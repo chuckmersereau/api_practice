@@ -5,7 +5,7 @@ class InsightController < ApplicationController
     @page_title = _('Insight')
     @current_user = current_user
 
-    insight = ObieeWsdl.new
+    insight = Obiee.new
     session_id = insight.auth_client
 
     sql = insight.report_sql(session_id,

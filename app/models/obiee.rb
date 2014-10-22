@@ -1,6 +1,6 @@
 require 'savon'
 
-class ObieeWsdl
+class Obiee
 
   def auth_client
     client = Savon::Client.new(wsdl: "http://plobia08.ccci.org:9704/analytics-ws/saw.dll/wsdl/v7")
