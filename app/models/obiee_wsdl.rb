@@ -4,7 +4,7 @@ class ObieeWsdl
 
   def auth_client
     client = Savon::Client.new(wsdl: "http://plobia08.ccci.org:9704/analytics-ws/saw.dll/wsdl/v7")
-    creds = {name: :obiee_key, password: :obiee_secret}
+    creds = {name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     auth_message = client.call( :logon,message: creds)
     auth_message.body[:logon_result][:session_id]
   end
