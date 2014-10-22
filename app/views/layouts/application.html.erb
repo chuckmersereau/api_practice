@@ -55,6 +55,7 @@
         <% if $rollout.active?(:research, current_account_list) %>
           <div class="item <%= request.path =~ /\/research/ ? 'active' : '' %>"><%= link_to(_('Research'), "/research") %></div>
         <% end %>
+        <div class="item <%= request.path =~ /\/insight/ ? 'active' : '' %>"><%= link_to(_('Insight'), "/insight") %></div>
         <div class="item last"><%= link_to(_('Help'), new_help_request_path, target: '_blank') %></div>
         <!-- <div class="item last <%= request.path =~ /\/social/ ? 'active' : '' %>"><%= link_to(_('Social'), "") %></div> -->
         <div class="item search">
