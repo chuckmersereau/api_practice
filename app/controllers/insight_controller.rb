@@ -11,8 +11,7 @@ class InsightController < ApplicationController
     sql = insight.report_sql(session_id,
                              '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations',
                              'mpdxRecurrDesig',
-                             '0124650')
-                                           #Person::RelayAccount.where(person_id: current_user.id ).pluck('designation')[0])
+                             Person::RelayAccount.where(person_id: current_user.id ).pluck('designation')[0])
 
     result_columns =  insight.report_results(session_id,sql)
 
