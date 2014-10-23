@@ -1,2 +1,43 @@
 <div class="clr"></div>
-<h2>Partner Recommendations for <%= @current_user%><%= @desig_accnt %></h2>
+<h2>Partner Recommendations for <%= @current_user%></h2>
+
+<table class="tablelist" >
+  <thead>
+  <tr>
+    <th >Gift Range</th>
+    <th>Donor Account Number</th>
+    <th>Zip Code</th>
+    <th>HH Income Range by Zip</th>
+    <th>Current Gift Amount</th>
+    <th>Average HH Income by Zip<sub>+</sub></th>
+    <th>Last Increase</th>
+    <th>Next Suggested Ask</th>
+    <th>Suggested Ask Amount</th>
+    <th>Max Ask Amount</th>
+  </tr>
+  </thead>
+  <tbody>
+
+<% @col_values.each  do |c| %>
+  <tr>  <td>#<%= c %>sometext</td></tr>
+
+
+      <!--
+
+          <tfoot>
+          <tr class="sum">
+            <td></td>
+            <td class="right"><strong>/strong></td>
+            <td class="right"></td>
+            <td colspan="4"></td>
+          </tr>
+          </tfoot>
+          -->
+      </tbody>
+    </table>
+
+
+
+<% end %>
+
+<%= @col_values%>
