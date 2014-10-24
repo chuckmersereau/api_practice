@@ -12,16 +12,13 @@ class InsightController < ApplicationController
     sql = insight.report_sql(session_id,
                              '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations',
                              'mpdxRecurrDesig',
-                             '0124650')
-                             #Person::RelayAccount.where(person_id: current_user.id ).pluck('designation')[0])
+                             Person::RelayAccount.where(person_id: current_user.id ).pluck('designation')[0])
 
-    result_columns =  insight.report_results(session_id,sql)
-    xmldoc = REXML::Document.new(result_columns)
+    xsd_results =  insight.report_results(session_id,sql)
 
-    @col_headers = xmldoc.elements.to_a('//xsd:element').map { |el| el.attributes['saw-sql:columnHeading'].to_s}
-    @col_values = xmldoc.elements[ '//Row' ].next_element.to_a
+    dom = Hash.from_trusted_xml(xsd_results).deep_symbolize_keys
 
-    @result_columns = result_columns
+    @xsd_results = dom[:rowset][:Row]
     end
 
 end

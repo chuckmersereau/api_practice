@@ -1,6 +1,7 @@
 <div class="clr"></div>
 <h2>Partner Recommendations for <%= @current_user%></h2>
 
+<div class="clr"></div>
 <table class="tablelist" >
   <thead>
   <tr>
@@ -17,27 +18,24 @@
   </tr>
   </thead>
   <tbody>
+  <% @xsd_results.each  do |c| %>
+      <tr>
+        <td width='Auto'><%= c[:Column6] %></td>
+        <td><%= c[:Column10] %></td>
+        <td><%= c[:Column14] %></td>
+        <td><%= c[:Column7] %></td>
+        <td style="text-align:right">$<%= c[:Column1] %></td>
+        <td style="text-align:right">$<%= c[:Column2] %></td>
+        <td><%= c[:Column12] %></td>
+        <td><%= c[:Column12] %></td>
+        <td style="text-align:right">$<%= c[:Column13] %></td>
+        <td style="text-align:right">$<%= c[:Column8] %></td>
+      </tr>
 
-<% @col_values.each  do |c| %>
-  <tr>  <td>#<%= c %>sometext</td></tr>
-
-
-      <!--
-
-          <tfoot>
-          <tr class="sum">
-            <td></td>
-            <td class="right"><strong>/strong></td>
-            <td class="right"></td>
-            <td colspan="4"></td>
-          </tr>
-          </tfoot>
-          -->
+  <% end %>
       </tbody>
     </table>
 
-
-
-<% end %>
-
-<%= @col_values%>
+<p>
+<small><p align="left" position="bottom">+&nbsp;<cite>US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/ </cite></p></small>
+</p>
