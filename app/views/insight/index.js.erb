@@ -1,0 +1,13 @@
+/**
+ * Change suggested ask date to a format of yyyy / mm from yyyy-mm-ddThh:mm:ss
+ */
+
+$(document).ready(function () {
+    $('#recurringGiftsDataTable tr td.nextAsk').each(function() {
+
+        var dateFormat =  $(this).text();
+        var dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
+
+        $(this).html(dateFormat);
+    });
+});

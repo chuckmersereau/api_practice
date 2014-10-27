@@ -15,10 +15,11 @@ class InsightController < ApplicationController
                              Person::RelayAccount.where(person_id: current_user.id ).pluck('designation')[0])
 
     xsd_results =  insight.report_results(session_id,sql)
-
     dom = Hash.from_trusted_xml(xsd_results).deep_symbolize_keys
 
     @xsd_results = dom[:rowset][:Row]
+    @acct = current_account_list
+
     end
 
 end

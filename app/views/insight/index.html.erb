@@ -2,7 +2,7 @@
 <h2>Partner Recommendations for <%= @current_user%></h2>
 
 <div class="clr"></div>
-<table class="tablelist" >
+<table class="tablelist" id="recurringGiftsDataTable">
   <thead>
   <tr>
     <th >Gift Range</th>
@@ -20,16 +20,16 @@
   <tbody>
   <% @xsd_results.each  do |c| %>
       <tr>
-        <td width='Auto'><%= c[:Column6] %></td>
-        <td><%= c[:Column10] %></td>
-        <td><%= c[:Column14] %></td>
-        <td><%= c[:Column7] %></td>
-        <td style="text-align:right">$<%= c[:Column1] %></td>
-        <td style="text-align:right">$<%= c[:Column2] %></td>
-        <td><%= c[:Column12] %></td>
-        <td><%= c[:Column12] %></td>
-        <td style="text-align:right">$<%= c[:Column13] %></td>
-        <td style="text-align:right">$<%= c[:Column8] %></td>
+        <td width='Auto'><%= c[:Column5] %></td>
+        <td><%= c[:Column9] %></td>
+        <td><%= c[:Column13] %></td>
+        <td><%= c[:Column6] %></td>
+        <td style="text-align:center">$<%= c[:Column1] %></td>
+        <td style="text-align:center">$<%= c[:Column2] %></td>
+        <td><%= c[:Column11] %></td>
+        <td class="nextAsk" ><%= c[:Column14]  %></td>
+        <td style="text-align:center">$<%= c[:Column13] %></td>
+        <td style="text-align:right">$<%= c[:Column7] %></td>
       </tr>
 
   <% end %>
@@ -39,3 +39,19 @@
 <p>
 <small><p align="left" position="bottom">+&nbsp;<cite>US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/ </cite></p></small>
 </p>
+
+
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $('#recurringGiftsDataTable tr td.nextAsk').each(function() {
+
+            var dateFormat =  $(this).text();
+            var dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
+
+            $(this).html(dateFormat);
+        });
+    });
+
+
+</script>
