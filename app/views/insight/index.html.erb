@@ -1,8 +1,8 @@
 <div class="clr"></div>
-<h2>Partner Recommendations for <%= @current_user%></h2>
+<h2>Recurring Gift Recommendations for <%= @current_user%></h2>
 
 <div class="clr"></div>
-<table class="tablelist" id="recurringGiftsDataTable">
+<table class="tablelist donations" id="recurringGiftsDataTable">
   <thead>
   <tr>
     <th >Gift Range</th>
@@ -22,13 +22,13 @@
       <tr>
         <td width='Auto'><%= c[:Column5] %></td>
         <td><%= c[:Column9] %></td>
-        <td><%= c[:Column13] %></td>
+        <td><%= c[:Column12] %></td>
         <td><%= c[:Column6] %></td>
         <td style="text-align:center">$<%= c[:Column1] %></td>
         <td style="text-align:center">$<%= c[:Column2] %></td>
         <td><%= c[:Column11] %></td>
         <td class="nextAsk" ><%= c[:Column14]  %></td>
-        <td style="text-align:center">$<%= c[:Column13] %></td>
+        <td style="text-align:right">$<%= c[:Column13] %></td>
         <td style="text-align:right">$<%= c[:Column7] %></td>
       </tr>
 
