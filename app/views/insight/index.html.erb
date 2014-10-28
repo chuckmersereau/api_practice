@@ -1,4 +1,6 @@
 <div class="clr"></div>
+<% if @xsd_results %>
+
 <h2>Recurring Gift Recommendations for <%= @current_user%></h2>
 
 <div class="clr"></div>
@@ -19,7 +21,7 @@
   </thead>
   <tbody>
   <% @xsd_results.each  do |c| %>
-      <tr>
+      <tr  >
         <td width='Auto'><%= c[:Column5] %></td>
         <td><%= c[:Column9] %></td>
         <td><%= c[:Column12] %></td>
@@ -27,7 +29,7 @@
         <td style="text-align:center">$<%= c[:Column1] %></td>
         <td style="text-align:center">$<%= c[:Column2] %></td>
         <td><%= c[:Column11] %></td>
-        <td class="nextAsk" ><%= c[:Column14]  %></td>
+        <td class="nextAskYearMonth" ><%= c[:Column14]  %></td>
         <td style="text-align:right">$<%= c[:Column13] %></td>
         <td style="text-align:right">$<%= c[:Column7] %></td>
       </tr>
@@ -39,12 +41,18 @@
 <p>
 <small><p align="left" position="bottom">+&nbsp;<cite>US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/ </cite></p></small>
 </p>
+<% else %>
+    <div class="mwrap">
+      <div class="nohide floating" style="background-color: #FDFFD4;">You have no monthly recurring gift recommendations</div>
+    </div>
+ <% end %>
 
+<p><%= @contact %> hi </p>
 
 
 <script type="text/javascript">
     $(document).ready(function () {
-        $('#recurringGiftsDataTable tr td.nextAsk').each(function() {
+        $('#recurringGiftsDataTable tr td.nextAskYearMonth').each(function() {
 
             var dateFormat =  $(this).text();
             var dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
