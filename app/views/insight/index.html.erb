@@ -22,13 +22,13 @@
   <tbody>
   <% @xsd_results.each  do |c| %>
       <tr  >
-        <td width='Auto'><%= c[:Column5] %></td>
-        <td><%= c[:Column9] %></td>
+        <td width="Auto"><%= c[:Column5] %></td>
+        <td><%= link_to(c[:Column9],c[:Column9]) %></td>
         <td><%= c[:Column12] %></td>
         <td><%= c[:Column6] %></td>
         <td style="text-align:center">$<%= c[:Column1] %></td>
         <td style="text-align:center">$<%= c[:Column2] %></td>
-        <td><%= c[:Column11] %></td>
+        <td class="date"><%= c[:Column11] %></td>
         <td class="nextAskYearMonth" ><%= c[:Column14]  %></td>
         <td style="text-align:right">$<%= c[:Column13] %></td>
         <td style="text-align:right">$<%= c[:Column7] %></td>
@@ -43,11 +43,11 @@
 </p>
 <% else %>
     <div class="mwrap">
-      <div class="nohide floating" style="background-color: #FDFFD4;">You have no monthly recurring gift recommendations</div>
+      <div class="nohide floating" style="background-color: #FDFFD4;">You have no monthly recurring gift recommendations.</div>
     </div>
  <% end %>
 
-<p><%= @contact %> hi </p>
+<p><%= @donor_accounts %> hi 2</p>
 
 
 <script type="text/javascript">
