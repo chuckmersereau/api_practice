@@ -30,7 +30,7 @@ class InsightController < ApplicationController
     @donor_accounts = []
       current_account_list.contacts.active.joins(:donor_accounts).includes(:donor_accounts).each do |c|
         c.donor_accounts.each do |da|
-          @donor_accounts << ["#{da.account_number}", da.id]
+          @donor_accounts << [da.account_number, da.id]
         end
       end
   end
