@@ -1,3 +1,6 @@
+<style>
+    th { vertical-align: bottom; }
+</style>
 <div class="clr"></div>
 <% if @xsd_results %>
 
@@ -7,8 +10,8 @@
 <table class="tablelist donations" id="recurringGiftsDataTable">
   <thead>
   <tr>
-    <th >Gift Range</th>
-    <th>Donor Account Number</th>
+    <th>Gift Range</th>
+    <th width="18%">Donor Account</th>
     <th>Zip Code</th>
     <th>HH Income Range by Zip</th>
     <th>Current Gift Amount</th>
@@ -17,22 +20,26 @@
     <th>Next Suggested Ask</th>
     <th>Suggested Ask Amount</th>
     <th>Max Ask Amount</th>
+    <th></th>
   </tr>
   </thead>
   <tbody>
   <% @xsd_results.each  do |c| %>
-      <tr  >
-        <td width="Auto"><%= c[:Column5] %></td>
-        <td><%= link_to(c[:Column9],c[:Column9]) %></td>
-        <td><%= c[:Column12] %></td>
-        <td><%= c[:Column6] %></td>
-        <td style="text-align:center">$<%= c[:Column1] %></td>
-        <td style="text-align:center">$<%= c[:Column2] %></td>
-        <td class="date"><%= c[:Column11] %></td>
-        <td class="nextAskYearMonth" ><%= c[:Column14]  %></td>
-        <td style="text-align:right">$<%= c[:Column13] %></td>
-        <td style="text-align:right">$<%= c[:Column7] %></td>
-      </tr>
+  <% @contact_id  = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c[:Column8]}).pluck('"contacts"."id"') %>
+
+  <tr  >
+    <td width="Auto"><%= c[:Column5] %></td>
+    <td width="Auto"><%= link_to( c[:Column16], current_account_list.contacts.where(id: @contact_id, account_list_id: current_account_list.id).first) %></td>
+    <td><%= c[:Column12] %></td>
+    <td><%= c[:Column6] %></td>
+    <td style="text-align:center">$<%= c[:Column1] %></td>
+    <td style="text-align:center">$<%= c[:Column2] %></td>
+    <td class="date"><%= c[:Column10] %></td>
+    <td class="nextAskYearMonth" ><%= c[:Column15]  %></td>
+    <td style="text-align:center">$<%= c[:Column12] %></td>
+    <td style="text-align:right">$<%= c[:Column13] %></td>
+    <td class="monthsUntilAsk" ><%= c[:Column11] %></td>
+  </tr>
 
   <% end %>
       </tbody>
@@ -47,9 +54,6 @@
     </div>
  <% end %>
 
-<p><%= @donor_accounts %> hi 2</p>
-
-
 <script type="text/javascript">
     $(document).ready(function () {
         $('#recurringGiftsDataTable tr td.nextAskYearMonth').each(function() {
@@ -57,8 +61,19 @@
             var dateFormat =  $(this).text();
             var dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
 
+
             $(this).html(dateFormat);
         });
+
+        $('#recurringGiftsDataTable tr td.monthsUntilAsk').each(function() {
+
+            var numberOfMonths =  parseInt($(this).text(),10);
+
+             numberOfMonths.css('color','red');
+
+            $(this).html(numberOfMonths);
+        });
+
     });
 
 
