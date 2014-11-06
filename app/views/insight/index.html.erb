@@ -36,9 +36,9 @@
     <td style="text-align:center">$<%= c[:Column2] %></td>
     <td class="date"><%= c[:Column10] %></td>
     <td class="nextAskYearMonth" ><%= c[:Column15]  %></td>
-    <td style="text-align:center">$<%= c[:Column12] %></td>
-    <td style="text-align:right">$<%= c[:Column13] %></td>
-    <td class="monthsUntilAsk" ><%= c[:Column11] %></td>
+    <td style="text-align:center">$<%= c[:Column13] %></td>
+    <td style="text-align:right">$<%= c[:Column14] %></td>
+    <td style="visibility:hidden" class="monthsUntilAsk" ><%= c[:Column11] %></td>
   </tr>
 
   <% end %>
@@ -59,21 +59,18 @@
         $('#recurringGiftsDataTable tr td.nextAskYearMonth').each(function() {
 
             var dateFormat =  $(this).text();
-            var dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
+            dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
+            var numberOfMonths = parseInt( $('#recurringGiftsDataTable tr td.monthsUntilAsk').text(), 10) *1 ;
 
-
-            $(this).html(dateFormat);
+            if ( numberOfMonths < -24)
+            {
+                $(this).html(dateFormat).css({'color': '#dd7d1b'});
+            }
+            else
+            {
+                $(this).html(dateFormat);
+            }
         });
-
-        $('#recurringGiftsDataTable tr td.monthsUntilAsk').each(function() {
-
-            var numberOfMonths =  parseInt($(this).text(),10);
-
-             numberOfMonths.css('color','red');
-
-            $(this).html(numberOfMonths);
-        });
-
     });
 
 
