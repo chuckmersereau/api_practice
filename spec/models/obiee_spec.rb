@@ -10,9 +10,10 @@ describe Obiee do
   before(:all) { savon.mock!   }
   after(:all)  { savon.unmock! }
 
-  describe "#login" do
-    it 'tests user login' do
-      creds = { name: "MPDXWEBAPPSTAGE", password: "NTBnPAlAVgV9ZThpT7M8L" }
+  describe "#obiee_login" do
+
+    it 'tests successful user login' do
+      creds = {name: APP_CONFIG['obiee_stage_key'], password: APP_CONFIG['obiee_stage_secret'] }
       fixture = File.read("spec/fixtures/obieeWsdl.xml")
 
       #expectation
@@ -20,10 +21,12 @@ describe Obiee do
 
       #create and call wsdl
       ob = Obiee.new
-      client = ob.get_client(true,'http://slobia02.ccci.org:9704/analytics-ws/saw.dll/wsdl/v7')
+      client = ob.get_client(APP_CONFIG['obiee_stage_base_url'])
+
       response = client.call( :logon, message: creds)
       expect(response).to be_successful
 
     end
+
   end
 end

@@ -7,7 +7,8 @@ class InsightController < ApplicationController
     insight = Obiee.new
     session_id = insight.auth_client
 
-    vars = { name: 'mpdxRecurrDesig',value: Person::RelayAccount.where(person_id: current_user.id ).pluck('designation')[0] }
+    vars = { name: 'mpdxRecurrDesig',value: '0124650' }
+    #vars = { name: 'mpdxRecurrDesig',value: Person::RelayAccount.where(person_id: current_user.id ).pluck('designation')[0] }
     sql = insight.report_sql(session_id,
                              '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations',
                             vars)

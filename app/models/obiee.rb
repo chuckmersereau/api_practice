@@ -3,7 +3,7 @@ require 'savon'
 class Obiee
 
   def auth_client
-    client = get_client( APP_CONFIG['obiee_base_url'] + 'nQSessionService' )
+    client = get_client( APP_CONFIG['obiee_prod_base_url'] + 'nQSessionService' )
     creds = {name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     auth_message = make_call( client, :logon, creds)
     auth_message.body[:logon_result][:session_id]
@@ -13,7 +13,7 @@ class Obiee
   # report can have a large number of variables.  the key value pair is name: var_name, value: var_value
   def report_sql(session_id,path,vars={})
 
-    get_report_client = get_client( APP_CONFIG['obiee_base_url'] + 'reportService')
+    get_report_client = get_client( APP_CONFIG['obiee_prod_base_url'] + 'reportService')
     report_params = { reportRef: {reportPath: path},
                       reportParams: {filterExpressions: '',
                                      variables: vars
@@ -25,7 +25,7 @@ class Obiee
 
   def report_results(session_id, report_sql)
 
-    run_report_client = get_client( APP_CONFIG['obiee_base_url'] + 'xmlViewService' )
+    run_report_client = get_client( APP_CONFIG['obiee_prod_base_url'] + 'xmlViewService' )
     run_params = {sql: report_sql,
                   outputFormat: 'SAWRowsetSchemaAndData',
                   executionOptions:

@@ -62,14 +62,20 @@
             dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
             var numberOfMonths = parseInt( $('#recurringGiftsDataTable tr td.monthsUntilAsk').text(), 10) *1 ;
 
+                $(this).html(dateFormat);
+
+        });
+
+
+        $('#recurringGiftsDataTable tr td.monthsUntilAsk').text().each(function(){
+
+            var numberOfMonths = parseInt($(this).text(),10);
+            alert(numberOfMonths);
             if ( numberOfMonths < -24)
             {
-                $(this).html(dateFormat).css({'color': '#dd7d1b'});
+                $(this).html($('#recurringGiftsDataTable tr td.nextAskYearMonth')).css({'color': '#dd7d1b'});
             }
-            else
-            {
-                $(this).html(dateFormat);
-            }
+
         });
     });
 
