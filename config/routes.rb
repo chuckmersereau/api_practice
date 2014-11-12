@@ -56,7 +56,7 @@ Mpdx::Application.routes.draw do
 
   resources :activity_comments
 
-  resources :insight
+  resources :insights
 
   resources :donations
   resources :accounts

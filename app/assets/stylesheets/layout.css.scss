@@ -507,6 +507,10 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     }
   }
 
+  #leftinsightsmenu {
+    span.left_filters {background: image-url("1415767347_bulb_on.png") no-repeat 10px 12px;}
+  }
+
   ul li {
     a.inbox {background-position: 5px 10px;}
     a.starred {background-position: 5px -55px;}
@@ -517,6 +521,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     span.tags {background-position: 5px -995px;}
     span.left_filters {background: image-url("filter.png") no-repeat 10px 12px;}
   }
+
 
   ul.tags li, ul.left_filters li {
     border: none;

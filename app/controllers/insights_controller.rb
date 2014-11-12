@@ -1,12 +1,12 @@
-class InsightController < ApplicationController
+class InsightsController < ApplicationController
 
   def index
-    @page_title = _('Insight')
+    @page_title = _('Insights')
     @current_user = current_user
 
     insight = Obiee.new
     session_id = insight.auth_client
-    vars = { name: 'mpdxRecurrDesig',value: Person::RelayAccount.where(person_id: current_user.id ).pluck('designation')[0] }
+    vars = { name: 'mpdxRecurrDesig',value: current_account_list.designation_accounts.pluck(:designation_number).first }
     sql = insight.report_sql(session_id,
                              '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations',
                             vars)
