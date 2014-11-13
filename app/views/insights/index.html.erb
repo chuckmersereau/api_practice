@@ -2,7 +2,7 @@
     th { vertical-align: bottom; }
 </style>
 <div class="clr"></div>
-<% if @xsd_results %>
+<% if @recommnds %>
 
 <h2>Recurring Gift Recommendations for <%= @current_user%></h2>
 
@@ -24,7 +24,7 @@
   </tr>
   </thead>
   <tbody>
-  <% @xsd_results.each  do |c| %>
+  <% @recommnds.each  do |c| %>
   <% @contact_id  = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c[:Column8]}).pluck('"contacts"."id"') %>
 
   <tr  >

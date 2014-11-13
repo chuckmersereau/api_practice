@@ -20,6 +20,8 @@ class ContactsController < ApplicationController
 
     @filtered_contacts = filtered_contacts
 
+    @recommends = InsightAnalyses.new.recommendations( current_account_list.designation_accounts.pluck(:designation_number).first)[:rowset][:Row]
+
     respond_to do |wants|
 
       wants.html do
