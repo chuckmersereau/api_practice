@@ -20,8 +20,6 @@ class ContactsController < ApplicationController
 
     @filtered_contacts = filtered_contacts
 
-    @recommends = InsightAnalyses.new.recommendations( current_account_list.designation_accounts.pluck(:designation_number).first)[:rowset][:Row]
-
     respond_to do |wants|
 
       wants.html do
@@ -365,4 +363,19 @@ class ContactsController < ApplicationController
   def contact_params
     @contact_params ||= params.require(:contact).permit(Contact::PERMITTED_ATTRIBUTES)
   end
+
+
+  def recommended_contacts
+    recommends = InsightAnalyses.new.recommendations( current_account_list.designation_accounts.pluck(:designation_number).first)[:rowset][:Row]
+    @fil = "today"
+
+
+    recommends.each do [ columns, value ]
+    @filtered_contacts =  current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: columns[:Column8]}).pluck('contacts.id')
+    end
+
+
+  end
+
+
 end
