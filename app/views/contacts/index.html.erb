@@ -3,6 +3,8 @@
   <script type="text/javascript" charset="utf-8">
     var account_contacts_json = <%= contacts_for_filter.collect { |c| {value: c.name, id: c.id} }.to_json.html_safe %>
     var filtered_contacts_ids = <%= @filtered_contacts.collect { |c| c.id }.to_json.html_safe %>
+    var recommended_contacts_ids = <%= @recommends.collect{ |d| d[:Column8]}.to_json.html_safe %>
+
     $(window).resize(function () {
         contactAreaSize();
     });
@@ -22,7 +24,10 @@
   <ul>
     <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
     <li>
-      <span class="menu_item"  ><%= _('Insights') %></span>
+      <span class="left_filters menu_item"  ><%= _('Insights') %></span>
+      <ul>
+           <li class="menu_item"> <%= link_to _('Recommendations') ,''%></li>
+      </ul>
     </li>
     <li>
       <span class="left_filters menu_item"><%= _('Filters') %></span>
