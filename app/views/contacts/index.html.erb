@@ -3,7 +3,6 @@
   <script type="text/javascript" charset="utf-8">
     var account_contacts_json = <%= contacts_for_filter.collect { |c| {value: c.name, id: c.id} }.to_json.html_safe %>
     var filtered_contacts_ids = <%= @filtered_contacts.collect { |c| c.id }.to_json.html_safe %>
-    var recommended_contacts_ids = <%= @recommends.collect{ |d| d[:Column8]}.to_json.html_safe %>
 
     $(window).resize(function () {
         contactAreaSize();
@@ -26,7 +25,7 @@
     <li>
       <span class="left_filters menu_item"  ><%= _('Insights') %></span>
       <ul>
-           <li class="menu_item"> <%= link_to _('Recommendations') ,''%></li>
+           <li class="menu_item"> <%= link_to _('Recommendations') ,:action => 'recommended_contacts' %></li>
       </ul>
     </li>
     <li>
@@ -194,7 +193,7 @@
           </div>
 
           <div style="float:right">
-            Show:
+            Show:<%= @fil %>
             <select ng-model="contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]"></select>
           </div>
         </td>
