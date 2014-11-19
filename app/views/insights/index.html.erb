@@ -11,12 +11,12 @@
   <thead>
   <tr>
     <th>Gift Range</th>
-    <th width="18%">Donor Account</th>
+    <th width="18%">Account Name</th>
     <th>Zip Code</th>
     <th>HH Income Range by Zip</th>
     <th>Current Gift Amount</th>
     <th>Average HH Income by Zip<sub>+</sub></th>
-    <th>Last Increase</th>
+    <th>Last Change</th>
     <th>Next Suggested Ask</th>
     <th>Suggested Ask Amount</th>
     <th>Max Ask Amount</th>
@@ -25,6 +25,7 @@
   </thead>
   <tbody>
   <% @recommnds.each  do |c| %>
+
   <% @contact_id  = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c[:Column8]}).pluck('"contacts"."id"') %>
 
   <tr  >
@@ -66,17 +67,6 @@
 
         });
 
-
-        $('#recurringGiftsDataTable tr td.monthsUntilAsk').text().each(function(){
-
-            var numberOfMonths = parseInt($(this).text(),10);
-            alert(numberOfMonths);
-            if ( numberOfMonths < -24)
-            {
-                $(this).html($('#recurringGiftsDataTable tr td.nextAskYearMonth')).css({'color': '#dd7d1b'});
-            }
-
-        });
     });
 
 
