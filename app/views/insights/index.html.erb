@@ -4,23 +4,22 @@
 <div class="clr"></div>
 <% if @recommnds %>
 
-<h2>Recurring Gift Recommendations for <%= @current_user%></h2>
+<h2>Recurring Gift Recommendations for <%= %></h2>
 
 <div class="clr"></div>
 <table class="tablelist donations" id="recurringGiftsDataTable">
   <thead>
   <tr>
-    <th>Gift Range</th>
-    <th width="18%">Account Name</th>
-    <th>Zip Code</th>
-    <th>HH Income Range by Zip</th>
-    <th>Current Gift Amount</th>
-    <th>Average HH Income by Zip<sub>+</sub></th>
+    <th width="7%">Gift Range</th>
+    <th width="21%">Account Name</th>
+    <th>Zip</th>
+    <th width="17%">HH Income Range by Zip</th>
+    <th>Current Gift</th>
+    <th>Avg HH Income by Zip<sub>+</sub></th>
     <th>Last Change</th>
     <th>Next Suggested Ask</th>
     <th>Suggested Ask Amount</th>
     <th>Max Ask Amount</th>
-    <th></th>
   </tr>
   </thead>
   <tbody>
@@ -32,14 +31,13 @@
     <td width="Auto"><%= c[:Column5] %></td>
     <td width="Auto"><%= link_to( c[:Column16], current_account_list.contacts.where(id: @contact_id, account_list_id: current_account_list.id).first) %></td>
     <td><%= c[:Column12] %></td>
-    <td><%= c[:Column6] %></td>
-    <td style="text-align:center">$<%= c[:Column1] %></td>
+    <td style="text-align:center"><%= c[:Column6] %></td>
+    <td class="donations">$<%= c[:Column1] %></td>
     <td style="text-align:center">$<%= c[:Column2] %></td>
     <td class="date"><%= c[:Column10] %></td>
     <td class="nextAskYearMonth" ><%= c[:Column15]  %></td>
     <td style="text-align:center">$<%= c[:Column13] %></td>
     <td style="text-align:right">$<%= c[:Column14] %></td>
-    <td style="visibility:hidden" class="monthsUntilAsk" ><%= c[:Column11] %></td>
   </tr>
 
   <% end %>
@@ -61,7 +59,6 @@
 
             var dateFormat =  $(this).text();
             dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
-            var numberOfMonths = parseInt( $('#recurringGiftsDataTable tr td.monthsUntilAsk').text(), 10) *1 ;
 
                 $(this).html(dateFormat);
 
