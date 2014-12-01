@@ -11,8 +11,11 @@ class Api::V1::InsightsController < Api::V1::BaseController
 
     r_contacts = Array.new
 
-    recommends.each do |c, v|
-      r_contacts.push( c[:Column8].to_s )
+    if !recommends.blank?
+      recommends.each do |c, v|
+        r_contacts.push( c[:Column8].to_s )
+      end
+
     end
 
     Contact.where(account_list_id: current_account_list, id:  current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: r_contacts}).pluck('contacts.id')).pluck('id')
