@@ -1,14 +1,13 @@
 class Api::V1::InsightsController < Api::V1::BaseController
   def index
-    render json: recommended_contacts, callback: params[:callback]
+    render json: increase_recommendation_contacts, callback: params[:callback]
   end
 
   private
 
-  def recommended_contacts
+  def increase_recommendation_contacts
 
     recommends = InsightAnalyses.new.recommendations( current_account_list.designation_accounts.pluck(:designation_number).first)[:rowset][:Row]
-
     r_contacts = Array.new
 
     if !recommends.blank?
