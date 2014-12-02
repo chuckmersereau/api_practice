@@ -15,20 +15,23 @@
     });
     function contactAreaSize(){
         var windowHeight = $(window).height() - 250;
-        var filtersHeight = $('#filters_form').height();
+        var filtersHeight = $('#leftmenu > ul').height() - 100;
         $('.contacts-scrollable').height(Math.max(windowHeight, filtersHeight));
     }
   </script>
   <aside id="leftmenu">
   <ul>
     <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
-    <li>
-      <span class="left_filters menu_item"  ><%= _('Insights') %></span>
+    <li ng-class="{'selected': insightFilterIsActive()}">
+      <span class="left_filters menu_item"><%= _('Insights') %></span>
       <ul>
-           <li class="menu_item"> <%= link_to( _('Recommendations') , '' ) %></li>
+        <li class="menu_item"><a href="" ng-click="runInsight('recommendations')">Recommendations</a></li>
       </ul>
     </li>
-    <li>
+    <li class="controls" ng-show="insightFilterIsActive()">
+      <a href="" ng-click="clearInsightFilter()" class="btn">Clear Insight Filter</a>
+    </li>
+    <li ng-show="!insightFilterIsActive()">
       <span class="left_filters menu_item"><%= _('Filters') %></span>
       <form id="filters_form">
 

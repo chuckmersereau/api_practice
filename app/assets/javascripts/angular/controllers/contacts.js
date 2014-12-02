@@ -201,7 +201,14 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         statusApiArray = _.uniq(_.union(statusApiArray, railsConstants.contact.INACTIVE_STATUSES));
       }
 
-      var requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
+      var requestUrl;
+      if(q.insightFilter){
+        requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
+        '&per_page=' + q.limit +
+        '&page=' + q.page +
+        '&filters[ids]=' + q.insightFilter.join();
+      } else {
+        requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
           '&per_page=' + q.limit +
           '&page=' + q.page +
           '&filters[name]=' + encodeURIComponent(q.name) +
@@ -220,6 +227,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           '&filters[timezone][]=' + encodeURLarray(q.timezone).join('&filters[timezone][]=') +
           '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
           '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch);
+      }
 
       api.call('get', requestUrl, {}, function (data) {
         angular.forEach(data.contacts, function (contact) {
@@ -318,6 +326,24 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           handler.fitMapToBounds();
         }
       );
+    };
+
+    $scope.runInsight = function(insight){
+      if(insight === 'recommendations'){
+        api.call('get', 'insights', {}, function (data) {
+          $scope.contactQuery.insightFilter = data.insights;
+        }, function(){
+          alert('An error has occurred while retrieving insight contacts');
+        });
+      }
+    };
+
+    $scope.clearInsightFilter = function(){
+      delete $scope.contactQuery.insightFilter;
+    };
+
+    $scope.insightFilterIsActive = function(){
+      return angular.isDefined($scope.contactQuery.insightFilter);
     };
 });
 
