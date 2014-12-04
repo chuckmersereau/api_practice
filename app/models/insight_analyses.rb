@@ -1,7 +1,7 @@
 class InsightAnalyses
 
 
-  def recommendations( designation_number )
+  def increase_recommendation_analysis( designation_number )
     insight = Obiee.new
     session_id = insight.auth_client
     vars = { name: 'mpdxRecurrDesig',value: designation_number}
@@ -10,6 +10,19 @@ class InsightAnalyses
                              vars)
 
    Hash.from_trusted_xml(insight.report_results(session_id,sql)).deep_symbolize_keys
+  end
+
+  def increase_recommendation_contacts(designation_number)
+
+    recommends = increase_recommendation_analysis( designation_number)[:rowset][:Row]
+    r_contacts = Array.new
+
+    if !recommends.blank?
+      recommends.each do |c, v|
+        r_contacts.push( c[:Column8].to_s )
+      end
+    end
+    r_contacts
   end
 
 end

@@ -10,16 +10,16 @@
 <table class="tablelist donations" id="recurringGiftsDataTable">
   <thead>
   <tr>
-    <th width="7%">Gift Range</th>
-    <th width="21%">Account Name</th>
-    <th>Zip</th>
-    <th width="17%">HH Income Range by Zip</th>
-    <th>Current Gift</th>
-    <th>Avg HH Income by Zip<sub>+</sub></th>
-    <th>Last Change</th>
-    <th>Next Suggested Ask</th>
-    <th>Suggested Ask Amount</th>
-    <th>Max Ask Amount</th>
+    <th width="7%"><%= _('Gift Range') %></th>
+    <th width="21%"><%= _('Account Name') %></th>
+    <th><%= _('Zip') %></th>
+    <th width="17%"><%= _('HH Income Range by Zip') %></th>
+    <th><%= _('Current Gift') %></th>
+    <th><%= _('Avg HH Income by Zip') %><sub>+</sub></th>
+    <th><%= _('Last Change') %></th>
+    <th><%= _('Next Suggested Ask') %></th>
+    <th><%= _('Suggested Ask Amount') %></th>
+    <th><%= _('Max Ask Amount') %></th>
   </tr>
   </thead>
   <tbody>
@@ -45,7 +45,7 @@
     </table>
 
 <p>
-<small><p align="left" position="bottom">+&nbsp;<cite>US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/ </cite></p></small>
+<small><p align="left" position="bottom">+&nbsp;<cite><%= _( 'US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/') %></cite></p></small>
 </p>
 <% else %>
     <div class="mwrap">
@@ -54,17 +54,6 @@
  <% end %>
 
 <script type="text/javascript">
-    $(document).ready(function () {
-        $('#recurringGiftsDataTable tr td.nextAskYearMonth').each(function() {
-
-            var dateFormat =  $(this).text();
-            dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
-
-                $(this).html(dateFormat);
-
-        });
-
-    });
 
 
 </script>

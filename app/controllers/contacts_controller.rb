@@ -364,6 +364,4 @@ class ContactsController < ApplicationController
     @contact_params ||= params.require(:contact).permit(Contact::PERMITTED_ATTRIBUTES)
   end
 
-
-
 end

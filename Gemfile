@@ -69,7 +69,6 @@ gem 'retryable-rb', '~> 1.1.0'
 gem 'rollout', '~> 2.0.0'
 gem 'ruby-rtf'
 gem 'savon' , '~> 2.3.0'
-gem 'savon_spec'
 gem 'secure_headers'
 gem 'sidekiq', '~> 2.17.0'
 gem 'sidekiq-failures', git: 'http://github.com/mhfs/sidekiq-failures.git'
@@ -133,4 +132,5 @@ group :test do
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
   gem 'rubocop', '~> 0.26.0'
+  gem 'savon_spec'
 end

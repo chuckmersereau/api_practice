@@ -58,7 +58,6 @@ Mpdx::Application.routes.draw do
   resources :activity_comments
 
   resources :insights
-
   resources :donations
   resources :accounts
   resources :preferences do
@@ -164,6 +163,4 @@ Mpdx::Application.routes.draw do
   get '/templates/:path.html' => 'templates#template', :constraints => { :path => /.+/  }
 
   # See how all your routes lay out with "rake routes"
-
-
 end
