@@ -37,7 +37,6 @@ class Obiee
                   sessionID: session_id}
 
     returned_results = make_call(run_report_client,:executeSQLQuery, run_params)
-    #run_report_client.call( :logoff, message: session_id)  # for some reason this call returns with the expired/invalid session exception
     returned_results.body[:execute_sql_query_result][:return][:rowset]
 
   end
