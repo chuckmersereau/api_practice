@@ -1,9 +1,10 @@
 $ ->
+  $().ready ->
+    numberOfrows = document.getElementById("recurringGiftsDataTable").rows.length
+    i=0
+    while numberOfrows > i
+       ++i
+       dateFormat = $('#nextAskYearMonth').text()
+       dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat))
+       $('#nextAskYearMonth').replaceWith(dateFormat)
 
-$(document).on 'ready page:load', ->
-  $('#recurringGiftsDataTable tr td.nextAskYearMonth').each(index, element) =>
-
-  dateFormat =  $(this).text();
-  dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat));
-
-  $(this).html(dateFormat);

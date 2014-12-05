@@ -56,3 +56,4 @@
 //= require typeahead.jquery.js
 
 //= require gmaps/google
+//= require insights
