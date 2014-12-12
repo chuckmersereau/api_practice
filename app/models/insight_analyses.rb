@@ -3,7 +3,7 @@ class InsightAnalyses
 
   def increase_recommendation_analysis( designation_number )
     insight = Obiee.new
-    session_id = insight.auth_client
+    session_id = insight.auth_client({name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] })
     vars = { name: 'mpdxRecurrDesig',value: designation_number}
     sql = insight.report_sql(session_id,
                              '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations',

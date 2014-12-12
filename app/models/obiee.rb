@@ -2,18 +2,17 @@ require 'savon'
 
 class Obiee
 
-  def auth_client
-    client = get_client( APP_CONFIG['obiee_prod_base_url'] + 'nQSessionService' )
-    creds = {name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
-    auth_message = make_call( client, :logon, creds)
+  def auth_client(creds={})
+    client = get_client( APP_CONFIG['obiee_base_url'] + 'nQSessionService' )
+    auth_message = make_call( c0lient, :logon, creds)
     auth_message.body[:logon_result][:session_id]
   end
 
-  # Pass in the session id, report path, and has with the variable name and it's value.  A hash is used becasuse a
-  # report can have a large number of variables.  the key value pair is name: var_name, value: var_value
+  # Pass in the session id, report path, and has with the variable name and it's value.  A hash is used because an
+  # analysis can have a large number of inputs/parameters.  the key value pair is name: var_name, value: var_value
   def report_sql(session_id,path,vars={})
 
-    get_report_client = get_client( APP_CONFIG['obiee_prod_base_url'] + 'reportService')
+    get_report_client = get_client( APP_CONFIG['obiee_base_url'] + 'reportService')
     report_params = { reportRef: {reportPath: path},
                       reportParams: {filterExpressions: '',
                                      variables: vars
@@ -25,7 +24,7 @@ class Obiee
 
   def report_results(session_id, report_sql)
 
-    run_report_client = get_client( APP_CONFIG['obiee_prod_base_url'] + 'xmlViewService' )
+    run_report_client = get_client( APP_CONFIG['obiee  _base_url'] + 'xmlViewService' )
     run_params = {sql: report_sql,
                   outputFormat: 'SAWRowsetSchemaAndData',
                   executionOptions:
