@@ -4,7 +4,7 @@ class Obiee
 
   def auth_client(creds={})
     client = get_client( APP_CONFIG['obiee_base_url'] + 'nQSessionService' )
-    auth_message = make_call( c0lient, :logon, creds)
+    auth_message = make_call( client, :logon, creds)
     auth_message.body[:logon_result][:session_id]
   end
 
@@ -24,7 +24,7 @@ class Obiee
 
   def report_results(session_id, report_sql)
 
-    run_report_client = get_client( APP_CONFIG['obiee  _base_url'] + 'xmlViewService' )
+    run_report_client = get_client( APP_CONFIG['obiee_base_url'] + 'xmlViewService' )
     run_params = {sql: report_sql,
                   outputFormat: 'SAWRowsetSchemaAndData',
                   executionOptions:
