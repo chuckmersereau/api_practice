@@ -180,7 +180,9 @@ $ ->
               click: ->
                 $(this).dialog("close")
             }
-          ]
+          ],
+          close: ->
+            $('#task_modal_form').removeClass('dirty')
         }
         false
 
@@ -300,6 +302,7 @@ $ ->
             {
               text: __('Save'),
               click: ->
+                window.onbeforeunload = undefined
                 $('form', this).submit()
                 $('.form_wrapper', this).html('<%= image_tag('spinner.gif') %>')
                 $(this).dialog( "option", "buttons", [])
@@ -309,8 +312,11 @@ $ ->
               click: ->
                 $(this).dialog('close')
             }
-          ]
+          ],
+          close: ->
+            $('#referrals_modal form').removeClass('dirty')
         }
+
 
       # Filter contact list
       $(document).on 'keyup', '#contact_name', ->
@@ -523,8 +529,5 @@ $.mpdx.loadSocialStream = ->
     }
 
 $.mpdx.reloadContact = ->
-  $('#page_spinner').dialog({modal: true, closeOnEscape: false})
-  $.ajax {
-    url: '/contacts/' + $('#contentbody').attr('data-contact-id'),
-    dataType: 'script'
-  }
+  return if !$('#contentbody').attr('data-contact-id')
+  location.reload()

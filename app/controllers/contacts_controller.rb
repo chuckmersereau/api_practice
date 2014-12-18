@@ -19,6 +19,7 @@ class ContactsController < ApplicationController
     @page_title = _('Contacts')
 
     @filtered_contacts = filtered_contacts
+    @appeals = current_account_list.appeals
 
     respond_to do |wants|
 
@@ -33,8 +34,9 @@ class ContactsController < ApplicationController
       wants.csv do
         @contacts = @filtered_contacts.includes(:primary_person, :primary_address, people: [:email_addresses, :phone_numbers])
         @headers = ['Contact Name', 'First Name', 'Last Name', 'Spouse First Name', 'Greeting',
-                    'Mailing Street Address', 'Mailing City', 'Mailing State', 'Mailing Postal Code',
-                    'Mailing Country', 'Status', 'Commitment Amount', 'Commitment Frequency', 'Newsletter', 'Pledge Received', 'Tags',
+                    'Envelope Greeting', 'Mailing Street Address', 'Mailing City', 'Mailing State',
+                    'Mailing Postal Code', 'Mailing Country', 'Status', 'Commitment Amount',
+                    'Commitment Frequency', 'Newsletter', 'Pledge Received', 'Tags',
                     'Email 1', 'Email 2', 'Email 3', 'Email 4',
                     'Phone 1', 'Phone 2', 'Phone 3', 'Phone 4']
 
@@ -206,9 +208,9 @@ class ContactsController < ApplicationController
           attributes[:first_name] = _('Unknown') if attributes[:first_name].blank?
           attributes[:last_name] = _('Unknown') if attributes[:last_name].blank?
           contact_name = "#{attributes[:last_name]}, #{attributes[:first_name]}"
-          contact_name += " & #{attributes[:spouse_name]}" if attributes[:spouse_name].present?
+          contact_name += " & #{attributes[:spouse_first_name]}" if attributes[:spouse_first_name].present?
           contact_greeting = "#{attributes[:first_name]}"
-          contact_greeting += " & #{attributes[:spouse_name]}" if attributes[:spouse_name].present?
+          contact_greeting += " & #{attributes[:spouse_first_name]}" if attributes[:spouse_first_name].present?
           contact = current_account_list.contacts.create(name: contact_name, greeting: contact_greeting, notes: attributes[:notes])
 
           begin
@@ -217,8 +219,8 @@ class ContactsController < ApplicationController
             contact.people << person
 
             # create spouse
-            if attributes[:spouse_name].present?
-              spouse = Person.create(first_name: attributes[:spouse_name], last_name: attributes[:last_name], phone: attributes[:spouse_phone], email: attributes[:spouse_email])
+            if attributes[:spouse_first_name].present?
+              spouse = Person.create(first_name: attributes[:spouse_first_name], last_name: attributes[:last_name], phone: attributes[:spouse_phone], email: attributes[:spouse_email])
               contact.people << spouse
             end
 

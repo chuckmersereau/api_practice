@@ -1,22 +1,25 @@
 source 'http://rubygems.org'
+source 'https://fe25782d:2b14c6ee@www.mikeperham.com/rubygems/'
 
-gem 'rails', '~> 4.0.0'
+gem 'rails', '~> 4.1.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
-gem 'sass-rails',   '~> 4.0.1'
+gem 'sass-rails',   '~> 4.0.3'
 gem 'coffee-rails', '~> 4.0.1'
 
-#gem 'execjs', '~> 1.4.0'
-gem 'therubyracer'
-#gem 'therubyrhino', '~> 2.0.2'
+gem 'execjs' #, '~> 1.4.0'
+# gem 'therubyracer', platforms: :ruby
+# gem 'therubyrhino', '~> 2.0.2'
 
 gem 'uglifier', '~> 2.4.0'
 gem 'jquery-ui-rails', '~> 4.2.1'
 
 gem 'angularjs-rails' #, '~> 1.2.16'
 gem 'lodash-rails' #, '~> 2.4.1'
+gem 'angular-ui-bootstrap-rails'
 gem 'ngmin-rails'
+gem 'momentjs-rails'
 # gem 'rails_karma'
 
 #gem 'activeadmin'
@@ -45,7 +48,6 @@ gem 'gmaps4rails', '~> 2.1.2'
 gem 'iniparse', '~> 1.1.6'
 gem 'jquery-rails', '~> 3.0.4'
 gem 'koala', '~> 1.9.0'
-gem 'libv8', '3.16.14.3'
 gem 'linkedin', '~> 0.3.7'
 gem 'newrelic_rpm', '~> 3.7.1'
 gem 'nokogiri', '~> 1.5.11'
@@ -70,8 +72,7 @@ gem 'rollout', '~> 2.0.0'
 gem 'ruby-rtf'
 gem 'savon' , '~> 2.3.0'
 gem 'secure_headers'
-gem 'sidekiq', '~> 2.17.0'
-gem 'sidekiq-failures', git: 'http://github.com/mhfs/sidekiq-failures.git'
+gem 'sidekiq-pro'
 gem 'sidekiq-unique-jobs'
 gem 'siebel_donations', '~> 1.0.5'
 gem 'sinatra', require: nil
@@ -84,10 +85,11 @@ gem 'whenever', '~> 0.8.1'
 gem 'wicked', '~> 1.0.2'
 gem 'will_paginate', '~> 3.0.3'
 gem 'global_phone', git: 'https://github.com/sstephenson/global_phone.git'
-gem 'global_phone_dbgen'
+#gem 'global_phone_dbgen'
 #gem 'font_assets'
 gem 'geocoder'
 gem 'google_timezone'
+gem 'email_validator'
 gem 'peek'
 gem 'peek-pg'
 gem 'peek-git'
@@ -108,6 +110,7 @@ end
 group :development, :test do
   gem 'awesome_print'
   gem 'database_cleaner'
+  gem 'spring-commands-rspec'
   gem 'rspec', '~> 2.14.1' #3.0.0.beta2'
   gem 'rspec-rails' #, '3.0.0.beta2'
   gem 'factory_girl_rails'
@@ -121,16 +124,21 @@ group :development, :test do
   gem 'fuubar'
   gem 'unicorn'
   gem 'zonebie'
+  gem 'equivalent-xml'
+  gem 'debase'
 end
+
 group :test do
+  gem 'mock_redis'
   gem 'webmock', '~> 1.9.0'
-  gem 'spork-rails' #, '~> 3.2.0'
   gem 'rb-fsevent', require: false
-  gem 'guard-spork'
   gem 'growl'
   gem 'capybara'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
   gem 'rubocop', '~> 0.26.0'
-  gem 'savon_spec'
+end
+
+group :doc do
+  gem 'sdoc', '~> 0.4.0'
 end

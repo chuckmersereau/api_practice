@@ -11,7 +11,7 @@ class Contact < ActiveRecord::Base
   has_many :donations, through: :donor_accounts
   belongs_to :account_list
   has_many :contact_people, dependent: :destroy
-  has_many :people, -> { order('contact_people.primary::int desc') }, through: :contact_people
+  has_many :people, through: :contact_people
   has_one :primary_contact_person, -> { where(primary: true) }, class_name: 'ContactPerson'
   has_one :primary_person, through: :primary_contact_person, source: :person
   has_one :spouse_contact_person, -> { where(['"primary" = ? OR "primary" is NULL', false]) }, class_name: 'ContactPerson'
@@ -25,6 +25,8 @@ class Contact < ActiveRecord::Base
   has_many :tasks, through: :activity_contacts, source: :task
   has_many :notifications, inverse_of: :contact, dependent: :destroy
   has_many :messages
+  has_many :appeal_contacts
+  has_many :appeals, through: :appeal_contacts
 
   scope :people, -> { where('donor_accounts.master_company_id is null').includes(:donor_accounts).references('donor_accounts') }
   scope :companies, -> { where('donor_accounts.master_company_id is not null').includes(:donor_accounts).references('donor_accounts') }
@@ -36,17 +38,20 @@ class Contact < ActiveRecord::Base
   scope :with_referrals, -> { joins(:contact_referrals_by_me).uniq }
   scope :active, -> { where(active_conditions) }
   scope :inactive, -> { where(inactive_conditions) }
-  scope :late_by, -> (min_days, max_days = nil) { financial_partners.where('last_donation_date BETWEEN ? AND ?', max_days ? Date.today - max_days : Date.new(1951, 1, 1), Date.today - min_days) }
+  scope :late_by, -> (min_days, max_days = nil) { financial_partners.order(:name).to_a.keep_if { |c| c.late_by?(min_days, max_days) } }
   scope :created_between, -> (start_date, end_date) { where('contacts.created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
 
   PERMITTED_ATTRIBUTES = [
-    :name, :pledge_amount, :status, :notes, :full_name, :greeting, :website, :pledge_frequency,
+    :name, :pledge_amount, :status, :notes, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
     :pledge_start_date, :next_ask, :never_ask, :likely_to_give, :church_name, :send_newsletter,
     :direct_deposit, :magazine, :pledge_received, :not_duplicated_with, :tag_list, :primary_person_id, :timezone,
     {
       contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
       donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
-      addresses_attributes: [:remote_id, :master_address_id, :location, :street, :city, :state, :postal_code, :region, :metro_area, :country, :historic, :primary_mailing_address, :_destroy, :id],
+      addresses_attributes: [
+        :remote_id, :master_address_id, :location, :street, :city, :state, :postal_code, :region, :metro_area,
+        :country, :historic, :primary_mailing_address, :_destroy, :id
+      ],
       people_attributes: Person::PERMITTED_ATTRIBUTES
     }
   ]
@@ -59,7 +64,7 @@ class Contact < ActiveRecord::Base
   accepts_nested_attributes_for :contact_referrals_to_me, reject_if: :all_blank, allow_destroy: true
 
   before_save :set_notes_saved_at
-  after_commit :sync_with_mail_chimp, :sync_with_prayer_letters
+  after_commit :sync_with_mail_chimp, :sync_with_prayer_letters, :sync_with_google_contacts
   before_destroy :delete_from_prayer_letters, :delete_people
 
   assignable_values_for :status, allow_blank: true do
@@ -71,15 +76,6 @@ class Contact < ActiveRecord::Base
 
   IN_PROGRESS_STATUSES = ['Never Contacted', 'Ask in Future', 'Contact for Appointment', 'Appointment Scheduled',
                           'Call for Decision']
-
-  TABS = {
-    'details' => _('Details'),
-    'tasks' => _('Tasks'),
-    'history' => _('History'),
-    'referrals' => _('Referrals'),
-    'notes' => _('Notes'),
-    'social' => _('Social')
-  }
 
   def status=(val)
     # handle deprecated values
@@ -104,13 +100,14 @@ class Contact < ActiveRecord::Base
 
   def to_s() name; end
 
-  def add_person(person)
+  def add_person(person, donor_account = nil)
     # Nothing to do if this person is already on the contact
     new_person = people.where(master_person_id: person.master_person_id).first
 
     unless new_person
       new_person = Person.clone(person)
       people << new_person
+      donor_account.people << new_person if donor_account
     end
 
     new_person
@@ -128,6 +125,24 @@ class Contact < ActiveRecord::Base
     !Contact.inactive_statuses.include?(status)
   end
 
+  def late_by?(min_days, max_days = nil)
+    date_to_check = last_donation_date || pledge_start_date
+    return false unless status == 'Partner - Financial' && pledge_frequency.present? && date_to_check.present?
+
+    case
+    when pledge_frequency >= 1.0
+      late_date = date_to_check + pledge_frequency.to_i.months
+    when pledge_frequency >= 0.4
+      late_date = date_to_check + 2.weeks
+    else
+      late_date = date_to_check + 1.week
+    end
+
+    min_late_date = Date.today - min_days
+    max_late_date = max_days ? Date.today - max_days : Date.new(1951, 1, 1)
+    late_date > max_late_date && late_date < min_late_date
+  end
+
   def self.active_conditions
     "status NOT IN('#{inactive_statuses.join("','")}') or status is null"
   end
@@ -142,7 +157,7 @@ class Contact < ActiveRecord::Base
 
   def self.create_from_donor_account(donor_account, account_list)
     contact = account_list.contacts.new(name: donor_account.name)
-    contact.addresses_attributes = Hash[donor_account.addresses.collect.with_index { |address, i| [i, address.attributes.slice(*%w(street city state country postal_code))] }]
+    contact.addresses_attributes = donor_account.addresses_attributes
     contact.save!
     contact.donor_accounts << donor_account
     contact
@@ -181,8 +196,12 @@ class Contact < ActiveRecord::Base
     person_id
   end
 
-  def spouse_name
+  def spouse_first_name
     spouse.try(:first_name)
+  end
+
+  def spouse_last_name
+    spouse.try(:last_name)
   end
 
   def spouse_phone
@@ -194,16 +213,27 @@ class Contact < ActiveRecord::Base
   end
 
   def greeting
+    self[:greeting].present? ? self[:greeting] : generated_greeting
+  end
+
+  def generated_greeting
     return name if siebel_organization?
-    return self[:greeting] if self[:greeting].present?
     return first_name if spouse.try(:deceased)
-    return spouse_name if primary_or_first_person.deceased && spouse
-    [first_name, spouse_name].compact.join(_(' and '))
+    return spouse_first_name if primary_or_first_person.deceased && spouse
+    [first_name, spouse_first_name].compact.join(" #{_('and')} ")
   end
 
   def envelope_greeting
+    self[:envelope_greeting].present? ? self[:envelope_greeting] : generated_envelope_greeting
+  end
+
+  def generated_envelope_greeting
     return name if siebel_organization?
-    greeting.include?(last_name.to_s) ? greeting : [greeting, last_name].compact.join(' ')
+    if spouse_last_name.blank? || last_name == spouse_last_name
+      [[first_name, spouse_first_name].compact.join(" #{_('and')} "), last_name].compact.join(' ')
+    else
+      [[first_name, last_name].compact.join(' '), [spouse_first_name, spouse_last_name].compact.join(' ')].join(" #{_('and')} ")
+    end
   end
 
   def siebel_organization?
@@ -280,7 +310,7 @@ class Contact < ActiveRecord::Base
       merge_addresses
 
       ContactReferral.where(referred_to_id: other.id).each do |contact_referral|
-        contact_referral.update_column(:referred_to_id, id) unless contact_referrals_to_me.find { |crtm| crtm.referred_by_id == contact_referral.referred_by_id }
+        contact_referral.update_column(:referred_to_id, id) unless contact_referrals_to_me.find_by_referred_by_id(contact_referral.referred_by_id)
       end
 
       ContactReferral.where(referred_by_id: other.id).update_all(referred_by_id: id)
@@ -443,6 +473,10 @@ class Contact < ActiveRecord::Base
     else
       delete_from_prayer_letters
     end
+  end
+
+  def sync_with_google_contacts
+    account_list.google_integrations.where(contacts_integration: true).each { |g_i| g_i.queue_sync_data('contacts') }
   end
 
   def delete_from_prayer_letters

@@ -23,6 +23,7 @@
 //= require jquery.browser.min
 //= require jquery.select-to-autocomplete
 //= require jquery.hoverIntent.minified
+//= require jquery.are-you-sure
 //= require highcharts
 //= require tooltipsy.min
 //= require mpdx
@@ -51,6 +52,8 @@
 //= require_tree ./angular/directives
 //= require_tree ./angular/services
 //= require_tree ./angular/filters
+//= require angular-ui-bootstrap-tpls
+//= require moment
 
 //= require bootstrap-tagsinput
 //= require typeahead.jquery.js

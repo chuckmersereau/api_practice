@@ -1,5 +1,5 @@
 require 'sidekiq/web'
-Mpdx::Application.routes.draw do
+Rails.application.routes.draw do
 
   resources :google_integrations, only: [:show, :edit, :update, :create] do
     member do
@@ -38,6 +38,7 @@ Mpdx::Application.routes.draw do
       resources :contacts do
         collection do
           get :count
+          get :tags
         end
       end
       resources :tasks do
@@ -48,7 +49,7 @@ Mpdx::Application.routes.draw do
       resources :donations, only: [:index]
       resources :preferences
       resources :users
-      resources :insights
+      resources :appeals
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
   end
@@ -86,7 +87,6 @@ Mpdx::Application.routes.draw do
       post :save_referrals
       get :details
       get :referrals
-      get :recommended_contacts
     end
     resources :people do
       collection do
@@ -145,9 +145,9 @@ Mpdx::Application.routes.draw do
   get '/auth/failure', to: 'accounts#failure'
 
   developer_user_constraint = lambda { |request| request.env["rack.session"] and
-                                  request.env["rack.session"]["warden.user.user.key"] and
-                                  request.env["rack.session"]["warden.user.user.key"][0] and
-                                  ['Starcher','Sabelko','Oberstadt','Meyer'].include?(User.find(request.env["rack.session"]["warden.user.user.key"][0].first).last_name) }
+      request.env["rack.session"]["warden.user.user.key"] and
+      request.env["rack.session"]["warden.user.user.key"][0] and
+      User.find(request.env["rack.session"]["warden.user.user.key"][0].first).developer }
   constraints developer_user_constraint do
     mount Sidekiq::Web => '/sidekiq'
   end
@@ -163,4 +163,5 @@ Mpdx::Application.routes.draw do
   get '/templates/:path.html' => 'templates#template', :constraints => { :path => /.+/  }
 
   # See how all your routes lay out with "rake routes"
+
 end

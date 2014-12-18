@@ -28,12 +28,12 @@
 
   <div class="field">
     <%= f.label :result, _('Result') %>
-    <%= f.select :result, {} %>
+    <%= f.select :result, task.result_options %>
   </div>
 
   <div class="field">
     <%= f.label :next_action, _('Next Action') %>
-    <%= f.select :next_action, {} %>
+    <%= f.select :next_action, task.next_action_options %>
   </div>
 <% else %>
   <div class="field due_date">
@@ -46,6 +46,12 @@
 <div class="field">
   <%= f.label :tag_list, _('Tags') %>
   <%= f.text_field :tag_list %>
+</div>
+
+<div class="field task_location" <% if task.activity_type != 'Appointment' %>style="display: none;"<% end %>>
+  <%= f.label :location, _('Location') %>
+  <%= f.text_field :location, { placeholder: task.calculated_location } %>
+  <p><%= _("Defaults to contact's primary address") %></p>
 </div>
 
 <div class="field">

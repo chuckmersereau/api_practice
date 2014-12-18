@@ -19,7 +19,7 @@ describe Contact do
       contact.addresses_attributes = [{ id: address.id, _destroy: '1' }]
       contact.save!
 
-      address.reload.deleted.should == true
+      expect { address.reload }.to raise_error(ActiveRecord::RecordNotFound)
     end
 
     it 'should update an address' do
@@ -165,7 +165,20 @@ describe Contact do
       expect { contact.destroy }
         .to change(Address, :count).by(-1)
     end
+  end
 
+  describe '#late_by?' do
+    it 'should tell if a monthly donor is late on their donation' do
+      contact.late_by?(2.days, 30.days).should be true
+      contact.late_by?(30.days, 60.days).should be false
+      contact.late_by?(60.days).should be false
+    end
+
+    it 'should tell if an annual donor is late on their donation' do
+      contact = create(:contact, pledge_frequency: 12.0, last_donation_date: 14.months.ago)
+      contact.late_by?(30.days, 45.days).should be false
+      contact.late_by?(45.days).should be true
+    end
   end
 
   context '#primary_person_id=' do
@@ -344,4 +357,45 @@ describe Contact do
     end
   end
 
+  context '#envelope_greeting' do
+    it 'uses first_name, spouse first_name and same last_name' do
+      contact = create(:contact, greeting: 'Fred and Lori Doe', name: 'Fredrick & Loraine Doe')
+      primary = create(:person, first_name: 'Bob', last_name: 'Jones', legal_first_name: 'Robert')
+      contact.people << primary
+
+      expect(contact.envelope_greeting).to eq('Bob Jones')
+
+      spouse = create(:person, first_name: 'Jen', last_name: 'Jones', legal_first_name: 'Jennifer')
+      contact.people << spouse
+      contact.reload
+      expect(contact.envelope_greeting).to eq('Bob and Jen Jones')
+    end
+
+    it 'uses first_name, spouse first_name and different last_name' do
+      contact = create(:contact, greeting: 'Fred and Lori Doe', name: 'Fredrick & Loraine Doe')
+      primary = create(:person, first_name: 'Bob', last_name: 'Jones', legal_first_name: 'Robert')
+      contact.people << primary
+
+      expect(contact.envelope_greeting).to eq('Bob Jones')
+
+      spouse = create(:person, first_name: 'Jen', last_name: 'Fidel', legal_first_name: 'Jennifer')
+      contact.people << spouse
+      contact.reload
+      expect(contact.envelope_greeting).to eq('Bob Jones and Jen Fidel')
+    end
+
+    it 'can be overwriten' do
+      contact = create(:contact, name: 'Fredrick & Loraine Doe')
+      primary = create(:person, first_name: 'Bob', last_name: 'Jones')
+      contact.people << primary
+      spouse = create(:person, first_name: 'Jen', last_name: 'Jones')
+      contact.people << spouse
+      contact.reload
+      expect(contact.envelope_greeting).to eq('Bob and Jen Jones')
+
+      contact.update_attributes(envelope_greeting: 'Mr and Mrs Jones')
+      contact.reload
+      expect(contact.envelope_greeting).to eq('Mr and Mrs Jones')
+    end
+  end
 end

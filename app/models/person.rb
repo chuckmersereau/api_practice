@@ -30,7 +30,8 @@ class Person < ActiveRecord::Base
   has_many :organization_accounts, class_name: 'Person::OrganizationAccount', foreign_key: :person_id, dependent: :destroy
   has_many :key_accounts, class_name: 'Person::KeyAccount', foreign_key: :person_id, dependent: :destroy
   has_many :companies, through: :company_positions
-  has_many :donor_accounts, through: :master_person
+  has_many :donor_account_people
+  has_many :donor_accounts, through: :donor_account_people
   has_many :contact_people
   has_many :contacts, through: :contact_people
   has_many :account_lists, through: :contacts
@@ -39,7 +40,7 @@ class Person < ActiveRecord::Base
   has_many :activity_comments, dependent: :destroy
   has_many :messages_sent, class_name: 'Message', foreign_key: :from_id, dependent: :destroy
   has_many :messages_received, class_name: 'Message', foreign_key: :to_id, dependent: :destroy
-  has_many :google_contacts
+  has_many :google_contacts, autosave: true
 
   scope :alive, -> { where.not(deceased: true) }
 

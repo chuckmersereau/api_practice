@@ -2,6 +2,7 @@ class DonationsController < ApplicationController
   before_action :find_donation, only: [:edit, :destroy, :update]
   before_action :find_contact
   before_action :find_donor_accounts, only: [:edit, :new]
+  before_action :find_appeals, only: [:index, :edit, :new]
 
   def index
     if @contact
@@ -60,7 +61,8 @@ class DonationsController < ApplicationController
   def setup_chart
     @by_month = @all_donations.where('donation_date >= ?', 12.months.ago.beginning_of_month).group_by { |r| r.donation_date.beginning_of_month }
     @by_month_index = 12.downto(0).map { |i| i.months.ago.to_date.beginning_of_month }
-    @prior_year = @all_donations.where('donation_date >= ? AND donation_date < ?', 24.months.ago.beginning_of_month, 11.months.ago.beginning_of_month).group_by { |r| r.donation_date.beginning_of_month }
+    @prior_year = @all_donations.where('donation_date >= ? AND donation_date < ?', 24.months.ago.beginning_of_month, 11.months.ago.beginning_of_month)
+                                .group_by { |r| r.donation_date.beginning_of_month }
     @prior_year_index = 24.downto(12).map { |i| i.months.ago.to_date.beginning_of_month }
   end
 
@@ -69,11 +71,18 @@ class DonationsController < ApplicationController
   end
 
   def donation_params
-    params.require(:donation).permit('donation_date(1i)', 'donation_date(2i)', 'donation_date(3i)', 'tendered_amount', 'donor_account_id', 'designation_account_id')
+    params.require(:donation).permit('donation_date(1i)', 'donation_date(2i)',
+                                     'donation_date(3i)', 'tendered_amount',
+                                     'donor_account_id', 'designation_account_id',
+                                     'appeal_id')
   end
 
   def find_contact
     @contact = current_account_list.contacts.where(id: params[:contact_id]).first if params[:contact_id]
+  end
+
+  def find_appeals
+    @appeals = current_account_list.appeals
   end
 
   def find_donor_accounts

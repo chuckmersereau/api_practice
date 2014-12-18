@@ -1,4 +1,5 @@
 require 'async'
+require 'open-uri'
 
 class PrayerLettersAccount < ActiveRecord::Base
   include Async
@@ -10,7 +11,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
   after_create :queue_subscribe_contacts
 
-  validates :token, :secret, :account_list_id, presence: true
+  validates :oauth2_token, :account_list_id,  presence: true
 
   def queue_subscribe_contacts
     async(:subscribe_contacts)
@@ -21,9 +22,12 @@ class PrayerLettersAccount < ActiveRecord::Base
 
     account_list.contacts.includes([:primary_address, { primary_person: :companies }]).each do |contact|
       next unless contact.send_physical_letter? &&
-                  contact.addresses.present? &&
+                  contact.mailing_address.present? &&
                   contact.active? &&
-                  contact.mailing_address.valid_mailing_address?
+                  contact.mailing_address.valid_mailing_address? &&
+                  contact.primary_person.present? &&
+                  contact.envelope_greeting.present? &&
+                  contact.name.present?
       params = {
         name: contact.envelope_greeting,
         greeting: contact.greeting,
@@ -61,18 +65,6 @@ class PrayerLettersAccount < ActiveRecord::Base
     end
   end
 
-  def validate_token
-    return false unless token.present? && secret.present?
-    begin
-      contacts(limit: 1) # If this works, the tokens are valid
-      self.valid_token = true
-    rescue RestClient::Unauthorized
-      self.valid_token = false
-    end
-    update_column(:valid_token, valid_token) unless new_record?
-    valid_token
-  end
-
   def active?
     valid_token?
   end
@@ -95,35 +87,29 @@ class PrayerLettersAccount < ActiveRecord::Base
   end
 
   def create_contact(contact)
-    begin
-      json = JSON.parse(get_response(:post, '/api/v1/contacts', contact_params(contact)))
-    rescue AccessError
-      # do nothing
-    rescue => e
-      json = JSON.parse(e.message)
-      case json['status']
-      when 400
-        # A contact must have a name or company.
-      else
-        raise e.message
-      end
-    end
+    contact_params = contact_params(contact)
+    json = JSON.parse(get_response(:post, '/api/v1/contacts', contact_params))
     contact.update_column(:prayer_letters_id, json['contact_id'])
+  rescue AccessError
+    # do nothing
+  rescue RestClient::BadRequest => e
+    # BadRequest: A contact must have a name or company. Monitor those cases for pattern / underlying causes.
+    Airbrake.raise_or_notify(e, parameters: contact_params)
   end
 
   def update_contact(contact)
     get_response(:post, "/api/v1/contacts/#{contact.prayer_letters_id}", contact_params(contact))
   rescue AccessError
     # do nothing
-  rescue => e
-    json = JSON.parse(e.message)
-    case json['status']
-    when 410, 404
-      contact.update_column(:prayer_letters_id, nil)
-      create_contact(contact)
-    else
-      raise e.message
-    end
+  rescue RestClient::Gone
+    handle_missing_contact(contact)
+  rescue RestClient::ResourceNotFound
+    handle_missing_contact(contact)
+  end
+
+  def handle_missing_contact(contact)
+    contact.update_column(:prayer_letters_id, nil)
+    subscribe_contacts
   end
 
   def delete_contact(contact)
@@ -156,18 +142,12 @@ class PrayerLettersAccount < ActiveRecord::Base
   end
 
   def get_response(method, path, params = nil)
-    consumer = OAuth::Consumer.new(APP_CONFIG['prayer_letters_key'], APP_CONFIG['prayer_letters_secret'],  site: SERVICE_URL, scheme: :query_string, oauth_version: '1.0')
-    oauth_token = OAuth::Token.new(token, secret)
+    return unless active?
 
-    response = consumer.request(method, path, oauth_token, {}, params)
-    case response.code.to_i
-    when 200, 201, 202, 204
-      response.body
-    when 401
-      handle_bad_token
-    else
-      fail response.body
-    end
+    RestClient::Request.execute(method: method, url: SERVICE_URL + path, payload: params, timeout: 960,
+                                headers: { 'Authorization' => "Bearer #{ URI.encode(oauth2_token) }" })
+  rescue RestClient::Unauthorized
+    handle_bad_token
   end
 
   def handle_bad_token
