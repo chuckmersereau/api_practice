@@ -8,7 +8,6 @@ class InsightAnalyses
     sql = insight.report_sql(session_id,
                              '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations',
                              vars)
-
    Hash.from_trusted_xml(insight.report_results(session_id,sql)).deep_symbolize_keys
   end
 

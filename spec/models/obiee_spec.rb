@@ -42,7 +42,7 @@ FETCH FIRST 10000000 ROWS ONLY'
 
     savon.expects(:generateReportSQL).with(message: report_params ).returns(rpt_sql_fixture)
 
-     report_sql = obiee.report_sql SESSION_ID, PATH, {}
+    report_sql = obiee.report_sql SESSION_ID, PATH, {}
 
     expect(report_sql).to eq('SELECT
    0 s_0,
@@ -127,8 +127,8 @@ FETCH FIRST 10000000 ROWS ONLY')
                        type: ''},
                   sessionID: SESSION_ID}
     savon.expects(:executeSQLQuery).with(message: run_params ).returns(results_fixture)
-   #No Session ID
-      expect{ obiee.report_results( '', SQL ) }.to raise_error( Savon::ExpectationError )
+    #No Session ID
+    expect{ obiee.report_results( '', SQL ) }.to raise_error( Savon::ExpectationError )
   end
 
   it('fails to get report results when no sql') do
