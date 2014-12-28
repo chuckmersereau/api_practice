@@ -124,6 +124,11 @@
                                    options_for_select([[_('-- Any --'), '']] + current_account_list.metro_areas.select(&:present?)),
                                    multiple: true, size: 5, class: 'form-control',
                                    :'ng-model' => 'contactQuery.metro_area' %>
+                    <label id="filter_country"><%= _('Country') %></label>
+                    <%= select_tag 'filters[country]',
+                                   options_for_select([[_('-- Any --'), '']] + current_account_list.countries.select(&:present?)),
+                                   multiple: true, size: 5,
+                                   :'ng-model' => 'contactQuery.country' %>
                     <label>
                       <input type="checkbox" ng-model="contactQuery.activeAddresses"> <%= _('Active addresses') %>
                     </label>
