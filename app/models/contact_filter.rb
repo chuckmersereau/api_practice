@@ -40,6 +40,7 @@ class ContactFilter
       filtered_contacts = state(filtered_contacts)
       filtered_contacts = region(filtered_contacts)
       filtered_contacts = metro_area(filtered_contacts)
+      filtered_contacts = country(filtered_contacts)
       filtered_contacts = likely(filtered_contacts)
       filtered_contacts = status(filtered_contacts)
       filtered_contacts = referrer(filtered_contacts)
@@ -98,6 +99,16 @@ class ContactFilter
   def metro_area(filtered_contacts)
     if @filters[:metro_area].present? && @filters[:metro_area].first != ''
       filtered_contacts = filtered_contacts.where('addresses.metro_area' => @filters[:metro_area], 'addresses.historic' => @filters[:address_historic] || false)
+                          .includes(:addresses)
+                          .references('addresses')
+    end
+    filtered_contacts
+  end
+
+  def country(filtered_contacts)
+    if @filters[:country].present? && @filters[:country].first != ''
+      filtered_contacts = filtered_contacts.where('addresses.country' => @filters[:country],
+                                                  'addresses.historic' => @filters[:address_historic] || false)
                           .includes(:addresses)
                           .references('addresses')
     end
