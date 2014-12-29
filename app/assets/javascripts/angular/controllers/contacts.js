@@ -15,6 +15,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         state: [''],
         region: [''],
         metro_area: [''],
+        country: [''],
         newsletter: '',
         status: ['active', 'null'],
         likely: [''],
@@ -50,6 +51,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         $scope.contactQuery.state = [''];
         $scope.contactQuery.region = [''];
         $scope.contactQuery.metro_area = [''];
+        $scope.contactQuery.country = [''];
         $scope.contactQuery.newsletter = '';
         $scope.contactQuery.status = ['active', 'null'];
         $scope.contactQuery.likely = [''];
@@ -158,13 +160,16 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         if(angular.isDefined(prefs.city)
           || angular.isDefined(prefs.state)
           || angular.isDefined(prefs.region)
-          || angular.isDefined(prefs.metro_area)){
+          || angular.isDefined(prefs.metro_area)
+          || angular.isDefined(prefs.country)){
             $scope.contactQuery.city = prefs.city || [];
             $scope.contactQuery.state = prefs.state || [];
             $scope.contactQuery.region = prefs.region || [];
             $scope.contactQuery.metro_area = prefs.metro_area || [];
+            $scope.contactQuery.country = prefs.country || [];
             if((prefs.city && prefs.city[0]) || (prefs.state && prefs.state[0]) ||
-               (prefs.region && prefs.region[0]) || (prefs.metro_area && prefs.metro_area[0])){
+               (prefs.region && prefs.region[0]) || (prefs.metro_area && prefs.metro_area[0]) ||
+               (prefs.country && prefs.country[0])){
                 jQuery("#filter_contact_location").trigger("click");
             }
         }
@@ -250,6 +255,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 '&filters[state][]=' + encodeURLarray(q.state).join('&filters[state][]=') +
                 '&filters[region][]=' + encodeURLarray(q.region).join('&filters[region][]=') +
                 '&filters[metro_area][]=' + encodeURLarray(q.metro_area).join('&filters[metro_area][]=') +
+                '&filters[country][]=' + encodeURLarray(q.country).join('&filters[country][]=') +
                 '&filters[newsletter]=' + encodeURIComponent(q.newsletter) +
                 '&filters[tags][]=' + encodeURLarray(q.tags).join('&filters[tags][]=') +
                 '&filters[status][]=' + encodeURLarray(statusApiArray).join('&filters[status][]=') +
@@ -315,6 +321,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           state: q.state,
           region: q.region,
           metro_area: q.metro_area,
+          country: q.country,
           newsletter: q.newsletter,
           status: statusApiArray,
           likely: q.likely,
@@ -348,7 +355,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
       if (!_.isEmpty(_.without(q.tags, '')) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
           !_.isEmpty(_.without(q.city, '')) || !_.isEmpty(_.without(q.state, '')) ||
           !_.isEmpty(_.without(q.region, '')) ||
-          !_.isEmpty(_.without(q.metro_area, '')) || !_.isEmpty(q.newsletter) ||
+          !_.isEmpty(_.without(q.metro_area, '')) ||
+          !_.isEmpty(_.without(q.country, '')) || !_.isEmpty(q.newsletter) ||
           !_.isEmpty(_.without(q.likely, '')) ||
           !_.isEmpty(_.without(q.church, '')) ||
           !_.isEmpty(_.without(q.referrer, '')) ||
