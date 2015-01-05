@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       resources :preferences
       resources :users
       resources :appeals
+      resources :insights
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
   end
