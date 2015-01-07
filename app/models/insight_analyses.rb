@@ -16,9 +16,9 @@ class InsightAnalyses
     recommends = increase_recommendation_analysis( designation_number)[:rowset][:Row]
     r_contacts = Array.new
 
-    if !recommends.blank?
-      recommends.each do |c, v|
-        r_contacts.push( c[:Column8].to_s )
+    unless recommends.empty?
+      recommends.each do |c|
+          r_contacts << c[ :Column8 ]
       end
     end
     r_contacts
