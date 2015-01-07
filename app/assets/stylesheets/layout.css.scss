@@ -1312,3 +1312,14 @@ body.google_integrations_controller {
 .best_in_place {
   cursor: pointer;
 }
+
+#toastPopup {
+  position: absolute;
+  top: 30px;
+  left: 50%;
+  margin-left: -50px;
+  background: #ead50e;
+  padding: 5px 12px;
+  border: 2px solid #4e4001;
+  border-radius: 6px;
+}

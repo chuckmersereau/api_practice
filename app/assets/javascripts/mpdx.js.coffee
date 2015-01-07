@@ -2,6 +2,10 @@ $ ->
 
   # Activating Best In Place
   $('.best_in_place').best_in_place()
+  $(document).on 'best_in_place:success', (event, request, error) ->
+    $.mpdx.toast(__("Contact Updated!"))
+  $(document).on 'best_in_place:error', (event, request, error) ->
+    $.mpdx.toast(__("Contact Save Failed"))
 
   $(document).on 'change', '#per_page', ->
     params = $.set_param('per_page', $(this).val())
@@ -193,6 +197,12 @@ $.mpdx.setOptions = (select_tag, options) ->
   select_tag.empty()
   $.each options.split(','), (key, value) ->
     select_tag.append $("<option></option>").attr("value", value).text(value)
+
+$.mpdx.toast = (options) ->
+  if typeof options == "string"
+    options = { message: options }
+  duration = options.duration || 2000
+  $('#toastPopup').text(options.message).fadeIn(300).delay(duration).fadeOut(300)
 
 $.set_param = (key, value, params) ->
   params = '?' + params if params
