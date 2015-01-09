@@ -105,7 +105,7 @@ class TntImport
     end
 
     merge_dups_by_donor_accts(contact, donor_accounts)
-
+ d
     if true?(row['IsOrganization'])
       donor_accounts.each { |donor_account|  add_or_update_company(row, donor_account) }
     end
@@ -360,30 +360,85 @@ class TntImport
     person
   end
 
+  def tnt_phone_locations(prefix)
+    locations = { 'HomePhone' => 'home', 'HomePhone2' => 'home', 'HomeFax' => 'fax',
+      'OtherPhone' => 'other', 'OtherFax' => 'fax' }
+
+    # Note: The order of these locations is important. The TntMPD export field PreferredPhoneType will
+    # index into this ordered hash and correspond with which phone number will get marked as preferred.
+    if prefix == 'Spouse'
+      locations.merge!(tnt_prefixed_phones('DO_NOT_IMPORT')).merge!(tnt_prefixed_phones(prefix))
+    else
+      locations.merge!(tnt_prefixed_phones(prefix)).merge!(tnt_prefixed_phones('DO_NOT_IMPORT'))
+    end
+
+    # These are old fields that are no longer in the user interface for Tnt 3.0, so put them at the end.
+    locations.merge('AssistantPhone' => 'work', 'OtherPhone' => 'other', 'CarPhone' => 'mobile',
+                    'CallbackPhone' => 'other', 'ISDNPhone' => 'other', 'PrimaryPhone' => 'other',
+                    'RadioPhone' => 'other', 'TelexPhone' => 'other')
+  end
+
+  def tnt_prefixed_phones(prefix)
+    { prefix + 'MobilePhone' => 'mobile', prefix + 'MobilePhone2' => 'mobile',
+      prefix + 'PagerNumber' => 'other', prefix + 'BusinessPhone' => 'work', prefix + 'BusinessPhone2' => 'work',
+      prefix + 'BusinessFax' => 'fax',  prefix + 'CompanyMainPhone' => 'work' }
+  end
+
   def update_person_attributes(person, row, prefix = '')
     person.attributes = { first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'], middle_name: row[prefix + 'MiddleName'],
                           title: row[prefix + 'Title'], suffix: row[prefix + 'Suffix'], gender: prefix.present? ? 'female' : 'male',
                           profession: prefix.present? ? nil : row['Profession'] }
-    # Phone numbers
-    phone_number_locations =
-    { 'HomePhone' => 'home', 'HomePhone2' => 'home', 'HomeFax' => 'fax',
-      prefix + 'BusinessPhone' => 'work', prefix + 'BusinessPhone2' => 'work',
-      prefix + 'BusinessFax' => 'fax', prefix + 'CompanyMainPhone' => 'work',
-      'AssistantPhone' => 'work', 'OtherPhone' => 'other', 'CarPhone' => 'mobile',
-      prefix + 'MobilePhone' => 'mobile', prefix + 'MobilePhone2' => 'mobile',
-      prefix + 'PagerNumber' => 'other', 'CallbackPhone' => 'other',
-      'ISDNPhone' => 'other', 'PrimaryPhone' => 'other', 'RadioPhone' => 'other',
-      'TelexPhone' => 'other' }
-    phone_number_locations.each_with_index do |key, i|
-      person.phone_number = { number: row[key[0]], location: key[1], primary: row['PreferredPhoneType'].to_i == i } if row[key[0]].present?
-    end
 
-    # email address
-    3.times do |i|
-      person.email_address = { email: row[prefix + "Email#{i}"], primary: row['PreferredEmailTypes'] == i } if row[prefix + "Email#{i}"].present?
-    end
-
+    update_person_phones(person, row, prefix)
+    update_person_emails(person, row, prefix)
     person
+  end
+
+  def update_person_phones(person, row, prefix)
+    found_primary = false
+    tnt_phone_locations(prefix).each_with_index do |key, i|
+      next unless row[key[0]].present? && row['PhoneIsValidMask'].to_i[i] == 1 # Index mask as bit vector
+      phone_attrs =  { number: row[key[0]], location: key[1] }
+      if @import.override? && !found_primary && row['PreferredPhoneType'].to_i == i
+        phone_attrs[:primary] = true
+        person.phone_numbers.each { |phone| phone.update(primary: false) }
+        found_primary = true
+      end
+      person.phone_number =  phone_attrs
+    end
+  end
+
+  def update_person_emails(person, row, prefix)
+    found_primary = false
+
+    # If there is just a single email in Tnt, it leaves the suffix off, so start with a blank then do the numbers
+    # up to three as Tnt allows a maximum of 3 email addresses for a person/spouse.
+    ['', '1', '2', '3'].each_with_index do |email_suffix, index|
+      email = row[prefix + "Email#{email_suffix}"]
+      next unless email.present?
+
+      email_valid = row[prefix + 'Email' + email_suffix + 'IsValid']
+      historic = email_valid.present? && !true?(email_valid)
+
+      email_attrs = { email: email, historic: historic }
+
+      # For MPDX, we set the primary email to be the first "preferred" email listed in Tnt.
+      email_num = email_suffix == '' ? 1 : index
+      if @import.override? && !found_primary && !historic && tnt_email_preferred?(row, email_num, prefix)
+        person.email_addresses.each { |e| e.update(primary: false) }
+        email_attrs[:primary] = true
+        found_primary = true
+      end
+
+      person.email_address = email_attrs
+    end
+  end
+
+  # TntMPD allows multiple emails to be marked as preferred and expresses that array of booleans as a
+  # bit vector in the PreferredEmailTypes. Bit 0 is ignored, then 3 for primary person emails, then 3 for spouse
+  def tnt_email_preferred?(row, email_num, person_prefix)
+    preferred_bit_index = (person_prefix == 'Spouse' ? 3 : 0) + email_num
+    row['PreferredEmailTypes'].present? && row['PreferredEmailTypes'].to_i[preferred_bit_index] == 1
   end
 
   def add_or_update_donor_accounts(row, designation_profile)

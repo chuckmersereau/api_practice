@@ -66,13 +66,13 @@ describe TntImport do
 
     context 'updating an existing contact' do
       before do
-        account_list = create(:account_list)
-        tnt_import.account_list = account_list
+        @account_list = create(:account_list)
+        tnt_import.account_list = @account_list
         tnt_import.save
         TntImport.new(tnt_import)
         contact.tnt_id = 1_620_699_916
         contact.status = 'Ask in Future'
-        contact.account_list = account_list
+        contact.account_list = @account_list
         contact.save
       end
 
@@ -84,22 +84,101 @@ describe TntImport do
         }.to change { contact.reload.status }.from('Ask in Future').to('Partner - Pray')
       end
 
-      it 'changes the primary address of an existing contact' do
-        donor_account_one = create(:donor_account)
-        donor_account_two = create(:donor_account)
-        import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_one])
-        import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_two])
-        import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_one])
-        import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_two])
-        address = create(:address, primary_mailing_address: true)
-        contact.addresses << address
-        contact.save
-        expect {
+      describe 'primary address behavior' do
+        def import_with_addresses
+          donor_account_one = create(:donor_account)
+          donor_account_two = create(:donor_account)
+          import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_one])
+          import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_two])
+          import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_one])
+          import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_two])
+          @address = create(:address, primary_mailing_address: true)
+          contact.addresses << @address
+          contact.save
+          expect {
+            import.send(:import_contacts)
+          }.not_to change { contact.addresses.where(primary_mailing_address: true).count }
+          expect { # make sure it survives a second import
+            import.send(:import_contacts)
+          }.not_to change { contact.addresses.where(primary_mailing_address: true).count }
+        end
+
+        it 'changes the primary address of an existing contact' do
+          import_with_addresses
+          expect(@address.reload.primary_mailing_address).to be_false
+        end
+
+        it 'does not change the primary address of an existing contact if not override' do
+          tnt_import.update_column(:override, false)
+          import_with_addresses
+          expect(@address.reload.primary_mailing_address).to be_true
+        end
+      end
+
+      describe 'primary email behavior' do
+        def import_with_email
+          person = create(:person, first_name: 'Bob', last_name: 'Doe')
+          person.email_address = { email: 'test@example.com', primary: true }
+          person.save
+          contact = create(:contact, account_list: @account_list, name: 'Doe, Bob and Dawn')
+          contact.people << person
+          @email_before_import = person.email_addresses.first
           import.send(:import_contacts)
-        }.not_to change { contact.addresses.where(primary_mailing_address: true).count }
-        expect { # make sure it survives a second import
+        end
+
+        it 'changes the primary email of an existing contact if override' do
+          import_with_email
+          expect(@email_before_import.reload.primary).to be_false
+        end
+
+        it 'does not change the primary email of an existing contact if not override' do
+          tnt_import.update_column(:override, false)
+          import_with_email
+          expect(@email_before_import.reload.primary).to be_true
+        end
+      end
+
+      describe 'primary phone behavior' do
+        def import_with_phone
+          person = create(:person, first_name: 'Bob', last_name: 'Doe')
+          person.phone_number = { number: '123-456-7890', primary: true }
+          person.save
+          contact = create(:contact, account_list: @account_list, name: 'Doe, Bob and Dawn')
+          contact.people << person
+          @phone_before_import = person.phone_numbers.first
           import.send(:import_contacts)
-        }.not_to change { contact.addresses.where(primary_mailing_address: true).count }
+        end
+
+        it 'changes the primary phone of an existing contact if override' do
+          import_with_phone
+          expect(@phone_before_import.reload.primary).to be_false
+        end
+
+        it 'does not change the primary phone of an existing contact if not override' do
+          tnt_import.update_column(:override, false)
+          import_with_phone
+          expect(@phone_before_import.reload.primary).to be_true
+        end
+      end
+
+      describe 'spouse/primary person phone import' do
+        it 'puts home phone in both, but only primary or spouse phones in individual people' do
+          john = create(:person, first_name: 'John', last_name: 'Smith')
+          jane = create(:person, first_name: 'Jane', last_name: 'Smith')
+          contact.people << john
+          contact.people << jane
+          import.send(:import_contacts)
+
+          john_numbers = john.reload.phone_numbers.pluck(:number)
+          jane_numbers = jane.reload.phone_numbers.pluck(:number)
+          expect(john_numbers.size).to eq(3)
+          expect(john_numbers).to include('+15555551234') # home
+          expect(john_numbers).to include('+11111111111')
+          expect(john_numbers).to include('(555) 555-9771 ext. 301')
+          expect(jane_numbers.size).to eq(2)
+          expect(jane_numbers).to include('+15555551234') # home
+          expect(jane_numbers).to include('+12222222222')
+        end
       end
     end
 
@@ -134,6 +213,100 @@ describe TntImport do
     end
   end
 
+  context '#tnt_email_preferred?' do
+    it 'interprets the tntmpd bit vector for PreferredEmailTypes to return true/false for prefix and email num' do
+      {
+        [{ 'PreferredEmailTypes' => '0' }, 1, ''] => false,
+        [{ 'PreferredEmailTypes' => '0' }, 2, ''] => false,
+        [{ 'PreferredEmailTypes' => '2' }, 1, ''] => true,
+        [{ 'PreferredEmailTypes' => '2' }, 2, ''] => false,
+        [{ 'PreferredEmailTypes' => '6' }, 1, ''] => true,
+        [{ 'PreferredEmailTypes' => '6' }, 2, ''] => true,
+        [{ 'PreferredEmailTypes' => '8' }, 1, ''] => false,
+        [{ 'PreferredEmailTypes' => '8' }, 2, ''] => false,
+        [{ 'PreferredEmailTypes' => '8' }, 3, ''] => true,
+        [{ 'PreferredEmailTypes' => '2' }, 1, 'Spouse'] => false,
+        [{ 'PreferredEmailTypes' => '2' }, 1, 'Spouse'] => false,
+        [{ 'PreferredEmailTypes' => '16' }, 1, 'Spouse'] => true,
+        [{ 'PreferredEmailTypes' => '16' }, 2, 'Spouse'] => false,
+        [{ 'PreferredEmailTypes' => '24' }, 1, 'Spouse'] => true,
+        [{ 'PreferredEmailTypes' => '24' }, 2, ''] => false,
+        [{ 'PreferredEmailTypes' => '24' }, 3, ''] => true,
+        [{ 'PreferredEmailTypes' => '32' }, 2, 'Spouse'] => true
+      }.each do |inputs, preferred|
+        row, email_num, person_prefix = inputs
+        expect(import.send(:tnt_email_preferred?, row, email_num, person_prefix)).to eq(preferred)
+      end
+    end
+  end
+
+  context '#update_person_emails' do
+    let(:person) { create(:person) }
+
+    it 'imports a single email with no numeric prefixes' do
+      row = { 'Email' => 'a@a.com' }
+      prefix = ''
+      expect(import).to receive(:tnt_email_preferred?).with(row, 1, prefix).and_return(true)
+      import.send(:update_person_emails, person, row, prefix)
+      expect(person.email_addresses.size).to eq(1)
+      email = person.email_addresses.first
+      expect(email.email).to eq('a@a.com')
+      expect(email.primary).to be_true
+    end
+
+    it 'imports emails and sets the first preferred and valid one to primary' do
+      row = { 'SpouseEmail1' => 'a@a.com', 'SpouseEmail2' => 'b@b.com', 'SpouseEmail3' => 'c@c.com',
+        'SpouseEmail1IsValid' => 'true', 'SpouseEmail2IsValid' => 'false', 'SpouseEmail3IsValid' => 'true' }
+      prefix = 'Spouse'
+      expect(import).to receive(:tnt_email_preferred?).and_return(false, true)
+      import.send(:update_person_emails, person, row, prefix)
+      expect(person.email_addresses.size).to eq(3)
+      expect(person.email_addresses.map { |e| [e.email, e.primary] }).to include(['a@a.com', false])
+      expect(person.email_addresses.map { |e| [e.email, e.primary] }).to include(['b@b.com', false])
+      expect(person.email_addresses.map { |e| [e.email, e.primary] }).to include(['c@c.com', true])
+    end
+
+    it 'only marks one email as primary even if there are multiple that are preferred and valid' do
+      prefix = ''
+      row = { 'Email1' => 'a@a.com', 'Email2' => 'b@b.com', 'Email1IsValid' => 'true', 'Email2IsValid' => 'true' }
+      expect(import).to receive(:tnt_email_preferred?).at_least(:once).and_return(true)
+      import.send(:update_person_emails, person, row, prefix)
+      expect(person.email_addresses.size).to eq(2)
+      expect(person.email_addresses.map { |e| [e.email, e.primary] }).to include(['a@a.com', true])
+      expect(person.email_addresses.map { |e| [e.email, e.primary] }).to include(['b@b.com', false])
+    end
+
+    it 'marks tnt "invalid" email addresses as historic in mpdx' do
+      prefix = ''
+      row = { 'Email' => 'a@a.com', 'EmailIsValid' => 'false' }
+      import.send(:update_person_emails, person, row, prefix)
+      expect(person.email_addresses.first.historic).to be_true
+
+      person.email_addresses.destroy_all
+
+      prefix = 'Spouse'
+      row = { 'SpouseEmail1' => 'a@a.com', 'SpouseEmail2' => 'b@b.com',
+              'SpouseEmail1IsValid' => 'true', 'SpouseEmail2IsValid' => 'false' }
+      import.send(:update_person_emails, person, row, prefix)
+      expect(person.email_addresses.count).to eq(2)
+      expect(person.email_addresses.map { |e| [e.email, e.historic] }).to include(['a@a.com', false])
+      expect(person.email_addresses.map { |e| [e.email, e.historic] }).to include(['b@b.com', true])
+    end
+  end
+
+  context '#update_person_phones' do
+    let(:person) { create(:person) }
+
+    it 'does not import invalid phone numbers' do
+      row = { 'HomePhone2' => '222-222-2222', 'SpouseMobilePhone' => '333-333-3333',
+        'PhoneIsValidMask' => '4096' }
+      prefix = 'Spouse'
+      import.send(:update_person_phones, person, row, prefix)
+      expect(person.phone_numbers.count).to eq(1)
+      expect(person.phone_numbers.first.number).to eq('+13333333333')
+    end
+  end
+
   context '#update_contact' do
     it 'updates notes correctly' do
       contact = Contact.new
@@ -159,7 +332,7 @@ describe TntImport do
       person = Person.new
       expect {
         person = import.send(:update_person_attributes, person, contact_rows.first)
-      }.to change(person.phone_numbers, :length).by(2)
+      }.to change(person.phone_numbers, :length).by(3)
     end
   end
 
@@ -403,5 +576,4 @@ describe TntImport do
       import.import
     end
   end
-
 end
