@@ -349,6 +349,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           return base + '6C41F0';
         case 'Partner - Pray':
           return base + 'F26FE5';
+          case 'Cultivate Relationship':
+              return base + '30eeb4';
       }
       return base + '757575'
     }
