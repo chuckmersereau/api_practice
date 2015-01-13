@@ -8,7 +8,10 @@
       <br/>
     <% end %>
   <% else %>
-    <%= link_to(_('Add a phone number'), @contact ? edit_contact_path(@contact) : edit_person_path(person)) %>
+    <span class="best_in_place best_in_place_once" data-bip-attribute="number"
+          data-bip-object="person[phone_numbers_attributes][0]"
+          data-bip-type="input" data-bip-url="/people/<%= person.id %>"
+          id="best_in_place_person_<%= person.id %>_phone_number">Add a phone number</span>
   <% end %>
 </div>
 
