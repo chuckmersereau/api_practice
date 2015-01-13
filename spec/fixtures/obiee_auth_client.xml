@@ -1,0 +1,7 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:sawsoap="urn://oracle.bi.webservices/v6">
+   <soap:Body>
+      <sawsoap:logonResult>
+         <sawsoap:sessionID xsi:type="xsd:string">sessionid22091522cru</sawsoap:sessionID>
+      </sawsoap:logonResult>
+   </soap:Body>
+</soap:Envelope>

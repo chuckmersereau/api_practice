@@ -1,0 +1,12 @@
+<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:sawsoap="urn://oracle.bi.webservices/v6">
+   <soap:Body>
+      <sawsoap:generateReportSQLResult>
+         <sawsoap:return xsi:type="xsd:string">SELECT
+   0 s_0,
+   "CCCi Transaction Analytics"."- Designation"."Designation Name" s_1
+FROM "CCCi Transaction Analytics"
+ORDER BY 1, 2 ASC NULLS LAST
+FETCH FIRST 10000000 ROWS ONLY</sawsoap:return>
+      </sawsoap:generateReportSQLResult>
+   </soap:Body>
+</soap:Envelope>

@@ -3,10 +3,7 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
         $scope.tasks = {};
         $scope.comments = {};
         $scope.people = {};
-        $scope.history = page == 'contactHistory';
-        $scope.loading = true;
 
-        var taskUrl;
         if(page === 'contact') {
             taskUrl = 'tasks?account_list_id=' + window.current_account_list_id +
                 '&filters[completed]=false' +
@@ -31,7 +28,6 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
 
         api.call('get', taskUrl, {}, function(tData) {
             if (tData.tasks.length === 0) {
-                $scope.loading = false;
                 return;
             }
 
@@ -56,43 +52,7 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
                 $scope.tasks = tData.tasks;
                 $scope.comments = _.union(tData.comments, $scope.comments);
                 $scope.people = _.union(tData.people, $scope.people);
-                $scope.loading = false;
             }, null, true);
         });
-    };
-
-    $scope.syncTask = function(resp) {
-        var task = resp.task || resp;
-        var old_task = _.findWhere($scope.tasks, {id: task.id});
-        if(!old_task)
-            $scope.addTask(task);
-        else if($scope.history == task.completed)
-            $scope.updateTask(old_task, task);
-        else
-            $scope.removeTask(task);
-        $scope.$digest();
-    };
-
-    $scope.addTask = function(newTask) {
-        if($scope.history == newTask.completed)
-            $scope.tasks.push(newTask);
-    };
-
-    $scope.updateTask = function(oldTask, newTask) {
-        var fields_to_update = ['subject', 'due_date', 'starred', 'activity_type',
-                                'tag_list', 'completed_at', 'result', 'next_action'];
-        for(var i in fields_to_update) {
-            oldTask[fields_to_update[i]] = newTask[fields_to_update[i]];
-        }
-    };
-
-    $scope.removeTask = function(oldTask) {
-        var index = $scope.tasks.indexOf(oldTask);
-        if(index != -1)
-            $scope.tasks.splice(index, 1);
-    };
-
-    $scope.noContacts = function() {
-        return !$scope.tasks.length && !$scope.loading;
     };
 });

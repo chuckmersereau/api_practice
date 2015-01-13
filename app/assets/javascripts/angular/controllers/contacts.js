@@ -22,7 +22,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         referrer: [''],
         timezone: [''],
         relatedTaskAction: [''],
-        appeal: [''],
         wildcardSearch: urlParameter.get('q'),
         viewPrefsLoaded: false
     };
@@ -50,7 +49,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         $scope.contactQuery.referrer = [''];
         $scope.contactQuery.timezone = [''];
         $scope.contactQuery.relatedTaskAction = [''];
-        $scope.contactQuery.appeal = [''];
         $scope.contactQuery.wildcardSearch = null;
         if(!_.isNull(document.getElementById('globalContactSearch'))) {
             document.getElementById('globalContactSearch').value = '';
@@ -158,12 +156,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_relatedTaskAction").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.appeal)){
-            $scope.contactQuery.appeal = prefs.appeal;
-            if(prefs.appeal[0]){
-                jQuery("#leftmenu #filter_appeal").trigger("click");
-            }
-        }
     });
 
     $scope.tagIsActive = function(tag){
@@ -214,11 +206,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
         '&per_page=' + q.limit +
         '&page=' + q.page +
-        '&filters[ids]=' + q.insightFilter.join();
-      } else {
-        requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
-          '&per_page=' + q.limit +
-          '&page=' + q.page +
           '&filters[name]=' + encodeURIComponent(q.name) +
           '&filters[contact_type]=' + encodeURIComponent(q.type) +
           '&filters[address_historic]=' + encodeURIComponent(!q.activeAddresses) +
@@ -234,18 +221,10 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           '&filters[referrer][]=' + encodeURLarray(q.referrer).join('&filters[referrer][]=') +
           '&filters[timezone][]=' + encodeURLarray(q.timezone).join('&filters[timezone][]=') +
           '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
-          '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
           '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch);
-      }
 
       api.call('get', requestUrl, {}, function (data) {
         angular.forEach(data.contacts, function (contact) {
-          var people = _.filter(data.people, function (i) {
-            return _.contains(contact.person_ids, i.id);
-          });
-          var flattenedEmailAddresses = _.flatten(_.pluck(people, 'email_address_ids'));
-          var flattenedFacebookAccounts = _.flatten(_.pluck(people, 'facebook_account_ids'));
-
           contactCache.update(contact.id, {
             addresses: _.filter(data.addresses, function (addr) {
               return _.contains(contact.address_ids, addr.id);
@@ -256,9 +235,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
             }),
             contact: _.find(data.contacts, { 'id': contact.id }),
             phone_numbers: data.phone_numbers,
-            facebook_accounts: _.filter(data.facebook_accounts, function (fb) {
-              return _.contains(flattenedFacebookAccounts, fb.id);
-            })
           });
         });
         $scope.contacts = data.contacts;
@@ -290,7 +266,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           referrer: q.referrer,
           timezone: q.timezone,
           relatedTaskAction: q.relatedTaskAction,
-          appeal: q.appeal
         };
         if (!isEmptyFilter(prefsToSave)) {
           viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
@@ -317,50 +292,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
       return true;
     };
 
-    var generateContactMarker = function(contact) {
-      var cc = contactCache.getFromCache(contact.id);
-      var marker;
-      if(cc && cc.addresses && cc.addresses.length > 0) {
-        var geo = cc.addresses[0].geo;
-        if(geo) {
-          marker = {
-            'lat': geo.split(',')[0],
-            'lng': geo.split(',')[1],
-            'infowindow': '<a href="/contacts/'+contact.id+'">' + contact.name + '</a>',
-            'picture': {
-              'url': markerURL(contact.status),
-              'width':  20,
-              'height': 36
-            }
-          }
-        }
-      }
-      return marker;
-    }
-    var markerURL = function(status) {
-      var base = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|'
-      switch(status) {
-        case '':
-        case 'Never Contacted':
-          return base + 'dcdcdc';
-        case 'Ask in Future':
-          return base + 'F04141';
-        case 'Contact for Appointment':
-          return base + 'F0D541';
-        case 'Appointment Scheduled':
-          return base + '54DB1A';
-        case 'Call for Decision':
-          return base + '41F0A1';
-        case 'Partner - Financial':
-          return base + '41AAF0';
-        case 'Partner - Special':
-          return base + '6C41F0';
-        case 'Partner - Pray':
-          return base + 'F26FE5';
-      }
-      return base + '757575'
-    }
-
     $scope.mapContacts = function() {
       var newMarkers = [];
       var contactsCounts = {
@@ -373,12 +304,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         else
           contactsCounts.noAddress++;
       })
-      $('#contacts_map_modal').dialog({ width: 700, height: 570 })
-      var addMarkers = function(){
-        $scope.mapHandler.removeMarkers($scope.mapMarkers)
-        $scope.mapMarkers = $scope.mapHandler.addMarkers(newMarkers);
-        $scope.mapHandler.bounds.extendWith($scope.mapMarkers);
-        $scope.mapHandler.fitMapToBounds();
       }
       $scope.singleMap(addMarkers)
       $('.contacts_counts').text(contactsCounts.noAddress + '/' + $scope.contacts.length)
@@ -398,27 +323,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           },
           methodToExec
         );
-      }
-      else
-        methodToExec()
-    };
-
-    $scope.runInsight = function(insight){
-      if(insight === 'recommendations'){
-        api.call('get', 'insights', {}, function (data) {
-          $scope.contactQuery.insightFilter = data.insights;
-        }, function(){
-          alert('An error has occurred while retrieving insight contacts');
-        });
-      }
-    };
-
-    $scope.clearInsightFilter = function(){
-      delete $scope.contactQuery.insightFilter;
-    };
-
-    $scope.insightFilterIsActive = function(){
-      return angular.isDefined($scope.contactQuery.insightFilter);
     };
 });
 
