@@ -56,6 +56,13 @@ class Contact < ActiveRecord::Base
     }
   ]
 
+  MERGE_COPY_ATTRIBUTES = [
+    :name, :pledge_amount, :status, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
+    :pledge_start_date, :next_ask, :never_ask, :likely_to_give, :church_name, :send_newsletter,
+    :direct_deposit, :magazine, :pledge_received, :timezone, :last_activity, :last_appointment, :last_letter,
+    :last_phone_call, :last_pre_call, :last_thank, :prayer_letters_id, :last_donation_date, :first_donation_date, :tnt_id
+  ]
+
   validates :name, presence: true
 
   accepts_nested_attributes_for :people, reject_if: :all_blank, allow_destroy: true
@@ -229,11 +236,20 @@ class Contact < ActiveRecord::Base
 
   def generated_envelope_greeting
     return name if siebel_organization?
-    if spouse_last_name.blank? || last_name == spouse_last_name
-      [[first_name, spouse_first_name].compact.join(" #{_('and')} "), last_name].compact.join(' ')
-    else
-      [[first_name, last_name].compact.join(' '), [spouse_first_name, spouse_last_name].compact.join(' ')].join(" #{_('and')} ")
+    working_name = name.to_s.strip
+    working_name.chomp!(',') if working_name.ends_with? ','
+    return working_name unless working_name.include? ','
+    last_name = working_name.split(',')[0].strip
+    first_names = working_name.split(',')[1].strip
+    return first_names + ' ' + last_name unless first_names =~ /\((\w|\W)*\)/
+    first_names = first_names.split(/ & | #{_('and')} /)
+    if first_names[0] =~ /\((\w|\W)*\)/
+      first_names[0].sub!(/\((\w|\W)*\)/, '')
+      first_names[0].strip!
+      return "#{first_names[0]} #{_('and')} #{first_names[1]} #{last_name}"
     end
+    first_names[1].delete!('()')
+    "#{first_names[0]} #{last_name} #{_('and')} #{first_names[1]}"
   end
 
   def siebel_organization?
@@ -244,6 +260,13 @@ class Contact < ActiveRecord::Base
     self.first_donation_date = donation.donation_date if first_donation_date.nil? || donation.donation_date < first_donation_date
     self.last_donation_date = donation.donation_date if last_donation_date.nil? || donation.donation_date > last_donation_date
     self.total_donations = total_donations.to_f + donation.amount
+    save(validate: false)
+  end
+
+  def update_all_donation_totals
+    return unless donor_account_ids.present?
+    donation_sum = account_list.donations.where(donor_account_id: donor_account_ids).sum(:amount)
+    self.total_donations = donation_sum
     save(validate: false)
   end
 
@@ -260,7 +283,8 @@ class Contact < ActiveRecord::Base
   end
 
   def not_same_as?(other)
-    not_duplicated_with.to_s.split(',').include?(other.id.to_s)
+    not_duplicated_with.to_s.split(',').include?(other.id.to_s) ||
+      other.not_duplicated_with.to_s.split(',').include?(id.to_s)
   end
 
   def donor_accounts_attributes=(attribute_collection)
@@ -277,74 +301,6 @@ class Contact < ActiveRecord::Base
         assign_nested_attributes_for_collection_association(:donor_accounts, [attrs])
       end
     end
-  end
-
-  def merge(other)
-    Contact.transaction do
-      # Update related records
-      other.messages.update_all(contact_id: id)
-
-      other.contact_people.each do |r|
-        next if contact_people.where(person_id: r.person_id).first
-        r.update_attributes(contact_id: id)
-      end
-
-      other.contact_donor_accounts.each do |other_contact_donor_account|
-        next if donor_accounts.map(&:account_number).include?(other_contact_donor_account.donor_account.account_number)
-        other_contact_donor_account.update_column(:contact_id, id)
-      end
-
-      other.activity_contacts.each do |other_activity_contact|
-        next if activities.include?(other_activity_contact.activity)
-        other_activity_contact.update_column(:contact_id, id)
-      end
-      update_uncompleted_tasks_count
-
-      other.addresses.each do |other_address|
-        next if addresses.find { |address| address.equal_to? other_address }
-        other_address.update_column(:addressable_id, id)
-      end
-
-      other.notifications.update_all(contact_id: id)
-
-      merge_addresses
-
-      ContactReferral.where(referred_to_id: other.id).each do |contact_referral|
-        contact_referral.update_column(:referred_to_id, id) unless contact_referrals_to_me.find_by_referred_by_id(contact_referral.referred_by_id)
-      end
-
-      ContactReferral.where(referred_by_id: other.id).update_all(referred_by_id: id)
-
-      # Copy fields over updating any field that's blank on the winner
-      [:name, :pledge_amount, :status, :greeting, :website,
-       :pledge_frequency, :pledge_start_date, :next_ask, :never_ask, :likely_to_give,
-       :church_name, :send_newsletter, :direct_deposit, :magazine, :last_activity, :last_appointment,
-       :last_letter, :last_phone_call, :last_pre_call, :last_thank, :prayer_letters_id].each do |field|
-         next unless send(field).blank? && other.send(field).present?
-         send("#{field}=".to_sym, other.send(field))
-       end
-
-       # If one of these is marked as a finanical partner, we want that status
-      if status != 'Partner - Financial' && other.status == 'Partner - Financial'
-        self.status = 'Partner - Financial'
-      end
-
-      self.notes = [notes, other.notes].compact.join("\n").strip if other.notes.present?
-
-      self.tag_list += other.tag_list
-
-      save(validate: false)
-    end
-
-    # Delete the losing record
-    begin
-      other.reload
-      other.destroy
-    rescue ActiveRecord::RecordNotFound; end
-
-    reload
-    merge_people
-    merge_donor_accounts
   end
 
   def deceased
@@ -369,16 +325,8 @@ class Contact < ActiveRecord::Base
     }
   end
 
-  def merge_addresses
-    ordered_addresses = addresses.order('created_at desc')
-    ordered_addresses.reload
-    ordered_addresses.each do |address|
-      other_address = ordered_addresses.find { |a| a.id != address.id && a.equal_to?(address) }
-      next unless other_address
-      address.merge(other_address)
-      merge_addresses
-      return
-    end
+  def merge(other)
+    ContactMerge.new(self, other).merge
   end
 
   def merge_people
@@ -389,8 +337,8 @@ class Contact < ActiveRecord::Base
       next if merged_people.include?(person)
 
       other_people = people.select { |p|
-        p.first_name == person.first_name &&
-        p.last_name == person.last_name &&
+        p.first_name.to_s.strip.downcase == person.first_name.to_s.strip.downcase &&
+        p.last_name.to_s.strip.downcase == person.last_name.to_s.strip.downcase &&
         p.id != person.id
       }
       next unless other_people

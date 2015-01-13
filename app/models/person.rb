@@ -125,7 +125,7 @@ class Person < ActiveRecord::Base
   end
 
   def deceased_check
-    return unless self.deceased?
+    return unless deceased_changed? && self.deceased?
 
     self.optout_enewsletter = true
 
@@ -139,11 +139,12 @@ class Person < ActiveRecord::Base
       # even if the field is nil. That causes an infinite loop here where it keeps trying to remove the first name
       # from the greeting but it keeps getting defaulted back to having it.
       if c[:greeting].present? && c[:greeting].include?(first_name)
-        contact_updates[:greeting] = c.greeting.sub(first_name, '').sub(' and ', ' ').strip
+        contact_updates[:greeting] = c.greeting.sub(first_name, '').sub(/ #{_('and')} /, ' ').strip
       end
+      contact_updates[:envelope_greeting] = '' if c[:envelope_greeting].present?
 
       if c.name.include?(first_name)
-        contact_updates[:name] = c.name.sub(first_name, '').sub(' and ', '').strip
+        contact_updates[:name] = c.name.sub(first_name, '').sub(/ & | #{_('and')} /, '').strip
       end
 
       if c.primary_person_id == id && c.people.count > 1
@@ -326,6 +327,10 @@ class Person < ActiveRecord::Base
         master_person.master_person_sources.where(organization_id: source.organization_id, remote_id: source.remote_id).first_or_initialize
       end
 
+      # Assume the winner has the nickname and the loser has the full name, and increment the times merged to
+      # track which nicknames are useful and to add new nicknames over time.
+      Nickname.increment_times_merged(other.first_name, first_name)
+
       other.reload
       other.destroy
     end
@@ -352,6 +357,11 @@ class Person < ActiveRecord::Base
 
   def to_person
     self
+  end
+
+  def not_same_as?(other)
+    not_duplicated_with.to_s.split(',').include?(other.id.to_s) ||
+      other.not_duplicated_with.to_s.split(',').include?(id.to_s)
   end
 
   private

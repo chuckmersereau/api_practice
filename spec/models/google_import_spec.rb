@@ -27,7 +27,7 @@ describe GoogleImport do
   end
 
   def stub_smarty_and_cloudinary
-    stub_request(:get, %r{http://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
+    stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
 
     # Based on sample from docs at http://cloudinary.com/documentation/upload_images
     cloudinary_reponse = {
@@ -92,7 +92,7 @@ describe GoogleImport do
     end
 
     it 'does not create a new person if their name matches' do
-      @contact.people << create(:person, last_name: 'Doe')
+      @contact.people << create(:person, first_name: 'John', last_name: 'Doe')
       expect {
         @google_import.send(:create_or_update_person, @google_contact)
       }.to_not change(Person, :count)
@@ -107,9 +107,67 @@ describe GoogleImport do
     end
   end
 
+  describe 'spouse import' do
+    def stub_g_contacts_with_spouse(spouse)
+      file = 'spec/fixtures/google_contacts.json'
+      json = JSON.parse(File.new(Rails.root.join(file)).read)
+      json['feed']['entry'][0]['gContact$relation'] = [{ 'rel' => 'spouse', '$t' => spouse }]
+      stub_request(:get, 'https://www.google.com/m8/feeds/contacts/default/full?alt=json&max-results=100000&v=3')
+        .with(headers: { 'Authorization' => "Bearer #{@account.token}" })
+        .to_return(body: json.to_json)
+    end
+
+    it 'does not import a spouse if none specified' do
+      @google_import.import
+      contact = Contact.find_by_name('Google, John')
+      expect(contact.people.count).to eq(1)
+    end
+
+    def import_and_expect_names(contact_name, person1_name, person2_name)
+      @google_import.import
+      contact = Contact.find_by_name(contact_name)
+      people_names = contact.people.map { |p| [p.first_name, p.last_name] }
+      expect(people_names.size).to eq(2)
+      expect(people_names).to include(person1_name)
+      expect(people_names).to include(person2_name)
+    end
+
+    it 'imports a spouse with a first name and assumes same last name' do
+      stub_g_contacts_with_spouse('Jane')
+      import_and_expect_names('Google, John and Jane', %w(John Google), %w(Jane Google))
+    end
+
+    it 'imports a spouse with a different last name' do
+      stub_g_contacts_with_spouse('Jane Smith')
+      import_and_expect_names('Google, John and Jane (Smith)', %w(John Google), %w(Jane Smith))
+    end
+
+    it 'imports a spouse with a compound first name and a last name' do
+      stub_g_contacts_with_spouse('Mary Beth Smith')
+      import_and_expect_names('Google, John and Mary Beth (Smith)', %w(John Google), ['Mary Beth', 'Smith'])
+    end
+
+    it 'does not import spouse or change contact name if spouse person already exists in contact' do
+      @contact.update(name: 'Google, John')
+      john = create(:person, first_name: 'John', last_name: 'Google')
+      jane = create(:person, first_name: 'Jane', last_name: 'Google', middle_name: 'Already there')
+      @contact.people << john
+      @contact.people << jane
+
+      stub_g_contacts_with_spouse('Jane')
+      @google_import.import
+      expect(Contact.count).to eq(1)
+      contact = Contact.first
+      expect(contact).to eq(@contact)
+      expect(contact.people).to include(john)
+      expect(contact.people).to include(jane)
+      expect(contact.people.map(&:middle_name)).to include('Already there')
+    end
+  end
+
   describe 'overall import results' do
     def check_imported_data
-      contacts = @account_list.contacts.where(name: 'Doe, John')
+      contacts = @account_list.contacts.where(name: 'Google, John')
       expect(contacts.to_a.count).to eq(1)
       contact = contacts.first
 
@@ -118,9 +176,9 @@ describe GoogleImport do
 
       expect(contact.people).to include(person)
       expect(person.contacts).to include(contact)
-      expect(contact.name).to eq('Doe, John')
+      expect(contact.name).to eq('Google, John')
       expect(person.first_name).to eq('John')
-      expect(person.last_name).to eq('Doe')
+      expect(person.last_name).to eq('Google')
       expect(person.middle_name).to eq('Henry')
       expect(person.title).to eq('Mr')
       expect(person.suffix).to eq('III')
@@ -203,7 +261,7 @@ describe GoogleImport do
         country: 'United States', location: 'Home', primary_mailing_address: true
       }]
       @contact.save
-      @person = build(:person, last_name: 'Doe')
+      @person = build(:person, last_name: 'Google')
       @person.email_address = { email: 'existing_primary@example.com', primary: true }
       @person.phone_number = { number: '474-747-4744', primary: true }
       @person.websites << Person::Website.create(url: 'original.example.com', primary: true)
@@ -272,7 +330,7 @@ describe GoogleImport do
       @existing_contact.reload
       expect(@existing_contact.notes).to eq('Notes here')
       expect(@existing_person.first_name).to eq('John')
-      expect(@existing_person.last_name).to eq('Doe')
+      expect(@existing_person.last_name).to eq('Google')
       expect(@existing_person.middle_name).to eq('Henry')
       expect(@existing_person.title).to eq('Mr')
       expect(@existing_person.suffix).to eq('III')
@@ -318,7 +376,7 @@ describe GoogleImport do
   end
 
   it "doesn't import a picture if the person has an associated facebook account" do
-    person = build(:person, last_name: 'Doe')
+    person = build(:person)
     @contact.people << person
     create(:facebook_account, person: person)
     @google_import.import

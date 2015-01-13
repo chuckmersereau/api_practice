@@ -51,24 +51,8 @@ namespace :mpdx do
   end
 
   task address_cleanup: :environment do
-    def merge_addresses(contact)
-      addresses = contact.addresses.order('addresses.created_at')
-      return unless addresses.length > 1
-
-      addresses.reload
-      addresses.each do |address|
-        other_address = addresses.find { |a| a.equal_to?(address) && a.id != address.id }
-        next unless other_address
-        address.merge(other_address)
-        merge_addresses(contact)
-        return
-      end
-    end
-
-    address_query = "addresses.id is not null AND (addresses.country is null or addresses.country = 'United States' or addresses.country = '' or addresses.country = 'United States of America')"
-    Contact.includes(:addresses).where(address_query).find_each do |c|
-      merge_addresses(c)
-    end
+    us_address = "addresses.id is not null AND (addresses.country is null or addresses.country = 'United States' or addresses.country = '' or addresses.country = 'United States of America')"
+    Contact.joins(:addresses).where(us_address).find_each(&:merge_addresses)
   end
 
   task clear_stalled_downloads: :environment do

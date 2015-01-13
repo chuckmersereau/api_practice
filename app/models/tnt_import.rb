@@ -1,4 +1,6 @@
 class TntImport
+  include TntImportUtil
+
   # Donation Services seems to pad donor accounts with zeros up to length 9. TntMPD does not though.
   DONOR_NUMBER_NORMAL_LEN = 9
 
@@ -8,35 +10,6 @@ class TntImport
     @user = @import.user
     @designation_profile = @account_list.designation_profiles.first || @user.designation_profiles.first
     @tags_by_contact_id = {}
-  end
-
-  def read_xml(import_file)
-    xml = {}
-    begin
-      File.open(import_file, 'r:utf-8') do |file|
-        @contents = file.read
-        begin
-          xml = Hash.from_xml(@contents)
-        rescue => e
-          # If the document contains characters that we don't know how to parse
-          # just strip them out.
-          # The eval is dirty, but it was all I could come up with at the time
-          # to unescape a unicode character.
-          begin
-            bad_char = e.message.match(/"([^"]*)"/)[1]
-            @contents.gsub!(eval(%("#{bad_char}")), ' ') # rubocop:disable Eval
-          rescue
-            raise e
-          end
-          retry
-        end
-      end
-    rescue ArgumentError
-      File.open(import_file, 'r:windows-1251:utf-8') do |file|
-        xml = Hash.from_xml(file.read)
-      end
-    end
-    xml
   end
 
   def xml
@@ -53,19 +26,30 @@ class TntImport
 
   def import
     @import.file.cache_stored_file!
+    return unless xml.present?
 
-    if xml.present?
-      tnt_contacts = import_contacts
-      import_tasks(tnt_contacts)
-      import_history(tnt_contacts)
-      import_settings
-    end
-
+    tnt_contacts = import_contacts
+    import_tasks(tnt_contacts)
+    import_history(tnt_contacts)
+    import_offline_org_gifts(tnt_contacts)
+    import_settings
   ensure
     CarrierWave.clean_cached_files!
   end
 
   private
+
+  def import_contacts
+    load_contact_group_tags
+
+    rows = Array.wrap(xml['Contact']['row'])
+    @tnt_contacts = {}
+    rows.each { |row| @tnt_contacts[row['id']] = import_contact(row) }
+
+    import_referrals(rows)
+
+    @tnt_contacts
+  end
 
   def load_contact_group_tags
     @tags_by_contact_id = {}
@@ -90,67 +74,65 @@ class TntImport
     end
   end
 
-  def import_contacts
-    @tnt_contacts = {}
-
-    load_contact_group_tags
-
-    rows = Array.wrap(xml['Contact']['row'])
-
-    rows.each_with_index do |row, _i|
-
-      contact = Retryable.retryable do
-        @account_list.contacts.where(tnt_id: row['id']).first
-      end
-
-      donor_accounts = add_or_update_donor_accounts(row, @designation_profile)
-
-      donor_accounts.each do |donor_account|
-        contact = donor_account.link_to_contact_for(@account_list, contact)
-      end
-
-      # Look for more ways to link a contact
-      contact ||= Retryable.retryable do
-        @account_list.contacts.where(name: row['FileAs']).first_or_create
-      end
-
-      # add additional data to contact
-      update_contact(contact, row)
-
-      primary_contact_person = add_or_update_primary_person(row, contact)
-
-      # Now the secondary person (persumably spouse)
-      if row['SpouseFirstName'].present?
-        row['SpouseLastName'] = row['LastName'] if row['SpouseLastName'].blank?
-        contact_spouse = add_or_update_spouse(row, contact)
-
-        # Wed the two peple
-        primary_contact_person.add_spouse(contact_spouse)
-      end
-
-      @tnt_contacts[row['id']] = contact
-
-      next unless true?(row['IsOrganization'])
-      # organization
-      donor_accounts.each do |donor_account|
-        add_or_update_company(row, donor_account)
-      end
+  def import_contact(row)
+    contact = Retryable.retryable do
+      @account_list.contacts.where(tnt_id: row['id']).first
     end
 
-    # set referrals
+    donor_accounts = add_or_update_donor_accounts(row, @designation_profile)
+
+    donor_accounts.each do |donor_account|
+      contact = donor_account.link_to_contact_for(@account_list, contact)
+    end
+
+    # Look for more ways to link a contact
+    contact ||= Retryable.retryable do
+      @account_list.contacts.where(name: row['FileAs']).first_or_create
+    end
+
+    # add additional data to contact
+    update_contact(contact, row)
+
+    primary_contact_person = add_or_update_primary_person(row, contact)
+
+    # Now the secondary person (persumably spouse)
+    if row['SpouseFirstName'].present?
+      row['SpouseLastName'] = row['LastName'] if row['SpouseLastName'].blank?
+      contact_spouse = add_or_update_spouse(row, contact)
+
+      # Wed the two peple
+      primary_contact_person.add_spouse(contact_spouse)
+    end
+
+    merge_dups_by_donor_accts(contact, donor_accounts)
+
+    if true?(row['IsOrganization'])
+      donor_accounts.each { |donor_account|  add_or_update_company(row, donor_account) }
+    end
+
+    contact
+  end
+
+  def import_referrals(rows)
     # Loop over the whole list again now that we've added everyone and try to link up referrals
     rows.each do |row|
       referred_by = @tnt_contacts.find { |_tnt_id, c|
-        c.name == row['ReferredBy'] ||
-        c.full_name == row['ReferredBy'] ||
-        c.greeting == row['ReferredBy']
+        c.name == row['ReferredBy'] || c.full_name == row['ReferredBy'] || c.greeting == row['ReferredBy']
       }
       next unless referred_by
       contact = @tnt_contacts[row['id']]
       contact.referrals_to_me << referred_by[1] unless contact.referrals_to_me.include?(referred_by[1])
     end
+  end
 
-    @tnt_contacts
+  # If the user had two donor accounts in the same contact in Tnt, then  merge different contacts with those in MPDX.
+  def merge_dups_by_donor_accts(tnt_contact, donor_accounts)
+    dups_by_donor_accts = @account_list.contacts.where.not(id: tnt_contact.id).joins(:donor_accounts)
+      .where(donor_accounts: { id: donor_accounts.map(&:id) }).readonly(false)
+
+    dups_by_donor_accts.each do |dup_contact_matching_donor_account|
+      tnt_contact.reload.merge(dup_contact_matching_donor_account)
+    end
   end
 
   def import_tasks(tnt_contacts = {})
@@ -212,6 +194,44 @@ class TntImport
     end
 
     tnt_history
+  end
+
+  def import_offline_org_gifts(tnt_contacts)
+    return unless @account_list.organization_accounts.count == 1
+    org = @account_list.organization_accounts.first.organization
+    return unless org.api_class == 'OfflineOrg'
+
+    Array.wrap(xml['Gift']['row']).each do |row|
+      contact = tnt_contacts[row['ContactID']]
+      next unless contact
+      account = donor_account_for_contact(org, contact)
+
+      # If someone re-imports donations, assume that there is just one donation per date per amount;
+      # that's not a perfect assumption but it seems reasonable solution for offline orgs for now.
+      donation_key_attrs = {  amount: row['Amount'], donation_date: parse_date(row['GiftDate']) }
+      account.donations.find_or_create_by(donation_key_attrs) do |donation|
+        # Assume the currency is USD. Tnt doesn't have great currency support and USD is a decent default.
+        donation.update(tendered_currency: 'USD', tendered_amount: row['Amount'])
+
+        contact.update_donation_totals(donation)
+      end
+    end
+  end
+
+  def donor_account_for_contact(org, contact)
+    account = contact.donor_accounts.first
+    return account if account
+
+    donor_account = Retryable.retryable(sleep: 60, tries: 3) do
+      # Find a unique donor account_number for this contact. Try the current max numeric account number
+      # plus one. If that is a collision due to a race condition, an exception will be raised as there is a
+      # unique constraint on (organization_id, account_number) for donor_accounts. Just wait and try
+      # again in that case.
+      max = org.donor_accounts.where("account_number ~ '^[0-9]+$'").maximum('CAST(account_number AS int)')
+      org.donor_accounts.create!(account_number: (max.to_i + 1).to_s, name: contact.name)
+    end
+    contact.donor_accounts << donor_account
+    donor_account
   end
 
   def import_settings
@@ -291,56 +311,6 @@ class TntImport
     contact.tag_list.add(@import.tags, parse: true) if @import.tags.present?
     contact.tnt_id = row['id']
     contact.addresses_attributes = build_address_array(row, contact, @import.override)
-  end
-
-  def true?(val)
-    val.upcase == 'TRUE'
-  end
-
-  def parse_date(val)
-    Date.parse(val)
-  rescue
-  end
-
-  def lookup_mpd_phase(phase)
-    case phase.to_i
-    when 10 then 'Never Contacted'
-    when 20 then 'Ask in Future'
-    when 30 then 'Contact for Appointment'
-    when 40 then 'Appointment Scheduled'
-    when 50 then 'Call for Decision'
-    when 60 then 'Partner - Financial'
-    when 70 then 'Partner - Special'
-    when 80 then 'Partner - Pray'
-    when 90 then 'Not Interested'
-    when 95 then 'Unresponsive'
-    when 100 then 'Never Ask'
-    when 110 then 'Research Abandoned'
-    when 130 then 'Expired Referral'
-    end
-  end
-
-  def lookup_task_type(task_type_id)
-    case task_type_id.to_i
-    when 1 then 'Appointment'
-    when 2 then 'Thank'
-    when 3 then 'To Do'
-    when 20 then 'Call'
-    when 30 then 'Reminder Letter'
-    when 40 then 'Support Letter'
-    when 50 then 'Letter'
-    when 60 then 'Newsletter'
-    when 70 then 'Pre Call Letter'
-    when 100 then 'Email'
-    end
-  end
-
-  def lookup_history_result(history_result_id)
-    case history_result_id.to_i
-    when 1 then 'Done'
-    when 2 then 'Received'
-    when 3 then 'Attempted'
-    end
   end
 
   def add_or_update_company(row, donor_account)
@@ -424,9 +394,9 @@ class TntImport
       donor_accounts = row['OrgDonorCodes'].to_s.split(',').map do |account_number|
         donor_account = Retryable.retryable do
           da = designation_profile.organization.donor_accounts
-          .where('account_number = :account_number OR account_number = :padded_account_number',
-                 account_number: account_number,
-                 padded_account_number: account_number.rjust(DONOR_NUMBER_NORMAL_LEN, '0')).first
+            .where('account_number = :account_number OR account_number = :padded_account_number',
+                   account_number: account_number,
+                   padded_account_number: account_number.rjust(DONOR_NUMBER_NORMAL_LEN, '0')).first
 
           unless da
             da = designation_profile.organization.donor_accounts.new(account_number: account_number, name: row['FileAs'])
@@ -460,16 +430,8 @@ class TntImport
           address.save
         end
       end
-      addresses << {
-        street: street,
-        city: city,
-        state: state,
-        postal_code: postal_code,
-        country: country,
-        location: location,
-        region: row['Region'],
-        primary_mailing_address: primary_address
-      }
+      addresses << {  street: street,  city: city,  state: state,  postal_code: postal_code,  country: country,
+        location: location,  region: row['Region'],  primary_mailing_address: primary_address  }
     end
     addresses
   end

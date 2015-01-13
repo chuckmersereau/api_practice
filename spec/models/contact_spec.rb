@@ -23,7 +23,7 @@ describe Contact do
     end
 
     it 'should update an address' do
-      stub_request(:get, %r{http:\/\/api\.smartystreets\.com\/street-address})
+      stub_request(:get, %r{https:\/\/api\.smartystreets\.com\/street-address})
          .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
          .to_return(status: 200, body: '[]', headers: {})
 
@@ -294,6 +294,33 @@ describe Contact do
       expect(contact.notes).to eq('fdsa')
     end
 
+    it 'should total the donations of the contacts' do
+      loser_contact.donor_accounts << create(:donor_account, account_number: '1')
+      loser_contact.donor_accounts.first.donations << create(:donation, amount: 500.00)
+      contact.donor_accounts << create(:donor_account, account_number: '2')
+      contact.donor_accounts.first.donations << create(:donation, amount: 300.00)
+      contact.merge(loser_contact)
+      expect(contact.total_donations).to eq(800.00)
+    end
+
+    it 'should keep the least recent first donation date' do
+      loser_contact.first_donation_date = '2009-01-01'
+      contact.first_donation_date = '2010-01-01'
+      contact.merge(loser_contact)
+      expect(contact.first_donation_date).to eq(Date.parse('2009-01-01'))
+    end
+
+    it 'should keep the most recent last donation date' do
+      loser_contact.last_donation_date = '2010-01-01'
+      contact.last_donation_date = '2009-01-01'
+      contact.merge(loser_contact)
+      expect(contact.last_donation_date).to eq(Date.parse('2010-01-01'))
+    end
+
+    it 'calls merge_people for the winner' do
+      expect(contact).to receive(:merge_people)
+      contact.merge(loser_contact)
+    end
   end
 
   context '#destroy' do
@@ -319,13 +346,14 @@ describe Contact do
     end
   end
 
-  context 'without set greeting' do
+  context 'without set greeting or envelope_greeting' do
     let(:person) { create(:person) }
     let(:spouse) { create(:person, first_name: 'Jill') }
 
     before do
       contact.people << person
       contact.people << spouse
+      contact.name = "#{person.last_name}, #{person.first_name} and #{spouse.first_name}"
       contact.save
       person.save
       spouse.save
@@ -337,16 +365,24 @@ describe Contact do
       expect(contact.greeting).to eq(person.first_name + ' and ' + spouse.first_name)
     end
 
-    it 'excludes deceased person from greeting' do
+    it 'excludes deceased person from greetings' do
+      person.reload
       person.deceased = true
+      person.deceased_check
       person.save
+      contact.reload
       expect(contact.greeting).to eq spouse.first_name
+      expect(contact.envelope_greeting).to eq(spouse.first_name + ' ' + spouse.last_name)
     end
 
-    it 'excludes deceased spouse from greeting' do
+    it 'excludes deceased spouse from greetings' do
+      spouse.reload
       spouse.deceased = true
+      spouse.deceased_check
       spouse.save
+      contact.reload
       expect(contact.greeting).to eq person.first_name
+      expect(contact.envelope_greeting).to eq(person.first_name + ' ' + person.last_name)
     end
 
     it 'still gives name with single deceased' do
@@ -358,44 +394,84 @@ describe Contact do
   end
 
   context '#envelope_greeting' do
-    it 'uses first_name, spouse first_name and same last_name' do
-      contact = create(:contact, greeting: 'Fred and Lori Doe', name: 'Fredrick & Loraine Doe')
-      primary = create(:person, first_name: 'Bob', last_name: 'Jones', legal_first_name: 'Robert')
+    let(:primary) { create(:person, first_name: 'Bob', last_name: 'Jones', legal_first_name: 'Robert') }
+
+    before do
+      contact.update_attributes(greeting: 'Fred and Lori Doe', name: 'Fredrick & Loraine Doe')
       contact.people << primary
-
-      expect(contact.envelope_greeting).to eq('Bob Jones')
-
-      spouse = create(:person, first_name: 'Jen', last_name: 'Jones', legal_first_name: 'Jennifer')
-      contact.people << spouse
-      contact.reload
-      expect(contact.envelope_greeting).to eq('Bob and Jen Jones')
     end
 
-    it 'uses first_name, spouse first_name and different last_name' do
-      contact = create(:contact, greeting: 'Fred and Lori Doe', name: 'Fredrick & Loraine Doe')
-      primary = create(:person, first_name: 'Bob', last_name: 'Jones', legal_first_name: 'Robert')
-      contact.people << primary
-
-      expect(contact.envelope_greeting).to eq('Bob Jones')
-
-      spouse = create(:person, first_name: 'Jen', last_name: 'Fidel', legal_first_name: 'Jennifer')
-      contact.people << spouse
-      contact.reload
-      expect(contact.envelope_greeting).to eq('Bob Jones and Jen Fidel')
+    it 'uses contact name' do
+      contact.name = 'Smith, John & Jane'
+      expect(contact.envelope_greeting).to eq 'John & Jane Smith'
+      contact.name = 'John & Jane Smith'
+      expect(contact.envelope_greeting).to eq 'John & Jane Smith'
+      contact.name = 'Smith,'
+      expect(contact.envelope_greeting).to eq 'Smith'
+      contact.name = 'Smith, John T and Jane F'
+      expect(contact.envelope_greeting).to eq 'John T and Jane F Smith'
+      contact.name = 'Doe, John and Jane (Smith)'
+      expect(contact.envelope_greeting).to eq 'John Doe and Jane Smith'
+      contact.name = 'Doe, John (Jonny) and Jane'
+      expect(contact.envelope_greeting).to eq 'John and Jane Doe'
+      contact.name = 'New Life Church'
+      expect(contact.envelope_greeting).to eq 'New Life Church'
     end
 
     it 'can be overwriten' do
-      contact = create(:contact, name: 'Fredrick & Loraine Doe')
-      primary = create(:person, first_name: 'Bob', last_name: 'Jones')
-      contact.people << primary
       spouse = create(:person, first_name: 'Jen', last_name: 'Jones')
       contact.people << spouse
       contact.reload
-      expect(contact.envelope_greeting).to eq('Bob and Jen Jones')
+      expect(contact.envelope_greeting).to eq('Fredrick & Loraine Doe')
 
       contact.update_attributes(envelope_greeting: 'Mr and Mrs Jones')
       contact.reload
       expect(contact.envelope_greeting).to eq('Mr and Mrs Jones')
+    end
+
+    it "will add last name if person doesn't have it set" do
+      primary.update_attributes(last_name: '')
+      contact.reload
+      expect(contact.envelope_greeting).to eq('Fredrick & Loraine Doe')
+    end
+  end
+
+  context '#merge_people' do
+    it 'merges people with the same trimmed first and last name case insensitive' do
+      matches = {
+        { first_name: 'John', last_name: 'Doe' } => { first_name: 'John', last_name: 'Doe' },
+        { first_name: 'John ', last_name: 'Doe ' } => { first_name: 'John', last_name: 'Doe' },
+        { first_name: 'john', last_name: 'doe' } => { first_name: 'JOHN', last_name: 'Doe' },
+        { first_name: 'joHn ', last_name: 'dOe' } => { first_name: ' JOHN', last_name: ' Doe' }
+      }
+      matches.each do |person_attrs1, person_attrs2|
+        Person.destroy_all
+        contact.people << create(:person, person_attrs1)
+        contact.people << create(:person, person_attrs2)
+        expect {
+          contact.merge_people
+        }.to change(Person, :count).from(2).to(1)
+      end
+
+      non_matches = {
+        { first_name: 'Jane', last_name: 'Doe' } => { first_name: 'John', last_name: 'Doe' }
+      }
+      non_matches.each do |person_attrs1, person_attrs2|
+        Person.destroy_all
+        contact.people << create(:person, person_attrs1)
+        contact.people << create(:person, person_attrs2)
+        expect {
+          contact.merge_people
+        }.to_not change(Person, :count).from(2)
+      end
+    end
+
+    it 'does not error but merges if last name is nil (first name cannot be blank)' do
+      contact.people << create(:person, last_name: nil)
+      contact.people << create(:person, last_name: nil)
+      expect {
+        contact.merge_people
+      }.to change(Person, :count).from(2).to(1)
     end
   end
 end
