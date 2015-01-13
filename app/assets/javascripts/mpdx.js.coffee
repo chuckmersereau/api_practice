@@ -2,6 +2,11 @@ $ ->
 
   # Activating Best In Place
   $('.best_in_place').best_in_place()
+  $('.best_in_place_once').on 'best_in_place:success', ->
+    elm = this
+    setTimeout ->
+      $(elm).unbind('click').removeClass('best_in_place_once').removeClass('best_in_place')
+
   $(document).on 'best_in_place:success', (event, request, error) ->
     $.mpdx.toast(__("Contact Updated!"))
   $(document).on 'best_in_place:error', (event, request, error) ->

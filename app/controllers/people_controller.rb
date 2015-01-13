@@ -1,5 +1,4 @@
 class PeopleController < ApplicationController
-  respond_to :html, :js
   before_action :find_contact
   before_action :find_person, only: [:show, :edit, :update, :social_search]
 
@@ -44,6 +43,7 @@ class PeopleController < ApplicationController
       else
         format.html { render action: 'edit' }
       end
+      format.json { respond_with_bip(@person) }
     end
   end
 

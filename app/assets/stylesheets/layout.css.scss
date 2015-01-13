@@ -1312,6 +1312,9 @@ body.google_integrations_controller {
 .best_in_place {
   cursor: pointer;
 }
+span.best_in_place {
+  color: $links;
+}
 
 #toastPopup {
   position: absolute;
