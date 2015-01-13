@@ -23,18 +23,17 @@ describe Api::V1::InsightsController do
 
      creds = {name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
      fixture = File.read('spec/fixtures/obiee_auth_client.xml')
-     savon.expects(:logon).with(message: creds).returns(fixture)
-
-     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
-     report_params = { reportRef: {reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations'},
+     if savon.expects(:logon).with(message: creds).returns(fixture)
+       rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
+       report_params = { reportRef: {reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations'},
                          reportParams: {filterExpressions: '',
-                                        variables: {:name=>"mpdxRecurrDesig", :value=>"2716653"}
+                                        variables: {:name=>"mpdxRecurrDesig", :value=>"0124650"}
                          },
                          sessionID: 'sessionid22091522cru'}
 
        if savon.expects(:generateReportSQL).with(message: report_params ).returns(rpt_sql_fixture)
          results_fixture = File.read('spec/fixtures/obiee_report_results2.xml')
-         run_params = {sql:  'SELECT
+         run_params = {sql: 'SELECT
    0 s_0,
    "CCCi Transaction Analytics"."- Designation"."Designation Name" s_1
 FROM "CCCi Transaction Analytics"
@@ -51,9 +50,9 @@ FETCH FIRST 10000000 ROWS ONLY',
          savon.expects(:executeSQLQuery).with(message: run_params ).returns(results_fixture)
 
        end
+     end
+
      get :index
-     espects [].to eq([])
-     end
-
 
      end
+end
