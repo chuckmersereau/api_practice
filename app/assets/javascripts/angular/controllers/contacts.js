@@ -330,7 +330,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
       return marker;
     }
     var markerURL = function(status) {
-      var base = 'http://chart.apis.google.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|'
+      var base = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|'
       switch(status) {
         case '':
         case 'Never Contacted':
@@ -349,8 +349,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           return base + '6C41F0';
         case 'Partner - Pray':
           return base + 'F26FE5';
-          case 'Cultivate Relationship':
-              return base + 'cf641e';
+        case 'Cultivate Relationship':
+          return base + 'cf641e';
       }
       return base + '757575'
     }
@@ -367,7 +367,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         else
           contactsCounts.noAddress++;
       })
-      $('#contacts_map_modal').dialog({ width: 700, height: 570 })
+      $('#contacts_map_modal').dialog({ width: 700, height: 615 })
       var addMarkers = function(){
         $scope.mapHandler.removeMarkers($scope.mapMarkers)
         $scope.mapMarkers = $scope.mapHandler.addMarkers(newMarkers);
