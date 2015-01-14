@@ -16,7 +16,7 @@
     row << contact.spouse_first_name
     row << contact.greeting
     row << contact.envelope_greeting
-    row << contact.mailing_address.street
+    row << (contact.mailing_address.street ? contact.mailing_address.street.gsub("\r\n", "  ") : nil)
     row << contact.mailing_address.city
     row << contact.mailing_address.state
     row << contact.mailing_address.postal_code
