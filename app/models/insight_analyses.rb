@@ -15,14 +15,17 @@ class InsightAnalyses
 
     recommends = increase_recommendation_analysis( designation_number)[:rowset][:Row]
     contacts_list = Array.new
+    puts "say something"
+puts recommends.inspect
 
     unless recommends.empty?
-      recommends.each{ |c,v|
+      recommends.each{ |c,val|
+        puts "say hi"
+        puts c.class
         if c.include?(:Column8)
-          contacts_list[0].push(v[0])
-          end
+          contacts_list.push(c[:Column8].to_s)
+        end
       }
-
     end
     contacts_list
   end

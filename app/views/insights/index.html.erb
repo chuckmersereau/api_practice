@@ -13,13 +13,13 @@
     <th width="7%"><%= _('Gift Range') %></th>
     <th width="21%"><%= _('Account Name') %></th>
     <th><%= _('Zip') %></th>
-    <th width="17%"><%= _('HH Income Range by Zip') %></th>
+    <th><%= _('Household Income Range by Zip') %></th>
     <th><%= _('Current Gift') %></th>
-    <th><%= _('Avg HH Income by Zip') %><sub>+</sub></th>
+    <th><%= _('Avg Household Income by Zip') %><sub>+</sub></th>
     <th><%= _('Last Change') %></th>
-    <th><%= _('Next Suggested Ask') %></th>
-    <th><%= _('Suggested Ask Amount') %></th>
-    <th><%= _('Max Ask Amount') %></th>
+    <th><%= _('Next Suggested Increase') %></th>
+    <th><%= _('Suggested Increase Amount') %></th>
+    <th><%= _('Max Increase Amount') %></th>
   </tr>
   </thead>
   <tbody>
@@ -31,7 +31,7 @@
     <td width="Auto"><%= c[:Column5] %></td>
     <td width="Auto"><%= link_to( c[:Column16], current_account_list.contacts.where(id: @contact_id, account_list_id: current_account_list.id).first) %></td>
     <td><%= c[:Column12] %></td>
-    <td style="text-align:center"><%= c[:Column6] %></td>
+    <td style="text-align:center" width="Auto"><%= c[:Column6] %></td>
     <td class="donations">$<%= c[:Column1] %></td>
     <td style="text-align:center">$<%= c[:Column2] %></td>
     <td class="date"><%= c[:Column10] %></td>

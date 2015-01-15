@@ -27,7 +27,7 @@ describe Api::V1::InsightsController do
        rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
        report_params = { reportRef: {reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations'},
                          reportParams: {filterExpressions: '',
-                                        variables: {:name=>"mpdxRecurrDesig", :value=>"0124650"}
+                                        variables: {:name=>"mpdxRecurrDesig", :value=>"2716653"}
                          },
                          sessionID: 'sessionid22091522cru'}
 
