@@ -64,25 +64,25 @@ angular.module('mpdxApp')
                                            ("0" + (dateTwoDaysFromToday.getMonth() + 1)).slice(-2) + '-' +
                                            ("0" + dateTwoDaysFromToday.getDate()).slice(-2);
 
-                    if(strContains(taskResult, 'Call Again') ||
+                    if(strContains(taskResult, 'Call') ||
                        strContains(taskResult, 'Call for Decision') ||
-                       strContains(taskResult, 'Email Again') ||
-                       strContains(taskResult, 'Message Again') ||
-                       strContains(taskResult, 'Text Again')) {
+                       strContains(taskResult, 'Email') ||
+                       strContains(taskResult, 'Message') ||
+                       strContains(taskResult, 'Text')) {
 
                         //generic followup task type
                         var taskType;
                         var taskSubject;
-                        if(strContains(taskResult, 'Call Again')){
+                        if(strContains(taskResult, 'Call')){
                             taskType = 'Call';
                         }else if(strContains(taskResult, 'Call for Decision')){
                             taskType = 'Call';
                             taskSubject = 'Call for Decision - ' + followUpTask.subject;
-                        }else if(strContains(taskResult, 'Email Again')){
+                        }else if(strContains(taskResult, 'Email')){
                             taskType = 'Email';
-                        }else if(strContains(taskResult, 'Message Again')){
+                        }else if(strContains(taskResult, 'Message')){
                             taskType = 'Facebook Message';
-                        }else if(strContains(taskResult, 'Text Again')){
+                        }else if(strContains(taskResult, 'Text')){
                             taskType = 'Text Message';
                         }
 
