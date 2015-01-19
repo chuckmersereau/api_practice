@@ -73,11 +73,11 @@ angular.module('mpdxApp')
                         //generic followup task type
                         var taskType;
                         var taskSubject;
-                        if(strContains(taskResult, 'Call')){
-                            taskType = 'Call';
-                        }else if(strContains(taskResult, 'Call for Decision')){
+                        if(strContains(taskResult, 'Call for Decision')){
                             taskType = 'Call';
                             taskSubject = 'Call for Decision - ' + followUpTask.subject;
+                        }else if(strContains(taskResult, 'Call')){
+                            taskType = 'Call';
                         }else if(strContains(taskResult, 'Email')){
                             taskType = 'Email';
                         }else if(strContains(taskResult, 'Message')){
