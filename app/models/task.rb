@@ -30,13 +30,33 @@ class Task < Activity
   CALL_NEXT_ACTIONS = ['Call Again', 'Email', 'Text', 'Message', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
 
   APPOINTMENT_RESULTS = %w(Completed Attempted)
-  APPOINTMENT_NEXT_ACTIONS = ['Call for Decision', 'Call', 'Email', 'Text', 'Message', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'Reschedule', 'None']
+  APPOINTMENT_NEXT_ACTIONS = ['Call for Decision',
+                              'Call',
+                              'Email',
+                              'Text',
+                              'Message',
+                              'Partner - Financial',
+                              'Partner - Special',
+                              'Partner - Pray',
+                              'Ask in Future',
+                              'Not Interested',
+                              'Reschedule',
+                              'None']
 
   EMAIL_RESULTS = %w(Completed Received)
   EMAIL_NEXT_ACTIONS = ['Email Again', 'Call', 'Text', 'Message', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
 
   FACEBOOK_MESSAGE_RESULTS = %w(Completed Received)
-  FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again', 'Call', 'Email', 'Text', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
+  FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again',
+                                   'Call', 'Email',
+                                   'Text',
+                                   'Appointment Scheduled',
+                                   'Partner - Financial',
+                                   'Partner - Special',
+                                   'Partner - Pray',
+                                   'Ask in Future',
+                                   'Not Interested',
+                                   'None']
 
   TEXT_RESULTS = %w(Completed Received)
   TEXT_NEXT_ACTIONS = ['Text Again', 'Call', 'Email', 'Message', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
