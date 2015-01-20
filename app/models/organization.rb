@@ -1,3 +1,5 @@
+require 'async'
+
 class Organization < ActiveRecord::Base
   include Async # To allow batch processing of address merges
   include Sidekiq::Worker
