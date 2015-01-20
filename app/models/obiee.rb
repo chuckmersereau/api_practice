@@ -1,11 +1,14 @@
 require 'savon'
 
-class Obiee
 
-  def auth_client(creds={})
+class Obiee
+  attr_accessor :session_id
+
+  def initialize
+    creds = {name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     client = get_client APP_CONFIG['obiee_base_url'] + 'nQSessionService'
     auth_message = make_call( client, :logon, creds)
-    auth_message.body[:logon_result][:session_id]
+    @session_id = auth_message.body[:logon_result][:session_id]
   end
 
   # Pass in the session id, report path, and has with the variable name and it's value.  A hash is used because an

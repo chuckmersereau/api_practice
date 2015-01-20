@@ -1,0 +1,68 @@
+
+<% if @recommnds %>
+
+    <table class="tablelist donations" id="recurringGiftsDataTable">
+      <thead>
+      <tr>
+        <th width="21%"><%= _('Account Name') %></th>
+        <th><%= _('Current Gift') %></th>
+        <th><%= _('Suggested Increase Amount') %></th>
+        <th><%= _('Max Increase Amount') %></th>
+        <th><%= _('Next Suggested Increase') %></th>
+        <th><%= _('Last Change') %></th>
+        <th width="7%"><%= _('Gift Range') %></th>
+        <th><%= _('Zip') %></th>
+        <th><%= _('Household Income Range by Zip') %></th>
+        <th><%= _('Avg Household Income by Zip') %>
+          <sub>+</sub></th>
+
+
+      </tr>
+      </thead>
+      <tbody>
+      <% @recommnds.each do |c| %>
+
+          <% @contact_id = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c["Column8"]}).pluck('"contacts"."id"') %>
+
+          <tr>
+            <td width="Auto"><%= link_to(c["Column16"], current_account_list.contacts.where(id: @contact_id, account_list_id: current_account_list.id).first) %></td>
+            <td class="donations">$<%= c["Column1"] %></td>
+            <td style="text-align:center">$<%= c["Column13"] %></td>
+            <td style="text-align:center">$<%= c["Column14"] %></td>
+            <td id="nextAskYearMonth"><%= c["Column15"] %></td>
+            <td class="date"><%= c["Column10"] %></td>
+            <td width="Auto"><%= c["Column5"] %></td>
+            <td><%= c["Column12"] %></td>
+            <td style="text-align:center" width="Auto"><%= c["Column6"] %></td>
+
+            <td style="text-align:center">$<%= c["Column2"] %></td>
+            <td>
+              <select>
+                <option value="blank"></option>
+                <option value="NoDecision">Contacted - No desicion yet</option>
+                <option value="Increased">Contacted - Received an Increase</option>
+                <option value="NotPossibleNow">Contacted - No increase at this time. Attempt in the future.
+                </option>
+                <option value="NotPossibleAtAll">Contacted - Not possible at all. Won't re-attempt.</option>
+                <option value="NoDecision">Did not contact</option>
+              </select>
+            </td>
+
+          </tr>
+
+      <% end %>
+      </tbody>
+    </table>
+
+    <p>
+      <small>
+        <p align="left" position="bottom">+&nbsp;<cite><%= _('US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/') %></cite>
+        </p></small>
+    </p>
+<% else %>
+    <div class="mwrap">
+      <div class="nohide floating" style="background-color: #FDFFD4;">You have no monthly recurring gift
+        recommendations.
+      </div>
+    </div>
+<% end %>
