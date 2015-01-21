@@ -126,7 +126,7 @@ class GoogleContactsIntegrator
   end
 
   def delete_g_contact_merge_loser(g_contact_link)
-    api_user.delete_contact(g_contact_link.remote_id)
+    api_user.delete_contact(g_contact_link.remote_id) if g_contact_link.remote_id
     g_contact_link.destroy
   rescue => e
     if defined?(e.response) && GoogleContactsApi::Api.parse_response_code(e.response) == 404

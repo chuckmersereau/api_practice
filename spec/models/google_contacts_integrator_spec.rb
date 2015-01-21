@@ -471,6 +471,16 @@ describe GoogleContactsIntegrator do
     end
   end
 
+  context '#delete_g_contact_merge_loser' do
+    it 'does not cause an error if the remote_id of the merge loser is nil' do
+      g_contact_link = create(:google_contact, remote_id: nil)
+      expect {
+        @integrator.delete_g_contact_merge_loser(g_contact_link)
+      }.to_not raise_error
+      expect(GoogleContact.count).to eq(0)
+    end
+  end
+
   describe 'sync behavior for merged MPDX contacts/people' do
     before do
       @contact.update_column(:notes, 'contact')

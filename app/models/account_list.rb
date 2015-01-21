@@ -9,6 +9,7 @@
 # one designation account.
 
 require 'async'
+require 'mail'
 
 class AccountList < ActiveRecord::Base
   include Async
@@ -354,6 +355,44 @@ class AccountList < ActiveRecord::Base
     contacts.where(timezone: nil).find_each(&:set_timezone)
   end
 
+  def async_send_chalkline_list
+    # Since AccountList normally uses the lower priority :import queue use the :default queue for the
+    # email to Chalkline which the user would expect to see soon after their clicking the button to send it.
+    Sidekiq::Client.enqueue_to(:default, self.class, id, :send_chalkline_mailing_list)
+  end
+
+  def send_chalkline_mailing_list
+    ChalklineMailer.mailing_list(self).deliver
+  end
+
+  def physical_newsletter_csv
+    newsletter_contacts = ContactFilter.new(newsletter: 'address').filter(contacts)
+    views = ActionView::Base.new('app/views', {}, ActionController::Base.new)
+    views.render(file: 'contacts/index.csv.erb', locals: { contacts: newsletter_contacts })
+  end
+
+  def users_combined_name
+    user1, user2 = users.order('created_at').limit(2).to_a[0..1]
+    return name unless user1
+    return "#{user1.first_name} #{user1.last_name}".strip unless user2
+
+    if user2.last_name == user1.last_name
+      "#{user1.first_name} and #{user2.first_name} #{user1.last_name}".strip
+    else
+      "#{user1.first_name} #{user1.last_name} and #{user2.first_name} #{user2.last_name}".strip
+    end
+  end
+
+  def user_emails_with_names
+    emails_with_nils = users.map do |user|
+      next unless user.email
+      address = Mail::Address.new user.email.email
+      address.display_name = (user.first_name.to_s + ' ' + user.last_name.to_s).strip
+      address.format
+    end
+    emails_with_nils.compact
+  end
+
   private
 
   def import_data
@@ -436,7 +475,9 @@ class AccountList < ActiveRecord::Base
       next unless result['success'] > 0
       result['data'].each do |row|
         next unless row['email'] && row['merges']
-        groups = row['merges']['GROUPINGS'].detect { |g| g['id'] == APP_CONFIG['mailchimp_grouping_id'] }['groups'].split(', ')
+        grouping = row['merges']['GROUPINGS'].detect { |g| g['id'] == APP_CONFIG['mailchimp_grouping_id'] }
+        next unless grouping
+        groups = grouping['groups'].split(', ')
         groups -= [group]
         vars = { GROUPINGS: [{ id: APP_CONFIG['mailchimp_grouping_id'], groups: groups.join(', ') }] }
         gb.list_update_member(id: APP_CONFIG['mailchimp_list'], email_address: row['email'], merge_vars: vars,
