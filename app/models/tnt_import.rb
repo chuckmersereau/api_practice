@@ -413,17 +413,16 @@ class TntImport
 
     # If there is just a single email in Tnt, it leaves the suffix off, so start with a blank then do the numbers
     # up to three as Tnt allows a maximum of 3 email addresses for a person/spouse.
-    ['', '1', '2', '3'].each_with_index do |email_suffix, index|
-      email = row[prefix + "Email#{email_suffix}"]
+    (1..3).each do |email_num|
+      email = row[prefix + "Email#{email_num}"]
       next unless email.present?
 
-      email_valid = row[prefix + 'Email' + email_suffix + 'IsValid']
+      email_valid = row["#{prefix}Email#{email_num}IsValid"]
       historic = email_valid.present? && !true?(email_valid)
 
       email_attrs = { email: email, historic: historic }
 
       # For MPDX, we set the primary email to be the first "preferred" email listed in Tnt.
-      email_num = email_suffix == '' ? 1 : index
       if @import.override? && !found_primary && !historic && tnt_email_preferred?(row, email_num, prefix)
         person.email_addresses.each { |e| e.update(primary: false) }
         email_attrs[:primary] = true

@@ -182,7 +182,12 @@ describe TntImport do
       end
     end
 
-    it 'imports a contact even if their donor account had no name', debug: true do
+    it 'does not cause an error and increases contact count for case with first email not preferred' do
+      row = YAML.load(File.new(Rails.root.join('spec/fixtures/tnt/tnt_row_multi_email.yaml')).read)
+      expect { import.send(:import_contact, row) }.to change(Contact, :count).by(1)
+    end
+
+    it 'imports a contact even if their donor account had no name' do
       org = create(:organization)
       create(:donor_account, account_number: '413518908', organization: org, name: nil)
       create(:designation_profile, account_list: tnt_import.account_list, organization: org)
@@ -252,17 +257,6 @@ describe TntImport do
   context '#update_person_emails' do
     let(:person) { create(:person) }
 
-    it 'imports a single email with no numeric prefixes' do
-      row = { 'Email' => 'a@a.com' }
-      prefix = ''
-      expect(import).to receive(:tnt_email_preferred?).with(row, 1, prefix).and_return(true)
-      import.send(:update_person_emails, person, row, prefix)
-      expect(person.email_addresses.size).to eq(1)
-      email = person.email_addresses.first
-      expect(email.email).to eq('a@a.com')
-      expect(email.primary).to be_true
-    end
-
     it 'imports emails and sets the first preferred and valid one to primary' do
       row = { 'SpouseEmail1' => 'a@a.com', 'SpouseEmail2' => 'b@b.com', 'SpouseEmail3' => 'c@c.com',
         'SpouseEmail1IsValid' => 'true', 'SpouseEmail2IsValid' => 'false', 'SpouseEmail3IsValid' => 'true' }
@@ -287,7 +281,7 @@ describe TntImport do
 
     it 'marks tnt "invalid" email addresses as historic in mpdx' do
       prefix = ''
-      row = { 'Email' => 'a@a.com', 'EmailIsValid' => 'false' }
+      row = { 'Email1' => 'a@a.com', 'Email1IsValid' => 'false' }
       import.send(:update_person_emails, person, row, prefix)
       expect(person.email_addresses.first.historic).to be_true
 
