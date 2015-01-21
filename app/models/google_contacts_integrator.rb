@@ -281,6 +281,7 @@ class GoogleContactsIntegrator
       g_contact = GoogleContactsApi::Contact.new
       g_contact_link.last_data = {}
     end
+    g_contact.prep_add_to_group(my_contacts_group)
     g_contact.prep_add_to_group(mpdx_group)
 
     [g_contact, g_contact_link]
@@ -288,6 +289,10 @@ class GoogleContactsIntegrator
 
   def groups
     @groups ||= api_user.groups
+  end
+
+  def my_contacts_group
+    @my_contacts_group ||= groups.find { |group| group.system_group_id == 'Contacts' }
   end
 
   def inactive_group
