@@ -182,6 +182,15 @@ describe TntImport do
       end
     end
 
+    it 'imports a contact even if their donor account had no name', debug: true do
+      org = create(:organization)
+      create(:donor_account, account_number: '413518908', organization: org, name: nil)
+      create(:designation_profile, account_list: tnt_import.account_list, organization: org)
+      expect {
+        import.send(:import_contacts)
+      }.to change(Contact, :count).by(2)
+    end
+
     it 'imports a contact people details even if the contact is not a donor' do
       import = TntImport.new(create(:tnt_import_non_donor))
       expect {

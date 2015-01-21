@@ -105,7 +105,7 @@ class TntImport
     end
 
     merge_dups_by_donor_accts(contact, donor_accounts)
- d
+
     if true?(row['IsOrganization'])
       donor_accounts.each { |donor_account|  add_or_update_company(row, donor_account) }
     end
@@ -453,7 +453,10 @@ class TntImport
                    account_number: account_number,
                    padded_account_number: account_number.rjust(DONOR_NUMBER_NORMAL_LEN, '0')).first
 
-          unless da
+          if da
+            # Donor accounts for non-Cru orgs could have nil names so update with the name from tnt
+            da.update(name: row['FileAs']) if da.name.blank?
+          else
             da = designation_profile.organization.donor_accounts.new(account_number: account_number, name: row['FileAs'])
             da.addresses_attributes = build_address_array(row)
             da.save!
