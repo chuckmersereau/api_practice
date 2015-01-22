@@ -116,48 +116,80 @@ describe TntImport do
       end
 
       describe 'primary email behavior' do
-        def import_with_email
-          person = create(:person, first_name: 'Bob', last_name: 'Doe')
-          person.email_address = { email: 'test@example.com', primary: true }
-          person.save
-          contact = create(:contact, account_list: @account_list, name: 'Doe, Bob and Dawn')
-          contact.people << person
-          @email_before_import = person.email_addresses.first
-          import.send(:import_contacts)
+        before do
+          @person = create(:person, first_name: 'Bob', last_name: 'Doe')
+          @person.email_address = { email: 'test@example.com', primary: true }
+          @person.save
+          @contact = create(:contact, account_list: @account_list, name: 'Doe, Bob and Dawn')
+          @contact.people << @person
+          @email_before_import = @person.email_addresses.first
+
+          tnt_import.update_column(:override, false)
         end
 
         it 'changes the primary email of an existing contact if override' do
-          import_with_email
+          tnt_import.update_column(:override, true)
+          import.send(:import_contacts)
           expect(@email_before_import.reload.primary).to be_false
         end
 
         it 'does not change the primary email of an existing contact if not override' do
-          tnt_import.update_column(:override, false)
-          import_with_email
+          import.send(:import_contacts)
           expect(@email_before_import.reload.primary).to be_true
+        end
+
+        it 'sets the primary email if override not set and no primary was set for the person' do
+          @email_before_import.update_column(:primary, false)
+          import.send(:import_contacts)
+          expect(@person.email_addresses.where(primary: true).count).to eq(1)
+          expect(@person.email_addresses.where(primary: true).first.email).to eq('fake2@example.com')
+        end
+
+        it 'sets the primary email if override not set and no person existed' do
+          @contact.destroy
+          import.send(:import_contacts)
+          person = Person.find_by_first_name('Bob')
+          expect(person.email_addresses.where(primary: true).count).to eq(1)
+          expect(person.email_addresses.where(primary: true).first.email).to eq('fake2@example.com')
         end
       end
 
       describe 'primary phone behavior' do
-        def import_with_phone
-          person = create(:person, first_name: 'Bob', last_name: 'Doe')
-          person.phone_number = { number: '123-456-7890', primary: true }
-          person.save
-          contact = create(:contact, account_list: @account_list, name: 'Doe, Bob and Dawn')
-          contact.people << person
-          @phone_before_import = person.phone_numbers.first
-          import.send(:import_contacts)
+        before do
+          @person = create(:person, first_name: 'Bob', last_name: 'Doe')
+          @person.phone_number = { number: '123-456-7890', primary: true }
+          @person.save
+          @contact = create(:contact, account_list: @account_list, name: 'Doe, Bob and Dawn')
+          @contact.people << @person
+          @phone_before_import = @person.phone_numbers.first
+
+          tnt_import.update_column(:override, false)
         end
 
         it 'changes the primary phone of an existing contact if override' do
-          import_with_phone
+          tnt_import.update_column(:override, true)
+          import.send(:import_contacts)
           expect(@phone_before_import.reload.primary).to be_false
         end
 
         it 'does not change the primary phone of an existing contact if not override' do
-          tnt_import.update_column(:override, false)
-          import_with_phone
+          import.send(:import_contacts)
           expect(@phone_before_import.reload.primary).to be_true
+        end
+
+        it 'sets the primary phone if override not set and no primary was set for the person' do
+          @phone_before_import.update_column(:primary, false)
+          import.send(:import_contacts)
+          expect(@person.phone_numbers.where(primary: true).count).to eq(1)
+          expect(@person.phone_numbers.where(primary: true).first.number).to eq('+12223337890')
+        end
+
+        it 'sets the primary phone if override not set and no person existed' do
+          @contact.destroy
+          import.send(:import_contacts)
+          person = Person.find_by_first_name('Bob')
+          expect(person.phone_numbers.where(primary: true).count).to eq(1)
+          expect(person.phone_numbers.where(primary: true).first.number).to eq('+12223337890')
         end
       end
 

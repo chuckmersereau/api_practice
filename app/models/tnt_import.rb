@@ -360,30 +360,6 @@ class TntImport
     person
   end
 
-  def tnt_phone_locations(prefix)
-    locations = { 'HomePhone' => 'home', 'HomePhone2' => 'home', 'HomeFax' => 'fax',
-      'OtherPhone' => 'other', 'OtherFax' => 'fax' }
-
-    # Note: The order of these locations is important. The TntMPD export field PreferredPhoneType will
-    # index into this ordered hash and correspond with which phone number will get marked as preferred.
-    if prefix == 'Spouse'
-      locations.merge!(tnt_prefixed_phones('DO_NOT_IMPORT')).merge!(tnt_prefixed_phones(prefix))
-    else
-      locations.merge!(tnt_prefixed_phones(prefix)).merge!(tnt_prefixed_phones('DO_NOT_IMPORT'))
-    end
-
-    # These are old fields that are no longer in the user interface for Tnt 3.0, so put them at the end.
-    locations.merge('AssistantPhone' => 'work', 'OtherPhone' => 'other', 'CarPhone' => 'mobile',
-                    'CallbackPhone' => 'other', 'ISDNPhone' => 'other', 'PrimaryPhone' => 'other',
-                    'RadioPhone' => 'other', 'TelexPhone' => 'other')
-  end
-
-  def tnt_prefixed_phones(prefix)
-    { prefix + 'MobilePhone' => 'mobile', prefix + 'MobilePhone2' => 'mobile',
-      prefix + 'PagerNumber' => 'other', prefix + 'BusinessPhone' => 'work', prefix + 'BusinessPhone2' => 'work',
-      prefix + 'BusinessFax' => 'fax',  prefix + 'CompanyMainPhone' => 'work' }
-  end
-
   def update_person_attributes(person, row, prefix = '')
     person.attributes = { first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'], middle_name: row[prefix + 'MiddleName'],
                           title: row[prefix + 'Title'], suffix: row[prefix + 'Suffix'], gender: prefix.present? ? 'female' : 'male',
@@ -396,10 +372,16 @@ class TntImport
 
   def update_person_phones(person, row, prefix)
     found_primary = false
-    tnt_phone_locations(prefix).each_with_index do |key, i|
-      next unless row[key[0]].present? && row['PhoneIsValidMask'].to_i[i] == 1 # Index mask as bit vector
-      phone_attrs =  { number: row[key[0]], location: key[1] }
-      if @import.override? && !found_primary && row['PreferredPhoneType'].to_i == i
+    primary_or_spouse_sym = prefix == '' ? :primary : :spouse
+    is_valid_mask = row['PhoneIsValidMask'].to_i
+    had_no_primary = person.phone_numbers.where(primary: true).empty?
+
+    TNT_PHONES.each_with_index do |tnt_phone, i|
+      next unless tnt_phone[:person] == :both || tnt_phone[:person] == primary_or_spouse_sym
+      next unless row[tnt_phone[:field]].present? && is_valid_mask[i] == 1 # Index mask as bit vector
+
+      phone_attrs =  { number: row[tnt_phone[:field]], location: tnt_phone[:location] }
+      if (@import.override? || had_no_primary) && !found_primary && row['PreferredPhoneType'].to_i == i
         phone_attrs[:primary] = true
         person.phone_numbers.each { |phone| phone.update(primary: false) }
         found_primary = true
@@ -410,20 +392,21 @@ class TntImport
 
   def update_person_emails(person, row, prefix)
     found_primary = false
+    had_no_primary = person.email_addresses.where(primary: true).empty?
 
     # If there is just a single email in Tnt, it leaves the suffix off, so start with a blank then do the numbers
     # up to three as Tnt allows a maximum of 3 email addresses for a person/spouse.
-    (1..3).each do |email_num|
-      email = row[prefix + "Email#{email_num}"]
+    (1..3).each do |i|
+      email = row[prefix + "Email#{i}"]
       next unless email.present?
 
-      email_valid = row["#{prefix}Email#{email_num}IsValid"]
+      email_valid = row["#{prefix}Email#{i}IsValid"]
       historic = email_valid.present? && !true?(email_valid)
 
       email_attrs = { email: email, historic: historic }
 
       # For MPDX, we set the primary email to be the first "preferred" email listed in Tnt.
-      if @import.override? && !found_primary && !historic && tnt_email_preferred?(row, email_num, prefix)
+      if (@import.override? || had_no_primary) && !found_primary && !historic && tnt_email_preferred?(row, i, prefix)
         person.email_addresses.each { |e| e.update(primary: false) }
         email_attrs[:primary] = true
         found_primary = true

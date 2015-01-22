@@ -31,7 +31,8 @@ Nowhere, CA  12345</MailingAddressBlock>
         <MailingAddressIsDeliverable>true</MailingAddressIsDeliverable>
         <Phone>(555) 555-1234</Phone>
         <PhoneIsValid>true</PhoneIsValid>
-        <EmailIsValid>false</EmailIsValid>
+        <Email>same@example.com</Email>
+        <EmailIsValid>true</EmailIsValid>
         <IsOrganization>false</IsOrganization>
         <FirstName>John</FirstName>
         <LastName>Smith</LastName>
@@ -72,9 +73,11 @@ Nowhere, CA  12345</HomeAddressBlock>
         <MobilePhone>111-111-1111</MobilePhone>
         <BusinessPhone>(555) 555-9771 ext. 301</BusinessPhone>
         <SpouseMobilePhone>222-222-2222</SpouseMobilePhone>
-        <PreferredEmailTypes>0</PreferredEmailTypes>
-        <Email1IsValid>false</Email1IsValid>
-        <Email2IsValid>false</Email2IsValid>
+        <PreferredEmailTypes>3</PreferredEmailTypes>
+        <Email1>same@example.com</Email1>
+        <Email2>same@example.com</Email2>
+        <Email1IsValid>true</Email1IsValid>
+        <Email2IsValid>true</Email2IsValid>
         <Email3IsValid>false</Email3IsValid>
         <SpouseEmail1IsValid>false</SpouseEmail1IsValid>
         <SpouseEmail2IsValid>false</SpouseEmail2IsValid>
@@ -185,13 +188,14 @@ State, CA  12345</HomeAddressBlock>
         <SpouseBusinessCountry>United States of America</SpouseBusinessCountry>
         <SpouseBusinessAddressIsDeliverable>false</SpouseBusinessAddressIsDeliverable>
         <SpouseBusinessAddressBlockIsCustom>false</SpouseBusinessAddressBlockIsCustom>
-        <PreferredPhoneType>0</PreferredPhoneType>
-        <PhoneIsValidMask>1</PhoneIsValidMask>
+        <PreferredPhoneType>3</PreferredPhoneType>
+        <PhoneIsValidMask>9</PhoneIsValidMask>
         <PhoneCountryIDs>0=840</PhoneCountryIDs>
         <HomePhone>(555) 234-2345</HomePhone>
-        <PreferredEmailTypes>2</PreferredEmailTypes>
+        <OtherPhone>222-333-7890</OtherPhone>
+        <PreferredEmailTypes>4</PreferredEmailTypes>
         <Email1>fake@example.com</Email1>
-        <Email2>fake@example.com</Email2>
+        <Email2>fake2@example.com</Email2>
         <Email1IsValid>true</Email1IsValid>
         <Email2IsValid>true</Email2IsValid>
         <Email3IsValid>false</Email3IsValid>
