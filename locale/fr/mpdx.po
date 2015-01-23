@@ -568,7 +568,7 @@ msgid "Completed"
 msgstr "Terminé"
 
 msgid "Completed On"
-msgstr "Complété le :"
+msgstr "Terminé le :"
 
 msgid "Completed:"
 msgstr "Terminé :"
@@ -1382,7 +1382,7 @@ msgid "No Subject"
 msgstr "Aucun sujet"
 
 msgid "No completed tasks found for this contact."
-msgstr "Vous n'avez pas de tâches complétées pour ce contact."
+msgstr "Vous n'avez pas de tâche terminée pour ce contact."
 
 msgid "No donations have been received from %{contact} in the past 13 months"
 msgstr "Aucun dons n'a été reçu de %{contact} depuis 13 mois passés."
