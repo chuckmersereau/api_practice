@@ -61,7 +61,7 @@ class Person < ActiveRecord::Base
       email_address: :email,
       phone_number: :number,
       email_addresses_attributes: [:email, :historic, :primary, :_destroy, :id],
-      phone_numbers_attributes: [:number, :location, :primary, :_destroy, :id],
+      phone_numbers_attributes: [:number, :location, :historic, :primary, :_destroy, :id],
       linkedin_accounts_attributes: [:url, :_destroy, :id],
       facebook_accounts_attributes: [:url, :_destroy, :id],
       twitter_accounts_attributes: [:screen_name, :_destroy, :id],
