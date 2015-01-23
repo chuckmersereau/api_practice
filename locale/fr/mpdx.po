@@ -27,7 +27,7 @@ msgstr ""
 "financiers."
 
 msgid "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
-msgstr "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
+msgstr "\"Affichage de #{b}%{from}#{sp}-#{sp}%{to}#{eb} sur #{b}%{count}#{eb}\""
 
 msgid "%% of goal pledged (%{totals})"
 msgstr "%% de l'objectif promis (%{totals})"
