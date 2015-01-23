@@ -371,27 +371,25 @@ class TntImport
   end
 
   def update_person_phones(person, row, prefix)
-    found_primary = false
-    primary_or_spouse_sym = prefix == '' ? :primary : :spouse
-    is_valid_mask = row['PhoneIsValidMask'].to_i
+    person_sym = prefix == '' ? :primary : :spouse
+    is_valid_mask = row['PhoneIsValidMask'].to_i # Bit vector indexed corresponding to TNT_PHONES
     had_no_primary = person.phone_numbers.where(primary: true).empty?
 
     TNT_PHONES.each_with_index do |tnt_phone, i|
-      next unless tnt_phone[:person] == :both || tnt_phone[:person] == primary_or_spouse_sym
-      next unless row[tnt_phone[:field]].present? && is_valid_mask[i] == 1 # Index mask as bit vector
+      number = row[tnt_phone[:field]]
+      next unless number.present? && (tnt_phone[:person] == :both || tnt_phone[:person] == person_sym)
 
-      phone_attrs =  { number: row[tnt_phone[:field]], location: tnt_phone[:location] }
-      if (@import.override? || had_no_primary) && !found_primary && row['PreferredPhoneType'].to_i == i
+      phone_attrs =  { number: number, location: tnt_phone[:location], historic: is_valid_mask[i] == 0 }
+      if (@import.override? || had_no_primary) && row['PreferredPhoneType'].to_i == i
         phone_attrs[:primary] = true
         person.phone_numbers.each { |phone| phone.update(primary: false) }
-        found_primary = true
       end
       person.phone_number =  phone_attrs
     end
   end
 
   def update_person_emails(person, row, prefix)
-    found_primary = false
+    changed_primary = false
     had_no_primary = person.email_addresses.where(primary: true).empty?
 
     # If there is just a single email in Tnt, it leaves the suffix off, so start with a blank then do the numbers
@@ -406,10 +404,10 @@ class TntImport
       email_attrs = { email: email, historic: historic }
 
       # For MPDX, we set the primary email to be the first "preferred" email listed in Tnt.
-      if (@import.override? || had_no_primary) && !found_primary && !historic && tnt_email_preferred?(row, i, prefix)
+      if (@import.override? || had_no_primary) && !changed_primary && !historic && tnt_email_preferred?(row, i, prefix)
         person.email_addresses.each { |e| e.update(primary: false) }
         email_attrs[:primary] = true
-        found_primary = true
+        changed_primary = true
       end
 
       person.email_address = email_attrs

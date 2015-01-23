@@ -41,6 +41,7 @@
 
     phone_numbers = contact.people.collect(&:phone_numbers).flatten[0..3]
     phone_numbers.each do |phone|
+      next if phone.historic?
       row << phone.number
     end
 

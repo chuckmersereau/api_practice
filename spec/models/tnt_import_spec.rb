@@ -332,13 +332,14 @@ describe TntImport do
   context '#update_person_phones' do
     let(:person) { create(:person) }
 
-    it 'does not import invalid phone numbers' do
+    it 'marks tnt "invalid" phone numbers as historic in mpdx' do
       row = { 'HomePhone2' => '222-222-2222', 'SpouseMobilePhone' => '333-333-3333',
         'PhoneIsValidMask' => '4096' }
       prefix = 'Spouse'
       import.send(:update_person_phones, person, row, prefix)
-      expect(person.phone_numbers.count).to eq(1)
-      expect(person.phone_numbers.first.number).to eq('+13333333333')
+      expect(person.phone_numbers.count).to eq(2)
+      expect(person.phone_numbers.map { |p| [p.number, p.historic] }).to include(['+12222222222', true])
+      expect(person.phone_numbers.map { |p| [p.number, p.historic] }).to include(['+13333333333', false])
     end
   end
 
