@@ -261,12 +261,16 @@ describe DataServer do
   end
 
   context '#add_or_update_donor_account' do
+    before do
+      stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
+    end
+
     let(:line) {
       { 'PEOPLE_ID' => '17083', 'ACCT_NAME' => 'Rodrigue', 'ADDR1' => 'Ramon y Celeste (Moreno)', 'CITY' => 'Bahia Acapulco 379',
         'STATE' => 'Chihuahua', 'ZIP' => '24555', 'PHONE' => '(376) 706-670', 'COUNTRY' => 'CHH', 'FIRST_NAME' => 'Ramon',
         'MIDDLE_NAME' => '', 'TITLE' => '', 'SUFFIX' => 'Sr.', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Moreno',
         'SP_MIDDLE_NAME' => 'Celeste', 'SP_TITLE' => 'Gonzalez', 'ADDR2' => 'Sra.', 'ADDR3' => '', 'ADDR4' => '',
-        'ADDR_CHANGED' => '', 'PHONE_CHANGED' => '4/4/2003', 'CNTRY_DESCR' => '4/4/2003', 'PERSON_TYPE' => '',
+        'ADDR_CHANGED' => '', 'PHONE_CHANGED' => '4/4/2003', 'CNTRY_DESCR' => 'USA', 'PERSON_TYPE' => '',
         'LAST_NAME_ORG' => 'P', 'SP_SUFFIX' => 'Rodriguez' }
     }
 
@@ -276,7 +280,17 @@ describe DataServer do
       }.to change(Contact, :count)
     end
 
-    it "doesn't add duplicate addresses" do
+    it "doesn't add duplicate addresses with standard country name" do
+      line['CNTRY_DESCR'] = 'United States'
+      expect {
+        @data_server.send(:add_or_update_donor_account, line, profile)
+      }.to change(Address, :count).by(2)
+      expect {
+        @data_server.send(:add_or_update_donor_account, line, profile)
+      }.to change(Address, :count).by(0)
+    end
+
+    it "doesn't add duplicate addresses with alternate country name" do
       expect {
         @data_server.send(:add_or_update_donor_account, line, profile)
       }.to change(Address, :count).by(2)
