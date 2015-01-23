@@ -33,4 +33,32 @@ describe Address do
       }.to change(MasterAddress, :count).from(1).to(0)
     end
   end
+
+  context '#country=' do
+    it 'normalizes the country when assigned' do
+      address = build(:address)
+      expect(Address).to receive(:normalize_country).with('USA').and_return('United States')
+      address.country = 'USA'
+      expect(address.country).to eq('United States')
+    end
+  end
+
+  context '#normalize_country' do
+    it 'returns passed in arg if given blank' do
+      expect(Address.normalize_country('')).to eq('')
+      expect(Address.normalize_country(nil)).to be_nil
+    end
+
+    it 'normalizes country by case' do
+      expect(Address.normalize_country('united STATES')).to eq('United States')
+    end
+
+    it 'normalizes by alternate country name' do
+      expect(Address.normalize_country('uSa')).to eq('United States')
+    end
+
+    it 'returns a country not in the list as is' do
+      expect(Address.normalize_country('Some non-Existent country')).to eq('Some non-Existent country')
+    end
+  end
 end
