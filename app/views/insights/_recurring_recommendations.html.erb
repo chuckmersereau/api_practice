@@ -15,17 +15,15 @@
         <th><%= _('Household Income Range by Zip') %></th>
         <th><%= _('Avg Household Income by Zip') %>
           <sub>+</sub></th>
-
-
       </tr>
       </thead>
-      <tbody>
+      <tbody id="increaseTBody">
       <% @recommnds.each do |c| %>
 
-          <% @contact_id = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c["Column8"]}).pluck('"contacts"."id"') %>
+          <% recurr_contact_id = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c["Column8"]}).pluck('"contacts"."id"')[0].to_s %>
 
-          <tr>
-            <td width="Auto"><%= link_to(c["Column16"], current_account_list.contacts.where(id: @contact_id, account_list_id: current_account_list.id).first) %></td>
+          <tr class="<%= recurr_contact_id %>"  data-id="<%= recurr_contact_id %>"   >
+            <td width="Auto" ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
             <td class="donations">$<%= c["Column1"] %></td>
             <td style="text-align:center">$<%= c["Column13"] %></td>
             <td style="text-align:center">$<%= c["Column14"] %></td>
@@ -34,23 +32,24 @@
             <td width="Auto"><%= c["Column5"] %></td>
             <td><%= c["Column12"] %></td>
             <td style="text-align:center" width="Auto"><%= c["Column6"] %></td>
-
             <td style="text-align:center">$<%= c["Column2"] %></td>
-            <td>
-              <select>
-                <option value="blank"></option>
-                <option value="NoDecision">Contacted - No desicion yet</option>
-                <option value="Increased">Contacted - Received an Increase</option>
-                <option value="NotPossibleNow">Contacted - No increase at this time. Attempt in the future.
-                </option>
-                <option value="NotPossibleAtAll">Contacted - Not possible at all. Won't re-attempt.</option>
-                <option value="NoDecision">Did not contact</option>
-              </select>
-            </td>
-
           </tr>
-
+          <tr  class="<%= recurr_contact_id %>" style="display: none;" data-id="<%= recurr_contact_id %>" >
+            <td>Select a result:
+              <%= select_tag "selectstuff", options_for_select(["",
+                                      "Contacted - No descision yet",
+                                      "Contacted - Received an Increase",
+                                      "Contacted - No increase at this time. Will r-ettempt in the future.",
+                                      "Contacted - Not possible at all. Will not re-attempt",
+                                      "Did not contact"]) %>
+            </td>
+            <td width="Auto" colspan="3" ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
+            <td colspan="7">
+              <%= button_tag "OK" , id: "submit_status"%>&nbsp;<%= _('Double click to cancel.') %>
+            </td>
+          </tr>
       <% end %>
+
       </tbody>
     </table>
 
