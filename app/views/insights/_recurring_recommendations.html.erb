@@ -36,7 +36,7 @@
           <tr  class="<%= recurr_contact_id %>" style="display: none;" data-id="<%= recurr_contact_id %>" >
             <td width="auto"  ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
             <td colspan="5" >
-              <%= select_tag "selectstuff", options_for_select(["",
+              <%= select_tag "select_result", options_for_select(["",
                                       "Contacted - No descision yet",
                                       "Contacted - Received an Increase",
                                       "Contacted - No increase at this time. Will r-ettempt in the future.",
