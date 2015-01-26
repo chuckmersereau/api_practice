@@ -13,8 +13,7 @@
         <th width="7%"><%= _('Gift Range') %></th>
         <th><%= _('Zip') %></th>
         <th><%= _('Household Income Range by Zip') %></th>
-        <th><%= _('Avg Household Income by Zip') %>
-          <sub>+</sub></th>
+        <th><%= _('Avg Household Income by Zip') %><sub>+</sub></th>
       </tr>
       </thead>
       <tbody id="increaseTBody">
@@ -23,7 +22,7 @@
           <% recurr_contact_id = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c["Column8"]}).pluck('"contacts"."id"')[0].to_s %>
 
           <tr class="<%= recurr_contact_id %>"  data-id="<%= recurr_contact_id %>"   >
-            <td width="Auto" ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
+            <td width="auto" ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
             <td class="donations">$<%= c["Column1"] %></td>
             <td style="text-align:center">$<%= c["Column13"] %></td>
             <td style="text-align:center">$<%= c["Column14"] %></td>
@@ -31,21 +30,23 @@
             <td class="date"><%= c["Column10"] %></td>
             <td width="Auto"><%= c["Column5"] %></td>
             <td><%= c["Column12"] %></td>
-            <td style="text-align:center" width="Auto"><%= c["Column6"] %></td>
+            <td style="text-align:center"  ><%= c["Column6"] %></td>
             <td style="text-align:center">$<%= c["Column2"] %></td>
           </tr>
           <tr  class="<%= recurr_contact_id %>" style="display: none;" data-id="<%= recurr_contact_id %>" >
-            <td>Select a result:
+            <td width="auto"  ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
+            <td colspan="5" >
               <%= select_tag "selectstuff", options_for_select(["",
                                       "Contacted - No descision yet",
                                       "Contacted - Received an Increase",
                                       "Contacted - No increase at this time. Will r-ettempt in the future.",
                                       "Contacted - Not possible at all. Will not re-attempt",
-                                      "Did not contact"]) %>
+                                      "Did not contact"])
+              %>&nbsp;&nbsp;&nbsp;
+              <%= button_tag "Submit" , id: "submit_status" %>
             </td>
-            <td width="Auto" colspan="3" ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
-            <td colspan="7">
-              <%= button_tag "OK" , id: "submit_status"%>&nbsp;<%= _('Double click to cancel.') %>
+                      <td colspan="4">
+              <%= _('Double click to cancel.') %>
             </td>
           </tr>
       <% end %>
