@@ -12,6 +12,6 @@ $ ->
     cName = $(this).data('id')
     $("."+ cName).slideToggle("fast")
 
-  $(document).on 'click', '#submit_status', ->
+  $(document).on 'click', '#submit_result', ->
     cName = $(this).parent().parent().data('id')
     $("."+ cName).slideToggle("fast")
