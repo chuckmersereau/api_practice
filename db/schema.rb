@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150106174739) do
+ActiveRecord::Schema.define(version: 20150127184809) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -860,6 +860,14 @@ ActiveRecord::Schema.define(version: 20150106174739) do
   end
 
   add_index "prayer_letters_accounts", ["account_list_id"], name: "index_prayer_letters_accounts_on_account_list_id", using: :btree
+
+  create_table "recurring_recommendation_results", force: true do |t|
+    t.integer  "account_list_id"
+    t.integer  "contact_id"
+    t.string   "result",          null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
 
   create_table "taggings", force: true do |t|
     t.integer  "tag_id"
