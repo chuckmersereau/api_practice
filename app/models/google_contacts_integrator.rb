@@ -29,7 +29,10 @@ class GoogleContactsIntegrator
   end
 
   def self.retryable_exp_backoff
-    Retryable.retryable(tries: 6, sleep: ->(n) { n**6 + 60 }) { yield }
+    # Not exactly an exponential backoff, but basically try 30 seconds for a while then wait an hour and try.
+    # Google Contacts API seems to have limits per user per second, hour and half day, so this makes sense,
+    # http://stackoverflow.com/questions/7366268/query-limit-for-google-contacts-api
+    Retryable.retryable(times: 1, sleep: 3601) { Retryable.retryable(times: 4, sleep: 30) { yield } }
   end
 
   def sync_contacts
