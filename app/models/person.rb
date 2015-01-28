@@ -322,17 +322,31 @@ class Person < ActiveRecord::Base
         send("#{field}=".to_sym, other.send(field))
       end
 
-      # copy over master person sources from loser
-      other.master_person.master_person_sources.each do |source|
-        master_person.master_person_sources.where(organization_id: source.organization_id, remote_id: source.remote_id).first_or_initialize
-      end
-
       # Assume the winner has the nickname and the loser has the full name, and increment the times merged to
       # track which nicknames are useful and to add new nicknames over time.
       Nickname.increment_times_merged(other.first_name, first_name)
 
+      # Save the master person sources for the winner to add after it (and usually its master person) are destroyed
+      other_master_person_id = other.master_person.id
+      other_master_person_sources = other.master_person.master_person_sources.pluck(:organization_id, :remote_id)
+
       other.reload
       other.destroy
+
+      # In the case where the loser's master person is used by other people (presumably in other account lists),
+      # adding the master person sources below could cause the database unique contsraint for master person sources
+      # to be violated. So first update the master person of those others to be this person's master, then copy
+      # over the sources. There is a risk that one account list's mistaken (or less likely, malicous) merge could
+      # negatively affect another account list, but in order for someone to merge two master people, they would
+      # need to have both as donors of theirs. So it seems that the benefit to data quality of supporting a merge
+      # (rather than causing an error) exceeds the risk of possible bad merges.
+      Person.where(master_person_id: other_master_person_id).each do |person_same_master_other|
+        person_same_master_other.update(master_person: master_person)
+      end
+      MasterPerson.find_by_id(other_master_person_id).try(:destroy)
+      other_master_person_sources.each do |organization_id, remote_id|
+        master_person.master_person_sources.find_or_create_by(organization_id: organization_id, remote_id: remote_id)
+      end
     end
 
     save(validate: false)

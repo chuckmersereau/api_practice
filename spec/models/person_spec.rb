@@ -264,9 +264,18 @@ describe Person do
 
     it 'copies over master person sources' do
       loser.master_person.master_person_sources.create(organization_id: 1, remote_id: 2)
+      expect {
+        winner.merge(loser)
+      }.to change(winner.master_person.master_person_sources, :count).from(0).to(1)
+    end
 
-      winner.merge(loser)
-      expect(winner.master_person.master_person_sources.where(organization_id: 1, remote_id: 2)).to_not be_nil
+    it 'merges the master people of unrelated people so master person source stays unique per org' do
+      loser.master_person.master_person_sources.create(organization_id: 1, remote_id: 2)
+      loser_master_person_id = loser.master_person.id
+      other_person_loser_master = create(:person, master_person: loser.master_person)
+      expect { winner.merge(loser) }.to_not raise_error
+      expect(other_person_loser_master.reload.master_person).to eq(winner.master_person)
+      expect(MasterPerson.find_by_id(loser_master_person_id)).to be_nil
     end
 
     it 'creates a Version with a related_object_id', versioning: true do
