@@ -134,6 +134,7 @@ GEM
     celluloid (0.16.0)
       timers (~> 4.0.0)
     chronic (0.10.2)
+    cliver (0.3.2)
     cloudinary (1.0.78)
       aws_cf_signer
       rest-client
@@ -400,6 +401,11 @@ GEM
       peek
       redis
     pg (0.14.1)
+    poltergeist (1.5.1)
+      capybara (~> 2.1)
+      cliver (~> 0.3.1)
+      multi_json (~> 1.0)
+      websocket-driver (>= 0.2.0)
     powerpack (0.0.9)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -609,6 +615,9 @@ GEM
     webmock (1.9.3)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
+    websocket-driver (0.5.1)
+      websocket-extensions (>= 0.1.0)
+    websocket-extensions (0.1.1)
     whenever (0.8.4)
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
@@ -700,6 +709,7 @@ DEPENDENCIES
   peek-pg
   peek-redis
   pg (~> 0.14.1)
+  poltergeist
   quiet_assets
   railroady
   rails (~> 4.1.0)

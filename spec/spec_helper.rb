@@ -14,6 +14,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'webmock/rspec'
 require 'capybara/rspec'
+require 'capybara/poltergeist'
 require 'sidekiq/testing'
 
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
@@ -40,6 +41,10 @@ RSpec.configure do |config|
     else
       Sidekiq::Testing.fake!
     end
+  end
+  config.before(:all) do
+    WebMock.disable_net_connect!(allow_localhost: true)
+    Capybara.javascript_driver = :poltergeist
   end
   # ## Mock Framework
   #
@@ -70,6 +75,10 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each, js: true) do
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each) do

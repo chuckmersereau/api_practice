@@ -135,6 +135,7 @@ group :test do
   gem 'rb-fsevent', require: false
   gem 'growl'
   gem 'capybara'
+  gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
   gem 'rubocop'
