@@ -28,6 +28,10 @@ class GoogleContactsIntegrator
     @account = google_integration.google_account
   end
 
+  def self.retryable_exp_backoff
+    Retryable.retryable(tries: 6, sleep: ->(n) { n**6 + 60 }) { yield }
+  end
+
   def sync_contacts
     # This sync_contacts method is queued when a user in MPDX modifies a contact.
 
@@ -187,7 +191,9 @@ class GoogleContactsIntegrator
 
   def contacts_to_sync
     if @integration.contacts_last_synced
-      updated_g_contacts = api_user.contacts_updated_min(@integration.contacts_last_synced, showdeleted: false)
+      updated_g_contacts = self.class.retryable_exp_backoff do
+        api_user.contacts_updated_min(@integration.contacts_last_synced, showdeleted: false)
+      end
 
       queried_contacts_to_sync = contacts_to_sync_query(updated_g_contacts)
       if queried_contacts_to_sync.length > CACHE_ALL_G_CONTACTS_THRESHOLD
@@ -288,7 +294,7 @@ class GoogleContactsIntegrator
   end
 
   def groups
-    @groups ||= api_user.groups
+    @groups ||= self.class.retryable_exp_backoff { api_user.groups }
   end
 
   def my_contacts_group
@@ -344,7 +350,8 @@ class GoogleContactsIntegrator
           end
         rescue => e
           # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
-          Airbrake.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs })
+          Airbrake.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
+                                                    batch_xml: api_user.last_batch_xml })
         end
       end
     end
