@@ -40,6 +40,10 @@ angular.module('mpdxApp')
                   $scope.completeResultOptions = railsConstants.task.TEXT_RESULTS;
                   $scope.completeActionOptions = railsConstants.task.TEXT_NEXT_ACTIONS;
 
+                }else if($scope.task.activity_type === 'Talk to In Person') {
+                    $scope.completeResultOptions = railsConstants.task.TALK_TO_IN_PERSON_RESULTS;
+                    $scope.completeActionOptions = railsConstants.task.TALK_TO_IN_PERSON_NEXT_ACTIONS;
+
                 }else if($scope.task.activity_type === 'Letter') {
                     $scope.completeResultOptions = railsConstants.task.MESSAGE_RESULTS;
 

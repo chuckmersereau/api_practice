@@ -27,28 +27,31 @@ class Task < Activity
   # validates :activity_type, :presence => { :message => _( '/ Action is required') }
 
   CALL_RESULTS = ['Attempted - Left Message', 'Attempted', 'Completed', 'Received']
-  CALL_NEXT_ACTIONS = ['Call Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
+  CALL_NEXT_ACTIONS = ['Call Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None' , 'Talk to In Person']
 
   APPOINTMENT_RESULTS = %w(Completed Attempted)
-  APPOINTMENT_NEXT_ACTIONS = ['Call for Decision', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'Reschedule', 'None']
+  APPOINTMENT_NEXT_ACTIONS = ['Call for Decision', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'Reschedule', 'None', 'Talk to In Person']
 
   EMAIL_RESULTS = %w(Completed Received)
-  EMAIL_NEXT_ACTIONS = ['Email Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
+  EMAIL_NEXT_ACTIONS = ['Email Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None', 'Talk to In Person']
 
   FACEBOOK_MESSAGE_RESULTS = %w(Completed Received)
-  FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
+  FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None', 'Talk to In Person']
 
   TEXT_RESULTS = %w(Completed Received)
-  TEXT_NEXT_ACTIONS = ['Text Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
+  TEXT_NEXT_ACTIONS = ['Text Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None', 'Talk to In Person']
+
+  TALK_TO_IN_PERSON_RESULTS = %w(Completed)
+  TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
 
   MESSAGE_RESULTS = [_('Done'), _('Received')]
   STANDARD_RESULTS = [_('Done')]
 
-  ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS
+  ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS + TALK_TO_IN_PERSON_RESULTS
 
   TASK_ACTIVITIES = ['Call', 'Appointment', 'Email', 'Text Message', 'Facebook Message',
                      'Letter', 'Newsletter', 'Pre Call Letter', 'Reminder Letter',
-                     'Support Letter', 'Thank', 'To Do']
+                     'Support Letter', 'Thank', 'To Do', 'Talk to In Person']
 
   assignable_values_for :activity_type, allow_blank: true do
     TASK_ACTIVITIES
@@ -108,6 +111,8 @@ class Task < Activity
       return FACEBOOK_MESSAGE_RESULTS
     when 'Text Message'
       return TEXT_RESULTS
+    when 'Talk to In Person'
+      return TALK_TO_IN_PERSON_RESULTS
     else
       return STANDARD_RESULTS
     end
@@ -125,6 +130,8 @@ class Task < Activity
       return FACEBOOK_MESSAGE_NEXT_ACTIONS
     when 'Text Message'
       return TEXT_NEXT_ACTIONS
+    when 'Talk to In Person'
+      return TALK_TO_IN_PERSON_NEXT_ACTIONS
     else
       return ['None']
     end
