@@ -18,11 +18,11 @@
       <tbody id="increaseTBody">
       <% @recommnds.each do |c| %>
 
-          <% @recurr_contact_id = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c["Column8"]}).pluck('"contacts"."id"')[0].to_s %>
-          <% if @recurring_recommnds.where(account_list_id: current_account_list.id, contact_id: @recurr_contact_id).empty?  %>
+          <% recurr_contact_id = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c["Column8"]}).pluck('"contacts"."id"')[0].to_s %>
+          <% if @recurring_recommnds.where(account_list_id: current_account_list.id, contact_id: recurr_contact_id).empty?  %>
 
-              <tr class="<%= @recurr_contact_id %>"  data-id="<%= @recurr_contact_id %>"   >
-                <td width="auto" ><%= link_to(c["Column16"], current_account_list.contacts.where(id: @recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
+              <tr class="<%= recurr_contact_id %>"  data-id="<%= recurr_contact_id %>"   >
+                <td width="auto" ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
                 <td class="donations">$<%= c["Column1"] %></td>
                 <td style="text-align:center">$<%= c["Column13"] %></td>
                 <td style="text-align:center">$<%= c["Column14"] %></td>
@@ -33,8 +33,8 @@
                 <td style="text-align:center"  ><%= c["Column6"] %></td>
                 <td style="text-align:center">$<%= c["Column2"] %></td>
               </tr>
-              <tr  class="<%= @recurr_contact_id %>" style="display: none;" data-id="<%= @recurr_contact_id %>" >
-                <td width="auto"  ><%= link_to(c["Column16"], current_account_list.contacts.where(id: @recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
+              <tr  class="<%= recurr_contact_id %>" style="display: none;" data-id="<%= recurr_contact_id %>" >
+                <td width="auto"  ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
                 <td colspan="5" name="selected_result">
                   <%= select_tag "select_result", options_for_select(["",
                                                                       "Contacted - No descision yet",
@@ -43,7 +43,7 @@
                                                                       "Contacted - Not possible at all. Will not re-attempt",
                                                                       "Did not contact"])
                   %>&nbsp;&nbsp;&nbsp;
-                  <%= button_to "Submit" ,  method: create %>
+                  <%= link_to _('Submit') , '#', action: 'create' , id: 'submit_result', class: 'btn smallbtn' %>
                 </td>
                 <td colspan="4">
                   <%= _('Double click to cancel.') %>
