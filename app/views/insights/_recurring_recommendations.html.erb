@@ -36,12 +36,12 @@
               <tr  class="<%= recurr_contact_id %>" style="display: none;" data-id="<%= recurr_contact_id %>" >
                 <td width="auto"  ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
                 <td colspan="5" name="selected_result">
-                  <%= select_tag "select_result", options_for_select(["",
-                                                                      "Contacted - No descision yet",
-                                                                      "Contacted - Received an Increase",
-                                                                      "Contacted - No increase at this time. Will re-attempt in the future.",
-                                                                      "Contacted - Not possible at all. Will not re-attempt",
-                                                                      "Did not contact"])
+                  <%= select_tag "select_result", options_for_select([ _(''),
+                                                                      _('Contacted - No descision yet'),
+                                                                      _('Contacted - Received an Increase'),
+                                                                      _('Contacted - No increase at this time. Will re-attempt in the future.'),
+                                                                      _('Contacted - Not possible at all. Will not re-attempt'),
+                                                                      _('Did not contact')])
                   %>&nbsp;&nbsp;&nbsp;
                   <%= link_to _('Submit') , '#', action: 'create' , id: 'submit_result', class: 'btn smallbtn' %>
                 </td>
