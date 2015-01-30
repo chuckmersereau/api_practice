@@ -27,7 +27,14 @@ class Task < Activity
   # validates :activity_type, :presence => { :message => _( '/ Action is required') }
 
   CALL_RESULTS = ['Attempted - Left Message', 'Attempted', 'Completed', 'Received']
+<<<<<<< HEAD
   CALL_NEXT_ACTIONS = ['Call Again', 'Email', 'Text', 'Message', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None', 'Talk to In Person']
+=======
+  CALL_NEXT_ACTIONS = ['Call Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None' , 'Talk to In Person']
+  
+  TALK_TO_IN_PERSON_RESULTS = %w(Completed)
+  TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
+>>>>>>> master
 
   APPOINTMENT_RESULTS = %w(Completed Attempted)
   APPOINTMENT_NEXT_ACTIONS = ['Call for Decision',
@@ -57,14 +64,21 @@ class Task < Activity
                                    'Partner - Pray',
                                    'Ask in Future',
                                    'Not Interested',
+<<<<<<< HEAD
                                    'None',
+=======
+                                   'None', 
+>>>>>>> master
                                    'Talk to In Person']
 
   TEXT_RESULTS = %w(Completed Received)
   TEXT_NEXT_ACTIONS = ['Text Again', 'Call', 'Email', 'Message', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None', 'Talk to In Person']
+<<<<<<< HEAD
 
   TALK_TO_IN_PERSON_RESULTS = %w(Completed)
   TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
+=======
+>>>>>>> master
 
   MESSAGE_RESULTS = [_('Done'), _('Received')]
   STANDARD_RESULTS = [_('Done')]

@@ -78,6 +78,7 @@ angular.module('mpdxApp')
                         //generic followup task type
                         var taskType;
                         var taskSubject;
+
                         if(strContains(taskResult, 'Call for Decision')){
                             taskType = 'Call';
                             taskSubject = 'Call for Decision - ' + followUpTask.subject;
@@ -85,20 +86,18 @@ angular.module('mpdxApp')
                             taskType = 'Call';
                         }else if(strContains(taskResult, 'Email')){
                             taskType = 'Email';
-                        }else if(strContains(taskResult, 'Message')) {
+                        }else if(strContains(taskResult, 'Message')){
                             taskType = 'Facebook Message';
                         }else if(strContains(taskResult, 'Text')){
-                                taskType = 'Text Message';
-                        }else if(strContains(taskResult, 'Talk to In Person')) {
+                            taskType = 'Text Message';
+                        }else if(strContains(taskResult, 'Talk to In Person')){
                             taskType = 'Talk to In Person';
-                        }else if(strContains(taskResult, 'Talk to In Person Again')){
-                            taskType = 'Talk to In Person';
-                        }else if(strContains(taskResult, 'Message Again')){
+                        }else if(strContains(taskResult, 'Message Again')) {
                             taskType = 'Facebook Message';
                         }else if(strContains(taskResult, 'Text Again')){
                             taskType = 'Text Message';
-                        }else if(strContains(taskResult, 'Email Again')){
-                            taskType = 'Email';
+                        }else if(strContains(taskResult, 'Talk to In Person Again')) {
+                            taskType = 'Talk to In Person';
                         }
 
                         $scope.followUpDialogData = {
