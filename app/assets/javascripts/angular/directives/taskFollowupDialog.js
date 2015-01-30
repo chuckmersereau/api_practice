@@ -97,6 +97,8 @@ angular.module('mpdxApp')
                             taskType = 'Facebook Message';
                         }else if(strContains(taskResult, 'Text Again')){
                             taskType = 'Text Message';
+                        }else if(strContains(taskResult, 'Email Again')){
+                            taskType = 'Email';
                         }
 
                         $scope.followUpDialogData = {
