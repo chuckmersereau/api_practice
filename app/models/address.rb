@@ -53,23 +53,24 @@ class Address < ActiveRecord::Base
   end
 
   def country=(val)
-    if val.blank?
-      self[:country] = val
-      return
-    end
+    self[:country] = self.class.normalize_country(val)
+  end
+
+  def self.normalize_country(val)
+    return val if val.blank?
 
     countries = CountrySelect::COUNTRIES
-    if country = countries.find { |c| c[:name].downcase == val.downcase }
-      self[:country] = country[:name]
-    else
-      countries.each do |c|
-        next unless c[:alternatives].downcase.include?(val.downcase)
-        self[:country] = c[:name]
-        return
-      end
-      # If we couldn't find a match anywhere, go ahead and save it anyway
-      self[:country] = val
+
+    country = countries.find { |c| c[:name].downcase == val.downcase }
+    return country[:name] if country
+
+    countries.each do |c|
+      next unless c[:alternatives].downcase.include?(val.downcase)
+      return c[:name]
     end
+
+    # If we couldn't find a match anywhere, go ahead and return the country
+    val
   end
 
   def valid_mailing_address?
@@ -120,7 +121,7 @@ class Address < ActiveRecord::Base
   end
 
   def clean_up_master_address
-    master_address.destroy if master_address && (master_address.addresses - [self]).blank?
+    master_address.destroy if master_address && master_address.addresses.where.not(id: id).empty?
 
     true
   end

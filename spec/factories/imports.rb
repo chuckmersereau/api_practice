@@ -44,4 +44,9 @@ FactoryGirl.define do
     association :account_list
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_gifts_1added.xml')) }
   end
+
+  factory :tnt_import_first_email_not_preferred, parent: :tnt_import do
+    association :account_list
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_row_multi_email.yaml')) }
+  end
 end

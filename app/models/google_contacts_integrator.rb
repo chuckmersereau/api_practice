@@ -28,6 +28,13 @@ class GoogleContactsIntegrator
     @account = google_integration.google_account
   end
 
+  def self.retryable_exp_backoff
+    # Not exactly an exponential backoff, but basically try 30 seconds for a while then wait an hour and try.
+    # Google Contacts API seems to have limits per user per second, hour and half day, so this makes sense,
+    # http://stackoverflow.com/questions/7366268/query-limit-for-google-contacts-api
+    Retryable.retryable(times: 1, sleep: 3601) { Retryable.retryable(times: 4, sleep: 30) { yield } }
+  end
+
   def sync_contacts
     # This sync_contacts method is queued when a user in MPDX modifies a contact.
 
@@ -126,7 +133,7 @@ class GoogleContactsIntegrator
   end
 
   def delete_g_contact_merge_loser(g_contact_link)
-    api_user.delete_contact(g_contact_link.remote_id)
+    api_user.delete_contact(g_contact_link.remote_id) if g_contact_link.remote_id
     g_contact_link.destroy
   rescue => e
     if defined?(e.response) && GoogleContactsApi::Api.parse_response_code(e.response) == 404
@@ -187,7 +194,9 @@ class GoogleContactsIntegrator
 
   def contacts_to_sync
     if @integration.contacts_last_synced
-      updated_g_contacts = api_user.contacts_updated_min(@integration.contacts_last_synced, showdeleted: false)
+      updated_g_contacts = self.class.retryable_exp_backoff do
+        api_user.contacts_updated_min(@integration.contacts_last_synced, showdeleted: false)
+      end
 
       queried_contacts_to_sync = contacts_to_sync_query(updated_g_contacts)
       if queried_contacts_to_sync.length > CACHE_ALL_G_CONTACTS_THRESHOLD
@@ -281,13 +290,18 @@ class GoogleContactsIntegrator
       g_contact = GoogleContactsApi::Contact.new
       g_contact_link.last_data = {}
     end
+    g_contact.prep_add_to_group(my_contacts_group)
     g_contact.prep_add_to_group(mpdx_group)
 
     [g_contact, g_contact_link]
   end
 
   def groups
-    @groups ||= api_user.groups
+    @groups ||= self.class.retryable_exp_backoff { api_user.groups }
+  end
+
+  def my_contacts_group
+    @my_contacts_group ||= groups.find { |group| group.system_group_id == 'Contacts' }
   end
 
   def inactive_group
@@ -339,7 +353,8 @@ class GoogleContactsIntegrator
           end
         rescue => e
           # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
-          Airbrake.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs })
+          Airbrake.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
+                                                    batch_xml: api_user.last_batch_xml })
         end
       end
     end

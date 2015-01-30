@@ -365,35 +365,34 @@ $ ->
         $('input[type=checkbox].primary', fieldset).prop('checked',false)
         $(this).prop('checked', true)
 
-    $(document).on 'click', 'input.address_historic', ->
-      historicAddressDisable this
-
-    historicAddressDisable = (check) ->
+    historicDisable = (check, input_selector) ->
       fieldset = $(check).closest(".rs")
       if $(check).is(":checked")
-        $("input[type=text], textarea, .country_select", fieldset).attr "readonly", true
+        $(input_selector, fieldset).attr "readonly", true
       else
-        $("input[type=text], textarea, .country_select", fieldset).removeAttr "readonly"
+        $(input_selector, fieldset).removeAttr "readonly"
       return
 
     $("input.address_historic").each ->
-      historicAddressDisable this
+      historicDisable this, "input[type=text], textarea, .country_select"
+      return
+
+    $(document).on 'click', 'input.address_historic', ->
+      historicDisable this, "input[type=text], textarea, .country_select"
+
+    $("input.email_historic").each ->
+      historicDisable this, "input[type=email]"
       return
 
     $(document).on 'click', 'input.email_historic', ->
-      historicEmailDisable this
+      historicDisable this, "input[type=email]"
 
-    historicEmailDisable = (check) ->
-      fieldset = $(check).closest(".rs")
-      if $(check).is(":checked")
-        $("input[type=email]", fieldset).attr "readonly", true
-      else
-        $("input[type=email]", fieldset).removeAttr "readonly"
+    $("input.phone_historic").each ->
+      historicDisable this, "input[type=tel]"
       return
 
-    $("input.email_historic").each ->
-      historicEmailDisable this
-      return
+    $(document).on 'click', 'input.phone_historic', ->
+      historicDisable(this, "input[type=tel]")
 
     $(document).on 'click', 'td.qaction a.quick', ->
       td = $(this).closest('td')

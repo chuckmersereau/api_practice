@@ -291,8 +291,9 @@ module GoogleContactSync
 
   def compare_numbers_for_sync(g_contact, person, g_contact_link)
     last_sync_numbers = g_contact_link.last_data[:phone_numbers].map { |p| p[:number] }
-    compare_normalized_for_sync(last_sync_numbers, person.phone_numbers.map(&:number), g_contact.phone_numbers,
-                                method(:normalize_number))
+    compare_normalized_for_sync(last_sync_numbers, person.phone_numbers.where(historic: false).pluck(:number),
+                                g_contact.phone_numbers, method(:normalize_number),
+                                person.phone_numbers.where(historic: true).pluck(:number))
   end
 
   def compare_addresses_for_sync(g_contact_addresses, contact, last_addresses)
