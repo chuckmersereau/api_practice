@@ -185,7 +185,7 @@ angular.module('mpdxApp')
                               validStatus: {},
                               validTags: {}
                             };
-                            $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES.concat(window.railsConstants.contact.INACTIVE_STATUSES).sort();
+                            $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES;
                             api.call('get', 'contacts/tags?account_list_id=' + (window.current_account_list_id || ''), null, function(data) {
                               $scope.contactTags = data.tags.sort();
                             }, null, true);
@@ -197,6 +197,10 @@ angular.module('mpdxApp')
                             $scope.save = function () {
                                 $modalInstance.close($scope.appeal);
                             };
+
+                          $scope.calculateGoal = function(amount){
+                            $scope.appeal.amount = Math.round(Number(amount) * 1.12 * 100) / 100;
+                          };
                         }
                     }).result.then(function (newAppeal) {
                         var contactsObject = [];

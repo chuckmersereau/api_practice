@@ -14,11 +14,16 @@
                     <input autofocus="autofocus" type="text" ng-model="appeal.name">
                 </div>
 
-                <div class="field">
-                    <label><%= _('Goal') %></label>
-                    <input type="text" ng-model="appeal.amount">
+                <div class="field" style="display:inline-block;">
+                  <label><%= _('Amount needed') %></label>
+                  <input type="text" ng-model="amountBeforeGoal" style="width:100px;">
+                  <a href="" ng-click="calculateGoal(amountBeforeGoal)">Calculate goal ></a>
                 </div>
-
+                <div class="field" style="display:inline-block;">
+                  <label><%= _('Goal') %></label>
+                  <input type="text" ng-model="appeal.amount" style="width:100px;">
+                </div>
+              <div style="clear:both; height:10px;"></div>
                 <div class="field appealFilterCol">
                     <label><%= _('Add contacts with the following status(es):') %></label>
                     <div style="margin-top: 5px;" ng-repeat="status in contactStatuses">
@@ -31,6 +36,24 @@
                     <label><input type="checkbox" ng-model="appeal.validTags[tag]"> {{tag}}</label>
                   </div>
                 </div>
+              <div class="field appealFilterCol">
+                <label><%= _('Do not add contacts who have:') %></label>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['specialGift3months']"> Gave a special gift in the last 3 months</label>
+                </div>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['joinedTeam3months']"> Joined my team in the last 3 months</label>
+                </div>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['increasedGiving3months']"> Increased their giving in the last 3 months</label>
+                </div>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['stoppedGiving3months']"> Stopped giving for the last 2 months</label>
+                </div>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['doNotAskAppeals3months']"> Are marked as do not ask for appeals</label>
+                </div>
+              </div>
             </div>
             <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
                 <div class="ui-dialog-buttonset">
