@@ -71,7 +71,7 @@ gem 'rest-client', '~> 1.6.7'
 gem 'retryable-rb', '~> 1.1.0'
 gem 'rollout', '~> 2.0.0'
 gem 'ruby-rtf'
-gem 'savon' , '~> 2.3.0'
+gem 'savon', '~> 2.3.0'
 gem 'secure_headers'
 gem 'sidekiq-pro'
 gem 'sidekiq-unique-jobs'
@@ -86,7 +86,7 @@ gem 'whenever', '~> 0.8.1'
 gem 'wicked', '~> 1.0.2'
 gem 'will_paginate', '~> 3.0.3'
 gem 'global_phone', git: 'https://github.com/sstephenson/global_phone.git'
-#gem 'global_phone_dbgen'
+gem 'global_phone_dbgen'
 #gem 'font_assets'
 gem 'geocoder'
 gem 'google_timezone'
@@ -126,7 +126,6 @@ group :development, :test do
   gem 'unicorn'
   gem 'zonebie'
   gem 'equivalent-xml'
-  gem 'debase'
 end
 
 group :test do
@@ -137,7 +136,7 @@ group :test do
   gem 'capybara'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
-  gem 'rubocop', '~> 0.26.0'
+  gem 'rubocop'
 end
 
 group :doc do
