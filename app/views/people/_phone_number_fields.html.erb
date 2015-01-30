@@ -8,5 +8,9 @@
       <%= builder.label :primary %>
       <%= link_to_remove_fields(builder) %>
     </div>
+    <div class="field_action">
+      <%= builder.check_box :historic, class: 'phone_historic' %>
+      <%= builder.label :historic, _('Phone number no longer valid') %>
+    </div>
   </div>
 </div>

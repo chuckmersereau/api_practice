@@ -97,6 +97,14 @@ describe GoogleContactsIntegrator do
     end
   end
 
+  describe 'my_contacts_group' do
+    it 'searches for the system group with id of Contacts' do
+      my_contacts = double(system_group_id: 'Contacts', id: 1)
+      expect(@integrator).to receive(:groups).and_return([double(system_group_id: nil), my_contacts])
+      expect(@integrator.my_contacts_group).to eq(my_contacts)
+    end
+  end
+
   describe 'contacts_to_sync_query' do
     before do
       @g_contact = create(:google_contact, google_account: @account, person: @person, contact: @contact)
@@ -226,8 +234,11 @@ describe GoogleContactsIntegrator do
         expect(@integrator).to receive(:get_or_query_g_contact).with(g_contact_link, @person).and_return(g_contact)
 
         mpdx_group = double
+        my_contacts_group = double
         expect(@integrator).to receive(:mpdx_group).and_return(mpdx_group)
-        expect(g_contact).to receive(:prep_add_to_group).with(mpdx_group)
+        expect(@integrator).to receive(:my_contacts_group).and_return(my_contacts_group)
+        expect(g_contact).to receive(:prep_add_to_group).once.with(mpdx_group)
+        expect(g_contact).to receive(:prep_add_to_group).once.with(my_contacts_group)
 
         contact_person = @contact.contact_people.first
 
@@ -286,11 +297,13 @@ describe GoogleContactsIntegrator do
           { 'id' => { '$t' => 'http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid' },
             'title' => { '$t' => GoogleContactsIntegrator::CONTACTS_GROUP_TITLE } },
           { 'id' => { '$t' => 'http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/inactivegroupid' },
-            'title' => { '$t' => GoogleContactsIntegrator::INACTIVE_GROUP_TITLE } }
+            'title' => { '$t' => GoogleContactsIntegrator::INACTIVE_GROUP_TITLE } },
+          { 'id' => { '$t' => 'http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6' },
+            'gContact$systemGroup' => { 'id' => 'Contacts' } }
         ],
-        'openSearch$totalResults' => { '$t' => '2' },
+        'openSearch$totalResults' => { '$t' => '3' },
         'openSearch$startIndex' => { '$t' => '0' },
-        'openSearch$itemsPerPage' => { '$t' => '2' }
+        'openSearch$itemsPerPage' => { '$t' => '3' }
       }
     }
     stub_request(:get, 'https://www.google.com/m8/feeds/groups/default/full?alt=json&max-results=100000&v=3')
@@ -349,6 +362,7 @@ describe GoogleContactsIntegrator do
           <gd:orgTitle>Worker</gd:orgTitle>
         </gd:organization>
         <gContact:groupMembershipInfo deleted="false" href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid"/>
+        <gContact:groupMembershipInfo deleted="false" href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6"/>
       EOS
 
       create_contact_request_xml = <<-EOS
@@ -394,8 +408,9 @@ describe GoogleContactsIntegrator do
       last_data = {
         name_prefix: nil, given_name: 'John', additional_name: nil, family_name: 'Google', name_suffix: nil,
         content: 'about', emails: [], phone_numbers: [], addresses: [],
-        organizations: [{ rel: 'work', primary: true, org_name: 'Company, Inc', org_title: 'Worker' }],
-        websites: [], group_memberships: ['http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid'],
+        organizations: [{ rel: 'work', primary: true, org_name: 'Company, Inc', org_title: 'Worker' }], websites: [],
+        group_memberships: ['http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/mpdxgroupid',
+                            'http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6'],
         deleted_group_memberships: []
       }
       expect(@person.google_contacts.first.last_data).to eq(last_data)

@@ -255,6 +255,7 @@ describe GoogleContactSync do
   describe 'sync numbers' do
     it 'combines and formats numbers from mpdx and google' do
       person.phone_number = { number: '+12223334444', location: 'mobile', primary: true }
+      person.save
 
       g_contact.update('gd$phoneNumber' => [
         { '$t' => '(777) 888-9999', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
@@ -266,8 +267,6 @@ describe GoogleContactSync do
         { number: '(777) 888-9999', primary: true, rel: 'other' },
         { number: '(222) 333-4444', primary: false, rel: 'mobile' }
       ])
-
-      person.save
 
       expect(person.phone_numbers.count).to eq(2)
       phone1 = person.phone_numbers.first
@@ -500,6 +499,15 @@ describe GoogleContactSync do
       person.save!
       expect(sync).to receive(:compare_considering_historic).with([], [], [], ['a@a.co']).and_return('compared')
       expect(sync.compare_emails_for_sync(g_contact, person, g_contact_link)).to eq('compared')
+    end
+  end
+
+  describe 'compare_numbers_for_sync' do
+    it 'uses historic list for comparision' do
+      person.phone_numbers << build(:phone_number, number: '+12223334444', historic: true)
+      person.save!
+      expect(sync).to receive(:compare_considering_historic).with([], [], [], ['+12223334444']).and_return('compared')
+      expect(sync.compare_numbers_for_sync(g_contact, person, g_contact_link)).to eq('compared')
     end
   end
 
