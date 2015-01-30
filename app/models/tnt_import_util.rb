@@ -1,4 +1,30 @@
 module TntImportUtil
+  # This is an ordered array of the Tnt phone types. The order matters because the tnt  PreferredPhoneType
+  # is an index that into this list and the PhoneIsValidMask is a bit vector that refers to these in order too.
+  TNT_PHONES = [
+    { field: 'HomePhone', location: 'home', person: :both }, # index 0
+    { field: 'HomePhone2', location: 'home', person: :both },
+    { field: 'HomeFax', location: 'fax', person: :both },
+    { field: 'OtherPhone', location: 'other', person: :both },
+    { field: 'OtherFax', location: 'fax', person: :both },
+
+    { field: 'MobilePhone', location: 'mobile', person: :primary },
+    { field: 'MobilePhone2', location: 'mobile', person: :primary },
+    { field: 'PagerNumber', location: 'other', person: :primary },
+    { field: 'BusinessPhone', location: 'work', person: :primary },
+    { field: 'BusinessPhone2', location: 'work', person: :primary },
+    { field: 'BusinessFax', location: 'fax', person: :primary },
+    { field: 'CompanyMainPhone', location: 'work', person: :primary },
+
+    { field: 'SpouseMobilePhone', location: 'mobile', person: :spouse },
+    { field: 'SpouseMobilePhone2', location: 'mobile', person: :spouse },
+    { field: 'SpousePagerNumber', location: 'other', person: :spouse },
+    { field: 'SpouseBusinessPhone', location: 'work', person: :spouse },
+    { field: 'SpouseBusinessPhone2', location: 'work', person: :spouse },
+    { field: 'SpouseBusinessFax', location: 'fax', person: :spouse },
+    { field: 'SpouseCompanyMainPhone', location: 'work', person: :spouse } # index 18
+  ]
+
   def read_xml(import_file)
     xml = {}
     begin

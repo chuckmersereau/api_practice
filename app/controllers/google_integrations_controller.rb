@@ -1,5 +1,6 @@
 class GoogleIntegrationsController < ApplicationController
   def show
+    google_integration
   end
 
   def update

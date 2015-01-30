@@ -28,7 +28,9 @@ class GoogleContactsCache
     cached_g_contact = @g_contact_by_id[remote_id]
     return cached_g_contact if cached_g_contact
     return nil if @all_g_contacts_cached
-    g_contact = Retryable.retryable { @account.contacts_api_user.get_contact(remote_id) }
+    g_contact = GoogleContactsIntegrator.retryable_exp_backoff do
+      @account.contacts_api_user.get_contact(remote_id)
+    end
     g_contact unless g_contact.deleted?
   rescue OAuth2::Error => e
     # Just return nil for a 404 Contact Not Found error, otherwise raise the error
@@ -48,7 +50,9 @@ class GoogleContactsCache
     elsif @all_g_contacts_cached
       []
     else
-      Retryable.retryable { @account.contacts_api_user.query_contacts(name, showdeleted: false) }
+      GoogleContactsIntegrator.retryable_exp_backoff do
+        @account.contacts_api_user.query_contacts(name, showdeleted: false)
+      end
     end
   end
 

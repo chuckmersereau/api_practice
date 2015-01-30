@@ -1,12 +1,4 @@
 GIT
-  remote: http://github.com/90seconds/gmail.git
-  revision: da8cc3138c7c02c6a57c922c04da964e7b333544
-  specs:
-    gmail (0.4.0)
-      gmail_xoauth (>= 0.3.0)
-      mail (>= 2.2.1)
-
-GIT
   remote: http://github.com/CruGlobal/country_select.git
   revision: 1ac18d07568b2a94b45818ae107bc3f08965301b
   specs:
@@ -27,13 +19,21 @@ GIT
 
 GIT
   remote: https://github.com/CruGlobal/google_contacts_api
-  revision: ca33225d3038ce7bfc5fb11531082aa6120f7f6a
+  revision: fddc9992600bcf60950585157497eebb52b042db
   specs:
     google_contacts_api (0.5.0)
       activesupport
       hashie
       i18n
       json
+
+GIT
+  remote: https://github.com/gmailgem/gmail.git
+  revision: 9aa7e57eab838631937db032431aedcde03e6b1d
+  specs:
+    gmail (0.4.2)
+      gmail_xoauth (>= 0.3.0)
+      mail (>= 2.2.1)
 
 GIT
   remote: https://github.com/sstephenson/global_phone.git
@@ -177,7 +177,7 @@ GEM
     factory_girl_rails (4.5.0)
       factory_girl (~> 4.5.0)
       railties (>= 3.0.0)
-    faraday (0.9.0)
+    faraday (0.9.1)
       multipart-post (>= 1.2, < 3)
     fast_gettext (0.9.0)
     fb_graph (2.6.7)
@@ -272,7 +272,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (4.2.1)
       railties (>= 3.2.16)
-    json (1.8.1)
+    json (1.8.2)
     jwt (0.1.13)
       multi_json (>= 1.5)
     kgio (2.9.2)
@@ -294,9 +294,8 @@ GEM
     lodash-rails (2.4.1)
       railties (>= 3.1)
     lumberjack (1.0.9)
-    mail (2.5.4)
-      mime-types (~> 1.16)
-      treetop (~> 1.4.8)
+    mail (2.6.3)
+      mime-types (>= 1.16, < 3)
     mailcatcher (0.2.4)
       eventmachine
       haml
@@ -309,7 +308,7 @@ GEM
       thin
     method_source (0.8.2)
     mime-types (1.25.1)
-    minitest (5.5.0)
+    minitest (5.5.1)
     mock_redis (0.13.2)
     momentjs-rails (2.8.3)
       railties (>= 3.1)
@@ -390,7 +389,6 @@ GEM
       peek
       redis
     pg (0.14.1)
-    polyglot (0.3.5)
     powerpack (0.0.9)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -561,9 +559,6 @@ GEM
     tilt (1.4.1)
     timers (4.0.1)
       hitimes
-    treetop (1.4.15)
-      polyglot
-      polyglot (>= 0.3.1)
     twitter_cldr (2.4.3)
       json
       tzinfo

@@ -1,8 +1,8 @@
 <div class="set phone">
   <% if person.phone_numbers.present? %>
-    <% person.phone_numbers.map {|pn| exhibit(pn, self)}.each do |phone_number| %>
-      <%= phone_number %>
-      <% if person.phone_numbers.length > 1 && phone_number.primary? %>
+    <% person.phone_numbers.map {|pn| exhibit(pn, self)}.each do |phone| next if phone.historic? %>
+      <%= phone %>
+      <% if person.phone_numbers.length > 1 && phone.primary? %>
         <i class="fa fa-check green"></i>
       <% end %>
       <br/>

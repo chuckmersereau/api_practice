@@ -1,0 +1,105 @@
+---
+id: '1360433356'
+LastEdit: '2014-09-24 20:29:18'
+CreatedDate: '2009-01-15'
+FileAs: Doe, John and Jane
+FileAsIsCustom: 'false'
+FullName: John and Jane Doe
+FullNameIsCustom: 'false'
+Greeting: John and Jane
+GreetingIsCustom: 'false'
+Salutation: Dear John and Jane,
+SalutationIsCustom: 'false'
+ShortName: John and Jane Doe
+ShortNameIsCustom: 'false'
+MailingAddressBlock: John and Jane Doe\nSC
+MailingAddressIsDeliverable: 'false'
+Phone: "(123) 345-7655"
+PhoneIsValid: 'true'
+Email: JohnF@nhcconline.com
+EmailIsValid: 'true'
+IsOrganization: 'false'
+FirstName: John
+LastName: Doe
+SpouseFirstName: Jane
+Deceased: 'false'
+MailingAddressType: '1'
+MailingState: SC
+HomeState: SC
+HomeCountryID: '840'
+HomeCountry: United States of America
+HomeAddressIsDeliverable: 'false'
+HomeAddressBlock: John and Jane Doe\nSC
+HomeAddressBlockIsCustom: 'false'
+OtherCountryID: '840'
+OtherCountry: United States of America
+OtherAddressIsDeliverable: 'false'
+OtherAddressBlockIsCustom: 'false'
+BusinessCountryID: '840'
+BusinessCountry: United States of America
+BusinessAddressIsDeliverable: 'false'
+BusinessAddressBlockIsCustom: 'false'
+SpouseBusinessCountryID: '840'
+SpouseBusinessCountry: United States of America
+SpouseBusinessAddressIsDeliverable: 'false'
+SpouseBusinessAddressBlockIsCustom: 'false'
+PreferredPhoneType: '5'
+PhoneIsValidMask: '32'
+PhoneCountryIDs: 5=840
+MobilePhone: "(123) 235-7655"
+PreferredEmailTypes: '4'
+Email1: John.Doe@charter.net
+Email2: JohnF@nhcconline.com
+Email1IsValid: 'true'
+Email2IsValid: 'true'
+Email3IsValid: 'false'
+SpouseEmail1IsValid: 'false'
+SpouseEmail2IsValid: 'false'
+SpouseEmail3IsValid: 'false'
+NotesAsRTF: "{\\rtf1\\ansi\\deff0{\\fonttbl{\\f0\\fnil\\fcharset0 Tahoma;}{\\f1\\fnil
+  Tahoma;}}\\n{\\*\\generator Msftedit 5.41.15.1515;}\\viewkind4\\uc1\\pard\\lang1033\\f0\\fs16
+  Elder \\f1\\par\\n}"
+Notes: Elder
+FamilySideID: '0'
+FamilyLevelID: '0'
+Children: 3-4
+PledgeAmount: '0'
+PledgeFrequencyID: '0'
+PledgeReceived: 'false'
+PledgeStartDate: '1899-12-30'
+ReferredBy: Cronins
+ReferredByList: Cronins
+MPDPhaseID: '20'
+NextAsk: '1899-12-30'
+NeverAsk: 'false'
+Region: South Carolina
+LikelyToGiveID: '0'
+ChurchName: North
+SendNewsletter: 'false'
+NewsletterMediaPref: "+P-E"
+DirectDeposit: 'false'
+Magazine: 'false'
+MonthlyPledge: '0'
+FirstGiftDate: '1899-12-30'
+LastGiftDate: '1899-12-30'
+LastGiftAmount: '0'
+LastGiftOrganizationID: '0'
+PrevYearTotal: '0'
+YearTotal: '0'
+LifetimeTotal: '0'
+LifetimeNumberOfGifts: '0'
+LargestGift: '0'
+GoodUntil: '1899-12-30'
+AveMonthlyGift: '0'
+LastDateInAve: '1899-12-30'
+TwelveMonthTotal: '0'
+LastActivity: '2013-03-19'
+LastAppointment: '1899-12-30'
+LastCall: '1899-12-30'
+LastPreCall: '1899-12-30'
+LastLetter: '2013-03-19'
+LastVisit: '1899-12-30'
+LastThank: '1899-12-30'
+LastChallenge: '1899-12-30'
+AppealsSinceLastGift: '0'
+ChallengesSinceLastGift: '0'
