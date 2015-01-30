@@ -43,9 +43,7 @@ class HomeController < ApplicationController
         appointments: all_tasks.of_type('Call')
                                .where(next_action: 'Appointment Scheduled')
                                .count,
-        talktoinperson: all_tasks.of_type('Call')
-                              .where(next_action: 'Talk to In Person')
-                              .count
+        talktoinperson: all_tasks.of_type('Talk to In Person').count
       },
       email: {
         sent: all_tasks.of_type('Email')

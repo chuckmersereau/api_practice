@@ -69,11 +69,12 @@ angular.module('mpdxApp')
                        strContains(taskResult, 'Email') ||
                        strContains(taskResult, 'Message') ||
                        strContains(taskResult, 'Text') ||
+                       strContains(taskResult, 'Talk to In Person') ||
+                       strContains(taskResult, 'Call Again') ||
                        strContains(taskResult, 'Email Again') ||
                        strContains(taskResult, 'Message Again') ||
-                       strContains(taskResult, 'Talk to In Person') ||
-                       strContains(taskResult, 'Talk to In Person Again') ||
-                       strContains(taskResult, 'Text Again')) {
+                       strContains(taskResult, 'Text Again') ||
+                       strContains(taskResult, 'Talk to In Person Again')){
 
                         //generic followup task type
                         var taskType;
@@ -92,6 +93,10 @@ angular.module('mpdxApp')
                             taskType = 'Text Message';
                         }else if(strContains(taskResult, 'Talk to In Person')){
                             taskType = 'Talk to In Person';
+                        }else if(strContains(taskResult, 'Call Again')){
+                            taskType = 'Call';
+                        }else if(strContains(taskResult, 'Email Again')){
+                            taskType = 'Email';
                         }else if(strContains(taskResult, 'Message Again')) {
                             taskType = 'Facebook Message';
                         }else if(strContains(taskResult, 'Text Again')){

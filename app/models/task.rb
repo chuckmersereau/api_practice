@@ -27,14 +27,16 @@ class Task < Activity
   # validates :activity_type, :presence => { :message => _( '/ Action is required') }
 
   CALL_RESULTS = ['Attempted - Left Message', 'Attempted', 'Completed', 'Received']
-<<<<<<< HEAD
-  CALL_NEXT_ACTIONS = ['Call Again', 'Email', 'Text', 'Message', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None', 'Talk to In Person']
-=======
-  CALL_NEXT_ACTIONS = ['Call Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None' , 'Talk to In Person']
-  
-  TALK_TO_IN_PERSON_RESULTS = %w(Completed)
-  TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
->>>>>>> master
+  CALL_NEXT_ACTIONS = ['Call Again',
+                       'Email', 'Text', 'Message',
+                       'Appointment Scheduled',
+                       'Partner - Financial',
+                       'Partner - Special',
+                       'Partner - Pray',
+                       'Ask in Future',
+                       'Not Interested',
+                       'None',
+                       'Talk to In Person']
 
   APPOINTMENT_RESULTS = %w(Completed Attempted)
   APPOINTMENT_NEXT_ACTIONS = ['Call for Decision',
@@ -52,7 +54,16 @@ class Task < Activity
                               'Talk to In Person']
 
   EMAIL_RESULTS = %w(Completed Received)
-  EMAIL_NEXT_ACTIONS = ['Email Again', 'Call', 'Text', 'Message', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None', 'Talk to In Person']
+  EMAIL_NEXT_ACTIONS = ['Email Again',
+                        'Call', 'Text', 'Message',
+                        'Appointment Scheduled',
+                        'Partner - Financial',
+                        'Partner - Special',
+                        'Partner - Pray',
+                        'Ask in Future',
+                        'Not Interested',
+                        'None',
+                        'Talk to In Person']
 
   FACEBOOK_MESSAGE_RESULTS = %w(Completed Received)
   FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again',
@@ -64,21 +75,31 @@ class Task < Activity
                                    'Partner - Pray',
                                    'Ask in Future',
                                    'Not Interested',
-<<<<<<< HEAD
                                    'None',
-=======
-                                   'None', 
->>>>>>> master
                                    'Talk to In Person']
 
   TEXT_RESULTS = %w(Completed Received)
-  TEXT_NEXT_ACTIONS = ['Text Again', 'Call', 'Email', 'Message', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None', 'Talk to In Person']
-<<<<<<< HEAD
+  TEXT_NEXT_ACTIONS = ['Text Again',
+                       'Call', 'Email', 'Message',
+                       'Appointment Scheduled',
+                       'Partner - Financial',
+                       'Partner - Special',
+                       'Partner - Pray',
+                       'Ask in Future',
+                       'Not Interested',
+                       'None',
+                       'Talk to In Person']
 
   TALK_TO_IN_PERSON_RESULTS = %w(Completed)
-  TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again', 'Appointment Scheduled', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Ask in Future', 'Not Interested', 'None']
-=======
->>>>>>> master
+  TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again',
+                                    'Call', 'Email', 'Message', 'Text',
+                                    'Appointment Scheduled',
+                                    'Partner - Financial',
+                                    'Partner - Special',
+                                    'Partner - Pray',
+                                    'Ask in Future',
+                                    'Not Interested',
+                                    'None']
 
   MESSAGE_RESULTS = [_('Done'), _('Received')]
   STANDARD_RESULTS = [_('Done')]
