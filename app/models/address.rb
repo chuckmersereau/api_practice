@@ -10,8 +10,7 @@ class Address < ActiveRecord::Base
 
   scope :current, -> { where(deleted: false) }
 
-  before_create :find_or_create_master_address
-  before_update :update_or_create_master_address
+  before_validation :determine_master_address
   after_destroy :clean_up_master_address
   after_save :update_contact_timezone
 
@@ -106,6 +105,14 @@ class Address < ActiveRecord::Base
   end
 
   private
+
+  def determine_master_address
+    if id.blank?
+      find_or_create_master_address
+    else
+      update_or_create_master_address
+    end
+  end
 
   def update_or_create_master_address
     if (changed & %w(street city state country postal_code)).present?
