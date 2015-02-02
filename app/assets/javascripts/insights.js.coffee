@@ -1,6 +1,6 @@
 $ ->
   $().ready ->
-    numberOfrows = document.getElementById("recurringGiftsDataTable").rows.length
+    numberOfrows = $('#recurringGiftsDataTable tbody tr').length
     i=0
     while numberOfrows > i
        ++i
