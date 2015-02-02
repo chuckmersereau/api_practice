@@ -18,8 +18,6 @@ class Address < ActiveRecord::Base
 
   attr_accessor :user_changed
 
-  validates :master_address_id, presence: true
-
   assignable_values_for :location, allow_blank: true do
     [_('Home'), _('Business'), _('Mailing'), _('Other')]
   end
