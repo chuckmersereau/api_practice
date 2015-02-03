@@ -36,15 +36,18 @@
               <tr  class="<%= recurr_contact_id %>" style="display: none;" data-id="<%= recurr_contact_id %>" >
                 <td width="auto"  ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
                 <td colspan="5" >
-                  <select id="sresult" name="sresult">
+                  <select id="sresult_<%=recurr_contact_id %>" name="sresult_<%=recurr_contact_id %>" >
                     <option></option>
-                    <option value="Contacted - No descision yet">Contacted - No descision yet</option>
-                    <option>Contacted - Received an Increase</option>
-                    <option>Contacted - No increase at this time. Will re-attempt in the future.</option>
-                    <option>Contacted - Not possible at all. Will not re-attempt</option>
-                    <option>Did not contact</option></select>
+                    <option ><%=_('Contacted - No descision yet')%></option>
+                    <option ><%=_('Contacted - Received an Increase')%></option>
+                    <option><%=_('Contacted - No increase at this time. Will re-attempt in the future.')%></option>
+                    <option><%=_('Contacted - Not possible at all. Will not re-attempt')%></option>
+                    <option><%=_('Did not contact')%></option>
+                  </select>
                  &nbsp;&nbsp;&nbsp;
-                  <%= button_to _('Submit') , :action => "create" ,  :remote => true,:recurr_contact_id => recurr_contact_id %>
+                </td>
+                <td id="btn">
+                  <%= link_to(_('Submit'), insights_path, class: 'btn smallbtn' ) %>
                 </td>
                 <td colspan="4">
                   <%= _('Double click to cancel.') %>
