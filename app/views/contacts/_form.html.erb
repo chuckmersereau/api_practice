@@ -86,6 +86,10 @@
           <%= f.label :pledge_received, _('Pledge Received') %>
         </div>
 
+        <div class="field radiocheck">
+          <%= f.check_box :no_appeals %>
+          <%= f.label :no_appeals, _("Don't send appeals") %>
+        </div>
 
         <div class="sfield referrers_field">
           <label class="fieldset_label"><%= _('Referrals') %></label>

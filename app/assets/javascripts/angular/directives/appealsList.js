@@ -181,12 +181,24 @@ angular.module('mpdxApp')
                     var modalInstance = $modal.open({
                         templateUrl: '/templates/appeals/wizard.html',
                         controller: function($scope, $modalInstance){
-                            $scope.appeal = {
-                              validStatus: {},
-                              validTags: {},
-                              exclude: {}
-                            };
                             $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES;
+
+                            defaultValidStatuses = {};
+                            angular.forEach($scope.contactStatuses, function(status){
+                                defaultValidStatuses[status] = true;
+                            });
+
+                            $scope.appeal = {
+                              validStatus: defaultValidStatuses,
+                              validTags: {},
+                              exclude: {
+                                  specialGift3months: true,
+                                  joinedTeam3months: true,
+                                  increasedGiving3months: true,
+                                  stoppedGiving2months: true,
+                                  doNotAskAppeals: true
+                              }
+                            };
                             api.call('get', 'contacts/tags?account_list_id=' + (window.current_account_list_id || ''), null, function(data) {
                               $scope.contactTags = data.tags.sort();
                             }, null, true);
@@ -215,7 +227,7 @@ angular.module('mpdxApp')
                         api.call('post', 'appeals', {
                           name: newAppeal.name,
                           amount: newAppeal.amount,
-                          contact_status: _.keys(newAppeal.validStatus),
+                          contact_statuses: _.keys(newAppeal.validStatus),
                           contact_tags: _.keys(newAppeal.validTags),
                           contact_exclude: newAppeal.exclude,
                           account_list_id: (window.current_account_list_id || '')
