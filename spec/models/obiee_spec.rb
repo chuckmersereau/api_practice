@@ -12,6 +12,7 @@ describe Obiee do
   before(:all) { savon.mock!   }
   after(:all)  { savon.unmock! }
 
+  obiee=''
   SESSION_ID = 'sessionid22091522cru'
   PATH = '/shared/Insight/Siebel Recurring Monthly/Recurring Designation Test Query'
   SQL = 'SELECT
@@ -22,17 +23,16 @@ WHERE ("- Designation"."Designation Name" = ''Test Desig ((2716653)'')
 ORDER BY 1, 2 ASC NULLS LAST
 FETCH FIRST 10000000 ROWS ONLY'
 
-  obiee = Obiee.new
-
-  it ( 'gets a session id') do
-    creds = {name: 'testuser', password: 'test1234567890@' }
+  it  'gets a session id' do
+    creds =  {name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
-    session_id = obiee.auth_client creds
+    obiee = Obiee.new
+    session_id = obiee.session_id
     expect(session_id).to eq(SESSION_ID)
   end
 
-  it('gets report sql with session id') do
+  it'gets report sql with session id' do
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
     report_params = { reportRef: {reportPath: PATH},
                       reportParams: {filterExpressions: '',
@@ -41,7 +41,6 @@ FETCH FIRST 10000000 ROWS ONLY'
                       sessionID: SESSION_ID}
 
     savon.expects(:generateReportSQL).with(message: report_params ).returns(rpt_sql_fixture)
-
     report_sql = obiee.report_sql SESSION_ID, PATH, {}
 
     expect(report_sql).to eq('SELECT
@@ -50,10 +49,9 @@ FETCH FIRST 10000000 ROWS ONLY'
 FROM "CCCi Transaction Analytics"
 ORDER BY 1, 2 ASC NULLS LAST
 FETCH FIRST 10000000 ROWS ONLY')
-
   end
 
-  it('no sql when no session_id') do
+  it 'no sql when no session_id' do
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
     report_params = { reportRef: {reportPath: PATH},
                       reportParams: {filterExpressions: '',
@@ -63,42 +61,33 @@ FETCH FIRST 10000000 ROWS ONLY')
 
     savon.expects(:generateReportSQL).with(message: report_params ).returns(rpt_sql_fixture)
     expect{ obiee.report_sql( '', PATH, {} ) }.to raise_error( Savon::ExpectationError )
-
   end
 
-
-  it('fails when no session_id') do
+  it 'fails when no session_id' do
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
     path = '/shared/Insight/Siebel Recurring Monthly/Recurring Designation Test Query'
-
     report_params = { reportRef: {reportPath: PATH},
                       reportParams: {filterExpressions: '',
                                      variables: {}
                       },
                       sessionID: SESSION_ID}
-
     savon.expects(:generateReportSQL).with(message: report_params ).returns(rpt_sql_fixture)
-
     expect{ obiee.report_sql( '', PATH, {} ) }.to raise_error( Savon::ExpectationError )
-
   end
 
-  it('fails when no report path') do
+  it 'fails when no report path' do
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
     report_params = { reportRef: {reportPath: PATH},
                       reportParams: {filterExpressions: '',
                                      variables: {}
                       },
                       sessionID: SESSION_ID}
-
     savon.expects(:generateReportSQL).with(message: report_params ).returns(rpt_sql_fixture)
-
     #No Path
     expect{ obiee.report_sql(SESSION_ID, '', {} ) }.to raise_error( Savon::ExpectationError )
-
   end
 
-  it('gets report results with session id') do
+  it 'gets report results with session id' do
     results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
     run_params = {sql: SQL,
                   outputFormat: 'SAWRowsetSchemaAndData',
@@ -115,7 +104,7 @@ FETCH FIRST 10000000 ROWS ONLY')
 
   end
 
-  it('fails to get report results when no session id') do
+  it 'fails to get report results when no session id' do
     results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
     run_params = {sql: SQL,
                   outputFormat: 'SAWRowsetSchemaAndData',
@@ -131,7 +120,7 @@ FETCH FIRST 10000000 ROWS ONLY')
     expect{ obiee.report_results( '', SQL ) }.to raise_error( Savon::ExpectationError )
   end
 
-  it('fails to get report results when no sql') do
+  it 'fails to get report results when no sql' do
     results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
     run_params = {sql: SQL,
                   outputFormat: 'SAWRowsetSchemaAndData',
@@ -147,6 +136,4 @@ FETCH FIRST 10000000 ROWS ONLY')
     expect{ obiee.report_results( SESSION_ID,'' ) }.to raise_error( Savon::ExpectationError )
   end
 
-
 end
-
