@@ -1,12 +1,4 @@
 GIT
-  remote: http://github.com/90seconds/gmail.git
-  revision: da8cc3138c7c02c6a57c922c04da964e7b333544
-  specs:
-    gmail (0.4.0)
-      gmail_xoauth (>= 0.3.0)
-      mail (>= 2.2.1)
-
-GIT
   remote: http://github.com/CruGlobal/country_select.git
   revision: 1ac18d07568b2a94b45818ae107bc3f08965301b
   specs:
@@ -34,6 +26,14 @@ GIT
       hashie
       i18n
       json
+
+GIT
+  remote: https://github.com/gmailgem/gmail.git
+  revision: 9aa7e57eab838631937db032431aedcde03e6b1d
+  specs:
+    gmail (0.4.2)
+      gmail_xoauth (>= 0.3.0)
+      mail (>= 2.2.1)
 
 GIT
   remote: https://github.com/sstephenson/global_phone.git
@@ -81,6 +81,9 @@ GEM
     airbrake (4.1.0)
       builder
       multi_json
+    akami (1.2.2)
+      gyoku (>= 0.4.0)
+      nokogiri
     angular-ui-bootstrap-rails (0.11.2)
     angularjs-rails (1.3.3)
     arel (5.0.1.20140414130214)
@@ -253,6 +256,8 @@ GEM
     guard-rubocop (1.2.0)
       guard (~> 2.0)
       rubocop (~> 0.20)
+    gyoku (1.1.1)
+      builder (>= 2.1.2)
     haml (4.0.5)
       tilt
     hashie (1.2.0)
@@ -263,6 +268,9 @@ GEM
       multi_xml (>= 0.5.2)
     httpauth (0.2.1)
     httpclient (2.5.3.3)
+    httpi (2.1.1)
+      rack
+      rubyntlm (~> 0.3.2)
     i18n (0.7.0)
     inflecto (0.0.2)
     iniparse (1.1.6)
@@ -294,9 +302,8 @@ GEM
     lodash-rails (2.4.1)
       railties (>= 3.1)
     lumberjack (1.0.9)
-    mail (2.5.4)
-      mime-types (~> 1.16)
-      treetop (~> 1.4.8)
+    mail (2.6.3)
+      mime-types (>= 1.16, < 3)
     mailcatcher (0.2.4)
       eventmachine
       haml
@@ -324,6 +331,7 @@ GEM
     ngmin-rails (0.4.0)
       rails (>= 3.1)
     nokogiri (1.5.11)
+    nori (2.3.0)
     oauth2 (0.8.1)
       faraday (~> 0.8)
       httpauth (~> 0.1)
@@ -390,7 +398,6 @@ GEM
       peek
       redis
     pg (0.14.1)
-    polyglot (0.3.5)
     powerpack (0.0.9)
     pry (0.10.1)
       coderay (~> 1.1.0)
@@ -486,6 +493,7 @@ GEM
     ruby-rtf (0.0.1)
     ruby_parser (3.6.3)
       sexp_processor (~> 4.1)
+    rubyntlm (0.3.4)
     safe_yaml (1.0.4)
     sass (3.2.19)
     sass-rails (4.0.5)
@@ -493,6 +501,14 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
+    savon (2.3.3)
+      akami (~> 1.2.0)
+      builder (>= 2.1.2)
+      gyoku (~> 1.1.0)
+      httpi (~> 2.1.0)
+      nokogiri (>= 1.4.0)
+      nori (~> 2.3.0)
+      wasabi (~> 3.2.2)
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
@@ -561,9 +577,6 @@ GEM
     tilt (1.4.1)
     timers (4.0.1)
       hitimes
-    treetop (1.4.15)
-      polyglot
-      polyglot (>= 0.3.1)
     twitter_cldr (2.4.3)
       json
       tzinfo
@@ -587,6 +600,10 @@ GEM
       descendants_tracker (~> 0.0.1)
     warden (1.2.3)
       rack (>= 1.0)
+    wasabi (3.2.3)
+      httpi (~> 2.0)
+      mime-types (< 2.0.0)
+      nokogiri (>= 1.4.0)
     webmock (1.9.3)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
