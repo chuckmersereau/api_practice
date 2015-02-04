@@ -4,9 +4,12 @@ angular.module('mpdxApp')
             restrict: 'E',
             templateUrl: '/templates/appeals/list.html',
             controller: function ($scope, $modal, api) {
-                var refreshAppeals = function(){
+                var refreshAppeals = function(callback){
                     api.call('get','appeals?account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
                         $scope.appeals = data.appeals;
+                      if(_.isFunction(callback)){
+                        callback(data);
+                      }
                     });
                 };
                 refreshAppeals();
@@ -231,8 +234,12 @@ angular.module('mpdxApp')
                           contact_tags: _.keys(newAppeal.validTags),
                           contact_exclude: newAppeal.exclude,
                           account_list_id: (window.current_account_list_id || '')
-                        }, function() {
-                          refreshAppeals();
+                        }, function(data) {
+                          refreshAppeals(function(){
+                            $scope.editAppeal(data.appeal.id);
+                          });
+                        }, function(){
+                          alert('An error occurred while creating the appeal.');
                         });
                     });
                 };
