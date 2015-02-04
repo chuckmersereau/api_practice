@@ -24,6 +24,13 @@ require 'equivalent-xml'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
+WebMock.disable_net_connect!(allow_localhost: true)
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, js_errors: false, timeout: 60)
+end
+Capybara.javascript_driver = :poltergeist
+Capybara.current_driver = :poltergeist
+
 RSpec.configure do |config|
 
   config.before(:each) do |example_method|
@@ -41,10 +48,6 @@ RSpec.configure do |config|
     else
       Sidekiq::Testing.fake!
     end
-  end
-  config.before(:all) do
-    WebMock.disable_net_connect!(allow_localhost: true)
-    Capybara.javascript_driver = :poltergeist
   end
   # ## Mock Framework
   #
