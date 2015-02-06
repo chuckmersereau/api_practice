@@ -17,6 +17,13 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     end
   end
 
+  def select_task_next_action(val)
+    within('.ui-dialog') do
+      first('#task_action_select select').find(:xpath, "option[@value='#{val}']").select_option
+      click_on('Complete')
+    end
+  end
+
   it 'opens a dialog' do
     visit_and_open_dialog(@task)
     within('.ui-dialog') do
@@ -26,10 +33,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
 
   it 'creates followup task for Call Again' do
     visit_and_open_dialog(@task)
-    within('.ui-dialog') do
-      first('#task_action_select select').find(:xpath, 'option[1]').select_option
-      click_on('Complete')
-    end
+    select_task_next_action('Call Again')
     expect {
       within('#complete_task_followup_modal') do
         click_on('Save')
@@ -44,10 +48,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
 
   it 'creates followup task for Appointment' do
     visit_and_open_dialog(@task)
-    within('.ui-dialog') do
-      first('#task_action_select select').find(:xpath, 'option[2]').select_option
-      click_on('Complete')
-    end
+    select_task_next_action('Appointment Scheduled')
     expect {
       within('#complete_task_followup_modal') do
         all('input').each do |cb|
@@ -65,10 +66,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
 
   it 'updates Contact when Not Interested' do
     visit_and_open_dialog(@task)
-    within('.ui-dialog') do
-      first('#task_action_select select').find(:xpath, 'option[7]').select_option
-      click_on('Complete')
-    end
+    select_task_next_action('Not Interested')
     within('#complete_task_followup_modal') do
       find_button('Save').trigger('click')
     end
