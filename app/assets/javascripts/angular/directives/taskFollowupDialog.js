@@ -60,6 +60,8 @@ angular.module('mpdxApp')
                     dateTwoDaysFromToday = dateTwoDaysFromToday.getFullYear() + '-' +
                                            ("0" + (dateTwoDaysFromToday.getMonth() + 1)).slice(-2) + '-' +
                                            ("0" + dateTwoDaysFromToday.getDate()).slice(-2);
+                    var timeNowHour = ("0" + (new Date().getHours())).slice(-2);
+                    var timeNowMin = ("0" + (new Date().getMinutes())).slice(-2);
 
                     $scope.followUpSaveFunc = function () {
                         if(strContains(taskResult, 'Partner - Financial') &&
@@ -71,19 +73,14 @@ angular.module('mpdxApp')
                         //Contact Updates
                         var newContactStatus;
                         if(strContains(taskResult, 'Appointment Scheduled') || strContains(taskResult, 'Reschedule'))
-                            newContactStatus = 'Appointment Scheduled'
+                            newContactStatus = 'Appointment Scheduled';
                         if(strContains(taskResult, 'Call for Decision') && $scope.followUpDialogResult.updateContactStatus)
-                            newContactStatus = 'Call for Decision'
-                        if(strContains(taskResult, 'Partner - Financial'))
-                            newContactStatus = 'Partner - Financial'
-                        if(strContains(taskResult, 'Partner - Special'))
-                            newContactStatus = 'Partner - Special'
-                        if(strContains(taskResult, 'Partner - Pray'))
-                            newContactStatus = 'Partner - Pray'
-                        if(strContains(taskResult, 'Ask in Future'))
-                            newContactStatus = 'Ask in Future'
-                        if(strContains(taskResult, 'Not Interested'))
-                            newContactStatus = 'Not Interested'
+                            newContactStatus = 'Call for Decision';
+                        if(taskResult == 'Partner - Financial' || taskResult == 'Partner - Special' ||
+                           taskResult == 'Partner - Pray' || taskResult == 'Ask in Future' ||
+                           taskResult == 'Not Interested') {
+                            newContactStatus = taskResult;
+                        }
 
                         if(newContactStatus && followUpTask.contacts.length > 0) {
                           angular.forEach(followUpTask.contacts, function (c) {
@@ -91,9 +88,9 @@ angular.module('mpdxApp')
                             if($scope.followUpDialogResult.newsletterSignup)
                                 contact.send_newsletter = $scope.followUpDialogResult.newsletter.type;
                             if(newContactStatus == 'Partner - Financial') {
-                                contact.pledge_amount = $scope.followUpDialogResult.financialCommitment.amount,
-                                pledge_frequency = $scope.followUpDialogResult.financialCommitment.frequency,
-                                pledge_start_date = $scope.followUpDialogResult.financialCommitment.date
+                                contact.pledge_amount = $scope.followUpDialogResult.financialCommitment.amount;
+                                pledge_frequency = $scope.followUpDialogResult.financialCommitment.frequency;
+                                pledge_start_date = $scope.followUpDialogResult.financialCommitment.date;
                             }
                             saveContact(contact);
                           });
@@ -102,68 +99,65 @@ angular.module('mpdxApp')
 
                         //Create Call, Message, Email or Text Task
                         if ($scope.followUpDialogResult.createCallTask) {
-                            createGenericTask(contactsObject, taskType);
+                            createTask($scope.followUpDialogResult.callTask, contactsObject, taskType);
                         }
                         if($scope.followUpDialogResult.createApptTask){
-                            createApptTask(contactsObject);
+                            createTask($scope.followUpDialogResult.apptTask, contactsObject, 'Appointment');
                         }
                         if($scope.followUpDialogResult.createThankTask){
-                            createThankTask(contactsObject);
+                            createTask($scope.followUpDialogResult.thankTask, contactsObject, 'Thank');
                         }
                         if($scope.followUpDialogResult.createGivingTask){
-                            createGivingTask(contactsObject);
+                            createTask($scope.followUpDialogResult.givingTask, contactsObject,
+                                       $scope.followUpDialogResult.givingTask.type);
                         }
 
                         jQuery('#complete_task_followup_modal').dialog('close');
                     };
 
                     if(strContains(taskResult, 'Call') ||
-                       strContains(taskResult, 'Call for Decision') ||
                        strContains(taskResult, 'Email') ||
                        strContains(taskResult, 'Message') ||
                        strContains(taskResult, 'Text') ||
-                       strContains(taskResult, 'Talk to In Person') ||
                        strContains(taskResult, 'Prayer Request') ||
-                       strContains(taskResult, 'Call Again') ||
-                       strContains(taskResult, 'Email Again') ||
-                       strContains(taskResult, 'Message Again') ||
-                       strContains(taskResult, 'Text Again') ||
-                       strContains(taskResult, 'Talk to In Person Again')){
+                       strContains(taskResult, 'Talk to In Person')){
 
                         //generic followup task type
                         var taskType;
                         var taskSubject;
 
-                        if(strContains(taskResult, 'Call for Decision')){
-                            taskType = 'Call';
-                            taskSubject = 'Call for Decision - ' + followUpTask.subject;
-                        }else if(strContains(taskResult, 'Call')){
-                            taskType = 'Call';
-                        }else if(strContains(taskResult, 'Email')){
-                            taskType = 'Email';
-                        }else if(strContains(taskResult, 'Message')){
-                            taskType = 'Facebook Message';
-                        }else if(strContains(taskResult, 'Text')){
-                            taskType = 'Text Message';
-                        }else if(strContains(taskResult, 'Talk to In Person')){
-                            taskType = 'Talk to In Person';
-                        }else if(strContains(taskResult, 'Prayer Request')){
-                            taskType = 'Prayer Request';
-                        }else if(strContains(taskResult, 'Call Again')){
-                            taskType = 'Call';
-                        }else if(strContains(taskResult, 'Email Again')){
-                            taskType = 'Email';
-                        }else if(strContains(taskResult, 'Message Again')) {
-                            taskType = 'Facebook Message';
-                        }else if(strContains(taskResult, 'Text Again')){
-                            taskType = 'Text Message';
-                        }else if(strContains(taskResult, 'Talk to In Person Again')) {
-                            taskType = 'Talk to In Person';
+                        switch(taskResult) {
+                            case 'Call for Decision':
+                                taskType = 'Call';
+                                taskSubject = 'Call for Decision - ' + followUpTask.subject;
+                                break;
+                            case 'Call':
+                            case 'Call Again':
+                                taskType = 'Call';
+                                break;
+                            case 'Email':
+                            case 'Email Again':
+                                taskType = 'Email';
+                                break;
+                            case 'Message':
+                            case 'Message Again':
+                                taskType = 'Facebook Message';
+                                break;
+                            case 'Text':
+                            case 'Text Again':
+                                taskType = 'Text Message';
+                                break;
+                            case 'Talk to In Person':
+                            case 'Talk to In Person Again':
+                                taskType = 'Talk to In Person';
+                                break;
+                            case 'Prayer Request':
+                                taskType = 'Prayer Request';
+                                break;
                         }
 
                         $scope.followUpDialogData = {
                             message: 'Schedule future task?',
-                            options: [],
                             callTask: true
                         };
                         if(strContains(taskResult, 'Call for Decision')) {
@@ -177,8 +171,8 @@ angular.module('mpdxApp')
                                 type: taskType,
                                 subject: taskSubject || followUpTask.subject,
                                 date: dateTwoDaysFromToday,
-                                hour: ("0" + (new Date().getHours())).slice(-2),
-                                min: ("0" + (new Date().getMinutes())).slice(-2),
+                                hour: timeNowHour,
+                                min: timeNowMin,
                                 tags: followUpTask.tag_list.join()
                             }
                         };
@@ -186,8 +180,7 @@ angular.module('mpdxApp')
                     }else if((strContains(taskResult, 'Appointment Scheduled') || strContains(taskResult, 'Reschedule')) && followUpTask.contacts.length > 0){
 
                         $scope.followUpDialogData = {
-                            message: 'Contact\'s status will be updated to \'Appointment Scheduled\'.',
-                            options: [],
+                            message: "Contact's status will be updated to 'Appointment Scheduled'.",
                             apptTask: true,
                             callTask: true
                         };
@@ -195,15 +188,15 @@ angular.module('mpdxApp')
                             apptTask: {
                                 subject: 'Support',
                                 date: dateTwoDaysFromToday,
-                                hour: ("0" + (new Date().getHours())).slice(-2),
-                                min: ("0" + (new Date().getMinutes())).slice(-2)
+                                hour: timeNowHour,
+                                min: timeNowMin
                             },
                             callTask: {
                               type: 'Call',
                               subject: followUpTask.subject,
                               date: dateTwoDaysFromToday,
-                              hour: ("0" + (new Date().getHours())).slice(-2),
-                              min: ("0" + (new Date().getMinutes())).slice(-2),
+                              hour: timeNowHour,
+                              min: timeNowMin,
                               tags: followUpTask.tag_list.join()
                             }
                         };
@@ -211,8 +204,7 @@ angular.module('mpdxApp')
                     }else if(strContains(taskResult, 'Partner - Financial') && followUpTask.contacts.length > 0){
 
                         $scope.followUpDialogData = {
-                            message: 'Contact\'s status will be updated to \'Partner - Financial\'.',
-                            options: [],
+                            message: "Contact's status will be updated to 'Partner - Financial'.",
                             thankTask: true,
                             financialCommitment: true,
                             givingTask: true,
@@ -226,8 +218,8 @@ angular.module('mpdxApp')
                             givingTask: {
                                 subject: 'For First Gift',
                                 date: dateTwoDaysFromToday,
-                                hour: ("0" + (new Date().getHours())).slice(-2),
-                                min: ("0" + (new Date().getMinutes())).slice(-2)
+                                hour: timeNowHour,
+                                min: timeNowMin
                             },
                             newsletter: {
                               type: 'Both'
@@ -237,10 +229,8 @@ angular.module('mpdxApp')
                     }else if(strContains(taskResult, 'Partner - Special') && followUpTask.contacts.length > 0){
 
                         $scope.followUpDialogData = {
-                            message: 'Contact\'s status will be updated to \'Partner - Special\'.',
-                            options: [],
+                            message: "Contact's status will be updated to 'Partner - Special'.",
                             thankTask: true,
-                            financialCommitment: false,
                             givingTask: true,
                             newsletter: true
                         };
@@ -252,8 +242,8 @@ angular.module('mpdxApp')
                             givingTask: {
                                 subject: 'For Gift',
                                 date: dateTwoDaysFromToday,
-                                hour: ("0" + (new Date().getHours())).slice(-2),
-                                min: ("0" + (new Date().getMinutes())).slice(-2)
+                                hour: timeNowHour,
+                                min: timeNowMin
                             },
                             newsletter: {
                               type: 'Both'
@@ -263,11 +253,7 @@ angular.module('mpdxApp')
                     }else if(strContains(taskResult, 'Partner - Pray') && followUpTask.contacts.length > 0){
 
                         $scope.followUpDialogData = {
-                            message: 'Contact\'s status will be updated to \'Partner - Pray\'.',
-                            options: [],
-                            thankTask: false,
-                            financialCommitment: false,
-                            givingTask: false,
+                            message: "Contact's status will be updated to 'Partner - Pray'.",
                             newsletter: true
                         };
                         $scope.followUpDialogResult = {
@@ -279,8 +265,7 @@ angular.module('mpdxApp')
                     }else if(strContains(taskResult, 'Ask in Future') && followUpTask.contacts.length > 0){
 
                         $scope.followUpDialogData = {
-                            message: 'Contact\'s status will be updated to \'Ask in Future\'.',
-                            options: [],
+                            message: "Contact's status will be updated to 'Ask in Future'.",
                             callTask: true,
                             newsletter: true
                         };
@@ -289,8 +274,8 @@ angular.module('mpdxApp')
                                 type: 'Ask In Future',
                                 subject: 'Ask again for financial partnership',
                                 date: dateTwoDaysFromToday,
-                                hour: ("0" + (new Date().getHours())).slice(-2),
-                                min: ("0" + (new Date().getMinutes())).slice(-2),
+                                hour: timeNowHour,
+                                min: timeNowMin,
                                 tags: followUpTask.tag_list.join()
                             },
                             newsletter: {
@@ -301,14 +286,12 @@ angular.module('mpdxApp')
                     }else if(strContains(taskResult, 'Not Interested') && followUpTask.contacts.length > 0){
 
                         $scope.followUpDialogData = {
-                            message: 'Contact\'s status will be updated to \'Not Interested\'.',
-                            options: []
+                            message: "Contact's status will be updated to 'Not Interested'."
                         };
 
                     }
 
                     if(angular.isDefined($scope.followUpDialogData)){
-                        $scope.followUpDialogResult.select = $scope.followUpDialogData.options[0];
                         if(!$scope.$$phase) {
                             $scope.$apply();
                         }
@@ -345,25 +328,8 @@ angular.module('mpdxApp')
                     });
                 };
 
-                var createThankTask = function(contactsObject){
-                    createTask($scope.followUpDialogResult.thankTask, contactsObject, 'Thank');
-                };
-
-                var createGivingTask = function(contactsObject){
-                    createTask($scope.followUpDialogResult.givingTask, contactsObject, $scope.followUpDialogResult.givingTask.type);
-                };
-
-                var createGenericTask = function(contactsObject, taskType){
-                    createTask($scope.followUpDialogResult.callTask, contactsObject, taskType);
-                };
-
-                var createApptTask = function(contactsObject){
-                    createTask($scope.followUpDialogResult.apptTask, contactsObject, 'Appointment');
-                };
-
                 var showContactStatus = function(status){
-                    status = __(status);
-                    jQuery('.contact_status').text(__('Status')+': '+status);
+                    jQuery('.contact_status').text(__('Status')+': '+__(status));
                 };
 
                 var saveContact = function(contact){

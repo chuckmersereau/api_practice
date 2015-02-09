@@ -2,8 +2,6 @@
     <div class="form_wrapper" style="overflow-y:auto; max-height:400px;">
 
         <p ng-bind="followUpDialogData.message"></p>
-        <select ng-show="followUpDialogData.options.length > 0" ng-options="i as i for i in followUpDialogData.options"
-                ng-model="followUpDialogResult.select"></select>
 
         <div ng-show="followUpDialogData.financialCommitment" style="padding-top:10px;">
             <label><%= _('Commitment Frequency') %></label><br>
