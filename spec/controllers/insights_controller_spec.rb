@@ -55,4 +55,11 @@ FETCH FIRST 10000000 ROWS ONLY',
     assigns(:recommnds).should eq( {"Column0"=>"0", "Column1"=>"Test Desig (2716653)"} )
   end
 
+  it 'is invalid without ' do
+      xhr :get, 'create', add_tag_name: 'foo', add_tag_contact_ids: "#{@contact1.id},#{@contact2.id}"
+      response.should be_success
+      @contact1.tag_list.should include('foo')
+      @contact2.tag_list.should include('foo')
+  end
+
 end
