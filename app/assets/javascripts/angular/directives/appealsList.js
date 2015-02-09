@@ -83,10 +83,11 @@ angular.module('mpdxApp')
                             };
 
                             $scope.createTask = function(taskType, inputContactsObject){
+                                $scope.creatingBulkTasks = true;
                                 var contactsObject = [];
                                 angular.forEach(inputContactsObject, function(value, key) {
                                     if(value){
-                                        contactsObject.push(_.zipObject(['contact_id'], [parseInt(key)]));
+                                        contactsObject.push(parseInt(key));
                                     }
                                 });
 
@@ -95,17 +96,29 @@ angular.module('mpdxApp')
                                     return;
                                 }
 
-                                api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
-                                    task: {
-                                        start_at: moment().add(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
-                                        subject: 'Appeal (' + $scope.appeal.name + ')',
-                                        activity_type: taskType,
-                                        activity_contacts_attributes: contactsObject
-                                    }
-                                }, function () {
-                                    alert('Task created.');
+                                var postTask = function(){
+                                  if(_.isEmpty(contactsObject)){
+                                    alert('Task(s) created.');
                                     $scope.taskType = '';
-                                });
+                                    $scope.creatingBulkTasks = false;
+                                    return;
+                                  }
+                                  api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
+                                    task: {
+                                      start_at: moment().add(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
+                                      subject: 'Appeal (' + $scope.appeal.name + ')',
+                                      activity_type: taskType,
+                                      activity_contacts_attributes: [{
+                                        'contact_id': contactsObject[0]
+                                      }]
+                                    }
+                                  }, function(){
+                                    contactsObject.shift();
+                                    postTask();
+                                  });
+                                };
+
+                                postTask();
                             };
 
                             $scope.selectAll = function(type){
