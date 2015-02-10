@@ -99,7 +99,8 @@ angular.module('mpdxApp')
 
                         //Create Call, Message, Email or Text Task
                         if ($scope.followUpDialogResult.createCallTask) {
-                            createTask($scope.followUpDialogResult.callTask, contactsObject, taskType);
+                            createTask($scope.followUpDialogResult.callTask, contactsObject,
+                                       $scope.followUpDialogResult.callTask.type);
                         }
                         if($scope.followUpDialogResult.createApptTask){
                             createTask($scope.followUpDialogResult.apptTask, contactsObject, 'Appointment');

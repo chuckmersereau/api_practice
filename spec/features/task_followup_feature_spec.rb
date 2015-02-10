@@ -32,6 +32,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
   end
 
   it 'creates followup task for Call Again' do
+    @task.update_attributes(tag_list: 'test')
     visit_and_open_dialog(@task)
     select_task_next_action('Call Again')
     expect {
@@ -41,6 +42,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
       page.should have_css('#complete_task_followup_modal', visible: false)
       sleep(2)
     }.to change(contact.tasks, :count).by(1)
+    expect(contact.tasks.where(activity_type: 'Call').last.tag_list.first).to include 'test'
 
     # this is needed to keep the server alive so the js api can reach it
     save_screenshot(nil)
@@ -60,6 +62,9 @@ describe 'Task Followup Dialog', type: :feature, js: true do
       sleep(2)
     }.to change(contact.tasks, :count).from(1).to(3)
     expect(contact.tasks.where(completed: false, activity_type: 'Appointment').count).to be 1
+    expect(contact.tasks.where(completed: false, activity_type: 'Call').count).to be 1
+    call_task = contact.tasks.where(completed: false, activity_type: 'Call').first
+    expect(call_task.start_at).to be < (DateTime.now + 2.days)
     expect(contact.reload.status).to eq 'Appointment Scheduled'
     save_screenshot(nil)
   end
