@@ -9,7 +9,7 @@
           <%= link_to(_('Reset Filters'), contact_path(@contact, clear_filter: true))  %>
         </span>
       <% end %>
-      <%= text_field_tag :contact_name, '', autocomplete: 'off', placeholder: _('Type to search'), class: "search_filter" %>
+      <%= text_field_tag :contact_name, '', autocomplete: 'off', placeholder: _('Search by Name'), class: "search_filter form-control" %>
     </div>
     <ul class="contact_list">
       <% @filtered_contacts.each do |contact| %>

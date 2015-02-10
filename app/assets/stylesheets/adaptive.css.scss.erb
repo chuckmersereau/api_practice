@@ -27,7 +27,7 @@
 
 @media screen and (min-width: 0px) and (max-width: 960px) {
   <% if Rails.env.development? %>
-    body:after { content: "750-980";  position: absolute; top: 1em; left: 1em; z-index: 999; }
+    body:after { content: "750-980";  position: absolute; top: 1em; left: 1em; z-index: 999; opacity: .25; }
   <% end %>
   
   $maxwidth: 100%;

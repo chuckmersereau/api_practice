@@ -12,6 +12,7 @@ body {background: $page_bg; margin: 0;}
 table {padding: 0; margin: 0; border-collapse: collapse;}
 td, th {text-align: left; vertical-align: top;}
 hr.thin {margin: .5em 0; border: none; border-top: 1px solid $gray_mid;}
+img {max-width: 100%; height: auto;}
 
 /* ************************************************************** */
 $userheight: 72px;
@@ -400,7 +401,10 @@ div.right {
 
 .wpp {margin-left: 18px; margin-right: 18px; margin-bottom: 18px;}
 .tabgroup {margin-top: 2em; margin-bottom: 2em;}
-#content {}
+#content {
+  margin-top: 30px;
+}
+
 #contentbody { 
   border-top: none;  
   background: #fff; 
@@ -464,7 +468,6 @@ h2.section {
   border: 1px solid $gray_mid;
   display: inline-block;
   line-height: 0;
-  margin: 0 1% 1em;
   width: 47%;
   .person_details {
     display: inline-block;
@@ -881,57 +884,13 @@ tbody.tasks {
   }
 }
 
-.profiletop {
-  h1 {
-    font-size: 2.5em;
-    font-family: FreightSansProMedium;
-    margin-bottom: .25em;
-  }
-  .contact_location {
-    font-size: .6em;
-    font-family: FreightSansProLight;
-    margin-left: 10px;
-    white-space: nowrap;
-  }
-  .contact_status { font-size: 1.3em; }
-  .avatar {
-    float: left;
-    border: 1px solid $gray_mid;
-    line-height: 0em;
-    padding: 3px;
-    border-radius: 2px;
-    margin-right: 12px;
-    margin-bottom: 10px;
-    img {width: 180px;}
-    .avatar_wrapper {max-height: 180px; overflow: hidden}
-  }
-  .quickprofile {margin-bottom: 12px;}
-  .edit_btn_container {
-    height: 0px;
-    text-align: right;
-
-    .btn {
-      border-bottom-left-radius: 0;
-      border-bottom-right-radius: 0;
-      font-size: 1.5em;
-      font-weight: normal;
-      position: relative;
-      top: -35px;
-    }
-  }
-
-  border-bottom: 1px solid $gray_mid;
+.module {
+  margin-top: 20px;
 }
 
-#contact-people {
-  border: 1px solid $gray_mid;
-  border-top-color: transparent;
-  padding: 0;
-  &>* {
-    margin-left: 1%;
-  }
-  h2 {
-    margin: .5em 1%;
+.profiletop {
+  .quickprofile {
+    margin-bottom: 12px;
   }
 }
 
@@ -954,14 +913,35 @@ tbody.tasks {
 
 table.meta {
   width: 100%;
-  margin-bottom: 20px;
-  td {padding-top: 4px; padding-bottom: 1px;}
-  .meta_name {width: 5%; font-weight: bold; padding-right: 15px; padding-left: 8px;}
-  .meta_name_wide {width: 32%; font-weight: bold; padding-right: 15px; padding-left: 8px;}
+  td {
+    padding-top: 4px; 
+    padding-bottom: 1px;
+  }
+  .meta_name {
+    width: 5%; 
+    font-weight: bold; 
+    padding-right: 15px; 
+  }
+  .meta_name_wide {
+    width: 32%; 
+    font-weight: bold; 
+    padding-right: 15px; 
+    padding-left: 8px;
+  }
   .meta_data {}
-  th {font-family: FreightSansProMedium; padding-bottom: 8px; border-bottom: 1px solid $gray_mid; padding-left: 8px; font-size: 16px; font-weight: normal;}
+  th {
+    font-family: FreightSansProMedium; 
+    padding-bottom: 8px; 
+    border-bottom: 1px solid $gray_mid; 
+    padding-left: 8px; 
+    font-size: 16px; 
+    font-weight: normal;
+  }
 }
-.tabaction {float: right; margin-top: 6px;}
+.tabaction {
+  float: right; 
+  margin-top: 6px;
+}
 
 /* ************************************************************** */
 
@@ -1035,23 +1015,13 @@ table.meta {
   @include listclear;
 }
 .contact_controls {
-  background: $gray_lightest;
-  border-bottom: 1px solid $gray_mid;
-  display: inline-block;
-  padding: 5px 0;
-  line-height: 23px;
-  width: 100%;
-
-  .actions {
-    float: right;
-    padding-right: 16px;
-  }
+  border-bottom: 5px solid $color-gray-keyline;
+  display: block;
+  padding-bottom: 20px;
 }
 
 #contact_paging {
   display: inline-block;
-  padding-left: 16px;
-
   span { padding: 0 5px; }
 }
 
@@ -1076,7 +1046,9 @@ table.meta {
   }
   .filters {
     height: auto;
-    .search_filter {width: 87%;}
+    .search_filter {
+      width: 100%;
+    }
   }
   .filtered_message {
     display: block;
