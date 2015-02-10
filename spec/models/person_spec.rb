@@ -278,6 +278,15 @@ describe Person do
       expect(MasterPerson.find_by_id(loser_master_person_id)).to be_nil
     end
 
+    it 'merges two people correctly if they have the same master person' do
+      loser.update(master_person: winner.master_person)
+      expect(loser.master_person).to_not be_nil
+      orig_winner_master_person_id = winner.master_person_id
+      expect { winner.merge(loser) }.to_not raise_error
+      expect(winner.master_person_id).to eq(orig_winner_master_person_id)
+      expect(winner.master_person).to_not be_nil
+    end
+
     it 'creates a Version with a related_object_id', versioning: true do
       p1 = create(:person)
       p2 = create(:person)
