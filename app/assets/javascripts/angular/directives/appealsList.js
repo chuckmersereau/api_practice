@@ -83,19 +83,16 @@ angular.module('mpdxApp')
                             };
 
                             $scope.createTask = function(taskType, inputContactsObject){
-                                $scope.creatingBulkTasks = true;
-                                var contactsObject = [];
-                                angular.forEach(inputContactsObject, function(value, key) {
-                                    if(value){
-                                        contactsObject.push(parseInt(key));
-                                    }
-                                });
+                                var contactsObject = _.keys(_.pick(inputContactsObject, function(val){
+                                  return val;
+                                }));
 
                                 if(!contactsObject.length){
                                     alert('You must check at least one contact.');
                                     return;
                                 }
 
+                                $scope.creatingBulkTasks = true;
                                 var postTask = function(){
                                   if(_.isEmpty(contactsObject)){
                                     alert('Task(s) created.');
@@ -109,7 +106,7 @@ angular.module('mpdxApp')
                                       subject: 'Appeal (' + $scope.appeal.name + ')',
                                       activity_type: taskType,
                                       activity_contacts_attributes: [{
-                                        'contact_id': contactsObject[0]
+                                        'contact_id': Number(contactsObject[0])
                                       }]
                                     }
                                   }, function(){
