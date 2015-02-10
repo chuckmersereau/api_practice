@@ -69,6 +69,29 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     save_screenshot(nil)
   end
 
+  it 'adds Partner - Financial commitment' do
+    visit_and_open_dialog(@task)
+    select_task_next_action('Partner - Financial')
+    expect {
+      within('#complete_task_followup_modal') do
+        select('Bi-Monthly', from: 'Commitment Frequency')
+        fill_in('Commitment Amount', with: '100')
+        all('input[type="checkbox"]').each do |cb|
+          cb.trigger('click') if cb.visible?
+        end
+        find_button('Save').trigger('click')
+      end
+      expect(page).to have_css('#complete_task_followup_modal', visible: false)
+      sleep(2)
+    }.to change(contact.tasks, :count).from(1).to(3)
+    expect(contact.tasks.where(completed: false, activity_type: 'Thank').count).to be 1
+    expect(contact.reload.status).to eq 'Partner - Financial'
+    expect(contact.send_newsletter).to eq 'Both'
+    expect(contact.pledge_amount).to eq 100
+    expect(contact.pledge_frequency.to_i).to eq 2
+    save_screenshot(nil)
+  end
+
   it 'updates Contact when Not Interested' do
     visit_and_open_dialog(@task)
     select_task_next_action('Not Interested')

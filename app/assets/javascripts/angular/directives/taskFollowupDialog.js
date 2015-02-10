@@ -89,8 +89,8 @@ angular.module('mpdxApp')
                                 contact.send_newsletter = $scope.followUpDialogResult.newsletter.type;
                             if(newContactStatus == 'Partner - Financial') {
                                 contact.pledge_amount = $scope.followUpDialogResult.financialCommitment.amount;
-                                pledge_frequency = $scope.followUpDialogResult.financialCommitment.frequency;
-                                pledge_start_date = $scope.followUpDialogResult.financialCommitment.date;
+                                contact.pledge_frequency = $scope.followUpDialogResult.financialCommitment.frequency;
+                                contact.pledge_start_date = $scope.followUpDialogResult.financialCommitment.date;
                             }
                             saveContact(contact);
                           });
