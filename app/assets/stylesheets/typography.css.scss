@@ -65,8 +65,28 @@ p:last-child {margin-bottom: 0;}
 
 #global {
   font-family: $font_highlight;
-  #mainmenu {font-size: 14px; a {color: $white; text-shadow: 1px 1px 1px #111;} a:hover {color: $gray_mid;} .active a {color: $black;;}}
-  #submenu {font-size: 12px;}
+  #mainmenu {
+    font-size: 18px; 
+    a {
+      color: $base-text-color;
+      &:hover {
+        color: $gray_mid;
+      }
+    } 
+    .active a {
+      color: $color-white;
+    }
+    a.btn.btn-reverse {
+      color: $color-white;
+      text-shadow: none;
+    }
+  }
+  #submenu {
+    font-size: 16px;
+    a {
+      color: $color-text;
+    }
+  }
   .bal {
     font-size: 15px;
     .balance {
@@ -78,11 +98,11 @@ p:last-child {margin-bottom: 0;}
 }
 
 #user {
-  color: $white;
-  .links a {
-    background: $blue_dark;
-    color: $white;
-    font-size: 13px;
+  .links {
+    a {
+      color: $color-black;
+      font-size: 20px;
+    }
   }
 }
 
@@ -91,19 +111,6 @@ p:last-child {margin-bottom: 0;}
   font-size: 12px;
   font-weight: bold;
   color: $white !important;
-}
-
-.btn {
-  text-align: center;
-  text-shadow: 0 1px 0 #eee;
-  font: normal 12px $font_buttons;
-  color: #000;
-  line-height: 1;
-}
-
-.btndark, .btndark:hover {
-  text-shadow: 0 1px 0 #111 !important;
-  color: #fff;
 }
 
 .indicator {

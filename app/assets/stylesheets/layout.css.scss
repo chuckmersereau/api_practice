@@ -14,52 +14,50 @@ td, th {text-align: left; vertical-align: top;}
 hr.thin {margin: .5em 0; border: none; border-top: 1px solid $gray_mid;}
 
 /* ************************************************************** */
-$userheight: 60px;
+$userheight: 72px;
 
 #user {
-  background-image: linear-gradient(bottom, #00556D 0%, #0077AE 22%);
-  background-image: -o-linear-gradient(bottom, #00556D 0%, #0077AE 22%);
-  background-image: -moz-linear-gradient(bottom, #00556D 0%, #0077AE 22%);
-  background-image: -webkit-linear-gradient(bottom, #00556D 0%, #0077AE 22%);
-  background-image: -ms-linear-gradient(bottom, #00556D 0%, #0077AE 22%);
-  background-image: -webkit-gradient(
-  	linear,
-  	left bottom,
-  	left top,
-  	color-stop(0, #00556D),
-  	color-stop(0.22, #0077AE)
-  );
-
   .links {
     position: relative;
     float: right;
+    form {
+      display: inline-block;
+      margin-top: 15px;
+    }
     > .section {
       float: left;
-      height: $userheight;
-      line-height: $userheight;
+      height: auto;
+      line-height: auto;
       margin-left: 5px;
     }
     > .bal {
       position: relative;
     }
     a {
-      line-height: 25px;
-      height: 25px;
+      line-height: auto;
+      height: auto;
       display: inline-block;
       padding: 0 10px;
       border-radius: 4px;
     }
+    a#settings-drop {
+      margin-top: 20px;
+    }
     a:hover {
-      background: $blue_dark;
-      box-shadow: inset 0 -3px 7px rgba(0,0,0,.5);
     }
     a:active {
-      box-shadow: inset 0 4px 7px rgba(0,0,0,.5);
     }
     .balance {
       border-left: 1px solid $blue-light;
       padding-left: 8px;
       margin-left: 8px;
+    }
+    .dropdown-menu {
+      line-height: 1.25em;
+      a {
+        display: block;
+        font-size: 14px;
+      }
     }
 
     .lists {
@@ -100,8 +98,9 @@ $userheight: 60px;
   vertical-align: middle;
   display: inline-block;
   .logo {
-    width: 200px;
-    height: 56px;
+    width: 123px;
+    height: 48px;
+    margin-top: 13px;
     text-indent: -1000px;
     display: block;
   }
@@ -113,13 +112,14 @@ div.right {
 }
 
 #mainmenu {
-  $mainmenuheight: 35px;
-  height: $mainmenuheight;
-  background: image-url("mainmenu_gradient.png") repeat-x #58595b 0 0;
+  $mainmenuheight: 48px;
+  height: auto;
+  background: $color-gray-keyline;
+  border-top: 1px solid $white;
 
   .account_balances {
     padding-top: 0px;
-    line-height: 35px;
+    line-height: $mainmenuheight;
     font-size: 14px;
     right: 0;
     color: $white;
@@ -136,8 +136,6 @@ div.right {
 
   .item {
     float: left;
-    border-right: 1px solid #231F20;
-    border-left: 1px solid #808184;
     a {
       line-height: $mainmenuheight;
       height: $mainmenuheight;
@@ -149,35 +147,47 @@ div.right {
     a:active {
       box-shadow: inset 0 6px 7px rgba(0,0,0,.5);
     }
+    &.active {
+      margin: 0 -1px 0 -1px;
+      border: none;
+    }
+    &.active a {
+      background: $color-gold image-url('menuselected.png') no-repeat 50% 100%;
+      background-size: 18px;
+      color: $color-white;
+    }
+    &:first-child {
+      border-left: none;
+    }
+    &.search {
+      border: none;
+      float: right;
+    }
   }
-  .item.active {
-    margin: 0 -1px 0 -1px;
-    border: none;
+  .navbar-quick {
+    line-height: $mainmenuheight;
   }
-  .item.active a {
-    background: image-url("menuselected.png") repeat-x 0 0;
-    text-shadow: 1px 1px 1px #999 !important;
+  .navbar-collapse {
+    padding-left: 0;
   }
-  .item:first-child {
-    border-left: none;
-  }
-  .item.last {
-    border-right: 1px solid #808184;
-    a {border-right: 1px solid #231F20; }
-  }
-  .item.search {
-    border: none;
-    float: right;
+
+  @media screen and (min-width: 0px) and (max-width: 767px) {
+    .item {
+      float: none;
+      display: block;
+    }
   }
 }
+
+.navbar {
+  margin-bottom: 0;
+  min-height: 35px;
+}
+
+
 /* ************************************************************** */
 
 #searchform {
-  margin-top: 5px;
-  border: 1px solid $gray;
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
-  background: $white;
   .searchfield {
     border: none;
     background: none;
@@ -289,7 +299,15 @@ div.right {
 }
 
 .btn {
-  margin-bottom: 8px;
+  margin-bottom: 0px;
+  border-radius: 4px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  &:hover {
+    color: $color-gray-dark;
+  }
 }
 
 
@@ -306,13 +324,14 @@ div.right {
 /* ************************************************************** */
 
 #submenu {
-  $submenuheight: 50px;
-  background: rgba(230,231,232,1);
+  $submenuheight: 42px;
+  background: none;
+  border-bottom: 1px solid $color-gray-keyline;
   .section {
     display: inline-block;
     height: $submenuheight;
     line-height: $submenuheight;
-    margin-right: 12px;
+    margin-right: 24px;
   }
   .section.right {
     margin-right: 0px;
@@ -381,7 +400,7 @@ div.right {
 
 .wpp {margin-left: 18px; margin-right: 18px; margin-bottom: 18px;}
 .tabgroup {margin-top: 2em; margin-bottom: 2em;}
-#content {width: auto /* $bodywidth */; min-width: $maxwidth;}
+#content {}
 #contentbody { border: 1px solid $borders; border-top: none; min-height: 430px; background: #fff; padding-top: 1px; min-height: 165px;}
 #contentbody.withleft {width: $maxwidth - $leftmenuwidth - 2px; margin-left: $leftmenuwidth;}
 #contentbody.withright {width: 752px; float: left;min-height: 430px; }
@@ -1308,3 +1327,8 @@ body.google_integrations_controller {
 .best_in_place {
   cursor: pointer;
 }
+
+/* ********************* Bootstrap Overwrites ****************** */
+
+.head-user-wrap {background: $color-white; border-top: 8px solid $color-gold;}
+.head-mainmenu-wrap {background: $color-gray-dark;}
