@@ -10,12 +10,13 @@ class Address < ActiveRecord::Base
 
   scope :current, -> { where(deleted: false) }
 
-  before_create :find_or_create_master_address
-  before_update :update_or_create_master_address
+  before_validation :determine_master_address
   after_destroy :clean_up_master_address
   after_save :update_contact_timezone
 
   alias_method :destroy!, :destroy
+
+  attr_accessor :user_changed
 
   assignable_values_for :location, allow_blank: true do
     [_('Home'), _('Business'), _('Mailing'), _('Other')]
@@ -103,8 +104,18 @@ class Address < ActiveRecord::Base
 
   private
 
+  def determine_master_address
+    if id.blank?
+      find_or_create_master_address
+    else
+      update_or_create_master_address
+    end
+  end
+
   def update_or_create_master_address
     if (changed & %w(street city state country postal_code)).present?
+      self.remote_id = nil if user_changed
+
       new_master_address_match = find_master_address
 
       if master_address.nil? || master_address != new_master_address_match

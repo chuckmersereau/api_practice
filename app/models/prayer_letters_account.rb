@@ -25,7 +25,6 @@ class PrayerLettersAccount < ActiveRecord::Base
                   contact.mailing_address.present? &&
                   contact.active? &&
                   contact.mailing_address.valid_mailing_address? &&
-                  contact.primary_person.present? &&
                   contact.envelope_greeting.present? &&
                   contact.name.present?
       params = {

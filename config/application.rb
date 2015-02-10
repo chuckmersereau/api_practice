@@ -38,8 +38,6 @@ module Mpdx
 
     #config.log_tags = [ :uuid, :remote_ip ]
 
-    config.active_record.disable_implicit_join_references = true
-
     config.exceptions_app = self.routes
   end
 end

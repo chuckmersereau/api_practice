@@ -50,7 +50,7 @@ class Contact < ActiveRecord::Base
       donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
       addresses_attributes: [
         :remote_id, :master_address_id, :location, :street, :city, :state, :postal_code, :region, :metro_area,
-        :country, :historic, :primary_mailing_address, :_destroy, :id
+        :country, :historic, :primary_mailing_address, :_destroy, :id, :user_changed
       ],
       people_attributes: Person::PERMITTED_ATTRIBUTES
     }
