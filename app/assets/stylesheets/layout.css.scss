@@ -401,9 +401,20 @@ div.right {
 .wpp {margin-left: 18px; margin-right: 18px; margin-bottom: 18px;}
 .tabgroup {margin-top: 2em; margin-bottom: 2em;}
 #content {}
-#contentbody { border: 1px solid $borders; border-top: none; min-height: 430px; background: #fff; padding-top: 1px; min-height: 165px;}
-#contentbody.withleft {width: $maxwidth - $leftmenuwidth - 2px; margin-left: $leftmenuwidth;}
-#contentbody.withright {width: 752px; float: left;min-height: 430px; }
+#contentbody { 
+  border-top: none;  
+  background: #fff; 
+  min-height: 165px;
+  /*&.withleft {
+    width: $maxwidth - $leftmenuwidth - 2px; 
+    margin-left: $leftmenuwidth;
+  }
+  &.withright {
+    width: 752px; 
+    float: left;
+    min-height: 430px; 
+  }*/
+}
 .seemore {border-top: 4px solid #BBBDBF; padding-top: 6px; padding-left: 6px;}
 
 h2.section {
@@ -1057,13 +1068,6 @@ table.meta {
 }
 
 #contact_drawer {
-  float: right;
-  width: 204px;
-  border: 1px solid $gray_mid;
-  border-width: 0 1px 1px;
-  overflow: hidden;
-  position: relative;
-  left: -1px;
   h3 {
     color: $black;
     margin: 0;

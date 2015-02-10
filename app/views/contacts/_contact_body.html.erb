@@ -1,5 +1,5 @@
 <% exhibit(contact, self).tap do |contact_exhibit| %>
-  <div id="contentbody" class="withright" data-contact-id="<%= contact.id %>">
+  <div id="contentbody" class="withright col-md-9" data-contact-id="<%= contact.id %>">
     <div class="contact_controls">
       <% contacts.index(contact_exhibit.to_model).tap do |current_index| %>
         <% if current_index %>
