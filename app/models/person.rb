@@ -333,17 +333,12 @@ class Person < ActiveRecord::Base
       other.reload
       other.destroy
 
-      # In the case where the loser's master person is used by other people (presumably in other account lists),
-      # adding the master person sources below could cause the database unique contsraint for master person sources
-      # to be violated. So first update the master person of those others to be this person's master, then copy
-      # over the sources. There is a risk that one account list's mistaken (or less likely, malicous) merge could
-      # negatively affect another account list, but in order for someone to merge two master people, they would
-      # need to have both as donors of theirs. So it seems that the benefit to data quality of supporting a merge
-      # (rather than causing an error) exceeds the risk of possible bad merges.
+      # Merge the master person records if they were different.
       Person.where(master_person_id: other_master_person_id).each do |person_same_master_other|
         person_same_master_other.update(master_person: master_person)
       end
-      MasterPerson.find_by_id(other_master_person_id).try(:destroy)
+      MasterPerson.find_by_id(other_master_person_id).try(:destroy) unless other_master_person_id == master_person_id
+
       other_master_person_sources.each do |organization_id, remote_id|
         master_person.master_person_sources.find_or_create_by(organization_id: organization_id, remote_id: remote_id)
       end

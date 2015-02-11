@@ -62,7 +62,7 @@
                     <div style="margin-top: 5px;">
                         <%= _('Create task with selected:') %>  <select ng-model="taskType" ng-options="t as t for t in taskTypes">
                         </select>
-                        <button type="button" ng-click="createTask(taskType, checkedContacts)" ng-show="taskType"><%= _('Create') %></button>
+                        <button type="button" ng-click="createTask(taskType, checkedContacts)" ng-show="taskType" ng-disabled="creatingBulkTasks"><%= _('Create') %></button>
                     </div>
                 </div>
             </div>
