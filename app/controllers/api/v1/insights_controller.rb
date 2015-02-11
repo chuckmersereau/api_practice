@@ -1,4 +1,5 @@
 class Api::V1::InsightsController < Api::V1::BaseController
+
   def index
     render json: insights_analyses_contacts, callback: params[:callback]
   end

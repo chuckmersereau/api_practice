@@ -56,7 +56,9 @@
         <% if $rollout.active?(:research, current_account_list) %>
           <div class="item <%= request.path =~ /\/research/ ? 'active' : '' %>"><%= link_to(_('Research'), "/research") %></div>
         <% end %>
-        <div class="item <%= request.path =~ /\/insights/ ? 'active' : '' %>"><%= link_to(_('Insights'), "/insights") %></div>
+        <% if $rollout.active?(:insights, current_account_list) %>
+            <div class="item <%= request.path =~ /\/insights/ ? 'active' : '' %>"><%= link_to(_('Insights'), "/insights") %></div>
+        <% end %>
         <div class="item last"><%= link_to(_('Help'), new_help_request_path, target: '_blank') %></div>
         <!-- <div class="item last <%= request.path =~ /\/social/ ? 'active' : '' %>"><%= link_to(_('Social'), "") %></div> -->
         <div class="item search">
@@ -81,7 +83,7 @@
           <div class="section"><%= link_to(_('Find Duplicates'), find_duplicates_contacts_path, class: 'btn') %></div>
         <% end %>
         <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
-          <div class="section right tip" title="<%= _('%% of goal pledged (%{totals})').localize %
+          <div class="section right tip" title="<%= _('%% of goal pledged (%{totals})').localize
                                                     {totals: "#{number_to_current_currency(current_account_list.total_pledges.to_i)} / #{number_to_current_currency(current_account_list.monthly_goal)}"} %>">
             <%= render 'progress_bar' %>
           </div>
