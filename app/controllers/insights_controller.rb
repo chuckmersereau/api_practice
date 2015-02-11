@@ -1,5 +1,4 @@
 class InsightsController < ApplicationController
-  before_action :ensure_rollout
 
   def index
     @page_title = _('Insights')
@@ -16,10 +15,4 @@ class InsightsController < ApplicationController
     redirect_to insights_path
   end
 
-  private
-
-  def ensure_rollout
-    return if $rollout.active?(:insights, current_account_list)
-    fail ActionController::RoutingError.new('Not Found'), 'Insights access is not granted.'
-  end
 end
