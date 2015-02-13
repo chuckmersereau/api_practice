@@ -51,6 +51,7 @@ FETCH FIRST 10000000 ROWS ONLY',
     savon.expects(:executeSQLQuery).with(message: run_params ).returns(results_fixture)
 
     get :index
-
+    response.should be_success
+    json = JSON.parse(response.body)
   end
 end
