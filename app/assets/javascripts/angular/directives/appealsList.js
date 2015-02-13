@@ -191,6 +191,10 @@ angular.module('mpdxApp')
                                 defaultValidStatuses[status] = true;
                             });
 
+                            $scope.goal = {
+                              adminPercent: 12
+                            };
+
                             $scope.appeal = {
                               validStatus: defaultValidStatuses,
                               validTags: {},
@@ -214,8 +218,9 @@ angular.module('mpdxApp')
                                 $modalInstance.close($scope.appeal);
                             };
 
-                          $scope.calculateGoal = function(amount){
-                            $scope.appeal.amount = Math.round(Number(amount) * 1.12 * 100) / 100;
+                          $scope.calculateGoal = function(goal){
+                            var adminPercent = Number(goal.adminPercent) / 100 + 1;
+                            $scope.appeal.amount = Math.round((Number(goal.initial) + Number(goal.letterCost)) * adminPercent * 100) / 100;
                           };
                         }
                     }).result.then(function (newAppeal) {

@@ -15,14 +15,22 @@
                 </div>
 
                 <div class="field" style="display:inline-block;">
-                  <label><%= _('Amount needed') %></label>
-                  <input type="text" ng-model="amountBeforeGoal" style="width:100px;">
-                  <a href="" ng-click="calculateGoal(amountBeforeGoal)">Calculate goal ></a>
+                  <label><%= _('Initial goal') %></label>
+                  <input type="text" ng-model="goal.initial" style="width:80px;"> +
+                </div>
+                <div class="field" style="display:inline-block;">
+                  <label><%= _('Letter cost') %></label>
+                  <input type="text" ng-model="goal.letterCost" style="width:80px;"> *
+                </div>
+                <div class="field" style="display:inline-block;">
+                  <label><%= _('Admin percent') %></label>
+                  <input type="text" ng-model="goal.adminPercent" style="width:80px;">
+
+                  <a href="" ng-click="calculateGoal(goal)">Calculate ></a>
                 </div>
                 <div class="field" style="display:inline-block;">
                   <label><%= _('Goal') %></label>
-                  <input type="text" ng-model="appeal.amount" style="width:100px;">
-                  * Goal is 1.12x the amount needed.
+                  <input type="text" ng-model="appeal.amount" style="width:80px;">
                 </div>
               <div style="clear:both; height:10px;"></div>
                 <div class="field appealFilterCol">
