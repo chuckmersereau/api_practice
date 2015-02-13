@@ -12,7 +12,7 @@ class Obiee
 
   # Pass in the session id, report path, and has with the variable name and it's value.  A hash is used because an
   # analysis can have a large number of inputs/parameters.  the key value pair is name: var_name, value: var_value
-  def report_sql(session_id, path, vars={})
+  def report_sql(session_id, path, vars = {})
     get_report_client = get_client APP_CONFIG['obiee_base_url'] + 'reportService'
     report_params = { reportRef: { reportPath: path },
                       reportParams: { filterExpressions: '',
@@ -40,7 +40,7 @@ class Obiee
 
   private
 
-  def make_call(client, operation, params={})
+  def make_call(client, operation, params = {})
     client.call(operation, message: params)
   end
 

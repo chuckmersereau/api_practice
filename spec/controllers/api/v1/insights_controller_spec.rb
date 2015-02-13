@@ -46,7 +46,7 @@ FETCH FIRST 10000000 ROWS ONLY',
                          maxRowsPerPage: -1,
                          refresh: true,
                          presentationInfo: true,
-                         type: ''},
+                         type: '' },
                    sessionID: 'sessionid22091522cru' }
     savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
 
