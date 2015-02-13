@@ -16,15 +16,15 @@
 
                 <div class="field" style="display:inline-block;">
                   <label><%= _('Initial goal') %></label>
-                  <input type="text" ng-model="goal.initial" style="width:80px;"> +
+                  <input type="text" ng-model="goal.initial" ng-change="calculateGoal(goal)" style="width:80px;"> +
                 </div>
                 <div class="field" style="display:inline-block;">
                   <label><%= _('Letter cost') %></label>
-                  <input type="text" ng-model="goal.letterCost" style="width:80px;"> *
+                  <input type="text" ng-model="goal.letterCost" ng-change="calculateGoal(goal)" style="width:80px;"> *
                 </div>
                 <div class="field" style="display:inline-block;">
                   <label><%= _('Admin percent') %></label>
-                  <input type="text" ng-model="goal.adminPercent" style="width:80px;">
+                  <input type="text" ng-model="goal.adminPercent" ng-change="calculateGoal(goal)" style="width:80px;">
 
                   <a href="" ng-click="calculateGoal(goal)">Calculate ></a>
                 </div>
