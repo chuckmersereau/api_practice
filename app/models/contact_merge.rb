@@ -5,7 +5,7 @@ class ContactMerge
   end
 
   def merge
-    Contact.transaction do
+    Contact.transaction(requires_new: true) do
       # Update related records
       @other.messages.update_all(contact_id: @winner.id)
 
