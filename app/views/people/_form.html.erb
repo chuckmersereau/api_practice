@@ -100,7 +100,7 @@
       <%= builder.fields_for :email_addresses do |builder| %>
         <%= render 'people/email_address_fields', builder: builder, object: person %>
       <% end %>
-      <div class="sfield field_indent" data-behavior="add-wrapper">
+      <div class="sfield field_indent rs" data-behavior="add-wrapper">
         <%= link_to_add_fields(_('Add Email Address'), builder, :email_addresses, partial: 'people/email_address_fields') %>
       </div>
 
@@ -114,7 +114,7 @@
       <%= builder.fields_for :phone_numbers do |pf| %>
         <%= render 'people/phone_number_fields', builder: pf, object: person %>
       <% end %>
-      <div class="sfield field_indent" data-behavior="add-wrapper">
+      <div class="sfield field_indent rs" data-behavior="add-wrapper">
         <%= link_to_add_fields(_('Add Phone Number'), builder, :phone_numbers, partial: 'people/phone_number_fields') %>
       </div>
 
@@ -139,7 +139,7 @@
       <%= builder.fields_for :websites do |pf| %>
           <%= render 'people/website_fields', builder: pf, object: person %>
       <% end %>
-      <div class="sfield field_indent" data-behavior="add-wrapper">
+      <div class="sfield field_indent rs" data-behavior="add-wrapper">
         <%= link_to_add_fields(_('Add Website/Blog'), builder, :websites, partial: 'people/website_fields') %>
       </div>
     </div>
