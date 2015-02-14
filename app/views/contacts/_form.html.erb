@@ -1,8 +1,6 @@
 <div id="contentbody">
-  <div class="wpp">
     <%= form_for(contact) do |f| %>
       <div class="clr"></div>
-      <div class="spacer"></div>
 
       <div class="actions">
         <%= f.submit _('Save Contact'), class: "btn desired_action" %>
@@ -161,5 +159,5 @@
         <%= link_to(_('Back'), request.referrer ? :back : contacts_path, class: "btn") %>
       </div>
     <% end %>
-  </div>
+  
 </div>

@@ -41,8 +41,8 @@ $userheight: 72px;
       padding: 0 10px;
       border-radius: 4px;
     }
-    a#settings-drop {
-      margin-top: 20px;
+    .settings-drop {
+      margin-top: 15px;
     }
     a:hover {
     }
@@ -117,7 +117,6 @@ div.right {
   height: auto;
   background: $color-gray-keyline;
   border-top: 1px solid $white;
-
   .account_balances {
     padding-top: 0px;
     line-height: $mainmenuheight;
@@ -125,16 +124,6 @@ div.right {
     right: 0;
     color: $white;
   }
-  a.plain {
-    box-shadow: none;
-    background: $blue_dark;
-    font-size: 10px;
-    font-family: Arial;
-    padding: 3px;
-    line-height: 1;
-    height: auto;
-  }
-
   .item {
     float: left;
     a {
@@ -143,19 +132,17 @@ div.right {
       padding: 0 20px;
       display: block;
     }
-    a:hover {
-    }
     a:active {
       box-shadow: inset 0 6px 7px rgba(0,0,0,.5);
     }
     &.active {
       margin: 0 -1px 0 -1px;
       border: none;
-    }
-    &.active a {
-      background: $color-gold image-url('menuselected.png') no-repeat 50% 100%;
-      background-size: 18px;
-      color: $color-white;
+      a {
+        background: $color-gold image-url('menuselected.png') no-repeat 50% 100%;
+        background-size: 18px;
+        color: $color-white;
+      }
     }
     &:first-child {
       border-left: none;
@@ -184,7 +171,6 @@ div.right {
   margin-bottom: 0;
   min-height: 35px;
 }
-
 
 /* ************************************************************** */
 
@@ -273,18 +259,6 @@ div.right {
   .right {
     float: right;
   }
-  input.search_filter {
-    font-size: 12px;
-    border: 1px solid silver;
-    padding: 4px 20px 4px 4px;
-    outline: none;
-    width: 150px;
-    margin: 0;
-    background-image: image-url("search.png");
-    background-repeat: no-repeat;
-    background-position: 98% 50%;
-    background-size: 7%;
-  }
   height: 29px;
 }
 
@@ -300,27 +274,18 @@ div.right {
 }
 
 .btn {
-  margin-bottom: 0px;
-  border-radius: 4px;
-  padding: 6px 12px;
+  border-radius: 3px;
   font-size: 14px;
   font-weight: 400;
-  line-height: 1.42857143;
-  &:hover {
-    color: $color-gray-dark;
-  }
+  border-width: 1px;
 }
 
 
 /* ************************************************************** */
 .pagination {
   line-height: 24px;
-  .current {}
-  .next_page {}
-  .gap {}
   a, .current {padding: 0 3px;}
 }
-
 
 /* ************************************************************** */
 
@@ -399,7 +364,6 @@ div.right {
 
 /* ************************************************************** */
 
-.wpp {margin-left: 18px; margin-right: 18px; margin-bottom: 18px;}
 .tabgroup {margin-top: 2em; margin-bottom: 2em;}
 #content {
   margin-top: 30px;
@@ -409,15 +373,6 @@ div.right {
   border-top: none;  
   background: #fff; 
   min-height: 165px;
-  /*&.withleft {
-    width: $maxwidth - $leftmenuwidth - 2px; 
-    margin-left: $leftmenuwidth;
-  }
-  &.withright {
-    width: 752px; 
-    float: left;
-    min-height: 430px; 
-  }*/
 }
 .seemore {border-top: 4px solid #BBBDBF; padding-top: 6px; padding-left: 6px;}
 
@@ -437,19 +392,14 @@ h2.section {
     font-weight: bold;
   }
 }
-
 .set {
-
+  &.phone {margin-bottom:2px;}
+  &.email {margin-bottom:3px;}
 }
 
-.set.phone {margin-bottom:2px;}
-.set.email {margin-bottom:3px;}
-
 .social-icons {
-  float: right;
-  padding: 6px 6px 6px 0;
+  padding: 6px 0;
   position: relative;
-  width: 20px;
   & > * {
     display: inline-block;
     height: 20px;
@@ -464,26 +414,31 @@ h2.section {
 }
 
 .small-person {
-  background-color: $gray_light;
-  border: 1px solid $gray_mid;
-  display: inline-block;
-  line-height: 0;
-  width: 47%;
+  padding: 10px;
+  margin-bottom: 0;
+  .set {
+    font-size: .9em;
+  }
   .person_details {
     display: inline-block;
     line-height: initial;
-    padding: 2px .5em 2px 2px;
+    padding: 0px .5em 0px 1em;
     vertical-align: top;
-    width: 162px;
+    width: 80%;
   }
   .person_avatar {
-    height: 120px;
-    width: 120px;
     padding: 0;
     margin: 0;
+    display: block;
   }
+  .person-external {
+    float: left;
+    width: 20%;
+  }
+
   .name {
-    font-size: 1.5em;
+    font-size: 1.15em;
+    font-weight: 400;
     line-height: 1em;
   }
   &.merge-person-checked {
@@ -528,7 +483,6 @@ div.name {font-size: 14px; margin-bottom: 4px;}
       display: block;
       font-weight: bold;
       font-size: 13px;
-      font-family: 'FreightSansProMedium';
       line-height: 3em;
       padding: 0 15px 0 35px;
     }
@@ -616,9 +570,6 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     border-bottom: none;
   }
   li {
-    /*.profile_content {*/
-      /*margin-left: 45px;*/
-    /*}*/
     .profile_name {
       font-weight: normal;
     }
@@ -731,10 +682,6 @@ tbody.tasks {
 .taskgroup--green {background: $green; border-color: green;}
 .taskgroup--red {background: #EC1C24; border-color: #AF1524;}
 .taskgroup--gray {background: #999; border-color: #666;}
-
-.snapshot {
-  .data {}
-}
 
 /* ************************************************************** */
 
@@ -913,10 +860,6 @@ tbody.tasks {
 
 table.meta {
   width: 100%;
-  td {
-    padding-top: 4px; 
-    padding-bottom: 1px;
-  }
   .meta_name {
     width: 5%; 
     font-weight: bold; 
@@ -936,6 +879,10 @@ table.meta {
     padding-left: 8px; 
     font-size: 16px; 
     font-weight: normal;
+  }
+  th,td {
+    line-height: 1.5em;
+    font-size: 1.0em;
   }
 }
 .tabaction {
@@ -1046,9 +993,6 @@ table.meta {
   }
   .filters {
     height: auto;
-    .search_filter {
-      width: 100%;
-    }
   }
   .filtered_message {
     display: block;
@@ -1126,8 +1070,7 @@ span.tip {
   border-bottom:1px dotted;
 }
 
-.tooltipsy
-{
+.tooltipsy {
     padding: 10px;
     max-width: 200px;
     color: #303030;
@@ -1145,22 +1088,9 @@ span.tip {
   background-repeat: no-repeat;
 }
 
-
-.statusIcon-enabled {
-  background-position: -6px -56px;
-}
-
-.statusIcon-disabled {
-  background-position: -6px -1px;
-}
-
-.statusIcon-error {
-  background-position: -6px -27px;
-}
-
-.mail_chimp_accounts_controller .wpp {
-  margin-top: 10px;
-}
+.statusIcon-enabled {background-position: -6px -56px;}
+.statusIcon-disabled {background-position: -6px -1px;}
+.statusIcon-error {background-position: -6px -27px;}
 
 #footer {
   padding: 5px 10px;

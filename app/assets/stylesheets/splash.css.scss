@@ -3,30 +3,6 @@
 *= require notices
 */
 
-@font-face {
-  font-family: 'NillandBlackRegular';
-  src: font-url('splash/nilland-black-webfont.eot');
-  src: font-url('splash/nilland-black-webfont.eot?#iefix') format('embedded-opentype'),
-       font-url('splash/nilland-black-webfont.woff') format('woff'),
-       font-url('splash/nilland-black-webfont.ttf') format('truetype'),
-       font-url('splash/nilland-black-webfont.svg#NillandBlackRegular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-@font-face {
-  font-family: 'NillandRegular';
-  src: font-url('splash/nilland-webfont.eot');
-  src: font-url('splash/nilland-webfont.eot?#iefix') format('embedded-opentype'),
-       font-url('splash/nilland-webfont.woff') format('woff'),
-       font-url('splash/nilland-webfont.ttf') format('truetype'),
-       font-url('splash/nilland-webfont.svg#NillandRegular') format('svg');
-  font-weight: normal;
-  font-style: normal;
-}
-
-
-
 html {font-family: Arial; line-height: 1.25em;}
 body {
   margin: 0;
@@ -42,7 +18,6 @@ header {background: image-url("splash/bottomshadow.png") 0 100% repeat-x, image-
 .headercontent {height: 210px;}
 #logo {margin-top: 38px;}
 #main {
-  font-family: 'NillandRegular', Arial; 
   border: 1px solid #cfcfcf; 
   box-shadow: 0 5px 12px rgba(0,0,0,.63), inset 0 0 21px rgba(0,0,0,.14); 
   background: #fafafa; 
@@ -54,7 +29,12 @@ header {background: image-url("splash/bottomshadow.png") 0 100% repeat-x, image-
   line-height: 1.35em; 
   padding-bottom: 17px;
 
-  h1 {font-weight: normal; font-family: 'NillandBlackRegular', Arial; color: #0073ab; font-size: 28.83px; margin-top: 55px;}
+  h1 {
+    font-weight: normal; 
+    color: #0073ab; 
+    font-size: 28.83px; 
+    margin-top: 55px;
+  }
   p {margin: 1em 0;}
 }
 .loginlink {

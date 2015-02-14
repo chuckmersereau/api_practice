@@ -96,43 +96,6 @@ input:read-only {
   color: #fff; }
 
 /* ************************************************************************ */
-@font-face {
-  font-family: 'FreightSansProSemibold';
-  src: font-url("freigsanprosem-webfont.eot");
-  src: font-url("freigsanprosem-webfont.eot?#iefix") format("embedded-opentype"), font-url("freigsanprosem-webfont.woff") format("woff"), font-url("freigsanprosem-webfont.ttf") format("truetype"), font-url("freigsanprosem-webfont.svg#FreightSansProSemibold") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-@font-face {
-  font-family: 'FreightSansProLight';
-  src: font-url("freigsanprolig-webfont.eot");
-  src: font-url("freigsanprolig-webfont.eot?#iefix") format("embedded-opentype"), font-url("freigsanprolig-webfont.woff") format("woff"), font-url("freigsanprolig-webfont.ttf") format("truetype"), font-url("freigsanprolig-webfont.svg#FreightSansProLight") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-@font-face {
-  font-family: 'FreightSansProMedium';
-  src: font-url("freigsanpromed-webfont.eot");
-  src: font-url("freigsanpromed-webfont.eot?#iefix") format("embedded-opentype"), font-url("freigsanpromed-webfont.woff") format("woff"), font-url("freigsanpromed-webfont.ttf") format("truetype"), font-url("freigsanpromed-webfont.svg#FreightSansProMedium") format("svg");
-  font-weight: normal;
-  font-style: normal; }
-/* ************************************************************************ */
-/* ************************************************************************ */
-html, body {
-  font-family: FreightSansProMedium, Arial, Helvetica, sans-serif;
-  font-size: 14px;
-  line-height: 1.25em;
-  color: #58595B; }
-
-h1, h2, h3, h4, h5, h6 {
-  font-family: FreightSansProSemibold;
-  letter-spacing: -1px;
-  line-height: 1em;
-  color: #333;
-  color: #58595B; }
-
-a {
-  color: #0077ae;
-  text-decoration: none; }
-
 p {
   margin: 0 0 1em 0; }
 
@@ -144,29 +107,26 @@ p:last-child {
   font-size: 16px;
   font-weight: normal; }
 
+.desired_action {
+  text-shadow: none; }
+
 /* ************************************************************************ */
-#global {
-  font-family: FreightSansProMedium; }
-  #global #mainmenu {
-    font-size: 18px; }
-    #global #mainmenu a {
-      color: #333333; }
-      #global #mainmenu a:hover {
-        color: #BBBDBF; }
-    #global #mainmenu .active a {
-      color: #fff; }
-    #global #mainmenu a.btn-reverse {
-      color: #fff; }
-  #global #submenu {
-    font-size: 16px; }
-    #global #submenu a {
-      color: #3a3a3a; }
-  #global .bal {
-    font-size: 15px; }
-    #global .bal .balance {
-      font-weight: bold;
-      letter-spacing: -1px;
-      font-size: 14px; }
+#global #mainmenu {
+  font-size: 18px; }
+  #global #mainmenu .active a {
+    color: #fff; }
+  #global #mainmenu a.btn-reverse {
+    color: #fff; }
+#global #submenu {
+  font-size: 16px; }
+  #global #submenu a {
+    color: #3a3a3a; }
+#global .bal {
+  font-size: 15px; }
+  #global .bal .balance {
+    font-weight: bold;
+    letter-spacing: -1px;
+    font-size: 14px; }
 
 .btn.btn-reverse {
   color: #fff;
@@ -177,13 +137,11 @@ p:last-child {
   font-size: 20px; }
 
 .indicator {
-  font-family: Arial;
   font-size: 12px;
   font-weight: bold;
   color: #FFF !important; }
 
 .indicator {
-  font-family: Arial;
   font-size: 11px;
   font-weight: normal;
   text-shadow: 0 1px 0 #000; }
@@ -239,7 +197,6 @@ p:last-child {
   height: 2.25em;
   color: #FFF;
   font-weight: bold;
-  font-family: 'FreightSansProMedium';
   font-size: 15px; }
 
 .comment_status {
@@ -1901,7 +1858,6 @@ header#global {
   #callout .in {
     background: image-url("bigcheck.png") no-repeat 0 21px;
     height: 47px;
-    font-family: FreightSansProSemibold;
     color: #FFF;
     font-size: 29px;
     padding: 31px 0 0 60px;
@@ -1909,8 +1865,7 @@ header#global {
     #callout .in .small {
       padding-top: 5px;
       display: inline-block;
-      font-size: 16px;
-      font-family: FreightSansProMedium; }
+      font-size: 16px; }
 
 @media screen and (min-width: 0px) and (max-width: 960px) {
   body {

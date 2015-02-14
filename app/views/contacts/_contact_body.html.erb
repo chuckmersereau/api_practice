@@ -9,7 +9,7 @@
           <%= link_to(_('<i class="fa fa-eye-slash"></i>'), contact_path(contact), title: "Hide Contact", class: "btn btn-default", method: :delete, data: { confirm: _("This contact will be set to 'Never Ask'. Is that what you want to do?") }) %>
         </div>
         <div class="col-md-3 text-right">
-          <%= link_to(_('<i class="fa fa-pencil"></i> Edit'), edit_contact_path(contact), :class=> "btn btn-default btn-reverse edit_contact_btn desired_action") %>
+          <%= link_to(_('<i class="fa fa-pencil"></i> Edit'), edit_contact_path(contact), :class=> "btn btn-secondary edit_contact_btn desired_action") %>
           <% contacts.index(contact_exhibit.to_model).tap do |current_index| %>
             <% if current_index %>
               <div id="contact_paging">
@@ -38,7 +38,7 @@
         </div>
         <div class="col-md-10">
           <div class="quickprofile">
-            <h1><%= contact_exhibit %></h1>
+            <h2><%= contact_exhibit %></h2>
             <% if contact_exhibit.location.present? %>
               <div class="contact_location">
                 <%= contact_exhibit.location %>
@@ -133,9 +133,11 @@
         </div>
         <div class="panel-body">
           <% if contact_exhibit.people.any? %>
+            <div class="row">
             <% contact_exhibit.people.each do |person| %>
               <%= render 'people/smallperson', person: person %>
             <% end %>
+            </div>
             <%= submit_tag(_('Merge checked people'), class: 'js-merge_related', style: 'display:none') %>
             <div id="person_merge_winner" style="display:none" title="<%= _('Pick the winner of the merge') %>">
               <%= _('Data from the "losers" will get copied to the "winner". No data will be lost by merging.') %>

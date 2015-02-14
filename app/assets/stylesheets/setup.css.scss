@@ -116,7 +116,6 @@ header#global {
   .in {
     background: image-url("bigcheck.png") no-repeat 0 21px;
     height: 47px;
-    font-family: $font_heading;
     color: $white;
     font-size: 29px;
     padding: 31px 0 0 60px;
@@ -125,7 +124,6 @@ header#global {
       padding-top: 5px;
       display: inline-block;
       font-size: 16px;
-      font-family: $font_highlight;
     }
   }
 }
