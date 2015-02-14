@@ -27,6 +27,8 @@
           <%= _('Basic Information') %>
         </div>
 
+        <%= f.hidden_field :user_changed, value: true %>
+
         <div class="field">
           <%= f.label :name, _('Name') %>
           <%= f.text_field :name, {placeholder: _('Last Name, First Name')} %>
