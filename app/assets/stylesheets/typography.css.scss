@@ -87,11 +87,6 @@ p:last-child {margin-bottom: 0;}
 .tablelist {
   th {text-align: left;}
   td.profile {
-    font-size: 11px;
-    .name {
-      font-size: 13px;
-      font-weight: bold;
-    }
   }
   .status h4 {
     margin: 0 0 .5em;
@@ -99,32 +94,8 @@ p:last-child {margin-bottom: 0;}
   }
 }
 
-.formatted-tag-base {
-  background: $blue;
-  color: $white;
-  display: inline-block;
-  font-weight: normal;
-  height: 18px;
-  font-size: 11px;
-  border-radius: 5px;
-  line-height: 18px;
-  text-align: center;
-  padding: 0 5px;
-  margin-bottom: 3px;
-}
-
-.bootstrap-tagsinput .tag {
-  @extend .formatted-tag-base;
-}
-
-.tags,
-#leftmenu ul li .tags {
-  a {
-    @extend .formatted-tag-base;
-  }
-  a.selected {
-    background: $blue_dark;
-  }
+address {
+  margin-bottom: 0;
 }
 
 /* ************************************************************************ */
@@ -180,4 +151,9 @@ p:last-child {margin-bottom: 0;}
 
 .text-error {
   color: #9d2c2d;
+}
+
+.contact_location,
+.contact_status {
+  line-height: 1.35em;
 }

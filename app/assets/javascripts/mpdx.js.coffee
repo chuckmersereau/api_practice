@@ -8,12 +8,9 @@ $ ->
     params = $.set_param('page', 1, params)
     document.location = document.location.pathname + '?' + params
 
-  $(document).on 'click', '#leftmenu ul.left_filters li > label', ->
-    $(this).next(".collapse").slideToggle('fast')
+  $(document).on 'click', '.filter_title', ->
     $(this).toggleClass("opened")
     $(this).parent("li").toggleClass("opened")
-
-  $('.tip, .qtip').tooltipsy()
 
   $(document).on 'mouseleave', 'div[data-behavior=account_selector]', ->
     $('div[data-behavior=account_selector] div').hide()

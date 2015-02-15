@@ -56,66 +56,68 @@
             <% end %>
           </div><!-- profiletop -->
 
-          <div class="cols col_30">
-            <table class="meta">
-              <% if contact_exhibit.donor_ids.present? %>
-                <tr>
-                  <td class="meta_name"><%= _('Donor ID') %></td>
-                  <td class="meta_data"><%= contact_exhibit.donor_ids %></td>
-                </tr>
-              <% end %>
-              <tr>
-                <td class="meta_name"><%= _('Commitment') %></td>
-                <td class="meta_data"><%= best_in_place(contact_exhibit, :pledge_amount, value: contact.pledge_amount) %></td>
-              </tr>
-              <tr>
-                <td class="meta_name"><%= _('Frequency') %></td>
-                <td class="meta_data"><%= _(contact_exhibit.pledge_frequency) %></td>
-              </tr>
-              <tr>
-                <td class="meta_name"><%= _('Newsletter') %> </td>
-                <td class="meta_data">
-                  <%= best_in_place(contact_exhibit, :send_newsletter,
-                                    as: :select,
-                                    value: contact.send_newsletter,
-                                    collection: [['','']] + contact.assignable_send_newsletters.collect { |s| [_(s), s] },
-                                    display_with: :_) %>
-                </td>
-              </tr>
-            </table>
-          </div>
-          <div class="cols col_30">
-            <table class="meta">
-              <% if contact_exhibit.mailing_address.street.present? && !contact_exhibit.mailing_address.historic %>
+          <div class="row">
+            <div class="col-md-4">
+              <table class="meta">
+                <% if contact_exhibit.donor_ids.present? %>
                   <tr>
-                    <td class="meta_name">Address</td>
-                    <td class="meta_data"><%= contact_exhibit.mailing_address.street %><br><%= contact_exhibit.mailing_address.city %>, <%= contact_exhibit.mailing_address.state %> <%= contact_exhibit.mailing_address.postal_code %><br><%= contact_exhibit.mailing_address.country %></td>
+                    <td class="meta_name"><%= _('Donor ID') %></td>
+                    <td class="meta_data"><%= contact_exhibit.donor_ids %></td>
                   </tr>
-              <% end %>
-              <% if contact.website.present? %>
+                <% end %>
                 <tr>
-                  <td class="meta_name"><%= _('Website') %></td>
-                  <td class="meta_data"><%= contact_exhibit.website %></td>
+                  <td class="meta_name"><%= _('Commitment') %></td>
+                  <td class="meta_data"><%= best_in_place(contact_exhibit, :pledge_amount, value: contact.pledge_amount) %></td>
                 </tr>
-              <% end %>
-              <% if contact_exhibit.referrals_to_me.present? %>
                 <tr>
-                  <td class="meta_name"><%= _('Referrer') %></td>
-                  <td class="meta_data"><%= contact_exhibit.referrer_links %></td>
+                  <td class="meta_name"><%= _('Frequency') %></td>
+                  <td class="meta_data"><%= _(contact_exhibit.pledge_frequency) %></td>
                 </tr>
-              <% end %>
-              <% if contact.tags.present? %>
                 <tr>
-                  <td class="meta_name"><%= _('Tags') %> </td>
+                  <td class="meta_name"><%= _('Newsletter') %> </td>
                   <td class="meta_data">
-                    <div class="tags">
-                      <%= contact_exhibit.tag_links %>
-                    </div>
+                    <%= best_in_place(contact_exhibit, :send_newsletter,
+                                      as: :select,
+                                      value: contact.send_newsletter,
+                                      collection: [['','']] + contact.assignable_send_newsletters.collect { |s| [_(s), s] },
+                                      display_with: :_) %>
                   </td>
                 </tr>
-              <% end %>
-            </table>
-          </div>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="meta">
+                <% if contact_exhibit.mailing_address.street.present? && !contact_exhibit.mailing_address.historic %>
+                    <tr>
+                      <td class="meta_name">Address</td>
+                      <td class="meta_data"><%= contact_exhibit.mailing_address.street %><br><%= contact_exhibit.mailing_address.city %>, <%= contact_exhibit.mailing_address.state %> <%= contact_exhibit.mailing_address.postal_code %><br><%= contact_exhibit.mailing_address.country %></td>
+                    </tr>
+                <% end %>
+                <% if contact.website.present? %>
+                  <tr>
+                    <td class="meta_name"><%= _('Website') %></td>
+                    <td class="meta_data"><%= contact_exhibit.website %></td>
+                  </tr>
+                <% end %>
+                <% if contact_exhibit.referrals_to_me.present? %>
+                  <tr>
+                    <td class="meta_name"><%= _('Referrer') %></td>
+                    <td class="meta_data"><%= contact_exhibit.referrer_links %></td>
+                  </tr>
+                <% end %>
+                <% if contact.tags.present? %>
+                  <tr>
+                    <td class="meta_name"><%= _('Tags') %> </td>
+                    <td class="meta_data">
+                      <div class="tags">
+                        <%= contact_exhibit.tag_links %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </table>
+            </div>
+          </div><!-- row -->
         </div>
       </div><!-- row -->
       <div class="clr"></div>

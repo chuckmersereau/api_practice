@@ -87,11 +87,11 @@
               <%= radio_button_tag '', 'all', false, :'ng-model' => 'filter.contactNewsletter' %> <%= _('All') %><br />
               <div>
                 <%= radio_button_tag '', 'address', false, :'ng-model' => 'filter.contactNewsletter' %> <%= _('With Mailing Address') %>
-                <%= tip(_('This filter will search for people who are set to receive your physical newsletter and have a mailing address'), style: 'margin: 0 6px -2px') %>
+                <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="<%= _('This filter will search for people who are set to receive your physical newsletter and have a mailing address') %>"></i>
               </div>
               <div>
                 <%= radio_button_tag '', 'email', false, :'ng-model' => 'filter.contactNewsletter' %> <%= _('With Email Address') %>
-                <%= tip(_('This filter will search for people who are set to receive your email newsletter and have a valid email address'), style: 'margin: 0 6px -2px') %>
+                <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="<%= _('This filter will search for people who are set to receive your email newsletter and have a valid email address') %>"></i>
               </div>
             </div>
           </li>

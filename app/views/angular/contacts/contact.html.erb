@@ -1,23 +1,23 @@
 <td class="avatar">
-    <img class="avatar small" ng-src="{{contact.square_avatar}}">
+    <img class="avatar" ng-src="{{contact.square_avatar}}">
 </td>
 <td class="profile">
     <div class="key">
-        <span class="name"><a href="/contacts/{{contact.id}}">{{contact.name}}</a>
+        <h4 class="name"><a href="/contacts/{{contact.id}}">{{contact.name}}</a>
             <i class="fa fa-envelope" ng-class="{'icon-error-red': hasSendNewsletterError()}" title="{{contact.send_newsletter}}" ng-show="contact.send_newsletter"></i>
             <i class="fa fa-<%= current_currency.downcase %>" title="Partner - Special" ng-show="contact.status === 'Partner - Special'"></i>
             <i class="fa fa-<%= current_currency.downcase %>" title="Partner - Financial" ng-show="contact.status === 'Partner - Financial'"></i>
             <i class="fa fa-<%= current_currency.downcase %>" title="Partner - Financial" ng-show="contact.status === 'Partner - Financial'"></i>
-        </span>
+        </h4>
         <div class="people">
             <div ng-repeat="i in contact.person_ids" ng-show="!getPerson(i).deceased">
               <a href="/people/{{i}}">{{getPerson(i).name}}</a>
-              <span ng-show="getPrimaryPhone(getPerson(i).id) && !getPrimaryPhone(getPerson(i).id).historic" style="display:inline;"> - {{getPrimaryPhone(getPerson(i).id).number}} - {{getPrimaryPhone(getPerson(i).id).location}}</span>
+              <span ng-show="getPrimaryPhone(getPerson(i).id) && !getPrimaryPhone(getPerson(i).id).historic" class="phone-type phone-type-{{getPrimaryPhone(getPerson(i).id).location}}">{{getPrimaryPhone(getPerson(i).id).number}}</span>
               <a ng-href="mailto:{{getEmailAddress(e).email}}" ng-repeat="e in getPerson(i).email_address_ids" ng-show="!getEmailAddress(e).historic"><i class="fa fa-envelope-square" title="Email"></i> </a>
               <a ng-href="https://www.facebook.com/{{getFacebookId(fb).remote_id}}" target="_blank" ng-repeat="fb in getPerson(i).facebook_account_ids"><i class="fa fa-facebook-square" title="Facebook profile"></i> </a>
             </div>
         </div>
-        <span class="address" ng-repeat="i in contact.address_ids" ng-bind-html="getAddress(i)"></span>
+        <address class="address" ng-repeat="i in contact.address_ids" ng-bind-html="getAddress(i)"></address>
         <div class="tags">
             <a class="tag" ng-repeat-start="tag in contact.tag_list">{{tag}}</a><span style="display:inline;" ng-repeat-end> </span>
         </div>
@@ -30,11 +30,7 @@
 </td>
 
 <td class="qaction" id="contact_{{contact.id}}_quick">
-    <a href="#" class="btn smallbtn quick"><%= _('Quick') %></a>
-    <ul style="display: none;" class="quick_action_list">
-        <li><a class="none" href="/contacts/{{contact.id}}"><%= _('Show') %></a></li>
-        <li><a class="none" href="/contacts/{{contact.id}}/edit"><%= _('Edit') %></a></li>
-        <li><a class="none" data-behavior="hide_contact" data-method="delete" data-remote="true" href="/contacts/{{contact.id}}" rel="nofollow"><%= _('Hide') %></a></li>
-    </ul>
+    <a class="btn btn-sm btn-default" href="/contacts/{{contact.id}}/edit"><%= _('<i class="fa fa-pencil"></i>') %></a>
+    <a class="btn btn-sm btn-default" data-behavior="hide_contact" data-method="delete" data-remote="true" href="/contacts/{{contact.id}}" rel="nofollow"><%= _('<i class="fa fa-eye-slash"></i>') %></a>
 </td>
 <td class="checks"><input type="checkbox" name="contact_ids[]" value="{{contact.id}}" /></td>

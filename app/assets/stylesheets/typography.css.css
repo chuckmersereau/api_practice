@@ -164,32 +164,12 @@ p:last-child {
 /* ************************************************************************ */
 .tablelist th {
   text-align: left; }
-.tablelist td.profile {
-  font-size: 11px; }
-  .tablelist td.profile .name {
-    font-size: 13px;
-    font-weight: bold; }
 .tablelist .status h4 {
   margin: 0 0 .5em;
   font-size: 12px; }
 
-.formatted-tag-base, .bootstrap-tagsinput .tag, .tags a,
-#leftmenu ul li .tags a {
-  background: #0077ae;
-  color: #FFF;
-  display: inline-block;
-  font-weight: normal;
-  height: 18px;
-  font-size: 11px;
-  border-radius: 5px;
-  line-height: 18px;
-  text-align: center;
-  padding: 0 5px;
-  margin-bottom: 3px; }
-
-.tags a.selected,
-#leftmenu ul li .tags a.selected {
-  background: #00566D; }
+address {
+  margin-bottom: 0; }
 
 /* ************************************************************************ */
 .taskgroup {
@@ -245,3 +225,7 @@ p:last-child {
 
 .text-error {
   color: #9d2c2d; }
+
+.contact_location,
+.contact_status {
+  line-height: 1.35em; }
