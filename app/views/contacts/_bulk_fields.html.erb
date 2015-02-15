@@ -1,28 +1,45 @@
-<div class="field">
-  <%= f.label :likely_to_give, _('Likely to Give') %>
-  <%= f.select :likely_to_give, f.object.assignable_likely_to_gives.collect { |s| [_(s), s] }, include_blank: true %>
+<div class="row">
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= f.label :likely_to_give, _('Likely to Give') %>
+      <%= f.select :likely_to_give, f.object.assignable_likely_to_gives.collect { |s| [_(s), s] }, {}, {include_blank: true, class: 'form-control'} %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= f.label :next_ask, _('Next Ask') %>
+      <%= f.date_select :next_ask, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: Time.now.year - 5 %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= f.label :status, _('Status') %>
+      <%= f.select :status, f.object.assignable_statuses.collect { |s| [_(s), s] }, {}, {include_blank: true, class: 'form-control'} %>
+    </div>
+  </div>
 </div>
 
-<div class="field">
-  <%= f.label :next_ask, _('Next Ask') %>
-  <%= f.date_select :next_ask, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: Time.now.year - 5 %>
-</div>
-
-<div class="field">
-  <%= f.label :status, _('Status') %>
-  <%= f.select :status, f.object.assignable_statuses.collect { |s| [_(s), s] }, include_blank: true %>
-</div>
-
-<div class="field">
-  <%= f.label :send_newsletter, _('Newsletter') %>
-  <% if @contact %>
-    <%= f.select :send_newsletter, f.object.assignable_send_newsletters.collect { |s| [_(s), s] }, include_blank: true %>
-  <% else %>
-    <%= f.select :send_newsletter, [[_('None'), 'none']] + f.object.assignable_send_newsletters.collect { |s| [_(s), s] }, include_blank: true %>
-  <% end %>
-</div>
-
-<div class="field">
-  <%= f.label :church_name, _('Church') %>
-  <%= f.text_field :church_name %>
+<div class="row">
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= f.label :send_newsletter, _('Newsletter') %>
+      <% if @contact %>
+        <%= f.select :send_newsletter, f.object.assignable_send_newsletters.collect { |s| [_(s), s] }, {}, {include_blank: true, class: 'form-control'} %>
+      <% else %>
+        <%= f.select :send_newsletter, [[_('None'), 'none']] + f.object.assignable_send_newsletters.collect { |s| [_(s), s] }, include_blank: true %>
+      <% end %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= f.label :church_name, _('Church') %>
+      <%= f.text_field :church_name, class: 'form-control'  %>
+    </div>
+  </div>
+  <div class="col-md-4">
+    <div class="form-group">
+      <%= f.label :website, _('Website') %>
+      <%= f.text_field :website, class: 'form-control' %>
+    </div>
+  </div>
 </div>

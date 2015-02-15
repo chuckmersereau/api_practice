@@ -669,15 +669,11 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 .tablelist {
   border-collapse: collapse;
   width: 100%;
-
-  
-
   th {
     background: $gray_light;
     text-align: left;
     padding: 5px 8px;
   }
-
   .checks {width: 22px; line-height: 22px;}
   tr {
     border-bottom: 1px solid $color-gray-light;
@@ -687,7 +683,6 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     vertical-align: top;
     font-size: .9em;
   }
-
   td.avatar {
     width: 50px;
     padding-left: 0;
@@ -1028,7 +1023,6 @@ table.meta {
   }
 }
 
-
 /* ************************************************************** */
 
 .inside_person {
@@ -1047,7 +1041,7 @@ table.meta {
   @include listclear;
 }
 .contact_controls {
-  border-bottom: 5px solid $color-gray-keyline;
+  border-bottom: 5px solid #ccc;
   display: block;
   padding-bottom: 20px;
 }
@@ -1349,9 +1343,28 @@ body.google_integrations_controller {
 
 .head-user-wrap {background: $color-white; border-top: 8px solid $color-gold;}
 .head-mainmenu-wrap {background: $color-gray-dark;}
+.bootstrap-tagsinput {
+  input {
+    outline: none;
+    border: none;
+  }
+}
+.form-group {
+  .bootstrap-tagsinput {
+    width: 100%;
+  }
+}
 .row-no-padding {
   [class*="col-"] {
     padding-left: 0 !important;
     padding-right: 0 !important;
   }
+}
+.panel-body {
+  padding: 15px;
+}
+.panel-heading {
+  padding: 6px 15px;
+  text-transform: uppercase;
+  font-weight: 600;
 }

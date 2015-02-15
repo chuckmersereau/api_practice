@@ -1,35 +1,44 @@
 <div class="sfield address_field" data-behavior="field-wrapper">
   <%= builder.hidden_field :user_changed, value: true %>
+  <div class="rs">
+    <%= builder.label :street %>
+    <%= builder.text_area :street, rows: 2, placeholder: "Street address" %>
+  </div>
   <div class="ls">
     <%= builder.label :location %>
     <%= builder.select :location, builder.object.assignable_locations.collect { |l| [_(l), l] }, include_blank: true %>
   </div>
-  <div class="rs">
-
-    <%= builder.label :street %>
-    <%= builder.text_area :street, rows: 3, placeholder: "Street address" %>
+  <div class="form-group">
     <%= builder.label :city %>
-    <%= builder.text_field :city, placeholder: "City" %>
-    <%= builder.label :state %>
-    <%= builder.text_field :state, placeholder: "State" %>
-    <%= builder.label :postal_code %>
-    <%= builder.text_field :postal_code, placeholder: "Postal Code" %>
-    <%= builder.label :region %>
-    <%= builder.text_field :region, placeholder: "Region" %>
-    <%= builder.label :metro_area %>
-    <%= builder.text_field :metro_area, placeholder: "Metro Area" %>
-    <%= builder.label :country %>
-    <%= builder.country_select :country, nil, {include_blank: true}, {class: 'country_select'} %><br/>
-    <div class="field_action">
-        <%= builder.check_box :historic, class: 'address_historic' %>
-        <%= builder.label :historic, "Address no longer valid" %>
-    </div><br>
-    <div class="field_action">
-      <%= builder.check_box :primary_mailing_address, class: 'primary' %>
-      <%= builder.label :primary_mailing_address %>
-      <%= link_to_remove_fields(builder) %>
-    </div>
-
+    <%= builder.text_field :city, placeholder: "City", class: 'form-control' %>
   </div>
-
+  <div class="form-group">
+    <%= builder.label :state %>
+    <%= builder.text_field :state, placeholder: "State", class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= builder.label :postal_code %>
+    <%= builder.text_field :postal_code, placeholder: "Postal Code", class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= builder.label :region %>
+    <%= builder.text_field :region, placeholder: "Region", class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= builder.label :metro_area %>
+    <%= builder.text_field :metro_area, placeholder: "Metro Area", class: 'form-control' %>
+  </div>
+  <div class="form-group">
+    <%= builder.label :country %>
+    <%= builder.country_select :country, nil, {include_blank: true}, {class: 'country_select form-control'} %>
+  </div>
+  <div class="field_action">
+      <%= builder.check_box :historic, class: 'address_historic' %>
+      <%= builder.label :historic, "Address no longer valid" %>
+  </div>
+  <div class="field_action">
+    <%= builder.check_box :primary_mailing_address, class: 'primary' %>
+    <%= builder.label :primary_mailing_address %>
+    <%= link_to_remove_fields(builder) %>
+  </div>
 </div>
