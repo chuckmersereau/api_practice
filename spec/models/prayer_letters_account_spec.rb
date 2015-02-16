@@ -85,4 +85,23 @@ describe PrayerLettersAccount do
       pla.create_contact(contact)
     end
   end
+
+  context '#subscribe_contacts' do
+    it 'syncronizes a contact even if it has no people' do
+      contact = create(:contact, account_list: pla.account_list, send_newsletter: 'Both', prayer_letters_id: 1)
+      contact.addresses << create(:address)
+      expect(contact.people.count).to eq(0)
+
+      contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John","contact_id":"1",'\
+        '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
+        '"country":"United States"},"external_id":' + contact.id.to_s +  '}]}'
+
+      stub = stub_request(:put, 'https://www.prayerletters.com/api/v1/contacts')
+        .with(body: contacts_body, headers: { 'Authorization' => 'Bearer MyString' })
+
+      expect(pla).to receive(:import_list)
+      pla.subscribe_contacts
+      expect(stub).to have_been_requested
+    end
+  end
 end

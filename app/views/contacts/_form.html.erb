@@ -27,6 +27,8 @@
           <%= _('Basic Information') %>
         </div>
 
+        <%= f.hidden_field :user_changed, value: true %>
+
         <div class="field">
           <%= f.label :name, _('Name') %>
           <%= f.text_field :name, {placeholder: _('Last Name, First Name')} %>
@@ -120,7 +122,7 @@
 
         <div class="fieldset">
           <label class="fieldset_label"><%= _('Address') %></label>
-          <% contact.addresses.build if contact.addresses.blank? %>
+          <% contact.addresses.build(primary_mailing_address: true) if contact.addresses.blank? %>
           <%= f.fields_for :addresses do |builder| %>
             <%= render 'address_fields', builder: builder, object: contact %>
           <% end %>

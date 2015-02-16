@@ -1075,6 +1075,9 @@ table.meta {
     line-height: 1.85em;
     height: 1.85em;
     padding: 0 8px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
   }
   li a:hover,
   li a:active {

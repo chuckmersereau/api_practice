@@ -167,7 +167,7 @@ $leftmenuwidth: 200px;
 .green_darkest { color: $green_darkest; }
 .red { color: $error_red }
 
-input:read-only{
+input:read-only, textarea:read-only {
   background-color: #d3d3d3;
 }
 
@@ -194,3 +194,5 @@ input:read-only{
   height: 310px;
   overflow-y: auto;
 }
+
+.no_longer_valid { text-decoration:line-through }

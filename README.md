@@ -47,6 +47,16 @@ $ bundle exec rake db:migrate
 $ bundle exec rails s
 ```
 
+## Local development VM via Vagrant
+
+To setup a virtual machine with all of the MPDX dependencies install
+[VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/) then in the mpdx
+directory run `vagrant up`. That will create a local MPDX VM.
+
+To run the server run `vagrant ssh` then `rails server`. To view it, go to your machine and visit `localhost:3000`.
+
+To run sidekiq (background jobs processor), open a new terminal tab, run `vagrant ssh` again then run `bundle exec sidekiq`.
+
 ## Bugs Reports & Contributing
 
 * Bug Reports: https://github.com/CruGlobal/mpdx/issues
