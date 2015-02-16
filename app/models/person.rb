@@ -271,6 +271,11 @@ class Person < ActiveRecord::Base
 
   def merge(other)
     Person.transaction(requires_new: true) do
+      # This is necessary in case this is executed in a loop of merges which could cause the master_person
+      # stored in memory to become out of date with what's in the database and cause an error.
+      reload
+      other.reload
+
       other.messages_sent.update_all(from_id: id)
       other.messages_received.update_all(to_id: id)
 
@@ -338,7 +343,6 @@ class Person < ActiveRecord::Base
         person_same_master_other.update(master_person: master_person)
       end
       MasterPerson.find_by_id(other_master_person_id).try(:destroy) unless other_master_person_id == master_person_id
-
       other_master_person_sources.each do |organization_id, remote_id|
         master_person.master_person_sources.find_or_create_by(organization_id: organization_id, remote_id: remote_id)
       end
