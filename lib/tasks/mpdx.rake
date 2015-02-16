@@ -55,6 +55,17 @@ namespace :mpdx do
     Contact.joins(:addresses).where(us_address).find_each(&:merge_addresses)
   end
 
+  task address_primary_fixes: :environment do
+    Contact.find_each do |contact|
+      puts "Primary address fix for contact: #{contact.id}"
+      contact.addresses_including_deleted.where(deleted: true).update_all(primary_mailing_address: false)
+      contact.addresses.where(historic: true).update_all(primary_mailing_address: false)
+      next unless contact.addresses.where(historic: false).count == 1
+      next unless contact.addresses.where(primary_mailing_address: true).count == 0
+      contact.addresses.first.update_column(:primary_mailing_address, true)
+    end
+  end
+
   task clear_stalled_downloads: :environment do
     Person::OrganizationAccount.where('locked_at is not null and locked_at < ?', 2.days.ago).update_all(downloading: false, locked_at: nil)
   end
