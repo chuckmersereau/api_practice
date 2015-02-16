@@ -70,11 +70,13 @@ angular.module('mpdxApp')
                        strContains(taskResult, 'Message') ||
                        strContains(taskResult, 'Text') ||
                        strContains(taskResult, 'Talk to In Person') ||
+                       strContains(taskResult, 'Prayer Request') ||
                        strContains(taskResult, 'Call Again') ||
                        strContains(taskResult, 'Email Again') ||
                        strContains(taskResult, 'Message Again') ||
                        strContains(taskResult, 'Text Again') ||
-                       strContains(taskResult, 'Talk to In Person Again')){
+                       strContains(taskResult, 'Talk to In Person Again') ||
+                       strContains(taskResult, 'Prayer Request Again')){
 
                         //generic followup task type
                         var taskType;
@@ -93,6 +95,8 @@ angular.module('mpdxApp')
                             taskType = 'Text Message';
                         }else if(strContains(taskResult, 'Talk to In Person')){
                             taskType = 'Talk to In Person';
+                        }else if(strContains(taskResult, 'Prayer Request')){
+                            taskType = 'Prayer Request';
                         }else if(strContains(taskResult, 'Call Again')){
                             taskType = 'Call';
                         }else if(strContains(taskResult, 'Email Again')){
@@ -103,6 +107,8 @@ angular.module('mpdxApp')
                             taskType = 'Text Message';
                         }else if(strContains(taskResult, 'Talk to In Person Again')) {
                             taskType = 'Talk to In Person';
+                        }else if(strContains(taskResult, 'Prayer Request Again')) {
+                            taskType = 'Prayer Request';
                         }
 
                         $scope.followUpDialogData = {
@@ -332,7 +338,7 @@ angular.module('mpdxApp')
                         };
                         $scope.followUpDialogResult = {
                             callTask: {
-                                type: 'Ask in Future',
+                                type: 'Call',
                                 subject: 'Ask again for financial partnership',
                                 date: dateTwoDaysFromToday,
                                 hour: ("0" + (new Date().getHours())).slice(-2),
@@ -355,7 +361,7 @@ angular.module('mpdxApp')
 
                             //Create Call Task
                             if($scope.followUpDialogResult.createCallTask){
-                                createGenericTask(contactsObject, 'Ask in Future');
+                                createGenericTask(contactsObject, 'Call');
                             }
 
                             jQuery('#complete_task_followup_modal').dialog('close');
