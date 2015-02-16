@@ -473,5 +473,16 @@ describe Contact do
         contact.merge_people
       }.to change(Person, :count).from(2).to(1)
     end
+
+    it 'does not error on second merge if their master person has been merged by first merge' do
+      person1 = create(:person)
+      person2 = create(:person)
+      person3 = create(:person, master_person: person2.master_person)
+      contact.people << person1
+      contact.people << person2
+      contact.people << person3
+
+      expect { contact.merge_people }.to_not raise_error
+    end
   end
 end
