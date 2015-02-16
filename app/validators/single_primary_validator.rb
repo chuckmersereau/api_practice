@@ -16,8 +16,9 @@ class SinglePrimaryValidator < ActiveModel::EachValidator
   private
 
   def valid?
-    return false if value.select(&:historic).any?(&options[:primary_field])
-    non_historic = value.reject(&:historic)
+    not_deleted = value.reject(&:marked_for_destruction?)
+    return false if not_deleted.select(&:historic).any?(&options[:primary_field])
+    non_historic = not_deleted.reject(&:historic)
     non_historic.empty? || non_historic.count(&options[:primary_field]) == 1
   end
 
