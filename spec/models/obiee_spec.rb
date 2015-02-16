@@ -20,6 +20,7 @@ FROM "CCCi Transaction Analytics"
 WHERE ("- Designation"."Designation Name" = ''Test Desig ((2716653)'')
 ORDER BY 1, 2 ASC NULLS LAST
 FETCH FIRST 10000000 ROWS ONLY'
+  expected_result = '<rowset xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" ><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saw-sql="urn:saw-sql" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset"><xsd:complexType name="Row"><xsd:sequence><xsd:element name="Column0" type="xsd:int" minOccurs="0" maxOccurs="1" saw-sql:type="integer" saw-sql:displayFormula="saw_0" saw-sql:tableHeading="" saw-sql:columnHeading="0" /><xsd:element name="Column1" type="xsd:string" minOccurs="0" maxOccurs="1" saw-sql:type="varchar" saw-sql:displayFormula="saw_1" saw-sql:tableHeading="Designation" saw-sql:columnHeading="Designation Name" /></xsd:sequence></xsd:complexType></xsd:schema><Row><Column0>0</Column0><Column1>Test Desig (2716653)</Column1></Row></rowset>'
 
   it 'gets a session id' do
     creds =  { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
@@ -75,7 +76,7 @@ FETCH FIRST 10000000 ROWS ONLY')
   it 'fails when no report path' do
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
     report_params = { reportRef: { reportPath: PATH },
-                      reportParams: {filterExpressions: '',
+                      reportParams: { filterExpressions: '',
                                      variables: {}
                       },
                       sessionID: SESSION_ID }
@@ -97,7 +98,7 @@ FETCH FIRST 10000000 ROWS ONLY')
                    sessionID: SESSION_ID }
     savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
     report_results = obiee.report_results(SESSION_ID, SQL)
-    expect( report_results ).to eq('<rowset xmlns="urn:schemas-microsoft-com:xml-analysis:rowset" ><xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:saw-sql="urn:saw-sql" targetNamespace="urn:schemas-microsoft-com:xml-analysis:rowset"><xsd:complexType name="Row"><xsd:sequence><xsd:element name="Column0" type="xsd:int" minOccurs="0" maxOccurs="1" saw-sql:type="integer" saw-sql:displayFormula="saw_0" saw-sql:tableHeading="" saw-sql:columnHeading="0" /><xsd:element name="Column1" type="xsd:string" minOccurs="0" maxOccurs="1" saw-sql:type="varchar" saw-sql:displayFormula="saw_1" saw-sql:tableHeading="Designation" saw-sql:columnHeading="Designation Name" /></xsd:sequence></xsd:complexType></xsd:schema><Row><Column0>0</Column0><Column1>Test Desig (2716653)</Column1></Row></rowset>')
+    expect(report_results).to eq(expected_result)
   end
 
   it 'fails to get report results when no session id' do

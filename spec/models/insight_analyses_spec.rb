@@ -50,7 +50,7 @@ FETCH FIRST 10000000 ROWS ONLY',
                                                  'xmlns:saw_sql' => 'urn:saw-sql',
                                                  'targetNamespace' => 'urn:schemas-microsoft-com:xml-analysis:rowset',
                                                  'complexType' => { 'name' => 'Row', 'sequence' =>
-                                                     { 'element' => [ {  'name' => 'Column0', 'type' => 'xsd:int',
+                                                     { 'element' => [{  'name' => 'Column0', 'type' => 'xsd:int',
                                                                          'saw_sql:type' => 'integer', 'minOccurs' => '0',
                                                                          'maxOccurs' => '1',
                                                                          'saw_sql:displayFormula' => 'saw_0',
@@ -62,8 +62,8 @@ FETCH FIRST 10000000 ROWS ONLY',
                                                                         'saw_sql:displayFormula' => 'saw_1',
                                                                         'saw_sql:tableHeading' => 'Designation',
                                                                         'saw_sql:columnHeading' => 'Designation Name'
-                                                                      }  ] } } },
-                                   'Row' => { 'Column0' => '0', 'Column1' => 'Test Desig (2716653)' } } )
+                                                                      }] } } },
+                                   'Row' => { 'Column0' => '0', 'Column1' => 'Test Desig (2716653)' } })
   end
 
   it 'fails with unknown desig' do
@@ -114,7 +114,7 @@ FETCH FIRST 10000000 ROWS ONLY',
 
     savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
     results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    run_params = {sql: 'SELECT
+    run_params = { sql: 'SELECT
    0 s_0,
    "CCCi Transaction Analytics"."- Designation"."Designation Name" s_1
 FROM "CCCi Transaction Analytics"
