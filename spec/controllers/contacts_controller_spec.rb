@@ -175,5 +175,15 @@ describe ContactsController do
         expect(assigns(:people_sets)).to eq(people_sets)
       end
     end
+
+    describe '#save_referrals' do
+      it 'sets the address as primary for the created contact' do
+        expect {
+          xhr :post, :save_referrals, id: contact.id,
+              account_list: { contacts_attributes: { nil => { first_name: 'John', street: '1 Way' } } }
+        }.to change(Address, :count).from(0).to(1)
+        expect(Address.first.primary_mailing_address).to be_true
+      end
+    end
   end
 end

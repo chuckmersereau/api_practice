@@ -219,7 +219,9 @@ class ContactsController < ApplicationController
             end
 
             # create address
-            contact.addresses_attributes = [attributes.slice(:street, :city, :state, :postal_code)]
+            contact.addresses_attributes = [
+              attributes.slice(:street, :city, :state, :postal_code).merge(primary_mailing_address: true)
+            ]
 
             contact.save
 
