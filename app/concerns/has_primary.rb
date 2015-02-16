@@ -16,9 +16,18 @@ module HasPrimary
     def ensure_only_one_primary?(parent_object, object)
       rel = to_s.tableize.to_sym
       return unless parent_object.send(rel).present?
-      primaries = parent_object.send(rel).where(primary: true)
+
+      if object.respond_to?(:historic)
+        parent_object.send(rel).where(historic: true).update_all(primary: false)
+        not_historic_where = { historic: false }
+        return unless parent_object.send(rel).where(not_historic_where).present?
+      else
+        not_historic_where = {}
+      end
+
+      primaries = parent_object.send(rel).where(primary: true).where(not_historic_where)
       if primaries.blank?
-        parent_object.send(rel).last.update_column(:primary, true)
+        parent_object.send(rel).where(not_historic_where).last.update_column(:primary, true)
       elsif primaries.length > 1
         if primaries.include?(object)
           (primaries - [object]).map { |e| e.update_column(:primary, false) }

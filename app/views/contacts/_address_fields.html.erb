@@ -1,4 +1,4 @@
-<div class="sfield address_field" data-behavior="field-wrapper">
+<div class="sfield address_field<%= ' marked_for_destruction' if builder.object.marked_for_destruction? %>" data-behavior="field-wrapper">
   <%= builder.hidden_field :user_changed, value: true %>
   <div class="ls">
     <%= builder.label :location %>

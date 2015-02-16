@@ -11,8 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150202221959) do
-
+ActiveRecord::Schema.define(version: 20150130162239) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -133,6 +132,16 @@ ActiveRecord::Schema.define(version: 20150202221959) do
   add_index "appeal_contacts", ["appeal_id"], name: "index_appeal_contacts_on_appeal_id", using: :btree
   add_index "appeal_contacts", ["contact_id"], name: "index_appeal_contacts_on_contact_id", using: :btree
 
+  create_table "appeal_donations", force: true do |t|
+    t.integer  "appeal_id"
+    t.integer  "donation_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "appeal_donations", ["appeal_id", "donation_id"], name: "index_appeal_donations_on_appeal_id_and_donation_id", using: :btree
+  add_index "appeal_donations", ["donation_id"], name: "index_appeal_donations_on_donation_id", using: :btree
+
   create_table "appeals", force: true do |t|
     t.string   "name"
     t.integer  "account_list_id"
@@ -250,6 +259,7 @@ ActiveRecord::Schema.define(version: 20150202221959) do
     t.string   "prayer_letters_id"
     t.string   "timezone"
     t.string   "envelope_greeting"
+    t.boolean  "no_appeals"
   end
 
   add_index "contacts", ["account_list_id"], name: "index_contacts_on_account_list_id", using: :btree
@@ -672,6 +682,7 @@ ActiveRecord::Schema.define(version: 20150202221959) do
     t.string   "profession"
     t.boolean  "deceased",                           default: false, null: false
     t.boolean  "subscribed_to_updates"
+    t.boolean  "optout_enewletter",                  default: false
     t.boolean  "optout_enewsletter",                 default: false
     t.string   "occupation"
     t.string   "employer"
