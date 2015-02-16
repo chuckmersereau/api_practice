@@ -1,13 +1,8 @@
 $ ->
 
   $().ready ->
-  numberOfrows = $('#recurringGiftsDataTable tbody tr').length
-  i=0
-  while numberOfrows > i
-    ++i
-    dateFormat = $('#nextAskYearMonth').text()
-    dateFormat = $.datepicker.formatDate('yy / mm', new Date(dateFormat))
-    $('#nextAskYearMonth').replaceWith(dateFormat)
+  numberOfRows = $('#recurringGiftsDataTable tbody tr').length
+  $('#nextAskYearMonth').replaceWith($.datepicker.formatDate 'yy / mm', new Date $('#nextAskYearMonth').text()) for num in [0..numberOfRows]
 
   $("table tbody tr").on 'dblclick', ->
     cName = $(this).data('id')
