@@ -34,6 +34,14 @@ describe Address do
     end
   end
 
+  context '#destroy' do
+    it 'clears the primary mailing address flag when destroyed' do
+      address1 = create(:address, primary_mailing_address: true)
+      address1.destroy
+      expect(address1.primary_mailing_address).to be_false
+    end
+  end
+
   context '#country=' do
     it 'normalizes the country when assigned' do
       address = build(:address)

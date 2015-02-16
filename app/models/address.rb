@@ -37,7 +37,7 @@ class Address < ActiveRecord::Base
   end
 
   def destroy
-    update_attributes(deleted: true)
+    update_attributes(deleted: true, primary_mailing_address: false)
   end
 
   def not_blank?

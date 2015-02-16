@@ -20,9 +20,16 @@ describe SinglePrimaryValidator do
        { historic: nil, primary_mailing_address: true }] => false,
       [{ historic: nil, primary_mailing_address: false },
        { historic: nil, primary_mailing_address: false }] => false,
-      [{ historic: false, primary_mailing_address: false }] => false
+      [{ historic: false, primary_mailing_address: false }] => false,
+      [{ historic: nil, primary_mailing_address: false, mark_for_destruction: true }] => true
     }.each do |address_attrs, valid|
-      contact = build(:contact, addresses: address_attrs.map { |attrs| build(:address, attrs) })
+      contact = build(:contact)
+      contact.addresses = address_attrs.map do |attrs|
+        mark_for_destruction = attrs.delete(:mark_for_destruction)
+        address = build(:address, attrs)
+        address.mark_for_destruction if mark_for_destruction
+        address
+      end
       addresses_validator.validate(contact)
       expect(contact.errors.empty?).to eq(valid)
     end
