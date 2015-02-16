@@ -84,6 +84,7 @@ class DonorAccount < ActiveRecord::Base
   end
 
   def addresses_attributes
-    Hash[addresses.collect.with_index { |address, i| [i, address.attributes.slice(*%w(street city state country postal_code))] }]
+    attrs = %w(street city state country postal_code start_date primary_mailing_address source source_donor_account_id)
+    Hash[addresses.collect.with_index { |address, i| [i, address.attributes.slice(*attrs)] }]
   end
 end

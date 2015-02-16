@@ -132,6 +132,7 @@ describe Contact do
         @contact = Contact.create_from_donor_account(@donor_account, @account_list)
       }.to change(Address, :count)
       @contact.addresses.first.equal_to?(@donor_account.addresses.first).should be_true
+      expect(@contact.addresses.first.source_donor_account).to eq(@donor_account)
     end
 
   end

@@ -110,7 +110,8 @@ class GoogleImport
       postal_code: google_address[:postcode],
       country: format_g_contact_country(google_address[:country]),
       location: google_address_rel_to_location(google_address[:rel]),
-      primary_mailing_address: google_address[:primary] }
+      primary_mailing_address: google_address[:primary],
+      source: 'GoogleImport' }
   end
 
   def format_g_contact_country(country)

@@ -83,7 +83,7 @@ describe DataServer do
 
     it 'should import a company' do
       stub_request(:post, /.*addresses/).to_return(body:
-        "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
+                                                     "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
         "\"SP_LAST_NAME\",\"SP_FIRST_NAME\",\"SP_MIDDLE_NAME\",\"SP_TITLE\",\"ADDR2\",\"ADDR3\",\"ADDR4\",\"ADDR_CHANGED\",\"PHONE_CHANGED\",\"CNTRY_DESCR\","\
         "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"19238\",\"ACorporation\",\"123 mi casa blvd.\",\"Colima\",\"COL\",\"456788\",\"(52) 45 456-5678\","\
         "\"MEX\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"8/15/2003\",\"8/15/2003\",\"\",\"O\",\"ACorporation\",\"\"\r\n")
@@ -131,7 +131,7 @@ describe DataServer do
       new_person.donor_accounts.last.should eq donor_account
 
       stub_request(:post, /.*addresses/).to_return(body:
-        "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
+                                                     "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
         "\"SP_LAST_NAME\",\"SP_FIRST_NAME\",\"SP_MIDDLE_NAME\",\"SP_TITLE\",\"ADDR2\",\"ADDR3\",\"ADDR4\",\"ADDR_CHANGED\",\"PHONE_CHANGED\",\"CNTRY_DESCR\","\
         "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodrigues, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
         "\"24555\",\"(376) 706-670\",\"MEX\",\"Ramon\",\"C\",\"Sr.\",\"\",\"Moreno\",\"Celeste\",\"Gonzalez\",\"Sra.\",\"\",\"\",\"\",\"4/4/2003\",\"4/4/2003\","\
@@ -143,7 +143,7 @@ describe DataServer do
 
     it "should notify Airbrake if PERSON_TYPE is not 'O' or 'P'" do
       stub_request(:post, /.*addresses/).to_return(body:
-        "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
+                                                     "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
         "\"SP_LAST_NAME\",\"SP_FIRST_NAME\",\"SP_MIDDLE_NAME\",\"SP_TITLE\",\"ADDR2\",\"ADDR3\",\"ADDR4\",\"ADDR_CHANGED\",\"PHONE_CHANGED\",\"CNTRY_DESCR\","\
         "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodriguez, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
         "\"24555\",\"(376) 706-670\",\"MEX\",\"Ramon\",\"\",\"Sr.\",\"\",\"Moreno\",\"Celeste\",\"Gonzalez\",\"Sra.\",\"\",\"\",\"\",\"4/4/2003\",\"4/4/2003\","\
@@ -270,7 +270,7 @@ describe DataServer do
         'STATE' => 'Chihuahua', 'ZIP' => '24555', 'PHONE' => '(376) 706-670', 'COUNTRY' => 'CHH', 'FIRST_NAME' => 'Ramon',
         'MIDDLE_NAME' => '', 'TITLE' => '', 'SUFFIX' => 'Sr.', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Moreno',
         'SP_MIDDLE_NAME' => 'Celeste', 'SP_TITLE' => 'Gonzalez', 'ADDR2' => 'Sra.', 'ADDR3' => '', 'ADDR4' => '',
-        'ADDR_CHANGED' => '', 'PHONE_CHANGED' => '4/4/2003', 'CNTRY_DESCR' => 'USA', 'PERSON_TYPE' => '',
+        'ADDR_CHANGED' => '2/14/2002', 'PHONE_CHANGED' => '4/4/2003', 'CNTRY_DESCR' => 'USA', 'PERSON_TYPE' => '',
         'LAST_NAME_ORG' => 'P', 'SP_SUFFIX' => 'Rodriguez' }
     }
 
@@ -280,7 +280,7 @@ describe DataServer do
       }.to change(Contact, :count)
     end
 
-    it "doesn't add duplicate addresses with standard country name" do
+    it "doesn't add duplicate addresses with standard country name, just one correct address" do
       line['CNTRY_DESCR'] = 'United States'
       expect {
         @data_server.send(:add_or_update_donor_account, line, profile)
@@ -288,6 +288,23 @@ describe DataServer do
       expect {
         @data_server.send(:add_or_update_donor_account, line, profile)
       }.to change(Address, :count).by(0)
+
+      expect(account_list.contacts.count).to eq(1)
+      contact = account_list.contacts.first
+      expect(contact.donor_accounts.count).to eq(1)
+      donor_account = contact.donor_accounts.first
+
+      expect(contact.addresses.count).to eq(1)
+      contact_address = contact.addresses.first
+      expect(donor_account.addresses.count).to eq(1)
+      donor_address = donor_account.addresses.first
+
+      expected_attrs = {
+        street: "Ramon y Celeste (Moreno)\nSra.", city: 'Bahia Acapulco 379', country: 'United States',
+        postal_code: '24555', source: 'DataServer', start_date: Date.new(2002, 2, 14)
+      }
+      expect(contact_address.attributes.symbolize_keys.slice(*expected_attrs.keys)).to eq(expected_attrs)
+      expect(donor_address.attributes.symbolize_keys.slice(*expected_attrs.keys)).to eq(expected_attrs)
     end
 
     it "doesn't add duplicate addresses with alternate country name" do
@@ -297,6 +314,27 @@ describe DataServer do
       expect {
         @data_server.send(:add_or_update_donor_account, line, profile)
       }.to change(Address, :count).by(0)
+    end
+
+    it 'sets the address as primary if the donor account has no other primary addresses' do
+      @data_server.send(:add_or_update_donor_account, line, profile)
+      contact = account_list.contacts.first
+      donor_account = contact.donor_accounts.first
+      expect(contact.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
+      expect(donor_account.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
+    end
+
+    it 'leaves existing primary address in the donor account' do
+      donor_account = create(:donor_account, organization: @org, account_number: '17083')
+      prior_address = create(:address, primary_mailing_address: true)
+      donor_account.addresses << prior_address
+      @data_server.send(:add_or_update_donor_account, line, profile)
+      contact = account_list.contacts.first
+      expect(contact.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
+      expect(donor_account.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
+
+      expect(prior_address.reload.primary_mailing_address).to be_true
+      expect(contact.addresses.find_by_street(prior_address.street).primary_mailing_address).to be_true
     end
   end
 
@@ -389,7 +427,7 @@ describe DataServer do
 
     it 'should create a donation' do
       stub_request(:post, /.*donations/).to_return(body:
-        "\xEF\xBB\xBF\"DONATION_ID\",\"PEOPLE_ID\",\"ACCT_NAME\",\"DESIGNATION\",\"MOTIVATION\",\"PAYMENT_METHOD\",\"TENDERED_CURRENCY\",\"MEMO\","\
+                                                     "\xEF\xBB\xBF\"DONATION_ID\",\"PEOPLE_ID\",\"ACCT_NAME\",\"DESIGNATION\",\"MOTIVATION\",\"PAYMENT_METHOD\",\"TENDERED_CURRENCY\",\"MEMO\","\
         "\"DISPLAY_DATE\",\"AMOUNT\",\"TENDERED_AMOUNT\"\r\n\"1062\",\"12271\",\"Garcia, Reynaldo\",\"10640\",\"\",\"EFECTIVO\",\"MXN\",\"\",\"4/23/2003\","\
         "\"1000.0000\",\"1000.0000\"\r\n")
       @data_server.should_receive(:check_credentials!)
@@ -424,8 +462,32 @@ describe DataServer do
           donation.amount == '5'
         }.to_not change(Donation, :count)
       end
-
     end
 
+    context '#parse_date' do
+      it 'supports dates formatted as %m/%d/%y %H:%M:%S' do
+        expect(@data_server.send(:parse_date, '5/15/2014 15:22:13')).to eq(Date.new(2014, 5, 15))
+      end
+
+      it 'supports dates formatted as MM/DD/YYYY' do
+        expect(@data_server.send(:parse_date, '5/15/2014')).to eq(Date.new(2014, 5, 15))
+      end
+
+      it 'supports dates formatted as YYYY-MM-DD' do
+        expect(@data_server.send(:parse_date, '2014-05-15')).to eq(Date.new(2014, 5, 15))
+      end
+
+      it 'returns nil for a badly formatted date' do
+        expect(@data_server.send(:parse_date, '2014-99-2')).to be_nil
+      end
+
+      it 'returns nil for nil' do
+        expect(@data_server.send(:parse_date, nil)).to be_nil
+      end
+
+      it 'returns nil for empty string' do
+        expect(@data_server.send(:parse_date, '')).to be_nil
+      end
+    end
   end
 end
