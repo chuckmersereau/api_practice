@@ -45,29 +45,29 @@ FETCH FIRST 10000000 ROWS ONLY',
     savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
 
     ia = InsightAnalyses.new.increase_recommendation_analysis('2716653')
-    expect(ia).to eq('rowset' => {'xmlns' => 'urn:schemas-microsoft-com:xml-analysis:rowset',
-                                  'schema' =>
+    expect(ia).to eq('rowset' => { 'xmlns' => 'urn:schemas-microsoft-com:xml-analysis:rowset',
+                                   'schema' =>
 
-                                      {'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
-                                       'xmlns:saw_sql' => 'urn:saw-sql',
-                                       'targetNamespace' => 'urn:schemas-microsoft-com:xml-analysis:rowset',
-                                       'complexType' => {'name' => 'Row', 'sequence' =>
-                                           {'element' => [{'name' => 'Column0', 'type' => 'xsd:int',
-                                                           'saw_sql:type' => 'integer', 'minOccurs' => '0',
-                                                           'maxOccurs' => '1',
-                                                           'saw_sql:displayFormula' => 'saw_0',
-                                                           'saw_sql:tableHeading' => '',
-                                                           'saw_sql:columnHeading' => '0'},
-                                                          {'name' => 'Column1', 'type' => 'xsd:string',
-                                                           'saw_sql:type' => 'varchar', 'minOccurs' => '0',
-                                                           'maxOccurs' => '1',
-                                                           'saw_sql:displayFormula' => 'saw_1',
-                                                           'saw_sql:tableHeading' => 'Designation',
-                                                           'saw_sql:columnHeading' => 'Designation Name'
-                                                          }]}
+                                      { 'xmlns:xsd' => 'http://www.w3.org/2001/XMLSchema',
+                                        'xmlns:saw_sql' => 'urn:saw-sql',
+                                        'targetNamespace' => 'urn:schemas-microsoft-com:xml-analysis:rowset',
+                                        'complexType' => { 'name' => 'Row', 'sequence' =>
+                                           { 'element' => [{ 'name' => 'Column0', 'type' => 'xsd:int',
+                                                             'saw_sql:type' => 'integer', 'minOccurs' => '0',
+                                                             'maxOccurs' => '1',
+                                                             'saw_sql:displayFormula' => 'saw_0',
+                                                             'saw_sql:tableHeading' => '',
+                                                             'saw_sql:columnHeading' => '0' },
+                                                           { 'name' => 'Column1', 'type' => 'xsd:string',
+                                                             'saw_sql:type' => 'varchar', 'minOccurs' => '0',
+                                                             'maxOccurs' => '1',
+                                                             'saw_sql:displayFormula' => 'saw_1',
+                                                             'saw_sql:tableHeading' => 'Designation',
+                                                             'saw_sql:columnHeading' => 'Designation Name'
+                                                          }] }
                                        }
                                       },
-                                  'Row' => {'Column0' => '0', 'Column1' => 'Test Desig (2716653)'}
+                                   'Row' => { 'Column0' => '0', 'Column1' => 'Test Desig (2716653)' }
     })
   end
 
