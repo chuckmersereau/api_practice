@@ -39,7 +39,7 @@ FETCH FIRST 10000000 ROWS ONLY'
                       sessionID: SESSION_ID }
 
     savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
-    report_sql = obiee.report_sql SESSION_ID, PATH, {}
+    report_sql = obiee.report_sql(SESSION_ID, PATH, {})
 
     expect(report_sql).to eq('SELECT
    0 s_0,
