@@ -83,6 +83,9 @@ GEM
     airbrake (4.1.0)
       builder
       multi_json
+    akami (1.2.2)
+      gyoku (>= 0.4.0)
+      nokogiri
     angular-ui-bootstrap-rails (0.11.2)
     angularjs-rails (1.3.3)
     arel (5.0.1.20140414130214)
@@ -255,6 +258,8 @@ GEM
     guard-rubocop (1.2.0)
       guard (~> 2.0)
       rubocop (~> 0.20)
+    gyoku (1.1.1)
+      builder (>= 2.1.2)
     haml (4.0.5)
       tilt
     hashie (1.2.0)
@@ -265,6 +270,9 @@ GEM
       multi_xml (>= 0.5.2)
     httpauth (0.2.1)
     httpclient (2.5.3.3)
+    httpi (2.1.1)
+      rack
+      rubyntlm (~> 0.3.2)
     i18n (0.7.0)
     inflecto (0.0.2)
     iniparse (1.1.6)
@@ -325,6 +333,7 @@ GEM
     ngmin-rails (0.4.0)
       rails (>= 3.1)
     nokogiri (1.5.11)
+    nori (2.3.0)
     oauth2 (0.8.1)
       faraday (~> 0.8)
       httpauth (~> 0.1)
@@ -486,6 +495,7 @@ GEM
     ruby-rtf (0.0.1)
     ruby_parser (3.6.3)
       sexp_processor (~> 4.1)
+    rubyntlm (0.3.4)
     safe_yaml (1.0.4)
     sass (3.2.19)
     sass-rails (4.0.5)
@@ -493,6 +503,14 @@ GEM
       sass (~> 3.2.2)
       sprockets (~> 2.8, < 3.0)
       sprockets-rails (~> 2.0)
+    savon (2.3.3)
+      akami (~> 1.2.0)
+      builder (>= 2.1.2)
+      gyoku (~> 1.1.0)
+      httpi (~> 2.1.0)
+      nokogiri (>= 1.4.0)
+      nori (~> 2.3.0)
+      wasabi (~> 3.2.2)
     sdoc (0.4.0)
       json (~> 1.8)
       rdoc (~> 4.0, < 5.0)
@@ -584,6 +602,10 @@ GEM
       descendants_tracker (~> 0.0.1)
     warden (1.2.3)
       rack (>= 1.0)
+    wasabi (3.2.3)
+      httpi (~> 2.0)
+      mime-types (< 2.0.0)
+      nokogiri (>= 1.4.0)
     webmock (1.9.3)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
@@ -697,6 +719,7 @@ DEPENDENCIES
   ruby-rtf
   ruby_parser
   sass-rails (~> 4.0.3)
+  savon (~> 2.3.0)
   sdoc (~> 0.4.0)
   secure_headers
   sidekiq-pro

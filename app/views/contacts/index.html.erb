@@ -3,6 +3,7 @@
   <script type="text/javascript" charset="utf-8">
     var account_contacts_json = <%= contacts_for_filter.collect { |c| {value: c.name, id: c.id} }.to_json.html_safe %>
     var filtered_contacts_ids = <%= @filtered_contacts.collect { |c| c.id }.to_json.html_safe %>
+
     $(window).resize(function () {
         contactAreaSize();
     });
@@ -14,14 +15,21 @@
     });
     function contactAreaSize(){
         var windowHeight = $(window).height() - 250;
-        var filtersHeight = $('#filters_form').height();
+        var filtersHeight = $('#leftmenu > ul').height() - 100;
         $('.contacts-scrollable').height(Math.max(windowHeight, filtersHeight));
     }
   </script>
   <aside id="leftmenu">
   <ul>
     <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
-    <li>
+    <li ng-class="{'selected': insightFilterIsActive()}">
+      <span class="left_filters menu_item"><%= _('Insights') %></span>
+      <p class="collapse" style="text-indent:40px"><a href="" ng-click="runInsight('recommendations')">Increase Recommendations</a></p>
+    </li>
+    <li class="controls" ng-show="insightFilterIsActive()">
+      <a href="" ng-click="clearInsightFilter()" class="btn">Clear Insight Filter</a>
+    </li>
+    <li ng-show="!insightFilterIsActive()">
       <span class="left_filters menu_item"><%= _('Filters') %></span>
       <form id="filters_form">
 
@@ -190,7 +198,7 @@
           </div>
 
           <div style="float:right">
-            Show:
+            Show:<%= @fil %>
             <select ng-model="contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]"></select>
           </div>
         </td>

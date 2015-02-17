@@ -50,6 +50,7 @@ Rails.application.routes.draw do
       resources :preferences
       resources :users
       resources :appeals
+      resources :insights
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
   end
@@ -58,6 +59,7 @@ Rails.application.routes.draw do
 
   resources :activity_comments
 
+  resources :insights
   resources :donations
   resources :accounts
   resources :preferences do
@@ -150,9 +152,9 @@ Rails.application.routes.draw do
   get '/auth/failure', to: 'accounts#failure'
 
   developer_user_constraint = lambda { |request| request.env["rack.session"] and
-                                  request.env["rack.session"]["warden.user.user.key"] and
-                                  request.env["rack.session"]["warden.user.user.key"][0] and
-                                  User.find(request.env["rack.session"]["warden.user.user.key"][0].first).developer }
+      request.env["rack.session"]["warden.user.user.key"] and
+      request.env["rack.session"]["warden.user.user.key"][0] and
+      User.find(request.env["rack.session"]["warden.user.user.key"][0].first).developer }
   constraints developer_user_constraint do
     mount Sidekiq::Web => '/sidekiq'
   end

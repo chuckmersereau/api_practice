@@ -396,6 +396,24 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
       else
         methodToExec()
     };
+
+    $scope.runInsight = function(insight){
+      if(insight === 'recommendations'){
+        api.call('get', 'insights', {}, function (data) {
+          $scope.contactQuery.insightFilter = data.insights;
+        }, function(){
+          alert('An error has occurred while retrieving insight contacts');
+        });
+      }
+    };
+
+    $scope.clearInsightFilter = function(){
+      delete $scope.contactQuery.insightFilter;
+    };
+
+    $scope.insightFilterIsActive = function(){
+      return angular.isDefined($scope.contactQuery.insightFilter);
+    };
 });
 
 

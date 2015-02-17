@@ -1,4 +1,4 @@
-<li ng-class="{'selected': contactQuery.tags[0]}">
+<li ng-class="{'selected': contactQuery.tags[0]}" ng-show="!insightFilterIsActive()">
   <span class="tags menu_item"><%= _('Tags') %></span>
   <ul class="left_taglist tags">
     <li>

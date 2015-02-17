@@ -12,3 +12,6 @@ test:
   s3_secret: asdf
   s3_bucket: asdf
   itg_auth_key: asdf
+  obiee_key: 'MPDXWEBAPP'
+  obiee_secret: 'mHXbAAzzB08v'
+  obiee_base_url: 'https://insight.cru.org/analytics-ws/saw.dll?SoapImpl='

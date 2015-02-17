@@ -56,6 +56,9 @@
         <% if $rollout.active?(:research, current_account_list) %>
           <div class="item <%= request.path =~ /\/research/ ? 'active' : '' %>"><%= link_to(_('Research'), "/research") %></div>
         <% end %>
+        <% if $rollout.active?(:insights, current_account_list) %>
+            <div class="item <%= request.path =~ /\/insights/ ? 'active' : '' %>"><%= link_to(_('Insights'), "/insights") %></div>
+        <% end %>
         <div class="item last"><%= link_to(_('Help'), new_help_request_path, target: '_blank') %></div>
         <!-- <div class="item last <%= request.path =~ /\/social/ ? 'active' : '' %>"><%= link_to(_('Social'), "") %></div> -->
         <div class="item search">
@@ -114,7 +117,7 @@
       <h2><%= _('Need Help?') %></h2>
       <p><%== _("Check out %{help_site} for training videos and FAQs. If you can't find the answer you need there or need to report a bug, %{link}").localize %
                {link: link_to(_('click here to let us know'), new_help_request_path),
-                help_site: link_to('www.gcx.org/mpdxhelp/', 'https://www.gcx.org/mpdxhelp/', target: '_blank')} %>
+              help_site: link_to('www.gcx.org/mpdxhelp/', 'https://www.gcx.org/mpdxhelp/', target: '_blank')} %>
       </p>
     </div>
 
