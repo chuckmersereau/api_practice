@@ -11,12 +11,10 @@ class InsightAnalyses
   def increase_recommendation_contacts(designation_number)
     recommends = increase_recommendation_analysis(designation_number)
     contacts_list = []
-    unless recommends.empty?
-      unless recommends['rowset']['Row'].empty?
-        recommends['rowset']['Row'].each { |c, _val|
-          contacts_list.push(c['Column8'])
-        }
-      end
+    if recommends && recommends['rowset']['Row']
+      recommends['rowset']['Row'].each { |c, _val|
+        contacts_list.push(c['Column8'])
+      }
     end
     contacts_list
   end
