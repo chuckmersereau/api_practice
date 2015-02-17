@@ -168,6 +168,7 @@ class Contact < ActiveRecord::Base
   def self.create_from_donor_account(donor_account, account_list)
     contact = account_list.contacts.new(name: donor_account.name)
     contact.addresses_attributes = donor_account.addresses_attributes
+    contact.addresses.each { |a| a.source_donor_account = donor_account }
     contact.save!
     contact.donor_accounts << donor_account
     contact

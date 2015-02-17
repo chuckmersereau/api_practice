@@ -215,10 +215,10 @@ class Siebel < DataServer
         donor.addresses.each do |address|
           next if date_from.present? && DateTime.parse(address.updated_at) < date_from && contact.addresses.present?
 
-          add_or_update_address(address, donor_account)
+          add_or_update_address(address, donor_account, donor_account)
 
           # Make sure the contact has the primary address
-          add_or_update_address(address, contact) if address.primary == true
+          add_or_update_address(address, contact, donor_account) if address.primary == true
         end
       end
 
@@ -311,7 +311,7 @@ class Siebel < DataServer
     [person, contact_person]
   end
 
-  def add_or_update_address(address, object)
+  def add_or_update_address(address, object, source_donor_account)
     new_address = Address.new(street: [address.address1, address.address2, address.address3, address.address4].compact.join("\n"),
                               city: address.city,
                               state: address.state,
@@ -319,7 +319,10 @@ class Siebel < DataServer
                               primary_mailing_address: address.primary,
                               seasonal: address.seasonal,
                               location: address.type,
-                              remote_id: address.id)
+                              remote_id: address.id,
+                              source: 'Siebel',
+                              start_date: parse_date(address.updated_at),
+                              source_donor_account: source_donor_account)
 
     # If we can match it to an existing address, update that address
     object.addresses_including_deleted.each do |a|

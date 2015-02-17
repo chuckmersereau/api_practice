@@ -17,4 +17,15 @@ class AddressExhibit < DisplayCase::Exhibit
   def to_google
     [street, city, state, postal_code, country].select(&:present?).join(', ')
   end
+
+  def user_friendly_source
+    case source
+    when 'DataServer', 'Siebel' then 'Donor system'
+    when 'GoogleImport' then 'Google import'
+    when 'GoogleContactsSync'  then 'Google sync'
+    when 'TntImport'  then 'Tnt import'
+    when Address::MANUAL_SOURCE then  'Manual entry'
+    else source
+    end
+  end
 end
