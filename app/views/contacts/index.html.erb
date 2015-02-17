@@ -22,6 +22,7 @@
   <aside id="leftmenu">
   <ul>
     <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
+    <% if $rollout.active?(:insights, current_account_list) %>
     <li ng-class="{'selected': insightFilterIsActive()}">
       <span class="left_filters menu_item"><%= _('Insights') %></span>
       <p class="collapse" style="text-indent:40px"><a href="" ng-click="runInsight('recommendations')">Increase Recommendations</a></p>
@@ -29,6 +30,7 @@
     <li class="controls" ng-show="insightFilterIsActive()">
       <a href="" ng-click="clearInsightFilter()" class="btn">Clear Insight Filter</a>
     </li>
+    <% end %>
     <li ng-show="!insightFilterIsActive()">
       <span class="left_filters menu_item"><%= _('Filters') %></span>
       <form id="filters_form">
