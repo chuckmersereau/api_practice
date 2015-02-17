@@ -360,7 +360,10 @@ class DataServer
           city: line['CITY'],
           state: line['STATE'],
           postal_code: line['ZIP'],
-          country: line['CNTRY_DESCR']
+          country: line['CNTRY_DESCR'],
+          source: 'DataServer',
+          start_date: parse_date(line['ADDR_CHANGED']),
+          primary_mailing_address: donor_account.addresses.find_by_primary_mailing_address(true).blank?
         }]
       end
       donor_account.save!
@@ -411,6 +414,17 @@ class DataServer
     proc { |exception, _handler, _attempts, _retries, _times|
       @org.update_attributes(url => exception.message)
     }
+  end
+
+  # Data server supports two date formats, try both of those
+  def parse_date(date_str)
+    return if date_str.blank?
+    Date.strptime(date_str, '%m/%d/%Y')
+  rescue ArgumentError
+    begin
+      Date.strptime(date_str, '%Y-%m-%d')
+    rescue ArgumentError
+    end
   end
 end
 

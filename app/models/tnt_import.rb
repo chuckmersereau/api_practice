@@ -469,7 +469,8 @@ class TntImport
         end
       end
       addresses << {  street: street,  city: city,  state: state,  postal_code: postal_code,  country: country,
-        location: location,  region: row['Region'],  primary_mailing_address: primary_address  }
+        location: location,  region: row['Region'],  primary_mailing_address: primary_address,
+        source: 'TntImport'  }
     end
     addresses
   end

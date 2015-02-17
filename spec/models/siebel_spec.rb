@@ -149,14 +149,26 @@ describe Siebel do
   end
 
   context '#import_donors' do
-    it 'imports a new donor from the donor system' do
+    before do
       designation_profile.designation_accounts << da1
 
       stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donors?account_address_filter=primary&contact_email_filter=all&contact_filter=all&contact_phone_filter=all&having_given_to_designations=#{da1.designation_number}&response_timeout=60000")
         .to_return(status: 200, body: '[{"id":"602506447","accountName":"HillsideEvangelicalFreeChurch","type":"Business","updatedAt":"' + Date.today.to_s(:db) + '"}]')
+    end
 
+    it 'imports a new donor from the donor system' do
       siebel.should_receive(:add_or_update_donor_account)
       siebel.should_receive(:add_or_update_company)
+      siebel.import_donors(designation_profile, Date.today)
+    end
+
+    it 'does not error if donor account has multiple primary addresses' do
+      donor_account.update_column(:account_number, '602506447')
+      address1 = create(:address, primary_mailing_address: true)
+      address2 = create(:address)
+      donor_account.addresses << address1
+      donor_account.addresses << address2
+      address2.update_column(:primary_mailing_address, true)
       siebel.import_donors(designation_profile, Date.today)
     end
 
@@ -186,7 +198,8 @@ describe Siebel do
       donor_account = create(:donor_account, organization: org, account_number: siebel_donor.id)
 
       siebel.should_receive(:add_or_update_person)
-      siebel.should_receive(:add_or_update_address).twice
+      expect(siebel).to receive(:add_or_update_address).once.with(anything, donor_account, donor_account)
+      expect(siebel).to receive(:add_or_update_address).once.with(anything, anything, donor_account)
 
       expect {
         siebel.send(:add_or_update_donor_account, account_list, siebel_donor, designation_profile)
@@ -220,7 +233,6 @@ describe Siebel do
 
       donor_account.reload.name.should == siebel_donor.account_name
     end
-
   end
 
   context '#add_or_update_person' do
@@ -302,18 +314,25 @@ describe Siebel do
   end
 
   context '#add_or_update_address' do
-    let(:siebel_address) { SiebelDonations::Address.new(Oj.load('{"id":"1-IQ5-1006","type":"Mailing","primary":true,"seasonal":false,"address1":"1697 } Marabu Way","city":"Fremont","state":"CA","zip":"94539-3683"}')) }
+    let(:siebel_address) { SiebelDonations::Address.new(Oj.load('{"id":"1-IQ5-1006","type":"Mailing","primary":true,"seasonal":false,"address1":"1697 Marabu Way","city":"Fremont","state":"CA","zip":"94539-3683","updated_at":"2014-02-14"}')) }
+    let(:source_donor_account) { create(:donor_account) }
 
     it 'adds a new address' do
       expect {
-        siebel.send(:add_or_update_address, siebel_address, contact)
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       }.to change { Address.count }.by(1)
+
+      expect(contact.addresses.count).to eq(1)
+      address = contact.addresses.first
+      attrs = { street: '1697 Marabu Way', city: 'Fremont', state: 'CA', country: nil, postal_code: '94539-3683',
+                start_date: Date.new(2014, 2, 14), source: 'Siebel' }
+      expect(address.attributes.symbolize_keys.slice(*attrs.keys)).to eq(attrs)
     end
 
     it 'updates an existing address' do
       address = create(:address, addressable: contact, remote_id: siebel_address.id)
       expect {
-        siebel.send(:add_or_update_address, siebel_address, contact)
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       }.not_to change { Address.count }
 
       address.reload.postal_code.should == siebel_address.zip
@@ -322,17 +341,22 @@ describe Siebel do
     it 'raises an error if the address is invalid' do
       siebel_address = SiebelDonations::Address.new(Oj.load('{"id":"1-IQ5-1006","type":"BAD_TYPE"}'))
       expect {
-        siebel.send(:add_or_update_address, siebel_address, contact)
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       }.to raise_exception
     end
 
     it "doesn't add a new address when there is a matching deleted address" do
       create(:address, addressable: contact, street: siebel_address.address1, city: siebel_address.city,
-                       state: siebel_address.state, postal_code: siebel_address.zip, deleted: true)
+             state: siebel_address.state, postal_code: siebel_address.zip, deleted: true)
       expect {
-        siebel.send(:add_or_update_address, siebel_address, contact)
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       }.not_to change { Address.count }
+    end
 
+    it 'sets the source donor account' do
+      source_donor_account = create(:donor_account)
+      siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      expect(contact.addresses.first.source_donor_account).to eq(source_donor_account)
     end
   end
 

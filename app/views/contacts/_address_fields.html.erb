@@ -20,6 +20,12 @@
     <%= builder.text_field :metro_area, placeholder: "Metro Area" %>
     <%= builder.label :country %>
     <%= builder.country_select :country, nil, {include_blank: true}, {class: 'country_select'} %><br/>
+
+    <div>
+      <%= builder.object.start_date ? _('Updated: ') + l(builder.object.start_date, format: :short) + '.' : '' %>
+      <%= builder.object.source ? _('Source: ') + _(exhibit(builder.object, self).user_friendly_source) : '' %>
+    </div>
+
     <div class="field_action">
         <%= builder.check_box :historic, class: 'address_historic' %>
         <%= builder.label :historic, "Address no longer valid" %>
