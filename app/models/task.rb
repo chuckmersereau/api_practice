@@ -109,16 +109,15 @@ class Task < Activity
 
   PRAYER_REQUEST_RESULTS = %w(Completed)
   PRAYER_REQUEST_NEXT_ACTIONS = ['Prayer Request Again',
-                                    'Call', 'Email', 'Message', 'Text',
-                                    'Appointment Scheduled',
-                                    'Partner - Financial',
-                                    'Partner - Special',
-                                    'Partner - Pray',
-                                    'Ask in Future',
-                                    'Not Interested',
-                                    'None',
-                                    'Talk to In Person']
-
+                                 'Call', 'Email', 'Message', 'Text',
+                                 'Appointment Scheduled',
+                                 'Partner - Financial',
+                                 'Partner - Special',
+                                 'Partner - Pray',
+                                 'Ask in Future',
+                                 'Not Interested',
+                                 'None',
+                                 'Talk to In Person']
 
   MESSAGE_RESULTS = [_('Done'), _('Received')]
   STANDARD_RESULTS = [_('Done')]
