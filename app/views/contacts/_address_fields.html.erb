@@ -6,6 +6,14 @@
   </div>
   <div class="rs">
 
+    <% if builder.object.remote_id.present? %>
+      <%= _('From donor system.') %>
+      <%= link_to_gmail_compose(_('Email donor services to change'), target: '_blank',
+                                to: 'Cru Donation Services <donation.services@cru.org>', subject: 'Donor address change',
+                                body: exhibit(builder.object, self).address_change_email_body + current_user.first_name.to_s) %>
+      <input type="hidden" class="address_remotely_managed">
+    <% end %>
+
     <%= builder.label :street %>
     <%= builder.text_area :street, rows: 3, placeholder: "Street address" %>
     <%= builder.label :city %>
@@ -15,9 +23,9 @@
     <%= builder.label :postal_code %>
     <%= builder.text_field :postal_code, placeholder: "Postal Code" %>
     <%= builder.label :region %>
-    <%= builder.text_field :region, placeholder: "Region" %>
+    <%= builder.text_field :region, placeholder: "Region", class: 'address_region' %>
     <%= builder.label :metro_area %>
-    <%= builder.text_field :metro_area, placeholder: "Metro Area" %>
+    <%= builder.text_field :metro_area, placeholder: "Metro Area", class: 'address_metro_area' %>
     <%= builder.label :country %>
     <%= builder.country_select :country, nil, {include_blank: true}, {class: 'country_select'} %><br/>
 

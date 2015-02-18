@@ -127,12 +127,13 @@ describe Contact do
     end
 
     it "should copy the donor account's addresses" do
-      create(:address, addressable: @donor_account)
+      create(:address, addressable: @donor_account, remote_id: '1')
       expect {
         @contact = Contact.create_from_donor_account(@donor_account, @account_list)
       }.to change(Address, :count)
       @contact.addresses.first.equal_to?(@donor_account.addresses.first).should be_true
       expect(@contact.addresses.first.source_donor_account).to eq(@donor_account)
+      expect(@contact.addresses.first.remote_id).to eq('1')
     end
 
   end
