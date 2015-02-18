@@ -75,8 +75,7 @@ angular.module('mpdxApp')
                        strContains(taskResult, 'Email Again') ||
                        strContains(taskResult, 'Message Again') ||
                        strContains(taskResult, 'Text Again') ||
-                       strContains(taskResult, 'Talk to In Person Again') ||
-                       strContains(taskResult, 'Prayer Request Again')){
+                       strContains(taskResult, 'Talk to In Person Again')){
 
                         //generic followup task type
                         var taskType;
@@ -107,8 +106,6 @@ angular.module('mpdxApp')
                             taskType = 'Text Message';
                         }else if(strContains(taskResult, 'Talk to In Person Again')) {
                             taskType = 'Talk to In Person';
-                        }else if(strContains(taskResult, 'Prayer Request Again')) {
-                            taskType = 'Prayer Request';
                         }
 
                         $scope.followUpDialogData = {

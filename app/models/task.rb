@@ -108,7 +108,7 @@ class Task < Activity
                                     'Prayer Request']
 
   PRAYER_REQUEST_RESULTS = %w(Completed)
-  PRAYER_REQUEST_NEXT_ACTIONS = ['Prayer Request Again',
+  PRAYER_REQUEST_NEXT_ACTIONS = ['Prayer Request',
                                  'Call', 'Email', 'Message', 'Text',
                                  'Appointment Scheduled',
                                  'Partner - Financial',
