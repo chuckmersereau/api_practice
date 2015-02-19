@@ -44,6 +44,10 @@ angular.module('mpdxApp')
                     $scope.completeResultOptions = railsConstants.task.TALK_TO_IN_PERSON_RESULTS;
                     $scope.completeActionOptions = railsConstants.task.TALK_TO_IN_PERSON_NEXT_ACTIONS;
 
+                }else if($scope.task.activity_type === 'Prayer Request') {
+                    $scope.completeResultOptions = railsConstants.task.PRAYER_REQUEST_RESULTS;
+                    $scope.completeActionOptions = railsConstants.task.PRAYER_REQUEST_NEXT_ACTIONS;
+
                 }else if($scope.task.activity_type === 'Letter') {
                     $scope.completeResultOptions = railsConstants.task.MESSAGE_RESULTS;
 
