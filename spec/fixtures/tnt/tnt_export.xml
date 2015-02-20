@@ -101,7 +101,7 @@ Has run into issues with Campus Crusade in the past...  Was told couldn&apos;t b
         <ReferredByList>Bob and Dawn Doe</ReferredByList>
         <MPDPhaseID>80</MPDPhaseID>
         <NextAsk>1899-12-30</NextAsk>
-        <NeverAsk>false</NeverAsk>
+        <NeverAsk>true</NeverAsk>
         <LikelyToGiveID>0</LikelyToGiveID>
         <ChurchName>PLRBC</ChurchName>
         <SendNewsletter>true</SendNewsletter>

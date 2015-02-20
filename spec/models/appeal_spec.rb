@@ -16,6 +16,15 @@ describe Appeal do
     end
   end
 
+  context '#bulk_add_contacts' do
+    it 'bulk adds the contacts but removes duplicates first' do
+      contact2 = create(:contact)
+      expect {
+        appeal.bulk_add_contacts([contact, contact, contact2])
+      }.to change(appeal.contacts, :count).from(0).to(2)
+    end
+  end
+
   context '#contacts_by_opts' do
     let(:donor_account) { create(:donor_account) }
     let(:donation) { create(:donation, donor_account: donor_account) }
