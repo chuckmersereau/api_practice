@@ -43,9 +43,6 @@ describe 'Task Followup Dialog', type: :feature, js: true do
       sleep(2)
     }.to change(contact.tasks, :count).by(1)
     expect(contact.tasks.where(activity_type: 'Call').last.tag_list.first).to include 'test'
-
-    # this is needed to keep the server alive so the js api can reach it
-    save_screenshot(nil)
   end
 
   it 'creates followup task for Appointment' do
@@ -66,7 +63,6 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     call_task = contact.tasks.where(completed: false, activity_type: 'Call').first
     expect(call_task.start_at).to be < (DateTime.now + 2.days)
     expect(contact.reload.status).to eq 'Appointment Scheduled'
-    save_screenshot(nil)
   end
 
   it 'adds Partner - Financial commitment' do
@@ -89,7 +85,6 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     expect(contact.send_newsletter).to eq 'Both'
     expect(contact.pledge_amount).to eq 100
     expect(contact.pledge_frequency.to_i).to eq 2
-    save_screenshot(nil)
   end
 
   it 'updates Contact when Not Interested' do
@@ -100,6 +95,5 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     end
     sleep(2)
     expect(contact.reload.status).to eq 'Not Interested'
-    save_screenshot(nil)
   end
 end

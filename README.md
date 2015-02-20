@@ -47,6 +47,15 @@ $ bundle exec rake db:migrate
 $ bundle exec rails s
 ```
 
+### Testing
+
+There are four different test sets that we are running:
+
+- Regular RSpec: `rspec spec/`
+- Poltergeist specs: `rspec spec/ --tag js`
+- Karma: `rake karma:run`
+- Rubocop: `rubocop -R`
+
 ## Local development VM via Vagrant
 
 To setup a virtual machine with all of the MPDX dependencies install
