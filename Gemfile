@@ -1,6 +1,8 @@
 source 'http://rubygems.org'
 source 'https://gems.contribsys.com/' do
-  gem 'sidekiq-pro'
+  group :production do
+    gem 'sidekiq-pro'
+  end
 end
 
 gem 'rails', '~> 4.1.0'
@@ -108,6 +110,7 @@ group :development do
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
+  gem 'sidekiq'
 end
 
 group :development, :test do
