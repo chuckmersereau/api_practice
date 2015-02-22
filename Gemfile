@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
-source 'https://fe25782d:2b14c6ee@gems.contribsys.com/'
+source 'https://gems.contribsys.com/' do
+  gem 'sidekiq-pro'
+end
 
 gem 'rails', '~> 4.1.0'
 
@@ -74,7 +76,6 @@ gem 'rollout', '~> 2.0.0'
 gem 'ruby-rtf'
 gem 'savon', '~> 2.3.0'
 gem 'secure_headers'
-gem 'sidekiq-pro'
 gem 'sidekiq-unique-jobs'
 gem 'siebel_donations', '~> 1.0.5'
 gem 'sinatra', require: nil
