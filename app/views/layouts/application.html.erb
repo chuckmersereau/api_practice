@@ -106,27 +106,32 @@
                 <div class="col-md-4 col-sm-4">
                   <div class="text-right navbar-quick">
 
-                    <div class="dropdown">
-                      <a class="dropdown-toggle btn btn-secondary" href="#" type="button" id="quick-drop" data-toggle="dropdown" aria-expanded="true" data-disabled="true">
-                        <i class="fa fa-plus-circle"></i> Quick Add
-                      </a>
-                      <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="quick-drop">
-                        <li role="presentation"><%= link_to(_('Add Task'), new_task_path, id: 'add_task_button', class: 'add_task', remote: true) %></li>
-                        <li role="presentation"><%= link_to(_('Add Contact'), new_contact_path, class: '') %></li>
-                      </ul>
-                    </div>
-
-
-                  </div>
-                  <div>
-                    <%= @account_list_exhibit.balances(current_user) %>
-                  </div>
-                </div>
-
-              </div><!-- row -->
-            </div><!-- container-luid -->
-          </nav>
-
+        <div class="section"><%= link_to(_('Settings'), "/preferences", :class => "") %></div>
+        <div class="section"><%= link_to(_('Log out'), '/logout', :class => "") %></div>
+      </div>
+    </div>
+    </hgroup>
+    <hgroup id="menu">
+    <div id="mainmenu">
+      <div class="outer">
+        <div class="item <%= request.path == '/' ? 'active' : '' %>"><%= link_to(_('Dashboard'), "/") %></div>
+        <div class="item <%= request.path =~ /\/contacts/ ? 'active' : '' %>"><%= link_to(_('Contacts'), "/contacts") %></div>
+        <!-- <div class="item <%= request.path =~ /\/messages/ ? 'active' : '' %>"><%= link_to((_('Messages') + ' ' + content_tag(:span, 3, class: 'indicator')).html_safe, '') %></div> -->
+        <div class="item <%= request.path =~ /\/tasks/ ? 'active' : '' %>"><%= link_to(_('Tasks'), "/tasks/") %></div>
+        <div class="item <%= request.path =~ /\/donations/ ? 'active' : '' %>"><%= link_to(_('Donations'), "/donations") %></div>
+        <% if $rollout.active?(:research, current_account_list) %>
+          <div class="item <%= request.path =~ /\/research/ ? 'active' : '' %>"><%= link_to(_('Research'), "/research") %></div>
+        <% end %>
+        <% if $rollout.active?(:insights, current_account_list) %>
+            <div class="item <%= request.path =~ /\/insights/ ? 'active' : '' %>"><%= link_to(_('Insights'), "/insights") %></div>
+        <% end %>
+        <div class="item last"><%= link_to(_('Help'), new_help_request_path, target: '_blank') %></div>
+        <!-- <div class="item last <%= request.path =~ /\/social/ ? 'active' : '' %>"><%= link_to(_('Social'), "") %></div> -->
+        <div class="item search">
+          <form method="get" action="/contacts" id="searchform">
+            <input type="text" class="searchfield" name="q" id="globalContactSearch" autocomplete="off" placeholder="<%= _('Search contacts...') %>" value="<%= request.GET["q"] %>" />
+            <button type="submit">Search</button>
+          </form>
         </div>
         <div id="submenu">
           <div class="container">
@@ -175,7 +180,7 @@
       <h2><%= _('Need Help?') %></h2>
       <p><%== _("Check out %{help_site} for training videos and FAQs. If you can't find the answer you need there or need to report a bug, %{link}").localize %
                {link: link_to(_('click here to let us know'), new_help_request_path),
-                help_site: link_to('www.gcx.org/mpdxhelp/', 'https://www.gcx.org/mpdxhelp/', target: '_blank')} %>
+              help_site: link_to('www.gcx.org/mpdxhelp/', 'https://www.gcx.org/mpdxhelp/', target: '_blank')} %>
       </p>
     </div>
 

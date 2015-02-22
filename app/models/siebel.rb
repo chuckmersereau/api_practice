@@ -215,10 +215,10 @@ class Siebel < DataServer
         donor.addresses.each do |address|
           next if date_from.present? && DateTime.parse(address.updated_at) < date_from && contact.addresses.present?
 
-          add_or_update_address(address, donor_account)
+          add_or_update_address(address, donor_account, donor_account)
 
           # Make sure the contact has the primary address
-          add_or_update_address(address, contact) if address.primary == true
+          add_or_update_address(address, contact, donor_account) if address.primary == true
         end
       end
 
@@ -311,30 +311,55 @@ class Siebel < DataServer
     [person, contact_person]
   end
 
-  def add_or_update_address(address, object)
-    new_address = Address.new(street: [address.address1, address.address2, address.address3, address.address4].compact.join("\n"),
-                              city: address.city,
-                              state: address.state,
-                              postal_code: address.zip,
-                              primary_mailing_address: address.primary,
-                              seasonal: address.seasonal,
-                              location: address.type,
-                              remote_id: address.id)
+  def add_or_update_address(address, object, source_donor_account)
+    new_address = new_address_from_siebel(address, object, source_donor_account)
 
-    # If we can match it to an existing address, update that address
-    object.addresses_including_deleted.each do |a|
-      next unless a.remote_id == new_address.remote_id || a.equal_to?(new_address)
-      a.update_attributes(new_address.attributes.select { |_k, v| v.present? })
-      return a
+    place_match = object.addresses_including_deleted.find { |a| a.equal_to?(new_address) }
+    remote_id_match = object.addresses_including_deleted.find { |a| a.remote_id == new_address.remote_id }
+
+    address_to_update = place_match || remote_id_match
+
+    # If Siebel always generates a new remote id for changed addresses, this isn't really needed, but in case
+    # they sometimes use the same remote id for a new address, we should disconnecte the old address from the
+    # remote id and attach it to the manually added / imported address (place_match) that matches the Siebel one.
+    remote_id_match.update(remote_id: nil) if remote_id_match && place_match && place_match != remote_id_match
+
+    if address_to_update
+      address_to_update.update_attributes(new_address.attributes.select { |_k, v| v.present? })
+    else
+      object.addresses << new_address
     end
 
-    # We didn't find a match. save it as a new address
-    object.addresses << new_address
     begin
       object.save!
     rescue ActiveRecord::RecordInvalid => e
       raise e.message + " - #{address.inspect}"
     end
+  end
+
+  def new_address_from_siebel(address, object, source_donor_account)
+    current_primary = object.addresses.find_by(primary_mailing_address: true)
+    make_primary = current_primary.blank? || (address.primary && current_primary.source == 'Siebel' &&
+      source_donor_account.present? && current_primary.source_donor_account == source_donor_account)
+
+    object.addresses.each { |a| a.primary_mailing_address = false } if current_primary.present? && make_primary
+
+    new_address = Address.new(street: [address.address1, address.address2, address.address3, address.address4].compact.join("\n"),
+                              city: address.city,
+                              state: address.state,
+                              postal_code: address.zip,
+                              primary_mailing_address: make_primary,
+                              seasonal: address.seasonal,
+                              location: address.type,
+                              remote_id: address.id,
+                              source: 'Siebel',
+                              start_date: parse_date(address.updated_at),
+                              source_donor_account: source_donor_account)
+
+    # Set the master address so we can match by the same address formatted differently
+    new_address.find_or_create_master_address
+
+    new_address
   end
 
   def add_or_update_phone_number(phone_number, person)

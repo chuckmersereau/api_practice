@@ -1,0 +1,75 @@
+
+<% if @recommnds %>
+    <table class="tablelist donations" id="recurringGiftsDataTable">
+      <thead>
+      <tr>
+        <th width="21%"><%= _('Account Name') %></th>
+        <th><%= _('Current Gift') %></th>
+        <th><%= _('Suggested Increase Amount') %></th>
+        <th><%= _('Max Increase Amount') %></th>
+        <th><%= _('Next Suggested Increase') %></th>
+        <th><%= _('Last Change') %></th>
+        <th width="7%"><%= _('Gift Range') %></th>
+        <th><%= _('Zip') %></th>
+        <th><%= _('Household Income Range by Zip') %></th>
+        <th><%= _('Avg Household Income by Zip') %><sub>+</sub></th>
+      </tr>
+      </thead>
+      <tbody id="increaseTBody">
+      <% @recommnds.each do |c| %>
+
+          <% recurr_contact_id = current_account_list.contacts.joins(:donor_accounts).where(donor_accounts: {account_number: c["Column8"]}).pluck('"contacts"."id"')[0].to_s %>
+
+          <% if @recurring_recommnds.where(account_list_id: current_account_list.id, contact_id: recurr_contact_id).empty? || recurr_contact_id.empty? %>
+
+              <tr class="<%= recurr_contact_id %>"  data-id="<%= recurr_contact_id %>"   >
+                <td width="auto" ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
+                <td class="donations">$<%= c["Column1"] %></td>
+                <td style="text-align:center">$<%= c["Column13"] %></td>
+                <td style="text-align:center">$<%= c["Column14"] %></td>
+                <td id="nextAskYearMonth"><%= c["Column15"] %></td>
+                <td class="date"><%= c["Column10"] %></td>
+                <td width="Auto"><%= c["Column5"] %></td>
+                <td><%= c["Column12"] %></td>
+                <td style="text-align:center"  ><%= c["Column6"] %></td>
+                <td style="text-align:center">$<%= c["Column2"] %></td>
+              </tr>
+              <tr  class="<%= recurr_contact_id %>" style="display: none;background-color: #D6ECF2" data-id="<%= recurr_contact_id %>" >
+                <td width="auto"  ><%= link_to(c["Column16"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
+                <td colspan="5" >
+                  <select id="sresult_<%=recurr_contact_id %>" name="sresult_<%=recurr_contact_id %>" >
+                    <option></option>
+                    <option ><%=_('Contacted - No descision yet')%></option>
+                    <option ><%=_('Contacted - Received an Increase')%></option>
+                    <option><%=_('Contacted - No increase at this time. Will re-attempt in the future.')%></option>
+                    <option><%=_('Contacted - Not possible at all. Will not re-attempt')%></option>
+                    <option><%=_('Did not contact')%></option>
+                  </select>
+                 &nbsp;&nbsp;&nbsp;
+                </td>
+                <td id="btn">
+                  <%= link_to(_('Submit'), insights_path, class: 'btn smallbtn' ) %>
+                </td>
+                <td colspan="4">
+                  <%= _('Double click to cancel.') %>
+                </td>
+              </tr>
+
+          <% end %>
+      <% end %>
+
+      </tbody>
+    </table>
+
+    <p>
+      <small>
+        <p align="left" position="bottom">+&nbsp;<cite><%= _('US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/') %></cite>
+        </p></small>
+    </p>
+<% else %>
+    <div class="mwrap">
+      <div class="nohide floating" style="background-color: #FDFFD4;">You have no monthly recurring gift
+        recommendations.
+      </div>
+    </div>
+<% end %>

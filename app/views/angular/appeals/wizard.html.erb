@@ -14,11 +14,24 @@
                     <input autofocus="autofocus" type="text" ng-model="appeal.name">
                 </div>
 
-                <div class="field">
-                    <label><%= _('Goal') %></label>
-                    <input type="text" ng-model="appeal.amount">
+                <div class="field" style="display:inline-block;">
+                  <label><%= _('Initial goal') %></label>
+                  <input type="text" ng-model="goal.initial" ng-change="calculateGoal(goal)" style="width:80px;"> +
                 </div>
-
+                <div class="field" style="display:inline-block;">
+                  <label><%= _('Letter cost') %></label>
+                  <input type="text" ng-model="goal.letterCost" ng-change="calculateGoal(goal)" style="width:80px;"> *
+                </div>
+                <div class="field" style="display:inline-block;">
+                  <label><%= _('Admin percent') %></label>
+                  <input type="text" ng-model="goal.adminPercent" ng-change="calculateGoal(goal)" style="width:80px;">
+                  =
+                </div>
+                <div class="field" style="display:inline-block;">
+                  <label><%= _('Goal') %></label>
+                  <input type="text" ng-model="appeal.amount" style="width:80px;">
+                </div>
+              <div style="clear:both; height:10px;"></div>
                 <div class="field appealFilterCol">
                     <label><%= _('Add contacts with the following status(es):') %></label>
                     <div style="margin-top: 5px;" ng-repeat="status in contactStatuses">
@@ -31,6 +44,24 @@
                     <label><input type="checkbox" ng-model="appeal.validTags[tag]"> {{tag}}</label>
                   </div>
                 </div>
+              <div class="field appealFilterCol">
+                <label><%= _('Do not add contacts who:') %></label>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['specialGift3months']"> <%= _('Gave a special gift in the last 3 months') %></label>
+                </div>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['joinedTeam3months']"> <%= _('Joined my team in the last 3 months') %></label>
+                </div>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['increasedGiving3months']"> <%= _('Increased their giving in the last 3 months') %></label>
+                </div>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['stoppedGiving2months']"> <%= _('Stopped giving for the last 2 months') %></label>
+                </div>
+                <div style="margin-top: 5px;">
+                  <label><input type="checkbox" ng-model="appeal.exclude['doNotAskAppeals']"> <%= _('Are marked as do not ask for appeals') %></label>
+                </div>
+              </div>
             </div>
             <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
                 <div class="ui-dialog-buttonset">

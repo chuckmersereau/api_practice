@@ -306,6 +306,8 @@ $.mpdx.getTaskResultOptions = (activity_type) ->
       return <%= Task::TEXT_RESULTS %>.join()
     when 'Talk to In Person'
       return <%= Task::TALK_TO_IN_PERSON_RESULTS %>.join()
+    when 'Prayer Request'
+      return <%= Task::PRAYER_REQUEST_RESULTS %>.join()
     when 'Letter'
       return <%= Task::MESSAGE_RESULTS %>.join()
     else
@@ -326,6 +328,8 @@ $.mpdx.getTaskNextActionOptions = (activity_type) ->
       return <%= Task::TEXT_NEXT_ACTIONS %>.join()
     when 'Talk to In Person'
       return <%= Task::TALK_TO_IN_PERSON_NEXT_ACTIONS %>.join()
+    when 'Prayer Request'
+      return <%= Task::PRAYER_REQUEST_NEXT_ACTIONS %>.join()
     else
       return 'None'
   end

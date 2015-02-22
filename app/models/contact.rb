@@ -43,7 +43,7 @@ class Contact < ActiveRecord::Base
 
   PERMITTED_ATTRIBUTES = [
     :name, :pledge_amount, :status, :notes, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
-    :pledge_start_date, :next_ask, :never_ask, :likely_to_give, :church_name, :send_newsletter,
+    :pledge_start_date, :next_ask, :never_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :user_changed,
     :direct_deposit, :magazine, :pledge_received, :not_duplicated_with, :tag_list, :primary_person_id, :timezone,
     {
       contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
@@ -58,12 +58,13 @@ class Contact < ActiveRecord::Base
 
   MERGE_COPY_ATTRIBUTES = [
     :name, :pledge_amount, :status, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
-    :pledge_start_date, :next_ask, :never_ask, :likely_to_give, :church_name, :send_newsletter,
+    :pledge_start_date, :next_ask, :never_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals,
     :direct_deposit, :magazine, :pledge_received, :timezone, :last_activity, :last_appointment, :last_letter,
     :last_phone_call, :last_pre_call, :last_thank, :prayer_letters_id, :last_donation_date, :first_donation_date, :tnt_id
   ]
 
   validates :name, presence: true
+  validates :addresses, single_primary: { primary_field: :primary_mailing_address }, if: :user_changed
 
   accepts_nested_attributes_for :people, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :donor_accounts, reject_if: :all_blank, allow_destroy: true
@@ -73,6 +74,8 @@ class Contact < ActiveRecord::Base
   before_save :set_notes_saved_at
   after_commit :sync_with_mail_chimp, :sync_with_prayer_letters, :sync_with_google_contacts
   before_destroy :delete_from_prayer_letters, :delete_people
+
+  attr_accessor :user_changed
 
   assignable_values_for :status, allow_blank: true do
     # Don't change these willy-nilly, they break the mobile app
@@ -165,6 +168,7 @@ class Contact < ActiveRecord::Base
   def self.create_from_donor_account(donor_account, account_list)
     contact = account_list.contacts.new(name: donor_account.name)
     contact.addresses_attributes = donor_account.addresses_attributes
+    contact.addresses.each { |a| a.source_donor_account = donor_account }
     contact.save!
     contact.donor_accounts << donor_account
     contact

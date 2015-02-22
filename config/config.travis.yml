@@ -12,3 +12,6 @@ test:
   s3_secret: asdf
   s3_bucket: asdf
   itg_auth_key: asdf
+  obiee_key: asdf
+  obiee_secret: asdf
+  obiee_base_url: asdf

@@ -1,5 +1,7 @@
 source 'http://rubygems.org'
-source 'https://fe25782d:2b14c6ee@gems.contribsys.com/'
+source 'https://gems.contribsys.com/' do
+  gem 'sidekiq-pro'
+end
 
 gem 'rails', '~> 4.1.0'
 
@@ -25,6 +27,7 @@ gem 'best_in_place', '~> 3.0.1'
 
 #gem 'activeadmin'
 gem 'active_model_serializers', '~> 0.8.1'
+gem 'activerecord-import', '~> 0.7.0'
 gem 'acts-as-taggable-on', '~> 3.0.0'
 gem 'airbrake' #, '~> 3.1.6'
 gem 'assignable_values', '~> 0.5.3'
@@ -71,8 +74,8 @@ gem 'rest-client', '~> 1.6.7'
 gem 'retryable-rb', '~> 1.1.0'
 gem 'rollout', '~> 2.0.0'
 gem 'ruby-rtf'
+gem 'savon', '~> 2.3.0'
 gem 'secure_headers'
-gem 'sidekiq-pro'
 gem 'sidekiq-unique-jobs'
 gem 'siebel_donations', '~> 1.0.5'
 gem 'sinatra', require: nil
@@ -133,6 +136,7 @@ group :test do
   gem 'rb-fsevent', require: false
   gem 'growl'
   gem 'capybara'
+  gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
   gem 'rubocop'

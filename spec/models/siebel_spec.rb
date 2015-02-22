@@ -149,14 +149,26 @@ describe Siebel do
   end
 
   context '#import_donors' do
-    it 'imports a new donor from the donor system' do
+    before do
       designation_profile.designation_accounts << da1
 
       stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donors?account_address_filter=primary&contact_email_filter=all&contact_filter=all&contact_phone_filter=all&having_given_to_designations=#{da1.designation_number}&response_timeout=60000")
         .to_return(status: 200, body: '[{"id":"602506447","accountName":"HillsideEvangelicalFreeChurch","type":"Business","updatedAt":"' + Date.today.to_s(:db) + '"}]')
+    end
 
+    it 'imports a new donor from the donor system' do
       siebel.should_receive(:add_or_update_donor_account)
       siebel.should_receive(:add_or_update_company)
+      siebel.import_donors(designation_profile, Date.today)
+    end
+
+    it 'does not error if donor account has multiple primary addresses' do
+      donor_account.update_column(:account_number, '602506447')
+      address1 = create(:address, primary_mailing_address: true)
+      address2 = create(:address)
+      donor_account.addresses << address1
+      donor_account.addresses << address2
+      address2.update_column(:primary_mailing_address, true)
       siebel.import_donors(designation_profile, Date.today)
     end
 
@@ -186,7 +198,8 @@ describe Siebel do
       donor_account = create(:donor_account, organization: org, account_number: siebel_donor.id)
 
       siebel.should_receive(:add_or_update_person)
-      siebel.should_receive(:add_or_update_address).twice
+      expect(siebel).to receive(:add_or_update_address).once.with(anything, donor_account, donor_account)
+      expect(siebel).to receive(:add_or_update_address).once.with(anything, anything, donor_account)
 
       expect {
         siebel.send(:add_or_update_donor_account, account_list, siebel_donor, designation_profile)
@@ -220,7 +233,6 @@ describe Siebel do
 
       donor_account.reload.name.should == siebel_donor.account_name
     end
-
   end
 
   context '#add_or_update_person' do
@@ -302,18 +314,25 @@ describe Siebel do
   end
 
   context '#add_or_update_address' do
-    let(:siebel_address) { SiebelDonations::Address.new(Oj.load('{"id":"1-IQ5-1006","type":"Mailing","primary":true,"seasonal":false,"address1":"1697 } Marabu Way","city":"Fremont","state":"CA","zip":"94539-3683"}')) }
+    let(:siebel_address) { SiebelDonations::Address.new(Oj.load('{"id":"1-IQ5-1006","type":"Mailing","primary":true,"seasonal":false,"address1":"1697 Marabu Way","city":"Fremont","state":"CA","zip":"94539-3683","updated_at":"2014-02-14"}')) }
+    let(:source_donor_account) { create(:donor_account) }
 
     it 'adds a new address' do
       expect {
-        siebel.send(:add_or_update_address, siebel_address, contact)
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       }.to change { Address.count }.by(1)
+
+      expect(contact.addresses.count).to eq(1)
+      address = contact.addresses.first
+      attrs = { street: '1697 Marabu Way', city: 'Fremont', state: 'CA', country: nil, postal_code: '94539-3683',
+                start_date: Date.new(2014, 2, 14), source: 'Siebel' }
+      expect(address.attributes.symbolize_keys.slice(*attrs.keys)).to eq(attrs)
     end
 
     it 'updates an existing address' do
       address = create(:address, addressable: contact, remote_id: siebel_address.id)
       expect {
-        siebel.send(:add_or_update_address, siebel_address, contact)
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       }.not_to change { Address.count }
 
       address.reload.postal_code.should == siebel_address.zip
@@ -322,17 +341,123 @@ describe Siebel do
     it 'raises an error if the address is invalid' do
       siebel_address = SiebelDonations::Address.new(Oj.load('{"id":"1-IQ5-1006","type":"BAD_TYPE"}'))
       expect {
-        siebel.send(:add_or_update_address, siebel_address, contact)
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       }.to raise_exception
     end
 
     it "doesn't add a new address when there is a matching deleted address" do
       create(:address, addressable: contact, street: siebel_address.address1, city: siebel_address.city,
-                       state: siebel_address.state, postal_code: siebel_address.zip, deleted: true)
+             state: siebel_address.state, postal_code: siebel_address.zip, deleted: true)
       expect {
-        siebel.send(:add_or_update_address, siebel_address, contact)
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       }.not_to change { Address.count }
+    end
 
+    it 'sets the source donor account' do
+      source_donor_account = create(:donor_account)
+      siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      expect(contact.addresses.first.source_donor_account).to eq(source_donor_account)
+    end
+
+    it 'sets the address as primary if none are marked primary' do
+      contact.addresses << create(:address, historic: true, primary_mailing_address: false)
+      expect {
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      }.to change(Address, :count).from(1).to(2)
+      expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_true
+    end
+
+    it 'does not set the address as primary if a non-matching non-Siebel address is primary' do
+      manual_address = create(:address, primary_mailing_address: true, source: Address::MANUAL_SOURCE)
+      contact.addresses << manual_address
+      expect {
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      }.to change(Address, :count).from(1).to(2)
+      expect(manual_address.primary_mailing_address).to be_true
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
+    end
+
+    it 'sets the address as primary if a Siebel address from the same donor account is primary' do
+      donor_account = create(:donor_account)
+      contact.addresses << create(:address, primary_mailing_address: true, source: 'Siebel',
+                                  source_donor_account: donor_account)
+      expect {
+        siebel.send(:add_or_update_address, siebel_address, contact, donor_account)
+      }.to change(Address, :count).from(1).to(2)
+      expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_true
+    end
+
+    it 'does not make address primary if a non-matching Siebel address from a different donor account is primary' do
+      donor_account1 = create(:donor_account)
+      donor_account2 = create(:donor_account)
+      contact.addresses << create(:address, primary_mailing_address: true, source: 'Siebel',
+                                  source_donor_account: donor_account1)
+      expect {
+        siebel.send(:add_or_update_address, siebel_address, contact, donor_account2)
+      }.to change(Address, :count).from(1).to(2)
+      expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
+    end
+
+    def stub_siebel_address_smarty
+      address_smarty = '[{"delivery_line_1":"1697 Marabu Way","components":{"city_name":"Fremont",'\
+        '"state_abbreviation":"CA","zipcode":"94539","plus4_code":"3683"}}]'
+      stub_request(:get, %r{https://api\.smartystreets\.com/.*}).to_return(body: address_smarty)
+    end
+
+    it 'matches and updates an address with the same master but different formatting' do
+      stub_siebel_address_smarty
+
+      contact.addresses << create(:address, primary_mailing_address: true, master_address: nil,
+                                  street: '1697 Marabu', city: 'Fremont', state: 'CA', postal_code: '94539')
+
+      expect {
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      }.to_not change(Address, :count).from(1)
+
+      address = contact.addresses.first
+      expect(address.street).to eq('1697 Marabu Way')
+      expect(address.postal_code).to eq('94539-3683')
+      expect(address.primary_mailing_address).to be_true
+      expect(address.source).to eq('Siebel')
+      expect(address.remote_id).to_not be_nil
+      expect(address.source_donor_account).to eq(source_donor_account)
+      expect(address.start_date).to eq(Date.new(2014, 2, 14))
+    end
+
+    it 'prefers match by place and disconnects remote id of old address now points to new place' do
+      stub_siebel_address_smarty
+
+      new_manual_address = create(:address, primary_mailing_address: true, master_address: nil,
+                                      street: '1697 Marabu', city: 'Fremont', state: 'CA', postal_code: '94539',
+                                      source: 'Manual', start_date: Date.new(2014, 1, 1), remote_id: nil)
+
+      old_remote_address = create(:address, primary_mailing_address: false, remote_id: '1-IQ5-1006')
+
+      contact.addresses << new_manual_address
+      contact.addresses << old_remote_address
+
+      expect {
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      }.to_not change(Address, :count).from(2)
+
+      expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
+
+      new_manual_address.reload
+      expect(new_manual_address.street).to eq('1697 Marabu Way')
+      expect(new_manual_address.postal_code).to eq('94539-3683')
+      expect(new_manual_address.primary_mailing_address).to be_true
+      expect(new_manual_address.source).to eq('Siebel')
+      expect(new_manual_address.remote_id).to eq('1-IQ5-1006')
+      expect(new_manual_address.source_donor_account).to eq(source_donor_account)
+      expect(new_manual_address.start_date).to eq(Date.new(2014, 2, 14))
+      expect(new_manual_address.primary_mailing_address).to be_true
+
+      old_remote_address.reload
+      expect(old_remote_address.primary_mailing_address).to be_false
+      expect(old_remote_address.remote_id).to be_nil
     end
   end
 

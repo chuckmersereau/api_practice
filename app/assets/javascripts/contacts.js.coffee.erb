@@ -365,13 +365,24 @@ $ ->
         $('input[type=checkbox].primary', fieldset).prop('checked',false)
         $(this).prop('checked', true)
 
+    $(document).on 'click', '.add_field', ->
+      fieldset = $(this).closest('.fieldset')
+      if $('input[type=checkbox].primary:checked:visible', fieldset).length == 0
+        newly_added_recordset = $('div.rs:eq(-2)', fieldset)
+        $('input[type=checkbox].primary', $(newly_added_recordset)).prop('checked', true)
+
     historicDisable = (check, input_selector) ->
-      fieldset = $(check).closest(".rs")
-      if $(check).is(":checked")
-        $(input_selector, fieldset).attr "readonly", true
+      recordset = $(check).closest('.rs')
+      if $(check).is(':checked')
+        $(input_selector, recordset).attr('readonly', true)
+        $(input_selector, recordset).addClass('no_longer_valid')
+        $('input[type=checkbox].primary', recordset).prop('checked', false)
+        $('input[type=checkbox].primary', recordset).attr('disabled', true)
       else
-        $(input_selector, fieldset).removeAttr "readonly"
-      return
+        $(input_selector, recordset).removeClass 'no_longer_valid'
+        $('input[type=checkbox].primary', recordset).removeAttr('disabled')
+        if recordset.children('.address_remotely_managed').length == 0
+          $(input_selector, recordset).removeAttr('readonly')
 
     $("input.address_historic").each ->
       historicDisable this, "input[type=text], textarea, .country_select"

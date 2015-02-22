@@ -3,7 +3,7 @@ Airbrake.configure do |config|
   config.host = 'errors.uscm.org'
   config.port = 443
   config.secure = config.port == 443
-  config.ignore_only = config.ignore + ['Google::APIClient::ServerError']
+  config.ignore_only = config.ignore + ['Google::APIClient::ServerError', 'Net::IMAP::BadResponseError']
 end
 
 module Airbrake

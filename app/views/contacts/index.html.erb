@@ -3,18 +3,37 @@
   <script type="text/javascript" charset="utf-8">
     var account_contacts_json = <%= contacts_for_filter.collect { |c| {value: c.name, id: c.id} }.to_json.html_safe %>
     var filtered_contacts_ids = <%= @filtered_contacts.collect { |c| c.id }.to_json.html_safe %>
-    $(function () {
-      $('[data-toggle="tooltip"]').tooltip()
-    })
+
+    $(window).resize(function () {
+        contactAreaSize();
+    });
+    $(function() {
+        contactAreaSize();
+        $('#filters_form ul li label').click(function() {
+            setTimeout(contactAreaSize, 400);
+        });
+    });
+    function contactAreaSize(){
+        var windowHeight = $(window).height() - 250;
+        var filtersHeight = $('#leftmenu > ul').height() - 100;
+        $('.contacts-scrollable').height(Math.max(windowHeight, filtersHeight));
+    }
   </script>
-  <div class="row">
-    <div class="col-md-3">
-      <aside id="leftmenu" class="filters_menu">
-      <ul>
-        <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
-        <li class="filters_section">
-          <span class="filters_title menu_item"><%= _('Filters') %></span>
-          <form id="filters_form">
+  <aside id="leftmenu">
+  <ul>
+    <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
+    <% if $rollout.active?(:insights, current_account_list) %>
+    <li ng-class="{'selected': insightFilterIsActive()}">
+      <span class="left_filters menu_item"><%= _('Insights') %></span>
+      <p class="collapse" style="text-indent:40px"><a href="" ng-click="runInsight('recommendations')">Increase Recommendations</a></p>
+    </li>
+    <li class="controls" ng-show="insightFilterIsActive()">
+      <a href="" ng-click="clearInsightFilter()" class="btn">Clear Insight Filter</a>
+    </li>
+    <% end %>
+    <li ng-show="!insightFilterIsActive()">
+      <span class="left_filters menu_item"><%= _('Filters') %></span>
+      <form id="filters_form">
 
             <%= hidden_field_tag 'filters[tags]', tag_params %>
             <%= hidden_field_tag :per_page, params[:per_page] %>
@@ -202,14 +221,18 @@
           </div>
         </div>
 
-        <div class="contacts-scrollable" id="contacts-scrollable">
-          <table class="tablelist" ng-class="{'contact_loading': contactsLoading}">
-            <tr ng-show="contacts.length === 0 && contactQuery.viewPrefsLoaded"><td style="color:red;">Sorry, there are no contacts that match the filters and/or tags you have selected. Try <a href="/contacts/new">adding a new contact</a> or <a href="#" ng-click="resetFilters()">resetting your filters</a>.</td></tr>
-            <tr contact="contact" ng-repeat="contact in contacts" id="contact_{{contact.id}}" data-hook="contact"></tr>
-          </table>
-        </div>
-      </div>
-
+          <div style="float:right">
+            Show:<%= @fil %>
+            <select ng-model="contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]"></select>
+          </div>
+        </td>
+      </tr>
+    </table>
+    <div class="contacts-scrollable" id="contacts-scrollable">
+      <table class="tablelist" ng-class="{'contact_loading': contactsLoading}">
+        <tr ng-show="contacts.length === 0 && contactQuery.viewPrefsLoaded"><td style="color:red;">Sorry, there are no contacts that match the filters and/or tags you have selected. Try <a href="/contacts/new">adding a new contact</a> or <a href="#" ng-click="resetFilters()">resetting your filters</a>.</td></tr>
+        <tr contact="contact" ng-repeat="contact in contacts" id="contact_{{contact.id}}" data-hook="contact"></tr>
+      </table>
     </div>
 </div>
 <%= render 'tag_modals' %>

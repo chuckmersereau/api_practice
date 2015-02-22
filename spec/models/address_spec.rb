@@ -34,6 +34,14 @@ describe Address do
     end
   end
 
+  context '#destroy' do
+    it 'clears the primary mailing address flag when destroyed' do
+      address1 = create(:address, primary_mailing_address: true)
+      address1.destroy
+      expect(address1.primary_mailing_address).to be_false
+    end
+  end
+
   context '#country=' do
     it 'normalizes the country when assigned' do
       address = build(:address)
@@ -85,6 +93,89 @@ describe Address do
       @address.user_changed = true
       @address.save
       expect(@address.remote_id).to eq(nil)
+    end
+  end
+
+  context '#merge' do
+    let(:a1) { create(:address, start_date: Date.new(2014, 1, 1)) }
+    let(:a2) { create(:address, start_date: Date.new(2014, 1, 2)) }
+
+    describe 'takes the min first start_date of the two addresses' do
+      it 'works with a1 winner' do
+        a1.merge(a2)
+        expect(a1.start_date).to eq(Date.new(2014, 1, 1))
+      end
+      it 'works with a2 winner' do
+        a2.merge(a1)
+        expect(a2.start_date).to eq(Date.new(2014, 1, 1))
+      end
+    end
+
+    it 'takes the non-nil start date if only one specified' do
+      a1.update(start_date: nil)
+      a1.merge(a2)
+      expect(a1.start_date).to eq(Date.new(2014, 1, 2))
+    end
+
+    it 'sets source to Siebel if remote_id specified' do
+      a2.remote_id = 'a'
+      a1.update(source: 'not-siebel')
+      a1.merge(a2)
+      expect(a1.source).to eq('Siebel')
+    end
+
+    it 'takes the non-nil source by default' do
+      a2.update(source: 'import')
+      a1.merge(a2)
+      expect(a1.source).to eq('import')
+    end
+
+    it 'taks the non-nil source_donor_account' do
+      donor_account = create(:donor_account)
+      a2.source_donor_account = donor_account
+      a1.merge(a2)
+      expect(a1.source_donor_account).to eq(donor_account)
+    end
+  end
+
+  describe 'start_date and manual source behavior' do
+    it 'sets source to manual and start_date to today for a new user changed address' do
+      address = build(:address, user_changed: true)
+      address.save
+      expect(address.start_date).to eq(Date.today)
+      expect(address.source).to eq(Address::MANUAL_SOURCE)
+    end
+
+    it 'does not update start_date for a user changed when only address meta data is updated' do
+      da = create(:donor_account)
+      start = Date.new(2014, 1, 15)
+      a = Address.create(start_date: start, source: 'import', source_donor_account: da)
+      a.update(seasonal: true, primary_mailing_address: true, remote_id: '5', master_address_id: 2,
+               location: 'Other', user_changed: true)
+      expect(a.start_date).to eq(start)
+      expect(a.source).to eq('import')
+      expect(a.source_donor_account).to eq(da)
+    end
+
+    it 'updates to today for a user changed address when place attributes change' do
+      da = create(:donor_account)
+      [:street, :city, :state, :postal_code, :country].each do |field|
+        a = Address.create(start_date: Date.new(2014, 1, 15), source: 'import', source_donor_account: da)
+        a.update(field => 'not-nil', user_changed: true)
+        expect(a.start_date).to eq(Date.today)
+        expect(a.source).to eq(Address::MANUAL_SOURCE)
+        expect(a.source_donor_account).to be_nil
+      end
+    end
+
+    it 'does not update start date or source for non-user changed address when place attributes change' do
+      start = Date.new(2014, 1, 15)
+      [:street, :city, :state, :postal_code, :country].each do |field|
+        a = Address.create(source: 'import', start_date: start)
+        a.update(field => 'a')
+        expect(a.start_date).to eq(start)
+        expect(a.source).to eq('import')
+      end
     end
   end
 end

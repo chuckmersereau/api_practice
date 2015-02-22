@@ -14,6 +14,7 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'webmock/rspec'
 require 'capybara/rspec'
+require 'capybara/poltergeist'
 require 'sidekiq/testing'
 
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
@@ -22,6 +23,12 @@ require 'equivalent-xml'
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
+
+WebMock.disable_net_connect!(allow_localhost: true)
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, js_errors: false, timeout: 60)
+end
+Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
 
@@ -63,6 +70,7 @@ RSpec.configure do |config|
   config.infer_base_class_for_anonymous_controllers = false
   config.treat_symbols_as_metadata_keys_with_true_values = true
   config.filter_run focus: true
+  config.filter_run_excluding js: true
   config.run_all_when_everything_filtered = true
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
@@ -70,6 +78,10 @@ RSpec.configure do |config|
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)
+  end
+
+  config.before(:each, js: true) do
+    DatabaseCleaner.strategy = :truncation
   end
 
   config.before(:each) do

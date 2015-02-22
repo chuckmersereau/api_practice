@@ -95,9 +95,12 @@ describe TntImport do
           @address = create(:address, primary_mailing_address: true)
           contact.addresses << @address
           contact.save
+          expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
+
           expect {
             import.send(:import_contacts)
           }.not_to change { contact.addresses.where(primary_mailing_address: true).count }
+
           expect { # make sure it survives a second import
             import.send(:import_contacts)
           }.not_to change { contact.addresses.where(primary_mailing_address: true).count }

@@ -7,16 +7,21 @@ class Address < ActiveRecord::Base
 
   belongs_to :addressable, polymorphic: true, touch: true
   belongs_to :master_address
+  belongs_to :source_donor_account, class_name: 'DonorAccount'
 
   scope :current, -> { where(deleted: false) }
 
   before_validation :determine_master_address
+  before_save :set_manual_source_if_user_changed
   after_destroy :clean_up_master_address
   after_save :update_contact_timezone
 
   alias_method :destroy!, :destroy
 
   attr_accessor :user_changed
+
+  # Indicates an address was manually created/updated. Otherwise source is usually the import class name.
+  MANUAL_SOURCE = 'manual'
 
   assignable_values_for :location, allow_blank: true do
     [_('Home'), _('Business'), _('Mailing'), _('Other')]
@@ -37,7 +42,7 @@ class Address < ActiveRecord::Base
   end
 
   def destroy
-    update_attributes(deleted: true)
+    update_attributes(deleted: true, primary_mailing_address: false)
   end
 
   def not_blank?
@@ -49,6 +54,9 @@ class Address < ActiveRecord::Base
     self.seasonal = (seasonal? || other_address.seasonal?)
     self.location = other_address.location if location.blank?
     self.remote_id = other_address.remote_id if remote_id.blank?
+    self.source_donor_account = other_address.source_donor_account if source_donor_account.blank?
+    self.start_date = [start_date, other_address.start_date].compact.min
+    self.source = remote_id.present? ? 'Siebel' : [source, other_address.source].compact.first
     save(validate: false)
     other_address.destroy!
   end
@@ -103,6 +111,13 @@ class Address < ActiveRecord::Base
   end
 
   private
+
+  def set_manual_source_if_user_changed
+    return unless user_changed && (new_record? || (changed & %w(street city state country postal_code)).present?)
+    self.source = MANUAL_SOURCE
+    self.start_date = Date.today
+    self.source_donor_account = nil
+  end
 
   def determine_master_address
     if id.blank?

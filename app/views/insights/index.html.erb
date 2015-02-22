@@ -1,0 +1,17 @@
+
+  <div class="wpp">
+    <style>
+        th {
+            vertical-align: bottom;
+        }
+    </style>
+
+    <h2>Insights for <%= current_user %></h2>
+
+    <span id="dash-tabs" class="tabgroup">
+      <ul>
+        <li class="killround"><a href="#insights-increase"><%= _('Recurring Gift Recommendations') %></a></li>
+      </ul>
+      <div id="insights-increase"><%= render partial: "recurring_recommendations" %></div>
+    </span>
+  </div>
