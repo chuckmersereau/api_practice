@@ -79,18 +79,18 @@ angular.module('mpdxApp')
                 }
 
                 if(newContactStatus && followUpTask.contacts.length > 0) {
-                  angular.forEach(followUpTask.contacts, function (c) {
-                    var contact = {id: c, status: newContactStatus};
-                    if($scope.followUpDialogResult.newsletterSignup)
-                        contact.send_newsletter = $scope.followUpDialogResult.newsletter.type;
-                    if(newContactStatus == 'Partner - Financial') {
-                        contact.pledge_amount = $scope.followUpDialogResult.financialCommitment.amount;
-                        contact.pledge_frequency = $scope.followUpDialogResult.financialCommitment.frequency;
-                        contact.pledge_start_date = $scope.followUpDialogResult.financialCommitment.date;
-                    }
-                    saveContact(contact);
-                  });
-                  showContactStatus(newContactStatus);
+                    angular.forEach(followUpTask.contacts, function (c) {
+                        var contact = {id: c, status: newContactStatus};
+                        if($scope.followUpDialogResult.newsletterSignup)
+                            contact.send_newsletter = $scope.followUpDialogResult.newsletter.type;
+                        if(newContactStatus == 'Partner - Financial') {
+                            contact.pledge_amount = $scope.followUpDialogResult.financialCommitment.amount;
+                            contact.pledge_frequency = $scope.followUpDialogResult.financialCommitment.frequency;
+                            contact.pledge_start_date = $scope.followUpDialogResult.financialCommitment.date;
+                        }
+                        saveContact(contact);
+                    });
+                    showContactStatus(newContactStatus);
                 }
 
                 //Create Call, Message, Email or Text Task
@@ -158,7 +158,7 @@ angular.module('mpdxApp')
                     callTask: true
                 };
                 if(strContains(taskResult, 'Call for Decision')) {
-                  $scope.followUpDialogData.updateStatus = 'Call for Decision';
+                    $scope.followUpDialogData.updateStatus = 'Call for Decision';
                 }
 
                 $scope.followUpDialogResult = {
@@ -174,7 +174,8 @@ angular.module('mpdxApp')
                     }
                 };
 
-            }else if((strContains(taskResult, 'Appointment Scheduled') || strContains(taskResult, 'Reschedule')) && followUpTask.contacts.length > 0){
+            }else if((strContains(taskResult, 'Appointment Scheduled') || strContains(taskResult, 'Reschedule')) &&
+                     followUpTask.contacts.length > 0){
 
                 $scope.followUpDialogData = {
                     message: "Contact's status will be updated to 'Appointment Scheduled'.",
@@ -189,12 +190,12 @@ angular.module('mpdxApp')
                         min: timeNowMin
                     },
                     callTask: {
-                      type: 'Call',
-                      subject: followUpTask.subject,
-                      date: dateTwoDaysFromToday,
-                      hour: timeNowHour,
-                      min: timeNowMin,
-                      tags: followUpTask.tag_list.join()
+                        type: 'Call',
+                        subject: followUpTask.subject,
+                        date: dateTwoDaysFromToday,
+                        hour: timeNowHour,
+                        min: timeNowMin,
+                        tags: followUpTask.tag_list.join()
                     }
                 };
 
@@ -219,7 +220,7 @@ angular.module('mpdxApp')
                         min: timeNowMin
                     },
                     newsletter: {
-                      type: 'Both'
+                        type: 'Both'
                     }
                 };
 
@@ -243,7 +244,7 @@ angular.module('mpdxApp')
                         min: timeNowMin
                     },
                     newsletter: {
-                      type: 'Both'
+                        type: 'Both'
                     }
                 };
 
@@ -254,9 +255,9 @@ angular.module('mpdxApp')
                     newsletter: true
                 };
                 $scope.followUpDialogResult = {
-                  newsletter: {
-                    type: 'Both'
-                  }
+                    newsletter: {
+                        type: 'Both'
+                    }
                 };
 
             }else if(strContains(taskResult, 'Ask in Future') && followUpTask.contacts.length > 0){
@@ -276,7 +277,7 @@ angular.module('mpdxApp')
                         tags: followUpTask.tag_list.join()
                     },
                     newsletter: {
-                      type: 'Both'
+                        type: 'Both'
                     }
                 };
 
