@@ -19,6 +19,7 @@
 
       <div class="row">
         <div class="col-md-7">
+          <%= f.hidden_field :user_changed, value: true %>
           <div class="form-group">
             <%= f.label :name, _('Name') %>
             <%= f.text_field :name, {placeholder: _('Last Name, First Name'), class: 'form-control'} %>
