@@ -10,8 +10,11 @@ class Import < ActiveRecord::Base
   mount_uploader :file, ImportUploader
   belongs_to :account_list
   # attr_accessible :file, :importing, :source, :file_cache, :override, :tags
-  validates :source, inclusion: { in: %w(facebook twitter linkedin tnt google) }
-  validates_with TntImportValidator, if: ->(import) { 'tnt' == import.source }
+  validates :source, inclusion: { in: %w(facebook twitter linkedin tnt google tnt_data_sync) }
+  TNT_MSG = 'You must specify a TntMPD .xml export file to upload to MPDX (see video linked below for more info).'
+  validates :file, if: ->(import) { 'tnt' == import.source }, upload_extension: { extension: 'xml', message: TNT_MSG }
+  TNT_DATA_SYNC_MSG = 'You must specify a TntMPD .tntmpd donor export file from your organization to upload to MPDX.'
+  validates :file, if: ->(import) { 'tnt_data_sync' == import.source }, upload_extension: { extension: 'tntmpd', message: TNT_DATA_SYNC_MSG }
   validates_with FacebookImportValidator, if: -> (import) { 'facebook' == import.source }
 
   serialize :groups, Array
@@ -28,7 +31,7 @@ class Import < ActiveRecord::Base
   def import
     update_column(:importing, true)
     begin
-      "#{source.titleize}Import".constantize.new(self).import
+      "#{source.camelize}Import".constantize.new(self).import
       ImportMailer.complete(self).deliver
 
       # clean up data
