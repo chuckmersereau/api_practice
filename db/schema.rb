@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150220141300) do
+ActiveRecord::Schema.define(version: 20150221153949) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -234,7 +234,6 @@ ActiveRecord::Schema.define(version: 20150220141300) do
     t.decimal  "pledge_frequency"
     t.date     "pledge_start_date"
     t.date     "next_ask"
-    t.boolean  "never_ask",                                                     default: false, null: false
     t.string   "likely_to_give"
     t.string   "church_name"
     t.string   "send_newsletter"

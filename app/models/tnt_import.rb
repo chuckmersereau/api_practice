@@ -366,7 +366,7 @@ class TntImport
     contact.status = lookup_mpd_phase(row['MPDPhaseID']) if (@import.override? || contact.status.blank?) && lookup_mpd_phase(row['MPDPhaseID']).present?
     contact.next_ask = parse_date(row['NextAsk']) if (@import.override? || contact.next_ask.blank?) && row['NextAsk'].present?
     contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1] if (@import.override? || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i != 0
-    contact.no_appeals = true?(row['NeverAsk']) if @import.override? || contact.never_ask.blank?
+    contact.no_appeals = true?(row['NeverAsk']) if @import.override? || contact.no_appeals.blank?
     contact.church_name = row['ChurchName'] if @import.override? || contact.church_name.blank?
 
     contact.direct_deposit = true?(row['DirectDeposit']) if @import.override? || contact.direct_deposit.blank?
