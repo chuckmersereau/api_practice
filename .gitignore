@@ -37,3 +37,4 @@ config/sidekiq.yml
 node_modules
 public/dev-assets
 .vagrant
+vendor/cache/sidekiq-pro-*
