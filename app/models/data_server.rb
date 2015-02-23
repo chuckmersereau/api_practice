@@ -76,7 +76,12 @@ class DataServer
       raise
     end
 
-    CSV.new(response, headers: :first_row).each do |line|
+    import_donors_from_csv(account_list, profile, response, user)
+    true
+  end
+
+  def import_donors_from_csv(account_list, profile, csv, user)
+    CSV.new(csv, headers: :first_row).each do |line|
       line['LAST_NAME'] = line['LAST_NAME_ORG']
       line['FIRST_NAME'] = line['ACCT_NAME'] if line['FIRST_NAME'].blank?
 
@@ -113,7 +118,6 @@ class DataServer
         raise line.inspect + "\n\n" + e.message.inspect
       end
     end
-    true
   end
 
   def import_donations(profile, date_from = nil, date_to = nil)
@@ -132,6 +136,10 @@ class DataServer
                                                       personid: @org_account.remote_id))
     end
 
+    import_donations_from_csv(profile, response)
+  end
+
+  def import_donations_from_csv(profile, response)
     CSV.new(response, headers: :first_row).each do |line|
       designation_account = find_or_create_designation_account(line['DESIGNATION'], profile)
       add_or_update_donation(line, designation_account, profile)

@@ -5,7 +5,8 @@ class ImportsController < ApplicationController
       import.user_id = current_user.id
 
       if import.save
-        flash[:notice] = _('MPDX is currently importing your contacts from %{source}. You will receive an email when the import is complete.').localize % { source: params[:import][:source].gsub('_', ' ') }
+        flash[:notice] = _('MPDX is currently importing your contacts from %{source}. You will receive an email when the import is complete.')
+                           .localize % { source: import.user_friendly_source }
       else
         flash[:alert] = import.errors.full_messages.join('<br>').html_safe
       end
