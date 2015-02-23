@@ -2,17 +2,15 @@
   "name": "crubrand",
   "homepage": "https://github.com/CruGlobal/crubrand",
   "authors": [
-    "James Dempsey <jimmy.dempsey@cru.com>"
+    "Elikem Adadevoh <elikem@gmail.com>"
   ],
   "description": "A Cru branded scss theme for web projects",
   "main": "_crubrand.scss",
-  "moduleType": [
-    "globals"
-  ],
   "keywords": [
-    "scss",
     "cru.org",
-    "css"
+    "scss",
+    "css",
+    "styleguide"
   ],
   "license": "MIT",
   "ignore": [
@@ -20,22 +18,18 @@
     "node_modules",
     "bower_components",
     "test",
-    "tests",
-    "*.css",
-    "bootstrap-sass-official",
-    "jquery"
+    "tests"
   ],
   "dependencies": {
-    "bootstrap-sass-official": "~3.3.1"
+    "bootstrap-sass-official": "3.3.1"
   },
-  "_release": "80665433f0",
+  "_release": "138241bc91",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "80665433f033af576f09d6029610c1d10cd12938"
+    "commit": "138241bc916f91b61d1e35b273e612badea722ee"
   },
   "_source": "git://github.com/CruGlobal/crubrand.git",
   "_target": "*",
-  "_originalSource": "crubrand",
-  "_direct": true
+  "_originalSource": "crubrand"
 }
