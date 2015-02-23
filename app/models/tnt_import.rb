@@ -1,6 +1,5 @@
+# rubocop:disable Metrics/ClassLength
 class TntImport
-  include TntImportUtil
-
   # Donation Services seems to pad donor accounts with zeros up to length 9. TntMPD does not though.
   DONOR_NUMBER_NORMAL_LEN = 9
 
@@ -24,15 +23,45 @@ class TntImport
     @xml
   end
 
+  def read_xml(import_file)
+    xml = {}
+    begin
+      File.open(import_file, 'r:utf-8') do |file|
+        @contents = file.read
+        begin
+          xml = Hash.from_xml(@contents)
+        rescue => e
+          # If the document contains characters that we don't know how to parse
+          # just strip them out.
+          # The eval is dirty, but it was all I could come up with at the time
+          # to unescape a unicode character.
+          begin
+            bad_char = e.message.match(/"([^"]*)"/)[1]
+            @contents.gsub!(eval(%("#{bad_char}")), ' ') # rubocop:disable Eval
+          rescue
+            raise e
+          end
+          retry
+        end
+      end
+    rescue ArgumentError
+      File.open(import_file, 'r:windows-1251:utf-8') do |file|
+        xml = Hash.from_xml(file.read)
+      end
+    end
+    xml
+  end
+
   def import
     @import.file.cache_stored_file!
     return unless xml.present?
 
     tnt_contacts = import_contacts
     import_tasks(tnt_contacts)
-    import_history(tnt_contacts)
+    _history, contacts_by_tnt_appeal_id = import_history(tnt_contacts)
     import_offline_org_gifts(tnt_contacts)
     import_settings
+    import_appeals(contacts_by_tnt_appeal_id)
   ensure
     CarrierWave.clean_cached_files!
   end
@@ -136,6 +165,7 @@ class TntImport
   end
 
   def import_tasks(tnt_contacts = {})
+    return unless xml['Task'].present? && xml['TaskContact'].present?
     tnt_tasks = {}
 
     Array.wrap(xml['Task']['row']).each do |row|
@@ -166,6 +196,8 @@ class TntImport
   def import_history(tnt_contacts = {})
     tnt_history = {}
 
+    tnt_history_id_to_appeal_id = {}
+
     Array.wrap(xml['History']['row']).each do |row|
       task = Retryable.retryable do
         @account_list.tasks.where(remote_id: row['id'], source: 'tnt').first_or_initialize
@@ -179,21 +211,35 @@ class TntImport
         completed: true,
         result: lookup_history_result(row['HistoryResultID'])
       }
+
+      tnt_history_id_to_appeal_id[row['id']] = row['AppealID'] if row['AppealID'].present?
+
       next unless task.save
       # Add any notes as a comment
       task.activity_comments.create(body: row['Notes'].strip) if row['Notes'].present?
       tnt_history[row['id']] = task
     end
 
+    contacts_by_tnt_appeal_id = {}
+
     # Add contacts to tasks
     Array.wrap(xml['HistoryContact']['row']).each do |row|
-      next unless tnt_contacts[row['ContactID']] && tnt_history[row['HistoryID']]
+      contact = tnt_contacts[row['ContactID']]
+      task = tnt_history[row['HistoryID']]
+      next unless contact && task
+
       Retryable.retryable times: 3, sleep: 1 do
-        tnt_history[row['HistoryID']].contacts << tnt_contacts[row['ContactID']] unless tnt_history[row['HistoryID']].contacts.include? tnt_contacts[row['ContactID']]
+        task.contacts << contact unless task.contacts.include?(contact)
+      end
+
+      tnt_appeal_id = tnt_history_id_to_appeal_id[row['HistoryID']]
+      if tnt_appeal_id
+        contacts_by_tnt_appeal_id[tnt_appeal_id] ||= []
+        contacts_by_tnt_appeal_id[tnt_appeal_id] << contact
       end
     end
 
-    tnt_history
+    [tnt_history, contacts_by_tnt_appeal_id]
   end
 
   def import_offline_org_gifts(tnt_contacts)
@@ -218,6 +264,57 @@ class TntImport
     end
   end
 
+  def import_appeals(contacts_by_tnt_appeal_id)
+    appeals_by_tnt_id = find_or_create_appeals_by_tnt_id
+
+    appeals_by_tnt_id.each do |appeal_tnt_id, appeal|
+      appeal_contact_ids = appeal.contacts.pluck(:id).to_set
+      contacts = contacts_by_tnt_appeal_id[appeal_tnt_id].reject { |c| appeal_contact_ids.include?(c.id) }
+      appeal.bulk_add_contacts(contacts)
+    end
+
+    import_appeal_amounts(appeals_by_tnt_id)
+  end
+
+  def find_or_create_appeals_by_tnt_id
+    return {} unless xml['Appeal'].present?
+    appeals = {}
+    Array.wrap(xml['Appeal']['row']).each do |row|
+      appeals[row['id']] = @account_list.appeals.find_by(tnt_id: row['id']) ||
+        @account_list.appeals.find_or_create_by(name: row['Description']) { |new| new.tnt_id = row['id'].to_i }
+    end
+    appeals
+  end
+
+  def import_appeal_amounts(appeals_by_tnt_id)
+    return unless xml['Gift'].present?
+
+    donor_accounts_by_tnt_id = find_donor_accounts_by_tnt_id
+    designation_account_ids = @account_list.designation_accounts.pluck(:id)
+
+    Array.wrap(xml['Gift']['row']).each do |row|
+      next if row['AppealID'].blank?
+      appeal = appeals_by_tnt_id[row['AppealID']]
+      donor_account = donor_accounts_by_tnt_id[row['DonorID']]
+      next unless donor_account
+
+      donation = donor_account.donations.where(donation_date: row['GiftDate'], amount: row['Amount'])
+                   .where(designation_account_id: designation_account_ids)
+                   .where('appeal_id is null or appeal_id = ?', appeal.id).first
+      next if donation.blank?
+      donation.update(appeal: appeal, appeal_amount: row['AppealAmount'])
+    end
+  end
+
+  def find_donor_accounts_by_tnt_id
+    return {} unless xml['Donor'].present?
+    donors = {}
+    Array.wrap(xml['Donor']['row']).each do |row|
+      donors[row['id']] = @account_list.donor_accounts.find_by(account_number: row['OrgDonorCode'])
+    end
+    donors
+  end
+
   def donor_account_for_contact(org, contact)
     account = contact.donor_accounts.first
     return account if account
@@ -232,6 +329,86 @@ class TntImport
     end
     contact.donor_accounts << donor_account
     donor_account
+  end
+
+  def update_person_attributes(person, row, prefix = '')
+    person.attributes = { first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'], middle_name: row[prefix + 'MiddleName'],
+                          title: row[prefix + 'Title'], suffix: row[prefix + 'Suffix'], gender: prefix.present? ? 'female' : 'male',
+                          profession: prefix.present? ? nil : row['Profession'] }
+
+    update_person_phones(person, row, prefix)
+    update_person_emails(person, row, prefix)
+    person
+  end
+
+  # This is an ordered array of the Tnt phone types. The order matters because the tnt  PreferredPhoneType
+  # is an index that into this list and the PhoneIsValidMask is a bit vector that refers to these in order too.
+  TNT_PHONES = [
+    { field: 'HomePhone', location: 'home', person: :both }, # index 0
+    { field: 'HomePhone2', location: 'home', person: :both },
+    { field: 'HomeFax', location: 'fax', person: :both },
+    { field: 'OtherPhone', location: 'other', person: :both },
+    { field: 'OtherFax', location: 'fax', person: :both },
+
+    { field: 'MobilePhone', location: 'mobile', person: :primary },
+    { field: 'MobilePhone2', location: 'mobile', person: :primary },
+    { field: 'PagerNumber', location: 'other', person: :primary },
+    { field: 'BusinessPhone', location: 'work', person: :primary },
+    { field: 'BusinessPhone2', location: 'work', person: :primary },
+    { field: 'BusinessFax', location: 'fax', person: :primary },
+    { field: 'CompanyMainPhone', location: 'work', person: :primary },
+
+    { field: 'SpouseMobilePhone', location: 'mobile', person: :spouse },
+    { field: 'SpouseMobilePhone2', location: 'mobile', person: :spouse },
+    { field: 'SpousePagerNumber', location: 'other', person: :spouse },
+    { field: 'SpouseBusinessPhone', location: 'work', person: :spouse },
+    { field: 'SpouseBusinessPhone2', location: 'work', person: :spouse },
+    { field: 'SpouseBusinessFax', location: 'fax', person: :spouse },
+    { field: 'SpouseCompanyMainPhone', location: 'work', person: :spouse } # index 18
+  ]
+
+  def update_person_phones(person, row, prefix)
+    person_sym = prefix == '' ? :primary : :spouse
+    is_valid_mask = row['PhoneIsValidMask'].to_i # Bit vector indexed corresponding to TNT_PHONES
+    had_no_primary = person.phone_numbers.where(primary: true).empty?
+
+    TNT_PHONES.each_with_index do |tnt_phone, i|
+      number = row[tnt_phone[:field]]
+      next unless number.present? && (tnt_phone[:person] == :both || tnt_phone[:person] == person_sym)
+
+      phone_attrs =  { number: number, location: tnt_phone[:location], historic: is_valid_mask[i] == 0 }
+      if (@import.override? || had_no_primary) && row['PreferredPhoneType'].to_i == i
+        phone_attrs[:primary] = true
+        person.phone_numbers.each { |phone| phone.update(primary: false) }
+      end
+      person.phone_number =  phone_attrs
+    end
+  end
+
+  def update_person_emails(person, row, prefix)
+    changed_primary = false
+    had_no_primary = person.email_addresses.where(primary: true).empty?
+
+    # If there is just a single email in Tnt, it leaves the suffix off, so start with a blank then do the numbers
+    # up to three as Tnt allows a maximum of 3 email addresses for a person/spouse.
+    (1..3).each do |i|
+      email = row[prefix + "Email#{i}"]
+      next unless email.present?
+
+      email_valid = row["#{prefix}Email#{i}IsValid"]
+      historic = email_valid.present? && !true?(email_valid)
+
+      email_attrs = { email: email, historic: historic }
+
+      # For MPDX, we set the primary email to be the first "preferred" email listed in Tnt.
+      if (@import.override? || had_no_primary) && !changed_primary && !historic && tnt_email_preferred?(row, i, prefix)
+        person.email_addresses.each { |e| e.update(primary: false) }
+        email_attrs[:primary] = true
+        changed_primary = true
+      end
+
+      person.email_address = email_attrs
+    end
   end
 
   def import_settings
@@ -297,7 +474,7 @@ class TntImport
     contact.status = lookup_mpd_phase(row['MPDPhaseID']) if (@import.override? || contact.status.blank?) && lookup_mpd_phase(row['MPDPhaseID']).present?
     contact.next_ask = parse_date(row['NextAsk']) if (@import.override? || contact.next_ask.blank?) && row['NextAsk'].present?
     contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1] if (@import.override? || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i != 0
-    contact.never_ask = true?(row['NeverAsk']) if @import.override? || contact.never_ask.blank?
+    contact.no_appeals = true?(row['NeverAsk']) if @import.override? || contact.no_appeals.blank?
     contact.church_name = row['ChurchName'] if @import.override? || contact.church_name.blank?
 
     contact.direct_deposit = true?(row['DirectDeposit']) if @import.override? || contact.direct_deposit.blank?
@@ -360,67 +537,6 @@ class TntImport
     person
   end
 
-  def update_person_attributes(person, row, prefix = '')
-    person.attributes = { first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'], middle_name: row[prefix + 'MiddleName'],
-                          title: row[prefix + 'Title'], suffix: row[prefix + 'Suffix'], gender: prefix.present? ? 'female' : 'male',
-                          profession: prefix.present? ? nil : row['Profession'] }
-
-    update_person_phones(person, row, prefix)
-    update_person_emails(person, row, prefix)
-    person
-  end
-
-  def update_person_phones(person, row, prefix)
-    person_sym = prefix == '' ? :primary : :spouse
-    is_valid_mask = row['PhoneIsValidMask'].to_i # Bit vector indexed corresponding to TNT_PHONES
-    had_no_primary = person.phone_numbers.where(primary: true).empty?
-
-    TNT_PHONES.each_with_index do |tnt_phone, i|
-      number = row[tnt_phone[:field]]
-      next unless number.present? && (tnt_phone[:person] == :both || tnt_phone[:person] == person_sym)
-
-      phone_attrs =  { number: number, location: tnt_phone[:location], historic: is_valid_mask[i] == 0 }
-      if (@import.override? || had_no_primary) && row['PreferredPhoneType'].to_i == i
-        phone_attrs[:primary] = true
-        person.phone_numbers.each { |phone| phone.update(primary: false) }
-      end
-      person.phone_number =  phone_attrs
-    end
-  end
-
-  def update_person_emails(person, row, prefix)
-    changed_primary = false
-    had_no_primary = person.email_addresses.where(primary: true).empty?
-
-    # If there is just a single email in Tnt, it leaves the suffix off, so start with a blank then do the numbers
-    # up to three as Tnt allows a maximum of 3 email addresses for a person/spouse.
-    (1..3).each do |i|
-      email = row[prefix + "Email#{i}"]
-      next unless email.present?
-
-      email_valid = row["#{prefix}Email#{i}IsValid"]
-      historic = email_valid.present? && !true?(email_valid)
-
-      email_attrs = { email: email, historic: historic }
-
-      # For MPDX, we set the primary email to be the first "preferred" email listed in Tnt.
-      if (@import.override? || had_no_primary) && !changed_primary && !historic && tnt_email_preferred?(row, i, prefix)
-        person.email_addresses.each { |e| e.update(primary: false) }
-        email_attrs[:primary] = true
-        changed_primary = true
-      end
-
-      person.email_address = email_attrs
-    end
-  end
-
-  # TntMPD allows multiple emails to be marked as preferred and expresses that array of booleans as a
-  # bit vector in the PreferredEmailTypes. Bit 0 is ignored, then 3 for primary person emails, then 3 for spouse
-  def tnt_email_preferred?(row, email_num, person_prefix)
-    preferred_bit_index = (person_prefix == 'Spouse' ? 3 : 0) + email_num
-    row['PreferredEmailTypes'].present? && row['PreferredEmailTypes'].to_i[preferred_bit_index] == 1
-  end
-
   def add_or_update_donor_accounts(row, designation_profile)
     # create variables outside the block scope
     donor_accounts = []
@@ -473,5 +589,62 @@ class TntImport
         source: 'TntImport'  }
     end
     addresses
+  end
+
+  def lookup_mpd_phase(phase)
+    case phase.to_i
+    when 10 then 'Never Contacted'
+    when 20 then 'Ask in Future'
+    when 30 then 'Contact for Appointment'
+    when 40 then 'Appointment Scheduled'
+    when 50 then 'Call for Decision'
+    when 60 then 'Partner - Financial'
+    when 70 then 'Partner - Special'
+    when 80 then 'Partner - Pray'
+    when 90 then 'Not Interested'
+    when 95 then 'Unresponsive'
+    when 100 then 'Never Ask'
+    when 110 then 'Research Abandoned'
+    when 130 then 'Expired Referral'
+    end
+  end
+
+  def lookup_task_type(task_type_id)
+    case task_type_id.to_i
+    when 1 then 'Appointment'
+    when 2 then 'Thank'
+    when 3 then 'To Do'
+    when 20 then 'Call'
+    when 30 then 'Reminder Letter'
+    when 40 then 'Support Letter'
+    when 50 then 'Letter'
+    when 60 then 'Newsletter'
+    when 70 then 'Pre Call Letter'
+    when 100 then 'Email'
+    end
+  end
+
+  def lookup_history_result(history_result_id)
+    case history_result_id.to_i
+    when 1 then 'Done'
+    when 2 then 'Received'
+    when 3 then 'Attempted'
+    end
+  end
+
+  def true?(val)
+    val.upcase == 'TRUE'
+  end
+
+  def parse_date(val)
+    Date.parse(val)
+  rescue
+  end
+
+  # TntMPD allows multiple emails to be marked as preferred and expresses that array of booleans as a
+  # bit vector in the PreferredEmailTypes. Bit 0 is ignored, then 3 for primary person emails, then 3 for spouse
+  def tnt_email_preferred?(row, email_num, person_prefix)
+    preferred_bit_index = (person_prefix == 'Spouse' ? 3 : 0) + email_num
+    row['PreferredEmailTypes'].present? && row['PreferredEmailTypes'].to_i[preferred_bit_index] == 1
   end
 end

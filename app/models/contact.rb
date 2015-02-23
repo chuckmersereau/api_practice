@@ -43,7 +43,7 @@ class Contact < ActiveRecord::Base
 
   PERMITTED_ATTRIBUTES = [
     :name, :pledge_amount, :status, :notes, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
-    :pledge_start_date, :next_ask, :never_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :user_changed,
+    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :user_changed,
     :direct_deposit, :magazine, :pledge_received, :not_duplicated_with, :tag_list, :primary_person_id, :timezone,
     {
       contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
@@ -58,7 +58,7 @@ class Contact < ActiveRecord::Base
 
   MERGE_COPY_ATTRIBUTES = [
     :name, :pledge_amount, :status, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
-    :pledge_start_date, :next_ask, :never_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals,
+    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals,
     :direct_deposit, :magazine, :pledge_received, :timezone, :last_activity, :last_appointment, :last_letter,
     :last_phone_call, :last_pre_call, :last_thank, :prayer_letters_id, :last_donation_date, :first_donation_date, :tnt_id
   ]

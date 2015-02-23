@@ -56,12 +56,13 @@ describe TntImport do
   end
 
   context '#import_contacts' do
-    it 'associates referrals' do
+    it 'associates referrals and imports no_appeals field' do
       import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
       import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
       expect {
         import.send(:import_contacts)
       }.to change(ContactReferral, :count).by(1)
+      expect(Contact.first.no_appeals).to be_true
     end
 
     context 'updating an existing contact' do
@@ -460,7 +461,7 @@ describe TntImport do
   context '#import_history' do
     it 'creates a new completed task' do
       expect {
-        tasks = import.send(:import_history)
+        tasks, _contacts_by_tnt_appeal_id = import.send(:import_history)
         tasks.first[1].remote_id.should_not be_nil
       }.to change(Task, :count).by(1)
     end
@@ -479,6 +480,16 @@ describe TntImport do
       }.to change(ActivityContact, :count).by(1)
     end
 
+    it 'associates contacts with tnt appeal ids' do
+      tnt_import = TntImport.new(create(:tnt_import_appeals))
+      _history, contacts_by_tnt_appeal_id = tnt_import.send(:import_history,  import.send(:import_contacts))
+      expect(contacts_by_tnt_appeal_id.size).to eq(1)
+      contacts = contacts_by_tnt_appeal_id['-2079150908']
+      expect(contacts.size).to eq(1)
+      expect(contacts[0]).to_not be_nil
+      expect(contacts[0].name).to eq('Smith, John and Jane')
+
+    end
   end
 
   context '#import_settings' do
@@ -605,6 +616,42 @@ describe TntImport do
     end
   end
 
+  context '#import_appeals' do
+    it 'imports an appeal as well as its contacts and donations' do
+      import = create(:tnt_import_appeals)
+      account_list = import.account_list
+      tnt_import = TntImport.new(import)
+      contact = create(:contact, account_list: account_list)
+      donor_account = create(:donor_account, account_number: '432294333')
+      contact.donor_accounts << donor_account
+      account_list.contacts << contact
+      designation_account = create(:designation_account)
+      account_list.account_list_entries << create(:account_list_entry, designation_account: designation_account)
+      donation = donor_account.donations.create(amount: 50, donation_date: Date.new(2005, 6, 10),
+                                                designation_account: designation_account)
+
+      expect {
+        tnt_import.send(:import)
+      }.to change(Appeal, :count).from(0).to(1)
+      appeal = Appeal.first
+      expect(appeal.contacts.count).to eq(1)
+      expect(appeal.contacts.first.name).to eq('Smith, John and Jane')
+      expect(appeal.donations.first).to eq(donation)
+      donation.reload
+      expect(donation.appeal).to eq(appeal)
+      expect(donation.appeal_amount).to eq(25)
+
+      # Survies the second import even if you rename the appeal
+      appeal.update(name: 'Test new name')
+      expect {
+        tnt_import.send(:import)
+      }.to_not change(Appeal, :count).from(1)
+      expect(donation.appeal_amount).to eq(25)
+      appeal.reload
+      expect(appeal.contacts.count).to eq(1)
+    end
+  end
+
   context '#import' do
     it 'performs an import' do
       import.should_receive(:xml).and_return('foo')
@@ -612,6 +659,7 @@ describe TntImport do
       import.should_receive(:import_tasks).and_return
       import.should_receive(:import_history).and_return
       import.should_receive(:import_settings).and_return
+      import.should_receive(:import_appeals)
       import.import
     end
   end
