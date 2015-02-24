@@ -7,6 +7,12 @@ $ ->
       $('[data-behavior="import_options"]', div).show()
       false
 
+    $(document).on 'click', '[data-behavior="show_org_import"]', ->
+      $(this).closest('div').hide()
+      div = $(this).closest('[data-behavior="account"]')
+      $('[data-behavior="org_import_options"]', div).show()
+      false
+
     $(document).on 'click', '[data-behavior="import_button"]', ->
       $(this).closest('form').submit()
       false
