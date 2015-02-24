@@ -11,7 +11,7 @@ angular.module('mpdxApp')
                     return;
                 }
             }
-            $http({
+            return $http({
                 method: method,
                 url: apiUrl + url,
                 data: data,

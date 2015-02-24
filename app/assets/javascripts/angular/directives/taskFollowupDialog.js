@@ -307,8 +307,7 @@ angular.module('mpdxApp')
         };
 
         var createTask = function(task, contactsObject, taskType){
-          var defer = $q.defer();
-          api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
+          return api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
               task: {
                   start_at: task.date + ' ' + task.hour + ':' + task.min + ':00',
                   subject: task.subject,
@@ -323,16 +322,12 @@ angular.module('mpdxApp')
                   }
               }
           }, function (resp) {
-            defer.resolve();
             if(angular.isDefined($scope.refreshVisibleTasks)){
                 $scope.refreshVisibleTasks();
             }
             else if($('#tasks-tab')[0])
                 angular.element($('#tasks-tab')).scope().syncTask(resp.task);
-          }, function(){
-            defer.reject();
           });
-          return defer.promise;
         };
 
         var showContactStatus = function(status){
@@ -340,15 +335,9 @@ angular.module('mpdxApp')
         };
 
         var saveContact = function(contact){
-          var defer = $q.defer();
-          api.call('put', 'contacts/' + contact.id + '?account_list_id=' + window.current_account_list_id, {
+          return api.call('put', 'contacts/' + contact.id + '?account_list_id=' + window.current_account_list_id, {
               contact: contact
-          }, function(){
-            defer.resolve();
-          }, function(){
-            defer.reject();
           });
-          return defer.promise;
         };
 
         var strContains = function(h, n){
