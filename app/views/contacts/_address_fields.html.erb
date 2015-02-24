@@ -7,10 +7,11 @@
   <div class="rs">
 
     <% if builder.object.remote_id.present? %>
-      <%= _('From donor system.') %>
-      <%= link_to_gmail_compose(_('Email donor services to change'), target: '_blank',
+      <%= _('From donor system. To make changes, ') %>
+      <%= link_to_gmail_compose(_('click here'), target: '_blank',
                                 to: 'Cru Donation Services <donation.services@cru.org>', subject: 'Donor address change',
                                 body: exhibit(builder.object, self).address_change_email_body + current_user.first_name.to_s) %>
+      <%= _(' to email donation services.') %>
       <input type="hidden" class="address_remotely_managed">
     <% end %>
 
