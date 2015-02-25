@@ -66,7 +66,8 @@ class Address < ActiveRecord::Base
   end
 
   def self.normalize_country(val)
-    return val if val.blank?
+    return if val.blank?
+    val = val.strip
 
     countries = CountrySelect::COUNTRIES
 
@@ -113,10 +114,17 @@ class Address < ActiveRecord::Base
   private
 
   def set_manual_source_if_user_changed
-    return unless user_changed && (new_record? || (changed & %w(street city state country postal_code)).present?)
+    return unless user_changed && (new_record? || place_fields_changed?)
     self.source = MANUAL_SOURCE
     self.start_date = Date.today
     self.source_donor_account = nil
+  end
+
+  def place_fields_changed?
+    place_fields = %w(street city state postal_code)
+    place_fields.any? { |f| changes[f].present? && changes[f][0].to_s.strip != changes[f][1].to_s.strip } ||
+      (changes['country'].present? &&
+        self.class.normalize_country(changes['country'][0]) != self.class.normalize_country(changes['country'][1]))
   end
 
   def determine_master_address
@@ -128,7 +136,7 @@ class Address < ActiveRecord::Base
   end
 
   def update_or_create_master_address
-    if (changed & %w(street city state country postal_code)).present?
+    if place_fields_changed?
       new_master_address_match = find_master_address
 
       if master_address.nil? || master_address != new_master_address_match
