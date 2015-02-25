@@ -129,8 +129,6 @@ class Address < ActiveRecord::Base
 
   def update_or_create_master_address
     if (changed & %w(street city state country postal_code)).present?
-      self.remote_id = nil if user_changed
-
       new_master_address_match = find_master_address
 
       if master_address.nil? || master_address != new_master_address_match

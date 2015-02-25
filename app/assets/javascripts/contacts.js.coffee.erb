@@ -359,6 +359,11 @@ $ ->
 
     $('.country_select').selectToAutocomplete()
 
+    $('.address_remotely_managed').each ->
+      fieldset = $(this).closest('.rs')
+      $("input[type=text], textarea, .country_select", fieldset).attr 'readonly', true
+      $('.address_region, .address_metro_area', fieldset).removeAttr 'readonly'
+
     $(document).on 'click', 'input.primary', ->
       if $(this).prop('checked',true)
         fieldset = $(this).closest('.fieldset')
