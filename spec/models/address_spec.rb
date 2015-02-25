@@ -52,11 +52,6 @@ describe Address do
   end
 
   context '#normalize_country' do
-    it 'returns passed in arg if given blank' do
-      expect(Address.normalize_country('')).to eq('')
-      expect(Address.normalize_country(nil)).to be_nil
-    end
-
     it 'normalizes country by case' do
       expect(Address.normalize_country('united STATES')).to eq('United States')
     end
@@ -67,6 +62,22 @@ describe Address do
 
     it 'returns a country not in the list as is' do
       expect(Address.normalize_country('Some non-Existent country')).to eq('Some non-Existent country')
+    end
+
+    it 'strips white space out from input' do
+      expect(Address.normalize_country(' united STATES ')).to eq('United States')
+    end
+
+    it 'strips white space out if country not in list' do
+      expect(Address.normalize_country(' Not-A-Country  ')).to eq('Not-A-Country')
+    end
+
+    it 'returns nil for nil' do
+      expect(Address.normalize_country(nil)).to be_nil
+    end
+
+    it 'returns nil for blank space' do
+      expect(Address.normalize_country('   ')).to be_nil
     end
   end
 
@@ -149,6 +160,18 @@ describe Address do
         a.update(field => 'a')
         expect(a.start_date).to eq(start)
         expect(a.source).to eq('import')
+      end
+    end
+
+    it 'does not update start date and source for changes affecting only whitespace or nil to blank' do
+      start = Date.new(2014, 1, 15)
+      [:street, :city, :state, :postal_code, :country].each do |field|
+        { nil => '', ' a ' => 'a', ' ' => nil, nil => ' ', 'a' => ' a ' }.each do |from_val, to_val|
+          a = Address.create(source: 'import', start_date: start, field => from_val)
+          a.update(field => to_val, user_changed: true)
+          expect(a.start_date).to eq(start)
+          expect(a.source).to eq('import')
+        end
       end
     end
   end
