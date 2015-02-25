@@ -17,7 +17,7 @@
         </div>
       <% end %>
 
-      <div class="row">
+      <div class="row spacer-top">
         <div class="col-md-7">
           <%= f.hidden_field :user_changed, value: true %>
           <div class="form-group">
@@ -54,7 +54,11 @@
             <div class="col-md-4">
               <div class="form-group">
                 <%= f.label :pledge_start_date, _('Commitment Start Date') %>
-                <%= f.date_select :pledge_start_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: 1951 %>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                  <input name="contact_pledge_start_date" type="text" class="form-control date-picker">
+                </div>
+                <%#= f.date_select :pledge_start_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: 1951 %>
               </div>
             </div>
           </div>
@@ -93,7 +97,7 @@
                   tags: current_account_list.contact_tags  %></script>
             </div>
           </div>
-          
+
           <div class="sfield referrers_field">
             <label class="fieldset_label"><%= _('Referrals') %></label>
             <% contact.contact_referrals_to_me.build if contact.contact_referrals_to_me.blank? %>
@@ -117,15 +121,13 @@
               <div class="rs"><%= link_to_add_fields(_('Add Donor Account'), f, :donor_accounts) %></div>
             </div>
           </div>
-          <div class="well">
-            <label class="fieldset_label"><%= _('Address') %></label>
+          <div class="contact_addresses_wrapper">
             <% contact.addresses.build if contact.addresses.blank? %>
             <%= f.fields_for :addresses do |builder| %>
               <%= render 'address_fields', builder: builder, object: contact %>
             <% end %>
-            <div class="sfield field_indent address_indent">
-              <div class="ls"></div>
-              <div class="rs"><%= link_to_add_fields(_('Add Address'), f, :addresses) %></div>
+            <div>
+              <%= link_to_add_fields(_('Add Address'), f, :addresses) %>
             </div>
           </div>
         </div><!-- col-md-5 -->
@@ -136,6 +138,7 @@
         <div class="fieldset">
           <label class="fieldset_label">People</label>
           <% contact.people.build if contact.people.blank? %>
+
           <%= f.fields_for :people do |builder| %>
             <div class="field radiocheck">
               <%= f.radio_button :primary_person_id, builder.object.id %>
@@ -146,6 +149,7 @@
               <%= render 'people/form', builder: builder, object: contact %>
             </div>
           <% end %>
+
           <div class="sfield">
             <div class="ls"></div>
             <div class="rs" id="add_person"><%= link_to_add_fields(_('Add Person/Child'), f, :people, partial: 'people/form') %></div>
@@ -160,3 +164,11 @@
       </div>
     <% end %>
 </div>
+
+<script>
+$(function(){
+    var datepicker = $.fn.datepicker.noConflict();
+    $.fn.bootstrapDP = datepicker;
+    $(".date-picker").bootstrapDP();
+});
+</script>

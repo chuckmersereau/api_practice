@@ -260,10 +260,25 @@ div.right {
   }
 }
 
+.donor_account_field {
+  .remove_fields {
+    background: none;
+    border: none;
+    padding: 0;
+    display: inline-block;
+  }
+  &:nth-child(n+2){
+    margin-top: 6px;
+  }
+}
+
 .page-controls {
   margin: 5px 0 20px;
   line-height: 34px;
 }
+
+.spacer-top {margin-top: 30px;}
+.spacer-bottom {margin-bottom: 30px;}
 
 .contacts-map-markers>span {
   white-space: nowrap;
@@ -367,9 +382,9 @@ div.right {
   margin-top: 30px;
 }
 
-#contentbody { 
-  border-top: none;  
-  background: #fff; 
+#contentbody {
+  border-top: none;
+  background: #fff;
   min-height: 165px;
 }
 .seemore {border-top: 4px solid #BBBDBF; padding-top: 6px; padding-left: 6px;}
@@ -466,7 +481,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 /* ************************************************************** */
 
 .filters_menu {
-  
+
   width: $leftmenuwidth;
   border-right: 1px solid #ccc;
   select {
@@ -507,7 +522,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 
   .left_tag_list {
     line-height: 1.3em;
-    padding: 10px 8px 0;
+    padding: 10px 8px 20px;
     a.tag {
       display: none;
       text-decoration: none;
@@ -600,7 +615,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
         border-radius: 2px;
       }
     }
-    
+
   }
 }
 
@@ -609,14 +624,16 @@ div.name {font-size: 14px; margin-bottom: 4px;}
   line-height: 1.3em;
   .tag {
     background: $color-blue-deep;
+    border-radius: 5px;
     color: $white;
     display: inline-block;
     font-size: .7em;
     font-family: Arial;
-    border-radius: 5px;
-    text-align: center;
-    padding: 0 7px;
+    font-weight: normal;
+    line-height: 1.5em;
     margin-bottom: 3px;
+    padding: 0 7px;
+    text-align: center;
   }
 }
 
@@ -941,23 +958,23 @@ tbody.tasks {
 table.meta {
   width: 100%;
   .meta_name {
-    width: 5%; 
-    font-weight: bold; 
-    padding-right: 15px; 
+    width: 5%;
+    font-weight: bold;
+    padding-right: 15px;
   }
   .meta_name_wide {
-    width: 32%; 
-    font-weight: bold; 
-    padding-right: 15px; 
+    width: 32%;
+    font-weight: bold;
+    padding-right: 15px;
     padding-left: 8px;
   }
   .meta_data {}
   th {
-    font-family: FreightSansProMedium; 
-    padding-bottom: 8px; 
-    border-bottom: 1px solid $gray_mid; 
-    padding-left: 8px; 
-    font-size: 16px; 
+    font-family: FreightSansProMedium;
+    padding-bottom: 8px;
+    border-bottom: 1px solid $gray_mid;
+    padding-left: 8px;
+    font-size: 16px;
     font-weight: normal;
   }
   th,td {
@@ -966,7 +983,7 @@ table.meta {
   }
 }
 .tabaction {
-  float: right; 
+  float: right;
   margin-top: 6px;
 }
 
@@ -1026,7 +1043,7 @@ table.meta {
 /* ************************************************************** */
 
 .inside_person {
-  background: $gray_lightest;
+  background: #eef9ff;
   margin-bottom: 10px;
   border-radius: 8px;
   padding: 15px;

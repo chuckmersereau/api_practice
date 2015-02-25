@@ -1,6 +1,6 @@
 <li ng-class="{'selected': contactQuery.tags[0]}" ng-show="!insightFilterIsActive()">
-  <span class="tags menu_item"><%= _('Tags') %></span>
-  <ul class="left_taglist tags">
+  <span class="tags_title menu_item"><%= _('Tags') %></span>
+  <ul class="left_tag_list tags">
     <li>
       <% tags.each do |tag|
         # toggle tag on / off
@@ -23,6 +23,9 @@
 <script>
 var tagSize = $('.left_tag_list .tag').length;
 $('.tagSize').html(tagSize);
+if (tagSize < 15) {
+  $('.show_all_tags_btn').hide();
+}
 $('.show_all_tags_btn').click(function() {
   $('.left_tag_list').toggleClass('show_all_tags');
 })

@@ -58,6 +58,7 @@
 //= require moment
 
 //= require bootstrap-tagsinput
+//= require bootstrap-datepicker.js
 //= require typeahead.jquery.js
 
 //= require gmaps/google

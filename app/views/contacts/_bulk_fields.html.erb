@@ -8,7 +8,11 @@
   <div class="col-md-4">
     <div class="form-group">
       <%= f.label :next_ask, _('Next Ask') %>
-      <%= f.date_select :next_ask, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: Time.now.year - 5 %>
+      <div class="input-group">
+        <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+        <input name="contact_next_ask" type="text" class="form-control date-picker">
+      </div>
+      <%#= f.date_select :next_ask, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: Time.now.year - 5 %>
     </div>
   </div>
   <div class="col-md-4">
@@ -39,7 +43,7 @@
   <div class="col-md-4">
     <div class="form-group">
       <%= f.label :website, _('Website') %>
-      <%= f.text_field :website, class: 'form-control' %>
+      <%= f.text_field :website, {placeholder: _('http://'), class: 'form-control'} %>
     </div>
   </div>
 </div>

@@ -23,11 +23,11 @@
   "dependencies": {
     "bootstrap-sass-official": "3.3.1"
   },
-  "_release": "138241bc91",
+  "_release": "a138c86e4a",
   "_resolution": {
     "type": "branch",
     "branch": "master",
-    "commit": "138241bc916f91b61d1e35b273e612badea722ee"
+    "commit": "a138c86e4a5fef129a8e54613dd14f838e5822ba"
   },
   "_source": "git://github.com/CruGlobal/crubrand.git",
   "_target": "*",

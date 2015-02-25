@@ -1,52 +1,84 @@
-<div class="sfield address_field<%= ' marked_for_destruction' if builder.object.marked_for_destruction? %>" data-behavior="field-wrapper">
+<div class="well sfield address_field<%= ' marked_for_destruction' if builder.object.marked_for_destruction? %>" data-behavior="field-wrapper">
   <%= builder.hidden_field :user_changed, value: true %>
-  <div class="rs">
-    <%= builder.label :street %>
-    <%= builder.text_area :street, rows: 2, placeholder: "Street address" %>
-  </div>
-  <div class="ls">
-    <%= builder.label :location %>
-    <%= builder.select :location, builder.object.assignable_locations.collect { |l| [_(l), l] }, include_blank: true %>
-  </div>
-  <div class="form-group">
-    <%= builder.label :city %>
-    <%= builder.text_field :city, placeholder: "City", class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= builder.label :state %>
-    <%= builder.text_field :state, placeholder: "State", class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= builder.label :postal_code %>
-    <%= builder.text_field :postal_code, placeholder: "Postal Code", class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= builder.label :region %>
-    <%= builder.text_field :region, placeholder: "Region", class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= builder.label :metro_area %>
-    <%= builder.text_field :metro_area, placeholder: "Metro Area", class: 'form-control' %>
-  </div>
-  <div class="form-group">
-    <%= builder.label :country %>
-    <%= builder.country_select :country, nil, {include_blank: true}, {class: 'country_select'} %><br/>
-
-    <div>
-      <%= builder.object.start_date ? _('Updated: ') + l(builder.object.start_date, format: :short) + '.' : '' %>
-      <%= builder.object.source ? _('Source: ') + _(exhibit(builder.object, self).user_friendly_source) : '' %>
+  <div class="row small-gutter">
+    <div class="col-xs-9">
+      <%= builder.label :street %>
+      <%= builder.text_area :street, rows: 2, placeholder: "Street address", class: 'form-control' %>
     </div>
-
-    <div class="field_action">
-        <%= builder.check_box :historic, class: 'address_historic' %>
-        <%= builder.label :historic, "Address no longer valid" %>
-    </div><br>
-    <div class="field_action">
-      <%= builder.check_box :primary_mailing_address, class: 'primary' %>
-      <%= builder.label :primary_mailing_address %>
-      <%= link_to_remove_fields(builder) %>
+    <div class="col-xs-3">
+      <%= builder.label :location %>
+      <%= builder.select :location, builder.object.assignable_locations.collect { |l| [_(l), l] }, include_blank: true, class: 'form-control' %>
     </div>
-
+  </div>
+  <div class="row small-gutter">
+    <div class="col-xs-5">
+      <div class="form-group">
+        <%= builder.label :city %>
+        <%= builder.text_field :city, placeholder: "City", class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <div class="form-group">
+        <%= builder.label :state %>
+        <%= builder.text_field :state, placeholder: "State", class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-xs-3">
+      <div class="form-group">
+        <%= builder.label :postal_code %>
+        <%= builder.text_field :postal_code, placeholder: "Postal Code", class: 'form-control' %>
+      </div>
+    </div>
   </div>
 
+
+  <div class="row small-gutter">
+    <div class="col-xs-5">
+      <div class="form-group">
+        <%= builder.label :country %>
+        <%= builder.country_select :country, nil, {include_blank: true}, {class: 'country_select form-control'} %>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <div class="form-group">
+        <%= builder.label :region %>
+        <%= builder.text_field :region, placeholder: "Region", class: 'form-control' %>
+      </div>
+    </div>
+    <div class="col-xs-3">
+      <div class="form-group">
+        <%= builder.label :metro_area %>
+        <%= builder.text_field :metro_area, placeholder: "Metro Area", class: 'form-control' %>
+      </div>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col-xs-8">
+      <div class="form-group">
+        <div>
+          <%= builder.object.start_date ? _('Updated: ') + l(builder.object.start_date, format: :short) + '.' : '' %>
+          <%= builder.object.source ? _('Source: ') + _(exhibit(builder.object, self).user_friendly_source) : '' %>
+        </div>
+        <div class="checkbox">
+          <%= builder.label(:historic) do%>
+            <%= builder.check_box :historic, class: 'address_historic' %>
+            <%= _("Address no longer valid") %>
+          <% end %>
+        </div>
+        <div class="checkbox">
+          <%= builder.label(:primary_mailing_address) do %>
+            <%= builder.check_box :primary_mailing_address, class: 'primary' %>
+            <%= _("Primary Address") %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+    <div class="col-xs-4">
+      <div class="form-group text-right">
+        <%= link_to_remove_fields(builder) %>
+      </div>
+    </div>
+  </div>
 </div>
