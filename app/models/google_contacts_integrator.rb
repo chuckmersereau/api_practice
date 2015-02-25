@@ -28,11 +28,17 @@ class GoogleContactsIntegrator
     @account = google_integration.google_account
   end
 
-  def self.retryable_exp_backoff
-    # Not exactly an exponential backoff, but basically try 30 seconds for a while then wait an hour and try.
-    # Google Contacts API seems to have limits per user per second, hour and half day, so this makes sense,
-    # http://stackoverflow.com/questions/7366268/query-limit-for-google-contacts-api
-    Retryable.retryable(times: 1, sleep: 3601) { Retryable.retryable(times: 4, sleep: 30) { yield } }
+  def self.retry_on_api_errs
+    yield
+  rescue OAuth2::Error => e
+    if e.response && e.response.status >= 500 || e.response.status == 403 # Server errs or rate limit exceeded
+      # For the rate limit error, we need to wait up to an hour, so we should put the job in the retry queue
+      # rather than holding up a Sidekiq thread with a long retry, but don't report the error to Airbrake since these
+      # errors are expected from time to time.
+      raise LowerRetryWorker::RetryJobButNoAirbrakeError
+    else
+      raise e
+    end
   end
 
   def sync_contacts
@@ -194,7 +200,7 @@ class GoogleContactsIntegrator
 
   def contacts_to_sync
     if @integration.contacts_last_synced
-      updated_g_contacts = self.class.retryable_exp_backoff do
+      updated_g_contacts = self.class.retry_on_api_errs do
         api_user.contacts_updated_min(@integration.contacts_last_synced, showdeleted: false)
       end
 
@@ -297,7 +303,7 @@ class GoogleContactsIntegrator
   end
 
   def groups
-    @groups ||= self.class.retryable_exp_backoff { api_user.groups }
+    @groups ||= self.class.retry_on_api_errs { api_user.groups }
   end
 
   def my_contacts_group
@@ -351,6 +357,8 @@ class GoogleContactsIntegrator
           else
             save_g_contact_links(g_contacts_and_links)
           end
+        rescue LowerRetryWorker::RetryJobButNoAirbrakeError => e
+          raise e
         rescue => e
           # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
           Airbrake.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
@@ -383,6 +391,9 @@ class GoogleContactsIntegrator
       end
 
       return true
+    when 403
+      # 403 is user rate limit exceeded, so don't retry the particular contact, just queue the whole job for retry
+      fail LowerRetryWorker::RetryJobButNoAirbrakeError
     else
       # Failed but can't just fix by resyncing the contact, so raise an error
       fail(status.inspect)
