@@ -1,0 +1,43 @@
+.bootstrap-tagsinput {
+  background-color: #fff;
+  border: 1px solid #ccc;
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  display: inline-block;
+  padding: 4px 6px;
+  margin-bottom: 10px;
+  color: #555;
+  vertical-align: middle;
+  border-radius: 4px;
+  max-width: 100%;
+  line-height: 22px;
+  cursor: text;
+  width: 80%; }
+
+.bootstrap-tagsinput input {
+  box-shadow: none;
+  background-color: transparent;
+  padding: 0;
+  margin: 0;
+  width: auto !important;
+  min-width: 7em;
+  max-width: inherit; }
+
+.bootstrap-tagsinput .tag [data-role="remove"] {
+  margin-left: 8px;
+  cursor: pointer; }
+
+.bootstrap-tagsinput .tag [data-role="remove"]:after {
+  content: "\f00d";
+  font-family: "FontAwesome";
+  padding: 0px 2px;
+  opacity: .5; }
+
+.bootstrap-tagsinput .tag [data-role="remove"]:hover:after {
+  opacity: 1; }
+
+.bootstrap-tagsinput .tag [data-role="remove"]:hover {
+  opacity: 1; }
+
+w
+.bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
+  opacity: .5; }
