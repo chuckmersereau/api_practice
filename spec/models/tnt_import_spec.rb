@@ -650,6 +650,14 @@ describe TntImport do
       appeal.reload
       expect(appeal.contacts.count).to eq(1)
     end
+
+    it 'does not error if an appeal has no contacts' do
+      expect(import).to receive(:find_or_create_appeals_by_tnt_id).and_return(1 => create(:appeal))
+      contacts_by_tnt_appeal_id = {}
+      expect { import.send(:import_appeals, contacts_by_tnt_appeal_id) }.to_not raise_error
+      expect(Appeal.count).to eq(1)
+      expect(AppealContact.count).to eq(0)
+    end
   end
 
   context '#import' do

@@ -27,8 +27,10 @@ class Appeal < ActiveRecord::Base
     bulk_add_contacts(contacts_by_opts(statuses, tags, excludes))
   end
 
-  def bulk_add_contacts(contacts)
-    AppealContact.import(contacts.uniq.map { |c| AppealContact.new(contact: c, appeal: self) })
+  def bulk_add_contacts(contacts_to_add)
+    appeal_contact_ids = contacts.pluck(:id).to_set
+    contacts_to_add = contacts_to_add.uniq.reject { |c| appeal_contact_ids.include?(c.id) }
+    AppealContact.import(contacts_to_add.map { |c| AppealContact.new(contact: c, appeal: self) })
   end
 
   def contacts_by_opts(statuses, tags, excludes)
