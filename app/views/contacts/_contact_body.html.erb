@@ -63,7 +63,7 @@
               <td class="meta_data">
                 <%= best_in_place(contact, :pledge_frequency,
                                   as: :select,
-                                  collection: [['',_('Unknown')]] + Contact.pledge_frequencies.to_a) %>
+                                  collection: [['',_('Unspecified')]] + Contact.pledge_frequencies.to_a) %>
               </td>
             </tr>
             <tr>
@@ -71,7 +71,7 @@
               <td class="meta_data">
                 <%= best_in_place(contact_exhibit, :send_newsletter,
                                   as: :select,
-                                  collection: [['','']] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
+                                  collection: [['','None']] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
               </td>
             </tr>
           </table>
