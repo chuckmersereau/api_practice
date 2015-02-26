@@ -268,9 +268,7 @@ class TntImport
     appeals_by_tnt_id = find_or_create_appeals_by_tnt_id
 
     appeals_by_tnt_id.each do |appeal_tnt_id, appeal|
-      appeal_contact_ids = appeal.contacts.pluck(:id).to_set
-      contacts = contacts_by_tnt_appeal_id[appeal_tnt_id].reject { |c| appeal_contact_ids.include?(c.id) }
-      appeal.bulk_add_contacts(contacts)
+      appeal.bulk_add_contacts(contacts_by_tnt_appeal_id[appeal_tnt_id] || [])
     end
 
     import_appeal_amounts(appeals_by_tnt_id)
