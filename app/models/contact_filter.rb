@@ -175,12 +175,9 @@ class ContactFilter
       end
 
       if @filters[:pledge_frequencies].present? && @filters[:pledge_frequencies].first != ''
-        puts 'look here!'
-        puts @filters[:pledge_frequencies]
         filtered_contacts = filtered_contacts.where(pledge_frequency: @filters[:pledge_frequencies])
       end
     end
-
     filtered_contacts
   end
 end
