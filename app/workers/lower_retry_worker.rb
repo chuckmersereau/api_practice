@@ -18,4 +18,7 @@ class LowerRetryWorker
       send(method, *args)
     end
   end
+
+  class RetryJobButNoAirbrakeError < StandardError
+  end
 end

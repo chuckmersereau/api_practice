@@ -4,7 +4,9 @@ class GoogleContactsCache
   end
 
   def cache_all_g_contacts
-    cache_g_contacts(@account.contacts_api_user.contacts(showdeleted: false), true)
+    GoogleContactsIntegrator.retry_on_api_errs do
+      cache_g_contacts(@account.contacts_api_user.contacts(showdeleted: false), true)
+    end
   end
 
   def cache_g_contacts(g_contacts, all_cached = false)
@@ -28,7 +30,7 @@ class GoogleContactsCache
     cached_g_contact = @g_contact_by_id[remote_id]
     return cached_g_contact if cached_g_contact
     return nil if @all_g_contacts_cached
-    g_contact = GoogleContactsIntegrator.retryable_exp_backoff do
+    g_contact = GoogleContactsIntegrator.retry_on_api_errs do
       @account.contacts_api_user.get_contact(remote_id)
     end
     g_contact unless g_contact.deleted?
@@ -50,7 +52,7 @@ class GoogleContactsCache
     elsif @all_g_contacts_cached
       []
     else
-      GoogleContactsIntegrator.retryable_exp_backoff do
+      GoogleContactsIntegrator.retry_on_api_errs do
         @account.contacts_api_user.query_contacts(name, showdeleted: false)
       end
     end

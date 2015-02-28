@@ -290,7 +290,7 @@ describe GoogleContactsIntegrator do
     end
   end
 
-  def stub_groups_request
+  def stub_groups_request(body = nil, status = 200)
     groups_body = {
       'feed' => {
         'entry' => [
@@ -308,7 +308,7 @@ describe GoogleContactsIntegrator do
     }
     stub_request(:get, 'https://www.google.com/m8/feeds/groups/default/full?alt=json&max-results=100000&v=3')
       .with(headers: { 'Authorization' => "Bearer #{@account.token}" })
-      .to_return(body: groups_body.to_json)
+      .to_return(body: body || groups_body.to_json, status: status)
   end
 
   def empty_feed_json
@@ -772,6 +772,44 @@ describe GoogleContactsIntegrator do
 
       @integrator.delete_g_contact_merge_losers
       expect(GoogleContact.all.count).to eq(0)
+    end
+  end
+
+  context '#retry_on_api_errs' do
+    def expect_err_for_response_code(code, expected_err)
+      if code == 200
+        stub_groups_request
+      else
+        body = <<-EOS
+          error: {
+              errors: [ { "domain": "d", "reason": "r", "message": "m" } ],
+              "code": #{code}, "message": "m"
+          }
+        EOS
+        stub_groups_request(body, code)
+      end
+
+      expectation = expect { GoogleContactsIntegrator.retry_on_api_errs { @integrator.api_user.groups } }
+      if expected_err
+        expectation.to raise_error(expected_err)
+      else
+        expectation.to_not raise_error
+      end
+    end
+
+    it 'raises a LowerRetryWorker::RetryJobButNoAirbrakeError error on 500s, 403 errs' do
+      expect_err_for_response_code(500, LowerRetryWorker::RetryJobButNoAirbrakeError)
+      expect_err_for_response_code(503, LowerRetryWorker::RetryJobButNoAirbrakeError)
+      expect_err_for_response_code(403, LowerRetryWorker::RetryJobButNoAirbrakeError)
+    end
+
+    it 'raise an OAuth2 error for other error codes' do
+      expect_err_for_response_code(400, OAuth2::Error)
+      expect_err_for_response_code(404, OAuth2::Error)
+    end
+
+    it 'does not raise an error for success code' do
+      expect_err_for_response_code(200, nil)
     end
   end
 
