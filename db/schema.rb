@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150227181652) do
+ActiveRecord::Schema.define(version: 20150228143706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -138,7 +138,7 @@ ActiveRecord::Schema.define(version: 20150227181652) do
   create_table "appeals", force: true do |t|
     t.string   "name"
     t.integer  "account_list_id"
-    t.decimal  "amount",          precision: 11, scale: 2
+    t.decimal  "amount",          precision: 19, scale: 2
     t.text     "description"
     t.date     "end_date"
     t.datetime "created_at"
@@ -221,9 +221,9 @@ ActiveRecord::Schema.define(version: 20150227181652) do
     t.integer  "account_list_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "pledge_amount",                        precision: 11, scale: 2
+    t.decimal  "pledge_amount",                        precision: 19, scale: 2
     t.string   "status"
-    t.decimal  "total_donations",                      precision: 13, scale: 2
+    t.decimal  "total_donations",                      precision: 19, scale: 2
     t.date     "last_donation_date"
     t.date     "first_donation_date"
     t.text     "notes"
@@ -265,7 +265,7 @@ ActiveRecord::Schema.define(version: 20150227181652) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
-    t.decimal  "balance",            precision: 11, scale: 2
+    t.decimal  "balance",            precision: 19, scale: 2
     t.datetime "balance_updated_at"
     t.string   "name"
     t.string   "staff_account_id"
@@ -291,7 +291,7 @@ ActiveRecord::Schema.define(version: 20150227181652) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "code"
-    t.decimal  "balance",            precision: 11, scale: 2
+    t.decimal  "balance",            precision: 19, scale: 2
     t.datetime "balance_updated_at"
     t.integer  "account_list_id"
   end
@@ -307,9 +307,9 @@ ActiveRecord::Schema.define(version: 20150227181652) do
     t.string   "motivation"
     t.string   "payment_method"
     t.string   "tendered_currency"
-    t.decimal  "tendered_amount",        precision: 11, scale: 2
+    t.decimal  "tendered_amount",        precision: 19, scale: 2
     t.string   "currency"
-    t.decimal  "amount",                 precision: 11, scale: 2
+    t.decimal  "amount",                 precision: 19, scale: 2
     t.text     "memo"
     t.date     "donation_date"
     t.datetime "created_at"
@@ -317,7 +317,7 @@ ActiveRecord::Schema.define(version: 20150227181652) do
     t.string   "payment_type"
     t.string   "channel"
     t.integer  "appeal_id"
-    t.decimal  "appeal_amount",          precision: 11, scale: 2
+    t.decimal  "appeal_amount",          precision: 19, scale: 2
   end
 
   add_index "donations", ["appeal_id"], name: "index_donations_on_appeal_id", using: :btree
@@ -342,7 +342,7 @@ ActiveRecord::Schema.define(version: 20150227181652) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "master_company_id"
-    t.decimal  "total_donations",                precision: 13, scale: 2
+    t.decimal  "total_donations",                precision: 19, scale: 2
     t.date     "last_donation_date"
     t.date     "first_donation_date"
     t.string   "donor_type",          limit: 20
