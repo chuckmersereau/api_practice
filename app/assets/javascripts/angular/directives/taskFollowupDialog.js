@@ -273,7 +273,7 @@ angular.module('mpdxApp')
                 };
                 $scope.followUpDialogResult = {
                     callTask: {
-                        type: 'Ask In Future',
+                        type: 'Call',
                         subject: 'Ask again for financial partnership',
                         date: dateTwoDaysFromToday,
                         hour: timeNowHour,
