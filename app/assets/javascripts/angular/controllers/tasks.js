@@ -59,7 +59,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
     };
 
     var contactFilterExists = function(){
-        return ($scope.filter.contactName !==  '' || $scope.filter.contactType !== '' || $scope.filter.contactCity[0] !== '' || $scope.filter.contactState[0] !== '' || $scope.filter.contactNewsletter !== '' || $scope.filter.contactStatus[0] !== '' || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== '' || $scope.filter.contactReferrer[0] !== ''  || $scope.filter.contactTimezone[0] !== '' || $scope.filter.contactPledgeFrequencies !== '');
+        return ($scope.filter.contactName !==  '' || $scope.filter.contactType !== '' || $scope.filter.contactCity[0] !== '' || $scope.filter.contactState[0] !== '' || $scope.filter.contactNewsletter !== '' || $scope.filter.contactStatus[0] !== '' || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== '' || $scope.filter.contactReferrer[0] !== ''  || $scope.filter.contactTimezone[0] !== '');
     };
 
     var getContactFilterIds = function(group){
@@ -75,7 +75,6 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[church][]=' + encodeURLarray($scope.filter.contactChurch).join('&filters[church][]=') +
             '&filters[referrer][]=' + encodeURLarray($scope.filter.contactReferrer).join('&filters[referrer][]=') +
             '&filters[timezone][]=' + encodeURLarray($scope.filter.contactTimezone).join('&filters[timezone][]=') +
-            '&filters[pledge_frequencies][]=' + encodeURLarray($scope.filter.contactPledgeFrequencies).join('&filters[pledge_frequencies][]=') +
             '&include=Contact.id&per_page=10000'
         , {}, function(data) {
             refreshTasks(group, _.flatten(data.contacts, 'id'));
@@ -167,7 +166,6 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             contactChurch: [''],
             contactReferrer: [''],
             contactTimezone: [''],
-            contactPledgeFrequencies: [''],
             tasksPerGroup: 25
         };
     };

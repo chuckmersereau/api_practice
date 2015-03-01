@@ -24,8 +24,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         relatedTaskAction: [''],
         appeal: [''],
         wildcardSearch: urlParameter.get('q'),
-        viewPrefsLoaded: false,
-        pledge_frequencies: ['']
+        viewPrefsLoaded: false
     };
 
     $scope.page = {
@@ -56,7 +55,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         if(!_.isNull(document.getElementById('globalContactSearch'))) {
             document.getElementById('globalContactSearch').value = '';
         }
-        $scope.contactQuery.pledge_frequencies = [''];
     };
 
     //view preferences
@@ -166,12 +164,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_appeal").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.pledge_frequencies)){
-            $scope.contactQuery.pledge_frequencies = prefs.pledge_frequencies;
-            if(prefs.pledge_frequencies[0]){
-                jQuery("#leftmenu #filter_pledge_frequencies").trigger("click");
-            }
-        }
     });
 
     $scope.tagIsActive = function(tag){
@@ -236,8 +228,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           '&filters[timezone][]=' + encodeURLarray(q.timezone).join('&filters[timezone][]=') +
           '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
           '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
-          '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch) +
-          '&filters[pledge_frequencies][]=' + encodeURLarray(q.pledge_frequencies).join('&filters[pledge_frequencies][]=');
+          '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch);
 
       api.call('get', requestUrl, {}, function (data) {
         angular.forEach(data.contacts, function (contact) {
@@ -291,8 +282,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           referrer: q.referrer,
           timezone: q.timezone,
           relatedTaskAction: q.relatedTaskAction,
-          appeal: q.appeal,
-          pledge_frequencies: q.pledge_frequencies
+          appeal: q.appeal
         };
         if (!isEmptyFilter(prefsToSave)) {
           viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
