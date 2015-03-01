@@ -89,7 +89,8 @@ describe Appeal do
       donation.update(amount: 150)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
 
-      donation2 = create(:donation, amount: 50, donation_date: 1.day.ago)
+      donation.update(donation_date: Date.today << 3)
+      donation2 = create(:donation, amount: 50, donation_date: Date.today)
       donor_account.donations << donation2
       contact.update_donation_totals(donation2)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
