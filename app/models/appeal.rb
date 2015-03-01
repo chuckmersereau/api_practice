@@ -97,8 +97,8 @@ class Appeal < ActiveRecord::Base
   # We define e.g. "stopped giving in the past 2 months" as no pledge set current, no gifts in the previous
   # 2 full months, and at least 3 gifts in the prior 10 months.
   def no_stopped_giving_recently(contacts, prev_full_months = 2, prior_months = 10, prior_num_gifts = 3)
-    prior_window_end = (Date.today.prev_month << prev_full_months).end_of_month
-    prior_window_start = (prior_window_end << prior_months).beginning_of_month
+    prior_window_end = Date.today << prev_full_months
+    prior_window_start = prior_window_end << prior_months
 
     former_givers_sql = "
       SELECT contacts.id
