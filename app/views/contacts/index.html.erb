@@ -153,17 +153,10 @@
               <%= select_tag 'filters[appeal]', options_from_collection_for_select(@appeals, 'id', 'name'), prompt: '-- Any --', multiple: true, size: 5, :'ng-model' => 'contactQuery.appeal' %>
             </div>
           </li>
-          <li>
-            <label id="filter_pledge_frequencies"><%= _('Commitment Frequency') %></label>
-            <div class="collapse" style="display:none;">
-              <%= select_tag 'filters[pledge_frequencies]', options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a), multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'contactQuery.pledge_frequencies' %>
-            </div>
-          </li>
           <li class="controls">
             <a href="#" ng-click="resetFilters()" class="btn">Reset Filters</a>
             <a href="#" ng-click="mapContacts()" class="btn">Map These Contacts</a>
           </li>
-
         </ul>
       </form>
 
