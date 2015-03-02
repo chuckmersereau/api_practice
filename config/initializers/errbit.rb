@@ -14,7 +14,7 @@ module Airbrake
     if ::Rails.env.development? || ::Rails.env.test?
       raise e
     else
-      Airbrake.notify(e, opts)
+      Airbrake.notify_or_ignore(e, opts)
     end
   end
 end
