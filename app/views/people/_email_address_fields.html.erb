@@ -1,15 +1,15 @@
-<div class="field email_field" data-behavior="field-wrapper">
-  <div class="ls"><%= builder.label :email, _('Email') %></div>
-  <div class="rs">
-    <%= builder.email_field :email %>
-    <div class="field_action">
-      <%= builder.check_box :primary, class: 'primary' %>
-      <%= builder.label :primary %>
-      <%= link_to_remove_fields(builder) %>
+<div class="field email_field form-inline" data-behavior="field-wrapper">
+    <div class="form-group">
+      <div class="input-group">
+        <%= builder.email_field :email, size: 33 %>
+        <div class="input-group-addon"><%= builder.check_box :primary, class: 'primary' %></div>
+      </div>
     </div>
-    <div class="field_action">
+    <div class="form-group disabler">
       <%= builder.check_box :historic, class: 'email_historic' %>
       <%= builder.label :historic, _('Email address no longer valid') %>
     </div>
-  </div>
+    <div class="form-group">
+      <%= link_to_remove_fields(builder) %>
+    </div>
 </div>

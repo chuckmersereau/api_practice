@@ -260,6 +260,13 @@ div.right {
   }
 }
 
+.page-filters-close {
+  border-top: 4px solid $borders;
+  padding-top: 10px;
+  border-bottom: 0;
+  padding-bottom: 0;
+}
+
 .donor_account_field {
   .remove_fields {
     background: none;
@@ -928,6 +935,30 @@ tbody.tasks {
   }
 }
 
+.disabler {
+  label {
+    width: 20px;
+    overflow: hidden;
+    height: 25px;
+  }
+  input[type=checkbox] { display:none; } /* to hide the checkbox itself */
+  input[type=checkbox] + label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+  }
+
+  input[type=checkbox] + label:before { content: "\f205"; } /* unchecked icon */
+  input[type=checkbox] + label:before { letter-spacing: 5px; } /* space between checkbox and label */
+
+  input[type=checkbox]:checked + label:before { content: "\f204"; } /* checked icon */
+  input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow space for check mark */
+}
+
+.status {
+  line-height: 1.15em;
+  margin-top: .5em;
+}
+
 .module {
   margin-top: 20px;
 }
@@ -1043,14 +1074,53 @@ table.meta {
 /* ************************************************************** */
 
 .inside_person {
-  background: #eef9ff;
+  background: $baby_blue;
   margin-bottom: 10px;
-  border-radius: 8px;
   padding: 15px;
   hr.thin {
     margin: 1em 0;
     border-color: $gray_light;
   }
+}
+
+.primary_select {
+  background: $baby_blue;
+  display: block !important;
+  margin: 0 !important;
+  .selector {
+    background: $color-blue-deep;
+    padding: 0px 10px;
+    display: inline-block;
+    margin-left: 1.5em;
+    label {
+      color: #fff;
+      margin-left: 5px;
+    }
+  }
+}
+
+.social_container {
+  padding-bottom: 25px;
+  position: relative;
+  .add_field {
+    position: absolute;
+    bottom: 0;
+    display: block;
+    content: "";
+    margin-bottom: 0;
+    line-height: 20px;
+    &:before {
+      font-size: 18px;
+    }
+    .add_title {
+      display: none;
+    }
+  }
+  .social_text {position: absolute; bottom:0; line-height: 20px;}
+  .add_facebook {margin-left: 36px; .add_field:before {content: "\f082"; }}
+  .add_twitter {margin-left: 56px; .add_field:before {content: "\f081"; }}
+  .add_linkedin {margin-left: 76px; .add_field:before {content: "\f08c"; }}
+  .add_website { margin-left: 96px; .add_field:before {content: "\f14c";}}
 }
 
 /* ************************************************************** */

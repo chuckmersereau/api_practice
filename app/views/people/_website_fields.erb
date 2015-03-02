@@ -1,11 +1,14 @@
-<div class="field phone_field" data-behavior="field-wrapper">
-  <div class="ls"><%= builder.label :number, _('URL') %></div>
-  <div class="rs">
-    <%= builder.text_field :url, placeholder: 'http://' %>
-    <div class="field_action">
-      <%= builder.check_box :primary, class: 'primary' %>
-      <%= builder.label :primary %>
-      <%= link_to_remove_fields(builder) %>
+<div class="field phone_field form-inline" data-behavior="field-wrapper">
+  <div class="form-group">
+    <%= _('<i class="fa fa-external-link-square"></i>') %>
+  </div>
+  <div class="form-group">
+  	<div class="input-group">
+	    <%= builder.text_field :url, placeholder: 'http://', class: 'form-control' %>
+    	<div class="input-group-addon"><%= builder.check_box :primary, class: 'primary' %></div>
     </div>
+  </div>
+  <div class="form-group">
+    <%= link_to_remove_fields(builder) %>
   </div>
 </div>

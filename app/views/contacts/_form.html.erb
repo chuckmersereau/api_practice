@@ -56,7 +56,7 @@
                 <%= f.label :pledge_start_date, _('Commitment Start Date') %>
                 <div class="input-group">
                   <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                  <input name="contact_pledge_start_date" type="text" class="form-control date-picker">
+                  <%= f.text_field :pledge_start_date, class: 'form-control date-picker' %>
                 </div>
                 <%#= f.date_select :pledge_start_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: 1951 %>
               </div>
@@ -97,15 +97,16 @@
                   tags: current_account_list.contact_tags  %></script>
             </div>
           </div>
-
-          <div class="sfield referrers_field">
-            <label class="fieldset_label"><%= _('Referrals') %></label>
-            <% contact.contact_referrals_to_me.build if contact.contact_referrals_to_me.blank? %>
-            <%= f.fields_for :contact_referrals_to_me do |builder| %>
-              <%= render 'contact_referral_fields', builder: builder, object: contact %>
-            <% end %>
-            <div class="sfield field_indent address_indent">
-              <div class="rs"><%= link_to_add_fields(_('Add Referral'), f, :contact_referrals_to_me, partial: 'contacts/contact_referral_fields') %></div>
+          <div class="row">
+            <div class="col-md-9 col-md-offset-3 referrers_field">
+              <label><%= _('Referrals') %></label>
+              <% contact.contact_referrals_to_me.build if contact.contact_referrals_to_me.blank? %>
+              <%= f.fields_for :contact_referrals_to_me do |builder| %>
+                <%= render 'contact_referral_fields', builder: builder, object: contact %>
+              <% end %>
+              <div class="sfield field_indent address_indent">
+                <div class="rs"><%= link_to_add_fields(_('Add Referral'), f, :contact_referrals_to_me, partial: 'contacts/contact_referral_fields') %></div>
+              </div>
             </div>
           </div>
         </div><!-- col-md-7 -->
@@ -134,15 +135,17 @@
       </div>
 
       <div class="clr"></div>
-      <div class="cols">
+      <div>
         <div class="fieldset">
           <label class="fieldset_label">People</label>
           <% contact.people.build if contact.people.blank? %>
 
           <%= f.fields_for :people do |builder| %>
-            <div class="field radiocheck">
-              <%= f.radio_button :primary_person_id, builder.object.id %>
-              <%= f.label :primary_person_id, _('Primary Contact') %>
+            <div class="field radiocheck primary_select">
+                <div class="selector">
+                  <%= f.radio_button :primary_person_id, builder.object.id %>
+                  <%= f.label :primary_person_id, _('Primary Contact') %>
+                </div>
             </div>
 
             <div class="inside_person">
@@ -151,16 +154,17 @@
           <% end %>
 
           <div class="sfield">
-            <div class="ls"></div>
-            <div class="rs" id="add_person"><%= link_to_add_fields(_('Add Person/Child'), f, :people, partial: 'people/form') %></div>
+            <div class="rs" id="add_person">
+              <%= link_to_add_fields(_('Add Person/Child'), f, :people, partial: 'people/form') %>
+            </div>
           </div>
         </div>
       </div>
       <div class="clr"></div>
       <div class="spacer"></div>
-      <div class="actions">
+      <div class="page-filters page-filters-close">
         <%= f.submit _('Save Contact'), class: "btn btn-primary" %>
-        <%= link_to(_('Back'), request.referrer ? :back : contacts_path, class: "btn") %>
+        <%= link_to(_('Back'), request.referrer ? :back : contacts_path, class: "btn btn-default") %>
       </div>
     <% end %>
 </div>
@@ -170,5 +174,7 @@ $(function(){
     var datepicker = $.fn.datepicker.noConflict();
     $.fn.bootstrapDP = datepicker;
     $(".date-picker").bootstrapDP();
+    $('[data-toggle="tooltip"]').tooltip();
+    //$( ".social_container .add_field" ).empty();
 });
 </script>

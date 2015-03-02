@@ -1,14 +1,15 @@
-<div class="field social_field" data-behavior="field-wrapper social-field" data-network="facebook">
-  <div class="ls"><%= builder.label :url, _('Facebook Url') %></div>
-  <div class="rs">
-    <% if builder.object.authenticated? %>
-      <%= link_to(builder.object.url, builder.object.url, target: '_blank') %>
-    <% else %>
-      <%= builder.text_field :url, placeholder: 'http://' %>
-    <% end %>
-    <div class="field_action">
-      <%= link_to_remove_fields(builder) %>
-    </div>
+<div class="social_field form-inline" data-behavior="field-wrapper social-field" data-network="facebook">
+  <div class="form-group">
+  <%= builder.label :url do %>
+	  <%= _('<i class="fa fa-facebook-square"></i>') %>
+	  <% if builder.object.authenticated? %>
+	    <%= link_to(builder.object.url, builder.object.url, target: '_blank') %>
+	  <% else %>
+	    <%= builder.text_field :url, placeholder: 'http://', class: 'form-control' %>
+	  <% end %>
+  <% end %>
   </div>
-
+  <div class="form-group">
+	  <%= link_to_remove_fields(builder) %>
+  </div>
 </div>

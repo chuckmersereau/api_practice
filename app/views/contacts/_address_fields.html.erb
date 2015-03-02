@@ -7,7 +7,7 @@
     </div>
     <div class="col-xs-3">
       <%= builder.label :location %>
-      <%= builder.select :location, builder.object.assignable_locations.collect { |l| [_(l), l] }, include_blank: true, class: 'form-control' %>
+      <%= builder.select :location, builder.object.assignable_locations.collect { |l| [_(l), l] }, {include_blank: true}, class: 'form-control' %>
     </div>
   </div>
   <div class="row small-gutter">
@@ -55,12 +55,8 @@
 
 
   <div class="row">
-    <div class="col-xs-8">
+    <div class="col-xs-6">
       <div class="form-group">
-        <div>
-          <%= builder.object.start_date ? _('Updated: ') + l(builder.object.start_date, format: :short) + '.' : '' %>
-          <%= builder.object.source ? _('Source: ') + _(exhibit(builder.object, self).user_friendly_source) : '' %>
-        </div>
         <div class="checkbox">
           <%= builder.label(:historic) do%>
             <%= builder.check_box :historic, class: 'address_historic' %>
@@ -75,9 +71,15 @@
         </div>
       </div>
     </div>
-    <div class="col-xs-4">
+    <div class="col-xs-6">
       <div class="form-group text-right">
         <%= link_to_remove_fields(builder) %>
+        <p class="status">
+          <small>
+            <%= builder.object.start_date ? _('Updated: ') + l(builder.object.start_date, format: :short) + '.' : '' %>
+            <%= builder.object.source ? _('Source: ') + _(exhibit(builder.object, self).user_friendly_source) : '' %>
+          </small>
+        </p>
       </div>
     </div>
   </div>

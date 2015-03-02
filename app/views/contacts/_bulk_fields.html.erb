@@ -10,7 +10,7 @@
       <%= f.label :next_ask, _('Next Ask') %>
       <div class="input-group">
         <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-        <input name="contact_next_ask" type="text" class="form-control date-picker">
+        <%= f.text_field :next_ask, class: 'form-control date-picker' %>
       </div>
       <%#= f.date_select :next_ask, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: Time.now.year - 5 %>
     </div>

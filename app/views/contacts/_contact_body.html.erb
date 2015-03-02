@@ -2,32 +2,32 @@
   <div id="contentbody" class="withright col-md-9" data-contact-id="<%= contact.id %>">
     <div class="contact_controls">
       <div class="row">
-        <div class="actions col-md-9">
+        <div class="actions col-md-8">
           <%= link_to(_('<i class="fa fa-users"></i> Add Referrals'), add_referrals_contact_path(contact), remote: true, :class=> "btn btn-default add_referrals no-new-tab") %>
           <%= link_to(_('Log Task'), new_task_path(contact_id: contact.id, completed: true), class: "btn btn-default add_task", remote: true, data: {completed: true}) %>
           <%= link_to(_('<i class="fa fa-check-square-o"></i> Add Task'), new_task_path(contact_id: contact.id), class: "btn btn-default add_task", data: {contact_id: contact.id}, remote: true) %>
           <%= link_to(_('<i class="fa fa-eye-slash"></i>'), contact_path(contact), title: "Hide Contact", class: "btn btn-default", method: :delete, data: { confirm: _("This contact will be set to 'Never Ask'. Is that what you want to do?") }) %>
         </div>
-        <div class="col-md-3 text-right">
+        <div class="col-md-4 text-right">
           <%= link_to(_('<i class="fa fa-pencil"></i> Edit'), edit_contact_path(contact), :class=> "btn btn-secondary edit_contact_btn desired_action") %>
           <% contacts.index(contact_exhibit.to_model).tap do |current_index| %>
             <% if current_index %>
               <div id="contact_paging">
                 <% if current_index > 0 %>
-                  <%= link_to('&lt;'.html_safe, contacts[current_index - 1], class: 'flatbtn', remote: false) %>
+                  <%= link_to('&lt;'.html_safe, contacts[current_index - 1], class: 'btn btn-default', remote: false) %>
+                <% end %>
+                <% if current_index < contacts.length - 1 %>
+                  <%= link_to('&gt;'.html_safe, contacts[current_index + 1], class: 'btn btn-default', remote: false) %>
                 <% end %>
                 <span><%== _('<strong>%{index} of %{total}</strong>').localize % {index: current_index + 1, total: contacts.length} %></span>
-                <% if current_index < contacts.length - 1 %>
-                  <%= link_to('&gt;'.html_safe, contacts[current_index + 1], class: 'flatbtn', remote: false) %>
-                <% end %>
               </div>
             <% end %>
           <% end %>
         </div>
-        
+
       </div>
     </div><!-- contact controls -->
-    
+
 
     <div class="profiletop module">
       <div class="row">
@@ -229,7 +229,7 @@
         <div id="donations"></div>
       </div>
     </div>
-    
+
 
   </div>
 <% end %>
