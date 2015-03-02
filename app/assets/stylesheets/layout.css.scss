@@ -234,6 +234,7 @@ div.right {
     padding: 0px 10px 10px 10px;
     width: 220px;
     color: #ddd;
+    line-height: 1.15em;
   }
 
   a {
@@ -522,6 +523,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
   .companies {}
   .tags_title:before {content: "\f02c";}
   .filters_title:before {content: "\f0ca";}
+  .sort_title:before {content: "\f1d8";}
 
   .filters_section {
     margin-bottom: 1.5em;
@@ -623,6 +625,35 @@ div.name {font-size: 14px; margin-bottom: 4px;}
       }
     }
 
+  }
+}
+
+.sort_options {
+  li.option {
+    padding-left: 8px;
+    a.inbox:before,
+    a.starred:before {
+      content: "\f114";
+      display: block;
+      float: left;
+      font-family: "FontAwesome";
+      margin-right: 5px;
+      transition: .2s all;
+      font-size: 12px;
+      font-weight: 100;
+      line-height: 28px;
+    }
+    a.starred:before {
+      content: "\f006";
+    }
+  }
+  li.option.selected {
+    a.inbox:before {
+      content: "\f07c";
+    }
+    a.starred:before {
+      content: "\f005";
+    }
   }
 }
 

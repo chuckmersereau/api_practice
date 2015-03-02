@@ -1,52 +1,53 @@
-<h2 style="line-height:130%">
+<h3 style="line-height: 1.15em;">
   <%= _('Have a suggestion or a problem? Please fill out the form below.') %>
-  <br>
   <%= _('The more detail you are able to give us, the easier it will be for us to help you. Thanks!') %>
-  <br>
-  <%== _('Before emailing us, please have a look at %{link} to see if your question is already answered there.').localize % {link: link_to('www.gcx.org/mpdxhelp/', 'http://www.gcx.org/mpdxhelp//', target: '_blank')} %>
-</h2>
+  <%== _('Before emailing us, please have a look at %{link} to see if your question is already answered there.').localize % {link: link_to('our MPDX Help Site', 'http://www.gcx.org/mpdxhelp/', target: '_blank')} %>
+</h3>
 
 <%= form_for @help_request do |f| %>
-  <% if @help_request.errors.any? %>
-    <div id="error_explanation">
-      <ul>
-        <% @help_request.errors.full_messages.each do |msg| %>
-          <li><%= msg %></li>
-        <% end %>
-      </ul>
+
+  <div class="row">
+    <% if @help_request.errors.any? %>
+      <div id="error_explanation">
+        <ul>
+          <% @help_request.errors.full_messages.each do |msg| %>
+            <li><%= msg %></li>
+          <% end %>
+        </ul>
+      </div>
+    <% end %>
+
+    <div class="col-md-8 col-md-offset-2">
+      <div class="form-group">
+        <%= f.label :request_type, _("Short version of why you're emailing us") %>
+        <%= f.text_field :request_type, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :name %>
+        <%= f.text_field :name, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :email %>
+        <%= f.text_field :email, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :problem, _('Problem / Suggestion / Question (Longer version)') %>
+        <%= f.text_area :problem, rows: 8, class: 'form-control' %>
+      </div>
+
+      <div class="form-group">
+        <%= f.label :file, _('If your problem is related to importing, please attach the file you are trying to upload.') %>
+        <%= f.file_field :file, class: 'form-control' %>
+        <%= f.hidden_field :file_cache %>
+        <%= @help_request.file.filename if @help_request.file? %>
+      </div>
+
+      <div class="form-group">
+        <%= f.submit _('Submit'), class: 'btn btn-primary' %>
+      </div>
     </div>
-  <% end %>
-
-  <div class="field">
-    <%= f.label :request_type, _("Short version of why you're emailing us") %>
-    <%= f.text_field :request_type %>
   </div>
-
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
-  </div>
-
-  <div class="field">
-    <%= f.label :email %>
-    <%= f.text_field :email %>
-  </div>
-
-  <div class="field">
-    <%= f.label :problem, _('Problem / Suggestion / Question (Longer version)') %>
-    <%= f.text_area :problem, rows: 10, style: 'width:500px' %>
-  </div>
-
-  <div class="field">
-    <%= f.label :file, _('If your problem is related to importing, please attach the file you are trying to upload.') %>
-    <%= f.file_field :file %>
-    <%= f.hidden_field :file_cache %>
-    <%= @help_request.file.filename if @help_request.file? %>
-  </div>
-
-  <div class="field">
-    <%= f.submit _('Submit') %>
-  </div>
-
-
 <% end %>
