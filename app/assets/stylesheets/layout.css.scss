@@ -566,8 +566,9 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 
   .filter_title {
     padding-left: 8px;
-    font-size: .9em;
-    font-weight: 600;
+    font-size: 1em;
+    font-weight: 500;
+    margin-bottom: 0;
     &:before {
       content: "\f196";
       display: block;
@@ -577,7 +578,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
       transition: .2s all;
       font-size: 12px;
       font-weight: 100;
-      line-height: 28px;
+      line-height: 29px;
     }
     &.opened {
       &:before {
@@ -601,7 +602,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     input[type=radio] {margin-right: 4px;}
   }
   .filters {
-    margin: 0 auto;
+    margin: .5em auto 0 auto;
     .controls {
       padding-left: 6px;
     }
@@ -629,8 +630,13 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 }
 
 .sort_options {
+  margin-top: .5em !important;
+  margin-bottom: 1em !important;
   li.option {
     padding-left: 8px;
+    a {
+      color: $base-text-color;
+    }
     a.inbox:before,
     a.starred:before {
       content: "\f114";
