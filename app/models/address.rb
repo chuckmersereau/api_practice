@@ -24,7 +24,7 @@ class Address < ActiveRecord::Base
   MANUAL_SOURCE = 'manual'
 
   assignable_values_for :location, allow_blank: true do
-    [_('Home'), _('Business'), _('Mailing'), _('Other')]
+    [_('Home'), _('Business'), _('Mailing'), _('Seasonal'), _('Other')]
   end
 
   def equal_to?(other)
