@@ -2,7 +2,7 @@ $ ->
 
   $().ready ->
   numberOfRows = $('#recurringGiftsDataTable tbody tr').length
-  $('#nextAskYearMonth').replaceWith($.datepicker.formatDate 'yy / mm', new Date $('#nextAskYearMonth').text()) for num in [0..numberOfRows]
+  $('#nextAskYearMonth').replaceWith('<td>' +  $.datepicker.formatDate 'yy / mm' + '</td>', new Date $('#nextAskYearMonth').text() ) for num in [0..numberOfRows]
 
   $("table tbody tr").on 'dblclick', ->
     cName = $(this).data('id')
@@ -17,3 +17,6 @@ $ ->
       data: {'selResult':selectedResult,'selectedRecurringContactId':selectedRecurringContactId } ,
       type: 'POST'
     }
+
+
+  $("#recurringGiftsDataTable").sortable();
