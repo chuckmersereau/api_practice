@@ -30,6 +30,9 @@ class GoogleContactsIntegrator
 
   def self.retry_on_api_errs
     yield
+  rescue GoogleContactsApi::UnauthorizedError
+    # Try job again which will refresh the token
+    raise LowerRetryWorker::RetryJobButNoAirbrakeError
   rescue OAuth2::Error => e
     if e.response && e.response.status >= 500 || e.response.status == 403 # Server errs or rate limit exceeded
       # For the rate limit error, we need to wait up to an hour, so we should put the job in the retry queue
