@@ -12,9 +12,9 @@ class InsightAnalyses
     recommends = increase_recommendation_analysis(designation_number)
     contacts_list = []
     if recommends && recommends['rowset']['Row']
-      recommends['rowset']['Row'].each { |c, _val|
+      recommends['rowset']['Row'].each do |c, _val|
         contacts_list.push(c['Column8'])
-      }
+      end
     end
     contacts_list
   end

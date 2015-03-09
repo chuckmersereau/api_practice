@@ -7,7 +7,6 @@ describe NotificationType::SpecialGift do
   let(:donation) { create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 5.days.ago) }
 
   context '#check' do
-
     it 'adds a notification if a gift comes from a non financial partner' do
       donation # create donation object from let above
       notifications = special_gift.check(contact.account_list)
@@ -27,16 +26,15 @@ describe NotificationType::SpecialGift do
       notifications = special_gift.check(account_list2)
       notifications.length.should == 0
     end
-
   end
 
   describe '.create_task' do
     let(:account_list) { create(:account_list) }
 
     it 'creates a task for the activity list' do
-      expect {
+      expect do
         special_gift.create_task(account_list, contact.notifications.new(donation_id: donation.id))
-      }.to change(Activity, :count).by(1)
+      end.to change(Activity, :count).by(1)
     end
 
     it 'associates the contact with the task created' do

@@ -36,17 +36,6 @@ Metrics/LineLength:
 Metrics/PerceivedComplexity:
   Max: 59
 
-# Offense count: 42
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedHashRocketStyle, EnforcedColonStyle, EnforcedLastArgumentHashStyle, SupportedLastArgumentHashStyles.
-Style/AlignHash:
-  Enabled: false
-
-# Offense count: 252
-# Cop supports --auto-correct.
-Style/Blocks:
-  Enabled: false
-
 # Offense count: 29
 # Configuration parameters: EnforcedStyle, SupportedStyles.
 Style/ClassAndModuleChildren:
@@ -56,38 +45,10 @@ Style/ClassAndModuleChildren:
 Style/ClassVars:
   Enabled: false
 
-# Offense count: 112
-# Cop supports --auto-correct.
-Style/CommentIndentation:
-  Enabled: false
-
 # Offense count: 175
 Style/Documentation:
   Enabled: false
 
 # Offense count: 2
 Style/EmptyElse:
-  Enabled: false
-
-# Offense count: 124
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/EmptyLinesAroundBlockBody:
-  Enabled: false
-
-# Offense count: 213
-# Cop supports --auto-correct.
-Style/LeadingCommentSpace:
-  Enabled: false
-
-# Offense count: 181
-# Cop supports --auto-correct.
-# Configuration parameters: EnforcedStyle, SupportedStyles.
-Style/MultilineOperationIndentation:
-  Enabled: false
-
-# Offense count: 22
-# Cop supports --auto-correct.
-# Configuration parameters: AllowIfMethodIsEmpty.
-Style/SingleLineMethods:
   Enabled: false

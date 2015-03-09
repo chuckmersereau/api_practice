@@ -1,6 +1,5 @@
 require 'spec_helper'
 describe AccountListExhibit do
-
   subject { AccountListExhibit.new(account_list, context) }
   let(:account_list) { build(:account_list) }
   let(:context) { double }
@@ -35,5 +34,4 @@ describe AccountListExhibit do
     context.stub(:number_to_current_currency).with(3).and_return('$3')
     subject.balances(user).should include('Balance: $3')
   end
-
 end

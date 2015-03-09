@@ -4,5 +4,7 @@ class CompanyPosition < ActiveRecord::Base
 
   # attr_accessible :position
 
-  def to_s() position; end
+  def to_s
+    position
+  end
 end

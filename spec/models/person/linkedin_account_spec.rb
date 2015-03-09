@@ -9,9 +9,9 @@ describe Person::LinkedinAccount do
                                    info: { first_name: 'John', last_name: 'Doe' }
                                   )
       person = FactoryGirl.create(:person)
-      expect {
+      expect do
         @account = Person::LinkedinAccount.find_or_create_from_auth(auth_hash, person)
-      }.to change(Person::LinkedinAccount, :count).from(0).to(1)
+      end.to change(Person::LinkedinAccount, :count).from(0).to(1)
       person.linkedin_accounts.should include(@account)
     end
   end
@@ -42,9 +42,9 @@ describe Person::LinkedinAccount do
     it 'raises LinkedIn::Errors::UnauthorizedError if there are no accounts with a valid token' do
       account = create(:linkedin_account, valid_token: false)
 
-      expect {
+      expect do
         account.update_attributes(url: 'http://bar.com')
-      }.to raise_error(LinkedIn::Errors::UnauthorizedError)
+      end.to raise_error(LinkedIn::Errors::UnauthorizedError)
     end
 
     it 'looks for a second valid account if the first one it finds raises an error' do
@@ -58,10 +58,9 @@ describe Person::LinkedinAccount do
       stub_request(:get, 'https://api.linkedin.com/v1/people/url=http:%2F%2Fwww.linkedin.com%2Fpub%2Fchris-cardiff%2F6%2Fa2%2F62a:(id,first-name,last-name,public-profile-url)')
         .to_return(status: 200, body: '{"first_name":"Chris","id":"F_ZUsSGtL7","last_name":"Cardiff","public_profile_url":"http://www.linkedin.com/pub/chris-cardiff/6/a2/62a"}', headers: {})
 
-      expect {
+      expect do
         account2.update_attributes(url: 'www.linkedin.com/pub/chris-cardiff/6/a2/62a')
-      }.to change(account1, :valid_token).from(true).to(false)
+      end.to change(account1, :valid_token).from(true).to(false)
     end
   end
-
 end

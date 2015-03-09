@@ -27,6 +27,6 @@ class PrayerLettersAccountsController < ApplicationController
 
   def prayer_letters_account
     @prayer_letters_account ||= current_account_list.prayer_letters_account ||
-                          current_account_list.build_prayer_letters_account
+                                current_account_list.build_prayer_letters_account
   end
 end

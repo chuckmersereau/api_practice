@@ -20,9 +20,13 @@ class Person::TwitterAccount < ActiveRecord::Base
     super
   end
 
-  def to_s() screen_name; end
+  def to_s
+    screen_name
+  end
 
-  def self.one_per_user?() false; end
+  def self.one_per_user?
+    false
+  end
 
   def screen_name=(value)
     return unless value

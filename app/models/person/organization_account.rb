@@ -32,7 +32,9 @@ class Person::OrganizationAccount < ActiveRecord::Base
     @user ||= person.to_user
   end
 
-  def self.one_per_user?() false; end
+  def self.one_per_user?
+    false
+  end
 
   def requires_username_and_password?
     organization.api(self).requires_username_and_password? if organization

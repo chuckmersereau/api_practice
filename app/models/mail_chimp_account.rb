@@ -85,7 +85,7 @@ class MailChimpAccount < ActiveRecord::Base
     api_key.to_s.split('-').last
   end
 
-  #private
+  # private
 
   def call_mailchimp(method, *args)
     return if !active? || primary_list_id.blank?
@@ -180,10 +180,10 @@ class MailChimpAccount < ActiveRecord::Base
     contacts = contacts.where(id: contact_ids) if contact_ids
 
     contacts = contacts
-      .includes(people: :primary_email_address)
-      .where(send_newsletter: %w(Email Both))
-      .where('email_addresses.email is not null')
-      .references('email_addresses')
+               .includes(people: :primary_email_address)
+               .where(send_newsletter: %w(Email Both))
+               .where('email_addresses.email is not null')
+               .references('email_addresses')
 
     export_to_list(primary_list_id, contacts.to_set)
   end
@@ -255,7 +255,7 @@ class MailChimpAccount < ActiveRecord::Base
   def find_grouping(list_id)
     groupings = gb.list_interest_groupings(id: list_id)
     groupings.find { |g| g['id'] == grouping_id } ||
-                           groupings.find { |g| g['name'] == _('Partner Status') }
+      groupings.find { |g| g['name'] == _('Partner Status') }
   end
 
   def queue_import_if_list_changed

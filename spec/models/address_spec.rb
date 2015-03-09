@@ -24,13 +24,13 @@ describe Address do
       master = create(:master_address)
       address1 = create(:address, master_address: master)
       address2 = create(:address, master_address: master)
-      expect {
+      expect do
         address1.destroy!
-      }.to_not change(MasterAddress, :count).from(1)
+      end.to_not change(MasterAddress, :count).from(1)
 
-      expect {
+      expect do
         address2.destroy!
-      }.to change(MasterAddress, :count).from(1).to(0)
+      end.to change(MasterAddress, :count).from(1).to(0)
     end
   end
 

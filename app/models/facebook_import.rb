@@ -77,7 +77,6 @@ class FacebookImport
           Airbrake.raise_or_notify(e)
           next
         end
-
       end
     ensure
       facebook_account.update_column(:downloading, false)

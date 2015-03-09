@@ -21,7 +21,6 @@ class ContactsController < ApplicationController
     @appeals = current_account_list.appeals
 
     respond_to do |format|
-
       format.html do
         @contacts = @filtered_contacts.includes([{ primary_person: [:facebook_account, :primary_picture] },
                                                  :tags, :primary_address,
@@ -234,17 +233,16 @@ class ContactsController < ApplicationController
         else
           @bad_contacts_count += 1
         end
-
       end
 
       if @contacts.length > 0
         flash[:notice] = _('You have successfully added %{contacts_count:referrals}.').to_str.localize %
-          { contacts_count: @contacts.length, referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
+                         { contacts_count: @contacts.length, referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
       end
 
       if @bad_contacts_count > 0
         flash[:alert] = _("%{contacts_count:referrals} couldn't be added because they were missing a first name or you put in a bad email address.").to_str.localize %
-          { contacts_count: @bad_contacts_count, referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
+                        { contacts_count: @bad_contacts_count, referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
 
       end
     end

@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe SocialStreamsController do
-
   before(:each) do
     @user = create(:user_with_account)
     sign_in(:user, @user)
@@ -27,5 +26,4 @@ describe SocialStreamsController do
       assigns(:items).length.should == 1
     end
   end
-
 end

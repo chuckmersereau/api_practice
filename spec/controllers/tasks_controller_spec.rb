@@ -44,9 +44,9 @@ describe TasksController do
   describe 'POST create' do
     describe 'with valid params' do
       it 'creates a new Task' do
-        expect {
+        expect do
           post :create,  task: valid_attributes
-        }.to change(@account_list.tasks, :count).by(1)
+        end.to change(@account_list.tasks, :count).by(1)
       end
 
       it 'assigns a newly created task as @task' do
@@ -113,9 +113,9 @@ describe TasksController do
     it 'destroys the requested task' do
       task = @account_list.tasks.create! valid_attributes
       request.env['HTTP_REFERER'] = tasks_url
-      expect {
+      expect do
         delete :destroy,  id: task.to_param
-      }.to change(@account_list.tasks, :count).by(-1)
+      end.to change(@account_list.tasks, :count).by(-1)
     end
 
     it 'redirects to the tasks list' do
@@ -125,5 +125,4 @@ describe TasksController do
       response.should redirect_to(request.env['HTTP_REFERER'])
     end
   end
-
 end

@@ -75,7 +75,7 @@ class User < Person
 
   def self.from_access_token(token)
     User.find_by_access_token(token) ||
-    get_user_from_cas_oauth(token)
+      get_user_from_cas_oauth(token)
   end
 
   def self.get_user_from_cas_oauth(token)
