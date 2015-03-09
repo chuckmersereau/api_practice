@@ -79,19 +79,40 @@ class Siebel < DataServer
 
   def import_donations(profile, start_date = nil, end_date = nil)
     # if no date_from was passed in, use min date from query_ini
+    rails_start_date = start_date
     if start_date.blank?
       start_date = @org.minimum_gift_date ? @org.minimum_gift_date : '01/01/2004'
-      start_date = Date.strptime(start_date, '%m/%d/%Y').strftime('%Y-%m-%d')
+      rails_start_date = Date.strptime(start_date, '%m/%d/%Y')
+      start_date = rails_start_date.strftime('%Y-%m-%d')
     else
       start_date = start_date.strftime('%Y-%m-%d')
     end
 
-    end_date = end_date ? Date.strptime(end_date, '%m/%d/%Y').strftime('%Y-%m-%d') : Time.now.strftime('%Y-%m-%d')
+    rails_end_date = end_date ? Date.strptime(end_date, '%m/%d/%Y') : Time.now
+    end_date = rails_end_date.strftime('%Y-%m-%d')
 
     profile.designation_accounts.each do |da|
       SiebelDonations::Donation.find(designations: da.designation_number, posted_date_start: start_date,
                                      posted_date_end: end_date).each do |donation|
         add_or_update_donation(donation, da, profile)
+      end
+
+      # Check for removed donations
+      all_current_donations_relation = da.donations.where('donation_date > ? AND donation_date < ?', rails_start_date, rails_end_date)
+                                       .where.not(remote_id: nil)
+      all_current_donations_array = all_current_donations_relation.to_a
+      SiebelDonations::Donation.find(designations: da.designation_number, donation_date_start: start_date,
+                                     donation_date_end: end_date).each do |siebel_donation|
+        donation = all_current_donations_relation.where(remote_id: siebel_donation.id).first
+        all_current_donations_array.delete(donation)
+      end
+
+      # Double check removed donations straight from Siebel
+      all_current_donations_array.each do |donation|
+        donation_date = donation.donation_date.strftime('%Y-%m-%d')
+        siebel_donation = SiebelDonations::Donation.find(designations: da.designation_number, donors: donation.donor_account.account_number,
+                                                         start_date: donation_date, end_date: donation_date)
+        donation.destroy unless siebel_donation.present?
       end
     end
   end
