@@ -96,9 +96,9 @@ describe Siebel do
       donor_account.save
 
       stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&posted_date_end=#{Date.today.strftime('%Y-%m-%d')}&response_timeout=60000&posted_date_start=2004-01-01")
-        .to_return(status: 200, body: '[ { "id": "1-IGQAP", "amount": "100.00", "designation": "' + da1.designation_number + '", "donorId": "' + donor_account.account_number + '", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" } ]')
+          .to_return(status: 200, body: '[ { "id": "1-IGQAP", "amount": "100.00", "designation": "' + da1.designation_number + '", "donorId": "' + donor_account.account_number + '", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" } ]')
       stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&donation_date_end=#{Date.today.strftime('%Y-%m-%d')}&response_timeout=60000&donation_date_start=2004-01-01")
-        .to_return(status: 200, body: '[ { "id": "1-IGQAP", "amount": "100.00", "designation": "' + da1.designation_number + '", "donorId": "' + donor_account.account_number + '", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" } ]')
+          .to_return(status: 200, body: '[ { "id": "1-IGQAP", "amount": "100.00", "designation": "' + da1.designation_number + '", "donorId": "' + donor_account.account_number + '", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" } ]')
 
       designation_profile.designation_accounts << da1
       expect {
@@ -106,15 +106,44 @@ describe Siebel do
       }.to change { da1.donations.count }.by(1)
 
       stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&posted_date_end=#{Date.today.strftime('%Y-%m-%d')}&response_timeout=60000&posted_date_start=2004-01-01")
-        .to_return(status: 200, body: '[]')
+          .to_return(status: 200, body: '[]')
       stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&donation_date_end=#{Date.today.strftime('%Y-%m-%d')}&response_timeout=60000&donation_date_start=2004-01-01")
-        .to_return(status: 200, body: '[]')
+          .to_return(status: 200, body: '[]')
       stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&donors=#{donor_account.account_number}&end_date=2012-12-18&response_timeout=60000&start_date=2012-12-18")
-        .to_return(status: 200, body: '[]')
+          .to_return(status: 200, body: '[]')
 
       expect {
         siebel.send(:import_donations, designation_profile)
       }.to change { da1.donations.count }.by(-1)
+    end
+
+    it 'does not remove a manually entered donation if it is not in the download list' do
+      donor_account.account_number = 'MyString'
+      donor_account.save
+      donation = create(:donation, donor_account: donor_account, designation_account: da1, donation_date: 2.weeks.ago, remote_id: nil)
+
+      stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&posted_date_end=#{Date.today.strftime('%Y-%m-%d')}&response_timeout=60000&posted_date_start=2004-01-01")
+          .to_return(status: 200, body: '[ { "id": "1-IGQAP", "amount": "100.00", "designation": "' + da1.designation_number + '", "donorId": "' + donor_account.account_number + '", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" } ]')
+      stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&donation_date_end=#{Date.today.strftime('%Y-%m-%d')}&response_timeout=60000&donation_date_start=2004-01-01")
+          .to_return(status: 200, body: '[ { "id": "1-IGQAP", "amount": "100.00", "designation": "' + da1.designation_number + '", "donorId": "' + donor_account.account_number + '", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" } ]')
+
+      designation_profile.designation_accounts << da1
+      expect {
+        siebel.send(:import_donations, designation_profile)
+      }.to change { da1.donations.count }.by(1)
+
+      stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&posted_date_end=#{Date.today.strftime('%Y-%m-%d')}&response_timeout=60000&posted_date_start=2004-01-01")
+          .to_return(status: 200, body: '[]')
+      stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&donation_date_end=#{Date.today.strftime('%Y-%m-%d')}&response_timeout=60000&donation_date_start=2004-01-01")
+          .to_return(status: 200, body: '[]')
+      stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donations?designations=#{da1.designation_number}&donors=#{donor_account.account_number}&end_date=2012-12-18&response_timeout=60000&start_date=2012-12-18")
+          .to_return(status: 200, body: '[]')
+
+      expect {
+        siebel.send(:import_donations, designation_profile)
+      }.to change { da1.donations.count }.by(-1)
+
+      Donation.exists?(donation.id).should be true
     end
   end
 

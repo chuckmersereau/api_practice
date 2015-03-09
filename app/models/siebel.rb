@@ -99,6 +99,7 @@ class Siebel < DataServer
 
       #Check for removed donations
       all_current_donations_relation = da.donations.where('donation_date > ? AND donation_date < ?', rails_start_date, rails_end_date)
+                                           .where.not(remote_id: nil)
       all_current_donations_array = all_current_donations_relation.to_a
       SiebelDonations::Donation.find(designations: da.designation_number, donation_date_start: start_date,
                                      donation_date_end: end_date).each do |siebel_donation|
