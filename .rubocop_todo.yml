@@ -48,7 +48,3 @@ Style/ClassVars:
 # Offense count: 175
 Style/Documentation:
   Enabled: false
-
-# Offense count: 2
-Style/EmptyElse:
-  Enabled: false

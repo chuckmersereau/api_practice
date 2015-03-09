@@ -93,7 +93,7 @@ class User < Person
       user.update_attribute(:access_token, token)
       user
     else
-      nil
+      return nil
     end
   end
 

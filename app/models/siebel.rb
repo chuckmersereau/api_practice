@@ -254,8 +254,6 @@ class Siebel < DataServer
     gender = case siebel_person.sex
              when 'F' then 'female'
              when 'M' then 'male'
-             else
-               nil
              end
 
     person.attributes = {
