@@ -2,11 +2,10 @@ require 'spec_helper'
 require 'savon/mock/spec_helper'
 
 describe Obiee do
-
-  #Disallow external requests
+  # Disallow external requests
   include Savon::SpecHelper
 
-# set Savon in and out of mock mode
+  # set Savon in and out of mock mode
   before(:all) { savon.mock!   }
   after(:all)  { savon.unmock! }
 
@@ -76,11 +75,11 @@ FETCH FIRST 10000000 ROWS ONLY')
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
     report_params = { reportRef: { reportPath: PATH },
                       reportParams: { filterExpressions: '',
-                                     variables: {}
+                                      variables: {}
                       },
                       sessionID: SESSION_ID }
     savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
-    #No Path
+    # No Path
     expect { obiee.report_sql(SESSION_ID, '', {}) }.to raise_error(Savon::ExpectationError)
   end
 
@@ -112,7 +111,7 @@ FETCH FIRST 10000000 ROWS ONLY')
                          type: '' },
                    sessionID: SESSION_ID }
     savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
-    #No Session ID
+    # No Session ID
     expect { obiee.report_results('', SQL) }.to raise_error(Savon::ExpectationError)
   end
 

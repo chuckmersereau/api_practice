@@ -15,6 +15,5 @@ describe ActivityCommentsController do
 
       response.should render_template('activity_comments/create')
     end
-
   end
 end

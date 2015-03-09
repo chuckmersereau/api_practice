@@ -165,7 +165,7 @@ class GoogleImport
     update_person_websites(person, g_contact)
 
     google_contact = person.google_contacts.create_with(google_account_id: @import.source_account_id)
-                                           .find_or_create_by(remote_id: g_contact.id)
+                     .find_or_create_by(remote_id: g_contact.id)
     update_person_picture(person, google_contact, g_contact)
 
     person.save

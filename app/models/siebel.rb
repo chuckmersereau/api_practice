@@ -1,27 +1,29 @@
 require_dependency 'data_server'
 class Siebel < DataServer
-  def self.requires_username_and_password?() false; end
+  def self.requires_username_and_password?
+    false
+  end
 
   def import_profiles
     designation_profiles = []
 
-    #designation_profiles = @org.designation_profiles.where(user_id: @org_account.person_id)
+    # designation_profiles = @org.designation_profiles.where(user_id: @org_account.person_id)
 
     # Remove any profiles this user no longer has access to
-    #designation_profiles.each do |designation_profile|
-      #unless profiles.detect { |profile| profile.name == designation_profile.name && profile.id == designation_profile.code}
-        #designation_profile.destroy
-      #end
-    #end
+    # designation_profiles.each do |designation_profile|
+    # unless profiles.detect { |profile| profile.name == designation_profile.name && profile.id == designation_profile.code}
+    # designation_profile.destroy
+    # end
+    # end
 
     profiles.each do |profile|
       designation_profile = Retryable.retryable do
         if profile.id
           @org.designation_profiles.where(user_id: @org_account.person_id, code: profile.id)
-                                   .first_or_create(name: profile.name)
+          .first_or_create(name: profile.name)
         else
           @org.designation_profiles.where(user_id: @org_account.person_id, code: nil)
-                                   .first_or_create(name: profile.name)
+          .first_or_create(name: profile.name)
         end
       end
 
@@ -68,7 +70,6 @@ class Siebel < DataServer
                                 contact_email_filter: :all,
                                 contact_phone_filter: :all
                                 ).each do |siebel_donor|
-
       donor_account = add_or_update_donor_account(account_list, siebel_donor, profile, date_from)
 
       next unless siebel_donor.type == 'Business'
@@ -253,8 +254,6 @@ class Siebel < DataServer
     gender = case siebel_person.sex
              when 'F' then 'female'
              when 'M' then 'male'
-             else
-               nil
              end
 
     person.attributes = {

@@ -5,17 +5,17 @@ describe GoogleContactSync do
   let(:sync) { GoogleContactSync }
   let(:contact) { build(:contact) }
   let(:g_contact_link) { build(:google_contact, last_data: { emails: [], websites: [], phone_numbers: [] }) }
-  let(:person) {
+  let(:person) do
     build(:person, last_name: 'Doe', middle_name: 'Henry', title: 'Mr', suffix: 'III', occupation: 'Worker',
-          employer: 'Company, Inc')
-  }
-  let(:g_contact) {
+                   employer: 'Company, Inc')
+  end
+  let(:g_contact) do
     GoogleContactsApi::Contact.new(
       'gd$etag' => 'a',
       'id' => { '$t' => '1' },
       'gd$name' => { 'gd$givenName' => { '$t' => 'John' }, 'gd$familyName' => { '$t' => 'Doe' } }
     )
-  }
+  end
 
   describe 'sync_notes' do
     describe 'first sync' do
@@ -146,7 +146,7 @@ describe GoogleContactSync do
 
     it 'syncs changes between mpdx and google, but prefers mpdx if both changed' do
       g_contact_link = build(:google_contact, last_data: { name_prefix: 'Mr', given_name: 'John', additional_name: 'Henry',
-                                           family_name: 'Doe', name_suffix: 'III' })
+                                                           family_name: 'Doe', name_suffix: 'III' })
 
       g_contact['gd$name'] = {
         'gd$namePrefix' => { '$t' => 'Mr-Google' },
@@ -188,7 +188,7 @@ describe GoogleContactSync do
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
         expect(g_contact.prepped_changes).to eq(organizations: [{ org_name: 'Company', org_title: 'Worker',
-                                                                   primary: true, rel: 'work' }])
+                                                                  primary: true, rel: 'work' }])
         expect(person.employer).to eq('Company')
         expect(person.occupation).to eq('Worker')
       end
@@ -201,16 +201,16 @@ describe GoogleContactSync do
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
         expect(g_contact.prepped_changes).to eq(organizations: [{ org_name: 'Company', org_title: 'Worker',
-                                                                   primary: true, rel: 'work' }])
+                                                                  primary: true, rel: 'work' }])
         expect(person.employer).to eq('Company')
         expect(person.occupation).to eq('Worker')
       end
     end
 
     describe 'subsequent syncs' do
-      let(:g_contact_link) {
+      let(:g_contact_link) do
         build(:google_contact, last_data: { organizations: [{ org_name: 'Old Company', org_title: 'Old Title' }] })
-      }
+      end
 
       it 'syncs changes from mpdx to google' do
         person.employer = 'MPDX Company'
@@ -220,7 +220,7 @@ describe GoogleContactSync do
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
         expect(g_contact.prepped_changes).to eq(organizations: [{ org_name: 'MPDX Company', org_title: 'MPDX Title',
-                                                                   primary: true, rel: 'work' }])
+                                                                  primary: true, rel: 'work' }])
         expect(person.employer).to eq('MPDX Company')
         expect(person.occupation).to eq('MPDX Title')
       end
@@ -245,7 +245,7 @@ describe GoogleContactSync do
         sync.sync_employer_and_title(person, g_contact, g_contact_link)
 
         expect(g_contact.prepped_changes).to eq(organizations: [{ org_name: 'MPDX Company', org_title: 'MPDX Title',
-                                                                   primary: true, rel: 'work' }])
+                                                                  primary: true, rel: 'work' }])
         expect(person.employer).to eq('MPDX Company')
         expect(person.occupation).to eq('MPDX Title')
       end
@@ -329,7 +329,7 @@ describe GoogleContactSync do
         'city=anchorage&state=ak&street=2421%20e.%20tudor%20rd.&street2=apt%20102&zipcode=99507' => anchorage_smarty
       }.each do |query, result|
         stub_request(:get, "https://api.smartystreets.com/street-address/?auth-id=&auth-token=&candidates=2&#{query}")
-        .to_return(body: result)
+          .to_return(body: result)
       end
 
       contact.save!
@@ -407,10 +407,10 @@ describe GoogleContactSync do
 
       contact.reload
 
-      addresses = contact.addresses.order(:state).map { |address|
+      addresses = contact.addresses.order(:state).map do |address|
         address.attributes.symbolize_keys.slice(:street, :city, :state, :postal_code, :country, :location,
                                                 :primary_mailing_address)
-      }
+      end
       expect(addresses).to eq([
         { street: '7229 Forest Avenue #208', city: 'Richmond', state: 'VA', postal_code: '23226',
           country: 'United States', location: 'Home', primary_mailing_address: true },

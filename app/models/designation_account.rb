@@ -12,7 +12,9 @@ class DesignationAccount < ActiveRecord::Base
 
   # attr_accessible :designation_number, :staff_account_id, :balance, :balance_updated_at
 
-  def to_s() designation_number; end
+  def to_s
+    designation_number
+  end
 
   # A given user should only have a designation account in one list
   def account_list(user)

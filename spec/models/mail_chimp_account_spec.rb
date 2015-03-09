@@ -65,42 +65,41 @@ describe MailChimpAccount do
   end
 
   describe 'queueing methods' do
-
     before do
       ResqueSpec.reset!
       account.save!
     end
 
     it 'should queue subscribe_contacts' do
-      expect {
+      expect do
         account.queue_export_to_primary_list
-      }.to change(MailChimpAccount.jobs, :size).by(1)
+      end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
     it 'should queue subscribe_contacts for one contact' do
       contact = create(:contact)
-      expect {
+      expect do
         account.queue_subscribe_contact(contact)
-      }.to change(MailChimpAccount.jobs, :size).by(1)
+      end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
     it 'should queue subscribe_person' do
       person = create(:person)
-      expect {
+      expect do
         account.queue_subscribe_person(person)
-      }.to change(MailChimpAccount.jobs, :size).by(1)
+      end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
     it 'should queue unsubscribe_email' do
-      expect {
+      expect do
         account.queue_unsubscribe_email('foo@example.com')
-      }.to change(MailChimpAccount.jobs, :size).by(1)
+      end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
     it 'should queue update_email' do
-      expect {
+      expect do
         account.queue_update_email('foo@example.com', 'foo1@example.com')
-      }.to change(MailChimpAccount.jobs, :size).by(1)
+      end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
     it 'should queue unsubscribe_email for each of a contacts email addresses' do
@@ -109,11 +108,10 @@ describe MailChimpAccount do
 
       2.times { |i| contact.people.first.email_addresses << EmailAddress.new(email: "foo#{i}@example.com") }
 
-      expect {
+      expect do
         account.queue_unsubscribe_contact(contact)
-      }.to change(MailChimpAccount.jobs, :size).by(2)
+      end.to change(MailChimpAccount.jobs, :size).by(2)
     end
-
   end
 
   describe 'callbacks' do
@@ -156,7 +154,6 @@ describe MailChimpAccount do
         account.send(:subscribe_person, person.id)
         account.primary_list_id.should be_nil
       end
-
     end
 
     context 'subscribing contacts' do
@@ -204,7 +201,6 @@ describe MailChimpAccount do
       end
 
       context 'adding status groups' do
-
         before do
           @gb = double
           account.stub(:gb).and_return(@gb)
@@ -237,10 +233,7 @@ describe MailChimpAccount do
 
           account.send(:add_status_groups, list_id, ['Partner - Pray'])
         end
-
       end
     end
-
   end
-
 end

@@ -163,12 +163,12 @@ class Address < ActiveRecord::Base
 
     # See if another address in the database matches this one and has a master address
     where_clause = attributes_for_master_address.symbolize_keys
-                                                .slice(:street, :city, :state, :country, :postal_code)
-                                                .map { |k, _v| "lower(#{k}) = :#{k}" }.join(' AND ')
+                   .slice(:street, :city, :state, :country, :postal_code)
+                   .map { |k, _v| "lower(#{k}) = :#{k}" }.join(' AND ')
 
     master_address ||= Address.where(where_clause, attributes_for_master_address)
-                              .where('master_address_id is not null')
-                              .first.try(:master_address)
+                       .where('master_address_id is not null')
+                       .first.try(:master_address)
 
     if !master_address &&
        (attributes_for_master_address[:state].to_s.length == 2 ||
@@ -190,7 +190,7 @@ class Address < ActiveRecord::Base
           attributes_for_master_address[:verified] = true
           master_address = MasterAddress.where(attributes_for_master_address.symbolize_keys
                                                                             .slice(:street, :city, :state, :country, :postal_code))
-                                        .first
+                           .first
         end
         attributes_for_master_address[:smarty_response] = results
       rescue RestClient::RequestFailed, SocketError, RestClient::ResourceNotFound
@@ -211,9 +211,9 @@ class Address < ActiveRecord::Base
 
   def attributes_for_master_address
     @attributes_for_master_address ||= Hash[attributes.symbolize_keys
-                                                      .slice(:street, :city, :state, :country, :postal_code)
-                                                      .select { |_k, v| v.present? }
-                                                      .map { |k, v| [k, v.downcase] }]
+                                            .slice(:street, :city, :state, :country, :postal_code)
+                                            .select { |_k, v| v.present? }
+                                            .map { |k, v| [k, v.downcase] }]
   end
 
   US_STATES =  [

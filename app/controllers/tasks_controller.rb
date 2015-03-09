@@ -78,10 +78,10 @@ class TasksController < ApplicationController
     else
       respond_to do |format|
         if @task.save
-          format.html {
+          format.html do
             redirect_to session[:contact_redirect_to] || tasks_path
             session[:contact_redirect_to] = nil
-          }
+          end
           format.js
         else
           format.html { render action: 'new' }

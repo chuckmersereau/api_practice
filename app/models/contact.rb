@@ -108,7 +108,9 @@ class Contact < ActiveRecord::Base
   delegate :first_name, :last_name, :phone, :email, to: :primary_or_first_person
   delegate :street, :city, :state, :postal_code, to: :mailing_address
 
-  def to_s() name; end
+  def to_s
+    name
+  end
 
   def add_person(person, donor_account = nil)
     # Nothing to do if this person is already on the contact
@@ -340,11 +342,11 @@ class Contact < ActiveRecord::Base
     people.reload.each do |person|
       next if merged_people.include?(person)
 
-      other_people = people.select { |p|
+      other_people = people.select do |p|
         p.first_name.to_s.strip.downcase == person.first_name.to_s.strip.downcase &&
         p.last_name.to_s.strip.downcase == person.last_name.to_s.strip.downcase &&
         p.id != person.id
-      }
+      end
       next unless other_people
       other_people.each do |other_person|
         person.merge(other_person)
@@ -358,10 +360,10 @@ class Contact < ActiveRecord::Base
   def merge_donor_accounts
     # Merge donor accounts that have the same number
     donor_accounts.reload.each do |account|
-      other = donor_accounts.find { |da|
+      other = donor_accounts.find do |da|
         da.id != account.id &&
         da.account_number == account.account_number
-      }
+      end
       next unless other
       account.merge(other)
       merge_donor_accounts

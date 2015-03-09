@@ -27,7 +27,5 @@ describe HelpRequestsController do
 
       response.should render_template('help_requests/new')
     end
-
   end
-
 end

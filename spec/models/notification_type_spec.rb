@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe NotificationType do
-
   context '.check_all' do
     let(:account_list) { create(:account_list) }
     let(:designation_account) { create(:designation_account) }
@@ -16,5 +15,4 @@ describe NotificationType do
       NotificationType.check_all(account_list)
     end
   end
-
 end

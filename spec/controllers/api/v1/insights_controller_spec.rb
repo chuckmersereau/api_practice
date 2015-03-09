@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'savon/mock/spec_helper'
 
 describe Api::V1::InsightsController do
-
   before(:each) do
     @user = create(:user_with_account)
     sign_in(:user, @user)
@@ -12,15 +11,14 @@ describe Api::V1::InsightsController do
     @donor_account = create(:donor_account, account_number: '123456789')
   end
 
-  #set Savon in and out of mock mode
+  # set Savon in and out of mock mode
   before(:all) { savon.mock! }
   after(:all)  { savon.unmock! }
 
-  #Disallow external requests
+  # Disallow external requests
   include Savon::SpecHelper
 
   it 'returns a string array' do
-
     creds = { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)

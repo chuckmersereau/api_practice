@@ -2,18 +2,18 @@ require 'spec_helper'
 
 describe ContactSerializer do
   describe 'contacts list' do
-    let(:contact) {
+    let(:contact) do
       c = create(:contact)
       c.addresses << build(:address)
       c
-    }
-    let(:person) {
+    end
+    let(:person) do
       p = build(:person)
       p.email_addresses << build(:email_address)
       p.phone_numbers << build(:phone_number)
       contact.people << p
       p
-    }
+    end
     let(:json) { ContactSerializer.new(contact).as_json }
     subject { json[:contact] }
 

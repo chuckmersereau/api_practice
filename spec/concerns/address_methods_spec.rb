@@ -13,10 +13,9 @@ describe AddressMethods do
       addressable.addresses << address2
       addressable.addresses << address3
 
-      expect {
+      expect do
         addressable.merge_addresses
-
-      }.to change(Address, :count).from(3).to(2)
+      end.to change(Address, :count).from(3).to(2)
 
       expect(Address.find_by_id(address1.id)).to be_nil
       expect(Address.find_by_id(address2.id)).to eq(address2)

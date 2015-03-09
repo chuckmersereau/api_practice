@@ -2,20 +2,18 @@ require 'spec_helper'
 require 'savon/mock/spec_helper'
 
 describe 'InsightAnalyses' do
-
   let(:account_list) { create(:account_list) }
   let(:contact) { create(:contact, account_list: account_list) }
   let(:designation_account) { create(:designation_account, designation_number: '2716653') }
 
-  #Disallow external requests
+  # Disallow external requests
   include Savon::SpecHelper
 
-# set Savon in and out of mock mode
+  # set Savon in and out of mock mode
   before(:all) { savon.mock! }
   after(:all)  { savon.unmock! }
 
   it 'gets analysis results with designation' do
-
     creds = { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
@@ -72,7 +70,6 @@ FETCH FIRST 10000000 ROWS ONLY',
   end
 
   it 'fails with unknown desig' do
-
     creds = { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
 
@@ -101,12 +98,11 @@ FETCH FIRST 10000000 ROWS ONLY',
                          type: '' },
                    sessionID: 'sessionid22091522cru' }
     savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
-    #unknown desig
+    # unknown desig
     expect { InsightAnalyses.new.increase_recommendation_analysis('271665T') }.to raise_error(Savon::ExpectationError)
   end
 
   it 'fails with no desig' do
-
     creds = { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
@@ -134,7 +130,7 @@ FETCH FIRST 10000000 ROWS ONLY',
                          type: '' },
                    sessionID: 'sessionid22091522cru' }
     savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
-    #unknown desig
+    # unknown desig
     expect { InsightAnalyses.new.increase_recommendation_analysis('') }.to raise_error(Savon::ExpectationError)
   end
 end

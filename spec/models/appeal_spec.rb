@@ -9,9 +9,9 @@ describe Appeal do
     it 'adds contacts found by contacts_by_opts' do
       opts = [['Partner - Pray'], ['tag'], {}]
       expect(appeal).to receive(:contacts_by_opts).with(*opts).and_return([contact])
-      expect {
+      expect do
         appeal.add_contacts_by_opts(*opts)
-      }.to change(appeal.contacts, :count).from(0).to(1)
+      end.to change(appeal.contacts, :count).from(0).to(1)
       expect(appeal.contacts.first).to eq(contact)
     end
   end
@@ -19,13 +19,13 @@ describe Appeal do
   context '#bulk_add_contacts' do
     it 'bulk adds the contacts but removes duplicates first and does not create dups when run again' do
       contact2 = create(:contact)
-      expect {
+      expect do
         appeal.bulk_add_contacts([contact, contact, contact2])
-      }.to change(appeal.contacts, :count).from(0).to(2)
+      end.to change(appeal.contacts, :count).from(0).to(2)
 
-      expect {
+      expect do
         appeal.bulk_add_contacts([contact, contact, contact2])
-      }.to_not change(appeal.contacts, :count).from(2)
+      end.to_not change(appeal.contacts, :count).from(2)
     end
   end
 
@@ -100,7 +100,6 @@ describe Appeal do
     end
 
     it 'excludes contacts who stopped giving in the past 2 months if specified' do
-
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
 

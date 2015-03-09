@@ -14,9 +14,9 @@ describe DataServerPtc do
     it 'should update a profile balance' do
       stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"\",\"2/10/15 10:13:38\",\"123.45\",\"Test Account\"\n")
       @data_server.should_receive(:check_credentials!)
-      expect {
+      expect do
         @data_server.import_profile_balance(profile)
-      }.to change(profile, :balance).to(123.45)
+      end.to change(profile, :balance).to(123.45)
     end
     it 'should update a designation account balance' do
       stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"#{@org_account.username}\",\"2/10/15 10:13:38\",\"123.45\",\"Test Account\"\n")

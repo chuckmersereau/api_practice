@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe SettingsController do
-
   before(:each) do
     @user = create(:user_with_account)
     sign_in(:user, @user)
@@ -14,5 +13,4 @@ describe SettingsController do
       response.should be_success
     end
   end
-
 end

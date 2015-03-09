@@ -134,7 +134,7 @@ class GoogleContactsIntegrator
     # Return the google_contacts for this Google account that are no longer associated with a contact-person pair
     # due to that contact or person being merged with another contact or person in MPDX.
     # Look for records that have both the contact_id and person_id set, because the Google Import uses an old method
-    #of just setting the person_id and we don't want to wrongly interpret imported Google contacts as merge losers.
+    # of just setting the person_id and we don't want to wrongly interpret imported Google contacts as merge losers.
     @account.google_contacts
       .joins('LEFT JOIN contact_people ON '\
         'google_contacts.person_id = contact_people.person_id AND contact_people.contact_id = google_contacts.contact_id')
@@ -197,8 +197,8 @@ class GoogleContactsIntegrator
 
   def setup_assigned_remote_ids
     @assigned_remote_ids = @integration.account_list.contacts.joins(:people)
-      .joins('INNER JOIN google_contacts ON google_contacts.person_id = people.id')
-      .pluck('google_contacts.remote_id').to_set
+                           .joins('INNER JOIN google_contacts ON google_contacts.person_id = people.id')
+                           .pluck('google_contacts.remote_id').to_set
   end
 
   def contacts_to_sync
@@ -256,7 +256,7 @@ class GoogleContactsIntegrator
 
     g_contacts_by_id = Hash[updated_g_contacts.map { |g_contact| [g_contact.id, g_contact] }]
     g_contact_links = GoogleContact.select(:id, :remote_id, :last_synced)
-      .where(google_account: @account).where(remote_id: updated_remote_ids).where.not(last_synced: nil).to_a
+                      .where(google_account: @account).where(remote_id: updated_remote_ids).where.not(last_synced: nil).to_a
 
     g_contact_links.select do |g_contact_link|
       g_contact = g_contacts_by_id[g_contact_link.remote_id]
@@ -274,7 +274,7 @@ class GoogleContactsIntegrator
 
   def sync_contact(contact)
     g_contacts_and_links = contact.contact_people.order('contact_people.primary::int desc').order(:person_id)
-      .map(&method(:get_g_contact_and_link))
+                           .map(&method(:get_g_contact_and_link))
     GoogleContactSync.sync_contact(contact, g_contacts_and_links)
     contact.save(validate: false)
 
@@ -315,12 +315,12 @@ class GoogleContactsIntegrator
 
   def inactive_group
     @inactive_group ||= groups.find { |group| group.title == INACTIVE_GROUP_TITLE } ||
-      GoogleContactsApi::Group.create({ title: INACTIVE_GROUP_TITLE }, api_user.api)
+                        GoogleContactsApi::Group.create({ title: INACTIVE_GROUP_TITLE }, api_user.api)
   end
 
   def mpdx_group
     @mpdx_group ||= groups.find { |group| group.title == CONTACTS_GROUP_TITLE } ||
-      GoogleContactsApi::Group.create({ title: CONTACTS_GROUP_TITLE }, api_user.api)
+                    GoogleContactsApi::Group.create({ title: CONTACTS_GROUP_TITLE }, api_user.api)
   end
 
   def get_or_query_g_contact(g_contact_link, person)

@@ -1,5 +1,4 @@
 namespace :mpdx do
-
   task set_special: :environment do
     AccountList.find_each do |al|
       al.contacts.includes(:donor_accounts).find_each do |contact|
@@ -75,13 +74,12 @@ namespace :mpdx do
       "master_addresses.id is not null AND (addresses.country is null or addresses.country = 'United States' or
        addresses.country = '' or addresses.country = 'United States of America')"
     ).find_each do |c|
-
       addresses = c.addresses
 
       # Find the contact's home address, or grab primary/first address
       address = addresses.find { |a| a.location == 'Home' } ||
-        addresses.find(&:primary_mailing_address?) ||
-        addresses.first
+                addresses.find(&:primary_mailing_address?) ||
+                addresses.first
 
       # Make sure we have a smarty streets response on file
       next unless address && address.master_address && address.master_address.smarty_response.present?
