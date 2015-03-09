@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe TagsController do
-
   before(:each) do
     @user = create(:user_with_account)
     sign_in(:user, @user)
@@ -31,5 +30,4 @@ describe TagsController do
       @contact2.reload.tag_list.should_not include('foo')
     end
   end
-
 end

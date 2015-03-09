@@ -8,7 +8,10 @@
       <br/>
     <% end %>
   <% else %>
-    <%= link_to(_('Add a phone number'), @contact ? edit_contact_path(@contact) : edit_person_path(person)) %>
+    <span class="best_in_place best_in_place_once" data-bip-attribute="number"
+          data-bip-object="person[phone_numbers_attributes][0]"
+          data-bip-type="input" data-bip-url="/people/<%= person.id %>"
+          id="best_in_place_person_<%= person.id %>_phone_number"><%= _('Add a phone number') %></span>
   <% end %>
 </div>
 
@@ -23,7 +26,10 @@
       <br/>
     <% end %>
   <% else %>
-    <%= link_to(_('Add an email address'), @contact ? edit_contact_path(@contact) : edit_person_path(person)) %>
+    <span class="best_in_place best_in_place_once" data-bip-attribute="email"
+          data-bip-object="person[email_addresses_attributes][0]"
+          data-bip-type="input" data-bip-url="/people/<%= person.id %>"
+          id="best_in_place_person_<%= person.id %>_email_address"><%= _('Add an email address') %></span>
   <% end %>
 </div>
 

@@ -44,16 +44,15 @@ describe NotificationType::StartedGiving do
       notifications = started_giving.check(account_list2)
       notifications.length.should == 0
     end
-
   end
 
   describe '.create_task' do
     let(:account_list) { create(:account_list) }
 
     it 'creates a task for the activity list' do
-      expect {
+      expect do
         started_giving.create_task(account_list, contact.notifications.new)
-      }.to change(Activity, :count).by(1)
+      end.to change(Activity, :count).by(1)
     end
 
     it 'associates the contact with the task created' do

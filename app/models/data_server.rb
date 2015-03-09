@@ -1,13 +1,17 @@
 require 'csv'
 class DataServer
-  def self.requires_username_and_password?() true; end
+  def self.requires_username_and_password?
+    true
+  end
 
   def initialize(org_account)
     @org_account = org_account
     @org = org_account.organization
   end
 
-  def requires_username_and_password?() self.class.requires_username_and_password?; end
+  def requires_username_and_password?
+    self.class.requires_username_and_password?
+  end
 
   def import_all(date_from)
     Rails.logger.debug 'Importing Profiles'
@@ -28,9 +32,9 @@ class DataServer
 
       # Remove any profiles this user no longer has access to
       # designation_profiles.each do |_designation_profile|
-        # unless profiles.detect { |profile| profile[:name] == designation_profile.name && profile[:code] == designation_profile.code}
-          # designation_profile.destroy
-        # end
+      # unless profiles.detect { |profile| profile[:name] == designation_profile.name && profile[:code] == designation_profile.code}
+      # designation_profile.destroy
+      # end
       # end
 
       profiles.each do |profile|
@@ -41,7 +45,7 @@ class DataServer
         end
       end
 
-    else #still want to update balance if possible
+    else # still want to update balance if possible
       designation_profiles.each do |designation_profile|
         Retryable.retryable do
           import_profile_balance(designation_profile)
@@ -76,7 +80,12 @@ class DataServer
       raise
     end
 
-    CSV.new(response, headers: :first_row).each do |line|
+    import_donors_from_csv(account_list, profile, response, user)
+    true
+  end
+
+  def import_donors_from_csv(account_list, profile, csv, user)
+    CSV.new(csv, headers: :first_row).each do |line|
       line['LAST_NAME'] = line['LAST_NAME_ORG']
       line['FIRST_NAME'] = line['ACCT_NAME'] if line['FIRST_NAME'].blank?
 
@@ -113,7 +122,6 @@ class DataServer
         raise line.inspect + "\n\n" + e.message.inspect
       end
     end
-    true
   end
 
   def import_donations(profile, date_from = nil, date_to = nil)
@@ -132,6 +140,10 @@ class DataServer
                                                       personid: @org_account.remote_id))
     end
 
+    import_donations_from_csv(profile, response)
+  end
+
+  def import_donations_from_csv(profile, response)
     CSV.new(response, headers: :first_row).each do |line|
       designation_account = find_or_create_designation_account(line['DESIGNATION'], profile)
       add_or_update_donation(line, designation_account, profile)
@@ -184,7 +196,7 @@ class DataServer
     unless @profiles_with_designation_numbers
       @profiles_with_designation_numbers = profiles.map do |profile|
         { designation_numbers: designation_numbers(profile[:code]) }
-         .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
+        .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
       end
     end
     @profiles_with_designation_numbers
@@ -245,7 +257,7 @@ class DataServer
 
   def get_params(raw_params, options = {})
     params_string = raw_params.sub('$ACCOUNT$', @org_account.username)
-                              .sub('$PASSWORD$', @org_account.password)
+                    .sub('$PASSWORD$', @org_account.password)
     params_string.sub!('$PROFILE$', options[:profile]) if options[:profile]
     params_string.sub!('$DATEFROM$', options[:datefrom]) if options[:datefrom]
     params_string.sub!('$DATETO$', options[:dateto]) if options[:dateto].present?
@@ -256,14 +268,14 @@ class DataServer
 
   def get_response(url, params)
     RestClient::Request.execute(method: :post, url: url, payload: params, timeout: -1, user: @org_account.username,
-                                password: @org_account.password) { |response, _request, _result, &_block|
+                                password: @org_account.password) do |response, _request, _result, &_block|
       # check for error response
       lines = response.split(/\n|\r/)
       first_line = lines.first.to_s.upcase
       case
       when first_line.include?('BAD_PASSWORD') ||
-           first_line.include?('password') ||
-           lines[1].to_s.include?('password')
+        first_line.include?('password') ||
+        lines[1].to_s.include?('password')
         @org_account.update_column(:valid_credentials, false) if @org_account.valid_credentials? && !@org_account.new_record?
         fail OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org }
       when response.code.to_i == 500 || first_line.include?('ERROR') || first_line.include?('HTML')
@@ -279,7 +291,7 @@ class DataServer
       end
 
       response
-    }
+    end
   end
 
   def add_or_update_primary_contact(account_list, line, donor_account)
@@ -298,7 +310,7 @@ class DataServer
 
     contact = donor_account.link_to_contact_for(account_list)
     person = donor_account.people.joins(:contacts).where(master_person_id: master_person_from_source.id)
-      .where('contacts.account_list_id' => account_list.id).readonly(false).first if master_person_from_source
+             .where('contacts.account_list_id' => account_list.id).readonly(false).first if master_person_from_source
     person ||= contact.people.where(first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME']).first
     person ||= donor_account.people.where(master_person_id: master_person_from_source.id).first if master_person_from_source
 
@@ -411,9 +423,9 @@ class DataServer
   end
 
   def update_url(url)
-    proc { |exception, _handler, _attempts, _retries, _times|
+    proc do |exception, _handler, _attempts, _retries, _times|
       @org.update_attributes(url => exception.message)
-    }
+    end
   end
 
   # Data server supports two date formats, try both of those

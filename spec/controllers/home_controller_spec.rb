@@ -21,7 +21,6 @@ describe HomeController do
         get 'index'
         response.should redirect_to('/auth/key')
       end
-
     end
     describe 'login' do
       it 'returns http success' do
@@ -55,5 +54,4 @@ describe HomeController do
       end
     end
   end
-
 end

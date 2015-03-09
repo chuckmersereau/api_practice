@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150212133202) do
+ActiveRecord::Schema.define(version: 20150302140850) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -131,18 +131,19 @@ ActiveRecord::Schema.define(version: 20150212133202) do
     t.datetime "updated_at"
   end
 
-  add_index "appeal_contacts", ["appeal_id", "contact_id"], name: "index_appeal_contacts_on_appeal_id_and_contact_id", using: :btree
+  add_index "appeal_contacts", ["appeal_id", "contact_id"], name: "index_appeal_contacts_on_appeal_id_and_contact_id", unique: true, using: :btree
   add_index "appeal_contacts", ["appeal_id"], name: "index_appeal_contacts_on_appeal_id", using: :btree
   add_index "appeal_contacts", ["contact_id"], name: "index_appeal_contacts_on_contact_id", using: :btree
 
   create_table "appeals", force: true do |t|
     t.string   "name"
     t.integer  "account_list_id"
-    t.decimal  "amount",          precision: 8, scale: 2
+    t.decimal  "amount",          precision: 19, scale: 2
     t.text     "description"
     t.date     "end_date"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "tnt_id"
   end
 
   add_index "appeals", ["account_list_id"], name: "index_appeals_on_account_list_id", using: :btree
@@ -220,9 +221,9 @@ ActiveRecord::Schema.define(version: 20150212133202) do
     t.integer  "account_list_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.decimal  "pledge_amount",                        precision: 8,  scale: 2
+    t.decimal  "pledge_amount",                        precision: 19, scale: 2
     t.string   "status"
-    t.decimal  "total_donations",                      precision: 10, scale: 2
+    t.decimal  "total_donations",                      precision: 19, scale: 2
     t.date     "last_donation_date"
     t.date     "first_donation_date"
     t.text     "notes"
@@ -233,7 +234,6 @@ ActiveRecord::Schema.define(version: 20150212133202) do
     t.decimal  "pledge_frequency"
     t.date     "pledge_start_date"
     t.date     "next_ask"
-    t.boolean  "never_ask",                                                     default: false, null: false
     t.string   "likely_to_give"
     t.string   "church_name"
     t.string   "send_newsletter"
@@ -265,7 +265,7 @@ ActiveRecord::Schema.define(version: 20150212133202) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "organization_id"
-    t.decimal  "balance",            precision: 8, scale: 2
+    t.decimal  "balance",            precision: 19, scale: 2
     t.datetime "balance_updated_at"
     t.string   "name"
     t.string   "staff_account_id"
@@ -285,13 +285,13 @@ ActiveRecord::Schema.define(version: 20150212133202) do
 
   create_table "designation_profiles", force: true do |t|
     t.string   "remote_id"
-    t.integer  "user_id",                                    null: false
-    t.integer  "organization_id",                            null: false
+    t.integer  "user_id",                                     null: false
+    t.integer  "organization_id",                             null: false
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "code"
-    t.decimal  "balance",            precision: 8, scale: 2
+    t.decimal  "balance",            precision: 19, scale: 2
     t.datetime "balance_updated_at"
     t.integer  "account_list_id"
   end
@@ -307,9 +307,9 @@ ActiveRecord::Schema.define(version: 20150212133202) do
     t.string   "motivation"
     t.string   "payment_method"
     t.string   "tendered_currency"
-    t.decimal  "tendered_amount",        precision: 8, scale: 2
+    t.decimal  "tendered_amount",        precision: 19, scale: 2
     t.string   "currency"
-    t.decimal  "amount",                 precision: 8, scale: 2
+    t.decimal  "amount",                 precision: 19, scale: 2
     t.text     "memo"
     t.date     "donation_date"
     t.datetime "created_at"
@@ -317,7 +317,7 @@ ActiveRecord::Schema.define(version: 20150212133202) do
     t.string   "payment_type"
     t.string   "channel"
     t.integer  "appeal_id"
-    t.decimal  "appeal_amount",          precision: 8, scale: 2
+    t.decimal  "appeal_amount",          precision: 19, scale: 2
   end
 
   add_index "donations", ["appeal_id"], name: "index_donations_on_appeal_id", using: :btree
@@ -342,7 +342,7 @@ ActiveRecord::Schema.define(version: 20150212133202) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.integer  "master_company_id"
-    t.decimal  "total_donations",                precision: 10, scale: 2
+    t.decimal  "total_donations",                precision: 19, scale: 2
     t.date     "last_donation_date"
     t.date     "first_donation_date"
     t.string   "donor_type",          limit: 20
@@ -906,5 +906,7 @@ ActiveRecord::Schema.define(version: 20150212133202) do
   add_index "versions", ["item_type", "event", "related_object_type", "related_object_id", "created_at", "item_id"], name: "index_versions_on_item_type", using: :btree
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   add_index "versions", ["item_type", "related_object_type", "related_object_id", "created_at"], name: "related_object_index", using: :btree
+
+  add_foreign_key "master_person_sources", "master_people", name: "master_person_sources_master_person_id_fk"
 
 end

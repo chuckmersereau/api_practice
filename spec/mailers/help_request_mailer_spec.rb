@@ -11,5 +11,4 @@ describe HelpRequestMailer do
       mail.from.should eq([help_request.email])
     end
   end
-
 end

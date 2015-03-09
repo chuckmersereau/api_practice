@@ -9,10 +9,23 @@ describe Appeal do
     it 'adds contacts found by contacts_by_opts' do
       opts = [['Partner - Pray'], ['tag'], {}]
       expect(appeal).to receive(:contacts_by_opts).with(*opts).and_return([contact])
-      expect {
+      expect do
         appeal.add_contacts_by_opts(*opts)
-      }.to change(appeal.contacts, :count).from(0).to(1)
+      end.to change(appeal.contacts, :count).from(0).to(1)
       expect(appeal.contacts.first).to eq(contact)
+    end
+  end
+
+  context '#bulk_add_contacts' do
+    it 'bulk adds the contacts but removes duplicates first and does not create dups when run again' do
+      contact2 = create(:contact)
+      expect do
+        appeal.bulk_add_contacts([contact, contact, contact2])
+      end.to change(appeal.contacts, :count).from(0).to(2)
+
+      expect do
+        appeal.bulk_add_contacts([contact, contact, contact2])
+      end.to_not change(appeal.contacts, :count).from(2)
     end
   end
 
@@ -65,13 +78,10 @@ describe Appeal do
     end
 
     it 'excludes special givers in the 3 months if specified' do
-      today = Date.new(2015, 2, 2)
-      expect(Date).to receive(:today).at_least(:once).and_return(today)
-
       contact.tag_list = ['tag']
       contact.save
       contact.update(pledge_amount: 50, pledge_frequency: 1, status: 'Partner - Pray')
-      donation.update(amount: 500, donation_date: Date.new(2014, 11, 1))
+      donation.update(amount: 500, donation_date: 2.months.ago)
 
       expect(appeal.contacts_by_opts([], ['tag'], {}).count).to eq(1)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(0)
@@ -79,7 +89,8 @@ describe Appeal do
       donation.update(amount: 150)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
 
-      donation2 = create(:donation, amount: 50, donation_date: Date.new(2015, 2, 1))
+      donation.update(donation_date: Date.today << 3)
+      donation2 = create(:donation, amount: 50, donation_date: Date.today)
       donor_account.donations << donation2
       contact.update_donation_totals(donation2)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
@@ -96,6 +107,7 @@ describe Appeal do
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
 
       contact.update(pledge_amount: 0, last_donation_date: 3.months.ago)
+
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
 
       donor_account.donations << create(:donation, amount: 25, donation_date: 4.months.ago)
@@ -133,7 +145,7 @@ describe Appeal do
         contact.update(pledge_frequency: giving_info[:pledge_frequency], last_donation_date: nil)
         giving_info[:amounts].reverse.each_with_index do |amount, i|
           next if amount == 0
-          d = create(:donation, donor_account: donor_account, amount: amount, donation_date: i.months.ago)
+          d = create(:donation, donor_account: donor_account, amount: amount, donation_date: Date.today << i)
           contact.update_donation_totals(d)
         end
 

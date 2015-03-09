@@ -16,9 +16,9 @@ class ReportsController < ApplicationController
     # due to a TntMPD import that two different contacts could both be assigned the same donor id
     # which would cause duplicated results in the sum columns of the report.
     @raw_donations = current_account_list
-      .donations
-      .where('donation_date BETWEEN ? AND ?', @start_date, @end_date)
-      .select('"donations"."donor_account_id",' \
+                     .donations
+                     .where('donation_date BETWEEN ? AND ?', @start_date, @end_date)
+                     .select('"donations"."donor_account_id",' \
               'date_trunc(\'month\', "donations"."donation_date"),' \
               'SUM("donations"."tendered_amount") as tendered_amount,' \
               '"donations"."tendered_currency",' \
@@ -28,9 +28,9 @@ class ReportsController < ApplicationController
               '"contacts"."pledge_amount",' \
               '"contacts"."pledge_frequency"'
       )
-      .where('contacts.account_list_id' => current_account_list.id)
-      .joins('INNER JOIN donor_accounts ON donor_accounts.id = donations.donor_account_id')
-      .joins('INNER JOIN ' \
+                     .where('contacts.account_list_id' => current_account_list.id)
+                     .joins('INNER JOIN donor_accounts ON donor_accounts.id = donations.donor_account_id')
+                     .joins('INNER JOIN ' \
                '(SELECT donor_account_id, MIN(contact_id) as contact_id' \
                ' FROM contact_donor_accounts ' \
                ' INNER JOIN contacts ON contacts.id = contact_donor_accounts.contact_id ' \
@@ -38,8 +38,8 @@ class ReportsController < ApplicationController
                ' GROUP BY donor_account_id) ' \
                'distinct_contact_donor_accounts ' \
               'ON distinct_contact_donor_accounts.donor_account_id = donations.donor_account_id')
-      .joins('INNER JOIN contacts ON contacts.id = distinct_contact_donor_accounts.contact_id')
-      .group('donations.donor_account_id, ' \
+                     .joins('INNER JOIN contacts ON contacts.id = distinct_contact_donor_accounts.contact_id')
+                     .group('donations.donor_account_id, ' \
              'date_trunc, ' \
              'tendered_currency, ' \
              'donor_accounts.name, ' \
@@ -48,9 +48,9 @@ class ReportsController < ApplicationController
              'pledge_amount, ' \
              'pledge_frequency '
              )
-      .reorder('donor_accounts.name')
-      .distinct
-      .to_a
+                     .reorder('donor_accounts.name')
+                     .distinct
+                     .to_a
     @donations = {}
     @sum_row = {}
     @raw_donations.each do |donation|
@@ -86,9 +86,9 @@ class ReportsController < ApplicationController
         # should be $50/month.
         # Thus we find the first month in the report (from left to right) where they
         # gave a donation and exclude earlier months from the average.
-        month_of_first_donation = (0..11).to_a.reverse.find_index {|index|
+        month_of_first_donation = (0..11).to_a.reverse.find_index do|index|
           !row[:amounts][index.month.ago(@end_date).strftime '%b %y'].nil?
-        }
+        end
         months_for_average = 12.0 - month_of_first_donation
 
         # If there was no donation in the current month, then don't count the current

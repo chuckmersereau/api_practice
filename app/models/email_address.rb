@@ -12,7 +12,9 @@ class EmailAddress < ActiveRecord::Base
   after_update :sync_with_mail_chimp
   after_destroy :delete_from_mailchimp
 
-  def to_s() email; end
+  def to_s
+    email
+  end
 
   def self.add_for_person(person, attributes)
     attributes = attributes.with_indifferent_access.except(:_destroy)
@@ -22,7 +24,6 @@ class EmailAddress < ActiveRecord::Base
 
     email = Retryable.retryable on: ActiveRecord::RecordNotUnique,
                                 then: then_cb do
-
       if attributes['id']
         existing_email = person.email_addresses.find(attributes['id'])
         # make sure we're not updating this record to another email that already exists

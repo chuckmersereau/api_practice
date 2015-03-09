@@ -3,7 +3,10 @@ Airbrake.configure do |config|
   config.host = 'errors.uscm.org'
   config.port = 443
   config.secure = config.port == 443
-  config.ignore_only = config.ignore + ['Google::APIClient::ServerError', 'Net::IMAP::BadResponseError']
+  config.ignore_only = config.ignore + [
+    'Google::APIClient::ServerError', 'Net::IMAP::BadResponseError',
+    'LowerRetryWorker::RetryJobButNoAirbrakeError'
+  ]
 end
 
 module Airbrake
@@ -11,7 +14,7 @@ module Airbrake
     if ::Rails.env.development? || ::Rails.env.test?
       raise e
     else
-      Airbrake.notify(e, opts)
+      Airbrake.notify_or_ignore(e, opts)
     end
   end
 end

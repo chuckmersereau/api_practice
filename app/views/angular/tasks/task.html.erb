@@ -3,7 +3,8 @@
 </td>
 <td class="data">
     <div class="primary">
-        <i class="fa fa-lg fav" ng-class="{'fa-star-o': !task.starred, 'fa-star': task.starred}" ng-click="starTask()"></i>
+        <i class="fa fa-lg fav" ng-click="starTask()" ng-hide="task.completed"
+           ng-class="{'fa-star-o': !task.starred, 'fa-star': task.starred}"></i>
         <a class="comment_status" href="" ng-click="visibleComments=!visibleComments; visibleContactInfo=false"><span id="comment_count_2">{{task.comments.length}}</span></a>
 
         <div class="actions">
@@ -102,6 +103,7 @@
         </div>
     </div>
 </td>
+<td ng-show="task.completed && multiselect"></td>
 <td class="check" ng-show="multiselect">
   <input type="checkbox" name="task_ids[]" value="{{task.id}}" />
 </td>

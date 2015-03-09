@@ -137,8 +137,8 @@ class AccountList < ActiveRecord::Base
 
   def top_partners
     contacts.order('total_donations desc')
-    .where('total_donations > 0')
-    .limit(10)
+      .where('total_donations > 0')
+      .limit(10)
   end
 
   def donations
@@ -163,7 +163,7 @@ class AccountList < ActiveRecord::Base
     end_month = end_date.month
     if start_month == end_month
       people_with_birthdays = people.where('people.birthday_month = ?', start_month)
-                                    .where('people.birthday_day BETWEEN ? AND ?', start_date.day, end_date.day)
+                              .where('people.birthday_day BETWEEN ? AND ?', start_date.day, end_date.day)
     else
       people_with_birthdays = people.where("(people.birthday_month = ? AND people.birthday_day >= ?)
                                            OR (people.birthday_month = ? AND people.birthday_day <= ?)",
@@ -178,7 +178,7 @@ class AccountList < ActiveRecord::Base
     end_month = end_date.month
     if start_month == end_month
       people_with_birthdays = people.where('people.anniversary_month = ?', start_month)
-                                    .where('people.anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
+                              .where('people.anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
     else
       people_with_birthdays = people.where("(people.anniversary_month = ? AND people.anniversary_day >= ?)
                                            OR (people.anniversary_month = ? AND people.anniversary_day <= ?)",
@@ -192,8 +192,8 @@ class AccountList < ActiveRecord::Base
     unless @top_50_percent
       financial_partners_count = contacts.where('pledge_amount > 0').count
       @top_50_percent = contacts.where('pledge_amount > 0')
-                                .order('(pledge_amount::numeric / (pledge_frequency::numeric)) desc')
-                                .limit(financial_partners_count / 2)
+                        .order('(pledge_amount::numeric / (pledge_frequency::numeric)) desc')
+                        .limit(financial_partners_count / 2)
     end
     @top_50_percent
   end
@@ -202,8 +202,8 @@ class AccountList < ActiveRecord::Base
     unless @bottom_50_percent
       financial_partners_count = contacts.where('pledge_amount > 0').count
       @bottom_50_percent = contacts.where('pledge_amount > 0')
-                                .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
-                                .limit(financial_partners_count / 2)
+                           .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
+                           .limit(financial_partners_count / 2)
     end
     @bottom_50_percent
   end
@@ -226,12 +226,12 @@ class AccountList < ActiveRecord::Base
     ordered_contacts.each do |contact|
       next if merged_contacts.include?(contact)
 
-      other_contacts = ordered_contacts.select { |c|
+      other_contacts = ordered_contacts.select do |c|
         c.name == contact.name &&
         c.id != contact.id &&
         (c.donor_accounts.first == contact.donor_accounts.first ||
          c.addresses.find { |a| contact.addresses.find { |ca| ca.equal_to? a } })
-      }
+      end
       next unless other_contacts.present?
       other_contacts.each do |other_contact|
         contact.merge(other_contact)
@@ -247,8 +247,8 @@ class AccountList < ActiveRecord::Base
   # Download all donations / info for all accounts associated with this list
   def self.update_linked_org_accounts
     AccountList.joins(:organization_accounts)
-               .where('locked_at is null').order('last_download asc')
-               .each do |al|
+      .where('locked_at is null').order('last_download asc')
+      .each do |al|
       al.async(:import_data)
     end
   end
@@ -314,7 +314,7 @@ class AccountList < ActiveRecord::Base
       # a monthly donor.
       gifts = donations.where(donor_account_id: contact.donor_account_ids,
                               designation_account_id: designation_account_ids)
-                       .order('donation_date desc')
+              .order('donation_date desc')
       latest_donation = gifts[0]
 
       next unless latest_donation
@@ -412,7 +412,7 @@ class AccountList < ActiveRecord::Base
 
       next unless notifications[notification_type_string].present?
       actions = notification_preferences.find_by_notification_type_id(notification_type.id).try(:actions) ||
-        NotificationPreference.default_actions
+                NotificationPreference.default_actions
 
       # Collect any emails that need sent
       if actions.include?('email')
@@ -434,7 +434,7 @@ class AccountList < ActiveRecord::Base
 
   def subscribe_tester_to_mailchimp
     return unless changes.keys.include?('settings') &&
-      changes['settings'][0]['tester'] != changes['settings'][1]['tester']
+                  changes['settings'][0]['tester'] != changes['settings'][1]['tester']
 
     if changes['settings'][1]['tester']
       MailChimpWorker.perform_async('AccountList', id, :mc_subscribe_users, 'Testers')
@@ -445,7 +445,7 @@ class AccountList < ActiveRecord::Base
 
   def subscribe_owners_to_mailchimp
     return unless changes.keys.include?('settings') &&
-      changes['settings'][0]['owner'] != changes['settings'][1]['owner']
+                  changes['settings'][0]['owner'] != changes['settings'][1]['owner']
 
     if changes['settings'][1]['owner']
       MailChimpWorker.perform_async('AccountList', id, :mc_subscribe_users, 'Owners')

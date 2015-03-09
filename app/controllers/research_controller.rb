@@ -24,8 +24,8 @@ class ResearchController < ApplicationController
     end
 
     @other_contacts = Contact.joins(:donor_accounts)
-      .where('donor_accounts.account_number' => account_numbers)
-      .where.not('contacts.id' => @contact.id)
+                      .where('donor_accounts.account_number' => account_numbers)
+                      .where.not('contacts.id' => @contact.id)
   end
 
   private

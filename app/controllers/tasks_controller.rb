@@ -22,32 +22,6 @@ class TasksController < ApplicationController
     @upcoming = @tasks.upcoming
   end
 
-  def starred
-    @page_title = _('Starred Tasks')
-
-    @tasks = current_account_list.tasks.uncompleted.starred
-  end
-
-  def completed
-    @tasks = current_account_list.tasks.completed
-  end
-
-  def history
-    @page_title = _('Task History')
-
-    @tasks = current_account_list.tasks.completed
-                                       .includes(:contacts, :activity_comments, :tags)
-                                       .page(page).per_page(per_page)
-    filters = filters_params || {}
-    filters[:date_range] ||= 'last_week'
-    @view_options = params.slice(:per_page, :page)
-    @tasks = TaskFilter.new(filters).filter(@tasks)
-  end
-
-  # def show
-  #   @task = current_account_list.tasks.find(params[:id])
-  # end
-
   def new
     @page_title = _('New Task')
 
@@ -104,10 +78,10 @@ class TasksController < ApplicationController
     else
       respond_to do |format|
         if @task.save
-          format.html {
+          format.html do
             redirect_to session[:contact_redirect_to] || tasks_path
             session[:contact_redirect_to] = nil
-          }
+          end
           format.js
         else
           format.html { render action: 'new' }

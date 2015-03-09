@@ -29,7 +29,9 @@ class Activity < ActiveRecord::Base
 
   validates :subject, :start_at, presence: true
 
-  def to_s() subject; end
+  def to_s
+    subject
+  end
 
   def subject_with_contacts
     "#{contacts.map(&:to_s).join(', ')} - #{_(activity_type)}: #{subject}"
@@ -50,7 +52,6 @@ class Activity < ActiveRecord::Base
   def activity_contacts_attributes=(hash_or_array)
     contacts_array = hash_or_array.is_a?(Hash) ? hash_or_array.values : hash_or_array
     contacts_array.each do |contact_attributes|
-
       next unless contact_attributes['contact_id'].present?
 
       contact = Contact.find(contact_attributes['contact_id'])

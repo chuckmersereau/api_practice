@@ -36,4 +36,5 @@ config/sidekiq.yml
 .idea
 node_modules
 public/dev-assets
-dump.rdb
+.vagrant
+vendor/cache/sidekiq-pro-*

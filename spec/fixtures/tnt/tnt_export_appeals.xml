@@ -1,0 +1,216 @@
+<Database>
+  <Tables>
+    <Appeal>
+      <row id="-2079150908">
+        <LastEdit>2005-05-21 12:56:40</LastEdit>
+        <Description>CSU</Description>
+      </row>
+    </Appeal>
+    <Contact>
+      <row id="1620699916">
+        <LastEdit>2011-12-16 15:29:33</LastEdit>
+        <Region>State College</Region>
+        <CreatedDate>2004-07-30</CreatedDate>
+        <FileAs>Smith, John and Jane</FileAs>
+        <FileAsIsCustom>false</FileAsIsCustom>
+        <FullName>John and Jane Smith</FullName>
+        <FullNameIsCustom>false</FullNameIsCustom>
+        <Greeting>John and Jane</Greeting>
+        <GreetingIsCustom>false</GreetingIsCustom>
+        <Salutation>Dear John and Jane,</Salutation>
+        <SalutationIsCustom>false</SalutationIsCustom>
+        <ShortName>John and Jane Smith</ShortName>
+        <ShortNameIsCustom>false</ShortNameIsCustom>
+        <MailingAddressBlock>John and Jane Smith
+          1234 N St.
+          Nowhere, CA  12345</MailingAddressBlock>
+        <MailingAddressIsDeliverable>true</MailingAddressIsDeliverable>
+        <Phone>(555) 555-1234</Phone>
+        <PhoneIsValid>true</PhoneIsValid>
+        <Email>same@example.com</Email>
+        <EmailIsValid>true</EmailIsValid>
+        <IsOrganization>false</IsOrganization>
+        <FirstName>John</FirstName>
+        <LastName>Smith</LastName>
+        <SpouseFirstName>Jane</SpouseFirstName>
+        <Deceased>false</Deceased>
+        <MailingAddressType>1</MailingAddressType>
+        <MailingStreetAddress>1234 N St.</MailingStreetAddress>
+        <MailingCity>Nowhere</MailingCity>
+        <MailingState>CA</MailingState>
+        <MailingPostalCode>12345</MailingPostalCode>
+        <HomeStreetAddress>1234 N St.</HomeStreetAddress>
+        <HomeCity>Nowhere</HomeCity>
+        <HomeState>CA</HomeState>
+        <HomePostalCode>12345</HomePostalCode>
+        <HomeCountryID>840</HomeCountryID>
+        <HomeCountry>United States of America</HomeCountry>
+        <HomeAddressIsDeliverable>true</HomeAddressIsDeliverable>
+        <HomeAddressBlock>John and Jane Smith
+          1234 N St.
+          Nowhere, CA  12345</HomeAddressBlock>
+        <HomeAddressBlockIsCustom>false</HomeAddressBlockIsCustom>
+        <OtherCountryID>555</OtherCountryID>
+        <OtherCountry>United States of America</OtherCountry>
+        <OtherAddressIsDeliverable>false</OtherAddressIsDeliverable>
+        <OtherAddressBlockIsCustom>false</OtherAddressBlockIsCustom>
+        <BusinessCountryID>840</BusinessCountryID>
+        <BusinessCountry>United States of America</BusinessCountry>
+        <BusinessAddressIsDeliverable>false</BusinessAddressIsDeliverable>
+        <BusinessAddressBlockIsCustom>false</BusinessAddressBlockIsCustom>
+        <SpouseBusinessCountryID>840</SpouseBusinessCountryID>
+        <SpouseBusinessCountry>United States of America</SpouseBusinessCountry>
+        <SpouseBusinessAddressIsDeliverable>false</SpouseBusinessAddressIsDeliverable>
+        <SpouseBusinessAddressBlockIsCustom>false</SpouseBusinessAddressBlockIsCustom>
+        <PreferredPhoneType>0</PreferredPhoneType>
+        <PhoneIsValidMask>4385</PhoneIsValidMask>
+        <PhoneCountryIDs>0=840</PhoneCountryIDs>
+        <HomePhone>(555) 555-1234</HomePhone>
+        <MobilePhone>111-111-1111</MobilePhone>
+        <BusinessPhone>(555) 555-9771 ext. 301</BusinessPhone>
+        <SpouseMobilePhone>222-222-2222</SpouseMobilePhone>
+        <PreferredEmailTypes>3</PreferredEmailTypes>
+        <Email1>same@example.com</Email1>
+        <Email2>same@example.com</Email2>
+        <Email1IsValid>true</Email1IsValid>
+        <Email2IsValid>true</Email2IsValid>
+        <Email3IsValid>false</Email3IsValid>
+        <SpouseEmail1IsValid>false</SpouseEmail1IsValid>
+        <SpouseEmail2IsValid>false</SpouseEmail2IsValid>
+        <SpouseEmail3IsValid>false</SpouseEmail3IsValid>
+        <NotesAsRTF>{\rtf1\ansi\ansicpg1252\deff0{\fonttbl{\f0\fnil\fcharset0 Tahoma;}{\f1\fnil Tahoma;}}
+          {\*\generator Msftedit 5.41.15.1507;}\viewkind4\uc1\pard\lang1033\f0\fs16 Principal\par
+          Has run into issues with Campus Crusade in the past...  Was told couldn&apos;t be involved because hadn&apos;t been baptized as an adult.\f1\par
+          }</NotesAsRTF>
+        <Notes>Principal
+          Has run into issues with Campus Crusade in the past...  Was told couldn&apos;t be involved because hadn&apos;t been baptized as an adult.</Notes>
+        <FamilyLevelID>0</FamilyLevelID>
+        <FamilySideID>0</FamilySideID>
+        <MapAddressType>0</MapAddressType>
+        <MapLat>0</MapLat>
+        <MapLng>0</MapLng>
+        <PledgeAmount>0</PledgeAmount>
+        <PledgeFrequencyID>0</PledgeFrequencyID>
+        <PledgeReceived>false</PledgeReceived>
+        <PledgeStartDate>2004-08-26</PledgeStartDate>
+        <ReferredBy>Bob and Dawn Doe</ReferredBy>
+        <ReferredByList>Bob and Dawn Doe</ReferredByList>
+        <MPDPhaseID>80</MPDPhaseID>
+        <NextAsk>1899-12-30</NextAsk>
+        <NeverAsk>false</NeverAsk>
+        <LikelyToGiveID>0</LikelyToGiveID>
+        <ChurchName>PLRBC</ChurchName>
+        <SendNewsletter>true</SendNewsletter>
+        <NewsletterMediaPref>+P-E</NewsletterMediaPref>
+        <DirectDeposit>false</DirectDeposit>
+        <Magazine>false</Magazine>
+        <MonthlyPledge>0</MonthlyPledge>
+        <FirstGiftDate>2004-09-01</FirstGiftDate>
+        <LastGiftDate>2005-06-06</LastGiftDate>
+        <LastGiftAmount>100</LastGiftAmount>
+        <LastGiftOrganizationID>0</LastGiftOrganizationID>
+        <PrevYearTotal>0</PrevYearTotal>
+        <YearTotal>0</YearTotal>
+        <LifetimeTotal>260</LifetimeTotal>
+        <LifetimeNumberOfGifts>2</LifetimeNumberOfGifts>
+        <LargestGift>100</LargestGift>
+        <GoodUntil>1899-12-30</GoodUntil>
+        <AveMonthlyGift>0</AveMonthlyGift>
+        <LastDateInAve>1899-12-30</LastDateInAve>
+        <TwelveMonthTotal>0</TwelveMonthTotal>
+        <LastActivity>2006-09-18</LastActivity>
+        <LastAppointment>2004-08-26</LastAppointment>
+        <LastCall>2006-09-18</LastCall>
+        <LastPreCall>2004-07-30</LastPreCall>
+        <LastLetter>2006-08-31</LastLetter>
+        <LastVisit>1899-12-30</LastVisit>
+        <LastThank>2004-08-30</LastThank>
+        <LastChallenge>1899-12-30</LastChallenge>
+        <AppealsSinceLastGift>0</AppealsSinceLastGift>
+        <ChallengesSinceLastGift>0</ChallengesSinceLastGift>
+        <OrgDonorCodes>413518908</OrgDonorCodes>
+      </row>
+    </Contact>
+
+    <Gift>
+      <row id="-2100979831">
+        <LastEdit>2003-01-11 18:49:34</LastEdit>
+        <ContactID>1620699916</ContactID>
+        <OrganizationID>-1030947333</OrganizationID>
+        <DonorID>-78585162</DonorID>
+        <DesignationID>1993848522</DesignationID>
+        <GiftDate>2005-06-10</GiftDate>
+        <Amount>50</Amount>
+        <PersonallyReceived>false</PersonallyReceived>
+        <AvailableOnWeb>true</AvailableOnWeb>
+        <PledgeFulfillmentType>0</PledgeFulfillmentType>
+        <AppealID>-2079150908</AppealID>
+        <AppealAmount>25</AppealAmount>
+        <OrgGiftCode>ICWMY</OrgGiftCode>
+        <OrgMotivationCode>S00000</OrgMotivationCode>
+      </row>
+    </Gift>
+    <Donor>
+      <row id="-78585162">
+        <LastEdit>2003-01-11 18:47:55</LastEdit>
+        <ContactID>1620699916</ContactID>
+        <IsSpouse>false</IsSpouse>
+        <OrganizationID>-1030947333</OrganizationID>
+        <OrgDonorCode>432294333</OrgDonorCode>
+        <OrgDonorName>Doe, John L and Jane M</OrgDonorName>
+        <Deceased>false</Deceased>
+        <IsOrganization>false</IsOrganization>
+        <NameLastUpdate>1899-12-30</NameLastUpdate>
+        <AddressLastUpdate>1899-12-30</AddressLastUpdate>
+        <AddressReviewed>true</AddressReviewed>
+        <AddressAutoAccepted>false</AddressAutoAccepted>
+        <PhoneLastUpdate>1899-12-30</PhoneLastUpdate>
+        <PhoneReviewed>true</PhoneReviewed>
+        <PhoneAutoAccepted>false</PhoneAutoAccepted>
+        <MobilePhoneLastUpdate>1899-12-30</MobilePhoneLastUpdate>
+        <MobilePhoneReviewed>true</MobilePhoneReviewed>
+        <MobilePhoneAutoAccepted>false</MobilePhoneAutoAccepted>
+        <SpouseMobilePhoneLastUpdate>1899-12-30</SpouseMobilePhoneLastUpdate>
+        <SpouseMobilePhoneReviewed>true</SpouseMobilePhoneReviewed>
+        <SpouseMobilePhoneAutoAccepted>false</SpouseMobilePhoneAutoAccepted>
+        <EmailLastUpdate>1899-12-30</EmailLastUpdate>
+        <EmailReviewed>true</EmailReviewed>
+        <EmailAutoAccepted>false</EmailAutoAccepted>
+        <SpouseEmailLastUpdate>1899-12-30</SpouseEmailLastUpdate>
+        <SpouseEmailReviewed>true</SpouseEmailReviewed>
+        <SpouseEmailAutoAccepted>false</SpouseEmailAutoAccepted>
+        <MemoLastUpdate>1899-12-30</MemoLastUpdate>
+      </row>
+    </Donor>
+    <History>
+      <row id="1136396219">
+        <LastEdit>2010-05-27 16:51:19</LastEdit>
+        <AppealID>-2079150908</AppealID>
+        <TaskTypeID>100</TaskTypeID>
+        <Description>for support</Description>
+        <HistoryDate>2005-05-21 16:35:20</HistoryDate>
+        <Notes>Special appeal</Notes>
+        <InMPDWeeklyUpdate>false</InMPDWeeklyUpdate>
+        <IsChallenge>false</IsChallenge>
+        <IsThank>false</IsThank>
+        <IsMassMailing>false</IsMassMailing>
+        <HistoryResultID>1</HistoryResultID>
+      </row>
+    </History>
+    <HistoryContact>
+      <row id="1686705835">
+        <LastEdit>2010-05-21 16:35:23</LastEdit>
+        <HistoryID>1136396219</HistoryID>
+        <ContactID>1620699916</ContactID>
+      </row>
+    </HistoryContact>
+
+    <Property>
+      <row id="-1783235008">
+        <LastEdit>2005-12-10 09:32:38</LastEdit>
+        <PropName>MonthlySupportGoal</PropName>
+        <PropValue>5000</PropValue>
+      </row>
+    </Property>
+  </Tables>
+</Database>

@@ -5,11 +5,11 @@ describe GoogleCalendarIntegrator do
   let(:integrator) { GoogleCalendarIntegrator.new(google_integration) }
   let(:task) { create(:task, account_list: google_integration.account_list, activity_type: 'Appointment') }
   let(:google_event) { create(:google_event, activity: task, google_integration: google_integration) }
-  let(:missing_event_response) {
+  let(:missing_event_response) do
     double(data: { 'error' => { 'errors' => [{ 'domain' => 'global', 'reason' => 'notFound', 'message' => 'Not Found' }],
                                 'code' => 404, 'message' => 'Not Found' } },
-      status: 404)
-  }
+           status: 404)
+  end
 
   context '#sync_tasks' do
     it 'calls #sync_task for each future, uncompleted task that is set to be synced' do
@@ -25,7 +25,6 @@ describe GoogleCalendarIntegrator do
 
   context '#sync_task' do
     it 'calls add_task if no google_event exists' do
-
       integrator.should_receive(:add_task).with(task)
 
       integrator.sync_task(task)
@@ -54,9 +53,9 @@ describe GoogleCalendarIntegrator do
       integrator.client.should_receive(:execute).and_return(double(data: { 'id' => 'foo' }, status: 200))
       integrator.should_receive(:event_attributes).and_return({})
 
-      expect {
+      expect do
         integrator.add_task(task)
-      }.to change(GoogleEvent, :count)
+      end.to change(GoogleEvent, :count)
     end
 
     it 'removes the calendar integration if the calendar no longer exists on google' do
@@ -81,9 +80,9 @@ describe GoogleCalendarIntegrator do
       integrator.should_not_receive(:add_task)
 
       google_event.save
-      expect {
+      expect do
         integrator.update_task(task, google_event)
-      }.to_not change(GoogleEvent, :count)
+      end.to_not change(GoogleEvent, :count)
     end
 
     it 'adds the google event if it is missing from google' do
@@ -106,9 +105,9 @@ describe GoogleCalendarIntegrator do
       integrator.client.should_receive(:execute).and_return(double(data: {}, status: 200))
 
       google_event.save
-      expect {
+      expect do
         integrator.remove_google_event(google_event)
-      }.to change(GoogleEvent, :count).by(-1)
+      end.to change(GoogleEvent, :count).by(-1)
     end
   end
 

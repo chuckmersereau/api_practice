@@ -1,0 +1,16 @@
+<div class="importoptions formstyles" data-behavior="org_import_options" style="display:none">
+  <%= form_for Import.new(source: 'tnt_data_sync', source_account_id: account.id) do |f| %>
+    <%= f.hidden_field :source %>
+    <%= f.hidden_field :source_account_id %>
+
+    <div class="field">
+      <%= f.file_field :file %>
+      <%= f.hidden_field :file_cache %>
+    </div>
+    <div class="hint">
+      <%= _('Note: this file should be in a TntMPD data sync (.tntmpd) text file from your organization, not your local TntMPD database file (.mpddb). To import your local Tnt database, click "Import Contacts" below next to the TntMPD logo.') %><br />
+    </div>
+    <a href="#" class="btn btngreen" data-behavior="import_button"><%= _('Import') %></a>
+  <% end %>
+</div>
+<div><a href="#" class="btn" data-behavior="show_org_import"><%= _('Import TntMPD DataSync file') %></a></div>

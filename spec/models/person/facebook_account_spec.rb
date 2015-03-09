@@ -8,20 +8,20 @@ describe Person::FacebookAccount do
     describe 'create from auth' do
       it 'should create an account linked to a person' do
         person = create(:person)
-        expect {
+        expect do
           @account = Person::FacebookAccount.find_or_create_from_auth(@auth_hash, person)
-        }.to change(Person::FacebookAccount, :count).from(0).to(1)
+        end.to change(Person::FacebookAccount, :count).from(0).to(1)
         person.facebook_accounts.should include(@account)
       end
     end
 
     describe 'create user from auth' do
       it 'should create a user with a first and last name' do
-        expect {
+        expect do
           user = Person::FacebookAccount.create_user_from_auth(@auth_hash)
           user.first_name.should == @auth_hash.info.first_name
           user.last_name.should == @auth_hash.info.last_name
-        }.to change(User, :count).from(0).to(1)
+        end.to change(User, :count).from(0).to(1)
       end
     end
 
@@ -30,7 +30,6 @@ describe Person::FacebookAccount do
       Person::FacebookAccount.find_or_create_from_auth(@auth_hash, user)
       Person::FacebookAccount.find_authenticated_user(@auth_hash).should == user
     end
-
   end
 
   it 'should return name for to_s' do
@@ -59,7 +58,6 @@ describe Person::FacebookAccount do
       @account.url = 'https://www.facebook.com/profile.php?id=1'
       @account.remote_id.should == 1
     end
-
   end
 
   describe 'get id from url' do
@@ -82,7 +80,6 @@ describe Person::FacebookAccount do
         .with(headers: { 'Accept' => 'application/json' }).to_return(status: 400)
       expect { @account.get_id_from_url('https://www.facebook.com/john.doe') }.to raise_error(Errors::FacebookLink)
     end
-
   end
 
   context '#token_missing_or_expired?' do
@@ -111,5 +108,4 @@ describe Person::FacebookAccount do
       expect(account.token_missing_or_expired?).to be_false
     end
   end
-
 end

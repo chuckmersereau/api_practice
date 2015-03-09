@@ -3,10 +3,10 @@ class NotificationType::SpecialGift < NotificationType
     notifications = []
     account_list.contacts.where(account_list_id: account_list.id).non_financial_partners.each do |contact|
       donation = contact.donations
-                        .where('donation_date > ?', 2.weeks.ago)
-                        .where(designation_account_id: account_list.designation_accounts.pluck(:id))
-                        .order('donations.donation_date desc')
-                        .last
+                 .where('donation_date > ?', 2.weeks.ago)
+                 .where(designation_account_id: account_list.designation_accounts.pluck(:id))
+                 .order('donations.donation_date desc')
+                 .last
       next unless donation
       prior_notification = Notification.active.where(notification_type_id: id, donation_id: donation.id).first
       next if prior_notification

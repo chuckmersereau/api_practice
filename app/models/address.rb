@@ -24,7 +24,7 @@ class Address < ActiveRecord::Base
   MANUAL_SOURCE = 'manual'
 
   assignable_values_for :location, allow_blank: true do
-    [_('Home'), _('Business'), _('Mailing'), _('Other')]
+    [_('Home'), _('Business'), _('Mailing'), _('Seasonal'), _('Other')]
   end
 
   def equal_to?(other)
@@ -66,7 +66,8 @@ class Address < ActiveRecord::Base
   end
 
   def self.normalize_country(val)
-    return val if val.blank?
+    return if val.blank?
+    val = val.strip
 
     countries = CountrySelect::COUNTRIES
 
@@ -113,10 +114,17 @@ class Address < ActiveRecord::Base
   private
 
   def set_manual_source_if_user_changed
-    return unless user_changed && (new_record? || (changed & %w(street city state country postal_code)).present?)
+    return unless user_changed && (new_record? || place_fields_changed?)
     self.source = MANUAL_SOURCE
     self.start_date = Date.today
     self.source_donor_account = nil
+  end
+
+  def place_fields_changed?
+    place_fields = %w(street city state postal_code)
+    place_fields.any? { |f| changes[f].present? && changes[f][0].to_s.strip != changes[f][1].to_s.strip } ||
+      (changes['country'].present? &&
+        self.class.normalize_country(changes['country'][0]) != self.class.normalize_country(changes['country'][1]))
   end
 
   def determine_master_address
@@ -128,9 +136,7 @@ class Address < ActiveRecord::Base
   end
 
   def update_or_create_master_address
-    if (changed & %w(street city state country postal_code)).present?
-      self.remote_id = nil if user_changed
-
+    if place_fields_changed?
       new_master_address_match = find_master_address
 
       if master_address.nil? || master_address != new_master_address_match
@@ -157,12 +163,12 @@ class Address < ActiveRecord::Base
 
     # See if another address in the database matches this one and has a master address
     where_clause = attributes_for_master_address.symbolize_keys
-                                                .slice(:street, :city, :state, :country, :postal_code)
-                                                .map { |k, _v| "lower(#{k}) = :#{k}" }.join(' AND ')
+                   .slice(:street, :city, :state, :country, :postal_code)
+                   .map { |k, _v| "lower(#{k}) = :#{k}" }.join(' AND ')
 
     master_address ||= Address.where(where_clause, attributes_for_master_address)
-                              .where('master_address_id is not null')
-                              .first.try(:master_address)
+                       .where('master_address_id is not null')
+                       .first.try(:master_address)
 
     if !master_address &&
        (attributes_for_master_address[:state].to_s.length == 2 ||
@@ -184,7 +190,7 @@ class Address < ActiveRecord::Base
           attributes_for_master_address[:verified] = true
           master_address = MasterAddress.where(attributes_for_master_address.symbolize_keys
                                                                             .slice(:street, :city, :state, :country, :postal_code))
-                                        .first
+                           .first
         end
         attributes_for_master_address[:smarty_response] = results
       rescue RestClient::RequestFailed, SocketError, RestClient::ResourceNotFound
@@ -205,9 +211,9 @@ class Address < ActiveRecord::Base
 
   def attributes_for_master_address
     @attributes_for_master_address ||= Hash[attributes.symbolize_keys
-                                                      .slice(:street, :city, :state, :country, :postal_code)
-                                                      .select { |_k, v| v.present? }
-                                                      .map { |k, v| [k, v.downcase] }]
+                                            .slice(:street, :city, :state, :country, :postal_code)
+                                            .select { |_k, v| v.present? }
+                                            .map { |k, v| [k, v.downcase] }]
   end
 
   US_STATES =  [

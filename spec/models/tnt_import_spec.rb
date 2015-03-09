@@ -56,12 +56,13 @@ describe TntImport do
   end
 
   context '#import_contacts' do
-    it 'associates referrals' do
+    it 'associates referrals and imports no_appeals field' do
       import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
       import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
-      expect {
+      expect do
         import.send(:import_contacts)
-      }.to change(ContactReferral, :count).by(1)
+      end.to change(ContactReferral, :count).by(1)
+      expect(Contact.first.no_appeals).to be_true
     end
 
     context 'updating an existing contact' do
@@ -79,9 +80,9 @@ describe TntImport do
       it 'updates an existing contact' do
         import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
         import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
-        expect {
+        expect do
           import.send(:import_contacts)
-        }.to change { contact.reload.status }.from('Ask in Future').to('Partner - Pray')
+        end.to change { contact.reload.status }.from('Ask in Future').to('Partner - Pray')
       end
 
       describe 'primary address behavior' do
@@ -97,13 +98,13 @@ describe TntImport do
           contact.save
           expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
 
-          expect {
+          expect do
             import.send(:import_contacts)
-          }.not_to change { contact.addresses.where(primary_mailing_address: true).count }
+          end.not_to change { contact.addresses.where(primary_mailing_address: true).count }
 
-          expect { # make sure it survives a second import
+          expect do # make sure it survives a second import
             import.send(:import_contacts)
-          }.not_to change { contact.addresses.where(primary_mailing_address: true).count }
+          end.not_to change { contact.addresses.where(primary_mailing_address: true).count }
         end
 
         it 'changes the primary address of an existing contact' do
@@ -226,16 +227,16 @@ describe TntImport do
       org = create(:organization)
       create(:donor_account, account_number: '413518908', organization: org, name: nil)
       create(:designation_profile, account_list: tnt_import.account_list, organization: org)
-      expect {
+      expect do
         import.send(:import_contacts)
-      }.to change(Contact, :count).by(2)
+      end.to change(Contact, :count).by(2)
     end
 
     it 'imports a contact people details even if the contact is not a donor' do
       import = TntImport.new(create(:tnt_import_non_donor))
-      expect {
+      expect do
         import.send(:import_contacts)
-      }.to change(Person, :count).by(1)
+      end.to change(Person, :count).by(1)
     end
 
     it 'matches an existing contact with leading zeros in their donor account' do
@@ -294,7 +295,7 @@ describe TntImport do
 
     it 'imports emails and sets the first preferred and valid one to primary' do
       row = { 'SpouseEmail1' => 'a@a.com', 'SpouseEmail2' => 'b@b.com', 'SpouseEmail3' => 'c@c.com',
-        'SpouseEmail1IsValid' => 'true', 'SpouseEmail2IsValid' => 'false', 'SpouseEmail3IsValid' => 'true' }
+              'SpouseEmail1IsValid' => 'true', 'SpouseEmail2IsValid' => 'false', 'SpouseEmail3IsValid' => 'true' }
       prefix = 'Spouse'
       expect(import).to receive(:tnt_email_preferred?).and_return(false, true)
       import.send(:update_person_emails, person, row, prefix)
@@ -337,7 +338,7 @@ describe TntImport do
 
     it 'marks tnt "invalid" phone numbers as historic in mpdx' do
       row = { 'HomePhone2' => '222-222-2222', 'SpouseMobilePhone' => '333-333-3333',
-        'PhoneIsValidMask' => '4096' }
+              'PhoneIsValidMask' => '4096' }
       prefix = 'Spouse'
       import.send(:update_person_phones, person, row, prefix)
       expect(person.phone_numbers.count).to eq(2)
@@ -369,9 +370,9 @@ describe TntImport do
   context '#update_person_attributes' do
     it 'imports a phone number for a person' do
       person = Person.new
-      expect {
+      expect do
         person = import.send(:update_person_attributes, person, contact_rows.first)
-      }.to change(person.phone_numbers, :length).by(3)
+      end.to change(person.phone_numbers, :length).by(3)
     end
   end
 
@@ -382,70 +383,69 @@ describe TntImport do
     it 'finds an existing donor account' do
       create(:donor_account, organization: organization, account_number: contact_rows.first['OrgDonorCodes'])
 
-      expect {
+      expect do
         import.send(:add_or_update_donor_accounts, contact_rows.first, designation_profile)
-      }.not_to change(DonorAccount, :count)
+      end.not_to change(DonorAccount, :count)
     end
 
     it 'finds an existing contact' do
       tnt_import.account_list.contacts << create(:contact, name: contact_rows.first['FileAs'])
       tnt_import.account_list.save
 
-      expect {
+      expect do
         import.send(:add_or_update_donor_accounts, contact_rows.first, designation_profile)
-      }.not_to change(Contact, :count)
+      end.not_to change(Contact, :count)
     end
 
     it 'creates a new donor account' do
-      expect {
+      expect do
         import.send(:add_or_update_donor_accounts, contact_rows.first, designation_profile)
-      }.to change(DonorAccount, :count).by(1)
+      end.to change(DonorAccount, :count).by(1)
     end
 
     it 'creates a new contact' do
-      expect {
+      expect do
         import.send(:import_contacts)
-      }.to change(Contact, :count).by(2)
+      end.to change(Contact, :count).by(2)
     end
 
     it 'creates a new contact from a non-donor' do
       import = TntImport.new(create(:tnt_import_non_donor))
-      expect {
+      expect do
         import.send(:import_contacts)
-      }.to change(Contact, :count).by(1)
+      end.to change(Contact, :count).by(1)
     end
 
     it "doesn't create duplicate people when importing the same list twice" do
       import = TntImport.new(create(:tnt_import_non_donor))
       import.send(:import_contacts)
 
-      expect {
+      expect do
         import.send(:import_contacts)
-      }.not_to change(Person, :count)
+      end.not_to change(Person, :count)
     end
-
   end
 
   context '#import_tasks' do
     it 'creates a new task' do
-      expect {
+      expect do
         tasks = import.send(:import_tasks)
         tasks.first[1].remote_id.should_not be_nil
-      }.to change(Task, :count).by(1)
+      end.to change(Task, :count).by(1)
     end
 
     it 'updates an existing task' do
       create(:task, source: 'tnt', remote_id: task_rows.first['id'], account_list: tnt_import.account_list)
 
-      expect {
+      expect do
         import.send(:import_tasks)
-      }.not_to change(Task, :count).by(1)
+      end.not_to change(Task, :count).by(1)
     end
 
     it 'accociates a contact with the task' do
-      expect {
+      expect do
         import.send(:import_tasks,  task_contact_rows.first['ContactID'] => contact)
-      }.to change(ActivityContact, :count).by(1)
+      end.to change(ActivityContact, :count).by(1)
     end
 
     it 'adds notes as a task comment' do
@@ -459,51 +459,60 @@ describe TntImport do
 
   context '#import_history' do
     it 'creates a new completed task' do
-      expect {
-        tasks = import.send(:import_history)
+      expect do
+        tasks, _contacts_by_tnt_appeal_id = import.send(:import_history)
         tasks.first[1].remote_id.should_not be_nil
-      }.to change(Task, :count).by(1)
+      end.to change(Task, :count).by(1)
     end
 
     it 'marks an existing task as completed' do
       create(:task, source: 'tnt', remote_id: history_rows.first['id'], account_list: tnt_import.account_list)
 
-      expect {
+      expect do
         import.send(:import_history)
-      }.not_to change(Task, :count).by(1)
+      end.not_to change(Task, :count).by(1)
     end
 
     it 'accociates a contact with the task' do
-      expect {
+      expect do
         import.send(:import_history,  history_contact_rows.first['ContactID'] => contact)
-      }.to change(ActivityContact, :count).by(1)
+      end.to change(ActivityContact, :count).by(1)
     end
 
+    it 'associates contacts with tnt appeal ids' do
+      tnt_import = TntImport.new(create(:tnt_import_appeals))
+      _history, contacts_by_tnt_appeal_id = tnt_import.send(:import_history,  import.send(:import_contacts))
+      expect(contacts_by_tnt_appeal_id.size).to eq(1)
+      contacts = contacts_by_tnt_appeal_id['-2079150908']
+      expect(contacts.size).to eq(1)
+      expect(contacts[0]).to_not be_nil
+      expect(contacts[0].name).to eq('Smith, John and Jane')
+    end
   end
 
   context '#import_settings' do
     it 'updates monthly goal' do
       import.should_receive(:create_or_update_mailchimp).and_return
 
-      expect {
+      expect do
         import.send(:import_settings)
-      }.to change(tnt_import.account_list, :monthly_goal).from(nil).to(6300)
+      end.to change(tnt_import.account_list, :monthly_goal).from(nil).to(6300)
     end
   end
 
   context '#create_or_update_mailchimp' do
     it 'creates a mailchimp account' do
-      expect {
+      expect do
         import.send(:create_or_update_mailchimp, 'asdf', 'asasdfdf-us4')
-      }.to change(MailChimpAccount, :count).by(1)
+      end.to change(MailChimpAccount, :count).by(1)
     end
 
     it 'updates a mailchimp account' do
       tnt_import.account_list.create_mail_chimp_account(api_key: '5', primary_list_id: '6')
 
-      expect {
+      expect do
         import.send(:create_or_update_mailchimp, '1', '2')
-      }.to change(tnt_import.account_list.mail_chimp_account, :api_key).from('5').to('2')
+      end.to change(tnt_import.account_list.mail_chimp_account, :api_key).from('5').to('2')
     end
   end
 
@@ -605,6 +614,50 @@ describe TntImport do
     end
   end
 
+  context '#import_appeals' do
+    it 'imports an appeal as well as its contacts and donations' do
+      import = create(:tnt_import_appeals)
+      account_list = import.account_list
+      tnt_import = TntImport.new(import)
+      contact = create(:contact, account_list: account_list)
+      donor_account = create(:donor_account, account_number: '432294333')
+      contact.donor_accounts << donor_account
+      account_list.contacts << contact
+      designation_account = create(:designation_account)
+      account_list.account_list_entries << create(:account_list_entry, designation_account: designation_account)
+      donation = donor_account.donations.create(amount: 50, donation_date: Date.new(2005, 6, 10),
+                                                designation_account: designation_account)
+
+      expect do
+        tnt_import.send(:import)
+      end.to change(Appeal, :count).from(0).to(1)
+      appeal = Appeal.first
+      expect(appeal.contacts.count).to eq(1)
+      expect(appeal.contacts.first.name).to eq('Smith, John and Jane')
+      expect(appeal.donations.first).to eq(donation)
+      donation.reload
+      expect(donation.appeal).to eq(appeal)
+      expect(donation.appeal_amount).to eq(25)
+
+      # Survies the second import even if you rename the appeal
+      appeal.update(name: 'Test new name')
+      expect do
+        tnt_import.send(:import)
+      end.to_not change(Appeal, :count).from(1)
+      expect(donation.appeal_amount).to eq(25)
+      appeal.reload
+      expect(appeal.contacts.count).to eq(1)
+    end
+
+    it 'does not error if an appeal has no contacts' do
+      expect(import).to receive(:find_or_create_appeals_by_tnt_id).and_return(1 => create(:appeal))
+      contacts_by_tnt_appeal_id = {}
+      expect { import.send(:import_appeals, contacts_by_tnt_appeal_id) }.to_not raise_error
+      expect(Appeal.count).to eq(1)
+      expect(AppealContact.count).to eq(0)
+    end
+  end
+
   context '#import' do
     it 'performs an import' do
       import.should_receive(:xml).and_return('foo')
@@ -612,6 +665,7 @@ describe TntImport do
       import.should_receive(:import_tasks).and_return
       import.should_receive(:import_history).and_return
       import.should_receive(:import_settings).and_return
+      import.should_receive(:import_appeals)
       import.import
     end
   end

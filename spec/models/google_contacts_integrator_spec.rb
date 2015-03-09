@@ -42,7 +42,7 @@ describe GoogleContactsIntegrator do
 
     it 'does not re-raise a missing refresh token error' do
       expect_any_instance_of(Person::GoogleAccount).to receive(:contacts_api_user)
-                                                       .and_raise(Person::GoogleAccount::MissingRefreshToken)
+        .and_raise(Person::GoogleAccount::MissingRefreshToken)
       expect { @integrator.sync_contacts }.not_to raise_error
     end
   end
@@ -64,7 +64,7 @@ describe GoogleContactsIntegrator do
       @integration.update_column(:contacts_last_synced, now)
       g_contact = double(id: 'id_1', given_name: 'John', family_name: 'Google')
       expect(@account.contacts_api_user).to receive(:contacts_updated_min)
-                                            .with(now, showdeleted: false).and_return([g_contact])
+        .with(now, showdeleted: false).and_return([g_contact])
 
       expect(@integrator).to receive(:contacts_to_sync_query).with([g_contact]).and_return([@contact])
       expect(@integrator.contacts_to_sync).to eq([@contact])
@@ -87,8 +87,8 @@ describe GoogleContactsIntegrator do
       expect(@integrator.api_user).to receive(:groups).exactly(:once).and_return([not_mpdx_group])
 
       expect(GoogleContactsApi::Group).to receive(:create).exactly(:once)
-                                          .with({ title: GoogleContactsIntegrator::CONTACTS_GROUP_TITLE }, @integrator.api_user.api)
-                                          .and_return(mpdx_group)
+        .with({ title: GoogleContactsIntegrator::CONTACTS_GROUP_TITLE }, @integrator.api_user.api)
+        .and_return(mpdx_group)
 
       expect(@integrator.mpdx_group).to eq(mpdx_group)
 
@@ -229,7 +229,7 @@ describe GoogleContactsIntegrator do
     describe 'get_g_contact_and_link' do
       it 'marks the remote id of a queried g_contact as assigned and adds the g_contact to the mpdx group' do
         g_contact_link = create(:google_contact, remote_id: 'id', person: @person, contact: @contact,
-                                google_account: @account)
+                                                 google_account: @account)
         g_contact = double(id: 'id', given_name: 'John', family_name: 'Google')
         expect(@integrator).to receive(:get_or_query_g_contact).with(g_contact_link, @person).and_return(g_contact)
 
@@ -250,7 +250,7 @@ describe GoogleContactsIntegrator do
       describe 'save_g_contact_links' do
         it 'marks the remote id of a saved g_contact as assigned' do
           g_contact_link = build(:google_contact, remote_id: 'id', person: @person, contact: @contact,
-                                  google_account: @account)
+                                                  google_account: @account)
           g_contact = double(id: 'id', formatted_attrs: {}, etag: '')
 
           @integrator.assigned_remote_ids = [].to_set
@@ -290,7 +290,7 @@ describe GoogleContactsIntegrator do
     end
   end
 
-  def stub_groups_request
+  def stub_groups_request(body = nil, status = 200)
     groups_body = {
       'feed' => {
         'entry' => [
@@ -308,7 +308,7 @@ describe GoogleContactsIntegrator do
     }
     stub_request(:get, 'https://www.google.com/m8/feeds/groups/default/full?alt=json&max-results=100000&v=3')
       .with(headers: { 'Authorization' => "Bearer #{@account.token}" })
-      .to_return(body: groups_body.to_json)
+      .to_return(body: body || groups_body.to_json, status: status)
   end
 
   def empty_feed_json
@@ -432,7 +432,7 @@ describe GoogleContactsIntegrator do
       times_batch_create_or_update_called = 0
       batch_time3_g_contact_id = ''
       expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(4).times
-                                            .and_return do |g_contact, &block|
+        .and_return do |g_contact, &block|
         times_batch_create_or_update_called += 1
         case times_batch_create_or_update_called
         when 1
@@ -489,9 +489,9 @@ describe GoogleContactsIntegrator do
   context '#delete_g_contact_merge_loser' do
     it 'does not cause an error if the remote_id of the merge loser is nil' do
       g_contact_link = create(:google_contact, remote_id: nil)
-      expect {
+      expect do
         @integrator.delete_g_contact_merge_loser(g_contact_link)
-      }.to_not raise_error
+      end.to_not raise_error
       expect(GoogleContact.count).to eq(0)
     end
   end
@@ -517,7 +517,7 @@ describe GoogleContactsIntegrator do
 
       batch_create_or_update_calls = 0
       expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(7).times
-                                            .and_return do |g_contact, &block|
+        .and_return do |g_contact, &block|
         batch_create_or_update_calls += 1
         case batch_create_or_update_calls
         when 1..4
@@ -571,7 +571,7 @@ describe GoogleContactsIntegrator do
       stub_groups_request
       @integration.update_column(:contacts_last_synced, 1.hour.ago)
       create(:google_contact, google_account: @account, contact: @contact, person: @person, remote_id: '1',
-             last_data: { given_name: 'John', family_name: 'Doe' }, last_synced: 1.hour.ago)
+                              last_data: { given_name: 'John', family_name: 'Doe' }, last_synced: 1.hour.ago)
       expect(@account.contacts_api_user).to receive(:contacts_updated_min).at_least(:once).and_return([])
     end
 
@@ -585,7 +585,7 @@ describe GoogleContactsIntegrator do
       times_batch_create_or_update_called = 0
 
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-                                            .exactly(2).times.and_return do |g_contact, &block|
+        .exactly(2).times.and_return do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -605,13 +605,13 @@ describe GoogleContactsIntegrator do
 
     it 'retries the sync and reloads a contact on a 412 error' do
       g_contact_reloaded = GoogleContactsApi::Contact.new('gd$etag' => 'a', 'id' => { '$t' => '2' },
-        'gd$name' => { 'gd$givenName' => { '$t' => 'MODIFIED-Jane' }, 'gd$familyName' => { '$t' => 'Doe' } })
+                                                          'gd$name' => { 'gd$givenName' => { '$t' => 'MODIFIED-Jane' }, 'gd$familyName' => { '$t' => 'Doe' } })
       expect(@account.contacts_api_user).to receive(:get_contact).with('1').exactly(:twice)
-                                            .and_return(@g_contact, g_contact_reloaded)
+        .and_return(@g_contact, g_contact_reloaded)
 
       times_batch_create_or_update_called = 0
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-                                            .exactly(2).times.and_return do |g_contact, &block|
+        .exactly(2).times.and_return do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -634,7 +634,7 @@ describe GoogleContactsIntegrator do
 
       times_batch_create_or_update_called = 0
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-                                            .exactly(:once).and_return do |g_contact, &block|
+        .exactly(:once).and_return do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -707,7 +707,7 @@ describe GoogleContactsIntegrator do
       end
 
       create(:google_contact, google_account: @account, person: @person, contact: @contact,
-             remote_id: 'http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/test')
+                              remote_id: 'http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/test')
 
       @contact.update_column :status, 'Not Interested'
       @integrator.sync_contacts
@@ -722,7 +722,7 @@ describe GoogleContactsIntegrator do
       stub_groups_request
       @remote_id = 'http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/test'
       @g_contact_link = create(:google_contact, google_account: @account, person: @person, contact: @contact,
-                               remote_id: @remote_id)
+                                                remote_id: @remote_id)
       @contact.update_column :status, 'Not Interested'
 
       @cache = GoogleContactsCache.new(@account)
@@ -734,7 +734,7 @@ describe GoogleContactsIntegrator do
       expect(@cache).to receive(:find_by_id).with(@remote_id).and_return(@g_contact)
 
       expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(:once)
-                                            .and_return { |_g_contact, &block| block.call(code: 404) }
+        .and_return { |_g_contact, &block| block.call(code: 404) }
 
       @integrator.cleanup_inactive_g_contacts
       expect(GoogleContact.all.count).to eq(0)
@@ -746,7 +746,7 @@ describe GoogleContactsIntegrator do
 
       times_batch_create_or_update_called = 0
       expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(:twice)
-                                            .and_return do |_g_contact, &block|
+        .and_return do |_g_contact, &block|
         times_batch_create_or_update_called += 1
         case times_batch_create_or_update_called
         when 1
@@ -764,7 +764,7 @@ describe GoogleContactsIntegrator do
   describe 'delete merge loser 404 contact not found error (already deleted)' do
     it 'destroys the local g_contact_link anyway' do
       create(:google_contact, google_account: @account, person: @person, contact: @contact,
-             remote_id: 'http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/test')
+                              remote_id: 'http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/test')
       ContactPerson.all.destroy_all
 
       stub_request(:delete, 'https://www.google.com/m8/feeds/contacts/test.user@cru.org/base/test?alt=json&v=3')
@@ -772,6 +772,44 @@ describe GoogleContactsIntegrator do
 
       @integrator.delete_g_contact_merge_losers
       expect(GoogleContact.all.count).to eq(0)
+    end
+  end
+
+  context '#retry_on_api_errs' do
+    def expect_err_for_response_code(code, expected_err)
+      if code == 200
+        stub_groups_request
+      else
+        body = <<-EOS
+          error: {
+              errors: [ { "domain": "d", "reason": "r", "message": "m" } ],
+              "code": #{code}, "message": "m"
+          }
+        EOS
+        stub_groups_request(body, code)
+      end
+
+      expectation = expect { GoogleContactsIntegrator.retry_on_api_errs { @integrator.api_user.groups } }
+      if expected_err
+        expectation.to raise_error(expected_err)
+      else
+        expectation.to_not raise_error
+      end
+    end
+
+    it 'raises a LowerRetryWorker::RetryJobButNoAirbrakeError error on 500s, 403 errs' do
+      expect_err_for_response_code(500, LowerRetryWorker::RetryJobButNoAirbrakeError)
+      expect_err_for_response_code(503, LowerRetryWorker::RetryJobButNoAirbrakeError)
+      expect_err_for_response_code(403, LowerRetryWorker::RetryJobButNoAirbrakeError)
+    end
+
+    it 'raise an OAuth2 error for other error codes' do
+      expect_err_for_response_code(400, OAuth2::Error)
+      expect_err_for_response_code(404, OAuth2::Error)
+    end
+
+    it 'does not raise an error for success code' do
+      expect_err_for_response_code(200, nil)
     end
   end
 
@@ -936,10 +974,10 @@ describe GoogleContactsIntegrator do
       expect(g_contact_link.remote_id).to eq('http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/6b70f8bb0372c')
       expect(g_contact_link.last_etag).to eq('"SXk6cDdXKit7I2A9Wh9VFUgORgE."')
 
-      addresses = @contact.addresses.order(:state).map { |address|
+      addresses = @contact.addresses.order(:state).map do |address|
         address.attributes.symbolize_keys.slice(:street, :city, :state, :postal_code, :country, :location,
                                                 :primary_mailing_address)
-      }
+      end
       expect(addresses).to eq([
         { street: '100 Lake Hart Dr.', city: 'Orlando', state: 'FL', postal_code: '32832',
           country: 'United States', location: 'Business', primary_mailing_address: true },
@@ -1116,10 +1154,10 @@ describe GoogleContactsIntegrator do
       expect(@person.phone_numbers.last.number).to eq('+11233345555')
 
       @contact.reload
-      addresses = @contact.addresses.order(:state).map { |address|
+      addresses = @contact.addresses.order(:state).map do |address|
         address.attributes.symbolize_keys.slice(:street, :city, :state, :postal_code, :country, :location,
                                                 :primary_mailing_address)
-      }
+      end
       expect(addresses).to eq([
         { street: 'MODIFIED 100 Lake Hart Dr.', city: 'Orlando', state: 'FL', postal_code: '32832',
           country: 'United States', location: 'Business', primary_mailing_address: true },

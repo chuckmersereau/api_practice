@@ -1,6 +1,5 @@
 require 'spec_helper'
 describe PersonExhibit do
-
   let(:exhib) { PersonExhibit.new(person, context) }
   let(:person) { build(:person) }
   let(:context) { double(root_url: 'https://mpdx.org') }
@@ -21,5 +20,4 @@ describe PersonExhibit do
       expect(exhib.avatar).to eq('https://graph.facebook.com/1234/picture?type=square')
     end
   end
-
 end

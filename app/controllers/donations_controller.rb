@@ -24,8 +24,8 @@ class DonationsController < ApplicationController
       end
       @end_date = @start_date.end_of_month
       @donations = current_account_list.donations.where('donation_date BETWEEN ? AND ?', @start_date, @end_date)
-                                                 .where('contacts.account_list_id' => current_account_list.id)
-                                                 .includes(donor_account: :contacts)
+                   .where('contacts.account_list_id' => current_account_list.id)
+                   .includes(donor_account: :contacts)
     end
   end
 
@@ -62,7 +62,7 @@ class DonationsController < ApplicationController
     @by_month = @all_donations.where('donation_date >= ?', 12.months.ago.beginning_of_month).group_by { |r| r.donation_date.beginning_of_month }
     @by_month_index = 12.downto(0).map { |i| i.months.ago.to_date.beginning_of_month }
     @prior_year = @all_donations.where('donation_date >= ? AND donation_date < ?', 24.months.ago.beginning_of_month, 11.months.ago.beginning_of_month)
-                                .group_by { |r| r.donation_date.beginning_of_month }
+                  .group_by { |r| r.donation_date.beginning_of_month }
     @prior_year_index = 24.downto(12).map { |i| i.months.ago.to_date.beginning_of_month }
   end
 

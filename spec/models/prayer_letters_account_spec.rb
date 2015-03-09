@@ -4,7 +4,6 @@ describe PrayerLettersAccount do
   let(:pla) { create(:prayer_letters_account) }
 
   context '#get_response' do
-
     it 'marks token as invalid if response is a 401 for OAuth2' do
       stub_request(:get, %r{https:\/\/www\.prayerletters\.com\/*}).to_return(status: 401)
       pla = create(:prayer_letters_account_oauth2)
@@ -32,17 +31,17 @@ describe PrayerLettersAccount do
     it 'sends an email to the account users' do
       AccountMailer.should_receive(:prayer_letters_invalid_token).with(an_instance_of(AccountList)).and_return(double(deliver: true))
 
-      expect {
+      expect do
         pla.handle_bad_token
-      }.to raise_exception(PrayerLettersAccount::AccessError)
+      end.to raise_exception(PrayerLettersAccount::AccessError)
     end
 
     it 'sets valid_token to false' do
       AccountMailer.stub(:prayer_letters_invalid_token).and_return(double(deliver: true))
 
-      expect {
+      expect do
         pla.handle_bad_token
-      }.to raise_exception(PrayerLettersAccount::AccessError)
+      end.to raise_exception(PrayerLettersAccount::AccessError)
 
       expect(pla.valid_token).to be_false
     end
@@ -97,7 +96,7 @@ describe PrayerLettersAccount do
         '"country":"United States"},"external_id":' + contact.id.to_s +  '}]}'
 
       stub = stub_request(:put, 'https://www.prayerletters.com/api/v1/contacts')
-        .with(body: contacts_body, headers: { 'Authorization' => 'Bearer MyString' })
+             .with(body: contacts_body, headers: { 'Authorization' => 'Bearer MyString' })
 
       expect(pla).to receive(:import_list)
       pla.subscribe_contacts

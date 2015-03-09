@@ -24,8 +24,13 @@ class Appeal < ActiveRecord::Base
   end
 
   def add_contacts_by_opts(statuses, tags, excludes)
-    contacts = contacts_by_opts(statuses, tags, excludes)
-    AppealContact.import(contacts.map { |c| AppealContact.new(contact: c, appeal: self) })
+    bulk_add_contacts(contacts_by_opts(statuses, tags, excludes))
+  end
+
+  def bulk_add_contacts(contacts_to_add)
+    appeal_contact_ids = contacts.pluck(:id).to_set
+    contacts_to_add = contacts_to_add.uniq.reject { |c| appeal_contact_ids.include?(c.id) }
+    AppealContact.import(contacts_to_add.map { |c| AppealContact.new(contact: c, appeal: self) })
   end
 
   def contacts_by_opts(statuses, tags, excludes)
@@ -85,15 +90,15 @@ class Appeal < ActiveRecord::Base
         > coalesce(pledge_amount, 0.0) / coalesce(pledge_frequency, 1.0)"
 
     contacts.where("contacts.id NOT IN (#{above_pledge_contacts_ids_sql})", account_list_id: account_list.id,
-                   start_of_month: start_of_month, start_of_prev_month: start_of_prev_month,
-                   prev_full_months: prev_full_months)
+                                                                            start_of_month: start_of_month, start_of_prev_month: start_of_prev_month,
+                                                                            prev_full_months: prev_full_months)
   end
 
   # We define e.g. "stopped giving in the past 2 months" as no pledge set current, no gifts in the previous
   # 2 full months, and at least 3 gifts in the prior 10 months.
   def no_stopped_giving_recently(contacts, prev_full_months = 2, prior_months = 10, prior_num_gifts = 3)
-    prior_window_end = (Date.today.prev_month << prev_full_months).end_of_month
-    prior_window_start = (prior_window_end << prior_months).beginning_of_month
+    prior_window_end = Date.today << prev_full_months
+    prior_window_start = prior_window_end << prior_months
 
     former_givers_sql = "
       SELECT contacts.id
@@ -110,16 +115,16 @@ class Appeal < ActiveRecord::Base
       HAVING COUNT(*) >= :prior_num_gifts"
 
     contacts.where("contacts.id NOT IN (#{former_givers_sql})", account_list_id: account_list.id,
-                   prior_window_start: prior_window_start, prior_window_end: prior_window_end,
-                   prior_num_gifts: prior_num_gifts)
+                                                                prior_window_start: prior_window_start, prior_window_end: prior_window_end,
+                                                                prior_num_gifts: prior_num_gifts)
   end
 
   def no_increased_recently(contacts, prev_full_months = 3)
     increased_recently_ids = contacts.scoping do
       account_list.contacts
-        .where('pledge_amount is not null AND pledge_amount > 0 AND pledge_frequency <= 4')
-        .where('last_donation_date >= ?', (Date.today.prev_month << prev_full_months).beginning_of_month)
-        .to_a.select { |contact| increased_recently?(contact, prev_full_months) }.map(&:id)
+      .where('pledge_amount is not null AND pledge_amount > 0 AND pledge_frequency <= 4')
+      .where('last_donation_date >= ?', (Date.today.prev_month << prev_full_months).beginning_of_month)
+      .to_a.select { |contact| increased_recently?(contact, prev_full_months) }.map(&:id)
     end
 
     return contacts if increased_recently_ids.empty?
