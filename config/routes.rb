@@ -99,9 +99,6 @@ Rails.application.routes.draw do
 
   resources :tasks do
     collection do
-      get :starred
-      get :completed
-      get :history
       delete :bulk_destroy
       put :bulk_update
     end

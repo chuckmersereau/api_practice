@@ -28,11 +28,20 @@ class GoogleContactsIntegrator
     @account = google_integration.google_account
   end
 
-  def self.retryable_exp_backoff
-    # Not exactly an exponential backoff, but basically try 30 seconds for a while then wait an hour and try.
-    # Google Contacts API seems to have limits per user per second, hour and half day, so this makes sense,
-    # http://stackoverflow.com/questions/7366268/query-limit-for-google-contacts-api
-    Retryable.retryable(times: 1, sleep: 3601) { Retryable.retryable(times: 4, sleep: 30) { yield } }
+  def self.retry_on_api_errs
+    yield
+  rescue GoogleContactsApi::UnauthorizedError
+    # Try job again which will refresh the token
+    raise LowerRetryWorker::RetryJobButNoAirbrakeError
+  rescue OAuth2::Error => e
+    if e.response && e.response.status >= 500 || e.response.status == 403 # Server errs or rate limit exceeded
+      # For the rate limit error, we need to wait up to an hour, so we should put the job in the retry queue
+      # rather than holding up a Sidekiq thread with a long retry, but don't report the error to Airbrake since these
+      # errors are expected from time to time.
+      raise LowerRetryWorker::RetryJobButNoAirbrakeError
+    else
+      raise e
+    end
   end
 
   def sync_contacts
@@ -125,7 +134,7 @@ class GoogleContactsIntegrator
     # Return the google_contacts for this Google account that are no longer associated with a contact-person pair
     # due to that contact or person being merged with another contact or person in MPDX.
     # Look for records that have both the contact_id and person_id set, because the Google Import uses an old method
-    #of just setting the person_id and we don't want to wrongly interpret imported Google contacts as merge losers.
+    # of just setting the person_id and we don't want to wrongly interpret imported Google contacts as merge losers.
     @account.google_contacts
       .joins('LEFT JOIN contact_people ON '\
         'google_contacts.person_id = contact_people.person_id AND contact_people.contact_id = google_contacts.contact_id')
@@ -188,13 +197,13 @@ class GoogleContactsIntegrator
 
   def setup_assigned_remote_ids
     @assigned_remote_ids = @integration.account_list.contacts.joins(:people)
-      .joins('INNER JOIN google_contacts ON google_contacts.person_id = people.id')
-      .pluck('google_contacts.remote_id').to_set
+                           .joins('INNER JOIN google_contacts ON google_contacts.person_id = people.id')
+                           .pluck('google_contacts.remote_id').to_set
   end
 
   def contacts_to_sync
     if @integration.contacts_last_synced
-      updated_g_contacts = self.class.retryable_exp_backoff do
+      updated_g_contacts = self.class.retry_on_api_errs do
         api_user.contacts_updated_min(@integration.contacts_last_synced, showdeleted: false)
       end
 
@@ -247,7 +256,7 @@ class GoogleContactsIntegrator
 
     g_contacts_by_id = Hash[updated_g_contacts.map { |g_contact| [g_contact.id, g_contact] }]
     g_contact_links = GoogleContact.select(:id, :remote_id, :last_synced)
-      .where(google_account: @account).where(remote_id: updated_remote_ids).where.not(last_synced: nil).to_a
+                      .where(google_account: @account).where(remote_id: updated_remote_ids).where.not(last_synced: nil).to_a
 
     g_contact_links.select do |g_contact_link|
       g_contact = g_contacts_by_id[g_contact_link.remote_id]
@@ -265,7 +274,7 @@ class GoogleContactsIntegrator
 
   def sync_contact(contact)
     g_contacts_and_links = contact.contact_people.order('contact_people.primary::int desc').order(:person_id)
-      .map(&method(:get_g_contact_and_link))
+                           .map(&method(:get_g_contact_and_link))
     GoogleContactSync.sync_contact(contact, g_contacts_and_links)
     contact.save(validate: false)
 
@@ -297,7 +306,7 @@ class GoogleContactsIntegrator
   end
 
   def groups
-    @groups ||= self.class.retryable_exp_backoff { api_user.groups }
+    @groups ||= self.class.retry_on_api_errs { api_user.groups }
   end
 
   def my_contacts_group
@@ -306,12 +315,12 @@ class GoogleContactsIntegrator
 
   def inactive_group
     @inactive_group ||= groups.find { |group| group.title == INACTIVE_GROUP_TITLE } ||
-      GoogleContactsApi::Group.create({ title: INACTIVE_GROUP_TITLE }, api_user.api)
+                        GoogleContactsApi::Group.create({ title: INACTIVE_GROUP_TITLE }, api_user.api)
   end
 
   def mpdx_group
     @mpdx_group ||= groups.find { |group| group.title == CONTACTS_GROUP_TITLE } ||
-      GoogleContactsApi::Group.create({ title: CONTACTS_GROUP_TITLE }, api_user.api)
+                    GoogleContactsApi::Group.create({ title: CONTACTS_GROUP_TITLE }, api_user.api)
   end
 
   def get_or_query_g_contact(g_contact_link, person)
@@ -351,6 +360,8 @@ class GoogleContactsIntegrator
           else
             save_g_contact_links(g_contacts_and_links)
           end
+        rescue LowerRetryWorker::RetryJobButNoAirbrakeError => e
+          raise e
         rescue => e
           # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
           Airbrake.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
@@ -383,6 +394,9 @@ class GoogleContactsIntegrator
       end
 
       return true
+    when 403
+      # 403 is user rate limit exceeded, so don't retry the particular contact, just queue the whole job for retry
+      fail LowerRetryWorker::RetryJobButNoAirbrakeError
     else
       # Failed but can't just fix by resyncing the contact, so raise an error
       fail(status.inspect)

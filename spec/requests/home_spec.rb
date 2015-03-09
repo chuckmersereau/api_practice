@@ -5,5 +5,4 @@ describe 'Home' do
     @user = FactoryGirl.create(:user_with_account)
     login(@user)
   end
-
 end

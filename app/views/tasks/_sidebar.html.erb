@@ -2,28 +2,26 @@
   <ul>
     <li><span class="sort_title menu_item">Sort</span></li>
     <ul class="sort_options">
-      <li ng-class="{'selected': filter.page === 'all'}" class="option"><a href="/tasks/#" class="inbox " ng-click="filter.page = 'all'">All</a></li>
-      <% if params[:action] == 'index' %>
-        <li ng-class="{'selected': filter.page === 'today'}" class="option">
-          <a href="#" class="inbox" ng-click="filter.page = 'today'">Today</a>
-        </li>
-        <li ng-class="{'selected': filter.page === 'overdue'}" class="option">
-          <a href="#" class="inbox " ng-click="filter.page = 'overdue'">Overdue</a>
-        </li>
-        <li ng-class="{'selected': filter.page === 'upcoming'}" class="option">
-          <a href="#" class="inbox " ng-click="filter.page = 'upcoming'">Upcoming</a>
-        </li>
-        <li ng-class="{'selected': filter.page === 'starred'}" class="option">
-          <a href="#" class="starred " ng-click="filter.page = 'starred'">Starred</a>
-        </li>
-      <% end %>
-      <li class="<%= 'selected' if params[:action] == 'history' %> option">
-        <%= link_to(_('History'), history_tasks_path, class: "completed inbox") %>
+      <li ng-class="{'selected': filter.page === 'all'}" class="option">
+        <a href="/tasks/#" class="inbox " ng-click="filter.page = 'all'">All</a>
+      </li>
+      <li ng-class="{'selected': filter.page === 'today'}" class="option">
+        <a href="#" class="inbox" ng-click="filter.page = 'today'">Today</a>
+      </li>
+      <li ng-class="{'selected': filter.page === 'overdue'}" class="option">
+        <a href="#" class="inbox" ng-click="filter.page = 'overdue'">Overdue</a>
+      </li>
+      <li ng-class="{'selected': filter.page === 'upcoming'}" class="option">
+        <a href="#" class="inbox" ng-click="filter.page = 'upcoming'">Upcoming</a>
+      </li>
+      <li ng-class="{'selected': filter.page === 'starred'}" class="option">
+        <a href="#" class="starred" ng-click="filter.page = 'starred'">Starred</a>
+      </li>
+      <li ng-class="{'selected': filter.page === 'history'}" class="option">
+        <a href="#" class="completed" ng-click="filter.page = 'history'">History</a>
       </li>
     </ul>
-    <% if params[:action] == 'index' %>
-      <%= render 'sidebar_tags', tags: current_account_list.activity_tags if current_account_list.activity_tags.present? %>
-    <% end %>
+    <%= render 'sidebar_tags', tags: current_account_list.activity_tags if current_account_list.activity_tags.present? %>
     <li>
       <span class="filters_title menu_item"><%= _('Filters') %></span>
       <% if params[:action] == 'history' %>

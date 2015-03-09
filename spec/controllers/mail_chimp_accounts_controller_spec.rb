@@ -45,18 +45,17 @@ describe MailChimpAccountsController do
 
       response.should redirect_to(edit_mail_chimp_account_path(chimp))
     end
-
   end
 
   context '#create' do
     it 'creates a new mailchimp account' do
       stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=lists')
-          .with(body: '%7B%22apikey%22%3A%22foo-us4%22%7D')
-          .to_return(status: 200, body: '{"total": 0,"data": []}', headers: {})
+        .with(body: '%7B%22apikey%22%3A%22foo-us4%22%7D')
+        .to_return(status: 200, body: '{"total": 0,"data": []}', headers: {})
 
-      expect {
+      expect do
         post :create, mail_chimp_account: valid_attributes
-      }.to change(MailChimpAccount, :count).by(1)
+      end.to change(MailChimpAccount, :count).by(1)
     end
   end
 end

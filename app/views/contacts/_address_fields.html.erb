@@ -1,5 +1,17 @@
 <div class="well sfield address_field<%= ' marked_for_destruction' if builder.object.marked_for_destruction? %>" data-behavior="field-wrapper">
   <%= builder.hidden_field :user_changed, value: true %>
+  <% if builder.object.remote_id.present? %>
+    <div class="row small-gutter">
+      <div class="col-xs-12">
+        <%= _('From donor system. To make changes, ') %>
+        <%= link_to_gmail_compose(_('click here'), target: '_blank',
+                                    to: 'Cru Donation Services <donation.services@cru.org>', subject: 'Donor address change',
+                                    body: exhibit(builder.object, self).address_change_email_body + current_user.first_name.to_s) %>
+        <%= _(' to email donation services.') %>
+        <input type="hidden" class="address_remotely_managed">
+      </div>
+    </div>
+  <% end %>
   <div class="row small-gutter">
     <div class="col-xs-9">
       <%= builder.label :street %>
@@ -42,13 +54,13 @@
     <div class="col-xs-4">
       <div class="form-group">
         <%= builder.label :region %>
-        <%= builder.text_field :region, placeholder: "Region", class: 'form-control' %>
+        <%= builder.text_field :region, placeholder: "Region", class: 'form-control address_region' %>
       </div>
     </div>
     <div class="col-xs-3">
       <div class="form-group">
         <%= builder.label :metro_area %>
-        <%= builder.text_field :metro_area, placeholder: "Metro Area", class: 'form-control' %>
+        <%= builder.text_field :metro_area, placeholder: "Metro Area", class: 'form-control address_metro_area' %>
       </div>
     </div>
   </div>

@@ -36,6 +36,5 @@ describe Api::V1::ContactsController do
         json['contacts'][0].should_not include 'pledge_amount'
       end
     end
-
   end
 end

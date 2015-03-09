@@ -2,7 +2,6 @@ require 'spec_helper'
 require 'savon/mock/spec_helper'
 
 describe InsightsController do
-
   before(:each) do
     @user = create(:user_with_account)
     sign_in(:user, @user)
@@ -11,15 +10,14 @@ describe InsightsController do
     @account_list.designation_accounts << @designation_account
   end
 
-  #set Savon in and out of mock mode
+  # set Savon in and out of mock mode
   before(:all) { savon.mock! }
   after(:all)  { savon.unmock! }
 
-  #Disallow external requests
+  # Disallow external requests
   include Savon::SpecHelper
 
   it 'returns analysis columns' do
-
     creds = { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
 
@@ -27,7 +25,7 @@ describe InsightsController do
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
     report_params = { reportRef: { reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations' },
                       reportParams: { filterExpressions: '',
-                                     variables: { name: 'mpdxRecurrDesig', value: '2716653' }
+                                      variables: { name: 'mpdxRecurrDesig', value: '2716653' }
                       },
                       sessionID: 'sessionid22091522cru' }
     savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
@@ -38,14 +36,14 @@ describe InsightsController do
 FROM "CCCi Transaction Analytics"
 ORDER BY 1, 2 ASC NULLS LAST
 FETCH FIRST 10000000 ROWS ONLY',
-                  outputFormat: 'SAWRowsetSchemaAndData',
-                  executionOptions:
+                   outputFormat: 'SAWRowsetSchemaAndData',
+                   executionOptions:
                       { async: '',
-                       maxRowsPerPage: -1,
-                       refresh: true,
-                       presentationInfo: true,
-                       type: '' },
-                  sessionID: 'sessionid22091522cru' }
+                        maxRowsPerPage: -1,
+                        refresh: true,
+                        presentationInfo: true,
+                        type: '' },
+                   sessionID: 'sessionid22091522cru' }
     savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
 
     get :index

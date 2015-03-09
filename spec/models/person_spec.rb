@@ -13,20 +13,20 @@ describe Person do
   describe 'saving family relationships' do
     it 'should create a family relationship' do
       family_relationship = build(:family_relationship, person: nil, related_person: create(:person))
-      expect {
+      expect do
         person.family_relationships_attributes = { '0' => family_relationship.attributes.with_indifferent_access.except(:id, :person_id, :created_at, :updated_at) }
-      }.to change(FamilyRelationship, :count).by(1)
+      end.to change(FamilyRelationship, :count).by(1)
     end
     it 'should destroy a family relationship' do
       family_relationship = create(:family_relationship, person: person, related_person: create(:person))
-      expect {
+      expect do
         person.family_relationships_attributes = { '0' => family_relationship.attributes.merge(_destroy: '1').with_indifferent_access }
-      }.to change(FamilyRelationship, :count).from(1).to(0)
+      end.to change(FamilyRelationship, :count).from(1).to(0)
     end
     it 'should update a family relationship' do
       family_relationship = create(:family_relationship, person: person)
       family_relationship_attributes = family_relationship.attributes.merge!(relationship: family_relationship.relationship + 'boo')
-                                                                     .with_indifferent_access.except(:person_id, :updated_at, :created_at)
+                                       .with_indifferent_access.except(:person_id, :updated_at, :created_at)
       person.family_relationships_attributes = { '0' => family_relationship_attributes }
       person.family_relationships.first.relationship.should == family_relationship.relationship + 'boo'
     end
@@ -138,10 +138,10 @@ describe Person do
     let(:email) { 'test@example.com' }
 
     it 'creates an email' do
-      expect {
+      expect do
         person.email = email
         person.email_addresses.first.email.should == email
-      }.to change(EmailAddress, :count).from(0).to(1)
+      end.to change(EmailAddress, :count).from(0).to(1)
     end
   end
 
@@ -182,11 +182,11 @@ describe Person do
         }
       }
 
-      expect {
+      expect do
         person.email_addresses_attributes = email_addresses_attributes
 
         person.save
-      }.to change(person.email_addresses, :count).by(-1)
+      end.to change(person.email_addresses, :count).by(-1)
     end
 
     it 'updates an existing email address' do
@@ -199,11 +199,11 @@ describe Person do
         }
       }
 
-      expect {
+      expect do
         person.email_addresses_attributes = email_addresses_attributes
 
         person.save
-      }.to_not change(person.email_addresses, :count)
+      end.to_not change(person.email_addresses, :count)
     end
 
     it "doesn't create a duplicate if updating to an address that already exists" do
@@ -218,11 +218,11 @@ describe Person do
         }
       }
 
-      expect {
+      expect do
         person.email_addresses_attributes = email_addresses_attributes
 
         person.save
-      }.to change(person.email_addresses, :count).by(-1)
+      end.to change(person.email_addresses, :count).by(-1)
     end
   end
 
@@ -235,9 +235,9 @@ describe Person do
       create(:facebook_account, person: loser, remote_id: fb_account.remote_id)
 
       # this shouldn't blow up
-      expect {
+      expect do
         winner.merge(loser)
-      }.to change(Person::FacebookAccount, :count)
+      end.to change(Person::FacebookAccount, :count)
     end
 
     it "should move loser's facebook over" do
@@ -264,9 +264,9 @@ describe Person do
 
     it 'copies over master person sources' do
       loser.master_person.master_person_sources.create(organization_id: 1, remote_id: 2)
-      expect {
+      expect do
         winner.merge(loser)
-      }.to change(winner.master_person.master_person_sources, :count).from(0).to(1)
+      end.to change(winner.master_person.master_person_sources, :count).from(0).to(1)
     end
 
     it 'merges the master people of unrelated people so master person source stays unique per org' do
@@ -293,9 +293,9 @@ describe Person do
       c = create(:contact)
       p1.contacts << c
       p2.contacts << c
-      expect {
+      expect do
         p1.merge(p2)
-      }.to change(Version, :count).by(1)
+      end.to change(Version, :count).by(1)
 
       v = Version.last
       expect(v.related_object_id).to eq(c.id)

@@ -9,10 +9,10 @@ describe DonorAccount do
     @donor_account.master_people << @mp1
     @donor_account.primary_master_person.should == @mp1
 
-    expect {
+    expect do
       @donor_account.master_people << create(:master_person)
       @donor_account.primary_master_person.should == @mp1
-    }.to_not change(MasterPersonDonorAccount.primary, :count)
+    end.to_not change(MasterPersonDonorAccount.primary, :count)
   end
 
   describe 'link_to_contact_for' do
@@ -33,28 +33,27 @@ describe DonorAccount do
     end
 
     # This feature was removed
-    #it 'should link a contact based on a matching address' do
-      #contact = create(:contact, account_list: @account_list)
-      #a1 = create(:address, addressable: @donor_account)
-      #a2 = create(:address, addressable: contact)
-      #new_contact = @donor_account.link_to_contact_for(@account_list)
-      #new_contact.should == contact
-      #new_contact.donor_account_ids.should include(@donor_account.id)
-    #end
+    # it 'should link a contact based on a matching address' do
+    # contact = create(:contact, account_list: @account_list)
+    # a1 = create(:address, addressable: @donor_account)
+    # a2 = create(:address, addressable: contact)
+    # new_contact = @donor_account.link_to_contact_for(@account_list)
+    # new_contact.should == contact
+    # new_contact.donor_account_ids.should include(@donor_account.id)
+    # end
 
     it 'should create a new contact if no match is found' do
-      expect {
+      expect do
         @donor_account.link_to_contact_for(@account_list)
-      }.to change(Contact, :count)
+      end.to change(Contact, :count)
     end
 
     it 'should not match to a contact with no addresses' do
       create(:contact, account_list: @account_list)
       create(:address, addressable: @donor_account)
-      expect {
+      expect do
         @donor_account.link_to_contact_for(@account_list)
-      }.to change(Contact, :count)
+      end.to change(Contact, :count)
     end
-
   end
 end

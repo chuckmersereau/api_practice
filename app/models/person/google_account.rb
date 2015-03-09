@@ -35,7 +35,9 @@ class Person::GoogleAccount < ActiveRecord::Base
     email
   end
 
-  def self.one_per_user?() false; end
+  def self.one_per_user?
+    false
+  end
 
   def token_expired?
     expires_at < Time.now
@@ -87,7 +89,7 @@ class Person::GoogleAccount < ActiveRecord::Base
       refresh_token: refresh_token,
       grant_type: 'refresh_token'
     }
-    RestClient.post('https://accounts.google.com/o/oauth2/token', params, content_type: 'application/x-www-form-urlencoded') {|response, _request, _result, &_block|
+    RestClient.post('https://accounts.google.com/o/oauth2/token', params, content_type: 'application/x-www-form-urlencoded') do|response, _request, _result, &_block|
       json = JSON.parse(response)
       if response.code == 200
         self.token = json['access_token']
@@ -102,12 +104,12 @@ class Person::GoogleAccount < ActiveRecord::Base
           fail response.inspect
         end
       end
-    }
+    end
   end
 
   def needs_refresh
     google_integrations.each do |integration|
-      integration.update_columns(calendar_integration: false, email_integration: false) #no callbacks
+      integration.update_columns(calendar_integration: false, email_integration: false) # no callbacks
       AccountMailer.google_account_refresh(person, integration).deliver
     end
   end

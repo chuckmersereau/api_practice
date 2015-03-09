@@ -3,7 +3,9 @@ class AddressExhibit < DisplayCase::Exhibit
     object.class.name == 'Address'
   end
 
-  def to_s() to_google; end
+  def to_s
+    to_google
+  end
 
   def to_html
     case country
@@ -27,5 +29,20 @@ class AddressExhibit < DisplayCase::Exhibit
     when Address::MANUAL_SOURCE then  'Manual entry'
     else source
     end
+  end
+
+  def address_change_email_body
+    if source_donor_account.present?
+      donor_info = "\"#{source_donor_account.name}\" (donor ##{source_donor_account.account_number})"
+    else
+      donor_info = "\"#{addressable.name}\""
+    end
+
+    "Dear Donation Services,\n\n"\
+    "One of my donors, #{donor_info} has a new current address.\n\n"\
+    "Please update their address to:\n\n"\
+    "REPLACE WITH NEW STREET\n"\
+    "REPLACE WITH NEW CITY, STATE, ZIP\n\n"\
+    "Thanks!\n\n"
   end
 end

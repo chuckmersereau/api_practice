@@ -2,7 +2,6 @@ require 'spec_helper'
 
 describe ContactsController do
   describe 'routing' do
-
     it 'routes to #index' do
       get('/contacts').should route_to('contacts#index')
     end
@@ -30,6 +29,5 @@ describe ContactsController do
     it 'routes to #destroy' do
       delete('/contacts/1').should route_to('contacts#destroy', id: '1')
     end
-
   end
 end

@@ -1,6 +1,5 @@
 require 'spec_helper'
 describe ContactExhibit do
-
   let(:exhib) { ContactExhibit.new(contact, context) }
   let(:contact) { build(:contact) }
   let(:context) { double }
@@ -66,11 +65,11 @@ describe ContactExhibit do
   end
 
   # it "should show return the default avatar filename" do
-    # contact.gender = 'female'
-    # exhib.avatar.should == 'avatar_f.png'
-    # contact.gender = 'male'
-    # exhib.avatar.should == 'avatar.png'
-    # contact.gender = nil
-    # exhib.avatar.should == 'avatar.png'
+  # contact.gender = 'female'
+  # exhib.avatar.should == 'avatar_f.png'
+  # contact.gender = 'male'
+  # exhib.avatar.should == 'avatar.png'
+  # contact.gender = nil
+  # exhib.avatar.should == 'avatar.png'
   # end
 end

@@ -5,7 +5,8 @@ class ImportsController < ApplicationController
       import.user_id = current_user.id
 
       if import.save
-        flash[:notice] = _('MPDX is currently importing your contacts from %{source}. You will receive an email when the import is complete.').localize % { source: params[:import][:source] }
+        flash[:notice] = _('MPDX is currently importing your contacts from %{source}. You will receive an email when the import is complete.')
+                         .localize % { source: import.user_friendly_source }
       else
         flash[:alert] = import.errors.full_messages.join('<br>').html_safe
       end
@@ -19,7 +20,7 @@ class ImportsController < ApplicationController
   def import_params
     group_tags = params.require(:import).fetch(:group_tags, nil).try(:permit!)
     params.require(:import)
-      .permit(:source, :source_account_id, :file, :tags, :override, :import_by_group, groups: [])
+      .permit(:source, :source_account_id, :file, :file_cache, :tags, :override, :import_by_group, groups: [])
       .merge(group_tags: group_tags)
   end
 end

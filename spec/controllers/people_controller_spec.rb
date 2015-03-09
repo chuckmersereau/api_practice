@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 describe PeopleController do
-
   before(:each) do
     @user = create(:user_with_account)
     sign_in(:user, @user)
@@ -41,30 +40,30 @@ describe PeopleController do
   describe 'POST create' do
     describe 'with valid params' do
       it 'creates a new Person' do
-        expect {
+        expect do
           post :create,  contact_id: @contact.id, person: valid_attributes
-        }.to change(Person, :count).by(1)
+        end.to change(Person, :count).by(1)
       end
 
       it 'creates a nested email' do
-        expect {
+        expect do
           post :create,  contact_id: @contact.id, person: valid_attributes.merge('email_address' => { 'email' => 'john.doe@example.com' })
-        }.to change(EmailAddress, :count).by(1)
+        end.to change(EmailAddress, :count).by(1)
         assigns(:person).email.to_s.should == 'john.doe@example.com'
       end
 
       it 'creates a nested phone number' do
-        expect {
+        expect do
           post :create,  contact_id: @contact.id, person: valid_attributes.merge('phone_number' => { 'number' => '123-312-2134' })
-        }.to change(PhoneNumber, :count).by(1)
+        end.to change(PhoneNumber, :count).by(1)
         assigns(:person).phone_number.number.should == '+11233122134'
       end
 
       # it "creates a nested address" do
-        # expect {
-          # post :create, {contact_id: @contact.id, :person => valid_attributes.merge("addresses_attributes"=>{'0' => {"street"=>"boo"}})}
-        # }.to change(Address, :count).by(1)
-        # assigns(:person).address.street.should == "boo"
+      # expect {
+      # post :create, {contact_id: @contact.id, :person => valid_attributes.merge("addresses_attributes"=>{'0' => {"street"=>"boo"}})}
+      # }.to change(Address, :count).by(1)
+      # assigns(:person).address.street.should == "boo"
       # end
 
       it 'assigns a newly created person as @person' do
@@ -143,9 +142,9 @@ describe PeopleController do
   describe 'DELETE destroy' do
     it 'destroys the requested person' do
       person = @contact.people.create! valid_attributes
-      expect {
+      expect do
         delete :destroy,  id: person.to_param
-      }.to change(Person, :count).by(-1)
+      end.to change(Person, :count).by(-1)
     end
 
     it 'redirects to the people list' do

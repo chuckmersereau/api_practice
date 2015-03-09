@@ -7,19 +7,19 @@ describe PhoneNumber do
       @attributes = { 'number' => '123-345-2313' }
     end
     it "creates a phone number if it's new" do
-      expect {
+      expect do
         PhoneNumber.add_for_person(@person, @attributes)
         phone_number = @person.reload.phone_numbers.first
         phone_number.number.should == '+11233452313'
-      }.to change(PhoneNumber, :count).from(0).to(1)
+      end.to change(PhoneNumber, :count).from(0).to(1)
     end
 
     it "doesn't create a phone number if it exists" do
       PhoneNumber.add_for_person(@person, @attributes)
-      expect {
+      expect do
         PhoneNumber.add_for_person(@person, @attributes)
         @person.phone_numbers.first.number.should == '+11233452313'
-      }.to_not change(PhoneNumber, :count)
+      end.to_not change(PhoneNumber, :count)
     end
 
     it 'sets only the first phone number to primary' do
@@ -38,7 +38,6 @@ describe PhoneNumber do
       phone2.send(:ensure_only_one_primary)
       phone1.reload.primary?.should == false
     end
-
   end
 
   describe 'clean_up_number' do
@@ -49,17 +48,16 @@ describe PhoneNumber do
     end
   end
 
-  #it 'should format a US number based on country code' do
-    #p = PhoneNumber.new(number: '1567890', country_code: '1')
-    #p.to_s.should == '156-7890'
-  #end
-  #it 'should format a US number based on length' do
-    #p = PhoneNumber.new(number: '1234567890', country_code: nil)
-    #p.to_s.should == '(123) 456-7890'
-  #end
-  #it 'should leave all other countries alone' do
-    #p = PhoneNumber.new(number: '1234567890', country_code: '999999999')
-    #p.to_s.should == '1234567890'
-  #end
-
+  # it 'should format a US number based on country code' do
+  # p = PhoneNumber.new(number: '1567890', country_code: '1')
+  # p.to_s.should == '156-7890'
+  # end
+  # it 'should format a US number based on length' do
+  # p = PhoneNumber.new(number: '1234567890', country_code: nil)
+  # p.to_s.should == '(123) 456-7890'
+  # end
+  # it 'should leave all other countries alone' do
+  # p = PhoneNumber.new(number: '1234567890', country_code: '999999999')
+  # p.to_s.should == '1234567890'
+  # end
 end

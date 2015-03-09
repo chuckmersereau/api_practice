@@ -18,16 +18,16 @@ describe Nickname do
   describe '#find_and_increment_counter' do
     it 'finds an existing nickname and increments its counter' do
       nickname = Nickname.create(name: 'john', nickname: 'johnny')
-      expect {
+      expect do
         Nickname.find_and_increment_counter('John', 'Johnny', :num_merges)
         nickname.reload
-      }.to change(nickname, :num_merges).from(0).to(1)
+      end.to change(nickname, :num_merges).from(0).to(1)
     end
 
     it 'creates a new nickname and increments its counter' do
-      expect {
+      expect do
         Nickname.find_and_increment_counter('John', 'Johnny', :num_merges)
-      }.to change(Nickname, :count).from(0).to(1)
+      end.to change(Nickname, :count).from(0).to(1)
       expect(Nickname.first.num_merges).to eq(1)
     end
 
@@ -40,12 +40,12 @@ describe Nickname do
         'Hoo-tee' => 'Hootee'
       }
 
-      expect {
+      expect do
         non_saved_nickname_pairs.each do |name1, name2|
           Nickname.find_and_increment_counter(name1, name2, :num_merges)
           Nickname.find_and_increment_counter(name2, name1, :num_merges)
         end
-      }.to_not change(Nickname, :count).from(0)
+      end.to_not change(Nickname, :count).from(0)
     end
   end
 end

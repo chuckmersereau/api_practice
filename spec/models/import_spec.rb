@@ -22,20 +22,19 @@ describe Import do
     import = create(:tnt_import)
     @tnt_import.should_receive(:import).and_raise('foo')
 
-    expect {
+    expect do
       ImportMailer.should_receive(:failed).and_return(OpenStruct.new)
       import.send(:import)
-    }.to raise_error
-
+    end.to raise_error
   end
 
   it 'should send a failure error but not re-raise/notify the error if the error is UnsurprisingImportError' do
     import = create(:tnt_import)
     @tnt_import.should_receive(:import).and_raise(Import::UnsurprisingImportError)
 
-    expect {
+    expect do
       ImportMailer.should_receive(:failed).and_return(OpenStruct.new)
       import.send(:import)
-    }.to_not raise_error
+    end.to_not raise_error
   end
 end

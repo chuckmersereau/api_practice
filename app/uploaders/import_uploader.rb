@@ -14,6 +14,6 @@ class ImportUploader < CarrierWave::Uploader::Base
 
   # Add a white list of extensions which are allowed to be uploaded.
   def extension_white_list
-    %w(xml)
+    %w(xml tntmpd)
   end
 end

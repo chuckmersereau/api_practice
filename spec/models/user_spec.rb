@@ -5,18 +5,17 @@ describe User do
     describe 'from omniauth' do
       before(:each) do
         user_attributes = [{ firstName: 'John', lastName: 'Doe', username: 'JOHN.DOE@EXAMPLE.COM',
-          email: 'johnnydoe@example.com', designation: '0000000', emplid: '000000000',
-          ssoGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024' }]
+                             email: 'johnnydoe@example.com', designation: '0000000', emplid: '000000000',
+                             ssoGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024' }]
         @auth_hash = Hashie::Mash.new(uid: 'JOHN.DOE@EXAMPLE.COM', extra: { attributes: user_attributes })
       end
 
       it 'should create a new user from omniauth' do
         FactoryGirl.create(:ccc)
-        expect {
+        expect do
           User.from_omniauth(Person::RelayAccount, @auth_hash)
-        }.to change(User, :count).from(0).to(1)
+        end.to change(User, :count).from(0).to(1)
       end
-
     end
   end
 
@@ -34,6 +33,5 @@ describe User do
     it 'should return a list of account numbers from a given org' do
       @user.designation_numbers(@org.id).should include(@account.designation_number)
     end
-
   end
 end
