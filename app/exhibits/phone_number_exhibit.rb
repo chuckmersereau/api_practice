@@ -3,7 +3,9 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
     object.class.name == 'PhoneNumber'
   end
 
-  def to_s() [number, location].join(' - '); end
+  def to_s
+    [number, location].join(' - ')
+  end
 
   def number
     return unless self[:number]

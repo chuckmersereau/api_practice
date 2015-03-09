@@ -6,25 +6,25 @@ describe EmailAddress do
     let(:address) { 'test@example.com' }
 
     it "should create an email address if it's new" do
-      expect {
+      expect do
         EmailAddress.add_for_person(person,  email: address)
         person.email_addresses.first.email.should == address
-      }.to change(EmailAddress, :count).from(0).to(1)
+      end.to change(EmailAddress, :count).from(0).to(1)
     end
 
     it "doesn't create an email address if it exists" do
       EmailAddress.add_for_person(person,  email: address)
-      expect {
+      expect do
         EmailAddress.add_for_person(person,  email: address)
         person.email_addresses.first.email.should == address
-      }.to_not change(EmailAddress, :count)
+      end.to_not change(EmailAddress, :count)
     end
 
     it 'does nothing when adding itself to a person' do
       email = EmailAddress.add_for_person(person,  email: address)
-      expect {
+      expect do
         EmailAddress.add_for_person(person,  email: address, id: email.id)
-      }.to_not change(EmailAddress, :count)
+      end.to_not change(EmailAddress, :count)
     end
 
     it 'sets only the first email to primary' do

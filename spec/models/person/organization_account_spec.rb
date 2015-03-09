@@ -27,9 +27,9 @@ describe Person::OrganizationAccount do
         org_account.new_record?.should be false
       end
       it 'rescues invalid password error' do
-        expect {
+        expect do
           org_account.import_all_data
-        }.to_not raise_error
+        end.to_not raise_error
       end
       it 'sends email' do
         org_account.import_all_data
@@ -48,18 +48,18 @@ describe Person::OrganizationAccount do
     it "doesn't create a new list if an existing list contains only the designation number for a profile" do
       account_list.designation_accounts << create(:designation_account, designation_number: '1234')
 
-      expect {
+      expect do
         org_account.send(:set_up_account_list)
-      }.to_not change(AccountList, :count)
+      end.to_not change(AccountList, :count)
     end
 
     it "doesn't create a new designation profile if linking to an account list that already has one" do
       account_list.designation_accounts << create(:designation_account, designation_number: '1234')
       create(:designation_profile, name: 'Profile 1', account_list: account_list)
 
-      expect {
+      expect do
         org_account.send(:set_up_account_list)
-      }.to_not change(DesignationProfile, :count)
+      end.to_not change(DesignationProfile, :count)
     end
   end
 

@@ -303,6 +303,13 @@ angular.module('mpdxApp')
                 });
 
                 jQuery('.followUpDialogDatepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+
+                if($scope.followUpDialogResult.apptTask && window.google) {
+                  var autocomplete = new google.maps.places.Autocomplete($('#follow-up-task_location')[0])
+                  google.maps.event.addListener(autocomplete, 'place_changed', function() {
+                    $('#follow-up-task_location').trigger('change')
+                  })
+                }
             }
         };
 

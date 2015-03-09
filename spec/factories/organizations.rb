@@ -16,7 +16,6 @@ FactoryGirl.define do
     donations_params 'UserName=$ACCOUNT$&Password=$PASSWORD$&Profile=$PROFILE$&DateFrom=$DATEFROM$&DateTo=$DATETO$&Action=Gifts'
     account_balance_url 'http://example.com/accounts'
     account_balance_params 'UserName=$ACCOUNT$&Password=$PASSWORD$&Profile=$PROFILE$&Action=AccountBalance'
-
   end
 
   factory :ccc, parent: :organization do

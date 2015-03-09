@@ -8,7 +8,9 @@ class Company < ActiveRecord::Base
   before_create :find_master_company
   after_destroy :clean_up_master_company
 
-  def to_s() name; end
+  def to_s
+    name
+  end
 
   private
 

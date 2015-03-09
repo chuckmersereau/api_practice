@@ -75,7 +75,7 @@ class Api::V1::BaseController < ApplicationController
     @oauth_access_token ||= (params[:access_token] || oauth_access_token_from_header)
   end
 
-    # grabs access_token from header if one is present
+  # grabs access_token from header if one is present
   def oauth_access_token_from_header
     auth_header = request.env['HTTP_AUTHORIZATION'] || ''
     match       = auth_header.match(/^token\s(.*)/) || auth_header.match(/^Bearer\s(.*)/)

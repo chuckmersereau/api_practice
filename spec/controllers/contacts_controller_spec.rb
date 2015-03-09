@@ -105,12 +105,12 @@ describe ContactsController do
 
     describe '#create' do
       it 'should create a good record' do
-        expect {
+        expect do
           post :create, contact: { name: 'foo' }
           contact = assigns(:contact)
           contact.errors.full_messages.should == []
           response.should redirect_to(contact)
-        }.to change(Contact, :count).by(1)
+        end.to change(Contact, :count).by(1)
       end
 
       it "doesn't create a contact without a name" do
@@ -118,7 +118,6 @@ describe ContactsController do
         assigns(:contact).errors.full_messages.should == ["Name can't be blank"]
         response.should be_success
       end
-
     end
 
     describe '#update' do
@@ -167,7 +166,7 @@ describe ContactsController do
         contact_sets = [[contact, create(:contact)]]
         people_sets = []
         expect(ContactDuplicatesFinder).to receive(:new).with(user.account_lists.first, user)
-                                             .and_return(double(dup_contacts_then_people: [contact_sets, people_sets]))
+          .and_return(double(dup_contacts_then_people: [contact_sets, people_sets]))
 
         xhr :get, :find_duplicates, format: :js
         expect(response).to be_success
@@ -178,10 +177,10 @@ describe ContactsController do
 
     describe '#save_referrals' do
       it 'sets the address as primary for the created contact' do
-        expect {
+        expect do
           xhr :post, :save_referrals, id: contact.id,
-              account_list: { contacts_attributes: { nil => { first_name: 'John', street: '1 Way' } } }
-        }.to change(Address, :count).from(0).to(1)
+                                      account_list: { contacts_attributes: { nil => { first_name: 'John', street: '1 Way' } } }
+        end.to change(Address, :count).from(0).to(1)
         expect(Address.first.primary_mailing_address).to be_true
       end
     end

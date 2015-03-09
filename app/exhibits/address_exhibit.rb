@@ -3,7 +3,9 @@ class AddressExhibit < DisplayCase::Exhibit
     object.class.name == 'Address'
   end
 
-  def to_s() to_google; end
+  def to_s
+    to_google
+  end
 
   def to_html
     case country

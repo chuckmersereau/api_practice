@@ -7,7 +7,6 @@ namespace :organizations do
     # Download the org csv from tnt and update orgs
     organizations = open('http://download.tntware.com/tntmpd/TntMPD_Organizations.csv').read.unpack('C*').pack('U*')
     CSV.new(organizations, headers: :first_row).each do |line|
-
       next unless line[1].present?
 
       if org = Organization.where(name: line[0]).first
@@ -23,7 +22,7 @@ namespace :organizations do
         # remove unicode characters if present
         ini_body = ini_body[3..-1] if ini_body.first.localize.code_points.first == 239
 
-        #ini_body = ini_body[1..-1] unless ini_body.first == '['
+        # ini_body = ini_body[1..-1] unless ini_body.first == '['
         ini = IniParse.parse(ini_body)
         attributes = {}
         attributes[:redirect_query_ini] = ini['ORGANIZATION']['RedirectQueryIni']
@@ -43,9 +42,9 @@ namespace :organizations do
         attributes[:default_currency_code] = ini['ORGANIZATION']['DefaultCurrencyCode']
         attributes[:allow_passive_auth] = ini['ORGANIZATION']['AllowPassiveAuth'] == 'True'
         %w(account_balance donations addresses addresses_by_personids profiles designations).each do |section|
-          keys = ini.map {|k, _v|
+          keys = ini.map do|k, _v|
             k.key =~ /^#{section.upcase}[\.\d]*$/ ? k.key : nil
-          }.compact.sort.reverse
+          end.compact.sort.reverse
           keys.each do |k|
             if attributes["#{section}_url"].nil? && ini[k]['Url']
               attributes["#{section}_url"] = ini[k]['Url']

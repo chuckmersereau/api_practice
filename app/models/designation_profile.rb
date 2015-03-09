@@ -7,7 +7,9 @@ class DesignationProfile < ActiveRecord::Base
 
   scope :for_org, -> (org_id) { where(organization_id: org_id) }
 
-  def to_s() name; end
+  def to_s
+    name
+  end
 
   def designation_account
     designation_accounts.first

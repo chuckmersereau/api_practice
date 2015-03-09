@@ -201,9 +201,9 @@ module GoogleContactSync
   end
 
   def remove_duplicate_addresses(addresses)
-    addresses.map(&:master_address_id).to_set.map { |master_address_id|
+    addresses.map(&:master_address_id).to_set.map do |master_address_id|
       lookup_by_key(addresses, master_address_id: master_address_id)
-    }
+    end
   end
 
   def ensure_single_primary_address(addresses)
@@ -229,9 +229,9 @@ module GoogleContactSync
   def add_emails_from_g_contact(emails_to_add, g_contact, person)
     had_primary = person.primary_email_address.present?
 
-    g_contact_emails_normalized_map = Hash[g_contact.emails_full.map { |email|
+    g_contact_emails_normalized_map = Hash[g_contact.emails_full.map do |email|
       [normalize_email(email[:address]), email]
-    }]
+    end]
 
     emails_to_add.each do |email|
       email_attrs = format_email_for_mpdx(g_contact_emails_normalized_map[email])
@@ -241,9 +241,9 @@ module GoogleContactSync
   end
 
   def add_numbers_from_g_contact(numbers_to_add, g_contact, person)
-    g_contact_numbers_normalized_map = Hash[g_contact.phone_numbers_full.map { |number|
+    g_contact_numbers_normalized_map = Hash[g_contact.phone_numbers_full.map do |number|
       [normalize_number(number[:number]), number]
-    }]
+    end]
 
     had_primary = person.primary_phone_number.present?
     numbers_to_add.each do |number|
@@ -260,9 +260,9 @@ module GoogleContactSync
   def add_websites_from_g_contact(urls_to_add, g_contact, person)
     had_primary = person.websites.where(primary: true).first
 
-    g_contact_websites_normalized_map = Hash[g_contact.websites.map { |website|
+    g_contact_websites_normalized_map = Hash[g_contact.websites.map do |website|
       [normalize_website(website[:href]), website]
-    }]
+    end]
 
     urls_to_add.each do |url|
       g_contact_website = g_contact_websites_normalized_map[url]

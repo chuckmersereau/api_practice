@@ -1,6 +1,5 @@
 require 'spec_helper'
 describe PhoneNumberExhibit do
-
   subject { PhoneNumberExhibit.new(phone_number, context) }
   let(:phone_number) { build(:phone_number, number: '1234567890', country_code: '1') }
   let(:context) { double }
@@ -15,5 +14,4 @@ describe PhoneNumberExhibit do
     phone_number.country_code = '2'
     subject.number.should.nil?
   end
-
 end

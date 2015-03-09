@@ -74,19 +74,19 @@ describe Person::GmailAccount do
   end
 
   context '#log_email' do
-    let(:gmail_message) {
+    let(:gmail_message) do
       double(message: double(multipart?: false, body: double(decoded: 'message body')),
-                                 envelope: double(date: Time.zone.now, message_id: '1'),
-                                 subject: 'subject', msg_id: 1)
-    }
+             envelope: double(date: Time.zone.now, message_id: '1'),
+             subject: 'subject', msg_id: 1)
+    end
     let(:google_email) { build(:google_email, google_email_id: gmail_message.msg_id, google_account: google_account) }
 
     it 'creates a completed task' do
-      expect {
-        expect {
+      expect do
+        expect do
           gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
-        }.to change(Task, :count).by(1)
-      }.to change(ActivityComment, :count).by(1)
+        end.to change(Task, :count).by(1)
+      end.to change(ActivityComment, :count).by(1)
 
       task = Task.last
       task.subject.should == 'subject'
@@ -113,15 +113,15 @@ describe Person::GmailAccount do
       contact.tasks << task
       create(:google_email_activity, google_email: google_email, activity: task)
 
-      expect {
+      expect do
         gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
-      }.not_to change(Task, :count)
+      end.not_to change(Task, :count)
     end
 
     it 'creates a google_email' do
-      expect {
+      expect do
         gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
-      }.to change(GoogleEmail, :count).by(1)
+      end.to change(GoogleEmail, :count).by(1)
 
       task = GoogleEmail.last
       task.google_email_id.should == gmail_message.msg_id
@@ -130,9 +130,9 @@ describe Person::GmailAccount do
     it "doesn't create a duplicate google_email" do
       google_email.save
 
-      expect {
+      expect do
         gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
-      }.not_to change(GoogleEmail, :count)
+      end.not_to change(GoogleEmail, :count)
     end
   end
 end

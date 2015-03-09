@@ -17,9 +17,9 @@ describe Person::RelayAccount do
     it 'should create an account linked to a person' do
       person = create(:user)
       @org.stub(:api).and_return(FakeApi.new)
-      expect {
+      expect do
         @account = Person::RelayAccount.find_or_create_from_auth(@auth_hash, person)
-      }.to change(Person::RelayAccount, :count).from(0).to(1)
+      end.to change(Person::RelayAccount, :count).from(0).to(1)
       person.relay_accounts.should include(@account)
     end
 
@@ -28,9 +28,9 @@ describe Person::RelayAccount do
       @person2 = create(:user)
       @org.stub(:api).and_return(FakeApi.new)
       @account = Person::RelayAccount.find_or_create_from_auth(@auth_hash, @person)
-      expect {
+      expect do
         @account2 = Person::RelayAccount.find_or_create_from_auth(@auth_hash, @person2)
-      }.to_not change(Person::RelayAccount, :count)
+      end.to_not change(Person::RelayAccount, :count)
       @account.should == @account2
     end
 
@@ -41,20 +41,19 @@ describe Person::RelayAccount do
                    body: '[{"name":"Staff Account(000555555)","designations":[{"number":"0555555","description":"Jon and Jane Doe(000555555)","staffAccountId":"000555555"}]}]')
       person = create(:user)
       @org.stub(:api).and_return(FakeApi.new)
-      expect {
+      expect do
         @account = Person::RelayAccount.find_or_create_from_auth(@auth_hash, person)
-      }.to change(Person::OrganizationAccount, :count).from(0).to(1)
+      end.to change(Person::OrganizationAccount, :count).from(0).to(1)
     end
-
   end
 
   describe 'create user from auth' do
     it 'should create a user with a first and last name' do
-      expect {
+      expect do
         user = Person::RelayAccount.create_user_from_auth(@auth_hash)
         user.first_name.should eq @auth_hash.extra.attributes.first.firstName
         user.last_name.should eq @auth_hash.extra.attributes.first.lastName
-      }.to change(User, :count).from(0).to(1)
+      end.to change(User, :count).from(0).to(1)
     end
   end
 
