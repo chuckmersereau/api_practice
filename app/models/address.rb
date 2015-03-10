@@ -88,11 +88,8 @@ class Address < ActiveRecord::Base
   end
 
   def geo
-    return unless master_address && master_address.smarty_response &&
-                  master_address.smarty_response[0] &&
-                  master_address.smarty_response[0]['metadata']
-    meta = master_address.smarty_response[0]['metadata']
-    meta['latitude'].to_s + ',' + meta['longitude'].to_s
+    return unless master_address
+    master_address.geo
   end
 
   # Not private because Google Contacts sync uses it to normalize addresses without needing to create a record
