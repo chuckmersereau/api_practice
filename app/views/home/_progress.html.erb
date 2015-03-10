@@ -12,7 +12,7 @@
 <% end %>
 
 <div class="progress-category">
-  <i class="fa fa-mobile" style="margin-top: -8px; font-size: 7em;"></i>
+  <i class="fa fa-mobile" style="margin-top: -8px; font-size: 6em;"></i>
   <h3><%= _('Phone Dials:') %></h3>
   <span class="progress-category-stat">
     <span><%= @counts[:phone][:completed] + @counts[:phone][:attempted] %></span>
@@ -87,7 +87,7 @@
 </div>
 
 <div class="progress-category">
-  <i class="fa fa-group" style="margin-top: -2px; font-size: 4.5em;"></i>
+  <i class="fa fa-group" style="margin-top: -2px; font-size: 3.5em;"></i>
   <h3><%= _('Appointments') %></h3>
   <span class="progress-category-stat">
     <span><%= @counts[:appointments][:completed] %></span>
@@ -118,7 +118,7 @@
 </div>
 
 <div class="progress-category">
-  <i class="fa fa-child" style="font-size: 6em;"></i>
+  <i class="fa fa-child" style="font-size: 4.5em;"></i>
   <h3><%= _('Contacts') %></h3>
   <span class="progress-category-stat tip" title="<%= _('Always current. Contacts with status: Never Contacted, Contact for Appointment, or none.') %>">
     <span><%= @counts[:contacts][:active] %></span>
