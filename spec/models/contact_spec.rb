@@ -7,10 +7,10 @@ describe Contact do
   describe 'saving addresses' do
     it 'should create an address' do
       address = build(:address, addressable: nil)
-      expect {
+      expect do
         contact.addresses_attributes = [address.attributes.with_indifferent_access.except(:id, :addressable_id, :addressable_type, :updated_at, :created_at)]
         contact.save!
-      }.to change(Address, :count).by(1)
+      end.to change(Address, :count).by(1)
     end
 
     it 'should mark an address deleted' do
@@ -24,8 +24,8 @@ describe Contact do
 
     it 'should update an address' do
       stub_request(:get, %r{https:\/\/api\.smartystreets\.com\/street-address})
-         .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
-         .to_return(status: 200, body: '[]', headers: {})
+        .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
+        .to_return(status: 200, body: '[]', headers: {})
 
       address = create(:address, addressable: contact)
       contact.addresses_attributes = [address.attributes.merge!(street: address.street + 'boo').with_indifferent_access.except(:addressable_id, :addressable_type, :updated_at, :created_at)]
@@ -69,10 +69,10 @@ describe Contact do
     end
 
     it 'creates a new donor account' do
-      expect {
+      expect do
         contact.donor_accounts_attributes = { '0' => { account_number: 'asdf', organization_id: create(:organization).id } }
         contact.save!
-      }.to change(DonorAccount, :count).by(1)
+      end.to change(DonorAccount, :count).by(1)
     end
 
     it 'updates an existing donor account' do
@@ -89,20 +89,20 @@ describe Contact do
       donor_account = create(:donor_account)
       donor_account.contacts << contact
 
-      expect {
+      expect do
         contact.donor_accounts_attributes = { '0' => { id: donor_account.id, account_number: 'asdf', _destroy: '1' } }
         contact.save!
-      }.to change(ContactDonorAccount, :count).by(-1)
+      end.to change(ContactDonorAccount, :count).by(-1)
     end
 
     it 'deletes an existing donor account when posting a blank account number' do
       donor_account = create(:donor_account)
       donor_account.contacts << contact
 
-      expect {
+      expect do
         contact.donor_accounts_attributes = { '0' => { id: donor_account.id, account_number: '' } }
         contact.save!
-      }.to change(ContactDonorAccount, :count).by(-1)
+      end.to change(ContactDonorAccount, :count).by(-1)
     end
 
     it 'saves a contact when posting a blank donor account number' do
@@ -117,7 +117,6 @@ describe Contact do
       contact2 = create(:contact, account_list: contact.account_list)
       contact2.update_attributes(donor_accounts_attributes: { '0' => { account_number: donor_account.account_number, organization_id: donor_account.organization_id } }).should == false
     end
-
   end
 
   describe 'create_from_donor_account' do
@@ -128,14 +127,13 @@ describe Contact do
 
     it "should copy the donor account's addresses" do
       create(:address, addressable: @donor_account, remote_id: '1')
-      expect {
+      expect do
         @contact = Contact.create_from_donor_account(@donor_account, @account_list)
-      }.to change(Address, :count)
+      end.to change(Address, :count)
       @contact.addresses.first.equal_to?(@donor_account.addresses.first).should be_true
       expect(@contact.addresses.first.source_donor_account).to eq(@donor_account)
       expect(@contact.addresses.first.remote_id).to eq('1')
     end
-
   end
 
   it 'should have a primary person' do
@@ -147,9 +145,9 @@ describe Contact do
   describe 'when being deleted' do
     it 'should delete people not linked to another contact' do
       contact.people << create(:person)
-      expect {
+      expect do
         contact.destroy
-      }.to change(Person, :count)
+      end.to change(Person, :count)
     end
 
     it 'should NOT delete people linked to another contact' do
@@ -157,9 +155,9 @@ describe Contact do
       contact.people << person
       contact2 = create(:contact, account_list: contact.account_list)
       contact2.people << person
-      expect {
+      expect do
         contact.destroy
-      }.to_not change(Person, :count)
+      end.to_not change(Person, :count)
     end
 
     it 'deletes associated addresses' do
@@ -185,9 +183,9 @@ describe Contact do
 
   context '#primary_person_id=' do
     it 'should not fail if an invalid id is passed in' do
-      expect {
+      expect do
         contact.primary_person_id = 0
-      }.not_to raise_exception
+      end.not_to raise_exception
     end
   end
 
@@ -268,11 +266,11 @@ describe Contact do
       task = create(:task, account_list: account_list)
       loser_contact.tasks << task
       contact.tasks << task
-      expect {
-        expect {
+      expect do
+        expect do
           contact.merge(loser_contact)
-        }.not_to change(Task, :count)
-      }.to change(ActivityContact, :count).by(-1)
+        end.not_to change(Task, :count)
+      end.to change(ActivityContact, :count).by(-1)
     end
 
     it 'prepend notes from loser to winner' do
@@ -450,9 +448,9 @@ describe Contact do
         Person.destroy_all
         contact.people << create(:person, person_attrs1)
         contact.people << create(:person, person_attrs2)
-        expect {
+        expect do
           contact.merge_people
-        }.to change(Person, :count).from(2).to(1)
+        end.to change(Person, :count).from(2).to(1)
       end
 
       non_matches = {
@@ -462,18 +460,18 @@ describe Contact do
         Person.destroy_all
         contact.people << create(:person, person_attrs1)
         contact.people << create(:person, person_attrs2)
-        expect {
+        expect do
           contact.merge_people
-        }.to_not change(Person, :count).from(2)
+        end.to_not change(Person, :count).from(2)
       end
     end
 
     it 'does not error but merges if last name is nil (first name cannot be blank)' do
       contact.people << create(:person, last_name: nil)
       contact.people << create(:person, last_name: nil)
-      expect {
+      expect do
         contact.merge_people
-      }.to change(Person, :count).from(2).to(1)
+      end.to change(Person, :count).from(2).to(1)
     end
 
     it 'does not error on second merge if their master person has been merged by first merge' do

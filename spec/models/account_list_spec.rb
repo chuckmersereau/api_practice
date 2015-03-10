@@ -8,9 +8,9 @@ describe AccountList do
     it 'should create a new account list if none is found' do
       da = create(:designation_account, organization: org_account.organization)
       profile.designation_accounts << da
-      expect {
+      expect do
         AccountList.find_or_create_from_profile(profile, org_account)
-      }.to change(AccountList, :count).by(1)
+      end.to change(AccountList, :count).by(1)
     end
 
     it 'should not create a new account list if one is found' do
@@ -20,7 +20,7 @@ describe AccountList do
       profile2 = create(:designation_profile, account_list: account_list)
       profile2.designation_accounts << da
       expect(AccountList.find_or_create_from_profile(profile, org_account))
-          .to eq(account_list)
+        .to eq(account_list)
     end
   end
 
@@ -56,7 +56,6 @@ describe AccountList do
       account_list.should_receive(:mail_chimp_account).once.and_return(nil)
       account_list.valid_mail_chimp_account.should_not == true
     end
-
   end
 
   context '#top_partners' do
@@ -88,7 +87,6 @@ describe AccountList do
     it 'handles a date range where the start and end day are in different months' do
       account_list.people_with_birthdays(Date.new(2012, 8, 29), Date.new(2012, 9, 1)).should == [person]
     end
-
   end
 
   context '#people_with_anniversaries' do

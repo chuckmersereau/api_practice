@@ -25,5 +25,4 @@ FactoryGirl.define do
       create(:contact_donor_account, contact: contact, donor_account: donor_account)
     end
   end
-
 end

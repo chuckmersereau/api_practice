@@ -35,20 +35,20 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     @task.update_attributes(tag_list: 'test')
     visit_and_open_dialog(@task)
     select_task_next_action('Call Again')
-    expect {
+    expect do
       within('#complete_task_followup_modal') do
         click_on('Save')
       end
       page.should have_css('#complete_task_followup_modal', visible: false)
       sleep(2)
-    }.to change(contact.tasks, :count).by(1)
+    end.to change(contact.tasks, :count).by(1)
     expect(contact.tasks.where(activity_type: 'Call').last.tag_list.first).to include 'test'
   end
 
   it 'creates followup task for Appointment' do
     visit_and_open_dialog(@task)
     select_task_next_action('Appointment Scheduled')
-    expect {
+    expect do
       within('#complete_task_followup_modal') do
         all('input').each do |cb|
           cb.trigger('click') if cb.visible?
@@ -57,7 +57,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
       end
       expect(page).to have_css('#complete_task_followup_modal', visible: false)
       sleep(2)
-    }.to change(contact.tasks, :count).from(1).to(3)
+    end.to change(contact.tasks, :count).from(1).to(3)
     expect(contact.tasks.where(completed: false, activity_type: 'Appointment').count).to be 1
     expect(contact.tasks.where(completed: false, activity_type: 'Call').count).to be 1
     call_task = contact.tasks.where(completed: false, activity_type: 'Call').first
@@ -68,7 +68,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
   it 'adds Partner - Financial commitment' do
     visit_and_open_dialog(@task)
     select_task_next_action('Partner - Financial')
-    expect {
+    expect do
       within('#complete_task_followup_modal') do
         select('Bi-Monthly', from: 'Commitment Frequency')
         fill_in('Commitment Amount', with: '100')
@@ -79,7 +79,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
       end
       expect(page).to have_css('#complete_task_followup_modal', visible: false)
       sleep(2)
-    }.to change(contact.tasks, :count).from(1).to(3)
+    end.to change(contact.tasks, :count).from(1).to(3)
     expect(contact.tasks.where(completed: false, activity_type: 'Thank').count).to be 1
     expect(contact.reload.status).to eq 'Partner - Financial'
     expect(contact.send_newsletter).to eq 'Both'

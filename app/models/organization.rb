@@ -21,7 +21,9 @@ class Organization < ActiveRecord::Base
   #                 :donations_params, :donations_url, :addresses_params, :addresses_url, :addresses_by_personids_params,
   #                 :addresses_by_personids_url, :profiles_url, :profiles_params
 
-  def to_s() name; end
+  def to_s
+    name
+  end
 
   def api(org_account)
     api_class.constantize.new(org_account)
@@ -45,8 +47,8 @@ class Organization < ActiveRecord::Base
     donor_accounts.find_each(batch_size: 5) { |donor_account| donor_account.merge_addresses }
 
     account_lists = AccountList.joins(:users)
-                      .joins('INNER JOIN person_organization_accounts ON person_organization_accounts.person_id = people.id')
-                      .where(person_organization_accounts: { organization_id: id })
+                    .joins('INNER JOIN person_organization_accounts ON person_organization_accounts.person_id = people.id')
+                    .where(person_organization_accounts: { organization_id: id })
     account_lists.find_each(batch_size: 1) do |account_list|
       account_list.contacts.find_each(batch_size: 5) { |contact| contact.merge_addresses }
     end

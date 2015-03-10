@@ -48,20 +48,20 @@ describe GoogleImport do
     it 'matches an existing person on my list' do
       person = create(:person)
       @contact.people << person
-      expect {
+      expect do
         @google_import.should_receive(:create_or_update_person).and_return(person)
         @google_import.import
-      }.to_not change(Contact, :count)
+      end.to_not change(Contact, :count)
     end
 
     it 'creates a new contact for someone not on my list and ignore contact without first name' do
       # note the json file has a blank contact record which should be ignored, so the count changes by 1 only
-      expect {
-        expect {
+      expect do
+        expect do
           @google_import.should_receive(:create_or_update_person).and_return(create(:person))
           @google_import.import
-        }.to change(Person, :count).by(1)
-      }.to change(Contact, :count).by(1)
+        end.to change(Person, :count).by(1)
+      end.to change(Contact, :count).by(1)
     end
 
     it 'adds tags from the import' do
@@ -85,25 +85,25 @@ describe GoogleImport do
       person = create(:person, first_name: 'Not-John')
       create(:google_contact, person: person, remote_id: @google_contact.id)
       @contact.people << person
-      expect {
+      expect do
         @google_import.send(:create_or_update_person, @google_contact)
         person.reload.first_name.should == 'John'
-      }.to_not change(Person, :count)
+      end.to_not change(Person, :count)
     end
 
     it 'does not create a new person if their name matches' do
       @contact.people << create(:person, first_name: 'John', last_name: 'Doe')
-      expect {
+      expect do
         @google_import.send(:create_or_update_person, @google_contact)
-      }.to_not change(Person, :count)
+      end.to_not change(Person, :count)
     end
 
     it "creates a person and master person if we can't find a match" do
-      expect {
-        expect {
+      expect do
+        expect do
           @google_import.send(:create_or_update_person, @google_contact)
-        }.to change(Person, :count)
-      }.to change(MasterPerson, :count)
+        end.to change(Person, :count)
+      end.to change(MasterPerson, :count)
     end
   end
 
@@ -248,7 +248,7 @@ describe GoogleImport do
 
     it 'handles the case when the Google auth token cannot be refreshed' do
       expect_any_instance_of(Person::GoogleAccount).to receive(:contacts_api_user)
-                                                       .at_least(1).times.and_raise(Person::GoogleAccount::MissingRefreshToken)
+        .at_least(1).times.and_raise(Person::GoogleAccount::MissingRefreshToken)
       expect { @google_import.import }.to raise_error(Import::UnsurprisingImportError)
       expect(@account_list.contacts.count).to eq(1)
     end
@@ -387,9 +387,9 @@ describe GoogleImport do
     it 'does nothing if no groups specified' do
       @import.import_by_group = true
       @import.save
-      expect {
+      expect do
         @google_import.import
-      }.to_not change(Contact, :count)
+      end.to_not change(Contact, :count)
     end
 
     it 'imports a specified group' do
@@ -407,16 +407,16 @@ describe GoogleImport do
         .to_return(body: File.new(Rails.root.join('spec/fixtures/google_contacts.json')).read)
         .times(1)
 
-      expect {
+      expect do
         @google_import.import
-      }.to change(Contact, :count).by(1)
+      end.to change(Contact, :count).by(1)
 
       Contact.last.tag_list.sort.should == %w(hi mom more tags)
     end
 
     it 'handles the case when the Google auth token cannot be refreshed' do
       expect_any_instance_of(Person::GoogleAccount).to receive(:contacts_api_user)
-                                                       .at_least(1).times.and_raise(Person::GoogleAccount::MissingRefreshToken)
+        .at_least(1).times.and_raise(Person::GoogleAccount::MissingRefreshToken)
       expect { @google_import.import }.to raise_error(Import::UnsurprisingImportError)
       expect(@account_list.contacts.count).to eq(1)
     end

@@ -41,6 +41,15 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             meta: {},
             loading: false,
             visible: false
+        },
+        {
+            filter:'history',
+            title: 'History',
+            class: 'taskgroup--gray',
+            currentPage: 1,
+            meta: {},
+            loading: false,
+            visible: false
         }
     ];
 
@@ -102,6 +111,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&per_page=' + $scope.filter.tasksPerGroup +
             '&page=' + group.currentPage +
             '&filters[starred]=' + $scope.filter.starred +
+            '&filters[completed]=' + $scope.filter.completed +
             '&filters[date_range]=' + group.filter +
             '&filters[contact_ids][]=' + _.uniq(contactFilterIds).join('&filters[contact_ids][]=') +
             '&filters[tags][]=' + encodeURLarray($scope.filter.tagsSelect).join('&filters[tags][]=') +
@@ -153,6 +163,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
         $scope.filter = {
             page: 'all',
             starred: '',
+            completed: '',
             contactsSelect: [(urlParameter.get('contact_ids') || '')],
             tagsSelect: [''],
             actionSelect: [''],
@@ -172,36 +183,37 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
     $scope.resetFilters();
 
     $scope.$watch('filter', function (f, oldf) {
-        if(f.page === 'starred'){
-            $scope.filter.starred = 'true';
-        }else{
-            $scope.filter.starred = '';
-        }
+        $scope.filter.starred = f.page == 'starred' ? 'true' : ''
+        $scope.filter.completed = f.page == 'history' ? 'true' : 'false'
+
+        $scope.taskGroups[0].visible = true;
+        $scope.taskGroups[1].visible = true;
+        $scope.taskGroups[2].visible = true;
+        $scope.taskGroups[3].visible = true;
+        $scope.taskGroups[4].visible = false;
 
         switch(f.page) {
             case 'today':
-                $scope.taskGroups[0].visible = true;
                 $scope.taskGroups[1].visible = false;
                 $scope.taskGroups[2].visible = false;
                 $scope.taskGroups[3].visible = false;
                 break;
             case 'overdue':
                 $scope.taskGroups[0].visible = false;
-                $scope.taskGroups[1].visible = true;
                 $scope.taskGroups[2].visible = false;
                 $scope.taskGroups[3].visible = false;
                 break;
             case 'upcoming':
                 $scope.taskGroups[0].visible = false;
                 $scope.taskGroups[1].visible = false;
-                $scope.taskGroups[2].visible = true;
-                $scope.taskGroups[3].visible = true;
                 break;
-            default:
-                $scope.taskGroups[0].visible = true;
-                $scope.taskGroups[1].visible = true;
-                $scope.taskGroups[2].visible = true;
-                $scope.taskGroups[3].visible = true;
+            case 'history':
+                $scope.taskGroups[0].visible = false;
+                $scope.taskGroups[1].visible = false;
+                $scope.taskGroups[2].visible = false;
+                $scope.taskGroups[3].visible = false;
+                $scope.taskGroups[4].visible = true;
+                break;
         }
         $scope.refreshVisibleTasks();
     }, true);

@@ -41,9 +41,13 @@ module Person::Account
       User.find_by_id(authenticated.where(remote_id: auth_hash.uid).pluck(:person_id).first)
     end
 
-    def one_per_user?() true; end
+    def one_per_user?
+      true
+    end
 
-    def queue() :import; end
+    def queue
+      :import
+    end
   end
 
   class NoSessionError < StandardError

@@ -36,6 +36,5 @@ describe SetupController do
       response.should redirect_to('/')
       @user.reload.setup_mode?.should == false
     end
-
   end
 end

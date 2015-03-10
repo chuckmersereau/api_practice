@@ -145,9 +145,9 @@ class TntImport
   def import_referrals(rows)
     # Loop over the whole list again now that we've added everyone and try to link up referrals
     rows.each do |row|
-      referred_by = @tnt_contacts.find { |_tnt_id, c|
+      referred_by = @tnt_contacts.find do |_tnt_id, c|
         c.name == row['ReferredBy'] || c.full_name == row['ReferredBy'] || c.greeting == row['ReferredBy']
-      }
+      end
       next unless referred_by
       contact = @tnt_contacts[row['id']]
       contact.referrals_to_me << referred_by[1] unless contact.referrals_to_me.include?(referred_by[1])
@@ -157,7 +157,7 @@ class TntImport
   # If the user had two donor accounts in the same contact in Tnt, then  merge different contacts with those in MPDX.
   def merge_dups_by_donor_accts(tnt_contact, donor_accounts)
     dups_by_donor_accts = @account_list.contacts.where.not(id: tnt_contact.id).joins(:donor_accounts)
-      .where(donor_accounts: { id: donor_accounts.map(&:id) }).readonly(false)
+                          .where(donor_accounts: { id: donor_accounts.map(&:id) }).readonly(false)
 
     dups_by_donor_accts.each do |dup_contact_matching_donor_account|
       tnt_contact.reload.merge(dup_contact_matching_donor_account)
@@ -279,7 +279,7 @@ class TntImport
     appeals = {}
     Array.wrap(xml['Appeal']['row']).each do |row|
       appeals[row['id']] = @account_list.appeals.find_by(tnt_id: row['id']) ||
-        @account_list.appeals.find_or_create_by(name: row['Description']) { |new| new.tnt_id = row['id'].to_i }
+                           @account_list.appeals.find_or_create_by(name: row['Description']) { |new| new.tnt_id = row['id'].to_i }
     end
     appeals
   end
@@ -297,8 +297,8 @@ class TntImport
       next unless donor_account
 
       donation = donor_account.donations.where(donation_date: row['GiftDate'], amount: row['Amount'])
-                   .where(designation_account_id: designation_account_ids)
-                   .where('appeal_id is null or appeal_id = ?', appeal.id).first
+                 .where(designation_account_id: designation_account_ids)
+                 .where('appeal_id is null or appeal_id = ?', appeal.id).first
       next if donation.blank?
       donation.update(appeal: appeal, appeal_amount: row['AppealAmount'])
     end
@@ -518,7 +518,7 @@ class TntImport
 
     # See if there's already a person by this name on this contact (This is a contact with multiple donation accounts)
     person = contact.people.where(first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'])
-                           .where("middle_name = ? OR middle_name = '' OR middle_name is NULL", row[prefix + 'MiddleName']).first
+             .where("middle_name = ? OR middle_name = '' OR middle_name is NULL", row[prefix + 'MiddleName']).first
     person ||= Person.new
 
     update_person_attributes(person, row, prefix)
@@ -543,9 +543,9 @@ class TntImport
       donor_accounts = row['OrgDonorCodes'].to_s.split(',').map do |account_number|
         donor_account = Retryable.retryable do
           da = designation_profile.organization.donor_accounts
-            .where('account_number = :account_number OR account_number = :padded_account_number',
-                   account_number: account_number,
-                   padded_account_number: account_number.rjust(DONOR_NUMBER_NORMAL_LEN, '0')).first
+               .where('account_number = :account_number OR account_number = :padded_account_number',
+                      account_number: account_number,
+                      padded_account_number: account_number.rjust(DONOR_NUMBER_NORMAL_LEN, '0')).first
 
           if da
             # Donor accounts for non-Cru orgs could have nil names so update with the name from tnt
@@ -583,8 +583,8 @@ class TntImport
         end
       end
       addresses << {  street: street,  city: city,  state: state,  postal_code: postal_code,  country: country,
-        location: location,  region: row['Region'],  primary_mailing_address: primary_address,
-        source: 'TntImport'  }
+                      location: location,  region: row['Region'],  primary_mailing_address: primary_address,
+                      source: 'TntImport'  }
     end
     addresses
   end
