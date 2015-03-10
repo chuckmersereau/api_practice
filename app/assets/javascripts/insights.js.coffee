@@ -17,6 +17,3 @@ $ ->
       data: {'selResult':selectedResult,'selectedRecurringContactId':selectedRecurringContactId } ,
       type: 'POST'
     }
-
-
-  $("#recurringGiftsDataTable").sortable();
