@@ -4,7 +4,7 @@ class MasterAddress < ActiveRecord::Base
 
   def geo
     if self.smarty_response && self.smarty_response[0] && self.smarty_response[0]['metadata']
-      meta = master_address.smarty_response[0]['metadata']
+      meta = smarty_response[0]['metadata']
       meta['latitude'].to_s + ',' + meta['longitude'].to_s
     else
       unless self.latitude && self.longitude
