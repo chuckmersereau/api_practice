@@ -1,7 +1,13 @@
 <aside id="leftmenu">
   <ul class="nav nav-pills nav-stacked">
-    <li class="active"><%= link_to(_('Preferences'), preferences_path, class: 'menu_item ' + (request.path == preferences_path ? 'completed' : '')) %></li>
-    <li><%= link_to(_('Networks & Imports'), accounts_path, class: 'menu_item ' + (request.path == accounts_path ? 'completed' : '')) %></li>
-    <li><%= link_to(_('Integrations'), integrations_settings_path, class: 'menu_item ' + (request.path == integrations_settings_path ? 'completed' : '')) %></li>
+    <li <% if request.path == preferences_path %>class="active"<% end %>>
+      <%= link_to(_('Preferences'), preferences_path) %>
+    </li>
+    <li <% if request.path == accounts_path %>class="active"<% end %>>
+      <%= link_to(_('Networks & Imports'), accounts_path) %>
+    </li>
+    <li <% if request.path == integrations_settings_path %>class="active"<% end %>>
+      <%= link_to(_('Integrations'), integrations_settings_path) %>
+    </li>
   </ul>
 </aside>

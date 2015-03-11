@@ -137,8 +137,8 @@
               <div class="col-md-12">
                 <!-- <div class="section"><%= link_to(_('Status Update'), "", class: '') %></div> -->
                 <!-- <div class="section"><%= link_to(_('Send Message'), "", class: '') %></div> -->
-                <div class="section"><%= link_to(_('Import Contacts'), accounts_path, class: '') %></div>
                 <% if params[:controller] == 'contacts' %>
+                  <div class="section"><%= link_to(_('Import Contacts'), accounts_path, class: '') %></div>
                   <div class="section"><%= link_to(_('Find Duplicates'), find_duplicates_contacts_path, class: '') %></div>
                 <% end %>
                 <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
