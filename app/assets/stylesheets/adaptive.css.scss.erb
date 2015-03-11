@@ -29,23 +29,20 @@
   <% if Rails.env.development? %>
     body:after { content: "750-980";  position: absolute; top: 1em; left: 1em; z-index: 999; opacity: .25; }
   <% end %>
-  
+
   $maxwidth: 100%;
 
   hgroup #mainmenu .outer {padding: 0 16px 0 0;}
   hgroup .outer {padding: 0 16px; max-width: $maxwidth; min-width: 420px;}
-  
-  #global { background-color: #0077ae; }
-  #menu { clear: both; }
-  
+
   .outer, #content {
     max-width: $maxwidth;
     min-width: 420px;
     clear: both;
   }
-  #contentbody.withleft, 
-	#contentbody.withright { 
-		width: auto; 
+  #contentbody.withleft,
+	#contentbody.withright {
+		width: auto;
 		float: none;
 	}
   #contact_drawer {
@@ -58,7 +55,7 @@
 			input[type=radio] {float: left;}
 		}
 	}
-	
+
   #leftmenu > ul > li {
     &.selected > a { border-left: 5px solid $blue; }
     .menu_item { padding-left: 42px; }
