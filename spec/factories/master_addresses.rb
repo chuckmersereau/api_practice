@@ -7,5 +7,7 @@ FactoryGirl.define do
     state 'MyString'
     country 'MyString'
     postal_code 'MyString'
+    latitude '0'
+    longitude '0'
   end
 end
