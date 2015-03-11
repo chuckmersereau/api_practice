@@ -23,6 +23,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         timezone: [''],
         relatedTaskAction: [''],
         appeal: [''],
+        pledge_frequencies: [''],
         wildcardSearch: urlParameter.get('q'),
         viewPrefsLoaded: false
     };
@@ -51,6 +52,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         $scope.contactQuery.timezone = [''];
         $scope.contactQuery.relatedTaskAction = [''];
         $scope.contactQuery.appeal = [''];
+        $scope.contactQuery.pledge_frequencies = [''];
         $scope.contactQuery.wildcardSearch = null;
         if(!_.isNull(document.getElementById('globalContactSearch'))) {
             document.getElementById('globalContactSearch').value = '';
@@ -164,6 +166,12 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_appeal").trigger("click");
             }
         }
+        if(angular.isDefined(prefs.pledge_frequencies)){
+            $scope.contactQuery.pledge_frequencies = prefs.pledge_frequencies;
+            if(prefs.pledge_frequencies[0]){
+                jQuery("#leftmenu #filter_pledge_frequencies").trigger("click");
+            }
+        }
     });
 
     $scope.tagIsActive = function(tag){
@@ -235,6 +243,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 '&filters[timezone][]=' + encodeURLarray(q.timezone).join('&filters[timezone][]=') +
                 '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
                 '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
+                '&filters[pledge_frequencies][]=' + encodeURLarray(q.pledge_frequencies).join('&filters[pledge_frequencies][]=') +
                 '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch);
         }
 
@@ -290,7 +299,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           referrer: q.referrer,
           timezone: q.timezone,
           relatedTaskAction: q.relatedTaskAction,
-          appeal: q.appeal
+          appeal: q.appeal,
+          pledge_frequencies: q.pledge_frequencies
         };
         if (!isEmptyFilter(prefsToSave)) {
           viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
