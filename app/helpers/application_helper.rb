@@ -8,12 +8,12 @@ module ApplicationHelper
     else
       prompt = _('Add another Account') unless "Person::#{provider.camelcase}Account".constantize.one_per_user?
     end
-    link_to(prompt, "/auth/#{provider}", class: 'btn') if prompt
+    link_to(prompt, "/auth/#{provider}", class: 'btn btn-default btn-xs') if prompt
   end
 
   def link_to_remove_fields(f, hidden = false)
     f.hidden_field(:_destroy, value: f.object.marked_for_destruction? ? '1' : '') +
-      link_to(_('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', class: 'remove_fields btn btn-default btn-xs', style: hidden ? 'display:none' : '', data: { behavior: 'remove_field' })
+      link_to(_('<i class="fa fa-trash-o"></i>'), 'javascript:void(0)', class: 'remove_fields btn btn-secondary btn-xs', style: hidden ? 'display:none' : '', data: { behavior: 'remove_field' })
   end
 
   def link_to_add_fields(name, f, association, options = {})

@@ -1,77 +1,122 @@
-<%= render 'settings_sidebar' %>
-<div id="contentbody" class="withleft">
-  <div class="wpp">
-    <%= form_for @preference_set, url: preference_path(current_user), method: :put do |f| %>
-      <h3><%= _('About you') %></h3>
-
-      <div class="field">
-        <%= f.label :first_name, _('Your first name') %>
-        <%= f.text_field :first_name %>
-      </div>
-
-      <div class="field">
-        <%= f.label :email, _('Preferred Email Address') %>
-        <%= f.text_field :email %>
-      </div>
-
-      <div class="field">
-        <%= f.label :time_zone, _('Time zone') %>
-        <%= f.time_zone_select :time_zone %>
-      </div>
-
-      <div class="field">
-        <%= f.label :locale, _('Language') %>
-        <%= f.select :locale, TwitterCldr::Shared::Languages.all_for(locale).select { |k, _| TwitterCldr.supported_locales.include?(k) }.invert, selected: locale %>
-      </div>
-
-      <br />
-
-      <h3><%= _('Account Settings') %></h3>
-
-      <div class="field">
-        <%= f.label :monthly_goal, _('Monthly goal') %>
-        <%= f.text_field :monthly_goal %>
-      </div>
-
-      <div class="field">
-        <%= f.label :default_account_list, _('Default Account List') %>
-        <%= f.select :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] } %>
-      </div>
-
-      <div class="field">
-        <%= f.check_box :tester %> <%= _('Early adopter') %>
-        <div>
-          <em>
-            By checking this box, you are telling us that you'd like to test new features for bugs before they are
-            rolled out to the full MPDx user base. We'll send you an email when new features are available on your
-            account to test, and then ask for you to give us feedback - both if you experience bugs and also about
-            your thoughts about the feature(s) you are testing.
-          </em>
+<div class="row">
+  <div class="col-md-3" role="complementary">
+    <%= render 'settings_sidebar' %>
+  </div>
+  <div class="col-md-9">
+    <div id="contentbody" class="withleft">
+      <div class="wpp">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="page-filters">
+              <h2><%= _('Preferences') %></h2>
+            </div>
+          </div>
         </div>
-      </div>
-
-      <br />
-
-      <h3><%= _('Notifications / Alerts') %></h3>
-      <p><%= _("Based on an analysis of a partner's giving history, MPDX can notify you of events that you will probably want to follow up on. The detection logic
-                is based on a set of rules that are right most of the time, but you will still want to verify an event manually before contacting the partner.<br><br>
-               For each event MPDX can notify you via email and also create a task entry reminding you to do something about it. The options below allow you to control that behavior.") %>
-      </p>
-
-      <% NotificationType.all.each do |notification_type| %>
-        <% next if notification_type.type == 'NotificationType::LargerGift' %>
-        <% field_name = notification_type.class.to_s.split('::').last.to_s.underscore.to_sym %>
-        <div class="field">
-          <strong><%= f.label field_name, _(notification_type.description) %></strong>
-          <%= check_box_tag "preference_set[#{field_name}][actions][]", 'email', f.object.send(field_name).include?('email') %>
-          <%= _('Email me') %> &nbsp;
-          <%= check_box_tag "preference_set[#{field_name}][actions][]", 'task', f.object.send(field_name).include?('task') %>
-          <%= _('Create a task') %>
-          <%= hidden_field_tag "preference_set[#{field_name}][actions][]", '' %>
+        <%= form_for @preference_set, url: preference_path(current_user), method: :put do |f| %>
+        <div class="row spacer-top">
+          <div class="col-md-12">
+            <h3><%= _('About you') %></h3>
+          </div>
         </div>
-      <% end %>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :first_name, _('Your first name') %>
+              <%= f.text_field :first_name, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :email, _('Preferred Email Address') %>
+              <%= f.text_field :email, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :time_zone, _('Time zone') %>
+              <%= f.time_zone_select :time_zone, nil, {}, {:class => 'form-control'} %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :locale, _('Language') %>
+              <%= f.select :locale, TwitterCldr::Shared::Languages.all_for(locale).select { |k, _| TwitterCldr.supported_locales.include?(k) }.invert, {selected: locale}, {class: 'form-control'} %>
+            </div>
+          </div>
+        </div>
 
-      <%= f.submit _('Save Preferences') %>
-    <% end %>
+        <div class="row">
+          <div class="col-md-12">
+            <h3><%= _('Account Settings') %></h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :monthly_goal, _('Monthly goal') %>
+              <%= f.text_field :monthly_goal, class: 'form-control' %>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="form-group">
+              <%= f.label :default_account_list, _('Default Account List') %>
+              <%= f.select :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {}, {class: 'form-control'} %>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="well">
+              <div class="form-group">
+                <label>
+                  <%= f.check_box :tester %> <%= _('Early adopter') %>
+                </label>
+              </div>
+              <p><small>
+                By checking this box, you are telling us that you'd like to test new features for bugs before they are
+                rolled out to the full MPDx user base. We'll send you an email when new features are available on your
+                account to test, and then ask for you to give us feedback - both if you experience bugs and also about
+                your thoughts about the feature(s) you are testing.
+              </small></p>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+
+            <h3><%= _('Notifications / Alerts') %></h3>
+            <p><%= _("Based on an analysis of a partner's giving history, MPDX can notify you of events that you will probably want to follow up on. The detection logic
+                      is based on a set of rules that are right most of the time, but you will still want to verify an event manually before contacting the partner.") %></p>
+            <p><%= _("For each event MPDX can notify you via email and also create a task entry reminding you to do something about it. The options below allow you to control that behavior.") %></p>
+
+            <% NotificationType.all.each do |notification_type| %>
+              <% next if notification_type.type == 'NotificationType::LargerGift' %>
+              <% field_name = notification_type.class.to_s.split('::').last.to_s.underscore.to_sym %>
+              <div class="form-group">
+                <%= f.label field_name, _(notification_type.description) %>
+                <label class="checkbox-inline">
+                  <%= check_box_tag "preference_set[#{field_name}][actions][]", 'email', f.object.send(field_name).include?('email') %>
+                  <%= _('Email me') %>
+                </label>
+                <label class="checkbox-inline">
+                  <%= check_box_tag "preference_set[#{field_name}][actions][]", 'task', f.object.send(field_name).include?('task') %>
+                  <%= _('Create a task') %>
+                </label>
+                <%= hidden_field_tag "preference_set[#{field_name}][actions][]", '' %>
+              </div>
+            <% end %>
+
+            <div class="page-filters page-filters-close">
+              <%= f.submit _('Save Preferences'), class: 'btn btn-primary btn-default' %>
+            </div>
+          </div>
+        </div>
+        <% end %>
+      </div>
+    </div>
   </div>
 </div>

@@ -173,6 +173,31 @@ div.right {
   min-height: 35px;
 }
 
+.nav-pills {
+  > li.active {
+    > a,
+    a:hover {
+      background-color: $color-secondary;
+    }
+  }
+  &.nav-stacked {
+    > li {
+      display: block;
+      a {
+        display: block;
+      }
+    }
+  }
+}
+
+.settings-sidebar {
+  .nav {
+    > li {
+      display: block;
+    }
+  }
+}
+
 /* ************************************************************** */
 
 #searchform {
@@ -326,25 +351,31 @@ div.right {
   }
 }
 
+$progress-bar-height: 30px;
+
 #mpd_progress_bar {
-  background: #888;
-  border: 1px solid white;
+  background: $color-gray;
   color: $white;
-  height: 20px;
-  margin: 14px 0;
+  height: $progress-bar-height;
+  margin: 6px 0 0 0;
   overflow: hidden;
   width: 200px;
+  position: relative;
+  border-radius: 4px;
   .bar {
-    background: #c5da6e;
-    border-right: 1px solid #5D7A29;
-    height: 20px;
+    background: $green;
+    /*border-right: 1px solid rgba(255,255,255,.35);*/
+    height: $progress-bar-height;
   }
   .value {
-    float: right;
+    right: 0;
     line-height: normal;
-    padding: 6px;
-    position: relative;
-    top: -22px;
+    padding: 0 10px;
+    position: absolute;
+    top: 0px;
+    line-height: $progress-bar-height;
+    height: $progress-bar-height;
+    height: $progress-bar-height;
   }
   .value.left {
     float: left;
@@ -1071,8 +1102,10 @@ table.meta {
   }
 
   .network_logo {
+    text-align: center;
     img {
       max-height: 100px;
+      display: inline-block;
     }
   }
   .network_button {
@@ -1086,7 +1119,7 @@ table.meta {
       padding: 12px;
       margin-bottom: 5px;
       margin-right: 5px;
-      min-width: 300px;
+      width: 300px;
       .actions {
         float: right;
         a {vertical-align: middle;}
