@@ -40,8 +40,12 @@
               </div>
               <div class="col-md-6 col-xs-6">
                 <div class="links text-right">
-                  <div class="section lists" data-behavior="account_selector" style="<%= 'display:none' unless current_user.account_lists.length > 1 %>">
-                    <a data-behavior="current_account"><span class='cur'><%= current_account_list.name %></span><%= image_tag("list_select.png") %></a>
+                  <div class="section lists account-dropdown" data-behavior="account_selector" style="<%= 'display:none' unless current_user.account_lists.length > 1 %>">
+                    <a data-behavior="current_account" class="btn btn-default btn-account-dropdown">
+                      <span class='cur'><%= current_account_list.name %></span>
+                      <span class="caret"></span>
+                      <%#= image_tag("list_select.png") %>
+                    </a>
                     <div style="display:none" class="switcher">
                       <ul>
                         <% (current_user.account_lists - [current_account_list]).each do |al| %>
@@ -106,9 +110,11 @@
                     </ul>
                   </div>
                 </div>
-                <div class="col-md-4 col-sm-4">
+                <div class="col-md-4 col-sm-4 text-right">
+                  <div class="navbar-quick">
+                    <%= @account_list_exhibit.balances(current_user) %>
+                  </div>
                   <div class="text-right navbar-quick">
-
                     <div class="dropdown">
                       <a class="dropdown-toggle btn btn-secondary" href="#" type="button" id="quick-drop" data-toggle="dropdown" aria-expanded="true" data-disabled="true">
                         <i class="fa fa-plus-circle"></i> Quick Add
@@ -118,11 +124,6 @@
                         <li role="presentation"><%= link_to(_('Add Contact'), new_contact_path, class: '') %></li>
                       </ul>
                     </div>
-
-
-                  </div>
-                  <div>
-                    <%= @account_list_exhibit.balances(current_user) %>
                   </div>
                 </div>
 

@@ -71,24 +71,32 @@ $userheight: 72px;
         position: absolute;
         z-index: 1;
         line-height: 1;
-        margin-top: -18px;
+        margin-top: 0px;
         background: rgba(0,0,0,.65);
         min-width: 146px;
         border-radius: 4px;
+        text-align: left;
         ul {
           @include listclear;
+          li {
+            display: block;
+          }
           li a {
             background: none;
             box-shadow: none;
             width: auto;
             display: block;
+            height: 2em;
+            line-height: 2em;
+            color: $white;
+            font-size: 13px;
           }
         }
       }
       .cur {
-        border-right: 1px solid rgba(255, 255, 255, .3);
-        padding: 4px 7px 4px 3px;
-        margin-right: 3px;
+        line-height: 18px;
+        display: inline-block;
+        font-size: 15px;
       }
     }
   }
@@ -113,6 +121,15 @@ div.right {
   float: right;
 }
 
+.account-dropdown {
+  font-size: 14px;
+}
+.btn-account-dropdown {
+  font-size: 16px !important;
+  margin-top: 15px;
+  line-height: 32px !important;
+}
+
 #mainmenu {
   $mainmenuheight: 48px;
   height: auto;
@@ -120,10 +137,10 @@ div.right {
   border-top: 1px solid $white;
   .account_balances {
     padding-top: 0px;
+    padding-right: 14px;
     line-height: $mainmenuheight;
     font-size: 14px;
     right: 0;
-    color: $white;
   }
   .item {
     float: left;
@@ -155,6 +172,7 @@ div.right {
   }
   .navbar-quick {
     line-height: $mainmenuheight;
+    display: inline-block;
   }
   .navbar-collapse {
     padding-left: 0;
