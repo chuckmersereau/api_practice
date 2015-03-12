@@ -209,26 +209,34 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         statusApiArray = _.uniq(_.union(statusApiArray, railsConstants.contact.INACTIVE_STATUSES));
       }
 
-      var requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
-          '&per_page=' + q.limit +
-          '&page=' + q.page +
-          '&filters[name]=' + encodeURIComponent(q.name) +
-          '&filters[contact_type]=' + encodeURIComponent(q.type) +
-          '&filters[address_historic]=' + encodeURIComponent(!q.activeAddresses) +
-          '&filters[city][]=' + encodeURLarray(q.city).join('&filters[city][]=') +
-          '&filters[state][]=' + encodeURLarray(q.state).join('&filters[state][]=') +
-          '&filters[region][]=' + encodeURLarray(q.region).join('&filters[region][]=') +
-          '&filters[metro_area][]=' + encodeURLarray(q.metro_area).join('&filters[metro_area][]=') +
-          '&filters[newsletter]=' + encodeURIComponent(q.newsletter) +
-          '&filters[tags][]=' + encodeURLarray(q.tags).join('&filters[tags][]=') +
-          '&filters[status][]=' + encodeURLarray(statusApiArray).join('&filters[status][]=') +
-          '&filters[likely][]=' + encodeURLarray(q.likely).join('&filters[likely][]=') +
-          '&filters[church][]=' + encodeURLarray(q.church).join('&filters[church][]=') +
-          '&filters[referrer][]=' + encodeURLarray(q.referrer).join('&filters[referrer][]=') +
-          '&filters[timezone][]=' + encodeURLarray(q.timezone).join('&filters[timezone][]=') +
-          '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
-          '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
-          '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch);
+        var requestUrl;
+        if(q.insightFilter){
+            requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
+                '&per_page=' + q.limit +
+                '&page=' + q.page +
+                '&filters[ids]=' + q.insightFilter.join();
+        } else {
+            requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
+                '&per_page=' + q.limit +
+                '&page=' + q.page +
+                '&filters[name]=' + encodeURIComponent(q.name) +
+                '&filters[contact_type]=' + encodeURIComponent(q.type) +
+                '&filters[address_historic]=' + encodeURIComponent(!q.activeAddresses) +
+                '&filters[city][]=' + encodeURLarray(q.city).join('&filters[city][]=') +
+                '&filters[state][]=' + encodeURLarray(q.state).join('&filters[state][]=') +
+                '&filters[region][]=' + encodeURLarray(q.region).join('&filters[region][]=') +
+                '&filters[metro_area][]=' + encodeURLarray(q.metro_area).join('&filters[metro_area][]=') +
+                '&filters[newsletter]=' + encodeURIComponent(q.newsletter) +
+                '&filters[tags][]=' + encodeURLarray(q.tags).join('&filters[tags][]=') +
+                '&filters[status][]=' + encodeURLarray(statusApiArray).join('&filters[status][]=') +
+                '&filters[likely][]=' + encodeURLarray(q.likely).join('&filters[likely][]=') +
+                '&filters[church][]=' + encodeURLarray(q.church).join('&filters[church][]=') +
+                '&filters[referrer][]=' + encodeURLarray(q.referrer).join('&filters[referrer][]=') +
+                '&filters[timezone][]=' + encodeURLarray(q.timezone).join('&filters[timezone][]=') +
+                '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
+                '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
+                '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch);
+        }
 
       api.call('get', requestUrl, {}, function (data) {
         angular.forEach(data.contacts, function (contact) {
