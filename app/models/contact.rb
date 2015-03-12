@@ -430,7 +430,7 @@ class Contact < ActiveRecord::Base
   end
 
   def sync_with_google_contacts
-    account_list.google_integrations.where(contacts_integration: true).each { |g_i| g_i.queue_sync_data('contacts') }
+    account_list.sync_with_google_contacts
   end
 
   def delete_from_prayer_letters

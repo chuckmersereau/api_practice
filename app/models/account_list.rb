@@ -1,3 +1,5 @@
+# rubocop:disable Metrics/ClassLength
+
 # This class provides the flexibility needed for one person to have
 # multiple designation accounts in multiple countries. In that scenario
 # it didn't make sense to associate a contact with a designation
@@ -393,6 +395,10 @@ class AccountList < ActiveRecord::Base
     emails_with_nils.compact
   end
 
+  def sync_with_google_contacts
+    lower_retry_async(:perform_google_contacts_sync)
+  end
+
   private
 
   def import_data
@@ -485,5 +491,9 @@ class AccountList < ActiveRecord::Base
         )
       end
     end
+  end
+
+  def perform_google_contacts_sync
+    google_integrations.where(contacts_integration: true).each { |g_i| g_i.sync_data('contacts') }
   end
 end
