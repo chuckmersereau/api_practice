@@ -13,7 +13,8 @@
         <div class="page-filters">
           <div class="row">
             <div class="col-md-4 form-inline">
-              <%= link_to(_('New Task'), '#', class: 'btn btn-secondary') %>
+              <%#= link_to(_('New Task'), '#', class: 'btn btn-secondary add_task') %>
+              <%= link_to(_('New Task'), new_task_path, id: 'add_task_button', class: 'btn btn-secondary add_task', remote: true) %>
             </div>
             <div class="col-md-5 col-md-offset-3 text-right">
 
@@ -38,7 +39,7 @@
               <thead>
               <tr class="taskgroup" ng-class="g.class">
                 <td colspan="2">
-                  <div style="float:right">Show: <select ng-model="filter.tasksPerGroup" ng-options="i as i for i in [10, 25, 50, 100, 500]"></select></div>
+                  <div style="float:right" class="form-inline">Show: <select ng-model="filter.tasksPerGroup" ng-options="i as i for i in [10, 25, 50, 100, 500]" class="form-control"></select></div>
                   {{g.title}}
                   <%= render 'actions' %>
                 </td>
