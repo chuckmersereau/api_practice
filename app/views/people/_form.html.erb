@@ -46,7 +46,7 @@
         <%= builder.radio_button :gender, 'female' %> <%= builder.label :gender_female, _('Female') %>
       </div>
     </div>
-    
+
     <div class="fieldset">
       <div class="field radiocheck">
         <%= builder.check_box :deceased %>
@@ -94,7 +94,7 @@
     <div class="fieldset">
       <div class="field_action optout_enewsletter">
         <%= builder.check_box :optout_enewsletter %>
-        <%= builder.label :optout_enewsletter, "Opt-out of email newsletter", title: "This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx." %>
+        <%= builder.label :optout_enewsletter, _("Opt-out of email newsletter"), title: _("This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx.") %>
       </div>
       <label class="fieldset_label"><%= _('Email') %></label>
       <%= builder.fields_for :email_addresses do |builder| %>

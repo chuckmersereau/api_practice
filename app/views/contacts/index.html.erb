@@ -25,10 +25,10 @@
     <% if $rollout.active?(:insights, current_account_list) %>
     <li ng-class="{'selected': insightFilterIsActive()}">
       <span class="left_filters menu_item"><%= _('Insights') %></span>
-      <p class="collapse" style="text-indent:40px"><a href="" ng-click="runInsight('recommendations')">Increase Recommendations</a></p>
+      <p class="collapse" style="text-indent:40px"><a href="" ng-click="runInsight('recommendations')"><%= _('Increase Recommendations') %></a></p>
     </li>
     <li class="controls" ng-show="insightFilterIsActive()">
-      <a href="" ng-click="clearInsightFilter()" class="btn">Clear Insight Filter</a>
+      <a href="" ng-click="clearInsightFilter()" class="btn"><%= _('Clear Insight Filter') %></a>
     </li>
     <% end %>
     <li ng-show="!insightFilterIsActive()">
@@ -56,7 +56,7 @@
             <div class="collapse" style="display:none;">
               <%= select_tag 'filters[city]', options_for_select([[_('-- Any --'), '']] + current_account_list.cities.select(&:present?)), multiple: true, size: 5, :'ng-model' => 'contactQuery.city' %>
               <label>
-                <input type="checkbox" ng-model="contactQuery.activeAddresses"> Active addresses
+                <input type="checkbox" ng-model="contactQuery.activeAddresses"> <%= _('Active addresses') %>
               </label>
             </div>
           </li>
@@ -66,7 +66,7 @@
             <div class="collapse" style="display:none;">
               <%= select_tag 'filters[state]', options_for_select([[_('-- Any --'), '']] + current_account_list.states.select(&:present?)), multiple: true, size: 5, :'ng-model' => 'contactQuery.state' %>
               <label>
-                <input type="checkbox" ng-model="contactQuery.activeAddresses"> Active addresses
+                <input type="checkbox" ng-model="contactQuery.activeAddresses"> <%= _('Active addresses') %>
               </label>
             </div>
           </li>
@@ -76,7 +76,7 @@
             <div class="collapse" style="display:none;">
               <%= select_tag 'filters[region]', options_for_select([[_('-- Any --'), '']] + current_account_list.regions.select(&:present?)), multiple: true, size: 5, :'ng-model' => 'contactQuery.region' %>
               <label>
-                <input type="checkbox" ng-model="contactQuery.activeAddresses"> Active addresses
+                <input type="checkbox" ng-model="contactQuery.activeAddresses"> <%= _('Active addresses') %>
               </label>
             </div>
           </li>
@@ -86,7 +86,7 @@
             <div class="collapse" style="display:none;">
               <%= select_tag 'filters[metro_area]', options_for_select([[_('-- Any --'), '']] + current_account_list.metro_areas.select(&:present?)), multiple: true, size: 5, :'ng-model' => 'contactQuery.metro_area' %>
               <label>
-                <input type="checkbox" ng-model="contactQuery.activeAddresses"> Active addresses
+                <input type="checkbox" ng-model="contactQuery.activeAddresses"> <%= _('Active addresses') %>
               </label>
             </div>
           </li>
@@ -154,8 +154,8 @@
             </div>
           </li>
           <li class="controls">
-            <a href="#" ng-click="resetFilters()" class="btn">Reset Filters</a>
-            <a href="#" ng-click="mapContacts()" class="btn">Map These Contacts</a>
+            <a href="#" ng-click="resetFilters()" class="btn"><%= _('Reset Filters') %></a>
+            <a href="#" ng-click="mapContacts()" class="btn"><%= _('Map These Contacts') %></a>
           </li>
         </ul>
       </form>
@@ -166,8 +166,8 @@
 
   <div id="contentbody" class="withleft">
     <div class="filters">
-      <input autocomplete="off" class="search_filter ui-autocomplete-input" id="contact_name" placeholder="Type to filter" type="text" ng-model="contactQuery.name">
-      <span ng-show="contactsLoading">Loading...</span>
+      <input autocomplete="off" class="search_filter ui-autocomplete-input" id="contact_name" placeholder="<%= _('Type to filter') %>" type="text" ng-model="contactQuery.name">
+      <span ng-show="contactsLoading"><%= _('Loading') %>...</span>
       <div class="right">
         <%= link_to(_('Actions'), "#", class: "btn smallbtn actionbtn") %>
         <%= link_to(_('Merge'), '#', class: 'btn smallbtn', data: {behavior: 'merge'}) %>
@@ -183,10 +183,10 @@
       <tr>
         <td colspan="10">
           <div style="float:left">
-            Displaying <b>{{page.from}}&nbsp;-&nbsp;{{page.to}}</b> of <b>{{totalContacts}}</b>
+            <%= _('Displaying') %> <b>{{page.from}}&nbsp;-&nbsp;{{page.to}}</b> of <b>{{totalContacts}}</b>
             <div class="pagination">
-              <span class="previous_page disabled" ng-show="page.current === 1">← Previous</span>
-              <a class="previous_page" rel="prev start" href="#" ng-click="page.current=page.current-1" ng-show="page.current > 1">← Previous</a>
+              <span class="previous_page disabled" ng-show="page.current === 1">← <%= _('Previous') %></span>
+              <a class="previous_page" rel="prev start" href="#" ng-click="page.current=page.current-1" ng-show="page.current > 1">← <%= _('Previous') %></a>
 
               <span ng-repeat="n in [1, page.total] | makeRange">
                 <em class="current" ng-show="n === page.current">{{n}}</em>
@@ -194,13 +194,13 @@
                 <span ng-show="(n === 2 && page.current > 9) || (n === page.total-1 && page.current < page.total - 8)">...</span>
               </span>
 
-              <span class="next_page disabled" ng-show="page.current === page.total">Next →</span>
-              <a class="next_page" rel="next" href="#" ng-click="page.current=page.current+1" ng-show="page.current < page.total">Next →</a>
+              <span class="next_page disabled" ng-show="page.current === page.total"><%= _('Next') %> →</span>
+              <a class="next_page" rel="next" href="#" ng-click="page.current=page.current+1" ng-show="page.current < page.total"><%= _('Next') %> →</a>
             </div>
           </div>
 
           <div style="float:right">
-            Show:<%= @fil %>
+            <%= _('Show') %>:<%= @fil %>
             <select ng-model="contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]"></select>
           </div>
         </td>
@@ -208,7 +208,11 @@
     </table>
     <div class="contacts-scrollable" id="contacts-scrollable">
       <table class="tablelist" ng-class="{'contact_loading': contactsLoading}">
-        <tr ng-show="contacts.length === 0 && contactQuery.viewPrefsLoaded"><td style="color:red;">Sorry, there are no contacts that match the filters and/or tags you have selected. Try <a href="/contacts/new">adding a new contact</a> or <a href="#" ng-click="resetFilters()">resetting your filters</a>.</td></tr>
+        <tr ng-show="contacts.length === 0 && contactQuery.viewPrefsLoaded">
+          <td style="color:red;">
+            Sorry, there are no contacts that match the filters and/or tags you have selected. Try <a href="/contacts/new">adding a new contact</a> or <a href="#" ng-click="resetFilters()">resetting your filters</a>.
+          </td>
+        </tr>
         <tr contact="contact" ng-repeat="contact in contacts" id="contact_{{contact.id}}" data-hook="contact"></tr>
       </table>
     </div>
