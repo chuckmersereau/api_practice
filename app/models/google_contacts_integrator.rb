@@ -118,6 +118,7 @@ class GoogleContactsIntegrator
     # despite re-applying the sync logic.
     @contacts_to_retry_sync.each(&:reload)
     @contacts_to_retry_sync.each(&method(:sync_contact))
+    api_user.send_batched_requests
 
     delete_g_contact_merge_losers
 
