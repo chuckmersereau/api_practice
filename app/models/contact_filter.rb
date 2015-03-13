@@ -37,8 +37,8 @@ class ContactFilter
 
       if @filters[:city].present? && @filters[:city].first != ''
         filtered_contacts = filtered_contacts.where('addresses.city' => @filters[:city], 'addresses.historic' => @filters[:address_historic] || false)
-        .includes(:addresses)
-        .references('addresses')
+                            .includes(:addresses)
+                            .references('addresses')
       end
 
       if @filters[:church].present? && @filters[:church].first != ''
@@ -47,20 +47,20 @@ class ContactFilter
 
       if @filters[:state].present? && @filters[:state].first != ''
         filtered_contacts = filtered_contacts.where('addresses.state' => @filters[:state], 'addresses.historic' => @filters[:address_historic] || false)
-        .includes(:addresses)
-        .references('addresses')
+                            .includes(:addresses)
+                            .references('addresses')
       end
 
       if @filters[:region].present? && @filters[:region].first != ''
         filtered_contacts = filtered_contacts.where('addresses.region' => @filters[:region], 'addresses.historic' => @filters[:address_historic] || false)
-        .includes(:addresses)
-        .references('addresses')
+                            .includes(:addresses)
+                            .references('addresses')
       end
 
       if @filters[:metro_area].present? && @filters[:metro_area].first != ''
         filtered_contacts = filtered_contacts.where('addresses.metro_area' => @filters[:metro_area], 'addresses.historic' => @filters[:address_historic] || false)
-        .includes(:addresses)
-        .references('addresses')
+                            .includes(:addresses)
+                            .references('addresses')
       end
 
       if @filters[:likely].present? && @filters[:likely].first != ''
@@ -97,19 +97,19 @@ class ContactFilter
 
       if @filters[:newsletter].present?
         case @filters[:newsletter]
-          when 'none'
-            filtered_contacts = filtered_contacts.where("send_newsletter is null OR send_newsletter = ''")
-          when 'address'
-            filtered_contacts = filtered_contacts.joins(:addresses).where(send_newsletter: %w(Physical Both))
-            .where('addresses.historic' => false)
-          when 'email'
-            filtered_contacts = filtered_contacts.where(send_newsletter: %w(Email Both))
-            .where('email_addresses.email is not null')
-            .includes(people: :email_addresses)
-            .references('email_addresses')
-          else
-            filtered_contacts = filtered_contacts.where("send_newsletter is not null AND send_newsletter <> ''")
-        end
+        when 'none'
+          filtered_contacts = filtered_contacts.where("send_newsletter is null OR send_newsletter = ''")
+        when 'address'
+          filtered_contacts = filtered_contacts.joins(:addresses).where(send_newsletter: %w(Physical Both))
+                              .where('addresses.historic' => false)
+        when 'email'
+          filtered_contacts = filtered_contacts.where(send_newsletter: %w(Email Both))
+                              .where('email_addresses.email is not null')
+                              .includes(people: :email_addresses)
+                              .references('email_addresses')
+        else
+          filtered_contacts = filtered_contacts.where("send_newsletter is not null AND send_newsletter <> ''")
+       end
         filtered_contacts = filtered_contacts.uniq unless filtered_contacts.to_sql.include?('DISTINCT')
       end
 
@@ -124,12 +124,12 @@ class ContactFilter
       if @filters[:relatedTaskAction].present? && @filters[:relatedTaskAction].first != ''
         if @filters[:relatedTaskAction].first == 'null'
           contacts_with_activities = filtered_contacts.where('activities.completed' => false)
-          .includes(:activities).map(&:id)
+                                     .includes(:activities).map(&:id)
           filtered_contacts = filtered_contacts.where('contacts.id not in (?)', contacts_with_activities)
         else
           filtered_contacts = filtered_contacts.where('activities.activity_type' => @filters[:relatedTaskAction])
-          .where('activities.completed' => false)
-          .includes(:activities)
+                              .where('activities.completed' => false)
+                              .includes(:activities)
         end
       end
 
@@ -138,10 +138,10 @@ class ContactFilter
       end
 
       case @filters[:contact_type]
-        when 'person'
-          filtered_contacts = filtered_contacts.people
-        when 'company'
-          filtered_contacts = filtered_contacts.companies
+      when 'person'
+        filtered_contacts = filtered_contacts.people
+      when 'company'
+        filtered_contacts = filtered_contacts.companies
       end
 
       if @filters[:wildcard_search].present? && @filters[:wildcard_search] != 'null'
@@ -160,18 +160,18 @@ class ContactFilter
         end
 
         filtered_contacts = filtered_contacts.where(
-            'lower(email_addresses.email) like :search '\
+          'lower(email_addresses.email) like :search '\
           'OR lower(contacts.name) like :search '\
           'OR lower(donor_accounts.account_number) like :search '\
           'OR lower(phone_numbers.number) like :search'\
           + person_search,
-            search: "%#{@filters[:wildcard_search].downcase}%", first_name: first_name, last_name: last_name)
-        .includes(people: :email_addresses)
-        .references('email_addresses')
-        .includes(:donor_accounts)
-        .references('donor_accounts')
-        .includes(people: :phone_numbers)
-        .references('phone_numbers')
+          search: "%#{@filters[:wildcard_search].downcase}%", first_name: first_name, last_name: last_name)
+                            .includes(people: :email_addresses)
+                            .references('email_addresses')
+                            .includes(:donor_accounts)
+                            .references('donor_accounts')
+                            .includes(people: :phone_numbers)
+                            .references('phone_numbers')
       end
     end
 
