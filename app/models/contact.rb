@@ -430,7 +430,7 @@ class Contact < ActiveRecord::Base
   end
 
   def sync_with_google_contacts
-    account_list.sync_with_google_contacts
+    account_list.lower_retry_async(:sync_with_google_contacts)
   end
 
   def delete_from_prayer_letters
