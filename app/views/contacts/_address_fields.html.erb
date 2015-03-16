@@ -16,17 +16,17 @@
     <% end %>
 
     <%= builder.label :street %>
-    <%= builder.text_area :street, rows: 3, placeholder: "Street address" %>
+    <%= builder.text_area :street, rows: 3, placeholder: _('Street address') %>
     <%= builder.label :city %>
-    <%= builder.text_field :city, placeholder: "City" %>
+    <%= builder.text_field :city, placeholder: _('City') %>
     <%= builder.label :state %>
-    <%= builder.text_field :state, placeholder: "State" %>
+    <%= builder.text_field :state, placeholder: _('State') %>
     <%= builder.label :postal_code %>
-    <%= builder.text_field :postal_code, placeholder: "Postal Code" %>
+    <%= builder.text_field :postal_code, placeholder: _('Postal Code') %>
     <%= builder.label :region %>
-    <%= builder.text_field :region, placeholder: "Region", class: 'address_region' %>
+    <%= builder.text_field :region, placeholder: _('Region'), class: 'address_region' %>
     <%= builder.label :metro_area %>
-    <%= builder.text_field :metro_area, placeholder: "Metro Area", class: 'address_metro_area' %>
+    <%= builder.text_field :metro_area, placeholder: _('Metro Area'), class: 'address_metro_area' %>
     <%= builder.label :country %>
     <%= builder.country_select :country, nil, {include_blank: true}, {class: 'country_select'} %><br/>
 
@@ -37,11 +37,11 @@
 
     <div class="field_action">
         <%= builder.check_box :historic, class: 'address_historic' %>
-        <%= builder.label :historic, "Address no longer valid" %>
+        <%= builder.label :historic, _('Address no longer valid') %>
     </div><br>
     <div class="field_action">
       <%= builder.check_box :primary_mailing_address, class: 'primary' %>
-      <%= builder.label :primary_mailing_address %>
+      <%= builder.label :primary_mailing_address, _('Primary mailing address') %>
       <%= link_to_remove_fields(builder) %>
     </div>
 
