@@ -183,7 +183,7 @@
       <tr>
         <td colspan="10">
           <div style="float:left">
-            <%= _('Displaying') %> <b>{{page.from}}&nbsp;-&nbsp;{{page.to}}</b> of <b>{{totalContacts}}</b>
+            <%= _('Displaying') %> <b>{{page.from}}&nbsp;-&nbsp;{{page.to}}</b> <%= _('of') %> <b>{{totalContacts}}</b>
             <div class="pagination">
               <span class="previous_page disabled" ng-show="page.current === 1">← <%= _('Previous') %></span>
               <a class="previous_page" rel="prev start" href="#" ng-click="page.current=page.current-1" ng-show="page.current > 1">← <%= _('Previous') %></a>
