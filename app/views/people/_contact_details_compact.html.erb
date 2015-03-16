@@ -35,25 +35,25 @@
 
 <% if person.birthday_month.present? %>
     <div class="set">
-      <strong>Birthday:</strong> <%= I18n.t("date.month_names")[person.birthday_month] %> <%= person.birthday_day %>, <%= person.birthday_year %>
+      <strong><%= _('Birthday') %>:</strong> <%= I18n.t("date.month_names")[person.birthday_month] %> <%= person.birthday_day %>, <%= person.birthday_year %>
     </div>
 <% end %>
 
 <% if person.anniversary_month.present? %>
     <div class="set">
-      <strong>Anniversary:</strong> <%= I18n.t("date.month_names")[person.anniversary_month] %> <%= person.anniversary_day %>, <%= person.anniversary_year %>
+      <strong><%= _('Anniversary') %>:</strong> <%= I18n.t("date.month_names")[person.anniversary_month] %> <%= person.anniversary_day %>, <%= person.anniversary_year %>
     </div>
 <% end %>
 
 <% if person.occupation.present? %>
     <div class="set">
-      <strong>Occupation:</strong> <%= person.occupation %>
+      <strong><%= _('Occupation') %>:</strong> <%= person.occupation %>
     </div>
 <% end %>
 
 <% if person.employer.present? %>
     <div class="set">
-      <strong>Employer:</strong> <%= person.employer %>
+      <strong><%= _('Employer') %>:</strong> <%= person.employer %>
     </div>
 <% end %>
 

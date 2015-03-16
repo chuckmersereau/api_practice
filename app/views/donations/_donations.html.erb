@@ -18,15 +18,15 @@
   <thead>
     <tr>
       <% if @contact %>
-        <th>Donor</th>
+        <th><%= _('Donor') %></th>
       <% end %>
-      <th class="date">Date</th>
+      <th class="date"><%= _('Date') %></th>
       <% unless @contact %>
-        <th>Donor</th>
+        <th><%= _('Donor') %></th>
       <% end %>
-      <th class="right">Amount</th>
+      <th class="right"><%= _('Amount') %></th>
       <% if current_account_list.multiple_designations %>
-        <th>Designation</th>
+        <th><%= _('Designation') %></th>
       <% end %>
       <th><%= _('Method') %></th>
       <th><%= _('Motivation') %></th>
