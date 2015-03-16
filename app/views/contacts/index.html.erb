@@ -210,7 +210,7 @@
       <table class="tablelist" ng-class="{'contact_loading': contactsLoading}">
         <tr ng-show="contacts.length === 0 && contactQuery.viewPrefsLoaded">
           <td style="color:red;">
-            Sorry, there are no contacts that match the filters and/or tags you have selected. Try <a href="/contacts/new">adding a new contact</a> or <a href="#" ng-click="resetFilters()">resetting your filters</a>.
+            <%= _('Sorry, there are no contacts that match the filters and/or tags you have selected.') %> <%= _('Try') %> <a href="/contacts/new"><%= _('adding a new contact') %></a> <%= _('or') %> <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a>.
           </td>
         </tr>
         <tr contact="contact" ng-repeat="contact in contacts" id="contact_{{contact.id}}" data-hook="contact"></tr>
