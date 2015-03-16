@@ -193,6 +193,21 @@ class Address < ActiveRecord::Base
       rescue RestClient::RequestFailed, SocketError, RestClient::ResourceNotFound
         # Don't blow up if smarty didn't like the request
       end
+
+      if results && results[0] && results[0]['metadata']
+        meta = results[0]['metadata']
+        attributes_for_master_address[:latitude] = meta['latitude'].to_s
+        attributes_for_master_address[:longitude] = meta['longitude'].to_s
+      end
+
+      unless attributes_for_master_address[:latitude] && attributes_for_master_address[:longitude]
+        lat, long = Geocoder.coordinates([attributes_for_master_address[:street],
+                                          attributes_for_master_address[:city],
+                                          attributes_for_master_address[:state],
+                                          attributes_for_master_address[:country]].join(','))
+        attributes_for_master_address[:latitude] = lat.to_s
+        attributes_for_master_address[:longitude] = long.to_s
+      end
     end
 
     master_address

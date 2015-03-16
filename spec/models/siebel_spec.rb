@@ -264,6 +264,7 @@ describe Siebel do
       contact = create(:contact, account_list: account_list)
       donor_account.contacts << contact
 
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         siebel.send(:add_or_update_donor_account, account_list, siebel_donor, designation_profile)
       end.not_to change { Contact.count }
@@ -278,6 +279,7 @@ describe Siebel do
 
       siebel.should_not_receive(:add_or_update_person)
 
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         siebel.send(:add_or_update_donor_account, account_list, siebel_donor, designation_profile, Time.zone.now)
       end.not_to change { Person.count }
@@ -367,6 +369,7 @@ describe Siebel do
     let(:source_donor_account) { create(:donor_account) }
 
     it 'adds a new address' do
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to change { Address.count }.by(1)
@@ -380,6 +383,7 @@ describe Siebel do
 
     it 'updates an existing address' do
       address = create(:address, addressable: contact, remote_id: siebel_address.id)
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.not_to change { Address.count }
@@ -404,12 +408,14 @@ describe Siebel do
 
     it 'sets the source donor account' do
       source_donor_account = create(:donor_account)
+      Geocoder.should_receive(:coordinates).at_least(:once)
       siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       expect(contact.addresses.first.source_donor_account).to eq(source_donor_account)
     end
 
     it 'sets the address as primary if none are marked primary' do
       contact.addresses << create(:address, historic: true, primary_mailing_address: false)
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to change(Address, :count).from(1).to(2)
@@ -420,6 +426,7 @@ describe Siebel do
     it 'does not set the address as primary if a non-matching non-Siebel address is primary' do
       manual_address = create(:address, primary_mailing_address: true, source: Address::MANUAL_SOURCE)
       contact.addresses << manual_address
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to change(Address, :count).from(1).to(2)
@@ -431,6 +438,7 @@ describe Siebel do
       donor_account = create(:donor_account)
       contact.addresses << create(:address, primary_mailing_address: true, source: 'Siebel',
                                             source_donor_account: donor_account)
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, donor_account)
       end.to change(Address, :count).from(1).to(2)
@@ -443,6 +451,7 @@ describe Siebel do
       donor_account2 = create(:donor_account)
       contact.addresses << create(:address, primary_mailing_address: true, source: 'Siebel',
                                             source_donor_account: donor_account1)
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, donor_account2)
       end.to change(Address, :count).from(1).to(2)
@@ -458,6 +467,7 @@ describe Siebel do
 
     it 'matches and updates an address with the same master but different formatting' do
       stub_siebel_address_smarty
+      Geocoder.should_receive(:coordinates).at_least(:once)
 
       contact.addresses << create(:address, primary_mailing_address: true, master_address: nil,
                                             street: '1697 Marabu', city: 'Fremont', state: 'CA', postal_code: '94539')
@@ -478,6 +488,7 @@ describe Siebel do
 
     it 'prefers match by place and disconnects remote id of old address now points to new place' do
       stub_siebel_address_smarty
+      Geocoder.should_receive(:coordinates).at_least(:once)
 
       new_manual_address = create(:address, primary_mailing_address: true, master_address: nil,
                                             street: '1697 Marabu', city: 'Fremont', state: 'CA', postal_code: '94539',

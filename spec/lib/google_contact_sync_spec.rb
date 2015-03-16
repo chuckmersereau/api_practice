@@ -304,6 +304,7 @@ describe GoogleContactSync do
   describe 'sync addresses' do
     it 'combines addresses from mpdx and google by master address comparison which uses SmartyStreets' do
       WebMock.reset!
+      Geocoder.should_receive(:coordinates).at_least(:once)
 
       richmond_smarty = '[{"input_index":0,"candidate_index":0,"delivery_line_1":"7229 Forest Ave Ste 208","last_line":"Richmond VA 23226-3765",'\
         '"delivery_point_barcode":"232263765581","components":{"primary_number":"7229","street_name":"Forest","street_suffix":"Ave","secondary_number":"208",'\

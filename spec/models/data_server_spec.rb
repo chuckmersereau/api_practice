@@ -275,12 +275,14 @@ describe DataServer do
     end
 
     it 'creates a new contact' do
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         @data_server.send(:add_or_update_donor_account, line, profile)
       end.to change(Contact, :count)
     end
 
     it "doesn't add duplicate addresses with standard country name, just one correct address" do
+      Geocoder.should_receive(:coordinates).at_least(:once)
       line['CNTRY_DESCR'] = 'United States'
       expect do
         @data_server.send(:add_or_update_donor_account, line, profile)
@@ -308,6 +310,7 @@ describe DataServer do
     end
 
     it "doesn't add duplicate addresses with alternate country name" do
+      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         @data_server.send(:add_or_update_donor_account, line, profile)
       end.to change(Address, :count).by(2)
@@ -317,6 +320,7 @@ describe DataServer do
     end
 
     it 'sets the address as primary if the donor account has no other primary addresses' do
+      Geocoder.should_receive(:coordinates).at_least(:once)
       @data_server.send(:add_or_update_donor_account, line, profile)
       contact = account_list.contacts.first
       donor_account = contact.donor_accounts.first
@@ -325,6 +329,7 @@ describe DataServer do
     end
 
     it 'leaves existing primary address in the donor account' do
+      Geocoder.should_receive(:coordinates).at_least(:once)
       donor_account = create(:donor_account, organization: @org, account_number: '17083')
       prior_address = create(:address, primary_mailing_address: true)
       donor_account.addresses << prior_address
