@@ -8,7 +8,7 @@ module ApplicationHelper
     else
       prompt = _('Add another Account') unless "Person::#{provider.camelcase}Account".constantize.one_per_user?
     end
-    link_to(prompt, "/auth/#{provider}", class: 'btn btn-default btn-xs') if prompt
+    link_to(prompt, "/auth/#{provider}", class: 'btn btn-secondary btn-xs') if prompt
   end
 
   def link_to_remove_fields(f, hidden = false)

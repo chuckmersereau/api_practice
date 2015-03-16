@@ -4,16 +4,26 @@
 */
 
 @import "../bower_components/crubrand/crubrand";
+@import "jquery-ui.css.scss";
 
-body,
 html {
   height: 100%;
 }
 
 body {
-  background: image-url('splash/splash_sf.jpg');
+  min-height: 100%;
+}
+
+body {
+  background: image-url('splash/splash_sf.jpg') fixed;
   background-size: cover;
   background-position: 50% 50%;
+}
+
+.btn-xs {
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 2px;
 }
 
 img {
@@ -38,12 +48,17 @@ img {
   }
 }
 
-.well-login {
+.well-login,
+.well-splash-setup {
   background: rgba(255,255,255,.85);
   border: none;
   overflow: hidden;
   border-radius: 8px;
   margin-top: 150px;
+}
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  .well-login {margin-top: 20px;}
 }
 
 .well-login-footer {
@@ -105,12 +120,119 @@ img {
 }
 
 @media screen and (min-width: 0px) and (max-width: 480px) {
+  .loginlink {
+    margin-bottom: 10px;
+  }
+}
+
+.well-splash-setup {
+  margin-top: 10px;
+  #brand {
+  }
+}
+
+.splash-user-bar {
+  margin-top: 50px;
+  display: block;
+}
+
+$sidebarwidth: 400px;
+
+#right {
+  width: $sidebarwidth - 1px;
+  float: right;
+  margin-top: 210px;
+  background: $color-white;
+  border: 1px solid #ddd;
+  border-left: 0px;
+  border-radius: 0 8px 8px 0;
+  z-index: -1;
+}
+
+.modcontent {
+  padding: 15px 20px;
+}
+
+.continue {
+  margin-top: 20px;
+}
+
+.network_wrap {overflow: hidden;}
+
+.network_connect {
+  border-bottom: 1px solid #ddd;
+  padding: 8px 20px;
+  height: auto;
+  min-height: 55px;
+  .network_logo {
+    display: block;
+    float: left;
+    width: 135px;
+      img {
+        max-height: 30px;
+        padding-top: 4px;
+      }
+    }
+  .network_connections {
+    display: block;
+    margin-left: 135px;
+    width: auto;
+    padding-top: 0px;
+    p {
+      line-height: 1.25em;
+    }
+  }
+  .actions { float: right;}
+  .network_button {
+    display: block;
+    padding-bottom: 8px;
+    .btn {
+      padding: 4px 8px;
+    }
+  }
+ .account_single {
+   display: block;
+   background: #eee;
+   border: 1px dotted #bbb;
+   padding: 5px;
+   border-radius: 4px;
+   font-weight: bold;
+   margin: 0 8px 8px 0;
+   font-size: 11px;
+ }
+}
+#logo {
+  background: image-url("splash/logo.png") no-repeat 50% 50%;
+  background-size:126px 50px;
+  width: 126px;
+  height: 50px;
+  text-indent: -1000px;
+  overflow: hidden;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.links {
+  .section {
+    margin-right: 10px;
+    display: inline-block;
+  }
+}
+
+
+@media screen and (min-width: 0px) and (max-width: 960px) {
+  body { margin: 0; }
+  #body, .setupwrap { width: 100%; }
+}
+
+
+
+
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
   #logo { margin: 1em; }
-
   .pagewidth {width: 100%;}
-
   .headercontent { height: auto; }
   #mainwrap { margin-top: 60px; }
-
   #main h1 { margin-top: 1em; }
 }
