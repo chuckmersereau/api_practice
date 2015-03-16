@@ -331,9 +331,20 @@ div.right {
 .spacer-top {margin-top: 30px;}
 .spacer-bottom {margin-bottom: 30px;}
 
-.contacts-map-markers>span {
-  white-space: nowrap;
-  margin-right: 6px;
+.contacts-map-markers {
+  margin-top: 8px;
+  > span {
+    white-space: nowrap;
+    margin-right: 6px;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: 13px;
+    img {
+      vertical-align: middle;
+      display: inline-block;
+      height: 25px;
+    }
+  }
 }
 
 .btn {
