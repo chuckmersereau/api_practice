@@ -3,22 +3,22 @@
     <li><span class="sort_title menu_item">Sort</span></li>
     <ul class="sort_options">
       <li ng-class="{'selected': filter.page === 'all'}" class="option">
-        <a href="/tasks/#" class="inbox " ng-click="filter.page = 'all'">All</a>
+        <a href="/tasks/#" class="inbox " ng-click="filter.page = 'all'"><%= _('All') %></a>
       </li>
       <li ng-class="{'selected': filter.page === 'today'}" class="option">
-        <a href="#" class="inbox" ng-click="filter.page = 'today'">Today</a>
+        <a href="#" class="inbox" ng-click="filter.page = 'today'"><%= _('Today') %></a>
       </li>
       <li ng-class="{'selected': filter.page === 'overdue'}" class="option">
-        <a href="#" class="inbox" ng-click="filter.page = 'overdue'">Overdue</a>
+        <a href="#" class="inbox" ng-click="filter.page = 'overdue'"><%= _('Overdue') %></a>
       </li>
       <li ng-class="{'selected': filter.page === 'upcoming'}" class="option">
-        <a href="#" class="inbox" ng-click="filter.page = 'upcoming'">Upcoming</a>
+        <a href="#" class="inbox" ng-click="filter.page = 'upcoming'"><%= _('Upcoming') %></a>
       </li>
       <li ng-class="{'selected': filter.page === 'starred'}" class="option">
-        <a href="#" class="starred" ng-click="filter.page = 'starred'">Starred</a>
+        <a href="#" class="starred" ng-click="filter.page = 'starred'"><%= _('Starred') %></a>
       </li>
       <li ng-class="{'selected': filter.page === 'history'}" class="option">
-        <a href="#" class="completed" ng-click="filter.page = 'history'">History</a>
+        <a href="#" class="completed" ng-click="filter.page = 'history'"><%= _('History') %></a>
       </li>
     </ul>
     <%= render 'sidebar_tags', tags: current_account_list.activity_tags if current_account_list.activity_tags.present? %>
@@ -98,7 +98,7 @@
           <li>
             <label id="filter_status" class="filter_title"><%= _('Contact Status') %></label>
             <div class="filter_set_inner">
-              <%= select_tag 'filters[status]', options_for_select([[_('-- Any --'), ''], [_('-- None --'), 'null'], ['Never Contacted', 'Never Contacted'], ['Ask in Future', 'Ask in Future'], ['Contact for Appointment', 'Contact for Appointment'], ['Appointment Scheduled', 'Appointment Scheduled'], ['Call for Decision', 'Call for Decision'], ['Partner - Financial', 'Partner - Financial'], ['Partner - Special', 'Partner - Special'], ['Partner - Pray', 'Partner - Pray'], ['Not Interested', 'Not Interested'], ['Unresponsive', 'Unresponsive'], ['Never Ask', 'Never Ask'], ['Research Abandoned', 'Research Abandoned'], ['Expired Referral', 'Expired Referral']] ), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactStatus' %>
+              <%= select_tag 'filters[status]', options_for_select([[_('-- Any --'), ''], [_('-- None --'), 'null'], [_('Never Contacted'), 'Never Contacted'], [_('Ask in Future'), 'Ask in Future'], [_('Contact for Appointment'), 'Contact for Appointment'], [_('Appointment Scheduled'), 'Appointment Scheduled'], [_('Call for Decision'), 'Call for Decision'], [_('Partner - Financial'), 'Partner - Financial'], [_('Partner - Special'), 'Partner - Special'], [_('Partner - Pray'), 'Partner - Pray'], [_('Not Interested'), 'Not Interested'], [_('Unresponsive'), 'Unresponsive'], [_('Never Ask'), 'Never Ask'], [_('Research Abandoned'), 'Research Abandoned'], [_('Expired Referral'), 'Expired Referral']]), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactStatus' %>
             </div>
           </li>
 

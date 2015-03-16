@@ -137,7 +137,7 @@
       <div class="clr"></div>
       <div>
         <div class="fieldset">
-          <label class="fieldset_label">People</label>
+          <label class="fieldset_label"><%= _('People') %></label>
           <% contact.people.build if contact.people.blank? %>
 
           <%= f.fields_for :people do |builder| %>

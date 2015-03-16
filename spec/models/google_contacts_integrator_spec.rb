@@ -624,8 +624,9 @@ describe GoogleContactsIntegrator do
         end
       end
 
+      expect(@account.contacts_api_user).to receive(:send_batched_requests).exactly(:twice)
       expect(times_batch_create_or_update_called).to eq(0)
-      @integrator.sync_contacts
+      @integrator.sync_and_return_num_synced
       expect(times_batch_create_or_update_called).to eq(2)
     end
 

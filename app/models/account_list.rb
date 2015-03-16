@@ -183,7 +183,6 @@ class AccountList < ActiveRecord::Base
       people_with_birthdays = people.where("(people.anniversary_month = ? AND people.anniversary_day >= ?)
                                            OR (people.anniversary_month = ? AND people.anniversary_day <= ?)",
                                            start_month, start_date.day, end_month, end_date.day)
-
     end
     people_with_birthdays.order('people.anniversary_month, people.anniversary_day').merge(contacts.active)
   end
@@ -200,10 +199,9 @@ class AccountList < ActiveRecord::Base
 
   def bottom_50_percent
     unless @bottom_50_percent
-      financial_partners_count = contacts.where('pledge_amount > 0').count
       @bottom_50_percent = contacts.where('pledge_amount > 0')
                            .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
-                           .limit(financial_partners_count / 2)
+                           .limit(contacts.where('pledge_amount > 0').count / 2)
     end
     @bottom_50_percent
   end
@@ -393,6 +391,10 @@ class AccountList < ActiveRecord::Base
     emails_with_nils.compact
   end
 
+  def sync_with_google_contacts
+    google_integrations.where(contacts_integration: true).each { |g_i| g_i.sync_data('contacts') }
+  end
+
   private
 
   def import_data
@@ -461,8 +463,7 @@ class AccountList < ActiveRecord::Base
       vars = { EMAIL: u.email.email, FNAME: u.first_name, LNAME: u.last_name,
                GROUPINGS: [{ id: APP_CONFIG['mailchimp_grouping_id'], groups: group }] }
       gb.list_subscribe(id: APP_CONFIG['mailchimp_list'], email_address: vars[:EMAIL], update_existing: true,
-                        double_optin: false, merge_vars: vars, send_welcome: false, replace_interests: false
-      )
+                        double_optin: false, merge_vars: vars, send_welcome: false, replace_interests: false)
     end
   end
 
@@ -481,8 +482,7 @@ class AccountList < ActiveRecord::Base
         groups -= [group]
         vars = { GROUPINGS: [{ id: APP_CONFIG['mailchimp_grouping_id'], groups: groups.join(', ') }] }
         gb.list_update_member(id: APP_CONFIG['mailchimp_list'], email_address: row['email'], merge_vars: vars,
-                              replace_interests: true
-        )
+                              replace_interests: true)
       end
     end
   end

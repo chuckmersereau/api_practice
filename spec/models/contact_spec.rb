@@ -485,4 +485,13 @@ describe Contact do
       expect { contact.merge_people }.to_not raise_error
     end
   end
+
+  context '#sync_with_google_contacts' do
+    it 'calls sync contacts on the google integration' do
+      create(:google_integration, contacts_integration: true, calendar_integration: false,
+                                  account_list: account_list, google_account: create(:google_account))
+      expect_any_instance_of(GoogleIntegration).to receive(:sync_data)
+      Sidekiq::Testing.inline! { contact.send(:sync_with_google_contacts) }
+    end
+  end
 end

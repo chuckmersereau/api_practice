@@ -15,7 +15,7 @@
   <div class="row small-gutter">
     <div class="col-xs-9">
       <%= builder.label :street %>
-      <%= builder.text_area :street, rows: 2, placeholder: "Street address", class: 'form-control' %>
+      <%= builder.text_area :street, rows: 2, placeholder: _('Street address'), class: 'form-control' %>
     </div>
     <div class="col-xs-3">
       <%= builder.label :location %>
@@ -26,19 +26,19 @@
     <div class="col-xs-5">
       <div class="form-group">
         <%= builder.label :city %>
-        <%= builder.text_field :city, placeholder: "City", class: 'form-control' %>
+        <%= builder.text_field :city, placeholder: _('City'), class: 'form-control' %>
       </div>
     </div>
     <div class="col-xs-4">
       <div class="form-group">
         <%= builder.label :state %>
-        <%= builder.text_field :state, placeholder: "State", class: 'form-control' %>
+        <%= builder.text_field :state, placeholder: _('State'), class: 'form-control' %>
       </div>
     </div>
     <div class="col-xs-3">
       <div class="form-group">
         <%= builder.label :postal_code %>
-        <%= builder.text_field :postal_code, placeholder: "Postal Code", class: 'form-control' %>
+        <%= builder.text_field :postal_code, placeholder: _('Postal Code'), class: 'form-control' %>
       </div>
     </div>
   </div>
@@ -54,13 +54,13 @@
     <div class="col-xs-4">
       <div class="form-group">
         <%= builder.label :region %>
-        <%= builder.text_field :region, placeholder: "Region", class: 'form-control address_region' %>
+        <%= builder.text_field :region, placeholder: _('Region'), class: 'form-control address_region' %>
       </div>
     </div>
     <div class="col-xs-3">
       <div class="form-group">
         <%= builder.label :metro_area %>
-        <%= builder.text_field :metro_area, placeholder: "Metro Area", class: 'form-control address_metro_area' %>
+        <%= builder.text_field :metro_area, placeholder: _('Metro Area'), class: 'form-control address_metro_area' %>
       </div>
     </div>
   </div>
