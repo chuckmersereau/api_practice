@@ -66,7 +66,7 @@
           <%= render 'contacts/bulk_fields', f: f %>
 
           <div class="row">
-            <div class="col-md-3 dense-checks">
+            <div class="col-md-4 dense-checks">
               <div class="checkbox">
                 <%= f.label :magazine do %>
                   <%= f.check_box :magazine %>
@@ -88,7 +88,7 @@
                 <% end %>
               </div>
             </div>
-            <div class="col-md-9">
+            <div class="col-md-8">
               <div class="form-group">
                 <%= f.label :tag_list, _('Tags') %>
                 <%= f.text_field :tag_list %>
@@ -98,7 +98,7 @@
             </div>
           </div>
           <div class="row">
-            <div class="col-md-9 col-md-offset-3 referrers_field">
+            <div class="col-md-8 col-md-offset-4 referrers_field">
               <label><%= _('Referrals') %></label>
               <% contact.contact_referrals_to_me.build if contact.contact_referrals_to_me.blank? %>
               <%= f.fields_for :contact_referrals_to_me do |builder| %>
