@@ -1353,10 +1353,16 @@ table.meta {
 .statusIcon-error {background-position: -6px -27px;}
 
 #footer {
-  padding: 20px 0 40px;
+  padding-bottom: 40px;
   margin-top: 20px;
   text-align: center;
-  border-top: 3px solid $color-gray-light;
+  .footer-border {
+    border-top:3px solid $color-gray-light;
+    margin-bottom: 20px;
+    display: block;
+    width: 100%;
+    height: 1px;
+  }
   img {
     display: inline-block;
   }
