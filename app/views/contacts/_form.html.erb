@@ -143,8 +143,10 @@
           <%= f.fields_for :people do |builder| %>
             <div class="field radiocheck primary_select">
                 <div class="selector">
-                  <%= f.radio_button :primary_person_id, builder.object.id %>
-                  <%= f.label :primary_person_id, _('Primary Contact') %>
+                  <label>
+                    <%= f.radio_button :primary_person_id, builder.object.id %>
+                    <%= _('Primary Contact') %>
+                  </label>
                 </div>
             </div>
 

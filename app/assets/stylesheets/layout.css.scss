@@ -1219,7 +1219,7 @@ table.meta {
   .add_facebook {margin-left: 36px; .add_field:before {content: "\f082"; }}
   .add_twitter {margin-left: 56px; .add_field:before {content: "\f081"; }}
   .add_linkedin {margin-left: 76px; .add_field:before {content: "\f08c"; }}
-  .add_website { margin-left: 96px; .add_field:before {content: "\f14c";}}
+  .add_website { margin-left: 96px; .add_field:before {content: "\f0ac";}}
 }
 
 /* ************************************************************** */
@@ -1353,8 +1353,13 @@ table.meta {
 .statusIcon-error {background-position: -6px -27px;}
 
 #footer {
-  padding: 5px 10px;
+  padding: 20px 0 40px;
+  margin-top: 20px;
   text-align: center;
+  border-top: 3px solid $color-gray-light;
+  img {
+    display: inline-block;
+  }
 }
 
 /* ************************************************************** */

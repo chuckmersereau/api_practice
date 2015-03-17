@@ -185,7 +185,12 @@
         <div class="md-2">
           <div class="form-group">
             <% if builder.options[:parent_builder] && builder.options[:parent_builder].object.is_a?(Contact) %>
-              <%= link_to_remove_fields(builder) %>
+              <label>
+                <small>
+                  <%= link_to_remove_fields(builder) %>
+                  Remove this Contact
+                </small>
+              </label>
             <% end %>
           </div>
         </div>

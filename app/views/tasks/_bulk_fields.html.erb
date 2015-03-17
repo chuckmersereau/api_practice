@@ -22,7 +22,7 @@
   <%= f.hidden_field :completed %>
   <div class="field">
     <%= f.label :start_at, _('Completed On') %>
-    <%= calendar_date_select_tag '' %>
+    <%= calendar_date_select_tag 'completed-on' %>
     <%= f.time_select :completed_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
   </div>
 
@@ -38,7 +38,7 @@
 <% else %>
   <div class="field due_date">
     <%= f.label :start_at, _('Due Date') %>
-    <%= calendar_date_select_tag '' %>
+    <%= calendar_date_select_tag 'due-date' %>
     <%= f.time_select :start_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
   </div>
 <% end %>

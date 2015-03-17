@@ -169,13 +169,23 @@
         <%= render 'notices' %>
         <%= yield %>
       </div>
-      <div id="footer">
+      <div id="footer" class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <img src="https://www.cru.org/images/cru-logo.svg" onerror="this.src='https://www.cru.org/images/cru-logo.png'; this.onerror=null;">
+            <%= link_to(image_tag(''), '') %><br/>
+            <%= link_to(_('Support/Help'), '/') %>
+            <%= link_to(_('Privacy Policy'), '/') %>
+            <br/>
+            © 2012-2015, Cru. All Rights Reserved.
+          </div>
+        </div>
         <% if session[:fullsite] == true %>
         <%= link_to(_('Visit Mobile Version'), '/mobile/') %>
         <% end %>
       </div>
     </div>
-    <div id="feedback">
+    <div id="feedback" style="display: none;">
       <h2><%= _('Need Help?') %></h2>
       <p><%== _("Check out %{help_site} for training videos and FAQs. If you can't find the answer you need there or need to report a bug, %{link}").localize %
               {link: link_to(_('click here to let us know'), new_help_request_path),
