@@ -49,6 +49,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             currentPage: 1,
             meta: {},
             loading: false,
+            order: 'completed_at DESC',
             visible: false
         }
     ];
@@ -107,9 +108,9 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             contactFilterIds = $scope.filter.contactsSelect;
         }
         api.call('get','tasks?account_list_id=' + window.current_account_list_id +
-            '&filters[completed]=false' +
             '&per_page=' + $scope.filter.tasksPerGroup +
             '&page=' + group.currentPage +
+            '&order=' + (group.order || 'start_at') +
             '&filters[starred]=' + $scope.filter.starred +
             '&filters[completed]=' + $scope.filter.completed +
             '&filters[date_range]=' + group.filter +
@@ -184,7 +185,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
 
     $scope.$watch('filter', function (f, oldf) {
         $scope.filter.starred = f.page == 'starred' ? 'true' : ''
-        $scope.filter.completed = f.page == 'history' ? 'true' : 'false'
+        $scope.filter.completed = f.page == 'history'
 
         $scope.taskGroups[0].visible = true;
         $scope.taskGroups[1].visible = true;
