@@ -201,12 +201,16 @@ class Address < ActiveRecord::Base
       end
 
       unless attributes_for_master_address[:latitude] && attributes_for_master_address[:longitude]
-        lat, long = Geocoder.coordinates([attributes_for_master_address[:street],
-                                          attributes_for_master_address[:city],
-                                          attributes_for_master_address[:state],
-                                          attributes_for_master_address[:country]].join(','))
-        attributes_for_master_address[:latitude] = lat.to_s
-        attributes_for_master_address[:longitude] = long.to_s
+        begin
+          lat, long = Geocoder.coordinates([attributes_for_master_address[:street],
+                                            attributes_for_master_address[:city],
+                                            attributes_for_master_address[:state],
+                                            attributes_for_master_address[:country]].join(','))
+          attributes_for_master_address[:latitude] = lat.to_s
+          attributes_for_master_address[:longitude] = long.to_s
+        rescue
+          # Don't blow up if Google didn't like the request... Rate limit most likely.
+        end
       end
     end
 
