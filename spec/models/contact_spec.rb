@@ -26,7 +26,6 @@ describe Contact do
       stub_request(:get, %r{https:\/\/api\.smartystreets\.com\/street-address})
         .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
         .to_return(status: 200, body: '[]', headers: {})
-      Geocoder.should_receive(:coordinates).at_least(:once)
 
       address = create(:address, addressable: contact)
       contact.addresses_attributes = [address.attributes.merge!(street: address.street + 'boo').with_indifferent_access.except(:addressable_id, :addressable_type, :updated_at, :created_at)]

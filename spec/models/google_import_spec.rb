@@ -46,7 +46,6 @@ describe GoogleImport do
 
   describe 'when importing contacts' do
     it 'matches an existing person on my list' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       person = create(:person)
       @contact.people << person
       expect do
@@ -56,7 +55,6 @@ describe GoogleImport do
     end
 
     it 'creates a new contact for someone not on my list and ignore contact without first name' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       # note the json file has a blank contact record which should be ignored, so the count changes by 1 only
       expect do
         expect do
@@ -67,7 +65,6 @@ describe GoogleImport do
     end
 
     it 'adds tags from the import' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @google_import.should_receive(:create_or_update_person).and_return(create(:person))
 
       @import.update_column(:tags, 'hi, mom')
@@ -121,7 +118,6 @@ describe GoogleImport do
     end
 
     it 'does not import a spouse if none specified' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @google_import.import
       contact = Contact.find_by_name('Google, John')
       expect(contact.people.count).to eq(1)
@@ -137,25 +133,21 @@ describe GoogleImport do
     end
 
     it 'imports a spouse with a first name and assumes same last name' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       stub_g_contacts_with_spouse('Jane')
       import_and_expect_names('Google, John and Jane', %w(John Google), %w(Jane Google))
     end
 
     it 'imports a spouse with a different last name' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       stub_g_contacts_with_spouse('Jane Smith')
       import_and_expect_names('Google, John and Jane (Smith)', %w(John Google), %w(Jane Smith))
     end
 
     it 'imports a spouse with a compound first name and a last name' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       stub_g_contacts_with_spouse('Mary Beth Smith')
       import_and_expect_names('Google, John and Mary Beth (Smith)', %w(John Google), ['Mary Beth', 'Smith'])
     end
 
     it 'does not import spouse or change contact name if spouse person already exists in contact' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @contact.update(name: 'Google, John')
       john = create(:person, first_name: 'John', last_name: 'Google')
       jane = create(:person, first_name: 'Jane', last_name: 'Google', middle_name: 'Already there')
@@ -246,7 +238,6 @@ describe GoogleImport do
     end
 
     it 'imports correct person data if no people exist and be the same for repeat imports' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @google_import.import
       check_imported_data
 
@@ -269,7 +260,6 @@ describe GoogleImport do
         street: '1 Way', city: 'Town', state: 'IL', postal_code: '22222',
         country: 'United States', location: 'Home', primary_mailing_address: true
       }]
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @contact.save
       @person = build(:person, last_name: 'Google')
       @person.email_address = { email: 'existing_primary@example.com', primary: true }
@@ -334,7 +324,6 @@ describe GoogleImport do
     end
 
     it 'updates fields if set to override' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @import.override = true
       @google_import.import
       @existing_person.reload
@@ -353,7 +342,6 @@ describe GoogleImport do
     end
 
     it 'does not not update fields if not set to override' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @import.override = false
       @google_import.import
       @existing_person.reload
@@ -374,7 +362,6 @@ describe GoogleImport do
     end
 
     it 'updates notes fields if they were blank even if set to not override' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @existing_contact.update notes: ''
       @existing_person.pictures.first.destroy
       @import.override = false
@@ -389,7 +376,6 @@ describe GoogleImport do
   end
 
   it "doesn't import a picture if the person has an associated facebook account" do
-    Geocoder.should_receive(:coordinates).at_least(:once)
     person = build(:person)
     @contact.people << person
     create(:facebook_account, person: person)
@@ -407,7 +393,6 @@ describe GoogleImport do
     end
 
     it 'imports a specified group' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @import.import_by_group = true
       group_url = 'http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/6'
       @import.groups = [group_url]
@@ -440,7 +425,6 @@ describe GoogleImport do
   describe 'import primary field default' do
     it "'assigns one arbitrary address/email/phone/website as primary if MPDX and Google didn't specify primary" do
       WebMock.reset!
-      Geocoder.should_receive(:coordinates).at_least(:once)
 
       stub_g_contacts('spec/fixtures/google_contacts_no_primary.json')
       stub_g_contact_photo

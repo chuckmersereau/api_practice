@@ -816,7 +816,6 @@ describe GoogleContactsIntegrator do
 
   describe 'overall first and subsequent sync for modifed contact info' do
     it 'combines MPDX & Google data on first sync then propagates updates of email/phone/address on subsequent syncs' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       setup_first_sync_data
       expect_first_sync_api_put
       @integrator.sync_contacts

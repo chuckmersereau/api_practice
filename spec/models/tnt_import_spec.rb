@@ -44,14 +44,12 @@ describe TntImport do
 
     it 'imports and merges existing contacts by donor accounts if set to override' do
       @import.update_column(:override, true)
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @tnt_import.send(:import_contacts)
       expect(Contact.all.count).to eq(1)
     end
 
     it 'imports and merges existing contacts by donor accounts if not set to override' do
       @import.update_column(:override, false)
-      Geocoder.should_receive(:coordinates).at_least(:once)
       @tnt_import.send(:import_contacts)
       expect(Contact.all.count).to eq(1)
     end
@@ -59,7 +57,6 @@ describe TntImport do
 
   context '#import_contacts' do
     it 'associates referrals and imports no_appeals field' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
       import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
       expect do
@@ -83,7 +80,6 @@ describe TntImport do
       it 'updates an existing contact' do
         import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
         import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
-        Geocoder.should_receive(:coordinates).at_least(:once)
         expect do
           import.send(:import_contacts)
         end.to change { contact.reload.status }.from('Ask in Future').to('Partner - Pray')
@@ -112,14 +108,12 @@ describe TntImport do
         end
 
         it 'changes the primary address of an existing contact' do
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import_with_addresses
           expect(@address.reload.primary_mailing_address).to be_false
         end
 
         it 'does not change the primary address of an existing contact if not override' do
           tnt_import.update_column(:override, false)
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import_with_addresses
           expect(@address.reload.primary_mailing_address).to be_true
         end
@@ -139,20 +133,17 @@ describe TntImport do
 
         it 'changes the primary email of an existing contact if override' do
           tnt_import.update_column(:override, true)
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
           expect(@email_before_import.reload.primary).to be_false
         end
 
         it 'does not change the primary email of an existing contact if not override' do
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
           expect(@email_before_import.reload.primary).to be_true
         end
 
         it 'sets the primary email if override not set and no primary was set for the person' do
           @email_before_import.update_column(:primary, false)
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
           expect(@person.email_addresses.where(primary: true).count).to eq(1)
           expect(@person.email_addresses.where(primary: true).first.email).to eq('fake2@example.com')
@@ -160,7 +151,6 @@ describe TntImport do
 
         it 'sets the primary email if override not set and no person existed' do
           @contact.destroy
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
           person = Person.find_by_first_name('Bob')
           expect(person.email_addresses.where(primary: true).count).to eq(1)
@@ -182,20 +172,17 @@ describe TntImport do
 
         it 'changes the primary phone of an existing contact if override' do
           tnt_import.update_column(:override, true)
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
           expect(@phone_before_import.reload.primary).to be_false
         end
 
         it 'does not change the primary phone of an existing contact if not override' do
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
           expect(@phone_before_import.reload.primary).to be_true
         end
 
         it 'sets the primary phone if override not set and no primary was set for the person' do
           @phone_before_import.update_column(:primary, false)
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
           expect(@person.phone_numbers.where(primary: true).count).to eq(1)
           expect(@person.phone_numbers.where(primary: true).first.number).to eq('+12223337890')
@@ -203,7 +190,6 @@ describe TntImport do
 
         it 'sets the primary phone if override not set and no person existed' do
           @contact.destroy
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
           person = Person.find_by_first_name('Bob')
           expect(person.phone_numbers.where(primary: true).count).to eq(1)
@@ -217,7 +203,6 @@ describe TntImport do
           jane = create(:person, first_name: 'Jane', last_name: 'Smith')
           contact.people << john
           contact.people << jane
-          Geocoder.should_receive(:coordinates).at_least(:once)
           import.send(:import_contacts)
 
           john_numbers = john.reload.phone_numbers.pluck(:number)
@@ -235,7 +220,6 @@ describe TntImport do
 
     it 'does not cause an error and increases contact count for case with first email not preferred' do
       row = YAML.load(File.new(Rails.root.join('spec/fixtures/tnt/tnt_row_multi_email.yaml')).read)
-      Geocoder.should_receive(:coordinates).at_least(:once)
       expect { import.send(:import_contact, row) }.to change(Contact, :count).by(1)
     end
 
@@ -243,7 +227,6 @@ describe TntImport do
       org = create(:organization)
       create(:donor_account, account_number: '413518908', organization: org, name: nil)
       create(:designation_profile, account_list: tnt_import.account_list, organization: org)
-      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         import.send(:import_contacts)
       end.to change(Contact, :count).by(2)
@@ -251,7 +234,6 @@ describe TntImport do
 
     it 'imports a contact people details even if the contact is not a donor' do
       import = TntImport.new(create(:tnt_import_non_donor))
-      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         import.send(:import_contacts)
       end.to change(Person, :count).by(1)
@@ -273,7 +255,6 @@ describe TntImport do
       account_list.save
 
       import = TntImport.new(create(:tnt_import_short_donor_code, account_list: account_list))
-      Geocoder.should_receive(:coordinates).at_least(:once)
       import.send(:import_contacts)
 
       # Should match existing contact based on the donor account with leading zeros
@@ -369,21 +350,18 @@ describe TntImport do
   context '#update_contact' do
     it 'updates notes correctly' do
       contact = Contact.new
-      Geocoder.should_receive(:coordinates).at_least(:once)
       import.send(:update_contact, contact, contact_rows.first)
       expect(contact.notes).to eq("Principal\nHas run into issues with Campus Crusade in the past...  Was told couldn't be involved because hadn't been baptized as an adult.")
     end
 
     it 'updates newsletter preferences correctly' do
       contact = Contact.new
-      Geocoder.should_receive(:coordinates).at_least(:once)
       import.send(:update_contact, contact, contact_rows.first)
       expect(contact.send_newsletter).to eq('Physical')
     end
 
     it 'sets the address region' do
       contact = Contact.new
-      Geocoder.should_receive(:coordinates).at_least(:once)
       import.send(:update_contact, contact, contact_rows.first)
       expect(contact.addresses.first.region).to eq('State College')
     end
@@ -414,21 +392,18 @@ describe TntImport do
       tnt_import.account_list.contacts << create(:contact, name: contact_rows.first['FileAs'])
       tnt_import.account_list.save
 
-      Geocoder.should_receive(:coordinates)
       expect do
         import.send(:add_or_update_donor_accounts, contact_rows.first, designation_profile)
       end.not_to change(Contact, :count)
     end
 
     it 'creates a new donor account' do
-      Geocoder.should_receive(:coordinates)
       expect do
         import.send(:add_or_update_donor_accounts, contact_rows.first, designation_profile)
       end.to change(DonorAccount, :count).by(1)
     end
 
     it 'creates a new contact' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       expect do
         import.send(:import_contacts)
       end.to change(Contact, :count).by(2)
@@ -436,7 +411,6 @@ describe TntImport do
 
     it 'creates a new contact from a non-donor' do
       import = TntImport.new(create(:tnt_import_non_donor))
-      Geocoder.should_receive(:coordinates)
       expect do
         import.send(:import_contacts)
       end.to change(Contact, :count).by(1)
@@ -444,7 +418,6 @@ describe TntImport do
 
     it "doesn't create duplicate people when importing the same list twice" do
       import = TntImport.new(create(:tnt_import_non_donor))
-      Geocoder.should_receive(:coordinates)
       import.send(:import_contacts)
 
       expect do
@@ -507,7 +480,6 @@ describe TntImport do
     end
 
     it 'associates contacts with tnt appeal ids' do
-      Geocoder.should_receive(:coordinates).at_least(:once)
       tnt_import = TntImport.new(create(:tnt_import_appeals))
       _history, contacts_by_tnt_appeal_id = tnt_import.send(:import_history,  import.send(:import_contacts))
       expect(contacts_by_tnt_appeal_id.size).to eq(1)
@@ -565,7 +537,6 @@ describe TntImport do
 
       online_org = create(:organization)
       @user.organization_accounts << create(:organization_account, organization: online_org)
-      Geocoder.should_receive(:coordinates)
       expect { @tnt_import.import  }.to_not change(Donation, :count).from(0)
 
       @user.organization_accounts.destroy_all
@@ -575,7 +546,6 @@ describe TntImport do
     end
 
     it 'imports gifts for a single offline org' do
-      Geocoder.should_receive(:coordinates)
       expect { @tnt_import.import  }.to change(Donation, :count).from(0).to(2)
       contact = Contact.first
       fields = [:donation_date, :amount, :tendered_amount, :tendered_currency]
@@ -599,7 +569,6 @@ describe TntImport do
       # Make sure it does a numeric search not an alphabetic one to find 10 as the max and not 9.
       @offline_org.donor_accounts.create(account_number: '10')
       @offline_org.donor_accounts.create(account_number: '9')
-      Geocoder.should_receive(:coordinates)
       expect { @tnt_import.import  }.to change(Donation, :count).from(0).to(2)
       Donation.all.each do |donation|
         expect(donation.donor_account.account_number).to eq('11')
@@ -607,7 +576,6 @@ describe TntImport do
     end
 
     it 'does not re-import the same gifts multiple times but adds new gifts in existing donor accounts' do
-      Geocoder.should_receive(:coordinates)
       expect { @tnt_import.import  }.to change(Donation, :count).from(0).to(2)
 
       expect(DonorAccount.first.account_number).to eq('1')
@@ -638,7 +606,6 @@ describe TntImport do
     it 'imports groups as tags' do
       account_list = build(:account_list)
       import = TntImport.new(create(:tnt_import_groups, account_list: account_list))
-      Geocoder.should_receive(:coordinates)
       import.send(:import_contacts)
 
       expect(Contact.all.count).to eq(1)
@@ -661,7 +628,6 @@ describe TntImport do
       donation = donor_account.donations.create(amount: 50, donation_date: Date.new(2005, 6, 10),
                                                 designation_account: designation_account)
 
-      Geocoder.should_receive(:coordinates)
       expect do
         tnt_import.send(:import)
       end.to change(Appeal, :count).from(0).to(1)
