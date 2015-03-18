@@ -53,12 +53,17 @@ $ ->
       # quick search for contact
       $('#contact_name').autocomplete({
         source: account_contacts_json,
-        focus:  (event, ui) ->
-          document.location = '/contacts/' + ui.item.id
         select: (event, ui) ->
           document.location = '/contacts/' + ui.item.id
           false
       })
+
+      # Redirect if one contact
+      $("form#searchform").submit (e) ->
+          e.preventDefault()
+          if $('[data-hook=contact]').length == 1
+                url = $('[data-hook=contact]').find('.ng-binding').first().attr('href')
+                document.location = url
 
       # check all feature
       $(document).on 'click', '.checkall', ->
