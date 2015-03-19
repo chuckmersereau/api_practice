@@ -58,13 +58,6 @@ $ ->
           false
       })
 
-      # Redirect if one contact
-      $("form#searchform").submit (e) ->
-          e.preventDefault()
-          if $('[data-hook=contact]').length == 1
-                url = $('[data-hook=contact]').find('.ng-binding').first().attr('href')
-                document.location = url
-
       # check all feature
       $(document).on 'click', '.checkall', ->
         $('.checks input[type=checkbox]').prop('checked', $(this).prop('checked'))
