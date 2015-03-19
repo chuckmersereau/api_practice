@@ -108,7 +108,7 @@ class GoogleContactsIntegrator
     @integration.contacts_last_synced = Time.now
 
     contacts.each(&method(:sync_contact))
-    retry_on_api_errs { api_user.send_batched_requests }
+    self.class.retry_on_api_errs { api_user.send_batched_requests }
 
     # For contacts syncs to the Google Contacts API that were either deleted or modified during the sync
     # and so caused a 404 Contact Not Found or a 412 Precondition Mismatch (i.e. ETag mismatch, i.e. contact changed),
@@ -118,7 +118,7 @@ class GoogleContactsIntegrator
     # despite re-applying the sync logic.
     @contacts_to_retry_sync.each(&:reload)
     @contacts_to_retry_sync.each(&method(:sync_contact))
-    retry_on_api_errs { api_user.send_batched_requests }
+    self.class.retry_on_api_errs { api_user.send_batched_requests }
 
     delete_g_contact_merge_losers
 
