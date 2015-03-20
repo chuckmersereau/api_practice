@@ -36,32 +36,19 @@ class ContactFilter
       end
 
       filtered_contacts = city(filtered_contacts)
-
       filtered_contacts = church(filtered_contacts)
-
       filtered_contacts = state(filtered_contacts)
-
       filtered_contacts = region(filtered_contacts)
-
       filtered_contacts = metro_area(filtered_contacts)
-
       filtered_contacts = likely(filtered_contacts)
-
       filtered_contacts = status(filtered_contacts)
-
       filtered_contacts = referrer(filtered_contacts)
-
       filtered_contacts = newsletter(filtered_contacts)
-
       filtered_contacts = contact_name(filtered_contacts)
-
       filtered_contacts = timezone(filtered_contacts)
-
       filtered_contacts = related_task_action(filtered_contacts)
-
       filtered_contacts = appeal(filtered_contacts)
       filtered_contacts = contact_type(filtered_contacts)
-
       filtered_contacts = wildcard_search(filtered_contacts)
       filtered_contacts = pledge_freq(filtered_contacts)
     end
