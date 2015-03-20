@@ -16,6 +16,14 @@ class Donation < ActiveRecord::Base
   after_create :update_totals
   before_validation :set_amount_from_tendered_amount
 
+  def localized_amount
+    amount.to_f.localize.to_currency.to_s(currency: currency)
+  end
+
+  def localized_date
+    donation_date.to_datetime.localize.to_s
+  end
+
   private
 
   def update_totals
