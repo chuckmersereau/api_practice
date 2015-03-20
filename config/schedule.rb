@@ -32,9 +32,9 @@ if @environment == 'production'
     runner "AccountList.update_linked_org_accounts"
   end
 
-#  every :day, at: '7am' do
-#    runner "MasterAddress.populate_lat_long"
-#  end
+  every :day, at: '7am' do
+    runner "MasterAddress.populate_lat_long"
+  end
 
   every :day, at: '10am' do
     rake 'organizations:fetch'
