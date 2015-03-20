@@ -60,6 +60,9 @@
 
       <% NotificationType.all.each do |notification_type| %>
         <% field_name = notification_type.class.to_s.split('::').last.to_s.underscore.to_sym %>
+        <% unless $rollout.active?(:new_notifications, current_account_list) %>
+            <% next if notification_type.type.in?(['NotificationType::LargerGift', 'NotificationType::LongTimeFrameGift', 'NotificationType::RecontinuingGift', 'NotificationType::SmallerGift']) %>
+        <% end %>
         <div class="field">
           <strong><%= f.label field_name, _(notification_type.description) %></strong>
           <%= check_box_tag "preference_set[#{field_name}][actions][]", 'email', f.object.send(field_name).include?('email') %>
