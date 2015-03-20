@@ -21,8 +21,6 @@ class GoogleContactsIntegrator
   SECS_BETWEEN_CHECK_FOR_IMPORTS_DONE = 30
   MAX_CHECKS_FOR_IMPORTS_DONE = 60
 
-  MAX_CONTACTS_TO_SYNC_CHECKS = 3
-
   def initialize(google_integration)
     @integration = google_integration
     @account = google_integration.google_account
@@ -45,35 +43,8 @@ class GoogleContactsIntegrator
   end
 
   def sync_contacts
-    # This sync_contacts method is queued when a user in MPDX modifies a contact.
-
-    # That means the imports will also queue the Google Contacts sync, but don't run the sync while an import is
-    # going (especially an import from Google) to allow the import and sync to be more efficient and have less chance
-    # of unexpected interactions
-    return if wait_for_imports_timed_out
-
-    # The contacts_to_sync will query the database for contacts that have been modified since they were last synced.
-    #
-    # However, it's possible that after editing on contact, the user will then edit another contact before the sync has
-    # finished. In that case, sidekiq would attempt to queue the contact sync job, but it would not queue the job because
-    # a sync for that integration (account list and google account basically) is already running (sidekiq_unique_jobs is the
-    # gem that would prevent a second job from being queued). That's a good thing because the sync code is designed to
-    # have only one instance of it running at a given time for a given integration.
-    #
-    # What we can do to solve this is check at the end of a sync to see if there are any more contacts that were modified
-    # since the sync began, and then at the end of that sync again, etc. until we do a check for modified contacts and find
-    # that none have been modified during the last sync in which case we can quit knowing the next modified contact
-    # will queue the sync job again. (The query to check for modified contacts runs quickly so there is only a small
-    # probability that someone could modify a contact during the query itself and anyway, that contact would just get
-    # synced after the next contact was modified).
-    #
-    # Because due to unforseen circumstances, I could imagine that turning into a wasteful infinite loop, I cut off
-    # the number of checks at a constant value.
-    contacts_to_sync_checks = 0
-    until sync_and_return_num_synced == 0 || contacts_to_sync_checks >= MAX_CONTACTS_TO_SYNC_CHECKS
-      contacts_to_sync_checks += 1
-    end
-
+    return if wait_for_imports_timed_out # Don't sync while an import is in progress
+    sync_and_return_num_synced
     cleanup_inactive_g_contacts
   rescue Person::GoogleAccount::MissingRefreshToken
     # Don't log this exception as we expect it to happen from time to time.
