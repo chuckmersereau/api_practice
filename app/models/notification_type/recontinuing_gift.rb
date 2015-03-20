@@ -10,6 +10,7 @@ class NotificationType::RecontinuingGift < NotificationType
   end
 
   def self.had_recontinuing_gift?(contact)
+    return unless contact.pledge_amount && contact.pledge_frequency
     contact.last_monthly_total >= contact.pledge_amount &&
       contact.months_from_prev_to_last_donation.present? &&
       contact.months_from_prev_to_last_donation >= (contact.pledge_frequency + MONTHS_LATE_WHEN_RECONTINUED)
