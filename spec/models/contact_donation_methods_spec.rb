@@ -95,6 +95,11 @@ describe ContactDonationMethods do
       contact.update(pledge_frequency: 12)
       expect(contact.recent_monthly_avg).to eq(9.99 * 2 / 12)
     end
+
+    it 'averages correctly even if there are multiple contact donor account records' do
+      create(:contact_donor_account, contact: contact, donor_account: donor_account)
+      expect(contact.recent_monthly_avg).to eq(9.99 / 2)
+    end
   end
 
   context '#months_from_prev_to_last_donation' do
