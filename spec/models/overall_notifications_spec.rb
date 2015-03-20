@@ -15,6 +15,7 @@ describe 'Overall notification tests' do
   let(:account_list2) { create(:account_list) }
 
   before do
+    expect($rollout).to receive(:active?).at_least(:once).with(:new_notifications, anything).and_return(true)
     [
       larger_gift, long_time_frame_gift, recontinuing_gift, smaller_gift, special_gift, started_giving, stopped_giving
     ].each do |notification_type|
