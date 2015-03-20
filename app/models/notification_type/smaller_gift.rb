@@ -8,6 +8,8 @@ class NotificationType::SmallerGift < NotificationType
   end
 
   def smaller_gift?(contact)
+    return unless contact.pledge_frequency
+    
     if contact.pledge_frequency < 1
       return contact.last_donation.present? && contact.last_donation.amount < contact.pledge_amount
     end
