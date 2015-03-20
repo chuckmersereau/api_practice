@@ -1,6 +1,9 @@
 module ContactDonationMethods
   def designated_donations
-    donations.where(designation_account_id: account_list.designation_accounts.pluck(:id))
+    # Don't use the "donations" association as that may introduce duplicates and incorrect totals
+    # if there are duplicated records in contact_donor_accounts.
+    Donation.where(donor_account_id: donor_accounts.pluck(:id),
+                   designation_account_id: account_list.designation_accounts.pluck(:id))
   end
 
   def last_donation
