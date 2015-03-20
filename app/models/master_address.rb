@@ -3,6 +3,7 @@ class MasterAddress < ActiveRecord::Base
   serialize :smarty_response, JSON
 
   def geo
+    return nil unless latitude.present? && longitude.present?
     latitude + ',' + longitude
   end
 
