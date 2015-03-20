@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150302140850) do
+ActiveRecord::Schema.define(version: 20150309205439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -496,6 +496,8 @@ ActiveRecord::Schema.define(version: 20150302140850) do
     t.text     "smarty_response"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "latitude"
+    t.string   "longitude"
   end
 
   add_index "master_addresses", ["street", "city", "state", "country", "postal_code"], name: "all_fields", using: :btree
