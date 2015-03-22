@@ -44,14 +44,13 @@
                 <%= contact_exhibit.location %>
               </div>
             <% end %>
-            <% if contact_exhibit.status.present? %>
-              <div class="contact_status">
-                <%= _('Status:') %>
-                <%= best_in_place(contact_exhibit, :status,
-                                  as: :select,
-                                  collection: contact.assignable_statuses.collect { |s| [s, _(s)] }) %>
-              </div>
-            <% end %>
+            <div class="contact_status">
+              <%= _('Status:') %>
+              <%= best_in_place(contact_exhibit, :status,
+                                as: :select,
+                                collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
+                                place_holder: _('None')) %>
+            </div>
           </div><!-- profiletop -->
 
           <div class="row">
@@ -83,7 +82,7 @@
                   <td class="meta_data">
                     <%= best_in_place(contact_exhibit, :send_newsletter,
                                       as: :select,
-                                      collection: [['','None']] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
+                                      collection: [['',_('None')]] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
                   </td>
                 </tr>
               </table>
