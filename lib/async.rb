@@ -24,6 +24,10 @@ module Async
     Sidekiq::Client.enqueue(self.class, id, method, *args)
   end
 
+  def async_to_queue(queue, method, *args)
+    Sidekiq::Client.enqueue_to(queue, self.class, id, method, *args)
+  end
+
   def lower_retry_async(method, *args)
     LowerRetryWorker.perform_async(self.class.name, id, method, *args)
   end
