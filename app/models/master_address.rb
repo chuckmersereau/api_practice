@@ -8,7 +8,7 @@ class MasterAddress < ActiveRecord::Base
   end
 
   def self.populate_lat_long
-    MasterAddress.where(latitude: nil).find_each do |ma|
+    MasterAddress.where("latitude is null or latitude = ''").find_each do |ma|
       if ma.smarty_response && ma.smarty_response[0] && ma.smarty_response[0]['metadata']
         meta = ma.smarty_response[0]['metadata']
         ma.latitude = meta['latitude'].to_s
