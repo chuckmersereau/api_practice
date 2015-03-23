@@ -13,6 +13,8 @@ describe 'Overall notification tests' do
   let!(:contact) { create(:contact, status: 'Partner - Financial', account_list: account_list) }
   let!(:donor_account) { create(:donor_account) }
   let(:account_list2) { create(:account_list) }
+  let(:weekly) { Contact.pledge_frequencies.find { |_freq, name| name == _('Weekly') }.first }
+  let(:fornightly) { Contact.pledge_frequencies.find { |_freq, name| name == _('Fortnightly') }.first }
 
   before do
     expect($rollout).to receive(:active?).at_least(:once).with(:new_notifications, anything).and_return(true)
@@ -32,27 +34,28 @@ describe 'Overall notification tests' do
   end
 
   it 'correctly creates notifications for financial partner giving patterns' do
-    weekly = Contact.pledge_frequencies.find { |_freq, name| name == _('Weekly') }.first
-    fornightly = Contact.pledge_frequencies.find { |_freq, name| name == _('Fortnightly') }.first
-
     {
-      { amounts: [11] } => [larger_gift, started_giving],
-      { amounts: [10, 11] } => [larger_gift],
-      { amounts: [10, 11, 0] } => [larger_gift],
-      { amounts: [10, 0, 0, 0] } => [stopped_giving],
-      { amounts: [10, 0, 0, 10, 20] } => [larger_gift],
-      { amounts: [9] } => [smaller_gift, started_giving],
-      { amounts: [10, 9] } => [smaller_gift],
-      { amounts: [10] } => [started_giving],
-      { amounts: [10, 10] } => [],
-      { amounts: [10, 0, 20] } => [],
-      { amounts: [10, 0, 21] } => [larger_gift],
-      { amounts: [10, 0, 0, 0, 40] } => [recontinuing_gift],
-      { amounts: [10, 0, 0, 10] } => [recontinuing_gift],
-      { amounts: [10, 0, 0, 0, 41] } => [larger_gift, recontinuing_gift],
-      { amounts: [10, 0, 0, 0, 10, 11] } => [larger_gift],
-      { amounts: [10] + Array.new(10, 0) + [20] } => [recontinuing_gift],
-      { amounts: [10] + Array.new(13, 0) + [20] } => [recontinuing_gift],
+      { pledge_frequency: nil, amounts: [] } => [],
+      { pledge_frequency: nil, amounts: [10] } => [started_giving],
+      { pledge_frequency: 1, amounts: [11] } => [larger_gift, started_giving],
+      { pledge_frequency: 1, amounts: [10, 11] } => [larger_gift],
+      { pledge_frequency: 1, amounts: [20, 10] } => [],
+      { pledge_frequency: 1, amounts: [5, 10] } => [],
+      { pledge_frequency: 1, amounts: [10, 11, 0] } => [larger_gift],
+      { pledge_frequency: 1, amounts: [10, 0, 0, 0] } => [stopped_giving],
+      { pledge_frequency: 1, amounts: [10, 0, 0, 10, 20] } => [larger_gift],
+      { pledge_frequency: 1, amounts: [9] } => [smaller_gift, started_giving],
+      { pledge_frequency: 1, amounts: [10, 9] } => [smaller_gift],
+      { pledge_frequency: 1, amounts: [10] } => [started_giving],
+      { pledge_frequency: 1, amounts: [10, 10] } => [],
+      { pledge_frequency: 1, amounts: [10, 0, 20] } => [],
+      { pledge_frequency: 1, amounts: [10, 0, 21] } => [larger_gift],
+      { pledge_frequency: 1, amounts: [10, 0, 0, 0, 40] } => [recontinuing_gift],
+      { pledge_frequency: 1, amounts: [10, 0, 0, 10] } => [recontinuing_gift],
+      { pledge_frequency: 1, amounts: [10, 0, 0, 0, 41] } => [larger_gift, recontinuing_gift],
+      { pledge_frequency: 1, amounts: [10, 0, 0, 0, 10, 11] } => [larger_gift],
+      { pledge_frequency: 1, amounts: [10] + Array.new(10, 0) + [20] } => [recontinuing_gift],
+      { pledge_frequency: 1, amounts: [10] + Array.new(13, 0) + [20] } => [recontinuing_gift],
       { pledge_frequency: weekly, amounts: [10] } => [started_giving],
       { pledge_frequency: weekly, amounts: [10, 10, 10, 10] } => [],
       { pledge_frequency: weekly, amounts: [10, 10, 200] } => [larger_gift, started_giving],
@@ -87,6 +90,7 @@ describe 'Overall notification tests' do
       { pledge_frequency: 6, amounts: [50] } => [smaller_gift, started_giving],
       { pledge_frequency: 12, amounts: [130] } => [larger_gift, started_giving],
       { pledge_frequency: 12, amounts: [120] } => [started_giving],
+      { pledge_frequency: 12, amounts: [120, 10] } => [larger_gift],
       { pledge_frequency: 12, amounts: [120] + Array.new(11, 0) + [130] } => [larger_gift],
       { pledge_frequency: 12, amounts: [120] + Array.new(11, 0) + [120] } => [long_time_frame_gift],
       { pledge_frequency: 12, amounts: [120] + Array.new(12, 0) + [110] } => [smaller_gift],
@@ -98,20 +102,8 @@ describe 'Overall notification tests' do
     }.each do |giving, notification_types|
       Donation.destroy_all
       Notification.destroy_all
-      giving[:pledge_frequency] ||= 1
-      pledge_amount = 10 * (giving[:pledge_frequency] >= 1 ? giving[:pledge_frequency] :
-          giving[:pledge_frequency] / weekly)
 
-      contact.update_columns(pledge_frequency: giving[:pledge_frequency] || 1, last_donation_date: nil,
-                             pledge_amount: pledge_amount, first_donation_date: nil, pledge_received: false)
-
-      giving[:amounts].reverse.each_with_index do |amount, i|
-        next if amount == 0
-        donation_date = giving[:pledge_frequency] < 1 ? Date.today - (7 * i) : Date.today << i
-        d = create(:donation, amount: amount, donation_date: donation_date, designation_account: da,
-                              donor_account: donor_account)
-        contact.update_donation_totals(d)
-      end
+      setup_giving_info(giving)
 
       contact.update_column(:pledge_received, true) if stopped_giving.in?(notification_types)
       contact.reload
@@ -124,6 +116,25 @@ describe 'Overall notification tests' do
 
       # It shouldn't add a notification if the contact is on a different account list with a shared designation account
       expect(NotificationType.check_all(account_list2)).to be_empty
+    end
+  end
+
+  def setup_giving_info(giving)
+    if giving[:pledge_frequency].nil?
+      pledge_amount = nil
+    else
+      pledge_amount = 10 * (giving[:pledge_frequency] >= 1 ? giving[:pledge_frequency] :
+          giving[:pledge_frequency] / weekly)
+    end
+    contact.update_columns(pledge_frequency: giving[:pledge_frequency] || 1, last_donation_date: nil,
+                           pledge_amount: pledge_amount, first_donation_date: nil, pledge_received: false)
+
+    giving[:amounts].reverse.each_with_index do |amount, i|
+      next if amount == 0
+      donation_date = (giving[:pledge_frequency] || 1) < 1 ? Date.today - (7 * i) : Date.today << i
+      d = create(:donation, amount: amount, donation_date: donation_date, designation_account: da,
+                            donor_account: donor_account)
+      contact.update_donation_totals(d)
     end
   end
 end

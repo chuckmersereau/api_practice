@@ -13,7 +13,7 @@ class NotificationType::SmallerGift < NotificationType
     if contact.pledge_frequency < 1
       return contact.last_donation.present? && contact.last_donation.amount < contact.pledge_amount
     end
-    contact.recent_monthly_avg < contact.monthly_pledge &&
+    contact.monthly_avg_with_prev_gift < contact.monthly_pledge &&
       contact.last_monthly_total > 0 && contact.last_monthly_total != contact.pledge_amount &&
       !NotificationType::RecontinuingGift.had_recontinuing_gift?(contact)
   end
