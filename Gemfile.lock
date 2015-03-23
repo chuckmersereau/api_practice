@@ -304,7 +304,7 @@ GEM
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
     locale (2.1.0)
-    lodash-rails (2.4.1)
+    lodash-rails (3.5.0)
       railties (>= 3.1)
     lumberjack (1.0.9)
     mail (2.6.3)
@@ -687,7 +687,7 @@ DEPENDENCIES
   jquery-ui-rails (~> 4.2.1)
   koala (~> 1.9.0)
   linkedin (~> 0.3.7)
-  lodash-rails
+  lodash-rails (~> 3.5.0)
   mailcatcher
   mock_redis
   momentjs-rails
