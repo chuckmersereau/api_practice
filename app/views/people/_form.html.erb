@@ -108,7 +108,7 @@
         </div>
       </div>
       <div class="row small-gutter">
-        <div class="col-md-6">
+        <div class="col-md-6 fieldset">
           <label><%= _('Email') %></label>
           <%= builder.fields_for :email_addresses do |builder| %>
             <%= render 'people/email_address_fields', builder: builder, object: person %>
@@ -141,7 +141,7 @@
         </div>
       </div>
       <div class="row small-gutter">
-        <div class="col-md-6">
+        <div class="col-md-6 fieldset">
           <label class="fieldset_label"><%= _('Phone') %></label>
           <%# person.phone_numbers.build if person.phone_numbers.blank? %>
           <%= builder.fields_for :phone_numbers do |pf| %>

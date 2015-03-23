@@ -1,4 +1,5 @@
-<div class="well sfield address_field<%= ' marked_for_destruction' if builder.object.marked_for_destruction? %>" data-behavior="field-wrapper">
+<div class="well sfield address_field rs <%= 'marked_for_destruction' if builder.object.marked_for_destruction? %>"
+     data-behavior="field-wrapper">
   <%= builder.hidden_field :user_changed, value: true %>
   <% if builder.object.remote_id.present? %>
     <div class="row small-gutter">
