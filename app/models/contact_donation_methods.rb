@@ -38,10 +38,10 @@ module ContactDonationMethods
 
   def monthly_avg_over_range(start_date, end_date)
     designated_donations
-        .where('donation_date >= ?', start_date)
-        .where('donation_date <= ?', end_date)
-        .sum(:amount) /
-        months_in_range(start_date, end_date)
+      .where('donation_date >= ?', start_date)
+      .where('donation_date <= ?', end_date)
+      .sum(:amount) /
+      months_in_range(start_date, end_date)
   end
 
   def last_donation_month_end

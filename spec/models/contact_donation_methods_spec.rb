@@ -87,7 +87,10 @@ describe ContactDonationMethods do
   end
 
   context '#current_monthly_avg' do
-
+    it 'looks at the current donation only including the previous gift' do
+      old_donation.update(amount: 3)
+      expect(contact.monthly_avg_current).to eq(9.99)
+    end
   end
 
   context '#recent_monthly_avg' do
