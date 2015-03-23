@@ -26,7 +26,7 @@ module ContactDonationMethods
   end
 
   def monthly_avg_with_prev_gift
-    monthly_avg_over_range(prev_donation_range_start, last_donation_month_end)
+    monthly_avg_over_range(prev_donation_month_start, last_donation_month_end)
   end
 
   def months_from_prev_to_last_donation
@@ -53,12 +53,12 @@ module ContactDonationMethods
         end
   end
 
-  def prev_donation_range_start
+  def prev_donation_month_start
     @recent_avg_range_start ||= begin
       start = [first_donation_date, Date.today << 12, prev_month_donation_date].compact.max
       months_in_range_mod_freq = months_in_range(start, last_donation_month_end) % pledge_frequency
       start <<= pledge_frequency - months_in_range_mod_freq if months_in_range_mod_freq > 0
-      start
+      start.beginning_of_month
     end
   end
 

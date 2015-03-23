@@ -107,6 +107,13 @@ describe ContactDonationMethods do
       create(:contact_donor_account, contact: contact, donor_account: donor_account)
       expect(contact.monthly_avg_with_prev_gift).to eq(9.99 / 2)
     end
+
+    it 'averages including all donations in the previous donation month' do
+      old_donation.update(donation_date: old_donation.donation_date.end_of_month)
+      create(:donation, donor_account: donor_account, designation_account: da,
+                        donation_date: old_donation.donation_date.beginning_of_month)
+      expect(contact.monthly_avg_with_prev_gift).to eq(9.99 * 3 / 4)
+    end
   end
 
   context '#months_from_prev_to_last_donation' do
