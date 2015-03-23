@@ -131,6 +131,13 @@
               <%= select_tag 'filters[timezone]', options_for_select([[_('-- Any --'), '']] + current_account_list.timezones.select(&:present?)), multiple: true, size: 5, :'ng-model' => 'filter.contactTimezone' %>
             </div>
           </li>
+          <li>
+            <label id="filter_pledge_frequencies"><%= _('Contact Commitment Frequency') %></label>
+            <div class="collapse" style="display:none;">
+              <%= select_tag 'filters[pledge_frequencies]', options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a),
+                             multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'filter.contactPledgeFrequencies' %>
+            </div>
+          </li>
           <% end %>
           <li class="controls">
             <% if params[:action] == 'history' %>
