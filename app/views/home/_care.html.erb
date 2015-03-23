@@ -1,92 +1,108 @@
-<h2><%= _('Week of %{date1} to %{date2}').localize % {date1: l(Date.today.beginning_of_week), date2: l(Date.today.end_of_week)} %></h2>
+<h3><%= _('Week of %{date1} to %{date2}').localize % {date1: l(Date.today.beginning_of_week), date2: l(Date.today.end_of_week)} %></h3>
+
 <% people_with_birthdays = current_account_list.people_with_birthdays(Time.now.beginning_of_week, Time.now.end_of_week) %>
 <% if people_with_birthdays.present? %>
-  <h3><%= _('Birthdays') %></h3>
-  <ul class="list birthdays">
-    <% people_with_birthdays.each do |person|
-      person_exhibit = exhibit(person, self) %>
-      <li>
-        <strong><%= link_to(person_exhibit, person) %></strong>: <%= l(Date.new(Time.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
-        <% if person.primary_phone_number %> - <%= exhibit(person.primary_phone_number) %> <% end %>
-        <% if person.primary_email_address %> - <%= mail_to(person.primary_email_address) %> <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
-<% people_with_anniversaries = current_account_list.people_with_anniversaries(Time.now.beginning_of_week, Time.now.end_of_week) %>
-<% if people_with_anniversaries.present? %>
-  <h3><%= _('Anniversaries') %></h3>
-  <ul class="list anniversaries">
-    <% people_with_anniversaries.each do |person|
-      person_exhibit = exhibit(person, self) %>
-      <li>
-        <strong><%= link_to(person_exhibit, person) %></strong>: <%= l(Date.new(Time.now.year, person.anniversary_month, person.anniversary_day), format: 'MMM-d') %>
-        <% if person.primary_phone_number %> - <%= exhibit(person.primary_phone_number) %> <% end %>
-        <% if person.primary_email_address %> - <%= mail_to(person.primary_email_address) %> <% end %>
-      </li>
-    <% end %>
-  </ul>
-<% end %>
-<div>
-  <div style="float:left;width:48%">
-    <% no_call = current_account_list.no_activity_since(6.months.ago, current_account_list.top_50_percent, 'Call') %>
-    <% if no_call.present? %>
-      <h3><%= _(' It has been more than 6 months since you have called these important financial partners.') %></h3>
-      <table class="list top_50_no_call socstatus">
-        <% no_call.collect {|c| exhibit(c, self)}.sort_by(&:to_s).each do |contact| %>
-          <tr>
-            <td>
-              <%= link_to(contact, contact) %>
-              &nbsp;&nbsp;
-            </td>
-            <td><%= link_to(_('Add Task'), new_task_path(contact_id: contact.id, activity_type: 'Call'), class: "add_task", remote: true) %></td>
-          </tr>
+<div class="row spacer-top">
+  <div class="col-md-12">
+
+      <h4><%= _('Birthdays') %></h4>
+      <ul class="list birthdays">
+        <% people_with_birthdays.each do |person|
+          person_exhibit = exhibit(person, self) %>
+          <li>
+            <strong><%= link_to(person_exhibit, person) %></strong>: <%= l(Date.new(Time.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
+            <% if person.primary_phone_number %> - <%= exhibit(person.primary_phone_number) %> <% end %>
+            <% if person.primary_email_address %> - <%= mail_to(person.primary_email_address) %> <% end %>
+          </li>
         <% end %>
-      </table>
-    <% end %>
-  </div>
-  <div style="float:left;width:48%">
-    <% no_thank = current_account_list.no_activity_since(1.year.ago, current_account_list.bottom_50_percent, 'Thank') %>
-    <% if no_thank.present? %>
-      <h3><%= _('It has been more than a year since you have thanked these important financial partners.') %></h3>
-      <table class="list top_50_no_call socstatus">
-        <% no_thank.collect {|c| exhibit(c, self)}.sort_by(&:to_s).each do |contact| %>
-          <tr>
-            <td nowrap="nowrap">
-              <%= link_to(contact, contact) %>
-              &nbsp;&nbsp;
-            </td>
-            <td>
-              <%= link_to(_('Add Task'), new_task_path(contact_id: contact.id, activity_type: 'Thank'), class: "add_task", remote: true) %>
-            </td>
-          </tr>
-        <% end %>
-      </table>
-    <% end %>
+      </ul>
   </div>
 </div>
-<div class="clr"></div>
-<br />
-<h3><%= _('Top Partners') %></h3>
-<div id="top5-mp">
-  <ul class="list socstatus">
-    <% current_account_list.top_partners.each do |contact| %>
-      <li>
-        <!-- <div class="profile_close"><%= link_to("Close", "Close", :class=> "corner_close") %></div> -->
-        <div class="profile_content">
-          <%== _('%{link} has given %{total} since %{since}').localize %
-                    {link: ('<span class="name">' + link_to(contact.name, contact, :class => "profile_name") + '</span>').html_safe,
-                     total: ('<span class="hl amt">' + number_to_current_currency(contact.total_donations) + '</span>').html_safe,
-                     since: ('<span class="hl date">' + (contact.first_donation_date ? l(contact.first_donation_date) : '') + '</span>').html_safe } %>
-          <p class="desc"></p>
-          <!-- <ul class="network_tags list">
-            <li><%= link_to("Facebook","#", :class => "icos ico_fb") %></li>
-            <li><%= link_to("LinkedIn","#", :class => "icos ico_linkedin") %></li>
-            <li><%= link_to("Twitter","#", :class => "icos ico_twitter") %></li>
-            <li><%= link_to("Gmail","#", :class => "icos ico_google") %></li>
-          </ul> -->
-        </div>
-      </li>
-    <% end %>
-  </ul>
+<% end %>
+
+<% people_with_anniversaries = current_account_list.people_with_anniversaries(Time.now.beginning_of_week, Time.now.end_of_week) %>
+<% if people_with_anniversaries.present? %>
+<div class="row spacer-top">
+  <div class="col-md-12">
+      <h4><%= _('Anniversaries') %></h4>
+      <ul class="list anniversaries">
+        <% people_with_anniversaries.each do |person|
+          person_exhibit = exhibit(person, self) %>
+          <li>
+            <strong><%= link_to(person_exhibit, person) %></strong>: <%= l(Date.new(Time.now.year, person.anniversary_month, person.anniversary_day), format: 'MMM-d') %>
+            <% if person.primary_phone_number %> - <%= exhibit(person.primary_phone_number) %> <% end %>
+            <% if person.primary_email_address %> - <%= mail_to(person.primary_email_address) %> <% end %>
+          </li>
+        <% end %>
+      </ul>
+  </div>
+</div>
+<% end %>
+
+<div class="row spacer-top">
+  <% no_call = current_account_list.no_activity_since(6.months.ago, current_account_list.top_50_percent, 'Call') %>
+  <% if no_call.present? %>
+  <div class="col-md-6">
+    <h4><%= _(' It has been more than 6 months since you have called these important financial partners.') %></h4>
+    <table class="list top_50_no_call socstatus">
+      <% no_call.collect {|c| exhibit(c, self)}.sort_by(&:to_s).each do |contact| %>
+        <tr>
+          <td>
+            <%= link_to(contact, contact) %>
+            &nbsp;&nbsp;
+          </td>
+          <td><%= link_to(_('Add Task'), new_task_path(contact_id: contact.id, activity_type: 'Call'), class: "add_task", remote: true) %></td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+  <% end %>
+
+  <% no_thank = current_account_list.no_activity_since(1.year.ago, current_account_list.bottom_50_percent, 'Thank') %>
+  <% if no_thank.present? %>
+  <div class="col-md-6">
+    <h4><%= _('It has been more than a year since you have thanked these important financial partners.') %></h4>
+    <table class="list top_50_no_call socstatus">
+      <% no_thank.collect {|c| exhibit(c, self)}.sort_by(&:to_s).each do |contact| %>
+        <tr>
+          <td nowrap="nowrap">
+            <%= link_to(contact, contact) %>
+            &nbsp;&nbsp;
+          </td>
+          <td>
+            <%= link_to(_('Add Task'), new_task_path(contact_id: contact.id, activity_type: 'Thank'), class: "add_task", remote: true) %>
+          </td>
+        </tr>
+      <% end %>
+    </table>
+  </div>
+  <% end %>
+</div>
+
+<div class="row spacer-top">
+  <div class="col-md-12">
+    <h4><%= _('Top Partners') %></h4>
+    <div id="top5-mp">
+      <ul class="list socstatus">
+        <% current_account_list.top_partners.each do |contact| %>
+          <li>
+            <!-- <div class="profile_close"><%= link_to("Close", "Close", :class=> "corner_close") %></div> -->
+            <div class="profile_content">
+              <%== _('%{link} has given %{total} since %{since}').localize %
+                        {link: ('<span class="name">' + link_to(contact.name, contact, :class => "profile_name") + '</span>').html_safe,
+                         total: ('<span class="hl amt">' + number_to_current_currency(contact.total_donations) + '</span>').html_safe,
+                         since: ('<span class="hl date">' + (contact.first_donation_date ? l(contact.first_donation_date) : '') + '</span>').html_safe } %>
+              <p class="desc"></p>
+              <!-- <ul class="network_tags list">
+                <li><%= link_to("Facebook","#", :class => "icos ico_fb") %></li>
+                <li><%= link_to("LinkedIn","#", :class => "icos ico_linkedin") %></li>
+                <li><%= link_to("Twitter","#", :class => "icos ico_twitter") %></li>
+                <li><%= link_to("Gmail","#", :class => "icos ico_google") %></li>
+              </ul> -->
+            </div>
+          </li>
+        <% end %>
+      </ul>
+    </div>
+  </div>
 </div>

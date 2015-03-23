@@ -16,7 +16,7 @@ p:last-child {margin-bottom: 0;}
 
 #global {
   #mainmenu {
-    font-size: 18px; 
+    font-size: 18px;
     .active a {
       color: $color-white;
     }
@@ -106,18 +106,6 @@ address {
   color: $white;
   font-weight: bold;
   font-size: 15px;
-}
-
-.comment_status {
-  font-size: 11px;
-  line-height: 1.5em;
-  margin-left: 4px;
-  :before {
-    color: $gray_dark;
-    font: 15px FontAwesome;
-    content: "\f0e6";
-    padding-right: 4px;
-  }
 }
 
 .translation_missing {

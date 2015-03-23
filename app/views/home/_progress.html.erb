@@ -1,131 +1,129 @@
-<div>
-  <div style="float:left"><%= link_to(_('<< Previous Week'), progress_home_path(start_date: @start_date - 1.week), remote: true, class: 'no-new-tab') %></div>
+<div class="row spacer-bottom">
+  <div class="text-left col-md-6"><%= link_to(_('<< Previous Week'), progress_home_path(start_date: @start_date - 1.week), remote: true, class: 'no-new-tab') %></div>
   <% unless @end_date >= Date.today %>
-    <div style="float:right"><%= link_to(_('Next Week >>'), progress_home_path(start_date: @start_date + 1.week), remote: true, class: 'no-new-tab') %></div>
+    <div class="text-right col-md-6"><%= link_to(_('Next Week >>'), progress_home_path(start_date: @start_date + 1.week), remote: true, class: 'no-new-tab') %></div>
   <% end %>
 </div>
-<div class="clr"></div>
+
 <h2><%= _('Week of %{date1} to %{date2}').localize % {date1: l(@start_date.to_date), date2: l(@end_date.to_date)} %></h2>
 <% if current_user.organization_accounts.detect {|oa| oa.organization_id == 48} %>
   <%= link_to('Click here to go to the weekly report form for coaches', 'https://staffweb.cru.org/mpd-donations/reports/mpd-weekly-update/index.htm', target: '_blank') %>
-  <br /><br />
 <% end %>
 
-<div class="progress-category">
-  <i class="fa fa-mobile" style="margin-top: -8px; font-size: 6em;"></i>
-  <h3><%= _('Phone Dials:') %></h3>
-  <span class="progress-category-stat">
-    <span><%= @counts[:phone][:completed] + @counts[:phone][:attempted] %></span>
-    <%= _('Outgoing Dials') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:phone][:completed] + @counts[:phone][:received] %></span>
-    <%= _('Talked To') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:phone][:appointments] %></span>
-    <%= _('Resulted in Appointments') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:phone][:talktoinperson] %></span>
-    <%= _('Talked To In Person') %>
-  </span>
-  <ul>
-    <li>
-      <%= _('Completed:') %>
-      <%= @counts[:phone][:completed] %>
-    </li>
-    <li>
-      <%= _('Attempted:') %>
-      <%= @counts[:phone][:attempted] %>
-    </li>
-    <li>
-      <%= _('Received:') %>
-      <%= @counts[:phone][:received] %>
-    </li>
-  </ul>
+<div class="row">
+  <div class="progress-category col-md-6">
+    <h3><i class="fa fa-mobile"></i> <%= _('Phone Dials:') %></h3>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:phone][:completed] + @counts[:phone][:attempted] %></span>
+      <small><%= _('Outgoing Dials') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:phone][:completed] + @counts[:phone][:received] %></span>
+      <small><%= _('Talked To') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:phone][:appointments] %></span>
+      <small><%= _('Resulted in Appointments') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:phone][:talktoinperson] %></span>
+      <small><%= _('Talked To In Person') %></small>
+    </span>
+    <ul>
+      <li>
+        <%= _('Completed:') %>
+        <%= @counts[:phone][:completed] %>
+      </li>
+      <li>
+        <%= _('Attempted:') %>
+        <%= @counts[:phone][:attempted] %>
+      </li>
+      <li>
+        <%= _('Received:') %>
+        <%= @counts[:phone][:received] %>
+      </li>
+    </ul>
+  </div>
+  <div class="progress-category col-md-6">
+    <h3><i class="fa fa-laptop"></i> <%= _('Electronic Contacts') %></h3>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:electronic][:sent] %></span>
+      <small><%= _('Sent') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:electronic][:received] %></span>
+      <small><%= _('Received') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:electronic][:appointments] %></span>
+      <small><%= _('Resulted in Appointments') %></small>
+    </span>
+    <ul>
+      <li>
+        <%= _('Email:') %>
+        <%= @counts[:email][:sent] %>
+        <%= _('Sent') %> /
+        <%= @counts[:email][:received] %>
+        <%= _('Received') %>
+      </li>
+      <li>
+        <%= _('Facebook:') %>
+        <%= @counts[:facebook][:sent] %>
+        <%= _('Sent') %> /
+        <%= @counts[:facebook][:received] %>
+        <%= _('Received') %>
+      </li>
+      <li>
+        <%= _('Text Message:') %>
+        <%= @counts[:text_message][:sent] %>
+        <%= _('Sent') %> /
+        <%= @counts[:text_message][:received] %>
+        <%= _('Received') %>
+      </li>
+    </ul>
+  </div>
 </div>
 
-<div class="progress-category">
-  <i class="fa fa-laptop" style="margin-top: -5px;"></i>
-  <h3><%= _('Electronic Contacts') %></h3>
-  <span class="progress-category-stat">
-    <span><%= @counts[:electronic][:sent] %></span>
-    <%= _('Sent') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:electronic][:received] %></span>
-    <%= _('Received') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:electronic][:appointments] %></span>
-    <%= _('Resulted in Appointments') %>
-  </span>
-  <ul>
-    <li>
-      <%= _('Email:') %>
-      <%= @counts[:email][:sent] %>
-      <%= _('Sent') %> /
-      <%= @counts[:email][:received] %>
-      <%= _('Received') %>
-    </li>
-    <li>
-      <%= _('Facebook:') %>
-      <%= @counts[:facebook][:sent] %>
-      <%= _('Sent') %> /
-      <%= @counts[:facebook][:received] %>
-      <%= _('Received') %>
-    </li>
-    <li>
-      <%= _('Text Message:') %>
-      <%= @counts[:text_message][:sent] %>
-      <%= _('Sent') %> /
-      <%= @counts[:text_message][:received] %>
-      <%= _('Received') %>
-    </li>
-  </ul>
+<div class="row">
+  <div class="progress-category col-md-6">
+    <h3><i class="fa fa-group"></i> <%= _('Appointments') %></h3>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:appointments][:completed] %></span>
+      <small><%= _('Completed') %></small>
+    </span>
+    <ul></ul>
+  </div>
+  <div class="progress-category col-md-6">
+    <h3><i class="fa fa-envelope"></i> <%= _('Correspondence') %></h3>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:correspondence][:precall] %></span>
+      <small><%= _('Pre-call Letters') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:correspondence][:support_letters] %></span>
+      <small><%= _('Support Letters') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:correspondence][:thank_yous] %></span>
+      <small><%= _('Thank You Notes') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:correspondence][:reminders] %></span>
+      <small><%= _('Reminder Letters') %></small>
+    </span>
+  </div>
 </div>
 
-<div class="progress-category">
-  <i class="fa fa-group" style="margin-top: -2px; font-size: 3.5em;"></i>
-  <h3><%= _('Appointments') %></h3>
-  <span class="progress-category-stat">
-    <span><%= @counts[:appointments][:completed] %></span>
-    <%= _('Completed') %>
-  </span>
-  <ul></ul>
-</div>
-
-<div class="progress-category">
-  <i class="fa fa-envelope" style="margin-top: -4px;"></i>
-  <h3><%= _('Correspondence') %></h3>
-  <span class="progress-category-stat">
-    <span><%= @counts[:correspondence][:precall] %></span>
-    <%= _('Pre-call Letters') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:correspondence][:support_letters] %></span>
-    <%= _('Support Letters') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:correspondence][:thank_yous] %></span>
-    <%= _('Thank You Notes') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:correspondence][:reminders] %></span>
-    <%= _('Reminder Letters') %>
-  </span>
-</div>
-
-<div class="progress-category">
-  <i class="fa fa-child" style="font-size: 4.5em;"></i>
-  <h3><%= _('Contacts') %></h3>
-  <span class="progress-category-stat tip" title="<%= _('Always current. Contacts with status: Never Contacted, Contact for Appointment, or none.') %>">
-    <span><%= @counts[:contacts][:active] %></span>
-    <%= _('Active Contacts') %>
-  </span>
-  <span class="progress-category-stat">
-    <span><%= @counts[:contacts][:referrals] %></span>
-    <%= _('Referrals Gained') %>
-  </span>
+<div class="row">
+  <div class="progress-category col-md-6">
+    <h3><i class="fa fa-child"></i> <%= _('Contacts') %></h3>
+    <span class="progress-category-stat tip" title="<%= _('Always current. Contacts with status: Never Contacted, Contact for Appointment, or none.') %>">
+      <span class="count"><%= @counts[:contacts][:active] %></span>
+      <small><%= _('Active Contacts') %></small>
+    </span>
+    <span class="progress-category-stat">
+      <span class="count"><%= @counts[:contacts][:referrals] %></span>
+      <small><%= _('Referrals Gained') %></small>
+    </span>
+  </div>
 </div>

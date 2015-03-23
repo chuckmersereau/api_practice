@@ -84,21 +84,23 @@
                 <i class="fa fa-comments-o fa-lg pull-left"></i>
 
                 <div class="body">
-                    <strong>{{getPerson(getComment(comment).person_id).name}}</strong>
+                    <span class="comment-person">{{getPerson(getComment(comment).person_id).name}}</strong>
+                    at
+                    <span class="comment-time">{{getComment(comment).created_at | date:'MM/dd/yyyy, h:mma'}}</span>
                     <p ng-bind="getComment(comment).body"></p>
                 </div>
-                <span class="time">{{getComment(comment).created_at | date:'MM/dd/yyyy, h:mma'}}</span>
+
             </div>
         </div>
 
         <div class="comment_form">
             <form ng-submit="postNewComment()">
                 <div style="margin:0;padding:0;display:inline"></div>
-                <textarea ng-model="postNewCommentMsg"></textarea>
-
-                <div class="buttons">
-                    <button class="btn smallbtn">Add Comment</button>
+                <div class="form-group">
+                    <textarea ng-model="postNewCommentMsg" class="form-control"></textarea>
                 </div>
+
+                <button class="btn btn-sm btn-secondary">Add Comment</button>
             </form>
         </div>
     </div>
