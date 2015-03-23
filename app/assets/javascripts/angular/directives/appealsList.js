@@ -22,7 +22,7 @@ angular.module('mpdxApp')
                             $scope.checkedContacts = {};
                             $scope.taskTypes = window.railsConstants.task.ACTIONS;
 
-                            api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
+                            api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.tag_list,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
                                 $scope.contacts = data.contacts;
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
@@ -120,6 +120,40 @@ angular.module('mpdxApp')
 
                                 postTask();
                             };
+
+                          $scope.createTag = function(newTag, inputContactsObject){
+                            var contactsObject = _.keys(_.pick(inputContactsObject, function(val){
+                              return val;
+                            }));
+
+                            if(!contactsObject.length){
+                              alert('You must check at least one contact.');
+                              return;
+                            }
+
+                            $scope.creatingTag = true;
+                            var updateContact = function(){
+                              if(_.isEmpty(contactsObject)){
+                                alert('Contact(s) updated.');
+                                $scope.newTag = '';
+                                $scope.creatingTag = false;
+                                return;
+                              }
+                              var tagList = _.find($scope.contacts, { 'id': Number(contactsObject[0]) }).tag_list;
+                              tagList.push(newTag);
+                              tagList = tagList.join();
+                              api.call('put', 'contacts/'+contactsObject[0]+'?account_list_id=' + window.current_account_list_id, {
+                                contact: {
+                                  tag_list: tagList
+                                }
+                              }, function(){
+                                contactsObject.shift();
+                                updateContact();
+                              });
+                            };
+
+                            updateContact();
+                          };
 
                             $scope.selectAll = function(type){
                                 if(type === 'all'){
