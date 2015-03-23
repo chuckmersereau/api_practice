@@ -170,11 +170,11 @@
       <div id="contentbody" class="withleft">
         <div class="page-filters">
           <div class="row">
-            <div class="col-md-4 form-inline">
+            <div class="col-md-5 form-inline">
               <input autocomplete="off" class="search_filter ui-autocomplete-input form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="contactQuery.name" size="40">
               <span ng-show="contactsLoading"><i class="fa fa-spinner fa-spin"></i></span>
             </div>
-            <div class="col-md-5 col-md-offset-3 text-right">
+            <div class="col-md-5 col-md-offset-2 text-right">
 
               <div class="dropdown">
                 <%= link_to(_('Actions <span class="caret"></span>'), "#", class: "btn btn-default dropdown-toggle", type: "button", id: "action-drop", :'data-toggle' => "dropdown", "aria-expanded" => "true", "data-disabled" => "true") %>

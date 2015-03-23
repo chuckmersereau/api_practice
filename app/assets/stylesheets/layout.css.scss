@@ -110,7 +110,8 @@ $userheight: 72px;
   .logo {
     width: 123px;
     height: 48px;
-    margin-top: 13px;
+    margin-top: 9px;
+    margin-bottom: 6px;
     text-indent: -1000px;
     display: block;
   }
@@ -942,6 +943,7 @@ tbody.tasks {
 .comments {
   width: 400px;
   margin-bottom: 0px;
+  margin-top: 6px;
   border-radius: 5px;
   > * {background: $blue_comments;}
   header {background: image-url("comment_head.png") no-repeat -1px 0; height: 7px;}
@@ -953,32 +955,40 @@ tbody.tasks {
     .body p {
       white-space: pre-wrap;
     }
+    .comment-icon {
+      margin-top: 5px;
+    }
+    .comment-meta {
+      font-weight: 600;
+    }
   }
   .comment:hover .corner_close {display: block;}
   .comment:last-child {border-bottom: none;}
   .comment_form {
-  padding: 8px 10px;
-  textarea {
-    resize: none;
-    width: 370px;
-    margin: 0;
-    height: 32px;
-    padding: 5px;
+    padding: 8px 10px;
+    textarea {
+      resize: none;
+      width: 370px;
+      margin: 0;
+      height: 32px;
+      padding: 5px;
+    }
   }
- }
- /*.comment_form .buttons {display: none;}*/
 
- .comment_form.focus .buttons {display:block;}
- .comment_form.focus textarea {height: 3em;}
+  .comment_form.focus .buttons {display:block;}
+  .comment_form.focus textarea {height: 3em;}
 
- .ico {float: left;}
- .body, .time {margin-left: 40px;}
- .body {min-height: 16px;}
- .corner_close {
-   right: 6px;
-   position: absolute;
-   display: none;
- }
+  .ico {float: left;}
+  .body,
+  .time {
+    margin-left: 25px;
+  }
+  .body {min-height: 16px;}
+  .corner_close {
+    right: 6px;
+    position: absolute;
+    display: none;
+  }
 }
 
 /* ************************************************************** */
@@ -1277,6 +1287,15 @@ table.meta {
   }
 }
 
+.contact_drawer_inner {
+  background: #eee;
+  padding: 10px;
+  .contact_list {
+    border-radius: 4px;
+    margin-top: 6px;
+  }
+}
+
 .contact_list {
   @include listclear;
   height: 397px;
@@ -1563,6 +1582,11 @@ body.google_integrations_controller {
   .fav:hover {
     text-decoration: none;
     color: $color-blue-deep;
+  }
+  .tags {
+    .tag:hover {
+      color: $color-white;
+    }
   }
 }
 

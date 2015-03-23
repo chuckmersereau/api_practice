@@ -81,12 +81,14 @@
         <div id="comment_list_2">
             <div class="comment" ng-repeat="comment in task.comments">
                 <a class="corner_close" data-confirm="Are you sure?" data-method="delete" data-remote="true" data-selector=".comment" ng-href="/activity_comments/{{comment}}?activity_id={{getComment(comment).activity_id}}" rel="nofollow">delete</a>
-                <i class="fa fa-comments-o fa-lg pull-left"></i>
+                <i class="fa fa-comments-o fa-lg pull-left comment-icon"></i>
 
                 <div class="body">
-                    <span class="comment-person">{{getPerson(getComment(comment).person_id).name}}</strong>
-                    at
-                    <span class="comment-time">{{getComment(comment).created_at | date:'MM/dd/yyyy, h:mma'}}</span>
+                    <div class="comment-meta">
+                        <span class="comment-person">{{getPerson(getComment(comment).person_id).name}}</strong>
+                        at
+                        <span class="comment-time">{{getComment(comment).created_at | date:'MM/dd/yyyy, h:mma'}}</span>
+                    </div>
                     <p ng-bind="getComment(comment).body"></p>
                 </div>
 
