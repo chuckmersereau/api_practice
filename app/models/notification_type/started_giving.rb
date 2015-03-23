@@ -12,6 +12,7 @@ class NotificationType::StartedGiving < NotificationType
       # update pledge amount/received
       contact.pledge_amount = donation.amount if contact.pledge_amount.blank?
       contact.pledge_received = true if contact.pledge_amount == donation.amount
+      contact.pledge_frequency ||= 1 # default to monthly pledge if nil
       contact.save
 
       notification = contact.notifications.create!(notification_type_id: id, event_date: Date.today)
