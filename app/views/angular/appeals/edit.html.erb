@@ -43,6 +43,16 @@
                               <td><span ng-repeat="d in listDonations(c)" style="display:block;">{{d}}</span></td>
                               <td><a class="ico ico_trash" href ng-click="deleteContact(c)"><%= _('Delete') %></a></td>
                           </tr>
+                          <tr>
+                            <td></td>
+                            <td style="text-align: right;"><strong>Total:</strong> </td>
+                            <td>${{formatNumber($parent.donationTotal(appeal.donations).sum)}}</td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td style="text-align: right;"><strong>Average:</strong> </td>
+                            <td>${{formatNumber($parent.donationTotal(appeal.donations).average)}}</td>
+                          </tr>
                           <tr><td colspan="4">
                               <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
                               <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |

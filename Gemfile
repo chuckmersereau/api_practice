@@ -18,7 +18,7 @@ gem 'uglifier', '~> 2.4.0'
 gem 'jquery-ui-rails', '~> 4.2.1'
 
 gem 'angularjs-rails' # , '~> 1.2.16'
-gem 'lodash-rails' # , '~> 2.4.1'
+gem 'lodash-rails', '~> 3.5.0'
 gem 'angular-ui-bootstrap-rails'
 gem 'ngmin-rails'
 gem 'momentjs-rails'

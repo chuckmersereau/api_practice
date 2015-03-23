@@ -65,9 +65,9 @@ angular.module('mpdxApp')
                                 if(angular.isUndefined(contact) || angular.isUndefined(contact.donor_accounts)){
                                     return '-';
                                 }
-                                var contactDonorIds = _.flatten(contact.donor_accounts, 'id');
-                                var donations = _.where(appeal.donations, function(d) {
-                                    return _.contains(contactDonorIds, d.donor_account_id);
+                                var contactDonorIds = _.pluck(contact.donor_accounts, 'id');
+                                var donations = _.filter(appeal.donations, function(d) {
+                                  return _.contains(contactDonorIds, d.donor_account_id);
                                 });
 
                                 if(!donations.length){
@@ -205,15 +205,21 @@ angular.module('mpdxApp')
                 };
 
                 $scope.donationTotal = function(donations){
-                  var sum = 0;
+                  var sum = [];
                   angular.forEach(donations, function(d){
                     if(_.isNull(d.appeal_amount) || _.isEmpty(d.appeal_amount)){
-                      sum += Number(d.amount);
+                      sum.push(Number(d.amount));
                     }else{
-                      sum += Number(d.appeal_amount);
+                      sum.push(d.appeal_amount);
                     }
                   });
-                  return sum;
+                  _.remove(sum, function(n) {
+                    return n == 0;
+                  });
+                  return {
+                    sum: _.sum(sum),
+                    average: _.sum(sum)/sum.length
+                  };
                 };
 
                 $scope.percentComplete = function(donationsTotal, goal){
