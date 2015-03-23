@@ -13,7 +13,8 @@ class NotificationType::LargerGift < NotificationType
     if contact.pledge_frequency < 1
       return contact.last_donation.present? && contact.last_donation.amount > contact.pledge_amount
     end
-    contact.recent_monthly_avg > contact.monthly_pledge
+    contact.monthly_avg_with_prev_gift > contact.monthly_pledge &&
+      contact.monthly_avg_current > contact.monthly_pledge
   end
 
   def task_description_template

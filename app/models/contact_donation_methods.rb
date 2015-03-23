@@ -11,20 +11,22 @@ module ContactDonationMethods
   end
 
   def last_monthly_total
-    designated_donations.where('donation_date >= ?', recent_avg_range_end.beginning_of_month).sum(:amount)
+    designated_donations.where('donation_date >= ?', last_donation_month_end.beginning_of_month).sum(:amount)
   end
 
   def prev_month_donation_date
-    designated_donations.where('donation_date <= ?', (recent_avg_range_end << 1).end_of_month)
+    designated_donations.where('donation_date <= ?', (last_donation_month_end << 1).end_of_month)
       .pluck(:donation_date).first
   end
 
-  def recent_monthly_avg
-    designated_donations
-      .where('donation_date >= ?', recent_avg_range_start)
-      .where('donation_date <= ?', recent_avg_range_end)
-      .sum(:amount) /
-      months_in_range(recent_avg_range_start, recent_avg_range_end)
+  def monthly_avg_current
+    prev_months_to_include = [(pledge_frequency || 1) - 1, 0].max
+    start_date = (last_donation_month_end << prev_months_to_include).beginning_of_month
+    monthly_avg_over_range(start_date, last_donation_month_end)
+  end
+
+  def monthly_avg_with_prev_gift
+    monthly_avg_over_range(prev_donation_month_start, last_donation_month_end)
   end
 
   def months_from_prev_to_last_donation
@@ -34,7 +36,15 @@ module ContactDonationMethods
 
   private
 
-  def recent_avg_range_end
+  def monthly_avg_over_range(start_date, end_date)
+    designated_donations
+      .where('donation_date >= ?', start_date)
+      .where('donation_date <= ?', end_date)
+      .sum(:amount) /
+      months_in_range(start_date, end_date)
+  end
+
+  def last_donation_month_end
     @recent_avg_range_end ||=
         if last_donation_date && month_diff(last_donation_date, Date.today) > 0
           Date.today.prev_month.end_of_month
@@ -43,12 +53,12 @@ module ContactDonationMethods
         end
   end
 
-  def recent_avg_range_start
+  def prev_donation_month_start
     @recent_avg_range_start ||= begin
       start = [first_donation_date, Date.today << 12, prev_month_donation_date].compact.max
-      months_in_range_mod_freq = months_in_range(start, recent_avg_range_end) % pledge_frequency
+      months_in_range_mod_freq = months_in_range(start, last_donation_month_end) % pledge_frequency
       start <<= pledge_frequency - months_in_range_mod_freq if months_in_range_mod_freq > 0
-      start
+      start.beginning_of_month
     end
   end
 
