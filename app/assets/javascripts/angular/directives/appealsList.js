@@ -22,7 +22,7 @@ angular.module('mpdxApp')
                             $scope.checkedContacts = {};
                             $scope.taskTypes = window.railsConstants.task.ACTIONS;
 
-                            api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.tag_list,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
+                            api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
                                 $scope.contacts = data.contacts;
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
@@ -39,13 +39,44 @@ angular.module('mpdxApp')
                                     });
                             };
 
-                            $scope.contactName = function(id){
+                            $scope.contactDetails = function(id){
                                 var contact = _.find($scope.contacts, { 'id': id });
                                 if(angular.isDefined(contact)){
-                                    return contact.name;
+                                    return contact;
                                 }
-                                return '';
+                                return {};
                             };
+
+                            $scope.contactName = function(id){
+                              var contact = _.find($scope.contacts, { 'id': id });
+                              if(angular.isDefined(contact)){
+                                return contact.name;
+                              }
+                              return '';
+                            };
+
+                          $scope.pledgeFrequencyStr = function(pledgeFrequency){
+                            switch(pledgeFrequency) {
+                              case '0.23076923076923':
+                                return 'Weekly';
+                              case '0.46153846153846':
+                                return 'Fortnightly';
+                              case '1.0':
+                                return 'Monthly';
+                              case '2.0':
+                                return 'Bi-Monthly';
+                              case '3.0':
+                                return 'Quarterly';
+                              case '4.0':
+                                return 'Quad-Monthly';
+                              case '6.0':
+                                return 'Semi-Annual';
+                              case '12.0':
+                                return 'Annual';
+                              case '24.0':
+                                return 'Biennial';
+                            }
+                          };
 
                             $scope.addContact = function(id){
                                 if(!id){ return; }
