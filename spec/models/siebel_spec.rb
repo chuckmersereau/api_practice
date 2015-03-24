@@ -415,6 +415,13 @@ describe Siebel do
       end.to change(Address, :count).from(1).to(2)
       expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
       expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_true
+
+      # survives a second import
+      contact.reload
+      expect do
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      end.to_not change(Address, :count)
+      expect(contact.addresses.reload.where(primary_mailing_address: true).count).to eq(1)
     end
 
     it 'does not set the address as primary if a non-matching non-Siebel address is primary' do
@@ -423,6 +430,14 @@ describe Siebel do
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to change(Address, :count).from(1).to(2)
+      expect(manual_address.primary_mailing_address).to be_true
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
+
+      # survives a second import
+      contact.reload
+      expect do
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      end.to_not change(Address, :count)
       expect(manual_address.primary_mailing_address).to be_true
       expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
     end
@@ -436,6 +451,14 @@ describe Siebel do
       end.to change(Address, :count).from(1).to(2)
       expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
       expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_true
+
+      # survives a second import
+      contact.reload
+      expect do
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      end.to_not change(Address, :count)
+      expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_true
     end
 
     it 'does not make address primary if a non-matching Siebel address from a different donor account is primary' do
@@ -446,6 +469,14 @@ describe Siebel do
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, donor_account2)
       end.to change(Address, :count).from(1).to(2)
+      expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
+
+      # survives a second import
+      contact.reload
+      expect do
+        siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
+      end.to_not change(Address, :count)
       expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
       expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
     end
