@@ -66,7 +66,9 @@ $ ->
   $(document).on 'click', 'a[data-behavior=remove_field]', ->
     link = this
     $(link).prev("input[type=hidden]").val("1")
-    $(link).closest("[data-behavior*=field-wrapper]").hide()
+    field_wrapper = $(link).closest("[data-behavior*=field-wrapper]")
+    field_wrapper.hide()
+    field_wrapper.find(':input:not([type=hidden])').attr('disabled', true)
     fieldset = $(link).closest('.fieldset')
     false
 
