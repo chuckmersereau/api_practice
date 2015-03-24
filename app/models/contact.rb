@@ -80,9 +80,10 @@ class Contact < ActiveRecord::Base
 
   assignable_values_for :status, allow_blank: true do
     # Don't change these willy-nilly, they break the mobile app
-    ['Never Contacted', 'Ask in Future', 'Contact for Appointment', 'Appointment Scheduled', 'Call for Decision',
-     'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Not Interested', 'Unresponsive', 'Never Ask',
-     'Research Abandoned', 'Expired Referral', 'Cultivate Relationship']
+    ['Never Contacted', 'Ask in Future', 'Cultivate Relationship', 'Contact for Appointment',
+     'Appointment Scheduled', 'Call for Decision', 'Partner - Financial', 'Partner - Special',
+     'Partner - Pray', 'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
+     'Expired Referral']
   end
 
   IN_PROGRESS_STATUSES = ['Never Contacted', 'Ask in Future', 'Contact for Appointment', 'Appointment Scheduled',
