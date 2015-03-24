@@ -21,6 +21,7 @@ class MasterAddress < ActiveRecord::Base
         ma.latitude = lat.to_s
         ma.longitude = long.to_s
         ma.save
+        sleep 5
       end
     end
   end
