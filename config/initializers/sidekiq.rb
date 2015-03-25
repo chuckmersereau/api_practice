@@ -17,3 +17,4 @@ Sidekiq.configure_server do |config|
                    namespace: "MPDX:#{rails_env}:resque"}
 end
 
+Sidekiq.default_worker_options = { backtrace: true }
