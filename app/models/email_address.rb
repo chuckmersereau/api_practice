@@ -50,6 +50,22 @@ class EmailAddress < ActiveRecord::Base
     email
   end
 
+  def self.expand_and_clean_emails(email_attrs)
+    cleaned_attrs = []
+    clean_and_split_emails(email_attrs[:email]).each_with_index do |cleaned_email, index|
+      cleaned = email_attrs.dup
+      cleaned[:primary] = false if index > 0 && email_attrs[:primary]
+      cleaned[:email] = cleaned_email
+      cleaned_attrs << cleaned
+    end
+    cleaned_attrs
+  end
+
+  def self.clean_and_split_emails(emails_str)
+    return [] if emails_str.blank?
+    emails_str.scan(/([^<>,;\s]+@[^<>,;\s]+)/).map(&:first)
+  end
+
   private
 
   def strip_email
