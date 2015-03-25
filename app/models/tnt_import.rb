@@ -405,7 +405,9 @@ class TntImport
         changed_primary = true
       end
 
-      person.email_address = email_attrs
+      EmailAddress.expand_and_clean_emails(email_attrs).each do |cleaned_attrs|
+        person.email_address = cleaned_attrs
+      end
     end
   end
 
