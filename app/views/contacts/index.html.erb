@@ -15,7 +15,7 @@
         <% if $rollout.active?(:insights, current_account_list) %>
         <li ng-class="{'selected': insightFilterIsActive()}">
           <span class="left_filters menu_item"><%= _('Insights') %></span>
-          <p class="collapse" style="text-indent:40px">
+          <p style="text-indent:40px">
             <a href="" ng-click="runInsight('recommendations')"><%= _('Increase Recommendations') %></a>
           </p>
         </li>
