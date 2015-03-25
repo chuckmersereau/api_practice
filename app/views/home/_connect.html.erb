@@ -8,7 +8,7 @@
   <% end %>
   <% if tasks.length > 5 %>
     <div class="seemore">
-      <%= link_to(_('See All'), tasks_path) %>
+      <%= link_to(_('See All'), tasks_path, class: 'btn btn-primary btn-sm') %>
     </div>
   <% end %>
 <% end %>

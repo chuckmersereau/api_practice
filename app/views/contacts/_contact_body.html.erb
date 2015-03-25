@@ -201,15 +201,17 @@
       </div>
       <div id="notes-tab">
         <%= form_for contact, remote: true do |f| %>
-          <%= f.submit _('Save Notes'), disabled: true %>
-          <span class="saved_at">
+          <div class="form-group">
+            <%= f.text_area :notes, rows: 5, class: 'contact_notes form-control' %>
+          </div>
+          <div class="seemore">
+          <%= f.submit _('Save Notes'), disabled: true, class: 'btn btn-primary btn-sm' %>
+          <small><span class="saved_at">
             <%= begin
                   contact_exhibit.notes_saved_at
                 rescue; end
             %>
-          </span>
-          <br />
-          <%= f.text_area :notes, rows: 10, class: 'contact_notes' %>
+          </span></small>
         <% end %>
       </div>
 

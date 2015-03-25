@@ -15,7 +15,7 @@
           <a class="tag" href="#" ng-class="{'selected': tagIsActive('<%= j(tag) %>')}" ng-click="tagClick('<%= j(tag) %>')"><%= tag %></a>
         <% end %>
       <% end %>
-      <a href="#" class="show_all_tags_btn"><i class="fa fa-plus"></i> See all <span class="tagSize"></span> tags</a>
+      <a href="#" class="show_all_tags_btn" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'See all tags']);"><i class="fa fa-plus"></i> See all <span class="tagSize"></span> tags</a>
     </li>
   </ul>
 </li>

@@ -32,19 +32,19 @@
 
             <ul class="filters">
               <li class="filter_set">
-                <label id="filter_name" class="filter_title"><%= _('Name') %></label>
+                <label id="filter_name" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Name']);"><%= _('Name') %></label>
                 <div class="filter_set_inner">
                   <input ng-model="contactQuery.name" type="text" class="form-control">
                 </div>
               </li>
               <li class="filter_set">
-                <label id="filter_type" class="filter_title"><%= _('Type') %></label>
+                <label id="filter_type" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Type']);"><%= _('Type') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[city]', options_for_select([[_('-- Any --'), ''], [_('Person'), 'person'], [_('Company'), 'company']]), multiple: false, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.type' %>
                 </div>
               </li>
               <li class="filter_set">
-                <label id="filter_city" class="filter_title"><%= _('City') %></label>
+                <label id="filter_city" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'City']);"><%= _('City') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[city]', options_for_select([[_('-- Any --'), '']] + current_account_list.cities.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.city' %>
                   <div class="checkbox">
@@ -56,7 +56,7 @@
               </li>
 
               <li class="filter_set">
-                <label id="filter_state" class="filter_title"><%= _('State') %></label>
+                <label id="filter_state" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'State']);"><%= _('State') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[state]', options_for_select([[_('-- Any --'), '']] + current_account_list.states.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.state' %>
                   <div class="checkbox">
@@ -68,7 +68,7 @@
               </li>
 
               <li class="filter_set">
-                <label id="filter_region" class="filter_title"><%= _('Region') %></label>
+                <label id="filter_region" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Region']);"><%= _('Region') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[region]', options_for_select([[_('-- Any --'), '']] + current_account_list.regions.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.region' %>
                   <div class="checkbox">
@@ -80,7 +80,7 @@
               </li>
 
               <li class="filter_set">
-                <label id="filter_metro_area" class="filter_title"><%= _('Metro Area') %></label>
+                <label id="filter_metro_area" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Metro Area']);"><%= _('Metro Area') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[metro_area]', options_for_select([[_('-- Any --'), '']] + current_account_list.metro_areas.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.metro_area' %>
                   <div class="checkbox">
@@ -92,7 +92,7 @@
               </li>
 
               <li class="filter_set">
-                <label id="filter_newsletter" class="filter_title"><%= _('Newsletter Recipients') %></label>
+                <label id="filter_newsletter" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Newsletter Recipients']);"><%= _('Newsletter Recipients') %></label>
                 <div class="filter_set_inner filter_radio">
                   <label><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.newsletter' %> <%= _('-- Any --') %></label>
                   <label><%= radio_button_tag '', 'none', false, :'ng-model' => 'contactQuery.newsletter' %> <%= _('None Selected') %></label>
@@ -110,53 +110,53 @@
               </li>
 
               <li class="filter_set">
-                <label id="filter_status" class="filter_title"><%= _('Status') %></label>
+                <label id="filter_status" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Status']);"><%= _('Status') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[status]', options_for_select([[_('-- All Active --'), 'active'], [_('-- All Hidden --'), 'hidden'], [_('-- None --'), 'null']] + contact_instance.assignable_statuses.collect { |s| [_(s), s] }), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.status' %>
                 </div>
               </li>
 
               <li class="filter_set">
-                <label id="filter_likely" class="filter_title"><%= _('Likely To Give') %></label>
+                <label id="filter_likely" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Likely To Give']);"><%= _('Likely To Give') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag '', options_for_select([[_('-- Any --'), '']] + contact_instance.assignable_likely_to_gives), multiple: true, size: 4, class: 'form-control', :'ng-model' => 'contactQuery.likely' %>
                 </div>
               </li>
 
               <li class="filter_set">
-                <label id="filter_church" class="filter_title"><%= _('Church') %></label>
+                <label id="filter_church" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Church']);"><%= _('Church') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[church]', options_for_select([[_('-- Any --'), '']] + current_account_list.churches.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.church' %>
                 </div>
               </li>
 
               <li class="filter_set">
-                <label id="filter_referrer" class="filter_title"><%= _('Referrer') %></label>
+                <label id="filter_referrer" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Referrer']);"><%= _('Referrer') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[referrer]', options_for_select([[_('-- Any --'), ''], [_('-- Someone --'), '*']] + current_account_list.contacts.with_referrals.order("name").collect { |c| [c.name, c.id] }), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.referrer' %>
                 </div>
               </li>
               <li class="filter_set">
-                <label id="filter_timezone" class="filter_title"><%= _('Timezone') %></label>
+                <label id="filter_timezone" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Timezone']);"><%= _('Timezone') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[timezone]', options_for_select([[_('-- Any --'), '']] + current_account_list.timezones.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.timezone' %>
                 </div>
               </li>
               <li class="filter_set">
-                <label id="filter_relatedTaskAction" class="filter_title"><%= _('Related task action') %></label>
+                <label id="filter_relatedTaskAction" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Related Task Action']);"><%= _('Related task action') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[activity_type]', options_for_select([[_('-- Any --'), ''], [_('-- None --'), 'null']] + (Task.new.assignable_activity_types & current_account_list.tasks.select(:activity_type).uniq.collect(&:activity_type)).collect { |a| [_(a), a] }, filters_params[:activity_type]), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.relatedTaskAction' %>
                 </div>
               </li>
               <li class="filter_set">
-                <label id="filter_appeal" class="filter_title"><%= _('Appeal') %></label>
+                <label id="filter_appeal" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Appeal']);"><%= _('Appeal') %></label>
                 <div class="filter_set_inner">
                   <%= select_tag 'filters[appeal]', options_from_collection_for_select(@appeals, 'id', 'name'), prompt: '-- Any --', multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.appeal' %>
                 </div>
               </li>
               <li class="controls">
-                <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> <%= _('Reset Filters') %></a>
-                <a href="#" ng-click="mapContacts()" class="btn btn-default btn-xs"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
+                <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);"><i class="fa fa-undo"></i> <%= _('Reset Filters') %></a>
+                <a href="#" ng-click="mapContacts()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Map These Contacts']);"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
               </li>
             </ul>
           </form>
@@ -177,7 +177,7 @@
             <div class="col-md-5 col-md-offset-2 text-right">
 
               <div class="dropdown">
-                <%= link_to(_('Actions <span class="caret"></span>'), "#", class: "btn btn-default dropdown-toggle", type: "button", id: "action-drop", :'data-toggle' => "dropdown", "aria-expanded" => "true", "data-disabled" => "true") %>
+                <%= link_to(_('Actions <span class="caret"></span>'), "#", class: "btn btn-default dropdown-toggle", :onclick => "_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'Bulk Actions']);", type: "button", id: "action-drop", :'data-toggle' => "dropdown", "aria-expanded" => "true", "data-disabled" => "true") %>
                 <%= render 'contacts_action_list' %>
               </div>
 

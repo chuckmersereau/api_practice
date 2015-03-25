@@ -110,16 +110,23 @@ textarea:read-only {
   background-color: #d3d3d3;
 }
 
+$appealHeight: 20px;
+
 .appealThermometer {
-  height: 15px;
+  height: $appealHeight;
+  line-height: $appealHeight;
+  font-size: 11px;
   width: 100px;
   margin: 0 10px;
   padding: 0;
   border: #cccccc solid 1px;
+  display: inline-block;
   .level {
-    height: 15px;
+    height: $appealHeight - 2;
+    line-height: $appealHeight - 2;
+    vertical-align: middle;
     margin: 0;
-    padding: 0;
+    padding: 0 3px 0 0;
     border-right: 1px solid #666666;
     background: #ffcccc;
     text-align: right;
@@ -132,6 +139,19 @@ textarea:read-only {
   vertical-align: top;
   height: 310px;
   overflow-y: auto;
+}
+
+.filter_selector_title {
+  font-size: 1em;
+  line-height: 1.5em;
+}
+
+.filter_selector {
+  label {
+    font-weight: normal;
+    line-height: 1.25em;
+    margin-bottom: 0;
+  }
 }
 
 .btn-reverse {
