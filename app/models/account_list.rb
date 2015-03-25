@@ -136,9 +136,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def top_partners
-    contacts.order('total_donations desc')
-      .where('total_donations > 0')
-      .limit(10)
+    contacts.order('total_donations desc').where('total_donations > 0').limit(10)
   end
 
   def donations
@@ -244,8 +242,7 @@ class AccountList < ActiveRecord::Base
 
   # Download all donations / info for all accounts associated with this list
   def self.update_linked_org_accounts
-    AccountList.joins(:organization_accounts)
-      .where('locked_at is null').order('last_download asc')
+    AccountList.joins(:organization_accounts).where('locked_at is null').order('last_download asc')
       .each do |al|
       al.async(:import_data)
     end
@@ -389,6 +386,10 @@ class AccountList < ActiveRecord::Base
       address.format
     end
     emails_with_nils.compact
+  end
+
+  def queue_sync_with_google_contacts
+    lower_retry_async(:sync_with_google_contacts)
   end
 
   def sync_with_google_contacts

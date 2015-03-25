@@ -16,7 +16,13 @@ class GoogleIntegration < ActiveRecord::Base
   delegate :sync_task, to: :calendar_integrator
 
   def queue_sync_data(integration = nil)
-    lower_retry_async(:sync_data, integration) if integration
+    return unless integration
+
+    if integration == 'contacts'
+      account_list.queue_sync_with_google_contacts
+    else
+      lower_retry_async(:sync_data, integration)
+    end
   end
 
   def sync_data(integration)
