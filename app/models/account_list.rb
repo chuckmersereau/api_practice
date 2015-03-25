@@ -439,9 +439,9 @@ class AccountList < ActiveRecord::Base
                   changes['settings'][0]['tester'] != changes['settings'][1]['tester']
 
     if changes['settings'][1]['tester']
-      async_on_queue(:default, :mc_subscribe_users, 'Testers')
+      async_to_queue(:default, :mc_subscribe_users, 'Testers')
     else
-      async_on_queue(:default, :mc_unsubscribe_users, 'Testers')
+      async_to_queue(:default, :mc_unsubscribe_users, 'Testers')
     end
   end
 
@@ -450,9 +450,9 @@ class AccountList < ActiveRecord::Base
                   changes['settings'][0]['owner'] != changes['settings'][1]['owner']
 
     if changes['settings'][1]['owner']
-      async_on_queue(:default, :mc_subscribe_users, 'Owners')
+      async_to_queue(:default, :mc_subscribe_users, 'Owners')
     else
-      async_on_queue(:default, :mc_unsubscribe_users, 'Owners')
+      async_to_queue(:default, :mc_unsubscribe_users, 'Owners')
     end
   end
 
