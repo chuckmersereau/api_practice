@@ -336,33 +336,29 @@ class Siebel < DataServer
 
     place_match = object.addresses_including_deleted.find { |a| a.equal_to?(new_address) }
     remote_id_match = object.addresses_including_deleted.find { |a| a.remote_id == new_address.remote_id }
-
     address_to_update = place_match || remote_id_match
 
-    # If Siebel always generates a new remote id for changed addresses, this isn't really needed, but in case
-    # they sometimes use the same remote id for a new address, we should disconnecte the old address from the
-    # remote id and attach it to the manually added / imported address (place_match) that matches the Siebel one.
+    # Remove the remote id from the old address if needed in case Siebel reuses address ids
     remote_id_match.update(remote_id: nil) if remote_id_match && place_match && place_match != remote_id_match
 
     if address_to_update
-      address_to_update.update_attributes(new_address.attributes.select { |_k, v| v.present? })
+      address_to_update.update!(new_address.attributes.select { |_k, v| v.present? })
+      new_or_updated_address = address_to_update
     else
-      object.addresses << new_address
+      new_or_updated_address = object.addresses.create!(new_address.attributes)
     end
 
-    begin
-      object.save!
-    rescue ActiveRecord::RecordInvalid => e
-      raise e.message + " - #{address.inspect}"
+    if new_or_updated_address.primary_mailing_address?
+      object.addresses.where.not(id: new_or_updated_address.id).update_all(primary_mailing_address: false)
     end
+  rescue ActiveRecord::RecordInvalid => e
+    raise e.message + " - #{address.inspect}"
   end
 
   def new_address_from_siebel(address, object, source_donor_account)
     current_primary = object.addresses.find_by(primary_mailing_address: true)
     make_primary = current_primary.blank? || (address.primary && current_primary.source == 'Siebel' &&
       source_donor_account.present? && current_primary.source_donor_account == source_donor_account)
-
-    object.addresses.each { |a| a.primary_mailing_address = false } if current_primary.present? && make_primary
 
     new_address = Address.new(street: [address.address1, address.address2, address.address3, address.address4].compact.join("\n"),
                               city: address.city,
