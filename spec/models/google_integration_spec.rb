@@ -16,6 +16,16 @@ describe GoogleIntegration do
         google_integration.queue_sync_data
       end.to_not change(LowerRetryWorker.jobs, :size)
     end
+
+    it 'queues the google contacts sync integration for the whole account list' do
+      google_integration.update(calendar_integration: false, contacts_integration: true)
+      expect do
+        google_integration.queue_sync_data('contacts')
+      end.to change(LowerRetryWorker.jobs, :size).from(0).to(1)
+
+      expect(LowerRetryWorker.jobs.first['args'])
+        .to eq(['AccountList', google_integration.account_list.id, 'sync_with_google_contacts'])
+    end
   end
 
   context '#sync_data' do
