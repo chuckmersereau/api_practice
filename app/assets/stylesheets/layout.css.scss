@@ -835,6 +835,12 @@ div.name {font-size: 14px; margin-bottom: 4px;}
       padding-right: 10px;
       width: auto;
     }
+    .people {
+      margin: 5px 0;
+      .people-single-contact {
+        line-height: 1.25em;
+      }
+    }
   }
   h4 {
     margin-bottom: 0;
@@ -854,20 +860,28 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 
 /* ************************************************************** */
 
-tbody.tasks {
-  td {min-height: 1.5em;}
+table tbody.tasks {
+  td {
+    vertical-align: middle;
+    padding-top: 7px;
+    padding-bottom: 7px;
+  }
   td.check {
-    padding-left: 8px; padding-right: 4px; padding-top: 12px; width: 12px;
+    padding-left: 8px;
+    padding-right: 4px;
+    width: 12px;
+    vertical-align: top;
     .complete_task{
       cursor: pointer;
     }
   }
-  td.data {padding-top: 10px; padding-bottom: 10px;}
 
   tr, tr:nth-child(odd) {background: none; min-height: 2em; border-top: 1px dotted $gray_mid;}
   tr:first-child {border-top: none;}
   tr .actions {
-    /*a {padding-left: 2px}*/
+    a {
+      vertical-align: sub;
+    }
   }
   /*tr:hover .actions {display: inline-block;}*/
   tr.clear {border: none; background: none; padding: 0; margin: 0;}
