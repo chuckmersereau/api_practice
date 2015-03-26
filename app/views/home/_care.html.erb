@@ -1,4 +1,4 @@
-<h3><%= _('Week of %{date1} to %{date2}').localize % {date1: l(Date.today.beginning_of_week), date2: l(Date.today.end_of_week)} %></h3>
+<h4><%= _('Week of %{date1} to %{date2}').localize % {date1: l(Date.today.beginning_of_week), date2: l(Date.today.end_of_week)} %></h4>
 
 <% people_with_birthdays = current_account_list.people_with_birthdays(Time.now.beginning_of_week, Time.now.end_of_week) %>
 <% if people_with_birthdays.present? %>

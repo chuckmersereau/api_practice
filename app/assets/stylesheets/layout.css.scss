@@ -1,6 +1,17 @@
 @import "elements";
 
-body {background: $page_bg; margin: 0;}
+* {
+  font-variant-numeric: lining-nums;
+  -moz-font-feature-settings: "lnum";
+  -ms-font-feature-settings: "lnum";
+  -webkit-font-feature-settings: "lnum";
+  font-feature-settings: "lnum";
+}
+
+body {
+  background: $page_bg;
+  margin: 0;
+}
 
 .outer {max-width: $maxwidth; min-width: $maxwidth; margin: 0 auto;}
 .clr {clear: both;}
