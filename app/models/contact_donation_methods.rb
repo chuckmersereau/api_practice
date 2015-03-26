@@ -1,21 +1,19 @@
 module ContactDonationMethods
-  def designated_donations
-    # Don't use the "donations" association as that may introduce duplicates and incorrect totals
-    # if there are duplicated records in contact_donor_accounts.
-    Donation.where(donor_account_id: donor_accounts.pluck(:id),
-                   designation_account_id: account_list.designation_accounts.pluck(:id))
+  def donations
+    Donation.where(donor_account_id: donor_accounts.pluck(:id))
+      .for_accounts(account_list.designation_accounts)
   end
 
   def last_donation
-    designated_donations.first
+    donations.first
   end
 
   def last_monthly_total
-    designated_donations.where('donation_date >= ?', last_donation_month_end.beginning_of_month).sum(:amount)
+    donations.where('donation_date >= ?', last_donation_month_end.beginning_of_month).sum(:amount)
   end
 
   def prev_month_donation_date
-    designated_donations.where('donation_date <= ?', (last_donation_month_end << 1).end_of_month)
+    donations.where('donation_date <= ?', (last_donation_month_end << 1).end_of_month)
       .pluck(:donation_date).first
   end
 
@@ -37,7 +35,7 @@ module ContactDonationMethods
   private
 
   def monthly_avg_over_range(start_date, end_date)
-    designated_donations
+    donations
       .where('donation_date >= ?', start_date)
       .where('donation_date <= ?', end_date)
       .sum(:amount) /

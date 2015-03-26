@@ -9,7 +9,6 @@ class Contact < ActiveRecord::Base
 
   has_many :contact_donor_accounts, dependent: :destroy, inverse_of: :contact
   has_many :donor_accounts, through: :contact_donor_accounts, inverse_of: :contacts
-  has_many :donations, through: :donor_accounts
   belongs_to :account_list
   has_many :contact_people, dependent: :destroy
   has_many :people, through: :contact_people
