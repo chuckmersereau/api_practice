@@ -129,10 +129,11 @@
             </div>
           </li>
           <li>
-            <label id="filter_pledge_frequencies"><%= _('Contact Commitment Frequency') %></label>
-            <div class="collapse" style="display:none;">
-              <%= select_tag 'filters[pledge_frequencies]', options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a),
-                             multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'filter.contactPledgeFrequencies' %>
+            <label id="filter_pledge_frequencies" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Commitment Frequency']);"><%= _('Contact Commitment Frequency') %></label>
+            <div class="filter_set_inner">
+              <%= select_tag 'filters[pledge_frequencies]',
+                             options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a),
+                             class: 'form-control', multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'filter.contactPledgeFrequencies' %>
             </div>
           </li>
           <% end %>
