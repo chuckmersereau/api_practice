@@ -1253,11 +1253,13 @@ table.meta {
 }
 
 .social_container {
-  padding-bottom: 25px;
+  padding-bottom: 40px;
   position: relative;
-  .add_field {
+  .add_field, .social_text {
     position: absolute;
-    bottom: 0;
+    bottom: 15px;
+  }
+  .add_field {
     display: block;
     content: "";
     margin-bottom: 0;
@@ -1269,7 +1271,7 @@ table.meta {
       display: none;
     }
   }
-  .social_text {position: absolute; bottom:0; line-height: 20px;}
+  .social_text { line-height: 20px; }
   .add_facebook {margin-left: 36px; .add_field:before {content: "\f082"; }}
   .add_twitter {margin-left: 56px; .add_field:before {content: "\f081"; }}
   .add_linkedin {margin-left: 76px; .add_field:before {content: "\f08c"; }}
