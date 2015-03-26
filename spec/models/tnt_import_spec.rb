@@ -331,6 +331,19 @@ describe TntImport do
       expect(person.email_addresses.map { |e| [e.email, e.historic] }).to include(['a@a.com', false])
       expect(person.email_addresses.map { |e| [e.email, e.historic] }).to include(['b@b.com', true])
     end
+
+    it 'removes the name formatting and splits multiple emails in a field' do
+      row = {
+        'Email1' => 'John Doe <a@a.com>, "Doe, John" <b@b.com; c@c.com',
+        'Email1IsValid' => 'true', 'PreferredEmailTypes' => '1'
+      }
+      expect do
+        import.send(:update_person_emails, person, row, '')
+      end.to change(person.email_addresses, :count).from(0).to(3)
+      expect(person.email_addresses.pluck(:email).sort).to eq(['a@a.com', 'b@b.com', 'c@c.com'])
+      expect(person.email_addresses.where(primary: true).count).to eq(1)
+      expect(person.email_addresses.find_by(email: 'a@a.com').primary).to be_true
+    end
   end
 
   context '#update_person_phones' do

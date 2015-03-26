@@ -88,11 +88,8 @@ class Address < ActiveRecord::Base
   end
 
   def geo
-    return unless master_address && master_address.smarty_response &&
-                  master_address.smarty_response[0] &&
-                  master_address.smarty_response[0]['metadata']
-    meta = master_address.smarty_response[0]['metadata']
-    meta['latitude'].to_s + ',' + meta['longitude'].to_s
+    return unless master_address
+    master_address.geo
   end
 
   # Not private because Google Contacts sync uses it to normalize addresses without needing to create a record
@@ -195,6 +192,25 @@ class Address < ActiveRecord::Base
         attributes_for_master_address[:smarty_response] = results
       rescue RestClient::RequestFailed, SocketError, RestClient::ResourceNotFound
         # Don't blow up if smarty didn't like the request
+      end
+
+      if results && results[0] && results[0]['metadata']
+        meta = results[0]['metadata']
+        attributes_for_master_address[:latitude] = meta['latitude'].to_s
+        attributes_for_master_address[:longitude] = meta['longitude'].to_s
+      end
+
+      unless attributes_for_master_address[:latitude] && attributes_for_master_address[:longitude]
+        begin
+          lat, long = Geocoder.coordinates([attributes_for_master_address[:street],
+                                            attributes_for_master_address[:city],
+                                            attributes_for_master_address[:state],
+                                            attributes_for_master_address[:country]].join(','))
+          attributes_for_master_address[:latitude] = lat.to_s
+          attributes_for_master_address[:longitude] = long.to_s
+        rescue
+          # Don't blow up if Google didn't like the request... Rate limit most likely.
+        end
       end
     end
 

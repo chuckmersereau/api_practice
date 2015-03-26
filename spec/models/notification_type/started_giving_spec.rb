@@ -44,6 +44,16 @@ describe NotificationType::StartedGiving do
       notifications = started_giving.check(account_list2)
       notifications.length.should == 0
     end
+
+    it 'sets pledge received and defaults to a monthly pledge when first gift given for financial partner ' do
+      contact.update(pledge_amount: nil, pledge_frequency: nil, pledge_received: false)
+      donation
+      started_giving.check(contact.account_list)
+      contact.reload
+      expect(contact.pledge_amount).to eq(9.99)
+      expect(contact.pledge_frequency).to eq(1)
+      expect(contact.pledge_received).to be_true
+    end
   end
 
   describe '.create_task' do
