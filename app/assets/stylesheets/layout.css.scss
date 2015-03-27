@@ -327,10 +327,11 @@ div.right {
 
 .donor_account_field {
   .remove_fields {
-    background: none;
     border: none;
-    padding: 0;
+    padding: 6px 9px;
     display: inline-block;
+    margin: -4px -14px;
+    border-radius: 0px;
   }
   &:nth-child(n+2){
     margin-top: 6px;
