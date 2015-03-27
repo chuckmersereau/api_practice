@@ -421,8 +421,7 @@ $progress-bar-height: 30px;
     height: $progress-bar-height;
   }
   .value.left {
-    float: left;
-    color: $gray_dark;
+    right: inherit;
   }
 }
 
@@ -497,8 +496,7 @@ h2.section {
 }
 
 .social-icons {
-  padding: 6px 0;
-  position: relative;
+  float: right;
   & > * {
     display: inline-block;
     height: 20px;
@@ -523,7 +521,7 @@ h2.section {
     line-height: initial;
     padding: 0px .5em 0px 1em;
     vertical-align: top;
-    width: 80%;
+    width: 73%;
   }
   .person_avatar {
     padding: 0;
@@ -749,7 +747,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     border-radius: 5px;
     color: $white;
     display: inline-block;
-    font-size: .7em;
+    font-size: 12px;
     font-family: Arial;
     font-weight: normal;
     line-height: 1.5em;
@@ -1325,7 +1323,7 @@ table.meta {
 }
 
 .contact_drawer_inner {
-  background: #eee;
+  background: $color-gray-keyline;
   padding: 10px;
   .contact_list {
     border-radius: 4px;
@@ -1335,7 +1333,7 @@ table.meta {
 
 .contact_list {
   @include listclear;
-  height: 397px;
+  height: 415px;
   overflow: auto;
   background: $white;
   li {border-bottom: 1px dotted $gray_light;}
