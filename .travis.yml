@@ -23,7 +23,7 @@ deploy:
   access_key_id: AKIAJYX4CH7WF7CZ2QIA
   secret_access_key:
     secure: ey938k7XvkH7o0ffEKIedVR/Pf3sYjaTUu241zK6HLuB3Lj8hVM+nV863eIqreCOMqRCRYCb+Hqe9t4wFhsIANJXsAr7ecx/BHNc68hqWeti6BAGZTBNsJssOX2Kncq/FR+o2WOuwNHFRH2ZT7JSU1pU4qpRXL5ZLTJpUl8TAuo=
-  app-id: b251a4f8-fd70-4fc6-8206-249555c55c61
+  app-id: 36c106d9-e3c9-495c-a826-1e29854d12c7
   migrate: true
   on:
     repo: CruGlobal/mpdx
