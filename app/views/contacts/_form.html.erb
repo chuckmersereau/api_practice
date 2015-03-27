@@ -175,7 +175,11 @@
 $(function(){
     var datepicker = $.fn.datepicker.noConflict();
     $.fn.bootstrapDP = datepicker;
-    $(".date-picker").bootstrapDP();
+    $(".date-picker").bootstrapDP({
+      autoclose: true,
+      todayHighlight: true,
+      format: 'yyyy-mm-dd'
+    });
     $('[data-toggle="tooltip"]').tooltip();
     //$( ".social_container .add_field" ).empty();
 });
