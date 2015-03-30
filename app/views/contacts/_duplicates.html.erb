@@ -5,11 +5,28 @@
         <%= link_to(_('Select all duplicates'), '#', class: 'select_all') %>
         <% @contact_sets.each do |set| %>
           <div class="duplicate_set">
-            <% set.each do |contact| %>
-              <div class="contact">
-                <%= link_to(contact.name, contact_path(contact), target: '_blank')  %>
-              </div>
-            <% end %>
+                <table class="tablelist" width="10%">
+                  <thead>
+                  <tr>
+                    <th><%= _('Select Primary') %></th>
+                    <th><%= _('Name') %></th>
+                    <th><%= _('Address') %></th>
+                    <th><%= _('Date Created') %></th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  <% set.each do |contact| %>
+                      <tr>
+                        <td width="11%"> <%= check_box_tag 'merge_sets[]'%></td>
+                        <td width="15%"><%= link_to(contact.name, contact_path(contact), target: '_blank')  %></td>
+                        <td width="25%"><%= contact.primary_address.address %></td>
+                        <td><%= contact.created_at.strftime('%B %d, %Y') %></td>
+                      </tr>
+                  <% end %>
+                  </tbody>
+                </table>
+
+
             <%= check_box_tag 'merge_sets[]', set.collect(&:id).join(',') %>
             <%= _('Merge these contacts') %><br />
             <%= link_to(_('These are not duplicates'), not_duplicates_contacts_path(ids: set.collect(&:id).join(',')),
