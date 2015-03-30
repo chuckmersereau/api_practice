@@ -1,5 +1,5 @@
-@import "typography.css.scss";
-@import "jquery-ui.css.scss";
+@import "typography.scss";
+@import "jquery-ui.scss";
 
 body {
   background: image-url("splash/bg_blue.jpg");
@@ -53,7 +53,7 @@ body {
   .network_connections {display: block; margin-left: 135px; width: 370px; padding-top: 0px;}
   .actions { float: right;}
   .network_button {
-    display: block; 
+    display: block;
     padding-bottom: 8px;
     .btn {
       padding: 4px 8px;
@@ -68,7 +68,7 @@ body {
    font-weight: bold;
    margin: 0 8px 8px 0;
    font-size: 11px;
- }  
+ }
 }
 
 .continue {
