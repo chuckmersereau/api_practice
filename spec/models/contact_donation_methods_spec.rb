@@ -20,10 +20,10 @@ describe ContactDonationMethods do
 
   context '#designated_donations' do
     it 'gives donations whose designation is connected to the contact account list' do
-      expect(contact.designated_donations.to_a).to eq([donation, old_donation])
+      expect(contact.donations.to_a).to eq([donation, old_donation])
       donation.update(designation_account: nil)
       old_donation.update(donor_account: nil)
-      expect(contact.designated_donations).to be_empty
+      expect(contact.donations).to be_empty
     end
   end
 
