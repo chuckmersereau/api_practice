@@ -4,6 +4,11 @@ describe Appeal do
   let(:account_list) { create(:account_list) }
   let(:appeal) { create(:appeal, account_list: account_list) }
   let(:contact) { create(:contact, account_list: account_list) }
+  let(:da) { create(:designation_account) }
+
+  before do
+    account_list.designation_accounts << da
+  end
 
   context '#add_contacts_by_opts' do
     it 'adds contacts found by contacts_by_opts' do
@@ -31,7 +36,8 @@ describe Appeal do
 
   context '#contacts_by_opts' do
     let(:donor_account) { create(:donor_account) }
-    let(:donation) { create(:donation, donor_account: donor_account) }
+    let(:donation) { create(:donation, donor_account: donor_account, designation_account: da) }
+
     before do
       contact.donor_accounts << donor_account
     end
@@ -77,7 +83,7 @@ describe Appeal do
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], {}).count).to eq(1)
     end
 
-    it 'excludes special givers in the 3 months if specified' do
+    it 'excludes special givers in the past 3 months if specified' do
       contact.tag_list = ['tag']
       contact.save
       contact.update(pledge_amount: 50, pledge_frequency: 1, status: 'Partner - Pray')
@@ -90,29 +96,39 @@ describe Appeal do
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
 
       donation.update(donation_date: Date.today << 3)
-      donation2 = create(:donation, amount: 50, donation_date: Date.today)
+      donation2 = create(:donation, amount: 50, donation_date: Date.today, designation_account: da)
       donor_account.donations << donation2
       contact.update_donation_totals(donation2)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
 
       donation2.update(amount: 51)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(0)
+
+      donation2.update(designation_account: nil)
+      expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
     end
 
     it 'excludes contacts who stopped giving in the past 2 months if specified' do
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
 
-      donor_account.donations << create(:donation, amount: 25, donation_date: 3.months.ago)
+      donation2 = create(:donation, amount: 25, donation_date: 3.months.ago, designation_account: da)
+      donor_account.donations << donation2
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
 
       contact.update(pledge_amount: 0, last_donation_date: 3.months.ago)
 
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
 
-      donor_account.donations << create(:donation, amount: 25, donation_date: 4.months.ago)
-      donor_account.donations << create(:donation, amount: 25, donation_date: 5.months.ago)
+      donation3 = create(:donation, amount: 25, donation_date: 4.months.ago, designation_account: da)
+      donation4 = create(:donation, amount: 25, donation_date: 5.months.ago, designation_account: da)
+      donor_account.donations << donation3
+      donor_account.donations << donation4
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(0)
+
+      donation2.update(designation_account: nil)
+      donation3.update(designation_account: nil)
+      expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
     end
 
     it 'excludes contacts who increased giving in the past 3 months if specified' do
@@ -145,12 +161,16 @@ describe Appeal do
         contact.update(pledge_frequency: giving_info[:pledge_frequency], last_donation_date: nil)
         giving_info[:amounts].reverse.each_with_index do |amount, i|
           next if amount == 0
-          d = create(:donation, donor_account: donor_account, amount: amount, donation_date: Date.today << i)
+          d = create(:donation, donor_account: donor_account, amount: amount,
+                                donation_date: Date.today << i, designation_account: da)
           contact.update_donation_totals(d)
         end
 
         expect(appeal.contacts_by_opts(['Partner - Financial'], [], increasedGiving3months: true).count)
           .to eq(increased ? 0 : 1)
+
+        donor_account.donations.update_all(designation_account_id: nil)
+        expect(appeal.contacts_by_opts(['Partner - Financial'], [], increasedGiving3months: true).count).to eq(1)
       end
     end
   end
