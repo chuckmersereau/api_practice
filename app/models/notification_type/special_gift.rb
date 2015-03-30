@@ -4,7 +4,7 @@ class NotificationType::SpecialGift < NotificationType
   end
 
   def check_for_donation_to_notify(contact)
-    contact.designated_donations.where('donation_date > ?', 2.weeks.ago).last
+    contact.donations.where('donation_date > ?', 2.weeks.ago).last
   end
 
   def task_description_template

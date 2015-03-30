@@ -2,7 +2,8 @@ class NotificationType::RecontinuingGift < NotificationType
   MONTHS_LATE_WHEN_RECONTINUED = 2
 
   def check_contacts_filter(contacts)
-    contacts.financial_partners
+    contacts.financial_partners.where.not(pledge_frequency: nil)
+      .where('pledge_frequency < ?', LongTimeFrameGift::LONG_TIME_FRAME_PLEDGE_FREQUENCY)
   end
 
   def check_for_donation_to_notify(contact)

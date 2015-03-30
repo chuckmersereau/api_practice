@@ -85,7 +85,7 @@ describe 'Overall notification tests' do
       { pledge_frequency: 6, amounts: [60] } => [started_giving],
       { pledge_frequency: 6, amounts: [60, 0, 0, 0, 0, 0, 60] } => [long_time_frame_gift],
       { pledge_frequency: 6, amounts: [60, 0, 0, 0, 0, 0, 70] } => [larger_gift],
-      { pledge_frequency: 6, amounts: [60] + Array.new(7, 0) + [60] } => [long_time_frame_gift, recontinuing_gift],
+      { pledge_frequency: 6, amounts: [60] + Array.new(7, 0) + [60] } => [long_time_frame_gift],
       { pledge_frequency: 6, amounts: [70] } => [larger_gift, started_giving],
       { pledge_frequency: 6, amounts: [50] } => [smaller_gift, started_giving],
       { pledge_frequency: 12, amounts: [130] } => [larger_gift, started_giving],
@@ -97,8 +97,8 @@ describe 'Overall notification tests' do
       { pledge_frequency: 12, amounts: [120, 10] } => [larger_gift],
       { pledge_frequency: 12, amounts: [120] + Array.new(11, 0) + [121] } => [larger_gift],
       { pledge_frequency: 12, amounts: [120] + Array.new(14, 0) } => [stopped_giving],
-      { pledge_frequency: 12, amounts: [120] + Array.new(14, 0) + [121] } => [larger_gift, recontinuing_gift],
-      { pledge_frequency: 12, amounts: [120] + Array.new(14, 0) + [120] } => [long_time_frame_gift, recontinuing_gift]
+      { pledge_frequency: 12, amounts: [120] + Array.new(14, 0) + [121] } => [larger_gift],
+      { pledge_frequency: 12, amounts: [120] + Array.new(14, 0) + [120] } => [long_time_frame_gift]
     }.each do |giving, notification_types|
       Donation.destroy_all
       Notification.destroy_all
