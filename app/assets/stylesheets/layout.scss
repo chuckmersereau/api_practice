@@ -616,7 +616,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     a.tag:hover {
       background-color: $color-blue-bright;
     }
-    a.tag:nth-child(-n+10) {
+    a.tag:nth-child(-n+15) {
       display: inline-block;
     }
     &.show_all_tags {
