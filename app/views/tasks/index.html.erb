@@ -53,7 +53,7 @@
               </thead>
 
               <tbody class="tablelist tasks">
-                <tr task="task" ng-repeat="task in tasks[g.filter]" id="task_{{task.id}}" multiselect="true"></tr>
+                <tr task="task" ng-repeat="task in tasks[g.filter]" id="task_{{task.id}}" class="tasklist" multiselect="true"></tr>
                 <tr>
                   <td colspan="3">
                       <span style="float:right;"><%= _('Displaying') %> <b>{{g.meta.from}}&nbsp;-&nbsp;{{g.meta.to}}</b> <%= _('of') %> <b>{{g.meta.total}}</b></span>

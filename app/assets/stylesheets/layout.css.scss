@@ -555,13 +555,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
   }
 }
 
-.tasklist {
-  .high {
-    a.ico_trash {
-      vertical-align: text-bottom;
-    }
-  }
-}
+
 
 /* ************************************************************** */
 
@@ -1624,6 +1618,12 @@ body.google_integrations_controller {
 
 /* ********************* Tasks Row ************************** */
 .tasklist {
+  width: 100%;
+  .high {
+    a.ico_trash {
+      vertical-align: text-bottom;
+    }
+  }
   .check {
     padding-right: 5px;
   }
@@ -1637,6 +1637,9 @@ body.google_integrations_controller {
     .tag:hover {
       color: $color-white;
     }
+  }
+  .contact-task-address {
+    line-height: 1.25em;
   }
 }
 
