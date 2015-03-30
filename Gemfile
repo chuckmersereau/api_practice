@@ -1,8 +1,6 @@
 source 'http://rubygems.org'
 source 'https://gems.contribsys.com/' do
-  group :production do
-    gem 'sidekiq-pro'
-  end
+  gem 'sidekiq-pro'
 end
 
 gem 'rails', '~> 4.1.0'
