@@ -4,6 +4,7 @@ describe SidekiqMonitor do
   before do
     APP_CONFIG['sidekiq_warn_emails'] = 'dev@example.com, dev2@example.com'
     APP_CONFIG['sidekiq_warn_min_procs'] = '2'
+    APP_CONFIG['sidekiq_warn_min_procs_interval'] = '60'
     APP_CONFIG['sidekiq_warn_default_queue_latency'] = '600'
     APP_CONFIG['sidekiq_warn_stuck_threads_free'] = '5'
     APP_CONFIG['sidekiq_warn_stuck_enqueued'] = '100'
@@ -41,6 +42,7 @@ describe SidekiqMonitor do
   it 'notifies if fewer than min processes' do
     stub_stats(default_queue_latency: 1.0, enqueued: 1, workers_size: 1)
     stub_processes_threads(5)
+    expect(SidekiqMonitor).to receive(:sleep).with(60.0)
     expect_mail
     SidekiqMonitor.notify_if_problem
   end
