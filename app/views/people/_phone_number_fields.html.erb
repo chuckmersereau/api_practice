@@ -1,16 +1,16 @@
-<div class="field phone_field" data-behavior="field-wrapper">
-  <div class="ls"><%= builder.label :number, _('Number') %></div>
-  <div class="rs">
-    <%= builder.phone_field :number %>
-    <%= builder.select :location, PhoneNumber::LOCATIONS.collect { |s| [_(s), s.downcase] } %>
-    <div class="field_action">
-      <%= builder.check_box :primary, class: 'primary' %>
-      <%= builder.label :primary %>
-      <%= link_to_remove_fields(builder) %>
-    </div>
-    <div class="field_action">
-      <%= builder.check_box :historic, class: 'phone_historic' %>
-      <%= builder.label :historic, _('Phone number no longer valid') %>
+<div class="field phone_field form-inline" data-behavior="field-wrapper">
+  <div class="form-group">
+    <div class="input-group">
+      <%= builder.phone_field :number, class: 'form-control', size: 33 %>
+      <div class="input-group-addon"><%= builder.check_box :primary, class: 'primary' %></div>
     </div>
   </div>
+  <div class="form-group">
+    <%= builder.select :location, PhoneNumber::LOCATIONS.collect { |s| [_(s), s.downcase] }, {include_blank: true}, class: 'form-control' %>
+  </div>
+  <div class="form-group disabler">
+    <%= builder.check_box :historic, class: 'phone_historic' %>
+    <%= builder.label :historic, _(' ') %>
+  </div>
+  <%= link_to_remove_fields(builder) %>
 </div>

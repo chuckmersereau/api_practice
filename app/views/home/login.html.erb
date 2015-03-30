@@ -7,42 +7,46 @@
   <meta name="viewport" content="width=device-width">
   <%= stylesheet_link_tag    "splash", :media => "all" %>
   <%= render 'google_analytics' %>
+
+  <script src="//use.typekit.net/ddm2mzv.js"></script>
+  <script>try{Typekit.load();}catch(e){}</script>
 </head>
 
 <body>
-  <% if false %>
-    <div class="mwrap">
-      <div class="inside notice">
-        <p><%= _('Your session has timed out. Please login again.') %></p>
-      </div>
-    </div>
-  <% end %>
-
-  <header>
-    <div class="margin pagewidth headercontent">
-		  <%= image_tag("splash/logo.png", id: "logo")%>
-    </div>
-  </header>
-
-  <div id="mainwrap" class="pagewidth margin">
-    <div role="main" id="main" class="pagewidth">
-      <h1><%= _('Welcome to MPDX!') %></h1>
-      <p><%= _('Please choose your preferred <br/> method of logging in:') %></p>
-
-      <div id="login_links">
-        <%= link_to(image_tag('splash/relay_logo.png'), '/auth/relay?origin=login', class: "loginlink relay") %>
-        <%= link_to(image_tag('splash/key_logo.png'), '/auth/key?origin=login', class: "loginlink relay") %>
-
-      </div>
-
-    </div>
+  <div class="container-fluid container-first">
   </div>
+  <div class="container">
+    <% if false %>
+      <div class="mwrap">
+        <div class="inside notice">
+          <p><%= _('Your session has timed out. Please login again.') %></p>
+        </div>
+      </div>
+    <% end %>
 
+    <div class="row">
+      <div class="col-md-6 col-md-offset-3 text-center">
 
-  <footer class="margin pagewidth">
-    Ministry Partner Development ConneXion | <%= mail_to('support@mpdx.org', _('Support')) %> | <%= link_to(_('Privacy Policy'), '/privacy', target: '_blank') %><br/>&copy; Copyright <%= Time.now.year %> by <%= link_to('Cru', 'http://cru.org') %> <br /><br />
-    <a href="https://smartystreets.com ">Address Validation</a> by SmartyStreets
-  </footer>
+        <div class="well well-login">
+          <div id="brand">
+            <%= link_to("", "/", :class=> "logo", :title=> 'MPDX Logo') %>
+          </div>
+          <p><%= _('Get started by choosing your login source:') %></p>
 
+          <div id="login_links">
+            <%= link_to(image_tag('splash/relay_logo.png'), '/auth/relay?origin=login', class: "loginlink relay", title: _('Relay Login Link')) %>
+            <%= link_to(image_tag('splash/key_logo.png'), '/auth/key?origin=login', class: "loginlink relay",  title: _('The Key Login Link')) %>
+          </div>
+
+          <footer class="well-login-footer">
+            Ministry Partner Development ConneXion | <%= mail_to('support@mpdx.org', _('Support')) %> | <%= link_to(_('Privacy Policy'), '/privacy', target: '_blank') %><br/>
+            &copy; Copyright <%= Time.now.year %> by <%= link_to('Cru', 'http://cru.org') %> | <a href="https://smartystreets.com ">Address Validation</a> by SmartyStreets
+          </footer>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
 </body>
 </html>

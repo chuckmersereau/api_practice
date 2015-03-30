@@ -1,9 +1,11 @@
-<div class="field social_field" data-behavior="field-wrapper social-field" data-network="twitter">
-  <div class="ls"><%= builder.label :url, 'Twitter' %></div>
-  <div class="rs">
-    <%= builder.text_field :screen_name, placeholder: '@' %>
-    <div class="field_action">
-      <%= link_to_remove_fields(builder) %>
-    </div>
+<div class="form-inline social_field" data-behavior="field-wrapper social-field" data-network="twitter">
+  <div class="form-group">
+  	<%= builder.label :url do %>
+  	  <%= _('<i class="fa fa-twitter-square"></i>') %>
+      <%= builder.text_field :screen_name, placeholder: '@', class: 'form-control' %>
+  	<% end %>
+  </div>
+  <div class="form-group">
+    <%= link_to_remove_fields(builder) %>
   </div>
 </div>

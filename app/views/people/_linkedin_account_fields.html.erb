@@ -1,16 +1,13 @@
-<div class="field social_field" data-behavior="field-wrapper social-field" data-network="linkedin">
-    <div class="ls">
-      <%= builder.label :url, 'LinkedIn' %>
-    </div>
-    <div class="rs">
+<div class="field social_field form-inline" data-behavior="field-wrapper social-field" data-network="linkedin">
+  <div class="form-group">
       <% if current_user.linkedin_account %>
-        <%= builder.text_field :url, placeholder: 'http://' %>
+        <%= builder.text_field :url, placeholder: 'http://', class: 'form-control' %>
       <% else %>
-        <%= link_to(_('Connect to your LinkedIn account to add a url for your contact'), '/auth/linkedin') %>
+        <%= link_to(_('You need to setup LinkedIn first'), '/auth/linkedin') %>
       <% end %>
-      <div class="field_action">
-        <%= link_to_remove_fields(builder) %>
-      </div>
-    </div>
+  </div>
+  <div class="form-group">
+    <%= link_to_remove_fields(builder) %>
+  </div>
 </div>
 

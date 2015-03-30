@@ -1,117 +1,129 @@
-<%= render 'settings_sidebar' %>
-<div id="contentbody" class="withleft">
-  <div class="wpp">
-
-    <% @providers.each do |provider| %>
-      <div class="network_connect">
-
-        <table>
-          <tr>
-            <td class="identify">
-
-              <div class="network_logo">
-                <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
-              </div>
-
-              <div class="network_button">
-                <%= auth_link(provider) %>
-              </div>
-            </td>
-            <td class="connections">
-              <%= render 'network_connections', provider: provider %>
-              <% case provider %>
-              <% when 'facebook', 'relay', 'key', 'google' %>
-              <% else %>
-                <%= _('MPDX does not currently import any data from this source, but it will soon! Connect your account now to be ready for when it does') %>
-              <% end %>
-            </td>
-          </tr>
-        </table>
-      </div>
-    <% end %>
-    <% provider = 'organization' %>
-    <div class="network_connect">
-      <table>
-        <tr>
-          <td class="identify">
-
-            <div class="network_logo">
-              <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
+<div class="row">
+  <div class="col-md-3" role="complementary">
+    <%= render 'settings_sidebar' %>
+  </div>
+  <div class="col-md-9">
+    <div id="contentbody">
+      <div class="wpp">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="page-filters">
+              <h2><%= _('Networks & Imports') %></h2>
             </div>
+          </div>
+        </div>
+        <% @providers.each do |provider| %>
+          <div class="network_connect spacer-top">
 
-            <div class="network_button">
-              <%= link_to(_('Add another Account'), '#', data: {behavior: 'add_org_account'}, :class => "btn") %>
-            </div>
-          </td>
-          <td class="connections">
-            <%= render 'network_connections', provider: provider %>
-          </td>
-        </tr>
-      </table>
-    </div>
-
-    <% %w[tnt].each do |provider| %>
-      <div class="network_connect">
-
-        <table>
-          <tr>
-            <td class="identify">
-
-              <div class="network_logo">
-                <h1>
-                  <%= image_tag("logos/#{provider}_logo.png", alt: provider) %> <br />
-                  TntMPD
-                </h1>
-              </div>
-            </td>
-            <td class="connections" data-behavior="account" style="width:500px">
-
-              <div class="importoptions formstyles" data-behavior="import_options" style="display:none">
-                <%= form_for Import.new(source: provider) do |f| %>
-                  <%= f.hidden_field :source %>
-
-                  <div class="field">
-                    <%= f.file_field :file %>
-                    <%= f.hidden_field :file_cache %>
+            <table>
+              <tr>
+                <td class="identify">
+                  <div class="network_logo">
+                    <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
                   </div>
+                </td>
+                <td class="connections">
+                  <%= render 'network_connections', provider: provider %>
+                  <% case provider %>
+                  <% when 'facebook', 'relay', 'key', 'google' %>
+                  <% else %>
+                    <div class="alert alert-warning" role="alert"><%= _('MPDX does not currently import any data from this source, but it will soon! Connect your account now to be ready for when it does') %></div>
+                  <% end %>
 
-                  <div class="field radiocheck">
-                    <%= f.radio_button :override, false %>
-                    <%= f.label 'override_false', _('Only add data to matched contact records when the current field is blank.') %>
+                  <div class="network_button">
+                    <%= auth_link(provider) %>
                   </div>
-                  <div class="field radiocheck">
-                    <%= f.radio_button :override, true %>
-                    <%= f.label 'override_true', _('Override existing contact fields with data in the uploaded file.') %>
-                  </div>
-                  <div class="field">
-                    <div class="importtags">
-                      <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
-                    </div>
-                  </div>
-                  <div class="hint">
-                    <%= link_to(_('Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version.'), 'http://www.tntware.com/tntmpd/downloads/') %><br />
-                    <div class="name inside alert"><%= link_to(_('Please watch this video to learn how to export from TNT in the specific format for MPDx.'), 'http://www.youtube.com/watch?v=EoWFRFIYMkQ&list=UUTjqVT-m3YXICbwaIu9_Gqg&index=22', target: '_blank') %></div>
-                  </div>
-                  <a href="#" class="btn btngreen" data-behavior="import_button"><%= _('Import') %></a>
-                <% end %>
-              </div>
-              <div><a href="#" class="btn" data-behavior="show_import"><%= _('Import Contacts') %></a></div>
+                </td>
+              </tr>
+            </table>
+          </div>
+        <% end %>
+        <% provider = 'organization' %>
+        <div class="network_connect">
+          <table>
+            <tr>
+              <td class="identify">
 
-            </td>
-          </tr>
-        </table>
+                <div class="network_logo">
+                  <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
+                </div>
+
+
+              </td>
+              <td class="connections">
+                <%= render 'network_connections', provider: provider %>
+                <div class="network_button">
+                  <%= link_to(_('Add another Account'), '#', data: {behavior: 'add_org_account'}, :class => "btn btn-default btn-xs") %>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+        <% %w[tnt].each do |provider| %>
+          <div class="network_connect">
+
+            <table>
+              <tr>
+                <td class="identify">
+
+                  <div class="network_logo">
+                    <h3>
+                      <%= image_tag("logos/#{provider}_logo.png", alt: provider) %><br />
+                      TntMPD
+                    </h3>
+                  </div>
+                </td>
+                <td class="connections" data-behavior="account" style="width:500px">
+
+                  <div class="importoptions formstyles" data-behavior="import_options" style="display:none">
+                    <%= form_for Import.new(source: provider) do |f| %>
+                      <%= f.hidden_field :source %>
+
+                      <div class="field">
+                        <%= f.file_field :file %>
+                        <%= f.hidden_field :file_cache %>
+                      </div>
+
+                      <div class="field radiocheck">
+                        <%= f.radio_button :override, false %>
+                        <%= f.label 'override_false', _('Only add data to matched contact records when the current field is blank.') %>
+                      </div>
+                      <div class="field radiocheck">
+                        <%= f.radio_button :override, true %>
+                        <%= f.label 'override_true', _('Override existing contact fields with data in the uploaded file.') %>
+                      </div>
+                      <div class="field">
+                        <div class="importtags">
+                          <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
+                        </div>
+                      </div>
+                      <div class="hint">
+                        <%= link_to(_('Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version.'), 'http://www.tntware.com/tntmpd/downloads/') %><br />
+                        <div class="name inside alert"><%= link_to(_('Please watch this video to learn how to export from TNT in the specific format for MPDx.'), 'http://www.youtube.com/watch?v=EoWFRFIYMkQ&list=UUTjqVT-m3YXICbwaIu9_Gqg&index=22', target: '_blank') %></div>
+                      </div>
+                      <a href="#" class="" data-behavior="import_button"><%= _('Import') %></a>
+                    <% end %>
+                  </div>
+                  <div><a href="#" class="btn btn-xs btn-default" data-behavior="show_import"><%= _('Import Contacts') %></a></div>
+
+                </td>
+              </tr>
+            </table>
+          </div>
+        <% end %>
+
+        <div data-behavior="new_org_account" style="display:none" title="<%= _('Connect to your organization') %>">
+          <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
+            <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true) %>
+            <br /><br />
+            <%= link_to(_('Connect to selected organization'), new_person_organization_account_path, class: 'btn btn-primary btn-xs', id: 'connect_to_org') %>
+          </div>
+        </div>
+        <div id="org_connection_box">
+        </div>
+
       </div>
-    <% end %>
-
-    <div data-behavior="new_org_account" style="display:none" title="<%= _('Connect to your organization') %>">
-      <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
-        <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true) %>
-        <br /><br />
-        <%= link_to(_('Connect to selected organization'), new_person_organization_account_path, class: 'btn', id: 'connect_to_org') %>
-      </div>
     </div>
-    <div id="org_connection_box">
-    </div>
-
   </div>
 </div>

@@ -25,25 +25,25 @@
                         <thead style="font-weight: bold;">
                             <tr>
                                 <td style="width: 5px;"></td>
-                                <td style="text-align: center;"><%= _('Contact') %></td>
-                                <td style="width:24%; text-align: center;"><%= _('Donation(s)') %></td>
+                                <td><%= _('Contact') %></td>
+                                <td style="width:24%;"><%= _('Donation(s)') %></td>
                                 <td style="width:4%;"></td>
                             </tr>
                         </thead>
                         <tbody>
-                          <tr><td colspan="4">
+                          <tr><td colspan="4" class="table_select_filters">
                             <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
                             <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
                             <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |
                             <a href="" ng-click="selectAll('!donated')"><%= _('Select all that have not donated') %></a>
                           </td></tr>
                           <tr ng-repeat="c in appeal.contacts | orderBy:contactName">
-                              <td><input type="checkbox" ng-model="$parent.checkedContacts[c]"></td>
+                              <td class="table_select_check"><input type="checkbox" ng-model="$parent.checkedContacts[c]"></td>
                               <td>{{contactName(c)}}</td>
                               <td><span ng-repeat="d in listDonations(c)" style="display:block;">{{d}}</span></td>
                               <td><a class="ico ico_trash" href ng-click="deleteContact(c)"><%= _('Delete') %></a></td>
                           </tr>
-                          <tr><td colspan="4">
+                          <tr><td colspan="4" class="table_select_filters">
                               <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
                               <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
                               <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |

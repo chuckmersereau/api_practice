@@ -4,64 +4,95 @@
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <title>Mpdx - <%= _('Setup') %></title>
-    <%= stylesheet_link_tag    "setup", :media => "all" %>
+    <%= stylesheet_link_tag    "splash", :media => "all" %>
     <%= stylesheet_link_tag    "errors", :media => "all" %>
     <%= javascript_include_tag "application" %>
     <%= csrf_meta_tags %>
     <%= render 'google_analytics' %>
+
+    <script src="//use.typekit.net/ddm2mzv.js"></script>
+    <script>try{Typekit.load();}catch(e){}</script>
   </head>
   <body>
+    <div class="container-fluid container-first">
+    </div>
 
-    <div class="setupwrap">
+    <div class="container">
 
-      <div id="body">
-        <header id="global" class="outer">
-          <div id="logo"><%= link_to("MPDX", "MPDX") %></div>
-          <div class="links">
-            <div class="section"><%= current_user %></div>
-            <div class="section"><%= link_to(_('Log out'), "/logout", :class => "btn btndark") %></div>
+
+        <div class="row">
+          <div class="col-md-8 col-md-offset-2">
+            <div class="splash-user-bar text-right">
+              <div class="links">
+                <div class="section"><strong><%= current_user %></strong></div>
+                <div class="section"><%= link_to(_('Log out'), "/logout") %></div>
+              </div>
+            </div>
+            <div class="well well-splash-setup">
+              <div id="body">
+                <header id="global" class="outer">
+                  <div class="row">
+                    <div class="col-md-12 text-center">
+                      <div id="brand">
+                        <%= link_to("MPDX", "MPDX", :class=> "logo", :title=> 'MPDX Logo') %>
+                      </div>
+                    </div>
+                  </div>
+                </header>
+
+                <div class="callout row">
+                  <div class="col-md-12 text-center">
+                    <% if wizard_scope == 'setup.org_accounts' %>
+                      <p><%= _('Start by connecting to your organization.') %></p>
+                    <% else %>
+                      <div class="alert alert-success" role="alert">
+                        <p><strong><%= _('Sweet! Your Account is activated!') %></strong> <br/>
+                        <%= _('Now you just need to connect some social accounts') %></p>
+                      </div>
+                    <% end %>
+                  </div>
+                </div>
+
+                <div id="content">
+
+                  <div class="">
+
+                  <% if notice %>
+                    <div class="alert alert-info" role="alert"><%= notice %></div>
+                  <% end %>
+                  <% if alert %>
+                    <div class="alert alert-warning" role="alert"><%= alert %></div>
+                  <% end %>
+
+                  <%= yield %>
+
+                </div>
+              </div>
+
+              <aside id="right" style="display: none;">
+
+                <div class="modcontent">
+                  <% if wizard_scope == 'setup.org_accounts' %>
+                    <%= _("To use MPDX, you need to connect to your organization's donation system. If you raise funds through more than one organization, you can connect to multiple accounts.") %>
+                  <% else %>
+                    <%== _("<p>Easily connect all of your contacts, calendars, communications and social conversations. MPDX will automatically identify contact's social profiles on Facebook, LinkedIn, and </p>
+                            <p>Twitter so that you connect, listen, and engage with your minitry partners. </p>") %>
+                  <% end %>
+                </div>
+
+              </aside>
+
+              <footer class="well-login-footer text-center">
+                Ministry Partner Development ConneXion | <%= mail_to('support@mpdx.org', _('Support')) %> | <%= link_to(_('Privacy Policy'), '/privacy', target: '_blank') %><br/>
+                &copy; Copyright <%= Time.now.year %> by <%= link_to('Cru', 'http://cru.org') %> | <a href="https://smartystreets.com ">Address Validation</a> by SmartyStreets
+              </footer>
+            </div>
           </div>
-        </header>
-
-        <div id="callout">
-          <div class="in">
-            <% if wizard_scope == 'setup.org_accounts' %>
-              <%= _('Welcome to MPDX!') %> <br/>
-              <span class="small"><%= _('Connect to your organization') %></span>
-            <% else %>
-              <%= _('Sweet! Your Account is activated!') %> <br/>
-              <span class="small"><%= _('Just need to connect some social accounts') %></span>
-            <% end %>
-          </div>
-        </div>
-        <div id="content">
-
-          <% if notice %>
-            <p class="notice"><%= notice %></p>
-          <% end %>
-          <% if alert %>
-            <p class="alert"><%= alert %></p>
-          <% end %>
-
-          <%= yield %>
-
-        </div>
-      </div>
-
-      <aside id="right" style="display: none;">
-
-        <div class="modcontent">
-          <% if wizard_scope == 'setup.org_accounts' %>
-            <%= _("To use MPDX, you need to connect to your organization's donation system. If you raise funds through more than one organization, you can connect to multiple accounts.") %>
-          <% else %>
-            <%== _("<p>Easily connect all of your contacts, calendars, communications and social conversations. MPDX will automatically identify contact's social profiles on Facebook, LinkedIn, and </p>
-                    <p>Twitter so that you connect, listen, and engage with your minitry partners. </p>") %>
-          <% end %>
         </div>
 
-      </aside>
 
     </div>
+
 
   </body>
 </html>

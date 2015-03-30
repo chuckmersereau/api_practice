@@ -302,7 +302,11 @@ angular.module('mpdxApp')
                     modal: true
                 });
 
-                jQuery('.followUpDialogDatepicker').datepicker({ dateFormat: 'yy-mm-dd' });
+                jQuery('.followUpDialogDatepicker').datepicker({
+                  autoclose: true,
+                  todayHighlight: true,
+                  format: 'yyyy-mm-dd'
+                });
 
                 if($scope.followUpDialogResult.apptTask && window.google) {
                   var autocomplete = new google.maps.places.Autocomplete($('#follow-up-task_location')[0])

@@ -12,41 +12,41 @@
       </div>
     <% end %>
 
-    <div class="field">
+    <div class="form-group">
       <%= f.label :donation_date, _('Date') %>
       <%= f.date_select :donation_date %>
     </div>
 
-    <div class="field">
+    <div class="form-group">
       <%= f.label :tendered_amount, _('Amount') %>
-      <%= f.text_field :tendered_amount %>
+      <%= f.text_field :tendered_amount, class: 'form-control' %>
     </div>
 
     <% if @donor_accounts.length > 1 %>
-      <div class="field">
+      <div class="form-group">
         <%= f.label :donor_account_id, _('Donor') %>
-        <%= f.select :donor_account_id, @donor_accounts %>
+        <%= f.select :donor_account_id, @donor_accounts, {}, class: 'form-control' %>
       </div>
     <% else %>
       <%= f.hidden_field :donor_account_id, value: @donor_accounts.first[1] %>
     <% end %>
 
-    <div class="field">
+    <div class="form-group">
       <%= f.label :appeal_id, _('Appeal') %>
       <%= f.select :appeal_id, options_from_collection_for_select(@appeals, 'id', 'name', donation.appeal.present? ? donation.appeal.id : ''),
-                   :include_blank => true %>
+                   {:include_blank => true}, class: 'form-control' %>
     </div>
 
-    <div class="field">
+    <div class="form-group">
       <%= f.label :appeal_amount, _('Appeal Amount') %>
-      <%= f.text_field :appeal_amount %>
-      <br>Leave empty to use full donation amount
+      <%= f.text_field :appeal_amount, class: 'form-control' %>
+      Leave empty to use full donation amount
     </div>
 
     <% if current_account_list.multiple_designations %>
-      <div class="field">
+      <div class="form-group">
         <%= f.label :designation_account_id, _('Designation Account') %>
-        <%= f.select :designation_account_id, current_account_list.designation_accounts.collect {|da| [da.designation_number, da.id]} %>
+        <%= f.select :designation_account_id, current_account_list.designation_accounts.collect {|da| [da.designation_number, da.id]}, {}, class: 'form-control' %>
       </div>
     <% else %>
       <%= f.hidden_field :designation_account_id %>

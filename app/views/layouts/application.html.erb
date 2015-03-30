@@ -8,6 +8,8 @@
     </title>
     <meta name="viewport" content="width=device-width, maximum-scale=1.0" />
     <%= stylesheet_link_tag    'jquery-ui', media: 'all' %>
+    <%= stylesheet_link_tag    'crubrand', media: 'all' %>
+    <%= stylesheet_link_tag    'datepicker3', media: 'all' %>
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
     <%= csrf_meta_tags %>
@@ -21,79 +23,139 @@
       window.current_account_list_tester = '<%= current_account_list.tester %>';
     </script>
     <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=places,geometry"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script src="//use.typekit.net/ddm2mzv.js"></script>
+    <script>try{Typekit.load();}catch(e){}</script>
   </head>
   <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller" ng-app="mpdxApp">
     <%= render 'peek/bar' %>
-    <header id="global">
-    <hgroup id="user">
-    <div class="outer">
-      <div id="brand"><%= link_to("", "/", :class=> "logo") %></div>
-      <div class="links">
-        <div class="section lists" data-behavior="account_selector" style="<%= 'display:none' unless current_user.account_lists.length > 1 %>">
-          <a data-behavior="current_account"><span class='cur'><%= current_account_list.name %></span><%= image_tag("list_select.png") %></a>
-          <div style="display:none" class="switcher">
-            <ul>
-              <% (current_user.account_lists - [current_account_list]).each do |al| %>
-                <li><%= link_to(al.name, "/home/change_account_list?id=#{al.id}") %></li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
 
-        <div class="section"><%= link_to(_('Settings'), "/preferences", :class => "") %></div>
-        <div class="section"><%= link_to(_('Log out'), '/logout', :class => "") %></div>
-      </div>
-    </div>
-    </hgroup>
-    <hgroup id="menu">
-    <div id="mainmenu">
-      <div class="outer">
-        <div class="item <%= request.path == '/' ? 'active' : '' %>"><%= link_to(_('Dashboard'), "/") %></div>
-        <div class="item <%= request.path =~ /\/contacts/ ? 'active' : '' %>"><%= link_to(_('Contacts'), "/contacts") %></div>
-        <!-- <div class="item <%= request.path =~ /\/messages/ ? 'active' : '' %>"><%= link_to((_('Messages') + ' ' + content_tag(:span, 3, class: 'indicator')).html_safe, '') %></div> -->
-        <div class="item <%= request.path =~ /\/tasks/ ? 'active' : '' %>"><%= link_to(_('Tasks'), "/tasks/") %></div>
-        <div class="item <%= request.path =~ /\/donations/ ? 'active' : '' %>"><%= link_to(_('Donations'), "/donations") %></div>
-        <% if $rollout.active?(:research, current_account_list) %>
-          <div class="item <%= request.path =~ /\/research/ ? 'active' : '' %>"><%= link_to(_('Research'), "/research") %></div>
-        <% end %>
-        <% if $rollout.active?(:insights, current_account_list) %>
-            <div class="item <%= request.path =~ /\/insights/ ? 'active' : '' %>"><%= link_to(_('Insights'), "/insights") %></div>
-        <% end %>
-        <div class="item last"><%= link_to(_('Help'), new_help_request_path, target: '_blank') %></div>
-        <!-- <div class="item last <%= request.path =~ /\/social/ ? 'active' : '' %>"><%= link_to(_('Social'), "") %></div> -->
-        <div class="item search">
-          <form method="get" action="/contacts" id="searchform">
-            <input type="text" class="searchfield" name="q" id="globalContactSearch" autocomplete="off" placeholder="<%= _('Search contacts...') %>" value="<%= request.GET["q"] %>" />
-            <button type="submit">Search</button>
-          </form>
+    <header id="global">
+      <div class="head-user-wrap">
+        <div class="container">
+          <hgroup id="user">
+            <div class="row">
+              <div class="col-md-6 col-xs-6" id="brand">
+                <%= link_to("", "/", :class=> "logo") %>
+              </div>
+              <div class="col-md-6 col-xs-6">
+                <div class="links text-right">
+                  <div class="section lists account-dropdown" data-behavior="account_selector" style="<%= 'display:none' unless current_user.account_lists.length > 1 %>">
+                    <a data-behavior="current_account" class="btn btn-default btn-account-dropdown">
+                      <span class='cur'><%= current_account_list.name %></span>
+                      <span class="caret"></span>
+                      <%#= image_tag("list_select.png") %>
+                    </a>
+                    <div style="display:none" class="switcher">
+                      <ul>
+                        <% (current_user.account_lists - [current_account_list]).each do |al| %>
+                          <li><%= link_to(al.name, "/home/change_account_list?id=#{al.id}") %></li>
+                        <% end %>
+                      </ul>
+                    </div>
+                  </div>
+
+                  <div class="section">
+                    <form method="get" action="/contacts" id="searchform">
+                      <input type="text" class="form-control" name="q" id="globalContactSearch" autocomplete="off" placeholder="<%= _('Search contacts...') %>" value="<%= request.GET["q"] %>" />
+                      <!-- <button type="submit">Search</button> -->
+                    </form>
+                  </div>
+                  <div class="section">
+                    <div class="dropdown">
+                      <a class="dropdown-toggle settings-drop" href="#" type="button" data-toggle="dropdown" aria-expanded="true" data-disabled="true">
+                        <i class="fa fa-cog"></i>
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="settings-drop">
+                        <li role="presentation"><%= link_to(_('Preferences'), "/preferences", :class => "") %></li>
+                        <li role="presentation"><%= link_to(_('Log out'), '/logout', :class => "") %></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </hgroup>
         </div>
-        <div class="right" style="width:100px;">
-          <%= @account_list_exhibit.balances(current_user) %>
-        </div>
       </div>
-    </div>
-    <div id="submenu">
-      <div class="outer">
-        <div class="section"><%= link_to(_('Add Task'), new_task_path, id: 'add_task_button', class: 'btn add_task', remote: true) %></div>
-        <!-- <div class="section"><%= link_to(_('Status Update'), "", class: 'btn') %></div> -->
-        <!-- <div class="section"><%= link_to(_('Send Message'), "", class: 'btn') %></div> -->
-        <div class="section"><%= link_to(_('Add Contact'), new_contact_path, class: 'btn') %></div>
-        <div class="section"><%= link_to(_('Import Contacts'), accounts_path, class: 'btn') %></div>
-        <% if params[:controller] == 'contacts' %>
-          <div class="section"><%= link_to(_('Find Duplicates'), find_duplicates_contacts_path, class: 'btn') %></div>
-        <% end %>
-        <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
-          <div class="section right tip" title="<%= _('%% of goal pledged (%{totals})').localize %
-                                                    {totals: "#{number_to_current_currency(current_account_list.total_pledges.to_i)} / #{number_to_current_currency(current_account_list.monthly_goal)}"} %>">
-            <%= render 'progress_bar' %>
+      <hgroup id="menu">
+        <div id="mainmenu">
+          <nav class="navbar">
+            <div class="container">
+              <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                </button>
+              </div>
+              <div class="row">
+                <div class="col-md-9 col-sm-9">
+                  <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                    <ul class="nav navbar-nav">
+                      <li class="item <%= request.path == '/' ? 'active' : '' %>"><%= link_to(_('Dashboard'), "/") %></li>
+                      <li class="item <%= request.path =~ /\/contacts/ ? 'active' : '' %>"><%= link_to(_('Contacts'), "/contacts") %></li>
+                      <!-- <li class="item <%= request.path =~ /\/messages/ ? 'active' : '' %>"><%= link_to((_('Messages') + ' ' + content_tag(:span, 3, class: 'indicator')).html_safe, '') %></li> -->
+                      <li class="item <%= request.path =~ /\/tasks/ ? 'active' : '' %>"><%= link_to(_('Tasks'), "/tasks/") %></li>
+                      <li class="item <%= request.path =~ /\/donations/ ? 'active' : '' %>"><%= link_to(_('Donations'), "/donations") %></li>
+                      <% if $rollout.active?(:research, current_account_list) %>
+                        <li class="item <%= request.path =~ /\/research/ ? 'active' : '' %>"><%= link_to(_('Research'), "/research") %></li>
+                      <% end %>
+                      <% if $rollout.active?(:insights, current_account_list) %>
+                        <li class="item <%= request.path =~ /\/insights/ ? 'active' : '' %>"><%= link_to(_('Insights'), "/insights") %></li>
+                      <% end %>
+                      <li class="item last"><%= link_to(_('Help'), new_help_request_path, target: '_blank') %></li>
+                      <!-- <li class="item last <%= request.path =~ /\/social/ ? 'active' : '' %>"><%= link_to(_('Social'), "") %></li> -->
+                    </ul>
+                  </div>
+                </div>
+                <div class="col-md-3 col-sm-3 text-right">
+                  <div class="navbar-quick">
+                    <%= @account_list_exhibit.balances(current_user) %>
+                  </div>
+                  <div class="text-right navbar-quick">
+                    <div class="dropdown">
+                      <a class="dropdown-toggle btn btn-secondary" href="#" type="button" id="quick-drop" data-toggle="dropdown" aria-expanded="true" data-disabled="true"  onClick="_gaq.push(['_trackEvent', 'Global Events', 'Actions', 'Quick Add']);">
+                        <i class="fa fa-plus-circle"></i> Quick Add
+                      </a>
+                      <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="quick-drop">
+                        <li role="presentation"><%= link_to(_('Add Task'), new_task_path, id: 'add_task_button', class: 'add_task', remote: true) %></li>
+                        <li role="presentation"><%= link_to(_('Add Contact'), new_contact_path, class: '') %></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+
+              </div><!-- row -->
+            </div><!-- container-luid -->
+          </nav>
+
+        </div>
+        <div id="submenu">
+          <div class="container">
+            <div class="row">
+              <div class="col-md-12">
+                <!-- <div class="section"><%= link_to(_('Status Update'), "", class: '') %></div> -->
+                <!-- <div class="section"><%= link_to(_('Send Message'), "", class: '') %></div> -->
+                <% if params[:controller] == 'contacts' %>
+                  <div class="section"><%= link_to(_('Import Contacts'), accounts_path, class: '') %></div>
+                  <div class="section"><%= link_to(_('Find Duplicates'), find_duplicates_contacts_path, class: '') %></div>
+                <% end %>
+                <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
+                  <div class="section right tip" title="<%= _('%% of goal pledged (%{totals})').localize %
+                                                            {totals: "#{number_to_current_currency(current_account_list.total_pledges.to_i)} / #{number_to_current_currency(current_account_list.monthly_goal)}"} %>">
+                    <%= render 'progress_bar' %>
+                  </div>
+                <% end %>
+              </div>
+            </div><!-- row -->
           </div>
-        <% end %>
-      </div>
-    </div>
-    </hgroup>
+        </div><!-- submenu -->
+      </hgroup>
     </header>
 
-    <div id="body" class="outer">
+    <div id="body">
       <%#<aside id="tipside">%>
       <%#<section class="tipbox">%>
       <%#blah blah blah%>
@@ -103,21 +165,32 @@
       <%#</section>%>
       <%#</aside>%>
 
-      <div id="content">
+      <div id="content" class="container">
         <%= render 'notices' %>
         <%= yield %>
       </div>
-      <div id="footer">
+      <div id="footer" class="container">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="footer-border"></div>
+            <img src="https://www.cru.org/images/cru-logo.svg" onerror="this.src='https://www.cru.org/images/cru-logo.png'; this.onerror=null;">
+            <%= link_to(image_tag(''), '') %><br/>
+            <%= link_to(_('Support/Help'), new_help_request_path, target: '_blank') %>
+            <%= link_to(_('Privacy Policy'), '/privacy', target: '_blank') %>
+            <br/>
+            © 2012-2015, Cru. All Rights Reserved.
+          </div>
+        </div>
         <% if session[:fullsite] == true %>
         <%= link_to(_('Visit Mobile Version'), '/mobile/') %>
         <% end %>
       </div>
     </div>
-    <div id="feedback">
+    <div id="feedback" style="display: none;">
       <h2><%= _('Need Help?') %></h2>
       <p><%== _("Check out %{help_site} for training videos and FAQs. If you can't find the answer you need there or need to report a bug, %{link}").localize %
-               {link: link_to(_('click here to let us know'), new_help_request_path),
-              help_site: link_to('www.gcx.org/mpdxhelp/', 'https://www.gcx.org/mpdxhelp/', target: '_blank')} %>
+              {link: link_to(_('click here to let us know'), new_help_request_path),
+               help_site: link_to('our MPDX Help Site', 'https://www.gcx.org/mpdxhelp/', target: '_blank')} %>
       </p>
     </div>
 

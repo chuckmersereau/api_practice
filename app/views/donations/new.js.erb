@@ -5,11 +5,13 @@ $('#js-edit_donation').dialog({
   buttons: [
     {
       text: __('Save'),
+      'class':'btn btn-primary',
       click: function(e) {
         $('form', this).trigger('submit')
       }
     }, {
       text: __('Cancel'),
+      'class':'btn btn-secondary',
       click: function() {
         $(this).dialog("destroy");
       }

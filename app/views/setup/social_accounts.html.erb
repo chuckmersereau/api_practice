@@ -20,14 +20,14 @@
             </div>
           </div>
         <% end %>
-        <%= _('MPDX does not currently import any data from this source, but it will soon! Connect your account now to be ready for when it does') unless %w[google facebook relay key].include?(provider) %>
+        <p><%= _('MPDX does not currently import any data from this source, but it will soon! Connect your account now to be ready for when it does') unless %w[google facebook relay key].include?(provider) %></p>
       </div>
 
 
     </div>
   <% end %>
 
-  <div class="continue">
-    <%= link_to(_('continue'), next_wizard_path, :class => "btn") %>
+  <div class="continue text-center">
+    <%= link_to(_('Continue'), next_wizard_path, :class => "btn btn-primary btn-lg") %>
   </div>
 </div>

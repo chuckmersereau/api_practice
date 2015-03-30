@@ -1,0 +1,147 @@
+@import "elements.scss";
+
+/* ************************************************************************ */
+
+p {margin: 0 0 1em 0;}
+
+p:last-child {margin-bottom: 0;}
+
+/* ************************************************************************ */
+
+.smallhead {font-size: 16px; font-weight: normal;}
+
+.desired_action {text-shadow: none;}
+
+/* ************************************************************************ */
+
+#global {
+  #mainmenu {
+    font-size: 18px;
+    .active a {
+      color: $color-white;
+    }
+    a.btn-reverse {
+      color: $color-white;
+    }
+  }
+  #submenu {
+    font-size: 16px;
+    a {
+      color: $color-text;
+    }
+  }
+  .bal {
+    font-size: 15px;
+    .balance {
+      font-weight: bold;
+      letter-spacing: -1px;
+      font-size: 14px;
+    }
+  }
+}
+
+.btn.btn-reverse {
+  color: $color-white;
+  text-shadow: none;
+}
+
+#user {
+  .links {
+    a {
+      color: $color-black;
+      font-size: 20px;
+    }
+  }
+}
+
+.indicator {
+  font-size: 12px;
+  font-weight: bold;
+  color: $white !important;
+}
+
+.indicator {
+  font-size: 11px;
+  font-weight: normal;
+  text-shadow: 0 1px 0 #000;
+}
+
+/* ************************************************************************ */
+
+.list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.tasklist {
+  li {
+    line-height: 2.0em;
+  }
+  .date {font-weight: normal;}
+  .high a {color: red;}
+  .mid a {color: #F6921E;}
+}
+
+/* ************************************************************************ */
+
+.tablelist {
+  th {text-align: left;}
+  td.profile {
+  }
+  .status h4 {
+    margin: 0 0 .5em;
+    font-size: 12px;
+  }
+}
+
+address {
+  margin-bottom: 0;
+}
+
+/* ************************************************************************ */
+
+.taskgroup {
+  line-height: 2.25em;
+  height: 2.25em;
+  color: $white;
+  font-weight: bold;
+  font-size: 15px;
+}
+
+.translation_missing {
+  color: red;
+  font-weight: bold;
+  font-size: 16px;
+  text-decoration: blink;
+}
+
+.messages {
+  tr {border-bottom: 1px solid $gray_light;}
+  tr:last-child {border-bottom: 0px;}
+  tr td {padding-bottom: 10px; padding-top: 10px;}
+  tr:last-child td {padding-bottom: 0px;}
+
+  .profilepic {padding-right: 10px;}
+  .data {color: $gray;}
+  .messagebody {margin-bottom: 5px;}
+  .actions a {margin-right: 6px;}
+
+  header {margin-bottom: 3px;}
+
+}
+
+.socstatus {
+  .hl {color: $gray_dark;}
+  .hl.amt {font-weight: bold;}
+}
+
+.pagination .current { font-weight: bold; }
+
+.text-error {
+  color: #9d2c2d;
+}
+
+.contact_location,
+.contact_status {
+  line-height: 1.35em;
+}

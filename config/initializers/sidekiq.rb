@@ -8,7 +8,9 @@ Sidekiq.configure_client do |config|
                    namespace: "MPDX:#{rails_env}:resque"}
 end
 
-Sidekiq::Client.reliable_push!
+if Sidekiq::Client.method_defined? :reliable_push!
+  Sidekiq::Client.reliable_push!
+end
 
 Sidekiq.configure_server do |config|
   config.reliable_fetch!
