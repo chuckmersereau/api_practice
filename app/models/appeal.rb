@@ -69,7 +69,7 @@ class Appeal < ActiveRecord::Base
 
   def no_joined_recently(contacts, within_months)
     contacts.where.not('pledge_amount > 0 AND contacts.first_donation_date >= ?',
-                       within_months.months.ago.beginning_of_month)
+                       within_months.months.ago)
   end
 
   def no_above_pledge_recently(contacts, prev_full_months)
