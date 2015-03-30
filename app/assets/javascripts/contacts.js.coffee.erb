@@ -302,6 +302,7 @@ $ ->
       # Add referrals
       $(document).on 'ajax:before', '.add_referrals', ->
         $('#referrals_modal').dialog {
+          height: 675,
           buttons: [
             {
               text: __('Save'),

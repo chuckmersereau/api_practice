@@ -1026,7 +1026,7 @@ table tbody.tasks {
 
 .contact-info{
   background: #e7f8ff;
-  padding:1px 6px;
+  padding:12px;
 
   .corner_close{
     float:right;
@@ -1363,8 +1363,22 @@ table.meta {
   opacity: .4;
 }
 
-#referrals_modal input {
-  width: 88px;
+#referrals_modal {
+  input[type=text],
+  input[type=email] {
+    width: 88px;
+    padding: 4px;
+    height: auto;
+  }
+  th {
+    line-height: 1.25em;
+    font-weight: normal;
+    font-size: 13px;
+  }
+  td {
+    padding-top: 2px;
+    padding-right: 2px;
+  }
 }
 
 /* duplicate merge page */
@@ -1624,6 +1638,10 @@ body.google_integrations_controller {
       color: $color-white;
     }
   }
+}
+
+.task-actions {
+  margin-left: 10px;
 }
 
 .comment_status {
