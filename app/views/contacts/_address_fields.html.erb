@@ -86,7 +86,7 @@
     </div>
     <div class="col-xs-6">
       <div class="form-group text-right">
-        <%= link_to_remove_fields(builder) %>
+        <%= link_to_remove_fields(builder, false, {label: _('Remove')}) %>
         <p class="status">
           <small>
             <%= builder.object.start_date ? _('Updated: ') + l(builder.object.start_date, format: :short) + '.' : '' %>
