@@ -22,8 +22,8 @@
                 <div class="field" style="height: 400px; overflow-y: auto; display: block;">
                     <label><%= _('Contacts') %></label>
                     <table style="width:100%;">
-                        <thead style="font-weight: bold;">
-                            <tr><td colspan="5">
+                        <thead>
+                            <tr><td colspan="5" class="table_select_filters">
                               <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
                               <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
                               <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |
@@ -31,29 +31,21 @@
                             </td></tr>
                             <tr>
                                 <td style="width: 5px;"></td>
-                                <td style="text-align: center;"><%= _('Contact') %></td>
-                                <td style="text-align: center;"><%= _('Commitment') %></td>
-                                <td style="width:24%; text-align: center;"><%= _('Donation(s)') %></td>
+                                <td><%= _('Contact') %></td>
+                                <td><%= _('Commitment') %></td>
+                                <td style="width:24%;"><%= _('Donation(s)') %></td>
                                 <td style="width:4%;"></td>
                             </tr>
                         </thead>
                         <tbody>
-                          <tr><td colspan="4">
-                            <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
-                            <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
-                            <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |
-                            <a href="" ng-click="selectAll('!donated')"><%= _('Select all that have not donated') %></a>
-                          </td></tr>
                           <tr ng-repeat="c in appeal.contacts | orderBy:contactName">
-                              <td><input type="checkbox" ng-model="$parent.checkedContacts[c]"></td>
-                              <td>{{contactDetails(c).name}}</td>
+                            <td class="table_select_check"><input type="checkbox" ng-model="$parent.checkedContacts[c]"></td>
+                            <td>{{contactName(c)}}</td>
                               <td>
                                 <span ng-if="contactDetails(c).status === 'Partner - Financial'">
                                   ${{formatNumber(contactDetails(c).pledge_amount)}} {{pledgeFrequencyStr(contactDetails(c).pledge_frequency)}}
                                 </span>
                               </td>
-                              <td class="table_select_check"><input type="checkbox" ng-model="$parent.checkedContacts[c]"></td>
-                              <td>{{contactName(c)}}</td>
                               <td><span ng-repeat="d in listDonations(c)" style="display:block;">{{d}}</span></td>
                               <td><a class="ico ico_trash" href ng-click="deleteContact(c)"><%= _('Delete') %></a></td>
                           </tr>
@@ -67,8 +59,7 @@
                             <td style="text-align: right;"><strong>Average:</strong> </td>
                             <td>${{formatNumber($parent.donationTotal(appeal.donations).average)}}</td>
                           </tr>
-                          <tr><td colspan="5">
-                          <tr><td colspan="4" class="table_select_filters">
+                          <tr><td colspan="5" class="table_select_filters">
                               <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
                               <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
                               <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |
