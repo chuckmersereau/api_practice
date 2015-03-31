@@ -2,14 +2,19 @@
     <div class="form-group">
       <div class="input-group">
         <%= builder.email_field :email, size: 33, class: 'form-control' %>
-        <div class="input-group-addon"><%= builder.check_box :primary, class: 'primary' %></div>
+        <div class="input-group-addon" data-toggle="tooltip" title="Check this box to set as Primary Email address"><%= builder.check_box :primary, class: 'primary' %></div>
       </div>
-    </div>
-    <div class="form-group disabler">
-      <%= builder.check_box :historic, class: 'email_historic' %>
-      <%= builder.label :historic, _('Email address no longer valid') %>
     </div>
     <div class="form-group">
       <%= link_to_remove_fields(builder) %>
     </div>
+    <div class="form-group historic-email">
+      <%= builder.check_box :historic, class: 'email_historic' %>
+      <%= builder.label :historic, _('Email address no longer valid') %>
+    </div>
 </div>
+<script>
+$(function(){
+  $('[data-toggle="tooltip"]').tooltip();
+});
+</script>

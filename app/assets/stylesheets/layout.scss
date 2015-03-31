@@ -1100,6 +1100,15 @@ table tbody.tasks {
   input[type=checkbox]:checked + label:before { letter-spacing: 5px; } /* allow space for check mark */
 }
 
+.historic-email {
+  label {
+    display: inline-block;
+    font-weight: 400;
+    font-size: 13px;
+  }
+}
+
+
 .status {
   line-height: 1.15em;
   margin-top: .5em;
