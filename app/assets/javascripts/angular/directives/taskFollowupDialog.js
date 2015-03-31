@@ -305,7 +305,7 @@ angular.module('mpdxApp')
                 jQuery('.followUpDialogDatepicker').datepicker({
                   autoclose: true,
                   todayHighlight: true,
-                  format: 'yyyy-mm-dd'
+                  dateFormat: 'yy-mm-dd'
                 });
 
                 if($scope.followUpDialogResult.apptTask && window.google) {
