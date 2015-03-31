@@ -5,14 +5,9 @@ class ContactsController < ApplicationController
   before_action :clear_annoying_redirect_locations
 
   def index
-    if params[:filters] && params[:filters][:name].present?
-      contacts_with_name = ContactFilter.new(name: filters_params[:name], status: ['*']).filter(current_account_list.contacts)
-      if contacts_with_name.count == 1
-        current_user.contacts_filter[current_account_list.id.to_s].delete('name')
-        current_user.save
-        redirect_to contacts_with_name.first
-        return
-      end
+    if params[:q].present?
+      contacts_with_name = ContactFilter.new(name: params[:q], status: ['*']).filter(current_account_list.contacts)
+      redirect_to contacts_with_name.first if contacts_with_name.count == 1
     end
 
     @page_title = _('Contacts')
