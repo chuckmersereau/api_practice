@@ -105,7 +105,7 @@ module ApplicationHelper
     options.merge!('data-calendar-jquery' => true)
     options.merge!('id' => '')
     options.merge!('style' => 'width:100px;')
-    options.merge!('readonly' => '')
+    # options.merge!('readonly' => '')
     value = case
             when value.is_a?(Time) || value.is_a?(DateTime)
               value.to_date.to_s(:db)

@@ -7,6 +7,7 @@ $ ->
         modal:'true',
         resizable: false,
         width: '400px',
+        maxHeight: 600,
         title: contact_info.attr('data-title'),
         buttons: [
           {
@@ -50,6 +51,7 @@ $ ->
       resizable: false,
       modal:'true',
       width: '400px',
+      maxHeight: 600,
       buttons: [
         {
           text: __('Save'),
@@ -82,9 +84,10 @@ $ ->
   $(document).on 'click', '.edit_task', ->
     $('#edit_task_modal .form_wrapper').html('<%= image_tag "spinner.gif" %>')
     $('#edit_task_modal').dialog
-      resizable: false,
+      resizable: true,
       modal:'true',
       width: '400px',
+      maxHeight: 600,
       buttons: [
         {
           text: __('Save'),
@@ -119,6 +122,7 @@ $ ->
         title: title,
         resizable: false,
         modal:'true',
+        maxHeight: 600,
         buttons: [
           {
             text: __('Complete'),
@@ -148,6 +152,7 @@ $ ->
         resizable: false,
         modal:'true',
         width: '400px',
+        maxHeight: 600,
         buttons: [
           {
             text: __('Save'),
@@ -267,7 +272,8 @@ $ ->
       $('#task_result_modal').dialog
         title: title,
         resizable: false,
-        modal:'true'
+        modal:'true',
+        maxHeight: 600,
         buttons: [
           {
             text: __('Complete'),

@@ -7,16 +7,19 @@
 <% end %>
 $('[data-calendar-jquery]').datepicker({
   changeYear:true,
+  dateFormat: 'yy-mm-dd',
   autoclose: true,
-  todayHighlight: true
-}).on('changeDate', function(response) {
-  var year = response.date.getFullYear();
-  var month = response.date.getMonth()+1;
-  var day = response.date.getDate();
+  todayHighlight: true,
+  onSelect: function(response) {
+    date = $.datepicker.parseDate('yy-mm-dd', response)
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
 
-  $('#task_modal_form [id$=_1i]').val(year);
-  $('#task_modal_form [id$=_2i]').val(month);
-  $('#task_modal_form [id$=_3i]').val(day);
+    $('#task_modal_form [id$=_1i]').val(year);
+    $('#task_modal_form [id$=_2i]').val(month);
+    $('#task_modal_form [id$=_3i]').val(day);
+  }
 });
 $('#task_modal_form').areYouSure({
   message: '<%= _('It looks like you were adding a task. If you leave before submitting, your changes will be lost.') %>'

@@ -6,16 +6,18 @@
 <script>
   $('[data-calendar-jquery]').datepicker({
     changeYear:true,
-    format: 'yyyy-mm-dd',
+    dateFormat: 'yy-mm-dd',
     autoclose: true,
-    todayHighlight: true
-  }).on('changeDate', function(response) {
-    var year = response.date.getFullYear();
-    var month = response.date.getMonth()+1;
-    var day = response.date.getDate();
+    todayHighlight: true,
+    onSelect: function(response) {
+      date = $.datepicker.parseDate('yy-mm-dd', response)
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
 
-    $('.due_date [id$=_1i]').val(year);
-    $('.due_date [id$=_2i]').val(month);
-    $('.due_date [id$=_3i]').val(day);
+      $('.due_date [id$=_1i]').val(year);
+      $('.due_date [id$=_2i]').val(month);
+      $('.due_date [id$=_3i]').val(day);
+    }
   });
 </script>
