@@ -17,6 +17,7 @@ angular.module('mpdxApp')
                 $scope.editAppeal = function(id) {
                     var modalInstance = $modal.open({
                         templateUrl: '/templates/appeals/edit.html',
+                        size: 'lg',
                         controller: function($scope, $modalInstance, appeal){
                             $scope.appeal = angular.copy(appeal);
                             $scope.checkedContacts = {};
