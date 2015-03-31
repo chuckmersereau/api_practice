@@ -1,4 +1,4 @@
-<div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons" style="width: 100%;">
+<div class="ui-dialog" style="width: 100%;">
     <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
         <span id="ui-id-7" class="ui-dialog-title" ng-bind="appeal.name"></span>
         <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" title="close" ng-click="cancel()">
@@ -6,7 +6,7 @@
             <span class="ui-button-text"><%= _('close') %></span>
         </button>
     </div>
-    <div class="ui-dialog-content ui-widget-content">
+    <div class="modal-body ui-dialog-content ui-widget-content">
         <form>
             <div class="form_wrapper">
                 <div class="field">
@@ -19,7 +19,7 @@
                     <input type="text" ng-model="appeal.amount">
                 </div>
 
-                <div class="field" style="height: 400px; overflow-y: auto; display: block;">
+                <div style="height: 400px; overflow-y: auto; padding:0 15px;">
                     <label><%= _('Contacts') %></label>
                     <table style="width:100%;">
                         <thead>
@@ -68,44 +68,67 @@
                         </tbody>
                     </table>
                     <span ng-show="!contacts"><%= _('Loading contacts...') %></span>
-                    <div ng-show="contacts.length">
-                        <strong><%= _('Add contact') %></strong>
-                        <select ng-model="newContact" ng-options="c.id as c.name for c in contacts">
-                        </select>
+
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <%= _('Add contact') %>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                        <select ng-model="newContact" ng-options="c.id as c.name for c in contacts"></select>
                         <button type="button" ng-click="addContact(newContact)"><%= _('Add') %></button>
+                      </div>
                     </div>
+                  </div>
 
-                    <div style="margin-top: 5px;">
-                        <%= _('Create task for selected:') %>  <select ng-model="taskType" ng-options="t as t for t in taskTypes">
-                        </select>
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <%= _('Create task for selected:') %>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                        <select ng-model="taskType" ng-options="t as t for t in taskTypes"></select>
                         <button type="button" ng-click="createTask(taskType, checkedContacts)" ng-show="taskType" ng-disabled="creatingBulkTasks"><%= _('Create') %></button>
+                      </div>
                     </div>
-
-                  <div style="margin-top: 5px;">
-                    <%= _('Export selected to:') %>  <select ng-model="exportType">
-                    <option value="csv">CSV</option>
-                    <option value="mailchimp">MailChimp</option>
-                    <option value="prayer_letters">PrayerLetters.com</option>
-                  </select>
-                    <button type="button" ng-click="exportContacts(exportType, checkedContacts)" ng-show="exportType"><%= _('Export') %></button>
                   </div>
 
-                  <div style="margin-top: 5px;">
-                    <%= _('Create tag for selected:') %>  <input type="text" ng-model="newTag">
-                    <button type="button" ng-click="createTag(newTag, checkedContacts)" ng-show="newTag" ng-disabled="creatingTag"><%= _('Create') %></button>
+                  <div class="row">
+                    <div class="col-sm-4">
+                        <%= _('Export selected to:') %>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                      <select ng-model="exportType">
+                        <option value="csv">CSV</option>
+                        <option value="mailchimp">MailChimp</option>
+                        <option value="prayer_letters">PrayerLetters.com</option>
+                      </select>
+                      <button type="button" ng-click="exportContacts(exportType, checkedContacts)" ng-show="exportType"><%= _('Export') %></button>
+                        </div>
+                    </div>
                   </div>
-                </div>
-            </div>
-            <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
-                <div class="ui-dialog-buttonset">
-                    <button type="submit" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" ng-click="save()">
-                        <span class="ui-button-text"><%= _('Save') %></span>
-                    </button>
-                    <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" ng-click="cancel()">
-                        <span class="ui-button-text"><%= _('Cancel') %></span>
-                    </button>
+
+                  <div class="row">
+                    <div class="col-sm-4">
+                      <%= _('Create tag for selected:') %>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                        <input type="text" ng-model="newTag" style="width:70%;">
+                        <button type="button" ng-click="createTag(newTag, checkedContacts)" ng-show="newTag" ng-disabled="creatingTag"><%= _('Create') %></button>
+                      </div>
+                    </div>
+                  </div>
+
                 </div>
             </div>
         </form>
     </div>
+  <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+    <div class="ui-dialog-buttonset">
+      <button ng-click="save()"><%= _('Save') %></button>
+      <button ng-click="cancel()"><%= _('Cancel') %></button>
+    </div>
+  </div>
 </div>
