@@ -5,8 +5,8 @@ class ContactsController < ApplicationController
   before_action :clear_annoying_redirect_locations
 
   def index
-    if filters_params.present?
-      contacts_with_name = ContactFilter.new(filters_params).filter(current_account_list.contacts)
+    if params[:q].present?
+      contacts_with_name = ContactFilter.new(name: params[:q], status: ['*']).filter(current_account_list.contacts)
       if contacts_with_name.count == 1
         redirect_to contacts_with_name.first
       end
