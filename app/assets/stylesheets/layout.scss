@@ -731,6 +731,11 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     a.starred:before {
       content: "\f005";
     }
+    a {
+      color: $color-blue-deep;
+      font-weight: bold;
+      text-decoration: none;
+    }
   }
 }
 
