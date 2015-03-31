@@ -102,15 +102,15 @@ module ApplicationHelper
   end
 
   def calendar_date_select_tag(name, value = nil, options = {})
-    options.merge!('data-calendar' => true)
+    options.merge!('data-calendar-jquery' => true)
     options.merge!('id' => '')
     options.merge!('style' => 'width:100px;')
-    # options.merge!('readonly' => '')
+    options.merge!('readonly' => '')
     value = case
             when value.is_a?(Time) || value.is_a?(DateTime)
-              l(value.to_date)
+              value.to_date.to_s(:db)
             when value.is_a?(Date)
-              l(value)
+              value.to_s(:db)
             else
               value
             end

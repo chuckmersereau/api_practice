@@ -1,6 +1,8 @@
 $ ->
+#  datepicker = $.fn.datepicker.noConflict() # return $.fn.datepicker to previously assigned value
+#  $.fn.bootstrapDP = datepicker
 
-  # Activating Best In Place
+# Activating Best In Place
   $('.best_in_place').best_in_place()
   $('.best_in_place_once').on 'best_in_place:success', ->
     elm = this
