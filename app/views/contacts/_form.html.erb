@@ -56,9 +56,8 @@
                 <%= f.label :pledge_start_date, _('Commitment Start Date') %>
                 <div class="input-group">
                   <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                  <%= f.text_field :pledge_start_date, class: 'form-control date-picker' %>
+                  <%= f.text_field :pledge_start_date, class: 'form-control', data: { 'calendar-jquery' => true } %>
                 </div>
-                <%#= f.date_select :pledge_start_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: 1951 %>
               </div>
             </div>
           </div>
@@ -173,13 +172,12 @@
 
 <script>
 $(function(){
-    var datepicker = $.fn.datepicker.noConflict();
-    $.fn.bootstrapDP = datepicker;
-    $(".date-picker").bootstrapDP({
-      autoclose: true,
-      todayHighlight: true,
-      format: 'yyyy-mm-dd'
-    });
+  $('[data-calendar-jquery]').datepicker({
+    changeYear: true,
+    dateFormat: 'yy-mm-dd',
+    autoclose: true,
+    todayHighlight: true
+  });
     $('[data-toggle="tooltip"]').tooltip();
     //$( ".social_container .add_field" ).empty();
 });
