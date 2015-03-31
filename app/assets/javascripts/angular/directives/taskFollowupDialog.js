@@ -301,6 +301,9 @@ angular.module('mpdxApp')
                     autoOpen: true,
                     modal: true
                 });
+                setTimeout(function() {
+                  jQuery("#complete_task_followup_modal").dialog('option', 'position', {my: "center", at: "center", of: window})
+                })
 
                 jQuery('.followUpDialogDatepicker').datepicker({
                   autoclose: true,
