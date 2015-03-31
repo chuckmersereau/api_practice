@@ -20,7 +20,8 @@ $ ->
     $(document).on 'click', '[data-behavior="add_org_account"]', ->
       $('[data-behavior="new_org_account"]').dialog
         resizable: false,
-        modal:'true'
+        modal:'true',
+        maxHeight: 600
       false
     $(document).on 'click', '[data-behavior="edit_organization_account"]', (event) ->
       $.ajax {
@@ -30,7 +31,8 @@ $ ->
       $('#org_connection_box').dialog
         title: '<%= _('Loading') %>',
         content: '',
-        modal:'true'
+        modal:'true',
+        maxHeight: 600
       false
     $(document).on 'click', '#connect_to_org', ->
       $('[data-behavior="new_org_account"]').dialog('destroy')

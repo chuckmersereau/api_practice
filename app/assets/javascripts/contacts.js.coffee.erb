@@ -170,6 +170,7 @@ $ ->
 
         $('#add_task_modal').dialog {
           width: 'auto',
+          maxHeight: 600,
           buttons: [
             {
               text: __('Add Task')
@@ -302,6 +303,7 @@ $ ->
       # Add referrals
       $(document).on 'ajax:before', '.add_referrals', ->
         $('#referrals_modal').dialog {
+          height: 675,
           buttons: [
             {
               text: __('Save'),
@@ -390,11 +392,11 @@ $ ->
           $(input_selector, recordset).removeAttr('readonly')
 
     $("input.address_historic").each ->
-      historicDisable this, "input[type=text], textarea, .country_select"
+      historicDisable this, "input[type=text], textarea, .country_select, select"
       return
 
     $(document).on 'click', 'input.address_historic', ->
-      historicDisable this, "input[type=text], textarea, .country_select"
+      historicDisable this, "input[type=text], textarea, .country_select, select"
 
     $("input.email_historic").each ->
       historicDisable this, "input[type=email]"

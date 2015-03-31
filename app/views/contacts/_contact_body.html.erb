@@ -1,212 +1,238 @@
 <% exhibit(contact, self).tap do |contact_exhibit| %>
-  <div id="contentbody" class="withright" data-contact-id="<%= contact.id %>">
+  <div id="contentbody" class="withright col-md-9" data-contact-id="<%= contact.id %>">
     <div class="contact_controls">
-      <% contacts.index(contact_exhibit.to_model).tap do |current_index| %>
-        <% if current_index %>
-          <div id="contact_paging">
-            <% if current_index > 0 %>
-              <%= link_to('&lt;'.html_safe, contacts[current_index - 1], class: 'flatbtn', remote: false) %>
-            <% end %>
-            <span><%== _('Navigate contacts: <strong>%{index} of %{total}</strong>').localize % {index: current_index + 1, total: contacts.length} %></span>
-            <% if current_index < contacts.length - 1 %>
-              <%= link_to('&gt;'.html_safe, contacts[current_index + 1], class: 'flatbtn', remote: false) %>
-            <% end %>
-          </div>
-        <% end %>
-      <% end %>
-
-      <div class="actions">
-        <%= link_to(_('Add Referrals'), add_referrals_contact_path(contact), remote: true, :class=> "btn smallbtn add_referrals no-new-tab") %>
-        <%= link_to(_('Log Task'), new_task_path(contact_id: contact.id, completed: true), class: "btn smallbtn add_task", remote: true, data: {completed: true}) %>
-        <%= link_to(_('Add Task'), new_task_path(contact_id: contact.id), class: "btn smallbtn add_task", data: {contact_id: contact.id}, remote: true) %>
-        <%= link_to(_('Hide Contact'), contact_path(contact), class: "btn smallbtn", method: :delete, data: { confirm: _("This contact will be set to 'Never Ask'. Is that what you want to do?") }) %>
-      </div>
-    </div>
-    <div class="wpp">
-
-      <div class="profiletop">
-
-        <div class="avatar">
-          <div class="avatar_wrapper"><%= image_tag(contact_exhibit.avatar(:large), class: "mid") %></div>
+      <div class="row">
+        <div class="actions col-md-8">
+          <%= link_to(_('<i class="fa fa-users"></i> Add Referrals'), add_referrals_contact_path(contact), remote: true, :class=> "btn btn-default add_referrals no-new-tab") %>
+          <%= link_to(_('Log Task'), new_task_path(contact_id: contact.id, completed: true), class: "btn btn-default add_task", remote: true, data: {completed: true}) %>
+          <%= link_to(_('<i class="fa fa-check-square-o"></i> Add Task'), new_task_path(contact_id: contact.id), class: "btn btn-default add_task", data: {contact_id: contact.id}, remote: true) %>
+          <%= link_to(_('<i class="fa fa-eye-slash"></i>'), contact_path(contact), title: "Hide Contact", class: "btn btn-default", method: :delete, data: { confirm: _("This contact will be set to 'Never Ask'. Is that what you want to do?") }) %>
         </div>
-        <div class="quickprofile">
-          <h1><%= contact_exhibit %>
-          <% if contact_exhibit.location.present? %><span class="contact_location"><%= contact_exhibit.location %></span><% end %>
-          </h1>
-          <% if contact_exhibit.status.present? %>
+        <div class="col-md-4 text-right">
+          <%= link_to(_('<i class="fa fa-pencil"></i> Edit'), edit_contact_path(contact), :class=> "btn btn-secondary edit_contact_btn desired_action") %>
+          <% contacts.index(contact_exhibit.to_model).tap do |current_index| %>
+            <% if current_index %>
+              <div id="contact_paging">
+                <% if current_index > 0 %>
+                  <%= link_to('&lt;'.html_safe, contacts[current_index - 1], class: 'btn btn-default', remote: false) %>
+                <% end %>
+                <% if current_index < contacts.length - 1 %>
+                  <%= link_to('&gt;'.html_safe, contacts[current_index + 1], class: 'btn btn-default', remote: false) %>
+                <% end %>
+                <span><%== _('<strong>%{index} of %{total}</strong>').localize % {index: current_index + 1, total: contacts.length} %></span>
+              </div>
+            <% end %>
+          <% end %>
+        </div>
+
+      </div>
+    </div><!-- contact controls -->
+
+
+    <div class="profiletop module">
+      <div class="row">
+        <div class="col-md-2">
+          <div class="avatar">
+            <div class="avatar_wrapper"><%= image_tag(contact_exhibit.avatar(:large), class: "mid") %></div>
+          </div>
+        </div>
+        <div class="col-md-10">
+          <div class="quickprofile">
+            <h2><%= contact_exhibit %></h2>
+            <% if contact_exhibit.location.present? %>
+              <div class="contact_location">
+                <%= contact_exhibit.location %>
+              </div>
+            <% end %>
             <div class="contact_status">
               <%= _('Status:') %>
               <%= best_in_place(contact_exhibit, :status,
                                 as: :select,
-                                collection: contact.assignable_statuses.collect { |s| [s, _(s)] }) %>
+                                collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
+                                place_holder: _('None')) %>
             </div>
-          <% end %>
-        </div>
+          </div><!-- profiletop -->
 
-        <div class="cols col_30">
-          <table class="meta">
-            <% if contact_exhibit.donor_ids.present? %>
-              <tr>
-                <td class="meta_name"><%= _('Donor ID') %></td>
-                <td class="meta_data"><%= contact_exhibit.donor_ids %></td>
-              </tr>
-            <% end %>
-            <tr>
-              <td class="meta_name"><%= _('Commitment') %></td>
-              <td class="meta_data">
-                <%= best_in_place(contact_exhibit, :pledge_amount,
-                                  value: contact.pledge_amount, place_holder: '0.0') %>
-              </td>
-            </tr>
-            <tr>
-              <td class="meta_name"><%= _('Frequency') %></td>
-              <td class="meta_data">
-                <%= best_in_place(contact, :pledge_frequency,
-                                  as: :select,
-                                  collection: [['',_('Unspecified')]] + Contact.pledge_frequencies.to_a) %>
-              </td>
-            </tr>
-            <tr>
-              <td class="meta_name"><%= _('Newsletter') %> </td>
-              <td class="meta_data">
-                <%= best_in_place(contact_exhibit, :send_newsletter,
-                                  as: :select,
-                                  collection: [['','None']] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
-              </td>
-            </tr>
-          </table>
-        </div>
-        <div class="cols col_30">
-          <table class="meta">
-            <% if contact_exhibit.mailing_address.street.present? && !contact_exhibit.mailing_address.historic %>
+          <div class="row">
+            <div class="col-md-4">
+              <table class="meta">
+                <% if contact_exhibit.donor_ids.present? %>
+                  <tr>
+                    <td class="meta_name"><%= _('Donor ID') %></td>
+                    <td class="meta_data"><%= contact_exhibit.donor_ids %></td>
+                  </tr>
+                <% end %>
                 <tr>
-                  <td class="meta_name">Address</td>
-                  <td class="meta_data"><%= contact_exhibit.mailing_address.street %><br><%= contact_exhibit.mailing_address.city %>, <%= contact_exhibit.mailing_address.state %> <%= contact_exhibit.mailing_address.postal_code %><br><%= contact_exhibit.mailing_address.country %></td>
+                  <td class="meta_name"><%= _('Commitment') %></td>
+                  <td class="meta_data">
+                    <%= best_in_place(contact_exhibit, :pledge_amount,
+                                      value: contact.pledge_amount, place_holder: '0.0') %>
+                  </td>
                 </tr>
-            <% end %>
-            <% if contact.website.present? %>
-              <tr>
-                <td class="meta_name"><%= _('Website') %></td>
-                <td class="meta_data"><%= contact_exhibit.website %></td>
-              </tr>
-            <% end %>
-            <% if contact_exhibit.referrals_to_me.present? %>
-              <tr>
-                <td class="meta_name"><%= _('Referrer') %></td>
-                <td class="meta_data"><%= contact_exhibit.referrer_links %></td>
-              </tr>
-            <% end %>
-            <% if contact.tags.present? %>
-              <tr>
-                <td class="meta_name"><%= _('Tags') %> </td>
-                <td class="meta_data">
-                  <div class="tags">
-                    <%= contact_exhibit.tag_links %>
-                  </div>
-                </td>
-              </tr>
-            <% end %>
-          </table>
+                <tr>
+                  <td class="meta_name"><%= _('Frequency') %></td>
+                  <td class="meta_data">
+                    <%= best_in_place(contact, :pledge_frequency,
+                                      as: :select,
+                                      collection: [['',_('Unspecified')]] + Contact.pledge_frequencies.to_a) %>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="meta_name"><%= _('Newsletter') %> </td>
+                  <td class="meta_data">
+                    <%= best_in_place(contact_exhibit, :send_newsletter,
+                                      as: :select,
+                                      collection: [['',_('None')]] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
+                  </td>
+                </tr>
+              </table>
+            </div>
+            <div class="col-md-6">
+              <table class="meta">
+                <% if contact_exhibit.mailing_address.street.present? && !contact_exhibit.mailing_address.historic %>
+                    <tr>
+                      <td class="meta_name">Address</td>
+                      <td class="meta_data"><%= contact_exhibit.mailing_address.street %><br><%= contact_exhibit.mailing_address.city %>, <%= contact_exhibit.mailing_address.state %> <%= contact_exhibit.mailing_address.postal_code %><br><%= contact_exhibit.mailing_address.country %></td>
+                    </tr>
+                <% end %>
+                <% if contact.website.present? %>
+                  <tr>
+                    <td class="meta_name"><%= _('Website') %></td>
+                    <td class="meta_data"><%= contact_exhibit.website %></td>
+                  </tr>
+                <% end %>
+                <% if contact_exhibit.referrals_to_me.present? %>
+                  <tr>
+                    <td class="meta_name"><%= _('Referrer') %></td>
+                    <td class="meta_data"><%= contact_exhibit.referrer_links %></td>
+                  </tr>
+                <% end %>
+                <% if contact.tags.present? %>
+                  <tr>
+                    <td class="meta_name"><%= _('Tags') %> </td>
+                    <td class="meta_data">
+                      <div class="tags">
+                        <%= contact_exhibit.tag_links %>
+                      </div>
+                    </td>
+                  </tr>
+                <% end %>
+              </table>
+            </div>
+          </div><!-- row -->
         </div>
-        <div class="clr"></div>
-        <div class="edit_btn_container">
-          <%= link_to(_('Edit'), edit_contact_path(contact), :class=> "btn edit_contact_btn desired_action") %>
-        </div>
+      </div><!-- row -->
+      <div class="clr"></div>
+    </div>
 
-      </div>
-
-      <div id="contact-people" class="js-people">
-        <h2><%= _('People') %>
+    <div id="contact-people" class="js-people module">
+      <div class="panel panel-default">
+        <!-- Default panel contents -->
+        <div class="panel-heading">
+          <%= _('People') %>
           <small>
             <%= link_to(_('(Click here to merge duplicates)'), '#', class: 'js-merge_people') %>
             <%= link_to(_('(Cancel merging)'), '#', class: 'js-cancel_merge_people js-merge_related', style: 'display:none') %>
           </small>
-        </h2>
-        <% if contact_exhibit.people.any? %>
-          <% contact_exhibit.people.each do |person| %>
-            <%= render 'people/smallperson', person: person %>
-          <% end %>
-          <%= submit_tag(_('Merge checked people'), class: 'js-merge_related', style: 'display:none') %>
-          <div id="person_merge_winner" style="display:none" title="<%= _('Pick the winner of the merge') %>">
-            <%= _('Data from the "losers" will get copied to the "winner". No data will be lost by merging.') %>
-            <%= form_tag(merge_contact_people_path(contact), id: 'merge_people_form', remote: true) do %>
-              <%= hidden_field_tag :merge_people_ids %>
-              <ul>
-                <% contact.people.each do |person| %>
-                  <li style="display:none" id="<%= "merge_winner_#{person.id}_li"%>" class="radiocheck">
-                    <%= radio_button_tag('merge_winner', person.id) %>
-                    <%= label_tag('merge_winner_'+person.id.to_s, person) %>
-                  </li>
-                <% end %>
-              </ul>
+        </div>
+        <div class="panel-body">
+          <% if contact_exhibit.people.any? %>
+            <div class="row">
+            <% contact_exhibit.people.each do |person| %>
+              <%= render 'people/smallperson', person: person %>
             <% end %>
+            </div>
+            <%= submit_tag(_('Merge checked people'), class: 'js-merge_related', style: 'display:none') %>
+            <div id="person_merge_winner" style="display:none" title="<%= _('Pick the winner of the merge') %>">
+              <%= _('Data from the "losers" will get copied to the "winner". No data will be lost by merging.') %>
+              <%= form_tag(merge_contact_people_path(contact), id: 'merge_people_form', remote: true) do %>
+                <%= hidden_field_tag :merge_people_ids %>
+                <ul>
+                  <% contact.people.each do |person| %>
+                    <li style="display:none" id="<%= "merge_winner_#{person.id}_li"%>" class="radiocheck">
+                      <%= radio_button_tag('merge_winner', person.id) %>
+                      <%= label_tag('merge_winner_'+person.id.to_s, person) %>
+                    </li>
+                  <% end %>
+                </ul>
+              <% end %>
+            </div>
+          <% else %>
+            <p><%= _('Currently No People') %></p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <div id="contact" class="module tabgroup">
+      <ul>
+        <% (current_user.tab_order_by_location('contact') | ContactExhibit::TABS.keys).each do |tab_name| %>
+          <li id="tabs_<%= tab_name %>"><a href="#<%= tab_name %>-tab"><%= _(ContactExhibit::TABS[tab_name]) %></a></li>
+        <% end %>
+      </ul>
+      <div class="clr"></div>
+
+      <div id="details-tab">
+          <%= spinner(extra: 'details', visible: true) %>
+          <div id="details"></div>
+      </div>
+
+      <div id="tasks-tab" ng-controller="taskShortListController" ng-init="init('contact','<%= contact.id %>')">
+        <table class="list tasklist">
+          <tbody class="tasks">
+            <tr task="task" ng-repeat="task in tasks" id="task_{{task.id}}"></tr>
+          </tbody>
+        </table>
+        <p ng-show="loading"><%= _('Loading contact tasks...') %></p>
+        <p ng-show="noContacts()"><%= _('No tasks found for this contact.') %></p>
+      </div>
+      <div id="history-tab" ng-controller="taskShortListController" ng-init="init('contactHistory','<%= contact.id %>')">
+        <table class="list tasklist">
+          <tbody class="tasks">
+            <tr task="task" ng-repeat="task in tasks" id="task_{{task.id}}"></tr>
+          </tbody>
+        </table>
+        <p ng-show="loading"><%= _('Loading contact history...') %></p>
+        <p ng-show="noContacts()"><%= _('No completed tasks found for this contact.') %></p>
+      </div>
+      <div id="referrals-tab">
+        <%= spinner(extra: 'referrals', visible: true) %>
+        <div id="referrals"></div>
+      </div>
+      <div id="notes-tab">
+        <%= form_for contact, remote: true do |f| %>
+          <div class="form-group">
+            <%= f.text_area :notes, rows: 5, class: 'contact_notes form-control' %>
           </div>
-        <% else %>
-          <p><%= _('Currently No People') %></p>
+          <%= f.submit _('Save Notes'), disabled: true, class: 'btn btn-primary btn-sm' %>
+          <small class="saved_at">
+            <%= begin
+                  contact_exhibit.notes_saved_at
+                rescue; end
+            %>
+          </small>
         <% end %>
       </div>
 
-      <div id="contact" class="tabgroup">
-        <ul>
-          <% (current_user.tab_order_by_location('contact') | ContactExhibit::TABS.keys).each do |tab_name| %>
-            <li id="tabs_<%= tab_name %>"><a href="#<%= tab_name %>-tab"><%= _(ContactExhibit::TABS[tab_name]) %></a></li>
-          <% end %>
-        </ul>
-        <div class="clr"></div>
-
-        <div id="details-tab">
-            <%= spinner(extra: 'details', visible: true) %>
-            <div id="details"></div>
-        </div>
-
-        <div id="tasks-tab" ng-controller="taskShortListController" ng-init="init('contact','<%= contact.id %>')">
-          <table class="list tasklist">
-            <tbody class="tasks">
-              <tr task="task" ng-repeat="task in tasks" id="task_{{task.id}}"></tr>
-            </tbody>
-          </table>
-          <p ng-show="loading"><%= _('Loading contact tasks...') %></p>
-          <p ng-show="noContacts()"><%= _('No tasks found for this contact.') %></p>
-        </div>
-        <div id="history-tab" ng-controller="taskShortListController" ng-init="init('contactHistory','<%= contact.id %>')">
-          <table class="list tasklist">
-            <tbody class="tasks">
-              <tr task="task" ng-repeat="task in tasks" id="task_{{task.id}}"></tr>
-            </tbody>
-          </table>
-          <p ng-show="loading"><%= _('Loading contact history...') %></p>
-          <p ng-show="noContacts()"><%= _('No completed tasks found for this contact.') %></p>
-        </div>
-        <div id="referrals-tab">
-          <%= spinner(extra: 'referrals', visible: true) %>
-          <div id="referrals"></div>
-        </div>
-        <div id="notes-tab">
-          <%= form_for contact, remote: true do |f| %>
-            <%= f.submit _('Save Notes'), disabled: true %>
-            <span class="saved_at">
-              <%= begin
-                    contact_exhibit.notes_saved_at
-                  rescue; end
-              %>
-            </span>
-            <br />
-            <%= f.text_area :notes, rows: 10, class: 'contact_notes' %>
-          <% end %>
-        </div>
-
-        <div id="social-tab">
-          <%= spinner(extra: 'social', visible: true) %>
-          <div id="social"></div>
-        </div>
+      <div id="social-tab">
+        <%= spinner(extra: 'social', visible: true) %>
+        <div id="social"></div>
       </div>
-
-      <div class="clr"></div>
-
-      <h2><%= _('Donations') %></h2>
-      <%= spinner(extra: 'donations', visible: true) %>
-      <div id="donations"></div>
-
     </div>
+
+    <div class="clr"></div>
+
+    <div class="panel panel-default">
+      <!-- Default panel contents -->
+      <div class="panel-heading">
+        <%= _('Donations') %>
+      </div>
+      <div class="panel-body">
+        <%= spinner(extra: 'donations', visible: true) %>
+        <div id="donations"></div>
+      </div>
+    </div>
+
+
   </div>
 <% end %>

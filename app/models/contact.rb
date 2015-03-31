@@ -9,7 +9,6 @@ class Contact < ActiveRecord::Base
 
   has_many :contact_donor_accounts, dependent: :destroy, inverse_of: :contact
   has_many :donor_accounts, through: :contact_donor_accounts, inverse_of: :contacts
-  has_many :donations, through: :donor_accounts
   belongs_to :account_list
   has_many :contact_people, dependent: :destroy
   has_many :people, through: :contact_people
@@ -80,9 +79,10 @@ class Contact < ActiveRecord::Base
 
   assignable_values_for :status, allow_blank: true do
     # Don't change these willy-nilly, they break the mobile app
-    ['Never Contacted', 'Ask in Future', 'Contact for Appointment', 'Appointment Scheduled', 'Call for Decision',
-     'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Not Interested', 'Unresponsive', 'Never Ask',
-     'Research Abandoned', 'Expired Referral', 'Cultivate Relationship']
+    ['Never Contacted', 'Ask in Future', 'Cultivate Relationship', 'Contact for Appointment',
+     'Appointment Scheduled', 'Call for Decision', 'Partner - Financial', 'Partner - Special',
+     'Partner - Pray', 'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
+     'Expired Referral']
   end
 
   IN_PROGRESS_STATUSES = ['Never Contacted', 'Ask in Future', 'Contact for Appointment', 'Appointment Scheduled',
@@ -431,7 +431,7 @@ class Contact < ActiveRecord::Base
   end
 
   def sync_with_google_contacts
-    account_list.lower_retry_async(:sync_with_google_contacts)
+    account_list.queue_sync_with_google_contacts
   end
 
   def delete_from_prayer_letters

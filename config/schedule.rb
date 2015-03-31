@@ -45,5 +45,9 @@ if @environment == 'production'
   every :day, at: '11am' do
     runner "Person::FacebookAccount.refresh_tokens"
   end
+
+  every 5.minutes do
+    runner 'SidekiqMonitor.notify_if_problem'
+  end
 end
 # Learn more: http://github.com/javan/whenever

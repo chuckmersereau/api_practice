@@ -1,89 +1,100 @@
-<%= render 'settings_sidebar' %>
-<div id="contentbody" class="withleft">
-  <div class="wpp">
-
-    <div class="network_connect">
-      <table>
-        <tr>
-          <td class="identify">
-            <% if current_account_list.mail_chimp_account %>
-              <% if current_account_list.valid_mail_chimp_account %>
-                <div class="statusIcon statusIcon-enabled">&nbsp;</div>
-              <% else %>
-                <div class="statusIcon statusIcon-error">&nbsp;</div>
-              <% end %>
-            <% else %>
-              <div class="statusIcon statusIcon-disabled">&nbsp;</div>
-            <% end %>
-            <div class="network_logo">
-              <%= image_tag("logos/mailchimp_logo.png", alt: 'MailChimp') %>
+<div class="row">
+  <div class="col-md-3 settings-sidebar" role="complementary">
+    <%= render 'settings_sidebar' %>
+  </div>
+  <div class="col-md-9">
+    <div id="contentbody" class="withleft">
+      <div class="wpp">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="page-filters">
+              <h2><%= _('Integrations') %></h2>
             </div>
-
-          </td>
-          <td class="connections">
-            <div class="network_button">
-              <% if current_account_list.valid_mail_chimp_account %>
-                <%= link_to(_('Settings'), mail_chimp_accounts_path, :class => "btn") %>
-                <%= link_to(_('Sync Now'), sync_mail_chimp_accounts_path, :class => "btn") %>
-              <% else %>
-                <%= link_to(_('Enable'), new_mail_chimp_account_path, :class => "btn") %>
-              <% end %>
-
-            </div>
-          </td>
-        </tr>
-      </table>
-    </div>
-    <div class="network_connect">
-      <table>
-        <tr>
-          <td class="identify">
-            <% if current_account_list.prayer_letters_account %>
-              <% if current_account_list.valid_prayer_letters_account %>
-                <div class="statusIcon statusIcon-enabled">&nbsp;</div>
-              <% else %>
-                <div class="statusIcon statusIcon-error">&nbsp;</div>
-              <% end %>
-            <% else %>
-              <div class="statusIcon statusIcon-disabled">&nbsp;</div>
-            <% end %>
-            <div class="network_logo">
-              <%= image_tag("logos/prayer_letters_logo.png", alt: 'Prayer Letters') %>
-            </div>
-
-          </td>
-        <td class="connections">
-          <div class="network_button">
-            <% if current_account_list.valid_prayer_letters_account %>
-              <%#= link_to(_('Settings'), prayer_letters_accounts_path, :class => "btn") %>
-              <%= link_to(_('Sync Now'), sync_prayer_letters_accounts_path, :class => 'btn', data: {method: :get, confirm: _("This will replace your prayerletters.com list with what you have in MPDX. Are you sure that's what you'd like to do?")}) %>
-              <%= link_to(_('Delete'), prayer_letters_account_path(current_account_list.prayer_letters_account), method: :delete, class: "btn", data: {confirm: _('Are you sure?')}) %>
-            <% else %>
-              <%= link_to(_('Enable'), '/auth/prayer_letters', :class => 'btn', data: {method: :get, confirm: _("This will replace your prayerletters.com list with what you have in MPDX. Are you sure that's what you'd like to do?")}) %>
-            <% end %>
           </div>
-        </td>
-        </tr>
-      </table>
-    </div>
-    <div class="network_connect">
-      <table>
-        <tr>
-          <td class="identify">
-            <div class="statusIcon statusIcon-disabled">&nbsp;</div>
-            <div class="network_logo">
-              <%= image_tag("logos/chalkline_logo.png", alt: 'Chalk Line') %>
-            </div>
-          </td>
-          <td class="connections">
-            <div class="network_button">
-              <%= link_to(_('Send Paper Newsletter List'), '#', id: 'chalkline_send_list', class: 'btn',
-                          data: {confirm: _('Would you like MPDX to email Chalkline your newsletter list and open their order form in a new tab?')}) %>
-            </div>
-          </td>
-        </tr>
-      </table>
+        </div>
+        <div class="network_connect spacer-top">
+          <table>
+            <tr>
+              <td class="identify">
+                <% if current_account_list.mail_chimp_account %>
+                  <% if current_account_list.valid_mail_chimp_account %>
+                    <div class="statusIcon statusIcon-enabled">&nbsp;</div>
+                  <% else %>
+                    <div class="statusIcon statusIcon-error">&nbsp;</div>
+                  <% end %>
+                <% else %>
+                  <div class="statusIcon statusIcon-disabled">&nbsp;</div>
+                <% end %>
+                <div class="network_logo">
+                  <%= image_tag("logos/mailchimp_logo.png", alt: 'MailChimp') %>
+                </div>
+
+              </td>
+              <td class="connections">
+                <div class="network_button">
+                  <% if current_account_list.valid_mail_chimp_account %>
+                    <%= link_to(_('Settings'), mail_chimp_accounts_path, :class => "btn btn-xs btn-default") %>
+                    <%= link_to(_('Sync Now'), sync_mail_chimp_accounts_path, :class => "btn btn-xs btn-default") %>
+                  <% else %>
+                    <%= link_to(_('Enable'), new_mail_chimp_account_path, :class => "btn btn-xs btn-default") %>
+                  <% end %>
+
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+        <div class="network_connect">
+          <table>
+            <tr>
+              <td class="identify">
+                <% if current_account_list.prayer_letters_account %>
+                  <% if current_account_list.valid_prayer_letters_account %>
+                    <div class="statusIcon statusIcon-enabled">&nbsp;</div>
+                  <% else %>
+                    <div class="statusIcon statusIcon-error">&nbsp;</div>
+                  <% end %>
+                <% else %>
+                  <div class="statusIcon statusIcon-disabled">&nbsp;</div>
+                <% end %>
+                <div class="network_logo">
+                  <%= image_tag("logos/prayer_letters_logo.png", alt: 'Prayer Letters') %>
+                </div>
+
+              </td>
+            <td class="connections">
+              <div class="network_button">
+                <% if current_account_list.valid_prayer_letters_account %>
+                  <%#= link_to(_('Settings'), prayer_letters_accounts_path, :class => "btn") %>
+                  <%= link_to(_('Sync Now'), sync_prayer_letters_accounts_path, :class => 'btn', data: {method: :get, confirm: _("This will replace your prayerletters.com list with what you have in MPDX. Are you sure that's what you'd like to do?")}) %>
+                  <%= link_to(_('Delete'), prayer_letters_account_path(current_account_list.prayer_letters_account), method: :delete, class: "btn", data: {confirm: _('Are you sure?')}) %>
+                <% else %>
+                  <%= link_to(_('Enable'), '/auth/prayer_letters', :class => 'btn btn-xs btn-default', data: {method: :get, confirm: _("This will replace your prayerletters.com list with what you have in MPDX. Are you sure that's what you'd like to do?")}) %>
+                <% end %>
+              </div>
+            </td>
+            </tr>
+          </table>
+        </div>
+        <div class="network_connect">
+          <table>
+            <tr>
+              <td class="identify">
+                <div class="statusIcon statusIcon-disabled">&nbsp;</div>
+                <div class="network_logo">
+                  <%= image_tag("logos/chalkline_logo.png", alt: 'Chalk Line') %>
+                </div>
+              </td>
+              <td class="connections">
+                <div class="network_button">
+                  <%= link_to(_('Send Paper Newsletter List'), '#', id: 'chalkline_send_list', class: 'btn btn-xs btn-default',
+                              data: {confirm: _('Would you like MPDX to email Chalkline your newsletter list and open their order form in a new tab?')}) %>
+                </div>
+              </td>
+            </tr>
+          </table>
+        </div>
+      </div>
     </div>
   </div>
 </div>
-

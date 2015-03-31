@@ -22,7 +22,7 @@
   <%= f.hidden_field :completed %>
   <div class="field">
     <%= f.label :start_at, _('Completed On') %>
-    <%= calendar_date_select_tag '' %>
+    <%= calendar_date_select_tag 'completed-on' %>
     <%= f.time_select :completed_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
   </div>
 
@@ -38,7 +38,7 @@
 <% else %>
   <div class="field due_date">
     <%= f.label :start_at, _('Due Date') %>
-    <%= calendar_date_select_tag '' %>
+    <%= calendar_date_select_tag 'due-date', f.object.start_at %>
     <%= f.time_select :start_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
   </div>
 <% end %>
@@ -51,7 +51,7 @@
 <div class="field task_location" <% if task.activity_type != 'Appointment' %>style="display: none;"<% end %>>
   <%= f.label :location, _('Location') %>
   <%= f.text_field :location, { placeholder: task.calculated_location } %>
-  <p><%= _("Defaults to contact's primary address") %></p>
+  <small><%= _("Defaults to contact's primary address") %></small>
 </div>
 
 <div class="field">

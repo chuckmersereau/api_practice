@@ -1,0 +1,238 @@
+/* ...
+*= require_self
+*= require notices
+*/
+
+@import "../bower_components/crubrand/crubrand";
+@import "jquery-ui.scss";
+
+html {
+  height: 100%;
+}
+
+body {
+  min-height: 100%;
+}
+
+body {
+  background: image-url('splash/splash_sf.jpg') fixed;
+  background-size: cover;
+  background-position: 50% 50%;
+}
+
+.btn-xs {
+  font-weight: 400;
+  font-size: 14px;
+  border-radius: 2px;
+}
+
+img {
+  display: inline-block;
+}
+
+.container-first {
+  border-top: 8px solid $color-gold;
+}
+
+#brand {
+  overflow: hidden;
+  vertical-align: middle;
+  display: inline-block;
+  margin: 20px 0;
+  .logo {
+    width: 180px;
+    height: 69px;
+    text-indent: -1000px;
+    display: block;
+    background-size: 100%;
+  }
+}
+
+.well-login,
+.well-splash-setup {
+  background: rgba(255,255,255,.85);
+  border: none;
+  overflow: hidden;
+  border-radius: 8px;
+  margin-top: 150px;
+}
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  .well-login {margin-top: 20px;}
+}
+
+.well-login-footer {
+  background: rgba(0,115,153,.85);
+  color: $color-white;
+  margin-top: 40px;
+  margin-left: -19px;
+  margin-right: -19px;
+  margin-bottom: -20px;
+  padding: 20px 0;
+  line-height: 2em;
+  font-size: .85em;
+  a {
+    color: $color-white;
+    font-weight: 600;
+  }
+}
+
+
+.loginlink {
+  background: rgb(248,248,248); /* Old browsers */
+  background: -moz-linear-gradient(top,  rgba(248,248,248,1) 0%, rgba(212,212,212,1) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(248,248,248,1)), color-stop(100%,rgba(212,212,212,1))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(248,248,248,1) 0%,rgba(212,212,212,1) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(248,248,248,1) 0%,rgba(212,212,212,1) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(248,248,248,1) 0%,rgba(212,212,212,1) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(248,248,248,1) 0%,rgba(212,212,212,1) 100%); /* W3C */
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#d4d4d4',GradientType=0 ); /* IE6-9 */
+
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  display: inline-block;
+  margin: 0 .5em;
+  height: 85px;
+  padding: 8px;
+  width: 160px;
+  transition: all .25s ease;
+  img { max-height: 100%;}
+  &:hover {
+    background: rgb(248,248,248); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(248,248,248,1) 0%, rgba(212,212,212,1) 66%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(248,248,248,1)), color-stop(66%,rgba(212,212,212,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(248,248,248,1) 0%,rgba(212,212,212,1) 66%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(248,248,248,1) 0%,rgba(212,212,212,1) 66%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(248,248,248,1) 0%,rgba(212,212,212,1) 66%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(248,248,248,1) 0%,rgba(212,212,212,1) 66%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f8f8f8', endColorstr='#d4d4d4',GradientType=0 ); /* IE6-9 */
+  }
+  &:active {
+    background: rgb(212,212,212); /* Old browsers */
+    background: -moz-linear-gradient(top,  rgba(212,212,212,1) 0%, rgba(248,248,248,1) 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(212,212,212,1)), color-stop(100%,rgba(248,248,248,1))); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  rgba(212,212,212,1) 0%,rgba(248,248,248,1) 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  rgba(212,212,212,1) 0%,rgba(248,248,248,1) 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  rgba(212,212,212,1) 0%,rgba(248,248,248,1) 100%); /* IE10+ */
+    background: linear-gradient(to bottom,  rgba(212,212,212,1) 0%,rgba(248,248,248,1) 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d4d4d4', endColorstr='#f8f8f8',GradientType=0 ); /* IE6-9 */
+  }
+}
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  .loginlink {
+    margin-bottom: 10px;
+  }
+}
+
+.well-splash-setup {
+  margin-top: 10px;
+  #brand {
+  }
+}
+
+.splash-user-bar {
+  margin-top: 50px;
+  display: block;
+}
+
+$sidebarwidth: 400px;
+
+#right {
+  width: $sidebarwidth - 1px;
+  float: right;
+  margin-top: 210px;
+  background: $color-white;
+  border: 1px solid #ddd;
+  border-left: 0px;
+  border-radius: 0 8px 8px 0;
+  z-index: -1;
+}
+
+.modcontent {
+  padding: 15px 20px;
+}
+
+.continue {
+  margin-top: 20px;
+}
+
+.network_wrap {overflow: hidden;}
+
+.network_connect {
+  border-bottom: 1px solid #ddd;
+  padding: 8px 20px;
+  height: auto;
+  min-height: 55px;
+  .network_logo {
+    display: block;
+    float: left;
+    width: 135px;
+      img {
+        max-height: 30px;
+        padding-top: 4px;
+      }
+    }
+  .network_connections {
+    display: block;
+    margin-left: 135px;
+    width: auto;
+    padding-top: 0px;
+    p {
+      line-height: 1.25em;
+    }
+  }
+  .actions { float: right;}
+  .network_button {
+    display: block;
+    padding-bottom: 8px;
+    .btn {
+      padding: 4px 8px;
+    }
+  }
+ .account_single {
+   display: block;
+   background: #eee;
+   border: 1px dotted #bbb;
+   padding: 5px;
+   border-radius: 4px;
+   font-weight: bold;
+   margin: 0 8px 8px 0;
+   font-size: 11px;
+ }
+}
+#logo {
+  background: image-url("splash/logo.png") no-repeat 50% 50%;
+  background-size:126px 50px;
+  width: 126px;
+  height: 50px;
+  text-indent: -1000px;
+  overflow: hidden;
+  vertical-align: middle;
+  display: inline-block;
+}
+
+.links {
+  .section {
+    margin-right: 10px;
+    display: inline-block;
+  }
+}
+
+
+@media screen and (min-width: 0px) and (max-width: 960px) {
+  body { margin: 0; }
+  #body, .setupwrap { width: 100%; }
+}
+
+
+
+
+
+@media screen and (min-width: 0px) and (max-width: 480px) {
+  #logo { margin: 1em; }
+  .pagewidth {width: 100%;}
+  .headercontent { height: auto; }
+  #mainwrap { margin-top: 60px; }
+  #main h1 { margin-top: 1em; }
+}

@@ -1,6 +1,6 @@
 <li ng-class="{'selected': contactQuery.tags[0]}" ng-show="!insightFilterIsActive()">
-  <span class="tags menu_item"><%= _('Tags') %></span>
-  <ul class="left_taglist tags">
+  <span class="tags_title menu_item"><%= _('Tags') %></span>
+  <ul class="left_tag_list tags">
     <li>
       <% tags.each do |tag|
         # toggle tag on / off
@@ -12,10 +12,21 @@
           else
             url_params['filters']['tags'] = (tags + [tag]).join(',')
           end %>
-
           <a class="tag" href="#" ng-class="{'selected': tagIsActive('<%= j(tag) %>')}" ng-click="tagClick('<%= j(tag) %>')"><%= tag %></a>
         <% end %>
       <% end %>
+      <a href="#" class="show_all_tags_btn" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'See all tags']);"><i class="fa fa-plus"></i> See all <span class="tagSize"></span> tags</a>
     </li>
   </ul>
 </li>
+
+<script>
+var tagSize = $('.left_tag_list .tag').length;
+$('.tagSize').html(tagSize);
+if (tagSize < 15) {
+  $('.show_all_tags_btn').hide();
+}
+$('.show_all_tags_btn').click(function() {
+  $('.left_tag_list').toggleClass('show_all_tags');
+})
+</script>

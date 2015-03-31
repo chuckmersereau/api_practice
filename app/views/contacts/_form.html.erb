@@ -1,16 +1,12 @@
 <div id="contentbody">
-  <div class="wpp">
     <%= form_for(contact) do |f| %>
       <div class="clr"></div>
-      <div class="spacer"></div>
-
-      <div class="actions">
-        <%= f.submit _('Save Contact'), class: "btn desired_action" %>
-        <%= link_to(_('Back'), request.referrer ? :back : contacts_path, class: "btn") %>
+      <div class="page-filters">
+        <%= f.submit _('Save Contact'), class: "btn btn-primary" %>
+        <%= link_to(_('Back'), request.referrer ? :back : contacts_path, class: "btn btn-default") %>
       </div>
 
-
-      <h1><%= @contact.name.present? ? @contact.name : _('New contact') %></h1>
+      <!-- <h1><%= @contact.name.present? ? @contact.name : _('New contact') %></h1> -->
       <% if contact.errors.any? %>
         <div id="error_explanation">
           <ul>
@@ -21,151 +17,166 @@
         </div>
       <% end %>
 
-
-      <div class="col_50 cols">
-        <div class="fieldset_label">
-          <%= _('Basic Information') %>
-        </div>
-
-        <%= f.hidden_field :user_changed, value: true %>
-
-        <div class="field">
-          <%= f.label :name, _('Name') %>
-          <%= f.text_field :name, {placeholder: _('Last Name, First Name')} %>
-        </div>
-
-        <div class="field">
-          <%= f.label :greeting, _('Greeting (used in csv download)') %>
-          <%= f.text_field :greeting, {placeholder: contact.generated_greeting} %>
-        </div>
-
-        <div class="field">
-          <%= f.label :envelope_greeting, _('Envelope Name Line') %>
-          <%= f.text_field :envelope_greeting, {placeholder: contact.generated_envelope_greeting} %>
-        </div>
-
-        <div class="field">
-          <%= f.label :pledge_amount, _('Commitment Amount') %>
-          <%= f.text_field :pledge_amount %>
-        </div>
-
-        <div class="field">
-          <%= f.label :pledge_frequency, _('Commitment Frequency') %>
-          <%= f.select :pledge_frequency, Contact.pledge_frequencies.invert.to_a, include_blank: true %>
-        </div>
-
-        <div class="field">
-          <%= f.label :pledge_start_date, _('Commitment Start Date') %>
-          <%= f.date_select :pledge_start_date, include_blank: true, order: [:month, :day, :year], start_year: Time.now.year + 2, end_year: 1951 %>
-        </div>
-
-        <%= render 'contacts/bulk_fields', f: f %>
-
-        <div class="field">
-          <%= f.label :website, _('Website') %>
-          <%= f.text_field :website %>
-        </div>
-
-        <div class="field">
-          <%= f.label :tag_list, _('Tags') %>
-          <%= f.text_field :tag_list %>
-        </div>
-        <script><%= render 'tags_input.js', input_selector: '#contact_tag_list',
-            tags: current_account_list.contact_tags  %></script>
-
-        <div class="field radiocheck">
-          <%= f.check_box :magazine %>
-          <%= f.label :magazine, _('Magazine') %>
-        </div>
-
-        <div class="field radiocheck">
-          <%= f.check_box :direct_deposit %>
-          <%= f.label :direct_deposit, _('Direct Deposit') %>
-        </div>
-
-        <div class="field radiocheck">
-          <%= f.check_box :pledge_received %>
-          <%= f.label :pledge_received, _('Pledge Received') %>
-        </div>
-
-        <div class="field radiocheck">
-          <%= f.check_box :no_appeals %>
-          <%= f.label :no_appeals, _("Don't send appeals") %>
-        </div>
-
-        <div class="sfield referrers_field">
-          <label class="fieldset_label"><%= _('Referrals') %></label>
-          <% contact.contact_referrals_to_me.build if contact.contact_referrals_to_me.blank? %>
-          <%= f.fields_for :contact_referrals_to_me do |builder| %>
-            <%= render 'contact_referral_fields', builder: builder, object: contact %>
-          <% end %>
-          <div class="sfield field_indent address_indent">
-            <div class="rs"><%= link_to_add_fields(_('Add Referral'), f, :contact_referrals_to_me, partial: 'contacts/contact_referral_fields') %></div>
+      <div class="row spacer-top">
+        <div class="col-md-7">
+          <%= f.hidden_field :user_changed, value: true %>
+          <div class="form-group">
+            <%= f.label :name, _('Name') %>
+            <%= f.text_field :name, {placeholder: _('Last Name, First Name'), class: 'form-control'} %>
+          </div>
+          <div class="row">
+            <div class="col-md-8">
+              <div class="form-group">
+                <%= f.label :greeting, _('Greeting (used in csv download)') %>
+                <%= f.text_field :greeting, {placeholder: contact.generated_greeting, class: 'form-control'} %>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                  <%= f.label :envelope_greeting, _('Envelope Name Line') %>
+                  <%= f.text_field :envelope_greeting, {placeholder: contact.generated_envelope_greeting, class: 'form-control'} %>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <%= f.label :pledge_amount, _('Commitment Amount') %>
+                <%= f.text_field :pledge_amount, class: 'form-control' %>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <%= f.label :pledge_frequency, _('Commitment Frequency') %>
+                <%= f.select :pledge_frequency, Contact.pledge_frequencies.invert.to_a, {}, {include_blank: true, class: 'form-control'} %>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <%= f.label :pledge_start_date, _('Commitment Start Date') %>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                  <%= f.text_field :pledge_start_date, class: 'form-control', data: { 'calendar-jquery' => true } %>
+                </div>
+              </div>
+            </div>
           </div>
 
-        </div>
+          <%= render 'contacts/bulk_fields', f: f %>
 
-      </div>
+          <div class="row">
+            <div class="col-md-4 dense-checks">
+              <div class="checkbox">
+                <%= f.label :magazine do %>
+                  <%= f.check_box :magazine %>
+                  <%= _('Magazine') %>
+                <% end %>
+              </div>
 
-      <div class="col_50 cols">
+              <div class="checkbox">
+                <%= f.label :direct_deposit do %>
+                  <%= f.check_box :direct_deposit %>
+                  <%= _('Direct Deposit') %>
+                <% end %>
+              </div>
 
-        <div class="fieldset">
-          <label class="fieldset_label"><%= _('Donor Accounts') %></label>
-          <% contact.donor_accounts.build if contact.donor_accounts.blank? %>
-          <%= f.fields_for :donor_accounts do |builder| %>
-            <%= render 'donor_account_fields', builder: builder, object: contact %>
-          <% end %>
-          <div class="sfield field_indent address_indent">
-            <div class="rs"><%= link_to_add_fields(_('Add Donor Account'), f, :donor_accounts) %></div>
+              <div class="checkbox">
+                <%= f.label :pledge_received do %>
+                  <%= f.check_box :pledge_received %>
+                  <%= _('Pledge Received') %>
+                <% end %>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <%= f.label :tag_list, _('Tags') %>
+                <%= f.text_field :tag_list %>
+              </div>
+              <script><%= render 'tags_input.js', input_selector: '#contact_tag_list',
+                  tags: current_account_list.contact_tags  %></script>
+            </div>
           </div>
-        </div>
-
-        <div class="fieldset">
-          <label class="fieldset_label"><%= _('Address') %></label>
-          <% contact.addresses.build(primary_mailing_address: true) if contact.addresses.blank? %>
-          <%= f.fields_for :addresses do |builder| %>
-            <%= render 'address_fields', builder: builder, object: contact %>
-          <% end %>
-          <div class="sfield field_indent address_indent">
-            <div class="ls"></div>
-            <div class="rs"><%= link_to_add_fields(_('Add Address'), f, :addresses) %></div>
+          <div class="row">
+            <div class="col-md-8 col-md-offset-4 referrers_field">
+              <label><%= _('Referrals') %></label>
+              <% contact.contact_referrals_to_me.build if contact.contact_referrals_to_me.blank? %>
+              <%= f.fields_for :contact_referrals_to_me do |builder| %>
+                <%= render 'contact_referral_fields', builder: builder, object: contact %>
+              <% end %>
+              <div class="sfield field_indent address_indent">
+                <div class="rs"><%= link_to_add_fields(_('Add Referral'), f, :contact_referrals_to_me, partial: 'contacts/contact_referral_fields') %></div>
+              </div>
+            </div>
           </div>
-        </div>
+        </div><!-- col-md-7 -->
 
+        <div class="col-md-5">
+          <div class="well">
+            <label class="fieldset_label"><%= _('Donor Accounts') %></label>
+            <% contact.donor_accounts.build if contact.donor_accounts.blank? %>
+            <%= f.fields_for :donor_accounts do |builder| %>
+              <%= render 'donor_account_fields', builder: builder, object: contact %>
+            <% end %>
+            <div class="sfield field_indent address_indent">
+              <div class="rs"><%= link_to_add_fields(_('Add Donor Account'), f, :donor_accounts) %></div>
+            </div>
+          </div>
+          <div class="contact_addresses_wrapper fieldset">
+            <% contact.addresses.build if contact.addresses.blank? %>
+            <%= f.fields_for :addresses do |builder| %>
+              <%= render 'address_fields', builder: builder, object: contact %>
+            <% end %>
+            <div class="sfield field_indent address_indent">
+              <%= link_to_add_fields(_('Add Address'), f, :addresses) %>
+            </div>
+          </div>
+        </div><!-- col-md-5 -->
       </div>
 
       <div class="clr"></div>
-      <div class="cols">
-
+      <div>
         <div class="fieldset">
           <label class="fieldset_label"><%= _('People') %></label>
           <% contact.people.build if contact.people.blank? %>
+
           <%= f.fields_for :people do |builder| %>
-            <div class="field radiocheck">
-              <%= f.radio_button :primary_person_id, builder.object.id %>
-              <%= f.label :primary_person_id, _('Primary Contact') %>
+            <div class="field radiocheck primary_select">
+                <div class="selector">
+                  <label>
+                    <%= f.radio_button :primary_person_id, builder.object.id %>
+                    <%= _('Primary Contact') %>
+                  </label>
+                </div>
             </div>
 
             <div class="inside_person">
               <%= render 'people/form', builder: builder, object: contact %>
             </div>
           <% end %>
+
           <div class="sfield">
-            <div class="ls"></div>
-            <div class="rs" id="add_person"><%= link_to_add_fields(_('Add Person/Child'), f, :people, partial: 'people/form') %></div>
+            <div class="rs" id="add_person">
+              <%= link_to_add_fields(_('Add Person/Child'), f, :people, partial: 'people/form') %>
+            </div>
           </div>
-
         </div>
-
       </div>
-
       <div class="clr"></div>
       <div class="spacer"></div>
-
-      <div class="actions">
-        <%= f.submit _('Save Contact'), class: "btn desired_action" %>
-        <%= link_to(_('Back'), request.referrer ? :back : contacts_path, class: "btn") %>
+      <div class="page-filters page-filters-close">
+        <%= f.submit _('Save Contact'), class: "btn btn-primary" %>
+        <%= link_to(_('Back'), request.referrer ? :back : contacts_path, class: "btn btn-default") %>
       </div>
     <% end %>
-  </div>
 </div>
+
+<script>
+$(function(){
+  $('[data-calendar-jquery]').datepicker({
+    changeYear: true,
+    dateFormat: 'yy-mm-dd',
+    autoclose: true,
+    todayHighlight: true
+  });
+});
+</script>

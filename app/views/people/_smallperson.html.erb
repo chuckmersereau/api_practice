@@ -1,9 +1,9 @@
 <% exhibit(person, self).tap do |p| %>
-  <div class="small-person" id="person-<%= p.id %>">
-    <%= link_to(image_tag(p.avatar(:large_square), class: "person_avatar"), p) %>
-    <div class="person_details">
-      <div class="name"><%= link_to(p, p) %></div>
-      <%= render 'people/contact_details_compact', person: p %>
+  <div class="col-md-6">
+  <div class="small-person well clearfix" id="person-<%= p.id %>">
+
+    <div class="person-external">
+      <%= link_to(image_tag(p.avatar(:large_square)), p, class: "person_avatar") %>
     </div>
     <div class="social-icons">
       <% if p.facebook_account %>
@@ -19,5 +19,11 @@
         <%= link_to('f', p.website.url, {target: "_blank", class: "website"}) %>
       <% end %>
     </div>
+
+    <div class="person_details">
+      <div class="name"><%= link_to(p, p) %></div>
+      <%= render 'people/contact_details_compact', person: p %>
+    </div>
+  </div>
   </div>
 <% end %>

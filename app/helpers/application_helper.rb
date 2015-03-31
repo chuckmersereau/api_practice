@@ -8,12 +8,19 @@ module ApplicationHelper
     else
       prompt = _('Add another Account') unless "Person::#{provider.camelcase}Account".constantize.one_per_user?
     end
-    link_to(prompt, "/auth/#{provider}", class: 'btn') if prompt
+    link_to(prompt, "/auth/#{provider}", class: 'btn btn-secondary btn-xs') if prompt
   end
 
-  def link_to_remove_fields(f, hidden = false)
-    f.hidden_field(:_destroy, value: f.object.marked_for_destruction? ? '1' : '') +
-      link_to(_('Remove'), 'javascript:void(0)', class: 'ico ico_trash', style: hidden ? 'display:none' : '', data: { behavior: 'remove_field' })
+  def link_to_remove_fields(f, hidden = false, options = {})
+    mfd = f.hidden_field(:_destroy, value: f.object.marked_for_destruction? ? '1' : '')
+    options = {
+      class: 'remove_fields btn btn-secondary btn-xs',
+      style: hidden ? 'display:none' : '',
+      data: { behavior: 'remove_field' }
+    }.merge(options)
+    label = options.delete(:label) || ''
+    button = link_to("<i class='fa fa-trash-o'></i> #{label}".html_safe, 'javascript:void(0)', options)
+    mfd + button
   end
 
   def link_to_add_fields(name, f, association, options = {})
@@ -95,15 +102,15 @@ module ApplicationHelper
   end
 
   def calendar_date_select_tag(name, value = nil, options = {})
-    options.merge!('data-calendar' => true)
+    options.merge!('data-calendar-jquery' => true)
     options.merge!('id' => '')
     options.merge!('style' => 'width:100px;')
-    options.merge!('readonly' => '')
+    # options.merge!('readonly' => '')
     value = case
             when value.is_a?(Time) || value.is_a?(DateTime)
-              l(value.to_date)
+              value.to_date.to_s(:db)
             when value.is_a?(Date)
-              l(value)
+              value.to_s(:db)
             else
               value
             end

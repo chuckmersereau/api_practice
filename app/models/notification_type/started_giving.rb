@@ -6,12 +6,13 @@ class NotificationType::StartedGiving < NotificationType
       next if prior_notification
       # If they just gave their first gift, note it as such
       next unless !contact.pledge_received? &&
-                  (donation = contact.donations.for_accounts(account_list.designation_accounts).where('donation_date > ?', 2.weeks.ago).last) &&
-                  contact.donations.for_accounts(account_list.designation_accounts).where('donation_date < ?', 2.weeks.ago).count == 0
+                  (donation = contact.donations.where('donation_date > ?', 2.weeks.ago).last) &&
+                  contact.donations.where('donation_date < ?', 2.weeks.ago).count == 0
 
       # update pledge amount/received
       contact.pledge_amount = donation.amount if contact.pledge_amount.blank?
       contact.pledge_received = true if contact.pledge_amount == donation.amount
+      contact.pledge_frequency ||= 1 # default to monthly pledge if nil
       contact.save
 
       notification = contact.notifications.create!(notification_type_id: id, event_date: Date.today)

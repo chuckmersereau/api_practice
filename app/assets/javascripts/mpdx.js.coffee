@@ -1,6 +1,5 @@
 $ ->
-
-  # Activating Best In Place
+# Activating Best In Place
   $('.best_in_place').best_in_place()
   $('.best_in_place_once').on 'best_in_place:success', ->
     elm = this
@@ -17,12 +16,9 @@ $ ->
     params = $.set_param('page', 1, params)
     document.location = document.location.pathname + '?' + params
 
-  $(document).on 'click', '#leftmenu ul.left_filters li > label', ->
-    $(this).next(".collapse").slideToggle('fast')
+  $(document).on 'click', '.filter_title', ->
     $(this).toggleClass("opened")
     $(this).parent("li").toggleClass("opened")
-
-  $('.tip, .qtip').tooltipsy()
 
   $(document).on 'mouseleave', 'div[data-behavior=account_selector]', ->
     $('div[data-behavior=account_selector] div').hide()
@@ -69,7 +65,9 @@ $ ->
   $(document).on 'click', 'a[data-behavior=remove_field]', ->
     link = this
     $(link).prev("input[type=hidden]").val("1")
-    $(link).closest("[data-behavior*=field-wrapper]").hide()
+    field_wrapper = $(link).closest("[data-behavior*=field-wrapper]")
+    field_wrapper.hide()
+    field_wrapper.find(':input:not([type=hidden])').attr('disabled', true)
     fieldset = $(link).closest('.fieldset')
     false
 

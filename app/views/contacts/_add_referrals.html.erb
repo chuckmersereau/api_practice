@@ -1,6 +1,6 @@
 <div class="form_wrapper">
   <%= form_for current_account_list, url: save_referrals_contact_path(@contact), method: :post, remote: true do |f| %>
-    <table border="0">
+    <table border="0" class="referrals_table">
       <tr>
         <th><%= _('First') %></th>
         <th><%= _('Spouse') %></th>

@@ -24,81 +24,94 @@
     </div>
 
     <div ng-show="visibleContactInfo" class="contact-info">
-        <a class="corner_close" href="" ng-click="visibleContactInfo=false">close</a>
-        <h2><a ng-href="/contacts/{{contactInfo.contact.id}}">{{contactInfo.contact.name}}</a></h2>
-        <div style="width:100%; display: block;">
-            <div class="column">
+        <div class="row">
+            <div class="col-md-11">
+                <h4><a ng-href="/contacts/{{contactInfo.contact.id}}">{{contactInfo.contact.name}}</a></h4>
+            </div>
+            <div class="col-md-1">
+                <a class="corner_close" href="" ng-click="visibleContactInfo=false">close</a>
+            </div>
+        </div>
+        <div class="row contact-task-address">
+            <div class="col-md-6">
                 <p ng-repeat="address in contactInfo.addresses | filter: { historic: false }">
                     <strong>{{address.location}} Address</strong> <i class="fa fa-check green" ng-show="address.primary_mailing_address"></i>
-                    <br>
-                    {{address.street}}<br>{{address.city}}, {{address.state}} {{address.postal_code}} {{address.country}}
+                    <br/>
+                    {{address.street}}<br/>{{address.city}}, {{address.state}} {{address.postal_code}} {{address.country}}
                 </p>
                 <p ng-show="!contactInfo.addresses.length">No mailing address</p>
 
             </div>
-            <div class="column">
+            <div class="col-md-6">
                 <p ng-repeat="referrer in contactInfo.contact.referrals_to_me_ids">
-                    <strong>Referrer:</strong><br>
+                    <strong>Referrer:</strong><br/>
                     <a ng-href="/contacts/{{referrer.id}}">{{referrer.name}}</a>
                 </p>
             </div>
         </div>
-        <div class="person"  ng-repeat="p in contactInfo.people">
-            <div class="social-icons">
-                <a class="facebook" ng-href="http://facebook.com/profile.php?id={{account.remote_id}}" target="_blank" ng-repeat="account in p.facebook_accounts">f</a>
-            </div>
+        <div class="row contact-indiv-contacts">
+            <div class="col-md-6">
+                <div class="small-person well clearfix"  ng-repeat="p in contactInfo.people">
+                    <div class="person-external">
+                        <a ng-href="/people/{{p.id}}"><img alt="Avatar" class="person_avatar" ng-src="{{p.avatar}}"></a>
+                        <div class="social-icons">
+                            <a class="facebook" ng-href="http://facebook.com/profile.php?id={{account.remote_id}}" target="_blank" ng-repeat="account in p.facebook_accounts">f</a>
+                        </div>
+                    </div>
 
-            <div class="avatar">
-                <a ng-href="/people/{{p.id}}"><img alt="Avatar" class="person_avatar" ng-src="{{p.avatar}}"></a>
-            </div>
+                    <div class="person_details">
+                        <div class="name">
+                            <a ng-href="/people/{{p.id}}">{{p.first_name}} {{p.last_name}}</a>
+                        </div>
+                        <div class="column-inner">
+                            <p ng-repeat="phone in p.phone_numbers">
+                                <strong>Phone ({{phone.location}})</strong><br/>
+                                {{phone.number}} <i class="fa fa-check green" ng-show="phone.primary"></i>
+                            </p>
+                            <p ng-show="!p.phone_numbers.length">No phone number</p>
 
-            <div class="name">
-                <a ng-href="/people/{{p.id}}">{{p.first_name}} {{p.last_name}}</a>
-            </div>
+                            <p>
+                                <span ng-repeat="email in p.email_addresses | filter:{ historic: false }">
+                                    <a ng-href="mailto:{{email.email}}">{{email.email}}</a> <i class="fa fa-check green" ng-show="email.primary"></i><br/>
+                                </span>
 
-            <div class="column-inner">
-                <p ng-repeat="phone in p.phone_numbers">
-                    <strong>Phone ({{phone.location}})</strong><br>
-                    {{phone.number}} <i class="fa fa-check green" ng-show="phone.primary"></i>
-                </p>
-                <p ng-show="!p.phone_numbers.length">No phone number</p>
-
-                <p>
-                    <span ng-repeat="email in p.email_addresses | filter:{ historic: false }">
-                        <a ng-href="mailto:{{email.email}}">{{email.email}}</a> <i class="fa fa-check green" ng-show="email.primary"></i><br>
-                    </span>
-
-                    <span ng-show="!p.email_addresses.length">
-                        <%= _('No email address') %>
-                    </span>
-                </p>
+                                <span ng-show="!p.email_addresses.length">
+                                    <%= _('No email address') %>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-
     </div>
 
     <div class="comments" ng-show="visibleComments">
         <div id="comment_list_2">
             <div class="comment" ng-repeat="comment in task.comments">
                 <a class="corner_close" data-confirm="Are you sure?" data-method="delete" data-remote="true" data-selector=".comment" ng-href="/activity_comments/{{comment}}?activity_id={{getComment(comment).activity_id}}" rel="nofollow">delete</a>
-                <i class="fa fa-comments-o fa-lg pull-left"></i>
+                <i class="fa fa-comments-o fa-lg pull-left comment-icon"></i>
 
                 <div class="body">
-                    <strong>{{getPerson(getComment(comment).person_id).name}}</strong>
+                    <div class="comment-meta">
+                        <span class="comment-person">{{getPerson(getComment(comment).person_id).name}}</strong>
+                        at
+                        <span class="comment-time">{{getComment(comment).created_at | date:'MM/dd/yyyy, h:mma'}}</span>
+                    </div>
                     <p ng-bind="getComment(comment).body"></p>
                 </div>
-                <span class="time">{{getComment(comment).created_at | date:'MM/dd/yyyy, h:mma'}}</span>
+
             </div>
         </div>
 
         <div class="comment_form">
             <form ng-submit="postNewComment()">
                 <div style="margin:0;padding:0;display:inline"></div>
-                <textarea ng-model="postNewCommentMsg"></textarea>
-
-                <div class="buttons">
-                    <button class="btn smallbtn">Add Comment</button>
+                <div class="form-group">
+                    <textarea ng-model="postNewCommentMsg" class="form-control"></textarea>
                 </div>
+
+                <button class="btn btn-sm btn-secondary">Add Comment</button>
             </form>
         </div>
     </div>

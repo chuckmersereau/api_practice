@@ -21,11 +21,11 @@
 
     <div id="dash-tabs" class="tabgroup">
       <ul>
-        <li class="killround"><a href="#dash-connect"><%= _('Connect') %></a></li>
-        <li class="killround"><a href="#dash-care"><%= _('Care') %></a></li>
-        <li class="killround"><a href="#dash-cultivate"><%= _('Cultivate') %></a></li>
-        <li class="killround"><a href="#dash-progress"><%= _('Progress') %></a></li>
-        <li class="killround"><a href="#dash-appeals"><%= _('Appeals') %></a></li>
+        <li class="killround"><a href="#dash-connect" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Connect') %>']);"><%= _('Connect') %></a></li>
+        <li class="killround"><a href="#dash-care" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Care') %>']);"><%= _('Care') %></a></li>
+        <li class="killround"><a href="#dash-cultivate" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Cultivate') %>']);"><%= _('Cultivate') %></a></li>
+        <li class="killround"><a href="#dash-progress" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Progress') %>']);"><%= _('Progress') %></a></li>
+        <li class="killround"><a href="#dash-appeals" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Appeals') %>']);"><%= _('Appeals') %></a></li>
       </ul>
 
       <div id="dash-connect" ng-controller="taskShortListController" ng-init="init('top5','')">
@@ -33,7 +33,7 @@
           <tr task="task" ng-repeat="task in tasks" id="task_{{task.id}}"></tr>
         </table>
         <div class="seemore">
-          <%= link_to(_('See All'), tasks_path) %>
+          <%= link_to(_('See All'), tasks_path, class: 'btn btn-primary btn-sm') %>
         </div>
       </div>
       <div id="dash-care"></div>

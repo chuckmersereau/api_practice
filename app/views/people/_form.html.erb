@@ -11,142 +11,8 @@
   <% end %>
 
 
-  <div class="col_50 cols">
-    <div class="fieldset_label">
-      <%= _('Basic Information') %>
-    </div>
-
-    <div class="field">
-      <%= builder.label :first_name %>
-      <%= builder.text_field :first_name, class: 'first_name' %>
-    </div>
-    <div class="field">
-      <%= builder.label :last_name %>
-      <%= builder.text_field :last_name, class: 'last_name' %>
-    </div>
-    <div class="field">
-      <%= builder.label :legal_first_name %>
-      <%= builder.text_field :legal_first_name %>
-    </div>
-    <div class="fieldset">
-      <div class="field">
-        <%= builder.label :title %>
-        <%= builder.select :title, Person::TITLES.collect {|t| _(t)}, include_blank: true %>
-      </div>
-      <div class="field">
-        <%= builder.label :suffix %>
-        <%= builder.select :suffix, Person::SUFFIXES.collect {|t| _(t)}, include_blank: true %>
-      </div>
-    </div>
-    <div class="fieldset">
-      <div class="field radiocheck">
-        <%= builder.radio_button :gender, 'male' %> <%= builder.label :gender_male, _('Male') %>
-      </div>
-      <div class="field radiocheck">
-        <%= builder.radio_button :gender, 'female' %> <%= builder.label :gender_female, _('Female') %>
-      </div>
-    </div>
-
-    <div class="fieldset">
-      <div class="field radiocheck">
-        <%= builder.check_box :deceased %>
-        <%= builder.label :deceased, _('Deceased') %>
-      </div>
-    </div>
-
-    <div class="field">
-      <%= builder.label :birthday %>
-      <%= builder.select :birthday_month, t('date.month_names')[1..-1].collect.with_index {|m, i| [m,i + 1]}, include_blank: true %>
-      <%= builder.select :birthday_day, (1..31).to_a, include_blank: true %>
-      <%= builder.select :birthday_year, Time.now.year.downto(1900).to_a, include_blank: true %>
-    </div><br />
-    <div class="field">
-      <%= builder.label :marital_status %>
-      <%= builder.select :marital_status, Person::MARITAL_STATUSES.collect {|t| _(t)}, include_blank: true %>
-    </div><br />
-
-    <div class="field">
-      <%= builder.label :anniversary %>
-      <%= builder.select :anniversary_month, t('date.month_names')[1..-1].collect.with_index {|m, i| [m,i + 1]}, include_blank: true %>
-      <%= builder.select :anniversary_day, (1..31).to_a, include_blank: true %>
-      <%= builder.select :anniversary_year, Time.now.year.downto(1900).to_a, include_blank: true %>
-    </div>
-
-    <div class="field">
-      <%= builder.label :occupation %>
-      <%= builder.text_field :occupation %>
-    </div>
-
-    <div class="field">
-      <%= builder.label :employer %>
-      <%= builder.text_field :employer %>
-    </div>
-
-    <div class="spacer"></div>
-    <% if builder.options[:parent_builder] && builder.options[:parent_builder].object.is_a?(Contact) %>
-      <%= link_to_remove_fields(builder) %>
-    <% end %>
-  </div>
-
-  <div class="col_50 cols">
-
-
-    <div class="fieldset">
-      <div class="field_action optout_enewsletter">
-        <%= builder.check_box :optout_enewsletter %>
-        <%= builder.label :optout_enewsletter, _("Opt-out of email newsletter"), title: _("This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx.") %>
-      </div>
-      <label class="fieldset_label"><%= _('Email') %></label>
-      <%= builder.fields_for :email_addresses do |builder| %>
-        <%= render 'people/email_address_fields', builder: builder, object: person %>
-      <% end %>
-      <div class="sfield field_indent rs" data-behavior="add-wrapper">
-        <%= link_to_add_fields(_('Add Email Address'), builder, :email_addresses, partial: 'people/email_address_fields') %>
-      </div>
-
-    </div>
-
-    <div class="spacer"></div>
-
-    <div class="fieldset">
-      <label class="fieldset_label"><%= _('Phone') %></label>
-      <%# person.phone_numbers.build if person.phone_numbers.blank? %>
-      <%= builder.fields_for :phone_numbers do |pf| %>
-        <%= render 'people/phone_number_fields', builder: pf, object: person %>
-      <% end %>
-      <div class="sfield field_indent rs" data-behavior="add-wrapper">
-        <%= link_to_add_fields(_('Add Phone Number'), builder, :phone_numbers, partial: 'people/phone_number_fields') %>
-      </div>
-
-    </div>
-
-    <div class="spacer"></div>
-
-    <div class="fieldset">
-      <label class="fieldset_label"><%= _('Social') %></label>
-      <% %w[facebook twitter linkedin].each do |network| %>
-        <% relationship = person.send(:"#{network}_accounts") %>
-        <%= builder.fields_for :"#{network}_accounts" do |pf| %>
-          <%= render "people/#{network}_account_fields", builder: pf, object: person %>
-        <% end %>
-        <div class="sfield field_indent" data-behavior="add-wrapper">
-          <%= link_to_add_fields(_("Add %{network} Account").localize % { network: network }, builder, :"#{network}_accounts", partial: "people/#{network}_account_fields") %>
-        </div>
-
-        <hr class="thin"/>
-      <% end %>
-
-      <%= builder.fields_for :websites do |pf| %>
-          <%= render 'people/website_fields', builder: pf, object: person %>
-      <% end %>
-      <div class="sfield field_indent rs" data-behavior="add-wrapper">
-        <%= link_to_add_fields(_('Add Website/Blog'), builder, :websites, partial: 'people/website_fields') %>
-      </div>
-    </div>
-
-    <div class="spacer"></div>
-
-    <div class="fieldset">
+  <div class="row">
+    <div class="col-md-2">
       <label class="fieldset_label"><%= _('Picture') %></label>
       <%= builder.fields_for :pictures do |builder| %>
         <%= render 'people/picture_fields', builder: builder, object: person %>
@@ -154,25 +20,181 @@
       <div class="sfield field_indent" data-behavior="add-wrapper">
         <%= link_to_add_fields(_('Add Picture'), builder, :pictures, partial: 'people/picture_fields') %>
       </div>
-
     </div>
-
-    <div class="spacer"></div>
-    <% if (current_account_list.contacts - [person]).present? %>
-      <div class="fieldset">
-        <label class="fieldset_label">Relationships</label>
-        <%# person.family_relationships.build if person.family_relationships.blank? %>
-        <%= builder.fields_for :family_relationships do |builder| %>
-          <%= render 'people/family_relationship_fields', builder: builder, object: person %>
-        <% end %>
-      </div>
-      <div class="sfield" data-behavior="add-wrapper">
-        <div class="ls"></div>
-        <div class="rs">
-          <%= link_to_add_fields(_('Add Relationship'), builder, :family_relationships, partial: 'people/family_relationship_fields') %>
+    <div class="col-md-10">
+      <div class="row small-gutter">
+        <div class="col-md-3">
+          <div class="form-group">
+            <%= builder.label :first_name %>
+            <%= builder.text_field :first_name, class: 'first_name form-control' %>
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= builder.label :last_name %>
+            <%= builder.text_field :last_name, class: 'last_name form-control' %>
+          </div>
+        </div>
+        <div class="col-md-3">
+          <div class="form-group">
+            <%= builder.label :legal_first_name %>
+            <%= builder.text_field :legal_first_name, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <div class="form-group">
+            <%= builder.label :title %>
+            <%= builder.select :title, Person::TITLES.collect {|t| _(t)}, {include_blank: true}, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="col-md-1">
+          <div class="form-group">
+            <%= builder.label :suffix %>
+            <%= builder.select :suffix, Person::SUFFIXES.collect {|t| _(t)}, {include_blank: true}, class: 'form-control' %>
+          </div>
         </div>
       </div>
-    <% end %>
+      <div class="row small-gutter">
+        <div class="col-md-2">
+          <%= builder.label :gender %>
+          <%= builder.select :gender, [['Male','male'],['Female','female']], {include_blank: true}, class: 'form-control' %>
+        </div>
+        <div class="col-md-4">
+          <%= builder.label :birthday %>
+          <div class="form-inline">
+            <div class="form-group">
+              <%= builder.select :birthday_month, t('date.month_names')[1..-1].collect.with_index {|m, i| [m,i + 1]}, {include_blank: true}, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+              <%= builder.select :birthday_day, (1..31).to_a, {include_blank: true}, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+              <%= builder.select :birthday_year, Time.now.year.downto(1900).to_a, {include_blank: true}, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <%= builder.label :marital_status %>
+          <%= builder.select :marital_status, Person::MARITAL_STATUSES.collect {|t| _(t)}, {include_blank: true}, class: 'form-control' %>
+        </div>
+        <div class="col-md-4">
+          <%= builder.label :anniversary %>
+          <div class="form-inline">
+            <div class="form-group">
+              <%= builder.select :anniversary_month, t('date.month_names')[1..-1].collect.with_index {|m, i| [m,i + 1]}, {include_blank: true}, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+              <%= builder.select :anniversary_day, (1..31).to_a, {include_blank: true}, class: 'form-control' %>
+            </div>
+            <div class="form-group">
+              <%= builder.select :anniversary_year, Time.now.year.downto(1900).to_a, {include_blank: true}, class: 'form-control' %>
+            </div>
+          </div>
+
+        </div>
+      </div>
+      <div class="row small-gutter">
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= builder.label :occupation %>
+            <%= builder.text_field :occupation, class: 'form-control' %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <div class="form-group">
+            <%= builder.label :employer %>
+            <%= builder.text_field :employer, class: 'form-control' %>
+          </div>
+        </div>
+      </div>
+      <div class="row small-gutter">
+        <div class="col-md-6 fieldset">
+          <label><%= _('Email') %></label>
+          <%= builder.fields_for :email_addresses do |builder| %>
+            <%= render 'people/email_address_fields', builder: builder, object: person %>
+          <% end %>
+          <div class="field_bucket"></div>
+          <div class="sfield field_indent rs" data-behavior="add-wrapper">
+            <%= link_to_add_fields(_('<span class="add_title">Add Email Address</span>'), builder, :email_addresses, partial: 'people/email_address_fields') %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <label><%= _('Social') %></label>
+          <div class="social_container">
+            <span class="social_text">Add:</span>
+            <% %w[facebook twitter linkedin].each do |network| %>
+              <% relationship = person.send(:"#{network}_accounts") %>
+              <%= builder.fields_for :"#{network}_accounts" do |pf| %>
+                <%= render "people/#{network}_account_fields", builder: pf, object: person %>
+              <% end %>
+              <div class="sfield field_indent add_<%= network %>" data-behavior="add-wrapper">
+                <%= link_to_add_fields(_('<span class="add_title">Add %{network} Account</span>') % { network: network }, builder, :"#{network}_accounts", {partial: "people/#{network}_account_fields"}) %>
+              </div>
+            <% end %>
+            <%= builder.fields_for :websites do |pf| %>
+                <%= render 'people/website_fields', builder: pf, object: person %>
+            <% end %>
+            <div class="sfield field_indent add_website" data-behavior="add-wrapper">
+              <%= link_to_add_fields(_('<span class="add_title">Add Website/Blog</span>'), builder, :websites, partial: 'people/website_fields') %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="row small-gutter">
+        <div class="col-md-6 fieldset">
+          <label class="fieldset_label"><%= _('Phone') %></label>
+          <%# person.phone_numbers.build if person.phone_numbers.blank? %>
+          <%= builder.fields_for :phone_numbers do |pf| %>
+            <%= render 'people/phone_number_fields', builder: pf, object: person %>
+          <% end %>
+          <div class="sfield field_indent rs" data-behavior="add-wrapper">
+            <%= link_to_add_fields(_('Add Phone Number'), builder, :phone_numbers, partial: 'people/phone_number_fields') %>
+          </div>
+        </div>
+        <div class="col-md-6">
+          <% if (current_account_list.contacts - [person]).present? %>
+            <label class="fieldset_label">Relationships</label>
+            <%# person.family_relationships.build if person.family_relationships.blank? %>
+            <%= builder.fields_for :family_relationships do |builder| %>
+              <%= render 'people/family_relationship_fields', builder: builder, object: person %>
+            <% end %>
+            <div class="sfield" data-behavior="add-wrapper">
+              <%= link_to_add_fields(_('Add Relationship'), builder, :family_relationships, partial: 'people/family_relationship_fields') %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+      <div class="row small-gutter">
+        <div class="col-md-4">
+          <div class="form-group">
+            <%= builder.label :optout_enewsletter do %>
+              <%= builder.check_box :optout_enewsletter %>
+              <%= _("Opt-out of email newsletter") %>
+              <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="<%= _("This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx.") %>"></i>
+            <% end %>
+          </div>
+        </div>
+        <div class="col-md-2">
+          <div class="form-group">
+            <%= builder.label :deceased do %>
+              <%= builder.check_box :deceased %>
+              <%= _('Deceased') %>
+            <% end %>
+          </div>
+        </div>
+        <div class="md-2">
+          <div class="form-group">
+            <% if builder.options[:parent_builder] && builder.options[:parent_builder].object.is_a?(Contact) %>
+              <label>
+                <small>
+                  <%= link_to_remove_fields(builder, false, {label: _('Remove this Person')}) %>
+                </small>
+              </label>
+            <% end %>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="clr"></div>
 </div>

@@ -20,10 +20,10 @@ describe ContactDonationMethods do
 
   context '#designated_donations' do
     it 'gives donations whose designation is connected to the contact account list' do
-      expect(contact.designated_donations.to_a).to eq([donation, old_donation])
+      expect(contact.donations.to_a).to eq([donation, old_donation])
       donation.update(designation_account: nil)
       old_donation.update(donor_account: nil)
-      expect(contact.designated_donations).to be_empty
+      expect(contact.donations).to be_empty
     end
   end
 
@@ -86,19 +86,33 @@ describe ContactDonationMethods do
     end
   end
 
+  context '#current_monthly_avg' do
+    it 'looks at the current donation only including the previous gift' do
+      old_donation.update(amount: 3)
+      expect(contact.monthly_avg_current).to eq(9.99)
+    end
+  end
+
   context '#recent_monthly_avg' do
     it 'uses time between donations to calculate average' do
-      expect(contact.recent_monthly_avg).to eq(9.99 / 2)
+      expect(contact.monthly_avg_with_prev_gift).to eq(9.99 / 2)
     end
 
     it 'considers pledge frequency in the average' do
       contact.update(pledge_frequency: 12)
-      expect(contact.recent_monthly_avg).to eq(9.99 * 2 / 12)
+      expect(contact.monthly_avg_with_prev_gift).to eq(9.99 * 2 / 12)
     end
 
     it 'averages correctly even if there are multiple contact donor account records' do
       create(:contact_donor_account, contact: contact, donor_account: donor_account)
-      expect(contact.recent_monthly_avg).to eq(9.99 / 2)
+      expect(contact.monthly_avg_with_prev_gift).to eq(9.99 / 2)
+    end
+
+    it 'averages including all donations in the previous donation month' do
+      old_donation.update(donation_date: old_donation.donation_date.end_of_month)
+      create(:donation, donor_account: donor_account, designation_account: da,
+                        donation_date: old_donation.donation_date.beginning_of_month)
+      expect(contact.monthly_avg_with_prev_gift).to eq(9.99 * 3 / 4)
     end
   end
 

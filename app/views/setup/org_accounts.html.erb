@@ -6,11 +6,13 @@
       </div>
 
       <%= render 'network_connections', provider: provider %>
-      <div class="network_button">
-        <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
-          <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true) %>
-          <br />
-          <%= link_to(_('Connect to selected organization'), new_person_organization_account_path, class: 'btn', id: 'connect_to_org') %>
+      <div class="network_button form-inline">
+        <div class="form-group">
+          <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
+            <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true, class: 'form-control') %>
+            <br />
+            <%= link_to(_('Connect to selected organization'), new_person_organization_account_path, class: 'btn', id: 'connect_to_org') %>
+          </div>
         </div>
       </div>
 
@@ -18,8 +20,8 @@
     </div>
   <% end %>
 
-  <div class="continue">
-    <%= link_to(_('continue'), next_wizard_path, class: 'btn') %>
+  <div class="continue text-center">
+    <%= link_to(_('Continue'), next_wizard_path, class: 'btn btn-primary btn-lg') %>
   </div>
 </div>
 

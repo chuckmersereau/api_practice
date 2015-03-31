@@ -69,7 +69,7 @@ class Appeal < ActiveRecord::Base
 
   def no_joined_recently(contacts, within_months)
     contacts.where.not('pledge_amount > 0 AND contacts.first_donation_date >= ?',
-                       within_months.months.ago.beginning_of_month)
+                       within_months.months.ago)
   end
 
   def no_above_pledge_recently(contacts, prev_full_months)
@@ -83,6 +83,9 @@ class Appeal < ActiveRecord::Base
       INNER JOIN donor_accounts da on da.id = cda.donor_account_id
       INNER JOIN donations ON donations.donor_account_id = da.id
       WHERE contacts.account_list_id = :account_list_id AND donations.donation_date >= :start_of_prev_month
+        AND donations.designation_account_id IN (
+          SELECT designation_account_id FROM account_list_entries WHERE account_list_id = :account_list_id
+        )
       GROUP BY contacts.id
       HAVING
         SUM(donations.amount)
@@ -111,12 +114,15 @@ class Appeal < ActiveRecord::Base
         AND contacts.last_donation_date <= :prior_window_end
         AND donations.donation_date >= :prior_window_start
         AND donations.donation_date <= :prior_window_end
+        AND donations.designation_account_id IN (
+          SELECT designation_account_id FROM account_list_entries WHERE account_list_id = :account_list_id
+        )
       GROUP BY contacts.id
       HAVING COUNT(*) >= :prior_num_gifts"
 
-    contacts.where("contacts.id NOT IN (#{former_givers_sql})", account_list_id: account_list.id,
-                                                                prior_window_start: prior_window_start, prior_window_end: prior_window_end,
-                                                                prior_num_gifts: prior_num_gifts)
+    contacts.where("contacts.id NOT IN (#{former_givers_sql})",
+                   account_list_id: account_list.id, prior_num_gifts: prior_num_gifts,
+                   prior_window_start: prior_window_start, prior_window_end: prior_window_end)
   end
 
   def no_increased_recently(contacts, prev_full_months = 3)
