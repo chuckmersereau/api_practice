@@ -2,24 +2,26 @@ $('#edit_task_modal .form_wrapper').html('<%= j(render('tasks/modal_form')) %>')
 $('#edit_task_modal').dialog({position:"center"})
 $('[data-calendar-jquery]').datepicker({
   changeYear:true,
-  format: 'yyyy-mm-dd',
+  dateFormat: 'yy-mm-dd',
   autoclose: true,
-  todayHighlight: true
-}).on('changeDate', function(response) {
-  var year = response.date.getFullYear();
-  var month = response.date.getMonth()+1;
-  var day = response.date.getDate();
+  todayHighlight: true,
+  onSelect: function(response) {
+    date = $.datepicker.parseDate('yy-mm-dd', response)
+    var year = date.getFullYear();
+    var month = date.getMonth() + 1;
+    var day = date.getDate();
 
-  if($('[id$=start_at_1i]').length){
-    $('[id$=start_at_1i]').val(year);
-    $('[id$=start_at_2i]').val(month);
-    $('[id$=start_at_3i]').val(day);
-  }
+    if ($('[id$=start_at_1i]').length) {
+      $('[id$=start_at_1i]').val(year);
+      $('[id$=start_at_2i]').val(month);
+      $('[id$=start_at_3i]').val(day);
+    }
 
-  if($('[id$=completed_at_1i]').length){
-    $('[id$=completed_at_1i]').val(year);
-    $('[id$=completed_at_2i]').val(month);
-    $('[id$=completed_at_3i]').val(day);
+    if ($('[id$=completed_at_1i]').length) {
+      $('[id$=completed_at_1i]').val(year);
+      $('[id$=completed_at_2i]').val(month);
+      $('[id$=completed_at_3i]').val(day);
+    }
   }
 });
 if($('#modal_task_start_at_1i').length) {
