@@ -126,7 +126,7 @@
             <%= f.fields_for :addresses do |builder| %>
               <%= render 'address_fields', builder: builder, object: contact %>
             <% end %>
-            <div>
+            <div class="sfield field_indent address_indent">
               <%= link_to_add_fields(_('Add Address'), f, :addresses) %>
             </div>
           </div>
