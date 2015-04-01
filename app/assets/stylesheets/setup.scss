@@ -23,7 +23,7 @@ body {
   width: $sidebarwidth - 1px;
   float: right;
   margin-top: 210px;
-  background: $white;
+  background: $color-white;
   border: 1px solid $gray;
   border-left: 0px;
   border-radius: 0 8px 8px 0;
@@ -75,7 +75,7 @@ body {
   background: image-url("splash/bg_gray.jpg");
   padding: 15px;
   text-align: left;
-  border-top: 1px solid $white;
+  border-top: 1px solid $color-white;
   box-shadow: 0 0 15px #555;
   .btn {
     font-size: 16px;
@@ -116,7 +116,7 @@ header#global {
   .in {
     background: image-url("bigcheck.png") no-repeat 0 21px;
     height: 47px;
-    color: $white;
+    color: $color-white;
     font-size: 29px;
     padding: 31px 0 0 60px;
     margin-left: 27px;

@@ -1,13 +1,3 @@
-@import "elements";
-
-* {
-  font-variant-numeric: lining-nums;
-  -moz-font-feature-settings: "lnum";
-  -ms-font-feature-settings: "lnum";
-  -webkit-font-feature-settings: "lnum";
-  font-feature-settings: "lnum";
-}
-
 body {
   background: $page_bg;
   margin: 0;
@@ -27,9 +17,10 @@ td, th {text-align: left; vertical-align: top;}
 hr.thin {margin: .5em 0; border: none; border-top: 1px solid $gray_mid;}
 img {max-width: 100%; height: auto;}
 .dropdown {display: inline-block;}
+$progress-bar-height: 30px;
+$userheight: 72px;
 
 /* ************************************************************** */
-$userheight: 72px;
 
 #user {
   .links {
@@ -101,7 +92,7 @@ $userheight: 72px;
             display: block;
             height: 2em;
             line-height: 2em;
-            color: $white;
+            color: $color-white;
             font-size: 13px;
           }
         }
@@ -148,7 +139,7 @@ div.right {
   $mainmenuheight: 48px;
   height: auto;
   background: $color-gray-keyline;
-  border-top: 1px solid $white;
+  border-top: 1px solid $color-white;
   .account_balances {
     padding-top: 0px;
     padding-right: 14px;
@@ -380,14 +371,6 @@ div.right {
   z-index: 10;
   background: #fff;
 }
-  @media (min-width: 992px) {
-    #leftmenu.affix {
-      width: 263px;
-    }
-    .page-filters.affix {
-      width: 848px;
-    }
-  }
   @media (min-width: 768px) {
     #leftmenu.affix {
       width: 213px;
@@ -396,6 +379,15 @@ div.right {
       width: 698px;
     }
   }
+  @media (min-width: 992px) {
+    #leftmenu.affix {
+      width: 263px;
+    }
+    .page-filters.affix {
+      width: 848px;
+    }
+  }
+
 
 /* ************************************************************** */
 .pagination {
@@ -422,11 +414,9 @@ div.right {
   }
 }
 
-$progress-bar-height: 30px;
-
 #mpd_progress_bar {
   background: $color-gray;
-  color: $white;
+  color: $color-white;
   height: $progress-bar-height;
   margin: 6px 0 0 0;
   overflow: hidden;
@@ -456,14 +446,14 @@ $progress-bar-height: 30px;
 /* ************************************************************** */
 
 .indicator {
-  background: $black;
+  background: $color-black;
   padding: 4px 5px;
   border-radius: 3px;
 }
 
 .mapit {
   background: image-url("pin.png") no-repeat 0 50%;
-  color: $black;
+  color: $color-black;
   padding-left: 14px;
   line-height: 16px;
   height: 16px;
@@ -478,7 +468,7 @@ $progress-bar-height: 30px;
 .tipbox {
   margin-top: $sidebarmargins;
   border: 1px solid $borders;
-  background: $white;
+  background: $color-white;
   padding: $sidebarmargins;
   box-shadow: 1px 1px 5px #999;
   border-radius: 5px;
@@ -494,7 +484,7 @@ $progress-bar-height: 30px;
 #contentbody {
   border-top: none;
   background: #fff;
-  min-height: 165px;
+  min-height: 800px;
 }
 .seemore {
   border-top: 4px solid #BBBDBF;
@@ -597,7 +587,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     @include listclear;
   }
   .menu_item {
-    background: $color-gray-background;
+    background: $color-background;
     border: 1px solid #ccc;
     border-right: none;
     display: block;
@@ -665,7 +655,8 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 
   .filter_title {
     padding-left: 8px;
-    font-size: 1em;
+    font-size: 90%;
+    line-height: 22px;
     font-weight: 500;
     margin-bottom: 0;
     &:before {
@@ -677,7 +668,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
       transition: .2s all;
       font-size: 12px;
       font-weight: 100;
-      line-height: 29px;
+      line-height: 22px;
     }
     &.opened {
       &:before {
@@ -773,7 +764,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
   .tag {
     background: $color-blue-deep;
     border-radius: 5px;
-    color: $white;
+    color: $color-white;
     display: inline-block;
     font-size: 12px;
     font-family: Arial;
@@ -980,7 +971,7 @@ table tbody.tasks {
 .qaction .quick_action_list, .action_list {
   @include listclear;
   padding: 4px;
-  background: $white;
+  background: $color-white;
   box-shadow: 0 0 6px #bbb;
   position: absolute;
   z-index: 10;
@@ -991,7 +982,7 @@ table tbody.tasks {
   a.fb {background-position: 0 -390px;}
   a.tweet {background-position: 0 -324px;}
   a.none {padding-left: 10px; background: none;}
-  a:hover {background-color: $green; color: $white;}
+  a:hover {background-color: $green; color: $color-white;}
   a:active {background-color: $green_dark;}
 }
 
@@ -1342,7 +1333,7 @@ table.meta {
 
 #contact_drawer {
   h3 {
-    color: $black;
+    color: $color-black;
     margin: 0;
     line-height: 2.25em;
     display: inline-block;
@@ -1372,7 +1363,7 @@ table.meta {
   @include listclear;
   height: 415px;
   overflow: auto;
-  background: $white;
+  background: $color-white;
   li {border-bottom: 1px dotted $gray_light;}
   li a {
     display: block;
@@ -1391,7 +1382,7 @@ table.meta {
   }
   li a.active {
     background: $color-primary;
-    color: $white;
+    color: $color-white;
   }
 }
 
@@ -1650,7 +1641,7 @@ body.google_integrations_controller {
   }
   .ui-state-active {
     font-weight: normal;
-    background: $white;
+    background: $color-white;
     border: 1px solid #ccc;
     a {
       line-height: 40px;

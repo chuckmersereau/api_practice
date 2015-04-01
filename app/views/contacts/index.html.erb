@@ -9,7 +9,7 @@
   </script>
   <div class="row">
     <div class="col-md-3">
-      <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182">
+      <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
         <ul>
           <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
           <% if $rollout.active?(:insights, current_account_list) %>
@@ -30,7 +30,7 @@
               <%= hidden_field_tag 'filters[tags]', tag_params %>
               <%= hidden_field_tag :per_page, params[:per_page] %>
 
-              <ul class="filters">
+              <ul class="filters data-font">
                 <li class="filter_set">
                   <label id="filter_name" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Name']);"><%= _('Name') %></label>
                   <div class="filter_set_inner">
