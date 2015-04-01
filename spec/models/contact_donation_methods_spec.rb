@@ -116,6 +116,19 @@ describe ContactDonationMethods do
     end
   end
 
+  context '#monthly_avg_from' do
+    it 'sums donations from date to current (or previous) month, goes back by pledge frequency multiple' do
+      expect(contact.monthly_avg_from(Date.today)).to eq(9.99)
+      expect(contact.monthly_avg_from(Date.today << 2)).to eq(9.99 / 3)
+      expect(contact.monthly_avg_from(Date.today << 3)).to eq(9.99 / 2)
+
+      contact.update(pledge_frequency: 3)
+      expect(contact.monthly_avg_from(Date.today)).to eq(9.99 / 3)
+      expect(contact.monthly_avg_from(Date.today << 2)).to eq(9.99 / 3)
+      expect(contact.monthly_avg_from(Date.today << 3)).to eq(9.99 * 2 / 6)
+    end
+  end
+
   context '#months_from_prev_to_last_donation' do
     it 'gives the months elapsed between the last donation and the last donation in a previous month' do
       expect(contact.months_from_prev_to_last_donation).to eq(3)

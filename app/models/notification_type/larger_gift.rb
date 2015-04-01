@@ -13,8 +13,19 @@ class NotificationType::LargerGift < NotificationType
     if contact.pledge_frequency < 1
       return contact.last_donation.present? && contact.last_donation.amount > contact.pledge_amount
     end
-    contact.monthly_avg_with_prev_gift > contact.monthly_pledge &&
-      contact.monthly_avg_current > contact.monthly_pledge
+
+    contact.monthly_avg_current > contact.monthly_pledge &&
+      contact.monthly_avg_with_prev_gift > contact.monthly_pledge &&
+      !current_catches_up_earlier_months?(contact)
+  end
+
+  def current_catches_up_earlier_months?(contact)
+    return unless contact.prev_month_donation_date
+    from_date = contact.prev_month_donation_date << 1
+    while from_date >= [1.year.ago, contact.first_donation_date].max
+      return true if contact.monthly_avg_from(from_date) == contact.monthly_pledge
+      from_date <<= 1
+    end
   end
 
   def task_description_template

@@ -43,7 +43,7 @@ describe 'Overall notification tests' do
       { pledge_frequency: 1, amounts: [5, 10] } => [],
       { pledge_frequency: 1, amounts: [10, 11, 0] } => [larger_gift],
       { pledge_frequency: 1, amounts: [10, 0, 0, 0] } => [stopped_giving],
-      { pledge_frequency: 1, amounts: [10, 0, 0, 10, 20] } => [larger_gift],
+      { pledge_frequency: 1, amounts: [10, 0, 0, 10, 20] } => [],
       { pledge_frequency: 1, amounts: [9] } => [smaller_gift, started_giving],
       { pledge_frequency: 1, amounts: [10, 9] } => [smaller_gift],
       { pledge_frequency: 1, amounts: [10] } => [started_giving],
