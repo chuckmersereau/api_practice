@@ -9,7 +9,7 @@
   </script>
   <div class="row">
     <div class="col-md-3">
-      <aside id="leftmenu" class="filters_menu">
+      <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182">
         <ul>
           <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
           <% if $rollout.active?(:insights, current_account_list) %>
@@ -176,7 +176,7 @@
     <div class="col-md-9">
 
       <div id="contentbody" class="withleft">
-        <div class="page-filters">
+        <div class="page-filters" data-spy="affix" data-offset-top="182">
           <div class="row">
             <div class="col-md-5 form-inline">
               <input autocomplete="off" class="search_filter ui-autocomplete-input form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="contactQuery.name" size="40">

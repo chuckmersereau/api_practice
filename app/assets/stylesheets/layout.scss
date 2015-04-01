@@ -368,7 +368,34 @@ div.right {
   font-weight: 400;
   border-width: 1px;
 }
-
+/* ************************************************************** */
+#leftmenu.affix {
+  background: #fff;
+  top: 20px;
+  z-index: 10;
+}
+.page-filters.affix {
+  top: 0;
+  padding-top: 20px;
+  z-index: 10;
+  background: #fff;
+}
+  @media (min-width: 992px) {
+    #leftmenu.affix {
+      width: 263px;
+    }
+    .page-filters.affix {
+      width: 848px;
+    }
+  }
+  @media (min-width: 768px) {
+    #leftmenu.affix {
+      width: 213px;
+    }
+    .page-filters.affix {
+      width: 698px;
+    }
+  }
 
 /* ************************************************************** */
 .pagination {
@@ -578,10 +605,11 @@ div.name {font-size: 14px; margin-bottom: 4px;}
     font-weight: 500;
     line-height: 2.5em;
     padding: 0 15px 0 35px;
+    position: relative;
     &:before {
       display:block;
       font-family: "FontAwesome";
-      left: 27px;
+      left: 11px;
       position: absolute;
     }
   }
