@@ -1,11 +1,6 @@
 /* ...
 *= require_self
-*= require typography
-*= require forms
-*= require layout
-*= require notices
-*= require ico
-*= require errors
+*= depends_on styles.scss
 *= require adaptive
 *= require font-awesome
 *= require peek
