@@ -59,8 +59,12 @@
                     </div>
                     <div class="col-sm-8">
                       <div class="form-group">
-                        <select ng-model="newContact" ng-options="c.id as c.name for c in contacts"></select>
-                        <button type="button" ng-click="addContact(newContact)"><%= _('Add') %></button>
+                        <div class="input-group">
+                          <select class="form-control" ng-model="newContact" ng-options="c.id as c.name for c in contacts"></select>
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" ng-click="addContact(newContact)"><%= _('Add') %></button>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -71,8 +75,12 @@
                     </div>
                     <div class="col-sm-8">
                       <div class="form-group">
-                        <select ng-model="taskType" ng-options="t as t for t in taskTypes"></select>
-                        <button type="button" ng-click="createTask(taskType, checkedContacts)" ng-show="taskType" ng-disabled="creatingBulkTasks"><%= _('Create') %></button>
+                        <div class="input-group">
+                          <select class="form-control" ng-model="taskType" ng-options="t as t for t in taskTypes"></select>
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" ng-click="createTask(taskType, checkedContacts)" ng-disabled="!taskType || creatingBulkTasks"><%= _('Create') %></button>
+                          </span>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -83,13 +91,16 @@
                     </div>
                     <div class="col-sm-8">
                       <div class="form-group">
-                      <select ng-model="exportType">
-                        <option value="csv">CSV</option>
-                        <option value="mailchimp">MailChimp</option>
-                        <option value="prayer_letters">PrayerLetters.com</option>
-                      </select>
-                      <button type="button" ng-click="exportContacts(exportType, checkedContacts)" ng-show="exportType"><%= _('Export') %></button>
+                        <div class="input-group">
+                          <select class="form-control" ng-model="exportType">
+                            <option value="csv">CSV</option>
+                            <option value="mailchimp">MailChimp</option>
+                          </select>
+                          <span class="input-group-btn">
+                            <button class="btn btn-default" ng-click="exportContacts(exportType, checkedContacts)" ng-disabled="!exportType"><%= _('Export') %></button>
+                          </span>
                         </div>
+                      </div>
                     </div>
                   </div>
 
@@ -99,8 +110,12 @@
                     </div>
                     <div class="col-sm-8">
                       <div class="form-group">
-                        <input type="text" ng-model="newTag" style="width:70%;">
-                        <button type="button" ng-click="createTag(newTag, checkedContacts)" ng-show="newTag" ng-disabled="creatingTag"><%= _('Create') %></button>
+                        <div class="input-group">
+                            <input type="text" class="form-control" ng-model="newTag">
+                            <span class="input-group-btn">
+                              <button class="btn btn-default" ng-click="createTag(newTag, checkedContacts)" ng-disabled="!newTag || creatingTag"><%= _('Create') %></button>
+                            </span>
+                        </div>
                       </div>
                     </div>
                   </div>
