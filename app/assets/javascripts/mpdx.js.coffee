@@ -217,3 +217,12 @@ $(document).ready ->
   element = $.deparam(location.search).focus
   $('#' + element).focus() if element
 
+determineAffixScroll = ->
+  if $(window).height() < $('#leftmenu').height()
+    $('#leftmenu').addClass 'scrollable_left'
+  else
+    $('#leftmenu').removeClass 'scrollable_left'
+  return
+
+$(document).ready determineAffixScroll
+$(window).on 'resize', determineAffixScroll

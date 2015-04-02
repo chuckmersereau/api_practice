@@ -360,10 +360,27 @@ div.right {
   border-width: 1px;
 }
 /* ************************************************************** */
+.affix + #affix-fix
+{
+     min-height: 71px;
+}
+
+#affix-fix
+{
+    min-height: 0;
+}
 #leftmenu.affix {
   background: #fff;
   top: 20px;
   z-index: 10;
+  overflow: auto;
+  position: fixed !important;
+}
+#leftmenu.affix.scrollable_left {
+  height: 95%;
+}
+#leftmenu.affix-bottom {
+  height: auto;
 }
 .page-filters.affix {
   top: 0;
@@ -379,7 +396,17 @@ div.right {
       width: 698px;
     }
   }
-  @media (min-width: 992px) {
+
+  @media (min-width: 978px) {
+    #leftmenu.affix {
+      width: 213px;
+    }
+    .page-filters.affix {
+      width: 698px;
+    }
+  }
+
+  @media (min-width: 1200px) {
     #leftmenu.affix {
       width: 263px;
     }
