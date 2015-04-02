@@ -15,9 +15,6 @@ before_script:
 - cp config/config.travis.yml config/config.yml
 - cp config/cloudinary.travis.yml config/cloudinary.yml
 - bundle exec rake db:schema:load RAILS_ENV=test
-branches:
-  only:
-  - master
 deploy:
   - provider: opsworks
     access_key_id: AKIAJYX4CH7WF7CZ2QIA
