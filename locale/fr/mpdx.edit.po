@@ -1,12 +1,10 @@
-# Copyright (C) 2012 THE version'S COPYRIGHT HOLDER
 # This file is distributed under the same license as the version package.
 # Josh Starcher <>, 2012.
-#
 msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2014-10-23 16:07+0100\n"
+"PO-Revision-Date: 2015-01-14 10:09+0100\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -15,7 +13,10 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.9\n"
-"POT-Creation-Date: 2015-01-05 21:29-0800\n"
+"POT-Creation-Date: 2015-04-02 11:54-0400\n"
+
+msgid " "
+msgstr ""
 
 msgid " For %{contact}"
 msgstr "Pour %{contact}"
@@ -23,17 +24,17 @@ msgstr "Pour %{contact}"
 msgid " It has been more than 6 months since you have called these important financial partners."
 msgstr "Cela fait plus de 6 mois que vous avez appelé ces importants partenaires financiers."
 
+msgid " to email donation services."
+msgstr ""
+
 msgid "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
-msgstr "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
+msgstr "\"Affichage de #{b}%{from}#{sp}-#{sp}%{to}#{eb} sur #{b}%{count}#{eb}\""
 
 msgid "%% of goal pledged (%{totals})"
 msgstr "%% de l'objectif promis (%{totals})"
 
 msgid "%{action} - %{time}"
 msgstr "%{action} - %{time}"
-
-msgid "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank You."
-msgstr "%{contact_name} a effectué un don spécial de %{amount} le %{date}. Envoyer lui vos remerciements."
 
 msgid "%{contact_name} just gave their first gift. Send them a Thank You."
 msgstr "%{contact_name} Viens juste d' effectuer son premier don. Envoyer lui vos remerciements."
@@ -95,9 +96,34 @@ msgstr "<< Semaine précédente"
 msgid "<< Previous Year"
 msgstr "<< Année précédente"
 
+msgid "<i class=\"fa fa-check-square-o\"></i> Add Task"
+msgstr ""
+
+msgid "<i class=\"fa fa-eye-slash\"></i>"
+msgstr ""
+
+msgid "<i class=\"fa fa-facebook-square\"></i>"
+msgstr ""
+
+msgid "<i class=\"fa fa-globe\"></i>"
+msgstr ""
+
+msgid "<i class=\"fa fa-pencil\"></i>"
+msgstr ""
+
+msgid "<i class=\"fa fa-pencil\"></i> Edit"
+msgstr ""
+
+msgid "<i class=\"fa fa-twitter-square\"></i>"
+msgstr ""
+
+msgid "<i class=\"fa fa-users\"></i> Add Referrals"
+msgstr ""
+
+#, fuzzy
 msgid ""
 "<p>Easily connect all of your contacts, calendars, communications and social conversations. MPDX will automatically identify contact's social profiles on Facebook, LinkedIn, and </p>\n"
-"                    <p>Twitter so that you connect, listen, and engage with your minitry partners. </p>"
+"                            <p>Twitter so that you connect, listen, and engage with your minitry partners. </p>"
 msgstr ""
 "<p> Connecter facilement tous vos contacts, calendriers, communications et conversations. MPDX identifiera automatiquement les profils sociaux des contacts sur Facebook, LinkedIn, et </p>\n"
 "                    <p>Twitter pour que vous puissiez vous connecter, écouter et vous engager avec vos partenaires du ministère</p>"
@@ -118,10 +144,26 @@ msgid ""
 "\n"
 "                     <p>If you delete a contact in Google contacts that is active in MPDX, you must also go in to MPDX and hide\n"
 "                     the contact, making it inactive in MPDX. Otherwise, it will get regenerated in Google once it syncs again.</p>"
+msgstr "<p> MPDX peut synchroniser vos contacts actifs à Google afin que vous n'ayez qu'à garder vos contacts à jour dans un seul endroit. (Les contacts actifs sont ceux dont le champ état indique qu'ils sont des partenaires ou dans le processus DEP.) </p>                      <p> Cela va synchroniser les informations des contacts existants ainsi que les mises à jour futures et les suppressions à vos informations à partir MPDX et Google. Une fois que la synchronisation est active, les changements dans Google ou MPDX seront reflétée dans l'autre système. Si vous faites un changement dans les deux endroits entre les synchronisations, les changements MPDx prévaudront. </ p>                      <p> Si vous rendez un contact inactif dans MPDX par exemple en sélectionnant \"Pas intéressé \" pour son statut, les infos de ce contact ne seront pas supprimées dans Google, mais seront marquées  \"inactif \" de sorte que vous puissiez facilement trouver ceux qui ne sont plus synchronisés et les supprimer si vous le souhaitez. </p>                      <p> Si vous supprimez un contact dans les contacts Google qui est actif dans MPDX, vous devez aussi aller dans MPDX et cacher le contact, le rendant inactif dans MPDX. Sinon, il sera régénéré dans Google à la prochaine synchronisation. </p>"
+
+msgid "<span class=\"add_title\">Add %{network} Account</span>"
+msgstr ""
+
+msgid "<span class=\"add_title\">Add Email Address</span>"
+msgstr ""
+
+msgid "<span class=\"add_title\">Add Website/Blog</span>"
+msgstr ""
+
+msgid "<strong>%{index} of %{total}</strong>"
 msgstr ""
 
 msgid "About you"
 msgstr "à propos de Vous"
+
+#, fuzzy
+msgid "Account Name"
+msgstr "Comptes"
 
 msgid "Account Settings"
 msgstr "Paramètres du compte"
@@ -132,17 +174,18 @@ msgstr "Comptes"
 msgid "Action"
 msgstr "Activité"
 
-msgid "Actions"
-msgstr "Activités"
+msgid "Actions <span class=\"caret\"></span>"
+msgstr ""
 
 msgid "Active Contacts"
 msgstr "Activer les contacts"
 
-msgid "Add"
-msgstr ""
+#, fuzzy
+msgid "Active addresses"
+msgstr "Adresse e-mail"
 
-msgid "Add %{network} Account"
-msgstr "Ajouter le compte %{network} "
+msgid "Add"
+msgstr "Ajouter"
 
 msgid "Add Address"
 msgstr "Ajouter une adresse"
@@ -155,9 +198,6 @@ msgstr "Ajouter un contact"
 
 msgid "Add Donor Account"
 msgstr "Ajouter un compte donateur"
-
-msgid "Add Email Address"
-msgstr "Ajouter une adresse e-mail"
 
 msgid "Add Note"
 msgstr "Ajouter une remarque"
@@ -186,9 +226,6 @@ msgstr "Ajouter des libellés"
 msgid "Add Task"
 msgstr "Ajouter une tâche"
 
-msgid "Add Website/Blog"
-msgstr "Ajouter un site web/blog"
-
 msgid "Add a donation"
 msgstr "Ajouter un don"
 
@@ -209,13 +246,13 @@ msgid "Add contact"
 msgstr "Ajouter un contact"
 
 msgid "Add contact(s) to newsletter list"
-msgstr ""
+msgstr "Ajouter un/des contact(s) à votre liste de lettre de nouvelle"
 
 msgid "Add contacts with the following status(es):"
-msgstr ""
+msgstr "Ajouter des contacts avec le(s) statut(s) suivant(s) :"
 
 msgid "Add contacts with the following tag(s):"
-msgstr ""
+msgstr "Ajouter des contacts avec le(s) libellé(s) suivant(s) :"
 
 msgid "Add some now"
 msgstr "En ajouter maintenant"
@@ -223,14 +260,18 @@ msgstr "En ajouter maintenant"
 msgid "Add tags to these contacts"
 msgstr "Ajouter des libellés à ces contacts"
 
-msgid "Address"
-msgstr "Adresse"
+#, fuzzy
+msgid "Address no longer valid"
+msgstr "L'API Key de MailChimp n'est plus valide"
 
 msgid "Addresses"
 msgstr "Adresses"
 
 msgid "Addresses:"
 msgstr "Adresses :"
+
+msgid "Admin %"
+msgstr ""
 
 msgid "Age"
 msgstr "Age"
@@ -239,7 +280,7 @@ msgid "All"
 msgstr "Tout"
 
 msgid "All Inactive"
-msgstr ""
+msgstr "Tous inactifs"
 
 msgid "Always current. Contacts with status: Never Contacted, Contact for Appointment, or none."
 msgstr "Toujours en cours. Contacts avec un statut: jamais contacté, Contact pour rendez-vous, ou pas."
@@ -256,6 +297,10 @@ msgstr "Montant (USD)"
 msgid "Anniversaries"
 msgstr "Anniversaires"
 
+#, fuzzy
+msgid "Anniversary"
+msgstr "Anniversaires"
+
 msgid "Annual"
 msgstr "Annuel"
 
@@ -269,10 +314,14 @@ msgid "Api Key"
 msgstr "Api Key"
 
 msgid "Appeal"
-msgstr ""
+msgstr "Appel"
+
+#, fuzzy
+msgid "Appeal Amount"
+msgstr "Ajouter un compte"
 
 msgid "Appeals"
-msgstr ""
+msgstr "Appels"
 
 msgid "Apply Filters"
 msgstr "Appliquer des filtres"
@@ -286,6 +335,9 @@ msgstr "Rendez-vous établi"
 msgid "Appointments"
 msgstr "Rendez-vous"
 
+msgid "Are marked as do not ask for appeals"
+msgstr ""
+
 msgid "Are you sure you want to delete this task instead of marking it as completed?"
 msgstr "Êtes vous sûr de vouloir supprimer cette tâche au lieu de la marque comme terminée ?"
 
@@ -295,9 +347,8 @@ msgstr "Êtes vous sûr de vouloir désactiver l'intégration de Gmail ?"
 msgid "Are you sure you want to disable Google Calendar integration?"
 msgstr "Êtes vous sûr de vouloir désactiver l'intégration du calendrier Google ?"
 
-#, fuzzy
 msgid "Are you sure you want to disable Google Contacts sync?"
-msgstr "Êtes vous sûr de vouloir désactiver l'intégration de Gmail ?"
+msgstr "Êtes vous sûr de vouloir désactiver la synchronisation des contacts Google ?"
 
 msgid "Are you sure you want to merge the selected contacts? This action cannot be undone!"
 msgstr "Êtes vous sûr de vouloir fusionner les contacts sélectionnés ? Cette action ne peut pas être annulée !"
@@ -326,17 +377,16 @@ msgstr "La moyenne des dons a baissé de <span style = \"color:red\">% {amount} 
 msgid "Average donations up <span style=\"color:green\">%{amount}</span> from last year"
 msgstr "Moyenne des dons a augmenté de <span style=\"color:green\">%{amount}</span>depuis l'année dernière"
 
+msgid "Avg Household Income by Zip"
+msgstr ""
+
 msgid "Back"
 msgstr "Retour"
 
 msgid ""
 "Based on an analysis of a partner's giving history, MPDX can notify you of events that you will probably want to follow up on. The detection logic\n"
-"                is based on a set of rules that are right most of the time, but you will still want to verify an event manually before contacting the partner.<br><br>\n"
-"               For each event MPDX can notify you via email and also create a task entry reminding you to do something about it. The options below allow you to control that behavior."
-msgstr "Basé sur l'analyse des antécédents donnés d'un partenaire, MPDX peut vous informer des événements que vous voudrez probablement suivre. La logique de détection  est basé sur un ensemble de règles qui s'avèrent vraies la plupart du temps, mais vous aurez toujours envie de vérifier un événement manuellement avant de contacter le partenaire. <br><br>             Pour chaque événement MPDX peut vous informer par email et aussi créer une inscription de tâche pour vous rappeler quelque chose à faire. Les options ci-dessous vous permettent de contrôler cette fonctionnalité."
-
-msgid "Basic Information"
-msgstr "Informations basique"
+"                      is based on a set of rules that are right most of the time, but you will still want to verify an event manually before contacting the partner."
+msgstr ""
 
 msgid "Before emailing us, please have a look at %{link} to see if your question is already answered there."
 msgstr "Avant de nous envoyer un e-mail, veuillez s'il vous plaît  regarder sur %{link} si vous n'avez pas déjà une réponse là-bas."
@@ -346,6 +396,10 @@ msgstr "Bi-mensuel"
 
 msgid "Biennial"
 msgstr "Biennal"
+
+#, fuzzy
+msgid "Birthday"
+msgstr "Anniversaires "
 
 msgid "Birthdays"
 msgstr "Anniversaires "
@@ -370,7 +424,7 @@ msgid ""
 "                 Tasks will be pushed to the calendar named %{calendar_name}"
 msgstr ""
 "L'intégration du calendrier a été activée. Choisissez dans la liste des tâches ci-dessous celles que vous aimeriez que MPDX mette sur votre calendrier. \n"
-"                  Les tâches seront inscrites sur l'agenda nommé %{calendar_name}"
+"                  Les tâches seront inscrites sur l'agenda nommé %{calendar_name}"
 
 msgid "Call"
 msgstr "Appel"
@@ -402,6 +456,9 @@ msgstr "Eglise"
 msgid "City"
 msgstr "Ville"
 
+msgid "Clear Insight Filter"
+msgstr ""
+
 msgid "Click here to create a new calendar"
 msgstr "Cliquer ici pour créer un nouveau calendrier"
 
@@ -413,9 +470,6 @@ msgstr "Cliquer ici pour supprimer ce don"
 
 msgid "Click here to link your facebook account."
 msgstr "Cliquer ici pour connecter votre compte Facebook."
-
-msgid "Click here to reschedule this task"
-msgstr "Cliquer ici pour reporter cette tâche"
 
 msgid "Click here to set your monthly goal, after which we will show you a pretty graph of your donations"
 msgstr "Cliquer ici pour définir votre objectif mensuel, après quoi nous allons vous montrer un joli graphique de vos dons"
@@ -451,7 +505,7 @@ msgid "Completed"
 msgstr "Terminé"
 
 msgid "Completed On"
-msgstr "Complété le :"
+msgstr "Terminé le :"
 
 msgid "Completed:"
 msgstr "Terminé :"
@@ -468,9 +522,6 @@ msgstr "Se connecter à %{org}"
 msgid "Connect to selected organization"
 msgstr "Se connecter à l'organisme sélectionnée"
 
-msgid "Connect to your LinkedIn account to add a url for your contact"
-msgstr "Se connecter à votre compte LinkedIn pour ajouter une URL à votre contact"
-
 msgid "Connect to your organization"
 msgstr "Se connecter à votre organisme"
 
@@ -485,6 +536,10 @@ msgstr "Eglise du contact"
 
 msgid "Contact City"
 msgstr "Ville du contact"
+
+#, fuzzy
+msgid "Contact Commitment Frequency"
+msgstr "Fréquence de l'engagement "
 
 msgid "Contact Details"
 msgstr "Coordonnées"
@@ -516,6 +571,18 @@ msgstr "Catégorie du contact"
 msgid "Contact for Appointment"
 msgstr "Contacter pour un rendez-vous"
 
+msgid "Contacted - No descision yet"
+msgstr ""
+
+msgid "Contacted - No increase at this time. Will re-attempt in the future."
+msgstr ""
+
+msgid "Contacted - Not possible at all. Will not re-attempt"
+msgstr ""
+
+msgid "Contacted - Received an Increase"
+msgstr ""
+
 msgid "Contacts"
 msgstr "Contacts"
 
@@ -527,6 +594,10 @@ msgstr "Contacts en cours d' importation"
 
 msgid "Contacts still in process:"
 msgstr "Contacts encore en cours :"
+
+#, fuzzy
+msgid "Continue"
+msgstr "continuer"
 
 msgid "Contribution Report"
 msgstr "Rapport de contribution :"
@@ -547,17 +618,16 @@ msgid "Create"
 msgstr "Créer"
 
 msgid "Create \"Appointment\" task"
-msgstr ""
+msgstr "Créer une tâche \"Rendez-vous\""
 
 msgid "Create \"Setup Giving\" task"
-msgstr ""
+msgstr "Créer une tâche \"mettre en place le don\""
 
-#, fuzzy
 msgid "Create \"Thank\" task"
-msgstr "Créer une tâche"
+msgstr "Créer une tâche \"Merci\""
 
 msgid "Create New Appeal"
-msgstr ""
+msgstr "Créer un nouvel appel"
 
 msgid "Create a task"
 msgstr "Créer une tâche"
@@ -566,10 +636,17 @@ msgid "Create one now."
 msgstr "En créer une maintenant."
 
 msgid "Create task with selected:"
-msgstr ""
+msgstr "Créer une tâche avec la sélection :"
 
 msgid "Cultivate"
 msgstr "Encourager"
+
+#, fuzzy
+msgid "Cultivate Relationship"
+msgstr "Ajouter des liens de parenté"
+
+msgid "Current Gift"
+msgstr ""
 
 msgid "Currently No People"
 msgstr "Pas de personnes pour l'instant"
@@ -596,7 +673,7 @@ msgid "Default Account List"
 msgstr "Liste des comptes par défaut"
 
 msgid "Defaults to contact's primary address"
-msgstr ""
+msgstr "Adresse principale de contact par défaut"
 
 msgid "Delete"
 msgstr "Supprimer "
@@ -604,11 +681,20 @@ msgstr "Supprimer "
 msgid "Delete Selected"
 msgstr "Supprimer la sélection"
 
+#, fuzzy
+msgid "Designation"
+msgstr "Compte de désignation"
+
 msgid "Designation Account"
 msgstr "Compte de désignation"
 
 msgid "Details"
 msgstr "Renseignements"
+
+#, fuzzy
+#, fuzzy
+msgid "Did not contact"
+msgstr "Ajouter un contact"
 
 msgid "Direct Deposit"
 msgstr "Dépôt direct"
@@ -619,19 +705,23 @@ msgstr "Désactiver l' intégration du calendrier"
 msgid "Disable Gmail Integration"
 msgstr "Désactiver l' intégration de Gmail"
 
-#, fuzzy
 msgid "Disable Google Contacts integration"
-msgstr "Désactiver l' intégration du calendrier"
+msgstr "Désactiver l' intégration des contacts Google"
+
+msgid "Displaying"
+msgstr ""
 
 msgid "Divorced"
 msgstr "Divorcé"
 
+msgid "Do not add contacts who:"
+msgstr ""
+
 msgid "Donation History"
 msgstr "Historique des dons"
 
-#, fuzzy
 msgid "Donation(s)"
-msgstr "Dons"
+msgstr "Don(s)"
 
 msgid "Donations"
 msgstr "Dons"
@@ -650,6 +740,9 @@ msgstr "Comptes des donateurs"
 
 msgid "Donor ID"
 msgstr "ID des donateurs"
+
+msgid "Double click to cancel."
+msgstr ""
 
 msgid "Download as CSV spreadsheet file"
 msgstr "Télécharger comme feuille de calcul CSV"
@@ -697,11 +790,18 @@ msgstr "Adresse e-mail"
 msgid "Email Addresses:"
 msgstr "Adresse e-mail :"
 
+#, fuzzy
+msgid "Email address no longer valid"
+msgstr "L'API Key de MailChimp n'est plus valide"
+
 msgid "Email me"
 msgstr "Ecrivez-moi"
 
 msgid "Email:"
 msgstr "E-mail :"
+
+msgid "Employer"
+msgstr ""
 
 msgid "Enable"
 msgstr "Activer"
@@ -712,9 +812,8 @@ msgstr "Activer l'intégration du calendrier"
 msgid "Enable Gmail Integration"
 msgstr "Activer l'intégration de Gmail"
 
-#, fuzzy
 msgid "Enable Google Contacts Integration"
-msgstr "Activer l'intégration du calendrier"
+msgstr "Activer l'intégration des contacts Google"
 
 msgid "Engaged"
 msgstr "Fiancé"
@@ -723,7 +822,7 @@ msgid "Enter a name"
 msgstr "Entrez un nom"
 
 msgid "Envelope Name Line"
-msgstr ""
+msgstr "Nom à mettre sur l'enveloppe"
 
 msgid "Error Saving!"
 msgstr "Erreur de sauvegarde !"
@@ -737,17 +836,15 @@ msgstr "Exporter"
 msgid "Facebook Message"
 msgstr "Message Facebook"
 
-msgid "Facebook Url"
-msgstr "Url Facebook"
-
 msgid "Facebook:"
 msgstr "Facebook :"
 
 msgid "Father"
 msgstr "Père"
 
-msgid "Female"
-msgstr "Femme"
+#, fuzzy
+msgid "Filter by Name"
+msgstr "Entrez un nom"
 
 msgid "Filters"
 msgstr "Filtres"
@@ -757,6 +854,9 @@ msgstr "Trouvez des doubles"
 
 msgid "First"
 msgstr "En premier"
+
+msgid "For each event MPDX can notify you via email and also create a task entry reminding you to do something about it. The options below allow you to control that behavior."
+msgstr ""
 
 msgid ""
 "For the MailChimp integration we recommend that you set up a new list on MailChimp to use\n"
@@ -769,12 +869,24 @@ msgstr "Pour l'intégration MailChimp nous vous recommandons de mettre en place 
 msgid "Fortnightly"
 msgstr "Bimensuel"
 
-#, fuzzy
 msgid "Frequency"
-msgstr "Fréquence de l'engagement"
+msgstr "Fréquence"
+
+msgid "From donor system. To make changes, "
+msgstr ""
+
+msgid "Gave a special gift in the last 3 months"
+msgstr ""
 
 msgid "Gender:"
 msgstr "Sexe :"
+
+msgid "Get started by choosing your login source:"
+msgstr ""
+
+#, fuzzy
+msgid "Gift Range"
+msgstr "Plage des dates"
 
 msgid "Giving Notifications from MPDX"
 msgstr "Nodifications de MPDX"
@@ -785,20 +897,17 @@ msgstr "Intégration de Gmail"
 msgid "Gmail integration has been enabled."
 msgstr "L'intégration de Gmail a été activée."
 
-#, fuzzy
 msgid "Goal"
-msgstr "Total"
+msgstr "Objectif"
 
 msgid "Good news! You don't have any pending tasks."
 msgstr "Bonne nouvelle ! Vous n'avez pas de tâches en attente."
 
-#, fuzzy
 msgid "Google Contacts integration"
-msgstr "Intégration du calendrier"
+msgstr "Intégration des contacts Google"
 
-#, fuzzy
 msgid "Google Contacts sync has been enabled."
-msgstr "L'intégration de Gmail a été activée."
+msgstr "La synchronisation des contacts Google a été activée."
 
 msgid "Google account needs to be refreshed"
 msgstr "Votre compte Google doit être rafraîchi"
@@ -833,10 +942,6 @@ msgstr "Salut"
 msgid "Hide"
 msgstr "Cacher"
 
-#, fuzzy
-msgid "Hide Contact"
-msgstr "Cacher les contacts"
-
 msgid "Hide Contacts"
 msgstr "Cacher les contacts"
 
@@ -848,6 +953,9 @@ msgstr "Accueil"
 
 msgid "Hon."
 msgstr "Hon."
+
+msgid "Household Income Range by Zip"
+msgstr ""
 
 msgid "Husband"
 msgstr "Mari"
@@ -877,8 +985,23 @@ msgstr "Importer des contacts"
 msgid "Import Google Contacts"
 msgstr "Importer des contacts Google"
 
+msgid "Import TntMPD DataSync file"
+msgstr ""
+
 msgid "Import all contacts"
 msgstr "Importer tous les contacts"
+
+msgid "Increase Recommendations"
+msgstr ""
+
+msgid "Increased their giving in the last 3 months"
+msgstr ""
+
+msgid "Initial goal"
+msgstr ""
+
+msgid "Insights"
+msgstr ""
 
 msgid "Integrations"
 msgstr "Intégrations"
@@ -890,19 +1013,19 @@ msgid "It has been more than a year since you have thanked these important finan
 msgstr "Cela fait plus d'un an que vous avez remercié ces importants partenaires financiers."
 
 msgid "It looks like you were adding a task. If you leave before submitting, your changes will be lost."
-msgstr ""
+msgstr "Il semble que vous êtes en train d'ajouter une tâche. Si vous partez avant de la soumettre, vos modifications seront perdues."
 
 msgid "It looks like you were adding some referrals. If you leave before submitting, your changes will be lost."
-msgstr ""
+msgstr "Il semble que vous soyez en train d'ajouter quelques références. Si vous partez avant de les soumettre, vos modifications seront perdues."
 
 msgid "It looks like you were editting a task. If you leave before submitting, your changes will be lost."
+msgstr "On dirait que vous êtes en train de modifier une tâche. Si vous partez avant de soumettre les changements, ils seront perdus."
+
+msgid "Joined my team in the last 3 months"
 msgstr ""
 
 msgid "Jr."
 msgstr "Jr."
-
-msgid "Just need to connect some social accounts"
-msgstr "Il est seulement nécessaire de connecter quelques comptes sociaux."
 
 msgid "Language"
 msgstr "Langage"
@@ -915,6 +1038,10 @@ msgstr "Les 12 derniers mois"
 
 msgid "Last 31 Days"
 msgstr "Les 31 derniers jours"
+
+#, fuzzy
+msgid "Last Change"
+msgstr "Plage des dates"
 
 msgid "Last Name, First Name"
 msgstr "Nom de famille, Prénom"
@@ -940,6 +1067,10 @@ msgstr "Peu probable"
 msgid "Letter"
 msgstr "Lettre"
 
+#, fuzzy
+msgid "Letter cost"
+msgstr "Lettre"
+
 msgid "Likelihood"
 msgstr "Probabilité"
 
@@ -956,19 +1087,20 @@ msgid "Loading"
 msgstr "Chargement en cours"
 
 msgid "Loading contact history..."
-msgstr ""
+msgstr "Chargement de l'historique de contact..."
 
-#, fuzzy
 msgid "Loading contact tasks..."
-msgstr "Recherche de contact..."
+msgstr "Chargement des tâches de contact ..."
 
-#, fuzzy
 msgid "Loading contacts..."
-msgstr "Recherche de contact..."
+msgstr "Chargement des contacts ..."
 
 #, fuzzy
+msgid "Loading tasks"
+msgstr "Chargement des contacts ..."
+
 msgid "Location"
-msgstr "Dons"
+msgstr "Emplacement"
 
 msgid "Log Task"
 msgstr "Ajouter une tâche terminée"
@@ -996,8 +1128,8 @@ msgid ""
 "              By default MPDX will add 'Appointment' tasks to your calendar."
 msgstr ""
 "MPDX peut automatiquement mettre à jour votre calendrier Google avec vos tâches. \n"
-"               Une fois cette fonction activée, vous serez en mesure de choisir quels types de tâches vous souhaitez synchroniser. \n"
-"                Par défaut MPDX ajoutera les tâches \"rendez-vous\" à votre calendrier."
+"               Une fois cette fonction activée, vous serez en mesure de choisir quels types de tâches vous souhaitez synchroniser. \n"
+"                Par défaut MPDX ajoutera les tâches \"rendez-vous\" à votre calendrier."
 
 msgid "MPDX does not currently import any data from this source, but it will soon! Connect your account now to be ready for when it does"
 msgstr "MPDX ne peut pas importer actuellement de données provenant de cette source, mais il pourra bientôt ! Connectez votre compte maintenant pour être prêt quand il le fera"
@@ -1009,7 +1141,7 @@ msgid ""
 "\n"
 "Thanks!\n"
 "MPDX Support Team"
-msgstr ""
+msgstr "MPDX rencontré des erreurs en essayant d'importer vos % {source} contacts.% {explanation} Merci !Équipe de soutien MPDX"
 
 msgid "MPDX has finished importing your %{source} contacts."
 msgstr "Mdpx a finis l'importation de %{source} de vos contacts."
@@ -1020,9 +1152,8 @@ msgstr "MPDX est en train de télécharger vos données à partir du système de
 msgid "MPDX is currently importing your contacts from %{source}. You will receive an email when the import is complete."
 msgstr "MPDX importe actuellement vos contacts à partir de %{source}. Vous recevrez un e-mail lorsque l'importation sera terminée."
 
-#, fuzzy
 msgid "MPDX is now synchronizing your active contacts with your Google Contacts."
-msgstr "MPDX est en train de synchroniser vos tâches avec votre calendrier Google."
+msgstr "MPDX synchronise maintenant vos contacts actifs avec vos contacts Google."
 
 msgid "MPDX is now synchronizing your history with your Gmail account."
 msgstr "MPDX est en train de synchroniser vôtre historique avec votre compte Gmail."
@@ -1054,17 +1185,21 @@ msgstr "La liste de MailChimp requiert un champ à fusionner supplémentaire"
 msgid "Mailing"
 msgstr "Postale"
 
-msgid "Male"
-msgstr "Homme"
-
 msgid "Map It"
 msgstr "Carte"
+
+#, fuzzy
+msgid "Map These Contacts"
+msgstr "Fusionner ces contacts"
 
 msgid "Marital:"
 msgstr "Situation matrimoniale :"
 
 msgid "Married"
 msgstr "Marié"
+
+msgid "Max Increase Amount"
+msgstr ""
 
 msgid "Merge"
 msgstr "Fusionner"
@@ -1078,8 +1213,16 @@ msgstr "Fusionner les personnes selectionnées"
 msgid "Merge selected contacts"
 msgstr "Fusionner les contacts sélectionnés"
 
+#, fuzzy
+msgid "Merge selected people"
+msgstr "Fusionner les personnes selectionnées"
+
 msgid "Merge these contacts"
 msgstr "Fusionner ces contacts"
+
+#, fuzzy
+msgid "Merge these people"
+msgstr "Fusionner les personnes selectionnées"
 
 msgid "Messages"
 msgstr "Messages"
@@ -1126,9 +1269,6 @@ msgstr "Mlle"
 msgid "Name"
 msgstr "Nom"
 
-msgid "Navigate contacts: <strong>%{index} of %{total}</strong>"
-msgstr "Naviguer dans les contacts : <strong>%{index} de %{total}</strong>"
-
 msgid "Need Help?"
 msgstr "Besoin d'aide ?"
 
@@ -1171,9 +1311,11 @@ msgstr "Lettre de nouvelle"
 msgid "Newsletter Recipients"
 msgstr "Destinataires de la lettre de nouvelle"
 
-#, fuzzy
 msgid "Newsletter type"
-msgstr "Lettre de nouvelle"
+msgstr "Type de lettre de nouvelle"
+
+msgid "Next"
+msgstr ""
 
 msgid "Next Action"
 msgstr "Prochaine action"
@@ -1183,6 +1325,9 @@ msgstr "Prochaine demande"
 
 msgid "Next Month >>"
 msgstr "Mois prochain >>"
+
+msgid "Next Suggested Increase"
+msgstr ""
 
 msgid "Next Week >>"
 msgstr "Semaine prochaine >>"
@@ -1200,7 +1345,7 @@ msgid "No Subject"
 msgstr "Aucun sujet"
 
 msgid "No completed tasks found for this contact."
-msgstr "Vous n'avez pas de tâches complétées pour ce contact."
+msgstr "Vous n'avez pas de tâche terminée pour ce contact."
 
 msgid "No donations have been received from %{contact} in the past 13 months"
 msgstr "Aucun dons n'a été reçu de %{contact} depuis 13 mois passés."
@@ -1238,20 +1383,31 @@ msgstr "Pas intéressé"
 msgid "Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version."
 msgstr "Remarque: Vous devez mettre à jour TntMPD pour faire cela. Cliquez ici pour télécharger la dernière version."
 
+msgid "Note: this file should be in a TntMPD data sync (.tntmpd) text file from your organization, not your local TntMPD database file (.mpddb). To import your local Tnt database, click \"Import Contacts\" below next to the TntMPD logo."
+msgstr ""
+
 msgid "Notes"
 msgstr "Remarques"
 
 msgid "Notifications / Alerts"
 msgstr "Notifications / Alertes"
 
-msgid "Number"
-msgstr "Numéro"
+#, fuzzy
+msgid "Now you just need to connect some social accounts"
+msgstr "Il est seulement nécessaire de connecter quelques comptes sociaux."
+
+#, fuzzy
+msgid "Occupation"
+msgstr "Emplacement"
 
 msgid "Only add data to matched contact records when the current field is blank."
 msgstr "Ajouter les données pour les enregistrements de contact adaptés seulement lorsque le champ actuel est vide."
 
 msgid "Only import contacts from certain groups"
 msgstr "Seulement importer les contacts de certains groupes"
+
+msgid "Opt-out of email newsletter"
+msgstr ""
 
 msgid "Other"
 msgstr "Autre"
@@ -1261,6 +1417,10 @@ msgstr "Autre details"
 
 msgid "Outgoing Dials"
 msgstr "Appels sortants"
+
+#, fuzzy
+msgid "Overdue"
+msgstr "Moyenne"
 
 msgid "Override existing contact fields with data in the uploaded file."
 msgstr "Remplacer les champs de contact existants avec les données du fichier téléchargé."
@@ -1325,9 +1485,6 @@ msgstr "Image"
 msgid "Please Wait"
 msgstr "Veuillez patientez s'il vous plaît"
 
-msgid "Please choose your preferred <br/> method of logging in:"
-msgstr "Veuillez choisir votre méthode de connexion préférée :"
-
 msgid ""
 "Please create a NEW list in MailChimp EXCLUSIVELY for use with MPDX. MPDX will automatically synchronize your mailchimp \n"
 "             list with your MPDX data. If you pick an existing list, this process could have the effect of removing people\n"
@@ -1352,6 +1509,9 @@ msgstr "Promesses :"
 msgid "Postal Code"
 msgstr "Code postal"
 
+msgid "Prayer Request"
+msgstr ""
+
 msgid "Pre Call Letter"
 msgstr "Lettre pré-appel"
 
@@ -1366,6 +1526,13 @@ msgstr "Préférences enregistrées"
 
 msgid "Preferred Email Address"
 msgstr "Adresse e-mail préférée "
+
+msgid "Previous"
+msgstr ""
+
+#, fuzzy
+msgid "Primary Address"
+msgstr "Ajouter une adresse e-mail"
 
 msgid "Primary Contact"
 msgstr "Contact primordial"
@@ -1397,6 +1564,9 @@ msgstr "Reçu"
 msgid "Received:"
 msgstr "Reçu :"
 
+msgid "Recurring Gift Recommendations"
+msgstr ""
+
 msgid "Referrals"
 msgstr "Références "
 
@@ -1427,6 +1597,9 @@ msgstr "Lié à"
 msgid "Related task action"
 msgstr "Tâche en relation"
 
+msgid "Relay Login Link"
+msgstr ""
+
 msgid "Reminder Letter"
 msgstr "Lettre de rappel"
 
@@ -1438,6 +1611,9 @@ msgstr "Supprimer"
 
 msgid "Remove Tag"
 msgstr "Supprimer le libellé"
+
+msgid "Remove this Person"
+msgstr ""
 
 msgid "Research"
 msgstr "Recherche"
@@ -1472,8 +1648,15 @@ msgstr "Enregistrer les préférences"
 msgid "Saving..."
 msgstr "Sauvegarde..."
 
+msgid "Search by Name"
+msgstr ""
+
 msgid "Search contacts..."
 msgstr "Recherche de contact..."
+
+#, fuzzy
+msgid "Seasonal"
+msgstr "Saisonnier :"
 
 msgid "Seasonal:"
 msgstr "Saisonnier :"
@@ -1481,27 +1664,29 @@ msgstr "Saisonnier :"
 msgid "See All"
 msgstr "Voir tout"
 
-#, fuzzy
 msgid "Select all"
-msgstr "Voir tout"
+msgstr "Tout selectionner"
 
 msgid "Select all duplicates"
 msgstr "Selectionner tous les doubles"
 
 msgid "Select all that have donated"
-msgstr ""
+msgstr "Sélectionner tous ceux qui ont fait un don"
 
 msgid "Select all that have not donated"
-msgstr ""
+msgstr "Sélectionner tous ceux qui n'ont pas fait de don"
 
 msgid "Select none"
-msgstr ""
+msgstr "Ne rien sélectionner "
 
 msgid "Semi-Annual"
 msgstr "Semi-annuel"
 
 msgid "Send Message"
 msgstr "Envoyer un message"
+
+msgid "Send Paper Newsletter List"
+msgstr ""
 
 msgid "Sent"
 msgstr "Envoyé"
@@ -1524,6 +1709,10 @@ msgstr "Afficher"
 msgid "Show:"
 msgstr "Afficher :"
 
+#, fuzzy
+msgid "Showing"
+msgstr "Afficher"
+
 msgid "Single"
 msgstr "Seul"
 
@@ -1538,6 +1727,12 @@ msgstr "Social :"
 
 msgid "Son"
 msgstr "Fils"
+
+msgid "Sorry, there are no contacts that match the filters and/or tags you have selected."
+msgstr ""
+
+msgid "Source: "
+msgstr ""
 
 msgid "Spouse"
 msgstr "Epou(x)(se)"
@@ -1554,8 +1749,8 @@ msgstr "Sr."
 msgid "Starred"
 msgstr "Favoris"
 
-msgid "Starred Tasks"
-msgstr "Tâches Favorites "
+msgid "Start by connecting to your organization."
+msgstr ""
 
 msgid "State"
 msgstr "Etat"
@@ -1566,11 +1761,23 @@ msgstr "Statut"
 msgid "Status Update"
 msgstr "Statut réactualisé "
 
-#, fuzzy
 msgid "Status:"
-msgstr "Statut"
+msgstr "Statut:"
+
+msgid "Step 1 of 2: Merge duplicate contacts (giving units)"
+msgstr ""
+
+msgid "Step 2 of 2: Merge duplicate people within contacts"
+msgstr ""
+
+msgid "Stopped giving for the last 2 months"
+msgstr ""
 
 msgid "Street Address"
+msgstr "Adresse"
+
+#, fuzzy
+msgid "Street address"
 msgstr "Adresse"
 
 msgid "Subject"
@@ -1578,6 +1785,9 @@ msgstr "Sujet"
 
 msgid "Submit"
 msgstr "Soumettre"
+
+msgid "Suggested Increase Amount"
+msgstr ""
 
 msgid "Support"
 msgstr "Soutien"
@@ -1588,6 +1798,10 @@ msgstr "Lettre de soutien"
 msgid "Support Letters"
 msgstr "Lettres de soutien"
 
+#, fuzzy
+msgid "Support/Help"
+msgstr "Soutien"
+
 msgid "Sweet! Your Account is activated!"
 msgstr "Cool ! Votre compte est activé !"
 
@@ -1597,14 +1811,17 @@ msgstr "Synchroniser maintenant"
 msgid "Tags"
 msgstr "Libellés"
 
+msgid "Talk to In Person"
+msgstr ""
+
 msgid "Talked To"
 msgstr "Parlé à"
 
+msgid "Talked To In Person"
+msgstr ""
+
 msgid "Task"
 msgstr "Tâche"
-
-msgid "Task History"
-msgstr "Historique des tâches"
 
 msgid "Tasks"
 msgstr "Tâches"
@@ -1621,13 +1838,17 @@ msgstr "Remercier"
 msgid "Thank You Notes"
 msgstr "notes de remerciements"
 
+#, fuzzy
 msgid ""
 "Thank you for suggesting ways we can make MPDX a better tool. We will take your suggestion into consideration\n"
-"    and add it to MPDX's project tool: %{link}"
+"        and add it to MPDX's project tool: %{link}"
 msgstr "Merci de nous suggérer vos avis pour que nous puissions faire de MPDX un meilleur outil. Nous prendrons en compte vos suggestions et les ajouterons à l'outil de projet de MPDX : %{link}"
 
 msgid "Thanks!"
 msgstr "Merci !"
+
+msgid "The Key Login Link"
+msgstr ""
 
 msgid ""
 "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n"
@@ -1645,10 +1866,11 @@ msgid ""
 "  that you had set already."
 msgstr "Le lien entre MPDX et votre compte Google a cessé de fonctionner. Si vous souhaitez avoir MPDX qui continue de synchroniser automatiquement avec votre compte Google, s'il vous plaît aller à% {lien} et cliquez sur le bouton \"Actualiser mon compte Google\". Après cela, vous aurez besoin de réactiver manuellement des intégrations que vous aviez déjà réglé."
 
+#, fuzzy
 msgid ""
 "The link between MPDX and your Google account stopped working. Click \"Refresh Google Account\" to re-enable it.\n"
-"                                     After that, you'll need to manually re-enable any integrations that you had set already."
-msgstr ""
+"                                 After that, you'll need to manually re-enable any integrations that you had set already."
+msgstr "Le lien entre MPDX et votre compte Google a cessé de fonctionner. Cliquez sur \"Rafraichir le compte Google\" pour le réactiver. Après cela, vous aurez besoin de réactiver manuellement des intégrations que vous aviez déjà faites."
 
 msgid ""
 "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n"
@@ -1662,9 +1884,8 @@ msgstr "Le lien vers votre compte Facebook a besoin d'être rafraîchi. <a href=
 msgid "The link to your facebook account needs to be refreshed. Click here to re-connect to facebook."
 msgstr "Le lien vers votre compte Facebook a besoin d'être rafraîchi. Cliquez ici pour vous  reconnecter à Facebook."
 
-#, fuzzy
 msgid "The link to your google account needs to be refreshed. Click here to re-connect to google."
-msgstr "Le lien vers votre compte Facebook a besoin d'être rafraîchi. Cliquez ici pour vous  reconnecter à Facebook."
+msgstr "Le lien vers votre compte Google a besoin d'être rafraîchi. Cliquez ici pour vous  reconnecter à Googlz."
 
 msgid ""
 "The mailchimp API key associated with your MPDX account is no longer valid.\n"
@@ -1677,6 +1898,9 @@ msgstr "Plus vous pouvez nous apportez de détails, plus ils sera facile pour no
 
 msgid "There are no referrals by this contact, "
 msgstr "Il n'y a pas de références données par ce contact,"
+
+msgid "There are no tasks that match the filters and/or tags you have selected."
+msgstr ""
 
 msgid "These are not duplicates"
 msgstr "Ce ne sont pas des doubles"
@@ -1693,6 +1917,9 @@ msgstr "Ce filtre recherchera les personnes qui ont une configuration permettant
 msgid "This filter will search for people who are set to receive your physical newsletter and have a mailing address"
 msgstr "Ce filtre recherchera les personnes qui ont une configuration permettant de recevoir votre lettre de nouvelle par la poste et qui ont une adresse postale"
 
+msgid "This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx."
+msgstr ""
+
 msgid "This will replace your prayerletters.com list with what you have in MPDX. Are you sure that's what you'd like to do?"
 msgstr "Cela remplacera votre liste de prayerletters.com avec celle de MPDX. Etes-vous sûr que c'est ce que vous aimeriez  faire ?"
 
@@ -1708,6 +1935,10 @@ msgstr "A faire"
 msgid "To use MPDX, you need to connect to your organization's donation system. If you raise funds through more than one organization, you can connect to multiple accounts."
 msgstr "Pour utiliser MPDX, vous devez vous connecter au système de don de votre organisation. Si vous soulevez des fonds à travers plus d'une organisation, vous pouvez vous connecter à plusieurs comptes."
 
+#, fuzzy
+msgid "Today"
+msgstr "Total"
+
 msgid "Top Partners"
 msgstr "Principaux partenaires"
 
@@ -1719,6 +1950,9 @@ msgstr "Total des dons"
 
 msgid "Total Donations (%{count}):"
 msgstr "Total des dons (%{count}) :"
+
+msgid "Try"
+msgstr ""
 
 msgid "Try going back, or if you keep getting this message, %{link}."
 msgstr "Essayer de faire un retour arrière, ou si vous continuez à recevoir ce message, cliquez %{link}."
@@ -1732,8 +1966,8 @@ msgstr "tapez pour rechercher :"
 msgid "Type:"
 msgstr "Type : "
 
-msgid "URL"
-msgstr "URL"
+msgid "US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
+msgstr ""
 
 msgid "Uncle"
 msgstr "Oncle"
@@ -1744,7 +1978,16 @@ msgstr "Inconnu"
 msgid "Unresponsive"
 msgstr "Ne répond pas"
 
+msgid "Unspecified"
+msgstr ""
+
+msgid "Upcoming"
+msgstr ""
+
 msgid "Update contact(s) status to"
+msgstr "Mise à jour du statut de(s) contact(s) vers"
+
+msgid "Updated: "
 msgstr ""
 
 msgid "Visit Mobile Version"
@@ -1762,11 +2005,8 @@ msgstr "Nous avons temporairement dissocié votre liste MailChimp de MPDX pour �
 msgid "We were unable to connect your account. Please try again."
 msgstr "Nous n'avons pas pu vous connecter à votre compte. Essayez de nouveau, s'il vous plaît."
 
-msgid "We were unable to link this person to the facebook url you provided. Check the url you entered and try again. If you are currently running the \"Import contacts from facebook\" process, please wait until you get the email saying the import finished before trying again."
-msgstr "Nous n'avons pas pu relier cette personne à l'url de Facebook que vous avez fourni. Vérifiez l'URL que vous avez saisie et réessayez. Si vous utilisez actuellement les processus \"Import les contacts Facebook\" , attendez s'il vous plaît jusqu'à ce que vous obteniez le message disant que l'importation est terminée avant de réessayer."
-
-msgid "We were unable to link this person to the facebook url you provided. This is likely due to facebook privacy settings this person has set. If they are your friend on facebook, try using the \"Import contacts from facebook\" feature instead of manually pasting the link in."
-msgstr "Nous n'avons pas pu relier cette personne à l'url de Facebook que vous avez fourni. Cela est probablement dû aux paramètres de confidentialité Facebook que cette personne s'est fixés. Si elle est votre amie sur Facebook, essayez d'utiliser la fonction \"Importer les contacts Facebook\"  au lieu de coller manuellement le lien dedans."
+msgid "We were unable to link this person to the facebook url you provided. "
+msgstr ""
 
 msgid "We weren't able to detect any duplicates on your account."
 msgstr "Nous n'avons pas pu détecter les doubles sur votre compte."
@@ -1779,9 +2019,6 @@ msgstr "Semaine du %{date1} au %{date2}"
 
 msgid "Weekly"
 msgstr "Hebdomadaire"
-
-msgid "Welcome to MPDX!"
-msgstr "Bienvenue sur MPDX !"
 
 msgid "Which one of your calendars would you like to push MPDX tasks to?"
 msgstr "Sur lequel de vos calendriers voulez-vous envoyer les tâches MPDX ?"
@@ -1803,6 +2040,9 @@ msgstr "Avec adresse postale"
 
 msgid "Work"
 msgstr "Travail"
+
+msgid "Would you like MPDX to email Chalkline your newsletter list and open their order form in a new tab?"
+msgstr ""
 
 msgid "Yes"
 msgstr "oui"
@@ -1828,8 +2068,9 @@ msgstr "Vous n'avez pas lié ce contact à un de vos amis Facebook. Cliquez ici 
 msgid "You just merged %{count} contacts"
 msgstr "Vous venez de fusionner %{count} contacts"
 
-msgid "You must specify a TntMPD .xml export file to upload to MPDX (see video linked below for more info)."
-msgstr ""
+#, fuzzy
+msgid "You just merged %{count} people"
+msgstr "Vous venez de fusionner %{count} contacts"
 
 msgid "You need to be connected to an organization to use MPDX."
 msgstr "Vous devez être connecté à une organisation pour utiliser MPDX."
@@ -1839,6 +2080,9 @@ msgstr "Vous devez créer une liste sur MailChimp que MPDX puisse utiliser pour 
 
 msgid "You need to go to https://mpdx.org and set up your account before using the mobile app."
 msgstr "Vous devez aller sur https://mpdx.org et configurer votre compte avant d'utiliser l'application mobile."
+
+msgid "You need to setup LinkedIn first"
+msgstr ""
 
 msgid "Your first name"
 msgstr "Votre prénom"
@@ -1852,6 +2096,9 @@ msgstr "Votre nom d'utilisateur et mot de passe sont absents  pour ce compte."
 msgid "Your username and password for %{org} are invalid."
 msgstr "Votre nom d'utilisateur et mot de passe pour %{org} sont invalides."
 
+msgid "Zip"
+msgstr ""
+
 msgid "[MPDX] Importing your %{source} contacts completed"
 msgstr "[MPDX] L' importation de vos contacts de %{source} est terminée"
 
@@ -1861,17 +2108,25 @@ msgstr "[MPDX] L'importation de vos contacts de %{source} a échouée"
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] Votre nom d'utilisateur et mot de passe pour %{source} sont invalides"
 
+#, fuzzy
+msgid "adding a new contact"
+msgstr "Ajouter des libellés à ces contacts"
+
 msgid "ask for help"
 msgstr "Demander de l'aide"
+
+msgid "click here"
+msgstr ""
 
 msgid "click here to let us know"
 msgstr "cliquez ici pour nous le faire savoir"
 
 msgid "close"
-msgstr ""
+msgstr "fermer"
 
-msgid "continue"
-msgstr "continuer"
+#, fuzzy
+msgid "creating a new task"
+msgstr "Créer une tâche"
 
 msgid "delete"
 msgstr "supprimer"
@@ -1879,34 +2134,181 @@ msgstr "supprimer"
 msgid "edit"
 msgstr "modifier"
 
+msgid "http://"
+msgstr ""
+
+msgid "of"
+msgstr ""
+
 msgid "on"
 msgstr "le"
+
+msgid "or"
+msgstr ""
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "Le compte prayerletters.com doit être rafraîchi"
 
+msgid "resetting your filters"
+msgstr ""
+
+msgid "showing all tasks"
+msgstr ""
+
 msgid "to"
 msgstr "à"
 
-#, fuzzy
 msgid "with invalid addresses"
-msgstr "Avec adresse e-mail"
+msgstr "Avec une adresse e-mail valide"
 
-#~ msgid " and "
-#~ msgstr "et"
-
-#~ msgid "Please choose a file that ends with .xml"
-#~ msgstr "Veuillez choisir un fichier qui se termine par .xml"
-
-#~ msgid "Please watch this video to see how to properly export from TntMPD."
+#~ msgid ""
+#~ "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank"
+#~ " You."
 #~ msgstr ""
-#~ "Veuillez regarder cette vidéo pour voir comment exporter correctement à partir"
-#~ " de TntMPD."
+#~ "%{contact_name} a effectué un don spécial de %{amount} le %{date}. Envoyer lui"
+#~ " vos remerciements."
 
-#~ msgid "Status: %{status}"
-#~ msgstr "Statut: %{status}"
-
-#~ msgid "The file you uploaded is not a valid Tnt export. %{link}"
+#~ msgid ""
+#~ "<p>Easily connect all of your contacts, calendars, communications and social c"
+#~ "onversations. MPDX will automatically identify contact's social profiles on Fa"
+#~ "cebook, LinkedIn, and </p>\n"
+#~ "                    <p>Twitter so that you connect, listen, and engage with yo"
+#~ "ur minitry partners. </p>"
 #~ msgstr ""
-#~ "Le fichier que vous avez téléchargé n'est pas un produit d'exportation Tnt val"
-#~ "ide. %{link}"
+#~ "<p> Connecter facilement tous vos contacts, calendriers, communications et con"
+#~ "versations. MPDX identifiera automatiquement les profils sociaux des contacts "
+#~ "sur Facebook, LinkedIn, et </p>\n"
+#~ "                    <p>Twitter pour que vous puissiez vous connecter, écouter "
+#~ "et vous engager avec vos partenaires du ministère</p>"
+
+#~ msgid "Actions"
+#~ msgstr "Activités"
+
+#~ msgid "Add %{network} Account"
+#~ msgstr "Ajouter le compte %{network} "
+
+#~ msgid "Add Email Address"
+#~ msgstr "Ajouter une adresse e-mail"
+
+#~ msgid "Add Website/Blog"
+#~ msgstr "Ajouter un site web/blog"
+
+#~ msgid "Address"
+#~ msgstr "Adresse"
+
+#~ msgid ""
+#~ "Based on an analysis of a partner's giving history, MPDX can notify you of eve"
+#~ "nts that you will probably want to follow up on. The detection logic\n"
+#~ "                is based on a set of rules that are right most of the time, bu"
+#~ "t you will still want to verify an event manually before contacting the partne"
+#~ "r.<br><br>\n"
+#~ "               For each event MPDX can notify you via email and also create a "
+#~ "task entry reminding you to do something about it. The options below allow you"
+#~ " to control that behavior."
+#~ msgstr ""
+#~ "Basé sur l'analyse des antécédents donnés d'un partenaire, MPDX peut vous info"
+#~ "rmer des événements que vous voudrez probablement suivre. La logique de détect"
+#~ "ion  est basé sur un ensemble de règles qui s'avèrent vraies la plupart du tem"
+#~ "ps, mais vous aurez toujours envie de vérifier un événement manuellement avant"
+#~ " de contacter le partenaire. <br><br>             Pour chaque événement MPDX p"
+#~ "eut vous informer par email et aussi créer une inscription de tâche pour vous "
+#~ "rappeler quelque chose à faire. Les options ci-dessous vous permettent de cont"
+#~ "rôler cette fonctionnalité."
+
+#~ msgid "Basic Information"
+#~ msgstr "Informations basique"
+
+#~ msgid "Click here to reschedule this task"
+#~ msgstr "Cliquer ici pour reporter cette tâche"
+
+#~ msgid "Connect to your LinkedIn account to add a url for your contact"
+#~ msgstr "Se connecter à votre compte LinkedIn pour ajouter une URL à votre contact"
+
+#~ msgid "Facebook Url"
+#~ msgstr "Url Facebook"
+
+#~ msgid "Female"
+#~ msgstr "Femme"
+
+#~ msgid "Hide Contact"
+#~ msgstr "Cacher le contact"
+
+#~ msgid "Just need to connect some social accounts"
+#~ msgstr "Il est seulement nécessaire de connecter quelques comptes sociaux."
+
+#~ msgid "Male"
+#~ msgstr "Homme"
+
+#~ msgid "Navigate contacts: <strong>%{index} of %{total}</strong>"
+#~ msgstr "Naviguer dans les contacts : <strong>%{index} de %{total}</strong>"
+
+#~ msgid "Number"
+#~ msgstr "Numéro"
+
+#~ msgid "Please choose your preferred <br/> method of logging in:"
+#~ msgstr "Veuillez choisir votre méthode de connexion préférée :"
+
+#~ msgid "Starred Tasks"
+#~ msgstr "Tâches Favorites "
+
+#~ msgid "Task History"
+#~ msgstr "Historique des tâches"
+
+#~ msgid ""
+#~ "Thank you for suggesting ways we can make MPDX a better tool. We will take you"
+#~ "r suggestion into consideration\n"
+#~ "    and add it to MPDX's project tool: %{link}"
+#~ msgstr ""
+#~ "Merci de nous suggérer vos avis pour que nous puissions faire de MPDX un meill"
+#~ "eur outil. Nous prendrons en compte vos suggestions et les ajouterons à l'outi"
+#~ "l de projet de MPDX : %{link}"
+
+#~ msgid ""
+#~ "The link between MPDX and your Google account stopped working. Click \"Refresh "
+#~ "Google Account\" to re-enable it.\n"
+#~ "                                     After that, you'll need to manually re-en"
+#~ "able any integrations that you had set already."
+#~ msgstr ""
+#~ "Le lien entre MPDX et votre compte Google a cessé de fonctionner. Cliquez sur "
+#~ "\"Rafraichir le compte Google\" pour le réactiver. Après cela, vous aurez besoin"
+#~ " de réactiver manuellement des intégrations que vous aviez déjà faites."
+
+#~ msgid "URL"
+#~ msgstr "URL"
+
+#~ msgid ""
+#~ "We were unable to link this person to the facebook url you provided. Check the"
+#~ " url you entered and try again. If you are currently running the \"Import conta"
+#~ "cts from facebook\" process, please wait until you get the email saying the imp"
+#~ "ort finished before trying again."
+#~ msgstr ""
+#~ "Nous n'avons pas pu relier cette personne à l'url de Facebook que vous avez fo"
+#~ "urni. Vérifiez l'URL que vous avez saisie et réessayez. Si vous utilisez actue"
+#~ "llement les processus \"Import les contacts Facebook\" , attendez s'il vous plaî"
+#~ "t jusqu'à ce que vous obteniez le message disant que l'importation est terminé"
+#~ "e avant de réessayer."
+
+#~ msgid ""
+#~ "We were unable to link this person to the facebook url you provided. This is l"
+#~ "ikely due to facebook privacy settings this person has set. If they are your f"
+#~ "riend on facebook, try using the \"Import contacts from facebook\" feature inste"
+#~ "ad of manually pasting the link in."
+#~ msgstr ""
+#~ "Nous n'avons pas pu relier cette personne à l'url de Facebook que vous avez fo"
+#~ "urni. Cela est probablement dû aux paramètres de confidentialité Facebook que "
+#~ "cette personne s'est fixés. Si elle est votre amie sur Facebook, essayez d'uti"
+#~ "liser la fonction \"Importer les contacts Facebook\"  au lieu de coller manuelle"
+#~ "ment le lien dedans."
+
+#~ msgid "Welcome to MPDX!"
+#~ msgstr "Bienvenue sur MPDX !"
+
+#~ msgid ""
+#~ "You must specify a TntMPD .xml export file to upload to MPDX (see video linked"
+#~ " below for more info)."
+#~ msgstr ""
+#~ "Vous devez spécifier le fichier d'exportation d'un TntMPD.xml pour le téléchar"
+#~ "ger sur MPDX (voir la vidéo ci-dessous liée pour plus d'infos)."
+
+#~ msgid "continue"
+#~ msgstr "continuer"
