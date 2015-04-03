@@ -10,6 +10,15 @@
     <link rel="icon" type="image/png" href="/mpdx-favicon.png" sizes="32x32">
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
+    <script>
+      (function(d) {
+        var config = {
+          kitId: 'ddm2mzv',
+          scriptTimeout: 3000
+        },
+        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+" wf-inactive";},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+=" wf-loading";tk.src='//use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
+      })(document);
+    </script>
     <%= csrf_meta_tags %>
   </head>
   <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller" ng-app="mpdxApp">
@@ -163,7 +172,7 @@
             <%= link_to(_('Support/Help'), new_help_request_path, target: '_blank') %>
             <%= link_to(_('Privacy Policy'), '/privacy', target: '_blank') %>
             <br/>
-            © 2012-2015, Cru. All Rights Reserved.
+            © 2012-2015, <span id="nice-fonts">Cru.</span> All Rights Reserved.
           </div>
         </div>
         <% if session[:fullsite] == true %>
@@ -190,8 +199,6 @@
     <div id="mini_contact_modal" title="<%= _('Contact Details') %>" style="display:none">
     </div>
     <div id="toastPopup" style="display: none;"></div>
-
-    <%= render 'google_analytics' %>
     <script type="text/javascript">
       window.current_currency = "<%= current_currency %>";
       window.current_currency_symbol = "<%= TwitterCldr::Shared::Currencies.for_code(current_currency) ?
@@ -199,19 +206,10 @@
                                             current_currency %>";
       window.current_account_list_id = <%= current_account_list.id %>;
       window.current_account_list_tester = '<%= current_account_list.tester %>';
+      $('#nice-fonts').dblclick(function() {$('.data-font').toggleClass("on");});
     </script>
-    <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=places,geometry"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
-    <script>
-      (function(d) {
-        var tkTimeout=3000;
-        if(window.sessionStorage){if(sessionStorage.getItem('useTypekit')==='false'){tkTimeout=0;}}
-        var config = {
-          kitId: 'ddm2mzv',
-          scriptTimeout: tkTimeout
-        },
-        h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+"wf-inactive";if(window.sessionStorage){sessionStorage.setItem("useTypekit","false")}},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+="wf-loading";tk.src='//use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
-      })(document);
-    </script>
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=places,geometry"></script>
+    <%= render 'google_analytics' %>
   </body>
 </html>

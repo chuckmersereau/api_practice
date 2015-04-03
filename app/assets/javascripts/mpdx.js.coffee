@@ -19,6 +19,7 @@ $ ->
   $(document).on 'click', '.filter_title', ->
     $(this).toggleClass("opened")
     $(this).parent("li").toggleClass("opened")
+    determineAffixScroll()
 
   $(document).on 'mouseleave', 'div[data-behavior=account_selector]', ->
     $('div[data-behavior=account_selector] div').hide()
@@ -217,3 +218,9 @@ $(document).ready ->
   element = $.deparam(location.search).focus
   $('#' + element).focus() if element
 
+determineAffixScroll = ->
+  $('#leftmenu').toggleClass 'scrollable_left', $(window).height() < $('#leftmenu').height()
+  return
+
+$(document).ready determineAffixScroll
+$(window).on 'resize', determineAffixScroll

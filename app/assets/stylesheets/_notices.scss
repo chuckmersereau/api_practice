@@ -1,5 +1,5 @@
-@import "elements";
-
+$blue: #0077ae;
+$blue_light: #D6ECF2;
 #dismissable {
   background: #F7E5C1;
   padding: 0px;
@@ -8,7 +8,7 @@
   overflow: hidden;
   border-bottom: 1px solid #ccc;
   .item {
-    border-bottom: 1px dotted $gray;
+    border-bottom: 1px dotted #999;
     padding: 10px;
     background: #FFFCF5;
   }
@@ -35,7 +35,7 @@
     border: 2px solid gray;
     border-top: none;
     padding: 10px;
-    background: $white;
+    background: #fff;
   }
   .floating {
     border-top:2px solid;
@@ -55,6 +55,6 @@
   border: 2px solid gray;
   border-top: none;
   padding: 10px;
-  background: $white;
+  background: #fff;
 }
 

@@ -36,7 +36,7 @@
             <div class="avatar_wrapper"><%= image_tag(contact_exhibit.avatar(:large), class: "mid") %></div>
           </div>
         </div>
-        <div class="col-md-10">
+        <div class="col-md-10 data-font">
           <div class="quickprofile">
             <h2><%= contact_exhibit %></h2>
             <% if contact_exhibit.location.present? %>
@@ -137,7 +137,7 @@
         </div>
         <div class="panel-body">
           <% if contact_exhibit.people.any? %>
-            <div class="row">
+            <div class="row data-font">
             <% contact_exhibit.people.each do |person| %>
               <%= render 'people/smallperson', person: person %>
             <% end %>
@@ -174,7 +174,7 @@
 
       <div id="details-tab">
           <%= spinner(extra: 'details', visible: true) %>
-          <div id="details"></div>
+          <div id="details" class="data-font"></div>
       </div>
 
       <div id="tasks-tab" ng-controller="taskShortListController" ng-init="init('contact','<%= contact.id %>')">
@@ -188,7 +188,7 @@
       </div>
       <div id="history-tab" ng-controller="taskShortListController" ng-init="init('contactHistory','<%= contact.id %>')">
         <table class="list tasklist">
-          <tbody class="tasks">
+          <tbody class="tasks data-font">
             <tr task="task" ng-repeat="task in tasks" id="task_{{task.id}}"></tr>
           </tbody>
         </table>
@@ -197,7 +197,7 @@
       </div>
       <div id="referrals-tab">
         <%= spinner(extra: 'referrals', visible: true) %>
-        <div id="referrals"></div>
+        <div id="referrals" class="data-font"></div>
       </div>
       <div id="notes-tab">
         <%= form_for contact, remote: true do |f| %>
@@ -229,7 +229,7 @@
       </div>
       <div class="panel-body">
         <%= spinner(extra: 'donations', visible: true) %>
-        <div id="donations"></div>
+        <div id="donations" class="data-font"></div>
       </div>
     </div>
 

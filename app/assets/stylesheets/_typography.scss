@@ -1,5 +1,3 @@
-@import "elements.scss";
-
 /* ************************************************************************ */
 
 p {margin: 0 0 1em 0;}
@@ -57,7 +55,7 @@ p:last-child {margin-bottom: 0;}
 .indicator {
   font-size: 12px;
   font-weight: bold;
-  color: $white !important;
+  color: $color-white !important;
 }
 
 .indicator {
@@ -103,7 +101,7 @@ address {
 .taskgroup {
   line-height: 2.25em;
   height: 2.25em;
-  color: $white;
+  color: $color-white;
   font-weight: bold;
   font-size: 15px;
 }
