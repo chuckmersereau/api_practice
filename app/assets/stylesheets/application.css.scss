@@ -1,6 +1,5 @@
 /* ...
 *= require_self
-*= depends_on styles.scss
 *= require adaptive
 *= require font-awesome
 *= require peek
@@ -10,4 +9,12 @@
 *= require angularModal
 */
 
-@import "styles.scss";
+@import "_crubrand";
+@import "_elements";
+@import "_jquery-ui";
+@import "_typography";
+@import "_forms";
+@import "_layout";
+@import "_notices";
+@import "_ico";
+@import "_errors";

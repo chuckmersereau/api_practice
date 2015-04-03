@@ -1,12 +1,12 @@
 /* ...
 *= require_self
-*= require notices
+*= require _notices
 */
 
-@import "crubrand";
-@import "elements";
-@import "notices";
-@import "jquery-ui.scss";
+@import "_crubrand";
+@import "_elements";
+@import "_notices";
+@import "_jquery-ui";
 
 html {
   height: 100%;
