@@ -59,6 +59,16 @@
                                 as: :select,
                                 collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
                                 place_holder: _('None')) %>
+              <% if contact.status == 'Partner - Financial' %>
+                <% if contact.pledge_received %>
+                  <i class="fa fa-check" title="<%= _('Commitment Recieved') %>"></i>
+                <% else %>
+                  <span class="fa-stack" title="<%= _('Commitment Not Recieved') %>">
+                    <i class="fa fa-check fa-stack-1x"></i>
+                    <i class="fa fa-ban fa-stack-2x"></i>
+                  </span>
+                <% end %>
+              <% end %>
             </div>
           </div><!-- profiletop -->
 
