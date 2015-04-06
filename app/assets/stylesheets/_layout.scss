@@ -1775,3 +1775,7 @@ span.best_in_place_once {
 }
 
 .marked_for_destruction { display: none; }
+
+.ui-datepicker {
+  z-index: 1100 !important;
+}
