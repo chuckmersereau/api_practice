@@ -1,13 +1,11 @@
 require 'spec_helper'
 
 describe Donation do
-  let(:da) { create(:designation_account) }
-  let(:donor_account) { create(:donor_account) }
-  let(:donation) { create(:donation) }
+  let(:donation) { create(:donation, donation_date: Date.new(2015, 4, 5)) }
 
   context '#localized_date' do
     it 'is just date' do
-      expect(donation.localized_date).to_not be_blank
+      expect(donation.localized_date).to eq 'April 05, 2015'
     end
   end
 end
