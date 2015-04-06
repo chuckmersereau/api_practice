@@ -242,7 +242,7 @@ angular.module('mpdxApp')
                     if(_.isNull(d.appeal_amount) || _.isEmpty(d.appeal_amount)){
                       sum.push(Number(d.amount));
                     }else{
-                      sum.push(d.appeal_amount);
+                      sum.push(Number(d.appeal_amount));
                     }
                   });
                   _.remove(sum, function(n) {
