@@ -1080,7 +1080,7 @@ button.ui-button::-moz-focus-inner { border: 0; padding: 0; } /* reset extra pad
  *
  * http://jqueryui.com/tabs/
  */
- .ui-tabs .ui-tabs-nav{ background:none; border-color: #ddd;border-style: solid;border-width: 0 0 1px;}
+ .ui-tabs .ui-tabs-nav{ font-family: $brand-font; font-size: 1.15em; background:none; border-color: #ddd;border-style: solid;border-width: 0 0 1px;}
 .ui-tabs { position: relative; padding: .2em; zoom: 1; border:0px;} /* position: relative prevents IE scroll bug (element with position: relative inside container with overflow: auto appear as "fixed") */
 
 

@@ -191,6 +191,10 @@ div.right {
   }
 }
 
+.nav {
+  font-family: $brand-font;
+}
+
 .navbar {
   margin-bottom: 0;
   min-height: 35px;
@@ -332,6 +336,10 @@ div.right {
 .page-controls {
   margin: 5px 0 20px;
   line-height: 34px;
+  .pagination {
+    width: auto;
+    margin-left: 20px;
+  }
 }
 
 .spacer-top {margin-top: 30px;}
@@ -682,7 +690,6 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 
   .filter_title {
     padding-left: 8px;
-    font-size: 90%;
     line-height: 22px;
     font-weight: 500;
     margin-bottom: 0;
@@ -749,6 +756,8 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 .sort_options {
   margin-top: .5em !important;
   margin-bottom: 1em !important;
+  font-size: 16px;
+  font-family: $brand-font;
   li.option {
     padding-left: 8px;
     a {
@@ -899,6 +908,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
   }
   h4 {
     margin-bottom: 0;
+    font-size: 1.05rem;
   }
   .address {
     line-height: 1.35em;
@@ -1708,13 +1718,12 @@ body.google_integrations_controller {
 }
 
 .comment_status {
-  font-size: 16px;
   font-weight: 500;
   line-height: 1.5em;
   margin-left: 4px;
   :before {
     color: $gray_dark;
-    font: 20px FontAwesome;
+    font: 18px FontAwesome;
     content: "\f0e6";
     padding-right: 4px;
   }
@@ -1772,6 +1781,7 @@ span.best_in_place_once {
   padding: 6px 15px;
   text-transform: uppercase;
   font-weight: 600;
+  font-family: $brand-font;
 }
 
 .marked_for_destruction { display: none; }

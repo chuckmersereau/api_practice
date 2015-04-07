@@ -10,6 +10,7 @@ form, .formstyles {
   label, .field p {
     display: block;
     color: $gray_dark;
+    font-family: $brand-font;
     font-weight: 600;
   }
 
@@ -145,7 +146,6 @@ form, .formstyles {
     margin-bottom: 8px;
   }
   label {
-    font-size: .8em;
     font-weight: 600;
     margin-bottom: 0;
   }

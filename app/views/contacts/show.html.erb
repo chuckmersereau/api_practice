@@ -1,7 +1,7 @@
 <div class="row">
   <%= render 'contact_body', contacts: @filtered_contacts, contact: @contact %>
 
-  <div id="contact_drawer" class="col-md-3 data-font">
+  <div id="contact_drawer" class="col-md-3">
     <div class="contact_drawer_inner">
       <div class="filters">
         <% if current_user.contacts_filter[current_account_list.id.to_s].present? %>
