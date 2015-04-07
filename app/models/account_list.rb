@@ -134,6 +134,11 @@ class AccountList < ActiveRecord::Base
     @total_pledges.round(2)
   end
 
+  def received_pledges
+    @received_pledges ||= contacts.financial_partners.where(pledge_received: true).to_a.sum(&:monthly_pledge)
+    @received_pledges.round(2)
+  end
+
   def people_with_birthdays(start_date, end_date)
     start_month = start_date.month
     end_month = end_date.month
@@ -362,6 +367,14 @@ class AccountList < ActiveRecord::Base
 
   def sync_with_google_contacts
     google_integrations.where(contacts_integration: true).each { |g_i| g_i.sync_data('contacts') }
+  end
+
+  def in_hand_percent
+    (received_pledges * 100 / monthly_goal).round(1)
+  end
+
+  def pledged_percent
+    (total_pledges * 100 / monthly_goal).round(1)
   end
 
   private

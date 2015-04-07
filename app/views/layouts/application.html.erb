@@ -137,8 +137,11 @@
                   <div class="section"><%= link_to(_('Find Duplicates'), find_duplicates_contacts_path, class: '') %></div>
                 <% end %>
                 <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
-                  <div class="section right tip" title="<%= _('%% of goal pledged (%{totals})').localize %
-                                                            {totals: "#{number_to_current_currency(current_account_list.total_pledges.to_i)} / #{number_to_current_currency(current_account_list.monthly_goal)}"} %>">
+                  <div class="section right tip"
+                       title="<%= _('%{received} received/%{pledged} pledged of goal: %{goal}').localize %
+                                  { pledged: number_to_current_currency(current_account_list.total_pledges.to_i),
+                                    received: number_to_current_currency(current_account_list.received_pledges.to_i),
+                                    goal: number_to_current_currency(current_account_list.monthly_goal) } %>">
                     <%= render 'progress_bar' %>
                   </div>
                 <% end %>
