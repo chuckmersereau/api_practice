@@ -38,5 +38,22 @@ describe ContactFilter do
       expect { ContactFilter.new(wildcard_search: ',').filter(Contact) }.to_not raise_error
       expect { ContactFilter.new(wildcard_search: 'doe,').filter(Contact) }.to_not raise_error
     end
+
+    it 'filters by commitment recieved' do
+      received = create(:contact, pledge_received: true)
+      not_received = create(:contact, pledge_received: false)
+
+      cf = ContactFilter.new(pledge_received: 'true')
+      filtered_contacts = cf.filter(Contact)
+      expect(filtered_contacts).to eq [received]
+
+      cf = ContactFilter.new(pledge_received: 'false')
+      filtered_contacts = cf.filter(Contact)
+      expect(filtered_contacts).to eq [not_received]
+
+      cf = ContactFilter.new(pledge_received: '')
+      filtered_contacts = cf.filter(Contact)
+      expect(filtered_contacts.length).to be 2
+    end
   end
 end

@@ -51,6 +51,7 @@ class ContactFilter
       filtered_contacts = contact_type(filtered_contacts)
       filtered_contacts = wildcard_search(filtered_contacts)
       filtered_contacts = pledge_freq(filtered_contacts)
+      filtered_contacts = pledge_received(filtered_contacts)
     end
 
     filtered_contacts
@@ -243,6 +244,13 @@ class ContactFilter
   def pledge_freq(filtered_contacts)
     if @filters[:pledge_frequencies].present? && @filters[:pledge_frequencies].first != ''
       filtered_contacts = filtered_contacts.where(pledge_frequency: @filters[:pledge_frequencies])
+    end
+    filtered_contacts
+  end
+
+  def pledge_received(filtered_contacts)
+    if @filters[:pledge_received].present?
+      filtered_contacts = filtered_contacts.where(pledge_received: @filters[:pledge_received])
     end
     filtered_contacts
   end

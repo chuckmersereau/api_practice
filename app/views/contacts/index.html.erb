@@ -162,6 +162,26 @@
                                    class: 'form-control', multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, 'ng-model' => 'contactQuery.pledge_frequencies' %>
                   </div>
                 </li>
+                <li class="filter_set">
+                  <label id="filter_pledge_received" class="filter_title"
+                         onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Commitment Received']);">
+                    <%= _('Commitment Received') %>
+                  </label>
+                  <div class="filter_set_inner filter_radio">
+                    <label>
+                      <%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.pledge_received' %>
+                      <%= _('-- Any --') %>
+                    </label>
+                    <label>
+                      <%= radio_button_tag '', 'true', false, :'ng-model' => 'contactQuery.pledge_received' %>
+                      <%= _('Received') %>
+                    </label>
+                    <label>
+                      <%= radio_button_tag '', 'false', false, :'ng-model' => 'contactQuery.pledge_received' %>
+                      <%= _('Not Received') %>
+                    </label>
+                  </div>
+                </li>
                 <li class="controls">
                   <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);"><i class="fa fa-undo"></i> <%= _('Reset Filters') %></a>
                   <a href="#" ng-click="mapContacts()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Map These Contacts']);"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
