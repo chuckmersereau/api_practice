@@ -77,6 +77,9 @@ describe ContactsController do
         get :index, format: 'csv'
         expect(assigns(:contacts).size).to eq(2)
       end
+
+      it '' do
+      end
     end
 
     describe '#show' do

@@ -1,9 +1,11 @@
-"<%==[
-    'Contact Name', 'First Name', 'Last Name', 'Spouse First Name', 'Greeting', 'Envelope Greeting',
+"<%==
+  (
+    ['Contact Name', 'First Name', 'Last Name', 'Spouse First Name', 'Greeting', 'Envelope Greeting',
     'Mailing Street Address', 'Mailing City', 'Mailing State', 'Mailing Postal Code', 'Mailing Country', 'Status',
-    'Commitment Amount', 'Commitment Frequency', 'Newsletter', 'Pledge Received', 'Tags',
-    'Email 1', 'Email 2', 'Email 3', 'Email 4', 'Phone 1', 'Phone 2', 'Phone 3', 'Phone 4'
-  ].map {|h| _(h)}.join('","') %>"
+    'Commitment Amount', 'Commitment Frequency', 'Newsletter', 'Pledge Received', 'Tags'] +
+    (@csv_primary_emails_only ? ['Primary Email', 'Spouse Email'] : ['Email 1', 'Email 2', 'Email 3', 'Email 4']) +
+    ['Phone 1', 'Phone 2', 'Phone 3', 'Phone 4']
+  ).map {|h| _(h)}.join('","') %>"
 <%== CSV.generate do |csv|
   # Handles the assignments in contacts_controller#index and account_list#physical_newsletter_csv
   contacts ||= @contacts
@@ -28,15 +30,20 @@
     row << (contact.pledge_received ? 'Yes' : 'No')
     row << contact.tag_list
 
-    email_addresses = contact.people.collect(&:email_addresses).flatten[0..3]
-    email_row = 0
-    email_addresses.each do |email|
-      next if email.historic?
-      row << email.email
-      email_row += 1
-    end
-    (email_row..3).each do |i|
-      row << ''
+    if @csv_primary_emails_only
+      row << contact.try(:primary_person).try(:primary_email_address)
+      row << contact.try(:spouse).try(:primary_email_address)
+    else
+      email_addresses = contact.people.collect(&:email_addresses).flatten[0..3]
+      email_row = 0
+      email_addresses.each do |email|
+        next if email.historic?
+        row << email.email
+        email_row += 1
+      end
+      (email_row..3).each do |i|
+        row << ''
+      end
     end
 
     phone_numbers = contact.people.collect(&:phone_numbers).flatten[0..3]
@@ -48,3 +55,4 @@
     csv << row
   end
 end %>
+

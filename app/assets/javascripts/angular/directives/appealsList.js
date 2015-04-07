@@ -192,12 +192,14 @@ angular.module('mpdxApp')
                                 return selected;
                               }));
 
-                              if(selectedContactIds.length == 0) {
+                              if (selectedContactIds.length == 0) {
                                 alert('You must check at least one contact.');
                                 return;
                               }
 
-                              window.location.href = '/contacts.csv?filters[status]=*&filters[ids]=' + selectedContactIds.join(',');
+                              window.location.href =
+                                '/contacts.csv?csv_primary_emails_only=true&' +
+                                  'filters[status]=*&filters[ids]=' + selectedContactIds.join(',');
                             }
 
                             $scope.selectAll = function(type){
