@@ -8,10 +8,15 @@ describe TagsEagerLoading do
   end
 
   it 'retrieves tags with no eager load' do
-    expect(contact.tag_list).to eq(%w(a b))
+    expect_correct_tag_list(contact.tag_list)
   end
 
   it 'retrieves tags with an eager load association' do
-    expect(Contact.includes(:tags).first.tag_list).to eq(%w(a b))
+    expect_correct_tag_list(Contact.includes(:tags).first.tag_list)
+  end
+
+  def expect_correct_tag_list(tag_list)
+    expect(tag_list).to eq(%w(a b))
+    expect(tag_list.to_s).to eq('a, b')
   end
 end
