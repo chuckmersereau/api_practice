@@ -263,6 +263,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           });
           var flattenedEmailAddresses = _.flatten(_.pluck(people, 'email_address_ids'));
           var flattenedFacebookAccounts = _.flatten(_.pluck(people, 'facebook_account_ids'));
+          contact.pledge_received = contact.pledge_received == 'true'
 
           contactCache.update(contact.id, {
             addresses: _.filter(data.addresses, function (addr) {

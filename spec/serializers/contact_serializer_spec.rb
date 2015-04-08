@@ -22,6 +22,7 @@ describe ContactSerializer do
       it { should include :name }
       it { should include :pledge_amount }
       it { should include :pledge_frequency }
+      it { should include :pledge_received }
       it { should include :status }
       it { should include :notes }
       it { should include :person_ids }
