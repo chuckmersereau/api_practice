@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-02 11:54-0400\n"
-"PO-Revision-Date: 2015-04-02 11:54-0400\n"
+"POT-Creation-Date: 2015-04-08 16:21-0400\n"
+"PO-Revision-Date: 2015-04-08 16:21-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -49,6 +49,9 @@ msgid "%{contacts_count:referrals} couldn't be added because they were missing a
 msgstr ""
 
 msgid "%{contacts_count} referrals"
+msgstr ""
+
+msgid "%{index} of %{total}"
 msgstr ""
 
 msgid "%{link} has given %{total} since %{since}"
@@ -99,33 +102,10 @@ msgstr ""
 msgid "<< Previous Year"
 msgstr ""
 
-msgid "<i class=\"fa fa-check-square-o\"></i> Add Task"
-msgstr ""
-
 msgid "<i class=\"fa fa-eye-slash\"></i>"
 msgstr ""
 
-msgid "<i class=\"fa fa-facebook-square\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-globe\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-pencil\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-pencil\"></i> Edit"
-msgstr ""
-
 msgid "<i class=\"fa fa-twitter-square\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-users\"></i> Add Referrals"
-msgstr ""
-
-msgid ""
-"<p>Easily connect all of your contacts, calendars, communications and social conversations. MPDX will automatically identify contact's social profiles on Facebook, LinkedIn, and </p>\n"
-"                            <p>Twitter so that you connect, listen, and engage with your minitry partners. </p>"
 msgstr ""
 
 msgid ""
@@ -146,18 +126,6 @@ msgid ""
 "                     the contact, making it inactive in MPDX. Otherwise, it will get regenerated in Google once it syncs again.</p>"
 msgstr ""
 
-msgid "<span class=\"add_title\">Add %{network} Account</span>"
-msgstr ""
-
-msgid "<span class=\"add_title\">Add Email Address</span>"
-msgstr ""
-
-msgid "<span class=\"add_title\">Add Website/Blog</span>"
-msgstr ""
-
-msgid "<strong>%{index} of %{total}</strong>"
-msgstr ""
-
 msgid "About you"
 msgstr ""
 
@@ -173,7 +141,7 @@ msgstr ""
 msgid "Action"
 msgstr ""
 
-msgid "Actions <span class=\"caret\"></span>"
+msgid "Actions"
 msgstr ""
 
 msgid "Active Contacts"
@@ -195,6 +163,9 @@ msgid "Add Contact"
 msgstr ""
 
 msgid "Add Donor Account"
+msgstr ""
+
+msgid "Add Email Address"
 msgstr ""
 
 msgid "Add Note"
@@ -742,6 +713,9 @@ msgid "Due date"
 msgstr ""
 
 msgid "Early adopter"
+msgstr ""
+
+msgid "Easily connect all of your contacts, calendars, communications and social conversations. MPDX will automatically identify contact's social profiles on Facebook, LinkedIn, and Twitter so that you connect, listen, and engage with your ministry partners."
 msgstr ""
 
 msgid "Edit"

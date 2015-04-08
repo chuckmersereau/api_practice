@@ -1,7 +1,7 @@
 <div class="social_field form-inline" data-behavior="field-wrapper social-field" data-network="facebook">
   <div class="form-group">
   <%= builder.label :url do %>
-	  <%= _('<i class="fa fa-facebook-square"></i>') %>
+      <i class="fa fa-facebook-square"></i>
 	  <% if builder.object.authenticated? %>
 	    <%= link_to(builder.object.url, builder.object.url, target: '_blank') %>
 	  <% else %>

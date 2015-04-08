@@ -13,7 +13,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.6.9\n"
-"POT-Creation-Date: 2015-04-02 11:54-0400\n"
 
 msgid " "
 msgstr ""
@@ -47,6 +46,9 @@ msgstr "%{contacts_count:referrals} n'a pas pu être ajouté car qu'il manquait 
 
 msgid "%{contacts_count} referrals"
 msgstr "%{contacts_count} références"
+
+msgid "%{index} of %{total}"
+msgstr ""
 
 msgid "%{link} has given %{total} since %{since}"
 msgstr "%{link} a donné %{total} depuis %{since}"
@@ -96,37 +98,11 @@ msgstr "<< Semaine précédente"
 msgid "<< Previous Year"
 msgstr "<< Année précédente"
 
-msgid "<i class=\"fa fa-check-square-o\"></i> Add Task"
-msgstr ""
-
 msgid "<i class=\"fa fa-eye-slash\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-facebook-square\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-globe\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-pencil\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-pencil\"></i> Edit"
 msgstr ""
 
 msgid "<i class=\"fa fa-twitter-square\"></i>"
 msgstr ""
-
-msgid "<i class=\"fa fa-users\"></i> Add Referrals"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"<p>Easily connect all of your contacts, calendars, communications and social conversations. MPDX will automatically identify contact's social profiles on Facebook, LinkedIn, and </p>\n"
-"                            <p>Twitter so that you connect, listen, and engage with your minitry partners. </p>"
-msgstr ""
-"<p> Connecter facilement tous vos contacts, calendriers, communications et conversations. MPDX identifiera automatiquement les profils sociaux des contacts sur Facebook, LinkedIn, et </p>\n"
-"                    <p>Twitter pour que vous puissiez vous connecter, écouter et vous engager avec vos partenaires du ministère</p>"
 
 msgid ""
 "<p>MPDX can sync your active contacts to Google so you only have to keep your contacts up to date in\n"
@@ -146,18 +122,6 @@ msgid ""
 "                     the contact, making it inactive in MPDX. Otherwise, it will get regenerated in Google once it syncs again.</p>"
 msgstr "<p> MPDX peut synchroniser vos contacts actifs à Google afin que vous n'ayez qu'à garder vos contacts à jour dans un seul endroit. (Les contacts actifs sont ceux dont le champ état indique qu'ils sont des partenaires ou dans le processus DEP.) </p>                      <p> Cela va synchroniser les informations des contacts existants ainsi que les mises à jour futures et les suppressions à vos informations à partir MPDX et Google. Une fois que la synchronisation est active, les changements dans Google ou MPDX seront reflétée dans l'autre système. Si vous faites un changement dans les deux endroits entre les synchronisations, les changements MPDx prévaudront. </ p>                      <p> Si vous rendez un contact inactif dans MPDX par exemple en sélectionnant \"Pas intéressé \" pour son statut, les infos de ce contact ne seront pas supprimées dans Google, mais seront marquées  \"inactif \" de sorte que vous puissiez facilement trouver ceux qui ne sont plus synchronisés et les supprimer si vous le souhaitez. </p>                      <p> Si vous supprimez un contact dans les contacts Google qui est actif dans MPDX, vous devez aussi aller dans MPDX et cacher le contact, le rendant inactif dans MPDX. Sinon, il sera régénéré dans Google à la prochaine synchronisation. </p>"
 
-msgid "<span class=\"add_title\">Add %{network} Account</span>"
-msgstr ""
-
-msgid "<span class=\"add_title\">Add Email Address</span>"
-msgstr ""
-
-msgid "<span class=\"add_title\">Add Website/Blog</span>"
-msgstr ""
-
-msgid "<strong>%{index} of %{total}</strong>"
-msgstr ""
-
 msgid "About you"
 msgstr "à propos de Vous"
 
@@ -174,8 +138,9 @@ msgstr "Comptes"
 msgid "Action"
 msgstr "Activité"
 
-msgid "Actions <span class=\"caret\"></span>"
-msgstr ""
+#, fuzzy
+msgid "Actions"
+msgstr "Activité"
 
 msgid "Active Contacts"
 msgstr "Activer les contacts"
@@ -198,6 +163,10 @@ msgstr "Ajouter un contact"
 
 msgid "Add Donor Account"
 msgstr "Ajouter un compte donateur"
+
+#, fuzzy
+msgid "Add Email Address"
+msgstr "Avec adresse e-mail"
 
 msgid "Add Note"
 msgstr "Ajouter une remarque"
@@ -692,7 +661,6 @@ msgid "Details"
 msgstr "Renseignements"
 
 #, fuzzy
-#, fuzzy
 msgid "Did not contact"
 msgstr "Ajouter un contact"
 
@@ -759,6 +727,9 @@ msgstr "Date d'échéance "
 
 msgid "Early adopter"
 msgstr "Premiers adopteurs"
+
+msgid "Easily connect all of your contacts, calendars, communications and social conversations. MPDX will automatically identify contact's social profiles on Facebook, LinkedIn, and Twitter so that you connect, listen, and engage with your ministry partners."
+msgstr ""
 
 msgid "Edit"
 msgstr "Modifier"
@@ -2161,154 +2132,16 @@ msgstr "à"
 msgid "with invalid addresses"
 msgstr "Avec une adresse e-mail valide"
 
-#~ msgid ""
-#~ "%{contact_name} gave a Special Gift of %{amount} on %{date}. Send them a Thank"
-#~ " You."
-#~ msgstr ""
-#~ "%{contact_name} a effectué un don spécial de %{amount} le %{date}. Envoyer lui"
-#~ " vos remerciements."
-
+#, fuzzy
 #~ msgid ""
 #~ "<p>Easily connect all of your contacts, calendars, communications and social c"
 #~ "onversations. MPDX will automatically identify contact's social profiles on Fa"
 #~ "cebook, LinkedIn, and </p>\n"
-#~ "                    <p>Twitter so that you connect, listen, and engage with yo"
-#~ "ur minitry partners. </p>"
+#~ "                            <p>Twitter so that you connect, listen, and engage"
+#~ " with your minitry partners. </p>"
 #~ msgstr ""
 #~ "<p> Connecter facilement tous vos contacts, calendriers, communications et con"
 #~ "versations. MPDX identifiera automatiquement les profils sociaux des contacts "
 #~ "sur Facebook, LinkedIn, et </p>\n"
 #~ "                    <p>Twitter pour que vous puissiez vous connecter, écouter "
 #~ "et vous engager avec vos partenaires du ministère</p>"
-
-#~ msgid "Actions"
-#~ msgstr "Activités"
-
-#~ msgid "Add %{network} Account"
-#~ msgstr "Ajouter le compte %{network} "
-
-#~ msgid "Add Email Address"
-#~ msgstr "Ajouter une adresse e-mail"
-
-#~ msgid "Add Website/Blog"
-#~ msgstr "Ajouter un site web/blog"
-
-#~ msgid "Address"
-#~ msgstr "Adresse"
-
-#~ msgid ""
-#~ "Based on an analysis of a partner's giving history, MPDX can notify you of eve"
-#~ "nts that you will probably want to follow up on. The detection logic\n"
-#~ "                is based on a set of rules that are right most of the time, bu"
-#~ "t you will still want to verify an event manually before contacting the partne"
-#~ "r.<br><br>\n"
-#~ "               For each event MPDX can notify you via email and also create a "
-#~ "task entry reminding you to do something about it. The options below allow you"
-#~ " to control that behavior."
-#~ msgstr ""
-#~ "Basé sur l'analyse des antécédents donnés d'un partenaire, MPDX peut vous info"
-#~ "rmer des événements que vous voudrez probablement suivre. La logique de détect"
-#~ "ion  est basé sur un ensemble de règles qui s'avèrent vraies la plupart du tem"
-#~ "ps, mais vous aurez toujours envie de vérifier un événement manuellement avant"
-#~ " de contacter le partenaire. <br><br>             Pour chaque événement MPDX p"
-#~ "eut vous informer par email et aussi créer une inscription de tâche pour vous "
-#~ "rappeler quelque chose à faire. Les options ci-dessous vous permettent de cont"
-#~ "rôler cette fonctionnalité."
-
-#~ msgid "Basic Information"
-#~ msgstr "Informations basique"
-
-#~ msgid "Click here to reschedule this task"
-#~ msgstr "Cliquer ici pour reporter cette tâche"
-
-#~ msgid "Connect to your LinkedIn account to add a url for your contact"
-#~ msgstr "Se connecter à votre compte LinkedIn pour ajouter une URL à votre contact"
-
-#~ msgid "Facebook Url"
-#~ msgstr "Url Facebook"
-
-#~ msgid "Female"
-#~ msgstr "Femme"
-
-#~ msgid "Hide Contact"
-#~ msgstr "Cacher le contact"
-
-#~ msgid "Just need to connect some social accounts"
-#~ msgstr "Il est seulement nécessaire de connecter quelques comptes sociaux."
-
-#~ msgid "Male"
-#~ msgstr "Homme"
-
-#~ msgid "Navigate contacts: <strong>%{index} of %{total}</strong>"
-#~ msgstr "Naviguer dans les contacts : <strong>%{index} de %{total}</strong>"
-
-#~ msgid "Number"
-#~ msgstr "Numéro"
-
-#~ msgid "Please choose your preferred <br/> method of logging in:"
-#~ msgstr "Veuillez choisir votre méthode de connexion préférée :"
-
-#~ msgid "Starred Tasks"
-#~ msgstr "Tâches Favorites "
-
-#~ msgid "Task History"
-#~ msgstr "Historique des tâches"
-
-#~ msgid ""
-#~ "Thank you for suggesting ways we can make MPDX a better tool. We will take you"
-#~ "r suggestion into consideration\n"
-#~ "    and add it to MPDX's project tool: %{link}"
-#~ msgstr ""
-#~ "Merci de nous suggérer vos avis pour que nous puissions faire de MPDX un meill"
-#~ "eur outil. Nous prendrons en compte vos suggestions et les ajouterons à l'outi"
-#~ "l de projet de MPDX : %{link}"
-
-#~ msgid ""
-#~ "The link between MPDX and your Google account stopped working. Click \"Refresh "
-#~ "Google Account\" to re-enable it.\n"
-#~ "                                     After that, you'll need to manually re-en"
-#~ "able any integrations that you had set already."
-#~ msgstr ""
-#~ "Le lien entre MPDX et votre compte Google a cessé de fonctionner. Cliquez sur "
-#~ "\"Rafraichir le compte Google\" pour le réactiver. Après cela, vous aurez besoin"
-#~ " de réactiver manuellement des intégrations que vous aviez déjà faites."
-
-#~ msgid "URL"
-#~ msgstr "URL"
-
-#~ msgid ""
-#~ "We were unable to link this person to the facebook url you provided. Check the"
-#~ " url you entered and try again. If you are currently running the \"Import conta"
-#~ "cts from facebook\" process, please wait until you get the email saying the imp"
-#~ "ort finished before trying again."
-#~ msgstr ""
-#~ "Nous n'avons pas pu relier cette personne à l'url de Facebook que vous avez fo"
-#~ "urni. Vérifiez l'URL que vous avez saisie et réessayez. Si vous utilisez actue"
-#~ "llement les processus \"Import les contacts Facebook\" , attendez s'il vous plaî"
-#~ "t jusqu'à ce que vous obteniez le message disant que l'importation est terminé"
-#~ "e avant de réessayer."
-
-#~ msgid ""
-#~ "We were unable to link this person to the facebook url you provided. This is l"
-#~ "ikely due to facebook privacy settings this person has set. If they are your f"
-#~ "riend on facebook, try using the \"Import contacts from facebook\" feature inste"
-#~ "ad of manually pasting the link in."
-#~ msgstr ""
-#~ "Nous n'avons pas pu relier cette personne à l'url de Facebook que vous avez fo"
-#~ "urni. Cela est probablement dû aux paramètres de confidentialité Facebook que "
-#~ "cette personne s'est fixés. Si elle est votre amie sur Facebook, essayez d'uti"
-#~ "liser la fonction \"Importer les contacts Facebook\"  au lieu de coller manuelle"
-#~ "ment le lien dedans."
-
-#~ msgid "Welcome to MPDX!"
-#~ msgstr "Bienvenue sur MPDX !"
-
-#~ msgid ""
-#~ "You must specify a TntMPD .xml export file to upload to MPDX (see video linked"
-#~ " below for more info)."
-#~ msgstr ""
-#~ "Vous devez spécifier le fichier d'exportation d'un TntMPD.xml pour le téléchar"
-#~ "ger sur MPDX (voir la vidéo ci-dessous liée pour plus d'infos)."
-
-#~ msgid "continue"
-#~ msgstr "continuer"

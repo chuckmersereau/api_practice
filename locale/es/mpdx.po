@@ -53,6 +53,9 @@ msgstr ""
 msgid "%{contacts_count} referrals"
 msgstr "%{contacts_count} referencias"
 
+msgid "%{index} of %{total}"
+msgstr ""
+
 msgid "%{link} has given %{total} since %{since}"
 msgstr ""
 
@@ -103,43 +106,11 @@ msgstr ""
 msgid "<< Previous Year"
 msgstr ""
 
-msgid "<i class=\"fa fa-check-square-o\"></i> Add Task"
-msgstr ""
-
 msgid "<i class=\"fa fa-eye-slash\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-facebook-square\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-globe\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-pencil\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-pencil\"></i> Edit"
 msgstr ""
 
 msgid "<i class=\"fa fa-twitter-square\"></i>"
 msgstr ""
-
-msgid "<i class=\"fa fa-users\"></i> Add Referrals"
-msgstr ""
-
-#, fuzzy
-msgid ""
-"<p>Easily connect all of your contacts, calendars, communications and social c"
-"onversations. MPDX will automatically identify contact's social profiles on Fa"
-"cebook, LinkedIn, and </p>\n"
-"                            <p>Twitter so that you connect, listen, and engage"
-" with your minitry partners. </p>"
-msgstr ""
-"<p> Conecte fácilmente todos tus contactos, calendarios, comunicaciones y conv"
-"ersaciones sociales. MPDX identificará automáticamente perfiles sociales del c"
-"ontacto en Facebook, LinkedIn, y </p> \n"
-"<p> Twitter para que se conecte, escuchar y participar con sus socios MINISTER"
-"IO. </p>"
 
 msgid ""
 "<p>MPDX can sync your active contacts to Google so you only have to keep your "
@@ -168,18 +139,6 @@ msgid ""
 "ll get regenerated in Google once it syncs again.</p>"
 msgstr ""
 
-msgid "<span class=\"add_title\">Add %{network} Account</span>"
-msgstr ""
-
-msgid "<span class=\"add_title\">Add Email Address</span>"
-msgstr ""
-
-msgid "<span class=\"add_title\">Add Website/Blog</span>"
-msgstr ""
-
-msgid "<strong>%{index} of %{total}</strong>"
-msgstr ""
-
 msgid "About you"
 msgstr ""
 
@@ -195,14 +154,14 @@ msgstr ""
 msgid "Action"
 msgstr "Acción"
 
-msgid "Actions <span class=\"caret\"></span>"
-msgstr ""
+#, fuzzy
+msgid "Actions"
+msgstr "Acción"
 
 #, fuzzy
 msgid "Active Contacts"
 msgstr "Añadir este contacto"
 
-#, fuzzy
 #, fuzzy
 msgid "Active addresses"
 msgstr "Añadir dirección de correo electrónico"
@@ -223,6 +182,11 @@ msgstr "Añadir este contacto"
 #, fuzzy
 msgid "Add Donor Account"
 msgstr "Añadir una cuenta"
+
+#, fuzzy
+#, fuzzy
+msgid "Add Email Address"
+msgstr "Añadir dirección de correo electrónico"
 
 #, fuzzy
 msgid "Add Note"
@@ -736,7 +700,6 @@ msgid "Delete Selected"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Designation"
 msgstr "Añadir una cuenta"
 
@@ -747,7 +710,6 @@ msgstr "Añadir una cuenta"
 msgid "Details"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Did not contact"
 msgstr "Añadir este contacto"
@@ -814,6 +776,13 @@ msgid "Due date"
 msgstr ""
 
 msgid "Early adopter"
+msgstr ""
+
+msgid ""
+"Easily connect all of your contacts, calendars, communications and social conv"
+"ersations. MPDX will automatically identify contact's social profiles on Faceb"
+"ook, LinkedIn, and Twitter so that you connect, listen, and engage with your m"
+"inistry partners."
 msgstr ""
 
 msgid "Edit"
@@ -1266,7 +1235,6 @@ msgid "Map It"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Map These Contacts"
 msgstr "Añadir etiquetas a estos contactos"
 
@@ -1298,7 +1266,6 @@ msgstr ""
 msgid "Merge these contacts"
 msgstr "Añadir etiquetas a estos contactos"
 
-#, fuzzy
 #, fuzzy
 msgid "Merge these people"
 msgstr "Añadir etiquetas a estos contactos"
@@ -1487,7 +1454,6 @@ msgstr ""
 msgid "Now you just need to connect some social accounts"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Occupation"
 msgstr "Acción"
@@ -1878,7 +1844,6 @@ msgstr ""
 msgid "Street Address"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Street address"
 msgstr "Añadir dirección de correo electrónico"
