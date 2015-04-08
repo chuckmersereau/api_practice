@@ -200,7 +200,7 @@ angular.module('mpdxApp')
 
                             window.location.href =
                                 '/contacts.csv?csv_primary_emails_only=true&' +
-                                'filters[status]=*&filters[ids]=' + selectedContactIds.join(',');
+                                'filters[status]=*&filters[ids]=' + selectedContactIds.join();
                           };
 
                             $scope.selectAll = function(type){
@@ -281,6 +281,7 @@ angular.module('mpdxApp')
                 $scope.newAppeal = function(){
                     var modalInstance = $modal.open({
                         templateUrl: '/templates/appeals/wizard.html',
+                        size: 'lg',
                         controller: function($scope, $modalInstance){
                             $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES;
 
