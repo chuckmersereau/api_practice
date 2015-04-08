@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-08 16:21-0400\n"
-"PO-Revision-Date: 2015-04-08 16:21-0400\n"
+"POT-Creation-Date: 2015-04-08 16:24-0400\n"
+"PO-Revision-Date: 2015-04-08 16:24-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -100,12 +100,6 @@ msgid "<< Previous Week"
 msgstr ""
 
 msgid "<< Previous Year"
-msgstr ""
-
-msgid "<i class=\"fa fa-eye-slash\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-twitter-square\"></i>"
 msgstr ""
 
 msgid ""

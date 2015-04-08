@@ -112,12 +112,6 @@ msgstr "<< Semaine précédente"
 msgid "<< Previous Year"
 msgstr "<< Année précédente"
 
-msgid "<i class=\"fa fa-eye-slash\"></i>"
-msgstr ""
-
-msgid "<i class=\"fa fa-twitter-square\"></i>"
-msgstr ""
-
 msgid ""
 "<p>MPDX can sync your active contacts to Google so you only have to keep your "
 "contacts up to date in\n"
@@ -166,6 +160,7 @@ msgid "About you"
 msgstr "à propos de Vous"
 
 #, fuzzy
+#, fuzzy
 msgid "Account Name"
 msgstr "Comptes"
 
@@ -179,12 +174,14 @@ msgid "Action"
 msgstr "Activité"
 
 #, fuzzy
+#, fuzzy
 msgid "Actions"
 msgstr "Activité"
 
 msgid "Active Contacts"
 msgstr "Activer les contacts"
 
+#, fuzzy
 #, fuzzy
 msgid "Active addresses"
 msgstr "Adresse e-mail"
@@ -204,6 +201,7 @@ msgstr "Ajouter un contact"
 msgid "Add Donor Account"
 msgstr "Ajouter un compte donateur"
 
+#, fuzzy
 #, fuzzy
 msgid "Add Email Address"
 msgstr "Avec adresse e-mail"
@@ -251,6 +249,7 @@ msgid "Add another Account"
 msgstr "Ajouter un autre compte"
 
 #, fuzzy
+#, fuzzy
 msgid "Add contact"
 msgstr "Ajouter un contact"
 
@@ -269,6 +268,7 @@ msgstr "En ajouter maintenant"
 msgid "Add tags to these contacts"
 msgstr "Ajouter des libellés à ces contacts"
 
+#, fuzzy
 #, fuzzy
 msgid "Address no longer valid"
 msgstr "L'API Key de MailChimp n'est plus valide"
@@ -311,6 +311,7 @@ msgid "Anniversaries"
 msgstr "Anniversaires"
 
 #, fuzzy
+#, fuzzy
 msgid "Anniversary"
 msgstr "Anniversaires"
 
@@ -338,6 +339,7 @@ msgstr "Api Key"
 msgid "Appeal"
 msgstr "Appel"
 
+#, fuzzy
 #, fuzzy
 msgid "Appeal Amount"
 msgstr "Ajouter un compte"
@@ -436,6 +438,7 @@ msgstr "Bi-mensuel"
 msgid "Biennial"
 msgstr "Biennal"
 
+#, fuzzy
 #, fuzzy
 msgid "Birthday"
 msgstr "Anniversaires "
@@ -596,6 +599,7 @@ msgid "Contact City"
 msgstr "Ville du contact"
 
 #, fuzzy
+#, fuzzy
 msgid "Contact Commitment Frequency"
 msgstr "Fréquence de l'engagement "
 
@@ -654,6 +658,7 @@ msgid "Contacts still in process:"
 msgstr "Contacts encore en cours :"
 
 #, fuzzy
+#, fuzzy
 msgid "Continue"
 msgstr "continuer"
 
@@ -700,6 +705,7 @@ msgid "Cultivate"
 msgstr "Encourager"
 
 #, fuzzy
+#, fuzzy
 msgid "Cultivate Relationship"
 msgstr "Ajouter des liens de parenté"
 
@@ -744,6 +750,7 @@ msgid "Delete Selected"
 msgstr "Supprimer la sélection"
 
 #, fuzzy
+#, fuzzy
 msgid "Designation"
 msgstr "Compte de désignation"
 
@@ -753,6 +760,7 @@ msgstr "Compte de désignation"
 msgid "Details"
 msgstr "Renseignements"
 
+#, fuzzy
 #, fuzzy
 msgid "Did not contact"
 msgstr "Ajouter un contact"
@@ -815,6 +823,7 @@ msgid "Due Date"
 msgstr "Date d'échéance "
 
 #, fuzzy
+#, fuzzy
 msgid "Due date"
 msgstr "Date d'échéance "
 
@@ -858,6 +867,7 @@ msgstr "Adresse e-mail"
 msgid "Email Addresses:"
 msgstr "Adresse e-mail :"
 
+#, fuzzy
 #, fuzzy
 msgid "Email address no longer valid"
 msgstr "L'API Key de MailChimp n'est plus valide"
@@ -910,6 +920,7 @@ msgstr "Facebook :"
 msgid "Father"
 msgstr "Père"
 
+#, fuzzy
 #, fuzzy
 msgid "Filter by Name"
 msgstr "Entrez un nom"
@@ -966,6 +977,7 @@ msgstr "Sexe :"
 msgid "Get started by choosing your login source:"
 msgstr ""
 
+#, fuzzy
 #, fuzzy
 msgid "Gift Range"
 msgstr "Plage des dates"
@@ -1153,6 +1165,7 @@ msgid "Last 31 Days"
 msgstr "Les 31 derniers jours"
 
 #, fuzzy
+#, fuzzy
 msgid "Last Change"
 msgstr "Plage des dates"
 
@@ -1181,6 +1194,7 @@ msgid "Letter"
 msgstr "Lettre"
 
 #, fuzzy
+#, fuzzy
 msgid "Letter cost"
 msgstr "Lettre"
 
@@ -1208,6 +1222,7 @@ msgstr "Chargement des tâches de contact ..."
 msgid "Loading contacts..."
 msgstr "Chargement des contacts ..."
 
+#, fuzzy
 #, fuzzy
 msgid "Loading tasks"
 msgstr "Chargement des contacts ..."
@@ -1329,6 +1344,7 @@ msgid "Map It"
 msgstr "Carte"
 
 #, fuzzy
+#, fuzzy
 msgid "Map These Contacts"
 msgstr "Fusionner ces contacts"
 
@@ -1354,12 +1370,14 @@ msgid "Merge selected contacts"
 msgstr "Fusionner les contacts sélectionnés"
 
 #, fuzzy
+#, fuzzy
 msgid "Merge selected people"
 msgstr "Fusionner les personnes selectionnées"
 
 msgid "Merge these contacts"
 msgstr "Fusionner ces contacts"
 
+#, fuzzy
 #, fuzzy
 msgid "Merge these people"
 msgstr "Fusionner les personnes selectionnées"
@@ -1545,9 +1563,11 @@ msgid "Notifications / Alerts"
 msgstr "Notifications / Alertes"
 
 #, fuzzy
+#, fuzzy
 msgid "Now you just need to connect some social accounts"
 msgstr "Il est seulement nécessaire de connecter quelques comptes sociaux."
 
+#, fuzzy
 #, fuzzy
 msgid "Occupation"
 msgstr "Emplacement"
@@ -1572,6 +1592,7 @@ msgstr "Autre details"
 msgid "Outgoing Dials"
 msgstr "Appels sortants"
 
+#, fuzzy
 #, fuzzy
 msgid "Overdue"
 msgstr "Moyenne"
@@ -1697,6 +1718,7 @@ msgid "Previous"
 msgstr ""
 
 #, fuzzy
+#, fuzzy
 msgid "Primary Address"
 msgstr "Ajouter une adresse e-mail"
 
@@ -1821,6 +1843,7 @@ msgid "Search contacts..."
 msgstr "Recherche de contact..."
 
 #, fuzzy
+#, fuzzy
 msgid "Seasonal"
 msgstr "Saisonnier :"
 
@@ -1875,6 +1898,7 @@ msgstr "Afficher"
 msgid "Show:"
 msgstr "Afficher :"
 
+#, fuzzy
 #, fuzzy
 msgid "Showing"
 msgstr "Afficher"
@@ -1945,6 +1969,7 @@ msgid "Street Address"
 msgstr "Adresse"
 
 #, fuzzy
+#, fuzzy
 msgid "Street address"
 msgstr "Adresse"
 
@@ -1966,6 +1991,7 @@ msgstr "Lettre de soutien"
 msgid "Support Letters"
 msgstr "Lettres de soutien"
 
+#, fuzzy
 #, fuzzy
 msgid "Support/Help"
 msgstr "Soutien"
@@ -2006,6 +2032,7 @@ msgstr "Remercier"
 msgid "Thank You Notes"
 msgstr "notes de remerciements"
 
+#, fuzzy
 #, fuzzy
 msgid ""
 "Thank you for suggesting ways we can make MPDX a better tool. We will take you"
@@ -2051,6 +2078,7 @@ msgstr ""
 " mon compte Google\". Après cela, vous aurez besoin de réactiver manuellement d"
 "es intégrations que vous aviez déjà réglé."
 
+#, fuzzy
 #, fuzzy
 msgid ""
 "The link between MPDX and your Google account stopped working. Click \"Refresh "
@@ -2170,6 +2198,7 @@ msgstr ""
 "isation. Si vous soulevez des fonds à travers plus d'une organisation, vous po"
 "uvez vous connecter à plusieurs comptes."
 
+#, fuzzy
 #, fuzzy
 msgid "Today"
 msgstr "Total"
@@ -2319,6 +2348,7 @@ msgid "You just merged %{count} contacts"
 msgstr "Vous venez de fusionner %{count} contacts"
 
 #, fuzzy
+#, fuzzy
 msgid "You just merged %{count} people"
 msgstr "Vous venez de fusionner %{count} contacts"
 
@@ -2367,6 +2397,7 @@ msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr "[MPDX] Votre nom d'utilisateur et mot de passe pour %{source} sont invalides"
 
 #, fuzzy
+#, fuzzy
 msgid "adding a new contact"
 msgstr "Ajouter des libellés à ces contacts"
 
@@ -2382,6 +2413,7 @@ msgstr "cliquez ici pour nous le faire savoir"
 msgid "close"
 msgstr "fermer"
 
+#, fuzzy
 #, fuzzy
 msgid "creating a new task"
 msgstr "Créer une tâche"
