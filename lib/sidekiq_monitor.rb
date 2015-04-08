@@ -9,18 +9,23 @@ module SidekiqMonitor
 
   def sidekiq_problem
     stats = Sidekiq::Stats.new
-    processes = Sidekiq::ProcessSet.new
-    threads = processes.map { |p| p['concurrency'].to_i }.reduce(:+)
+    procs = Sidekiq::ProcessSet.new
+    threads = procs.map { |p| p['concurrency'].to_i }.reduce(:+)
     threads_free = threads - stats.workers_size
 
-    if processes.size < config(:min_procs).to_i
-      "Expected at least #{config(:min_procs)} processes but only #{processes.size} running"
-    elsif stats.default_queue_latency > config(:default_queue_latency).to_f
+    if stats.default_queue_latency > config(:default_queue_latency).to_f
       "High default queue latency: #{stats.default_queue_latency.round} seconds"
+    elsif too_few_procs?(procs)
+      sleep(config(:min_procs_interval).to_f)
+      "Expected #{config(:min_procs)} processes but only #{procs.size} running" if too_few_procs?(procs)
     elsif stuck?(threads_free, stats)
       sleep(config(:stuck_interval).to_f)
       "Stuck: #{threads_free} threads free, but #{stats.enqueued} jobs enqueued" if stuck?(threads_free, stats)
     end
+  end
+
+  def too_few_procs?(processes)
+    processes.size < config(:min_procs).to_i
   end
 
   def stuck?(threads_free, stats)
@@ -31,5 +36,5 @@ module SidekiqMonitor
     APP_CONFIG["sidekiq_warn_#{key}"]
   end
 
-  module_function :notify_if_problem, :sidekiq_problem, :config, :stuck?
+  module_function :notify_if_problem, :sidekiq_problem, :config, :stuck?, :too_few_procs?
 end

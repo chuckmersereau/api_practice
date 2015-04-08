@@ -92,6 +92,8 @@ class Api::V1::ContactsController < Api::V1::BaseController
       includes << { people: [:email_addresses, :phone_numbers, :facebook_account] } if params[:include].include?('Person.')
       includes << :addresses if params[:include].include?('Address.')
       includes << { primary_person: :facebook_account } if params[:include].include?('avatar')
+      includes << :tags if params[:include].include?('Contact.tag_list')
+      includes << :donor_accounts if params[:include].include?('Contact.donor_accounts')
     end
     includes
   end

@@ -1,10 +1,12 @@
 /* ...
 *= require_self
-*= require notices
+*= require _notices
 */
 
-@import "../bower_components/crubrand/crubrand";
-@import "jquery-ui.scss";
+@import "_crubrand";
+@import "_elements";
+@import "_notices";
+@import "_jquery-ui";
 
 html {
   height: 100%;

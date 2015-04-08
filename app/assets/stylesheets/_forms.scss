@@ -1,5 +1,3 @@
-@import "elements";
-
 form, .formstyles {
   .fieldset {
     .field {
@@ -75,7 +73,7 @@ form, .formstyles {
   .add_field {
     margin-bottom: 10px;
     display: block;
-    color: $black;
+    color: $color-black;
     &:before {
       content: "\f196 ";
       font-family: "FontAwesome";

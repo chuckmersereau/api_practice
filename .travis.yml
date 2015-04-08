@@ -15,15 +15,22 @@ before_script:
 - cp config/config.travis.yml config/config.yml
 - cp config/cloudinary.travis.yml config/cloudinary.yml
 - bundle exec rake db:schema:load RAILS_ENV=test
-branches:
-  only:
-  - master
 deploy:
-  provider: opsworks
-  access_key_id: AKIAJYX4CH7WF7CZ2QIA
-  secret_access_key:
-    secure: e/dQXR+htBMkcnHNP3+N4Pz/hqGN1ke48q4f7KSvZP0qWJAM7Oii5OITmnIXxCyDl6yCM8zTVK1oPJLRQUihPs/jy9S4EW7NfkDlOatAhTqznbs5bacoPh0DsyJ+/hh/Xh8eYkp8KhLv03O5T4n858EM6PpR+zghmcL2pruKGxM=
-  app-id: 36c106d9-e3c9-495c-a826-1e29854d12c7
-  migrate: true
-  on:
-    repo: CruGlobal/mpdx
+  - provider: opsworks
+    access_key_id: AKIAJYX4CH7WF7CZ2QIA
+    secret_access_key:
+      secure: e/dQXR+htBMkcnHNP3+N4Pz/hqGN1ke48q4f7KSvZP0qWJAM7Oii5OITmnIXxCyDl6yCM8zTVK1oPJLRQUihPs/jy9S4EW7NfkDlOatAhTqznbs5bacoPh0DsyJ+/hh/Xh8eYkp8KhLv03O5T4n858EM6PpR+zghmcL2pruKGxM=
+    app-id: 36c106d9-e3c9-495c-a826-1e29854d12c7
+    migrate: true
+    on:
+      repo: CruGlobal/mpdx
+      branch: master
+  - provider: opsworks
+    access_key_id: AKIAJYX4CH7WF7CZ2QIA
+    secret_access_key:
+      secure: e/dQXR+htBMkcnHNP3+N4Pz/hqGN1ke48q4f7KSvZP0qWJAM7Oii5OITmnIXxCyDl6yCM8zTVK1oPJLRQUihPs/jy9S4EW7NfkDlOatAhTqznbs5bacoPh0DsyJ+/hh/Xh8eYkp8KhLv03O5T4n858EM6PpR+zghmcL2pruKGxM=
+    app-id: 591bff4c-6d8c-4a24-b477-25715ac8a51c
+    migrate: true
+    on:
+      repo: CruGlobal/mpdx
+      branch: dev

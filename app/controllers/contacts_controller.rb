@@ -5,14 +5,9 @@ class ContactsController < ApplicationController
   before_action :clear_annoying_redirect_locations
 
   def index
-    if params[:filters] && params[:filters][:name].present?
-      contacts_with_name = ContactFilter.new(name: filters_params[:name], status: ['*']).filter(current_account_list.contacts)
-      if contacts_with_name.count == 1
-        current_user.contacts_filter[current_account_list.id.to_s].delete('name')
-        current_user.save
-        redirect_to contacts_with_name.first
-        return
-      end
+    if params[:q].present?
+      contacts_with_name = ContactFilter.new(name: params[:q], status: ['*']).filter(current_account_list.contacts)
+      redirect_to contacts_with_name.first if contacts_with_name.count == 1
     end
 
     @page_title = _('Contacts')
@@ -30,7 +25,9 @@ class ContactsController < ApplicationController
       end
 
       format.csv do
-        @contacts = @filtered_contacts.includes(:primary_person, :primary_address, people: [:email_addresses, :phone_numbers])
+        @csv_primary_emails_only = csv_primary_emails_only_param
+        @contacts = @filtered_contacts.includes(:primary_person, :spouse, :primary_address, :addresses,
+                                                :tags, people: [:email_addresses, :phone_numbers])
         render_csv("contacts-#{Time.now.strftime('%Y%m%d')}")
       end
     end
@@ -335,5 +332,9 @@ class ContactsController < ApplicationController
 
   def contact_params
     @contact_params ||= params.require(:contact).permit(Contact::PERMITTED_ATTRIBUTES)
+  end
+
+  def csv_primary_emails_only_param
+    @csv_primary_emails_only ||= params.permit(:csv_primary_emails_only)
   end
 end

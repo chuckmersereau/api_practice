@@ -31,7 +31,7 @@ describe NotificationType do
         notification_type.create_task(account_list, contact.notifications.new(donation_id: donation.id))
       end.to change(Activity, :count).by(1)
       activity = Activity.first
-      expect(activity.subject).to eq('Doe, John gave a gift of MyString9.99 on Mar 18, 2015, 12:00:00 AM')
+      expect(activity.subject).to eq('Doe, John gave a gift of MyString9.99 on March 18, 2015')
       expect(activity.activity_type).to eq('Thank')
     end
 
@@ -70,7 +70,7 @@ describe NotificationType do
       template = '%{contact_name} gave %{amount} on %{date}'
       expect(notification_type).to receive(:task_description_template).and_return(template)
       notification = contact.notifications.new(donation: donation)
-      description = 'Doe, John gave MyString9.99 on Mar 18, 2015, 12:00:00 AM'
+      description = 'Doe, John gave MyString9.99 on March 18, 2015'
       expect(notification_type.task_description(notification)).to eq(description)
     end
   end

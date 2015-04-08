@@ -48,7 +48,7 @@
             <div class="col-md-4">
               <div class="form-group">
                 <%= f.label :pledge_frequency, _('Commitment Frequency') %>
-                <%= f.select :pledge_frequency, Contact.pledge_frequencies.invert.to_a, {}, {include_blank: true, class: 'form-control'} %>
+                <%= f.select :pledge_frequency, Contact.pledge_frequencies.invert.to_a, {include_blank: true}, {include_blank: true, class: 'form-control'} %>
               </div>
             </div>
             <div class="col-md-4">

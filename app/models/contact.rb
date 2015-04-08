@@ -2,6 +2,7 @@ class Contact < ActiveRecord::Base
   include AddressMethods
   include ContactDonationMethods
   acts_as_taggable
+  include TagsEagerLoading
 
   has_paper_trail on: [:destroy, :update],
                   meta: { related_object_type: 'AccountList',

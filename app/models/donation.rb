@@ -21,7 +21,7 @@ class Donation < ActiveRecord::Base
   end
 
   def localized_date
-    donation_date.to_datetime.localize.to_s
+    I18n.l donation_date, format: :long
   end
 
   private
