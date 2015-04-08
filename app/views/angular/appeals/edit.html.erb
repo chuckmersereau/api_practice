@@ -103,19 +103,11 @@
 
                   <div class="row">
                     <div class="col-sm-4">
-                        <%= _('Export selected to:') %>
+                        <%= _('Export selected to CSV:') %>
                     </div>
                     <div class="col-sm-8">
                       <div class="form-group">
-                        <div class="input-group">
-                          <select class="form-control" ng-model="exportType">
-                            <option value="csv">CSV</option>
-                            <option value="mailchimp">MailChimp</option>
-                          </select>
-                          <span class="input-group-btn">
-                            <button class="btn btn-default" ng-click="exportContacts(exportType, checkedContacts)" ng-disabled="!exportType"><%= _('Export') %></button>
-                          </span>
-                        </div>
+                        <button class="btn btn-default" ng-click="exportContactsToCSV(checkedContacts)"><%= _('Export') %></button>
                       </div>
                     </div>
                   </div>

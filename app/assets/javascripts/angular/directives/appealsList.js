@@ -187,6 +187,22 @@ angular.module('mpdxApp')
                             updateContact();
                           };
 
+
+                          $scope.exportContactsToCSV = function(selectedContactsMap) {
+                            var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
+                              return selected;
+                            }));
+
+                            if (selectedContactIds.length == 0) {
+                              alert('You must check at least one contact.');
+                              return;
+                            }
+
+                            window.location.href =
+                                '/contacts.csv?csv_primary_emails_only=true&' +
+                                'filters[status]=*&filters[ids]=' + selectedContactIds.join(',');
+                          };
+
                             $scope.selectAll = function(type){
                                 if(type === 'all'){
                                     angular.forEach($scope.appeal.contacts, function (c) {
