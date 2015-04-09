@@ -115,7 +115,7 @@
           <% end %>
           <div class="field_bucket"></div>
           <div class="sfield field_indent rs" data-behavior="add-wrapper">
-            <%= link_to_add_fields(_('<span class="add_title">Add Email Address</span>'), builder, :email_addresses, partial: 'people/email_address_fields') %>
+            <span class="add_title"><%= link_to_add_fields(_('Add Email Address'), builder, :email_addresses, partial: 'people/email_address_fields') %></span>
           </div>
         </div>
         <div class="col-md-6">
@@ -128,14 +128,14 @@
                 <%= render "people/#{network}_account_fields", builder: pf, object: person %>
               <% end %>
               <div class="sfield field_indent add_<%= network %>" data-behavior="add-wrapper">
-                <%= link_to_add_fields(_('<span class="add_title">Add %{network} Account</span>') % { network: network }, builder, :"#{network}_accounts", {partial: "people/#{network}_account_fields"}) %>
+                <%= link_to_add_fields('' % { network: network }, builder, :"#{network}_accounts", {partial: "people/#{network}_account_fields"}) %>
               </div>
             <% end %>
             <%= builder.fields_for :websites do |pf| %>
                 <%= render 'people/website_fields', builder: pf, object: person %>
             <% end %>
             <div class="sfield field_indent add_website" data-behavior="add-wrapper">
-              <%= link_to_add_fields(_('<span class="add_title">Add Website/Blog</span>'), builder, :websites, partial: 'people/website_fields') %>
+              <%= link_to_add_fields('', builder, :websites, partial: 'people/website_fields') %>
             </div>
           </div>
         </div>
