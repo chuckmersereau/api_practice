@@ -185,7 +185,11 @@
             <div class="col-md-5 col-md-offset-2 text-right">
 
               <div class="dropdown">
-                <%= link_to(_('Actions') + ' <span class="caret"></span>', "#", class: "btn btn-default dropdown-toggle", :onclick => "_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'Bulk Actions']);", type: "button", id: "action-drop", :'data-toggle' => "dropdown", "aria-expanded" => "true", "data-disabled" => "true") %>
+                <%= link_to(_('Actions') + ' <span class="caret"></span>'.html_safe, "#",
+                            class: "btn btn-default dropdown-toggle", id: "action-drop",
+                            onclick: "_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'Bulk Actions']);",
+                            type: "button", 'data-toggle' => "dropdown",
+                            "aria-expanded" => "true", "data-disabled" => "true") %>
                 <%= render 'contacts_action_list' %>
               </div>
 
