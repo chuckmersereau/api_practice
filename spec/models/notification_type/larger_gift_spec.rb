@@ -41,5 +41,24 @@ describe NotificationType::LargerGift do
       expect(Notification.count).to eq(1)
       expect(Notification.first.donation_id).to eq(donation2.id)
     end
+
+    it 'does not add a notification for a regular gift after a larger gift in same month' do
+      donation.update(amount: 15, donation_date: Date.today.beginning_of_month)
+      create(:donation, donor_account: donor_account, amount: 5,
+                        designation_account: da, donation_date: Date.today.end_of_month)
+
+      expect(larger_gift.check(account_list).size).to eq(1)
+      expect(Notification.first.donation).to eq(donation)
+    end
+
+    it 'does not notify for a regular gift if an extra gift was given that month' do
+      donation.update(amount: 15, donation_date: Date.today.beginning_of_month)
+      expect(larger_gift.check(account_list).size).to eq(1)
+      expect(Notification.first.donation).to eq(donation)
+
+      create(:donation, donor_account: donor_account, amount: 5,
+                        designation_account: da, donation_date: Date.today.end_of_month)
+      expect(larger_gift.check(account_list)).to be_empty
+    end
   end
 end
