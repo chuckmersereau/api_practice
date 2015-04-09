@@ -1,3 +1,4 @@
 $('#dash-progress').html('<%= j(render('progress')) %>')
+$.mpdx.activateTooltips($('#dash-progress'))
 if(ga)
   ga('send', 'pageview', '/#progress');

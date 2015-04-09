@@ -1542,7 +1542,8 @@ table.meta {
 }
 
 .tooltip {
-  text-align: left;
+  font-family: $data-font;
+  font-size: 13px;
 }
 
 .statusIcon {
