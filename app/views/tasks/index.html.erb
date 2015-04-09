@@ -1,4 +1,4 @@
-<div ng-controller="tasksController" id="tasksController" ng-cloak>
+<div ng-controller="tasksController" id="tasksController">
   <script type="text/javascript" charset="utf-8">
     $(function () {
       $('[data-toggle="tooltip"]').tooltip()
@@ -8,7 +8,7 @@
     <div class="col-md-3">
       <%= render 'sidebar' %>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9" ng-cloak>
       <div id="contentbody" class="withleft">
         <div class="page-filters" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
           <div class="row">

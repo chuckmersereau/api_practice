@@ -1,4 +1,4 @@
-<div ng-controller="contactsController" ng-cloak>
+<div ng-controller="contactsController">
   <% contact_instance = Contact.new %>
   <script type="text/javascript" charset="utf-8">
       var account_contacts_json = <%= contacts_for_filter.collect { |c| {value: c.name, id: c.id} }.to_json.html_safe %>
@@ -173,7 +173,7 @@
         </ul>
       </aside>
     </div>
-    <div class="col-md-9">
+    <div class="col-md-9" ng-cloak>
 
       <div id="contentbody" class="withleft">
         <div class="page-filters" data-spy="affix" data-offset-top="182">

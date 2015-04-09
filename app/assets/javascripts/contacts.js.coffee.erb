@@ -194,6 +194,7 @@ $ ->
       $(document).on 'click', '[data-behavior=bulk_edit]', ->
         $('#bulk_edit_modal #bulk_edit_contact_ids').val($('#selected_ids').val())
         $('#bulk_edit_modal').dialog {
+          width: 550,
           buttons: [
             {
               text: __('Update')
@@ -209,6 +210,13 @@ $ ->
             }
           ]
         }
+        setTimeout ->
+          $('#bulk_edit_modal [data-calendar-jquery]').datepicker({
+            changeYear: true,
+            dateFormat: 'yy-mm-dd',
+            autoclose: true,
+            todayHighlight: true
+          });
         $('#add_tag_name').focus()
         false
 

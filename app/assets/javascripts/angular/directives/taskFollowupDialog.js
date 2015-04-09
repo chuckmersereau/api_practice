@@ -187,6 +187,7 @@ angular.module('mpdxApp')
                     callTask: true
                 };
                 $scope.followUpDialogResult = {
+                    createApptTask: true,
                     apptTask: {
                         subject: 'Support',
                         date: dateTwoDaysFromToday,
@@ -299,10 +300,12 @@ angular.module('mpdxApp')
                 }
                 jQuery("#complete_task_followup_modal").dialog({
                     autoOpen: true,
-                    modal: true
+                    modal: true,
+                    maxHeight: 600,
+                    width: 400
                 });
                 setTimeout(function() {
-                  jQuery("#complete_task_followup_modal").dialog('option', 'position', {my: "center", at: "center", of: window})
+                    jQuery("#complete_task_followup_modal").dialog('option', 'position', {my: "center", at: "center", of: window})
                 })
 
                 jQuery('.followUpDialogDatepicker').datepicker({
