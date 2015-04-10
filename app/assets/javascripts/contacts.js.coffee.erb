@@ -155,18 +155,14 @@ $ ->
         false
 
       $(document).on 'click', '[data-behavior=add_task_to_list]', ->
-        if $(this).attr('data-completed') == 'true'
-          $('#add_task_modal .form_wrapper').html('<%= image_tag("spinner.gif") %>')
-          ids = $.mpdx.updateSelectedContactIds()
-
-          $.ajax {
-            url: '/tasks/new',
-            data: {add_task_contact_ids: ids.join(','), completed: true},
-            dataType: 'script',
-            type: 'GET'
-          }
-        else
-          $('#add_task_modal #add_task_contact_ids').val($('#selected_ids').val())
+        $('#add_task_modal .form_wrapper').html('<%= image_tag("spinner.gif") %>')
+        ids = $.mpdx.updateSelectedContactIds()
+        $.ajax {
+          url: '/tasks/new',
+          data: {add_task_contact_ids: ids.join(','), completed: $(this).attr('data-completed')},
+          dataType: 'script',
+          type: 'GET'
+        }
 
         $('#add_task_modal').dialog {
           width: 'auto',
