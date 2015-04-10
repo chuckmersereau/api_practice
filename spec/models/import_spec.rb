@@ -12,9 +12,11 @@ describe Import do
     import.importing.should == false
   end
 
-  it 'should send an success email when importing completes' do
+  it 'should send an success email when importing completes then merge contacts and queue google sync' do
     ImportMailer.should_receive(:complete).and_return(OpenStruct.new)
     import = create(:tnt_import)
+    expect(import.account_list).to receive(:merge_contacts)
+    expect(import.account_list).to receive(:queue_sync_with_google_contacts)
     import.send(:import)
   end
 

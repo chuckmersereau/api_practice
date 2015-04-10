@@ -360,11 +360,14 @@ class AccountList < ActiveRecord::Base
   end
 
   def queue_sync_with_google_contacts
+    return if google_integrations.where(contacts_integration: true).empty?
+    return if organization_accounts.any?(&:downloading)
+    return if imports.any?(&:importing)
     lower_retry_async(:sync_with_google_contacts)
   end
 
-  def sync_with_google_contacts
-    google_integrations.where(contacts_integration: true).each { |g_i| g_i.sync_data('contacts') }
+  def organization_accounts
+    @organization_accounts ||= users.map(&:organization_accounts).flatten.uniq
   end
 
   def in_hand_percent
@@ -377,9 +380,14 @@ class AccountList < ActiveRecord::Base
 
   private
 
+  def sync_with_google_contacts
+    google_integrations.where(contacts_integration: true).each { |g_i| g_i.sync_data('contacts') }
+  end
+
   def import_data
-    users.map(&:organization_accounts).flatten.uniq.map(&:import_all_data)
+    organization_accounts.each(&:import_all_data)
     send_account_notifications
+    queue_sync_with_google_contacts
   end
 
   # trigger any notifications for this account list
