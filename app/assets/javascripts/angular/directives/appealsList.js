@@ -22,6 +22,9 @@ angular.module('mpdxApp')
                             $scope.appeal = angular.copy(appeal);
                             $scope.checkedContacts = {};
                             $scope.taskTypes = window.railsConstants.task.ACTIONS;
+                            $scope.task = {
+                              subject: 'Appeal (' + $scope.appeal.name + ')'
+                            };
 
                             api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
                                 $scope.contacts = data.contacts;
@@ -127,12 +130,12 @@ angular.module('mpdxApp')
                                     return;
                                 }
 
-                                $scope.creatingBulkTasks = true;
+                                $scope.creatingBulkTasks = 0;
                                 var postTask = function(){
+                                  $scope.creatingBulkTasks = contactsObject.length;
                                   if(_.isEmpty(contactsObject)){
                                     alert('Task(s) created.');
                                     $scope.taskType = '';
-                                    $scope.creatingBulkTasks = false;
                                     return;
                                   }
                                   api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
@@ -163,12 +166,12 @@ angular.module('mpdxApp')
                               return;
                             }
 
-                            $scope.creatingTag = true;
+                            $scope.creatingTag = 0;
                             var updateContact = function(){
+                              $scope.creatingTag = contactsObject.length;
                               if(_.isEmpty(contactsObject)){
                                 alert('Contact(s) updated.');
                                 $scope.newTag = '';
-                                $scope.creatingTag = false;
                                 return;
                               }
                               var tagList = _.find($scope.contacts, { 'id': Number(contactsObject[0]) }).tag_list;
@@ -228,6 +231,14 @@ angular.module('mpdxApp')
                                     });
                                 }
                             };
+                          setTimeout(function() {
+                            jQuery('.dueDatePicker').datepicker({
+                              autoclose: true,
+                              todayHighlight: true,
+                              dateFormat: 'yy-mm-dd'
+                            });
+                          }, 1000);
+
                         },
                         resolve: {
                             appeal: function () {

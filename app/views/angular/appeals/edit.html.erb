@@ -92,16 +92,16 @@
                     <div class="col-sm-8">
                       <div class="field">
                         <label for="task_subject">Subject</label>
-                        <input id="task_subject" type="text" ng-model="task.subject">
+                        <input id="task_subject" type="text" ng-model="task.subject" ng-disabled="creatingBulkTasks">
                       </div>
                       <div class="field">
                         <label for="task_activity_type">Action</label>
-                        <select id="task_activity_type" ng-model="task.type" ng-options="t as t for t in taskTypes"></select>
+                        <select id="task_activity_type" ng-model="task.type" ng-options="t as t for t in taskTypes" ng-disabled="creatingBulkTasks"></select>
                       </div>
                       <div class="field">
-                        <label for="task_start_at">Due date</label>
-                        <input id="task_start_at" ng-model="task.date" style="width:100px;" type="text">
-                        <select ng-model="task.hour">
+                        <label>Due date</label>
+                        <input ng-model="task.date" style="width:100px;" type="text" class="dueDatePicker" ng-disabled="creatingBulkTasks">
+                        <select ng-model="task.hour" ng-disabled="creatingBulkTasks">
                           <option value="00">12 AM</option>
                           <option value="01">01 AM</option>
                           <option value="02">02 AM</option>
@@ -127,7 +127,7 @@
                           <option value="22">10 PM</option>
                           <option value="23">11 PM</option>
                         </select>
-                        : <select ng-model="task.min">
+                        : <select ng-model="task.min" ng-disabled="creatingBulkTasks">
                         <option value="00">00</option>
                         <option value="01">01</option>
                         <option value="02">02</option>
@@ -191,7 +191,8 @@
                       </select>
                       </div>
                       <div class="form-group">
-                        <button class="btn btn-default" ng-click="createTask(task, checkedContacts)" ng-disabled="creatingBulkTasks"><%= _('Create') %></button>
+                        <button class="btn btn-default" ng-click="createTask(task, checkedContacts)" ng-show="!creatingBulkTasks"><%= _('Create') %></button>
+                        <button class="btn btn-default" ng-show="creatingBulkTasks" disabled><%= _('Creating tasks') %>: {{creatingBulkTasks}} remaining...</button>
                       </div>
                     </div>
                   </div>
@@ -216,7 +217,8 @@
                         <div class="input-group">
                             <input type="text" class="form-control" ng-model="newTag">
                             <span class="input-group-btn">
-                              <button class="btn btn-default" ng-click="createTag(newTag, checkedContacts)" ng-disabled="!newTag || creatingTag"><%= _('Create') %></button>
+                              <button class="btn btn-default" ng-click="createTag(newTag, checkedContacts)" ng-if="!creatingTag"><%= _('Create') %></button>
+                              <button class="btn btn-default" ng-if="creatingTag" disabled><%= _('Updating contacts') %>: {{creatingTag}} remaining...</button>
                             </span>
                         </div>
                       </div>
