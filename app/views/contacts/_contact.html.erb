@@ -4,7 +4,7 @@
       <%= link_to(image_tag(contact_exhibit.avatar, class: "avatar small"), contact_path(contact))%>
 
     </td>
-    <td class="profile data-font">
+    <td class="profile">
       <div class="key">
         <span class="name"><%= link_to(contact_exhibit, contact_path(contact), data: {name: contact_exhibit.to_s}) %>
         <% if contact.send_newsletter.present? %>
@@ -34,7 +34,7 @@
         </div>
       </div>
     </td>
-    <td class="contact-tasks data-font" nowrap="nowrap">
+    <td class="contact-tasks" nowrap="nowrap">
       <% if contact.status %>
         <%= contact_exhibit.status %><br />
       <% end %>

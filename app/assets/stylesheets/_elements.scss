@@ -51,22 +51,29 @@ $leftmenuwidth: auto;
 .avatar.mid {width: 125px;}
 .avatar.large {width: 200px;}
 
-$data-font: "Helvetica Neue", "Helvetica", Arial, sans-serif;
-.data-font {
+/* **************************************************************** */
+
+$brand-font: "freight-sans-pro", "Helvetica Neue", Arial, Helvetica, sans-serif;
+$data-font: "Helvetica Neue", "Helvetica", "Arial";
+
+.brand-font {font-family: $brand-font;}
+.data-font {font-family: $data-font;}
+
+html {
   font-family: $data-font;
   font-size: 14px;
-  h1, h2, h3, h4, h5, h6 {
-    font-weight: 500;
-  }
-  h4 {
-    font-size: 18px;
-    font-size: 1.15rem;
-  }
-  .btn-xs {
-    font-size: 12px;
-  }
 }
-#nice-fonts {cursor: crosshair;}
+
+.btn,
+h1, h2, h3,
+.navbar,
+span.menu_item,
+.dropdown,
+#global {
+  font-family: $brand-font;
+}
+
+
 /* ************************************************************** */
 
 .logo {width: 83px; height: 21px; background: image-url("mpdx_logo_dark.png") no-repeat; background-size: 123px 48px;}
