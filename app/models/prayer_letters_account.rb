@@ -60,7 +60,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
     contacts.each do |pl_contact|
       next unless pl_contact['external_id'] && contact = account_list.contacts.where(id: pl_contact['external_id']).first
-      contact.update_column(:prayer_letters_id, pl_contact['contact_id'])
+      contact.update_columns(prayer_letters_id: pl_contact['contact_id'], prayer_letters_params: nil)
     end
   end
 
@@ -88,7 +88,7 @@ class PrayerLettersAccount < ActiveRecord::Base
   def create_contact(contact)
     contact_params = contact_params(contact)
     json = JSON.parse(get_response(:post, '/api/v1/contacts', contact_params))
-    contact.update_column(:prayer_letters_id, json['contact_id'])
+    contact.update_columns(prayer_letters_id: json['contact_id'], prayer_letters_params: contact_params)
   rescue AccessError
     # do nothing
   rescue RestClient::BadRequest => e
@@ -97,7 +97,10 @@ class PrayerLettersAccount < ActiveRecord::Base
   end
 
   def update_contact(contact)
+    params = contact_params(contact)
+    return if params == contact.prayer_letters_params
     get_response(:post, "/api/v1/contacts/#{contact.prayer_letters_id}", contact_params(contact))
+    contact.update_column(:prayer_letters_params, params)
   rescue AccessError
     # do nothing
   rescue RestClient::Gone
@@ -107,18 +110,18 @@ class PrayerLettersAccount < ActiveRecord::Base
   end
 
   def handle_missing_contact(contact)
-    contact.update_column(:prayer_letters_id, nil)
+    contact.update_columns(prayer_letters_id: nil, prayer_letters_params: nil)
     queue_subscribe_contacts
   end
 
   def delete_contact(contact)
     get_response(:delete, "/api/v1/contacts/#{contact.prayer_letters_id}")
-    contact.update_column(:prayer_letters_id, nil)
+    contact.update_columns(prayer_letters_id: nil, prayer_letters_params: nil)
   end
 
   def delete_all_contacts
     get_response(:delete, '/api/v1/contacts')
-    account_list.contacts.update_all(prayer_letters_id: nil)
+    account_list.contacts.update_all(prayer_letters_id: nil, prayer_letters_params: nil)
   end
 
   def contact_params(contact)

@@ -2,6 +2,11 @@ require 'spec_helper'
 
 describe PrayerLettersAccount do
   let(:pla) { create(:prayer_letters_account) }
+  let(:contact) { create(:contact, account_list: pla.account_list, send_newsletter: 'Both') }
+  let(:params) do
+    { city: 'Fremont', external_id: contact.id.to_s, file_as: 'Doe, John', greeting: '',
+      name: 'John Doe', postal_code: '94539', state: 'CA', street: '123 Somewhere St' }
+  end
 
   context '#get_response' do
     it 'marks token as invalid if response is a 401 for OAuth2' do
@@ -47,11 +52,32 @@ describe PrayerLettersAccount do
     end
   end
 
-  context 'handle 410 and 404 errors' do
-    let(:contact) { create(:contact) }
+  context '#update_contact' do
+    before do
+      contact.addresses << create(:address)
+      contact.update(prayer_letters_id: 'c1')
+    end
+
+    it 'calls the prayer letters api to create a contact and sets cached params value' do
+      stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts/c1')
+             .with(body: params, headers: { 'Authorization' => 'Bearer MyString' }).to_return(status: 204)
+
+      pla.update_contact(contact)
+      expect(contact.prayer_letters_id).to eq('c1')
+      params[:external_id] = params[:external_id].to_i
+      expect(contact.prayer_letters_params).to eq(params)
+      expect(stub).to have_been_requested
+    end
+
+    it 'does not call the api if the contact params are the same as the cached value' do
+      params[:external_id] = params[:external_id].to_i
+      contact.update(prayer_letters_params: params)
+      expect(pla).to_not receive(:get_request)
+      pla.update_contact(contact)
+    end
 
     def stub_update_error(code)
-      stub_request(:post,  'https://www.prayerletters.com/api/v1/contacts/').to_return(status: code)
+      stub_request(:post,  'https://www.prayerletters.com/api/v1/contacts/c1').to_return(status: code)
     end
 
     it 're-subscribes the contact list on 410' do
@@ -59,6 +85,8 @@ describe PrayerLettersAccount do
       pla.update_contact(contact)
       expect(PrayerLettersAccount.jobs.size).to eq(1)
       expect(PrayerLettersAccount.jobs.first['args']).to eq([pla.id, 'subscribe_contacts'])
+      expect(contact.prayer_letters_id).to be_nil
+      expect(contact.prayer_letters_params).to be_blank
     end
 
     it 're-subscribes the contact list on 404' do
@@ -66,11 +94,26 @@ describe PrayerLettersAccount do
       pla.update_contact(contact)
       expect(PrayerLettersAccount.jobs.size).to eq(1)
       expect(PrayerLettersAccount.jobs.first['args']).to eq([pla.id, 'subscribe_contacts'])
+      expect(contact.prayer_letters_id).to be_nil
+      expect(contact.prayer_letters_params).to be_blank
     end
   end
 
-  context 'handle 400 error in create contact' do
-    let(:contact) { create(:contact) }
+  context '#create_contact' do
+    it 'calls the prayer letters api to create a contact and sets cached params value' do
+      contact.addresses << create(:address)
+      params = { city: 'Fremont', external_id: contact.id.to_s, file_as: 'Doe, John', greeting: '',
+                 name: 'John Doe', postal_code: '94539', state: 'CA', street: '123 Somewhere St' }
+      stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts')
+             .with(body: params, headers: { 'Authorization' => 'Bearer MyString' })
+             .to_return(body: '{"contact_id": "c1"}')
+
+      pla.create_contact(contact)
+      expect(contact.prayer_letters_id).to eq('c1')
+      params[:external_id] = params[:external_id].to_i
+      expect(contact.prayer_letters_params).to eq(params)
+      expect(stub).to have_been_requested
+    end
 
     it 'does not raise an error on a 400 bad request code but logs it via Airbrake' do
       missing_name_body = <<-EOS
@@ -89,7 +132,7 @@ describe PrayerLettersAccount do
 
   context '#subscribe_contacts' do
     it 'syncronizes a contact even if it has no people' do
-      contact = create(:contact, account_list: pla.account_list, send_newsletter: 'Both', prayer_letters_id: 1)
+      contact.update(prayer_letters_id: 1)
       contact.addresses << create(:address)
       expect(contact.people.count).to eq(0)
 
@@ -103,6 +146,53 @@ describe PrayerLettersAccount do
       expect(pla).to receive(:import_list)
       pla.subscribe_contacts
       expect(stub).to have_been_requested
+    end
+  end
+
+  context '#import_list' do
+    it 'retrieves the prayer letters list and updates contacts with prayer_letters_id' do
+      contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John","contact_id":"c1",'\
+        '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
+        '"country":"United States"},"external_id":' + contact.id.to_s +  '}]}'
+
+      stub = stub_request(:get, 'https://www.prayerletters.com/api/v1/contacts')
+             .with(headers: { 'Authorization' => 'Bearer MyString' }).to_return(body: contacts_body)
+
+      pla.import_list
+      contact.reload
+      expect(contact.prayer_letters_id).to eq('c1')
+      expect(contact.prayer_letters_params).to be_blank
+      expect(stub).to have_been_requested
+    end
+  end
+
+  context '#delete_contact' do
+    it 'calls the prayer letters api to delete and sets prayer letters info to blanks' do
+      contact.update(prayer_letters_id: 'c1', prayer_letters_params: params)
+
+      stub = stub_request(:delete, 'https://www.prayerletters.com/api/v1/contacts/c1')
+             .with(headers: { 'Authorization' => 'Bearer MyString' })
+
+      pla.delete_contact(contact)
+      expect(stub).to have_been_requested
+      contact.reload
+      expect(contact.prayer_letters_id).to be_nil
+      expect(contact.prayer_letters_params).to be_blank
+    end
+  end
+
+  context '#delete_all_contacts' do
+    it 'calls the prayer letters api to delete all and sets prayer letters info to blanks' do
+      contact.update(prayer_letters_id: 'c1', prayer_letters_params: params)
+
+      stub = stub_request(:delete, 'https://www.prayerletters.com/api/v1/contacts')
+             .with(headers: { 'Authorization' => 'Bearer MyString' })
+
+      pla.delete_all_contacts
+      expect(stub).to have_been_requested
+      contact.reload
+      expect(contact.prayer_letters_id).to be_nil
+      expect(contact.prayer_letters_params).to be_blank
     end
   end
 end
