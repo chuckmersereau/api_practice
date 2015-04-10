@@ -108,7 +108,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
   def handle_missing_contact(contact)
     contact.update_column(:prayer_letters_id, nil)
-    subscribe_contacts
+    queue_subscribe_contacts
   end
 
   def delete_contact(contact)

@@ -56,14 +56,16 @@ describe PrayerLettersAccount do
 
     it 're-subscribes the contact list on 410' do
       stub_update_error(410)
-      expect(pla).to receive(:subscribe_contacts)
       pla.update_contact(contact)
+      expect(PrayerLettersAccount.jobs.size).to eq(1)
+      expect(PrayerLettersAccount.jobs.first['args']).to eq([pla.id, 'subscribe_contacts'])
     end
 
     it 're-subscribes the contact list on 404' do
       stub_update_error(404)
-      expect(pla).to receive(:subscribe_contacts)
       pla.update_contact(contact)
+      expect(PrayerLettersAccount.jobs.size).to eq(1)
+      expect(PrayerLettersAccount.jobs.first['args']).to eq([pla.id, 'subscribe_contacts'])
     end
   end
 
