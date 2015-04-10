@@ -8,8 +8,9 @@
               })
   </script>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap">
       <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
+        <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
         <ul>
           <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
           <% if $rollout.active?(:insights, current_account_list) %>
@@ -173,16 +174,20 @@
         </ul>
       </aside>
     </div>
-    <div class="col-md-9" ng-cloak>
+    <div class="col-md-9 col-sm-12" ng-cloak>
 
       <div id="contentbody" class="withleft">
         <div class="page-filters" data-spy="affix" data-offset-top="182">
           <div class="row">
-            <div class="col-md-5 form-inline">
+            <div class="col-xs-2 col-sm-2 col-xs-3 hidden-md hidden-lg">
+              <a class="btn btn-default btn-secondary toggle-mobile-filters"><i class="fa fa-bars"></i> Filters</a>
+            </div>
+
+            <div class="col-md-5 col-sm-5 col-xs-9 form-inline">
               <input autocomplete="off" class="search_filter ui-autocomplete-input form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="contactQuery.name" size="40">
               <span ng-show="contactsLoading"><i class="fa fa-spinner fa-spin"></i></span>
             </div>
-            <div class="col-md-5 col-md-offset-2 text-right">
+            <div class="col-md-5 col-md-offset-2 col-sm-5 col-xs-12 text-right">
 
               <div class="dropdown">
                 <%= link_to(_('Actions') + ' <span class="caret"></span>'.html_safe, "#",
@@ -204,7 +209,7 @@
         </div>
 
         <div class="row page-controls row-no-padding">
-          <div class="col-md-8">
+          <div class="col-md-8 col-sm-8">
             <%= _('Showing') %> <b>{{page.from}}&nbsp;-&nbsp;{{page.to}}</b> <%= _('of') %> <b>{{totalContacts}}</b>
             <div class="pagination">
               <span class="previous_page disabled" ng-show="page.current === 1">
@@ -228,7 +233,7 @@
               </a>
             </div>
           </div>
-          <div class="col-md-4 text-right form-inline">
+          <div class="col-md-4 col-sm-4 text-right form-inline">
             <%= _('Show') %>: <select ng-model="contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]" class="form-control"></select>
           </div>
         </div>
@@ -236,7 +241,7 @@
         <div class="contacts-scrollable" id="contacts-scrollable">
           <table class="tablelist" ng-class="{'contact_loading': contactsLoading}">
             <tr ng-show="contacts.length === 0 && contactQuery.viewPrefsLoaded">
-              <td style="color:red;">
+              <td style="color:red;" colspan="5">
                 <%= _('Sorry, there are no contacts that match the filters and/or tags you have selected.') %> <%= _('Try') %> <a href="/contacts/new"><%= _('adding a new contact') %></a> <%= _('or') %> <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a>.
               </td>
             </tr>

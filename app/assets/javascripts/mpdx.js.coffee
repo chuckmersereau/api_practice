@@ -224,3 +224,15 @@ determineAffixScroll = ->
 
 $(document).ready determineAffixScroll
 $(window).on 'resize', determineAffixScroll
+
+$(document).ready ->
+  $('.toggle-mobile-filters').click ->
+    $('html, body').animate { scrollTop: 0 }, 0
+    $('.mobile_filters_wrap').toggleClass 'show_mobile_filters'
+    $('body').toggleClass 'stopscroll'
+    return
+
+  $(window).scroll ->
+    filterWidth = $('.page-filters').parent().width()
+    $('.page-filters').width filterWidth
+

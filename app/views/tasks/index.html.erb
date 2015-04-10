@@ -5,17 +5,20 @@
     })
   </script>
   <div class="row">
-    <div class="col-md-3">
+    <div class="col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap">
       <%= render 'sidebar' %>
     </div>
-    <div class="col-md-9" ng-cloak>
+    <div class="col-md-9 col-sm-12" ng-cloak>
       <div id="contentbody" class="withleft">
         <div class="page-filters" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
           <div class="row">
-            <div class="col-md-4 form-inline">
+            <div class="col-xs-2 col-sm-2 col-xs-3 hidden-md hidden-lg">
+              <a class="btn btn-default btn-secondary toggle-mobile-filters"><i class="fa fa-bars"></i> Filters</a>
+            </div>
+            <div class="col-md-4 col-sm-5 col-xs-9 form-inline">
               <%= link_to(_('New Task'), new_task_path, id: 'add_task_button', class: 'btn btn-secondary add_task', remote: true) %>
             </div>
-            <div class="col-md-5 col-md-offset-3 text-right">
+            <div class="col-md-5 col-md-offset-3 col-sm-5 col-xs-12 text-right">
 
 
             </div>
