@@ -39,7 +39,7 @@ describe ContactFilter do
       expect { ContactFilter.new(wildcard_search: 'doe,').filter(Contact) }.to_not raise_error
     end
 
-    it 'filters by commitment recieved' do
+    it 'filters by commitment received' do
       received = create(:contact, pledge_received: true)
       not_received = create(:contact, pledge_received: false)
 
