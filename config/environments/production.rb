@@ -52,15 +52,6 @@ Rails.application.configure do
   # Use a different logger for distributed setups.
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
-  # Use a different cache store in production.
-  if File.exist?(Rails.root.join('config', 'memcached.yml'))
-    cache_servers = YAML.load_file(Rails.root.join('config', 'memcached.yml'))[Rails.env]['host']
-  else
-    cache_servers = ['10.181.146.139', '10.181.25.99']
-  end
-
-  config.cache_store = :dalli_store, cache_servers, {:namespace => 'MPDXCache', :expire_after => 1.day, :compress => true}
-
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = "d1k8eizr7zr0k0.cloudfront.net"
 
