@@ -241,4 +241,14 @@ describe AccountList do
       expect(account_list.all_contacts).to include c2
     end
   end
+
+  context '#merge' do
+    it 'deletes old AccountList' do
+      al_master = create(:account_list)
+      merge_al = create(:account_list)
+
+      al_master.merge(merge_al)
+      expect(AccountList.count).to be 1
+    end
+  end
 end

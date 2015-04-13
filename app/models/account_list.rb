@@ -262,7 +262,7 @@ class AccountList < ActiveRecord::Base
       end
       other.activities.update_all(account_list_id: id)
 
-      if mail_chimp_account.blank? && other.mail_chimp_account
+      if mail_chimp_account.nil? && other.mail_chimp_account
         other.mail_chimp_account.update_attributes(account_list_id: id)
       end
       other.reload
