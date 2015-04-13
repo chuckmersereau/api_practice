@@ -187,4 +187,46 @@ describe AccountList do
       expect(no_act_list).to include contact2
     end
   end
+
+  context '#churches' do
+    let(:account_list) { create(:account_list) }
+
+    it 'returns all churches' do
+      create(:contact, account_list: account_list, church_name: 'church2')
+      create(:contact, account_list: account_list, church_name: 'church1')
+      create(:contact, account_list: account_list, church_name: 'church1')
+      expect(account_list.churches).to eq %w(church1 church2)
+    end
+  end
+
+  context '#contact_tags and #activity_tags' do
+    let(:account_list) { create(:account_list) }
+
+    it 'returns all churches' do
+      create(:contact, account_list: account_list, tag_list: ['tag2'])
+      create(:contact, account_list: account_list, tag_list: ['tag1'])
+      create(:contact, tag_list: ['other tag'])
+
+      create(:activity, account_list: account_list, tag_list: ['t_tag2'])
+      create(:activity, account_list: account_list, tag_list: ['t_tag1'])
+      create(:activity, tag_list: ['other tag'])
+
+      expect(account_list.contact_tags).to eq %w(tag1 tag2)
+      expect(account_list.activity_tags).to eq %w(t_tag1 t_tag2)
+    end
+  end
+
+  context '#contact_tags and #activity_tags' do
+    let(:account_list) { create(:account_list) }
+
+    it 'returns all churches' do
+      contact = create(:contact, account_list: account_list)
+      contact.addresses << create(:address, city: 'City1', state: 'WI')
+      contact.addresses << create(:address, city: 'City2', state: 'FL')
+      # contact.save!
+
+      expect(account_list.cities).to eq %w(City1 City2)
+      expect(account_list.states).to eq %w(FL WI)
+    end
+  end
 end
