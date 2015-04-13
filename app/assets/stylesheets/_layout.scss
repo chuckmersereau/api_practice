@@ -459,22 +459,23 @@ div.right {
   position: relative;
   border-radius: 4px;
   .bar {
-    background: $green;
+    background: $green_dark;
     /*border-right: 1px solid rgba(255,255,255,.35);*/
+  }
+  .bar-pledged {
+    background: $green
+  }
+  .value, .bar {
     height: $progress-bar-height;
+    position: absolute;
   }
   .value {
-    right: 0;
     line-height: normal;
     padding: 0 10px;
-    position: absolute;
-    top: 0px;
     line-height: $progress-bar-height;
-    height: $progress-bar-height;
-    height: $progress-bar-height;
   }
-  .value.left {
-    right: inherit;
+  .value.right {
+    right: 0;
   }
 }
 
@@ -912,6 +913,9 @@ div.name {font-size: 14px; margin-bottom: 4px;}
   }
   .address {
     line-height: 1.35em;
+  }
+  .pledge_not_received_icon {
+    font-size: 70%;
   }
 }
 

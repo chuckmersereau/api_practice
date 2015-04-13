@@ -2,5 +2,14 @@
   <%= form_for Contact.new, url: bulk_update_contacts_path, method: :put, remote: true do |f| %>
     <%= hidden_field_tag :bulk_edit_contact_ids %>
     <%= render 'contacts/bulk_fields', f: f %>
+
+    <div class="row">
+      <div class="col-md-4">
+        <div class="form-group">
+          <%= f.label :pledge_received, _('Commitment Received') %>
+          <%= f.select :pledge_received, [[_('Yes'), 1], [_('No'), 0]], include_blank: true %>
+        </div>
+      </div>
+    </div>
   <% end %>
 </div>

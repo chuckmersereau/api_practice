@@ -5,7 +5,7 @@ class ContactSerializer < ActiveModel::Serializer
 
   embed :ids, include: true
 
-  ATTRIBUTES = [:id, :name, :pledge_amount, :pledge_frequency, :pledge_start_date, :status, :deceased,
+  ATTRIBUTES = [:id, :name, :pledge_amount, :pledge_frequency, :pledge_start_date, :pledge_received, :status, :deceased,
                 :notes, :notes_saved_at, :next_ask, :no_appeals, :likely_to_give, :church_name, :send_newsletter,
                 :magazine, :last_activity, :last_appointment, :last_letter, :last_phone_call, :last_pre_call,
                 :last_thank, :avatar, :square_avatar, :referrals_to_me_ids, :tag_list, :uncompleted_tasks_count, :timezone, :donor_accounts]
@@ -37,13 +37,19 @@ class ContactSerializer < ActiveModel::Serializer
   end
 
   def avatar
-    contact_exhibit = exhibit(object)
     contact_exhibit.avatar(:large)
   end
 
   def square_avatar
-    contact_exhibit = exhibit(object)
     contact_exhibit.avatar
+  end
+
+  def pledge_received
+    object[:pledge_received].to_s
+  end
+
+  def contact_exhibit
+    @contact_exhibit ||= exhibit(object)
   end
 
   # def cache_key

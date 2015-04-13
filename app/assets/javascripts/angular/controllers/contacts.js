@@ -24,6 +24,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         relatedTaskAction: [''],
         appeal: [''],
         pledge_frequencies: [''],
+        pledge_received: '',
         wildcardSearch: urlParameter.get('q'),
         viewPrefsLoaded: false
     };
@@ -53,6 +54,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         $scope.contactQuery.relatedTaskAction = [''];
         $scope.contactQuery.appeal = [''];
         $scope.contactQuery.pledge_frequencies = [''];
+        $scope.contactQuery.pledge_received = '';
         $scope.contactQuery.wildcardSearch = null;
         if(!_.isNull(document.getElementById('globalContactSearch'))) {
             document.getElementById('globalContactSearch').value = '';
@@ -172,6 +174,12 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_pledge_frequencies").trigger("click");
             }
         }
+        if(angular.isDefined(prefs.pledge_received)){
+            $scope.contactQuery.pledge_received = prefs.pledge_received;
+            if(prefs.pledge_received){
+                jQuery("#leftmenu #filter_pledge_received").trigger("click");
+            }
+        }
     });
 
     $scope.tagIsActive = function(tag){
@@ -244,6 +252,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
                 '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
                 '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch) +
+                '&filters[pledge_received]=' + encodeURIComponent(q.pledge_received) +
                 '&filters[pledge_frequencies][]=' + encodeURLarray(q.pledge_frequencies).join('&filters[pledge_frequencies][]=');
         }
 
@@ -254,6 +263,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           });
           var flattenedEmailAddresses = _.flatten(_.pluck(people, 'email_address_ids'));
           var flattenedFacebookAccounts = _.flatten(_.pluck(people, 'facebook_account_ids'));
+          contact.pledge_received = contact.pledge_received == 'true'
 
           contactCache.update(contact.id, {
             addresses: _.filter(data.addresses, function (addr) {
@@ -300,7 +310,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           timezone: q.timezone,
           relatedTaskAction: q.relatedTaskAction,
           appeal: q.appeal,
-          pledge_frequencies: q.pledge_frequencies
+          pledge_frequencies: q.pledge_frequencies,
+          pledge_received: q.pledge_received
         };
         if (!isEmptyFilter(prefsToSave)) {
           viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
@@ -316,7 +327,18 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
     }, true);
 
     var isEmptyFilter = function (q) {
-      if (!_.isEmpty(q.tags) || !_.isEmpty(q.name) || !_.isEmpty(q.type) || !_.isEmpty(_.without(q.city, '')) || !_.isEmpty(_.without(q.state, '')) || !_.isEmpty(_.without(q.region, '')) || !_.isEmpty(_.without(q.metro_area, '')) || !_.isEmpty(q.newsletter) || !_.isEmpty(_.without(q.likely, '')) || !_.isEmpty(_.without(q.church, '')) || !_.isEmpty(_.without(q.referrer, '')) || !_.isEmpty(_.without(q.relatedTaskAction, '')) || !_.isEmpty(_.without(q.timezone, '')) || !_.isEmpty(_.without(q.appeal, '')) || !_.isEmpty(_.without(q.pledge_frequencies, ''))) {
+      if (!_.isEmpty(q.tags) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
+          !_.isEmpty(_.without(q.city, '')) || !_.isEmpty(_.without(q.state, '')) ||
+          !_.isEmpty(_.without(q.region, '')) ||
+          !_.isEmpty(_.without(q.metro_area, '')) || !_.isEmpty(q.newsletter) ||
+          !_.isEmpty(_.without(q.likely, '')) ||
+          !_.isEmpty(_.without(q.church, '')) ||
+          !_.isEmpty(_.without(q.referrer, '')) ||
+          !_.isEmpty(_.without(q.relatedTaskAction, '')) ||
+          !_.isEmpty(_.without(q.timezone, '')) ||
+          !_.isEmpty(_.without(q.appeal, '')) ||
+          !_.isEmpty(_.without(q.pledge_frequencies, '')) ||
+          !_.isEmpty(_.without(q.pledge_received, ''))) {
         return false;
       }
 

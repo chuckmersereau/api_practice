@@ -36,3 +36,6 @@ RegexpLiteral:
 Void:
   Exclude:
     - 'spec/**/*'
+
+ClassLength:
+  Enabled: false

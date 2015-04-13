@@ -251,4 +251,13 @@ describe AccountList do
       expect(AccountList.count).to be 1
     end
   end
+
+  it 'percent calculations' do
+    account_list = create(:account_list, monthly_goal: '200')
+    create(:contact, pledge_amount: 100, account_list: account_list)
+    create(:contact, pledge_amount: 50, pledge_received: true, account_list: account_list)
+
+    expect(account_list.in_hand_percent).to eq 25
+    expect(account_list.pledged_percent).to eq 75
+  end
 end
