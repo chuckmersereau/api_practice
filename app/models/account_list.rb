@@ -262,10 +262,8 @@ class AccountList < ActiveRecord::Base
       end
       other.activities.update_all(account_list_id: id)
 
-      unless mail_chimp_account
-        if other.mail_chimp_account
-          other.mail_chimp_account.update_attributes(account_list_id: id)
-        end
+      if mail_chimp_account.blank? && other.mail_chimp_account
+        other.mail_chimp_account.update_attributes(account_list_id: id)
       end
       other.reload
       other.destroy
@@ -306,11 +304,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def all_contacts
-    unless @all_contacts
-      @all_contacts = contacts.order('contacts.name')
-      @all_contacts.select(['contacts.id', 'contacts.name'])
-    end
-    @all_contacts
+    @all_contacts ||= contacts.order('contacts.name').select(['contacts.id', 'contacts.name'])
   end
 
   def cache_key

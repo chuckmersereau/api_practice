@@ -229,4 +229,16 @@ describe AccountList do
       expect(account_list.states).to eq %w(FL WI)
     end
   end
+
+  context '#all_contacts' do
+    let(:account_list) { create(:account_list) }
+
+    it 'returns all churches' do
+      c1 = create(:contact, account_list: account_list)
+      c2 = create(:contact, account_list: account_list, status: 'Unresponsive')
+
+      expect(account_list.all_contacts).to include c1
+      expect(account_list.all_contacts).to include c2
+    end
+  end
 end
