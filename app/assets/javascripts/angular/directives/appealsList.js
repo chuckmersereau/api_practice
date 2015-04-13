@@ -23,7 +23,10 @@ angular.module('mpdxApp')
                             $scope.checkedContacts = {};
                             $scope.taskTypes = window.railsConstants.task.ACTIONS;
                             $scope.task = {
-                              subject: 'Appeal (' + $scope.appeal.name + ')'
+                              subject: 'Appeal (' + $scope.appeal.name + ')',
+                              date: moment().format('YYYY-MM-DD'),
+                              hour: moment().hour(),
+                              min: moment().minute()
                             };
 
                             api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
