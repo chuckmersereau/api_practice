@@ -1,3 +1,4 @@
+
 <table class="list">
     <tbody>
         <tr ng-repeat="appeal in appeals | orderBy: 'name'">
@@ -10,11 +11,11 @@
             <td style="width: 350px;">
                 <strong>{{appeal.name}}</strong>
             </td>
-            <td>${{formatNumber(donationTotal(appeal.donations).sum)}}</td>
+            <td>${{formatNumber(donationTotal(appeal.donations))}}</td>
 
             <td>
                 <div class="appealThermometer">
-                    <div class="level" ng-style="{'width': percentComplete(donationTotal(appeal.donations).sum, appeal.amount) + '%'}">{{percentComplete(donationTotal(appeal.donations).sum, appeal.amount)}}%
+                    <div class="level" ng-style="{'width': percentComplete(donationTotal(appeal.donations), appeal.amount) + '%'}">{{percentComplete(donationTotal(appeal.donations), appeal.amount)}}%
                     </div>
                 </div>
             </td>
