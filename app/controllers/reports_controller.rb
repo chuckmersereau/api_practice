@@ -76,7 +76,7 @@ class ReportsController < ApplicationController
     @total_pledges = 0.0
     @total_average = 0.0
     @donations.each do |_key, row|
-      if row[:pledge_amount].present?
+      if row[:pledge_amount].present? && row[:status] == 'Partner - Financial'
         @total_pledges += row[:pledge_amount] / (row[:pledge_frequency] || 1)
       end
 
