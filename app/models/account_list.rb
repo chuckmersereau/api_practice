@@ -186,33 +186,29 @@ class AccountList < ActiveRecord::Base
   end
 
   def top_50_percent
-    unless @top_50_percent
-      financial_partners_count = contacts.where('pledge_amount > 0').count
-      @top_50_percent = contacts.where('pledge_amount > 0')
-                        .order('(pledge_amount::numeric / (pledge_frequency::numeric)) desc')
-                        .limit(financial_partners_count / 2)
-    end
-    @top_50_percent
+    return @top_50_percent if @top_50_percent
+    financial_partners_count = contacts.where('pledge_amount > 0').count
+    @top_50_percent = contacts.where('pledge_amount > 0')
+                      .order('(pledge_amount::numeric / (pledge_frequency::numeric)) desc')
+                      .limit(financial_partners_count / 2)
   end
 
   def bottom_50_percent
-    unless @bottom_50_percent
-      @bottom_50_percent = contacts.where('pledge_amount > 0')
-                           .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
-                           .limit(contacts.where('pledge_amount > 0').count / 2)
-    end
-    @bottom_50_percent
+    return @button if @bottom_50_percent
+    @bottom_50_percent = contacts.where('pledge_amount > 0')
+                         .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
+                         .limit(contacts.where('pledge_amount > 0').count / 2)
   end
 
   def no_activity_since(date, contacts_scope = nil, activity_type = nil)
-    @no_activity_since = []
+    no_activity_since = []
     contacts_scope ||= contacts
     contacts_scope.includes(people: [:primary_phone_number, :primary_email_address]).each do |contact|
       activities = contact.tasks.where('completed_at > ?', date)
       activities = activities.where('activity_type = ?', activity_type) if activity_type.present?
-      @no_activity_since << contact if activities.blank?
+      no_activity_since << contact if activities.empty?
     end
-    @no_activity_since
+    no_activity_since
   end
 
   def merge_contacts

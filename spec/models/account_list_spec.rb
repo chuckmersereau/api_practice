@@ -174,4 +174,17 @@ describe AccountList do
       expect(account_list.user_emails_with_names).to include('Jane Doe <jane@a.com>')
     end
   end
+
+  context '#no_activity_since' do
+    let(:account_list) { create(:account_list) }
+
+    it 'filters contacts' do
+      contact1 = create(:contact, account_list: account_list)
+      contact1.tasks << create(:task, completed: true, completed_at: 1.day.ago)
+      contact2 = create(:contact, account_list: account_list)
+      no_act_list = account_list.no_activity_since(6.months.ago)
+      expect(no_act_list).to_not include contact1
+      expect(no_act_list).to include contact2
+    end
+  end
 end
