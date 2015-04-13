@@ -623,7 +623,7 @@ describe TntImport do
 
       expect(Contact.all.count).to eq(1)
       contact = Contact.all.first
-      expect(contact.tag_list).to eq(%w(testers category-1 group-with-dave))
+      expect(contact.tag_list.sort).to eq(%w(category-1 group-with-dave testers))
     end
   end
 

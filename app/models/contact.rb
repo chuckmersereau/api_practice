@@ -15,7 +15,7 @@ class Contact < ActiveRecord::Base
   has_many :people, through: :contact_people
   has_one :primary_contact_person, -> { where(primary: true) }, class_name: 'ContactPerson'
   has_one :primary_person, through: :primary_contact_person, source: :person
-  has_one :spouse_contact_person, -> { where(['"primary" = ? OR "primary" is NULL', false]) }, class_name: 'ContactPerson'
+  has_one :spouse_contact_person, -> { where(primary: [false, nil]) }, class_name: 'ContactPerson'
   has_one :spouse, through: :spouse_contact_person, source: :person
   has_many :contact_referrals_to_me, foreign_key: :referred_to_id, class_name: 'ContactReferral', dependent: :destroy
   has_many :contact_referrals_by_me, foreign_key: :referred_by_id, class_name: 'ContactReferral', dependent: :destroy

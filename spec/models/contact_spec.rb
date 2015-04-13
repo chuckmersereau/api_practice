@@ -391,6 +391,17 @@ describe Contact do
       expect(contact.people.count).to be 1
       expect(contact.greeting).to eq person.first_name
     end
+
+    it 'considers the spouse to be the contact with primary nil or false' do
+      spouse.contact_people.first.update(primary: false)
+      expect(contact.reload.spouse).to eq(spouse)
+      spouse.contact_people.first.update(primary: nil)
+      expect(contact.reload.spouse).to eq(spouse)
+
+      spouse.contact_people.first.update(primary: true)
+      person.contact_people.first.update(primary: false)
+      expect(contact.reload.spouse).to eq(person)
+    end
   end
 
   context '#envelope_greeting' do
