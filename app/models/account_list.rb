@@ -74,57 +74,35 @@ class AccountList < ActiveRecord::Base
   end
 
   def contact_tags
-    @contact_tags ||= ActiveRecord::Base.connection.select_values("select distinct(tags.name) from account_lists al inner join contacts c on c.account_list_id = al.id
-                                            inner join taggings t on t.taggable_id = c.id AND t.taggable_type = 'Contact'
-                                            inner join tags on t.tag_id = tags.id where al.id = #{id} order by tags.name")
+    @contact_tags ||= contacts.joins(:tags).order('tags.name').pluck('DISTINCT tags.name')
   end
 
   def activity_tags
-    @contact_tags ||= ActiveRecord::Base.connection.select_values("select distinct(tags.name) from account_lists al inner join activities a on a.account_list_id = al.id
-                                            inner join taggings t on t.taggable_id = a.id AND t.taggable_type = 'Activity'
-                                            inner join tags on t.tag_id = tags.id where al.id = #{id} order by tags.name")
+    @activity_tags ||= activities.joins(:tags).order('tags.name').pluck('DISTINCT tags.name')
   end
 
   def cities
-    @cities ||= ActiveRecord::Base.connection.select_values("select distinct(a.city) from account_lists al inner join contacts c on c.account_list_id = al.id
-                                                       inner join addresses a on a.addressable_id = c.id AND a.addressable_type = 'Contact' where al.id = #{id}
-                                                       AND (#{Contact.active_conditions})
-                                                       order by a.city")
+    @cities ||= contacts.active.joins(:addresses).order('addresses.city').pluck('DISTINCT addresses.city')
   end
 
   def states
-    @states ||= ActiveRecord::Base.connection.select_values("select distinct(a.state) from account_lists al inner join contacts c on c.account_list_id = al.id
-                                                       inner join addresses a on a.addressable_id = c.id AND a.addressable_type = 'Contact' where al.id = #{id}
-                                                       AND (#{Contact.active_conditions})
-                                                       order by a.state")
+    @states ||= contacts.active.joins(:addresses).order('addresses.state').pluck('DISTINCT addresses.state')
   end
 
   def regions
-    @regions ||= ActiveRecord::Base.connection.select_values("select distinct(a.region) from account_lists al inner join contacts c on c.account_list_id = al.id
-                                                       inner join addresses a on a.addressable_id = c.id AND a.addressable_type = 'Contact' where al.id = #{id}
-                                                       AND (#{Contact.active_conditions})
-                                                       order by a.region")
+    @regions ||= contacts.active.joins(:addresses).order('addresses.region').pluck('DISTINCT addresses.region')
   end
 
   def metro_areas
-    @metro_areas ||= ActiveRecord::Base.connection.select_values("select distinct(a.metro_area) from account_lists al inner join contacts c on c.account_list_id = al.id
-                                                       inner join addresses a on a.addressable_id = c.id AND a.addressable_type = 'Contact' where al.id = #{id}
-                                                       AND (#{Contact.active_conditions})
-                                                       order by a.metro_area")
+    @metro_areas ||= contacts.active.joins(:addresses).order('addresses.metro_area').pluck('DISTINCT addresses.metro_area')
   end
 
   def churches
-    @churches ||= ActiveRecord::Base.connection.select_values("select distinct(c.church_name) from account_lists al inner join contacts c on c.account_list_id = al.id
-                                                       where al.id = #{id}
-                                                       AND (#{Contact.active_conditions})
-                                                       order by c.church_name")
+    @churches ||= contacts.order(:church_name).pluck('DISTINCT church_name')
   end
 
   def timezones
-    @timezones ||= ActiveRecord::Base.connection.select_values("select distinct(c.timezone) from account_lists al inner join contacts c on c.account_list_id = al.id
-                                                       where al.id = #{id}
-                                                       AND (#{Contact.active_conditions})
-                                                       order by c.timezone")
+    @timezones ||= contacts.order(:timezone).pluck('DISTINCT timezone')
   end
 
   def valid_mail_chimp_account
@@ -186,33 +164,29 @@ class AccountList < ActiveRecord::Base
   end
 
   def top_50_percent
-    unless @top_50_percent
-      financial_partners_count = contacts.where('pledge_amount > 0').count
-      @top_50_percent = contacts.where('pledge_amount > 0')
-                        .order('(pledge_amount::numeric / (pledge_frequency::numeric)) desc')
-                        .limit(financial_partners_count / 2)
-    end
-    @top_50_percent
+    return @top_50_percent if @top_50_percent
+    financial_partners_count = contacts.where('pledge_amount > 0').count
+    @top_50_percent = contacts.where('pledge_amount > 0')
+                      .order('(pledge_amount::numeric / (pledge_frequency::numeric)) desc')
+                      .limit(financial_partners_count / 2)
   end
 
   def bottom_50_percent
-    unless @bottom_50_percent
-      @bottom_50_percent = contacts.where('pledge_amount > 0')
-                           .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
-                           .limit(contacts.where('pledge_amount > 0').count / 2)
-    end
-    @bottom_50_percent
+    return @button if @bottom_50_percent
+    @bottom_50_percent = contacts.where('pledge_amount > 0')
+                         .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
+                         .limit(contacts.where('pledge_amount > 0').count / 2)
   end
 
   def no_activity_since(date, contacts_scope = nil, activity_type = nil)
-    @no_activity_since = []
+    no_activity_since = []
     contacts_scope ||= contacts
     contacts_scope.includes(people: [:primary_phone_number, :primary_email_address]).each do |contact|
       activities = contact.tasks.where('completed_at > ?', date)
       activities = activities.where('activity_type = ?', activity_type) if activity_type.present?
-      @no_activity_since << contact if activities.blank?
+      no_activity_since << contact if activities.empty?
     end
-    @no_activity_since
+    no_activity_since
   end
 
   def merge_contacts
@@ -288,10 +262,8 @@ class AccountList < ActiveRecord::Base
       end
       other.activities.update_all(account_list_id: id)
 
-      unless mail_chimp_account
-        if other.mail_chimp_account
-          other.mail_chimp_account.update_attributes(account_list_id: id)
-        end
+      if mail_chimp_account.nil? && other.mail_chimp_account
+        other.mail_chimp_account.update_attributes(account_list_id: id)
       end
       other.reload
       other.destroy
@@ -332,11 +304,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def all_contacts
-    unless @all_contacts
-      @all_contacts = contacts.order('contacts.name')
-      @all_contacts.select(['contacts.id', 'contacts.name'])
-    end
-    @all_contacts
+    @all_contacts ||= contacts.order('contacts.name').select(['contacts.id', 'contacts.name'])
   end
 
   def cache_key

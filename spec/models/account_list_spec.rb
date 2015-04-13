@@ -174,4 +174,81 @@ describe AccountList do
       expect(account_list.user_emails_with_names).to include('Jane Doe <jane@a.com>')
     end
   end
+
+  context '#no_activity_since' do
+    let(:account_list) { create(:account_list) }
+
+    it 'filters contacts' do
+      contact1 = create(:contact, account_list: account_list)
+      contact1.tasks << create(:task, completed: true, completed_at: 1.day.ago)
+      contact2 = create(:contact, account_list: account_list)
+      no_act_list = account_list.no_activity_since(6.months.ago)
+      expect(no_act_list).to_not include contact1
+      expect(no_act_list).to include contact2
+    end
+  end
+
+  context '#churches' do
+    let(:account_list) { create(:account_list) }
+
+    it 'returns all churches' do
+      create(:contact, account_list: account_list, church_name: 'church2')
+      create(:contact, account_list: account_list, church_name: 'church1')
+      create(:contact, account_list: account_list, church_name: 'church1')
+      expect(account_list.churches).to eq %w(church1 church2)
+    end
+  end
+
+  context '#contact_tags and #activity_tags' do
+    let(:account_list) { create(:account_list) }
+
+    it 'returns all churches' do
+      create(:contact, account_list: account_list, tag_list: ['tag2'])
+      create(:contact, account_list: account_list, tag_list: ['tag1'])
+      create(:contact, tag_list: ['other tag'])
+
+      create(:activity, account_list: account_list, tag_list: ['t_tag2'])
+      create(:activity, account_list: account_list, tag_list: ['t_tag1'])
+      create(:activity, tag_list: ['other tag'])
+
+      expect(account_list.contact_tags).to eq %w(tag1 tag2)
+      expect(account_list.activity_tags).to eq %w(t_tag1 t_tag2)
+    end
+  end
+
+  context '#contact_tags and #activity_tags' do
+    let(:account_list) { create(:account_list) }
+
+    it 'returns all churches' do
+      contact = create(:contact, account_list: account_list)
+      contact.addresses << create(:address, city: 'City1', state: 'WI')
+      contact.addresses << create(:address, city: 'City2', state: 'FL')
+      # contact.save!
+
+      expect(account_list.cities).to eq %w(City1 City2)
+      expect(account_list.states).to eq %w(FL WI)
+    end
+  end
+
+  context '#all_contacts' do
+    let(:account_list) { create(:account_list) }
+
+    it 'returns all churches' do
+      c1 = create(:contact, account_list: account_list)
+      c2 = create(:contact, account_list: account_list, status: 'Unresponsive')
+
+      expect(account_list.all_contacts).to include c1
+      expect(account_list.all_contacts).to include c2
+    end
+  end
+
+  context '#merge' do
+    it 'deletes old AccountList' do
+      al_master = create(:account_list)
+      merge_al = create(:account_list)
+
+      al_master.merge(merge_al)
+      expect(AccountList.count).to be 1
+    end
+  end
 end
