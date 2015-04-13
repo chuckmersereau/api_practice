@@ -96,6 +96,10 @@ class PrayerLettersAccount < ActiveRecord::Base
     Airbrake.raise_or_notify(e, parameters: contact_params)
   end
 
+  def contact_needs_sync?(contact)
+    contact_params(contact) != contact.prayer_letters_params
+  end
+
   def update_contact(contact)
     params = contact_params(contact)
     return if params == contact.prayer_letters_params

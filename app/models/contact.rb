@@ -424,8 +424,10 @@ class Contact < ActiveRecord::Base
 
   def sync_with_prayer_letters
     return unless account_list && account_list.valid_prayer_letters_account
-    pl = account_list.prayer_letters_account
+
     if send_physical_letter?
+      pl = account_list.prayer_letters_account
+      return unless pl.contact_needs_sync?(self)
       pl.add_or_update_contact(self)
     else
       delete_from_prayer_letters

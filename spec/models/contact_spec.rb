@@ -505,4 +505,44 @@ describe Contact do
       Sidekiq::Testing.inline! { contact.send(:sync_with_google_contacts) }
     end
   end
+
+  context '#sync_with_prayer_letters' do
+    let(:pl) { build(:prayer_letters_account, account_list: account_list) }
+
+    before do
+      stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
+      contact.account_list.prayer_letters_account = pl
+      contact.update(send_newsletter: 'Physical')
+    end
+
+    it 'does not queue the update if not set to receive newsletter' do
+      expect_update_queued(false) { contact.update(send_newsletter: nil) }
+    end
+
+    it 'queues update if relevant info changed' do
+      expect_update_queued { contact.update(name: 'Not-John', greeting: 'New greeting') }
+    end
+
+    it 'queues update if address changed' do
+      address = create(:address)
+      contact.addresses << address
+      expect_update_queued { address.update(street: 'new street') }
+    end
+
+    it 'does not queue update if not data changed or unrelated data changed' do
+      expect_update_queued(false) { contact.touch }
+      expect_update_queued(false) { contact.update(notes: 'Unrelated info') }
+    end
+
+    def expect_update_queued(queued = true)
+      if queued
+        expect(pl).to receive(:add_or_update_contact).with(contact)
+      else
+        expect(pl).to_not receive(:add_or_update_contac).with(contact)
+      end
+
+      yield
+      contact.run_callbacks(:commit)
+    end
+  end
 end
