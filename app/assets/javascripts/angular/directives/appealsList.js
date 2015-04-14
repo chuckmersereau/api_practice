@@ -17,12 +17,19 @@ angular.module('mpdxApp')
                 $scope.editAppeal = function(id) {
                     var modalInstance = $modal.open({
                         templateUrl: '/templates/appeals/edit.html',
+                        size: 'lg',
                         controller: function($scope, $modalInstance, appeal){
                             $scope.appeal = angular.copy(appeal);
                             $scope.checkedContacts = {};
                             $scope.taskTypes = window.railsConstants.task.ACTIONS;
+                            $scope.task = {
+                              subject: 'Appeal (' + $scope.appeal.name + ')',
+                              date: moment().format('YYYY-MM-DD'),
+                              hour: moment().hour(),
+                              min: moment().minute()
+                            };
 
-                            api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
+                            api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
                                 $scope.contacts = data.contacts;
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
@@ -39,13 +46,44 @@ angular.module('mpdxApp')
                                     });
                             };
 
-                            $scope.contactName = function(id){
+                            $scope.contactDetails = function(id){
                                 var contact = _.find($scope.contacts, { 'id': id });
                                 if(angular.isDefined(contact)){
-                                    return contact.name;
+                                    return contact;
                                 }
-                                return '';
+                                return {};
                             };
+
+                            $scope.contactName = function(id){
+                              var contact = _.find($scope.contacts, { 'id': id });
+                              if(angular.isDefined(contact)){
+                                return contact.name;
+                              }
+                              return '';
+                            };
+
+                          $scope.pledgeFrequencyStr = function(pledgeFrequency){
+                            switch(pledgeFrequency) {
+                              case '0.23076923076923':
+                                return 'Weekly';
+                              case '0.46153846153846':
+                                return 'Fortnightly';
+                              case '1.0':
+                                return 'Monthly';
+                              case '2.0':
+                                return 'Bi-Monthly';
+                              case '3.0':
+                                return 'Quarterly';
+                              case '4.0':
+                                return 'Quad-Monthly';
+                              case '6.0':
+                                return 'Semi-Annual';
+                              case '12.0':
+                                return 'Annual';
+                              case '24.0':
+                                return 'Biennial';
+                            }
+                          };
 
                             $scope.addContact = function(id){
                                 if(!id){ return; }
@@ -65,9 +103,9 @@ angular.module('mpdxApp')
                                 if(angular.isUndefined(contact) || angular.isUndefined(contact.donor_accounts)){
                                     return '-';
                                 }
-                                var contactDonorIds = _.flatten(contact.donor_accounts, 'id');
-                                var donations = _.where(appeal.donations, function(d) {
-                                    return _.contains(contactDonorIds, d.donor_account_id);
+                                var contactDonorIds = _.pluck(contact.donor_accounts, 'id');
+                                var donations = _.filter(appeal.donations, function(d) {
+                                  return _.contains(contactDonorIds, d.donor_account_id);
                                 });
 
                                 if(!donations.length){
@@ -85,7 +123,7 @@ angular.module('mpdxApp')
                                 }
                             };
 
-                            $scope.createTask = function(taskType, inputContactsObject){
+                            $scope.createTask = function(task, inputContactsObject){
                                 var contactsObject = _.keys(_.pick(inputContactsObject, function(val){
                                   return val;
                                 }));
@@ -95,19 +133,19 @@ angular.module('mpdxApp')
                                     return;
                                 }
 
-                                $scope.creatingBulkTasks = true;
+                                $scope.creatingBulkTasks = 0;
                                 var postTask = function(){
+                                  $scope.creatingBulkTasks = contactsObject.length;
                                   if(_.isEmpty(contactsObject)){
                                     alert('Task(s) created.');
                                     $scope.taskType = '';
-                                    $scope.creatingBulkTasks = false;
                                     return;
                                   }
                                   api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
                                     task: {
-                                      start_at: moment().add(7, 'days').format('YYYY-MM-DD HH:mm:ss'),
-                                      subject: 'Appeal (' + $scope.appeal.name + ')',
-                                      activity_type: taskType,
+                                      start_at: moment(task.date).hour(task.hour).minute(task.min).format('YYYY-MM-DD HH:mm:ss'),
+                                      subject: task.subject,
+                                      activity_type: task.type,
                                       activity_contacts_attributes: [{
                                         'contact_id': Number(contactsObject[0])
                                       }]
@@ -120,6 +158,56 @@ angular.module('mpdxApp')
 
                                 postTask();
                             };
+
+                          $scope.createTag = function(newTag, inputContactsObject){
+                            var contactsObject = _.keys(_.pick(inputContactsObject, function(val){
+                              return val;
+                            }));
+
+                            if(!contactsObject.length){
+                              alert('You must check at least one contact.');
+                              return;
+                            }
+
+                            $scope.creatingTag = 0;
+                            var updateContact = function(){
+                              $scope.creatingTag = contactsObject.length;
+                              if(_.isEmpty(contactsObject)){
+                                alert('Contact(s) updated.');
+                                $scope.newTag = '';
+                                return;
+                              }
+                              var tagList = _.find($scope.contacts, { 'id': Number(contactsObject[0]) }).tag_list;
+                              tagList.push(newTag);
+                              tagList = tagList.join();
+                              api.call('put', 'contacts/'+contactsObject[0]+'?account_list_id=' + window.current_account_list_id, {
+                                contact: {
+                                  tag_list: tagList
+                                }
+                              }, function(){
+                                contactsObject.shift();
+                                updateContact();
+                              });
+                            };
+
+                            updateContact();
+                          };
+
+
+                          $scope.exportContactsToCSV = function(selectedContactsMap) {
+                            var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
+                              return selected;
+                            }));
+
+                            if (selectedContactIds.length == 0) {
+                              alert('You must check at least one contact.');
+                              return;
+                            }
+
+                            window.location.href =
+                                '/contacts.csv?csv_primary_emails_only=true&' +
+                                'filters[status]=*&filters[ids]=' + selectedContactIds.join();
+                          };
 
                             $scope.selectAll = function(type){
                                 if(type === 'all'){
@@ -146,6 +234,14 @@ angular.module('mpdxApp')
                                     });
                                 }
                             };
+                          setTimeout(function() {
+                            jQuery('.dueDatePicker').datepicker({
+                              autoclose: true,
+                              todayHighlight: true,
+                              dateFormat: 'yy-mm-dd'
+                            });
+                          }, 1000);
+
                         },
                         resolve: {
                             appeal: function () {
@@ -171,15 +267,21 @@ angular.module('mpdxApp')
                 };
 
                 $scope.donationTotal = function(donations){
-                  var sum = 0;
+                  var sum = [];
                   angular.forEach(donations, function(d){
                     if(_.isNull(d.appeal_amount) || _.isEmpty(d.appeal_amount)){
-                      sum += Number(d.amount);
+                      sum.push(Number(d.amount));
                     }else{
-                      sum += Number(d.appeal_amount);
+                      sum.push(d.appeal_amount);
                     }
                   });
-                  return sum;
+                  _.remove(sum, function(n) {
+                    return n == 0;
+                  });
+                  return {
+                    sum: _.sum(sum),
+                    average: _.sum(sum)/sum.length
+                  };
                 };
 
                 $scope.percentComplete = function(donationsTotal, goal){
@@ -193,6 +295,7 @@ angular.module('mpdxApp')
                 $scope.newAppeal = function(){
                     var modalInstance = $modal.open({
                         templateUrl: '/templates/appeals/wizard.html',
+                        size: 'lg',
                         controller: function($scope, $modalInstance){
                             $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES;
 
