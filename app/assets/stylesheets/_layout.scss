@@ -397,12 +397,17 @@ div.right {
   z-index: 10;
   background: #fff;
 }
-  @media (min-width: 768px) {
+  @media (min-width: 768px) and (max-width: 977px) {
     #leftmenu.affix {
       width: 213px;
     }
     .page-filters.affix {
-      width: auto;
+      width: 100%;
+      right: 0;
+      .row {
+        width: 750px;
+        margin: auto;
+      }
     }
   }
 
