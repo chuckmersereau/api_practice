@@ -23,7 +23,7 @@
   <div class="field">
     <%= f.label :start_at, _('Completed On') %>
     <%= calendar_date_select_tag 'completed-on' %>
-    <%= f.time_select :completed_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
+    <%= f.time_select :completed_at, ampm: true, default: 0.day.from_now, order: [:month, :day, :year] %>
   </div>
 
   <div class="field">
