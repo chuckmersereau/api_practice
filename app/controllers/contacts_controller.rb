@@ -26,7 +26,7 @@ class ContactsController < ApplicationController
 
       format.csv do
         @csv_primary_emails_only = csv_primary_emails_only_param
-        @contacts = @filtered_contacts.includes(:primary_person, :spouse, :primary_address, :addresses,
+        @contacts = @filtered_contacts.includes(:primary_person, :spouse, :primary_address,
                                                 :tags, people: [:email_addresses, :phone_numbers])
         render_csv("contacts-#{Time.now.strftime('%Y%m%d')}")
       end

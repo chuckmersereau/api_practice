@@ -148,7 +148,7 @@ class ContactFilter
         filtered_contacts = filtered_contacts.where("send_newsletter is null OR send_newsletter = ''")
       when 'address'
         filtered_contacts = filtered_contacts.joins(:addresses).where(send_newsletter: %w(Physical Both))
-                            .where('addresses.historic' => false)
+                            .where(addresses: { historic: false })
       when 'email'
         filtered_contacts = filtered_contacts.where(send_newsletter: %w(Email Both))
                             .where('email_addresses.email is not null')
