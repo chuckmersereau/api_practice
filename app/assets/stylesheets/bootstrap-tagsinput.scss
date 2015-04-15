@@ -26,20 +26,15 @@
 .bootstrap-tagsinput .tag [data-role="remove"] {
   margin-left: 8px;
   cursor: pointer;
-}
-.bootstrap-tagsinput .tag [data-role="remove"]:after {
-  content: "\f00d";
-  font-family: "FontAwesome";
-  padding: 0px 2px;
-  opacity: .5;
-}
-.bootstrap-tagsinput .tag [data-role="remove"]:hover:after {
-  opacity: 1;
-}
-
-.bootstrap-tagsinput .tag [data-role="remove"]:hover {
-  opacity: 1;
-}w
-.bootstrap-tagsinput .tag [data-role="remove"]:hover:active {
-  opacity: .5;
+  &:after {
+    content: "\f00d";
+    font-family: "FontAwesome";
+    padding: 0px 2px;
+  }
+  &:hover:active, &:after {
+    opacity: .5;
+  }
+  &:hover:after, &:hover {
+    opacity: 1;
+  }
 }
