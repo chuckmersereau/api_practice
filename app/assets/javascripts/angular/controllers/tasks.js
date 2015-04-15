@@ -187,7 +187,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
 
     $scope.$watch('filter', function (f, oldf) {
         $scope.filter.starred = f.page == 'starred' ? 'true' : ''
-        $scope.filter.completed = f.page == 'history'
+        $scope.filter.completed = f.page == 'history' ? 'true' : ''
 
         $scope.taskGroups[0].visible = true;
         $scope.taskGroups[1].visible = true;
