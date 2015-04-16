@@ -43,7 +43,7 @@ $ ->
       $.get '/home/download_data_check', (data)->
         if data == 'false'
           clearInterval(data_download_interval)
-          $('#data_downloading').remove()
+          $('#data_downloading').parent().remove()
     , 5000
 
   $(document).on 'click', '.item .dismiss_item', ->
