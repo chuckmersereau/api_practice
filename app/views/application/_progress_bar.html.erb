@@ -1,4 +1,8 @@
-<div id="mpd_progress_bar">
+<a id="mpd_progress_bar" href="<%= contacts_path(filters: {status: ['Partner - Financial'], pledge_received: false}) %>"
+   title="<%= _('%{received} received/%{pledged} pledged of goal: %{goal}. Click to see outstanding financial partners.').localize %
+              { pledged: number_to_current_currency(current_account_list.total_pledges.to_i),
+                received: number_to_current_currency(current_account_list.received_pledges.to_i),
+                goal: number_to_current_currency(current_account_list.monthly_goal) } %>">
     <div class="bar bar-pledged" style="width: <%= current_account_list.pledged_percent %>%"></div>
     <% if $rollout.active?(:new_progress_bar, current_account_list) %>
       <div class="bar bar-received" style="width: <%= current_account_list.in_hand_percent %>%"></div>
@@ -7,4 +11,4 @@
       <%= "#{current_account_list.in_hand_percent}%/" if $rollout.active?(:new_progress_bar, current_account_list) %>
       <%= current_account_list.pledged_percent %>%
     </span>
-</div>
+</a>

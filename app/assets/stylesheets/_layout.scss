@@ -451,7 +451,8 @@ div.right {
 
 #mpd_progress_bar {
   background: $color-gray;
-  color: $color-white;
+  color: $color-white !important;
+  display: block;
   height: $progress-bar-height;
   margin: 6px 0 0 0;
   overflow: hidden;
