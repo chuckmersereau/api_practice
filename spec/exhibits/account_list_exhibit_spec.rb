@@ -17,21 +17,30 @@ describe AccountListExhibit do
   end
 
   it 'returns names with balances' do
-    account_list.stub(:designation_accounts).and_return([create(:designation_account, name: 'foo', balance: '5')])
+    account_list.designation_accounts << create(:designation_account, name: 'foo', balance: 5)
     context.stub(:number_to_current_currency).with(5).and_return('$5')
     subject.balances(user).should include('Balance: $5')
   end
 
   it 'converts null balances to 0' do
-    account_list.stub(:designation_accounts).and_return([create(:designation_account, name: 'foo', balance: nil)])
+    account_list.designation_accounts << create(:designation_account, name: 'foo', balance: nil)
     context.stub(:number_to_current_currency).with(0).and_return('$0')
     subject.balances(user).should include('Balance: $0')
   end
 
   it 'sums the balances of multiple designation accounts' do
-    account_list.stub(:designation_accounts).and_return([create(:designation_account, name: 'foo', balance: 1),
-                                                         create(:designation_account, name: 'bar', balance: 2)])
+    account_list.designation_accounts << create(:designation_account, name: 'foo', balance: 1)
+    account_list.designation_accounts << create(:designation_account, name: 'bar', balance: 2)
     context.stub(:number_to_current_currency).with(3).and_return('$3')
     subject.balances(user).should include('Balance: $3')
+  end
+
+  it 'excludes inactive designation accounts from the sum' do
+    da1 = create(:designation_account, name: 'foo', balance: 1)
+    da2 = create(:designation_account, name: 'bar', balance: 2)
+    account_list.account_list_entries << create(:account_list_entry, designation_account: da1, active: false)
+    account_list.account_list_entries << create(:account_list_entry, designation_account: da2)
+    expect(context).to receive(:number_to_current_currency).with(2).and_return('$2')
+    expect(subject.balances(user)).to include('Balance: $2')
   end
 end

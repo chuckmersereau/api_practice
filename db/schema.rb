@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150410120313) do
+ActiveRecord::Schema.define(version: 20150416191837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,6 +21,7 @@ ActiveRecord::Schema.define(version: 20150410120313) do
     t.integer  "designation_account_id"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.boolean  "active",                 default: true, null: false
   end
 
   add_index "account_list_entries", ["account_list_id", "designation_account_id"], name: "unique_account", unique: true, using: :btree
@@ -253,6 +254,7 @@ ActiveRecord::Schema.define(version: 20150410120313) do
     t.string   "timezone"
     t.string   "envelope_greeting"
     t.boolean  "no_appeals"
+    t.string   "pls_id"
     t.text     "prayer_letters_params"
   end
 
@@ -855,6 +857,16 @@ ActiveRecord::Schema.define(version: 20150410120313) do
   end
 
   add_index "pictures", ["picture_of_id", "picture_of_type"], name: "picture_of", using: :btree
+
+  create_table "pls_accounts", force: true do |t|
+    t.integer  "account_list_id"
+    t.string   "oauth2_token"
+    t.boolean  "valid_token",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pls_accounts", ["account_list_id"], name: "index_pls_accounts_on_account_list_id", using: :btree
 
   create_table "prayer_letters_accounts", force: true do |t|
     t.string   "token"
