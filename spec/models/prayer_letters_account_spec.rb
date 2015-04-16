@@ -16,6 +16,13 @@ describe PrayerLettersAccount do
       pla.contacts
     end
 
+    it 'marks token as invalid if response is a 403 for OAuth2' do
+      stub_request(:get, %r{https:\/\/www\.prayerletters\.com\/*}).to_return(status: 403)
+      pla = create(:prayer_letters_account_oauth2)
+      pla.should_receive(:handle_bad_token).and_return('{}')
+      pla.contacts
+    end
+
     it 'uses OAuth2 if possible' do
       stub_request(:get, 'https://www.prayerletters.com/api/v1/contacts')
         .with(headers: { 'Authorization' => 'Bearer test_oauth2_token' })
