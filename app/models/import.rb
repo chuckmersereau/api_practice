@@ -37,8 +37,8 @@ class Import < ActiveRecord::Base
       "#{source.camelize}Import".constantize.new(self).import
       ImportMailer.complete(self).deliver
 
-      # clean up data
-      account_list.merge_contacts
+      account_list.merge_contacts # clean up data
+      account_list.queue_sync_with_google_contacts
       true
     rescue UnsurprisingImportError
       # Only send a failure email, don't re-raise the error, as it was not considered a surprising error by the

@@ -43,7 +43,8 @@ class GoogleContactsIntegrator
   end
 
   def sync_contacts
-    return if wait_for_imports_timed_out # Don't sync while an import is in progress
+    return if @integration.account_list.organization_accounts.any?(&:downloading)
+    return if @integration.account_list.imports.any?(&:importing)
     sync_and_return_num_synced
     cleanup_inactive_g_contacts
   rescue Person::GoogleAccount::MissingRefreshToken
@@ -51,17 +52,6 @@ class GoogleContactsIntegrator
     # Person::GoogleAccount will turn off the contacts integration and send the user an email to refresh their Google login.
   rescue => e
     Airbrake.raise_or_notify(e)
-  end
-
-  def wait_for_imports_timed_out
-    checks_for_imports_done = 0
-    loop do
-      return false if @integration.account_list.imports.where(importing: true).empty?
-      sleep(SECS_BETWEEN_CHECK_FOR_IMPORTS_DONE)
-      checks_for_imports_done += 1
-      break if checks_for_imports_done >= MAX_CHECKS_FOR_IMPORTS_DONE
-    end
-    true
   end
 
   def sync_and_return_num_synced

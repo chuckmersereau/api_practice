@@ -260,4 +260,59 @@ describe AccountList do
     expect(account_list.in_hand_percent).to eq 25
     expect(account_list.pledged_percent).to eq 75
   end
+
+  context '#queue_sync_with_google_contacts' do
+    let(:account_list) { create(:account_list) }
+    let(:integration) { create(:google_integration, contacts_integration: true, calendar_integration: false) }
+
+    before do
+      account_list.google_integrations << integration
+    end
+
+    it 'queues a job if there is a google integration that syncs contacts' do
+      account_list.queue_sync_with_google_contacts
+      expect(LowerRetryWorker.jobs.size).to eq(1)
+    end
+
+    it 'does not queue if there are no google integrations with contact sync set' do
+      integration.update(contacts_integration: false)
+      account_list.queue_sync_with_google_contacts
+      expect(LowerRetryWorker.jobs).to be_empty
+
+      account_list.google_integrations.destroy_all
+      account_list.queue_sync_with_google_contacts
+      expect(LowerRetryWorker.jobs).to be_empty
+    end
+
+    it 'does not queue if is an import is running' do
+      create(:import, account_list: account_list, importing: true, source: 'google')
+      account_list.queue_sync_with_google_contacts
+      expect(LowerRetryWorker.jobs).to be_empty
+    end
+
+    it 'does not queue if is an account is downloading' do
+      account_list.users << create(:user)
+      create(:organization_account, downloading: true, person: account_list.users.first)
+      account_list.queue_sync_with_google_contacts
+      expect(LowerRetryWorker.jobs).to be_empty
+    end
+  end
+
+  context '#import_data' do
+    let(:account_list) { create(:account_list) }
+    let(:user) { create(:user) }
+    let(:organization_account) { create(:organization_account) }
+
+    before do
+      account_list.users << user
+      user.organization_accounts << organization_account
+    end
+
+    it 'imports data for each org account, then sends notifications and queues google contact sync' do
+      expect_any_instance_of(Person::OrganizationAccount).to receive(:import_all_data)
+      expect(account_list).to receive(:send_account_notifications)
+      expect(account_list).to receive(:queue_sync_with_google_contacts)
+      account_list.send(:import_data)
+    end
+  end
 end

@@ -467,13 +467,17 @@ describe GoogleContactsIntegrator do
     end
   end
 
-  describe 'sync behavior when an import is running' do
-    it 'waits for it to finish until a timeout is reached, then does not sync if import still importing' do
-      create(:import, account_list: @account_list, importing: true, source: 'google')
-      expect(@integrator).to receive(:sleep).at_least(:once)
-      expect(@integrator).to receive(:sync_and_return_num_synced).exactly(0).times
-      @integrator.sync_contacts
-    end
+  it 'does nothing when an organization account is downloading' do
+    @account_list.users << create(:user)
+    create(:organization_account, downloading: true, person: @account_list.users.first)
+    expect(@integrator).to_not receive(:sync_and_return_num_synced)
+    @integrator.sync_contacts
+  end
+
+  it 'does nothing when an import is running' do
+    create(:import, account_list: @account_list, importing: true, source: 'google')
+    expect(@integrator).to_not receive(:sync_and_return_num_synced)
+    @integrator.sync_contacts
   end
 
   describe 'compatibility with previous import code' do

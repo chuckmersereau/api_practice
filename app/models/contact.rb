@@ -29,6 +29,8 @@ class Contact < ActiveRecord::Base
   has_many :appeal_contacts
   has_many :appeals, through: :appeal_contacts
 
+  serialize :prayer_letters_params, Hash
+
   scope :people, -> { where('donor_accounts.master_company_id is null').includes(:donor_accounts).references('donor_accounts') }
   scope :companies, -> { where('donor_accounts.master_company_id is not null').includes(:donor_accounts).references('donor_accounts') }
   scope :with_person, -> (person) { includes(:people).where('people.id' => person.id) }
@@ -423,8 +425,10 @@ class Contact < ActiveRecord::Base
 
   def sync_with_prayer_letters
     return unless account_list && account_list.valid_prayer_letters_account
-    pl = account_list.prayer_letters_account
+
     if send_physical_letter?
+      pl = account_list.prayer_letters_account
+      return unless pl.contact_needs_sync?(self)
       pl.add_or_update_contact(self)
     else
       delete_from_prayer_letters

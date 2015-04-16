@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150309205439) do
+ActiveRecord::Schema.define(version: 20150410120313) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(version: 20150309205439) do
     t.string   "timezone"
     t.string   "envelope_greeting"
     t.boolean  "no_appeals"
+    t.text     "prayer_letters_params"
   end
 
   add_index "contacts", ["account_list_id"], name: "index_contacts_on_account_list_id", using: :btree
