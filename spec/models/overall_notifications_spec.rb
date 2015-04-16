@@ -105,8 +105,10 @@ describe 'Overall notification tests' do
 
       setup_giving_info(giving)
 
-      contact.update_column(:pledge_received, true) if stopped_giving.in?(notification_types)
-      contact.reload
+      if stopped_giving.in?(notification_types) || recontinuing_gift.in?(notification_types)
+        contact.update_column(:pledge_received, true)
+        contact.reload
+      end
 
       NotificationType.check_all(account_list.reload)
       msg = "Pledge frequency: #{giving[:pledge_frequency]}, amounts: #{giving[:amounts]}"

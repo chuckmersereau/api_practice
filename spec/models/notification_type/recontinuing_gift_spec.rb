@@ -4,7 +4,7 @@ describe NotificationType::RecontinuingGift do
   let!(:recontinuing_gift) { NotificationType::RecontinuingGift.first_or_initialize }
   let!(:da) { create(:designation_account) }
   let!(:account_list) { create(:account_list) }
-  let!(:contact) { create(:contact, account_list: account_list, pledge_amount: 9.99) }
+  let!(:contact) { create(:contact, account_list: account_list, pledge_amount: 9.99, pledge_received: true) }
   let!(:donor_account) { create(:donor_account) }
   let!(:donation) { create(:donation, donor_account: donor_account, designation_account: da) }
   let!(:old_donation) do
@@ -28,6 +28,11 @@ describe NotificationType::RecontinuingGift do
       old_donation.update(donation_date: Date.today << 2)
       expect(recontinuing_gift.check(account_list)).to be_empty
       old_donation.destroy!
+      expect(recontinuing_gift.check(account_list)).to be_empty
+    end
+
+    it 'does not add a notification if marked as pledge not received' do
+      contact.update(pledge_received: false)
       expect(recontinuing_gift.check(account_list)).to be_empty
     end
   end
