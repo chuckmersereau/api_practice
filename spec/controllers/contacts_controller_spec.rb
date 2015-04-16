@@ -78,8 +78,12 @@ describe ContactsController do
         expect(assigns(:contacts).size).to eq(2)
       end
 
-      it 'does not have an error when exporting after search for contacts in email list' do
+      it 'does not have an error when exporting after searches' do
         get :index, format: 'csv', filters: { newsletter: 'email' }
+      end
+
+      it 'does not have an error when exporting after searches' do
+        get :index, format: 'csv', filters: { newsletter: 'address' }
       end
     end
 

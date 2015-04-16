@@ -34,7 +34,7 @@ angular.module('mpdxApp')
         $scope.followUpDialog = function(taskId, taskResult){
             if(angular.isDefined($scope.tasks)){
                 var mergedTasks = [];
-                _($scope.tasks).forEach(function(i) { mergedTasks.push(i); });
+                _($scope.tasks).forEach(function(i) { mergedTasks.push(i); }).value();
                 var followUpTask = _.find(_.flatten(mergedTasks), { 'id': parseInt(taskId) });
                 followUpDialogCallback(followUpTask, taskResult);
             }else{
