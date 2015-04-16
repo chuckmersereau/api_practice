@@ -152,7 +152,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
     RestClient::Request.execute(method: method, url: SERVICE_URL + path, payload: params, timeout: 5000,
                                 headers: { 'Authorization' => "Bearer #{ URI.encode(oauth2_token) }" })
-  rescue RestClient::Unauthorized
+  rescue RestClient::Unauthorized, RestClient::Forbidden
     handle_bad_token
   end
 
