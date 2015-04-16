@@ -10,7 +10,7 @@ module SidekiqMonitor
   def sidekiq_problem
     stats = Sidekiq::Stats.new
     procs = Sidekiq::ProcessSet.new
-    threads = procs.map { |p| p['concurrency'].to_i }.reduce(:+)
+    threads = procs.map { |p| p['concurrency'].to_i }.reduce(0, :+)
     threads_free = threads - stats.workers_size
 
     if stats.default_queue_latency > config(:default_queue_latency).to_f

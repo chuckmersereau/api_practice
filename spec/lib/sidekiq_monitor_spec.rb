@@ -54,4 +54,12 @@ describe SidekiqMonitor do
     expect_mail
     SidekiqMonitor.notify_if_problem
   end
+
+  it 'does not error if no processors are running' do
+    stub_processes_threads
+    stub_stats(default_queue_latency: 1.0, enqueued: 1, workers_size: 1)
+    expect(SidekiqMonitor).to receive(:sleep).with(60.0)
+    expect_mail
+    SidekiqMonitor.notify_if_problem
+  end
 end
