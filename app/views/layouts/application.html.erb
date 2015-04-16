@@ -105,7 +105,7 @@
                   </div>
                 </div>
                 <div class="col-md-3 col-sm-3 text-right">
-                  <div class="navbar-quick">
+                  <div class="navbar-quick hidden-sm hidden-xs">
                     <%= @account_list_exhibit.balances(current_user) %>
                   </div>
                   <div class="text-right navbar-quick">
@@ -162,7 +162,7 @@
         <%= render 'notices' %>
         <%= yield %>
       </div>
-      <div id="footer" class="container">
+      <div id="footer" class="container brand-font">
         <div class="row">
           <div class="col-md-12">
             <div class="footer-border"></div>

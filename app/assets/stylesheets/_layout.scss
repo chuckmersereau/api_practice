@@ -152,7 +152,8 @@ div.right {
     a {
       line-height: $mainmenuheight;
       height: $mainmenuheight;
-      padding: 0 20px;
+      padding: 0 16px;
+      font-size: .95em;
       display: block;
     }
     a:active {
@@ -183,7 +184,7 @@ div.right {
     padding-left: 0;
   }
 
-  @media screen and (min-width: 0px) and (max-width: 767px) {
+  @media screen and (min-width: 0px) and (max-width: 550px) {
     .item {
       float: none;
       display: block;
@@ -396,12 +397,17 @@ div.right {
   z-index: 10;
   background: #fff;
 }
-  @media (min-width: 768px) {
+  @media (min-width: 768px) and (max-width: 977px) {
     #leftmenu.affix {
       width: 213px;
     }
     .page-filters.affix {
-      width: 698px;
+      width: 100%;
+      right: 0;
+      .row {
+        width: 750px;
+        margin: auto;
+      }
     }
   }
 
@@ -754,6 +760,60 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 
   }
 }
+
+ @media (max-width: 960px) {
+    .mobile_filters_wrap {
+    }
+    .show_mobile_filters {
+
+      display: block !important;
+
+      .close-filters {
+        color: $color-white;
+        position: absolute;
+        right: 5%;
+        top: 1%;
+        text-align: right;
+        font-weight: bold;
+        cursor: pointer;
+      }
+
+      .filters_menu {
+        border-right: 0;
+        position: fixed;
+        height: 100%;
+        width: 100%;
+        z-index: 100;
+        background: rgba(0,0,0,.85);
+        top: 0;
+        left: 0;
+        overflow: auto;
+        > ul {
+          margin: 5%;
+          padding: 10px;
+          max-height: 90%;
+          width: 90%;
+          background: #fff;
+          overflow: auto;
+          > li {
+            span.menu_item {
+              margin-left: 0 !important;
+              border: 1px solid #ccc !important;
+            }
+          }
+          .filters_section:last-child {
+            margin-bottom: 0;
+          }
+        }
+      }
+    }
+    body.stopscroll {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+    }
+  }
 
 .sort_options {
   margin-top: .5em !important;
