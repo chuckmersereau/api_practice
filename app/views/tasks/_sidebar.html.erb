@@ -64,6 +64,14 @@
             </div>
           </li>
           <li>
+            <label id="filter_status" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Contact Status']);"><%= _('Contact Status') %></label>
+            <div class="filter_set_inner">
+              <%= select_tag 'filters[status]',
+                    options_for_select([[_('-- Any --'), ''], [_('-- None --'), 'null']] + Contact.new.assignable_statuses.collect { |s| [_(s), s] }),
+                    multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactStatus' %>
+            </div>
+          </li>
+          <li>
             <label id="filter_type" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Contact Type']);"><%= _('Contact Type') %></label>
             <div class="filter_set_inner">
               <%= select_tag 'filters[city]', options_for_select([[_('-- Any --'), ''], [_('Person'), 'person'], [_('Company'), 'company']]), multiple: false, size: 5, class: 'form-control', :'ng-model' => 'filter.contactType' %>
@@ -98,11 +106,18 @@
               </label>
             </div>
           </li>
-
           <li>
-            <label id="filter_status" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Contact Status']);"><%= _('Contact Status') %></label>
+            <label id="filter_pledge_frequencies" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Commitment Frequency']);"><%= _('Contact Commitment Frequency') %></label>
             <div class="filter_set_inner">
-              <%= select_tag 'filters[status]', options_for_select([[_('-- Any --'), ''], [_('-- None --'), 'null'], [_('Never Contacted'), 'Never Contacted'], [_('Ask in Future'), 'Ask in Future'], [_('Contact for Appointment'), 'Contact for Appointment'], [_('Appointment Scheduled'), 'Appointment Scheduled'], [_('Call for Decision'), 'Call for Decision'], [_('Partner - Financial'), 'Partner - Financial'], [_('Partner - Special'), 'Partner - Special'], [_('Partner - Pray'), 'Partner - Pray'], [_('Not Interested'), 'Not Interested'], [_('Unresponsive'), 'Unresponsive'], [_('Never Ask'), 'Never Ask'], [_('Research Abandoned'), 'Research Abandoned'], [_('Expired Referral'), 'Expired Referral']]), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactStatus' %>
+              <%= select_tag 'filters[pledge_frequencies]',
+                             options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a),
+                             class: 'form-control', multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'filter.contactPledgeFrequencies' %>
+            </div>
+          </li>
+          <li>
+            <label id="filter_referrer" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Referrer']);"><%= _('Contact Referrer') %></label>
+            <div class="filter_set_inner">
+              <%= select_tag 'filters[referrer]', options_for_select([[_('-- Any --'), ''], [_('-- Someone --'), '*']] + current_account_list.contacts.with_referrals.order("name").collect { |c| [c.name, c.id] }), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactReferrer' %>
             </div>
           </li>
 
@@ -121,23 +136,9 @@
           </li>
 
           <li>
-            <label id="filter_referrer" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Referrer']);"><%= _('Contact Referrer') %></label>
-            <div class="filter_set_inner">
-              <%= select_tag 'filters[referrer]', options_for_select([[_('-- Any --'), ''], [_('-- Someone --'), '*']] + current_account_list.contacts.with_referrals.order("name").collect { |c| [c.name, c.id] }), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactReferrer' %>
-            </div>
-          </li>
-          <li>
             <label id="filter_timezone" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Timezone']);"><%= _('Contact Timezone') %></label>
             <div class="filter_set_inner">
               <%= select_tag 'filters[timezone]', options_for_select([[_('-- Any --'), '']] + current_account_list.timezones.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactTimezone' %>
-            </div>
-          </li>
-          <li>
-            <label id="filter_pledge_frequencies" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Commitment Frequency']);"><%= _('Contact Commitment Frequency') %></label>
-            <div class="filter_set_inner">
-              <%= select_tag 'filters[pledge_frequencies]',
-                             options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a),
-                             class: 'form-control', multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'filter.contactPledgeFrequencies' %>
             </div>
           </li>
           <li class="filter_set">
