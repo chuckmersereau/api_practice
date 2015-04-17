@@ -10,7 +10,12 @@ class AccountListExhibit < DisplayCase::Exhibit
   def balances(user)
     return '' if designation_accounts.length == 0
     if designation_accounts.length > 1
-      balance = designation_profile(user).try(:balance) ? designation_profile(user).balance.to_i : designation_accounts.map { |da| da.balance.to_i }.reduce(&:+)
+      balance =
+        if designation_profile(user).try(:balance)
+          designation_profile(user).balance.to_i
+        else
+          account_list_entries.select(&:active).map { |e| e.designation_account.balance.to_i }.reduce(&:+)
+        end
     else
       balance = designation_accounts.first.balance.to_i
     end
