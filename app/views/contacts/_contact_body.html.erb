@@ -139,20 +139,6 @@
                           var lastSaveTagsValue = '<%=contact_exhibit.tag_list%>'.replace(/, /g, ',');
                           <%= render 'tags_input.js', input_selector: '#contact_tag_list',
                                   tags: current_account_list.contact_tags  %>
-                        function saveContactTags(tags){
-                            if(lastSaveTagsValue == tags){ return; }
-                            jQuery.ajax({
-                                url: '/api/v1/contacts/<%=contact.id%>?account_list_id=' + window.current_account_list_id,
-                                type: 'PUT',
-                                contentType: 'application/json',
-                                data: JSON.stringify({contact: {
-                                    tag_list: tags
-                                }}),
-                                success: function() {
-                                    lastSaveTagsValue = tags;
-                                }
-                            });
-                        }
                       </script>
                     </td>
                   </tr>
