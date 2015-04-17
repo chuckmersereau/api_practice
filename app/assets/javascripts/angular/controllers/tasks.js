@@ -88,7 +88,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[pledge_frequencies][]=' + encodeURLarray($scope.filter.contactPledgeFrequencies).join('&filters[pledge_frequencies][]=') +
             '&include=Contact.id&per_page=10000'
         , {}, function(data) {
-            refreshTasks(group, _.flatten(data.contacts, 'id'));
+            refreshTasks(group, _.pluck(data.contacts, 'id'));
         }, null, true);
     };
 
@@ -135,7 +135,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
 
             //retrieve contacts
             api.call('get','contacts?account_list_id=' + window.current_account_list_id +
-                '&filters[status]=*&filters[ids]='+_.uniq(_.flatten(tData.tasks, 'contacts')).join(), {} ,function(data) {
+                '&filters[status]=*&filters[ids]='+_.chain(tData.tasks).pluck('contacts').flatten().unique().join().value(), {} ,function(data) {
                 angular.forEach(data.contacts, function(contact){
                     contactCache.update(contact.id, {
                         addresses: _.filter(data.addresses, function (addr) {
@@ -232,7 +232,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             }
         });
         $timeout(function(){
-            $scope.totalTasksLoading = _.contains(_.flatten($scope.taskGroups, 'loading'), true);
+            $scope.totalTasksLoading = _.some($scope.taskGroups, 'loading', true);
         }, 1000);
     };
 
