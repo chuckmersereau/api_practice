@@ -101,10 +101,10 @@ window.addFields = (link, association, content) ->
 
 $.mpdx = {}
 $.mpdx.activateTabs = ->
-  $(".tabgroup").tabs({
-    activate: (event, ui) ->
+  $(".tabgroup").tabs(
+    # activate: (event, ui) ->
       #window.location.hash = ui.newPanel[0].id
-  })
+  )
 
 $.mpdx.ajaxBefore = ->
   $('#page_spinner').dialog({modal: true, closeOnEscape: false})

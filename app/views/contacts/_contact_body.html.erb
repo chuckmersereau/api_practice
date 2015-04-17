@@ -183,8 +183,8 @@
       </div>
     </div>
 
-    <div id="contact" class="module tabgroup">
-      <ul>
+    <div id="contact" class="module tabgroup ui-tabs">
+      <ul class="ui-tabs-nav">
         <% (current_user.tab_order_by_location('contact') | ContactExhibit::TABS.keys).each do |tab_name| %>
           <li id="tabs_<%= tab_name %>"><a href="#<%= tab_name %>-tab"><%= _(ContactExhibit::TABS[tab_name]) %></a></li>
         <% end %>
