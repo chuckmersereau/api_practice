@@ -557,15 +557,15 @@ $.mpdx.reloadContact = ->
   return if !$('#contentbody').attr('data-contact-id')
   location.reload()
 
-saveContactTags = (tags, contactId) ->
-    if lastSaveTagsValue == tags
-        return
-    jQuery.ajax
-        url: '/api/v1/contacts/' + contactId + '?account_list_id=' + window.current_account_list_id
-        type: 'PUT'
-        contentType: 'application/json'
-        data: JSON.stringify(contact: tag_list: tags)
-        success: ->
-            lastSaveTagsValue = tags
-            return
+$.mpdx.saveContactTags = (tags, contactId) ->
+  if lastSaveTagsValue == tags
     return
+  jQuery.ajax
+    url: '/api/v1/contacts/' + contactId + '?account_list_id=' + window.current_account_list_id
+    type: 'PUT'
+    contentType: 'application/json'
+    data: JSON.stringify(contact: tag_list: tags)
+    success: ->
+      lastSaveTagsValue = tags
+      return
+  return
