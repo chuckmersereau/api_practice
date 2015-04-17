@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-04-15 17:27+0100\n"
+"PO-Revision-Date: 2015-04-17 14:30+0100\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -28,7 +28,7 @@ msgstr ""
 "Cela fait plus de 6 mois que vous avez appelé ces importants partenaires financiers."
 
 msgid " to email donation services."
-msgstr ""
+msgstr " to pour contacter l'équipe des finances."
 
 msgid "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
 msgstr "\"Affichage de #{b}%{from}#{sp}-#{sp}%{to}#{eb} sur #{b}%{count}#{eb}\""
@@ -58,7 +58,7 @@ msgid "%{contacts_count} referrals"
 msgstr "%{contacts_count} références"
 
 msgid "%{index} of %{total}"
-msgstr ""
+msgstr "%{index} de %{total}"
 
 msgid "%{link} has given %{total} since %{since}"
 msgstr "%{link} a donné %{total} depuis %{since}"
@@ -83,10 +83,10 @@ msgstr ""
 "MPDx.)"
 
 msgid "-- All Active --"
-msgstr "-- Tout activer --"
+msgstr "-- Tout active --"
 
 msgid "-- All Hidden --"
-msgstr "-- Tout cacher --"
+msgstr "-- Tout caché --"
 
 msgid "-- Any --"
 msgstr "--Tous--"
@@ -95,7 +95,7 @@ msgid "-- None --"
 msgstr "--Aucun--"
 
 msgid "-- Someone --"
-msgstr "--quelqu'un--"
+msgstr "--Quelqu'un--"
 
 msgid "... Show More"
 msgstr "...Plus"
@@ -268,7 +268,7 @@ msgid "Addresses:"
 msgstr "Adresses :"
 
 msgid "Admin %"
-msgstr ""
+msgstr "Admin %"
 
 msgid "Age"
 msgstr "Age"
@@ -344,7 +344,7 @@ msgid "Appointments"
 msgstr "Rendez-vous"
 
 msgid "Are marked as do not ask for appeals"
-msgstr ""
+msgstr "Sont marqués de ne pas demander pour les appels"
 
 msgid "Are you sure you want to delete this task instead of marking it as completed?"
 msgstr ""
@@ -394,7 +394,7 @@ msgstr ""
 "l'année dernière"
 
 msgid "Avg Household Income by Zip"
-msgstr ""
+msgstr "Revenu moyen des ménages par zone"
 
 msgid "Back"
 msgstr "Retour"
@@ -405,6 +405,10 @@ msgid ""
 "                      is based on a set of rules that are right most of the time, but "
 "you will still want to verify an event manually before contacting the partner."
 msgstr ""
+"Basé sur une analyse de l'hisorique des dons d'un partenaire, MPDX peut vous informer "
+"d'événements que vous voudrez probablement suivi. La logique de détection est basé sur "
+"un ensemble de règles qui sont corrects la plupart du temps, mais vous aurez toujours "
+"vouloir vérifier un événement manuellement avant de contacter le partenaire."
 
 msgid ""
 "Before emailing us, please have a look at %{link} to see if your question is already "
@@ -491,7 +495,7 @@ msgid "City"
 msgstr "Ville"
 
 msgid "Clear Insight Filter"
-msgstr ""
+msgstr "Réinitialiser le filtre"
 
 msgid "Click here to create a new calendar"
 msgstr "Cliquer ici pour créer un nouveau calendrier"
@@ -609,16 +613,16 @@ msgid "Contact for Appointment"
 msgstr "Contacter pour un rendez-vous"
 
 msgid "Contacted - No descision yet"
-msgstr ""
+msgstr "Contacté - Pas de décision"
 
 msgid "Contacted - No increase at this time. Will re-attempt in the future."
-msgstr ""
+msgstr "Contacté - Pas d'augmentation en ce moment. Va tenter à nouveau à l'avenir."
 
 msgid "Contacted - Not possible at all. Will not re-attempt"
-msgstr ""
+msgstr "Contacté - Pas possible du tout. Ne pas tenter à l'avenir."
 
 msgid "Contacted - Received an Increase"
-msgstr ""
+msgstr "Contacté - Reçu une augmentation"
 
 msgid "Contacts"
 msgstr "Contacts"
@@ -681,7 +685,7 @@ msgid "Cultivate Relationship"
 msgstr "Cultiver la relation"
 
 msgid "Current Gift"
-msgstr ""
+msgstr "Don actuelle"
 
 msgid "Currently No People"
 msgstr "Pas de personnes pour l'instant"
@@ -745,13 +749,13 @@ msgid "Disable Google Contacts integration"
 msgstr "Désactiver l' intégration des contacts Google"
 
 msgid "Displaying"
-msgstr ""
+msgstr "Montrer"
 
 msgid "Divorced"
 msgstr "Divorcé"
 
 msgid "Do not add contacts who:"
-msgstr ""
+msgstr "Ne pas ajouter des contacts qui:"
 
 msgid "Donation History"
 msgstr "Historique des dons"
@@ -778,7 +782,7 @@ msgid "Donor ID"
 msgstr "ID des donateurs"
 
 msgid "Double click to cancel."
-msgstr ""
+msgstr "Double-cliquez pour annuler."
 
 msgid "Download as CSV spreadsheet file"
 msgstr "Télécharger comme feuille de calcul CSV"
@@ -801,6 +805,10 @@ msgid ""
 "LinkedIn, and Twitter so that you connect, listen, and engage with your ministry "
 "partners."
 msgstr ""
+"Se connecter facilement tous vos contacts, calendriers, communications et "
+"conversations sociales. MPDX identifiera automatiquement les profils sociaux de "
+"contact sur Facebook, LinkedIn et Twitter, afin que vous pouvez vous connecter, "
+"écouter, et se engager avec vos partenaires du ministère."
 
 msgid "Edit"
 msgstr "Modifier"
@@ -842,7 +850,7 @@ msgid "Email:"
 msgstr "E-mail :"
 
 msgid "Employer"
-msgstr ""
+msgstr "Employeur"
 
 msgid "Enable"
 msgstr "Activer"
@@ -899,6 +907,9 @@ msgid ""
 "For each event MPDX can notify you via email and also create a task entry reminding "
 "you to do something about it. The options below allow you to control that behavior."
 msgstr ""
+"Pour chaque événement MPDX peut vous informer par email et également créer une tâche "
+"pour vous rappeler de faire quelque chose. Les options ci-dessous vous permettent de "
+"contrôler ce comportement."
 
 msgid ""
 "For the MailChimp integration we recommend that you set up a new list on MailChimp to "
@@ -926,16 +937,16 @@ msgid "Frequency"
 msgstr "Fréquence"
 
 msgid "From donor system. To make changes, "
-msgstr ""
+msgstr "De système des dons. Pour apporter des modifications,"
 
 msgid "Gave a special gift in the last 3 months"
-msgstr ""
+msgstr "A donné un don spécial dans les 3 derniers mois"
 
 msgid "Gender:"
 msgstr "Sexe :"
 
 msgid "Get started by choosing your login source:"
-msgstr ""
+msgstr "Commencez par choisir votre source de connexion:"
 
 msgid "Gift Range"
 msgstr "Intervalle des dons"
@@ -1010,7 +1021,7 @@ msgid "Hon."
 msgstr "Hon."
 
 msgid "Household Income Range by Zip"
-msgstr ""
+msgstr "Plage revenu du ménage par zone"
 
 msgid "Husband"
 msgstr "Mari"
@@ -1052,22 +1063,22 @@ msgid "Import Google Contacts"
 msgstr "Importer des contacts Google"
 
 msgid "Import TntMPD DataSync file"
-msgstr ""
+msgstr "Importer un fichier TntMPD DataSync"
 
 msgid "Import all contacts"
 msgstr "Importer tous les contacts"
 
 msgid "Increase Recommendations"
-msgstr ""
+msgstr "Recommandations pour augmentation"
 
 msgid "Increased their giving in the last 3 months"
-msgstr ""
+msgstr "A augmenté leurs dons dans les 3 derniers mois"
 
 msgid "Initial goal"
-msgstr ""
+msgstr "Objectif initial"
 
 msgid "Insights"
-msgstr ""
+msgstr "Idées"
 
 msgid "Integrations"
 msgstr "Intégrations"
@@ -1104,7 +1115,7 @@ msgstr ""
 "soumettre les changements, ils seront perdus."
 
 msgid "Joined my team in the last 3 months"
-msgstr ""
+msgstr "A rejoint mon équipe dans les 3 derniers mois"
 
 msgid "Jr."
 msgstr "Jr."
@@ -1297,7 +1308,7 @@ msgid "Married"
 msgstr "Marié"
 
 msgid "Max Increase Amount"
-msgstr ""
+msgstr "Montant maximal d'augmentation "
 
 msgid "Merge"
 msgstr "Fusionner"
@@ -1327,7 +1338,7 @@ msgid "Method"
 msgstr "Méthode"
 
 msgid "Metro Area"
-msgstr "Arrêt de metro"
+msgstr "Région métropolitaine"
 
 msgid "Mobile"
 msgstr "Mobile"
@@ -1411,7 +1422,7 @@ msgid "Newsletter type"
 msgstr "Type de lettre de nouvelle"
 
 msgid "Next"
-msgstr ""
+msgstr "Suivant"
 
 msgid "Next Action"
 msgstr "Prochaine action"
@@ -1423,7 +1434,7 @@ msgid "Next Month >>"
 msgstr "Mois prochain >>"
 
 msgid "Next Suggested Increase"
-msgstr ""
+msgstr "Prochaine augmentation suggérée"
 
 msgid "Next Week >>"
 msgstr "Semaine prochaine >>"
@@ -1493,6 +1504,10 @@ msgid ""
 "organization, not your local TntMPD database file (.mpddb). To import your local Tnt "
 "database, click \"Import Contacts\" below next to the TntMPD logo."
 msgstr ""
+"Remarque: ce fichier doit être un fichier texte de TntMPD datasync (.tntmpd) de votre "
+"organisation, pas votre fichier de base de données TntMPD locale (.mpddb). Pour "
+"importer votre base de données locale Tnt, cliquez sur  \"Importer des contacts \" ci-"
+"dessous à côté du logo TntMPD."
 
 msgid "Notes"
 msgstr "Remarques"
@@ -1515,7 +1530,7 @@ msgid "Only import contacts from certain groups"
 msgstr "Seulement importer les contacts de certains groupes"
 
 msgid "Opt-out of email newsletter"
-msgstr ""
+msgstr "Exclure de la lettre des nouvelles électronique"
 
 msgid "Other"
 msgstr "Autre"
@@ -1628,7 +1643,7 @@ msgid "Postal Code"
 msgstr "Code postal"
 
 msgid "Prayer Request"
-msgstr ""
+msgstr " Requête de prière"
 
 msgid "Pre Call Letter"
 msgstr "Lettre pré-appel"
@@ -1646,7 +1661,7 @@ msgid "Preferred Email Address"
 msgstr "Adresse e-mail préférée "
 
 msgid "Previous"
-msgstr ""
+msgstr "Précédent"
 
 msgid "Primary Address"
 msgstr "Adresse primaire"
@@ -1682,7 +1697,7 @@ msgid "Received:"
 msgstr "Reçu :"
 
 msgid "Recurring Gift Recommendations"
-msgstr ""
+msgstr "Recommandations de dons récurrents"
 
 msgid "Referrals"
 msgstr "Références "
@@ -1715,7 +1730,7 @@ msgid "Related task action"
 msgstr "Tâche en relation"
 
 msgid "Relay Login Link"
-msgstr ""
+msgstr "Lien de connexion Relay"
 
 msgid "Reminder Letter"
 msgstr "Lettre de rappel"
@@ -1730,7 +1745,7 @@ msgid "Remove Tag"
 msgstr "Supprimer le libellé"
 
 msgid "Remove this Person"
-msgstr ""
+msgstr "Supprimer cette personne"
 
 msgid "Research"
 msgstr "Recherche"
@@ -1766,7 +1781,7 @@ msgid "Saving..."
 msgstr "Sauvegarde..."
 
 msgid "Search by Name"
-msgstr ""
+msgstr "Recherche par Nom"
 
 msgid "Search contacts..."
 msgstr "Recherche de contact..."
@@ -1802,7 +1817,7 @@ msgid "Send Message"
 msgstr "Envoyer un message"
 
 msgid "Send Paper Newsletter List"
-msgstr ""
+msgstr "Envoyer lettre des nouvelles par papier"
 
 msgid "Sent"
 msgstr "Envoyé"
@@ -2301,7 +2316,7 @@ msgid "Your username and password for %{org} are invalid."
 msgstr "Votre nom d'utilisateur et mot de passe pour %{org} sont invalides."
 
 msgid "Zip"
-msgstr "Zip"
+msgstr "Code postale"
 
 msgid "[MPDX] Importing your %{source} contacts completed"
 msgstr "[MPDX] L' importation de vos contacts de %{source} est terminée"
