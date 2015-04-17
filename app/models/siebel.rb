@@ -269,7 +269,7 @@ class Siebel < DataServer
     end
 
     person = contact.people.where(first_name: siebel_person.first_name, last_name: siebel_person.last_name).first
-    person ||= donor_account.people.where(master_person_id: master_person_from_source.id).first if master_person_from_source
+    person ||= contact.people.where(master_person_id: master_person_from_source.id).first if master_person_from_source
     person ||= Person.new(master_person: master_person_from_source)
 
     gender = case siebel_person.sex
@@ -285,7 +285,7 @@ class Siebel < DataServer
       title: siebel_person.title,
       suffix: siebel_person.suffix,
       gender: gender
-    }
+    } if person.new_record?
 
     person.master_person_id ||= MasterPerson.find_or_create_for_person(person, donor_account: donor_account).try(:id)
     person.save!
