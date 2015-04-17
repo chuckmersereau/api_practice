@@ -49,13 +49,16 @@ describe HasPrimary do
   end
 
   context '#ensure_only_one_primary? case for person and email addresses (does not respond to :historic)' do
-    let(:contact) { create(:contact) }
-    let(:person1) { create(:person) }
-    let(:person2) { create(:person) }
+    let!(:contact) { create(:contact) }
+    let!(:person1) { create(:person) }
+    let!(:person2) { create(:person) }
     let!(:contact_person1) { create(:contact_person, contact: contact, person: person1, primary: true) }
-    let!(:contact_person2) { create(:contact_person, contact: contact, person: person2, primary: false) }
+    let!(:contact_person2) do
+      create(:contact_person, contact: contact.reload, person: person2.reload, primary: false)
+    end
 
     it 'leaves the existing primary one if one is specified' do
+      expect(contact_person1.reload.primary).to be_true
       contact_person1.send(:ensure_only_one_primary)
       expect(contact_person1.reload.primary).to be_true
       expect(contact_person2.reload.primary).to be_false

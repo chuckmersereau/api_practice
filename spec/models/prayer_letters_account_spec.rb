@@ -61,8 +61,8 @@ describe PrayerLettersAccount do
 
   context '#update_contact' do
     before do
-      contact.addresses << create(:address)
-      contact.update(prayer_letters_id: 'c1')
+      contact.addresses << create(:address, primary_mailing_address: true)
+      contact.update(prayer_letters_id: 'c1', send_newsletter: 'Both', prayer_letters_params: nil)
     end
 
     it 'calls the prayer letters api to create a contact and sets cached params value' do
@@ -84,38 +84,39 @@ describe PrayerLettersAccount do
     end
 
     def stub_update_error(code)
-      stub_request(:post,  'https://www.prayerletters.com/api/v1/contacts/c1').to_return(status: code)
-    end
-
-    it 're-subscribes the contact list on 410' do
-      stub_update_error(410)
-      pla.update_contact(contact)
-      expect(PrayerLettersAccount.jobs.size).to eq(1)
-      expect(PrayerLettersAccount.jobs.first['args']).to eq([pla.id, 'subscribe_contacts'])
-      expect(contact.prayer_letters_id).to be_nil
-      expect(contact.prayer_letters_params).to be_blank
+      stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts/c1').to_return(status: code)
+      yield
+      expect(stub).to have_been_requested
     end
 
     it 're-subscribes the contact list on 404' do
-      stub_update_error(404)
-      pla.update_contact(contact)
-      expect(PrayerLettersAccount.jobs.size).to eq(1)
-      expect(PrayerLettersAccount.jobs.first['args']).to eq([pla.id, 'subscribe_contacts'])
-      expect(contact.prayer_letters_id).to be_nil
-      expect(contact.prayer_letters_params).to be_blank
+      stub_update_error(404) do
+        expect(pla).to receive(:queue_subscribe_contacts)
+        pla.update_contact(contact)
+      end
+    end
+
+    it 're-subscribes the contact list on 410' do
+      stub_update_error(410) do
+        expect(contact.reload.prayer_letters_params).to eq({})
+        expect(pla).to receive(:queue_subscribe_contacts)
+        pla.update_contact(contact)
+      end
     end
   end
 
   context '#create_contact' do
     it 'calls the prayer letters api to create a contact and sets cached params value' do
       contact.addresses << create(:address)
+
       params = { city: 'Fremont', external_id: contact.id.to_s, file_as: 'Doe, John', greeting: '',
                  name: 'John Doe', postal_code: '94539', state: 'CA', street: '123 Somewhere St' }
       stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts')
              .with(body: params, headers: { 'Authorization' => 'Bearer MyString' })
              .to_return(body: '{"contact_id": "c1"}')
 
-      pla.create_contact(contact)
+      pla.create_contact(Contact.find(contact.id))
+      contact.reload
       expect(contact.prayer_letters_id).to eq('c1')
       params[:external_id] = params[:external_id].to_i
       expect(contact.prayer_letters_params).to eq(params)
@@ -154,6 +155,18 @@ describe PrayerLettersAccount do
       pla.subscribe_contacts
       expect(stub).to have_been_requested
     end
+
+    it 'clears the prayer letters params for removed contacts so they can be re-added later' do
+      stub_request(:put, 'https://www.prayerletters.com/api/v1/contacts')
+        .with(headers: { 'Authorization' => 'Bearer MyString' })
+      expect(pla).to receive(:import_list)
+
+      contact.update_columns(send_newsletter: false, prayer_letters_params: { old: 'old values' })
+      pla.subscribe_contacts
+      contact.reload
+      expect(contact.prayer_letters_params).to be_blank
+      expect(contact.prayer_letters_id).to be_nil
+    end
   end
 
   context '#import_list' do
@@ -175,7 +188,7 @@ describe PrayerLettersAccount do
 
   context '#delete_contact' do
     it 'calls the prayer letters api to delete and sets prayer letters info to blanks' do
-      contact.update(prayer_letters_id: 'c1', prayer_letters_params: params)
+      contact.update_columns(prayer_letters_id: 'c1', prayer_letters_params: params)
 
       stub = stub_request(:delete, 'https://www.prayerletters.com/api/v1/contacts/c1')
              .with(headers: { 'Authorization' => 'Bearer MyString' })

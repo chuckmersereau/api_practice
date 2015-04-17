@@ -367,7 +367,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def organization_accounts
-    @organization_accounts ||= users.map(&:organization_accounts).flatten.uniq
+    users.map(&:organization_accounts).flatten.uniq
   end
 
   def in_hand_percent

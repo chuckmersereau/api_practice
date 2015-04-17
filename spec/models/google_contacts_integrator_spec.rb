@@ -475,7 +475,7 @@ describe GoogleContactsIntegrator do
   end
 
   it 'does nothing when an import is running' do
-    create(:import, account_list: @account_list, importing: true, source: 'google')
+    @account_list.imports << create(:import, importing: true, source: 'google')
     expect(@integrator).to_not receive(:sync_and_return_num_synced)
     @integrator.sync_contacts
   end

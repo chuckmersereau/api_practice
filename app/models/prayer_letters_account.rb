@@ -21,12 +21,8 @@ class PrayerLettersAccount < ActiveRecord::Base
     contacts = []
 
     account_list.contacts.includes([:primary_address, { primary_person: :companies }]).each do |contact|
-      next unless contact.send_physical_letter? &&
-                  contact.mailing_address.present? &&
-                  contact.active? &&
-                  contact.mailing_address.valid_mailing_address? &&
-                  contact.envelope_greeting.present? &&
-                  contact.name.present?
+      next unless contact.should_be_in_prayer_letters?
+
       params = {
         name: contact.envelope_greeting,
         greeting: contact.greeting,
@@ -50,8 +46,9 @@ class PrayerLettersAccount < ActiveRecord::Base
 
     get_response(:put, '/api/v1/contacts', { contacts: contacts }.to_json)
 
-    # Now that we've replaced the list, we need to fetch the whole list and match it to our existing contacts
+    account_list.contacts.update_all(prayer_letters_id: nil, prayer_letters_params: nil)
 
+    # Now that we've replaced the list, we need to fetch the whole list and match it to our existing contacts
     import_list
   end
 
@@ -60,7 +57,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
     contacts.each do |pl_contact|
       next unless pl_contact['external_id'] && contact = account_list.contacts.where(id: pl_contact['external_id']).first
-      contact.update_columns(prayer_letters_id: pl_contact['contact_id'], prayer_letters_params: nil)
+      contact.update_columns(prayer_letters_id: pl_contact['contact_id'])
     end
   end
 
@@ -107,9 +104,7 @@ class PrayerLettersAccount < ActiveRecord::Base
     contact.update_column(:prayer_letters_params, params)
   rescue AccessError
     # do nothing
-  rescue RestClient::Gone
-    handle_missing_contact(contact)
-  rescue RestClient::ResourceNotFound
+  rescue RestClient::Gone, RestClient::ResourceNotFound
     handle_missing_contact(contact)
   end
 

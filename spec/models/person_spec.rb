@@ -207,7 +207,8 @@ describe Person do
     end
 
     it "doesn't create a duplicate if updating to an address that already exists" do
-      email2 = create(:email_address, person: person)
+      email2 = create(:email_address)
+      person.email_addresses << email2
 
       email_addresses_attributes = {
         '0' => {
@@ -295,7 +296,7 @@ describe Person do
       p2.contacts << c
       expect do
         p1.merge(p2)
-      end.to change(Version, :count).by(1)
+      end.to change(Version, :count).by(2) # 2 from the .destroy call and then the transaction commit I think
 
       v = Version.last
       expect(v.related_object_id).to eq(c.id)

@@ -141,6 +141,7 @@ group :test do
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
   gem 'rubocop'
+  gem 'test_after_commit'
 end
 
 group :doc do
