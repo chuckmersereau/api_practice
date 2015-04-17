@@ -321,18 +321,18 @@ describe Siebel do
       siebel.send(:add_or_update_person, siebel_person_with_rels, donor_account, contact, Time.zone.now)
     end
 
-    it 'updates an existing person' do
+    it 'leaves the user modified name fields alone when it updates a person' do
       mp = MasterPerson.create
       MasterPersonSource.create(master_person_id: mp.id, organization_id: org.id, remote_id: siebel_person.id)
       p = create(:person, master_person_id: mp.id)
       donor_account.people << p
-      contact.add_person(p)
+      contact.people << p
 
       expect do
         siebel.send(:add_or_update_person, siebel_person, donor_account, contact)
       end.not_to change { Person.count }
 
-      p.reload.legal_first_name.should == siebel_person.first_name
+      expect(p.reload.legal_first_name).to_not eq(siebel_person.first_name)
     end
 
     it 'find and updates an old-style remote_id' do
