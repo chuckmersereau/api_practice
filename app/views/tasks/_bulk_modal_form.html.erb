@@ -15,9 +15,17 @@
       var month = date.getMonth() + 1;
       var day = date.getDate();
 
-      $('.due_date [id$=_1i]').val(year);
-      $('.due_date [id$=_2i]').val(month);
-      $('.due_date [id$=_3i]').val(day);
+      if ($('[id$=start_at_1i]').length) {
+        $('[id$=start_at_1i]').val(year);
+        $('[id$=start_at_2i]').val(month);
+        $('[id$=start_at_3i]').val(day);
+      }
+
+      if ($('[id$=completed_at_1i]').length) {
+        $('[id$=completed_at_1i]').val(year);
+        $('[id$=completed_at_2i]').val(month);
+        $('[id$=completed_at_3i]').val(day);
+      }
     }
   });
 </script>
