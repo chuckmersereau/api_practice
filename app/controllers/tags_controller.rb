@@ -9,7 +9,6 @@ class TagsController < ApplicationController
   end
 
   def destroy
-    p params
     return if params[:remove_tag_name].blank?
     if params[:all_contacts] == '1'
       contacts = current_account_list.contacts
