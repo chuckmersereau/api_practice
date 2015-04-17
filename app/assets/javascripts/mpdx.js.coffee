@@ -19,7 +19,7 @@ $ ->
   $(document).on 'click', '.filter_title', ->
     $(this).toggleClass("opened")
     $(this).parent("li").toggleClass("opened")
-    determineAffixScroll()
+    setTimeout(determineAffixScroll, 500)
 
   $(document).on 'mouseleave', 'div[data-behavior=account_selector]', ->
     $('div[data-behavior=account_selector] div').hide()
