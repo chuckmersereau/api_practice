@@ -132,7 +132,7 @@
                     <td class="meta_data">
                       <%= form_for(contact_exhibit) do |f| %>
                       <div class="form-group">
-                        <%= f.text_field :tag_list, :onChange => "saveContactTags(this.value); " %>
+                        <%= f.text_field :tag_list, :onChange => "saveContactTags(this.value, "+contact.id+");" %>
                       </div>
                       <% end %>
                       <script>
