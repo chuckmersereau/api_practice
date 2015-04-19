@@ -229,7 +229,7 @@ class TntImport
       next unless contact && task
 
       Retryable.retryable times: 3, sleep: 1 do
-        task.contacts << contact unless task.contacts.include?(contact)
+        task.contacts << contact unless task.contacts.reload.include?(contact)
       end
 
       tnt_appeal_id = tnt_history_id_to_appeal_id[row['HistoryID']]
