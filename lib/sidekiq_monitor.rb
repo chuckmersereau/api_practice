@@ -13,10 +13,7 @@ module SidekiqMonitor
     threads = procs.map { |p| p['concurrency'].to_i }.reduce(0, :+)
     threads_free = threads - stats.workers_size
 
-    latency_threshold = config(:default_queue_latency).to_f
-    if latency_threshold > 0.0 && stats.default_queue_latency > latency_threshold
-      "High default queue latency: #{stats.default_queue_latency.round} seconds"
-    elsif too_few_procs?(procs)
+    if too_few_procs?(procs)
       sleep(config(:min_procs_interval).to_f)
       "Expected #{config(:min_procs)} processes but only #{procs.size} running" if too_few_procs?(procs)
     elsif stuck?(threads_free, stats)
