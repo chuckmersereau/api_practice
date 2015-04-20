@@ -130,9 +130,16 @@
                   <tr>
                     <td class="meta_name"><%= _('Tags') %> </td>
                     <td class="meta_data">
-                      <div class="tags">
-                        <%= contact_exhibit.tag_links %>
+                      <%= form_for(contact_exhibit) do |f| %>
+                      <div class="form-group">
+                        <%= f.text_field :tag_list, onChange: "$.mpdx.saveContactTags(this.value, "+contact.id.to_s+");" %>
                       </div>
+                      <% end %>
+                      <script>
+                          var lastSaveTagsValue = '<%=contact_exhibit.tag_list%>'.replace(/, /g, ',');
+                          <%= render 'tags_input.js', input_selector: '#contact_tag_list',
+                                  tags: current_account_list.contact_tags  %>
+                      </script>
                     </td>
                   </tr>
                 <% end %>
