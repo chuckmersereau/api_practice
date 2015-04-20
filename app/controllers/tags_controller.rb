@@ -18,10 +18,9 @@ class TagsController < ApplicationController
       taggables = current_account_list.contacts.where(id: params[:remove_tag_contact_ids].split(','))
     end
     taggables.each do |o|
-      if o.tag_list.include?(params[:remove_tag_name].downcase)
-        o.tag_list.remove(params[:remove_tag_name].downcase)
-        o.save
-      end
+      next unless o.tag_list.include?(params[:remove_tag_name].downcase)
+      o.tag_list.remove(params[:remove_tag_name].downcase)
+      o.save
     end
   end
 end

@@ -23,23 +23,7 @@
   max-width: inherit;
 }
 
-.tag [data-role="remove"] {
-  margin-left: 8px;
-  cursor: pointer;
-  &:after {
-    content: "\f00d";
-    font-family: "FontAwesome";
-    padding: 0px 2px;
-  }
-  &:hover:active, &:after {
-    opacity: .5;
-  }
-  &:hover:after, &:hover {
-    opacity: 1;
-  }
-}
-
-.tag_remove {
+.tag [data-role="remove"], .tag_remove {
   margin-left: 2px;
   cursor: pointer;
   &:after {
