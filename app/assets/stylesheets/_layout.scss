@@ -1840,6 +1840,12 @@ span.best_in_place_once {
   text-transform: uppercase;
   font-weight: 600;
   font-family: $brand-font;
+  .badge {
+    border-radius: 15px;
+    display: inline-block;
+    font-size: 11px;
+    padding: 0 6px;
+  }
 }
 
 .marked_for_destruction { display: none; }
