@@ -10,23 +10,17 @@ class TagsController < ApplicationController
 
   def destroy
     return if params[:remove_tag_name].blank?
-    if params[:all_contacts] == '1'
-      contacts = current_account_list.contacts
-      contacts.each do |c|
-        c.tag_list.remove(params[:remove_tag_name].downcase)
-        c.save
-      end
-    elsif params[:all_tasks] == '1'
-      tasks = current_account_list.tasks
-      tasks.each do |t|
-        t.tag_list.remove(params[:remove_tag_name].downcase)
-        t.save
-      end
+    if params[:all_contacts]
+      taggables = current_account_list.contacts
+    elsif params[:all_tasks]
+      taggables = current_account_list.tasks
     else
-      contacts = current_account_list.contacts.where(id: params[:remove_tag_contact_ids].split(','))
-      contacts.each do |c|
-        c.tag_list.remove(params[:remove_tag_name].downcase)
-        c.save
+      taggables = current_account_list.contacts.where(id: params[:remove_tag_contact_ids].split(','))
+    end
+    taggables.each do |o|
+      if o.tag_list.include?(params[:remove_tag_name].downcase)
+        o.tag_list.remove(params[:remove_tag_name].downcase)
+        o.save
       end
     end
   end
