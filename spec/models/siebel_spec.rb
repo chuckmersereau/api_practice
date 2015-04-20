@@ -76,6 +76,20 @@ describe Siebel do
 
       da1.balance.should == 1
     end
+
+    it 'does not total the amounts from designation accounts marked as inactive for the account list' do
+      stub_request(:get, 'https://wsapi.ccci.org/wsapi/rest/staffAccount/balances?employee_ids=1&response_timeout=60000')
+        .to_return(status: 200, body: '{ "1": { "primary": 1 }}')
+      stub_request(:get, 'https://wsapi.ccci.org/wsapi/rest/staffAccount/balances?employee_ids=2&response_timeout=60000')
+        .to_return(status: 200, body: '{ "2": { "primary": 2 }}')
+
+      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << da2
+      account_list.account_list_entries.find_by(designation_account: da1).update(active: false)
+
+      siebel.import_profile_balance(designation_profile)
+      expect(designation_profile.balance).to eq(2)
+    end
   end
 
   context '#import_donations' do

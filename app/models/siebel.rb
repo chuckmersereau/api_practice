@@ -52,6 +52,7 @@ class Siebel < DataServer
       next unless da.staff_account_id.present?
       balance = SiebelDonations::Balance.find(employee_ids: da.staff_account_id).first
       da.update_attributes(balance: balance.primary, balance_updated_at: Time.now)
+      next if profile.account_list.account_list_entries.where(designation_account: da, active: false).any?
       total += balance.primary
     end
     profile.update_attributes(balance: total, balance_updated_at: Time.now)
