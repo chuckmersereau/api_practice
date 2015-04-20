@@ -49,10 +49,6 @@ $userheight: 72px;
     .settings-drop {
       margin-top: 15px;
     }
-    a:hover {
-    }
-    a:active {
-    }
     .balance {
       border-left: 1px solid $blue-light;
       padding-left: 8px;
@@ -1785,6 +1781,122 @@ body.google_integrations_controller {
     content: "\f0e6";
     padding-right: 4px;
   }
+}
+
+/* ********************* Dashboard ************************** */
+#donations_summary_chart {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+#dash-progress {
+  .page-filters {
+    margin-bottom: 1.5em;
+    h3 {font-weight: 600; font-size: 1.6em; margin-bottom: 0; line-height: 35px;}
+    h3 .normal-weight {font-weight: 500;}
+  }
+  .well {
+    padding: 14px 19px;
+  }
+}
+.dash-tasks {}
+.appeal-single {
+  margin-bottom: 1.5em;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  .dash-progress {
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+  }
+  
+  .progress-red {background: red !important;}
+  .progress-yellow {background: orange !important;}
+  .progress-green {background: #009900 !important;}
+
+  .count-red {color: red;}
+  .count-yellow {color: orange;}
+  .count-green {color: #009900;}
+
+  .progress-bar {
+    background: #555;
+    height: 100%;
+    display: inline-block;
+    vertical-align: top;
+  }
+  .progress-count {
+    display: inline-block;
+    line-height: 30px;
+    vertical-align: top;
+    font-weight: 600;
+  }
+
+  .progress-count-inside {
+    position: absolute;
+    left: 10px;
+    color: $color-white;
+  }
+}
+
+#dash-widgets {
+  margin-top: 2em;
+}
+.dash-stat {
+  line-height: 36px;
+}
+.dash-panel {
+  min-height: 315px;
+  position: relative;
+}
+.panel-tasks {
+  .btn-add-tasks {
+    bottom: 19px;
+    position: absolute;
+  }
+  .panel-body {
+    display: relative;
+  }
+}
+.count {font-size: 18px; font-weight: 500;}
+.count-big {
+  font-size: 36px;
+  font-weight: 500;
+}
+.progress-stat {
+  display: inline-block;
+  margin-right: 1em;
+}
+.progress-box-title {
+  text-transform: uppercase;
+  font-family: $brand-font;
+  font-weight: 600;
+  font-size: 16px;
+  i.fa {
+    margin-right: 5px;
+    color: $color-blue-deep;
+    font-size: 18px;
+  }
+}
+.plain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.see-all {
+  font-size: 13px;
+  display: block;
+  margin-top: 1em;
+}
+h4.title {
+  text-transform: uppercase;
+  font-family: $brand-font;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: .5em;
 }
 
 /* ********************* Layout Hacks ************************** */
