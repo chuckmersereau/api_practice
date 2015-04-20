@@ -62,4 +62,12 @@ describe SidekiqMonitor do
     expect_mail
     SidekiqMonitor.notify_if_problem
   end
+
+  it 'does not check default queue latency if threshold set to zero' do
+    APP_CONFIG['sidekiq_warn_default_queue_latency'] = '0'
+    stub_stats(default_queue_latency: 5000.1, enqueued: 1, workers_size: 1)
+    stub_processes_threads(5, 5)
+    expect(ActionMailer::Base).not_to receive(:mail)
+    SidekiqMonitor.notify_if_problem
+  end
 end
