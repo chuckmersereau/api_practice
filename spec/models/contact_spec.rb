@@ -530,11 +530,6 @@ describe Contact do
       expect_update_queued(false) { address.update(street: nil) }
     end
 
-    it 'does not queue if made inactive, but deletes' do
-      expect(contact).to receive(:delete_from_prayer_letters)
-      expect_update_queued(false) { contact.update(status: 'Not Interested') }
-    end
-
     it 'queues update if relevant info changed' do
       expect(contact.prayer_letters_params).to_not eq({})
       expect_update_queued { contact.update(name: 'Not-John', greeting: 'New greeting') }

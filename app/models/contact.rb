@@ -401,7 +401,7 @@ class Contact < ActiveRecord::Base
   end
 
   def should_be_in_prayer_letters?
-    send_physical_letter? && active? && name.present? && envelope_greeting.present? &&
+    send_physical_letter? && name.present? && envelope_greeting.present? &&
       mailing_address.present? && mailing_address.valid_mailing_address?
   end
 
