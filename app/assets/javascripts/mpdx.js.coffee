@@ -219,7 +219,7 @@ $(document).ready ->
   $('#' + element).focus() if element
 
 determineAffixScroll = ->
-  $('#leftmenu').toggleClass 'scrollable_left', $(window).height() < $('#leftmenu').height()
+  $('#leftmenu').toggleClass 'scrollable_left', $(window).height() < $('#leftmenu')[0].scrollHeight
   return
 
 $(document).ready determineAffixScroll
