@@ -22,7 +22,7 @@ class NotificationType::LargerGift < NotificationType
   def caught_up_earlier_months?(contact)
     return unless contact.prev_month_donation_date
     from_date = contact.prev_month_donation_date << 1
-    while from_date >= [Date.today << 12, contact.first_donation_date].max
+    while from_date >= [Date.today << 12, contact.first_donation_date].compact.max
       return true if contact.monthly_avg_from(from_date) == contact.monthly_pledge
       from_date <<= contact.pledge_frequency
     end
