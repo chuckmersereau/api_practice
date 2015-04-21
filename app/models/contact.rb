@@ -133,6 +133,11 @@ class Contact < ActiveRecord::Base
     @mailing_address ||= primary_address || addresses.first || Address.new
   end
 
+  def reload_mailing_address
+    @mailing_address = nil
+    mailing_address.try(:reload)
+  end
+
   def hide
     update_attributes(status: 'Never Ask')
   end
@@ -395,6 +400,11 @@ class Contact < ActiveRecord::Base
     update_column(:timezone, find_timezone) unless timezone == self.timezone
   end
 
+  def should_be_in_prayer_letters?
+    send_physical_letter? && name.present? && envelope_greeting.present? &&
+      mailing_address.present? && mailing_address.valid_mailing_address?
+  end
+
   private
 
   def delete_people
@@ -426,7 +436,9 @@ class Contact < ActiveRecord::Base
   def sync_with_prayer_letters
     return unless account_list && account_list.valid_prayer_letters_account
 
-    if send_physical_letter?
+    reload_mailing_address # in case this was triggered by a association instance address being changed
+
+    if should_be_in_prayer_letters?
       pl = account_list.prayer_letters_account
       return unless pl.contact_needs_sync?(self)
       pl.add_or_update_contact(self)

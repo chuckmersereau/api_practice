@@ -499,6 +499,7 @@ describe Contact do
 
   context '#sync_with_google_contacts' do
     it 'calls sync contacts on the google integration' do
+      contact # create test record so the commit callbacks aren't triggered below
       create(:google_integration, contacts_integration: true, calendar_integration: false,
                                   account_list: account_list, google_account: create(:google_account))
       expect_any_instance_of(GoogleIntegration).to receive(:sync_data)
@@ -507,26 +508,39 @@ describe Contact do
   end
 
   context '#sync_with_prayer_letters' do
-    let(:pl) { build(:prayer_letters_account, account_list: account_list) }
+    let(:pl) { create(:prayer_letters_account, account_list: account_list) }
+    let(:address) { create(:address, primary_mailing_address: true) }
 
     before do
       stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
       contact.account_list.prayer_letters_account = pl
-      contact.update(send_newsletter: 'Physical')
+      contact.send_newsletter = 'Physical'
+      contact.prayer_letters_params = pl.contact_params(contact)
+      contact.save
+      contact.addresses << address
     end
 
-    it 'does not queue the update if not set to receive newsletter' do
+    it 'does not queue the update if not set to receive newsletter, but deletes' do
+      expect(contact).to receive(:delete_from_prayer_letters)
       expect_update_queued(false) { contact.update(send_newsletter: nil) }
     end
 
+    it 'does not queue if address missing, but deletes' do
+      expect_any_instance_of(Contact).to receive(:delete_from_prayer_letters)
+      expect_update_queued(false) { address.update(street: nil) }
+    end
+
     it 'queues update if relevant info changed' do
+      expect(contact.prayer_letters_params).to_not eq({})
       expect_update_queued { contact.update(name: 'Not-John', greeting: 'New greeting') }
     end
 
+    it 'queues update if queried address changed' do
+      expect_update_queued { Address.first.update(street: 'changed') }
+    end
+
     it 'queues update if address changed' do
-      address = create(:address)
-      contact.addresses << address
-      expect_update_queued { address.update(street: 'new street') }
+      expect_update_queued { address.update(street: 'changed') }
     end
 
     it 'does not queue update if not data changed or unrelated data changed' do
@@ -536,13 +550,12 @@ describe Contact do
 
     def expect_update_queued(queued = true)
       if queued
-        expect(pl).to receive(:add_or_update_contact).with(contact)
+        expect_any_instance_of(PrayerLettersAccount).to receive(:add_or_update_contact).with(contact)
       else
-        expect(pl).to_not receive(:add_or_update_contac).with(contact)
+        expect_any_instance_of(PrayerLettersAccount).to_not receive(:add_or_update_contac).with(contact)
       end
 
       yield
-      contact.run_callbacks(:commit)
     end
   end
 end
