@@ -61,4 +61,13 @@ describe NotificationType::LargerGift do
       expect(larger_gift.check(account_list)).to be_empty
     end
   end
+
+  context '#caught_up_earlier_months?' do
+    it 'does not error if first_donation_date is nil' do
+      create(:donation, donor_account: donor_account,
+                        designation_account: da, donation_date: Date.today << 1)
+      contact.update(first_donation_date: nil)
+      expect { larger_gift.caught_up_earlier_months?(contact) }.to_not raise_error
+    end
+  end
 end
