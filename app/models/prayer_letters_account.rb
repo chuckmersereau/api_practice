@@ -18,46 +18,25 @@ class PrayerLettersAccount < ActiveRecord::Base
   end
 
   def subscribe_contacts
-    contacts = []
+    contacts = account_list.contacts.includes([:primary_address, { primary_person: :companies }])
+               .select(&:should_be_in_prayer_letters?)
+    contact_subscribe_params = contacts.map { |c| contact_params(c, true) }
+    contact_params_map = Hash[contacts.map { |c| [c.id, contact_params(c)] }]
 
-    account_list.contacts.includes([:primary_address, { primary_person: :companies }]).each do |contact|
-      next unless contact.should_be_in_prayer_letters?
-
-      params = {
-        name: contact.envelope_greeting,
-        greeting: contact.greeting,
-        file_as: contact.name,
-        contact_id: contact.prayer_letters_id,
-        address: {
-          street: contact.mailing_address.street,
-          city: contact.mailing_address.city,
-          state: contact.mailing_address.state,
-          postal_code: contact.mailing_address.postal_code,
-          country: contact.mailing_address.country
-        },
-        external_id: contact.id
-      }
-      if contact.siebel_organization?
-        params[:name] = nil
-        params[:company] = contact.name
-      end
-      contacts << params
-    end
-
-    get_response(:put, '/api/v1/contacts', { contacts: contacts }.to_json)
-
+    get_response(:put, '/api/v1/contacts', { contacts: contact_subscribe_params }.to_json)
     account_list.contacts.update_all(prayer_letters_id: nil, prayer_letters_params: nil)
-
-    # Now that we've replaced the list, we need to fetch the whole list and match it to our existing contacts
-    import_list
+    import_list(contact_params_map)
   end
 
-  def import_list
+  def import_list(contact_params_map = nil)
     contacts = JSON.parse(get_response(:get, '/api/v1/contacts'))['contacts']
 
     contacts.each do |pl_contact|
-      next unless pl_contact['external_id'] && contact = account_list.contacts.where(id: pl_contact['external_id']).first
-      contact.update_columns(prayer_letters_id: pl_contact['contact_id'])
+      next unless pl_contact['external_id'] &&
+                  contact = account_list.contacts.where(id: pl_contact['external_id']).first
+
+      contact.update_columns(prayer_letters_id: pl_contact['contact_id'],
+                             prayer_letters_params: contact_params_map ? contact_params_map[contact.id] : nil)
     end
   end
 
@@ -123,22 +102,26 @@ class PrayerLettersAccount < ActiveRecord::Base
     account_list.contacts.update_all(prayer_letters_id: nil, prayer_letters_params: nil)
   end
 
-  def contact_params(contact)
-    params = {
-      name: contact.envelope_greeting,
-      greeting: contact.greeting,
-      file_as: contact.name,
-      street: contact.mailing_address.street,
-      city: contact.mailing_address.city,
-      state: contact.mailing_address.state,
-      postal_code: contact.mailing_address.postal_code,
-      external_id: contact.id
-    }
-    params[:country] = contact.mailing_address.country unless contact.mailing_address.country == 'United States'
+  def contact_params(contact, subscribe_format = false)
+    params = { name: contact.envelope_greeting, greeting: contact.greeting, file_as: contact.name,
+               external_id: contact.id }
     if contact.siebel_organization?
       params[:name] = nil
       params[:company] = contact.name
     end
+
+    address = contact.mailing_address
+    address_params = { street: address.street, city: address.city, state: address.state,
+                       postal_code: address.postal_code,
+                       country: address.country == 'United States' ? '' : address.country.to_s }
+    address_params[:country] = address.country unless address.country == 'United States'
+    if subscribe_format
+      params[:contact_id] = contact.prayer_letters_id
+      params[:address] = address_params
+    else
+      params.merge!(address_params)
+    end
+
     params
   end
 
