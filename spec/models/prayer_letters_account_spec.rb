@@ -4,8 +4,8 @@ describe PrayerLettersAccount do
   let(:pla) { create(:prayer_letters_account) }
   let(:contact) { create(:contact, account_list: pla.account_list, send_newsletter: 'Both') }
   let(:params) do
-    { city: 'Fremont', external_id: contact.id.to_s, file_as: 'Doe, John', greeting: '',
-      name: 'John Doe', postal_code: '94539', state: 'CA', street: '123 Somewhere St' }
+    { name: 'John Doe', greeting: '', file_as: 'Doe, John', external_id: contact.id,
+      street: '123 Somewhere St', city: 'Fremont', state: 'CA', postal_code: '94539', country: '' }
   end
 
   context '#get_response' do
@@ -66,6 +66,7 @@ describe PrayerLettersAccount do
     end
 
     it 'calls the prayer letters api to create a contact and sets cached params value' do
+      params[:external_id] = params[:external_id].to_s
       stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts/c1')
              .with(body: params, headers: { 'Authorization' => 'Bearer MyString' }).to_return(status: 204)
 
@@ -110,7 +111,7 @@ describe PrayerLettersAccount do
       contact.addresses << create(:address)
 
       params = { city: 'Fremont', external_id: contact.id.to_s, file_as: 'Doe, John', greeting: '',
-                 name: 'John Doe', postal_code: '94539', state: 'CA', street: '123 Somewhere St' }
+                 name: 'John Doe', postal_code: '94539', state: 'CA', street: '123 Somewhere St', country: '' }
       stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts')
              .with(body: params, headers: { 'Authorization' => 'Bearer MyString' })
              .to_return(body: '{"contact_id": "c1"}')
@@ -120,6 +121,8 @@ describe PrayerLettersAccount do
       expect(contact.prayer_letters_id).to eq('c1')
       params[:external_id] = params[:external_id].to_i
       expect(contact.prayer_letters_params).to eq(params)
+      contact.reload_mailing_address
+      expect(pla.contact_params(contact)).to eq(params)
       expect(stub).to have_been_requested
     end
 
@@ -144,14 +147,15 @@ describe PrayerLettersAccount do
       contact.addresses << create(:address)
       expect(contact.people.count).to eq(0)
 
-      contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John","contact_id":"1",'\
+      contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John",'\
+        '"external_id":' + contact.id.to_s +  ',"contact_id":"1",'\
         '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
-        '"country":"United States"},"external_id":' + contact.id.to_s +  '}]}'
+        '"country":""}}]}'
 
       stub = stub_request(:put, 'https://www.prayerletters.com/api/v1/contacts')
              .with(body: contacts_body, headers: { 'Authorization' => 'Bearer MyString' })
 
-      expect(pla).to receive(:import_list)
+      expect(pla).to receive(:import_list).with(contact.id => params)
       pla.subscribe_contacts
       expect(stub).to have_been_requested
     end
@@ -171,17 +175,19 @@ describe PrayerLettersAccount do
 
   context '#import_list' do
     it 'retrieves the prayer letters list and updates contacts with prayer_letters_id' do
+      contact.addresses << create(:address, street: '123 Somewhere St', city: 'Fremont', state: 'CA',
+                                            postal_code: '94539', country: 'United States')
       contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John","contact_id":"c1",'\
         '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
-        '"country":"United States"},"external_id":' + contact.id.to_s +  '}]}'
+        '"country":""},"external_id":' + contact.id.to_s +  '}]}'
 
       stub = stub_request(:get, 'https://www.prayerletters.com/api/v1/contacts')
              .with(headers: { 'Authorization' => 'Bearer MyString' }).to_return(body: contacts_body)
 
-      pla.import_list
+      pla.import_list(contact.id => params)
       contact.reload
       expect(contact.prayer_letters_id).to eq('c1')
-      expect(contact.prayer_letters_params).to be_blank
+      expect(contact.reload.prayer_letters_params).to eq(params)
       expect(stub).to have_been_requested
     end
   end
