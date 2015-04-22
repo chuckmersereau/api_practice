@@ -23,13 +23,14 @@
   max-width: inherit;
 }
 
-.bootstrap-tagsinput .tag [data-role="remove"] {
-  margin-left: 8px;
+.tag [data-role="remove"], .tag_remove {
+  margin-left: 2px;
   cursor: pointer;
+  color: #FFF;
   &:after {
     content: "\f00d";
     font-family: "FontAwesome";
-    padding: 0px 2px;
+    padding: 0px 0px;
   }
   &:hover:active, &:after {
     opacity: .5;
