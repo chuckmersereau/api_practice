@@ -86,6 +86,13 @@
                   <%= _('Commitment Received') %>
                 <% end %>
               </div>
+
+              <div class="checkbox">
+                <%= f.label :no_appeals do %>
+                    <%= f.check_box :no_appeals %>
+                    <%= _('Don\'t send appeals') %>
+                <% end %>
+              </div>
             </div>
             <div class="col-md-8">
               <div class="form-group">
