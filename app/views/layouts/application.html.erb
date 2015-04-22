@@ -124,7 +124,7 @@
                   <div class="section"><%= link_to(_('Find Duplicates'), find_duplicates_contacts_path, class: '') %></div>
                 <% end %>
                 <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
-                  <div class="section right tip">
+                  <div class="section right">
                     <%= render 'progress_bar' %>
                   </div>
                 <% end %>

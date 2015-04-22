@@ -25,7 +25,6 @@
 //= require jquery.hoverIntent.minified
 //= require jquery.are-you-sure
 //= require highcharts
-//= require tooltipsy.min
 //= require mpdx
 //= require accounts
 //= require donations

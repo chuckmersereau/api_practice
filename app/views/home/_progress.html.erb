@@ -117,7 +117,8 @@
 <div class="row">
   <div class="progress-category col-md-6">
     <h3><i class="fa fa-child"></i> <%= _('Contacts') %></h3>
-    <span class="progress-category-stat tip" title="<%= _('Always current. Contacts with status: Never Contacted, Contact for Appointment, or none.') %>">
+    <span class="progress-category-stat" data-toggle="tooltip"
+          title="<%= _('Always current. Contacts with status: Never Contacted, Contact for Appointment, or none.') %>">
       <span class="count"><%= @counts[:contacts][:active] %></span>
       <small><%= _('Active Contacts') %></small>
     </span>
