@@ -13,7 +13,7 @@
             url_params['filters']['tags'] = (tags + [tag]).join(',')
           end %>
           <span class="tag" ng-class="{'selected': tagIsActive('<%= j(tag) %>')}" ng-click="tagClick('<%= j(tag) %>', $event)"><%= tag %>
-            <% if $rollout.active?(:insights, current_account_list) %>
+            <% if $rollout.active?(:bulk_remove_tags, current_account_list) %>
                 <% if params[:controller] == 'contacts' %>
                     <%= link_to '', "/tags/1?remove_tag_name=#{tag}&all_contacts=1", class: "tag_remove", namespace: 'remove_tag', method: :delete,
                                 data: { confirm: 'Are you sure you want to remove this tag from all contacts?'}, :remote => true %>
