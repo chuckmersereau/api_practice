@@ -105,13 +105,13 @@
           </div>
           <div class="row">
             <div class="col-md-8 col-md-offset-4 referrers_field">
-              <label><%= _('Referrals') %></label>
+              <label><%= _('Referrers') %></label>
               <% contact.contact_referrals_to_me.build if contact.contact_referrals_to_me.blank? %>
               <%= f.fields_for :contact_referrals_to_me do |builder| %>
                 <%= render 'contact_referral_fields', builder: builder, object: contact %>
               <% end %>
               <div class="sfield field_indent address_indent">
-                <div class="rs"><%= link_to_add_fields(_('Add Referral'), f, :contact_referrals_to_me, partial: 'contacts/contact_referral_fields') %></div>
+                <div class="rs"><%= link_to_add_fields(_('Add Referrer'), f, :contact_referrals_to_me, partial: 'contacts/contact_referral_fields') %></div>
               </div>
             </div>
           </div>
