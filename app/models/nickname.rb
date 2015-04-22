@@ -13,7 +13,9 @@ class Nickname < ActiveRecord::Base
 
     return if name == nickname || name =~ /[\s\-\.]/  || nickname =~ /[\s\-\.]/ || name.length == 1 || nickname.length == 1
 
-    nickname = find_or_create_by(name: name, nickname: nickname)
+    Retryable.retryable do
+      nickname = find_or_create_by(name: name, nickname: nickname)
+    end
     increment_counter(counter, nickname.id)
   end
 end
