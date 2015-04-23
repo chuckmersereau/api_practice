@@ -189,41 +189,31 @@
                       <thead>
                       </thead>
                       <tbody >
-                      <%if EmailAddress.joins(:person).length > 0 %>
                           <tr>
                             <td><%= ('Email') %></td>
                             <td><input type="checkbox" class="checks"  ng-model="contactQuery.contact_info_email" name="contactQuery.contact_info_email" >
                             </td>
                           </tr>
-                      <% end %>
-                      <%if PhoneNumber.joins(:person).where(location: 'home').length > 0 %>
                           <tr>
                             <td><%= ('Home Phone') %></td>
                             <td><input type="checkbox" class="checks" ng-model="contactQuery.contact_info_phone" name="contactQuery.contact_info_phone" >
                             </td>
                           </tr>
-                      <% end %>
-                      <%if PhoneNumber.joins(:person).where(location: 'mobile').length > 0 %>
                           <tr>
                             <td><%= ('Mobile Phone') %></td>
                             <td><input type="checkbox" class="checks" ng-model="contactQuery.contact_info_mobile" name="contactQuery.contact_info_mobile" >
                             </td>
                           </tr>
-                      <% end %>
-                      <%if Contact.new.mailing_address != nil? %>
                           <tr>
                             <td><%= ('Home Address') %></td>
                             <td><input type="checkbox" class="checks"  ng-model="contactQuery.contact_info_addr_" name="contactQuery.contact_info_addr" >
                             </td>
                           </tr>
-                      <% end %>
-                      <%if Person.joins(:facebook_accounts).length > 0%>
                           <tr>
                             <td><%= ('Facebook Profile') %></td>
                             <td><input type="checkbox" class="checks" ng-model="contactQuery.contact_info_facebook" name="contactQuery.contact_info_facebook" >
                             </td>
                           </tr>
-                      <% end %>
                       </tbody>
                     </table>
                   </div>
