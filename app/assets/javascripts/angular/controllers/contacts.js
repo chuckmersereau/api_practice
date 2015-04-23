@@ -26,10 +26,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         pledge_frequencies: [''],
         pledge_received: '',
         contact_info_email: '',
-        contact_info_phone: '',
-        contact_info_mobile: '',
-        contact_info_addr: '',
-        contact_info_facebook: '',
         wildcardSearch: urlParameter.get('q'),
         viewPrefsLoaded: false
     };
@@ -62,10 +58,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         $scope.contactQuery.pledge_received = '';
         $scope.contactQuery.wildcardSearch = null;
         $scope.contactQuery.contact_info_email = '';
-        $scope.contactQuery.contact_info_phone = '';
-        $scope.contactQuery.contact_info_mobile = '';
-        $scope.contactQuery.contact_info_addr = '';
-        $scope.contactQuery.contact_info_facebook = '';
         if(!_.isNull(document.getElementById('globalContactSearch'))) {
             document.getElementById('globalContactSearch').value = '';
         }
@@ -196,31 +188,6 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_contact_info_email").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.contact_info_phone)){
-            $scope.contactQuery.contact_info_phone = prefs.contact_info_phone;
-            if(prefs.contact_info_phone){
-                jQuery("#leftmenu #filter_contact_info_phone").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.contact_info_mobile)){
-            $scope.contactQuery.contact_info_mobile = prefs.contact_info_mobile;
-            if(prefs.contact_info_mobile){
-                jQuery("#leftmenu #filter_contact_info_mobile").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.contact_info_addr)){
-            $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;
-            if(prefs.contact_info_addr){
-                jQuery("#leftmenu #filter_contact_info_addr").trigger("click");
-            }
-        }
-
-        if(angular.isDefined(prefs.contact_info_facebook)){
-            $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;
-            if(prefs.contact_info_facebook){
-                jQuery("#leftmenu #filter_contact_info_facebook").trigger("click");
-            }
-        }
     });
 
     $scope.tagIsActive = function(tag){
@@ -295,11 +262,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch) +
                 '&filters[pledge_received]=' + encodeURIComponent(q.pledge_received) +
                 '&filters[pledge_frequencies][]=' + encodeURLarray(q.pledge_frequencies).join('&filters[pledge_frequencies][]=') +
-                '&filters[contact_info_email]=' + encodeURIComponent(q.contact_info_email) +
-                '&filters[contact_info_phone]=' + encodeURIComponent(q.contact_info_phone) +
-                '&filters[contact_info_mobile]=' + encodeURIComponent(q.contact_info_mobile) +
-                '&filters[contact_info_addr]=' + encodeURIComponent(q.contact_info_addr) +
-                '&filters[contact_info_facebook]=' + encodeURIComponent(q.contact_info_facebook) ;
+                '&filters[contact_info_email]=' + encodeURIComponent(q.contact_info_email) ;
         }
 
       api.call('get', requestUrl, {}, function (data) {
@@ -358,11 +321,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           appeal: q.appeal,
           pledge_frequencies: q.pledge_frequencies,
           pledge_received: q.pledge_received,
-          contact_info_email: q.contact_info_email,
-          contact_info_phone: q.contact_info_phone,
-          contact_info_mobile: q.contact_info_mobile,
-          contact_info_addr: q.contact_info_addr,
-          contact_info_facebook: q.contact_info_facebook
+          contact_info_email: q.contact_info_email
         };
         if (!isEmptyFilter(prefsToSave)) {
           viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
@@ -390,11 +349,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           !_.isEmpty(_.without(q.appeal, '')) ||
           !_.isEmpty(_.without(q.pledge_frequencies, '')) ||
           !_.isEmpty(_.without(q.pledge_received, '')) ||
-          !_.isEmpty(_.without(q.contact_info_email,'')) ||
-          !_.isEmpty(_.without(q.contact_info_phone,'')) ||
-          !_.isEmpty(_.without(q.contact_info_mobile,'')) ||
-          !_.isEmpty(_.without(q.contact_info_addr,'')) ||
-          !_.isEmpty(_.without(q.contact_info_facebook,'')))
+          !_.isEmpty(_.without(q.contact_info_email,'')))
         {
         return false;
       }
