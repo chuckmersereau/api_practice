@@ -390,11 +390,11 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           !_.isEmpty(_.without(q.appeal, '')) ||
           !_.isEmpty(_.without(q.pledge_frequencies, '')) ||
           !_.isEmpty(_.without(q.pledge_received, '')) ||
-          !_.isEmpty(q.contact_info_email) ||
-          !_.isEmpty(q.contact_info_phone) ||
-          !_.isEmpty(q.contact_info_mobile) ||
-          !_.isEmpty(q.contact_info_addr) ||
-          !_.isEmpty(q.contact_info_facebook))
+          !_.isEmpty(_.without(q.contact_info_email,'')) ||
+          !_.isEmpty(_.without(q.contact_info_phone,'')) ||
+          !_.isEmpty(_.without(q.contact_info_mobile,'')) ||
+          !_.isEmpty(_.without(q.contact_info_addr,'')) ||
+          !_.isEmpty(_.without(q.contact_info_facebook,'')))
         {
         return false;
       }
