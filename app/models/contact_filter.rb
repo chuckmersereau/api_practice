@@ -52,6 +52,10 @@ class ContactFilter
       filtered_contacts = wildcard_search(filtered_contacts)
       filtered_contacts = pledge_freq(filtered_contacts)
       filtered_contacts = pledge_received(filtered_contacts)
+      filtered_contacts = contact_info_email(filtered_contacts)
+      filtered_contacts = contact_info_phone_type(filtered_contacts)
+      filtered_contacts = contact_info_address(filtered_contacts)
+      filtered_contacts = contact_info_facebook(filtered_contacts)
     end
 
     filtered_contacts
@@ -253,5 +257,62 @@ class ContactFilter
       filtered_contacts = filtered_contacts.where(pledge_received: @filters[:pledge_received])
     end
     filtered_contacts
+  end
+
+  def contact_info_email(filtered_contacts)
+    if @filters[:contact_info_email].present?
+      if @filters[:contact_info_email] == 'true'
+        filtered_contacts = filtered_contacts.where('email_addresses.email is not null '\
+                            'AND email_addresses.primary = true')
+      end
+    end
+
+    filtered_contacts
+      .includes(people: :email_addresses)
+      .references('email_addresses')
+  end
+
+  def contact_info_address(filtered_contacts)
+    if @filters[:contact_info_addr].present?
+      if @filters[:contact_info_addr] == 'true'
+        filtered_contacts = filtered_contacts.where("addresses.street <> '' AND addresses.location = 'Home' "\
+                            'AND addresses.historic = false ')
+      end
+    end
+
+    filtered_contacts
+      .includes(:addresses)
+      .references('addresses')
+  end
+
+  def contact_info_facebook(filtered_contacts)
+    if @filters[:contact_info_facebook].present?
+      if @filters[:contact_info_facebook] == 'true'
+        filtered_contacts = filtered_contacts.where('person_facebook_accounts.remote_id IS NOT NULL')
+      end
+    end
+
+    filtered_contacts
+      .includes(people: :facebook_account)
+      .references('facebook_account')
+  end
+
+  def contact_info_phone_type(filtered_contacts)
+    if @filters[:contact_info_phone].present? || @filters[:contact_info_mobile].present?
+
+      if @filters[:contact_info_phone] == 'true' || @filters[:contact_info_mobile] == 'true'
+        filtered_contacts = filtered_contacts.where('phone_numbers.number IS NOT NULL')
+        phone_type = []
+      end
+
+      phone_type << 'home' unless @filters[:contact_info_phone] != 'true'
+      phone_type << 'mobile' unless @filters[:contact_info_mobile] != 'true'
+
+      filtered_contacts = filtered_contacts.where('phone_numbers.location' => phone_type)
+
+    end
+    filtered_contacts
+      .includes(people: :phone_numbers)
+      .references('phone_numbers')
   end
 end
