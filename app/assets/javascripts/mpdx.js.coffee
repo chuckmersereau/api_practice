@@ -25,7 +25,8 @@ $ ->
     if element
       $(element).find('[data-toggle="tooltip"]').tooltip()
     else
-      $('[data-toggle="tooltip"]').tooltip()
+      try $('[data-toggle="tooltip"]').tooltip()
+      catch e
   $.mpdx.activateTooltips()
 
   $(document).on 'mouseleave', 'div[data-behavior=account_selector]', ->
@@ -229,7 +230,7 @@ $(document).ready ->
 determineAffixScroll = ->
   leftmenu = $('#leftmenu')
   if leftmenu[0]
-    leftmenu.toggleClass 'scrollable_left', $(window).height() < $('#leftmenu').height()
+    leftmenu.toggleClass 'scrollable_left', $(window).height() < leftmenu.height()
 
 $(document).ready determineAffixScroll
 $(window).on 'resize', determineAffixScroll
