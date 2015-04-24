@@ -55,6 +55,7 @@ class ContactFilter
       filtered_contacts = contact_info_email(filtered_contacts)
       filtered_contacts = contact_info_phone_type(filtered_contacts)
       filtered_contacts = contact_info_address(filtered_contacts)
+      filtered_contacts = contact_info_facebook(filtered_contacts)
     end
 
     filtered_contacts
@@ -295,6 +296,17 @@ class ContactFilter
         filtered_contacts = filtered_contacts.where("addresses.street <> '' AND addresses.location = 'Home'")
                             .includes(:addresses)
                             .references('addresses')
+      end
+    end
+    filtered_contacts
+  end
+
+  def contact_info_facebook(filtered_contacts)
+    if @filters[:contact_info_facebook].present?
+      if @filters[:contact_info_facebook] == 'true'
+        filtered_contacts = filtered_contacts.where('person_facebook_accounts.remote_id IS NOT NULL')
+                            .includes(people: :facebook_account)
+                            .references('facebook_account')
       end
     end
     filtered_contacts
