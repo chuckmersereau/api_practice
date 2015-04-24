@@ -17,7 +17,7 @@ class Person::KeyAccount < ActiveRecord::Base
 
   def self.create_user_from_auth(auth_hash)
     @attributes = {
-      first_name: auth_hash.extra.attributes.first.firstName,
+      first_name: auth_hash.extra.attributes.first.firstName || 'Unknown',
       last_name: auth_hash.extra.attributes.first.lastName
     }
 
