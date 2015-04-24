@@ -53,6 +53,7 @@ class ContactFilter
       filtered_contacts = pledge_freq(filtered_contacts)
       filtered_contacts = pledge_received(filtered_contacts)
       filtered_contacts = contact_info_email(filtered_contacts)
+      filtered_contacts = contact_info_phone_type(filtered_contacts)
     end
 
     filtered_contacts
@@ -261,11 +262,29 @@ class ContactFilter
       if @filters[:contact_info_email] == 'true'
         filtered_contacts = filtered_contacts.where('email_addresses.email is not null '\
                             'AND email_addresses.primary = true')
+                            .includes(people: :email_addresses)
+                            .references('email_addresses')
       end
     end
-
     filtered_contacts
-      .includes(people: :email_addresses)
-      .references('email_addresses')
+  end
+
+  def contact_info_phone_type(filtered_contacts)
+    if @filters[:contact_info_phone].present? || @filters[:contact_info_mobile].present?
+
+      if @filters[:contact_info_phone] == 'true' || @filters[:contact_info_mobile] == 'true'
+        filtered_contacts = filtered_contacts.where('phone_numbers.number IS NOT NULL')
+        phone_type = []
+      end
+
+      phone_type << 'home' unless @filters[:contact_info_phone] != 'true'
+      phone_type << 'mobile' unless @filters[:contact_info_mobile] != 'true'
+
+      filtered_contacts = filtered_contacts.where('phone_numbers.location' => phone_type)
+                          .includes(people: :phone_numbers)
+                          .references('phone_numbers')
+
+    end
+    filtered_contacts
   end
 end

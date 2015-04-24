@@ -184,7 +184,7 @@
                   <label id="filter_contact_info" class="filter_title"
                          onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Contact Information']);">
                     <%= _('Contact Information') %></label>
-                  <div class="filter_set_inner filter_check">
+                  <div class="filter_set_inner">
                     <table class="tablelist">
                       <thead>
                       </thead>
@@ -192,6 +192,16 @@
                           <tr>
                             <td><%= ('Email') %></td>
                             <td><input type="checkbox" class="checks"  ng-model="contactQuery.contact_info_email" name="contactQuery.contact_info_email" >
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><%= ('Home Phone') %></td>
+                            <td><input type="checkbox" class="checks" ng-model="contactQuery.contact_info_phone" name="contactQuery.contact_info_phone" >
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><%= ('Mobile Phone') %></td>
+                            <td><input type="checkbox" class="checks" ng-model="contactQuery.contact_info_mobile" name="contactQuery.contact_info_mobile" >
                             </td>
                           </tr>
                       </tbody>
