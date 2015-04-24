@@ -54,6 +54,7 @@ class ContactFilter
       filtered_contacts = pledge_received(filtered_contacts)
       filtered_contacts = contact_info_email(filtered_contacts)
       filtered_contacts = contact_info_phone_type(filtered_contacts)
+      filtered_contacts = contact_info_address(filtered_contacts)
     end
 
     filtered_contacts
@@ -284,6 +285,17 @@ class ContactFilter
                           .includes(people: :phone_numbers)
                           .references('phone_numbers')
 
+    end
+    filtered_contacts
+  end
+
+  def contact_info_address(filtered_contacts)
+    if @filters[:contact_info_addr].present?
+      if @filters[:contact_info_addr] == 'true'
+        filtered_contacts = filtered_contacts.where("addresses.street <> '' AND addresses.location = 'Home'")
+                            .includes(:addresses)
+                            .references('addresses')
+      end
     end
     filtered_contacts
   end
