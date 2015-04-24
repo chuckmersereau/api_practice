@@ -293,7 +293,7 @@ class ContactFilter
   def contact_info_address(filtered_contacts)
     if @filters[:contact_info_addr].present?
       if @filters[:contact_info_addr] == 'true'
-        filtered_contacts = filtered_contacts.where("addresses.street <> '' AND addresses.location = 'Home'")
+        filtered_contacts = filtered_contacts.where("addresses.street <> '' AND addresses.historic = false")
                             .includes(:addresses)
                             .references('addresses')
       end
