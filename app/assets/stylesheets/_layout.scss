@@ -664,26 +664,22 @@ div.name {font-size: 14px; margin-bottom: 4px;}
   .left_tag_list {
     line-height: 1.3em;
     padding: 10px 8px 20px;
-    a.tag {
+    .tag {
       display: none;
       text-decoration: none;
-      &.selected {
+      cursor: pointer;
+      &.selected, &.selected:hover {
         background: $color-gray;
-        &:hover {
-          background: $color-gray;
-        }
       }
-    }
-    a.tag:hover {
-      background-color: $color-blue-bright;
-    }
-    a.tag:nth-child(-n+15) {
-      display: inline-block;
-    }
-    &.show_all_tags {
-      a.tag {
+      &:hover {
+        background-color: $color-blue-bright;
+      }
+      &:nth-child(-n+15) {
         display: inline-block;
       }
+    }
+    &.show_all_tags .tag {
+      display: inline-block;
     }
   }
 
