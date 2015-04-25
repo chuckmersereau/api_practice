@@ -148,6 +148,9 @@ Rails.application.routes.draw do
   get '/auth/:provider/callback', to: 'accounts#create'
   get '/auth/failure', to: 'accounts#failure'
 
+  get '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
+  post '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
+
   developer_user_constraint = lambda { |request| request.env["rack.session"] and
       request.env["rack.session"]["warden.user.user.key"] and
       request.env["rack.session"]["warden.user.user.key"][0] and

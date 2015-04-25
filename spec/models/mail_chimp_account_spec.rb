@@ -236,4 +236,120 @@ describe MailChimpAccount do
       end
     end
   end
+
+  describe 'hook methods' do
+    let(:contact) { create(:contact, account_list: account_list) }
+    let(:person) { create(:person) }
+
+    before do
+      account.primary_list_id = 'list1'
+      person.email_address = { email: 'a@example.com', primary: true }
+      person.save
+      contact.people << person
+
+      expect($rollout).to receive(:active?).with(:mailchimp_webhooks, account_list)
+        .at_least(:once).and_return(true)
+    end
+
+    context '#unsubscribe_hook' do
+      it 'marks an unsubscribed person with opt out of enewsletter' do
+        account.unsubscribe_hook('a@example.com')
+        expect(person.reload.optout_enewsletter).to be_true
+      end
+
+      it 'does not mark as unsubscribed someone with that email but not as set primary' do
+        person.email_addresses.first.update_column(:primary, false)
+        person.email_address = { email: 'b@example.com', primary: true }
+        person.save
+        account.unsubscribe_hook('a@example.com')
+        expect(person.reload.optout_enewsletter).to be_false
+      end
+    end
+
+    context '#email_update_hook' do
+      it 'creates a new email address for the updated email if it is not there' do
+        account.email_update_hook('a@example.com', 'new@example.com')
+        person.reload
+        expect(person.email_addresses.count).to eq(2)
+        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be_false
+        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be_true
+      end
+
+      it 'sets the new email address as primary if it is there' do
+        person.email_address = { email: 'new@example.com', primary: false }
+        person.save
+        account.email_update_hook('a@example.com', 'new@example.com')
+        person.reload
+        expect(person.email_addresses.count).to eq(2)
+        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be_false
+        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be_true
+      end
+    end
+
+    context '#email_cleaned_hook' do
+      it 'marks the cleaned email as no longer valid and not primary and queues a mailing' do
+        email = person.email_addresses.first
+        delayed = double
+        expect(SubscriberCleanedMailer).to receive(:delay).and_return(delayed)
+        expect(delayed).to receive(:subscriber_cleaned).with(account_list, email)
+
+        account.email_cleaned_hook('a@example.com', 'hard')
+        email.reload
+        expect(email.historic).to be_true
+        expect(email.primary).to be_false
+      end
+
+      it 'makes another valid email as primary but not as invalid' do
+        email2 = create(:email_address, email: 'b@example.com', primary: false)
+        person.email_addresses << email2
+        account.email_cleaned_hook('a@example.com', 'hard')
+
+        email = person.email_addresses.first.reload
+        expect(email.historic).to be_true
+        expect(email.primary).to be_false
+
+        email2.reload
+        expect(email2.historic).to be_false
+        expect(email2.primary).to be_true
+      end
+
+      it 'triggers the unsubscribe hook for an email marked as spam (abuse)' do
+        expect(account).to receive(:unsubscribe_hook).with('a@example.com')
+        account.email_cleaned_hook('a@example.com', 'abuse')
+      end
+    end
+
+    context '#setup_webhooks' do
+      def expect_webhook_created
+        expect(SecureRandom).to receive(:hex).at_least(:once).and_return('abc123')
+        hook_params = {
+          id: 'list1', url: 'https://mpdx.org/mail_chimp_webhook/abc123',
+          actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
+                     upemail: true, campaign: true },
+          sources: { user: true, admin: true, api: false }
+        }
+        expect(account.gb).to receive(:list_webhook_add).with(hook_params)
+        yield
+        expect(account.reload.webhook_token).to eq('abc123')
+      end
+
+      it 'creates a webhook if the webhook token is missing' do
+        expect_webhook_created { account.setup_webhooks }
+      end
+
+      it 'creates a webhook if the webhook token is missing' do
+        account.update(webhook_token: 'old')
+        expect(account.gb).to receive(:list_webhooks).and_return([])
+        expect_webhook_created { account.setup_webhooks }
+      end
+
+      it 'does not create a webhook if it already exists' do
+        account.update(webhook_token: '111')
+        expect(account.gb).to receive(:list_webhooks)
+          .and_return([{ 'url' => 'https://mpdx.org/mail_chimp_webhook/111' }])
+        expect(account.gb).to_not receive(:list_webhook_add)
+        account.setup_webhooks
+      end
+    end
+  end
 end
