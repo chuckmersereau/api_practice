@@ -195,6 +195,11 @@ class MailChimpAccount < ActiveRecord::Base
 
     add_status_groups(list_id, statuses)
 
+    gb.list_batch_subscribe(id: list_id, batch: batch_params(contacts), update_existing: true,
+                            double_optin: false, send_welcome: false, replace_interests: true)
+  end
+
+  def batch_params(contacts)
     batch = []
 
     contacts.each do |contact|
@@ -202,7 +207,9 @@ class MailChimpAccount < ActiveRecord::Base
       contact.status = 'Partner - Pray' if contact.status.blank?
 
       contact.people.each do |person|
-        next if person.primary_email_address.blank? || person.optout_enewsletter?
+        next if person.primary_email_address.blank? || person.optout_enewsletter? ||
+                person.primary_email_address.historic?
+
         batch << { EMAIL: person.primary_email_address.email, FNAME: person.first_name,
                    LNAME: person.last_name }
       end
@@ -212,12 +219,7 @@ class MailChimpAccount < ActiveRecord::Base
       batch.each { |p| p[:GROUPINGS] ||= [{ id: grouping_id, groups: _(contact.status) }] }
     end
 
-    begin
-      gb.list_batch_subscribe(id: list_id, batch: batch, update_existing: true, double_optin: false,
-                              send_welcome: false, replace_interests: true)
-    rescue Gibbon::MailChimpError => e
-      raise e
-    end
+    batch
   end
 
   def add_status_groups(list_id, statuses)

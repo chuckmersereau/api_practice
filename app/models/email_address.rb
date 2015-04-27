@@ -82,7 +82,7 @@ class EmailAddress < ActiveRecord::Base
 
   def sync_with_mail_chimp
     return unless mail_chimp_account
-    if contact && contact.send_email_letter? && !person.optout_enewsletter?
+    if contact && contact.send_email_letter? && !person.optout_enewsletter? && !historic
       if primary?
         # If this is the newly designated primary email, we need to
         # change the old one to this one
