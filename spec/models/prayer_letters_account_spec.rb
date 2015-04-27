@@ -4,7 +4,7 @@ describe PrayerLettersAccount do
   let(:pla) { create(:prayer_letters_account) }
   let(:contact) { create(:contact, account_list: pla.account_list, send_newsletter: 'Both') }
   let(:params) do
-    { name: 'John Doe', greeting: '', file_as: 'Doe, John', external_id: contact.id,
+    { name: 'John Doe', greeting: '', file_as: 'Doe, John', external_id: contact.id, company: '',
       street: '123 Somewhere St', city: 'Fremont', state: 'CA', postal_code: '94539', country: '' }
   end
 
@@ -110,8 +110,7 @@ describe PrayerLettersAccount do
     it 'calls the prayer letters api to create a contact and sets cached params value' do
       contact.addresses << create(:address)
 
-      params = { city: 'Fremont', external_id: contact.id.to_s, file_as: 'Doe, John', greeting: '',
-                 name: 'John Doe', postal_code: '94539', state: 'CA', street: '123 Somewhere St', country: '' }
+      params[:external_id] = params[:external_id].to_s
       stub = stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts')
              .with(body: params, headers: { 'Authorization' => 'Bearer MyString' })
              .to_return(body: '{"contact_id": "c1"}')
@@ -148,7 +147,7 @@ describe PrayerLettersAccount do
       expect(contact.people.count).to eq(0)
 
       contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John",'\
-        '"external_id":' + contact.id.to_s +  ',"contact_id":"1",'\
+        '"external_id":' + contact.id.to_s +  ',"company":"","contact_id":"1",'\
         '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
         '"country":""}}]}'
 
@@ -219,6 +218,15 @@ describe PrayerLettersAccount do
       contact.reload
       expect(contact.prayer_letters_id).to be_nil
       expect(contact.prayer_letters_params).to be_blank
+    end
+  end
+
+  context '#contact_params' do
+    it 'specifies a blank name but non-blank company if the contact is a siebel org' do
+      expect(contact).to receive(:siebel_organization?).at_least(:once).and_return(true)
+      params = pla.contact_params(contact)
+      expect(params.keys).to include(:name)
+      expect(params[:name]).to be_blank
     end
   end
 end

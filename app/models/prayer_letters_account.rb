@@ -103,12 +103,9 @@ class PrayerLettersAccount < ActiveRecord::Base
   end
 
   def contact_params(contact, subscribe_format = false)
-    params = { name: contact.envelope_greeting, greeting: contact.greeting, file_as: contact.name,
-               external_id: contact.id }
-    if contact.siebel_organization?
-      params[:name] = nil
-      params[:company] = contact.name
-    end
+    params = { name: contact.siebel_organization? ? '' : contact.envelope_greeting,
+               greeting: contact.greeting, file_as: contact.name, external_id: contact.id,
+               company: contact.siebel_organization? ? contact.name : '' }
 
     address = contact.mailing_address
     address_params = { street: address.street, city: address.city, state: address.state,
