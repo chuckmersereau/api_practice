@@ -184,38 +184,27 @@
                   <label id="filter_contact_info" class="filter_title"
                          onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Contact Information']);">
                     <%= _('Contact Information') %></label>
-                  <div class="filter_set_inner">
-                    <table class="tablelist">
-                      <thead>
-                      </thead>
-                      <tbody >
-                          <tr>
-                            <td><%= ('Email') %></td>
-                            <td><input type="checkbox" class="checks"  ng-model="contactQuery.contact_info_email" name="contactQuery.contact_info_email" >
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><%= ('Home Phone') %></td>
-                            <td><input type="checkbox" class="checks" ng-model="contactQuery.contact_info_phone" name="contactQuery.contact_info_phone" >
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><%= ('Mobile Phone') %></td>
-                            <td><input type="checkbox" class="checks" ng-model="contactQuery.contact_info_mobile" name="contactQuery.contact_info_mobile" >
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><%= ('Address') %></td>
-                            <td><input type="checkbox" class="checks"  ng-model="contactQuery.contact_info_addr" name="contactQuery.contact_info_addr" >
-                            </td>
-                          </tr>
-                          <tr>
-                            <td><%= ('Facebook Profile') %></td>
-                            <td><input type="checkbox" class="checks" ng-model="contactQuery.contact_info_facebook" name="contactQuery.contact_info_facebook" >
-                            </td>
-                          </tr>
-                      </tbody>
-                    </table>
+                  <div class="filter_set_inner filter_radio">
+                   <label><%= ('Email') %>
+                        <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_email'  %>
+                         <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_email' %>
+                    </label>
+                    <label><%= ('Home Phone') %>
+                      <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_phone'  %>
+                      <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_phone' %>
+                    </label>
+                    <label><%= ('Mobile Phone') %>
+                      <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_mobile'  %>
+                      <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_mobile' %>
+                    </label>
+                    <label><%= ('Address') %>
+                      <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_addr'  %>
+                      <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_addr' %>
+                    </label>
+                    <label><%= ('Facebook Profile') %>
+                      <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_facebook'  %>
+                      <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_facebook' %>
+                    </label>
                   </div>
                 </li>
                 <li class="controls">
