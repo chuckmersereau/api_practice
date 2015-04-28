@@ -278,8 +278,12 @@ class TntImport
     return {} unless xml['Appeal'].present?
     appeals = {}
     Array.wrap(xml['Appeal']['row']).each do |row|
-      appeals[row['id']] = @account_list.appeals.find_by(tnt_id: row['id']) ||
-                           @account_list.appeals.find_or_create_by(name: row['Description']) { |new| new.tnt_id = row['id'].to_i }
+      appeal = @account_list.appeals.find_by(tnt_id: row['id'])
+      unless appeal
+        appeal = @account_list.appeals.create(name: row['Description'],
+                                              created_at: row['LastEdit']) { |new| new.tnt_id = row['id'].to_i }
+      end
+      appeals[row['id']] = appeal
     end
     appeals
   end
