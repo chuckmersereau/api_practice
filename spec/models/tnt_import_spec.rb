@@ -645,6 +645,8 @@ describe TntImport do
         tnt_import.send(:import)
       end.to change(Appeal, :count).from(0).to(1)
       appeal = Appeal.first
+      expect(appeal.name).to eq('CSU')
+      expect(appeal.created_at).to eq(Time.zone.local(2005, 5, 21, 12, 56, 40))
       expect(appeal.contacts.count).to eq(1)
       expect(appeal.contacts.first.name).to eq('Smith, John and Jane')
       expect(appeal.donations.first).to eq(donation)

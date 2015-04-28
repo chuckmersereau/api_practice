@@ -1,6 +1,6 @@
 <table class="list">
     <tbody>
-        <tr ng-repeat="appeal in appeals | orderBy: 'name'">
+        <tr ng-repeat="appeal in appeals | orderBy:'parseDate(created_at)':reverse">
             <td>
                 <div class="actions">
                     <a class="ico ico_edit" href ng-click="editAppeal(appeal.id)"><%= _('Edit') %></a>
