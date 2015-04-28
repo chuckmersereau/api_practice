@@ -200,6 +200,18 @@ describe MailChimpAccount do
         account.send(:export_to_list, account.primary_list_id, [contact])
       end
 
+      it 'does not include people with historic emails in the batch params' do
+        contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
+        person = create(:person)
+        person.email_addresses << create(:email_address)
+        contact.people << person
+
+        expect(account.send(:batch_params, [contact])).to_not be_empty
+        person.email_addresses.first.update(historic: true)
+        contact.reload
+        expect(account.send(:batch_params, [contact])).to be_empty
+      end
+
       context 'adding status groups' do
         before do
           @gb = double
