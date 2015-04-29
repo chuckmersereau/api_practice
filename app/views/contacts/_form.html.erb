@@ -129,7 +129,7 @@
             </div>
           </div>
           <div class="contact_addresses_wrapper fieldset">
-            <% contact.addresses.build if contact.addresses.blank? %>
+            <% contact.addresses.build(primary_mailing_address: true) if contact.addresses.blank? %>
             <%= f.fields_for :addresses do |builder| %>
               <%= render 'address_fields', builder: builder, object: contact %>
             <% end %>
