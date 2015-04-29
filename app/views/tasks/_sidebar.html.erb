@@ -137,6 +137,36 @@
                              class: 'form-control', multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'filter.contactPledgeFrequencies' %>
             </div>
           </li>
+              <li class="filter_set">
+                <label id="filter_contact_info" class="filter_title"
+                       onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Contact Information']);">
+                  <%= _('Contact Information') %></label>
+                <div class="filter_set_inner filter_radio">
+                  <%= ('Email') %>
+                  <label ><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoEmail' %><%= _('-- Any --') %><br/>
+                    <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoEmail'  %><%= _('Yes') %><br/>
+                    <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoEmail' %><%= _('No') %></label>
+                  <%= ('Home Phone') %>
+                  <label ><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoPhone' %><%= _('-- Any --') %><br/>
+                    <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoPhone'%><%= _('Yes') %><br/>
+                    <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoPhone' %><%= _('No') %></label>
+                  <%= ('Mobile Phone') %>
+                  <label ><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoMobile' %><%= _('-- Any --') %><br/>
+                    <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoMobile'  %><%= _('Yes') %><br/>
+                    <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoMobile' %><%= _('No') %>
+                  </label>
+                  <%= ('Address') %>
+                  <label ><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoAddr' %><%= _('-- Any --') %><br/>
+                    <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoAddr'  %><%= _('Yes') %><br/>
+                    <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoAddr' %><%= _('No') %>
+                  </label>
+                  <%= ('Facebook Profile') %>
+                  <label><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoFacebook' %><%= _('-- Any --') %><br/>
+                    <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoFacebook'  %><%= _('Yes') %><br/>
+                    <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoFacebook' %><%= _('No') %>
+                  </label>
+                </div>
+              </li>
           <% end %>
 
           <li class="controls">
