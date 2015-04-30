@@ -13,7 +13,6 @@ class TagsController < ApplicationController
     if params[:all_contacts]
       taggables = current_account_list.contacts.tagged_with(params[:remove_tag_name])
       tag_type = 'Contact'
-
     elsif params[:all_tasks]
       taggables = current_account_list.tasks.tagged_with(params[:remove_tag_name])
       tag_type = 'Activity'
