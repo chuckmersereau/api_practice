@@ -12,15 +12,18 @@ class TagsController < ApplicationController
     return if params[:remove_tag_name].blank?
     if params[:all_contacts]
       taggables = current_account_list.contacts.tagged_with(params[:remove_tag_name])
+      tag_type = 'Contact'
+
     elsif params[:all_tasks]
       taggables = current_account_list.tasks.tagged_with(params[:remove_tag_name])
+      tag_type = 'Activity'
     else
-      taggables = current_account_list.contacts.where(id: params[:remove_tag_contact_ids].split(','))
+      taggableslist = current_account_list.contacts.where(id: params[:remove_tag_contact_ids].split(','))
+      taggables = taggableslist.tagged_with(params[:remove_tag_name])
+      tag_type = 'Contact'
     end
-    taggables.each do |o|
-      next unless o.tag_list.include?(params[:remove_tag_name].downcase)
-      o.tag_list.remove(params[:remove_tag_name].downcase)
-      o.save
-    end
+    ActsAsTaggableOn::Tagging.joins(:tag)
+        .where(taggable_type: tag_type, taggable_id: taggables.pluck(:id))
+        .where('tags.name' => params[:remove_tag_name]).destroy_all
   end
 end
