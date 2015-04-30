@@ -23,7 +23,7 @@ class TagsController < ApplicationController
       tag_type = 'Contact'
     end
     ActsAsTaggableOn::Tagging.joins(:tag)
-        .where(taggable_type: tag_type, taggable_id: taggables.pluck(:id))
-        .where('tags.name' => params[:remove_tag_name]).destroy_all
+      .where(taggable_type: tag_type, taggable_id: taggables.pluck(:id))
+      .where('tags.name' => params[:remove_tag_name]).destroy_all
   end
 end
