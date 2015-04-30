@@ -119,17 +119,17 @@
 
         <div class="col-md-5">
           <div class="well">
-            <label class="fieldset_label"><%= _('Donor Accounts') %></label>
+            <label class="fieldset_label"><%= _('Partner Accounts') %></label>
             <% contact.donor_accounts.build if contact.donor_accounts.blank? %>
             <%= f.fields_for :donor_accounts do |builder| %>
               <%= render 'donor_account_fields', builder: builder, object: contact %>
             <% end %>
             <div class="sfield field_indent address_indent">
-              <div class="rs"><%= link_to_add_fields(_('Add Donor Account'), f, :donor_accounts) %></div>
+              <div class="rs"><%= link_to_add_fields(_('Add Partner Account'), f, :donor_accounts) %></div>
             </div>
           </div>
           <div class="contact_addresses_wrapper fieldset">
-            <% contact.addresses.build if contact.addresses.blank? %>
+            <% contact.addresses.build(primary_mailing_address: true) if contact.addresses.blank? %>
             <%= f.fields_for :addresses do |builder| %>
               <%= render 'address_fields', builder: builder, object: contact %>
             <% end %>

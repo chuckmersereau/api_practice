@@ -6,6 +6,8 @@ class Appeal < ActiveRecord::Base
 
   validates :account_list_id, presence: true
 
+  default_scope { order(created_at: :desc) }
+
   PERMITTED_ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :account_list_id]
 
   def add_and_remove_contacts(account_list, contact_ids)

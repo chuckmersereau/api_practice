@@ -1,24 +1,29 @@
 $ ->
 
   if $('#new_contact')[0]?
+      fillInNames = ->
+        contactName = $("#contact_name").val()
+        lastName = contactName.substr(0, contactName.indexOf(","))
+        afterLastName = contactName.substr(contactName.indexOf(",") + 1).trim()
+        firstNames = afterLastName.split(RegExp(" & | and "))
+        $("#contact_greeting").val afterLastName  unless $("#contact_greeting").val()
+
+        #first person
+        $(".last_name").first().val lastName  unless $(".last_name").first().val()
+        $(".first_name").first().val firstNames[0]  unless $(".first_name").first().val()
+
+        #second person
+        if firstNames.length > 1
+          $("#add_person a").trigger "click"  if $(".last_name").length < 2
+          $(".last_name:eq(1)").val lastName  unless $(".last_name:eq(1)").val()
+          $(".first_name:eq(1)").val firstNames[1]  unless $(".first_name:eq(1)").val()
+        window.scrollTo 0, 0
+
+      $("#new_contact").submit ->
+          fillInNames()
+
       $("#contact_name").focusout ->
-          contactName = $(this).val()
-          lastName = contactName.substr(0, contactName.indexOf(","))
-          afterLastName = contactName.substr(contactName.indexOf(",") + 1).trim()
-          firstNames = afterLastName.split(RegExp(" & | and "))
-          $("#contact_greeting").val afterLastName  unless $("#contact_greeting").val()
-
-          #first person
-          $(".last_name").first().val lastName  unless $(".last_name").first().val()
-          $(".first_name").first().val firstNames[0]  unless $(".first_name").first().val()
-
-          #second person
-          if firstNames.length > 1
-              $("#add_person a").trigger "click"  if $(".last_name").length < 2
-              $(".last_name:eq(1)").val lastName  unless $(".last_name:eq(1)").val()
-              $(".first_name:eq(1)").val firstNames[1]  unless $(".first_name:eq(1)").val()
-          window.scrollTo 0, 0
-          return
+          fillInNames()
 
   if $('.contacts_controller')[0]?
 
@@ -379,11 +384,16 @@ $ ->
     $(document).on 'click', '.add_field', ->
       fieldset = $(this).closest('.fieldset')
       if $('input[type=checkbox].primary:checked:visible', fieldset).length == 0
-        newly_added_recordset = $('div.rs:eq(-2)', fieldset)
+        newly_added_recordset = $('div.field:eq(-1)', fieldset)
+        if newly_added_recordset.length == 0
+          newly_added_recordset = $('div.address_field:eq(-1)', fieldset)
         $('input[type=checkbox].primary', $(newly_added_recordset)).prop('checked', true)
 
     historicDisable = (check, input_selector) ->
-      recordset = $(check).closest('.rs')
+      recordset = $(check).closest('.field')
+      if recordset.length == 0
+        recordset = $(check).closest('.address_field')
+
       if $(check).is(':checked')
         $(input_selector, recordset).attr('readonly', true)
         $(input_selector, recordset).addClass('no_longer_valid')

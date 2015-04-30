@@ -3,13 +3,13 @@
     <div class="contact_controls">
       <div class="row">
         <div class="actions col-md-8">
-          <%= link_to('<i class="fa fa-users"></i> '.html_safe+_('Add Referrals'),
+          <%= link_to('<i class="fa fa-users"></i> '.html_safe + _('Add Referrals'),
                       add_referrals_contact_path(contact), remote: true,
                       class: "btn btn-default add_referrals no-new-tab") %>
-          <%= link_to(_('Log Task'), new_task_path(contact_id: contact.id, completed: true),
+          <%= link_to('<i class="fa fa-check-square-o"></i> '.html_safe + _('Log Task'), new_task_path(contact_id: contact.id, completed: true),
                       class: "btn btn-default add_task",
                       remote: true, data: {completed: true}) %>
-          <%= link_to('<i class="fa fa-check-square-o"></i> '.html_safe+_('Add Task'),
+          <%= link_to('<i class="fa fa-square-o"></i> '.html_safe + _('Add Task'),
                       new_task_path(contact_id: contact.id),
                       class: "btn btn-default add_task", data: {contact_id: contact.id}, remote: true) %>
           <%= link_to('<i class="fa fa-eye-slash"></i>'.html_safe, contact_path(contact),
@@ -17,7 +17,7 @@
                       data: { confirm: _("This contact will be set to 'Never Ask'. Is that what you want to do?") }) %>
         </div>
         <div class="col-md-4 text-right">
-          <%= link_to('<i class="fa fa-pencil"></i> '.html_safe+_('Edit'),
+          <%= link_to('<i class="fa fa-pencil"></i> '.html_safe + _('Edit'),
                       edit_contact_path(contact), :class=> "btn btn-secondary edit_contact_btn desired_action") %>
           <% contacts.index(contact_exhibit.to_model).tap do |current_index| %>
             <% if current_index %>

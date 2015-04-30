@@ -261,7 +261,9 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
         return _.contains($scope.filter.tagsSelect, tag);
     };
 
-    $scope.tagClick = function(tag){
+    $scope.tagClick = function(tag, $event){
+        if($event && $event.target.attributes['data-method'])
+            return;
         if($scope.tagIsActive(tag)){
             _.remove($scope.filter.tagsSelect, function(i) { return i === tag; });
             if($scope.filter.tagsSelect.length === 0){

@@ -226,7 +226,9 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         return _.contains($scope.contactQuery.tags, tag);
     };
 
-    $scope.tagClick = function(tag){
+    $scope.tagClick = function(tag, $event){
+        if($event && $event.target.attributes['data-method'])
+            return;
         if($scope.tagIsActive(tag)){
             _.remove($scope.contactQuery.tags, function(i) { return i === tag; });
             if($scope.contactQuery.tags.length === 0){

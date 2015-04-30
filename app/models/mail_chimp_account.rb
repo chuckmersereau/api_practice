@@ -53,7 +53,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def queue_export_to_primary_list
-    async(:call_mailchimp, :subscribe_contacts)
+    async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
   end
 
   def queue_subscribe_contact(contact)
@@ -175,6 +175,11 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
+  def setup_webhooks_and_subscribe_contacts
+    setup_webhooks
+    subscribe_contacts
+  end
+
   def subscribe_contacts(contact_ids = nil)
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
@@ -195,6 +200,11 @@ class MailChimpAccount < ActiveRecord::Base
 
     add_status_groups(list_id, statuses)
 
+    gb.list_batch_subscribe(id: list_id, batch: batch_params(contacts), update_existing: true,
+                            double_optin: false, send_welcome: false, replace_interests: true)
+  end
+
+  def batch_params(contacts)
     batch = []
 
     contacts.each do |contact|
@@ -202,7 +212,9 @@ class MailChimpAccount < ActiveRecord::Base
       contact.status = 'Partner - Pray' if contact.status.blank?
 
       contact.people.each do |person|
-        next if person.primary_email_address.blank? || person.optout_enewsletter?
+        next if person.primary_email_address.blank? || person.optout_enewsletter? ||
+                person.primary_email_address.historic?
+
         batch << { EMAIL: person.primary_email_address.email, FNAME: person.first_name,
                    LNAME: person.last_name }
       end
@@ -212,12 +224,7 @@ class MailChimpAccount < ActiveRecord::Base
       batch.each { |p| p[:GROUPINGS] ||= [{ id: grouping_id, groups: _(contact.status) }] }
     end
 
-    begin
-      gb.list_batch_subscribe(id: list_id, batch: batch, update_existing: true, double_optin: false,
-                              send_welcome: false, replace_interests: true)
-    rescue Gibbon::MailChimpError => e
-      raise e
-    end
+    batch
   end
 
   def add_status_groups(list_id, statuses)
@@ -260,6 +267,66 @@ class MailChimpAccount < ActiveRecord::Base
 
   def queue_import_if_list_changed
     queue_export_to_primary_list if changed.include?('primary_list_id')
+  end
+
+  def setup_webhooks
+    return unless $rollout.active?(:mailchimp_webhooks, account_list)
+    return if webhook_token.present? &&
+              gb.list_webhooks(id: primary_list_id).find { |hook| hook['url'] == webhook_url }
+
+    update(webhook_token: SecureRandom.hex(32))
+    gb.list_webhook_add(id: primary_list_id, url: webhook_url,
+                        actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
+                                   upemail: true, campaign: true },
+                        sources: { user: true, admin: true, api: false })
+  end
+
+  def webhook_url
+    (Rails.env.development? ? 'http://' : 'https://') +
+      Rails.application.routes.default_url_options[:host] + '/mail_chimp_webhook/' + webhook_token
+  end
+
+  def unsubscribe_hook(email)
+    return unless $rollout.active?(:mailchimp_webhooks, account_list)
+    # No need to trigger a callback because MailChimp has already unsubscribed this email
+    account_list.people.joins(:email_addresses).where(email_addresses: { email: email, primary: true })
+      .update_all(optout_enewsletter: true)
+  end
+
+  def email_update_hook(old_email, new_email)
+    return unless $rollout.active?(:mailchimp_webhooks, account_list)
+    ids_of_people_to_update = account_list.people.joins(:email_addresses)
+                              .where(email_addresses: { email: old_email, primary: true }).pluck(:id)
+
+    Person.where(id: ids_of_people_to_update).includes(:email_addresses).each do |person|
+      old_email_record = person.email_addresses.find { |e| e.email == old_email }
+      new_email_record = person.email_addresses.find { |e| e.email == new_email }
+
+      if new_email_record
+        new_email_record.primary = true
+        old_email_record.primary = false
+      else
+        old_email_record.primary = false
+        person.email_addresses << EmailAddress.new(email: new_email, primary: true)
+      end
+      person.save!
+    end
+  end
+
+  def email_cleaned_hook(email, reason)
+    return unless $rollout.active?(:mailchimp_webhooks, account_list)
+    return unsubscribe_hook(email) if reason == 'abuse'
+
+    emails = EmailAddress.joins(person: [:contacts])
+             .where(contacts: { account_list_id: account_list.id }, email: email)
+
+    emails.each do |email_to_clean|
+      email_to_clean.update(historic: true, primary: false)
+      SubscriberCleanedMailer.delay.subscriber_cleaned(account_list, email_to_clean)
+    end
+  end
+
+  def campaign_status_hook(_campaign_id, _status, _subject)
   end
 
   def set_active
