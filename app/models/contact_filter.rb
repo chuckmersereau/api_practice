@@ -265,27 +265,24 @@ class ContactFilter
 
     where_statement =  if @filters[:contact_info_email] == 'Yes'
                          'email_addresses.email is not null AND email_addresses.primary = true'
-                       elsif @filters[:contact_info_email] == 'No'
+                       else
                          'email_addresses.email is NULL'
                        end
 
     filtered_contacts = filtered_contacts.where(where_statement)
                         .includes(people: :email_addresses)
                         .references('email_addresses')
-    filtered_contacts
   end
 
   def contact_info_phone_type(filtered_contacts)
-    return filtered_contacts unless  @filters[:contact_info_email].present?
+    return filtered_contacts unless @filters[:contact_info_email].present?
 
     if @filters[:contact_info_phone] == 'Yes'
       filtered_contacts = filtered_contacts.where("phone_numbers.number IS NOT NULL AND phone_numbers.location = 'home' ")
                           .includes(people: :phone_numbers)
                           .references('phone_numbers')
 
-    end
-
-    if @filters[:contact_info_phone] == 'No'
+    else
       filtered_contacts = filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'home' ")
                           .includes(people: :phone_numbers)
                           .references('phone_numbers')
@@ -303,9 +300,7 @@ class ContactFilter
                           .includes(people: :phone_numbers)
                           .references('phone_numbers')
 
-    end
-
-    if @filters[:contact_info_mobile] == 'No'
+    else
       filtered_contacts = filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'mobile' ")
                           .includes(people: :phone_numbers)
                           .references('phone_numbers')
@@ -319,27 +314,25 @@ class ContactFilter
     return filtered_contacts unless  @filters[:contact_info_email].present?
     where_statement = if @filters[:contact_info_addr] == 'Yes'
                         "addresses.street <> '' AND addresses.historic = false"
-                      elsif @filters[:contact_info_addr] == 'No'
+                      else
                         "addresses.street =''"
                       end
 
     filtered_contacts = filtered_contacts.where(where_statement)
                         .includes(:addresses)
                         .references('addresses')
-    filtered_contacts
   end
 
   def contact_info_facebook(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_email].present?
     where_statement =  if @filters[:contact_info_facebook] == 'Yes'
                          'person_facebook_accounts.remote_id IS NOT NULL'
-                       elsif @filters[:contact_info_facebook] == 'No'
+                       else
                          'person_facebook_accounts.remote_id IS NULL'
                        end
 
     filtered_contacts = filtered_contacts.where(where_statement)
                         .includes(people: :facebook_account)
                         .references('facebook_account')
-    filtered_contacts
   end
 end
