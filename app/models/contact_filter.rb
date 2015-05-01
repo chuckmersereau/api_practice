@@ -269,70 +269,66 @@ class ContactFilter
                          'email_addresses.email is NULL'
                        end
 
-    filtered_contacts = filtered_contacts.where(where_statement)
-                        .includes(people: :email_addresses)
-                        .references('email_addresses')
+    filtered_contacts.where(where_statement)
+      .includes(people: :email_addresses)
+      .references('email_addresses')
   end
 
   def contact_info_phone_type(filtered_contacts)
-    return filtered_contacts unless @filters[:contact_info_email].present?
+    return filtered_contacts unless @filters[:contact_info_phone].present?
 
     if @filters[:contact_info_phone] == 'Yes'
-      filtered_contacts = filtered_contacts.where("phone_numbers.number IS NOT NULL AND phone_numbers.location = 'home' ")
-                          .includes(people: :phone_numbers)
-                          .references('phone_numbers')
+      filtered_contacts.where("phone_numbers.number IS NOT NULL AND phone_numbers.location = 'home' ")
+        .includes(people: :phone_numbers)
+        .references('phone_numbers')
 
     else
-      filtered_contacts = filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'home' ")
-                          .includes(people: :phone_numbers)
-                          .references('phone_numbers')
+      filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'home' ")
+        .includes(people: :phone_numbers)
+        .references('phone_numbers')
 
     end
-
-    filtered_contacts
   end
 
   def contact_info_mobile_type(filtered_contacts)
-    return filtered_contacts unless  @filters[:contact_info_email].present?
+    return filtered_contacts unless  @filters[:contact_info_mobile].present?
 
     if @filters[:contact_info_mobile] == 'Yes'
-      filtered_contacts = filtered_contacts.where("phone_numbers.number IS NOT NULL AND phone_numbers.location = 'mobile' ")
-                          .includes(people: :phone_numbers)
-                          .references('phone_numbers')
+      filtered_contacts.where("phone_numbers.number IS NOT NULL AND phone_numbers.location = 'mobile' ")
+        .includes(people: :phone_numbers)
+        .references('phone_numbers')
 
     else
-      filtered_contacts = filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'mobile' ")
-                          .includes(people: :phone_numbers)
-                          .references('phone_numbers')
+      filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'mobile' ")
+        .includes(people: :phone_numbers)
+        .references('phone_numbers')
 
     end
-
-    filtered_contacts
   end
 
   def contact_info_address(filtered_contacts)
-    return filtered_contacts unless  @filters[:contact_info_email].present?
+    return filtered_contacts unless  @filters[:contact_info_addr].present?
     where_statement = if @filters[:contact_info_addr] == 'Yes'
                         "addresses.street <> '' AND addresses.historic = false"
                       else
                         "addresses.street =''"
                       end
 
-    filtered_contacts = filtered_contacts.where(where_statement)
-                        .includes(:addresses)
-                        .references('addresses')
+    filtered_contacts.where(where_statement)
+      .includes(:addresses)
+      .references('addresses')
   end
 
   def contact_info_facebook(filtered_contacts)
-    return filtered_contacts unless  @filters[:contact_info_email].present?
+    return filtered_contacts unless  @filters[:contact_info_facebook].present?
     where_statement =  if @filters[:contact_info_facebook] == 'Yes'
                          'person_facebook_accounts.remote_id IS NOT NULL'
                        else
                          'person_facebook_accounts.remote_id IS NULL'
                        end
 
-    filtered_contacts = filtered_contacts.where(where_statement)
-                        .includes(people: :facebook_account)
-                        .references('facebook_account')
+    filtered_contacts.where(where_statement)
+      .includes(people: :facebook_account)
+      .references('facebook_account')
   end
 end
