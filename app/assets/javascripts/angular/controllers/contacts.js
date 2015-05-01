@@ -190,35 +190,17 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_pledge_received").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.contact_info_email)){
-            $scope.contactQuery.contact_info_email = prefs.contact_info_email;
-            if(prefs.contact_info_email){
-                jQuery("#leftmenu #filter_contact_info_email").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.contact_info_phone)){
-            $scope.contactQuery.contact_info_phone = prefs.contact_info_phone;
-            if(prefs.contact_info_phone){
-                jQuery("#leftmenu #filter_contact_info_phone").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.contact_info_mobile)){
-            $scope.contactQuery.contact_info_mobile = prefs.contact_info_mobile;
-            if(prefs.contact_info_mobile){
-                jQuery("#leftmenu #filter_contact_info_mobile").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.contact_info_addr)){
-            $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;
-            if(prefs.contact_info_addr){
-                jQuery("#leftmenu #filter_contact_info_addr").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.contact_info_facebook)){
-            $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;
-            if(prefs.contact_info_facebook){
-                jQuery("#leftmenu #filter_contact_info_facebook").trigger("click");
-            }
+        if(angular.isDefined(prefs.contact_info_email) 
+          || angular.isDefined(prefs.contact_info_phone) 
+          || angular.isDefined(prefs.contact_info_mobile) 
+          || angular.isDefined(prefs.contact_info_addr)
+          || angular.isDefined(prefs.contact_info_facebook)){
+              $scope.contactQuery.contact_info_email = prefs.contact_info_email; 
+              $scope.contactQuery.contact_info_phone = prefs.contact_info_phone;
+              $scope.contactQuery.contact_info_mobile = prefs.contact_info_mobile;
+              $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;            
+              $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;  
+              jQuery("#leftmenu #filter_contact_info").trigger("click");    
         }
     });
 
