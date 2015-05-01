@@ -7,8 +7,7 @@ class ContactExhibit < DisplayCase::Exhibit
     'tasks' => _('Tasks'),
     'history' => _('History'),
     'referrals' => _('Referrals'),
-    'notes' => _('Notes'),
-    'social' => _('Social')
+    'notes' => _('Notes')
   }
 
   def self.applicable_to?(object)

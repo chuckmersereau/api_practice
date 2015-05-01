@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
 
   def index
     @page_title = _('Accounts')
-    @providers = %w(google facebook twitter linkedin key relay)
+    @providers = %w(google facebook key relay)
   end
 
   def new
