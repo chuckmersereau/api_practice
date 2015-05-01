@@ -20,9 +20,7 @@
       <%= hidden_field_tag 'remove_tag_contact_ids' %>
       <p><%= _('Click on a tag to remove it from selected contacts.') %></p>
       <ul>
-        <% if $rollout.active?(:bulk_remove_tags, current_account_list) %>
           <%= label_tag :all_contacts, _('Remove tag from all contacts') %><%= check_box_tag :all_contacts %>
-        <% end %>
         <% current_account_list.contact_tags.each do |tag| %>
           <li><a href="#" class="tag" data-name="<%= tag %>"><%= tag %></a></li>
         <% end %>
