@@ -113,6 +113,7 @@ class Siebel < DataServer
         donation_date = donation.donation_date.strftime('%Y-%m-%d')
         siebel_donations = SiebelDonations::Donation.find(designations: da.designation_number, donors: donation.donor_account.account_number,
                                                          start_date: donation_date, end_date: donation_date)
+        # The previous query might return a donation for the same date, so check that the remote_id is equal
         if siebel_donations.blank? || (siebel_donations.size == 1 && siebel_donations.first.id != donation.remote_id)
           donation.destroy
         end
