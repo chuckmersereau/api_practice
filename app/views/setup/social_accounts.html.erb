@@ -1,6 +1,6 @@
 <div class="network_wrap">
 
-  <% %w[google facebook twitter linkedin key relay].each do |provider| %>
+  <% %w[google key relay].each do |provider| %>
     <% next if %w{relay key}.include?(provider) && current_user.send("#{provider}_accounts".to_sym).present? %>
     <div class="network_connect">
       <div class="network_logo">

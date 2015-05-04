@@ -30,9 +30,14 @@
                     <div class="alert alert-warning" role="alert"><%= _('MPDX does not currently import any data from this source, but it will soon! Connect your account now to be ready for when it does') %></div>
                   <% end %>
 
-                  <div class="network_button">
-                    <%= auth_link(provider) %>
-                  </div>
+                  <% if provider == 'facebook' %>
+                    <div class="alert alert-warning" role="alert"><%= _('As of April 30, 2015 Facebook changed how they integrate with apps like MPDX so we cannot currently import Facebook contacts. We will investigate options in the future.') %></div>
+                  <% else %>
+                    <div class="network_button">
+                      <%= auth_link(provider) %>
+                    </div>
+                  <% end %>
+
                 </td>
               </tr>
             </table>
