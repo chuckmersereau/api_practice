@@ -17,7 +17,7 @@ describe 'Overall notification tests' do
   let(:fornightly) { Contact.pledge_frequencies.find { |_freq, name| name == _('Fortnightly') }.first }
 
   before do
-    expect($rollout).to receive(:active?).at_least(:once).with(:new_notifications, anything).and_return(true)
+    expect($rollout).to receive(:active?).at_least(:once).with(:activity_notifications, anything).and_return(true)
     [
       larger_gift, long_time_frame_gift, recontinuing_gift, smaller_gift, special_gift, started_giving, stopped_giving
     ].each do |notification_type|

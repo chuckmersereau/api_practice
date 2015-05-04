@@ -12,9 +12,8 @@ class NotificationType < ActiveRecord::Base
   def self.check_all(account_list)
     contacts = {}
     types.each do |type|
-      unless $rollout.active?(:new_notifications, account_list)
-        next if type.in?(['NotificationType::LargerGift', 'NotificationType::LongTimeFrameGift',
-                          'NotificationType::RecontinuingGift', 'NotificationType::SmallerGift'])
+      unless $rollout.active?(:activity_notifications, account_list)
+        next if type.in?(['NotificationType::ThankPartnerOncePerYear', 'NotificationType::CallPartnerOncePerYear'])
       end
       type_instance = type.constantize.first
       actions = account_list.notification_preferences.find_by_notification_type_id(type_instance.id).try(:actions)
