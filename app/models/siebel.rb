@@ -99,7 +99,7 @@ class Siebel < DataServer
       end
 
       # Check for removed donations
-      all_current_donations_relation = da.donations.where('donation_date > ? AND donation_date < ?', rails_start_date, rails_end_date)
+      all_current_donations_relation = da.donations.where('donation_date >= ? AND donation_date <= ?', rails_start_date, rails_end_date)
                                        .where.not(remote_id: nil)
       all_current_donations_array = all_current_donations_relation.to_a
       SiebelDonations::Donation.find(designations: da.designation_number, donation_date_start: start_date,
@@ -111,9 +111,11 @@ class Siebel < DataServer
       # Double check removed donations straight from Siebel
       all_current_donations_array.each do |donation|
         donation_date = donation.donation_date.strftime('%Y-%m-%d')
-        siebel_donation = SiebelDonations::Donation.find(designations: da.designation_number, donors: donation.donor_account.account_number,
+        siebel_donations = SiebelDonations::Donation.find(designations: da.designation_number, donors: donation.donor_account.account_number,
                                                          start_date: donation_date, end_date: donation_date)
-        donation.destroy unless siebel_donation.present?
+        if siebel_donations.blank? || (siebel_donations.size == 1 && siebel_donations.first.id != donation.remote_id)
+          donation.destroy
+        end
       end
     end
   end
