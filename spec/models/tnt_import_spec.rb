@@ -647,21 +647,24 @@ describe TntImport do
       appeal = Appeal.first
       expect(appeal.name).to eq('CSU')
       expect(appeal.created_at).to eq(Time.zone.local(2005, 5, 21, 12, 56, 40))
-      expect(appeal.contacts.count).to eq(1)
-      expect(appeal.contacts.first.name).to eq('Smith, John and Jane')
+      expect(appeal.contacts.count).to eq(2)
+      expect(appeal.contacts.pluck(:name)).to include('Smith, John and Jane')
+      expect(appeal.contacts.pluck(:name)).to include('Doe, John')
       expect(appeal.donations.first).to eq(donation)
       donation.reload
       expect(donation.appeal).to eq(appeal)
       expect(donation.appeal_amount).to eq(25)
 
       # Survies the second import even if you rename the appeal
-      appeal.update(name: 'Test new name')
+      # Also check that it updates created_at to match tnt
+      appeal.update(name: 'Test new name', created_at: Time.now)
       expect do
         tnt_import.send(:import)
       end.to_not change(Appeal, :count).from(1)
       expect(donation.appeal_amount).to eq(25)
       appeal.reload
-      expect(appeal.contacts.count).to eq(1)
+      expect(appeal.created_at).to eq(Time.zone.local(2005, 5, 21, 12, 56, 40))
+      expect(appeal.contacts.count).to eq(2)
     end
 
     it 'does not error if an appeal has no contacts' do
