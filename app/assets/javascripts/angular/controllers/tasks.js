@@ -69,7 +69,12 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
     };
 
     var contactFilterExists = function(){
-        return ($scope.filter.contactName !==  '' || $scope.filter.contactType !== '' || $scope.filter.contactCity[0] !== '' || $scope.filter.contactState[0] !== '' || $scope.filter.contactNewsletter !== '' || $scope.filter.contactStatus[0] !== '' || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== '' || $scope.filter.contactReferrer[0] !== ''  || $scope.filter.contactTimezone[0] !== '' || $scope.filter.contactPledgeFrequencies[0] !== '');
+        return ($scope.filter.contactName !==  '' || $scope.filter.contactType !== '' || $scope.filter.contactCity[0] !== ''
+            || $scope.filter.contactState[0] !== '' || $scope.filter.contactNewsletter !== '' || $scope.filter.contactStatus[0] !== ''
+            || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== '' || $scope.filter.contactReferrer[0] !== ''
+            || $scope.filter.contactTimezone[0] !== '' || $scope.filter.contactPledgeFrequencies[0] !== ''
+            || $scope.filter.contactInfoEmail !== '' || $scope.filter.contactInfoMobile !== '' || $scope.filter.contactInfoMobile !== ''
+            || $scope.filter.contactInfoAddr[0]!== '' || $scope.filter.contactInfoFacebook !== '' );
     };
 
     var getContactFilterIds = function(group){
@@ -86,6 +91,11 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[referrer][]=' + encodeURLarray($scope.filter.contactReferrer).join('&filters[referrer][]=') +
             '&filters[timezone][]=' + encodeURLarray($scope.filter.contactTimezone).join('&filters[timezone][]=') +
             '&filters[pledge_frequencies][]=' + encodeURLarray($scope.filter.contactPledgeFrequencies).join('&filters[pledge_frequencies][]=') +
+            '&filters[contact_info_email]=' + encodeURIComponent($scope.filter.contactInfoEmail) +
+            '&filters[contact_info_phone]=' + encodeURIComponent($scope.filter.contactInfoPhone) +
+            '&filters[contact_info_mobile]=' + encodeURIComponent($scope.filter.contactInfoMobile) +
+            '&filters[contact_info_addr]=' + encodeURIComponent($scope.filter.contactInfoAddr) +
+            '&filters[contact_info_facebook]=' + encodeURIComponent($scope.filter.contactInfoFacebook) +
             '&include=Contact.id&per_page=10000'
         , {}, function(data) {
             refreshTasks(group, _.pluck(data.contacts, 'id'));
@@ -180,6 +190,11 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             contactReferrer: [''],
             contactTimezone: [''],
             contactPledgeFrequencies: [''],
+            contactInfoEmail: '',
+            contactInfoPhone: '',
+            contactInfoMobile: '',
+            contactInfoAddr: '',
+            contactInfoFacebook: '',
             tasksPerGroup: 25
         };
     };
