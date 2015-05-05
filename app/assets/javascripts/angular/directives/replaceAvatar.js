@@ -30,14 +30,18 @@ angular.module('mpdxApp')
                     }
                   }
                 }).result.then(function (facebookUrl) {
-                      contactObj.people_attributes = [{
-                        facebook_accounts_attributes: [{
-                          url: facebookUrl
-                        }]
-                      }];
-
-                      api.call('put', 'contacts/' + contactId + '?account_list_id=' + window.current_account_list_id, contactObj);
-                  });
+                  obj = {
+                    contact: {
+                      people_attributes: [{
+                        id: contactObj.people[0]['id'],
+                        facebook_accounts_attributes: {
+                          1430848487081: { url: facebookUrl }
+                        }
+                      }]
+                    }
+                  }
+                  api.call('put', 'contacts/' + contactId + '?account_list_id=' + window.current_account_list_id, obj);
+                });
               };
             }
         };

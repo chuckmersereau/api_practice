@@ -185,7 +185,9 @@ class Person < ActiveRecord::Base
   def facebook_accounts_attributes=(hash)
     facebook_ids = facebook_accounts.pluck(:remote_id)
 
+    puts "HASH: #{hash.inspect}"
     hash.each do |key, attributes|
+      puts "ATTRIBUTES: #{attributes.inspect}"
       next if attributes['_destroy'] == '1'
 
       remote_id = Person::FacebookAccount.get_id_from_url(attributes['url'])
