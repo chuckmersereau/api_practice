@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150423195307) do
+ActiveRecord::Schema.define(version: 20150501024703) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -472,6 +472,7 @@ ActiveRecord::Schema.define(version: 20150423195307) do
     t.boolean  "import_by_group",   default: false
     t.text     "groups"
     t.text     "group_tags"
+    t.boolean  "in_preview",        default: false, null: false
   end
 
   add_index "imports", ["account_list_id"], name: "index_imports_on_account_list_id", using: :btree

@@ -55,7 +55,14 @@ Rails.application.routes.draw do
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
   end
 
-  resources :imports
+  resources :imports do
+    collection do
+      get :sample
+    end
+    member do
+      get :csv_preview_partial
+    end
+  end
 
   resources :activity_comments
 

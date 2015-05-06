@@ -1,0 +1,145 @@
+<div class="container" id="csv_import_preview">
+  <div class="row">
+    <h2><%= _('Import Preview:') %> <%= @import.read_attribute(:file) %></h2>
+  </div>
+  <% any_invalid = false %>
+
+  <% @csv_import.contacts.each do |contact| %>
+    <% contact = exhibit(contact, self) %>
+    <div class="row">
+      <h4><%= contact.name %></h4>
+      <% contact.mailing_address.master_address_id = 0 # skip master address lookup %>
+      <% if !contact.valid? %>
+        <% any_invalid = true %>
+        <div id="error_explanation">
+          <ul>
+            <% contact.errors.full_messages.each do |error_message| %>
+              <li><%= error_message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+    </div>
+    <div class="row">
+      <div class="col-md-3">
+        <table class="meta">
+          <tr>
+            <td class="meta_name"><%= _('Greeting') %></td>
+            <td class="meta_data"><%= contact.greeting %></td>
+          </tr>
+          <tr>
+            <td class="meta_name"><%= _('Status') %></td>
+            <td class="meta_data">
+              <%= contact.status %>
+              <% if contact.status == 'Partner - Financial' %>
+                <% if contact.pledge_received %>
+                  <i class="fa fa-check" title="<%= _('Commitment Received') %>"></i>
+                <% else %>
+                  <span class="fa-stack" title="<%= _('Commitment Not Received') %>">
+                    <i class="fa fa-check fa-stack-1x"></i>
+                    <i class="fa fa-ban fa-stack-2x"></i>
+                  </span>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
+          <tr>
+            <td class="meta_name"><%= _('Commitment') %></td>
+            <td class="meta_data"><%= contact.pledge_amount %></td>
+          </tr>
+          <tr>
+            <td class="meta_name"><%= _('Frequency') %></td>
+            <td class="meta_data"><%= contact.pledge_frequency %></td>
+          </tr>
+          <tr>
+            <td class="meta_name"><%= _('Newsletter') %></td>
+            <td class="meta_data"><%= contact.send_newsletter %></td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-3">
+        <table class="meta">
+          <td class="meta_name_wide"><%= _('Address') %></td>
+          <td class="meta_data">
+            <%= contact.envelope_greeting %><br>
+            <%= contact.mailing_address.street %><br>
+            <%= contact.mailing_address.city %>, <%= contact.mailing_address.state %> <%= contact.mailing_address.postal_code %>
+          </td>
+          <tr>
+            <td class="meta_name_wide"><%= _('Tags') %></td>
+            <td class="meta_data"><%= contact.tag_list %></td>
+          </tr>
+          <tr>
+            <td class="meta_name_wide"><%= _('Notes') %></td>
+            <td class="meta_data"><%= contact.notes %></td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-3">
+        <table class="meta">
+          <tr>
+            <td class="meta_name"><%= _('Primary') %></td>
+            <td class="meta_data"><%= contact.primary_person.first_name %> <%= contact.primary_person.last_name %></td>
+          </tr>
+          <tr>
+            <td class="meta_name"><%= _('Email') %></td>
+            <td class="meta_data"><%= contact.primary_person.email %></td>
+          </tr>
+          <tr>
+            <td class="meta_name"><%= _('Phone') %></td>
+            <td class="meta_data"><%= contact.primary_person.phone_numbers.first.try(:number) %></td>
+          </tr>
+        </table>
+      </div>
+      <div class="col-md-3">
+        <% if contact.spouse.present? %>
+          <table class="meta">
+            <tr>
+              <td class="meta_name"><%= _('Spouse') %></td>
+              <td class="meta_data"><%= contact.spouse.first_name %> <%= contact.spouse.last_name %></td>
+            </tr>
+            <tr>
+              <td class="meta_name"><%= _('Email') %></td>
+              <td class="meta_data"><%= contact.spouse.email %></td>
+            </tr>
+            <tr>
+              <td class="meta_name"><%= _('Phone') %></td>
+              <td class="meta_data"><%= contact.spouse.phone_numbers.first.try(:number) %></td>
+            </tr>
+          </table>
+        <% end %>
+      </div>
+    </div>
+    <div class="row">
+      <hr class="thin" style="width: 100%">
+    </div>
+  <% end %>
+
+  <div class="row" style="margin-top: 1em">
+    <%= form_for @import do |f| %>
+      <h2><%= any_invalid ? _('Fix CSV Errors and Preview Again') : ('Run or Preview again') %></h2>
+
+      <div class="field">
+        <div class="importtags">
+          <%= _('Tags for contacts:') %>
+          <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
+        </div>
+      </div>
+
+      <% unless any_invalid %>
+        <%= _('Current file: ') + @import.read_attribute(:file) %><br>
+        <%= f.hidden_field :in_preview %>
+        <a href="#" class="btn btn-xs btn-default" data-behavior="run_previewed_import"><%= _('Run Import') %></a>
+        <br><br>
+      <% end %>
+
+      <%= any_invalid ? _('Upload fixed CSV file') : _('Or upload a new file and preview again:') %>
+      <div class="field">
+        <%= f.file_field :file %>
+        <%= f.hidden_field :file_cache %>
+      </div>
+      <a href="#" class="btn btn-xs" data-behavior="import_button"><%= _('Preview Again') %></a>
+    <% end %>
+
+  </div>
+</div>

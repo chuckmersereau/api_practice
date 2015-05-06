@@ -1,0 +1,7 @@
+<% if @import.source == 'csv' %>
+  <script type="text/javascript">$.mpdx.import_id = <%= @import.id %>;</script>
+  <div id="csv_import_preview">
+    <%= _('Preparing preview. This takes some time if you have a large file ...') %>
+    <%= spinner(visible: true) %>
+  </div>
+<% end %>
