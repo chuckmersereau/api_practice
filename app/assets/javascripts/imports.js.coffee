@@ -1,3 +1,8 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
+$ ->
+  if $('#csv_import_preview')[0]?
+    $.ajax
+      type: 'GET'
+      url: "/imports/" + $.mpdx.import_id + "/csv_preview_partial"
+      dataType: "html"
+      success: (preview_html) ->
+        $("#csv_import_preview").html(preview_html)
