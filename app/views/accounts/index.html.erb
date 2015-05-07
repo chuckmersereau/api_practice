@@ -134,28 +134,56 @@
                   </td>
                   <td class="connections" data-behavior="account" style="width:500px">
                     <div class="importoptions formstyles" data-behavior="import_options" style="display:none">
-                      <%= (_('MPDX requires that your .csv file have specific headers and types of values. '\
-                             'Here is a <a href="%{sample_url}">sample csv</a>. '\
-                             'Use it as a template to format your spreadsheet. '\
-                             'After you run the import, we suggest you run "Find Duplicates" under "Contacts".'
-                            ).localize % { sample_url: sample_imports_path(format: :csv) }).html_safe
-                          %>
-                        <%= form_for Import.new(source: provider, in_preview: true) do |f| %>
-                          <%= f.hidden_field :source %>
-                          <%= f.hidden_field :in_preview %>
+                      <%= _('To import from a .csv spreadsheet file:') %>
+                      <ol>
+                        <li>
+                          <%= (_('Download the <a href="%{sample_url}">sample MPDX csv import file</a>.'
+                                ).localize % { sample_url: sample_imports_path(format: :csv) }).html_safe %>
+                        </li>
+                        <li> <%= _('Format your data to match the sample:') %>
+                          <ul>
+                            <li>
+                              <%= _('The headers in the first row must exactly match the sample.') %>
+                            </li>
+                            <li>
+                              <%= _('The Status, Commitment Frequency, and Newsletter values must also exactly '\
+                                    'match one of the "Cell Options" in the sample.') %>
+                            </li>
+                            <li>
+                              <%= _('The Spouse Last Name, Greeting and Envelope Greeting fields will get '\
+                                    'automatic defaults if you leave them blank.') %>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <%= _('When you finish formatting your data, remove any blank or sample rows '\
+                                'at the bottom, upload your file below, optionally specify a tag, and click "Preview Import."') %>
+                        </li>
+                        <li>
+                          <%= _('You can then review the import to ensure it is correct and re-upload as needed. '\
+                                "Note that the sample itself isn't fully valid because we included instructions at the bottom.") %>
+                        </li>
+                        <li>
+                          <%= _('Once you have a CSV import with valid and correct data you can click "Run import" from the preview page.') %>
+                        </li>
+                      </ol>
 
-                          <div class="field">
-                            <%= f.file_field :file %>
-                            <%= f.hidden_field :file_cache %>
-                          </div>
+                      <%= form_for Import.new(source: provider, in_preview: true) do |f| %>
+                        <%= f.hidden_field :source %>
+                        <%= f.hidden_field :in_preview %>
 
-                          <div class="field">
-                            <div class="importtags">
-                              <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
-                            </div>
+                        <div class="field">
+                          <%= f.file_field :file %>
+                          <%= f.hidden_field :file_cache %>
+                        </div>
+
+                        <div class="field">
+                          <div class="importtags">
+                            <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
                           </div>
-                          <a href="#" class="" data-behavior="import_button"><%= _('Preview Import') %></a>
-                        <% end %>
+                        </div>
+                        <a href="#" class="" data-behavior="import_button"><%= _('Preview Import') %></a>
+                      <% end %>
                     </div>
                     <div><a href="#" class="btn btn-xs btn-default" data-behavior="show_import"><%= _('Import Contacts') %></a></div>
                   </td>
