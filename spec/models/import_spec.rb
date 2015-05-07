@@ -39,4 +39,12 @@ describe Import do
       import.send(:import)
     end.to_not raise_error
   end
+
+  it 'queues an import when saved' do
+    expect { create(:csv_import) }.to change(Import.jobs, :size).from(0).to(1)
+  end
+
+  it 'does not queue an import when set to in preview' do
+    expect { create(:csv_import, in_preview: true) }.to_not change(Import.jobs, :size).from(0)
+  end
 end
