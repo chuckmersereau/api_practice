@@ -118,50 +118,52 @@
           </div>
         <% end %>
 
-        <% %w[csv].each do |provider| %>
-          <div class="network_connect">
+        <% if $rollout.active?(:csv_import, current_account_list) %>
+          <% %w[csv].each do |provider| %>
+            <div class="network_connect">
 
-            <table>
-              <tr>
-                <td class="identify">
+              <table>
+                <tr>
+                  <td class="identify">
 
-                  <div class="network_logo">
-                    <h3>
-                      .CSV File
-                    </h3>
-                  </div>
-                </td>
-                <td class="connections" data-behavior="account" style="width:500px">
-                  <div class="importoptions formstyles" data-behavior="import_options" style="display:none">
-                    <%= (_('MPDX requires that your .csv file have specific headers and types of values. '\
-                          'Here is a <a href="%{sample_url}">sample csv</a>. '\
-                          'Use it as a template to format your spreadsheet. '\
-                          'After you run the import, we suggest you run "Find Duplicates" under "Contacts".'
-                          ).localize % { sample_url: sample_imports_path(format: :csv) }).html_safe
-                    %>
-                    <%= form_for Import.new(source: provider, in_preview: true) do |f| %>
-                      <%= f.hidden_field :source %>
-                      <%= f.hidden_field :in_preview %>
+                    <div class="network_logo">
+                      <h3>
+                        .CSV File
+                      </h3>
+                    </div>
+                  </td>
+                  <td class="connections" data-behavior="account" style="width:500px">
+                    <div class="importoptions formstyles" data-behavior="import_options" style="display:none">
+                      <%= (_('MPDX requires that your .csv file have specific headers and types of values. '\
+                             'Here is a <a href="%{sample_url}">sample csv</a>. '\
+                             'Use it as a template to format your spreadsheet. '\
+                             'After you run the import, we suggest you run "Find Duplicates" under "Contacts".'
+                            ).localize % { sample_url: sample_imports_path(format: :csv) }).html_safe
+                          %>
+                        <%= form_for Import.new(source: provider, in_preview: true) do |f| %>
+                          <%= f.hidden_field :source %>
+                          <%= f.hidden_field :in_preview %>
 
-                      <div class="field">
-                        <%= f.file_field :file %>
-                        <%= f.hidden_field :file_cache %>
-                      </div>
+                          <div class="field">
+                            <%= f.file_field :file %>
+                            <%= f.hidden_field :file_cache %>
+                          </div>
 
-                      <div class="field">
-                        <div class="importtags">
-                          <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
-                        </div>
-                      </div>
-                      <a href="#" class="" data-behavior="import_button"><%= _('Preview Import') %></a>
-                    <% end %>
-                  </div>
-                  <div><a href="#" class="btn btn-xs btn-default" data-behavior="show_import"><%= _('Import Contacts') %></a></div>
-                </td>
-              </tr>
-            </table>
-          </div>
-        <% end %>
+                          <div class="field">
+                            <div class="importtags">
+                              <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
+                            </div>
+                          </div>
+                          <a href="#" class="" data-behavior="import_button"><%= _('Preview Import') %></a>
+                        <% end %>
+                    </div>
+                    <div><a href="#" class="btn btn-xs btn-default" data-behavior="show_import"><%= _('Import Contacts') %></a></div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          <% end %>
+        <% end%>
 
         <div data-behavior="new_org_account" style="display:none" title="<%= _('Connect to your organization') %>">
           <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
