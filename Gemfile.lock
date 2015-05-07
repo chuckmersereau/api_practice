@@ -28,6 +28,16 @@ GIT
       json
 
 GIT
+  remote: https://github.com/carrierwaveuploader/carrierwave
+  revision: 01f7ec68d0403dfeec13e5f177ffa7e272b230aa
+  specs:
+    carrierwave (0.10.0)
+      activemodel (>= 3.2.0)
+      activesupport (>= 3.2.0)
+      json (>= 1.7)
+      mime-types (>= 1.16)
+
+GIT
   remote: https://github.com/gmailgem/gmail.git
   revision: 9aa7e57eab838631937db032431aedcde03e6b1d
   specs:
@@ -126,11 +136,6 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
-    carrierwave (0.10.0)
-      activemodel (>= 3.2.0)
-      activesupport (>= 3.2.0)
-      json (>= 1.7)
-      mime-types (>= 1.16)
     celluloid (0.16.0)
       timers (~> 4.0.0)
     chronic (0.10.2)
@@ -661,7 +666,7 @@ DEPENDENCIES
   binding_of_caller
   bluepill
   capybara
-  carrierwave
+  carrierwave!
   cloudinary
   coffee-rails (~> 4.0.1)
   country_select!
