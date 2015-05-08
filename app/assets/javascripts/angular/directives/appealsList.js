@@ -364,10 +364,10 @@ angular.module('mpdxApp')
                         }, function(){
                           alert('An error occurred while creating the appeal.');
                         });
-                        modalInstance.opened.then(function() {
-                          //wait for browser render before resizing
-                          setTimeout($.respDialogs);
-                        });
+                    });
+                    modalInstance.opened.then(function() {
+                        //wait for browser render before resizing
+                        setTimeout($.respDialogs);
                     });
                 };
 
