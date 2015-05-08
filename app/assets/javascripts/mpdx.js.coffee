@@ -251,10 +251,7 @@ $.respDialogs = ->
   $('.ui-dialog-responsive .ui-dialog-content').height $(window).height() - 180
   return
 
-$('#dash-tabs').on 'tabsactivate', (event, ui) ->
-  $.respDialogs()
-  return
+$('#dash-tabs').on 'tabsactivate', $.respDialogs
 
 $(window).resize ->
   $.respDialogs()
-  return
