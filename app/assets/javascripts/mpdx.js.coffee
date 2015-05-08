@@ -241,3 +241,20 @@ $(document).ready ->
     $('.mobile_filters_wrap').toggleClass 'show_mobile_filters'
     $('body').toggleClass 'stopscroll'
     return
+
+  $(window).scroll ->
+    filterWidth = $('.page-filters').parent().width()
+    $('.page-filters').width filterWidth
+
+$.respDialogs = ->
+  $('.ui-dialog-responsive').height $(window).height() - 60
+  $('.ui-dialog-responsive .ui-dialog-content').height $(window).height() - 180
+  return
+
+$('#dash-tabs').on 'tabsactivate', (event, ui) ->
+  $.respDialogs()
+  return
+
+$(window).resize ->
+  $.respDialogs()
+  return

@@ -758,8 +758,6 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 }
 
  @media (max-width: 960px) {
-    .mobile_filters_wrap {
-    }
     .show_mobile_filters {
 
       display: block !important;
@@ -791,11 +789,9 @@ div.name {font-size: 14px; margin-bottom: 4px;}
           width: 90%;
           background: #fff;
           overflow: auto;
-          > li {
-            span.menu_item {
-              margin-left: 0 !important;
-              border: 1px solid #ccc !important;
-            }
+          > li .menu_item {
+            margin-left: 0 !important;
+            border: 1px solid #ccc !important;
           }
           .filters_section:last-child {
             margin-bottom: 0;
@@ -1747,6 +1743,22 @@ body.google_integrations_controller {
     }
   }
 }
+
+// .modal.in .modal-dialog {
+//   max-height: 87%;
+//   height: 90%;
+//   .ui-dialog {
+//     height: 100%;
+//     .ui-dialog-content {
+//       max-height: 75%;
+//     }
+//     .ui-dialog-buttonpane {
+//       position: absolute;
+//       width: 100%;
+//       bottom: 0;
+//     }
+//   }
+// }
 
 /* ********************* Tasks Row ************************** */
 .tasklist {

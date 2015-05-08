@@ -23,7 +23,11 @@
           </span>
         <% end %>
       <% end %>
-      <a href="#" class="show_all_tags_btn" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'See all tags']);"><i class="fa fa-plus"></i> See all <span class="tagSize"></span> tags</a>
+      <a href="#" 
+        class="show_all_tags_btn" 
+        onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'See all tags']);">
+        <i class="fa fa-plus"></i> See all <span class="tagSize"></span> tags
+      </a>
     </li>
   </ul>
 </li>
@@ -36,5 +40,6 @@ if (tagSize < 15) {
 }
 $('.show_all_tags_btn').click(function() {
   $('.left_tag_list').toggleClass('show_all_tags');
+  $('.tagLess, .tagSize, .tagAll').toggle();
 })
 </script>
