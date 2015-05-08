@@ -143,6 +143,10 @@ $appealHeight: 20px;
   overflow-y: auto;
 }
 
+.ui-dialog-responsive .appealFilterCol {
+  height: auto;
+}
+
 .filter_selector_title {
   font-size: 1em;
   line-height: 1.5em;

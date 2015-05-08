@@ -254,6 +254,10 @@ angular.module('mpdxApp')
                         var index = _.findIndex($scope.appeals, { 'id': updatedAppeal.id });
                         $scope.appeals[index] = updatedAppeal;
                     });
+                    modalInstance.opened.then(function() {
+                        //wait for browser render before resizing
+                        setTimeout($.respDialogs);
+                    });
                 };
 
                 $scope.deleteAppeal = function(id){
@@ -336,7 +340,8 @@ angular.module('mpdxApp')
                             $scope.appeal.amount = Math.round((Number(goal.initial) + Number(goal.letterCost)) * adminPercent * 100) / 100;
                           };
                         }
-                    }).result.then(function (newAppeal) {
+                    });
+                    modalInstance.result.then(function (newAppeal) {
                         //remove false values
                         angular.forEach(newAppeal.validStatus, function(value, key) {
                           if(!value){ delete newAppeal.validStatus[key]; }
@@ -359,6 +364,10 @@ angular.module('mpdxApp')
                         }, function(){
                           alert('An error occurred while creating the appeal.');
                         });
+                    });
+                    modalInstance.opened.then(function() {
+                        //wait for browser render before resizing
+                        setTimeout($.respDialogs);
                     });
                 };
 
