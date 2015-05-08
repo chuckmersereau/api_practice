@@ -251,5 +251,4 @@ $.respDialogs = ->
 
 $('#dash-tabs').on 'tabsactivate', $.respDialogs
 
-$(window).resize ->
-  $.respDialogs()
+$(window).resize $.respDialogs()
