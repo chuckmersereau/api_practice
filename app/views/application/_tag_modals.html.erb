@@ -15,7 +15,7 @@
 </div>
 
 <div id="remove_tag_modal" title="<%= _('Remove Tag') %>" style="display:none">
-  <div class="form_wrapper">
+  <div class="form_wrapper" style="height: 400px;">
     <%= form_for ActsAsTaggableOn::Tag.new, url: '/tags/1', method: :delete, namespace: 'pre-scrollable', remote: true do |f| %>
       <%= hidden_field_tag 'remove_tag_contact_ids' %>
       <p><%= _('Click on a tag to remove it from selected contacts.') %></p>
