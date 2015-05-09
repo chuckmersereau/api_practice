@@ -55,5 +55,20 @@ describe ContactFilter do
       filtered_contacts = cf.filter(Contact)
       expect(filtered_contacts.length).to be 2
     end
+
+    it 'filters by contact details' do
+      has_email = create(:contact)
+      has_email.people << create(:person)
+      has_email.primary_or_first_person.email_addresses << create(:email_address)
+      no_email = create(:contact)
+
+      cf = ContactFilter.new(contact_info_email: 'Yes')
+      filtered_contacts = cf.filter(Contact)
+      expect(filtered_contacts).to eq [has_email]
+
+      cf = ContactFilter.new(contact_info_email: 'No')
+      filtered_contacts = cf.filter(Contact)
+      expect(filtered_contacts).to eq [no_email]
+    end
   end
 end
