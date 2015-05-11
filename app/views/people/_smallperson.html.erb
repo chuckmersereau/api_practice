@@ -3,7 +3,6 @@
   <div class="small-person well clearfix" id="person-<%= p.id %>">
 
     <div class="person-external">
-      <!--<%= link_to(image_tag(p.avatar(:large_square)), p, class: "person_avatar") %>-->
       <img src="<%=p.avatar(:large_square)%>" replace-avatar ng-click="replaceFacebookLink(<%=p.contact.id%>, <%=p.id%>, '<% if p.facebook_account %><%=p.facebook_account.url%><% end %>')">
     </div>
     <div class="social-icons">
