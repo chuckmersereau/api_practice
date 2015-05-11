@@ -66,6 +66,11 @@ describe CsvImport do
 
       check_contacts(contacts)
     end
+
+    it 'does not error if the csv file has a byte order mark' do
+      csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_bom.csv')))
+      check_contacts(import.contacts)
+    end
   end
 
   context '#import' do

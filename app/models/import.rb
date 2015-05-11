@@ -39,7 +39,7 @@ class Import < ActiveRecord::Base
 
   def read_file_contents
     file.cache_stored_file!
-    File.open(file.file.file) { |file| file.read }
+    File.open(file.file.file, 'r:bom|utf-8') { |file| file.read }
   end
 
   def import
