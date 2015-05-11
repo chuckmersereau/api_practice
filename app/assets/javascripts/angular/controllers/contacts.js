@@ -190,17 +190,17 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_pledge_received").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.contact_info_email) 
-          || angular.isDefined(prefs.contact_info_phone) 
-          || angular.isDefined(prefs.contact_info_mobile) 
+        if(angular.isDefined(prefs.contact_info_email)
+          || angular.isDefined(prefs.contact_info_phone)
+          || angular.isDefined(prefs.contact_info_mobile)
           || angular.isDefined(prefs.contact_info_addr)
           || angular.isDefined(prefs.contact_info_facebook)){
-              $scope.contactQuery.contact_info_email = prefs.contact_info_email; 
+              $scope.contactQuery.contact_info_email = prefs.contact_info_email;
               $scope.contactQuery.contact_info_phone = prefs.contact_info_phone;
               $scope.contactQuery.contact_info_mobile = prefs.contact_info_mobile;
-              $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;            
-              $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;  
-              jQuery("#leftmenu #filter_contact_info").trigger("click");    
+              $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;
+              $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;
+              jQuery("#leftmenu #filter_contact_info").trigger("click");
         }
     });
 
@@ -373,11 +373,11 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           !_.isEmpty(_.without(q.appeal, '')) ||
           !_.isEmpty(_.without(q.pledge_frequencies, '')) ||
           !_.isEmpty(_.without(q.pledge_received, '')) ||
-          !_.isEmpty(_.without(q.contact_info_email,'')) ||
-          !_.isEmpty(_.without(q.contact_info_phone,'')) ||
-          !_.isEmpty(_.without(q.contact_info_mobile,'')) ||
+          !_.isEmpty(q.contact_info_email) ||
+          !_.isEmpty(q.contact_info_phone) ||
+          !_.isEmpty(q.contact_info_mobile) ||
           !_.isEmpty(q.contact_info_addr) ||
-          !_.isEmpty(_.without(q.contact_info_facebook,'')))
+          !_.isEmpty(q.contact_info_facebook))
         {
         return false;
       }
