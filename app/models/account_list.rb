@@ -126,7 +126,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def designation_profile(user)
-    designation_profiles.where(user_id: user.id).first
+    designation_profiles.where(user_id: user.id).last
   end
 
   def total_pledges
