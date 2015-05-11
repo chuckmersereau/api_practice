@@ -60,19 +60,37 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
         refreshTasks(group);
     };
 
-    $scope.refreshVisibleTasks = function(){
+    $scope.refreshVisibleTasks = function(contactIds){
+        if(contactFilterExists()){
+            if(!contactIds) {
+                getContactFilterIds();
+                return;
+            }else{
+                if(contactIds.length === 0){
+                    contactIds[0] = '-'
+                }
+            }
+        }else{
+            contactIds = $scope.filter.contactsSelect;
+        }
+
         angular.forEach($scope.taskGroups, function(g, key){
             if(g.visible){
-                refreshTasks(g);
+                refreshTasks(g,contactIds);
             }
         });
     };
 
     var contactFilterExists = function(){
-        return ($scope.filter.contactName !==  '' || $scope.filter.contactType !== '' || $scope.filter.contactCity[0] !== '' || $scope.filter.contactState[0] !== '' || $scope.filter.contactNewsletter !== '' || $scope.filter.contactStatus[0] !== '' || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== '' || $scope.filter.contactReferrer[0] !== ''  || $scope.filter.contactTimezone[0] !== '' || $scope.filter.contactPledgeFrequencies[0] !== '');
+        return ($scope.filter.contactName !==  '' || $scope.filter.contactType !== '' || $scope.filter.contactCity[0] !== ''
+            || $scope.filter.contactState[0] !== '' || $scope.filter.contactNewsletter !== '' || $scope.filter.contactStatus[0] !== ''
+            || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== '' || $scope.filter.contactReferrer[0] !== ''
+            || $scope.filter.contactTimezone[0] !== '' || $scope.filter.contactPledgeFrequencies[0] !== ''
+            || $scope.filter.contactInfoEmail !== '' || $scope.filter.contactInfoMobile !== '' || $scope.filter.contactInfoMobile !== ''
+            || $scope.filter.contactInfoAddr !== '' || $scope.filter.contactInfoFacebook !== '' );
     };
 
-    var getContactFilterIds = function(group){
+    var getContactFilterIds = function(){
         api.call('get','contacts?account_list_id=' + (window.current_account_list_id || '') +
             '&filters[name]=' + encodeURIComponent($scope.filter.contactName) +
             '&filters[contact_type]=' + encodeURIComponent($scope.filter.contactType) +
@@ -86,28 +104,22 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[referrer][]=' + encodeURLarray($scope.filter.contactReferrer).join('&filters[referrer][]=') +
             '&filters[timezone][]=' + encodeURLarray($scope.filter.contactTimezone).join('&filters[timezone][]=') +
             '&filters[pledge_frequencies][]=' + encodeURLarray($scope.filter.contactPledgeFrequencies).join('&filters[pledge_frequencies][]=') +
+            '&filters[contact_info_email]=' + encodeURIComponent($scope.filter.contactInfoEmail) +
+            '&filters[contact_info_phone]=' + encodeURIComponent($scope.filter.contactInfoPhone) +
+            '&filters[contact_info_mobile]=' + encodeURIComponent($scope.filter.contactInfoMobile) +
+            '&filters[contact_info_addr]=' + encodeURIComponent($scope.filter.contactInfoAddr) +
+            '&filters[contact_info_facebook]=' + encodeURIComponent($scope.filter.contactInfoFacebook) +
             '&include=Contact.id&per_page=10000'
         , {}, function(data) {
-            refreshTasks(group, _.pluck(data.contacts, 'id'));
+
+                $scope.contactFilterIds = _.pluck(data.contacts, 'id');
+                $scope.refreshVisibleTasks($scope.contactFilterIds);
         }, null, true);
     };
 
     var refreshTasks = function(group, contactFilterIds){
         var groupIndex = _.indexOf($scope.taskGroups, group);
         $scope.taskGroups[groupIndex].loading = true;
-
-        if(contactFilterExists()){
-            if(angular.isUndefined(contactFilterIds)) {
-                getContactFilterIds(group);
-                return;
-            }else{
-                if(contactFilterIds.length === 0){
-                    contactFilterIds[0] = '-'
-                }
-            }
-        }else{
-            contactFilterIds = $scope.filter.contactsSelect;
-        }
         api.call('get','tasks?account_list_id=' + window.current_account_list_id +
             '&per_page=' + $scope.filter.tasksPerGroup +
             '&page=' + group.currentPage +
@@ -180,6 +192,11 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             contactReferrer: [''],
             contactTimezone: [''],
             contactPledgeFrequencies: [''],
+            contactInfoEmail: '',
+            contactInfoPhone: '',
+            contactInfoMobile: '',
+            contactInfoAddr: '',
+            contactInfoFacebook: '',
             tasksPerGroup: 25
         };
     };
