@@ -61,7 +61,7 @@ class Contact < ActiveRecord::Base
 
   MERGE_COPY_ATTRIBUTES = [
     :name, :pledge_amount, :status, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
-    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals,
+    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :pls_id,
     :direct_deposit, :magazine, :pledge_received, :timezone, :last_activity, :last_appointment, :last_letter,
     :last_phone_call, :last_pre_call, :last_thank, :prayer_letters_id, :last_donation_date, :first_donation_date, :tnt_id
   ]
@@ -75,8 +75,9 @@ class Contact < ActiveRecord::Base
   accepts_nested_attributes_for :contact_referrals_to_me, reject_if: :all_blank, allow_destroy: true
 
   before_save :set_notes_saved_at
-  after_commit :sync_with_mail_chimp, :sync_with_prayer_letters, :sync_with_google_contacts
-  before_destroy :delete_from_prayer_letters, :delete_people
+  after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
+  before_destroy :delete_from_letter_services, :delete_people
+  LETTER_SERVICES = [:pls, :prayer_letters]
 
   attr_accessor :user_changed
 
@@ -441,31 +442,40 @@ class Contact < ActiveRecord::Base
     (previous_changes.keys & %w(send_newsletter status greeting)).present?
   end
 
-  def sync_with_prayer_letters
-    return unless account_list && account_list.valid_prayer_letters_account
-
-    reload_mailing_address # in case this was triggered by a association instance address being changed
-
-    if should_be_in_prayer_letters?
-      pl = account_list.prayer_letters_account
-      return unless pl.contact_needs_sync?(self)
-      pl.add_or_update_contact(self)
-    else
-      delete_from_prayer_letters
-    end
-  end
-
   def sync_with_google_contacts
     account_list.queue_sync_with_google_contacts
   end
 
-  def delete_from_prayer_letters
+  def sync_with_letter_services
+    LETTER_SERVICES.each { |service| sync_with_letter_service(service) }
+  end
+
+  def delete_from_letter_services
+    LETTER_SERVICES.each { |service| delete_from_letter_service(service) }
+  end
+
+  def sync_with_letter_service(service)
+    return unless account_list && account_list.send("valid_#{service}_account")
+
+    # in case an association change triggered this
+    reload_mailing_address
+
+    pl = account_list.send("#{service}_account")
+
+    if should_be_in_prayer_letters?
+      pl.add_or_update_contact(self)
+    else
+      delete_from_letter_service(service)
+    end
+  end
+
+  def delete_from_letter_service(service)
     # If this contact was at prayerletters.com and no other contact on this list has the
     # same prayer_letters_id, remove this contact from prayerletters.com
-    return if prayer_letters_id.blank?
-    return unless account_list && account_list.valid_prayer_letters_account
-    return if account_list.contacts.where("prayer_letters_id = '#{prayer_letters_id}' AND id <> #{id}").present?
+    return if send("#{service}_id").blank?
+    return unless account_list && account_list.send("valid_#{service}_account")
+    return if account_list.contacts.where("#{service}_id" => send("#{service}_id")).where.not(id: id).present?
 
-    account_list.prayer_letters_account.delete_contact(self)
+    account_list.send("#{service}_account").delete_contact(self)
   end
 end

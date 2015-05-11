@@ -29,6 +29,12 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :pls_accounts do
+    collection do
+      get :sync
+    end
+  end
+
   get "settings/integrations", as: :integrations_settings
 
   resources :tags, only: [:create, :destroy]
@@ -153,6 +159,7 @@ Rails.application.routes.draw do
   get 'monitors/lb' => 'monitors#lb'
 
   get '/auth/prayer_letters/callback', to: 'prayer_letters_accounts#create'
+  get '/auth/pls/callback', to: 'pls_accounts#create'
   get '/auth/:provider/callback', to: 'accounts#create'
   get '/auth/failure', to: 'accounts#failure'
 

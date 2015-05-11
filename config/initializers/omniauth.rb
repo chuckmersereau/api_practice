@@ -11,6 +11,7 @@ Rails.application.config.middleware.use OmniAuth::Builder do
   provider :cas, name: 'key', url: 'https://thekey.me/cas'
   provider :cas, name: 'admin', url: 'https://signin.relaysso.org/cas'
   provider :prayer_letters, APP_CONFIG['prayer_letters_client_id'], APP_CONFIG['prayer_letters_client_secret'], scope: 'contacts.read contacts.write'
+  provider :pls, APP_CONFIG['pls_client_id'], APP_CONFIG['pls_client_secret'], scope: 'contacts.read contacts.write'
 end
 
 OmniAuth.config.on_failure = Proc.new { |env|
