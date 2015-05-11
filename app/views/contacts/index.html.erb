@@ -10,17 +10,6 @@
         <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
         <ul>
           <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
-          <% if $rollout.active?(:insights, current_account_list) %>
-              <li ng-class="{'selected': insightFilterIsActive()}">
-                <span class="left_filters menu_item"><%= _('Insights') %></span>
-                <p style="text-indent:40px">
-                  <a href="" ng-click="runInsight('recommendations')"><%= _('Increase Recommendations') %></a>
-                </p>
-              </li>
-              <li class="controls" ng-show="insightFilterIsActive()">
-                <a href="" ng-click="clearInsightFilter()" class="btn"><%= _('Clear Insight Filter') %></a>
-              </li>
-          <% end %>
           <li class="filters_section" ng-show="!insightFilterIsActive()">
             <span class="filters_title menu_item"><%= _('Filters') %></span>
             <form id="filters_form">
@@ -30,16 +19,36 @@
 
               <ul class="filters">
                 <li class="filter_set">
-                  <label id="filter_name" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Name']);"><%= _('Name') %></label>
+                  <label id="filter_status" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Status']);"><%= _('Status') %></label>
                   <div class="filter_set_inner">
-                    <input ng-model="contactQuery.name" type="text" class="form-control">
+                    <%= select_tag 'filters[status]', options_for_select([[_('-- All Active --'), 'active'], [_('-- All Hidden --'), 'hidden'], [_('-- None --'), 'null']] + contact_instance.assignable_statuses.collect { |s| [_(s), s] }), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.status' %>
                   </div>
                 </li>
 
                 <li class="filter_set">
-                  <label id="filter_status" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Status']);"><%= _('Status') %></label>
-                  <div class="filter_set_inner">
-                    <%= select_tag 'filters[status]', options_for_select([[_('-- All Active --'), 'active'], [_('-- All Hidden --'), 'hidden'], [_('-- None --'), 'null']] + contact_instance.assignable_statuses.collect { |s| [_(s), s] }), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.status' %>
+                  <label id="filter_commitment_details" class="filter_title"
+                         onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Commitment Details']);">
+                    <%= _('Commitment Details') %>
+                  </label>
+                  <div class="filter_set_inner filter_radio">
+                    <lable><%= _('Commitment Received') %>:</lable>
+                    <label>
+                      <%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.pledge_received' %>
+                      <%= _('-- Any --') %>
+                    </label>
+                    <label>
+                      <%= radio_button_tag '', 'true', false, :'ng-model' => 'contactQuery.pledge_received' %>
+                      <%= _('Received') %>
+                    </label>
+                    <label>
+                      <%= radio_button_tag '', 'false', false, :'ng-model' => 'contactQuery.pledge_received' %>
+                      <%= _('Not Received') %>
+                    </label>
+                    <lable><%= _('Commitment Frequency') %>:</lable>
+                    <%= select_tag 'filters[pledge_frequencies]',
+                                   options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a),
+                                   class: 'form-control', multiple: true, size: 5,
+                                   'ng-model' => 'contactQuery.pledge_frequencies' %>
                   </div>
                 </li>
 
@@ -69,15 +78,17 @@
                   </div>
                 </li>
                 <li class="filter_set">
-                  <label id="filter_type" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Type']);"><%= _('Type') %></label>
+                  <label id="filter_likely" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Likely To Give']);"><%= _('Likely To Give') %></label>
                   <div class="filter_set_inner">
-                    <%= select_tag 'filters[type]', options_for_select([[_('-- Any --'), ''], [_('Person'), 'person'], [_('Company'), 'company']]), multiple: false, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.type' %>
+                    <%= select_tag '', options_for_select([[_('-- Any --'), '']] + contact_instance.assignable_likely_to_gives),
+                                   multiple: true, size: 4, class: 'form-control', :'ng-model' => 'contactQuery.likely' %>
                   </div>
                 </li>
                 <li class="filter_set">
-                  <label id="filter_likely" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Likely To Give']);"><%= _('Likely To Give') %></label>
+                  <label id="filter_type" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Type']);"><%= _('Type') %></label>
                   <div class="filter_set_inner">
-                    <%= select_tag '', options_for_select([[_('-- Any --'), '']] + contact_instance.assignable_likely_to_gives), multiple: true, size: 4, class: 'form-control', :'ng-model' => 'contactQuery.likely' %>
+                    <%= select_tag 'filters[type]', options_for_select([[_('-- Any --'), ''], [_('Person'), 'person'], [_('Company'), 'company']]),
+                                   multiple: false, size: 3, class: 'form-control', :'ng-model' => 'contactQuery.type' %>
                   </div>
                 </li>
                 <li class="filter_set">
@@ -105,34 +116,6 @@
                                    :'ng-model' => 'contactQuery.metro_area' %>
                     <label>
                       <input type="checkbox" ng-model="contactQuery.activeAddresses"> <%= _('Active addresses') %>
-                    </label>
-                  </div>
-                </li>
-
-                <li class="filter_set">
-                  <label id="filter_church" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Church']);"><%= _('Church') %></label>
-                  <div class="filter_set_inner">
-                    <%= select_tag 'filters[church]', options_for_select([[_('-- Any --'), '']] + current_account_list.churches.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.church' %>
-                  </div>
-                </li>
-
-                <li class="filter_set">
-                  <label id="filter_pledge_received" class="filter_title"
-                         onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Commitment Received']);">
-                    <%= _('Commitment Received') %>
-                  </label>
-                  <div class="filter_set_inner filter_radio">
-                    <label>
-                      <%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.pledge_received' %>
-                      <%= _('-- Any --') %>
-                    </label>
-                    <label>
-                      <%= radio_button_tag '', 'true', false, :'ng-model' => 'contactQuery.pledge_received' %>
-                      <%= _('Received') %>
-                    </label>
-                    <label>
-                      <%= radio_button_tag '', 'false', false, :'ng-model' => 'contactQuery.pledge_received' %>
-                      <%= _('Not Received') %>
                     </label>
                   </div>
                 </li>
@@ -166,14 +149,14 @@
                     </label>
                   </div>
                 </li>
+
                 <li class="filter_set">
-                  <label id="filter_pledge_frequencies" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Commitment Frequency']);"><%= _('Commitment Frequency') %></label>
+                  <label id="filter_church" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Church']);"><%= _('Church') %></label>
                   <div class="filter_set_inner">
-                    <%= select_tag 'filters[pledge_frequencies]',
-                                   options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a),
-                                   class: 'form-control', multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, 'ng-model' => 'contactQuery.pledge_frequencies' %>
+                    <%= select_tag 'filters[church]', options_for_select([[_('-- Any --'), '']] + current_account_list.churches.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.church' %>
                   </div>
                 </li>
+
                 <li class="filter_set">
                   <label id="filter_relatedTaskAction" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Related Task Action']);"><%= _('Related task action') %></label>
                   <div class="filter_set_inner">
@@ -200,6 +183,17 @@
             </form>
 
           </li>
+          <% if $rollout.active?(:insights, current_account_list) %>
+            <li ng-class="{'selected': insightFilterIsActive()}">
+              <span class="left_filters menu_item"><%= _('Insights') %></span>
+              <p style="text-indent:40px">
+                <a href="" ng-click="runInsight('recommendations')"><%= _('Increase Recommendations') %></a>
+              </p>
+            </li>
+            <li class="controls" ng-show="insightFilterIsActive()">
+              <a href="" ng-click="clearInsightFilter()" class="btn"><%= _('Clear Insight Filter') %></a>
+            </li>
+          <% end %>
         </ul>
       </aside>
     </div>
@@ -254,7 +248,7 @@
                 <span ng-show="(n === 2 && page.current > 9) || (n === page.total-1 && page.current < page.total - 8)">...</span>
               </span>
 
-              <span class="next_page disabled" ng-show="page.current === page.total">
+              <span class="next_page disabled" ng-show="page.current === page.total || page.total === 0">
                 <%= _('Next') %> <i class="fa fa-chevron-right"></i>
               </span>
               <a class="next_page" rel="next" href="#" ng-click="page.current=page.current+1" ng-show="page.current < page.total">
