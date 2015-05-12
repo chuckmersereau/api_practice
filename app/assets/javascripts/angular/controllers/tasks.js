@@ -86,7 +86,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             || $scope.filter.contactState[0] !== '' || $scope.filter.contactNewsletter !== '' || $scope.filter.contactStatus[0] !== ''
             || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== '' || $scope.filter.contactReferrer[0] !== ''
             || $scope.filter.contactTimezone[0] !== '' || $scope.filter.contactPledgeFrequencies[0] !== ''
-            || $scope.filter.contactInfoEmail !== '' || $scope.filter.contactInfoMobile !== '' || $scope.filter.contactInfoMobile !== ''
+            || $scope.filter.contactInfoEmail !== '' || $scope.filter.contactInfoPhone !== '' || $scope.filter.contactInfoMobile !== ''
             || $scope.filter.contactInfoAddr !== '' || $scope.filter.contactInfoFacebook !== '' );
     };
 
