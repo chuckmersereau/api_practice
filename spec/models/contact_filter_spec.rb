@@ -70,5 +70,26 @@ describe ContactFilter do
       filtered_contacts = cf.filter(Contact)
       expect(filtered_contacts).to eq [no_email]
     end
+
+    it 'filters by contact address present' do
+      has_address = create(:contact)
+      has_address.addresses << create(:address)
+      has_address.addresses << create(:address, historic: true)
+      no_address = create(:contact)
+      historic_address_contact = create(:contact)
+      historic_address_contact.addresses << create(:address, historic: true)
+
+      cf = ContactFilter.new(contact_info_addr: 'Yes')
+      filtered_contacts = cf.filter(Contact)
+      expect(filtered_contacts).to include has_address
+      expect(filtered_contacts).to_not include no_address
+      expect(filtered_contacts).to_not include historic_address_contact
+
+      cf = ContactFilter.new(contact_info_addr: 'No', contact_info_email: 'No')
+      no_address_contacts = cf.filter(Contact)
+      expect(no_address_contacts).to_not include has_address
+      expect(no_address_contacts).to include no_address
+      expect(no_address_contacts).to include historic_address_contact
+    end
   end
 end

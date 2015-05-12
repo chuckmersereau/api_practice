@@ -10,6 +10,7 @@ class ContactFilter
   end
 
   def filter(contacts)
+    @contacts = contacts
     filtered_contacts = contacts
 
     if filters.present?
@@ -308,13 +309,16 @@ class ContactFilter
 
   def contact_info_address(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_addr].present?
-    where_statement = if @filters[:contact_info_addr] == 'Yes'
-                        "addresses.street <> '' AND addresses.historic = false"
-                      else
-                        "addresses.street =''"
-                      end
 
-    filtered_contacts.where(where_statement)
+    if @filters[:contact_info_addr] == 'No'
+      contacts_with_addr_ids = filtered_contacts.where("addresses.street <> '' AND addresses.historic = false")
+                               .includes(:addresses)
+                               .references('addresses')
+                               .select(:id).to_a
+      return filtered_contacts.where('contacts.id not in (?)', contacts_with_addr_ids)
+    end
+
+    filtered_contacts.where("addresses.street <> '' AND addresses.historic = false")
       .includes(:addresses)
       .references('addresses')
   end
