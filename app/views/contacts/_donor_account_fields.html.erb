@@ -1,6 +1,6 @@
 <div class="sfield donor_account_field" data-behavior="field-wrapper">
 	<div class="input-group">
-		<%= builder.text_field :account_number, placeholder: 'Account Number', class: 'form-control' %>
+		<%= builder.text_field :account_number, placeholder: _('Account Number'), class: 'form-control' %>
 		<%= builder.hidden_field :organization_id, value: builder.object.organization_id || current_account_list.designation_profiles.first.try(:organization_id) || current_account_list.users.first.organization_accounts.first.try(:organization_id) %>
 		<div class="input-group-addon"><%= link_to_remove_fields(builder) %></div>
     </div>
