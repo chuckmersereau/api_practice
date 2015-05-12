@@ -32,6 +32,7 @@ gem 'acts-as-taggable-on', '~> 3.0.0'
 gem 'airbrake' # , '~> 3.1.6'
 gem 'assignable_values', '~> 0.5.3'
 gem 'carrierwave', git: 'https://github.com/carrierwaveuploader/carrierwave' # has cache err fix not release yet
+gem 'charlock_holmes'
 gem 'cloudinary'
 gem 'country_select', git: 'http://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 gem 'deadlock_retry', '~> 1.2.0'

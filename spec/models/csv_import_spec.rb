@@ -71,6 +71,13 @@ describe CsvImport do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_bom.csv')))
       check_contacts(import.contacts)
     end
+
+    it 'does not error if the csv file has a non-utf-8 encoding' do
+      csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_iso_8950_1.csv')))
+      contacts = import.contacts
+      expect(contacts.size).to eq(1)
+      expect(contacts.first.name).to eq('Lané, John')
+    end
   end
 
   context '#import' do
