@@ -4,4 +4,7 @@
     <%= _('Preparing preview. This takes some time if you have a large file ...') %>
     <%= spinner(visible: true) %>
   </div>
+  <div id="csv_preview_err" style="display:none">
+    <%= _('Error loading CSV import preview. The MPDX team has been notified. If the problem persists please click "Help" above and submit a request.') %>
+  </div>
 <% end %>

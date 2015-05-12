@@ -6,3 +6,6 @@ $ ->
       dataType: "html"
       success: (preview_html) ->
         $("#csv_import_preview").html(preview_html)
+      error: ->
+        $("#csv_import_preview").hide()
+        $("#csv_preview_err").show()
