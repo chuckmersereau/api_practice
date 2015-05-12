@@ -57,7 +57,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
 
     $scope.goToPage = function(group, page){
         $scope.taskGroups[_.indexOf($scope.taskGroups, group)].currentPage = page;
-        refreshTasks(group);
+        refreshTasks(group,$scope.contactFilterIds);
     };
 
     $scope.refreshVisibleTasks = function(contactIds){
@@ -111,9 +111,8 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[contact_info_facebook]=' + encodeURIComponent($scope.filter.contactInfoFacebook) +
             '&include=Contact.id&per_page=10000'
         , {}, function(data) {
-
-                $scope.contactFilterIds = _.pluck(data.contacts, 'id');
-                $scope.refreshVisibleTasks($scope.contactFilterIds);
+             $scope.contactFilterIds = _.pluck(data.contacts, 'id');
+             $scope.refreshVisibleTasks($scope.contactFilterIds);
         }, null, true);
     };
 

@@ -200,7 +200,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
               $scope.contactQuery.contact_info_mobile = prefs.contact_info_mobile;
               $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;
               $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;
-              jQuery("#leftmenu #filter_contact_info").trigger("click");
+              jQuery("#filter_contact_info").trigger("click");
         }
     });
 
@@ -378,7 +378,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           !_.isEmpty(q.contact_info_mobile) ||
           !_.isEmpty(q.contact_info_addr) ||
           !_.isEmpty(q.contact_info_facebook))
-        {
+      {
         return false;
       }
 

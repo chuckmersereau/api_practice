@@ -181,36 +181,36 @@
                   </div>
                 </li>
                 <% if $rollout.active?(:filter_contact_info, current_account_list) %>
-                    <li class="filter_set">
-                      <label id="filter_contact_info" class="filter_title"
+                <li class="filter_set">
+                    <label id="filter_contact_info" class="filter_title"
                              onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Contact Information']);">
                         <%= _('Contact Information') %></label>
-                      <div class="filter_set_inner filter_radio">
-                        <%= _('Email') %>
-                        <label ><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_email' %><%= _('-- Any --') %><br/>
-                          <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_email'  %><%= _('Yes') %><br/>
-                          <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_email' %><%= _('No') %></label>
-                        <%= _('Home Phone') %>
-                        <label ><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_phone' %><%= _('-- Any --') %><br/>
-                          <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_phone'%><%= _('Yes') %><br/>
-                          <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_phone' %><%= _('No') %></label>
-                        <%= _('Mobile Phone') %>
-                        <label ><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_mobile' %><%= _('-- Any --') %><br/>
-                          <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_mobile'  %><%= _('Yes') %><br/>
-                          <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_mobile' %><%= _('No') %>
-                        </label>
-                        <%= _('Address') %>
-                        <label ><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_addr' %><%= _('-- Any --') %><br/>
-                          <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_addr'  %><%= _('Yes') %><br/>
-                          <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_addr' %><%= _('No') %>
-                        </label>
-                        <%= _('Facebook Profile') %>
-                        <label><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_facebook' %><%= _('-- Any --') %><br/>
-                          <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_facebook'  %><%= _('Yes') %><br/>
-                          <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_facebook' %><%= _('No') %>
-                        </label>
-                      </div>
-                    </li>
+                    <div class="filter_set_inner filter_radio">
+                      <%= _('Email') %>
+                      <label ><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_email' %><%= _('-- Any --') %><br/>
+                        <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_email'  %><%= _('Yes') %><br/>
+                        <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_email' %><%= _('No') %></label>
+                      <%= _('Home Phone') %>
+                      <label ><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_phone' %><%= _('-- Any --') %><br/>
+                        <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_phone'%><%= _('Yes') %><br/>
+                        <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_phone' %><%= _('No') %></label>
+                      <%= _('Mobile Phone') %>
+                      <label ><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_mobile' %><%= _('-- Any --') %><br/>
+                        <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_mobile'  %><%= _('Yes') %><br/>
+                        <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_mobile' %><%= _('No') %>
+                      </label>
+                      <%= _('Address') %>
+                      <label ><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_addr' %><%= _('-- Any --') %><br/>
+                        <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_addr'  %><%= _('Yes') %><br/>
+                        <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_addr' %><%= _('No') %>
+                      </label>
+                         <%= _('Facebook Profile') %>
+                      <label><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.contact_info_facebook' %><%= _('-- Any --') %><br/>
+                        <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'contactQuery.contact_info_facebook'  %><%= _('Yes') %><br/>
+                        <%= radio_button_tag '', 'No', false, 'ng-model' => 'contactQuery.contact_info_facebook' %><%= _('No') %>
+                      </label>
+                    </div>
+                </li>
                 <% end %>
                 <li class="controls">
                   <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);"><i class="fa fa-undo"></i> <%= _('Reset Filters') %></a>
