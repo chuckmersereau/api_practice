@@ -92,6 +92,15 @@
 
     </div>
 
+    <div id="missing_org_modal" title="<%= _("Don't see your organization here?") %>" style="display:none">
+      <div class="form_wrapper">
+        <p><%= _("We are sorry, but you must have an organization selected to continue. MPDX is open to any missions organization or church. If your organization is listed in the dropdown box, you can just sign up. If not, we need to add your organization. There are two routes to go about this.") %></p>
+        <p><%= _("The first is to create an offline organization which is a quick process. However, this means that you have to enter in your contacts and donations in manually. If you would like to go this route, please email us at support@mpdx.org with the name of your organization.") %></p>
+        <p><%= _("The second is to set up your organization to sync your donations with MPDx. This is actually not done by us, but here is where you can go to get started: ") %>
+          <%= link_to('http://www.tntware.com/tntmpd.dataserver/', 'http://www.tntware.com/tntmpd.dataserver/') %>.
+        </p>
+      </div>
+    </div>
 
   </body>
 </html>

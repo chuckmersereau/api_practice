@@ -15,4 +15,9 @@ $ ->
     }
     false
 
-
+  $('.missing_org_btn').click ->
+    $('#missing_org_modal').dialog
+      resizable: false,
+      height: 'auto',
+      width: 500
+    false

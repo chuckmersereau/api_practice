@@ -11,6 +11,8 @@
           <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}),
                          include_blank: true, class: 'form-control margin-bottom') %>
           <%= link_to(_('Connect'), new_person_organization_account_path, class: 'btn btn-primary btn-lg', id: 'connect_to_org') %>
+          <br>
+          <%= link_to(_("Don't see your organization here?"), '#missing_org_modal', class: 'btn missing_org_btn') %>
         </div>
       </div>
     </div>
