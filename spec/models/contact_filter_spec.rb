@@ -59,8 +59,11 @@ describe ContactFilter do
     it 'filters by contact details' do
       has_email = create(:contact)
       has_email.people << create(:person)
+      has_email.people << create(:person)
       has_email.primary_or_first_person.email_addresses << create(:email_address)
       no_email = create(:contact)
+      no_email.people << create(:person)
+      no_email.primary_or_first_person.email_addresses << create(:email_address, historic: true)
 
       cf = ContactFilter.new(contact_info_email: 'Yes')
       filtered_contacts = cf.filter(Contact)

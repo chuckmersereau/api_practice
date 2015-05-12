@@ -10,7 +10,6 @@ class ContactFilter
   end
 
   def filter(contacts)
-    @contacts = contacts
     filtered_contacts = contacts
 
     if filters.present?
@@ -264,13 +263,16 @@ class ContactFilter
   def contact_info_email(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_email].present?
 
-    where_statement =  if @filters[:contact_info_email] == 'Yes'
-                         'email_addresses.email is not null AND email_addresses.primary = true'
-                       else
-                         'email_addresses.email is NULL'
-                       end
+    if @filters[:contact_info_email] == 'No'
+      contacts_with_emails_ids = filtered_contacts.where('email_addresses.email is not null AND email_addresses.historic = false')
+                                 .includes(people: :email_addresses)
+                                 .references('email_addresses')
+                                 .select(:id).to_a
+      return filtered_contacts if contacts_with_emails_ids.empty?
+      return filtered_contacts.where('contacts.id not in (?)', contacts_with_emails_ids)
+    end
 
-    filtered_contacts.where(where_statement)
+    filtered_contacts.where('email_addresses.email is not null AND email_addresses.primary = true')
       .includes(people: :email_addresses)
       .references('email_addresses')
   end
@@ -282,12 +284,10 @@ class ContactFilter
       filtered_contacts.where("phone_numbers.number IS NOT NULL AND phone_numbers.location = 'home' ")
         .includes(people: :phone_numbers)
         .references('phone_numbers')
-
     else
       filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'home' ")
         .includes(people: :phone_numbers)
         .references('phone_numbers')
-
     end
   end
 
@@ -315,6 +315,7 @@ class ContactFilter
                                .includes(:addresses)
                                .references('addresses')
                                .select(:id).to_a
+      return filtered_contacts if contacts_with_addr_ids.empty?
       return filtered_contacts.where('contacts.id not in (?)', contacts_with_addr_ids)
     end
 
