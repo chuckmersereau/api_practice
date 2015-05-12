@@ -317,6 +317,7 @@ class ContactFilter
 
     # both filters present
     if filter_home_phone == 'Yes' && filter_moble_phone == 'Yes'
+      # & is intersection
       return filtered_contacts.where('contacts.id in (?)', contacts_with_mobile_phone_ids & contacts_with_home_phone_ids)
     end
     if filter_home_phone == 'Yes' && filter_moble_phone == 'No'
@@ -326,6 +327,7 @@ class ContactFilter
       return filtered_contacts.where('contacts.id in (?)', contacts_with_mobile_phone_ids - contacts_with_home_phone_ids)
     end
     if filter_home_phone == 'No' && filter_moble_phone == 'No'
+      # | is union
       return filtered_contacts.where('contacts.id not in (?)', contacts_with_mobile_phone_ids | contacts_with_home_phone_ids)
     end
 
