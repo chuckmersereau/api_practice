@@ -2,29 +2,33 @@
   <div class="wpp">
     <h1><%= _('Hi') %> <%= current_user.first_name %>! <span class="smallhead"><%= _("Here's whats happening...") %></span></h1>
 
-    <% if current_account_list.monthly_goal.present? %>
-      <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
-        <div id="donations_summary_chart">
+    <div class="row">
+      <div class="col-md-12">
+        <% if current_account_list.monthly_goal.present? %>
+          <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
+            <div id="donations_summary_chart">
 
-        </div>
-        <%= render 'donations_summary_chart' %>
-      <% end %>
-    <% else %>
-      <%= link_to(preferences_path(:focus => "preference_set_monthly_goal")) do %>
-        <div class="mwrap">
-          <div class="nohide floating info">
-            <%= _('Click here to set your monthly goal, after which we will show you a pretty graph of your donations') %>
-          </div>
-        </div>
-      <% end %>
-    <% end %>
+            </div>
+            <%= render 'donations_summary_chart' %>
+          <% end %>
+        <% else %>
+          <%= link_to(preferences_path(:focus => "preference_set_monthly_goal")) do %>
+            <div class="mwrap">
+              <div class="nohide floating info">
+                <%= _('Click here to set your monthly goal, after which we will show you a pretty graph of your donations') %>
+              </div>
+            </div>
+          <% end %>
+        <% end %>
+      </div>
+    </div>
 
     <section id="dash-widgets">
       <div class="row">
         <div class="col-md-4">
           <div class="panel panel-default dash-panel panel-tasks">
             <div class="panel-heading">
-              Connect <span class="badge data-font">45</span>
+              Connect
             </div>
             <div class="panel-body">
               Tasks overdue or due today
@@ -45,7 +49,7 @@
         <div class="col-md-4">
           <div class="panel panel-default dash-panel">
             <div class="panel-heading">
-              Commitments not received 
+              Commitments Unfufilled
             </div>
             <div class="panel-body">
 
@@ -64,12 +68,12 @@
         <div class="col-md-4">
           <div class="panel panel-default dash-panel">
             <div class="panel-heading">
-              Care
+              Care <span class="badge badge-blue badge-right-well">+ Log Prayer Letter</span>
             </div>
             <div class="panel-body">
               <div class="dash-stat">
                 <span class="count-big">45</span> days since your last prayer letter
-                <p>Log Prayer Letter</p>
+                <p></p>
               </div>
 
               <h4 class="title">Recent Birthdays</h4>
@@ -102,6 +106,12 @@
       <div class="row">
         <div class="col-md-8">
           <div class="well">
+            <div class="progress-box-title"><i class="fa fa-users"></i> Contacts</div>
+            <div class="progress-stat"><span class="count-big">0</span> Active</div> 
+            <div class="progress-stat"><span class="count-big">0</span> Referrals On-hand</div> 
+            <div class="progress-stat"><span class="count-big">5</span> Gained</div> 
+          </div>
+          <div class="well">
             <div class="progress-box-title"><i class="fa fa-mobile"></i> Phone Dials</div>
             <div class="progress-stat"><span class="count-big">0</span> Outgoing</div> 
             <div class="progress-stat"><span class="count-big">5</span> Talked To</div> 
@@ -133,19 +143,12 @@
         </div>
         <div class="col-md-4">
           <div class="well">
-            <div class="progress-box-title"><i class="fa fa-users"></i> Contacts</div>
-            <div class="progress-stat"><span class="count-big">0</span> Active</div> 
-            <div class="progress-stat"><span class="count-big">0</span> Referrals On-hand</div> 
-            <div class="progress-stat"><span class="count-big">5</span> Gained Referrals</div> 
-            
-          </div>
-          <div class="well">
             <div class="progress-box-title"><i class="fa fa-calendar"></i> Appointments</div>
             <div class="progress-stat"><span class="count-big">0</span> Completed</div> 
             
           </div>
 
-          <div class="well">
+          <div class="">
             <div class="panel panel-default dash-panel">
               <div class="panel-heading">
                 Appeals
@@ -171,7 +174,7 @@
                   </div>
                   East Asia Summer Project
                 </div>
-                See all 10 appeals
+                <a href="" class="see-all"><i class="fa fa-plus-square-o"></i> See all 50 Appeals</a>
               </div>
             </div>
           </div>

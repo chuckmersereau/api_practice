@@ -358,12 +358,6 @@ div.right {
   }
 }
 
-.btn {
-  border-radius: 3px;
-  font-size: 14px;
-  font-weight: 400;
-  border-width: 1px;
-}
 /* ************************************************************** */
 .affix + #affix-fix
 {
@@ -1957,6 +1951,14 @@ span.best_in_place_once {
     display: inline-block;
     font-size: 11px;
     padding: 0 6px;
+  }
+  .badge-blue {
+    background: $color-blue-deep !important;
+    color: $color-white;
+  }
+  .badge-right-well {
+    float: right;
+    margin-top: 4px;
   }
 }
 
