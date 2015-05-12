@@ -53,8 +53,7 @@ class ContactFilter
       filtered_contacts = pledge_freq(filtered_contacts)
       filtered_contacts = pledge_received(filtered_contacts)
       filtered_contacts = contact_info_email(filtered_contacts)
-      filtered_contacts = contact_info_phone_type(filtered_contacts)
-      filtered_contacts = contact_info_mobile_type(filtered_contacts)
+      filtered_contacts = contact_info_phone(filtered_contacts)
       filtered_contacts = contact_info_address(filtered_contacts)
       filtered_contacts = contact_info_facebook(filtered_contacts)
     end
@@ -277,34 +276,60 @@ class ContactFilter
       .references('email_addresses')
   end
 
-  def contact_info_phone_type(filtered_contacts)
-    return filtered_contacts unless @filters[:contact_info_phone].present?
+  def contact_info_phone(filtered_contacts)
+    filter_home_phone = @filters[:contact_info_phone]
+    filter_moble_phone = @filters[:contact_info_mobile]
 
-    if @filters[:contact_info_phone] == 'Yes'
-      filtered_contacts.where("phone_numbers.number IS NOT NULL AND phone_numbers.location = 'home' ")
-        .includes(people: :phone_numbers)
-        .references('phone_numbers')
-    else
-      filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'home' ")
-        .includes(people: :phone_numbers)
-        .references('phone_numbers')
+    # set up contact id arrays
+    if filter_home_phone.present?
+      contacts_with_home_phone_ids = filtered_contacts.where("phone_numbers.number is not null AND phone_numbers.historic = false AND phone_numbers.location = 'home'")
+                                     .includes(people: :phone_numbers)
+                                     .references('phone_numbers')
+                                     .pluck(:id)
+      filter_home_phone = '' if contacts_with_home_phone_ids.empty?
     end
-  end
-
-  def contact_info_mobile_type(filtered_contacts)
-    return filtered_contacts unless  @filters[:contact_info_mobile].present?
-
-    if @filters[:contact_info_mobile] == 'Yes'
-      filtered_contacts.where("phone_numbers.number IS NOT NULL AND phone_numbers.location = 'mobile' ")
-        .includes(people: :phone_numbers)
-        .references('phone_numbers')
-
-    else
-      filtered_contacts.where("phone_numbers.number IS NULL OR phone_numbers.location <> 'mobile' ")
-        .includes(people: :phone_numbers)
-        .references('phone_numbers')
-
+    if filter_moble_phone.present?
+      contacts_with_mobile_phone_ids = filtered_contacts.where("phone_numbers.number is not null AND phone_numbers.historic = false AND phone_numbers.location = 'mobile'")
+                                       .includes(people: :phone_numbers)
+                                       .references('phone_numbers')
+                                       .pluck(:id)
+      filter_moble_phone = '' if contacts_with_mobile_phone_ids.empty?
     end
+
+    # guard blank filters
+    return filtered_contacts unless filter_home_phone.present? || filter_moble_phone.present?
+
+    # one but not the other
+    if filter_home_phone.blank?
+      if filter_moble_phone == 'Yes'
+        return filtered_contacts.where('contacts.id in (?)', contacts_with_mobile_phone_ids)
+      else
+        return filtered_contacts.where('contacts.id not in (?)', contacts_with_mobile_phone_ids)
+      end
+    end
+    if filter_moble_phone.blank?
+      if filter_home_phone == 'Yes'
+        return filtered_contacts.where('contacts.id in (?)', contacts_with_home_phone_ids)
+      else
+        return filtered_contacts.where('contacts.id not in (?)', contacts_with_home_phone_ids)
+      end
+    end
+
+    # both filters present
+    if filter_home_phone == 'Yes' && filter_moble_phone == 'Yes'
+      return filtered_contacts.where('contacts.id in (?)', contacts_with_mobile_phone_ids & contacts_with_home_phone_ids)
+    end
+    if filter_home_phone == 'Yes' && filter_moble_phone == 'No'
+      return filtered_contacts.where('contacts.id in (?)', contacts_with_home_phone_ids - contacts_with_mobile_phone_ids)
+    end
+    if filter_home_phone == 'No' && filter_moble_phone == 'Yes'
+      return filtered_contacts.where('contacts.id in (?)', contacts_with_mobile_phone_ids - contacts_with_home_phone_ids)
+    end
+    if filter_home_phone == 'No' && filter_moble_phone == 'No'
+      return filtered_contacts.where('contacts.id not in (?)', contacts_with_mobile_phone_ids | contacts_with_home_phone_ids)
+    end
+
+    filtered_contacts
   end
 
   def contact_info_address(filtered_contacts)
