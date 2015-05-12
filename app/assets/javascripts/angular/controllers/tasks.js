@@ -126,7 +126,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[starred]=' + $scope.filter.starred +
             '&filters[completed]=' + ($scope.filter.completed || 'false') +
             '&filters[date_range]=' + group.filter +
-            '&filters[contact_ids][]=' + _.uniq(contactFilterIds).join('&filters[contact_ids][]=') +
+            '&filters[contact_ids]=' + _.uniq(contactFilterIds).join(',') +
             '&filters[tags][]=' + encodeURLarray($scope.filter.tagsSelect).join('&filters[tags][]=') +
             '&filters[activity_type][]=' + encodeURLarray($scope.filter.actionSelect).join('&filters[activity_type][]='), {}, function(tData) {
 
