@@ -179,5 +179,33 @@ describe ContactFilter do
       expect(no_address_contacts).to include no_address
       expect(no_address_contacts).to include historic_address_contact
     end
+
+    context '#contact_info_facebook' do
+      let!(:has_fb) do
+        c = create(:contact)
+        c.people << create(:person)
+        c.people << create(:person)
+        c.primary_or_first_person.facebook_accounts << create(:facebook_account)
+        c
+      end
+      let!(:no_fb) do
+        c = create(:contact)
+        c.people << create(:person)
+        c
+      end
+
+      it 'filters when looking for facebook_account' do
+        cf = ContactFilter.new(contact_info_facebook: 'Yes')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to eq [has_fb]
+      end
+
+      it 'filters when looking for no facebook_account' do
+        cf = ContactFilter.new(contact_info_facebook: 'No')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to include no_fb
+        expect(filtered_contacts).to_not include has_fb
+      end
+    end
   end
 end

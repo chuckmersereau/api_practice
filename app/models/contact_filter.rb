@@ -266,7 +266,7 @@ class ContactFilter
       contacts_with_emails_ids = filtered_contacts.where('email_addresses.email is not null AND email_addresses.historic = false')
                                  .includes(people: :email_addresses)
                                  .references('email_addresses')
-                                 .select(:id).to_a
+                                 .pluck(:id)
       return filtered_contacts if contacts_with_emails_ids.empty?
       return filtered_contacts.where('contacts.id not in (?)', contacts_with_emails_ids)
     end
@@ -339,7 +339,7 @@ class ContactFilter
       contacts_with_addr_ids = filtered_contacts.where("addresses.street <> '' AND addresses.historic = false")
                                .includes(:addresses)
                                .references('addresses')
-                               .select(:id).to_a
+                               .pluck(:id)
       return filtered_contacts if contacts_with_addr_ids.empty?
       return filtered_contacts.where('contacts.id not in (?)', contacts_with_addr_ids)
     end
@@ -351,14 +351,16 @@ class ContactFilter
 
   def contact_info_facebook(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_facebook].present?
-    where_statement =  if @filters[:contact_info_facebook] == 'Yes'
-                         'person_facebook_accounts.remote_id IS NOT NULL'
-                       else
-                         'person_facebook_accounts.remote_id IS NULL'
-                       end
 
-    filtered_contacts.where(where_statement)
+    if @filters[:contact_info_facebook] == 'No'
+      contacts_with_fb_ids = filtered_contacts.where.not(person_facebook_accounts: { remote_id: nil })
+                             .includes(people: :facebook_account)
+                             .pluck(:id)
+      return filtered_contacts if contacts_with_fb_ids.empty?
+      return filtered_contacts.where.not(id: contacts_with_fb_ids)
+    end
+
+    filtered_contacts.where.not(person_facebook_accounts: { remote_id: nil })
       .includes(people: :facebook_account)
-      .references('facebook_account')
   end
 end
