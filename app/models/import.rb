@@ -47,7 +47,7 @@ class Import < ActiveRecord::Base
     contents = CharlockHolmes::Converter.convert(contents, encoding, 'UTF-8')
 
     # Remove byte order mark
-    contents.sub("\xEF\xBB\xBF".force_encoding("UTF-8"), '')
+    contents.sub("\xEF\xBB\xBF".force_encoding('UTF-8'), '')
   end
 
   def import
