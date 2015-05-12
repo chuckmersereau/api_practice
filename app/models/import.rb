@@ -1,4 +1,5 @@
 require 'async'
+require 'charlock_holmes'
 
 class Import < ActiveRecord::Base
   include Async
@@ -39,7 +40,14 @@ class Import < ActiveRecord::Base
 
   def read_file_contents
     file.cache_stored_file!
-    File.open(file.file.file, 'r:bom|utf-8') { |file| file.read }
+    contents = File.open(file.file.file) { |file| file.read }
+    encoding_info = CharlockHolmes::EncodingDetector.detect(contents)
+    return unless encoding_info
+    encoding = encoding_info[:encoding]
+    contents = CharlockHolmes::Converter.convert(contents, encoding, 'UTF-8')
+
+    # Remove byte order mark
+    contents.sub("\xEF\xBB\xBF".force_encoding("UTF-8"), '')
   end
 
   def import
