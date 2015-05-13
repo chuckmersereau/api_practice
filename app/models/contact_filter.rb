@@ -343,7 +343,7 @@ class ContactFilter
                                .references('addresses')
                                .pluck(:id)
       return filtered_contacts if contacts_with_addr_ids.empty?
-      return filtered_contacts.where(id: contacts_with_addr_ids)
+      return filtered_contacts.where.not(id: contacts_with_addr_ids)
     end
 
     filtered_contacts.where("addresses.street <> '' AND addresses.historic = false")
