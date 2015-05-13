@@ -215,6 +215,10 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         refreshContacts();
     }, true);
 
+    $scope.isEmptyFilter = function() {
+        return isEmptyFilter($scope.contactQuery);
+    }
+
     var refreshContacts = function () {
       var q = $scope.contactQuery;
 
@@ -340,7 +344,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
     }, true);
 
     var isEmptyFilter = function (q) {
-      if (!_.isEmpty(q.tags) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
+      if (!_.isEmpty(_.without(q.tags, '')) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
           !_.isEmpty(_.without(q.city, '')) || !_.isEmpty(_.without(q.state, '')) ||
           !_.isEmpty(_.without(q.region, '')) ||
           !_.isEmpty(_.without(q.metro_area, '')) || !_.isEmpty(q.newsletter) ||

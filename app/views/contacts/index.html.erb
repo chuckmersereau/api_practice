@@ -8,6 +8,11 @@
     <div class="col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap">
       <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
         <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
+        <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block"
+           ng-hide="isEmptyFilter()"
+           onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
+          <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
+        </a>
         <ul>
           <%= render 'sidebar_tags', tags: current_account_list.contact_tags %>
           <li class="filters_section" ng-show="!insightFilterIsActive()">
@@ -176,7 +181,6 @@
                   </div>
                 </li>
                 <li class="controls">
-                  <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);"><i class="fa fa-undo"></i> <%= _('Reset Filters') %></a>
                   <a href="#" ng-click="mapContacts()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Map These Contacts']);"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
                 </li>
               </ul>
