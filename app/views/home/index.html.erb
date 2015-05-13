@@ -34,15 +34,23 @@
               Tasks overdue or due today
               <div class="dash-tasks">
                 <ul class="plain-list">
-                  <li><a href=""><span class="count">10</span> Emails to be sent</a></li>
-                  <li><a href=""><span class="count">10</span> Phone Calls</a></li>
-                  <li><a href=""><span class="count">10</span> Thank yous</a></li>
+                  <% current_account_list.tasks.overdue_and_today.group(:activity_type).count.each do |type, count| %>
+                    <% next if type == '' %>
+                    <li>
+                      <a href="<%= tasks_path(filters: {activity_type: [type]}) %>">
+                        <span class="count"><%= count %></span> <%= n_(type, type+'s',count) %>
+                      </a>
+                    </li>
+                  <% end %>
                 </ul>
               </div>
 
-              <a href="" class="see-all"><i class="fa fa-plus-square-o"></i> See all 50 Tasks</a>
+              <a href="<%= tasks_path %>" class="see-all">
+                <i class="fa fa-plus-square-o"></i> See all <%= current_account_list.tasks.overdue_and_today.count %> Tasks
+              </a>
 
-              <a href="" class="btn btn-blue btn-lg btn-add-tasks"><i class="fa fa-plus-circle"></i> Add a New Task</a>
+              <%= link_to('<i class="fa fa-plus-circle"></i> '.html_safe+_('Add a New Task'),
+                          new_task_path, class: 'btn btn-blue btn-lg btn-add-tasks add_task', remote: true) %>
             </div>
           </div>
         </div>
@@ -53,14 +61,30 @@
             </div>
             <div class="panel-body">
 
-              <div class="dash-stat"><span class="count-big">5</span> first gift not received</div>
+              <div class="dash-stat">
+                <span class="count-big">
+                  <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %>
+                </span> first gift not received
+              </div>
 
-              <div class="dash-stat"><span class="count-big">10</span> partners <strong>30</strong> days late</div>
+              <div class="dash-stat">
+                <span class="count-big">
+                  <%= current_account_list.contacts.late_by(31.days, 60.days).count %>
+                </span> partners <strong>30</strong> days late
+              </div>
 
-              <div class="dash-stat"><span class="count-big">10</span> partners <strong>60</strong> days late</div>
+              <div class="dash-stat">
+                <span class="count-big">
+                  <%= current_account_list.contacts.late_by(61.days).count %>
+                </span> partners <strong>60</strong> days late
+              </div>
 
 
-              <a href="" class="see-all"><i class="fa fa-plus-square-o"></i> See all XX unreceived commitments</a>
+              <a href="<%= contacts_path(filters: {status: ['Partner - Financial'], pledge_received: false}) %>"
+                 class="see-all">
+                 <i class="fa fa-plus-square-o"></i>
+                 See all <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %> unreceived commitments
+              </a>
             </div>
           </div>
         </div>
@@ -72,8 +96,13 @@
             </div>
             <div class="panel-body">
               <div class="dash-stat">
-                <span class="count-big">45</span> days since your last prayer letter
-                <p></p>
+                <% current_account_list.tasks.completed.of_type('Newsletter').first.tap do |newsletter| %>
+                  <% if newsletter %>
+                    <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> days since your last prayer letter
+                  <% else %>
+                    <%= _("You've never logged a prayer letter") %>
+                  <% end %>
+                <% end %>
               </div>
 
               <h4 class="title">Recent Birthdays</h4>
@@ -88,9 +117,9 @@
             </div>
           </div>
         </div>
-        
+
       </div>
-    </section>    
+    </section>
 
     <section id="dash-progress">
       <div class="page-filters">
@@ -107,15 +136,15 @@
         <div class="col-md-8">
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-users"></i> Contacts</div>
-            <div class="progress-stat"><span class="count-big">0</span> Active</div> 
-            <div class="progress-stat"><span class="count-big">0</span> Referrals On-hand</div> 
-            <div class="progress-stat"><span class="count-big">5</span> Gained</div> 
+            <div class="progress-stat"><span class="count-big">0</span> Active</div>
+            <div class="progress-stat"><span class="count-big">0</span> Referrals On-hand</div>
+            <div class="progress-stat"><span class="count-big">5</span> Gained</div>
           </div>
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-mobile"></i> Phone Dials</div>
-            <div class="progress-stat"><span class="count-big">0</span> Outgoing</div> 
-            <div class="progress-stat"><span class="count-big">5</span> Talked To</div> 
-            <div class="progress-stat"><span class="count-big">2</span> Appointments Produced</div> 
+            <div class="progress-stat"><span class="count-big">0</span> Outgoing</div>
+            <div class="progress-stat"><span class="count-big">5</span> Talked To</div>
+            <div class="progress-stat"><span class="count-big">2</span> Appointments Produced</div>
             <ul class="plain-list">
               <li>Completed: 0</li>
               <li>Attempted: 0</li>
@@ -124,9 +153,9 @@
           </div>
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-desktop"></i> Electronic Contacts</div>
-            <div class="progress-stat"><span class="count-big">0</span> Sent</div> 
-            <div class="progress-stat"><span class="count-big">5</span> Received</div> 
-            <div class="progress-stat"><span class="count-big">2</span> Appointments Produced</div> 
+            <div class="progress-stat"><span class="count-big">0</span> Sent</div>
+            <div class="progress-stat"><span class="count-big">5</span> Received</div>
+            <div class="progress-stat"><span class="count-big">2</span> Appointments Produced</div>
             <ul class="plain-list">
               <li>Email: 0 Sent / 0 Received</li>
               <li>Facebook: 0 Sent / 0 Received</li>
@@ -135,17 +164,17 @@
           </div>
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-envelope-o"></i> Correspondence</div>
-            <div class="progress-stat"><span class="count-big">10</span> Pre-call Letters</div> 
-            <div class="progress-stat"><span class="count-big">5</span> Support Letters</div> 
-            <div class="progress-stat"><span class="count-big">2</span> Thank You Notes</div> 
-            <div class="progress-stat"><span class="count-big">2</span> Reminders</div> 
+            <div class="progress-stat"><span class="count-big">10</span> Pre-call Letters</div>
+            <div class="progress-stat"><span class="count-big">5</span> Support Letters</div>
+            <div class="progress-stat"><span class="count-big">2</span> Thank You Notes</div>
+            <div class="progress-stat"><span class="count-big">2</span> Reminders</div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-calendar"></i> Appointments</div>
-            <div class="progress-stat"><span class="count-big">0</span> Completed</div> 
-            
+            <div class="progress-stat"><span class="count-big">0</span> Completed</div>
+
           </div>
 
           <div class="">
