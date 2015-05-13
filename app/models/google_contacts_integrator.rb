@@ -249,7 +249,7 @@ class GoogleContactsIntegrator
       save_g_contacts_then_links(contact, g_contacts_to_save, g_contacts_and_links)
     end
   rescue => e
-    Airbrake.raise_or_notify(e)
+    Airbrake.raise_or_notify(e, parameters: { contact_id: contact.id, last_batch_xml: api_user.last_batch_xml })
   end
 
   def get_g_contact_and_link(contact_person)
