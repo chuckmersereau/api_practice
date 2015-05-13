@@ -391,11 +391,20 @@ describe DataServer do
         @data_server.send(:get_response, 'http://example.com', {})
       end.to raise_error(DataServerError, "ERROR\nmessage")
     end
-    it 'should raise a DataServerError if the first line of the response is BAD_PASSWORD' do
-      stub_request(:post, 'http://foo:bar@example.com').to_return(body: "BAD_PASSWORD\nmessage")
+
+    def expect_bad_passsword_err(data_server_body)
+      stub_request(:post, 'http://foo:bar@example.com').to_return(body: data_server_body)
       expect do
         @data_server.send(:get_response, 'http://example.com', {})
       end.to raise_error(OrgAccountInvalidCredentialsError, 'Your username and password for MyString are invalid.')
+    end
+
+    it 'should raise OrgAccountInvalidCredentialsError if the first line of the response is BAD_PASSWORD' do
+      expect_bad_passsword_err("BAD_PASSWORD\nmessage")
+    end
+
+    it 'should raise OrgAccountInvalidCredentialsError if the first line includes the word "password"' do
+      expect_bad_passsword_err("You have entered an invalid login and/or password\nmessage")
     end
   end
 
