@@ -263,15 +263,15 @@ class ContactFilter
     return filtered_contacts unless  @filters[:contact_info_email].present?
 
     if @filters[:contact_info_email] == 'No'
-      contacts_with_emails_ids = filtered_contacts.where('email_addresses.email is not null AND email_addresses.historic = false')
+      contacts_with_emails_ids = filtered_contacts.where.not(email_addresses: { email: nil }).where(email_addresses: { historic: false })
                                  .includes(people: :email_addresses)
                                  .references('email_addresses')
                                  .pluck(:id)
       return filtered_contacts if contacts_with_emails_ids.empty?
-      return filtered_contacts.where('contacts.id not in (?)', contacts_with_emails_ids)
+      return filtered_contacts.where.not(id: contacts_with_emails_ids)
     end
 
-    filtered_contacts.where('email_addresses.email is not null AND email_addresses.primary = true')
+    filtered_contacts.where.not(email_addresses: { email: nil }).where(email_addresses: { primary: true })
       .includes(people: :email_addresses)
       .references('email_addresses')
   end
@@ -282,14 +282,14 @@ class ContactFilter
 
     # set up contact id arrays
     if filter_home_phone.present?
-      contacts_with_home_phone_ids = filtered_contacts.where("phone_numbers.number is not null AND phone_numbers.historic = false AND phone_numbers.location = 'home'")
+      contacts_with_home_phone_ids = filtered_contacts.where.not(phone_numbers: { number: nil }).where( phone_numbers: { historic: false }, phone_numbers: { location: 'home'})
                                      .includes(people: :phone_numbers)
                                      .references('phone_numbers')
                                      .pluck(:id)
       filter_home_phone = '' if contacts_with_home_phone_ids.empty?
     end
     if filter_moble_phone.present?
-      contacts_with_mobile_phone_ids = filtered_contacts.where("phone_numbers.number is not null AND phone_numbers.historic = false AND phone_numbers.location = 'mobile'")
+      contacts_with_mobile_phone_ids = filtered_contacts.where.not(phone_numbers: { number: nil }).where( phone_numbers: { historic: false }, phone_numbers: { location: 'mobile'})
                                        .includes(people: :phone_numbers)
                                        .references('phone_numbers')
                                        .pluck(:id)
@@ -302,33 +302,33 @@ class ContactFilter
     # one but not the other
     if filter_home_phone.blank?
       if filter_moble_phone == 'Yes'
-        return filtered_contacts.where('contacts.id in (?)', contacts_with_mobile_phone_ids)
+        return filtered_contacts.where(id: contacts_with_mobile_phone_ids)
       else
-        return filtered_contacts.where('contacts.id not in (?)', contacts_with_mobile_phone_ids)
+        return filtered_contacts.where.not(id: contacts_with_mobile_phone_ids)
       end
     end
     if filter_moble_phone.blank?
-      if filter_home_phone == 'Yes'
-        return filtered_contacts.where('contacts.id in (?)', contacts_with_home_phone_ids)
+      if filter_home_phone == 'Yes' 
+        return filtered_contacts.where(id: contacts_with_home_phone_ids)
       else
-        return filtered_contacts.where('contacts.id not in (?)', contacts_with_home_phone_ids)
+        return filtered_contacts.where.not(id: contacts_with_home_phone_ids)
       end
     end
 
     # both filters present
     if filter_home_phone == 'Yes' && filter_moble_phone == 'Yes'
       # & is intersection
-      return filtered_contacts.where('contacts.id in (?)', contacts_with_mobile_phone_ids & contacts_with_home_phone_ids)
+      return filtered_contacts.where(id: contacts_with_mobile_phone_ids & contacts_with_home_phone_ids)
     end
     if filter_home_phone == 'Yes' && filter_moble_phone == 'No'
-      return filtered_contacts.where('contacts.id in (?)', contacts_with_home_phone_ids - contacts_with_mobile_phone_ids)
+      return filtered_contacts.where(id: contacts_with_home_phone_ids - contacts_with_mobile_phone_ids)
     end
     if filter_home_phone == 'No' && filter_moble_phone == 'Yes'
-      return filtered_contacts.where('contacts.id in (?)', contacts_with_mobile_phone_ids - contacts_with_home_phone_ids)
+      return filtered_contacts.where(id: contacts_with_mobile_phone_ids - contacts_with_home_phone_ids)
     end
     if filter_home_phone == 'No' && filter_moble_phone == 'No'
       # | is union
-      return filtered_contacts.where('contacts.id not in (?)', contacts_with_mobile_phone_ids | contacts_with_home_phone_ids)
+      return filtered_contacts.where.not(id: contacts_with_mobile_phone_ids | contacts_with_home_phone_ids)
     end
 
     filtered_contacts
@@ -343,7 +343,7 @@ class ContactFilter
                                .references('addresses')
                                .pluck(:id)
       return filtered_contacts if contacts_with_addr_ids.empty?
-      return filtered_contacts.where('contacts.id not in (?)', contacts_with_addr_ids)
+      return filtered_contacts.where.not(id: contacts_with_addr_ids)
     end
 
     filtered_contacts.where("addresses.street <> '' AND addresses.historic = false")
