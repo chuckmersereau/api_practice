@@ -180,7 +180,6 @@
                     </label>
                   </div>
                 </li>
-                <% if $rollout.active?(:filter_contact_info, current_account_list) %>
                 <li class="filter_set">
                   <label id="filter_contact_info" class="filter_title"
                            onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Contact Information']);">
@@ -211,7 +210,6 @@
                     </label>
                   </div>
                 </li>
-                <% end %>
                 <li class="controls">
                   <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);"><i class="fa fa-undo"></i> <%= _('Reset Filters') %></a>
                   <a href="#" ng-click="mapContacts()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Map These Contacts']);"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
