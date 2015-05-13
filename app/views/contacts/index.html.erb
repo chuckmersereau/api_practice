@@ -31,7 +31,7 @@
                     <%= _('Commitment Details') %>
                   </label>
                   <div class="filter_set_inner filter_radio">
-                    <lable><%= _('Commitment Received') %>:</lable>
+                    <label><%= _('Commitment Received') %>:</label>
                     <label>
                       <%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.pledge_received' %>
                       <%= _('-- Any --') %>
@@ -44,7 +44,7 @@
                       <%= radio_button_tag '', 'false', false, :'ng-model' => 'contactQuery.pledge_received' %>
                       <%= _('Not Received') %>
                     </label>
-                    <lable><%= _('Commitment Frequency') %>:</lable>
+                    <label><%= _('Commitment Frequency') %>:</label>
                     <%= select_tag 'filters[pledge_frequencies]',
                                    options_for_select([[_('-- Any --'), '']] + current_account_list.contacts.pledge_frequencies.invert.to_a, current_account_list.contacts.pledge_frequencies.to_a),
                                    class: 'form-control', multiple: true, size: 5,
@@ -92,24 +92,24 @@
                   </div>
                 </li>
                 <li class="filter_set">
-                  <label id="filter_city" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Location']);"><%= _('Contact Location') %></label>
+                  <label id="filter_contact_location" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Location']);"><%= _('Contact Location') %></label>
                   <div class="filter_set_inner">
-                    <lable><%= _('City') %>:</lable>
+                    <label><%= _('City') %>:</label>
                     <%= select_tag 'filters[city]',
                                    options_for_select([[_('-- Any --'), '']] + current_account_list.cities.select(&:present?)),
                                    multiple: true, size: 5, class: 'form-control',
                                    :'ng-model' => 'contactQuery.city' %>
-                    <lable><%= _('State') %>:</lable>
+                    <label><%= _('State') %>:</label>
                     <%= select_tag 'filters[state]',
                                    options_for_select([[_('-- Any --'), '']] + current_account_list.states.select(&:present?)),
                                    multiple: true, size: 5, class: 'form-control',
                                    :'ng-model' => 'contactQuery.state' %>
-                    <lable><%= _('Region') %>:</lable>
+                    <label><%= _('Region') %>:</label>
                     <%= select_tag 'filters[region]',
                                    options_for_select([[_('-- Any --'), '']] + current_account_list.regions.select(&:present?)),
                                    multiple: true, size: 5, class: 'form-control',
                                    :'ng-model' => 'contactQuery.region' %>
-                    <lable><%= _('Metro Area') %>:</lable>
+                    <label><%= _('Metro Area') %>:</label>
                     <%= select_tag 'filters[metro_area]',
                                    options_for_select([[_('-- Any --'), '']] + current_account_list.metro_areas.select(&:present?)),
                                    multiple: true, size: 5, class: 'form-control',

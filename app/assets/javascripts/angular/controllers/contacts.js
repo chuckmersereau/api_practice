@@ -94,41 +94,11 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         if(angular.isDefined(prefs.tags)){
             $scope.contactQuery.tags = prefs.tags.split(',');
         }
-        if(angular.isDefined(prefs.name)){
-            $scope.contactQuery.name = prefs.name;
-            if(prefs.name){
-                jQuery("#leftmenu #filter_name").trigger("click");
-            }
-        }
         if(angular.isDefined(prefs.type)){
             $scope.contactQuery.type = prefs.type;
             if(prefs.type){
                 jQuery("#leftmenu #filter_type").trigger("click");
             }
-        }
-        if(angular.isDefined(prefs.city)){
-            $scope.contactQuery.city = prefs.city;
-            if(prefs.city[0]){
-                jQuery("#leftmenu #filter_city").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.state)){
-            $scope.contactQuery.state = prefs.state;
-            if(prefs.state[0]){
-                jQuery("#leftmenu #filter_state").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.region)){
-          $scope.contactQuery.region = prefs.region;
-          if(prefs.region[0]){
-            jQuery("#leftmenu #filter_region").trigger("click");
-          }
-        }
-        if(angular.isDefined(prefs.metro_area)){
-          $scope.contactQuery.metro_area = prefs.metro_area;
-          if(prefs.metro_area[0]){
-            jQuery("#leftmenu #filter_metro_area").trigger("click");
-          }
         }
         if(angular.isDefined(prefs.newsletter)){
             $scope.contactQuery.newsletter = prefs.newsletter;
@@ -178,16 +148,23 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_appeal").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.pledge_frequencies)){
+        if(angular.isDefined(prefs.pledge_frequencies) || angular.isDefined(prefs.pledge_received)){
             $scope.contactQuery.pledge_frequencies = prefs.pledge_frequencies;
-            if(prefs.pledge_frequencies[0]){
-                jQuery("#leftmenu #filter_pledge_frequencies").trigger("click");
+            $scope.contactQuery.pledge_received = prefs.pledge_received;
+            if(prefs.pledge_frequencies[0] || prefs.pledge_received){
+                jQuery("#filter_commitment_details").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.pledge_received)){
-            $scope.contactQuery.pledge_received = prefs.pledge_received;
-            if(prefs.pledge_received){
-                jQuery("#leftmenu #filter_pledge_received").trigger("click");
+        if(angular.isDefined(prefs.city)
+          || angular.isDefined(prefs.state)
+          || angular.isDefined(prefs.region)
+          || angular.isDefined(prefs.metro_area)){
+            $scope.contactQuery.city = prefs.city;
+            $scope.contactQuery.state = prefs.state;
+            $scope.contactQuery.region = prefs.region;
+            $scope.contactQuery.metro_area = prefs.metro_area;
+            if(prefs.city[0] || prefs.state[0] || prefs.region[0] || prefs.metro_area[0]){
+                jQuery("#filter_contact_location").trigger("click");
             }
         }
         if(angular.isDefined(prefs.contact_info_email)
@@ -195,12 +172,14 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           || angular.isDefined(prefs.contact_info_mobile)
           || angular.isDefined(prefs.contact_info_addr)
           || angular.isDefined(prefs.contact_info_facebook)){
-              $scope.contactQuery.contact_info_email = prefs.contact_info_email;
-              $scope.contactQuery.contact_info_phone = prefs.contact_info_phone;
-              $scope.contactQuery.contact_info_mobile = prefs.contact_info_mobile;
-              $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;
-              $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;
-              jQuery("#filter_contact_info").trigger("click");
+            $scope.contactQuery.contact_info_email = prefs.contact_info_email;
+            $scope.contactQuery.contact_info_phone = prefs.contact_info_phone;
+            $scope.contactQuery.contact_info_mobile = prefs.contact_info_mobile;
+            $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;
+            $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;
+            if(prefs.contact_info_email || prefs.contact_info_phone || prefs.contact_info_mobile
+               || prefs.contact_info_addr || prefs.contact_info_facebook)
+                jQuery("#filter_contact_info").trigger("click");
         }
     });
 
