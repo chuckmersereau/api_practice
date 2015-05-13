@@ -1,6 +1,11 @@
 <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
   <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
   <ul>
+    <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
+       ng-hide="isEmptyFilter()">
+      Reset Filters
+    </a>
+
     <li><span class="sort_title menu_item">Sort</span></li>
     <ul class="sort_options">
       <li ng-class="{'selected': filter.page === 'all'}" class="option">
@@ -172,13 +177,6 @@
             </div>
           </li>
           <% end %>
-          <li class="controls">
-            <% if params[:action] == 'history' %>
-              <%= submit_tag _('Apply Filters'), class: 'form-control btn btn-primary' %>
-            <% else %>
-              <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs">Reset Filters</a>
-            <% end %>
-          </li>
         </ul>
       </form>
     </li>

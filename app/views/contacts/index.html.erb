@@ -8,7 +8,7 @@
     <div class="col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap">
       <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
         <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
-        <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block"
+        <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
            ng-hide="isEmptyFilter()"
            onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
           <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
