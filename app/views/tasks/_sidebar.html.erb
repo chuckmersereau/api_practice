@@ -135,7 +135,6 @@
                              class: 'form-control', multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'filter.contactPledgeFrequencies' %>
             </div>
           </li>
-          <% if $rollout.active?(:filter_contact_info, current_account_list) %>
           <li class="filter_set">
             <label id="filter_contact_info" class="filter_title"
                            onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Contact Information']);">
@@ -166,7 +165,6 @@
               </label>
             </div>
           </li>
-          <% end %>
           <% end %>
           <li class="controls">
             <% if params[:action] == 'history' %>
