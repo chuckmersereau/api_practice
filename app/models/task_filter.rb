@@ -11,8 +11,11 @@ class TaskFilter
   def filter(tasks)
     filtered_tasks = tasks
 
-    if @filters[:contact_ids].present? && @filters[:contact_ids].first != ''
-      filtered_tasks = filtered_tasks.where('contacts.id' => @filters[:contact_ids])
+    if @filters[:contact_ids].present?
+      @filters[:contact_ids] = @filters[:contact_ids].split(',') if @filters[:contact_ids].class == String
+      if @filters[:contact_ids].first != ''
+        filtered_tasks = filtered_tasks.where('contacts.id' => @filters[:contact_ids])
+      end
     end
 
     if @filters[:completed].present?

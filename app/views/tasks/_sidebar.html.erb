@@ -75,14 +75,12 @@
               <%= select_tag 'filters[city]', options_for_select([[_('-- Any --'), '']] + current_account_list.cities.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactCity' %>
             </div>
           </li>
-
           <li>
             <label id="filter_state" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Contact State']);"><%= _('Contact State') %></label>
             <div class="filter_set_inner">
               <%= select_tag 'filters[state]', options_for_select([[_('-- Any --'), '']] + current_account_list.states.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactState' %>
             </div>
           </li>
-
           <li>
             <label id="filter_newsletter" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Contact Newsletter']);"><%= _('Contact Newsletter') %></label>
             <div class="filter_set_inner filter_radio">
@@ -137,8 +135,39 @@
                              class: 'form-control', multiple: true, size: current_account_list.contacts.pledge_frequencies.to_a.size, :'ng-model' => 'filter.contactPledgeFrequencies' %>
             </div>
           </li>
+          <% if $rollout.active?(:filter_contact_info, current_account_list) %>
+          <li class="filter_set">
+            <label id="filter_contact_info" class="filter_title"
+                           onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Contact Information']);">
+            <%= _('Contact Information') %></label>
+            <div class="filter_set_inner filter_radio">
+              <%= _('Email') %>
+              <label ><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoEmail' %><%= _('-- Any --') %><br/>
+                <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoEmail'  %><%= _('Yes') %><br/>
+                <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoEmail' %><%= _('No') %></label>
+              <%= _('Home Phone') %>
+              <label ><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoPhone' %><%= _('-- Any --') %><br/>
+                <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoPhone'%><%= _('Yes') %><br/>
+                <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoPhone' %><%= _('No') %></label>
+              <%= _('Mobile Phone') %>
+              <label ><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoMobile' %><%= _('-- Any --') %><br/>
+                <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoMobile'  %><%= _('Yes') %><br/>
+                <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoMobile' %><%= _('No') %>
+              </label>
+              <%= _('Address') %>
+              <label ><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoAddr' %><%= _('-- Any --') %><br/>
+                <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoAddr'  %><%= _('Yes') %><br/>
+                <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoAddr' %><%= _('No') %>
+              </label>
+              <%= _('Facebook Profile') %>
+              <label><%= radio_button_tag '', '', false, :'ng-model' => 'filter.contactInfoFacebook' %><%= _('-- Any --') %><br/>
+                <%= radio_button_tag '', 'Yes', false, 'ng-model' => 'filter.contactInfoFacebook'  %><%= _('Yes') %><br/>
+                <%= radio_button_tag '', 'No', false, 'ng-model' => 'filter.contactInfoFacebook' %><%= _('No') %>
+              </label>
+            </div>
+          </li>
           <% end %>
-
+          <% end %>
           <li class="controls">
             <% if params[:action] == 'history' %>
               <%= submit_tag _('Apply Filters'), class: 'form-control btn btn-primary' %>

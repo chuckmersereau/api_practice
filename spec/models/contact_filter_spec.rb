@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe ContactFilter do
-  context '#filter' do
+  describe 'filters' do
     it 'filters contacts with newsletter = Email and state' do
       c = create(:contact, send_newsletter: 'Email')
       a = create(:address, addressable: c)
@@ -54,6 +54,158 @@ describe ContactFilter do
       cf = ContactFilter.new(pledge_received: '')
       filtered_contacts = cf.filter(Contact)
       expect(filtered_contacts.length).to be 2
+    end
+
+    context '#contact_info_email' do
+      let(:has_email) do
+        c = create(:contact)
+        c.people << create(:person)
+        c.people << create(:person)
+        c.primary_or_first_person.email_addresses << create(:email_address)
+        c
+      end
+      let(:no_email) do
+        c = create(:contact)
+        c.people << create(:person)
+        c.primary_or_first_person.email_addresses << create(:email_address, historic: true)
+        c
+      end
+
+      it 'filters when looking for emails' do
+        cf = ContactFilter.new(contact_info_email: 'Yes')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to eq [has_email]
+      end
+
+      it 'filters when looking for no emails' do
+        cf = ContactFilter.new(contact_info_email: 'No')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to eq [no_email]
+      end
+    end
+
+    context '#contact_info_phone' do
+      let!(:has_home) do
+        c = create(:contact)
+        c.people << create(:person)
+        c.people << create(:person)
+        c.primary_or_first_person.phone_numbers << create(:phone_number, location: 'home')
+        c
+      end
+      let!(:has_mobile) do
+        c = create(:contact)
+        c.people << create(:person)
+        c.primary_or_first_person.phone_numbers << create(:phone_number, location: 'mobile')
+        c
+      end
+      let!(:has_both) do
+        c = create(:contact)
+        c.people << home_person = create(:person)
+        home_person.phone_numbers << create(:phone_number, location: 'home')
+        c.people << mobile_person = create(:person)
+        mobile_person.phone_numbers << create(:phone_number, location: 'mobile')
+        c
+      end
+      let!(:no_phone) do
+        c = create(:contact)
+        c.people << create(:person)
+        c.primary_or_first_person.phone_numbers << create(:phone_number, historic: true)
+        c
+      end
+
+      it 'filters when looking for home phone' do
+        cf = ContactFilter.new(contact_info_phone: 'Yes')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to include has_home
+        expect(filtered_contacts).to_not include has_mobile
+        expect(filtered_contacts).to_not include no_phone
+
+        cf = ContactFilter.new(contact_info_phone: 'Yes', contact_info_mobile: 'No')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to include has_home
+        expect(filtered_contacts).to_not include has_mobile
+        expect(filtered_contacts).to_not include no_phone
+      end
+
+      it 'filters when looking for mobile phone' do
+        cf = ContactFilter.new(contact_info_mobile: 'Yes')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to include has_mobile
+        expect(filtered_contacts).to_not include has_home
+        expect(filtered_contacts).to_not include no_phone
+
+        cf = ContactFilter.new(contact_info_mobile: 'Yes', contact_info_phone: 'No')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to include has_mobile
+        expect(filtered_contacts).to_not include has_home
+        expect(filtered_contacts).to_not include no_phone
+      end
+
+      it 'filters when looking for both phones' do
+        cf = ContactFilter.new(contact_info_mobile: 'Yes', contact_info_phone: 'Yes')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to include has_both
+        expect(filtered_contacts).to_not include has_home
+        expect(filtered_contacts).to_not include has_mobile
+        expect(filtered_contacts).to_not include no_phone
+      end
+
+      it 'filters when looking for no phones' do
+        cf = ContactFilter.new(contact_info_phone: 'No', contact_info_mobile: 'No')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to_not include has_home
+        expect(filtered_contacts).to_not include has_mobile
+        expect(filtered_contacts).to include no_phone
+      end
+    end
+
+    it 'filters by contact address present' do
+      has_address = create(:contact)
+      has_address.addresses << create(:address)
+      has_address.addresses << create(:address, historic: true)
+      no_address = create(:contact)
+      historic_address_contact = create(:contact)
+      historic_address_contact.addresses << create(:address, historic: true)
+
+      cf = ContactFilter.new(contact_info_addr: 'Yes')
+      filtered_contacts = cf.filter(Contact)
+      expect(filtered_contacts).to include has_address
+      expect(filtered_contacts).to_not include no_address
+      expect(filtered_contacts).to_not include historic_address_contact
+
+      cf = ContactFilter.new(contact_info_addr: 'No', contact_info_email: 'No')
+      no_address_contacts = cf.filter(Contact)
+      expect(no_address_contacts).to_not include has_address
+      expect(no_address_contacts).to include no_address
+      expect(no_address_contacts).to include historic_address_contact
+    end
+
+    context '#contact_info_facebook' do
+      let!(:has_fb) do
+        c = create(:contact)
+        c.people << create(:person)
+        c.people << create(:person)
+        c.primary_or_first_person.facebook_accounts << create(:facebook_account)
+        c
+      end
+      let!(:no_fb) do
+        c = create(:contact)
+        c.people << create(:person)
+        c
+      end
+
+      it 'filters when looking for facebook_account' do
+        cf = ContactFilter.new(contact_info_facebook: 'Yes')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to eq [has_fb]
+      end
+
+      it 'filters when looking for no facebook_account' do
+        cf = ContactFilter.new(contact_info_facebook: 'No')
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to include no_fb
+        expect(filtered_contacts).to_not include has_fb
+      end
     end
   end
 end
