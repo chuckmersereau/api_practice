@@ -262,18 +262,14 @@ class ContactFilter
   def contact_info_email(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_email].present?
 
-    if @filters[:contact_info_email] == 'No'
-      contacts_with_emails_ids = filtered_contacts.where.not(email_addresses: { email: nil }).where(email_addresses: { historic: false })
-                                 .includes(people: :email_addresses)
-                                 .references('email_addresses')
-                                 .pluck(:id)
-      return filtered_contacts if contacts_with_emails_ids.empty?
-      return filtered_contacts.here.not(id: contacts_with_emails_ids)
-    end
+    contacts_with_emails = filtered_contacts.where.not(email_addresses: { email: nil })
+                           .where(email_addresses: { historic: false })
+                           .includes(people: :email_addresses)
+    return contacts_with_emails if @filters[:contact_info_email] == 'Yes'
 
-    filtered_contacts.where.not(email_addresses: { email: nil }).where(email_addresses: { primary: true })
-      .includes(people: :email_addresses)
-      .references('email_addresses')
+    contacts_with_emails_ids = contacts_with_emails.pluck(:id)
+    return filtered_contacts if contacts_with_emails_ids.empty?
+    filtered_contacts.where.not(id: contacts_with_emails_ids)
   end
 
   def contact_info_phone(filtered_contacts)
@@ -339,16 +335,13 @@ class ContactFilter
   def contact_info_address(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_addr].present?
 
-    if @filters[:contact_info_addr] == 'No'
-      contacts_with_addr_ids = filtered_contacts.where.not(addresses: { street: '' }).where(addresses: { historic: false })
-                               .includes(:addresses)
-                               .pluck(:id)
-      return filtered_contacts if contacts_with_addr_ids.empty?
-      return filtered_contacts.where.not(id: contacts_with_addr_ids)
-    end
+    contacts_with_addr = filtered_contacts.where.not(addresses: { street: '' }).where(addresses: { historic: false })
+                         .includes(:addresses)
+    return contacts_with_addr if @filters[:contact_info_addr] == 'Yes'
 
-    filtered_contacts.where.not(addresses: { street: '' }).where(addresses: { historic: false })
-      .includes(:addresses)
+    contacts_with_addr_ids = contacts_with_addr.pluck(:id)
+    return filtered_contacts if contacts_with_addr_ids.empty?
+    filtered_contacts.where.not(id: contacts_with_addr_ids)
   end
 
   def contact_info_facebook(filtered_contacts)
