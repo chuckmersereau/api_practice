@@ -207,5 +207,18 @@ describe ContactFilter do
         expect(filtered_contacts).to_not include has_fb
       end
     end
+
+    it 'includes contacts with no email when set to email newsletter' do
+      has_email = create(:contact, send_newsletter: 'Email')
+      p = create(:person)
+      has_email.people << p
+      create(:email_address, person: p)
+      no_email = create(:contact, send_newsletter: 'Email')
+      cf = ContactFilter.new(newsletter: 'email')
+
+      filtered_contacts = cf.filter(Contact)
+      filtered_contacts.should include no_email
+      filtered_contacts.should include has_email
+    end
   end
 end

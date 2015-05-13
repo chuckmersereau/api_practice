@@ -90,19 +90,20 @@
                 </li>
 
                 <li class="filter_set">
-                  <label id="filter_newsletter" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Newsletter Recipients']);"><%= _('Newsletter Recipients') %></label>
+                  <label id="filter_newsletter" class="filter_title"
+                         onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Newsletter Recipients']);">
+                    <%= _('Newsletter Recipients') %>
+                  </label>
                   <div class="filter_set_inner filter_radio">
                     <label><%= radio_button_tag '', '', false, :'ng-model' => 'contactQuery.newsletter' %> <%= _('-- Any --') %></label>
                     <label><%= radio_button_tag '', 'none', false, :'ng-model' => 'contactQuery.newsletter' %> <%= _('None Selected') %></label>
                     <label><%= radio_button_tag '', 'all', false, :'ng-model' => 'contactQuery.newsletter' %> <%= _('All') %></label>
                     <label>
                       <%= radio_button_tag '', 'address', false, :'ng-model' => 'contactQuery.newsletter' %>
-                      <%= _('With Mailing Address') %>
-                      <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="<%= _('This filter will search for people who are set to receive your physical newsletter and have a mailing address') %>"></i></label>
+                      <%= _('Physical') %>
                     <label>
                       <%= radio_button_tag '', 'email', false, :'ng-model' => 'contactQuery.newsletter' %>
-                      <%= _('With Email Address') %>
-                      <i class="fa fa-question-circle" data-toggle="tooltip" data-placement="top" title="<%= _('This filter will search for people who are set to receive your email newsletter and have a valid email address') %>"></i>
+                      <%= _('Email') %>
                     </label>
                   </div>
                 </li>
