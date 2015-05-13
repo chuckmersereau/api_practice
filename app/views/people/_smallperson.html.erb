@@ -3,7 +3,10 @@
   <div class="small-person well clearfix" id="person-<%= p.id %>">
 
     <div class="person-external">
-      <img src="<%=p.avatar(:large_square)%>" replace-avatar ng-click="replaceFacebookLink(<%=p.contact.id%>, <%=p.id%>, '<% if p.facebook_account %><%=p.facebook_account.url%><% end %>')">
+      <% if !p.facebook_account %>
+        <i class="fa fa-plus-circle fa-3x avatar-add" replace-avatar ng-click="replaceFacebookLink(<%=p.contact.id%>, <%=p.id%>, '<% if p.facebook_account %><%=p.facebook_account.url%><% end %>')"></i>
+      <% end %>
+      <img src="<%=p.avatar(:large_square)%>">
     </div>
     <div class="social-icons">
       <% if p.facebook_account %>
