@@ -924,7 +924,6 @@ div.name {font-size: 14px; margin-bottom: 4px;}
   border-collapse: collapse;
   width: 100%;
   th {
-    background: $gray_light;
     text-align: left;
     padding: 5px 8px;
   }
@@ -991,39 +990,57 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 /* ************************************************************** */
 
 table tbody.tasks {
+  .primary {
+    height: auto; 
+  }
   td {
     vertical-align: middle;
     padding-top: 7px;
     padding-bottom: 7px;
+    line-height: 21px;
   }
-  td.check {
+  td.task-check,
+  td.task-favorite {
     padding-left: 8px;
     padding-right: 4px;
     width: 12px;
     vertical-align: top;
     .complete_task{
       cursor: pointer;
+      &:hover:before {
+        content: "\f14a";
+      }
     }
   }
-
-  tr, tr:nth-child(odd) {background: none; min-height: 2em; border-top: 1px dotted $gray_mid;}
-  tr:first-child {border-top: none;}
-  tr .actions {
-    a {
+  tr {
+    background: none; min-height: 2em; border-top: 1px dotted $gray_mid;
+    &:first-child {
+      border-top: none;
+    }
+    .actions a {
       vertical-align: sub;
     }
+    &.clear {
+      background: none;
+      border: none; 
+      padding: 0; 
+      margin: 0;
+    }
+    .hover-show {
+      visibility: hidden;
+    }
+    &:hover {
+      .hover-show {
+        visibility: visible;
+      }
+    }
   }
-  /*tr:hover .actions {display: inline-block;}*/
-  tr.clear {border: none; background: none; padding: 0; margin: 0;}
-  .primary {height: auto; line-height: 1.5em;}
 }
 
 .taskgroup {
   background: #EC1C24;
   width: 150px;
   position: relative;
-  border: 1px solid #AF1524;
-  border-width: 1px 1px 1px 0;
   box-shadow: inset 0 1px 1px rgba(255,255,255,.75);
   td {
     padding: 8px;
