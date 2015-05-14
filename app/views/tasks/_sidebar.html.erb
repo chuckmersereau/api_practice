@@ -3,7 +3,7 @@
   <ul>
     <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
        ng-hide="isEmptyFilter()">
-      Reset Filters
+      <%= _('Reset Filters') %>
     </a>
 
     <li><span class="sort_title menu_item">Sort</span></li>
@@ -176,5 +176,9 @@
         </ul>
       </form>
     </li>
+    <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
+       ng-hide="isEmptyFilter()">
+      <%= _('Reset Filters') %>
+    </a>
   </ul>
 </aside>

@@ -198,6 +198,11 @@
               <a href="" ng-click="clearInsightFilter()" class="btn"><%= _('Clear Insight Filter') %></a>
             </li>
           <% end %>
+          <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
+             ng-hide="isEmptyFilter()"
+             onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
+            <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
+          </a>
         </ul>
       </aside>
     </div>
