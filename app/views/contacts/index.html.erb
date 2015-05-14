@@ -79,7 +79,12 @@
                 <li class="filter_set">
                   <label id="filter_referrer" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Referrer']);"><%= _('Referrer') %></label>
                   <div class="filter_set_inner">
-                    <%= select_tag 'filters[referrer]', options_for_select([[_('-- Any --'), ''], [_('-- Someone --'), '*']] + current_account_list.contacts.with_referrals.order("name").collect { |c| [c.name, c.id] }), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.referrer' %>
+                    <%= select_tag 'filters[referrer]',
+                        options_for_select(
+                          [[_('-- Any --'), ''], [_('-- Someone --'), '*']] +
+                            current_account_list.contacts.with_referrals.order("name").collect { |c| [c.name, c.id] }
+                        ),
+                        multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.referrer' %>
                   </div>
                 </li>
                 <li class="filter_set">
@@ -191,7 +196,10 @@
             <li ng-class="{'selected': insightFilterIsActive()}">
               <span class="left_filters menu_item"><%= _('Insights') %></span>
               <p style="text-indent:40px">
-                <a href="" ng-click="runInsight('recommendations')"><%= _('Increase Recommendations') %></a>
+                <a href="" ng-click="runInsight('recommendations')"
+                   onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Increase Recommendations']);">
+                  <%= _('Increase Recommendations') %>
+                </a>
               </p>
             </li>
             <li class="controls" ng-show="insightFilterIsActive()">
