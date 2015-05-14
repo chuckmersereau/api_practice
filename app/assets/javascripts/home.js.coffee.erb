@@ -5,6 +5,10 @@ $ ->
 
     $.mpdx.loadDashTabData(window.location.hash)
 
+    $('.see-all-birthdays').click ->
+      $('.see-all-birthdays').hide()
+      $('.birthdays-list').addClass('show_all')
+
 $.mpdx.loadDashTabData = (hash) ->
   hash ||= '#dash-connect'
   $.mpdx.loadDashbaordTab(hash)
