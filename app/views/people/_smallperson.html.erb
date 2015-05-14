@@ -4,7 +4,7 @@
 
     <div class="person-external">
       <% if !p.facebook_account %>
-        <i class="fa fa-plus-circle fa-2x avatar-add" replace-avatar ng-click="replaceFacebookLink(<%=p.contact.id%>, <%=p.id%>, '<% if p.facebook_account %><%=p.facebook_account.url%><% end %>')" title="Add picture"></i>
+        <i class="fa fa-plus-circle fa-2x avatar-add" replace-avatar ng-click="replaceFacebookLink(<%=p.contact.id%>, <%=p.id%>)" title="Add picture with Facebook URL"></i>
       <% end %>
       <img src="<%=p.avatar(:large_square)%>">
     </div>
