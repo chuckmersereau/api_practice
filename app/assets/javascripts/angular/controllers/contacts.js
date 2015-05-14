@@ -163,7 +163,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
             $scope.contactQuery.state = prefs.state || [];
             $scope.contactQuery.region = prefs.region || [];
             $scope.contactQuery.metro_area = prefs.metro_area || [];
-            if(prefs.city[0] || prefs.state[0] || prefs.region[0] || prefs.metro_area[0]){
+            if((prefs.city && prefs.city[0]) || (prefs.state && prefs.state[0]) ||
+               (prefs.region && prefs.region[0]) || (prefs.metro_area && prefs.metro_area[0])){
                 jQuery("#filter_contact_location").trigger("click");
             }
         }

@@ -68,7 +68,7 @@ describe('contacts', function() {
             "type": "", "city": [""], "state": [""], "newsletter": "", "status": [""], "likely": [""], "church": [""], "referrer": [""],
             "timezone": [""], "relatedTaskAction": [""], "appeal": [""], "pledge_frequencies": [""], "pledge_received": "",
             "contact_info_email": "", "contact_info_phone": "", "contact_info_mobile": "", "contact_info_addr": "", "contact_info_facebook": ""},
-            "2": {"tags": "", "name": "", "type": "", "city": [""], "state": [""], "newsletter": "all", "status": [""], "likely": [""],
+            "2": {"tags": "", "name": "", "type": "", "city": [""], "state": [""], "region": [""], "newsletter": "all", "status": [""], "likely": [""],
                 "church": [""], "referrer": [""], "timezone": [""], "relatedTaskAction": [""], "appeal": [""], "pledge_frequencies": [""],
                 "pledge_received": "", "contact_info_email": "", "contact_info_phone": "", "contact_info_mobile": "", "contact_info_addr": "",
                 "contact_info_facebook": ""}}, "contacts_view_options": {}, "time_zone": "Atlantic Time (Canada)", "default_account_list": 1},
