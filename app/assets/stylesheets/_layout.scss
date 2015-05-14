@@ -1780,6 +1780,7 @@ body.google_integrations_controller {
   }
   .check {
     padding-right: 5px;
+    padding-left: 8px;
   }
   a:hover,
   a:before:hover,
@@ -1794,6 +1795,9 @@ body.google_integrations_controller {
   }
   .contact-task-address {
     line-height: 1.25em;
+  }
+  td.data {
+    width: 89%;
   }
 }
 
