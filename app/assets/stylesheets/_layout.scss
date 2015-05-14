@@ -335,7 +335,7 @@ div.right {
 }
 
 .page-controls {
-  margin: 5px 0 20px;
+  margin: 5px 0 10px;
   line-height: 34px;
   .pagination {
     width: auto;
@@ -380,20 +380,20 @@ div.right {
 }
 #leftmenu.affix {
   background: #fff;
-  top: 20px;
+  top: 12px;
   z-index: 10;
   overflow: auto;
   position: fixed !important;
 }
 #leftmenu.affix.scrollable_left {
-  height: 95%;
+  height: 97%;
 }
 #leftmenu.affix-bottom {
   height: auto;
 }
-.page-filters.affix {
+.sticky-page-filters.affix {
   top: 0;
-  padding-top: 20px;
+  padding-top: 12px;
   z-index: 10;
   background: #fff;
 }
@@ -401,12 +401,16 @@ div.right {
     #leftmenu.affix {
       width: 213px;
     }
-    .page-filters.affix {
+    .sticky-page-filters.affix {
       width: 100%;
       right: 0;
       .row {
         width: 750px;
         margin: auto;
+      }
+      .page-controls div[class*='col-'] {
+        padding-top: 5px;
+        padding-bottom: 5px;
       }
     }
   }
@@ -415,7 +419,7 @@ div.right {
     #leftmenu.affix {
       width: 213px;
     }
-    .page-filters.affix {
+    .sticky-page-filters.affix {
       width: 698px;
     }
   }
@@ -424,7 +428,7 @@ div.right {
     #leftmenu.affix {
       width: 263px;
     }
-    .page-filters.affix {
+    .sticky-page-filters.affix {
       width: 848px;
     }
   }
