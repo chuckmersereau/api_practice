@@ -335,7 +335,7 @@ div.right {
 }
 
 .page-controls {
-  margin: 5px 0 20px;
+  margin: 5px 0 10px;
   line-height: 34px;
   .pagination {
     width: auto;
@@ -380,20 +380,20 @@ div.right {
 }
 #leftmenu.affix {
   background: #fff;
-  top: 20px;
+  top: 12px;
   z-index: 10;
   overflow: auto;
   position: fixed !important;
 }
 #leftmenu.affix.scrollable_left {
-  height: 95%;
+  height: 97%;
 }
 #leftmenu.affix-bottom {
   height: auto;
 }
 .sticky-page-filters.affix {
   top: 0;
-  padding-top: 20px;
+  padding-top: 12px;
   z-index: 10;
   background: #fff;
 }
