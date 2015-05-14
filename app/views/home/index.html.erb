@@ -135,24 +135,28 @@
 
     </div>
 
-    <section id="dash-progress">
+    <section id="dash-progress" ng-controller="progressController as progress">
       <div class="page-filters">
         <div class="row">
           <div class="col-md-6">
-            <h3>Progress <span class="normal-weight">June 5 - July 5</span></h3>
+            <h3>Progress <span class="normal-weight">{{progress.testVar}}</span></h3>
           </div>
-          <div class="col-md-6 text-right">
-            <a href="" class="btn btn-blue">Weekly Progress Report</a>
-          </div>
+          <% if current_user.organization_accounts.detect {|oa| oa.organization_id == 48} %>
+            <div class="col-md-6 text-right">
+              <%= link_to(_('Weekly Progress Report'),
+                          'https://staffweb.cru.org/mpd-donations/reports/mpd-weekly-update/',
+                          target: '_blank', class: 'btn btn-blue') %>
+            </div>
+          <% end %>
         </div>
       </div>
-      <div class="row">
+      <div class="row ng-cloak">
         <div class="col-md-8">
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-users"></i> Contacts</div>
-            <div class="progress-stat"><span class="count-big">0</span> Active</div>
-            <div class="progress-stat"><span class="count-big">0</span> Referrals On-hand</div>
-            <div class="progress-stat"><span class="count-big">5</span> Gained</div>
+            <div class="progress-stat"><span class="count-big">{{progress.data.contacts.active}}</span> Active</div>
+            <div class="progress-stat"><span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span> Referrals On-hand</div>
+            <div class="progress-stat"><span class="count-big">{{progress.data.contacts.referrals_gained}}</span> Gained</div>
           </div>
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-mobile"></i> Phone Dials</div>
