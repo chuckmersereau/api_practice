@@ -1330,7 +1330,7 @@ table.meta {
       padding: 12px;
       margin-bottom: 5px;
       margin-right: 5px;
-      width: 300px;
+      min-width: 300px;
       .actions {
         float: right;
         a {vertical-align: middle;}
