@@ -200,6 +200,8 @@ class MailChimpAccount < ActiveRecord::Base
 
     add_status_groups(list_id, statuses)
 
+    add_greeting_merge_variable(list_id)
+
     gb.list_batch_subscribe(id: list_id, batch: batch_params(contacts), update_existing: true,
                             double_optin: false, send_welcome: false, replace_interests: true)
   end
@@ -216,7 +218,7 @@ class MailChimpAccount < ActiveRecord::Base
                 person.primary_email_address.historic?
 
         batch << { EMAIL: person.primary_email_address.email, FNAME: person.first_name,
-                   LNAME: person.last_name }
+                   LNAME: person.last_name, GREETING: contact.greeting }
       end
 
       # if we have a grouping_id, add them to that group
@@ -225,6 +227,11 @@ class MailChimpAccount < ActiveRecord::Base
     end
 
     batch
+  end
+
+  def add_greeting_merge_variable(list_id)
+    return if gb.list_merge_vars(id: list_id).find { |merge_var| merge_var['tag'] == 'GREETING' }
+    gb.list_merge_var_add(id: list_id, tag: 'GREETING', name: 'Greeting')
   end
 
   def add_status_groups(list_id, statuses)
