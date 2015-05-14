@@ -314,5 +314,11 @@ describe AccountList do
       expect(account_list).to receive(:queue_sync_with_google_contacts)
       account_list.send(:import_data)
     end
+
+    it 'does not import from org accounts with skip_downloads set' do
+      organization_account.update(disable_downloads: true)
+      expect_any_instance_of(Person::OrganizationAccount).to_not receive(:import_all_data)
+      account_list.send(:import_data)
+    end
   end
 end
