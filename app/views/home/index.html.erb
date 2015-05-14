@@ -155,18 +155,28 @@
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-users"></i> Contacts</div>
             <div class="progress-stat"><span class="count-big">{{progress.data.contacts.active}}</span> Active</div>
-            <div class="progress-stat"><span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span> Referrals On-hand</div>
-            <div class="progress-stat"><span class="count-big">{{progress.data.contacts.referrals_gained}}</span> Gained</div>
+            <div class="progress-stat">
+              <span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span> Referrals On-hand
+            </div>
+            <div class="progress-stat">
+              <span class="count-big">{{progress.data.contacts.referrals_gained}}</span> Gained
+            </div>
           </div>
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-mobile"></i> Phone Dials</div>
-            <div class="progress-stat"><span class="count-big">0</span> Outgoing</div>
-            <div class="progress-stat"><span class="count-big">5</span> Talked To</div>
-            <div class="progress-stat"><span class="count-big">2</span> Appointments Produced</div>
+            <div class="progress-stat">
+              <span class="count-big">{{progress.data.phone.attempted + progress.data.phone.completed}}</span> Outgoing
+            </div>
+            <div class="progress-stat">
+              <span class="count-big">{{progress.data.phone.completed + progress.data.phone.recieved}}</span> Talked To
+            </div>
+            <div class="progress-stat">
+              <span class="count-big">{{progress.data.phone.appointments}}</span> Appointments Produced
+            </div>
             <ul class="plain-list">
-              <li>Completed: 0</li>
-              <li>Attempted: 0</li>
-              <li>Received: 0</li>
+              <li>Completed: {{progress.data.phone.completed}}</li>
+              <li>Attempted: {{progress.data.phone.attempted}}</li>
+              <li>Received: {{progress.data.phone.received}}</li>
             </ul>
           </div>
           <div class="well">
@@ -229,30 +239,6 @@
 
         </div>
     </section>
-
-    <div id="dash-tabs" class="tabgroup">
-      <ul>
-        <li class="killround"><a href="#dash-connect" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Connect') %>']);"><%= _('Connect') %></a></li>
-        <li class="killround"><a href="#dash-care" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Care') %>']);"><%= _('Care') %></a></li>
-        <li class="killround"><a href="#dash-cultivate" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Cultivate') %>']);"><%= _('Cultivate') %></a></li>
-        <li class="killround"><a href="#dash-progress" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Progress') %>']);"><%= _('Progress') %></a></li>
-        <li class="killround"><a href="#dash-appeals" onClick="_gaq.push(['_trackEvent', 'Dashboard Tabs', 'Click', '<%= _('Appeals') %>']);"><%= _('Appeals') %></a></li>
-      </ul>
-
-      <div id="dash-connect" ng-controller="taskShortListController" ng-init="init('top5','')">
-        <table class="list tasklist">
-          <tr task="task" ng-repeat="task in tasks" id="task_{{task.id}}"></tr>
-        </table>
-        <div class="seemore">
-          <%= link_to(_('See All'), tasks_path, class: 'btn btn-primary btn-sm') %>
-        </div>
-      </div>
-      <div id="dash-care"></div>
-      <div id="dash-cultivate"></div>
-      <div id="dash-progress"></div>
-      <div id="dash-appeals"><p><appeals-list></appeals-list></div>
-
-    </div>
 
   </div>
 </div>
