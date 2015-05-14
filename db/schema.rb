@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150501024703) do
+ActiveRecord::Schema.define(version: 20150514012021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -782,6 +782,7 @@ ActiveRecord::Schema.define(version: 20150501024703) do
     t.datetime "last_download"
     t.string   "token"
     t.datetime "locked_at"
+    t.boolean  "disable_downloads",    default: false, null: false
   end
 
   add_index "person_organization_accounts", ["person_id", "organization_id"], name: "user_id_and_organization_id", unique: true, using: :btree
