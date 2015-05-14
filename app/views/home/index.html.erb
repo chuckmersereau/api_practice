@@ -38,7 +38,8 @@
                     <% next if type == '' %>
                     <li>
                       <a href="<%= tasks_path(filters: {activity_type: [type]}) %>">
-                        <span class="count"><%= count %></span> <%= n_(type, type+'s',count) %>
+                        <span class="count"><%= count %></span>
+                        <%= type == 'Talk to In Person' ? _(type) : n_(type, type+'s',count) %>
                       </a>
                     </li>
                   <% end %>
@@ -92,13 +93,16 @@
         <div class="col-md-4">
           <div class="panel panel-default dash-panel">
             <div class="panel-heading">
-              Care <span class="badge badge-blue badge-right-well">+ Log Prayer Letter</span>
+              Care
+              <%= link_to('+ '+_('Log Prayer Letter'),
+                          new_task_path(completed: true, activity_type: 'Newsletter'),
+                          class: 'badge badge-blue badge-right-well add_task', remote: true) %>
             </div>
             <div class="panel-body">
               <div class="dash-stat">
                 <% current_account_list.tasks.completed.of_type('Newsletter').first.tap do |newsletter| %>
                   <% if newsletter %>
-                    <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> days since your last prayer letter
+                    <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> since your last prayer letter
                   <% else %>
                     <%= _("You've never logged a prayer letter") %>
                   <% end %>
