@@ -23,121 +23,117 @@
       </div>
     </div>
 
-    <section id="dash-widgets">
-      <div class="row">
-        <div class="col-md-4">
-          <div class="panel panel-default dash-panel panel-tasks">
-            <div class="panel-heading">
-              Connect
-            </div>
-            <div class="panel-body">
-              Tasks overdue or due today
-              <div class="dash-tasks">
-                <ul class="plain-list">
-                  <% current_account_list.tasks.overdue_and_today.group(:activity_type).count.each do |type, count| %>
-                    <% next if type == '' %>
-                    <li>
-                      <a href="<%= tasks_path(filters: {activity_type: [type]}) %>">
-                        <span class="count"><%= count %></span>
-                        <%= type == 'Talk to In Person' ? _(type) : n_(type, type+'s',count) %>
-                      </a>
-                    </li>
-                  <% end %>
-                </ul>
-              </div>
+    <div class="row" id="dash-widgets">
+      <div class="col-md-4">
+        <div class="panel panel-default dash-panel panel-tasks">
+          <div class="panel-heading">
+            Connect
+          </div>
+          <div class="panel-body">
+            Tasks overdue or due today
+            <ul class="dash-tasks plain-list">
+              <% current_account_list.tasks.overdue_and_today.group(:activity_type).count.each do |type, count| %>
+                <% next if type == '' %>
+                <li>
+                  <a href="<%= tasks_path(filters: {activity_type: [type]}) %>">
+                    <span class="count"><%= count %></span>
+                    <%= type == 'Talk to In Person' ? _(type) : n_(type, type+'s',count) %>
+                  </a>
+                </li>
+              <% end %>
+            </ul>
 
-              <a href="<%= tasks_path %>" class="see-all">
-                <i class="fa fa-plus-square-o"></i> See all <%= current_account_list.tasks.overdue_and_today.count %> Tasks
-              </a>
+            <a href="<%= tasks_path %>" class="see-all">
+              <i class="fa fa-plus-square-o"></i> See all <%= current_account_list.tasks.overdue_and_today.count %> Tasks
+            </a>
 
-              <%= link_to('<i class="fa fa-plus-circle"></i> '.html_safe+_('Add a New Task'),
-                          new_task_path, class: 'btn btn-blue btn-lg btn-add-tasks add_task', remote: true) %>
-            </div>
+            <%= link_to('<i class="fa fa-plus-circle"></i> '.html_safe+_('Add a New Task'),
+                        new_task_path, class: 'btn btn-blue btn-lg btn-add-tasks add_task', remote: true) %>
           </div>
         </div>
-        <div class="col-md-4">
-          <div class="panel panel-default dash-panel">
-            <div class="panel-heading">
-              Commitments Unfufilled
+      </div>
+      <div class="col-md-4">
+        <div class="panel panel-default dash-panel">
+          <div class="panel-heading">
+            Commitments Unfufilled
+          </div>
+          <div class="panel-body">
+
+            <div class="dash-stat">
+              <span class="count-big">
+                <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %>
+              </span> first gift not received
             </div>
-            <div class="panel-body">
 
-              <div class="dash-stat">
-                <span class="count-big">
-                  <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %>
-                </span> first gift not received
-              </div>
-
-              <div class="dash-stat">
-                <span class="count-big">
-                  <%= current_account_list.contacts.late_by(31.days, 60.days).count %>
-                </span> partners <strong>30</strong> days late
-              </div>
-
-              <div class="dash-stat">
-                <span class="count-big">
-                  <%= current_account_list.contacts.late_by(61.days).count %>
-                </span> partners <strong>60</strong> days late
-              </div>
-
-
-              <a href="<%= contacts_path(filters: {status: ['Partner - Financial'], pledge_received: false}) %>"
-                 class="see-all">
-                 <i class="fa fa-plus-square-o"></i>
-                 See all <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %> unreceived commitments
-              </a>
+            <div class="dash-stat">
+              <span class="count-big">
+                <%= current_account_list.contacts.late_by(31.days, 60.days).count %>
+              </span> partners <strong>30</strong> days late
             </div>
+
+            <div class="dash-stat">
+              <span class="count-big">
+                <%= current_account_list.contacts.late_by(61.days).count %>
+              </span> partners <strong>60</strong> days late
+            </div>
+
+
+            <a href="<%= contacts_path(filters: {status: ['Partner - Financial'], pledge_received: false}) %>"
+               class="see-all">
+               <i class="fa fa-plus-square-o"></i>
+               See all <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %> unreceived commitments
+            </a>
           </div>
         </div>
+      </div>
 
-        <div class="col-md-4">
-          <div class="panel panel-default dash-panel">
-            <div class="panel-heading">
-              Care
-              <%= link_to('+ '+_('Log Prayer Letter'),
-                          new_task_path(completed: true, activity_type: 'Newsletter'),
-                          class: 'badge badge-blue badge-right-well add_task', remote: true) %>
-            </div>
-            <div class="panel-body">
-              <div class="dash-stat">
-                <% current_account_list.tasks.completed.of_type('Newsletter').first.tap do |newsletter| %>
-                  <% if newsletter %>
-                    <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> since your last prayer letter
-                  <% else %>
-                    <%= _("You've never logged a prayer letter") %>
-                  <% end %>
+      <div class="col-md-4">
+        <div class="panel panel-default dash-panel">
+          <div class="panel-heading">
+            Care
+            <%= link_to('+ '+_('Log Prayer Letter'),
+                        new_task_path(completed: true, activity_type: 'Newsletter'),
+                        class: 'badge badge-blue badge-right-well add_task', remote: true) %>
+          </div>
+          <div class="panel-body">
+            <div class="dash-stat">
+              <% current_account_list.tasks.completed.of_type('Newsletter').first.tap do |newsletter| %>
+                <% if newsletter %>
+                  <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> since your last prayer letter
+                <% else %>
+                  <%= _("You've never logged a prayer letter") %>
                 <% end %>
-              </div>
-
-              <h4 class="title">Recent Birthdays</h4>
-              <% people_with_birthdays = current_account_list.people_with_birthdays(
-                                           Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
-                 birthdays_count = people_with_birthdays.count %>
-              <% if birthdays_count > 0 %>
-                <ul class="plain-list birthdays-list">
-                  <% people_with_birthdays.each do |person|
-                     p_exhibit = exhibit(person, self)%>
-                    <li>
-                      <%= link_to(p_exhibit, person) %>:
-                      <%= l(Date.new(Time.zone.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
-                      <%= link_to('', person.facebook_account.url, {class: "fa fa-facebook-square"}) if person.facebook_account %>
-                      <%= link_to('', person.twitter_account.url, {class: "fa fa-twitter-square"}) if person.twitter_account %>
-                      <%= mail_to(person.primary_email_address, '', {class: "fa fa-envelope"}) if person.primary_email_address %>
-                    </li>
-                  <% end %>
-                </ul>
-                <% more_bdays_text = '<i class="fa fa-plus-square-o"></i> '.html_safe +
-                                     _('See all %{c} Birthdays').localize % {c: birthdays_count} %>
-                <%= link_to(more_bdays_text, '#', class: 'see-all-birthdays') if birthdays_count > 5 %>
-              <% else %>
-                <%= _('No recent birthdays!') %>
               <% end %>
             </div>
+
+            <h4 class="title">Recent Birthdays</h4>
+            <% people_with_birthdays = current_account_list.people_with_birthdays(
+                                         Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
+               birthdays_count = people_with_birthdays.count %>
+            <% if birthdays_count > 0 %>
+              <ul class="plain-list birthdays-list">
+                <% people_with_birthdays.each do |person|
+                   p_exhibit = exhibit(person, self)%>
+                  <li>
+                    <%= link_to(p_exhibit, person) %>:
+                    <%= l(Date.new(Time.zone.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
+                    <%= link_to('', person.facebook_account.url, {class: "fa fa-facebook-square"}) if person.facebook_account %>
+                    <%= link_to('', person.twitter_account.url, {class: "fa fa-twitter-square"}) if person.twitter_account %>
+                    <%= mail_to(person.primary_email_address, '', {class: "fa fa-envelope"}) if person.primary_email_address %>
+                  </li>
+                <% end %>
+              </ul>
+              <% more_bdays_text = '<i class="fa fa-plus-square-o"></i> '.html_safe +
+                                   _('See all %{c} Birthdays').localize % {c: birthdays_count} %>
+              <%= link_to(more_bdays_text, '#', class: 'see-all-birthdays') if birthdays_count > 5 %>
+            <% else %>
+              <%= _('No recent birthdays!') %>
+            <% end %>
           </div>
         </div>
-
       </div>
-    </section>
+
+    </div>
 
     <section id="dash-progress">
       <div class="page-filters">
