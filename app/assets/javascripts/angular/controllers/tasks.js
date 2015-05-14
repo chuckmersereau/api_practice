@@ -172,8 +172,8 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
         });
     };
 
-    $scope.resetFilters = function(){
-        $scope.filter = {
+    var blankFilterObject = function() {
+        return {
             page: 'all',
             starred: '',
             completed: '',
@@ -198,8 +198,15 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             contactInfoFacebook: '',
             tasksPerGroup: 25
         };
+    }
+    $scope.resetFilters = function(){
+        $scope.filter = blankFilterObject();
     };
     $scope.resetFilters();
+
+    $scope.isEmptyFilter = function() {
+        return _.isEqual($scope.filter, blankFilterObject());
+    }
 
     $scope.$watch('filter', function (f, oldf) {
         $scope.filter.starred = f.page == 'starred' ? 'true' : ''
