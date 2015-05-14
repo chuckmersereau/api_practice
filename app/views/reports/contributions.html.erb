@@ -1,62 +1,68 @@
 <% if @start_date %>
-  <div class="filters">
-    <div style="float:left"><%= link_to(_('<< Previous Year'), contributions_reports_path(start_date: @start_date - 1.year), class: 'btn smallbtn') %></div>
-    <div style="float:right"><%= link_to(_('Donations'), donations_path, class: 'btn smallbtn') %></div>
-    <% unless @end_date >= Date.today %>
-      <div style="float:right"><%= link_to(_('Next Year >>'), contributions_reports_path(start_date: @start_date + 1.year), class: 'btn smallbtn') %>&nbsp;|&nbsp;</div>
-    <% end %>
-
+  <div class="row page-controls">
+    <div class="col-md-8 col-sm-8">
+      <%= link_to(_('<i class="fa fa-chevron-left"></i> Previous Year'), contributions_reports_path(start_date: @start_date - 1.year)) %>
+      <% unless @end_date >= Date.today %>
+        &nbsp; &nbsp; 
+        <%= link_to(_('Next Year <i class="fa fa-chevron-right"></i>'), contributions_reports_path(start_date: @start_date + 1.year)) %>
+      <% end %>
+    </div>
+    <div class="col-md-4 col-sm-4 text-right">
+      <%= link_to(_('Donations'), donations_path) %>
+    </div>
   </div>
   <div class="clr"></div>
   <h2><%= _('Contribution Report for %{start_date} through %{end_date}').localize % {start_date: l(@start_date), end_date: l(@end_date)} %></h2>
   <%= link_to _('Download as CSV spreadsheet file'), request.parameters.merge({ format: 'csv' }) %>
 <% end %>
-<table class="tablelist donations" id="donations_table">
-  <thead>
-    <tr>
-      <th><%= _('Donor') %></th>
-      <th><%= _('Status') %></th>
-      <th><%= _('Commitment Amount') %></th>
-      <th><%= _('Commitment Frequency') %></th>
-      <th><%= _('Average') %></th>
-      <% (0..11).reverse_each do |index| %>
-        <th class="right"><%= index.month.ago(@end_date).strftime '%b %y' %></th>
-      <% end %>
-      <th class="total right"><%= _('Total') %></th>
-    </tr>
-  </thead>
-  <tbody>
-    <% @donations.each do |key, row| %>
+<div class="table-responsive">
+  <table class="tablelist donations" id="donations_table">
+    <thead>
       <tr>
-        <td><%= link_to(row[:donor], contact_path(row[:id])) %></td>
-        <td><%= row[:status] %></td>
-        <td><%= number_to_current_currency(row[:pledge_amount]) %></td>
-        <td><%= Contact.pledge_frequencies[row[:pledge_frequency]] %></td>
-        <td><%= number_to_current_currency(row[:average], precision: 2) %></td>
+        <th><%= _('Donor') %></th>
+        <th><%= _('Status') %></th>
+        <th><%= _('Commitment Amount') %></th>
+        <th><%= _('Commitment Frequency') %></th>
+        <th><%= _('Average') %></th>
+        <% (0..11).reverse_each do |index| %>
+          <th class="right"><%= index.month.ago(@end_date).strftime '%b %y' %></th>
+        <% end %>
+        <th class="total right"><%= _('Total') %></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @donations.each do |key, row| %>
+        <tr>
+          <td><%= link_to(row[:donor], contact_path(row[:id])) %></td>
+          <td><%= row[:status] %></td>
+          <td><%= number_to_current_currency(row[:pledge_amount]) %></td>
+          <td><%= Contact.pledge_frequencies[row[:pledge_frequency]] %></td>
+          <td><%= number_to_current_currency(row[:average], precision: 2) %></td>
+          <% (0..11).reverse_each do |index| %>
+            <td class="right">
+              <% unless row[:amounts][index.month.ago(@end_date).strftime '%b %y'].nil? %>
+                <%= number_to_current_currency(row[:amounts][index.month.ago(@end_date).strftime '%b %y'][:value], currency: row[:amounts][index.month.ago(@end_date).strftime '%b %y'][:currency]) %>
+              <% end %>
+            </td>
+          <% end %>
+          <td class="total right"><%= number_to_current_currency(row[:total]) %></td>
+        </tr>
+      <% end %>
+      <tr class="sum">
+        <td><strong><%= _('Total Donations') %></strong></td>
+        <td></td>
+        <td><%= number_to_current_currency(@total_pledges) %></td>
+        <td></td>
+        <td><%= number_to_current_currency(@total_average) %></td>
         <% (0..11).reverse_each do |index| %>
           <td class="right">
-            <% unless row[:amounts][index.month.ago(@end_date).strftime '%b %y'].nil? %>
-              <%= number_to_current_currency(row[:amounts][index.month.ago(@end_date).strftime '%b %y'][:value], currency: row[:amounts][index.month.ago(@end_date).strftime '%b %y'][:currency]) %>
+            <% unless @sum_row[index.month.ago(@end_date).strftime '%b %y'].nil? %>
+              <%= number_to_current_currency(@sum_row[index.month.ago(@end_date).strftime '%b %y']) %>
             <% end %>
           </td>
         <% end %>
-        <td class="total right"><%= number_to_current_currency(row[:total]) %></td>
+        <td class="total"></td>
       </tr>
-    <% end %>
-    <tr class="sum">
-      <td><strong><%= _('Total Donations') %></strong></td>
-      <td></td>
-      <td><%= number_to_current_currency(@total_pledges) %></td>
-      <td></td>
-      <td><%= number_to_current_currency(@total_average) %></td>
-      <% (0..11).reverse_each do |index| %>
-        <td class="right">
-          <% unless @sum_row[index.month.ago(@end_date).strftime '%b %y'].nil? %>
-            <%= number_to_current_currency(@sum_row[index.month.ago(@end_date).strftime '%b %y']) %>
-          <% end %>
-        </td>
-      <% end %>
-      <td class="total"></td>
-    </tr>
-  </tbody>
-</table>
+    </tbody>
+  </table>
+</div>

@@ -1,57 +1,63 @@
 <% @contact = exhibit(@contact, self) if @contact %>
 <% unless params[:page] %>
   <% if @start_date %>
-    <div class="filters">
-      <div style="float:left"><%= link_to(_('<< Previous Month'), donations_path(start_date: @start_date - 1.month), class: 'btn smallbtn') %></div>
-      <div style="float:right"><%= link_to(_('Contribution Report'), contributions_reports_path, class: 'btn smallbtn') %></div>
-      <% unless @end_date >= Date.today %>
-        <div style="float:right"><%= link_to(_('Next Month >>'), donations_path(start_date: @start_date + 1.month), class: 'btn smallbtn') %>&nbsp;|&nbsp;</div>
-      <% end %>
-
+    <div class="row page-controls">
+      <div class="col-md-8 col-sm-8">
+        <%= link_to(_('<i class="fa fa-chevron-left"></i> Previous Month'), donations_path(start_date: @start_date - 1.month)) %>
+        <% unless @end_date >= Date.today %>
+          &nbsp; &nbsp; 
+          <%= link_to(_('Next Month <i class="fa fa-chevron-right"></i>'), donations_path(start_date: @start_date + 1.month)) %>
+        <% end %>
+      </div>
+      <div class="col-md-4 col-sm-4 text-right">
+        <%= link_to(_('Contribution Report'), contributions_reports_path) %>
+      </div>
     </div>
     <div class="clr"></div>
     <h2><%= _('Donations for %{start_date} through %{end_date}').localize % {start_date: l(@start_date), end_date: l(@end_date)} %></h2>
     <%= link_to('<i class="fa fa-plus-square"></i> '.html_safe + _('Add a donation'), new_donation_path, remote: true, class: 'no-new-tab') %>
     <br /><br />
   <% end %>
-<table class="tablelist donations" id="donations_table">
-  <thead>
-    <tr>
-      <% if @contact %>
-        <th><%= _('Donor') %></th>
-      <% end %>
-      <th class="date"><%= _('Date') %></th>
-      <% unless @contact %>
-        <th><%= _('Donor') %></th>
-      <% end %>
-      <th class="right"><%= _('Amount') %></th>
-      <% if current_account_list.multiple_designations %>
-        <th><%= _('Designation') %></th>
-      <% end %>
-      <th><%= _('Method') %></th>
-      <th><%= _('Motivation') %></th>
-      <%#<th class="appeal">Appeal</th>%>
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<% end %>
-
-<%= render donations %>
-
-<% unless params[:page] %>
-  </tbody>
-  <% unless @contact %>
-    <tfoot>
-      <tr class="sum">
-        <td></td>
-        <td class="right"><strong><%= _('Total Donations (%{count}):').localize % {count: donations.length} %></strong></td>
-        <td class="right"><%= number_to_current_currency(donations.to_a.sum(&:amount)) %></td>
-        <td colspan="4"></td>
+<div class="table-responsive">
+  <table class="tablelist donations" id="donations_table">
+    <thead>
+      <tr>
+        <% if @contact %>
+          <th><%= _('Donor') %></th>
+        <% end %>
+        <th class="date"><%= _('Date') %></th>
+        <% unless @contact %>
+          <th><%= _('Donor') %></th>
+        <% end %>
+        <th class="right"><%= _('Amount') %></th>
+        <% if current_account_list.multiple_designations %>
+          <th><%= _('Designation') %></th>
+        <% end %>
+        <th><%= _('Method') %></th>
+        <th><%= _('Motivation') %></th>
+        <%#<th class="appeal">Appeal</th>%>
+        <th></th>
       </tr>
-    </tfoot>
+    </thead>
+    <tbody>
   <% end %>
-</table>
+
+  <%= render donations %>
+
+  <% unless params[:page] %>
+    </tbody>
+    <% unless @contact %>
+      <tfoot>
+        <tr class="sum">
+          <td></td>
+          <td class="right"><strong><%= _('Total Donations (%{count}):').localize % {count: donations.length} %></strong></td>
+          <td class="right"><%= number_to_current_currency(donations.to_a.sum(&:amount)) %></td>
+          <td colspan="4"></td>
+        </tr>
+      </tfoot>
+    <% end %>
+  </table>
+</div><!-- responsive-table -->
 <% end %>
 
 <div id="js-edit_donation" style="display:none" title="<%= _('Edit Donation') %>">
