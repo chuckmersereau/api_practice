@@ -225,64 +225,66 @@
     <div class="col-md-9 col-sm-12" ng-cloak>
 
       <div id="contentbody" class="withleft">
-        <div class="page-filters" data-spy="affix" data-offset-top="182">
-          <div class="row">
-            <div class="col-xs-2 col-sm-2 col-xs-3 hidden-md hidden-lg">
-              <a class="btn btn-default btn-secondary toggle-mobile-filters"><i class="fa fa-bars"></i> Filters</a>
-            </div>
-
-            <div class="col-md-5 col-sm-5 col-xs-9 form-inline">
-              <input autocomplete="off" class="search_filter ui-autocomplete-input form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="contactQuery.name" size="40">
-              <span ng-show="contactsLoading"><i class="fa fa-spinner fa-spin"></i></span>
-            </div>
-            <div class="col-md-5 col-md-offset-2 col-sm-5 col-xs-12 text-right">
-
-              <div class="dropdown">
-                <%= link_to(_('Actions') + ' <span class="caret"></span>'.html_safe, "#",
-                            class: "btn btn-default dropdown-toggle", id: "action-drop",
-                            onclick: "_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'Bulk Actions']);",
-                            type: "button", 'data-toggle' => "dropdown",
-                            "aria-expanded" => "true", "data-disabled" => "true") %>
-                <%= render 'contacts_action_list' %>
+        <div class="sticky-page-filters" data-spy="affix" data-offset-top="182">
+          <div class="page-filters">
+            <div class="row">
+              <div class="col-xs-2 col-sm-2 col-xs-3 hidden-md hidden-lg">
+                <a class="btn btn-default btn-secondary toggle-mobile-filters"><i class="fa fa-bars"></i> Filters</a>
               </div>
 
-              <%= link_to(_('Merge'), '#', class: 'btn btn-default', data: {behavior: 'merge'}) %>
-              <%= hidden_field_tag :selected_ids %>
+              <div class="col-md-5 col-sm-5 col-xs-9 form-inline">
+                <input autocomplete="off" class="search_filter ui-autocomplete-input form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="contactQuery.name" size="40">
+                <span ng-show="contactsLoading"><i class="fa fa-spinner fa-spin"></i></span>
+              </div>
+              <div class="col-md-5 col-md-offset-2 col-sm-5 col-xs-12 text-right">
 
-              <%= link_to(_('Export'), params.merge(format: 'csv'), class: "btn btn-default") %>
-              <span class="btn btn-default"><input type="checkbox" class="checkall" /></span>
+                <div class="dropdown">
+                  <%= link_to(_('Actions') + ' <span class="caret"></span>'.html_safe, "#",
+                              class: "btn btn-default dropdown-toggle", id: "action-drop",
+                              onclick: "_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'Bulk Actions']);",
+                              type: "button", 'data-toggle' => "dropdown",
+                              "aria-expanded" => "true", "data-disabled" => "true") %>
+                  <%= render 'contacts_action_list' %>
+                </div>
 
+                <%= link_to(_('Merge'), '#', class: 'btn btn-default', data: {behavior: 'merge'}) %>
+                <%= hidden_field_tag :selected_ids %>
+
+                <%= link_to(_('Export'), params.merge(format: 'csv'), class: "btn btn-default") %>
+                <span class="btn btn-default"><input type="checkbox" class="checkall" /></span>
+
+              </div>
             </div>
           </div>
-        </div>
 
-        <div class="row page-controls row-no-padding">
-          <div class="col-md-8 col-sm-8">
-            <%= _('Showing') %> <b>{{page.from}}&nbsp;-&nbsp;{{page.to}}</b> <%= _('of') %> <b>{{totalContacts}}</b>
-            <div class="pagination">
-              <span class="previous_page disabled" ng-show="page.current === 1">
-                <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
-              </span>
-              <a class="previous_page" rel="prev start" href="#" ng-click="page.current=page.current-1" ng-show="page.current > 1">
-                <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
-              </a>
+          <div class="row page-controls">
+            <div class="col-md-8 col-sm-8">
+              <%= _('Showing') %> <b>{{page.from}}&nbsp;-&nbsp;{{page.to}}</b> <%= _('of') %> <b>{{totalContacts}}</b>
+              <div class="pagination">
+                <span class="previous_page disabled" ng-show="page.current === 1">
+                  <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
+                </span>
+                <a class="previous_page" rel="prev start" href="#" ng-click="page.current=page.current-1" ng-show="page.current > 1">
+                  <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
+                </a>
 
-              <span ng-repeat="n in [1, page.total] | makeRange">
-                <em class="current" ng-show="n === page.current">{{n}}</em>
-                <a rel="next" ng-show="n !== page.current && ((n > (page.current-8) && n < (page.current+8)) || n === 1 || n === page.total)" href="#" ng-click="page.current=n">{{n}}</a>
-                <span ng-show="(n === 2 && page.current > 9) || (n === page.total-1 && page.current < page.total - 8)">...</span>
-              </span>
+                <span ng-repeat="n in [1, page.total] | makeRange">
+                  <em class="current" ng-show="n === page.current">{{n}}</em>
+                  <a rel="next" ng-show="n !== page.current && ((n > (page.current-8) && n < (page.current+8)) || n === 1 || n === page.total)" href="#" ng-click="page.current=n">{{n}}</a>
+                  <span ng-show="(n === 2 && page.current > 9) || (n === page.total-1 && page.current < page.total - 8)">...</span>
+                </span>
 
-              <span class="next_page disabled" ng-show="page.current === page.total">
-                <%= _('Next') %> <i class="fa fa-chevron-right"></i>
-              </span>
-              <a class="next_page" rel="next" href="#" ng-click="page.current=page.current+1" ng-show="page.current < page.total">
-                <%= _('Next') %> <i class="fa fa-chevron-right"></i>
-              </a>
+                <span class="next_page disabled" ng-show="page.current === page.total">
+                  <%= _('Next') %> <i class="fa fa-chevron-right"></i>
+                </span>
+                <a class="next_page" rel="next" href="#" ng-click="page.current=page.current+1" ng-show="page.current < page.total">
+                  <%= _('Next') %> <i class="fa fa-chevron-right"></i>
+                </a>
+              </div>
             </div>
-          </div>
-          <div class="col-md-4 col-sm-4 text-right form-inline">
-            <%= _('Show') %>: <select ng-model="contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]" class="form-control"></select>
+            <div class="col-md-4 col-sm-4 text-right form-inline">
+              <%= _('Show') %>: <select ng-model="contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]" class="form-control"></select>
+            </div>
           </div>
         </div>
 

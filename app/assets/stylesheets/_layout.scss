@@ -391,7 +391,7 @@ div.right {
 #leftmenu.affix-bottom {
   height: auto;
 }
-.page-filters.affix {
+.sticky-page-filters.affix {
   top: 0;
   padding-top: 20px;
   z-index: 10;
@@ -401,12 +401,16 @@ div.right {
     #leftmenu.affix {
       width: 213px;
     }
-    .page-filters.affix {
+    .sticky-page-filters.affix {
       width: 100%;
       right: 0;
       .row {
         width: 750px;
         margin: auto;
+      }
+      .page-controls div[class*='col-'] {
+        padding-top: 5px;
+        padding-bottom: 5px;
       }
     }
   }
@@ -415,7 +419,7 @@ div.right {
     #leftmenu.affix {
       width: 213px;
     }
-    .page-filters.affix {
+    .sticky-page-filters.affix {
       width: 698px;
     }
   }
@@ -424,7 +428,7 @@ div.right {
     #leftmenu.affix {
       width: 263px;
     }
-    .page-filters.affix {
+    .sticky-page-filters.affix {
       width: 848px;
     }
   }
