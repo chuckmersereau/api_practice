@@ -149,8 +149,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
             }
         }
         if(angular.isDefined(prefs.pledge_frequencies) || angular.isDefined(prefs.pledge_received)){
-            $scope.contactQuery.pledge_frequencies = prefs.pledge_frequencies;
-            $scope.contactQuery.pledge_received = prefs.pledge_received;
+            $scope.contactQuery.pledge_frequencies = prefs.pledge_frequencies || [];
+            $scope.contactQuery.pledge_received = prefs.pledge_received || '';
             if(prefs.pledge_frequencies[0] || prefs.pledge_received){
                 jQuery("#filter_commitment_details").trigger("click");
             }
