@@ -16,8 +16,8 @@
     <tr>
       <th><%= _('Donor') %></th>
       <th><%= _('Status') %></th>
-      <th><%= _('Pledge Amount') %></th>
-      <th><%= _('Pledge Frequency') %></th>
+      <th><%= _('Commitment Amount') %></th>
+      <th><%= _('Commitment Frequency') %></th>
       <th><%= _('Average') %></th>
       <% (0..11).reverse_each do |index| %>
         <th class="right"><%= index.month.ago(@end_date).strftime '%b %y' %></th>
