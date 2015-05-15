@@ -1,4 +1,4 @@
-angular.module('mpdxApp').controller('progressController', function ($scope, $http, $filter) {
+angular.module('mpdxApp').controller('progressController', function ($scope, api, $filter) {
     var monthNames = ["January", "February", "March", "April", "May", "June",
         "July", "August", "September", "October", "November", "December"
     ];
@@ -56,7 +56,7 @@ angular.module('mpdxApp').controller('progressController', function ($scope, $ht
     var getData = function() {
         blankData();
         var start_date_string = $filter('date')(scope.start_date, 'yyyy-MM-dd');
-        $http.get('/home/progress.json?start_date='+start_date_string).success(function(newData){
+        api.get('progress.json?start_date='+start_date_string).success(function(newData){
             scope.data = newData;
         });
     }
