@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-05-13 13:16-0400\n"
-"PO-Revision-Date: 2015-05-13 13:16-0400\n"
+"POT-Creation-Date: 2015-05-15 14:03-0400\n"
+"PO-Revision-Date: 2015-05-15 14:03-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -288,9 +288,6 @@ msgstr ""
 msgid "Appeals"
 msgstr ""
 
-msgid "Apply Filters"
-msgstr ""
-
 msgid "Appointment"
 msgstr ""
 
@@ -454,6 +451,9 @@ msgstr ""
 msgid "Commitment Amount"
 msgstr ""
 
+msgid "Commitment Details"
+msgstr ""
+
 msgid "Commitment Frequency"
 msgstr ""
 
@@ -505,9 +505,6 @@ msgstr ""
 msgid "Contact Church"
 msgstr ""
 
-msgid "Contact City"
-msgstr ""
-
 msgid "Contact Commitment Frequency"
 msgstr ""
 
@@ -520,16 +517,13 @@ msgstr ""
 msgid "Contact Likely To Give"
 msgstr ""
 
-msgid "Contact Name"
+msgid "Contact Location"
 msgstr ""
 
 msgid "Contact Newsletter"
 msgstr ""
 
 msgid "Contact Referrer"
-msgstr ""
-
-msgid "Contact State"
 msgstr ""
 
 msgid "Contact Status"
@@ -751,6 +745,9 @@ msgstr ""
 msgid "Edit Donation"
 msgstr ""
 
+msgid "Edit Facebook Profile"
+msgstr ""
+
 msgid "Edit Fields"
 msgstr ""
 
@@ -824,6 +821,9 @@ msgid "Facebook Message"
 msgstr ""
 
 msgid "Facebook Profile"
+msgstr ""
+
+msgid "Facebook Profile Url"
 msgstr ""
 
 msgid "Facebook:"
@@ -1704,6 +1704,9 @@ msgstr ""
 msgid "Search contacts..."
 msgstr ""
 
+msgid "Search or select below"
+msgstr ""
+
 msgid "Seasonal"
 msgstr ""
 
@@ -1907,10 +1910,10 @@ msgid ""
 "  unable to sync your contacts to MailChimp."
 msgstr ""
 
-msgid "The Spouse Last Name, Greeting and Envelope Greeting fields will get "
+msgid "The Spouse Last Name, Greeting and Envelope Greeting fields will get automatic defaults if you leave them blank."
 msgstr ""
 
-msgid "The Status, Commitment Frequency, and Newsletter values must also exactly "
+msgid "The Status, Commitment Frequency, and Newsletter values must also exactly match one of the \"Cell Options\" in the sample."
 msgstr ""
 
 msgid "The connection to your LinkedIn account needs to be renewed."
@@ -1968,12 +1971,6 @@ msgid "This contact doesn't have any recent facebook posts"
 msgstr ""
 
 msgid "This contact will be set to 'Never Ask'. Is that what you want to do?"
-msgstr ""
-
-msgid "This filter will search for people who are set to receive your email newsletter and have a valid email address"
-msgstr ""
-
-msgid "This filter will search for people who are set to receive your physical newsletter and have a mailing address"
 msgstr ""
 
 msgid "This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx."
@@ -2090,7 +2087,7 @@ msgstr ""
 msgid "Weekly"
 msgstr ""
 
-msgid "When you finish formatting your data, remove any blank or sample rows "
+msgid "When you finish formatting your data, remove any blank or sample rows at the bottom, upload your file below, optionally specify a tag, and click \"Preview Import.\""
 msgstr ""
 
 msgid "Which one of your calendars would you like to push MPDX tasks to?"
@@ -2103,12 +2100,6 @@ msgid "Widowed"
 msgstr ""
 
 msgid "Wife"
-msgstr ""
-
-msgid "With Email Address"
-msgstr ""
-
-msgid "With Mailing Address"
 msgstr ""
 
 msgid "Work"
@@ -2126,7 +2117,7 @@ msgstr ""
 msgid "You can now export your contacts to MailChimp."
 msgstr ""
 
-msgid "You can then review the import to ensure it is correct and re-upload as needed. "
+msgid "You can then review the import to ensure it is correct and re-upload as needed. Note that the sample itself isn't fully valid because we included instructions at the bottom."
 msgstr ""
 
 msgid "You don't have any outstanding tasks for this contact. "
