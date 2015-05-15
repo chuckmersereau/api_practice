@@ -248,7 +248,6 @@ msgid "Add another Account"
 msgstr "Ajouter un autre compte"
 
 #, fuzzy
-#, fuzzy
 msgid "Add contact"
 msgstr "Ajouter un contact"
 
@@ -557,7 +556,6 @@ msgid "Commitment Amount"
 msgstr "Montant de l'engagement"
 
 #, fuzzy
-#, fuzzy
 msgid "Commitment Details"
 msgstr "Engagement reçu"
 
@@ -618,7 +616,6 @@ msgstr "Fréquence de l'engagement du contact"
 msgid "Contact Details"
 msgstr "Coordonnées"
 
-#, fuzzy
 #, fuzzy
 msgid "Contact Information"
 msgstr "Coordonnées"
@@ -871,7 +868,6 @@ msgid "Edit Donation"
 msgstr "Modifier les dons"
 
 #, fuzzy
-#, fuzzy
 msgid "Edit Facebook Profile"
 msgstr "Profile Facebook"
 
@@ -955,7 +951,6 @@ msgstr "Message Facebook"
 msgid "Facebook Profile"
 msgstr "Profile Facebook"
 
-#, fuzzy
 #, fuzzy
 msgid "Facebook Profile Url"
 msgstr "Profile Facebook"
@@ -1456,7 +1451,6 @@ msgid "Metro Area"
 msgstr "Région métropolitaine"
 
 #, fuzzy
-#, fuzzy
 msgid "Metro area"
 msgstr "Région métropolitaine"
 
@@ -1780,7 +1774,6 @@ msgid "Postal Code"
 msgstr "Code postal"
 
 #, fuzzy
-#, fuzzy
 msgid "Postal code"
 msgstr "Code postal"
 
@@ -1876,7 +1869,6 @@ msgstr "Référé par :"
 msgid "Referrer"
 msgstr "Attribué par"
 
-#, fuzzy
 #, fuzzy
 msgid "Referrers"
 msgstr "Attribué par"
@@ -2013,7 +2005,6 @@ msgstr "Afficher"
 msgid "Show:"
 msgstr "Afficher :"
 
-#, fuzzy
 #, fuzzy
 msgid "Showing"
 msgstr "Afficher"

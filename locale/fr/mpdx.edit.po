@@ -13,6 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.7.5\n"
+"POT-Creation-Date: 2015-05-15 14:03-0400\n"
 
 msgid " "
 msgstr ""
@@ -203,7 +204,6 @@ msgstr "Ajouter une adresse e-mail"
 msgid "Add another Account"
 msgstr "Ajouter un autre compte"
 
-#, fuzzy
 #, fuzzy
 msgid "Add contact"
 msgstr "Ajouter un contact"
@@ -452,7 +452,6 @@ msgid "Commitment Amount"
 msgstr "Montant de l'engagement"
 
 #, fuzzy
-#, fuzzy
 msgid "Commitment Details"
 msgstr "Engagement reçu"
 
@@ -513,7 +512,6 @@ msgstr "Fréquence de l'engagement du contact"
 msgid "Contact Details"
 msgstr "Coordonnées"
 
-#, fuzzy
 #, fuzzy
 msgid "Contact Information"
 msgstr "Coordonnées"
@@ -752,7 +750,6 @@ msgid "Edit Donation"
 msgstr "Modifier les dons"
 
 #, fuzzy
-#, fuzzy
 msgid "Edit Facebook Profile"
 msgstr "Profile Facebook"
 
@@ -831,7 +828,6 @@ msgstr "Message Facebook"
 msgid "Facebook Profile"
 msgstr "Profile Facebook"
 
-#, fuzzy
 #, fuzzy
 msgid "Facebook Profile Url"
 msgstr "Profile Facebook"
@@ -1256,7 +1252,6 @@ msgid "Metro Area"
 msgstr "Région métropolitaine"
 
 #, fuzzy
-#, fuzzy
 msgid "Metro area"
 msgstr "Région métropolitaine"
 
@@ -1546,7 +1541,6 @@ msgid "Postal Code"
 msgstr "Code postal"
 
 #, fuzzy
-#, fuzzy
 msgid "Postal code"
 msgstr "Code postal"
 
@@ -1640,7 +1634,6 @@ msgstr "Référé par :"
 msgid "Referrer"
 msgstr "Attribué par"
 
-#, fuzzy
 #, fuzzy
 msgid "Referrers"
 msgstr "Attribué par"
@@ -1777,7 +1770,6 @@ msgstr "Afficher"
 msgid "Show:"
 msgstr "Afficher :"
 
-#, fuzzy
 #, fuzzy
 msgid "Showing"
 msgstr "Afficher"
@@ -2249,37 +2241,46 @@ msgstr "à"
 msgid "with invalid addresses"
 msgstr "Avec une adresse e-mail valide"
 
-#~ msgid "When you finish formatting your data, remove any blank or sample rows "
-#~ msgstr ""
-#~ "Lorsque vous avez terminé le formatage de vos données, supprimer toutes les li"
-#~ "gnes ou échantillons vides"
-#~ msgid ""
-#~ "You can then review the import to ensure it is correct and re-upload as needed"
-#~ ". "
-#~ msgstr ""
-#~ "Vous pouvez ensuite passer en revue l'importation pour assurer qu'elle est cor"
-#~ "recte et re-télécharger si nécessaire."
 #~ msgid "Apply Filters"
 #~ msgstr "Appliquer des filtres"
+
 #~ msgid "Contact City"
 #~ msgstr "Ville du contact"
+
 #~ msgid "Contact Name"
 #~ msgstr "Nom du contact"
+
 #~ msgid "Contact State"
 #~ msgstr "Etat du contact"
+
 #~ msgid ""
 #~ "This filter will search for people who are set to receive your email newslette"
 #~ "r and have a valid email address"
 #~ msgstr ""
 #~ "Ce filtre recherchera les personnes qui ont une configuration permettant de re"
 #~ "cevoir votre lettre de nouvelle par email et qui ont une adresse email valide."
+
 #~ msgid ""
 #~ "This filter will search for people who are set to receive your physical newsle"
 #~ "tter and have a mailing address"
 #~ msgstr ""
 #~ "Ce filtre recherchera les personnes qui ont une configuration permettant de re"
 #~ "cevoir votre lettre de nouvelle par la poste et qui ont une adresse postale"
+
+#~ msgid "When you finish formatting your data, remove any blank or sample rows "
+#~ msgstr ""
+#~ "Lorsque vous avez terminé le formatage de vos données, supprimer toutes les li"
+#~ "gnes ou échantillons vides"
+
 #~ msgid "With Email Address"
 #~ msgstr "Avec adresse e-mail"
+
 #~ msgid "With Mailing Address"
 #~ msgstr "Avec adresse postale"
+
+#~ msgid ""
+#~ "You can then review the import to ensure it is correct and re-upload as needed"
+#~ ". "
+#~ msgstr ""
+#~ "Vous pouvez ensuite passer en revue l'importation pour assurer qu'elle est cor"
+#~ "recte et re-télécharger si nécessaire."
