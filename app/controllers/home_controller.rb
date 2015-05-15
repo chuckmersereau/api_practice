@@ -18,7 +18,7 @@ class HomeController < ApplicationController
   end
 
   def progress
-    redirect_to '/#dash-progress' && return unless request.xhr?
+    redirect_to '/#dash-progress' && return unless request.xhr? || request.format.json?
 
     if params[:start_date]
       @start_date = Date.parse(params[:start_date])
@@ -102,7 +102,10 @@ class HomeController < ApplicationController
         referrals: current_account_list.contacts
                    .created_between(@start_date, @end_date)
                    .joins(:contact_referrals_to_me).uniq
-                   .count
+                   .count,
+        referrals_on_hand: current_account_list.contacts.with_referrals
+                           .where(status: Contact::IN_PROGRESS_STATUSES)
+                           .count
       }
     }
     @counts[:electronic][:sent] = @counts[:email][:sent] +
@@ -111,6 +114,8 @@ class HomeController < ApplicationController
     @counts[:electronic][:received] = @counts[:email][:received] +
                                       @counts[:facebook][:received] +
                                       @counts[:text_message][:received]
+
+    render json: @counts if request.format.json?
   end
 
   def login
