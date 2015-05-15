@@ -5,28 +5,15 @@
         <%= link_to(_('Select all duplicates'), '#', class: 'select_all') %>
         <% @contact_sets.each do |set| %>
           <div class="duplicate_set">
-                <table class="tablelist" width="10%">
-                  <thead>
-                  <tr>
-                    <th><%= _('Select Primary') %></th>
-                    <th><%= _('Name') %></th>
-                    <th><%= _('Address') %></th>
-                    <th><%= _('Date Created') %></th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  <% set.each do |contact| %>
-                      <tr>
-                        <td width="11%"> <%= check_box_tag 'merge_sets[]'%></td>
-                        <td width="15%"><%= link_to(contact.name, contact_path(contact), target: '_blank')  %></td>
-                        <td width="25%"><%= contact.primary_address.address %></td>
-                        <td><%= contact.created_at.strftime('%B %d, %Y') %></td>
-                      </tr>
-                  <% end %>
-                  </tbody>
-                </table>
-
-
+            <% set.each.with_index do |contact,index| %>
+                <%if index==0 %><%= _('Select a contact to be the primary. The name and status of each are below.') %><% end %>
+                <div class="contact">
+                  <%= radio_button_tag set.collect(&:id), contact.id, false,
+                                       checked: (contact.id == set.collect(&:id).first) %>
+                  <%= link_to(contact.name, contact_path(contact), style: 'padding: 3%', target: '_blank')  %>
+                  <%= contact.status %>
+                </div>
+            <% end %>
             <%= check_box_tag 'merge_sets[]', set.collect(&:id).join(',') %>
             <%= _('Merge these contacts') %><br />
             <%= link_to(_('These are not duplicates'), not_duplicates_contacts_path(ids: set.collect(&:id).join(',')),
