@@ -1,5 +1,13 @@
 angular.module('mpdxApp').controller('progressController', function (api) {
-    this.dateRange = 'May 11 - May 17'
+    var monthNames = ["January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    this.start_date = new Date();
+    this.start_date.setHours(0,0,0,0);
+    this.start_date.setDate(this.start_date.getDate() - this.start_date.getDay());
+    this.end_date = new Date(this.start_date);
+    this.end_date.setDate(this.start_date.getDate() + 7);
     this.data = {
         contacts: {
             active: 10,
@@ -40,5 +48,15 @@ angular.module('mpdxApp').controller('progressController', function (api) {
             thank_yous: 3,
             reminders: 3
         }
+    };
+
+    this.nextWeek = function() {
+        this.start_date.setDate(this.start_date.getDate() + 7);
+        this.end_date.setDate(this.end_date.getDate() + 7);
+    }
+
+    this.previousWeek = function() {
+        this.start_date.setDate(this.start_date.getDate() - 7);
+        this.end_date.setDate(this.end_date.getDate() - 7);
     }
 });
