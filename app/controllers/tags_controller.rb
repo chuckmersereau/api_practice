@@ -17,7 +17,6 @@ class TagsController < ApplicationController
       taggables = current_account_list.tasks.tagged_with(params[:remove_tag_name])
       tag_type = 'Activity'
     else
-      return if params[:remove_tag_contact_ids].blank?
       taggableslist = current_account_list.contacts.where(id: params[:remove_tag_contact_ids].split(','))
       taggables = taggableslist.tagged_with(params[:remove_tag_name])
       tag_type = 'Contact'
