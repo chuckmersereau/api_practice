@@ -59,29 +59,23 @@
           </div>
           <div class="panel-body">
 
-            <div class="dash-stat">
+            <a href="<%= contacts_path(filters: {status: ['Partner - Financial'], pledge_received: false}) %>"
+               class="dash-stat">
               <span class="count-big">
                 <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %>
               </span> first gift not received
-            </div>
+            </a>
 
-            <div class="dash-stat">
+            <a href="#" class="dash-stat late-partners-count">
               <span class="count-big">
                 <%= current_account_list.contacts.late_by(31.days, 60.days).count %>
               </span> partners <strong>30</strong> days late
-            </div>
+            </a>
 
-            <div class="dash-stat">
+            <a href="#" class="dash-stat late-partners-count">
               <span class="count-big">
                 <%= current_account_list.contacts.late_by(61.days).count %>
               </span> partners <strong>60</strong> days late
-            </div>
-
-
-            <a href="<%= contacts_path(filters: {status: ['Partner - Financial'], pledge_received: false}) %>"
-               class="see-all">
-               <i class="fa fa-plus-square-o"></i>
-               See all <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %> unreceived commitments
             </a>
           </div>
         </div>
@@ -256,4 +250,5 @@
   </div>
 </div>
 <task-followup-dialog id="task-followup-dialog"></task-followup-dialog>
+<%= render 'home/late_partners_dialog' %>
 <%= render 'tasks/results_modal' %>
