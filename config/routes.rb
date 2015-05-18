@@ -133,9 +133,6 @@ Rails.application.routes.draw do
 
   resource :home, only: [:index], controller: :home do
     get "index"
-    get "connect"
-    get "care"
-    get "cultivate"
     get "change_account_list"
     get "download_data_check"
   end

@@ -5,18 +5,6 @@ class HomeController < ApplicationController
     @page_title = _('Dashboard')
   end
 
-  def connect
-    redirect_to '/#dash-connect' && return unless request.xhr?
-  end
-
-  def cultivate
-    redirect_to '/#dash-cultivate' && return unless request.xhr?
-  end
-
-  def care
-    redirect_to '/#dash-care' && return unless request.xhr?
-  end
-
   def login
     render layout: false
   end
