@@ -2,7 +2,7 @@
     <div ng-repeat="appeal in appeals | orderBy:'parseDate(created_at)':reverse"
          class="appeal-single {{progressClass(appeal)}}" ng-click="editAppeal(appeal.id)">
          <div class="dash-stat">
-            <span class="count-big">
+            <span class="progress-total-donations count-big">
                 ${{formatNumber(donationTotal(appeal.donations).sum)}}
             </span>
             /${{formatNumber(appeal.amount)}}
@@ -19,7 +19,10 @@
     </div>
 </div>
 <a href="" class="see-all" ng-show="appeals.length > 2 && !show_all" ng-click="show_all = true">
-    <i class="fa fa-plus-square-o"></i> See all {{appeals.length}} Appeals
+    <i class="fa fa-plus-square-o"></i> <%= _('See all {{appeals.length}} Appeals') %>
+</a>
+<a href="" class="see-all" ng-show="appeals.length > 2 && show_all" ng-click="show_all = false">
+    <i class="fa fa-minus-square-o"></i> <%= _('See less appeals') %>
 </a>
 <div class="seemore">
     <button ng-click="newAppeal()" class="btn btn-primary btn-sm"><%= _('Create New Appeal') %></button>

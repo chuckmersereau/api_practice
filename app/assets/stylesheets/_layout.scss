@@ -1801,12 +1801,23 @@ body.google_integrations_controller {
     padding: 14px 19px;
   }
 }
-.dash-tasks {}
+.dash-tasks .show-all {
+  margin-bottom: 5em;
+}
 .show-all .appeal-single:nth-child(n+3) {
   display: block;
 }
 appeals-list :not(.show-all) :nth-child(2) {
   margin-bottom: 0;
+}
+appeals-list .show-all {
+  .dash-progress {
+    height: 20px;
+    line-height: 18px;
+  }
+  .appeal-single {
+    margin-bottom: 0.5em;
+  }
 }
 .appeal-single {
   margin-bottom: 1.5em;
@@ -1829,15 +1840,15 @@ appeals-list :not(.show-all) :nth-child(2) {
 
   &.progress-green {
     .progress-bar { background: #009900 !important; }
-    .count-big { color: #009900; }
+    .progress-total-donations { color: #009900; }
   }
   &.progress-yellow {
     .progress-bar { background: orange !important; }
-    .count-big { color: orange; }
+    .progress-total-donations { color: orange; }
   }
   &.progress-red {
     .progress-bar { background: red !important; }
-    .count-big { color: red; }
+    .progress-total-donations { color: red; }
   }
 
   .progress-bar {
@@ -1850,7 +1861,6 @@ appeals-list :not(.show-all) :nth-child(2) {
   }
   .progress-count {
     display: inline-block;
-    line-height: 30px;
     vertical-align: top;
     font-weight: 600;
     margin-left: 1.5em;
