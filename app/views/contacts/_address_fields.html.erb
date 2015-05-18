@@ -15,30 +15,30 @@
   <% end %>
   <div class="row small-gutter">
     <div class="col-xs-9">
-      <%= builder.label :street %>
+      <%= builder.label :street, _('Street') %>
       <%= builder.text_area :street, rows: 2, placeholder: _('Street address'), class: 'form-control' %>
     </div>
     <div class="col-xs-3">
-      <%= builder.label :location %>
+      <%= builder.label :location, _('Location') %>
       <%= builder.select :location, builder.object.assignable_locations.collect { |l| [_(l), l] }, {include_blank: true}, class: 'form-control' %>
     </div>
   </div>
   <div class="row small-gutter">
     <div class="col-xs-5">
       <div class="form-group">
-        <%= builder.label :city %>
+        <%= builder.label :city, _('City') %>
         <%= builder.text_field :city, placeholder: _('City'), class: 'form-control' %>
       </div>
     </div>
     <div class="col-xs-4">
       <div class="form-group">
-        <%= builder.label :state %>
+        <%= builder.label :state, _('State') %>
         <%= builder.text_field :state, placeholder: _('State'), class: 'form-control' %>
       </div>
     </div>
     <div class="col-xs-3">
       <div class="form-group">
-        <%= builder.label :postal_code %>
+        <%= builder.label :postal_code, _('Postal code') %>
         <%= builder.text_field :postal_code, placeholder: _('Postal Code'), class: 'form-control' %>
       </div>
     </div>
@@ -48,19 +48,19 @@
   <div class="row small-gutter">
     <div class="col-xs-5">
       <div class="form-group">
-        <%= builder.label :country %>
+        <%= builder.label :country, _('Country') %>
         <%= builder.country_select :country, nil, {include_blank: true}, {class: 'country_select form-control'} %>
       </div>
     </div>
     <div class="col-xs-4">
       <div class="form-group">
-        <%= builder.label :region %>
+        <%= builder.label :region, _('Region') %>
         <%= builder.text_field :region, placeholder: _('Region'), class: 'form-control address_region' %>
       </div>
     </div>
     <div class="col-xs-3">
       <div class="form-group">
-        <%= builder.label :metro_area %>
+        <%= builder.label :metro_area, _('Metro area') %>
         <%= builder.text_field :metro_area, placeholder: _('Metro Area'), class: 'form-control address_metro_area' %>
       </div>
     </div>

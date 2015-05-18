@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-04-08 16:24-0400\n"
-"PO-Revision-Date: 2015-04-08 16:24-0400\n"
+"POT-Creation-Date: 2015-05-13 13:16-0400\n"
+"PO-Revision-Date: 2015-05-13 13:16-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -31,9 +31,6 @@ msgid " to email donation services."
 msgstr ""
 
 msgid "\"Displaying #{b}%{from}#{sp}-#{sp}%{to}#{eb} of #{b}%{count}#{eb}\""
-msgstr ""
-
-msgid "%% of goal pledged (%{totals})"
 msgstr ""
 
 msgid "%{action} - %{time}"
@@ -61,6 +58,9 @@ msgid ""
 "%{org_name} said we have the wrong password for your account.\n"
 "\n"
 "Please try updating it here: %{link}"
+msgstr ""
+
+msgid "%{received} received/%{pledged} pledged of goal: %{goal}. Click to see outstanding financial partners."
 msgstr ""
 
 msgid "(Cancel merging)"
@@ -126,6 +126,9 @@ msgstr ""
 msgid "Account Name"
 msgstr ""
 
+msgid "Account Number"
+msgstr ""
+
 msgid "Account Settings"
 msgstr ""
 
@@ -156,13 +159,13 @@ msgstr ""
 msgid "Add Contact"
 msgstr ""
 
-msgid "Add Donor Account"
-msgstr ""
-
 msgid "Add Email Address"
 msgstr ""
 
 msgid "Add Note"
+msgstr ""
+
+msgid "Add Partner Account"
 msgstr ""
 
 msgid "Add Person/Child"
@@ -174,10 +177,10 @@ msgstr ""
 msgid "Add Picture"
 msgstr ""
 
-msgid "Add Referral"
+msgid "Add Referrals"
 msgstr ""
 
-msgid "Add Referrals"
+msgid "Add Referrer"
 msgstr ""
 
 msgid "Add Relationship"
@@ -220,6 +223,9 @@ msgid "Add some now"
 msgstr ""
 
 msgid "Add tags to these contacts"
+msgstr ""
+
+msgid "Address"
 msgstr ""
 
 msgid "Address no longer valid"
@@ -316,6 +322,9 @@ msgid "Are you sure you want to remove this connection?"
 msgstr ""
 
 msgid "Are you sure?"
+msgstr ""
+
+msgid "As of April 30, 2015 Facebook changed how they integrate with apps like MPDX so we cannot currently import Facebook contacts. We will investigate options in the future."
 msgstr ""
 
 msgid "Ask in Future"
@@ -448,6 +457,12 @@ msgstr ""
 msgid "Commitment Frequency"
 msgstr ""
 
+msgid "Commitment Not Received"
+msgstr ""
+
+msgid "Commitment Received"
+msgstr ""
+
 msgid "Commitment Start Date"
 msgstr ""
 
@@ -499,6 +514,9 @@ msgstr ""
 msgid "Contact Details"
 msgstr ""
 
+msgid "Contact Information"
+msgstr ""
+
 msgid "Contact Likely To Give"
 msgstr ""
 
@@ -544,9 +562,6 @@ msgstr ""
 msgid "Contacts List Filtered"
 msgstr ""
 
-msgid "Contacts are currently being imported"
-msgstr ""
-
 msgid "Contacts still in process:"
 msgstr ""
 
@@ -560,6 +575,9 @@ msgid "Contribution Report for %{start_date} through %{end_date}"
 msgstr ""
 
 msgid "Correspondence"
+msgstr ""
+
+msgid "Country"
 msgstr ""
 
 msgid "Cousin (Female)"
@@ -589,7 +607,13 @@ msgstr ""
 msgid "Create one now."
 msgstr ""
 
-msgid "Create task with selected:"
+msgid "Create tag for selected:"
+msgstr ""
+
+msgid "Create task for selected:"
+msgstr ""
+
+msgid "Creating tasks"
 msgstr ""
 
 msgid "Cultivate"
@@ -599,6 +623,9 @@ msgid "Cultivate Relationship"
 msgstr ""
 
 msgid "Current Gift"
+msgstr ""
+
+msgid "Current file: "
 msgstr ""
 
 msgid "Currently No People"
@@ -667,6 +694,9 @@ msgstr ""
 msgid "Do not add contacts who:"
 msgstr ""
 
+msgid "Don't send appeals"
+msgstr ""
+
 msgid "Donation History"
 msgstr ""
 
@@ -685,9 +715,6 @@ msgstr ""
 msgid "Donor"
 msgstr ""
 
-msgid "Donor Accounts"
-msgstr ""
-
 msgid "Donor ID"
 msgstr ""
 
@@ -695,6 +722,9 @@ msgid "Double click to cancel."
 msgstr ""
 
 msgid "Download as CSV spreadsheet file"
+msgstr ""
+
+msgid "Download the <a href=\"%{sample_url}\">sample MPDX csv import file</a>."
 msgstr ""
 
 msgid "Dr."
@@ -778,13 +808,22 @@ msgstr ""
 msgid "Error Saving!"
 msgstr ""
 
+msgid "Error loading CSV import preview. The MPDX team has been notified. If the problem persists please click \"Help\" above and submit a request."
+msgstr ""
+
 msgid "Expired Referral"
 msgstr ""
 
 msgid "Export"
 msgstr ""
 
+msgid "Export selected to CSV:"
+msgstr ""
+
 msgid "Facebook Message"
+msgstr ""
+
+msgid "Facebook Profile"
 msgstr ""
 
 msgid "Facebook:"
@@ -805,6 +844,12 @@ msgstr ""
 msgid "First"
 msgstr ""
 
+msgid "First name"
+msgstr ""
+
+msgid "Fix CSV Errors and Preview Again"
+msgstr ""
+
 msgid "For each event MPDX can notify you via email and also create a task entry reminding you to do something about it. The options below allow you to control that behavior."
 msgstr ""
 
@@ -814,6 +859,9 @@ msgid ""
 "  If you set it up with a fresh list, everyone set to receive your newsletter will get copied over\n"
 "  automatically, and from then on you can manage all the updates from MPDX (i.e. when you change an email\n"
 "  address on MPDX it will update on mailchimp)."
+msgstr ""
+
+msgid "Format your data to match the sample:"
 msgstr ""
 
 msgid "Fortnightly"
@@ -826,6 +874,9 @@ msgid "From donor system. To make changes, "
 msgstr ""
 
 msgid "Gave a special gift in the last 3 months"
+msgstr ""
+
+msgid "Gender"
 msgstr ""
 
 msgid "Gender:"
@@ -873,6 +924,9 @@ msgstr ""
 msgid "Grandson"
 msgstr ""
 
+msgid "Greeting"
+msgstr ""
+
 msgid "Greeting (used in csv download)"
 msgstr ""
 
@@ -898,6 +952,9 @@ msgid "History"
 msgstr ""
 
 msgid "Home"
+msgstr ""
+
+msgid "Home Phone"
 msgstr ""
 
 msgid "Hon."
@@ -932,6 +989,9 @@ msgid "Import Contacts"
 msgstr ""
 
 msgid "Import Google Contacts"
+msgstr ""
+
+msgid "Import Preview:"
 msgstr ""
 
 msgid "Import TntMPD DataSync file"
@@ -1009,7 +1069,13 @@ msgstr ""
 msgid "Last Year"
 msgstr ""
 
+msgid "Last name"
+msgstr ""
+
 msgid "Least Likely"
+msgstr ""
+
+msgid "Legal first name"
 msgstr ""
 
 msgid "Letter"
@@ -1119,6 +1185,9 @@ msgstr ""
 msgid "MailChimp list to use for your newsletter:"
 msgstr ""
 
+msgid "MailChimp subscriber email bounced"
+msgstr ""
+
 msgid "Mailchimp API Key no longer valid"
 msgstr ""
 
@@ -1132,6 +1201,9 @@ msgid "Map It"
 msgstr ""
 
 msgid "Map These Contacts"
+msgstr ""
+
+msgid "Marital status"
 msgstr ""
 
 msgid "Marital:"
@@ -1164,16 +1236,19 @@ msgstr ""
 msgid "Merge these people"
 msgstr ""
 
-msgid "Messages"
-msgstr ""
-
 msgid "Method"
 msgstr ""
 
 msgid "Metro Area"
 msgstr ""
 
+msgid "Metro area"
+msgstr ""
+
 msgid "Mobile"
+msgstr ""
+
+msgid "Mobile Phone"
 msgstr ""
 
 msgid "Monthly"
@@ -1320,6 +1395,9 @@ msgstr ""
 msgid "Not Interested"
 msgstr ""
 
+msgid "Not Received"
+msgstr ""
+
 msgid "Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version."
 msgstr ""
 
@@ -1338,6 +1416,9 @@ msgstr ""
 msgid "Occupation"
 msgstr ""
 
+msgid "Once you have a CSV import with valid and correct data you can click \"Run import\" from the preview page."
+msgstr ""
+
 msgid "Only add data to matched contact records when the current field is blank."
 msgstr ""
 
@@ -1345,6 +1426,9 @@ msgid "Only import contacts from certain groups"
 msgstr ""
 
 msgid "Opt-out of email newsletter"
+msgstr ""
+
+msgid "Or upload a new file and preview again:"
 msgstr ""
 
 msgid "Other"
@@ -1369,6 +1453,9 @@ msgid "Partner - Pray"
 msgstr ""
 
 msgid "Partner - Special"
+msgstr ""
+
+msgid "Partner Accounts"
 msgstr ""
 
 msgid "Partner Status"
@@ -1437,13 +1524,13 @@ msgstr ""
 msgid "Pledge Frequency"
 msgstr ""
 
-msgid "Pledge Received"
-msgstr ""
-
 msgid "Pledges:"
 msgstr ""
 
 msgid "Postal Code"
+msgstr ""
+
+msgid "Postal code"
 msgstr ""
 
 msgid "Prayer Request"
@@ -1464,13 +1551,28 @@ msgstr ""
 msgid "Preferred Email Address"
 msgstr ""
 
+msgid "Preparing preview. This takes some time if you have a large file ..."
+msgstr ""
+
+msgid "Preview Again"
+msgstr ""
+
+msgid "Preview Import"
+msgstr ""
+
 msgid "Previous"
+msgstr ""
+
+msgid "Primary"
 msgstr ""
 
 msgid "Primary Address"
 msgstr ""
 
 msgid "Primary Contact"
+msgstr ""
+
+msgid "Primary Email Address"
 msgstr ""
 
 msgid "Primary:"
@@ -1521,6 +1623,9 @@ msgstr ""
 msgid "Referrer"
 msgstr ""
 
+msgid "Referrers"
+msgstr ""
+
 msgid "Refresh Google Account"
 msgstr ""
 
@@ -1548,6 +1653,9 @@ msgstr ""
 msgid "Remove Tag"
 msgstr ""
 
+msgid "Remove tag from all contacts"
+msgstr ""
+
 msgid "Remove this Person"
 msgstr ""
 
@@ -1567,6 +1675,12 @@ msgid "Resulted in Appointments"
 msgstr ""
 
 msgid "Rev."
+msgstr ""
+
+msgid "Run Import"
+msgstr ""
+
+msgid "Sample_MPDX_Upload"
 msgstr ""
 
 msgid "Save"
@@ -1615,9 +1729,6 @@ msgid "Select none"
 msgstr ""
 
 msgid "Semi-Annual"
-msgstr ""
-
-msgid "Send Message"
 msgstr ""
 
 msgid "Send Paper Newsletter List"
@@ -1692,9 +1803,6 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-msgid "Status Update"
-msgstr ""
-
 msgid "Status:"
 msgstr ""
 
@@ -1707,6 +1815,9 @@ msgstr ""
 msgid "Stopped giving for the last 2 months"
 msgstr ""
 
+msgid "Street"
+msgstr ""
+
 msgid "Street Address"
 msgstr ""
 
@@ -1717,6 +1828,9 @@ msgid "Subject"
 msgstr ""
 
 msgid "Submit"
+msgstr ""
+
+msgid "Suffix"
 msgstr ""
 
 msgid "Suggested Increase Amount"
@@ -1741,6 +1855,9 @@ msgid "Sync Now"
 msgstr ""
 
 msgid "Tags"
+msgstr ""
+
+msgid "Tags for contacts:"
 msgstr ""
 
 msgid "Talk to In Person"
@@ -1778,6 +1895,9 @@ msgstr ""
 msgid "Thanks!"
 msgstr ""
 
+msgid "That email has been marked as \"no longer valid.\" "
+msgstr ""
+
 msgid "The Key Login Link"
 msgstr ""
 
@@ -1787,7 +1907,16 @@ msgid ""
 "  unable to sync your contacts to MailChimp."
 msgstr ""
 
+msgid "The Spouse Last Name, Greeting and Envelope Greeting fields will get "
+msgstr ""
+
+msgid "The Status, Commitment Frequency, and Newsletter values must also exactly "
+msgstr ""
+
 msgid "The connection to your LinkedIn account needs to be renewed."
+msgstr ""
+
+msgid "The headers in the first row must exactly match the sample."
 msgstr ""
 
 msgid ""
@@ -1859,7 +1988,13 @@ msgstr ""
 msgid "Timezone"
 msgstr ""
 
+msgid "Title"
+msgstr ""
+
 msgid "To Do"
+msgstr ""
+
+msgid "To import from a .csv spreadsheet file:"
 msgstr ""
 
 msgid "To use MPDX, you need to connect to your organization's donation system. If you raise funds through more than one organization, you can connect to multiple accounts."
@@ -1919,6 +2054,12 @@ msgstr ""
 msgid "Updated: "
 msgstr ""
 
+msgid "Updating contacts"
+msgstr ""
+
+msgid "Upload fixed CSV file"
+msgstr ""
+
 msgid "Visit Mobile Version"
 msgstr ""
 
@@ -1947,6 +2088,9 @@ msgid "Week of %{date1} to %{date2}"
 msgstr ""
 
 msgid "Weekly"
+msgstr ""
+
+msgid "When you finish formatting your data, remove any blank or sample rows "
 msgstr ""
 
 msgid "Which one of your calendars would you like to push MPDX tasks to?"
@@ -1982,6 +2126,9 @@ msgstr ""
 msgid "You can now export your contacts to MailChimp."
 msgstr ""
 
+msgid "You can then review the import to ensure it is correct and re-upload as needed. "
+msgstr ""
+
 msgid "You don't have any outstanding tasks for this contact. "
 msgstr ""
 
@@ -2010,6 +2157,9 @@ msgid "You need to go to https://mpdx.org and set up your account before using t
 msgstr ""
 
 msgid "You need to setup LinkedIn first"
+msgstr ""
+
+msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> "
 msgstr ""
 
 msgid "Your first name"

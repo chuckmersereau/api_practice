@@ -385,7 +385,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def import_data
-    organization_accounts.each(&:import_all_data)
+    organization_accounts.reject(&:disable_downloads).each(&:import_all_data)
     send_account_notifications
     queue_sync_with_google_contacts
   end

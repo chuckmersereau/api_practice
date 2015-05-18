@@ -186,9 +186,12 @@ describe MailChimpAccount do
 
       it 'should export to a list' do
         stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listBatchSubscribe')
-          .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3Anull%2C%22batch%22%3A%5B%7B%22EMAIL%22%3A%22foo%40example.com%22%2C%22FNAME%22%3A%22John%22'\
-                        '%2C%22LNAME%22%3A%22Smith%22%2C%22GROUPINGS%22%3A%5B%7B%22id%22%3A1%2C%22groups%22%3A%22Partner+-+Financial%22%7D%5D%7D%5D%2C%22update_existing%22'\
-                        '%3Atrue%2C%22double_optin%22%3Afalse%2C%22send_welcome%22%3Afalse%2C%22replace_interests%22%3Atrue%7D')
+          .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3Anull%2C%22'\
+            'batch%22%3A%5B%7B%22EMAIL%22%3A%22foo%40example.com%22%2C%22'\
+            'FNAME%22%3A%22John%22%2C%22LNAME%22%3A%22Smith%22%2C%22GREETING%22%3A%22John%22%2C%22'\
+            'GROUPINGS%22%3A%5B%7B%22id%22%3A1%2C%22groups%22%3A%22Partner+-+Financial%22%7D%5D%7D%5D%2C%22'\
+            'update_existing%22%3Atrue%2C%22double_optin%22%3Afalse%2C%22send_welcome%22%3Afalse%2C%22'\
+            'replace_interests%22%3Atrue%7D')
           .to_return(status: 200, body: '', headers: {})
 
         account.grouping_id = 1
@@ -196,7 +199,8 @@ describe MailChimpAccount do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact.people << create(:person, email: 'foo@example.com')
 
-        account.should_receive(:add_status_groups).and_return
+        expect(account).to receive(:add_status_groups)
+        expect(account).to receive(:add_greeting_merge_variable)
         account.send(:export_to_list, account.primary_list_id, [contact])
       end
 
@@ -259,7 +263,7 @@ describe MailChimpAccount do
       person.save
       contact.people << person
 
-      expect($rollout).to receive(:active?).with(:mailchimp_webhooks, account_list)
+      allow($rollout).to receive(:active?).with(:mailchimp_webhooks, account_list)
         .at_least(:once).and_return(true)
     end
 
@@ -361,6 +365,28 @@ describe MailChimpAccount do
           .and_return([{ 'url' => 'https://mpdx.org/mail_chimp_webhook/111' }])
         expect(account.gb).to_not receive(:list_webhook_add)
         account.setup_webhooks
+      end
+    end
+
+    context '#add_greeting_merge_variable' do
+      before do
+        account.primary_list_id = 'list1'
+      end
+
+      it 'does not add a greeting merge variable if it already exists' do
+        merge_vars = [
+          { 'name' => 'Greeting', 'req' => false, 'field_type' => 'text', 'public' => true, 'show' => true,
+            'order' => '5', 'default' => '', 'helptext' => '', 'size' => '25', 'tag' => 'GREETING', 'id' => 3 }
+        ]
+        expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return(merge_vars)
+        expect(account.gb).to_not receive(:list_merge_var_add)
+        account.add_greeting_merge_variable(account.primary_list_id)
+      end
+
+      it 'adds the greeting merge variable if it does not exist' do
+        expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return([])
+        expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
+        account.add_greeting_merge_variable(account.primary_list_id)
       end
     end
   end

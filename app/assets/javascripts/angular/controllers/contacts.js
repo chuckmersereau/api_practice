@@ -25,6 +25,11 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         appeal: [''],
         pledge_frequencies: [''],
         pledge_received: '',
+        contact_info_email: '',
+        contact_info_phone: '',
+        contact_info_mobile: '',
+        contact_info_addr: '',
+        contact_info_facebook: '',
         wildcardSearch: urlParameter.get('q'),
         viewPrefsLoaded: false
     };
@@ -56,6 +61,11 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         $scope.contactQuery.pledge_frequencies = [''];
         $scope.contactQuery.pledge_received = '';
         $scope.contactQuery.wildcardSearch = null;
+        $scope.contactQuery.contact_info_email = '';
+        $scope.contactQuery.contact_info_phone = '';
+        $scope.contactQuery.contact_info_mobile = '';
+        $scope.contactQuery.contact_info_addr = '';
+        $scope.contactQuery.contact_info_facebook = '';
         if(!_.isNull(document.getElementById('globalContactSearch'))) {
             document.getElementById('globalContactSearch').value = '';
         }
@@ -84,41 +94,11 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         if(angular.isDefined(prefs.tags)){
             $scope.contactQuery.tags = prefs.tags.split(',');
         }
-        if(angular.isDefined(prefs.name)){
-            $scope.contactQuery.name = prefs.name;
-            if(prefs.name){
-                jQuery("#leftmenu #filter_name").trigger("click");
-            }
-        }
         if(angular.isDefined(prefs.type)){
             $scope.contactQuery.type = prefs.type;
             if(prefs.type){
                 jQuery("#leftmenu #filter_type").trigger("click");
             }
-        }
-        if(angular.isDefined(prefs.city)){
-            $scope.contactQuery.city = prefs.city;
-            if(prefs.city[0]){
-                jQuery("#leftmenu #filter_city").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.state)){
-            $scope.contactQuery.state = prefs.state;
-            if(prefs.state[0]){
-                jQuery("#leftmenu #filter_state").trigger("click");
-            }
-        }
-        if(angular.isDefined(prefs.region)){
-          $scope.contactQuery.region = prefs.region;
-          if(prefs.region[0]){
-            jQuery("#leftmenu #filter_region").trigger("click");
-          }
-        }
-        if(angular.isDefined(prefs.metro_area)){
-          $scope.contactQuery.metro_area = prefs.metro_area;
-          if(prefs.metro_area[0]){
-            jQuery("#leftmenu #filter_metro_area").trigger("click");
-          }
         }
         if(angular.isDefined(prefs.newsletter)){
             $scope.contactQuery.newsletter = prefs.newsletter;
@@ -168,17 +148,39 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 jQuery("#leftmenu #filter_appeal").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.pledge_frequencies)){
-            $scope.contactQuery.pledge_frequencies = prefs.pledge_frequencies;
-            if(prefs.pledge_frequencies[0]){
-                jQuery("#leftmenu #filter_pledge_frequencies").trigger("click");
+        if(angular.isDefined(prefs.pledge_frequencies) || angular.isDefined(prefs.pledge_received)){
+            $scope.contactQuery.pledge_frequencies = prefs.pledge_frequencies || [];
+            $scope.contactQuery.pledge_received = prefs.pledge_received || '';
+            if(prefs.pledge_frequencies[0] || prefs.pledge_received){
+                jQuery("#filter_commitment_details").trigger("click");
             }
         }
-        if(angular.isDefined(prefs.pledge_received)){
-            $scope.contactQuery.pledge_received = prefs.pledge_received;
-            if(prefs.pledge_received){
-                jQuery("#leftmenu #filter_pledge_received").trigger("click");
+        if(angular.isDefined(prefs.city)
+          || angular.isDefined(prefs.state)
+          || angular.isDefined(prefs.region)
+          || angular.isDefined(prefs.metro_area)){
+            $scope.contactQuery.city = prefs.city || [];
+            $scope.contactQuery.state = prefs.state || [];
+            $scope.contactQuery.region = prefs.region || [];
+            $scope.contactQuery.metro_area = prefs.metro_area || [];
+            if((prefs.city && prefs.city[0]) || (prefs.state && prefs.state[0]) ||
+               (prefs.region && prefs.region[0]) || (prefs.metro_area && prefs.metro_area[0])){
+                jQuery("#filter_contact_location").trigger("click");
             }
+        }
+        if(angular.isDefined(prefs.contact_info_email)
+          || angular.isDefined(prefs.contact_info_phone)
+          || angular.isDefined(prefs.contact_info_mobile)
+          || angular.isDefined(prefs.contact_info_addr)
+          || angular.isDefined(prefs.contact_info_facebook)){
+            $scope.contactQuery.contact_info_email = prefs.contact_info_email;
+            $scope.contactQuery.contact_info_phone = prefs.contact_info_phone;
+            $scope.contactQuery.contact_info_mobile = prefs.contact_info_mobile;
+            $scope.contactQuery.contact_info_addr = prefs.contact_info_addr;
+            $scope.contactQuery.contact_info_facebook = prefs.contact_info_facebook;
+            if(prefs.contact_info_email || prefs.contact_info_phone || prefs.contact_info_mobile
+               || prefs.contact_info_addr || prefs.contact_info_facebook)
+                jQuery("#filter_contact_info").trigger("click");
         }
     });
 
@@ -213,6 +215,10 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
 
         refreshContacts();
     }, true);
+
+    $scope.isEmptyFilter = function() {
+        return isEmptyFilter($scope.contactQuery);
+    }
 
     var refreshContacts = function () {
       var q = $scope.contactQuery;
@@ -255,7 +261,12 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
                 '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch) +
                 '&filters[pledge_received]=' + encodeURIComponent(q.pledge_received) +
-                '&filters[pledge_frequencies][]=' + encodeURLarray(q.pledge_frequencies).join('&filters[pledge_frequencies][]=');
+                '&filters[pledge_frequencies][]=' + encodeURLarray(q.pledge_frequencies).join('&filters[pledge_frequencies][]=') +
+                '&filters[contact_info_email]=' + encodeURIComponent(q.contact_info_email) +
+                '&filters[contact_info_phone]=' + encodeURIComponent(q.contact_info_phone) +
+                '&filters[contact_info_mobile]=' + encodeURIComponent(q.contact_info_mobile) +
+                '&filters[contact_info_addr]=' + encodeURIComponent(q.contact_info_addr) +
+                '&filters[contact_info_facebook]=' + encodeURIComponent(q.contact_info_facebook) ;
         }
 
       api.call('get', requestUrl, {}, function (data) {
@@ -313,7 +324,12 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           relatedTaskAction: q.relatedTaskAction,
           appeal: q.appeal,
           pledge_frequencies: q.pledge_frequencies,
-          pledge_received: q.pledge_received
+          pledge_received: q.pledge_received,
+          contact_info_email: q.contact_info_email,
+          contact_info_phone: q.contact_info_phone,
+          contact_info_mobile: q.contact_info_mobile,
+          contact_info_addr: q.contact_info_addr,
+          contact_info_facebook: q.contact_info_facebook
         };
         if (!isEmptyFilter(prefsToSave)) {
           viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
@@ -329,7 +345,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
     }, true);
 
     var isEmptyFilter = function (q) {
-      if (!_.isEmpty(q.tags) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
+      if (!_.isEmpty(_.without(q.tags, '')) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
           !_.isEmpty(_.without(q.city, '')) || !_.isEmpty(_.without(q.state, '')) ||
           !_.isEmpty(_.without(q.region, '')) ||
           !_.isEmpty(_.without(q.metro_area, '')) || !_.isEmpty(q.newsletter) ||
@@ -340,7 +356,13 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           !_.isEmpty(_.without(q.timezone, '')) ||
           !_.isEmpty(_.without(q.appeal, '')) ||
           !_.isEmpty(_.without(q.pledge_frequencies, '')) ||
-          !_.isEmpty(_.without(q.pledge_received, ''))) {
+          !_.isEmpty(_.without(q.pledge_received, '')) ||
+          !_.isEmpty(q.contact_info_email) ||
+          !_.isEmpty(q.contact_info_phone) ||
+          !_.isEmpty(q.contact_info_mobile) ||
+          !_.isEmpty(q.contact_info_addr) ||
+          !_.isEmpty(q.contact_info_facebook))
+      {
         return false;
       }
 

@@ -1,0 +1,25 @@
+<div class="ui-dialog" style="width: 100%;">
+    <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
+        <span id="ui-id-7" class="ui-dialog-title"><%= _('Edit Facebook Profile') %></span>
+        <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" title="close" ng-click="cancel()">
+            <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
+            <span class="ui-button-text"><%= _('close') %></span>
+        </button>
+    </div>
+  <form ng-submit="save()">
+    <div class="ui-dialog-content ui-widget-content">
+        <div class="form_wrapper">
+          <div class="field">
+              <label><%= _('Facebook Profile Url') %></label>
+              <input type="text" ng-model="facebookUrl" auto-focus>
+          </div>
+        </div>
+    </div>
+    <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+      <div class="ui-dialog-buttonset">
+        <button type="submit"><%= _('Save') %></button>
+        <button ng-click="cancel()"><%= _('Cancel') %></button>
+      </div>
+    </div>
+  </form>
+</div>

@@ -25,42 +25,42 @@
       <div class="row small-gutter">
         <div class="col-md-3">
           <div class="form-group">
-            <%= builder.label :first_name %>
+            <%= builder.label :first_name, _('First name') %>
             <%= builder.text_field :first_name, class: 'first_name form-control' %>
           </div>
         </div>
         <div class="col-md-4">
           <div class="form-group">
-            <%= builder.label :last_name %>
+            <%= builder.label :last_name, _('Last name') %>
             <%= builder.text_field :last_name, class: 'last_name form-control' %>
           </div>
         </div>
         <div class="col-md-3">
           <div class="form-group">
-            <%= builder.label :legal_first_name %>
+            <%= builder.label :legal_first_name, _('Legal first name') %>
             <%= builder.text_field :legal_first_name, class: 'form-control' %>
           </div>
         </div>
         <div class="col-md-1">
           <div class="form-group">
-            <%= builder.label :title %>
+            <%= builder.label :title, _('Title') %>
             <%= builder.select :title, Person::TITLES.collect {|t| _(t)}, {include_blank: true}, class: 'form-control' %>
           </div>
         </div>
         <div class="col-md-1">
           <div class="form-group">
-            <%= builder.label :suffix %>
+            <%= builder.label :suffix, _('Suffix') %>
             <%= builder.select :suffix, Person::SUFFIXES.collect {|t| _(t)}, {include_blank: true}, class: 'form-control' %>
           </div>
         </div>
       </div>
       <div class="row small-gutter">
         <div class="col-md-2">
-          <%= builder.label :gender %>
+          <%= builder.label :gender, _('Gender') %>
           <%= builder.select :gender, [['Male','male'],['Female','female']], {include_blank: true}, class: 'form-control' %>
         </div>
         <div class="col-md-4">
-          <%= builder.label :birthday %>
+          <%= builder.label :birthday, _('Birthday') %>
           <div class="form-inline">
             <div class="form-group">
               <%= builder.select :birthday_month, t('date.month_names')[1..-1].collect.with_index {|m, i| [m,i + 1]}, {include_blank: true}, class: 'form-control' %>
@@ -74,11 +74,11 @@
           </div>
         </div>
         <div class="col-md-2">
-          <%= builder.label :marital_status %>
+          <%= builder.label :marital_status, _('Marital status') %>
           <%= builder.select :marital_status, Person::MARITAL_STATUSES.collect {|t| _(t)}, {include_blank: true}, class: 'form-control' %>
         </div>
         <div class="col-md-4">
-          <%= builder.label :anniversary %>
+          <%= builder.label :anniversary, _('Anniversary') %>
           <div class="form-inline">
             <div class="form-group">
               <%= builder.select :anniversary_month, t('date.month_names')[1..-1].collect.with_index {|m, i| [m,i + 1]}, {include_blank: true}, class: 'form-control' %>
@@ -96,13 +96,13 @@
       <div class="row small-gutter">
         <div class="col-md-6">
           <div class="form-group">
-            <%= builder.label :occupation %>
+            <%= builder.label :occupation, _('Occupation') %>
             <%= builder.text_field :occupation, class: 'form-control' %>
           </div>
         </div>
         <div class="col-md-6">
           <div class="form-group">
-            <%= builder.label :employer %>
+            <%= builder.label :employer, _('Employer') %>
             <%= builder.text_field :employer, class: 'form-control' %>
           </div>
         </div>
@@ -121,7 +121,7 @@
         <div class="col-md-6">
           <label><%= _('Social') %></label>
           <div class="social_container">
-            <span class="social_text">Add:</span>
+            <span class="social_text"><%= _('Add') %>:</span>
             <% %w[facebook twitter linkedin].each do |network| %>
               <% relationship = person.send(:"#{network}_accounts") %>
               <%= builder.fields_for :"#{network}_accounts" do |pf| %>
