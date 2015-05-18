@@ -7,98 +7,77 @@ class Api::V1::ProgressController < Api::V1::BaseController
     end
     @end_date = @start_date.end_of_week
 
-    counts = {
+    @counts = {
       phone: {
-        completed: all_tasks.of_type('Call')
-                   .with_result(%w(Completed Done))
-                   .count,
-        attempted: all_tasks.of_type('Call')
-                   .with_result(['Attempted - Left Message', 'Attempted'])
-                   .count,
-        received: all_tasks.of_type('Call')
-                  .with_result('Received')
-                  .count,
-        appointments: all_tasks.of_type(['Call', 'Talk to In Person'])
-                      .where(next_action: 'Appointment Scheduled')
-                      .count,
+        completed: task_count('Call', %w(Completed Done)),
+        attempted: task_count('Call', ['Attempted - Left Message', 'Attempted']),
+        received: task_count('Call', 'Received'),
+        appointments: task_count(['Call', 'Talk to In Person'], nil, 'Appointment Scheduled'),
         talktoinperson: all_tasks.of_type('Talk to In Person').count
       },
       email: {
-        sent: all_tasks.of_type('Email')
-              .with_result(%w(Completed Done))
-              .count,
-        received: all_tasks.of_type('Email')
-                  .with_result('Received')
-                  .count
+        sent: task_count('Email', %w(Completed Done)),
+        received: task_count('Email', 'Received')
       },
       facebook: {
-        sent: all_tasks.of_type('Facebook Message')
-              .with_result(%w(Completed Done))
-              .count,
-        received: all_tasks.of_type('Facebook Message')
-                  .with_result('Received')
-                  .count
+        sent: task_count('Facebook Message', %w(Completed Done)),
+        received: task_count('Facebook Message', 'Received')
       },
       text_message: {
-        sent: all_tasks.of_type('Text Message')
-              .with_result(%w(Completed Done))
-              .count,
-        received: all_tasks.of_type('Text Message')
-                  .with_result('Received')
-                  .count
+        sent: task_count('Text Message', %w(Completed Done)),
+        received: task_count('Text Message', 'Received')
       },
       electronic: {
         sent: 0,
         received: 0,
-        appointments: all_tasks.of_type(['Email', 'Facebook Message', 'Text Message'])
-                      .where(next_action: 'Appointment Scheduled')
-                      .count
+        appointments: task_count(['Email', 'Facebook Message', 'Text Message'], nil, 'Appointment Scheduled')
       },
       appointments: {
-        completed: all_tasks.of_type('Appointment')
-                   .with_result(%w(Completed Done))
-                   .count
+        completed: task_count('Appointment', %w(Completed Done))
       },
       correspondence: {
-        precall: all_tasks.of_type('Pre Call Letter')
-                 .with_result('Done')
-                 .count,
-        support_letters: all_tasks.of_type('Support Letter')
-                         .with_result('Done')
-                         .count,
-        thank_yous: all_tasks.of_type('Thank')
-                    .with_result('Done')
-                    .count,
-        reminders: all_tasks.of_type('Reminder Letter')
-                   .with_result('Done')
-                   .count
+        precall: task_count('Pre Call Letter', 'Done'),
+        support_letters: task_count('Support Letter', 'Done'),
+        thank_yous: task_count('Thank', 'Done'),
+        reminders: task_count('Reminder Letter', 'Done')
       },
-      contacts: {
-        active: current_account_list.contacts
-                .where(status: ['Never Contacted', 'Contact for Appointment', '', nil])
-                .count,
-        referrals: current_account_list.contacts
-                   .created_between(@start_date, @end_date)
-                   .joins(:contact_referrals_to_me).uniq
-                   .count,
-        referrals_on_hand: current_account_list.contacts.with_referrals
-                           .where(status: Contact::IN_PROGRESS_STATUSES)
-                           .count
-      }
+      contacts: contact_counts
     }
-    counts[:electronic][:sent] = counts[:email][:sent] +
-                                 counts[:facebook][:sent] +
-                                 counts[:text_message][:sent]
-    counts[:electronic][:received] = counts[:email][:received] +
-                                     counts[:facebook][:received] +
-                                     counts[:text_message][:received]
+    @counts[:electronic][:sent] = calc_electronic_count(:sent)
+    @counts[:electronic][:received] = calc_electronic_count(:received)
 
-    render json: counts, callback: params[:callback]
+    render json: @counts, callback: params[:callback]
   end
 
   protected
 
   def all_tasks
     current_account_list.tasks.completed_between(@start_date, @end_date)
+  end
+
+  def task_count(type, result, next_action = nil)
+    q = all_tasks.of_type(type)
+    q = q.with_result(result) if result.present?
+    q = q.where(next_action: next_action) if next_action.present?
+    q.count
+  end
+
+  def contact_counts
+    {
+      active: current_account_list.contacts
+              .where(status: ['Never Contacted', 'Contact for Appointment', '', nil])
+              .count,
+      referrals: current_account_list.contacts
+                 .created_between(@start_date, @end_date)
+                 .joins(:contact_referrals_to_me).uniq
+                 .count,
+      referrals_on_hand: current_account_list.contacts.with_referrals
+                         .where(status: Contact::IN_PROGRESS_STATUSES)
+                         .count
+    }
+  end
+
+  def calc_electronic_count(result)
+    @counts[:email][result] + @counts[:facebook][result] + @counts[:text_message][result]
   end
 end

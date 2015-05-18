@@ -17,7 +17,6 @@ class Activity < ActiveRecord::Base
 
   scope :overdue, -> { where(completed: false).where('start_at < ?', Time.zone.now.beginning_of_day).order('start_at') }
   scope :today, -> { where('start_at BETWEEN ? AND ?', Time.zone.now.beginning_of_day, Time.zone.now.end_of_day).order('start_at') }
-  scope :overdue_and_today, -> { where(completed: false).where('start_at < ?', Time.zone.now.end_of_day) }
   scope :tomorrow, -> { where('start_at BETWEEN ? AND ?', Time.zone.now.end_of_day, Time.zone.now.end_of_day + 1.day).order('start_at') }
   scope :future, -> { where('start_at > ?', Time.zone.now.end_of_day).order('start_at') }
   scope :upcoming, -> { where('start_at > ?', Time.zone.now.end_of_day + 1.day).order('start_at') }
@@ -66,5 +65,9 @@ class Activity < ActiveRecord::Base
 
   def activity_comment=(hash)
     activity_comments.new(hash) if hash.values.any?(&:present?)
+  end
+
+  def self.overdue_and_today
+    where(completed: false).where('start_at < ?', Time.zone.now.end_of_day)
   end
 end
