@@ -78,6 +78,13 @@ describe CsvImport do
       expect(contacts.size).to eq(1)
       expect(contacts.first.name).to eq('Lané, John')
     end
+
+    it 'does not error if csv file uses inconsistent newlines like \n then later \r\n' do
+      csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_inconsistent_newlines.csv')))
+      contacts = import.contacts
+      expect(contacts.size).to eq(1)
+      expect(contacts.first.name).to eq('Doe, John and Jane')
+    end
   end
 
   context '#import' do
