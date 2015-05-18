@@ -33,7 +33,7 @@
             Tasks overdue or due today
             <ul class="dash-tasks plain-list">
               <% current_account_list.tasks.overdue_and_today.group(:activity_type).count.each do |type, count| %>
-                <% next if type == '' %>
+                <% next if type == '' || !type %>
                 <li>
                   <a href="<%= tasks_path(filters: {actionSelect: [type]}) %>">
                     <span class="count"><%= count %></span>
