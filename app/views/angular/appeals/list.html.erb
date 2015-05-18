@@ -18,7 +18,7 @@
         {{appeal.name}}
     </div>
 </div>
-<a href="" class="see-all" ng-show="appeals.length > 2" ng-click="show_all = true" ng-hide="show_all">
+<a href="" class="see-all" ng-show="appeals.length > 2 && !show_all" ng-click="show_all = true">
     <i class="fa fa-plus-square-o"></i> See all {{appeals.length}} Appeals
 </a>
 <div class="seemore">
