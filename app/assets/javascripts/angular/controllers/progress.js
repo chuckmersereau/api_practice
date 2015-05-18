@@ -1,7 +1,4 @@
 angular.module('mpdxApp').controller('progressController', function ($scope, api, $filter) {
-    var monthNames = ["January", "February", "March", "April", "May", "June",
-        "July", "August", "September", "October", "November", "December"
-    ];
     var scope = this;
 
     this.start_date = new Date();

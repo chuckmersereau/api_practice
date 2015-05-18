@@ -298,7 +298,7 @@ angular.module('mpdxApp')
                   if(goal === 0){
                     return 0;
                   }
-                  return parseInt(($scope.donationTotal(appeal.donations).sum / goal) * 100);
+                  return Math.round(($scope.donationTotal(appeal.donations).sum / goal) * 100);
                 };
 
                 $scope.progressClass = function(appeal) {
