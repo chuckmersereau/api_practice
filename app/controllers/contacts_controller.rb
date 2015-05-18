@@ -335,6 +335,6 @@ class ContactsController < ApplicationController
   end
 
   def csv_primary_emails_only_param
-    @csv_primary_emails_only ||= params.permit(:csv_primary_emails_only)
+    @csv_primary_emails_only ||= params[:csv_primary_emails_only]
   end
 end
