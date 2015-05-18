@@ -106,7 +106,7 @@
               <% end %>
             </div>
 
-            <h4 class="title">Recent Birthdays</h4>
+            <h4 class="title">Birthdays This Week</h4>
             <% people_with_birthdays = current_account_list.people_with_birthdays(
                                          Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
                birthdays_count = people_with_birthdays.count %>
@@ -125,9 +125,9 @@
               </ul>
               <% more_bdays_text = '<i class="fa fa-plus-square-o"></i> '.html_safe +
                                    _('See all %{c} Birthdays').localize % {c: birthdays_count} %>
-              <%= link_to(more_bdays_text, '#', class: 'see-all-birthdays') if birthdays_count > 5 %>
+              <%= link_to(more_bdays_text, '#', class: 'see-all see-all-birthdays') if birthdays_count > 5 %>
             <% else %>
-              <%= _('No recent birthdays!') %>
+              <%= _('No birthdays this week!') %>
             <% end %>
           </div>
         </div>

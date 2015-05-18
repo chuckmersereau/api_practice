@@ -8,6 +8,7 @@ $ ->
     $('.see-all-birthdays').click ->
       $('.see-all-birthdays').hide()
       $('.birthdays-list').addClass('show_all')
+      return false
 
 $.mpdx.loadDashTabData = (hash) ->
   hash ||= '#dash-connect'
