@@ -35,7 +35,7 @@
               <% current_account_list.tasks.overdue_and_today.group(:activity_type).count.each do |type, count| %>
                 <% next if type == '' %>
                 <li>
-                  <a href="<%= tasks_path(filters: {activity_type: [type]}) %>">
+                  <a href="<%= tasks_path(filters: {actionSelect: [type]}) %>">
                     <span class="count"><%= count %></span>
                     <%= type == 'Talk to In Person' ? _(type) : n_(type, type+'s',count) %>
                   </a>

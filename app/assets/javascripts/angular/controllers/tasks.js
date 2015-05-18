@@ -161,8 +161,9 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
         });
     };
 
-    $scope.resetFilters = function(){
-        $scope.filter = {
+    $scope.resetFilters = function(overrides){
+        overrides = overrides || {}
+        var blank = {
             page: 'all',
             starred: '',
             completed: '',
@@ -182,8 +183,29 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             contactPledgeFrequencies: [''],
             tasksPerGroup: 25
         };
+        $scope.filter = _.extend(blank, overrides);
     };
-    $scope.resetFilters();
+    var getLocationFilters = function() {
+        if(!window.location || !window.location.search)
+            return {}
+        var filterOverrides = {};
+        var locationFilters = decodeURIComponent(location.search.substr(1)).split('&');
+        angular.forEach(locationFilters, function(filter){
+            if(filter.indexOf('filters') != 0)
+                return;
+            var key = filter.split('=')[0].slice(8,-1), val = filter.split('=')[1]
+            if(key.indexOf('][') != -1) {
+                var arrayName = key.slice(0,-2);
+                filterOverrides[arrayName] = filterOverrides[arrayName] || [];
+                filterOverrides[arrayName].push(val);
+            }
+            else {
+                filterOverrides[key] = val
+            }
+        })
+        return filterOverrides;
+    }
+    $scope.resetFilters(getLocationFilters());
 
     $scope.$watch('filter', function (f, oldf) {
         $scope.filter.starred = f.page == 'starred' ? 'true' : ''
