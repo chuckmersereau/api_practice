@@ -29,9 +29,9 @@
           <div class="panel-heading">
             Connect
           </div>
-          <div class="panel-body">
+          <div class="panel-body dash-tasks">
             Tasks overdue or due today
-            <ul class="dash-tasks plain-list">
+            <ul class="plain-list">
               <% current_account_list.tasks.overdue_and_today.group(:activity_type).count.each do |type, count| %>
                 <% next if type == '' || !type %>
                 <li>
@@ -43,7 +43,7 @@
               <% end %>
             </ul>
 
-            <a href="<%= tasks_path %>" class="see-all">
+            <a href="<%= tasks_path %>" class="see-all see-all-tasks">
               <i class="fa fa-plus-square-o"></i> See all <%= current_account_list.tasks.overdue_and_today.count %> Tasks
             </a>
 
