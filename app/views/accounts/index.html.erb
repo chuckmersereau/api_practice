@@ -58,7 +58,7 @@
               <td class="connections">
                 <%= render 'network_connections', provider: provider %>
                 <div class="network_button">
-                  <%= link_to(_('Add another Account'), '#', data: {behavior: 'add_org_account'}, :class => "btn btn-default btn-xs") %>
+                  <%= link_to(_('Add another Account'), '#', data: {behavior: 'add_org_account'}, :class => "btn btn-secondary btn-xs") %>
                 </div>
               </td>
             </tr>
@@ -81,36 +81,42 @@
                 </td>
                 <td class="connections" data-behavior="account" style="width:500px">
 
-                  <div class="importoptions formstyles" data-behavior="import_options" style="display:none">
+                  <div class="importoptions formstyles well" data-behavior="import_options" style="display:none">
                     <%= form_for Import.new(source: provider) do |f| %>
                       <%= f.hidden_field :source %>
 
-                      <div class="field">
-                        <%= f.file_field :file %>
+                      <div class="form-group">
+                        <%= f.file_field :file, class: 'form-control' %>
                         <%= f.hidden_field :file_cache %>
                       </div>
 
-                      <div class="field radiocheck">
-                        <%= f.radio_button :override, false %>
-                        <%= f.label 'override_false', _('Only add data to matched contact records when the current field is blank.') %>
+                      <div class="radio">
+                        <label class="field radiocheck">
+                          <%= f.radio_button :override, false %>
+                          <%= _('Only add data to matched contact records when the current field is blank.') %>
+                        </label>
                       </div>
-                      <div class="field radiocheck">
-                        <%= f.radio_button :override, true %>
-                        <%= f.label 'override_true', _('Override existing contact fields with data in the uploaded file.') %>
+
+                      <div class="radio">
+                        <label>
+                          <%= f.radio_button :override, true %>
+                          <%= _('Override existing contact fields with data in the uploaded file.') %>
+                        </label>
                       </div>
+
                       <div class="field">
                         <div class="importtags">
                           <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
                         </div>
                       </div>
                       <div class="hint">
-                        <%= link_to(_('Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version.'), 'http://www.tntware.com/tntmpd/downloads/') %><br />
-                        <div class="name inside alert"><%= link_to(_('Please watch this video to learn how to export from TNT in the specific format for MPDx.'), 'http://www.youtube.com/watch?v=EoWFRFIYMkQ&list=UUTjqVT-m3YXICbwaIu9_Gqg&index=22', target: '_blank') %></div>
+                        <p><%= link_to(_('<i class="fa  fa-cloud-download"></i> Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version.'), 'http://www.tntware.com/tntmpd/downloads/') %></p>
+                        <p><%= link_to(_('<i class="fa fa-play-circle-o"></i> Please watch this video to learn how to export from TNT in the specific format for MPDx.'), 'http://www.youtube.com/watch?v=EoWFRFIYMkQ&list=UUTjqVT-m3YXICbwaIu9_Gqg&index=22', target: '_blank') %></p>
                       </div>
-                      <a href="#" class="" data-behavior="import_button"><%= _('Import') %></a>
+                      <a href="#" class="btn btn-primary" data-behavior="import_button"><%= _('Import') %></a>
                     <% end %>
                   </div>
-                  <div><a href="#" class="btn btn-xs btn-default" data-behavior="show_import"><%= _('<i class="fa fa-user-plus"></i> Import Contacts') %></a></div>
+                  <div><a href="#" class="btn btn-xs btn-secondary" data-behavior="show_import"><%= _('<i class="fa fa-user-plus"></i> Import Contacts') %></a></div>
 
                 </td>
               </tr>

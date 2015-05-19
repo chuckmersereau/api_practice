@@ -1368,6 +1368,16 @@ table.meta {
       margin-bottom: .25em;
     }
   }
+  .import-tags-table {
+    width: 100%;
+    .bootstrap-tagsinput {
+      width: auto;
+      display: block;
+    }
+    .google_import_group {
+      white-space: nowrap;
+    }
+  }
 }
 
 /* ************************************************************** */
@@ -1849,6 +1859,7 @@ span.best_in_place_once {
   input {
     outline: none;
     border: none;
+    height: auto;
   }
 }
 .form-group {
