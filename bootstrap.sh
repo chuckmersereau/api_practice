@@ -9,7 +9,7 @@ echo nameserver 8.8.8.8 | sudo tee /etc/resolv.conf
 
 # Install apt dependencies
 sudo apt-get update
-sudo apt-get install -y memcached redis-server git postgresql postgresql-contrib libpq-dev libxslt-dev libxml2-dev nodejs
+sudo apt-get install -y memcached redis-server git postgresql postgresql-contrib libpq-dev libxslt-dev libxml2-dev nodejs libicu-dev
 
 # Install Ruby via RVM
 gpg --keyserver hkp://keys.gnupg.net --recv-keys D39DC0E3
@@ -21,8 +21,9 @@ rvm install 2.1
 
 # Install Gems
 cd /vagrant
-sudo gem install --no-rdoc --no-ri bundler
+gem install --no-rdoc --no-ri bundler
 echo 'gem: --no-document' >> ~/.gemrc
+bundle config gems.contribsys.com $1:$2
 bundle install
 
 # Use example config files
