@@ -408,15 +408,19 @@ describe DataServer do
     end
 
     it 'raises OrgAccountInvalidCredentialsError if the second line includes the word "password"' do
-      expect_bad_passsword_err("DataServerError: ﻿ERROR\nAn error occurred in GetServiceTicketFromUserNamePassword")
+      expect_bad_passsword_err("﻿ERROR\rAn error occurred in GetServiceTicketFromUserNamePassword")
     end
 
     it 'raises OrgAccountInvalidCredentialsError if the second line includes the word "password"' do
-      expect_bad_passsword_err("DataServerError: ﻿ERROR\nPerhaps the username or password are incorrect")
+      expect_bad_passsword_err("﻿ERROR\nPerhaps the username or password are incorrect")
     end
 
     it 'raises OrgAccountInvalidCredentialsError if the second line includes the phrase "not registered"' do
-      expect_bad_passsword_err("DataServerError: ﻿ERROR\nThe user logging in is not registered with this system")
+      expect_bad_passsword_err("﻿ERROR\nThe user logging in is not registered with this system")
+    end
+
+    it 'raises OrgAccountInvalidCredentialsError if the first line includes a byte order mark' do
+      expect_bad_passsword_err("ERROR\r\nAuthentication failed.  Perhaps the username or password are incorrect.")
     end
   end
 
