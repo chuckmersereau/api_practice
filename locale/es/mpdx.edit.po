@@ -80,11 +80,9 @@ msgid "-- Any --"
 msgstr "- Cualquiera -"
 
 #, fuzzy
-#, fuzzy
 msgid "-- None --"
 msgstr "- Cualquiera -"
 
-#, fuzzy
 #, fuzzy
 msgid "-- Someone --"
 msgstr "- Cualquiera -"
@@ -129,7 +127,6 @@ msgid "Account Name"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Account Number"
 msgstr "Agregar número de teléfono"
 
@@ -143,16 +140,13 @@ msgid "Action"
 msgstr "Acción"
 
 #, fuzzy
-#, fuzzy
 msgid "Actions"
 msgstr "Acción"
 
 #, fuzzy
-#, fuzzy
 msgid "Active Contacts"
 msgstr "Añadir este contacto"
 
-#, fuzzy
 #, fuzzy
 msgid "Active addresses"
 msgstr "Añadir dirección de correo electrónico"
@@ -164,7 +158,6 @@ msgid "Add Address"
 msgstr "Añadir dirección"
 
 #, fuzzy
-#, fuzzy
 msgid "Add Comment"
 msgstr "Añadir este contacto"
 
@@ -172,21 +165,17 @@ msgid "Add Contact"
 msgstr "Añadir este contacto"
 
 #, fuzzy
-#, fuzzy
 msgid "Add Email Address"
 msgstr "Añadir dirección de correo electrónico"
 
-#, fuzzy
 #, fuzzy
 msgid "Add Note"
 msgstr "Añadir este contacto"
 
 #, fuzzy
-#, fuzzy
 msgid "Add Partner Account"
 msgstr "Añadir otra cuenta"
 
-#, fuzzy
 #, fuzzy
 msgid "Add Person/Child"
 msgstr "Añadir persona"
@@ -201,14 +190,12 @@ msgid "Add Referrals"
 msgstr "Añadir Referidos"
 
 #, fuzzy
-#, fuzzy
 msgid "Add Referrer"
 msgstr "Añadir Referencia"
 
 msgid "Add Relationship"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Add Tags"
 msgstr "Añadir etiqueta"
@@ -220,7 +207,6 @@ msgid "Add a donation"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Add a phone number"
 msgstr "Agregar número de teléfono"
 
@@ -228,14 +214,12 @@ msgid "Add an Account"
 msgstr "Añadir una cuenta"
 
 #, fuzzy
-#, fuzzy
 msgid "Add an email address"
 msgstr "Añadir dirección de correo electrónico"
 
 msgid "Add another Account"
 msgstr "Añadir otra cuenta"
 
-#, fuzzy
 #, fuzzy
 msgid "Add contact"
 msgstr "Añadir este contacto"
@@ -256,7 +240,6 @@ msgid "Add tags to these contacts"
 msgstr "Añadir etiquetas a estos contactos"
 
 #, fuzzy
-#, fuzzy
 msgid "Address"
 msgstr "Señas"
 
@@ -264,11 +247,9 @@ msgid "Address no longer valid"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Addresses"
 msgstr "Señas"
 
-#, fuzzy
 #, fuzzy
 msgid "Addresses:"
 msgstr "Señas"
@@ -319,14 +300,15 @@ msgid "Appeal"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Appeal Amount"
 msgstr "Añadir una cuenta"
 
 msgid "Appeals"
 msgstr ""
 
-#, fuzzy
+msgid "Apply Filters"
+msgstr ""
+
 #, fuzzy
 msgid "Appointment"
 msgstr "Llame para cita"
@@ -334,7 +316,6 @@ msgstr "Llame para cita"
 msgid "Appointment Scheduled"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Appointments"
 msgstr "Llame para cita"
@@ -346,14 +327,12 @@ msgid "Are you sure you want to delete this task instead of marking it as comple
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Are you sure you want to disable Gmail integration?"
 msgstr "¿Está seguro que desea eliminar esta conexión?"
 
 msgid "Are you sure you want to disable Google Calendar integration?"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Are you sure you want to disable Google Contacts sync?"
 msgstr "¿Está seguro que desea eliminar esta conexión?"
@@ -420,7 +399,6 @@ msgstr ""
 msgid "Both"
 msgstr "Los dos"
 
-#, fuzzy
 #, fuzzy
 msgid "Brother"
 msgstr "Los dos"
@@ -499,9 +477,6 @@ msgstr ""
 msgid "Commitment Amount"
 msgstr ""
 
-msgid "Commitment Details"
-msgstr ""
-
 msgid "Commitment Frequency"
 msgstr ""
 
@@ -553,6 +528,9 @@ msgstr ""
 msgid "Contact Church"
 msgstr ""
 
+msgid "Contact City"
+msgstr ""
+
 msgid "Contact Commitment Frequency"
 msgstr ""
 
@@ -565,13 +543,16 @@ msgstr ""
 msgid "Contact Likely To Give"
 msgstr ""
 
-msgid "Contact Location"
+msgid "Contact Name"
 msgstr ""
 
 msgid "Contact Newsletter"
 msgstr ""
 
 msgid "Contact Referrer"
+msgstr ""
+
+msgid "Contact State"
 msgstr ""
 
 msgid "Contact Status"
@@ -583,7 +564,6 @@ msgstr ""
 msgid "Contact Type"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Contact for Appointment"
 msgstr "Llame para cita"
@@ -706,11 +686,9 @@ msgid "Delete Selected"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Designation"
 msgstr "Añadir una cuenta"
 
-#, fuzzy
 #, fuzzy
 msgid "Designation Account"
 msgstr "Añadir una cuenta"
@@ -718,7 +696,6 @@ msgstr "Añadir una cuenta"
 msgid "Details"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Did not contact"
 msgstr "Añadir este contacto"
@@ -801,9 +778,6 @@ msgstr ""
 msgid "Edit Donation"
 msgstr ""
 
-msgid "Edit Facebook Profile"
-msgstr ""
-
 msgid "Edit Fields"
 msgstr ""
 
@@ -820,11 +794,9 @@ msgid "Email"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Email Addresses"
 msgstr "Añadir dirección de correo electrónico"
 
-#, fuzzy
 #, fuzzy
 msgid "Email Addresses:"
 msgstr "Añadir dirección de correo electrónico"
@@ -881,9 +853,6 @@ msgid "Facebook Message"
 msgstr ""
 
 msgid "Facebook Profile"
-msgstr ""
-
-msgid "Facebook Profile Url"
 msgstr ""
 
 msgid "Facebook:"
@@ -1005,7 +974,6 @@ msgstr ""
 msgid "Hide"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Hide Contacts"
 msgstr "Añadir este contacto"
@@ -1174,7 +1142,6 @@ msgid "Loading tasks"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Location"
 msgstr "Acción"
 
@@ -1265,7 +1232,6 @@ msgid "Map It"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Map These Contacts"
 msgstr "Añadir etiquetas a estos contactos"
 
@@ -1297,11 +1263,9 @@ msgid "Merge selected people"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Merge these contacts"
 msgstr "Añadir etiquetas a estos contactos"
 
-#, fuzzy
 #, fuzzy
 msgid "Merge these people"
 msgstr "Añadir etiquetas a estos contactos"
@@ -1373,7 +1337,6 @@ msgid "Never Contacted"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "New Account"
 msgstr "Añadir una cuenta"
 
@@ -1381,14 +1344,12 @@ msgid "New Calendar"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "New Contact"
 msgstr "Añadir este contacto"
 
 msgid "New Tag"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "New Task"
 msgstr "Agregar tarea"
@@ -1408,7 +1369,6 @@ msgstr ""
 msgid "Next"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Next Action"
 msgstr "Acción"
@@ -1447,7 +1407,6 @@ msgid "No email addess on file"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "No email address"
 msgstr "Añadir dirección de correo electrónico"
 
@@ -1457,7 +1416,6 @@ msgstr ""
 msgid "No mailing address or email addess on file"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "No phone number"
 msgstr "Agregar número de teléfono"
@@ -1496,7 +1454,6 @@ msgid "Now you just need to connect some social accounts"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Occupation"
 msgstr "Acción"
 
@@ -1525,7 +1482,6 @@ msgid "Outgoing Dials"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Overdue"
 msgstr "Promedio"
 
@@ -1541,7 +1497,6 @@ msgstr ""
 msgid "Partner - Special"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Partner Accounts"
 msgstr "Añadir otra cuenta"
@@ -1568,7 +1523,6 @@ msgid "Percentage of goal"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Person"
 msgstr "Añadir persona"
 
@@ -1579,11 +1533,9 @@ msgid "Phone Dials:"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Phone Numbers"
 msgstr "Agregar número de teléfono"
 
-#, fuzzy
 #, fuzzy
 msgid "Phone Numbers:"
 msgstr "Agregar número de teléfono"
@@ -1643,7 +1595,6 @@ msgid "Preferences saved"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Preferred Email Address"
 msgstr "Añadir dirección de correo electrónico"
 
@@ -1663,16 +1614,13 @@ msgid "Primary"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Primary Address"
 msgstr "Añadir dirección de correo electrónico"
 
 #, fuzzy
-#, fuzzy
 msgid "Primary Contact"
 msgstr "Añadir este contacto"
 
-#, fuzzy
 #, fuzzy
 msgid "Primary Email Address"
 msgstr "Añadir dirección de correo electrónico"
@@ -1714,7 +1662,6 @@ msgid "Referrals Gained"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Referrals by this contact"
 msgstr "Añadir etiquetas a estos contactos"
 
@@ -1727,7 +1674,6 @@ msgstr ""
 msgid "Referrer"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Referrers"
 msgstr "Añadir Referidos"
@@ -1808,9 +1754,6 @@ msgid "Search by Name"
 msgstr ""
 
 msgid "Search contacts..."
-msgstr ""
-
-msgid "Search or select below"
 msgstr ""
 
 msgid "Seasonal"
@@ -1931,7 +1874,6 @@ msgid "Street Address"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Street address"
 msgstr "Añadir dirección de correo electrónico"
 
@@ -1968,7 +1910,6 @@ msgstr ""
 msgid "Tags"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Tags for contacts:"
 msgstr "Añadir este contacto"
@@ -2020,10 +1961,10 @@ msgid ""
 "  unable to sync your contacts to MailChimp."
 msgstr ""
 
-msgid "The Spouse Last Name, Greeting and Envelope Greeting fields will get automatic defaults if you leave them blank."
+msgid "The Spouse Last Name, Greeting and Envelope Greeting fields will get "
 msgstr ""
 
-msgid "The Status, Commitment Frequency, and Newsletter values must also exactly match one of the \"Cell Options\" in the sample."
+msgid "The Status, Commitment Frequency, and Newsletter values must also exactly "
 msgstr ""
 
 msgid "The connection to your LinkedIn account needs to be renewed."
@@ -2081,6 +2022,12 @@ msgid "This contact doesn't have any recent facebook posts"
 msgstr ""
 
 msgid "This contact will be set to 'Never Ask'. Is that what you want to do?"
+msgstr ""
+
+msgid "This filter will search for people who are set to receive your email newsletter and have a valid email address"
+msgstr ""
+
+msgid "This filter will search for people who are set to receive your physical newsletter and have a mailing address"
 msgstr ""
 
 msgid "This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx."
@@ -2162,7 +2109,6 @@ msgid "Updated: "
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Updating contacts"
 msgstr "Añadir este contacto"
 
@@ -2199,7 +2145,7 @@ msgstr ""
 msgid "Weekly"
 msgstr ""
 
-msgid "When you finish formatting your data, remove any blank or sample rows at the bottom, upload your file below, optionally specify a tag, and click \"Preview Import.\""
+msgid "When you finish formatting your data, remove any blank or sample rows "
 msgstr ""
 
 msgid "Which one of your calendars would you like to push MPDX tasks to?"
@@ -2212,6 +2158,12 @@ msgid "Widowed"
 msgstr ""
 
 msgid "Wife"
+msgstr ""
+
+msgid "With Email Address"
+msgstr ""
+
+msgid "With Mailing Address"
 msgstr ""
 
 msgid "Work"
@@ -2229,7 +2181,7 @@ msgstr ""
 msgid "You can now export your contacts to MailChimp."
 msgstr ""
 
-msgid "You can then review the import to ensure it is correct and re-upload as needed. Note that the sample itself isn't fully valid because we included instructions at the bottom."
+msgid "You can then review the import to ensure it is correct and re-upload as needed. "
 msgstr ""
 
 msgid "You don't have any outstanding tasks for this contact. "
@@ -2289,7 +2241,6 @@ msgstr ""
 msgid "[MPDX] Your username and password for %{source} are invalid"
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "adding a new contact"
 msgstr "Añadir etiquetas a estos contactos"

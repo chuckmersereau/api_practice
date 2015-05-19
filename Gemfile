@@ -42,7 +42,7 @@ gem 'fb_graph', '~> 2.6.0'
 gem 'fog', '~> 1.23.0'
 gem 'font-awesome-rails'
 gem 'foreigner'
-gem 'gettext_i18n_rails' # , '~> 1.0.3'
+gem 'gettext_i18n_rails', '~> 1.2.3'
 # gem 'gettext_i18n_rails_js'#, '~> 0.0.3'
 gem 'gibberish', '~> 1.4.0'
 gem 'gibbon', '~> 0.4.2'
@@ -123,7 +123,7 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'simplecov', require: false
   # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
-  gem 'gettext', '>=3.0.2', require: false, group: :development
+  gem 'gettext', '~> 3.1.6', require: false, group: :development
   gem 'ruby_parser', require: false, group: :development
   gem 'mailcatcher'
   gem 'fuubar'

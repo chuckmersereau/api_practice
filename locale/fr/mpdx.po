@@ -145,17 +145,17 @@ msgstr ""
 "<p> MPDX peut synchroniser vos contacts actifs à Google afin que vous n'ayez q"
 "u'à garder vos contacts à jour dans un seul endroit. (Les contacts actifs sont"
 " ceux dont le champ état indique qu'ils sont des partenaires ou dans le proces"
-"sus DEP.) </p>                      <p> Cela va synchroniser les informations "
+"sus DEP.) </p>                      <p> Cela va synchroniser les informations "
 "des contacts existants ainsi que les mises à jour futures et les suppressions "
 "à vos informations à partir MPDX et Google. Une fois que la synchronisation es"
 "t active, les changements dans Google ou MPDX seront reflétée dans l'autre sys"
 "tème. Si vous faites un changement dans les deux endroits entre les synchronis"
-"ations, les changements MPDx prévaudront. </ p>                      <p> Si vo"
+"ations, les changements MPDx prévaudront. </ p>                      <p> Si vo"
 "us rendez un contact inactif dans MPDX par exemple en sélectionnant \"Pas intér"
 "essé \" pour son statut, les infos de ce contact ne seront pas supprimées dans "
 "Google, mais seront marquées  \"inactif \" de sorte que vous puissiez facilement"
 " trouver ceux qui ne sont plus synchronisés et les supprimer si vous le souhai"
-"tez. </p>                      <p> Si vous supprimez un contact dans les conta"
+"tez. </p>                      <p> Si vous supprimez un contact dans les conta"
 "cts Google qui est actif dans MPDX, vous devez aussi aller dans MPDX et cacher"
 " le contact, le rendant inactif dans MPDX. Sinon, il sera régénéré dans Google"
 " à la prochaine synchronisation. </p>"
@@ -341,6 +341,9 @@ msgstr "Montant de l'appel"
 
 msgid "Appeals"
 msgstr "Appels"
+
+msgid "Apply Filters"
+msgstr "Appliquer des filtres"
 
 msgid "Appointment"
 msgstr "Rendez-vous"
@@ -555,10 +558,6 @@ msgstr "Engagement "
 msgid "Commitment Amount"
 msgstr "Montant de l'engagement"
 
-#, fuzzy
-msgid "Commitment Details"
-msgstr "Engagement reçu"
-
 msgid "Commitment Frequency"
 msgstr "Fréquence de l'engagement "
 
@@ -610,6 +609,9 @@ msgstr "Contact"
 msgid "Contact Church"
 msgstr "Eglise du contact"
 
+msgid "Contact City"
+msgstr "Ville du contact"
+
 msgid "Contact Commitment Frequency"
 msgstr "Fréquence de l'engagement du contact"
 
@@ -623,16 +625,17 @@ msgstr "Coordonnées"
 msgid "Contact Likely To Give"
 msgstr "Pourrait donner"
 
-#, fuzzy
-#, fuzzy
-msgid "Contact Location"
-msgstr "Coordonnées"
+msgid "Contact Name"
+msgstr "Nom du contact"
 
 msgid "Contact Newsletter"
 msgstr "Lettre de nouvelle"
 
 msgid "Contact Referrer"
 msgstr "Parrain du contact"
+
+msgid "Contact State"
+msgstr "Etat du contact"
 
 msgid "Contact Status"
 msgstr "Statut du contact"
@@ -867,10 +870,6 @@ msgstr "Modifier - %{contact}"
 msgid "Edit Donation"
 msgstr "Modifier les dons"
 
-#, fuzzy
-msgid "Edit Facebook Profile"
-msgstr "Profile Facebook"
-
 msgid "Edit Fields"
 msgstr "Modifier les champs"
 
@@ -949,10 +948,6 @@ msgid "Facebook Message"
 msgstr "Message Facebook"
 
 msgid "Facebook Profile"
-msgstr "Profile Facebook"
-
-#, fuzzy
-msgid "Facebook Profile Url"
 msgstr "Profile Facebook"
 
 msgid "Facebook:"
@@ -1951,9 +1946,6 @@ msgstr "Recherche par Nom"
 msgid "Search contacts..."
 msgstr "Recherche de contact..."
 
-msgid "Search or select below"
-msgstr ""
-
 msgid "Seasonal"
 msgstr "Saisonnier"
 
@@ -2172,14 +2164,10 @@ msgstr ""
 " sait pas comment remplir votre champ de fusion à la clientèle, et est donc in"
 "capable de synchroniser vos contacts à MailChimp."
 
-msgid ""
-"The Spouse Last Name, Greeting and Envelope Greeting fields will get automatic"
-" defaults if you leave them blank."
+msgid "The Spouse Last Name, Greeting and Envelope Greeting fields will get "
 msgstr ""
 
-msgid ""
-"The Status, Commitment Frequency, and Newsletter values must also exactly matc"
-"h one of the \"Cell Options\" in the sample."
+msgid "The Status, Commitment Frequency, and Newsletter values must also exactly "
 msgstr ""
 
 msgid "The connection to your LinkedIn account needs to be renewed."
@@ -2279,6 +2267,20 @@ msgstr "Ce contact n'a pas de messages Facebook récents"
 
 msgid "This contact will be set to 'Never Ask'. Is that what you want to do?"
 msgstr "Ce contact sera réglé sur \"Ne plus demander\". C'est ce que vous voulez faire ?"
+
+msgid ""
+"This filter will search for people who are set to receive your email newslette"
+"r and have a valid email address"
+msgstr ""
+"Ce filtre recherchera les personnes qui ont une configuration permettant de re"
+"cevoir votre lettre de nouvelle par email et qui ont une adresse email valide."
+
+msgid ""
+"This filter will search for people who are set to receive your physical newsle"
+"tter and have a mailing address"
+msgstr ""
+"Ce filtre recherchera les personnes qui ont une configuration permettant de re"
+"cevoir votre lettre de nouvelle par la poste et qui ont une adresse postale"
 
 msgid ""
 "This will prevent this person's primary email address from being synced with M"
@@ -2419,11 +2421,10 @@ msgstr "Semaine du %{date1} au %{date2}"
 msgid "Weekly"
 msgstr "Hebdomadaire"
 
-msgid ""
-"When you finish formatting your data, remove any blank or sample rows at the b"
-"ottom, upload your file below, optionally specify a tag, and click \"Preview Im"
-"port.\""
+msgid "When you finish formatting your data, remove any blank or sample rows "
 msgstr ""
+"Lorsque vous avez terminé le formatage de vos données, supprimer toutes les li"
+"gnes ou échantillons vides"
 
 msgid "Which one of your calendars would you like to push MPDX tasks to?"
 msgstr "Sur lequel de vos calendriers voulez-vous envoyer les tâches MPDX ?"
@@ -2436,6 +2437,12 @@ msgstr "Veuf(ve)"
 
 msgid "Wife"
 msgstr "Epouse"
+
+msgid "With Email Address"
+msgstr "Avec adresse e-mail"
+
+msgid "With Mailing Address"
+msgstr "Avec adresse postale"
 
 msgid "Work"
 msgstr "Travail"
@@ -2458,9 +2465,10 @@ msgstr "Vous pouvez maintenant exporter vos contacts vers MailChimp."
 
 msgid ""
 "You can then review the import to ensure it is correct and re-upload as needed"
-". Note that the sample itself isn't fully valid because we included instructio"
-"ns at the bottom."
+". "
 msgstr ""
+"Vous pouvez ensuite passer en revue l'importation pour assurer qu'elle est cor"
+"recte et re-télécharger si nécessaire."
 
 msgid "You don't have any outstanding tasks for this contact. "
 msgstr "Vous n'avez pas de tâches en attente pour ce contact."
