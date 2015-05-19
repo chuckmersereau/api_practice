@@ -145,7 +145,7 @@
               </span>
             </h3>
           </div>
-          <% if current_user.organization_accounts.where(organization_id: Organization.cru_usa.id).any? %>
+          <% if current_user.organization_accounts.where(organization_id: Organization.cru_usa.try(:id)).any? %>
             <div class="col-md-4 text-right">
               <%= link_to(_('Weekly Progress Report'),
                           'https://staffweb.cru.org/mpd-donations/reports/mpd-weekly-update/',
