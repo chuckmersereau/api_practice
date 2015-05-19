@@ -22,12 +22,12 @@
 
             <div class="form-group">
                 <label>
-                  <%= _('Commitment Amount') %>
+                    <%= _('Commitment Amount') %>
+                    <input type="text" class="form-control" ng-model="followUpDialogResult.financialCommitment.amount"
+                           placeholder="<%= TwitterCldr::Shared::Currencies.for_code(current_currency) ?
+                                            TwitterCldr::Shared::Currencies.for_code(current_currency)[:symbol] :
+                                            current_currency %>">
                 </label>
-                <input type="text" class="form-control" ng-model="followUpDialogResult.financialCommitment.amount"
-                       placeholder="<%= TwitterCldr::Shared::Currencies.for_code(current_currency) ?
-                                        TwitterCldr::Shared::Currencies.for_code(current_currency)[:symbol] :
-                                        current_currency %>">
             </div>
             <div class="form-group">
                 <label>

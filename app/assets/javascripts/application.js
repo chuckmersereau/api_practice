@@ -57,6 +57,7 @@
 //= require angular-ui-bootstrap-tpls
 //= require moment
 
+//= require bootstrap.min.js
 //= require bootstrap-tagsinput
 //= require typeahead.jquery.js
 
