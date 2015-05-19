@@ -5,5 +5,5 @@ Vagrant.configure(2) do |config|
     vb.memory = '1024'
   end
 
-  config.vm.provision :shell, privileged: false, path: 'bootstrap.sh'
+  config.vm.provision :shell, privileged: false, path: 'bootstrap.sh', args: [ENV['SIDEKIQ_USER'], ENV['SIDEKIQ_PASS']]
 end

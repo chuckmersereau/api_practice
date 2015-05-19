@@ -3,7 +3,7 @@
 MPDX
 ====
 
-MPDX is an online tool designed to help you maintain and improve your relationships with your ministry partners. 
+MPDX is an online tool designed to help you maintain and improve your relationships with your ministry partners.
 
 ## Local setup
 
@@ -58,9 +58,8 @@ There are four different test sets that we are running:
 
 ## Local development VM via Vagrant
 
-To setup a virtual machine with all of the MPDX dependencies install
-[VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/) then in the mpdx
-directory run `vagrant up`. That will create a local MPDX VM.
+To setup a virtual machine with all of the MPDX dependencies, install
+[VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/). Set local environment variables for `SIDEKIQ_USER` and `SIDEKIQ_PASS` then in the mpdx directory run `vagrant up`. That will create a local MPDX VM.
 
 To run the server run `vagrant ssh` then `rails server`. To view it, go to your machine and visit `localhost:3000`.
 
