@@ -50,9 +50,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     select_task_next_action('Appointment Scheduled')
     expect do
       within('#complete_task_followup_modal') do
-        all('input').each do |cb|
-          cb.trigger('click') if cb.visible?
-        end
+        all('input[type="checkbox"]')[1].trigger('click')
         find_button('Save').trigger('click')
       end
       expect(page).to have_css('#complete_task_followup_modal', visible: false)
@@ -75,6 +73,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
         all('input[type="checkbox"]').each do |cb|
           cb.trigger('click') if cb.visible?
         end
+        sleep(1)
         find_button('Save').trigger('click')
       end
       expect(page).to have_css('#complete_task_followup_modal', visible: false)
