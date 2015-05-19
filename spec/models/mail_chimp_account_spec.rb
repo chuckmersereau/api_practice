@@ -388,6 +388,16 @@ describe MailChimpAccount do
         expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
         account.add_greeting_merge_variable(account.primary_list_id)
       end
+
+      it 'does not raise an error if the greeting variable added after call to check for it' do
+        expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return([])
+
+        msg = 'MailChimp API Error: A Merge Field with the tag "GREETING" already exists for this list. (code 254)'
+        expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
+          .and_raise(Gibbon::MailChimpError.new(msg))
+
+        expect { account.add_greeting_merge_variable(account.primary_list_id) }.to_not raise_error
+      end
     end
   end
 end
