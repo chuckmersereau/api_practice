@@ -1,10 +1,16 @@
 <% if @start_date %>
   <div class="row page-controls">
     <div class="col-md-8 col-sm-8">
-      <%= link_to(_('<i class="fa fa-chevron-left"></i> Previous Year'), contributions_reports_path(start_date: @start_date - 1.year)) %>
+      <%= link_to(contributions_reports_path(start_date: @start_date - 1.year)) do %>
+        <i class="fa fa-chevron-left"></i> 
+        <%= _('Previous Year') %>
+      <% end %>
       <% unless @end_date >= Date.today %>
         &nbsp; &nbsp; 
-        <%= link_to(_('Next Year <i class="fa fa-chevron-right"></i>'), contributions_reports_path(start_date: @start_date + 1.year)) %>
+        <%= link_to(contributions_reports_path(start_date: @start_date + 1.year)) do %>
+          <%= _('Next Year ') %>
+          <i class="fa fa-chevron-right"></i>
+        <% end %>
       <% end %>
     </div>
     <div class="col-md-4 col-sm-4 text-right">

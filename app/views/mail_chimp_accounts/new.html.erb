@@ -12,7 +12,10 @@
           <%= @mail_chimp_account.validation_error %><br /><br />
         <% end %>
 
-        <%= link_to(_('<i class="fa fa-play-circle-o"></i> Watch a video showing you how to link to Mailchimp'), 'http://www.gcx.org/mpdxhelp/sync-with-mailchimp/', target: '_blank') %>
+        <%= link_to('http://www.gcx.org/mpdxhelp/sync-with-mailchimp/', target: '_blank') do %>
+          <i class="fa fa-play-circle-o"></i> 
+          <%= _('Watch a video showing you how to link to Mailchimp') %>
+        <% end %>
         <br />
         <%= form_for @mail_chimp_account do |f| %>
           <div class="form-group">

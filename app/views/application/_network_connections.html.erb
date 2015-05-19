@@ -28,9 +28,14 @@
                     <%= link_to(_('Refresh Google Account'), new_account_path(new_account_path_opts), class: 'btn desired_action') %>
                 <% else %>
                     <% if google_integration %>
-                        <%= link_to(_('<i class="fa fa-refresh"></i> Configure synchronization'), google_integration_path(google_integration)) %>
+                        <%= link_to(google_integration_path(google_integration)) do %>
+                          <i class="fa fa-refresh"></i> 
+                          <%= _('Configure synchronization') %>
+                        <% end %>
                     <% else %>
-                        <%= link_to(_('<i class="fa fa-refresh"></i> Configure synchronization'), google_integrations_path(google_account_id: account.id), method: :post) %>
+                      <%= link_to(google_integrations_path(google_account_id: account.id), method: :post) do %>
+                        <i class="fa fa-refresh"></i>   <%= _('Configure synchronization') %>
+                      <% end %>
                     <% end %>
                      <%= render('google_import_options', account: account) %>
                  <% end %>
