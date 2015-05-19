@@ -142,7 +142,6 @@ msgid "Account Name"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Account Number"
 msgstr "Agregar número de teléfono"
 
@@ -255,7 +254,6 @@ msgstr ""
 msgid "Add tags to these contacts"
 msgstr "Añadir etiquetas a estos contactos"
 
-#, fuzzy
 #, fuzzy
 msgid "Address"
 msgstr "Señas"
@@ -1583,7 +1581,6 @@ msgid "Partner - Special"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Partner Accounts"
 msgstr "Añadir otra cuenta"
 
@@ -1711,7 +1708,6 @@ msgstr "Añadir dirección de correo electrónico"
 msgid "Primary Contact"
 msgstr "Añadir este contacto"
 
-#, fuzzy
 #, fuzzy
 msgid "Primary Email Address"
 msgstr "Añadir dirección de correo electrónico"
@@ -2004,7 +2000,6 @@ msgid "Tags"
 msgstr ""
 
 #, fuzzy
-#, fuzzy
 msgid "Tags for contacts:"
 msgstr "Añadir este contacto"
 
@@ -2229,7 +2224,6 @@ msgstr ""
 msgid "Updated: "
 msgstr ""
 
-#, fuzzy
 #, fuzzy
 msgid "Updating contacts"
 msgstr "Añadir este contacto"

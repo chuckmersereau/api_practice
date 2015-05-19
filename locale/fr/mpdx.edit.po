@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-05-06 16:26+0100\n"
+"PO-Revision-Date: 2015-05-15 13:49+0100\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -58,7 +58,7 @@ msgid ""
 msgstr "%{org_name} dit que vous avez le mauvais mot de passe pour votre compte.S'il vous plaît essayez de le mettre à jour ici : %{link}"
 
 msgid "%{received} received/%{pledged} pledged of goal: %{goal}. Click to see outstanding financial partners."
-msgstr ""
+msgstr "%{received} reçu/%{pledged} promis de l'objectif : %{goal}. Cliquez pour voir les partenaires financiers en attente."
 
 msgid "(Cancel merging)"
 msgstr "(Annuler la fusion)"
@@ -115,7 +115,7 @@ msgid ""
 "\n"
 "                     <p>If you delete a contact in Google contacts that is active in MPDX, you must also go in to MPDX and hide\n"
 "                     the contact, making it inactive in MPDX. Otherwise, it will get regenerated in Google once it syncs again.</p>"
-msgstr "<p> MPDX peut synchroniser vos contacts actifs à Google afin que vous n'ayez qu'à garder vos contacts à jour dans un seul endroit. (Les contacts actifs sont ceux dont le champ état indique qu'ils sont des partenaires ou dans le processus DEP.) </p>                      <p> Cela va synchroniser les informations des contacts existants ainsi que les mises à jour futures et les suppressions à vos informations à partir MPDX et Google. Une fois que la synchronisation est active, les changements dans Google ou MPDX seront reflétée dans l'autre système. Si vous faites un changement dans les deux endroits entre les synchronisations, les changements MPDx prévaudront. </ p>                      <p> Si vous rendez un contact inactif dans MPDX par exemple en sélectionnant \"Pas intéressé \" pour son statut, les infos de ce contact ne seront pas supprimées dans Google, mais seront marquées  \"inactif \" de sorte que vous puissiez facilement trouver ceux qui ne sont plus synchronisés et les supprimer si vous le souhaitez. </p>                      <p> Si vous supprimez un contact dans les contacts Google qui est actif dans MPDX, vous devez aussi aller dans MPDX et cacher le contact, le rendant inactif dans MPDX. Sinon, il sera régénéré dans Google à la prochaine synchronisation. </p>"
+msgstr "<p> MPDX peut synchroniser vos contacts actifs à Google afin que vous n'ayez qu'à garder vos contacts à jour dans un seul endroit. (Les contacts actifs sont ceux dont le champ état indique qu'ils sont des partenaires ou dans le processus DEP.) </p>                      <p> Cela va synchroniser les informations des contacts existants ainsi que les mises à jour futures et les suppressions à vos informations à partir MPDX et Google. Une fois que la synchronisation est active, les changements dans Google ou MPDX seront reflétée dans l'autre système. Si vous faites un changement dans les deux endroits entre les synchronisations, les changements MPDx prévaudront. </ p>                      <p> Si vous rendez un contact inactif dans MPDX par exemple en sélectionnant \"Pas intéressé \" pour son statut, les infos de ce contact ne seront pas supprimées dans Google, mais seront marquées  \"inactif \" de sorte que vous puissiez facilement trouver ceux qui ne sont plus synchronisés et les supprimer si vous le souhaitez. </p>                      <p> Si vous supprimez un contact dans les contacts Google qui est actif dans MPDX, vous devez aussi aller dans MPDX et cacher le contact, le rendant inactif dans MPDX. Sinon, il sera régénéré dans Google à la prochaine synchronisation. </p>"
 
 msgid "About you"
 msgstr "A propos de Vous"
@@ -123,9 +123,8 @@ msgstr "A propos de Vous"
 msgid "Account Name"
 msgstr "Nom de compte"
 
-#, fuzzy
 msgid "Account Number"
-msgstr "Nom de compte"
+msgstr "Numéro de compte"
 
 msgid "Account Settings"
 msgstr "Paramètres du compte"
@@ -163,9 +162,8 @@ msgstr "Ajouter une adresse e-mail"
 msgid "Add Note"
 msgstr "Ajouter une remarque"
 
-#, fuzzy
 msgid "Add Partner Account"
-msgstr "Ajouter un autre compte"
+msgstr "Ajouter un compte partenaire"
 
 msgid "Add Person/Child"
 msgstr "Ajouter une personne/enfant"
@@ -179,9 +177,8 @@ msgstr "Ajouter une image"
 msgid "Add Referrals"
 msgstr "Ajouter des références"
 
-#, fuzzy
 msgid "Add Referrer"
-msgstr "Ajouter une référence"
+msgstr "Ajouter un parrain"
 
 msgid "Add Relationship"
 msgstr "Ajouter des liens de parenté"
@@ -226,9 +223,8 @@ msgstr "En ajouter maintenant"
 msgid "Add tags to these contacts"
 msgstr "Ajouter des libellés à ces contacts"
 
-#, fuzzy
 msgid "Address"
-msgstr "Adresses"
+msgstr "Adresse"
 
 msgid "Address no longer valid"
 msgstr "Adresse plus valide"
@@ -327,7 +323,7 @@ msgid "Are you sure?"
 msgstr "Êtes vous sûr ?"
 
 msgid "As of April 30, 2015 Facebook changed how they integrate with apps like MPDX so we cannot currently import Facebook contacts. We will investigate options in the future."
-msgstr ""
+msgstr "Le 30 Avril, 2015 Facebook a changé sa façon d'intégrer des applications comme MPDX donc nous ne pouvons pas importer de contacts Facebook pour l'instant. Nous allons étudier les options possibles prochainement."
 
 msgid "Ask in Future"
 msgstr "Demander plus tard"
@@ -461,13 +457,11 @@ msgstr "Montant de l'engagement"
 msgid "Commitment Frequency"
 msgstr "Fréquence de l'engagement "
 
-#, fuzzy
 msgid "Commitment Not Received"
-msgstr "Date de début de l'engagement"
+msgstr "Engagement non reçu"
 
-#, fuzzy
 msgid "Commitment Received"
-msgstr "Fréquence de l'engagement "
+msgstr "Engagement reçu"
 
 msgid "Commitment Start Date"
 msgstr "Date de début de l'engagement"
@@ -585,7 +579,7 @@ msgid "Correspondence"
 msgstr "Correspondance"
 
 msgid "Country"
-msgstr ""
+msgstr "Pays"
 
 msgid "Cousin (Female)"
 msgstr "Cousine "
@@ -614,17 +608,14 @@ msgstr "Créer une tâche"
 msgid "Create one now."
 msgstr "En créer une maintenant."
 
-#, fuzzy
 msgid "Create tag for selected:"
-msgstr "Créer une tâche avec la sélection :"
+msgstr "Créer un libellé pour la sélection :"
 
-#, fuzzy
 msgid "Create task for selected:"
-msgstr "Créer une tâche avec la sélection :"
+msgstr "Créer une tâche pour la sélection :"
 
-#, fuzzy
 msgid "Creating tasks"
-msgstr "Créer une tâche"
+msgstr "Créer des tâches"
 
 msgid "Cultivate"
 msgstr "Encourager"
@@ -635,9 +626,8 @@ msgstr "Cultiver la relation"
 msgid "Current Gift"
 msgstr "Don actuel"
 
-#, fuzzy
 msgid "Current file: "
-msgstr "Don actuel"
+msgstr "Fichier en cours :"
 
 msgid "Currently No People"
 msgstr "Pas de personnes pour l'instant"
@@ -706,7 +696,7 @@ msgid "Do not add contacts who:"
 msgstr "Ne pas ajouter des contacts qui :"
 
 msgid "Don't send appeals"
-msgstr ""
+msgstr "Pas de projets spéciaux"
 
 msgid "Donation History"
 msgstr "Historique des dons"
@@ -736,7 +726,7 @@ msgid "Download as CSV spreadsheet file"
 msgstr "Télécharger comme feuille de calcul CSV"
 
 msgid "Download the <a href=\"%{sample_url}\">sample MPDX csv import file</a>."
-msgstr ""
+msgstr "Télécharger une  <a href=\"%{sample_url}\"> copie MPDX du fichier d'importation CSV </a>."
 
 msgid "Dr."
 msgstr "Dr."
@@ -820,7 +810,7 @@ msgid "Error Saving!"
 msgstr "Erreur de sauvegarde !"
 
 msgid "Error loading CSV import preview. The MPDX team has been notified. If the problem persists please click \"Help\" above and submit a request."
-msgstr ""
+msgstr "Erreur lors du chargement de l'aperçu d'importation CSV.  L'équipe de MPDX a été notifiée. Si le problème persiste cliquez s'il vous plaît  sur \"Help\"  ci-dessus et soumettez une demande."
 
 msgid "Expired Referral"
 msgstr "Référence expirée"
@@ -829,14 +819,13 @@ msgid "Export"
 msgstr "Exporter"
 
 msgid "Export selected to CSV:"
-msgstr ""
+msgstr "Exporter la sélection au format CSV :"
 
 msgid "Facebook Message"
 msgstr "Message Facebook"
 
-#, fuzzy
 msgid "Facebook Profile"
-msgstr "Message Facebook"
+msgstr "Profile Facebook"
 
 msgid "Facebook:"
 msgstr "Facebook :"
@@ -856,12 +845,11 @@ msgstr "Trouvez des doubles"
 msgid "First"
 msgstr "En premier"
 
-#, fuzzy
 msgid "First name"
-msgstr "Votre prénom"
+msgstr "Prénom"
 
 msgid "Fix CSV Errors and Preview Again"
-msgstr ""
+msgstr "Corriger les erreurs CSV et faire un nouvel aperçu"
 
 msgid "For each event MPDX can notify you via email and also create a task entry reminding you to do something about it. The options below allow you to control that behavior."
 msgstr "Pour chaque événement MPDX peut vous informer par email et également créer une tâche pour vous rappeler de faire quelque chose. Les options ci-dessous vous permettent de contrôler ce comportement."
@@ -875,7 +863,7 @@ msgid ""
 msgstr "Pour l'intégration MailChimp nous vous recommandons de mettre en place une nouvelle liste MailChimp à utiliser  (pas un nouveau compte, juste une nouvelle liste), et de laisser tous les paramètres par défaut MailChimp en place pour cette liste. Si vous faites des réglages avec une nouvelle liste, tout le monde pourra recevoir votre newsletter qui sera copiée automatiquement, et à partir de là vous pouvez gérer toutes les mises à jour de MPDX (c'est à dire lorsque vous modifiez une adresse email sur MPDX il mettra à jour sur MailChimp)."
 
 msgid "Format your data to match the sample:"
-msgstr ""
+msgstr "Formater vos données pour correspondre à l'échantillon :"
 
 msgid "Fortnightly"
 msgstr "Bimensuel"
@@ -889,9 +877,8 @@ msgstr "De système des dons. Pour apporter des modifications,"
 msgid "Gave a special gift in the last 3 months"
 msgstr "A donné un don spécial dans les 3 derniers mois"
 
-#, fuzzy
 msgid "Gender"
-msgstr "Sexe :"
+msgstr "Sexe"
 
 msgid "Gender:"
 msgstr "Sexe :"
@@ -939,7 +926,7 @@ msgid "Grandson"
 msgstr "Petit-fils"
 
 msgid "Greeting"
-msgstr ""
+msgstr "Salutation"
 
 msgid "Greeting (used in csv download)"
 msgstr "Salutation (utilisé en téléchargement csv)"
@@ -968,9 +955,8 @@ msgstr "Historique"
 msgid "Home"
 msgstr "Accueil"
 
-#, fuzzy
 msgid "Home Phone"
-msgstr "Téléphone de l'épou(x)(se)"
+msgstr "Téléphone fixe"
 
 msgid "Hon."
 msgstr "Hon."
@@ -1007,7 +993,7 @@ msgid "Import Google Contacts"
 msgstr "Importer des contacts Google"
 
 msgid "Import Preview:"
-msgstr ""
+msgstr "Importer l'aperçu :"
 
 msgid "Import TntMPD DataSync file"
 msgstr "Importer un fichier TntMPD DataSync"
@@ -1084,16 +1070,14 @@ msgstr "La semaine dernière"
 msgid "Last Year"
 msgstr "L'année dernière"
 
-#, fuzzy
 msgid "Last name"
-msgstr "Dernier changement"
+msgstr "Nom"
 
 msgid "Least Likely"
 msgstr "Peu probable"
 
-#, fuzzy
 msgid "Legal first name"
-msgstr "Votre prénom"
+msgstr "Prénom Juridique"
 
 msgid "Letter"
 msgstr "Lettre"
@@ -1197,7 +1181,7 @@ msgid "MPDX is now uploading your newsletter recipients to PrayerLetters.com."
 msgstr "MPDX envoie maintenant vos destinataires de lettres de nouvelles à PrayerLetters.com."
 
 msgid "Magazine"
-msgstr "Magazine"
+msgstr "Journal"
 
 msgid "MailChimp API key:"
 msgstr "MailChimp API key :"
@@ -1206,7 +1190,7 @@ msgid "MailChimp list to use for your newsletter:"
 msgstr "Liste de MailChimp à utiliser pour votre lettre de nouvelle :"
 
 msgid "MailChimp subscriber email bounced"
-msgstr ""
+msgstr "Message MailChimp rejeté par la messagerie de l'abonné. "
 
 msgid "Mailchimp API Key no longer valid"
 msgstr "L'API Key de MailChimp n'est plus valide"
@@ -1223,9 +1207,8 @@ msgstr "Carte"
 msgid "Map These Contacts"
 msgstr "Plan des contacts"
 
-#, fuzzy
 msgid "Marital status"
-msgstr "Statut du partenaire"
+msgstr "Etat civil"
 
 msgid "Marital:"
 msgstr "Situation matrimoniale :"
@@ -1270,9 +1253,8 @@ msgstr "Région métropolitaine"
 msgid "Mobile"
 msgstr "Mobile"
 
-#, fuzzy
 msgid "Mobile Phone"
-msgstr "Téléphone de l'épou(x)(se)"
+msgstr "Téléphone portable"
 
 msgid "Monthly"
 msgstr "Mensuel"
@@ -1418,9 +1400,8 @@ msgstr "Aucun de vos contacts ne sont associés à des comptes de donateurs. S'i
 msgid "Not Interested"
 msgstr "Pas intéressé"
 
-#, fuzzy
 msgid "Not Received"
-msgstr "Reçu"
+msgstr "Non reçu"
 
 msgid "Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version."
 msgstr "Remarque: Vous devez mettre à jour TntMPD pour faire cela. Cliquez ici pour télécharger la dernière version."
@@ -1441,7 +1422,7 @@ msgid "Occupation"
 msgstr "Profession"
 
 msgid "Once you have a CSV import with valid and correct data you can click \"Run import\" from the preview page."
-msgstr ""
+msgstr "Une fois que vous avez une importation CSV avec des données valides et correctes, vous pouvez cliquer sur \"Run import\" à partir de la page d'aperçu."
 
 msgid "Only add data to matched contact records when the current field is blank."
 msgstr "Ajouter les données pour les enregistrements de contact adaptés seulement lorsque le champ actuel est vide."
@@ -1453,7 +1434,7 @@ msgid "Opt-out of email newsletter"
 msgstr "Exclure de la lettre des nouvelles électronique"
 
 msgid "Or upload a new file and preview again:"
-msgstr ""
+msgstr "Ou télécharger un nouveau fichier et un nouvel aperçu :"
 
 msgid "Other"
 msgstr "Autre"
@@ -1479,9 +1460,8 @@ msgstr "Partenaire - De prière"
 msgid "Partner - Special"
 msgstr "Partenaire - Spécial"
 
-#, fuzzy
 msgid "Partner Accounts"
-msgstr "Comptes des donateurs"
+msgstr "Comptes des partenaires"
 
 msgid "Partner Status"
 msgstr "Statut du partenaire"
@@ -1578,20 +1558,19 @@ msgid "Preferred Email Address"
 msgstr "Adresse e-mail préférée "
 
 msgid "Preparing preview. This takes some time if you have a large file ..."
-msgstr ""
+msgstr "Préparation de l'aperçu. Cela prend un certain temps si vous avez un fichier de grande taille ..."
 
 msgid "Preview Again"
-msgstr ""
+msgstr "Nouvel aperçu"
 
 msgid "Preview Import"
-msgstr ""
+msgstr "Import de l'aperçu"
 
 msgid "Previous"
 msgstr "Précédent"
 
-#, fuzzy
 msgid "Primary"
-msgstr "Primordial :"
+msgstr "Primordial"
 
 msgid "Primary Address"
 msgstr "Adresse primaire"
@@ -1599,9 +1578,8 @@ msgstr "Adresse primaire"
 msgid "Primary Contact"
 msgstr "Contact primordial"
 
-#, fuzzy
 msgid "Primary Email Address"
-msgstr "Adresse e-mail préférée "
+msgstr "Adresse e-mail préférée"
 
 msgid "Primary:"
 msgstr "Primordial :"
@@ -1682,9 +1660,8 @@ msgstr "Supprimer"
 msgid "Remove Tag"
 msgstr "Supprimer le libellé"
 
-#, fuzzy
 msgid "Remove tag from all contacts"
-msgstr "Importer tous les contacts"
+msgstr "Supprimer les libellés de tous les contacts"
 
 msgid "Remove this Person"
 msgstr "Supprimer cette personne"
@@ -1707,12 +1684,11 @@ msgstr "Résultat des rendez-vous"
 msgid "Rev."
 msgstr "Pasteur"
 
-#, fuzzy
 msgid "Run Import"
-msgstr "Importer"
+msgstr "Lancer l'import"
 
 msgid "Sample_MPDX_Upload"
-msgstr ""
+msgstr "Sample_MPDX_Upload"
 
 msgid "Save"
 msgstr "Enregistrer"
@@ -1847,9 +1823,8 @@ msgstr "Étape 2 de 2 : Fusionner les personnes en double dans les contacts"
 msgid "Stopped giving for the last 2 months"
 msgstr "A arrêté les dons depuis 2 mois"
 
-#, fuzzy
 msgid "Street"
-msgstr "Favoris"
+msgstr "Rue"
 
 msgid "Street Address"
 msgstr "Adresse"
@@ -1864,7 +1839,7 @@ msgid "Submit"
 msgstr "Soumettre"
 
 msgid "Suffix"
-msgstr ""
+msgstr "Suffixe "
 
 msgid "Suggested Increase Amount"
 msgstr "Montant accrue suggéré"
@@ -1890,9 +1865,8 @@ msgstr "Synchroniser maintenant"
 msgid "Tags"
 msgstr "Libellés"
 
-#, fuzzy
 msgid "Tags for contacts:"
-msgstr "Ne pas contacter"
+msgstr "Libellés pour contacts :"
 
 msgid "Talk to In Person"
 msgstr "Parler en personne"
@@ -1930,7 +1904,7 @@ msgid "Thanks!"
 msgstr "Merci !"
 
 msgid "That email has been marked as \"no longer valid.\" "
-msgstr ""
+msgstr "Adresse mail expirée."
 
 msgid "The Key Login Link"
 msgstr "Le lien de connexion clé"
@@ -1951,7 +1925,7 @@ msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "La connexion à votre compte LinkedIn a besoin d'être renouvelée."
 
 msgid "The headers in the first row must exactly match the sample."
-msgstr ""
+msgstr "Les en-têtes de la première ligne doivent correspondre exactement l'échantillon."
 
 msgid ""
 "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n"
@@ -2023,14 +1997,13 @@ msgid "Timezone"
 msgstr "Fuseau horaire "
 
 msgid "Title"
-msgstr ""
+msgstr "Titre"
 
 msgid "To Do"
 msgstr "A faire"
 
-#, fuzzy
 msgid "To import from a .csv spreadsheet file:"
-msgstr "Télécharger comme feuille de calcul CSV"
+msgstr "Télécharger depuis une  feuille de calcul .CSV"
 
 msgid "To use MPDX, you need to connect to your organization's donation system. If you raise funds through more than one organization, you can connect to multiple accounts."
 msgstr "Pour utiliser MPDX, vous devez vous connecter au système de don de votre organisation. Si vous soulevez des fonds à travers plus d'une organisation, vous pouvez vous connecter à plusieurs comptes."
@@ -2089,12 +2062,11 @@ msgstr "Mise à jour du statut de(s) contact(s) vers"
 msgid "Updated: "
 msgstr "Mise à jour :"
 
-#, fuzzy
 msgid "Updating contacts"
-msgstr "Chargement des contacts ..."
+msgstr "Mise à jour des contacts"
 
 msgid "Upload fixed CSV file"
-msgstr ""
+msgstr "Télécharger un fichier CSV réparé"
 
 msgid "Visit Mobile Version"
 msgstr "Visiter la version Mobile"
@@ -2127,7 +2099,7 @@ msgid "Weekly"
 msgstr "Hebdomadaire"
 
 msgid "When you finish formatting your data, remove any blank or sample rows "
-msgstr ""
+msgstr "Lorsque vous avez terminé le formatage de vos données, supprimer toutes les lignes ou échantillons vides"
 
 msgid "Which one of your calendars would you like to push MPDX tasks to?"
 msgstr "Sur lequel de vos calendriers voulez-vous envoyer les tâches MPDX ?"
@@ -2163,7 +2135,7 @@ msgid "You can now export your contacts to MailChimp."
 msgstr "Vous pouvez maintenant exporter vos contacts vers MailChimp."
 
 msgid "You can then review the import to ensure it is correct and re-upload as needed. "
-msgstr ""
+msgstr "Vous pouvez ensuite passer en revue l'importation pour assurer qu'elle est correcte et re-télécharger si nécessaire."
 
 msgid "You don't have any outstanding tasks for this contact. "
 msgstr "Vous n'avez pas de tâches en attente pour ce contact."
@@ -2196,7 +2168,7 @@ msgid "You need to setup LinkedIn first"
 msgstr "Vous avez besoin d'installer LinkedIn d'abord "
 
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> "
-msgstr ""
+msgstr "Votre contact MPDX \"%{contact}\"  a une personne <a href=\"%{edit_person_url}\">%{person_name}</a>"
 
 msgid "Your first name"
 msgstr "Votre prénom"
@@ -2272,33 +2244,3 @@ msgstr "à"
 
 msgid "with invalid addresses"
 msgstr "Avec une adresse e-mail valide"
-
-#~ msgid "%% of goal pledged (%{totals})"
-#~ msgstr "%% de l'objectif promis (%{totals})"
-
-#~ msgid "Add Donor Account"
-#~ msgstr "Ajouter un compte donateur"
-
-#~ msgid "Add Referral"
-#~ msgstr "Ajouter une référence"
-
-#~ msgid "Contacts are currently being imported"
-#~ msgstr "Contacts en cours d' importation"
-
-#~ msgid "Create task with selected:"
-#~ msgstr "Créer une tâche avec la sélection :"
-
-#~ msgid "Donor Accounts"
-#~ msgstr "Comptes des donateurs"
-
-#~ msgid "Messages"
-#~ msgstr "Messages"
-
-#~ msgid "Pledge Received"
-#~ msgstr "Promesse reçue"
-
-#~ msgid "Send Message"
-#~ msgstr "Envoyer un message"
-
-#~ msgid "Status Update"
-#~ msgstr "Statut réactualisé "
