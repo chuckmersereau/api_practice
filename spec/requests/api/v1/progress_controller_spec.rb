@@ -16,7 +16,7 @@ describe Api::V1::ProgressController do
 
     it 'responds 200' do
       response.code.should == '200'
-      JSON.parse(response.body)['contacts']['active'].should == 1
+      expect(JSON.parse(response.body)['contacts']['active']).to eq 1
     end
   end
 end
