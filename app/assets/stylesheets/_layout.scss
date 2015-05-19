@@ -302,12 +302,17 @@ div.right {
   padding-right: 20px;
 }
 
-.page-filters {
+.page-filters,
+.page-filters-plain {
   border-bottom: 4px solid $borders;
   padding-bottom: 10px;
   .right {
     float: right;
   }
+}
+
+.page-filters-plain {
+  margin-bottom: 1em;
 }
 
 .page-filters-close {
