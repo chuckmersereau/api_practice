@@ -15,7 +15,7 @@ describe Api::V1::ProgressController do
     end
 
     it 'responds 200' do
-      response.code.should == '200'
+      expect(response).to be_success
       expect(JSON.parse(response.body)['contacts']['active']).to eq 1
     end
   end
