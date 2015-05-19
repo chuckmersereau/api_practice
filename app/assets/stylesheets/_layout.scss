@@ -1900,6 +1900,14 @@ appeals-list .show-all {
 .dash-panel {
   min-height: 315px;
   position: relative;
+  a:hover {
+    text-decoration: none;
+  }
+}
+@media screen and (max-width: 980px) {
+  .dash-panel {
+    min-height: 0;
+  }
 }
 .panel-tasks {
   .btn-add-tasks {
