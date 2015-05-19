@@ -5,13 +5,13 @@
         <%= link_to(_('Select all duplicates'), '#', class: 'select_all') %>
         <% @contact_sets.each do |set| %>
           <div class="duplicate_set">
+            <%= _('Select a contact to be the primary. The name and status of each are below.') %>
             <% set.each.with_index do |contact, index| %>
-                <%if index==0 %><%= _('Select a contact to be the primary. The name and status of each are below.') %><% end %>
                 <div class="contact">
-                  <%= radio_button_tag 'selected_winner'+set.collect(&:id).to_s.delete(' '),contact.id, false,
-                                       checked: (contact.id == set.collect(&:id).first) %>
-                  <%= link_to(contact.name, contact_path(contact), style: 'padding: 3%', target: '_blank')  %>
-                  <%= contact.status %>
+                  <%= radio_button_tag 'selected_winner['+set.collect(&:id).join(',')+']',contact.id,false,
+                                       checked: (index==0) %>
+                  <%= link_to( _(contact.name), contact_path(contact), style: 'padding: 3%', target: '_blank')  %>
+                  <%= _(contact.status) %>
                 </div>
             <% end %>
             <%= check_box_tag 'merge_sets[]', set.collect(&:id).join(',') %>
