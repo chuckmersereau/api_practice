@@ -273,7 +273,7 @@ class DataServer
       lines = response.split(/\n|\r/)
       first_line = lines.first.to_s.upcase
       case
-      when first_line.include?('PASSWORD')
+      when first_line + lines[1].to_s =~ /password|not registered/i
         @org_account.update_column(:valid_credentials, false) if @org_account.valid_credentials? && !@org_account.new_record?
         fail OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org }
       when response.code.to_i == 500 || first_line.include?('ERROR') || first_line.include?('HTML')

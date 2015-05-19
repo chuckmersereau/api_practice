@@ -399,12 +399,24 @@ describe DataServer do
       end.to raise_error(OrgAccountInvalidCredentialsError, 'Your username and password for MyString are invalid.')
     end
 
-    it 'should raise OrgAccountInvalidCredentialsError if the first line of the response is BAD_PASSWORD' do
+    it 'raises OrgAccountInvalidCredentialsError if the first line of the response is BAD_PASSWORD' do
       expect_bad_passsword_err("BAD_PASSWORD\nmessage")
     end
 
-    it 'should raise OrgAccountInvalidCredentialsError if the first line includes the word "password"' do
+    it 'raises OrgAccountInvalidCredentialsError if the first line includes the word "password"' do
       expect_bad_passsword_err("You have entered an invalid login and/or password\nmessage")
+    end
+
+    it 'raises OrgAccountInvalidCredentialsError if the second line includes the word "password"' do
+      expect_bad_passsword_err("DataServerError: ﻿ERROR\nAn error occurred in GetServiceTicketFromUserNamePassword")
+    end
+
+    it 'raises OrgAccountInvalidCredentialsError if the second line includes the word "password"' do
+      expect_bad_passsword_err("DataServerError: ﻿ERROR\nPerhaps the username or password are incorrect")
+    end
+
+    it 'raises OrgAccountInvalidCredentialsError if the second line includes the phrase "not registered"' do
+      expect_bad_passsword_err("DataServerError: ﻿ERROR\nThe user logging in is not registered with this system")
     end
   end
 
