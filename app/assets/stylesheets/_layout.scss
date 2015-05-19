@@ -49,10 +49,6 @@ $userheight: 72px;
     .settings-drop {
       margin-top: 15px;
     }
-    a:hover {
-    }
-    a:active {
-    }
     .balance {
       border-left: 1px solid $blue-light;
       padding-left: 8px;
@@ -372,6 +368,7 @@ div.right {
   display: block;
   margin-bottom: 8px;
 }
+
 /* ************************************************************** */
 .affix + #affix-fix
 {
@@ -1673,6 +1670,15 @@ body.google_integrations_controller {
 
 /* ************************************************************** */
 
+.birthdays-list {
+  li {
+    display: none;
+  }
+  li:nth-child(-n+5), &.show_all li {
+    display: block;
+  }
+}
+
 .progress-category {
   display: inline-block;
   width: 50%;
@@ -1795,6 +1801,153 @@ body.google_integrations_controller {
   }
 }
 
+/* ********************* Dashboard ************************** */
+#donations_summary_chart {
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+#dash-progress {
+  .page-filters {
+    margin-bottom: 1.5em;
+    h3 {font-weight: 600; font-size: 1.6em; margin-bottom: 0; line-height: 35px;}
+    h3 .normal-weight {font-weight: 500;}
+  }
+  .well {
+    padding: 14px 19px;
+  }
+}
+.dash-tasks .see-all {
+  margin-bottom: 5em;
+}
+.show-all .appeal-single:nth-child(n+3) {
+  display: block;
+}
+appeals-list :not(.show-all) :nth-child(2) {
+  margin-bottom: 0;
+}
+appeals-list .show-all {
+  .dash-progress {
+    height: 20px;
+    line-height: 18px;
+  }
+  .appeal-single {
+    margin-bottom: 0.5em;
+  }
+}
+.appeal-single {
+  margin-bottom: 1.5em;
+  cursor: pointer;
+  &:nth-child(n+3) {
+    display: none;
+  }
+  &:last-child {
+    margin-bottom: 0;
+  }
+  .dash-progress {
+    display: block;
+    height: 30px;
+    line-height: 30px;
+    background-color: #ddd;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    position: relative;
+  }
+
+  &.progress-green {
+    .progress-bar { background: #009900 !important; }
+    .progress-total-donations { color: #009900; }
+  }
+  &.progress-yellow {
+    .progress-bar { background: orange !important; }
+    .progress-total-donations { color: orange; }
+  }
+  &.progress-red {
+    .progress-bar { background: red !important; }
+    .progress-total-donations { color: red; }
+  }
+
+  .progress-bar {
+    background: #555;
+    height: 100%;
+    max-width: 100%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: -1em;
+  }
+  .progress-count {
+    display: inline-block;
+    vertical-align: top;
+    font-weight: 600;
+    margin-left: 1.5em;
+  }
+
+  .progress-count-inside {
+    position: relative;
+    left: -3em;
+    width: 0;
+    color: $color-white;
+    margin-left: 0;
+  }
+}
+
+#dash-widgets {
+  margin-top: 2em;
+}
+.dash-stat {
+  display: block;
+  line-height: 36px;
+}
+.dash-panel {
+  min-height: 315px;
+  position: relative;
+}
+.panel-tasks {
+  .btn-add-tasks {
+    bottom: 19px;
+    position: absolute;
+  }
+  .panel-body {
+    display: relative;
+  }
+}
+.count {font-size: 18px; font-weight: 500;}
+.count-big {
+  font-size: 36px;
+  font-weight: 500;
+}
+.progress-stat {
+  display: inline-block;
+  margin-right: 1em;
+}
+.progress-box-title {
+  text-transform: uppercase;
+  font-family: $brand-font;
+  font-weight: 600;
+  font-size: 16px;
+  i.fa {
+    margin-right: 5px;
+    color: $color-blue-deep;
+    font-size: 18px;
+  }
+}
+.plain-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.see-all {
+  font-size: 13px;
+  display: block;
+  margin-top: 1em;
+}
+h4.title {
+  text-transform: uppercase;
+  font-family: $brand-font;
+  font-size: 16px;
+  font-weight: 600;
+  margin-top: .5em;
+}
+
 /* ********************* Layout Hacks ************************** */
 .gm-style .gm-style-iw {
   width: inherit !important;
@@ -1842,12 +1995,27 @@ span.best_in_place_once {
 }
 .panel-body {
   padding: 15px;
+  display: block;
 }
 .panel-heading {
   padding: 6px 15px;
   text-transform: uppercase;
   font-weight: 600;
   font-family: $brand-font;
+  .badge {
+    border-radius: 15px;
+    display: inline-block;
+    font-size: 11px;
+    padding: 0 6px;
+  }
+  .badge-blue {
+    background: $color-blue-deep !important;
+    color: $color-white;
+  }
+  .badge-right-well {
+    float: right;
+    margin-top: 4px;
+  }
 }
 
 .marked_for_destruction { display: none; }

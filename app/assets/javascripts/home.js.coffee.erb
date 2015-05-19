@@ -5,6 +5,18 @@ $ ->
 
     $.mpdx.loadDashTabData(window.location.hash)
 
+    $('.see-all-birthdays').click ->
+      $('.see-all-birthdays').hide()
+      $('.birthdays-list').addClass('show_all')
+      return false
+
+    $('.late-partners-count').click ->
+      $('#late-partners-dialog').dialog
+        title: __('Late Partners'),
+        modal:'true',
+        width: '400px'
+      return false;
+
 $.mpdx.loadDashTabData = (hash) ->
   hash ||= '#dash-connect'
   $.mpdx.loadDashbaordTab(hash)

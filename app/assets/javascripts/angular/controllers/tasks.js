@@ -199,10 +199,32 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             tasksPerGroup: 25
         };
     }
-    $scope.resetFilters = function(){
-        $scope.filter = blankFilterObject();
+    $scope.resetFilters = function(overrides){
+        overrides = overrides || {}
+        $scope.filter = _.extend(blankFilterObject(), overrides);
     };
-    $scope.resetFilters();
+    var getLocationFilters = function() {
+        if(!window.location || !window.location.search)
+            return {}
+        var filterOverrides = {};
+        var locationFilters = decodeURIComponent(location.search.substr(1)).split('&');
+        angular.forEach(locationFilters, function(filter){
+            if(filter.indexOf('filters') != 0 || filter.indexOf('=') == -1)
+                return;
+            var key = filter.split('=')[0].slice("filters[".length,-1),
+                val = filter.split('=')[1].split('+').join(' ')
+            if(key.indexOf('][') != -1 && val) {
+                var arrayName = key.slice(0,-2);
+                filterOverrides[arrayName] = filterOverrides[arrayName] || [];
+                filterOverrides[arrayName].push(val);
+            }
+            else {
+                filterOverrides[key] = val
+            }
+        })
+        return filterOverrides;
+    }
+    $scope.resetFilters(getLocationFilters());
 
     $scope.isEmptyFilter = function() {
         return _.isEqual($scope.filter, blankFilterObject());

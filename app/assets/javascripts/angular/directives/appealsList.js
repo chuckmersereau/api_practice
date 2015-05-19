@@ -29,7 +29,11 @@ angular.module('mpdxApp')
                               min: moment().minute()
                             };
 
-                            api.call('get','contacts?filters[status]=*&per_page=5000&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts&account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
+                            api.call('get',
+                                     'contacts?filters[status]=*&per_page=5000'+
+                                         '&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts'+
+                                         '&account_list_id=' + (window.current_account_list_id || ''),
+                                     {}, function(data) {
                                 $scope.contacts = data.contacts;
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
@@ -44,6 +48,17 @@ angular.module('mpdxApp')
                                     function(data) {
                                         $modalInstance.close($scope.appeal);
                                     });
+                            };
+
+                            $scope.delete = function (){
+                                var r = confirm('Are you sure you want to delete this appeal?');
+                                if(!r){
+                                    return;
+                                }
+                                api.call('delete', 'appeals/' + id + '?account_list_id=' + (window.current_account_list_id || ''), null, function() {
+                                    $modalInstance.dismiss('cancel');
+                                    refreshAppeals();
+                                });
                             };
 
                             $scope.contactDetails = function(id){
@@ -260,16 +275,6 @@ angular.module('mpdxApp')
                     });
                 };
 
-                $scope.deleteAppeal = function(id){
-                    var r = confirm('Are you sure you want to delete this appeal?');
-                    if(!r){
-                        return;
-                    }
-                    api.call('delete', 'appeals/' + id + '?account_list_id=' + (window.current_account_list_id || ''), null, function() {
-                        refreshAppeals();
-                    });
-                };
-
                 $scope.donationTotal = function(donations){
                   var sum = [];
                   angular.forEach(donations, function(d){
@@ -288,12 +293,23 @@ angular.module('mpdxApp')
                   };
                 };
 
-                $scope.percentComplete = function(donationsTotal, goal){
-                  goal = Number(goal);
+                $scope.percentComplete = function(appeal){
+                  goal = Number(appeal.amount);
                   if(goal === 0){
                     return 0;
                   }
-                  return parseInt((donationsTotal / goal) * 100);
+                  return Math.round(($scope.donationTotal(appeal.donations).sum / goal) * 100);
+                };
+
+                $scope.progressClass = function(appeal) {
+                    var percent = $scope.percentComplete(appeal);
+                    if(percent < 33) {
+                        return 'progress-red';
+                    }
+                    if(percent < 66) {
+                        return 'progress-yellow';
+                    }
+                    return 'progress-green';
                 };
 
                 $scope.newAppeal = function(){

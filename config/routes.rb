@@ -47,6 +47,7 @@ Rails.application.routes.draw do
         end
       end
       resources :donations, only: [:index]
+      resources :progress, only: [:index]
       resources :preferences
       resources :users
       resources :appeals
@@ -132,10 +133,6 @@ Rails.application.routes.draw do
 
   resource :home, only: [:index], controller: :home do
     get "index"
-    get "connect"
-    get "care"
-    get "cultivate"
-    get "progress"
     get "change_account_list"
     get "download_data_check"
   end

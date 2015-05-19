@@ -34,7 +34,7 @@ class Organization < ActiveRecord::Base
   end
 
   def self.cru_usa
-    Organization.find_by_code('CCC-USA')
+    Organization.where(code: 'CCC-USA').first
   end
 
   # We had an organization, DiscipleMakers with a lot of duplicate addresses in its contacts and donor

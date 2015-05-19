@@ -230,6 +230,9 @@
         </form>
     </div>
   <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
+    <div class="ui-dialog-buttonset" style="float: left;">
+      <button ng-click="delete()"><%= _('Delete') %></button>
+    </div>
     <div class="ui-dialog-buttonset">
       <button ng-click="save()"><%= _('Save') %></button>
       <button ng-click="cancel()"><%= _('Cancel') %></button>

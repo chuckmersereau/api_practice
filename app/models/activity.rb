@@ -66,4 +66,8 @@ class Activity < ActiveRecord::Base
   def activity_comment=(hash)
     activity_comments.new(hash) if hash.values.any?(&:present?)
   end
+
+  def self.overdue_and_today
+    where(completed: false).where('start_at < ?', Time.zone.now.end_of_day)
+  end
 end
