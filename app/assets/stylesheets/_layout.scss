@@ -994,7 +994,7 @@ div.name {font-size: 14px; margin-bottom: 4px;}
 
 table tbody.tasks {
   .primary {
-    height: auto; 
+    height: auto;
   }
   td {
     vertical-align: middle;
@@ -1025,8 +1025,8 @@ table tbody.tasks {
     }
     &.clear {
       background: none;
-      border: none; 
-      padding: 0; 
+      border: none;
+      padding: 0;
       margin: 0;
     }
     .hover-show {
@@ -2072,3 +2072,5 @@ span.best_in_place_once {
 .pac-container {
   z-index: 1100 !important;
 }
+
+em.gold { color: $color-gold; font-style: normal; }
