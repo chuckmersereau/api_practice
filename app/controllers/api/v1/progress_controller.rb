@@ -65,15 +65,15 @@ class Api::V1::ProgressController < Api::V1::BaseController
   def contact_counts
     {
       active: current_account_list.contacts
-              .where(status: ['Never Contacted', 'Contact for Appointment', '', nil])
-              .count,
+        .where(status: ['Never Contacted', 'Contact for Appointment', '', nil])
+        .count,
       referrals: current_account_list.contacts
-                 .created_between(@start_date, @end_date)
-                 .joins(:contact_referrals_to_me).uniq
-                 .count,
+        .created_between(@start_date, @end_date)
+        .joins(:contact_referrals_to_me).uniq
+        .count,
       referrals_on_hand: current_account_list.contacts.with_referrals
-                         .where(status: Contact::IN_PROGRESS_STATUSES)
-                         .count
+        .where(status: Contact::IN_PROGRESS_STATUSES)
+        .count
     }
   end
 
