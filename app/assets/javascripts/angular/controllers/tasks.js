@@ -211,7 +211,8 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
         angular.forEach(locationFilters, function(filter){
             if(filter.indexOf('filters') != 0 || filter.indexOf('=') == -1)
                 return;
-            var key = filter.split('=')[0].slice(8,-1), val = filter.split('=')[1].split('+').join(' ')
+            var key = filter.split('=')[0].slice("filters[".length,-1),
+                val = filter.split('=')[1].split('+').join(' ')
             if(key.indexOf('][') != -1 && val) {
                 var arrayName = key.slice(0,-2);
                 filterOverrides[arrayName] = filterOverrides[arrayName] || [];
