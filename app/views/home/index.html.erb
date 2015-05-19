@@ -27,10 +27,10 @@
       <div class="col-md-4">
         <div class="panel panel-default dash-panel panel-tasks">
           <div class="panel-heading">
-            Connect
+            <%= _('Connect') %>
           </div>
           <div class="panel-body dash-tasks">
-            Tasks overdue or due today
+            <%= _('Tasks overdue or due today') %>
             <ul class="plain-list">
               <% current_account_list.tasks.overdue_and_today.group(:activity_type).count.each do |type, count| %>
                 <% next if type == '' || !type %>
@@ -44,7 +44,8 @@
             </ul>
 
             <a href="<%= tasks_path %>" class="see-all see-all-tasks">
-              <i class="fa fa-plus-square-o"></i> See all <%= current_account_list.tasks.overdue_and_today.count %> Tasks
+              <i class="fa fa-plus-square-o"></i>
+              <%= _('See all %{overdue_count} tasks').localize % { overdue_count: current_account_list.tasks.overdue_and_today.count } %>
             </a>
 
             <%= link_to('<i class="fa fa-plus-circle"></i> '.html_safe+_('Add a New Task'),
@@ -55,7 +56,7 @@
       <div class="col-md-4">
         <div class="panel panel-default dash-panel">
           <div class="panel-heading">
-            Commitments Unfufilled
+            <%= _('Commitments Unfufilled') %>
           </div>
           <div class="panel-body">
 
@@ -63,20 +64,18 @@
                class="dash-stat">
               <span class="count-big">
                 <%= current_account_list.contacts.financial_partners.where(pledge_received: false).count %>
-              </span> first gift not received
+              </span> <%= _('first gift not received') %>
             </a>
 
-            <a href="#" class="dash-stat late-partners-count">
-              <span class="count-big">
-                <%= current_account_list.contacts.late_by(31.days, 60.days).count %>
-              </span> partners <strong>30</strong> days late
-            </a>
-
-            <a href="#" class="dash-stat late-partners-count">
-              <span class="count-big">
-                <%= current_account_list.contacts.late_by(61.days).count %>
-              </span> partners <strong>60</strong> days late
-            </a>
+            <% [30, 60].each do |days| %>
+              <% contacts = current_account_list.contacts
+                 contacts = days == 30 ? contacts.late_by(31.days, 60.days) : contacts.late_by(61.days) %>
+              <a href="#" class="dash-stat late-partners-count">
+                <%= (_('<span class="count-big">%{contact_count}</span> partners '+
+                       '<strong>%{days}</strong> days late').localize %
+                         { contact_count: contacts.count, days: days }).html_safe %>
+              </a>
+            <% end %>
           </div>
         </div>
       </div>
@@ -84,7 +83,7 @@
       <div class="col-md-4">
         <div class="panel panel-default dash-panel">
           <div class="panel-heading">
-            Care
+            <%= _('Care') %>
             <%= link_to('+ '+_('Log Prayer Letter'),
                         new_task_path(completed: true, activity_type: 'Newsletter'),
                         class: 'badge badge-blue badge-right-well add_task', remote: true) %>
@@ -93,14 +92,14 @@
             <div class="dash-stat">
               <% current_account_list.tasks.completed.of_type('Newsletter').first.tap do |newsletter| %>
                 <% if newsletter %>
-                  <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> since your last prayer letter
+                  <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> <%= _('since your last prayer letter') %>
                 <% else %>
                   <%= _("You've never logged a prayer letter") %>
                 <% end %>
               <% end %>
             </div>
 
-            <h4 class="title">Birthdays This Week</h4>
+            <h4 class="title"><%= _('Birthdays This Week') %></h4>
             <% people_with_birthdays = current_account_list.people_with_birthdays(
                                          Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
                birthdays_count = people_with_birthdays.count %>
@@ -134,7 +133,7 @@
         <div class="row">
           <div class="col-md-8">
             <h3>
-              Progress
+              <%= _('Progress') %>
               <span class="normal-weight ng-cloak">
                 <a class="previous_page" ng-click="progress.previousWeek()">
                   <i class="fa fa-chevron-left"></i> <%= _('Previous Week') %>
@@ -158,86 +157,92 @@
       <div class="row ng-cloak">
         <div class="col-md-8">
           <div class="well">
-            <div class="progress-box-title"><i class="fa fa-users"></i> Contacts</div>
-            <div class="progress-stat"><span class="count-big">{{progress.data.contacts.active}}</span> Active</div>
+            <div class="progress-box-title"><i class="fa fa-users"></i> <%= _('Contacts') %></div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span> Referrals On-hand
+              <span class="count-big">{{progress.data.contacts.active}}</span> <%= _('Active') %>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.contacts.referrals}}</span> Gained
+              <span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span> <%= _('Referrals On-hand') %>
+            </div>
+            <div class="progress-stat">
+              <span class="count-big">{{progress.data.contacts.referrals}}</span> <%= _('Gained') %>
             </div>
           </div>
           <div class="well">
-            <div class="progress-box-title"><i class="fa fa-mobile"></i> Phone Dials</div>
+            <div class="progress-box-title"><i class="fa fa-mobile"></i> <%= _('Phone Dials') %></div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.phone.attempted + progress.data.phone.completed}}</span> Outgoing
+              <span class="count-big">{{progress.data.phone.attempted + progress.data.phone.completed}}</span>
+              <%= _('Outgoing') %>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.phone.completed + progress.data.phone.recieved}}</span> Talked To
+              <span class="count-big">{{progress.data.phone.completed + progress.data.phone.recieved}}</span>
+              <%= _('Talked To') %>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.phone.appointments}}</span> Appointments Produced
+              <span class="count-big">{{progress.data.phone.appointments}}</span>
+              <%= _('Appointments Produced') %>
             </div>
             <ul class="plain-list">
-              <li>Completed: {{progress.data.phone.completed}}</li>
-              <li>Attempted: {{progress.data.phone.attempted}}</li>
-              <li>Received: {{progress.data.phone.received}}</li>
+              <li><%= _('Completed') %>: {{progress.data.phone.completed}}</li>
+              <li><%= _('Attempted') %>: {{progress.data.phone.attempted}}</li>
+              <li><%= _('Received') %>: {{progress.data.phone.received}}</li>
             </ul>
           </div>
           <div class="well">
-            <div class="progress-box-title"><i class="fa fa-desktop"></i> Electronic Contacts</div>
+            <div class="progress-box-title"><i class="fa fa-desktop"></i> <%= _('Electronic Contacts') %></div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.electronic.sent}}</span> Sent
+              <span class="count-big">{{progress.data.electronic.sent}}</span> <%= _('Sent') %>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.electronic.received}}</span> Received
+              <span class="count-big">{{progress.data.electronic.received}}</span> <%= _('Received') %>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.electronic.appointments}}</span> Appointments Produced
+              <span class="count-big">{{progress.data.electronic.appointments}}</span>
+              <%= _('Appointments Produced') %>
             </div>
             <ul class="plain-list">
               <li>
-                Email: {{progress.data.email.sent}} Sent /
-                {{progress.data.email.received}} Received
+                <%= _('Email') %>: {{progress.data.email.sent}} <%= _('Sent') %> /
+                {{progress.data.email.received}} <%= _('Received') %>
               </li>
               <li>
-                Facebook: {{progress.data.facebook.sent}} Sent /
-                {{progress.data.facebook.received}} Received
+                <%= _('Facebook') %>: {{progress.data.facebook.sent}} <%= _('Sent') %> /
+                {{progress.data.facebook.received}} <%= _('Received') %>
               </li>
               <li>
-                Text SMS: {{progress.data.text_message.sent}} Sent /
-                {{progress.data.text_message.received}} Received
+                <%= _('Text Message') %>: {{progress.data.text_message.sent}} <%= _('Sent') %> /
+                {{progress.data.text_message.received}} <%= _('Received') %>
               </li>
             </ul>
           </div>
           <div class="well">
-            <div class="progress-box-title"><i class="fa fa-envelope-o"></i> Correspondence</div>
+            <div class="progress-box-title"><i class="fa fa-envelope-o"></i> <%= _('Correspondence') %></div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.correspondence.precall}}</span> Pre-call Letters
+              <span class="count-big">{{progress.data.correspondence.precall}}</span> <%= _('Pre-call Letters') %>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.correspondence.support_letters}}</span> Support Letters
+              <span class="count-big">{{progress.data.correspondence.support_letters}}</span> <%= _('Support Letters') %>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.correspondence.thank_yous}}</span> Thank You Notes
+              <span class="count-big">{{progress.data.correspondence.thank_yous}}</span> <%= _('Thank You Notes') %>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.correspondence.reminders}}</span> Reminders
+              <span class="count-big">{{progress.data.correspondence.reminders}}</span> <%= _('Reminders') %>
             </div>
           </div>
         </div>
         <div class="col-md-4">
           <div class="well">
-            <div class="progress-box-title"><i class="fa fa-calendar"></i> Appointments</div>
+            <div class="progress-box-title"><i class="fa fa-calendar"></i> <%= _('Appointments') %></div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.appointments.completed}}</span> Completed
+              <span class="count-big">{{progress.data.appointments.completed}}</span> <%= _('Completed') %>
             </div>
           </div>
 
           <div class="">
             <div class="panel panel-default dash-panel">
               <div class="panel-heading">
-                Appeals
+                <%= _('Appeals') %>
               </div>
               <appeals-list class="panel-body"></appeals-list>
             </div>
