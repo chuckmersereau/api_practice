@@ -20,11 +20,11 @@
         <% account.contact_groups.each_with_index do |group, index| %>
             <tr>
               <td class="google_import_group">
-                <div class="field radiocheck google_import_group">
+                <label class="field radiocheck google_import_group">
                   <%= check_box_tag 'import[groups][]', group.id, false,
                                     id: "group_#{index}", class: 'import_by_group'  %>
-                  <%= label 'group', index, group.title.gsub('System Group: ','') %>
-                </div>
+                  <%= group.title.gsub('System Group: ','') %>
+                </label>
               </td>
               <td class="google_import_tags">
                 <%= text_field_tag "import[group_tags[#{group.id}]]",
