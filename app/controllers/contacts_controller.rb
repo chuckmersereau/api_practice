@@ -145,7 +145,8 @@ class ContactsController < ApplicationController
       next if contacts.length <= 1
 
       merged_contacts_count += contacts.length
-      winner = contacts.find(ids[1][0].to_i)
+      winner_id = params[:selected_winner][ids].to_i
+      winner = contacts.find(winner_id)
       Contact.transaction do
         (contacts - [winner]).each do |loser|
           winner.merge(loser)
