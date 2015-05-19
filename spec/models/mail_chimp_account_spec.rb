@@ -399,5 +399,17 @@ describe MailChimpAccount do
         expect { account.add_greeting_merge_variable(account.primary_list_id) }.to_not raise_error
       end
     end
+
+    context '#call_mailchimp' do
+      it 'raises an error to silently retry the job if it gets error code -50 (too many connections)' do
+        account.primary_list_id = 'list1'
+        account.active = true
+        msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
+        expect(account).to receive(:subscribe_person).with(1).and_raise(Gibbon::MailChimpError.new(msg))
+        expect do
+          account.call_mailchimp(:subscribe_person, 1)
+        end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
+      end
+    end
   end
 end
