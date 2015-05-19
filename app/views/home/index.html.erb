@@ -147,11 +147,11 @@
               </button>
             </span>
 
-            <%# if current_user.organization_accounts.where(organization_id: Organization.cru_usa.try(:id)).any? %>
+            <% if current_user.organization_accounts.where(organization_id: Organization.cru_usa.try(:id)).any? %>
                 <%= link_to(_('Weekly Progress Report'),
                             'https://staffweb.cru.org/mpd-donations/reports/mpd-weekly-update/',
                             target: '_blank', class: 'btn btn-sm btn-default btn-blue') %>
-            <%# end %>
+            <% end %>
 
           </div>
           
