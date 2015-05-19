@@ -403,7 +403,7 @@ GEM
       peek
       redis
     pg (0.14.1)
-    poltergeist (1.5.1)
+    poltergeist (1.6.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
       multi_json (~> 1.0)
@@ -636,9 +636,9 @@ GEM
     webmock (1.9.3)
       addressable (>= 2.2.7)
       crack (>= 0.3.2)
-    websocket-driver (0.5.1)
+    websocket-driver (0.5.4)
       websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.1)
+    websocket-extensions (0.1.2)
     whenever (0.8.4)
       activesupport (>= 2.3.4)
       chronic (>= 0.6.3)
