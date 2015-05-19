@@ -270,7 +270,7 @@ class DataServer
     RestClient::Request.execute(method: :post, url: url, payload: params, timeout: -1, user: @org_account.username,
                                 password: @org_account.password) do |response, _request, _result, &_block|
       # check for error response
-      lines = response.split(/\n|\r/)
+      lines = response.split(/\r?\n|\r/)
       first_line = lines.first.to_s.upcase
       case
       when first_line + lines[1].to_s =~ /password|not registered/i
