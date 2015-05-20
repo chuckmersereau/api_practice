@@ -6,7 +6,7 @@
     <div id="contentbody" class="withleft">
       <div class="wpp">
         <%= image_tag('logos/google_logo_high_res.png', width: '150px') %><br />
-        <%= (_('You are currently editing settings for %{account}').localize % { account: "<strong>#{@google_integration.google_account}</strong>" }).html_safe %>
+        <h5><%= (_('You are currently editing settings for %{account}').localize % { account: "<strong>#{@google_integration.google_account}</strong>" }).html_safe %></h5>
         <div>
           <div class="well">
             <h2><%= _('Calendar integration') %></h2>

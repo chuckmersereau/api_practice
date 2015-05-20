@@ -139,8 +139,7 @@
                     </div>
                   </td>
                   <td class="connections" data-behavior="account" style="width:500px">
-                    <div class="importoptions formstyles" data-behavior="import_options" style="display:none">
-                      <strong>**<%= _('Follow these instructions EXACTLY or your import will not work.') %>**</strong><br>
+                    <div class="well importoptions formstyles" data-behavior="import_options" style="display:none">
                       <%= _('To import from a .csv spreadsheet file:') %>
                       <ol>
                         <li>
@@ -189,7 +188,7 @@
                             <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
                           </div>
                         </div>
-                        <a href="#" class="" data-behavior="import_button"><%= _('Preview Import') %></a>
+                        <a href="#" class="btn btn-xs btn-secondary" data-behavior="import_button"><%= _('Preview Import') %></a>
                       <% end %>
                     </div>
                     <div><a href="#" class="btn btn-xs btn-default" data-behavior="show_import"><%= _('Import Contacts') %></a></div>
