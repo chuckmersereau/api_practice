@@ -98,10 +98,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def countries
-    @countries ||= ActiveRecord::Base.connection.select_values("select distinct(a.country) from account_lists al inner join contacts c on c.account_list_id = al.id
-                                                       inner join addresses a on a.addressable_id = c.id AND a.addressable_type = 'Contact' where al.id = #{id}
-                                                       AND (#{Contact.active_conditions})
-                                                       order by a.country")
+    @countries ||= contacts.active.joins(:addresses).order('addresses.country').pluck('DISTINCT addresses.country')
   end
 
   def churches

@@ -83,9 +83,9 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
 
     var contactFilterExists = function(){
         return ($scope.filter.contactName !==  '' || $scope.filter.contactType !== '' || $scope.filter.contactCity[0] !== ''
-            || $scope.filter.contactState[0] !== '' || $scope.filter.contactNewsletter !== '' || $scope.filter.contactStatus[0] !== ''
-            || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== '' || $scope.filter.contactReferrer[0] !== ''
-            || $scope.filter.contactTimezone[0] !== '' || $scope.filter.contactPledgeFrequencies[0] !== ''
+            || $scope.filter.contactState[0] !== '' || $scope.filter.contactCountry[0] !== '' || $scope.filter.contactNewsletter !== ''
+            || $scope.filter.contactStatus[0] !== '' || $scope.filter.contactLikely[0] !== '' || $scope.filter.contactChurch[0] !== ''
+            || $scope.filter.contactReferrer[0] !== '' || $scope.filter.contactTimezone[0] !== '' || $scope.filter.contactPledgeFrequencies[0] !== ''
             || $scope.filter.contactInfoEmail !== '' || $scope.filter.contactInfoPhone !== '' || $scope.filter.contactInfoMobile !== ''
             || $scope.filter.contactInfoAddr !== '' || $scope.filter.contactInfoFacebook !== '' );
     };
@@ -96,6 +96,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[contact_type]=' + encodeURIComponent($scope.filter.contactType) +
             '&filters[city][]=' + encodeURLarray($scope.filter.contactCity).join('&filters[city][]=') +
             '&filters[state][]=' + encodeURLarray($scope.filter.contactState).join('&filters[state][]=') +
+            '&filters[country][]=' + encodeURLarray($scope.filter.contactState).join('&filters[country][]=') +
             '&filters[newsletter]=' + encodeURIComponent($scope.filter.contactNewsletter) +
             //'&filters[tags][]=' + encodeURLarray(q.tags).join('&filters[tags][]=') +
             '&filters[status][]=' + encodeURLarray($scope.filter.contactStatus).join('&filters[status][]=') +
@@ -184,6 +185,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             contactType: '',
             contactCity: [''],
             contactState: [''],
+            contactCountry: [''],
             contactNewsletter: '',
             contactStatus: [''],
             contactLikely: [''],
