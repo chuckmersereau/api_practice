@@ -4,15 +4,13 @@
       <a name="<%= dom_id(task) %>" />
       <input type="checkbox" name="task_ids[]" value="<%= task.id %>" data-behavior="complete_task" data-results="" data-actions="" data-id="<%= task.id %>" <%= 'disabled="disabled"' if task.attempted? %> <%= 'checked="checked"' if task.completed? %> />
     </td>
+    <td class="taskact">
+      <div class="taskact-wrap">
+        <i class="fa fa-star<%= task.starred? ? '' : '-o' %> fa-lg fav"></i>
+      </div>
+    </td>
     <td class="data">
       <div class="primary">
-        <i class="fa fa-star<%= task.starred? ? '' : '-o' %> fa-lg fav"></i>
-        <a class="comment_status" href=""><span id="comment_count_<%= task.id %>"><%= task.activity_comments.length  %></span></a>
-        <div class="actions">
-          <%= link_to(_('Edit'), edit_task_path(task), :class=> "ico ico_edit edit_task", data: {id: task.id}, remote: true) %>
-          <%= link_to(_('Delete'), task, data: { confirm: _("Are you sure you want to delete this task instead of marking it as completed?") }, method: :delete, remote: true, :class=> "ico ico_trash") %>
-        </div>
-
         <% if task.activity_type.present? %>
           <span class="taskaction"><%= _(task.activity_type) %></span> -
         <% end %>
@@ -68,6 +66,12 @@
             </div>
           <% end %>
         <% end %>
+
+        <a class="comment_status" href=""><span id="comment_count_<%= task.id %>"><%= task.activity_comments.length  %></span></a>
+        <div class="actions">
+          <%= link_to(_('Edit'), edit_task_path(task), :class=> "ico ico_edit edit_task", data: {id: task.id}, remote: true) %>
+          <%= link_to(_('Delete'), task, data: { confirm: _("Are you sure you want to delete this task instead of marking it as completed?") }, method: :delete, remote: true, :class=> "ico ico_trash") %>
+        </div>
       </div>
       <div class="comments" style="<%= 'display:none' %>">
         <header></header>
