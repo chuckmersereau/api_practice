@@ -140,6 +140,7 @@
                   </td>
                   <td class="connections" data-behavior="account" style="width:500px">
                     <div class="importoptions formstyles" data-behavior="import_options" style="display:none">
+                      <strong>**<%= _('Follow these instructions EXACTLY or your import will not work.') %>**</strong><br>
                       <%= _('To import from a .csv spreadsheet file:') %>
                       <ol>
                         <li>
@@ -149,11 +150,11 @@
                         <li> <%= _('Format your data to match the sample:') %>
                           <ul>
                             <li>
-                              <%= _('The headers in the first row must exactly match the sample.') %>
+                              <strong><%= (_('The headers in the first row <em class="gold">must exactly match</em> the sample.')).html_safe %></strong>
                             </li>
                             <li>
-                              <%= _('The Status, Commitment Frequency, and Newsletter values must also exactly ' +
-                                    'match one of the "Cell Options" in the sample.') %>
+                              <strong><%= (_('The Status, Commitment Frequency, and Newsletter values <em class="gold">must also exactly match</em> ' +
+                                                     'one of the "Cell Options" in the sample.')).html_safe %></strong>
                             </li>
                             <li>
                               <%= _('The Spouse Last Name, Greeting and Envelope Greeting fields will get ' +
@@ -162,15 +163,15 @@
                           </ul>
                         </li>
                         <li>
-                          <%= _('When you finish formatting your data, remove any blank or sample rows ' +
-                                'at the bottom, upload your file below, optionally specify a tag, and click "Preview Import."') %>
+                          <strong><%= _('When you finish formatting your data, remove any blank or sample rows at the bottom.') %></strong>
+                          <%= _('Then upload your file below, optionally specify a tag, and click "Preview Import."') %>
                         </li>
                         <li>
                           <%= _('You can then review the import to ensure it is correct and re-upload as needed. ' +
                                 "Note that the sample itself isn't fully valid because we included instructions at the bottom.") %>
                         </li>
                         <li>
-                          <%= _('Once you have a CSV import with valid and correct data you can click "Run import" from the preview page.') %>
+                          <%= (_('Once you have a CSV import with valid and correct data <strong>click "Run import"</strong> from the preview page.')).html_safe %>
                         </li>
                       </ol>
 
