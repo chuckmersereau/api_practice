@@ -302,12 +302,17 @@ div.right {
   padding-right: 20px;
 }
 
-.page-filters {
+.page-filters,
+.page-filters-plain {
   border-bottom: 4px solid $borders;
   padding-bottom: 10px;
   .right {
     float: right;
   }
+}
+
+.page-filters-plain {
+  margin-bottom: 1em;
 }
 
 .page-filters-close {
@@ -1900,6 +1905,14 @@ appeals-list .show-all {
 .dash-panel {
   min-height: 315px;
   position: relative;
+  a:hover {
+    text-decoration: none;
+  }
+}
+@media screen and (max-width: 980px) {
+  .dash-panel {
+    min-height: 0;
+  }
 }
 .panel-tasks {
   .btn-add-tasks {
