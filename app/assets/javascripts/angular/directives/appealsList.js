@@ -38,6 +38,8 @@ angular.module('mpdxApp')
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
 
+                            $scope.formatNumber = formatNumber;
+
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
                             };
@@ -387,7 +389,7 @@ angular.module('mpdxApp')
                     });
                 };
 
-                $scope.formatNumber = function(number){
+                var formatNumber = $scope.formatNumber= function(number){
                   return Number(number).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                 };
             }
