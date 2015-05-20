@@ -28,6 +28,13 @@ GIT
       json
 
 GIT
+  remote: https://github.com/CruGlobal/rollout_ui.git
+  revision: df470f00267d0fba5e5ccd287d8c566f4c4b87ac
+  specs:
+    rollout_ui (0.3.0)
+      rollout
+
+GIT
   remote: https://github.com/carrierwaveuploader/carrierwave
   revision: 01f7ec68d0403dfeec13e5f177ffa7e272b230aa
   specs:
@@ -745,6 +752,7 @@ DEPENDENCIES
   rest-client (~> 1.6.7)
   retryable-rb (~> 1.1.0)
   rollout (~> 2.0.0)
+  rollout_ui!
   rspec (~> 2.14.1)
   rspec-rails
   rubocop
