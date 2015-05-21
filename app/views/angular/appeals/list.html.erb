@@ -3,9 +3,9 @@
          class="appeal-single {{progressClass(appeal)}}" ng-click="editAppeal(appeal.id)">
          <div class="dash-stat">
             <span class="progress-total-donations count-big">
-                ${{formatNumber(donationTotal(appeal.donations).sum)}}
+                {{donationTotal(appeal.donations).sum | currency : current_currency_symbol}}
             </span>
-            /${{formatNumber(appeal.amount)}}
+            /{{appeal.amount | currency : current_currency_symbol}}
         </div>
         <div class="dash-progress">
             <div class="progress-bar"
