@@ -78,8 +78,7 @@ class PeopleController < ApplicationController
 
       # We assume the winner is the first in the contact set. That will be the contact with the more casual nickname.
       winner_id = params[:dup_person_winner]
-      return unless people.include?(winner_id)
-      winner = people.find(winner_id)
+      winner = people.find { winner_id } || people.find { |person| person.id.to_s == ids[0] }
       Person.transaction do
         (people - [winner]).each do |loser|
           winner.merge(loser)

@@ -184,7 +184,7 @@ describe PeopleController do
       person2.save
 
       request.env['HTTP_REFERER'] = '/'
-      post :merge_sets, merge_sets: ["#{person1.id},#{person2.id}"]
+      post :merge_sets, merge_sets: ["#{person1.id},#{person2.id}"], dup_person_winner: ["#{person1.id}"]
 
       expect(Person.find_by_id(person2.id)).to be_nil
       expect(person1.email.email).to eq('test_merge@example.com')
