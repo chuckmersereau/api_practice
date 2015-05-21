@@ -3,15 +3,17 @@
       <h2><%=  _('Step 1 of 2: Merge duplicate contacts (giving units)') %></h2>
       <%= form_tag merge_contacts_path do %>
         <%= link_to(_('Select all duplicates'), '#', class: 'select_all') %>
+          <p ><%= _('Toggle the radio buttons to change the person who will be the "winner" of the merge.
+        All data from the "loser" of the merge will get copied into the "winner." No data will be lost.') %></p>
         <% @contact_sets.each do |set| %>
           <div class="duplicate_set">
-            <%= _('Select a contact to be the primary. The name and status of each are below.') %>
-            <% set.each.with_index do |contact, index| %>
+            <%= _('The name number of people in each contact are below.') %>
+            <% set.sort_by { |c| -c.people.length}.each.with_index do |contact, index| %>
                 <div class="contact">
-                  <%= radio_button_tag 'selected_winner['+set.collect(&:id).join(',')+']',contact.id,false,
+                  <%= radio_button_tag 'dup_contact_winner['+set.collect(&:id).join(',')+']',contact.id,false,
                                        checked: (index==0) %>
                   <%= link_to( _(contact.name), contact_path(contact), style: 'padding: 3%', target: '_blank')  %>
-                  <%= _(contact.status) %>
+                  <%= contact.people.length %>
                 </div>
             <% end %>
             <%= check_box_tag 'merge_sets[]', set.collect(&:id).join(',') %>
@@ -27,12 +29,16 @@
       <h2><%=  _('Step 2 of 2: Merge duplicate people within contacts') %></h2>
       <%= form_tag merge_sets_people_path do %>
           <%= link_to(_('Select all duplicates'), '#', class: 'select_all') %>
-          <% @people_sets.each do |dup| %>
+          <p ><%= _('Toggle the radio buttons to change the person who will be the "winner" of the merge.
+        All data from the "loser" of the merge will get copied into the "winner." No data will be lost.') %></p>
+          <% @people_sets.sort_by { |ppl|ppl.person.id}.each do |dup| %>
               <div class="duplicate_set">
                 <div class="contact-header "><%= link_to(dup.shared_contact.name, contact_path(dup.shared_contact), target: '_blank')  %></div>
-                <div class="person"><%= dup.person %></div>
-                <div class="person"><%= dup.dup_person %></div>
-                <%= check_box_tag 'merge_sets[]', "#{dup.person.id},#{dup.dup_person.id}" %>
+                <div class="person"><%= radio_button_tag 'dup_person_winner', dup.person.id, true%>
+                  <%= dup.person %></div>
+                <div class="person"><%= radio_button_tag 'dup_person_winner', dup.dup_person.id %>
+                  <%= dup.dup_person %></div>
+                <%= check_box_tag 'merge_sets[]', "#{dup.person.id},#{dup.dup_person.id}"%>
                 <%= _('Merge these people') %><br />
                 <%= link_to(_('These are not duplicates'), not_duplicates_people_path(ids: "#{dup.person.id},#{dup.dup_person.id}"),
                             remote: true, method: :put, data: {behavior: 'not_duplicates'}) %>

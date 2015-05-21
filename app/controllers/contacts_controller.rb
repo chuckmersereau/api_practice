@@ -145,7 +145,10 @@ class ContactsController < ApplicationController
       next if contacts.length <= 1
 
       merged_contacts_count += contacts.length
-      winner_id = params[:selected_winner][ids].to_i
+
+      #The winner id is included in a hash that has both potential merge id. Thus, no need to check if its the
+      #correct merge set.
+      winner_id = params[:dup_contact_winner][ids].to_i
       winner = contacts.find(winner_id)
       Contact.transaction do
         (contacts - [winner]).each do |loser|
