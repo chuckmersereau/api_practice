@@ -104,36 +104,19 @@
                 <li class="filter_set">
                   <label id="filter_contact_location" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Location']);"><%= _('Contact Location') %></label>
                   <div class="filter_set_inner">
-                    <label><%= _('City') %>:</label>
-                    <%= select_tag 'filters[city]',
-                                   options_for_select([[_('-- Any --'), '']] + current_account_list.cities.select(&:present?)),
-                                   multiple: true, size: 5, class: 'form-control',
-                                   :'ng-model' => 'contactQuery.city' %>
-                    <label><%= _('State') %>:</label>
-                    <%= select_tag 'filters[state]',
-                                   options_for_select([[_('-- Any --'), '']] + current_account_list.states.select(&:present?)),
-                                   multiple: true, size: 5, class: 'form-control',
-                                   :'ng-model' => 'contactQuery.state' %>
-                    <% region_options = [[_('-- Any --'), '']] + current_account_list.regions.select(&:present?) %>
-                    <% if region_options.count > 1 %>
-                      <label><%= _('Region') %>:</label>
-                      <%= select_tag 'filters[region]', options_for_select(region_options),
-                                     multiple: true, size: [region_options.count, 5].min, class: 'form-control',
-                                     :'ng-model' => 'contactQuery.region' %>
-                    <% end %>
-                    <% metro_options = [[_('-- Any --'), '']] + current_account_list.metro_areas.select(&:present?) %>
-                    <% if metro_options.count > 1 %>
-                      <label><%= _('Metro Area') %>:</label>
-                      <%= select_tag 'filters[metro_area]', options_for_select(metro_options),
-                                     multiple: true, size: [5, metro_options.count].min, class: 'form-control',
-                                     :'ng-model' => 'contactQuery.metro_area' %>
-                    <% end %>
-                    <% country_options = [[_('-- Any --'), '']] + current_account_list.countries.select(&:present?) %>
-                    <% if country_options.count > 1 %>
-                      <label id="filter_country"><%= _('Country') %></label>
-                      <%= select_tag 'filters[country]', options_for_select(country_options),
-                                     multiple: true, size: [5, country_options.count].min, class: 'form-control',
-                                     :'ng-model' => 'contactQuery.country' %>
+                    <% location_filters = [
+                      ['City', 'city', :cities],
+                      ['State', 'state', :states],
+                      ['Region', 'region', :regions],
+                      ['Country', 'country', :countries],
+                    ] %>
+                    <% location_filters.each do |location| %>
+                      <% options = [[_('-- Any --'), '']] + current_account_list.try(location[2]).select(&:present?) %>
+                      <% next if options.count <= 1 %>
+                      <label><%= _(location[0]) %>:</label>
+                      <%= select_tag 'filters['+location[1]+']', options_for_select(options),
+                                     multiple: true, size: [5, options.count].min, class: 'form-control',
+                                     :'ng-model' => 'contactQuery.'+location[1] %>
                     <% end %>
                     <label>
                       <input type="checkbox" ng-model="contactQuery.activeAddresses"> <%= _('Active addresses') %>
