@@ -97,6 +97,10 @@ class AccountList < ActiveRecord::Base
     @metro_areas ||= contacts.active.joins(:addresses).order('addresses.metro_area').pluck('DISTINCT addresses.metro_area')
   end
 
+  def countries
+    @countries ||= contacts.active.joins(:addresses).order('addresses.country').pluck('DISTINCT addresses.country')
+  end
+
   def churches
     @churches ||= contacts.order(:church_name).pluck('DISTINCT church_name')
   end
