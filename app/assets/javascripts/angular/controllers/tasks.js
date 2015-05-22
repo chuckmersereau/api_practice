@@ -96,7 +96,7 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[contact_type]=' + encodeURIComponent($scope.filter.contactType) +
             '&filters[city][]=' + encodeURLarray($scope.filter.contactCity).join('&filters[city][]=') +
             '&filters[state][]=' + encodeURLarray($scope.filter.contactState).join('&filters[state][]=') +
-            '&filters[country][]=' + encodeURLarray($scope.filter.contactState).join('&filters[country][]=') +
+            '&filters[country][]=' + encodeURLarray($scope.filter.contactCountry).join('&filters[country][]=') +
             '&filters[newsletter]=' + encodeURIComponent($scope.filter.contactNewsletter) +
             //'&filters[tags][]=' + encodeURLarray(q.tags).join('&filters[tags][]=') +
             '&filters[status][]=' + encodeURLarray($scope.filter.contactStatus).join('&filters[status][]=') +
