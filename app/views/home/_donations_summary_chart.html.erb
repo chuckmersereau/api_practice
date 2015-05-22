@@ -15,7 +15,7 @@
    total = 0
    @by_month.each { |month| month[1].each { |d| total += d.amount if d.donation_date < Date.today.beginning_of_month } }
    monthly_average = (total / @time_span).to_i
-   plot_line_values = [pledges, current_account_list.monthly_goal, monthly_average]
+   plot_line_values = [pledges, (current_account_list.monthly_goal || 0), monthly_average]
    monthly_values = @by_month_index.collect {|month| @by_month[month] || []}.collect {|v| v.sum(&:amount)} %>
 
 
@@ -64,7 +64,7 @@
           width: 2,
           color: "#007398"
         },{
-          value: <%= current_account_list.monthly_goal %>,
+          value: <%= current_account_list.monthly_goal || 0 %>,
           width: 2,
           color: "#3eb1c8"
         },{
@@ -81,7 +81,7 @@
             s += '<br/>'+ point.series.name +': '+
                   point.y +
                   '<br/><%= j _('Percentage of goal') %>: '+
-                  Math.round(Number(point.y) / <%= current_account_list.monthly_goal %> * 100) + '%'+
+                  Math.round(Number(point.y) / <%= current_account_list.monthly_goal || 0 %> * 100) + '%'+
                   '<br/><%= j _('Percentage of average') %>: '+
                   Math.round(Number(point.y) / <%= monthly_average + 0.1 %> * 100) + '%';
           });
