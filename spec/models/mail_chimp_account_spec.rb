@@ -137,9 +137,16 @@ describe MailChimpAccount do
 
     context 'subscribing a person' do
       it "should add a person's primary email address" do
-        stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listSubscribe')
-          .to_return(body: '{}')
+        account.primary_list_id = 'list1'
+        subscribe_args = {
+          id: 'list1', email_address: 'foo@example.com', update_existing: true, double_optin: false,
+          merge_vars: { EMAIL: 'foo@example.com', FNAME: 'John', LNAME: 'Smith', GREETING: 'Sync greeting' },
+          send_welcome: false, replace_interests: true
+        }
+        expect(account.gb).to receive(:list_subscribe).with(subscribe_args)
         person = create(:person, email: 'foo@example.com')
+        contact = create(:contact, greeting: 'Sync greeting')
+        contact.people << person
         account.send(:subscribe_person, person.id)
       end
 

@@ -316,4 +316,76 @@ describe Person do
       expect(p2.not_same_as?(p1)).to be_true
     end
   end
+
+  context '#sync_with_mailchimp' do
+    let(:mail_chimp_account) { build(:mail_chimp_account) }
+    let(:contact) { create(:contact, send_newsletter: 'Email') }
+
+    before do
+      expect(person).to receive(:mail_chimp_account).at_least(:once).and_return(mail_chimp_account)
+      contact.people << person
+      person.email_address = { email: 'test@example.com' }
+      person.save
+      person.reload
+    end
+
+    it 'does not subscribe when a non-related field is updated' do
+      expect(mail_chimp_account).to_not receive(:queue_subscribe_person).with(person)
+      expect(mail_chimp_account).to_not receive(:queue_unsubscribe_person).with(person)
+      person.update(occupation: 'not mailchimp related')
+    end
+
+    it 'subscribes (to update) a person when their first name changes' do
+      expect_subscribe_on_update(first_name: 'new-first-name')
+    end
+
+    it 'subscribes (to update) a person when their last name changes' do
+      expect_subscribe_on_update(last_name: 'new-last-name')
+    end
+
+    it 'subscribes a previously opted-out person if they are opted back in' do
+      person.update_column(:optout_enewsletter, true)
+      expect_subscribe_on_update(optout_enewsletter: false)
+    end
+
+    it 'unsubscribes a person if they are updated to opt out of the newsletter' do
+      expect_unsubscribe_on_update(optout_enewsletter: true)
+    end
+
+    it 'works using nested email attributes (contact update had trouble with that)' do
+      expect_unsubscribe_on_update(optout_enewsletter: true,
+                                   email_addresses_attributes: [{ id: person.email_addresses.first.id,
+                                                                  email: 'update@test.com' }])
+    end
+
+    it 'updates an email if one no longer valid and one new via nested attributes' do
+      # create an email address
+      email = person.email_addresses.first
+      update_attrs = {
+        email_addresses_attributes: [
+          { email: email.email, primary: 0, historic: 1, id: email.id },
+          { email: 'new@example.com', primary: 0 }
+        ]
+      }
+      person.update(update_attrs)
+      person.reload
+      email.reload
+      email2 = person.email_addresses.find_by(email: 'new@example.com')
+      expect(email.historic).to be_true
+      expect(email.primary).to be_false
+      expect(email2.primary).to be_true
+
+      expect(mail_chimp_account).to receive(:queue_update_email).with('test@example.com', 'new@example.com')
+    end
+
+    def expect_unsubscribe_on_update(update_args)
+      expect(mail_chimp_account).to receive(:queue_unsubscribe_person).with(person)
+      person.update(update_args)
+    end
+
+    def expect_subscribe_on_update(update_args)
+      expect(mail_chimp_account).to receive(:queue_subscribe_person).with(person)
+      person.update(update_args)
+    end
+  end
 end
