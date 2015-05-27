@@ -1,4 +1,14 @@
 class CsvImport
+  SUPPORTED_HEADERS = [
+    'Contact Name', 'Greeting', 'Envelope Greeting', 'Status', 'Commitment Amount', 'Notes',
+    'Commitment Frequency', 'Newsletter', 'Commitment Received', 'Tags', 'Mailing Street Address',
+    'Mailing City', 'Mailing State', 'Mailing Postal Code', 'Mailing Country', 'First Name',
+    'Last Name', 'Primary Email', 'Primary Phone', 'Spouse First Name', 'Spouse Last Name',
+    'Spouse Email', 'Spouse Phone'
+  ]
+
+  REQUIRED_HEADERS = ['Contact Name', 'First Name']
+
   def initialize(import)
     @import = import
     @account_list = import.account_list
@@ -10,6 +20,10 @@ class CsvImport
 
   def contacts
     CSV.new(@import.file_contents, headers: :first_row).map(&method(:contact_from_line))
+  end
+
+  def actual_headers
+    CSV.new(@import.file_contents).first
   end
 
   def contact_from_line(line)
