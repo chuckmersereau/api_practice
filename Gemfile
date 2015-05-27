@@ -20,7 +20,7 @@ gem 'jquery-ui-rails', '~> 4.2.1'
 gem 'angularjs-rails' # , '~> 1.2.16'
 gem 'lodash-rails', '~> 3.5.0'
 gem 'angular-ui-bootstrap-rails'
-gem 'ngmin-rails'
+gem 'ngannotate-rails'
 gem 'momentjs-rails'
 # gem 'rails_karma'
 gem 'best_in_place', '~> 3.0.1'
@@ -144,7 +144,7 @@ group :test do
   gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
-  gem 'rubocop'
+  gem 'rubocop', '= 0.29.1'
   gem 'test_after_commit'
 end
 
