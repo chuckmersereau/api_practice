@@ -1,4 +1,4 @@
-development: localhost:6379
-test: localhost:6379
-staging: redis:6379
-production: redis:6379
+development: <%= ENV['REDIS_PORT_6379_TCP_ADDR'] %>:<%= ENV['REDIS_PORT_6379_TCP_PORT'] %>
+test: <%= ENV['REDIS_PORT_6379_TCP_ADDR'] %>:<%= ENV['REDIS_PORT_6379_TCP_PORT'] %>
+staging: <%= ENV['REDIS_PORT_6379_TCP_ADDR'] %>:<%= ENV['REDIS_PORT_6379_TCP_PORT'] %>
+production: <%= ENV['REDIS_PORT_6379_TCP_ADDR'] %>:<%= ENV['REDIS_PORT_6379_TCP_PORT'] %>
