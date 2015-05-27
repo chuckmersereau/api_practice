@@ -404,7 +404,7 @@ GEM
       atomic (>= 1.0.0)
       peek
       redis
-    pg (0.14.1)
+    pg (0.18.2)
     poltergeist (1.6.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
@@ -721,7 +721,7 @@ DEPENDENCIES
   peek-performance_bar
   peek-pg
   peek-redis
-  pg (~> 0.14.1)
+  pg (~> 0.18.2)
   poltergeist
   puma
   quiet_assets
