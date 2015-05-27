@@ -253,7 +253,6 @@ ActiveRecord::Schema.define(version: 20150528170855) do
     t.string   "timezone"
     t.string   "envelope_greeting"
     t.boolean  "no_appeals"
-    t.string   "pls_id"
     t.text     "prayer_letters_params"
   end
 
@@ -782,7 +781,7 @@ ActiveRecord::Schema.define(version: 20150528170855) do
     t.datetime "last_download"
     t.string   "token"
     t.datetime "locked_at"
-    t.boolean  "disable_downloads",    default: false, null: false
+    t.boolean  "disable_downloads", default: false, null: false
   end
 
   add_index "person_organization_accounts", ["person_id", "organization_id"], name: "user_id_and_organization_id", unique: true, using: :btree
@@ -860,16 +859,6 @@ ActiveRecord::Schema.define(version: 20150528170855) do
   end
 
   add_index "pictures", ["picture_of_id", "picture_of_type"], name: "picture_of", using: :btree
-
-  create_table "pls_accounts", force: true do |t|
-    t.integer  "account_list_id"
-    t.string   "oauth2_token"
-    t.boolean  "valid_token",     default: true
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "pls_accounts", ["account_list_id"], name: "index_pls_accounts_on_account_list_id", using: :btree
 
   create_table "prayer_letters_accounts", force: true do |t|
     t.string   "token"

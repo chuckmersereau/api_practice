@@ -181,6 +181,9 @@ GEM
     diff-lcs (1.2.5)
     display_case (0.0.5)
     docile (1.1.5)
+    dotenv (2.0.1)
+    dotenv-rails (2.0.1)
+      dotenv (= 2.0.1)
     email_validator (1.4.0)
       activemodel
     equivalent-xml (0.5.1)
@@ -420,6 +423,8 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    puma (2.11.3)
+      rack (>= 1.1, < 2.0)
     quiet_assets (1.0.3)
       railties (>= 3.1, < 5.0)
     rack (1.5.2)
@@ -683,6 +688,7 @@ DEPENDENCIES
   deadlock_retry (~> 1.2.0)
   devise (~> 3.2.2)
   display_case (= 0.0.5)
+  dotenv-rails
   email_validator
   emoji_spec!
   equivalent-xml
@@ -738,6 +744,7 @@ DEPENDENCIES
   peek-redis
   pg (~> 0.14.1)
   poltergeist
+  puma
   quiet_assets
   railroady
   rails (~> 4.1.0)

@@ -19,7 +19,7 @@ describe Api::V1::InsightsController do
   include Savon::SpecHelper
 
   it 'returns a string array' do
-    creds = { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
+    creds = { name: ENV['OBIEE_KEY'], password: ENV['OBIEE_SECRET'] }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
 

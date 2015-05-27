@@ -12,9 +12,8 @@
 /tmp
 vendor/ruby
 vendor/jruby
-config/database.yml
-config/config.yml
 coverage
+config/config.yml
 .DS_Store
 rails/ruby
 NERD_tree_3
@@ -37,3 +36,4 @@ config/sidekiq.yml
 node_modules
 public/dev-assets
 .vagrant
+.env.local

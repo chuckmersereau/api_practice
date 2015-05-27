@@ -1,7 +1,7 @@
 namespace :mailchimp do
   desc 'Sync MPDX users to mailchimp list'
   task sync: :environment do
-    gb = Gibbon.new(APP_CONFIG['mailchimp_key'])
+    gb = Gibbon.new(ENV['MAILCHIMP_KEY'])
 
     CURRENT_USER_RANGE = 180.days.ago
 
@@ -12,7 +12,7 @@ namespace :mailchimp do
       if u.email
         vars = { EMAIL: u.email.email, FNAME: u.first_name, LNAME: u.last_name }
         begin
-          gb.list_subscribe(id: APP_CONFIG['mailchimp_list'], email_address: vars[:EMAIL], update_existing: true,
+          gb.list_subscribe(id: ENV['MAILCHIMP_LIST'], email_address: vars[:EMAIL], update_existing: true,
                             double_optin: false, merge_vars: vars, send_welcome: false, replace_interests: true)
           u.update_column(:subscribed_to_updates, true)
 
@@ -34,7 +34,7 @@ namespace :mailchimp do
     ).find_each do |u|
       if u.email
         begin
-          gb.list_unsubscribe(id: APP_CONFIG['mailchimp_list'], email_address: u.email.email,
+          gb.list_unsubscribe(id: ENV['MAILCHIMP_LIST'], email_address: u.email.email,
                               send_goodbye: false, delete_member: true)
           u.update_column(:subscribed_to_updates, nil)
           puts "Unsubscribed #{u.first_name} #{u.last_name} - #{u.email.email}"
