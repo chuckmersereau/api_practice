@@ -17,6 +17,7 @@ class Import < ActiveRecord::Base
   validates :file, if: ->(import) { 'tnt_data_sync' == import.source }, upload_extension: { extension: 'tntmpd', message: TNT_DATA_SYNC_MSG }
   CSV_MSG = 'You must specify a .csv spreadsheet file from to upload to MPDX.'
   validates :file, if: ->(import) { 'csv' == import.source }, upload_extension: { extension: 'csv', message: CSV_MSG }
+  validates_with CsvImportHeadersValidator, if: -> (import) { 'csv' == import.source }
   validates_with FacebookImportValidator, if: -> (import) { 'facebook' == import.source }
 
   serialize :groups, Array

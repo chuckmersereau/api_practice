@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe CsvImport do
-  let!(:csv_import) { create(:csv_import, tags: 'csv, test') }
+  let!(:csv_import) { build(:csv_import, tags: 'csv, test') }
   let!(:import) { CsvImport.new(csv_import) }
 
   before do
@@ -53,14 +53,14 @@ describe CsvImport do
     it 'parses the contacts from csv without saving them' do
       expect(Contact.count).to eq(0)
       expect(Person.count).to eq(1)
-      expect(EmailAddress.count).to eq(1)
+      expect(EmailAddress.count).to eq(0)
       expect(Address.count).to eq(0)
       expect(PhoneNumber.count).to eq(0)
 
       contacts = import.contacts
       expect(Contact.count).to eq(0)
       expect(Person.count).to eq(1)
-      expect(EmailAddress.count).to eq(1)
+      expect(EmailAddress.count).to eq(0)
       expect(Address.count).to eq(0)
       expect(PhoneNumber.count).to eq(0)
 
