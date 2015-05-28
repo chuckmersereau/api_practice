@@ -14,7 +14,7 @@ class AccountListExhibit < DisplayCase::Exhibit
         if designation_profile(user).try(:balance)
           designation_profile(user).balance.to_i
         else
-          account_list_entries.select(&:active).map { |e| e.designation_account.balance.to_i }.reduce(&:+)
+          account_list_entries.map { |e| e.designation_account.balance.to_i }.reduce(&:+)
         end
     else
       balance = designation_accounts.first.balance.to_i
