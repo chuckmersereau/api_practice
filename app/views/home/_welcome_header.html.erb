@@ -1,0 +1,62 @@
+<% if current_user.setup.count > 0 %>
+  <div class="row">
+    <div class="getting_started_title col-md-6 col-md-offset-3">
+      <h1><%= _('Hi') %> <%= current_user.first_name %>!</h1>
+      <h3><%= _("While there's a lot you can do in MPDX, here's a few easy steps to get you up and going:") %></h3>
+    </div>
+  </div>
+<% else %>
+  <h1><%= _('Hi') %> <%= current_user.first_name %>! <span class="smallhead"><%= _("Here's whats happening...") %></span></h1>
+<% end %>
+
+<div class="row">
+  <% if current_user.setup.include? :import %>
+    <div class="col-md-4 getting-started-panel">
+      <div class="getting_started_number">1</div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          Form here for importing
+        </div>
+      </div>
+      <h2><%= _('Import Contacts') %></h2>
+    </div>
+  <% end %>
+  <% if current_user.setup.include? :goal %>
+    <div class="col-md-4 getting-started-panel">
+      <div class="getting_started_number">2</div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <%= link_to(preferences_path(:focus => "preference_set_monthly_goal")) do %>
+            <div class="mwrap">
+              <div class="nohide floating info">
+                <%= _('Click here to set your monthly goal, after which we will show '+
+                      'your progress and factor it into the pretty graph of your donations') %>
+              </div>
+            </div>
+          <% end %>
+          Form here for settings
+        </div>
+      </div>
+      <h2><%= _('Setup Your Support Goal And Notifications') %></h2>
+    </div>
+  <% end %>
+  <% if current_user.setup.include? :contacts %>
+    <div class="col-md-4 getting-started-panel">
+      <div class="getting_started_number">3</div>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          Form here for first contact
+        </div>
+      </div>
+      <h2><%= _('Add A Contact') %></h2>
+    </div>
+  <% end %>
+  <% if current_user.setup.count < 2 %>
+    <div class="col-md-12 donations_summary_panel">
+      <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
+        <div id="donations_summary_chart"></div>
+        <%= render 'donations_summary_chart' %>
+      <% end %>
+    </div>
+  <% end %>
+</div>

@@ -51,7 +51,7 @@ class User < Person
 
   def setup_finished!
     if setup_mode?
-      self.setup = nil
+      self.setup = [:import, :goal, :contacts]
       save(validate: false)
     end
   end

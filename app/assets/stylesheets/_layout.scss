@@ -1858,9 +1858,30 @@ body.google_integrations_controller {
 }
 
 /* ********************* Dashboard ************************** */
+/* -------- Welcome -------- */
+.getting_started_title, .getting-started-panel {
+  text-align: center;
+}
+.getting-started-panel .panel {
+  margin-top: -20px;
+  margin-bottom: 1em;
+}
+.getting_started_number {
+  background-color: orange;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  border-radius: 20px;
+  font-size: 20px;
+}
+
 #donations_summary_chart {
   border: 1px solid #ddd;
   border-radius: 5px;
+  .highcharts-container {
+    // width: 100% !important;
+  }
 }
 #dash-progress {
   .page-filters {
@@ -1954,7 +1975,7 @@ appeals-list .show-all {
   line-height: 36px;
 }
 .dash-panel {
-  min-height: 315px;
+  min-height: 200px;
   position: relative;
   a:hover {
     text-decoration: none;

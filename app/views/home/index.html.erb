@@ -1,24 +1,6 @@
 <div id="contentbody">
   <div class="wpp">
-    <h1><%= _('Hi') %> <%= current_user.first_name %>! <span class="smallhead"><%= _("Here's whats happening...") %></span></h1>
-
-    <div class="row">
-      <div class="col-md-12">
-        <% if current_account_list.monthly_goal.blank? %>
-          <%= link_to(preferences_path(:focus => "preference_set_monthly_goal")) do %>
-            <div class="mwrap">
-              <div class="nohide floating info">
-                <%= _('Click here to set your monthly goal, after which we will factor that into the pretty graph of your donations') %>
-              </div>
-            </div>
-          <% end %>
-        <% end %>
-        <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
-          <div id="donations_summary_chart"></div>
-          <%= render 'donations_summary_chart' %>
-        <% end %>
-      </div>
-    </div>
+    <%= render 'welcome_header' %>
 
     <div class="row" id="dash-widgets">
       <div class="col-md-4">
