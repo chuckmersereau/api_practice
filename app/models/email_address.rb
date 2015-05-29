@@ -83,28 +83,32 @@ class EmailAddress < ActiveRecord::Base
   def sync_with_mail_chimp
     return unless mail_chimp_account
     if contact && contact.send_email_letter? && !person.optout_enewsletter? && !historic && primary?
-      # If this is the newly designated primary email, we need to
-      # change the old one to this one
-      if old_email = person.primary_email_address.try(:email)
-        if old_email == email
-          if changes.include?('person_id')
-            mail_chimp_account.queue_subscribe_person(person)
-          elsif changes.include?('email')
-            old_email = changes['email'][0]
-            mail_chimp_account.queue_update_email(old_email, email)
-          end
-        else
-          mail_chimp_account.queue_update_email(old_email, email)
-        end
-      else
-        mail_chimp_account.queue_subscribe_person(person)
-      end
+      update_or_subscribe_to_mail_chimp
     else
       begin
         mail_chimp_account.queue_unsubscribe_email(email)
       rescue Gibbon::MailChimpError => e
         logger.info(e)
       end
+    end
+  end
+
+  def update_or_subscribe_to_mail_chimp
+    # If this is the newly designated primary email, we need to
+    # change the old one to this one
+    if old_email = person.primary_email_address.try(:email)
+      if old_email == email
+        if changes.include?('person_id')
+          mail_chimp_account.queue_subscribe_person(person)
+        elsif changes.include?('email')
+          old_email = changes['email'][0]
+          mail_chimp_account.queue_update_email(old_email, email)
+        end
+      else
+        mail_chimp_account.queue_update_email(old_email, email)
+      end
+    else
+      mail_chimp_account.queue_subscribe_person(person)
     end
   end
 
