@@ -3,11 +3,11 @@ class InsightsController < ApplicationController
     @page_title = _('Insights')
     @recommnds = InsightAnalyses.new.increase_recommendation_analysis(current_account_list.designation_accounts
                                                                      .pluck(:designation_number).first)['rowset']['Row']
-    @recurring_recommnds = RecurringRecommendationResults
+    @recurring_recommnds = RecurringRecommendationResult
   end
 
   def create
-    results = RecurringRecommendationResults.new
+    results = RecurringRecommendationResult.new
     results.contact_id = params[:selectedRecurringContactId].to_i
     results.account_list_id = current_account_list.id
     results.result = params[:selResult]

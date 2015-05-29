@@ -44,6 +44,8 @@ class AccountList < ActiveRecord::Base
   has_one :prayer_letters_account, dependent: :destroy, autosave: true
   has_many :google_integrations, dependent: :destroy
   has_many :appeals
+  has_many :help_requests
+  has_many :recurring_recommendation_results
 
   accepts_nested_attributes_for :contacts, reject_if: :all_blank, allow_destroy: true
 
@@ -252,26 +254,28 @@ class AccountList < ActiveRecord::Base
 
   def merge(other)
     AccountList.transaction do
-      other.designation_profiles.update_all(account_list_id: id)
-      other.messages.update_all(account_list_id: id)
+      # Intentionally don't copy over notification_preferences since they may conflict between accounts
+      [:activities, :appeals, :company_partnerships, :contacts, :designation_profiles,
+       :google_integrations, :help_requests, :imports, :messages, :recurring_recommendation_results
+      ].each { |has_many| other.send(has_many).update_all(account_list_id: id) }
+
+      [:mail_chimp_account, :prayer_letters_account].each do |has_one|
+        next unless send(has_one).nil? && other.send(has_one).present?
+        other.send(has_one).update(account_list_id: id)
+      end
+
+      [:designation_accounts, :companies].each do |copy_if_missing|
+        other.send(copy_if_missing).each do |item|
+          send(copy_if_missing) << item unless send(copy_if_missing).include?(item)
+        end
+      end
 
       other.users.each do |user|
         next if users.include?(user)
         users << user
-        user.update_attributes(preferences: nil)
+        user.update(preferences: nil)
       end
-      other.designation_accounts.each do |da|
-        designation_accounts << da unless designation_accounts.include?(da)
-      end
-      other.contacts.update_all(account_list_id: id)
-      other.companies.each do |company|
-        companies << company unless companies.include?(company)
-      end
-      other.activities.update_all(account_list_id: id)
 
-      if mail_chimp_account.nil? && other.mail_chimp_account
-        other.mail_chimp_account.update_attributes(account_list_id: id)
-      end
       other.reload
       other.destroy
 
