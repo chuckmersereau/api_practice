@@ -1862,10 +1862,16 @@ body.google_integrations_controller {
 .getting_started_title, .getting-started-panel {
   text-align: center;
 }
-.getting-started-panel .panel {
-  margin-top: -20px;
-  margin-bottom: 1em;
+.getting-started-panel {
+  .panel {
+    margin-top: -20px;
+    margin-bottom: 1em;
+  }
+  .account_single {
+    margin-bottom: 1em;
+  }
 }
+
 .getting_started_number {
   background-color: orange;
   display: inline-block;

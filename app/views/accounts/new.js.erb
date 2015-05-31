@@ -1,2 +1,2 @@
-$('#generic_dialog').html('<%= j(render('accounts/tnt_import_form')) %>')
-$('#generic_dialog').dialog({position:"center", width: '500'})
+ $('#generic_dialog').html('<%= j(render("accounts/#{params[:provider]}_form")) %>')
+                     .dialog({position:"center", width: '550'})

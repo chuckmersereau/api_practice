@@ -101,6 +101,10 @@ class User < Person
     Person.find(id)
   end
 
+  def setup
+    super || []
+  end
+
   private
 
   def set_setup_mode

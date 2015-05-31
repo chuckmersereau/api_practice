@@ -1,50 +1,53 @@
 <div class="network_connections">
   <% current_user.send("#{provider}_accounts".to_sym).each do |account| %>
-      <div class="account_single <%= 'error_element' if account.try(:valid_credentials) == false %>"
-           data-behavior="account" id="<%= provider%>-account-<%= account.id %>">
-        <div class="actions">
-          <% if provider == 'organization' %>
-              <%= link_to(_('edit'), edit_person_organization_account_path(account, format: :js), class: "edit ico ico_edit no-new-tab",
-                          data: {behavior: "edit_#{provider}_account"}) %>
-          <% else %>
-              <%= link_to(_('delete'), account_path(account, provider: provider), method: :delete, :class => "inlineaction delete",
-                          data: { confirm: _('Are you sure you want to remove this connection?') }) %>
-          <% end %>
-        </div>
-        <span class="account_name"><%= account %></span>
-
-        <% case provider %>
-        <% when 'organization'  %>
-          <% if account.organization.api_class == 'OfflineOrg' %>
-            <%= render('tnt_data_sync_import_form', account: account) %>
-          <% end %>
-        <% when 'google' %>
-            <% account.google_integration(current_account_list).tap do |google_integration| %>
-                <% if account.token_expired? && !account.refresh_token!  %>
-                    <p>
-                      <%= _('The link between MPDX and your Google account stopped working. '+
-                            'Click "Refresh Google Account" to re-enable it. After that, '+
-                            'you\'ll need to manually re-enable any integrations that you had set already.') %>
-                    </p>
-                    <% new_account_path_opts = { provider: :google } %>
-                    <% new_account_path_opts[:redirect] =  google_integration_path(google_integration) if google_integration %>
-                    <%= link_to(_('Refresh Google Account'), new_account_path(new_account_path_opts), class: 'btn desired_action') %>
-                <% else %>
-                    <% if google_integration %>
-                        <%= link_to(google_integration_path(google_integration)) do %>
-                          <i class="fa fa-refresh"></i>
-                          <%= _('Configure synchronization') %>
-                        <% end %>
-                    <% else %>
-                      <%= link_to(google_integrations_path(google_account_id: account.id), method: :post) do %>
-                        <i class="fa fa-refresh"></i>   <%= _('Configure synchronization') %>
-                      <% end %>
-                    <% end %>
-                    <%= render('google_import_options', account: account) %>
-                 <% end %>
-            <% end %>
+    <div class="account_single <%= 'error_element' if account.try(:valid_credentials) == false %>"
+         data-behavior="account" id="<%= provider%>-account-<%= account.id %>">
+      <div class="actions">
+        <% if provider == 'organization' %>
+          <%= link_to(_('edit'), edit_person_organization_account_path(account, format: :js),
+                      class: "edit ico ico_edit no-new-tab",
+                      data: { behavior: "edit_#{provider}_account" }) %>
+        <% else %>
+          <%= link_to(_('delete'), account_path(account, provider: provider),
+                      method: :delete, :class => "inlineaction delete",
+                      data: { confirm: _('Are you sure you want to remove this connection?') }) %>
         <% end %>
-
       </div>
+      <span class="account_name"><%= account %></span>
+      <% case provider %>
+      <% when 'organization'  %>
+        <%= render('tnt_data_sync_import_form', account: account) if account.organization.api_class == 'OfflineOrg' %>
+      <% when 'google' %>
+        <% account.google_integration(current_account_list).tap do |google_integration| %>
+          <% if account.token_expired? && !account.refresh_token!  %>
+            <p>
+              <%= _('The link between MPDX and your Google account stopped working. '+
+                    'Click "Refresh Google Account" to re-enable it. After that, '+
+                    'you\'ll need to manually re-enable any integrations that you had set already.') %>
+            </p>
+            <% new_account_path_opts = { provider: :google } %>
+            <% new_account_path_opts[:redirect] =  google_integration_path(google_integration) if google_integration %>
+            <%= link_to(_('Refresh Google Account'), new_account_path(new_account_path_opts), class: 'btn desired_action') %>
+          <% else %>
+            <% if google_integration %>
+              <%= link_to(google_integration_path(google_integration)) do %>
+                <i class="fa fa-refresh"></i>
+                <%= _('Configure synchronization') %>
+              <% end %>
+            <% else %>
+              <%= link_to(google_integrations_path(google_account_id: account.id), method: :post) do %>
+                <i class="fa fa-refresh"></i>   <%= _('Configure synchronization') %>
+              <% end %>
+            <% end %>
+            <div class="well importoptions formstyles" data-behavior="import_options" style="display:none">
+              <%= render('accounts/google_import_form', account: account) %>
+            </div>
+            <a href="#" data-behavior="show_import">
+              <%= '<i class="fa fa-cloud-download"></i> '.html_safe+_('Import Contacts') %>
+            </a>
+           <% end %>
+        <% end %>
+      <% end %>
+    </div>
   <% end %>
 </div>

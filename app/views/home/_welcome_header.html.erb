@@ -23,9 +23,30 @@
                   TntMPD
                 </h3>
               </td>
-              <td class="connections" data-behavior="account" style="width:500px">
+              <td class="connections" data-behavior="account">
                 <%= link_to(_('Import Tnt Contacts'), new_account_path(provider: 'tnt_import'),
                     class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
+              </td>
+            </tr>
+            <tr>
+              <td class="identify network_logo">
+                <%= image_tag("logos/google_logo.png", alt: 'Google') %>
+              </td>
+              <td class="connections" data-behavior="account">
+                <% current_user.google_accounts.each do |account| %>
+                  <div class="account_single">
+                    <span class="account_name"><%= account %></span>
+                    <% if account.token_expired? && !account.refresh_token! %>
+                      <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: home_path),
+                                  class: 'btn btn-xs btn-secondary desired_action') %>
+                    <% else %>
+                      <%= link_to('<i class="fa fa-cloud-download"></i> '.html_safe+_('Import Contacts'),
+                                  new_account_path(provider: 'google_import', account_id: account.id),
+                                  class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
+                    <% end %>
+                  </div>
+                <% end %>
+                <%= auth_link('google') %>
               </td>
             </tr>
           </table>
@@ -65,7 +86,7 @@
     </div>
   <% end %>
   <% if current_user.setup.count < 2 %>
-    <div class="col-md-12 donations_summary_panel">
+    <div class="col-md-<%= 12 - (current_user.setup.count*4) %> donations_summary_panel">
       <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
         <div id="donations_summary_chart"></div>
         <%= render 'donations_summary_chart' %>
