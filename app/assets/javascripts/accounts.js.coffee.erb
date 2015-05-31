@@ -23,7 +23,7 @@ $ ->
       false
 
     $(document).on 'click', '[data-behavior="add_org_account"]', ->
-      $('[data-behavior="new_org_account"]').dialog
+      $('#new_org_account').dialog
         resizable: false,
         modal:'true',
         maxHeight: 600

@@ -2,175 +2,142 @@
   <div class="col-md-3" role="complementary">
     <%= render 'settings_sidebar' %>
   </div>
-  <div class="col-md-9">
-    <div id="contentbody">
-      <div class="wpp">
-        <div class="row">
-          <div class="col-md-12">
-            <div class="page-filters">
-              <h2><%= _('Networks & Imports') %></h2>
-            </div>
-          </div>
+  <div class="col-md-9 wpp" id="contentbody">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-filters">
+          <h2><%= _('Networks & Imports') %></h2>
         </div>
-        <% @providers.each do |provider| %>
-          <div class="network_connect spacer-top">
-
-            <table>
-              <tr>
-                <td class="identify">
-                  <div class="network_logo">
-                    <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
-                  </div>
-                </td>
-                <td class="connections">
-                  <%= render 'network_connections', provider: provider %>
-                  <% case provider %>
-                  <% when 'facebook', 'relay', 'key', 'google' %>
-                  <% else %>
-                    <div class="alert alert-warning" role="alert"><%= _('MPDX does not currently import any data from this source, but it will soon! Connect your account now to be ready for when it does') %></div>
-                  <% end %>
-
-                  <% if provider == 'facebook' %>
-                    <div class="alert alert-warning" role="alert"><%= _('As of April 30, 2015 Facebook changed how they integrate with apps like MPDX so we cannot currently import Facebook contacts. We will investigate options in the future.') %></div>
-                  <% else %>
-                    <div class="network_button">
-                      <%= auth_link(provider) %>
-                    </div>
-                  <% end %>
-
-                </td>
-              </tr>
-            </table>
-          </div>
-        <% end %>
-        <% provider = 'organization' %>
-        <div class="network_connect">
-          <table>
-            <tr>
-              <td class="identify">
-
-                <div class="network_logo">
-                  <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
-                </div>
-
-
-              </td>
-              <td class="connections">
-                <%= render 'network_connections', provider: provider %>
-                <div class="network_button">
-                  <%= link_to(_('Add another Account'), '#', data: {behavior: 'add_org_account'}, :class => "btn btn-secondary btn-xs") %>
-                </div>
-              </td>
-            </tr>
-          </table>
-        </div>
-
-        <div class="network_connect">
-          <table>
-            <tr>
-              <td class="identify network_logo">
-                <h3>
-                  <%= image_tag("logos/tnt_logo.png", alt: 'TntMPD') %>
-                  TntMPD
-                </h3>
-              </td>
-              <td class="connections" data-behavior="account" style="width:500px">
-                <div class="importoptions formstyles well" data-behavior="import_options" style="display:none">
-                  <%= render 'tnt_import_form' %>
-                </div>
-                <a href="#" class="btn btn-xs btn-secondary" data-behavior="show_import">
-                  <%= '<i class="fa fa-user-plus"></i> '.html_safe+_('Import Contacts') %>
-                </a>
-              </td>
-            </tr>
-          </table>
-        </div>
-
-
-        <% %w[csv].each do |provider| %>
-          <div class="network_connect">
-
-            <table>
-              <tr>
-                <td class="identify">
-
-                  <div class="network_logo">
-                    <h3>
-                      .CSV File
-                    </h3>
-                  </div>
-                </td>
-                <td class="connections" data-behavior="account" style="width:500px">
-                  <div class="well importoptions formstyles" data-behavior="import_options" style="display:none">
-                    <h4><i class="fa fa-exclamation-triangle"></i> <%= _('Follow these instructions EXACTLY or your import will not work.') %></h4>
-
-                    <ol>
-                      <li>
-                        <%= (_('Download the <a href="%{sample_url}">sample MPDX csv import file</a>.'
-                              ).localize % { sample_url: sample_imports_path(format: :csv) }).html_safe %>
-                      </li>
-                      <li> <%= _('Format your data to match the sample:') %>
-                        <ul>
-                          <li>
-                            <strong><%= (_('The headers in the first row <em class="gold">must exactly match</em> the sample.')).html_safe %></strong>
-                          </li>
-                          <li>
-                            <strong><%= (_('The Status, Commitment Frequency, and Newsletter values <em class="gold">must also exactly match</em> ' +
-                                                   'one of the "Cell Options" in the sample.')).html_safe %></strong>
-                          </li>
-                          <li>
-                            <%= _('The Spouse Last Name, Greeting and Envelope Greeting fields will get ' +
-                                  'automatic defaults if you leave them blank.') %>
-                          </li>
-                        </ul>
-                      </li>
-                      <li>
-                        <strong><%= _('When you finish formatting your data, remove any blank or sample rows at the bottom.') %></strong>
-                        <%= _('Then upload your file below, optionally specify a tag, and click "Preview Import."') %>
-                      </li>
-                      <li>
-                        <%= _('You can then review the import to ensure it is correct and re-upload as needed. ' +
-                              "Note that the sample itself isn't fully valid because we included instructions at the bottom.") %>
-                      </li>
-                      <li>
-                        <%= (_('Once you have a CSV import with valid and correct data <strong>click "Run import"</strong> from the preview page.')).html_safe %>
-                      </li>
-                    </ol>
-
-                    <%= form_for Import.new(source: provider, in_preview: true) do |f| %>
-                      <%= f.hidden_field :source %>
-                      <%= f.hidden_field :in_preview %>
-
-                      <div class="field">
-                        <%= f.file_field :file %>
-                        <%= f.hidden_field :file_cache %>
-                      </div>
-
-                      <div class="field">
-                        <div class="importtags">
-                          <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
-                        </div>
-                      </div>
-                      <a href="#" class="btn btn-xs btn-secondary" data-behavior="import_button"><%= _('Preview Import') %></a>
-                    <% end %>
-                  </div>
-                  <a href="#" class="btn btn-xs btn-default" data-behavior="show_import"><%= _('Import Contacts') %></a>
-                </td>
-              </tr>
-            </table>
-          </div>
-        <% end %>
-
-        <div data-behavior="new_org_account" style="display:none" title="<%= _('Connect to your organization') %>">
-          <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
-            <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true) %>
-            <%= link_to(_('Connect to selected organization'), new_person_organization_account_path, class: 'btn btn-primary btn-xs', id: 'connect_to_org') %>
-          </div>
-        </div>
-        <div id="org_connection_box">
-        </div>
-
       </div>
     </div>
+    <% @providers.each do |provider| %>
+      <table class="network_connect spacer-top">
+        <tr>
+          <td class="identify">
+            <div class="network_logo">
+              <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
+            </div>
+          </td>
+          <td class="connections">
+            <%= render 'network_connections', provider: provider %>
+
+            <% if provider == 'facebook' %>
+              <div class="alert alert-warning" role="alert">
+                <%= _('As of April 30, 2015 Facebook changed how they integrate '+
+                      'with apps like MPDX so we cannot currently import Facebook '+
+                      'contacts. We will investigate options in the future.') %>
+              </div>
+            <% else %>
+              <div class="network_button">
+                <%= auth_link(provider) %>
+              </div>
+            <% end %>
+
+          </td>
+        </tr>
+      </table>
+    <% end %>
+
+    <table class="network_connect">
+      <tr>
+        <td class="identify network_logo">
+          <h3>
+            <%= image_tag("logos/tnt_logo.png", alt: 'TntMPD') %>
+            TntMPD
+          </h3>
+        </td>
+        <td class="connections" data-behavior="account" style="width:500px">
+          <div class="importoptions formstyles well" data-behavior="import_options" style="display:none">
+            <%= render 'tnt_import_form' %>
+          </div>
+          <a href="#" class="btn btn-xs btn-secondary" data-behavior="show_import">
+            <i class="fa fa-user-plus"></i> <%= _('Import Contacts') %>
+          </a>
+        </td>
+      </tr>
+    </table>
+
+    <% provider = 'csv' %>
+    <table class="network_connect">
+      <tr>
+        <td class="identify network_logo">
+          <h3>
+            .CSV File
+          </h3>
+        </td>
+        <td class="connections" data-behavior="account" style="width:500px">
+          <div class="well importoptions formstyles" data-behavior="import_options" style="display:none">
+            <h4>
+              <i class="fa fa-exclamation-triangle"></i>
+              <%= _('Follow these instructions EXACTLY or your import will not work.') %>
+            </h4>
+
+            <ol>
+              <li>
+                <%= (_('Download the <a href="%{sample_url}">sample MPDX csv import file</a>.'
+                      ).localize % { sample_url: sample_imports_path(format: :csv) }).html_safe %>
+              </li>
+              <li> <%= _('Format your data to match the sample:') %>
+                <ul>
+                  <li>
+                    <strong><%= _('The headers in the first row <em class="gold">'+
+                                    'must exactly match</em> the sample.').html_safe %></strong>
+                  </li>
+                  <li>
+                    <strong><%= _('The Status, Commitment Frequency, and Newsletter values '+
+                                    '<em class="gold">must also exactly match</em> one of the '+
+                                    '"Cell Options" in the sample.').html_safe %></strong>
+                  </li>
+                  <li>
+                    <%= _('The Spouse Last Name, Greeting and Envelope Greeting fields will get ' +
+                          'automatic defaults if you leave them blank.') %>
+                  </li>
+                </ul>
+              </li>
+              <li>
+                <strong><%= _('When you finish formatting your data, remove any blank or sample rows at the bottom.') %></strong>
+                <%= _('Then upload your file below, optionally specify a tag, and click "Preview Import."') %>
+              </li>
+              <li>
+                <%= _('You can then review the import to ensure it is correct and re-upload as needed. ' +
+                      "Note that the sample itself isn't fully valid because we included instructions at the bottom.") %>
+              </li>
+              <li>
+                <%= _('Once you have a CSV import with valid and correct data <strong>'+
+                        'click "Run import"</strong> from the preview page.').html_safe %>
+              </li>
+            </ol>
+
+            <%= form_for Import.new(source: provider, in_preview: true) do |f| %>
+              <%= f.hidden_field :source %>
+              <%= f.hidden_field :in_preview %>
+
+              <div class="field">
+                <%= f.file_field :file %>
+                <%= f.hidden_field :file_cache %>
+              </div>
+
+              <div class="field">
+                <div class="importtags">
+                  <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
+                </div>
+              </div>
+              <a href="#" class="btn btn-xs btn-secondary" data-behavior="import_button"><%= _('Preview Import') %></a>
+            <% end %>
+          </div>
+          <a href="#" class="btn btn-xs btn-default" data-behavior="show_import"><%= _('Import Contacts') %></a>
+        </td>
+      </tr>
+    </table>
+
+    <div id="new_org_account" style="display:none" title="<%= _('Connect to your organization') %>">
+      <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
+        <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true) %>
+        <%= link_to(_('Connect to selected organization'), new_person_organization_account_path, class: 'btn btn-primary btn-xs', id: 'connect_to_org') %>
+      </div>
+    </div>
+    <div id="org_connection_box">
+    </div>
+
   </div>
 </div>
