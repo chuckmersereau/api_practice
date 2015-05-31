@@ -8,9 +8,14 @@ class AccountsController < ApplicationController
   end
 
   def new
-    @page_title = _('New Account')
-    session[:user_return_to] = params[:redirect] if params[:redirect]
-    redirect_to "/auth/#{params[:provider]}"
+    respond_to do |format|
+      format.js {}
+      format.html do
+        @page_title = _('New Account')
+        session[:user_return_to] = params[:redirect] if params[:redirect]
+        redirect_to "/auth/#{params[:provider]}"
+      end
+    end
   end
 
   def create

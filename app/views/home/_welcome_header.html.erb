@@ -15,7 +15,20 @@
       <div class="getting_started_number">1</div>
       <div class="panel panel-default">
         <div class="panel-body">
-          Form here for importing
+          <table>
+            <tr>
+              <td class="identify network_logo">
+                <h3>
+                  <%= image_tag("logos/tnt_logo.png", alt: 'TntMPD') %>
+                  TntMPD
+                </h3>
+              </td>
+              <td class="connections" data-behavior="account" style="width:500px">
+                <%= link_to(_('Import Tnt Contacts'), new_account_path(provider: 'tnt_import'),
+                    class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
+              </td>
+            </tr>
+          </table>
         </div>
       </div>
       <h2><%= _('Import Contacts') %></h2>

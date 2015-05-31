@@ -17,6 +17,12 @@ $ ->
         width: '400px'
       return false;
 
+    $(document).on 'click', '[data-behavior="show_import"]', ->
+      $('#generic_dialog').html('<%= image_tag "spinner.gif" %>')
+      $('#generic_dialog').dialog
+        resizable: false,
+        width: 400
+
 $.mpdx.loadDashTabData = (hash) ->
   hash ||= '#dash-connect'
   $.mpdx.loadDashbaordTab(hash)
