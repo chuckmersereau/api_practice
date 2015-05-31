@@ -1,0 +1,57 @@
+<h4>
+  <i class="fa fa-exclamation-triangle"></i>
+  <%= _('Follow these instructions EXACTLY or your import will not work.') %>
+</h4>
+
+<ol>
+  <li>
+    <%= (_('Download the <a href="%{sample_url}">sample MPDX csv import file</a>.'
+          ).localize % { sample_url: sample_imports_path(format: :csv) }).html_safe %>
+  </li>
+  <li> <%= _('Format your data to match the sample:') %>
+    <ul>
+      <li>
+        <strong><%= _('The headers in the first row <em class="gold">'+
+                        'must exactly match</em> the sample.').html_safe %></strong>
+      </li>
+      <li>
+        <strong><%= _('The Status, Commitment Frequency, and Newsletter values '+
+                        '<em class="gold">must also exactly match</em> one of the '+
+                        '"Cell Options" in the sample.').html_safe %></strong>
+      </li>
+      <li>
+        <%= _('The Spouse Last Name, Greeting and Envelope Greeting fields will get ' +
+              'automatic defaults if you leave them blank.') %>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <strong><%= _('When you finish formatting your data, remove any blank or sample rows at the bottom.') %></strong>
+    <%= _('Then upload your file below, optionally specify a tag, and click "Preview Import."') %>
+  </li>
+  <li>
+    <%= _('You can then review the import to ensure it is correct and re-upload as needed. ' +
+          "Note that the sample itself isn't fully valid because we included instructions at the bottom.") %>
+  </li>
+  <li>
+    <%= _('Once you have a CSV import with valid and correct data <strong>'+
+            'click "Run import"</strong> from the preview page.').html_safe %>
+  </li>
+</ol>
+
+<%= form_for Import.new(source: 'csv', in_preview: true) do |f| %>
+  <%= f.hidden_field :source %>
+  <%= f.hidden_field :in_preview %>
+
+  <div class="field">
+    <%= f.file_field :file %>
+    <%= f.hidden_field :file_cache %>
+  </div>
+
+  <div class="field">
+    <div class="importtags">
+      <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
+    </div>
+  </div>
+  <a href="#" class="btn btn-xs btn-secondary" data-behavior="import_button"><%= _('Preview Import') %></a>
+<% end %>
