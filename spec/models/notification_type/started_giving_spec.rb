@@ -37,6 +37,15 @@ describe NotificationType::StartedGiving do
       notifications.length.should == 0
     end
 
+    it "sets pledge_received if first gift came more than 2 weeks ago but pledge_received wasn't set" do
+      contact.update(pledge_amount: 9.99)
+      create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 37.days.ago)
+      donation
+      started_giving.check(contact.account_list)
+      contact.reload
+      expect(contact.pledge_received).to be_true
+    end
+
     it "doesn't add a notification if the contact is on a different account list with a shared designation account" do
       donation # create donation object from let above
       account_list2 = create(:account_list)

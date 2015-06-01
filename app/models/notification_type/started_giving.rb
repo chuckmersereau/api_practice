@@ -4,13 +4,20 @@ class NotificationType::StartedGiving < NotificationType
     account_list.contacts.where(account_list_id: account_list.id).financial_partners.each do |contact|
       prior_notification = Notification.active.where(contact_id: contact.id, notification_type_id: id).first
       next if prior_notification
+
+      # update pledge received in case there are past donations
+      orig_pledge_received = contact.pledge_received?
+      donation = contact.donations.where('donation_date > ?', 2.weeks.ago).last
+      contact.pledge_received = true if donation.present? && contact.pledge_amount == donation.amount
+      contact.save
+
       # If they just gave their first gift, note it as such
-      next unless !contact.pledge_received? &&
-                  (donation = contact.donations.where('donation_date > ?', 2.weeks.ago).last) &&
+      next unless !orig_pledge_received && donation &&
                   contact.donations.where('donation_date < ?', 2.weeks.ago).count == 0
 
-      # update pledge amount/received
+      # update pledge amount
       contact.pledge_amount = donation.amount if contact.pledge_amount.blank?
+      # recheck pledge_received in case pledge_amount was blank before
       contact.pledge_received = true if contact.pledge_amount == donation.amount
       contact.pledge_frequency ||= 1 # default to monthly pledge if nil
       contact.save
