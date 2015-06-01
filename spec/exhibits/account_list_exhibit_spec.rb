@@ -34,13 +34,4 @@ describe AccountListExhibit do
     context.stub(:number_to_current_currency).with(3).and_return('$3')
     subject.balances(user).should include('Balance: $3')
   end
-
-  it 'excludes inactive designation accounts from the sum' do
-    da1 = create(:designation_account, name: 'foo', balance: 1)
-    da2 = create(:designation_account, name: 'bar', balance: 2)
-    account_list.account_list_entries << create(:account_list_entry, designation_account: da1, active: false)
-    account_list.account_list_entries << create(:account_list_entry, designation_account: da2)
-    expect(context).to receive(:number_to_current_currency).with(2).and_return('$2')
-    expect(subject.balances(user)).to include('Balance: $2')
-  end
 end

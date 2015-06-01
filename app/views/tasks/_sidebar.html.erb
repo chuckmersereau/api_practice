@@ -82,12 +82,19 @@
               <%= _('Contact Location') %>
             </label>
             <div class="filter_set_inner">
-              <label><%= _('City') %>:</label>
-              <%= select_tag 'filters[city]', options_for_select([[_('-- Any --'), '']] + current_account_list.cities.select(&:present?)),
-                             multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactCity' %>
-              <label><%= _('State') %>:</label>
-              <%= select_tag 'filters[state]', options_for_select([[_('-- Any --'), '']] + current_account_list.states.select(&:present?)),
-                             multiple: true, size: 5, class: 'form-control', :'ng-model' => 'filter.contactState' %>
+              <% location_filters = [
+                ['City', 'city', :cities],
+                ['State', 'state', :states],
+                ['Country', 'country', :countries],
+              ] %>
+              <% location_filters.each do |location| %>
+                <% options = [[_('-- Any --'), '']] + current_account_list.try(location[2]).select(&:present?) %>
+                <% next if options.count <= 1 %>
+                <label><%= _(location[0]) %>:</label>
+                <%= select_tag 'filters['+location[1]+']', options_for_select(options),
+                               multiple: true, size: [5, options.count].min, class: 'form-control',
+                               :'ng-model' => 'filter.contact'+location[0] %>
+              <% end %>
             </div>
           </li>
           <li>

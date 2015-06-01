@@ -1,6 +1,6 @@
 angular.module('mpdxApp').controller('taskShortListController', function ($scope, api, $location, contactCache) {
     $scope.init = function(page, contactId) {
-        $scope.tasks = {};
+        $scope.tasks = [];
         $scope.comments = {};
         $scope.people = {};
         $scope.history = page == 'contactHistory';
@@ -62,15 +62,23 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
     };
 
     $scope.syncTask = function(resp) {
-        var task = resp.task || resp;
-        var old_task = _.findWhere($scope.tasks, {id: task.id});
-        if(!old_task)
-            $scope.addTask(task);
-        else if($scope.history == task.completed)
-            $scope.updateTask(old_task, task);
-        else
-            $scope.removeTask(task);
-        $scope.$digest();
+        var fn = function() {
+            var task = resp.task || resp;
+            var old_task = _.findWhere($scope.tasks, {id: task.id});
+            if(!old_task)
+                $scope.addTask(task);
+            else if($scope.history == task.completed)
+                $scope.updateTask(old_task, task);
+            else
+                $scope.removeTask(task);
+        }
+        var phase = this.$root.$$phase;
+        if(phase == '$apply' || phase == '$digest') {
+            fn();
+        }
+        else {
+            this.$apply(fn);
+        }
     };
 
     $scope.addTask = function(newTask) {

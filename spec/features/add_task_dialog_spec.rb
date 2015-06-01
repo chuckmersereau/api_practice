@@ -26,4 +26,27 @@ describe 'Add Task Dialog', type: :feature, js: true do
       end.to change(contact.tasks, :count).to(1)
     end
   end
+
+  context 'with french locale' do
+    before do
+      user.update_attributes(locale: 'fr')
+    end
+
+    it 'creates a task in db' do
+      FastGettext.locale = 'fr'
+      visit '/'
+      click_on 'Quick Add'
+      click_on _('Add Task')
+      expect do
+        within('#edit_task_modal') do
+          fill_in(_('Subject'), with: @task.subject)
+          select(_(@task.activity_type), from: _('Action'))
+          select(contact.name, from: _('Related To'))
+        end
+        find_button('Save').trigger('click')
+        expect(page).to have_css('#edit_task_modal', visible: false)
+        sleep(2)
+      end.to change(contact.tasks, :count).by(1)
+    end
+  end
 end

@@ -1,6 +1,6 @@
 Airbrake.configure do |config|
-  config.api_key = '919b0e21430abfaf5206ca4cfe5b3e3c'
-  config.host = 'errors.uscm.org'
+  config.api_key = '7744bf0009024620829643306bad3a74'
+  config.host = 'api.rollbar.com'
   config.port = 443
   config.secure = config.port == 443
   config.ignore_only = config.ignore + [

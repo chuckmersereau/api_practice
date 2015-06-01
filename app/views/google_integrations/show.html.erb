@@ -1,121 +1,129 @@
-<%= render 'settings_sidebar' %>
-<div id="contentbody" class="withleft">
-  <div class="wpp">
-    <%= image_tag('logos/google_logo.png') %><br />
-    <%= (_('You are currently editing settings for %{account}').localize % { account: "<strong>#{@google_integration.google_account}</strong>" }).html_safe %>
-    <div>
-      <h2><%= _('Calendar integration') %></h2>
+<div class="row">
+  <div class="col-md-3" role="complementary">
+    <%= render 'settings_sidebar' %>
+  </div>
+  <div class="col-md-9">
+    <div id="contentbody" class="withleft">
+      <div class="wpp">
+        <%= image_tag('logos/google_logo_high_res.png', width: '150px') %><br />
+        <h5><%= (_('You are currently editing settings for %{account}').localize % { account: "<strong>#{@google_integration.google_account}</strong>" }).html_safe %></h5>
+        <div>
+          <div class="well">
+            <h2><%= _('Calendar integration') %></h2>
 
-      <% if @google_integration.calendar_integration? %>
-        <% if @google_integration.calendar_name %>
-          <%= (_("Calendar integration has been enabled. Choose from the list of tasks below which things you'd like MPDX to put on your calendar.
-                 Tasks will be pushed to the calendar named %{calendar_name}").localize % { calendar_name: "<strong>#{@google_integration.calendar_name}</strong>" }).html_safe %>
-          <br/><br/>
-          <%= form_for(@google_integration, remote: true) do |f| %>
-            <div>
-            <ul>
-              <% Task.new.assignable_activity_types.each do |activity_type| %>
-                <li class="radiocheck">
-                  <%= check_box_tag 'google_integration[calendar_integrations][]', activity_type, @google_integration.calendar_integrations.include?(activity_type), id: "calendar_integrations_#{activity_type.underscore}", data: { behavior: 'calendar_integration_type' } %>
-                  <%= label_tag "calendar_integrations_#{activity_type.underscore}", _(activity_type) %>
-                </li>
+            <% if @google_integration.calendar_integration? %>
+              <% if @google_integration.calendar_name %>
+                <%= (_("Calendar integration has been enabled. Choose from the list 
+                        of tasks below which things you'd like MPDX to put on your 
+                        calendar. Tasks will be pushed to the calendar named 
+                        %{calendar_name}").localize % { calendar_name: "<strong>#{@google_integration.calendar_name}</strong>" }).html_safe %>
+                <br/><br/>
+                <%= form_for(@google_integration, remote: true) do |f| %>
+                  <ul class="list-group">
+                    <% Task.new.assignable_activity_types.each do |activity_type| %>
+                      <li class="radiocheck list-group-item">
+                        <%= check_box_tag 'google_integration[calendar_integrations][]', 
+                                          activity_type, 
+                                          @google_integration.calendar_integrations.include?(activity_type), 
+                                          id: "calendar_integrations_#{activity_type.underscore}", 
+                                          data: { behavior: 'calendar_integration_type' } %>
+                        <%= label_tag "calendar_integrations_#{activity_type.underscore}", _(activity_type) %>
+                      </li>
+                    <% end %>
+                  </ul>
+                <% end %>
+                <br/>
+                <%= link_to(_('Disable Calendar Integration'), 
+                  google_integration_path(@google_integration, google_integration: { calendar_integration: false }), 
+                    method: :put,
+                    class: 'btn btn-secondary', 
+                    data: { confirm: _('Are you sure you want to disable Google Calendar integration?') }) %>
+                <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'calendar'), class: 'btn btn-secondary desired_action') %>
+              <% else %>
+                <p><%= _('Which one of your calendars would you like to push MPDX tasks to?') %></p>
+                <ul class="list-group">
+                  <% @google_integration.calendars.each do |calendar| %>
+                    <li class="list-group-item">
+                      <%= link_to(calendar['summary'], google_integration_path(@google_integration, google_integration: { calendar_name: calendar['summary'], calendar_id: calendar['id'] }), method: :put) %>
+                    </li>
+                  <% end %>
+                </ul>
+                <p></p>
+                <p><%= link_to(_('Click here to create a new calendar'), '#', class: 'btn btn-secondary', id: 'new_calendar_link') %></p>
+                <%= form_for(@google_integration, html: { id: 'new_calendar_form', style: 'display:none' }) do |f| %>
+                  <%= f.label :new_calendar, _('New Calendar') %>
+                  <%= f.text_field :new_calendar, placeholder: _('Enter a name') %>
+                  <%= f.submit _('Create') %>
+                <% end %>
+            <% end %>
+            <% else %>
+              <%= _("MPDX can automatically update your google calendar with your tasks.
+                    Once you enable this feature, you'll be able to choose which types of tasks you want to sync.
+                    By default MPDX will add 'Appointment' tasks to your calendar.") %>
+              <br/><br/>
+              <%= link_to(_('Enable Calendar Integration'), google_integration_path(@google_integration, google_integration: { calendar_integration: true }), method: :put, class: 'btn btn-secondary desired_action') %>
+            <% end %>
+          </div>
+
+
+          <% if $rollout.active?(:google_email_integration, current_account_list) %>
+            <div class="well">
+              <h2><%= _('Gmail integration') %></h2>
+
+              <% if @google_integration.email_integration? %>
+                <%= _("Gmail integration has been enabled.") %>
+                <br/><br/>
+                <%= link_to(_('Disable Gmail Integration'), google_integration_path(@google_integration, google_integration: { email_integration: false }), method: :put,
+                            class: 'btn', data: { confirm: _('Are you sure you want to disable Gmail integration?') }) %>
+                <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'email'), class: 'btn btn-secondary desired_action') %>
+              <% else %>
+                <%= _("MPDX can automatically update your MPDX task history based on emails you've sent
+                      or received to/from your contacts in your Gmail account.") %>
+                <br/><br/>
+                <%= link_to(_('Enable Gmail Integration'), google_integration_path(@google_integration, google_integration: { email_integration: true }), method: :put, class: 'btn btn-secondary desired_action') %>
               <% end %>
-            </ul>
             </div>
           <% end %>
-          <br/>
-          <%= link_to(_('Disable Calendar Integration'), google_integration_path(@google_integration, google_integration: { calendar_integration: false }), method: :put,
-                      class: 'btn', data: { confirm: _('Are you sure you want to disable Google Calendar integration?') }) %>
-          <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'calendar'), class: 'btn desired_action') %>
-        <% else %>
-          <%= _('Which one of your calendars would you like to push MPDX tasks to?') %>
-          <ul>
-            <% @google_integration.calendars.each do |calendar| %>
-              <li>
-                <%= link_to(calendar['summary'], google_integration_path(@google_integration, google_integration: { calendar_name: calendar['summary'], calendar_id: calendar['id'] }), method: :put) %>
-              </li>
-            <% end %>
-            <li>
-              <hr/>
-            </li>
-            <li>
-              <%= link_to(_('Click here to create a new calendar'), '#', id: 'new_calendar_link') %>
-              <%= form_for(@google_integration, html: { id: 'new_calendar_form', style: 'display:none' }) do |f| %>
-                <%= f.label :new_calendar, _('New Calendar') %>
-                <%= f.text_field :new_calendar, placeholder: _('Enter a name') %>
-                <%= f.submit _('Create') %>
+
+          <% if $rollout.active?(:google_contacts_sync, current_account_list) %>
+            <div class="well">
+              <h2><%= _('Google Contacts integration') %></h2>
+
+              <%= _("<p>MPDX can sync your active contacts to Google so you only have to keep your contacts up to date in one place.  (Active contacts are those whose status field indicates that they are partners or in the MPD process.)</p>
+
+                    <p>This will synchronize existing contact information as well as future updates and deletions to your contact info to and from MPDX and Google. Once the sync is active, changes in either Google or MPDX will be reflected in the other system. If you make a change in both places between syncs, MPDx changes will take precedence.</p>
+
+                    <p>If you make a contact inactive in MPDX e.g. by selecting \"Not Interested\" for its status, the contact info will not be deleted in Google, but will be labeled \"Inactive\" so you can easily find those no-longer-synced contacts and delete them if you choose.</p>
+
+                    <p>If you delete a contact in Google contacts that is active in MPDX, you must also go in to MPDX and hide the contact, making it inactive in MPDX. Otherwise, it will get regenerated in Google once it syncs again.</p>") %>
+
+              <% if @google_integration.contacts_integration? %>
+                  <%= _("Google Contacts sync has been enabled.") %>
+                  <br/><br/>
+                  <%= link_to(_('Disable Google Contacts integration'), google_integration_path(@google_integration, google_integration: { contacts_integration: false }), method: :put,
+                              class: 'btn btn-secondary ', data: { confirm: _('Are you sure you want to disable Google Contacts sync?') }) %>
+                  <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'contacts'), class: 'btn btn-secondary  desired_action') %>
+              <% else %>
+                  <%= link_to(_('Enable Google Contacts Integration'), google_integration_path(@google_integration, google_integration: { contacts_integration: true }), method: :put, class: 'btn btn-secondary  desired_action') %>
               <% end %>
-            </li>
-          </ul>
-      <% end %>
-      <% else %>
-        <%= _("MPDX can automatically update your google calendar with your tasks.
-              Once you enable this feature, you'll be able to choose which types of tasks you want to sync.
-              By default MPDX will add 'Appointment' tasks to your calendar.") %>
-        <br/><br/>
-        <%= link_to(_('Enable Calendar Integration'), google_integration_path(@google_integration, google_integration: { calendar_integration: true }), method: :put, class: 'btn desired_action') %>
-      <% end %>
-      <br/>
-
-      <% if $rollout.active?(:google_email_integration, current_account_list) %>
-        <h2><%= _('Gmail integration') %></h2>
-
-        <% if @google_integration.email_integration? %>
-          <%= _("Gmail integration has been enabled.") %>
-          <br/><br/>
-          <%= link_to(_('Disable Gmail Integration'), google_integration_path(@google_integration, google_integration: { email_integration: false }), method: :put,
-                      class: 'btn', data: { confirm: _('Are you sure you want to disable Gmail integration?') }) %>
-          <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'email'), class: 'btn desired_action') %>
-        <% else %>
-          <%= _("MPDX can automatically update your MPDX task history based on emails you've sent
-                or received to/from your contacts in your Gmail account.") %>
-          <br/><br/>
-          <%= link_to(_('Enable Gmail Integration'), google_integration_path(@google_integration, google_integration: { email_integration: true }), method: :put, class: 'btn desired_action') %>
-        <% end %>
-        <br/>
-      <% end %>
-
-      <% if $rollout.active?(:google_contacts_sync, current_account_list) %>
-          <h2><%= _('Google Contacts integration') %></h2>
-
-          <%= _("<p>MPDX can sync your active contacts to Google so you only have to keep your contacts up to date in
-                     one place.  (Active contacts are those whose status field indicates that they are partners or in the
-                     MPD process.)</p>
-
-                     <p>This will synchronize existing contact information as well as future updates and deletions to your contact
-                     info to and from MPDX and Google. Once the sync is active, changes in either Google or MPDX will be
-                     reflected in the other system. If you make a change in both places between syncs, MPDx changes
-                     will take precedence.</p>
-
-                     <p>If make a contact inactive in MPDX e.g. by selecting \"Not Interested\" for its status, the contact info will not
-                     be deleted in Google, but will be labeled \"Inactive\" so you can easily find those no-longer-synced contacts
-                     and delete them if you choose.</p>
-
-                     <p>If you delete a contact in Google contacts that is active in MPDX, you must also go in to MPDX and hide
-                     the contact, making it inactive in MPDX. Otherwise, it will get regenerated in Google once it syncs again.</p>") %>
-
-          <% if @google_integration.contacts_integration? %>
-              <%= _("Google Contacts sync has been enabled.") %>
-              <br/><br/>
-              <%= link_to(_('Disable Google Contacts integration'), google_integration_path(@google_integration, google_integration: { contacts_integration: false }), method: :put,
-                          class: 'btn', data: { confirm: _('Are you sure you want to disable Google Contacts sync?') }) %>
-              <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'contacts'), class: 'btn desired_action') %>
-          <% else %>
-              <%= link_to(_('Enable Google Contacts Integration'), google_integration_path(@google_integration, google_integration: { contacts_integration: true }), method: :put, class: 'btn desired_action') %>
+            </div>
           <% end %>
-      <% end %>
 
-      <div id='google_refresh'>
-        <h2><%= _('Refresh Google Account') %></h2>
+          <div id='google_refresh'>
+            <div class="well">
+              <h2><%= _('Refresh Google Account') %></h2>
 
-        <%= _('If the link between MPDx and your Google account breaks,
-              click the button below to re-establish the connection.') %>
-        <br/>
-        <%= _('(You should only need to do this if you receive an email from MPDx.)') %>
-        <br/><br/>
-        <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: google_integration_path(@google_integration)), class: 'btn desired_action') %>
+              <%= _('If the link between MPDx and your Google account breaks,
+                    click the button below to re-establish the connection.') %>
+              <br/>
+              <%= _('(You should only need to do this if you receive an email from MPDx.)') %>
+              <br/><br/>
+              <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: google_integration_path(@google_integration)), class: 'btn btn-secondary desired_action') %>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-
   </div>
 </div>

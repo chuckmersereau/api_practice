@@ -1,16 +1,12 @@
-<td class="check" ng-show="!task.completed">
+<td class="check task-check" ng-show="!task.completed">
     <i class="fa fa-lg fa-square-o complete_task" data-behavior="complete_task" data-results="{{completeResultOptions.join()}}"  data-actions="{{completeActionOptions.join()}}" data-id="{{task.id}}" data-title="{{task.activity_type + ' ' + task.subject}}"></i>
+</td>
+<td class="task-favorite">
+    <i class="fa fa-lg fav" ng-click="starTask()" ng-hide="task.completed" ng-class="{'fa-star-o': !task.starred, 'fa-star': task.starred}"></i>
 </td>
 <td class="data">
     <div class="primary">
-        <i class="fa fa-lg fav" ng-click="starTask()" ng-hide="task.completed"
-           ng-class="{'fa-star-o': !task.starred, 'fa-star': task.starred}"></i>
-        <a class="comment_status" href="" ng-click="visibleComments=!visibleComments; visibleContactInfo=false"><span id="comment_count_2">{{task.comments.length}}</span></a>
-
-        <div class="actions">
-            <a class="ico ico_edit edit_task" data-id="{{task.id}}" data-remote="true" ng-href="/tasks/{{task.id}}/edit">Edit</a>
-            <a class="ico ico_trash" data-confirm="Are you sure you want to delete this task instead of marking it as completed?" data-method="delete" data-remote="true" ng-href="/tasks/{{task.id}}" rel="nofollow">Delete</a>
-        </div>
+        
         <span ng-hide="task.activity_type === ''">{{task.activity_type}}</span>
         <strong><span class="tasktitle">{{task.subject}}</span></strong>
         <span ng-show="task.completed">- {{task.result}} {{task.next_action}} - {{task.completed_at | ignoreTimezone | date:'MM/dd/yyyy, h:mma'}}</span>
@@ -21,6 +17,13 @@
             <span ng-repeat-end> </span>
         </div>
         <span class="people" ng-show="task.contacts.length > 0">(<span ng-repeat="contact in task.contacts"><span ng-show="!$first">, </span><a ng-click="showContactInfo(contact); $event.preventDefault();" ng-bind="contacts[contact]" href="/contacts/{{contact}}" title="Click to view contact details"></a></span>)</span>
+
+        <a class="comment_status hover-show" href="" ng-click="visibleComments=!visibleComments; visibleContactInfo=false"><span id="comment_count_2">{{task.comments.length}}</span></a>
+
+        <div class="actions hover-show">
+            <a class="ico ico_edit edit_task" data-id="{{task.id}}" data-remote="true" ng-href="/tasks/{{task.id}}/edit">Edit</a>
+            <a class="ico ico_trash" data-confirm="Are you sure you want to delete this task instead of marking it as completed?" data-method="delete" data-remote="true" ng-href="/tasks/{{task.id}}" rel="nofollow">Delete</a>
+        </div>
     </div>
 
     <div ng-show="visibleContactInfo" class="contact-info">

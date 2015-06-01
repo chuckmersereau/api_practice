@@ -19,13 +19,20 @@ GIT
 
 GIT
   remote: https://github.com/CruGlobal/google_contacts_api
-  revision: 28fb568a60515b2c8ea102929c7afd95d64cf71a
+  revision: b81317f6df527e8937985cb3f2a770faeed0c001
   specs:
     google_contacts_api (0.5.0)
       activesupport
       hashie
       i18n
       json
+
+GIT
+  remote: https://github.com/CruGlobal/rollout_ui.git
+  revision: df470f00267d0fba5e5ccd287d8c566f4c4b87ac
+  specs:
+    rollout_ui (0.3.0)
+      rollout
 
 GIT
   remote: https://github.com/carrierwaveuploader/carrierwave
@@ -745,6 +752,7 @@ DEPENDENCIES
   rest-client (~> 1.6.7)
   retryable-rb (~> 1.1.0)
   rollout (~> 2.0.0)
+  rollout_ui!
   rspec (~> 2.14.1)
   rspec-rails
   rubocop

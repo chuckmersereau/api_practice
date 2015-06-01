@@ -25,12 +25,19 @@ class ImportsController < ApplicationController
 
   def update
     find_import
-    @import.update(import_params)
+    update_succeeded = @import.update(import_params)
 
     if @import.in_preview?
+      unless update_succeeded
+        flash[:alert] = ([_('Your re-upload was invalid.')] +
+                         @import.errors.full_messages +
+                         [_('The preview below is for your previous upload.')]
+                        ).join('<br>').html_safe
+      end
+
       redirect_to @import
     else
-      show_importing_notice(@import)
+      show_importing_notice(@import) if update_succeeded
       redirect_to accounts_path
     end
   end

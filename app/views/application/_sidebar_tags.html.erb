@@ -26,20 +26,13 @@
       <a href="#" 
         class="show_all_tags_btn" 
         onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'See all tags']);">
-        <i class="fa fa-plus"></i> See all <span class="tagSize"></span> tags
+        <i class="fa fa-plus"></i> 
+        See 
+        <span class="tagAll">all</span>
+        <span class="tagLess" style="display: none;">less</span> 
+        <span class="tagSize"></span> 
+        tags
       </a>
     </li>
   </ul>
 </li>
-
-<script>
-var tagSize = $('.left_tag_list .tag').length;
-$('.tagSize').html(tagSize);
-if (tagSize < 15) {
-  $('.show_all_tags_btn').hide();
-}
-$('.show_all_tags_btn').click(function() {
-  $('.left_tag_list').toggleClass('show_all_tags');
-  $('.tagLess, .tagSize, .tagAll').toggle();
-})
-</script>

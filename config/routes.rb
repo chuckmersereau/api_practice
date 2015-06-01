@@ -1,4 +1,6 @@
 require 'sidekiq/web'
+require 'rollout_ui/server'
+
 Rails.application.routes.draw do
 
   resources :google_integrations, only: [:show, :edit, :update, :create] do
@@ -155,12 +157,14 @@ Rails.application.routes.draw do
   get '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
 
-  developer_user_constraint = lambda { |request| request.env["rack.session"] and
+  developer_user_constraint = lambda { |request|
+      request.env["rack.session"] and
       request.env["rack.session"]["warden.user.user.key"] and
       request.env["rack.session"]["warden.user.user.key"][0] and
       User.find(request.env["rack.session"]["warden.user.user.key"][0].first).developer }
   constraints developer_user_constraint do
     mount Sidekiq::Web => '/sidekiq'
+    mount RolloutUi::Server => "/rollout"
   end
 
   get '/404', :to => "errors#error_404"
@@ -174,5 +178,4 @@ Rails.application.routes.draw do
   get '/templates/:path.html' => 'templates#template', :constraints => { :path => /.+/  }
 
   # See how all your routes lay out with "rake routes"
-
 end

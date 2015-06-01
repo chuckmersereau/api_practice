@@ -22,6 +22,6 @@ $('[data-calendar-jquery]').datepicker({
   }
 });
 $('#task_modal_form').areYouSure({
-  message: '<%= _('It looks like you were adding a task. If you leave before submitting, your changes will be lost.') %>'
+  message: '<%= j(_('It looks like you were adding a task. If you leave before submitting, your changes will be lost.')) %>'
 })
 $.mpdx.autocomplete = new google.maps.places.Autocomplete($('#modal_task_location')[0])

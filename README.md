@@ -25,20 +25,21 @@ $ cp cloudinary.example.yml cloudinary.yml
 
 ### Install Gems
 
+We use a paid version of the sidekiq gem. In order to install our gem stack,
+you will need to add the password to your gem config.
+[Find them here](https://docs.google.com/a/cru.org/document/d/17RZH6MbGxtsrS3kLdOQlnXUFlg_q7fJoh1AfLwZBFz4)
+(You will need to log in with a Cru email address)
+
 ```bash
 $ bundle install
 ```
 
 ### Create databases
 
-```bash
-$ bundle exec rake db:create:all
-```
-
-### Run migrations
+Create, migrate, and seed your databases with:
 
 ```bash
-$ bundle exec rake db:migrate
+$ bundle exec rake db:setup
 ```
 
 ### Start Server
@@ -46,15 +47,6 @@ $ bundle exec rake db:migrate
 ```bash
 $ bundle exec rails s
 ```
-
-### Testing
-
-There are four different test sets that we are running:
-
-- Regular RSpec: `rspec spec/`
-- Poltergeist specs: `rspec spec/ --tag js`
-- Karma: `rake karma:run`
-- Rubocop: `rubocop -R`
 
 ## Local development VM via Vagrant
 
@@ -64,6 +56,15 @@ To setup a virtual machine with all of the MPDX dependencies, install
 To run the server run `vagrant ssh` then `rails server`. To view it, go to your machine and visit `localhost:3000`.
 
 To run sidekiq (background jobs processor), open a new terminal tab, run `vagrant ssh` again then run `bundle exec sidekiq`.
+
+## Testing
+
+There are four different test sets that we are running:
+
+- Regular RSpec: `rspec spec/`
+- Poltergeist specs: `rspec spec/ --tag js`
+- Karma: `rake karma:run`
+- Rubocop: `rubocop -R`
 
 ## Bugs Reports & Contributing
 

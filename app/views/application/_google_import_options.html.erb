@@ -1,5 +1,4 @@
-<br/><br/>
-<div class="importoptions formstyles" data-behavior="import_options" style="display:none">
+<div class="well importoptions formstyles" data-behavior="import_options" style="display:none">
   <h3><%= _('Import Google Contacts') %></h3>
 
   <%= form_for Import.new(source: 'google', source_account_id: account.id) do |f| %>
@@ -13,7 +12,7 @@
         <%= f.label(:import_by_group_true, _('Only import contacts from certain groups')) %>
       </div>
 
-      <table>
+      <table class="import-tags-table">
         <tr>
           <th>Contact group</th>
           <th>Tags for group</th>
@@ -21,11 +20,11 @@
         <% account.contact_groups.each_with_index do |group, index| %>
             <tr>
               <td class="google_import_group">
-                <div class="field radiocheck google_import_group">
+                <label class="field radiocheck google_import_group">
                   <%= check_box_tag 'import[groups][]', group.id, false,
                                     id: "group_#{index}", class: 'import_by_group'  %>
-                  <%= label 'group', index, group.title.gsub('System Group: ','') %>
-                </div>
+                  <%= group.title.gsub('System Group: ','') %>
+                </label>
               </td>
               <td class="google_import_tags">
                 <%= text_field_tag "import[group_tags[#{group.id}]]",
@@ -54,7 +53,7 @@
         <%= f.label 'override_true', _('Override existing contact fields with data in the uploaded file.') %>
       </div>
 
-      <a href="#" class="btn btngreen" data-behavior="import_button"><%= _('Import') %></a>
+      <a href="#" class="btn btn-secondary" data-behavior="import_button"><%= _('Import') %></a>
       <script>
           <%= render 'tags_input.js', input_selector: '.import_contact_tags', tags: current_account_list.contact_tags  %>
 
@@ -66,4 +65,4 @@
       </script>
   <% end %>
 </div>
-<div><a href="#" class="btn smallbtn" data-behavior="show_import"><%= _('Import Contacts') %></a></div>
+<div><a href="#" data-behavior="show_import"><%= _('<i class="fa fa-cloud-download"></i> Import Contacts') %></a></div>

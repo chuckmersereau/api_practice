@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150514012021) do
+ActiveRecord::Schema.define(version: 20150528170855) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -21,7 +21,6 @@ ActiveRecord::Schema.define(version: 20150514012021) do
     t.integer  "designation_account_id"
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "active",                 default: true, null: false
   end
 
   add_index "account_list_entries", ["account_list_id", "designation_account_id"], name: "unique_account", unique: true, using: :btree
@@ -273,6 +272,7 @@ ActiveRecord::Schema.define(version: 20150514012021) do
     t.string   "name"
     t.string   "staff_account_id"
     t.string   "chartfield"
+    t.boolean  "active",                                      default: true, null: false
   end
 
   add_index "designation_accounts", ["organization_id", "designation_number"], name: "unique_designation_org", unique: true, using: :btree

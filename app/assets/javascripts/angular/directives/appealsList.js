@@ -18,7 +18,7 @@ angular.module('mpdxApp')
                     var modalInstance = $modal.open({
                         templateUrl: '/templates/appeals/edit.html',
                         size: 'lg',
-                        controller: function($scope, $modalInstance, appeal){
+                        controller: function($scope, $modalInstance, $filter, appeal){
                             $scope.appeal = angular.copy(appeal);
                             $scope.checkedContacts = {};
                             $scope.taskTypes = window.railsConstants.task.ACTIONS;
@@ -128,11 +128,10 @@ angular.module('mpdxApp')
                                 }else{
                                     var str = [];
                                     angular.forEach(donations, function(d){
-                                      if(_.isNull(d.appeal_amount) || _.isEmpty(d.appeal_amount)){
-                                        str.push(d.donation_date + ' - $' + $scope.formatNumber(d.amount));
-                                      }else{
-                                        str.push(d.donation_date + ' - $' + $scope.formatNumber(d.appeal_amount));
-                                      }
+                                      var amount = (_.isNull(d.appeal_amount) || _.isEmpty(d.appeal_amount)) ?
+                                                   d.amount : d.appeal_amount;
+                                      amount = $filter('currency')(amount, window.current_currency_symbol);
+                                      str.push(d.donation_date + ' - ' + amount);
                                     });
                                     return str;
                                 }
@@ -385,10 +384,6 @@ angular.module('mpdxApp')
                         //wait for browser render before resizing
                         setTimeout($.respDialogs);
                     });
-                };
-
-                $scope.formatNumber = function(number){
-                  return Number(number).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
                 };
             }
         };
