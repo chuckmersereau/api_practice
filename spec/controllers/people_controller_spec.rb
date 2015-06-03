@@ -176,32 +176,31 @@ describe PeopleController do
     end
   end
 
-  describe 'POST merge_sets' do
-    it 'merges two people  where winner is the first person in the list' do
-      person1 = @contact.people.create! valid_attributes
-      person2 = @contact.people.create! valid_attributes
-      person2.email = 'test_merge@example.com'
+  describe 'POST merge_sets for person duplicates' do
+    let(:person1) { @contact.people.create! valid_attributes }
+    let(:person2) { @contact.people.create! valid_attributes }
+    let(:person_ids) { ["#{person1.id},#{person2.id}"] }
+
+    before { request.env['HTTP_REFERER'] = '/' }
+
+    it 'merges two people  where the winner is the first in the list' do
+      person2.email = 'test_merge_person2@example.com'
       person2.save
-      params = { merge_sets: ["#{person1.id},#{person2.id}"],
-                 dup_person_winner: { "#{person1.id},#{person2.id}" => "#{person1.id}" } }
-
-      request.env['HTTP_REFERER'] = '/'
+      params = { merge_sets: person_ids,
+                 dup_person_winner: { person_ids => "#{person1.id}" } }
       post :merge_sets, params
-
       expect(Person.find_by_id(person2.id)).to be_nil
-      expect(person1.email.email).to eq('test_merge@example.com')
+      expect(person1.email.email).to eq('test_merge_person2@example.com')
     end
 
-    it 'merges two people where winner is the second person in the list' do
-      person1 = @contact.people.create! valid_attributes
-      person2 = @contact.people.create! valid_attributes
-
-      params = { merge_sets: ["#{person1.id},#{person2.id}"],
-                 dup_person_winner: { "#{person1.id},#{person2.id}" => "#{person2.id}" } }
-      request.env['HTTP_REFERER'] = '/'
+    it 'merges two people where the winner is the second in the list' do
+      person1.email = 'test_merge_person1@example.com'
+      person1.save
+      params = { merge_sets: person_ids,
+                 dup_person_winner: { person_ids => "#{person2.id}" } }
       post :merge_sets, params
-
       expect(Person.find_by_id(person1.id)).to be_nil
+      expect(person2.email.email).to eq('test_merge_person1@example.com')
     end
   end
 end

@@ -10,14 +10,14 @@
             <%= _('Duplicates') %>
             <% set.sort_by { |c| -c.people.length }.each.with_index do |contact, index| %>
                 <div class="contact">
-                  <%= radio_button_tag 'dup_contact_winner['+set.collect(&:id).join(',')+']',contact.id,false,
+                  <%= radio_button_tag 'dup_contact_winner['+set.map(&:id).join(',')+']',contact.id,false,
                                        checked: (index==0) %>
-                  <%= link_to( _(contact.name), contact_path(contact), style: 'padding: 3%', target: '_blank')  %>
+                  <%= link_to( _(contact.name), contact_path(contact), target: '_blank')  %>
                 </div>
             <% end %>
-            <%= check_box_tag 'merge_sets[]', set.collect(&:id).join(',') %>
+            <%= check_box_tag 'merge_sets[]', set.map(&:id).join(',') %>
             <%= _('Merge these contacts') %><br />
-            <%= link_to(_('These are not duplicates'), not_duplicates_contacts_path(ids: set.collect(&:id).join(',')),
+            <%= link_to(_('These are not duplicates'), not_duplicates_contacts_path(ids: set.map(&:id).join(',')),
                         remote: true, method: :put, data: {behavior: 'not_duplicates'}) %>
           </div>
         <% end %>

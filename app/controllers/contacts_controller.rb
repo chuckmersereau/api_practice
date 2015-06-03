@@ -138,7 +138,6 @@ class ContactsController < ApplicationController
     params[:merge_sets] = [params[:merge_contact_ids]] if params[:merge_contact_ids]
 
     merged_contacts_count = 0
-
     params[:merge_sets].each do |ids|
       # When performing a merge we want to keep the contact with the most people
       contacts = current_account_list.contacts.includes(:people).where(id: ids.split(','))
@@ -147,7 +146,7 @@ class ContactsController < ApplicationController
       merged_contacts_count += contacts.length
 
       winner_id = params[:dup_contact_winner][ids].to_i
-      winner = contacts.find(winner_id)
+      winner = contacts.find( winner_id )
       Contact.transaction do
         (contacts - [winner]).each do |loser|
           winner.merge(loser)
