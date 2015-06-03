@@ -1323,6 +1323,7 @@ table.meta {
 
   border-bottom: 1px solid $gray_light;
   padding: 15px 0;
+  display: block;
 
   .identify {
     width: 180px;
@@ -1336,7 +1337,7 @@ table.meta {
     text-align: center;
     img {
       max-height: 100px;
-      display: inline-block;
+      margin: 0 auto;
     }
   }
   .network_button {

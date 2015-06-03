@@ -21,15 +21,18 @@
         <% when 'google' %>
             <% account.google_integration(current_account_list).tap do |google_integration| %>
                 <% if account.token_expired? && !account.refresh_token!  %>
-                    <p><%= _('The link between MPDX and your Google account stopped working. Click "Refresh Google Account" to re-enable it.
-                                 After that, you\'ll need to manually re-enable any integrations that you had set already.') %></p>
+                    <p>
+                      <%= _('The link between MPDX and your Google account stopped working. '+
+                            'Click "Refresh Google Account" to re-enable it. After that, '+
+                            'you\'ll need to manually re-enable any integrations that you had set already.') %>
+                    </p>
                     <% new_account_path_opts = { provider: :google } %>
                     <% new_account_path_opts[:redirect] =  google_integration_path(google_integration) if google_integration %>
                     <%= link_to(_('Refresh Google Account'), new_account_path(new_account_path_opts), class: 'btn desired_action') %>
                 <% else %>
                     <% if google_integration %>
                         <%= link_to(google_integration_path(google_integration)) do %>
-                          <i class="fa fa-refresh"></i> 
+                          <i class="fa fa-refresh"></i>
                           <%= _('Configure synchronization') %>
                         <% end %>
                     <% else %>
@@ -37,7 +40,7 @@
                         <i class="fa fa-refresh"></i>   <%= _('Configure synchronization') %>
                       <% end %>
                     <% end %>
-                     <%= render('google_import_options', account: account) %>
+                    <%= render('google_import_options', account: account) %>
                  <% end %>
             <% end %>
         <% end %>
