@@ -194,8 +194,6 @@ describe PeopleController do
 
     it 'merges two people where winner is the second person in the list' do
       person1 = @contact.people.create! valid_attributes
-      person1.email = 'test_merge@example.com'
-      person1.save
       person2 = @contact.people.create! valid_attributes
 
       params = { merge_sets: ["#{person1.id},#{person2.id}"],
