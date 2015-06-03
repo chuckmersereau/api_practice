@@ -8,7 +8,7 @@
         <% @contact_sets.each do |set| %>
           <div class="duplicate_set">
             <%= _('Duplicates') %>
-            <% set.sort_by { |c| -c.people.length}.each.with_index do |contact, index| %>
+            <% set.sort_by { |c| -c.people.length }.each.with_index do |contact, index| %>
                 <div class="contact">
                   <%= radio_button_tag 'dup_contact_winner['+set.collect(&:id).join(',')+']',contact.id,false,
                                        checked: (index==0) %>
@@ -30,7 +30,7 @@
           <%= link_to(_('Select all duplicates'), '#', class: 'select_all') %>
           <p ><%= _('Toggle the radio buttons to change the person who will be the "winner" of the merge.
         All data from the "loser" of the merge will get copied into the "winner." No data will be lost.') %></p>
-          <% @people_sets.sort_by { |ppl|ppl.person.id}.each do |dup| %>
+          <% @people_sets.sort_by { |ppl| ppl.person.id }.each do |dup| %>
               <div class="duplicate_set">
                 <div class="contact-header "><%= link_to(dup.shared_contact.name, contact_path(dup.shared_contact), target: '_blank')  %></div>
                 <div class="person"><%= radio_button_tag 'dup_person_winner[' + "#{dup.person.id},#{dup.dup_person.id}" + ']', dup.person.id, true%>

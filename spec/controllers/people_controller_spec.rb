@@ -176,13 +176,14 @@ describe PeopleController do
     end
   end
 
-  describe 'POST merge_sets first becomes primary' do
-    it 'merges two accounts where the first person in the set is the primary.' do
+  describe 'POST merge_sets' do
+    it 'merges two people  where winner is the first person in the list' do
       person1 = @contact.people.create! valid_attributes
       person2 = @contact.people.create! valid_attributes
       person2.email = 'test_merge@example.com'
       person2.save
-      params = { merge_sets: ["#{person1.id},#{person2.id}"], dup_person_winner: { "#{person1.id},#{person2.id}" => "#{person1.id}" } }
+      params = { merge_sets: ["#{person1.id},#{person2.id}"],
+                 dup_person_winner: { "#{person1.id},#{person2.id}" => "#{person1.id}" } }
 
       request.env['HTTP_REFERER'] = '/'
       post :merge_sets, params
@@ -190,18 +191,19 @@ describe PeopleController do
       expect(Person.find_by_id(person2.id)).to be_nil
       expect(person1.email.email).to eq('test_merge@example.com')
     end
-  end
 
-  describe 'POST merge_sets second becomes primary' do
-    it 'merges two accounts where the second person in the set is the primary.' do
-      person4 = @contact.people.create! valid_attributes
-      person5 = @contact.people.create! valid_attributes
+    it 'merges two people where winner is the second person in the list' do
+      person1 = @contact.people.create! valid_attributes
+      person1.email = 'test_merge@example.com'
+      person1.save
+      person2 = @contact.people.create! valid_attributes
 
-      params1 = { merge_sets: ["#{person4.id},#{person5.id}"], dup_person_winner: { "#{person4.id}, #{person5.id}" => "#{person5.id}" } }
+      params = { merge_sets: ["#{person1.id},#{person2.id}"],
+                 dup_person_winner: { "#{person1.id},#{person2.id}" => "#{person2.id}" } }
       request.env['HTTP_REFERER'] = '/'
-      post :merge_sets, params1
+      post :merge_sets, params
 
-      expect(Person.find_by_id(person4.id)).to be_nil
+      expect(Person.find_by_id(person1.id)).to be_nil
     end
   end
 end
