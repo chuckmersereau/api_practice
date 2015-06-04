@@ -69,6 +69,7 @@
                     <label>
                       <%= radio_button_tag '', 'address', false, :'ng-model' => 'contactQuery.newsletter' %>
                       <%= _('Physical') %>
+                    </label>
                     <label>
                       <%= radio_button_tag '', 'email', false, :'ng-model' => 'contactQuery.newsletter' %>
                       <%= _('Email') %>
@@ -109,6 +110,7 @@
                       ['State', 'state', :states],
                       ['Region', 'region', :regions],
                       ['Country', 'country', :countries],
+                      ['Metro Area', 'metro_area', :metro_areas]
                     ] %>
                     <% location_filters.each do |location| %>
                       <% options = [[_('-- Any --'), '']] + current_account_list.try(location[2]).select(&:present?) %>
