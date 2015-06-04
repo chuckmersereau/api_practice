@@ -194,21 +194,22 @@ describe ContactsController do
     end
 
     describe 'POST merge_sets for contact duplicates' do
-      let!(:contact1) { create(:contact, name: 'Joe Doe', account_list: user.account_lists.first) }
-      let!(:contact2) { create(:contact, name: 'Joe Doe', account_list: user.account_lists.first) }
+      let(:contact1) { create(:contact, name: 'Joe Doe', account_list: user.account_lists.first) }
+      let(:contact2) { create(:contact, name: 'Joe Doe', account_list: user.account_lists.first) }
+      let(:contact_ids) { [contact1.id, contact2.id].join(',') }
 
       before { request.env['HTTP_REFERER'] = '/' }
 
       it 'merges two contacts  where the winner is the first in the list' do
-        params = { merge_sets: [[contact1.id, contact2.id].join(',')],
-                   dup_contact_winner: { [contact1.id, contact2.id].join(',') => contact1.id } }
+        params = { merge_sets: [contact_ids],
+                   dup_contact_winner: { contact_ids => contact1.id } }
         post :merge, params
         expect(Contact.find_by_id(contact2.id)).to be_nil
       end
 
       it 'merges two contacts where the winner is the second in the list' do
-        params = { merge_sets: [[contact1.id, contact2.id].join(',')],
-                   dup_contact_winner: { [contact1.id, contact2.id].join(',') => contact2.id } }
+        params = { merge_sets: [contact_ids],
+                   dup_contact_winner: { contact_ids => contact2.id } }
         post :merge, params
         expect(Contact.find_by_id(contact1.id)).to be_nil
       end
