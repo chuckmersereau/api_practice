@@ -179,15 +179,15 @@ describe PeopleController do
   describe 'POST merge_sets for person duplicates' do
     let(:person1) { @contact.people.create! valid_attributes }
     let(:person2) { @contact.people.create! valid_attributes }
-    let(:person_ids) { ["#{person1.id},#{person2.id}"] }
+    let(:person_ids) { [person1.id, person2.id].map { |x| x }.join(',') }
 
     before { request.env['HTTP_REFERER'] = '/' }
 
     it 'merges two people  where the winner is the first in the list' do
       person2.email = 'test_merge_person2@example.com'
       person2.save
-      params = { merge_sets: person_ids,
-                 dup_person_winner: { person_ids => "#{person1.id}" } }
+      params = { merge_sets: [person_ids],
+                 dup_person_winner: { person_ids => person1.id } }
       post :merge_sets, params
       expect(Person.find_by_id(person2.id)).to be_nil
       expect(person1.email.email).to eq('test_merge_person2@example.com')
@@ -196,11 +196,11 @@ describe PeopleController do
     it 'merges two people where the winner is the second in the list' do
       person1.email = 'test_merge_person1@example.com'
       person1.save
-      params = { merge_sets: person_ids,
-                 dup_person_winner: { person_ids => "#{person2.id}" } }
+      params = { merge_sets: [person_ids],
+                 dup_person_winner: { person_ids => person2.id } }
       post :merge_sets, params
       expect(Person.find_by_id(person1.id)).to be_nil
-      expect(person2.email.email).to eq('test_merge_person1@example.com')
+      expect(person1.email.email).to eq('test_merge_person1@example.com')
     end
   end
 end

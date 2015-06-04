@@ -196,7 +196,7 @@ describe ContactsController do
     describe 'POST merge_sets for contact duplicates' do
       let(:contact1) { create(:contact, name: 'Joe Doe', account_list: user.account_lists.first) }
       let(:contact2) { create(:contact, name: 'Joe Doe', account_list: user.account_lists.first) }
-      let(:contact_ids) { [contact1.id, contact2.id].join(',') }
+      let(:contact_ids) { [contact1.id, contact2.id].map { |x| x }.join(',') }
 
       before { request.env['HTTP_REFERER'] = '/' }
 
