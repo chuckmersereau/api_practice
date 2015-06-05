@@ -21,7 +21,8 @@ class ContactsController < ApplicationController
                                                  :tags, :primary_address,
                                                  { people: :primary_phone_number }])
 
-        @contacts = @contacts.page(@view_options[:page].to_i > 0 ? @view_options[:page].to_i : 1).per_page(@view_options[:per_page].to_i > 0 ? @view_options[:per_page].to_i : 25)
+        @contacts = @contacts.page(@view_options[:page].to_i > 0 ? @view_options[:page].to_i : 1)
+                    .per_page(@view_options[:per_page].to_i > 0 ? @view_options[:per_page].to_i : 25)
       end
 
       format.csv do
@@ -111,7 +112,9 @@ class ContactsController < ApplicationController
   def bulk_update
     contacts = current_account_list.contacts.where(id: params[:bulk_edit_contact_ids].split(','))
 
-    next_ask_year, next_ask_month, next_ask_day = contact_params.delete('next_ask(1i)'), contact_params.delete('next_ask(2i)'), contact_params.delete('next_ask(3i)')
+    next_ask_year, next_ask_month, next_ask_day = contact_params.delete('next_ask(1i)'),
+                                                  contact_params.delete('next_ask(2i)'),
+                                                  contact_params.delete('next_ask(3i)')
     if [next_ask_year, next_ask_month, next_ask_day].all?(&:present?)
       contact_params['next_ask'] = Date.new(next_ask_year.to_i, next_ask_month.to_i, next_ask_day.to_i)
     end
@@ -201,7 +204,8 @@ class ContactsController < ApplicationController
           contact_name += " & #{attributes[:spouse_first_name]}" if attributes[:spouse_first_name].present?
           contact_greeting = "#{attributes[:first_name]}"
           contact_greeting += " & #{attributes[:spouse_first_name]}" if attributes[:spouse_first_name].present?
-          contact = current_account_list.contacts.create(name: contact_name, greeting: contact_greeting, notes: attributes[:notes])
+          contact = current_account_list.contacts.create(name: contact_name, greeting: contact_greeting,
+                                                         notes: attributes[:notes])
 
           begin
             # create primary
@@ -210,7 +214,8 @@ class ContactsController < ApplicationController
 
             # create spouse
             if attributes[:spouse_first_name].present?
-              spouse = Person.create(first_name: attributes[:spouse_first_name], last_name: attributes[:last_name], phone: attributes[:spouse_phone], email: attributes[:spouse_email])
+              spouse = Person.create(first_name: attributes[:spouse_first_name], last_name: attributes[:last_name],
+                                     phone: attributes[:spouse_phone], email: attributes[:spouse_email])
               contact.people << spouse
             end
 
@@ -260,7 +265,8 @@ class ContactsController < ApplicationController
   def not_duplicates
     contacts = current_account_list.contacts.where(id: params[:ids])
     contacts.each do |contact|
-      not_duplicated_with = (contact.not_duplicated_with.to_s.split(',') + params[:ids].split(',') - [contact.id.to_s]).uniq.join(',')
+      not_duplicated_with = (contact.not_duplicated_with.to_s.split(',') +
+          params[:ids].split(',') - [contact.id.to_s]).uniq.join(',')
       contact.update_attributes(not_duplicated_with: not_duplicated_with)
     end
 
@@ -273,7 +279,9 @@ class ContactsController < ApplicationController
   private
 
   def find_contact
-    @contact = current_account_list.contacts.includes(people: [:primary_email_address, :primary_phone_number, :email_addresses, :phone_numbers, :family_relationships]).find(params[:id])
+    @contact = current_account_list.contacts.includes(people: [:primary_email_address,
+                                                               :primary_phone_number, :email_addresses,
+                                                               :phone_numbers, :family_relationships]).find(params[:id])
   end
 
   def setup_filters
@@ -318,7 +326,8 @@ class ContactsController < ApplicationController
       current_user.save
     end
 
-    if current_user.contacts_view_options.present? && current_user.contacts_view_options[current_account_list.id.to_s].present?
+    if current_user.contacts_view_options.present? &&
+       current_user.contacts_view_options[current_account_list.id.to_s].present?
       view_options = current_user.contacts_view_options[current_account_list.id.to_s]
     end
     @view_options = view_options || params.slice(:per_page, :page)

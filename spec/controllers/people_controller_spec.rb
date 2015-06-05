@@ -47,21 +47,24 @@ describe PeopleController do
 
       it 'creates a nested email' do
         expect do
-          post :create,  contact_id: @contact.id, person: valid_attributes.merge('email_address' => { 'email' => 'john.doe@example.com' })
+          post :create,  contact_id: @contact.id,
+                         person: valid_attributes.merge('email_address' => { 'email' => 'john.doe@example.com' })
         end.to change(EmailAddress, :count).by(1)
         assigns(:person).email.to_s.should == 'john.doe@example.com'
       end
 
       it 'creates a nested phone number' do
         expect do
-          post :create,  contact_id: @contact.id, person: valid_attributes.merge('phone_number' => { 'number' => '123-312-2134' })
+          post :create,  contact_id: @contact.id,
+                         person: valid_attributes.merge('phone_number' => { 'number' => '123-312-2134' })
         end.to change(PhoneNumber, :count).by(1)
         assigns(:person).phone_number.number.should == '+11233122134'
       end
 
       # it "creates a nested address" do
       # expect {
-      # post :create, {contact_id: @contact.id, :person => valid_attributes.merge("addresses_attributes"=>{'0' => {"street"=>"boo"}})}
+      # post :create, {contact_id: @contact.id,
+      #      :person => valid_attributes.merge("addresses_attributes"=>{'0' => {"street"=>"boo"}})}
       # }.to change(Address, :count).by(1)
       # assigns(:person).address.street.should == "boo"
       # end
@@ -200,7 +203,7 @@ describe PeopleController do
                  dup_person_winner: { person_ids => person2.id } }
       post :merge_sets, params
       expect(Person.find_by_id(person1.id)).to be_nil
-      expect(person1.email.email).to eq('test_merge_person1@example.com')
+      expect(person2.email.email).to eq('test_merge_person1@example.com')
     end
   end
 end

@@ -77,7 +77,8 @@ class PeopleController < ApplicationController
       merged_people_count += people.length
 
       winner_id = params[:dup_person_winner][ids].to_i
-      winner = people.find { |person| person.id == winner_id } || people.find { |person| person.id.to_s == merge_set_ids[0] }
+      winner = people.find { |person| person.id == winner_id } ||
+               people.find { |person| person.id.to_s == merge_set_ids[0] }
       Person.transaction do
         (people - [winner]).each do |loser|
           winner.merge(loser)
@@ -92,7 +93,8 @@ class PeopleController < ApplicationController
     people = current_account_list.people.where(id: ids)
 
     people.each do |person|
-      not_duplicated_with = (person.not_duplicated_with.to_s.split(',') + params[:ids].split(',') - [person.id.to_s]).uniq.join(',')
+      not_duplicated_with = (person.not_duplicated_with.to_s.split(',') + params[:ids].split(',') -
+          [person.id.to_s]).uniq.join(',')
       person.update(not_duplicated_with: not_duplicated_with)
     end
 
