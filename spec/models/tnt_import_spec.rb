@@ -223,6 +223,19 @@ describe TntImport do
       expect { import.send(:import_contact, row) }.to change(Contact, :count).by(1)
     end
 
+    it 'does not import very old dates' do
+      import.send(:import_contacts)
+      contact = Contact.first
+      expect(contact.next_ask).not_to eq Date.parse('1899-12-30')
+      expect(contact.pledge_start_date).not_to eq Date.parse('1899-12-30')
+      expect(contact.last_activity).not_to eq Date.parse('1899-12-30')
+      expect(contact.last_appointment).not_to eq Date.parse('1899-12-30')
+      expect(contact.last_letter).not_to eq Date.parse('1899-12-30')
+      expect(contact.last_phone_call).not_to eq Date.parse('1899-12-30')
+      expect(contact.last_pre_call).not_to eq Date.parse('1899-12-30')
+      expect(contact.last_thank).not_to eq Date.parse('1899-12-30')
+    end
+
     it 'imports a contact even if their donor account had no name' do
       org = create(:organization)
       create(:donor_account, account_number: '413518908', organization: org, name: nil)
