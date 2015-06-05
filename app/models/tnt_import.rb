@@ -486,7 +486,8 @@ class TntImport
     contact.notes = row['Notes'] if @import.override? || contact.notes.blank?
     contact.pledge_amount = row['PledgeAmount'] if @import.override? || contact.pledge_amount.blank?
     contact.pledge_frequency = row['PledgeFrequencyID'] if (@import.override? || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i != 0
-    contact.pledge_start_date = parse_date(row['PledgeStartDate']) if (@import.override? || contact.pledge_start_date.blank?) && row['PledgeStartDate'].present? && row['PledgeStartDate'] != '1899-12-30'
+    contact.pledge_start_date = parse_date(row['PledgeStartDate']) if (@import.override? || contact.pledge_start_date.blank?) && row['PledgeStartDate'].present? &&
+                                                                      row['PledgeStartDate'] != '1899-12-30'
     contact.pledge_received = true?(row['PledgeReceived']) if @import.override? || contact.pledge_received.blank?
     contact.status = lookup_mpd_phase(row['MPDPhaseID']) if (@import.override? || contact.status.blank?) && lookup_mpd_phase(row['MPDPhaseID']).present?
     contact.next_ask = parse_date(row['NextAsk']) if (@import.override? || contact.next_ask.blank?) && row['NextAsk'].present? && row['NextAsk'] != '1899-12-30'
@@ -497,7 +498,8 @@ class TntImport
     contact.direct_deposit = true?(row['DirectDeposit']) if @import.override? || contact.direct_deposit.blank?
     contact.magazine = true?(row['Magazine']) if @import.override? || contact.magazine.blank?
     contact.last_activity = parse_date(row['LastActivity']) if (@import.override? || contact.last_activity.blank?) && row['LastActivity'].present? && row['LastActivity'] != '1899-12-30'
-    contact.last_appointment = parse_date(row['LastAppointment']) if (@import.override? || contact.last_appointment.blank?) && row['LastAppointment'].present? && row['LastAppointment'] != '1899-12-30'
+    contact.last_appointment = parse_date(row['LastAppointment']) if (@import.override? || contact.last_appointment.blank?) && row['LastAppointment'].present? &&
+                                                                     row['LastAppointment'] != '1899-12-30'
     contact.last_letter = parse_date(row['LastLetter']) if (@import.override? || contact.last_letter.blank?) && row['LastLetter'].present? && row['LastLetter'] != '1899-12-30'
     contact.last_phone_call = parse_date(row['LastCall']) if (@import.override? || contact.last_phone_call.blank?) && row['LastCall'].present? && row['LastCall'] != '1899-12-30'
     contact.last_pre_call = parse_date(row['LastPreCall']) if (@import.override? || contact.last_pre_call.blank?) && row['LastPreCall'].present? && row['LastPreCall'] != '1899-12-30'
