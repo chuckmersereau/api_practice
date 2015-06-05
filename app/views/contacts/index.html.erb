@@ -282,7 +282,8 @@
               <td colspan="5">
                 <p><%=  %>
                   <% if current_account_list.contacts.count > 0 %>
-                    <strong><%= _('You have') %> <%= current_account_list.contacts.count %> <%= _('active and hidden contact.') %></strong>
+                    <strong><%= _('You have') %> <%= current_account_list.contacts.active.count %> <%= _('active contacts.') %></strong>
+                    (<%= current_account_list.contacts.count %> total contacts) 
                     <%= _('Unfortunately none of them match your current search or filters.') %>
                   <% else %>
                     <%= _("Sorry, we couldn't find any contacts that match your current search or filters.") %>
