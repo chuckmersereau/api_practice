@@ -2002,8 +2002,13 @@ h4.title {
 }
 
 /* ********************* Layout Hacks ************************** */
-.gm-style .gm-style-iw {
-  width: inherit !important;
+.gm-style {
+  img {
+    max-width: initial;
+  }
+  .gm-style-iw {
+    width: inherit !important;
+  }
 }
 
 .best_in_place {
