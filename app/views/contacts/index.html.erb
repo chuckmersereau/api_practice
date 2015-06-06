@@ -282,8 +282,8 @@
               <td colspan="5">
                 <p>
                   <% if current_account_list.contacts.any? %>
-                    <strong><%= _('You have') %> <%= current_account_list.contacts.active.count %> <%= _('active contacts.') %></strong>
-                    (<%= current_account_list.contacts.count %> total contacts) 
+                    <strong><%= _('You have %{total_contacts} active contacts.').localize % { total_contacts: current_account_list.contacts.active.count } %></strong>
+                    (<%= current_account_list.contacts.count %> <%= _(total contacts.) %>) 
                     <%= _('Unfortunately none of them match your current search or filters.') %>
                   <% else %>
                     <%= _("Uh oh, looks like have no contacts. You should:") %>
