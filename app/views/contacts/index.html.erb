@@ -280,8 +280,8 @@
           <table class="tablelist" ng-class="{'contact_loading': contactsLoading}">
             <tr ng-show="contacts.length === 0 && contactQuery.viewPrefsLoaded">
               <td colspan="5">
-                <p><%=  %>
-                  <% if current_account_list.contacts.count > 0 %>
+                <p>
+                  <% if current_account_list.contacts.count.any? %>
                     <strong><%= _('You have') %> <%= current_account_list.contacts.active.count %> <%= _('active contacts.') %></strong>
                     (<%= current_account_list.contacts.count %> total contacts) 
                     <%= _('Unfortunately none of them match your current search or filters.') %>
