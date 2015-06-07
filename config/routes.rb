@@ -75,6 +75,7 @@ Rails.application.routes.draw do
   resources :preferences do
     collection do
       post :update_tab_order
+      get 'notifications', to: :notification_settings
     end
   end
 

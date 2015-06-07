@@ -64,7 +64,8 @@ class AccountList < ActiveRecord::Base
   end
 
   def monthly_goal=(val)
-    settings[:monthly_goal] = val.gsub(/[^\d\.]/, '').to_i if val
+    val.gsub!(/[^\d\.]/, '').to_i if val.is_a? String
+    settings[:monthly_goal] = val
   end
 
   def monthly_goal

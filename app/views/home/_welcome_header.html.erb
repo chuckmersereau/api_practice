@@ -60,15 +60,18 @@
       <div class="getting_started_number">2</div>
       <div class="panel panel-default">
         <div class="panel-body">
-          <%= link_to(preferences_path(:focus => "preference_set_monthly_goal")) do %>
-            <div class="mwrap">
-              <div class="nohide floating info">
-                <%= _('Click here to set your monthly goal, after which we will show '+
-                      'your progress and factor it into the pretty graph of your donations') %>
-              </div>
+          <% preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list) %>
+          <%= form_for preference_set, url: preference_path(current_user, redirect: home_path),
+                       method: :put do |f| %>
+            <div class="form-group">
+              <%= f.label :monthly_goal, _('Monthly goal') %>
+              <%= f.text_field :monthly_goal, class: 'form-control' %>
             </div>
+            <%= f.submit _('Save'), class: 'btn btn-primary' %>
           <% end %>
-          Form here for settings
+          <hr>
+          <%= link_to(_('Setup Notifications'), notifications_preferences_path,
+                      class: 'btn btn-secondary', remote: true) %>
         </div>
       </div>
       <h2><%= _('Setup Your Support Goal And Notifications') %></h2>

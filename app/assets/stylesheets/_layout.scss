@@ -1870,6 +1870,13 @@ body.google_integrations_controller {
   .account_single {
     margin-bottom: 1em;
   }
+  form {
+    text-align: left;
+  }
+  hr {
+    width: auto;
+    margin: 7px 0;
+  }
 }
 
 .getting_started_number {
