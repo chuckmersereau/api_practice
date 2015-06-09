@@ -348,18 +348,23 @@ div.right {
 .spacer-top {margin-top: 30px;}
 .spacer-bottom {margin-bottom: 30px;}
 
+#contacts-map {
+  margin-right: 170px;
+  height: 100%;
+}
 .contacts-map-markers {
-  margin-top: 8px;
+  width: 175px;
+  position: absolute;
+  top: 0;
+  right: 0;
   > span {
-    white-space: nowrap;
-    margin-right: 6px;
     display: inline-block;
-    vertical-align: middle;
     font-size: 13px;
     img {
-      vertical-align: middle;
-      display: inline-block;
       height: 25px;
+      float: left;
+      margin-top: 4px;
+      margin-right: 4px;
     }
   }
 }
