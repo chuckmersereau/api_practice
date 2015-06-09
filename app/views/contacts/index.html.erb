@@ -286,7 +286,9 @@
                     (<%= _('%{total_contacts} total contacts.').localize % {total_contacts: current_account_list.contacts.count} %>) 
                     <%= _('Unfortunately none of them match your current search or filters.') %>
                   <% else %>
-                    <%= _("Uh oh, looks like have no contacts. You should:") %>
+                    <%= _("Looks like you haven't added any contacts yet. You can") %>
+                    <%= link_to(_('add one'), new_task_path) %> or 
+                    <%= link_to(_('import some'), "/accounts") %> from another service.
                   <% end %>
                 </p>
                 <p>
