@@ -286,16 +286,14 @@
                     (<%= _('%{total_contacts} total contacts.').localize % {total_contacts: current_account_list.contacts.count} %>) 
                     <%= _('Unfortunately none of them match your current search or filters.') %>
                   <% else %>
-                    <%= _("Looks like you haven't added any contacts yet. You can") %>
-                    <%= link_to(_('add one'), new_task_path) %> or 
-                    <%= link_to(_('import some'), "/accounts") %> from another service.
+                    <%= _("Looks like you haven't added any contacts yet. You can add one or import some from another service.") %>
                   <% end %>
                 </p>
                 <p>
                   <% if current_account_list.contacts.any? %>
                     <a href="#" ng-click="resetFilters()" class="btn btn-primary"><%= _('Reset All Search Filters') %></a>
                   <% else %>
-                    <%= link_to(_('Import Contacts'), "/accounts", class: 'btn btn-secondary') %>
+                    <%= link_to(_('Import Contacts'), "/accounts", class: 'btn btn-primary') %>
                   <% end %>
                   <%= link_to(_('Add New Contact'),'/contacts/new', class: 'btn btn-secondary') %>
                 </p>
