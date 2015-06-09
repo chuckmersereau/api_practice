@@ -1877,6 +1877,12 @@ body.google_integrations_controller {
     width: auto;
     margin: 7px 0;
   }
+
+  .input-group-btn:last-child > .btn,
+  .input-group-btn:last-child > .btn-group {
+    box-shadow: none;
+    line-height: 24px;
+  }
 }
 
 .getting_started_number {

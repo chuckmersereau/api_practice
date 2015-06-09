@@ -81,8 +81,32 @@
     <div class="col-md-4 getting-started-panel">
       <div class="getting_started_number">3</div>
       <div class="panel panel-default">
-        <div class="panel-body">
-          Form here for first contact
+        <div class="panel-body" ng-controller="smallNamestorm as namestorm">
+          <form ng-submit="namestorm.addContact()">
+            <p><%= _("Let's namestorm a few contacts. You can start "+
+                     "with the contact name, we normally do 'Last Name, First'") %></p>
+            <p ng-cloak>{{namestorm.error}}</p>
+            <div class="input-group">
+              <input type="text" ng-model="namestorm.newContactName"
+                     ng-disabled="namestorm.apiBusy" id="welcome-new-contact-name"
+                     placeholder="Last Name, First Name" class="form-control" />
+              <span class="input-group-btn">
+                <input type="submit" value="Add" class="btn btn-primary"
+                       ng-disabled="namestorm.newContactName.length == 0 || namestorm.apiBusy"/>
+              </span>
+            </div>
+            <select class="form-control" ng-model="namestorm.newContactStatus">
+              <option ng-repeat="status in namestorm.contactStatuses" value="{{status}}">{{status}}</option>
+            </select>
+            <div ng-cloak ng-show="namestorm.contacts.length > 0">
+              <p><%= _('Here are your new contacts, click one to edit more of their information!') %></p>
+              <ul>
+                <li ng-repeat="contact in namestorm.contacts">
+                  <a href="/contacts/{{contact.id}}/edit/" target="_blank">{{contact.name}}</a>
+                </li>
+              </ul>
+            </div>
+          </form>
         </div>
       </div>
       <h2><%= _('Add A Contact') %></h2>
