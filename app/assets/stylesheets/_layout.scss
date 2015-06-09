@@ -15,6 +15,7 @@ td, th {text-align: left; vertical-align: top;}
 .table_select_filters {font-size: 11px;}
 .table_select_check {padding-right: 4px;}
 hr.thin {margin: .5em 0; border: none; border-top: 1px solid $gray_mid;}
+hr.thick {margin: 1.5em 0; border: none; border-top: 6px solid $gray_mid; width: 100%;}
 img {max-width: 100%; height: auto;}
 .dropdown {display: inline-block;}
 $progress-bar-height: 30px;
@@ -1857,7 +1858,8 @@ body.google_integrations_controller {
   }
 }
 
-/* ********************* Dashboard ************************** */
+/* ************************************************************** */
+
 /* -------- Welcome -------- */
 .getting_started_title, .getting-started-panel {
   text-align: center;
@@ -1878,6 +1880,9 @@ body.google_integrations_controller {
     margin: 7px 0;
   }
 
+  .input-group {
+    margin-bottom: 0.5em;
+  }
   .input-group-btn:last-child > .btn,
   .input-group-btn:last-child > .btn-group {
     box-shadow: none;
@@ -1886,13 +1891,16 @@ body.google_integrations_controller {
 }
 
 .getting_started_number {
-  background-color: orange;
   display: inline-block;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  border-radius: 20px;
-  font-size: 20px;
+  width: 60px;
+  height: 60px;
+  border-radius: 80px;
+  font-weight: bold;
+  line-height: 52px;
+  border: 4px solid $color-brownish;
+  color: $color-brownish;
+  background-color: $color-primary;
+  font-size: 35px;
   position: relative;
 }
 

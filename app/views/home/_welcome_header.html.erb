@@ -63,11 +63,13 @@
           <% preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list) %>
           <%= form_for preference_set, url: preference_path(current_user, redirect: home_path),
                        method: :put do |f| %>
-            <div class="form-group">
-              <%= f.label :monthly_goal, _('Monthly goal') %>
+            <%= f.label :monthly_goal, _('Monthly goal') %>
+            <div class="input-group">
               <%= f.text_field :monthly_goal, class: 'form-control' %>
+              <span class="input-group-btn">
+                <%= f.submit _('Save'), class: 'btn btn-primary' %>
+              </span>
             </div>
-            <%= f.submit _('Save'), class: 'btn btn-primary' %>
           <% end %>
           <hr>
           <%= link_to(_('Setup Notifications'), notifications_preferences_path,
@@ -89,7 +91,7 @@
             <div class="input-group">
               <input type="text" ng-model="namestorm.newContactName"
                      ng-disabled="namestorm.apiBusy" id="welcome-new-contact-name"
-                     placeholder="Last Name, First Name" class="form-control" />
+                     placeholder="<%= _('Last Name, First Name') %>" class="form-control" />
               <span class="input-group-btn">
                 <input type="submit" value="Add" class="btn btn-primary"
                        ng-disabled="namestorm.newContactName.length == 0 || namestorm.apiBusy"/>

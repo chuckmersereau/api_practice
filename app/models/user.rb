@@ -102,7 +102,7 @@ class User < Person
   end
 
   def setup
-    super || []
+    super || [:import, :goal, :contacts]
   end
 
   private
