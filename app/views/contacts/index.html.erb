@@ -8,7 +8,7 @@
     <div class="col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap">
       <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
         <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
-        <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
+        <a href="#" ng-click="resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
            ng-hide="isEmptyFilter()"
            onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
           <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
@@ -202,7 +202,7 @@
               <a href="" ng-click="clearInsightFilter()" class="btn"><%= _('Clear Insight Filter') %></a>
             </li>
           <% end %>
-          <a href="#" ng-click="resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
+          <a href="#" ng-click="resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
              ng-hide="isEmptyFilter()"
              onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
             <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
@@ -279,8 +279,24 @@
         <div class="contacts-scrollable" id="contacts-scrollable" ng-cloak>
           <table class="tablelist" ng-class="{'contact_loading': contactsLoading}">
             <tr ng-show="contacts.length === 0 && contactQuery.viewPrefsLoaded">
-              <td style="color:red;" colspan="5">
-                <%= _('Sorry, there are no contacts that match the filters and/or tags you have selected.') %> <%= _('Try') %> <a href="/contacts/new"><%= _('adding a new contact') %></a> <%= _('or') %> <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a>.
+              <td colspan="5">
+                <p>
+                  <% if current_account_list.contacts.any? %>
+                    <strong><%= _('You have %{active_contacts} active contacts.').localize % { active_contacts: current_account_list.contacts.active.count } %></strong>
+                    (<%= _('%{total_contacts} total contacts.').localize % {total_contacts: current_account_list.contacts.count} %>) 
+                    <%= _('Unfortunately none of them match your current search or filters.') %>
+                  <% else %>
+                    <%= _("Looks like you haven't added any contacts yet. You can add one or import some from another service.") %>
+                  <% end %>
+                </p>
+                <p>
+                  <% if current_account_list.contacts.any? %>
+                    <a href="#" ng-click="resetFilters()" class="btn btn-primary"><%= _('Reset All Search Filters') %></a>
+                  <% else %>
+                    <%= link_to(_('Import Contacts'), "/accounts", class: 'btn btn-primary') %>
+                  <% end %>
+                  <%= link_to(_('Add New Contact'),'/contacts/new', class: 'btn btn-secondary') %>
+                </p>
               </td>
             </tr>
             <tr contact="contact" ng-repeat="contact in contacts" id="contact_{{contact.id}}" data-hook="contact"></tr>
