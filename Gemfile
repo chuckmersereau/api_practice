@@ -3,7 +3,7 @@ source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro'
 end
 
-gem 'rails', '~> 4.1.0'
+gem 'rails', '~> 4.1.10'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -41,7 +41,7 @@ gem 'display_case', '= 0.0.5'
 gem 'fb_graph', '~> 2.6.0'
 gem 'fog', '~> 1.23.0'
 gem 'font-awesome-rails'
-gem 'foreigner'
+gem 'foreigner', '~> 1.7.3'
 gem 'gettext_i18n_rails', '~> 1.2.3'
 # gem 'gettext_i18n_rails_js'#, '~> 0.0.3'
 gem 'gibberish', '~> 1.4.0'
