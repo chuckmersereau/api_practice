@@ -21,7 +21,7 @@ ORDER BY 1, 2 ASC NULLS LAST
 FETCH FIRST 10000000 ROWS ONLY'
 
   it 'gets a session id' do
-    creds =  { name: ENV['OBIEE_KEY'], password: ENV['OBIEE_SECRET'] }
+    creds =  { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
     obiee = Obiee.new

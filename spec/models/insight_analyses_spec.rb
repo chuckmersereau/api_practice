@@ -14,7 +14,7 @@ describe 'InsightAnalyses' do
   after(:all)  { savon.unmock! }
 
   it 'gets analysis results with designation' do
-    creds = { name: ENV['OBIEE_KEY'], password: ENV['OBIEE_SECRET'] }
+    creds = { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
@@ -70,7 +70,7 @@ FETCH FIRST 10000000 ROWS ONLY',
   end
 
   it 'fails with unknown desig' do
-    creds = { name: ENV['OBIEE_KEY'], password: ENV['OBIEE_SECRET'] }
+    creds = { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
 
     savon.expects(:logon).with(message: creds).returns(fixture)
@@ -103,7 +103,7 @@ FETCH FIRST 10000000 ROWS ONLY',
   end
 
   it 'fails with no desig' do
-    creds = { name: ENV['OBIEE_KEY'], password: ENV['OBIEE_SECRET'] }
+    creds = { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
     rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')

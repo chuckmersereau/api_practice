@@ -4,9 +4,9 @@ development: &dev
   reconnect: false
   pool: <%= ENV['DB_ENV_POSTGRESQL_POOL'] || 25 %>
   database: <%= ENV['DB_ENV_POSTGRESQL_DB'] || 'mpdx' %>
-  username: <%= ENV['DB_ENV_POSTGRESQL_USER'] %>
-  password: <%= ENV['DB_ENV_POSTGRESQL_PASS'] %>
-  host: <%= ENV['DB_PORT_5432_TCP_ADDR'] %>
+  username: <%= ENV.fetch('DB_ENV_POSTGRESQL_USER') %>
+  password: <%= ENV.fetch('DB_ENV_POSTGRESQL_PASS') %>
+  host: <%= ENV.fetch('DB_PORT_5432_TCP_ADDR') %>
 
 
 staging:
@@ -21,6 +21,6 @@ production:
 test:
   <<: *dev
   database: <%= ENV['DB_ENV_POSTGRESQL_DB_TEST'] || 'mpdx_test' %>
-  username: <%= ENV['DB_ENV_POSTGRESQL_USER_TEST'] %>
-  password: <%= ENV['DB_ENV_POSTGRESQL_PASS_TEST'] %>
-  host: <%= ENV['DB_PORT_5432_TCP_ADDR_TEST'] %>
+  username: <%= ENV['DB_ENV_POSTGRESQL_USER_TEST'] || ENV.fetch('DB_ENV_POSTGRESQL_USER') %>
+  password: <%= ENV['DB_ENV_POSTGRESQL_PASS_TEST'] || ENV.fetch('DB_ENV_POSTGRESQL_PASS') %>
+  host: <%= ENV['DB_PORT_5432_TCP_ADDR_TEST'] || ENV.fetch('DB_PORT_5432_TCP_ADDR') %>
