@@ -14,14 +14,7 @@ MPDX is an online tool designed to help you maintain and improve your relationsh
 
 ### Setup
 
-Copy the example configuration files to active configuration files:
-
-```bash
-$ cd config
-$ cp database.example.yml database.yml
-$ cp config.example.yml config.yml
-$ cp cloudinary.example.yml cloudinary.yml
-```
+Make a `.env.local` file in your project root and add any local config variables you may need.
 
 ### Install Gems
 
