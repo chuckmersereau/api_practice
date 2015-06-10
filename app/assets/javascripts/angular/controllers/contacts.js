@@ -439,7 +439,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         else
           contactsCounts.noAddress++;
       })
-      $('#contacts_map_modal').dialog({ width: 700, height: 615 })
+      $('#contacts_map_modal').dialog({ width: 750, height: 615 });
       var addMarkers = function(){
         $scope.mapHandler.removeMarkers($scope.mapMarkers)
         $scope.mapMarkers = $scope.mapHandler.addMarkers(newMarkers);

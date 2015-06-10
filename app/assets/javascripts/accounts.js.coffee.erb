@@ -2,7 +2,7 @@ $ ->
   if $('#accounts_index')[0]? || $('#csv_import_preview')[0]?
 
     $(document).on 'click', '[data-behavior="show_import"]', ->
-      $(this).closest('div').hide()
+      $(this).hide()
       div = $(this).closest('[data-behavior="account"]')
       $('[data-behavior="import_options"]', div).show()
       false
@@ -23,7 +23,7 @@ $ ->
       false
 
     $(document).on 'click', '[data-behavior="add_org_account"]', ->
-      $('[data-behavior="new_org_account"]').dialog
+      $('#new_org_account').dialog
         resizable: false,
         modal:'true',
         maxHeight: 600

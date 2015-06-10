@@ -131,6 +131,12 @@ div.right {
   line-height: 32px !important;
 }
 
+.btn-filter-left {
+  width: auto;
+  margin-right: 10px;
+  margin-left: 10px;
+}
+
 #mainmenu {
   $mainmenuheight: 48px;
   height: auto;
@@ -348,18 +354,23 @@ div.right {
 .spacer-top {margin-top: 30px;}
 .spacer-bottom {margin-bottom: 30px;}
 
+#contacts-map {
+  margin-right: 170px;
+  height: 100%;
+}
 .contacts-map-markers {
-  margin-top: 8px;
+  width: 175px;
+  position: absolute;
+  top: 0;
+  right: 0;
   > span {
-    white-space: nowrap;
-    margin-right: 6px;
     display: inline-block;
-    vertical-align: middle;
     font-size: 13px;
     img {
-      vertical-align: middle;
-      display: inline-block;
       height: 25px;
+      float: left;
+      margin-top: 4px;
+      margin-right: 4px;
     }
   }
 }
@@ -1098,7 +1109,14 @@ table tbody.tasks {
   position: absolute;
   z-index: 10;
 
-  a {background: image-url("sprite.png") no-repeat 0 50%; line-height: 25px; height: 25px; padding-left: 25px; padding-right: 10px; display: block;}
+  a {
+    background: image-url("sprite.png") no-repeat 0 50%;
+    line-height: 25px;
+    height: 25px;
+    padding-left: 25px;
+    padding-right: 10px;
+    display: block;
+  }
   a.text {background-position: 0 -192px;}
   a.email {background-position: 0 -259px;}
   a.fb {background-position: 0 -390px;}
@@ -1323,6 +1341,7 @@ table.meta {
 
   border-bottom: 1px solid $gray_light;
   padding: 15px 0;
+  display: block;
 
   .identify {
     width: 180px;
@@ -1336,7 +1355,7 @@ table.meta {
     text-align: center;
     img {
       max-height: 100px;
-      display: inline-block;
+      margin: 0 auto;
     }
   }
   .network_button {
@@ -1994,8 +2013,13 @@ h4.title {
 }
 
 /* ********************* Layout Hacks ************************** */
-.gm-style .gm-style-iw {
-  width: inherit !important;
+.gm-style {
+  img {
+    max-width: initial;
+  }
+  .gm-style-iw {
+    width: inherit !important;
+  }
 }
 
 .best_in_place {

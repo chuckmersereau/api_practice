@@ -1,0 +1,38 @@
+<%= form_for Import.new(source: 'tnt') do |f| %>
+  <%= f.hidden_field :source %>
+
+  <div class="form-group">
+    <%= f.file_field :file, class: 'form-control', required: true %>
+    <%= f.hidden_field :file_cache %>
+  </div>
+
+  <div class="radio">
+    <label class="field radiocheck">
+      <%= f.radio_button :override, false %>
+      <%= _('Only add data to matched contact records when the current field is blank.') %>
+    </label>
+  </div>
+
+  <div class="radio">
+    <label>
+      <%= f.radio_button :override, true %>
+      <%= _('Override existing contact fields with data in the uploaded file.') %>
+    </label>
+  </div>
+
+  <div class="field importtags">
+    <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
+  </div>
+  <div class="hint">
+    <p>
+      <%= link_to('<i class="fa  fa-cloud-download"></i> '.html_safe+_('Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version.'), 'http://www.tntware.com/tntmpd/downloads/') %>
+    </p>
+    <p>
+      <%= link_to('<i class="fa fa-play-circle-o"></i> '.html_safe+
+                    _('Please watch this video to learn how to export from TNT in the specific format for MPDx.'),
+                  'http://www.youtube.com/watch?v=EoWFRFIYMkQ&list=UUTjqVT-m3YXICbwaIu9_Gqg&index=22',
+                  target: '_blank') %>
+    </p>
+  </div>
+  <%= f.submit _('Import'), class: 'btn btn-primary' %>
+<% end %>
