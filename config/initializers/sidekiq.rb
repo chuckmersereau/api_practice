@@ -14,7 +14,6 @@ Sidekiq.configure_server do |config|
   config.reliable_scheduler!
   config.redis = { url: Redis.current.client.id,
                    namespace: "MPDX:#{Rails.env}:resque"}
-  config.failures_default_mode = :exhausted
 end
 
 Sidekiq.default_worker_options = { backtrace: true }
