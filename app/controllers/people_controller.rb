@@ -71,14 +71,14 @@ class PeopleController < ApplicationController
     merged_people_count = 0
 
     params[:merge_sets].each do |ids|
-      ids = ids.split(',')
-      people = current_account_list.people.where(id: ids)
+      merge_set_ids = ids.split(',')
+      people = current_account_list.people.where(id: merge_set_ids)
       next if people.length <= 1
       merged_people_count += people.length
 
-      # We assume the winner is the first in the contact set. That will be the contact with the more casual nickname.
-      winner = people.find { |person| person.id.to_s == ids[0] }
-
+      winner_id = params[:dup_person_winner][ids].to_i
+      winner = people.find { |person| person.id == winner_id } ||
+               people.find { |person| person.id.to_s == merge_set_ids[0] }
       Person.transaction do
         (people - [winner]).each do |loser|
           winner.merge(loser)
@@ -93,7 +93,8 @@ class PeopleController < ApplicationController
     people = current_account_list.people.where(id: ids)
 
     people.each do |person|
-      not_duplicated_with = (person.not_duplicated_with.to_s.split(',') + params[:ids].split(',') - [person.id.to_s]).uniq.join(',')
+      not_duplicated_with = (person.not_duplicated_with.to_s.split(',') + params[:ids].split(',') -
+          [person.id.to_s]).uniq.join(',')
       person.update(not_duplicated_with: not_duplicated_with)
     end
 
