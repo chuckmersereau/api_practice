@@ -2,11 +2,11 @@ require 'cgi'
 
 module SmartyStreets
   def self.auth_id
-    APP_CONFIG['smarty_auth_id']
+    ENV.fetch('SMARTY_AUTH_ID')
   end
 
   def self.auth_token
-    APP_CONFIG['smarty_auth_token']
+    ENV.fetch('SMARTY_AUTH_TOKEN')
   end
 
   def self.get(address_hash)

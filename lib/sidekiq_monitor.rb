@@ -31,7 +31,7 @@ module SidekiqMonitor
   end
 
   def config(key)
-    APP_CONFIG["sidekiq_warn_#{key}"]
+    ENV["sidekiq_warn_#{key}".upcase]
   end
 
   module_function :notify_if_problem, :sidekiq_problem, :config, :stuck?, :too_few_procs?

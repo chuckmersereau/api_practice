@@ -469,33 +469,6 @@ $ ->
     # fix to hide mysterious donations tab that won't go away
     $('#tabs_donations').remove()
 
-    <%#$(document).on 'focus', '[data-behavior*=social-field]', ->%>
-      <%#wrapper = $(this).closest('[data-behavior*=field-wrapper]')%>
-
-      <%#unless $('[data-behavior=suggestions]', wrapper)[0]?%>
-        <%#fieldset = $(this).closest('.inside_person')%>
-        <%#div = $('<div data-behavior="suggestions"></div>')%>
-        <%#wrapper.append(div)%>
-        <%#$.ajax {%>
-          <%#url: '/contacts/social_search',%>
-          <%#data: {%>
-            <%#network: wrapper.attr('data-network'),%>
-            <%#first_name: $('.first_name', fieldset).val(),%>
-            <%#last_name: $('.last_name', fieldset).val()%>
-          <%#},%>
-          <%#dataType: 'html',%>
-          <%#success: (data) ->%>
-            <%#div.append(data)%>
-            <%#wrapper.append(div)%>
-          <%#,%>
-          <%#error: () ->%>
-            <%## do nothing%>
-        <%#}%>
-      <%#$('[data-behavior=suggestions]', this).show()%>
-
-    <%#$(document).on 'blur', '[data-behavior*=social-field]', ->%>
-      <%#$('[data-behavior=suggestions]', this).hide()%>
-
 $.mpdx.updateSelectedContactIds = ->
   ids = []
   $('[name="contact_ids[]"]:checked').each ->
