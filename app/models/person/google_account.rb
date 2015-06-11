@@ -59,7 +59,7 @@ class Person::GoogleAccount < ActiveRecord::Base
     fail Person::GoogleAccount::MissingRefreshToken if token_expired? && !refresh_token!
 
     unless @contact_api_user
-      client = OAuth2::Client.new(APP_CONFIG['google_key'], APP_CONFIG['google_secret'])
+      client = OAuth2::Client.new(ENV.fetch('GOOGLE_KEY'), ENV.fetch('GOOGLE_SECRET'))
       oath_token = OAuth2::AccessToken.new(client, token)
       @contact_api_user = GoogleContactsApi::User.new(oath_token)
     end
@@ -84,8 +84,8 @@ class Person::GoogleAccount < ActiveRecord::Base
 
     # Refresh auth token from google_oauth2.
     params = {
-      client_id: APP_CONFIG['google_key'],
-      client_secret: APP_CONFIG['google_secret'],
+      client_id: ENV.fetch('GOOGLE_KEY'),
+      client_secret: ENV.fetch('GOOGLE_SECRET'),
       refresh_token: refresh_token,
       grant_type: 'refresh_token'
     }

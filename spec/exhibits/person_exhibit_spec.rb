@@ -9,14 +9,14 @@ describe PersonExhibit do
       person.stub(facebook_account: nil,
                   primary_picture: double(image: double(url: nil)),
                   gender: nil
-      )
+                 )
       expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
     end
 
     it 'should make facebook image' do
       person.stub(facebook_account: double(remote_id: 1234),
                   primary_picture: double(image: double(url: nil))
-      )
+                 )
       expect(exhib.avatar).to eq('https://graph.facebook.com/1234/picture?type=square')
     end
   end

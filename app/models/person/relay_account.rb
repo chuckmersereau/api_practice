@@ -52,7 +52,7 @@ class Person::RelayAccount < ActiveRecord::Base
     designation = auth_hash.extra.attributes.first.designation || 'NO-DESIG'
 
     account.assign_attributes(remote_id: remote_id,
-                              token: "#{APP_CONFIG['itg_auth_key']}_#{designation}_#{emplid}",
+                              token: "#{ENV.fetch('WSAPI_KEY')}_#{designation}_#{emplid}",
                               authenticated: true,
                               valid_credentials: true)
 
