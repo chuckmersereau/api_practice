@@ -148,7 +148,7 @@ class Appeal < ActiveRecord::Base
 
     # If they gave this month, make the cut off 3 months ago, if they didn't give this month yet, make it
     # 4 months ago so we are capturing 3 complete months of giving.
-    months_ago_cutoff = prev_full_months + (month_diff(contact.last_donation_date, Date.today) == 0 ? 0 : 1)
+    months_ago_cutoff = prev_full_months + (month_diff(contact.last_donation_date, Date.today) == 0 ? 0  : 1)
 
     net_increase = 0
     last_total = monthly_totals.pop

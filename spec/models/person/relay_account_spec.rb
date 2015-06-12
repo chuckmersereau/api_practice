@@ -8,7 +8,7 @@ describe Person::RelayAccount do
                          ssoGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024' }]
     @auth_hash = Hashie::Mash.new(uid: 'JOHN.DOE@EXAMPLE.COM', extra: { attributes: user_attributes })
     @wsapi_headers = { 'Accept' => '*/*; q=0.5, application/xml', 'Accept-Encoding' => 'gzip, deflate',
-                       'Authorization' => "Bearer #{ENV.fetch('WSAPI_KEY')}", 'User-Agent' => 'Ruby' }
+                       'Authorization' => "Bearer #{APP_CONFIG['itg_auth_key']}", 'User-Agent' => 'Ruby' }
     stub_request(:get, 'https://wsapi.ccci.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=F167605D-94A4-7121-2A58-8D0F2CA6E024')
       .with(headers: @wsapi_headers)
       .to_return(status: 200, body: '[]', headers: {})

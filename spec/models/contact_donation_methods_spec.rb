@@ -53,7 +53,7 @@ describe ContactDonationMethods do
       old_donation.update(donation_date: Date.today << 1)
       contact.update_donation_totals(donation)
       contact.update_donation_totals(old_donation)
-      expect(contact.last_monthly_total).to eq(9.99 * 2)
+      expect(contact.last_monthly_total).to eq(9.99  * 2)
     end
 
     it 'returns zero if the previous and current months have no donations' do

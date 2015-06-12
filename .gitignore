@@ -12,8 +12,9 @@
 /tmp
 vendor/ruby
 vendor/jruby
-coverage
+config/database.yml
 config/config.yml
+coverage
 .DS_Store
 rails/ruby
 NERD_tree_3
@@ -30,8 +31,9 @@ public/uploads
 public/mobile
 *.sublime-project
 *.sublime-workspace
+cloudinary.yml
+config/sidekiq.yml
 .idea
 node_modules
 public/dev-assets
 .vagrant
-.env.local

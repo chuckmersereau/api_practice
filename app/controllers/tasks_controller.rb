@@ -14,7 +14,7 @@ class TasksController < ApplicationController
         :referrals_to_me,
         { people: [:phone_numbers, :email_addresses] }
       ]
-                            )
+    )
 
     @overdue = @tasks.overdue
     @today = @tasks.today

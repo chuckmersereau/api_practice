@@ -98,7 +98,7 @@ class Person::FacebookAccount < ActiveRecord::Base
   end
 
   def refresh_token
-    info = Koala::Facebook::OAuth.new(ENV.fetch('FACEBOOK_KEY'), ENV.fetch('FACEBOOK_SECRET')).exchange_access_token_info(token)
+    info = Koala::Facebook::OAuth.new(APP_CONFIG['facebook_key'], APP_CONFIG['facebook_secret']).exchange_access_token_info(token)
     self.token = info['access_token']
     begin
       self.token_expires_at = Time.at(info['expires'].to_i)
@@ -110,7 +110,7 @@ class Person::FacebookAccount < ActiveRecord::Base
 
   # Refresh any tokens that will be expiring soon
   def self.refresh_tokens
-    Person::FacebookAccount.where('token_expires_at < ? AND token_expires_at > ?', 2.days.from_now, Time.now).find_each(&:refresh_token)
+    Person::FacebookAccount.where('token_expires_at < ? AND token_expires_at > ?', 2.days.from_now, Time.now).each(&:refresh_token)
   end
 
   private

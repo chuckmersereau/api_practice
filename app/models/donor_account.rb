@@ -15,7 +15,7 @@ class DonorAccount < ActiveRecord::Base
   validates :organization_id, :account_number, presence: true
 
   def primary_master_person
-    master_people.find_by('master_person_donor_accounts.primary' => true)
+    master_people.where('master_person_donor_accounts.primary' => true).first
   end
 
   def link_to_contact_for(account_list, contact = nil)

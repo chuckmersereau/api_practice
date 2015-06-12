@@ -389,7 +389,7 @@ class AccountList < ActiveRecord::Base
   private
 
   def sync_with_google_contacts
-    google_integrations.where(contacts_integration: true).find_each { |g_i| g_i.sync_data('contacts') }
+    google_integrations.where(contacts_integration: true).each { |g_i| g_i.sync_data('contacts') }
   end
 
   def import_data
@@ -453,31 +453,31 @@ class AccountList < ActiveRecord::Base
   end
 
   def mc_subscribe_users(group)
-    gb = Gibbon.new(ENV.fetch('MAILCHIMP_KEY'))
+    gb = Gibbon.new(APP_CONFIG['mailchimp_key'])
     users.each do |u|
       next unless u.email
       vars = { EMAIL: u.email.email, FNAME: u.first_name, LNAME: u.last_name,
-               GROUPINGS: [{ id: ENV.fetch('MAILCHIMP_GROUPING_ID'), groups: group }] }
-      gb.list_subscribe(id: ENV.fetch('MAILCHIMP_LIST'), email_address: vars[:EMAIL], update_existing: true,
+               GROUPINGS: [{ id: APP_CONFIG['mailchimp_grouping_id'], groups: group }] }
+      gb.list_subscribe(id: APP_CONFIG['mailchimp_list'], email_address: vars[:EMAIL], update_existing: true,
                         double_optin: false, merge_vars: vars, send_welcome: false, replace_interests: false)
     end
   end
 
   def mc_unsubscribe_users(group)
-    gb = Gibbon.new(ENV.fetch('MAILCHIMP_KEY'))
+    gb = Gibbon.new(APP_CONFIG['mailchimp_key'])
     users.each do |u|
       next if u.email.blank?
       # subtract this group from the list of groups this email is subscribed to
-      result = gb.list_member_info(id: ENV.fetch('MAILCHIMP_LIST'), email_address: [u.email.email])
+      result = gb.list_member_info(id: APP_CONFIG['mailchimp_list'], email_address: [u.email.email])
       next unless result['success'] > 0
       result['data'].each do |row|
         next unless row['email'] && row['merges']
-        grouping = row['merges']['GROUPINGS'].detect { |g| g['id'] == ENV.fetch('MAILCHIMP_GROUPING_ID') }
+        grouping = row['merges']['GROUPINGS'].detect { |g| g['id'] == APP_CONFIG['mailchimp_grouping_id'] }
         next unless grouping
         groups = grouping['groups'].split(', ')
         groups -= [group]
-        vars = { GROUPINGS: [{ id: ENV.fetch('MAILCHIMP_GROUPING_ID'), groups: groups.join(', ') }] }
-        gb.list_update_member(id: ENV.fetch('MAILCHIMP_LIST'), email_address: row['email'], merge_vars: vars,
+        vars = { GROUPINGS: [{ id: APP_CONFIG['mailchimp_grouping_id'], groups: groups.join(', ') }] }
+        gb.list_update_member(id: APP_CONFIG['mailchimp_list'], email_address: row['email'], merge_vars: vars,
                               replace_interests: true)
       end
     end

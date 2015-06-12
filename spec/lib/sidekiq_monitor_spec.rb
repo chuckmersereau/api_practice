@@ -2,13 +2,13 @@ require 'spec_helper'
 
 describe SidekiqMonitor do
   before do
-    ENV['SIDEKIQ_WARN_EMAILS'] = 'dev@example.com, dev2@example.com'
-    ENV['SIDEKIQ_WARN_MIN_PROCS'] = '2'
-    ENV['SIDEKIQ_WARN_MIN_PROCS_INTERVAL'] = '60'
-    ENV['SIDEKIQ_WARN_DEFAULT_QUEUE_LATENCY'] = '600'
-    ENV['SIDEKIQ_WARN_STUCK_THREADS_FREE'] = '5'
-    ENV['SIDEKIQ_WARN_STUCK_ENQUEUED'] = '100'
-    ENV['SIDEKIQ_WARN_STUCK_INTERVAL'] = '30'
+    APP_CONFIG['sidekiq_warn_emails'] = 'dev@example.com, dev2@example.com'
+    APP_CONFIG['sidekiq_warn_min_procs'] = '2'
+    APP_CONFIG['sidekiq_warn_min_procs_interval'] = '60'
+    APP_CONFIG['sidekiq_warn_default_queue_latency'] = '600'
+    APP_CONFIG['sidekiq_warn_stuck_threads_free'] = '5'
+    APP_CONFIG['sidekiq_warn_stuck_enqueued'] = '100'
+    APP_CONFIG['sidekiq_warn_stuck_interval'] = '30'
   end
 
   def stub_stats(stats)

@@ -27,7 +27,7 @@ class ReportsController < ApplicationController
               '"contacts"."status",'\
               '"contacts"."pledge_amount",' \
               '"contacts"."pledge_frequency"'
-                            )
+      )
                      .where('contacts.account_list_id' => current_account_list.id)
                      .joins('INNER JOIN donor_accounts ON donor_accounts.id = donations.donor_account_id')
                      .joins('INNER JOIN ' \
@@ -47,7 +47,7 @@ class ReportsController < ApplicationController
              'status, ' \
              'pledge_amount, ' \
              'pledge_frequency '
-                           )
+             )
                      .reorder('donor_accounts.name')
                      .distinct
                      .to_a
