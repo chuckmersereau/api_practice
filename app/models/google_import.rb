@@ -173,8 +173,8 @@ class GoogleImport
   end
 
   def create_or_update_person_basic_info(g_contact)
-    person = (@account_list.people.includes(:google_contacts).find_by('google_contacts.remote_id' => g_contact.id) ||
-              @account_list.people.find_by(first_name: g_contact.given_name, last_name: g_contact.family_name))
+    person = (@account_list.people.includes(:google_contacts).where('google_contacts.remote_id' => g_contact.id).first ||
+              @account_list.people.where(first_name: g_contact.given_name, last_name: g_contact.family_name).first)
 
     person_attrs = person_attr_from_g_contact(g_contact)
 

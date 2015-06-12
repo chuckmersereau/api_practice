@@ -118,7 +118,7 @@ class Contact < ActiveRecord::Base
 
   def add_person(person, donor_account = nil)
     # Nothing to do if this person is already on the contact
-    new_person = people.find_by(master_person_id: person.master_person_id)
+    new_person = people.where(master_person_id: person.master_person_id).first
 
     unless new_person
       new_person = Person.clone(person)
@@ -193,7 +193,7 @@ class Contact < ActiveRecord::Base
     if people.count == 1
       @primary_or_first_person = people.first
     else
-      @primary_or_first_person = people.alive.find_by(gender: 'male') || people.alive.order('created_at').first
+      @primary_or_first_person = people.alive.where(gender: 'male').first || people.alive.order('created_at').first
     end
     if @primary_or_first_person && @primary_or_first_person.new_record? && !self.new_record?
       self.primary_person_id = @primary_or_first_person.id
@@ -212,7 +212,7 @@ class Contact < ActiveRecord::Base
 
   def primary_person_id=(person_id)
     if person_id
-      cp = contact_people.find_by(person_id: person_id)
+      cp = contact_people.where(person_id: person_id).first
       cp.update_attributes(primary: true) if cp
     end
     person_id
@@ -310,7 +310,7 @@ class Contact < ActiveRecord::Base
         ContactDonorAccount.where(donor_account_id: attrs[:id], contact_id: id).destroy_all
       when attrs[:account_number].blank?
         next
-      when donor_account = DonorAccount.find_by(account_number: attrs[:account_number], organization_id: attrs[:organization_id])
+      when donor_account = DonorAccount.where(account_number: attrs[:account_number], organization_id: attrs[:organization_id]).first
         contact_donor_accounts.new(donor_account: donor_account) unless donor_account.contacts.include?(self)
       else
         assign_nested_attributes_for_collection_association(:donor_accounts, [attrs])

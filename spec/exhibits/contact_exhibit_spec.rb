@@ -49,7 +49,7 @@ describe ContactExhibit do
       person = double(facebook_account: nil,
                       primary_picture: double(image: double(url: nil)),
                       gender: nil
-                     )
+      )
       contact.stub(:primary_person).and_return(person)
       context.stub(:root_url).and_return('https://mpdx.org')
       expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
@@ -58,7 +58,7 @@ describe ContactExhibit do
     it 'should make facebook image' do
       person = double(facebook_account: double(remote_id: 1234),
                       primary_picture: double(image: double(url: nil))
-                     )
+      )
       contact.stub(:primary_person).and_return(person)
       expect(exhib.avatar).to eq('https://graph.facebook.com/1234/picture?type=square')
     end

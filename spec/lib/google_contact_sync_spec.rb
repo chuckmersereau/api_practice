@@ -328,7 +328,7 @@ describe GoogleContactSync do
         'city=anchorage&state=ak&street=2421%20east%20tudor%20road%20%23102&zipcode=99507-1166' => anchorage_smarty,
         'city=anchorage&state=ak&street=2421%20e.%20tudor%20rd.&street2=apt%20102&zipcode=99507' => anchorage_smarty
       }.each do |query, result|
-        stub_request(:get, "https://api.smartystreets.com/street-address/?auth-id=#{ENV.fetch('SMARTY_AUTH_ID')}&auth-token=#{ENV.fetch('SMARTY_AUTH_TOKEN')}&candidates=2&#{query}")
+        stub_request(:get, "https://api.smartystreets.com/street-address/?auth-id=&auth-token=&candidates=2&#{query}")
           .to_return(body: result)
       end
 

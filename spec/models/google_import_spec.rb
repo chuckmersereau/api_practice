@@ -31,8 +31,8 @@ describe GoogleImport do
 
     # Based on sample from docs at http://cloudinary.com/documentation/upload_images
     cloudinary_reponse = {
-      url: "http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg",
-      secure_url: "https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg",
+      url: 'http://res.cloudinary.com/cru/image/upload/v1/img.jpg',
+      secure_url: 'https://res.cloudinary.com/cru/image/upload/v1/img.jpg',
       public_id: 'img',
       version: '1',
       width: 864,
@@ -41,7 +41,7 @@ describe GoogleImport do
       resource_type: 'image',
       signature: 'abcdefgc024acceb1c5baa8dca46797137fa5ae0c3'
     }.to_json
-    stub_request(:post, %r{https://api\.cloudinary\.com/v1_1/.*/auto/upload}).to_return(body: cloudinary_reponse)
+    stub_request(:post, 'https://api.cloudinary.com/v1_1/cru/auto/upload').to_return(body: cloudinary_reponse)
   end
 
   describe 'when importing contacts' do
@@ -77,7 +77,7 @@ describe GoogleImport do
     before do
       @google_contact = OpenStruct.new(given_name: 'John', family_name: 'Doe',
                                        emails_full: [], phone_numbers_full: [], organizations: [],
-                                       websites: [], id: Time.zone.now.to_i.to_s)
+                                       websites: [], id: Time.now.to_i.to_s)
     end
 
     it 'updates the person if they already exist by google remote_id if override set' do
@@ -127,7 +127,7 @@ describe GoogleImport do
       @google_import.import
       contact = Contact.find_by_name(contact_name)
       people_names = contact.people.map { |p| [p.first_name, p.last_name] }
-      expect(people_names.count).to eq(2)
+      expect(people_names.size).to eq(2)
       expect(people_names).to include(person1_name)
       expect(people_names).to include(person2_name)
     end
@@ -166,10 +166,9 @@ describe GoogleImport do
   end
 
   describe 'overall import results' do
-    # rubocop:disable all
     def check_imported_data
       contacts = @account_list.contacts.where(name: 'Google, John')
-      expect(contacts.to_a.size).to eq(1)
+      expect(contacts.to_a.count).to eq(1)
       contact = contacts.first
 
       expect(contact.people.count).to eq(1)
@@ -189,7 +188,7 @@ describe GoogleImport do
       expect(person.employer).to eq('Example, Inc')
       expect(person.occupation).to eq('Worker Person')
 
-      expect(person.websites.to_a.size).to eq(2)
+      expect(person.websites.to_a.count).to eq(2)
       website1 = person.websites.order(:url).first
       expect(website1.url).to eq('blog.example.com')
       expect(website1.primary).to be_false
@@ -199,7 +198,7 @@ describe GoogleImport do
 
       expect(contact.notes).to eq('Notes here')
 
-      expect(contact.addresses.to_a.size).to eq(2)
+      expect(contact.addresses.to_a.count).to eq(2)
       address1 = contact.addresses.order(:postal_code).first
       expect(address1.country).to eq('United States')
       expect(address1.city).to eq('Somewhere')
@@ -214,13 +213,13 @@ describe GoogleImport do
       expect(address2.state).to eq('MO')
       expect(address2.postal_code).to eq('56789')
 
-      expect(person.email_addresses.to_a.size).to eq(1)
+      expect(person.email_addresses.to_a.count).to eq(1)
       email = person.email_addresses.order(:email).first
       expect(email.email).to eq('johnsmith@example.com')
       expect(email.location).to eq('other')
       expect(email.primary).to be_true
 
-      expect(person.phone_numbers.to_a.size).to eq(1)
+      expect(person.phone_numbers.to_a.count).to eq(1)
       phone = person.phone_numbers.order(:number).first
       expect(phone.number).to eq('+11233345158')
       expect(phone.location).to eq('mobile')
@@ -228,7 +227,7 @@ describe GoogleImport do
 
       expect(person.pictures.count).to eq(1)
       picture = person.pictures.first
-      expect(picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      expect(picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
       expect(picture.primary).to be_true
 
       expect(person.google_contacts.count).to eq(1)
@@ -237,7 +236,6 @@ describe GoogleImport do
       expect(google_contact.picture_etag).to eq('dxt2DAEZfCp7ImA-AV4zRxBoPG4UK3owXBM.')
       expect(google_contact.picture).to eq(picture)
     end
-    # rubocop:enable all
 
     it 'imports correct person data if no people exist and be the same for repeat imports' do
       @google_import.import
@@ -340,7 +338,7 @@ describe GoogleImport do
       @original_picture.reload
       expect(@original_picture.primary).to be_false
       expect(@existing_person.pictures.count).to eq(2)
-      expect(@existing_person.primary_picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      expect(@existing_person.primary_picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
     end
 
     it 'does not not update fields if not set to override' do
@@ -373,7 +371,7 @@ describe GoogleImport do
       expect(@existing_contact.notes).to eq('Notes here')
 
       expect(@existing_person.pictures.count).to eq(1)
-      expect(@existing_person.primary_picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      expect(@existing_person.primary_picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
     end
   end
 
@@ -438,25 +436,25 @@ describe GoogleImport do
       contact = @account_list.contacts.where(name: 'Doe, John').first
       person = contact.people.first
 
-      expect(person.websites.to_a.size).to eq(2)
+      expect(person.websites.to_a.count).to eq(2)
       website1 = person.websites.order(:url).first
       website2 = person.websites.order(:url).last
       expect(website1.primary || website2.primary).to be_true
       expect(website1.primary && website2.primary).to be_false
 
-      expect(contact.addresses.to_a.size).to eq(2)
+      expect(contact.addresses.to_a.count).to eq(2)
       address1 = contact.addresses.order(:postal_code).first
       address2 = contact.addresses.order(:postal_code).last
       expect(address1.primary_mailing_address || address1.primary_mailing_address).to be_true
       expect(address2.primary_mailing_address && address2.primary_mailing_address).to be_false
 
-      expect(person.email_addresses.to_a.size).to eq(2)
+      expect(person.email_addresses.to_a.count).to eq(2)
       email1 = person.email_addresses.order(:email).first
       email2 = person.email_addresses.order(:email).last
       expect(email1.primary || email1.primary).to be_true
       expect(email2.primary && email2.primary).to be_false
 
-      expect(person.phone_numbers.to_a.size).to eq(2)
+      expect(person.phone_numbers.to_a.count).to eq(2)
       phone1 = person.phone_numbers.order(:number).first
       phone2 = person.phone_numbers.order(:number).last
       expect(phone1.primary || phone1.primary).to be_true

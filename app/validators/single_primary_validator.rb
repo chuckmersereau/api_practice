@@ -8,9 +8,7 @@ class SinglePrimaryValidator < ActiveModel::EachValidator
   end
 
   def validate_each(record, attribute, value)
-    @record = record
-    @attribute = attribute
-    @value = value
+    @record, @attribute, @value = record, attribute, value
 
     add_error unless valid?
   end

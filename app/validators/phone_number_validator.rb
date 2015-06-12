@@ -2,9 +2,7 @@ class PhoneNumberValidator < ActiveModel::EachValidator
   attr_reader :record, :attribute, :value
 
   def validate_each(record, attribute, value)
-    @record = record
-    @attribute = attribute
-    @value = value
+    @record, @attribute, @value = record, attribute, value
 
     add_error unless valid?
   end

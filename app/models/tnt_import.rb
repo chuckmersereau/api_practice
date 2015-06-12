@@ -105,7 +105,7 @@ class TntImport
 
   def import_contact(row)
     contact = Retryable.retryable do
-      @account_list.contacts.find_by(tnt_id: row['id'])
+      @account_list.contacts.where(tnt_id: row['id']).first
     end
 
     donor_accounts = add_or_update_donor_accounts(row, @designation_profile)
@@ -313,7 +313,7 @@ class TntImport
 
       donation = donor_account.donations.where(donation_date: row['GiftDate'], amount: row['Amount'])
                  .where(designation_account_id: designation_account_ids)
-                 .find_by('appeal_id is null or appeal_id = ?', appeal.id)
+                 .where('appeal_id is null or appeal_id = ?', appeal.id).first
       next if donation.blank?
       donation.update(appeal: appeal, appeal_amount: row['AppealAmount'])
     end
@@ -515,7 +515,7 @@ class TntImport
 
   def add_or_update_company(row, donor_account)
     master_company = MasterCompany.find_by_name(row['OrganizationName'])
-    company = @user.partner_companies.find_by(master_company_id: master_company.id) if master_company
+    company = @user.partner_companies.where(master_company_id: master_company.id).first if master_company
 
     company ||= @account_list.companies.new(master_company: master_company)
     company.assign_attributes(name: row['OrganizationName'],
@@ -543,7 +543,7 @@ class TntImport
 
     # See if there's already a person by this name on this contact (This is a contact with multiple donation accounts)
     person = contact.people.where(first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'])
-             .find_by("middle_name = ? OR middle_name = '' OR middle_name is NULL", row[prefix + 'MiddleName'])
+             .where("middle_name = ? OR middle_name = '' OR middle_name is NULL", row[prefix + 'MiddleName']).first
     person ||= Person.new
 
     update_person_attributes(person, row, prefix)
@@ -568,9 +568,9 @@ class TntImport
       donor_accounts = row['OrgDonorCodes'].to_s.split(',').map do |account_number|
         donor_account = Retryable.retryable do
           da = designation_profile.organization.donor_accounts
-               .find_by('account_number = :account_number OR account_number = :padded_account_number',
-                        account_number: account_number,
-                        padded_account_number: account_number.rjust(DONOR_NUMBER_NORMAL_LEN, '0'))
+               .where('account_number = :account_number OR account_number = :padded_account_number',
+                      account_number: account_number,
+                      padded_account_number: account_number.rjust(DONOR_NUMBER_NORMAL_LEN, '0')).first
 
           if da
             # Donor accounts for non-Cru orgs could have nil names so update with the name from tnt
