@@ -148,7 +148,7 @@ class ContactsController < ApplicationController
       winner_id = if params[:dup_contact_winner][ids].present?
                     params[:dup_contact_winner][ids]
                   else
-                    (contacts.max_by { |c| c.people.length })
+                    contacts.max_by { |c| c.people.length }
                   end
 
       winner = contacts.find(winner_id)

@@ -200,25 +200,25 @@ describe ContactsController do
 
       before { request.env['HTTP_REFERER'] = '/' }
 
-      it 'where the winner is the first in the list' do
+      it 'merges and makes dup_contact_winner the first contact in the list' do
         params = { merge_sets: [contact_ids],
                    dup_contact_winner: { contact_ids => contact1.id } }
         post :merge, params
         expect(Contact.find_by_id(contact2.id)).to be_nil
       end
 
-      it 'where the winner is the second in the list' do
+      it 'merges and makes dup_contact_winner the second contact in the list' do
         params = { merge_sets: [contact_ids],
                    dup_contact_winner: { contact_ids => contact2.id } }
         post :merge, params
         expect(Contact.find_by_id(contact1.id)).to be_nil
       end
 
-      it 'when no dup winner is present uses the highest/most recent ID' do
+      it 'merges when no dup_contact_winner is present using the highest/most recent ID' do
         params = { merge_sets: [contact_ids],
                    dup_contact_winner: { contact_ids => '' } }
-        post :merge, params
         max_contact = Contact.find_by_id(contact_ids.split(',').max)
+        post :merge, params
         expect(Contact.find_by_id(contact2.id)).to eq(max_contact)
       end
     end

@@ -205,5 +205,16 @@ describe PeopleController do
       expect(Person.find_by_id(person1.id)).to be_nil
       expect(person2.email.email).to eq('test_merge_person1@example.com')
     end
+
+    it 'merges two people when no dup_person_winner is present the winner is the first in the dup set' do
+      person2.email = 'test_merge_person2@example.com'
+      person2.save
+      first_person = Person.find_by_id(person_ids.first)
+      params = { merge_sets: [person_ids],
+                 dup_person_winner: { person_ids => '' } }
+      post :merge_sets, params
+      expect(Person.find_by_id(person1.id)).to eq(first_person)
+      expect(person1.email.email).to eq('test_merge_person2@example.com')
+    end
   end
 end
