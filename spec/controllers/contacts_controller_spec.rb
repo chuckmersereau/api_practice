@@ -192,35 +192,5 @@ describe ContactsController do
         expect(Address.first.primary_mailing_address).to be_true
       end
     end
-
-    describe 'POST merge_sets for contact duplicates' do
-      let(:contact1) { create(:contact, name: 'Joe Doe', account_list: user.account_lists.first) }
-      let(:contact2) { create(:contact, name: 'Joe Doe', account_list: user.account_lists.first) }
-      let(:contact_ids) { [contact1.id, contact2.id].map { |x| x }.join(',') }
-
-      before { request.env['HTTP_REFERER'] = '/' }
-
-      it 'merges and makes dup_contact_winner the first contact in the list' do
-        params = { merge_sets: [contact_ids],
-                   dup_contact_winner: { contact_ids => contact1.id } }
-        post :merge, params
-        expect(Contact.find_by_id(contact2.id)).to be_nil
-      end
-
-      it 'merges and makes dup_contact_winner the second contact in the list' do
-        params = { merge_sets: [contact_ids],
-                   dup_contact_winner: { contact_ids => contact2.id } }
-        post :merge, params
-        expect(Contact.find_by_id(contact1.id)).to be_nil
-      end
-
-      it 'merges when no dup_contact_winner is present using the highest/most recent ID' do
-        params = { merge_sets: [contact_ids],
-                   dup_contact_winner: { contact_ids => '' } }
-        max_contact = Contact.find_by_id(contact_ids.split(',').max)
-        post :merge, params
-        expect(Contact.find_by_id(contact2.id)).to eq(max_contact)
-      end
-    end
   end
 end
