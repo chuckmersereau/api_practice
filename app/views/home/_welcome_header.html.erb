@@ -17,11 +17,8 @@
         <div class="panel-body">
           <table>
             <tr>
-              <td class="identify network_logo">
-                <h3>
-                  <%= image_tag("logos/tnt_logo.png", alt: 'TntMPD') %>
-                  TntMPD
-                </h3>
+              <td class="identify">
+                <h3>TntMPD</h3>
               </td>
               <td class="connections" data-behavior="account">
                 <%= link_to(_('Import Tnt Contacts'), new_account_path(provider: 'tnt_import'),
@@ -29,8 +26,17 @@
               </td>
             </tr>
             <tr>
-              <td class="identify network_logo">
-                <%= image_tag("logos/google_logo.png", alt: 'Google') %>
+              <td class="identify">
+                <h3>.CSV File</h3>
+              </td>
+              <td class="connections" data-behavior="account">
+                <%= link_to(_('Import Contacts'), new_account_path(provider: 'csv_import'),
+                    class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
+              </td>
+            </tr>
+            <tr>
+              <td class="identify">
+                <h3>Google</h3>
               </td>
               <td class="connections" data-behavior="account">
                 <% current_user.google_accounts.each do |account| %>

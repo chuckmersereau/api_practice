@@ -1864,10 +1864,16 @@ body.google_integrations_controller {
 .getting_started_title, .getting-started-panel {
   text-align: center;
 }
+.getting_started_title {
+  padding-bottom: 3em;
+}
 .getting-started-panel {
   .panel {
     margin-top: -20px;
     margin-bottom: 1em;
+  }
+  .identify {
+    padding: 0 1em 1em 0;
   }
   .account_single {
     margin-bottom: 1em;
