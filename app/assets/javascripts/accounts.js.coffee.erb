@@ -18,10 +18,6 @@ $ ->
       $('[data-behavior="org_import_options"]', div).show()
       false
 
-    $(document).on 'click', '[data-behavior="import_button"]', ->
-      $(this).closest('form').submit()
-      false
-
     $(document).on 'click', '[data-behavior="add_org_account"]', ->
       $('#new_org_account').dialog
         resizable: false,

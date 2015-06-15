@@ -135,10 +135,10 @@
 
       <%= any_invalid ? _('Upload fixed CSV file') : _('Or upload a new file and preview again:') %>
       <div class="field">
-        <%= f.file_field :file %>
+        <%= f.file_field :file, class: 'form-control' %>
         <%= f.hidden_field :file_cache %>
       </div>
-      <a href="#" class="btn btn-xs" data-behavior="import_button"><%= _('Preview Again') %></a>
+      <%= f.submit _('Preview Again'), class: 'btn btn-xs btn-primary' %>
     <% end %>
 
   </div>
