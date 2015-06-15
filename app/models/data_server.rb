@@ -304,13 +304,13 @@ class DataServer
 
   def add_or_update_person(account_list, line, donor_account, remote_id, prefix = '')
     organization = donor_account.organization
-    master_person_from_source = organization.master_people.find_by('master_person_sources.remote_id' => remote_id.to_s)
+    master_person_from_source = organization.master_people.where('master_person_sources.remote_id' => remote_id.to_s).first
 
     contact = donor_account.link_to_contact_for(account_list)
     person = donor_account.people.joins(:contacts).where(master_person_id: master_person_from_source.id)
              .where('contacts.account_list_id' => account_list.id).readonly(false).first if master_person_from_source
-    person ||= contact.people.find_by(first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME'])
-    person ||= donor_account.people.find_by(master_person_id: master_person_from_source.id) if master_person_from_source
+    person ||= contact.people.where(first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME']).first
+    person ||= donor_account.people.where(master_person_id: master_person_from_source.id).first if master_person_from_source
 
     person ||= Person.new(master_person: master_person_from_source)
     person.attributes = { first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME'], middle_name: line[prefix + 'MIDDLE_NAME'],
@@ -342,7 +342,7 @@ class DataServer
 
   def add_or_update_company(account_list, user, line, donor_account)
     master_company = MasterCompany.find_by_name(line['LAST_NAME_ORG'])
-    company = user.partner_companies.find_by(master_company_id: master_company.id) if master_company
+    company = user.partner_companies.where(master_company_id: master_company.id).first if master_company
 
     company ||= account_list.companies.new(master_company: master_company)
     company.assign_attributes(name: line['LAST_NAME_ORG'],
@@ -414,7 +414,7 @@ class DataServer
         amount: line['AMOUNT'],
         tendered_amount: line['TENDERED_AMOUNT'] || line['AMOUNT'],
         currency: default_currency
-      )
+       )
       donation.save!
       donation
     end

@@ -4,7 +4,7 @@ class Encryptor
   end
 
   def cipher
-    @cipher ||= ::Gibberish::AES.new(ENV.fetch('ENCRYPTION_KEY'))
+    @cipher ||= ::Gibberish::AES.new(APP_CONFIG['encryption_key'])
   end
 
   def load(s)

@@ -3,7 +3,7 @@ source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro'
 end
 
-gem 'rails', '~> 4.1.10'
+gem 'rails', '~> 4.1.0'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -20,7 +20,7 @@ gem 'jquery-ui-rails', '~> 4.2.1'
 gem 'angularjs-rails' # , '~> 1.2.16'
 gem 'lodash-rails', '~> 3.5.0'
 gem 'angular-ui-bootstrap-rails'
-gem 'ngannotate-rails'
+gem 'ngmin-rails'
 gem 'momentjs-rails'
 # gem 'rails_karma'
 gem 'best_in_place', '~> 3.0.1'
@@ -41,7 +41,7 @@ gem 'display_case', '= 0.0.5'
 gem 'fb_graph', '~> 2.6.0'
 gem 'fog', '~> 1.23.0'
 gem 'font-awesome-rails'
-gem 'foreigner', '~> 1.7.3'
+gem 'foreigner'
 gem 'gettext_i18n_rails', '~> 1.2.3'
 # gem 'gettext_i18n_rails_js'#, '~> 0.0.3'
 gem 'gibberish', '~> 1.4.0'
@@ -66,7 +66,7 @@ gem 'omniauth-prayer-letters'
 gem 'omniauth-twitter', '~> 1.0.1'
 gem 'paper_trail', '~> 3.0.0'
 gem 'passenger'
-gem 'pg', '~> 0.18.2'
+gem 'pg', '~> 0.14.1'
 gem 'rails_autolink', '~> 1.1.5'
 gem 'rake'
 gem 'redis-namespace'
@@ -102,7 +102,6 @@ gem 'peek-git'
 gem 'peek-redis'
 gem 'peek-performance_bar'
 gem 'peek-gc'
-gem 'puma'
 
 group :development do
   gem 'railroady'
@@ -115,7 +114,6 @@ group :development do
 end
 
 group :development, :test do
-  gem 'dotenv-rails'
   gem 'awesome_print'
   gem 'database_cleaner'
   gem 'spring-commands-rspec'
@@ -128,6 +126,7 @@ group :development, :test do
   # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
   gem 'gettext', '~> 3.1.6', require: false, group: :development
   gem 'ruby_parser', require: false, group: :development
+  gem 'mailcatcher'
   gem 'fuubar'
   gem 'unicorn'
   gem 'zonebie'
@@ -143,7 +142,7 @@ group :test do
   gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
-  gem 'rubocop', '= 0.29.1'
+  gem 'rubocop'
   gem 'test_after_commit'
 end
 

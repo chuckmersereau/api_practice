@@ -50,8 +50,8 @@ class MasterPerson < ActiveRecord::Base
       if other_person = extra[:donor_account].people.where('people.first_name' => person.first_name,
                                                            'people.last_name' => person.last_name,
                                                            'people.suffix' => person.suffix)
-                        .find_by('people.middle_name = ? OR people.middle_name is null', person.middle_name)
-
+                        .where('people.middle_name = ? OR people.middle_name is null', person.middle_name)
+                        .first
         return other_person.master_person
       end
 

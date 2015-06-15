@@ -6,7 +6,7 @@ class FamilyRelationship < ActiveRecord::Base
 
   def self.add_for_person(person, attributes)
     attributes = attributes.except(:_destroy)
-    unless fr = person.family_relationships.find_by(related_person_id: attributes[:related_person_id])
+    unless fr = person.family_relationships.where(related_person_id: attributes[:related_person_id]).first
       new_or_create = person.new_record? ? :new : :create
       fr = person.family_relationships.send(new_or_create, attributes)
     end

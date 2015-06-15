@@ -88,8 +88,7 @@ module ApplicationHelper
   # The default output contains HTML. Use ":html => false" for plain text.
   def page_entries_info(collection, options = {})
     if options.fetch(:html, true)
-      b = '<b>'
-      eb = '</b>'
+      b, eb = '<b>', '</b>'
       sp = '&nbsp;'
       # html_key = '_html'
     else

@@ -1,0 +1,37 @@
+development: &common
+  twitter_key: asdf
+  twitter_secret: asdf
+  facebook_key: asdf
+  facebook_secret: asdf
+  linkedin_key: asdf
+  linkedin_secret: asdf
+  google_key: asdf
+  google_secret: asdf
+  s3_key: asdf
+  s3_secret: asdf
+  s3_bucket: asdf
+  encryption_key: asdf
+  itg_auth_key: asdf
+  secret_key_base: 'asdfadsfasdfadsfasdfadsfasdfadsfasdfadsfasdfadsfasdfadsfasdfadsfasdfadsfasdfadsfasdfadsf'
+
+production:
+  <<: *common
+
+staging:
+  <<: *common
+  
+test: 
+  twitter_key:
+  twitter_secret:
+  facebook_key:
+  facebook_secret:
+  linkedin_key:
+  linkedin_secret:
+  google_key:
+  google_secret:
+  s3_key:
+  s3_secret:
+  s3_bucket:
+  encryption_key:
+  itg_auth_key:
+

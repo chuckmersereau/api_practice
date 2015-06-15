@@ -11,7 +11,7 @@ class Nickname < ActiveRecord::Base
     name = name.downcase
     nickname = nickname.downcase
 
-    return if name == nickname || name =~ /[\s\-\.]/ || nickname =~ /[\s\-\.]/ || name.length == 1 || nickname.length == 1
+    return if name == nickname || name =~ /[\s\-\.]/  || nickname =~ /[\s\-\.]/ || name.length == 1 || nickname.length == 1
 
     Retryable.retryable do
       nickname = find_or_create_by(name: name, nickname: nickname)

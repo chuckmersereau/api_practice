@@ -22,7 +22,7 @@ class DesignationAccount < ActiveRecord::Base
   end
 
   def update_donation_totals(donation)
-    contacts.includes(:donor_accounts).where('donor_accounts.id' => donation.donor_account_id).find_each do |contact|
+    contacts.includes(:donor_accounts).where('donor_accounts.id' => donation.donor_account_id).each do |contact|
       contact.update_donation_totals(donation)
     end
   end
