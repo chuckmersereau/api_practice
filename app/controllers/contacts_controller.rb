@@ -145,7 +145,7 @@ class ContactsController < ApplicationController
 
       merged_contacts_count += contacts.length
 
-      winner_id = if params[:dup_contact_winner][ids].present?
+      winner_id = if params[:dup_contact_winner].present?
                     params[:dup_contact_winner][ids]
                   else
                     contacts.max_by { |c| c.people.length }

@@ -211,7 +211,7 @@ describe PeopleController do
       person2.save
       first_person = Person.find_by_id(person_ids.split(',').first)
       params = { merge_sets: [person_ids],
-                 dup_person_winner: { person_ids => '' } }
+                 dup_person_winner: nil }
       post :merge_sets, params
       expect(Person.find_by_id(person1.id)).to eq(first_person)
       expect(Person.find_by_id(person2.id)).to be_nil

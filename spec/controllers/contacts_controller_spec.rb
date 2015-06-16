@@ -216,7 +216,7 @@ describe ContactsController do
 
       it 'merges when no dup_contact_winner is present using the highest/most recent ID' do
         params = { merge_sets: [contact_ids],
-                   dup_contact_winner: { contact_ids => '' } }
+                   dup_contact_winner: nil }
         max_contact = Contact.find_by_id(contact_ids.split(',').max)
         post :merge, params
         expect(Contact.find_by_id(contact2.id)).to eq(max_contact)
