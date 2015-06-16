@@ -14,49 +14,41 @@
     <div class="col-md-4 getting-started-panel">
       <div class="getting_started_number">1</div>
       <div class="panel panel-default">
-        <div class="panel-body">
-          <table>
+        <table class="panel-body">
+          <% [['TntMPD', 'Tnt'], [_('.CSV File'), 'CSV']].each do |source| %>
             <tr>
               <td class="identify">
-                <h3>TntMPD</h3>
+                <h3><%= source[0] %></h3>
               </td>
               <td class="connections" data-behavior="account">
-                <%= link_to(_('Import Tnt Contacts'), new_account_path(provider: 'tnt_import'),
-                    class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
+                <%= link_to(_('Import %{source} Contacts') % {source: source[1]},
+                            new_account_path(provider: source[1].downcase + '_import'),
+                            class: 'btn btn-xs btn-secondary', remote: true, behavior: 'show_import') %>
               </td>
             </tr>
-            <tr>
-              <td class="identify">
-                <h3>.CSV File</h3>
-              </td>
-              <td class="connections" data-behavior="account">
-                <%= link_to(_('Import Contacts'), new_account_path(provider: 'csv_import'),
-                    class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
-              </td>
-            </tr>
-            <tr>
-              <td class="identify">
-                <h3>Google</h3>
-              </td>
-              <td class="connections" data-behavior="account">
-                <% current_user.google_accounts.each do |account| %>
-                  <div class="account_single">
-                    <span class="account_name"><%= account %></span>
-                    <% if account.token_expired? && !account.refresh_token! %>
-                      <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: home_path),
-                                  class: 'btn btn-xs btn-secondary desired_action') %>
-                    <% else %>
-                      <%= link_to('<i class="fa fa-cloud-download"></i> '.html_safe+_('Import Contacts'),
-                                  new_account_path(provider: 'google_import', account_id: account.id),
-                                  class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
-                    <% end %>
-                  </div>
-                <% end %>
-                <%= auth_link('google') %>
-              </td>
-            </tr>
-          </table>
-        </div>
+          <% end %>
+          <tr>
+            <td class="identify">
+              <h3>Google</h3>
+            </td>
+            <td class="connections" data-behavior="account">
+              <% current_user.google_accounts.each do |account| %>
+                <div class="account_single">
+                  <span class="account_name"><%= account %></span>
+                  <% if account.token_expired? && !account.refresh_token! %>
+                    <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: home_path),
+                                class: 'btn btn-xs btn-secondary desired_action') %>
+                  <% else %>
+                    <%= link_to('<i class="fa fa-cloud-download"></i> '.html_safe+_('Import Contacts'),
+                                new_account_path(provider: 'google_import', account_id: account.id),
+                                class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
+                  <% end %>
+                </div>
+              <% end %>
+              <%= auth_link('google') %>
+            </td>
+          </tr>
+        </table>
       </div>
       <h2><%= _('Import Contacts') %></h2>
     </div>
