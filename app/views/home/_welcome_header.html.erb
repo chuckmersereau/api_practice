@@ -95,8 +95,8 @@
                        ng-disabled="namestorm.newContactName.length == 0 || namestorm.apiBusy"/>
               </span>
             </div>
-            <select class="form-control" ng-model="namestorm.newContactStatus">
-              <option ng-repeat="status in namestorm.contactStatuses" value="{{status}}">{{status}}</option>
+            <select class="form-control" ng-model="namestorm.newContactStatus"
+                    ng-options="status.value as status.text for status in namestorm.contactStatuses">
             </select>
             <div ng-cloak ng-show="namestorm.contacts.length > 0">
               <p><%= _('Here are your new contacts, click one to edit more of their information!') %></p>
