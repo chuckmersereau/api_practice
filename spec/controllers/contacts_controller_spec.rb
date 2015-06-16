@@ -222,11 +222,10 @@ describe ContactsController do
         expect(Contact.find_by_id(contact1.id)).to be_nil
       end
 
-      it 'merges when no dup_contact_winner is present using the highest/most recent ID' do
-        params = { merge_sets: [contact_ids] }
-        max_contact = Contact.find_by_id(contact_ids.split(',').max)
-        post :merge, params
-        expect(Contact.find_by_id(contact2.id)).to eq(max_contact)
+      it 'merges when no dup_contact_winner present and contact with most people wins' do
+        contact2.people << create(:person)
+        post :merge, merge_sets: [contact_ids]
+        expect(Contact.find_by(id: contact1.id)).to be_nil
       end
     end
   end

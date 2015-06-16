@@ -4,6 +4,8 @@ describe HomeController do
   render_views
 
   describe 'when not logged in' do
+    before { sign_out(:user) }
+
     describe "GET 'index'" do
       it 'redirects to splash page' do
         get 'index'
@@ -35,6 +37,7 @@ describe HomeController do
       @user = FactoryGirl.create(:user_with_account)
       sign_in(:user, @user)
     end
+
     describe "GET 'index'" do
       it 'returns http success' do
         get 'index'

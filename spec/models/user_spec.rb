@@ -14,7 +14,7 @@ describe User do
         FactoryGirl.create(:ccc)
         expect do
           User.from_omniauth(Person::RelayAccount, @auth_hash)
-        end.to change(User, :count).from(0).to(1)
+        end.to change(User, :count).by(1)
       end
     end
   end

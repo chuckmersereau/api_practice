@@ -247,7 +247,7 @@ describe AccountList do
     let(:winner) { create(:account_list) }
 
     it 'deletes old AccountList' do
-      expect { winner.merge(loser) }.to change(AccountList, :count).to(1)
+      expect { winner.merge(loser) }.to change(AccountList, :count).by(1)
     end
 
     it 'merges appeals' do

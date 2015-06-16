@@ -10,7 +10,7 @@ describe Person::FacebookAccount do
         person = create(:person)
         expect do
           @account = Person::FacebookAccount.find_or_create_from_auth(@auth_hash, person)
-        end.to change(Person::FacebookAccount, :count).from(0).to(1)
+        end.to change(Person::FacebookAccount, :count).by(1)
         person.facebook_accounts.should include(@account)
       end
     end
@@ -21,7 +21,7 @@ describe Person::FacebookAccount do
           user = Person::FacebookAccount.create_user_from_auth(@auth_hash)
           user.first_name.should == @auth_hash.info.first_name
           user.last_name.should == @auth_hash.info.last_name
-        end.to change(User, :count).from(0).to(1)
+        end.to change(User, :count).by(1)
       end
     end
 

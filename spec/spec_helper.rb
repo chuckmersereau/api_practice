@@ -74,6 +74,12 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
 
+  config.order = :random
+
+  # Reset seed each time this file is loaded, so that spring won't cache seed
+  # To run a spec with a specific seed, use --order=rand:[seed]
+  config.seed = srand % 0xFFFF
+
   config.before(:suite) do
     DatabaseCleaner.strategy = :transaction
     DatabaseCleaner.clean_with(:truncation)

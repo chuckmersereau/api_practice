@@ -4,7 +4,7 @@ describe MasterPerson do
   it 'should create a MasterPerson for a new person' do
     expect do
       MasterPerson.find_or_create_for_person(Person.new)
-    end.to change(MasterPerson, :count).from(0).to(1)
+    end.to change(MasterPerson, :count).by(1)
   end
 
   it 'should find an existing person based on name and email address' do
