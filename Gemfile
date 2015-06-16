@@ -38,6 +38,7 @@ gem 'country_select', git: 'http://github.com/CruGlobal/country_select.git' # My
 gem 'deadlock_retry', '~> 1.2.0'
 gem 'devise', '~> 3.2.2'
 gem 'display_case', '= 0.0.5'
+gem 'email_reply_parser'
 gem 'fb_graph', '~> 2.6.0'
 gem 'fog', '~> 1.23.0'
 gem 'font-awesome-rails'

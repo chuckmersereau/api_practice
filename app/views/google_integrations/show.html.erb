@@ -13,19 +13,19 @@
 
             <% if @google_integration.calendar_integration? %>
               <% if @google_integration.calendar_name %>
-                <%= (_("Calendar integration has been enabled. Choose from the list 
-                        of tasks below which things you'd like MPDX to put on your 
-                        calendar. Tasks will be pushed to the calendar named 
+                <%= (_("Calendar integration has been enabled. Choose from the list
+                        of tasks below which things you'd like MPDX to put on your
+                        calendar. Tasks will be pushed to the calendar named
                         %{calendar_name}").localize % { calendar_name: "<strong>#{@google_integration.calendar_name}</strong>" }).html_safe %>
                 <br/><br/>
                 <%= form_for(@google_integration, remote: true) do |f| %>
                   <ul class="list-group">
                     <% Task.new.assignable_activity_types.each do |activity_type| %>
                       <li class="radiocheck list-group-item">
-                        <%= check_box_tag 'google_integration[calendar_integrations][]', 
-                                          activity_type, 
-                                          @google_integration.calendar_integrations.include?(activity_type), 
-                                          id: "calendar_integrations_#{activity_type.underscore}", 
+                        <%= check_box_tag 'google_integration[calendar_integrations][]',
+                                          activity_type,
+                                          @google_integration.calendar_integrations.include?(activity_type),
+                                          id: "calendar_integrations_#{activity_type.underscore}",
                                           data: { behavior: 'calendar_integration_type' } %>
                         <%= label_tag "calendar_integrations_#{activity_type.underscore}", _(activity_type) %>
                       </li>
@@ -33,10 +33,10 @@
                   </ul>
                 <% end %>
                 <br/>
-                <%= link_to(_('Disable Calendar Integration'), 
-                  google_integration_path(@google_integration, google_integration: { calendar_integration: false }), 
+                <%= link_to(_('Disable Calendar Integration'),
+                  google_integration_path(@google_integration, google_integration: { calendar_integration: false }),
                     method: :put,
-                    class: 'btn btn-secondary', 
+                    class: 'btn btn-secondary',
                     data: { confirm: _('Are you sure you want to disable Google Calendar integration?') }) %>
                 <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'calendar'), class: 'btn btn-secondary desired_action') %>
               <% else %>
@@ -65,25 +65,23 @@
             <% end %>
           </div>
 
+          <div class="well">
+            <h2><%= _('Gmail integration') %></h2>
 
-          <% if $rollout.active?(:google_email_integration, current_account_list) %>
-            <div class="well">
-              <h2><%= _('Gmail integration') %></h2>
-
-              <% if @google_integration.email_integration? %>
-                <%= _("Gmail integration has been enabled.") %>
-                <br/><br/>
-                <%= link_to(_('Disable Gmail Integration'), google_integration_path(@google_integration, google_integration: { email_integration: false }), method: :put,
+            <% if @google_integration.email_integration? %>
+              <%= _("Gmail integration has been enabled.") %>
+              <br/><br/>
+              <%= link_to(_('Disable Gmail Integration'), google_integration_path(@google_integration, google_integration: { email_integration: false }), method: :put,
                             class: 'btn', data: { confirm: _('Are you sure you want to disable Gmail integration?') }) %>
-                <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'email'), class: 'btn btn-secondary desired_action') %>
-              <% else %>
-                <%= _("MPDX can automatically update your MPDX task history based on emails you've sent
-                      or received to/from your contacts in your Gmail account.") %>
-                <br/><br/>
-                <%= link_to(_('Enable Gmail Integration'), google_integration_path(@google_integration, google_integration: { email_integration: true }), method: :put, class: 'btn btn-secondary desired_action') %>
-              <% end %>
-            </div>
-          <% end %>
+              <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'email'), class: 'btn btn-secondary desired_action') %>
+            <% else %>
+              <%= _("MPDX can automatically update your MPDX task history based on emails you've sent
+                    or received to/from your contacts in your Gmail account.") %>
+              <br/><br/>
+              <%= link_to(_('Enable Gmail Integration'), google_integration_path(@google_integration, google_integration: { email_integration: true }), method: :put, class: 'btn btn-secondary desired_action') %>
+            <% end %>
+          </div>
+
 
           <% if $rollout.active?(:google_contacts_sync, current_account_list) %>
             <div class="well">
