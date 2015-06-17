@@ -1,5 +1,9 @@
 require 'csv'
+require 'erb'
+
 class DataServer
+  include ERB::Util
+
   def self.requires_username_and_password?
     true
   end
@@ -267,8 +271,8 @@ class DataServer
   end
 
   def get_response(url, params)
-    RestClient::Request.execute(method: :post, url: url, payload: params, timeout: -1, user: @org_account.username,
-                                password: @org_account.password) do |response, _request, _result, &_block|
+    RestClient::Request.execute(method: :post, url: url, payload: params, timeout: -1, user: u(@org_account.username),
+                                password: u(@org_account.password)) do |response, _request, _result, &_block|
       # check for error response
       lines = response.split(/\r?\n|\r/)
       first_line = lines.first.to_s.upcase
