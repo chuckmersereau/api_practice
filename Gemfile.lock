@@ -94,6 +94,8 @@ GEM
       minitest (~> 5.1)
       thread_safe (~> 0.1)
       tzinfo (~> 1.1)
+    activesupport-json_encoder (1.1.0)
+      activesupport (>= 4.1.0, < 5.0)
     acts-as-taggable-on (3.0.2)
       rails (>= 3, < 5)
     addressable (2.3.6)
@@ -664,6 +666,7 @@ PLATFORMS
 DEPENDENCIES
   active_model_serializers (~> 0.8.1)
   activerecord-import (~> 0.7.0)
+  activesupport-json_encoder
   acts-as-taggable-on (~> 3.0.0)
   airbrake
   angular-ui-bootstrap-rails
