@@ -422,6 +422,24 @@ describe DataServer do
     it 'raises OrgAccountInvalidCredentialsError if the first line includes a byte order mark' do
       expect_bad_passsword_err("ERROR\r\nAuthentication failed.  Perhaps the username or password are incorrect.")
     end
+
+    it 'raises no error when the creds are encoded' do
+      stub_request(:post, 'http://tester%2540tester.com:abcd543%2521@example.com').to_return(body: '')
+      @org_account.username = 'tester@tester.com'
+      @org_account.password = 'abcd543!'
+      expect do
+        @data_server.send(:get_response, 'http://example.com', {})
+      end.to_not raise_error
+    end
+
+    it 'raises an error when the creds are not encoded' do
+      stub_request(:post, 'http://tester@tester.com:abcd543!@example.com').to_return(body: '')
+      @org_account.username = 'tester@tester.com'
+      @org_account.password = 'abcd543!'
+      expect do
+        @data_server.send(:get_response, 'http://example.com', {})
+      end.to raise_error
+    end
   end
 
   describe 'import account balances' do
