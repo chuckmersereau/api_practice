@@ -23,5 +23,12 @@ describe ActivityCommentExhibit do
       activity_comment.body = nil
       subject.body.should.nil?
     end
+
+    it 'parse a message with unicode characters' do
+      activity_comment.body = "message body\n"\
+        "On Thu, Jun 4, 2015 at 4:02 PM, tester <tester@gmail.com> wrote:\n"\
+        '> Â  Â  Â This is long thread test with return message.'
+      expect(subject.body).to eq('message body')
+    end
   end
 end
