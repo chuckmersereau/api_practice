@@ -424,21 +424,16 @@ describe DataServer do
     end
 
     it 'raises no error when the creds are encoded' do
-      stub_request(:post, 'http://tester%2540tester.com:abcd543%2521@example.com').to_return(body: '')
       @org_account.username = 'tester@tester.com'
       @org_account.password = 'abcd543!'
-      expect do
-        @data_server.send(:get_response, 'http://example.com', {})
-      end.to_not raise_error
-    end
 
-    it 'raises an error when the creds are not encoded' do
-      stub_request(:post, 'http://tester@tester.com:abcd543!@example.com').to_return(body: '')
-      @org_account.username = 'tester@tester.com'
-      @org_account.password = 'abcd543!'
-      expect do
-        @data_server.send(:get_response, 'http://example.com', {})
-      end.to raise_error
+      execute_params = {
+        method: :post, url: 'http://example.com', payload: [], timeout: -1,
+        user: 'tester%40tester.com', password: 'abcd543%21'
+      }
+      # We can't use webmock to spec this since webmock smart matches on encoding
+      expect(RestClient::Request).to_not receive(:execute).with(execute_params)
+      @data_server.send(:get_response, 'http://example.com', {})
     end
   end
 
