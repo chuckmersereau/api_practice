@@ -85,6 +85,14 @@ describe ContactsController do
       it 'does not have an error when exporting after searches' do
         get :index, format: 'csv', filters: { newsletter: 'address' }
       end
+
+      it 'does not export addresses with extra line breaks' do
+        address = create(:address, street: "Attn: Test\r\n123 Street")
+        contact.addresses << address
+        get :index, format: 'csv'
+        csv = CSV.parse(response.body)
+        expect(csv.second).to include "Attn: Test\n123 Street"
+      end
     end
 
     describe '#show' do

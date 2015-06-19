@@ -108,6 +108,10 @@ class Address < ActiveRecord::Base
     true
   end
 
+  def csv_street
+    street.gsub("\r\n", "\n") if street
+  end
+
   private
 
   def set_manual_source_if_user_changed
