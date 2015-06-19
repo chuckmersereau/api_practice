@@ -422,6 +422,19 @@ describe DataServer do
     it 'raises OrgAccountInvalidCredentialsError if the first line includes a byte order mark' do
       expect_bad_passsword_err("ERROR\r\nAuthentication failed.  Perhaps the username or password are incorrect.")
     end
+
+    it 'raises no error when the creds are encoded' do
+      @org_account.username = 'tester@tester.com'
+      @org_account.password = 'abcd543!'
+
+      execute_params = {
+        method: :post, url: 'http://example.com', payload: [], timeout: -1,
+        user: 'tester%40tester.com', password: 'abcd543%21'
+      }
+      # We can't use webmock to spec this since webmock smart matches on encoding
+      expect(RestClient::Request).to_not receive(:execute).with(execute_params)
+      @data_server.send(:get_response, 'http://example.com', {})
+    end
   end
 
   describe 'import account balances' do
