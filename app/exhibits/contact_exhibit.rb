@@ -2,7 +2,8 @@ class ContactExhibit < DisplayCase::Exhibit
   include DisplayCase::ExhibitsHelper
   include ApplicationHelper
 
-  TABS = {
+  # Use ||= to avoid "warning: already initialized contant" for specs
+  TABS ||= {
     'details' => _('Details'),
     'tasks' => _('Tasks'),
     'history' => _('History'),
