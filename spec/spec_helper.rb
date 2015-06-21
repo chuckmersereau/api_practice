@@ -122,6 +122,7 @@ end
 
 # This code will be run each time you run your specs.
 start_simplecov if ENV['DRB']
+Zonebie.quiet = true
 Zonebie.set_random_timezone
 FactoryGirl.reload
 Dir[Rails.root.join('app/roles/**/*.rb')].each { |f| require f }
