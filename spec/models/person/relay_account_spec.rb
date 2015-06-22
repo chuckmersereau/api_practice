@@ -19,7 +19,7 @@ describe Person::RelayAccount do
       @org.stub(:api).and_return(FakeApi.new)
       expect do
         @account = Person::RelayAccount.find_or_create_from_auth(@auth_hash, person)
-      end.to change(Person::RelayAccount, :count).from(0).to(1)
+      end.to change(Person::RelayAccount, :count).by(1)
       person.relay_accounts.should include(@account)
     end
 
@@ -43,7 +43,7 @@ describe Person::RelayAccount do
       @org.stub(:api).and_return(FakeApi.new)
       expect do
         @account = Person::RelayAccount.find_or_create_from_auth(@auth_hash, person)
-      end.to change(Person::OrganizationAccount, :count).from(0).to(1)
+      end.to change(Person::OrganizationAccount, :count).by(1)
     end
   end
 
@@ -53,7 +53,7 @@ describe Person::RelayAccount do
         user = Person::RelayAccount.create_user_from_auth(@auth_hash)
         user.first_name.should eq @auth_hash.extra.attributes.first.firstName
         user.last_name.should eq @auth_hash.extra.attributes.first.lastName
-      end.to change(User, :count).from(0).to(1)
+      end.to change(User, :count).by(1)
     end
   end
 

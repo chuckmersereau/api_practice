@@ -14,7 +14,7 @@ describe Person::KeyAccount do
       person = FactoryGirl.create(:person)
       expect do
         @account = Person::KeyAccount.find_or_create_from_auth(@auth_hash, person)
-      end.to change(Person::KeyAccount, :count).from(0).to(1)
+      end.to change(Person::KeyAccount, :count).by(1)
       person.key_accounts.should include(@account)
     end
   end
@@ -25,7 +25,7 @@ describe Person::KeyAccount do
         user = Person::KeyAccount.create_user_from_auth(@auth_hash)
         user.first_name.should eq @auth_hash.extra.attributes.first.firstName
         user.last_name.should eq @auth_hash.extra.attributes.first.lastName
-      end.to change(User, :count).from(0).to(1)
+      end.to change(User, :count).by(1)
     end
   end
 

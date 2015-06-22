@@ -5,11 +5,18 @@ describe Obiee do
   # Disallow external requests
   include Savon::SpecHelper
 
-  # set Savon in and out of mock mode
-  before(:all) { savon.mock!   }
-  after(:all)  { savon.unmock! }
+  let(:obiee) { Obiee.new }
 
-  obiee = ''
+  before do
+    savon.mock!
+
+    creds = { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
+    fixture = File.read('spec/fixtures/obiee_auth_client.xml')
+    savon.expects(:logon).with(message: creds).returns(fixture)
+  end
+
+  after { savon.unmock! }
+
   SESSION_ID = 'sessionid22091522cru'
   PATH = '/shared/Insight/Siebel Recurring Monthly/Recurring Designation Test Query'
   SQL = 'SELECT
@@ -21,12 +28,7 @@ ORDER BY 1, 2 ASC NULLS LAST
 FETCH FIRST 10000000 ROWS ONLY'
 
   it 'gets a session id' do
-    creds =  { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
-    fixture = File.read('spec/fixtures/obiee_auth_client.xml')
-    savon.expects(:logon).with(message: creds).returns(fixture)
-    obiee = Obiee.new
-    session_id = obiee.session_id
-    expect(session_id).to eq(SESSION_ID)
+    expect(obiee.session_id).to eq(SESSION_ID)
   end
 
   it 'gets report sql with session id' do

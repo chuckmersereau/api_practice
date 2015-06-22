@@ -482,7 +482,7 @@ describe Contact do
       contact.people << create(:person, last_name: nil)
       expect do
         contact.merge_people
-      end.to change(Person, :count).from(2).to(1)
+      end.to change(Person, :count).by(-1)
     end
 
     it 'does not error on second merge if their master person has been merged by first merge' do

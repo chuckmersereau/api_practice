@@ -51,19 +51,14 @@ describe CsvImport do
 
   context '#contacts' do
     it 'parses the contacts from csv without saving them' do
-      expect(Contact.count).to eq(0)
-      expect(Person.count).to eq(1)
-      expect(EmailAddress.count).to eq(0)
-      expect(Address.count).to eq(0)
-      expect(PhoneNumber.count).to eq(0)
+      def relevant_record_count
+        [Contact, Person, EmailAddress, Address, PhoneNumber].map(&:count).reduce(:+)
+      end
 
-      contacts = import.contacts
-      expect(Contact.count).to eq(0)
-      expect(Person.count).to eq(1)
-      expect(EmailAddress.count).to eq(0)
-      expect(Address.count).to eq(0)
-      expect(PhoneNumber.count).to eq(0)
-
+      contacts = []
+      expect do
+        contacts = import.contacts
+      end.to_not change(self, :relevant_record_count)
       check_contacts(contacts)
     end
 
