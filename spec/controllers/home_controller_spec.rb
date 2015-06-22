@@ -4,10 +4,7 @@ describe HomeController do
   render_views
 
   describe 'when not logged in' do
-    before do
-      sign_out(:user)
-      sign_out(:admin_user)
-    end
+    before { logout_test_user }
 
     describe "GET 'index'" do
       it 'redirects to splash page' do
