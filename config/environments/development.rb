@@ -49,4 +49,6 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = { :host => "localhost", :port => 1025 }
 
   Rails.application.routes.default_url_options[:host] = config.action_mailer.default_url_options[:host]
+
+  config.middleware.use Rack::LiveReload
 end
