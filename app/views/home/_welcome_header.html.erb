@@ -6,7 +6,9 @@
     </div>
   </div>
 <% else %>
-  <h1><%= _('Hi') %> <%= current_user.first_name %>! <span class="smallhead"><%= _("Here's whats happening...") %></span></h1>
+  <h1>
+    <%= _('Hi') %> <%= current_user.first_name %>! <span class="smallhead"><%= _("Here's whats happening...") %></span>
+  </h1>
 <% end %>
 
 <div class="row">
@@ -14,41 +16,47 @@
     <div class="col-md-4 getting-started-panel">
       <div class="getting_started_number">1</div>
       <div class="panel panel-default">
-        <table class="panel-body">
-          <% [['TntMPD', 'Tnt'], [_('.CSV File'), 'CSV']].each do |source| %>
+        <div class="panel-body">
+          <table class="imports-table">
+            <% [['TntMPD', 'Tnt'], [_('.CSV File'), 'CSV']].each do |source| %>
+              <tr>
+                <td class="identify">
+                  <h3><%= source[0] %></h3>
+                </td>
+                <td class="connections" data-behavior="account">
+                  <%= link_to(_('Import %{source} Contacts') % {source: source[1]},
+                              new_account_path(provider: source[1].downcase + '_import'),
+                              class: 'btn btn-xs btn-secondary', remote: true, behavior: 'show_import') %>
+                </td>
+              </tr>
+            <% end %>
             <tr>
               <td class="identify">
-                <h3><%= source[0] %></h3>
+                <h3>Google</h3>
               </td>
               <td class="connections" data-behavior="account">
-                <%= link_to(_('Import %{source} Contacts') % {source: source[1]},
-                            new_account_path(provider: source[1].downcase + '_import'),
-                            class: 'btn btn-xs btn-secondary', remote: true, behavior: 'show_import') %>
+                <% current_user.google_accounts.each do |account| %>
+                  <div class="account_single">
+                    <span class="account_name"><%= account %></span>
+                    <% if account.token_expired? && !account.refresh_token! %>
+                      <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: home_path),
+                                  class: 'btn btn-xs btn-secondary desired_action') %>
+                    <% else %>
+                      <%= link_to('<i class="fa fa-cloud-download"></i> '.html_safe+_('Import Contacts'),
+                                  new_account_path(provider: 'google_import', account_id: account.id),
+                                  class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
+                    <% end %>
+                  </div>
+                <% end %>
+                <%= auth_link('google') %>
               </td>
             </tr>
-          <% end %>
-          <tr>
-            <td class="identify">
-              <h3>Google</h3>
-            </td>
-            <td class="connections" data-behavior="account">
-              <% current_user.google_accounts.each do |account| %>
-                <div class="account_single">
-                  <span class="account_name"><%= account %></span>
-                  <% if account.token_expired? && !account.refresh_token! %>
-                    <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: home_path),
-                                class: 'btn btn-xs btn-secondary desired_action') %>
-                  <% else %>
-                    <%= link_to('<i class="fa fa-cloud-download"></i> '.html_safe+_('Import Contacts'),
-                                new_account_path(provider: 'google_import', account_id: account.id),
-                                class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
-                  <% end %>
-                </div>
-              <% end %>
-              <%= auth_link('google') %>
-            </td>
-          </tr>
-        </table>
+          </table>
+          <p class="note">
+            <%= _("Run more imports by clicking the gear in the top "+
+                  "right, and selecting 'Networks&nbsp&&nbspImports'") %>
+          </p>
+        </div>
       </div>
       <h2><%= _('Import Contacts') %></h2>
     </div>
@@ -72,6 +80,10 @@
           <hr>
           <%= link_to(_('Setup Notifications'), notifications_preferences_path,
                       class: 'btn btn-secondary', remote: true) %>
+          <p class="note">
+            <%= _("Change these in the future by clicking the gear "+
+                  "in the top right, and selecting 'Preferences'") %>
+          </p>
         </div>
       </div>
       <h2><%= _('Setup Your Support Goal And Notifications') %></h2>
@@ -107,6 +119,9 @@
               </ul>
             </div>
           </form>
+          <p class="note">
+            <%= _("Add more later by clicking 'Quick&nbspAdd' > 'Add&nbspContact' in the top right") %>
+          </p>
         </div>
       </div>
       <h2><%= _('Add A Contact') %></h2>
