@@ -149,6 +149,13 @@ def login(user)
   $user = user
 end
 
+def logout_test_user
+  $request_test = false
+  $user = nil
+  sign_out(:user)
+  sign_out(:admin_user)
+end
+
 class FakeApi
   def initialize(*_args)
   end
