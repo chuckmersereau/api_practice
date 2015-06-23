@@ -10,7 +10,7 @@ class ContactFilter
   end
 
   def filter(contacts)
-    filtered_contacts = contacts
+    @contacts = filtered_contacts = contacts
 
     if filters.present?
       if @filters[:ids]
@@ -285,7 +285,7 @@ class ContactFilter
 
     # set up contact id arrays
     if filter_home_phone.present?
-      contacts_with_home_phone_ids = filtered_contacts
+      contacts_with_home_phone_ids = @contacts
                                      .where.not(phone_numbers: { number: nil })
                                      .where(phone_numbers: { historic: false, location: 'home' })
                                      .includes(people: :phone_numbers)
@@ -293,7 +293,7 @@ class ContactFilter
       filter_home_phone = '' if contacts_with_home_phone_ids.empty?
     end
     if filter_moble_phone.present?
-      contacts_with_mobile_phone_ids = filtered_contacts
+      contacts_with_mobile_phone_ids = @contacts
                                        .where.not(phone_numbers: { number: nil })
                                        .where(phone_numbers: { historic: false, location: 'mobile' })
                                        .includes(people: :phone_numbers)
