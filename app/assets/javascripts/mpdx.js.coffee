@@ -233,7 +233,7 @@ determineAffixScroll = ->
     leftmenu.toggleClass 'scrollable_left', $(window).height() < leftmenu[0].scrollHeight
 
 $(document).ready determineAffixScroll
-$(window).on 'resize', determineAffixScroll
+$(window).resize determineAffixScroll
 
 $(document).ready ->
   $('.toggle-mobile-filters').click ->
@@ -251,7 +251,7 @@ $.respDialogs = ->
 
 $('#dash-tabs').on 'tabsactivate', $.respDialogs
 
-$(window).resize $.respDialogs()
+$(window).resize $.respDialogs
 
 $(document).ready ->
   tagSize = $('.left_tag_list .tag').length
