@@ -3,10 +3,12 @@
 
 group :red_green_refactor, halt_on_fail: true do
   guard :livereload do
-    # see full watch list here: https://github.com/guard/guard-livereload#guardfile
-    # only enabling css livereload for now because it does it live (without browser reload)
-    watch(%r{public/.+\.(css)})
+    watch(%r{app/views/.+\.(erb|haml|slim)})
+    watch(%r{app/helpers/.+\.rb})
+    watch(%r{public/.+\.(css|js|html)})
+    watch(%r{config/locales/.+\.yml})
     watch(%r{(app|vendor)(/assets/\w+/(.+)\.(scss))}) { |m| "/assets/#{m[3]}.css" }
+    watch(%r{(app|vendor)(/assets/\w+/(.+\.(js|html))).*}) { |m| "/assets/#{m[3]}" }
   end
 
   guard 'rspec', all_on_start: false, all_after_pass: false, failed_mode: :focus, cmd: 'bin/spring rspec' do
