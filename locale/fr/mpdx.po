@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-05-29 16:18+0100\n"
+"PO-Revision-Date: 2015-06-23 17:32+0100\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -49,7 +49,7 @@ msgid "%{contacts_count} referrals"
 msgstr "%{contacts_count} références"
 
 msgid "%{index} of %{total}"
-msgstr "%{index} de %{total}"
+msgstr "%{index} sur %{total}"
 
 msgid ""
 "%{org_name} said we have the wrong password for your account.\n"
@@ -59,19 +59,18 @@ msgstr ""
 "%{org_name} dit que vous avez le mauvais mot de passe pour votre compte.S'il vous "
 "plaît essayez de le mettre à jour ici : %{link}"
 
-#, fuzzy
 msgid ""
 "%{received} received/%{pledged} committed of goal: %{goal}. Click to see outstanding "
 "financial partners."
 msgstr ""
-"%{received} reçu/%{pledged} promis de l'objectif : %{goal}. Cliquez pour voir les "
-"partenaires financiers en attente."
+"%{received} reçus sur %{pledged} promis pour un objectif de %{goal}. Cliquez pour voir "
+"les partenaires financiers en attente."
 
 msgid "(Cancel merging)"
 msgstr "(Annuler la fusion)"
 
 msgid "(Click here to merge duplicates)"
-msgstr "(Cliquer ici pour fusionner les doubles)"
+msgstr "(Cliquer ici pour fusionner les doublons)"
 
 msgid "(You should only need to do this if you receive an email from MPDx.)"
 msgstr ""
@@ -165,7 +164,7 @@ msgid ""
 "<span class=\"count-big\">%{contact_count}</span> partners <strong>%{days}</strong> "
 "days late"
 msgstr ""
-"<span class=\"count-big\">%{contact_count}</span> partenaires avec<strong>%{days}</"
+"<span class=\"count-big\">%{contact_count}</span> partenaires avec <strong>%{days}</"
 "strong> jours de retard"
 
 msgid "About you"
@@ -314,7 +313,7 @@ msgid "Anniversary"
 msgstr "Anniversaire de marriage"
 
 msgid "Annual"
-msgstr "Annuel"
+msgstr "Tous les ans"
 
 msgid ""
 "Another contact in your organization already has the donor account number you've tried "
@@ -341,20 +340,19 @@ msgid "Appeal Amount"
 msgstr "Montant de l'appel"
 
 msgid "Appeals"
-msgstr "Appels"
+msgstr "Appels dons spéciaux"
 
 msgid "Appointment"
 msgstr "Rendez-vous"
 
 msgid "Appointment Scheduled"
-msgstr "Rendez-vous établi"
+msgstr "Rendez-vous fixé"
 
 msgid "Appointments"
 msgstr "Rendez-vous"
 
-#, fuzzy
 msgid "Appointments Produced"
-msgstr "Rendez-vous établi"
+msgstr "Rendez-vous fixés"
 
 msgid "Are marked as do not ask for appeals"
 msgstr "Sont marqués de ne pas demander pour les appels"
@@ -393,10 +391,10 @@ msgstr ""
 "étudier les options possibles prochainement."
 
 msgid "Ask in Future"
-msgstr "Demander plus tard"
+msgstr "Demander dans le futur"
 
 msgid "Attempted"
-msgstr "Tentative"
+msgstr "Tentés"
 
 msgid "Aunt"
 msgstr "Tante"
@@ -440,10 +438,10 @@ msgstr ""
 "français) si vous n'avez pas déjà une réponse là-bas."
 
 msgid "Bi-Monthly"
-msgstr "Bi-mensuel"
+msgstr "Tous les 2 mois"
 
 msgid "Biennial"
-msgstr "Biennal"
+msgstr "Tous les 2 ans"
 
 msgid "Birthday"
 msgstr "Anniversaire"
@@ -488,7 +486,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgid "Care"
-msgstr "Suivi "
+msgstr "Rester en relation "
 
 msgid ""
 "Check out %{help_site} for training videos and FAQs. If you can't find the answer you "
@@ -498,7 +496,7 @@ msgstr ""
 "pas de réponses à vos questions ou avez un bug : %{link}"
 
 msgid "Checking for duplicates..."
-msgstr "Vérifications des doubles..."
+msgstr "Vérifications des doublons..."
 
 msgid "Choose an existing tag, or create new tag (separate multiple tags with commas):"
 msgstr ""
@@ -547,31 +545,31 @@ msgid "Comments"
 msgstr "Commentaires "
 
 msgid "Commitment"
-msgstr "Engagement "
+msgstr "Promesse"
 
 msgid "Commitment Amount"
-msgstr "Montant de l'engagement"
+msgstr "Montant de la promesse"
 
 msgid "Commitment Details"
-msgstr "Détails de l'engagement"
+msgstr "Détails de la promesse"
 
 msgid "Commitment Frequency"
-msgstr "Fréquence de l'engagement "
+msgstr "Fréquence de la promesse "
 
 msgid "Commitment Not Received"
-msgstr "Engagement non reçu"
+msgstr "Promesse non reçue"
 
 msgid "Commitment Received"
-msgstr "Engagement reçu"
+msgstr "Promesse reçue"
 
 msgid "Commitment Start Date"
 msgstr "Date de début de l'engagement"
 
 msgid "Commitments Unfufilled"
-msgstr "Engagement non remplis "
+msgstr "Promesses à suivre"
 
 msgid "Commitments:"
-msgstr "Engagements :"
+msgstr "Promesses :"
 
 msgid "Company"
 msgstr "Entreprise"
@@ -580,7 +578,7 @@ msgid "Complete Selected"
 msgstr "Marquer comme accompli "
 
 msgid "Completed"
-msgstr "Terminé"
+msgstr "Effectués"
 
 msgid "Completed On"
 msgstr "Terminé le :"
@@ -589,7 +587,7 @@ msgid "Configure synchronization"
 msgstr "Configurer la synchronisation"
 
 msgid "Connect"
-msgstr "Se connecter "
+msgstr "Contacter"
 
 msgid "Connect to %{org}"
 msgstr "Se connecter à %{org}"
@@ -670,7 +668,7 @@ msgid "Contribution Report for %{start_date} through %{end_date}"
 msgstr "Rapport de contribution du %{start_date} au %{end_date}"
 
 msgid "Correspondence"
-msgstr "Correspondance"
+msgstr "Courriers"
 
 msgid "Country"
 msgstr "Pays"
@@ -873,7 +871,7 @@ msgid "Edit Task - %{task}"
 msgstr "Modifier les tâches - %{task}"
 
 msgid "Electronic Contacts"
-msgstr "Contacts électroniques"
+msgstr "Messages électroniques"
 
 msgid "Email"
 msgstr "E-mail"
@@ -956,7 +954,7 @@ msgid "Filters"
 msgstr "Filtres"
 
 msgid "Find Duplicates"
-msgstr "Trouvez des doubles"
+msgstr "Trouver des doublons"
 
 msgid "First"
 msgstr "En premier"
@@ -1001,7 +999,7 @@ msgid "Format your data to match the sample:"
 msgstr "Formater vos données pour correspondre à l'échantillon :"
 
 msgid "Fortnightly"
-msgstr "Bimensuel"
+msgstr "Toutes les  2 semaines"
 
 msgid "Frequency"
 msgstr "Fréquence"
@@ -1010,7 +1008,7 @@ msgid "From donor system. To make changes, "
 msgstr "De système des dons. Pour apporter des modifications,"
 
 msgid "Gained"
-msgstr "Acquis"
+msgstr "Ajoutés"
 
 msgid "Gave a special gift in the last 3 months"
 msgstr "A donné un don spécial dans les 3 derniers mois"
@@ -1076,7 +1074,7 @@ msgid "Help"
 msgstr "Aide"
 
 msgid "Here's whats happening..."
-msgstr "Voici ce qu'il se passe ..."
+msgstr "Voici ce qui se passe ..."
 
 msgid "Hi"
 msgstr "Salut"
@@ -1273,7 +1271,7 @@ msgid "Location"
 msgstr "Emplacement"
 
 msgid "Log Prayer Letter"
-msgstr "Enregistrer une lettre de prière"
+msgstr "Lettre de nouvelles"
 
 msgid "Log Task"
 msgstr "Ajouter une tâche terminée"
@@ -1439,7 +1437,7 @@ msgid "Mobile Phone"
 msgstr "Téléphone portable"
 
 msgid "Monthly"
-msgstr "Mensuel"
+msgstr "Tous les mois"
 
 msgid "Monthly Average:"
 msgstr "Moyenne mensuelle :"
@@ -1478,10 +1476,10 @@ msgid "Nephew"
 msgstr "Neveu"
 
 msgid "Networks & Imports"
-msgstr "Réseau & importations"
+msgstr "Réseaux & importations"
 
 msgid "Never Ask"
-msgstr "Ne plus demander"
+msgstr "Ne jamais demander"
 
 msgid "Never Contacted"
 msgstr "Jamais contacté"
@@ -1541,7 +1539,7 @@ msgid "No Subject"
 msgstr "Aucun sujet"
 
 msgid "No birthdays this week!"
-msgstr "Aucun anniversaires cette semaine !"
+msgstr "Aucun anniversaire cette semaine !"
 
 msgid "No completed tasks found for this contact."
 msgstr "Vous n'avez pas de tâche terminée pour ce contact."
@@ -1585,7 +1583,7 @@ msgid "Not Interested"
 msgstr "Pas intéressé"
 
 msgid "Not Received"
-msgstr "Non reçu"
+msgstr "Non reçus"
 
 msgid ""
 "Note: this file should be in a TntMPD data sync (.tntmpd) text file from your "
@@ -1636,9 +1634,8 @@ msgstr "Autre"
 msgid "Other Details"
 msgstr "Autre details"
 
-#, fuzzy
 msgid "Outgoing"
-msgstr "Appels sortants"
+msgstr "Appels passés"
 
 msgid "Overdue"
 msgstr "En retard"
@@ -1648,10 +1645,10 @@ msgstr ""
 "Remplacer les champs de contact existants avec les données du fichier téléchargé."
 
 msgid "Partner - Financial"
-msgstr "Partenaire - financier"
+msgstr "Partenaire - Financier"
 
 msgid "Partner - Pray"
-msgstr "Partenaire - De prière"
+msgstr "Partenaire - Prière"
 
 msgid "Partner - Special"
 msgstr "Partenaire - Spécial"
@@ -1788,19 +1785,19 @@ msgid "Problem / Suggestion / Question (Longer version)"
 msgstr "Problème / Suggestion / Question (version la plus longue)"
 
 msgid "Progress"
-msgstr "Progrès"
+msgstr "Activités hebdomadaires"
 
 msgid "Quad-Monthly"
-msgstr "Hebdomadaire"
+msgstr "Toutes les semaines"
 
 msgid "Quarterly"
-msgstr "Trimestrielle"
+msgstr "Tous les 3 mois"
 
 msgid "Quick"
 msgstr "Rapide"
 
 msgid "Received"
-msgstr "Reçu"
+msgstr "Reçus"
 
 msgid "Recurring Gift Recommendations"
 msgstr "Recommandations de dons récurrents"
@@ -1925,7 +1922,7 @@ msgid "Select all"
 msgstr "Tout selectionner"
 
 msgid "Select all duplicates"
-msgstr "Selectionner tous les doubles"
+msgstr "Sélectionner tous les doublons"
 
 msgid "Select all that have donated"
 msgstr "Sélectionner tous ceux qui ont fait un don"
@@ -1937,7 +1934,7 @@ msgid "Select none"
 msgstr "Ne rien sélectionner "
 
 msgid "Semi-Annual"
-msgstr "Semi-annuel"
+msgstr "Tous les 6 mois"
 
 msgid "Send Paper Newsletter List"
 msgstr "Envoyer la liste de lettres de nouvelles par courrier"
@@ -2019,10 +2016,10 @@ msgid "Status:"
 msgstr "Statut:"
 
 msgid "Step 1 of 2: Merge duplicate contacts (giving units)"
-msgstr "Étape 1 de 2: Fusionner les contacts en double (en donnant les unités)"
+msgstr "Étape 1 sur 2: Fusionner les contacts en double"
 
 msgid "Step 2 of 2: Merge duplicate people within contacts"
-msgstr "Étape 2 de 2 : Fusionner les personnes en double dans les contacts"
+msgstr "Étape 2 sur 2 : Fusionner les personnes en double dans les contacts"
 
 msgid "Stopped giving for the last 2 months"
 msgstr "A arrêté les dons depuis 2 mois"
@@ -2052,10 +2049,10 @@ msgid "Support"
 msgstr "Soutien"
 
 msgid "Support Letter"
-msgstr "Lettre de soutien"
+msgstr "Lettre de demande de soutien"
 
 msgid "Support Letters"
-msgstr "Lettres de soutien"
+msgstr "Lettres de demande de soutien"
 
 msgid "Support/Help"
 msgstr "Soutien/Aide"
@@ -2076,7 +2073,7 @@ msgid "Talk to In Person"
 msgstr "Parler en personne"
 
 msgid "Talked To"
-msgstr "Parlé à"
+msgstr "Conversations"
 
 msgid "Task"
 msgstr "Tâche"
@@ -2088,13 +2085,13 @@ msgid "Tasks overdue or due today"
 msgstr "Tâches en retard ou à faire aujourd'hui"
 
 msgid "Text Message"
-msgstr "Message texte"
+msgstr "SMS"
 
 msgid "Thank"
-msgstr "Remercier"
+msgstr "Remerciement"
 
 msgid "Thank You Notes"
-msgstr "notes de remerciements"
+msgstr "Remerciements"
 
 msgid ""
 "Thank you for suggesting ways we can make MPDX a better tool. We will take your "
@@ -2148,9 +2145,9 @@ msgid ""
 "The Status, Commitment Frequency, and Newsletter values <em class=\"gold\">must also "
 "exactly match</em> one of the \"Cell Options\" in the sample."
 msgstr ""
-"Le Statut, fréquence de l'engagement, et les valeurs de la lettre de nouvelle <em "
-"class=\"gold\">doivent correspondre exactement</em> à l'une des  \"Cellules d'options"
-"\" de l'exemple."
+"Les valeurs Statut, Fréquence de l'engagement et Lettre de nouvelles <em class=\"gold"
+"\">doivent correspondre exactement</em> à l'une des  \"Cellules d'options\" de "
+"l'exemple."
 
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "La connexion à votre compte LinkedIn a besoin d'être renouvelée."
@@ -2265,7 +2262,7 @@ msgstr ""
 "Il n'y a aucune tâches qui correspondent aux filtres ou tags que vous avez sélectionné."
 
 msgid "These are not duplicates"
-msgstr "Ce ne sont pas des doubles"
+msgstr "Ce ne sont pas des doublons"
 
 msgid "This contact doesn't have any recent facebook posts"
 msgstr "Ce contact n'a pas de messages Facebook récents"
@@ -2424,7 +2421,7 @@ msgstr ""
 "des contacts depuis Facebook\" au lieu de coller manuellement le lien dedans."
 
 msgid "We weren't able to detect any duplicates on your account."
-msgstr "Nous n'avons pas pu détecter les doubles sur votre compte."
+msgstr "Nous n'avons pas pu détecter de doublons sur votre compte."
 
 msgid "Website"
 msgstr "Site web"
@@ -2523,7 +2520,7 @@ msgid "You need to setup LinkedIn first"
 msgstr "Vous avez besoin d'installer LinkedIn d'abord "
 
 msgid "You've never logged a prayer letter"
-msgstr "Vous n'avez aucune lettre de prière dans votre historique"
+msgstr "Vous n'avez aucune lettre de nouvelles dans votre historique"
 
 msgid ""
 "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">"
@@ -2582,7 +2579,7 @@ msgid "edit"
 msgstr "modifier"
 
 msgid "first gift not received"
-msgstr "premier don non reçu"
+msgstr "premiers dons non reçus"
 
 msgid "http://"
 msgstr "http://"
@@ -2606,7 +2603,7 @@ msgid "showing all tasks"
 msgstr "afficher toutes les tâches"
 
 msgid "since your last prayer letter"
-msgstr "depuis votre dernière lettre de prière"
+msgstr "depuis votre dernière lettre de nouvelles"
 
 msgid "to"
 msgstr "à"
