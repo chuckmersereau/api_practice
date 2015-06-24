@@ -226,8 +226,8 @@ class DataServer
 
         break
       end
-    rescue NoMethodError
-      raise response.inspect
+      # rescue NoMethodError
+      #   raise response.inspect
     end
     balance
   end
@@ -260,17 +260,23 @@ class DataServer
   end
 
   def get_params(raw_params, options = {})
-    params_string = raw_params.sub('$ACCOUNT$', @org_account.username)
-                    .sub('$PASSWORD$', @org_account.password)
-    params_string.sub!('$PROFILE$', options[:profile]) if options[:profile]
-    params_string.sub!('$DATEFROM$', options[:datefrom]) if options[:datefrom]
-    params_string.sub!('$DATETO$', options[:dateto]) if options[:dateto].present?
-    params_string.sub!('$PERSONIDS$', options[:personid].to_s) if options[:personid].present?
-    params = Hash[params_string.split('&').map { |p| p.split('=') }]
-    params
+    params = Hash[raw_params.split('&').map { |p| p.split('=') }]
+    replaced_params = {}
+    params.each do |k, v|
+      replaced_params[k] = @org_account.username if v == '$ACCOUNT$'
+      replaced_params[k] = @org_account.password if v == '$PASSWORD$'
+      replaced_params[k] = options[:profile] if options[:profile] && v == '$PROFILE$'
+      replaced_params[k] = options[:datefrom] if options[:datefrom] && v == '$DATEFROM$'
+      replaced_params[k] = options[:dateto] if options[:dateto].present? && v == '$DATETO$'
+      replaced_params[k] = options[:personid].to_s if options[:personid].present? && v == '$PERSONIDS$'
+    end
+    replaced_params.merge!(params.slice(*(params.keys - replaced_params.keys)))
+    replaced_params
   end
 
   def get_response(url, params)
+    Rails.logger.debug(url: url, payload: params, timeout: -1, user: u(@org_account.username),
+                       password: u(@org_account.password))
     RestClient::Request.execute(method: :post, url: url, payload: params, timeout: -1, user: u(@org_account.username),
                                 password: u(@org_account.password)) do |response, _request, _result, &_block|
       # check for error response
