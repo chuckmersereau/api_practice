@@ -1863,8 +1863,6 @@ body.google_integrations_controller {
 /* -------- Welcome -------- */
 .getting_started_title, .getting-started-panel {
   text-align: center;
-}
-.getting_started_title {
   padding-bottom: 3em;
 }
 .getting-started-panel {
@@ -1923,6 +1921,21 @@ body.google_integrations_controller {
   background-color: $color-primary;
   font-size: 35px;
   position: relative;
+}
+.welcome-panel-completed {
+  float: right;
+  display: inline-block;
+  width: 40px;
+  height: 40px;
+  border-radius: 40px;
+  line-height: 35px;
+  font-size: 18px;
+  position: relative;
+  right: -20px;
+  top: 20px;
+  background-color: white;
+  color: $gray_light;
+  border: 3px solid $gray_light;
 }
 
 #donations_summary_chart {

@@ -15,6 +15,7 @@
   <% if current_user.setup.include? :import %>
     <div class="col-md-4 getting-started-panel">
       <div class="getting_started_number">1</div>
+      <a href="#" class="welcome-panel-completed"><i class="fa fa-check"></i>︎</a>
       <div class="panel panel-default">
         <div class="panel-body">
           <table class="imports-table">
@@ -64,6 +65,7 @@
   <% if current_user.setup.include? :goal %>
     <div class="col-md-4 getting-started-panel">
       <div class="getting_started_number">2</div>
+      <a href="#" class="welcome-panel-completed"><i class="fa fa-check"></i>︎</a>
       <div class="panel panel-default">
         <div class="panel-body">
           <% preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list) %>
@@ -92,6 +94,7 @@
   <% if current_user.setup.include? :contacts %>
     <div class="col-md-4 getting-started-panel">
       <div class="getting_started_number">3</div>
+      <a href="#" class="welcome-panel-completed"><i class="fa fa-check"></i>︎</a>
       <div class="panel panel-default">
         <div class="panel-body" ng-controller="smallNamestorm as namestorm">
           <form ng-submit="namestorm.addContact()">
