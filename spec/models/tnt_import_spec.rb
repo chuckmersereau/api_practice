@@ -465,7 +465,7 @@ describe TntImport do
 
       expect do
         import.send(:import_tasks)
-      end.not_to change(Task, :count).by(1)
+      end.not_to change(Task, :count)
     end
 
     it 'accociates a contact with the task' do
@@ -496,7 +496,7 @@ describe TntImport do
 
       expect do
         import.send(:import_history)
-      end.not_to change(Task, :count).by(1)
+      end.not_to change(Task, :count)
     end
 
     it 'accociates a contact with the task' do
@@ -518,7 +518,7 @@ describe TntImport do
 
   context '#import_settings' do
     it 'updates monthly goal' do
-      import.should_receive(:create_or_update_mailchimp).and_return
+      import.should_receive(:create_or_update_mailchimp)
 
       expect do
         import.send(:import_settings)
@@ -692,10 +692,10 @@ describe TntImport do
   context '#import' do
     it 'performs an import' do
       import.should_receive(:xml).and_return('foo')
-      import.should_receive(:import_contacts).and_return
-      import.should_receive(:import_tasks).and_return
-      import.should_receive(:import_history).and_return
-      import.should_receive(:import_settings).and_return
+      import.should_receive(:import_contacts)
+      import.should_receive(:import_tasks)
+      import.should_receive(:import_history)
+      import.should_receive(:import_settings)
       import.should_receive(:import_appeals)
       import.import
     end

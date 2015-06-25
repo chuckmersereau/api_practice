@@ -200,7 +200,7 @@ describe Siebel do
 
       expect do
         siebel.send(:add_or_update_donation, siebel_donation, da1, designation_profile)
-      end.not_to change { Donation.count }.by(1)
+      end.not_to change { Donation.count }
     end
 
     it "fetches the donor from siebel if the donor isn't already on this account list" do

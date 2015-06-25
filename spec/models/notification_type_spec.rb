@@ -13,7 +13,7 @@ describe NotificationType do
       create(:notification_preference, account_list: account_list, notification_type: special_gift)
       NotificationType.should_receive(:types).and_return(['NotificationType::SpecialGift'])
       NotificationType::SpecialGift.should_receive(:first).and_return(special_gift)
-      special_gift.should_receive(:check).and_return
+      special_gift.should_receive(:check)
 
       NotificationType.check_all(account_list)
     end

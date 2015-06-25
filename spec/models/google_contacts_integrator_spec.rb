@@ -431,8 +431,8 @@ describe GoogleContactsIntegrator do
     it 'syncs each person-contact with its own Google contact' do
       times_batch_create_or_update_called = 0
       batch_time3_g_contact_id = ''
-      expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(4).times
-        .and_return do |g_contact, &block|
+      expect(@account.contacts_api_user).to receive(:batch_create_or_update)
+        .exactly(4).times do |g_contact, &block|
         times_batch_create_or_update_called += 1
         case times_batch_create_or_update_called
         when 1
@@ -520,8 +520,8 @@ describe GoogleContactsIntegrator do
       g_contacts_for_ids = {}
 
       batch_create_or_update_calls = 0
-      expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(7).times
-        .and_return do |g_contact, &block|
+      expect(@account.contacts_api_user).to receive(:batch_create_or_update)
+        .exactly(7).times do |g_contact, &block|
         batch_create_or_update_calls += 1
         case batch_create_or_update_calls
         when 1..4
@@ -539,7 +539,8 @@ describe GoogleContactsIntegrator do
         end
       end
 
-      expect(@account.contacts_api_user).to receive(:get_contact).at_least(:once).and_return { |id| g_contacts_for_ids[id] }
+      expect(@account.contacts_api_user).to receive(:get_contact)
+        .at_least(:once) { |id| g_contacts_for_ids[id] }
 
       # The first sync should create four Google contacts for @contact-@person, @contact-@person2,
       # @contact2-@person, and @contact2-@person2
@@ -589,7 +590,7 @@ describe GoogleContactsIntegrator do
       times_batch_create_or_update_called = 0
 
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-        .exactly(2).times.and_return do |g_contact, &block|
+        .exactly(2).times do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -615,7 +616,7 @@ describe GoogleContactsIntegrator do
 
       times_batch_create_or_update_called = 0
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-        .exactly(2).times.and_return do |g_contact, &block|
+        .exactly(2).times do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -639,7 +640,7 @@ describe GoogleContactsIntegrator do
 
       times_batch_create_or_update_called = 0
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-        .exactly(:once).and_return do |g_contact, &block|
+        .exactly(:once) do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -738,8 +739,8 @@ describe GoogleContactsIntegrator do
     it 'deletes the associated link record in the case of a 404 error' do
       expect(@cache).to receive(:find_by_id).with(@remote_id).and_return(@g_contact)
 
-      expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(:once)
-        .and_return { |_g_contact, &block| block.call(code: 404) }
+      expect(@account.contacts_api_user).to receive(:batch_create_or_update)
+        .exactly(:once) { |_g_contact, &block| block.call(code: 404) }
 
       @integrator.cleanup_inactive_g_contacts
       expect(GoogleContact.all.count).to eq(0)
@@ -750,8 +751,8 @@ describe GoogleContactsIntegrator do
       expect(@cache).to receive(:find_by_id).exactly(:twice).with(@remote_id).and_return(@g_contact)
 
       times_batch_create_or_update_called = 0
-      expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(:twice)
-        .and_return do |_g_contact, &block|
+      expect(@account.contacts_api_user).to receive(:batch_create_or_update)
+        .exactly(:twice) do |_g_contact, &block|
         times_batch_create_or_update_called += 1
         case times_batch_create_or_update_called
         when 1
