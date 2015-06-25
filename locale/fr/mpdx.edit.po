@@ -892,7 +892,7 @@ msgstr "Commencez par choisir votre source de connexion:"
 msgid "Gift Range"
 msgstr "Intervalle des dons"
 
-msgid "Giving Notifications from MPDX"
+msgid "Notifications from MPDX"
 msgstr "Nodifications de MPDX"
 
 msgid "Gmail integration"

@@ -882,7 +882,7 @@ msgstr ""
 msgid "Gift Range"
 msgstr ""
 
-msgid "Giving Notifications from MPDX"
+msgid "Notifications from MPDX"
 msgstr ""
 
 msgid "Gmail integration"
