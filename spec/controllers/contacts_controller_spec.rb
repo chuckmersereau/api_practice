@@ -197,7 +197,7 @@ describe ContactsController do
           xhr :post, :save_referrals, id: contact.id,
                                       account_list: { contacts_attributes: { nil => { first_name: 'John', street: '1 Way' } } }
         end.to change(Address, :count).from(0).to(1)
-        expect(Address.first.primary_mailing_address).to be_true
+        expect(Address.first.primary_mailing_address).to be true
       end
     end
 

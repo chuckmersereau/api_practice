@@ -33,16 +33,16 @@ describe AddressMethods do
 
   context '#blank_or_duplicate_address?' do
     it 'returns false if an id specified' do
-      expect(contact.blank_or_duplicate_address?('id' => '1')).to be_false
+      expect(contact.blank_or_duplicate_address?('id' => '1')).to be false
     end
 
     it 'returns true if address fields blank' do
-      expect(contact.blank_or_duplicate_address?({})).to be_true
+      expect(contact.blank_or_duplicate_address?({})).to be true
     end
 
     it 'returns false if any address field is specified' do
       ['street', 'city', 'state', 'country', 'postal_code', :street, :city, :state, :country, :postal_code].each do |field|
-        expect(contact.blank_or_duplicate_address?(field => 'a')).to be_false
+        expect(contact.blank_or_duplicate_address?(field => 'a')).to be false
       end
     end
 
@@ -50,15 +50,15 @@ describe AddressMethods do
       a = create(:address)
       contact.addresses << a
       expect(contact.blank_or_duplicate_address?(street: a.street, city: a.city, country: a.country,
-                                                 postal_code: a.postal_code)).to be_true
-      expect(contact.blank_or_duplicate_address?(street: 'other street')).to be_false
+                                                 postal_code: a.postal_code)).to be true
+      expect(contact.blank_or_duplicate_address?(street: 'other street')).to be false
     end
 
     it 'returns true for a duplicate address by by matching attributes if country set alternate name' do
       a = create(:address, country: 'USA')
       contact.addresses << a
       expect(contact.blank_or_duplicate_address?(street: a.street, city: a.city, country: 'USA',
-                                                 postal_code: a.postal_code)).to be_true
+                                                 postal_code: a.postal_code)).to be true
     end
   end
 end

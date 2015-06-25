@@ -54,8 +54,8 @@ describe Contact do
           }
         }
       contact.update_attributes(people_attributes)
-      expect(email1.reload.primary?).to be_false
-      expect(email2.reload.primary?).to be_true
+      expect(email1.reload.primary?).to be false
+      expect(email2.reload.primary?).to be true
     end
   end
 
@@ -130,7 +130,7 @@ describe Contact do
       expect do
         @contact = Contact.create_from_donor_account(@donor_account, @account_list)
       end.to change(Address, :count)
-      @contact.addresses.first.equal_to?(@donor_account.addresses.first).should be_true
+      @contact.addresses.first.equal_to?(@donor_account.addresses.first).should be true
       expect(@contact.addresses.first.source_donor_account).to eq(@donor_account)
       expect(@contact.addresses.first.remote_id).to eq('1')
     end

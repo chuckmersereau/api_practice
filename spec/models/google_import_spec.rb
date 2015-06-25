@@ -191,10 +191,10 @@ describe GoogleImport do
       expect(person.websites.to_a.count).to eq(2)
       website1 = person.websites.order(:url).first
       expect(website1.url).to eq('blog.example.com')
-      expect(website1.primary).to be_false
+      expect(website1.primary).to be false
       website2 = person.websites.order(:url).last
       expect(website2.url).to eq('www.example.com')
-      expect(website2.primary).to be_true
+      expect(website2.primary).to be true
 
       expect(contact.notes).to eq('Notes here')
 
@@ -205,7 +205,7 @@ describe GoogleImport do
       expect(address1.street).to eq('2345 Long Dr. #232')
       expect(address1.state).to eq('IL')
       expect(address1.postal_code).to eq('12345')
-      expect(address1.primary_mailing_address).to be_true
+      expect(address1.primary_mailing_address).to be true
       address2 = contact.addresses.order(:postal_code).last
       expect(address2.country).to eq('United States')
       expect(address2.city).to eq('Anywhere')
@@ -217,18 +217,18 @@ describe GoogleImport do
       email = person.email_addresses.order(:email).first
       expect(email.email).to eq('johnsmith@example.com')
       expect(email.location).to eq('other')
-      expect(email.primary).to be_true
+      expect(email.primary).to be true
 
       expect(person.phone_numbers.to_a.count).to eq(1)
       phone = person.phone_numbers.order(:number).first
       expect(phone.number).to eq('+11233345158')
       expect(phone.location).to eq('mobile')
-      expect(phone.primary).to be_true
+      expect(phone.primary).to be true
 
       expect(person.pictures.count).to eq(1)
       picture = person.pictures.first
       expect(picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
-      expect(picture.primary).to be_true
+      expect(picture.primary).to be true
 
       expect(person.google_contacts.count).to eq(1)
       google_contact = person.google_contacts.first
@@ -305,10 +305,10 @@ describe GoogleImport do
     expect(person.websites.count).to eq(2)
     website1 = person.websites.order(:url).first
     expect(website1.url).to eq('example.com')
-    expect(website1.primary).to be_false
+    expect(website1.primary).to be false
     website2 = person.websites.order(:url).last
     expect(website2.url).to eq('other.example.com')
-    expect(website2.primary).to be_true
+    expect(website2.primary).to be true
   end
 
   describe 'import override behavior for basic fields' do
@@ -336,7 +336,7 @@ describe GoogleImport do
       expect(@existing_person.suffix).to eq('III')
 
       @original_picture.reload
-      expect(@original_picture.primary).to be_false
+      expect(@original_picture.primary).to be false
       expect(@existing_person.pictures.count).to eq(2)
       expect(@existing_person.primary_picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
     end
@@ -356,7 +356,7 @@ describe GoogleImport do
       @original_picture.reload
 
       # Check that it does add the picture but doesn't set it to primary
-      expect(@original_picture.primary).to be_true
+      expect(@original_picture.primary).to be true
       expect(@existing_person.pictures.count).to eq(2)
       expect(@existing_person.primary_picture.image.url).to be_nil
     end
@@ -439,30 +439,30 @@ describe GoogleImport do
       expect(person.websites.to_a.count).to eq(2)
       website1 = person.websites.order(:url).first
       website2 = person.websites.order(:url).last
-      expect(website1.primary || website2.primary).to be_true
-      expect(website1.primary && website2.primary).to be_false
+      expect(website1.primary || website2.primary).to be true
+      expect(website1.primary && website2.primary).to be false
 
       expect(contact.addresses.to_a.count).to eq(2)
       address1 = contact.addresses.order(:postal_code).first
       address2 = contact.addresses.order(:postal_code).last
-      expect(address1.primary_mailing_address || address1.primary_mailing_address).to be_true
-      expect(address2.primary_mailing_address && address2.primary_mailing_address).to be_false
+      expect(address1.primary_mailing_address || address1.primary_mailing_address).to be true
+      expect(address2.primary_mailing_address && address2.primary_mailing_address).to be false
 
       expect(person.email_addresses.to_a.count).to eq(2)
       email1 = person.email_addresses.order(:email).first
       email2 = person.email_addresses.order(:email).last
-      expect(email1.primary || email1.primary).to be_true
-      expect(email2.primary && email2.primary).to be_false
+      expect(email1.primary || email1.primary).to be true
+      expect(email2.primary && email2.primary).to be false
 
       expect(person.phone_numbers.to_a.count).to eq(2)
       phone1 = person.phone_numbers.order(:number).first
       phone2 = person.phone_numbers.order(:number).last
-      expect(phone1.primary || phone1.primary).to be_true
-      expect(phone2.primary && phone2.primary).to be_false
+      expect(phone1.primary || phone1.primary).to be true
+      expect(phone2.primary && phone2.primary).to be false
 
       expect(person.pictures.count).to eq(1)
       picture = person.pictures.first
-      expect(picture.primary).to be_true
+      expect(picture.primary).to be true
     end
   end
 end

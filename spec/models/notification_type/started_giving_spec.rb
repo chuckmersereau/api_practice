@@ -43,7 +43,7 @@ describe NotificationType::StartedGiving do
       donation
       started_giving.check(contact.account_list)
       contact.reload
-      expect(contact.pledge_received).to be_true
+      expect(contact.pledge_received).to be true
     end
 
     it "doesn't add a notification if the contact is on a different account list with a shared designation account" do
@@ -61,7 +61,7 @@ describe NotificationType::StartedGiving do
       contact.reload
       expect(contact.pledge_amount).to eq(9.99)
       expect(contact.pledge_frequency).to eq(1)
-      expect(contact.pledge_received).to be_true
+      expect(contact.pledge_received).to be true
     end
   end
 

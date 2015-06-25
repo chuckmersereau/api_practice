@@ -62,7 +62,7 @@ describe TntImport do
       expect do
         import.send(:import_contacts)
       end.to change(ContactReferral, :count).by(1)
-      expect(Contact.first.no_appeals).to be_true
+      expect(Contact.first.no_appeals).to be true
     end
 
     context 'updating an existing contact' do
@@ -109,13 +109,13 @@ describe TntImport do
 
         it 'changes the primary address of an existing contact' do
           import_with_addresses
-          expect(@address.reload.primary_mailing_address).to be_false
+          expect(@address.reload.primary_mailing_address).to be false
         end
 
         it 'does not change the primary address of an existing contact if not override' do
           tnt_import.update_column(:override, false)
           import_with_addresses
-          expect(@address.reload.primary_mailing_address).to be_true
+          expect(@address.reload.primary_mailing_address).to be true
         end
       end
 
@@ -134,12 +134,12 @@ describe TntImport do
         it 'changes the primary email of an existing contact if override' do
           tnt_import.update_column(:override, true)
           import.send(:import_contacts)
-          expect(@email_before_import.reload.primary).to be_false
+          expect(@email_before_import.reload.primary).to be false
         end
 
         it 'does not change the primary email of an existing contact if not override' do
           import.send(:import_contacts)
-          expect(@email_before_import.reload.primary).to be_true
+          expect(@email_before_import.reload.primary).to be true
         end
 
         it 'sets the primary email if override not set and no primary was set for the person' do
@@ -173,12 +173,12 @@ describe TntImport do
         it 'changes the primary phone of an existing contact if override' do
           tnt_import.update_column(:override, true)
           import.send(:import_contacts)
-          expect(@phone_before_import.reload.primary).to be_false
+          expect(@phone_before_import.reload.primary).to be false
         end
 
         it 'does not change the primary phone of an existing contact if not override' do
           import.send(:import_contacts)
-          expect(@phone_before_import.reload.primary).to be_true
+          expect(@phone_before_import.reload.primary).to be true
         end
 
         it 'sets the primary phone if override not set and no primary was set for the person' do
@@ -332,7 +332,7 @@ describe TntImport do
       prefix = ''
       row = { 'Email1' => 'a@a.com', 'Email1IsValid' => 'false' }
       import.send(:update_person_emails, person, row, prefix)
-      expect(person.email_addresses.first.historic).to be_true
+      expect(person.email_addresses.first.historic).to be true
 
       person.email_addresses.destroy_all
 
@@ -355,7 +355,7 @@ describe TntImport do
       end.to change(person.email_addresses, :count).from(0).to(3)
       expect(person.email_addresses.pluck(:email).sort).to eq(['a@a.com', 'b@b.com', 'c@c.com'])
       expect(person.email_addresses.where(primary: true).count).to eq(1)
-      expect(person.email_addresses.find_by(email: 'a@a.com').primary).to be_true
+      expect(person.email_addresses.find_by(email: 'a@a.com').primary).to be true
     end
   end
 

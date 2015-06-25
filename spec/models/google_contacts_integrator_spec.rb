@@ -397,7 +397,7 @@ describe GoogleContactsIntegrator do
       EOS
 
       stub_request(:post, 'https://www.google.com/m8/feeds/contacts/default/full/batch?alt=&v=3').to_return do |request|
-        expect(EquivalentXml.equivalent?(request.body, create_contact_request_xml)).to be_true
+        expect(EquivalentXml.equivalent?(request.body, create_contact_request_xml)).to be true
         { body: create_contact_response_xml }
       end
 
@@ -414,7 +414,7 @@ describe GoogleContactsIntegrator do
         deleted_group_memberships: []
       }
       expect(@person.google_contacts.first.last_data).to eq(last_data)
-      expect(@person.google_contacts.first.last_synced.nil?).to be_false
+      expect(@person.google_contacts.first.last_synced.nil?).to be false
     end
   end
 
@@ -707,7 +707,7 @@ describe GoogleContactsIntegrator do
       EOS
 
       update_stub = stub_request(:post, 'https://www.google.com/m8/feeds/contacts/default/full/batch?alt=&v=3').to_return do |request|
-        expect(EquivalentXml.equivalent?(request.body, update_request_xml)).to be_true
+        expect(EquivalentXml.equivalent?(request.body, update_request_xml)).to be true
         { body: update_response_xml }
       end
 
@@ -950,30 +950,30 @@ describe GoogleContactsIntegrator do
       email1 = @person.email_addresses.first
       expect(email1.email).to eq('mpdx@example.com')
       expect(email1.location).to eq('home')
-      expect(email1.primary).to be_true
+      expect(email1.primary).to be true
       email2 = @person.email_addresses.last
       expect(email2.email).to eq('johnsmith@example.com')
       expect(email2.location).to eq('other')
-      expect(email2.primary).to be_false
+      expect(email2.primary).to be false
 
       expect(@person.phone_numbers.count).to eq(2)
       number1 = @person.phone_numbers.first
       expect(number1.number).to eq('+14567890123')
       expect(number1.location).to eq('home')
-      expect(number1.primary).to be_true
+      expect(number1.primary).to be true
       number2 = @person.phone_numbers.last
       expect(number2.number).to eq('+11233345158')
       expect(number2.location).to eq('mobile')
-      expect(number2.primary).to be_false
+      expect(number2.primary).to be false
 
       expect(@person.websites.count).to eq(3)
       websites = @person.websites.order(:url).to_a
       expect(websites[0].url).to eq('blog.example.com')
-      expect(websites[0].primary).to be_false
+      expect(websites[0].primary).to be false
       expect(websites[1].url).to eq('mpdx.example.com')
-      expect(websites[1].primary).to be_false
+      expect(websites[1].primary).to be false
       expect(websites[2].url).to eq('www.example.com')
-      expect(websites[2].primary).to be_true
+      expect(websites[2].primary).to be true
 
       g_contact_link = @person.google_contacts.first
       expect(g_contact_link.remote_id).to eq('http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/6b70f8bb0372c')
@@ -1175,11 +1175,11 @@ describe GoogleContactsIntegrator do
       expect(@person.websites.count).to eq(3)
       websites = @person.websites.order(:url).to_a
       expect(websites[0].url).to eq('MODIFIED_blog.example.com')
-      expect(websites[0].primary).to be_false
+      expect(websites[0].primary).to be false
       expect(websites[1].url).to eq('MODIFIED_mpdx.example.com')
-      expect(websites[1].primary).to be_false
+      expect(websites[1].primary).to be false
       expect(websites[2].url).to eq('www.example.com')
-      expect(websites[2].primary).to be_true
+      expect(websites[2].primary).to be true
     end
   end
 end

@@ -307,13 +307,13 @@ describe Person do
     it 'considers two people different unless not_duplicated_with is set' do
       p1 = create(:person)
       p2 = create(:person)
-      expect(p1.not_same_as?(p2)).to be_false
-      expect(p2.not_same_as?(p1)).to be_false
+      expect(p1.not_same_as?(p2)).to be false
+      expect(p2.not_same_as?(p1)).to be false
 
       p1.not_duplicated_with = p2.id.to_s
 
-      expect(p1.not_same_as?(p2)).to be_true
-      expect(p2.not_same_as?(p1)).to be_true
+      expect(p1.not_same_as?(p2)).to be true
+      expect(p2.not_same_as?(p1)).to be true
     end
   end
 

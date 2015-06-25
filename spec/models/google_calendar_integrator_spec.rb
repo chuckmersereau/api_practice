@@ -65,7 +65,7 @@ describe GoogleCalendarIntegrator do
 
       integrator.add_task(task)
 
-      expect(google_integration.calendar_integration?).to be_false
+      expect(google_integration.calendar_integration?).to be false
       expect(google_integration.calendar_id).to be_nil
       expect(google_integration.calendar_name).to be_nil
     end

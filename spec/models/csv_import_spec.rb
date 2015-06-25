@@ -22,7 +22,7 @@ describe CsvImport do
     expect(contact.notes).to eq('test notes')
     expect(contact.pledge_frequency).to eq(1)
     expect(contact.send_newsletter).to eq('Both')
-    expect(contact.pledge_received?).to be_true
+    expect(contact.pledge_received?).to be true
     expect(contact.tag_list.sort).to eq(%w(christmas-card csv family test))
 
     address = contact.mailing_address
@@ -38,7 +38,7 @@ describe CsvImport do
     expect(person.email_addresses.size).to eq(1)
     expect(person.email_addresses.first.email).to eq('john@example.com')
     expect(person.phone_numbers.size).to eq(1)
-    expect(person.phone_numbers.first.number.in?(['(111) 222-3333', '+11112223333'])).to be_true
+    expect(person.phone_numbers.first.number.in?(['(111) 222-3333', '+11112223333'])).to be true
 
     spouse = contact.spouse
     expect(spouse.first_name).to eq('Jane')
@@ -46,7 +46,7 @@ describe CsvImport do
     expect(spouse.email_addresses.size).to eq(1)
     expect(spouse.email_addresses.first.email).to eq('jane@example.com')
     expect(spouse.phone_numbers.size).to eq(1)
-    expect(spouse.phone_numbers.first.number.in?(['(444) 555-6666', '+14445556666'])).to be_true
+    expect(spouse.phone_numbers.first.number.in?(['(444) 555-6666', '+14445556666'])).to be true
   end
 
   context '#contacts' do

@@ -333,8 +333,8 @@ describe DataServer do
       expect(contact.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
       expect(donor_account.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
 
-      expect(prior_address.reload.primary_mailing_address).to be_true
-      expect(contact.addresses.find_by_street(prior_address.street).primary_mailing_address).to be_true
+      expect(prior_address.reload.primary_mailing_address).to be true
+      expect(contact.addresses.find_by_street(prior_address.street).primary_mailing_address).to be true
     end
   end
 

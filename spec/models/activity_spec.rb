@@ -40,7 +40,7 @@ describe Activity do
                                'start_at(5i)' => '15', 'activity_type' => 'Call', 'tag_list' => '',
                                'activity_comments_attributes' => { '0' => { 'body' => 'asdf' } },
                                'activity_contacts_attributes' => { '0' => { 'contact_id' => '', 'id' => ac.id.to_s } })
-      ).to be_true
+      ).to be true
     end
   end
 end

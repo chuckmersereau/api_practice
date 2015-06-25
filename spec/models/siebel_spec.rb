@@ -429,7 +429,7 @@ describe Siebel do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to change(Address, :count).from(1).to(2)
       expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
-      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_true
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be true
 
       # survives a second import
       contact.reload
@@ -445,16 +445,16 @@ describe Siebel do
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to change(Address, :count).from(1).to(2)
-      expect(manual_address.primary_mailing_address).to be_true
-      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
+      expect(manual_address.primary_mailing_address).to be true
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be false
 
       # survives a second import
       contact.reload
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to_not change(Address, :count)
-      expect(manual_address.primary_mailing_address).to be_true
-      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
+      expect(manual_address.primary_mailing_address).to be true
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be false
     end
 
     it 'sets the address as primary if a Siebel address from the same donor account is primary' do
@@ -465,7 +465,7 @@ describe Siebel do
         siebel.send(:add_or_update_address, siebel_address, contact, donor_account)
       end.to change(Address, :count).from(1).to(2)
       expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
-      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_true
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be true
 
       # survives a second import
       contact.reload
@@ -473,7 +473,7 @@ describe Siebel do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to_not change(Address, :count)
       expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
-      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_true
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be true
     end
 
     it 'does not make address primary if a non-matching Siebel address from a different donor account is primary' do
@@ -485,7 +485,7 @@ describe Siebel do
         siebel.send(:add_or_update_address, siebel_address, contact, donor_account2)
       end.to change(Address, :count).from(1).to(2)
       expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
-      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be false
 
       # survives a second import
       contact.reload
@@ -493,7 +493,7 @@ describe Siebel do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.to_not change(Address, :count)
       expect(contact.addresses.where(primary_mailing_address: true).count).to eq(1)
-      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be_false
+      expect(contact.addresses.where.not(remote_id: nil).first.primary_mailing_address).to be false
     end
 
     def stub_siebel_address_smarty
@@ -515,7 +515,7 @@ describe Siebel do
       address = contact.addresses.first
       expect(address.street).to eq('1697 Marabu Way')
       expect(address.postal_code).to eq('94539-3683')
-      expect(address.primary_mailing_address).to be_true
+      expect(address.primary_mailing_address).to be true
       expect(address.source).to eq('Siebel')
       expect(address.remote_id).to_not be_nil
       expect(address.source_donor_account).to eq(source_donor_account)
@@ -543,15 +543,15 @@ describe Siebel do
       new_manual_address.reload
       expect(new_manual_address.street).to eq('1697 Marabu Way')
       expect(new_manual_address.postal_code).to eq('94539-3683')
-      expect(new_manual_address.primary_mailing_address).to be_true
+      expect(new_manual_address.primary_mailing_address).to be true
       expect(new_manual_address.source).to eq('Siebel')
       expect(new_manual_address.remote_id).to eq('1-IQ5-1006')
       expect(new_manual_address.source_donor_account).to eq(source_donor_account)
       expect(new_manual_address.start_date).to eq(Date.new(2014, 2, 14))
-      expect(new_manual_address.primary_mailing_address).to be_true
+      expect(new_manual_address.primary_mailing_address).to be true
 
       old_remote_address.reload
-      expect(old_remote_address.primary_mailing_address).to be_false
+      expect(old_remote_address.primary_mailing_address).to be false
       expect(old_remote_address.remote_id).to be_nil
     end
   end

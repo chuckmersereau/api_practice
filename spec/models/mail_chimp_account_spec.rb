@@ -277,7 +277,7 @@ describe MailChimpAccount do
     context '#unsubscribe_hook' do
       it 'marks an unsubscribed person with opt out of enewsletter' do
         account.unsubscribe_hook('a@example.com')
-        expect(person.reload.optout_enewsletter).to be_true
+        expect(person.reload.optout_enewsletter).to be true
       end
 
       it 'does not mark as unsubscribed someone with that email but not as set primary' do
@@ -285,7 +285,7 @@ describe MailChimpAccount do
         person.email_address = { email: 'b@example.com', primary: true }
         person.save
         account.unsubscribe_hook('a@example.com')
-        expect(person.reload.optout_enewsletter).to be_false
+        expect(person.reload.optout_enewsletter).to be false
       end
     end
 
@@ -294,8 +294,8 @@ describe MailChimpAccount do
         account.email_update_hook('a@example.com', 'new@example.com')
         person.reload
         expect(person.email_addresses.count).to eq(2)
-        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be_false
-        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be_true
+        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be false
+        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be true
       end
 
       it 'sets the new email address as primary if it is there' do
@@ -304,8 +304,8 @@ describe MailChimpAccount do
         account.email_update_hook('a@example.com', 'new@example.com')
         person.reload
         expect(person.email_addresses.count).to eq(2)
-        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be_false
-        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be_true
+        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be false
+        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be true
       end
     end
 
@@ -318,8 +318,8 @@ describe MailChimpAccount do
 
         account.email_cleaned_hook('a@example.com', 'hard')
         email.reload
-        expect(email.historic).to be_true
-        expect(email.primary).to be_false
+        expect(email.historic).to be true
+        expect(email.primary).to be false
       end
 
       it 'makes another valid email as primary but not as invalid' do
@@ -328,12 +328,12 @@ describe MailChimpAccount do
         account.email_cleaned_hook('a@example.com', 'hard')
 
         email = person.email_addresses.first.reload
-        expect(email.historic).to be_true
-        expect(email.primary).to be_false
+        expect(email.historic).to be true
+        expect(email.primary).to be false
 
         email2.reload
-        expect(email2.historic).to be_false
-        expect(email2.primary).to be_true
+        expect(email2.historic).to be false
+        expect(email2.primary).to be true
       end
 
       it 'triggers the unsubscribe hook for an email marked as spam (abuse)' do

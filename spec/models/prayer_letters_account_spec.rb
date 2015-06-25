@@ -55,7 +55,7 @@ describe PrayerLettersAccount do
         pla.handle_bad_token
       end.to raise_exception(PrayerLettersAccount::AccessError)
 
-      expect(pla.valid_token).to be_false
+      expect(pla.valid_token).to be false
     end
   end
 
