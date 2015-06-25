@@ -31,11 +31,9 @@ end
 Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
-  config.before(:each) do |example_method|
+  config.before(:each) do |example|
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all
-    # Get the current example from the example_method object
-    example = example_method.example
 
     if example.metadata[:sidekiq] == :fake
       Sidekiq::Testing.fake!
@@ -47,6 +45,7 @@ RSpec.configure do |config|
       Sidekiq::Testing.fake!
     end
   end
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -54,6 +53,9 @@ RSpec.configure do |config|
   # config.mock_with :mocha
   # config.mock_with :flexmock
   # config.mock_with :rr
+
+  config.expect_with(:rspec) { |c| c.syntax = [:should, :expect] }
+  config.mock_with(:rspec) { |c| c.syntax = [:should, :expect] }
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -74,16 +76,11 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
 
-  # Include these specific gems in spec backtraces
-  gems_to_include_in_backtraces = %w(google_contacts_api siebel_donations)
+  config.infer_spec_type_from_file_location!
 
-  # Exclude all other gem and library paths from spec backtraces
-  gem_exclusion_patterns =
-    Gem::Specification.all
-    .reject { |g| g.name.in?(gems_to_include_in_backtraces) }
-    .map { |g| Regexp.new(Regexp.escape("#{g.name}-#{g.version}")) }
-  config.backtrace_exclusion_patterns = gem_exclusion_patterns +
-    [%r{/lib\d*/ruby/}, /bin\//, /lib\/rspec/]
+  # Exclude gems from spec backtraces, except a few directly related to our app
+  config.filter_gems_from_backtrace(*(Gem::Specification.map(&:name) -
+                                      %w(google_contacts_api siebel_donations)))
 
   config.order = :random
 

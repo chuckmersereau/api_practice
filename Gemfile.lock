@@ -770,7 +770,7 @@ DEPENDENCIES
   retryable-rb (~> 1.1.0)
   rollout (~> 2.0.0)
   rollout_ui!
-  rspec (~> 2.14.1)
+  rspec
   rspec-rails
   rubocop
   ruby-rtf
