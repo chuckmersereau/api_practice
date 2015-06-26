@@ -1922,6 +1922,7 @@ body.google_integrations_controller {
     top: 0;
   }
   .welcome-panel-completed {
+    transition: all 0.5s ease;
     float: right;
     display: inline-block;
     width: 40px;
@@ -1942,9 +1943,8 @@ body.google_integrations_controller {
     background-color: $gray_light;
     color: $gray;
     border-color: $gray;
-    float: none;
-    margin-left: -30px;
-    right: 0;
+    margin-left: 0;
+    right: 40%;
     cursor: inherit;
   }
 }

@@ -22,4 +22,13 @@ class PreferencesController < ApplicationController
     current_user.save
     render nothing: true
   end
+
+  def complete_welcome_panel
+    key = params[:key].try(:to_sym)
+    if current_user.setup.is_a?(Array) && current_user.setup.include?(key)
+      current_user.setup.delete(key)
+      current_user.save!
+    end
+    render nothing: true
+  end
 end

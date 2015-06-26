@@ -12,8 +12,10 @@
 <% end %>
 
 <div class="row">
+  <% p "asdfasdfasdfasdf" + current_user.setup.to_s %>
   <% if current_user.setup.is_a?(Array) && current_user.setup.any? %>
-    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :import %>">
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :import %>"
+         data-panel="import">
       <div class="getting_started_number">1</div>
       <i class="fa fa-check welcome-panel-completed"></i>
       <div class="panel panel-default">
@@ -61,7 +63,8 @@
       </div>
       <h2><%= _('Import Contacts') %></h2>
     </div>
-    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :goal %>">
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :goal %>"
+         data-panel="goal">
       <div class="getting_started_number">2</div>
       <i class="fa fa-check welcome-panel-completed"></i>
       <div class="panel panel-default">
@@ -88,7 +91,8 @@
       </div>
       <h2><%= _('Setup Your Support Goal And&nbsp;Notifications') %></h2>
     </div>
-    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :contacts %>">
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :contacts %>"
+         data-panel="contacts">
       <div class="getting_started_number">3</div>
       <i class="fa fa-check welcome-panel-completed"></i>
       <div class="panel panel-default">

@@ -23,6 +23,16 @@ $ ->
         resizable: false,
         width: 400
 
+    $(document).on 'click', '.welcome-panel-completed', ->
+      elm = $(this)
+      return false if elm.parent().hasClass('completed')
+      elm.addClass('fa-spinner fa-spin')
+      $.post('/preferences/complete_welcome_panel.js?key='+elm.parent().attr('data-panel'), ->
+        elm.parent().addClass('completed')
+        elm.removeClass('fa-spinner fa-spin')
+      )
+      false
+
 $.mpdx.loadDashTabData = (hash) ->
   hash ||= '#dash-connect'
   $.mpdx.loadDashbaordTab(hash)
