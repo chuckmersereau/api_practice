@@ -95,8 +95,8 @@
 
                 <% NotificationType.all.each do |notification_type| %>
                     <% field_name = notification_type.class.to_s.split('::').last.to_s.underscore.to_sym %>
-                    <% unless $rollout.active?(:activity_notifications, current_account_list) %>
-                        <% next if notification_type.type.in?(['NotificationType::CallPartnerOncePerYear', 'NotificationType::ThankPartnerOncePerYear']) %>
+                    <% unless $rollout.active?(:partner_reminders, current_account_list) %>
+                        <% next if notification_type.type.in?(['NotificationType::RemindPartnerInAdvance']) %>
                     <% end %>
                     <div class="form-group">
                       <%= f.label field_name, _(notification_type.description) %>
