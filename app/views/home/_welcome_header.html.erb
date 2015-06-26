@@ -12,25 +12,13 @@
 <% end %>
 
 <div class="row">
-  <% if current_user.setup.include? :import %>
-    <div class="col-md-4 getting-started-panel">
+  <% if current_user.setup.is_a?(Array) && current_user.setup.any? %>
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :import %>">
       <div class="getting_started_number">1</div>
-      <a href="#" class="welcome-panel-completed"><i class="fa fa-check"></i>︎</a>
+      <i class="fa fa-check welcome-panel-completed"></i>
       <div class="panel panel-default">
         <div class="panel-body">
           <table class="imports-table">
-            <% [['TntMPD', 'Tnt'], [_('.CSV File'), 'CSV']].each do |source| %>
-              <tr>
-                <td class="identify">
-                  <h3><%= source[0] %></h3>
-                </td>
-                <td class="connections" data-behavior="account">
-                  <%= link_to(_('Import %{source} Contacts') % {source: source[1]},
-                              new_account_path(provider: source[1].downcase + '_import'),
-                              class: 'btn btn-xs btn-secondary', remote: true, behavior: 'show_import') %>
-                </td>
-              </tr>
-            <% end %>
             <tr>
               <td class="identify">
                 <h3>Google</h3>
@@ -52,6 +40,18 @@
                 <%= auth_link('google') %>
               </td>
             </tr>
+            <% [['TntMPD', 'Tnt'], [_('.CSV File'), 'CSV']].each do |source| %>
+              <tr>
+                <td class="identify">
+                  <h3><%= source[0] %></h3>
+                </td>
+                <td class="connections" data-behavior="account">
+                  <%= link_to(_('Import %{source} Contacts') % {source: source[1]},
+                              new_account_path(provider: source[1].downcase + '_import'),
+                              class: 'btn btn-xs btn-secondary', remote: true, behavior: 'show_import') %>
+                </td>
+              </tr>
+            <% end %>
           </table>
           <p class="note">
             <%= _("Run more imports by clicking the gear in the top "+
@@ -61,11 +61,9 @@
       </div>
       <h2><%= _('Import Contacts') %></h2>
     </div>
-  <% end %>
-  <% if current_user.setup.include? :goal %>
-    <div class="col-md-4 getting-started-panel">
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :goal %>">
       <div class="getting_started_number">2</div>
-      <a href="#" class="welcome-panel-completed"><i class="fa fa-check"></i>︎</a>
+      <i class="fa fa-check welcome-panel-completed"></i>
       <div class="panel panel-default">
         <div class="panel-body">
           <% preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list) %>
@@ -88,13 +86,11 @@
           </p>
         </div>
       </div>
-      <h2><%= _('Setup Your Support Goal And Notifications') %></h2>
+      <h2><%= _('Setup Your Support Goal And&nbsp;Notifications') %></h2>
     </div>
-  <% end %>
-  <% if current_user.setup.include? :contacts %>
-    <div class="col-md-4 getting-started-panel">
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :contacts %>">
       <div class="getting_started_number">3</div>
-      <a href="#" class="welcome-panel-completed"><i class="fa fa-check"></i>︎</a>
+      <i class="fa fa-check welcome-panel-completed"></i>
       <div class="panel panel-default">
         <div class="panel-body" ng-controller="smallNamestorm as namestorm">
           <form ng-submit="namestorm.addContact()">
@@ -129,9 +125,8 @@
       </div>
       <h2><%= _('Add A Contact') %></h2>
     </div>
-  <% end %>
-  <% if current_user.setup.count < 2 %>
-    <div class="col-md-<%= 12 - (current_user.setup.count*4) %> donations_summary_panel">
+  <% else %>
+    <div class="col-md-12 donations_summary_panel">
       <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
         <div id="donations_summary_chart"></div>
         <%= render 'donations_summary_chart' %>
