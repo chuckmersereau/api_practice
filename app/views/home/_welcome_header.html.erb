@@ -57,7 +57,7 @@
           </table>
           <p class="note">
             <%= _("Run more imports by clicking the gear in the top "+
-                  "right, and selecting 'Networks&nbsp&&nbspImports'") %>
+                  "right, and selecting 'Networks&nbsp;&&nbsp;Imports'") %>
           </p>
         </div>
       </div>
@@ -79,6 +79,7 @@
                 <%= f.submit _('Save'), class: 'btn btn-primary' %>
               </span>
             </div>
+            <p><%= _("You can change this in the future if you aren't sure.") %></p>
           <% end %>
           <hr>
           <%= link_to(_('Setup Notifications'), notifications_preferences_path,
@@ -123,7 +124,7 @@
             </div>
           </form>
           <p class="note">
-            <%= _("Add more later by clicking 'Quick&nbspAdd' > 'Add&nbspContact' in the top right") %>
+            <%= _("Add more later by clicking 'Quick&nbsp;Add' > 'Add&nbsp;Contact' in the top right") %>
           </p>
         </div>
       </div>
