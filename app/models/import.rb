@@ -61,6 +61,7 @@ class Import < ActiveRecord::Base
 
       account_list.merge_contacts # clean up data
       account_list.queue_sync_with_google_contacts
+      account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
       true
     rescue UnsurprisingImportError
       # Only send a failure email, don't re-raise the error, as it was not considered a surprising error by the

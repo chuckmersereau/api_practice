@@ -74,10 +74,12 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def queue_unsubscribe_contact(contact)
-    contact.people.each do |person|
-      person.email_addresses.each do |email_address|
-        async(:call_mailchimp, :unsubscribe_email, email_address.email)
-      end
+    contact.people.each(&method(:queue_unsubscribe_person))
+  end
+
+  def queue_unsubscribe_person(person)
+    person.email_addresses.each do |email_address|
+      async(:call_mailchimp, :unsubscribe_email, email_address.email)
     end
   end
 
@@ -155,7 +157,7 @@ class MailChimpAccount < ActiveRecord::Base
 
     return unless person.primary_email_address
     vars = { EMAIL: person.primary_email_address.email, FNAME: person.first_name,
-             LNAME: person.last_name }
+             LNAME: person.last_name, GREETING: person.contact ? person.contact.greeting : '' }
     begin
       gb.list_subscribe(id: primary_list_id, email_address: vars[:EMAIL], update_existing: true,
                         double_optin: false, merge_vars: vars, send_welcome: false, replace_interests: true)
@@ -333,6 +335,10 @@ class MailChimpAccount < ActiveRecord::Base
 
     emails.each do |email_to_clean|
       email_to_clean.update(historic: true, primary: false)
+
+      # ensure other email is subscribed
+      queue_subscribe_person(email_to_clean.person) if email_to_clean.person
+
       SubscriberCleanedMailer.delay.subscriber_cleaned(account_list, email_to_clean)
     end
   end
