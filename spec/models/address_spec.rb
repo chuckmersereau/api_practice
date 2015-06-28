@@ -15,7 +15,7 @@ describe Address do
       address = build(:address)
       master_address = create(:master_address, street: '12958 fawns dell pl', city: 'fishers', state: 'in', country: 'united states', postal_code: '46038-1026')
       address.send(:find_master_address)
-      address.master_address == master_address
+      address.master_address eq(master_address)
     end
   end
 

@@ -12,12 +12,12 @@ describe Person::LinkedinAccount do
       expect do
         @account = Person::LinkedinAccount.find_or_create_from_auth(auth_hash, person)
       end.to change(Person::LinkedinAccount, :count).from(0).to(1)
-      person.linkedin_accounts.should include(@account)
+      expect(person.linkedin_accounts).to include(@account)
     end
   end
   it 'should return name for to_s' do
     account = Person::LinkedinAccount.new(first_name: 'John', last_name: 'Doe')
-    account.to_s.should == 'John Doe'
+    expect(account.to_s).to eq('John Doe')
   end
 
   it 'adds http:// to url if necessary' do

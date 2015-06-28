@@ -39,7 +39,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
       within('#complete_task_followup_modal') do
         click_on('Save')
       end
-      page.should have_css('#complete_task_followup_modal', visible: false)
+      expect(page).to have_css('#complete_task_followup_modal', visible: false)
       sleep(2)
     end.to change(contact.tasks, :count).by(1)
     expect(contact.tasks.where(activity_type: 'Call').last.tag_list.first).to include 'test'

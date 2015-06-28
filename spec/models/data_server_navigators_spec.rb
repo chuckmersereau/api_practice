@@ -22,7 +22,7 @@ describe DataServerNavigators do
       stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"#{@org_account.username}\",\"3/14/2014\",\"123.45\",\"Test Account\"\n")
       @designation_account = create(:designation_account, organization: @org, designation_number: @org_account.username)
       @data_server.import_profile_balance(profile)
-      @designation_account.reload.balance.should == 123.45
+      expect(@designation_account.reload.balance).to eq(123.45)
     end
   end
 end

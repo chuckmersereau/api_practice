@@ -15,7 +15,7 @@ describe Person::OrganizationAccountsController do
   # it "assigns all person_organization_accounts as @person_organization_accounts" do
   # organization_account = Person::OrganizationAccount.create! valid_attributes
   # get :index, {}
-  # assigns(:person_organization_accounts).should eq([organization_account])
+  # expect(assigns(:person_organization_accounts)).to eq([organization_account])
   # end
   # end
 
@@ -23,7 +23,7 @@ describe Person::OrganizationAccountsController do
   # it "assigns the requested organization_account as @organization_account" do
   # organization_account = Person::OrganizationAccount.create! valid_attributes
   # get :show, {:id => organization_account.to_param}
-  # assigns(:organization_account).should eq(organization_account)
+  # expect(assigns(:organization_account)).to eq(organization_account)
   # end
   # end
 
@@ -31,8 +31,8 @@ describe Person::OrganizationAccountsController do
     it 'assigns a new organization_account as @organization_account' do
       org = FactoryGirl.create(:fake_org)
       xhr :get, :new, id: org.id
-      assigns(:organization_account).should be_a_new(Person::OrganizationAccount)
-      assigns(:organization).should == org
+      expect(assigns(:organization_account)).to be_a_new(Person::OrganizationAccount)
+      expect(assigns(:organization)).to eq(org)
     end
   end
 
@@ -40,7 +40,7 @@ describe Person::OrganizationAccountsController do
   # it "assigns the requested organization_account as @organization_account" do
   # organization_account = Person::OrganizationAccount.create! valid_attributes
   # get :edit, {:id => organization_account.to_param}
-  # assigns(:organization_account).should eq(organization_account)
+  # expect(assigns(:organization_account)).to eq(organization_account)
   # end
   # end
 
@@ -57,13 +57,13 @@ describe Person::OrganizationAccountsController do
 
       it 'assigns a newly created organization_account as @organization_account' do
         xhr :post, :create,  person_organization_account: valid_attributes
-        assigns(:organization_account).should be_a(Person::OrganizationAccount)
-        assigns(:organization_account).should be_persisted
+        expect(assigns(:organization_account)).to be_a(Person::OrganizationAccount)
+        expect(assigns(:organization_account)).to be_persisted
       end
 
       it 'redirects to the created organization_account' do
         xhr :post, :create,  person_organization_account: valid_attributes
-        response.should render_template('create')
+        expect(response).to render_template('create')
       end
     end
 
@@ -72,8 +72,8 @@ describe Person::OrganizationAccountsController do
         # Trigger the behavior that occurs when invalid params are submitted
         Person::OrganizationAccount.any_instance.stub(:save).and_return(false)
         xhr :post, :create,  person_organization_account: { username: '' }
-        assigns(:organization_account).should be_a_new(Person::OrganizationAccount)
-        response.should render_template('new')
+        expect(assigns(:organization_account)).to be_a_new(Person::OrganizationAccount)
+        expect(response).to render_template('new')
       end
     end
   end
@@ -93,13 +93,13 @@ describe Person::OrganizationAccountsController do
   # it "assigns the requested organization_account as @organization_account" do
   # organization_account = Person::OrganizationAccount.create! valid_attributes
   # put :update, {:id => organization_account.to_param, :organization_account => valid_attributes}
-  # assigns(:organization_account).should eq(organization_account)
+  # expect(assigns(:organization_account)).to eq(organization_account)
   # end
 
   # it "redirects to the organization_account" do
   # organization_account = Person::OrganizationAccount.create! valid_attributes
   # put :update, {:id => organization_account.to_param, :organization_account => valid_attributes}
-  # response.should redirect_to(organization_account)
+  # expect(response).to redirect_to(organization_account)
   # end
   # end
 
@@ -109,7 +109,7 @@ describe Person::OrganizationAccountsController do
   ## Trigger the behavior that occurs when invalid params are submitted
   # Person::OrganizationAccount.any_instance.stub(:save).and_return(false)
   # put :update, {:id => organization_account.to_param, :organization_account => {}}
-  # assigns(:organization_account).should eq(organization_account)
+  # expect(assigns(:organization_account)).to eq(organization_account)
   # end
 
   # it "re-renders the 'edit' template" do
@@ -117,7 +117,7 @@ describe Person::OrganizationAccountsController do
   ## Trigger the behavior that occurs when invalid params are submitted
   # Person::OrganizationAccount.any_instance.stub(:save).and_return(false)
   # put :update, {:id => organization_account.to_param, :organization_account => {}}
-  # response.should render_template("edit")
+  # expect(response).to render_template("edit")
   # end
   # end
   # end
@@ -133,7 +133,7 @@ describe Person::OrganizationAccountsController do
   # it "redirects to the person_organization_accounts list" do
   # organization_account = Person::OrganizationAccount.create! valid_attributes
   # delete :destroy, {:id => organization_account.to_param}
-  # response.should redirect_to(person_organization_accounts_url)
+  # expect(response).to redirect_to(person_organization_accounts_url)
   # end
   # end
 end

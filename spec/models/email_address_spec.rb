@@ -8,7 +8,7 @@ describe EmailAddress do
     it "should create an email address if it's new" do
       expect do
         EmailAddress.add_for_person(person,  email: address)
-        person.email_addresses.first.email.should == address
+        expect(person.email_addresses.first.email).to eq(address)
       end.to change(EmailAddress, :count).from(0).to(1)
     end
 
@@ -16,7 +16,7 @@ describe EmailAddress do
       EmailAddress.add_for_person(person,  email: address)
       expect do
         EmailAddress.add_for_person(person,  email: address)
-        person.email_addresses.first.email.should == address
+        expect(person.email_addresses.first.email).to eq(address)
       end.to_not change(EmailAddress, :count)
     end
 
@@ -29,19 +29,19 @@ describe EmailAddress do
 
     it 'sets only the first email to primary' do
       EmailAddress.add_for_person(person,  email: address)
-      person.email_addresses.first.primary?.should == true
+      expect(person.email_addresses.first.primary?).to eq(true)
       EmailAddress.add_for_person(person,  email: 'foo' + address)
-      person.email_addresses.last.primary?.should == false
+      expect(person.email_addresses.last.primary?).to eq(false)
     end
 
     it 'sets a prior email to not-primary if the new one is primary' do
       email1 = EmailAddress.add_for_person(person,  email: address)
-      email1.primary?.should == true
+      expect(email1.primary?).to eq(true)
 
       email2 = EmailAddress.add_for_person(person,  email: 'foo' + address, primary: true)
-      email2.primary?.should == true
+      expect(email2.primary?).to eq(true)
       email2.send(:ensure_only_one_primary)
-      email1.reload.primary?.should == false
+      expect(email1.reload.primary?).to eq(false)
     end
 
     it 'gracefully handles duplicate emails on an unsaved person' do
@@ -51,8 +51,8 @@ describe EmailAddress do
       person.email_address = { email: email }
       EmailAddress.add_for_person(person,  email: email)
       person.save
-      person.email_addresses.first.email.should == email
-      person.email_addresses.length.should == 1
+      expect(person.email_addresses.first.email).to eq(email)
+      expect(person.email_addresses.length).to eq(1)
     end
 
     context '#clean_and_split_emails' do

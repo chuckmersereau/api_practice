@@ -63,7 +63,7 @@ describe Siebel do
 
       siebel.import_profile_balance(designation_profile)
 
-      designation_profile.balance.should == 3
+      expect(designation_profile.balance).to eq(3)
     end
 
     it 'updates the balance of a designation account on that profile' do
@@ -74,7 +74,7 @@ describe Siebel do
 
       siebel.import_profile_balance(designation_profile)
 
-      da1.balance.should == 1
+      expect(da1.balance).to eq(1)
     end
 
     it 'sets inactive designation accounts to a zero balance thus excluding their amount from the profile total' do
@@ -158,7 +158,7 @@ describe Siebel do
         siebel.send(:import_donations, designation_profile)
       end.to change { da1.donations.count }.by(-1)
 
-      Donation.exists?(donation.id).should be true
+      expect(Donation.exists?(donation.id)).to be true
     end
   end
 
@@ -178,7 +178,7 @@ describe Siebel do
                     name: 'foo')
       end.not_to change { DesignationAccount.count }
 
-      da1.reload.name.should == 'foo'
+      expect(da1.reload.name).to eq('foo')
     end
   end
 
@@ -271,7 +271,7 @@ describe Siebel do
         siebel.send(:add_or_update_donor_account, account_list, siebel_donor, designation_profile)
       end.not_to change { DonorAccount.count }
 
-      donor_account.reload.name.should == siebel_donor.account_name
+      expect(donor_account.reload.name).to eq(siebel_donor.account_name)
     end
 
     it "doesn't create a new contact if one already exists with this account number" do
@@ -297,7 +297,7 @@ describe Siebel do
         siebel.send(:add_or_update_donor_account, account_list, siebel_donor, designation_profile, Time.zone.now)
       end.not_to change { Person.count }
 
-      donor_account.reload.name.should == siebel_donor.account_name
+      expect(donor_account.reload.name).to eq(siebel_donor.account_name)
     end
   end
 
@@ -359,21 +359,21 @@ describe Siebel do
         siebel.send(:add_or_update_person, siebel_person, donor_account, contact)
       end.not_to change { MasterPersonSource.count }
 
-      mps.reload.remote_id.should == siebel_person.id
+      expect(mps.reload.remote_id).to eq(siebel_person.id)
     end
 
     it 'maps sex=M to gender=male' do
       siebel_person = SiebelDonations::Contact.new(Oj.load('{"id":"1-3GJ-2744","primary":true,"firstName":"Jean","preferredName":"Jean","lastName":"Spansel","title":"Mrs","sex":"M"}'))
 
       p = siebel.send(:add_or_update_person, siebel_person, donor_account, contact).first
-      p.gender.should == 'male'
+      expect(p.gender).to eq('male')
     end
 
     it 'maps sex=Undetermined to gender=nil' do
       siebel_person = SiebelDonations::Contact.new(Oj.load('{"id":"1-3GJ-2744","primary":true,"firstName":"Jean","preferredName":"Jean","lastName":"Spansel","title":"Mrs","sex":"Undetermined"}'))
 
       p = siebel.send(:add_or_update_person, siebel_person, donor_account, contact).first
-      p.gender.should be_nil
+      expect(p.gender).to be_nil
     end
   end
 
@@ -399,7 +399,7 @@ describe Siebel do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
       end.not_to change { Address.count }
 
-      address.reload.postal_code.should == siebel_address.zip
+      expect(address.reload.postal_code).to eq(siebel_address.zip)
     end
 
     it 'raises an error if the address is invalid' do
@@ -572,7 +572,7 @@ describe Siebel do
         siebel.send(:add_or_update_phone_number, siebel_phone_number, person)
       end.not_to change { PhoneNumber.count }
 
-      pn.reload.number.should == GlobalPhone.normalize(siebel_phone_number.phone)
+      expect(pn.reload.number).to eq(GlobalPhone.normalize(siebel_phone_number.phone))
     end
   end
 
@@ -592,7 +592,7 @@ describe Siebel do
         siebel.send(:add_or_update_email_address, siebel_email, person)
       end.not_to change { EmailAddress.count }
 
-      email.reload.email.should == siebel_email.email
+      expect(email.reload.email).to eq(siebel_email.email)
     end
   end
 
@@ -612,14 +612,14 @@ describe Siebel do
         siebel.send(:add_or_update_company, account_list, siebel_donor, donor_account)
       end.not_to change { Company.count }
 
-      company.reload.name.should == siebel_donor.account_name
+      expect(company.reload.name).to eq(siebel_donor.account_name)
     end
   end
 
   context '#profiles_with_designation_numbers' do
     it 'returns a hash of attributes' do
       siebel.should_receive(:profiles).and_return([SiebelDonations::Profile.new('id' => '', 'name' => 'Profile 1', 'designations' => [{ 'number' => '1234' }])])
-      siebel.profiles_with_designation_numbers.should == [{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }]
+      expect(siebel.profiles_with_designation_numbers).to eq([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
     end
   end
 end

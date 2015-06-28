@@ -7,12 +7,12 @@ describe ContactExhibit do
   it 'returns referrers as a list of links' do
     context.stub(:link_to).and_return('foo')
     exhib.stub(:referrals_to_me).and_return(%w(foo foo))
-    exhib.referrer_links.should == 'foo, foo'
+    expect(exhib.referrer_links).to eq('foo, foo')
   end
 
   it 'should figure out location based on address' do
     exhib.stub(:address).and_return(OpenStruct.new(city: 'Rome', state: 'Empire', country: 'Gross'))
-    exhib.location.should == 'Rome, Empire, Gross'
+    expect(exhib.location).to eq('Rome, Empire, Gross')
   end
 
   it 'should show contact_info' do
@@ -25,23 +25,23 @@ describe ContactExhibit do
     email = build(:email_address, person: person)
     phone_number = build(:phone_number, person: person)
     context.stub(:link_to).and_return("#{phone_number.number}<br />#{email.email}")
-    exhib.contact_info.should == "#{phone_number.number}<br />#{email.email}"
+    expect(exhib.contact_info).to eq("#{phone_number.number}<br />#{email.email}")
   end
 
   it 'should not have a newsletter error' do
     contact.send_newsletter = _('Physical')
     address = create(:address, addressable: contact)
     contact.addresses << address
-    contact.mailing_address.should eq address
+    expect(contact.mailing_address).to eq address
     exhib.send_newsletter_error.should.nil?
   end
 
   it 'should have a newsletter error' do
     contact.send_newsletter = _('Physical')
-    contact.mailing_address.equal_to?(Address.new).should be true
-    exhib.send_newsletter_error.should be_present
+    expect(contact.mailing_address.equal_to?(Address.new)).to be true
+    expect(exhib.send_newsletter_error).to be_present
     contact.send_newsletter = _('Both')
-    exhib.send_newsletter_error.should == 'No mailing address or email addess on file'
+    expect(exhib.send_newsletter_error).to eq('No mailing address or email addess on file')
   end
 
   context '#avatar' do
@@ -66,10 +66,10 @@ describe ContactExhibit do
 
   # it "should show return the default avatar filename" do
   # contact.gender = 'female'
-  # exhib.avatar.should == 'avatar_f.png'
+  # expect(exhib.avatar).to eq('avatar_f.png')
   # contact.gender = 'male'
-  # exhib.avatar.should == 'avatar.png'
+  # expect(exhib.avatar).to eq('avatar.png')
   # contact.gender = nil
-  # exhib.avatar.should == 'avatar.png'
+  # expect(exhib.avatar).to eq('avatar.png')
   # end
 end

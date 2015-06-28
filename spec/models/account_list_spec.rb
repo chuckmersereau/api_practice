@@ -37,24 +37,24 @@ describe AccountList do
     it 'returns true if there is a mailchimp associated with this account list that has a valid primary list' do
       mail_chimp_account = double(active?: true, primary_list: { id: 'foo', name: 'bar' })
       account_list.should_receive(:mail_chimp_account).twice.and_return(mail_chimp_account)
-      account_list.valid_mail_chimp_account.should == true
+      expect(account_list.valid_mail_chimp_account).to eq(true)
     end
 
     it 'returns a non-true value when primary list is not present' do
       mail_chimp_account = double(active?: true, primary_list: nil)
       account_list.should_receive(:mail_chimp_account).twice.and_return(mail_chimp_account)
-      account_list.valid_mail_chimp_account.should_not == true
+      expect(account_list.valid_mail_chimp_account).not_to eq(true)
     end
 
     it 'returns a non-true value when mail_chimp_account is not active' do
       mail_chimp_account = double(active?: false, primary_list: nil)
       account_list.should_receive(:mail_chimp_account).once.and_return(mail_chimp_account)
-      account_list.valid_mail_chimp_account.should_not == true
+      expect(account_list.valid_mail_chimp_account).not_to eq(true)
     end
 
     it 'returns a non-true value when there is no mail_chimp_account' do
       account_list.should_receive(:mail_chimp_account).once.and_return(nil)
-      account_list.valid_mail_chimp_account.should_not == true
+      expect(account_list.valid_mail_chimp_account).not_to eq(true)
     end
   end
 
@@ -66,7 +66,7 @@ describe AccountList do
         account_list.contacts << create(:contact, total_donations: i)
       end
 
-      account_list.top_partners.should == account_list.contacts.order(:id)[1..-1].reverse
+      expect(account_list.top_partners).to eq(account_list.contacts.order(:id)[1..-1].reverse)
     end
   end
 
@@ -81,11 +81,11 @@ describe AccountList do
     end
 
     it 'handles a date range where the start and end day are in the same month' do
-      account_list.people_with_birthdays(Date.new(2012, 8, 29), Date.new(2012, 8, 31)).should == [person]
+      expect(account_list.people_with_birthdays(Date.new(2012, 8, 29), Date.new(2012, 8, 31))).to eq([person])
     end
 
     it 'handles a date range where the start and end day are in different months' do
-      account_list.people_with_birthdays(Date.new(2012, 8, 29), Date.new(2012, 9, 1)).should == [person]
+      expect(account_list.people_with_birthdays(Date.new(2012, 8, 29), Date.new(2012, 9, 1))).to eq([person])
     end
   end
 
@@ -100,11 +100,11 @@ describe AccountList do
     end
 
     it 'handles a date range where the start and end day are in the same month' do
-      account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 8, 31)).should == [person]
+      expect(account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 8, 31))).to eq([person])
     end
 
     it 'handles a date range where the start and end day are in different months' do
-      account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1)).should == [person]
+      expect(account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1))).to eq([person])
     end
   end
 

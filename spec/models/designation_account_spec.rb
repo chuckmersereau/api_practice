@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe DesignationAccount do
   it 'should return designation_number for to_s' do
-    DesignationAccount.new(designation_number: 'foo').to_s.should == 'foo'
+    expect(DesignationAccount.new(designation_number: 'foo').to_s).to eq('foo')
   end
 
   it "should return a user's first account list" do
@@ -10,6 +10,6 @@ describe DesignationAccount do
     user = double('user', account_lists: [account_list])
     da = DesignationAccount.new
     da.stub(:account_lists).and_return([account_list])
-    da.account_list(user).should == account_list
+    expect(da.account_list(user)).to eq(account_list)
   end
 end

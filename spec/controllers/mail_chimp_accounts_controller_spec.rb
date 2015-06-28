@@ -32,7 +32,7 @@ describe MailChimpAccountsController do
 
       get :index
 
-      response.should redirect_to(new_mail_chimp_account_path)
+      expect(response).to redirect_to(new_mail_chimp_account_path)
     end
 
     it "should redirect to the 'edit' page if there is no primary list" do
@@ -43,7 +43,7 @@ describe MailChimpAccountsController do
 
       get :index
 
-      response.should redirect_to(edit_mail_chimp_account_path(chimp))
+      expect(response).to redirect_to(edit_mail_chimp_account_path(chimp))
     end
   end
 

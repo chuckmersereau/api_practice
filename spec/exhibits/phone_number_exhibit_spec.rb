@@ -6,12 +6,12 @@ describe PhoneNumberExhibit do
 
   it 'returns a formatted number' do
     context.stub(:number_to_phone).and_return('(123) 456-7890')
-    subject.number.should == '(123) 456-7890'
+    expect(subject.number).to eq('(123) 456-7890')
   end
 
   it "should return nil number if it's not a valid phone number" do
     phone_number.number = '555'
     phone_number.country_code = '2'
-    subject.number.should.nil?
+    expect(subject.number).to be_nil
   end
 end

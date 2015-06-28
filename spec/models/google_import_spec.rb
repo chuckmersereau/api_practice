@@ -69,7 +69,7 @@ describe GoogleImport do
 
       @import.update_column(:tags, 'hi, mom')
       @google_import.import
-      Contact.last.tag_list.sort.should == %w(hi mom)
+      expect(Contact.last.tag_list.sort).to eq(%w(hi mom))
     end
   end
 
@@ -87,7 +87,7 @@ describe GoogleImport do
       @contact.people << person
       expect do
         @google_import.send(:create_or_update_person, @google_contact)
-        person.reload.first_name.should == 'John'
+        expect(person.reload.first_name).to eq('John')
       end.to_not change(Person, :count)
     end
 
@@ -411,7 +411,7 @@ describe GoogleImport do
         @google_import.import
       end.to change(Contact, :count).by(1)
 
-      Contact.last.tag_list.sort.should == %w(hi mom more tags)
+      expect(Contact.last.tag_list.sort).to eq(%w(hi mom more tags))
     end
 
     it 'handles the case when the Google auth token cannot be refreshed' do

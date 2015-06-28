@@ -12,7 +12,7 @@ describe Person::GmailAccount do
   context '#client' do
     it 'initializes a gmail client' do
       client = gmail_account.client
-      client.authorization.access_token.should == google_account.token
+      expect(client.authorization.access_token).to eq(google_account.token)
     end
   end
 
@@ -89,10 +89,10 @@ describe Person::GmailAccount do
       end.to change(ActivityComment, :count).by(1)
 
       task = Task.last
-      task.subject.should == 'subject'
-      task.completed.should == true
-      task.completed_at.to_s(:db).should == gmail_message.envelope.date.to_s(:db)
-      task.result.should == 'Done'
+      expect(task.subject).to eq('subject')
+      expect(task.completed).to eq(true)
+      expect(task.completed_at.to_s(:db)).to eq(gmail_message.envelope.date.to_s(:db))
+      expect(task.result).to eq('Done')
     end
 
     it "creates a task even if the email doesn't have a subject" do
@@ -124,7 +124,7 @@ describe Person::GmailAccount do
       end.to change(GoogleEmail, :count).by(1)
 
       task = GoogleEmail.last
-      task.google_email_id.should == gmail_message.msg_id
+      expect(task.google_email_id).to eq(gmail_message.msg_id)
     end
 
     it "doesn't create a duplicate google_email" do

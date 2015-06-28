@@ -9,7 +9,7 @@ describe Import do
   it "should set 'importing' to false after an import" do
     import = create(:tnt_import, importing: true)
     import.send(:import)
-    import.importing.should == false
+    expect(import.importing).to eq(false)
   end
 
   it 'should send an success email when importing completes then merge contacts and queue google sync' do

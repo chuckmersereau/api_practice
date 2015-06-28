@@ -60,7 +60,7 @@ describe Person::FacebookAccount do
     it 'should add tags from the import' do
       @import.update_column(:tags, 'hi, mom')
       @facebook_import.send(:import_contacts)
-      Contact.last.tag_list.sort.should == %w(hi mom)
+      expect(Contact.last.tag_list.sort).to eq(%w(hi mom))
     end
   end
 
@@ -77,7 +77,7 @@ describe Person::FacebookAccount do
       contact.people << person
       expect do
         @facebook_import.send(:create_or_update_person, @friend, @account_list)
-        person.reload.first_name.should == 'John'
+        expect(person.reload.first_name).to eq('John')
       end.to_not change(Person, :count)
     end
 

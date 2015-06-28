@@ -5,8 +5,8 @@ describe MailChimpAccount do
   let(:account_list) { create(:account_list) }
 
   it 'validates the format of an api key' do
-    MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}').should_not be_valid
-    MailChimpAccount.new(account_list_id: 1, api_key: 'jk234lkwjntlkj3n5lk3j3kj-us4').should be_valid
+    expect(MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
+    expect(MailChimpAccount.new(account_list_id: 1, api_key: 'jk234lkwjntlkj3n5lk3j3kj-us4')).to be_valid
   end
 
   before(:each) do
@@ -34,18 +34,18 @@ describe MailChimpAccount do
   end
 
   it 'returns an array of lists' do
-    account.lists.length.should == 2
+    expect(account.lists.length).to eq(2)
   end
 
   it 'finds a list by list_id' do
     account.stub(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
-    account.list(1).name.should == 'foo'
+    expect(account.list(1).name).to eq('foo')
   end
 
   it 'finds the primary list' do
     account.stub(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
     account.primary_list_id = 1
-    account.primary_list.name.should == 'foo'
+    expect(account.primary_list.name).to eq('foo')
   end
 
   it 'deactivates the account if the api key is invalid' do
@@ -54,14 +54,14 @@ describe MailChimpAccount do
       .to_return(body: '{"error":"Invalid Mailchimp API Key: fake-us4","code":104}')
     account.active = true
     account.validate_key
-    account.active.should be false
-    account.validation_error.should =~ /Invalid Mailchimp API Key: fake-us4/
+    expect(account.active).to be false
+    expect(account.validation_error).to match(/Invalid Mailchimp API Key: fake-us4/)
   end
 
   it 'activates the account if the api key is valid' do
     account.active = false
     account.validate_key
-    account.active.should == true
+    expect(account.active).to eq(true)
   end
 
   describe 'queueing methods' do
@@ -159,7 +159,7 @@ describe MailChimpAccount do
         account.primary_list_id = 5
         account.save
         account.send(:subscribe_person, person.id)
-        account.primary_list_id.should be_nil
+        expect(account.primary_list_id).to be_nil
       end
     end
 

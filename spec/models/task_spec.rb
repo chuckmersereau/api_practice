@@ -8,18 +8,18 @@ describe Task do
     contact = create(:contact, account_list: account_list)
     contact.tasks << task1
     contact.tasks << task2
-    contact.reload.uncompleted_tasks_count.should == 2
+    expect(contact.reload.uncompleted_tasks_count).to eq(2)
 
     task1.reload.update_attributes(completed: true)
 
-    contact.reload.uncompleted_tasks_count.should == 1
+    expect(contact.reload.uncompleted_tasks_count).to eq(1)
 
     task1.update_attributes(completed: false)
 
-    contact.reload.uncompleted_tasks_count.should == 2
+    expect(contact.reload.uncompleted_tasks_count).to eq(2)
 
     task2.destroy
-    contact.reload.uncompleted_tasks_count.should == 1
+    expect(contact.reload.uncompleted_tasks_count).to eq(1)
   end
 
   context 'google calendar integration' do

@@ -15,21 +15,21 @@ describe TasksController do
     it 'assigns all tasks as @tasks' do
       task = @account_list.tasks.create! valid_attributes
       get :index, {}
-      assigns(:overdue).should eq([task])
+      expect(assigns(:overdue)).to eq([task])
     end
 
     it 'filters by tag' do
       task1 = @account_list.tasks.create! valid_attributes.merge(tag_list: 'foo')
       @account_list.tasks.create! valid_attributes.merge(tag_list: 'bar')
       get :index, filters: { tags: 'foo' }
-      assigns(:overdue).should eq([task1])
+      expect(assigns(:overdue)).to eq([task1])
     end
   end
 
   describe 'GET new' do
     it 'assigns a new task as @task' do
       get :new, {}
-      assigns(:task).should be_a_new(Task)
+      expect(assigns(:task)).to be_a_new(Task)
     end
   end
 
@@ -37,7 +37,7 @@ describe TasksController do
     it 'assigns the requested task as @task' do
       task = @account_list.tasks.create! valid_attributes
       get :edit,  id: task.to_param
-      assigns(:task).should eq(task)
+      expect(assigns(:task)).to eq(task)
     end
   end
 
@@ -51,13 +51,13 @@ describe TasksController do
 
       it 'assigns a newly created task as @task' do
         post :create,  task: valid_attributes
-        assigns(:task).should be_a(Task)
-        assigns(:task).should be_persisted
+        expect(assigns(:task)).to be_a(Task)
+        expect(assigns(:task)).to be_persisted
       end
 
       it 'redirects to the created task' do
         post :create,  task: valid_attributes
-        response.should redirect_to(tasks_path)
+        expect(response).to redirect_to(tasks_path)
       end
     end
 
@@ -66,8 +66,8 @@ describe TasksController do
         # Trigger the behavior that occurs when invalid params are submitted
         Task.any_instance.stub(:save).and_return(false)
         post :create,  task: { subject: '' }
-        assigns(:task).should be_a_new(Task)
-        response.should render_template('new')
+        expect(assigns(:task)).to be_a_new(Task)
+        expect(response).to render_template('new')
       end
     end
   end
@@ -87,13 +87,13 @@ describe TasksController do
       it 'assigns the requested task as @task' do
         task = @account_list.tasks.create! valid_attributes
         put :update,  id: task.to_param, task: valid_attributes
-        assigns(:task).should eq(task)
+        expect(assigns(:task)).to eq(task)
       end
 
       it 'redirects to the task' do
         task = @account_list.tasks.create! valid_attributes
         put :update,  id: task.to_param, task: valid_attributes
-        response.should redirect_to(tasks_path)
+        expect(response).to redirect_to(tasks_path)
       end
     end
 
@@ -103,8 +103,8 @@ describe TasksController do
         # Trigger the behavior that occurs when invalid params are submitted
         Task.any_instance.stub(:save).and_return(false)
         put :update,  id: task.to_param, task: { 'subject' => '' }
-        assigns(:task).should eq(task)
-        response.should render_template('edit')
+        expect(assigns(:task)).to eq(task)
+        expect(response).to render_template('edit')
       end
     end
   end
@@ -122,7 +122,7 @@ describe TasksController do
       task = @account_list.tasks.create! valid_attributes
       request.env['HTTP_REFERER'] = tasks_url
       delete :destroy,  id: task.to_param
-      response.should redirect_to(request.env['HTTP_REFERER'])
+      expect(response).to redirect_to(request.env['HTTP_REFERER'])
     end
   end
 end

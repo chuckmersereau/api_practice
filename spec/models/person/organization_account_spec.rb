@@ -14,7 +14,7 @@ describe Person::OrganizationAccount do
       org_account.downloading = false
       org_account.last_download = nil
       org_account.send(:import_all_data)
-      org_account.reload.last_download.should be_nil
+      expect(org_account.reload.last_download).to be_nil
     end
 
     context 'when password error' do
@@ -24,7 +24,7 @@ describe Person::OrganizationAccount do
 
         org_account.downloading = false
         org_account.locked_at = nil
-        org_account.new_record?.should be false
+        expect(org_account.new_record?).to be false
       end
       it 'rescues invalid password error' do
         expect do
@@ -33,11 +33,11 @@ describe Person::OrganizationAccount do
       end
       it 'sends email' do
         org_account.import_all_data
-        ActionMailer::Base.deliveries.last.to.first.should == org_account.person.email.email
+        expect(ActionMailer::Base.deliveries.last.to.first).to eq(org_account.person.email.email)
       end
       it 'marks as not valid' do
         org_account.import_all_data
-        org_account.valid_credentials.should be false
+        expect(org_account.valid_credentials).to be false
       end
     end
   end
@@ -65,7 +65,7 @@ describe Person::OrganizationAccount do
 
   context '#to_s' do
     it 'makes a pretty string' do
-      org_account.to_s.should == 'MyString: foo'
+      expect(org_account.to_s).to eq('MyString: foo')
     end
   end
 end

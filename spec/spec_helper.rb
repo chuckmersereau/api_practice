@@ -58,7 +58,6 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
 
-  config.expect_with(:rspec) { |c| c.syntax = [:should, :expect] }
   config.mock_with(:rspec) { |c| c.syntax = [:should, :expect] }
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures

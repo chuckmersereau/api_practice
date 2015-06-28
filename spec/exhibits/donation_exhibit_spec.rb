@@ -6,6 +6,6 @@ describe DonationExhibit do
 
   it 'returns a formatted amount' do
     context.stub(:number_to_current_currency).and_return('$1.23')
-    subject.tendered_amount.should == '$1.23'
+    expect(subject.tendered_amount).to eq('$1.23')
   end
 end

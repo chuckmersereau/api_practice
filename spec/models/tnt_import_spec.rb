@@ -456,7 +456,7 @@ describe TntImport do
     it 'creates a new task' do
       expect do
         tasks = import.send(:import_tasks)
-        tasks.first[1].remote_id.should_not be_nil
+        expect(tasks.first[1].remote_id).not_to be_nil
       end.to change(Task, :count).by(1)
     end
 
@@ -479,7 +479,7 @@ describe TntImport do
 
       import.send(:import_tasks)
 
-      task.activity_comments.first.body.should == 'Notes'
+      expect(task.activity_comments.first.body).to eq('Notes')
     end
   end
 
@@ -487,7 +487,7 @@ describe TntImport do
     it 'creates a new completed task' do
       expect do
         tasks, _contacts_by_tnt_appeal_id = import.send(:import_history)
-        tasks.first[1].remote_id.should_not be_nil
+        expect(tasks.first[1].remote_id).not_to be_nil
       end.to change(Task, :count).by(1)
     end
 

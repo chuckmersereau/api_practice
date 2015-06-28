@@ -53,7 +53,7 @@ describe GoogleIntegration do
       client.should_receive(:execute).with(api_method: calendar_list_api,
                                            parameters: { 'userId' => 'me' })
 
-      google_integration.calendars.should == calendar_data.items
+      expect(google_integration.calendars).to eq(calendar_data.items)
     end
   end
 

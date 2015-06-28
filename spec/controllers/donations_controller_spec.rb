@@ -17,18 +17,18 @@ describe DonationsController do
       contact.donor_accounts << @donor_account
       create(:donation, donor_account: @donor_account, designation_account: @designation_account)
       get :index, contact_id: contact.id
-      assigns(:contact).should == contact
-      assigns(:donations).total_entries.should == 1
+      expect(assigns(:contact)).to eq(contact)
+      expect(assigns(:donations).total_entries).to eq(1)
     end
 
     it 'should not find any donations for a contact without a donor account' do
       get :index, contact_id: contact.id
-      assigns(:donations).total_entries.should == 0
+      expect(assigns(:donations).total_entries).to eq(0)
     end
 
     it 'should set up chart variables if page parameter is not present' do
       get :index, contact_id: contact.id
-      assigns(:by_month).should_not be_nil
+      expect(assigns(:by_month)).not_to be_nil
     end
   end
 end

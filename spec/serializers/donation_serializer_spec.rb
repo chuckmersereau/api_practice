@@ -17,6 +17,6 @@ describe DonationSerializer do
 
   it { should include :amount }
   it { should include :contact_id }
-  it { subject[:contact_id].should be contact.id }
+  it { expect(subject[:contact_id]).to be contact.id }
   it { should include :donation_date }
 end
