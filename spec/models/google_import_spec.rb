@@ -429,6 +429,7 @@ describe GoogleImport do
       stub_g_contacts('spec/fixtures/google_contacts_no_primary.json')
       stub_g_contact_photo
       stub_smarty_and_cloudinary
+      stub_google_geocoder
 
       @import.override = false
       @google_import.import

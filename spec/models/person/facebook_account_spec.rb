@@ -84,6 +84,9 @@ describe Person::FacebookAccount do
 
   context '#token_missing_or_expired?' do
     it 'returns true if the token is expired' do
+      stub_request(:post, 'https://graph.facebook.com/oauth/access_token')
+        .to_return(status: 401, body: '')
+
       account = Person::FacebookAccount.new(token: 'asdf', token_expires_at: 10.days.ago)
 
       expect(account.token_missing_or_expired?).to be true

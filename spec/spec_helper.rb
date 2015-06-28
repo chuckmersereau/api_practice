@@ -44,6 +44,10 @@ RSpec.configure do |config|
     else
       Sidekiq::Testing.fake!
     end
+
+    # Stub the Google geocoder by default (creating an address calls it so it's
+    # needed a lot)
+    stub_google_geocoder
   end
 
   # ## Mock Framework
@@ -151,6 +155,11 @@ def logout_test_user
   $user = nil
   sign_out(:user)
   sign_out(:admin_user)
+end
+
+def stub_google_geocoder
+  stub_request(:get, %r{maps\.googleapis\.com/maps/api.*})
+    .to_return(body: '{}')
 end
 
 class FakeApi

@@ -17,6 +17,10 @@ describe GoogleContactSync do
     )
   end
 
+  before do
+    stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
+  end
+
   describe 'sync_notes' do
     describe 'first sync' do
       it 'sets blank mpdx notes with google contact notes' do
@@ -305,6 +309,8 @@ describe GoogleContactSync do
     it 'combines addresses from mpdx and google by master address comparison which uses SmartyStreets' do
       WebMock.reset!
 
+      stub_google_geocoder
+
       richmond_smarty = '[{"input_index":0,"candidate_index":0,"delivery_line_1":"7229 Forest Ave Ste 208","last_line":"Richmond VA 23226-3765",'\
         '"delivery_point_barcode":"232263765581","components":{"primary_number":"7229","street_name":"Forest","street_suffix":"Ave","secondary_number":"208",'\
         '"secondary_designator":"Ste","city_name":"Richmond","state_abbreviation":"VA","zipcode":"23226","plus4_code":"3765","delivery_point":"58",'\
@@ -372,7 +378,7 @@ describe GoogleContactSync do
           'gd$street' => { '$t' => '7229 Forest Ave Suite 208' }, 'gd$city' => { '$t' => 'Richmond' },
           'gd$region' => { '$t' => 'VA' }, 'gd$postcode' => { '$t' => '23226-3765' },
           'gd$country' => { '$t' => 'United States of America' }
-        },
+      },
         { 'rel' => 'http://schemas.google.com/g/2005#other', 'primary' => 'true',
           'gd$street' => { '$t' => "2421 E. Tudor Rd.\nApt 102" }, 'gd$city' => { '$t' => 'Anchorage' },
           'gd$region' => { '$t' => 'AK' }, 'gd$postcode' => { '$t' => '99507' },

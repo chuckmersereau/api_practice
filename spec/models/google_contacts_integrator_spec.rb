@@ -1046,6 +1046,7 @@ describe GoogleContactsIntegrator do
 
       WebMock.reset!
 
+      stub_google_geocoder
       stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
 
       @updated_g_contact_obj = JSON.parse(g_contact_fixture_json)['feed']['entry'][0]
