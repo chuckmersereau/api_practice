@@ -651,7 +651,7 @@ describe GoogleContactsIntegrator do
       end
 
       expect(times_batch_create_or_update_called).to eq(0)
-      expect { @integrator.sync_contacts }.to raise_error
+      expect { @integrator.sync_contacts }.to raise_error(/500/)
       expect(times_batch_create_or_update_called).to eq(1)
     end
   end

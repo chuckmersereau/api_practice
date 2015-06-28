@@ -90,7 +90,7 @@ describe CsvImport do
 
     it 'errors if there is invalid data and does not save any contacts' do
       expect(import).to receive(:contacts).and_return([build(:contact), build(:contact, name: '')])
-      expect { import.import }.to raise_error
+      expect { import.import }.to raise_error(/Validation failed/)
       expect(Contact.count).to eq(0)
     end
   end

@@ -27,7 +27,7 @@ describe Import do
     expect do
       ImportMailer.should_receive(:failed).and_return(OpenStruct.new)
       import.send(:import)
-    end.to raise_error
+    end.to raise_error('foo')
   end
 
   it 'should send a failure error but not re-raise/notify the error if the error is UnsurprisingImportError' do

@@ -406,7 +406,7 @@ describe Siebel do
       siebel_address = SiebelDonations::Address.new(Oj.load('{"id":"1-IQ5-1006","type":"BAD_TYPE"}'))
       expect do
         siebel.send(:add_or_update_address, siebel_address, contact, source_donor_account)
-      end.to raise_exception
+      end.to raise_error(/Validation failed/)
     end
 
     it "doesn't add a new address when there is a matching deleted address" do
