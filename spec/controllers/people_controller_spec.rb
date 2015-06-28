@@ -84,14 +84,14 @@ describe PeopleController do
     describe 'with invalid params' do
       it 'assigns a newly created but unsaved person as @person' do
         # Trigger the behavior that occurs when invalid params are submitted
-        Person.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person).to receive(:save).and_return(false)
         post :create,  contact_id: @contact.id, person: { first_name: '' }
         expect(assigns(:person)).to be_a_new(Person)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
-        Person.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person).to receive(:save).and_return(false)
         post :create,  contact_id: @contact.id, person: { first_name: '' }
         expect(response).to render_template('new')
       end
@@ -106,7 +106,7 @@ describe PeopleController do
         # specifies that the Person created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Person.any_instance.should_receive(:update_attributes).with('first_name' => 'params')
+        expect_any_instance_of(Person).to receive(:update_attributes).with('first_name' => 'params')
         put :update,  id: person.to_param, person: { 'first_name' => 'params' }
       end
 
@@ -127,7 +127,7 @@ describe PeopleController do
       it 'assigns the person as @person' do
         person = @contact.people.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        Person.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person).to receive(:save).and_return(false)
         put :update,  id: person.to_param, person: { first_name: '' }
         expect(assigns(:person)).to eq(person)
       end
@@ -135,7 +135,7 @@ describe PeopleController do
       it "re-renders the 'edit' template" do
         person = @contact.people.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        Person.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person).to receive(:save).and_return(false)
         put :update,  id: person.to_param, person: { first_name: '' }
         expect(response).to render_template('edit')
       end

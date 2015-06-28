@@ -5,7 +5,7 @@ describe DonationExhibit do
   let(:context) { double }
 
   it 'returns a formatted amount' do
-    context.stub(:number_to_current_currency).and_return('$1.23')
+    allow(context).to receive(:number_to_current_currency).and_return('$1.23')
     expect(subject.tendered_amount).to eq('$1.23')
   end
 end

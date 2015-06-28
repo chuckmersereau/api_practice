@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ApplicationHelper do
   describe 'date helper method' do
     before do
-      helper.stub(:locale).and_return(:en)
+      allow(helper).to receive(:locale).and_return(:en)
     end
     it 'should output the right time zone for activity_comment.created_at' do # activity_comments/_comment.html.erb
       comment = create(:activity_comment)

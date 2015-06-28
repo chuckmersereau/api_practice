@@ -46,7 +46,7 @@ describe Person::OrganizationAccountsController do
 
   describe 'POST create' do
     before(:each) do
-      # @org.stub(:api).and_return(FakeApi.new)
+      # allow(@org).to receive(:api).and_return(FakeApi.new)
     end
     describe 'with valid params' do
       it 'creates a new Person::OrganizationAccount' do
@@ -70,7 +70,7 @@ describe Person::OrganizationAccountsController do
     describe 'with invalid params' do
       it 'assigns a newly created but unsaved organization_account as @organization_account' do
         # Trigger the behavior that occurs when invalid params are submitted
-        Person::OrganizationAccount.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person::OrganizationAccount).to receive(:save).and_return(false)
         xhr :post, :create,  person_organization_account: { username: '' }
         expect(assigns(:organization_account)).to be_a_new(Person::OrganizationAccount)
         expect(response).to render_template('new')
@@ -86,7 +86,7 @@ describe Person::OrganizationAccountsController do
   ## specifies that the Person::OrganizationAccount created on the previous line
   ## receives the :update_attributes message with whatever params are
   ## submitted in the request.
-  # Person::OrganizationAccount.any_instance.should_receive(:update_attributes).with({'these' => 'params'})
+  # expect_any_instance_of(Person::OrganizationAccount).to receive(:update_attributes).with({'these' => 'params'})
   # put :update, {:id => organization_account.to_param, :organization_account => {'these' => 'params'}}
   # end
 
@@ -107,7 +107,7 @@ describe Person::OrganizationAccountsController do
   # it "assigns the organization_account as @organization_account" do
   # organization_account = Person::OrganizationAccount.create! valid_attributes
   ## Trigger the behavior that occurs when invalid params are submitted
-  # Person::OrganizationAccount.any_instance.stub(:save).and_return(false)
+  # allow_any_instance_of(Person::OrganizationAccount).to receive(:save).and_return(false)
   # put :update, {:id => organization_account.to_param, :organization_account => {}}
   # expect(assigns(:organization_account)).to eq(organization_account)
   # end
@@ -115,7 +115,7 @@ describe Person::OrganizationAccountsController do
   # it "re-renders the 'edit' template" do
   # organization_account = Person::OrganizationAccount.create! valid_attributes
   ## Trigger the behavior that occurs when invalid params are submitted
-  # Person::OrganizationAccount.any_instance.stub(:save).and_return(false)
+  # allow_any_instance_of(Person::OrganizationAccount).to receive(:save).and_return(false)
   # put :update, {:id => organization_account.to_param, :organization_account => {}}
   # expect(response).to render_template("edit")
   # end

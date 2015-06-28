@@ -49,7 +49,7 @@ describe GoogleImport do
       person = create(:person)
       @contact.people << person
       expect do
-        @google_import.should_receive(:create_or_update_person).and_return(person)
+        expect(@google_import).to receive(:create_or_update_person).and_return(person)
         @google_import.import
       end.to_not change(Contact, :count)
     end
@@ -58,14 +58,14 @@ describe GoogleImport do
       # note the json file has a blank contact record which should be ignored, so the count changes by 1 only
       expect do
         expect do
-          @google_import.should_receive(:create_or_update_person).and_return(create(:person))
+          expect(@google_import).to receive(:create_or_update_person).and_return(create(:person))
           @google_import.import
         end.to change(Person, :count).by(1)
       end.to change(Contact, :count).by(1)
     end
 
     it 'adds tags from the import' do
-      @google_import.should_receive(:create_or_update_person).and_return(create(:person))
+      expect(@google_import).to receive(:create_or_update_person).and_return(create(:person))
 
       @import.update_column(:tags, 'hi, mom')
       @google_import.import

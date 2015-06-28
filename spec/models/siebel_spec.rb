@@ -31,7 +31,7 @@ describe Siebel do
       stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=#{relay.remote_id}")
         .to_return(status: 200, body: '[ { "name": "Staff Account (0559826)", "designations": [ { "number": "0559826", "description": "Joshua and Amanda Starcher (0559826)", "staffAccountId": "000559826" } ] }]')
 
-      siebel.should_receive(:find_or_create_designation_account)
+      expect(siebel).to receive(:find_or_create_designation_account)
 
       expect do
         siebel.import_profiles
@@ -102,7 +102,7 @@ describe Siebel do
 
       designation_profile.designation_accounts << da1
 
-      siebel.should_receive(:add_or_update_donation)
+      expect(siebel).to receive(:add_or_update_donation)
       siebel.import_donations(designation_profile)
     end
 
@@ -223,8 +223,8 @@ describe Siebel do
     end
 
     it 'imports a new donor from the donor system' do
-      siebel.should_receive(:add_or_update_donor_account)
-      siebel.should_receive(:add_or_update_company)
+      expect(siebel).to receive(:add_or_update_donor_account)
+      expect(siebel).to receive(:add_or_update_company)
       siebel.import_donors(designation_profile, Date.today)
     end
 
@@ -245,15 +245,15 @@ describe Siebel do
     #  stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/donors?account_address_filter=primary&contact_email_filter=all&contact_filter=all&contact_phone_filter=all&having_given_to_designations=#{da1.designation_number}&response_timeout=60000").
     #    to_return(:status => 200, :body => '[{"id":"602506447","accountName":"HillsideEvangelicalFreeChurch","type":"Business","updatedAt":"2012-01-01"}]')
     #
-    #  siebel.should_not_receive(:add_or_update_donor_account)
+    #  expect(siebel).to_not receive(:add_or_update_donor_account)
     #  siebel.import_donors(designation_profile, Date.today)
     # end
   end
 
   context '#add_or_update_donor_account' do
     it 'adds a new donor account' do
-      siebel.should_receive(:add_or_update_person)
-      siebel.should_receive(:add_or_update_address).twice
+      expect(siebel).to receive(:add_or_update_person)
+      expect(siebel).to receive(:add_or_update_address).twice
 
       expect do
         siebel.send(:add_or_update_donor_account, account_list, siebel_donor, designation_profile)
@@ -263,7 +263,7 @@ describe Siebel do
     it 'updates an existing donor account' do
       donor_account = create(:donor_account, organization: org, account_number: siebel_donor.id)
 
-      siebel.should_receive(:add_or_update_person)
+      expect(siebel).to receive(:add_or_update_person)
       expect(siebel).to receive(:add_or_update_address).once.with(anything, donor_account, donor_account)
       expect(siebel).to receive(:add_or_update_address).once.with(anything, anything, donor_account)
 
@@ -287,11 +287,12 @@ describe Siebel do
     it "skips people who haven't been updated since the last download" do
       donor_account = create(:donor_account, organization: org, account_number: siebel_donor.id)
 
-      donor_account.should_receive(:link_to_contact_for).and_return(contact)
-      org.stub_chain(:donor_accounts, :where, :first_or_initialize).and_return(donor_account)
-      contact.stub_chain(:people, :present?).and_return(true)
+      expect(donor_account).to receive(:link_to_contact_for).and_return(contact)
+      allow(org).to receive_message_chain(:donor_accounts, :where, :first_or_initialize)
+        .and_return(donor_account)
+      allow(contact).to receive_message_chain(:people, :present?).and_return(true)
 
-      siebel.should_not_receive(:add_or_update_person)
+      expect(siebel).to_not receive(:add_or_update_person)
 
       expect do
         siebel.send(:add_or_update_donor_account, account_list, siebel_donor, designation_profile, Time.zone.now)
@@ -307,8 +308,8 @@ describe Siebel do
     it 'adds a new person' do
       siebel_person_with_rels = SiebelDonations::Contact.new(Oj.load('{"id":"1-3GJ-2744","primary":true,"firstName":"Jean","preferredName":"Jean","lastName":"Spansel","title":"Mrs","sex":"F","emailAddresses":[{"updatedAt":"' + 1.day.ago.to_s(:db) + '","id":"1-CEX-8425","type":"Home","primary":true,"email":"markmarthaspansel@gmail.com"}],"phoneNumbers":[{"id":"1-BTE-2524","type":"Work","primary":true,"phone":"510/656-7873"}]}'))
 
-      siebel.should_receive(:add_or_update_email_address).twice
-      siebel.should_receive(:add_or_update_phone_number).twice
+      expect(siebel).to receive(:add_or_update_email_address).twice
+      expect(siebel).to receive(:add_or_update_phone_number).twice
 
       expect do
         siebel.send(:add_or_update_person, siebel_person_with_rels, donor_account, contact)
@@ -325,13 +326,13 @@ describe Siebel do
                         "primary":true,"phone":"510/656-7873"}]}')
       )
 
-      contact.should_receive(:add_person).and_return(person)
+      expect(contact).to receive(:add_person).and_return(person)
 
-      person.stub_chain(:phone_numbers, :present?).and_return(true)
-      person.stub_chain(:email_addresses, :present?).and_return(true)
+      allow(person).to receive_message_chain(:phone_numbers, :present?).and_return(true)
+      allow(person).to receive_message_chain(:email_addresses, :present?).and_return(true)
 
-      siebel.should_not_receive(:add_or_update_email_address)
-      siebel.should_not_receive(:add_or_update_phone_number)
+      expect(siebel).to_not receive(:add_or_update_email_address)
+      expect(siebel).to_not receive(:add_or_update_phone_number)
 
       siebel.send(:add_or_update_person, siebel_person_with_rels, donor_account, contact, Time.zone.now)
     end
@@ -618,7 +619,7 @@ describe Siebel do
 
   context '#profiles_with_designation_numbers' do
     it 'returns a hash of attributes' do
-      siebel.should_receive(:profiles).and_return([SiebelDonations::Profile.new('id' => '', 'name' => 'Profile 1', 'designations' => [{ 'number' => '1234' }])])
+      expect(siebel).to receive(:profiles).and_return([SiebelDonations::Profile.new('id' => '', 'name' => 'Profile 1', 'designations' => [{ 'number' => '1234' }])])
       expect(siebel.profiles_with_designation_numbers).to eq([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
     end
   end

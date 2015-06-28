@@ -5,8 +5,8 @@ describe Person::OrganizationAccount do
   let(:api) { FakeApi.new }
 
   before do
-    org_account.organization.stub(:api).and_return(api)
-    api.stub(:profiles_with_designation_numbers).and_return([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
+    allow(org_account.organization).to receive(:api).and_return(api)
+    allow(api).to receive(:profiles_with_designation_numbers).and_return([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
   end
 
   context '#import_all_data' do
@@ -19,7 +19,7 @@ describe Person::OrganizationAccount do
 
     context 'when password error' do
       before do
-        api.stub(:import_all).and_raise(OrgAccountInvalidCredentialsError)
+        allow(api).to receive(:import_all).and_raise(OrgAccountInvalidCredentialsError)
         org_account.person.email = 'foo@example.com'
 
         org_account.downloading = false

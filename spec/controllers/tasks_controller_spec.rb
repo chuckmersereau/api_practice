@@ -64,7 +64,7 @@ describe TasksController do
     describe 'with invalid params' do
       it 'assigns a newly created but unsaved task as @task' do
         # Trigger the behavior that occurs when invalid params are submitted
-        Task.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Task).to receive(:save).and_return(false)
         post :create,  task: { subject: '' }
         expect(assigns(:task)).to be_a_new(Task)
         expect(response).to render_template('new')
@@ -80,7 +80,7 @@ describe TasksController do
         # specifies that the Task created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Task.any_instance.should_receive(:update_attributes).with('subject' => 'foo')
+        expect_any_instance_of(Task).to receive(:update_attributes).with('subject' => 'foo')
         put :update,  id: task.to_param, task: { 'subject' => 'foo' }
       end
 
@@ -101,7 +101,7 @@ describe TasksController do
       it 'assigns the task as @task' do
         task = @account_list.tasks.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        Task.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Task).to receive(:save).and_return(false)
         put :update,  id: task.to_param, task: { 'subject' => '' }
         expect(assigns(:task)).to eq(task)
         expect(response).to render_template('edit')

@@ -13,7 +13,7 @@ describe DataServerNavigators do
   describe 'import account balances' do
     it 'should update a profile balance' do
       stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"\",\"3/14/2014\",\"123.45\",\"Test Account\"\n")
-      @data_server.should_receive(:check_credentials!)
+      expect(@data_server).to receive(:check_credentials!)
       expect do
         @data_server.import_profile_balance(profile)
       end.to change(profile, :balance).to(123.45)

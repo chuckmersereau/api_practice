@@ -5,7 +5,7 @@ describe PhoneNumberExhibit do
   let(:context) { double }
 
   it 'returns a formatted number' do
-    context.stub(:number_to_phone).and_return('(123) 456-7890')
+    allow(context).to receive(:number_to_phone).and_return('(123) 456-7890')
     expect(subject.number).to eq('(123) 456-7890')
   end
 

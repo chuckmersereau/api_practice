@@ -57,8 +57,8 @@ describe TntImport do
 
   context '#import_contacts' do
     it 'associates referrals and imports no_appeals field' do
-      import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
-      import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
+      expect(import).to receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
+      expect(import).to receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
       expect do
         import.send(:import_contacts)
       end.to change(ContactReferral, :count).by(1)
@@ -78,8 +78,8 @@ describe TntImport do
       end
 
       it 'updates an existing contact' do
-        import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
-        import.should_receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
+        expect(import).to receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
+        expect(import).to receive(:add_or_update_donor_accounts).and_return([create(:donor_account)])
         expect do
           import.send(:import_contacts)
         end.to change { contact.reload.status }.from('Ask in Future').to('Partner - Pray')
@@ -89,10 +89,10 @@ describe TntImport do
         def import_with_addresses
           donor_account_one = create(:donor_account)
           donor_account_two = create(:donor_account)
-          import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_one])
-          import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_two])
-          import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_one])
-          import.should_receive(:add_or_update_donor_accounts).and_return([donor_account_two])
+          expect(import).to receive(:add_or_update_donor_accounts).and_return([donor_account_one])
+          expect(import).to receive(:add_or_update_donor_accounts).and_return([donor_account_two])
+          expect(import).to receive(:add_or_update_donor_accounts).and_return([donor_account_one])
+          expect(import).to receive(:add_or_update_donor_accounts).and_return([donor_account_two])
           @address = create(:address, primary_mailing_address: true)
           contact.addresses << @address
           contact.save
@@ -518,7 +518,7 @@ describe TntImport do
 
   context '#import_settings' do
     it 'updates monthly goal' do
-      import.should_receive(:create_or_update_mailchimp)
+      expect(import).to receive(:create_or_update_mailchimp)
 
       expect do
         import.send(:import_settings)
@@ -691,12 +691,12 @@ describe TntImport do
 
   context '#import' do
     it 'performs an import' do
-      import.should_receive(:xml).and_return('foo')
-      import.should_receive(:import_contacts)
-      import.should_receive(:import_tasks)
-      import.should_receive(:import_history)
-      import.should_receive(:import_settings)
-      import.should_receive(:import_appeals)
+      expect(import).to receive(:xml).and_return('foo')
+      expect(import).to receive(:import_contacts)
+      expect(import).to receive(:import_tasks)
+      expect(import).to receive(:import_history)
+      expect(import).to receive(:import_settings)
+      expect(import).to receive(:import_appeals)
       import.import
     end
   end

@@ -18,9 +18,9 @@ describe Person::GmailAccount do
 
   context '#folders' do
     it 'returns a list of gmail folders/labels' do
-      gmail_account.stub(:client).and_return(client)
+      allow(gmail_account).to receive(:client).and_return(client)
 
-      client.should_receive(:labels).and_return(double(all: []))
+      expect(client).to receive(:labels).and_return(double(all: []))
 
       gmail_account.folders
     end
@@ -28,10 +28,10 @@ describe Person::GmailAccount do
 
   context '#gmail' do
     it 'refreshes the google account token if expired' do
-      Gmail.stub(:connect).and_return(double(logout: true))
+      allow(Gmail).to receive(:connect).and_return(double(logout: true))
       google_account.expires_at = 1.hour.ago
 
-      google_account.should_receive(:refresh_token!).once
+      expect(google_account).to receive(:refresh_token!).once
       gmail_account.gmail {}
     end
   end
@@ -49,25 +49,25 @@ describe Person::GmailAccount do
       google_account.save
       account_list.users << user
 
-      Gmail.stub(:connect).and_return(client)
-      client.stub(:mailbox).with('[Gmail]/Sent Mail').and_return(sent_mailbox)
-      client.stub(:mailbox).with('[Gmail]/All Mail').and_return(all_mailbox)
+      allow(Gmail).to receive(:connect).and_return(client)
+      allow(client).to receive(:mailbox).with('[Gmail]/Sent Mail').and_return(sent_mailbox)
+      allow(client).to receive(:mailbox).with('[Gmail]/All Mail').and_return(all_mailbox)
     end
 
     it 'logs a sent email' do
-      sent_mailbox.should_receive(:emails).and_return([email])
-      all_mailbox.should_receive(:emails).and_return([])
+      expect(sent_mailbox).to receive(:emails).and_return([email])
+      expect(all_mailbox).to receive(:emails).and_return([])
 
-      gmail_account.should_receive(:log_email).once
+      expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
     end
 
     it 'logs a received email' do
-      sent_mailbox.should_receive(:emails).and_return([])
-      all_mailbox.should_receive(:emails).and_return([email])
+      expect(sent_mailbox).to receive(:emails).and_return([])
+      expect(all_mailbox).to receive(:emails).and_return([email])
 
-      gmail_account.should_receive(:log_email).once
+      expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
     end

@@ -22,7 +22,7 @@ describe ContactsController do
       it 'gets all' do
         get :index
         expect(response).to be_success
-        expect(assigns(:contacts).length.should).to eq(2)
+        expect(assigns(:contacts).length).to eq(2)
       end
 
       it "filters out people you don't want to contact even when no filter is set" do
@@ -173,7 +173,7 @@ describe ContactsController do
 
       it "ignores a partial 'next ask' value" do
         xhr :put, :bulk_update,  'bulk_edit_contact_ids' => contact.id, 'contact' => { 'next_ask(3i)' => '3', 'next_ask(1i)' => '2012' }
-        contact.reload.next_ask.should.nil?
+        expect(contact.reload.next_ask).to be_nil
       end
     end
 

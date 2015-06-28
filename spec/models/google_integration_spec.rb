@@ -30,7 +30,7 @@ describe GoogleIntegration do
 
   context '#sync_data' do
     it 'triggers a calendar_integration sync' do
-      google_integration.calendar_integrator.should_receive(:sync_tasks)
+      expect(google_integration.calendar_integrator).to receive(:sync_tasks)
 
       google_integration.sync_data('calendar')
     end
@@ -47,10 +47,11 @@ describe GoogleIntegration do
     let(:client) { double(execute: double(data: calendar_data)) }
 
     it 'returns a list of calendars from google' do
-      google_integration.google_account.stub(:client).and_return(client)
-      google_integration.stub_chain(:calendar_api, :calendar_list, :list).and_return(calendar_list_api)
+      allow(google_integration.google_account).to receive(:client).and_return(client)
+      allow(google_integration).to receive_message_chain(:calendar_api, :calendar_list, :list)
+        .and_return(calendar_list_api)
 
-      client.should_receive(:execute).with(api_method: calendar_list_api,
+      expect(client).to receive(:execute).with(api_method: calendar_list_api,
                                            parameters: { 'userId' => 'me' })
 
       expect(google_integration.calendars).to eq(calendar_data.items)
@@ -59,7 +60,7 @@ describe GoogleIntegration do
 
   context '#toggle_calendar_integration_for_appointments' do
     before do
-      google_integration.stub(:calendars).and_return([{}])
+      allow(google_integration).to receive(:calendars).and_return([{}])
       google_integration.calendar_id = ''
       google_integration.calendar_integrations = []
       google_integration.calendar_integration = true
@@ -84,7 +85,7 @@ describe GoogleIntegration do
     end
 
     it 'defaults to the first calendar if this google account only has 1' do
-      google_integration.stub(:calendars).and_return([calendar_data.items.first])
+      allow(google_integration).to receive(:calendars).and_return([calendar_data.items.first])
       first_calendar = calendar_data.items.first
 
       google_integration.set_default_calendar
@@ -94,13 +95,13 @@ describe GoogleIntegration do
     end
 
     it 'returns false if the api fails' do
-      google_integration.stub(:calendar_api).and_return(false)
+      allow(google_integration).to receive(:calendar_api).and_return(false)
 
       expect(google_integration.set_default_calendar).to eq(false)
     end
 
     it 'returns nil if this google account has more than one calendar' do
-      google_integration.stub(:calendars).and_return(calendar_data.items)
+      allow(google_integration).to receive(:calendars).and_return(calendar_data.items)
 
       expect(google_integration.set_default_calendar).to eq(nil)
     end
@@ -114,10 +115,11 @@ describe GoogleIntegration do
       google_integration.calendar_id = nil
       google_integration.new_calendar = 'new calendar'
 
-      google_integration.google_account.stub(:client).and_return(client)
-      google_integration.stub_chain(:calendar_api, :calendars, :insert).and_return(calendar_insert_api)
+      allow(google_integration.google_account).to receive(:client).and_return(client)
+      allow(google_integration).to receive_message_chain(:calendar_api, :calendars, :insert)
+        .and_return(calendar_insert_api)
 
-      client.should_receive(:execute).with(api_method: calendar_insert_api,
+      expect(client).to receive(:execute).with(api_method: calendar_insert_api,
                                            body_object: { 'summary' => google_integration.new_calendar })
 
       first_calendar = calendar_data.items.first

@@ -11,9 +11,9 @@ describe NotificationType do
   context '.check_all' do
     it 'checks for notifications of each type' do
       create(:notification_preference, account_list: account_list, notification_type: special_gift)
-      NotificationType.should_receive(:types).and_return(['NotificationType::SpecialGift'])
-      NotificationType::SpecialGift.should_receive(:first).and_return(special_gift)
-      special_gift.should_receive(:check)
+      expect(NotificationType).to receive(:types).and_return(['NotificationType::SpecialGift'])
+      expect(NotificationType::SpecialGift).to receive(:first).and_return(special_gift)
+      expect(special_gift).to receive(:check)
 
       NotificationType.check_all(account_list)
     end

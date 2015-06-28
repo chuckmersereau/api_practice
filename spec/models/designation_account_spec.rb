@@ -9,7 +9,7 @@ describe DesignationAccount do
     account_list = double('account_list')
     user = double('user', account_lists: [account_list])
     da = DesignationAccount.new
-    da.stub(:account_lists).and_return([account_list])
+    allow(da).to receive(:account_lists).and_return([account_list])
     expect(da.account_list(user)).to eq(account_list)
   end
 end

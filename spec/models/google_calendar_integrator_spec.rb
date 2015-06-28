@@ -15,9 +15,11 @@ describe GoogleCalendarIntegrator do
     it 'calls #sync_task for each future, uncompleted task that is set to be synced' do
       task1, task2 = double(id: 1), double(id: 2)
 
-      google_integration.stub_chain(:account_list, :tasks, :future, :uncompleted, :of_type).and_return([task1, task2])
-      integrator.should_receive(:sync_task).with(task1.id)
-      integrator.should_receive(:sync_task).with(task2.id)
+      allow(google_integration)
+        .to receive_message_chain(:account_list, :tasks, :future, :uncompleted, :of_type)
+        .and_return([task1, task2])
+      expect(integrator).to receive(:sync_task).with(task1.id)
+      expect(integrator).to receive(:sync_task).with(task2.id)
 
       integrator.sync_tasks
     end
@@ -25,21 +27,21 @@ describe GoogleCalendarIntegrator do
 
   context '#sync_task' do
     it 'calls add_task if no google_event exists' do
-      integrator.should_receive(:add_task).with(task)
+      expect(integrator).to receive(:add_task).with(task)
 
       integrator.sync_task(task)
     end
 
     it 'calls update_task if a google_event exists' do
-      google_integration.stub(:calendars).and_return(nil)
-      integrator.should_receive(:update_task).with(task, google_event)
+      allow(google_integration).to receive(:calendars).and_return(nil)
+      expect(integrator).to receive(:update_task).with(task, google_event)
 
       integrator.sync_task(task)
     end
 
     it 'calls remove_google_event if task is nil' do
-      google_integration.stub(:calendars).and_return(nil)
-      integrator.should_receive(:remove_google_event).with(google_event)
+      allow(google_integration).to receive(:calendars).and_return(nil)
+      expect(integrator).to receive(:remove_google_event).with(google_event)
 
       task.destroy
 
@@ -49,9 +51,11 @@ describe GoogleCalendarIntegrator do
 
   context '#add_task' do
     it 'creates a google_event' do
-      google_integration.stub_chain(:calendar_api, :events, :insert).and_return('')
-      integrator.client.should_receive(:execute).and_return(double(data: { 'id' => 'foo' }, status: 200))
-      integrator.should_receive(:event_attributes).and_return({})
+      allow(google_integration).to receive_message_chain(:calendar_api, :events, :insert)
+        .and_return('')
+      expect(integrator.client).to receive(:execute)
+        .and_return(double(data: { 'id' => 'foo' }, status: 200))
+      expect(integrator).to receive(:event_attributes).and_return({})
 
       expect do
         integrator.add_task(task)
@@ -59,9 +63,10 @@ describe GoogleCalendarIntegrator do
     end
 
     it 'removes the calendar integration if the calendar no longer exists on google' do
-      google_integration.stub_chain(:calendar_api, :events, :insert).and_return('')
-      integrator.client.should_receive(:execute).and_return(missing_event_response)
-      integrator.should_receive(:event_attributes).and_return({})
+      allow(google_integration).to receive_message_chain(:calendar_api, :events, :insert)
+        .and_return('')
+      expect(integrator.client).to receive(:execute).and_return(missing_event_response)
+      expect(integrator).to receive(:event_attributes).and_return({})
 
       integrator.add_task(task)
 
@@ -73,11 +78,12 @@ describe GoogleCalendarIntegrator do
 
   context '#update_task' do
     it 'updates a google_event' do
-      google_integration.stub(:calendars).and_return(nil)
-      google_integration.stub_chain(:calendar_api, :events, :patch).and_return('')
-      integrator.client.should_receive(:execute).and_return(double(data: { 'id' => 'foo' }, status: 200))
-      integrator.should_receive(:event_attributes).and_return({})
-      integrator.should_not_receive(:add_task)
+      allow(google_integration).to receive(:calendars).and_return(nil)
+      allow(google_integration).to receive_message_chain(:calendar_api, :events, :patch)
+        .and_return('')
+      expect(integrator.client).to receive(:execute).and_return(double(data: { 'id' => 'foo' }, status: 200))
+      expect(integrator).to receive(:event_attributes).and_return({})
+      expect(integrator).to_not receive(:add_task)
 
       google_event.save
       expect do
@@ -86,11 +92,12 @@ describe GoogleCalendarIntegrator do
     end
 
     it 'adds the google event if it is missing from google' do
-      google_integration.stub(:calendars).and_return(nil)
-      google_integration.stub_chain(:calendar_api, :events, :patch).and_return('')
-      integrator.client.should_receive(:execute).and_return(missing_event_response)
-      integrator.should_receive(:event_attributes).and_return({})
-      integrator.should_receive(:add_task)
+      allow(google_integration).to receive(:calendars).and_return(nil)
+      allow(google_integration).to receive_message_chain(:calendar_api, :events, :patch)
+        .and_return('')
+      expect(integrator.client).to receive(:execute).and_return(missing_event_response)
+      expect(integrator).to receive(:event_attributes).and_return({})
+      expect(integrator).to receive(:add_task)
 
       integrator.update_task(task, google_event)
 
@@ -100,9 +107,10 @@ describe GoogleCalendarIntegrator do
 
   context '#remove_google_event' do
     it 'deletes a google_event' do
-      google_integration.stub(:calendars).and_return(nil)
-      google_integration.stub_chain(:calendar_api, :events, :delete).and_return('')
-      integrator.client.should_receive(:execute).and_return(double(data: {}, status: 200))
+      allow(google_integration).to receive(:calendars).and_return(nil)
+      allow(google_integration).to receive_message_chain(:calendar_api, :events, :delete)
+        .and_return('')
+      expect(integrator.client).to receive(:execute).and_return(double(data: {}, status: 200))
 
       google_event.save
       expect do

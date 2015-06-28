@@ -24,18 +24,18 @@ describe Person::FacebookAccount do
       person = create(:person)
       contact.people << person
       expect do
-        @facebook_import.should_receive(:create_or_update_person).and_return(person)
-        @facebook_import.should_receive(:create_or_update_person).and_return(create(:person)) # spouse
+        expect(@facebook_import).to receive(:create_or_update_person).and_return(person)
+        expect(@facebook_import).to receive(:create_or_update_person).and_return(create(:person)) # spouse
         @facebook_import.send(:import_contacts)
       end.to_not change(Contact, :count)
     end
 
     it 'should create a new contact for someone not on my list (or married to someone on my list)' do
       spouse = create(:person)
-      @facebook_import.should_receive(:create_or_update_person).and_return(spouse)
+      expect(@facebook_import).to receive(:create_or_update_person).and_return(spouse)
       expect do
         expect do
-          @facebook_import.should_receive(:create_or_update_person).and_return(create(:person))
+          expect(@facebook_import).to receive(:create_or_update_person).and_return(create(:person))
           @facebook_import.send(:import_contacts)
         end.to change(Person, :count).by(1)
       end.to change(Contact, :count).by(1)
@@ -49,8 +49,8 @@ describe Person::FacebookAccount do
       create(:facebook_account, person: spouse, remote_id: '120582')
       expect do
         expect do
-          @facebook_import.should_receive(:create_or_update_person).and_return(create(:person))
-          @facebook_import.should_receive(:create_or_update_person).and_return(spouse)
+          expect(@facebook_import).to receive(:create_or_update_person).and_return(create(:person))
+          expect(@facebook_import).to receive(:create_or_update_person).and_return(spouse)
 
           @facebook_import.send(:import_contacts)
         end.to change(Person, :count).by(1)

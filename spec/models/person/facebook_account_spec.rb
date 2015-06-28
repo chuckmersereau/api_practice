@@ -48,13 +48,13 @@ describe Person::FacebookAccount do
     end
 
     it 'should get an id from a url containing a name' do
-      @account.should_receive(:get_id_from_url).and_return(1)
+      expect(@account).to receive(:get_id_from_url).and_return(1)
       @account.url = 'https://www.facebook.com/john.doe'
       expect(@account.remote_id).to eq(1)
     end
 
     it 'should get an id from a url containing a profile id' do
-      @account.should_receive(:get_id_from_url).and_return(1)
+      expect(@account).to receive(:get_id_from_url).and_return(1)
       @account.url = 'https://www.facebook.com/profile.php?id=1'
       expect(@account.remote_id).to eq(1)
     end
@@ -94,7 +94,7 @@ describe Person::FacebookAccount do
 
     it 'tries to refresh once if the token is expired' do
       account = Person::FacebookAccount.new(token: 'asdf', token_expires_at: 10.days.ago)
-      account.should_receive(:refresh_token)
+      expect(account).to receive(:refresh_token)
 
       expect(account.token_missing_or_expired?).to be true
     end

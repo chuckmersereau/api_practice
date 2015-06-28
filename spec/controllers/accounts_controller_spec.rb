@@ -14,8 +14,8 @@ describe AccountsController do
     end
 
     it 'should queue data imports on sign in' do
-      User.should_receive(:from_omniauth).and_return(@user)
-      @user.should_receive(:queue_imports)
+      expect(User).to receive(:from_omniauth).and_return(@user)
+      expect(@user).to receive(:queue_imports)
       post 'create', provider: 'facebook'
     end
 
@@ -61,14 +61,14 @@ describe AccountsController do
 
       it 'should redirect to social accounts if the user is in setup mode' do
         @user.update_attributes(preferences: { setup: true })
-        Person::FacebookAccount.stub(:find_or_create_from_auth)
+        allow(Person::FacebookAccount).to receive(:find_or_create_from_auth)
         post 'create', provider: 'facebook'
         expect(response).to redirect_to(setup_path(:social_accounts))
       end
 
       it 'should redirect to a stored user_return_to' do
         session[:user_return_to] = '/foo'
-        Person::FacebookAccount.stub(:find_or_create_from_auth)
+        allow(Person::FacebookAccount).to receive(:find_or_create_from_auth)
         post 'create', provider: 'facebook'
         expect(response).to redirect_to('/foo')
       end
@@ -87,7 +87,7 @@ describe AccountsController do
     describe "GET 'failure'" do
       it 'redirects to index' do
         get 'failure'
-        flash[:alert].should_not.nil?
+        expect(flash[:alert]).to_not be_nil
         expect(response).to redirect_to(accounts_path)
       end
     end

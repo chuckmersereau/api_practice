@@ -204,7 +204,7 @@ describe Contact do
 
     it 'should not remove the loser from prayer letters service' do
       pla = create(:prayer_letters_account, account_list: account_list)
-      pla.should_not_receive(:delete_contact)
+      expect(pla).to_not receive(:delete_contact)
 
       loser_contact.update_column(:prayer_letters_id, 'foo')
 

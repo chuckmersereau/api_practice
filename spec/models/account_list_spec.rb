@@ -26,7 +26,7 @@ describe AccountList do
 
   context '#send_account_notifications' do
     it 'checks all notification types' do
-      NotificationType.should_receive(:check_all)
+      expect(NotificationType).to receive(:check_all)
       AccountList.new.send(:send_account_notifications)
     end
   end
@@ -36,24 +36,24 @@ describe AccountList do
 
     it 'returns true if there is a mailchimp associated with this account list that has a valid primary list' do
       mail_chimp_account = double(active?: true, primary_list: { id: 'foo', name: 'bar' })
-      account_list.should_receive(:mail_chimp_account).twice.and_return(mail_chimp_account)
+      expect(account_list).to receive(:mail_chimp_account).twice.and_return(mail_chimp_account)
       expect(account_list.valid_mail_chimp_account).to eq(true)
     end
 
     it 'returns a non-true value when primary list is not present' do
       mail_chimp_account = double(active?: true, primary_list: nil)
-      account_list.should_receive(:mail_chimp_account).twice.and_return(mail_chimp_account)
+      expect(account_list).to receive(:mail_chimp_account).twice.and_return(mail_chimp_account)
       expect(account_list.valid_mail_chimp_account).not_to eq(true)
     end
 
     it 'returns a non-true value when mail_chimp_account is not active' do
       mail_chimp_account = double(active?: false, primary_list: nil)
-      account_list.should_receive(:mail_chimp_account).once.and_return(mail_chimp_account)
+      expect(account_list).to receive(:mail_chimp_account).once.and_return(mail_chimp_account)
       expect(account_list.valid_mail_chimp_account).not_to eq(true)
     end
 
     it 'returns a non-true value when there is no mail_chimp_account' do
-      account_list.should_receive(:mail_chimp_account).once.and_return(nil)
+      expect(account_list).to receive(:mail_chimp_account).once.and_return(nil)
       expect(account_list.valid_mail_chimp_account).not_to eq(true)
     end
   end
