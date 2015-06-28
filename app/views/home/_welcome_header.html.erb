@@ -1,5 +1,5 @@
 <% if current_user.setup.count > 0 %>
-  <div class="row">
+  <div class="row fadable">
     <div class="getting_started_title col-md-6 col-md-offset-3">
       <h1><%= _('Hi') %> <%= current_user.first_name %>!</h1>
       <h3><%= _("While there's a lot you can do in MPDX, here's a few easy steps to get you up and going:") %></h3>
@@ -11,9 +11,30 @@
   </h1>
 <% end %>
 
-<div class="row">
-  <% p "asdfasdfasdfasdf" + current_user.setup.to_s %>
-  <% if current_user.setup.is_a?(Array) && current_user.setup.any? %>
+<% p "asdfasdfasdfasdf" + current_user.setup.to_s %>
+<% if current_user.setup.is_a?(Array) && current_user.setup.any? %>
+  <div class="row welcome-completed-row uncompleted">
+    <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0">
+      <h1><%= _('Great job! Check out some more tutorials videos and help articles '+
+                'to learn about some of our other cool features.') %></h1>
+      <hr>
+      <div class="tutorial-links">
+        <a href="https://www.gcx.org/mpdxhelp/about/"><i class="fa fa-youtube-play"></i>Take a tour</a>
+        <a href="https://www.youtube.com/watch?v=5w4CO0tpzpA&list=PL1nTOKhRxBt673yiW3qmvnx3ulDOawoLU"><i class="fa fa-youtube-play"></i>Add a Task</a>
+        <a href="https://www.youtube.com/watch?v=3m3E1CRRoq4"><i class="fa fa-youtube-play"></i>Bulk Editing Tasks</a>
+        <a href=""><i class="fa fa-youtube-play"></i>Recording Pledges & Donations</a>
+        <a href=""><i class="fa fa-youtube-play"></i>Generating Reports</a>
+        <a href="https://www.youtube.com/watch?v=8VZMcdVBN30"><i class="fa fa-youtube-play"></i>Automating Prayer Letters</a>
+      </div>
+      <h2>
+        <%= _('Find more anytime at') %>
+        <%= link_to('www.gcx.org/mpdxhelp', 'https://www.gcx.org/mpdxhelp/') %>
+        <br>
+        <%= _("or by clicking 'Help' in the top menu bar") %>
+      </h2>
+    </div>
+  </div>
+  <div class="row fadable">
     <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :import %>"
          data-panel="import">
       <div class="getting_started_number">1</div>
@@ -130,12 +151,14 @@
       </div>
       <h2><%= _('Add A Contact') %></h2>
     </div>
-  <% else %>
+  </div>
+<% else %>
+  <div class="row">
     <div class="col-md-12 donations_summary_panel">
       <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
         <div id="donations_summary_chart"></div>
         <%= render 'donations_summary_chart' %>
       <% end %>
     </div>
-  <% end %>
-</div>
+  </div>
+<% end %>

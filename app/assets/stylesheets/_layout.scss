@@ -1948,6 +1948,54 @@ body.google_integrations_controller {
     cursor: inherit;
   }
 }
+.welcome-completed-row {
+  text-align: center;
+  transition: all 1s ease;
+  position: relative;
+  height: 0;
+  z-index: 4;
+  display: inline-block;
+  opacity: 1;
+  top: -80px;
+  &.uncompleted {
+    top: 40px;
+    opacity: 0;
+    z-index: 0;
+  }
+  h1 {
+    font-weight: 500;
+    font-size: 44px;
+  }
+  hr {
+    width: inherit;
+    margin: 20px auto;
+    border-width: 5px;
+  }
+  .tutorial-links {
+    list-style: none;
+    font-size: 14px;
+    margin: 10px -10px 0 10px;
+    text-align: right;
+    a {
+      display: inline-block;
+      width: 32%;
+      margin-bottom: 20px;
+      color: $color_gray_dark;
+      text-align: left;
+    }
+    .fa {
+      margin-right: 12px;
+      font-size: 20px;
+      color: $color_gold;
+    }
+  }
+}
+.fadable {
+  transition: opacity 0.5s ease;
+  &.faded {
+    opacity: .05;
+  }
+}
 
 
 #donations_summary_chart {
