@@ -100,11 +100,13 @@ describe AccountList do
     end
 
     it 'handles a date range where the start and end day are in the same month' do
-      expect(account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 8, 31))).to eq([person])
+      expect(account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 8, 31)))
+        .to eq([person])
     end
 
     it 'handles a date range where the start and end day are in different months' do
-      expect(account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1))).to eq([person])
+      expect(account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1)))
+        .to eq([person])
     end
   end
 

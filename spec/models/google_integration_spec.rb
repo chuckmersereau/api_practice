@@ -52,7 +52,7 @@ describe GoogleIntegration do
         .and_return(calendar_list_api)
 
       expect(client).to receive(:execute).with(api_method: calendar_list_api,
-                                           parameters: { 'userId' => 'me' })
+                                               parameters: { 'userId' => 'me' })
 
       expect(google_integration.calendars).to eq(calendar_data.items)
     end
@@ -120,7 +120,7 @@ describe GoogleIntegration do
         .and_return(calendar_insert_api)
 
       expect(client).to receive(:execute).with(api_method: calendar_insert_api,
-                                           body_object: { 'summary' => google_integration.new_calendar })
+                                               body_object: { 'summary' => google_integration.new_calendar })
 
       first_calendar = calendar_data.items.first
 

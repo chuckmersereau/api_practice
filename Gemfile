@@ -121,8 +121,8 @@ group :development, :test do
   gem 'awesome_print'
   gem 'database_cleaner'
   gem 'spring-commands-rspec'
-  gem 'rspec'
-  gem 'rspec-rails'
+  gem 'rspec', '~> 3.3.0'
+  gem 'rspec-rails', '~> 3.3.2'
   gem 'factory_girl_rails'
   gem 'guard-rubocop'
   gem 'guard-rspec'
@@ -139,7 +139,7 @@ end
 
 group :test do
   gem 'mock_redis'
-  gem 'webmock', '~> 1.9.0'
+  gem 'webmock', '~> 1.21.0'
   gem 'rb-fsevent', require: false
   gem 'growl'
   gem 'capybara'
