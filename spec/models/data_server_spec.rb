@@ -39,7 +39,8 @@ describe DataServer do
     allow(@data_server).to receive(:designation_numbers).and_return(designation_numbers)
     allow(@data_server).to receive(:profiles).and_return(profiles)
     expect(@data_server.profiles_with_designation_numbers.first[:name]).to eq 'Profile 1'
-    expect(@data_server.profiles_with_designation_numbers.first[:designation_numbers]).to eq(designation_numbers)
+    expect(@data_server.profiles_with_designation_numbers.first[:designation_numbers])
+      .to eq(designation_numbers)
   end
 
   context '.import_profiles' do
@@ -96,7 +97,8 @@ describe DataServer do
       stub_request(:post, /.*addresses/).to_return(body: raw_data1)
       primary_contact = double('person')
       other_person = double('person')
-      expect(@data_server).to receive(:add_or_update_primary_contact).and_return([primary_contact, other_person])
+      expect(@data_server).to receive(:add_or_update_primary_contact)
+        .and_return([primary_contact, other_person])
       expect(@data_server).to receive(:add_or_update_spouse)
       expect(primary_contact).to receive(:add_spouse)
       expect(other_person).to receive(:add_spouse)

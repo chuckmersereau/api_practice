@@ -14,19 +14,25 @@ describe CredentialValidator do
     it 'should not add error if the record is missing an org' do
       @record.organization = nil
       @record.valid?
-      expect(@record.errors.full_messages).not_to include(_('Your username and password for %{org} are invalid.').localize % { org: @record.organization })
+      expect(@record.errors.full_messages).not_to include(
+        _('Your username and password for %{org} are invalid.').localize % { org: @record.organization }
+      )
     end
 
     it 'should not add error if the record is missing username' do
       @record.username = nil
       @record.valid?
-      expect(@record.errors.full_messages).not_to include(_('Your username and password for %{org} are invalid.').localize % { org: @record.organization })
+      expect(@record.errors.full_messages).not_to include(
+        _('Your username and password for %{org} are invalid.').localize % { org: @record.organization }
+      )
     end
 
     it 'should add error if the record is missing password' do
       @record.password = nil
       @record.valid?
-      expect(@record.errors.full_messages).not_to include(_('Your username and password for %{org} are invalid.').localize % { org: @record.organization })
+      expect(@record.errors.full_messages).not_to include(
+        _('Your username and password for %{org} are invalid.').localize % { org: @record.organization }
+      )
     end
 
     it 'should add error if the username and password are invalid' do
@@ -34,7 +40,9 @@ describe CredentialValidator do
       allow(@record.organization).to receive(:api) { @api }
       allow(@api).to receive(:validate_username_and_password) { false }
       @validator.validate(@record)
-      expect(@record.errors.full_messages).to eq([_('Your username and password for %{org} are invalid.').localize % { org: @record.organization }])
+      expect(@record.errors.full_messages).to eq(
+        [_('Your username and password for %{org} are invalid.').localize % { org: @record.organization }]
+      )
     end
 
     it 'should not add error if an error already exists' do
@@ -57,7 +65,9 @@ describe CredentialValidator do
       @record.username = nil
       @record.password = nil
       @validator.validate(@record)
-      expect(@record.errors.full_messages).not_to include(_('Your username and password for %{org} are invalid.').localize % { org: @record.organization })
+      expect(@record.errors.full_messages).not_to include(
+        _('Your username and password for %{org} are invalid.').localize % { org: @record.organization }
+      )
     end
   end
 end

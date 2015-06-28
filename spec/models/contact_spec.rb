@@ -115,7 +115,15 @@ describe Contact do
       donor_account.contacts << contact
 
       contact2 = create(:contact, account_list: contact.account_list)
-      expect(contact2.update_attributes(donor_accounts_attributes: { '0' => { account_number: donor_account.account_number, organization_id: donor_account.organization_id } })).to eq(false)
+
+      expect(
+        contact2.update(donor_accounts_attributes: {
+                          '0' => {
+                            account_number: donor_account.account_number,
+                            organization_id: donor_account.organization_id
+                          }
+                        })
+      ).to eq(false)
     end
   end
 

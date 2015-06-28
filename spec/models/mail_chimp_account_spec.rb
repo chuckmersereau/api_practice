@@ -168,7 +168,8 @@ describe MailChimpAccount do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact.people << create(:person, email: 'foo@example.com')
 
-        expect(account).to receive(:export_to_list).with(account.primary_list_id, [contact].to_set).and_return(true)
+        expect(account).to receive(:export_to_list)
+          .with(account.primary_list_id, [contact].to_set).and_return(true)
         account.send(:subscribe_contacts, contact.id)
       end
 
@@ -179,7 +180,8 @@ describe MailChimpAccount do
         contact2 = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact2.people << create(:person, email: 'foo@example.com')
 
-        expect(account).to receive(:export_to_list).with(account.primary_list_id, [contact1, contact2].to_set).and_return(true)
+        expect(account).to receive(:export_to_list)
+          .with(account.primary_list_id, [contact1, contact2].to_set).and_return(true)
         account.send(:subscribe_contacts, [contact1.id, contact2.id])
       end
 
@@ -187,7 +189,8 @@ describe MailChimpAccount do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact.people << create(:person, email: 'foo@example.com')
 
-        expect(account).to receive(:export_to_list).with(account.primary_list_id, [contact].to_set).and_return(true)
+        expect(account).to receive(:export_to_list)
+          .with(account.primary_list_id, [contact].to_set).and_return(true)
         account.send(:subscribe_contacts)
       end
 
@@ -234,11 +237,14 @@ describe MailChimpAccount do
 
           list_id = 'foo'
 
-          expect(@gb).to receive(:list_interest_groupings).with(id: list_id).and_return([{ 'id' => 1, 'name' => 'Partner Status', 'groups' => [] }])
+          expect(@gb).to receive(:list_interest_groupings).with(id: list_id)
+            .and_return([{ 'id' => 1, 'name' => 'Partner Status', 'groups' => [] }])
 
-          expect(@gb).to receive(:list_interest_grouping_update).with(grouping_id: 1, name: 'type', value: 'hidden')
+          expect(@gb).to receive(:list_interest_grouping_update)
+            .with(grouping_id: 1, name: 'type', value: 'hidden')
 
-          expect(@gb).to receive(:list_interest_group_add).with(id: 'foo', group_name: 'Partner - Pray', grouping_id: 1)
+          expect(@gb).to receive(:list_interest_group_add)
+            .with(id: 'foo', group_name: 'Partner - Pray', grouping_id: 1)
 
           account.send(:add_status_groups, list_id, ['Partner - Pray'])
         end

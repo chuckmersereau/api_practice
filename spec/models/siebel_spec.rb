@@ -619,8 +619,11 @@ describe Siebel do
 
   context '#profiles_with_designation_numbers' do
     it 'returns a hash of attributes' do
-      expect(siebel).to receive(:profiles).and_return([SiebelDonations::Profile.new('id' => '', 'name' => 'Profile 1', 'designations' => [{ 'number' => '1234' }])])
-      expect(siebel.profiles_with_designation_numbers).to eq([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
+      expect(siebel).to receive(:profiles).and_return(
+        [SiebelDonations::Profile.new('id' => '', 'name' => 'Profile 1',
+                                      'designations' => [{ 'number' => '1234' }])])
+      expect(siebel.profiles_with_designation_numbers)
+        .to eq([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
     end
   end
 end

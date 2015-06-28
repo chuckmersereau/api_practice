@@ -6,7 +6,8 @@ describe Person::OrganizationAccount do
 
   before do
     allow(org_account.organization).to receive(:api).and_return(api)
-    allow(api).to receive(:profiles_with_designation_numbers).and_return([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
+    allow(api).to receive(:profiles_with_designation_numbers)
+      .and_return([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
   end
 
   context '#import_all_data' do

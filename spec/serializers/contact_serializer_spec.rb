@@ -38,7 +38,7 @@ describe ContactSerializer do
 
     # it "cache_key is dependant on include params" do
     #   key = ContactSerializer.new(contact, {scope: {include: 'person'}}).cache_key
-    # expect(  key).not_to eq(ContactSerializer.new(contact).cache_key)
+    #   expect(key).not_to eq(ContactSerializer.new(contact).cache_key)
     # end
     #
     # it "cache_key should change when updated" do

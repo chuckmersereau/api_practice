@@ -81,7 +81,8 @@ describe GoogleCalendarIntegrator do
       allow(google_integration).to receive(:calendars).and_return(nil)
       allow(google_integration).to receive_message_chain(:calendar_api, :events, :patch)
         .and_return('')
-      expect(integrator.client).to receive(:execute).and_return(double(data: { 'id' => 'foo' }, status: 200))
+      expect(integrator.client).to receive(:execute)
+        .and_return(double(data: { 'id' => 'foo' }, status: 200))
       expect(integrator).to receive(:event_attributes).and_return({})
       expect(integrator).to_not receive(:add_task)
 

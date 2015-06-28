@@ -20,11 +20,11 @@ describe MasterPerson do
   # it "should find an existing person based on name and address" do
   # person = create(:person)
   # address = create(:address, person: person)
-  #-> {
+  # expect do
   # person = Person.new(first_name: person.first_name, last_name: person.last_name, suffix: person.suffix)
   # person.addresses_attributes = {'0' => address.attributes.with_indifferent_access.slice(:street, :city, :state, :country, :postal_code)}
   # person.save!
-  # expect(}).not_to change(MasterPerson, :count)
+  # end.not_to change(MasterPerson, :count)
   # end
 
   it 'should find an existing person based on name and phone number' do
@@ -43,6 +43,7 @@ describe MasterPerson do
     donor_account.master_people << person.master_person
     donor_account.people << person
     new_person = Person.new(first_name: person.first_name, last_name: person.last_name, suffix: person.suffix)
-    expect(MasterPerson.find_for_person(new_person, donor_account: donor_account)).to eq(person.master_person)
+    expect(MasterPerson.find_for_person(new_person, donor_account: donor_account))
+      .to eq(person.master_person)
   end
 end

@@ -14,7 +14,7 @@ describe AccountListSerializer do
   #     serializer = AccountListSerializer.new(account_list)
   #     old_key = serializer.cache_key
   #     contact.update_attributes(:pledge_amount => 100)
-  # expect(    AccountListSerializer.new(AccountList.find(account_list)).cache_key).not_to eq old_key
+  #     expect(AccountListSerializer.new(AccountList.find(account_list)).cache_key).not_to eq old_key
   #   end
   # end
 end

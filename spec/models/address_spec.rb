@@ -14,8 +14,12 @@ describe Address do
           '"analysis":{"dpv_match_code":"Y","dpv_footnotes":"AABB","dpv_cmra":"N","dpv_vacant":"N","active":"Y"}}]')
       address = build(:address)
       master_address = create(:master_address, street: '12958 fawns dell pl', city: 'fishers', state: 'in', country: 'united states', postal_code: '46038-1026')
-      address.send(:find_master_address)
-      address.master_address eq(master_address)
+
+      # Force update of the master address
+      address.master_address_id = nil
+      address.send(:determine_master_address)
+
+      expect(address.master_address).to eq(master_address)
     end
   end
 

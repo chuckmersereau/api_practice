@@ -76,6 +76,7 @@ RSpec.configure do |config|
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
 
+  # This adds automatic meta-data for specs by location (e.g. for controllers)
   config.infer_spec_type_from_file_location!
 
   # Exclude gems from spec backtraces, except a few directly related to our app
@@ -154,8 +155,7 @@ def logout_test_user
 end
 
 def stub_google_geocoder
-  stub_request(:get, %r{maps\.googleapis\.com/maps/api.*})
-    .to_return(body: '{}')
+  stub_request(:get, %r{maps\.googleapis\.com/maps/api.*}).to_return(body: '{}')
 end
 
 class FakeApi
