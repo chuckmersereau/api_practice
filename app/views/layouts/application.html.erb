@@ -91,7 +91,7 @@
                       <% if $rollout.active?(:insights, current_account_list) %>
                         <li class="item <%= request.path =~ /\/insights/ ? 'active' : '' %>"><%= link_to(_('Insights'), "/insights") %></li>
                       <% end %>
-                      <li class="item last"><%= link_to(_('Help'), 'https://www.gcx.org/mpdxhelp/', target: '_blank') %></li>
+                      <li class="item last"><%= link_to(_('Help'), new_help_request_path, target: '_blank') %></li>
                     </ul>
                   </div>
                 </div>
