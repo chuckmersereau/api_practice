@@ -5,8 +5,8 @@ describe MailChimpAccount do
   let(:account_list) { create(:account_list) }
 
   it 'validates the format of an api key' do
-    MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}').should_not be_valid
-    MailChimpAccount.new(account_list_id: 1, api_key: 'jk234lkwjntlkj3n5lk3j3kj-us4').should be_valid
+    expect(MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
+    expect(MailChimpAccount.new(account_list_id: 1, api_key: 'jk234lkwjntlkj3n5lk3j3kj-us4')).to be_valid
   end
 
   before(:each) do
@@ -34,18 +34,18 @@ describe MailChimpAccount do
   end
 
   it 'returns an array of lists' do
-    account.lists.length.should == 2
+    expect(account.lists.length).to eq(2)
   end
 
   it 'finds a list by list_id' do
-    account.stub(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
-    account.list(1).name.should == 'foo'
+    allow(account).to receive(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
+    expect(account.list(1).name).to eq('foo')
   end
 
   it 'finds the primary list' do
-    account.stub(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
+    allow(account).to receive(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
     account.primary_list_id = 1
-    account.primary_list.name.should == 'foo'
+    expect(account.primary_list.name).to eq('foo')
   end
 
   it 'deactivates the account if the api key is invalid' do
@@ -54,14 +54,14 @@ describe MailChimpAccount do
       .to_return(body: '{"error":"Invalid Mailchimp API Key: fake-us4","code":104}')
     account.active = true
     account.validate_key
-    account.active.should be false
-    account.validation_error.should =~ /Invalid Mailchimp API Key: fake-us4/
+    expect(account.active).to be false
+    expect(account.validation_error).to match(/Invalid Mailchimp API Key: fake-us4/)
   end
 
   it 'activates the account if the api key is valid' do
     account.active = false
     account.validate_key
-    account.active.should == true
+    expect(account.active).to eq(true)
   end
 
   describe 'queueing methods' do
@@ -116,7 +116,7 @@ describe MailChimpAccount do
 
   describe 'callbacks' do
     it 'should queue import if primary list changed' do
-      account.should_receive(:queue_export_to_primary_list).and_return(true)
+      expect(account).to receive(:queue_export_to_primary_list).and_return(true)
       account.primary_list_id = 'foo'
       account.save
     end
@@ -151,7 +151,7 @@ describe MailChimpAccount do
       end
 
       it 'nilifies the primary_list_id if an extra merge field is required' do
-        AccountMailer.stub(:mailchimp_required_merge_field).and_return(double('mailer', deliver: true))
+        allow(AccountMailer).to receive(:mailchimp_required_merge_field).and_return(double('mailer', deliver: true))
 
         stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listSubscribe')
           .to_return(body: '{"error":"MMERGE3 must be provided - Please enter a value","code":250}', status: 500)
@@ -159,7 +159,7 @@ describe MailChimpAccount do
         account.primary_list_id = 5
         account.save
         account.send(:subscribe_person, person.id)
-        account.primary_list_id.should be_nil
+        expect(account.primary_list_id).to be_nil
       end
     end
 
@@ -168,7 +168,8 @@ describe MailChimpAccount do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact.people << create(:person, email: 'foo@example.com')
 
-        account.should_receive(:export_to_list).with(account.primary_list_id, [contact].to_set).and_return(true)
+        expect(account).to receive(:export_to_list)
+          .with(account.primary_list_id, [contact].to_set).and_return(true)
         account.send(:subscribe_contacts, contact.id)
       end
 
@@ -179,7 +180,8 @@ describe MailChimpAccount do
         contact2 = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact2.people << create(:person, email: 'foo@example.com')
 
-        account.should_receive(:export_to_list).with(account.primary_list_id, [contact1, contact2].to_set).and_return(true)
+        expect(account).to receive(:export_to_list)
+          .with(account.primary_list_id, [contact1, contact2].to_set).and_return(true)
         account.send(:subscribe_contacts, [contact1.id, contact2.id])
       end
 
@@ -187,7 +189,8 @@ describe MailChimpAccount do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact.people << create(:person, email: 'foo@example.com')
 
-        account.should_receive(:export_to_list).with(account.primary_list_id, [contact].to_set).and_return(true)
+        expect(account).to receive(:export_to_list)
+          .with(account.primary_list_id, [contact].to_set).and_return(true)
         account.send(:subscribe_contacts)
       end
 
@@ -226,7 +229,7 @@ describe MailChimpAccount do
       context 'adding status groups' do
         before do
           @gb = double
-          account.stub(:gb).and_return(@gb)
+          allow(account).to receive(:gb).and_return(@gb)
         end
 
         it 'should add groups to an existing grouping' do
@@ -234,11 +237,14 @@ describe MailChimpAccount do
 
           list_id = 'foo'
 
-          @gb.should_receive(:list_interest_groupings).with(id: list_id).and_return([{ 'id' => 1, 'name' => 'Partner Status', 'groups' => [] }])
+          expect(@gb).to receive(:list_interest_groupings).with(id: list_id)
+            .and_return([{ 'id' => 1, 'name' => 'Partner Status', 'groups' => [] }])
 
-          @gb.should_receive(:list_interest_grouping_update).with(grouping_id: 1, name: 'type', value: 'hidden')
+          expect(@gb).to receive(:list_interest_grouping_update)
+            .with(grouping_id: 1, name: 'type', value: 'hidden')
 
-          @gb.should_receive(:list_interest_group_add).with(id: 'foo', group_name: 'Partner - Pray', grouping_id: 1)
+          expect(@gb).to receive(:list_interest_group_add)
+            .with(id: 'foo', group_name: 'Partner - Pray', grouping_id: 1)
 
           account.send(:add_status_groups, list_id, ['Partner - Pray'])
         end
@@ -246,13 +252,13 @@ describe MailChimpAccount do
         it 'should create a new grouping if none exists' do
           list_id = 'foo'
 
-          @gb.should_receive(:list_interest_groupings).with(id: list_id).and_return([])
+          expect(@gb).to receive(:list_interest_groupings).with(id: list_id).and_return([])
 
-          @gb.should_receive(:list_interest_grouping_add).with(id: 'foo', name: 'Partner Status', type: 'hidden', groups: ['Partner - Pray'])
+          expect(@gb).to receive(:list_interest_grouping_add).with(id: 'foo', name: 'Partner Status', type: 'hidden', groups: ['Partner - Pray'])
 
-          @gb.should_receive(:list_interest_groupings).with(id: list_id).and_return([{ 'id' => 1, 'name' => 'Partner Status', 'groups' => [] }])
+          expect(@gb).to receive(:list_interest_groupings).with(id: list_id).and_return([{ 'id' => 1, 'name' => 'Partner Status', 'groups' => [] }])
 
-          @gb.should_receive(:list_interest_group_add).with(id: 'foo', group_name: 'Partner - Pray', grouping_id: 1)
+          expect(@gb).to receive(:list_interest_group_add).with(id: 'foo', group_name: 'Partner - Pray', grouping_id: 1)
 
           account.send(:add_status_groups, list_id, ['Partner - Pray'])
         end
@@ -277,7 +283,7 @@ describe MailChimpAccount do
     context '#unsubscribe_hook' do
       it 'marks an unsubscribed person with opt out of enewsletter' do
         account.unsubscribe_hook('a@example.com')
-        expect(person.reload.optout_enewsletter).to be_true
+        expect(person.reload.optout_enewsletter).to be true
       end
 
       it 'does not mark as unsubscribed someone with that email but not as set primary' do
@@ -285,7 +291,7 @@ describe MailChimpAccount do
         person.email_address = { email: 'b@example.com', primary: true }
         person.save
         account.unsubscribe_hook('a@example.com')
-        expect(person.reload.optout_enewsletter).to be_false
+        expect(person.reload.optout_enewsletter).to be false
       end
     end
 
@@ -294,8 +300,8 @@ describe MailChimpAccount do
         account.email_update_hook('a@example.com', 'new@example.com')
         person.reload
         expect(person.email_addresses.count).to eq(2)
-        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be_false
-        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be_true
+        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be false
+        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be true
       end
 
       it 'sets the new email address as primary if it is there' do
@@ -304,8 +310,8 @@ describe MailChimpAccount do
         account.email_update_hook('a@example.com', 'new@example.com')
         person.reload
         expect(person.email_addresses.count).to eq(2)
-        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be_false
-        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be_true
+        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be false
+        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be true
       end
     end
 
@@ -318,8 +324,8 @@ describe MailChimpAccount do
 
         account.email_cleaned_hook('a@example.com', 'hard')
         email.reload
-        expect(email.historic).to be_true
-        expect(email.primary).to be_false
+        expect(email.historic).to be true
+        expect(email.primary).to be false
       end
 
       it 'makes another valid email as primary but not as invalid' do
@@ -328,12 +334,12 @@ describe MailChimpAccount do
         account.email_cleaned_hook('a@example.com', 'hard')
 
         email = person.email_addresses.first.reload
-        expect(email.historic).to be_true
-        expect(email.primary).to be_false
+        expect(email.historic).to be true
+        expect(email.primary).to be false
 
         email2.reload
-        expect(email2.historic).to be_false
-        expect(email2.primary).to be_true
+        expect(email2.historic).to be false
+        expect(email2.primary).to be true
       end
 
       it 'triggers the unsubscribe hook for an email marked as spam (abuse)' do

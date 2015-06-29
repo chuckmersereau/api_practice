@@ -6,17 +6,17 @@ describe PersonExhibit do
 
   context '#avatar' do
     it 'should ignore images with nil content' do
-      person.stub(facebook_account: nil,
-                  primary_picture: double(image: double(url: nil)),
-                  gender: nil
-      )
+      allow(person).to receive(:facebook_account).and_return(nil)
+      allow(person).to receive(:primary_picture).and_return(double(image: double(url: nil)))
+      allow(person).to receive(:gender).and_return(nil)
+
       expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
     end
 
     it 'should make facebook image' do
-      person.stub(facebook_account: double(remote_id: 1234),
-                  primary_picture: double(image: double(url: nil))
-      )
+      allow(person).to receive(:facebook_account).and_return(double(remote_id: 1234))
+      allow(person).to receive(:primary_picture).and_return(double(image: double(url: nil)))
+
       expect(exhib.avatar).to eq('https://graph.facebook.com/1234/picture?type=square')
     end
   end

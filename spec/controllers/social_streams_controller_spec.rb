@@ -22,8 +22,8 @@ describe SocialStreamsController do
         ']}')
 
       get 'index', contact_id: @contact.id
-      response.should be_success
-      assigns(:items).length.should == 1
+      expect(response).to be_success
+      expect(assigns(:items).length).to eq(1)
     end
   end
 end

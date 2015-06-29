@@ -14,8 +14,12 @@ describe Address do
           '"analysis":{"dpv_match_code":"Y","dpv_footnotes":"AABB","dpv_cmra":"N","dpv_vacant":"N","active":"Y"}}]')
       address = build(:address)
       master_address = create(:master_address, street: '12958 fawns dell pl', city: 'fishers', state: 'in', country: 'united states', postal_code: '46038-1026')
-      address.send(:find_master_address)
-      address.master_address == master_address
+
+      # Force update of the master address
+      address.master_address_id = nil
+      address.send(:determine_master_address)
+
+      expect(address.master_address).to eq(master_address)
     end
   end
 
@@ -38,7 +42,7 @@ describe Address do
     it 'clears the primary mailing address flag when destroyed' do
       address1 = create(:address, primary_mailing_address: true)
       address1.destroy
-      expect(address1.primary_mailing_address).to be_false
+      expect(address1.primary_mailing_address).to be false
     end
   end
 

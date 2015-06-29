@@ -18,14 +18,14 @@ describe PeopleController do
     it 'assigns the requested person as @person' do
       person = @contact.people.create! valid_attributes
       get :show,  id: person.to_param
-      assigns(:person).should eq(person)
+      expect(assigns(:person)).to eq(person)
     end
   end
 
   describe 'GET new' do
     it 'assigns a new person as @person' do
       get :new, {}
-      assigns(:person).should be_a_new(Person)
+      expect(assigns(:person)).to be_a_new(Person)
     end
   end
 
@@ -33,7 +33,7 @@ describe PeopleController do
     it 'assigns the requested person as @person' do
       person = @contact.people.create! valid_attributes
       get :edit,  id: person.to_param
-      assigns(:person).should eq(person)
+      expect(assigns(:person)).to eq(person)
     end
   end
 
@@ -50,7 +50,7 @@ describe PeopleController do
           post :create,  contact_id: @contact.id,
                          person: valid_attributes.merge('email_address' => { 'email' => 'john.doe@example.com' })
         end.to change(EmailAddress, :count).by(1)
-        assigns(:person).email.to_s.should == 'john.doe@example.com'
+        expect(assigns(:person).email.to_s).to eq('john.doe@example.com')
       end
 
       it 'creates a nested phone number' do
@@ -58,7 +58,7 @@ describe PeopleController do
           post :create,  contact_id: @contact.id,
                          person: valid_attributes.merge('phone_number' => { 'number' => '123-312-2134' })
         end.to change(PhoneNumber, :count).by(1)
-        assigns(:person).phone_number.number.should == '+11233122134'
+        expect(assigns(:person).phone_number.number).to eq('+11233122134')
       end
 
       # it "creates a nested address" do
@@ -66,34 +66,34 @@ describe PeopleController do
       # post :create, {contact_id: @contact.id,
       #      :person => valid_attributes.merge("addresses_attributes"=>{'0' => {"street"=>"boo"}})}
       # }.to change(Address, :count).by(1)
-      # assigns(:person).address.street.should == "boo"
+      # expect(assigns(:person).address.street).to eq("boo")
       # end
 
       it 'assigns a newly created person as @person' do
         post :create,  contact_id: @contact.id, person: valid_attributes
-        assigns(:person).should be_a(Person)
-        assigns(:person).should be_persisted
+        expect(assigns(:person)).to be_a(Person)
+        expect(assigns(:person)).to be_persisted
       end
 
       it 'redirects back to the contact' do
         post :create,  contact_id: @contact.id, person: valid_attributes
-        response.should redirect_to(@contact)
+        expect(response).to redirect_to(@contact)
       end
     end
 
     describe 'with invalid params' do
       it 'assigns a newly created but unsaved person as @person' do
         # Trigger the behavior that occurs when invalid params are submitted
-        Person.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person).to receive(:save).and_return(false)
         post :create,  contact_id: @contact.id, person: { first_name: '' }
-        assigns(:person).should be_a_new(Person)
+        expect(assigns(:person)).to be_a_new(Person)
       end
 
       it "re-renders the 'new' template" do
         # Trigger the behavior that occurs when invalid params are submitted
-        Person.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person).to receive(:save).and_return(false)
         post :create,  contact_id: @contact.id, person: { first_name: '' }
-        response.should render_template('new')
+        expect(response).to render_template('new')
       end
     end
   end
@@ -106,20 +106,20 @@ describe PeopleController do
         # specifies that the Person created on the previous line
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
-        Person.any_instance.should_receive(:update_attributes).with('first_name' => 'params')
+        expect_any_instance_of(Person).to receive(:update_attributes).with('first_name' => 'params')
         put :update,  id: person.to_param, person: { 'first_name' => 'params' }
       end
 
       it 'assigns the requested person as @person' do
         person = @contact.people.create! valid_attributes
         put :update,  id: person.to_param, person: valid_attributes
-        assigns(:person).should eq(person)
+        expect(assigns(:person)).to eq(person)
       end
 
       it 'redirects to the person' do
         person = @contact.people.create! valid_attributes
         put :update,  id: person.to_param, person: valid_attributes
-        response.should redirect_to(person)
+        expect(response).to redirect_to(person)
       end
     end
 
@@ -127,17 +127,17 @@ describe PeopleController do
       it 'assigns the person as @person' do
         person = @contact.people.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        Person.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person).to receive(:save).and_return(false)
         put :update,  id: person.to_param, person: { first_name: '' }
-        assigns(:person).should eq(person)
+        expect(assigns(:person)).to eq(person)
       end
 
       it "re-renders the 'edit' template" do
         person = @contact.people.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
-        Person.any_instance.stub(:save).and_return(false)
+        allow_any_instance_of(Person).to receive(:save).and_return(false)
         put :update,  id: person.to_param, person: { first_name: '' }
-        response.should render_template('edit')
+        expect(response).to render_template('edit')
       end
     end
   end
@@ -153,7 +153,7 @@ describe PeopleController do
     it 'redirects to the people list' do
       person = @contact.people.create! valid_attributes
       delete :destroy,  id: person.to_param
-      response.should redirect_to(people_url)
+      expect(response).to redirect_to(people_url)
     end
   end
 

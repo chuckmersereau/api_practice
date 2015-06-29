@@ -397,7 +397,7 @@ describe GoogleContactsIntegrator do
       EOS
 
       stub_request(:post, 'https://www.google.com/m8/feeds/contacts/default/full/batch?alt=&v=3').to_return do |request|
-        expect(EquivalentXml.equivalent?(request.body, create_contact_request_xml)).to be_true
+        expect(EquivalentXml.equivalent?(request.body, create_contact_request_xml)).to be true
         { body: create_contact_response_xml }
       end
 
@@ -414,7 +414,7 @@ describe GoogleContactsIntegrator do
         deleted_group_memberships: []
       }
       expect(@person.google_contacts.first.last_data).to eq(last_data)
-      expect(@person.google_contacts.first.last_synced.nil?).to be_false
+      expect(@person.google_contacts.first.last_synced.nil?).to be false
     end
   end
 
@@ -431,8 +431,8 @@ describe GoogleContactsIntegrator do
     it 'syncs each person-contact with its own Google contact' do
       times_batch_create_or_update_called = 0
       batch_time3_g_contact_id = ''
-      expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(4).times
-        .and_return do |g_contact, &block|
+      expect(@account.contacts_api_user).to receive(:batch_create_or_update)
+        .exactly(4).times do |g_contact, &block|
         times_batch_create_or_update_called += 1
         case times_batch_create_or_update_called
         when 1
@@ -520,8 +520,8 @@ describe GoogleContactsIntegrator do
       g_contacts_for_ids = {}
 
       batch_create_or_update_calls = 0
-      expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(7).times
-        .and_return do |g_contact, &block|
+      expect(@account.contacts_api_user).to receive(:batch_create_or_update)
+        .exactly(7).times do |g_contact, &block|
         batch_create_or_update_calls += 1
         case batch_create_or_update_calls
         when 1..4
@@ -539,7 +539,8 @@ describe GoogleContactsIntegrator do
         end
       end
 
-      expect(@account.contacts_api_user).to receive(:get_contact).at_least(:once).and_return { |id| g_contacts_for_ids[id] }
+      expect(@account.contacts_api_user).to receive(:get_contact)
+        .at_least(:once) { |id| g_contacts_for_ids[id] }
 
       # The first sync should create four Google contacts for @contact-@person, @contact-@person2,
       # @contact2-@person, and @contact2-@person2
@@ -589,7 +590,7 @@ describe GoogleContactsIntegrator do
       times_batch_create_or_update_called = 0
 
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-        .exactly(2).times.and_return do |g_contact, &block|
+        .exactly(2).times do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -615,7 +616,7 @@ describe GoogleContactsIntegrator do
 
       times_batch_create_or_update_called = 0
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-        .exactly(2).times.and_return do |g_contact, &block|
+        .exactly(2).times do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -639,7 +640,7 @@ describe GoogleContactsIntegrator do
 
       times_batch_create_or_update_called = 0
       expect(@account.contacts_api_user).to receive(:batch_create_or_update)
-        .exactly(:once).and_return do |g_contact, &block|
+        .exactly(:once) do |g_contact, &block|
         times_batch_create_or_update_called += 1
 
         case times_batch_create_or_update_called
@@ -650,7 +651,7 @@ describe GoogleContactsIntegrator do
       end
 
       expect(times_batch_create_or_update_called).to eq(0)
-      expect { @integrator.sync_contacts }.to raise_error
+      expect { @integrator.sync_contacts }.to raise_error(/500/)
       expect(times_batch_create_or_update_called).to eq(1)
     end
   end
@@ -707,7 +708,7 @@ describe GoogleContactsIntegrator do
       EOS
 
       update_stub = stub_request(:post, 'https://www.google.com/m8/feeds/contacts/default/full/batch?alt=&v=3').to_return do |request|
-        expect(EquivalentXml.equivalent?(request.body, update_request_xml)).to be_true
+        expect(EquivalentXml.equivalent?(request.body, update_request_xml)).to be true
         { body: update_response_xml }
       end
 
@@ -738,8 +739,8 @@ describe GoogleContactsIntegrator do
     it 'deletes the associated link record in the case of a 404 error' do
       expect(@cache).to receive(:find_by_id).with(@remote_id).and_return(@g_contact)
 
-      expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(:once)
-        .and_return { |_g_contact, &block| block.call(code: 404) }
+      expect(@account.contacts_api_user).to receive(:batch_create_or_update)
+        .exactly(:once) { |_g_contact, &block| block.call(code: 404) }
 
       @integrator.cleanup_inactive_g_contacts
       expect(GoogleContact.all.count).to eq(0)
@@ -750,8 +751,8 @@ describe GoogleContactsIntegrator do
       expect(@cache).to receive(:find_by_id).exactly(:twice).with(@remote_id).and_return(@g_contact)
 
       times_batch_create_or_update_called = 0
-      expect(@account.contacts_api_user).to receive(:batch_create_or_update).exactly(:twice)
-        .and_return do |_g_contact, &block|
+      expect(@account.contacts_api_user).to receive(:batch_create_or_update)
+        .exactly(:twice) do |_g_contact, &block|
         times_batch_create_or_update_called += 1
         case times_batch_create_or_update_called
         when 1
@@ -950,30 +951,30 @@ describe GoogleContactsIntegrator do
       email1 = @person.email_addresses.first
       expect(email1.email).to eq('mpdx@example.com')
       expect(email1.location).to eq('home')
-      expect(email1.primary).to be_true
+      expect(email1.primary).to be true
       email2 = @person.email_addresses.last
       expect(email2.email).to eq('johnsmith@example.com')
       expect(email2.location).to eq('other')
-      expect(email2.primary).to be_false
+      expect(email2.primary).to be false
 
       expect(@person.phone_numbers.count).to eq(2)
       number1 = @person.phone_numbers.first
       expect(number1.number).to eq('+14567890123')
       expect(number1.location).to eq('home')
-      expect(number1.primary).to be_true
+      expect(number1.primary).to be true
       number2 = @person.phone_numbers.last
       expect(number2.number).to eq('+11233345158')
       expect(number2.location).to eq('mobile')
-      expect(number2.primary).to be_false
+      expect(number2.primary).to be false
 
       expect(@person.websites.count).to eq(3)
       websites = @person.websites.order(:url).to_a
       expect(websites[0].url).to eq('blog.example.com')
-      expect(websites[0].primary).to be_false
+      expect(websites[0].primary).to be false
       expect(websites[1].url).to eq('mpdx.example.com')
-      expect(websites[1].primary).to be_false
+      expect(websites[1].primary).to be false
       expect(websites[2].url).to eq('www.example.com')
-      expect(websites[2].primary).to be_true
+      expect(websites[2].primary).to be true
 
       g_contact_link = @person.google_contacts.first
       expect(g_contact_link.remote_id).to eq('http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/6b70f8bb0372c')
@@ -1045,6 +1046,7 @@ describe GoogleContactsIntegrator do
 
       WebMock.reset!
 
+      stub_google_geocoder
       stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
 
       @updated_g_contact_obj = JSON.parse(g_contact_fixture_json)['feed']['entry'][0]
@@ -1175,11 +1177,11 @@ describe GoogleContactsIntegrator do
       expect(@person.websites.count).to eq(3)
       websites = @person.websites.order(:url).to_a
       expect(websites[0].url).to eq('MODIFIED_blog.example.com')
-      expect(websites[0].primary).to be_false
+      expect(websites[0].primary).to be false
       expect(websites[1].url).to eq('MODIFIED_mpdx.example.com')
-      expect(websites[1].primary).to be_false
+      expect(websites[1].primary).to be false
       expect(websites[2].url).to eq('www.example.com')
-      expect(websites[2].primary).to be_true
+      expect(websites[2].primary).to be true
     end
   end
 end

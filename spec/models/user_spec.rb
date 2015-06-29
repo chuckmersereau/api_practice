@@ -31,7 +31,7 @@ describe User do
     end
 
     it 'should return a list of account numbers from a given org' do
-      @user.designation_numbers(@org.id).should include(@account.designation_number)
+      expect(@user.designation_numbers(@org.id)).to include(@account.designation_number)
     end
   end
 end

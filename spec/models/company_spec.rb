@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Company do
   it 'should return the company name for to_s' do
-    Company.new(name: 'foo').to_s.should == 'foo'
+    expect(Company.new(name: 'foo').to_s).to eq('foo')
   end
 
   it 'should delete master_company on destroy if there are no other companies for that master' do

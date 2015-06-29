@@ -47,6 +47,6 @@ FETCH FIRST 10000000 ROWS ONLY',
     savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
 
     get :index
-    assigns(:recommnds).should eq('Column0' => '0', 'Column1' => 'Test Desig (2716653)')
+    expect(assigns(:recommnds)).to eq('Column0' => '0', 'Column1' => 'Test Desig (2716653)')
   end
 end

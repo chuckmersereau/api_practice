@@ -10,7 +10,7 @@ describe SettingsController do
   describe "GET 'integrations'" do
     it 'returns http success' do
       get 'integrations'
-      response.should be_success
+      expect(response).to be_success
     end
   end
 end

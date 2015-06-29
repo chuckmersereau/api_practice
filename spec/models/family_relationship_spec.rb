@@ -11,7 +11,7 @@ describe FamilyRelationship do
     it "should create a family relationship if it's new" do
       expect do
         FamilyRelationship.add_for_person(@person, @attributes)
-        @person.family_relationships.first.relationship.should == @relationship
+        expect(@person.family_relationships.first.relationship).to eq(@relationship)
       end.to change(FamilyRelationship, :count).from(0).to(1)
     end
 
@@ -19,7 +19,7 @@ describe FamilyRelationship do
       FamilyRelationship.add_for_person(@person, @attributes)
       expect do
         FamilyRelationship.add_for_person(@person, @attributes)
-        @person.family_relationships.first.relationship.should == @relationship
+        expect(@person.family_relationships.first.relationship).to eq(@relationship)
       end.to_not change(FamilyRelationship, :count)
     end
   end

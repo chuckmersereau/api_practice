@@ -12,7 +12,7 @@ describe Api::V1::ContactsController do
     end
 
     it 'responds 200' do
-      response.code.should == '200'
+      expect(response.code).to eq('200')
     end
   end
 end

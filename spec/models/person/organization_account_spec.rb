@@ -5,8 +5,9 @@ describe Person::OrganizationAccount do
   let(:api) { FakeApi.new }
 
   before do
-    org_account.organization.stub(:api).and_return(api)
-    api.stub(:profiles_with_designation_numbers).and_return([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
+    allow(org_account.organization).to receive(:api).and_return(api)
+    allow(api).to receive(:profiles_with_designation_numbers)
+      .and_return([{ name: 'Profile 1', code: '', designation_numbers: ['1234'] }])
   end
 
   context '#import_all_data' do
@@ -14,17 +15,17 @@ describe Person::OrganizationAccount do
       org_account.downloading = false
       org_account.last_download = nil
       org_account.send(:import_all_data)
-      org_account.reload.last_download.should be_nil
+      expect(org_account.reload.last_download).to be_nil
     end
 
     context 'when password error' do
       before do
-        api.stub(:import_all).and_raise(OrgAccountInvalidCredentialsError)
+        allow(api).to receive(:import_all).and_raise(OrgAccountInvalidCredentialsError)
         org_account.person.email = 'foo@example.com'
 
         org_account.downloading = false
         org_account.locked_at = nil
-        org_account.new_record?.should be false
+        expect(org_account.new_record?).to be false
       end
       it 'rescues invalid password error' do
         expect do
@@ -33,11 +34,11 @@ describe Person::OrganizationAccount do
       end
       it 'sends email' do
         org_account.import_all_data
-        ActionMailer::Base.deliveries.last.to.first.should == org_account.person.email.email
+        expect(ActionMailer::Base.deliveries.last.to.first).to eq(org_account.person.email.email)
       end
       it 'marks as not valid' do
         org_account.import_all_data
-        org_account.valid_credentials.should be false
+        expect(org_account.valid_credentials).to be false
       end
     end
   end
@@ -65,7 +66,7 @@ describe Person::OrganizationAccount do
 
   context '#to_s' do
     it 'makes a pretty string' do
-      org_account.to_s.should == 'MyString: foo'
+      expect(org_account.to_s).to eq('MyString: foo')
     end
   end
 end

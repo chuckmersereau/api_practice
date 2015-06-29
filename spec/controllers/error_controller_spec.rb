@@ -6,7 +6,7 @@ describe ErrorsController do
   describe 'page not found' do
     it 'renders error page' do
       get 'error_404'
-      response.should render_template 'application/error'
+      expect(response).to render_template 'application/error'
     end
   end
 end

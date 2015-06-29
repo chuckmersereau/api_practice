@@ -21,34 +21,34 @@ describe ContactsController do
 
       it 'gets all' do
         get :index
-        response.should be_success
-        assigns(:contacts).length.should.should == 2
+        expect(response).to be_success
+        expect(assigns(:contacts).length).to eq(2)
       end
 
       it "filters out people you don't want to contact even when no filter is set" do
         contact.update_attributes(status: 'Not Interested')
         get :index
-        response.should be_success
-        assigns(:contacts).length.should == 1
+        expect(response).to be_success
+        expect(assigns(:contacts).length).to eq(1)
       end
 
       it 'gets people' do
         get :index, filters: { contact_type: 'person' }
-        response.should be_success
-        assigns(:contacts).should == [contact]
+        expect(response).to be_success
+        expect(assigns(:contacts)).to eq([contact])
       end
 
       it 'gets companies' do
         get :index, filters: { contact_type: 'company' }
-        response.should be_success
-        assigns(:contacts).should == [contact2]
+        expect(response).to be_success
+        expect(assigns(:contacts)).to eq([contact2])
       end
 
       it 'filters by tag' do
         contact.update_attributes(tag_list: 'asdf')
         get :index, filters: { tags: 'asdf' }
-        response.should be_success
-        assigns(:contacts).should == [contact]
+        expect(response).to be_success
+        expect(assigns(:contacts)).to eq([contact])
       end
 
       it "doesn't display duplicate rows when filtering by Newsletter Recipients With Mailing Address" do
@@ -58,7 +58,7 @@ describe ContactsController do
         end
 
         get :index, filters: { newsletter: 'address' }
-        assigns(:contacts).length.should == 1
+        expect(assigns(:contacts).length).to eq(1)
       end
 
       it "doesn't display duplicate rows when filtering by Newsletter Recipients With Email Address" do
@@ -70,7 +70,7 @@ describe ContactsController do
         end
 
         get :index, filters: { newsletter: 'email' }
-        assigns(:contacts).length.should == 1
+        expect(assigns(:contacts).length).to eq(1)
       end
 
       it 'does not cause an error for the export and still assigns contact' do
@@ -98,24 +98,24 @@ describe ContactsController do
     describe '#show' do
       it 'should find a contact in the current account list' do
         get :show, id: contact.id
-        response.should be_success
-        contact.should == assigns(:contact)
+        expect(response).to be_success
+        expect(contact).to eq(assigns(:contact))
       end
     end
 
     describe '#edit' do
       it 'should edit a contact in the current account list' do
         get :edit, id: contact.id
-        response.should be_success
-        contact.should == assigns(:contact)
+        expect(response).to be_success
+        expect(contact).to eq(assigns(:contact))
       end
     end
 
     describe '#new' do
       it 'should render the new template' do
         get :new
-        response.should be_success
-        response.should render_template('new')
+        expect(response).to be_success
+        expect(response).to render_template('new')
       end
     end
 
@@ -124,15 +124,15 @@ describe ContactsController do
         expect do
           post :create, contact: { name: 'foo' }
           contact = assigns(:contact)
-          contact.errors.full_messages.should == []
-          response.should redirect_to(contact)
+          expect(contact.errors.full_messages).to eq([])
+          expect(response).to redirect_to(contact)
         end.to change(Contact, :count).by(1)
       end
 
       it "doesn't create a contact without a name" do
         post :create, contact: { name: '' }
-        assigns(:contact).errors.full_messages.should == ["Name can't be blank"]
-        response.should be_success
+        expect(assigns(:contact).errors.full_messages).to eq(["Name can't be blank"])
+        expect(response).to be_success
       end
     end
 
@@ -140,14 +140,14 @@ describe ContactsController do
       it 'updates a contact when passed valid attributes' do
         put :update, id: contact.id, contact: { name: 'Bob' }
         contact = assigns(:contact)
-        contact.name.should == 'Bob'
-        response.should redirect_to(contact)
+        expect(contact.name).to eq('Bob')
+        expect(response).to redirect_to(contact)
       end
 
       it "doesn't update a contact when passed invalid attributes" do
         put :update, id: contact.id, contact: { name: '' }
-        assigns(:contact).errors.full_messages.should == ["Name can't be blank"]
-        response.should be_success
+        expect(assigns(:contact).errors.full_messages).to eq(["Name can't be blank"])
+        expect(response).to be_success
       end
     end
 
@@ -156,24 +156,24 @@ describe ContactsController do
         contact # instantiate object
         delete :destroy, id: contact.id
 
-        contact.reload.status.should == 'Never Ask'
+        expect(contact.reload.status).to eq('Never Ask')
       end
     end
 
     describe '#bulk_update' do
       it "doesn't error out when all the attributes to update are blank" do
         xhr :put, :bulk_update, bulk_edit_contact_ids: '1', contact: { send_newsletter: '' }
-        response.should be_success
+        expect(response).to be_success
       end
 
       it "correctly updates the 'next ask' field" do
         xhr :put, :bulk_update,  'bulk_edit_contact_ids' => contact.id, 'contact' => { 'next_ask(2i)' => '3', 'next_ask(3i)' => '3', 'next_ask(1i)' => '2012' }
-        contact.reload.next_ask.should == Date.parse('2012-03-03')
+        expect(contact.reload.next_ask).to eq(Date.parse('2012-03-03'))
       end
 
       it "ignores a partial 'next ask' value" do
         xhr :put, :bulk_update,  'bulk_edit_contact_ids' => contact.id, 'contact' => { 'next_ask(3i)' => '3', 'next_ask(1i)' => '2012' }
-        contact.reload.next_ask.should.nil?
+        expect(contact.reload.next_ask).to be_nil
       end
     end
 
@@ -197,7 +197,7 @@ describe ContactsController do
           xhr :post, :save_referrals, id: contact.id,
                                       account_list: { contacts_attributes: { nil => { first_name: 'John', street: '1 Way' } } }
         end.to change(Address, :count).from(0).to(1)
-        expect(Address.first.primary_mailing_address).to be_true
+        expect(Address.first.primary_mailing_address).to be true
       end
     end
 
