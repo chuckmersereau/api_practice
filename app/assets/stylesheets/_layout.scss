@@ -1870,6 +1870,9 @@ body.google_integrations_controller {
     margin-top: -20px;
     margin-bottom: 1em;
   }
+  &.completed .panel {
+    opacity: .5;
+  }
   .imports-table {
     margin-top: 1em;
   }
@@ -1907,7 +1910,8 @@ body.google_integrations_controller {
     margin-top: 1em;
     text-align: left;
   }
-  .getting_started_number, &.completed .welcome-panel-completed {
+  .getting_started_number, 
+  &.completed .welcome-panel-completed {
     display: inline-block;
     width: 60px;
     height: 60px;
@@ -1920,9 +1924,13 @@ body.google_integrations_controller {
     font-size: 35px;
     position: relative;
     top: 0;
+    z-index: 1;
+  }
+  .getting_started_number {
+    transition: all .5s;
   }
   .welcome-panel-completed {
-    transition: all 0.5s ease;
+    transition: all 0.5s;
     float: right;
     display: inline-block;
     width: 40px;
@@ -1940,12 +1948,15 @@ body.google_integrations_controller {
     cursor: pointer;
   }
   &.completed .welcome-panel-completed {
-    background-color: $gray_light;
-    color: $gray;
-    border-color: $gray;
-    margin-left: 0;
-    right: 40%;
+    background-color: $color-white;
+    color: $green;
+    border-color: $green;
+    margin-right: -30px;
+    right: 50%;
     cursor: inherit;
+  }
+  &.completed .getting_started_number {
+    opacity: 0;
   }
 }
 .welcome-completed-row {
