@@ -13,6 +13,7 @@
           </div>
         </div>
         <%= form_for @preference_set, url: preference_path(current_user), method: :put do |f| %>
+            <%= f.hidden_field :setup %>
             <div class="row spacer-top">
               <div class="col-md-12">
                 <h3><%= _('About you') %></h3>
@@ -82,6 +83,11 @@
                     your thoughts about the feature(s) you are testing.
                   </small></p>
                 </div>
+              </div>
+            </div>
+            <div class="row spacer-bottom">
+              <div class="col-md-12">
+                <button class="btn btn-secondary" id="preference_reset_welcome">Reset Welcome Tour</button>
               </div>
             </div>
 
