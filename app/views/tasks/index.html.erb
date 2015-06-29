@@ -14,10 +14,7 @@
               <div class="col-md-4 col-sm-5 col-xs-9 form-inline">
                 <%= link_to(_('New Task'), new_task_path, id: 'add_task_button', class: 'btn btn-secondary add_task', remote: true) %>
               </div>
-              <div class="col-md-5 col-md-offset-3 col-sm-5 col-xs-12 text-right">
-
-
-              </div>
+              <div class="col-md-5 col-md-offset-3 col-sm-5 col-xs-12 text-right"></div>
             </div>
           </div>
         </div>
@@ -25,10 +22,13 @@
         <div class="wpp">
           <h1 style="display:none;"></h1>
           <div class="mwrap" ng-show="totalTasksShown === 0 && !totalTasksLoading">
-            <div class="nohide floating" style="background-color: #FDFFD4;">
+            <div class="nohide floating">
               <span ng-show="filter.page === 'all'">
-                <%= _('There are no tasks that match the filters and/or tags you have selected.') %>
-                <%= _('Try') %> <a href="/tasks/new" data-remote="true"><%= _('creating a new task') %></a> or <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a>.
+                <p class="spacer-top"><a href="/tasks/new" class="btn btn-lg btn-primary" data-remote="true"><%= _('Create Your First Task') %></a></p>
+                <h1><%= _("It's time to add your first task!") %></h1>
+                <p><%= _("Tasks are how MPDX helps you to stay on top of your MPD goals. From follow up, to making contact with someone for the first time, MPDX tasks will be your tool for keeping it all together. As you add and complete tasks, you will begin to see your dashboard, reports, contact details and other areas all come to life with real time information about your MPD.") %></p>
+                <h2><%= _("There's more!") %></h3>
+                <p><%= _("Once you've loaded up your tasks, you can use filters to quickly sort tasks that you're working on or have already completed.") %></p>
               </span>
               <span ng-show="filter.page !== 'all'">
                 You don't have any tasks that are <span ng-show="filter.page === 'today'">set for today</span><span ng-show="filter.page === 'overdue'">overdue</span><span ng-show="filter.page === 'upcoming'">upcoming</span> or match a filter you have set.
@@ -37,7 +37,7 @@
             </div>
           </div>
 
-          <h2 ng-show="totalTasksShown === 0 && totalTasksLoading"><%= _('Loading tasks') %>...</h2>
+          <p ng-show="totalTasksShown === 0 && totalTasksLoading"><i class="fa fa-spinner fa-spin"></i> <%= _('Loading tasks') %>...</p>
 
           <div ng-repeat="g in taskGroups" ng-class="{'contact_loading': g.loading}" ng-show="g.visible && tasks[g.filter].length > 0">
             <table class="tablelist">
