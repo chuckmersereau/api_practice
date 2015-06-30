@@ -253,6 +253,8 @@ $('#dash-tabs').on 'tabsactivate', $.respDialogs
 
 $(window).resize $.respDialogs
 
+$('[data-toggle="tooltip"]').tooltip()
+
 $(document).ready ->
   tagSize = $('.left_tag_list .tag').length
   $('.tagSize').html tagSize

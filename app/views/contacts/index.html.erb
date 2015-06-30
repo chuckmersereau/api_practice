@@ -239,7 +239,7 @@
                 <%= hidden_field_tag :selected_ids %>
 
                 <%= link_to(_('Export'), params.merge(format: 'csv'), class: "btn btn-default") %>
-                <span class="btn btn-default"><input type="checkbox" class="checkall" /></span>
+                <span class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Select All"><input type="checkbox" class="checkall" /></span>
 
               </div>
             </div>
