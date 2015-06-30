@@ -253,8 +253,6 @@ $('#dash-tabs').on 'tabsactivate', $.respDialogs
 
 $(window).resize $.respDialogs
 
-$('[data-toggle="tooltip"]').tooltip()
-
 $(document).ready ->
   tagSize = $('.left_tag_list .tag').length
   $('.tagSize').html tagSize
@@ -264,3 +262,4 @@ $(document).ready ->
     $('.left_tag_list').toggleClass 'show_all_tags'
     $('.tagLess, .tagSize, .tagAll').toggle()
     return
+  $('body').tooltip selector: '[data-toggle="tooltip"]'
