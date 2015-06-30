@@ -104,6 +104,7 @@ gem 'peek-git'
 gem 'peek-redis'
 gem 'peek-performance_bar'
 gem 'peek-gc'
+gem 'user_agent_decoder'
 
 group :development do
   gem 'railroady'
