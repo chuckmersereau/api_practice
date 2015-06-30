@@ -1,13 +1,11 @@
-<h1>Get Help!</h1>
+<h1 class="text-center">Get Help!</h1>
 
 <div class="row">
-  <div class="col-md-6">
-    <h3 style="line-height: 1.25em;"><%== _('95.91543% of all help requests are answered on our %{link} in the form of a Video or FAQ. Get answers to your questions on our %{link} now.').localize % {link: link_to('MPDX Help Site', 'http://www.gcx.org/mpdxhelp/', target: '_blank')} %></h3>
-    <div class="spacer-bottom">
-      <a href="" class="btn btn-secondary btn-lg"><i class="fa fa-life-ring"></i> <%= _("Go to MPDX Help Site Now") %></a>
+  <div class="col-md-8 col-md-offset-2">
+    <h3 style="line-height: 1.25em;"><%== _('<strong>95.91543%</strong> of all help requests are answered on our %{link} in the form of a Video or FAQ. Get answers to your questions on our %{link} now.').localize % {link: link_to('MPDX Help Site', 'http://www.gcx.org/mpdxhelp/', target: '_blank')} %></h3>
+    <div class="spacer-bottom text-center">
+      <a href="http://www.gcx.org/mpdxhelp/" class="btn btn-primary btn-lg"><i class="fa fa-life-ring"></i> <%= _("Go to MPDX Help Site Now") %></a>
     </div>
-  </div>
-  <div class="col-md-6">
     <div class="well">
       <p>
         <%= _('Have a suggestion or a problem? Please fill out the form below.') %>
@@ -15,10 +13,9 @@
         <%== _('Before emailing us, please have a look at %{link} to see if your question is already answered there.').localize % {link: link_to('our MPDX Help Site', 'http://www.gcx.org/mpdxhelp/', target: '_blank')} %>
       </p>
     </div>
+    <hr class="fullwidth" style="margin: 25px 0;"/>
   </div>
 </div>
-
-<hr class="fullwidth" />
 
 <%= form_for @help_request do |f| %>
   <div class="row">
