@@ -90,7 +90,7 @@ class ApplicationController < ActionController::Base
   end
 
   def locale
-    user_signed_in? && current_user.preferences[:locale].present? ?  current_user.preferences[:locale] : :en
+    user_signed_in? && current_user.preferences[:locale].present? ? current_user.preferences[:locale] : :en
   end
   helper_method :locale
 

@@ -168,7 +168,7 @@ describe GoogleImport do
   describe 'overall import results' do
     def check_imported_data
       contacts = @account_list.contacts.where(name: 'Google, John')
-      expect(contacts.to_a.count).to eq(1)
+      expect(contacts.to_a.size).to eq(1)
       contact = contacts.first
 
       expect(contact.people.count).to eq(1)
@@ -188,7 +188,7 @@ describe GoogleImport do
       expect(person.employer).to eq('Example, Inc')
       expect(person.occupation).to eq('Worker Person')
 
-      expect(person.websites.to_a.count).to eq(2)
+      expect(person.websites.to_a.size).to eq(2)
       website1 = person.websites.order(:url).first
       expect(website1.url).to eq('blog.example.com')
       expect(website1.primary).to be false
@@ -198,7 +198,7 @@ describe GoogleImport do
 
       expect(contact.notes).to eq('Notes here')
 
-      expect(contact.addresses.to_a.count).to eq(2)
+      expect(contact.addresses.to_a.size).to eq(2)
       address1 = contact.addresses.order(:postal_code).first
       expect(address1.country).to eq('United States')
       expect(address1.city).to eq('Somewhere')
@@ -213,13 +213,13 @@ describe GoogleImport do
       expect(address2.state).to eq('MO')
       expect(address2.postal_code).to eq('56789')
 
-      expect(person.email_addresses.to_a.count).to eq(1)
+      expect(person.email_addresses.to_a.size).to eq(1)
       email = person.email_addresses.order(:email).first
       expect(email.email).to eq('johnsmith@example.com')
       expect(email.location).to eq('other')
       expect(email.primary).to be true
 
-      expect(person.phone_numbers.to_a.count).to eq(1)
+      expect(person.phone_numbers.to_a.size).to eq(1)
       phone = person.phone_numbers.order(:number).first
       expect(phone.number).to eq('+11233345158')
       expect(phone.location).to eq('mobile')
@@ -437,25 +437,25 @@ describe GoogleImport do
       contact = @account_list.contacts.where(name: 'Doe, John').first
       person = contact.people.first
 
-      expect(person.websites.to_a.count).to eq(2)
+      expect(person.websites.to_a.size).to eq(2)
       website1 = person.websites.order(:url).first
       website2 = person.websites.order(:url).last
       expect(website1.primary || website2.primary).to be true
       expect(website1.primary && website2.primary).to be false
 
-      expect(contact.addresses.to_a.count).to eq(2)
+      expect(contact.addresses.to_a.size).to eq(2)
       address1 = contact.addresses.order(:postal_code).first
       address2 = contact.addresses.order(:postal_code).last
       expect(address1.primary_mailing_address || address1.primary_mailing_address).to be true
       expect(address2.primary_mailing_address && address2.primary_mailing_address).to be false
 
-      expect(person.email_addresses.to_a.count).to eq(2)
+      expect(person.email_addresses.to_a.size).to eq(2)
       email1 = person.email_addresses.order(:email).first
       email2 = person.email_addresses.order(:email).last
       expect(email1.primary || email1.primary).to be true
       expect(email2.primary && email2.primary).to be false
 
-      expect(person.phone_numbers.to_a.count).to eq(2)
+      expect(person.phone_numbers.to_a.size).to eq(2)
       phone1 = person.phone_numbers.order(:number).first
       phone2 = person.phone_numbers.order(:number).last
       expect(phone1.primary || phone1.primary).to be true

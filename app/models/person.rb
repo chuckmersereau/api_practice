@@ -110,7 +110,7 @@ class Person < ActiveRecord::Base
   end
 
   def spouse
-    family_relationships.where(relationship: %w(Husband Wife)).first.try(:related_person)
+    family_relationships.find_by(relationship: %w(Husband Wife)).try(:related_person)
   end
 
   def to_user
@@ -310,12 +310,12 @@ class Person < ActiveRecord::Base
 
       # because we're in a transaction, we need to keep track of which relationships we've updated so
       # we don't create duplicates on the next part
-      FamilyRelationship.where(related_person_id: other.id).each do |fr|
-        next if FamilyRelationship.where(person_id: fr.person_id, related_person_id: id).first
+      FamilyRelationship.where(related_person_id: other.id).find_each do |fr|
+        next if FamilyRelationship.find_by(person_id: fr.person_id, related_person_id: id)
         fr.update_attributes(related_person_id: id)
       end
 
-      FamilyRelationship.where(person_id: other.id).each do |fr|
+      FamilyRelationship.where(person_id: other.id).find_each do |fr|
         next if FamilyRelationship.where(related_person_id: fr.person_id, person_id: id)
         fr.update_attributes(person_id: id)
       end
@@ -340,7 +340,7 @@ class Person < ActiveRecord::Base
       other.destroy
 
       # Merge the master person records if they were different.
-      Person.where(master_person_id: other_master_person_id).each do |person_same_master_other|
+      Person.where(master_person_id: other_master_person_id).find_each do |person_same_master_other|
         person_same_master_other.update(master_person: master_person)
       end
       MasterPerson.find_by_id(other_master_person_id).try(:destroy) unless other_master_person_id == master_person_id

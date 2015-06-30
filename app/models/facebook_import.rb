@@ -99,13 +99,13 @@ class FacebookImport
     }.select { |_, v| v.present? }
 
     # First from my contacts
-    fb_person = account_list.people.includes(:facebook_account).where('person_facebook_accounts.remote_id' => friend.identifier).first
+    fb_person = account_list.people.includes(:facebook_account).find_by('person_facebook_accounts.remote_id' => friend.identifier)
 
     # If we can't find a contact with this fb account, see if we have a contact with the same name and no fb account
     unless fb_person
-      fb_person = account_list.people.includes(:facebook_account).where('person_facebook_accounts.remote_id' => nil,
-                                                                        'people.first_name' => friend.first_name,
-                                                                        'people.last_name' => friend.last_name).first
+      fb_person = account_list.people.includes(:facebook_account).find_by('person_facebook_accounts.remote_id' => nil,
+                                                                          'people.first_name' => friend.first_name,
+                                                                          'people.last_name' => friend.last_name)
 
     end
 
@@ -113,7 +113,7 @@ class FacebookImport
       fb_person.update_attributes(person_attributes)
     else
       # Look for a matching person auth an authenticated fb account
-      account = Person::FacebookAccount.where(remote_id: friend.identifier, authenticated: true).first
+      account = Person::FacebookAccount.find_by(remote_id: friend.identifier, authenticated: true)
       if account
         # Create a new person using the same master_person
         fb_person = account.person.master_person.people.create(person_attributes)

@@ -146,7 +146,7 @@ group :test do
   gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
-  gem 'rubocop'
+  gem 'rubocop', '~> 0.32.1'
   gem 'test_after_commit'
 end
 

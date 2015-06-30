@@ -683,7 +683,7 @@ describe GoogleContactsIntegrator do
           xmlns:batch='http://schemas.google.com/gdata/batch'>
         <entry xmlns="http://www.w3.org/2005/Atom" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:gd="http://schemas.google.com/g/2005" gd:etag="">
           <id>http://www.google.com/m8/feeds/contacts/test.user%40cru.org/base/test</id>
-          <updated>#{ GoogleContactsApi::Api.format_time_for_xml(now) }</updated>
+          <updated>#{GoogleContactsApi::Api.format_time_for_xml(now)}</updated>
           <category scheme="http://schemas.google.com/g/2005#kind" term="http://schemas.google.com/contact/2008#contact"/>
           <batch:id>0</batch:id>
           <batch:operation type="update"/>
@@ -881,7 +881,7 @@ describe GoogleContactsIntegrator do
       create_group_request_regex_str =
         '<atom:entry xmlns:gd="http://schemas.google.com/g/2005" xmlns:atom="http://www.w3.org/2005/Atom">\s*'\
           '<atom:category scheme="http://schemas.google.com/g/2005#kind"\s+term="http://schemas.google.com/contact/2008#group"/>\s*'\
-          "<atom:title type=\"text\">#{ GoogleContactsIntegrator::CONTACTS_GROUP_TITLE }</atom:title>\s*"\
+          "<atom:title type=\"text\">#{GoogleContactsIntegrator::CONTACTS_GROUP_TITLE}</atom:title>\s*"\
         '</atom:entry>'
 
       create_group_response = {
