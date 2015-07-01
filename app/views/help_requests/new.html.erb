@@ -1,11 +1,31 @@
-<h3 style="line-height: 1.15em;">
-  <%= _('Have a suggestion or a problem? Please fill out the form below.') %>
-  <%= _('The more detail you are able to give us, the easier it will be for us to help you. Thanks!') %>
-  <%== _('Before emailing us, please have a look at %{link} to see if your question is already answered there.').localize % {link: link_to('our MPDX Help Site', 'http://www.gcx.org/mpdxhelp/', target: '_blank')} %>
-</h3>
+<h1 class="text-center">Get Help!</h1>
+
+<div class="row">
+  <div class="col-md-8 col-md-offset-2">
+    <h3 style="line-height: 1.25em;">
+      <%== _('<strong>95.91543%</strong> of all help requests are answered on our %{link} in the 
+      form of a Video or FAQ. Get answers to your questions on our %{link} now.').localize % 
+      {link: link_to('MPDX Help Site', 'http://www.gcx.org/mpdxhelp/', target: '_blank')} %>
+    </h3>
+    <div class="spacer-bottom text-center">
+      <a href="http://www.gcx.org/mpdxhelp/" class="btn btn-primary btn-lg">
+        <i class="fa fa-life-ring"></i> <%= _("Go to MPDX Help Site Now") %>
+      </a>
+    </div>
+    <div class="well">
+      <p>
+        <%= _('Have a suggestion or a problem? Please fill out the form below.') %>
+        <%= _('The more detail you are able to give us, the easier it will be for us to help you. Thanks!') %>
+        <%== _('Before emailing us, please have a look at %{link} to see if your question is 
+        already answered there.').localize % {link: link_to('our MPDX Help Site', 
+        'http://www.gcx.org/mpdxhelp/', target: '_blank')} %>
+      </p>
+    </div>
+    <hr class="fullwidth" style="margin: 25px 0;"/>
+  </div>
+</div>
 
 <%= form_for @help_request do |f| %>
-
   <div class="row">
     <% if @help_request.errors.any? %>
       <div id="error_explanation">

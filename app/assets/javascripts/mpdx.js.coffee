@@ -21,14 +21,6 @@ $ ->
     $(this).parent("li").toggleClass("opened")
     setTimeout(determineAffixScroll, 500)
 
-  $.mpdx.activateTooltips = (element) ->
-    if element
-      $(element).find('[data-toggle="tooltip"]').tooltip()
-    else
-      try $('[data-toggle="tooltip"]').tooltip()
-      catch e
-  $.mpdx.activateTooltips()
-
   $(document).on 'mouseleave', 'div[data-behavior=account_selector]', ->
     $('div[data-behavior=account_selector] div').hide()
     false
@@ -105,7 +97,6 @@ window.addFields = (link, association, content) ->
   $('.field_action', fieldset).show() # delete buttons
   $('input', new_field).focus()
   $('.country_select').selectToAutocomplete()
-  $.mpdx.activateTooltips(new_field)
   false
 
 $.mpdx = {}
@@ -262,3 +253,4 @@ $(document).ready ->
     $('.left_tag_list').toggleClass 'show_all_tags'
     $('.tagLess, .tagSize, .tagAll').toggle()
     return
+  $('body').tooltip selector: '[data-toggle="tooltip"]'

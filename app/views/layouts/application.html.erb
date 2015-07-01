@@ -125,6 +125,10 @@
                   <div class="section"><%= link_to(_('Import Contacts'), accounts_path, class: '') %></div>
                   <div class="section"><%= link_to(_('Find Duplicates'), find_duplicates_contacts_path, class: '') %></div>
                 <% end %>
+                <% if params[:controller] == 'donations' %>
+                  <div class="section"><%= link_to('<i class="fa fa-plus-square"></i> '.html_safe + _('Add a donation'), new_donation_path, remote: true, class: 'no-new-tab') %></div>
+                  <div class="section"><%= link_to(_('Contribution Report'), contributions_reports_path) %></div>
+                <% end %>
                 <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
                   <div class="section right">
                     <%= render 'progress_bar' %>
