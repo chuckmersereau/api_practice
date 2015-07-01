@@ -88,6 +88,7 @@ class PreferenceSet
   end
 
   def setup_array
+    return setup unless setup.is_a? String
     setup.gsub(/\[|\]|:/, '').split(', ').map(&:to_sym)
   end
 end
