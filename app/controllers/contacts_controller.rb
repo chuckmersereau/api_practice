@@ -111,7 +111,9 @@ class ContactsController < ApplicationController
   def bulk_update
     contacts = current_account_list.contacts.where(id: params[:bulk_edit_contact_ids].split(','))
 
-    next_ask_year, next_ask_month, next_ask_day = contact_params.delete('next_ask(1i)'), contact_params.delete('next_ask(2i)'), contact_params.delete('next_ask(3i)')
+    next_ask_year = contact_params.delete('next_ask(1i)')
+    next_ask_month = contact_params.delete('next_ask(2i)')
+    next_ask_day = contact_params.delete('next_ask(3i)')
     if [next_ask_year, next_ask_month, next_ask_day].all?(&:present?)
       contact_params['next_ask'] = Date.new(next_ask_year.to_i, next_ask_month.to_i, next_ask_day.to_i)
     end

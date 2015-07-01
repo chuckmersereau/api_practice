@@ -11,7 +11,7 @@ class NotificationType::RemindPartnerInAdvance < NotificationType
       next unless contact.pledge_received?
       next unless early_by?(1.month, contact)
       prior_notification = Notification.active.where(contact_id: contact.id, notification_type_id: id)
-                           .where('event_date > ?', 2.months.ago).first
+                           .find_by('event_date > ?', 2.months.ago)
       next if prior_notification
       next unless contact.donations.any?
       notification = contact.notifications.create!(notification_type_id: id, event_date: Date.today)

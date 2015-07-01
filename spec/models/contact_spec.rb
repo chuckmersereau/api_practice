@@ -337,7 +337,7 @@ describe Contact do
     end
 
     it 'deletes this person from prayerletters.com if no other contact has the prayer_letters_id' do
-      stub_request(:delete, /www.prayerletters.com\/.*/)
+      stub_request(:delete, %r{www.prayerletters.com/.*})
         .to_return(status: 200, body: '', headers: {})
 
       prayer_letters_id  = 'foo'

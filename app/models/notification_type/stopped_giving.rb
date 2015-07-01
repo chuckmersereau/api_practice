@@ -1,12 +1,12 @@
 class NotificationType::StoppedGiving < NotificationType
   def check(account_list)
     notifications = []
-    account_list.contacts.financial_partners.where(['pledge_start_date is NULL OR pledge_start_date < ?', 30.days.ago]).each do |contact|
+    account_list.contacts.financial_partners.where(['pledge_start_date is NULL OR pledge_start_date < ?', 30.days.ago]).find_each do |contact|
       next unless contact.pledge_received?
 
       late = contact.late_by?(30.days)
 
-      prior_notification = Notification.active.where(contact_id: contact.id, notification_type_id: id).first
+      prior_notification = Notification.active.find_by(contact_id: contact.id, notification_type_id: id)
 
       if late
         unless prior_notification

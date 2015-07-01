@@ -2,7 +2,7 @@ class NotificationType::StartedGiving < NotificationType
   def check(account_list)
     notifications = []
     account_list.contacts.where(account_list_id: account_list.id).financial_partners.each do |contact|
-      prior_notification = Notification.active.where(contact_id: contact.id, notification_type_id: id).first
+      prior_notification = Notification.active.find_by(contact_id: contact.id, notification_type_id: id)
       next if prior_notification
 
       # update pledge received in case there are past donations

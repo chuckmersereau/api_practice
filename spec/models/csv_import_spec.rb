@@ -5,7 +5,7 @@ describe CsvImport do
   let!(:import) { CsvImport.new(csv_import) }
 
   before do
-    stub_request(:get, /api\.smartystreets\.com\/.*/)
+    stub_request(:get, %r{api.smartystreets.com/.*})
       .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
       .to_return(status: 200, body: '{}', headers: {})
   end

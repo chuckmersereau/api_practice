@@ -13,7 +13,8 @@ describe GoogleCalendarIntegrator do
 
   context '#sync_tasks' do
     it 'calls #sync_task for each future, uncompleted task that is set to be synced' do
-      task1, task2 = double(id: 1), double(id: 2)
+      task1 = double(id: 1)
+      task2 = double(id: 2)
 
       allow(google_integration)
         .to receive_message_chain(:account_list, :tasks, :future, :uncompleted, :of_type)

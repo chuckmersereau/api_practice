@@ -9,11 +9,11 @@ describe CSVUtil do
           <tr><td>1</td><td>2</td></tr>
         </table>
               EOS
-              ).to eq(<<-EOS
+            ).to eq(<<-EOS
 A,B
 1,2
         EOS
-      )
+                   )
 
       expect(CSVUtil.html_table_to_csv <<-EOS
         <table>
@@ -23,12 +23,12 @@ A,B
           <td>2</td></tr>
         </table>
               EOS
-              ).to eq(<<-EOS
+            ).to eq(<<-EOS
 A,B
 "1,
           """,2
         EOS
-      )
+                   )
 
       expect(CSVUtil.html_table_to_csv <<-EOS
         <table>
@@ -50,11 +50,11 @@ A,B
           </tbody>
         </table>
         EOS
-      ).to eq(<<-EOS
+            ).to eq(<<-EOS
 A,B
 1,2
         EOS
-      )
+                   )
     end
   end
 end
