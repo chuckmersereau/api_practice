@@ -1,5 +1,6 @@
 class ContactSerializer < ActiveModel::Serializer
   include DisplayCase::ExhibitsHelper
+  include ActionView::Helpers::NumberHelper
 
   # cached
 
@@ -46,6 +47,10 @@ class ContactSerializer < ActiveModel::Serializer
 
   def pledge_received
     object[:pledge_received].to_s
+  end
+
+  def pledge_frequency
+    number_with_precision(object[:pledge_frequency], precision: 14, strip_insignificant_zeros: true)
   end
 
   def contact_exhibit
