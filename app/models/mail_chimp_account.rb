@@ -87,6 +87,10 @@ class MailChimpAccount < ActiveRecord::Base
     api_key.to_s.split('-').last
   end
 
+  def appeals_lists
+    lists.select { |a| a.id != primary_list_id }
+  end
+
   # private
 
   def call_mailchimp(method, *args)

@@ -211,6 +211,18 @@
 
                   <div class="row">
                     <div class="col-sm-4">
+                      <%= _('Export selected list to Mail Chimp:') %>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                        <%= select_tag 'selected_appeal',options_for_select(current_account_list.mail_chimp_account.appeals_lists.collect{ |a| [a.name, a.id] }), { :class => 'form-control' } %>
+                            <button class="btn btn-default" ng-click="exportContactsToCSV(checkedContacts)"><%= _('Export') %></button>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="row">
+                    <div class="col-sm-4">
                       <%= _('Create tag for selected:') %>
                     </div>
                     <div class="col-sm-8">
