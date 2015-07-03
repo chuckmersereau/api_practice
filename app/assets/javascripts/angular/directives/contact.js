@@ -48,19 +48,19 @@ angular.module('mpdxApp')
                             return 'Weekly';
                         case '0.46153846153846':
                             return 'Fortnightly';
-                        case '1.0':
+                        case '1':
                             return 'Monthly';
-                        case '2.0':
+                        case '2':
                             return 'Bi-Monthly';
-                        case '3.0':
+                        case '3':
                             return 'Quarterly';
-                        case '4.0':
+                        case '4':
                             return 'Quad-Monthly';
-                        case '6.0':
+                        case '6':
                             return 'Semi-Annual';
-                        case '12.0':
+                        case '12':
                             return 'Annual';
-                        case '24.0':
+                        case '24':
                             return 'Biennial';
                     }
                 };
