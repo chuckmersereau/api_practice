@@ -26,7 +26,7 @@
 <td class="contact-tasks" nowrap="nowrap">
     <div ng-show="contact.status !== ''">{{contact.status}}</div>
     <div ng-show="contact.pledge_amount > 0">
-      {{contact.pledge_amount | currency: current_currency_symbol}} {{pledgeFrequencyStr(contact.pledge_frequency)}}
+      {{contact.pledge_amount | currency: current_currency_symbol}} {{contact.pledge_frequency | pledgeFrequencyStr}}
       <i ng-show="contact.pledge_received" class="fa fa-check" title="<%= _('Commitment Received') %>"></i>
       <span ng-hide="contact.pledge_received" class="fa-stack pledge_not_received_icon" title="<%= _('Commitment Not Received') %>">
         <i class="fa fa-check fa-stack-1x"></i>
@@ -37,19 +37,19 @@
 </td>
 
 <td class="qaction" id="contact_{{contact.id}}_quick">
-    <a class="btn btn-sm btn-default" 
-        href="/contacts/{{contact.id}}/edit" 
-        data-toggle="tooltip" 
-        data-placement="top" 
+    <a class="btn btn-sm btn-default"
+        href="/contacts/{{contact.id}}/edit"
+        data-toggle="tooltip"
+        data-placement="top"
         title="Edit Contact"><i class="fa fa-pencil"></i></a>
-    <a class="btn btn-sm btn-default" 
-        data-behavior="hide_contact" 
-        data-method="delete" 
-        data-remote="true" 
-        href="/contacts/{{contact.id}}" 
-        rel="nofollow" 
-        data-toggle="tooltip" 
-        data-placement="top" 
+    <a class="btn btn-sm btn-default"
+        data-behavior="hide_contact"
+        data-method="delete"
+        data-remote="true"
+        href="/contacts/{{contact.id}}"
+        rel="nofollow"
+        data-toggle="tooltip"
+        data-placement="top"
         title="Hide Contact"><i class="fa fa-eye-slash"></i></a>
 </td>
 <td class="checks"><input type="checkbox" name="contact_ids[]" value="{{contact.id}}" /></td>
