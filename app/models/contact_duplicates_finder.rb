@@ -152,23 +152,23 @@ class ContactDuplicatesFinder
         /* Nickname over the long name (Dave over David) */
         when ppl.name = nicknames.nickname then 800
 
-        /* First name over middle, (David over John David) */
-        when dups.name_field = 'middle' then 700
+        /* Prefer first name over middle when first name is well-formed
+           (David over John David) */
+        when dups.name_field = 'middle' and
+          ppl.first_name ~ '^[A-Z].*[a-z]' then 700
 
-        /* Inside/first capitals (MaryBeth over Marybeth, Jo over jo) */
-        when ppl.first_name ~ '^[A-Z][a-z]+[A-Z][a-z].*' then 600
+        /* Prefer names with inside capitals (MaryBeth over Marybeth) */
+        when ppl.first_name ~ '^[A-Z][a-z]+[A-Z][a-z]' then 600
 
         /* Prefer two letter initials (CS over Clive Staples) */
         when ppl.first_name ~ '^[A-Z][A-Z]$|^[A-Z]\\.\s?[A-Z]\\.$' then 500
 
         /* Prefer multi-word names (Mary Beth over Mary) */
-        when ppl.first_name ~ '^[A-Z][a-z]+ [A-Z][a-z]' then 400
+        when ppl.first_name ~ '^[A-Z][A-Za-z]+ [A-Z][a-z]' then 400
 
-        /* Prefer names over initials (Mary over M) */
-        when dups.first_name ~ '([. ]|^)[A-Za-z]([. ]|$)' then 300
-
-        /* Prefer names not ending in a . (John over John.) */
-        when dups.first_name ~ '.*\\.' then 200
+        /* Prefer names that start with upper case, end with a lower case,
+           and don't start with an initial. (John over D John, john, J. or J) */
+        when ppl.first_name ~ '^[A-Z]([^\s\\.].*)?[a-z]$' then 300
 
         /* More arbitrary preference by id.  */
         when dups.id > ppl.id then 100 else 50
