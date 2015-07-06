@@ -11,7 +11,6 @@
   </h1>
 <% end %>
 
-<% p "asdfasdfasdfasdf" + current_user.setup.to_s %>
 <% if current_user.setup.is_a?(Array) && current_user.setup.any? %>
   <div class="row welcome-completed-row uncompleted">
     <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0">
@@ -19,18 +18,22 @@
                 'to learn about some of our other cool features.') %></h1>
       <hr>
       <div class="tutorial-links">
-        <a href="https://www.gcx.org/mpdxhelp/about/"><i class="fa fa-youtube-play"></i>Take a tour</a>
-        <a href="https://www.youtube.com/watch?v=5w4CO0tpzpA&list=PL1nTOKhRxBt673yiW3qmvnx3ulDOawoLU"><i class="fa fa-youtube-play"></i>Add a Task</a>
-        <a href="https://www.youtube.com/watch?v=3m3E1CRRoq4"><i class="fa fa-youtube-play"></i>Bulk Editing Tasks</a>
-        <a href=""><i class="fa fa-youtube-play"></i>Recording Pledges & Donations</a>
-        <a href=""><i class="fa fa-youtube-play"></i>Generating Reports</a>
-        <a href="https://www.youtube.com/watch?v=8VZMcdVBN30"><i class="fa fa-youtube-play"></i>Automating Prayer Letters</a>
+        <% [['https://www.gcx.org/mpdxhelp/about/', 'Take a tour'],
+            ['https://www.gcx.org/mpdxhelp/2015/07/01/organizing-your-contacts/', 'Organize Your Contact'],
+            ['https://www.youtube.com/watch?v=ui6snOtmd50', 'Contact Filters and Tags'],
+            ['https://www.youtube.com/watch?v=3m3E1CRRoq4', 'Add Tasks, Tags and Edit in Bulk'],
+            ['https://www.youtube.com/watch?v=ijy4UzZqN8I', 'Add a Task'],
+            ['https://www.youtube.com/watch?v=3RWae_Sj8u8', 'Task Filters and Tags'],
+            ['https://www.gcx.org/mpdxhelp/track-appeals-and-goals/', 'Track an Appeal or Goal']].each do |tut| %>
+          <a href="<%= tut[0] %>"><i class="fa fa-youtube-play"></i><%= _(tut[1]) %></a>
+        <% end %>
+        <a href="https://www.gcx.org/mpdxhelp/training-videos/">
+          <i class="fa fa-share"></i><%= _('Many More On Our Help Site') %>
+        </a>
       </div>
       <h2>
-        <%= _('Find more anytime at') %>
-        <%= link_to('www.gcx.org/mpdxhelp', 'https://www.gcx.org/mpdxhelp/') %>
-        <br>
-        <%= _("or by clicking 'Help' in the top menu bar") %>
+        <%= _('Find more anytime at') %><%= link_to('www.gcx.org/mpdxhelp', 'https://www.gcx.org/mpdxhelp/') %>
+        <br><%= _("or by clicking 'Help' in the top menu bar") %>
       </h2>
     </div>
   </div>
