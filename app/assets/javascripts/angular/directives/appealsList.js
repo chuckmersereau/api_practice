@@ -28,7 +28,6 @@ angular.module('mpdxApp')
                               hour: moment().hour(),
                               min: moment().minute()
                             };
-
                             api.call('get',
                                      'contacts?filters[status]=*&per_page=5000'+
                                          '&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts'+
@@ -37,6 +36,13 @@ angular.module('mpdxApp')
                                 $scope.contacts = data.contacts;
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
+
+                            api.call('get', 'mail_chimp_accounts',{}, function (data) {
+                                $scope.mail_chimp = data.mail_chimp_accounts;
+                                $scope.selected_list = data.mail_chimp_accounts[0].id;
+                            }, function(){
+                                alert('An error has occurred while retrieving your mail chimp lists');
+                            });
 
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
@@ -208,7 +214,7 @@ angular.module('mpdxApp')
                           };
 
 
-                          $scope.exportContactsToCSV = function(selectedContactsMap) {
+                          $scope.exportContactsToCSV = function(selectedContactsMap,data) {
                             var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
                               return selected;
                             }));
@@ -221,6 +227,19 @@ angular.module('mpdxApp')
                             window.location.href =
                                 '/contacts.csv?csv_primary_emails_only=true&' +
                                 'filters[status]=*&filters[ids]=' + selectedContactIds.join();
+                          };
+
+                          $scope.exportContactsToMailChimpList = function(selectedContactsMap, selected_mail_chimp_list) {
+                              alert(selected_mail_chimp_list);
+                              var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
+                                  return selected;
+                              }));
+
+                              if (selectedContactIds.length == 0) {
+                                  alert('You must check at least one contact.');
+                                  return;
+                              }
+
                           };
 
                             $scope.selectAll = function(type){

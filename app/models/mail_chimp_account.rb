@@ -54,6 +54,10 @@ class MailChimpAccount < ActiveRecord::Base
 
   def queue_export_to_primary_list
     async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
+    end
+
+  def queue_export_to_appeal_list(contact_ids)
+    async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts, contact_ids)
   end
 
   def queue_subscribe_contact(contact)
