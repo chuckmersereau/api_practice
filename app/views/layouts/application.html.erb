@@ -78,7 +78,7 @@
                 </button>
               </div>
               <div class="row">
-                <div class="col-md-9 col-sm-9">
+                <div class="col-md-8">
                   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                       <li class="item <%= request.path == '/' ? 'active' : '' %>"><%= link_to(_('Dashboard'), "/") %></li>
@@ -95,7 +95,7 @@
                     </ul>
                   </div>
                 </div>
-                <div class="col-md-3 col-sm-3 text-right">
+                <div class="col-md-4 text-right">
                   <div class="navbar-quick hidden-sm hidden-xs">
                     <%= @account_list_exhibit.balances(current_user) %>
                   </div>
