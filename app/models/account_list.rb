@@ -390,7 +390,7 @@ class AccountList < ActiveRecord::Base
   private
 
   def sync_with_google_contacts
-    google_integrations.where(contacts_integration: true).each { |g_i| g_i.sync_data('contacts') }
+    google_integrations.where(contacts_integration: true).find_each { |g_i| g_i.sync_data('contacts') }
   end
 
   def import_data

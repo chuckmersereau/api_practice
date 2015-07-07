@@ -20,10 +20,10 @@ describe JobDuplicateChecker do
       expect(Sidekiq::RetrySet).to receive(:new).at_least(3).times
         .and_return([double(klass: 'DupCheckWorker', args: [1, 2])])
 
-      expect(dup_check_worker.send(:job_in_retries?, [1, 2])).to be_true
-      expect(dup_check_worker.send(:job_in_retries?, [1, 3])).to be_false
+      expect(dup_check_worker.send(:job_in_retries?, [1, 2])).to be true
+      expect(dup_check_worker.send(:job_in_retries?, [1, 3])).to be false
 
-      expect(other_test_worker.send(:job_in_retries?, [1, 2])).to be_false
+      expect(other_test_worker.send(:job_in_retries?, [1, 2])).to be false
     end
   end
 
@@ -54,21 +54,21 @@ describe JobDuplicateChecker do
       expect(Sidekiq::Workers).to receive(:new).at_least(:once).and_return(workers)
 
       dup_check_worker.jid = '1'
-      expect(dup_check_worker.send(:older_job_running?, [1, 2])).to be_false
+      expect(dup_check_worker.send(:older_job_running?, [1, 2])).to be false
 
       dup_check_worker.jid = '2'
-      expect(dup_check_worker.send(:older_job_running?, [1, 2])).to be_true
+      expect(dup_check_worker.send(:older_job_running?, [1, 2])).to be true
 
       dup_check_worker.jid = '3'
-      expect(dup_check_worker.send(:older_job_running?, [1, 2])).to be_true
+      expect(dup_check_worker.send(:older_job_running?, [1, 2])).to be true
 
       dup_check_worker.jid = 'not a running job id'
-      expect(dup_check_worker.send(:older_job_running?, [1, 2])).to_not be_true
+      expect(dup_check_worker.send(:older_job_running?, [1, 2])).to_not be true
 
       dup_check_worker.jid = '1'
-      expect(dup_check_worker.send(:older_job_running?, [1, 3])).to be_false
+      expect(dup_check_worker.send(:older_job_running?, [1, 3])).to be false
 
-      expect(other_test_worker.send(:older_job_running?, [1, 3])).to_not be_true
+      expect(other_test_worker.send(:older_job_running?, [1, 3])).to_not be true
     end
   end
 end

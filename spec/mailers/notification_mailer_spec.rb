@@ -5,13 +5,13 @@ describe NotificationMailer do
     # let(:mail) { NotificationMailer.notify }
 
     # it "renders the headers" do
-    # mail.subject.should eq("Notify")
-    # mail.to.should eq(["to@example.org"])
-    # mail.from.should eq(["from@example.com"])
+    # expect(mail.subject).to eq("Notify")
+    # expect(mail.to).to eq(["to@example.org"])
+    # expect(mail.from).to eq(["from@example.com"])
     # end
 
     # it "renders the body" do
-    # mail.body.encoded.should match("Hi")
+    # expect(mail.body.encoded).to match("Hi")
     # end
   end
 end

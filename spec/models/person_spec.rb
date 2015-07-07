@@ -6,7 +6,7 @@ describe Person do
   describe 'creating a person' do
     it 'should set master_person_id' do
       person = Person.create!(build(:person, master_person: nil).attributes.slice('first_name'))
-      person.master_person_id.should_not be_nil
+      expect(person.master_person_id).not_to be_nil
     end
   end
 
@@ -28,7 +28,7 @@ describe Person do
       family_relationship_attributes = family_relationship.attributes.merge!(relationship: family_relationship.relationship + 'boo')
                                        .with_indifferent_access.except(:person_id, :updated_at, :created_at)
       person.family_relationships_attributes = { '0' => family_relationship_attributes }
-      person.family_relationships.first.relationship.should == family_relationship.relationship + 'boo'
+      expect(person.family_relationships.first.relationship).to eq(family_relationship.relationship + 'boo')
     end
   end
 
@@ -50,7 +50,7 @@ describe Person do
                                    'url' => fb_account.url
                                  }
                                })
-      person.facebook_accounts.length.should == 2
+      expect(person.facebook_accounts.length).to eq(2)
     end
 
     it 'gracefully handles having an fb account with a blank url' do
@@ -60,7 +60,7 @@ describe Person do
                                    'url' => ''
                                  }
                                })
-      person.facebook_accounts.length.should == 0
+      expect(person.facebook_accounts.length).to eq(0)
     end
 
     describe 'saving deceased person' do
@@ -140,7 +140,7 @@ describe Person do
     it 'creates an email' do
       expect do
         person.email = email
-        person.email_addresses.first.email.should == email
+        expect(person.email_addresses.first.email).to eq(email)
       end.to change(EmailAddress, :count).from(0).to(1)
     end
   end
@@ -246,7 +246,7 @@ describe Person do
       fb = create(:facebook_account, person: loser)
 
       winner.merge(loser)
-      winner.facebook_accounts.should == [fb]
+      expect(winner.facebook_accounts).to eq([fb])
     end
 
     it "should move loser's twitter over" do
@@ -254,13 +254,13 @@ describe Person do
       create(:twitter_account, person: loser)
 
       winner.merge(loser)
-      winner.twitter_accounts.should_not be_empty
+      expect(winner.twitter_accounts).not_to be_empty
     end
 
     it 'moves pictures over' do
       picture = create(:picture, picture_of: loser)
       winner.merge(loser)
-      winner.pictures.should include(picture)
+      expect(winner.pictures).to include(picture)
     end
 
     it 'copies over master person sources' do
@@ -307,13 +307,13 @@ describe Person do
     it 'considers two people different unless not_duplicated_with is set' do
       p1 = create(:person)
       p2 = create(:person)
-      expect(p1.not_same_as?(p2)).to be_false
-      expect(p2.not_same_as?(p1)).to be_false
+      expect(p1.not_same_as?(p2)).to be false
+      expect(p2.not_same_as?(p1)).to be false
 
       p1.not_duplicated_with = p2.id.to_s
 
-      expect(p1.not_same_as?(p2)).to be_true
-      expect(p2.not_same_as?(p1)).to be_true
+      expect(p1.not_same_as?(p2)).to be true
+      expect(p2.not_same_as?(p1)).to be true
     end
   end
 

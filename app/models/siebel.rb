@@ -71,7 +71,7 @@ class Siebel < DataServer
                                 account_address_filter: :primary,
                                 contact_email_filter: :all,
                                 contact_phone_filter: :all
-                                ).each do |siebel_donor|
+                               ).each do |siebel_donor|
       donor_account = add_or_update_donor_account(account_list, siebel_donor, profile, date_from)
 
       next unless siebel_donor.type == 'Business'
@@ -105,7 +105,7 @@ class Siebel < DataServer
       all_current_donations_array = all_current_donations_relation.to_a
       SiebelDonations::Donation.find(designations: da.designation_number, donation_date_start: start_date,
                                      donation_date_end: end_date).each do |siebel_donation|
-        donation = all_current_donations_relation.where(remote_id: siebel_donation.id).first
+        donation = all_current_donations_relation.find_by(remote_id: siebel_donation.id)
         all_current_donations_array.delete(donation)
       end
 
@@ -206,7 +206,7 @@ class Siebel < DataServer
   def add_or_update_company(account_list, siebel_donor, donor_account)
     master_company = MasterCompany.find_by_name(siebel_donor.account_name)
 
-    company = @org_account.user.partner_companies.where(master_company_id: master_company.id).first if master_company
+    company = @org_account.user.partner_companies.find_by(master_company_id: master_company.id) if master_company
     company ||= account_list.companies.new(master_company: master_company)
 
     contact = siebel_donor.primary_contact || SiebelDonations::Contact.new
@@ -263,18 +263,18 @@ class Siebel < DataServer
   end
 
   def add_or_update_person(siebel_person, donor_account, contact, date_from = nil)
-    master_person_from_source = @org.master_people.where('master_person_sources.remote_id' => siebel_person.id).first
+    master_person_from_source = @org.master_people.find_by('master_person_sources.remote_id' => siebel_person.id)
 
     # If we didn't find someone using the real remote_id, try the "old style"
     unless master_person_from_source
       remote_id = siebel_person.primary ? "#{donor_account.account_number}-1" : "#{donor_account.account_number}-2"
-      if master_person_from_source = @org.master_people.where('master_person_sources.remote_id' => remote_id).first
+      if master_person_from_source = @org.master_people.find_by('master_person_sources.remote_id' => remote_id)
         MasterPersonSource.where(organization_id: @org.id, remote_id: remote_id).update_all(remote_id: siebel_person.id)
       end
     end
 
-    person = contact.people.where(first_name: siebel_person.first_name, last_name: siebel_person.last_name).first
-    person ||= contact.people.where(master_person_id: master_person_from_source.id).first if master_person_from_source
+    person = contact.people.find_by(first_name: siebel_person.first_name, last_name: siebel_person.last_name)
+    person ||= contact.people.find_by(master_person_id: master_person_from_source.id) if master_person_from_source
     person ||= Person.new(master_person: master_person_from_source)
 
     gender = case siebel_person.sex

@@ -21,7 +21,7 @@ describe ActivityCommentExhibit do
 
     it 'returns nil if the comment body is nil' do
       activity_comment.body = nil
-      subject.body.should.nil?
+      expect(subject.body).to be_nil
     end
 
     it 'parse a message with unicode characters' do

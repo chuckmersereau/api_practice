@@ -6,6 +6,32 @@
     <div class="page-filters">
       <h2><%= _('Networks & Imports') %></h2>
     </div>
+
+    <% %w[csv tnt].each do |provider| %>
+      <table class="network_connect">
+        <tr>
+          <td class="identify network_logo">
+            <h3>
+              <% if provider == 'tnt' %>
+                <%= image_tag("logos/tnt_logo.png", alt: 'TntMPD') %>TntMPD
+              <% elsif provider == 'csv' %>
+                .CSV File
+              <% end %>
+            </h3>
+          </td>
+          <td class="connections" data-behavior="account" style="width:500px">
+            <div class="importoptions formstyles well" data-behavior="import_options" style="display:none">
+              <%= render "#{provider}_import_form" %>
+            </div>
+            <a href="#" class="btn btn-xs btn-secondary" data-behavior="show_import">
+              <i class="fa fa-user-plus"></i> <%= _('Import Contacts') %>
+            </a>
+          </td>
+        </tr>
+      </table>
+    <% end %>
+
+
     <% @providers.each do |provider| %>
       <table class="network_connect spacer-top">
         <tr>
@@ -26,30 +52,6 @@
                 <%= auth_link(provider) %>
               </div>
             <% end %>
-          </td>
-        </tr>
-      </table>
-    <% end %>
-
-    <% %w[tnt csv].each do |provider| %>
-      <table class="network_connect">
-        <tr>
-          <td class="identify network_logo">
-            <h3>
-              <% if provider == 'tnt' %>
-                <%= image_tag("logos/tnt_logo.png", alt: 'TntMPD') %>TntMPD
-              <% elsif provider == 'csv' %>
-                .CSV File
-              <% end %>
-            </h3>
-          </td>
-          <td class="connections" data-behavior="account" style="width:500px">
-            <div class="importoptions formstyles well" data-behavior="import_options" style="display:none">
-              <%= render "#{provider}_import_form" %>
-            </div>
-            <a href="#" class="btn btn-xs btn-secondary" data-behavior="show_import">
-              <i class="fa fa-user-plus"></i> <%= _('Import Contacts') %>
-            </a>
           </td>
         </tr>
       </table>

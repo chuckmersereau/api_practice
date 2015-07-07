@@ -13,7 +13,7 @@ describe ActivityCommentsController do
     it 'saves a valid submission' do
       xhr :post, :create, activity_comment: valid_attributes, activity_id: activity.id
 
-      response.should render_template('activity_comments/create')
+      expect(response).to render_template('activity_comments/create')
     end
   end
 end

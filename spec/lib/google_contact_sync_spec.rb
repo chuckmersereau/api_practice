@@ -17,6 +17,10 @@ describe GoogleContactSync do
     )
   end
 
+  before do
+    stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
+  end
+
   describe 'sync_notes' do
     describe 'first sync' do
       it 'sets blank mpdx notes with google contact notes' do
@@ -272,11 +276,11 @@ describe GoogleContactSync do
       phone1 = person.phone_numbers.first
       expect(phone1.number).to eq('+12223334444')
       expect(phone1.location).to eq('mobile')
-      expect(phone1.primary).to be_true
+      expect(phone1.primary).to be true
       phone2 = person.phone_numbers.last
       expect(phone2.number).to eq('+17778889999')
       expect(phone2.location).to eq('other')
-      expect(phone2.primary).to be_false
+      expect(phone2.primary).to be false
     end
 
     it 'normalizes the numbers for comparison between mpdx and google' do
@@ -304,6 +308,8 @@ describe GoogleContactSync do
   describe 'sync addresses' do
     it 'combines addresses from mpdx and google by master address comparison which uses SmartyStreets' do
       WebMock.reset!
+
+      stub_google_geocoder
 
       richmond_smarty = '[{"input_index":0,"candidate_index":0,"delivery_line_1":"7229 Forest Ave Ste 208","last_line":"Richmond VA 23226-3765",'\
         '"delivery_point_barcode":"232263765581","components":{"primary_number":"7229","street_name":"Forest","street_suffix":"Ave","secondary_number":"208",'\
@@ -441,9 +447,9 @@ describe GoogleContactSync do
       expect(person.websites.count).to eq(2)
       websites = person.websites.order(:url).to_a
       expect(websites[0].url).to eq('google.example.com')
-      expect(websites[0].primary).to be_true
+      expect(websites[0].primary).to be true
       expect(websites[1].url).to eq('mpdx.example.com')
-      expect(websites[1].primary).to be_false
+      expect(websites[1].primary).to be false
     end
   end
 
@@ -453,9 +459,9 @@ describe GoogleContactSync do
       address2 = build(:address, primary_mailing_address: false)
       address3 = build(:address, primary_mailing_address: true)
       sync.ensure_single_primary_address([address1, address2, address3])
-      expect(address1.primary_mailing_address).to be_true
-      expect(address2.primary_mailing_address).to be_false
-      expect(address3.primary_mailing_address).to be_false
+      expect(address1.primary_mailing_address).to be true
+      expect(address2.primary_mailing_address).to be false
+      expect(address3.primary_mailing_address).to be false
     end
   end
 

@@ -15,14 +15,14 @@ describe Api::V1::TasksController do
 
     it 'all tasks should return all tasks' do
       get '/api/v1/tasks?access_token=' + user.access_token
-      response.should be_success
-      JSON.parse(response.body)['tasks'].length.should == 2
+      expect(response).to be_success
+      expect(JSON.parse(response.body)['tasks'].length).to eq(2)
     end
 
     it 'contact tasks should return one task' do
       get '/api/v1/tasks?filters[contact_ids]=' + contact.id.to_s + '&access_token=' + user.access_token
-      response.should be_success
-      JSON.parse(response.body)['tasks'].length.should == 1
+      expect(response).to be_success
+      expect(JSON.parse(response.body)['tasks'].length).to eq(1)
     end
 
     # the app currently doesn't have activity_type in it and doesn't require it.

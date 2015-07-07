@@ -8,7 +8,7 @@ describe Person::TwitterAccount do
       expect do
         @account = Person::TwitterAccount.find_or_create_from_auth(auth_hash, person)
       end.to change(Person::TwitterAccount, :count).from(0).to(1)
-      person.twitter_accounts.should include(@account)
+      expect(person.twitter_accounts).to include(@account)
     end
   end
   describe 'update from auth' do
@@ -24,6 +24,6 @@ describe Person::TwitterAccount do
 
   it 'should return screen name for to_s' do
     account = Person::TwitterAccount.new(screen_name: 'Doe')
-    account.to_s.should == 'Doe'
+    expect(account.to_s).to eq('Doe')
   end
 end

@@ -21,25 +21,26 @@ describe DataServer do
 
   it 'should import all' do
     date_from = '01/01/1951'
-    @data_server.should_receive(:import_profiles).and_return([profile])
-    @data_server.should_receive(:import_donors).with(profile, date_from)
-    @data_server.should_receive(:import_donations).with(profile, date_from)
+    expect(@data_server).to receive(:import_profiles).and_return([profile])
+    expect(@data_server).to receive(:import_donors).with(profile, date_from)
+    expect(@data_server).to receive(:import_donations).with(profile, date_from)
     @data_server.import_all(date_from)
   end
 
   it 'should return designation numbers for a profile code' do
     designation_numbers = ['031231']
-    @data_server.should_receive(:profile_balance).and_return(designation_numbers: designation_numbers)
-    @data_server.send(:designation_numbers, profile.code).should == designation_numbers
+    expect(@data_server).to receive(:profile_balance).and_return(designation_numbers: designation_numbers)
+    expect(@data_server.send(:designation_numbers, profile.code)).to eq(designation_numbers)
   end
 
   it 'should return a list of all profiles with their associated designation numbers' do
     designation_numbers = ['031231']
     profiles = [{ name: 'Profile 1', code: 'Profile 1' }, { name: 'Profile 2', code: '' }]
-    @data_server.stub(:designation_numbers).and_return(designation_numbers)
-    @data_server.stub(:profiles).and_return(profiles)
-    @data_server.profiles_with_designation_numbers.first[:name].should eq 'Profile 1'
-    @data_server.profiles_with_designation_numbers.first[:designation_numbers].should == designation_numbers
+    allow(@data_server).to receive(:designation_numbers).and_return(designation_numbers)
+    allow(@data_server).to receive(:profiles).and_return(profiles)
+    expect(@data_server.profiles_with_designation_numbers.first[:name]).to eq 'Profile 1'
+    expect(@data_server.profiles_with_designation_numbers.first[:designation_numbers])
+      .to eq(designation_numbers)
   end
 
   context '.import_profiles' do
@@ -48,7 +49,7 @@ describe DataServer do
     it 'in US format' do
       stub_request(:post, /.*profiles/).to_return(body: "ROLE_CODE,ROLE_DESCRIPTION\n,\"Staff Account (0559826)\"\n")
       stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"0000000\",\"2012-03-23 16:01:39.0\",\"123.45\",\"Test Account\"\n")
-      data_server.should_receive(:import_profile_balance)
+      expect(data_server).to receive(:import_profile_balance)
 
       expect do
         data_server.import_profiles
@@ -87,8 +88,8 @@ describe DataServer do
         "\"SP_LAST_NAME\",\"SP_FIRST_NAME\",\"SP_MIDDLE_NAME\",\"SP_TITLE\",\"ADDR2\",\"ADDR3\",\"ADDR4\",\"ADDR_CHANGED\",\"PHONE_CHANGED\",\"CNTRY_DESCR\","\
         "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"19238\",\"ACorporation\",\"123 mi casa blvd.\",\"Colima\",\"COL\",\"456788\",\"(52) 45 456-5678\","\
         "\"MEX\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"8/15/2003\",\"8/15/2003\",\"\",\"O\",\"ACorporation\",\"\"\r\n")
-      @data_server.should_receive(:add_or_update_donor_account)
-      @data_server.should_receive(:add_or_update_company)
+      expect(@data_server).to receive(:add_or_update_donor_account)
+      expect(@data_server).to receive(:add_or_update_company)
       @data_server.import_donors(profile)
     end
 
@@ -96,10 +97,11 @@ describe DataServer do
       stub_request(:post, /.*addresses/).to_return(body: raw_data1)
       primary_contact = double('person')
       other_person = double('person')
-      @data_server.should_receive(:add_or_update_primary_contact).and_return([primary_contact, other_person])
-      @data_server.should_receive(:add_or_update_spouse)
-      primary_contact.should_receive(:add_spouse)
-      other_person.should_receive(:add_spouse)
+      expect(@data_server).to receive(:add_or_update_primary_contact)
+        .and_return([primary_contact, other_person])
+      expect(@data_server).to receive(:add_or_update_spouse)
+      expect(primary_contact).to receive(:add_spouse)
+      expect(other_person).to receive(:add_spouse)
       @data_server.import_donors(profile)
     end
 
@@ -112,7 +114,7 @@ describe DataServer do
       expect do
         @data_server.import_donors(profile)
       end.to change(Contact, :count)
-      @account_list2.contacts.last.name.should == 'Rodriguez, Ramon y Celeste (Moreno)'
+      expect(@account_list2.contacts.last.name).to eq('Rodriguez, Ramon y Celeste (Moreno)')
     end
 
     it 'should create a new person in the right account list and donor account' do
@@ -126,9 +128,9 @@ describe DataServer do
         @data_server.import_donors(profile)
       end.to change(Person, :count)
       new_person = @account_list2.contacts.last.people.order('contact_people.primary::int desc').references(:contact_people).last
-      new_person.last_name.should eq 'Rodriguez'
-      new_person.middle_name.should eq ''
-      new_person.donor_accounts.last.should eq donor_account
+      expect(new_person.last_name).to eq 'Rodriguez'
+      expect(new_person.middle_name).to eq ''
+      expect(new_person.donor_accounts.last).to eq donor_account
 
       stub_request(:post, /.*addresses/).to_return(body:
                                                      "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
@@ -137,8 +139,8 @@ describe DataServer do
         "\"24555\",\"(376) 706-670\",\"MEX\",\"Ramon\",\"C\",\"Sr.\",\"\",\"Moreno\",\"Celeste\",\"Gonzalez\",\"Sra.\",\"\",\"\",\"\",\"4/4/2003\",\"4/4/2003\","\
         "\"\",\"P\",\"Rodrigues\",\"\"\r\n")
       @data_server.import_donors(profile)
-      new_person.reload.last_name.should eq 'Rodrigues'
-      new_person.middle_name.should eq 'C'
+      expect(new_person.reload.last_name).to eq 'Rodrigues'
+      expect(new_person.middle_name).to eq 'C'
     end
 
     it "should notify Airbrake if PERSON_TYPE is not 'O' or 'P'" do
@@ -148,15 +150,15 @@ describe DataServer do
         "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodriguez, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
         "\"24555\",\"(376) 706-670\",\"MEX\",\"Ramon\",\"\",\"Sr.\",\"\",\"Moreno\",\"Celeste\",\"Gonzalez\",\"Sra.\",\"\",\"\",\"\",\"4/4/2003\",\"4/4/2003\","\
         "\"\",\"BAD_PERSON_TYPE\",\"Rodriguez\",\"\"\r\n")
-      Airbrake.should_receive(:notify)
+      expect(Airbrake).to receive(:notify)
       @data_server.import_donors(profile)
     end
     it 'should add or update primary contact' do
-      @data_server.should_receive(:add_or_update_person)
+      expect(@data_server).to receive(:add_or_update_person)
       @data_server.send(:add_or_update_primary_contact, create(:account_list), '', create(:donor_account))
     end
     it 'should add or update spouse' do
-      @data_server.should_receive(:add_or_update_person)
+      expect(@data_server).to receive(:add_or_update_person)
       @data_server.send(:add_or_update_spouse, create(:account_list), '', create(:donor_account))
     end
 
@@ -191,12 +193,12 @@ describe DataServer do
         @account_list.companies << company
         expect do
           new_company = @data_server.send(:add_or_update_company, @account_list, @user, line, @donor_account)
-          new_company.should == company
+          expect(new_company).to eq(company)
         end.to_not change(Company, :count)
       end
       it 'should associate new company with the donor account' do
         @data_server.send(:add_or_update_company, @account_list, @user, line, @donor_account)
-        @donor_account.master_company_id.should_not be_nil
+        expect(@donor_account.master_company_id).not_to be_nil
       end
     end
 
@@ -249,7 +251,7 @@ describe DataServer do
         @donor_account.organization.master_person_sources.create(master_person_id: person.master_person_id, remote_id: 1)
         expect do
           new_contact, _other = @data_server.send(:add_or_update_person, @account_list, line, @donor_account, 1)
-          new_contact.should == person
+          expect(new_contact).to eq(person)
         end.to_not change(MasterPerson, :count)
       end
       it 'should associate new contacts with the donor account' do
@@ -333,8 +335,8 @@ describe DataServer do
       expect(contact.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
       expect(donor_account.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
 
-      expect(prior_address.reload.primary_mailing_address).to be_true
-      expect(contact.addresses.find_by_street(prior_address.street).primary_mailing_address).to be_true
+      expect(prior_address.reload.primary_mailing_address).to be true
+      expect(contact.addresses.find_by_street(prior_address.street).primary_mailing_address).to be true
     end
   end
 
@@ -362,22 +364,22 @@ describe DataServer do
 
   describe 'validate_username_and_password' do
     it 'should validate using the profiles url if there is one' do
-      @data_server.should_receive(:get_params).and_return({})
-      @data_server.should_receive(:get_response).with(@org.profiles_url, {})
-      @data_server.validate_username_and_password.should == true
+      expect(@data_server).to receive(:get_params).and_return({})
+      expect(@data_server).to receive(:get_response).with(@org.profiles_url, {})
+      expect(@data_server.validate_username_and_password).to eq(true)
     end
     it 'should validate using the account balance url if there is no profiles url' do
       @org.profiles_url = nil
-      @data_server.should_receive(:get_params).and_return({})
-      @data_server.should_receive(:get_response).with(@org.account_balance_url, {})
-      @data_server.validate_username_and_password.should == true
+      expect(@data_server).to receive(:get_params).and_return({})
+      expect(@data_server).to receive(:get_response).with(@org.account_balance_url, {})
+      expect(@data_server.validate_username_and_password).to eq(true)
     end
     it 'should return false if the error message says the username/password were wrong' do
-      @data_server.should_receive(:get_response).and_raise(DataServerError.new('Either your username or password were incorrect.'))
-      @data_server.validate_username_and_password.should == false
+      expect(@data_server).to receive(:get_response).and_raise(DataServerError.new('Either your username or password were incorrect.'))
+      expect(@data_server.validate_username_and_password).to eq(false)
     end
     it 'should re-raise other errors' do
-      @data_server.should_receive(:get_response).and_raise(DataServerError.new('other error'))
+      expect(@data_server).to receive(:get_response).and_raise(DataServerError.new('other error'))
       expect do
         @data_server.validate_username_and_password
       end.to raise_error(DataServerError)
@@ -440,7 +442,7 @@ describe DataServer do
   describe 'import account balances' do
     it 'should update a profile balance' do
       stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"0000000\",\"2012-03-23 16:01:39.0\",\"123.45\",\"Test Account\"\n")
-      @data_server.should_receive(:check_credentials!)
+      expect(@data_server).to receive(:check_credentials!)
       expect do
         @data_server.import_profile_balance(profile)
       end.to change(profile, :balance).to(123.45)
@@ -449,7 +451,7 @@ describe DataServer do
       stub_request(:post, /.*accounts/).to_return(body: "\"EMPLID\",\"EFFDT\",\"BALANCE\",\"ACCT_NAME\"\n\"0000000\",\"2012-03-23 16:01:39.0\",\"123.45\",\"Test Account\"\n")
       @designation_account = create(:designation_account, organization: @org, designation_number: '0000000')
       @data_server.import_profile_balance(profile)
-      @designation_account.reload.balance.should == 123.45
+      expect(@designation_account.reload.balance).to eq(123.45)
     end
   end
 
@@ -465,15 +467,15 @@ describe DataServer do
                                                      "\xEF\xBB\xBF\"DONATION_ID\",\"PEOPLE_ID\",\"ACCT_NAME\",\"DESIGNATION\",\"MOTIVATION\",\"PAYMENT_METHOD\",\"TENDERED_CURRENCY\",\"MEMO\","\
         "\"DISPLAY_DATE\",\"AMOUNT\",\"TENDERED_AMOUNT\"\r\n\"1062\",\"12271\",\"Garcia, Reynaldo\",\"10640\",\"\",\"EFECTIVO\",\"MXN\",\"\",\"4/23/2003\","\
         "\"1000.0000\",\"1000.0000\"\r\n")
-      @data_server.should_receive(:check_credentials!)
-      @data_server.should_receive(:find_or_create_designation_account)
-      @data_server.should_receive(:add_or_update_donation)
+      expect(@data_server).to receive(:check_credentials!)
+      expect(@data_server).to receive(:find_or_create_designation_account)
+      expect(@data_server).to receive(:add_or_update_donation)
       @data_server.import_donations(profile, DateTime.new(1951, 1, 1), '2/2/2012')
     end
 
     it 'should find an existing designation account' do
       account = create(:designation_account, organization: @org, designation_number: line['DESIGNATION'])
-      @data_server.send(:find_or_create_designation_account, line['DESIGNATION'], profile).should == account
+      expect(@data_server.send(:find_or_create_designation_account, line['DESIGNATION'], profile)).to eq(account)
     end
 
     it 'should create a new designation account' do
@@ -494,7 +496,7 @@ describe DataServer do
         @data_server.send(:add_or_update_donation, line, designation_account, profile)
         expect do
           donation = @data_server.send(:add_or_update_donation, line.merge!('AMOUNT' => '5'), designation_account, profile)
-          donation.amount == '5'
+          expect(donation.amount).to eq(5)
         end.to_not change(Donation, :count)
       end
     end

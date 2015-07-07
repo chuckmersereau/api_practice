@@ -33,7 +33,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
     contacts.each do |pl_contact|
       next unless pl_contact['external_id'] &&
-                  contact = account_list.contacts.where(id: pl_contact['external_id']).first
+                  contact = account_list.contacts.find_by(id: pl_contact['external_id'])
 
       contact.update_columns(prayer_letters_id: pl_contact['contact_id'],
                              prayer_letters_params: contact_params_map ? contact_params_map[contact.id] : nil)
@@ -126,7 +126,7 @@ class PrayerLettersAccount < ActiveRecord::Base
     return unless active?
 
     RestClient::Request.execute(method: method, url: SERVICE_URL + path, payload: params, timeout: 5000,
-                                headers: { 'Authorization' => "Bearer #{ URI.encode(oauth2_token) }" })
+                                headers: { 'Authorization' => "Bearer #{URI.encode(oauth2_token)}" })
   rescue RestClient::Unauthorized, RestClient::Forbidden
     handle_bad_token
   end

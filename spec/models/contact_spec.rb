@@ -30,7 +30,7 @@ describe Contact do
       address = create(:address, addressable: contact)
       contact.addresses_attributes = [address.attributes.merge!(street: address.street + 'boo').with_indifferent_access.except(:addressable_id, :addressable_type, :updated_at, :created_at)]
       contact.save!
-      contact.addresses.first.street.should == address.street + 'boo'
+      expect(contact.addresses.first.street).to eq(address.street + 'boo')
     end
   end
 
@@ -54,8 +54,8 @@ describe Contact do
           }
         }
       contact.update_attributes(people_attributes)
-      expect(email1.reload.primary?).to be_false
-      expect(email2.reload.primary?).to be_true
+      expect(email1.reload.primary?).to be false
+      expect(email2.reload.primary?).to be true
     end
   end
 
@@ -65,7 +65,7 @@ describe Contact do
       account_list.designation_accounts << create(:designation_account, organization: donor_account.organization)
       contact.donor_accounts_attributes = { '0' => { account_number: donor_account.account_number, organization_id: donor_account.organization_id } }
       contact.save!
-      contact.donor_accounts.should include(donor_account)
+      expect(contact.donor_accounts).to include(donor_account)
     end
 
     it 'creates a new donor account' do
@@ -82,7 +82,7 @@ describe Contact do
       contact.donor_accounts_attributes = { '0' => { id: donor_account.id, account_number: 'asdf' } }
       contact.save!
 
-      donor_account.reload.account_number.should == 'asdf'
+      expect(donor_account.reload.account_number).to eq('asdf')
     end
 
     it 'deletes an existing donor account' do
@@ -107,7 +107,7 @@ describe Contact do
 
     it 'saves a contact when posting a blank donor account number' do
       contact.donor_accounts_attributes = { '0' => { account_number: '', organization_id: 1 } }
-      contact.save.should == true
+      expect(contact.save).to eq(true)
     end
 
     it "won't let you assign the same donor account number to two contacts" do
@@ -115,7 +115,15 @@ describe Contact do
       donor_account.contacts << contact
 
       contact2 = create(:contact, account_list: contact.account_list)
-      contact2.update_attributes(donor_accounts_attributes: { '0' => { account_number: donor_account.account_number, organization_id: donor_account.organization_id } }).should == false
+
+      expect(
+        contact2.update(donor_accounts_attributes: {
+                          '0' => {
+                            account_number: donor_account.account_number,
+                            organization_id: donor_account.organization_id
+                          }
+                        })
+      ).to eq(false)
     end
   end
 
@@ -130,7 +138,7 @@ describe Contact do
       expect do
         @contact = Contact.create_from_donor_account(@donor_account, @account_list)
       end.to change(Address, :count)
-      @contact.addresses.first.equal_to?(@donor_account.addresses.first).should be_true
+      expect(@contact.addresses.first.equal_to?(@donor_account.addresses.first)).to be true
       expect(@contact.addresses.first.source_donor_account).to eq(@donor_account)
       expect(@contact.addresses.first.remote_id).to eq('1')
     end
@@ -139,7 +147,7 @@ describe Contact do
   it 'should have a primary person' do
     person = create(:person)
     contact.people << person
-    contact.primary_or_first_person.should == person
+    expect(contact.primary_or_first_person).to eq(person)
   end
 
   describe 'when being deleted' do
@@ -169,15 +177,15 @@ describe Contact do
 
   describe '#late_by?' do
     it 'should tell if a monthly donor is late on their donation' do
-      contact.late_by?(2.days, 30.days).should be true
-      contact.late_by?(30.days, 60.days).should be false
-      contact.late_by?(60.days).should be false
+      expect(contact.late_by?(2.days, 30.days)).to be true
+      expect(contact.late_by?(30.days, 60.days)).to be false
+      expect(contact.late_by?(60.days)).to be false
     end
 
     it 'should tell if an annual donor is late on their donation' do
       contact = create(:contact, pledge_frequency: 12.0, last_donation_date: 14.months.ago)
-      contact.late_by?(30.days, 45.days).should be false
-      contact.late_by?(45.days).should be true
+      expect(contact.late_by?(30.days, 45.days)).to be false
+      expect(contact.late_by?(45.days)).to be true
     end
   end
 
@@ -199,12 +207,12 @@ describe Contact do
       loser_contact.people << create(:person, first_name: 'Bob')
 
       contact.merge(loser_contact)
-      contact.contact_people.size.should == 3
+      expect(contact.contact_people.size).to eq(3)
     end
 
     it 'should not remove the loser from prayer letters service' do
       pla = create(:prayer_letters_account, account_list: account_list)
-      pla.should_not_receive(:delete_contact)
+      expect(pla).to_not receive(:delete_contact)
 
       loser_contact.update_column(:prayer_letters_id, 'foo')
 
@@ -225,8 +233,8 @@ describe Contact do
       expect { contact.merge(loser_contact) }
         .to change(contact, :uncompleted_tasks_count).by(1)
 
-      contact.tasks.should include(task, shared_task)
-      shared_task.contacts.reload.should match_array [contact]
+      expect(contact.tasks).to include(task, shared_task)
+      expect(shared_task.contacts.reload).to match_array [contact]
     end
 
     it "should move loser's notifications" do
@@ -234,7 +242,7 @@ describe Contact do
 
       contact.merge(loser_contact)
 
-      contact.notifications.should include(notification)
+      expect(contact.notifications).to include(notification)
     end
 
     it 'should not duplicate referrals' do
@@ -244,7 +252,7 @@ describe Contact do
 
       contact.merge(loser_contact)
 
-      contact.referrals_to_me.length.should == 1
+      expect(contact.referrals_to_me.length).to eq(1)
     end
 
     it 'should not remove the facebook account of a person on the merged contact' do
@@ -257,9 +265,9 @@ describe Contact do
 
       contact.merge(loser_contact)
 
-      contact.people.length.should == 1
+      expect(contact.people.length).to eq(1)
 
-      contact.people.first.facebook_accounts.should == [fb]
+      expect(contact.people.first.facebook_accounts).to eq([fb])
     end
 
     it 'should never delete a task' do
@@ -329,7 +337,7 @@ describe Contact do
     end
 
     it 'deletes this person from prayerletters.com if no other contact has the prayer_letters_id' do
-      stub_request(:delete, /www.prayerletters.com\/.*/)
+      stub_request(:delete, %r{www.prayerletters.com/.*})
         .to_return(status: 200, body: '', headers: {})
 
       prayer_letters_id  = 'foo'

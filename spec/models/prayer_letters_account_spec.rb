@@ -12,14 +12,14 @@ describe PrayerLettersAccount do
     it 'marks token as invalid if response is a 401 for OAuth2' do
       stub_request(:get, %r{https:\/\/www\.prayerletters\.com\/*}).to_return(status: 401)
       pla = create(:prayer_letters_account_oauth2)
-      pla.should_receive(:handle_bad_token).and_return('{}')
+      expect(pla).to receive(:handle_bad_token).and_return('{}')
       pla.contacts
     end
 
     it 'marks token as invalid if response is a 403 for OAuth2' do
       stub_request(:get, %r{https:\/\/www\.prayerletters\.com\/*}).to_return(status: 403)
       pla = create(:prayer_letters_account_oauth2)
-      pla.should_receive(:handle_bad_token).and_return('{}')
+      expect(pla).to receive(:handle_bad_token).and_return('{}')
       pla.contacts
     end
 
@@ -41,7 +41,7 @@ describe PrayerLettersAccount do
 
   context '#handle_bad_token' do
     it 'sends an email to the account users' do
-      AccountMailer.should_receive(:prayer_letters_invalid_token).with(an_instance_of(AccountList)).and_return(double(deliver: true))
+      expect(AccountMailer).to receive(:prayer_letters_invalid_token).with(an_instance_of(AccountList)).and_return(double(deliver: true))
 
       expect do
         pla.handle_bad_token
@@ -49,13 +49,13 @@ describe PrayerLettersAccount do
     end
 
     it 'sets valid_token to false' do
-      AccountMailer.stub(:prayer_letters_invalid_token).and_return(double(deliver: true))
+      allow(AccountMailer).to receive(:prayer_letters_invalid_token).and_return(double(deliver: true))
 
       expect do
         pla.handle_bad_token
       end.to raise_exception(PrayerLettersAccount::AccessError)
 
-      expect(pla.valid_token).to be_false
+      expect(pla.valid_token).to be false
     end
   end
 
@@ -147,7 +147,7 @@ describe PrayerLettersAccount do
       expect(contact.people.count).to eq(0)
 
       contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John",'\
-        '"external_id":' + contact.id.to_s +  ',"company":"","contact_id":"1",'\
+        '"external_id":' + contact.id.to_s + ',"company":"","contact_id":"1",'\
         '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
         '"country":""}}]}'
 
@@ -178,7 +178,7 @@ describe PrayerLettersAccount do
                                             postal_code: '94539', country: 'United States')
       contacts_body = '{"contacts":[{"name":"John Doe","greeting":"","file_as":"Doe, John","contact_id":"c1",'\
         '"address":{"street":"123 Somewhere St","city":"Fremont","state":"CA","postal_code":"94539",'\
-        '"country":""},"external_id":' + contact.id.to_s +  '}]}'
+        '"country":""},"external_id":' + contact.id.to_s + '}]}'
 
       stub = stub_request(:get, 'https://www.prayerletters.com/api/v1/contacts')
              .with(headers: { 'Authorization' => 'Bearer MyString' }).to_return(body: contacts_body)

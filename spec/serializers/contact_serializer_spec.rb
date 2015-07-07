@@ -29,16 +29,25 @@ describe ContactSerializer do
     end
 
     it 'people list' do
-      json.should include :people
+      expect(json).to include :people
     end
 
     it 'addresses list' do
-      json.should include :addresses
+      expect(json).to include :addresses
+    end
+
+    it 'returns frequency without trailing zeros' do
+      monthly_json = ContactSerializer.new(contact).to_json
+      expect(JSON.parse(monthly_json)['contact']['pledge_frequency']).to eq '1'
+      contact.update_attribute(:pledge_frequency, 0.23076923076923)
+      contact.reload
+      weekly_json = ContactSerializer.new(contact).to_json
+      expect(JSON.parse(weekly_json)['contact']['pledge_frequency']).to eq '0.23076923076923'
     end
 
     # it "cache_key is dependant on include params" do
     #   key = ContactSerializer.new(contact, {scope: {include: 'person'}}).cache_key
-    #   key.should_not == ContactSerializer.new(contact).cache_key
+    #   expect(key).not_to eq(ContactSerializer.new(contact).cache_key)
     # end
     #
     # it "cache_key should change when updated" do

@@ -13,11 +13,11 @@ describe Api::V1::TasksController do
 
     it 'gets count' do
       get :count, access_token: user.access_token
-      response.should be_success
+      expect(response).to be_success
       json = JSON.parse(response.body)
-      json['total'].should == 4
-      json['uncompleted'].should == 2
-      json['overdue'].should == 1
+      expect(json['total']).to eq(4)
+      expect(json['uncompleted']).to eq(2)
+      expect(json['overdue']).to eq(1)
     end
   end
 end

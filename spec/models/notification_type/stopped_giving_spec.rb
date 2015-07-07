@@ -14,20 +14,20 @@ describe NotificationType::StoppedGiving do
       it 'adds a notification if late' do
         create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 63.days.ago)
         notifications = stopped_giving.check(contact.account_list)
-        notifications.length.should == 1
+        expect(notifications.length).to eq(1)
       end
 
       it 'skips people with future pledge_start_date' do
         create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 60.days.ago)
         contact.update_attributes(pledge_start_date: 1.day.from_now)
         notifications = stopped_giving.check(contact.account_list)
-        notifications.length.should == 0
+        expect(notifications.length).to eq(0)
       end
 
       it "doesn't add a notification if not late" do
         create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 37.days.ago)
         notifications = stopped_giving.check(contact.account_list)
-        notifications.length.should == 0
+        expect(notifications.length).to eq(0)
       end
 
       it "doesn't add a notification if the contact is on a different account list with a shared designation account" do
@@ -35,7 +35,7 @@ describe NotificationType::StoppedGiving do
         account_list2 = create(:account_list)
         account_list2.account_list_entries.create!(designation_account: da)
         notifications = stopped_giving.check(account_list2)
-        notifications.length.should == 0
+        expect(notifications.length).to eq(0)
       end
     end
 
@@ -47,20 +47,20 @@ describe NotificationType::StoppedGiving do
       it 'adds a notification if late' do
         create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 65.days.ago)
         notifications = stopped_giving.check(contact.account_list)
-        notifications.length.should == 1
+        expect(notifications.length).to eq(1)
       end
 
       it "doesn't add a notification if not late" do
         create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 37.days.ago)
         notifications = stopped_giving.check(contact.account_list)
-        notifications.length.should == 0
+        expect(notifications.length).to eq(0)
       end
     end
 
     context 'has never given' do
       it "doesn't add a notification" do
         notifications = stopped_giving.check(contact.account_list)
-        notifications.length.should == 0
+        expect(notifications.length).to eq(0)
       end
     end
   end
@@ -76,7 +76,7 @@ describe NotificationType::StoppedGiving do
 
     it 'associates the contact with the task created' do
       task = stopped_giving.create_task(account_list, contact.notifications.new)
-      task.contacts.reload.should include contact
+      expect(task.contacts.reload).to include contact
     end
   end
 end

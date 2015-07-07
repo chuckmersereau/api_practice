@@ -125,8 +125,8 @@ describe 'Overall notification tests' do
     if giving[:pledge_frequency].nil?
       pledge_amount = nil
     else
-      pledge_amount = 10 * (giving[:pledge_frequency] >= 1 ? giving[:pledge_frequency] :
-          giving[:pledge_frequency] / weekly)
+      pledge_amount = 10 * giving[:pledge_frequency]
+      pledge_amount /= weekly unless giving[:pledge_frequency] >= 1
     end
     contact.update_columns(pledge_frequency: giving[:pledge_frequency] || 1, last_donation_date: nil,
                            pledge_amount: pledge_amount, first_donation_date: nil, pledge_received: false)

@@ -121,8 +121,8 @@ group :development, :test do
   gem 'awesome_print'
   gem 'database_cleaner'
   gem 'spring-commands-rspec'
-  gem 'rspec', '~> 2.14.1' # 3.0.0.beta2'
-  gem 'rspec-rails' # , '3.0.0.beta2'
+  gem 'rspec', '~> 3.3.0'
+  gem 'rspec-rails', '~> 3.3.2'
   gem 'factory_girl_rails'
   gem 'guard-rubocop'
   gem 'guard-rspec'
@@ -139,14 +139,14 @@ end
 
 group :test do
   gem 'mock_redis'
-  gem 'webmock', '~> 1.9.0'
+  gem 'webmock', '~> 1.21.0'
   gem 'rb-fsevent', require: false
   gem 'growl'
   gem 'capybara'
   gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
-  gem 'rubocop'
+  gem 'rubocop', '~> 0.32.1'
   gem 'test_after_commit'
 end
 

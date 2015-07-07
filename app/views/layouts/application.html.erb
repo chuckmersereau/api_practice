@@ -78,7 +78,7 @@
                 </button>
               </div>
               <div class="row">
-                <div class="col-md-9 col-sm-9">
+                <div class="col-md-8">
                   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                       <li class="item <%= request.path == '/' ? 'active' : '' %>"><%= link_to(_('Dashboard'), "/") %></li>
@@ -95,7 +95,7 @@
                     </ul>
                   </div>
                 </div>
-                <div class="col-md-3 col-sm-3 text-right">
+                <div class="col-md-4 text-right">
                   <div class="navbar-quick hidden-sm hidden-xs">
                     <%= @account_list_exhibit.balances(current_user) %>
                   </div>
@@ -124,6 +124,10 @@
                 <% if params[:controller] == 'contacts' %>
                   <div class="section"><%= link_to(_('Import Contacts'), accounts_path, class: '') %></div>
                   <div class="section"><%= link_to(_('Find Duplicates'), find_duplicates_contacts_path, class: '') %></div>
+                <% end %>
+                <% if params[:controller] == 'donations' %>
+                  <div class="section"><%= link_to('<i class="fa fa-plus-square"></i> '.html_safe + _('Add a donation'), new_donation_path, remote: true, class: 'no-new-tab') %></div>
+                  <div class="section"><%= link_to(_('Contribution Report'), contributions_reports_path) %></div>
                 <% end %>
                 <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
                   <div class="section right">

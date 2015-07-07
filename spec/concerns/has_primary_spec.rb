@@ -13,8 +13,8 @@ describe HasPrimary do
 
     it 'leaves the existing primary one if one is specified' do
       email1.send(:ensure_only_one_primary)
-      expect(email1.reload.primary).to be_true
-      expect(email2.reload.primary).to be_false
+      expect(email1.reload.primary).to be true
+      expect(email2.reload.primary).to be false
     end
 
     it 'updates one of the items to become primary if none are' do
@@ -22,8 +22,8 @@ describe HasPrimary do
       email1.send(:ensure_only_one_primary)
       email1.reload
       email2.reload
-      expect(email1.primary || email2.primary).to be_true
-      expect(email1.primary && email2.primary).to be_false
+      expect(email1.primary || email2.primary).to be true
+      expect(email1.primary && email2.primary).to be false
     end
 
     it 'makes it so that only one of the items can be primary' do
@@ -31,20 +31,20 @@ describe HasPrimary do
       email2.send(:ensure_only_one_primary)
       email1.reload
       email2.reload
-      expect(email1.primary || email2.primary).to be_true
-      expect(email1.primary && email2.primary).to be_false
+      expect(email1.primary || email2.primary).to be true
+      expect(email1.primary && email2.primary).to be false
     end
 
     it 'sets historic items to not primary' do
       email1.update_column(:historic, true)
       email1.send(:ensure_only_one_primary)
-      expect(email1.reload.primary).to be_false
-      expect(email2.reload.primary).to be_true
+      expect(email1.reload.primary).to be false
+      expect(email2.reload.primary).to be true
 
       email2.update_column(:historic, true)
       email2.send(:ensure_only_one_primary)
-      expect(email1.reload.primary).to be_false
-      expect(email2.reload.primary).to be_false
+      expect(email1.reload.primary).to be false
+      expect(email2.reload.primary).to be false
     end
   end
 
@@ -58,10 +58,10 @@ describe HasPrimary do
     end
 
     it 'leaves the existing primary one if one is specified' do
-      expect(contact_person1.reload.primary).to be_true
+      expect(contact_person1.reload.primary).to be true
       contact_person1.send(:ensure_only_one_primary)
-      expect(contact_person1.reload.primary).to be_true
-      expect(contact_person2.reload.primary).to be_false
+      expect(contact_person1.reload.primary).to be true
+      expect(contact_person2.reload.primary).to be false
     end
 
     it 'updates one of the items to become primary if none are' do
@@ -69,8 +69,8 @@ describe HasPrimary do
       contact_person1.send(:ensure_only_one_primary)
       contact_person1.reload
       contact_person2.reload
-      expect(contact_person1.primary || contact_person2.primary).to be_true
-      expect(contact_person1.primary && contact_person2.primary).to be_false
+      expect(contact_person1.primary || contact_person2.primary).to be true
+      expect(contact_person1.primary && contact_person2.primary).to be false
     end
 
     it 'makes it so that only one of the items can be primary' do
@@ -78,8 +78,8 @@ describe HasPrimary do
       contact_person2.send(:ensure_only_one_primary)
       contact_person1.reload
       contact_person2.reload
-      expect(contact_person1.primary || contact_person2.primary).to be_true
-      expect(contact_person1.primary && contact_person2.primary).to be_false
+      expect(contact_person1.primary || contact_person2.primary).to be true
+      expect(contact_person1.primary && contact_person2.primary).to be false
     end
   end
 end

@@ -49,7 +49,7 @@ describe GoogleImport do
       person = create(:person)
       @contact.people << person
       expect do
-        @google_import.should_receive(:create_or_update_person).and_return(person)
+        expect(@google_import).to receive(:create_or_update_person).and_return(person)
         @google_import.import
       end.to_not change(Contact, :count)
     end
@@ -58,18 +58,18 @@ describe GoogleImport do
       # note the json file has a blank contact record which should be ignored, so the count changes by 1 only
       expect do
         expect do
-          @google_import.should_receive(:create_or_update_person).and_return(create(:person))
+          expect(@google_import).to receive(:create_or_update_person).and_return(create(:person))
           @google_import.import
         end.to change(Person, :count).by(1)
       end.to change(Contact, :count).by(1)
     end
 
     it 'adds tags from the import' do
-      @google_import.should_receive(:create_or_update_person).and_return(create(:person))
+      expect(@google_import).to receive(:create_or_update_person).and_return(create(:person))
 
       @import.update_column(:tags, 'hi, mom')
       @google_import.import
-      Contact.last.tag_list.sort.should == %w(hi mom)
+      expect(Contact.last.tag_list.sort).to eq(%w(hi mom))
     end
   end
 
@@ -87,7 +87,7 @@ describe GoogleImport do
       @contact.people << person
       expect do
         @google_import.send(:create_or_update_person, @google_contact)
-        person.reload.first_name.should == 'John'
+        expect(person.reload.first_name).to eq('John')
       end.to_not change(Person, :count)
     end
 
@@ -168,7 +168,7 @@ describe GoogleImport do
   describe 'overall import results' do
     def check_imported_data
       contacts = @account_list.contacts.where(name: 'Google, John')
-      expect(contacts.to_a.count).to eq(1)
+      expect(contacts.to_a.size).to eq(1)
       contact = contacts.first
 
       expect(contact.people.count).to eq(1)
@@ -188,24 +188,24 @@ describe GoogleImport do
       expect(person.employer).to eq('Example, Inc')
       expect(person.occupation).to eq('Worker Person')
 
-      expect(person.websites.to_a.count).to eq(2)
+      expect(person.websites.to_a.size).to eq(2)
       website1 = person.websites.order(:url).first
       expect(website1.url).to eq('blog.example.com')
-      expect(website1.primary).to be_false
+      expect(website1.primary).to be false
       website2 = person.websites.order(:url).last
       expect(website2.url).to eq('www.example.com')
-      expect(website2.primary).to be_true
+      expect(website2.primary).to be true
 
       expect(contact.notes).to eq('Notes here')
 
-      expect(contact.addresses.to_a.count).to eq(2)
+      expect(contact.addresses.to_a.size).to eq(2)
       address1 = contact.addresses.order(:postal_code).first
       expect(address1.country).to eq('United States')
       expect(address1.city).to eq('Somewhere')
       expect(address1.street).to eq('2345 Long Dr. #232')
       expect(address1.state).to eq('IL')
       expect(address1.postal_code).to eq('12345')
-      expect(address1.primary_mailing_address).to be_true
+      expect(address1.primary_mailing_address).to be true
       address2 = contact.addresses.order(:postal_code).last
       expect(address2.country).to eq('United States')
       expect(address2.city).to eq('Anywhere')
@@ -213,22 +213,22 @@ describe GoogleImport do
       expect(address2.state).to eq('MO')
       expect(address2.postal_code).to eq('56789')
 
-      expect(person.email_addresses.to_a.count).to eq(1)
+      expect(person.email_addresses.to_a.size).to eq(1)
       email = person.email_addresses.order(:email).first
       expect(email.email).to eq('johnsmith@example.com')
       expect(email.location).to eq('other')
-      expect(email.primary).to be_true
+      expect(email.primary).to be true
 
-      expect(person.phone_numbers.to_a.count).to eq(1)
+      expect(person.phone_numbers.to_a.size).to eq(1)
       phone = person.phone_numbers.order(:number).first
       expect(phone.number).to eq('+11233345158')
       expect(phone.location).to eq('mobile')
-      expect(phone.primary).to be_true
+      expect(phone.primary).to be true
 
       expect(person.pictures.count).to eq(1)
       picture = person.pictures.first
       expect(picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
-      expect(picture.primary).to be_true
+      expect(picture.primary).to be true
 
       expect(person.google_contacts.count).to eq(1)
       google_contact = person.google_contacts.first
@@ -305,10 +305,10 @@ describe GoogleImport do
     expect(person.websites.count).to eq(2)
     website1 = person.websites.order(:url).first
     expect(website1.url).to eq('example.com')
-    expect(website1.primary).to be_false
+    expect(website1.primary).to be false
     website2 = person.websites.order(:url).last
     expect(website2.url).to eq('other.example.com')
-    expect(website2.primary).to be_true
+    expect(website2.primary).to be true
   end
 
   describe 'import override behavior for basic fields' do
@@ -336,7 +336,7 @@ describe GoogleImport do
       expect(@existing_person.suffix).to eq('III')
 
       @original_picture.reload
-      expect(@original_picture.primary).to be_false
+      expect(@original_picture.primary).to be false
       expect(@existing_person.pictures.count).to eq(2)
       expect(@existing_person.primary_picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
     end
@@ -356,7 +356,7 @@ describe GoogleImport do
       @original_picture.reload
 
       # Check that it does add the picture but doesn't set it to primary
-      expect(@original_picture.primary).to be_true
+      expect(@original_picture.primary).to be true
       expect(@existing_person.pictures.count).to eq(2)
       expect(@existing_person.primary_picture.image.url).to be_nil
     end
@@ -411,7 +411,7 @@ describe GoogleImport do
         @google_import.import
       end.to change(Contact, :count).by(1)
 
-      Contact.last.tag_list.sort.should == %w(hi mom more tags)
+      expect(Contact.last.tag_list.sort).to eq(%w(hi mom more tags))
     end
 
     it 'handles the case when the Google auth token cannot be refreshed' do
@@ -429,6 +429,7 @@ describe GoogleImport do
       stub_g_contacts('spec/fixtures/google_contacts_no_primary.json')
       stub_g_contact_photo
       stub_smarty_and_cloudinary
+      stub_google_geocoder
 
       @import.override = false
       @google_import.import
@@ -436,33 +437,33 @@ describe GoogleImport do
       contact = @account_list.contacts.where(name: 'Doe, John').first
       person = contact.people.first
 
-      expect(person.websites.to_a.count).to eq(2)
+      expect(person.websites.to_a.size).to eq(2)
       website1 = person.websites.order(:url).first
       website2 = person.websites.order(:url).last
-      expect(website1.primary || website2.primary).to be_true
-      expect(website1.primary && website2.primary).to be_false
+      expect(website1.primary || website2.primary).to be true
+      expect(website1.primary && website2.primary).to be false
 
-      expect(contact.addresses.to_a.count).to eq(2)
+      expect(contact.addresses.to_a.size).to eq(2)
       address1 = contact.addresses.order(:postal_code).first
       address2 = contact.addresses.order(:postal_code).last
-      expect(address1.primary_mailing_address || address1.primary_mailing_address).to be_true
-      expect(address2.primary_mailing_address && address2.primary_mailing_address).to be_false
+      expect(address1.primary_mailing_address || address1.primary_mailing_address).to be true
+      expect(address2.primary_mailing_address && address2.primary_mailing_address).to be false
 
-      expect(person.email_addresses.to_a.count).to eq(2)
+      expect(person.email_addresses.to_a.size).to eq(2)
       email1 = person.email_addresses.order(:email).first
       email2 = person.email_addresses.order(:email).last
-      expect(email1.primary || email1.primary).to be_true
-      expect(email2.primary && email2.primary).to be_false
+      expect(email1.primary || email1.primary).to be true
+      expect(email2.primary && email2.primary).to be false
 
-      expect(person.phone_numbers.to_a.count).to eq(2)
+      expect(person.phone_numbers.to_a.size).to eq(2)
       phone1 = person.phone_numbers.order(:number).first
       phone2 = person.phone_numbers.order(:number).last
-      expect(phone1.primary || phone1.primary).to be_true
-      expect(phone2.primary && phone2.primary).to be_false
+      expect(phone1.primary || phone1.primary).to be true
+      expect(phone2.primary && phone2.primary).to be false
 
       expect(person.pictures.count).to eq(1)
       picture = person.pictures.first
-      expect(picture.primary).to be_true
+      expect(picture.primary).to be true
     end
   end
 end

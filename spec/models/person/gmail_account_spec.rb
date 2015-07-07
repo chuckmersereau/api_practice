@@ -12,15 +12,15 @@ describe Person::GmailAccount do
   context '#client' do
     it 'initializes a gmail client' do
       client = gmail_account.client
-      client.authorization.access_token.should == google_account.token
+      expect(client.authorization.access_token).to eq(google_account.token)
     end
   end
 
   context '#folders' do
     it 'returns a list of gmail folders/labels' do
-      gmail_account.stub(:client).and_return(client)
+      allow(gmail_account).to receive(:client).and_return(client)
 
-      client.should_receive(:labels).and_return(double(all: []))
+      expect(client).to receive(:labels).and_return(double(all: []))
 
       gmail_account.folders
     end
@@ -28,10 +28,10 @@ describe Person::GmailAccount do
 
   context '#gmail' do
     it 'refreshes the google account token if expired' do
-      Gmail.stub(:connect).and_return(double(logout: true))
+      allow(Gmail).to receive(:connect).and_return(double(logout: true))
       google_account.expires_at = 1.hour.ago
 
-      google_account.should_receive(:refresh_token!).once
+      expect(google_account).to receive(:refresh_token!).once
       gmail_account.gmail {}
     end
   end
@@ -49,25 +49,25 @@ describe Person::GmailAccount do
       google_account.save
       account_list.users << user
 
-      Gmail.stub(:connect).and_return(client)
-      client.stub(:mailbox).with('[Gmail]/Sent Mail').and_return(sent_mailbox)
-      client.stub(:mailbox).with('[Gmail]/All Mail').and_return(all_mailbox)
+      allow(Gmail).to receive(:connect).and_return(client)
+      allow(client).to receive(:mailbox).with('[Gmail]/Sent Mail').and_return(sent_mailbox)
+      allow(client).to receive(:mailbox).with('[Gmail]/All Mail').and_return(all_mailbox)
     end
 
     it 'logs a sent email' do
-      sent_mailbox.should_receive(:emails).and_return([email])
-      all_mailbox.should_receive(:emails).and_return([])
+      expect(sent_mailbox).to receive(:emails).and_return([email])
+      expect(all_mailbox).to receive(:emails).and_return([])
 
-      gmail_account.should_receive(:log_email).once
+      expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
     end
 
     it 'logs a received email' do
-      sent_mailbox.should_receive(:emails).and_return([])
-      all_mailbox.should_receive(:emails).and_return([email])
+      expect(sent_mailbox).to receive(:emails).and_return([])
+      expect(all_mailbox).to receive(:emails).and_return([email])
 
-      gmail_account.should_receive(:log_email).once
+      expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
     end
@@ -89,10 +89,10 @@ describe Person::GmailAccount do
       end.to change(ActivityComment, :count).by(1)
 
       task = Task.last
-      task.subject.should == 'subject'
-      task.completed.should == true
-      task.completed_at.to_s(:db).should == gmail_message.envelope.date.to_s(:db)
-      task.result.should == 'Done'
+      expect(task.subject).to eq('subject')
+      expect(task.completed).to eq(true)
+      expect(task.completed_at.to_s(:db)).to eq(gmail_message.envelope.date.to_s(:db))
+      expect(task.result).to eq('Done')
     end
 
     it "creates a task even if the email doesn't have a subject" do
@@ -124,7 +124,7 @@ describe Person::GmailAccount do
       end.to change(GoogleEmail, :count).by(1)
 
       task = GoogleEmail.last
-      task.google_email_id.should == gmail_message.msg_id
+      expect(task.google_email_id).to eq(gmail_message.msg_id)
     end
 
     it "doesn't create a duplicate google_email" do

@@ -5,7 +5,7 @@ describe EmailAddressExhibit do
   let(:context) { double }
 
   it 'returns a mailto link for to_s' do
-    context.stub(:mail_to).and_return('<a href="mailto:MyString">MyString</a>')
-    subject.to_s.should == '<a href="mailto:MyString">MyString</a>'
+    allow(context).to receive(:mail_to).and_return('<a href="mailto:MyString">MyString</a>')
+    expect(subject.to_s).to eq('<a href="mailto:MyString">MyString</a>')
   end
 end

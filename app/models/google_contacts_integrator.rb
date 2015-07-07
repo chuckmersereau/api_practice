@@ -201,13 +201,13 @@ class GoogleContactsIntegrator
       .joins('LEFT JOIN phone_numbers ON people.id = phone_numbers.person_id')
       .joins('LEFT JOIN person_websites ON people.id = person_websites.person_id')
       .joins('LEFT JOIN google_contacts ON google_contacts.person_id = people.id AND google_contacts.contact_id = contacts.id '\
-          "AND google_contacts.google_account_id = #{ quote_sql(@account.id) }")
+          "AND google_contacts.google_account_id = #{quote_sql(@account.id)}")
       .group('contacts.id, google_contacts.last_synced, google_contacts.id')
       .having('google_contacts.last_synced IS NULL ' \
         'OR google_contacts.last_synced < ' \
             'GREATEST(contacts.updated_at, MAX(contact_people.updated_at), MAX(people.updated_at), MAX(addresses.updated_at), ' \
                 'MAX(email_addresses.updated_at), MAX(phone_numbers.updated_at), MAX(person_websites.updated_at))' +
-        (updated_link_ids.empty? ? '' : " OR google_contacts.id IN (#{ quote_sql_list(updated_link_ids) })"))
+        (updated_link_ids.empty? ? '' : " OR google_contacts.id IN (#{quote_sql_list(updated_link_ids)})"))
       .distinct
       .readonly(false)
   end

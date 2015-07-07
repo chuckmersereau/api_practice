@@ -33,7 +33,7 @@ describe ImportsController do
     end
 
     it 'raises error if none found' do
-      expect { get :show, id: 1 }.to raise_error
+      expect { get :show, id: 1 }.to raise_error(ActiveRecord::RecordNotFound)
     end
   end
 

@@ -11,7 +11,7 @@ describe HelpRequestsController do
   context '#new' do
     it 'gets form' do
       get :new
-      response.should be_success
+      expect(response).to be_success
     end
   end
 
@@ -19,13 +19,13 @@ describe HelpRequestsController do
     it 'saves a valid submission' do
       post :create, help_request: valid_attributes
 
-      response.should render_template('help_requests/thanks')
+      expect(response).to render_template('help_requests/thanks')
     end
 
     it 'shows the form again if the submission was invalid' do
       post :create, help_request: { name: '' }
 
-      response.should render_template('help_requests/new')
+      expect(response).to render_template('help_requests/new')
     end
   end
 end

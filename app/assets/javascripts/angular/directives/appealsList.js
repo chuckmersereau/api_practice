@@ -77,29 +77,6 @@ angular.module('mpdxApp')
                               return '';
                             };
 
-                          $scope.pledgeFrequencyStr = function(pledgeFrequency){
-                            switch(pledgeFrequency) {
-                              case '0.23076923076923':
-                                return 'Weekly';
-                              case '0.46153846153846':
-                                return 'Fortnightly';
-                              case '1.0':
-                                return 'Monthly';
-                              case '2.0':
-                                return 'Bi-Monthly';
-                              case '3.0':
-                                return 'Quarterly';
-                              case '4.0':
-                                return 'Quad-Monthly';
-                              case '6.0':
-                                return 'Semi-Annual';
-                              case '12.0':
-                                return 'Annual';
-                              case '24.0':
-                                return 'Biennial';
-                            }
-                          };
-
                             $scope.addContact = function(id){
                                 if(!id){ return; }
                                 if(_.contains($scope.appeal.contacts, id)){

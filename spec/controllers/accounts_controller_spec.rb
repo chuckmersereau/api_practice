@@ -10,12 +10,12 @@ describe AccountsController do
     end
     it 'should sign a user in' do
       post 'create', provider: 'facebook'
-      request.session['warden.user.user.key'].should == [[@user.id], nil]
+      expect(request.session['warden.user.user.key']).to eq([[@user.id], nil])
     end
 
     it 'should queue data imports on sign in' do
-      User.should_receive(:from_omniauth).and_return(@user)
-      @user.should_receive(:queue_imports)
+      expect(User).to receive(:from_omniauth).and_return(@user)
+      expect(@user).to receive(:queue_imports)
       post 'create', provider: 'facebook'
     end
 
@@ -34,7 +34,7 @@ describe AccountsController do
     describe 'GET index' do
       it 'should be successful' do
         get :index
-        response.should be_success
+        expect(response).to be_success
       end
     end
 
@@ -44,9 +44,9 @@ describe AccountsController do
         request.env['omniauth.auth'] = mash
         expect do
           post 'create', provider: 'facebook', origin: 'login'
-          response.should redirect_to(setup_path(:org_accounts))
+          expect(response).to redirect_to(setup_path(:org_accounts))
         end.to change(Person::FacebookAccount, :count).from(0).to(1)
-        subject.current_user.should_not eq @user
+        expect(subject.current_user).not_to eq @user
       end
 
       it 'creates an account' do
@@ -54,23 +54,23 @@ describe AccountsController do
         request.env['omniauth.auth'] = mash
         expect do
           post 'create', provider: 'facebook'
-          response.should redirect_to(accounts_path)
-          @user.facebook_accounts.should include(assigns(:account))
+          expect(response).to redirect_to(accounts_path)
+          expect(@user.facebook_accounts).to include(assigns(:account))
         end.to change(Person::FacebookAccount, :count).from(0).to(1)
       end
 
       it 'should redirect to social accounts if the user is in setup mode' do
         @user.update_attributes(preferences: { setup: true })
-        Person::FacebookAccount.stub(:find_or_create_from_auth)
+        allow(Person::FacebookAccount).to receive(:find_or_create_from_auth)
         post 'create', provider: 'facebook'
-        response.should redirect_to(setup_path(:social_accounts))
+        expect(response).to redirect_to(setup_path(:social_accounts))
       end
 
       it 'should redirect to a stored user_return_to' do
         session[:user_return_to] = '/foo'
-        Person::FacebookAccount.stub(:find_or_create_from_auth)
+        allow(Person::FacebookAccount).to receive(:find_or_create_from_auth)
         post 'create', provider: 'facebook'
-        response.should redirect_to('/foo')
+        expect(response).to redirect_to('/foo')
       end
     end
 
@@ -79,7 +79,7 @@ describe AccountsController do
         @account = FactoryGirl.create(:facebook_account, person: @user)
         expect do
           get 'destroy', provider: 'facebook', id: @account.id
-          response.should redirect_to(accounts_path)
+          expect(response).to redirect_to(accounts_path)
         end.to change(Person::FacebookAccount, :count).from(1).to(0)
       end
     end
@@ -87,8 +87,8 @@ describe AccountsController do
     describe "GET 'failure'" do
       it 'redirects to index' do
         get 'failure'
-        flash[:alert].should_not.nil?
-        response.should redirect_to(accounts_path)
+        expect(flash[:alert]).to_not be_nil
+        expect(response).to redirect_to(accounts_path)
       end
     end
   end

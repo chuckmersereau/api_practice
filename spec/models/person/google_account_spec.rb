@@ -10,7 +10,7 @@ describe Person::GoogleAccount do
       expect do
         @account = Person::GoogleAccount.find_or_create_from_auth(auth_hash, person)
       end.to change(Person::GoogleAccount, :count).from(0).to(1)
-      person.google_accounts.should include(@account)
+      expect(person.google_accounts).to include(@account)
     end
   end
   describe 'update from auth' do
@@ -23,12 +23,12 @@ describe Person::GoogleAccount do
       expect do
         @account = Person::GoogleAccount.find_or_create_from_auth(auth_hash.merge!(credentials: { refresh_token: 'c' }), person)
       end.to_not change(Person::GoogleAccount, :count)
-      @account.refresh_token.should == 'c'
+      expect(@account.refresh_token).to eq('c')
     end
   end
 
   it 'should return email for to_s' do
     account = Person::GoogleAccount.new(email: 'john.doe@example.com')
-    account.to_s.should == 'john.doe@example.com'
+    expect(account.to_s).to eq('john.doe@example.com')
   end
 end

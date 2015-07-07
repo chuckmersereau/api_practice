@@ -31,11 +31,9 @@ end
 Capybara.javascript_driver = :poltergeist
 
 RSpec.configure do |config|
-  config.before(:each) do |example_method|
+  config.before(:each) do |example|
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all
-    # Get the current example from the example_method object
-    example = example_method.example
 
     if example.metadata[:sidekiq] == :fake
       Sidekiq::Testing.fake!
@@ -46,7 +44,12 @@ RSpec.configure do |config|
     else
       Sidekiq::Testing.fake!
     end
+
+    # Stub the Google geocoder by default (creating an address calls it so it's
+    # needed a lot)
+    stub_google_geocoder
   end
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
@@ -67,23 +70,18 @@ RSpec.configure do |config|
   # automatically. This will be the default behavior in future versions of
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
-  config.treat_symbols_as_metadata_keys_with_true_values = true
   config.filter_run focus: true
   config.filter_run_excluding js: true
   config.run_all_when_everything_filtered = true
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
 
-  # Include these specific gems in spec backtraces
-  gems_to_include_in_backtraces = %w(google_contacts_api siebel_donations)
+  # This adds automatic meta-data for specs by location (e.g. for controllers)
+  config.infer_spec_type_from_file_location!
 
-  # Exclude all other gem and library paths from spec backtraces
-  gem_exclusion_patterns =
-    Gem::Specification.all
-    .reject { |g| g.name.in?(gems_to_include_in_backtraces) }
-    .map { |g| Regexp.new(Regexp.escape("#{g.name}-#{g.version}")) }
-  config.backtrace_exclusion_patterns = gem_exclusion_patterns +
-    [%r{/lib\d*/ruby/}, /bin\//, /lib\/rspec/]
+  # Exclude gems from spec backtraces, except a few directly related to our app
+  config.filter_gems_from_backtrace(*(Gem::Specification.map(&:name) -
+                                      %w(google_contacts_api siebel_donations)))
 
   config.order = :random
 
@@ -154,6 +152,10 @@ def logout_test_user
   $user = nil
   sign_out(:user)
   sign_out(:admin_user)
+end
+
+def stub_google_geocoder
+  stub_request(:get, %r{maps\.googleapis\.com/maps/api.*}).to_return(body: '{}')
 end
 
 class FakeApi
