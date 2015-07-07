@@ -1998,6 +1998,21 @@ body.google_integrations_controller {
       color: $color_gold;
     }
   }
+  .welcome-completed-dismiss {
+    float: right;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    line-height: 42px;
+    background-color: white;
+    color: $gray_light;
+    border: 3px solid $gray_light;
+    font-size: 30px;
+    position: relative;
+    top: -20px;
+    cursor: pointer;
+  }
 }
 .fadable {
   transition: opacity 0.5s ease;

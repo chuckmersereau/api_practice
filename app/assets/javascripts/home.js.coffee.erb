@@ -23,6 +23,10 @@ $ ->
         resizable: false,
         width: 400
 
+    $('.welcome-completed-dismiss').click ->
+      $('.welcome-completed-row').addClass('uncompleted')
+      $('.fadable').removeClass('faded')
+
     showAllWelcomeCompleted = ->
       $('.welcome-completed-row').removeClass('uncompleted')
       $('.fadable').addClass('faded')

@@ -29,21 +29,20 @@ class HomeController < ApplicationController
   def check_welcome_stages
     user = current_user
     return unless user.setup.is_a?(Array) && user.setup.any?
-    if user.setup.include?(:import) && user.imports.any?
+    if user.setup.include?(:import) && user.imports.count > 1
       user.setup.delete :import
       dirty_preferences = true
     end
-
     if user.setup.include?(:goal) && current_account_list.monthly_goal.present?
       user.setup.delete :goal
       dirty_preferences = true
     end
-
     if user.setup.include?(:contacts) && current_account_list.contacts.count > 3
       user.setup.delete :contacts
       dirty_preferences = true
     end
 
+    flash[:tour_complete] = true if dirty_preferences && user.setup.empty?
     user.save! if dirty_preferences
   end
 end

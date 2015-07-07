@@ -1,7 +1,10 @@
-<% if current_user.setup.count > 0 %>
-  <div class="row fadable">
+<% if flash[:tour_complete] || current_user.setup.any? %>
+  <div class="row fadable <%= 'faded' if flash[:tour_complete] %>">
     <div class="getting_started_title col-md-6 col-md-offset-3">
-      <h1><%= _('Hi') %> <%= current_user.first_name %>!</h1>
+      <h1>
+        <%= current_user.stale? ? _('Welcome back') : _('Hi') %>
+        <%= current_user.first_name %>!
+      </h1>
       <h3><%= _("While there's a lot you can do in MPDX, here's a few easy steps to get you up and going:") %></h3>
     </div>
   </div>
@@ -11,9 +14,10 @@
   </h1>
 <% end %>
 
-<% if current_user.setup.is_a?(Array) && current_user.setup.any? %>
-  <div class="row welcome-completed-row uncompleted">
+<% if flash[:tour_complete] || current_user.setup.any? %>
+  <div class="row welcome-completed-row <%= 'uncompleted' unless flash[:tour_complete] %>">
     <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0">
+      <i class="fa fa-times welcome-completed-dismiss"></i>
       <h1><%= _('Great job! Check out some more tutorials videos and help articles '+
                 'to learn about some of our other cool features.') %></h1>
       <hr>
@@ -37,7 +41,7 @@
       </h2>
     </div>
   </div>
-  <div class="row fadable">
+  <div class="row fadable <%= 'faded' if flash[:tour_complete] %>">
     <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :import %>"
          data-panel="import">
       <div class="getting_started_number">1</div>
