@@ -1,14 +1,15 @@
 class Api::V1::MailChimpAccountsController < ApplicationController
   def index
-    render json: mail_chimp_appeals_lists,
-           callback: params[:callback],
-           root: :mail_chimp_accounts
+    render json: lists_available_for_appeals, callback: params[:callback]
+  end
+
+  def update
+    #todo add update logic
   end
 
   private
 
-  def mail_chimp_appeals_lists
-    current_account_list.mail_chimp_account.appeals_lists
+  def lists_available_for_appeals
+    current_account_list.mail_chimp_account.lists_available_for_appeals
   end
-
 end

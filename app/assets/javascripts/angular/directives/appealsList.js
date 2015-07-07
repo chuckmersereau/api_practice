@@ -38,11 +38,16 @@ angular.module('mpdxApp')
                             }, null, true);
 
                             api.call('get', 'mail_chimp_accounts',{}, function (data) {
-                                $scope.mail_chimp = data.mail_chimp_accounts;
-                                $scope.selected_list = data.mail_chimp_accounts[0].id;
-                            }, function(){
-                                alert('An error has occurred while retrieving your mail chimp lists');
-                            });
+                                $scope.mail_chimp_lists = data.mail_chimp_accounts;
+                                $scope.selected_list_mail_chimp_list = data.mail_chimp_accounts[0].id;
+                            }, null, true);
+
+                            if (window.current_account_list_mailchimp_account) {
+                                $scope.mail_chimp_account = window.current_account_list_mailchimp_account;
+                            }
+                            else{
+                                $scope.mail_chimp_account = null;
+                            }
 
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
@@ -229,7 +234,7 @@ angular.module('mpdxApp')
                                 'filters[status]=*&filters[ids]=' + selectedContactIds.join();
                           };
 
-                          $scope.exportContactsToMailChimpList = function(selectedContactsMap, selected_mail_chimp_list) {
+                          $scope.exportContactsToMailChimpList = function(selectedContactsMap, selected_mail_chimp_list ) {
                               alert(selected_mail_chimp_list);
                               var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
                                   return selected;
@@ -239,6 +244,18 @@ angular.module('mpdxApp')
                                   alert('You must check at least one contact.');
                                   return;
                               }
+
+                              api.call('put','mail_chimp_accounts/' + mail_chimp_account + '?account_list_id=' + window.current_account_list_id , {
+                                      mail_chimp_account: {
+                                          appeal_id: $scope.appeal.id,
+                                          mail_chimp_list: $scope.selected_list_mail_chimp_list,
+                                          appeal_list_id:  $scope.selected_list_mail_chimp_list,
+                                          contact_ids: SelectedContactIds
+                                      }
+                                  },
+                                  function(data) {
+                                      $modalInstance.close($scope.appeal);
+                                  });
 
                           };
 
