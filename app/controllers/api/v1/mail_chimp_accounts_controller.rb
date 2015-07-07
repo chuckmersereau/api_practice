@@ -4,7 +4,7 @@ class Api::V1::MailChimpAccountsController < ApplicationController
   end
 
   def update
-    #todo add update logic
+    update_list
   end
 
   private
@@ -12,4 +12,9 @@ class Api::V1::MailChimpAccountsController < ApplicationController
   def lists_available_for_appeals
     current_account_list.mail_chimp_account.lists_available_for_appeals
   end
+
+  def update_list
+
+  end
+
 end
