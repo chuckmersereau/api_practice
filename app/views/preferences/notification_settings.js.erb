@@ -1,0 +1,7 @@
+<% preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list) %>
+$('#generic_dialog').html(
+'<%= form_for preference_set, url: preference_path(current_user, redirect: home_path),
+                       method: :put do |f| %>'+
+  '<%= j(render('notification_settings_form', f: f)) %>'+
+  '<%= f.submit 'Save', class: 'btn btn-primary' %>'+
+'<% end %>').dialog({position:"center", width: '550'})

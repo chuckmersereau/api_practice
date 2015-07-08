@@ -44,7 +44,7 @@
   <%= f.hidden_field :in_preview %>
 
   <div class="field">
-    <%= f.file_field :file %>
+    <%= f.file_field :file, class: 'form-control', required: true %>
     <%= f.hidden_field :file_cache %>
   </div>
 
@@ -53,5 +53,5 @@
       <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
     </div>
   </div>
-  <a href="#" class="btn btn-xs btn-secondary" data-behavior="import_button"><%= _('Preview Import') %></a>
+  <%= f.submit _('Preview Import'), class: 'btn btn-primary' %>
 <% end %>

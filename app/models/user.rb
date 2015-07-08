@@ -50,10 +50,9 @@ class User < Person
   end
 
   def setup_finished!
-    if setup_mode?
-      self.setup = nil
-      save(validate: false)
-    end
+    return unless setup_mode?
+    self.setup = [:import, :goal, :contacts]
+    save(validate: false)
   end
 
   def designation_numbers(organization_id)
@@ -99,6 +98,15 @@ class User < Person
 
   def to_person
     Person.find(id)
+  end
+
+  def setup
+    super || []
+  end
+
+  def stale?
+    return false unless last_sign_in_at
+    last_sign_in_at < 6.months.ago
   end
 
   private

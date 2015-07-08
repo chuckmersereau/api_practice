@@ -4,6 +4,7 @@ $brand-primary:         $color-primary;
 $color-gray-keyline:    #e9e9e9;
 $color-gray-dark:       #4c4749;
 $color-gray-light:      #e2e2e2;
+$color-brownish:        #bd8500;
 
 $base-text-color:       $color-gray-dark;
 
@@ -177,3 +178,5 @@ $appealHeight: 20px;
   top: 58px;
   left: 74px;
 }
+
+.color-primary {color: $color-primary;}

@@ -88,6 +88,9 @@ $ ->
     event.target.click()
     false
 
+  $('#preference_reset_welcome').click ->
+    $('#preference_set_setup').val("[:goal, :import, :contacts]")
+
 window.addFields = (link, association, content) ->
   new_id = new Date().getTime()
   regexp = new RegExp("new_" + association, "g")

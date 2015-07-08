@@ -17,6 +17,34 @@ $ ->
         width: '400px'
       return false;
 
+    $(document).on 'click', '[data-behavior="show_import"]', ->
+      $('#generic_dialog').html('<%= image_tag "spinner.gif" %>')
+      $('#generic_dialog').dialog
+        resizable: false,
+        width: 400
+
+    $('.welcome-completed-dismiss').click ->
+      $('.welcome-completed-row').addClass('uncompleted')
+      $('.fadable').removeClass('faded')
+
+    showAllWelcomeCompleted = ->
+      $('.welcome-completed-row').removeClass('uncompleted')
+      $('.fadable').addClass('faded')
+
+    $.mpdx.completeWelcomePanel = (elm) ->
+      elm = $(elm)
+      return false if elm.parent().hasClass('completed')
+      elm.addClass('fa-spinner fa-spin')
+      $.post('/preferences/complete_welcome_panel.js?key='+elm.parent().attr('data-panel'), ->
+        elm.parent().addClass('completed')
+        elm.removeClass('fa-spinner fa-spin')
+        showAllWelcomeCompleted() if $('.getting-started-panel:not(.completed)').length == 0
+      )
+
+    $(document).on 'click', '.welcome-panel-completed', ->
+      $.mpdx.completeWelcomePanel(this)
+      false
+
 $.mpdx.loadDashTabData = (hash) ->
   hash ||= '#dash-connect'
   $.mpdx.loadDashbaordTab(hash)
