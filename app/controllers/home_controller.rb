@@ -4,7 +4,7 @@ class HomeController < ApplicationController
   def index
     @page_title = _('Dashboard')
 
-    check_welcome_stages unless Rails.env.development?
+    check_welcome_stages
   end
 
   def login

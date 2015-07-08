@@ -9,7 +9,7 @@ class AccountsController < ApplicationController
 
   def new
     respond_to do |format|
-      format.js {}
+      format.js
       format.html do
         @page_title = _('New Account')
         session[:user_return_to] = params[:redirect] if params[:redirect]
