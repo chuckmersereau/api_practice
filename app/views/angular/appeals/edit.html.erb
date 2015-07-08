@@ -202,7 +202,7 @@
                     <div class="col-sm-4">
                         <%= _('Export selected to CSV:') %>
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-5">
                       <div class="form-group">
                         <button class="btn btn-default" ng-click="exportContactsToCSV(checkedContacts)"><%= _('Export') %></button>
                       </div>
@@ -216,9 +216,16 @@
                       <div class="form-group">
                         <select class="form-control" ng-model="selected_list_mail_chimp_list" ng-options="m.id as m.name for m in mail_chimp_lists" ></select>
                         <button class="btn btn-default" ng-click="exportContactsToMailChimpList(checkedContacts,selected_list_mail_chimp_list)"><%= _('Export') %></button>
+                        <div class="small well"><%= _('You cannot use the MailChimp list you normally sync to for your newsletter,
+                        as this list would override it. Create a new list in MailChimp and choose it in this drop down.
+                        Subsequent exports to this list will override previous ones') %></div>
                       </div>
                     </div>
                   </div>
+                  <div class="row" ng-show="mail_chimp_account_id == null">
+                    <div class="small well">
+                      <%= _('You need to create a list on Mail Chimp that MPDX can use for your appeals. Go to http://api.mailchimp.com to create a list').localize %>
+                    </div>
                   <div class="row">
                     <div class="col-sm-4">
                       <%= _('Create tag for selected:') %>
