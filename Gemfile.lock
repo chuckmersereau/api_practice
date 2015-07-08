@@ -643,6 +643,7 @@ GEM
       kgio (~> 2.6)
       rack
       raindrops (~> 0.7)
+    user_agent_decoder (0.0.4)
     uuidtools (2.1.5)
     vegas (0.1.11)
       rack (>= 1.0.0)
@@ -796,6 +797,7 @@ DEPENDENCIES
   twitter_cldr (~> 2.4.0)
   uglifier (~> 2.4.0)
   unicorn
+  user_agent_decoder
   versionist (~> 1.2.1)
   virtus (~> 0.5.4)
   webmock (~> 1.21.0)

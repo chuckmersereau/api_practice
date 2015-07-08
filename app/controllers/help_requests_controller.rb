@@ -7,7 +7,7 @@ class HelpRequestsController < ApplicationController
   def create
     @help_request = HelpRequest.new(help_request_params)
     if @help_request.valid?
-      @help_request.browser = request.user_agent
+      @help_request.user_agent = request.user_agent
       @help_request.user_id = current_user.id
       @help_request.account_list_id = current_account_list.id
       @help_request.session = session
