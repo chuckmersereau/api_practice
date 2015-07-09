@@ -17,9 +17,15 @@
       <%= link_to(_('Donations'), donations_path) %>
     </div>
   </div>
-  <div class="clr"></div>
   <h2><%= _('Contribution Report for %{start_date} through %{end_date}').localize % {start_date: l(@start_date), end_date: l(@end_date)} %></h2>
+  <div class="row">
+    <div class="col-md-6">
   <%= link_to _('Download as CSV spreadsheet file'), request.parameters.merge({ format: 'csv' }) %>
+    </div>
+    <div class="col-md-6 text-right">
+      <%= link_to _('Fullscreen'), '#', class: 'trigger-fullscreen-content hide-on-fullscreen' %>
+    </div>
+  </div>
 <% end %>
 <div class="table-responsive">
   <table class="tablelist donations" id="donations_table">

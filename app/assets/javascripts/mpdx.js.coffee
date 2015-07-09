@@ -207,6 +207,10 @@ $.mpdx.toast = (options) ->
   duration = options.duration || 2000
   $('#toastPopup').text(options.message).fadeIn(300).delay(duration).fadeOut(300)
 
+$.mpdx.fullscreenContent = ->
+  $('#content').addClass('fullscreen')
+  false
+
 $.set_param = (key, value, params) ->
   params = '?' + params if params
   params = $.deparam(params)
@@ -226,6 +230,10 @@ $(document).ready determineAffixScroll
 $(window).resize determineAffixScroll
 
 $(document).ready ->
+  $('#exit-fullscreen').click ->
+    $('#content').removeClass('fullscreen')
+  $(document).on 'click', '.trigger-fullscreen-content', $.mpdx.fullscreenContent
+
   $('.toggle-mobile-filters').click ->
     $('html, body').animate { scrollTop: 0 }, 0
     $('.mobile_filters_wrap').toggleClass 'show_mobile_filters'

@@ -546,6 +546,34 @@ div.right {
 .tabgroup {margin-top: 2em; margin-bottom: 2em;}
 #content {
   margin-top: 30px;
+  &.fullscreen {
+    background-color: white;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    margin-top: 0;
+    padding-top: 20px;
+    #exit-fullscreen {
+      display: inline-block;
+    }
+    .hide-on-fullscreen {
+      display: none;
+    }
+  }
+}
+#exit-fullscreen {
+  display: none;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: transparentize($color_gray, .30);
+  padding: 10px;
+  color: white;
+  .icons {
+    display: block;
+    transform: rotate(315deg);
+  }
 }
 
 #contentbody {
