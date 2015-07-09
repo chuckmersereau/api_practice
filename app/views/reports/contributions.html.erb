@@ -2,11 +2,11 @@
   <div class="row page-controls">
     <div class="col-md-8 col-sm-8">
       <%= link_to(contributions_reports_path(start_date: @start_date - 1.year)) do %>
-        <i class="fa fa-chevron-left"></i> 
+        <i class="fa fa-chevron-left"></i>
         <%= _('Previous Year') %>
       <% end %>
       <% unless @end_date >= Date.today %>
-        &nbsp; &nbsp; 
+        &nbsp; &nbsp;
         <%= link_to(contributions_reports_path(start_date: @start_date + 1.year)) do %>
           <%= _('Next Year ') %>
           <i class="fa fa-chevron-right"></i>
@@ -20,7 +20,7 @@
   <h2><%= _('Contribution Report for %{start_date} through %{end_date}').localize % {start_date: l(@start_date), end_date: l(@end_date)} %></h2>
   <div class="row">
     <div class="col-md-6">
-  <%= link_to _('Download as CSV spreadsheet file'), request.parameters.merge({ format: 'csv' }) %>
+      <%= link_to _('Download as CSV spreadsheet file'), request.parameters.merge({ format: 'csv' }) %>
     </div>
     <div class="col-md-6 text-right">
       <%= link_to _('Fullscreen'), '#', class: 'trigger-fullscreen-content hide-on-fullscreen' %>
@@ -31,50 +31,83 @@
   <table class="tablelist donations" id="donations_table">
     <thead>
       <tr>
-        <th><%= _('Donor') %></th>
+        <th><span class="table-padding-left"><%= _('Donor') %></span></th>
         <th><%= _('Status') %></th>
         <th><%= _('Commitment Amount') %></th>
         <th><%= _('Commitment Frequency') %></th>
-        <th><%= _('Average') %></th>
+        <th><%= _('Avg') %></th>
+        <th data-toggle="tooltip" data-container="body" title="<%= _("The lesser of a contact's pledge or monthly average") %>">
+          <%= _('Min') %>
+        </th>
         <% (0..11).reverse_each do |index| %>
-          <th class="right"><%= index.month.ago(@end_date).strftime '%b %y' %></th>
+          <th class="right">
+            <span class="table-padding"><%= index.month.ago(@end_date).strftime('%b<br>%y').html_safe %></span>
+          </th>
         <% end %>
-        <th class="total right"><%= _('Total') %></th>
+        <th class="total right">
+          <span class="table-padding-right"><%= _('Total') %></span>
+        </th>
       </tr>
     </thead>
     <tbody>
-      <% @donations.each do |key, row| %>
-        <tr>
-          <td><%= link_to(row[:donor], contact_path(row[:id])) %></td>
-          <td><%= row[:status] %></td>
-          <td><%= number_to_current_currency(row[:pledge_amount]) %></td>
-          <td><%= Contact.pledge_frequencies[row[:pledge_frequency]] %></td>
-          <td><%= number_to_current_currency(row[:average], precision: 2) %></td>
+      <% def sum_row %>
+        <tr class="sum">
+          <td><strong class="table-padding-left"><%= _('Total Donations') %></strong></td>
+          <td></td>
+          <td><%= number_to_current_currency(@total_pledges) %></td>
+          <td></td>
+          <td>
+            <span class="table-padding"><%= number_to_current_currency(@total_average) %></span>
+          </td>
+          <td>
+            <span class="table-padding"><%= number_to_current_currency(@total_min) %></span>
+          </td>
           <% (0..11).reverse_each do |index| %>
             <td class="right">
-              <% unless row[:amounts][index.month.ago(@end_date).strftime '%b %y'].nil? %>
-                <%= number_to_current_currency(row[:amounts][index.month.ago(@end_date).strftime '%b %y'][:value], currency: row[:amounts][index.month.ago(@end_date).strftime '%b %y'][:currency]) %>
+              <% unless @sum_row[index.month.ago(@end_date).strftime '%b %y'].nil? %>
+                <span class="table-padding">
+                  <%= number_to_current_currency(@sum_row[index.month.ago(@end_date).strftime '%b %y']) %>
+                </span>
               <% end %>
             </td>
           <% end %>
-          <td class="total right"><%= number_to_current_currency(row[:total]) %></td>
+          <td class="total"></td>
+        </tr>
+        <tr>
+          <td colspan="18">
+            <span class="table-padding-left">
+              <%= _("Not showing ministry partners with outstanding commitments which total to %{missing}/month")
+                  .localize % { missing: number_to_current_currency(@monthly_pledges_not_given) } %>
+            </span>
+          </td>
         </tr>
       <% end %>
-      <tr class="sum">
-        <td><strong><%= _('Total Donations') %></strong></td>
-        <td></td>
-        <td><%= number_to_current_currency(@total_pledges) %></td>
-        <td></td>
-        <td><%= number_to_current_currency(@total_average) %></td>
-        <% (0..11).reverse_each do |index| %>
-          <td class="right">
-            <% unless @sum_row[index.month.ago(@end_date).strftime '%b %y'].nil? %>
-              <%= number_to_current_currency(@sum_row[index.month.ago(@end_date).strftime '%b %y']) %>
-            <% end %>
+      <% sum_row %>
+      <% @donations.each do |key, row| %>
+        <tr class="<%= row[:status].gsub(' ','') %>">
+          <td>
+            <span class="table-padding-left"><%= link_to(row[:donor], contact_path(row[:id])) %></span>
           </td>
-        <% end %>
-        <td class="total"></td>
-      </tr>
+          <td><%= row[:status] %></td>
+          <td><%= number_to_current_currency(row[:pledge_amount]) %></td>
+          <td><%= Contact.pledge_frequencies[row[:pledge_frequency]] %></td>
+          <td><span class="table-padding"><%= number_to_current_currency(row[:average]) %></span></td>
+          <td><span class="table-padding"><%= number_to_current_currency(row[:minimum]) %></span></td>
+          <% (0..11).reverse_each do |index| %>
+            <td class="right">
+              <% unless row[:amounts][index.month.ago(@end_date).strftime '%b %y'].nil? %>
+                <%= number_to_current_currency(
+                      row[:amounts][index.month.ago(@end_date).strftime '%b %y'][:value],
+                      currency: row[:amounts][index.month.ago(@end_date).strftime '%b %y'][:currency]) %>
+              <% end %>
+            </td>
+          <% end %>
+          <td class="total right">
+            <span class="table-padding-right"><%= number_to_current_currency(row[:total]) %></span>
+          </td>
+        </tr>
+      <% end %>
+      <% sum_row %>
     </tbody>
   </table>
 </div>

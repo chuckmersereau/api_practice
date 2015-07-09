@@ -1099,9 +1099,26 @@ table tbody.tasks {
 /* ************************************************************** */
 
 .donations {
-  th, td {padding-top: 4px; padding-bottom: 4px;}
+  th, td {
+    padding: 4px 0;
+  }
+  .table-padding, .table-padding-left, .table-padding-right {
+    display: inline-block;
+  }
+  .table-padding {
+    padding: 0 4px;
+  }
+  .table-padding-left {
+    padding-left: 4px;
+  }
+  .table-padding-right {
+    padding-right: 4px;
+  }
   td {}
 
+  tr.Partner-Financial {
+    background-color: lighten($color_gold, 38%);
+  }
   tr:hover {
     background-color: $gray_light;
   }
@@ -1112,10 +1129,9 @@ table tbody.tasks {
   .sum {border-top: 1px solid $blue;}
   .total {border-left: 1px solid $blue;}
 
-
-
   thead {
     border-bottom: 1px solid $blue;
+    font-size: 12px ;
     th {background: $blue_light; }
   }
 }

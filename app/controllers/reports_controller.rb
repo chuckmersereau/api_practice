@@ -58,6 +58,7 @@ class ReportsController < ApplicationController
         donor: donation.name, id: donation.contact_id, status: donation.status,
         pledge_amount: donation.pledge_amount,
         pledge_frequency: donation.pledge_frequency,
+        minimun: monthly_pledge(donation),
         amounts: {}, total: 0
       }
 
@@ -75,6 +76,7 @@ class ReportsController < ApplicationController
 
     @total_pledges = 0.0
     @total_average = 0.0
+    @total_min = 0.0
     @donations.each do |_key, row|
       if row[:pledge_amount].present? && row[:status] == 'Partner - Financial'
         @total_pledges += row[:pledge_amount] / (row[:pledge_frequency] || 1)
@@ -103,7 +105,14 @@ class ReportsController < ApplicationController
 
       row[:average] = row[:total] / months_for_average
       @total_average += row[:average]
+      row[:minimum] = [row[:average], monthly_pledge(row)].min
+      @total_min += row[:minimum]
     end
+
+    @monthly_pledges_not_given = current_account_list.contacts.financial_partners
+                                 .includes(donor_accounts: :donations)
+                                 .where(donations: { id: nil })
+                                 .to_a.sum(&:monthly_pledge)
 
     respond_to do |format|
       format.html
@@ -112,5 +121,12 @@ class ReportsController < ApplicationController
         render text: CSVUtil.html_table_to_csv(html_table)
       end
     end
+  end
+
+  private
+
+  def monthly_pledge(row)
+    return 0 unless row && row[:pledge_amount]
+    row[:pledge_amount] / (row[:pledge_frequency] || 0)
   end
 end
