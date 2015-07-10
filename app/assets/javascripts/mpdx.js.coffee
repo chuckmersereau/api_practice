@@ -129,10 +129,6 @@ $.mpdx.sortableTabs = (location) ->
       }
   }).disableSelection()
 
-# Stub method for translation
-window.__ = (val) ->
-  val
-
 # Replace built in rails confirmation method
 $.rails.allowAction = (element) ->
   message = element.data('confirm')

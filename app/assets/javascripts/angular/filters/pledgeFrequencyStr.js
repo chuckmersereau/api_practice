@@ -2,23 +2,23 @@ angular.module('mpdxApp').filter('pledgeFrequencyStr', function(){
   return function (val) {
     switch(val) {
       case '0.23076923076923':
-        return 'Weekly';
+        return __('Weekly');
       case '0.46153846153846':
-        return 'Fortnightly';
+        return __('Fortnightly');
       case '1':
-        return 'Monthly';
+        return __('Monthly');
       case '2':
-        return 'Bi-Monthly';
+        return __('Bi-Monthly');
       case '3':
-        return 'Quarterly';
+        return __('Quarterly');
       case '4':
-        return 'Quad-Monthly';
+        return __('Quad-Monthly');
       case '6':
-        return 'Semi-Annual';
+        return __('Semi-Annual');
       case '12':
-        return 'Annual';
+        return __('Annual');
       case '24':
-        return 'Biennial';
+        return __('Biennial');
     }
   };
 });
