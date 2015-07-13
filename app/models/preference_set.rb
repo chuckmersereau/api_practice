@@ -24,6 +24,7 @@ class PreferenceSet
   attribute :monthly_goal, String, default: -> (preference_set, _attribute) { preference_set.account_list.monthly_goal }
   attribute :default_account_list, Integer, default: -> (preference_set, _attribute) { preference_set.user.default_account_list }
   attribute :tester, Boolean, default: -> (preference_set, _attribute) { preference_set.account_list.tester }
+  attribute :setup, String, default: -> (preference_set, _attribute) { preference_set.user.setup }
 
   # AccountList preferences
   # - Notification Preferences
@@ -80,8 +81,14 @@ class PreferenceSet
   end
 
   def persist!
-    user.update_attributes(first_name: first_name, email: email, time_zone: time_zone, locale: locale, default_account_list: default_account_list)
+    user.update_attributes(first_name: first_name, email: email, time_zone: time_zone,
+                           locale: locale, default_account_list: default_account_list, setup: setup_array)
     account_list.update_attributes(monthly_goal: monthly_goal, tester: tester)
     account_list.save
+  end
+
+  def setup_array
+    return setup unless setup.is_a? String
+    setup.gsub(/\[|\]|:/, '').split(', ').map(&:to_sym)
   end
 end

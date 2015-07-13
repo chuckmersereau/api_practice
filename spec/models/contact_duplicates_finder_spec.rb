@@ -12,51 +12,51 @@ describe ContactDuplicatesFinder do
 
   let(:nickname) { create(:nickname, name: 'john', nickname: 'johnny', suggest_duplicates: true) }
 
-  MATCHING_FIRST_NAMES = {
-    'Grable A' => 'Andy',
-    'Grable A' => 'G Andrew',
-    'G Andrew' => 'Andy',
-    'G Andrew' => 'G Andy',
-    'A' => 'Andy',
-    'A' => 'Andrew',
-    'Andy' => 'Andrew',
-    'GA' => 'Andrew',
-    'GA' => 'Andy',
-    'GA' => 'Grable A',
-    'G.A.' => 'Grable A',
-    'G.A.' => 'G A',
-    'G.A.' => 'Andy',
-    'G.A.' => 'Grable',
-    'G A.' => 'Andy',
-    'G A.' => 'Grable',
-    'G A.' => 'Andy',
-    'G A.' => 'Grable',
-    'A G' => 'Grable',
-    'A G' => 'Andrew',
-    'Grable Andy' => 'Andrew',
-    'Grable Andrew' => 'Andy',
-    'Grable Andy' => 'G Andrew',
-    'Grable Andrew' => 'G Andy',
-    'CC' => 'Charlie',
-    'C' => 'Charlie',
-    'Hoo-Tee' => 'Hoo Tee',
-    'HooTee' => 'Hoo Tee',
-    'Hootee' => 'Hoo Tee',
-    'Mary Beth' => 'Marybeth',
-    'JW' => 'john wilson'
-  }
+  MATCHING_FIRST_NAMES = [
+    ['Grable A', 'Andy'],
+    ['Grable A', 'G Andrew'],
+    ['G Andrew', 'Andy'],
+    ['G Andrew', 'G Andy'],
+    %w(A Andy),
+    %w(A Andrew),
+    %w(Andy Andrew),
+    %w(GA Andrew),
+    %w(GA Andy),
+    ['GA', 'Grable A'],
+    ['G.A.', 'Grable A'],
+    ['G.A.', 'G A'],
+    ['G.A.', 'Andy'],
+    ['G.A.', 'Grable'],
+    ['G A.', 'Andy'],
+    ['G A.', 'Grable'],
+    ['G A.', 'Andy'],
+    ['G A.', 'Grable'],
+    ['A G', 'Grable'],
+    ['A G', 'Andrew'],
+    ['Grable Andy', 'Andrew'],
+    ['Grable Andrew', 'Andy'],
+    ['Grable Andy', 'G Andrew'],
+    ['Grable Andrew', 'G Andy'],
+    %w(CC Charlie),
+    %w(C Charlie),
+    ['Hoo-Tee', 'Hoo Tee'],
+    ['HooTee', 'Hoo Tee'],
+    ['Hootee', 'Hoo Tee'],
+    ['Mary Beth', 'Marybeth'],
+    ['JW', 'john wilson']
+  ]
 
-  NON_MATCHING_FIRST_NAMES = {
-    'G' => 'Andy',
-    'Grable' => 'Andy',
-    'Grable B' => 'Andy',
-    'G B' => 'Andy',
-    'Andrew' => 'Andrea',
-    'CCC NEHQ' => 'Charlie',
-    'Dad US' => 'Scott',
-    'Jonathan F' => 'Florence',
-    'Unknown' => 'Unknown'
-  }
+  NON_MATCHING_FIRST_NAMES = [
+    %w(G Andy),
+    %w(Grable Andy),
+    ['Grable B', 'Andy'],
+    ['G B', 'Andy'],
+    %w(Andrew Andrea),
+    ['CCC NEHQ', 'Charlie'],
+    ['Dad US', 'Scott'],
+    ['Jonathan F', 'Florence'],
+    %w(Unknown Unknown)
+  ]
 
   def create_records_for_name_list
     create(:nickname, name: 'andrew', nickname: 'andy', suggest_duplicates: true)
@@ -131,24 +131,26 @@ describe ContactDuplicatesFinder do
 
         # Prefer nicknames, matched middle names, two letter initials (common nickname), two word names, and
         # trying to preserve capitalization. Don't preference names that are just an initial or include an initial and a name.
-        order_preserving_matches = {
-          { first_name: 'johnny' } => { first_name: 'John' },
-          { first_name: 'John' } => { first_name: 'George', middle_name: 'J' },
-          { first_name: 'John' } => { first_name: 'J' },
-          { first_name: 'Mary Beth' } => { first_name: 'Mary' },
-          { first_name: 'AnnMarie' } => { first_name: 'Annmarie' },
-          { first_name: 'Andy' } => { first_name: 'Grable A' },
-          { first_name: 'JW' } => { first_name: 'John' },
-          { first_name: 'C. S.' } => { first_name: 'Clive' },
-          { first_name: 'A.J.' } => { first_name: 'Andrew' },
-          { first_name: 'John' } => { first_name: 'john' },
-          { first_name: 'John' } => { first_name: 'John.' },
-          { first_name: 'David' } => { first_name: 'J David' },
-          { first_name: 'Andy' } => { first_name: 'A A' },
-          { first_name: 'Somebody', last_name: 'Doe' } => { first_name: 'Match by contact info', last_name: 'Notdoe' },
-          { first_name: 'Somebody', last_name: 'doe' } => { first_name: 'Match by contact info', last_name: 'Notdoe' },
-          { first_name: 'Somebody', last_name: 'Notdoe' } => { first_name: 'Match by contact info', last_name: nil }
-        }
+        order_preserving_matches = [
+          [{ first_name: 'johnny' }, { first_name: 'John' }],
+          [{ first_name: 'Jo' }, { first_name: 'jo' }],
+          [{ first_name: 'John' }, { first_name: 'George', middle_name: 'J' }],
+          [{ first_name: 'John' }, { first_name: 'J', middle_name: nil }],
+          [{ first_name: 'Mary Beth' }, { first_name: 'Mary' }],
+          [{ first_name: 'AnnMarie' }, { first_name: 'Annmarie' }],
+          [{ first_name: 'Andy' }, { first_name: 'Grable A' }],
+          [{ first_name: 'JW' }, { first_name: 'John' }],
+          [{ first_name: 'C. S.' }, { first_name: 'Clive' }],
+          [{ first_name: 'A.J.' }, { first_name: 'Andrew' }],
+          [{ first_name: 'John' }, { first_name: 'john' }],
+          [{ first_name: 'John' }, { first_name: 'John.' }],
+          [{ first_name: 'David' }, { first_name: 'J David' }],
+          [{ first_name: 'David' }, { first_name: 'J. David' }],
+          [{ first_name: 'Andy' }, { first_name: 'A A' }],
+          [{ first_name: 'Somebody', last_name: 'Doe' }, { first_name: 'Match by contact info', last_name: 'Notdoe' }],
+          [{ first_name: 'Somebody', last_name: 'doe' }, { first_name: 'Match by contact info', last_name: 'Notdoe' }],
+          [{ first_name: 'Somebody', last_name: 'Notdoe' }, { first_name: 'Match by contact info', last_name: nil }]
+        ]
         nickname
 
         order_preserving_matches.each do |first_fields, second_fields|

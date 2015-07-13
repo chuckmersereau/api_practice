@@ -1,0 +1,171 @@
+<% if flash[:tour_complete] || current_user.setup.any? %>
+  <div class="row fadable <%= 'faded' if flash[:tour_complete] %>">
+    <div class="getting_started_title col-md-6 col-md-offset-3">
+      <h1>
+        <%= current_user.stale? ? _('Welcome back') : _('Hi') %>
+        <%= current_user.first_name %>!
+      </h1>
+      <h3><%= _("While there's a lot you can do in MPDX, here's a few easy steps to get you up and going:") %></h3>
+    </div>
+  </div>
+<% else %>
+  <h1>
+    <%= _('Hi') %> <%= current_user.first_name %>! <span class="smallhead"><%= _("Here's whats happening...") %></span>
+  </h1>
+<% end %>
+
+<% if flash[:tour_complete] || current_user.setup.any? %>
+  <div class="row welcome-completed-row <%= 'uncompleted' unless flash[:tour_complete] %>">
+    <div class="col-lg-8 col-lg-offset-2 col-md-12 col-md-offset-0">
+      <i class="fa fa-times welcome-completed-dismiss"></i>
+      <h1><%= _('Great job! Check out some more tutorials videos and help articles '+
+                'to learn about some of our other cool features.') %></h1>
+      <hr>
+      <div class="tutorial-links">
+        <% [['https://www.gcx.org/mpdxhelp/about/', 'Take a tour'],
+            ['https://www.gcx.org/mpdxhelp/2015/07/01/organizing-your-contacts/', 'Organize Your Contacts'],
+            ['https://www.youtube.com/watch?v=ui6snOtmd50', 'Contact Filters and Tags'],
+            ['https://www.youtube.com/watch?v=3m3E1CRRoq4', 'Add/Edit in Bulk'],
+            ['https://www.youtube.com/watch?v=ijy4UzZqN8I', 'Add a Task'],
+            ['https://www.youtube.com/watch?v=3RWae_Sj8u8', 'Task Filters and Tags'],
+            ['https://www.gcx.org/mpdxhelp/track-appeals-and-goals/', 'Track an Appeal or Goal']].each do |tut| %>
+          <a href="<%= tut[0] %>"><i class="fa fa-youtube-play"></i><%= _(tut[1]) %></a>
+        <% end %>
+        <a href="https://www.gcx.org/mpdxhelp/training-videos/">
+          <i class="fa fa-share"></i><%= _('Many More On Our Help Site') %>
+        </a>
+      </div>
+      <h2>
+        <%= _('Find more anytime at') %><%= link_to('www.gcx.org/mpdxhelp', 'https://www.gcx.org/mpdxhelp/') %>
+        <br><%= _("or by clicking 'Help' in the top menu bar") %>
+      </h2>
+    </div>
+  </div>
+  <div class="row fadable <%= 'faded' if flash[:tour_complete] %>">
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :import %>"
+         data-panel="import">
+      <div class="getting_started_number">1</div>
+      <i class="fa fa-check welcome-panel-completed"></i>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <table class="imports-table">
+            <tr>
+              <td class="identify">
+                <h3>Google</h3>
+              </td>
+              <td class="connections" data-behavior="account">
+                <% current_user.google_accounts.each do |account| %>
+                  <div class="account_single">
+                    <span class="account_name"><%= account %></span>
+                    <% if account.token_expired? && !account.refresh_token! %>
+                      <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: home_path),
+                                  class: 'btn btn-xs btn-secondary desired_action') %>
+                    <% else %>
+                      <%= link_to('<i class="fa fa-cloud-download"></i> '.html_safe+_('Import Contacts'),
+                                  new_account_path(provider: 'google_import', account_id: account.id),
+                                  class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
+                    <% end %>
+                  </div>
+                <% end %>
+                <%= auth_link('google') %>
+              </td>
+            </tr>
+            <% [['TntMPD', 'Tnt'], [_('.CSV File'), 'CSV']].each do |source| %>
+              <tr>
+                <td class="identify">
+                  <h3><%= source[0] %></h3>
+                </td>
+                <td class="connections" data-behavior="account">
+                  <%= link_to(_('Import %{source} Contacts') % {source: source[1]},
+                              new_account_path(provider: source[1].downcase + '_import'),
+                              class: 'btn btn-xs btn-secondary', remote: true, behavior: 'show_import') %>
+                </td>
+              </tr>
+            <% end %>
+          </table>
+          <p class="note">
+            <%= _("Run more imports by clicking the gear in the top "+
+                  "right, and selecting 'Networks&nbsp;&&nbsp;Imports'") %>
+          </p>
+        </div>
+      </div>
+      <h2><%= _('Import Contacts') %></h2>
+    </div>
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :goal %>"
+         data-panel="goal">
+      <div class="getting_started_number">2</div>
+      <i class="fa fa-check welcome-panel-completed"></i>
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <% preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list) %>
+          <%= form_for preference_set, url: preference_path(current_user, redirect: home_path),
+                       method: :put do |f| %>
+            <%= f.label :monthly_goal, _('Monthly goal') %>
+            <div class="input-group">
+              <%= f.text_field :monthly_goal, class: 'form-control' %>
+              <span class="input-group-btn">
+                <%= f.submit _('Save'), class: 'btn btn-primary' %>
+              </span>
+            </div>
+            <p><%= _("You can change this in the future if you aren't sure.") %></p>
+          <% end %>
+          <hr>
+          <%= link_to(_('Setup Notifications'), notifications_preferences_path,
+                      class: 'btn btn-secondary', remote: true) %>
+          <p class="note">
+            <%= _("Change these in the future by clicking the gear "+
+                  "in the top right, and selecting 'Preferences'") %>
+          </p>
+        </div>
+      </div>
+      <h2><%= _('Setup Your Support Goal And&nbsp;Notifications') %></h2>
+    </div>
+    <div class="col-md-4 getting-started-panel <%= 'completed' unless current_user.setup.include? :contacts %>"
+         data-panel="contacts">
+      <div class="getting_started_number">3</div>
+      <i class="fa fa-check welcome-panel-completed"></i>
+      <div class="panel panel-default">
+        <div class="panel-body" ng-controller="smallNamestorm as namestorm">
+          <form ng-submit="namestorm.addContact()">
+            <p><%= _("Let's namestorm a few contacts. You can start "+
+                     "with the contact name, we normally do 'Last Name, First'") %></p>
+            <p ng-cloak>{{namestorm.error}}</p>
+            <div class="input-group">
+              <input type="text" ng-model="namestorm.newContactName"
+                     ng-disabled="namestorm.apiBusy" id="welcome-new-contact-name"
+                     placeholder="<%= _('Last Name, First Name') %>" class="form-control" />
+              <span class="input-group-btn">
+                <input type="submit" value="Add" class="btn btn-primary"
+                       ng-disabled="namestorm.newContactName.length == 0 || namestorm.apiBusy"/>
+              </span>
+            </div>
+            <select class="form-control" ng-model="namestorm.newContactStatus"
+                    ng-options="status.value as status.text for status in namestorm.contactStatuses">
+            </select>
+            <div ng-cloak ng-show="namestorm.contacts.length > 0">
+              <p><%= _('Here are your new contacts, click one to edit more of their information!') %></p>
+              <ul>
+                <li ng-repeat="contact in namestorm.contacts">
+                  <a href="/contacts/{{contact.id}}/edit/" target="_blank">{{contact.name}}</a>
+                </li>
+              </ul>
+            </div>
+          </form>
+          <p class="note">
+            <%= _("Add more later by clicking 'Quick&nbsp;Add' > 'Add&nbsp;Contact' in the top right") %>
+          </p>
+        </div>
+      </div>
+      <h2><%= _('Add A Contact') %></h2>
+    </div>
+  </div>
+<% else %>
+  <div class="row">
+    <div class="col-md-12 donations_summary_panel">
+      <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
+        <div id="donations_summary_chart"></div>
+        <%= render 'donations_summary_chart' %>
+      <% end %>
+    </div>
+  </div>
+<% end %>

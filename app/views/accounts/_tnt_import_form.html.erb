@@ -25,7 +25,10 @@
   </div>
   <div class="hint">
     <p>
-      <%= link_to('<i class="fa  fa-cloud-download"></i> '.html_safe+_('Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version.'), 'http://www.tntware.com/tntmpd/downloads/') %>
+      <%= link_to('<i class="fa  fa-cloud-download"></i> '.html_safe+
+                    _('Note: You must be upgraded to the latest version of TntMPD to do this. '+
+                      'Click here to download the latest version.'),
+                  'http://www.tntware.com/tntmpd/downloads/') %>
     </p>
     <p>
       <%= link_to('<i class="fa fa-play-circle-o"></i> '.html_safe+

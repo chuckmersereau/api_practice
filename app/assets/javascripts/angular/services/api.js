@@ -37,4 +37,7 @@ angular.module('mpdxApp')
         this.get = function (url, data, successFn, errorFn, cache) {
             return this.call('get', url, data, successFn, errorFn, cache);
         };
+        this.post = function (url, data, successFn, errorFn, cache) {
+            return this.call('post', url, data, successFn, errorFn, cache);
+        };
     });

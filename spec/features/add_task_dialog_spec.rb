@@ -35,7 +35,7 @@ describe 'Add Task Dialog', type: :feature, js: true do
     it 'creates a task in db' do
       FastGettext.locale = 'fr'
       visit '/'
-      click_on 'Quick Add'
+      click_on _('Quick Add')
       click_on _('Add Task')
       expect do
         within('#edit_task_modal') do
@@ -43,7 +43,7 @@ describe 'Add Task Dialog', type: :feature, js: true do
           select(_(@task.activity_type), from: _('Action'))
           select(contact.name, from: _('Related To'))
         end
-        find_button('Save').trigger('click')
+        find_button(_('Save')).trigger('click')
         expect(page).to have_css('#edit_task_modal', visible: false)
         sleep(2)
       end.to change(contact.tasks, :count).by(1)

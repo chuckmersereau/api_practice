@@ -15,6 +15,7 @@ td, th {text-align: left; vertical-align: top;}
 .table_select_filters {font-size: 11px;}
 .table_select_check {padding-right: 4px;}
 hr.thin {margin: .5em 0; border: none; border-top: 1px solid $gray_mid;}
+hr.thick {margin: 1.5em 0; border: none; border-top: 6px solid $gray_mid; width: 100%;}
 hr.fullwidth {width: 100%;}
 img {max-width: 100%; height: auto;}
 .dropdown {display: inline-block;}
@@ -1858,7 +1859,171 @@ body.google_integrations_controller {
   }
 }
 
-/* ********************* Dashboard ************************** */
+/* ************************************************************** */
+
+/* -------- Welcome -------- */
+.getting_started_title, .getting-started-panel {
+  text-align: center;
+  padding-bottom: 3em;
+}
+.getting-started-panel {
+  .panel {
+    margin-top: -20px;
+    margin-bottom: 1em;
+  }
+  &.completed .panel {
+    opacity: .5;
+  }
+  .imports-table {
+    margin-top: 1em;
+  }
+  .connections {
+    padding: 0 0 1.5em 1em;
+  }
+  tr:last-of-type {
+    .connections {
+      padding-bottom: 0;
+    }
+    h3 {
+      margin-bottom: 0;
+    }
+  }
+  .account_single {
+    margin-bottom: 1em;
+  }
+  form {
+    text-align: left;
+  }
+  hr {
+    width: auto;
+    margin: 7px 0;
+  }
+
+  .input-group {
+    margin-bottom: 0.5em;
+  }
+  .input-group-btn:last-child > .btn,
+  .input-group-btn:last-child > .btn-group {
+    box-shadow: none;
+    line-height: 24px;
+  }
+  .note {
+    color: $gray;
+    font-size: 11px;
+    margin-top: 1em;
+    text-align: left;
+  }
+  .getting_started_number,
+  &.completed .welcome-panel-completed {
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    border-radius: 60px;
+    font-weight: bold;
+    line-height: 52px;
+    border: 4px solid $color-brownish;
+    color: $color-brownish;
+    background-color: $color-primary;
+    font-size: 35px;
+    position: relative;
+    top: 0;
+    z-index: 1;
+  }
+  .getting_started_number {
+    transition: all .5s;
+  }
+  .welcome-panel-completed {
+    transition: all 0.5s;
+    float: right;
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border-radius: 40px;
+    line-height: 35px;
+    font-size: 18px;
+    position: relative;
+    right: -20px;
+    top: 20px;
+    background-color: white;
+    color: $gray_light;
+    border: 3px solid $gray_light;
+    margin-left: -40px;
+    cursor: pointer;
+  }
+  &.completed .welcome-panel-completed {
+    background-color: $color-white;
+    color: $green;
+    border-color: $green;
+    margin-right: -30px;
+    right: 50%;
+    cursor: inherit;
+  }
+  &.completed .getting_started_number {
+    opacity: 0;
+  }
+}
+.welcome-completed-row {
+  text-align: center;
+  transition: all 1s ease;
+  position: relative;
+  height: 0;
+  z-index: 4;
+  display: inline-block;
+  opacity: 1;
+  top: -80px;
+  &.uncompleted {
+    top: 40px;
+    opacity: 0;
+    z-index: 0;
+  }
+  h1 {
+    font-weight: 500;
+    font-size: 44px;
+  }
+  hr {
+    width: inherit;
+    margin: 20px auto;
+    border-width: 5px;
+  }
+  .tutorial-links {
+    font-size: 16px;
+    a {
+      display: inline-block;
+      width: 32%;
+      margin-bottom: 20px;
+      color: $color_gray_dark;
+      text-align: left;
+    }
+    .fa {
+      margin-right: 12px;
+      font-size: 20px;
+      color: $color_gold;
+    }
+  }
+  .welcome-completed-dismiss {
+    float: right;
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    border-radius: 25px;
+    line-height: 42px;
+    background-color: white;
+    color: $gray_light;
+    border: 3px solid $gray_light;
+    font-size: 30px;
+    position: relative;
+    top: -20px;
+    cursor: pointer;
+  }
+}
+.fadable {
+  transition: opacity 0.5s ease;
+  &.faded {
+    opacity: .05;
+  }
+}
+
+
 #donations_summary_chart {
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -1955,7 +2120,7 @@ appeals-list .show-all {
   line-height: 36px;
 }
 .dash-panel {
-  min-height: 315px;
+  min-height: 200px;
   position: relative;
   a:hover {
     text-decoration: none;
