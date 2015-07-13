@@ -18,8 +18,14 @@ class Api::V1::MailChimpAccountsController < Api::V1::BaseController
   end
 
   def mail_chimp_params
-    m = MailChimpAccount.new(params[:id])
-    m.export_to_list(params[:appeal_list_id],current_account_list.contact.where(id: params[:contact_ids]))
-    m.update(appeal_list_id: params[:appeal_list_id], appeal_id: params[:appeal_id])
+    mail_chimp_appeal = MailChimpAccountAppealLists.find_by(mail_chimp_account_id:
+                                                                current_account_list.mail_chimp_account.id)
+    if !mail_chimp_appeal.nil?
+      mail_chimp_appeal.update(appeal_list_id: params[:appeal_list_id], appeal_id: params[:appeal_id])
+      else
+        mail_chimp_appeal.create(mail_chimp_account_id: current_account_list.mail_chimp_account.id,
+        appeal_list_id: params[:appeal_list_id], appeal_id: params[:appeal_id])
+    end
   end
 end
+

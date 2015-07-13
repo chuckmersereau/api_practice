@@ -214,28 +214,23 @@ angular.module('mpdxApp')
                               }));
 
                               if (selectedContactIds.length == 0) {
-                                  alert('You must check at least one contact.');
+                                  alert ('You must check at least one contact.');
                                   return;
                               }
 
-                              $scope.selected_list_mail_chimp_list = ''
+                              var r = confirm( __('Are you sure you want to export the contacts to the list? ' +
+                                  'It will overwrite the existing contacts on the list, if any.'));
+                              if(!r){
+                                    return;
+                              }
 
                               api.call('put','mail_chimp_accounts/' + $scope.mail_chimp_account_id +'?account_list_id='
-                                  + window.current_account_list_id, {
-                                  mail_chimp_account_appeal_list: {
+                                  + window.current_account_list_id,
+                                  {
                                       appeal_id: $scope.appeal.id,
                                       appeal_list_id: selected_mail_chimp_list,
                                       contact_ids: selectedContactIds
-                                  }
-                              },
-                                  function() {
-                                      var r = confirm('Are you sure you want to export the contacts to the list? ' +
-                                          'It will overwrite the existing contacts on the list, if any.');
-                                      if(!r){
-                                          return;
-                                      }
-                                  });
-
+                                  },null,null,true)
                           };
 
                             $scope.selectAll = function(type){
