@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150713203830) do
+ActiveRecord::Schema.define(version: 20150714135841) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -478,17 +478,6 @@ ActiveRecord::Schema.define(version: 20150713203830) do
   add_index "imports", ["account_list_id"], name: "index_imports_on_account_list_id", using: :btree
   add_index "imports", ["user_id"], name: "index_imports_on_user_id", using: :btree
 
-  create_table "mail_chimp_account_appeal_lists", force: true do |t|
-    t.integer  "mail_chimp_account_id"
-    t.integer  "appeal_list_id"
-    t.integer  "appeal_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-  end
-
-  add_index "mail_chimp_account_appeal_lists", ["appeal_list_id"], name: "index_mail_chimp_account_appeal_lists_on_appeal_list_id", using: :btree
-  add_index "mail_chimp_account_appeal_lists", ["mail_chimp_account_id"], name: "index_mail_chimp_account_appeal_lists_on_mail_chimp_account_id", using: :btree
-
   create_table "mail_chimp_accounts", force: true do |t|
     t.string   "api_key"
     t.boolean  "active",          default: false
@@ -499,6 +488,17 @@ ActiveRecord::Schema.define(version: 20150713203830) do
     t.string   "webhook_token"
     t.integer  "account_list_id"
   end
+
+  create_table "mail_chimp_appeal_lists", force: true do |t|
+    t.integer  "mail_chimp_account_id"
+    t.string   "appeal_list_id"
+    t.integer  "appeal_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mail_chimp_appeal_lists", ["appeal_list_id"], name: "index_mail_chimp_appeal_lists_on_appeal_list_id", using: :btree
+  add_index "mail_chimp_appeal_lists", ["mail_chimp_account_id"], name: "index_mail_chimp_appeal_lists_on_mail_chimp_account_id", using: :btree
 
   create_table "master_addresses", force: true do |t|
     t.text     "street"

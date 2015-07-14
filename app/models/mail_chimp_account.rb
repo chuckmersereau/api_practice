@@ -54,9 +54,10 @@ class MailChimpAccount < ActiveRecord::Base
 
   def queue_export_to_primary_list
     async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
-    end
+  end
 
-  def queue_export_to_appeal_list(contact_ids)
+  def queue_export_to_appeal_list(contact_ids, list_id)
+    compare_and_remove_prior_list_members(list_id, contact_ids)
     async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts, contact_ids)
   end
 
@@ -97,14 +98,14 @@ class MailChimpAccount < ActiveRecord::Base
 
   def export_appeal_contacts(params)
     return unless primary_list_id.present?
-    mail_chimp_appeal = MailChimpAccountAppealLists.find_by(mail_chimp_account_id: id)
-    if !mail_chimp_appeal.nil?
-      queue_export_to_appeal_list(params[:contact_ids])
-      mail_chimp_appeal.update(appeal_list_id: params[:appeal_list_id], appeal_id: params[:appeal_id])
+    appeal_list = MailChimpAppealList.find_by(mail_chimp_account_id: id)
+    contact_ids = params[:contact_ids]
+    list_id = params[:appeal_list_id]
+    queue_export_to_appeal_list(contact_ids, list_id)
+    if !appeal_list.nil?
+      appeal_list.update(appeal_list_id: list_id, appeal_id: params[:appeal_id])
     else
-      queue_export_to_appeal_list(params[:contact_ids])
-      mail_chimp_appeal.create(mail_chimp_account_id: current_account_list.mail_chimp_account.id,
-                               appeal_list_id: params[:appeal_list_id], appeal_id: params[:appeal_id])
+      MailChimpAppealList.create(mail_chimp_account_id: id, appeal_list_id: list_id, appeal_id: params[:appeal_id])
     end
   end
   # private
@@ -153,6 +154,21 @@ class MailChimpAccount < ActiveRecord::Base
     else
       raise e
     end
+  end
+
+  def compare_and_remove_prior_list_members(list_id, contact_ids)
+    # compare and remove email addresses from the prev mail chimp appeal list not on
+    # the current one.
+    contacts = contacts_with_email_addresses(contact_ids)
+    members_to_unsubscribe = list_members(list_id).map { |m| m['email'] }.uniq -
+                             batch_params(contacts).map { |a| a[:EMAIL] }
+    unsubscribe_list_batch(list_id, members_to_unsubscribe)
+  end
+
+  def unsubscribe_list_batch(list_id, members_to_unsubscribe)
+    return if list_id.blank? || primary_list_id == list_id
+    gb.list_batch_unsubscribe(id: list_id, emails: members_to_unsubscribe,
+                              delete_member: true, send_goodbye: false, send_notify: false)
   end
 
   def subscribe_email(email)
@@ -205,16 +221,17 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def subscribe_contacts(contact_ids = nil)
+    contacts = contacts_with_email_addresses(contact_ids)
+    export_to_list(primary_list_id, contacts.to_set)
+  end
+
+  def contacts_with_email_addresses(contact_ids)
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
-
-    contacts = contacts
-               .includes(people: :primary_email_address)
-               .where(send_newsletter: %w(Email Both))
-               .where('email_addresses.email is not null')
-               .references('email_addresses')
-
-    export_to_list(primary_list_id, contacts.to_set)
+    contacts.includes(people: :primary_email_address)
+      .where(send_newsletter: %w(Email Both))
+      .where('email_addresses.email is not null')
+      .references('email_addresses')
   end
 
   def export_to_list(list_id, contacts)
@@ -225,7 +242,6 @@ class MailChimpAccount < ActiveRecord::Base
     add_status_groups(list_id, statuses)
 
     add_greeting_merge_variable(list_id)
-
     gb.list_batch_subscribe(id: list_id, batch: batch_params(contacts), update_existing: true,
                             double_optin: false, send_welcome: false, replace_interests: true)
   end
@@ -372,7 +388,11 @@ class MailChimpAccount < ActiveRecord::Base
 
   def gb
     @gb ||= Gibbon.new(api_key)
-    @gb.timeout = 600
+    @gb.timeout = 1500
     @gb
+  end
+
+  def list_members(list_id)
+    gb.list_members(id: list_id)['data']
   end
 end
