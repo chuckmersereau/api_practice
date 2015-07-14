@@ -95,6 +95,18 @@ class MailChimpAccount < ActiveRecord::Base
     lists.select { |a| a.id != primary_list_id }
   end
 
+  def export_appeal_contacts(params)
+    return unless primary_list_id.present?
+    mail_chimp_appeal = MailChimpAccountAppealLists.find_by(mail_chimp_account_id: id)
+    if !mail_chimp_appeal.nil?
+      queue_export_to_appeal_list(params[:contact_ids])
+      mail_chimp_appeal.update(appeal_list_id: params[:appeal_list_id], appeal_id: params[:appeal_id])
+    else
+      queue_export_to_appeal_list(params[:contact_ids])
+      mail_chimp_appeal.create(mail_chimp_account_id: current_account_list.mail_chimp_account.id,
+                               appeal_list_id: params[:appeal_list_id], appeal_id: params[:appeal_id])
+    end
+  end
   # private
 
   def call_mailchimp(method, *args)
