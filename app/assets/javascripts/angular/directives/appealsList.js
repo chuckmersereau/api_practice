@@ -218,8 +218,8 @@ angular.module('mpdxApp')
                                   return;
                               }
 
-                              var r = confirm( __('Are you sure you want to export the contacts to the list? ' +
-                                  'It will overwrite the existing contacts on the list, if any.'));
+                              var r = confirm( __('Are you sure you want to export the contacts to this list? ' +
+                                  'If you pick an existing list, this process could have the effect of removing people from it.'));
                               if(!r){
                                     return;
                               }
@@ -230,7 +230,7 @@ angular.module('mpdxApp')
                                       appeal_id: $scope.appeal.id,
                                       appeal_list_id: selected_mail_chimp_list,
                                       contact_ids: selectedContactIds
-                                  },null,null,true)
+                                  },null,true)
                           };
 
                             $scope.selectAll = function(type){

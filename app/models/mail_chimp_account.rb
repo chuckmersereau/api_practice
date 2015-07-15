@@ -54,10 +54,9 @@ class MailChimpAccount < ActiveRecord::Base
 
   def queue_export_to_primary_list
     async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
-  end
+    end
 
-  def queue_export_to_appeal_list(contact_ids, list_id)
-    compare_and_remove_prior_list_members(list_id, contact_ids)
+  def queue_export_to_appeal_list(contact_ids)
     async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts, contact_ids)
   end
 
@@ -88,6 +87,10 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
+  def queue_compare_and_remove_prior_list_members(contact_ids, list_id)
+    async(:call_mailchimp, :compare_and_remove_prior_list_members, contact_ids, list_id)
+  end
+
   def datacenter
     api_key.to_s.split('-').last
   end
@@ -101,7 +104,8 @@ class MailChimpAccount < ActiveRecord::Base
     appeal_list = MailChimpAppealList.find_by(mail_chimp_account_id: id)
     contact_ids = params[:contact_ids]
     list_id = params[:appeal_list_id]
-    queue_export_to_appeal_list(contact_ids, list_id)
+    queue_compare_and_remove_prior_list_members(contact_ids, list_id)
+    queue_export_to_primary_list(contact_ids)
     if !appeal_list.nil?
       appeal_list.update(appeal_list_id: list_id, appeal_id: params[:appeal_id])
     else
@@ -215,14 +219,14 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def setup_webhooks_and_subscribe_contacts
-    setup_webhooks
-    subscribe_contacts
+  def setup_webhooks_and_subscribe_contacts(contact_ids=nil,list_id=primary_list_id)
+    setup_webhooks(contact_ids)
+    subscribe_contacts(list_id)
   end
 
-  def subscribe_contacts(contact_ids = nil)
+  def subscribe_contacts(contact_ids = nil,list_id)
     contacts = contacts_with_email_addresses(contact_ids)
-    export_to_list(primary_list_id, contacts.to_set)
+    export_to_list(list_id, contacts.to_set)
   end
 
   def contacts_with_email_addresses(contact_ids)
@@ -240,7 +244,6 @@ class MailChimpAccount < ActiveRecord::Base
     statuses = contacts.map(&:status).compact.uniq
 
     add_status_groups(list_id, statuses)
-
     add_greeting_merge_variable(list_id)
     gb.list_batch_subscribe(id: list_id, batch: batch_params(contacts), update_existing: true,
                             double_optin: false, send_welcome: false, replace_interests: true)
@@ -318,13 +321,13 @@ class MailChimpAccount < ActiveRecord::Base
     queue_export_to_primary_list if changed.include?('primary_list_id')
   end
 
-  def setup_webhooks
+  def setup_webhooks(list_id)
     return unless $rollout.active?(:mailchimp_webhooks, account_list)
     return if webhook_token.present? &&
-              gb.list_webhooks(id: primary_list_id).find { |hook| hook['url'] == webhook_url }
+              gb.list_webhooks(id: list_id).find { |hook| hook['url'] == webhook_url }
 
     update(webhook_token: SecureRandom.hex(32))
-    gb.list_webhook_add(id: primary_list_id, url: webhook_url,
+    gb.list_webhook_add(id: list_id, url: webhook_url,
                         actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
                                    upemail: true, campaign: true },
                         sources: { user: true, admin: true, api: false })
