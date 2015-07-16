@@ -1,8 +1,0 @@
-server starting
-LOG:  database system was shut down at 2015-07-02 00:03:02 EDT
-LOG:  database system is ready to accept connections
-LOG:  autovacuum launcher started
-WARNING:  there is no transaction in progress
-WARNING:  there is no transaction in progress
-ERROR:  column "legal_first_name" does not exist at character 13
-STATEMENT:  SELECT "id","legal_first_name","birthday_month","anniversary_month","anniversary_day","suffix","marital_status","sign_in_count","subscribed_to_updates","optout_enewsletter","employer",ctid FROM public.mail_chimp_accounts T
