@@ -56,8 +56,8 @@ class MailChimpAccount < ActiveRecord::Base
     async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
     end
 
-  def queue_export_to_appeal_list(contact_ids)
-    async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts, contact_ids)
+  def queue_export_to_appeal_list(contact_ids, list_id)
+    async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts, contact_ids, list_id)
   end
 
   def queue_subscribe_contact(contact)
@@ -87,8 +87,8 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def queue_compare_and_remove_prior_list_members(contact_ids, list_id)
-    async(:call_mailchimp, :compare_and_remove_prior_list_members, contact_ids, list_id)
+  def queue_compare_and_unsubscribe_prior_members(contact_ids, list_id)
+    async(:call_mailchimp, :compare_and_unsubscribe_prior_members, contact_ids, list_id)
   end
 
   def datacenter
@@ -104,8 +104,7 @@ class MailChimpAccount < ActiveRecord::Base
     appeal_list = MailChimpAppealList.find_by(mail_chimp_account_id: id)
     contact_ids = params[:contact_ids]
     list_id = params[:appeal_list_id]
-    queue_compare_and_remove_prior_list_members(contact_ids, list_id)
-    queue_export_to_primary_list(contact_ids)
+    queue_compare_and_unsubscribe_prior_members(contact_ids, list_id)
     if !appeal_list.nil?
       appeal_list.update(appeal_list_id: list_id, appeal_id: params[:appeal_id])
     else
@@ -160,13 +159,14 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def compare_and_remove_prior_list_members(list_id, contact_ids)
+  def compare_and_unsubscribe_prior_members(list_id, contact_ids)
     # compare and remove email addresses from the prev mail chimp appeal list not on
     # the current one.
     contacts = contacts_with_email_addresses(contact_ids)
     members_to_unsubscribe = list_members(list_id).map { |m| m['email'] }.uniq -
                              batch_params(contacts).map { |a| a[:EMAIL] }
     unsubscribe_list_batch(list_id, members_to_unsubscribe)
+    queue_export_to_appeal_list(contact_ids, list_id)
   end
 
   def unsubscribe_list_batch(list_id, members_to_unsubscribe)
