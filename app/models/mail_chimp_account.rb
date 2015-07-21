@@ -54,10 +54,6 @@ class MailChimpAccount < ActiveRecord::Base
 
   def queue_export_to_primary_list
     async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
-    end
-
-  def queue_export_to_appeal_list(contact_ids, list_id)
-    async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts, contact_ids, list_id)
   end
 
   def queue_subscribe_contact(contact)
@@ -87,8 +83,8 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def queue_compare_and_unsubscribe_prior_members(contact_ids, list_id)
-    async(:call_mailchimp, :compare_and_unsubscribe_prior_members, contact_ids, list_id)
+  def queue_export_appeal_contacts
+    async(:call_mailchimp, :export_appeal_contacts)
   end
 
   def datacenter
@@ -99,12 +95,13 @@ class MailChimpAccount < ActiveRecord::Base
     lists.select { |a| a.id != primary_list_id }
   end
 
-  def export_appeal_contacts(params)
+  def export_appeal_contacts
     return unless primary_list_id.present?
+
     appeal_list = MailChimpAppealList.find_by(mail_chimp_account_id: id)
-    contact_ids = params[:contact_ids]
+    contacts = contacts_with_email_addresses(params[:contact_ids])
     list_id = params[:appeal_list_id]
-    queue_compare_and_unsubscribe_prior_members(contact_ids, list_id)
+    compare_and_remove_prior_list_members(contacts, list_id)
     if !appeal_list.nil?
       appeal_list.update(appeal_list_id: list_id, appeal_id: params[:appeal_id])
     else
@@ -159,14 +156,14 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def compare_and_unsubscribe_prior_members(list_id, contact_ids)
+  def compare_and_remove_prior_list_members(contacts, list_id)
     # compare and remove email addresses from the prev mail chimp appeal list not on
     # the current one.
-    contacts = contacts_with_email_addresses(contact_ids)
     members_to_unsubscribe = list_members(list_id).map { |m| m['email'] }.uniq -
                              batch_params(contacts).map { |a| a[:EMAIL] }
+    contact_ids = contacts.map(&:id)
     unsubscribe_list_batch(list_id, members_to_unsubscribe)
-    queue_export_to_appeal_list(contact_ids, list_id)
+    queue_export_to_appeal_list(contact_ids)
   end
 
   def unsubscribe_list_batch(list_id, members_to_unsubscribe)
@@ -219,12 +216,12 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def setup_webhooks_and_subscribe_contacts(contact_ids=nil,list_id=primary_list_id)
-    setup_webhooks(contact_ids)
-    subscribe_contacts(list_id)
+  def setup_webhooks_and_subscribe_contacts
+    setup_webhooks
+    subscribe_contacts
   end
 
-  def subscribe_contacts(contact_ids = nil,list_id)
+  def subscribe_contacts(contact_ids = nil, list_id = primary_list_id)
     contacts = contacts_with_email_addresses(contact_ids)
     export_to_list(list_id, contacts.to_set)
   end
@@ -321,13 +318,13 @@ class MailChimpAccount < ActiveRecord::Base
     queue_export_to_primary_list if changed.include?('primary_list_id')
   end
 
-  def setup_webhooks(list_id)
+  def setup_webhooks
     return unless $rollout.active?(:mailchimp_webhooks, account_list)
     return if webhook_token.present? &&
-              gb.list_webhooks(id: list_id).find { |hook| hook['url'] == webhook_url }
+              gb.list_webhooks(id: primary_list_id).find { |hook| hook['url'] == webhook_url }
 
     update(webhook_token: SecureRandom.hex(32))
-    gb.list_webhook_add(id: list_id, url: webhook_url,
+    gb.list_webhook_add(id: primary_list_id, url: webhook_url,
                         actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
                                    upemail: true, campaign: true },
                         sources: { user: true, admin: true, api: false })
