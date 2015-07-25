@@ -1,15 +1,13 @@
 class Api::V1::MailChimpAccountsController < Api::V1::BaseController
-  def index
+  def available_appeal_lists
     render json: lists_available_for_appeals, callback: params[:callback]
   end
 
   def update
     if update_or_create
-      logger.debug
       render json: lists_available_for_appeals, callback: params[:callback]
     else
       render json: { errors: update_or_create.errors.full_messages }, callback: params[:callback], status: :bad_request
-      logger.debug
     end
   end
 

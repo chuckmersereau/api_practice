@@ -37,7 +37,7 @@ angular.module('mpdxApp')
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
 
-                            api.call('get', 'mail_chimp_accounts',{}, function (data) {
+                            api.call('get', 'mail_chimp_accounts/available_appeal_lists',{}, function (data) {
                                 $scope.mail_chimp_lists = data.mail_chimp_accounts;
                                 $scope.selected_list_mail_chimp_list = data.mail_chimp_accounts[0].id;
                             }, null, true);
