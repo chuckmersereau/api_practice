@@ -7,7 +7,7 @@ class NotificationType::StartedGiving < NotificationType
 
       # update pledge received in case there are past donations
       orig_pledge_received = contact.pledge_received?
-      donation = contact.donations.where('donation_date > ?', 2.weeks.ago).last
+      donation = contact.donations.first # default ordering is date in reverse
       contact.pledge_received = true if donation.present? && contact.pledge_amount == donation.amount
       contact.save
 
