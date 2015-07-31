@@ -42,15 +42,7 @@ class Import < ActiveRecord::Base
   def read_file_contents
     file.cache_stored_file!
     contents = File.open(file.file.file) { |file| file.read }
-    encoding_info = CharlockHolmes::EncodingDetector.detect(contents)
-    return unless encoding_info
-    encoding = encoding_info[:encoding]
-    contents = CharlockHolmes::Converter.convert(contents, encoding, 'UTF-8')
-
-    # Remove byte order mark
-    contents.sub!("\xEF\xBB\xBF".force_encoding('UTF-8'), '')
-
-    contents.encode(universal_newline: true)
+    EncodingUtil.normalized_utf8(contents)
   end
 
   def import
