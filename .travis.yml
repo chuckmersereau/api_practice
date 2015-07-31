@@ -10,6 +10,8 @@ script:
 - bundle exec rake karma:run
 - bundle exec rubocop -R
 before_script:
+# Fail if there are any non-vendored Ruby files that include 'binding.pry'
+- bash -c "! find . -type f | grep -v 'vendor/bundle' | grep -E '\.(rb|erb|rake)|(Gem|Guard|Rake)file' | xargs grep binding.pry"
 - PHANTOMJS_CDNURL=https://bitbucket.org/ariya/phantomjs/downloads npm install
 - psql -c 'create database mpdx_test;' -U postgres
 - cp config/database.travis.yml config/database.yml

@@ -120,6 +120,8 @@ group :development do
   # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
   gem 'gettext', '~> 3.1.6', require: false
   gem 'ruby_parser', require: false
+  gem 'pry-byebug'
+  gem 'pry-rails'
 end
 
 group :development, :test do
