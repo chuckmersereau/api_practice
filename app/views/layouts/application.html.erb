@@ -190,7 +190,7 @@
                                             current_currency %>";
       window.current_account_list_id = <%= current_account_list.id %>;
       window.current_account_list_tester = '<%= current_account_list.tester %>';
-      <% if current_account_list.mail_chimp_account.id  != nil %>
+      <% if current_account_list.mail_chimp_account.try(:active) %>
         $.mpdx.mailchimp_account_id = '<%= current_account_list.mail_chimp_account.id %>';
       <% end %>
       $('#nice-fonts').dblclick(function() {$('.data-font').toggleClass("on");});

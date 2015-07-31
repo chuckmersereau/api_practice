@@ -37,6 +37,12 @@ describe MailChimpAccount do
     expect(account.lists.length).to eq(2)
   end
 
+  it 'returns an available lists for appeal. the primary is excluded' do
+    # list id from above stub
+    account.primary_list_id = '1e72b58b72'
+    expect(account.lists_available_for_appeals.length).to eq(1)
+  end
+
   it 'finds a list by list_id' do
     allow(account).to receive(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
     expect(account.list(1).name).to eq('foo')
@@ -422,6 +428,44 @@ describe MailChimpAccount do
         expect do
           account.call_mailchimp(:subscribe_person, 1)
         end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
+      end
+    end
+  end
+
+  describe 'mail chimp appeal methods' do
+    let(:contact1) { create(:contact) }
+    let(:contact2) { create(:contact) }
+    let(:list_id) { 'appeal_list1' }
+
+    before do
+      contact1.people << create(:person, email: 'foo@example.com')
+      contact2.people << create(:person, email: 'foo2@example.com')
+
+      stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listMembers')
+        .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22appeal_list1%22%7D')
+        .to_return(body: '{"total":1, "data":[{"email":"foo@example.com", "timestamp":"2015-07-31 14:39:19"}]}')
+    end
+
+    context '#export_appeal_contacts' do
+      it 'should export appeal contacts' do
+        account.primary_list_id = 'list1'
+        expect(account).to receive(:compare_and_unsubscribe)
+        expect(account).to receive(:export_to_list).with(list_id, [contact1, contact2].to_set)
+          .and_return(true)
+        account.send(:export_appeal_contacts, [contact1, contact2].to_set, list_id, 1)
+      end
+    end
+
+    context '#compare_and_unsubscribe' do
+      it 'should compare and unsubscribe contacts no longer on the mail chimp appeal list' do
+        expect(account).to receive(:compare_and_unsubscribe)
+        account.send(:compare_and_unsubscribe, [contact1].to_set, list_id)
+      end
+    end
+
+    context '#list_members' do
+      it 'should return members of a list, specifically emails' do
+        account.send(:list_members, list_id)
       end
     end
   end

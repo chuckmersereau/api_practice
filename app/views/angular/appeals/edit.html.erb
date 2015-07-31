@@ -222,9 +222,9 @@
                         </button>
                         <div class="alert alert-warning" role="alert">
                           <span class="glyphicon glyphicon-exclamation-sign">
-                            <%= _('You cannot use the MailChimp list you normally sync to for your newsletter,
-                               as this list would overwrite it. Create a new list in MailChimp and choose it in this drop
-                               down. Subsequent exports to this list will override previous ones') %>
+                            <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ')+
+                                _('as this one would overwrite it. Create a new list in MailChimp and choose it in ')+
+                                _('this drop down. Subsequent exports to it will overwrite previous ones.') %>
                           </span>
                         </div>
                       </div>
@@ -233,8 +233,8 @@
                   <div class="row" ng-show="mail_chimp_account_id == null">
                     <div class="alert alert-warning" role="alert">
                        <span class="glyphicon glyphicon-exclamation-sign">
-                          <%= _('You need to create a list on Mail Chimp that MPDX can use for your appeals.
-                          Go to http://api.mailchimp.com to create a list').localize %>
+                          <%= _('You need to create a list on Mail Chimp so that MPDX can use for your appeals.
+                          Go to ') %> <%= link_to 'mailchimp.com', "http://mailchimp.com" %> <%=_(' to do so.') %>
                        </span>
                     </div>
                   <div class="row">
