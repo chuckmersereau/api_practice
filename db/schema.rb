@@ -254,6 +254,8 @@ ActiveRecord::Schema.define(version: 20150605194836) do
     t.string   "envelope_greeting"
     t.boolean  "no_appeals"
     t.text     "prayer_letters_params"
+    t.string   "pls_id"
+    t.text     "pls_params"
   end
 
   add_index "contacts", ["account_list_id"], name: "index_contacts_on_account_list_id", using: :btree
@@ -859,6 +861,16 @@ ActiveRecord::Schema.define(version: 20150605194836) do
   end
 
   add_index "pictures", ["picture_of_id", "picture_of_type"], name: "picture_of", using: :btree
+
+  create_table "pls_accounts", force: true do |t|
+    t.integer  "account_list_id"
+    t.string   "oauth2_token"
+    t.boolean  "valid_token",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pls_accounts", ["account_list_id"], name: "index_pls_accounts_on_account_list_id", using: :btree
 
   create_table "prayer_letters_accounts", force: true do |t|
     t.string   "token"

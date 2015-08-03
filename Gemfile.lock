@@ -354,7 +354,7 @@ GEM
     momentjs-rails (2.8.3)
       railties (>= 3.1)
     mono_logger (1.1.0)
-    multi_json (1.11.1)
+    multi_json (1.11.2)
     multi_xml (0.5.5)
     multipart-post (2.0.0)
     net-scp (1.2.1)
@@ -392,6 +392,9 @@ GEM
     omniauth-oauth2 (1.1.1)
       oauth2 (~> 0.8.0)
       omniauth (~> 1.0)
+    omniauth-pls (0.0.2)
+      multi_json
+      omniauth-oauth2
     omniauth-prayer-letters (0.0.3)
       multi_json
       omniauth-oauth2
@@ -756,6 +759,7 @@ DEPENDENCIES
   omniauth-facebook (~> 1.6.0)
   omniauth-google-oauth2
   omniauth-linkedin (~> 0.1.0)
+  omniauth-pls
   omniauth-prayer-letters
   omniauth-twitter (~> 1.0.1)
   paper_trail (~> 3.0.0)

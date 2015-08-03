@@ -76,6 +76,41 @@
             </tr>
           </table>
         </div>
+        <% if $rollout.active?(:pls_integration, current_account_list) %>
+            <div class="network_connect">
+              <table>
+                <tr>
+                  <td class="identify">
+                    <% if current_account_list.pls_account %>
+                        <% if current_account_list.valid_pls_account %>
+                            <div class="statusIcon statusIcon-enabled">&nbsp;</div>
+                        <% else %>
+                            <div class="statusIcon statusIcon-error">&nbsp;</div>
+                        <% end %>
+                    <% else %>
+                        <div class="statusIcon statusIcon-disabled">&nbsp;</div>
+                    <% end %>
+                    <div class="network_logo">
+                      <%= image_tag("logos/pls_logo.png", alt: 'Prayer Letter Service') %>
+                    </div>
+
+                  </td>
+                  <td class="connections">
+                    <div class="network_button">
+                      <% if current_account_list.valid_pls_account %>
+                          <%= link_to(_('Sync Now'), sync_pls_accounts_path,
+                                      :class => 'btn', data: {method: :get, confirm: _("This will replace your myletterservice.org list with what you have in MPDX. Are you sure that's what you'd like to do?")}) %>
+                          <%= link_to(_('Delete'), pls_account_path(current_account_list.pls_account), method: :delete, class: "btn", data: {confirm: _('Are you sure?')}) %>
+                      <% else %>
+                          <%= link_to(_('Enable'), '/auth/pls',
+                                      :class => 'btn btn-xs btn-default', data: {method: :get, confirm: _("This will replace your myletterservice.org list with what you have in MPDX. Are you sure that's what you'd like to do?")}) %>
+                      <% end %>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+        <% end %>
         <div class="network_connect">
           <table>
             <tr>
