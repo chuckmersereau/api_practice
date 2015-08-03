@@ -43,6 +43,10 @@ describe MailChimpAccount do
     expect(account.lists_available_for_appeals.length).to eq(1)
   end
 
+  it 'returns lists available for newsletters only.' do
+    expect(account.lists_available_for_newsletters.length).to eq(2)
+  end
+
   it 'finds a list by list_id' do
     allow(account).to receive(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
     expect(account.list(1).name).to eq('foo')
@@ -436,6 +440,7 @@ describe MailChimpAccount do
     let(:contact1) { create(:contact) }
     let(:contact2) { create(:contact) }
     let(:list_id) { 'appeal_list1' }
+    let(:appeal) { create(:appeal, account_list: account_list) }
 
     before do
       contact1.people << create(:person, email: 'foo@example.com')
@@ -450,9 +455,8 @@ describe MailChimpAccount do
       it 'should export appeal contacts' do
         account.primary_list_id = 'list1'
         expect(account).to receive(:compare_and_unsubscribe)
-        expect(account).to receive(:export_to_list).with(list_id, [contact1, contact2].to_set)
-          .and_return(true)
-        account.send(:export_appeal_contacts, [contact1, contact2].to_set, list_id, 1)
+        expect(account).to receive(:export_to_list)
+        account.send(:export_appeal_contacts, [contact1.id, contact2.id].to_set, list_id, appeal.id)
       end
     end
 

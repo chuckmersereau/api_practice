@@ -91,10 +91,18 @@ class MailChimpAccount < ActiveRecord::Base
     lists.select { |a| a.id != primary_list_id }
   end
 
-  def export_appeal_contacts(contacts, list_id, appeal_id)
+  def lists_available_for_newsletters
+    appeal_list_id = MailChimpAppealList.where(mail_chimp_account_id: id).pluck(:appeal_list_id)
+    lists.reject { |l| appeal_list_id.include? l.id }
+  end
+
+  def export_appeal_contacts(contact_ids, list_id, appeal_id_from_param)
     return unless primary_list_id.present? || primary_list_id == list_id
+    contacts = contacts_with_email_addresses(contact_ids)
     compare_and_unsubscribe(contacts, list_id)
     export_to_list(list_id, contacts)
+    appeal_id = account_list.appeals.find(appeal_id_from_param).id
+    return unless appeal_id.present?
     appeal_list = MailChimpAppealList.find_or_create_by(mail_chimp_account_id: id, appeal_id: appeal_id)
     appeal_list.update(appeal_list_id: list_id, appeal_id: appeal_id)
   end
