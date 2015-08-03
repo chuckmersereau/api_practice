@@ -1,6 +1,7 @@
 class User < Person
   has_many :account_list_users, dependent: :destroy
   has_many :account_lists, through: :account_list_users
+  has_many :account_list_invites
   has_many :contacts, through: :account_lists
   has_many :account_list_entries, through: :account_lists
   has_many :designation_accounts, through: :account_list_entries
@@ -107,6 +108,13 @@ class User < Person
   def stale?
     return false unless last_sign_in_at
     last_sign_in_at < 6.months.ago
+  end
+
+  def send_account_list_invite(account_list, email)
+    code = SecureRandom.hex(32)
+    invite = account_list_invites.create(code: code, recipient_email: email,
+                                         account_list: account_list)
+    AccountListInviteMailer.email(invite).deliver
   end
 
   private

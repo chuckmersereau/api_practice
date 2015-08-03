@@ -75,6 +75,15 @@ Rails.application.routes.draw do
 
   resources :activity_comments
 
+  resources :account_lists do
+    collection do
+      get :sharing
+      post :share
+      post :merge
+      get 'accept_invite/:code', to: :accept_invite, as: :accept_invite
+    end
+  end
+
   resources :insights
   resources :donations
   resources :accounts
