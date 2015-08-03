@@ -67,7 +67,7 @@ describe 'Overall notification tests' do
       { pledge_frequency: weekly, amounts: [5] } => [smaller_gift, started_giving],
       { pledge_frequency: weekly, amounts: [10, 5] } => [smaller_gift, started_giving],
       { pledge_frequency: weekly, amounts: [10, 10, 10, 10, 10, 5] } => [smaller_gift],
-      { pledge_frequency: weekly, amounts: [10, 0] } => [started_giving],
+      { pledge_frequency: weekly, amounts: [10, 0] } => [],
       { pledge_frequency: fornightly, amounts: [20] } => [started_giving],
       { pledge_frequency: fornightly, amounts: [20, 0, 20, 0, 20] } => [],
       { pledge_frequency: 2, amounts: [20, 0, 20] } => [],
