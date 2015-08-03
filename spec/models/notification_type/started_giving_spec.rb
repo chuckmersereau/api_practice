@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'pry'
 
 describe NotificationType::StartedGiving do
   let!(:started_giving) { NotificationType::StartedGiving.first_or_initialize }
