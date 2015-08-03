@@ -7,7 +7,7 @@ class NotificationType::StartedGiving < NotificationType
 
       # update pledge received in case there are past donations
       orig_pledge_received = contact.pledge_received?
-      donation = contact.donations.first # default ordering is date in reverse
+      donation = last_donation_within_pledge_freq(contact)
       contact.pledge_received = true if donation.present? && contact.pledge_amount == donation.amount
       contact.save
 
@@ -39,5 +39,26 @@ class NotificationType::StartedGiving < NotificationType
   def task_description(notification)
     _('%{contact_name} just gave their first gift. Send them a Thank You.').localize %
       { contact_name: notification.contact.name }
+  end
+
+  private
+
+  def last_donation_within_pledge_freq(contact)
+    # Default past period to 2 weeks so we can set the pledge info above when
+    # the first gift comes for a partner with no pledge info set.
+    past_pledge_period_start = pledge_freq_months_ago(contact) || 2.weeks.ago
+
+    # Donation sort order is by donation_date descending by default
+    contact.donations.find_by('donation_date > ?', past_pledge_period_start)
+  end
+
+  def pledge_freq_months_ago(contact)
+    return unless contact.pledge_frequency.present?
+
+    if contact.pledge_frequency < 1
+      (contact.pledge_frequency * 30).days.ago
+    else
+      contact.pledge_frequency.to_i.months.ago
+    end
   end
 end
