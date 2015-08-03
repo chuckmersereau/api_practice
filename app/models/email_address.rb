@@ -12,6 +12,8 @@ class EmailAddress < ActiveRecord::Base
   after_save :sync_with_mail_chimp
   after_destroy :delete_from_mailchimp
 
+  has_one :mail_chimp_appeal_list, dependent: :destroy
+
   def to_s
     email
   end

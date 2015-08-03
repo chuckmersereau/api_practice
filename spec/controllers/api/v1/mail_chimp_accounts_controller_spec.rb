@@ -40,8 +40,9 @@ describe Api::V1::MailChimpAccountsController do
     it 'should return lists available for appeals' do
       get :available_appeal_lists
       expect(response).to be_success
-      json = JSON.parse(response.body)
-      expect(json).to include
+      json = JSON.parse(response.body).to_s
+      expect(json).to include 'MPDX'
+      expect(json).to include 'Appeals List'
     end
   end
 end
