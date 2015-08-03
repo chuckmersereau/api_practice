@@ -40,7 +40,6 @@ describe NotificationType::StartedGiving do
     it "sets pledge_received if first gift came more than 2 weeks ago but pledge_received wasn't set" do
       contact.update(pledge_amount: 9.99)
       create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 37.days.ago)
-      donation
       started_giving.check(contact.account_list)
       contact.reload
       expect(contact.pledge_received).to be true
