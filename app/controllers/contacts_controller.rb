@@ -76,7 +76,7 @@ class ContactsController < ApplicationController
         begin
           @contact = current_account_list.contacts.new(contact_params)
           if @contact.save
-            format.html { redirect_to(session[:contact_return_to] || @contact) }
+            format.html { redirect_to(@contact) }
           else
             format.html { render action: 'new' }
           end
