@@ -1,9 +1,9 @@
 class CreateMailChimpAppealLists < ActiveRecord::Migration
   def change
     create_table :mail_chimp_appeal_lists do |t|
-      t.integer :mail_chimp_account_id
-      t.string :appeal_list_id
-      t.integer :appeal_id
+      t.integer :mail_chimp_account_id, null: false
+      t.string :appeal_list_id, null: false
+      t.integer :appeal_id, null: false
 
       t.timestamps
     end

@@ -253,6 +253,7 @@ ActiveRecord::Schema.define(version: 20150714135841) do
     t.string   "timezone"
     t.string   "envelope_greeting"
     t.boolean  "no_appeals"
+    t.string   "pls_id"
     t.text     "prayer_letters_params"
   end
 
@@ -482,15 +483,11 @@ ActiveRecord::Schema.define(version: 20150714135841) do
     t.boolean  "active",          default: false
     t.integer  "grouping_id"
     t.string   "primary_list_id"
-    t.integer  "account_list_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "webhook_token"
-    t.string   "type"
-    t.integer  "appeal_id"
+    t.integer  "account_list_id"
   end
-
-  add_index "mail_chimp_accounts", ["account_list_id"], name: "index_mail_chimp_accounts_on_account_list_id", using: :btree
 
   create_table "mail_chimp_appeal_lists", force: true do |t|
     t.integer  "mail_chimp_account_id"
@@ -872,6 +869,16 @@ ActiveRecord::Schema.define(version: 20150714135841) do
   end
 
   add_index "pictures", ["picture_of_id", "picture_of_type"], name: "picture_of", using: :btree
+
+  create_table "pls_accounts", force: true do |t|
+    t.integer  "account_list_id"
+    t.string   "oauth2_token"
+    t.boolean  "valid_token",     default: true
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "pls_accounts", ["account_list_id"], name: "index_pls_accounts_on_account_list_id", using: :btree
 
   create_table "prayer_letters_accounts", force: true do |t|
     t.string   "token"

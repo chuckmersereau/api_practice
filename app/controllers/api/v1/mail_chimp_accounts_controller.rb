@@ -15,13 +15,13 @@ class Api::V1::MailChimpAccountsController < Api::V1::BaseController
   private
 
   def lists_available_for_appeals
-    return unless current_account_list.mail_chimp_account.attributes.find(id: params[:id])
+    return unless current_account_list.mail_chimp_account
     current_account_list.mail_chimp_account.lists_available_for_appeals
   end
 
   def update_or_create
-    return unless current_account_list.mail_chimp_account.attributes.find(id: params[:id])
-    current_account_list.mail_chimp_account.export_appeal_contacts(params[:contact_ids],params[:appeal_list_id],
-                                                                   params[:appeal_id])
+    return unless current_account_list.mail_chimp_account
+    current_account_list.mail_chimp_account
+      .export_appeal_contacts(params[:contact_ids], params[:appeal_list_id], params[:appeal_id])
   end
 end

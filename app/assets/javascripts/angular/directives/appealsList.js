@@ -42,9 +42,11 @@ angular.module('mpdxApp')
                                 $scope.selected_list_mail_chimp_list = data.mail_chimp_accounts[0].id;
                             }, null, true);
 
-                            if ( $.mpdx.mailchimp_account_id) {
-                                $scope.mail_chimp_account_id =  $.mpdx.mailchimp_account_id;
-                            }
+                            api.call('get','account_lists/', {}, function(data) {
+                                $scope.mail_chimp_account_id = data.account_list.id;
+                            },null,true);
+
+                            alert($scope.mail_chimp_account_id );
 
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
@@ -59,7 +61,7 @@ angular.module('mpdxApp')
                             };
 
                             $scope.delete = function (){
-                                var r = confirm('Are you sure you want to delete this appeal?');
+                                var r = confirm(__('Are you sure you want to delete this appeal?'));
                                 if(!r){
                                     return;
                                 }
@@ -88,7 +90,7 @@ angular.module('mpdxApp')
                             $scope.addContact = function(id){
                                 if(!id){ return; }
                                 if(_.contains($scope.appeal.contacts, id)){
-                                    alert('This contact already exists in this appeal.');
+                                    alert(__('This contact already exists in this appeal.'));
                                     return;
                                 }
                                 $scope.appeal.contacts.push(id);
@@ -128,7 +130,7 @@ angular.module('mpdxApp')
                                 }));
 
                                 if(!contactsObject.length){
-                                    alert('You must check at least one contact.');
+                                    alert(__('You must check at least one contact.'));
                                     return;
                                 }
 
@@ -164,7 +166,7 @@ angular.module('mpdxApp')
                             }));
 
                             if(!contactsObject.length){
-                              alert('You must check at least one contact.');
+                              alert(__('You must check at least one contact.'));
                               return;
                             }
 
@@ -199,7 +201,7 @@ angular.module('mpdxApp')
                             }));
 
                             if (selectedContactIds.length == 0) {
-                              alert('You must check at least one contact.');
+                              alert(__('You must check at least one contact.'));
                               return;
                             }
 
@@ -214,17 +216,18 @@ angular.module('mpdxApp')
                               }));
 
                               if (selectedContactIds.length == 0) {
-                                  alert ('You must check at least one contact.');
+                                  alert (__('You must check at least one contact.'));
                                   return;
                               }
 
-                              var r = confirm( __('Are you sure you want to export the contacts to this list? ' +
-                                  'If you pick an existing list, this process could have the effect of removing people from it.'));
+                              var r = confirm(__('Are you sure you want to export the contacts to this list? ' +
+                                  'If you pick an existing list, this process could have the effect of removing ' +
+                                  'people from it.'));
                               if(!r){
                                     return;
                               }
 
-                              api.call('put','mail_chimp_accounts/' + $scope.mail_chimp_account_id +'?account_list_id='
+                              api.call('put','mail_chimp_accounts/' + $scope.mail_chimp_account_id + '?account_list_id='
                                   + window.current_account_list_id,
                                   {
                                       appeal_id: $scope.appeal.id,
@@ -387,7 +390,7 @@ angular.module('mpdxApp')
                             $scope.editAppeal(data.appeal.id);
                           });
                         }, function(){
-                          alert('An error occurred while creating the appeal.');
+                          alert(__('An error occurred while creating the appeal.'));
                         });
                     });
                     modalInstance.opened.then(function() {

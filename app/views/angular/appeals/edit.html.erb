@@ -208,7 +208,8 @@
                       </div>
                     </div>
                   </div>
-                  <div class="row" ng-show="mail_chimp_account_id != null">
+                  <% if current_account_list.mail_chimp_account.try(:active) %>
+                  <div class="row">
                     <div class="col-sm-4">
                       <%= _('Export selected to a Mail Chimp list:') %>
                     </div>
@@ -223,21 +224,24 @@
                         <div class="spacer"></div>
                         <div class="alert alert-warning" role="alert">
                           <span class="glyphicon glyphicon-exclamation-sign">
-                            <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ')+
-                                _('as this one would overwrite it. Create a new list in MailChimp and choose it in ')+
-                                _('this drop down. Subsequent exports to it will overwrite previous ones.') %>
+                            <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ' +
+                                'as this one would overwrite it. Create a new list in MailChimp and choose it in ' +
+                                'this drop down. Subsequent exports to it will overwrite previous ones.') %>
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
-                  <div class="row" ng-show="mail_chimp_account_id == null">
+                      <% else %>
+                  <div class="row" >
                     <div class="alert alert-warning" role="alert">
                        <span class="glyphicon glyphicon-exclamation-sign">
-                          <%= _('You need to create a list on Mail Chimp so that MPDX can use for your appeals.
-                          Go to ') %> <%= link_to 'mailchimp.com', "http://mailchimp.com" %> <%=_(' to do so.') %>
+                          <%= _('You need to create a list on Mail Chimp so that MPDX can use for your appeals.' +
+                              ' Go to ') %> <%= link_to 'mailchimp.com', "http://mailchimp.com" %><%=_(' to do so.') %>
                        </span>
                     </div>
+                  </div>
+                      <% end %>
                   <div class="row">
                     <div class="col-sm-4">
                       <%= _('Create tag for selected:') %>
