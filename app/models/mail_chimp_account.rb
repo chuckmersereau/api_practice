@@ -8,6 +8,7 @@ class MailChimpAccount < ActiveRecord::Base
   List = Struct.new(:id, :name)
 
   belongs_to :account_list
+  has_one :mail_chimp_appeal_list, dependent: :destroy
 
   # attr_accessible :api_key, :primary_list_id
   attr_reader :validation_error
