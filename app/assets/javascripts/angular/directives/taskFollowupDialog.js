@@ -1,5 +1,5 @@
 angular.module('mpdxApp')
-    .controller('taskFollowupController', ['$scope', '$q', 'api', function($scope, $q, api) {
+    .controller('taskFollowupController', ['$scope', '$q', 'api', 'contactCache', function($scope, $q, api, contactCache) {
         $scope.logTask = function(formData) {
             api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
                 task: {
@@ -68,11 +68,14 @@ angular.module('mpdxApp')
 
                 //Contact Updates
                 var newContactStatus;
-                if(strContains(taskResult, 'Appointment Scheduled') || strContains(taskResult, 'Reschedule'))
+                if ($scope.followUpDialogResult.updateContactStatus) {
+                  if (strContains(taskResult, 'Appointment Scheduled') ||
+                      strContains(taskResult, 'Reschedule')) {
                     newContactStatus = 'Appointment Scheduled';
-                if(strContains(taskResult, 'Call for Decision') && $scope.followUpDialogResult.updateContactStatus)
+                  } else if (strContains(taskResult, 'Call for Decision')) {
                     newContactStatus = 'Call for Decision';
-                if(taskResult == 'Partner - Financial' || taskResult == 'Partner - Special' ||
+                  }
+                } else if (taskResult == 'Partner - Financial' || taskResult == 'Partner - Special' ||
                    taskResult == 'Partner - Pray' || taskResult == 'Ask in Future' ||
                    taskResult == 'Not Interested') {
                     newContactStatus = taskResult;
@@ -167,7 +170,7 @@ angular.module('mpdxApp')
 
                 $scope.followUpDialogResult = {
                     createCallTask: true,
-                    updateContactStatus: true,
+                    updateContactStatus: !allFinancialPartners(followUpTask.contacts),
                     callTask: {
                         type: taskType,
                         subject: taskSubject || followUpTask.subject,
@@ -182,12 +185,13 @@ angular.module('mpdxApp')
                      followUpTask.contacts.length > 0){
 
                 $scope.followUpDialogData = {
-                    message: "Contact's status will be updated to 'Appointment Scheduled'.",
+                    updateStatus: 'Appointment Scheduled',
                     apptTask: true,
                     callTask: true
                 };
                 $scope.followUpDialogResult = {
                     createApptTask: true,
+                    updateContactStatus: !allFinancialPartners(followUpTask.contacts),
                     apptTask: {
                         subject: 'Support',
                         date: dateTwoDaysFromToday,
@@ -359,6 +363,15 @@ angular.module('mpdxApp')
 
         var strContains = function(h, n){
             return h.indexOf(n) > -1;
+        };
+
+        var allFinancialPartners = function(contactIds) {
+          return _.all(contactIds, function (contactId) {
+            record = contactCache.getFromCache(contactId);
+            return !angular.isUndefined(record) && 
+              !angular.isUndefined(record.contact) &&
+              record.contact.status == 'Partner - Financial';
+          });
         };
     }])
     .directive('taskFollowupDialog', function () {

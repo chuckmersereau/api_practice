@@ -50,7 +50,8 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     select_task_next_action('Appointment Scheduled')
     expect do
       within('#complete_task_followup_modal') do
-        all('input[type="checkbox"]')[1].trigger('click')
+        # check 'Create "Call" task' checkbox
+        all('input[type="checkbox"]')[2].trigger('click')
         find_button('Save').trigger('click')
       end
       expect(page).to have_css('#complete_task_followup_modal', visible: false)
@@ -61,6 +62,18 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     call_task = contact.tasks.where(completed: false, activity_type: 'Call').first
     expect(call_task.start_at).to be < (DateTime.now + 2.days)
     expect(contact.reload.status).to eq 'Appointment Scheduled'
+  end
+
+  it 'does not change status for Appointment followup if status change box unchecked' do
+    visit_and_open_dialog(@task)
+    select_task_next_action('Appointment Scheduled')
+    within('#complete_task_followup_modal') do
+      # uncheck the update status checkbox (defaulted to checked)
+      all('input[type="checkbox"]')[0].trigger('click')
+      find_button('Save').trigger('click')
+    end
+    sleep(2)
+    expect(contact.reload.status).to eq 'Contact for Appointment'
   end
 
   it 'adds Partner - Financial commitment' do
