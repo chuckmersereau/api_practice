@@ -42,6 +42,8 @@ angular.module('mpdxApp')
                                 $scope.selected_list_mail_chimp_list = data.mail_chimp_accounts[0].id;
                             }, null, true);
 
+                            $scope.mail_chimp_account_present = $.mpdx.mail_chimp_account_present;
+
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
                             };
