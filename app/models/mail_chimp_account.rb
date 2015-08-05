@@ -89,28 +89,26 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def lists_available_for_appeals
-    lists.select { |a| a.id != primary_list_id }
+    lists.select { |l| l.id != primary_list_id }
   end
 
   def lists_available_for_newsletters
-    appeal_list_id = mail_chimp_appeal_list.try(:appeal_list_id)
-    if appeal_list_id.nil?
-      lists
-    else
-      lists.reject { |l| appeal_list_id.include? l.id }
-    end
+    lists.select { |l| l.id != mail_chimp_appeal_list.try(:appeal_list_id) }
   end
 
-  def export_appeal_contacts(contact_ids, list_id, appeal_id_from_param)
-    return if !primary_list_id.present? || primary_list_id == list_id
+  def export_appeal_contacts(contact_ids, list_id, appeal)
+    return if primary_list_id == list_id
     contacts = contacts_with_email_addresses(contact_ids)
     compare_and_unsubscribe(contacts, list_id)
     export_to_list(list_id, contacts)
-    appeal_id = account_list.appeals.find_by(id: appeal_id_from_param).try(:id)
-    return unless appeal_id.present?
-    appeal_list = MailChimpAppealList.find_or_create_by(appeal_id: appeal_id)
-    appeal_list.update(appeal_list_id: list_id, appeal_id: appeal_id)
+    save_appeal_list_info(list_id, appeal)
   end
+
+  def save_appeal_list_info(appeal_list_id, appeal)
+    build_mail_chimp_appeal_list unless mail_chimp_appeal_list
+    mail_chimp_appeal_list.update(appeal_list_id: appeal_list_id, appeal: appeal)
+  end
+
   # private
 
   def call_mailchimp(method, *args)
@@ -164,7 +162,7 @@ class MailChimpAccount < ActiveRecord::Base
     # the current one.
     members_to_unsubscribe = list_members(list_id).map { |l| l['email'] }.uniq -
                              batch_params(contacts).map { |b| b[:EMAIL] }
-    unsubscribe_list_batch(list_id, members_to_unsubscribe)
+    unsubscribe_list_batch(list_id, members_to_unsubscribe) if members_to_unsubscribe.present?
   end
 
   def unsubscribe_list_batch(list_id, members_to_unsubscribe)

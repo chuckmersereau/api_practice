@@ -3,6 +3,7 @@ require 'spec_helper'
 describe MailChimpAccount do
   let(:account) { MailChimpAccount.new(api_key: 'fake-us4') }
   let(:account_list) { create(:account_list) }
+  let(:appeal) { create(:appeal, account_list: account_list) }
 
   it 'validates the format of an api key' do
     expect(MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
@@ -37,14 +38,24 @@ describe MailChimpAccount do
     expect(account.lists.length).to eq(2)
   end
 
-  it 'returns an available lists for appeal. the primary is excluded' do
-    # list id from above stub
-    account.primary_list_id = '1e72b58b72'
-    expect(account.lists_available_for_appeals.length).to eq(1)
+  context '#lists_available_for_appeals' do
+    it 'returns an available lists for appeal. the primary is excluded' do
+      # list id from above stub
+      account.primary_list_id = '1e72b58b72'
+      expect(account.lists_available_for_appeals.map(&:id)).to eq(['29a77ba541'])
+    end
   end
 
-  it 'returns lists available for newsletters only.' do
-    expect(account.lists_available_for_newsletters.length).to eq(2)
+  context '#lists_available_for_newsletters' do
+    it 'returns all lists if no appeals list.' do
+      expect(account.lists_available_for_newsletters.length).to eq(2)
+    end
+
+    it 'excludes the appeals list if specified' do
+      account.mail_chimp_appeal_list = create(:mail_chimp_appeal_list, appeal_list_id: '1e72b58b72',
+                                                                       appeal: appeal, mail_chimp_account: account)
+      expect(account.lists_available_for_newsletters.map(&:id)).to eq(['29a77ba541'])
+    end
   end
 
   it 'finds a list by list_id' do
@@ -445,6 +456,7 @@ describe MailChimpAccount do
     before do
       contact1.people << create(:person, email: 'foo@example.com')
       contact2.people << create(:person, email: 'foo2@example.com')
+      account.primary_list_id = 'list1'
 
       stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listMembers')
         .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22appeal_list1%22%7D')
@@ -452,24 +464,59 @@ describe MailChimpAccount do
     end
 
     context '#export_appeal_contacts' do
-      it 'should export appeal contacts' do
-        account.primary_list_id = 'list1'
-        expect(account).to receive(:compare_and_unsubscribe)
-        expect(account).to receive(:export_to_list)
-        account.send(:export_appeal_contacts, [contact1.id, contact2.id].to_set, list_id, appeal.id)
+      it 'will not export if primary list equals appeals list' do
+        list_id = account.primary_list_id
+        expect(account).to_not receive(:export_to_list)
+        account.send(:export_appeal_contacts, [contact1.id, contact2.id], list_id, appeal)
+      end
+
+      it 'exports appeal contacts' do
+        expect(account).to receive(:contacts_with_email_addresses)
+          .with([contact1.id, contact2.id]) { [contact2] }
+        expect(account).to receive(:compare_and_unsubscribe).with([contact2], 'appeal_list1')
+        expect(account).to receive(:export_to_list).with('appeal_list1', [contact2])
+        expect(account).to receive(:save_appeal_list_info)
+        account.send(:export_appeal_contacts, [contact1.id, contact2.id], list_id, appeal)
       end
     end
 
     context '#compare_and_unsubscribe' do
-      it 'should compare and unsubscribe contacts no longer on the mail chimp appeal list' do
-        expect(account).to receive(:compare_and_unsubscribe)
-        account.send(:compare_and_unsubscribe, [contact1].to_set, list_id)
+      it 'does not unsubscribe when all members are passed in' do
+        expect(account).to_not receive(:unsubscribe_list_batch).with('appeal_list1', [])
+        account.send(:compare_and_unsubscribe, [contact1], list_id)
+      end
+
+      it 'should compare and unsubscribe contacts not passed in' do
+        expect(account).to receive(:unsubscribe_list_batch).with('appeal_list1', ['foo@example.com'])
+        account.send(:compare_and_unsubscribe, [], list_id)
       end
     end
 
     context '#list_members' do
       it 'should return members of a list, specifically emails' do
-        account.send(:list_members, list_id)
+        expect(account.send(:list_members, list_id))
+          .to eq([{ 'email' => 'foo@example.com', 'timestamp' => '2015-07-31 14:39:19' }])
+      end
+    end
+
+    context '#save_appeal_list_info' do
+      let(:appeal2) { create(:appeal) }
+
+      it 'updates existing appeal list info' do
+        account.mail_chimp_appeal_list = create(:mail_chimp_appeal_list, appeal_list_id: '1e72b58b72',
+                                                                         appeal: appeal, mail_chimp_account: account)
+        expect do
+          account.send(:save_appeal_list_info, 'newlist', appeal2)
+        end.to_not change(MailChimpAppealList, :count)
+        account.mail_chimp_appeal_list.reload
+        expect(account.mail_chimp_appeal_list.appeal_list_id).to eq('newlist')
+        expect(account.mail_chimp_appeal_list.appeal).to eq(appeal2)
+      end
+
+      it 'creates a new mail chimp appeal list if not existing yet' do
+        account.send(:save_appeal_list_info, 'newlist', appeal2)
+        expect(account.mail_chimp_appeal_list.appeal_list_id).to eq('newlist')
+        expect(account.mail_chimp_appeal_list.appeal).to eq(appeal2)
       end
     end
   end

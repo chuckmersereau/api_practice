@@ -58,6 +58,7 @@ Rails.application.routes.draw do
       resources :mail_chimp_accounts do
         collection do
           get :available_appeal_lists
+          put :export_appeal_list
         end
       end
     end

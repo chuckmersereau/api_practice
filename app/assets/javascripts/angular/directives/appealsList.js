@@ -42,12 +42,6 @@ angular.module('mpdxApp')
                                 $scope.selected_list_mail_chimp_list = data.mail_chimp_accounts[0].id;
                             }, null, true);
 
-                            api.call('get','account_lists/', {}, function(data) {
-                                $scope.mail_chimp_account_id = data.account_list.id;
-                            },null,true);
-
-                            alert($scope.mail_chimp_account_id );
-
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
                             };
@@ -194,7 +188,6 @@ angular.module('mpdxApp')
                             updateContact();
                           };
 
-
                           $scope.exportContactsToCSV = function(selectedContactsMap,data) {
                             var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
                               return selected;
@@ -210,7 +203,8 @@ angular.module('mpdxApp')
                                 'filters[status]=*&filters[ids]=' + selectedContactIds.join();
                           };
 
-                          $scope.exportContactsToMailChimpList = function(selectedContactsMap, selected_mail_chimp_list ) {
+                          $scope.exportContactsToMailChimpList = function(selectedContactsMap,
+                                                                          selected_mail_chimp_list ) {
                               var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
                                   return selected;
                               }));
@@ -227,10 +221,8 @@ angular.module('mpdxApp')
                                     return;
                               }
 
-                              api.call('put','mail_chimp_accounts/' + $scope.mail_chimp_account_id + '?account_list_id='
-                                  + window.current_account_list_id,
-                                  {
-                                      appeal_id: $scope.appeal.id,
+                              api.call('put','mail_chimp_accounts/export_appeal_list', {
+                                  appeal_id: $scope.appeal.id,
                                       appeal_list_id: selected_mail_chimp_list,
                                       contact_ids: selectedContactIds
                                   },null,true)
