@@ -11,7 +11,8 @@
 
 <p>
 <%= link_to(_('Accept MPDX Account Invite'),
-            accept_invite_account_lists_url(@invite.code)) %>
+            accept_invite_account_lists_url(code: @invite.code, 
+                                            id: @invite.account_list.id)) %>
 </p>
 
 <p>

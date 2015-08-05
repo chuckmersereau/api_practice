@@ -19,7 +19,8 @@ class AccountListsController < ApplicationController
   end
 
   def accept_invite
-    invite = AccountListInvite.find_by(code: params[:code])
+    invite = AccountListInvite.find_by(code: params[:code],
+                                       account_list_id: params[:id])
 
     if invite
       invite.accept_and_destroy(current_user)

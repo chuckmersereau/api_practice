@@ -80,7 +80,7 @@ Rails.application.routes.draw do
       get :sharing
       post :share
       post :merge
-      get 'accept_invite/:code', to: :accept_invite, as: :accept_invite
+      get :accept_invite
     end
   end
 
