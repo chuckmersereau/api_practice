@@ -29,6 +29,7 @@ class Task < Activity
   CALL_RESULTS = ['Attempted - Left Message', 'Attempted', 'Completed', 'Received']
   CALL_NEXT_ACTIONS = ['Call Again',
                        'Email', 'Text', 'Message',
+                       'Talk to In Person',
                        'Appointment Scheduled',
                        'Partner - Financial',
                        'Partner - Special',
@@ -36,7 +37,6 @@ class Task < Activity
                        'Ask in Future',
                        'Not Interested',
                        'None',
-                       'Talk to In Person',
                        'Prayer Request']
 
   APPOINTMENT_RESULTS = %w(Completed Attempted)
@@ -45,6 +45,7 @@ class Task < Activity
                               'Email',
                               'Text',
                               'Message',
+                              'Talk to In Person',
                               'Partner - Financial',
                               'Partner - Special',
                               'Partner - Pray',
@@ -52,12 +53,12 @@ class Task < Activity
                               'Not Interested',
                               'Reschedule',
                               'None',
-                              'Talk to In Person',
                               'Prayer Request']
 
   EMAIL_RESULTS = %w(Completed Received)
   EMAIL_NEXT_ACTIONS = ['Email Again',
                         'Call', 'Text', 'Message',
+                        'Talk to In Person',
                         'Appointment Scheduled',
                         'Partner - Financial',
                         'Partner - Special',
@@ -65,13 +66,13 @@ class Task < Activity
                         'Ask in Future',
                         'Not Interested',
                         'None',
-                        'Talk to In Person',
                         'Prayer Request']
 
   FACEBOOK_MESSAGE_RESULTS = %w(Completed Received)
   FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again',
                                    'Call', 'Email',
                                    'Text',
+                                   'Talk to In Person',
                                    'Appointment Scheduled',
                                    'Partner - Financial',
                                    'Partner - Special',
@@ -79,12 +80,12 @@ class Task < Activity
                                    'Ask in Future',
                                    'Not Interested',
                                    'None',
-                                   'Talk to In Person',
                                    'Prayer Request']
 
   TEXT_RESULTS = %w(Completed Received)
   TEXT_NEXT_ACTIONS = ['Text Again',
                        'Call', 'Email', 'Message',
+                       'Talk to In Person',
                        'Appointment Scheduled',
                        'Partner - Financial',
                        'Partner - Special',
@@ -92,7 +93,6 @@ class Task < Activity
                        'Ask in Future',
                        'Not Interested',
                        'None',
-                       'Talk to In Person',
                        'Prayer Request']
 
   TALK_TO_IN_PERSON_RESULTS = %w(Completed)
@@ -110,14 +110,14 @@ class Task < Activity
   PRAYER_REQUEST_RESULTS = %w(Completed)
   PRAYER_REQUEST_NEXT_ACTIONS = ['Prayer Request',
                                  'Call', 'Email', 'Message', 'Text',
+                                 'Talk to In Person',
                                  'Appointment Scheduled',
                                  'Partner - Financial',
                                  'Partner - Special',
                                  'Partner - Pray',
                                  'Ask in Future',
                                  'Not Interested',
-                                 'None',
-                                 'Talk to In Person']
+                                 'None']
 
   MESSAGE_RESULTS = [_('Done'), _('Received')]
   STANDARD_RESULTS = [_('Done')]
