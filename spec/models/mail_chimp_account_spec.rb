@@ -133,6 +133,13 @@ describe MailChimpAccount do
         account.queue_unsubscribe_contact(contact)
       end.to change(MailChimpAccount.jobs, :size).by(2)
     end
+
+    it 'should queue export_appeal_contacts' do
+      contact = create(:contact)
+      expect do
+        account.queue_export_appeal_contacts(contact, 'list1', appeal)
+      end.to change(MailChimpAccount.jobs, :size).by(1)
+    end
   end
 
   describe 'callbacks' do

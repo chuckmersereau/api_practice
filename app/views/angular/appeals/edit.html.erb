@@ -224,13 +224,15 @@
                         <div class="alert alert-warning" role="alert">
                           <span class="glyphicon glyphicon-exclamation-sign">
                             <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ' +
-                                          'as this one would overwrite it. Create a new list in MailChimp and choose it in ' +
-                                          'this drop down. Subsequent exports to it will overwrite previous ones.') %>
+                                  'as this one would overwrite it. Create a new list in MailChimp and choose ' +
+                                  'it in this drop down. Subsequent exports to it will overwrite previous ones.') %>
                           </span>
                         </div>
                       </div>
                     </div>
                   </div>
+                  <div class="row alert alert-success" role="alert"
+                       id="appealListLoading" ng-show="mail_chimp_appeal_load_complete"></div>
                   <div class="row" ng-show="!mail_chimp_account_present">
                     <div class="alert alert-warning" role="alert">
                        <span class="glyphicon glyphicon-exclamation-sign">

@@ -43,6 +43,7 @@ angular.module('mpdxApp')
                             }, null, true);
 
                             $scope.mail_chimp_account_present = $.mpdx.mail_chimp_account_present;
+                            $scope.mail_chimp_appeal_load_complete = false;
 
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
@@ -227,7 +228,17 @@ angular.module('mpdxApp')
                                   appeal_id: $scope.appeal.id,
                                       appeal_list_id: selected_mail_chimp_list,
                                       contact_ids: selectedContactIds
-                                  },null,true)
+                                  },
+                                  function (){
+                                      var appealLoadingDivId = angular.element( document
+                                          .querySelector( '#appealListLoading' ) );
+                                      appealLoadingDivId.html(__('Your Appeal Contacts are loading to MailChimp'));
+                                      $scope.mail_chimp_appeal_load_complete = true
+                                  }
+                                  ,true)
+
+
+
                           };
 
                             $scope.selectAll = function(type){

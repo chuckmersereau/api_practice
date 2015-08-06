@@ -84,6 +84,10 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
+  def queue_export_appeal_contacts(contact_ids, list_id, appeal)
+    async(:call_mailchimp, :export_appeal_contacts, contact_ids, list_id, appeal)
+  end
+
   def datacenter
     api_key.to_s.split('-').last
   end
@@ -386,7 +390,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def gb
     @gb ||= Gibbon.new(api_key)
-    @gb.timeout = 1500
+    @gb.timeout = 600
     @gb
   end
 
