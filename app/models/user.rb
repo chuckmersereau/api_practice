@@ -1,6 +1,7 @@
 class User < Person
   has_many :account_list_users, dependent: :destroy
   has_many :account_lists, through: :account_list_users
+  has_many :account_list_invites
   has_many :contacts, through: :account_lists
   has_many :account_list_entries, through: :account_lists
   has_many :designation_accounts, through: :account_list_entries

@@ -190,7 +190,7 @@ GEM
       eventmachine (>= 0.12.9)
       http_parser.rb (~> 0.6.0)
     email_reply_parser (0.5.8)
-    email_validator (1.4.0)
+    email_validator (1.6.0)
       activemodel
     equivalent-xml (0.5.1)
       nokogiri (>= 1.4.3)

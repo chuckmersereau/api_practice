@@ -1,0 +1,67 @@
+<div class="row">
+<div class="col-md-3 settings-sidebar" role="complementary">
+  <%= render 'settings_sidebar' %>
+</div>
+<div class="col-md-9">
+  <div id="contentbody" class="withleft">
+    <div class="wpp">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="page-filters">
+            <h2><%= _('Account Sharing & Merging') %></h2>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cw-top">
+      <%= _('Your currently selected MPDX Account is:') %> 
+      <b><%= current_account_list.name %></b>.
+
+      <%= _('It has designation info for:') %>
+      <b>
+        <%= current_account_list.designation_accounts
+              .map { |d| d.name || d.designation_number }
+              .to_sentence(last_word_connector: _(' and ')) %>
+      </b>.
+
+      <%= _('It is shared with:') %>
+      <b>
+        <%= current_account_list.users
+              .map { |u|  "#{u.first_name} #{u.last_name} (#{u.email_addresses.first})"}
+              .to_sentence(last_word_connector: _(' and ')) %>
+      </b>.
+
+      <br/><br/>
+      <%= _('To invite another user to access this account, enter their email:') %>
+      <div class="row">
+        <%= form_tag share_account_lists_path do %>
+          <div class="col-md-4">
+            <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org') %>
+          </div>
+          <div class="col-md-2">
+            <%= submit_tag _('Share Account'), class: 'btn btn-xs btn-secondary' %>
+          </div>
+        <% end %>
+      </div>
+
+      <br/>
+      <% if @mergeable_accounts.size == 0 %>
+        <%= _("You only have access to this account, so you can't merge it with another one yet.") %>
+      <% else %>
+        <%= _('Merge this account with another of your accounts:') %>
+        <div class="row">
+          <%= form_tag merge_account_lists_path do %>
+            <div class="col-md-4">
+              <%= select_tag :merge_id, 
+                    options_from_collection_for_select(@mergeable_accounts, :id, :name),
+                    class: 'form-control' %>
+            </div>
+          <div class="col-md-2">
+            <%= submit_tag _('Merge...'), class: 'btn btn-xs btn-secondary',
+                  data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>

@@ -37,6 +37,7 @@ class AccountList < ActiveRecord::Base
   has_many :tasks
   has_many :activities, dependent: :destroy
   has_many :imports, dependent: :destroy
+  has_many :account_list_invites, dependent: :destroy
   has_one :mail_chimp_account, dependent: :destroy
   has_many :notification_preferences, dependent: :destroy, autosave: true
   has_many :messages
