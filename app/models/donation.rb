@@ -41,7 +41,6 @@ class Donation < ActiveRecord::Base
   end
 
   def add_appeal_contacts
-
     return unless appeal
     contacts = appeal.account_list.contacts
                .joins(:contact_donor_accounts)
