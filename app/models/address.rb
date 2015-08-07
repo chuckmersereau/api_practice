@@ -109,7 +109,7 @@ class Address < ActiveRecord::Base
   end
 
   def csv_street
-    street.gsub("\r\n", "\n") if street
+    street.gsub("\r\n", "\n").strip if street
   end
 
   private

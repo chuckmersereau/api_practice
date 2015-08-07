@@ -179,4 +179,15 @@ describe Address do
       end
     end
   end
+
+  context '#csv_street' do
+    it 'normalizes newlines and strips whitespace' do
+      address = build(:address, street: "123 Somewhere\r\n#1\n")
+      expect(address.csv_street).to eq("123 Somewhere\n#1")
+    end
+
+    it 'gives nil for nil' do
+      expect(build(:address, street: nil).csv_street).to be_nil
+    end
+  end
 end
