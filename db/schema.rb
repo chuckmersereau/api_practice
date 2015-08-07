@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150804155832) do
+ActiveRecord::Schema.define(version: 20150807145306) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -705,7 +705,7 @@ ActiveRecord::Schema.define(version: 20150804155832) do
 
   create_table "person_facebook_accounts", force: true do |t|
     t.integer  "person_id",                                  null: false
-    t.integer  "remote_id",        limit: 8,                 null: false
+    t.integer  "remote_id",        limit: 8
     t.string   "token"
     t.datetime "token_expires_at"
     t.datetime "created_at"
@@ -716,9 +716,11 @@ ActiveRecord::Schema.define(version: 20150804155832) do
     t.boolean  "authenticated",              default: false, null: false
     t.boolean  "downloading",                default: false, null: false
     t.datetime "last_download"
+    t.string   "username"
   end
 
   add_index "person_facebook_accounts", ["person_id", "remote_id"], name: "index_person_facebook_accounts_on_person_id_and_remote_id", unique: true, using: :btree
+  add_index "person_facebook_accounts", ["person_id", "username"], name: "index_person_facebook_accounts_on_person_id_and_username", unique: true, using: :btree
   add_index "person_facebook_accounts", ["remote_id"], name: "index_person_facebook_accounts_on_remote_id", using: :btree
 
   create_table "person_google_accounts", force: true do |t|

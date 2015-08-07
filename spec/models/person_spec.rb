@@ -33,7 +33,7 @@ describe Person do
   end
 
   describe '.save' do
-    it 'gracefully handles having the same FB account assigned twice' do
+    it 'gracefully handles having the same FB account assigned twice by id' do
       fb_account = create(:facebook_account, person: person)
       person.update_attributes('facebook_accounts_attributes' => {
                                  '0' => {
@@ -43,6 +43,26 @@ describe Person do
                                  '1' => {
                                    '_destroy' => 'false',
                                    'url' => 'http://facebook.com/profile.php?id=500015648'
+                                 },
+                                 '1354203866590' => {
+                                   '_destroy' => 'false',
+                                   'id' => fb_account.id,
+                                   'url' => fb_account.url
+                                 }
+                               })
+      expect(person.facebook_accounts.length).to eq(2)
+    end
+
+    it 'gracefully handles having the same FB account assigned twice by username' do
+      fb_account = create(:facebook_account, person: person)
+      person.update_attributes('facebook_accounts_attributes' => {
+                                 '0' => {
+                                   '_destroy' => 'false',
+                                   'url' => 'http://facebook.com/john.doe'
+                                 },
+                                 '1' => {
+                                   '_destroy' => 'false',
+                                   'url' => 'http://facebook.com/john.doe'
                                  },
                                  '1354203866590' => {
                                    '_destroy' => 'false',

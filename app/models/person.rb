@@ -184,20 +184,8 @@ class Person < ActiveRecord::Base
 
   # Augment the built-in rails method to prevent duplicate facebook accounts
   def facebook_accounts_attributes=(hash)
-    facebook_ids = facebook_accounts.pluck(:remote_id)
-
-    hash.each do |key, attributes|
-      next if attributes['_destroy'] == '1'
-
-      remote_id = Person::FacebookAccount.get_id_from_url(attributes['url'])
-      next unless remote_id
-      attributes['remote_id'] = remote_id
-      if facebook_ids.include?(attributes['remote_id'])
-        hash.delete(key)
-      else
-        facebook_ids << attributes['remote_id']
-      end
-    end
+    split_facebook_urls(hash)
+    reject_dup_facebook_accounts(hash)
 
     hash.each do |_, attributes|
       if attributes['id']
@@ -208,10 +196,38 @@ class Person < ActiveRecord::Base
           fa.update_attributes(attributes.except('id', '_destroy'))
         end
       else
-        unless attributes['_destroy'] == '1' || attributes['remote_id'].blank?
+        unless attributes['_destroy'] == '1' ||
+               (attributes['remote_id'].blank? && attributes['username'].blank?)
           fa = facebook_accounts.new(attributes.except('_destroy'))
           fa.save unless new_record?
         end
+      end
+    end
+  end
+
+  def split_facebook_urls(hash)
+    hash.each do |_, attributes|
+      remote_id = Person::FacebookAccount.id_from_url(attributes['url'])
+      username = Person::FacebookAccount.username_from_url(attributes['url'])
+      attributes['remote_id'] = remote_id if remote_id
+      attributes['username'] = username if username
+    end
+  end
+
+  def reject_dup_facebook_accounts(hash)
+    fb_ids_and_users = facebook_accounts.pluck(:remote_id, :username)
+    facebook_ids = fb_ids_and_users.map(&:first).compact
+    facebook_usernames = fb_ids_and_users.map(&:second).compact
+
+    hash.each do |key, attributes|
+      next if attributes['_destroy'] == '1'
+
+      if facebook_ids.include?(attributes['remote_id']) ||
+         facebook_usernames.include?(attributes['username'])
+        hash.delete(key)
+      else
+        facebook_ids << attributes['remote_id'] if attributes['remote_id']
+        facebook_usernames << attributes['username'] if attributes['username']
       end
     end
   end

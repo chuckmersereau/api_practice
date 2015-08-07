@@ -45,22 +45,32 @@ describe ContactExhibit do
   end
 
   context '#avatar' do
-    it 'should ignore images with nil content' do
+    before { allow(context).to receive(:root_url).and_return('https://mpdx.org') }
+
+    it 'ignore images with nil content' do
       person = double(facebook_account: nil,
                       primary_picture: double(image: double(url: nil)),
                       gender: nil
                      )
       allow(contact).to receive(:primary_person).and_return(person)
-      allow(context).to receive(:root_url).and_return('https://mpdx.org')
       expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
     end
 
-    it 'should make facebook image' do
+    it 'uses make facebook image if remote_id present' do
       person = double(facebook_account: double(remote_id: 1234),
                       primary_picture: double(image: double(url: nil))
                      )
       allow(contact).to receive(:primary_person).and_return(person)
       expect(exhib.avatar).to eq('https://graph.facebook.com/1234/picture?type=square')
+    end
+
+    it 'uses default avatar if facebook remote_id not present' do
+      person = double(facebook_account: double(remote_id: nil),
+                      primary_picture: double(image: double(url: nil)),
+                      gender: nil
+                     )
+      allow(contact).to receive(:primary_person).and_return(person)
+      expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
     end
   end
 
