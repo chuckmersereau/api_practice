@@ -6,8 +6,6 @@ describe AccountListInviteMailer do
     let(:mail) { AccountListInviteMailer.email(invite) }
 
     it 'renders the headers' do
-      expect(invite.user).to_not be_nil
-      expect(invite.account_list).to_not be_nil
       expect(mail.subject).to eq('Account access invite')
       expect(mail.to).to eq(['joe@example.com'])
       expect(mail.from).to eq(['support@mpdx.org'])

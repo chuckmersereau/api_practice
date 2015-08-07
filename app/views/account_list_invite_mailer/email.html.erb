@@ -1,7 +1,8 @@
 <p>
   <%= 
     _('You have been invited by %{inviter} to access the MPDX account "%{account}".')
-      .localize % { inviter: @invite.user.first_name.to_s + ' ' + @invite.user.last_name.to_s,
+      .localize % { inviter: @invite.invited_by_user.first_name.to_s + ' ' +
+                             @invite.invited_by_user.last_name.to_s,
                     account: @invite.account_list.name.to_s } %>
 </p>
 

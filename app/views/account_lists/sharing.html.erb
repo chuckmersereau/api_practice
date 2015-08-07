@@ -21,14 +21,14 @@
       <b>
         <%= current_account_list.designation_accounts
               .map { |d| d.name || d.designation_number }
-              .to_sentence(last_word_connector: _('and')) %>
+              .to_sentence(last_word_connector: _(' and ')) %>
       </b>.
 
       <%= _('It is shared with:') %>
       <b>
         <%= current_account_list.users
               .map { |u|  "#{u.first_name} #{u.last_name} (#{u.email_addresses.first})"}
-              .to_sentence(last_word_connector: _('and')) %>
+              .to_sentence(last_word_connector: _(' and ')) %>
       </b>.
 
       <br/><br/>

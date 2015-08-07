@@ -20,7 +20,8 @@ describe AccountListsController do
 
   context '#share' do
     it 'sends the account invite with the specified email if it is valid' do
-      expect(user).to receive(:send_account_list_invite).with(account_list, 'john@example.com')
+      expect(AccountListInvite).to receive(:send_invite)
+        .with(user, account_list, 'john@example.com')
       post :share, email: 'john@example.com'
     end
 
@@ -32,6 +33,9 @@ describe AccountListsController do
 
   context '#accept_invite' do
     let(:invited_account) { create(:account_list) }
+    let!(:invite) do
+      create(:account_list_invite, code: 'code', account_list: invited_account)
+    end
 
     it 'redirect with a flash alert for an invalid invite code' do
       expect do
@@ -41,27 +45,31 @@ describe AccountListsController do
     end
 
     it 'redirect with a flash alert for an invalid account id' do
-      create(:account_list_invite, code: 'code', account_list: invited_account)
       expect do
         get :accept_invite, code: 'code', id: (invited_account.id + 1)
       end.to_not change(user.account_lists, :count)
       expect(flash[:alert]).to be_present
     end
 
-    it 'accepts and destorys the invite if the code and id are valid' do
-      create(:account_list_invite, code: 'code', account_list: invited_account)
+    it 'accepts the invite if the code and id are valid' do
       get :accept_invite, code: 'code', id: invited_account.id
       expect(user.account_lists.reload).to include(invited_account)
     end
 
     it 'does not allow an invite to be used if it was accepted by another user' do
-      invite = create(:account_list_invite, code: 'code', account_list: invited_account)
       user2 = create(:user)
-      invite.accept_and_destroy(user2)
+      invite.accept(user2)
 
       get :accept_invite, code: 'code', id: invited_account.id
       expect(flash[:alert]).to be_present
       expect(user.account_lists.reload).to_not include(invited_account)
+    end
+
+    it 'give a flash notice (but no alert) if the user re-accepts an invite' do
+      invite.accept(user)
+      get :accept_invite, code: 'code', id: invited_account.id
+      expect(flash[:notice]).to be_present
+      expect(flash[:alert]).to_not be_present
     end
 
     after { expect(subject).to redirect_to(root_path) }

@@ -110,13 +110,6 @@ class User < Person
     last_sign_in_at < 6.months.ago
   end
 
-  def send_account_list_invite(account_list, email)
-    code = SecureRandom.hex(32)
-    invite = account_list_invites.create(code: code, recipient_email: email,
-                                         account_list: account_list)
-    AccountListInviteMailer.email(invite).deliver
-  end
-
   private
 
   def set_setup_mode

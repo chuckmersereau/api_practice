@@ -27,10 +27,12 @@ ActiveRecord::Schema.define(version: 20150804155832) do
   add_index "account_list_entries", ["designation_account_id"], name: "index_account_list_entries_on_designation_account_id", using: :btree
 
   create_table "account_list_invites", force: true do |t|
-    t.integer "account_list_id"
-    t.integer "user_id"
-    t.string  "code",            null: false
-    t.string  "recipient_email", null: false
+    t.integer  "account_list_id"
+    t.integer  "invited_by_user_id",  null: false
+    t.string   "code",                null: false
+    t.string   "recipient_email",     null: false
+    t.integer  "accepted_by_user_id"
+    t.datetime "accepted_at"
   end
 
   create_table "account_list_users", force: true do |t|
