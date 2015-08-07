@@ -14,6 +14,8 @@ class Donation < ActiveRecord::Base
   default_scope { order('donation_date desc') }
 
   after_create :update_totals
+  after_save :add_appeal_contacts
+
   before_validation :set_amount_from_tendered_amount
 
   def localized_amount
@@ -36,5 +38,13 @@ class Donation < ActiveRecord::Base
       self.tendered_amount = tendered_amount_before_type_cast.to_s.gsub(/[^\d\.\-]+/, '').to_f
       self.amount ||= tendered_amount_before_type_cast
     end
+  end
+
+  def add_appeal_contacts
+    return unless appeal
+    contacts = appeal.account_list.contacts
+               .joins(:contact_donor_accounts)
+               .where(contact_donor_accounts: { donor_account_id: donor_account.id })
+    appeal.bulk_add_contacts(contacts)
   end
 end
