@@ -102,7 +102,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def export_appeal_contacts(contact_ids, list_id, appeal)
     return if primary_list_id == list_id
-    contacts = contacts_with_email_addresses(contact_ids)
+    contacts = contacts_with_email_addresses(contact_ids, false)
     compare_and_unsubscribe(contacts, list_id)
     export_to_list(list_id, contacts)
     save_appeal_list_info(list_id, appeal)
@@ -229,13 +229,13 @@ class MailChimpAccount < ActiveRecord::Base
     export_to_list(list_id, contacts.to_set)
   end
 
-  def contacts_with_email_addresses(contact_ids)
+  def contacts_with_email_addresses(contact_ids, enewsletter_only = true)
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
+    contacts = contacts.where(send_newsletter: %w(Email Both)) if enewsletter_only
     contacts.includes(people: :primary_email_address)
-      .where(send_newsletter: %w(Email Both))
-      .where('email_addresses.email is not null')
-      .references('email_addresses')
+        .where('email_addresses.email is not null')
+        .references('email_addresses')
   end
 
   def export_to_list(list_id, contacts)

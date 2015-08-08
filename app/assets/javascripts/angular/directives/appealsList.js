@@ -37,13 +37,19 @@ angular.module('mpdxApp')
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
 
-                            api.call('get', 'mail_chimp_accounts/available_appeal_lists',{}, function (data) {
-                                $scope.mail_chimp_lists = data.mail_chimp_accounts;
-                                $scope.selected_list_mail_chimp_list = data.mail_chimp_accounts[0].id;
-                            }, null, true);
-
                             $scope.mail_chimp_account_present = $.mpdx.mail_chimp_account_present;
+
+                            if ($.mpdx.mail_chimp_lists == null) {
+                                $scope.mail_chimp_lists = [];
+                            } else {
+                                $scope.mail_chimp_lists = $.mpdx.mail_chimp_lists;
+                                if ($scope.mail_chimp_lists.size > 0) {
+                                    $scope.selected_mail_chimp_list = $scope.mail_chimp_lists[0].id
+                                }
+                            }
+
                             $scope.mail_chimp_appeal_load_complete = false;
+
 
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
@@ -207,7 +213,7 @@ angular.module('mpdxApp')
                           };
 
                           $scope.exportContactsToMailChimpList = function(selectedContactsMap,
-                                                                          selected_mail_chimp_list ) {
+                                                                          appealListId ) {
                               var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
                                   return selected;
                               }));
@@ -224,21 +230,19 @@ angular.module('mpdxApp')
                                     return;
                               }
 
+                              debugger;
+
                               api.call('put','mail_chimp_accounts/export_appeal_list', {
-                                  appeal_id: $scope.appeal.id,
-                                      appeal_list_id: selected_mail_chimp_list,
+                                      appeal_id: $scope.appeal.id,
+                                      appeal_list_id: appealListId,
                                       contact_ids: selectedContactIds
                                   },
-                                  function (){
-                                      var appealLoadingDivId = angular.element( document
-                                          .querySelector( '#appealListLoading' ) );
+                                  function () {
+                                      var appealLoadingDivId = angular.element(document
+                                          .querySelector('#appealListLoading'));
                                       appealLoadingDivId.html(__('Your Appeal Contacts are loading to MailChimp'));
                                       $scope.mail_chimp_appeal_load_complete = true
-                                  }
-                                  ,true)
-
-
-
+                              });
                           };
 
                             $scope.selectAll = function(type){

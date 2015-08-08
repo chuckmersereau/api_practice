@@ -214,10 +214,10 @@
                     </div>
                     <div class="col-sm-8">
                       <div class="form-group">
-                        <select class="form-control" ng-model="selected_list_mail_chimp_list"
+                        <select class="form-control" ng-model="selected_mail_chimp_list"
                                 ng-options="m.id as m.name for m in mail_chimp_lists" ></select>
                         <button class="btn btn-default"
-                                ng-click="exportContactsToMailChimpList(checkedContacts,selected_list_mail_chimp_list)">
+                                ng-click="exportContactsToMailChimpList(checkedContacts,selected_mail_chimp_list)">
                           <%= _('Export') %>
                         </button>
                         <div class="spacer"></div>

@@ -292,6 +292,31 @@ describe MailChimpAccount do
         end
       end
     end
+
+    context '#contacts_with_email_addresses' do
+      let(:contact) { create(:contact, name: 'John Smith', send_newsletter: 'Email', account_list: account_list) }
+      let(:person) { create(:person) }
+
+      it 'returns a contact when the passed in contact has a person email address and valid newsletter option' do
+        person.email_address = { email: 'foo@example.com', primary: true }
+        person.save
+        contact.people << person
+        allow(account).to receive(:contacts_with_email_addresses).with(contact.id).and_return(contact)
+      end
+
+      it 'returns nothing when the passed in contact id has no person email address' do
+        contact.people << person
+        allow(account).to receive(:contacts_with_email_addresses).with(contact.id).and_return(nil)
+      end
+
+      it 'returns nothing when email address is present but send_newsletter is blank' do
+        person.email_address = { email: 'foo@example.com', primary: true }
+        person.save
+        contact.people << person
+        contact.send_newsletter = ''
+        allow(account).to receive(:contacts_with_email_addresses).with(contact.id).and_return(nil)
+      end
+    end
   end
 
   describe 'hook methods' do
@@ -479,7 +504,7 @@ describe MailChimpAccount do
 
       it 'exports appeal contacts' do
         expect(account).to receive(:contacts_with_email_addresses)
-          .with([contact1.id, contact2.id]) { [contact2] }
+          .with([contact1.id, contact2.id], false) { [contact2] }
         expect(account).to receive(:compare_and_unsubscribe).with([contact2], 'appeal_list1')
         expect(account).to receive(:export_to_list).with('appeal_list1', [contact2])
         expect(account).to receive(:save_appeal_list_info)
