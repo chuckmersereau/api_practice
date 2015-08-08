@@ -234,8 +234,8 @@ class MailChimpAccount < ActiveRecord::Base
     contacts = contacts.where(id: contact_ids) if contact_ids
     contacts = contacts.where(send_newsletter: %w(Email Both)) if enewsletter_only
     contacts.includes(people: :primary_email_address)
-        .where('email_addresses.email is not null')
-        .references('email_addresses')
+      .where('email_addresses.email is not null')
+      .references('email_addresses')
   end
 
   def export_to_list(list_id, contacts)
