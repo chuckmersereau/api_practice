@@ -342,7 +342,7 @@ describe Contact do
 
       prayer_letters_id  = 'foo'
       contact.prayer_letters_id = prayer_letters_id
-      contact.send(:delete_from_prayer_letters)
+      contact.send(:delete_from_letter_services)
     end
 
     it "DOESN'T delete this person from prayerletters.com if another contact has the prayer_letters_id" do
@@ -350,7 +350,7 @@ describe Contact do
       prayer_letters_id  = 'foo'
       contact.update_column(:prayer_letters_id, prayer_letters_id)
       create(:contact, account_list: account_list, prayer_letters_id: prayer_letters_id)
-      contact.send(:delete_from_prayer_letters)
+      contact.send(:delete_from_letter_services)
     end
   end
 
@@ -529,12 +529,14 @@ describe Contact do
     end
 
     it 'does not queue the update if not set to receive newsletter, but deletes' do
-      expect(contact).to receive(:delete_from_prayer_letters)
+      expect(contact).to receive(:delete_from_letter_service)
+        .with(:prayer_letters)
       expect_update_queued(false) { contact.update(send_newsletter: nil) }
     end
 
     it 'does not queue if address missing, but deletes' do
-      expect_any_instance_of(Contact).to receive(:delete_from_prayer_letters)
+      expect_any_instance_of(Contact).to receive(:delete_from_letter_service)
+        .with(:prayer_letters)
       expect_update_queued(false) { address.update(street: nil) }
     end
 

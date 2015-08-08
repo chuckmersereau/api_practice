@@ -37,11 +37,13 @@ class AccountList < ActiveRecord::Base
   has_many :tasks
   has_many :activities, dependent: :destroy
   has_many :imports, dependent: :destroy
+  has_many :account_list_invites, dependent: :destroy
   has_one :mail_chimp_account, dependent: :destroy
   has_many :notification_preferences, dependent: :destroy, autosave: true
   has_many :messages
   has_many :designation_profiles
   has_one :prayer_letters_account, dependent: :destroy, autosave: true
+  has_one :pls_account, dependent: :destroy, autosave: true
   has_many :google_integrations, dependent: :destroy
   has_many :appeals
   has_many :help_requests
@@ -117,6 +119,10 @@ class AccountList < ActiveRecord::Base
 
   def valid_prayer_letters_account
     prayer_letters_account.try(:valid_token?)
+  end
+
+  def valid_pls_account
+    pls_account.try(:valid_token?)
   end
 
   def top_partners

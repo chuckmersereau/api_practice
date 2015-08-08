@@ -3,6 +3,10 @@
 
         <p ng-bind="followUpDialogData.message"></p>
 
+        <div ng-show="followUpDialogData.updateStatus" style="padding-top:10px;">
+          <input type="checkbox" ng-model="followUpDialogResult.updateContactStatus"> <%= _('Update contact(s) status to') %> "{{followUpDialogData.updateStatus}}"
+        </div>
+
         <div ng-show="followUpDialogData.financialCommitment" style="padding-top:10px;">
             <label>
               <%= _('Commitment Frequency') %><br>
@@ -429,9 +433,6 @@
                 <option value="Both"><%= _('Both') %></option></select>
         </div>
 
-        <div ng-show="followUpDialogData.updateStatus" style="padding-top:10px;">
-          <input type="checkbox" ng-model="followUpDialogResult.updateContactStatus"> <%= _('Update contact(s) status to') %> "{{followUpDialogData.updateStatus}}"
-        </div>
     </div>
 
 

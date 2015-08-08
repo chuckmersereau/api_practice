@@ -437,6 +437,12 @@ describe DataServer do
       expect(RestClient::Request).to_not receive(:execute).with(execute_params)
       @data_server.send(:get_response, 'http://example.com', {})
     end
+
+    it 'correctly parses special characters in utf-8' do
+      stub_request(:post, 'http://foo:bar@example.com').to_return(body: 'Agapé')
+      expect(@data_server.send(:get_response, 'http://example.com', {}))
+        .to eq('Agapé')
+    end
   end
 
   describe 'import account balances' do

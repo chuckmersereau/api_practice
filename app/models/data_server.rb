@@ -279,6 +279,10 @@ class DataServer
                        password: u(@org_account.password))
     RestClient::Request.execute(method: :post, url: url, payload: params, timeout: -1, user: u(@org_account.username),
                                 password: u(@org_account.password)) do |response, _request, _result, &_block|
+      fail(DataServerError, response) if response.code == 500
+
+      response = EncodingUtil.normalized_utf8(response.to_str)
+
       # check for error response
       lines = response.split(/\r?\n|\r/)
       first_line = lines.first.to_s.upcase
@@ -286,12 +290,9 @@ class DataServer
       when first_line + lines[1].to_s =~ /password|not registered/i
         @org_account.update_column(:valid_credentials, false) if @org_account.valid_credentials? && !@org_account.new_record?
         fail OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org }
-      when response.code.to_i == 500 || first_line.include?('ERROR') || first_line.include?('HTML')
+      when first_line.include?('ERROR') || first_line.include?('HTML')
         fail DataServerError, response
       end
-      response = response.to_str.unpack('C*').pack('U*')
-      # Strip annoying extra unicode at the beginning of the file
-      response = response[3..-1] if response.first.localize.code_points.first == 239
 
       # look for a redirect
       if lines[1] && lines[1].include?('RedirectQueryIni')

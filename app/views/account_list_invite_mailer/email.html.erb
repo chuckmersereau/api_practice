@@ -1,0 +1,23 @@
+<p>
+  <%= 
+    _('You have been invited by %{inviter} to access the MPDX account "%{account}".')
+      .localize % { inviter: @invite.invited_by_user.first_name.to_s + ' ' +
+                             @invite.invited_by_user.last_name.to_s,
+                    account: @invite.account_list.name.to_s } %>
+</p>
+
+<p>
+  <%= _('To activate your invitation, click "Accept" below and log into MPDX.') %>
+</p>
+
+<p>
+<%= link_to(_('Accept MPDX Account Invite'),
+            accept_invite_account_lists_url(code: @invite.code, 
+                                            id: @invite.account_list.id)) %>
+</p>
+
+<p>
+  <%= _('Thanks!') %>
+  <br/>
+  <%= _('MPDX Support Team') %>
+</p>

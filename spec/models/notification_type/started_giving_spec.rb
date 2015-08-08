@@ -37,13 +37,44 @@ describe NotificationType::StartedGiving do
       expect(notifications.length).to eq(0)
     end
 
-    it "sets pledge_received if first gift came more than 2 weeks ago but pledge_received wasn't set" do
-      contact.update(pledge_amount: 9.99)
-      create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 37.days.ago)
-      donation
-      started_giving.check(contact.account_list)
-      contact.reload
-      expect(contact.pledge_received).to be true
+    describe 'sets pledge_received if first gift came in the past pledge_frequency period' do
+      before { contact.update(pledge_amount: 9.99) }
+
+      it 'marks pledge received if monthly and donation within one month' do
+        contact.update(pledge_frequency: 1)
+
+        donation = create_donation(6.months.ago)
+        expect_pledge_received(false)
+
+        donation.update(donation_date: 15.days.ago)
+        expect_pledge_received(true)
+      end
+
+      it 'marks pledge received if annual and donation within one year' do
+        contact.update(pledge_frequency: 12)
+
+        donation = create_donation(2.years.ago)
+        expect_pledge_received(false)
+
+        donation.update(donation_date: 6.months.ago)
+        expect_pledge_received(true)
+      end
+
+      it 'works if pledge frequency is a fraction' do
+        contact.update(pledge_frequency: 0.5)
+        create_donation(1.day.ago)
+        expect_pledge_received(true)
+      end
+
+      def create_donation(donation_date)
+        create(:donation, donor_account: contact.donor_accounts.first,
+                          designation_account: da, donation_date: donation_date)
+      end
+
+      def expect_pledge_received(expected_val)
+        started_giving.check(contact.account_list)
+        expect(contact.reload.pledge_received).to be expected_val
+      end
     end
 
     it "doesn't add a notification if the contact is on a different account list with a shared designation account" do
