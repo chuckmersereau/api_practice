@@ -15,6 +15,10 @@ class NotificationType < ActiveRecord::Base
       unless $rollout.active?(:partner_reminders, account_list)
         next if type.in?(['NotificationType::RemindPartnerInAdvance'])
       end
+      unless $rollout.active?(:missing_info_notifications, account_list)
+        next if type.in?(['NotificationType::MissingAddressInNewsletter',
+                          'NotificationType::MissingEmailInNewsletter'])
+      end
       type_instance = type.constantize.first
       actions = account_list.notification_preferences.find_by_notification_type_id(type_instance.id).try(:actions)
       next unless (Array.wrap(actions) & NotificationPreference.default_actions).present?

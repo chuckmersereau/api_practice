@@ -13,6 +13,9 @@
   <% field_name = notification_type.class.to_s.split('::').last.to_s.underscore.to_sym %>
   <% next if !$rollout.active?(:partner_reminders, current_account_list) &&
              notification_type.type.in?(['NotificationType::RemindPartnerInAdvance']) %>
+  <% next if !$rollout.active?(:missing_info_notifications, current_account_list) &&
+    notification_type.type.in?(['NotificationType::MissingEmailInNewsletter', 
+                                'NotificationType::MissingAddressInNewsletter']) %>
   <div class="form-group">
     <%= f.label field_name, _(notification_type.description) %>
     <label class="checkbox-inline">
