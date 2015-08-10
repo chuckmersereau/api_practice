@@ -119,6 +119,16 @@ class Task < Activity
                                  'Not Interested',
                                  'None']
 
+  PRE_CALL_LETTER_NEXT_ACTIONS = ['Call to Follow Up',
+                                  'Email',
+                                  'Text',
+                                  'Message',
+                                  'Talk to In Person',
+                                  'None']
+
+  REMINDER_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
+  SUPPORT_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
+
   MESSAGE_RESULTS = [_('Done'), _('Received')]
   STANDARD_RESULTS = [_('Done')]
 
@@ -177,42 +187,48 @@ class Task < Activity
   def result_options
     case activity_type
     when 'Call'
-      return CALL_RESULTS
+      CALL_RESULTS
     when 'Appointment'
-      return APPOINTMENT_RESULTS
+      APPOINTMENT_RESULTS
     when 'Email'
-      return EMAIL_RESULTS
+      EMAIL_RESULTS
     when 'Facebook Message'
-      return FACEBOOK_MESSAGE_RESULTS
+      FACEBOOK_MESSAGE_RESULTS
     when 'Text Message'
-      return TEXT_RESULTS
+      TEXT_RESULTS
     when 'Talk to In Person'
-      return TALK_TO_IN_PERSON_RESULTS
+      TALK_TO_IN_PERSON_RESULTS
     when 'Prayer Request'
-      return PRAYER_REQUEST_RESULTS
+      PRAYER_REQUEST_RESULTS
     else
-      return STANDARD_RESULTS
+      STANDARD_RESULTS
     end
   end
 
   def next_action_options
     case activity_type
     when 'Call'
-      return CALL_NEXT_ACTIONS
+      CALL_NEXT_ACTIONS
     when 'Appointment'
-      return APPOINTMENT_NEXT_ACTIONS
+      APPOINTMENT_NEXT_ACTIONS
     when 'Email'
-      return EMAIL_NEXT_ACTIONS
+      EMAIL_NEXT_ACTIONS
     when 'Facebook Message'
-      return FACEBOOK_MESSAGE_NEXT_ACTIONS
+      FACEBOOK_MESSAGE_NEXT_ACTIONS
     when 'Text Message'
-      return TEXT_NEXT_ACTIONS
+      TEXT_NEXT_ACTIONS
     when 'Talk to In Person'
-      return TALK_TO_IN_PERSON_NEXT_ACTIONS
+      TALK_TO_IN_PERSON_NEXT_ACTIONS
     when 'Prayer Request'
-      return PRAYER_REQUEST_NEXT_ACTIONS
+      PRAYER_REQUEST_NEXT_ACTIONS
+    when 'Pre Call Letter'
+      PRE_CALL_LETTER_NEXT_ACTIONS
+    when 'Reminder Letter'
+      REMINDER_LETTER_NEXT_ACTIONS
+    when 'Support Letter'
+      SUPPORT_LETTER_NEXT_ACTIONS
     else
-      return ['None']
+      ['None']
     end
   end
 
