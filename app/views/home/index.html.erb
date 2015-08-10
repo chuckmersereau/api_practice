@@ -89,9 +89,9 @@
                   <li>
                     <%= link_to(p_exhibit, person) %>:
                     <%= l(Date.new(Time.zone.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
-                    <%= link_to('', person.facebook_account.url, {class: "fa fa-facebook-square"}) if person.facebook_account %>
-                    <%= link_to('', person.twitter_account.url, {class: "fa fa-twitter-square"}) if person.twitter_account %>
-                    <%= mail_to(person.primary_email_address, '', {class: "fa fa-envelope"}) if person.primary_email_address %>
+                    <%= link_to('', person.facebook_account.url, target: '_blank', class: 'fa fa-facebook-square') if person.facebook_account %>
+                    <%= link_to('', person.twitter_account.url, target: '_blank', class: 'fa fa-twitter-square') if person.twitter_account %>
+                    <%= mail_to(person.primary_email_address, '', class: "fa fa-envelope") if person.primary_email_address %>
                   </li>
                 <% end %>
               </ul>
