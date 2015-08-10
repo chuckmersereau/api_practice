@@ -132,12 +132,9 @@ angular.module('mpdxApp')
 
                 switch(taskResult) {
                     case 'Call for Decision':
-                        taskType = 'Call';
-                        taskSubject = 'Call for Decision - ' + followUpTask.subject;
-                        break;
                     case 'Call to Follow Up':
                         taskType = 'Call';
-                        taskSubject = 'Call to Follow Up - ' + followUpTask.subject;
+                        taskSubject = taskResult + ' - ' + followUpTask.subject;
                         break;
                     case 'Call':
                     case 'Call Again':

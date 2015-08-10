@@ -61,8 +61,6 @@ angular.module('mpdxApp')
                     $scope.completeActionOptions = railsConstants.task.SUPPORT_LETTER_NEXT_ACTIONS;
 
                 }else if($scope.task.activity_type === 'Letter') {
-
-                }else if($scope.task.activity_type === 'Letter') {
                     $scope.completeResultOptions = railsConstants.task.MESSAGE_RESULTS;
 
                 }else{
