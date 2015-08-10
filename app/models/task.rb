@@ -37,7 +37,8 @@ class Task < Activity
                        'Ask in Future',
                        'Not Interested',
                        'None',
-                       'Prayer Request']
+                       'Prayer Request',
+                       'Thank']
 
   APPOINTMENT_RESULTS = %w(Completed Attempted)
   APPOINTMENT_NEXT_ACTIONS = ['Call for Decision',
@@ -53,7 +54,8 @@ class Task < Activity
                               'Not Interested',
                               'Reschedule',
                               'None',
-                              'Prayer Request']
+                              'Prayer Request',
+                              'Thank']
 
   EMAIL_RESULTS = %w(Completed Received)
   EMAIL_NEXT_ACTIONS = ['Email Again',
@@ -66,7 +68,8 @@ class Task < Activity
                         'Ask in Future',
                         'Not Interested',
                         'None',
-                        'Prayer Request']
+                        'Prayer Request',
+                        'Thank']
 
   FACEBOOK_MESSAGE_RESULTS = %w(Completed Received)
   FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again',
@@ -80,7 +83,8 @@ class Task < Activity
                                    'Ask in Future',
                                    'Not Interested',
                                    'None',
-                                   'Prayer Request']
+                                   'Prayer Request',
+                                   'Thank']
 
   TEXT_RESULTS = %w(Completed Received)
   TEXT_NEXT_ACTIONS = ['Text Again',
@@ -93,7 +97,8 @@ class Task < Activity
                        'Ask in Future',
                        'Not Interested',
                        'None',
-                       'Prayer Request']
+                       'Prayer Request',
+                       'Thank']
 
   TALK_TO_IN_PERSON_RESULTS = %w(Completed)
   TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again',
@@ -105,7 +110,8 @@ class Task < Activity
                                     'Ask in Future',
                                     'Not Interested',
                                     'None',
-                                    'Prayer Request']
+                                    'Prayer Request',
+                                    'Thank']
 
   PRAYER_REQUEST_RESULTS = %w(Completed)
   PRAYER_REQUEST_NEXT_ACTIONS = ['Prayer Request',
@@ -117,7 +123,8 @@ class Task < Activity
                                  'Partner - Pray',
                                  'Ask in Future',
                                  'Not Interested',
-                                 'None']
+                                 'None',
+                                 'Thank']
 
   PRE_CALL_LETTER_NEXT_ACTIONS = ['Call to Follow Up',
                                   'Email',

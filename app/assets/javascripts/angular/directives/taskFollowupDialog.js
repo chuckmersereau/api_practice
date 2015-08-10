@@ -124,7 +124,7 @@ angular.module('mpdxApp')
                strContains(taskResult, 'Message') ||
                strContains(taskResult, 'Text') ||
                strContains(taskResult, 'Prayer Request') ||
-               strContains(taskResult, 'Talk to In Person')){
+               strContains(taskResult, 'Talk to In Person')) {
 
                 //generic followup task type
                 var taskType;
@@ -248,6 +248,31 @@ angular.module('mpdxApp')
                 $scope.followUpDialogResult = {
                     thankTask: {
                         subject: 'For Special Gift',
+                        date: dateTwoDaysFromToday
+                    },
+                    givingTask: {
+                        subject: 'For Gift',
+                        date: dateTwoDaysFromToday,
+                        hour: timeNowHour,
+                        min: timeNowMin
+                    },
+                    newsletter: {
+                        type: 'Both'
+                    }
+                };
+
+
+            }else if(strContains(taskResult, 'Thank') && followUpTask.contacts.length > 0){
+
+                $scope.followUpDialogData = {
+                    thankTask: true,
+                    givingTask: true,
+                    newsletter: true
+                };
+                $scope.followUpDialogResult = {
+                    createThankTask: true,
+                    thankTask: {
+                        subject: 'Thank',
                         date: dateTwoDaysFromToday
                     },
                     givingTask: {
