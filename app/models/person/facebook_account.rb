@@ -39,46 +39,25 @@ class Person::FacebookAccount < ActiveRecord::Base
   end
 
   def url
-    "http://facebook.com/profile.php?id=#{remote_id}" if remote_id.to_i > 0
+    prefix = 'https://www.facebook.com/'
+    return prefix + "profile.php?id=#{remote_id}" if remote_id.to_i > 0
+    prefix + username if username
   end
 
   def url=(value)
-    return nil unless value.present?
-    self.remote_id ||= get_id_from_url(value)
-    return unless remote_id.blank? && person_id.present?
-    fail Errors::FacebookLink, _('We were unable to link this person to the facebook url you provided. '\
-      'Check the url you entered and try again. If you are currently running the "Import contacts from '\
-      'facebook" process, please wait until you get the email saying the import finished before trying again.')
+    return unless value.present?
+    self.remote_id = self.class.id_from_url(value)
+    self.username = self.class.username_from_url(value) unless remote_id
   end
 
-  def get_id_from_url(url)
-    Person::FacebookAccount.get_id_from_url(url)
+  def self.id_from_url(url)
+    return unless url.present? && url.include?('id=')
+    url.split('id=').last.split('&').first
   end
 
-  def self.get_id_from_url(url)
-    return nil unless url.present?
-
-    begin
-      Retryable.retryable on: [RestClient::Forbidden, Timeout::Error, Errno::ECONNRESET], times: 6, sleep: 0.5 do
-        # e.g. https://www.facebook.com/username)
-        if url.include?('id=')
-          id = url.split('id=').last
-          id.split('&').first
-        else
-          name = url.split('/').last
-          name = name.split('?').first
-          response = RestClient.get("https://graph.facebook.com/#{name}",  accept: :json)
-          json = JSON.parse(response)
-          fail RestClient::ResourceNotFound unless json['id'].to_i > 0
-          json['id']
-        end.to_i
-      end
-    rescue RestClient::ResourceNotFound, URI::InvalidURIError, RestClient::Forbidden, RestClient::ServiceUnavailable
-    rescue RestClient::BadRequest
-      raise Errors::FacebookLink, _('We were unable to link this person to the facebook url you provided. '\
-        'This is likely due to facebook privacy settings this person has set. If they are your friend on '\
-        'facebook, try using the "Import contacts from facebook" feature instead of manually pasting the link in.')
-    end
+  def self.username_from_url(url)
+    return unless url.present? && url.include?('facebook.com/')
+    url.split('/').last.split('&').first
   end
 
   def queue_import_contacts(import)
