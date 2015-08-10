@@ -185,6 +185,28 @@ angular.module('mpdxApp')
                     }
                 };
 
+            }else if(strContains(taskResult, 'Cultivate Relationship') &&
+                     followUpTask.contacts.length > 0){
+
+                $scope.followUpDialogData = {
+                    message: "Contact's status will be updated to 'Cultivate Relationship'.",
+                    callTask: true,
+                    newsletter: true
+                };
+                $scope.followUpDialogResult = {
+                    callTask: {
+                        type: 'To Do',
+                        subject: 'Cultivate relationship',
+                        date: dateTwoDaysFromToday,
+                        hour: timeNowHour,
+                        min: timeNowMin,
+                        tags: followUpTask.tag_list.join()
+                    },
+                    newsletter: {
+                        type: 'Both'
+                    }
+                };
+
             }else if((strContains(taskResult, 'Appointment Scheduled') || strContains(taskResult, 'Reschedule')) &&
                      followUpTask.contacts.length > 0){
 
