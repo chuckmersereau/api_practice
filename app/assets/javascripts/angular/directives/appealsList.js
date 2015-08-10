@@ -197,7 +197,7 @@ angular.module('mpdxApp')
                             updateContact();
                           };
 
-                          $scope.exportContactsToCSV = function(selectedContactsMap,data) {
+                          $scope.exportContactsToCSV = function(selectedContactsMap) {
                             var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
                               return selected;
                             }));
@@ -236,10 +236,7 @@ angular.module('mpdxApp')
                                       contact_ids: selectedContactIds
                                   },
                                   function () {
-                                      var appealLoadingDivId = angular.element(document
-                                          .querySelector('#appealListLoading'));
-                                      appealLoadingDivId.html(__('Your Appeal Contacts are loading to MailChimp'));
-                                      $scope.mail_chimp_appeal_load_complete = true
+                                      $scope.mail_chimp_appeal_load_complete = true;
                               });
                           };
 

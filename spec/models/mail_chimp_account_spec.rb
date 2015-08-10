@@ -137,7 +137,7 @@ describe MailChimpAccount do
     it 'should queue export_appeal_contacts' do
       contact = create(:contact)
       expect do
-        account.queue_export_appeal_contacts(contact, 'list1', appeal)
+        account.queue_export_appeal_contacts(contact, 'list1', appeal.id)
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
   end
@@ -499,7 +499,7 @@ describe MailChimpAccount do
       it 'will not export if primary list equals appeals list' do
         list_id = account.primary_list_id
         expect(account).to_not receive(:export_to_list)
-        account.send(:export_appeal_contacts, [contact1.id, contact2.id], list_id, appeal)
+        account.send(:export_appeal_contacts, [contact1.id, contact2.id], list_id, appeal.id)
       end
 
       it 'exports appeal contacts' do
@@ -508,7 +508,7 @@ describe MailChimpAccount do
         expect(account).to receive(:compare_and_unsubscribe).with([contact2], 'appeal_list1')
         expect(account).to receive(:export_to_list).with('appeal_list1', [contact2])
         expect(account).to receive(:save_appeal_list_info)
-        account.send(:export_appeal_contacts, [contact1.id, contact2.id], list_id, appeal)
+        account.send(:export_appeal_contacts, [contact1.id, contact2.id], list_id, appeal.id)
       end
     end
 
@@ -542,13 +542,13 @@ describe MailChimpAccount do
         end.to_not change(MailChimpAppealList, :count)
         account.mail_chimp_appeal_list.reload
         expect(account.mail_chimp_appeal_list.appeal_list_id).to eq('newlist')
-        expect(account.mail_chimp_appeal_list.appeal).to eq(appeal2)
+        expect(account.mail_chimp_appeal_list.appeal.id).to eq(appeal2.id)
       end
 
       it 'creates a new mail chimp appeal list if not existing yet' do
         account.send(:save_appeal_list_info, 'newlist', appeal2)
         expect(account.mail_chimp_appeal_list.appeal_list_id).to eq('newlist')
-        expect(account.mail_chimp_appeal_list.appeal).to eq(appeal2)
+        expect(account.mail_chimp_appeal_list.appeal.id).to eq(appeal2.id)
       end
     end
   end

@@ -84,8 +84,8 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def queue_export_appeal_contacts(contact_ids, list_id, appeal)
-    async(:call_mailchimp, :export_appeal_contacts, contact_ids, list_id, appeal)
+  def queue_export_appeal_contacts(contact_ids, list_id, appeal_id)
+    async(:call_mailchimp, :export_appeal_contacts, contact_ids, list_id, appeal_id)
   end
 
   def datacenter
@@ -100,17 +100,17 @@ class MailChimpAccount < ActiveRecord::Base
     lists.select { |l| l.id != mail_chimp_appeal_list.try(:appeal_list_id) }
   end
 
-  def export_appeal_contacts(contact_ids, list_id, appeal)
+  def export_appeal_contacts(contact_ids, list_id, appeal_id)
     return if primary_list_id == list_id
     contacts = contacts_with_email_addresses(contact_ids, false)
     compare_and_unsubscribe(contacts, list_id)
     export_to_list(list_id, contacts)
-    save_appeal_list_info(list_id, appeal)
+    save_appeal_list_info(list_id, appeal_id)
   end
 
-  def save_appeal_list_info(appeal_list_id, appeal)
+  def save_appeal_list_info(appeal_list_id, appeal_id)
     build_mail_chimp_appeal_list unless mail_chimp_appeal_list
-    mail_chimp_appeal_list.update(appeal_list_id: appeal_list_id, appeal: appeal)
+    mail_chimp_appeal_list.update(appeal_list_id: appeal_list_id, appeal_id: appeal_id)
   end
 
   # private
