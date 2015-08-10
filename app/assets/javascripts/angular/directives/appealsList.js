@@ -43,7 +43,7 @@ angular.module('mpdxApp')
                                 $scope.mail_chimp_lists = [];
                             } else {
                                 $scope.mail_chimp_lists = $.mpdx.mail_chimp_lists;
-                                if ($scope.mail_chimp_lists.size > 0) {
+                                if ($scope.mail_chimp_lists.length > 0) {
                                     $scope.selected_mail_chimp_list = $scope.mail_chimp_lists[0].id
                                 }
                             }
@@ -229,8 +229,6 @@ angular.module('mpdxApp')
                               if(!r){
                                     return;
                               }
-
-                              debugger;
 
                               api.call('put','mail_chimp_accounts/export_appeal_list', {
                                       appeal_id: $scope.appeal.id,
