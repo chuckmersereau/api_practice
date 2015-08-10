@@ -10,16 +10,16 @@
     </div>
     <div class="social-icons">
       <% if p.facebook_account %>
-        <%= link_to('f', p.facebook_account.url, {class: "facebook"}) %>
+        <%= link_to('f', p.facebook_account.url, target: '_blank', class: 'facebook') %>
       <% end %>
       <% if p.twitter_account %>
-        <%= link_to('t', p.twitter_account.url, {class: "twitter"}) %>
+        <%= link_to('t', p.twitter_account.url, target: '_blank', class: 'twitter') %>
       <% end %>
       <% if p.linkedin_account %>
-        <%= link_to('l', p.linkedin_account.url, {class: "linkedin"}) %>
+        <%= link_to('l', p.linkedin_account.url, target: '_blank', class: 'linkedin') %>
       <% end %>
       <% if p.website %>
-        <%= link_to('w', p.website.url, {target: "_blank", class: "website"}) %>
+        <%= link_to('w', p.website.url, target: '_blank', class: 'website') %>
       <% end %>
     </div>
 

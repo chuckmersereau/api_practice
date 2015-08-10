@@ -28,7 +28,7 @@
     <div ng-show="visibleContactInfo" class="contact-info">
         <div class="row">
             <div class="col-md-11">
-                <h4><a ng-href="/contacts/{{contactInfo.contact.id}}">{{contactInfo.contact.name}}</a></h4>
+                <h4><a ng-href="/contacts/{{contactInfo.contact.id}}" target="_blank">{{contactInfo.contact.name}}</a></h4>
             </div>
             <div class="col-md-1">
                 <a class="corner_close" href="" ng-click="visibleContactInfo=false">close</a>
@@ -55,15 +55,17 @@
             <div class="col-md-6">
                 <div class="small-person well clearfix"  ng-repeat="p in contactInfo.people">
                     <div class="person-external">
-                        <a ng-href="/people/{{p.id}}"><img alt="Avatar" class="person_avatar" ng-src="{{p.avatar}}"></a>
-                        <div class="social-icons">
-                            <a class="facebook" ng-href="http://facebook.com/profile.php?id={{account.remote_id}}" target="_blank" ng-repeat="account in p.facebook_accounts">f</a>
-                        </div>
+                      <a ng-href="/people/{{p.id}}" target="_blank">
+                        <img alt="Avatar" class="person_avatar" ng-src="{{p.avatar}}">
+                      </a>
+                      <div class="social-icons">
+                        <a class="facebook" ng-href="http://facebook.com/profile.php?id={{account.remote_id}}" target="_blank" ng-repeat="account in p.facebook_accounts">f</a>
+                      </div>
                     </div>
 
                     <div class="person_details">
                         <div class="name">
-                            <a ng-href="/people/{{p.id}}">{{p.first_name}} {{p.last_name}}</a>
+                            <a ng-href="/people/{{p.id}}" target="_blank">{{p.first_name}} {{p.last_name}}</a>
                         </div>
                         <div class="column-inner">
                             <p ng-repeat="phone in p.phone_numbers">
