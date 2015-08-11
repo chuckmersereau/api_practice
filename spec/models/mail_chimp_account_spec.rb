@@ -536,9 +536,9 @@ describe MailChimpAccount do
 
       it 'updates existing appeal list info' do
         account.mail_chimp_appeal_list = create(:mail_chimp_appeal_list, appeal_list_id: '1e72b58b72',
-                                                                         appeal: appeal, mail_chimp_account: account)
+                                                                         appeal_id: appeal.id, mail_chimp_account: account)
         expect do
-          account.send(:save_appeal_list_info, 'newlist', appeal2)
+          account.send(:save_appeal_list_info, 'newlist', appeal2.id)
         end.to_not change(MailChimpAppealList, :count)
         account.mail_chimp_appeal_list.reload
         expect(account.mail_chimp_appeal_list.appeal_list_id).to eq('newlist')
@@ -546,7 +546,7 @@ describe MailChimpAccount do
       end
 
       it 'creates a new mail chimp appeal list if not existing yet' do
-        account.send(:save_appeal_list_info, 'newlist', appeal2)
+        account.send(:save_appeal_list_info, 'newlist', appeal2.id)
         expect(account.mail_chimp_appeal_list.appeal_list_id).to eq('newlist')
         expect(account.mail_chimp_appeal_list.appeal.id).to eq(appeal2.id)
       end
