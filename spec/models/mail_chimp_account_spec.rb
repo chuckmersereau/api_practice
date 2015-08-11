@@ -91,39 +91,39 @@ describe MailChimpAccount do
       account.save!
     end
 
-    it 'should queue subscribe_contacts' do
+    it 'queues subscribe_contacts' do
       expect do
         account.queue_export_to_primary_list
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
-    it 'should queue subscribe_contacts for one contact' do
+    it 'queues subscribe_contacts for one contact' do
       contact = create(:contact)
       expect do
         account.queue_subscribe_contact(contact)
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
-    it 'should queue subscribe_person' do
+    it 'queues subscribe_person' do
       person = create(:person)
       expect do
         account.queue_subscribe_person(person)
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
-    it 'should queue unsubscribe_email' do
+    it 'queues unsubscribe_email' do
       expect do
         account.queue_unsubscribe_email('foo@example.com')
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
-    it 'should queue update_email' do
+    it 'queues update_email' do
       expect do
         account.queue_update_email('foo@example.com', 'foo1@example.com')
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
-    it 'should queue unsubscribe_email for each of a contacts email addresses' do
+    it 'queues unsubscribe_email for each of a contacts email addresses' do
       contact = create(:contact)
       contact.people << create(:person)
 
@@ -143,7 +143,7 @@ describe MailChimpAccount do
   end
 
   describe 'callbacks' do
-    it 'should queue import if primary list changed' do
+    it 'queues import if primary list changed' do
       expect(account).to receive(:queue_export_to_primary_list).and_return(true)
       account.primary_list_id = 'foo'
       account.save
@@ -151,20 +151,20 @@ describe MailChimpAccount do
   end
 
   context 'when updating mailchimp' do
-    it 'should update an email' do
+    it 'updates an email' do
       stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listUpdateMember')
         .to_return(body: '{}')
       account.send(:update_email, 'foo@example.com', 'foo1@example.com')
     end
 
-    it 'should unsubscribe an email' do
+    it 'unsubscribes an email' do
       stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listUnsubscribe')
         .to_return(body: '{}')
       account.send(:unsubscribe_email, 'foo@example.com')
     end
 
     context 'subscribing a person' do
-      it "should add a person's primary email address" do
+      it "adds a person's primary email address" do
         account.primary_list_id = 'list1'
         subscribe_args = {
           id: 'list1', email_address: 'foo@example.com', update_existing: true, double_optin: false,
@@ -192,7 +192,7 @@ describe MailChimpAccount do
     end
 
     context 'subscribing contacts' do
-      it 'should subscribe a single contact' do
+      it 'subscribes a single contact' do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact.people << create(:person, email: 'foo@example.com')
 
@@ -201,7 +201,7 @@ describe MailChimpAccount do
         account.send(:subscribe_contacts, contact.id)
       end
 
-      it 'should subscribe multiple contacts' do
+      it 'subscribes multiple contacts' do
         contact1 = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact1.people << create(:person, email: 'foo@example.com')
 
@@ -213,7 +213,7 @@ describe MailChimpAccount do
         account.send(:subscribe_contacts, [contact1.id, contact2.id])
       end
 
-      it 'should subscribe all contacts' do
+      it 'subscribes all contacts' do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact.people << create(:person, email: 'foo@example.com')
 
@@ -222,7 +222,7 @@ describe MailChimpAccount do
         account.send(:subscribe_contacts)
       end
 
-      it 'should export to a list' do
+      it 'exports to a list' do
         stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listBatchSubscribe')
           .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3Anull%2C%22'\
             'batch%22%3A%5B%7B%22EMAIL%22%3A%22foo%40example.com%22%2C%22'\
@@ -260,7 +260,7 @@ describe MailChimpAccount do
           allow(account).to receive(:gb).and_return(@gb)
         end
 
-        it 'should add groups to an existing grouping' do
+        it 'adds groups to an existing grouping' do
           account.grouping_id = 1
 
           list_id = 'foo'
@@ -277,7 +277,7 @@ describe MailChimpAccount do
           account.send(:add_status_groups, list_id, ['Partner - Pray'])
         end
 
-        it 'should create a new grouping if none exists' do
+        it 'creates a new grouping if none exists' do
           list_id = 'foo'
 
           expect(@gb).to receive(:list_interest_groupings).with(id: list_id).and_return([])
@@ -518,14 +518,14 @@ describe MailChimpAccount do
         account.send(:compare_and_unsubscribe, [contact1], list_id)
       end
 
-      it 'should compare and unsubscribe contacts not passed in' do
+      it 'compares and unsubscribe contacts not passed in' do
         expect(account).to receive(:unsubscribe_list_batch).with('appeal_list1', ['foo@example.com'])
         account.send(:compare_and_unsubscribe, [], list_id)
       end
     end
 
     context '#list_members' do
-      it 'should return members of a list, specifically emails' do
+      it 'returns members of a list, specifically emails' do
         expect(account.send(:list_members, list_id))
           .to eq([{ 'email' => 'foo@example.com', 'timestamp' => '2015-07-31 14:39:19' }])
       end
