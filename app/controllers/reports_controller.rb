@@ -54,20 +54,19 @@ class ReportsController < ApplicationController
     @donations = {}
     @sum_row = {}
     @raw_donations.each do |donation|
-      @donations[donation.donor_account_id] ||= {
+      @donations[donation.contact_id] ||= {
         donor: donation.name, id: donation.contact_id, status: donation.status,
         pledge_amount: donation.pledge_amount,
         pledge_frequency: donation.pledge_frequency,
-        minimun: monthly_pledge(donation),
         amounts: {}, total: 0
       }
 
-      @donations[donation.donor_account_id][:amounts][donation.date_trunc.strftime '%b %y'] = {
+      @donations[donation.contact_id][:amounts][donation.date_trunc.strftime '%b %y'] = {
         value: donation.tendered_amount,
         currency: donation.tendered_currency
       }
 
-      @donations[donation.donor_account_id][:total] += donation.tendered_amount
+      @donations[donation.contact_id][:total] += donation.tendered_amount
 
       @sum_row[donation.date_trunc.strftime '%b %y'] ||= 0
 
