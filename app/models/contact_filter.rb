@@ -268,12 +268,12 @@ class ContactFilter
   def contact_info_email(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_email].present?
 
-    contacts_with_emails = filtered_contacts.where.not(email_addresses: { email: nil })
+    contacts_with_emails = @contacts.where.not(email_addresses: { email: nil })
                            .where(email_addresses: { historic: false })
                            .includes(people: :email_addresses)
     return contacts_with_emails if @filters[:contact_info_email] == 'Yes'
 
-    contacts_with_emails_ids = contacts_with_emails.reorder('').pluck(:id)
+    contacts_with_emails_ids = contacts_with_emails.pluck(:id)
     return filtered_contacts if contacts_with_emails_ids.empty?
     filtered_contacts.where.not(id: contacts_with_emails_ids)
   end
@@ -341,11 +341,12 @@ class ContactFilter
   def contact_info_address(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_addr].present?
 
-    contacts_with_addr = filtered_contacts.where.not(addresses: { street: '' }).where(addresses: { historic: false })
+    contacts_with_addr = @contacts.where.not(addresses: { street: '' })
+                         .where(addresses: { historic: false })
                          .includes(:addresses)
     return contacts_with_addr if @filters[:contact_info_addr] == 'Yes'
 
-    contacts_with_addr_ids = contacts_with_addr.reorder('').pluck(:id)
+    contacts_with_addr_ids = contacts_with_addr.pluck(:id)
     return filtered_contacts if contacts_with_addr_ids.empty?
     filtered_contacts.where.not(id: contacts_with_addr_ids)
   end
