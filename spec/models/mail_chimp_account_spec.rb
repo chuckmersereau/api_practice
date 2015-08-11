@@ -134,7 +134,7 @@ describe MailChimpAccount do
       end.to change(MailChimpAccount.jobs, :size).by(2)
     end
 
-    it 'should queue export_appeal_contacts' do
+    it 'queues export_appeal_contacts' do
       contact = create(:contact)
       expect do
         account.queue_export_appeal_contacts(contact, 'list1', appeal.id)
