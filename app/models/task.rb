@@ -30,6 +30,7 @@ class Task < Activity
   CALL_NEXT_ACTIONS = ['Call Again',
                        'Email', 'Text', 'Message',
                        'Talk to In Person',
+                       'Cultivate Relationship',
                        'Appointment Scheduled',
                        'Partner - Financial',
                        'Partner - Special',
@@ -37,7 +38,8 @@ class Task < Activity
                        'Ask in Future',
                        'Not Interested',
                        'None',
-                       'Prayer Request']
+                       'Prayer Request',
+                       'Thank']
 
   APPOINTMENT_RESULTS = %w(Completed Attempted)
   APPOINTMENT_NEXT_ACTIONS = ['Call for Decision',
@@ -46,6 +48,7 @@ class Task < Activity
                               'Text',
                               'Message',
                               'Talk to In Person',
+                              'Cultivate Relationship',
                               'Partner - Financial',
                               'Partner - Special',
                               'Partner - Pray',
@@ -53,12 +56,14 @@ class Task < Activity
                               'Not Interested',
                               'Reschedule',
                               'None',
-                              'Prayer Request']
+                              'Prayer Request',
+                              'Thank']
 
   EMAIL_RESULTS = %w(Completed Received)
   EMAIL_NEXT_ACTIONS = ['Email Again',
                         'Call', 'Text', 'Message',
                         'Talk to In Person',
+                        'Cultivate Relationship',
                         'Appointment Scheduled',
                         'Partner - Financial',
                         'Partner - Special',
@@ -66,13 +71,15 @@ class Task < Activity
                         'Ask in Future',
                         'Not Interested',
                         'None',
-                        'Prayer Request']
+                        'Prayer Request',
+                        'Thank']
 
   FACEBOOK_MESSAGE_RESULTS = %w(Completed Received)
   FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again',
                                    'Call', 'Email',
                                    'Text',
                                    'Talk to In Person',
+                                   'Cultivate Relationship',
                                    'Appointment Scheduled',
                                    'Partner - Financial',
                                    'Partner - Special',
@@ -80,12 +87,14 @@ class Task < Activity
                                    'Ask in Future',
                                    'Not Interested',
                                    'None',
-                                   'Prayer Request']
+                                   'Prayer Request',
+                                   'Thank']
 
   TEXT_RESULTS = %w(Completed Received)
   TEXT_NEXT_ACTIONS = ['Text Again',
                        'Call', 'Email', 'Message',
                        'Talk to In Person',
+                       'Cultivate Relationship',
                        'Appointment Scheduled',
                        'Partner - Financial',
                        'Partner - Special',
@@ -93,11 +102,13 @@ class Task < Activity
                        'Ask in Future',
                        'Not Interested',
                        'None',
-                       'Prayer Request']
+                       'Prayer Request',
+                       'Thank']
 
   TALK_TO_IN_PERSON_RESULTS = %w(Completed)
   TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again',
                                     'Call', 'Email', 'Message', 'Text',
+                                    'Cultivate Relationship',
                                     'Appointment Scheduled',
                                     'Partner - Financial',
                                     'Partner - Special',
@@ -105,19 +116,32 @@ class Task < Activity
                                     'Ask in Future',
                                     'Not Interested',
                                     'None',
-                                    'Prayer Request']
+                                    'Prayer Request',
+                                    'Thank']
 
   PRAYER_REQUEST_RESULTS = %w(Completed)
   PRAYER_REQUEST_NEXT_ACTIONS = ['Prayer Request',
                                  'Call', 'Email', 'Message', 'Text',
                                  'Talk to In Person',
+                                 'Cultivate Relationship',
                                  'Appointment Scheduled',
                                  'Partner - Financial',
                                  'Partner - Special',
                                  'Partner - Pray',
                                  'Ask in Future',
                                  'Not Interested',
-                                 'None']
+                                 'None',
+                                 'Thank']
+
+  PRE_CALL_LETTER_NEXT_ACTIONS = ['Call to Follow Up',
+                                  'Email',
+                                  'Text',
+                                  'Message',
+                                  'Talk to In Person',
+                                  'None']
+
+  REMINDER_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
+  SUPPORT_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
 
   MESSAGE_RESULTS = [_('Done'), _('Received')]
   STANDARD_RESULTS = [_('Done')]
@@ -177,42 +201,48 @@ class Task < Activity
   def result_options
     case activity_type
     when 'Call'
-      return CALL_RESULTS
+      CALL_RESULTS
     when 'Appointment'
-      return APPOINTMENT_RESULTS
+      APPOINTMENT_RESULTS
     when 'Email'
-      return EMAIL_RESULTS
+      EMAIL_RESULTS
     when 'Facebook Message'
-      return FACEBOOK_MESSAGE_RESULTS
+      FACEBOOK_MESSAGE_RESULTS
     when 'Text Message'
-      return TEXT_RESULTS
+      TEXT_RESULTS
     when 'Talk to In Person'
-      return TALK_TO_IN_PERSON_RESULTS
+      TALK_TO_IN_PERSON_RESULTS
     when 'Prayer Request'
-      return PRAYER_REQUEST_RESULTS
+      PRAYER_REQUEST_RESULTS
     else
-      return STANDARD_RESULTS
+      STANDARD_RESULTS
     end
   end
 
   def next_action_options
     case activity_type
     when 'Call'
-      return CALL_NEXT_ACTIONS
+      CALL_NEXT_ACTIONS
     when 'Appointment'
-      return APPOINTMENT_NEXT_ACTIONS
+      APPOINTMENT_NEXT_ACTIONS
     when 'Email'
-      return EMAIL_NEXT_ACTIONS
+      EMAIL_NEXT_ACTIONS
     when 'Facebook Message'
-      return FACEBOOK_MESSAGE_NEXT_ACTIONS
+      FACEBOOK_MESSAGE_NEXT_ACTIONS
     when 'Text Message'
-      return TEXT_NEXT_ACTIONS
+      TEXT_NEXT_ACTIONS
     when 'Talk to In Person'
-      return TALK_TO_IN_PERSON_NEXT_ACTIONS
+      TALK_TO_IN_PERSON_NEXT_ACTIONS
     when 'Prayer Request'
-      return PRAYER_REQUEST_NEXT_ACTIONS
+      PRAYER_REQUEST_NEXT_ACTIONS
+    when 'Pre Call Letter'
+      PRE_CALL_LETTER_NEXT_ACTIONS
+    when 'Reminder Letter'
+      REMINDER_LETTER_NEXT_ACTIONS
+    when 'Support Letter'
+      SUPPORT_LETTER_NEXT_ACTIONS
     else
-      return ['None']
+      ['None']
     end
   end
 

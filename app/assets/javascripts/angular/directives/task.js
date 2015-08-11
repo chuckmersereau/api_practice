@@ -48,6 +48,18 @@ angular.module('mpdxApp')
                     $scope.completeResultOptions = railsConstants.task.PRAYER_REQUEST_RESULTS;
                     $scope.completeActionOptions = railsConstants.task.PRAYER_REQUEST_NEXT_ACTIONS;
 
+                }else if($scope.task.activity_type === 'Pre Call Letter') {
+                    $scope.completeResultOptions = railsConstants.task.MESSAGE_RESULTS;
+                    $scope.completeActionOptions = railsConstants.task.PRE_CALL_LETTER_NEXT_ACTIONS;
+
+                }else if($scope.task.activity_type === 'Reminder Letter') {
+                    $scope.completeResultOptions = railsConstants.task.MESSAGE_RESULTS;
+                    $scope.completeActionOptions = railsConstants.task.REMINDER_LETTER_NEXT_ACTIONS;
+
+                }else if($scope.task.activity_type === 'Support Letter') {
+                    $scope.completeResultOptions = railsConstants.task.MESSAGE_RESULTS;
+                    $scope.completeActionOptions = railsConstants.task.SUPPORT_LETTER_NEXT_ACTIONS;
+
                 }else if($scope.task.activity_type === 'Letter') {
                     $scope.completeResultOptions = railsConstants.task.MESSAGE_RESULTS;
 

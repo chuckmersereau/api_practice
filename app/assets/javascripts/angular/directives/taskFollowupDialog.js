@@ -124,7 +124,7 @@ angular.module('mpdxApp')
                strContains(taskResult, 'Message') ||
                strContains(taskResult, 'Text') ||
                strContains(taskResult, 'Prayer Request') ||
-               strContains(taskResult, 'Talk to In Person')){
+               strContains(taskResult, 'Talk to In Person')) {
 
                 //generic followup task type
                 var taskType;
@@ -132,8 +132,9 @@ angular.module('mpdxApp')
 
                 switch(taskResult) {
                     case 'Call for Decision':
+                    case 'Call to Follow Up':
                         taskType = 'Call';
-                        taskSubject = 'Call for Decision - ' + followUpTask.subject;
+                        taskSubject = taskResult + ' - ' + followUpTask.subject;
                         break;
                     case 'Call':
                     case 'Call Again':
@@ -178,6 +179,28 @@ angular.module('mpdxApp')
                         hour: timeNowHour,
                         min: timeNowMin,
                         tags: followUpTask.tag_list.join()
+                    }
+                };
+
+            }else if(strContains(taskResult, 'Cultivate Relationship') &&
+                     followUpTask.contacts.length > 0){
+
+                $scope.followUpDialogData = {
+                    message: "Contact's status will be updated to 'Cultivate Relationship'.",
+                    callTask: true,
+                    newsletter: true
+                };
+                $scope.followUpDialogResult = {
+                    callTask: {
+                        type: 'To Do',
+                        subject: 'Cultivate relationship',
+                        date: dateTwoDaysFromToday,
+                        hour: timeNowHour,
+                        min: timeNowMin,
+                        tags: followUpTask.tag_list.join()
+                    },
+                    newsletter: {
+                        type: 'Both'
                     }
                 };
 
@@ -244,6 +267,31 @@ angular.module('mpdxApp')
                 $scope.followUpDialogResult = {
                     thankTask: {
                         subject: 'For Special Gift',
+                        date: dateTwoDaysFromToday
+                    },
+                    givingTask: {
+                        subject: 'For Gift',
+                        date: dateTwoDaysFromToday,
+                        hour: timeNowHour,
+                        min: timeNowMin
+                    },
+                    newsletter: {
+                        type: 'Both'
+                    }
+                };
+
+
+            }else if(strContains(taskResult, 'Thank') && followUpTask.contacts.length > 0){
+
+                $scope.followUpDialogData = {
+                    thankTask: true,
+                    givingTask: true,
+                    newsletter: true
+                };
+                $scope.followUpDialogResult = {
+                    createThankTask: true,
+                    thankTask: {
+                        subject: 'Thank',
                         date: dateTwoDaysFromToday
                     },
                     givingTask: {
