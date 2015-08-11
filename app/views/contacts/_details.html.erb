@@ -29,10 +29,10 @@
         <th colspan="2"><%= _('Other Details') %></th>
       </tr>
       <% if contact_exhibit.likely_to_give.present? %>
-          <tr>
-            <td class="meta_name_wide"><%= _('Likelihood') %></td>
-            <td class="meta_data"><%= _(contact_exhibit.likely_to_give) %></td>
-          </tr>
+        <tr>
+          <td class="meta_name_wide"><%= _('Likelihood') %></td>
+          <td class="meta_data"><%= _(contact_exhibit.likely_to_give) %></td>
+        </tr>
       <% end %>
       <tr>
         <td class="meta_name_wide"><%= _('Magazine') %></td>
@@ -43,10 +43,16 @@
         <td class="meta_data"><%= contact_exhibit.direct_deposit ? _('Yes') : _('No') %></td>
       </tr>
       <% if contact.church_name.present? %>
-          <tr>
-            <td class="meta_name_wide"><%= _('Church') %></td>
-            <td class="meta_data"><%= contact_exhibit.church_name %></td>
-          </tr>
+        <tr>
+          <td class="meta_name_wide"><%= _('Church') %></td>
+          <td class="meta_data"><%= contact_exhibit.church_name %></td>
+        </tr>
+      <% end %>
+      <% if contact.total_donations.present? %>
+        <tr>
+          <td class="meta_name_wide"><%= _('Lifetime Donations') %></td>
+          <td class="meta_data"><%= number_to_current_currency(contact_exhibit.total_donations) %></td>
+        </tr>
       <% end %>
       </table>
     </div>
