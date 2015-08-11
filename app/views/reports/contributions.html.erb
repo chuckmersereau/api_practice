@@ -76,7 +76,7 @@
         <tr>
           <td colspan="18">
             <span class="table-padding-left">
-              <%= _("Not showing ministry partners with outstanding commitments which total to %{missing}/month")
+              <%= _("Not showing ministry partners without gifts in these 12 months which total to %{missing}/month")
                   .localize % { missing: number_to_current_currency(@monthly_pledges_not_given) } %>
             </span>
           </td>

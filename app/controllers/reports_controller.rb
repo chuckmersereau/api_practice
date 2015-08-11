@@ -4,13 +4,7 @@ class ReportsController < ApplicationController
   def contributions
     @page_title = _('Contribution Report')
 
-    if params[:start_date]
-      @start_date = Date.parse(params[:start_date])
-      @end_date = @start_date.end_of_month + 11.months
-    else
-      @end_date = Date.today.end_of_month
-      @start_date = 11.month.ago(@end_date).beginning_of_month
-    end
+    setup_dates
 
     # The reason for the "distinct_contact_donor_accounts" inner query is that it's possible
     # due to a TntMPD import that two different contacts could both be assigned the same donor id
@@ -108,10 +102,7 @@ class ReportsController < ApplicationController
       @total_min += row[:minimum]
     end
 
-    @monthly_pledges_not_given = current_account_list.contacts.financial_partners
-                                 .includes(donor_accounts: :donations)
-                                 .where(donations: { id: nil })
-                                 .to_a.sum(&:monthly_pledge)
+    @monthly_pledges_not_given = monthly_pledges_not_given
 
     respond_to do |format|
       format.html
@@ -122,10 +113,28 @@ class ReportsController < ApplicationController
     end
   end
 
+  def setup_dates
+    if params[:start_date]
+      @start_date = Date.parse(params[:start_date])
+      @end_date = @start_date.end_of_month + 11.months
+    else
+      @end_date = Date.today.end_of_month
+      @start_date = 11.month.ago(@end_date).beginning_of_month
+    end
+  end
+
+  def monthly_pledges_not_given
+    current_account_list.contacts.financial_partners
+      .includes(donor_accounts: :donations)
+      .where('donations.id is null or donations.donation_date NOT BETWEEN ? AND ?', @start_date, @end_date)
+      .references(:donations)
+      .to_a.sum(&:monthly_pledge)
+  end
+
   private
 
   def monthly_pledge(row)
     return 0 unless row && row[:pledge_amount]
-    row[:pledge_amount] / (row[:pledge_frequency] || 0)
+    row[:pledge_amount] / (row[:pledge_frequency] || 1)
   end
 end
