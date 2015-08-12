@@ -264,7 +264,6 @@ ActiveRecord::Schema.define(version: 20150807145306) do
     t.boolean  "no_appeals"
     t.text     "prayer_letters_params"
     t.string   "pls_id"
-    t.text     "pls_params"
   end
 
   add_index "contacts", ["account_list_id"], name: "index_contacts_on_account_list_id", using: :btree
@@ -946,6 +945,7 @@ ActiveRecord::Schema.define(version: 20150807145306) do
   add_index "versions", ["item_type", "item_id"], name: "index_versions_on_item_type_and_item_id", using: :btree
   add_index "versions", ["item_type", "related_object_type", "related_object_id", "created_at"], name: "related_object_index", using: :btree
 
+  Foreigner.load
   add_foreign_key "master_person_sources", "master_people", name: "master_person_sources_master_person_id_fk"
 
 end

@@ -24,7 +24,7 @@ Lint/UnneededDisable:
 
 # Offense count: 250
 Metrics/AbcSize:
-  Max: 233
+  Max: 234
 
 # Offense count: 74
 Metrics/CyclomaticComplexity:

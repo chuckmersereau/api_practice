@@ -12,8 +12,6 @@
 /tmp
 vendor/ruby
 vendor/jruby
-config/database.yml
-config/config.yml
 coverage
 .DS_Store
 rails/ruby
@@ -31,8 +29,6 @@ public/uploads
 public/mobile
 *.sublime-project
 *.sublime-workspace
-cloudinary.yml
-config/sidekiq.yml
 .idea
 node_modules
 public/dev-assets

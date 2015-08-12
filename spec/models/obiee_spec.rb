@@ -10,7 +10,7 @@ describe Obiee do
   before do
     savon.mock!
 
-    creds = { name: APP_CONFIG['obiee_key'], password: APP_CONFIG['obiee_secret'] }
+    creds = { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
   end

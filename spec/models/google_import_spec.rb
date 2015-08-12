@@ -31,8 +31,8 @@ describe GoogleImport do
 
     # Based on sample from docs at http://cloudinary.com/documentation/upload_images
     cloudinary_reponse = {
-      url: 'http://res.cloudinary.com/cru/image/upload/v1/img.jpg',
-      secure_url: 'https://res.cloudinary.com/cru/image/upload/v1/img.jpg',
+      url: "http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg",
+      secure_url: "https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg",
       public_id: 'img',
       version: '1',
       width: 864,
@@ -41,7 +41,7 @@ describe GoogleImport do
       resource_type: 'image',
       signature: 'abcdefgc024acceb1c5baa8dca46797137fa5ae0c3'
     }.to_json
-    stub_request(:post, 'https://api.cloudinary.com/v1_1/cru/auto/upload').to_return(body: cloudinary_reponse)
+    stub_request(:post, %r{https://api\.cloudinary\.com/v1_1/.*/auto/upload}).to_return(body: cloudinary_reponse)
   end
 
   describe 'when importing contacts' do
@@ -77,7 +77,7 @@ describe GoogleImport do
     before do
       @google_contact = OpenStruct.new(given_name: 'John', family_name: 'Doe',
                                        emails_full: [], phone_numbers_full: [], organizations: [],
-                                       websites: [], id: Time.now.to_i.to_s)
+                                       websites: [], id: Time.zone.now.to_i.to_s)
     end
 
     it 'updates the person if they already exist by google remote_id if override set' do
@@ -227,7 +227,7 @@ describe GoogleImport do
 
       expect(person.pictures.count).to eq(1)
       picture = person.pictures.first
-      expect(picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
+      expect(picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
       expect(picture.primary).to be true
 
       expect(person.google_contacts.count).to eq(1)
@@ -338,7 +338,7 @@ describe GoogleImport do
       @original_picture.reload
       expect(@original_picture.primary).to be false
       expect(@existing_person.pictures.count).to eq(2)
-      expect(@existing_person.primary_picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
+      expect(@existing_person.primary_picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
     end
 
     it 'does not not update fields if not set to override' do
@@ -371,7 +371,7 @@ describe GoogleImport do
       expect(@existing_contact.notes).to eq('Notes here')
 
       expect(@existing_person.pictures.count).to eq(1)
-      expect(@existing_person.primary_picture.image.url).to eq('http://res.cloudinary.com/cru/image/upload/v1/img.jpg')
+      expect(@existing_person.primary_picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
     end
   end
 
