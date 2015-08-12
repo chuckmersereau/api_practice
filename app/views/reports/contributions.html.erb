@@ -84,7 +84,7 @@
       <% end %>
       <% sum_row %>
       <% @donations.each do |key, row| %>
-        <tr class="<%= row[:status].gsub(' ','') %>">
+        <tr class="<%= row[:status].gsub(' ','') if row[:status] %>">
           <td>
             <span class="table-padding-left"><%= link_to(row[:donor], contact_path(row[:id])) %></span>
           </td>
