@@ -28,7 +28,6 @@ angular.module('mpdxApp')
                               hour: moment().hour(),
                               min: moment().minute()
                             };
-
                             api.call('get',
                                      'contacts?filters[status]=*&per_page=5000'+
                                          '&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts'+
@@ -37,6 +36,20 @@ angular.module('mpdxApp')
                                 $scope.contacts = data.contacts;
                                 $scope.newContact = data.contacts[0].id;
                             }, null, true);
+
+                            $scope.mail_chimp_account_present = $.mpdx.mail_chimp_account_present;
+
+                            if ($.mpdx.mail_chimp_lists == null) {
+                                $scope.mail_chimp_lists = [];
+                            } else {
+                                $scope.mail_chimp_lists = $.mpdx.mail_chimp_lists;
+                                if ($scope.mail_chimp_lists.length > 0) {
+                                    $scope.selected_mail_chimp_list = $scope.mail_chimp_lists[0].id
+                                }
+                            }
+
+                            $scope.mail_chimp_appeal_load_complete = false;
+
 
                             $scope.cancel = function () {
                                 $modalInstance.dismiss('cancel');
@@ -51,7 +64,7 @@ angular.module('mpdxApp')
                             };
 
                             $scope.delete = function (){
-                                var r = confirm('Are you sure you want to delete this appeal?');
+                                var r = confirm(__('Are you sure you want to delete this appeal?'));
                                 if(!r){
                                     return;
                                 }
@@ -80,7 +93,7 @@ angular.module('mpdxApp')
                             $scope.addContact = function(id){
                                 if(!id){ return; }
                                 if(_.contains($scope.appeal.contacts, id)){
-                                    alert('This contact already exists in this appeal.');
+                                    alert(__('This contact already exists in this appeal.'));
                                     return;
                                 }
                                 $scope.appeal.contacts.push(id);
@@ -120,7 +133,7 @@ angular.module('mpdxApp')
                                 }));
 
                                 if(!contactsObject.length){
-                                    alert('You must check at least one contact.');
+                                    alert(__('You must check at least one contact.'));
                                     return;
                                 }
 
@@ -156,7 +169,7 @@ angular.module('mpdxApp')
                             }));
 
                             if(!contactsObject.length){
-                              alert('You must check at least one contact.');
+                              alert(__('You must check at least one contact.'));
                               return;
                             }
 
@@ -184,20 +197,47 @@ angular.module('mpdxApp')
                             updateContact();
                           };
 
-
                           $scope.exportContactsToCSV = function(selectedContactsMap) {
                             var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
                               return selected;
                             }));
 
                             if (selectedContactIds.length == 0) {
-                              alert('You must check at least one contact.');
+                              alert(__('You must check at least one contact.'));
                               return;
                             }
 
                             window.location.href =
                                 '/contacts.csv?csv_primary_emails_only=true&' +
                                 'filters[status]=*&filters[ids]=' + selectedContactIds.join();
+                          };
+
+                          $scope.exportContactsToMailChimpList = function(selectedContactsMap,
+                                                                          appealListId ) {
+                              var selectedContactIds = _.keys(_.pick(selectedContactsMap, function(selected) {
+                                  return selected;
+                              }));
+
+                              if (selectedContactIds.length == 0) {
+                                  alert (__('You must check at least one contact.'));
+                                  return;
+                              }
+
+                              var r = confirm(__('Are you sure you want to export the contacts to this list? ' +
+                                  'If you pick an existing list, this process could have the effect of removing ' +
+                                  'people from it.'));
+                              if(!r){
+                                    return;
+                              }
+
+                              api.call('put','mail_chimp_accounts/export_appeal_list', {
+                                      appeal_id: $scope.appeal.id,
+                                      appeal_list_id: appealListId,
+                                      contact_ids: selectedContactIds
+                                  },
+                                  function () {
+                                      $scope.mail_chimp_appeal_load_complete = true;
+                              });
                           };
 
                             $scope.selectAll = function(type){
@@ -354,7 +394,7 @@ angular.module('mpdxApp')
                             $scope.editAppeal(data.appeal.id);
                           });
                         }, function(){
-                          alert('An error occurred while creating the appeal.');
+                          alert(__('An error occurred while creating the appeal.'));
                         });
                     });
                     modalInstance.opened.then(function() {

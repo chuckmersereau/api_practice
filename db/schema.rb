@@ -499,7 +499,16 @@ ActiveRecord::Schema.define(version: 20150807145306) do
     t.string   "webhook_token"
   end
 
-  add_index "mail_chimp_accounts", ["account_list_id"], name: "index_mail_chimp_accounts_on_account_list_id", using: :btree
+  create_table "mail_chimp_appeal_lists", force: true do |t|
+    t.integer  "mail_chimp_account_id"
+    t.string   "appeal_list_id"
+    t.integer  "appeal_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mail_chimp_appeal_lists", ["appeal_list_id"], name: "index_mail_chimp_appeal_lists_on_appeal_list_id", using: :btree
+  add_index "mail_chimp_appeal_lists", ["mail_chimp_account_id"], name: "index_mail_chimp_appeal_lists_on_mail_chimp_account_id", using: :btree
 
   create_table "master_addresses", force: true do |t|
     t.text     "street"

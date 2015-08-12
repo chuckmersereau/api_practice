@@ -229,14 +229,21 @@
               <appeals-list class="panel-body"></appeals-list>
             </div>
           </div>
-
-
         </div>
+      </div>
     </section>
-
   </div>
 </div>
 <task-followup-dialog id="task-followup-dialog"></task-followup-dialog>
 <div id="generic_dialog"></div>
 <%= render 'home/late_partners_dialog' %>
 <%= render 'tasks/results_modal' %>
+<script type="text/javascript">
+    $.mpdx.mail_chimp_account_present =
+        <%= current_account_list.mail_chimp_account.present? &&
+            current_account_list.mail_chimp_account.active %>;
+    $.mpdx.mail_chimp_lists =
+       <%= current_account_list.mail_chimp_account.try(:lists_available_for_appeals)
+             .to_json.html_safe %>;
+</script>
+

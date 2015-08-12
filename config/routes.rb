@@ -60,6 +60,12 @@ Rails.application.routes.draw do
       resources :users
       resources :appeals
       resources :insights
+
+      resources :mail_chimp_accounts do
+        collection do
+          put :export_appeal_list
+        end
+      end
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
   end

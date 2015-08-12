@@ -202,13 +202,46 @@
                     <div class="col-sm-4">
                         <%= _('Export selected to CSV:') %>
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-sm-5">
                       <div class="form-group">
                         <button class="btn btn-default" ng-click="exportContactsToCSV(checkedContacts)"><%= _('Export') %></button>
                       </div>
                     </div>
                   </div>
-
+                  <div class="row" ng-show="mail_chimp_account_present" >
+                    <div class="col-sm-4">
+                      <%= _('Export selected to a Mail Chimp list:') %>
+                    </div>
+                    <div class="col-sm-8">
+                      <div class="form-group">
+                        <select class="form-control" ng-model="selected_mail_chimp_list"
+                                ng-options="m.id as m.name for m in mail_chimp_lists" ></select>
+                        <button class="btn btn-default"
+                                ng-click="exportContactsToMailChimpList(checkedContacts,selected_mail_chimp_list)">
+                          <%= _('Export') %>
+                        </button>
+                        <div class="spacer"></div>
+                        <div class="alert alert-warning" role="alert">
+                          <span class="glyphicon glyphicon-exclamation-sign">
+                            <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ' +
+                                  'as this one would overwrite it. Create a new list in MailChimp and choose ' +
+                                  'it in this drop down. Subsequent exports to it will overwrite previous ones.') %>
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="row alert alert-success" role="alert"
+                       id="appealListLoading" ng-show="mail_chimp_appeal_load_complete">
+                    <%=  _('Your Appeal Contacts are loading to MailChimp') %></div>
+                  <div class="row" ng-show="!mail_chimp_account_present">
+                    <div class="alert alert-warning" role="alert">
+                       <span class="glyphicon glyphicon-exclamation-sign">
+                          <%= _('If you want to export the selected contacts to MailChimp, connect your MailChimp ' +
+                                        ' account in the') %> <%= link_to 'settings page', integrations_settings_path %>.
+                       </span>
+                    </div>
+                  </div>
                   <div class="row">
                     <div class="col-sm-4">
                       <%= _('Create tag for selected:') %>
