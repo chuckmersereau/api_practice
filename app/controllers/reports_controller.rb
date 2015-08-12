@@ -124,10 +124,12 @@ class ReportsController < ApplicationController
   end
 
   def monthly_pledges_not_given
+    contacts_who_have_given = current_account_list.contacts.financial_partners
+                              .includes(donor_accounts: :donations)
+                              .where('donations.donation_date BETWEEN ? AND ?', @start_date, @end_date)
+                              .pluck(:id)
     current_account_list.contacts.financial_partners
-      .includes(donor_accounts: :donations)
-      .where('donations.id is null or donations.donation_date NOT BETWEEN ? AND ?', @start_date, @end_date)
-      .references(:donations)
+      .where.not(id: contacts_who_have_given)
       .to_a.sum(&:monthly_pledge)
   end
 
