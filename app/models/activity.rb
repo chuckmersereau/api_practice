@@ -15,7 +15,7 @@ class Activity < ActiveRecord::Base
   has_many :google_email_activities, dependent: :destroy
   has_many :google_emails, through: :google_email_activities
 
-  scope :overdue, -> { where(completed: false).where('start_at < ?', Time.zone.now.beginning_of_day).order('start_at') }
+  scope :overdue, -> { where(completed: false).where('start_at < ?', Time.zone.now.beginning_of_day).order('start_at DESC') }
   scope :today, -> { where('start_at BETWEEN ? AND ?', Time.zone.now.beginning_of_day, Time.zone.now.end_of_day).order('start_at') }
   scope :tomorrow, -> { where('start_at BETWEEN ? AND ?', Time.zone.now.end_of_day, Time.zone.now.end_of_day + 1.day).order('start_at') }
   scope :future, -> { where('start_at > ?', Time.zone.now.end_of_day).order('start_at') }
