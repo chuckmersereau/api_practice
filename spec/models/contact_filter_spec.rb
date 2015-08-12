@@ -2,6 +2,21 @@ require 'spec_helper'
 
 describe ContactFilter do
   describe 'filters' do
+    it 'filters by comma separated ids' do
+      c1 = create(:contact)
+      c2 = create(:contact)
+      create(:contact)
+      filtered = ContactFilter.new(ids: "#{c1.id},#{c2.id}").filter(Contact)
+      expect(filtered.count).to eq(2)
+      expect(filtered).to include(c1)
+      expect(filtered).to include(c2)
+    end
+
+    it 'allows all if ids blank' do
+      create(:contact)
+      expect(ContactFilter.new(ids: '').filter(Contact).count).to eq(1)
+    end
+
     it 'filters contacts with newsletter = Email and state' do
       c = create(:contact, send_newsletter: 'Email')
       a = create(:address, addressable: c)

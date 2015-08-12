@@ -193,64 +193,57 @@ class ContactsController < ApplicationController
   end
 
   def add_referrals
+    @modal_title = _('Add Referrals')
+    @save_path = save_referrals_contact_path(@contact)
+    render :add_multi
   end
 
   def save_referrals
-    @contacts = []
-    @bad_contacts_count = 0
-    Contact.transaction do
-      params[:account_list][:contacts_attributes].each do |_, attributes|
-        next if attributes.all? { |_, v| v.blank? }
-        # create the new contact
-        if attributes[:first_name].present? || attributes[:last_name].present?
-          attributes[:first_name] = _('Unknown') if attributes[:first_name].blank?
-          attributes[:last_name] = _('Unknown') if attributes[:last_name].blank?
-          contact_name = "#{attributes[:last_name]}, #{attributes[:first_name]}"
-          contact_name += " & #{attributes[:spouse_first_name]}" if attributes[:spouse_first_name].present?
-          contact_greeting = "#{attributes[:first_name]}"
-          contact_greeting += " & #{attributes[:spouse_first_name]}" if attributes[:spouse_first_name].present?
-          contact = current_account_list.contacts.create(name: contact_name, greeting: contact_greeting, notes: attributes[:notes])
+    multi_add = ContactMultiAdd.new(current_account_list, @contact)
+    contacts_attrs = params[:account_list][:contacts_attributes]
+    @contacts, @bad_contacts_count = multi_add.add_contacts(contacts_attrs)
 
-          begin
-            # create primary
-            person = Person.create(attributes.slice(:first_name, :last_name, :email, :phone))
-            contact.people << person
-
-            # create spouse
-            if attributes[:spouse_first_name].present?
-              spouse = Person.create(first_name: attributes[:spouse_first_name], last_name: attributes[:last_name], phone: attributes[:spouse_phone], email: attributes[:spouse_email])
-              contact.people << spouse
-            end
-
-            # create address
-            contact.addresses_attributes = [
-              attributes.slice(:street, :city, :state, :postal_code).merge(primary_mailing_address: true)
-            ]
-
-            contact.save
-
-            @contact.referrals_by_me << contact
-
-            @contacts << contact
-          rescue ActiveRecord::RecordInvalid
-            @bad_contacts_count += 1
-          end
-        else
-          @bad_contacts_count += 1
-        end
-      end
-
-      if @contacts.length > 0
-        flash[:notice] = _('You have successfully added %{contacts_count:referrals}.').to_str.localize %
-                         { contacts_count: @contacts.length, referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
-      end
-
-      if @bad_contacts_count > 0
-        flash[:alert] = _("%{contacts_count:referrals} couldn't be added because they were missing a first name or you put in a bad email address.").to_str.localize %
-                        { contacts_count: @bad_contacts_count, referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
-
-      end
+    if @contacts.length > 0
+      flash[:notice] = _('You have successfully added %{contacts_count:referrals}.').to_str.localize %
+                       { contacts_count: @contacts.length, referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
     end
+
+    if @bad_contacts_count > 0
+      flash[:alert] = _("%{contacts_count:referrals} couldn't be added because they were missing a first name or you put in a bad email address.").to_str.localize %
+                      { contacts_count: @bad_contacts_count,
+                        referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
+    end
+
+    # Can't use redirect_to because this is called with remote: true
+    @redirect_path  = contacts_path(filters: { referrer: [@contact.id] })
+    render :redirect_script
+  end
+
+  def add_multi
+    @modal_title = _('Add Contacts')
+    @save_path = save_multi_contacts_path
+  end
+
+  def save_multi
+    multi_add = ContactMultiAdd.new(current_account_list, @contact)
+    contacts_attrs = params[:account_list][:contacts_attributes]
+    @contacts, @bad_contacts_count = multi_add.add_contacts(contacts_attrs)
+
+    if @contacts.length > 0
+      flash[:notice] = _('You have successfully added %{contacts_count:contacts}.').to_str.localize %
+                       { contacts_count: @contacts.length,
+                         contacts: { one: _('1 contact'), other: _('%{contacts_count} contacts') } }
+    end
+
+    if @bad_contacts_count > 0
+      flash[:alert] = _("%{contacts_count:contacts} couldn't be added because they were missing a first name or you put in a bad email address.").to_str.localize %
+                      { contacts_count: @bad_contacts_count,
+                        contacts: { one: _('1 contact'), other: _('%{contacts_count} contacts') } }
+    end
+
+    # Can't use redirect_to because this is called with remote: true
+    @redirect_path = contacts_path(filters: { ids: @contacts.map(&:id).join(',') })
+    render :redirect_script
   end
 
   def find_duplicates

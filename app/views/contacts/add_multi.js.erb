@@ -1,0 +1,31 @@
+$('#referrals_modal').html('<%= j(render('add_multi')) %>');
+
+$('#referrals_modal').dialog({
+  width: 900, maxHeight: 600, modal: true,
+  buttons: [
+    {
+      text: __('Save'),
+      click: function() {
+        window.onbeforeunload = undefined;
+        $('form', this).submit();
+        $('.form_wrapper', this).html('<%= image_tag('spinner.gif') %>');
+        $(this).dialog( "option", "buttons", []);
+      },
+    },
+    {
+      text: __('Cancel'),
+      click: function() {
+        $(this).dialog('close');
+      }
+    }
+  ],
+  close: function() {
+    $('#referrals_modal form').removeClass('dirty');
+  }
+});
+
+$('#referrals_modal').dialog('option', 'position', { my: "center", at: "center", of: window });
+$('#referrals_modal').dialog('option', 'title', '<%= @modal_title %>');
+$('#referrals_modal form').areYouSure({
+  message: '<%= _('It looks like you were adding some referrals. If you leave before submitting, your changes will be lost.') %>'
+});

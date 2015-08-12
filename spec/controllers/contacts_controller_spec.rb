@@ -198,12 +198,13 @@ describe ContactsController do
     end
 
     describe '#save_referrals' do
-      it 'sets the address as primary for the created contact' do
+      it 'creates a contact and sets the referrer' do
         expect do
           xhr :post, :save_referrals, id: contact.id,
-                                      account_list: { contacts_attributes: { nil => { first_name: 'John', street: '1 Way' } } }
-        end.to change(Address, :count).from(0).to(1)
-        expect(Address.first.primary_mailing_address).to be true
+                                      account_list: { contacts_attributes: { 0 => { first_name: 'John', street: '1 Way' } } }
+        end.to change(Contact, :count).by(1)
+        expect(Contact.last.first_name).to eq('John')
+        expect(Contact.last.referrals_to_me.to_a).to eq([contact])
       end
     end
 
