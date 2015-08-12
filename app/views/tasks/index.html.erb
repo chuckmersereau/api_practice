@@ -53,7 +53,7 @@
               </thead>
 
               <tbody class="tasks">
-                <tr task="task" ng-repeat="task in tasks[g.filter] | orderBy:'due_date':(g.filter == 'overdue')" 
+                <tr task="task" ng-repeat="task in tasks[g.filter]" 
                     id="task_{{task.id}}" class="tasklist" multiselect="true"></tr>
                 <tr>
                   <td colspan="4">
