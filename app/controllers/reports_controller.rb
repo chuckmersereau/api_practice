@@ -4,13 +4,7 @@ class ReportsController < ApplicationController
   def contributions
     @page_title = _('Contribution Report')
 
-    if params[:start_date]
-      @start_date = Date.parse(params[:start_date])
-      @end_date = @start_date.end_of_month + 11.months
-    else
-      @end_date = Date.today.end_of_month
-      @start_date = 11.month.ago(@end_date).beginning_of_month
-    end
+    setup_dates
 
     # The reason for the "distinct_contact_donor_accounts" inner query is that it's possible
     # due to a TntMPD import that two different contacts could both be assigned the same donor id
@@ -54,19 +48,19 @@ class ReportsController < ApplicationController
     @donations = {}
     @sum_row = {}
     @raw_donations.each do |donation|
-      @donations[donation.donor_account_id] ||= {
+      @donations[donation.contact_id] ||= {
         donor: donation.name, id: donation.contact_id, status: donation.status,
         pledge_amount: donation.pledge_amount,
         pledge_frequency: donation.pledge_frequency,
         amounts: {}, total: 0
       }
 
-      @donations[donation.donor_account_id][:amounts][donation.date_trunc.strftime '%b %y'] = {
+      @donations[donation.contact_id][:amounts][donation.date_trunc.strftime '%b %y'] = {
         value: donation.tendered_amount,
         currency: donation.tendered_currency
       }
 
-      @donations[donation.donor_account_id][:total] += donation.tendered_amount
+      @donations[donation.contact_id][:total] += donation.tendered_amount
 
       @sum_row[donation.date_trunc.strftime '%b %y'] ||= 0
 
@@ -75,6 +69,7 @@ class ReportsController < ApplicationController
 
     @total_pledges = 0.0
     @total_average = 0.0
+    @total_min = 0.0
     @donations.each do |_key, row|
       if row[:pledge_amount].present? && row[:status] == 'Partner - Financial'
         @total_pledges += row[:pledge_amount] / (row[:pledge_frequency] || 1)
@@ -103,7 +98,11 @@ class ReportsController < ApplicationController
 
       row[:average] = row[:total] / months_for_average
       @total_average += row[:average]
+      row[:minimum] = [row[:average], monthly_pledge(row)].min
+      @total_min += row[:minimum]
     end
+
+    @monthly_pledges_not_given = monthly_pledges_not_given
 
     respond_to do |format|
       format.html
@@ -112,5 +111,30 @@ class ReportsController < ApplicationController
         render text: CSVUtil.html_table_to_csv(html_table)
       end
     end
+  end
+
+  def setup_dates
+    if params[:start_date]
+      @start_date = Date.parse(params[:start_date])
+      @end_date = @start_date.end_of_month + 11.months
+    else
+      @end_date = Date.today.end_of_month
+      @start_date = 11.month.ago(@end_date).beginning_of_month
+    end
+  end
+
+  def monthly_pledges_not_given
+    current_account_list.contacts.financial_partners
+      .includes(donor_accounts: :donations)
+      .where('donations.id is null or donations.donation_date NOT BETWEEN ? AND ?', @start_date, @end_date)
+      .references(:donations)
+      .to_a.sum(&:monthly_pledge)
+  end
+
+  private
+
+  def monthly_pledge(row)
+    return 0 unless row && row[:pledge_amount]
+    row[:pledge_amount] / (row[:pledge_frequency] || 1)
   end
 end

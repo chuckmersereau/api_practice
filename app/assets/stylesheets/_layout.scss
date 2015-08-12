@@ -546,6 +546,34 @@ div.right {
 .tabgroup {margin-top: 2em; margin-bottom: 2em;}
 #content {
   margin-top: 30px;
+  &.fullscreen {
+    background-color: white;
+    z-index: 1;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    margin-top: 0;
+    padding-top: 20px;
+    #exit-fullscreen {
+      display: inline-block;
+    }
+    .hide-on-fullscreen {
+      display: none;
+    }
+  }
+}
+#exit-fullscreen {
+  display: none;
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background-color: transparentize($color_gray, .30);
+  padding: 10px;
+  color: white;
+  .icons {
+    display: block;
+    transform: rotate(315deg);
+  }
 }
 
 #contentbody {
@@ -1071,9 +1099,26 @@ table tbody.tasks {
 /* ************************************************************** */
 
 .donations {
-  th, td {padding-top: 4px; padding-bottom: 4px;}
+  th, td {
+    padding: 4px 0;
+  }
+  .table-padding, .table-padding-left, .table-padding-right {
+    display: inline-block;
+  }
+  .table-padding {
+    padding: 0 4px;
+  }
+  .table-padding-left {
+    padding-left: 4px;
+  }
+  .table-padding-right {
+    padding-right: 4px;
+  }
   td {}
 
+  tr.Partner-Financial {
+    background-color: lighten($color_gold, 38%);
+  }
   tr:hover {
     background-color: $gray_light;
   }
@@ -1084,10 +1129,9 @@ table tbody.tasks {
   .sum {border-top: 1px solid $blue;}
   .total {border-left: 1px solid $blue;}
 
-
-
   thead {
     border-bottom: 1px solid $blue;
+    font-size: 12px ;
     th {background: $blue_light; }
   }
 }
