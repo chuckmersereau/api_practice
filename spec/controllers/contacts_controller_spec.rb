@@ -73,6 +73,12 @@ describe ContactsController do
         expect(assigns(:contacts).length).to eq(1)
       end
 
+      it 'does error if the newsletter and address info filters are combined' do
+        expect do
+          get :index, filters: { newsletter: 'address', contact_info_addr: 'No' }
+        end.to_not raise_error
+      end
+
       it 'does not cause an error for the export and still assigns contact' do
         get :index, format: 'csv'
         expect(assigns(:contacts).size).to eq(2)

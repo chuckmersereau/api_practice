@@ -268,7 +268,7 @@ class ContactFilter
   def contact_info_email(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_email].present?
 
-    contacts_with_emails = filtered_contacts.where.not(email_addresses: { email: nil })
+    contacts_with_emails = @contacts.where.not(email_addresses: { email: nil })
                            .where(email_addresses: { historic: false })
                            .includes(people: :email_addresses)
     return contacts_with_emails if @filters[:contact_info_email] == 'Yes'
@@ -341,7 +341,8 @@ class ContactFilter
   def contact_info_address(filtered_contacts)
     return filtered_contacts unless  @filters[:contact_info_addr].present?
 
-    contacts_with_addr = filtered_contacts.where.not(addresses: { street: '' }).where(addresses: { historic: false })
+    contacts_with_addr = @contacts.where.not(addresses: { street: '' })
+                         .where(addresses: { historic: false })
                          .includes(:addresses)
     return contacts_with_addr if @filters[:contact_info_addr] == 'Yes'
 
