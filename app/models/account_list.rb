@@ -16,7 +16,7 @@ class AccountList < ActiveRecord::Base
   include Sidekiq::Worker
   sidekiq_options queue: :import, retry: false, unique: true
 
-  store :settings, accessors: [:monthly_goal, :tester, :owner]
+  store :settings, accessors: [:monthly_goal, :tester, :owner, :account_list_country]
 
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
   has_many :account_list_users, dependent: :destroy
@@ -71,6 +71,10 @@ class AccountList < ActiveRecord::Base
 
   def monthly_goal
     settings[:monthly_goal].present? && settings[:monthly_goal].to_i > 0 ? settings[:monthly_goal].to_i : nil
+  end
+
+  def account_list_country
+    settings[:account_list_country]
   end
 
   def multiple_designations

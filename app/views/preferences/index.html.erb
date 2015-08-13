@@ -43,7 +43,9 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <%= f.label :locale, _('Language') %>
-                  <%= f.select :locale, TwitterCldr::Shared::Languages.all_for(locale).select { |k, _| TwitterCldr.supported_locales.include?(k) }.invert, {selected: locale}, {class: 'form-control'} %>
+                  <%= f.select :locale, TwitterCldr::Shared::Languages.all_for(locale)
+                              .select { |k, _| TwitterCldr.supported_locales.include?(k) }.invert,
+                              {selected: locale}, {class: 'form-control'} %>
                 </div>
               </div>
             </div>
@@ -63,7 +65,21 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <%= f.label :default_account_list, _('Default Account List') %>
-                  <%= f.select :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {}, {class: 'form-control'} %>
+                  <%= f.select :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {},
+                               {class: 'form-control'} %>
+                </div>
+              </div>
+            </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <h3><%= _('Contact Export Options') %></h3>
+                </div>
+              </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <%= f.label _('Include your home country in the contacts export file.') %>
+                  <%= f.country_select :account_list_country, nil, {}, {class: 'country_select form-control', disabled: true} %>
                 </div>
               </div>
             </div>
