@@ -2,8 +2,7 @@ $('#spinner_donations').hide();
 <% if params[:page] %>
   $('#donations_table').append('<%= j(render('donations', donations: @donations)) %>');
 <% else %>
-  $('#donations').html('<%= j(render('chart', donations: @donations)) %>');
-  $('#donations').append('<%= j(render('donations', donations: @donations)) %>');
+  $('#donations').html('<%= j(render('chart', donations: @donations)) %><%= j(render('donations', donations: @donations)) %>');
 <% end %>
 if($('.pagination')[0]) {
   $('.pagination').remove()
