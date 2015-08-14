@@ -2,6 +2,11 @@ require 'async'
 require 'open-uri'
 
 class PlsAccount < ActiveRecord::Base
+  # :nocov:
+  # There are intentionally no specs for this yet as the PLS API is still buggy
+  # and under development, but I wanted to get this on the master branch so it
+  # will track with future changes while we wait on PLS.
+
   include Async
   include Sidekiq::Worker
   sidekiq_options unique: true
@@ -143,4 +148,6 @@ class PlsAccount < ActiveRecord::Base
 
   class AccessError < StandardError
   end
+
+  # :nocov:
 end
