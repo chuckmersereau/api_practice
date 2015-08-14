@@ -355,4 +355,17 @@ describe AccountList do
       account_list.send(:import_data)
     end
   end
+
+  context '#account_list_country' do
+    let(:account_list) { create(:account_list)}
+
+    it 'returns a blank when the tag is not present' do
+      expect(account_list.account_list_country).to eq('')
+    end
+
+    it 'returns the country that has been saved' do
+      account_list.account_list_country = 'Test Country'
+      expect(account_list.account_list_country).to eq('Test Country')
+    end
+  end
 end

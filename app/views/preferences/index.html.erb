@@ -94,10 +94,10 @@
               </div>
             </div>
 
-            <div class="row">
+            <div class="row spacer-bottom">
               <div class="col-md-8">
                 <div class="form-group">
-                  <%=  _('Exclude your home country from the contacts export file here.') %>
+                  <%=  f.label _('Exclude your home country from the contacts export file here') %>
                   <%= f.country_select :account_list_country, ['None'], {},
                                    {class: 'country_select form-control'} %>
                 </div>

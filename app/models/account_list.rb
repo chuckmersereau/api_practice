@@ -74,7 +74,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def account_list_country
-    settings[:account_list_country]
+    settings[:account_list_country].present? ? settings[:account_list_country] : ''
   end
 
   def multiple_designations
