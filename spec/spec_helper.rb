@@ -136,7 +136,7 @@ RSpec.configure do |config|
 end
 
 # This code will be run each time you run your specs.
-start_simplecov if ENV['DRB']
+start_simplecov
 Zonebie.quiet = true
 Zonebie.set_random_timezone
 FactoryGirl.reload
