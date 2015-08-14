@@ -142,6 +142,11 @@ Zonebie.set_random_timezone
 FactoryGirl.reload
 Dir[Rails.root.join('app/roles/**/*.rb')].each { |f| require f }
 
+# Suppress debug-level "Geocoder: HTTP request being made ..." in spec output
+geo_logger = Logger.new(STDOUT)
+geo_logger.level = Logger::INFO
+Geocoder.configure(logger: geo_logger)
+
 def login(user)
   $request_test = true
   $user = user
