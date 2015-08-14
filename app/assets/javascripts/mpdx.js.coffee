@@ -88,9 +88,6 @@ $ ->
     event.target.click()
     false
 
-  $('#preference_set_account_list_country').on 'dblclick', (event) ->
-    this.prop('disabled', false)
-
   $('#preference_reset_welcome').click ->
     $('#preference_set_setup').val("[:goal, :import, :contacts]")
 
