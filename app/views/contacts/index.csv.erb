@@ -20,11 +20,11 @@
     row << contact.mailing_address.city
     row << contact.mailing_address.state
     row << contact.mailing_address.postal_code
-    row << if contact.account_list.account_list_country
-    contact.mailing_address.country
-    elseif !contact.account_list.account_list_country &&
-    ''
-    end
+    row << if contact.mailing_address.country != current_account_list.account_list_country
+             contact.mailing_address.country
+           else
+             ''
+           end
     row << contact.status
     row << contact.pledge_amount
     row << Contact.pledge_frequencies[contact.pledge_frequency || 1.0]
