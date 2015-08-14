@@ -18,13 +18,3 @@ branches:
   - master
 env:
   - REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
-deploy:
-  - provider: opsworks
-    access_key_id: AKIAJYX4CH7WF7CZ2QIA
-    secret_access_key:
-      secure: e/dQXR+htBMkcnHNP3+N4Pz/hqGN1ke48q4f7KSvZP0qWJAM7Oii5OITmnIXxCyDl6yCM8zTVK1oPJLRQUihPs/jy9S4EW7NfkDlOatAhTqznbs5bacoPh0DsyJ+/hh/Xh8eYkp8KhLv03O5T4n858EM6PpR+zghmcL2pruKGxM=
-    app-id: 36c106d9-e3c9-495c-a826-1e29854d12c7
-    migrate: true
-    on:
-      repo: CruGlobal/mpdx
-      branch: master
