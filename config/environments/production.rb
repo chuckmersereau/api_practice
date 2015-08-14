@@ -78,6 +78,8 @@ Rails.application.configure do
   config.action_mailer.default_url_options = { host: 'mpdx.org' }
 
   #config.font_assets.origin = 'https://mpdx.org'
+  config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new("mpdx-#{ENV['ENVIRONMENT']}", Syslog::LOG_LOCAL7))
+  config.log_tags = [lambda { |request| "ReqID:#{request.uuid}" }]
 
   Rails.application.routes.default_url_options[:host] = 'mpdx.org'
 end

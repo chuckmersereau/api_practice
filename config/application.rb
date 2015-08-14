@@ -33,8 +33,6 @@ module Mpdx
     config.exceptions_app = self.routes
 
     config.log_formatter = ::Logger::Formatter.new
-    config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new("global_registry:#{ENV['GIT_BRANCH']}", Syslog::LOG_LOCAL7))
-    config.log_tags = [ lambda { |request| "ReqID:#{request.uuid}" } ]
     config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, :silence => ['/monitors/lb']
 
   end
