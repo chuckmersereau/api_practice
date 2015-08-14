@@ -319,163 +319,86 @@ describe MailChimpAccount do
     end
   end
 
-  describe 'hook methods' do
-    let(:contact) { create(:contact, account_list: account_list) }
-    let(:person) { create(:person) }
+  context '#call_mailchimp' do
+    it 'raises an error to silently retry the job if it gets error code -50 (too many connections)' do
+      account.primary_list_id = 'list1'
+      account.active = true
+      msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
+      expect(account).to receive(:subscribe_person).with(1).and_raise(Gibbon::MailChimpError.new(msg))
+      expect do
+        account.call_mailchimp(:subscribe_person, 1)
+      end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
+    end
+  end
 
+  context '#add_greeting_merge_variable' do
     before do
       account.primary_list_id = 'list1'
-      person.email_address = { email: 'a@example.com', primary: true }
-      person.save
-      contact.people << person
+    end
 
+    it 'does not add a greeting merge variable if it already exists' do
+      merge_vars = [
+        { 'name' => 'Greeting', 'req' => false, 'field_type' => 'text', 'public' => true, 'show' => true,
+          'order' => '5', 'default' => '', 'helptext' => '', 'size' => '25', 'tag' => 'GREETING', 'id' => 3 }
+      ]
+      expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return(merge_vars)
+      expect(account.gb).to_not receive(:list_merge_var_add)
+      account.add_greeting_merge_variable(account.primary_list_id)
+    end
+
+    it 'adds the greeting merge variable if it does not exist' do
+      expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return([])
+      expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
+      account.add_greeting_merge_variable(account.primary_list_id)
+    end
+
+    it 'does not raise an error if the greeting variable added after call to check for it' do
+      expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return([])
+
+      msg = 'MailChimp API Error: A Merge Field with the tag "GREETING" already exists for this list. (code 254)'
+      expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
+        .and_raise(Gibbon::MailChimpError.new(msg))
+
+      expect { account.add_greeting_merge_variable(account.primary_list_id) }.to_not raise_error
+    end
+  end
+
+  context '#setup_webhooks' do
+    before do
       allow($rollout).to receive(:active?).with(:mailchimp_webhooks, account_list)
         .at_least(:once).and_return(true)
+      account.primary_list_id = 'list1'
     end
 
-    context '#unsubscribe_hook' do
-      it 'marks an unsubscribed person with opt out of enewsletter' do
-        account.unsubscribe_hook('a@example.com')
-        expect(person.reload.optout_enewsletter).to be true
-      end
-
-      it 'does not mark as unsubscribed someone with that email but not as set primary' do
-        person.email_addresses.first.update_column(:primary, false)
-        person.email_address = { email: 'b@example.com', primary: true }
-        person.save
-        account.unsubscribe_hook('a@example.com')
-        expect(person.reload.optout_enewsletter).to be false
-      end
+    def expect_webhook_created
+      expect(SecureRandom).to receive(:hex).at_least(:once).and_return('abc123')
+      hook_params = {
+        id: 'list1', url: 'https://mpdx.org/mail_chimp_webhook/abc123',
+        actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
+                   upemail: true, campaign: true },
+        sources: { user: true, admin: true, api: false }
+      }
+      expect(account.gb).to receive(:list_webhook_add).with(hook_params)
+      yield
+      expect(account.webhook_token).to eq('abc123')
     end
 
-    context '#email_update_hook' do
-      it 'creates a new email address for the updated email if it is not there' do
-        account.email_update_hook('a@example.com', 'new@example.com')
-        person.reload
-        expect(person.email_addresses.count).to eq(2)
-        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be false
-        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be true
-      end
-
-      it 'sets the new email address as primary if it is there' do
-        person.email_address = { email: 'new@example.com', primary: false }
-        person.save
-        account.email_update_hook('a@example.com', 'new@example.com')
-        person.reload
-        expect(person.email_addresses.count).to eq(2)
-        expect(person.email_addresses.find_by(email: 'a@example.com').primary).to be false
-        expect(person.email_addresses.find_by(email: 'new@example.com').primary).to be true
-      end
+    it 'creates a webhook if the webhook token is missing' do
+      expect_webhook_created { account.setup_webhooks }
     end
 
-    context '#email_cleaned_hook' do
-      it 'marks the cleaned email as no longer valid and not primary and queues a mailing' do
-        email = person.email_addresses.first
-        delayed = double
-        expect(SubscriberCleanedMailer).to receive(:delay).and_return(delayed)
-        expect(delayed).to receive(:subscriber_cleaned).with(account_list, email)
-
-        account.email_cleaned_hook('a@example.com', 'hard')
-        email.reload
-        expect(email.historic).to be true
-        expect(email.primary).to be false
-      end
-
-      it 'makes another valid email as primary but not as invalid' do
-        email2 = create(:email_address, email: 'b@example.com', primary: false)
-        person.email_addresses << email2
-        account.email_cleaned_hook('a@example.com', 'hard')
-
-        email = person.email_addresses.first.reload
-        expect(email.historic).to be true
-        expect(email.primary).to be false
-
-        email2.reload
-        expect(email2.historic).to be false
-        expect(email2.primary).to be true
-      end
-
-      it 'triggers the unsubscribe hook for an email marked as spam (abuse)' do
-        expect(account).to receive(:unsubscribe_hook).with('a@example.com')
-        account.email_cleaned_hook('a@example.com', 'abuse')
-      end
+    it 'creates a webhook if the webhook token is missing' do
+      account.update(webhook_token: 'old')
+      expect(account.gb).to receive(:list_webhooks).and_return([])
+      expect_webhook_created { account.setup_webhooks }
     end
 
-    context '#setup_webhooks' do
-      def expect_webhook_created
-        expect(SecureRandom).to receive(:hex).at_least(:once).and_return('abc123')
-        hook_params = {
-          id: 'list1', url: 'https://mpdx.org/mail_chimp_webhook/abc123',
-          actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
-                     upemail: true, campaign: true },
-          sources: { user: true, admin: true, api: false }
-        }
-        expect(account.gb).to receive(:list_webhook_add).with(hook_params)
-        yield
-        expect(account.reload.webhook_token).to eq('abc123')
-      end
-
-      it 'creates a webhook if the webhook token is missing' do
-        expect_webhook_created { account.setup_webhooks }
-      end
-
-      it 'creates a webhook if the webhook token is missing' do
-        account.update(webhook_token: 'old')
-        expect(account.gb).to receive(:list_webhooks).and_return([])
-        expect_webhook_created { account.setup_webhooks }
-      end
-
-      it 'does not create a webhook if it already exists' do
-        account.update(webhook_token: '111')
-        expect(account.gb).to receive(:list_webhooks)
-          .and_return([{ 'url' => 'https://mpdx.org/mail_chimp_webhook/111' }])
-        expect(account.gb).to_not receive(:list_webhook_add)
-        account.setup_webhooks
-      end
-    end
-
-    context '#add_greeting_merge_variable' do
-      before do
-        account.primary_list_id = 'list1'
-      end
-
-      it 'does not add a greeting merge variable if it already exists' do
-        merge_vars = [
-          { 'name' => 'Greeting', 'req' => false, 'field_type' => 'text', 'public' => true, 'show' => true,
-            'order' => '5', 'default' => '', 'helptext' => '', 'size' => '25', 'tag' => 'GREETING', 'id' => 3 }
-        ]
-        expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return(merge_vars)
-        expect(account.gb).to_not receive(:list_merge_var_add)
-        account.add_greeting_merge_variable(account.primary_list_id)
-      end
-
-      it 'adds the greeting merge variable if it does not exist' do
-        expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return([])
-        expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
-        account.add_greeting_merge_variable(account.primary_list_id)
-      end
-
-      it 'does not raise an error if the greeting variable added after call to check for it' do
-        expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return([])
-
-        msg = 'MailChimp API Error: A Merge Field with the tag "GREETING" already exists for this list. (code 254)'
-        expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
-          .and_raise(Gibbon::MailChimpError.new(msg))
-
-        expect { account.add_greeting_merge_variable(account.primary_list_id) }.to_not raise_error
-      end
-    end
-
-    context '#call_mailchimp' do
-      it 'raises an error to silently retry the job if it gets error code -50 (too many connections)' do
-        account.primary_list_id = 'list1'
-        account.active = true
-        msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
-        expect(account).to receive(:subscribe_person).with(1).and_raise(Gibbon::MailChimpError.new(msg))
-        expect do
-          account.call_mailchimp(:subscribe_person, 1)
-        end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
-      end
+    it 'does not create a webhook if it already exists' do
+      account.update(webhook_token: '111')
+      expect(account.gb).to receive(:list_webhooks)
+        .and_return([{ 'url' => 'https://mpdx.org/mail_chimp_webhook/111' }])
+      expect(account.gb).to_not receive(:list_webhook_add)
+      account.setup_webhooks
     end
   end
 

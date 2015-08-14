@@ -14,15 +14,16 @@ class MailChimpWebhookController < ApplicationController
       return
     end
 
+    handler = MailChimpHookHandler.new(@account.account_list)
     case hook_params[:type]
     when 'unsubscribe'
-      @account.unsubscribe_hook(data_param(:email))
+      handler.unsubscribe_hook(data_param(:email))
     when 'upemail'
-      @account.email_update_hook(data_param(:old_email), data_param(:new_email))
+      handler.email_update_hook(data_param(:old_email), data_param(:new_email))
     when 'cleaned'
-      @account.email_cleaned_hook(data_param(:email), data_param(:reason))
+      handler.email_cleaned_hook(data_param(:email), data_param(:reason))
     when 'campaign'
-      @account.campaign_status_hook(data_param(:id), data_param(:status), data_param(:subject))
+      handler.campaign_status_hook(data_param(:id), data_param(:status), data_param(:subject))
     end
     render nothing: true
   end

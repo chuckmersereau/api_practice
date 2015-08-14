@@ -5,7 +5,6 @@ describe MailChimpWebhookController do
   let!(:account) do
     create(:mail_chimp_account, account_list: account_list, webhook_token: 'token', active: true)
   end
-
   let(:unsubscribe_params) do
     {
       type: 'unsubscribe', fired_at: '2009-03-26 21:40:57',
@@ -18,10 +17,14 @@ describe MailChimpWebhookController do
       }
     }
   end
-
   let(:campaign_params) do
     { type: 'campaign', fired_at: '2009-03-26 21:31:21',
       data: { id: 'campaign1', subject: 'Subject', status: 'sent', reason: '', list_id: 'MyString' } }
+  end
+  let(:handler) { double }
+
+  before do
+    allow(MailChimpHookHandler).to receive(:new) { handler }
   end
 
   it 'returns 200 if you get the webhook index for a valid token' do
@@ -45,8 +48,8 @@ describe MailChimpWebhookController do
     expect(account).to eq(assigns(:account))
   end
 
-  it 'calls account hook on unsubscribe' do
-    expect_any_instance_of(MailChimpAccount).to receive(:unsubscribe_hook).with('api+unsub@mailchimp.com')
+  it 'calls handler hook on unsubscribe' do
+    expect(handler).to receive(:unsubscribe_hook).with('api+unsub@mailchimp.com')
     post_and_expect_success(unsubscribe_params)
   end
 
@@ -71,7 +74,7 @@ describe MailChimpWebhookController do
         new_email: 'api+new@mailchimp.com', old_email: 'api+old@mailchimp.com'
       }
     }
-    expect_any_instance_of(MailChimpAccount).to receive(:email_update_hook)
+    expect(handler).to receive(:email_update_hook)
       .with('api+old@mailchimp.com', 'api+new@mailchimp.com')
     post_and_expect_success(params)
   end
@@ -81,26 +84,25 @@ describe MailChimpWebhookController do
       type: 'cleaned', fired_at: '2009-03-26 22:01:00',
       data: { list_id: 'MyString', campaign_id: '4f', reason: 'hard', email: 'cleaned@mailchimp.com' }
     }
-    expect_any_instance_of(MailChimpAccount).to receive(:email_cleaned_hook)
+    expect(handler).to receive(:email_cleaned_hook)
       .with('cleaned@mailchimp.com', 'hard')
     post_and_expect_success(params)
   end
 
   it 'calls account hook on campaign sent' do
-    expect_any_instance_of(MailChimpAccount).to receive(:campaign_status_hook)
-      .with('campaign1', 'sent', 'Subject')
+    expect(handler).to receive(:campaign_status_hook).with('campaign1', 'sent', 'Subject')
     post_and_expect_success(campaign_params)
   end
 
   it 'renders success but does not call account hook method if for non-primary list' do
     unsubscribe_params[:data][:list_id] = 'other-list'
-    expect_any_instance_of(MailChimpAccount).to_not receive(:unsubscribe_hook)
+    expect(handler).to_not receive(:unsubscribe_hook)
     post_and_expect_success(unsubscribe_params)
   end
 
   it 'renders success but does not call account hook method if account is inactive' do
     account.update(active: false)
-    expect_any_instance_of(MailChimpAccount).to_not receive(:unsubscribe_hook)
+    expect(handler).to_not receive(:unsubscribe_hook)
     post_and_expect_success(unsubscribe_params)
   end
 end
