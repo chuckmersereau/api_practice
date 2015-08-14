@@ -66,7 +66,7 @@ namespace :mpdx do
   end
 
   task clear_stalled_downloads: :environment do
-    Person::OrganizationAccount.where('locked_at is not null and locked_at < ?', 2.days.ago).update_all(downloading: false, locked_at: nil)
+    Person::OrganizationAccount.clear_stalled_downloads
   end
 
   task timezones: :environment do

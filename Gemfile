@@ -84,6 +84,7 @@ gem 'ruby-rtf'
 gem 'savon', '~> 2.3.0'
 gem 'secure_headers'
 gem 'sidekiq-unique-jobs'
+gem 'sidekiq-cron'
 gem 'siebel_donations', '~> 1.0.5'
 gem 'sinatra', require: nil
 gem 'slim' # used for sidekiq web
@@ -91,7 +92,6 @@ gem 'twitter_cldr', '~> 2.4.0'
 # gem 'typhoeus'
 gem 'versionist', '~> 1.2.1'
 gem 'virtus', '~> 0.5.4'
-gem 'whenever', '~> 0.8.1'
 gem 'wicked', '~> 1.0.2'
 gem 'will_paginate', '~> 3.0.3'
 gem 'global_phone', git: 'https://github.com/sstephenson/global_phone.git'
@@ -117,7 +117,6 @@ group :development do
   gem 'quiet_assets'
   gem 'better_errors'
   gem 'binding_of_caller'
-  gem 'sidekiq'
   gem 'rack-livereload'
   gem 'guard-livereload', '~> 2.4', require: false
   # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
