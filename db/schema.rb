@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150807145306) do
+ActiveRecord::Schema.define(version: 20150814142759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 20150807145306) do
     t.boolean  "no_appeals"
     t.text     "prayer_letters_params"
     t.string   "pls_id"
+    t.text     "pls_params"
   end
 
   add_index "contacts", ["account_list_id"], name: "index_contacts_on_account_list_id", using: :btree
@@ -498,10 +499,12 @@ ActiveRecord::Schema.define(version: 20150807145306) do
     t.string   "webhook_token"
   end
 
+  add_index "mail_chimp_accounts", ["account_list_id"], name: "index_mail_chimp_accounts_on_account_list_id", using: :btree
+
   create_table "mail_chimp_appeal_lists", force: true do |t|
-    t.integer  "mail_chimp_account_id"
-    t.string   "appeal_list_id"
-    t.integer  "appeal_id"
+    t.integer  "mail_chimp_account_id", null: false
+    t.string   "appeal_list_id",        null: false
+    t.integer  "appeal_id",             null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
