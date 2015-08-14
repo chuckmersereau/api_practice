@@ -56,5 +56,26 @@ describe HomeController do
         expect(response).to render_template('home/_donations_summary_chart')
       end
     end
+
+    describe '#check_welcome_stages' do
+      it 'removes completed steps' do
+        al = @user.account_lists.first
+        @user.update_attribute(:setup, [:import, :goal, :contacts])
+        al.update_attribute(:monthly_goal, 100)
+        4.times { |i| al.contacts << create(:contact, name: i) }
+        2.times { create(:tnt_import, user: @user) }
+        get 'index'
+        expect(@user.reload.setup).to_not include :goal
+        expect(@user.reload.setup).to_not include :contacts
+        expect(@user.reload.setup).to_not include :import
+      end
+    end
+  end
+
+  describe '#privacy' do
+    it 'succeeds' do
+      get 'privacy'
+      expect(response).to be_success
+    end
   end
 end
