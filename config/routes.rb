@@ -1,4 +1,5 @@
 require 'sidekiq/web'
+require 'sidekiq/cron/web'
 require 'rollout_ui/server'
 
 Rails.application.routes.draw do
