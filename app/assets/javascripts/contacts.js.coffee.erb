@@ -309,29 +309,6 @@ $ ->
         false
 
       $.mpdx.sortableTabs('contact')
-      # Add referrals
-      $(document).on 'ajax:before', '.add_referrals', ->
-        $('#referrals_modal').dialog {
-          height: 675,
-          buttons: [
-            {
-              text: __('Save'),
-              click: ->
-                window.onbeforeunload = undefined
-                $('form', this).submit()
-                $('.form_wrapper', this).html('<%= image_tag('spinner.gif') %>')
-                $(this).dialog( "option", "buttons", [])
-            },
-            {
-              text: __('Cancel'),
-              click: ->
-                $(this).dialog('close')
-            }
-          ],
-          close: ->
-            $('#referrals_modal form').removeClass('dirty')
-        }
-
 
       # Filter contact list
       $(document).on 'keyup', '#contact_name', ->

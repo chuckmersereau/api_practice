@@ -17,9 +17,7 @@ describe GoogleContactSync do
     )
   end
 
-  before do
-    stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*}).to_return(body: '[]')
-  end
+  before { stub_smarty_streets }
 
   describe 'sync_notes' do
     describe 'first sync' do

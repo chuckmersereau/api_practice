@@ -116,6 +116,8 @@ Rails.application.routes.draw do
       get  :find_duplicates
       put :not_duplicates
       post :send_to_chalkline
+      get :add_multi
+      post :save_multi
     end
     member do
       get :add_referrals

@@ -158,6 +158,11 @@ def stub_google_geocoder
   stub_request(:get, %r{maps\.googleapis\.com/maps/api.*}).to_return(body: '{}')
 end
 
+def stub_smarty_streets
+  stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*})
+    .to_return(body: '[]')
+end
+
 class FakeApi
   def initialize(*_args)
   end

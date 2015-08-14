@@ -103,11 +103,12 @@
                   <div class="text-right navbar-quick">
                     <div class="dropdown">
                       <a class="dropdown-toggle btn btn-secondary" href="#" type="button" id="quick-drop" data-toggle="dropdown" aria-expanded="true" data-disabled="true"  onClick="_gaq.push(['_trackEvent', 'Global Events', 'Actions', 'Quick Add']);">
-                        <i class="fa fa-plus-circle"></i> Quick Add
+                        <i class="fa fa-plus-circle"></i> <%= _('Quick Add') %>
                       </a>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="quick-drop">
                         <li role="presentation"><%= link_to(_('Add Task'), new_task_path, id: 'add_task_button', class: 'add_task', remote: true) %></li>
                         <li role="presentation"><%= link_to(_('Add Contact'), new_contact_path, class: '') %></li>
+                        <li role="presentation"><%= link_to(_('Multiple Contacts'), add_multi_contacts_path, remote: true, class: '') %></li>
                       </ul>
                     </div>
                   </div>
@@ -188,6 +189,10 @@
     </div>
     <div id="mini_contact_modal" title="<%= _('Contact Details') %>" style="display:none">
     </div>
+    <div id="referrals_modal" style="display:none">
+      <%= spinner(visible: true) %>
+    </div>
+
     <div id="toastPopup" style="display: none;"></div>
     <script type="text/javascript">
       window.current_currency = "<%= current_currency %>";

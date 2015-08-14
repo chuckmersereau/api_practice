@@ -13,7 +13,7 @@ class ContactFilter
     @contacts = filtered_contacts = contacts
 
     if filters.present?
-      if @filters[:ids]
+      if @filters[:ids].present?
         filtered_contacts = filtered_contacts.where('contacts.id' => @filters[:ids].split(','))
       end
 

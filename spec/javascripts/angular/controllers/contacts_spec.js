@@ -22,6 +22,7 @@ describe('contacts', function() {
     it('reset filter should clear filters', function() {
         var controller = createController();
 
+        $scope.contactQuery.ids = '1,2';
         $scope.contactQuery.tags = ['test'];
         $scope.contactQuery.name = 'Steve';
         $scope.contactQuery.type = 'person';
@@ -35,6 +36,7 @@ describe('contacts', function() {
 
         $scope.resetFilters();
 
+        expect($scope.contactQuery.ids).toEqual('');
         expect($scope.contactQuery.tags).toEqual(['']);
         expect($scope.contactQuery.name).toEqual('');
         expect($scope.contactQuery.type).toEqual('');
@@ -64,7 +66,7 @@ describe('contacts', function() {
         window.current_account_list_id = 1;
 
         //get user view filters
-        $httpBackend.when("GET", "/api/v1/users/me").respond({"user": {"preferences": {"contacts_filter": {"1": {"tags": "", "name": "",
+        $httpBackend.when("GET", "/api/v1/users/me").respond({"user": {"preferences": {"contacts_filter": {"1": {"ids": "", "tags": "", "name": "",
             "type": "", "city": [""], "state": [""], "newsletter": "", "status": [""], "likely": [""], "church": [""], "referrer": [""],
             "timezone": [""], "relatedTaskAction": [""], "appeal": [""], "pledge_frequencies": [""], "pledge_received": "",
             "contact_info_email": "", "contact_info_phone": "", "contact_info_mobile": "", "contact_info_addr": "", "contact_info_facebook": ""},

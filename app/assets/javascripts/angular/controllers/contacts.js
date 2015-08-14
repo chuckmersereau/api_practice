@@ -7,6 +7,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
     $scope.contactQuery = {
         limit: 25,
         page: 1,
+        ids: '',
         tags: [''],
         name: '',
         type: '',
@@ -44,6 +45,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
 
     $scope.resetFilters = function(){
         $scope.contactQuery.tags = [''];
+        $scope.contactQuery.ids = '';
         $scope.contactQuery.name = '';
         $scope.contactQuery.type = '';
         $scope.contactQuery.activeAddresses = true;
@@ -92,6 +94,9 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
 
         if(_.isNull(prefs)){
             return;
+        }
+        if(angular.isDefined(prefs.ids)){
+            $scope.contactQuery.ids = prefs.ids;
         }
         if(angular.isDefined(prefs.tags)){
             $scope.contactQuery.tags = prefs.tags.split(',');
@@ -248,6 +253,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
             requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
                 '&per_page=' + q.limit +
                 '&page=' + q.page +
+                '&filters[ids]=' + encodeURIComponent(q.ids) +
                 '&filters[name]=' + encodeURIComponent(q.name) +
                 '&filters[contact_type]=' + encodeURIComponent(q.type) +
                 '&filters[address_historic]=' + encodeURIComponent(!q.activeAddresses) +
@@ -315,6 +321,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         //Save View Prefs
         var prefsToSave = {
           tags: q.tags.join(),
+          ids: q.ids,
           name: q.name,
           type: q.type,
           city: q.city,
@@ -354,7 +361,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
     var isEmptyFilter = function (q) {
       if (!_.isEmpty(_.without(q.tags, '')) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
           !_.isEmpty(_.without(q.city, '')) || !_.isEmpty(_.without(q.state, '')) ||
-          !_.isEmpty(_.without(q.region, '')) ||
+          !_.isEmpty(_.without(q.region, '')) || !_.isEmpty(q.ids) ||
           !_.isEmpty(_.without(q.metro_area, '')) ||
           !_.isEmpty(_.without(q.country, '')) || !_.isEmpty(q.newsletter) ||
           !_.isEmpty(_.without(q.likely, '')) ||

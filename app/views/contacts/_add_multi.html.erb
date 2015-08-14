@@ -1,5 +1,5 @@
 <div class="form_wrapper">
-  <%= form_for current_account_list, url: save_referrals_contact_path(@contact), method: :post, remote: true do |f| %>
+  <%= form_for current_account_list, url: @save_path, method: :post, remote: true do |f| %>
     <table border="0" class="referrals_table">
       <tr>
         <th><%= _('First') %></th>
@@ -17,7 +17,7 @@
       </tr>
       <% 15.times do %>
         <%= f.fields_for :contacts, Contact.new do |cf| %>
-          <%= render 'contacts/referral_fields', builder: cf %>
+          <%= render 'contacts/add_multi_fields', builder: cf %>
         <% end %>
       <% end %>
     </table>
