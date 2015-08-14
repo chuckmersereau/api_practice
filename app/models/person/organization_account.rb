@@ -36,6 +36,10 @@ class Person::OrganizationAccount < ActiveRecord::Base
     false
   end
 
+  def self.clear_stalled_downloads
+    where('locked_at is not null and locked_at < ?', 2.days.ago).update_all(downloading: false, locked_at: nil)
+  end
+
   def requires_username_and_password?
     organization.api(self).requires_username_and_password? if organization
   end
