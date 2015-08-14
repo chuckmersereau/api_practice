@@ -20,17 +20,12 @@ class PlsAccount < ActiveRecord::Base
                .select(&:should_be_in_prayer_letters?)
     contacts.each(&method(:add_or_update_contact))
 
-    # Using PLS api put method below is buggy, so for now we can't use it.
-    #
-    # contact_subscribe_params = contacts.map { |c| contact_params(c, true) }
-    # contact_params_map = Hash[contacts.map { |c| [c.id, contact_params(c)] }]
-    #
-    # # Delete the existing contacts first
-    # contacts.select { |c| c.pls_id.present? }.each(&method(:delete_contact))
-    #
-    # get_response(:put, '/api/v1/contacts', { contacts: contact_subscribe_params }.to_json, 'application/json')
-    # account_list.contacts.update_all(pls_id: nil, pls_params: nil)
-    # import_list(contact_params_map)
+    contact_subscribe_params = contacts.map { |c| contact_params(c, true) }
+    contact_params_map = Hash[contacts.map { |c| [c.id, contact_params(c)] }]
+
+    get_response(:put, '/api/v1/contacts', { contacts: contact_subscribe_params }.to_json, 'application/json')
+    account_list.contacts.update_all(pls_id: nil, pls_params: nil)
+    import_list(contact_params_map)
   end
 
   def import_list(contact_params_map = nil)
@@ -47,10 +42,6 @@ class PlsAccount < ActiveRecord::Base
 
   def active?
     valid_token?
-  end
-
-  def contacts(params = {})
-    JSON.parse(get_response(:get, '/api/v1/contacts?' + params.map { |k, v| "#{k}=#{v}" }.join('&')))['contacts']
   end
 
   def add_or_update_contact(contact)
