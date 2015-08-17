@@ -73,10 +73,12 @@ describe DonationsController do
     end
 
     it "doesn't create a donation when passed invalid attributes" do
-      put :create, format: :js, donation: { tendered_amount: '', donation_date: '' }
-      expect(response).to render_template :new
-      put :create, format: :js, contact_id: contact.id, donation: { tendered_amount: '', donation_date: '' }
-      expect(response).to render_template :new
+      expect do
+        put :create, format: :js, donation: { tendered_amount: '', donation_date: '' }
+      end.to_not change(Donation, :count)
+      expect do
+        put :create, format: :js, contact_id: contact.id, donation: { tendered_amount: '', donation_date: '' }
+      end.to_not change(Donation, :count)
     end
   end
 
@@ -88,7 +90,7 @@ describe DonationsController do
       put :update, format: :js, id: donation.id, donation: { tendered_amount: '1000' }
       expect(donation.reload.tendered_amount).to eq 1000
     end
-    it 'updates a donation when passed invalid attributes' do
+    it 'redirects when passed invalid attributes' do
       put :update, format: :js, id: donation.id, donation: {
         'donation_date(1i)': '',
         'donation_date(2i)': '',
