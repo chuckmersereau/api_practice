@@ -190,4 +190,16 @@ describe Address do
       expect(build(:address, street: nil).csv_street).to be_nil
     end
   end
+
+  context '#csv_country' do
+    let(:address) { create(:address, country: 'Test Country') }
+
+    it 'returns blank when the passed in country equals the address country' do
+      expect(address.csv_country('Test Country')).to eq('')
+    end
+
+    it 'returns the country when none is passed in' do
+      expect(address.csv_country('')).to eq(address.country)
+    end
+  end
 end

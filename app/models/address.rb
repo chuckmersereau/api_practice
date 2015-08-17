@@ -112,6 +112,14 @@ class Address < ActiveRecord::Base
     street.gsub("\r\n", "\n").strip if street
   end
 
+  def csv_country(country)
+    if self.country == country
+      ''
+    else
+      self.country
+    end
+  end
+
   private
 
   def set_manual_source_if_user_changed
