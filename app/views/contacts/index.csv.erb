@@ -20,10 +20,10 @@
     row << contact.mailing_address.city
     row << contact.mailing_address.state
     row << contact.mailing_address.postal_code
-    row << if contact.mailing_address.country != current_account_list.account_list_country
+    row << if contact.mailing_address.country != contact.account_list.account_list_country
              contact.mailing_address.country
            else
-             ''
+             '' #insert a blank row when contact's country is the same as the account list's home country
            end
     row << contact.status
     row << contact.pledge_amount

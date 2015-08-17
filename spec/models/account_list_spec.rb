@@ -359,8 +359,8 @@ describe AccountList do
   context '#account_list_country' do
     let(:account_list) { create(:account_list)}
 
-    it 'returns a blank when the tag is not present' do
-      expect(account_list.account_list_country).to eq('')
+    it 'returns None blank when the tag is not present' do
+      expect(account_list.account_list_country).to eq('None')
     end
 
     it 'returns the country that has been saved' do
