@@ -85,8 +85,7 @@ class PreferenceSet
   def persist!
     user.update_attributes(first_name: first_name, email: email, time_zone: time_zone,
                            locale: locale, default_account_list: default_account_list, setup: setup_array)
-    account_list.update(monthly_goal: monthly_goal, tester: tester,
-                                   home_country: home_country)
+    account_list.update(monthly_goal: monthly_goal, tester: tester, home_country: home_country)
     account_list.save
   end
 
