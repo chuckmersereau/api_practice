@@ -112,11 +112,11 @@ class Address < ActiveRecord::Base
     street.gsub("\r\n", "\n").strip if street
   end
 
-  def csv_country(country)
-    if self.country == country
+  def csv_country(home_country)
+    if country == home_country
       ''
     else
-      self.country
+      country
     end
   end
 
