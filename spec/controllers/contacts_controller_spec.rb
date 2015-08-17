@@ -99,6 +99,12 @@ describe ContactsController do
         csv = CSV.parse(response.body)
         expect(csv.second).to include "Attn: Test\n123 Street"
       end
+
+      it 'accepts and saves per_page option' do
+        get :index, per_page: 100
+        view_opts = user.reload.contacts_view_options[user.account_lists.first.id.to_s]
+        expect(view_opts[:per_page]).to eq '100'
+      end
     end
 
     describe '#show' do
@@ -159,10 +165,18 @@ describe ContactsController do
 
     describe '#destroy' do
       it 'should hide a contact' do
-        contact # instantiate object
         delete :destroy, id: contact.id
-
         expect(contact.reload.status).to eq('Never Ask')
+      end
+    end
+
+    describe '#bulk_destroy' do
+      it 'should hide multiple contacts' do
+        c2 = create(:contact, account_list: user.account_lists.first)
+        delete :bulk_destroy, ids: [contact.id, c2.id]
+
+        expect(contact.reload.status).to eq 'Never Ask'
+        expect(c2.reload.status).to eq 'Never Ask'
       end
     end
 
@@ -173,12 +187,24 @@ describe ContactsController do
       end
 
       it "correctly updates the 'next ask' field" do
-        xhr :put, :bulk_update,  'bulk_edit_contact_ids' => contact.id, 'contact' => { 'next_ask(2i)' => '3', 'next_ask(3i)' => '3', 'next_ask(1i)' => '2012' }
+        xhr :put, :bulk_update,  bulk_edit_contact_ids: contact.id, contact:
+                    { 'next_ask(2i)': '3', 'next_ask(3i)': '3', 'next_ask(1i)': '2012' }
         expect(contact.reload.next_ask).to eq(Date.parse('2012-03-03'))
       end
 
+      it 'queues MailChimp sync' do
+        queued = false
+        allow_any_instance_of(MailChimpAccount).to receive(:queue_subscribe_contact) do
+          queued = true
+        end
+        create(:mail_chimp_account, account_list: user.account_lists.first)
+        xhr :put, :bulk_update, bulk_edit_contact_ids: contact.id, contact: { send_newsletter: 'Email' }
+        expect(queued).to be true
+      end
+
       it "ignores a partial 'next ask' value" do
-        xhr :put, :bulk_update,  'bulk_edit_contact_ids' => contact.id, 'contact' => { 'next_ask(3i)' => '3', 'next_ask(1i)' => '2012' }
+        xhr :put, :bulk_update,  bulk_edit_contact_ids: contact.id, contact:
+                    { 'next_ask(3i)': '3', 'next_ask(1i)': '2012' }
         expect(contact.reload.next_ask).to be_nil
       end
     end
@@ -200,11 +226,21 @@ describe ContactsController do
     describe '#save_referrals' do
       it 'creates a contact and sets the referrer' do
         expect do
-          xhr :post, :save_referrals, id: contact.id,
-                                      account_list: { contacts_attributes: { 0 => { first_name: 'John', street: '1 Way' } } }
+          xhr :post, :save_referrals, id: contact.id, account_list:
+                       { contacts_attributes: { 0 => { first_name: 'John', street: '1 Way' } } }
         end.to change(Contact, :count).by(1)
         expect(Contact.last.first_name).to eq('John')
         expect(Contact.last.referrals_to_me.to_a).to eq([contact])
+      end
+    end
+
+    describe '#save_multi' do
+      it 'creates a contact' do
+        expect do
+          xhr :post, :save_multi, account_list:
+                       { contacts_attributes: { 0 => { first_name: 'John', street: '1 Way' } } }
+        end.to change(Contact, :count).by(1)
+        expect(Contact.last.first_name).to eq('John')
       end
     end
 
