@@ -75,7 +75,7 @@ class ReportsController < ApplicationController
         @total_pledges += row[:pledge_amount] / (row[:pledge_frequency] || 1)
       end
 
-      if !row[:pledge_frequency].nil? && row[:pledge_frequency].to_f <= 1.0
+      if row[:pledge_frequency] && row[:pledge_frequency].to_f <= 1.0
         # If someone gives monthly and they gave, e.g. $50/month for the past four month
         # and not before that, then assume they are a new ministry partner and their average
         # should be $50/month.
