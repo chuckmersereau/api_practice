@@ -33,7 +33,5 @@ public/mobile
 node_modules
 public/dev-assets
 .vagrant
-.env.local
-.env.development
-.env.production
+.env.*
 logfile
