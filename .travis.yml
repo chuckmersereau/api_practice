@@ -5,8 +5,8 @@ services:
 - memcache
 - redis-server
 script:
-- bundle exec rspec spec/ --tag js
 - bundle exec rake spec
+- bundle exec rspec spec/ --tag js
 - bundle exec rake coveralls:push
 - bundle exec rake karma:run
 - bundle exec rubocop -R
