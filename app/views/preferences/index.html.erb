@@ -98,7 +98,7 @@
               <div class="col-md-8">
                 <div class="form-group">
                   <%=  f.label _('Exclude your home country from the contacts export file here') %>
-                  <%= f.country_select :home_country, ['None'], {},
+                  <%= f.country_select :home_country, [nil], {},
                                    {class: 'country_select form-control'} %>
                 </div>
               </div>
