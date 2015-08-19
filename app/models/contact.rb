@@ -506,7 +506,9 @@ class Contact < ActiveRecord::Base
   end
 
   def sync_with_mail_chimp
+    mail_chimp_account = account_list.mail_chimp_account
     return unless mail_chimp_account
+    # binding.pry
     MailChimpSync.new(mail_chimp_account).sync_contacts
 
   #   mail_chimp_account = account_list.mail_chimp_account

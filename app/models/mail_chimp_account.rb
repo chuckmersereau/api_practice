@@ -223,7 +223,17 @@ class MailChimpAccount < ActiveRecord::Base
 
   def setup_webhooks_and_subscribe_contacts
     setup_webhooks
-    subscribe_contacts
+    MailChimpSync.new(self).sync_contacts
+    create_missing_member_records
+  end
+
+  def create_missing_member_records
+    actual_emails = list_members(primary_list_id).map { |m| m['email'] }
+    recorded_emails = mail_chimp_members.where(email: actual_emails).pluck(:email)
+    create_emails = (actual_emails.to_set - recorded_emails.to_set).to_a
+    create_emails.each do |email|
+      mail_chimp_members.create(list_id: primary_list_id, email: email)
+    end
   end
 
   def subscribe_contacts(contact_ids = nil, list_id = primary_list_id)

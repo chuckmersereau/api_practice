@@ -73,7 +73,6 @@ class Person < ActiveRecord::Base
 
   before_create :find_master_person
   after_destroy :clean_up_master_person, :clean_up_contact_people
-  after_commit :sync_with_mailchimp
 
   before_save :deceased_check
   after_save :touch_contacts

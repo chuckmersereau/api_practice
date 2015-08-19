@@ -9,8 +9,6 @@ class EmailAddress < ActiveRecord::Base
   belongs_to :person, touch: true
   validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
   before_save :strip_email
-  after_save :sync_with_mail_chimp
-  after_destroy :delete_from_mailchimp
 
   def to_s
     email
