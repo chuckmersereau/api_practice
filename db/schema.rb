@@ -512,6 +512,23 @@ ActiveRecord::Schema.define(version: 20150814142759) do
   add_index "mail_chimp_appeal_lists", ["appeal_list_id"], name: "index_mail_chimp_appeal_lists_on_appeal_list_id", using: :btree
   add_index "mail_chimp_appeal_lists", ["mail_chimp_account_id"], name: "index_mail_chimp_appeal_lists_on_mail_chimp_account_id", using: :btree
 
+  create_table "mail_chimp_members", force: true do |t|
+    t.integer  "mail_chimp_account_id", null: false
+    t.string   "list_id",               null: false
+    t.string   "email",                 null: false
+    t.string   "status"
+    t.string   "greeting"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mail_chimp_members", ["email"], name: "index_mail_chimp_members_on_email", using: :btree
+  add_index "mail_chimp_members", ["list_id"], name: "index_mail_chimp_members_on_list_id", using: :btree
+  add_index "mail_chimp_members", ["mail_chimp_account_id", "list_id", "email"], name: "mail_chimp_members_email_list_account_uniq", unique: true, using: :btree
+  add_index "mail_chimp_members", ["mail_chimp_account_id"], name: "index_mail_chimp_members_on_mail_chimp_account_id", using: :btree
+
   create_table "master_addresses", force: true do |t|
     t.text     "street"
     t.string   "city"

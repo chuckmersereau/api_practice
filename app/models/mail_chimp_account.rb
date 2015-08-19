@@ -9,6 +9,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   belongs_to :account_list
   has_one :mail_chimp_appeal_list, dependent: :destroy
+  has_many :mail_chimp_members
 
   # attr_accessible :api_key, :primary_list_id
   attr_reader :validation_error
@@ -173,6 +174,7 @@ class MailChimpAccount < ActiveRecord::Base
     return if list_id.blank?
     gb.list_batch_unsubscribe(id: list_id, emails: members_to_unsubscribe,
                               delete_member: true, send_goodbye: false, send_notify: false)
+    mail_chimp_members.where(list_id: list_id, email: members_to_unsubscribe).destroy_all
   end
 
   def subscribe_email(email)
@@ -234,7 +236,7 @@ class MailChimpAccount < ActiveRecord::Base
     contacts = contacts.where(id: contact_ids) if contact_ids
     contacts = contacts.where(send_newsletter: %w(Email Both)) if enewsletter_only
     contacts.includes(people: :primary_email_address)
-      .where('email_addresses.email is not null')
+      .where.not(email_addresses: { historic: true })
       .references('email_addresses')
   end
 
@@ -244,8 +246,21 @@ class MailChimpAccount < ActiveRecord::Base
     statuses = contacts.map(&:status).compact.uniq
     add_status_groups(list_id, statuses)
     add_greeting_merge_variable(list_id)
-    gb.list_batch_subscribe(id: list_id, batch: batch_params(contacts), update_existing: true,
+
+    members_params = batch_params(contacts)
+    gb.list_batch_subscribe(id: list_id, batch: members_params, update_existing: true,
                             double_optin: false, send_welcome: false, replace_interests: true)
+    create_member_records(members_params)
+  end
+
+  def create_member_records(members_params)
+    members_params.each do |params|
+      member = mail_chimp_members.find_or_create_by(list_id: primary_list_id, email: params[:EMAIL])
+      groupings = params[:GROUPINGS].try(:first)
+      status = groupings ? groupings[:groups] : nil
+      member.update(first_name: params[:FNAME], last_name: params[:LNAME], 
+                    greeting: params[:GREETING], status: status)
+    end
   end
 
   def batch_params(contacts)
@@ -321,6 +336,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def setup_webhooks
+    return if Rails.env.development?
     return if webhook_token.present? &&
               gb.list_webhooks(id: primary_list_id).find { |hook| hook['url'] == webhook_url }
 

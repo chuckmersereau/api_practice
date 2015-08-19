@@ -506,19 +506,23 @@ class Contact < ActiveRecord::Base
   end
 
   def sync_with_mail_chimp
-    mail_chimp_account = account_list.mail_chimp_account
     return unless mail_chimp_account
-    return unless mail_chimp_related_changes? || people.any?(&:mail_chimp_related_changes?)
+    MailChimpSync.new(mail_chimp_account).sync_contacts
 
-    if send_email_letter?
-      mail_chimp_account.queue_subscribe_contact(self)
-    else
-      mail_chimp_account.queue_unsubscribe_contact(self)
-    end
+  #   mail_chimp_account = account_list.mail_chimp_account
+  #   return unless mail_chimp_account
+  #   return unless mail_chimp_related_changes? || people.any?(&:mail_chimp_related_changes?)
 
-    # This is needed because HasPrimary's after_commit handler will reset the person's previous_changes
-    # value in some cases.
-    people.each(&:sync_with_mailchimp)
+  #   if send_email_letter?
+  #     mail_chimp_account.queue_subscribe_contact(self)
+  #   else
+  #     mail_chimp_account.queue_unsubscribe_contact(self)
+  #   end
+
+  #   # This is needed because HasPrimary's after_commit handler will reset the person's previous_changes
+  #   # value in some cases.
+  #   people.each(&:sync_with_mailchimp)
+
   end
 
   def mail_chimp_related_changes?

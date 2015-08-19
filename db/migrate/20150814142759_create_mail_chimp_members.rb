@@ -15,6 +15,7 @@ class CreateMailChimpMembers < ActiveRecord::Migration
     add_index :mail_chimp_members, :mail_chimp_account_id
     add_index :mail_chimp_members, :list_id
     add_index :mail_chimp_members, :email
-    add_index :mail_chimp_members, [:mail_chimp_account_id, :list_id, :email], unique: true
+    add_index :mail_chimp_members, [:mail_chimp_account_id, :list_id, :email], 
+      unique: true, name: :mail_chimp_members_email_list_account_uniq
   end
 end
