@@ -20,7 +20,7 @@
     row << contact.mailing_address.city
     row << contact.mailing_address.state
     row << contact.mailing_address.postal_code
-    row << contact.mailing_address.country
+    row << contact.mailing_address.csv_country(contact.account_list.home_country)
     row << contact.status
     row << contact.pledge_amount
     row << Contact.pledge_frequencies[contact.pledge_frequency || 1.0]

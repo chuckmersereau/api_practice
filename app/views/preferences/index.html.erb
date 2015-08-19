@@ -43,7 +43,9 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <%= f.label :locale, _('Language') %>
-                  <%= f.select :locale, TwitterCldr::Shared::Languages.all_for(locale).select { |k, _| TwitterCldr.supported_locales.include?(k) }.invert, {selected: locale}, {class: 'form-control'} %>
+                  <%= f.select :locale, TwitterCldr::Shared::Languages.all_for(locale)
+                              .select { |k, _| TwitterCldr.supported_locales.include?(k) }.invert,
+                              {selected: locale}, {class: 'form-control'} %>
                 </div>
               </div>
             </div>
@@ -63,7 +65,8 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <%= f.label :default_account_list, _('Default Account List') %>
-                  <%= f.select :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {}, {class: 'form-control'} %>
+                  <%= f.select :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {},
+                               {class: 'form-control'} %>
                 </div>
               </div>
             </div>
@@ -88,6 +91,16 @@
             <div class="row spacer-bottom">
               <div class="col-md-12">
                 <button class="btn btn-secondary" id="preference_reset_welcome"><%= _('Reset Welcome Tour') %></button>
+              </div>
+            </div>
+
+            <div class="row spacer-bottom">
+              <div class="col-md-8">
+                <div class="form-group">
+                  <%=  f.label _('Exclude your home country from the contacts export file here') %>
+                  <%= f.country_select :home_country, ['None'], {},
+                                   {class: 'country_select form-control'} %>
+                </div>
               </div>
             </div>
 
