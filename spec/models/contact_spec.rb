@@ -570,62 +570,20 @@ describe Contact do
   end
 
   context '#sync_with_mailchimp' do
-    let(:mail_chimp_account) { build(:mail_chimp_account) }
-    before do
-      account_list.update(mail_chimp_account: mail_chimp_account)
-      contact.update(send_newsletter: 'Email')
+    it 'gets called when the contact is changed' do
+      expect(contact).to receive(:sync_with_mail_chimp)
+      contact.update(status: 'Changed')
     end
 
-    it 'queues subscribe if the send newsletter changed to include email' do
-      contact.update_column(:send_newsletter, 'None')
-      expect(mail_chimp_account).to receive(:queue_subscribe_contact).with(contact)
-      contact.update(send_newsletter: 'Email')
+    it 'calls contact_changed if the account exists' do
+      mc_account = build(:mail_chimp_account)
+      account_list.mail_chimp_account = mc_account
+      expect(mc_account).to receive(:contact_changed).with(contact)
+      contact.send(:sync_with_mail_chimp)
     end
 
-    it 'queues unsubscribe if send newsletter is changed to not include email' do
-      expect(mail_chimp_account).to receive(:queue_unsubscribe_contact).with(contact)
-      contact.update(send_newsletter: 'Physical')
-    end
-
-    it 'queues subscribe (for update) if greeting changed' do
-      expect(mail_chimp_account).to receive(:queue_subscribe_contact).with(contact)
-      contact.update(greeting: 'new greeting')
-    end
-
-    it 'queues subscribe (for update) if status changed' do
-      expect(mail_chimp_account).to receive(:queue_subscribe_contact).with(contact)
-      contact.update(status: 'Ask in Future')
-    end
-
-    # This case is relevant because HasPrimary's after_commit handler will cause the person instance's
-    # previous_changes field to be cleared so the check for people to sync to mail chimp needs to
-    # occur in Contact#sync_with_mail_chimp as well
-    describe 'person nest attributes updates with email specified' do
-      let(:person) { create(:person) }
-      before do
-        contact.people << person
-        person.reload
-        person.email_address = { email: 'test2@example.com' }
-      end
-
-      def update_opt_out_nested(opt_out)
-        person_attributes = {
-          id: person.id, optout_enewsletter: opt_out ? 1 : 0,
-          email_addresses_attributes: [{ id: person.email_addresses.first.id, email: 'update@test.com' }]
-        }
-        contact.update(people_attributes: [person_attributes])
-      end
-
-      it 'queues an unsubscribe for nested person if opt out of enewsletter' do
-        expect_any_instance_of(MailChimpAccount).to receive(:queue_unsubscribe_person)
-        update_opt_out_nested(true)
-      end
-
-      it 'queues a subscribe for nested person if opt out becomes unset' do
-        person.update_column(:optout_enewsletter, true)
-        expect_any_instance_of(MailChimpAccount).to receive(:queue_subscribe_person)
-        update_opt_out_nested(false)
-      end
+    it 'does not error if there is no mail chimp account' do
+      expect { contact.send(:sync_with_mail_chimp) }.to_not raise_error
     end
   end
 

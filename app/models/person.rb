@@ -393,21 +393,6 @@ class Person < ActiveRecord::Base
       other.not_duplicated_with.to_s.split(',').include?(id.to_s)
   end
 
-  def mail_chimp_related_changes?
-    (previous_changes.keys & %w(optout_enewsletter first_name last_name)).present?
-  end
-
-  def sync_with_mailchimp
-    return unless mail_chimp_account
-    return unless mail_chimp_related_changes?
-
-    if contact.send_email_letter? && !self.optout_enewsletter?
-      mail_chimp_account.queue_subscribe_person(self)
-    else
-      mail_chimp_account.queue_unsubscribe_person(self)
-    end
-  end
-
   private
 
   def find_master_person
@@ -422,10 +407,6 @@ class Person < ActiveRecord::Base
 
   def clean_up_contact_people
     contact_people.destroy_all
-  end
-
-  def mail_chimp_account
-    @mail_chimp_account ||= contact.account_list.mail_chimp_account if contact
   end
 
   def touch_contacts

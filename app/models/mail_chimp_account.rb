@@ -20,6 +20,9 @@ class MailChimpAccount < ActiveRecord::Base
   before_create :set_active
   after_save :queue_import_if_list_changed
 
+  def contact_changed(contact)
+  end
+
   def lists
     return [] unless api_key.present?
     @list_response ||= gb.lists
