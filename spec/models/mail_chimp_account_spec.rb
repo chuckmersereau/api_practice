@@ -129,36 +129,6 @@ describe MailChimpAccount do
         end.to change(MailChimpMember, :count).by(-1)
       end
 
-      it 'subscribes a single contact' do
-        contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        contact.people << create(:person, email: 'foo@example.com')
-
-        expect(account).to receive(:export_to_list)
-          .with(account.primary_list_id, [contact].to_set).and_return(true)
-        account.send(:subscribe_contacts, contact.id)
-      end
-
-      it 'subscribes multiple contacts' do
-        contact1 = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        contact1.people << create(:person, email: 'foo@example.com')
-
-        contact2 = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        contact2.people << create(:person, email: 'foo@example.com')
-
-        expect(account).to receive(:export_to_list)
-          .with(account.primary_list_id, [contact1, contact2].to_set).and_return(true)
-        account.send(:subscribe_contacts, [contact1.id, contact2.id])
-      end
-
-      it 'subscribes all contacts' do
-        contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        contact.people << create(:person, email: 'foo@example.com')
-
-        expect(account).to receive(:export_to_list)
-          .with(account.primary_list_id, [contact].to_set).and_return(true)
-        account.send(:subscribe_contacts)
-      end
-
       it 'exports to a list and saves mail chimp member records' do
         account.primary_list_id = 'list1'
         account.save
@@ -242,7 +212,7 @@ describe MailChimpAccount do
     end
 
     context '#contacts_with_email_addresses' do
-      let(:contact) do 
+      let(:contact) do
         create(:contact, name: 'John Smith', send_newsletter: 'Email', account_list: account_list)
       end
       let(:person) { create(:person) }
@@ -325,9 +295,9 @@ describe MailChimpAccount do
       account.primary_list_id = 'list1'
       account.active = true
       msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
-      expect(account).to receive(:subscribe_contacts).with(1).and_raise(Gibbon::MailChimpError.new(msg))
+      expect(account).to receive(:sync_contacts).with(1).and_raise(Gibbon::MailChimpError.new(msg))
       expect do
-        account.call_mailchimp(:subscribe_contacts, 1)
+        account.call_mailchimp(:sync_contacts, 1)
       end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
     end
   end

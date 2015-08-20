@@ -134,11 +134,6 @@ class MailChimpAccount < ActiveRecord::Base
     MailChimpSync.new(self).sync_contacts
   end
 
-  def subscribe_contacts(contact_ids = nil, list_id = primary_list_id)
-    contacts = contacts_with_email_addresses(contact_ids)
-    export_to_list(list_id, contacts.to_set)
-  end
-
   def contacts_with_email_addresses(contact_ids, enewsletter_only = true)
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
