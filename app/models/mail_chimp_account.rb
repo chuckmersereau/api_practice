@@ -54,7 +54,7 @@ class MailChimpAccount < ActiveRecord::Base
     active? && validate_key
   end
 
-  def notify_contact_changed(contact)
+  def notify_contacts_changed(_contact_ids)
     async(:call_mailchimp, :sync_contacts)
   end
 
@@ -204,17 +204,21 @@ class MailChimpAccount < ActiveRecord::Base
 
   def setup_webhooks_and_subscribe_contacts
     setup_webhooks
+    refresh_member_records
     MailChimpSync.new(self).sync_contacts
-    create_missing_member_records
   end
 
-  def create_missing_member_records
+  def refresh_member_records
     actual_emails = list_members(primary_list_id).map { |m| m['email'] }
-    recorded_emails = mail_chimp_members.where(email: actual_emails).pluck(:email)
-    create_emails = (actual_emails.to_set - recorded_emails.to_set).to_a
-    create_emails.each do |email|
+    recorded_emails = mail_chimp_members.where(list_id: primary_list_id).pluck(:email)
+
+    emails_to_add = (actual_emails.to_set - recorded_emails.to_set).to_a
+    emails_to_add.each do |email|
       mail_chimp_members.create(list_id: primary_list_id, email: email)
     end
+
+    emails_to_remove = (recorded_emails.to_set - actual_emails.to_set).to_a
+    mail_chimp_members.where(list_id: primary_list_id, email: emails_to_remove).destroy_all
   end
 
   def subscribe_contacts(contact_ids = nil, list_id = primary_list_id)

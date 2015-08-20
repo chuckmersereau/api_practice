@@ -194,12 +194,11 @@ describe ContactsController do
 
       it 'queues MailChimp sync' do
         queued = false
-        allow_any_instance_of(MailChimpAccount).to receive(:queue_subscribe_contact) do
-          queued = true
-        end
+        allow_any_instance_of(MailChimpAccount).to receive(:notify_contacts_changed)
+          .with([contact.id]) { queued = true }
         create(:mail_chimp_account, account_list: user.account_lists.first)
         xhr :put, :bulk_update, bulk_edit_contact_ids: contact.id, contact: { send_newsletter: 'Email' }
-        expect(queued).to be true
+        expect(queued).to be_truthy
       end
 
       it "ignores a partial 'next ask' value" do
