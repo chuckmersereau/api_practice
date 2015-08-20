@@ -55,15 +55,15 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def notify_contacts_changed(_contact_ids)
-    async(:call_mailchimp, :sync_contacts)
+    async(:sync_contacts)
   end
 
   def queue_export_to_primary_list
-    async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
+    async(:setup_webhooks_and_subscribe_contacts)
   end
 
   def queue_export_appeal_contacts(contact_ids, list_id, appeal_id)
-    async(:call_mailchimp, :export_appeal_contacts, contact_ids, list_id, appeal_id)
+    async(:export_appeal_contacts, contact_ids, list_id, appeal_id)
   end
 
   def datacenter
@@ -84,6 +84,8 @@ class MailChimpAccount < ActiveRecord::Base
     compare_and_unsubscribe(contacts, list_id)
     export_to_list(list_id, contacts)
     save_appeal_list_info(list_id, appeal_id)
+  rescue Gibbon::MailChimpError => e
+    handle_mail_chimp_error(e)
   end
 
   def save_appeal_list_info(appeal_list_id, appeal_id)
@@ -91,27 +93,24 @@ class MailChimpAccount < ActiveRecord::Base
     mail_chimp_appeal_list.update(appeal_list_id: appeal_list_id, appeal_id: appeal_id)
   end
 
-  # private
-
   def sync_contacts
     MailChimpSync.new(self).sync_contacts
+  rescue Gibbon::MailChimpError => e
+    handle_mail_chimp_error(e)
   end
 
-  def call_mailchimp(method, *args)
-    return if !active? || primary_list_id.blank?
-    send(method, *args)
-  rescue Gibbon::MailChimpError => e
+  def handle_mail_chimp_error(e)
     case
     when e.message.include?('API Key Disabled') || e.message.include?('code 104')
       update_column(:active, false)
       AccountMailer.invalid_mailchimp_key(account_list).deliver
     when e.message.include?('code -50') # No more than 10 simultaneous connections allowed.
-      raise LowerRetryWorker::RetryJobButNoAirbrakeError
+      fail LowerRetryWorker::RetryJobButNoAirbrakeError
     when e.message.include?('code -91') # A backend database error has occurred. Please try again later or report this issue. (code -91)
       # raise the exception and the background queue will retry
-      raise e
+      fail e
     else
-      raise e
+      fail e
     end
   end
 
@@ -135,6 +134,8 @@ class MailChimpAccount < ActiveRecord::Base
     # to force a full export, clear the member records
     mail_chimp_members.where(list_id: primary_list_id).destroy_all
     MailChimpSync.new(self).sync_contacts
+  rescue Gibbon::MailChimpError => e
+    handle_mail_chimp_error(e)
   end
 
   def subscribe_contacts(contact_ids = nil, list_id = primary_list_id)

@@ -93,14 +93,14 @@ describe MailChimpAccount do
 
     it 'queues subscribe_contacts' do
       expect(account).to receive(:async)
-        .with(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
+        .with(:setup_webhooks_and_subscribe_contacts)
       account.queue_export_to_primary_list
     end
 
     it 'queues export_appeal_contacts' do
       contact = create(:contact)
       expect(account).to receive(:async)
-        .with(:call_mailchimp, :export_appeal_contacts, [contact.id], 'list1', appeal.id)
+        .with(:export_appeal_contacts, [contact.id], 'list1', appeal.id)
       account.queue_export_appeal_contacts([contact.id], 'list1', appeal.id)
     end
   end
@@ -258,14 +258,11 @@ describe MailChimpAccount do
     end
   end
 
-  context '#call_mailchimp' do
+  context '#handle_mail_chimp_error' do
     it 'raises an error to silently retry the job if it gets error code -50 (too many connections)' do
-      account.primary_list_id = 'list1'
-      account.active = true
       msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
-      expect(account).to receive(:subscribe_contacts).with(1).and_raise(Gibbon::MailChimpError.new(msg))
       expect do
-        account.call_mailchimp(:subscribe_contacts, 1)
+        account.handle_mail_chimp_error(Gibbon::MailChimpError.new(msg))
       end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
     end
   end
