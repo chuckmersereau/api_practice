@@ -5,7 +5,7 @@ describe MailChimpSync do
   let(:mc_account) do
     create(:mail_chimp_account, account_list: account_list, primary_list_id: 'list1')
   end
-  let(:contact) do 
+  let(:contact) do
     create(:contact, account_list: account_list, send_newsletter: 'Email')
   end
   let(:person) { create(:person) }

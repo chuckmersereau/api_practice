@@ -20,9 +20,6 @@ class MailChimpAccount < ActiveRecord::Base
   before_create :set_active
   after_save :queue_import_if_list_changed
 
-  def contact_changed(_contact)
-  end
-
   def lists
     return [] unless api_key.present?
     @list_response ||= gb.lists
@@ -57,35 +54,12 @@ class MailChimpAccount < ActiveRecord::Base
     active? && validate_key
   end
 
+  def notify_contact_changed(contact)
+    async(:call_mailchimp, :sync_contacts)
+  end
+
   def queue_export_to_primary_list
     async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
-  end
-
-  def queue_subscribe_contact(contact)
-    async(:call_mailchimp, :subscribe_contacts, contact.id)
-  end
-
-  def queue_subscribe_person(person)
-    async(:call_mailchimp, :subscribe_person, person.id)
-  end
-
-  def queue_unsubscribe_email(email)
-    async(:call_mailchimp, :unsubscribe_email, email)
-  end
-
-  def queue_update_email(old_email, new_email)
-    return if old_email == new_email
-    async(:call_mailchimp, :update_email, old_email, new_email)
-  end
-
-  def queue_unsubscribe_contact(contact)
-    contact.people.each(&method(:queue_unsubscribe_person))
-  end
-
-  def queue_unsubscribe_person(person)
-    person.email_addresses.each do |email_address|
-      async(:call_mailchimp, :unsubscribe_email, email_address.email)
-    end
   end
 
   def queue_export_appeal_contacts(contact_ids, list_id, appeal_id)
@@ -118,6 +92,10 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   # private
+
+  def sync_contacts
+    MailChimpSync.new(self).sync_contacts
+  end
 
   def call_mailchimp(method, *args)
     return if !active? || primary_list_id.blank?

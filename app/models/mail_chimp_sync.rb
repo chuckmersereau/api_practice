@@ -11,12 +11,12 @@ class MailChimpSync
 
   def sync_adds_and_updates
     contacts_to_export = @mc_account.contacts_with_email_addresses(nil)
-      .select(&method(:contact_changed_or_new))
+                         .select(&method(:contact_changed_or_new))
 
     return if contacts_to_export.empty?
     @mc_account.export_to_list(@mc_account.primary_list_id, contacts_to_export)
   end
-  
+
   def contact_changed_or_new(contact)
     contact.people.reject(&:optout_enewsletter).any? do |person|
       member = members_by_email[person.primary_email_address.email]

@@ -97,48 +97,11 @@ describe MailChimpAccount do
       account.queue_export_to_primary_list
     end
 
-    it 'queues subscribe_contacts for one contact' do
-      contact = create(:contact)
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :subscribe_contacts, contact.id)
-      account.queue_subscribe_contact(contact)
-    end
-
-    it 'queues subscribe_person' do
-      person = create(:person)
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :subscribe_person, person.id)
-      account.queue_subscribe_person(person)
-    end
-
-    it 'queues unsubscribe_email' do
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :unsubscribe_email, 'foo@example.com')
-      account.queue_unsubscribe_email('foo@example.com')
-    end
-
-    it 'queues update_email' do
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :update_email, 'foo@example.com', 'foo1@example.com')
-      account.queue_update_email('foo@example.com', 'foo1@example.com')
-    end
-
-    it 'queues unsubscribe_email for each of a contacts email addresses' do
-      contact = create(:contact)
-      contact.people << create(:person)
-
-      2.times { |i| contact.people.first.email_addresses << EmailAddress.new(email: "foo#{i}@example.com") }
-
-      expect do
-        account.queue_unsubscribe_contact(contact)
-      end.to change(MailChimpAccount.jobs, :size).by(2)
-    end
-
     it 'queues export_appeal_contacts' do
       contact = create(:contact)
-      expect do
-        account.queue_export_appeal_contacts(contact, 'list1', appeal.id)
-      end.to change(MailChimpAccount.jobs, :size).by(1)
+      expect(account).to receive(:async)
+        .with(:call_mailchimp, :export_appeal_contacts, [contact.id], 'list1', appeal.id)
+      account.queue_export_appeal_contacts([contact.id], 'list1', appeal.id)
     end
   end
 
@@ -420,10 +383,10 @@ describe MailChimpAccount do
 
   context '#unsubscribe_list_batch' do
     it 'unsubscribes members and destroys their related records' do
-      stub = stub_request(:post, "https://us4.api.mailchimp.com/1.3/?method=listBatchUnsubscribe").
-        with(body: "%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22list1%22%2C%22"\
-             "emails%22%3A%22john%40example.com%22%2C%22delete_member%22%3Atrue%2C%22"\
-             "send_goodbye%22%3Afalse%2C%22send_notify%22%3Afalse%7D")
+      stub = stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listBatchUnsubscribe')
+             .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22list1%22%2C%22'\
+             'emails%22%3A%22john%40example.com%22%2C%22delete_member%22%3Atrue%2C%22'\
+             'send_goodbye%22%3Afalse%2C%22send_notify%22%3Afalse%7D')
       member = create(:mail_chimp_member, mail_chimp_account: account)
       account.unsubscribe_list_batch('list1', 'john@example.com')
       expect(stub).to have_been_requested

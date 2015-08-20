@@ -506,7 +506,7 @@ class Contact < ActiveRecord::Base
   end
 
   def sync_with_mail_chimp
-    account_list.mail_chimp_account.try(:contact_changed, self)
+    account_list.mail_chimp_account.try(:notify_contact_changed, self)
   end
 
   def sync_with_google_contacts
