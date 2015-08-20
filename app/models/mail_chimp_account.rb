@@ -17,7 +17,7 @@ class MailChimpAccount < ActiveRecord::Base
   validates :api_key, format: /\A\w+-us\d+\z/
 
   before_create :set_active
-  after_save :queue_import_if_list_changed
+  after_save :queue_export_if_list_changed
 
   def lists
     return [] unless api_key.present?
@@ -58,7 +58,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def queue_export_to_primary_list
-    async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
+    async(:call_mailchimp, :export_to_primary_list)
   end
 
   def queue_export_appeal_contacts(contact_ids, list_id, appeal_id)
@@ -127,7 +127,7 @@ class MailChimpAccount < ActiveRecord::Base
     mail_chimp_members.where(list_id: list_id, email: members_to_unsubscribe).destroy_all
   end
 
-  def setup_webhooks_and_subscribe_contacts
+  def export_to_primary_list
     setup_webhooks
     # to force a full export, clear the member records
     mail_chimp_members.where(list_id: primary_list_id).destroy_all
@@ -245,7 +245,7 @@ class MailChimpAccount < ActiveRecord::Base
       groupings.find { |g| g['name'] == _('Partner Status') }
   end
 
-  def queue_import_if_list_changed
+  def queue_export_if_list_changed
     queue_export_to_primary_list if changed.include?('primary_list_id')
   end
 

@@ -93,7 +93,7 @@ describe MailChimpAccount do
 
     it 'queues subscribe_contacts' do
       expect(account).to receive(:async)
-        .with(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
+        .with(:call_mailchimp, :export_to_primary_list)
       account.queue_export_to_primary_list
     end
 
@@ -106,7 +106,7 @@ describe MailChimpAccount do
   end
 
   describe 'callbacks' do
-    it 'queues import if primary list changed' do
+    it 'queues export if primary list changed' do
       expect(account).to receive(:queue_export_to_primary_list).and_return(true)
       account.primary_list_id = 'foo'
       account.save
