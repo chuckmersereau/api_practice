@@ -1,15 +1,4 @@
 class MailChimpSync
-  # So there is code in a few places:
-  # callbacks
-  # mail chimp account
-  # mail chimp sync
-  # appeals front end stuff
-  # maybe other places ...
-  # inputs into the process:
-  # - contact is changed
-  # - appeal list is exported
-  # - sync now clicked
-
   def initialize(mail_chimp_account)
     @mc_account = mail_chimp_account
     @account_list = mail_chimp_account.account_list

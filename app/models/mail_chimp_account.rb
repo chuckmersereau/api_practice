@@ -9,7 +9,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   belongs_to :account_list
   has_one :mail_chimp_appeal_list, dependent: :destroy
-  has_many :mail_chimp_members
+  has_many :mail_chimp_members, dependent: :destroy
 
   # attr_accessible :api_key, :primary_list_id
   attr_reader :validation_error
@@ -20,7 +20,7 @@ class MailChimpAccount < ActiveRecord::Base
   before_create :set_active
   after_save :queue_import_if_list_changed
 
-  def contact_changed(contact)
+  def contact_changed(_contact)
   end
 
   def lists
@@ -271,7 +271,7 @@ class MailChimpAccount < ActiveRecord::Base
       member = mail_chimp_members.find_or_create_by(list_id: primary_list_id, email: params[:EMAIL])
       groupings = params[:GROUPINGS].try(:first)
       status = groupings ? groupings[:groups] : nil
-      member.update(first_name: params[:FNAME], last_name: params[:LNAME], 
+      member.update(first_name: params[:FNAME], last_name: params[:LNAME],
                     greeting: params[:GREETING], status: status)
     end
   end

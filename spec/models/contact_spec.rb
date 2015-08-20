@@ -570,11 +570,6 @@ describe Contact do
   end
 
   context '#sync_with_mailchimp' do
-    it 'gets called when the contact is changed' do
-      expect(contact).to receive(:sync_with_mail_chimp)
-      contact.update(status: 'Changed')
-    end
-
     it 'calls contact_changed if the account exists' do
       mc_account = build(:mail_chimp_account)
       account_list.mail_chimp_account = mc_account
