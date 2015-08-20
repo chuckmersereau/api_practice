@@ -126,34 +126,6 @@ describe MailChimpAccount do
       account.send(:unsubscribe_email, 'foo@example.com')
     end
 
-    context 'subscribing a person' do
-      it "adds a person's primary email address" do
-        account.primary_list_id = 'list1'
-        subscribe_args = {
-          id: 'list1', email_address: 'foo@example.com', update_existing: true, double_optin: false,
-          merge_vars: { EMAIL: 'foo@example.com', FNAME: 'John', LNAME: 'Smith', GREETING: 'Sync greeting' },
-          send_welcome: false, replace_interests: true
-        }
-        expect(account.gb).to receive(:list_subscribe).with(subscribe_args)
-        person = create(:person, email: 'foo@example.com')
-        contact = create(:contact, greeting: 'Sync greeting')
-        contact.people << person
-        account.send(:subscribe_person, person.id)
-      end
-
-      it 'nilifies the primary_list_id if an extra merge field is required' do
-        allow(AccountMailer).to receive(:mailchimp_required_merge_field).and_return(double('mailer', deliver: true))
-
-        stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listSubscribe')
-          .to_return(body: '{"error":"MMERGE3 must be provided - Please enter a value","code":250}', status: 500)
-        person = create(:person, email: 'foo@example.com')
-        account.primary_list_id = 5
-        account.save
-        account.send(:subscribe_person, person.id)
-        expect(account.primary_list_id).to be_nil
-      end
-    end
-
     context 'subscribing contacts' do
       it 'subscribes a single contact' do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
@@ -303,9 +275,9 @@ describe MailChimpAccount do
       account.primary_list_id = 'list1'
       account.active = true
       msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
-      expect(account).to receive(:subscribe_person).with(1).and_raise(Gibbon::MailChimpError.new(msg))
+      expect(account).to receive(:subscribe_contacts).with(1).and_raise(Gibbon::MailChimpError.new(msg))
       expect do
-        account.call_mailchimp(:subscribe_person, 1)
+        account.call_mailchimp(:subscribe_contacts, 1)
       end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
     end
   end

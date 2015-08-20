@@ -573,7 +573,7 @@ describe Contact do
     it 'calls contact_changed if the account exists' do
       mc_account = build(:mail_chimp_account)
       account_list.mail_chimp_account = mc_account
-      expect(mc_account).to receive(:contact_changed).with(contact)
+      expect(mc_account).to receive(:notify_contacts_changed).with([contact.id])
       contact.send(:sync_with_mail_chimp)
     end
 

@@ -170,38 +170,6 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def subscribe_person(person_id)
-    begin
-      person = Person.find(person_id)
-    rescue ActiveRecord::RecordNotFound
-      # This person was deleted after the background job was created
-      return false
-    end
-
-    return unless person.primary_email_address
-    vars = { EMAIL: person.primary_email_address.email, FNAME: person.first_name,
-             LNAME: person.last_name, GREETING: person.contact ? person.contact.greeting : '' }
-    begin
-      gb.list_subscribe(id: primary_list_id, email_address: vars[:EMAIL], update_existing: true,
-                        double_optin: false, merge_vars: vars, send_welcome: false, replace_interests: true)
-    rescue Gibbon::MailChimpError => e
-      case
-      when e.message.include?('code 250') # MMERGE3 must be provided - Please enter a value (code 250)
-        # Notify user and nulify primary_list_id until they fix the problem
-        update_column(:primary_list_id, nil)
-        AccountMailer.mailchimp_required_merge_field(account_list).deliver
-      when e.message.include?('code 200') # Invalid MailChimp List ID (code 200)
-        # TODO: Notify user and nulify primary_list_id until they fix the problem
-        update_column(:primary_list_id, nil)
-      when e.message.include?('code 502') || e.message.include?('code 220')
-        # Invalid Email Address: "Rajah Tony" <amrajah@gmail.com> (code 502)
-        # "jake.adams.photo@gmail.cm" has been banned (code 220) - This is usually a typo in an email address
-      else
-        raise e
-      end
-    end
-  end
-
   def setup_webhooks_and_subscribe_contacts
     setup_webhooks
     refresh_member_records
