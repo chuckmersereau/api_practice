@@ -53,6 +53,13 @@ GIT
       mail (>= 2.2.1)
 
 GIT
+  remote: https://github.com/mhenrixon/sidekiq-unique-jobs
+  revision: 7c9cf8647bf442c639d7b0783aa2b8c75bda669a
+  specs:
+    sidekiq-unique-jobs (3.0.14)
+      sidekiq (>= 2.6)
+
+GIT
   remote: https://github.com/sstephenson/global_phone.git
   revision: 9b2772c4678dc9e323c58d9258663812bbd9fc73
   specs:
@@ -601,8 +608,6 @@ GEM
       tilt (< 2.0.0)
     sidekiq-pro (2.0.8)
       sidekiq (>= 3.4.2)
-    sidekiq-unique-jobs (3.0.14)
-      sidekiq (>= 2.6)
     siebel_donations (1.0.5)
       activesupport (>= 3.0.0)
       oj (~> 2.1.0)
@@ -811,7 +816,7 @@ DEPENDENCIES
   secure_headers
   sidekiq-cron
   sidekiq-pro!
-  sidekiq-unique-jobs
+  sidekiq-unique-jobs!
   siebel_donations (~> 1.0.5)
   silencer
   simplecov

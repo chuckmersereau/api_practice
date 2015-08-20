@@ -6,9 +6,9 @@ describe GoogleIntegration do
 
   context '#queue_sync_data' do
     it 'queues a data sync when an integration type is passed in' do
-      expect do
-        google_integration.queue_sync_data('calendar')
-      end.to change(LowerRetryWorker.jobs, :size).by(1)
+      expect(google_integration).to receive(:lower_retry_async)
+        .with(:sync_data, 'calendar')
+      google_integration.queue_sync_data('calendar')
     end
 
     it 'does not queue a data sync when an integration type is passed in' do

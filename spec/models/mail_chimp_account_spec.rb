@@ -92,35 +92,35 @@ describe MailChimpAccount do
     end
 
     it 'queues subscribe_contacts' do
-      expect do
-        account.queue_export_to_primary_list
-      end.to change(MailChimpAccount.jobs, :size).by(1)
+      expect(account).to receive(:async)
+        .with(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
+      account.queue_export_to_primary_list
     end
 
     it 'queues subscribe_contacts for one contact' do
       contact = create(:contact)
-      expect do
-        account.queue_subscribe_contact(contact)
-      end.to change(MailChimpAccount.jobs, :size).by(1)
+      expect(account).to receive(:async)
+        .with(:call_mailchimp, :subscribe_contacts, contact.id)
+      account.queue_subscribe_contact(contact)
     end
 
     it 'queues subscribe_person' do
       person = create(:person)
-      expect do
-        account.queue_subscribe_person(person)
-      end.to change(MailChimpAccount.jobs, :size).by(1)
+      expect(account).to receive(:async)
+        .with(:call_mailchimp, :subscribe_person, person.id)
+      account.queue_subscribe_person(person)
     end
 
     it 'queues unsubscribe_email' do
-      expect do
-        account.queue_unsubscribe_email('foo@example.com')
-      end.to change(MailChimpAccount.jobs, :size).by(1)
+      expect(account).to receive(:async)
+        .with(:call_mailchimp, :unsubscribe_email, 'foo@example.com')
+      account.queue_unsubscribe_email('foo@example.com')
     end
 
     it 'queues update_email' do
-      expect do
-        account.queue_update_email('foo@example.com', 'foo1@example.com')
-      end.to change(MailChimpAccount.jobs, :size).by(1)
+      expect(account).to receive(:async)
+        .with(:call_mailchimp, :update_email, 'foo@example.com', 'foo1@example.com')
+      account.queue_update_email('foo@example.com', 'foo1@example.com')
     end
 
     it 'queues unsubscribe_email for each of a contacts email addresses' do

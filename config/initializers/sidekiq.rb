@@ -16,4 +16,4 @@ Sidekiq.configure_server do |config|
                    namespace: "MPDX:#{Rails.env}:resque"}
 end
 
-Sidekiq.default_worker_options = { backtrace: true }
+Sidekiq.default_worker_options = { backtrace: true, unique_job_expiration: 12 * 60 * 60}
