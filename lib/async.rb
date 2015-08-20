@@ -1,12 +1,8 @@
 require 'job_duplicate_checker'
 
 module Async
-  include JobDuplicateChecker
-
   # This will be called by a worker when a job needs to be processed
   def perform(id, method, *args)
-    return if duplicate_job?(id, method, *args)
-
     if id
       begin
         self.class.find(id).send(method, *args)

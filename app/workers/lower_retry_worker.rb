@@ -2,7 +2,6 @@ require 'job_duplicate_checker'
 
 class LowerRetryWorker
   include Sidekiq::Worker
-  include JobDuplicateChecker
 
   sidekiq_options backtrace: true, unique: true
 
@@ -11,8 +10,6 @@ class LowerRetryWorker
   end
 
   def perform(klass_str, id, method, *args)
-    return if duplicate_job?(klass_str, id, method, *args)
-
     if id
       begin
         klass_str.constantize.find(id).send(method, *args)
