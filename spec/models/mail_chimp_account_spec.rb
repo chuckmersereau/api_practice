@@ -99,9 +99,9 @@ describe MailChimpAccount do
 
     it 'queues export_appeal_contacts' do
       contact = create(:contact)
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :export_appeal_contacts, [contact.id], 'list1', appeal.id)
-      account.queue_export_appeal_contacts([contact.id], 'list1', appeal.id)
+      expect do
+        account.queue_export_appeal_contacts(contact, 'list1', appeal.id)
+      end.to change(MailChimpAccount.jobs, :size).by(1)
     end
   end
 

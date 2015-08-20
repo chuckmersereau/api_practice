@@ -9,7 +9,7 @@ class MailChimpSync
     sync_deletes
   end
 
-  def sync_adds_and_updates(contact_ids)
+  def sync_adds_and_updates(_contact_ids)
     contacts_to_export = @mc_account.contacts_with_email_addresses(@contact_ids)
                          .select(&method(:contact_changed_or_new?))
     return if contacts_to_export.empty?
@@ -18,7 +18,7 @@ class MailChimpSync
 
   def sync_deletes
     newsletter_emails = @mc_account.contacts_with_email_addresses(nil)
-      .pluck('email_addresses.email')
+                        .pluck('email_addresses.email')
     emails_to_remove = (members.pluck(:email).to_set - newsletter_emails.to_set).to_a
     return if emails_to_remove.empty?
     @mc_account.unsubscribe_list_batch(@mc_account.primary_list_id, emails_to_remove)
@@ -27,7 +27,7 @@ class MailChimpSync
   private
 
   def contact_changed_or_new?(contact)
-    contact.people.reject(&:optout_enewsletter).any? do |person|
+    contact.people.any? do |person|
       member = members_by_email[person.primary_email_address.email]
       contact_person_changed_or_new?(contact, person, member)
     end

@@ -198,7 +198,7 @@ describe ContactsController do
           .with([contact.id]) { queued = true }
         create(:mail_chimp_account, account_list: user.account_lists.first)
         xhr :put, :bulk_update, bulk_edit_contact_ids: contact.id, contact: { send_newsletter: 'Email' }
-        expect(queued).to be_truthy
+        expect(queued).to be true
       end
 
       it "ignores a partial 'next ask' value" do

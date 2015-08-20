@@ -90,10 +90,8 @@ class MailChimpAccount < ActiveRecord::Base
     mail_chimp_appeal_list.update(appeal_list_id: appeal_list_id, appeal_id: appeal_id)
   end
 
-  # private
-
   def sync_contacts(contact_ids)
-    MailChimpSync.new(self, contact_ids).sync_contacts
+    MailChimpSync.new(self).sync_contacts(contact_ids)
   end
 
   def call_mailchimp(method, *args)
@@ -145,12 +143,12 @@ class MailChimpAccount < ActiveRecord::Base
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
     contacts = contacts.includes(people: :primary_email_address)
-      .where.not(email_addresses: { historic: true })
-      .references('email_addresses')
+               .where.not(email_addresses: { historic: true })
+               .references('email_addresses')
 
     if enewsletter_only
       contacts = contacts.where(send_newsletter: %w(Email Both))
-        .where.not(people: { optout_enewsletter: true })
+                 .where.not(people: { optout_enewsletter: true })
     end
 
     contacts
