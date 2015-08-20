@@ -11,7 +11,6 @@ class MailChimpAccount < ActiveRecord::Base
   has_one :mail_chimp_appeal_list, dependent: :destroy
   has_many :mail_chimp_members, dependent: :destroy
 
-  # attr_accessible :api_key, :primary_list_id
   attr_reader :validation_error
 
   validates :account_list_id, :api_key, presence: true
