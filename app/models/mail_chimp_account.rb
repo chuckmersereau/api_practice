@@ -115,34 +115,6 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def update_email(old_email, new_email)
-    gb.list_update_member(id: primary_list_id, email_address: old_email, merge_vars: { EMAIL: new_email })
-  rescue Gibbon::MailChimpError => e
-    # The email address "xxxxx@example.com" does not belong to this list (code 215)
-    # There is no record of "xxxxx@example.com" in the database (code 232)
-    if e.message.include?('code 215') || e.message.include?('code 232')
-      subscribe_email(new_email)
-    else
-      raise e unless e.message.include?('code 214') # The new email address "xxxxx@example.com" is already subscribed to this list and must be unsubscribed first. (code 214)
-    end
-  end
-
-  def unsubscribe_email(email)
-    return if email.blank? || primary_list_id.blank?
-    gb.list_unsubscribe(id: primary_list_id, email_address: email,
-                        send_goodbye: false, delete_member: true)
-  rescue Gibbon::MailChimpError => e
-    case
-    when e.message.include?('code 232') || e.message.include?('code 215')
-      # do nothing
-    when e.message.include?('code 200')
-      # Invalid MailChimp List ID
-      update_column(:primary_list_id, nil)
-    else
-      raise e
-    end
-  end
-
   def compare_and_unsubscribe(contacts, list_id)
     # compare and unsubscribe email addresses from the prev mail chimp appeal list not on
     # the current one.
@@ -156,18 +128,6 @@ class MailChimpAccount < ActiveRecord::Base
     gb.list_batch_unsubscribe(id: list_id, emails: members_to_unsubscribe,
                               delete_member: true, send_goodbye: false, send_notify: false)
     mail_chimp_members.where(list_id: list_id, email: members_to_unsubscribe).destroy_all
-  end
-
-  def subscribe_email(email)
-    gb.list_subscribe(id: primary_list_id, email_address: email, update_existing: true,
-                      double_optin: false, send_welcome: false, replace_interests: true)
-  rescue Gibbon::MailChimpError => e
-    case
-    when e.message.include?('code 250') # FNAME must be provided - Please enter a value (code 250)
-    when e.message.include?('code 214') # The new email address "xxxxx@example.com" is already subscribed to this list and must be unsubscribed first. (code 214)
-    else
-      raise e
-    end
   end
 
   def setup_webhooks_and_subscribe_contacts

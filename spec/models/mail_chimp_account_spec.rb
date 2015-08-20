@@ -114,18 +114,6 @@ describe MailChimpAccount do
   end
 
   context 'when updating mailchimp' do
-    it 'updates an email' do
-      stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listUpdateMember')
-        .to_return(body: '{}')
-      account.send(:update_email, 'foo@example.com', 'foo1@example.com')
-    end
-
-    it 'unsubscribes an email' do
-      stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listUnsubscribe')
-        .to_return(body: '{}')
-      account.send(:unsubscribe_email, 'foo@example.com')
-    end
-
     context 'subscribing contacts' do
       it 'subscribes a single contact' do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
