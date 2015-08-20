@@ -2,7 +2,7 @@ class OrganizationFetcherWorker
   include Sidekiq::Worker
   sidekiq_options backtrace: true, unique: true
 
-  def perform(*args)
+  def perform
     # Download the org csv from tnt and update orgs
     organizations = open('http://download.tntware.com/tntmpd/TntMPD_Organizations.csv').read.unpack('C*').pack('U*')
     CSV.new(organizations, headers: :first_row).each do |line|

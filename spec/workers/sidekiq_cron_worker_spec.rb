@@ -6,8 +6,6 @@ describe SidekiqCronWorker do
 
   it 'calls the specified static method' do
     expect(TestJob).to receive(:test)
-    Sidekiq::Testing.inline! do
-      SidekiqCronWorker.perform_async('TestJob.test')
-    end
+    SidekiqCronWorker.new.perform('TestJob.test')
   end
 end
