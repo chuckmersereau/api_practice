@@ -53,8 +53,8 @@ class MailChimpAccount < ActiveRecord::Base
     active? && validate_key
   end
 
-  def notify_contacts_changed(_contact_ids)
-    async(:call_mailchimp, :sync_contacts)
+  def notify_contacts_changed(contact_ids)
+    async(:call_mailchimp, :sync_contacts, contact_ids)
   end
 
   def queue_export_to_primary_list
@@ -92,8 +92,8 @@ class MailChimpAccount < ActiveRecord::Base
 
   # private
 
-  def sync_contacts
-    MailChimpSync.new(self).sync_contacts
+  def sync_contacts(contact_ids)
+    MailChimpSync.new(self, contact_ids).sync_contacts
   end
 
   def call_mailchimp(method, *args)
@@ -144,10 +144,16 @@ class MailChimpAccount < ActiveRecord::Base
   def contacts_with_email_addresses(contact_ids, enewsletter_only = true)
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
-    contacts = contacts.where(send_newsletter: %w(Email Both)) if enewsletter_only
-    contacts.includes(people: :primary_email_address)
+    contacts = contacts.includes(people: :primary_email_address)
       .where.not(email_addresses: { historic: true })
       .references('email_addresses')
+
+    if enewsletter_only
+      contacts = contacts.where(send_newsletter: %w(Email Both))
+        .where.not(people: { optout_enewsletter: true })
+    end
+
+    contacts
   end
 
   def export_to_list(list_id, contacts)
