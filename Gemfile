@@ -83,7 +83,7 @@ gem 'rollout_ui', git: 'https://github.com/CruGlobal/rollout_ui.git'
 gem 'ruby-rtf'
 gem 'savon', '~> 2.3.0'
 gem 'secure_headers'
-gem 'sidekiq-unique-jobs'
+gem 'sidekiq-unique-jobs', git: 'https://github.com/mhenrixon/sidekiq-unique-jobs'
 gem 'sidekiq-cron'
 gem 'siebel_donations', '~> 1.0.5'
 gem 'sinatra', require: nil
