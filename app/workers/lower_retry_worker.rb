@@ -1,5 +1,3 @@
-require 'job_duplicate_checker'
-
 class LowerRetryWorker
   include Sidekiq::Worker
 

@@ -1,5 +1,3 @@
-require 'job_duplicate_checker'
-
 module Async
   # This will be called by a worker when a job needs to be processed
   def perform(id, method, *args)
