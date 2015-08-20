@@ -115,6 +115,20 @@ describe MailChimpAccount do
 
   context 'when updating mailchimp' do
     context 'subscribing contacts' do
+      it 'sets up the webhooks, clears the cached members and syncs contacts' do
+        account.primary_list_id = 'foo'
+        create(:mail_chimp_member, mail_chimp_account: account, list_id: 'foo')
+
+        expect(account).to receive(:setup_webhooks)
+        sync = double
+        expect(MailChimpSync).to receive(:new) { sync }
+        expect(sync).to receive(:sync_contacts)
+
+        expect do
+          account.send(:export_to_primary_list)
+        end.to change(MailChimpMember, :count).by(-1)
+      end
+
       it 'subscribes a single contact' do
         contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
         contact.people << create(:person, email: 'foo@example.com')
@@ -228,7 +242,9 @@ describe MailChimpAccount do
     end
 
     context '#contacts_with_email_addresses' do
-      let(:contact) { create(:contact, name: 'John Smith', send_newsletter: 'Email', account_list: account_list) }
+      let(:contact) do 
+        create(:contact, name: 'John Smith', send_newsletter: 'Email', account_list: account_list)
+      end
       let(:person) { create(:person) }
 
       before do
@@ -237,16 +253,16 @@ describe MailChimpAccount do
         contact.people << person
       end
 
-      it 'returns a contact when the passed in contact has a person email address and valid newsletter option' do
+      it 'returns a contact with valid email on newsletter' do
         expect(account.contacts_with_email_addresses(nil).to_a).to eq [contact]
       end
 
-      it 'returns nothing when the passed in contact id has no person email address' do
+      it 'returns nothing when person has no email address' do
         person.email_addresses.first.destroy
         expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
       end
 
-      it 'returns nothing when email address is present but send_newsletter is blank' do
+      it 'returns when email address present but send_newsletter is blank' do
         contact.update(send_newsletter: '')
         expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
       end
@@ -254,6 +270,52 @@ describe MailChimpAccount do
       it 'excludes contacts with historic email addresses' do
         person.email_addresses.first.update_column(:historic, true)
         expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
+      end
+
+      describe 'it excludes people from the loaded contact.people association if: ' do
+        let(:excluded_person) { create(:person) }
+        before do
+          excluded_person.email_address = { email: 'foo2@example.com', primary: true }
+          excluded_person.save
+          expect(excluded_person.email_addresses.count).to eq 1
+          contact.people << excluded_person
+          expect(excluded_person.email_addresses.count).to eq 1
+        end
+
+        it 'opted out of newsletter' do
+          excluded_person.update(optout_enewsletter: true)
+          expect_person_excluded
+        end
+        it 'has no email address' do
+          excluded_person.email_addresses.first.destroy
+          expect_person_excluded
+        end
+        it 'has a non-primary email' do
+          expect(excluded_person.email_addresses.count).to eq 1
+          excluded_person.email_addresses.first.update_column(:primary, false)
+          expect_person_excluded
+        end
+        it 'has a historic email' do
+          excluded_person.email_addresses.first.update_column(:historic, true)
+          expect_person_excluded
+        end
+
+        def expect_person_excluded
+          contact = account.contacts_with_email_addresses(nil).first
+          expect(contact.people.size).to eq(1)
+          expect(contact.people).to include person
+          expect(contact.people).to_not include excluded_person
+        end
+      end
+
+      it 'scopes the contacts to the passed in ids if specified' do
+        expect(account.contacts_with_email_addresses([contact.id + 1])).to be_empty
+      end
+
+      it 'includes opted out people and non-newsletter contacts if specified' do
+        contact.update(send_newsletter: '')
+        person.update(optout_enewsletter: true)
+        expect(account.contacts_with_email_addresses(nil, false)).to include contact
       end
     end
   end
