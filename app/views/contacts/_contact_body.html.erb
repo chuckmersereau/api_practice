@@ -69,6 +69,10 @@
                   </span>
                 <% end %>
               <% end %>
+              <i class="fa fa-question-circle" data-toggle="tooltip" 
+                 data-placement="top" data-behavior="explain_statuses"
+                 title="<%= _('Click for explanation of contact status options.') %>"></i>
+              <%= render 'explain_statuses_modal' %>
             </div>
           </div><!-- profiletop -->
 
