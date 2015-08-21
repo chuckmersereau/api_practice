@@ -5,6 +5,8 @@ class MailChimpSync
   end
 
   def sync_contacts(contact_ids = nil)
+    # Scope the search for edits and updates to the passed contact ids, but the
+    # logic for the deletes requires checking the full list.
     sync_adds_and_updates(contact_ids)
     sync_deletes
   end

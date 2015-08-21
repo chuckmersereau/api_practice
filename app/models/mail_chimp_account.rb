@@ -129,8 +129,10 @@ class MailChimpAccount < ActiveRecord::Base
 
   def export_to_primary_list
     setup_webhooks
-    # to force a full export, clear the member records
+
+    # clear the member records to force a full export
     mail_chimp_members.where(list_id: primary_list_id).destroy_all
+
     MailChimpSync.new(self).sync_contacts
   end
 
@@ -235,7 +237,6 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def setup_webhooks
-    return if Rails.env.development?
     return if webhook_token.present? &&
               gb.list_webhooks(id: primary_list_id).find { |hook| hook['url'] == webhook_url }
 
