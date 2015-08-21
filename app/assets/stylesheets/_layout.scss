@@ -1778,6 +1778,15 @@ body.google_integrations_controller {
   }
 }
 
+.anniversaries-list {
+  li {
+    display: none;
+  }
+  li:nth-child(-n+3), &.show_all li {
+    display: block;
+  }
+}
+
 .progress-category {
   display: inline-block;
   width: 50%;

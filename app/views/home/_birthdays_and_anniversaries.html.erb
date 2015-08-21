@@ -1,0 +1,47 @@
+<h4 class="title"><%= _('Birthdays This Week') %></h4>
+<% people_with_birthdays = current_account_list.people_with_birthdays(
+                              Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
+   birthdays_count = people_with_birthdays.count %>
+<% if birthdays_count > 0 %>
+  <ul class="plain-list birthdays-list">
+    <% people_with_birthdays.each do |person|
+        p_exhibit = exhibit(person, self)%>
+      <li>
+        <%= link_to(p_exhibit, person) %>:
+        <%= l(Date.new(Time.zone.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
+        <%= link_to('', person.facebook_account.url, target: '_blank', class: 'fa fa-facebook-square') if person.facebook_account %>
+        <%= link_to('', person.twitter_account.url, target: '_blank', class: 'fa fa-twitter-square') if person.twitter_account %>
+        <%= mail_to(person.primary_email_address, '', class: "fa fa-envelope") if person.primary_email_address %>
+      </li>
+    <% end %>
+  </ul>
+  <% more_bdays_text = '<i class="fa fa-plus-square-o"></i> '.html_safe +
+                        _('See all %{c} Birthdays').localize % {c: birthdays_count} %>
+  <%= link_to(more_bdays_text, '#', class: 'see-all see-all-birthdays') if birthdays_count > 5 %>
+<% else %>
+  <%= _('No birthdays this week!') %>
+<% end %>
+
+<h4 class="title"><%= _('Anniversaries This Week') %></h4>
+<% people_with_anniversaries = current_account_list.people_with_anniversaries(
+                                  Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
+   anniversaries_count = people_with_anniversaries.count %>
+<% if anniversaries_count > 0 %>
+  <ul class="plain-list anniversaries-list">
+    <% people_with_anniversaries.each do |person|
+        p_exhibit = exhibit(person, self)%>
+      <li>
+        <%= link_to(p_exhibit, person) %>:
+        <%= l(Date.new(Time.zone.now.year, person.anniversary_month, person.anniversary_day), format: 'MMM-d') %>
+        <%= link_to('', person.facebook_account.url, target: '_blank', class: 'fa fa-facebook-square') if person.facebook_account %>
+        <%= link_to('', person.twitter_account.url, target: '_blank', class: 'fa fa-twitter-square') if person.twitter_account %>
+        <%= mail_to(person.primary_email_address, '', class: "fa fa-envelope") if person.primary_email_address %>
+      </li>
+    <% end %>
+  </ul>
+  <% more_anniversaries = '<i class="fa fa-plus-square-o"></i> '.html_safe +
+                        _('See all %{c} Anniversaries').localize % {c: anniversaries_count} %>
+  <%= link_to(more_anniversaries, '#', class: 'see-all see-all-anniversaries') if anniversaries_count > 3 %>
+<% else %>
+  <%= _('No anniversaries this week!') %>
+<% end %>
