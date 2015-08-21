@@ -9,60 +9,7 @@
         <h5><%= (_('You are currently editing settings for %{account}').localize % { account: "<strong>#{@google_integration.google_account}</strong>" }).html_safe %></h5>
         <div>
           <div class="well">
-            <h2><%= _('Calendar integration') %></h2>
-
-            <% if @google_integration.calendar_integration? %>
-              <% if @google_integration.calendar_name %>
-                <%= (_("Calendar integration has been enabled. Choose from the list
-                        of tasks below which things you'd like MPDX to put on your
-                        calendar. Tasks will be pushed to the calendar named
-                        %{calendar_name}").localize % { calendar_name: "<strong>#{@google_integration.calendar_name}</strong>" }).html_safe %>
-                <br/><br/>
-                <%= form_for(@google_integration, remote: true) do |f| %>
-                  <ul class="list-group">
-                    <% Task.new.assignable_activity_types.each do |activity_type| %>
-                      <li class="radiocheck list-group-item">
-                        <%= check_box_tag 'google_integration[calendar_integrations][]',
-                                          activity_type,
-                                          @google_integration.calendar_integrations.include?(activity_type),
-                                          id: "calendar_integrations_#{activity_type.underscore}",
-                                          data: { behavior: 'calendar_integration_type' } %>
-                        <%= label_tag "calendar_integrations_#{activity_type.underscore}", _(activity_type) %>
-                      </li>
-                    <% end %>
-                  </ul>
-                <% end %>
-                <br/>
-                <%= link_to(_('Disable Calendar Integration'),
-                  google_integration_path(@google_integration, google_integration: { calendar_integration: false }),
-                    method: :put,
-                    class: 'btn btn-secondary',
-                    data: { confirm: _('Are you sure you want to disable Google Calendar integration?') }) %>
-                <%= link_to(_('Sync Now'), sync_google_integration_path(@google_integration, integration: 'calendar'), class: 'btn btn-secondary desired_action') %>
-              <% else %>
-                <p><%= _('Which one of your calendars would you like to push MPDX tasks to?') %></p>
-                <ul class="list-group">
-                  <% @google_integration.calendars.each do |calendar| %>
-                    <li class="list-group-item">
-                      <%= link_to(calendar['summary'], google_integration_path(@google_integration, google_integration: { calendar_name: calendar['summary'], calendar_id: calendar['id'] }), method: :put) %>
-                    </li>
-                  <% end %>
-                </ul>
-                <p></p>
-                <p><%= link_to(_('Click here to create a new calendar'), '#', class: 'btn btn-secondary', id: 'new_calendar_link') %></p>
-                <%= form_for(@google_integration, html: { id: 'new_calendar_form', style: 'display:none' }) do |f| %>
-                  <%= f.label :new_calendar, _('New Calendar') %>
-                  <%= f.text_field :new_calendar, placeholder: _('Enter a name') %>
-                  <%= f.submit _('Create') %>
-                <% end %>
-            <% end %>
-            <% else %>
-              <%= _("MPDX can automatically update your google calendar with your tasks.
-                    Once you enable this feature, you'll be able to choose which types of tasks you want to sync.
-                    By default MPDX will add 'Appointment' tasks to your calendar.") %>
-              <br/><br/>
-              <%= link_to(_('Enable Calendar Integration'), google_integration_path(@google_integration, google_integration: { calendar_integration: true }), method: :put, class: 'btn btn-secondary desired_action') %>
-            <% end %>
+            <%= render 'calendar_integration', google_integration: @google_integration %>
           </div>
 
           <div class="well">
