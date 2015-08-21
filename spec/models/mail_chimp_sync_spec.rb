@@ -103,4 +103,19 @@ describe MailChimpSync do
       end
     end
   end
+
+  context '#newsletter_contacts_with_emails' do
+    it 'excludes people not on the email newsletter' do
+      contact.update(send_newsletter: 'Physical')
+      expect(subject.newsletter_contacts_with_emails(nil).to_a).to be_empty
+    end
+
+    it 'excludes a person from the loaded contact association if opted-out' do
+      opt_out_person = create(:person, optout_enewsletter: true)
+      opt_out_person.email_address = { email: 'foo2@example.com', primary: true }
+      opt_out_person.save
+      contact.people << opt_out_person
+      opt_out_person.update(optout_enewsletter: true)
+    end
+  end
 end

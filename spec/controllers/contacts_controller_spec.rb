@@ -194,7 +194,7 @@ describe ContactsController do
 
       it 'queues MailChimp sync' do
         queued = false
-        allow_any_instance_of(MailChimpAccount).to receive(:notify_contacts_changed)
+        allow_any_instance_of(MailChimpAccount).to receive(:queue_sync_contacts)
           .with([contact.id]) { queued = true }
         create(:mail_chimp_account, account_list: user.account_lists.first)
         xhr :put, :bulk_update, bulk_edit_contact_ids: contact.id, contact: { send_newsletter: 'Email' }

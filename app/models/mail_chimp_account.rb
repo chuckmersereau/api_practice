@@ -53,7 +53,7 @@ class MailChimpAccount < ActiveRecord::Base
     active? && validate_key
   end
 
-  def notify_contacts_changed(contact_ids)
+  def queue_sync_contacts(contact_ids)
     async(:call_mailchimp, :sync_contacts, contact_ids)
   end
 
@@ -79,7 +79,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def export_appeal_contacts(contact_ids, list_id, appeal_id)
     return if primary_list_id == list_id
-    contacts = contacts_with_email_addresses(contact_ids, false)
+    contacts = contacts_with_email_addresses(contact_ids)
     compare_and_unsubscribe(contacts, list_id)
     export_to_list(list_id, contacts)
     save_appeal_list_info(list_id, appeal_id)
@@ -134,19 +134,12 @@ class MailChimpAccount < ActiveRecord::Base
     MailChimpSync.new(self).sync_contacts
   end
 
-  def contacts_with_email_addresses(contact_ids, enewsletter_only = true)
+  def contacts_with_email_addresses(contact_ids)
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
-    contacts = contacts.includes(people: :primary_email_address)
-               .where.not(email_addresses: { historic: true })
-               .references('email_addresses')
-
-    if enewsletter_only
-      contacts = contacts.where(send_newsletter: %w(Email Both))
-                 .where.not(people: { optout_enewsletter: true })
-    end
-
-    contacts
+    contacts.includes(people: :primary_email_address)
+      .where.not(email_addresses: { historic: true })
+      .references('email_addresses')
   end
 
   def export_to_list(list_id, contacts)
@@ -180,9 +173,6 @@ class MailChimpAccount < ActiveRecord::Base
       contact.status = 'Partner - Pray' if contact.status.blank?
 
       contact.people.each do |person|
-        next if person.primary_email_address.blank? || person.optout_enewsletter? ||
-                person.primary_email_address.historic?
-
         batch << { EMAIL: person.primary_email_address.email, FNAME: person.first_name,
                    LNAME: person.last_name, GREETING: contact.greeting }
       end

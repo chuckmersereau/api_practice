@@ -160,18 +160,6 @@ describe MailChimpAccount do
         expect(member.last_name).to eq 'Smith'
       end
 
-      it 'does not include people with historic emails in the batch params' do
-        contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        person = create(:person)
-        person.email_addresses << create(:email_address)
-        contact.people << person
-
-        expect(account.send(:batch_params, [contact])).to_not be_empty
-        person.email_addresses.first.update(historic: true)
-        contact.reload
-        expect(account.send(:batch_params, [contact])).to be_empty
-      end
-
       context 'adding status groups' do
         before do
           @gb = double
@@ -232,11 +220,6 @@ describe MailChimpAccount do
         expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
       end
 
-      it 'returns when email address present but send_newsletter is blank' do
-        contact.update(send_newsletter: '')
-        expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
-      end
-
       it 'excludes contacts with historic email addresses' do
         person.email_addresses.first.update_column(:historic, true)
         expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
@@ -247,20 +230,14 @@ describe MailChimpAccount do
         before do
           excluded_person.email_address = { email: 'foo2@example.com', primary: true }
           excluded_person.save
-          expect(excluded_person.email_addresses.count).to eq 1
           contact.people << excluded_person
-          expect(excluded_person.email_addresses.count).to eq 1
         end
 
-        it 'opted out of newsletter' do
-          excluded_person.update(optout_enewsletter: true)
-          expect_person_excluded
-        end
         it 'has no email address' do
           excluded_person.email_addresses.first.destroy
           expect_person_excluded
         end
-        it 'has a non-primary email' do
+        it 'has only a non-primary email' do
           expect(excluded_person.email_addresses.count).to eq 1
           excluded_person.email_addresses.first.update_column(:primary, false)
           expect_person_excluded
@@ -280,12 +257,6 @@ describe MailChimpAccount do
 
       it 'scopes the contacts to the passed in ids if specified' do
         expect(account.contacts_with_email_addresses([contact.id + 1])).to be_empty
-      end
-
-      it 'includes opted out people and non-newsletter contacts if specified' do
-        contact.update(send_newsletter: '')
-        person.update(optout_enewsletter: true)
-        expect(account.contacts_with_email_addresses(nil, false)).to include contact
       end
     end
   end
@@ -411,7 +382,7 @@ describe MailChimpAccount do
 
       it 'exports appeal contacts' do
         expect(account).to receive(:contacts_with_email_addresses)
-          .with([contact1.id, contact2.id], false) { [contact2] }
+          .with([contact1.id, contact2.id]) { [contact2] }
         expect(account).to receive(:compare_and_unsubscribe).with([contact2], 'appeal_list1')
         expect(account).to receive(:export_to_list).with('appeal_list1', [contact2])
         expect(account).to receive(:save_appeal_list_info)

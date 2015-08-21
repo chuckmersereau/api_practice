@@ -123,7 +123,7 @@ class ContactsController < ApplicationController
     contacts.update_all(attributes_to_update)
 
     # Since update_all doesn't trigger callbacks, we need to manually sync with mail chimp
-    current_account_list.mail_chimp_account.try(:notify_contacts_changed, contacts.pluck(:id))
+    current_account_list.mail_chimp_account.try(:queue_sync_contacts, contacts.pluck(:id))
   end
 
   def merge
