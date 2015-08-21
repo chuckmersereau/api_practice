@@ -26,6 +26,18 @@ $ ->
           fillInNames()
 
   if $('.contacts_controller')[0]?
+    $(document).on 'click', '[data-behavior=explain_statuses]', ->
+      $('#explain_statuses_modal').dialog {
+        width: 'auto',
+        maxHeight: 700,
+        buttons: [
+          {
+            text: __('OK')
+            click: ->
+              $(this).dialog("close")
+          }
+        ]
+      }
 
     $("#contact_pledge_amount").focusout ->
         amount = $(this).val()
