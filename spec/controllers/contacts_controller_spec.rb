@@ -105,6 +105,12 @@ describe ContactsController do
         view_opts = user.reload.contacts_view_options[user.account_lists.first.id.to_s]
         expect(view_opts[:per_page]).to eq '100'
       end
+
+      it 'redirects to the contact if there is a single wildcard match' do
+        contact.people << create(:person, first_name: 'jane', last_name: 'doe')
+        get :index, q: 'doe, jane'
+        expect(response).to redirect_to(contact)
+      end
     end
 
     describe '#show' do

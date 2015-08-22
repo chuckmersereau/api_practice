@@ -6,8 +6,8 @@ class ContactsController < ApplicationController
 
   def index
     if params[:q].present?
-      contacts_with_name = ContactFilter.new(name: params[:q], status: ['*']).filter(current_account_list.contacts)
-      redirect_to contacts_with_name.first if contacts_with_name.count == 1
+      contacts_quick_find = ContactFilter.new(wildcard_search: params[:q], status: ['*']).filter(current_account_list.contacts)
+      redirect_to contacts_quick_find.first if contacts_quick_find.count == 1
     end
 
     @page_title = _('Contacts')
