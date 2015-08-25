@@ -21,7 +21,7 @@ class MasterAddress < ActiveRecord::Base
         ma.latitude = lat.to_s
         ma.longitude = long.to_s
         ma.save
-        sleep 1
+        sleep 1 unless Rails.env.test?
       end
     end
   end
