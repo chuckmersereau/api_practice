@@ -9,10 +9,9 @@
       <li>
         <%= link_to(p_exhibit, person) %>:
         <%= l(Date.new(Time.zone.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
-        <%= link_to('', person.facebook_account.url, target: '_blank', class: 'fa fa-facebook-square') if person.facebook_account %>
-        <%= link_to('', person.twitter_account.url, target: '_blank', class: 'fa fa-twitter-square') if person.twitter_account %>
-        <%= mail_to(person.primary_email_address, '', class: "fa fa-envelope") if person.primary_email_address %>
-      </li>
+        <%= p_exhibit.facebook_link %>
+        <%= p_exhibit.twitter_link %>
+        <%= p_exhibit.email_link %>
     <% end %>
   </ul>
   <% more_bdays_text = '<i class="fa fa-plus-square-o"></i> '.html_safe +
@@ -35,9 +34,10 @@
         <%= l(Date.new(Time.zone.now.year, contact.people.first.anniversary_month, 
                        contact.people.first.anniversary_day), format: 'MMM-d') %>
         <% contact.people.each do |person| %>
-          <%= link_to('', person.facebook_account.url, target: '_blank', class: 'fa fa-facebook-square') if person.facebook_account %>
-          <%= link_to('', person.twitter_account.url, target: '_blank', class: 'fa fa-twitter-square') if person.twitter_account %>
-          <%= mail_to(person.primary_email_address, '', class: "fa fa-envelope") if person.primary_email_address %>
+          <% p_exhibit = exhibit(person, self) %>
+          <%= p_exhibit.facebook_link %>
+          <%= p_exhibit.twitter_link %>
+          <%= p_exhibit.email_link %>
         <% end %>
       </li>
     <% end %>

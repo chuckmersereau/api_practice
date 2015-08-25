@@ -28,4 +28,41 @@ describe PersonExhibit do
       expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
     end
   end
+
+  context '#facebook_link' do
+    it 'gives blank if person has no facebook account' do
+      expect(exhib.facebook_link).to be_blank
+    end
+
+    it 'links to the facebook account url if person has an account' do
+      exhib = PersonExhibit.new(person, ActionView::Base.new)
+      allow(person).to receive(:facebook_account) { double(url: 'facebook.com/joe') }
+      expect(exhib.facebook_link).to eq '<a class="fa fa-facebook-square" href="facebook.com/joe" target="_blank"></a>'
+    end
+  end
+
+  context '#twitter_link' do
+    it 'gives blank if person has no twitter account' do
+      expect(exhib.twitter_link).to be_blank
+    end
+
+    it 'links to the twitter account url if the person has a twitter account' do
+      exhib = PersonExhibit.new(person, ActionView::Base.new)
+      allow(person).to receive(:twitter_account) { double(url: 'twitter.com/joe') }
+      expect(exhib.twitter_link).to eq '<a class="fa fa-twitter-square" href="twitter.com/joe" target="_blank"></a>'
+    end
+  end
+
+  context '#email_link' do
+    it 'gives blank if person has no primary email address' do
+      expect(exhib.email_link).to be_blank
+    end
+
+    it 'links to the email mailto url if person has a primary email' do
+      person.email_address = { email: 'joe@example.com', primary: true }
+      person.save
+      exhib = PersonExhibit.new(person, ActionView::Base.new)
+      expect(exhib.email_link).to eq '<a class="fa fa-envelope" href="mailto:joe@example.com"></a>'
+    end
+  end
 end
