@@ -68,18 +68,18 @@
                             <a ng-href="/people/{{p.id}}" target="_blank">{{p.first_name}} {{p.last_name}}</a>
                         </div>
                         <div class="column-inner">
-                            <p ng-repeat="phone in p.phone_numbers">
+                            <p ng-repeat="phone in p.valid_numbers = (p.phone_numbers | filter:{ historic: false })">
                                 <strong>Phone ({{phone.location}})</strong><br/>
                                 {{phone.number}} <i class="fa fa-check green" ng-show="phone.primary"></i>
                             </p>
-                            <p ng-show="!p.phone_numbers.length">No phone number</p>
+                            <p ng-show="!p.valid_numbers.length">No phone number</p>
 
                             <p>
-                                <span ng-repeat="email in p.email_addresses | filter:{ historic: false }">
+                                <span ng-repeat="email in p.valid_emails = (p.email_addresses | filter:{ historic: false })">
                                     <a ng-href="mailto:{{email.email}}">{{email.email}}</a> <i class="fa fa-check green" ng-show="email.primary"></i><br/>
                                 </span>
 
-                                <span ng-show="!p.email_addresses.length">
+                                <span ng-show="!p.valid_emails.length">
                                     <%= _('No email address') %>
                                 </span>
                             </p>
