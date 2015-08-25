@@ -48,4 +48,4 @@ hash = {
   }
 }
 
-Sidekiq::Cron::Job.load_from_hash! hash
+Sidekiq::Cron::Job.load_from_hash! hash if Rails.env.production?
