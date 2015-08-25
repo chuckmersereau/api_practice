@@ -119,6 +119,17 @@ describe AccountList do
       expect(account_list.contacts_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1)))
         .to be_empty
     end
+
+    it 'only includes people with anniversaries in the loaded people association' do
+      person_without_anniversary = create(:person)
+      contact.people << person_without_anniversary
+
+      contact_with_anniversary = account_list
+        .contacts_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1))
+        .first
+      expect(contact_with_anniversary.people.size).to eq 1
+      expect(contact_with_anniversary.people).to include(person)
+    end
   end
 
   context '#users_combined_name' do

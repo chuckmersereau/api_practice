@@ -23,19 +23,22 @@
 <% end %>
 
 <h4 class="title"><%= _('Anniversaries This Week') %></h4>
-<% people_with_anniversaries = current_account_list.people_with_anniversaries(
+<% contacts_with_anniversaries = current_account_list.contacts_with_anniversaries(
                                   Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
-   anniversaries_count = people_with_anniversaries.count %>
+   anniversaries_count = contacts_with_anniversaries.count %>
 <% if anniversaries_count > 0 %>
   <ul class="plain-list anniversaries-list">
-    <% people_with_anniversaries.each do |person|
-        p_exhibit = exhibit(person, self)%>
+    <% contacts_with_anniversaries.each do |contact|
+        c_exhibit = exhibit(contact, self)%>
       <li>
-        <%= link_to(p_exhibit, person) %>:
-        <%= l(Date.new(Time.zone.now.year, person.anniversary_month, person.anniversary_day), format: 'MMM-d') %>
-        <%= link_to('', person.facebook_account.url, target: '_blank', class: 'fa fa-facebook-square') if person.facebook_account %>
-        <%= link_to('', person.twitter_account.url, target: '_blank', class: 'fa fa-twitter-square') if person.twitter_account %>
-        <%= mail_to(person.primary_email_address, '', class: "fa fa-envelope") if person.primary_email_address %>
+        <%= link_to(c_exhibit, contact) %>:
+        <%= l(Date.new(Time.zone.now.year, contact.people.first.anniversary_month, 
+                       contact.people.first.anniversary_day), format: 'MMM-d') %>
+        <% contact.people.each do |person| %>
+          <%= link_to('', person.facebook_account.url, target: '_blank', class: 'fa fa-facebook-square') if person.facebook_account %>
+          <%= link_to('', person.twitter_account.url, target: '_blank', class: 'fa fa-twitter-square') if person.twitter_account %>
+          <%= mail_to(person.primary_email_address, '', class: "fa fa-envelope") if person.primary_email_address %>
+        <% end %>
       </li>
     <% end %>
   </ul>

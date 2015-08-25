@@ -169,17 +169,17 @@ class AccountList < ActiveRecord::Base
     start_month = start_date.month
     end_month = end_date.month
 
-    contacts_with_anniversaries = active_contacts.joins(:people)
+    contacts_with_anniversaries = active_contacts.includes(:people)
 
     if start_month == end_month
       contacts_with_anniversaries = contacts_with_anniversaries
-        .where('people.anniversary_month = ?', start_month)
-        .where('people.anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
+                                    .where('people.anniversary_month = ?', start_month)
+                                    .where('people.anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
     else
       contacts_with_anniversaries = contacts_with_anniversaries
-        .where("(people.anniversary_month = ? AND people.anniversary_day >= ?)
+                                    .where("(people.anniversary_month = ? AND people.anniversary_day >= ?)
                OR (people.anniversary_month = ? AND people.anniversary_day <= ?)",
-               start_month, start_date.day, end_month, end_date.day)
+                                           start_month, start_date.day, end_month, end_date.day)
     end
 
     contacts_with_anniversaries
