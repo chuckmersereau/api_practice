@@ -43,4 +43,27 @@ describe Activity do
       ).to be true
     end
   end
+
+  context '#assignable_contacts' do
+    let(:task) { build(:task, account_list: account_list) }
+    let(:active_contact) { create(:contact, status: 'Partner - Pray') }
+    let(:inactive_contact) { create(:contact, status: 'Not Interested') }
+
+    before do
+      account_list.contacts << active_contact
+      account_list.contacts << inactive_contact
+    end
+
+    it 'gives only active contacts if none are assigned to task' do
+      expect(task.assignable_contacts.to_a).to eq([active_contact])
+    end
+
+    it 'includes inactive contacts that are assigned to the task' do
+      task.contacts << inactive_contact
+      task.save
+      contacts = task.assignable_contacts
+      expect(contacts).to include(active_contact)
+      expect(contacts).to include(inactive_contact)
+    end
+  end
 end
