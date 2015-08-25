@@ -141,10 +141,16 @@
           <div class="well">
             <div class="progress-box-title"><i class="fa fa-users"></i> <%= _('Contacts') %></div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.contacts.active}}</span> <%= _('Active') %>
+              <a href="<%= contacts_path(filters: { status: Api::V1::ProgressController::ACTIVE_STATUSES_FOR_STAT }) %>">
+                <span class="count-big">{{progress.data.contacts.active}}</span> 
+                <%= _('Active') %>
+              </a>
             </div>
             <div class="progress-stat">
-              <span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span> <%= _('Referrals On-hand') %>
+              <a href="<%= contacts_path(filters: { referrer: '*', status: Contact::IN_PROGRESS_STATUSES }) %>">
+                <span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span> 
+                <%= _('Referrals On-hand') %>
+              </a>
             </div>
             <div class="progress-stat">
               <span class="count-big">{{progress.data.contacts.referrals}}</span> <%= _('Gained') %>
