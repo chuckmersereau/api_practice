@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150807145306) do
+ActiveRecord::Schema.define(version: 20150814142759) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -264,6 +264,7 @@ ActiveRecord::Schema.define(version: 20150807145306) do
     t.boolean  "no_appeals"
     t.text     "prayer_letters_params"
     t.string   "pls_id"
+    t.text     "pls_params"
   end
 
   add_index "contacts", ["account_list_id"], name: "index_contacts_on_account_list_id", using: :btree
@@ -498,16 +499,35 @@ ActiveRecord::Schema.define(version: 20150807145306) do
     t.string   "webhook_token"
   end
 
+  add_index "mail_chimp_accounts", ["account_list_id"], name: "index_mail_chimp_accounts_on_account_list_id", using: :btree
+
   create_table "mail_chimp_appeal_lists", force: true do |t|
-    t.integer  "mail_chimp_account_id"
-    t.string   "appeal_list_id"
-    t.integer  "appeal_id"
+    t.integer  "mail_chimp_account_id", null: false
+    t.string   "appeal_list_id",        null: false
+    t.integer  "appeal_id",             null: false
     t.datetime "created_at"
     t.datetime "updated_at"
   end
 
   add_index "mail_chimp_appeal_lists", ["appeal_list_id"], name: "index_mail_chimp_appeal_lists_on_appeal_list_id", using: :btree
   add_index "mail_chimp_appeal_lists", ["mail_chimp_account_id"], name: "index_mail_chimp_appeal_lists_on_mail_chimp_account_id", using: :btree
+
+  create_table "mail_chimp_members", force: true do |t|
+    t.integer  "mail_chimp_account_id", null: false
+    t.string   "list_id",               null: false
+    t.string   "email",                 null: false
+    t.string   "status"
+    t.string   "greeting"
+    t.string   "first_name"
+    t.string   "last_name"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "mail_chimp_members", ["email"], name: "index_mail_chimp_members_on_email", using: :btree
+  add_index "mail_chimp_members", ["list_id"], name: "index_mail_chimp_members_on_list_id", using: :btree
+  add_index "mail_chimp_members", ["mail_chimp_account_id", "list_id", "email"], name: "mail_chimp_members_email_list_account_uniq", unique: true, using: :btree
+  add_index "mail_chimp_members", ["mail_chimp_account_id"], name: "index_mail_chimp_members_on_mail_chimp_account_id", using: :btree
 
   create_table "master_addresses", force: true do |t|
     t.text     "street"

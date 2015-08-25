@@ -9,15 +9,15 @@ class MailChimpAccount < ActiveRecord::Base
 
   belongs_to :account_list
   has_one :mail_chimp_appeal_list, dependent: :destroy
+  has_many :mail_chimp_members, dependent: :destroy
 
-  # attr_accessible :api_key, :primary_list_id
   attr_reader :validation_error
 
   validates :account_list_id, :api_key, presence: true
   validates :api_key, format: /\A\w+-us\d+\z/
 
   before_create :set_active
-  after_save :queue_import_if_list_changed
+  after_save :queue_export_if_list_changed
 
   def lists
     return [] unless api_key.present?
@@ -53,35 +53,12 @@ class MailChimpAccount < ActiveRecord::Base
     active? && validate_key
   end
 
+  def queue_sync_contacts(contact_ids)
+    async(:call_mailchimp, :sync_contacts, contact_ids)
+  end
+
   def queue_export_to_primary_list
-    async(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
-  end
-
-  def queue_subscribe_contact(contact)
-    async(:call_mailchimp, :subscribe_contacts, contact.id)
-  end
-
-  def queue_subscribe_person(person)
-    async(:call_mailchimp, :subscribe_person, person.id)
-  end
-
-  def queue_unsubscribe_email(email)
-    async(:call_mailchimp, :unsubscribe_email, email)
-  end
-
-  def queue_update_email(old_email, new_email)
-    return if old_email == new_email
-    async(:call_mailchimp, :update_email, old_email, new_email)
-  end
-
-  def queue_unsubscribe_contact(contact)
-    contact.people.each(&method(:queue_unsubscribe_person))
-  end
-
-  def queue_unsubscribe_person(person)
-    person.email_addresses.each do |email_address|
-      async(:call_mailchimp, :unsubscribe_email, email_address.email)
-    end
+    async(:call_mailchimp, :export_to_primary_list)
   end
 
   def queue_export_appeal_contacts(contact_ids, list_id, appeal_id)
@@ -102,7 +79,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def export_appeal_contacts(contact_ids, list_id, appeal_id)
     return if primary_list_id == list_id
-    contacts = contacts_with_email_addresses(contact_ids, false)
+    contacts = contacts_with_email_addresses(contact_ids)
     compare_and_unsubscribe(contacts, list_id)
     export_to_list(list_id, contacts)
     save_appeal_list_info(list_id, appeal_id)
@@ -113,7 +90,9 @@ class MailChimpAccount < ActiveRecord::Base
     mail_chimp_appeal_list.update(appeal_list_id: appeal_list_id, appeal_id: appeal_id)
   end
 
-  # private
+  def sync_contacts(contact_ids)
+    MailChimpSync.new(self).sync_contacts(contact_ids)
+  end
 
   def call_mailchimp(method, *args)
     return if !active? || primary_list_id.blank?
@@ -133,34 +112,6 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def update_email(old_email, new_email)
-    gb.list_update_member(id: primary_list_id, email_address: old_email, merge_vars: { EMAIL: new_email })
-  rescue Gibbon::MailChimpError => e
-    # The email address "xxxxx@example.com" does not belong to this list (code 215)
-    # There is no record of "xxxxx@example.com" in the database (code 232)
-    if e.message.include?('code 215') || e.message.include?('code 232')
-      subscribe_email(new_email)
-    else
-      raise e unless e.message.include?('code 214') # The new email address "xxxxx@example.com" is already subscribed to this list and must be unsubscribed first. (code 214)
-    end
-  end
-
-  def unsubscribe_email(email)
-    return if email.blank? || primary_list_id.blank?
-    gb.list_unsubscribe(id: primary_list_id, email_address: email,
-                        send_goodbye: false, delete_member: true)
-  rescue Gibbon::MailChimpError => e
-    case
-    when e.message.include?('code 232') || e.message.include?('code 215')
-      # do nothing
-    when e.message.include?('code 200')
-      # Invalid MailChimp List ID
-      update_column(:primary_list_id, nil)
-    else
-      raise e
-    end
-  end
-
   def compare_and_unsubscribe(contacts, list_id)
     # compare and unsubscribe email addresses from the prev mail chimp appeal list not on
     # the current one.
@@ -173,68 +124,23 @@ class MailChimpAccount < ActiveRecord::Base
     return if list_id.blank?
     gb.list_batch_unsubscribe(id: list_id, emails: members_to_unsubscribe,
                               delete_member: true, send_goodbye: false, send_notify: false)
+    mail_chimp_members.where(list_id: list_id, email: members_to_unsubscribe).destroy_all
   end
 
-  def subscribe_email(email)
-    gb.list_subscribe(id: primary_list_id, email_address: email, update_existing: true,
-                      double_optin: false, send_welcome: false, replace_interests: true)
-  rescue Gibbon::MailChimpError => e
-    case
-    when e.message.include?('code 250') # FNAME must be provided - Please enter a value (code 250)
-    when e.message.include?('code 214') # The new email address "xxxxx@example.com" is already subscribed to this list and must be unsubscribed first. (code 214)
-    else
-      raise e
-    end
-  end
-
-  def subscribe_person(person_id)
-    begin
-      person = Person.find(person_id)
-    rescue ActiveRecord::RecordNotFound
-      # This person was deleted after the background job was created
-      return false
-    end
-
-    return unless person.primary_email_address
-    vars = { EMAIL: person.primary_email_address.email, FNAME: person.first_name,
-             LNAME: person.last_name, GREETING: person.contact ? person.contact.greeting : '' }
-    begin
-      gb.list_subscribe(id: primary_list_id, email_address: vars[:EMAIL], update_existing: true,
-                        double_optin: false, merge_vars: vars, send_welcome: false, replace_interests: true)
-    rescue Gibbon::MailChimpError => e
-      case
-      when e.message.include?('code 250') # MMERGE3 must be provided - Please enter a value (code 250)
-        # Notify user and nulify primary_list_id until they fix the problem
-        update_column(:primary_list_id, nil)
-        AccountMailer.mailchimp_required_merge_field(account_list).deliver
-      when e.message.include?('code 200') # Invalid MailChimp List ID (code 200)
-        # TODO: Notify user and nulify primary_list_id until they fix the problem
-        update_column(:primary_list_id, nil)
-      when e.message.include?('code 502') || e.message.include?('code 220')
-        # Invalid Email Address: "Rajah Tony" <amrajah@gmail.com> (code 502)
-        # "jake.adams.photo@gmail.cm" has been banned (code 220) - This is usually a typo in an email address
-      else
-        raise e
-      end
-    end
-  end
-
-  def setup_webhooks_and_subscribe_contacts
+  def export_to_primary_list
     setup_webhooks
-    subscribe_contacts
+
+    # clear the member records to force a full export
+    mail_chimp_members.where(list_id: primary_list_id).destroy_all
+
+    MailChimpSync.new(self).sync_contacts
   end
 
-  def subscribe_contacts(contact_ids = nil, list_id = primary_list_id)
-    contacts = contacts_with_email_addresses(contact_ids)
-    export_to_list(list_id, contacts.to_set)
-  end
-
-  def contacts_with_email_addresses(contact_ids, enewsletter_only = true)
+  def contacts_with_email_addresses(contact_ids)
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
-    contacts = contacts.where(send_newsletter: %w(Email Both)) if enewsletter_only
     contacts.includes(people: :primary_email_address)
-      .where('email_addresses.email is not null')
+      .where.not(email_addresses: { historic: true })
       .references('email_addresses')
   end
 
@@ -244,8 +150,21 @@ class MailChimpAccount < ActiveRecord::Base
     statuses = contacts.map(&:status).compact.uniq
     add_status_groups(list_id, statuses)
     add_greeting_merge_variable(list_id)
-    gb.list_batch_subscribe(id: list_id, batch: batch_params(contacts), update_existing: true,
+
+    members_params = batch_params(contacts)
+    gb.list_batch_subscribe(id: list_id, batch: members_params, update_existing: true,
                             double_optin: false, send_welcome: false, replace_interests: true)
+    create_member_records(members_params)
+  end
+
+  def create_member_records(members_params)
+    members_params.each do |params|
+      member = mail_chimp_members.find_or_create_by(list_id: primary_list_id, email: params[:EMAIL])
+      groupings = params[:GROUPINGS].try(:first)
+      status = groupings ? groupings[:groups] : nil
+      member.update(first_name: params[:FNAME], last_name: params[:LNAME],
+                    greeting: params[:GREETING], status: status)
+    end
   end
 
   def batch_params(contacts)
@@ -256,9 +175,6 @@ class MailChimpAccount < ActiveRecord::Base
       contact.status = 'Partner - Pray' if contact.status.blank?
 
       contact.people.each do |person|
-        next if person.primary_email_address.blank? || person.optout_enewsletter? ||
-                person.primary_email_address.historic?
-
         batch << { EMAIL: person.primary_email_address.email, FNAME: person.first_name,
                    LNAME: person.last_name, GREETING: contact.greeting }
       end
@@ -316,7 +232,7 @@ class MailChimpAccount < ActiveRecord::Base
       groupings.find { |g| g['name'] == _('Partner Status') }
   end
 
-  def queue_import_if_list_changed
+  def queue_export_if_list_changed
     queue_export_to_primary_list if changed.include?('primary_list_id')
   end
 

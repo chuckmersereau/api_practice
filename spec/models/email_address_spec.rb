@@ -88,37 +88,5 @@ describe EmailAddress do
         end
       end
     end
-
-    context '#sync_with_mail_chimp' do
-      let!(:account_list) { create(:account_list) }
-      let!(:mail_chimp_account) { create(:mail_chimp_account, account_list: account_list, active: true) }
-      let!(:contact) { create(:contact, account_list: account_list, send_newsletter: 'Email') }
-
-      before do
-        contact.people << person
-      end
-
-      it 'unsubscribes if an email address is changed to no longer valid' do
-        expect_any_instance_of(MailChimpAccount).to receive(:queue_unsubscribe_email).with('test@example.com')
-
-        email = EmailAddress.add_for_person(person, email: address, primary: true)
-        email.reload
-
-        email.update(historic: true)
-      end
-
-      it 'subscribes if an email address is added to a person' do
-        expect_any_instance_of(MailChimpAccount).to receive(:queue_subscribe_person)
-        EmailAddress.add_for_person(person, email: address, primary: true)
-      end
-
-      it 'updates the email when it changes' do
-        expect_any_instance_of(MailChimpAccount).to receive(:queue_update_email)
-          .with('test@example.com', 'test2@example.com')
-        email = EmailAddress.add_for_person(person, email: address, primary: true)
-        email.reload
-        email.update(email: 'test2@example.com')
-      end
-    end
   end
 end

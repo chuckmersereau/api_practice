@@ -120,18 +120,10 @@ class ContactsController < ApplicationController
 
     attributes_to_update = contact_params.select { |_, v| v.present? }
     return unless attributes_to_update.present?
-    # Since update_all doesn't trigger callbacks, we need to manually sync with mail chimp
-    if attributes_to_update['send_newsletter'].present?
-      attributes_to_update['send_newsletter'] = nil if attributes_to_update['send_newsletter'] == 'none'
-      if mail_chimp_account = current_account_list.mail_chimp_account
-        if %w(Email Both).include?(attributes_to_update['send_newsletter'])
-          contacts.map { |c| mail_chimp_account.queue_subscribe_contact(c) }
-        else
-          contacts.map { |c| mail_chimp_account.queue_unsubscribe_contact(c) }
-        end
-      end
-    end
     contacts.update_all(attributes_to_update)
+
+    # Since update_all doesn't trigger callbacks, we need to manually sync with mail chimp
+    current_account_list.mail_chimp_account.try(:queue_sync_contacts, contacts.pluck(:id))
   end
 
   def merge

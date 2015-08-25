@@ -18,6 +18,7 @@ require 'webmock/rspec'
 require 'capybara/rspec'
 require 'capybara/poltergeist'
 require 'sidekiq/testing'
+require 'sidekiq_unique_jobs/testing'
 
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'

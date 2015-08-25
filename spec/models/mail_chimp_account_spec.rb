@@ -93,45 +93,8 @@ describe MailChimpAccount do
 
     it 'queues subscribe_contacts' do
       expect(account).to receive(:async)
-        .with(:call_mailchimp, :setup_webhooks_and_subscribe_contacts)
+        .with(:call_mailchimp, :export_to_primary_list)
       account.queue_export_to_primary_list
-    end
-
-    it 'queues subscribe_contacts for one contact' do
-      contact = create(:contact)
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :subscribe_contacts, contact.id)
-      account.queue_subscribe_contact(contact)
-    end
-
-    it 'queues subscribe_person' do
-      person = create(:person)
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :subscribe_person, person.id)
-      account.queue_subscribe_person(person)
-    end
-
-    it 'queues unsubscribe_email' do
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :unsubscribe_email, 'foo@example.com')
-      account.queue_unsubscribe_email('foo@example.com')
-    end
-
-    it 'queues update_email' do
-      expect(account).to receive(:async)
-        .with(:call_mailchimp, :update_email, 'foo@example.com', 'foo1@example.com')
-      account.queue_update_email('foo@example.com', 'foo1@example.com')
-    end
-
-    it 'queues unsubscribe_email for each of a contacts email addresses' do
-      contact = create(:contact)
-      contact.people << create(:person)
-
-      2.times { |i| contact.people.first.email_addresses << EmailAddress.new(email: "foo#{i}@example.com") }
-
-      expect do
-        account.queue_unsubscribe_contact(contact)
-      end.to change(MailChimpAccount.jobs, :size).by(2)
     end
 
     it 'queues export_appeal_contacts' do
@@ -143,7 +106,7 @@ describe MailChimpAccount do
   end
 
   describe 'callbacks' do
-    it 'queues import if primary list changed' do
+    it 'queues export if primary list changed' do
       expect(account).to receive(:queue_export_to_primary_list).and_return(true)
       account.primary_list_id = 'foo'
       account.save
@@ -151,80 +114,27 @@ describe MailChimpAccount do
   end
 
   context 'when updating mailchimp' do
-    it 'updates an email' do
-      stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listUpdateMember')
-        .to_return(body: '{}')
-      account.send(:update_email, 'foo@example.com', 'foo1@example.com')
-    end
-
-    it 'unsubscribes an email' do
-      stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listUnsubscribe')
-        .to_return(body: '{}')
-      account.send(:unsubscribe_email, 'foo@example.com')
-    end
-
-    context 'subscribing a person' do
-      it "adds a person's primary email address" do
-        account.primary_list_id = 'list1'
-        subscribe_args = {
-          id: 'list1', email_address: 'foo@example.com', update_existing: true, double_optin: false,
-          merge_vars: { EMAIL: 'foo@example.com', FNAME: 'John', LNAME: 'Smith', GREETING: 'Sync greeting' },
-          send_welcome: false, replace_interests: true
-        }
-        expect(account.gb).to receive(:list_subscribe).with(subscribe_args)
-        person = create(:person, email: 'foo@example.com')
-        contact = create(:contact, greeting: 'Sync greeting')
-        contact.people << person
-        account.send(:subscribe_person, person.id)
-      end
-
-      it 'nilifies the primary_list_id if an extra merge field is required' do
-        allow(AccountMailer).to receive(:mailchimp_required_merge_field).and_return(double('mailer', deliver: true))
-
-        stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listSubscribe')
-          .to_return(body: '{"error":"MMERGE3 must be provided - Please enter a value","code":250}', status: 500)
-        person = create(:person, email: 'foo@example.com')
-        account.primary_list_id = 5
-        account.save
-        account.send(:subscribe_person, person.id)
-        expect(account.primary_list_id).to be_nil
-      end
-    end
-
     context 'subscribing contacts' do
-      it 'subscribes a single contact' do
-        contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        contact.people << create(:person, email: 'foo@example.com')
+      it 'sets up the webhooks, clears the cached members and syncs contacts' do
+        account.primary_list_id = 'foo'
+        create(:mail_chimp_member, mail_chimp_account: account, list_id: 'foo')
 
-        expect(account).to receive(:export_to_list)
-          .with(account.primary_list_id, [contact].to_set).and_return(true)
-        account.send(:subscribe_contacts, contact.id)
+        expect(account).to receive(:setup_webhooks)
+        sync = double
+        expect(MailChimpSync).to receive(:new) { sync }
+        expect(sync).to receive(:sync_contacts)
+
+        expect do
+          account.send(:export_to_primary_list)
+        end.to change(MailChimpMember, :count).by(-1)
       end
 
-      it 'subscribes multiple contacts' do
-        contact1 = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        contact1.people << create(:person, email: 'foo@example.com')
+      it 'exports to a list and saves mail chimp member records' do
+        account.primary_list_id = 'list1'
+        account.save
 
-        contact2 = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        contact2.people << create(:person, email: 'foo@example.com')
-
-        expect(account).to receive(:export_to_list)
-          .with(account.primary_list_id, [contact1, contact2].to_set).and_return(true)
-        account.send(:subscribe_contacts, [contact1.id, contact2.id])
-      end
-
-      it 'subscribes all contacts' do
-        contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        contact.people << create(:person, email: 'foo@example.com')
-
-        expect(account).to receive(:export_to_list)
-          .with(account.primary_list_id, [contact].to_set).and_return(true)
-        account.send(:subscribe_contacts)
-      end
-
-      it 'exports to a list' do
         stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listBatchSubscribe')
-          .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3Anull%2C%22'\
+          .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22list1%22%2C%22'\
             'batch%22%3A%5B%7B%22EMAIL%22%3A%22foo%40example.com%22%2C%22'\
             'FNAME%22%3A%22John%22%2C%22LNAME%22%3A%22Smith%22%2C%22GREETING%22%3A%22John%22%2C%22'\
             'GROUPINGS%22%3A%5B%7B%22id%22%3A1%2C%22groups%22%3A%22Partner+-+Financial%22%7D%5D%7D%5D%2C%22'\
@@ -239,19 +149,15 @@ describe MailChimpAccount do
 
         expect(account).to receive(:add_status_groups)
         expect(account).to receive(:add_greeting_merge_variable)
-        account.send(:export_to_list, account.primary_list_id, [contact])
-      end
-
-      it 'does not include people with historic emails in the batch params' do
-        contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
-        person = create(:person)
-        person.email_addresses << create(:email_address)
-        contact.people << person
-
-        expect(account.send(:batch_params, [contact])).to_not be_empty
-        person.email_addresses.first.update(historic: true)
-        contact.reload
-        expect(account.send(:batch_params, [contact])).to be_empty
+        expect do
+          account.send(:export_to_list, account.primary_list_id, [contact])
+        end.to change(account.mail_chimp_members, :count).by(1)
+        member = account.mail_chimp_members.first
+        expect(member.email).to eq 'foo@example.com'
+        expect(member.status).to eq 'Partner - Financial'
+        expect(member.greeting).to eq 'John'
+        expect(member.first_name).to eq 'John'
+        expect(member.last_name).to eq 'Smith'
       end
 
       context 'adding status groups' do
@@ -294,27 +200,63 @@ describe MailChimpAccount do
     end
 
     context '#contacts_with_email_addresses' do
-      let(:contact) { create(:contact, name: 'John Smith', send_newsletter: 'Email', account_list: account_list) }
+      let(:contact) do
+        create(:contact, name: 'John Smith', send_newsletter: 'Email', account_list: account_list)
+      end
       let(:person) { create(:person) }
 
-      it 'returns a contact when the passed in contact has a person email address and valid newsletter option' do
+      before do
         person.email_address = { email: 'foo@example.com', primary: true }
         person.save
         contact.people << person
-        allow(account).to receive(:contacts_with_email_addresses).with(contact.id).and_return(contact)
       end
 
-      it 'returns nothing when the passed in contact id has no person email address' do
-        contact.people << person
-        allow(account).to receive(:contacts_with_email_addresses).with(contact.id).and_return(nil)
+      it 'returns a contact with valid email on newsletter' do
+        expect(account.contacts_with_email_addresses(nil).to_a).to eq [contact]
       end
 
-      it 'returns nothing when email address is present but send_newsletter is blank' do
-        person.email_address = { email: 'foo@example.com', primary: true }
-        person.save
-        contact.people << person
-        contact.send_newsletter = ''
-        allow(account).to receive(:contacts_with_email_addresses).with(contact.id).and_return(nil)
+      it 'returns nothing when person has no email address' do
+        person.email_addresses.first.destroy
+        expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
+      end
+
+      it 'excludes contacts with historic email addresses' do
+        person.email_addresses.first.update_column(:historic, true)
+        expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
+      end
+
+      describe 'it excludes people from the loaded contact.people association if: ' do
+        let(:excluded_person) { create(:person) }
+        before do
+          excluded_person.email_address = { email: 'foo2@example.com', primary: true }
+          excluded_person.save
+          contact.people << excluded_person
+        end
+
+        it 'has no email address' do
+          excluded_person.email_addresses.first.destroy
+          expect_person_excluded
+        end
+        it 'has only a non-primary email' do
+          expect(excluded_person.email_addresses.count).to eq 1
+          excluded_person.email_addresses.first.update_column(:primary, false)
+          expect_person_excluded
+        end
+        it 'has a historic email' do
+          excluded_person.email_addresses.first.update_column(:historic, true)
+          expect_person_excluded
+        end
+
+        def expect_person_excluded
+          contact = account.contacts_with_email_addresses(nil).first
+          expect(contact.people.size).to eq(1)
+          expect(contact.people).to include person
+          expect(contact.people).to_not include excluded_person
+        end
+      end
+
+      it 'scopes the contacts to the passed in ids if specified' do
+        expect(account.contacts_with_email_addresses([contact.id + 1])).to be_empty
       end
     end
   end
@@ -324,9 +266,9 @@ describe MailChimpAccount do
       account.primary_list_id = 'list1'
       account.active = true
       msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
-      expect(account).to receive(:subscribe_person).with(1).and_raise(Gibbon::MailChimpError.new(msg))
+      expect(account).to receive(:sync_contacts).with(1).and_raise(Gibbon::MailChimpError.new(msg))
       expect do
-        account.call_mailchimp(:subscribe_person, 1)
+        account.call_mailchimp(:sync_contacts, 1)
       end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
     end
   end
@@ -402,6 +344,19 @@ describe MailChimpAccount do
     end
   end
 
+  context '#unsubscribe_list_batch' do
+    it 'unsubscribes members and destroys their related records' do
+      stub = stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listBatchUnsubscribe')
+             .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22list1%22%2C%22'\
+             'emails%22%3A%22john%40example.com%22%2C%22delete_member%22%3Atrue%2C%22'\
+             'send_goodbye%22%3Afalse%2C%22send_notify%22%3Afalse%7D')
+      member = create(:mail_chimp_member, mail_chimp_account: account)
+      account.unsubscribe_list_batch('list1', 'john@example.com')
+      expect(stub).to have_been_requested
+      expect(MailChimpMember.find_by(id: member.id)).to be_nil
+    end
+  end
+
   describe 'mail chimp appeal methods' do
     let(:contact1) { create(:contact) }
     let(:contact2) { create(:contact) }
@@ -427,7 +382,7 @@ describe MailChimpAccount do
 
       it 'exports appeal contacts' do
         expect(account).to receive(:contacts_with_email_addresses)
-          .with([contact1.id, contact2.id], false) { [contact2] }
+          .with([contact1.id, contact2.id]) { [contact2] }
         expect(account).to receive(:compare_and_unsubscribe).with([contact2], 'appeal_list1')
         expect(account).to receive(:export_to_list).with('appeal_list1', [contact2])
         expect(account).to receive(:save_appeal_list_info)
