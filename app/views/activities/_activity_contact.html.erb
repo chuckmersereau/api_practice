@@ -1,7 +1,16 @@
 <div class="sfield email_field">
   <div class="field">
     <%= builder.label :contact_id, _('Related To') %>
-    <%= builder.select :contact_id, current_account_list.active_contacts.order('name').map {|c| [c.to_s, c.id]}, include_blank: true %>
+    <% 
+      contacts = current_account_list.contacts
+      if builder.object.contact_id.present?
+        # Include the currently selected contact in the list even if it's inactive.
+        contacts = contacts.where(Contact.active_conditions + ' OR contacts.id = ?', builder.object.contact_id)
+      else
+        contacts = contacts.active
+      end 
+    %>
+    <%= builder.select :contact_id, contacts.order('name').map {|c| [c.to_s, c.id]}, include_blank: true %>
   </div>
 </div>
 
