@@ -161,21 +161,30 @@ class AccountList < ActiveRecord::Base
                                            start_month, start_date.day, end_month, end_date.day)
 
     end
-    people_with_birthdays.order('people.birthday_month, people.birthday_day').merge(contacts.active)
+    people_with_birthdays.alive
+      .order('people.birthday_month, people.birthday_day').merge(contacts.active)
   end
 
-  def people_with_anniversaries(start_date, end_date)
+  def contacts_with_anniversaries(start_date, end_date)
     start_month = start_date.month
     end_month = end_date.month
+
+    contacts_with_anniversaries = active_contacts.includes(:people)
+
     if start_month == end_month
-      people_with_birthdays = people.where('people.anniversary_month = ?', start_month)
-                              .where('people.anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
+      contacts_with_anniversaries = contacts_with_anniversaries
+                                    .where('people.anniversary_month = ?', start_month)
+                                    .where('people.anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
     else
-      people_with_birthdays = people.where("(people.anniversary_month = ? AND people.anniversary_day >= ?)
-                                           OR (people.anniversary_month = ? AND people.anniversary_day <= ?)",
+      contacts_with_anniversaries = contacts_with_anniversaries
+                                    .where("(people.anniversary_month = ? AND people.anniversary_day >= ?)
+               OR (people.anniversary_month = ? AND people.anniversary_day <= ?)",
                                            start_month, start_date.day, end_month, end_date.day)
     end
-    people_with_birthdays.order('people.anniversary_month, people.anniversary_day').merge(contacts.active)
+
+    contacts_with_anniversaries
+      .order('people.anniversary_month, people.anniversary_day')
+      .reject { |contact| contact.people.where(deceased: true).any? }
   end
 
   def top_50_percent

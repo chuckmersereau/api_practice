@@ -87,9 +87,14 @@ describe AccountList do
     it 'handles a date range where the start and end day are in different months' do
       expect(account_list.people_with_birthdays(Date.new(2012, 8, 29), Date.new(2012, 9, 1))).to eq([person])
     end
+
+    it 'excludes deceased people' do
+      person.update(deceased: true)
+      expect(account_list.people_with_birthdays(Date.new(2012, 8, 29), Date.new(2012, 8, 31))).to be_empty
+    end
   end
 
-  context '#people_with_anniversaries' do
+  context '#contacts_with_anniversaries' do
     let(:account_list) { create(:account_list) }
     let(:contact) { create(:contact) }
     let(:person) { create(:person, anniversary_month: 8, anniversary_day: 30) }
@@ -100,13 +105,30 @@ describe AccountList do
     end
 
     it 'handles a date range where the start and end day are in the same month' do
-      expect(account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 8, 31)))
-        .to eq([person])
+      expect(account_list.contacts_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 8, 31)))
+        .to eq([contact])
     end
 
     it 'handles a date range where the start and end day are in different months' do
-      expect(account_list.people_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1)))
-        .to eq([person])
+      expect(account_list.contacts_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1)))
+        .to eq([contact])
+    end
+
+    it 'excludes contacts who have any deceased people in them' do
+      contact.people << create(:person, deceased: true)
+      expect(account_list.contacts_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1)))
+        .to be_empty
+    end
+
+    it 'only includes people with anniversaries in the loaded people association' do
+      person_without_anniversary = create(:person)
+      contact.people << person_without_anniversary
+
+      contact_with_anniversary = account_list
+                                 .contacts_with_anniversaries(Date.new(2012, 8, 29), Date.new(2012, 9, 1))
+                                 .first
+      expect(contact_with_anniversary.people.size).to eq 1
+      expect(contact_with_anniversary.people).to include(person)
     end
   end
 

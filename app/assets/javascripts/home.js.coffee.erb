@@ -10,6 +10,11 @@ $ ->
       $('.birthdays-list').addClass('show_all')
       return false
 
+    $('.see-all-anniversaries').click ->
+      $('.see-all-anniversaries').hide()
+      $('.anniversaries-list').addClass('show_all')
+      return false
+
     $('.late-partners-count').click ->
       $('#late-partners-dialog').dialog
         title: __('Late Partners'),

@@ -65,4 +65,19 @@ class PersonExhibit < DisplayCase::Exhibit
   def social?
     facebook_account || twitter_account || linkedin_account
   end
+
+  def facebook_link
+    return unless facebook_account
+    @context.link_to('', facebook_account.url, target: '_blank', class: 'fa fa-facebook-square')
+  end
+
+  def twitter_link
+    return unless twitter_account
+    @context.link_to('', twitter_account.url, target: '_blank', class: 'fa fa-twitter-square')
+  end
+
+  def email_link
+    return unless primary_email_address
+    @context.mail_to(primary_email_address, '', class: 'fa fa-envelope')
+  end
 end

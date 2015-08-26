@@ -1,0 +1,50 @@
+<h4 class="title"><%= _('Birthdays This Week') %></h4>
+<% people_with_birthdays = current_account_list.people_with_birthdays(
+                              Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
+   birthdays_count = people_with_birthdays.count %>
+<% if birthdays_count > 0 %>
+  <ul class="plain-list birthdays-list">
+    <% people_with_birthdays.each do |person|
+        p_exhibit = exhibit(person, self)%>
+      <li>
+        <%= link_to(p_exhibit, person) %>:
+        <%= l(Date.new(Time.zone.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
+        <%= p_exhibit.facebook_link %>
+        <%= p_exhibit.twitter_link %>
+        <%= p_exhibit.email_link %>
+    <% end %>
+  </ul>
+  <% more_bdays_text = '<i class="fa fa-plus-square-o"></i> '.html_safe +
+                        _('See all %{c} Birthdays').localize % {c: birthdays_count} %>
+  <%= link_to(more_bdays_text, '#', class: 'see-all see-all-birthdays') if birthdays_count > 5 %>
+<% else %>
+  <%= _('No birthdays this week!') %>
+<% end %>
+
+<h4 class="title"><%= _('Anniversaries This Week') %></h4>
+<% contacts_with_anniversaries = current_account_list.contacts_with_anniversaries(
+                                  Time.zone.now.beginning_of_week, Time.zone.now.end_of_week)
+   anniversaries_count = contacts_with_anniversaries.count %>
+<% if anniversaries_count > 0 %>
+  <ul class="plain-list anniversaries-list">
+    <% contacts_with_anniversaries.each do |contact|
+        c_exhibit = exhibit(contact, self)%>
+      <li>
+        <%= link_to(c_exhibit, contact) %>:
+        <%= l(Date.new(Time.zone.now.year, contact.people.first.anniversary_month, 
+                       contact.people.first.anniversary_day), format: 'MMM-d') %>
+        <% contact.people.each do |person| %>
+          <% p_exhibit = exhibit(person, self) %>
+          <%= p_exhibit.facebook_link %>
+          <%= p_exhibit.twitter_link %>
+          <%= p_exhibit.email_link %>
+        <% end %>
+      </li>
+    <% end %>
+  </ul>
+  <% more_anniversaries = '<i class="fa fa-plus-square-o"></i> '.html_safe +
+                        _('See all %{c} Anniversaries').localize % {c: anniversaries_count} %>
+  <%= link_to(more_anniversaries, '#', class: 'see-all see-all-anniversaries') if anniversaries_count > 3 %>
+<% else %>
+  <%= _('No anniversaries this week!') %>
+<% end %>
