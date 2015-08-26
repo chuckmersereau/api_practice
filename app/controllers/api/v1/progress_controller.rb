@@ -73,7 +73,8 @@ class Api::V1::ProgressController < Api::V1::BaseController
         .created_between(@start_date, @end_date)
         .joins(:contact_referrals_to_me).uniq
         .count,
-      referrals_on_hand: current_account_list.contacts.with_referrals
+      referrals_on_hand: current_account_list.contacts
+        .joins(:contact_referrals_to_me).uniq
         .where(status: Contact::IN_PROGRESS_STATUSES)
         .count
     }
