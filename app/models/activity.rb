@@ -70,4 +70,12 @@ class Activity < ActiveRecord::Base
   def self.overdue_and_today
     where(completed: false).where('start_at < ?', Time.zone.now.end_of_day)
   end
+
+  def assignable_contacts
+    assigned_contact_ids = activity_contacts.pluck(:contact_id)
+    return account_list.active_contacts if assigned_contact_ids.empty?
+
+    account_list.contacts
+      .where(Contact.active_conditions + ' OR contacts.id IN (?)', assigned_contact_ids)
+  end
 end
