@@ -70,8 +70,8 @@ class Api::V1::ProgressController < Api::V1::BaseController
         .where(status: ACTIVE_STATUSES_FOR_STAT)
         .count,
       referrals: current_account_list.contacts
-        .created_between(@start_date, @end_date)
         .joins(:contact_referrals_to_me).uniq
+        .where('contact_referrals.created_at BETWEEN ? AND ?', @start_date, @end_date)
         .count,
       referrals_on_hand: current_account_list.contacts
         .joins(:contact_referrals_to_me).uniq
