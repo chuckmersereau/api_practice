@@ -386,13 +386,14 @@ class Contact < ActiveRecord::Base
   end
 
   def find_timezone
-    primary_address = addresses.find(&:primary_mailing_address?) || addresses.first
-    return unless primary_address
-
-    latitude, longitude = Geocoder.coordinates([primary_address.street, primary_address.city, primary_address.state, primary_address.country].join(','))
-    timezone = GoogleTimezone.fetch(latitude, longitude).time_zone_id
-    ActiveSupport::TimeZone::MAPPING.invert[timezone]
+    return unless primary_or_first_address
+    primary_or_first_address.master_address.find_timezone
   rescue
+  end
+
+  def primary_or_first_address
+    @primary_or_first_address ||=
+      addresses.find(&:primary_mailing_address?) || addresses.first
   end
 
   def set_timezone

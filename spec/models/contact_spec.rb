@@ -717,4 +717,17 @@ describe Contact do
       end
     end
   end
+
+  context '#find_timezone' do
+    it 'returns nil if the contact has no primary address' do
+      expect(contact.find_timezone).to be_nil
+    end
+
+    it 'retrieves the master address timezone if there is a primary address' do
+      address = build(:address)
+      allow(contact).to receive(:primary_or_first_address) { address }
+      expect(address.master_address).to receive(:find_timezone).and_return('EST')
+      expect(contact.find_timezone).to eq 'EST'
+    end
+  end
 end
