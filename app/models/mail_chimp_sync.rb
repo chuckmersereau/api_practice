@@ -9,6 +9,24 @@ class MailChimpSync
     # logic for the deletes requires checking the full list.
     sync_adds_and_updates(contact_ids)
     sync_deletes
+  rescue Gibbon::MailChimpError => e
+    case
+    when e.message.include?('code 250')
+      # MMERGE3 must be provided - Please enter a value (code 250)
+      # Notify user and nulify primary_list_id until they fix the problem
+      @mc_account.update_column(:primary_list_id, nil)
+      AccountMailer.mailchimp_required_merge_field(@account_list).deliver
+    when e.message.include?('code 200')
+      # Invalid MailChimp List ID (code 200)
+      @mc_account.update_column(:primary_list_id, nil)
+    when e.message.include?('code 502') || e.message.include?('code 220')
+      # Invalid Email Address: "Rajah Tony" <amrajah@gmail.com> (code 502)
+      # "jake.adams.photo@gmail.cm" has been banned (code 220) - Usually a typo in an email address
+    when e.message.include?('code 214')
+      # The new email address "xxxxx@example.com" is already subscribed to this list
+    else
+      raise e
+    end
   end
 
   def sync_adds_and_updates(contact_ids)
