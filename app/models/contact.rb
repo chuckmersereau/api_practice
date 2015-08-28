@@ -261,7 +261,11 @@ class Contact < ActiveRecord::Base
     if first_names[0] =~ /\((\w|\W)*\)/
       first_names[0].sub!(/\((\w|\W)*\)/, '')
       first_names[0].strip!
-      return "#{first_names[0]} #{_('and')} #{first_names[1]} #{last_name}"
+      if first_names[1].present?
+        return "#{first_names[0]} #{_('and')} #{first_names[1]} #{last_name}"
+      else
+        return "#{first_names[0]} #{last_name}"
+      end
     end
     first_names[1].delete!('()')
     "#{first_names[0]} #{last_name} #{_('and')} #{first_names[1]}"
