@@ -279,10 +279,11 @@ class Contact < ActiveRecord::Base
   end
 
   def update_all_donation_totals
-    return unless donor_account_ids.present?
-    donation_sum = account_list.donations.where(donor_account_id: donor_account_ids).sum(:amount)
-    self.total_donations = donation_sum
-    save(validate: false)
+    update(total_donations: total_donations_query)
+  end
+
+  def total_donations_query
+    donations.sum(:amount)
   end
 
   def monthly_pledge
