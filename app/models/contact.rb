@@ -283,7 +283,7 @@ class Contact < ActiveRecord::Base
   end
 
   def total_donations_query
-    donations.sum(:amount)
+    @total_donations_query ||= donations.sum(:amount)
   end
 
   def monthly_pledge

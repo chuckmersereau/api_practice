@@ -48,10 +48,10 @@
           <td class="meta_data"><%= contact_exhibit.church_name %></td>
         </tr>
       <% end %>
-      <% if contact.total_donations.to_f > 0.0 %>
+      <% if contact.total_donations_query.to_f > 0.0 %>
         <tr>
           <td class="meta_name_wide"><%= _('Lifetime Donations') %></td>
-          <td class="meta_data"><%= number_to_current_currency(contact_exhibit.total_donations) %></td>
+          <td class="meta_data"><%= number_to_current_currency(contact_exhibit.total_donations_query) %></td>
         </tr>
       <% end %>
       </table>

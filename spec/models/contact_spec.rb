@@ -308,16 +308,16 @@ describe Contact do
 
       loser_contact.donor_accounts << create(:donor_account, account_number: '1')
       create(:donation, amount: 500.00, donor_account: loser_contact.donor_accounts.first,
-             designation_account: designation_account)
+                        designation_account: designation_account)
 
       contact.donor_accounts << create(:donor_account, account_number: '2')
       create(:donation, amount: 300.00, donor_account: contact.donor_accounts.first,
-             designation_account: designation_account)
+                        designation_account: designation_account)
 
       # Test that donation in same donor account but different designation
       # account not counted toward contact total.
       create(:donation, amount: 200.00, donor_account: contact.donor_accounts.first,
-             designation_account: create(:designation_account))
+                        designation_account: create(:designation_account))
 
       contact.merge(loser_contact)
       expect(contact.total_donations).to eq(800.00)
@@ -758,8 +758,8 @@ describe Contact do
       donor_account = create(:donor_account)
       contact.donor_accounts << donor_account
 
-      create(:donation, amount: 5, donor_account: donor_account, 
-             designation_account: designation_account)
+      create(:donation, amount: 5, donor_account: donor_account,
+                        designation_account: designation_account)
 
       # It shouldn't count this donation since it has no designation
       create(:donation, amount: 10, donor_account: donor_account)
