@@ -447,6 +447,11 @@ class DataServer
     rescue ArgumentError
     end
   end
+
+  def sanitize_name(name)
+    # Replace () with "" 
+    name.gsub('(', '"').gsub(')', '"')
+  end
 end
 
 class OrgAccountMissingCredentialsError < StandardError
