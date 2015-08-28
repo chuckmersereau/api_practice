@@ -18,7 +18,9 @@ class GoogleCalendarIntegrator
     return nil unless @google_integration.calendar_integration? && @google_integration.calendar_id
 
     task = Task.find_by(id: task_id)
-    google_event = GoogleEvent.find_by(google_integration_id: @google_integration.id, activity_id: task_id)
+    google_event = GoogleEvent.find_by(google_integration_id: @google_integration.id,
+                                       calendar_id: @google_integration.calendar_id,
+                                       activity_id: task_id)
 
     case
     when !task, !@google_integration.calendar_integrations.include?(task.activity_type)
@@ -63,7 +65,9 @@ class GoogleCalendarIntegrator
       body_object: event_attributes(task)
     )
     handle_error(result, task)
-    task.google_events.create!(google_integration_id: @google_integration.id, google_event_id: result.data['id'])
+    task.google_events.create!(google_integration_id: @google_integration.id,
+                               calendar_id: @google_integration.calendar_id,
+                               google_event_id: result.data['id'])
   rescue GoogleCalendarIntegrator::NotFound
     # a NotFound error here means the calendar being referenced doesn't exist on this google account
     @google_integration.update_attributes(

@@ -377,4 +377,26 @@ describe AccountList do
       account_list.send(:import_data)
     end
   end
+
+  describe 'top and bottom donor halves by pledge value' do
+    subject { create(:account_list) }
+    let(:high_pledger) do
+      create(:contact, status: 'Partner - Financial', pledge_amount: 100)
+    end
+    let(:low_pledger) do
+      create(:contact, status: 'Partner - Financial', pledge_amount: 600, pledge_frequency: 12)
+    end
+    before do
+      subject.contacts << high_pledger
+      subject.contacts << low_pledger
+    end
+
+    it 'calculates the top 50 percent' do
+      expect(subject.reload.top_50_percent.to_a).to eq [high_pledger]
+    end
+
+    it 'calculates the bottom 50 percent' do
+      expect(subject.bottom_50_percent.to_a).to eq [low_pledger]
+    end
+  end
 end
