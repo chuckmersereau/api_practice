@@ -12,7 +12,7 @@ class PhoneNumberValidator < ActiveModel::EachValidator
   private
 
   def valid?
-    GlobalPhone.parse(value)
+    Phonelib.parse(value)
   end
 
   def add_error

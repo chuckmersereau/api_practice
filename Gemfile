@@ -108,6 +108,7 @@ gem 'peek-performance_bar'
 gem 'peek-gc'
 gem 'user_agent_decoder'
 gem 'puma'
+gem 'phonelib', '~> 0.4.9'
 gem 'silencer'
 
 group :development do

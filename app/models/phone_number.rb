@@ -34,9 +34,10 @@ class PhoneNumber < ActiveRecord::Base
   end
 
   def clean_up_number
-    global = GlobalPhone.parse(number)
+    Phonelib.default_country = 'US'
+    global = Phonelib.parse(number)
     if global
-      self.number = global.international_string
+      self.number = global.international.gsub('+', '+' + global.country_code)
       self.country_code = global.country_code
     end
     true
