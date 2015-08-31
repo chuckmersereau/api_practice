@@ -303,10 +303,22 @@ describe Contact do
     end
 
     it 'should total the donations of the contacts' do
+      designation_account = create(:designation_account)
+      account_list.designation_accounts << designation_account
+
       loser_contact.donor_accounts << create(:donor_account, account_number: '1')
-      loser_contact.donor_accounts.first.donations << create(:donation, amount: 500.00)
+      create(:donation, amount: 500.00, donor_account: loser_contact.donor_accounts.first,
+                        designation_account: designation_account)
+
       contact.donor_accounts << create(:donor_account, account_number: '2')
-      contact.donor_accounts.first.donations << create(:donation, amount: 300.00)
+      create(:donation, amount: 300.00, donor_account: contact.donor_accounts.first,
+                        designation_account: designation_account)
+
+      # Test that donation in same donor account but different designation
+      # account not counted toward contact total.
+      create(:donation, amount: 200.00, donor_account: contact.donor_accounts.first,
+                        designation_account: create(:designation_account))
+
       contact.merge(loser_contact)
       expect(contact.total_donations).to eq(800.00)
     end
@@ -732,6 +744,31 @@ describe Contact do
       allow(contact).to receive(:primary_or_first_address) { address }
       expect(address.master_address).to receive(:find_timezone).and_return('EST')
       expect(contact.find_timezone).to eq 'EST'
+    end
+  end
+
+  context '#update_all_donation_totals' do
+    it 'sets the total_donations field to its query result' do
+      expect(contact).to receive(:total_donations_query) { 5 }
+      contact.update_all_donation_totals
+      expect(contact.reload.total_donations).to eq 5
+    end
+  end
+
+  context '#total_donations_query' do
+    it 'sums the donations for the contact' do
+      designation_account = create(:designation_account)
+      account_list.designation_accounts << designation_account
+      donor_account = create(:donor_account)
+      contact.donor_accounts << donor_account
+
+      create(:donation, amount: 5, donor_account: donor_account,
+                        designation_account: designation_account)
+
+      # It shouldn't count this donation since it has no designation
+      create(:donation, amount: 10, donor_account: donor_account)
+
+      expect(contact.total_donations_query).to eq 5
     end
   end
 end
