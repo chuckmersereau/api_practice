@@ -435,6 +435,10 @@ describe Contact do
       expect(contact.envelope_greeting).to eq 'John and Jane Doe'
       contact.name = 'New Life Church'
       expect(contact.envelope_greeting).to eq 'New Life Church'
+      contact.name = 'Doe, George (G)'
+      expect(contact.envelope_greeting).to eq 'George Doe'
+      contact.name = 'Doe, John (Johnny) and Janet (Jane)'
+      expect(contact.envelope_greeting).to eq 'John and Janet Doe'
     end
 
     it 'can be overwriten' do
