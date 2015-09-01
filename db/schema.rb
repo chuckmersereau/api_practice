@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150826193355) do
+ActiveRecord::Schema.define(version: 20150901153709) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -491,13 +491,14 @@ ActiveRecord::Schema.define(version: 20150826193355) do
 
   create_table "mail_chimp_accounts", force: true do |t|
     t.string   "api_key"
-    t.boolean  "active",          default: false
+    t.boolean  "active",             default: false
     t.integer  "grouping_id"
     t.string   "primary_list_id"
     t.integer  "account_list_id"
     t.datetime "created_at"
     t.datetime "updated_at"
     t.string   "webhook_token"
+    t.boolean  "auto_log_campaigns", default: true,  null: false
   end
 
   add_index "mail_chimp_accounts", ["account_list_id"], name: "index_mail_chimp_accounts_on_account_list_id", using: :btree

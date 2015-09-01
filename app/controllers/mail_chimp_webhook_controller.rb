@@ -14,7 +14,7 @@ class MailChimpWebhookController < ApplicationController
       return
     end
 
-    handler = MailChimpHookHandler.new(@account.account_list)
+    handler = MailChimpHookHandler.new(@account)
     case hook_params[:type]
     when 'unsubscribe'
       handler.unsubscribe_hook(data_param(:email))

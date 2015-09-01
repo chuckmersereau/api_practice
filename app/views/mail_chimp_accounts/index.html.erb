@@ -9,7 +9,11 @@
         <div>
           <%= _('You can now export your contacts to MailChimp.') %><br />
           <%= _('MailChimp API key:') %> <strong><%= @mail_chimp_account.api_key %></strong><br />
-          <%= _('MailChimp list to use for your newsletter:') %> <strong><%= @mail_chimp_account.primary_list.name %></strong>
+          <%= _('MailChimp list to use for your newsletter:') %> <strong><%= @mail_chimp_account.primary_list.name %></strong><br />
+          <% if $rollout.active?(:mail_chimp_auto_log, current_account_list) %>
+            <%= _('Automatic logging of campaigns: ') %>
+            <strong><%= @mail_chimp_account.auto_log_campaigns? ? _('On') : _('Off') %></strong>
+          <% end %>
 
           <br /><br />
 

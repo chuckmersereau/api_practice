@@ -65,8 +65,27 @@ class MailChimpAccount < ActiveRecord::Base
     async(:call_mailchimp, :export_appeal_contacts, contact_ids, list_id, appeal_id)
   end
 
+  def queue_log_sent_campaign(campaign_id, subject)
+    async(:call_mailchimp, :log_sent_campaign, campaign_id, subject)
+  end
+
   def datacenter
     api_key.to_s.split('-').last
+  end
+
+  def log_sent_campaign(campaign_id, subject)
+    sent_emails = gb.campaign_members(cid: campaign_id, status: 'sent')['data']
+                  .map { |member| member['email'] }
+    account_list.contacts.joins(people: :primary_email_address)
+      .where(email_addresses: { email: sent_emails }).references(:email_addresses)
+      .uniq.each { |contact| create_campaign_activity(contact, subject) }
+  end
+
+  def create_campaign_activity(contact, subject)
+    contact.activities.create(
+      account_list: account_list, subject: "MailChimp: #{subject}",
+      completed: true, start_at: Time.now, completed_at: Time.now, type: 'Task',
+      activity_type: 'Email', result: 'Completed', source: 'mailchimp')
   end
 
   def lists_available_for_appeals
