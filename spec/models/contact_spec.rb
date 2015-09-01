@@ -451,6 +451,14 @@ describe Contact do
       expect(contact.envelope_greeting).to eq 'George Doe'
       contact.name = 'Doe, John (Johnny) and Janet (Jane)'
       expect(contact.envelope_greeting).to eq 'John and Janet Doe'
+      contact.name = 'Doe, John (Johnny)'
+      expect(contact.envelope_greeting).to eq 'John Doe'
+    end
+
+    it 'treats parens after a spouse as nickname if also in donor account name' do
+      contact.donor_accounts << create(:donor_account, name: 'Doe, John and Janet (Jane)')
+      contact.name = 'Doe, John and Janet (Jane)'
+      expect(contact.envelope_greeting).to eq 'John and Janet Doe'
     end
 
     it 'can be overwriten' do

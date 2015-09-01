@@ -267,6 +267,12 @@ class Contact < ActiveRecord::Base
         return "#{first_names[0]} #{last_name}"
       end
     end
+    if donor_accounts.where(name: name).any?
+      # Contacts from the donor system usually have nicknames, not a different
+      # last name in paren, i.e. "Doe, John and Janet (Jane)" not "Doe, John and Janet (Smith)"
+      nickname_stripped = first_names[1].gsub!(/\(.*?\)/, '').gsub(/\s\s+/, ' ').strip
+      return "#{first_names[0]} #{_('and')} #{nickname_stripped} #{last_name}"
+    end
     first_names[1].delete!('()')
     "#{first_names[0]} #{last_name} #{_('and')} #{first_names[1]}"
   end
