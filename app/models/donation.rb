@@ -1,4 +1,6 @@
 class Donation < ActiveRecord::Base
+  has_paper_trail on: [:destroy]
+
   belongs_to :donor_account
   belongs_to :designation_account
   belongs_to :appeal
@@ -10,6 +12,7 @@ class Donation < ActiveRecord::Base
   scope :for, -> (designation_account) { where(designation_account_id: designation_account.id) }
   scope :for_accounts, -> (designation_accounts) { where(designation_account_id: designation_accounts.pluck(:id)) }
   scope :since, -> (date) { where('donation_date > ?', date) }
+  scope :between, -> (from, to) { where(donation_date: from.to_date..to.to_date) }
 
   default_scope { order('donation_date desc') }
 
