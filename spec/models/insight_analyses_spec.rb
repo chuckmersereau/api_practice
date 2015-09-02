@@ -6,15 +6,18 @@ describe 'InsightAnalyses' do
   let(:contact) { create(:contact, account_list: account_list) }
   let(:designation_account) { create(:designation_account, designation_number: '2716653') }
   let(:auth_fixture) { File.read('spec/fixtures/obiee_auth_client.xml') }
-  let(:creds) {  { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }  }
+  let(:creds) { { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') } }
+  let(:results_fixture) { File.read('spec/fixtures/obiee_report_results.xml') }
+
   # Disallow external requests
   include Savon::SpecHelper
 
   # set Savon in and out of mock mode
-  before(:all) do
-    savon.mock!
+  before(:all) { savon.mock! }
+  before do
+    savon.expects(:logon).with(message: creds).returns(auth_fixture)
+    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
   end
-
   after(:all)  { savon.unmock! }
 
   def report_params
@@ -33,9 +36,6 @@ describe 'InsightAnalyses' do
   end
 
   it 'gets analysis results with designation' do
-    savon.expects(:logon).with(message: creds).returns(auth_fixture)
-    results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
     ia = InsightAnalyses.new.increase_recommendation_analysis('2716653')
     expect(ia).to eq('rowset' => { 'xmlns' => 'urn:schemas-microsoft-com:xml-analysis:rowset',
                                    'schema' =>
@@ -64,17 +64,11 @@ describe 'InsightAnalyses' do
   end
 
   it 'fails with unknown desig' do
-    savon.expects(:logon).with(message: creds).returns(auth_fixture)
-    results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
     # unknown desig
     expect { InsightAnalyses.new.increase_recommendation_analysis('271665T') }.to raise_error(Savon::ExpectationError)
   end
 
   it 'fails with no desig' do
-    savon.expects(:logon).with(message: creds).returns(auth_fixture)
-    results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
     # unknown desig
     expect { InsightAnalyses.new.increase_recommendation_analysis('') }.to raise_error(Savon::ExpectationError)
   end

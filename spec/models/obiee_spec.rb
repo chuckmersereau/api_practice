@@ -8,15 +8,15 @@ describe Obiee do
   let(:obiee) { Obiee.new }
   let(:session_id) { 'sessionid22091522cru' }
   let(:report_path) { '/shared/Insight/Siebel Recurring Monthly/Recurring Designation Test Query' }
-  let(:results_fixture) { File.read('spec/fixtures/obiee_report_sql.xml') }
+  let(:results_fixture) { File.read('spec/fixtures/obiee_report_results.xml') }
 
   before do
     savon.mock!
-
     creds = { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
   end
+  after { savon.unmock! }
 
   def report_params
     { report: { reportPath: report_path },
@@ -33,8 +33,6 @@ describe Obiee do
       sessionID: session_id }
   end
 
-  after { savon.unmock! }
-
   it 'gets a session id' do
     expect(obiee.session_id).to eq(session_id)
   end
@@ -46,7 +44,6 @@ describe Obiee do
   end
 
   it 'gets report results when session id and report path are present' do
-    results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
     savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
     report_results = obiee.report_results(session_id, report_path)
     expect(report_results).to include('<Row><Column0>0</Column0><Column1>Test Desig (2716653)</Column1></Row><')
