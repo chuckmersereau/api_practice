@@ -9,6 +9,10 @@ describe MailChimpAccountsController do
     @account_list = @user.account_lists.first
     allow(controller).to receive(:current_account_list).and_return(@account_list)
     @contact = create(:contact, account_list: @account_list)
+
+    stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=lists')
+      .with(body: '%7B%22apikey%22%3A%22foo-us4%22%7D')
+      .to_return(status: 200, body: '{"total": 0,"data": []}', headers: {})
   end
 
   context 'index' do
@@ -49,13 +53,26 @@ describe MailChimpAccountsController do
 
   context '#create' do
     it 'creates a new mailchimp account' do
-      stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=lists')
-        .with(body: '%7B%22apikey%22%3A%22foo-us4%22%7D')
-        .to_return(status: 200, body: '{"total": 0,"data": []}', headers: {})
-
       expect do
         post :create, mail_chimp_account: valid_attributes
       end.to change(MailChimpAccount, :count).by(1)
+    end
+  end
+
+  context '#update' do
+    it 'updates an existing mail chimp account' do
+      mc_account = create(:mail_chimp_account, account_list: @account_list)
+      put :update, id: mc_account.id,
+                   mail_chimp_account: valid_attributes.merge(auto_log_campaigns: true)
+      expect(mc_account.reload.auto_log_campaigns).to be true
+    end
+  end
+
+  context '#new' do
+    it 'initializes a mail chimp account to auto log campaigns by default' do
+      expect($rollout).to receive(:active?) { true }
+      get :new
+      expect(assigns(:mail_chimp_account).auto_log_campaigns).to be true
     end
   end
 end

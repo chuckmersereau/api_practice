@@ -24,6 +24,9 @@ class MailChimpAccountsController < ApplicationController
   end
 
   def new
+    if $rollout.active?(:mail_chimp_auto_log, current_account_list)
+      @mail_chimp_account = MailChimpAccount.new(auto_log_campaigns: true)
+    end
   end
 
   def edit
@@ -68,6 +71,7 @@ class MailChimpAccountsController < ApplicationController
   end
 
   def mail_chimp_account_params
-    params.require(:mail_chimp_account).permit(:api_key, :grouping_id, :primary_list_id)
+    params.require(:mail_chimp_account)
+      .permit(:api_key, :grouping_id, :primary_list_id, :auto_log_campaigns)
   end
 end

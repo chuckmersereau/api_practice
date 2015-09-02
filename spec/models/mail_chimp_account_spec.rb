@@ -103,6 +103,12 @@ describe MailChimpAccount do
         account.queue_export_appeal_contacts(contact, 'list1', appeal.id)
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
+
+    it 'queues log sync campaign' do
+      expect do
+        account.queue_log_sent_campaign('campaign1', 'subject')
+      end.to change(MailChimpAccount.jobs, :size).by(1)
+    end
   end
 
   describe 'callbacks' do
@@ -354,6 +360,49 @@ describe MailChimpAccount do
       account.unsubscribe_list_batch('list1', 'john@example.com')
       expect(stub).to have_been_requested
       expect(MailChimpMember.find_by(id: member.id)).to be_nil
+    end
+  end
+
+  context '#log_sent_campaign' do
+    let(:contact) { create(:contact, account_list: account_list) }
+    before do
+      account.account_list = account_list
+      contact.people << create(:person_with_email)
+    end
+
+    it 'adds activity records to the contacts who received the campaign' do
+      stub_campaign_members('john@example.com')
+      expect do
+        account.log_sent_campaign('c1', 'subject')
+      end.to change(contact.activities, :count).by(1)
+
+      activity = contact.activities.last
+      expect(activity.account_list).to eq account_list
+      expect(activity.subject).to eq 'MailChimp: subject'
+      expect(activity.completed).to be true
+      expect(activity.type).to eq 'Task'
+      expect(activity.start_at).to be_within(2.seconds).of(Time.now)
+      expect(activity.completed_at).to be_within(2.seconds).of(Time.now)
+      expect(activity.activity_type).to eq 'Email'
+      expect(activity.result).to eq 'Completed'
+      expect(activity.source).to eq 'mailchimp'
+    end
+
+    it 'only logs a single activity if a contact has multiple matching people' do
+      person2 = create(:person_with_email)
+      person2.email_addresses.first.update(email: 'jane@example.com')
+      contact.people << person2
+      stub_campaign_members('john@example.com', 'jane@example.com')
+
+      expect do
+        account.log_sent_campaign('c1', 'subject')
+      end.to change(contact.activities, :count).by(1)
+    end
+
+    def stub_campaign_members(*emails)
+      expect(account.gb).to receive(:campaign_members).with(cid: 'c1', status: 'sent') do
+        { 'data' => emails.map { |email| { 'email' => email } } }
+      end
     end
   end
 
