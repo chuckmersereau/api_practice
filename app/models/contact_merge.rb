@@ -46,6 +46,9 @@ class ContactMerge
         @winner.send("#{field}=".to_sym, @other.send(field))
       end
 
+      @winner.send_newsletter = self.class.merged_send_newsletter(@winner.send_newsletter,
+                                                                  @other.send_newsletter)
+
       # If one of these is marked as a finanical partner, we want that status
       if @winner.status != 'Partner - Financial' && @other.status == 'Partner - Financial'
         @winner.status = 'Partner - Financial'
@@ -78,5 +81,25 @@ class ContactMerge
 
     # Update donation total after donor account ids are all assigned correctly
     @winner.update_all_donation_totals
+  end
+
+  def self.merged_send_newsletter(winner_send_newsletter, other_send_newsletter)
+    email = winner_send_newsletter.in?(%w(Email Both)) ||
+            other_send_newsletter.in?(%w(Email Both))
+
+    physical = winner_send_newsletter.in?(%w(Physical Both)) ||
+               other_send_newsletter.in?(%w(Physical Both))
+
+    send_newsletter_word(email, physical)
+  end
+
+  def self.send_newsletter_word(email, physical)
+    if email && physical
+      'Both'
+    elsif email
+      'Email'
+    elsif physical
+      'Physical'
+    end
   end
 end

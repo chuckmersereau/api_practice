@@ -60,7 +60,7 @@ class Contact < ActiveRecord::Base
 
   MERGE_COPY_ATTRIBUTES = [
     :name, :pledge_amount, :status, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
-    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :pls_id,
+    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :no_appeals, :pls_id,
     :direct_deposit, :magazine, :pledge_received, :timezone, :last_activity, :last_appointment, :last_letter,
     :last_phone_call, :last_pre_call, :last_thank, :prayer_letters_id, :last_donation_date, :first_donation_date, :tnt_id
   ]

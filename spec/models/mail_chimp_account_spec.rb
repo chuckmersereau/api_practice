@@ -109,6 +109,19 @@ describe MailChimpAccount do
         account.queue_log_sent_campaign('campaign1', 'subject')
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
+
+    it 'queues sync contacts' do
+      expect do
+        account.queue_sync_contacts(1)
+      end.to change(MailChimpAccount.jobs, :size).by(1)
+    end
+
+    it 'does not queue sync if importing' do
+      account.update(importing: true)
+      expect do
+        account.queue_sync_contacts(1)
+      end.to_not change(MailChimpAccount.jobs, :size)
+    end
   end
 
   describe 'callbacks' do
@@ -126,6 +139,9 @@ describe MailChimpAccount do
         create(:mail_chimp_member, mail_chimp_account: account, list_id: 'foo')
 
         expect(account).to receive(:setup_webhooks)
+        import = double
+        expect(MailChimpImport).to receive(:new) { import }
+        expect(import).to receive(:import_contacts)
         sync = double
         expect(MailChimpSync).to receive(:new) { sync }
         expect(sync).to receive(:sync_contacts)
@@ -205,7 +221,7 @@ describe MailChimpAccount do
       end
     end
 
-    context '#contacts_with_email_addresses' do
+    describe 'filtering contacts with email and whether on letter' do
       let(:contact) do
         create(:contact, name: 'John Smith', send_newsletter: 'Email', account_list: account_list)
       end
@@ -217,52 +233,72 @@ describe MailChimpAccount do
         contact.people << person
       end
 
-      it 'returns a contact with valid email on newsletter' do
-        expect(account.contacts_with_email_addresses(nil).to_a).to eq [contact]
+      context '#contacts_with_email_addresses' do
+        it 'returns a contact with valid email on newsletter' do
+          expect(account.contacts_with_email_addresses(nil).to_a).to eq [contact]
+        end
+
+        it 'returns nothing when person has no email address' do
+          person.email_addresses.first.destroy
+          expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
+        end
+
+        it 'excludes contacts with historic email addresses' do
+          person.email_addresses.first.update_column(:historic, true)
+          expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
+        end
+
+        describe 'it excludes people from the loaded contact.people association if: ' do
+          let(:excluded_person) { create(:person) }
+          before do
+            excluded_person.email_address = { email: 'foo2@example.com', primary: true }
+            excluded_person.save
+            contact.people << excluded_person
+          end
+
+          it 'has no email address' do
+            excluded_person.email_addresses.first.destroy
+            expect_person_excluded
+          end
+          it 'has only a non-primary email' do
+            expect(excluded_person.email_addresses.count).to eq 1
+            excluded_person.email_addresses.first.update_column(:primary, false)
+            expect_person_excluded
+          end
+          it 'has a historic email' do
+            excluded_person.email_addresses.first.update_column(:historic, true)
+            expect_person_excluded
+          end
+
+          def expect_person_excluded
+            contact = account.contacts_with_email_addresses(nil).first
+            expect(contact.people.size).to eq(1)
+            expect(contact.people).to include person
+            expect(contact.people).to_not include excluded_person
+          end
+        end
+
+        it 'scopes the contacts to the passed in ids if specified' do
+          expect(account.contacts_with_email_addresses([contact.id + 1])).to be_empty
+        end
       end
 
-      it 'returns nothing when person has no email address' do
-        person.email_addresses.first.destroy
-        expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
-      end
-
-      it 'excludes contacts with historic email addresses' do
-        person.email_addresses.first.update_column(:historic, true)
-        expect(account.contacts_with_email_addresses(nil).to_a).to be_empty
-      end
-
-      describe 'it excludes people from the loaded contact.people association if: ' do
-        let(:excluded_person) { create(:person) }
-        before do
-          excluded_person.email_address = { email: 'foo2@example.com', primary: true }
-          excluded_person.save
-          contact.people << excluded_person
+      context '#newsletter_contacts_with_emails' do
+        it 'excludes people not on the email newsletter' do
+          contact.update(send_newsletter: 'Physical')
+          expect(account.newsletter_contacts_with_emails(nil).to_a).to be_empty
         end
 
-        it 'has no email address' do
-          excluded_person.email_addresses.first.destroy
-          expect_person_excluded
+        it 'excludes a person from the loaded contact association if opted-out' do
+          opt_out_person = create(:person, optout_enewsletter: true)
+          opt_out_person.email_address = { email: 'foo2@example.com', primary: true }
+          opt_out_person.save
+          contact.people << opt_out_person
+          opt_out_person.update(optout_enewsletter: true)
+          contacts = account.newsletter_contacts_with_emails(nil)
+          expect(contacts.first.people).to include(person)
+          expect(contacts.first.people).to_not include(opt_out_person)
         end
-        it 'has only a non-primary email' do
-          expect(excluded_person.email_addresses.count).to eq 1
-          excluded_person.email_addresses.first.update_column(:primary, false)
-          expect_person_excluded
-        end
-        it 'has a historic email' do
-          excluded_person.email_addresses.first.update_column(:historic, true)
-          expect_person_excluded
-        end
-
-        def expect_person_excluded
-          contact = account.contacts_with_email_addresses(nil).first
-          expect(contact.people.size).to eq(1)
-          expect(contact.people).to include person
-          expect(contact.people).to_not include excluded_person
-        end
-      end
-
-      it 'scopes the contacts to the passed in ids if specified' do
-        expect(account.contacts_with_email_addresses([contact.id + 1])).to be_empty
       end
     end
   end
@@ -418,7 +454,7 @@ describe MailChimpAccount do
       account.primary_list_id = 'list1'
 
       stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listMembers')
-        .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22appeal_list1%22%7D')
+        .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22appeal_list1%22%2C%22limit%22%3A15000%7D')
         .to_return(body: '{"total":1, "data":[{"email":"foo@example.com", "timestamp":"2015-07-31 14:39:19"}]}')
     end
 
@@ -455,6 +491,35 @@ describe MailChimpAccount do
       it 'returns members of a list, specifically emails' do
         expect(account.send(:list_members, list_id))
           .to eq([{ 'email' => 'foo@example.com', 'timestamp' => '2015-07-31 14:39:19' }])
+      end
+    end
+
+    context '#list_emails' do
+      it 'returns only the list emails' do
+        expect(account.list_emails(list_id)).to eq ['foo@example.com']
+      end
+    end
+
+    context '#list_member_info' do
+      it 'retrieves the list member info' do
+        response = '{"data":[{"email":"foo@example.com","merges":{"FNAME":"Joe"}}]}'
+        data = [{ 'email' => 'foo@example.com', 'merges' => { 'FNAME' => 'Joe' } }]
+        stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listMemberInfo')
+          .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22'\
+                      'appeal_list1%22%2C%22email_address%22%3A%5B%22'\
+                      'foo%40example.com%22%5D%7D')
+          .and_return(body: response)
+        expect(account.list_member_info(list_id, ['foo@example.com'])).to eq data
+      end
+
+      it 'makes multiple batches of 50 for lots of emails' do
+        url = 'https://us4.api.mailchimp.com/1.3/?method=listMemberInfo'
+        data = Array.new(50, merges: { FNAME: 'Joe' })
+        stub = stub_request(:post, url).and_return(body: { data: data }.to_json)
+
+        expect(account.list_member_info(list_id, Array.new(100, 'j@example.com')))
+          .to eq Array.new(100, 'merges' => { 'FNAME' => 'Joe' })
+        expect(stub).to have_been_made.twice
       end
     end
 
