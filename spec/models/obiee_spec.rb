@@ -33,24 +33,28 @@ describe Obiee do
       sessionID: session_id }
   end
 
+  def expect_execut_xml_query
+    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
+  end
+
   it 'gets a session id' do
     expect(obiee.session_id).to eq(session_id)
   end
 
   it 'fails when no report path' do
-    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
+    expect_execut_xml_query
     # No Path
     expect { obiee.report_results(session_id, '', {}) }.to raise_error(Savon::ExpectationError)
   end
 
   it 'gets report results when session id and report path are present' do
-    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
+    expect_execut_xml_query
     report_results = obiee.report_results(session_id, report_path)
     expect(report_results).to include('<Row><Column0>0</Column0><Column1>Test Desig (2716653)</Column1></Row><')
   end
 
   it 'fails to get report results when no session id' do
-    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
+    expect_execut_xml_query
     # No Session ID
     expect { obiee.report_results('', report_path) }.to raise_error(Savon::ExpectationError)
   end
