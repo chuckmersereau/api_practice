@@ -15,8 +15,7 @@ class Obiee
   def report_results(session_id, report_path, vars = {})
     url = OBIEE_URL + '=xmlViewService'
     run_report_client = get_client(url)
-    run_params = {
-        report: { reportPath: report_path },
+    run_params = { report: { reportPath: report_path },
                    outputFormat: 'SAWRowsetAndData',
                    executionOptions:
                        { async: '',
@@ -24,9 +23,9 @@ class Obiee
                          refresh: true,
                          presentationInfo: true,
                          type: '' },
-                    reportParams: { filterExpressions: '',
-                                    variables: vars
-                    },
+                   reportParams: { filterExpressions: '',
+                                   variables: vars
+                   },
                    sessionID: session_id }
     returned_results = make_call(run_report_client, :executeXMLQuery, run_params)
     returned_results.body[:execute_xml_query_result][:return][:rowset]
@@ -40,7 +39,7 @@ class Obiee
 
   def get_client(url)
     call_url = { endpoint: url, namespace: 'urn://oracle.bi.webservices/v7',
-                 open_timeout: 30, read_timeout: 30, filters: [:password,:session_id] }
+                 open_timeout: 30, read_timeout: 30, filters: [:password, :session_id] }
     Savon.client(call_url)
   end
 end

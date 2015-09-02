@@ -3,8 +3,8 @@ class InsightAnalyses
     insight = Obiee.new
     vars = { name: 'mpdxRecurrDesig', value: designation_number }
     returned_xml = insight.report_results(insight.session_id,
-                             '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations',
-                             vars)
+                                          '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations',
+                                          vars)
     Hash.from_xml(returned_xml)
   end
 
