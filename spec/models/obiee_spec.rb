@@ -6,129 +6,56 @@ describe Obiee do
   include Savon::SpecHelper
 
   let(:obiee) { Obiee.new }
+  let(:session_id) { 'sessionid22091522cru' }
+  let(:report_path) { '/shared/Insight/Siebel Recurring Monthly/Recurring Designation Test Query' }
+  let(:results_fixture) { File.read('spec/fixtures/obiee_report_results.xml') }
 
   before do
     savon.mock!
-
     creds = { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
   end
-
   after { savon.unmock! }
 
-  SESSION_ID = 'sessionid22091522cru'
-  PATH = '/shared/Insight/Siebel Recurring Monthly/Recurring Designation Test Query'
-  SQL = 'SELECT
-   0 s_0,
-   "CCCi Transaction Analytics"."- Designation"."Designation Name" s_1
-FROM "CCCi Transaction Analytics"
-WHERE ("- Designation"."Designation Name" = ''Test Desig ((2716653)'')
-ORDER BY 1, 2 ASC NULLS LAST
-FETCH FIRST 10000000 ROWS ONLY'
+  def report_params
+    { report: { reportPath: report_path },
+      outputFormat: 'SAWRowsetAndData',
+      executionOptions:
+        { async: '',
+          maxRowsPerPage: -1,
+          refresh: true,
+          presentationInfo: true,
+          type: '' },
+      reportParams: { filterExpressions: '',
+                      variables: {}
+    },
+      sessionID: session_id }
+  end
+
+  def expect_execut_xml_query
+    savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
+  end
 
   it 'gets a session id' do
-    expect(obiee.session_id).to eq(SESSION_ID)
-  end
-
-  it 'gets report sql with session id' do
-    rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
-    report_params = { reportRef: { reportPath: PATH },
-                      reportParams: { filterExpressions: '',
-                                      variables: {}
-                      },
-                      sessionID: SESSION_ID }
-
-    savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
-    report_sql = obiee.report_sql(SESSION_ID, PATH, {})
-
-    expect(report_sql).to eq('SELECT
-   0 s_0,
-   "CCCi Transaction Analytics"."- Designation"."Designation Name" s_1
-FROM "CCCi Transaction Analytics"
-ORDER BY 1, 2 ASC NULLS LAST
-FETCH FIRST 10000000 ROWS ONLY')
-  end
-
-  it 'no sql when no session_id' do
-    rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
-    report_params = { reportRef: { reportPath: PATH },
-                      reportParams: { filterExpressions: '',
-                                      variables: {}
-                      },
-                      sessionID: SESSION_ID }
-
-    savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
-    expect { obiee.report_sql('', PATH, {}) }.to raise_error(Savon::ExpectationError)
-  end
-
-  it 'fails when no session_id' do
-    rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
-    report_params = { reportRef: { reportPath: PATH },
-                      reportParams: { filterExpressions: '',
-                                      variables: {}
-                      },
-                      sessionID: SESSION_ID }
-    savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
-    expect { obiee.report_sql('', PATH, {}) }.to raise_error(Savon::ExpectationError)
+    expect(obiee.session_id).to eq(session_id)
   end
 
   it 'fails when no report path' do
-    rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
-    report_params = { reportRef: { reportPath: PATH },
-                      reportParams: { filterExpressions: '',
-                                      variables: {}
-                      },
-                      sessionID: SESSION_ID }
-    savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
+    expect_execut_xml_query
     # No Path
-    expect { obiee.report_sql(SESSION_ID, '', {}) }.to raise_error(Savon::ExpectationError)
+    expect { obiee.report_results(session_id, '', {}) }.to raise_error(Savon::ExpectationError)
   end
 
-  it 'gets report results with session id' do
-    results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    run_params = { sql: SQL,
-                   outputFormat: 'SAWRowsetSchemaAndData',
-                   executionOptions:
-                       { async: '',
-                         maxRowsPerPage: -1,
-                         refresh: true,
-                         presentationInfo: true,
-                         type: '' },
-                   sessionID: SESSION_ID }
-    savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
-    report_results = obiee.report_results(SESSION_ID, SQL)
+  it 'gets report results when session id and report path are present' do
+    expect_execut_xml_query
+    report_results = obiee.report_results(session_id, report_path)
     expect(report_results).to include('<Row><Column0>0</Column0><Column1>Test Desig (2716653)</Column1></Row><')
   end
 
   it 'fails to get report results when no session id' do
-    results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    run_params = { sql: SQL,
-                   outputFormat: 'SAWRowsetSchemaAndData',
-                   executionOptions:
-                       { async: '',
-                         maxRowsPerPage: -1,
-                         refresh: true,
-                         presentationInfo: true,
-                         type: '' },
-                   sessionID: SESSION_ID }
-    savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
+    expect_execut_xml_query
     # No Session ID
-    expect { obiee.report_results('', SQL) }.to raise_error(Savon::ExpectationError)
-  end
-
-  it 'fails to get report results when no sql' do
-    results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    run_params = { sql: SQL,
-                   outputFormat: 'SAWRowsetSchemaAndData',
-                   executionOptions:
-                       { async: '',
-                         maxRowsPerPage: -1,
-                         refresh: true,
-                         presentationInfo: true,
-                         type: '' },
-                   sessionID: SESSION_ID }
-    savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
-    expect { obiee.report_results(SESSION_ID, '') }.to raise_error(Savon::ExpectationError)
+    expect { obiee.report_results('', report_path) }.to raise_error(Savon::ExpectationError)
   end
 end

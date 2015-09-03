@@ -20,33 +20,29 @@ describe InsightsController do
   it 'returns analysis columns' do
     creds = { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
-
     savon.expects(:logon).with(message: creds).returns(fixture)
-    rpt_sql_fixture = File.read('spec/fixtures/obiee_report_sql.xml')
-    report_params = { reportRef: { reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations' },
-                      reportParams: { filterExpressions: '',
-                                      variables: { name: 'mpdxRecurrDesig', value: '2716653' }
-                      },
-                      sessionID: 'sessionid22091522cru' }
-    savon.expects(:generateReportSQL).with(message: report_params).returns(rpt_sql_fixture)
     results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    run_params = { sql: 'SELECT
-   0 s_0,
-   "CCCi Transaction Analytics"."- Designation"."Designation Name" s_1
-FROM "CCCi Transaction Analytics"
-ORDER BY 1, 2 ASC NULLS LAST
-FETCH FIRST 10000000 ROWS ONLY',
-                   outputFormat: 'SAWRowsetSchemaAndData',
+    run_params = { report: { reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations' },
+                   outputFormat: 'SAWRowsetAndData',
                    executionOptions:
                       { async: '',
                         maxRowsPerPage: -1,
                         refresh: true,
                         presentationInfo: true,
                         type: '' },
+                   reportParams: { filterExpressions: '',
+                                   variables: { name: 'mpdxRecurrDesig', value: '2716653' }
+                   },
                    sessionID: 'sessionid22091522cru' }
-    savon.expects(:executeSQLQuery).with(message: run_params).returns(results_fixture)
+    savon.expects(:executeXMLQuery).with(message: run_params).returns(results_fixture)
 
     get :index
     expect(assigns(:recommnds)).to eq('Column0' => '0', 'Column1' => 'Test Desig (2716653)')
+  end
+
+  it 'it calls the creates action and adds a recommendation result record' do
+    expect do
+      post :create, selectedRecurringContactId: '12346234', selResult: 'Contacted - Received an Increase'
+    end.to change { RecurringRecommendationResult.count }.by 1
   end
 end
