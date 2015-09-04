@@ -8,6 +8,13 @@ describe MailChimpImport do
   subject { MailChimpImport.new(mc_account) }
 
   describe 'importing from mail chimp' do
+    it 'sends mail chimp errors to the mail chimp account for handling' do
+      err = Gibbon::MailChimpError.new
+      expect(mc_account).to receive(:list_emails).and_raise(err)
+      expect(mc_account).to receive(:handle_newsletter_mc_error).with(err)
+      subject.import_contacts
+    end
+
     it 'creates a new contact and person if not there' do
       stub_list_members(email: 'j@example.com', fname: 'John', lname: 'Doe')
       expect do

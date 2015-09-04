@@ -544,4 +544,40 @@ describe MailChimpAccount do
       end
     end
   end
+
+  context '#handle_newsletter_mc_error' do
+    it 'sets the primary_list_id to nil on a code 200 (no list) error' do
+      account.save
+      msg = 'Invalid MailChimp List ID (code 200)'
+      account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
+      expect(account.reload.primary_list_id).to be_nil
+    end
+
+    it 'notifies user and clears primary_list_id if required merge field missing' do
+      account.save
+      msg = 'MMERGE3 must be provided - Please enter a value (code 250)'
+
+      email = double
+      expect(AccountMailer).to receive(:mailchimp_required_merge_field)
+        .with(account_list) { email }
+      expect(email).to receive(:deliver)
+
+      account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
+      expect(account.reload.primary_list_id).to be_nil
+    end
+
+    it 'does nothing for specified benign error codes' do
+      [502, 220, 214].each do |code|
+        msg = "Error (code #{code})"
+        account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
+      end
+    end
+
+    it 're-raises other mail chimp errors' do
+      expect do
+        msg = 'other err'
+        account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
+      end.to raise_error(Gibbon::MailChimpError)
+    end
+  end
 end

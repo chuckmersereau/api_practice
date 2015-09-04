@@ -6,6 +6,8 @@ class MailChimpImport
 
   def import_contacts
     import_members(members_to_import.map(&method(:format_member_info)))
+  rescue Gibbon::MailChimpError => e
+    @mc_account.handle_newsletter_mc_error(e)
   end
 
   def self.email_to_name(email)
