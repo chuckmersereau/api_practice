@@ -385,7 +385,7 @@ class AccountList < ActiveRecord::Base
   def queue_sync_with_google_contacts
     return if google_integrations.where(contacts_integration: true).empty?
     return if organization_accounts.any?(&:downloading)
-    return if imports.any?(&:importing)
+    return if imports.any?(&:importing) || mail_chimp_account.try(&:importing)
     lower_retry_async(:sync_with_google_contacts)
   end
 

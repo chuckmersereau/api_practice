@@ -352,6 +352,13 @@ describe AccountList do
       account_list.queue_sync_with_google_contacts
       expect(LowerRetryWorker.jobs).to be_empty
     end
+
+    it 'does not queue if the mail chimp account is importing' do
+      create(:mail_chimp_account, account_list: account_list, importing: true)
+      expect do
+        account_list.queue_sync_with_google_contacts
+      end.to_not change(LowerRetryWorker.jobs, :size)
+    end
   end
 
   context '#import_data' do

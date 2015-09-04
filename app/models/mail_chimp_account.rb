@@ -147,7 +147,7 @@ class MailChimpAccount < ActiveRecord::Base
     when e.message.include?('code 214')
       # The new email address "xxxxx@example.com" is already subscribed to this list
     else
-      raise e
+      fail e
     end
   end
 
