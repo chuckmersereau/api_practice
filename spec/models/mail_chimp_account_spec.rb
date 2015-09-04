@@ -151,6 +151,22 @@ describe MailChimpAccount do
         end.to change(MailChimpMember, :count).by(-1)
       end
 
+      it 'does not unsubscribe the newly imported contacts' do
+        account.primary_list_id = 'foo'
+
+        expect(account).to receive(:setup_webhooks)
+        expect(account).to receive(:add_status_groups)
+        expect(account).to receive(:add_greeting_merge_variable)
+        expect(account).to receive(:list_emails) { ['j@t.co'] }
+        expect(account).to receive(:list_member_info) do
+          [{ 'email' => 'j@t.co', 'merges' => {} }]
+        end
+        expect(account.gb).to receive(:list_batch_subscribe)
+
+        expect(account).to_not receive(:unsubscribe_list_batch)
+        account.send(:export_to_primary_list)
+      end
+
       it 'exports to a list and saves mail chimp member records' do
         account.primary_list_id = 'list1'
         account.save

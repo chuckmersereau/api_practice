@@ -172,17 +172,16 @@ class MailChimpAccount < ActiveRecord::Base
 
     # clear the member records to force a full export
     mail_chimp_members.where(list_id: primary_list_id).destroy_all
+    mail_chimp_members.reload
 
     MailChimpImport.new(self).import_contacts
-    mail_chimp_members.reload
     MailChimpSync.new(self).sync_contacts
   ensure
     update(importing: false)
   end
 
   def newsletter_emails
-    @newsletter_emails ||=
-      newsletter_contacts_with_emails(nil).pluck('email_addresses.email')
+    newsletter_contacts_with_emails(nil).pluck('email_addresses.email')
   end
 
   def newsletter_contacts_with_emails(contact_ids)
@@ -294,7 +293,8 @@ class MailChimpAccount < ActiveRecord::Base
   def setup_webhooks
     # Don't setup webhooks when developing on localhost because MailChimp can't
     # verify the URL and so it makes the sync fail
-    return if Rails.env.development? && webhook_url.include?('localhost')
+    return if Rails.env.development? &&
+              Rails.application.routes.default_url_options[:host].include?('localhost')
 
     return if webhook_token.present? &&
               gb.list_webhooks(id: primary_list_id).find { |hook| hook['url'] == webhook_url }
