@@ -83,14 +83,10 @@ class ContactMerge
     @winner.update_all_donation_totals
   end
 
-  def self.merged_send_newsletter(winner_send_newsletter, other_send_newsletter)
-    email = winner_send_newsletter.in?(%w(Email Both)) ||
-            other_send_newsletter.in?(%w(Email Both))
-
-    physical = winner_send_newsletter.in?(%w(Physical Both)) ||
-               other_send_newsletter.in?(%w(Physical Both))
-
-    send_newsletter_word(email, physical)
+  def self.merged_send_newsletter(winner, other)
+    return 'Both' if winner == 'Both' || other == 'Both'
+    send_newsletter_word(winner == 'Email' || other == 'Email',
+                         winner == 'Physical' || other == 'Physical')
   end
 
   def self.send_newsletter_word(email, physical)
