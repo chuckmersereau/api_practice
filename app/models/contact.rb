@@ -259,9 +259,19 @@ class Contact < ActiveRecord::Base
     return first_names + ' ' + last_name unless first_names =~ /\((\w|\W)*\)/
     first_names = first_names.split(/ & | #{_('and')} /)
     if first_names[0] =~ /\((\w|\W)*\)/
-      first_names[0].sub!(/\((\w|\W)*\)/, '')
-      first_names[0].strip!
-      return "#{first_names[0]} #{_('and')} #{first_names[1]} #{last_name}"
+      first_names.each { |first_name| first_name.sub!(/\((\w|\W)*\)/, '') }
+      first_names.each(&:strip!)
+      if first_names[1].present?
+        return "#{first_names[0]} #{_('and')} #{first_names[1]} #{last_name}"
+      else
+        return "#{first_names[0]} #{last_name}"
+      end
+    end
+    if donor_accounts.where(name: name).any?
+      # Contacts from the donor system usually have nicknames, not a different
+      # last name in paren, i.e. "Doe, John and Janet (Jane)" not "Doe, John and Janet (Smith)"
+      nickname_stripped = first_names[1].gsub!(/\(.*?\)/, '').gsub(/\s\s+/, ' ').strip
+      return "#{first_names[0]} #{_('and')} #{nickname_stripped} #{last_name}"
     end
     first_names[1].delete!('()')
     "#{first_names[0]} #{last_name} #{_('and')} #{first_names[1]}"
@@ -279,10 +289,11 @@ class Contact < ActiveRecord::Base
   end
 
   def update_all_donation_totals
-    return unless donor_account_ids.present?
-    donation_sum = account_list.donations.where(donor_account_id: donor_account_ids).sum(:amount)
-    self.total_donations = donation_sum
-    save(validate: false)
+    update(total_donations: total_donations_query)
+  end
+
+  def total_donations_query
+    @total_donations_query ||= donations.sum(:amount)
   end
 
   def monthly_pledge
@@ -386,13 +397,14 @@ class Contact < ActiveRecord::Base
   end
 
   def find_timezone
-    primary_address = addresses.find(&:primary_mailing_address?) || addresses.first
-    return unless primary_address
-
-    latitude, longitude = Geocoder.coordinates([primary_address.street, primary_address.city, primary_address.state, primary_address.country].join(','))
-    timezone = GoogleTimezone.fetch(latitude, longitude).time_zone_id
-    ActiveSupport::TimeZone::MAPPING.invert[timezone]
+    return unless primary_or_first_address
+    primary_or_first_address.master_address.find_timezone
   rescue
+  end
+
+  def primary_or_first_address
+    @primary_or_first_address ||=
+      addresses.find(&:primary_mailing_address?) || addresses.first
   end
 
   def set_timezone

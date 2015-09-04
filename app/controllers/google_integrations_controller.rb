@@ -54,8 +54,18 @@ class GoogleIntegrationsController < ApplicationController
   end
 
   def google_integration_params
+    split_calendar_id_and_name
     params.require(:google_integration).permit([:calendar_integration, { calendar_integrations: [] }, :calendar_id,
                                                 :calendar_name, :new_calendar, :email_integration, :contacts_integration])
+  end
+
+  def split_calendar_id_and_name
+    cal_id_and_name = params[:google_integration][:calendar_id_and_name]
+    return unless cal_id_and_name
+    cal_id_and_name = JSON.parse(cal_id_and_name)
+    params[:google_integration][:calendar_id] = cal_id_and_name[0]
+    params[:google_integration][:calendar_name] = cal_id_and_name[1]
+    params[:google_integration].delete(:calendar_id_and_name)
   end
 
   def missing_refresh_token

@@ -1,6 +1,7 @@
 class MailChimpHookHandler
-  def initialize(account_list)
-    @account_list = account_list
+  def initialize(mail_chimp_account)
+    @mc_account = mail_chimp_account
+    @account_list = mail_chimp_account.account_list
   end
 
   def unsubscribe_hook(email)
@@ -19,7 +20,6 @@ class MailChimpHookHandler
   end
 
   def email_cleaned_hook(email, reason)
-    return unless $rollout.active?(:mailchimp_webhooks, @account_list)
     return unsubscribe_hook(email) if reason == 'abuse'
 
     emails = EmailAddress.joins(person: [:contacts])
@@ -31,7 +31,9 @@ class MailChimpHookHandler
     end
   end
 
-  def campaign_status_hook(_campaign_id, _status, _subject)
+  def campaign_status_hook(campaign_id, status, subject)
+    return unless status == 'sent' && @mc_account.auto_log_campaigns
+    @mc_account.queue_log_sent_campaign(campaign_id, subject)
   end
 
   private

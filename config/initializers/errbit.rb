@@ -1,5 +1,5 @@
 Airbrake.configure do |config|
-  config.api_key = '7744bf0009024620829643306bad3a74'
+  config.api_key = 'd65b57308fbe49fe8903198f8b2a1c52'
   config.host = 'api.rollbar.com'
   config.port = 443
   config.secure = config.port == 443

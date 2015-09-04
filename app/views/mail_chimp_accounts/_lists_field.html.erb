@@ -12,4 +12,10 @@
   <%= f.label :primary_list_id, _('Pick a list to use for your newsletter') %>
   <%= f.select :primary_list_id, @mail_chimp_account.lists_available_for_newsletters.collect { |l| [l.name, l.id] }, {},
                { :class => 'form-control' } %><br />
+  <% if $rollout.active?(:mail_chimp_auto_log, current_account_list) %>
+   <%= f.label :auto_log_campaigns do %>
+     <%= f.check_box :auto_log_campaigns  %>
+     <%= _('Automatically log sent MailChimp campaigns in contact task history.') %>
+   <% end %>
+  <% end %> 
 </div>

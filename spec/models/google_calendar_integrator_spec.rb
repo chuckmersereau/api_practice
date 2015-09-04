@@ -40,6 +40,14 @@ describe GoogleCalendarIntegrator do
       integrator.sync_task(task)
     end
 
+    it 'calls add_task if google_event is for another calendar' do
+      allow(google_integration).to receive(:calendars).and_return(nil)
+      google_event.update(calendar_id: 'other-calendar')
+      expect(integrator).to receive(:add_task).with(task)
+
+      integrator.sync_task(task)
+    end
+
     it 'calls remove_google_event if task is nil' do
       allow(google_integration).to receive(:calendars).and_return(nil)
       expect(integrator).to receive(:remove_google_event).with(google_event)
@@ -61,6 +69,7 @@ describe GoogleCalendarIntegrator do
       expect do
         integrator.add_task(task)
       end.to change(GoogleEvent, :count)
+      expect(GoogleEvent.last.calendar_id).to eq('cal1')
     end
 
     it 'removes the calendar integration if the calendar no longer exists on google' do

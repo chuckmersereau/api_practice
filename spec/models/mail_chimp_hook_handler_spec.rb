@@ -2,7 +2,10 @@ require 'spec_helper'
 
 describe MailChimpHookHandler do
   let(:account_list) { create(:account_list) }
-  let(:handler) { MailChimpHookHandler.new(account_list) }
+  let(:mc_account) do
+    create(:mail_chimp_account, account_list: account_list, auto_log_campaigns: true)
+  end
+  let(:handler) { MailChimpHookHandler.new(mc_account) }
   let(:contact) { create(:contact, account_list: account_list) }
   let(:person) { create(:person) }
 
@@ -10,9 +13,6 @@ describe MailChimpHookHandler do
     person.email_address = { email: 'a@example.com', primary: true }
     person.save
     contact.people << person
-
-    allow($rollout).to receive(:active?).with(:mailchimp_webhooks, account_list)
-      .at_least(:once).and_return(true)
   end
 
   context '#unsubscribe_hook' do
@@ -80,6 +80,24 @@ describe MailChimpHookHandler do
     it 'triggers the unsubscribe hook for an email marked as spam (abuse)' do
       expect(handler).to receive(:unsubscribe_hook).with('a@example.com')
       handler.email_cleaned_hook('a@example.com', 'abuse')
+    end
+  end
+
+  context '#campaign_status_hook' do
+    it 'does nothing if the status is not sent' do
+      expect(mc_account).to_not receive(:queue_log_sent_campaign)
+      handler.campaign_status_hook('campaign1', 'not-sent', 'subject')
+    end
+
+    it 'does nothing if the mail chimp account not set to auto-log campaigns' do
+      mc_account.auto_log_campaigns = false
+      expect(mc_account).to_not receive(:queue_log_sent_campaign)
+      handler.campaign_status_hook('campaign1', 'sent', 'subject')
+    end
+
+    it 'asyncronously calls the mail chimp account to log the sent campaign' do
+      expect(mc_account).to receive(:queue_log_sent_campaign).with('c1', 'subject')
+      handler.campaign_status_hook('c1', 'sent', 'subject')
     end
   end
 end

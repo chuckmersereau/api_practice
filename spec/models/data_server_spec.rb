@@ -468,23 +468,48 @@ describe DataServer do
         'TENDERED_AMOUNT' => '1000.0000' }
     end
 
-    it 'should create a donation' do
+    def stub_donations_request
       stub_request(:post, /.*donations/).to_return(body:
                                                      "\xEF\xBB\xBF\"DONATION_ID\",\"PEOPLE_ID\",\"ACCT_NAME\",\"DESIGNATION\",\"MOTIVATION\",\"PAYMENT_METHOD\",\"TENDERED_CURRENCY\",\"MEMO\","\
         "\"DISPLAY_DATE\",\"AMOUNT\",\"TENDERED_AMOUNT\"\r\n\"1062\",\"12271\",\"Garcia, Reynaldo\",\"10640\",\"\",\"EFECTIVO\",\"MXN\",\"\",\"4/23/2003\","\
         "\"1000.0000\",\"1000.0000\"\r\n")
       expect(@data_server).to receive(:check_credentials!)
+    end
+
+    it 'creates a donation' do
+      stub_donations_request
       expect(@data_server).to receive(:find_or_create_designation_account)
       expect(@data_server).to receive(:add_or_update_donation)
+      expect(@data_server).to receive(:delete_removed_donations)
       @data_server.import_donations(profile, DateTime.new(1951, 1, 1), '2/2/2012')
     end
 
-    it 'should find an existing designation account' do
+    it 'removes non-manual donations in the date range but no longer in import', versioning: true do
+      stub_donations_request
+      da = create(:designation_account, organization: @org, designation_number: line['DESIGNATION'])
+
+      removed_donation = create(:donation)
+      manual_donation = create(:donation, remote_id: nil)
+      old_donation = create(:donation, donation_date: 1.month.ago)
+      da.donations += [manual_donation, old_donation, removed_donation]
+      other_designation = create(:donation)
+
+      expect do
+        @data_server.import_donations(profile, Date.today - 2.weeks, Date.today)
+      end.to change(Version.where(item_type: 'Donation'), :count).by(1)
+
+      expect(Donation.find_by(id: removed_donation.id)).to be_nil
+      expect(Donation.find(manual_donation.id)).to be_present
+      expect(Donation.find(old_donation.id)).to be_present
+      expect(Donation.find(other_designation.id)).to be_present
+    end
+
+    it 'finds an existing designation account' do
       account = create(:designation_account, organization: @org, designation_number: line['DESIGNATION'])
       expect(@data_server.send(:find_or_create_designation_account, line['DESIGNATION'], profile)).to eq(account)
     end
 
-    it 'should create a new designation account' do
+    it 'creates a new designation account' do
       expect do
         @data_server.send(:find_or_create_designation_account, line['DESIGNATION'], profile)
       end.to change(DesignationAccount, :count)
@@ -493,12 +518,12 @@ describe DataServer do
     describe 'add or update donation' do
       let(:designation_account) { create(:designation_account) }
 
-      it 'should add a new donation' do
+      it 'adds a new donation' do
         expect do
           @data_server.send(:add_or_update_donation, line, designation_account, profile)
         end.to change(Donation, :count)
       end
-      it 'should update an existing donation' do
+      it 'updates an existing donation' do
         @data_server.send(:add_or_update_donation, line, designation_account, profile)
         expect do
           donation = @data_server.send(:add_or_update_donation, line.merge!('AMOUNT' => '5'), designation_account, profile)
@@ -530,6 +555,14 @@ describe DataServer do
 
       it 'returns nil for empty string' do
         expect(@data_server.send(:parse_date, '')).to be_nil
+      end
+
+      it 'returns the date if given a date object' do
+        expect(@data_server.send(:parse_date, Date.today)).to eq Date.today
+      end
+
+      it 'returns the date for a time if given' do
+        expect(@data_server.send(:parse_date, Time.now)).to eq Date.today
       end
     end
   end

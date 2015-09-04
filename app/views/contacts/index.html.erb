@@ -299,7 +299,7 @@
                 </p>
               </td>
             </tr>
-            <tr contact="contact" ng-repeat="contact in contacts" id="contact_{{contact.id}}" data-hook="contact"></tr>
+            <tr contact="contact" ng-repeat="contact in contacts | orderBy:'name'" id="contact_{{contact.id}}" data-hook="contact"></tr>
           </table>
         </div>
       </div>

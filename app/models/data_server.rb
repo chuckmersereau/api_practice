@@ -144,11 +144,31 @@ class DataServer
                                                       personid: @org_account.remote_id))
     end
 
-    import_donations_from_csv(profile, response)
+    imported_donations = import_donations_from_csv(profile, response)
+    delete_removed_donations(parse_date(date_from), parse_date(date_to),
+                             imported_donations)
+  end
+
+  def delete_removed_donations(date_from, date_to, imported_donations)
+    imported_by_designation = group_by_designation(imported_donations)
+    imported_by_designation.keys.each do |designation_account|
+      designation_account.donations.between(date_from, date_to)
+        .where.not(remote_id: imported_by_designation[designation_account].map(&:remote_id))
+        .where.not(remote_id: nil).each(&:destroy)
+    end
+  end
+
+  def group_by_designation(imported_donations)
+    by_designation = {}
+    imported_donations.each do |donation|
+      by_designation[donation.designation_account] ||= []
+      by_designation[donation.designation_account] << donation
+    end
+    by_designation
   end
 
   def import_donations_from_csv(profile, response)
-    CSV.new(response, headers: :first_row).each do |line|
+    CSV.new(response, headers: :first_row).read.map do |line|
       designation_account = find_or_create_designation_account(line['DESIGNATION'], profile)
       add_or_update_donation(line, designation_account, profile)
     end
@@ -438,12 +458,14 @@ class DataServer
   end
 
   # Data server supports two date formats, try both of those
-  def parse_date(date_str)
-    return if date_str.blank?
-    Date.strptime(date_str, '%m/%d/%Y')
+  def parse_date(date_obj)
+    return if date_obj.blank?
+    return date_obj if date_obj.is_a?(Date)
+    return date_obj.to_date if date_obj.is_a?(Time)
+    Date.strptime(date_obj, '%m/%d/%Y')
   rescue ArgumentError
     begin
-      Date.strptime(date_str, '%Y-%m-%d')
+      Date.strptime(date_obj, '%Y-%m-%d')
     rescue ArgumentError
     end
   end
