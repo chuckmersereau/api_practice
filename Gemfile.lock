@@ -442,7 +442,7 @@ GEM
       peek
       redis
     pg (0.18.2)
-    phonelib (0.4.9)
+    phonelib (0.5.0)
     po_to_json (1.0.0)
       json (>= 1.6.0)
     poltergeist (1.6.0)
@@ -786,7 +786,7 @@ DEPENDENCIES
   peek-pg
   peek-redis
   pg (~> 0.18.2)
-  phonelib (~> 0.4.9)
+  phonelib (~> 0.5.0)
   poltergeist
   pry-byebug
   pry-rails
