@@ -45,6 +45,7 @@ class GoogleContactsIntegrator
   def sync_contacts
     return if @integration.account_list.organization_accounts.any?(&:downloading)
     return if @integration.account_list.imports.any?(&:importing)
+    return if @integration.account_list.mail_chimp_account.try(&:importing)
     sync_and_return_num_synced
     cleanup_inactive_g_contacts
   rescue Person::GoogleAccount::MissingRefreshToken

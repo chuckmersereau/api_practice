@@ -54,7 +54,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def queue_sync_contacts(contact_ids)
-    async(:call_mailchimp, :sync_contacts, contact_ids)
+    async(:call_mailchimp, :sync_contacts, contact_ids) unless importing
   end
 
   def queue_export_to_primary_list
@@ -131,10 +131,30 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
+  def handle_newsletter_mc_error(e)
+    case
+    when e.message.include?('code 250')
+      # MMERGE3 must be provided - Please enter a value (code 250)
+      # Notify user and nulify primary_list_id until they fix the problem
+      update_column(:primary_list_id, nil)
+      AccountMailer.mailchimp_required_merge_field(account_list).deliver
+    when e.message.include?('code 200')
+      # Invalid MailChimp List ID (code 200)
+      update_column(:primary_list_id, nil)
+    when e.message.include?('code 502') || e.message.include?('code 220')
+      # Invalid Email Address: "Rajah Tony" <amrajah@gmail.com> (code 502)
+      # "jake.adams.photo@gmail.cm" has been banned (code 220) - Usually a typo in an email address
+    when e.message.include?('code 214')
+      # The new email address "xxxxx@example.com" is already subscribed to this list
+    else
+      fail e
+    end
+  end
+
   def compare_and_unsubscribe(contacts, list_id)
     # compare and unsubscribe email addresses from the prev mail chimp appeal list not on
     # the current one.
-    members_to_unsubscribe = list_members(list_id).map { |l| l['email'] }.uniq -
+    members_to_unsubscribe = list_emails(list_id) -
                              batch_params(contacts).map { |b| b[:EMAIL] }
     unsubscribe_list_batch(list_id, members_to_unsubscribe) if members_to_unsubscribe.present?
   end
@@ -147,12 +167,27 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def export_to_primary_list
+    update(importing: true)
     setup_webhooks
 
     # clear the member records to force a full export
     mail_chimp_members.where(list_id: primary_list_id).destroy_all
+    mail_chimp_members.reload
 
+    MailChimpImport.new(self).import_contacts
     MailChimpSync.new(self).sync_contacts
+  ensure
+    update(importing: false)
+  end
+
+  def newsletter_emails
+    newsletter_contacts_with_emails(nil).pluck('email_addresses.email')
+  end
+
+  def newsletter_contacts_with_emails(contact_ids)
+    contacts_with_email_addresses(contact_ids)
+      .where(send_newsletter: %w(Email Both))
+      .where.not(people: { optout_enewsletter: true })
   end
 
   def contacts_with_email_addresses(contact_ids)
@@ -256,6 +291,11 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def setup_webhooks
+    # Don't setup webhooks when developing on localhost because MailChimp can't
+    # verify the URL and so it makes the sync fail
+    return if Rails.env.development? &&
+              Rails.application.routes.default_url_options[:host].include?('localhost')
+
     return if webhook_token.present? &&
               gb.list_webhooks(id: primary_list_id).find { |hook| hook['url'] == webhook_url }
 
@@ -281,7 +321,19 @@ class MailChimpAccount < ActiveRecord::Base
     @gb
   end
 
+  def list_emails(list_id)
+    list_members(list_id).map { |l| l['email'] }
+  end
+
   def list_members(list_id)
-    gb.list_members(id: list_id)['data']
+    # This would require paging if there is an account with over 15000 emails,
+    # but that seems quite unlikely for regular staff members.
+    gb.list_members(id: list_id, limit: 15_000)['data']
+  end
+
+  def list_member_info(list_id, emails)
+    emails.each_slice(50).to_a.flat_map do |emails_batch|
+      gb.list_member_info(id: list_id, email_address: emails_batch)['data']
+    end
   end
 end

@@ -28,38 +28,11 @@ describe MailChimpSync do
       subject.sync_contacts([1])
     end
 
-    it 'sets the primary_list_id to nil on a code 200 (no list) error' do
-      stub_mc_error('Invalid MailChimp List ID (code 200)')
+    it 'sends mail chimp errors to the mail chimp account for handling' do
+      err = Gibbon::MailChimpError.new
+      expect(subject).to receive(:sync_adds_and_updates).and_raise(err)
+      expect(mc_account).to receive(:handle_newsletter_mc_error).with(err)
       subject.sync_contacts
-      expect(mc_account.reload.primary_list_id).to be_nil
-    end
-
-    it 'notifies user and clears primary_list_id if required merge field missing' do
-      stub_mc_error('MMERGE3 must be provided - Please enter a value (code 250)')
-
-      email = double
-      expect(AccountMailer).to receive(:mailchimp_required_merge_field)
-        .with(account_list) { email }
-      expect(email).to receive(:deliver)
-
-      subject.sync_contacts
-      expect(mc_account.reload.primary_list_id).to be_nil
-    end
-
-    it 'does nothing for specified benign error codes' do
-      [502, 220, 214].each do |code|
-        stub_mc_error("Error (code #{code})")
-        subject.sync_contacts
-      end
-    end
-
-    it 're-raises other mail chimp errors' do
-      stub_mc_error('other error')
-      expect { subject.sync_contacts }.to raise_error(Gibbon::MailChimpError)
-    end
-
-    def stub_mc_error(msg)
-      expect(subject).to receive(:sync_adds_and_updates).and_raise(Gibbon::MailChimpError, msg)
     end
   end
 
@@ -135,21 +108,6 @@ describe MailChimpSync do
           .with('list1', ['john@example.com'])
         subject.sync_deletes
       end
-    end
-  end
-
-  context '#newsletter_contacts_with_emails' do
-    it 'excludes people not on the email newsletter' do
-      contact.update(send_newsletter: 'Physical')
-      expect(subject.newsletter_contacts_with_emails(nil).to_a).to be_empty
-    end
-
-    it 'excludes a person from the loaded contact association if opted-out' do
-      opt_out_person = create(:person, optout_enewsletter: true)
-      opt_out_person.email_address = { email: 'foo2@example.com', primary: true }
-      opt_out_person.save
-      contact.people << opt_out_person
-      opt_out_person.update(optout_enewsletter: true)
     end
   end
 end
