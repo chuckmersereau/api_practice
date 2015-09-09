@@ -122,6 +122,12 @@ describe MailChimpAccount do
         account.queue_sync_contacts(1)
       end.to_not change(MailChimpAccount.jobs, :size)
     end
+
+    it 'queues import subscriber' do
+      expect do
+        account.queue_import_new_member('j@t.co')
+      end.to change(MailChimpAccount.jobs, :size).by(1)
+    end
   end
 
   describe 'callbacks' do
@@ -149,6 +155,13 @@ describe MailChimpAccount do
         expect do
           account.send(:export_to_primary_list)
         end.to change(MailChimpMember, :count).by(-1)
+      end
+
+      it 'imports new subscribers' do
+        import = double
+        expect(MailChimpImport).to receive(:new).with(account) { import }
+        expect(import).to receive(:import_members_by_emails).with(['j@t.co'])
+        account.send(:import_new_member, 'j@t.co')
       end
 
       it 'does not unsubscribe the newly imported contacts' do

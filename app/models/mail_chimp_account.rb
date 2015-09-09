@@ -69,6 +69,17 @@ class MailChimpAccount < ActiveRecord::Base
     async(:call_mailchimp, :log_sent_campaign, campaign_id, subject)
   end
 
+  def queue_import_new_member(email)
+    update(importing: true)
+    async(:call_mailchimp, :import_new_member, email)
+  ensure
+    update(importing: false)
+  end
+
+  def import_new_member(email)
+    MailChimpImport.new(self).import_members_by_emails([email])
+  end
+
   def datacenter
     api_key.to_s.split('-').last
   end

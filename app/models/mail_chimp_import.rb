@@ -5,7 +5,15 @@ class MailChimpImport
   end
 
   def import_contacts
-    import_members(members_to_import.map(&method(:format_member_info)))
+    import_members_by_emails(all_emails_to_import)
+  rescue Gibbon::MailChimpError => e
+    @mc_account.handle_newsletter_mc_error(e)
+  end
+
+  def import_members_by_emails(member_emails)
+    members_info = 
+      @mc_account.list_member_info(@mc_account.primary_list_id, member_emails)
+    import_members(members_info.map(&method(:format_member_info)))
   rescue Gibbon::MailChimpError => e
     @mc_account.handle_newsletter_mc_error(e)
   end
@@ -16,16 +24,13 @@ class MailChimpImport
 
   private
 
-  def format_member_info(member_info)
-    { email: member_info['email'], first_name: member_info['merges']['FNAME'],
-      last_name: member_info['merges']['LNAME'] }
+  def format_member_info(info)
+    { email: info['email'], first_name: info['merges']['FNAME'],
+      last_name: info['merges']['LNAME'], greeting: info['merges']['GREETING'],
+      groupings: info['merges']['GROUPINGS'] }
   end
 
-  def members_to_import
-    @mc_account.list_member_info(@mc_account.primary_list_id, emails_to_import)
-  end
-
-  def emails_to_import
+  def all_emails_to_import
     @mc_account.list_emails(@mc_account.primary_list_id) - @mc_account.newsletter_emails
   end
 
@@ -99,21 +104,32 @@ class MailChimpImport
   def import_unmatched(members, matched_person_ids_map)
     members_to_add = members - matched_person_ids_map.values
     members_to_add.each do |member|
-      person = create_person(member[:first_name], member[:last_name], member[:email])
+      person = create_person(member)
       add_person_to_newsletter(person, member[:email])
     end
   end
 
-  def create_person(first_name, last_name, email)
-    contact = @account_list.contacts.create(
-      name: contact_name(first_name, last_name, email), status: 'Partner - Pray',
-      notes: 'Imported from MailChimp')
-
+  def create_person(member)
     person = Person.create(
-      first_name: first_name || self.class.email_to_name(email), last_name: last_name)
+      first_name: member[:first_name] || self.class.email_to_name(member[:email]), 
+      last_name: member[:last_name])
 
-    person.contacts << contact
+    person.contacts << contact_from_member(member)
     person
+  end
+
+  def contact_from_member(member)
+    contact = @account_list.contacts.build(
+      name: contact_name(member[:first_name], member[:last_name], member[:email]),
+      notes: 'Imported from MailChimp', greeting: member[:greeting])
+
+    grouping = member[:groupings].try(:first) || {}
+    group_status = grouping['groups'].try(:split, ',').try(:first)
+    contact.status = group_status if group_status.in?(contact.assignable_statuses)
+    contact.status ||= 'Partner - Pray'
+    contact.save
+
+    contact
   end
 
   def contact_name(first_name, last_name, email)
