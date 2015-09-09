@@ -1,6 +1,9 @@
 require 'spec_helper'
 
 describe User do
+  subject { build(:user) }
+  let(:account_list) { create(:account_list) }
+
   describe 'user role' do
     describe 'from omniauth' do
       before(:each) do
@@ -32,6 +35,27 @@ describe User do
 
     it 'should return a list of account numbers from a given org' do
       expect(@user.designation_numbers(@org.id)).to include(@account.designation_number)
+    end
+  end
+
+  context '#can_manage_sharing?' do
+    it 'can manage sharing if it has a designation profile for account list' do
+      expect(subject.can_manage_sharing?(account_list)).to be false
+    end
+
+    it 'cannot manage sharing if it does not have a designation profile for it' do
+      subject.save
+      create(:designation_profile, account_list: account_list, user: subject)
+      expect(subject.can_manage_sharing?(account_list)).to be true
+    end
+  end
+
+  context '#remove_access' do
+    it 'removes user from account list users' do
+      subject.save
+      account_list.users << subject
+      subject.remove_access(account_list)
+      expect(account_list.reload.users).to_not include subject
     end
   end
 end

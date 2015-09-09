@@ -87,6 +87,8 @@ Rails.application.routes.draw do
       get :sharing
       post :share
       post :merge
+      post :remove_access
+      post :cancel_invite
       get :accept_invite
     end
   end

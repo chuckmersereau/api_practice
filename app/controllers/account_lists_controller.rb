@@ -33,6 +33,30 @@ class AccountListsController < ApplicationController
     redirect_to root_path
   end
 
+  def cancel_invite
+    invite = current_account_list.account_list_invites.find(params[:invite_id])
+    if current_user.can_manage_sharing?(current_account_list)
+      invite.cancel(current_user)
+      flash[:notice] = _('Invite canceled.')
+    else
+      flash[:alert] = _('You are not allowed to manage sharing for this account.')
+    end
+    redirect_to sharing_account_lists_path
+  end
+
+  def remove_access
+    user_to_remove = current_account_list.users.find_by(id: params[:user_id])
+    if user_to_remove.nil?
+      flash[:notice] = _('User already removed')
+    elsif current_user.can_manage_sharing?(current_account_list)
+      user_to_remove.remove_access(current_account_list)
+      flash[:notice] = _('User account access removed.')
+    else
+      flash[:alert] = _('You are not allowed to manage sharing for this account.')
+    end
+    redirect_to sharing_account_lists_path
+  end
+
   def merge
     merge_account_list = current_user.account_lists.find_by(id: params[:merge_id])
 
