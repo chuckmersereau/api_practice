@@ -13,7 +13,7 @@ class InsightAnalyses
     contacts_list = []
     if recommends && recommends['rowset']['Row']
       recommends['rowset']['Row'].each do |c, _val|
-        contacts_list.push(c['Column8'])
+        contacts_list.push(c['Column0'])
       end
     end
     contacts_list
