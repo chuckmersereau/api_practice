@@ -72,100 +72,7 @@
                 <input ng-model="followUpDialogResult.givingTask.subject" class="form-control">
             </div>
 
-            <div style="padding-top:10px;">
-                <label><%= _('Due date') %></label>
-                <input type="text" class="followUpDialogDatepicker" ng-model="followUpDialogResult.givingTask.date" style="width:100px;">
-
-                <select ng-model="followUpDialogResult.givingTask.hour">
-                    <option value="00">12 AM</option>
-                    <option value="01">01 AM</option>
-                    <option value="02">02 AM</option>
-                    <option value="03">03 AM</option>
-                    <option value="04">04 AM</option>
-                    <option value="05">05 AM</option>
-                    <option value="06">06 AM</option>
-                    <option value="07">07 AM</option>
-                    <option value="08">08 AM</option>
-                    <option value="09">09 AM</option>
-                    <option value="10">10 AM</option>
-                    <option value="11">11 AM</option>
-                    <option value="12">12 PM</option>
-                    <option value="13">01 PM</option>
-                    <option value="14">02 PM</option>
-                    <option value="15">03 PM</option>
-                    <option value="16">04 PM</option>
-                    <option value="17">05 PM</option>
-                    <option value="18">06 PM</option>
-                    <option value="19">07 PM</option>
-                    <option value="20">08 PM</option>
-                    <option value="21">09 PM</option>
-                    <option value="22">10 PM</option>
-                    <option value="23">11 PM</option>
-                </select>
-                :
-                <select ng-model="followUpDialogResult.givingTask.min">
-                    <option value="00">00</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">06</option>
-                    <option value="07">07</option>
-                    <option value="08">08</option>
-                    <option value="09">09</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">21</option>
-                    <option value="22">22</option>
-                    <option value="23">23</option>
-                    <option value="24">24</option>
-                    <option value="25">25</option>
-                    <option value="26">26</option>
-                    <option value="27">27</option>
-                    <option value="28">28</option>
-                    <option value="29">29</option>
-                    <option value="30">30</option>
-                    <option value="31">31</option>
-                    <option value="32">32</option>
-                    <option value="33">33</option>
-                    <option value="34">34</option>
-                    <option value="35">35</option>
-                    <option value="36">36</option>
-                    <option value="37">37</option>
-                    <option value="38">38</option>
-                    <option value="39">39</option>
-                    <option value="40">40</option>
-                    <option value="41">41</option>
-                    <option value="42">42</option>
-                    <option value="43">43</option>
-                    <option value="44">44</option>
-                    <option value="45">45</option>
-                    <option value="46">46</option>
-                    <option value="47">47</option>
-                    <option value="48">48</option>
-                    <option value="49">49</option>
-                    <option value="50">50</option>
-                    <option value="51">51</option>
-                    <option value="52">52</option>
-                    <option value="53">53</option>
-                    <option value="54">54</option>
-                    <option value="55">55</option>
-                    <option value="56">56</option>
-                    <option value="57">57</option>
-                    <option value="58">58</option>
-                    <option value="59">59</option>
-                </select>
-            </div>
+            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.givingTask' %> 
 
             <div style="padding-top:10px;">
                 <label><%= _('Action') %></label>
@@ -188,6 +95,38 @@
         </div>
 
 
+        <div ng-show="followUpDialogData.cultivateTask" style="padding-top:10px;">
+          <input type="checkbox" ng-model="followUpDialogResult.createCultivateTask"> 
+          <%= _('Create "Cultivate Relationship" task') %>
+        </div>
+        <div ng-show="followUpDialogResult.createCultivateTask" style="padding-top:10px;">
+            <div class="form-group">
+                <label><%= _('Subject') %></label>
+                <input ng-model="followUpDialogResult.cultivateTask.subject" class="form-control">
+            </div>
+
+            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.cultivateTask' %> 
+
+            <div style="padding-top:10px;">
+                <label><%= _('Action') %></label>
+                <select ng-model="followUpDialogResult.cultivateTask.type">
+                    <option value=""></option>
+                    <option value="Email"><%= _('Email') %></option>
+                    <option value="Text Message"><%= _('Text Message') %></option>
+                    <option value="Facebook Message"><%= _('Facebook Message') %></option>
+                    <option value="Talk to In Person"><%= _('Talk to In Person') %></option>
+                    <option value="Prayer Request"><%= _('Prayer Request') %></option>
+                    <option value="Letter"><%= _('Letter') %></option>
+                    <option value="To Do"><%= _('To Do') %></option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label><%= _('Comments') %></label>
+                <textarea ng-model="followUpDialogResult.cultivateTask.comments" class="form-control"></textarea>
+            </div>
+        </div>
+
 
         <div ng-show="followUpDialogData.apptTask" style="padding-top:10px;">
             <input type="checkbox" ng-model="followUpDialogResult.createApptTask"> <%= _('Create "Appointment" task') %>
@@ -199,100 +138,7 @@
                 <input ng-model="followUpDialogResult.apptTask.subject" class="form-control">
             </div>
 
-            <div class="form-group">
-                <label><%= _('Due date') %></label>
-                <input type="text" class="followUpDialogDatepicker" ng-model="followUpDialogResult.apptTask.date" style="width:100px;"/>
-
-                <select ng-model="followUpDialogResult.apptTask.hour">
-                    <option value="00">12 AM</option>
-                    <option value="01">01 AM</option>
-                    <option value="02">02 AM</option>
-                    <option value="03">03 AM</option>
-                    <option value="04">04 AM</option>
-                    <option value="05">05 AM</option>
-                    <option value="06">06 AM</option>
-                    <option value="07">07 AM</option>
-                    <option value="08">08 AM</option>
-                    <option value="09">09 AM</option>
-                    <option value="10">10 AM</option>
-                    <option value="11">11 AM</option>
-                    <option value="12">12 PM</option>
-                    <option value="13">01 PM</option>
-                    <option value="14">02 PM</option>
-                    <option value="15">03 PM</option>
-                    <option value="16">04 PM</option>
-                    <option value="17">05 PM</option>
-                    <option value="18">06 PM</option>
-                    <option value="19">07 PM</option>
-                    <option value="20">08 PM</option>
-                    <option value="21">09 PM</option>
-                    <option value="22">10 PM</option>
-                    <option value="23">11 PM</option>
-                </select>
-                :
-                <select ng-model="followUpDialogResult.apptTask.min">
-                    <option value="00">00</option>
-                    <option value="01">01</option>
-                    <option value="02">02</option>
-                    <option value="03">03</option>
-                    <option value="04">04</option>
-                    <option value="05">05</option>
-                    <option value="06">06</option>
-                    <option value="07">07</option>
-                    <option value="08">08</option>
-                    <option value="09">09</option>
-                    <option value="10">10</option>
-                    <option value="11">11</option>
-                    <option value="12">12</option>
-                    <option value="13">13</option>
-                    <option value="14">14</option>
-                    <option value="15">15</option>
-                    <option value="16">16</option>
-                    <option value="17">17</option>
-                    <option value="18">18</option>
-                    <option value="19">19</option>
-                    <option value="20">20</option>
-                    <option value="21">21</option>
-                    <option value="22">22</option>
-                    <option value="23">23</option>
-                    <option value="24">24</option>
-                    <option value="25">25</option>
-                    <option value="26">26</option>
-                    <option value="27">27</option>
-                    <option value="28">28</option>
-                    <option value="29">29</option>
-                    <option value="30">30</option>
-                    <option value="31">31</option>
-                    <option value="32">32</option>
-                    <option value="33">33</option>
-                    <option value="34">34</option>
-                    <option value="35">35</option>
-                    <option value="36">36</option>
-                    <option value="37">37</option>
-                    <option value="38">38</option>
-                    <option value="39">39</option>
-                    <option value="40">40</option>
-                    <option value="41">41</option>
-                    <option value="42">42</option>
-                    <option value="43">43</option>
-                    <option value="44">44</option>
-                    <option value="45">45</option>
-                    <option value="46">46</option>
-                    <option value="47">47</option>
-                    <option value="48">48</option>
-                    <option value="49">49</option>
-                    <option value="50">50</option>
-                    <option value="51">51</option>
-                    <option value="52">52</option>
-                    <option value="53">53</option>
-                    <option value="54">54</option>
-                    <option value="55">55</option>
-                    <option value="56">56</option>
-                    <option value="57">57</option>
-                    <option value="58">58</option>
-                    <option value="59">59</option>
-                </select>
-            </div>
+            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.apptTask' %> 
 
             <div style="padding-top:10px;">
                 <label for="follow-up-task_location"><%= _('Location') %></label><br>
@@ -314,102 +160,7 @@
             <label><%= _('Subject') %></label><br>
             <input ng-model="followUpDialogResult.callTask.subject" class="form-control">
 
-            <div style="padding-top:10px;">
-                <div class="form-group">
-                    <label><%= _('Due date') %></label><br/>
-                    <input type="text" class="followUpDialogDatepicker form-control" ng-model="followUpDialogResult.callTask.date"style="width:100px;">
-
-                    <select ng-model="followUpDialogResult.callTask.hour">
-                        <option value="00">12 AM</option>
-                        <option value="01">01 AM</option>
-                        <option value="02">02 AM</option>
-                        <option value="03">03 AM</option>
-                        <option value="04">04 AM</option>
-                        <option value="05">05 AM</option>
-                        <option value="06">06 AM</option>
-                        <option value="07">07 AM</option>
-                        <option value="08">08 AM</option>
-                        <option value="09">09 AM</option>
-                        <option value="10">10 AM</option>
-                        <option value="11">11 AM</option>
-                        <option value="12">12 PM</option>
-                        <option value="13">01 PM</option>
-                        <option value="14">02 PM</option>
-                        <option value="15">03 PM</option>
-                        <option value="16">04 PM</option>
-                        <option value="17">05 PM</option>
-                        <option value="18">06 PM</option>
-                        <option value="19">07 PM</option>
-                        <option value="20">08 PM</option>
-                        <option value="21">09 PM</option>
-                        <option value="22">10 PM</option>
-                        <option value="23">11 PM</option>
-                    </select>
-                    :
-                    <select ng-model="followUpDialogResult.callTask.min">
-                        <option value="00">00</option>
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="26">26</option>
-                        <option value="27">27</option>
-                        <option value="28">28</option>
-                        <option value="29">29</option>
-                        <option value="30">30</option>
-                        <option value="31">31</option>
-                        <option value="32">32</option>
-                        <option value="33">33</option>
-                        <option value="34">34</option>
-                        <option value="35">35</option>
-                        <option value="36">36</option>
-                        <option value="37">37</option>
-                        <option value="38">38</option>
-                        <option value="39">39</option>
-                        <option value="40">40</option>
-                        <option value="41">41</option>
-                        <option value="42">42</option>
-                        <option value="43">43</option>
-                        <option value="44">44</option>
-                        <option value="45">45</option>
-                        <option value="46">46</option>
-                        <option value="47">47</option>
-                        <option value="48">48</option>
-                        <option value="49">49</option>
-                        <option value="50">50</option>
-                        <option value="51">51</option>
-                        <option value="52">52</option>
-                        <option value="53">53</option>
-                        <option value="54">54</option>
-                        <option value="55">55</option>
-                        <option value="56">56</option>
-                        <option value="57">57</option>
-                        <option value="58">58</option>
-                        <option value="59">59</option>
-                    </select>
-                </div>
-            </div>
+            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.callTask' %> 
 
             <div class="form-group">
                 <label><%= _('Tags') %></label>

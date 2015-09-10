@@ -103,6 +103,10 @@ angular.module('mpdxApp')
                   httpPromises.push(createTask($scope.followUpDialogResult.callTask, contactsObject,
                                $scope.followUpDialogResult.callTask.type));
                 }
+                if ($scope.followUpDialogResult.createCultivateTask) {
+                  httpPromises.push(createTask($scope.followUpDialogResult.cultivateTask, contactsObject,
+                               $scope.followUpDialogResult.cultivateTask.type));
+                }
                 if($scope.followUpDialogResult.createApptTask){
                   httpPromises.push(createTask($scope.followUpDialogResult.apptTask, contactsObject, 'Appointment'));
                 }
@@ -187,11 +191,12 @@ angular.module('mpdxApp')
 
                 $scope.followUpDialogData = {
                     message: "Contact's status will be updated to 'Cultivate Relationship'.",
-                    callTask: true,
+                    cultivateTask: true,
                     newsletter: true
                 };
                 $scope.followUpDialogResult = {
-                    callTask: {
+                    createCultivateTask: true,
+                    cultivateTask: {
                         type: 'To Do',
                         subject: 'Cultivate relationship',
                         date: dateTwoDaysFromToday,
