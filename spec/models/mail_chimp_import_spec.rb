@@ -55,7 +55,7 @@ describe MailChimpImport do
 
     it 'uses the greeting and grouping status if valid' do
       stub_list_members(
-        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J', 
+        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J',
         groupings: [{ 'groups' => 'Partner - Financial' }])
       subject.import_contacts
       expect(Contact.last.status).to eq('Partner - Financial')
@@ -64,7 +64,7 @@ describe MailChimpImport do
 
     it 'takes the first status if there are multiple groups specified' do
       stub_list_members(
-        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J', 
+        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J',
         groupings: [{ 'groups' => 'Never Contacted, Ask in Future' }])
       subject.import_contacts
       expect(Contact.last.status).to eq('Never Contacted')
@@ -72,8 +72,8 @@ describe MailChimpImport do
 
     it 'defaults an invalid status to Partner - Pray' do
       stub_list_members(
-        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J', 
-        groupings: [{ 'groups' => ['Invalid']}])
+        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J',
+        groupings: [{ 'groups' => ['Invalid'] }])
       subject.import_contacts
       expect(Contact.last.status).to eq('Partner - Pray')
     end

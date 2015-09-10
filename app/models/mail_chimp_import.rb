@@ -11,7 +11,7 @@ class MailChimpImport
   end
 
   def import_members_by_emails(member_emails)
-    members_info = 
+    members_info =
       @mc_account.list_member_info(@mc_account.primary_list_id, member_emails)
     import_members(members_info.map(&method(:format_member_info)))
   rescue Gibbon::MailChimpError => e
@@ -111,7 +111,7 @@ class MailChimpImport
 
   def create_person(member)
     person = Person.create(
-      first_name: member[:first_name] || self.class.email_to_name(member[:email]), 
+      first_name: member[:first_name] || self.class.email_to_name(member[:email]),
       last_name: member[:last_name])
 
     person.contacts << contact_from_member(member)
