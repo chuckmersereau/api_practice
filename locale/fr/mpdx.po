@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-06-23 17:32+0100\n"
+"PO-Revision-Date: 2015-09-10 14:29+0200\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
-"X-Generator: Poedit 1.7.5\n"
+"X-Generator: Poedit 1.8.4\n"
 "POT-Creation-Date: \n"
 
 msgid " "
@@ -78,10 +78,10 @@ msgstr ""
 "MPDx.)"
 
 msgid "-- All Active --"
-msgstr "-- Tout activer --"
+msgstr "-- Tous les actifs --"
 
 msgid "-- All Hidden --"
-msgstr "-- Tout cacher --"
+msgstr "-- Tous les cachés --"
 
 msgid "-- Any --"
 msgstr "--Tous--"
@@ -168,13 +168,13 @@ msgstr ""
 "strong> jours de retard"
 
 msgid "About you"
-msgstr "A propos de Vous"
+msgstr "A propos de vous"
 
 msgid "Account Name"
-msgstr "Nom de compte"
+msgstr "Nom du compte"
 
 msgid "Account Number"
-msgstr "Numéro de compte"
+msgstr "Numéro du compte"
 
 msgid "Account Settings"
 msgstr "Paramètres du compte"
@@ -310,7 +310,7 @@ msgid "Amount (USD)"
 msgstr "Montant (USD)"
 
 msgid "Anniversary"
-msgstr "Anniversaire de marriage"
+msgstr "Anniversaire de mariage"
 
 msgid "Annual"
 msgstr "Tous les ans"
@@ -359,25 +359,26 @@ msgstr "Sont marqués de ne pas demander pour les appels"
 
 msgid "Are you sure you want to delete this task instead of marking it as completed?"
 msgstr ""
-"Êtes vous sûr de vouloir supprimer cette tâche au lieu de la marque comme terminée ?"
+"Êtes vous sûr de vouloir supprimer cette tâche au lieu de la marquer comme terminée ?"
 
 msgid "Are you sure you want to disable Gmail integration?"
-msgstr "Êtes vous sûr de vouloir désactiver l'intégration de Gmail ?"
+msgstr "Êtes-vous sûr de vouloir désactiver l'intégration avec Gmail ?"
 
 msgid "Are you sure you want to disable Google Calendar integration?"
-msgstr "Êtes vous sûr de vouloir désactiver l'intégration du calendrier Google ?"
+msgstr "Êtes-vous sûr de vouloir désactiver l'intégration avec le calendrier Google ?"
 
 msgid "Are you sure you want to disable Google Contacts sync?"
-msgstr "Êtes vous sûr de vouloir désactiver la synchronisation des contacts Google ?"
+msgstr ""
+"Êtes-vous sûr de vouloir désactiver la synchronisation avec les contacts Google ?"
 
 msgid ""
 "Are you sure you want to merge the selected contacts? This action cannot be undone!"
 msgstr ""
-"Êtes vous sûr de vouloir fusionner les contacts sélectionnés ? Cette action ne peut "
+"Êtes-vous sûr de vouloir fusionner les contacts sélectionnés ? Cette action ne peut "
 "pas être annulée !"
 
 msgid "Are you sure you want to remove this connection?"
-msgstr "Êtes vous sûr de vouloir supprimer cette connexion ?"
+msgstr "Êtes-vous sûr de vouloir supprimer cette connexion ?"
 
 msgid "Are you sure?"
 msgstr "Êtes vous sûr ?"
@@ -409,7 +410,7 @@ msgstr ""
 
 msgid "Average donations up <span style=\"color:green\">%{amount}</span> from last year"
 msgstr ""
-"Moyenne des dons a augmenté de <span style=\"color:green\">%{amount}</span>depuis "
+"La moyenne des dons a augmenté de <span style=\"color:green\">%{amount}</span>depuis "
 "l'année dernière"
 
 msgid "Avg Household Income by Zip"
@@ -728,8 +729,8 @@ msgid ""
 "Data from the \"losers\" will get copied to the \"winner\". No data will be lost by "
 "merging."
 msgstr ""
-"Les données des \"losers\" seront copiés aux \"winner\". Aucune donnée ne sera perdue "
-"par fusion."
+"Les données des contacts supprimés seront copiées aux contacts gardés. Aucune donnée "
+"ne sera perdue par fusion."
 
 msgid "Date"
 msgstr "Date"
@@ -1788,7 +1789,7 @@ msgid "Progress"
 msgstr "Activités hebdomadaires"
 
 msgid "Quad-Monthly"
-msgstr "Toutes les semaines"
+msgstr "Tous les 4 mois"
 
 msgid "Quarterly"
 msgstr "Tous les 3 mois"
@@ -1940,7 +1941,7 @@ msgid "Send Paper Newsletter List"
 msgstr "Envoyer la liste de lettres de nouvelles par courrier"
 
 msgid "Sent"
-msgstr "Envoyé"
+msgstr "Envoyés"
 
 msgid "Separated"
 msgstr "Separé"
@@ -1960,9 +1961,8 @@ msgstr "Afficher"
 msgid "Show:"
 msgstr "Afficher :"
 
-#, fuzzy
 msgid "Showing"
-msgstr "Afficher"
+msgstr "Affiche"
 
 msgid "Single"
 msgstr "Seul"
@@ -2427,7 +2427,7 @@ msgid "Website"
 msgstr "Site web"
 
 msgid "Weekly"
-msgstr "Hebdomadaire"
+msgstr "Toutes les semaines"
 
 msgid "Weekly Progress Report"
 msgstr "Rapport d'activité hebdomadaire"
@@ -2600,7 +2600,7 @@ msgid "resetting your filters"
 msgstr "réinitialisation des filtres"
 
 msgid "showing all tasks"
-msgstr "afficher toutes les tâches"
+msgstr "affiche toutes les tâches"
 
 msgid "since your last prayer letter"
 msgstr "depuis votre dernière lettre de nouvelles"
