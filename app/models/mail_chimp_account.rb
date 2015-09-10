@@ -245,7 +245,9 @@ class MailChimpAccount < ActiveRecord::Base
     return if gb.list_merge_vars(id: list_id).find { |merge_var| merge_var['tag'] == 'GREETING' }
     gb.list_merge_var_add(id: list_id, tag: 'GREETING', name: 'Greeting')
   rescue Gibbon::MailChimpError => e
-    raise e unless e.message.include?('code 254') # A Merge Field with the tag "GREETING" already exists for this list.
+    # You cannot have more than 30 merge fields on a list (code 253)
+    # A Merge Field with the tag "GREETING" already exists for this list. (code 254)
+    raise e unless e.message.include?('code 253') || e.message.include?('code 254')
   end
 
   def add_status_groups(list_id, statuses)
