@@ -74,14 +74,14 @@ describe ContactFilter do
     end
 
     context '#contact_info_email' do
-      let(:has_email) do
+      let!(:has_email) do
         c = create(:contact)
         c.people << create(:person)
         c.people << create(:person)
         c.primary_or_first_person.email_addresses << create(:email_address)
         c
       end
-      let(:no_email) do
+      let!(:no_email) do
         c = create(:contact)
         c.people << create(:person)
         c.primary_or_first_person.email_addresses << create(:email_address, historic: true)
@@ -103,6 +103,19 @@ describe ContactFilter do
       it 'works when combined with newsletter and ordered by name' do
         cf = ContactFilter.new(contact_info_email: 'No', newsletter: 'address')
         expect(cf.filter(Contact.order('name')).to_a).to eq([])
+      end
+
+      it 'works when combined with facebook and status' do
+        has_email.update_attribute(:status, 'Partner - Pray')
+        has_email.primary_or_first_person.facebook_accounts << create(:facebook_account)
+        another_contact = create(:contact, status: 'Contact for Appointment')
+        p = create(:person)
+        p.email_addresses << create(:email_address)
+        p.facebook_accounts << create(:facebook_account)
+        another_contact.people << p
+        cf = ContactFilter.new(contact_info_email: 'Yes', contact_info_facebook: 'Yes', status: ['Contact for Appointment'])
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to eq [another_contact]
       end
     end
 
@@ -187,10 +200,14 @@ describe ContactFilter do
     end
 
     context '#contact_info_address' do
+      let!(:has_address) do
+        c = create(:contact)
+        c.addresses << create(:address)
+        c.addresses << create(:address, historic: true)
+        c
+      end
+
       it 'filters by contact address present' do
-        has_address = create(:contact)
-        has_address.addresses << create(:address)
-        has_address.addresses << create(:address, historic: true)
         no_address = create(:contact)
         historic_address_contact = create(:contact)
         historic_address_contact.addresses << create(:address, historic: true)
@@ -212,6 +229,15 @@ describe ContactFilter do
         create(:contact).addresses << create(:address)
         cf = ContactFilter.new(contact_info_addr: 'No', newsletter: 'address')
         expect(cf.filter(Contact.order('name')).to_a).to eq([])
+      end
+
+      it 'works when combined with status' do
+        has_address.update_attribute(:status, 'Partner - Pray')
+        another_contact = create(:contact, status: 'Contact for Appointment')
+        another_contact.addresses << create(:address)
+        cf = ContactFilter.new(contact_info_addr: 'Yes', status: ['Contact for Appointment'])
+        filtered_contacts = cf.filter(Contact)
+        expect(filtered_contacts).to eq [another_contact]
       end
     end
 
