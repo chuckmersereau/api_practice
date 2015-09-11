@@ -15,6 +15,24 @@ describe MailChimpImport do
       subject.import_contacts
     end
 
+    it 'handles mail chimp errors when importing specific members' do
+      err = Gibbon::MailChimpError.new
+      expect(mc_account).to receive(:list_member_info).and_raise(err)
+      expect(mc_account).to receive(:handle_newsletter_mc_error).with(err)
+      subject.import_members_by_emails(['j@t.co'])
+    end
+
+    context '#import_members_by_emails' do
+      it 'imports specified members' do
+        stub_list_members({ email: 'j@t.co', fname: 'John', lname: 'Doe' },
+                          email: 'b@t.co', fname: 'Bob', lname: 'Doe')
+        expect do
+          subject.import_members_by_emails(['j@t.co'])
+        end.to change(Contact, :count).by(1)
+        expect(Contact.last.name).to eq 'Doe, John'
+      end
+    end
+
     it 'creates a new contact and person if not there' do
       stub_list_members(email: 'j@example.com', fname: 'John', lname: 'Doe')
       expect do
@@ -25,6 +43,7 @@ describe MailChimpImport do
       expect(contact.name).to eq 'Doe, John'
       expect(contact.people.count).to eq 1
       expect(contact.send_newsletter).to eq 'Email'
+      expect(contact.greeting).to eq 'John'
       person = contact.people.first
       expect(person.first_name).to eq('John')
       expect(person.last_name).to eq('Doe')
@@ -32,6 +51,31 @@ describe MailChimpImport do
       email = person.email_addresses.first
       expect(email.email).to eq 'j@example.com'
       expect(email.primary).to be true
+    end
+
+    it 'uses the greeting and grouping status if valid' do
+      stub_list_members(
+        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J',
+        groupings: [{ 'groups' => 'Partner - Financial' }])
+      subject.import_contacts
+      expect(Contact.last.status).to eq('Partner - Financial')
+      expect(Contact.last.greeting).to eq('J')
+    end
+
+    it 'takes the first status if there are multiple groups specified' do
+      stub_list_members(
+        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J',
+        groupings: [{ 'groups' => 'Never Contacted, Ask in Future' }])
+      subject.import_contacts
+      expect(Contact.last.status).to eq('Never Contacted')
+    end
+
+    it 'defaults an invalid status to Partner - Pray' do
+      stub_list_members(
+        email: 'j@t.co', fname: 'John', lname: 'Doe', greeting: 'J',
+        groupings: [{ 'groups' => ['Invalid'] }])
+      subject.import_contacts
+      expect(Contact.last.status).to eq('Partner - Pray')
     end
 
     it 'handles a missing first name' do
@@ -143,9 +187,11 @@ describe MailChimpImport do
         merges = {}
         merges['FNAME'] = member[:fname] if member[:fname]
         merges['LNAME'] = member[:lname] if member[:lname]
+        merges['GREETING'] = member[:greeting] if member[:greeting]
+        merges['GROUPINGS'] = member[:groupings] if member[:groupings]
         { 'email' => member[:email], 'merges' => merges }
       end
-      expect(mc_account).to receive(:list_emails).with('list1') { member_emails }
+      allow(mc_account).to receive(:list_emails).with('list1') { member_emails }
       expect(mc_account).to receive(:list_member_info) do |list_id, emails|
         expect(list_id).to eq 'list1'
         expect(emails - member_emails).to be_empty

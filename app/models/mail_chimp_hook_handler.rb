@@ -4,6 +4,10 @@ class MailChimpHookHandler
     @account_list = mail_chimp_account.account_list
   end
 
+  def subscribe_hook(email)
+    @mc_account.queue_import_new_member(email)
+  end
+
   def unsubscribe_hook(email)
     # No need to trigger a callback because MailChimp has already unsubscribed this email
     @account_list.people.joins(:email_addresses).where(email_addresses: { email: email, primary: true })

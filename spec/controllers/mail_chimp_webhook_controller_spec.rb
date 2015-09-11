@@ -94,6 +94,15 @@ describe MailChimpWebhookController do
     post_and_expect_success(campaign_params)
   end
 
+  it 'calls handler on subscribe' do
+    params = {
+      type: 'subscribe', fired_at: '2009-03-26 22:01:00',
+      data: { list_id: 'MyString', email: 'j@t.co', email_type: 'html' }
+    }
+    expect(handler).to receive(:subscribe_hook).with('j@t.co')
+    post_and_expect_success(params)
+  end
+
   it 'renders success but does not call account hook method if for non-primary list' do
     unsubscribe_params[:data][:list_id] = 'other-list'
     expect(handler).to_not receive(:unsubscribe_hook)

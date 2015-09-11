@@ -15,6 +15,13 @@ describe MailChimpHookHandler do
     contact.people << person
   end
 
+  context '#subscribe_hook' do
+    it 'queues an import for the new subscriber' do
+      expect(mc_account).to receive(:queue_import_new_member).with('j@t.co')
+      handler.subscribe_hook('j@t.co')
+    end
+  end
+
   context '#unsubscribe_hook' do
     it 'marks an unsubscribed person with opt out of enewsletter' do
       handler.unsubscribe_hook('a@example.com')
