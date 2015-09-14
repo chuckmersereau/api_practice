@@ -71,7 +71,7 @@ class Person::GmailAccount
       end
     return unless message
 
-    message = message.body.decoded.to_s.unpack('C*').pack('U*').force_encoding('UTF-8').encode!
+    message = message.body.decoded.to_s.unpack('C*').pack('U*').force_encoding('UTF-8').encode!.gsub("\0", '')
     return unless message.strip.present?
     google_email = @google_account.google_emails.find_or_create_by!(google_email_id: gmail_message.msg_id)
     return unless contact.tasks.where(id: google_email.activities.pluck(:id)).empty?

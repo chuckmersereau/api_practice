@@ -336,6 +336,12 @@ $.mpdx.getTaskNextActionOptions = (activity_type) ->
       return <%= Task::TALK_TO_IN_PERSON_NEXT_ACTIONS %>.join()
     when 'Prayer Request'
       return <%= Task::PRAYER_REQUEST_NEXT_ACTIONS %>.join()
+    when 'Pre Call Letter'
+      return <%= Task::PRE_CALL_LETTER_NEXT_ACTIONS %>.join()
+    when 'Reminder Letter'
+      return <%= Task::REMINDER_LETTER_NEXT_ACTIONS %>.join()
+    when 'Support Letter'
+      return <%= Task::SUPPORT_LETTER_NEXT_ACTIONS %>.join()
     else
       return 'None'
   end

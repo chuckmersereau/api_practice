@@ -74,12 +74,14 @@ describe Person::GmailAccount do
   end
 
   context '#log_email' do
-    let(:gmail_message) do
-      double(message: double(multipart?: false, body: double(decoded: 'message body')),
+    let(:gmail_message) { mock_gmail_message('message body') }
+    let(:google_email) { build(:google_email, google_email_id: gmail_message.msg_id, google_account: google_account) }
+
+    def mock_gmail_message(body)
+      double(message: double(multipart?: false, body: double(decoded: body)),
              envelope: double(date: Time.zone.now, message_id: '1'),
              subject: 'subject', msg_id: 1)
     end
-    let(:google_email) { build(:google_email, google_email_id: gmail_message.msg_id, google_account: google_account) }
 
     it 'creates a completed task' do
       expect do
@@ -133,6 +135,13 @@ describe Person::GmailAccount do
       expect do
         gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
       end.not_to change(GoogleEmail, :count)
+    end
+
+    it 'handles messages with null bytes' do
+      expect do
+        gmail_account.log_email(mock_gmail_message("\0null\0!"), account_list, contact, person, 'Done')
+      end.to change(Task, :count).by(1)
+      expect(Task.last.activity_comments.first.body).to eq 'null!'
     end
   end
 end

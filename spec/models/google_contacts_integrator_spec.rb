@@ -480,6 +480,12 @@ describe GoogleContactsIntegrator do
     @integrator.sync_contacts
   end
 
+  it 'does nothing when the mail chimp account is importing' do
+    create(:mail_chimp_account, account_list: @account_list, importing: true)
+    expect(@integrator).to_not receive(:sync_and_return_num_synced)
+    @integrator.sync_contacts
+  end
+
   describe 'compatibility with previous import code' do
     it 'does consider old google contacts associated by previously implemented Google contacts import' do
       # The Google contacts import code would only associate a google_contact link record with the person, so just leave
