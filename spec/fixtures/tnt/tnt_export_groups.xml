@@ -116,8 +116,8 @@
       </row>
       <row id="372261379">
         <LastEdit>2014-11-20 17:13:17</LastEdit>
-        <Description>Category 1\Group with Dave</Description>
-        <Category>Category 1</Category>
+        <Description>Category 1,comma\Group with Dave,comma</Description>
+        <Category>Category 1,comma</Category>
       </row>
       <row id="372261380">
         <LastEdit>2014-11-20 17:13:31</LastEdit>
