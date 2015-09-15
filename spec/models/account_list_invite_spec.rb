@@ -37,6 +37,14 @@ describe AccountListInvite do
         expect(invite.accept(user2)).to be_falsey
       end.to_not change(AccountListUser, :count)
     end
+
+    it 'returns false and does nothing if the invite was canceled' do
+      invite.cancel(user)
+      user2 = create(:user)
+      expect do
+        expect(invite.accept(user2)).to be_falsey
+      end.to_not change(AccountListUser, :count)
+    end
   end
 
   context '.send_invite' do
@@ -50,6 +58,18 @@ describe AccountListInvite do
       expect(invite.code).to eq('code')
       expect(invite.recipient_email).to eq('test@example.com')
       expect(invite.account_list).to eq(account_list)
+    end
+  end
+
+  context '#cancel' do
+    it 'sets the canceling user and is then considered cancelled', versioning: true do
+      expect(invite.cancelled?).to be false
+      user2 = create(:user)
+      expect do
+        invite.cancel(user2)
+      end.to change(Version.where(item_type: 'AccountListInvite'), :count).by(1)
+      expect(invite.cancelled?).to be true
+      expect(invite.cancelled_by_user).to eq user2
     end
   end
 end
