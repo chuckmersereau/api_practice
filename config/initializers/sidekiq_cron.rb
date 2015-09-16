@@ -35,6 +35,12 @@ hash = {
     'args'  => []
   },
 
+  'Fetch currency rates' => {
+    'class' => 'CurrencyExchangeFetcherWorker',
+    'cron' => '0 11 * * *',
+    'args' => []
+  },
+
   'Refresh facebook tokens' => {
     'class' => 'SidekiqCronWorker',
     'cron'  => '0 11 * * *',

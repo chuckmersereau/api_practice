@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915141504) do
+ActiveRecord::Schema.define(version: 20150915181704) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -272,6 +272,17 @@ ActiveRecord::Schema.define(version: 20150915141504) do
   add_index "contacts", ["last_donation_date"], name: "index_contacts_on_last_donation_date", using: :btree
   add_index "contacts", ["tnt_id"], name: "index_contacts_on_tnt_id", using: :btree
   add_index "contacts", ["total_donations"], name: "index_contacts_on_total_donations", using: :btree
+
+  create_table "currency_rates", force: true do |t|
+    t.date    "exchanged_on",                           null: false
+    t.string  "code",                                   null: false
+    t.decimal "rate",         precision: 20, scale: 10, null: false
+    t.string  "source",                                 null: false
+  end
+
+  add_index "currency_rates", ["code", "exchanged_on"], name: "index_currency_rates_on_code_and_exchanged_on", unique: true, using: :btree
+  add_index "currency_rates", ["code"], name: "index_currency_rates_on_code", using: :btree
+  add_index "currency_rates", ["exchanged_on"], name: "index_currency_rates_on_exchanged_on", using: :btree
 
   create_table "designation_accounts", force: true do |t|
     t.string   "designation_number"
