@@ -24,6 +24,13 @@ class PersonExhibit < DisplayCase::Exhibit
     [phone_number, email].compact.map { |e| exhibit(e, @context) }.join('<br />').html_safe
   end
 
+  def contact_info_phone_extension
+    number = Phonelib.parse(phone_number.number)
+    if number.extension.present?
+      'x' + number.extension
+    end
+  end
+
   def avatar(size = :square)
     if primary_picture
       size_to_load = size

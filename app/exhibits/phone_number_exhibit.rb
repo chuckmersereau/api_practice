@@ -9,18 +9,20 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
 
   def number
     return unless self[:number]
-
     global = Phonelib.parse(self[:number])
     return unless global
 
-    number = if country_code == '1' || (country_code.blank? && (self[:number].length == 10 || self[:number].length == 7))
-      global.national
+   if country_code == '1' || (country_code.blank? && (self[:number].length == 10 || self[:number].length == 7))
+      global.format
     else
-      global.international
-             end
+      global.e164
+                  end
   end
 
   def extension
-    :number[12..15]
+    global = Phonelib.parse(self[:number])
+    if global.extension.present?
+      global.extension
+    end
   end
 end
