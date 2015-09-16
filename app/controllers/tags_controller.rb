@@ -11,19 +11,28 @@ class TagsController < ApplicationController
   def destroy
     return if params[:remove_tag_name].blank?
     if params[:all_contacts]
-      taggables = current_account_list.contacts.tagged_with(params[:remove_tag_name])
       tag_type = 'Contact'
+      taggables = current_account_list.contacts
     elsif params[:all_tasks]
-      taggables = current_account_list.tasks.tagged_with(params[:remove_tag_name])
       tag_type = 'Activity'
+      taggables = current_account_list.tasks
     else
       return if params[:remove_tag_contact_ids].blank?
-      taggableslist = current_account_list.contacts.where(id: params[:remove_tag_contact_ids].split(','))
-      taggables = taggableslist.tagged_with(params[:remove_tag_name])
       tag_type = 'Contact'
+      taggables = current_account_list.contacts
+                  .where(id: params[:remove_tag_contact_ids].split(','))
     end
+    taggables = taggables.tagged_with(quote_tag(params[:remove_tag_name]))
     ActsAsTaggableOn::Tagging.joins(:tag)
       .where(taggable_type: tag_type, taggable_id: taggables.pluck(:id))
       .where(tags: { name: params[:remove_tag_name] }).destroy_all
+  end
+
+  private
+
+  def quote_tag(tag_name)
+    return "\"#{tag_name}\"" unless tag_name.include?('"')
+    return "\'#{tag_name}\'" unless tag_name.include?("'")
+    tag_name
   end
 end
