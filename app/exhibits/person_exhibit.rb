@@ -27,7 +27,7 @@ class PersonExhibit < DisplayCase::Exhibit
   def contact_info_phone_extension
     number = Phonelib.parse(phone_number.number)
     if number.extension.present?
-      'x' + number.extension
+      "x#{number.extension}"
     end
   end
 

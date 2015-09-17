@@ -34,16 +34,10 @@ class PhoneNumber < ActiveRecord::Base
   end
 
   def clean_up_number
-    global = Phonelib.parse(number)
-
-    if global
-      self.number = if global.extension.present?
-      global.sanitized + ';' + global.extension
-                    else
-                      global.sanitized
-                    end
-      self.country_code = global.country_code
-    end
+    phone = Phonelib.parse(number)
+    return false if phone.blank?
+    self.number = phone.extension.present? ? "#{phone.e164};#{phone.extension}" : phone.e164
+    self.country_code = phone.country_code
   end
 
   def ==(other)

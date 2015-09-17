@@ -6,13 +6,13 @@ class PhoneNumberValidator < ActiveModel::EachValidator
     @attribute = attribute
     @value = value
 
-    add_error unless valid?
+    add_error unless valid
   end
 
   private
 
-  def valid?
-    Phonelib.parse(value)
+  def valid
+    Phonelib.parse(value).valid?
   end
 
   def add_error

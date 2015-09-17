@@ -59,14 +59,6 @@ GIT
     sidekiq-unique-jobs (3.0.14)
       sidekiq (>= 2.6)
 
-GIT
-  remote: https://github.com/sstephenson/global_phone.git
-  revision: 9b2772c4678dc9e323c58d9258663812bbd9fc73
-  specs:
-    global_phone (1.0.1)
-    global_phone_dbgen (1.0.1)
-      nokogiri (~> 1.5)
-
 GEM
   remote: http://rubygems.org/
   remote: https://gems.contribsys.com/
@@ -746,8 +738,6 @@ DEPENDENCIES
   gettext_i18n_rails_js (~> 1.0.0)
   gibberish (~> 1.4.0)
   gibbon (~> 0.4.2)
-  global_phone!
-  global_phone_dbgen
   gmail!
   gmaps4rails (~> 2.1.2)
   google-api-client
