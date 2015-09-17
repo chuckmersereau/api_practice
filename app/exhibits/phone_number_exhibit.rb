@@ -4,7 +4,7 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
   end
 
   def to_s
-    [number, location].join('')
+    [number, location].join(' - ')
   end
 
   def number

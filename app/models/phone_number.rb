@@ -38,6 +38,7 @@ class PhoneNumber < ActiveRecord::Base
     return false if phone.blank?
     self.number = phone.extension.present? ? "#{phone.e164};#{phone.extension}" : phone.e164
     self.country_code = phone.country_code
+    true
   end
 
   def ==(other)
