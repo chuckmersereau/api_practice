@@ -29,6 +29,9 @@ class HomeController < ApplicationController
   def check_welcome_stages
     user = current_user
     return unless user.setup.is_a?(Array) && user.setup.any?
+    old_setup = user.setup
+    user.setup = user.setup.map(&:to_sym)
+    dirty_preferences = true unless old_setup == user.setup
     if user.setup.include?(:import) && user.imports.count > 1
       user.setup.delete :import
       dirty_preferences = true
