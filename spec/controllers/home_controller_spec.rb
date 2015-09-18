@@ -69,6 +69,20 @@ describe HomeController do
         expect(@user.reload.setup).to_not include :contacts
         expect(@user.reload.setup).to_not include :import
       end
+
+      it 'removes completed steps even if they are strings' do
+        @user.update_attribute(:setup, ['import'])
+        2.times { create(:tnt_import, user: @user) }
+        controller.send :check_welcome_stages
+        expect(@user.reload.setup).to eq []
+      end
+
+      it "doesn't error with setup unset" do
+        @user.update_attribute(:setup, nil)
+        expect do
+          controller.send :check_welcome_stages
+        end.to_not raise_error
+      end
     end
   end
 
