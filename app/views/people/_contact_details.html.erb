@@ -12,11 +12,7 @@
               <i class="fa fa-check green"></i>
             <% end %>
           </td>
-          <td class="meta_data"><%= phone_number.to_s %>
-          <% if phone_number.extension.present? %>
-            <%= _('x') %><%= phone_number.extension %>
-          <% end %>
-          </td>
+          <td class="meta_data"><%= phone_number.to_s %></td>
         </tr>
       <% end %>
     <% else %>

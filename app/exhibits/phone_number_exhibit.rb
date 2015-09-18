@@ -11,11 +11,17 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
     return unless self[:number]
     phone = Phonelib.parse(self[:number])
     return unless phone.valid?
-
-    if country_code == '1' || (country_code.blank? && (self[:number].length == 10 || self[:number].length == 7))
+    phone_num = if country_code == '1' || (country_code.blank? &&
+        (self[:number].length == 10 || self[:number].length == 7))
       phone.national.gsub(/(\d{3})(\d{3})(\d{4})/, '(\\1) \\2-\\3')
     else
       phone.e164
+                end
+
+    if phone.extension.blank?
+        phone_num
+    else
+      "#{phone_num} x#{phone.extension}"
     end
   end
 
