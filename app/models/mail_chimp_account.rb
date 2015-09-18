@@ -110,7 +110,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def campaign_info(campaign_id)
-    gb.campaigns(campaign_id: campaign_id)['data'][0]
+    gb.campaigns(filters: { campaign_id: campaign_id })['data'][0]
   end
 
   def create_campaign_activity(contact, subject)
