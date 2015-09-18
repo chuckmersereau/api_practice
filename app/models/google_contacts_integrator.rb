@@ -238,8 +238,11 @@ class GoogleContactsIntegrator
   end
 
   def sync_contact(contact)
-    g_contacts_and_links = contact.contact_people.order('contact_people.primary::int desc').order(:person_id)
+    g_contacts_and_links = contact.contact_people.joins(:person)
+                           .order('contact_people.primary::int desc').order(:person_id)
                            .map(&method(:get_g_contact_and_link))
+    return if g_contacts_and_links.empty?
+
     GoogleContactSync.sync_contact(contact, g_contacts_and_links)
     contact.save(validate: false)
 
@@ -370,7 +373,7 @@ class GoogleContactsIntegrator
 
   def save_g_contact_links(g_contacts_and_links)
     g_contacts_and_links.each do|g_contact_and_link|
-      g_contact, g_contact_link  = g_contact_and_link
+      g_contact, g_contact_link = g_contact_and_link
       @assigned_remote_ids.add(g_contact.id)
       g_contact_link.update(last_data: g_contact.formatted_attrs, remote_id: g_contact.id, last_etag: g_contact.etag, last_synced: Time.now)
     end
