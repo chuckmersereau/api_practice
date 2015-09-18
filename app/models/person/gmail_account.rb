@@ -37,7 +37,10 @@ class Person::GmailAccount
         contact.people.each do |person|
           person.email_addresses.map(&:email).uniq.each do |email|
             # The Ruby IMAP library currenty errors on non-ascii emails
-            next unless email.ascii_only?
+            unless email.ascii_only?
+              Rails.logger.info "Skipping Gmail import for email: #{email}"
+              next
+            end
 
             next if email_addresses.include?(email)
             email_addresses << email
