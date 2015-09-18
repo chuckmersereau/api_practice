@@ -464,6 +464,43 @@ describe MailChimpAccount do
       end.to change(contact.activities, :count).by(1)
     end
 
+    describe 'handling campaign not completely sent error (code 301)' do
+      let(:gb) { double }
+      before do
+        allow(account).to receive(:gb) { gb }
+        allow(gb).to receive(:campaigns).with(campaign_id: 'c1') do
+          { 'data' => [{ 'send_time' => '2015-09-18 16:52:47' }] }
+        end
+      end
+
+      it 'quietly retries the job if it has been less than one hour since sent' do
+        stub_campaign_members_err('code 301')
+        travel_to Time.new(2015, 9, 18, 16, 52, 49, '+00:00') do
+          expect { account.log_sent_campaign('c1', 'subject') }
+            .to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
+        end
+      end
+
+      it 'does nothing if more than one hour since sent (campaign status is stuck)' do
+        stub_campaign_members_err('code 301')
+        travel_to Time.new(2015, 9, 18, 17, 52, 49, '+00:00') do
+          expect { account.log_sent_campaign('c1', 'subject') }
+            .to_not raise_error
+        end
+      end
+
+      it 're-raises other mail chimp errors' do
+        stub_campaign_members_err('other mail chimp error')
+        expect { account.log_sent_campaign('c1', 'subject') }
+          .to raise_error(Gibbon::MailChimpError)
+      end
+
+      def stub_campaign_members_err(msg)
+        err = Gibbon::MailChimpError.new(msg)
+        expect(gb).to receive(:campaign_members).and_raise(err)
+      end
+    end
+
     def stub_campaign_members(*emails)
       expect(account.gb).to receive(:campaign_members).with(cid: 'c1', status: 'sent') do
         { 'data' => emails.map { |email| { 'email' => email } } }
