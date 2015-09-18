@@ -90,6 +90,27 @@ class MailChimpAccount < ActiveRecord::Base
     account_list.contacts.joins(people: :primary_email_address)
       .where(email_addresses: { email: sent_emails }).references(:email_addresses)
       .uniq.each { |contact| create_campaign_activity(contact, subject) }
+  rescue Gibbon::MailChimpError => e
+    if e.message.include?('code 301')
+      # Campaign stats are not available until the campaign has been completely
+      # sent. (code 301)
+      # This erorr occurs either if the campaign really is in the midst of
+      # sending or if the campaign is for some reason stuck in the "sending"
+      # status, so keep retrying the job for one hour then give up.
+      if Time.now.utc - campaign_send_time(campaign_id) < 1.hour
+        raise LowerRetryWorker::RetryJobButNoAirbrakeError
+      end
+    else
+      raise e
+    end
+  end
+
+  def campaign_send_time(campaign_id)
+    Time.parse(campaign_info(campaign_id)['send_time'] + ' UTC')
+  end
+
+  def campaign_info(campaign_id)
+    gb.campaigns(campaign_id: campaign_id)['data'][0]
   end
 
   def create_campaign_activity(contact, subject)
