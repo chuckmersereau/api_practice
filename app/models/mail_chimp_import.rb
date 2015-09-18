@@ -110,9 +110,13 @@ class MailChimpImport
   end
 
   def create_person(member)
-    person = Person.create(
-      first_name: member[:first_name] || self.class.email_to_name(member[:email]),
-      last_name: member[:last_name])
+    first_name = if member[:first_name].present?
+                   member[:first_name]
+                 else
+                   self.class.email_to_name(member[:email])
+                 end
+
+    person = Person.create(first_name: first_name, last_name: member[:last_name])
 
     person.contacts << contact_from_member(member)
     person
