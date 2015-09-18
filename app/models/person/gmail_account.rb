@@ -36,7 +36,9 @@ class Person::GmailAccount
       account_list.contacts.active.includes(people: :email_addresses).each do |contact|
         contact.people.each do |person|
           person.email_addresses.map(&:email).uniq.each do |email|
+            # The Ruby IMAP library currenty errors on non-ascii emails
             next unless email.ascii_only?
+
             next if email_addresses.include?(email)
             email_addresses << email
 
