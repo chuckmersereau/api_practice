@@ -468,7 +468,7 @@ describe MailChimpAccount do
       let(:gb) { double }
       before do
         allow(account).to receive(:gb) { gb }
-        allow(gb).to receive(:campaigns).with(campaign_id: 'c1') do
+        allow(gb).to receive(:campaigns).with(filters: { campaign_id: 'c1' }) do
           { 'data' => [{ 'send_time' => '2015-09-18 16:52:47' }] }
         end
       end
