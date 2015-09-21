@@ -61,6 +61,8 @@ RSpec.configure do |config|
   # config.mock_with :flexmock
   # config.mock_with :rr
 
+  config.include ActiveSupport::Testing::TimeHelpers
+
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
 
@@ -139,7 +141,7 @@ RSpec.configure do |config|
 end
 
 # This code will be run each time you run your specs.
-start_simplecov
+start_simplecov unless ENV['NO_COVERAGE']
 Zonebie.quiet = true
 Zonebie.set_random_timezone
 FactoryGirl.reload

@@ -89,4 +89,10 @@ describe EmailAddress do
       end
     end
   end
+
+  it 'strips out whitespace and zero-width characters before saving email' do
+    email = build(:email_address, email: "\t zero-width-spaces\u200B\u200E@t.co \n")
+    email.save
+    expect(email.email).to eq 'zero-width-spaces@t.co'
+  end
 end

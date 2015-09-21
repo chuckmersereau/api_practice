@@ -110,6 +110,18 @@ class User < Person
     last_sign_in_at < 6.months.ago
   end
 
+  def can_manage_sharing?(account_list)
+    # We only allow users to manage sharing if the donor system linked them to
+    # the accoutn list via a designation profile. Otherwise, they only have
+    # access through a invite from another user and they are not allowed to
+    # manage sharing.
+    designation_profiles.where(account_list: account_list).any?
+  end
+
+  def remove_access(account_list)
+    account_list_users.where(account_list: account_list).find_each(&:destroy)
+  end
+
   private
 
   def set_setup_mode

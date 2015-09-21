@@ -75,6 +75,59 @@ describe AccountListsController do
     after { expect(subject).to redirect_to(root_path) }
   end
 
+  context '#cancel_invite' do
+    let(:invite) { create(:account_list_invite, account_list: account_list) }
+
+    it 'does not cancel the invite if the user cannot manage sharing' do
+      expect(user).to receive(:can_manage_sharing?).with(account_list) { false }
+      post :cancel_invite, invite_id: invite.id
+      expect(invite.reload.cancelled?).to be false
+      expect(flash[:alert]).to be_present
+    end
+
+    it 'cancels if the user can manage sharing' do
+      expect(user).to receive(:can_manage_sharing?).with(account_list) { true }
+      post :cancel_invite, invite_id: invite.id
+      expect(invite.reload.cancelled?).to be true
+      expect(flash[:notice]).to be_present
+    end
+
+    after { expect(subject).to redirect_to(sharing_account_lists_path) }
+  end
+
+  context '#remove_access' do
+    let!(:user2) { create(:user) }
+
+    it 'gives a flash notice if the user is already removed' do
+      post :remove_access, user_id: user2.id
+      expect(flash[:notice]).to be_present
+    end
+
+    it 'does not remove access if the user cannot manage sharing' do
+      account_list.users << user2
+      expect(user).to receive(:can_manage_sharing?).with(account_list) { false }
+      post :remove_access, user_id: user2.id
+      expect(flash[:alert]).to be_present
+      expect(account_list.users.reload).to include user2
+    end
+
+    it 'removes access if the user can manage sharing, and logs in paper trail', versioning: true do
+      account_list.users << user2
+      expect(user).to receive(:can_manage_sharing?).with(account_list) { true }
+      expect do
+        post :remove_access, user_id: user2.id
+      end.to change(Version.where(item_type: 'AccountListUser'), :count).by(1)
+      version = Version.where(item_type: 'AccountListUser').last
+      expect(version.whodunnit.to_i).to eq user.id
+      expect(version.event).to eq 'destroy'
+
+      expect(account_list.users.reload).to_not include user2
+      expect(flash[:notice]).to be_present
+    end
+
+    after { expect(subject).to redirect_to(sharing_account_lists_path) }
+  end
+
   context '#merge' do
     it 'does not merge if merge_id is for an account_list the user does not own' do
       not_owned_account = create(:account_list)

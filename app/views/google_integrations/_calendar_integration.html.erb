@@ -6,9 +6,8 @@
         <div class="col-md-6">
           <%= _('Calendar integration enabled. Push tasks to calendar: ') %>
           <%= select_tag('google_integration[calendar_id_and_name]', 
-                                            options_for_select(@google_integration.calendars.map { |c| [c['summary'], [c[
-          'id'], c['summary']]] },
-                                            @google_integration.calendar_id),
+                         options_for_select(@google_integration.calendars.map { |c| [c['summary'], [c['id'], c['summary']]] },
+                                            [@google_integration.calendar_id, @google_integration.calendar_name].to_s),
                          class: 'form-control', data: { behavior: 'calendar_integration' }) %>
         </div>
       </div>

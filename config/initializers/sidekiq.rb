@@ -16,4 +16,9 @@ Sidekiq.configure_server do |config|
                    namespace: "MPDX:#{Rails.env}:resque"}
 end
 
-Sidekiq.default_worker_options = { backtrace: true, unique_job_expiration: 12 * 60 * 60}
+Sidekiq.default_worker_options = {
+  backtrace: true, 
+  # Uniqueness lock lasts for 22 days as at that time jobs stop getting retried
+  # and move to the "Dead" list.
+  unique_job_expiration: 22 * 24 * 60 * 60
+}

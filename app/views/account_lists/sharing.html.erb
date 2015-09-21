@@ -16,33 +16,60 @@
     <div class="cw-top">
       <%= _('Your currently selected MPDX Account is:') %> 
       <b><%= current_account_list.name %></b>.
-
-      <%= _('It has designation info for:') %>
-      <b>
-        <%= current_account_list.designation_accounts
-              .map { |d| d.name || d.designation_number }
-              .to_sentence(last_word_connector: _(' and ')) %>
-      </b>.
-
-      <%= _('It is shared with:') %>
-      <b>
-        <%= current_account_list.users
-              .map { |u|  "#{u.first_name} #{u.last_name} (#{u.email_addresses.first})"}
-              .to_sentence(last_word_connector: _(' and ')) %>
-      </b>.
-
       <br/><br/>
-      <%= _('To invite another user to access this account, enter their email:') %>
-      <div class="row">
-        <%= form_tag share_account_lists_path do %>
-          <div class="col-md-4">
-            <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org') %>
-          </div>
-          <div class="col-md-2">
-            <%= submit_tag _('Share Account'), class: 'btn btn-xs btn-secondary' %>
-          </div>
+
+      <table class="account-users">
+        <tr><th><%= _('Account currently shared with') %></th><th><%= _('Status') %></th></tr>
+        <% current_account_list.users.each do |user| %>
+          <tr>
+            <td><%= "#{user.first_name} #{user.last_name} (#{user.email_addresses.first})" %></td>
+            <td>
+              <% designation_profile = current_account_list.designation_profiles.find_by(user: user) %>
+              <% if designation_profile  %>
+                <%= _('Linked by designation: ') + designation_profile.name %>
+              <% else  %>
+                <% invite = current_account_list.account_list_invites.find_by(accepted_by_user: user) %>
+                <% if invite %>
+                  <%= _('Invited by: ') + "#{invite.invited_by_user.first_name} #{invite.invited_by_user.last_name}" %>
+                  <% if current_user.can_manage_sharing?(current_account_list) %>
+                    <%= link_to _('Remove Access'), remove_access_account_lists_path(user_id: user.id),
+                      class: 'btn btn-xs btn-secondary', method: :post %>
+                  <% end %>
+                <% else %>
+                  <%= _('Manually added by MPDX support') %>
+                <% end %>
+              <% end %>
+            </td>
+          </tr>
         <% end %>
-      </div>
+        <% current_account_list.account_list_invites.active.where(accepted_by_user: nil).each do |invite| %>
+          <tr>
+            <td><%= _('Pending invite for: ') + invite.recipient_email %></td>
+            <td>
+              <%= _('Sent by: ') + invite.invited_by_user.to_s %>
+              <% if current_user.can_manage_sharing?(current_account_list) %>
+                <%= link_to _('Cancel Invite'), cancel_invite_account_lists_path(invite_id: invite.id),
+                  class: 'btn btn-xs btn-secondary', method: :post %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </table>
+
+      <% if current_user.can_manage_sharing?(current_account_list) %>
+        <br/>
+        <%= _('To invite another user to access this account, enter their email:') %>
+        <div class="row">
+          <%= form_tag share_account_lists_path do %>
+            <div class="col-md-4">
+              <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org') %>
+            </div>
+            <div class="col-md-2">
+              <%= submit_tag _('Share Account'), class: 'btn btn-xs btn-secondary' %>
+            </div>
+          <% end %>
+        </div>
+      <% end %>
 
       <br/>
       <% if @mergeable_accounts.size == 0 %>

@@ -71,6 +71,13 @@ describe Person::GmailAccount do
 
       gmail_account.import_emails(account_list)
     end
+
+    it 'skips email addresses with unicode non-control characters' do
+      expect(sent_mailbox).to_not receive(:emails)
+      expect(all_mailbox).to_not receive(:emails)
+      email_address.update(email: "cat_emoji_\u{1f431}@t.co")
+      gmail_account.import_emails(account_list)
+    end
   end
 
   context '#log_email' do
