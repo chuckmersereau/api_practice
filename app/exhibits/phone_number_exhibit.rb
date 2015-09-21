@@ -15,7 +15,7 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
         if country_code == '1' || (country_code.blank? &&
         (self[:number].length == 10 || self[:number].length == 7))
 
-          phone.national.gsub(/(\d{3})(\d{3})(\d{4})/, '(\\1) \\2-\\3')
+          phone.local_number
         else
           phone.e164
         end
@@ -23,12 +23,7 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
     if phone.extension.blank?
       phone_num
     else
-      "#{phone_num} x#{phone.extension}"
+      "#{phone_num} ext #{phone.extension}"
     end
-  end
-
-  def extension
-    phone = Phonelib.parse(self[:number])
-    phone.extension if phone.extension.present?
   end
 end

@@ -256,50 +256,50 @@ describe GoogleContactSync do
 
   describe 'sync numbers' do
     it 'combines and formats numbers from mpdx and google' do
-      person.phone_number = { number: '+12223334444', location: 'mobile', primary: true }
+      person.phone_number = { number: '+12123334444', location: 'mobile', primary: true }
       person.save
 
       g_contact.update('gd$phoneNumber' => [
-        { '$t' => '(777) 888-9999', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
+        { '$t' => '(717) 888-9999', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
       ])
 
       sync.sync_numbers(g_contact, person, g_contact_link)
 
       expect(g_contact.prepped_changes).to eq(phone_numbers: [
-        { number: '(777) 888-9999', primary: true, rel: 'other' },
-        { number: '(222) 333-4444', primary: false, rel: 'mobile' }
+        { number: '(717) 888-9999', primary: true, rel: 'other' },
+        { number: '(212) 333-4444', primary: false, rel: 'mobile' }
       ])
 
       expect(person.phone_numbers.count).to eq(2)
       phone1 = person.phone_numbers.first
-      expect(phone1.number).to eq('+12223334444')
+      expect(phone1.number).to eq('+12123334444')
       expect(phone1.location).to eq('mobile')
       expect(phone1.primary).to be true
       phone2 = person.phone_numbers.last
-      expect(phone2.number).to eq('+17778889999')
+      expect(phone2.number).to eq('+17178889999')
       expect(phone2.location).to eq('other')
       expect(phone2.primary).to be false
     end
 
     it 'normalizes the numbers for comparison between mpdx and google' do
-      person.phone_number = { number: '+12223334444', location: 'mobile', primary: true }
+      person.phone_number = { number: '+12123334444', location: 'mobile', primary: true }
       person.save
-      person.phone_numbers.first.update_column(:number, '2223334444')
+      person.phone_numbers.first.update_column(:number, '2123334444')
 
       g_contact.update('gd$phoneNumber' => [
-        { '$t' => '(222) 333-4444', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
+        { '$t' => '(212) 333-4444', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
       ])
 
       sync.sync_numbers(g_contact, person, g_contact_link)
 
       expect(g_contact.prepped_changes).to eq(phone_numbers: [
-        { number: '(222) 333-4444', primary: true, rel: 'other' }
+        { number: '(212) 333-4444', primary: true, rel: 'other' }
       ])
 
       person.save
 
       expect(person.phone_numbers.count).to eq(1)
-      expect(person.phone_numbers.first.number).to eq('2223334444')
+      expect(person.phone_numbers.first.number).to eq('2123334444')
     end
   end
 
@@ -508,9 +508,9 @@ describe GoogleContactSync do
 
   describe 'compare_numbers_for_sync' do
     it 'uses historic list for comparision' do
-      person.phone_numbers << build(:phone_number, number: '+12223334444', historic: true)
+      person.phone_numbers << build(:phone_number, number: '+12123334444', historic: true)
       person.save!
-      expect(sync).to receive(:compare_considering_historic).with([], [], [], ['+12223334444']).and_return('compared')
+      expect(sync).to receive(:compare_considering_historic).with([], [], [], ['+12123334444']).and_return('compared')
       expect(sync.compare_numbers_for_sync(g_contact, person, g_contact_link)).to eq('compared')
     end
   end

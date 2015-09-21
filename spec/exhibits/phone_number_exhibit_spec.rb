@@ -16,7 +16,7 @@ describe PhoneNumberExhibit do
   end
 
   it 'should return an extension when included in the number' do
-    phone_number.number = '55512345678;1234'
-    expect(subject.extension).to eq('1234')
+    phone_number.number = '2135555555;ext=1234'
+    expect(subject.number).to eq('(213) 555-5555 ext 1234')
   end
 end
