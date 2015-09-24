@@ -40,8 +40,8 @@
     </gd:name>
     <gd:email rel="http://schemas.google.com/g/2005#other" address="johnsmith@example.com" primary="true"/>
     <gd:email rel="http://schemas.google.com/g/2005#home" address="mpdx@example.com"/>
-    <gd:phoneNumber rel="http://schemas.google.com/g/2005#mobile" primary="true">(123) 334-5158</gd:phoneNumber>
-    <gd:phoneNumber rel="http://schemas.google.com/g/2005#home">(456) 789-0123</gd:phoneNumber>
+    <gd:phoneNumber rel="http://schemas.google.com/g/2005#mobile" primary="true">(213) 334-5158</gd:phoneNumber>
+    <gd:phoneNumber rel="http://schemas.google.com/g/2005#home">(407) 789-0123</gd:phoneNumber>
     <gContact:website href="blog.example.com" rel="blog"/>
     <gContact:website href="www.example.com" rel="profile" primary="true"/>
     <gContact:groupMembershipInfo deleted="false" href="http://www.google.com/m8/feeds/groups/test.user%40cru.org/base/1b9d086d0a95e81a"/>

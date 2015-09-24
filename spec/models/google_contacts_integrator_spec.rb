@@ -162,7 +162,7 @@ describe GoogleContactsIntegrator do
       expect_contact_sync_query([])
 
       # Phone
-      @person.phone = '123-456-7890'
+      @person.phone = '213-456-7890'
       @person.save
       expect(contacts_to_sync_query).to eq([])
       @person.phone_numbers.first.update_column(:updated_at, 2.hours.since)
@@ -847,8 +847,8 @@ describe GoogleContactsIntegrator do
         { primary: false, rel: 'http://schemas.google.com/g/2005#home', address: 'mpdx@example.com' }
       ]
       @updated_g_contact_obj['gd$phoneNumber'] = [
-        { '$t' => '(123) 334-5158', 'rel' => 'http://schemas.google.com/g/2005#mobile', 'primary' => 'true' },
-        { '$t' => '(456) 789-0123', 'rel' => 'http://schemas.google.com/g/2005#home', 'primary' => 'false' }
+        { '$t' => '(213) 334-5158', 'rel' => 'http://schemas.google.com/g/2005#mobile', 'primary' => 'true' },
+        { '$t' => '(407) 789-0123', 'rel' => 'http://schemas.google.com/g/2005#home', 'primary' => 'false' }
       ]
       @updated_g_contact_obj['gd$structuredPostalAddress'] = [
         { 'rel' => 'http://schemas.google.com/g/2005#home', 'primary' => 'false',
@@ -871,7 +871,7 @@ describe GoogleContactsIntegrator do
       ]
 
       @person.email_address = { email: 'mpdx@example.com', location: 'home', primary: true }
-      @person.phone_number = { number: '456-789-0123', primary: true, location: 'home' }
+      @person.phone_number = { number: '407-789-0123', primary: true, location: 'home' }
       @person.websites << Person::Website.create(url: 'mpdx.example.com', primary: false)
 
       @contact.addresses_attributes = [
@@ -912,8 +912,8 @@ describe GoogleContactsIntegrator do
         '<atom:content>about</atom:content>\s*'\
         '<gd:email\s+rel="http://schemas.google.com/g/2005#other"\s+primary="true"\s+address="johnsmith@example.com"/>\s+'\
         '<gd:email\s+rel="http://schemas.google.com/g/2005#home"\s+address="mpdx@example.com"/>\s+'\
-        '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#mobile"\s+primary="true"\s+>\(123\) 334-5158</gd:phoneNumber>\s+'\
-        '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#home"\s+>\(456\) 789-0123</gd:phoneNumber>\s+'\
+        '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#mobile"\s+primary="true"\s+>\(213\) 334-5158</gd:phoneNumber>\s+'\
+        '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#home"\s+>\(407\) 789-0123</gd:phoneNumber>\s+'\
         '<gd:structuredPostalAddress\s+rel="http://schemas.google.com/g/2005#home"\s+>\s+'\
           '<gd:city>Somewhere</gd:city>\s+'\
           '<gd:street>2345 Long Dr. #232</gd:street>\s+'\
@@ -965,11 +965,11 @@ describe GoogleContactsIntegrator do
 
       expect(@person.phone_numbers.count).to eq(2)
       number1 = @person.phone_numbers.first
-      expect(number1.number).to eq('+14567890123')
+      expect(number1.number).to eq('+14077890123')
       expect(number1.location).to eq('home')
       expect(number1.primary).to be true
       number2 = @person.phone_numbers.last
-      expect(number2.number).to eq('+11233345158')
+      expect(number2.number).to eq('+12133345158')
       expect(number2.location).to eq('mobile')
       expect(number2.primary).to be false
 
@@ -1005,8 +1005,8 @@ describe GoogleContactsIntegrator do
         emails: [{ primary: true, rel: 'other', address: 'johnsmith@example.com' },
                  { primary: false, rel: 'home', address: 'mpdx@example.com' }],
         phone_numbers: [
-          { number: '(123) 334-5158', rel: 'mobile', primary: true },
-          { number: '(456) 789-0123', rel: 'home', primary: false }
+          { number: '(213) 334-5158', rel: 'mobile', primary: true },
+          { number: '(407) 789-0123', rel: 'home', primary: false }
         ],
         addresses: [
           { rel: 'home', primary: false, country: 'United States of America',
@@ -1037,7 +1037,7 @@ describe GoogleContactsIntegrator do
       @person.email_address = { email: 'mpdx_MODIFIED@example.com', primary: true, _destroy: 1, id: old_email.id }
 
       first_number = @person.phone_numbers.first
-      first_number.number = '+14567894444'
+      first_number.number = '+14077894444'
       first_number.save
 
       first_address = @contact.addresses.first
@@ -1061,8 +1061,8 @@ describe GoogleContactsIntegrator do
         { primary: false, rel: 'http://schemas.google.com/g/2005#home', address: 'mpdx@example.com' }
       ]
       @updated_g_contact_obj['gd$phoneNumber'] = [
-        { '$t' => '(123) 334-5555', 'rel' => 'http://schemas.google.com/g/2005#mobile', 'primary' => 'true' },
-        { '$t' => '(456) 789-0123', 'rel' => 'http://schemas.google.com/g/2005#home', 'primary' => 'false' }
+        { '$t' => '(213) 334-5555', 'rel' => 'http://schemas.google.com/g/2005#mobile', 'primary' => 'true' },
+        { '$t' => '(407) 789-0123', 'rel' => 'http://schemas.google.com/g/2005#home', 'primary' => 'false' }
       ]
       @updated_g_contact_obj['gd$structuredPostalAddress'] = [
         { 'rel' => 'http://schemas.google.com/g/2005#home', 'primary' => 'false',
@@ -1116,8 +1116,8 @@ describe GoogleContactsIntegrator do
       xml_regex_str = '</atom:content>\s+'\
         '<gd:email\s+rel="http://schemas.google.com/g/2005#other"\s+primary="true"\s+address="johnsmith_MODIFIED@example.com"/>\s+'\
         '<gd:email\s+rel="http://schemas.google.com/g/2005#home"\s+address="mpdx_MODIFIED@example.com"/>\s+'\
-        '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#mobile"\s+primary="true"\s+>\(123\) 334-5555</gd:phoneNumber>\s+'\
-        '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#home"\s+>\(456\) 789-4444</gd:phoneNumber>\s+'\
+        '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#mobile"\s+primary="true"\s+>\(213\) 334-5555</gd:phoneNumber>\s+'\
+        '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#home"\s+>\(407\) 789-4444</gd:phoneNumber>\s+'\
         '<gd:structuredPostalAddress\s+rel="http://schemas.google.com/g/2005#home"\s+>\s+'\
           '<gd:city>Somewhere</gd:city>\s+'\
           '<gd:street>2345 Long Dr. #232</gd:street>\s+'\
@@ -1163,8 +1163,8 @@ describe GoogleContactsIntegrator do
       expect(@person.email_addresses.last.email).to eq('johnsmith_MODIFIED@example.com')
 
       expect(@person.phone_numbers.count).to eq(2)
-      expect(@person.phone_numbers.first.number).to eq('+14567894444')
-      expect(@person.phone_numbers.last.number).to eq('+11233345555')
+      expect(@person.phone_numbers.first.number).to eq('+14077894444')
+      expect(@person.phone_numbers.last.number).to eq('+12133345555')
 
       @contact.reload
       addresses = @contact.addresses.order(:state).map do |address|
