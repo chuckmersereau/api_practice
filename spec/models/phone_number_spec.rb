@@ -47,7 +47,7 @@ describe PhoneNumber do
       expect(pn.country_code).to eq('44')
     end
 
-    it 'should return a number and extension when provided' do
+    it 'returns a number and extension when provided' do
       phone = PhoneNumber.new(number: '213-345-2313;23')
       phone.clean_up_number
       expect(phone.number).to eq('+12133452313;23')
