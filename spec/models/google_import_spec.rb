@@ -221,7 +221,7 @@ describe GoogleImport do
 
       expect(person.phone_numbers.to_a.size).to eq(1)
       phone = person.phone_numbers.order(:number).first
-      expect(phone.number).to eq('+11233345158')
+      expect(phone.number).to eq('+12133345158')
       expect(phone.location).to eq('mobile')
       expect(phone.primary).to be true
 
@@ -263,7 +263,7 @@ describe GoogleImport do
       @contact.save
       @person = build(:person, last_name: 'Google')
       @person.email_address = { email: 'existing_primary@example.com', primary: true }
-      @person.phone_number = { number: '474-747-4744', primary: true }
+      @person.phone_number = { number: '414-555-5555', primary: true }
       @person.websites << Person::Website.create(url: 'original.example.com', primary: true)
       @person.save
       @contact.people << @person
@@ -278,7 +278,7 @@ describe GoogleImport do
 
       @person.reload
       expect(@person.primary_email_address.email).to eq('johnsmith@example.com')
-      expect(@person.primary_phone_number.number).to eq('+11233345158')
+      expect(@person.primary_phone_number.number).to eq('+12133345158')
       expect(@person.website.url).to eq('www.example.com')
     end
 
@@ -291,7 +291,7 @@ describe GoogleImport do
 
       @person.reload
       expect(@person.primary_email_address.email).to eq('existing_primary@example.com')
-      expect(@person.primary_phone_number.number).to eq('+14747474744')
+      expect(@person.primary_phone_number.number).to eq('+14145555555')
       expect(@person.website.url).to eq('original.example.com')
     end
   end

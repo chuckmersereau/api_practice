@@ -38,7 +38,7 @@ describe CsvImport do
     expect(person.email_addresses.size).to eq(1)
     expect(person.email_addresses.first.email).to eq('john@example.com')
     expect(person.phone_numbers.size).to eq(1)
-    expect(person.phone_numbers.first.number.in?(['(111) 222-3333', '+11112223333'])).to be true
+    expect(person.phone_numbers.first.number.in?(['(213) 222-3333', '+12132223333'])).to be true
 
     spouse = contact.spouse
     expect(spouse.first_name).to eq('Jane')
@@ -46,7 +46,7 @@ describe CsvImport do
     expect(spouse.email_addresses.size).to eq(1)
     expect(spouse.email_addresses.first.email).to eq('jane@example.com')
     expect(spouse.phone_numbers.size).to eq(1)
-    expect(spouse.phone_numbers.first.number.in?(['(444) 555-6666', '+14445556666'])).to be true
+    expect(spouse.phone_numbers.first.number.in?(['(407) 555-6666', '+14075556666'])).to be true
   end
 
   context '#contacts' do
