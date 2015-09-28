@@ -31,8 +31,8 @@
                 <td class="date" ><%= c["Column4"] %></td>
                 <td width="auto"><%= c["Column1"] %></td>
                 <td><%= c["Column6"] %></td>
-                <td style="text-align:center" >$<%= c["Column7"] %></td>
-                <td style="text-align:center">$<%= c["Column5"] %></td>
+                <td style="text-align:center" >$<%= c["Column5"] %></td>
+                <td style="text-align:center">$<%= c["Column7"] %></td>
               </tr>
               <tr  class="<%= recurr_contact_id %>" style="display: none;background-color: #D6ECF2" data-id="<%= recurr_contact_id %>" >
                 <td width="auto"  ><%= link_to(c["Column14"], current_account_list.contacts.where(id: recurr_contact_id, account_list_id: current_account_list.id).first) %></td>
