@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :phone_number do
     person nil
-    number '+11234567890'
+    number '+12134567890'
     country_code 'MyString'
     location 'mobile'
     primary false
