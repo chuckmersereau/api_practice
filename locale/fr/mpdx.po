@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-09-11 18:10+0200\n"
+"PO-Revision-Date: 2015-09-29 17:48+0200\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -373,9 +373,8 @@ msgstr ""
 "Une invitation a été envoyée à %{email}. Ils obtiendront l'accès dès qu'ils auront "
 "ouverts l'invitation et qu'ils se seront connectés."
 
-#, fuzzy
 msgid "Anniversaries This Week"
-msgstr "Anniversaires cette semaine"
+msgstr "Anniversaires de mariage cette semaine"
 
 msgid "Anniversary"
 msgstr "Anniversaire de mariage"
@@ -472,10 +471,12 @@ msgid "Aunt"
 msgstr "Tante"
 
 msgid "Automatic logging of campaigns: "
-msgstr ""
+msgstr "Ajout automatique des campagnes dans l'historique : "
 
 msgid "Automatically log sent MailChimp campaigns in contact task history."
 msgstr ""
+"Ajoute automatiquement les campagnes envoyées par Mailchimp dans l'historique des "
+"contacts."
 
 msgid "Average"
 msgstr "Moyenne"
@@ -491,7 +492,7 @@ msgstr ""
 "l'année dernière"
 
 msgid "Avg"
-msgstr ""
+msgstr "Moy."
 
 msgid "Avg Household Income by Zip"
 msgstr "Revenu moyen des ménages par zone"
@@ -505,15 +506,19 @@ msgid ""
 "that are right most of the time, but you will still want to verify an event manually "
 "before contacting the partner."
 msgstr ""
+"A partir d'une analyse de l'historique des dons d'un partenaire, MPDX peut vous "
+"signaler des événements que vous voudrez probablement investiguer. La logique de "
+"détection est basée sur un ensemble de règles qui sont justes la plupart du temps, "
+"mais il est tout de même conseillé de vérifier l'événement manuellement avant de "
+"contacter le partenaire."
 
-#, fuzzy
 msgid ""
 "Before emailing us, please have a look at %{link} to see if your question is \n"
 "        already answered there."
 msgstr ""
-"Avant de nous envoyer un e-mail, veuillez s'il vous plaît  regarder %{link} (en "
-"anglais) ou <A HREF=\"https://www.gcx.org/MPDXaide\">notre site d'aide</A> (en "
-"français) si vous n'avez pas déjà une réponse là-bas."
+"Avant de nous envoyer un email, veuillez vérifier sur %{link} (en anglais) ou sur <A "
+"HREF=\"https://www.gcx.org/MPDXaide\">notre site d'aide</A> (en français) si la "
+"réponse à votre question ne s'y trouve pas déja."
 
 msgid "Bi-Monthly"
 msgstr "Tous les 2 mois"
@@ -543,10 +548,10 @@ msgid "Calendar integration"
 msgstr "Intégration du calendrier"
 
 msgid "Calendar integration enabled. Push tasks to calendar: "
-msgstr ""
+msgstr "Intégration avec l'agenda activée. Envoyer les tâches vers l'agenda :"
 
 msgid "Calendar integration update failed."
-msgstr ""
+msgstr "La mise-à-jour de l'intégration avec l'agenda a échouée."
 
 #, fuzzy
 msgid "Calendar integration updated!"
@@ -568,6 +573,8 @@ msgid ""
 "Change these in the future by clicking the gear in the top right, and selecting "
 "'Preferences'"
 msgstr ""
+"Pour changer ces paramètres ultérieurement, cliquer sur la roue en haut à droite et "
+"sélectionner \"Préférences\""
 
 msgid ""
 "Check out %{help_site} for training videos and FAQs. If you can't find the answer you "
@@ -593,6 +600,7 @@ msgstr ""
 
 msgid "Choose which of tasks below you'd like MPDX to put on your calendar."
 msgstr ""
+"Choisissez parmi les tâches ci-dessous celles que vous voulez ajouter à votre agenda."
 
 msgid "Church"
 msgstr "Eglise"
@@ -605,6 +613,7 @@ msgstr "Réinitialiser le filtre"
 
 msgid "Click for explanation of contact status options."
 msgstr ""
+"Cliquer pour avoir des explications concernant les options pour le statut des contacts."
 
 msgid "Click here to create a new calendar"
 msgstr "Cliquer ici pour créer un nouveau calendrier"
@@ -1029,7 +1038,7 @@ msgstr ""
 "soumettez une demande."
 
 msgid "Exclude your home country from the contacts export file here"
-msgstr ""
+msgstr "Exclure votre pays d'origine ci-dessous du fichier d'export des contacts"
 
 msgid "Expired Referral"
 msgstr "Référence expirée"
@@ -1041,7 +1050,7 @@ msgid "Export selected to CSV:"
 msgstr "Exporter la sélection au format CSV :"
 
 msgid "Export selected to a Mail Chimp list:"
-msgstr ""
+msgstr "Export sélectionné vers une liste Mailchimp :"
 
 msgid "Facebook"
 msgstr "Facebook"
@@ -1072,7 +1081,7 @@ msgid "Find Duplicates"
 msgstr "Trouver des doublons"
 
 msgid "Find more anytime at"
-msgstr ""
+msgstr "Plus d'informations sur"
 
 msgid "First"
 msgstr "En premier"
@@ -1126,7 +1135,7 @@ msgid "From donor system. To make changes, "
 msgstr "De système des dons. Pour apporter des modifications,"
 
 msgid "Fullscreen"
-msgstr ""
+msgstr "Plein écran"
 
 msgid "Gained"
 msgstr "Ajoutés"
@@ -1153,7 +1162,7 @@ msgid "Gmail integration has been enabled."
 msgstr "L'intégration de Gmail a été activée."
 
 msgid "Go to MPDX Help Site Now"
-msgstr ""
+msgstr "Ouvrir maintenant le site d'aide de MPDX en anglais"
 
 msgid "Goal"
 msgstr "Objectif"
@@ -1183,6 +1192,8 @@ msgid ""
 "Great job! Check out some more tutorials videos and help articles to learn about some "
 "of our other cool features."
 msgstr ""
+"Bravo ! Regardez d'autres tutoriels vidéos et articles d'aide pour découvrir quelques-"
+"unes de nos autres super fonctionnalités."
 
 msgid "Greeting"
 msgstr "Salutation"
@@ -1200,7 +1211,7 @@ msgid "Help"
 msgstr "Aide"
 
 msgid "Here are your new contacts, click one to edit more of their information!"
-msgstr ""
+msgstr "Voici vos nouveaux contacts. Cliquez-en un pour éditer ses informations !"
 
 msgid "Here's whats happening..."
 msgstr "Voici ce qui se passe ..."
