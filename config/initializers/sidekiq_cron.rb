@@ -36,7 +36,7 @@ hash = {
   },
 
   'Fetch currency rates' => {
-    'class' => 'CurrencyExchangeFetcherWorker',
+    'class' => 'CurrencyRatesFetcherWorker',
     'cron' => '0 11 * * *',
     'args' => []
   },
