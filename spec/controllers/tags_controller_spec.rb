@@ -18,7 +18,7 @@ describe TagsController do
   end
 
   describe "GET 'destroy'" do
-    it 'returns http success' do
+    it 'deletes tag for contacts' do
       @contact1.tag_list << 'foo'
       @contact2.tag_list << 'foo'
       @contact1.save
@@ -28,6 +28,39 @@ describe TagsController do
       expect(response).to be_success
       expect(@contact1.reload.tag_list).not_to include('foo')
       expect(@contact2.reload.tag_list).not_to include('foo')
+    end
+
+    it 'deletes tagings for a tag with a comma' do
+      expect_deleted_tag('a,b')
+    end
+
+    it 'deletes tagings for a tag with a single quote' do
+      expect_deleted_tag("a'b")
+    end
+
+    it 'deletes tagings for a tag with a double quote' do
+      expect_deleted_tag('a"b')
+    end
+
+    it 'deletes tagings for a tag with double and single quote' do
+      expect_deleted_tag('a"\'b')
+    end
+
+    def expect_deleted_tag(tag)
+      @contact1.tag_list << tag
+      @contact1.save
+      xhr :get, 'destroy', id: 1, remove_tag_name: tag, all_contacts: true
+      expect(@contact1.reload.tag_list).to be_empty
+    end
+
+    it 'deletes tags for activities' do
+      task = create(:task)
+      task.tag_list << 'a,b'
+      task.save
+      @user.account_lists.first.tasks << task
+
+      xhr :get, 'destroy', id: 1, remove_tag_name: 'a,b', all_tasks: true
+      expect(task.reload.tag_list).to be_empty
     end
   end
 end

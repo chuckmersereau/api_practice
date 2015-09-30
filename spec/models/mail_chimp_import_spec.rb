@@ -99,6 +99,13 @@ describe MailChimpImport do
       expect(Person.last.first_name).to eq 'J D'
     end
 
+    it 'defaults to the name from email if MailChimp has a blank first name' do
+      stub_list_members(email: 'john@example.com', fname: ' ')
+      subject.import_contacts
+      expect(Contact.last.name).to eq 'John'
+      expect(Person.last.first_name).to eq 'John'
+    end
+
     describe 'importing with an existing contact' do
       let(:contact) { create(:contact, account_list: account_list) }
       let(:person) { create(:person_with_email) }

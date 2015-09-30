@@ -67,7 +67,9 @@ class EmailAddress < ActiveRecord::Base
   private
 
   def strip_email
-    self.email = email.to_s.strip
+    # Some email addresses seem to get zero-width characters like the
+    # zero-width-space (\u200B) or left-to-right mark (\u200E)
+    self.email = email.to_s.gsub(/[\u200B-\u200F]/, '').strip
   end
 
   def contact

@@ -180,3 +180,10 @@ $appealHeight: 20px;
 }
 
 .color-primary {color: $color-primary;}
+
+.account-users {
+  td, th {
+    padding: 10px;
+    border: 1px solid $color-gray-light;
+  }
+}
