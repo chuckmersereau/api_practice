@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-09-30 12:50+0200\n"
+"PO-Revision-Date: 2015-09-30 15:06+0200\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -1360,7 +1360,7 @@ msgstr ""
 "soumettre les changements, ils seront perdus."
 
 msgid "It's time to add your first task!"
-msgstr ""
+msgstr "Il est temps d'ajouter votre première tâche !"
 
 msgid "Joined my team in the last 3 months"
 msgstr "A rejoint mon équipe dans les 3 derniers mois"
@@ -1471,9 +1471,11 @@ msgid ""
 "Looks like you haven't added any contacts yet. You can add one or import some from "
 "another service."
 msgstr ""
+"Il semble que vous n'avez pas encore ajouté de contact. Vous pouvez en ajouter un ou "
+"en importer d'un autre service."
 
 msgid "MPD appointment is set"
-msgstr ""
+msgstr "Un rendez-vous de DEP est planifié"
 
 msgid "MPDX Support Team"
 msgstr "Equipe de soutien MPDX"
@@ -1825,10 +1827,10 @@ msgid "Occupation"
 msgstr "Profession"
 
 msgid "Off"
-msgstr ""
+msgstr "Désactivé"
 
 msgid "On"
-msgstr ""
+msgstr "Activé"
 
 msgid ""
 "Once you have a CSV import with valid and correct data <strong>click \"Run import\"</"
@@ -2098,13 +2100,13 @@ msgid "Research Abandoned"
 msgstr "Recherche abandonnée "
 
 msgid "Reset All Search Filters"
-msgstr ""
+msgstr "Réinitialiser tous les filtres de recherche"
 
 msgid "Reset Filters"
 msgstr "Réinitialiser les filtres"
 
 msgid "Reset Welcome Tour"
-msgstr ""
+msgstr "Réinitialiser l'assistant de bienvenue"
 
 msgid "Result"
 msgstr "Résultat"
@@ -2347,7 +2349,7 @@ msgid "Tasks overdue or due today"
 msgstr "Tâches en retard ou à faire aujourd'hui"
 
 msgid "Temporary"
-msgstr ""
+msgstr "Temporaire"
 
 msgid "Text Message"
 msgstr "SMS"
@@ -2415,7 +2417,7 @@ msgstr ""
 "l'exemple."
 
 msgid "The account %{loser} has been merged into %{winner}"
-msgstr ""
+msgstr "Le compte %{loser} a été fusionné dans le compte %{winner}"
 
 msgid "The connection to your LinkedIn account needs to be renewed."
 msgstr "La connexion à votre compte LinkedIn a besoin d'être renouvelée."
@@ -2528,7 +2530,7 @@ msgid "There are no referrals by this contact, "
 msgstr "Il n'y a pas de références données par ce contact,"
 
 msgid "There's more!"
-msgstr ""
+msgstr "Il y a plus !"
 
 msgid "These are not duplicates"
 msgstr "Ce ne sont pas des doublons"
@@ -2705,7 +2707,7 @@ msgid "Weekly Progress Report"
 msgstr "Rapport d'activité hebdomadaire"
 
 msgid "Welcome back"
-msgstr ""
+msgstr "Content de vous revoir"
 
 msgid ""
 "When you finish formatting your data, remove any blank or sample rows at the bottom."
@@ -2929,7 +2931,7 @@ msgid "not catgorized by you yet"
 msgstr ""
 
 msgid "not contacted yet"
-msgstr ""
+msgstr "pas encore contacté"
 
 msgid "of"
 msgstr "de"
@@ -2941,7 +2943,7 @@ msgid "or by clicking 'Help' in the top menu bar"
 msgstr ""
 
 msgid "person.to.share@cru.org"
-msgstr ""
+msgstr "personne.avec.qui.partager@agapefrance.org"
 
 msgid "prayerletters.com account needs to be refreshed"
 msgstr "Le compte prayerletters.com doit être rafraîchi"
