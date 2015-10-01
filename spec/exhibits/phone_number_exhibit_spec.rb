@@ -31,4 +31,16 @@ describe PhoneNumberExhibit do
     phone_number.number = '613-555-55555;ext=1234'
     expect(subject.number).to eq('+61355555555 ext 1234')
   end
+
+  it 'returns a number, dash and location when a location is present' do
+    phone_number.location = 'Home'
+    phone_number.number = '4075555555'
+    expect(subject.to_s).to eq('(407) 555-5555 - Home')
+  end
+
+  it 'returns only a number, when no location is present' do
+    phone_number.location = nil
+    phone_number.number = '4075555555'
+    expect(subject.to_s).to eq('(407) 555-5555')
+  end
 end
