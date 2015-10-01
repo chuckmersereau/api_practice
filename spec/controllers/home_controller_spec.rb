@@ -63,7 +63,7 @@ describe HomeController do
         @user.update_attribute(:setup, [:import, :goal, :contacts])
         al.update_attribute(:monthly_goal, 100)
         4.times { |i| al.contacts << create(:contact, name: i) }
-        2.times { create(:tnt_import, user: @user) }
+        create(:tnt_import, user: @user)
         get 'index'
         expect(@user.reload.setup).to_not include :goal
         expect(@user.reload.setup).to_not include :contacts
@@ -72,7 +72,7 @@ describe HomeController do
 
       it 'removes completed steps even if they are strings' do
         @user.update_attribute(:setup, ['import'])
-        2.times { create(:tnt_import, user: @user) }
+        create(:tnt_import, user: @user)
         controller.send :check_welcome_stages
         expect(@user.reload.setup).to eq []
       end
