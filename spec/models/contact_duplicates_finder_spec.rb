@@ -185,9 +185,9 @@ describe ContactDuplicatesFinder do
 
       it 'finds duplicates by phone' do
         person1.update_column(:first_name, 'Notjohn')
-        person1.phone = '123-456-7890'
+        person1.phone = '213-456-7890'
         person1.save
-        person2.phone = '(123) 456-7890'
+        person2.phone = '(213) 456-7890'
         person2.save
 
         expect_people_set
@@ -230,14 +230,14 @@ describe ContactDuplicatesFinder do
         create(:name_male_ratio, name: 'lara', male_ratio: 0.001)
 
         person1.first_name = 'J David'
-        person1.phone = '123-456-7890'
+        person1.phone = '213-456-7890'
         person1.email = 'same@example.com'
         person1.gender = 'male'
         person1.save
 
         person2.first_name = 'Lara'
 
-        person2.phone = '(123) 456-7890'
+        person2.phone = '(213) 456-7890'
         person2.gender = 'male' # sometimes the gender field data is wrong, simulate that
         person2.email = 'Same@Example.com'
         person2.save
@@ -304,12 +304,12 @@ describe ContactDuplicatesFinder do
         contact1.update_column(:name, 'Doe, John and Jane')
 
         person1.first_name = 'John'
-        person1.phone = '123-456-7890'
+        person1.phone = '213-456-7890'
         person1.email = 'same@example.com'
         person1.save
 
         person2.first_name = 'Jane'
-        person2.phone = '(123) 456-7890'
+        person2.phone = '(213) 456-7890'
         person2.email = 'Same@Example.com'
         person2.save
 
@@ -320,12 +320,12 @@ describe ContactDuplicatesFinder do
         contact1.update_column(:name, 'Doe, John Henry and Jane Mae')
 
         person1.first_name = 'John'
-        person1.phone = '123-456-7890'
+        person1.phone = '213-456-7890'
         person1.email = 'same@example.com'
         person1.save
 
         person2.first_name = 'Jane'
-        person2.phone = '(123) 456-7890'
+        person2.phone = '(213) 456-7890'
         person2.email = 'Same@Example.com'
         person2.save
 
@@ -465,9 +465,9 @@ describe ContactDuplicatesFinder do
 
     it 'finds duplicates by people with matching phone' do
       person1.update_column(:first_name, 'Notjohn')
-      person1.phone = '123-456-7890'
+      person1.phone = '213-456-7890'
       person1.save
-      person2.phone = '(123) 456-7890'
+      person2.phone = '(213) 456-7890'
       person2.save
 
       expect_contact_set

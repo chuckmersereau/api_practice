@@ -319,8 +319,8 @@ module GoogleContactSync
   end
 
   def normalize_number(number)
-    global = GlobalPhone.parse(number)
-    global ? global.international_string : number
+    phonelib = Phonelib.parse(number)
+    phonelib ? phonelib.e164 : number
   end
 
   def new_address_for_g_address(g_addr)
@@ -406,9 +406,9 @@ module GoogleContactSync
 
   def format_phone_for_google(phone)
     number = phone.number
-    global = GlobalPhone.parse(number)
-    if global
-      number = global.country_code == '1' ? global.national_format : global.international_format
+    phonelib = Phonelib.parse(number)
+    if phonelib
+      number = phonelib.country_code == '1' ? phonelib.local_number : phonelib.e164
     end
 
     # From https://developers.google.com/gdata/docs/2.0/elements#gdPhoneNumber

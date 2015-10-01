@@ -4,19 +4,26 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
   end
 
   def to_s
-    [number, location].join(' - ')
+    location.present? ? [number, location].join(' - ') : number
   end
 
   def number
     return unless self[:number]
+    phone = Phonelib.parse(self[:number])
+    return unless phone.valid?
+    phone_num =
+        if country_code == '1' || (country_code.blank? &&
+        (self[:number].length == 10 || self[:number].length == 7))
 
-    global = GlobalPhone.parse(self[:number])
-    return unless global
+          phone.local_number
+        else
+          phone.e164
+        end
 
-    if country_code == '1' || (country_code.blank? && (self[:number].length == 10 || self[:number].length == 7))
-      global.national_format
+    if phone.extension.blank?
+      phone_num
     else
-      global.international_format
+      "#{phone_num} ext #{phone.extension}"
     end
   end
 end

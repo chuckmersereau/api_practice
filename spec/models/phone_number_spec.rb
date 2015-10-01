@@ -4,13 +4,13 @@ describe PhoneNumber do
   describe 'adding a phone number to a person' do
     before(:each) do
       @person = FactoryGirl.create(:person)
-      @attributes = { 'number' => '123-345-2313' }
+      @attributes = { 'number' => '213-345-2313' }
     end
     it "creates a phone number if it's new" do
       expect do
         PhoneNumber.add_for_person(@person, @attributes)
         phone_number = @person.reload.phone_numbers.first
-        expect(phone_number.number).to eq('+11233452313')
+        expect(phone_number.number).to eq('+12133452313')
       end.to change(PhoneNumber, :count).from(0).to(1)
     end
 
@@ -18,7 +18,7 @@ describe PhoneNumber do
       PhoneNumber.add_for_person(@person, @attributes)
       expect do
         PhoneNumber.add_for_person(@person, @attributes)
-        expect(@person.phone_numbers.first.number).to eq('+11233452313')
+        expect(@person.phone_numbers.first.number).to eq('+12133452313')
       end.to_not change(PhoneNumber, :count)
     end
 
@@ -45,6 +45,12 @@ describe PhoneNumber do
       pn = PhoneNumber.new(number: '+44 12345532')
       pn.clean_up_number
       expect(pn.country_code).to eq('44')
+    end
+
+    it 'returns a number and extension when provided' do
+      phone = PhoneNumber.new(number: '213-345-2313;23')
+      phone.clean_up_number
+      expect(phone.number).to eq('+12133452313;23')
     end
   end
 

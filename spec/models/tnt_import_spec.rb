@@ -161,7 +161,7 @@ describe TntImport do
       describe 'primary phone behavior' do
         before do
           @person = create(:person, first_name: 'Bob', last_name: 'Doe')
-          @person.phone_number = { number: '123-456-7890', primary: true }
+          @person.phone_number = { number: '212-456-7890', primary: true }
           @person.save
           @contact = create(:contact, account_list: @account_list, name: 'Doe, Bob and Dawn')
           @contact.people << @person
@@ -185,7 +185,7 @@ describe TntImport do
           @phone_before_import.update_column(:primary, false)
           import.send(:import_contacts)
           expect(@person.phone_numbers.where(primary: true).count).to eq(1)
-          expect(@person.phone_numbers.where(primary: true).first.number).to eq('+12223337890')
+          expect(@person.phone_numbers.where(primary: true).first.number).to eq('+12123337890')
         end
 
         it 'sets the primary phone if override not set and no person existed' do
@@ -193,7 +193,7 @@ describe TntImport do
           import.send(:import_contacts)
           person = Person.find_by_first_name('Bob')
           expect(person.phone_numbers.where(primary: true).count).to eq(1)
-          expect(person.phone_numbers.where(primary: true).first.number).to eq('+12223337890')
+          expect(person.phone_numbers.where(primary: true).first.number).to eq('+12123337890')
         end
       end
 
@@ -208,12 +208,12 @@ describe TntImport do
           john_numbers = john.reload.phone_numbers.pluck(:number)
           jane_numbers = jane.reload.phone_numbers.pluck(:number)
           expect(john_numbers.size).to eq(3)
-          expect(john_numbers).to include('+15555551234') # home
-          expect(john_numbers).to include('+11111111111')
-          expect(john_numbers).to include('(555) 555-9771 ext. 301')
+          expect(john_numbers).to include('+15155551234') # home
+          expect(john_numbers).to include('+12132111111')
+          expect(john_numbers).to include('+15155559771;301')
           expect(jane_numbers.size).to eq(2)
-          expect(jane_numbers).to include('+15555551234') # home
-          expect(jane_numbers).to include('+12222222222')
+          expect(jane_numbers).to include('+15155551234') # home
+          expect(jane_numbers).to include('+12122222222')
         end
       end
     end
@@ -363,13 +363,13 @@ describe TntImport do
     let(:person) { create(:person) }
 
     it 'marks tnt "invalid" phone numbers as historic in mpdx' do
-      row = { 'HomePhone2' => '222-222-2222', 'SpouseMobilePhone' => '333-333-3333',
+      row = { 'HomePhone2' => '212-222-2222', 'SpouseMobilePhone' => '313-333-3333',
               'PhoneIsValidMask' => '4096' }
       prefix = 'Spouse'
       import.send(:update_person_phones, person, row, prefix)
       expect(person.phone_numbers.count).to eq(2)
-      expect(person.phone_numbers.map { |p| [p.number, p.historic] }).to include(['+12222222222', true])
-      expect(person.phone_numbers.map { |p| [p.number, p.historic] }).to include(['+13333333333', false])
+      expect(person.phone_numbers.map { |p| [p.number, p.historic] }).to include(['+12122222222', true])
+      expect(person.phone_numbers.map { |p| [p.number, p.historic] }).to include(['+13133333333', false])
     end
   end
 

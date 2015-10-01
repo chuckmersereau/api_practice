@@ -66,7 +66,7 @@ describe Task do
     it 'users numbers if call' do
       task.update_column(:activity_type, 'Call')
       person.phone_numbers << create(:phone_number)
-      expect(task.calculated_location).to eq 'John Smith (123) 456-7890 - mobile'
+      expect(task.calculated_location).to eq 'John Smith (213) 456-7890 - mobile'
     end
 
     it 'uses address for non-calls' do

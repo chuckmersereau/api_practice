@@ -94,8 +94,7 @@ gem 'versionist', '~> 1.2.1'
 gem 'virtus', '~> 0.5.4'
 gem 'wicked', '~> 1.0.2'
 gem 'will_paginate', '~> 3.0.3'
-gem 'global_phone', git: 'https://github.com/sstephenson/global_phone.git'
-gem 'global_phone_dbgen'
+
 # gem 'font_assets'
 gem 'geocoder'
 gem 'google_timezone'
@@ -108,6 +107,7 @@ gem 'peek-performance_bar'
 gem 'peek-gc'
 gem 'user_agent_decoder'
 gem 'puma'
+gem 'phonelib', '~> 0.5.0'
 gem 'silencer'
 
 group :development do

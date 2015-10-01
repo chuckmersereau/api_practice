@@ -29,7 +29,7 @@
 1234 N St.
 Nowhere, CA  12345</MailingAddressBlock>
         <MailingAddressIsDeliverable>true</MailingAddressIsDeliverable>
-        <Phone>(555) 555-1234</Phone>
+        <Phone>(515) 555-1234</Phone>
         <PhoneIsValid>true</PhoneIsValid>
         <Email>same@example.com</Email>
         <EmailIsValid>true</EmailIsValid>
@@ -69,10 +69,10 @@ Nowhere, CA  12345</HomeAddressBlock>
         <PreferredPhoneType>0</PreferredPhoneType>
         <PhoneIsValidMask>4385</PhoneIsValidMask>
         <PhoneCountryIDs>0=840</PhoneCountryIDs>
-        <HomePhone>(555) 555-1234</HomePhone>
-        <MobilePhone>111-111-1111</MobilePhone>
-        <BusinessPhone>(555) 555-9771 ext. 301</BusinessPhone>
-        <SpouseMobilePhone>222-222-2222</SpouseMobilePhone>
+        <HomePhone>(515) 555-1234</HomePhone>
+        <MobilePhone>213-211-1111</MobilePhone>
+        <BusinessPhone>(515) 555-9771;ext=301</BusinessPhone>
+        <SpouseMobilePhone>212-222-2222</SpouseMobilePhone>
         <PreferredEmailTypes>3</PreferredEmailTypes>
         <Email1>same@example.com</Email1>
         <Email2>same@example.com</Email2>
@@ -151,7 +151,7 @@ Has run into issues with Campus Crusade in the past...  Was told couldn&apos;t b
 2345 Capa Dr.
 State, CA  12345</MailingAddressBlock>
         <MailingAddressIsDeliverable>true</MailingAddressIsDeliverable>
-        <Phone>(555) 234-2345</Phone>
+        <Phone>(515) 234-2345</Phone>
         <PhoneIsValid>true</PhoneIsValid>
         <Email>fake@example.com</Email>
         <EmailIsValid>true</EmailIsValid>
@@ -191,8 +191,8 @@ State, CA  12345</HomeAddressBlock>
         <PreferredPhoneType>3</PreferredPhoneType>
         <PhoneIsValidMask>9</PhoneIsValidMask>
         <PhoneCountryIDs>0=840</PhoneCountryIDs>
-        <HomePhone>(555) 234-2345</HomePhone>
-        <OtherPhone>222-333-7890</OtherPhone>
+        <HomePhone>(515) 234-2345</HomePhone>
+        <OtherPhone>212-333-7890</OtherPhone>
         <PreferredEmailTypes>4</PreferredEmailTypes>
         <Email1>fake@example.com</Email1>
         <Email2>fake2@example.com</Email2>

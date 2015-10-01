@@ -25,7 +25,7 @@
           1234 N St.
           Nowhere, CA  12345</MailingAddressBlock>
         <MailingAddressIsDeliverable>true</MailingAddressIsDeliverable>
-        <Phone>(555) 555-1234</Phone>
+        <Phone>(515) 555-1234</Phone>
         <PhoneIsValid>true</PhoneIsValid>
         <Email>same@example.com</Email>
         <EmailIsValid>true</EmailIsValid>
@@ -65,10 +65,10 @@
         <PreferredPhoneType>0</PreferredPhoneType>
         <PhoneIsValidMask>4385</PhoneIsValidMask>
         <PhoneCountryIDs>0=840</PhoneCountryIDs>
-        <HomePhone>(555) 555-1234</HomePhone>
-        <MobilePhone>111-111-1111</MobilePhone>
-        <BusinessPhone>(555) 555-9771 ext. 301</BusinessPhone>
-        <SpouseMobilePhone>222-222-2222</SpouseMobilePhone>
+        <HomePhone>(515) 555-1234</HomePhone>
+        <MobilePhone>213-211-1111</MobilePhone>
+        <BusinessPhone>(515) 555-9771;ext=301</BusinessPhone>
+        <SpouseMobilePhone>212-222-2222</SpouseMobilePhone>
         <PreferredEmailTypes>3</PreferredEmailTypes>
         <Email1>same@example.com</Email1>
         <Email2>same@example.com</Email2>

@@ -1,7 +1,7 @@
 <% exhibit(@person, self).tap do |person_exhibit| %>
 <div id="contentbody" data-person-id="<%= @person.id %>">
   <div class="wpp">
-    
+
     <div class="backline">
     <% if @contact %>
       <% @contact = exhibit(@contact, self) %>
@@ -68,7 +68,7 @@
       <div id="person-details">
         <%= render 'contact_details', person: @person, person_exhibit: person_exhibit %>
       </div>
-      <!-- 
+      <!--
       <div id="messages-tab">
         <div class="tabdata">
           <table class="messages snapshot">

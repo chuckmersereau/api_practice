@@ -573,7 +573,7 @@ describe Siebel do
         siebel.send(:add_or_update_phone_number, siebel_phone_number, person)
       end.not_to change { PhoneNumber.count }
 
-      expect(pn.reload.number).to eq(GlobalPhone.normalize(siebel_phone_number.phone))
+      expect(pn.reload.number).to eq(Phonelib.parse(siebel_phone_number.phone).e164)
     end
   end
 

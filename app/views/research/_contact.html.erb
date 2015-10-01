@@ -34,7 +34,7 @@
             <ul>
               <% person.phone_numbers.each do |pn| %>
                 <li>
-                  <%= GlobalPhone.parse(pn.phone).national_format %>
+                  <%= Phonelib.parse(pn.number).local_number %>
                   <%= "(#{pn.type})" if pn.type.present? %>
                   <% if person.phone_numbers.length > 1 && pn.primary %>
                     <i class="fa fa-check green"></i>
