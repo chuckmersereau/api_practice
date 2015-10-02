@@ -15,4 +15,23 @@ describe GoogleIntegrationsController do
       expect(subject.params).to eq(expected_params)
     end
   end
+
+  context '#update' do
+    let(:user) { create(:user_with_account) }
+    let(:google_integration) do
+      create(:google_integration, calendar_integration: false,
+                                  account_list: user.account_lists.first)
+    end
+
+    before { login(user) }
+
+    it 'queues google contact sync if contact integration set' do
+      expect do
+        put :update, id: google_integration.id,
+                     google_integration: { contacts_integration: true }
+        expect(response).to redirect_to(google_integration)
+      end.to change(LowerRetryWorker.jobs, :size).by(1)
+      expect(google_integration.reload.contacts_integration).to be true
+    end
+  end
 end

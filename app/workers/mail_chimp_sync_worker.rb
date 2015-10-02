@@ -5,8 +5,6 @@ class MailChimpSyncWorker
   CURRENT_USER_RANGE = 180.days.ago
 
   def perform(*)
-    gb = Gibbon.new(ENV.fetch('MAILCHIMP_KEY'))
-
     # Subscribe anyone who has logged in in the past [CURRENT_USER_RANGE] days
     User.includes(:primary_email_address).where(
       'sign_in_count > 0 and current_sign_in_at > ? and subscribed_to_updates IS NULL', CURRENT_USER_RANGE
@@ -51,5 +49,9 @@ class MailChimpSyncWorker
         end
       end
     end
+  end
+
+  def gb
+    @gb ||= Gibbon.new(ENV.fetch('MAILCHIMP_KEY'))
   end
 end

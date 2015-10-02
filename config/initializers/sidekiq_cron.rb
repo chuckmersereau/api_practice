@@ -1,4 +1,4 @@
-hash = {
+SIDEKIQ_CRON_HASH  = {
   'Google email sync' => {
     'class' => 'SidekiqCronWorker',
     'cron'  => '0 3 * * *',
@@ -36,7 +36,7 @@ hash = {
   },
 
   'Fetch currency rates' => {
-    'class' => 'CurrencyExchangeFetcherWorker',
+    'class' => 'CurrencyRatesFetcherWorker',
     'cron' => '0 11 * * *',
     'args' => []
   },
@@ -54,4 +54,8 @@ hash = {
   }
 }
 
-Sidekiq::Cron::Job.load_from_hash! hash if Rails.env.production?
+def load_sidekiq_cron_hash
+  Sidekiq::Cron::Job.load_from_hash! SIDEKIQ_CRON_HASH
+end
+
+load_sidekiq_cron_hash if Rails.env.production?
