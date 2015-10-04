@@ -55,12 +55,6 @@ FactoryGirl.define do
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_appeals.xml')) }
   end
 
-  factory :tnt_data_sync_import, parent: :import do
-    association :account_list
-    source 'tnt_data_sync'
-    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_data_sync_file.tntmpd')) }
-  end
-
   factory :csv_import, parent: :import do
     association :account_list
     source 'csv'

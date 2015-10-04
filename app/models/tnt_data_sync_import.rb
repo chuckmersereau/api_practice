@@ -8,15 +8,19 @@ class TntDataSyncImport
   end
 
   def import
-    fail Import::UnsurprisingImportError unless @import.file_contents.starts_with?('[ORGANIZATION]')
+    fail Import::UnsurprisingImportError unless file_contents_valid?
     @data_server.import_donors_from_csv(@account_list, @profile, section('DONORS'), @user)
     @data_server.import_donations_from_csv(@profile, section('GIFTS'))
   end
 
   private
 
+  def file_contents_valid?
+    section('DONORS').present? && section('GIFTS').present?
+  end
+
   def section(heading)
     @sections_by_heading ||= Hash[@import.file_contents.scan(/^\[(.*?)\]\r?\n(.*?)(?=^\[|\Z)/m)]
-    @sections_by_heading[heading].strip
+    @sections_by_heading[heading].try(:strip)
   end
 end
