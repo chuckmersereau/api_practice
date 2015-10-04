@@ -89,7 +89,7 @@ class DataServer
   end
 
   def import_donors_from_csv(account_list, profile, csv, user)
-    CSV.new(csv, headers: :first_row).each do |line|
+    CSV.new(csv, headers: :first_row, header_converters: ->(h) { h.upcase }).each do |line|
       line['LAST_NAME'] = line['LAST_NAME_ORG']
       line['FIRST_NAME'] = line['ACCT_NAME'] if line['FIRST_NAME'].blank?
 
@@ -168,7 +168,7 @@ class DataServer
   end
 
   def import_donations_from_csv(profile, response)
-    CSV.new(response, headers: :first_row).read.map do |line|
+    CSV.new(response, headers: :first_row, header_converters: ->(h) { h.upcase }).read.map do |line|
       designation_account = find_or_create_designation_account(line['DESIGNATION'], profile)
       add_or_update_donation(line, designation_account, profile)
     end
@@ -232,15 +232,15 @@ class DataServer
     balance = {}
     response = Retryable.retryable on: Errors::UrlChanged, times: 1, then: update_url(:account_balance_url) do
       get_response(@org.account_balance_url,
-                   get_params(@org.account_balance_params,  profile: profile_code.to_s))
+                   get_params(@org.account_balance_params, profile: profile_code.to_s))
     end
 
     # This csv should always only have one line (besides the headers)
     begin
       CSV.new(response, headers: :first_row).each do |line|
-        balance[:designation_numbers] = line['EMPLID'].split(',').map { |e| e.gsub('"', '') } if line['EMPLID']
+        balance[:designation_numbers] = line['EMPLID'].split(',').map { |e| e.delete('"') } if line['EMPLID']
         balance[:account_names] = line['ACCT_NAME'].split('\n') if line['ACCT_NAME']
-        balance_match = line['BALANCE'].gsub(',', '').match(/([-]?\d+\.?\d*)/)
+        balance_match = line['BALANCE'].delete(',').match(/([-]?\d+\.?\d*)/)
         balance[:balance] = balance_match[0] if balance_match
         balance[:date] = line['EFFDT'] ? DateTime.strptime(line['EFFDT'], '%Y-%m-%d %H:%M:%S') : Time.now
 

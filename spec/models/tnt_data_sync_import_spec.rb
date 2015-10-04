@@ -17,8 +17,8 @@ describe TntDataSyncImport do
     expect(donation.amount).to eq 85
   end
 
-  it 'works even if the [ORGANIZATIONS] section is missing' do
-    subject = build_import('tnt_data_sync_no_org.tntmpd')
+  it 'works even if [ORGANIZATIONS] section missing and headers are lowercase' do
+    subject = build_import('tnt_data_sync_no_org_lowercase_fields.tntmpd')
     expect do
       subject.import
     end.to change(Donation, :count).by(1)
