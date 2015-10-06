@@ -8,6 +8,8 @@ class ContactPerson < ActiveRecord::Base
   after_commit :delete_orphaned_person, on: :destroy
   before_create :set_primary_contact
 
+  validates :person, presence: true
+
   private
 
   def delete_orphaned_person

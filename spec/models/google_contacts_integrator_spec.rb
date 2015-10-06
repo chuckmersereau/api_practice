@@ -294,7 +294,8 @@ describe GoogleContactsIntegrator do
       expect(@integrator).to receive(:get_g_contact_and_link)
         .with(@contact.contact_people.first) { [g_contact, g_contact_link] }
 
-      contact_person_no_person = create(:contact_person, person_id: 0)
+      contact_person_no_person = create(:contact_person, person: create(:person))
+      contact_person_no_person.update_column(:person_id, 0)
       @contact.contact_people << contact_person_no_person
       expect(@integrator).to_not receive(:get_g_contact_and_link)
         .with(contact_person_no_person)
