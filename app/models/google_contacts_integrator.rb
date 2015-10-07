@@ -5,19 +5,7 @@ class GoogleContactsIntegrator
   attr_accessor :assigned_remote_ids, :cache, :client
 
   CONTACTS_GROUP_TITLE = 'MPDX'
-
-  # If a contact in MPDX gets marked as inactive, e.g. 'Not Interested', then they won't be synced with Google anymore
-  # but they will be assigned to this Google group so the user can delete it if they want to.
   INACTIVE_GROUP_TITLE = 'Inactive'
-
-  # Caching the Google contacts from one big request speeds up the sync as we don't need separate HTTP get requests
-  # But is only worth it if we are syncing a number of contacts, so check the number against this threshold.
-  CACHE_ALL_G_CONTACTS_THRESHOLD = 10
-
-  # The Google sync will wait for any running Google and Facebook imports to finish first to reduce the chance of
-  # unexpected behavior of a sync and an import running at the same time. These constants configure how often to check
-  # for the imports being done and when to just cancel this queuing of the Google contacts sync due to an import
-  # not being finished. (The sync would get re-queued after another contact is saved though).
   SECS_BETWEEN_CHECK_FOR_IMPORTS_DONE = 30
   MAX_CHECKS_FOR_IMPORTS_DONE = 60
 
@@ -32,10 +20,8 @@ class GoogleContactsIntegrator
     # Try job again which will refresh the token
     raise LowerRetryWorker::RetryJobButNoAirbrakeError
   rescue OAuth2::Error => e
-    if e.response && e.response.status >= 500 || e.response.status == 403 # Server errs or rate limit exceeded
-      # For the rate limit error, we need to wait up to an hour, so we should put the job in the retry queue
-      # rather than holding up a Sidekiq thread with a long retry, but don't report the error to Airbrake since these
-      # errors are expected from time to time.
+    if e.response && e.response.status >= 500 || e.response.status == 403
+      # Try again on server errs or rate limit exceeded
       raise LowerRetryWorker::RetryJobButNoAirbrakeError
     else
       raise e
@@ -173,11 +159,7 @@ class GoogleContactsIntegrator
       end
 
       queried_contacts_to_sync = contacts_to_sync_query(updated_g_contacts)
-      if queried_contacts_to_sync.length > CACHE_ALL_G_CONTACTS_THRESHOLD
-        @cache.cache_all_g_contacts
-      else
-        @cache.cache_g_contacts(updated_g_contacts)
-      end
+      @cache.cache_g_contacts(updated_g_contacts)
 
       queried_contacts_to_sync
     else
