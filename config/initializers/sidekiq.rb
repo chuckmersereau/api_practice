@@ -1,3 +1,4 @@
+require 'sidekiq_job_args_logger'
 require Rails.root.join('config', 'initializers', 'redis').to_s
 
 Sidekiq.configure_client do |config|
@@ -14,6 +15,9 @@ Sidekiq.configure_server do |config|
   config.reliable_scheduler!
   config.redis = { url: Redis.current.client.id,
                    namespace: "MPDX:#{Rails.env}:resque"}
+  config.server_middleware do |chain|
+    chain.add SidekiqJobArgsLogger
+  end
 end
 
 Sidekiq.default_worker_options = {
