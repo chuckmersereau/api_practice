@@ -262,9 +262,10 @@ describe GoogleContactsIntegrator do
   end
 
   describe 'sync_contact' do
+    let(:g_contact_link) { double(last_data: { given_name: 'John' }) }
+
     it 'does not save a g_contact if it has not changed since the last sync' do
-      g_contact_link = double(last_data: { given_name: 'John' })
-      g_contact = double(attrs_with_changes:  { given_name: 'John' })
+      g_contact = double(attrs_with_changes: { given_name: 'John' })
 
       contact_person = @contact.contact_people.first
       expect(@integrator).to receive(:get_g_contact_and_link).with(contact_person).and_return([g_contact, g_contact_link])
@@ -277,8 +278,7 @@ describe GoogleContactsIntegrator do
     end
 
     it 'saves the g_contacts if they were modified' do
-      g_contact_link = double(last_data: { given_name: 'John' })
-      g_contact = double(attrs_with_changes:  { given_name: 'MODIFIED-John' })
+      g_contact = double(attrs_with_changes: { given_name: 'MODIFIED-John' })
 
       contact_person = @contact.contact_people.first
       expect(@integrator).to receive(:get_g_contact_and_link).with(contact_person).and_return([g_contact, g_contact_link])
@@ -286,6 +286,29 @@ describe GoogleContactsIntegrator do
 
       expect(@integrator).to receive(:save_g_contacts_then_links).with(@contact, [g_contact], [[g_contact, g_contact_link]])
 
+      @integrator.sync_contact(@contact)
+    end
+
+    it 'does not attempt to sync a ContactPerson that points to a non-exist Person' do
+      g_contact = double(attrs_with_changes: { given_name: 'John' })
+      expect(@integrator).to receive(:get_g_contact_and_link)
+        .with(@contact.contact_people.first) { [g_contact, g_contact_link] }
+
+      contact_person_no_person = create(:contact_person, person: create(:person))
+      contact_person_no_person.update_column(:person_id, 0)
+      @contact.contact_people << contact_person_no_person
+      expect(@integrator).to_not receive(:get_g_contact_and_link)
+        .with(contact_person_no_person)
+
+      expect(GoogleContactSync).to receive(:sync_contact)
+      expect(@integrator).to receive(:save_g_contact_links)
+
+      @integrator.sync_contact(@contact)
+    end
+
+    it "does not try to sync if all a contact's contact-people have non-existent people" do
+      @contact.contact_people.first.update_column(:person_id, 0)
+      expect(GoogleContactSync).to_not receive(:sync_contact)
       @integrator.sync_contact(@contact)
     end
   end
@@ -534,8 +557,8 @@ describe GoogleContactsIntegrator do
           g_contact_id = batch_create_or_update_calls.to_s
           g_contact['id'] = { '$t' => g_contact_id }
           g_contact['gd$etag'] = 'etag:' + g_contact_id
-          g_contact['content'] = { '$t' =>  g_contact.prepped_changes[:content] }
-          g_contact['gd$name'] = { 'gd$givenName' => { '$t' =>  g_contact.prepped_changes[:given_name] } }
+          g_contact['content'] = { '$t' => g_contact.prepped_changes[:content] }
+          g_contact['gd$name'] = { 'gd$givenName' => { '$t' => g_contact.prepped_changes[:given_name] } }
           notes_and_first_name = g_contact.content + ':' + g_contact.given_name
           g_contact_ids[notes_and_first_name] = g_contact_id
           g_contacts_for_ids[g_contact_id] = g_contact
