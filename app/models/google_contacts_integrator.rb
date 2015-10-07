@@ -5,9 +5,10 @@ class GoogleContactsIntegrator
   attr_accessor :assigned_remote_ids, :cache, :client
 
   CONTACTS_GROUP_TITLE = 'MPDX'
+
+  # If a contact in MPDX gets marked as inactive, e.g. 'Not Interested', then they won't be synced with Google anymore
+  # but they will be assigned to this Google group so the user can delete it if they want to.
   INACTIVE_GROUP_TITLE = 'Inactive'
-  SECS_BETWEEN_CHECK_FOR_IMPORTS_DONE = 30
-  MAX_CHECKS_FOR_IMPORTS_DONE = 60
 
   def initialize(google_integration)
     @integration = google_integration
@@ -29,9 +30,12 @@ class GoogleContactsIntegrator
   end
 
   def sync_contacts
+    # Don't run the Google sync during imports, it can sync them all once the
+    # import is done, which is much more efficient.
     return if @integration.account_list.organization_accounts.any?(&:downloading)
     return if @integration.account_list.imports.any?(&:importing)
     return if @integration.account_list.mail_chimp_account.try(&:importing)
+
     sync_and_return_num_synced
     cleanup_inactive_g_contacts
   rescue Person::GoogleAccount::MissingRefreshToken
