@@ -401,18 +401,6 @@ class AccountList < ActiveRecord::Base
     (total_pledges * 100 / monthly_goal).round(1)
   end
 
-  private
-
-  def sync_with_google_contacts
-    google_integrations.where(contacts_integration: true).find_each { |g_i| g_i.sync_data('contacts') }
-  end
-
-  def import_data
-    organization_accounts.reject(&:disable_downloads).each(&:import_all_data)
-    send_account_notifications
-    queue_sync_with_google_contacts
-  end
-
   # trigger any notifications for this account list
   def send_account_notifications
     notifications = NotificationType.check_all(self)
@@ -443,6 +431,18 @@ class AccountList < ActiveRecord::Base
     if notifications_to_email.present?
       NotificationMailer.notify(self, notifications_to_email).deliver
     end
+  end
+
+  private
+
+  def sync_with_google_contacts
+    google_integrations.where(contacts_integration: true).find_each { |g_i| g_i.sync_data('contacts') }
+  end
+
+  def import_data
+    organization_accounts.reject(&:disable_downloads).each(&:import_all_data)
+    send_account_notifications
+    queue_sync_with_google_contacts
   end
 
   def subscribe_tester_to_mailchimp
