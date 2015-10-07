@@ -11,6 +11,7 @@ class TntDataSyncImport
     fail Import::UnsurprisingImportError unless file_contents_valid?
     @data_server.import_donors_from_csv(@account_list, @profile, section('DONORS'), @user)
     @data_server.import_donations_from_csv(@profile, section('GIFTS'))
+    @account_list.send_account_notifications
   end
 
   private
