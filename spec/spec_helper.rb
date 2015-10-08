@@ -48,6 +48,9 @@ RSpec.configure do |config|
       Sidekiq::Testing.fake!
     end
 
+    # Travis had an issue where the locale sometimes switched to French
+    I18n.locale = :en_US
+
     # Stub the Google geocoder by default (creating an address calls it so it's
     # needed a lot)
     stub_google_geocoder
