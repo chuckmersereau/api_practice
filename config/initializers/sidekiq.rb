@@ -1,4 +1,5 @@
 require 'sidekiq_job_args_logger'
+require 'sidekiq_mem_notifier'
 require Rails.root.join('config', 'initializers', 'redis').to_s
 
 Sidekiq.configure_client do |config|
@@ -26,3 +27,5 @@ Sidekiq.default_worker_options = {
   # and move to the "Dead" list.
   unique_job_expiration: 22 * 24 * 60 * 60
 }
+
+SidekiqMemNotifier.start
