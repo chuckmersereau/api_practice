@@ -29,7 +29,8 @@ describe GoogleContactsIntegrator do
     it 'syncs contacts and records last synced time' do
       expect(@integrator).to receive(:setup_assigned_remote_ids)
 
-      expect(@integrator).to receive(:contacts_to_sync).and_return([@contact])
+      expect(@integrator).to receive(:contacts_to_sync)
+        .and_return(Contact.where(id: @contact.id))
       expect(@integrator).to receive(:sync_contact).with(@contact)
 
       now = Time.now
