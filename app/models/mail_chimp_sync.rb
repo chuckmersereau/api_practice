@@ -14,8 +14,7 @@ class MailChimpSync
   end
 
   def sync_adds_and_updates(contact_ids)
-    contacts_to_export = @mc_account.newsletter_contacts_with_emails(contact_ids)
-                         .select(&method(:contact_changed_or_new?))
+    contacts_to_export = select_contacts_to_export(contact_ids)
     return if contacts_to_export.empty?
     @mc_account.export_to_list(@mc_account.primary_list_id, contacts_to_export)
   end
@@ -27,6 +26,14 @@ class MailChimpSync
   end
 
   private
+
+  def select_contacts_to_export(contact_ids)
+    to_export = []
+    @mc_account.newsletter_contacts_with_emails(contact_ids).find_each do |contact|
+      to_export << contact if contact_changed_or_new?(contact)
+    end
+    to_export
+  end
 
   def contact_changed_or_new?(contact)
     contact.people.any? do |person|

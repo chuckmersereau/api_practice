@@ -59,7 +59,7 @@ class GoogleContactsIntegrator
     # changed during the sync in the next sync.
     @integration.contacts_last_synced = Time.now
 
-    contacts.each(&method(:sync_contact))
+    contacts.find_each(&method(:sync_contact))
     self.class.retry_on_api_errs { api_user.send_batched_requests }
 
     # For contacts syncs to the Google Contacts API that were either deleted or modified during the sync
