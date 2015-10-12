@@ -22,9 +22,6 @@ msgstr ""
 msgid " For %{contact}"
 msgstr ""
 
-msgid " and "
-msgstr ""
-
 msgid " to email donation services."
 msgstr ""
 
@@ -161,6 +158,9 @@ msgid "Account Sharing & Merging"
 msgstr ""
 
 msgid "Account access invite"
+msgstr ""
+
+msgid "Account currently shared with"
 msgstr ""
 
 msgid "Accounts"
@@ -495,6 +495,9 @@ msgstr "Convocatoria de la Decisión"
 msgid "Cancel"
 msgstr ""
 
+msgid "Cancel Invite"
+msgstr ""
+
 msgid "Care"
 msgstr ""
 
@@ -695,6 +698,9 @@ msgid "Create"
 msgstr ""
 
 msgid "Create \"Appointment\" task"
+msgstr ""
+
+msgid "Create \"Cultivate Relationship\" task"
 msgstr ""
 
 msgid "Create \"Setup Giving\" task"
@@ -1182,10 +1188,10 @@ msgstr ""
 msgid "Invalid Username/Password Combination. Please update your information."
 msgstr ""
 
-msgid "It has designation info for:"
+msgid "Invite canceled."
 msgstr ""
 
-msgid "It is shared with:"
+msgid "Invited by: "
 msgstr ""
 
 msgid "It looks like you were adding a task. If you leave before submitting, your changes will be lost."
@@ -1267,6 +1273,9 @@ msgid "Likely To Give"
 msgstr ""
 
 msgid "Likely to Give"
+msgstr ""
+
+msgid "Linked by designation: "
 msgstr ""
 
 msgid "Loading"
@@ -1378,6 +1387,9 @@ msgid "Mailchimp List is requiring an additional merge field"
 msgstr ""
 
 msgid "Mailing"
+msgstr ""
+
+msgid "Manually added by MPDX support"
 msgstr ""
 
 msgid "Many More On Our Help Site"
@@ -1693,6 +1705,9 @@ msgstr ""
 msgid "Partners more than 60 days late"
 msgstr ""
 
+msgid "Pending invite for: "
+msgstr ""
+
 msgid "People"
 msgstr ""
 
@@ -1881,6 +1896,9 @@ msgstr "Añadir Referidos"
 msgid "Remove"
 msgstr ""
 
+msgid "Remove Access"
+msgstr ""
+
 msgid "Remove Tag"
 msgstr ""
 
@@ -1987,6 +2005,9 @@ msgid "Send Paper Newsletter List"
 msgstr ""
 
 msgid "Sent"
+msgstr ""
+
+msgid "Sent by: "
 msgstr ""
 
 msgid "Separated"
@@ -2280,6 +2301,9 @@ msgstr ""
 msgid "To activate your invitation, click \"Accept\" below and log into MPDX."
 msgstr ""
 
+msgid "To add an extension, use the format, 1234567890;ext=123"
+msgstr ""
+
 msgid "To invite another user to access this account, enter their email:"
 msgstr ""
 
@@ -2350,6 +2374,12 @@ msgstr "Añadir este contacto"
 msgid "Upload fixed CSV file"
 msgstr ""
 
+msgid "User account access removed."
+msgstr ""
+
+msgid "User already removed"
+msgstr ""
+
 msgid "Visit Mobile Version"
 msgstr ""
 
@@ -2417,6 +2447,9 @@ msgid "You are currently editing settings for %{account}"
 msgstr ""
 
 msgid "You are getting this notification from MPDX because you checked the email setting in your preferences for this type of notification. You can change it <a href=\"%{preferences_url}\">here</a>."
+msgstr ""
+
+msgid "You are not allowed to manage sharing for this account."
 msgstr ""
 
 msgid "You can change this in the future if you aren't sure."
@@ -2616,10 +2649,3 @@ msgstr ""
 
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
-
-#, fuzzy
-#~ msgid "adding a new contact"
-#~ msgstr "Añadir etiquetas a estos contactos"
-
-#~ msgid "Active Contacts"
-#~ msgstr "Añadir este contacto"
