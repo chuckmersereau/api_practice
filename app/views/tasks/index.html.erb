@@ -24,7 +24,7 @@
           <div class="mwrap" ng-show="totalTasksShown === 0 && !totalTasksLoading">
             <div>
               <span ng-show="filter.page === 'all'">
-                <p class="spacer-top"><a href="/tasks/new" class="btn btn-lg btn-primary" data-remote="true"><%= _('Create Your First Task') %></a></p>
+                <p class="spacer-top"><a href="/tasks/new" class="btn btn-lg btn-primary add_task" data-remote="true"><%= _('Create Your First Task') %></a></p>
                 <h1><%= _("It's time to add your first task!") %></h1>
                 <p><%= _("Tasks are how MPDX helps you to stay on top of your MPD goals. From follow up, to making contact with someone for the first time, MPDX tasks will be your tool for keeping it all together. As you add and complete tasks, you will begin to see your dashboard, reports, contact details and other areas all come to life with real time information about your MPD.") %></p>
                 <h2><%= _("There's more!") %></h3>
@@ -53,7 +53,7 @@
               </thead>
 
               <tbody class="tasks">
-                <tr task="task" ng-repeat="task in tasks[g.filter]" 
+                <tr task="task" ng-repeat="task in tasks[g.filter]"
                     id="task_{{task.id}}" class="tasklist" multiselect="true"></tr>
                 <tr>
                   <td colspan="4">
