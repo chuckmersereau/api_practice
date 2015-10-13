@@ -1,7 +1,8 @@
 # Based on: https://github.com/andys/sidekiq_memlimit
 class SidekiqMemNotifier
   class << self
-    attr_accessor :threshold_mb, :sleep_time, :max_mb_percent
+    attr_accessor :threshold_mb, :sleep_time, :max_mb_percent,
+                  :last_time_emailed
     attr_reader :monitor_thread
 
     def start
@@ -38,13 +39,14 @@ class SidekiqMemNotifier
       memory_threshold_exceeded(mb)
     end
 
+    def rss_mb
+      NewRelic::Agent::Samplers::MemorySampler.new.sampler.get_sample
+    end
+
     def memory_threshold_exceeded(mb)
       msgs = threshold_exceeded_msgs(mb)
       msgs.each { |msg| Sidekiq.logger.error(msg) }
-      ActionMailer::Base.mail(from: 'support@mpdx.org',
-                              to: ENV['SIDEKIQ_WARN_EMAILS'],
-                              subject: 'Sidekiq memory threshold',
-                              body: msgs.join("\n")).deliver
+      notify_by_email(msgs)
     end
 
     def threshold_exceeded_msgs(mb)
@@ -55,8 +57,13 @@ class SidekiqMemNotifier
       ]
     end
 
-    def rss_mb
-      NewRelic::Agent::Samplers::MemorySampler.new.sampler.get_sample
+    def notify_by_email(msgs)
+      return if last_time_emailed.present? && last_time_emailed > 2.hours.ago
+      self.last_time_emailed = Time.current
+      ActionMailer::Base.mail(from: 'support@mpdx.org',
+                              to: ENV['SIDEKIQ_WARN_EMAILS'],
+                              subject: 'Sidekiq memory threshold',
+                              body: msgs.join("\n")).deliver
     end
   end
 end
