@@ -45,18 +45,11 @@ describe SidekiqMemNotifier do
 
   context '#memory_threshold_exceeded' do
     it 'logs messages and sends an notification email' do
-      ENV['SIDEKIQ_WARN_EMAILS'] = 'dev@mpdx.org, dev2@mpdx.org'
-
       expect(subject).to receive(:threshold_exceeded_msgs).with(951) { ['Oops', ':('] }
       expect(Sidekiq.logger).to receive(:error).with('Oops').ordered
       expect(Sidekiq.logger).to receive(:error).once.with(':(').ordered
 
-      mail = double
-      expect(ActionMailer::Base).to receive(:mail)
-        .with(from: 'support@mpdx.org', to: 'dev@mpdx.org, dev2@mpdx.org',
-              subject: 'Sidekiq memory threshold', body: "Oops\n:(")
-        .and_return(mail)
-      expect(mail).to receive(:deliver)
+      expect(subject).to receive(:notify_by_email).with(['Oops', ':('])
 
       subject.memory_threshold_exceeded(951)
     end
@@ -74,6 +67,37 @@ describe SidekiqMemNotifier do
         'All jobs: [{:work=>1}, {:work=>2}]'
       ]
       expect(subject.threshold_exceeded_msgs(951.5)).to eq expected_msgs
+    end
+  end
+
+  context '#notify_by_email' do
+    let(:mail) { double }
+    before do
+      subject.last_time_emailed = nil
+      ENV['SIDEKIQ_WARN_EMAILS'] = 'dev@mpdx.org, dev2@mpdx.org'
+      allow(ActionMailer::Base).to receive(:mail)
+        .with(from: 'support@mpdx.org', to: 'dev@mpdx.org, dev2@mpdx.org',
+              subject: 'Sidekiq memory threshold', body: "Oops\n:(")
+        .and_return(mail)
+    end
+
+    it 'sends a notification email the first time called' do
+      expect(mail).to receive(:deliver)
+      subject.notify_by_email(['Oops', ':('])
+    end
+
+    it 'does not send notifications when called again right away' do
+      expect(mail).to receive(:deliver).exactly(:once)
+      subject.notify_by_email(['Oops', ':('])
+      subject.notify_by_email(['Oops', ':('])
+    end
+
+    it 'will email again after 2 hours' do
+      expect(mail).to receive(:deliver).exactly(:twice)
+      subject.notify_by_email(['Oops', ':('])
+      travel_to 2.hours.since do
+        subject.notify_by_email(['Oops', ':('])
+      end
     end
   end
 end
