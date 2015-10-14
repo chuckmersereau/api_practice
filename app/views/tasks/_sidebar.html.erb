@@ -132,7 +132,9 @@
           <li>
             <label id="filter_likely" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Likely To Give']);"><%= _('Contact Likely To Give') %></label>
             <div class="filter_set_inner">
-              <%= select_tag '', options_for_select([[_('-- Any --'), ''], [_('Least Likely'),'Least Likely'], [_('Likely'),'Likely'], [_('Most Likely'),'Most Likely']]), multiple: true, size: 4, class: 'form-control', :'ng-model' => 'filter.contactLikely' %>
+              <%= select_tag '', options_for_select([[_('-- Any --'), ''], [_('Least Likely'),'Least Likely'],
+                                                     [_('Likely'),'Likely'], [_('Most Likely'),'Most Likely']]),
+                             multiple: true, size: 4, class: 'form-control', :'ng-model' => 'filter.contactLikely' %>
             </div>
           </li>
 
