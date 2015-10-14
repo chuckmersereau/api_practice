@@ -36,11 +36,10 @@
                 <span ng-show="filter.page === 'overdue'"><%= _('overdue') %></span>
                 <span ng-show="filter.page === 'upcoming'"><%= _('upcoming') %></span>
                 <%= _('or match a filter you have set.') %>
-                <%= _('Try') %> <a href="/tasks/new" data-remote="true"><%= _('creating a new task') %></a>,
-                                <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a>
-                <%= _(' or') %> <a href="#" ng-click="filter.page = 'all'"><%= _('showing all tasks') %></a>.
-                You don't have any tasks that are <span ng-show="filter.page === 'today'">set for today</span><span ng-show="filter.page === 'overdue'">overdue</span><span ng-show="filter.page === 'upcoming'">upcoming</span> or match a filter you have set.
-                <%= _('Try') %> <a href="/tasks/new" class="add_task" data-remote="true"><%= _('creating a new task') %></a>, <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a> or <a href="#" ng-click="filter.page = 'all'"><%= _('showing all tasks') %></a>.
+                <%= _('Try') %><a href="/tasks/new" class="add_task" data-remote="true">
+                <%= _('creating a new task') %></a>,
+                <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a><%= _(' or') %>
+                <a href="#" ng-click="filter.page = 'all'"><%= _('showing all tasks') %></a>.
               </span>
             </div>
           </div>
