@@ -13,13 +13,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.4\n"
-"POT-Creation-Date: 2015-10-12 14:50-0400\n"
 
 msgid " "
 msgstr ""
 
 msgid " For %{contact}"
 msgstr "Pour %{contact}"
+
+msgid " or"
+msgstr ""
 
 msgid " to email donation services."
 msgstr " pour contacter l'équipe des finances."
@@ -2029,6 +2031,10 @@ msgstr "Social :"
 msgid "Son"
 msgstr "Fils"
 
+#, fuzzy
+msgid "Sort"
+msgstr "Soutien"
+
 msgid "Source: "
 msgstr "Source :"
 
@@ -2440,6 +2446,9 @@ msgstr "Vous n'avez pas de tâches en attente pour ce contact."
 msgid "You don't have any tasks logged for this contact. "
 msgstr "Vous n'avez pas de tâches enregistrées pour ce contact."
 
+msgid "You don't have any tasks that are "
+msgstr ""
+
 msgid "You have %{active_contacts} active contacts."
 msgstr ""
 
@@ -2585,6 +2594,13 @@ msgstr "le"
 msgid "or by clicking 'Help' in the top menu bar"
 msgstr ""
 
+msgid "or match a filter you have set."
+msgstr ""
+
+#, fuzzy
+msgid "overdue"
+msgstr "En retard"
+
 msgid "person.to.share@cru.org"
 msgstr "personne.avec.qui.partager@agapefrance.org"
 
@@ -2596,6 +2612,9 @@ msgstr ""
 
 msgid "resetting your filters"
 msgstr "réinitialisation des filtres"
+
+msgid "set for today"
+msgstr ""
 
 msgid "showing all tasks"
 msgstr "affiche toutes les tâches"
@@ -2609,6 +2628,10 @@ msgstr "à"
 msgid "too long has passed so it is no longer appropriate to use the referrer's name"
 msgstr ""
 
+#, fuzzy
+msgid "upcoming"
+msgstr "Prochainement"
+
 msgid "with invalid addresses"
 msgstr "Avec une adresse e-mail valide"
 
@@ -2620,6 +2643,3 @@ msgstr ""
 
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
-
-#~ msgid " and "
-#~ msgstr " et "

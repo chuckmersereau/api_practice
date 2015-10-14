@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-12 14:50-0400\n"
-"PO-Revision-Date: 2015-10-12 14:50-0400\n"
+"POT-Creation-Date: 2015-10-14 11:59-0400\n"
+"PO-Revision-Date: 2015-10-14 11:59-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -22,6 +22,9 @@ msgid " "
 msgstr ""
 
 msgid " For %{contact}"
+msgstr ""
+
+msgid " or"
 msgstr ""
 
 msgid " to email donation services."
@@ -1990,6 +1993,9 @@ msgstr ""
 msgid "Son"
 msgstr ""
 
+msgid "Sort"
+msgstr ""
+
 msgid "Source: "
 msgstr ""
 
@@ -2401,6 +2407,9 @@ msgstr ""
 msgid "You don't have any tasks logged for this contact. "
 msgstr ""
 
+msgid "You don't have any tasks that are "
+msgstr ""
+
 msgid "You have %{active_contacts} active contacts."
 msgstr ""
 
@@ -2545,6 +2554,12 @@ msgstr ""
 msgid "or by clicking 'Help' in the top menu bar"
 msgstr ""
 
+msgid "or match a filter you have set."
+msgstr ""
+
+msgid "overdue"
+msgstr ""
+
 msgid "person.to.share@cru.org"
 msgstr ""
 
@@ -2557,6 +2572,9 @@ msgstr ""
 msgid "resetting your filters"
 msgstr ""
 
+msgid "set for today"
+msgstr ""
+
 msgid "showing all tasks"
 msgstr ""
 
@@ -2567,6 +2585,9 @@ msgid "to"
 msgstr ""
 
 msgid "too long has passed so it is no longer appropriate to use the referrer's name"
+msgstr ""
+
+msgid "upcoming"
 msgstr ""
 
 msgid "with invalid addresses"
