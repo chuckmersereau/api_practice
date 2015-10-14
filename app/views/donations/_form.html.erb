@@ -40,7 +40,7 @@
     <div class="form-group">
       <%= f.label :appeal_amount, _('Appeal Amount') %>
       <%= f.text_field :appeal_amount, class: 'form-control' %>
-      Leave empty to use full donation amount
+      <%= _('Leave empty to use full donation amount') %>
     </div>
 
     <% if current_account_list.multiple_designations %>
