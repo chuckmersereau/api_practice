@@ -5,7 +5,7 @@ class Donation < ActiveRecord::Base
   belongs_to :designation_account
   belongs_to :appeal
 
-  validates :amount, :donation_date, presence: true
+  validates :amount, :donation_date, presence: { message: _('can not be blank') }
 
   # attr_accessible :donor_account_id, :motivation, :payment_method, :tendered_currency, :donation_date, :amount, :tendered_amount, :currency, :channel, :payment_type
 

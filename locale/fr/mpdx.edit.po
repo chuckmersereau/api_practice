@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-09-30 15:06+0200\n"
+"PO-Revision-Date: 2015-10-14 11:32+0200\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.4\n"
-"POT-Creation-Date: 2015-10-12 14:50-0400\n"
+"POT-Creation-Date: 2015-10-14 12:01-0400\n"
 
 msgid " "
 msgstr ""
@@ -85,13 +85,13 @@ msgid "-- All Hidden --"
 msgstr "-- Tous les cachés --"
 
 msgid "-- Any --"
-msgstr "--Tous--"
+msgstr "-- Tous --"
 
 msgid "-- None --"
-msgstr "--Aucun--"
+msgstr "-- Aucun --"
 
 msgid "-- Someone --"
-msgstr "--Quelqu'un--"
+msgstr "-- Quelqu'un --"
 
 msgid "... Show More"
 msgstr "...Plus"
@@ -166,7 +166,7 @@ msgid "Account access invite"
 msgstr "Invitation à accéder à un compte"
 
 msgid "Account currently shared with"
-msgstr ""
+msgstr "Compte actuellement partagé avec"
 
 msgid "Accounts"
 msgstr "Comptes"
@@ -477,7 +477,7 @@ msgid "Cancel"
 msgstr "Annuler"
 
 msgid "Cancel Invite"
-msgstr ""
+msgstr "Annuler l'invitation"
 
 msgid "Care"
 msgstr "Rester en relation "
@@ -661,7 +661,7 @@ msgid "Continue"
 msgstr "Continuer"
 
 msgid "Contribution Report"
-msgstr "Rapport de contribution :"
+msgstr "Rapport de contribution"
 
 msgid "Contribution Report for %{start_date} through %{end_date}"
 msgstr "Rapport de contribution du %{start_date} au %{end_date}"
@@ -685,7 +685,7 @@ msgid "Create \"Appointment\" task"
 msgstr "Créer une tâche \"Rendez-vous\""
 
 msgid "Create \"Cultivate Relationship\" task"
-msgstr ""
+msgstr "Créer une tâche pour entretenir la relation"
 
 msgid "Create \"Setup Giving\" task"
 msgstr "Créer une tâche \"mettre en place le don\""
@@ -782,7 +782,7 @@ msgid "Disable Google Contacts integration"
 msgstr "Désactiver l' intégration des contacts Google"
 
 msgid "Displaying"
-msgstr "Montrer"
+msgstr "Affiche"
 
 msgid "Divorced"
 msgstr "Divorcé"
@@ -1164,7 +1164,7 @@ msgid "Initial goal"
 msgstr "Objectif initial"
 
 msgid "Insights"
-msgstr "Idées"
+msgstr "Suggestions"
 
 msgid "Integrations"
 msgstr "Intégrations"
@@ -1173,10 +1173,10 @@ msgid "Invalid Username/Password Combination. Please update your information."
 msgstr "La combinaison mot de passe/Utilisateur est invalide. Réessayer avec les bonnes informations s'il vous plaît"
 
 msgid "Invite canceled."
-msgstr ""
+msgstr "Invitation annulée."
 
 msgid "Invited by: "
-msgstr ""
+msgstr "Invité par :"
 
 msgid "It looks like you were adding a task. If you leave before submitting, your changes will be lost."
 msgstr "Il semble que vous êtes en train d'ajouter une tâche. Si vous partez avant de la soumettre, vos modifications seront perdues."
@@ -1231,6 +1231,9 @@ msgstr "Nom"
 
 msgid "Least Likely"
 msgstr "Peu probable"
+
+msgid "Leave empty to use full donation amount"
+msgstr ""
 
 msgid "Legal first name"
 msgstr "Prénom Juridique"
@@ -1461,7 +1464,7 @@ msgid "Monthly goal"
 msgstr "Objectif mensuel"
 
 msgid "Most Likely"
-msgstr "Plus probable"
+msgstr "Très probable"
 
 msgid "Mother"
 msgstr "Mère"
@@ -1589,7 +1592,7 @@ msgid "None"
 msgstr "Aucun"
 
 msgid "None Selected"
-msgstr "rien de choisi"
+msgstr "Rien de choisi"
 
 msgid "None of your contacts are associated with donor accounts. Please edit a contact and give them a Donor Account before trying to add a donation."
 msgstr "Aucun de vos contacts ne sont associés à des comptes de donateurs. S'il vous plaît, modifier vos contacts et donner leur un compte donateur avant d'essayer d'ajouter un don."
@@ -1607,7 +1610,7 @@ msgid "Note: You must be upgraded to the latest version of TntMPD to do this. Cl
 msgstr ""
 
 msgid "Note: this file should be in a TntMPD data sync (.tntmpd) text file from your organization, not your local TntMPD database file (.mpddb). To import your local Tnt database, click \"Import Contacts\" below next to the TntMPD logo."
-msgstr "Remarque: ce fichier doit être un fichier texte de TntMPD datasync (.tntmpd) de votre organisation, pas votre fichier de base de données TntMPD locale (.mpddb). Pour importer votre base de données locale Tnt, cliquez sur  \"Importer des contacts \" ci-dessous à côté du logo TntMPD."
+msgstr "Remarque : Ce fichier doit être un fichier texte de TntMPD Datasync (.tntmpd) de votre organisation, pas votre fichier de base de données TntMPD locale (.mpddb). Pour importer votre base de données locale TntMPD, cliquez sur \"Importer des contacts \" ci-dessus à côté du logo TntMPD."
 
 msgid "Notes"
 msgstr "Remarques"
@@ -1634,7 +1637,7 @@ msgid "Once you have a CSV import with valid and correct data <strong>click \"Ru
 msgstr "Une fois que vous avez une importation CSV avec des données valides et correctes <strong>clicquez sur  \"Lancer l'import\"</strong> à partir de la page d'aperçu."
 
 msgid "Once you've loaded up your tasks, you can use filters to quickly sort tasks that you're working on or have already completed."
-msgstr ""
+msgstr "Une fois que vous avez fait le plein de tâches, vous pouvez utiliser des filtres pour trier rapidement les tâches sur lesquelles vous travaillez ou celles que vous avez déjà accomplies."
 
 msgid "Only add data to matched contact records when the current field is blank."
 msgstr "Ajouter les données pour les enregistrements de contact adaptés seulement lorsque le champ actuel est vide."
@@ -1685,7 +1688,7 @@ msgid "Partners more than 60 days late"
 msgstr "Partenaires ayant plus de 60 jours de retard"
 
 msgid "Pending invite for: "
-msgstr ""
+msgstr "Invitation en attente pour : "
 
 msgid "People"
 msgstr "Personnes"
@@ -1957,7 +1960,7 @@ msgid "See less appeals"
 msgstr "Voir moins d'appels"
 
 msgid "Select all"
-msgstr "Tout selectionner"
+msgstr "Tout sélectionner"
 
 msgid "Select all duplicates"
 msgstr "Sélectionner tous les doublons"
@@ -1981,7 +1984,7 @@ msgid "Sent"
 msgstr "Envoyés"
 
 msgid "Sent by: "
-msgstr ""
+msgstr "Envoyé par : "
 
 msgid "Separated"
 msgstr "Separé"
@@ -2126,7 +2129,7 @@ msgid "Tasks"
 msgstr "Tâches"
 
 msgid "Tasks are how MPDX helps you to stay on top of your MPD goals. From follow up, to making contact with someone for the first time, MPDX tasks will be your tool for keeping it all together. As you add and complete tasks, you will begin to see your dashboard, reports, contact details and other areas all come to life with real time information about your MPD."
-msgstr ""
+msgstr "Grâce aux tâches, MPDX vous aide à ne pas vous laisser dépasser par vos objectifs de DEP. Que ce soit pour le suivi ou pour prendre contact avec quelqu'un pour la première fois, les tâches de MPDX seront votre outil pour rester organisé. En ajoutant et en terminant des tâches, vous commencerez à voir votre tableau de bord, vos rapports, les informations de vos contacts et d'autres zones prendre vie avec des informations en temps réel sur votre DEP."
 
 msgid "Tasks overdue or due today"
 msgstr "Tâches en retard ou à faire aujourd'hui"
@@ -2231,7 +2234,7 @@ msgid "There are no referrals by this contact, "
 msgstr "Il n'y a pas de références données par ce contact,"
 
 msgid "There's more!"
-msgstr "Il y a plus !"
+msgstr "Mieux encore !"
 
 msgid "These are not duplicates"
 msgstr "Ce ne sont pas des doublons"
@@ -2297,7 +2300,7 @@ msgid "Total Donations (%{count}):"
 msgstr "Total des dons (%{count}) :"
 
 msgid "Try"
-msgstr "Essayer"
+msgstr "Essayez"
 
 msgid "Try going back, or if you keep getting this message, %{link}."
 msgstr "Essayer de faire un retour arrière, ou si vous continuez à recevoir ce message, cliquez %{link}."
@@ -2318,7 +2321,7 @@ msgid "Uncle"
 msgstr "Oncle"
 
 msgid "Unfortunately none of them match your current search or filters."
-msgstr ""
+msgstr "Malheureusement aucun d'entre-eux ne correspond à votre recherche ou vos filtres en cours."
 
 msgid "Unknown"
 msgstr "Inconnu"
@@ -2348,7 +2351,7 @@ msgid "User account access removed."
 msgstr ""
 
 msgid "User already removed"
-msgstr ""
+msgstr "Utilisateur déjà supprimé"
 
 msgid "Visit Mobile Version"
 msgstr "Visiter la version Mobile"
@@ -2411,7 +2414,7 @@ msgid "Would you like MPDX to email Chalkline your newsletter list and open thei
 msgstr "Voulez vous que MPDX envoie un e-mail à Chalkline avec votre liste de lettre de nouvelle et ouvre le formulaire de commande dans un nouvel onglet ?"
 
 msgid "Yes"
-msgstr "oui"
+msgstr "Oui"
 
 msgid "You are currently editing settings for %{account}"
 msgstr "Vous êtes en train d'éditer les paramètres de %{account}"
@@ -2441,7 +2444,7 @@ msgid "You don't have any tasks logged for this contact. "
 msgstr "Vous n'avez pas de tâches enregistrées pour ce contact."
 
 msgid "You have %{active_contacts} active contacts."
-msgstr ""
+msgstr "Vous avez %{active_contacts} contacts actifs."
 
 msgid "You have been invited by %{inviter} to access the MPDX account \"%{account}\"."
 msgstr ""
@@ -2528,6 +2531,9 @@ msgstr "Demander de l'aide"
 msgid "building more relationship before asking"
 msgstr ""
 
+msgid "can not be blank"
+msgstr ""
+
 msgid "click here"
 msgstr "cliquez ici"
 
@@ -2541,7 +2547,7 @@ msgid "committed to ongoing financial support at a specific level"
 msgstr ""
 
 msgid "creating a new task"
-msgstr "Créer une nouvelle tâche"
+msgstr "de créer une nouvelle tâche"
 
 msgid "delete"
 msgstr "supprimer"
@@ -2577,7 +2583,7 @@ msgid "not contacted yet"
 msgstr "pas encore contacté"
 
 msgid "of"
-msgstr "de"
+msgstr "sur"
 
 msgid "on"
 msgstr "le"
@@ -2595,10 +2601,10 @@ msgid "prays for your ministry but does not give financially"
 msgstr ""
 
 msgid "resetting your filters"
-msgstr "réinitialisation des filtres"
+msgstr "de réinitialiser vos filtres"
 
 msgid "showing all tasks"
-msgstr "affiche toutes les tâches"
+msgstr "d'afficher toutes les tâches"
 
 msgid "since your last prayer letter"
 msgstr "depuis votre dernière lettre de nouvelles"
@@ -2620,6 +2626,3 @@ msgstr ""
 
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
-
-#~ msgid " and "
-#~ msgstr " et "

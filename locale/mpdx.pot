@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-12 14:50-0400\n"
-"PO-Revision-Date: 2015-10-12 14:50-0400\n"
+"POT-Creation-Date: 2015-10-14 12:01-0400\n"
+"PO-Revision-Date: 2015-10-14 12:01-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -1206,6 +1206,9 @@ msgid "Last name"
 msgstr ""
 
 msgid "Least Likely"
+msgstr ""
+
+msgid "Leave empty to use full donation amount"
 msgstr ""
 
 msgid "Legal first name"
@@ -2486,6 +2489,9 @@ msgid "ask for help"
 msgstr ""
 
 msgid "building more relationship before asking"
+msgstr ""
+
+msgid "can not be blank"
 msgstr ""
 
 msgid "click here"

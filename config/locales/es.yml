@@ -1,0 +1,9 @@
+es:
+  date:
+    # Don't forget the nil at the beginning; there's no such thing as a 0th month
+    month_names: [~, enero, febrero, marzo, abril, mayo, junio, julio,
+                  agosto, septiembre, octubre, noviembre, diciembre]
+    order:
+      - :day
+      - :month
+      - :year
