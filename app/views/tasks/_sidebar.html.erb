@@ -6,7 +6,7 @@
       <%= _('Reset Filters') %>
     </a>
 
-    <li><span class="sort_title menu_item">Sort</span></li>
+    <li><span class="sort_title menu_item"><%= _('Sort') %></span></li>
     <ul class="sort_options">
       <li ng-class="{'selected': filter.page === 'all'}" class="option">
         <a href="/tasks/#" class="inbox " ng-click="filter.page = 'all'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'All']);"><%= _('All') %></a>
@@ -132,7 +132,7 @@
           <li>
             <label id="filter_likely" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Filters', 'Likely To Give']);"><%= _('Contact Likely To Give') %></label>
             <div class="filter_set_inner">
-              <%= select_tag '', options_for_select([[_('-- Any --'), ''], ['Least Likely','Least Likely'], ['Likely','Likely'], ['Most Likely','Most Likely']]), multiple: true, size: 4, class: 'form-control', :'ng-model' => 'filter.contactLikely' %>
+              <%= select_tag '', options_for_select([[_('-- Any --'), ''], [_('Least Likely'),'Least Likely'], [_('Likely'),'Likely'], [_('Most Likely'),'Most Likely']]), multiple: true, size: 4, class: 'form-control', :'ng-model' => 'filter.contactLikely' %>
             </div>
           </li>
 
