@@ -63,13 +63,12 @@
 
     <p>
       <small>
-        <p align="left" position="bottom">+&nbsp;<cite><%= _('US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/') %></cite>
+        <p align="left" position="bottom">
+          <cite><%= _('+ US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/') %></cite>
         </p></small>
     </p>
 <% else %>
     <div class="mwrap">
-      <div class="nohide floating" style="background-color: #FDFFD4;">You have no monthly recurring gift
-        recommendations.
-      </div>
+      <div class="alert alert-warning" ><%= _('You have no monthly recurring gift recommendations.') %></div>
     </div>
 <% end %>

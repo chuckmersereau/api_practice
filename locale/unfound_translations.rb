@@ -36,3 +36,20 @@ _('Unresponsive')
 _('Never Ask')
 _('Research Abandoned')
 _('Expired Referral')
+
+# Headings
+_('Insights for ')
+_('Balance: %{balance}')
+
+#Info Messages
+_('You have no monthly recurring gift recommendations.')
+
+#Tool Tips
+_('May take a few days to update')
+
+#Titles
+_('New Donation')
+
+#Alerts
+_('You must select at least 2 contacts to merge.')
+

@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-14 12:01-0400\n"
-"PO-Revision-Date: 2015-10-14 12:01-0400\n"
+"POT-Creation-Date: 2015-10-15 16:42-0400\n"
+"PO-Revision-Date: 2015-10-15 16:42-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -22,6 +22,9 @@ msgid " "
 msgstr ""
 
 msgid " For %{contact}"
+msgstr ""
+
+msgid " or"
 msgstr ""
 
 msgid " to email donation services."
@@ -78,6 +81,9 @@ msgstr ""
 msgid "(You should only need to do this if you receive an email from MPDx.)"
 msgstr ""
 
+msgid "+ US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
+msgstr ""
+
 msgid "-- All Active --"
 msgstr ""
 
@@ -128,7 +134,7 @@ msgid "<span class=\"count-big\">%{contact_count}</span> partners <strong>%{days
 msgstr ""
 
 msgid ""
-"<strong>95.91543%</strong> of all help requests are answered on our %{link} in the \n"
+"<strong>95.91543%</strong> of all help requests are answered on our %{link} in the\n"
 "      form of a Video or FAQ. Get answers to your questions on our %{link} now."
 msgstr ""
 
@@ -411,11 +417,14 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
+msgid "Balance: %{balance}"
+msgstr ""
+
 msgid "Based on an analysis of a partner's giving history, MPDX can notify you of events that you will probably want to follow up on. The detection logic is based on a set of rules that are right most of the time, but you will still want to verify an event manually before contacting the partner."
 msgstr ""
 
 msgid ""
-"Before emailing us, please have a look at %{link} to see if your question is \n"
+"Before emailing us, please have a look at %{link} to see if your question is\n"
 "        already answered there."
 msgstr ""
 
@@ -994,6 +1003,9 @@ msgstr ""
 msgid "Gender:"
 msgstr ""
 
+msgid "Get Help!"
+msgstr ""
+
 msgid "Get started by choosing your login source:"
 msgstr ""
 
@@ -1140,6 +1152,9 @@ msgid "Initial goal"
 msgstr ""
 
 msgid "Insights"
+msgstr ""
+
+msgid "Insights for "
 msgstr ""
 
 msgid "Integrations"
@@ -1375,6 +1390,9 @@ msgstr ""
 msgid "Max Increase Amount"
 msgstr ""
 
+msgid "May take a few days to update"
+msgstr ""
+
 msgid "Merge"
 msgstr ""
 
@@ -1478,6 +1496,9 @@ msgid "New Calendar"
 msgstr ""
 
 msgid "New Contact"
+msgstr ""
+
+msgid "New Donation"
 msgstr ""
 
 msgid "New Tag"
@@ -1993,6 +2014,9 @@ msgstr ""
 msgid "Son"
 msgstr ""
 
+msgid "Sort"
+msgstr ""
+
 msgid "Source: "
 msgstr ""
 
@@ -2275,9 +2299,6 @@ msgstr ""
 msgid "Type:"
 msgstr ""
 
-msgid "US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
-msgstr ""
-
 msgid "Uncle"
 msgstr ""
 
@@ -2404,10 +2425,16 @@ msgstr ""
 msgid "You don't have any tasks logged for this contact. "
 msgstr ""
 
+msgid "You don't have any tasks that are "
+msgstr ""
+
 msgid "You have %{active_contacts} active contacts."
 msgstr ""
 
 msgid "You have been invited by %{inviter} to access the MPDX account \"%{account}\"."
+msgstr ""
+
+msgid "You have no monthly recurring gift recommendations."
 msgstr ""
 
 msgid "You have successfully added %{contacts_count:contacts}."
@@ -2426,6 +2453,9 @@ msgid "You just merged %{count} people"
 msgstr ""
 
 msgid "You must check at least one contact."
+msgstr ""
+
+msgid "You must select at least 2 contacts to merge."
 msgstr ""
 
 msgid "You need to be connected to an organization to use MPDX."
@@ -2551,6 +2581,12 @@ msgstr ""
 msgid "or by clicking 'Help' in the top menu bar"
 msgstr ""
 
+msgid "or match a filter you have set."
+msgstr ""
+
+msgid "overdue"
+msgstr ""
+
 msgid "person.to.share@cru.org"
 msgstr ""
 
@@ -2563,16 +2599,25 @@ msgstr ""
 msgid "resetting your filters"
 msgstr ""
 
+msgid "set for today"
+msgstr ""
+
 msgid "showing all tasks"
 msgstr ""
 
 msgid "since your last prayer letter"
 msgstr ""
 
+msgid "starred"
+msgstr ""
+
 msgid "to"
 msgstr ""
 
 msgid "too long has passed so it is no longer appropriate to use the referrer's name"
+msgstr ""
+
+msgid "upcoming"
 msgstr ""
 
 msgid "with invalid addresses"

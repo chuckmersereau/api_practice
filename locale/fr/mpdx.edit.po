@@ -20,6 +20,9 @@ msgstr ""
 msgid " For %{contact}"
 msgstr "Pour %{contact}"
 
+msgid " or"
+msgstr ""
+
 msgid " to email donation services."
 msgstr " pour contacter l'équipe des finances."
 
@@ -77,6 +80,10 @@ msgstr "(Cliquer ici pour fusionner les doublons)"
 msgid "(You should only need to do this if you receive an email from MPDx.)"
 msgstr "(Vous devriez seulement avoir besoin de faire cela si vous recevez un courriel de MPDx.)"
 
+#, fuzzy
+msgid "+ US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
+msgstr "US Census Bureau. (2012). Récupérée depuis http://factfinder2.census.gov/"
+
 msgid "-- All Active --"
 msgstr "-- Tous les actifs --"
 
@@ -133,8 +140,9 @@ msgstr ""
 msgid "<span class=\"count-big\">%{contact_count}</span> partners <strong>%{days}</strong> days late"
 msgstr "<span class=\"count-big\">%{contact_count}</span> partenaires avec <strong>%{days}</strong> jours de retard"
 
+#, fuzzy
 msgid ""
-"<strong>95.91543%</strong> of all help requests are answered on our %{link} in the \n"
+"<strong>95.91543%</strong> of all help requests are answered on our %{link} in the\n"
 "      form of a Video or FAQ. Get answers to your questions on our %{link} now."
 msgstr ""
 "<strong>95.91543%</strong> de toutes les demandes d'aide ont une réponse sur notre %{link} sous \n"
@@ -421,11 +429,15 @@ msgstr "Revenu moyen des ménages par zone"
 msgid "Back"
 msgstr "Retour"
 
+msgid "Balance: %{balance}"
+msgstr ""
+
 msgid "Based on an analysis of a partner's giving history, MPDX can notify you of events that you will probably want to follow up on. The detection logic is based on a set of rules that are right most of the time, but you will still want to verify an event manually before contacting the partner."
 msgstr "A partir d'une analyse de l'historique des dons d'un partenaire, MPDX peut vous signaler des événements que vous voudrez probablement investiguer. La logique de détection est basée sur un ensemble de règles qui sont justes la plupart du temps, mais il est tout de même conseillé de vérifier l'événement manuellement avant de contacter le partenaire."
 
+#, fuzzy
 msgid ""
-"Before emailing us, please have a look at %{link} to see if your question is \n"
+"Before emailing us, please have a look at %{link} to see if your question is\n"
 "        already answered there."
 msgstr "Avant de nous envoyer un email, veuillez vérifier sur %{link} (en anglais) ou sur <A HREF=\"https://www.gcx.org/MPDXaide\">notre site d'aide</A> (en français) si la réponse à votre question ne s'y trouve pas déja."
 
@@ -1013,6 +1025,10 @@ msgstr "Sexe"
 msgid "Gender:"
 msgstr "Sexe :"
 
+#, fuzzy
+msgid "Get Help!"
+msgstr "Besoin d'aide ?"
+
 msgid "Get started by choosing your login source:"
 msgstr "Commencez par choisir votre source de connexion:"
 
@@ -1163,6 +1179,10 @@ msgid "Initial goal"
 msgstr "Objectif initial"
 
 msgid "Insights"
+msgstr "Suggestions"
+
+#, fuzzy
+msgid "Insights for "
 msgstr "Suggestions"
 
 msgid "Integrations"
@@ -1403,6 +1423,9 @@ msgstr "Marié"
 msgid "Max Increase Amount"
 msgstr "Montant maximal d'augmentation "
 
+msgid "May take a few days to update"
+msgstr ""
+
 msgid "Merge"
 msgstr "Fusionner"
 
@@ -1510,6 +1533,10 @@ msgstr "Nouveau calendrier"
 
 msgid "New Contact"
 msgstr "Nouveau contact"
+
+#, fuzzy
+msgid "New Donation"
+msgstr "Modifier les dons"
 
 msgid "New Tag"
 msgstr "Nouveau libellé"
@@ -2031,6 +2058,10 @@ msgstr "Social :"
 msgid "Son"
 msgstr "Fils"
 
+#, fuzzy
+msgid "Sort"
+msgstr "Soutien"
+
 msgid "Source: "
 msgstr "Source :"
 
@@ -2313,9 +2344,6 @@ msgstr "tapez pour rechercher :"
 msgid "Type:"
 msgstr "Type : "
 
-msgid "US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
-msgstr "US Census Bureau. (2012). Récupérée depuis http://factfinder2.census.gov/"
-
 msgid "Uncle"
 msgstr "Oncle"
 
@@ -2442,10 +2470,16 @@ msgstr "Vous n'avez pas de tâches en attente pour ce contact."
 msgid "You don't have any tasks logged for this contact. "
 msgstr "Vous n'avez pas de tâches enregistrées pour ce contact."
 
+msgid "You don't have any tasks that are "
+msgstr ""
+
 msgid "You have %{active_contacts} active contacts."
 msgstr "Vous avez %{active_contacts} contacts actifs."
 
 msgid "You have been invited by %{inviter} to access the MPDX account \"%{account}\"."
+msgstr ""
+
+msgid "You have no monthly recurring gift recommendations."
 msgstr ""
 
 #, fuzzy
@@ -2465,6 +2499,9 @@ msgid "You just merged %{count} people"
 msgstr "Vous venez de fusionner %{count} personnes"
 
 msgid "You must check at least one contact."
+msgstr ""
+
+msgid "You must select at least 2 contacts to merge."
 msgstr ""
 
 msgid "You need to be connected to an organization to use MPDX."
@@ -2590,6 +2627,13 @@ msgstr "le"
 msgid "or by clicking 'Help' in the top menu bar"
 msgstr ""
 
+msgid "or match a filter you have set."
+msgstr ""
+
+#, fuzzy
+msgid "overdue"
+msgstr "En retard"
+
 msgid "person.to.share@cru.org"
 msgstr "personne.avec.qui.partager@agapefrance.org"
 
@@ -2602,17 +2646,28 @@ msgstr ""
 msgid "resetting your filters"
 msgstr "de réinitialiser vos filtres"
 
+msgid "set for today"
+msgstr ""
+
 msgid "showing all tasks"
 msgstr "d'afficher toutes les tâches"
 
 msgid "since your last prayer letter"
 msgstr "depuis votre dernière lettre de nouvelles"
 
+#, fuzzy
+msgid "starred"
+msgstr "Favoris"
+
 msgid "to"
 msgstr "à"
 
 msgid "too long has passed so it is no longer appropriate to use the referrer's name"
 msgstr ""
+
+#, fuzzy
+msgid "upcoming"
+msgstr "Prochainement"
 
 msgid "with invalid addresses"
 msgstr "Avec une adresse e-mail valide"
@@ -2626,14 +2681,22 @@ msgstr ""
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Sort"
-#~ msgstr "Soutien"
-
-#, fuzzy
-#~ msgid "overdue"
-#~ msgstr "En retard"
-
-#, fuzzy
-#~ msgid "upcoming"
-#~ msgstr "Prochainement"
+#~ msgid ""
+#~ "<strong>95.91543%</strong> of all help requests are answered on our %{link} in"
+#~ " the \n"
+#~ "      form of a Video or FAQ. Get answers to your questions on our %{link} now"
+#~ "."
+#~ msgstr ""
+#~ "<strong>95.91543%</strong> de toutes les demandes d'aide ont une réponse sur n"
+#~ "otre %{link} sous \n"
+#~ "      forme d'une vidéo ou d'une FAQ. Obtenez des réponses à vos questions sur"
+#~ " notre %{link} dès maintenant."
+#~ msgid ""
+#~ "Before emailing us, please have a look at %{link} to see if your question is \n"
+#~ "        already answered there."
+#~ msgstr ""
+#~ "Avant de nous envoyer un email, veuillez vérifier sur %{link} (en anglais) ou "
+#~ "sur <A HREF=\"https://www.gcx.org/MPDXaide\">notre site d'aide</A> (en français)"
+#~ " si la réponse à votre question ne s'y trouve pas déja."
+#~ msgid "US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
+#~ msgstr "US Census Bureau. (2012). Récupérée depuis http://factfinder2.census.gov/"
