@@ -239,7 +239,8 @@
                 <%= hidden_field_tag :selected_ids %>
 
                 <%= link_to(_('Export'), params.merge(format: 'csv'), class: "btn btn-default") %>
-                <span class="btn btn-default" data-toggle="tooltip" data-placement="top" title="Select All"><input type="checkbox" class="checkall" /></span>
+                <span class="btn btn-default" data-toggle="tooltip" data-placement="top" title="<%= _('Select all') %>">
+                  <input type="checkbox" class="checkall" /></span>
 
               </div>
             </div>
@@ -283,7 +284,7 @@
                 <p>
                   <% if current_account_list.contacts.any? %>
                     <strong><%= _('You have %{active_contacts} active contacts.').localize % { active_contacts: current_account_list.contacts.active.count } %></strong>
-                    (<%= _('%{total_contacts} total contacts.').localize % {total_contacts: current_account_list.contacts.count} %>) 
+                    (<%= _('%{total_contacts} total contacts.').localize % {total_contacts: current_account_list.contacts.count} %>)
                     <%= _('Unfortunately none of them match your current search or filters.') %>
                   <% else %>
                     <%= _("Looks like you haven't added any contacts yet. You can add one or import some from another service.") %>
@@ -310,4 +311,4 @@
   <%= render 'task_modal' %>
   <%= render 'edit_modal' %>
   <%= render 'merge_modal' %>
-<%= render 'contacts_map_modal' %>
+  <%= render 'contacts_map_modal' %>

@@ -2655,3 +2655,7 @@ msgstr ""
 
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
+
+#, fuzzy
+#~ msgid "overdue"
+#~ msgstr "Promedio"

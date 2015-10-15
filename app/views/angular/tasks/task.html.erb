@@ -21,7 +21,9 @@
         <a class="comment_status hover-show" href="" ng-click="visibleComments=!visibleComments; visibleContactInfo=false"><span id="comment_count_2">{{task.comments.length}}</span></a>
 
         <div class="actions hover-show">
-            <a class="ico ico_trash" data-confirm="Are you sure you want to delete this task instead of marking it as completed?" data-method="delete" data-remote="true" ng-href="/tasks/{{task.id}}" rel="nofollow">Delete</a>
+            <a class="ico ico_trash" data-confirm="<%= _('Are you sure you want to delete this task instead of ' +
+               'marking it as completed?') %>"
+               data-method="delete" data-remote="true" ng-href="/tasks/{{task.id}}" rel="nofollow">Delete</a>
         </div>
     </div>
 

@@ -27,12 +27,19 @@
                 <p class="spacer-top"><a href="/tasks/new" class="btn btn-lg btn-primary add_task" data-remote="true"><%= _('Create Your First Task') %></a></p>
                 <h1><%= _("It's time to add your first task!") %></h1>
                 <p><%= _("Tasks are how MPDX helps you to stay on top of your MPD goals. From follow up, to making contact with someone for the first time, MPDX tasks will be your tool for keeping it all together. As you add and complete tasks, you will begin to see your dashboard, reports, contact details and other areas all come to life with real time information about your MPD.") %></p>
-                <h2><%= _("There's more!") %></h3>
+                <h2><%= _("There's more!") %></h2>
                 <p><%= _("Once you've loaded up your tasks, you can use filters to quickly sort tasks that you're working on or have already completed.") %></p>
               </span>
               <span ng-show="filter.page !== 'all'">
-                You don't have any tasks that are <span ng-show="filter.page === 'today'">set for today</span><span ng-show="filter.page === 'overdue'">overdue</span><span ng-show="filter.page === 'upcoming'">upcoming</span> or match a filter you have set.
-                <%= _('Try') %> <a href="/tasks/new" class="add_task" data-remote="true"><%= _('creating a new task') %></a>, <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a> or <a href="#" ng-click="filter.page = 'all'"><%= _('showing all tasks') %></a>.
+                <%= _("You don't have any tasks that are ") %>
+                <span ng-show="filter.page === 'today'"><%= _('set for today') %></span>
+                <span ng-show="filter.page === 'overdue'"><%= _('overdue') %></span>
+                <span ng-show="filter.page === 'upcoming'"><%= _('upcoming') %></span>
+                <%= _('or match a filter you have set.') %>
+                <%= _('Try') %><a href="/tasks/new" class="add_task" data-remote="true">
+                <%= _('creating a new task') %></a>,
+                <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a><%= _(' or') %>
+                <a href="#" ng-click="filter.page = 'all'"><%= _('showing all tasks') %></a>.
               </span>
             </div>
           </div>
