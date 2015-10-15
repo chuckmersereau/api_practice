@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe GoogleCalendarIntegrator do
   let(:user) { create(:user) }
-  let(:google_account) { create :google_account, person: user}
+  let(:google_account) { create :google_account, person: user }
   let(:google_integration) { build(:google_integration, google_account: google_account, calendar_integrations: ['Appointment']) }
   let(:integrator) { GoogleCalendarIntegrator.new(google_integration) }
   let(:task) { create(:task, account_list: google_integration.account_list, activity_type: 'Appointment') }
@@ -153,11 +153,11 @@ describe GoogleCalendarIntegrator do
 
     it 'respects the user time zone on an all day event' do
       task.activity_type = 'Thank'
-      task.start_at = "Thu, 15 Oct 2015 00:55:00 UTC +00:00"
+      task.start_at = 'Thu, 15 Oct 2015 00:55:00 UTC +00:00'
 
-      user.preferences["time_zone"] = "Central Time (US & Canada)"
+      user.preferences['time_zone'] = 'Central Time (US & Canada)'
 
-      expect(integrator.event_attributes(task)[:start][:date]).to eql("2015-10-14")
+      expect(integrator.event_attributes(task)[:start][:date]).to eql('2015-10-14')
     end
   end
 end
