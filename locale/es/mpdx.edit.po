@@ -22,9 +22,6 @@ msgstr ""
 msgid " For %{contact}"
 msgstr ""
 
-msgid " or"
-msgstr ""
-
 msgid " to email donation services."
 msgstr ""
 
@@ -2062,9 +2059,6 @@ msgstr ""
 msgid "Son"
 msgstr ""
 
-msgid "Sort"
-msgstr ""
-
 msgid "Source: "
 msgstr ""
 
@@ -2479,9 +2473,6 @@ msgstr ""
 msgid "You don't have any tasks logged for this contact. "
 msgstr ""
 
-msgid "You don't have any tasks that are "
-msgstr ""
-
 msgid "You have %{active_contacts} active contacts."
 msgstr ""
 
@@ -2629,13 +2620,6 @@ msgstr ""
 msgid "or by clicking 'Help' in the top menu bar"
 msgstr ""
 
-msgid "or match a filter you have set."
-msgstr ""
-
-#, fuzzy
-msgid "overdue"
-msgstr "Promedio"
-
 msgid "person.to.share@cru.org"
 msgstr ""
 
@@ -2646,9 +2630,6 @@ msgid "prays for your ministry but does not give financially"
 msgstr ""
 
 msgid "resetting your filters"
-msgstr ""
-
-msgid "set for today"
 msgstr ""
 
 msgid "showing all tasks"
@@ -2663,9 +2644,6 @@ msgstr ""
 msgid "too long has passed so it is no longer appropriate to use the referrer's name"
 msgstr ""
 
-msgid "upcoming"
-msgstr ""
-
 msgid "with invalid addresses"
 msgstr ""
 
@@ -2677,3 +2655,7 @@ msgstr ""
 
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
+
+#, fuzzy
+#~ msgid "overdue"
+#~ msgstr "Promedio"

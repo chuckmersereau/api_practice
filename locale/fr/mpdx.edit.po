@@ -13,7 +13,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.4\n"
-"POT-Creation-Date: 2015-10-14 12:01-0400\n"
 
 msgid " "
 msgstr ""
@@ -2626,3 +2625,15 @@ msgstr ""
 
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
+
+#, fuzzy
+#~ msgid "Sort"
+#~ msgstr "Soutien"
+
+#, fuzzy
+#~ msgid "overdue"
+#~ msgstr "En retard"
+
+#, fuzzy
+#~ msgid "upcoming"
+#~ msgstr "Prochainement"
