@@ -1330,6 +1330,9 @@ msgstr ""
 msgid "Least Likely"
 msgstr ""
 
+msgid "Leave empty to use full donation amount"
+msgstr ""
+
 msgid "Legal first name"
 msgstr ""
 
@@ -2759,6 +2762,9 @@ msgid "ask for help"
 msgstr ""
 
 msgid "building more relationship before asking"
+msgstr ""
+
+msgid "can not be blank"
 msgstr ""
 
 msgid "click here"

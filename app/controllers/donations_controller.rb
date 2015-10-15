@@ -43,6 +43,7 @@ class DonationsController < ApplicationController
 
     return if @donation.save
     find_donor_accounts
+    find_appeals
     render action: :new
   end
 
