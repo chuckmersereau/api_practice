@@ -155,7 +155,8 @@ describe GoogleCalendarIntegrator do
       task.activity_type = 'Thank'
       task.start_at = 'Thu, 15 Oct 2015 00:55:00 UTC +00:00'
 
-      user.preferences['time_zone'] = 'Central Time (US & Canada)'
+      user.time_zone = 'Central Time (US & Canada)'
+      user.save
 
       expect(integrator.event_attributes(task)[:start][:date]).to eql('2015-10-14')
     end
