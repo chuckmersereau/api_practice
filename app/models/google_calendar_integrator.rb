@@ -90,7 +90,8 @@ class GoogleCalendarIntegrator
       attributes.merge!(start: { dateTime: task.start_at.to_datetime.rfc3339, date: nil },
                         end: { dateTime: end_at.to_datetime.rfc3339, date: nil })
     else
-      task_date = task.start_at.to_datetime.in_time_zone(@google_account.person.preferences['time_zone']).to_date.to_s(:db)
+      user = User.find(@google_account.person.id)
+      task_date = task.start_at.to_datetime.in_time_zone(user.time_zone).to_date.to_s(:db)
       attributes.merge!(start: { date: task_date, dateTime: nil },
                         end: { date: task_date, dateTime: nil })
     end
