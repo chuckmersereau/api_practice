@@ -83,9 +83,9 @@
             </label>
             <div class="filter_set_inner">
               <% location_filters = [
-                ['City', 'city', :cities],
-                ['State', 'state', :states],
-                ['Country', 'country', :countries],
+                [_('City'), 'city', :cities],
+                [_('State'), 'state', :states],
+                [_('Country'), 'country', :countries],
               ] %>
               <% location_filters.each do |location| %>
                 <% options = [[_('-- Any --'), '']] + current_account_list.try(location[2]).select(&:present?) %>

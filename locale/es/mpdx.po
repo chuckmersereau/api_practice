@@ -22,6 +22,9 @@ msgstr ""
 msgid " For %{contact}"
 msgstr ""
 
+msgid " or"
+msgstr ""
+
 msgid " to email donation services."
 msgstr ""
 
@@ -81,6 +84,9 @@ msgid "(Click here to merge duplicates)"
 msgstr ""
 
 msgid "(You should only need to do this if you receive an email from MPDx.)"
+msgstr ""
+
+msgid "+ US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
 msgstr ""
 
 msgid "-- All Active --"
@@ -153,7 +159,7 @@ msgstr ""
 
 msgid ""
 "<strong>95.91543%</strong> of all help requests are answered on our %{link} in"
-" the \n"
+" the\n"
 "      form of a Video or FAQ. Get answers to your questions on our %{link} now"
 "."
 msgstr ""
@@ -478,6 +484,9 @@ msgstr ""
 msgid "Back"
 msgstr "Volver"
 
+msgid "Balance: %{balance}"
+msgstr ""
+
 msgid ""
 "Based on an analysis of a partner's giving history, MPDX can notify you of eve"
 "nts that you will probably want to follow up on. The detection logic is based "
@@ -486,7 +495,7 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Before emailing us, please have a look at %{link} to see if your question is \n"
+"Before emailing us, please have a look at %{link} to see if your question is\n"
 "        already answered there."
 msgstr ""
 
@@ -1096,6 +1105,9 @@ msgstr ""
 msgid "Gender:"
 msgstr ""
 
+msgid "Get Help!"
+msgstr ""
+
 msgid "Get started by choosing your login source:"
 msgstr ""
 
@@ -1253,6 +1265,9 @@ msgid "Initial goal"
 msgstr ""
 
 msgid "Insights"
+msgstr ""
+
+msgid "Insights for "
 msgstr ""
 
 msgid "Integrations"
@@ -1506,6 +1521,9 @@ msgstr ""
 msgid "Max Increase Amount"
 msgstr ""
 
+msgid "May take a few days to update"
+msgstr ""
+
 msgid "Merge"
 msgstr ""
 
@@ -1615,6 +1633,10 @@ msgstr ""
 #, fuzzy
 msgid "New Contact"
 msgstr "Añadir este contacto"
+
+#, fuzzy
+msgid "New Donation"
+msgstr "Añadir una cuenta"
 
 msgid "New Tag"
 msgstr ""
@@ -2170,6 +2192,9 @@ msgstr ""
 msgid "Son"
 msgstr ""
 
+msgid "Sort"
+msgstr ""
+
 msgid "Source: "
 msgstr ""
 
@@ -2507,9 +2532,6 @@ msgstr ""
 msgid "Type:"
 msgstr ""
 
-msgid "US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
-msgstr ""
-
 msgid "Uncle"
 msgstr ""
 
@@ -2657,10 +2679,16 @@ msgstr ""
 msgid "You don't have any tasks logged for this contact. "
 msgstr ""
 
+msgid "You don't have any tasks that are "
+msgstr ""
+
 msgid "You have %{active_contacts} active contacts."
 msgstr ""
 
 msgid "You have been invited by %{inviter} to access the MPDX account \"%{account}\"."
+msgstr ""
+
+msgid "You have no monthly recurring gift recommendations."
 msgstr ""
 
 msgid "You have successfully added %{contacts_count:contacts}."
@@ -2681,6 +2709,9 @@ msgid "You just merged %{count} people"
 msgstr ""
 
 msgid "You must check at least one contact."
+msgstr ""
+
+msgid "You must select at least 2 contacts to merge."
 msgstr ""
 
 msgid "You need to be connected to an organization to use MPDX."
@@ -2815,6 +2846,13 @@ msgstr ""
 msgid "or by clicking 'Help' in the top menu bar"
 msgstr ""
 
+msgid "or match a filter you have set."
+msgstr ""
+
+#, fuzzy
+msgid "overdue"
+msgstr "Promedio"
+
 msgid "person.to.share@cru.org"
 msgstr ""
 
@@ -2827,16 +2865,25 @@ msgstr ""
 msgid "resetting your filters"
 msgstr ""
 
+msgid "set for today"
+msgstr ""
+
 msgid "showing all tasks"
 msgstr ""
 
 msgid "since your last prayer letter"
 msgstr ""
 
+msgid "starred"
+msgstr ""
+
 msgid "to"
 msgstr ""
 
 msgid "too long has passed so it is no longer appropriate to use the referrer's name"
+msgstr ""
+
+msgid "upcoming"
 msgstr ""
 
 msgid "with invalid addresses"
