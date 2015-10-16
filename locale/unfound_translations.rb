@@ -41,15 +41,14 @@ _('Expired Referral')
 _('Insights for ')
 _('Balance: %{balance}')
 
-#Info Messages
+# Info Messages
 _('You have no monthly recurring gift recommendations.')
 
-#Tool Tips
+# Tool Tips
 _('May take a few days to update')
 
-#Titles
+# Titles
 _('New Donation')
 
-#Alerts
+# Alerts
 _('You must select at least 2 contacts to merge.')
-
