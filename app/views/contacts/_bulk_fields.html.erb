@@ -30,7 +30,7 @@
       <% if @contact %>
         <%= f.select :send_newsletter, f.object.assignable_send_newsletters.collect { |s| [_(s), s] }, {include_blank: true}, {class: 'form-control'} %>
       <% else %>
-        <%= f.select :send_newsletter, [[_('None'), 'none']] + f.object.assignable_send_newsletters.collect { |s| [_(s), s] }, include_blank: true %>
+        <%= f.select :send_newsletter, [[_('None'), '']] + f.object.assignable_send_newsletters.collect { |s| [_(s), s] }, include_blank: true %>
       <% end %>
     </div>
   </div>
