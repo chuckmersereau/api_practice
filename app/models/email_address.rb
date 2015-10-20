@@ -8,7 +8,7 @@ class EmailAddress < ActiveRecord::Base
 
   belongs_to :person, touch: true
   validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
-  before_save :strip_email
+  before_save :strip_email_attribute
 
   def to_s
     email
@@ -20,12 +20,14 @@ class EmailAddress < ActiveRecord::Base
       person.email_addresses.reload
     end
 
+    attributes['email'] = strip_email(attributes['email'].to_s)
+
     email = Retryable.retryable on: ActiveRecord::RecordNotUnique,
                                 then: then_cb do
       if attributes['id']
         existing_email = person.email_addresses.find(attributes['id'])
         # make sure we're not updating this record to another email that already exists
-        if email = person.email_addresses.find { |e| e.email == attributes['email'].to_s.strip && e.id != attributes['id'].to_i }
+        if email = person.email_addresses.find { |e| e.email == attributes['email'] && e.id != attributes['id'].to_i }
           email.attributes = attributes
           existing_email.destroy
           email
@@ -34,7 +36,7 @@ class EmailAddress < ActiveRecord::Base
           existing_email
         end
       else
-        if email = person.email_addresses.find { |e| e.email == attributes['email'].to_s.strip }
+        if email = person.email_addresses.find { |e| e.email == attributes['email'] }
           email.attributes = attributes
         else
           attributes['primary'] ||= !person.email_addresses.present?
@@ -64,12 +66,16 @@ class EmailAddress < ActiveRecord::Base
     emails_str.scan(/([^<>,;\s]+@[^<>,;\s]+)/).map(&:first)
   end
 
-  private
-
-  def strip_email
+  def self.strip_email(email)
     # Some email addresses seem to get zero-width characters like the
     # zero-width-space (\u200B) or left-to-right mark (\u200E)
-    self.email = email.to_s.gsub(/[\u200B-\u200F]/, '').strip
+    email.to_s.gsub(/[\u200B-\u200F]/, '').strip
+  end
+
+  private
+
+  def strip_email_attribute
+    self.email = self.class.strip_email(email)
   end
 
   def contact
