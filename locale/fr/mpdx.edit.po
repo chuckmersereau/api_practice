@@ -140,13 +140,8 @@ msgstr ""
 msgid "<span class=\"count-big\">%{contact_count}</span> partners <strong>%{days}</strong> days late"
 msgstr "<span class=\"count-big\">%{contact_count}</span> partenaires avec <strong>%{days}</strong> jours de retard"
 
-#, fuzzy
-msgid ""
-"<strong>95.91543%</strong> of all help requests are answered on our %{link} in the\n"
-"      form of a Video or FAQ. Get answers to your questions on our %{link} now."
+msgid "<strong>95.91543%</strong> of all help requests are answered on our %{link} in theform of a Video or FAQ. Get answers to your questions on our %{link} now."
 msgstr ""
-"<strong>95.91543%</strong> de toutes les demandes d'aide ont une réponse sur notre %{link} sous \n"
-"      forme d'une vidéo ou d'une FAQ. Obtenez des réponses à vos questions sur notre %{link} dès maintenant."
 
 msgid "About you"
 msgstr "A propos de vous"
@@ -349,7 +344,7 @@ msgid "Appeal"
 msgstr "Appel"
 
 msgid "Appeal Amount"
-msgstr "Montant de l'appel"
+msgstr "Montant en réponse à l'appel"
 
 msgid "Appeals"
 msgstr "Appels dons spéciaux"
@@ -436,9 +431,7 @@ msgid "Based on an analysis of a partner's giving history, MPDX can notify you o
 msgstr "A partir d'une analyse de l'historique des dons d'un partenaire, MPDX peut vous signaler des événements que vous voudrez probablement investiguer. La logique de détection est basée sur un ensemble de règles qui sont justes la plupart du temps, mais il est tout de même conseillé de vérifier l'événement manuellement avant de contacter le partenaire."
 
 #, fuzzy
-msgid ""
-"Before emailing us, please have a look at %{link} to see if your question is\n"
-"        already answered there."
+msgid "Before emailing us, please have a look at %{link} to see if your question isalready answered there."
 msgstr "Avant de nous envoyer un email, veuillez vérifier sur %{link} (en anglais) ou sur <A HREF=\"https://www.gcx.org/MPDXaide\">notre site d'aide</A> (en français) si la réponse à votre question ne s'y trouve pas déja."
 
 msgid "Bi-Monthly"
@@ -1252,7 +1245,7 @@ msgid "Least Likely"
 msgstr "Peu probable"
 
 msgid "Leave empty to use full donation amount"
-msgstr ""
+msgstr "Laisser vide pour affecter le montant total du don"
 
 msgid "Legal first name"
 msgstr "Prénom Juridique"
@@ -1323,6 +1316,10 @@ msgstr "Il semble que vous n'avez pas encore ajouté de contact. Vous pouvez en 
 
 msgid "MPD appointment is set"
 msgstr "Un rendez-vous de DEP est planifié"
+
+#, fuzzy
+msgid "MPDX Help Site"
+msgstr "Ouvrir maintenant le site d'aide de MPDX en anglais"
 
 msgid "MPDX Support Team"
 msgstr "Equipe de soutien MPDX"
@@ -2279,7 +2276,7 @@ msgid "This contact will be set to 'Never Ask'. Is that what you want to do?"
 msgstr "Ce contact sera réglé sur \"Ne plus demander\". C'est ce que vous voulez faire ?"
 
 msgid "This invitation is no longer valid."
-msgstr ""
+msgstr "Cette invitation n'est plus valide."
 
 msgid "This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx."
 msgstr "Cela empêchera que l'adresse email primaire de cette personne soit synchronisé avec MailChimp et qu'un contact soit exporté de MPDx."
@@ -2568,7 +2565,7 @@ msgid "building more relationship before asking"
 msgstr ""
 
 msgid "can not be blank"
-msgstr ""
+msgstr "ne peut pas être vide"
 
 msgid "click here"
 msgstr "cliquez ici"
@@ -2603,6 +2600,10 @@ msgstr ""
 msgid "has not answered or replied to repeated contact attempts"
 msgstr ""
 
+#, fuzzy
+msgid "history"
+msgstr "Historique"
+
 msgid "http://"
 msgstr "http://"
 
@@ -2625,10 +2626,14 @@ msgid "on"
 msgstr "le"
 
 msgid "or by clicking 'Help' in the top menu bar"
-msgstr ""
+msgstr "ou en cliquant 'Aide' dans la barre de menu"
 
 msgid "or match a filter you have set."
 msgstr ""
+
+#, fuzzy
+msgid "our MPDX Help Site"
+msgstr "Ouvrir maintenant le site d'aide de MPDX en anglais"
 
 #, fuzzy
 msgid "overdue"
@@ -2681,9 +2686,13 @@ msgstr ""
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
 
+#, fuzzy
 #~ msgid ""
 #~ "<strong>95.91543%</strong> of all help requests are answered on our %{link} in"
 #~ " the \n"
+#~ "      form of a Video or FAQ. Get answers to your questions on our %{link} now"
+#~ ".<strong>95.91543%</strong> of all help requests are answered on our %{link} i"
+#~ "n the\n"
 #~ "      form of a Video or FAQ. Get answers to your questions on our %{link} now"
 #~ "."
 #~ msgstr ""
@@ -2691,12 +2700,12 @@ msgstr ""
 #~ "otre %{link} sous \n"
 #~ "      forme d'une vidéo ou d'une FAQ. Obtenez des réponses à vos questions sur"
 #~ " notre %{link} dès maintenant."
+
+#, fuzzy
 #~ msgid ""
-#~ "Before emailing us, please have a look at %{link} to see if your question is \n"
+#~ "Before emailing us, please have a look at %{link} to see if your question is\n"
 #~ "        already answered there."
 #~ msgstr ""
 #~ "Avant de nous envoyer un email, veuillez vérifier sur %{link} (en anglais) ou "
 #~ "sur <A HREF=\"https://www.gcx.org/MPDXaide\">notre site d'aide</A> (en français)"
 #~ " si la réponse à votre question ne s'y trouve pas déja."
-#~ msgid "US Census Bureau. (2012). Retrieved from http://factfinder2.census.gov/"
-#~ msgstr "US Census Bureau. (2012). Récupérée depuis http://factfinder2.census.gov/"
