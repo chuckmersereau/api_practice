@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-10-21 11:55+0200\n"
+"PO-Revision-Date: 2015-10-21 12:36+0200\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -190,9 +190,10 @@ msgid ""
 "<strong>95.91543%</strong> of all help requests are answered on our %{link} in theform "
 "of a Video or FAQ. Get answers to your questions on our %{link} now."
 msgstr ""
-"<strong>95.91543%</strong> de toutes les demandes d'aide ont une réponse sur notre "
-"%{link} sous forme d'une vidéo ou d'une FAQ. Obtenez des réponses à vos questions sur "
-"notre %{link} dès maintenant."
+"<strong>95.91543%</strong> de toutes les demandes d'aide ont une réponse sur le "
+"%{link} sous forme d'une vidéo ou d'une FAQ. Obtenez des réponses à vos questions dès "
+"maintenant sur le %{link} (le plus complet) ou sur le <A HREF=\"https://www.gcx.org/"
+"MPDXaide\">site d'aide en français</A>."
 
 msgid "About you"
 msgstr "A propos de vous"
@@ -520,14 +521,13 @@ msgstr ""
 "mais il est tout de même conseillé de vérifier l'événement manuellement avant de "
 "contacter le partenaire."
 
-#, fuzzy
 msgid ""
 "Before emailing us, please have a look at %{link} to see if your question isalready "
 "answered there."
 msgstr ""
-"Avant de nous envoyer un email, veuillez vérifier sur %{link} (en anglais) ou sur <A "
-"HREF=\"https://www.gcx.org/MPDXaide\">notre site d'aide</A> (en français) si la "
-"réponse à votre question ne s'y trouve pas déja."
+"Avant de nous envoyer un email, veuillez vérifier sur %{link} (le plus complet) ou sur "
+"<A HREF=\"https://www.gcx.org/MPDXaide\">le site d'aide en français</A> si la réponse "
+"à votre question ne s'y trouve pas déjà."
 
 msgid "Bi-Monthly"
 msgstr "Tous les 2 mois"
@@ -1460,7 +1460,7 @@ msgid "Likely to Give"
 msgstr "Susceptible de donner"
 
 msgid "Linked by designation: "
-msgstr ""
+msgstr "Lié par la désignation :"
 
 msgid "Loading"
 msgstr "Chargement en cours"
@@ -1505,9 +1505,8 @@ msgstr ""
 msgid "MPD appointment is set"
 msgstr "Un rendez-vous de DEP est planifié"
 
-#, fuzzy
 msgid "MPDX Help Site"
-msgstr "Ouvrir maintenant le site d'aide de MPDX en anglais"
+msgstr "site d'aide de MPDX en anglais"
 
 msgid "MPDX Support Team"
 msgstr "Equipe de soutien MPDX"
@@ -1598,10 +1597,10 @@ msgid "Mailing"
 msgstr "Postale"
 
 msgid "Manually added by MPDX support"
-msgstr ""
+msgstr "Ajouté manuellement pas le support de MPDX"
 
 msgid "Many More On Our Help Site"
-msgstr ""
+msgstr "Beaucoup plus sur notre site d'aide"
 
 msgid "Map It"
 msgstr "Carte"
@@ -1646,7 +1645,7 @@ msgid "Merge these people"
 msgstr "Fusionner ces personnes"
 
 msgid "Merge this account with another of your accounts:"
-msgstr ""
+msgstr "Fusionner ce compte avec un autre de vos comptes :"
 
 #, fuzzy
 msgid "Merge..."
@@ -3005,9 +3004,8 @@ msgstr ""
 msgid "has not answered or replied to repeated contact attempts"
 msgstr ""
 
-#, fuzzy
 msgid "history"
-msgstr "Historique"
+msgstr "dans l'historique"
 
 msgid "http://"
 msgstr "http://"
@@ -3016,10 +3014,10 @@ msgid "in the process of setting up an MPD appointment"
 msgstr ""
 
 msgid "makes special gifts but not committed to a specific ongoing amount"
-msgstr ""
+msgstr "fait des dons ponctuels mais n'est pas engagé à un montant spécifique"
 
 msgid "not catgorized by you yet"
-msgstr ""
+msgstr "pas encore catégorisé par vous"
 
 msgid "not contacted yet"
 msgstr "pas encore contacté"
@@ -3036,9 +3034,8 @@ msgstr "ou en cliquant 'Aide' dans la barre de menu"
 msgid "or match a filter you have set."
 msgstr "ou correspondant à un filtre que vous avez sélectionné."
 
-#, fuzzy
 msgid "our MPDX Help Site"
-msgstr "Ouvrir maintenant le site d'aide de MPDX en anglais"
+msgstr "le site d'aide de MPDX en anglais"
 
 msgid "overdue"
 msgstr "en retard"
