@@ -159,9 +159,7 @@ msgstr ""
 
 msgid ""
 "<strong>95.91543%</strong> of all help requests are answered on our %{link} in"
-" the\n"
-"      form of a Video or FAQ. Get answers to your questions on our %{link} now"
-"."
+" theform of a Video or FAQ. Get answers to your questions on our %{link} now."
 msgstr ""
 
 msgid "About you"
@@ -495,8 +493,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"Before emailing us, please have a look at %{link} to see if your question is\n"
-"        already answered there."
+"Before emailing us, please have a look at %{link} to see if your question isal"
+"ready answered there."
 msgstr ""
 
 msgid "Bi-Monthly"
@@ -1417,6 +1415,9 @@ msgid ""
 msgstr ""
 
 msgid "MPD appointment is set"
+msgstr ""
+
+msgid "MPDX Help Site"
 msgstr ""
 
 msgid "MPDX Support Team"
@@ -2822,6 +2823,9 @@ msgstr ""
 msgid "has not answered or replied to repeated contact attempts"
 msgstr ""
 
+msgid "history"
+msgstr ""
+
 msgid "http://"
 msgstr ""
 
@@ -2847,6 +2851,9 @@ msgid "or by clicking 'Help' in the top menu bar"
 msgstr ""
 
 msgid "or match a filter you have set."
+msgstr ""
+
+msgid "our MPDX Help Site"
 msgstr ""
 
 #, fuzzy
