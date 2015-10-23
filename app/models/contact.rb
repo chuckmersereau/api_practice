@@ -130,7 +130,11 @@ class Contact < ActiveRecord::Base
   end
 
   def mailing_address
-    @mailing_address ||= primary_address || addresses.first || Address.new
+    # Use .reject(&:historic) and not .where.not(historic: true) because the
+    # CSV import uses mailing_address for checking the addresses for contacts
+    # before saving them to the database.
+    @mailing_address ||= primary_address ||
+                         addresses.reject(&:historic).first || Address.new
   end
 
   def reload_mailing_address

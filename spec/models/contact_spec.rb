@@ -779,4 +779,11 @@ describe Contact do
       expect(contact.total_donations_query).to eq 5
     end
   end
+
+  context '#mailing_address' do
+    it 'gives a new address if contact only has a historic address' do
+      contact.addresses << create(:address, street: '1', historic: true)
+      expect(contact.mailing_address.street).to be_nil
+    end
+  end
 end
