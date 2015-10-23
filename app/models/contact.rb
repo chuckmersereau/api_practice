@@ -130,7 +130,8 @@ class Contact < ActiveRecord::Base
   end
 
   def mailing_address
-    @mailing_address ||= primary_address || addresses.first || Address.new
+    @mailing_address ||= primary_address || 
+      addresses.where.not(historic: true).first || Address.new
   end
 
   def reload_mailing_address
