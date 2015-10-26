@@ -66,4 +66,10 @@ FactoryGirl.define do
     source 'csv'
     file { File.new(Rails.root.join('spec/fixtures/sample_csv_with_bom.csv')) }
   end
+
+  factory :csv_import_invalid_phone, parent: :import do
+    association :account_list
+    source 'csv'
+    file { File.new(Rails.root.join('spec/fixtures/csv_invalid_phone.csv')) }
+  end
 end
