@@ -37,7 +37,8 @@ class CsvImport
 
     contact.addresses.build(
       street: line['Mailing Street Address'], city: line['Mailing City'], state: line['Mailing State'],
-      postal_code: line['Mailing Postal Code'], country: line['Mailing Country']
+      postal_code: line['Mailing Postal Code'], country: line['Mailing Country'],
+      primary_mailing_address: true
     ) if line['Mailing Street Address'].present?
     contact.tag_list.add(@import.tags, parse: true) if @import.tags.present?
 
