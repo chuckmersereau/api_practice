@@ -15,8 +15,8 @@ describe CsvImport do
     contact = contacts.first
     expect(contact.account_list).to eq(csv_import.account_list)
     expect(contact.name).to eq('Doe, John and Jane')
-    expect(contact.greeting).to eq('John and Jane')
-    expect(contact.envelope_greeting).to eq('John and Jane Doe')
+    expect(contact.greeting).to eq('Hi John and Jane')
+    expect(contact.envelope_greeting).to eq('Doe family')
     expect(contact.status).to eq('Partner - Pray')
     expect(contact.pledge_amount).to eq(50)
     expect(contact.notes).to eq('test notes')
@@ -31,6 +31,7 @@ describe CsvImport do
     expect(address.state).to eq('IL')
     expect(address.postal_code).to eq('60201')
     expect(address.country).to be_nil
+    expect(address.primary_mailing_address).to be true
 
     person = contact.primary_person
     expect(person.first_name).to eq('John')

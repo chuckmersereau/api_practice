@@ -8,7 +8,13 @@
     <% contact = exhibit(contact, self) %>
     <div class="row">
       <h4><%= contact.name %></h4>
-      <% contact.mailing_address.master_address_id = 0 # skip master address lookup %>
+      <%
+        # skip master address lookup
+        contact.mailing_address.master_address_id = 0
+
+        # this causes the people to be validated in the check below
+        contact.people = [contact.primary_person, contact.spouse].compact 
+      %>
       <% if !contact.valid? %>
         <% any_invalid = true %>
         <div id="error_explanation">

@@ -42,8 +42,8 @@ class ContactMerge
 
       # Copy fields over updating any field that's blank on the winner
       Contact::MERGE_COPY_ATTRIBUTES.each do |field|
-        next unless @winner.send(field).blank? && @other.send(field).present?
-        @winner.send("#{field}=".to_sym, @other.send(field))
+        next unless @winner[field].blank? && @other[field].present?
+        @winner.send("#{field}=".to_sym, @other[field])
       end
 
       @winner.send_newsletter = self.class.merged_send_newsletter(@winner.send_newsletter,
