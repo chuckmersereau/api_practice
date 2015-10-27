@@ -44,7 +44,7 @@ describe ImportsController do
       import = create(:csv_import_invalid_phone, account_list: @account_list)
       get :csv_preview_partial, id: import.id
       expect(response).to be_success
-      expect(response.body).to match /Number is invalid/im
+      expect(response.body).to match(/Number is invalid/)
     end
   end
 
