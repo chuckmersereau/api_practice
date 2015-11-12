@@ -100,7 +100,7 @@ Rails.application.routes.draw do
     collection do
       post :update_tab_order
       post :complete_welcome_panel
-      get 'notifications', to: :notification_settings
+      get 'notifications', action: :notification_settings
     end
   end
 

@@ -19,40 +19,39 @@ describe SidekiqMonitor do
     expect(Sidekiq::ProcessSet).to receive(:new).and_return(proc_threads.map { |c| { 'concurrency' => c } })
   end
 
-  def expect_mail
-    mail = double
-    expect(ActionMailer::Base).to receive(:mail).and_return(mail)
-    expect(mail).to receive(:deliver)
-  end
-
   it 'does not notify in normal conditions' do
     stub_stats(default_queue_latency: 1.0, enqueued: 1, workers_size: 1)
     stub_processes_threads(5, 5)
-    expect(ActionMailer::Base).not_to receive(:mail)
-    SidekiqMonitor.notify_if_problem
+
+    expect do
+      SidekiqMonitor.notify_if_problem
+    end.to_not change(ActionMailer::Base.deliveries, :size)
   end
 
   it 'notifies if fewer than min processes' do
     stub_stats(default_queue_latency: 1.0, enqueued: 1, workers_size: 1)
     stub_processes_threads(5)
     expect(SidekiqMonitor).to receive(:sleep).with(60.0)
-    expect_mail
-    SidekiqMonitor.notify_if_problem
+    expect do
+      SidekiqMonitor.notify_if_problem
+    end.to change(ActionMailer::Base.deliveries, :size).by(1)
   end
 
   it 'notifies too many jobs enqueued but enough threads free over a time interval' do
     stub_stats(default_queue_latency: 1.0, enqueued: 1000, workers_size: 10)
     stub_processes_threads(20, 20)
     expect(SidekiqMonitor).to receive(:sleep).with(30.0)
-    expect_mail
-    SidekiqMonitor.notify_if_problem
+    expect do
+      SidekiqMonitor.notify_if_problem
+    end.to change(ActionMailer::Base.deliveries, :size).by(1)
   end
 
   it 'does not error if no processors are running' do
     stub_processes_threads
     stub_stats(default_queue_latency: 1.0, enqueued: 1, workers_size: 1)
     expect(SidekiqMonitor).to receive(:sleep).with(60.0)
-    expect_mail
-    SidekiqMonitor.notify_if_problem
+    expect do
+      SidekiqMonitor.notify_if_problem
+    end.to change(ActionMailer::Base.deliveries, :size).by(1)
   end
 end

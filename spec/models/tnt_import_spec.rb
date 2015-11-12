@@ -375,19 +375,19 @@ describe TntImport do
 
   context '#update_contact' do
     it 'updates notes correctly' do
-      contact = Contact.new
+      contact = build(:contact)
       import.send(:update_contact, contact, contact_rows.first)
       expect(contact.notes).to eq("Principal\nHas run into issues with Campus Crusade in the past...  Was told couldn't be involved because hadn't been baptized as an adult.")
     end
 
     it 'updates newsletter preferences correctly' do
-      contact = Contact.new
+      contact = build(:contact)
       import.send(:update_contact, contact, contact_rows.first)
       expect(contact.send_newsletter).to eq('Physical')
     end
 
     it 'sets the address region' do
-      contact = Contact.new
+      contact = build(:contact)
       import.send(:update_contact, contact, contact_rows.first)
       expect(contact.addresses.first.region).to eq('State College')
     end

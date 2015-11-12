@@ -71,32 +71,39 @@ describe SidekiqMemNotifier do
   end
 
   context '#notify_by_email' do
-    let(:mail) { double }
     before do
       subject.last_time_emailed = nil
       ENV['SIDEKIQ_WARN_EMAILS'] = 'dev@mpdx.org, dev2@mpdx.org'
-      allow(ActionMailer::Base).to receive(:mail)
-        .with(from: 'support@mpdx.org', to: 'dev@mpdx.org, dev2@mpdx.org',
-              subject: 'Sidekiq memory threshold', body: "Oops\n:(")
-        .and_return(mail)
     end
 
     it 'sends a notification email the first time called' do
-      expect(mail).to receive(:deliver)
-      subject.notify_by_email(['Oops', ':('])
+      expect do
+        subject.notify_by_email(['Oops', ':('])
+      end.to change(ActionMailer::Base.deliveries, :size).by(1)
+      email = ActionMailer::Base.deliveries.last
+      expect(email.from).to eq ['support@mpdx.org']
+      expect(email.to).to include 'dev@mpdx.org'
+      expect(email.to).to include 'dev2@mpdx.org'
+      expect(email.subject).to eq 'Sidekiq memory threshold'
+      expect(email.body.to_s).to eq "Oops\n:("
     end
 
     it 'does not send notifications when called again right away' do
-      expect(mail).to receive(:deliver).exactly(:once)
-      subject.notify_by_email(['Oops', ':('])
-      subject.notify_by_email(['Oops', ':('])
+      expect do
+        subject.notify_by_email(['Oops', ':('])
+        subject.notify_by_email(['Oops', ':('])
+      end.to change(ActionMailer::Base.deliveries, :size).by(1)
     end
 
     it 'will email again after 2 hours' do
-      expect(mail).to receive(:deliver).exactly(:twice)
-      subject.notify_by_email(['Oops', ':('])
-      travel_to 2.hours.since do
+      expect do
         subject.notify_by_email(['Oops', ':('])
+      end.to change(ActionMailer::Base.deliveries, :size).by(1)
+
+      travel_to((2.hours + 1.second).since) do
+        expect do
+          subject.notify_by_email(['Oops', ':('])
+        end.to change(ActionMailer::Base.deliveries, :size).by(1)
       end
     end
   end

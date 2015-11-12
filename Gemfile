@@ -3,7 +3,7 @@ source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro'
 end
 
-gem 'rails', '~> 4.1.10'
+gem 'rails', '~> 4.2.4'
 
 # Gems used only for assets and not required
 # in production environments by default.
@@ -30,7 +30,7 @@ gem 'syslog-logger'
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'activerecord-import', '~> 0.7.0'
 gem 'activesupport-json_encoder'
-gem 'acts-as-taggable-on', '~> 3.0.0'
+gem 'acts-as-taggable-on', '~> 3.4.2'
 gem 'airbrake' # , '~> 3.1.6'
 gem 'assignable_values', '~> 0.5.3'
 gem 'carrierwave', git: 'https://github.com/carrierwaveuploader/carrierwave' # has cache err fix not release yet
@@ -38,13 +38,12 @@ gem 'charlock_holmes'
 gem 'cloudinary'
 gem 'country_select', git: 'http://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 gem 'deadlock_retry', '~> 1.2.0'
-gem 'devise', '~> 3.2.2'
+gem 'devise', '~> 3.4.1'
 gem 'display_case', '= 0.0.5'
 gem 'email_reply_parser'
 gem 'fb_graph', '~> 2.6.0'
 gem 'fog', '~> 1.23.0'
 gem 'font-awesome-rails'
-gem 'foreigner', '~> 1.7.3'
 gem 'gettext_i18n_rails', '~> 1.2.3'
 gem 'gettext_i18n_rails_js', '~> 1.0.0'
 gem 'gibberish', '~> 1.4.0'
@@ -58,7 +57,7 @@ gem 'jquery-rails', '~> 3.0.4'
 gem 'koala', '~> 1.9.0'
 gem 'linkedin', '~> 0.3.7'
 gem 'newrelic_rpm', '~> 3.7.1'
-gem 'nokogiri', '~> 1.5.11'
+gem 'nokogiri', '~> 1.6.6.2'
 gem 'oauth', git: 'http://github.com/CruGlobal/oauth-ruby'
 gem 'oj', '~> 2.1.0'
 gem 'omniauth-cas', '~> 1.0.2'
@@ -68,7 +67,7 @@ gem 'omniauth-linkedin', '~> 0.1.0'
 gem 'omniauth-pls'
 gem 'omniauth-prayer-letters'
 gem 'omniauth-twitter', '~> 1.0.1'
-gem 'paper_trail', '~> 3.0.0'
+gem 'paper_trail', '~> 4.0.0'
 gem 'passenger'
 gem 'pg', '~> 0.18.2'
 gem 'rails_autolink', '~> 1.1.5'
@@ -119,6 +118,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'rack-livereload'
   gem 'guard-livereload', '~> 2.4', require: false
+  gem 'web-console', '~> 2.0'
   # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
 end
 

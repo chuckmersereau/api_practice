@@ -78,6 +78,6 @@ class PersonExhibit < DisplayCase::Exhibit
 
   def email_link
     return unless primary_email_address
-    @context.mail_to(primary_email_address, '', class: 'fa fa-envelope')
+    @context.mail_to(primary_email_address.to_s, '', class: 'fa fa-envelope')
   end
 end
