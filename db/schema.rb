@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150915181704) do
+ActiveRecord::Schema.define(version: 20151116162403) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -732,7 +732,7 @@ ActiveRecord::Schema.define(version: 20150915181704) do
     t.integer  "master_person_id",                                   null: false
     t.string   "middle_name"
     t.string   "access_token",          limit: 32
-    t.string   "profession"
+    t.text     "profession"
     t.boolean  "deceased",                           default: false, null: false
     t.boolean  "subscribed_to_updates"
     t.boolean  "optout_enewsletter",                 default: false
