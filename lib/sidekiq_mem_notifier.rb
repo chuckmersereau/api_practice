@@ -63,7 +63,7 @@ class SidekiqMemNotifier
       ActionMailer::Base.mail(from: 'support@mpdx.org',
                               to: ENV['SIDEKIQ_WARN_EMAILS'],
                               subject: 'Sidekiq memory threshold',
-                              body: msgs.join("\n")).deliver_now
+                              body: msgs.join("\n")).deliver
     end
   end
 end

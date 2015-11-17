@@ -4,7 +4,7 @@ module SidekiqMonitor
     return unless problem
 
     ActionMailer::Base.mail(from: 'support@mpdx.org', to: config(:emails), subject: 'Sidekiq problem',
-                            body: "#{problem}\r\n\r\nSee https://mpdx.org/sidekiq").deliver_now
+                            body: "#{problem}\r\n\r\nSee https://mpdx.org/sidekiq").deliver
   end
 
   def sidekiq_problem

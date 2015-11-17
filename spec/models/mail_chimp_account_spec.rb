@@ -59,13 +59,13 @@ describe MailChimpAccount do
   end
 
   it 'finds a list by list_id' do
-    allow(account).to receive(:lists).and_return([double(id: '1', name: 'foo')])
-    expect(account.list('1').name).to eq('foo')
+    allow(account).to receive(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
+    expect(account.list(1).name).to eq('foo')
   end
 
   it 'finds the primary list' do
-    allow(account).to receive(:lists).and_return([double(id: '1', name: 'foo')])
-    account.primary_list_id = '1'
+    allow(account).to receive(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
+    account.primary_list_id = 1
     expect(account.primary_list.name).to eq('foo')
   end
 
@@ -623,12 +623,12 @@ describe MailChimpAccount do
       account.save
       msg = 'MMERGE3 must be provided - Please enter a value (code 250)'
 
-      user = create(:user)
-      user.email = { email: 'j@t.co' }
-      account.account_list.users << user
-      expect do
-        account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
-      end.to change(ActionMailer::Base.deliveries, :size).by(1)
+      email = double
+      expect(AccountMailer).to receive(:mailchimp_required_merge_field)
+        .with(account_list) { email }
+      expect(email).to receive(:deliver)
+
+      account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
       expect(account.reload.primary_list_id).to be_nil
     end
 

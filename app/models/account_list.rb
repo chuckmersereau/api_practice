@@ -351,7 +351,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def send_chalkline_mailing_list
-    ChalklineMailer.mailing_list(self).deliver_later
+    ChalklineMailer.mailing_list(self).deliver
   end
 
   def physical_newsletter_csv
@@ -429,7 +429,7 @@ class AccountList < ActiveRecord::Base
 
     # Send email if necessary
     if notifications_to_email.present?
-      NotificationMailer.notify(self, notifications_to_email).deliver_now
+      NotificationMailer.notify(self, notifications_to_email).deliver
     end
   end
 

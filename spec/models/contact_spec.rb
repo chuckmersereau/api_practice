@@ -214,9 +214,7 @@ describe Contact do
       pla = create(:prayer_letters_account, account_list: account_list)
       expect(pla).to_not receive(:delete_contact)
 
-      loser_contact.addresses << create(:address)
-      loser_contact.update_columns(prayer_letters_id: 'foo',
-                                   send_newsletter: 'Physical')
+      loser_contact.update_column(:prayer_letters_id, 'foo')
 
       contact.merge(loser_contact)
     end
