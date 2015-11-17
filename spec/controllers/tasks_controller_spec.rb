@@ -76,7 +76,7 @@ describe TasksController do
         c1 = create(:contact, account_list: @account_list)
         c2 = create(:contact, account_list: @account_list)
         expect do
-          xhr :post, :create, task: valid_attributes, add_task_contact_ids: [c1.id, c2.id]
+          xhr :post, :create, task: valid_attributes, add_task_contact_ids: "#{c1.id}, #{c2.id}"
         end.to change { Task.count }.by 2
       end
     end
@@ -128,7 +128,7 @@ describe TasksController do
         request.env['HTTP_REFERER'] = tasks_url
         t1 = create(:task, account_list: @account_list)
         t2 = create(:task, account_list: @account_list)
-        put :bulk_update, bulk_task_update_ids: [t1.id, t2.id], task: { subject: 'NewSub', 'start_at(1i)': 1.year.ago.year }
+        put :bulk_update, bulk_task_update_ids: "#{t1.id},#{t2.id}", task: { subject: 'NewSub', 'start_at(1i)': 1.year.ago.year }
         expect(t1.reload.start_at.year).to eq 1.year.ago.year
       end
     end

@@ -152,7 +152,7 @@ class MailChimpAccount < ActiveRecord::Base
     case
     when e.message.include?('API Key Disabled') || e.message.include?('code 104')
       update_column(:active, false)
-      AccountMailer.invalid_mailchimp_key(account_list).deliver
+      AccountMailer.invalid_mailchimp_key(account_list).deliver_now
     when e.message.include?('code -50') # No more than 10 simultaneous connections allowed.
       raise LowerRetryWorker::RetryJobButNoAirbrakeError
     when e.message.include?('code -91') # A backend database error has occurred. Please try again later or report this issue. (code -91)
@@ -169,7 +169,7 @@ class MailChimpAccount < ActiveRecord::Base
       # MMERGE3 must be provided - Please enter a value (code 250)
       # Notify user and nulify primary_list_id until they fix the problem
       update_column(:primary_list_id, nil)
-      AccountMailer.mailchimp_required_merge_field(account_list).deliver
+      AccountMailer.mailchimp_required_merge_field(account_list).deliver_now
     when e.message.include?('code 200')
       # Invalid MailChimp List ID (code 200)
       update_column(:primary_list_id, nil)

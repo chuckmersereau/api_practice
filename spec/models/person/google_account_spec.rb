@@ -75,4 +75,27 @@ describe Person::GoogleAccount do
         .to_return(body: body, status: status)
     end
   end
+
+  context '#needs_refresh' do
+    it 'turns off contacts, calendar and email integration and emails user' do
+      integration = create(:google_integration, contacts_integration: true,
+                                                calendar_integration: false, email_integration: true)
+
+      # Do this in a update_column call so it doesn't trigger HTTP calls to
+      # Google calendar
+      integration.update_column(:calendar_integration, true)
+
+      subject.person = create(:person_with_email)
+      subject.google_integrations << integration
+
+      expect do
+        perform_enqueued_jobs { subject.needs_refresh }
+      end.to change(ActionMailer::Base.deliveries, :size).by(1)
+
+      integration.reload
+      expect(integration.contacts_integration).to be false
+      expect(integration.calendar_integration).to be false
+      expect(integration.email_integration).to be false
+    end
+  end
 end

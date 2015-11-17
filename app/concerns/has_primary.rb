@@ -15,7 +15,7 @@ module HasPrimary
   module ClassMethods
     def ensure_only_one_primary?(parent_object, object)
       rel = to_s.tableize.to_sym
-      return unless parent_object.send(rel).present?
+      return unless parent_object.present? && parent_object.send(rel).present?
 
       if object.respond_to?(:historic)
         parent_object.send(rel).where(historic: true).update_all(primary: false)

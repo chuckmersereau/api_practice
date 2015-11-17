@@ -79,7 +79,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
       end
     rescue OrgAccountInvalidCredentialsError
       update_column(:valid_credentials, false)
-      ImportMailer.credentials_error(self).deliver
+      ImportMailer.credentials_error(self).deliver_later
     ensure
       begin
         update_column(:downloading, false)

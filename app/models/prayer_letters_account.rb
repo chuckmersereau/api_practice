@@ -133,7 +133,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
   def handle_bad_token
     update_column(:valid_token, false)
-    AccountMailer.prayer_letters_invalid_token(account_list).deliver
+    AccountMailer.prayer_letters_invalid_token(account_list).deliver_now
 
     fail AccessError
   end

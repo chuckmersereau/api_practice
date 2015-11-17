@@ -141,7 +141,7 @@ class PlsAccount < ActiveRecord::Base
 
   def handle_bad_token
     update_column(:valid_token, false)
-    AccountMailer.pls_invalid_token(account_list).deliver
+    AccountMailer.pls_invalid_token(account_list).deliver_now
 
     fail AccessError
   end
