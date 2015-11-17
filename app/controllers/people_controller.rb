@@ -76,12 +76,12 @@ class PeopleController < ApplicationController
       next if people.length <= 1
       merged_people_count += people.length
 
-      winner = if params[:dup_person_winner].present?
-                 people.find(params[:dup_person_winner][ids])
-               else
-                 people.find { |person| person.id.to_s == merge_set_ids[0] }
-               end
-
+      winner_id = if params[:dup_person_winner].present?
+                    params[:dup_person_winner][ids]
+                  else
+                    people.find { |person| person.id.to_s == merge_set_ids[0] }
+                  end
+      winner = people.find(winner_id)
       Person.transaction do
         (people - [winner]).each do |loser|
           winner.merge(loser)

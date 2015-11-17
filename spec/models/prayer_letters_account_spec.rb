@@ -41,15 +41,21 @@ describe PrayerLettersAccount do
 
   context '#handle_bad_token' do
     it 'sends an email to the account users' do
-      orig_num_emails = ActionMailer::Base.deliveries.size
-      user = create(:user)
-      user.email = { email: 'j@t.co', primary: true }
-      pla.account_list.users << user
+      expect(AccountMailer).to receive(:prayer_letters_invalid_token).with(an_instance_of(AccountList)).and_return(double(deliver: true))
+
       expect do
         pla.handle_bad_token
       end.to raise_exception(PrayerLettersAccount::AccessError)
+    end
+
+    it 'sets valid_token to false' do
+      allow(AccountMailer).to receive(:prayer_letters_invalid_token).and_return(double(deliver: true))
+
+      expect do
+        pla.handle_bad_token
+      end.to raise_exception(PrayerLettersAccount::AccessError)
+
       expect(pla.valid_token).to be false
-      expect(ActionMailer::Base.deliveries.size - orig_num_emails).to eq 1
     end
   end
 
@@ -136,7 +142,7 @@ describe PrayerLettersAccount do
 
   context '#subscribe_contacts' do
     it 'syncronizes a contact even if it has no people' do
-      contact.update_column(:prayer_letters_id, 1)
+      contact.update(prayer_letters_id: 1)
       contact.addresses << create(:address)
       expect(contact.people.count).to eq(0)
 
@@ -202,7 +208,7 @@ describe PrayerLettersAccount do
 
   context '#delete_all_contacts' do
     it 'calls the prayer letters api to delete all and sets prayer letters info to blanks' do
-      contact.update_columns(prayer_letters_id: 'c1', prayer_letters_params: params)
+      contact.update(prayer_letters_id: 'c1', prayer_letters_params: params)
 
       stub = stub_request(:delete, 'https://www.prayerletters.com/api/v1/contacts')
              .with(headers: { 'Authorization' => 'Bearer MyString' })

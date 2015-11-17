@@ -18,7 +18,7 @@ class HelpRequest < ActiveRecord::Base
   validates :email, email: true
 
   def send_email
-    HelpRequestMailer.email(self).deliver_later
+    HelpRequestMailer.email(self).deliver
   end
 
   def user_agent=(val)

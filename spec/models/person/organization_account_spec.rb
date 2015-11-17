@@ -33,7 +33,7 @@ describe Person::OrganizationAccount do
         end.to_not raise_error
       end
       it 'sends email' do
-        perform_enqueued_jobs { org_account.import_all_data }
+        org_account.import_all_data
         expect(ActionMailer::Base.deliveries.last.to.first).to eq(org_account.person.email.email)
       end
       it 'marks as not valid' do

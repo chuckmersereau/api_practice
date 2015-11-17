@@ -31,7 +31,7 @@ class AccountListInvite < ActiveRecord::Base
     code = SecureRandom.hex(32)
     invite = create(invited_by_user: inviting_user, code: code,
                     recipient_email: email, account_list: account_list)
-    AccountListInviteMailer.email(invite).deliver_later
+    AccountListInviteMailer.email(invite).deliver
     invite
   end
 end

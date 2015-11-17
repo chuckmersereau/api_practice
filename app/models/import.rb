@@ -49,7 +49,7 @@ class Import < ActiveRecord::Base
     update_column(:importing, true)
     begin
       "#{source.camelize}Import".constantize.new(self).import
-      ImportMailer.complete(self).deliver_now
+      ImportMailer.complete(self).deliver
 
       account_list.merge_contacts # clean up data
       account_list.queue_sync_with_google_contacts
@@ -58,9 +58,9 @@ class Import < ActiveRecord::Base
     rescue UnsurprisingImportError
       # Only send a failure email, don't re-raise the error, as it was not considered a surprising error by the
       # import function, so don't re-raise it (that will prevent non-surprising errors from being logged via Airbrake).
-      ImportMailer.failed(self).deliver_now
+      ImportMailer.failed(self).deliver
     rescue => e
-      ImportMailer.failed(self).deliver_now
+      ImportMailer.failed(self).deliver
       raise e
     end
   ensure
