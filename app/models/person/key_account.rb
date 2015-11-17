@@ -25,7 +25,7 @@ class Person::KeyAccount < ActiveRecord::Base
   end
 
   def self.find_authenticated_user(auth_hash)
-    User.find_by_id(authenticated.where("upper(remote_id) = ?", auth_hash.extra.attributes.first.ssoGuid.upcase).pluck(:person_id).first)
+    User.find_by_id(authenticated.where('upper(remote_id) = ?', auth_hash.extra.attributes.first.ssoGuid.upcase).pluck(:person_id).first)
   end
 
   def to_s
