@@ -9,7 +9,7 @@ module Person::Account
   module ClassMethods
     def find_or_create_from_auth(_auth_hash, person)
       @attributes.merge!(authenticated: true)
-      @account = @rel.find_by_remote_id_and_authenticated(@remote_id, true)
+      @account = find_related_account(@rel, @remote_id)
       if @account
         @account.update_attributes(@attributes)
       else
@@ -30,6 +30,10 @@ module Person::Account
       @account.queue_import_data if @account.respond_to?(:queue_import_data)
 
       @account
+    end
+
+    def find_related_account(rel, remote_id)
+      rel.authenticated.find_by(remote_id: remote_id)
     end
 
     def create_user_from_auth(_auth_hash)
