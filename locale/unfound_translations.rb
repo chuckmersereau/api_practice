@@ -48,7 +48,7 @@ _('You have no monthly recurring gift recommendations.')
 _('May take a few days to update')
 
 # Titles
-_('New Donation')
+__('New Donation')
 
 # Alerts
-_('You must select at least 2 contacts to merge.')
+__('You must select at least 2 contacts to merge.')
