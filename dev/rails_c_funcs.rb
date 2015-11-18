@@ -101,6 +101,26 @@ module M
     end
   end
 
+  def add_dev_user(account_list)
+    dev_user.account_list_users.create(account_list: account_list)
+  end
+
+  def dev_user_back_to_normal
+    dev_user.account_list_users.select do |alu|
+      alu.account_list != dev_account
+    end.map(&:destroy)
+  end
+
+  def dev_user(id = nil)
+    id ||= ENV['DEV_USER_ID']
+    @dev_user ||= User.find_by(id: id)
+  end
+
+  def dev_account(id = nil)
+    id ||= ENV['DEV_ACCOUNT_LIST_ID']
+    @dev_account ||= AccountList.find_by(id: id)
+  end
+
   def find_a(name)
     first, last = name.split(' ')
     alus = AccountListUser.joins(:user).where(people: { first_name: first, last_name: last })
