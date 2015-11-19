@@ -109,8 +109,6 @@ gem 'user_agent_decoder'
 gem 'puma'
 gem 'phonelib', '~> 0.5.0'
 gem 'silencer'
-gem 'pry-byebug'
-gem 'pry-rails'
 
 group :development do
   gem 'railroady'
@@ -142,6 +140,8 @@ group :development, :test do
   gem 'unicorn'
   gem 'zonebie'
   gem 'equivalent-xml'
+  gem 'pry-byebug'
+  gem 'pry-rails'
 end
 
 group :test do
