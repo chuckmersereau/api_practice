@@ -54,6 +54,13 @@ describe PhoneNumber do
     end
   end
 
+  describe 'validate phone number' do
+    it 'should not validate an invalid number' do
+      phone = PhoneNumber.new(number: 'asdf')
+      expect(phone.valid?).to eql(false)
+    end
+  end
+
   # it 'should format a US number based on country code' do
   # p = PhoneNumber.new(number: '1567890', country_code: '1')
   # expect(p.to_s).to eq('156-7890')
