@@ -54,6 +54,27 @@ describe PhoneNumber do
     end
   end
 
+  describe 'validate phone number' do
+    it 'should not validate an invalid number' do
+      phone = PhoneNumber.new(number: 'asdf')
+      expect(phone.valid?).to eql(false)
+    end
+  end
+
+  describe '#==' do
+    it 'should return true for two numbers that are the same' do
+      pn = PhoneNumber.create(number: '+44 12345532')
+      pn2 = PhoneNumber.create(number: '+44 12345532')
+      expect(pn == pn2).to eql(true)
+    end
+
+    it 'should return false for two numbers that are not the same' do
+      pn = PhoneNumber.create(number: '+44 12345532')
+      pn2 = PhoneNumber.create(number: '+44 12345531')
+      expect(pn == pn2).to eql(false)
+    end
+  end
+
   # it 'should format a US number based on country code' do
   # p = PhoneNumber.new(number: '1567890', country_code: '1')
   # expect(p.to_s).to eq('156-7890')
