@@ -1,5 +1,3 @@
-require 'phone_number_validator'
-
 class PhoneNumber < ActiveRecord::Base
   include HasPrimary
   @@primary_scope = :person
@@ -14,7 +12,7 @@ class PhoneNumber < ActiveRecord::Base
 
   before_save :clean_up_number
 
-  validates :number, presence: true, phone_number: true
+  validates :number, phone: true
 
   # attr_accessible :number, :primary, :country_code, :location, :remote_id
 
