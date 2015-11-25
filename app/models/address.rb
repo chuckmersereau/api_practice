@@ -1,7 +1,7 @@
 require 'smarty_streets'
 
 class Address < ActiveRecord::Base
-  has_paper_trail on: [:destroy, :update],
+  has_paper_trail on: [:destroy],
                   meta: { related_object_type: :addressable_type,
                           related_object_id: :addressable_id }
 
