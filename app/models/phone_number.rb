@@ -12,7 +12,14 @@ class PhoneNumber < ActiveRecord::Base
 
   before_save :clean_up_number
 
-  validates :number, phone: true
+  # Use GlobalPhone for validation because it is designed to not give false
+  # negatives (i.e. it's less strict than the phonelib validation), though it
+  # may give false positives (which is OK, since that's less annoying to the
+  # user to enter a slightly wrong number than to not be able to enter a valid
+  # one.)
+  validates_each :number do |record, attr, value|
+    record.errors.add(attr) unless GlobalPhone.validate(value)
+  end
 
   # attr_accessible :number, :primary, :country_code, :location, :remote_id
 
@@ -32,6 +39,8 @@ class PhoneNumber < ActiveRecord::Base
   end
 
   def clean_up_number
+    # Use PhoneLib for parsing instead of GlobalPhone as PhoneLib supports
+    # extensions
     phone = Phonelib.parse(number)
     return false if phone.blank?
     self.number = phone.extension.present? ? "#{phone.e164};#{phone.extension}" : phone.e164

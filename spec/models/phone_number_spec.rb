@@ -33,7 +33,7 @@ describe PhoneNumber do
       phone1 = PhoneNumber.add_for_person(@person, @attributes)
       expect(phone1.primary?).to eq(true)
 
-      phone2 = PhoneNumber.add_for_person(@person,  number: '313-313-3142', primary: true)
+      phone2 = PhoneNumber.add_for_person(@person, number: '313-313-3142', primary: true)
       expect(phone2.primary?).to eq(true)
       phone2.send(:ensure_only_one_primary)
       expect(phone1.reload.primary?).to eq(false)
@@ -55,23 +55,27 @@ describe PhoneNumber do
   end
 
   describe 'validate phone number' do
-    it 'should not validate an invalid number' do
-      phone = PhoneNumber.new(number: 'asdf')
-      expect(phone.valid?).to eql(false)
+    it 'does not validate invalid numbers' do
+      expect(PhoneNumber.new(number: 'asdf')).to_not be_valid
+      expect(PhoneNumber.new(number: '(213)BAD-PHONE')).to_not be_valid
+    end
+
+    it 'allows international numbers not in strict phonelib database' do
+      expect(PhoneNumber.new(number: '+6427751138')).to be_valid
     end
   end
 
-  describe '#==' do
-    it 'should return true for two numbers that are the same' do
-      pn = PhoneNumber.create(number: '+44 12345532')
-      pn2 = PhoneNumber.create(number: '+44 12345532')
-      expect(pn == pn2).to eql(true)
+  describe 'normalizing saved numberes' do
+    it 'returns true for two numbers that are the same except for formatting' do
+      pn = PhoneNumber.create(number: '+16173194567')
+      pn2 = PhoneNumber.create(number: '(617) 319-4567')
+      expect(pn.reload).to eq(pn2.reload)
     end
 
-    it 'should return false for two numbers that are not the same' do
-      pn = PhoneNumber.create(number: '+44 12345532')
-      pn2 = PhoneNumber.create(number: '+44 12345531')
-      expect(pn == pn2).to eql(false)
+    it 'return false for two numbers that are not the same' do
+      pn = PhoneNumber.create(number: '6173191234')
+      pn2 = PhoneNumber.create(number: '6173191235')
+      expect(pn).to_not eq(pn2)
     end
   end
 

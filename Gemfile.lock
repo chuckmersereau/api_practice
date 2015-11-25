@@ -59,6 +59,12 @@ GIT
     sidekiq-unique-jobs (3.0.14)
       sidekiq (>= 2.6)
 
+GIT
+  remote: https://github.com/sstephenson/global_phone
+  revision: dd0894061f58479884e6cfa2d00382542dc77d5a
+  specs:
+    global_phone (1.0.1)
+
 GEM
   remote: http://rubygems.org/
   remote: https://gems.contribsys.com/
@@ -449,7 +455,7 @@ GEM
       peek
       redis
     pg (0.18.2)
-    phonelib (0.5.0)
+    phonelib (0.5.4)
     po_to_json (1.0.0)
       json (>= 1.6.0)
     poltergeist (1.6.0)
@@ -753,6 +759,7 @@ DEPENDENCIES
   gettext_i18n_rails_js (~> 1.0.0)
   gibberish (~> 1.4.0)
   gibbon (~> 0.4.2)
+  global_phone!
   gmail!
   gmaps4rails (~> 2.1.2)
   google-api-client
@@ -791,7 +798,7 @@ DEPENDENCIES
   peek-pg
   peek-redis
   pg (~> 0.18.2)
-  phonelib (~> 0.5.0)
+  phonelib (~> 0.5.4)
   poltergeist
   pry-byebug
   pry-rails
