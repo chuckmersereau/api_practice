@@ -12,7 +12,8 @@ class PhoneNumber < ActiveRecord::Base
 
   before_save :clean_up_number
 
-  validates :number, phone: true
+  # The { possible: true } parameter means we do less strict phone validation.
+  validates :number, phone: { possible: true }
 
   # attr_accessible :number, :primary, :country_code, :location, :remote_id
 
