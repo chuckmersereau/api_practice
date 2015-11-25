@@ -41,7 +41,7 @@ gem 'devise', '~> 3.2.2'
 gem 'display_case', '= 0.0.5'
 gem 'email_reply_parser'
 gem 'fb_graph', '~> 2.6.0'
-gem 'fog', '~> 1.23.0'
+gem 'fog', '~> 1.36.0'
 gem 'font-awesome-rails'
 gem 'foreigner', '~> 1.7.3'
 gem 'gettext_i18n_rails', '~> 1.2.3'
@@ -123,6 +123,7 @@ group :development do
 end
 
 group :development, :test do
+  gem 'parallel_tests'
   gem 'dotenv-rails'
   gem 'awesome_print'
   gem 'database_cleaner'

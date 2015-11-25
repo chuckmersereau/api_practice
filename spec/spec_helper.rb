@@ -1,3 +1,5 @@
+ActiveRecord::Base.establish_connection("test#{ENV['TEST_ENV_NUMBER']}")
+
 if ENV['COVERALLS_REPO_TOKEN']
   require 'coveralls'
   Coveralls.wear_merged!('rails')

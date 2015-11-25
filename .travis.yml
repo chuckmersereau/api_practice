@@ -11,12 +11,14 @@ services:
 before_script:
 - PHANTOMJS_CDNURL=https://bitbucket.org/ariya/phantomjs/downloads npm install
 - psql -c 'create database mpdx_test;' -U postgres
-- bundle exec rake db:schema:load RAILS_ENV=test
+- psql -c 'create database mpdx_test2;' -U postgres
+- psql -U postgres -q -d mpdx_test -f db/structure.sql
+- psql -U postgres -q -d mpdx_test2 -f db/structure.sql
 script:
 - bundle exec rake $TEST_SUITE
 branches:
   only:
   - master
 env:
-  - TEST_SUITE='spec coveralls:push' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
+  - TEST_SUITE='parallel:spec[2] coveralls:push' SPRING_DISABLED=1 REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
   - TEST_SUITE='karma:run rubocop' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
