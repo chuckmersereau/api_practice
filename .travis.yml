@@ -8,17 +8,15 @@ language: ruby
 services:
 - memcache
 - redis-server
-script:
-- bundle exec rake spec
-- bundle exec rake coveralls:push
-- bundle exec rake karma:run
-- bundle exec rubocop -R
 before_script:
 - PHANTOMJS_CDNURL=https://bitbucket.org/ariya/phantomjs/downloads npm install
 - psql -c 'create database mpdx_test;' -U postgres
 - bundle exec rake db:schema:load RAILS_ENV=test
+script:
+- bundle exec rake $TEST_SUITE
 branches:
   only:
   - master
 env:
-  - REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
+  - TEST_SUITE='spec coveralls:push' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
+  - TEST_SUITE='karma:run rubocop' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres

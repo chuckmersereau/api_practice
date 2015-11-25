@@ -22,7 +22,6 @@ gem 'lodash-rails', '~> 3.5.0'
 gem 'angular-ui-bootstrap-rails'
 gem 'ngannotate-rails'
 gem 'momentjs-rails'
-# gem 'rails_karma'
 gem 'best_in_place', '~> 3.0.1'
 gem 'syslog-logger'
 
