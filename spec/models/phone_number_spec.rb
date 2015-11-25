@@ -55,12 +55,12 @@ describe PhoneNumber do
   end
 
   describe 'validate phone number' do
-    it 'does not validate invalid number' do
-      phone = PhoneNumber.new(number: 'asdf')
-      expect(phone).to_not be_valid
+    it 'does not validate invalid numbers' do
+      expect(PhoneNumber.new(number: 'asdf')).to_not be_valid
+      expect(PhoneNumber.new(number: '(213)BAD-PHONE')).to_not be_valid
     end
 
-    it 'allows possible numbers' do
+    it 'allows international numbers not in strict phonelib database' do
       expect(PhoneNumber.new(number: '+6427751138')).to be_valid
     end
   end
