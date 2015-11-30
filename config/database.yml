@@ -24,7 +24,3 @@ test: &test
   username: <%= ENV['DB_ENV_POSTGRESQL_USER_TEST'] || ENV.fetch('DB_ENV_POSTGRESQL_USER') %>
   password: <%= ENV['DB_ENV_POSTGRESQL_PASS_TEST'] || ENV.fetch('DB_ENV_POSTGRESQL_PASS') %>
   host: <%= ENV['DB_PORT_5432_TCP_ADDR_TEST'] || ENV.fetch('DB_PORT_5432_TCP_ADDR') %>
-
-test2:
-  <<: *test
-  database: mpdx_test2
