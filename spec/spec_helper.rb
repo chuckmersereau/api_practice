@@ -27,6 +27,8 @@ require 'equivalent-xml'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
+ActiveRecord::Base.establish_connection(:test)
+
 WebMock.disable_net_connect!(allow_localhost: true)
 Capybara.register_driver :poltergeist do |app|
   Capybara::Poltergeist::Driver.new(app, js_errors: false, timeout: 60)
@@ -97,21 +99,23 @@ RSpec.configure do |config|
   # To run a spec with a specific seed, use --order=rand:[seed]
   config.seed = srand % 0xFFFF
 
-  config.before(:suite) do
-    DatabaseCleaner.strategy = :transaction
-    DatabaseCleaner.clean_with(:truncation)
-  end
+  if Rails.env.test?
+    config.before(:suite) do
+      DatabaseCleaner.strategy = :transaction
+      DatabaseCleaner.clean_with(:truncation)
+    end
 
-  config.before(:each, js: true) do
-    DatabaseCleaner.strategy = :truncation
-  end
+    config.before(:each, js: true) do
+      DatabaseCleaner.strategy = :truncation
+    end
 
-  config.before(:each) do
-    DatabaseCleaner.start
-  end
+    config.before(:each) do
+      DatabaseCleaner.start
+    end
 
-  config.after(:each) do
-    DatabaseCleaner.clean
+    config.after(:each) do
+      DatabaseCleaner.clean
+    end
   end
 
   REDIS_PID = "#{Rails.root}/tmp/pids/redis-test.pid"
