@@ -1,8 +1,8 @@
 require 'spec_helper'
 
 describe NotificationType::RemindPartnerInAdvance do
-  let!(:remind_partner_in_advance) { NotificationType::RemindPartnerInAdvance.first_or_initialize }
-  let!(:da) { create(:designation_account_with_donor) }
+  let(:remind_partner_in_advance) { NotificationType::RemindPartnerInAdvance.first_or_initialize }
+  let(:da) { create(:designation_account_with_donor) }
   let(:contact) { da.contacts.financial_partners.first }
   let(:donation) do
     create(:donation, donor_account: contact.donor_accounts.first, designation_account: da,
