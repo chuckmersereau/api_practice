@@ -1,5 +1,3 @@
-ActiveRecord::Base.establish_connection("test#{ENV['TEST_ENV_NUMBER']}")
-
 if ENV['COVERALLS_REPO_TOKEN']
   require 'coveralls'
   Coveralls.wear_merged!('rails')
@@ -29,7 +27,7 @@ require 'equivalent-xml'
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
-ActiveRecord::Base.establish_connection(:test)
+ActiveRecord::Base.establish_connection("test#{ENV['TEST_ENV_NUMBER']}")
 
 WebMock.disable_net_connect!(allow_localhost: true)
 Capybara.register_driver :poltergeist do |app|

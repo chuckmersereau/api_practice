@@ -14,11 +14,12 @@ before_script:
 - psql -c 'create database mpdx_test2;' -U postgres
 - psql -U postgres -q -d mpdx_test -f db/structure.sql
 - psql -U postgres -q -d mpdx_test2 -f db/structure.sql
+- rm -f bin/spring
 script:
-- bundle exec rake $TEST_SUITE
+- SPRING_DISABLED=1 bundle exec rake $TEST_SUITE
 branches:
   only:
   - master
 env:
-  - TEST_SUITE='parallel:spec[2] coveralls:push' SPRING_DISABLED=1 REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
+  - TEST_SUITE='parallel:spec[2] coveralls:push' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
   - TEST_SUITE='karma:run rubocop' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
