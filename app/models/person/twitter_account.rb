@@ -33,7 +33,7 @@ class Person::TwitterAccount < ActiveRecord::Base
     if value =~ /https?:/
       handle = value.split('/').last
     else
-      handle = value.gsub('@', '')
+      handle = value.delete('@')
     end
     self[:remote_id] = handle
     self[:screen_name] = handle

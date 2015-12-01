@@ -470,7 +470,7 @@ describe TntImport do
 
     it 'accociates a contact with the task' do
       expect do
-        import.send(:import_tasks,  task_contact_rows.first['ContactID'] => contact)
+        import.send(:import_tasks, task_contact_rows.first['ContactID'] => contact)
       end.to change(ActivityContact, :count).by(1)
     end
 
@@ -501,13 +501,13 @@ describe TntImport do
 
     it 'accociates a contact with the task' do
       expect do
-        import.send(:import_history,  history_contact_rows.first['ContactID'] => contact)
+        import.send(:import_history, history_contact_rows.first['ContactID'] => contact)
       end.to change(ActivityContact, :count).by(1)
     end
 
     it 'associates contacts with tnt appeal ids' do
       tnt_import = TntImport.new(create(:tnt_import_appeals))
-      _history, contacts_by_tnt_appeal_id = tnt_import.send(:import_history,  import.send(:import_contacts))
+      _history, contacts_by_tnt_appeal_id = tnt_import.send(:import_history, import.send(:import_contacts))
       expect(contacts_by_tnt_appeal_id.size).to eq(1)
       contacts = contacts_by_tnt_appeal_id['-2079150908']
       expect(contacts.size).to eq(1)
@@ -563,7 +563,7 @@ describe TntImport do
 
       online_org = create(:organization)
       @user.organization_accounts << create(:organization_account, organization: online_org)
-      expect { @tnt_import.import  }.to_not change(Donation, :count).from(0)
+      expect { @tnt_import.import }.to_not change(Donation, :count).from(0)
 
       @user.organization_accounts.destroy_all
       @user.organization_accounts << create(:organization_account, organization: @offline_org)
@@ -595,14 +595,14 @@ describe TntImport do
       # Make sure it does a numeric search not an alphabetic one to find 10 as the max and not 9.
       @offline_org.donor_accounts.create(account_number: '10')
       @offline_org.donor_accounts.create(account_number: '9')
-      expect { @tnt_import.import  }.to change(Donation, :count).from(0).to(2)
+      expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
       Donation.all.each do |donation|
         expect(donation.donor_account.account_number).to eq('11')
       end
     end
 
     it 'does not re-import the same gifts multiple times but adds new gifts in existing donor accounts' do
-      expect { @tnt_import.import  }.to change(Donation, :count).from(0).to(2)
+      expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
 
       expect(DonorAccount.first.account_number).to eq('1')
 

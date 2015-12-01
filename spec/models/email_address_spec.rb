@@ -7,7 +7,7 @@ describe EmailAddress do
 
     it "should create an email address if it's new" do
       expect do
-        EmailAddress.add_for_person(person,  email: address)
+        EmailAddress.add_for_person(person, email: address)
         expect(person.email_addresses.first.email).to eq(address)
       end.to change(EmailAddress, :count).from(0).to(1)
     end
@@ -15,30 +15,30 @@ describe EmailAddress do
     it "doesn't create an email address if it exists" do
       EmailAddress.add_for_person(person,  email: address)
       expect do
-        EmailAddress.add_for_person(person,  email: address)
+        EmailAddress.add_for_person(person, email: address)
         expect(person.email_addresses.first.email).to eq(address)
       end.to_not change(EmailAddress, :count)
     end
 
     it 'does nothing when adding itself to a person' do
-      email = EmailAddress.add_for_person(person,  email: address)
+      email = EmailAddress.add_for_person(person, email: address)
       expect do
-        EmailAddress.add_for_person(person,  email: address, id: email.id)
+        EmailAddress.add_for_person(person, email: address, id: email.id)
       end.to_not change(EmailAddress, :count)
     end
 
     it 'sets only the first email to primary' do
-      EmailAddress.add_for_person(person,  email: address)
+      EmailAddress.add_for_person(person, email: address)
       expect(person.email_addresses.first.primary?).to eq(true)
-      EmailAddress.add_for_person(person,  email: 'foo' + address)
+      EmailAddress.add_for_person(person, email: 'foo' + address)
       expect(person.email_addresses.last.primary?).to eq(false)
     end
 
     it 'sets a prior email to not-primary if the new one is primary' do
-      email1 = EmailAddress.add_for_person(person,  email: address)
+      email1 = EmailAddress.add_for_person(person, email: address)
       expect(email1.primary?).to eq(true)
 
-      email2 = EmailAddress.add_for_person(person,  email: 'foo' + address, primary: true)
+      email2 = EmailAddress.add_for_person(person, email: 'foo' + address, primary: true)
       expect(email2.primary?).to eq(true)
       email2.send(:ensure_only_one_primary)
       expect(email1.reload.primary?).to eq(false)
@@ -49,7 +49,7 @@ describe EmailAddress do
       email = 'test@example.com'
 
       person.email_address = { email: email }
-      EmailAddress.add_for_person(person,  email: email)
+      EmailAddress.add_for_person(person, email: email)
       person.save
       expect(person.email_addresses.first.email).to eq(email)
       expect(person.email_addresses.length).to eq(1)

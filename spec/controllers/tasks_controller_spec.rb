@@ -48,7 +48,7 @@ describe TasksController do
   describe 'GET edit' do
     it 'assigns the requested task as @task' do
       task = @account_list.tasks.create! valid_attributes
-      get :edit,  id: task.to_param
+      get :edit, id: task.to_param
       expect(assigns(:task)).to eq(task)
     end
   end
@@ -57,12 +57,12 @@ describe TasksController do
     describe 'with valid params' do
       it 'creates a new Task' do
         expect do
-          post :create,  task: valid_attributes
+          post :create, task: valid_attributes
         end.to change(@account_list.tasks, :count).by(1)
       end
 
       it 'assigns a newly created task as @task' do
-        post :create,  task: valid_attributes
+        post :create, task: valid_attributes
         expect(assigns(:task)).to be_a(Task)
         expect(assigns(:task)).to be_persisted
       end
@@ -87,12 +87,12 @@ describe TasksController do
         allow_any_instance_of(Task).to receive(:save).and_return(false)
       end
       it 'assigns a newly created but unsaved task as @task' do
-        post :create,  task: { subject: '' }
+        post :create, task: { subject: '' }
         expect(assigns(:task)).to be_a_new(Task)
         expect(response).to render_template('new')
       end
       it 'redirects when given add_task_contact_ids param' do
-        xhr :post, :create,  task: { subject: '' }, add_task_contact_ids: [1]
+        xhr :post, :create, task: { subject: '' }, add_task_contact_ids: [1]
         expect(response).to render_template('new')
       end
     end
@@ -107,18 +107,18 @@ describe TasksController do
         # receives the :update_attributes message with whatever params are
         # submitted in the request.
         expect_any_instance_of(Task).to receive(:update_attributes).with('subject' => 'foo')
-        put :update,  id: task.to_param, task: { 'subject' => 'foo' }
+        put :update, id: task.to_param, task: { 'subject' => 'foo' }
       end
 
       it 'assigns the requested task as @task' do
         task = @account_list.tasks.create! valid_attributes
-        put :update,  id: task.to_param, task: valid_attributes
+        put :update, id: task.to_param, task: valid_attributes
         expect(assigns(:task)).to eq(task)
       end
 
       it 'redirects to the task' do
         task = @account_list.tasks.create! valid_attributes
-        put :update,  id: task.to_param, task: valid_attributes
+        put :update, id: task.to_param, task: valid_attributes
         expect(response).to redirect_to(tasks_path)
       end
     end
@@ -138,7 +138,7 @@ describe TasksController do
         task = @account_list.tasks.create! valid_attributes
         # Trigger the behavior that occurs when invalid params are submitted
         allow_any_instance_of(Task).to receive(:save).and_return(false)
-        put :update,  id: task.to_param, task: { 'subject' => '' }
+        put :update, id: task.to_param, task: { 'subject' => '' }
         expect(assigns(:task)).to eq(task)
         expect(response).to render_template('edit')
       end
@@ -150,14 +150,14 @@ describe TasksController do
       task = @account_list.tasks.create! valid_attributes
       request.env['HTTP_REFERER'] = tasks_url
       expect do
-        delete :destroy,  id: task.to_param
+        delete :destroy, id: task.to_param
       end.to change(@account_list.tasks, :count).by(-1)
     end
 
     it 'redirects to the tasks list' do
       task = @account_list.tasks.create! valid_attributes
       request.env['HTTP_REFERER'] = tasks_url
-      delete :destroy,  id: task.to_param
+      delete :destroy, id: task.to_param
       expect(response).to redirect_to(request.env['HTTP_REFERER'])
     end
   end

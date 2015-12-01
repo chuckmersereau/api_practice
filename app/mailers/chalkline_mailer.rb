@@ -7,7 +7,7 @@ class ChalklineMailer < ActionMailer::Base
     user_emails = account_list.user_emails_with_names
     time_formatted = Time.now.in_time_zone(TIME_ZONE).strftime('%Y%m%d %l%M%P')
     filename = "#{@name} #{time_formatted}.csv".gsub(/\s+/, '_').downcase
-    attachments[filename] = { mime_type: 'text/csv',  content: account_list.physical_newsletter_csv }
+    attachments[filename] = { mime_type: 'text/csv', content: account_list.physical_newsletter_csv }
     mail subject: "MPDX List: #{@name}", cc: user_emails, reply_to: user_emails
   end
 end

@@ -51,18 +51,18 @@ describe Person::OrganizationAccountsController do
     describe 'with valid params' do
       it 'creates a new Person::OrganizationAccount' do
         expect do
-          xhr :post, :create,  person_organization_account: valid_attributes
+          xhr :post, :create, person_organization_account: valid_attributes
         end.to change(Person::OrganizationAccount, :count).by(1)
       end
 
       it 'assigns a newly created organization_account as @organization_account' do
-        xhr :post, :create,  person_organization_account: valid_attributes
+        xhr :post, :create, person_organization_account: valid_attributes
         expect(assigns(:organization_account)).to be_a(Person::OrganizationAccount)
         expect(assigns(:organization_account)).to be_persisted
       end
 
       it 'redirects to the created organization_account' do
-        xhr :post, :create,  person_organization_account: valid_attributes
+        xhr :post, :create, person_organization_account: valid_attributes
         expect(response).to render_template('create')
       end
     end
@@ -71,7 +71,7 @@ describe Person::OrganizationAccountsController do
       it 'assigns a newly created but unsaved organization_account as @organization_account' do
         # Trigger the behavior that occurs when invalid params are submitted
         allow_any_instance_of(Person::OrganizationAccount).to receive(:save).and_return(false)
-        xhr :post, :create,  person_organization_account: { username: '' }
+        xhr :post, :create, person_organization_account: { username: '' }
         expect(assigns(:organization_account)).to be_a_new(Person::OrganizationAccount)
         expect(response).to render_template('new')
       end

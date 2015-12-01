@@ -12,7 +12,7 @@ FactoryGirl.define do
     after :create do |u|
       create(:organization_account, person: u)
       account_list = create(:account_list)
-      create(:account_list_user,  user: u, account_list: account_list)
+      create(:account_list_user, user: u, account_list: account_list)
     end
   end
 end

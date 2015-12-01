@@ -18,7 +18,7 @@ describe 'InsightAnalyses' do
     savon.expects(:logon).with(message: creds).returns(auth_fixture)
     savon.expects(:executeXMLQuery).with(message: report_params).returns(results_fixture)
   end
-  after(:all)  { savon.unmock! }
+  after(:all) { savon.unmock! }
 
   def report_params
     { report: { reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations' },

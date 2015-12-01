@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :donation do
-    sequence(:remote_id) { |n| n.to_s }
+    sequence(:remote_id, &:to_s)
     association :donor_account
     association :designation_account
     motivation 'MyString'

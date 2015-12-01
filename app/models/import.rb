@@ -30,7 +30,7 @@ class Import < ActiveRecord::Base
   end
 
   def user_friendly_source
-    source.gsub('_', ' ')
+    source.tr('_', ' ')
   end
 
   def file_contents
@@ -41,7 +41,7 @@ class Import < ActiveRecord::Base
 
   def read_file_contents
     file.cache_stored_file!
-    contents = File.open(file.file.file) { |file| file.read }
+    contents = File.open(file.file.file, &:read)
     EncodingUtil.normalized_utf8(contents)
   end
 

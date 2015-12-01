@@ -24,9 +24,9 @@ class AddressExhibit < DisplayCase::Exhibit
     case source
     when 'DataServer', 'Siebel' then 'Donor system'
     when 'GoogleImport' then 'Google import'
-    when 'GoogleContactsSync'  then 'Google sync'
+    when 'GoogleContactsSync' then 'Google sync'
     when 'TntImport'  then 'Tnt import'
-    when Address::MANUAL_SOURCE then  'Manual entry'
+    when Address::MANUAL_SOURCE then 'Manual entry'
     else source
     end
   end

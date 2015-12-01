@@ -10,6 +10,8 @@ AllCops:
     - 'bin/**/*'
 
   RunRailsCops: true
+  UseCache: true
+  CacheRootDirectory: 'cache/'
 
 Metrics/MethodLength:
   Enabled: false

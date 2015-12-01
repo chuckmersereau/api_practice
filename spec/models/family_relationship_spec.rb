@@ -5,7 +5,7 @@ describe FamilyRelationship do
     before(:each) do
       @person = FactoryGirl.create(:person)
       @wife = FactoryGirl.create(:person)
-      @relationship =  'wife'
+      @relationship = 'wife'
       @attributes = { related_person_id: @wife.id, relationship: @relationship }
     end
     it "should create a family relationship if it's new" do

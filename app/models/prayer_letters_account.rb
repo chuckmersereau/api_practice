@@ -11,7 +11,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
   after_create :queue_subscribe_contacts
 
-  validates :oauth2_token, :account_list_id,  presence: true
+  validates :oauth2_token, :account_list_id, presence: true
 
   def queue_subscribe_contacts
     async(:subscribe_contacts)

@@ -89,7 +89,7 @@ class ReportsController < ApplicationController
         # If there was no donation in the current month, then don't count the current
         # month toward the average calculation, as it may be midway through the month
         # and their donation hasn't shown up yet.
-        if row[:amounts][0.month.ago(@end_date).strftime '%b %y'].nil?
+        if row[:amounts][0.months.ago(@end_date).strftime '%b %y'].nil?
           months_for_average -= 1.0
         end
       else
@@ -119,7 +119,7 @@ class ReportsController < ApplicationController
       @end_date = @start_date.end_of_month + 11.months
     else
       @end_date = Date.today.end_of_month
-      @start_date = 11.month.ago(@end_date).beginning_of_month
+      @start_date = 11.months.ago(@end_date).beginning_of_month
     end
   end
 
