@@ -14,24 +14,28 @@
                     <input autofocus="autofocus" type="text" ng-model="appeal.name">
                 </div>
 
-                <div class="field" style="display:inline-block;">
-                  <label><%= _('Initial goal') %></label>
-                  <input type="text" ng-model="goal.initial" ng-change="calculateGoal(goal)" style="width:80px;"> +
+                <div class="form-inline">
+                    <div class="form-group">
+                        <label><%= _('Initial goal') %></label>
+                        <input type="number" ng-model="goal.initial" ng-change="calculateGoal(goal)"
+                               style="width:80px;" class="form-control" raw-number> +
+                    </div>
+                    <div class="form-group">
+                        <label><%= _('Letter cost') %></label>
+                        <input type="text" ng-model="goal.letterCost" ng-change="calculateGoal(goal)"
+                               class="form-control" style="width:80px;"> *
+                    </div>
+                    <div class="form-group">
+                        <label><%= _('Admin %') %></label>
+                        <input type="text" ng-model="goal.adminPercent" ng-change="calculateGoal(goal)"
+                               class="form-control" style="width:80px;"> =
+                    </div>
+                    <div class="form-group">
+                        <label><%= _('Goal') %></label>
+                        <input type="text" ng-model="appeal.amount" class="form-control" style="width:80px;">
+                    </div>
                 </div>
-                <div class="field" style="display:inline-block;">
-                  <label><%= _('Letter cost') %></label>
-                  <input type="text" ng-model="goal.letterCost" ng-change="calculateGoal(goal)" style="width:80px;"> *
-                </div>
-                <div class="field" style="display:inline-block;">
-                  <label><%= _('Admin %') %></label>
-                  <input type="text" ng-model="goal.adminPercent" ng-change="calculateGoal(goal)" style="width:80px;">
-                  =
-                </div>
-                <div class="field" style="display:inline-block;">
-                  <label><%= _('Goal') %></label>
-                  <input type="text" ng-model="appeal.amount" style="width:80px;">
-                </div>
-              <div style="clear:both; height:10px;"></div>
+                <div style="clear:both; height:10px;"></div>
                 <div class="field appealFilterCol">
                     <label class="filter_selector_title"><%= _('Add contacts with the following status(es):') %></label>
                     <div class="filter_selector" ng-repeat="status in contactStatuses">
