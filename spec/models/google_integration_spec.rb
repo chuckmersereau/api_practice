@@ -130,4 +130,16 @@ describe GoogleIntegration do
       expect(google_integration.calendar_name).to eq(google_integration.new_calendar)
     end
   end
+
+  context '#sync_all_email_accounts' do
+    it 'schedules the sync email jobs', sidekiq: :testing_disabled do
+      clear_uniqueness_locks
+      create(:google_integration, email_integration: true, calendar_integration: false)
+      create(:google_integration, email_integration: true, calendar_integration: false)
+      expect do
+        GoogleIntegration.sync_all_email_accounts
+      end.to change(Sidekiq::Queue.new, :size).by(1)
+        .and change(Sidekiq::ScheduledSet.new, :size).by(1)
+    end
+  end
 end

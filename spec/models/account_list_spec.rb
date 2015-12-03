@@ -421,12 +421,14 @@ describe AccountList do
   end
 
   context '.update_linked_org_accounts' do
-    it 'schedules the linked accounts to randomly import in the next 24 hours' do
+    it 'schedules the linked accounts to spread over 24 hours' do
       account_list = instance_double(AccountList)
       expect(AccountList).to receive(:with_linked_org_accounts) do
         [account_list]
       end
-      expect(account_list).to receive(:async_randomly_next_24h)
+      expect(AsyncScheduler).to receive(:schedule_over_24h)
+        .with([account_list], :import_data)
+
       AccountList.update_linked_org_accounts
     end
   end

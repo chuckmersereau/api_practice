@@ -222,3 +222,11 @@ class FakeApi
     true
   end
 end
+
+# Clear out unique job locks. They can get into Redis if you interrupt a test
+# run or don't call Worker.clear after queuing jobs in a spec.
+def clear_uniqueness_locks
+  Sidekiq.redis do |redis|
+    redis.keys('*unique*').each { |k| redis.del(k) }
+  end
+end
