@@ -53,6 +53,10 @@ class AccountList < ActiveRecord::Base
 
   after_update :subscribe_tester_to_mailchimp, :subscribe_owners_to_mailchimp
 
+  scope :with_linked_org_accounts, -> {
+    joins(:organization_accounts).where('locked_at is null')
+  }
+
   def self.find_with_designation_numbers(numbers, organization)
     designation_account_ids = DesignationAccount.where(designation_number: numbers, organization_id: organization.id).pluck(:id).sort
     query = "select account_list_id,array_to_string(array_agg(designation_account_id), ',') as designation_account_ids from account_list_entries group by account_list_id"
@@ -240,9 +244,8 @@ class AccountList < ActiveRecord::Base
 
   # Download all donations / info for all accounts associated with this list
   def self.update_linked_org_accounts
-    AccountList.joins(:organization_accounts).where('locked_at is null').order('last_download asc')
-      .each do |al|
-      al.async(:import_data)
+    with_linked_org_accounts.each do |al|
+      al.async_randomly_next_24h(:import_data)
     end
   end
 

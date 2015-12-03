@@ -406,4 +406,28 @@ describe AccountList do
       expect(subject.bottom_50_percent.to_a).to eq [low_pledger]
     end
   end
+
+  context 'with_linked_org_accounts scope' do
+    let!(:org_account) { create(:organization_account) }
+
+    it 'returns non-locked account lists with organization accounts' do
+      expect(AccountList.with_linked_org_accounts).to eq [org_account.account_list]
+    end
+
+    it 'does not return locked accounts' do
+      org_account.update_column(:locked_at, 1.minute.ago)
+      expect(AccountList.with_linked_org_accounts).to be_empty
+    end
+  end
+
+  context '.update_linked_org_accounts' do
+    it 'schedules the linked accounts to randomly import in the next 24 hours' do
+      account_list = instance_double(AccountList)
+      expect(AccountList).to receive(:with_linked_org_accounts) do
+        [account_list]
+      end
+      expect(account_list).to receive(:async_randomly_next_24h)
+      AccountList.update_linked_org_accounts
+    end
+  end
 end

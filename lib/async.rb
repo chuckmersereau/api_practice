@@ -18,6 +18,10 @@ module Async
     Sidekiq::Client.enqueue(self.class, id, method, *args)
   end
 
+  def async_randomly_next_24h(method, *args)
+    self.class.perform_in(24.hours * rand, id, method, *args)
+  end
+
   def async_to_queue(queue, method, *args)
     Sidekiq::Client.enqueue_to(queue, self.class, id, method, *args)
   end
