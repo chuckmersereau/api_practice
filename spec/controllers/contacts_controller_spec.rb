@@ -193,7 +193,7 @@ describe ContactsController do
       end
 
       it "correctly updates the 'next ask' field" do
-        xhr :put, :bulk_update,  bulk_edit_contact_ids: contact.id, contact:
+        xhr :put, :bulk_update, bulk_edit_contact_ids: contact.id, contact:
                     { 'next_ask(2i)': '3', 'next_ask(3i)': '3', 'next_ask(1i)': '2012' }
         expect(contact.reload.next_ask).to eq(Date.parse('2012-03-03'))
       end
@@ -208,7 +208,7 @@ describe ContactsController do
       end
 
       it "ignores a partial 'next ask' value" do
-        xhr :put, :bulk_update,  bulk_edit_contact_ids: contact.id, contact:
+        xhr :put, :bulk_update, bulk_edit_contact_ids: contact.id, contact:
                     { 'next_ask(3i)': '3', 'next_ask(1i)': '2012' }
         expect(contact.reload.next_ask).to be_nil
       end

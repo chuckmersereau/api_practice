@@ -5,6 +5,7 @@ class NotificationType < ActiveRecord::Base
     @contacts ||= {}
     super
   end
+
   def self.types
     @@types ||= connection.select_values("select distinct(type) from #{table_name}")
   end

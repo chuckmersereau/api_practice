@@ -35,3 +35,4 @@ public/dev-assets
 .vagrant
 .env.*
 logfile
+/cache

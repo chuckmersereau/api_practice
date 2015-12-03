@@ -21,7 +21,7 @@ describe Activity do
     end
 
     it '#starred includes starred' do
-      unstarred_task =  create(:task, account_list: account_list)
+      unstarred_task = create(:task, account_list: account_list)
       starred_task = create(:task, account_list: account_list, starred: true)
 
       starred_tasks = account_list.tasks.starred

@@ -50,7 +50,7 @@ module GoogleContactSync
       # Replace vertical tabs with newlines in both MPDX and Google Contact as vertical tabs are invalid XML and
       # will get escaped to newlines by  the google_contacts_api gem.
       # By fixing them in MPDX as well, we make the values the same to simplify future syncs.
-      synced_value.gsub!("\v", "\n") if synced_value
+      synced_value.tr!("\v", "\n") if synced_value
 
       g_contact.prep_changes(g_contact_field => synced_value) if synced_value != g_contact.send(g_contact_field)
       record[field] = synced_value

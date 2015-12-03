@@ -352,14 +352,14 @@ describe Contact do
       stub_request(:delete, %r{www.prayerletters.com/.*})
         .to_return(status: 200, body: '', headers: {})
 
-      prayer_letters_id  = 'foo'
+      prayer_letters_id = 'foo'
       contact.prayer_letters_id = prayer_letters_id
       contact.send(:delete_from_letter_services)
     end
 
     it "DOESN'T delete this person from prayerletters.com if another contact has the prayer_letters_id" do
       # This spec passes because no external web call is made
-      prayer_letters_id  = 'foo'
+      prayer_letters_id = 'foo'
       contact.update_column(:prayer_letters_id, prayer_letters_id)
       create(:contact, account_list: account_list, prayer_letters_id: prayer_letters_id)
       contact.send(:delete_from_letter_services)

@@ -147,7 +147,7 @@ class ContactFilter
 
   def referrer(filtered_contacts)
     if @filters[:referrer].present? && @filters[:referrer].first != ''
-      if (@filters[:referrer].first == '*')
+      if @filters[:referrer].first == '*'
         filtered_contacts = filtered_contacts.joins(:contact_referrals_to_me).where('contact_referrals.referred_by_id is not null').uniq
       else
         filtered_contacts = filtered_contacts.joins(:contact_referrals_to_me).where('contact_referrals.referred_by_id' => @filters[:referrer]).uniq
@@ -266,7 +266,7 @@ class ContactFilter
   end
 
   def contact_info_email(filtered_contacts)
-    return filtered_contacts unless  @filters[:contact_info_email].present?
+    return filtered_contacts unless @filters[:contact_info_email].present?
 
     contacts_with_emails = @contacts.where.not(email_addresses: { email: nil })
                            .where(email_addresses: { historic: false })
@@ -339,7 +339,7 @@ class ContactFilter
   end
 
   def contact_info_address(filtered_contacts)
-    return filtered_contacts unless  @filters[:contact_info_addr].present?
+    return filtered_contacts unless @filters[:contact_info_addr].present?
 
     contacts_with_addr = @contacts.where.not(addresses: { street: '' })
                          .where(addresses: { historic: false })
@@ -352,7 +352,7 @@ class ContactFilter
   end
 
   def contact_info_facebook(filtered_contacts)
-    return filtered_contacts unless  @filters[:contact_info_facebook].present?
+    return filtered_contacts unless @filters[:contact_info_facebook].present?
 
     contacts_with_fb = filtered_contacts.where.not(person_facebook_accounts: { remote_id: nil })
                        .includes(people: :facebook_account)

@@ -12,7 +12,7 @@ class ContactDuplicatesFinder
   # duplicate matching, require a certain threshold of the name ratio to confidently assume the person is male/female
   # for the sake of suggesting duplicates.
   MALE_NAME_CONFIDENCE_LVL = 0.9 # Assume male if more than this ratio with name are male
-  FEMALE_NAME_CONFIDENCE_LVL  = 0.1 # Assume female if fewer than this ratio with name are male
+  FEMALE_NAME_CONFIDENCE_LVL = 0.1 # Assume female if fewer than this ratio with name are male
 
   def dup_contacts_then_people
     create_temp_tables

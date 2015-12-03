@@ -140,7 +140,7 @@ class TntImport
     merge_dups_by_donor_accts(contact, donor_accounts)
 
     if true?(row['IsOrganization'])
-      donor_accounts.each { |donor_account|  add_or_update_company(row, donor_account) }
+      donor_accounts.each { |donor_account| add_or_update_company(row, donor_account) }
     end
 
     contact
@@ -258,7 +258,7 @@ class TntImport
 
       # If someone re-imports donations, assume that there is just one donation per date per amount;
       # that's not a perfect assumption but it seems reasonable solution for offline orgs for now.
-      donation_key_attrs = {  amount: row['Amount'], donation_date: parse_date(row['GiftDate']) }
+      donation_key_attrs = { amount: row['Amount'], donation_date: parse_date(row['GiftDate']) }
       account.donations.find_or_create_by(donation_key_attrs) do |donation|
         # Assume the currency is USD. Tnt doesn't have great currency support and USD is a decent default.
         donation.update(tendered_currency: 'USD', tendered_amount: row['Amount'])
@@ -395,12 +395,12 @@ class TntImport
       number = row[tnt_phone[:field]]
       next unless number.present? && (tnt_phone[:person] == :both || tnt_phone[:person] == person_sym)
 
-      phone_attrs =  { number: number, location: tnt_phone[:location], historic: is_valid_mask[i] == 0 }
+      phone_attrs = { number: number, location: tnt_phone[:location], historic: is_valid_mask[i] == 0 }
       if (@import.override? || had_no_primary) && row['PreferredPhoneType'].to_i == i
         phone_attrs[:primary] = true
         person.phone_numbers.each { |phone| phone.update(primary: false) }
       end
-      person.phone_number =  phone_attrs
+      person.phone_number = phone_attrs
     end
   end
 
@@ -611,8 +611,8 @@ class TntImport
           address.save
         end
       end
-      addresses << {  street: street,  city: city,  state: state,  postal_code: postal_code,  country: country,
-                      location: location,  region: row['Region'],  primary_mailing_address: primary_address,
+      addresses << {  street: street, city: city, state: state, postal_code: postal_code, country: country,
+                      location: location,  region: row['Region'], primary_mailing_address: primary_address,
                       source: 'TntImport'  }
     end
     addresses

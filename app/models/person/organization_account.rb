@@ -64,7 +64,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
       starting_donation_count = user.donations.count
 
       update_attributes(downloading: true, locked_at: Time.now)
-      date_from = last_download ? (last_download - 2.week) : ''
+      date_from = last_download ? (last_download - 2.weeks) : ''
       organization.api(self).import_all(date_from)
 
       ending_donation_count = user.donations.count

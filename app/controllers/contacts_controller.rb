@@ -207,7 +207,7 @@ class ContactsController < ApplicationController
     end
 
     # Can't use redirect_to because this is called with remote: true
-    @redirect_path  = contacts_path(filters: { referrer: [@contact.id] })
+    @redirect_path = contacts_path(filters: { referrer: [@contact.id] })
     render :redirect_script
   end
 

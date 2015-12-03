@@ -198,6 +198,7 @@ class FakeApi
   def self.requires_username_and_password?
     true
   end
+
   def requires_username_and_password?
     self.class.requires_username_and_password?
   end

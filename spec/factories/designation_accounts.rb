@@ -2,7 +2,7 @@
 
 FactoryGirl.define do
   factory :designation_account do
-    sequence(:designation_number) { |n| n.to_s }
+    sequence(:designation_number, &:to_s)
     association :organization
   end
 

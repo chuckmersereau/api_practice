@@ -9,7 +9,7 @@ describe MailChimpWebhookController do
     {
       type: 'unsubscribe', fired_at: '2009-03-26 21:40:57',
       data: {
-        action: 'unsub', reason: 'manual', id: '8a25ff1d98', list_id: 'MyString',
+        action: 'unsub', id: '8a25ff1d98', list_id: 'MyString',
         email: 'api+unsub@mailchimp.com', email_type: 'html',
         merges: { EMAIL: 'api+unsub@mailchimp.com', FNAME: 'MailChimp',
                   LNAME: 'API', INTERESTS: 'Group1,Group2' },

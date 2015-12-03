@@ -16,7 +16,7 @@ describe NotificationType::RemindPartnerInAdvance do
       end
 
       it 'adds a notification if one month in advance' do
-        donation.update(donation_date: 2.month.ago)
+        donation.update(donation_date: 2.months.ago)
         contact.update(last_donation_date: donation.donation_date)
         notifications = remind_partner_in_advance.check(contact.account_list)
         expect(notifications.length).to eq(1)
@@ -69,13 +69,13 @@ describe NotificationType::RemindPartnerInAdvance do
         donation.update(donation_date: 65.days.ago)
         contact.update(last_donation_date: donation.donation_date)
         contact.notifications.create!(notification_type_id: remind_partner_in_advance.id,
-                                      event_date: 3.month.ago)
+                                      event_date: 3.months.ago)
         notifications = remind_partner_in_advance.check(contact.account_list)
         expect(notifications.length).to eq(1)
       end
 
       it "doesn't add a notification if the contact is on a different account list with a shared designation account" do
-        donation.update(donation_date: 2.month.ago)
+        donation.update(donation_date: 2.months.ago)
         contact.update(last_donation_date: donation.donation_date)
         account_list2 = create(:account_list)
         account_list2.account_list_entries.create!(designation_account: da)
