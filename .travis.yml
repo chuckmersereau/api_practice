@@ -21,11 +21,11 @@ branches:
   only:
   - master
 env:
+  - TEST_SUITE='rake karma:run rubocop' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379
+    -DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
   - TEST_SUITE='parallel_test spec/ -n 6 --only-group 1,2 --group-by filesize --type rspec'
     -REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
     -COVERAGE=1
   - TEST_SUITE='parallel_test spec/ -n 4 --only-group 3,4 --group-by filesize --type rspec'
     -REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
     -COVERAGE=1
-  - TEST_SUITE='rake karma:run rubocop' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379
-    -DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
