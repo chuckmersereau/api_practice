@@ -14,7 +14,7 @@ class NotificationType::RemindPartnerInAdvance < NotificationType
                            .find_by('event_date > ?', 2.months.ago)
       next if prior_notification
       next unless contact.donations.any?
-      notification = contact.notifications.create!(notification_type_id: id, event_date: Date.today)
+      notification = contact.notifications.create!(notification_type_id: id, event_date: Time.zone.today)
       notifications << notification
     end
     notifications
@@ -24,12 +24,12 @@ class NotificationType::RemindPartnerInAdvance < NotificationType
     date_to_check = contact.last_donation_date || contact.pledge_start_date
     return false unless date_to_check.present?
     next_gift_date = date_to_check + contact.pledge_frequency.to_i.months
-    next_gift_date > Date.today && next_gift_date <= Date.today + days + 1.day
+    next_gift_date > Time.zone.today && next_gift_date <= Time.zone.today + days + 1.day
   end
 
   def create_task(account_list, notification)
     contact = notification.contact
-    task = account_list.tasks.create(subject: task_description(notification), start_at: Time.now,
+    task = account_list.tasks.create(subject: task_description(notification), start_at: Time.zone.now,
                                      activity_type: _('To Do'), notification_id: notification.id)
     task.activity_contacts.create(contact_id: contact.id)
     task

@@ -28,13 +28,14 @@ module Mpdx
     # config.i18n.load_path += Dir[Rails.root.join('my', 'locales', '*.{rb,yml}').to_s]
     # config.i18n.default_locale = :de
 
+    config.active_record.schema_format = :sql
+
     config.assets.paths << "#{Rails.root}/app/assets/fonts"
 
     config.exceptions_app = self.routes
 
     config.log_formatter = ::Logger::Formatter.new
     config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, :silence => ['/monitors/lb']
-
   end
 end
 
