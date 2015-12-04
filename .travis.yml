@@ -14,7 +14,6 @@ before_script:
 - psql -c 'create database mpdx_test2;' -U postgres
 - psql -U postgres -q -d mpdx_test -f db/structure.sql
 - psql -U postgres -q -d mpdx_test2 -f db/structure.sql
-- rm -f bin/spring
 script:
 - DISABLE_SPRING=1 bundle exec $TEST_SUITE
 - if [ ! -z "$COVERAGE" ]; then bundle exec rake coveralls:push; else echo "0"; fi
