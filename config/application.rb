@@ -29,6 +29,7 @@ module Mpdx
     # config.i18n.default_locale = :de
 
     config.active_record.schema_format = :sql
+    config.active_record.cache_timestamp_format = :nsec
 
     config.assets.paths << "#{Rails.root}/app/assets/fonts"
 
