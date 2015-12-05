@@ -3,7 +3,8 @@
 :concurrency: 7
 :timeout: 8
 :queues:
-  - [import, 1]
-  - [default, 1]
-  - [facebook, 1]
-  - [general, 5]
+  - mailers
+  - default
+  - import
+  - facebook
+  - general
