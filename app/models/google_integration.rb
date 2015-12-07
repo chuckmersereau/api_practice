@@ -1,6 +1,12 @@
 require 'async'
 class GoogleIntegration < ActiveRecord::Base
   include Async
+  include Sidekiq::Worker
+  sidekiq_options unique: true
+
+  sidekiq_retry_in do |count|
+    count**6 + 30 # 30, 31, 94, 759, 4126 ... second delays
+  end
 
   belongs_to :google_account, class_name: 'Person::GoogleAccount', inverse_of: :google_integrations
   belongs_to :account_list, inverse_of: :google_integrations
@@ -30,10 +36,14 @@ class GoogleIntegration < ActiveRecord::Base
     when 'calendar'
       calendar_integrator.sync_tasks
     when 'email'
-      email_integrator.sync_mail
+      sync_email
     when 'contacts'
       contacts_integrator.sync_contacts
     end
+  end
+
+  def sync_email
+    email_integrator.sync_mail
   end
 
   def calendar_integrator
@@ -105,9 +115,7 @@ class GoogleIntegration < ActiveRecord::Base
   end
 
   def self.sync_all_email_accounts
-    email_accounts = GoogleIntegration.where(email_integration: true)
-    email_accounts.each do |integration|
-      integration.queue_sync_data('email')
-    end
+    email_integrations = GoogleIntegration.where(email_integration: true)
+    AsyncScheduler.schedule_over_24h(email_integrations, :sync_email)
   end
 end

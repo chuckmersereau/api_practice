@@ -40,11 +40,14 @@ RSpec.configure do |config|
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all
 
-    if example.metadata[:sidekiq] == :fake
+    case
+    when example.metadata[:sidekiq] == :fake
       Sidekiq::Testing.fake!
-    elsif example.metadata[:sidekiq] == :inline
+    when example.metadata[:sidekiq] == :testing_disabled
+      Sidekiq::Testing.disable!
+    when example.metadata[:sidekiq] == :acceptance
       Sidekiq::Testing.inline!
-    elsif example.metadata[:type] == :acceptance
+    when example.metadata[:type] == :acceptance
       Sidekiq::Testing.inline!
     else
       Sidekiq::Testing.fake!
@@ -217,5 +220,13 @@ class FakeApi
 
   def method_missing(*_args, &_block)
     true
+  end
+end
+
+# Clear out unique job locks. They can get into Redis if you interrupt a test
+# run or don't call Worker.clear after queuing jobs in a spec.
+def clear_uniqueness_locks
+  Sidekiq.redis do |redis|
+    redis.keys('*unique*').each { |k| redis.del(k) }
   end
 end
