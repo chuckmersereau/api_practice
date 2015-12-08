@@ -437,6 +437,7 @@ GEM
     lumberjack (1.0.9)
     mail (2.6.3)
       mime-types (>= 1.16, < 3)
+    marco-polo (1.2.1)
     method_source (0.8.2)
     mime-types (1.25.1)
     minitest (5.8.0)
@@ -842,6 +843,7 @@ DEPENDENCIES
   koala (~> 1.9.0)
   linkedin (~> 0.3.7)
   lodash-rails (~> 3.5.0)
+  marco-polo
   mock_redis
   momentjs-rails
   newrelic_rpm (~> 3.7.1)
