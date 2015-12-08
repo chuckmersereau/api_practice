@@ -21,7 +21,6 @@ gem 'angularjs-rails' # , '~> 1.2.16'
 gem 'lodash-rails', '~> 3.5.0'
 gem 'angular-ui-bootstrap-rails'
 gem 'ngannotate-rails'
-gem 'marco-polo'
 gem 'momentjs-rails'
 gem 'best_in_place', '~> 3.0.1'
 gem 'syslog-logger'
@@ -163,3 +162,6 @@ end
 group :doc do
   gem 'sdoc', '~> 0.4.0'
 end
+
+# add this at the end so it plays nice with pry
+gem 'marco-polo'
