@@ -1,3 +1,6 @@
+# To load in a production rails console run:
+# load('./dev/rails_c_funcs.rb')
+
 def fix_donation_totals
   sql = '
   UPDATE contacts
@@ -158,4 +161,54 @@ end
 
 def add_offline_org(org_name, website = 'example.com')
   Organization.create(name: org_name, api_class: 'OfflineOrg', query_ini_url: website, addresses_url: 'example.com')
+end
+
+def save_account_list_sql_to_s3(account_list)
+  filename = "account_list_#{account_list.id}_at_#{Time.now.to_i}.sql"
+  upload_to_s3(filename, account_list_sql(account_list))
+end
+
+def upload_to_s3(filename, body)
+  conn = Fog::Storage.new(provider: 'AWS',
+                          aws_access_key_id: ENV.fetch('AWS_ACCESS_KEY_ID'),
+                          aws_secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'))
+  dir = conn.directories.get(ENV.fetch('AWS_BUCKET'))
+  path = "debug_exports/#{filename}"
+  file = dir.files.new(key: path, body: body)
+  file.save
+  puts "Saved in #{ENV.fetch('AWS_BUCKET')} bucket at #{path}"
+end
+
+def account_list_sql(account_list)
+  sql = []
+  account_list.contacts.find_each do |contact|
+    sql << model_insert_sql(account_list)
+    sql += contact.people.map(&method(:person_sql))
+    sql += relation_insert_sql(contact.addresses)
+  end
+  sql.join("\n")
+end
+
+def person_sql(person)
+  [model_insert_sql(person)] + relation_insert_sql(person.phone_numbers) +
+    relation_insert_sql(person.phone_numbers)
+end
+
+def relation_insert_sql(relation)
+  relation.map(&method(:model_insert_sql))
+end
+
+def model_insert_sql(model)
+  quoted_columns = []
+  quoted_values = []
+
+  attributes_with_values =
+    model.send(:arel_attributes_with_values_for_create, model.attribute_names)
+
+  attributes_with_values.each_pair do |key, value|
+    quoted_columns << ActiveRecord::Base.connection.quote_column_name(key.name)
+    quoted_values << ActiveRecord::Base.connection.quote(value)
+  end
+
+  "INSERT INTO #{model.class.quoted_table_name} (#{quoted_columns.join(', ')}) VALUES(#{quoted_values.join(', ')});\n"
 end
