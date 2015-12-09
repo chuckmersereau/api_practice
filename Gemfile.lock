@@ -440,7 +440,7 @@ GEM
     marco-polo (1.2.1)
     method_source (0.8.2)
     mime-types (1.25.1)
-    minitest (5.8.0)
+    minitest (5.8.3)
     mock_redis (0.15.1)
     momentjs-rails (2.10.3)
       railties (>= 3.1)
@@ -464,7 +464,7 @@ GEM
       jwt (~> 0.1.4)
       multi_json (~> 1.0)
       rack (~> 1.2)
-    oj (2.1.7)
+    oj (2.14.0)
     omniauth (1.1.4)
       hashie (>= 1.2, < 3)
       rack
@@ -691,9 +691,9 @@ GEM
       sidekiq (>= 4.0.0)
     sidekiq-pro (3.0.0)
       sidekiq (>= 4.0.0.pre1)
-    siebel_donations (1.0.5)
+    siebel_donations (1.0.6)
       activesupport (>= 3.0.0)
-      oj (~> 2.1.0)
+      oj (~> 2.14.0)
       rest-client (~> 1.6.7)
       retryable-rb (~> 1.1.0)
     signet (0.5.1)
@@ -850,7 +850,7 @@ DEPENDENCIES
   ngannotate-rails
   nokogiri (~> 1.5.11)
   oauth!
-  oj (~> 2.1.0)
+  oj (~> 2.14.0)
   omniauth-cas (~> 1.0.2)
   omniauth-facebook (~> 1.6.0)
   omniauth-google-oauth2
@@ -901,7 +901,7 @@ DEPENDENCIES
   sidekiq-cron
   sidekiq-pro!
   sidekiq-unique-jobs!
-  siebel_donations (~> 1.0.5)
+  siebel_donations (~> 1.0.6)
   silencer
   simplecov
   sinatra
