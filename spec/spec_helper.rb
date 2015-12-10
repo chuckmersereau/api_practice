@@ -7,6 +7,7 @@ def start_simplecov
   require 'simplecov'
   SimpleCov.start 'rails' do
     add_filter 'vendor'
+    add_filter '/dev/'
     add_group 'Roles', 'app/roles'
   end
 end

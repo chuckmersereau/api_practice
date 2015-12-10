@@ -181,21 +181,22 @@ end
 
 def account_list_sql(account_list)
   sql = []
-  account_list.contacts.find_each do |contact|
-    sql << model_insert_sql(account_list)
-    sql += contact.people.map(&method(:person_sql))
-    sql += relation_insert_sql(contact.addresses)
+  sql << model_insert_sql(account_list)
+  [
+    account_list.contacts,
+    account_list.people,
+    account_list.addresses,
+    ContactPerson.where(contact: account_list.contacts),
+    PhoneNumber.where(person: account_list.people),
+    EmailAddress.where(person: account_list.people)
+  ].each do |relation|
+    sql += relation_insert_sql(relation)
   end
   sql.join("\n")
 end
 
-def person_sql(person)
-  [model_insert_sql(person)] + relation_insert_sql(person.phone_numbers) +
-    relation_insert_sql(person.phone_numbers)
-end
-
 def relation_insert_sql(relation)
-  relation.map(&method(:model_insert_sql))
+  relation.uniq.map(&method(:model_insert_sql))
 end
 
 def model_insert_sql(model)
@@ -210,5 +211,5 @@ def model_insert_sql(model)
     quoted_values << ActiveRecord::Base.connection.quote(value)
   end
 
-  "INSERT INTO #{model.class.quoted_table_name} (#{quoted_columns.join(', ')}) VALUES(#{quoted_values.join(', ')});\n"
+  "INSERT INTO #{model.class.quoted_table_name} (#{quoted_columns.join(', ')}) VALUES (#{quoted_values.join(', ')});\n"
 end
