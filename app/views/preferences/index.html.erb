@@ -72,6 +72,22 @@
             </div>
 
             <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <%=  f.label _('Exclude your home country from the contacts export file here') %>
+                  <%= f.country_select :home_country, ['None'], {},
+                                   {class: 'country_select form-control'} %>
+                </div>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-12">
+                <%= render 'notification_settings_form', f: f %>
+              </div>
+            </div>
+
+            <div class="row">
               <div class="col-md-12">
                 <div class="well">
                   <div class="form-group">
@@ -94,20 +110,8 @@
               </div>
             </div>
 
-            <div class="row spacer-bottom">
-              <div class="col-md-8">
-                <div class="form-group">
-                  <%=  f.label _('Exclude your home country from the contacts export file here') %>
-                  <%= f.country_select :home_country, ['None'], {},
-                                   {class: 'country_select form-control'} %>
-                </div>
-              </div>
-            </div>
-
             <div class="row">
               <div class="col-md-12">
-                <%= render 'notification_settings_form', f: f %>
-
                 <div class="page-filters page-filters-close">
                   <%= f.submit _('Save Preferences'), class: 'btn btn-primary btn-default' %>
                 </div>
