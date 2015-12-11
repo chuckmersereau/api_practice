@@ -45,12 +45,6 @@ SIDEKIQ_CRON_HASH  = {
     'class' => 'SidekiqCronWorker',
     'cron'  => '0 11 * * *',
     'args'  => ['Person::FacebookAccount.refresh_tokens']
-  },
-
-  'Check for sidekiq problems' => {
-    'class' => 'SidekiqCronWorker',
-    'cron'  => '*/10 * * * *',
-    'args'  => ['SidekiqMonitor.notify_if_problem']
   }
 }
 
