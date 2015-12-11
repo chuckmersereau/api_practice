@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-10-20 16:32-0400\n"
-"PO-Revision-Date: 2015-10-20 16:32-0400\n"
+"POT-Creation-Date: 2015-12-11 15:22-0500\n"
+"PO-Revision-Date: 2015-12-11 15:22-0500\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -1497,9 +1497,6 @@ msgstr ""
 msgid "New Contact"
 msgstr ""
 
-msgid "New Donation"
-msgstr ""
-
 msgid "New Tag"
 msgstr ""
 
@@ -1609,6 +1606,9 @@ msgid "Notifications from MPDX"
 msgstr ""
 
 msgid "Now you can connect some social accounts"
+msgstr ""
+
+msgid "Number is invalid"
 msgstr ""
 
 msgid "Occupation"
@@ -2452,9 +2452,6 @@ msgid "You just merged %{count} people"
 msgstr ""
 
 msgid "You must check at least one contact."
-msgstr ""
-
-msgid "You must select at least 2 contacts to merge."
 msgstr ""
 
 msgid "You need to be connected to an organization to use MPDX."

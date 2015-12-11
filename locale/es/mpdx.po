@@ -1635,10 +1635,6 @@ msgstr ""
 msgid "New Contact"
 msgstr "Añadir este contacto"
 
-#, fuzzy
-msgid "New Donation"
-msgstr "Añadir una cuenta"
-
 msgid "New Tag"
 msgstr ""
 
@@ -1761,6 +1757,9 @@ msgid "Notifications from MPDX"
 msgstr ""
 
 msgid "Now you can connect some social accounts"
+msgstr ""
+
+msgid "Number is invalid"
 msgstr ""
 
 #, fuzzy
@@ -2710,9 +2709,6 @@ msgid "You just merged %{count} people"
 msgstr ""
 
 msgid "You must check at least one contact."
-msgstr ""
-
-msgid "You must select at least 2 contacts to merge."
 msgstr ""
 
 msgid "You need to be connected to an organization to use MPDX."
