@@ -6,7 +6,6 @@ cache:
     - cache
 language: ruby
 services:
-- memcache
 - redis-server
 before_script:
 - psql -c 'create database mpdx_test;' -U postgres
@@ -14,9 +13,9 @@ before_script:
 - psql -U postgres -q -d mpdx_test -f db/structure.sql
 - psql -U postgres -q -d mpdx_test2 -f db/structure.sql
 script:
-- bin/travis_rubocop_or_karma.sh
 - bin/travis_parallel_test.sh
 - bundle exec rake coveralls:push
+- bin/travis_rubocop_or_karma.sh
 branches:
   only:
   - master
