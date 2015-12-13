@@ -9,23 +9,13 @@ services:
 - memcache
 - redis-server
 before_script:
-- PHANTOMJS_CDNURL=https://bitbucket.org/ariya/phantomjs/downloads npm install
 - psql -c 'create database mpdx_test;' -U postgres
-- psql -c 'create database mpdx_test2;' -U postgres
 - psql -U postgres -q -d mpdx_test -f db/structure.sql
-- psql -U postgres -q -d mpdx_test2 -f db/structure.sql
 script:
-- DISABLE_SPRING=1 bundle exec $TEST_SUITE
-- if [ ! -z "$COVERAGE" ]; then bundle exec rake coveralls:push; else echo "0"; fi
+- bin/travis_tests.sh
 branches:
   only:
   - master
 env:
-  - TEST_SUITE='rake karma:run rubocop' REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379
-    -DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
-  - TEST_SUITE='parallel_test spec/ -n 6 --only-group 1,2 --group-by filesize --type rspec'
-    -REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
-    -COVERAGE=1
-  - TEST_SUITE='parallel_test spec/ -n 4 --only-group 3,4 --group-by filesize --type rspec'
-    -REDIS_PORT_6379_TCP_ADDR=localhost REDIS_PORT_6379_TCP_PORT=6379 DB_ENV_POSTGRESQL_DB=mpdx_test DB_ENV_POSTGRESQL_USER=postgres
-    -COVERAGE=1
+- TEST_SUITE=1
+- TEST_SUITE=2
