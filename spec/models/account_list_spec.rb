@@ -411,12 +411,12 @@ describe AccountList do
     let!(:org_account) { create(:organization_account) }
 
     it 'returns non-locked account lists with organization accounts' do
-      expect(AccountList.with_linked_org_accounts).to eq [org_account.account_list]
+      expect(AccountList.with_linked_org_accounts).to include org_account.account_list
     end
 
     it 'does not return locked accounts' do
       org_account.update_column(:locked_at, 1.minute.ago)
-      expect(AccountList.with_linked_org_accounts).to be_empty
+      expect(AccountList.with_linked_org_accounts).to_not include org_account.account_list
     end
   end
 

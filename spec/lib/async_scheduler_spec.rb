@@ -12,8 +12,9 @@ describe AsyncScheduler do
       Sidekiq::ScheduledSet.new.clear
       Sidekiq::Queue.new('import').clear
 
+      account_lists_relation = AccountList.where(id: [al1.id, al2.id, al3.id])
       expect do
-        AsyncScheduler.schedule_over_24h(AccountList.all, :import_data)
+        AsyncScheduler.schedule_over_24h(account_lists_relation, :import_data)
       end.to change(Sidekiq::ScheduledSet.new, :size).by(2)
 
       # The first job is queued right away and the rest are scheduled evenly
