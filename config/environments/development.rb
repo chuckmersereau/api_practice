@@ -1,4 +1,14 @@
 Rails.application.configure do
+  # Make it easy to turn on http logger when you want it
+  if ENV['HTTP_LOGGER']
+    HttpLogger.log_headers = true
+    HttpLogger.logger = Logger.new(STDOUT)
+    HttpLogger.collapse_body_limit = 10_000
+    HttpLogger.ignore = [/newrelic\.com/]
+  else
+    HttpLogger.logger = Logger.new("/dev/null")
+  end
+
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded on

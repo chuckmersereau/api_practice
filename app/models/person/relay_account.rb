@@ -7,7 +7,7 @@ class Person::RelayAccount < ActiveRecord::Base
 
   def self.find_or_create_from_auth(auth_hash, user)
     @rel = user.relay_accounts
-    @remote_id = auth_hash.extra.attributes.first.ssoGuid
+    @remote_id = auth_hash.extra.attributes.first.ssoGuid.upcase
     @attributes = {
       remote_id: @remote_id,
       first_name: auth_hash.extra.attributes.first.firstName,
@@ -22,6 +22,10 @@ class Person::RelayAccount < ActiveRecord::Base
     org = Organization.cru_usa
     account.find_or_create_org_account(auth_hash) if user.organization_accounts.where(organization_id: org.id).blank?
     account
+  end
+
+  def self.find_related_account(rel, remote_id)
+    rel.authenticated.find_by('upper(remote_id) = ?', remote_id)
   end
 
   def self.create_user_from_auth(auth_hash)

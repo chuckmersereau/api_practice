@@ -5,7 +5,7 @@ class Person::KeyAccount < ActiveRecord::Base
 
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.key_accounts
-    @remote_id = auth_hash.extra.attributes.first.ssoGuid
+    @remote_id = auth_hash.extra.attributes.first.ssoGuid.upcase
     @attributes = {
       remote_id: @remote_id,
       first_name: auth_hash.extra.attributes.first.firstName,
@@ -13,6 +13,10 @@ class Person::KeyAccount < ActiveRecord::Base
       email: auth_hash.extra.attributes.first.email
     }
     super
+  end
+
+  def self.find_related_account(rel, remote_id)
+    rel.authenticated.find_by('upper(remote_id) = ?', remote_id)
   end
 
   def self.create_user_from_auth(auth_hash)

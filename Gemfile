@@ -119,6 +119,7 @@ group :development do
   gem 'binding_of_caller'
   gem 'rack-livereload'
   gem 'guard-livereload', '~> 2.4', require: false
+  gem 'http_logger'
   # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
 end
 
