@@ -3,7 +3,8 @@ require 'smarty_streets'
 class Address < ActiveRecord::Base
   has_paper_trail on: [:destroy, :update],
                   meta: { related_object_type: :addressable_type,
-                          related_object_id: :addressable_id }
+                          related_object_id: :addressable_id },
+                  ignore: [:updated_at]
 
   belongs_to :addressable, polymorphic: true, touch: true
   belongs_to :master_address
