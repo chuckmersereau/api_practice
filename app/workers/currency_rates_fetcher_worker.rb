@@ -5,6 +5,7 @@ class CurrencyRatesFetcherWorker
   MAX_DAYS_TO_FETCH = 30
 
   def perform
+    PaperTrail.whodunnit = 'CurrencyRatesFetcherWorker'
     num_days_to_fetch.times do |n|
       fetch_rates(Date.current - n)
     end
