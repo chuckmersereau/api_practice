@@ -3,9 +3,18 @@ class Contact < ActiveRecord::Base
   acts_as_taggable
   include TagsEagerLoading
 
+  # Don't create a new paper trail version if only a timestamp or de-normalized
+  # field changes.
+  PAPER_TRAIL_IGNORED_FIELDS = [
+    :updated_at, :total_donations, :last_donation_date, :first_donation_date,
+    :notes_saved_at, :last_activity, :last_letter, :last_phone_call,
+    :last_pre_call, :last_thank, :uncompleted_tasks_count
+  ]
+
   has_paper_trail on: [:destroy, :update],
                   meta: { related_object_type: 'AccountList',
-                          related_object_id: :account_list_id }
+                          related_object_id: :account_list_id },
+                  ignore: PAPER_TRAIL_IGNORED_FIELDS
 
   has_many :contact_donor_accounts, dependent: :destroy, inverse_of: :contact
   has_many :donor_accounts, through: :contact_donor_accounts, inverse_of: :contacts

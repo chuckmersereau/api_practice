@@ -1,5 +1,5 @@
 class AccountListInvite < ActiveRecord::Base
-  has_paper_trail on: [:update]
+  has_paper_trail on: [:update], ignore: [:updated_at]
 
   belongs_to :account_list
   belongs_to :invited_by_user, class_name: 'User'
