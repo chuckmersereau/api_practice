@@ -17,8 +17,8 @@ class PhoneNumber < ActiveRecord::Base
   # may give false positives (which is OK, since that's less annoying to the
   # user to enter a slightly wrong number than to not be able to enter a valid
   # one.)
-  validates_each :number do |record, attr, value|
-    record.errors.add(:base, _("Number is invalid")) unless GlobalPhone.validate(value)
+  validates_each :number do |record, _attr, value|
+    record.errors.add(:base, _('Number is invalid')) unless GlobalPhone.validate(value)
   end
 
   # attr_accessible :number, :primary, :country_code, :location, :remote_id
