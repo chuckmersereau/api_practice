@@ -135,7 +135,7 @@ describe Appeal do
       {
         { amounts: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2], pledge_frequency: 1 } => true,
         { amounts: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2], pledge_frequency: 1 } => true,
-        { amounts: [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2], pledge_frequency: 1 }  => false,
+        { amounts: [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2], pledge_frequency: 1 } => false,
         { amounts: [1, 1, 1], pledge_frequency: 1 } => false,
         { amounts: [1, 1, 2], pledge_frequency: 1 } => true,
         { amounts: [1, 1, 2, 2, 0], pledge_frequency: 1 } => true,
