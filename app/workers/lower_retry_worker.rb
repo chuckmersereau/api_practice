@@ -8,6 +8,7 @@ class LowerRetryWorker
   end
 
   def perform(klass_str, id, method, *args)
+    PaperTrail.whodunnit = 'LowerRetryWorker'
     if id
       begin
         klass_str.constantize.find(id).send(method, *args)
