@@ -9,12 +9,6 @@ describe PhoneNumberExhibit do
     expect(subject.number).to eq('(213) 456-7890')
   end
 
-  it "should return nil number if it's not a valid phone number" do
-    phone_number.number = '555'
-    phone_number.country_code = '2'
-    expect(subject.number).to be_nil
-  end
-
   it 'returns an extension when included in the local number' do
     phone_number.number = '2135555555;ext=1234'
     expect(subject.number).to eq('(213) 555-5555 ext 1234')
