@@ -36,7 +36,8 @@ class HomeController < ApplicationController
       user.setup.delete :import
       dirty_preferences = true
     end
-    if user.setup.include?(:goal) && current_account_list.monthly_goal.present?
+    if user.setup.include?(:goal) && current_account_list.monthly_goal.present? &&
+       current_account_list.notification_preferences.count > 1
       user.setup.delete :goal
       dirty_preferences = true
     end

@@ -8,6 +8,10 @@ class PreferencesController < ApplicationController
   def update
     @preference_set = PreferenceSet.new(params[:preference_set].merge!(user: current_user, account_list: current_account_list))
     if @preference_set.save
+      if params[:preference_set][:completed_welcome_step] && current_user.setup.include?(:goal)
+        current_user.setup.delete :goal
+        current_user.save
+      end
       path = params[:redirect] || preferences_path
       redirect_to path, notice: _('Preferences saved')
     else
