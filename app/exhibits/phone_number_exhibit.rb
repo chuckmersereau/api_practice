@@ -10,7 +10,6 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
   def number
     return unless self[:number]
     phone = Phonelib.parse(self[:number])
-    return unless phone.valid?
     phone_num =
         if country_code == '1' || (country_code.blank? &&
         (self[:number].length == 10 || self[:number].length == 7))
