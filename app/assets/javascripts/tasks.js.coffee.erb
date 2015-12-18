@@ -148,6 +148,8 @@ $ ->
       $('select', form).val('')
       $('#bulk_task_update_ids', form).val($.mpdx.getSelectedTaskIds($(this).closest('table')).join(','))
 
+      $('#task_start_at_1i, #task_start_at_2i, #task_start_at_3i').val('')
+
       $('#bulk_edit_task_modal').dialog
         resizable: false,
         modal:'true',

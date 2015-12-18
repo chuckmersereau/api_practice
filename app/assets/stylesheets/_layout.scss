@@ -181,7 +181,7 @@ div.right {
     }
   }
   .navbar-quick {
-    line-height: $mainmenuheight;
+    line-height: $mainmenuheight - 2px;
     display: inline-block;
   }
   .navbar-collapse {
