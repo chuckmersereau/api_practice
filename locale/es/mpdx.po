@@ -415,6 +415,9 @@ msgstr "Llame para cita"
 msgid "Are marked as do not ask for appeals"
 msgstr ""
 
+msgid "Are you sure you want to close?"
+msgstr ""
+
 msgid "Are you sure you want to delete this appeal?"
 msgstr ""
 
@@ -1286,8 +1289,8 @@ msgid ""
 msgstr ""
 
 msgid ""
-"It looks like you were adding some referrals. If you leave before submitting, "
-"your changes will be lost."
+"It looks like you were adding some contacts. If you leave before submitting, y"
+"our changes will be lost."
 msgstr ""
 
 msgid ""
