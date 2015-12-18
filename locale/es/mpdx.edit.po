@@ -383,6 +383,9 @@ msgstr "Llame para cita"
 msgid "Are marked as do not ask for appeals"
 msgstr ""
 
+msgid "Are you sure you want to close?"
+msgstr ""
+
 msgid "Are you sure you want to delete this appeal?"
 msgstr ""
 
@@ -1208,7 +1211,7 @@ msgstr ""
 msgid "It looks like you were adding a task. If you leave before submitting, your changes will be lost."
 msgstr ""
 
-msgid "It looks like you were adding some referrals. If you leave before submitting, your changes will be lost."
+msgid "It looks like you were adding some contacts. If you leave before submitting, your changes will be lost."
 msgstr ""
 
 msgid "It looks like you were editting a task. If you leave before submitting, your changes will be lost."
@@ -2703,7 +2706,3 @@ msgstr ""
 
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
-
-#, fuzzy
-#~ msgid "New Donation"
-#~ msgstr "Añadir una cuenta"
