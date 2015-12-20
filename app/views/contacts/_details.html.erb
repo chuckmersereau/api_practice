@@ -14,7 +14,7 @@
               <% end %>
             </td>
             <td class="meta_data"<% if address.historic %> style="text-decoration: line-through;"<% end %>>
-              <%= address_exhibit.to_html %>
+              <%= address_exhibit.to_i18n_html %>
               <br />
               <%= link_to(_('Map It'), "http://maps.google.com?q=#{address_exhibit.to_google}", target: '_blank', class: 'mapit') %>
             </td>

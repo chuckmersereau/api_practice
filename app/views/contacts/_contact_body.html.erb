@@ -73,7 +73,7 @@
                                   collection: { 'false' => pledge_not_received.html_safe,
                                                 'true' => pledge_received.html_safe })%>
               <% end %>
-              <i class="fa fa-question-circle" data-toggle="tooltip" 
+              <i class="fa fa-question-circle" data-toggle="tooltip"
                  data-placement="top" data-behavior="explain_statuses"
                  title="<%= _('Click for explanation of contact status options.') %>"></i>
               <%= render 'explain_statuses_modal' %>
@@ -119,7 +119,7 @@
                 <% if contact_exhibit.mailing_address.street.present? && !contact_exhibit.mailing_address.historic %>
                     <tr>
                       <td class="meta_name">Address</td>
-                      <td class="meta_data"><%= contact_exhibit.mailing_address.street %><br><%= contact_exhibit.mailing_address.city %>, <%= contact_exhibit.mailing_address.state %> <%= contact_exhibit.mailing_address.postal_code %><br><%= contact_exhibit.mailing_address.country %></td>
+                      <td class="meta_data"><%= exhibit(contact_exhibit.mailing_address, self).to_i18n_html %></td>
                     </tr>
                 <% end %>
                 <% if contact.website.present? %>

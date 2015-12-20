@@ -88,6 +88,7 @@ gem 'sidekiq-cron'
 gem 'siebel_donations', '~> 1.0.6'
 gem 'sinatra', require: nil
 gem 'slim' # used for sidekiq web
+gem 'snail'
 gem 'twitter_cldr', '~> 2.4.0'
 # gem 'typhoeus'
 gem 'versionist', '~> 1.2.1'

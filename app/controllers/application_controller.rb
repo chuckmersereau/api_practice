@@ -98,7 +98,9 @@ class ApplicationController < ActionController::Base
     unless @current_account_list
       @current_account_list = current_user.account_lists.where(id: session[:current_account_list_id]).first if session[:current_account_list_id].present?
       @current_account_list ||= default_account_list
-      session[:current_account_list_id] = @current_account_list.id if @current_account_list
+      return unless @current_account_list
+      Snail.home_country = Address.find_country_iso(@current_account_list.home_country) if @current_account_list.home_country
+      session[:current_account_list_id] = @current_account_list.id
     end
     @current_account_list
   end

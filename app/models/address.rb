@@ -121,7 +121,23 @@ class Address < ActiveRecord::Base
     end
   end
 
+  def to_snail
+    Snail.new(
+      line_1: street, postal_code: postal_code, city: city,
+      region: region, country: Address.find_country_iso(country)
+    ).to_s
+  end
+
   private
+
+  def self.find_country_iso(val)
+    return nil if val.nil? || val.empty?
+    val.upcase!
+    Snail.lookup_country_iso(val) ||
+      Snail::Iso3166::ALPHA2.select { |_key, hash| hash.include? val }.keys.first ||
+      Snail::Iso3166::ALPHA2.select { |_key, hash| hash.include? val }.keys.first ||
+      Snail::Iso3166::ALPHA2_EXCEPTIONS.select { |_key, hash| hash.include? val }.keys.first
+  end
 
   def set_manual_source_if_user_changed
     return unless user_changed && (new_record? || place_fields_changed?)
