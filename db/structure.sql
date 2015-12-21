@@ -529,6 +529,39 @@ ALTER SEQUENCE contact_donor_accounts_id_seq OWNED BY contact_donor_accounts.id;
 
 
 --
+-- Name: contact_notes_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE contact_notes_logs (
+    id integer NOT NULL,
+    contact_id integer,
+    recorded_on date,
+    notes text,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: contact_notes_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE contact_notes_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: contact_notes_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE contact_notes_logs_id_seq OWNED BY contact_notes_logs.id;
+
+
+--
 -- Name: contact_people; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2582,6 +2615,13 @@ ALTER TABLE ONLY contact_donor_accounts ALTER COLUMN id SET DEFAULT nextval('con
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY contact_notes_logs ALTER COLUMN id SET DEFAULT nextval('contact_notes_logs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY contact_people ALTER COLUMN id SET DEFAULT nextval('contact_people_id_seq'::regclass);
 
 
@@ -3052,6 +3092,14 @@ ALTER TABLE ONLY company_positions
 
 ALTER TABLE ONLY contact_donor_accounts
     ADD CONSTRAINT contact_donor_accounts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: contact_notes_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY contact_notes_logs
+    ADD CONSTRAINT contact_notes_logs_pkey PRIMARY KEY (id);
 
 
 --
@@ -3671,6 +3719,20 @@ CREATE INDEX index_contact_donor_accounts_on_contact_id ON contact_donor_account
 --
 
 CREATE INDEX index_contact_donor_accounts_on_donor_account_id ON contact_donor_accounts USING btree (donor_account_id);
+
+
+--
+-- Name: index_contact_notes_logs_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contact_notes_logs_on_contact_id ON contact_notes_logs USING btree (contact_id);
+
+
+--
+-- Name: index_contact_notes_logs_on_recorded_on; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contact_notes_logs_on_recorded_on ON contact_notes_logs USING btree (recorded_on);
 
 
 --
@@ -4765,4 +4827,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151019190942');
 INSERT INTO schema_migrations (version) VALUES ('20151116162403');
 
 INSERT INTO schema_migrations (version) VALUES ('20151221004231');
+
+INSERT INTO schema_migrations (version) VALUES ('20151221154339');
 

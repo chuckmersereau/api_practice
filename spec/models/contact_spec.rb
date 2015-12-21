@@ -786,13 +786,4 @@ describe Contact do
       expect(contact.mailing_address.street).to be_nil
     end
   end
-
-  describe 'partner status log' do
-    it 'tracks status and pledge details', versioning: true do
-      contact = create(:contact, status: nil, pledge_amount: nil)
-      expect do
-        contact.update(status: 'Partner - Financial', pledge_amount: 200)
-      end.to change(PartnerStatusLog, :count).by(1)
-    end
-  end
 end

@@ -121,7 +121,7 @@ GEM
       parser (~> 2.2)
     atomic (1.1.99)
     attr_required (1.0.0)
-    attributes_history (0.0.2)
+    attributes_history (0.0.3)
       activerecord (>= 3.0, < 6.0)
       activesupport (>= 3.0, < 6.0)
     autoparse (0.3.3)
