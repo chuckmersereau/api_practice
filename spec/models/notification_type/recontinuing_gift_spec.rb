@@ -37,16 +37,13 @@ describe NotificationType::RecontinuingGift do
     end
 
     it 'does not notify if prior gift was a special gift', versioning: true do
-      # These updates will create paper trail versions
-      contact.update(status: 'Partner - Special')
-      contact.update(status: 'Partner - Financial')
+      # First force the status to start as Partner - Special (without callbacks
+      # so it won't trigger a partner status log entry)
+      contact.update_column(:status, 'Partner - Special')
 
-      # The last version will have the 'Partner - Special' so make all the
-      # rest be old so that we simulate that the partner was a special partner
-      # previously.
-      contact.versions.where.not(id: contact.versions.last.id).destroy_all
-      expect(contact.reload.version_at(old_donation.donation_date).status)
-        .to eq('Partner - Special')
+      # Do an update to Partner - Financial so that Partner - Special is
+      # recorded in the partner status log
+      contact.update(status: 'Partner - Financial')
 
       # Now don't consider it a recontinuing gift because the partner
       # status at the previous gift time was not Partner - Financial

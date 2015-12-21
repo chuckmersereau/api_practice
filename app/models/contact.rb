@@ -16,6 +16,10 @@ class Contact < ActiveRecord::Base
                           related_object_id: :account_list_id },
                   ignore: PAPER_TRAIL_IGNORED_FIELDS
 
+  has_attributes_history for: [:status, :pledge_amount, :pledge_frequency,
+                               :pledge_received, :pledge_start_date],
+                         with_model: PartnerStatusLog
+
   has_many :contact_donor_accounts, dependent: :destroy, inverse_of: :contact
   has_many :donor_accounts, through: :contact_donor_accounts, inverse_of: :contacts
   belongs_to :account_list
