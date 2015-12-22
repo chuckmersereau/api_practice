@@ -17,7 +17,7 @@ class NotificationType::RecontinuingGift < NotificationType
     # A gift is only "recontiuing" if the prior gift was given when the contact
     # was a financial partner.
     return unless contact.prev_month_donation_date.present? &&
-                  contact.version_at(contact.prev_month_donation_date).status == 'Partner - Financial'
+                  contact.status_on_date(contact.prev_month_donation_date) == 'Partner - Financial'
 
     contact.last_monthly_total >= contact.pledge_amount &&
       contact.months_from_prev_to_last_donation.present? &&

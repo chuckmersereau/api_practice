@@ -32,6 +32,7 @@ gem 'activesupport-json_encoder'
 gem 'acts-as-taggable-on', '~> 3.0.0'
 gem 'airbrake' # , '~> 3.1.6'
 gem 'assignable_values', '~> 0.5.3'
+gem 'attributes_history'
 gem 'carrierwave', git: 'https://github.com/carrierwaveuploader/carrierwave' # has cache err fix not release yet
 gem 'charlock_holmes'
 gem 'cloudinary'
