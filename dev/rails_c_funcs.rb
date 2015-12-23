@@ -113,7 +113,9 @@ end
 
 def dev_user(id = nil)
   id ||= ENV['DEV_USER_ID']
-  @dev_user ||= User.find_by(id: id)
+  return @dev_user if @dev_user || id.blank?
+  @dev_user = User.find_by(id: id)
+  PaperTrail.whodunnit = @dev_user
 end
 
 def dev_account(id = nil)
