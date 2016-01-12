@@ -1,265 +1,266 @@
 <div class="ui-dialog ui-widget ui-widget-content ui-corner-all ui-front ui-dialog-buttons ui-dialog-responsive" style="width: 100%;">
     <div class="ui-dialog-titlebar ui-widget-header ui-corner-all ui-helper-clearfix">
-        <span id="ui-id-7" class="ui-dialog-title" ng-bind="appeal.name"></span>
+        <span id="ui-id-7" class="ui-dialog-title"
+              ng-bind="appeal.name || '<%= _("Nameless Appeal") %>'"></span>
         <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-icon-only ui-dialog-titlebar-close" title="close" ng-click="cancel()">
             <span class="ui-button-icon-primary ui-icon ui-icon-closethick"></span>
             <span class="ui-button-text"><%= _('close') %></span>
         </button>
     </div>
-    <div class="modal-body ui-dialog-content ui-widget-content">
-        <form>
-            <div class="form_wrapper">
-                <div class="field">
+    <div class="modal-body ui-dialog-content ui-widget-content edit-appeal-dialog-content">
+        <form class="form_wrapper">
+            <div class="row">
+                <div class="col-md-6 field">
                     <label><%= _('Name') %></label>
                     <input autofocus="autofocus" type="text" ng-model="appeal.name">
                 </div>
 
-                <div class="field">
+                <div class="col-md-6 field">
                     <label><%= _('Goal') %></label>
                     <input type="number" ng-model="appeal.amount" class="form-control" raw-number>
                 </div>
+            </div>
 
-                <div style="height: 400px; overflow-y: auto; padding:0 15px;">
-                    <label><%= _('Contacts') %></label>
-                    <table style="width:100%;">
-                        <thead>
-                            <tr><td colspan="5" class="table_select_filters">
-                              <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
-                              <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
-                              <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |
-                              <a href="" ng-click="selectAll('!donated')"><%= _('Select all that have not donated') %></a>
-                            </td></tr>
-                            <tr>
-                                <td style="width: 5px;"></td>
-                                <td><%= _('Contact') %></td>
-                                <td><%= _('Commitment') %></td>
-                                <td style="width:24%;"><%= _('Donation(s)') %></td>
-                                <td style="width:4%;"></td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                          <tr ng-repeat="c in appeal.contacts | orderBy:contactName">
-                            <td class="table_select_check"><input type="checkbox" ng-model="$parent.checkedContacts[c]"></td>
-                            <td>{{contactName(c)}}</td>
-                              <td>
-                                <span ng-if="contactDetails(c).status === 'Partner - Financial'">
-                                  {{contactDetails(c).pledge_amount | currency : current_currency_symbol}}
-                                  {{ contactDetails(c).pledge_frequency | pledgeFrequencyStr }}
-                                </span>
-                              </td>
-                              <td><span ng-repeat="d in listDonations(c)" style="display:block;">{{d}}</span></td>
-                              <td><a class="ico ico_trash" href ng-click="deleteContact(c)"><%= _('Delete') %></a></td>
-                          </tr>
-                          <tr>
-                            <td colspan="2"></td>
-                            <td style="text-align: right;"><strong>Total:</strong> </td>
-                            <td>{{$parent.donationTotal(appeal.donations).sum | currency : current_currency_symbol}}</td>
-                          </tr>
-                          <tr>
-                            <td colspan="2"></td>
-                            <td style="text-align: right;"><strong>Average:</strong> </td>
-                            <td>{{$parent.donationTotal(appeal.donations).average | currency : current_currency_symbol}}</td>
-                          </tr>
-                          <tr><td colspan="5" class="table_select_filters">
-                              <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
-                              <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
-                              <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |
-                              <a href="" ng-click="selectAll('!donated')"><%= _('Select all that have not donated') %></a>
-                          </td></tr>
-                        </tbody>
-                    </table>
-                    <span ng-show="!contacts"><%= _('Loading contacts...') %></span>
-
-                  <div class="row">
-                    <div class="col-sm-4">
-                      <%= _('Add contact') %>
-                    </div>
-                    <div class="col-sm-8">
-                      <div class="form-group">
-                        <div class="input-group">
-                          <select class="form-control" ng-model="newContact" ng-options="c.id as c.name for c in contacts"></select>
-                          <span class="input-group-btn">
-                            <button class="btn btn-default" ng-click="addContact(newContact)"><%= _('Add') %></button>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row ui-widget">
-                    <div class="col-sm-4">
-                      <%= _('Create task for selected:') %>
-                    </div>
-                    <div class="col-sm-8">
-                      <div class="field">
-                        <label for="task_subject">Subject</label>
-                        <input id="task_subject" type="text" ng-model="task.subject" ng-disabled="creatingBulkTasks">
-                      </div>
-                      <div class="field">
-                        <label for="task_activity_type">Action</label>
-                        <select id="task_activity_type" ng-model="task.type" ng-options="t as t for t in taskTypes" ng-disabled="creatingBulkTasks"></select>
-                      </div>
-                      <div class="field">
-                        <label>Due date</label>
-                        <input ng-model="task.date" style="width:100px;" type="text" class="dueDatePicker" ng-disabled="creatingBulkTasks">
-                        <select ng-model="task.hour" ng-disabled="creatingBulkTasks">
-                          <option value="00">12 AM</option>
-                          <option value="01">01 AM</option>
-                          <option value="02">02 AM</option>
-                          <option value="03">03 AM</option>
-                          <option value="04">04 AM</option>
-                          <option value="05">05 AM</option>
-                          <option value="06">06 AM</option>
-                          <option value="07">07 AM</option>
-                          <option value="08">08 AM</option>
-                          <option value="09">09 AM</option>
-                          <option value="10">10 AM</option>
-                          <option value="11">11 AM</option>
-                          <option value="12">12 PM</option>
-                          <option value="13">01 PM</option>
-                          <option value="14">02 PM</option>
-                          <option value="15">03 PM</option>
-                          <option value="16">04 PM</option>
-                          <option value="17">05 PM</option>
-                          <option value="18">06 PM</option>
-                          <option value="19">07 PM</option>
-                          <option value="20">08 PM</option>
-                          <option value="21">09 PM</option>
-                          <option value="22">10 PM</option>
-                          <option value="23">11 PM</option>
-                        </select>
-                        : <select ng-model="task.min" ng-disabled="creatingBulkTasks">
-                        <option value="00">00</option>
-                        <option value="01">01</option>
-                        <option value="02">02</option>
-                        <option value="03">03</option>
-                        <option value="04">04</option>
-                        <option value="05">05</option>
-                        <option value="06">06</option>
-                        <option value="07">07</option>
-                        <option value="08">08</option>
-                        <option value="09">09</option>
-                        <option value="10">10</option>
-                        <option value="11">11</option>
-                        <option value="12">12</option>
-                        <option value="13">13</option>
-                        <option value="14">14</option>
-                        <option value="15">15</option>
-                        <option value="16">16</option>
-                        <option value="17">17</option>
-                        <option value="18">18</option>
-                        <option value="19">19</option>
-                        <option value="20">20</option>
-                        <option value="21">21</option>
-                        <option value="22">22</option>
-                        <option value="23">23</option>
-                        <option value="24">24</option>
-                        <option value="25">25</option>
-                        <option value="26">26</option>
-                        <option value="27">27</option>
-                        <option value="28">28</option>
-                        <option value="29">29</option>
-                        <option value="30">30</option>
-                        <option value="31">31</option>
-                        <option value="32">32</option>
-                        <option value="33">33</option>
-                        <option value="34">34</option>
-                        <option value="35">35</option>
-                        <option value="36">36</option>
-                        <option value="37">37</option>
-                        <option value="38">38</option>
-                        <option value="39">39</option>
-                        <option value="40">40</option>
-                        <option value="41">41</option>
-                        <option value="42">42</option>
-                        <option value="43">43</option>
-                        <option value="44">44</option>
-                        <option value="45">45</option>
-                        <option value="46">46</option>
-                        <option value="47">47</option>
-                        <option value="48">48</option>
-                        <option value="49">49</option>
-                        <option value="50">50</option>
-                        <option value="51">51</option>
-                        <option value="52">52</option>
-                        <option value="53">53</option>
-                        <option value="54">54</option>
-                        <option value="55">55</option>
-                        <option value="56">56</option>
-                        <option value="57">57</option>
-                        <option value="58">58</option>
-                        <option value="59">59</option>
-                      </select>
-                      </div>
-                      <div class="form-group">
-                        <button class="btn btn-default" ng-click="createTask(task, checkedContacts)" ng-show="!creatingBulkTasks"><%= _('Create') %></button>
-                        <button class="btn btn-default" ng-show="creatingBulkTasks" disabled><%= _('Creating tasks') %>: {{creatingBulkTasks}} remaining...</button>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col-sm-4">
-                        <%= _('Export selected to CSV:') %>
-                    </div>
-                    <div class="col-sm-5">
-                      <div class="form-group">
-                        <button class="btn btn-default" ng-click="exportContactsToCSV(checkedContacts)"><%= _('Export') %></button>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row" ng-show="mail_chimp_account_present" >
-                    <div class="col-sm-4">
-                      <%= _('Export selected to a Mail Chimp list:') %>
-                    </div>
-                    <div class="col-sm-8">
-                      <div class="form-group">
-                        <select class="form-control" ng-model="selected_mail_chimp_list"
-                                ng-options="m.id as m.name for m in mail_chimp_lists" ></select>
-                        <button class="btn btn-default"
-                                ng-click="exportContactsToMailChimpList(checkedContacts,selected_mail_chimp_list)">
-                          <%= _('Export') %>
-                        </button>
-                        <div class="spacer"></div>
-                        <div class="alert alert-warning" role="alert">
-                          <span class="glyphicon glyphicon-exclamation-sign">
-                            <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ' +
-                                  'as this one would overwrite it. Create a new list in MailChimp and choose ' +
-                                  'it in this drop down. Subsequent exports to it will overwrite previous ones.') %>
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  <div class="row alert alert-success" role="alert"
-                       id="appealListLoading" ng-show="mail_chimp_appeal_load_complete">
-                    <%=  _('Your Appeal Contacts are loading to MailChimp') %></div>
-                  <div class="row" ng-show="!mail_chimp_account_present">
-                    <div class="alert alert-warning" role="alert">
-                       <span class="glyphicon glyphicon-exclamation-sign">
-                          <%= _('If you want to export the selected contacts to MailChimp, connect your MailChimp ' +
-                                        ' account in the') %> <%= link_to 'settings page', integrations_settings_path %>.
-                       </span>
-                    </div>
-                  </div>
-                  <div class="row">
-                    <div class="col-sm-4">
-                      <%= _('Create tag for selected:') %>
-                    </div>
-                    <div class="col-sm-8">
-                      <div class="form-group">
-                        <div class="input-group">
-                            <input type="text" class="form-control" ng-model="newTag">
-                            <span class="input-group-btn">
-                              <button class="btn btn-default" ng-click="createTag(newTag, checkedContacts)" ng-if="!creatingTag"><%= _('Create') %></button>
-                              <button class="btn btn-default" ng-if="creatingTag" disabled><%= _('Updating contacts') %>: {{creatingTag}} remaining...</button>
+            <div class="scroll">
+                <label><%= _('Contacts') %></label>
+                <table>
+                    <thead>
+                        <tr><td colspan="5" class="table_select_filters">
+                          <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
+                          <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
+                          <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |
+                          <a href="" ng-click="selectAll('!donated')"><%= _('Select all that have not donated') %></a>
+                        </td></tr>
+                        <tr>
+                            <td style="width: 5px;"></td>
+                            <td><%= _('Contact') %></td>
+                            <td><%= _('Commitment') %></td>
+                            <td style="width:24%;"><%= _('Donation(s)') %></td>
+                            <td style="width:4%;"></td>
+                        </tr>
+                    </thead>
+                    <tbody>
+                      <tr ng-repeat="c in appeal.contacts | orderBy:contactName">
+                        <td class="table_select_check"><input type="checkbox" ng-model="$parent.checkedContacts[c]"></td>
+                        <td>{{contactName(c)}}</td>
+                          <td>
+                            <span ng-if="contactDetails(c).status === 'Partner - Financial'">
+                              {{contactDetails(c).pledge_amount | currency : current_currency_symbol}}
+                              {{ contactDetails(c).pledge_frequency | pledgeFrequencyStr }}
                             </span>
-                        </div>
-                      </div>
+                          </td>
+                          <td><div ng-repeat="d in listDonations(c)">{{d}}</div></td>
+                          <td><a class="ico ico_trash" href ng-click="deleteContact(c)"><%= _('Delete') %></a></td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"></td>
+                        <td style="text-align: right;"><strong>Total:</strong> </td>
+                        <td>{{$parent.donationTotal(appeal.donations).sum | currency : current_currency_symbol}}</td>
+                      </tr>
+                      <tr>
+                        <td colspan="2"></td>
+                        <td style="text-align: right;"><strong>Average:</strong> </td>
+                        <td>{{$parent.donationTotal(appeal.donations).average | currency : current_currency_symbol}}</td>
+                      </tr>
+                      <tr><td colspan="5" class="table_select_filters">
+                          <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
+                          <a href="" ng-click="selectAll('none')"><%= _('Select none') %></a> |
+                          <a href="" ng-click="selectAll('donated')"><%= _('Select all that have donated') %></a> |
+                          <a href="" ng-click="selectAll('!donated')"><%= _('Select all that have not donated') %></a>
+                      </td></tr>
+                    </tbody>
+                </table>
+                <span ng-show="!contacts"><%= _('Loading contacts...') %></span>
+
+              <div class="row">
+                <div class="col-sm-4">
+                  <%= _('Add contact') %>
+                </div>
+                <div class="col-sm-8">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <select class="form-control" ng-model="newContact" ng-options="c.id as c.name for c in contacts"></select>
+                      <span class="input-group-btn">
+                        <button class="btn btn-default" ng-click="addContact(newContact)"><%= _('Add') %></button>
+                      </span>
                     </div>
                   </div>
-
                 </div>
+              </div>
+
+              <div class="row ui-widget">
+                <div class="col-sm-4">
+                  <%= _('Create task for selected:') %>
+                </div>
+                <div class="col-sm-8">
+                  <div class="field">
+                    <label for="task_subject">Subject</label>
+                    <input id="task_subject" type="text" ng-model="task.subject" ng-disabled="creatingBulkTasks">
+                  </div>
+                  <div class="field">
+                    <label for="task_activity_type">Action</label>
+                    <select id="task_activity_type" ng-model="task.type" ng-options="t as t for t in taskTypes" ng-disabled="creatingBulkTasks"></select>
+                  </div>
+                  <div class="field">
+                    <label>Due date</label>
+                    <input ng-model="task.date" style="width:100px;" type="text" class="dueDatePicker" ng-disabled="creatingBulkTasks">
+                    <select ng-model="task.hour" ng-disabled="creatingBulkTasks">
+                      <option value="00">12 AM</option>
+                      <option value="01">01 AM</option>
+                      <option value="02">02 AM</option>
+                      <option value="03">03 AM</option>
+                      <option value="04">04 AM</option>
+                      <option value="05">05 AM</option>
+                      <option value="06">06 AM</option>
+                      <option value="07">07 AM</option>
+                      <option value="08">08 AM</option>
+                      <option value="09">09 AM</option>
+                      <option value="10">10 AM</option>
+                      <option value="11">11 AM</option>
+                      <option value="12">12 PM</option>
+                      <option value="13">01 PM</option>
+                      <option value="14">02 PM</option>
+                      <option value="15">03 PM</option>
+                      <option value="16">04 PM</option>
+                      <option value="17">05 PM</option>
+                      <option value="18">06 PM</option>
+                      <option value="19">07 PM</option>
+                      <option value="20">08 PM</option>
+                      <option value="21">09 PM</option>
+                      <option value="22">10 PM</option>
+                      <option value="23">11 PM</option>
+                    </select>
+                    : <select ng-model="task.min" ng-disabled="creatingBulkTasks">
+                    <option value="00">00</option>
+                    <option value="01">01</option>
+                    <option value="02">02</option>
+                    <option value="03">03</option>
+                    <option value="04">04</option>
+                    <option value="05">05</option>
+                    <option value="06">06</option>
+                    <option value="07">07</option>
+                    <option value="08">08</option>
+                    <option value="09">09</option>
+                    <option value="10">10</option>
+                    <option value="11">11</option>
+                    <option value="12">12</option>
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="19">19</option>
+                    <option value="20">20</option>
+                    <option value="21">21</option>
+                    <option value="22">22</option>
+                    <option value="23">23</option>
+                    <option value="24">24</option>
+                    <option value="25">25</option>
+                    <option value="26">26</option>
+                    <option value="27">27</option>
+                    <option value="28">28</option>
+                    <option value="29">29</option>
+                    <option value="30">30</option>
+                    <option value="31">31</option>
+                    <option value="32">32</option>
+                    <option value="33">33</option>
+                    <option value="34">34</option>
+                    <option value="35">35</option>
+                    <option value="36">36</option>
+                    <option value="37">37</option>
+                    <option value="38">38</option>
+                    <option value="39">39</option>
+                    <option value="40">40</option>
+                    <option value="41">41</option>
+                    <option value="42">42</option>
+                    <option value="43">43</option>
+                    <option value="44">44</option>
+                    <option value="45">45</option>
+                    <option value="46">46</option>
+                    <option value="47">47</option>
+                    <option value="48">48</option>
+                    <option value="49">49</option>
+                    <option value="50">50</option>
+                    <option value="51">51</option>
+                    <option value="52">52</option>
+                    <option value="53">53</option>
+                    <option value="54">54</option>
+                    <option value="55">55</option>
+                    <option value="56">56</option>
+                    <option value="57">57</option>
+                    <option value="58">58</option>
+                    <option value="59">59</option>
+                  </select>
+                  </div>
+                  <div class="form-group">
+                    <button class="btn btn-default" ng-click="createTask(task, checkedContacts)" ng-show="!creatingBulkTasks"><%= _('Create') %></button>
+                    <button class="btn btn-default" ng-show="creatingBulkTasks" disabled><%= _('Creating tasks') %>: {{creatingBulkTasks}} remaining...</button>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-4">
+                    <%= _('Export selected to CSV:') %>
+                </div>
+                <div class="col-sm-5">
+                  <div class="form-group">
+                    <button class="btn btn-default" ng-click="exportContactsToCSV(checkedContacts)"><%= _('Export') %></button>
+                  </div>
+                </div>
+              </div>
+              <div class="row" ng-show="mail_chimp_account_present" >
+                <div class="col-sm-4">
+                  <%= _('Export selected to a Mail Chimp list:') %>
+                </div>
+                <div class="col-sm-8">
+                  <div class="form-group">
+                    <select class="form-control" ng-model="selected_mail_chimp_list"
+                            ng-options="m.id as m.name for m in mail_chimp_lists" ></select>
+                    <button class="btn btn-default"
+                            ng-click="exportContactsToMailChimpList(checkedContacts,selected_mail_chimp_list)">
+                      <%= _('Export') %>
+                    </button>
+                    <div class="spacer"></div>
+                    <div class="alert alert-warning" role="alert">
+                      <span class="glyphicon glyphicon-exclamation-sign">
+                        <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ' +
+                              'as this one would overwrite it. Create a new list in MailChimp and choose ' +
+                              'it in this drop down. Subsequent exports to it will overwrite previous ones.') %>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row alert alert-success" role="alert"
+                   id="appealListLoading" ng-show="mail_chimp_appeal_load_complete">
+                <%=  _('Your Appeal Contacts are loading to MailChimp') %></div>
+              <div class="row" ng-show="!mail_chimp_account_present">
+                <div class="alert alert-warning" role="alert">
+                   <span class="glyphicon glyphicon-exclamation-sign">
+                      <%= _('If you want to export the selected contacts to MailChimp, connect your MailChimp ' +
+                                    ' account in the') %> <%= link_to 'settings page', integrations_settings_path %>.
+                   </span>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-4">
+                  <%= _('Create tag for selected:') %>
+                </div>
+                <div class="col-sm-8">
+                  <div class="form-group">
+                    <div class="input-group">
+                        <input type="text" class="form-control" ng-model="newTag">
+                        <span class="input-group-btn">
+                          <button class="btn btn-default" ng-click="createTag(newTag, checkedContacts)" ng-if="!creatingTag"><%= _('Create') %></button>
+                          <button class="btn btn-default" ng-if="creatingTag" disabled><%= _('Updating contacts') %>: {{creatingTag}} remaining...</button>
+                        </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
         </form>
     </div>
