@@ -121,6 +121,7 @@ Rails.application.routes.draw do
       post :send_to_chalkline
       get :add_multi
       post :save_multi
+      get :mailing
     end
     member do
       get :add_referrals

@@ -124,7 +124,7 @@ class Address < ActiveRecord::Base
   def to_snail
     Snail.new(
       line_1: street, postal_code: postal_code, city: city,
-      region: region, country: Address.find_country_iso(country)
+      region: state, country: Address.find_country_iso(country)
     ).to_s
   end
 

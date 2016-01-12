@@ -260,6 +260,19 @@ $ ->
         }
         false
 
+      $(document).on 'click', '[data-behavior=export]', ->
+        $('#export_modal').dialog {
+          width: 500,
+          buttons: [
+            {
+              text: __('Ok')
+              click: ->
+                $(this).dialog("close")
+            }
+          ]
+        }
+        false
+
     if $('#contacts_show')[0]?
       # Merge people stuff
       $(document).on 'click', '.js-merge_people', ->
