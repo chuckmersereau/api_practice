@@ -2165,6 +2165,21 @@ appeals-list .show-all {
     margin-left: 0;
   }
 }
+.edit-appeal-dialog-content {
+  .form_wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  .scroll {
+    flex: 1 1 auto;
+    overflow-y: auto;
+    padding:0 15px;
+  }
+  table {
+    width: 100%;
+  }
+}
 
 #dash-widgets {
   margin-top: 2em;
