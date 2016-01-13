@@ -113,6 +113,14 @@ describe ContactsController do
       end
     end
 
+    describe '#mailing' do
+      it 'returns a row for each contact' do
+        get :mailing, format: 'csv'
+        csv = CSV.parse(response.body)
+        expect(csv.count).to be 3
+      end
+    end
+
     describe '#show' do
       it 'should find a contact in the current account list' do
         get :show, id: contact.id

@@ -132,11 +132,11 @@ class Address < ActiveRecord::Base
 
   def self.find_country_iso(val)
     return nil if val.nil? || val.empty?
-    val.upcase!
+    val = val.upcase
     Snail.lookup_country_iso(val) ||
-      Snail::Iso3166::ALPHA2.select { |_key, hash| hash.include? val }.keys.first ||
-      Snail::Iso3166::ALPHA2.select { |_key, hash| hash.include? val }.keys.first ||
-      Snail::Iso3166::ALPHA2_EXCEPTIONS.select { |_key, hash| hash.include? val }.keys.first
+      Snail::Iso3166::ALPHA2.select { |_key, array| array.include? val }.keys.first ||
+      Snail::Iso3166::ALPHA2.select { |_key, array| array.include? val }.keys.first ||
+      Snail::Iso3166::ALPHA2_EXCEPTIONS.select { |_key, array| array.include? val }.keys.first
   end
 
   def set_manual_source_if_user_changed

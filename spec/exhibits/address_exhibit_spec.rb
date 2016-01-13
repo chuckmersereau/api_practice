@@ -1,9 +1,6 @@
 require 'spec_helper'
 
 describe AddressExhibit do
-  subject { ActivityCommentExhibit.new(activity_comment, context) }
-  let(:person) { create(:person) }
-  let(:activity_comment) { build(:activity_comment, person: person) }
   let(:context) { double }
 
   context '.applicable_to?' do
@@ -39,6 +36,24 @@ describe AddressExhibit do
       exhibit = AddressExhibit.new(build_stubbed(:address, country: 'Canada'), double)
       expect(exhibit.to_html)
         .to eq '123 Somewhere St, Fremont, CA, 94539, Canada'
+    end
+  end
+
+  context '#to_i18n_html' do
+    it 'renders US address without country' do
+      exhibit = AddressExhibit.new(build_stubbed(:address), double)
+      expect(exhibit.to_i18n_html).to_not include 'United States'
+    end
+
+    it 'renders non-US address with country' do
+      exhibit = AddressExhibit.new(build_stubbed(:address, country: 'Canada'), double)
+      expect(exhibit.to_i18n_html).to include 'Canada'
+    end
+
+    it 'renders country specific order' do
+      address = build_stubbed(:address, country: 'Germany')
+      exhibit = AddressExhibit.new(address, double)
+      expect(exhibit.to_i18n_html).to_not include address.state
     end
   end
 

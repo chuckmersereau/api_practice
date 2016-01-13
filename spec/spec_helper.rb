@@ -103,12 +103,13 @@ RSpec.configure do |config|
 
   # Reset seed each time this file is loaded, so that spring won't cache seed
   # To run a spec with a specific seed, use --order=rand:[seed]
-  config.seed = srand % 0xFFFF
+  config.seed = srand % 0xFFFF unless ARGV.any? { |arg| arg =~ /seed/ }
 
   if Rails.env.test?
     config.before(:suite) do
       DatabaseCleaner.strategy = :transaction
       DatabaseCleaner.clean_with(:truncation)
+      Rails.application.load_seed
     end
 
     config.before(:each, js: true) do

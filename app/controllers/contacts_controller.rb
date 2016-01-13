@@ -56,20 +56,6 @@ class ContactsController < ApplicationController
     end
   end
 
-  def value_for_contact_field(contact, method)
-    @contacts_account_list ||= contact.account_list
-    return contact.mailing_address.csv_country(@contacts_account_list.home_country) if method == :csv_country
-    if method == :address_block
-      return "#{contact.envelope_greeting}\n#{contact.mailing_address.to_snail.gsub("\r\n", "\n")}"
-    end
-    return contact.try(method) unless method.is_a?(Array)
-    holder = contact
-    method.each do |m|
-      holder = holder.try(m)
-    end
-    holder
-  end
-
   def send_to_chalkline
     current_account_list.async_send_chalkline_list
     render text: 'OK'
@@ -366,5 +352,17 @@ class ContactsController < ApplicationController
 
   def csv_primary_emails_only_param
     @csv_primary_emails_only ||= params[:csv_primary_emails_only]
+  end
+
+  def value_for_contact_field(contact, method)
+    @contacts_account_list ||= contact.account_list
+    return contact.mailing_address.csv_country(@contacts_account_list.home_country) if method == :csv_country
+    if method == :address_block
+      return "#{contact.envelope_greeting}\n#{contact.mailing_address.to_snail.gsub("\r\n", "\n")}"
+    end
+    return contact.try(method) unless method.is_a?(Array)
+    holder = contact
+    method.each { |m| holder = holder.try(m) }
+    holder
   end
 end
