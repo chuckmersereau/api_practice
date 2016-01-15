@@ -100,9 +100,6 @@ class ApplicationController < ActionController::Base
     @current_account_list = current_user.account_lists.where(id: session[:current_account_list_id]).first if session[:current_account_list_id].present?
     @current_account_list ||= default_account_list
     return unless @current_account_list
-    country_iso = Address.find_country_iso(@current_account_list.home_country)
-    Phonelib.default_country = country_iso || 'US'
-    GlobalPhone.default_territory_name = Phonelib.default_country.to_sym
     session[:current_account_list_id] = @current_account_list.id
     @current_account_list
   end

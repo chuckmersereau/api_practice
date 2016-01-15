@@ -185,29 +185,6 @@ describe ContactsController do
         expect(assigns(:contact).errors.full_messages).to eq(["Name can't be blank"])
         expect(response).to be_success
       end
-
-      context "validates numbers based on user's home country" do
-        it 'in the US' do
-          put :update, id: contact.id, contact: {
-            people_attributes: [{
-              first_name: FactoryGirl.build(:person).first_name,
-              phone_numbers_attributes: [{ number: '213-345-2314' }]
-            }]
-          }
-          expect(contact.people.first.phone_numbers.first.number).to eq '+12133452314'
-        end
-
-        it 'outside the US' do
-          user.account_lists.first.update(home_country: 'Australia')
-          put :update, id: contact.id, contact: {
-            people_attributes: [{
-              first_name: FactoryGirl.build(:person).first_name,
-              phone_numbers_attributes: [{ number: '2 9261 4561' }]
-            }]
-          }
-          expect(contact.people.first.phone_numbers.first.number).to eq '+61292614561'
-        end
-      end
     end
 
     describe '#destroy' do
