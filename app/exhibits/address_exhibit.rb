@@ -17,7 +17,9 @@ class AddressExhibit < DisplayCase::Exhibit
   end
 
   def to_i18n_html
-    to_snail.gsub(country.upcase, country).gsub("\n", '<br>').html_safe
+    i18n = to_snail
+    i18n = i18n.gsub(country.upcase, country) if country.present?
+    i18n.gsub("\n", '<br>').html_safe
   end
 
   def to_google
