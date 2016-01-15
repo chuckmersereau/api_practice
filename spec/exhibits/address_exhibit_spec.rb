@@ -50,6 +50,15 @@ describe AddressExhibit do
       expect(exhibit.to_i18n_html).to include 'Canada'
     end
 
+    it 'renders non-US home address without country' do
+      user = create(:user_with_account)
+      user.account_lists.first.update(home_country: 'Canada')
+      contact = build_stubbed(:contact, account_list: user.account_lists.first)
+      address = build_stubbed(:address, country: 'Canada', addressable: contact)
+      exhibit = AddressExhibit.new(address, double)
+      expect(exhibit.to_i18n_html).to_not include 'Canada'
+    end
+
     it 'renders country specific order' do
       address = build_stubbed(:address, country: 'Germany')
       exhibit = AddressExhibit.new(address, double)
