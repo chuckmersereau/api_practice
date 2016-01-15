@@ -26,7 +26,7 @@ describe AccountList do
 
   context '#send_account_notifications' do
     it 'checks all notification types' do
-      expect(NotificationType).to receive(:check_all)
+      expect(NotificationType).to receive(:check_all).and_return({})
       AccountList.new.send(:send_account_notifications)
     end
   end

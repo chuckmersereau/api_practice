@@ -6,4 +6,4 @@ else
 fi
 
 DISABLE_SPRING=1 bundle exec parallel_test spec/ -n 4 \
-  --only-group $TEST_GROUPS --group-by filesize --type rspec
+  --only-group $TEST_GROUPS --group-by filesize --type rspec --verbose

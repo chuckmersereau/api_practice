@@ -238,7 +238,7 @@
                 <%= link_to(_('Merge'), '#', class: 'btn btn-default', data: {behavior: 'merge'}) %>
                 <%= hidden_field_tag :selected_ids %>
 
-                <%= link_to(_('Export'), params.merge(format: 'csv'), class: "btn btn-default") %>
+                <%= link_to(_('Export'), '#', class: 'btn btn-default', data: {behavior: 'export'}) %>
                 <span class="btn btn-default" data-toggle="tooltip" data-placement="top" title="<%= _('Select all') %>">
                   <input type="checkbox" class="checkall" /></span>
 
@@ -311,4 +311,5 @@
   <%= render 'task_modal' %>
   <%= render 'edit_modal' %>
   <%= render 'merge_modal' %>
+  <%= render 'export_modal' %>
   <%= render 'contacts_map_modal' %>

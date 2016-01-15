@@ -16,6 +16,10 @@ class AddressExhibit < DisplayCase::Exhibit
     end
   end
 
+  def to_i18n_html
+    to_snail.gsub(country.upcase, country).gsub("\n", '<br>').html_safe
+  end
+
   def to_google
     [street, city, state, postal_code, country].select(&:present?).join(', ')
   end

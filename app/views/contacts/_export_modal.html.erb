@@ -1,0 +1,14 @@
+<div id="export_modal" title="<%= _('Export Contacts') %>" style="display:none">
+  <div class="row">
+    <div class="col-sm-6">
+      <%= link_to _('CSV for Mail Merge'), mailing_contacts_path(format: :csv), class: 'btn btn-primary btn-block' %>
+      <p><%= _('Best for making mailing labels. Addresses will be formatted based on country.') %></p>
+    </div>
+    <div class="col-sm-6">
+      <%= link_to _('Advanced CSV'), contacts_path(format: :csv), class: 'btn btn-primary btn-block' %>
+      <p>
+        <%= _('All of the information for your contacts, best for advanced sorting/filtering and importing into other software.') %>
+      </p>
+    </div>
+  </div>
+</div>

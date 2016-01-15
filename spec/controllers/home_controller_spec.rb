@@ -63,9 +63,9 @@ describe HomeController do
         @user.update_attribute(:setup, [:import, :goal, :contacts])
         al.update_attribute(:monthly_goal, 100)
         al.notification_preferences << create(:notification_preference, notification_type:
-            create(:notification_type, type: 'TestType'))
+            build_stubbed(:notification_type, type: 'TestType'))
         al.notification_preferences << create(:notification_preference, notification_type:
-            create(:notification_type, type: 'AnotherTestType'))
+            build_stubbed(:notification_type, type: 'AnotherTestType'))
         4.times { |i| al.contacts << create(:contact, name: i) }
         create(:tnt_import, user: @user)
         get 'index'
