@@ -14,6 +14,15 @@ angular.module('mpdxApp')
                 };
                 refreshAppeals();
 
+                function donationTotal(donations) {
+                  var amounts = _.chain(donations)
+                    .map(function(d) { return d.appeal_amount || d.amount })
+                    .reject(function(n) {return !n})
+                    .value();
+                  var sum = _.sum(amounts);
+                  return {sum: sum, average: sum/amounts.length};
+                }
+
                 $scope.editAppeal = function(id) {
                     var modalInstance = $modal.open({
                         templateUrl: '/templates/appeals/edit.html',
@@ -265,6 +274,11 @@ angular.module('mpdxApp')
                                     });
                                 }
                             };
+
+                            $scope.donationTotal = function() {
+                                return donationTotal(appeal.donations);
+                            };
+
                           setTimeout(function() {
                             jQuery('.dueDatePicker').datepicker({
                               autoclose: true,
@@ -292,21 +306,7 @@ angular.module('mpdxApp')
                 };
 
                 $scope.donationTotal = function(donations){
-                  var sum = [];
-                  angular.forEach(donations, function(d){
-                    if(_.isNull(d.appeal_amount) || _.isEmpty(d.appeal_amount)){
-                      sum.push(Number(d.amount));
-                    }else{
-                      sum.push(d.appeal_amount);
-                    }
-                  });
-                  _.remove(sum, function(n) {
-                    return n == 0;
-                  });
-                  return {
-                    sum: _.sum(sum),
-                    average: _.sum(sum)/sum.length
-                  };
+                  return donationTotal(donations);
                 };
 
                 $scope.percentComplete = function(appeal){
