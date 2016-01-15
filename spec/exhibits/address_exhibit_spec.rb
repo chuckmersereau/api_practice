@@ -55,6 +55,12 @@ describe AddressExhibit do
       exhibit = AddressExhibit.new(address, double)
       expect(exhibit.to_i18n_html).to_not include address.state
     end
+
+    it "doesn't error when nil country" do
+      address = build_stubbed(:address, country: nil)
+      exhibit = AddressExhibit.new(address, double)
+      expect(exhibit.to_i18n_html).to include address.state
+    end
   end
 
   context '#address_change_email_body' do
