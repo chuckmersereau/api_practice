@@ -14,7 +14,7 @@ angular.module('mpdxApp')
                 };
                 refreshAppeals();
 
-                function donationTotal(donations) {
+                function donationAggregates(donations) {
                   var amounts = _.chain(donations)
                     .map(function(d) { return d.appeal_amount || d.amount })
                     .reject(function(n) {return !n})
@@ -275,8 +275,8 @@ angular.module('mpdxApp')
                                 }
                             };
 
-                            $scope.donationTotal = function() {
-                                return donationTotal(appeal.donations);
+                            $scope.donationAggregates = function() {
+                                return donationAggregates(appeal.donations);
                             };
 
                           setTimeout(function() {
@@ -305,8 +305,8 @@ angular.module('mpdxApp')
                     });
                 };
 
-                $scope.donationTotal = function(donations){
-                  return donationTotal(donations);
+                $scope.donationAggregates = function(donations){
+                  return donationAggregates(donations);
                 };
 
                 $scope.percentComplete = function(appeal){
@@ -314,7 +314,7 @@ angular.module('mpdxApp')
                   if(goal === 0){
                     return 0;
                   }
-                  return Math.round(($scope.donationTotal(appeal.donations).sum / goal) * 100);
+                  return Math.round(($scope.donationAggregates(appeal.donations).sum / goal) * 100);
                 };
 
                 $scope.progressClass = function(appeal) {
