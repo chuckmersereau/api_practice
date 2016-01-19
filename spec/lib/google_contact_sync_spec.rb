@@ -301,6 +301,16 @@ describe GoogleContactSync do
       expect(person.phone_numbers.count).to eq(1)
       expect(person.phone_numbers.first.number).to eq('2123334444')
     end
+
+    it 'excludes blank numbers from google sync' do
+      person.phone_number = { number: '+12123334444', location: 'mobile', primary: true }
+      person.save
+      # Set the blank number via update_column to skip validation
+      person.phone_numbers.first.update_column(:number, ' ')
+
+      sync.sync_numbers(g_contact, person, g_contact_link)
+      expect(g_contact.prepped_changes[:phone_numbers]).to be_empty
+    end
   end
 
   describe 'sync addresses' do
