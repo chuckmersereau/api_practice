@@ -55,12 +55,12 @@
                       <tr>
                         <td colspan="2"></td>
                         <td style="text-align: right;"><strong>Total:</strong> </td>
-                        <td>{{$parent.donationTotal(appeal.donations).sum | currency : current_currency_symbol}}</td>
+                        <td>{{donationAggregates().sum | currency : current_currency_symbol}}</td>
                       </tr>
                       <tr>
                         <td colspan="2"></td>
                         <td style="text-align: right;"><strong>Average:</strong> </td>
-                        <td>{{$parent.donationTotal(appeal.donations).average | currency : current_currency_symbol}}</td>
+                        <td>{{donationAggregates().average | currency : current_currency_symbol}}</td>
                       </tr>
                       <tr><td colspan="5" class="table_select_filters">
                           <a href="" ng-click="selectAll('all')"><%= _('Select all') %></a> |
