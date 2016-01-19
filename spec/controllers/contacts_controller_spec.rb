@@ -116,8 +116,18 @@ describe ContactsController do
     describe '#mailing' do
       it 'returns a row for each contact' do
         get :mailing, format: 'csv'
-        csv = CSV.parse(response.body)
-        expect(csv.count).to be 3
+        # we expect 3 entries because the parsed csv response has
+        # the header row and an empty line at the end
+        expect(CSV.parse(response.body).count).to be 3
+      end
+
+      it 'filters contacts' do
+        create(:contact, account_list: user.account_lists.first, name: 'Contact 2', tag_list: 'tag1')
+        user.update(contacts_filter: {
+                      user.account_lists.first.id.to_s => { tags: 'tag1' }
+                    })
+        get :mailing, format: 'csv'
+        expect(CSV.parse(response.body).count).to be 3
       end
     end
 

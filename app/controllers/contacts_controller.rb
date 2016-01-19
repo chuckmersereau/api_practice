@@ -1,7 +1,7 @@
 class ContactsController < ApplicationController
   before_action :find_contact, only: [:show, :edit, :update, :add_referrals, :save_referrals, :details, :referrals]
-  before_action :setup_view_options, only: [:index]
-  before_action :setup_filters, only: [:index, :show]
+  before_action :setup_view_options, only: [:index, :mailing]
+  before_action :setup_filters, only: [:index, :show, :mailing]
   before_action :clear_annoying_redirect_locations
 
   def index
