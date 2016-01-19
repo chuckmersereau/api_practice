@@ -122,9 +122,11 @@ class Address < ActiveRecord::Base
   end
 
   def to_snail
+    origin = addressable.try(:account_list) ? Address.find_country_iso(addressable.account_list.home_country) : 'US'
     Snail.new(
       line_1: street, postal_code: postal_code, city: city,
-      region: state, country: Address.find_country_iso(country)
+      region: state, country: Address.find_country_iso(country),
+      origin: origin
     ).to_s
   end
 
