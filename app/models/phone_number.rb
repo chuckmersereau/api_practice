@@ -13,7 +13,7 @@ class PhoneNumber < ActiveRecord::Base
   before_save :clean_up_number
 
   validates :number, presence: true,
-                     format: { with: /\A\+?[\d\s\.\(\)x;-]+\z/, message: 'only allows numbers and -.x' }
+                     format: { with: %r(\A\+?[\d\s\.\/\(\)x;-]+\z), message: 'only allows numbers and -.x' }
 
   # attr_accessible :number, :primary, :country_code, :location, :remote_id
 
@@ -44,7 +44,7 @@ class PhoneNumber < ActiveRecord::Base
 
   def ==(other)
     return false unless other.is_a?(PhoneNumber)
-    number == other.number
+    number.gsub(/\D/, '') == other.number.gsub(/\D/, '')
   end
 
   def merge(other)
