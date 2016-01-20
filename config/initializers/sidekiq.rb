@@ -18,6 +18,7 @@ Sidekiq.configure_server do |config|
                    namespace: "MPDX:#{Rails.env}:resque"}
   config.server_middleware do |chain|
     chain.add SidekiqJobArgsLogger
+    chain.add SidekiqWhodunnit
   end
 end
 
