@@ -54,8 +54,19 @@ module GoogleContactSync
 
       g_contact.prep_changes(g_contact_field => synced_value) if synced_value != g_contact.send(g_contact_field)
       record[field] = synced_value
-      record[field] ||= 'Unknown' if field == :first_name # MPDX doesn't allow blank first names
+      if field == :first_name && record[field].nil?
+        record[field] = 'Unknown' # MPDX doesn't allow blank first names
+        log_missing_name_info(record, g_contact, g_contact_link, field_map)
+      end
     end
+  end
+
+  def log_missing_name_info(record, g_contact, g_contact_link, field_map)
+    Rails.logger.error("Google sync missing first name:\n"\
+                       " record.attributes: #{record.attributes}\n "\
+                       " google_contact: #{g_contact.to_hash}\n "\
+                       " last_data: #{g_contact_link.last_data}\n "\
+                       " field_map: #{field_map}")
   end
 
   def sync_employer_and_title(person, g_contact, g_contact_link)

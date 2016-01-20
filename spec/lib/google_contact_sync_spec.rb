@@ -525,4 +525,14 @@ describe GoogleContactSync do
       expect(sync.g_contact_organizations_for('', nil)).to eq([])
     end
   end
+
+  describe 'missing first name in sync' do
+    it 'marks the first name as Unknown and logs a message' do
+      g_contact['gd$name']['gd$givenName'] = nil
+      g_contact_link.last_data = { given_name: 'John' }
+      expect(Rails.logger).to receive(:error)
+      sync.sync_basic_person_fields(person, g_contact, g_contact_link)
+      expect(person.first_name).to eq 'Unknown'
+    end
+  end
 end
