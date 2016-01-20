@@ -302,9 +302,11 @@ module GoogleContactSync
 
   def compare_numbers_for_sync(g_contact, person, g_contact_link)
     last_sync_numbers = g_contact_link.last_data[:phone_numbers].map { |p| p[:number] }
-    compare_normalized_for_sync(last_sync_numbers, person.phone_numbers.where(historic: false).pluck(:number),
+    current_numbers = person.phone_numbers.where(historic: false).pluck(:number).select(&:present?)
+    historic_numbers = person.phone_numbers.where(historic: true).pluck(:number).select(&:present?)
+    compare_normalized_for_sync(last_sync_numbers, current_numbers,
                                 g_contact.phone_numbers, method(:normalize_number),
-                                person.phone_numbers.where(historic: true).pluck(:number))
+                                historic_numbers)
   end
 
   def compare_addresses_for_sync(g_contact_addresses, contact, last_addresses)
