@@ -172,6 +172,9 @@ $ ->
       false
 
     $(document).on 'click', '[data-behavior=bulk_delete]', ->
+      if !window.confirm(__('Are you sure you want to delete the selected tasks?'))
+        return
+
       $('#page_spinner').dialog(modal: true)
 
       ids = $.mpdx.getSelectedTaskIds($(this).closest('table'))
