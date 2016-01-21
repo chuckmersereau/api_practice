@@ -172,26 +172,27 @@ $ ->
       false
 
     $(document).on 'click', '[data-behavior=bulk_delete]', ->
-      $('#page_spinner').dialog(modal: true)
-
       ids = $.mpdx.getSelectedTaskIds($(this).closest('table'))
 
-      # remove items
-      $(ids).each ->
-        $('#task_' + this).fadeOut()
+      $.mpdx.confirm __('Are you sure you want to delete the selected tasks?'), ->
+        $('#page_spinner').dialog(modal: true)
 
-      $.ajax {
-        url: '/tasks/bulk_destroy',
-        data: {ids: ids},
-        dataType: 'script',
-        type: 'DELETE'
-        error: ->
-          $('#page_spinner').dialog('close')
-          alert(__('There was an error deleting your tasks'))
-      }
+        # remove items
+        $(ids).each ->
+          $('#task_' + this).fadeOut()
 
-      $('#page_spinner').dialog('close')
-      false
+        $.ajax {
+          url: '/tasks/bulk_destroy',
+          data: {ids: ids},
+          dataType: 'script',
+          type: 'DELETE'
+          error: ->
+            $('#page_spinner').dialog('close')
+            alert(__('There was an error deleting your tasks'))
+        }
+
+        $('#page_spinner').dialog('close')
+        false
 
   $(document).on 'click', '#tasks_index .select_all', ->
     table = $(this).closest('table')

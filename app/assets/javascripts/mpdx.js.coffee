@@ -133,23 +133,8 @@ $.mpdx.sortableTabs = (location) ->
 $.rails.allowAction = (element) ->
   message = element.data('confirm')
   if message
-    div = $('#confirmation_modal')
-    div.html(message)
-    div.dialog {
-      buttons: [
-        {
-          text: __('Yes'),
-          click: ->
-            $.rails.confirmed(element)
-            $(this).dialog("close")
-        },
-        {
-          text: __('No'),
-          click: ->
-            $(this).dialog("close")
-        },
-      ]
-    }
+    $.mpdx.confirm message, ->
+      $.rails.confirmed(element)
     false
   else
     true
@@ -261,3 +246,23 @@ $(document).ready ->
     $('.tagLess, .tagSize, .tagAll').toggle()
     return
   $('body').tooltip selector: '[data-toggle="tooltip"]'
+
+$.mpdx.confirm = (message, yesFunction) ->
+  div = $('#confirmation_modal')
+  div.html(message)
+  div.dialog {
+    buttons: [
+      {
+        text: __('Yes'),
+        click: ->
+          $(this).dialog("close")
+          yesFunction()
+      },
+      {
+        text: __('No'),
+        click: ->
+          $(this).dialog("close")
+      },
+    ]
+  }
+  false
