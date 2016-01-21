@@ -41,7 +41,7 @@
                     <p>If you make a contact inactive in MPDX e.g. by selecting \"Not Interested\" for its status, the contact info will not be deleted in Google, but will be labeled \"Inactive\" so you can easily find those no-longer-synced contacts and delete them if you choose.</p>
 
                     <p>If you delete a contact in Google contacts that is active in MPDX, you must also go in to MPDX and hide the contact, making it inactive in MPDX. Otherwise, it will get regenerated in Google once it syncs again.</p>") %>
-                <p class="alert-warning text-center"><%= _("It is recommended that you backup your Google contacts before enabling integration.") %></p>
+                <p class="alert-warning text-center"><%= _("It is recommended that you backup your Google contacts as a CSV before enabling integration.") %> <a href="https://support.google.com/mail/answer/24911" target="_blank"><%= _("Learn how") %></a></p>
               <% if @google_integration.contacts_integration? %>
                   <%= _("Google Contacts sync has been enabled.") %>
                   <br/><br/>
