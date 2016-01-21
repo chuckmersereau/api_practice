@@ -261,3 +261,23 @@ $(document).ready ->
     $('.tagLess, .tagSize, .tagAll').toggle()
     return
   $('body').tooltip selector: '[data-toggle="tooltip"]'
+
+$.mpdx.confirm = (message, yesFunction) ->
+  div = $('#confirmation_modal')
+  div.html(message)
+  div.dialog {
+    buttons: [
+      {
+        text: __('Yes'),
+        click: ->
+          $(this).dialog("close")
+          yesFunction()
+      },
+      {
+        text: __('No'),
+        click: ->
+          $(this).dialog("close")
+      },
+    ]
+  }
+  false
