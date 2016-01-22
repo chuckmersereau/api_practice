@@ -198,6 +198,7 @@ class ContactDuplicatesFinder
 
     # Join the emails and phone number tables together to find duplicate people by contact info.
     # Always check gender for these matches as husband and wife often have common contact info.
+    # Strip out non-numeric characters from the phone numbers as we match them
     'SELECT *, true as check_genders
     INTO TEMP tmp_dups_by_contact_info
     FROM (
@@ -213,7 +214,8 @@ class ContactDuplicatesFinder
         INNER JOIN tmp_account_ppl as dups ON ppl.id <> dups.id
         INNER JOIN phone_numbers ON phone_numbers.person_id = ppl.id
         INNER JOIN phone_numbers as dup_phone_numbers ON dup_phone_numbers.person_id = dups.id
-      WHERE phone_numbers.number = dup_phone_numbers.number
+      WHERE regexp_replace(phone_numbers.number, \'[^0-9]\', \'\', \'g\') =
+            regexp_replace(dup_phone_numbers.number, \'[^0-9]\', \'\', \'g\')
     ) tmp_dups_by_contact_info_query',
     'CREATE INDEX ON tmp_dups_by_contact_info (person_id)',
     'CREATE INDEX ON tmp_dups_by_contact_info (dup_person_id)',

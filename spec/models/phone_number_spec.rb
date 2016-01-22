@@ -1,31 +1,40 @@
 require 'spec_helper'
 
 describe PhoneNumber do
+  let(:user) do
+    u = create(:user_with_account)
+    u.account_lists.first.update(home_country: 'Australia')
+    u
+  end
+  let(:contact) { create(:contact, account_list: user.account_lists.first) }
+  let(:person) { contact.people.create(first_name: 'test') }
+
   describe 'adding a phone number to a person' do
     before(:each) do
       @person = FactoryGirl.create(:person)
-      @attributes = { 'number' => '213-345-2313' }
+      @attributes = { number: '213-345-2313' }
     end
     it "creates a phone number if it's new" do
       expect do
         PhoneNumber.add_for_person(@person, @attributes)
         phone_number = @person.reload.phone_numbers.first
-        expect(phone_number.number).to eq('+12133452313')
+        expect(phone_number.number).to eq('213-345-2313')
       end.to change(PhoneNumber, :count).from(0).to(1)
     end
 
     it "doesn't create a phone number if it exists" do
+      expect(@person.phone_numbers).to be_empty
       PhoneNumber.add_for_person(@person, @attributes)
       expect do
         PhoneNumber.add_for_person(@person, @attributes)
-        expect(@person.phone_numbers.first.number).to eq('+12133452313')
+        expect(@person.phone_numbers.first.number).to eq('213-345-2313')
       end.to_not change(PhoneNumber, :count)
     end
 
     it 'sets only the first phone number to primary' do
       PhoneNumber.add_for_person(@person, @attributes)
       expect(@person.phone_numbers.first.primary?).to eq(true)
-      PhoneNumber.add_for_person(@person, @attributes.merge('number' => '313-313-3142'))
+      PhoneNumber.add_for_person(@person, @attributes.merge(number: '313-313-3142'))
       expect(@person.phone_numbers.last.primary?).to eq(false)
     end
 
@@ -42,15 +51,22 @@ describe PhoneNumber do
 
   describe 'clean_up_number' do
     it 'should parse out the country code' do
-      pn = PhoneNumber.new(number: '+44 12345532')
+      pn = PhoneNumber.add_for_person(person, number: '+44 12345532')
       pn.clean_up_number
       expect(pn.country_code).to eq('44')
     end
 
     it 'returns a number and extension when provided' do
-      phone = PhoneNumber.new(number: '213-345-2313;23')
+      phone = PhoneNumber.add_for_person(person, number: '213-345-2313;23')
       phone.clean_up_number
       expect(phone.number).to eq('+12133452313;23')
+    end
+
+    it 'does not run when user home country is unset' do
+      user.account_lists.first.update(home_country: '')
+      phone = PhoneNumber.add_for_person(person, number: '213-345-2313;23')
+      phone.clean_up_number
+      expect(phone.number).to eq('213-345-2313;23')
     end
   end
 
@@ -65,10 +81,11 @@ describe PhoneNumber do
     end
   end
 
-  describe 'normalizing saved numberes' do
+  describe 'normalizing saved numbers' do
     it 'returns true for two numbers that are the same except for formatting' do
-      pn = PhoneNumber.create(number: '+16173194567')
-      pn2 = PhoneNumber.create(number: '(617) 319-4567')
+      user.account_lists.first.update(home_country: 'United States')
+      pn = PhoneNumber.add_for_person(person, number: '+16173194567')
+      pn2 = PhoneNumber.add_for_person(person, number: '(617) 319-4567')
       expect(pn.reload).to eq(pn2.reload)
     end
 

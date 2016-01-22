@@ -989,11 +989,11 @@ describe GoogleContactsIntegrator do
 
       expect(@person.phone_numbers.count).to eq(2)
       number1 = @person.phone_numbers.first
-      expect(number1.number).to eq('+14077890123')
+      expect(number1.number).to eq('407-789-0123')
       expect(number1.location).to eq('home')
       expect(number1.primary).to be true
       number2 = @person.phone_numbers.last
-      expect(number2.number).to eq('+12133345158')
+      expect(number2.number).to eq('(213) 334-5158')
       expect(number2.location).to eq('mobile')
       expect(number2.primary).to be false
 
@@ -1188,7 +1188,7 @@ describe GoogleContactsIntegrator do
 
       expect(@person.phone_numbers.count).to eq(2)
       expect(@person.phone_numbers.first.number).to eq('+14077894444')
-      expect(@person.phone_numbers.last.number).to eq('+12133345555')
+      expect(@person.phone_numbers.last.number).to eq('(213) 334-5555')
 
       @contact.reload
       addresses = @contact.addresses.order(:state).map do |address|
