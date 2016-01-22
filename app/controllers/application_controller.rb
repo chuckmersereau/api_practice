@@ -95,12 +95,12 @@ class ApplicationController < ActionController::Base
   helper_method :locale
 
   def current_account_list
-    unless @current_account_list
-      @current_account_list = current_user.account_lists.where(id: session[:current_account_list_id]).first if session[:current_account_list_id].present?
-      @current_account_list ||= default_account_list
-      return unless @current_account_list
-      session[:current_account_list_id] = @current_account_list.id
-    end
+    return @current_account_list if @current_account_list
+
+    @current_account_list = current_user.account_lists.where(id: session[:current_account_list_id]).first if session[:current_account_list_id].present?
+    @current_account_list ||= default_account_list
+    return unless @current_account_list
+    session[:current_account_list_id] = @current_account_list.id
     @current_account_list
   end
   helper_method :current_account_list
