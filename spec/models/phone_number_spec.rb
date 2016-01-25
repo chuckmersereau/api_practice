@@ -68,6 +68,17 @@ describe PhoneNumber do
       phone.clean_up_number
       expect(phone.number).to eq('213-345-2313;23')
     end
+
+    # Badly formatted numbers can be imported into MPDX by the TntMPD import.
+    # Rather than cleaning those numbers to nil or not importing them from
+    # TntMPD (or any other import that might skip validation), this will allow
+    # the user to see the badly formatted numbers in MPDX and then fix them
+    # gradually as they edit contacts.
+    it 'leaves a number with non-digit characters in it as-is' do
+      pn = PhoneNumber.add_for_person(person, number: 'none')
+      pn.clean_up_number
+      expect(pn.number).to eq 'none'
+    end
   end
 
   describe 'validate phone number' do
