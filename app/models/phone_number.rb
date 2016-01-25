@@ -36,7 +36,7 @@ class PhoneNumber < ActiveRecord::Base
     # Use PhoneLib for parsing because PhoneLib supports extensions
     return unless user_country
     phone = Phonelib.parse(number, user_country)
-    return false if phone.blank?
+    return false if phone.e164.blank?
     self.number = phone.extension.present? ? "#{phone.e164};#{phone.extension}" : phone.e164
     self.country_code = phone.country_code
     true
