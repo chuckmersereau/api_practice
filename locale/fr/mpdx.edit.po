@@ -13,7 +13,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.5\n"
-"POT-Creation-Date: 2015-12-18 11:26-0500\n"
 
 msgid " "
 msgstr ""
@@ -298,6 +297,9 @@ msgstr "Adresses :"
 msgid "Admin %"
 msgstr "Admin %"
 
+msgid "Advanced CSV"
+msgstr ""
+
 msgid "Age"
 msgstr "Age"
 
@@ -306,6 +308,9 @@ msgstr "Tout"
 
 msgid "All Inactive"
 msgstr "Tous inactifs"
+
+msgid "All of the information for your contacts, best for advanced sorting/filtering and importing into other software."
+msgstr ""
 
 msgid "Amount"
 msgstr "Montant"
@@ -436,6 +441,9 @@ msgstr "A partir d'une analyse de l'historique des dons d'un partenaire, MPDX pe
 msgid "Before emailing us, please have a look at %{link} to see if your question isalready answered there."
 msgstr "Avant de nous envoyer un email, merci de vérifier sur %{link} (le plus complet) ou sur <A HREF=\"https://www.gcx.org/MPDXaide\" target=\"_blank\">le site d'aide en français</A> si la réponse à votre question ne s'y trouve pas déjà."
 
+msgid "Best for making mailing labels. Addresses will be formatted based on country."
+msgstr ""
+
 msgid "Bi-Monthly"
 msgstr "Tous les 2 mois"
 
@@ -459,6 +467,9 @@ msgstr "Frère"
 
 msgid "Business"
 msgstr "Entreprise"
+
+msgid "CSV for Mail Merge"
+msgstr ""
 
 msgid "Calendar integration"
 msgstr "Intégration du calendrier"
@@ -924,14 +935,15 @@ msgstr "Erreur de sauvegarde !"
 msgid "Error loading CSV import preview. The MPDX team has been notified. If the problem persists please click \"Help\" above and submit a request."
 msgstr "Erreur lors du chargement de l'aperçu d'importation CSV.  L'équipe de MPDX a été notifiée. Si le problème persiste cliquez s'il vous plaît  sur \"Help\"  ci-dessus et soumettez une demande."
 
-msgid "Exclude your home country from the contacts export file here"
-msgstr "Exclure votre pays d'origine ci-dessous du fichier d'export des contacts"
-
 msgid "Expired Referral"
 msgstr "Référence expirée"
 
 msgid "Export"
 msgstr "Exporter"
+
+#, fuzzy
+msgid "Export Contacts"
+msgstr "Importer des contacts"
 
 msgid "Export selected to CSV:"
 msgstr "Exporter la sélection au format CSV :"
@@ -1106,6 +1118,10 @@ msgstr "Historique"
 msgid "Home"
 msgstr "Domicile"
 
+#, fuzzy
+msgid "Home Country"
+msgstr "Pays"
+
 msgid "Home Phone"
 msgstr "Téléphone fixe"
 
@@ -1191,6 +1207,9 @@ msgstr "Invitation annulée."
 msgid "Invited by: "
 msgstr "Invité par :"
 
+msgid "It is recommended that you backup your Google contacts as a CSV before enabling integration."
+msgstr ""
+
 msgid "It looks like you were adding a task. If you leave before submitting, your changes will be lost."
 msgstr "Il semble que vous êtes en train d'ajouter une tâche. Si vous partez avant de la soumettre, vos modifications seront perdues."
 
@@ -1242,6 +1261,9 @@ msgstr "L'année dernière"
 
 msgid "Last name"
 msgstr "Nom"
+
+msgid "Learn how"
+msgstr ""
 
 msgid "Least Likely"
 msgstr "Peu probable"
@@ -1507,6 +1529,10 @@ msgstr "Cacher les contacts"
 msgid "Name"
 msgstr "Nom"
 
+#, fuzzy
+msgid "Nameless Appeal"
+msgstr "Voir moins d'appels"
+
 msgid "Need Help?"
 msgstr "Besoin d'aide ?"
 
@@ -1642,9 +1668,6 @@ msgstr "Nodifications de MPDX"
 
 msgid "Now you can connect some social accounts"
 msgstr "Maintenant, vous pouvez connecter quelques comptes sociaux"
-
-msgid "Number is invalid"
-msgstr "Le numéro de téléphone n'est pas valide."
 
 msgid "Occupation"
 msgstr "Profession"
@@ -2676,9 +2699,8 @@ msgstr ""
 msgid "you tried but did not find a way to contact this person"
 msgstr ""
 
-#~ msgid ""
-#~ "It looks like you were adding some referrals. If you leave before submitting, "
-#~ "your changes will be lost."
-#~ msgstr ""
-#~ "Il semble que vous soyez en train d'ajouter quelques références. Si vous parte"
-#~ "z avant de les soumettre, vos modifications seront perdues."
+#~ msgid "Exclude your home country from the contacts export file here"
+#~ msgstr "Exclure votre pays d'origine ci-dessous du fichier d'export des contacts"
+
+#~ msgid "Number is invalid"
+#~ msgstr "Le numéro de téléphone n'est pas valide."
