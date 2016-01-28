@@ -303,10 +303,18 @@ describe GoogleContactSync do
     end
 
     it 'excludes blank numbers from google sync' do
+      expect_number_excluded(' ')
+    end
+
+    it 'excludes numbers that will be blank when normalized from sync' do
+      expect_number_excluded('(')
+    end
+
+    def expect_number_excluded(number)
       person.phone_number = { number: '+12123334444', location: 'mobile', primary: true }
       person.save
       # Set the blank number via update_column to skip validation
-      person.phone_numbers.first.update_column(:number, ' ')
+      person.phone_numbers.first.update_column(:number, number)
 
       sync.sync_numbers(g_contact, person, g_contact_link)
       expect(g_contact.prepped_changes[:phone_numbers]).to be_empty
