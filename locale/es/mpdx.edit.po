@@ -313,6 +313,9 @@ msgstr "Señas"
 msgid "Admin %"
 msgstr ""
 
+msgid "Advanced CSV"
+msgstr ""
+
 msgid "Age"
 msgstr ""
 
@@ -320,6 +323,9 @@ msgid "All"
 msgstr "Todos"
 
 msgid "All Inactive"
+msgstr ""
+
+msgid "All of the information for your contacts, best for advanced sorting/filtering and importing into other software."
 msgstr ""
 
 msgid "Amount"
@@ -457,6 +463,9 @@ msgstr ""
 msgid "Before emailing us, please have a look at %{link} to see if your question isalready answered there."
 msgstr ""
 
+msgid "Best for making mailing labels. Addresses will be formatted based on country."
+msgstr ""
+
 msgid "Bi-Monthly"
 msgstr ""
 
@@ -481,6 +490,9 @@ msgstr "Los dos"
 
 msgid "Business"
 msgstr "Empresa"
+
+msgid "CSV for Mail Merge"
+msgstr ""
 
 msgid "Calendar integration"
 msgstr ""
@@ -945,14 +957,15 @@ msgstr ""
 msgid "Error loading CSV import preview. The MPDX team has been notified. If the problem persists please click \"Help\" above and submit a request."
 msgstr ""
 
-msgid "Exclude your home country from the contacts export file here"
-msgstr ""
-
 msgid "Expired Referral"
 msgstr ""
 
 msgid "Export"
 msgstr ""
+
+#, fuzzy
+msgid "Export Contacts"
+msgstr "Añadir este contacto"
 
 msgid "Export selected to CSV:"
 msgstr ""
@@ -1126,6 +1139,9 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
+msgid "Home Country"
+msgstr ""
+
 msgid "Home Phone"
 msgstr ""
 
@@ -1208,6 +1224,9 @@ msgstr ""
 msgid "Invited by: "
 msgstr ""
 
+msgid "It is recommended that you backup your Google contacts as a CSV before enabling integration."
+msgstr ""
+
 msgid "It looks like you were adding a task. If you leave before submitting, your changes will be lost."
 msgstr ""
 
@@ -1257,6 +1276,9 @@ msgid "Last Year"
 msgstr ""
 
 msgid "Last name"
+msgstr ""
+
+msgid "Learn how"
 msgstr ""
 
 msgid "Least Likely"
@@ -1521,6 +1543,9 @@ msgstr "Añadir este contacto"
 msgid "Name"
 msgstr ""
 
+msgid "Nameless Appeal"
+msgstr ""
+
 msgid "Need Help?"
 msgstr ""
 
@@ -1660,9 +1685,6 @@ msgid "Notifications from MPDX"
 msgstr ""
 
 msgid "Now you can connect some social accounts"
-msgstr ""
-
-msgid "Number is invalid"
 msgstr ""
 
 #, fuzzy
