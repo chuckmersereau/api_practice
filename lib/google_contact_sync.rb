@@ -302,8 +302,8 @@ module GoogleContactSync
 
   def compare_numbers_for_sync(g_contact, person, g_contact_link)
     last_sync_numbers = g_contact_link.last_data[:phone_numbers].map { |p| p[:number] }
-    current_numbers = person.phone_numbers.where(historic: false).pluck(:number).select(&:present?)
-    historic_numbers = person.phone_numbers.where(historic: true).pluck(:number).select(&:present?)
+    current_numbers = person.phone_numbers.where(historic: false).pluck(:number)
+    historic_numbers = person.phone_numbers.where(historic: true).pluck(:number)
     compare_normalized_for_sync(last_sync_numbers, current_numbers,
                                 g_contact.phone_numbers, method(:normalize_number),
                                 historic_numbers)
@@ -349,8 +349,11 @@ module GoogleContactSync
   end
 
   def compare_normalized_for_sync(last_sync_list, mpdx_list, g_contact_list, normalize_fn, historic_list = [])
-    compare_considering_historic(last_sync_list.map(&normalize_fn), mpdx_list.map(&normalize_fn),
-                                 g_contact_list.map(&normalize_fn), historic_list.map(&normalize_fn))
+    compare_considering_historic(
+      last_sync_list.map(&normalize_fn).select(&:present?),
+      mpdx_list.map(&normalize_fn).select(&:present?),
+      g_contact_list.map(&normalize_fn).select(&:present?),
+      historic_list.map(&normalize_fn).select(&:present?))
   end
 
   def compare_considering_historic(last_sync_list, mpdx_list, g_contact_list, historic_list)
