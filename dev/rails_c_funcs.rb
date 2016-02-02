@@ -1,7 +1,8 @@
 # To load in a production rails console run:
 # load('./dev/rails_c_funcs.rb')
 
-def fix_donation_totals
+def fix_donation_totals(account_list)
+  account_list = account_list.id unless account_list.blank? || account_list.is_a?(Integer)
   sql = '
   UPDATE contacts
   SET total_donations = correct_totals.total
@@ -10,8 +11,9 @@ def fix_donation_totals
     FROM contacts, contact_donor_accounts, account_list_entries, donations
     WHERE contacts.id = contact_donor_accounts.contact_id
     AND donations.donor_account_id = contact_donor_accounts.donor_account_id
-    AND contacts.account_list_id = account_list_entries.account_list_id
-    AND donations.designation_account_id = account_list_entries.designation_account_id
+    AND contacts.account_list_id = account_list_entries.account_list_id ' +
+        (account_list ? "AND account_list_entries.account_list_id = #{account_list}" : '') +
+        ' AND donations.designation_account_id = account_list_entries.designation_account_id
     GROUP BY contacts.id
     ) correct_totals
   WHERE correct_totals.contact_id = contacts.id
