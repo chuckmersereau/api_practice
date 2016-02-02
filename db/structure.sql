@@ -3582,6 +3582,13 @@ CREATE INDEX index_activities_on_activity_type ON activities USING btree (activi
 
 
 --
+-- Name: index_activities_on_completed; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_activities_on_completed ON activities USING btree (completed);
+
+
+--
 -- Name: index_activities_on_notification_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3635,6 +3642,13 @@ CREATE UNIQUE INDEX index_activity_contacts_on_contact_id_and_activity_id ON act
 --
 
 CREATE INDEX index_addresses_on_addressable_id ON addresses USING btree (addressable_id);
+
+
+--
+-- Name: index_addresses_on_lower_city; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_addresses_on_lower_city ON addresses USING btree (lower((city)::text));
 
 
 --
@@ -4034,6 +4048,13 @@ CREATE INDEX index_mail_chimp_members_on_list_id ON mail_chimp_members USING btr
 --
 
 CREATE INDEX index_mail_chimp_members_on_mail_chimp_account_id ON mail_chimp_members USING btree (mail_chimp_account_id);
+
+
+--
+-- Name: index_master_addresses_on_postal_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_master_addresses_on_postal_code ON master_addresses USING btree (postal_code);
 
 
 --
@@ -4831,4 +4852,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151210152844');
 INSERT INTO schema_migrations (version) VALUES ('20151221004231');
 
 INSERT INTO schema_migrations (version) VALUES ('20151221154339');
+
+INSERT INTO schema_migrations (version) VALUES ('20160202192709');
 
