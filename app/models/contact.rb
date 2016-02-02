@@ -64,6 +64,7 @@ class Contact < ActiveRecord::Base
     :name, :pledge_amount, :status, :notes, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
     :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :user_changed,
     :direct_deposit, :magazine, :pledge_received, :not_duplicated_with, :tag_list, :primary_person_id, :timezone,
+    :pledge_currency,
     {
       contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
       donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],

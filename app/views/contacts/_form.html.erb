@@ -25,7 +25,7 @@
             <%= f.text_field :name, {placeholder: _('Last Name, First Name'), class: 'form-control'} %>
           </div>
           <div class="row">
-            <div class="col-md-8">
+            <div class="col-md-4">
               <div class="form-group">
                 <%= f.label :greeting, _('Greeting (used in csv download)') %>
                 <%= f.text_field :greeting, {placeholder: contact.generated_greeting, class: 'form-control'} %>
@@ -36,6 +36,13 @@
                   <%= f.label :envelope_greeting, _('Envelope Name Line') %>
                   <%= f.text_field :envelope_greeting, {placeholder: contact.generated_envelope_greeting, class: 'form-control'} %>
               </div>
+            </div>
+            <div class="col-md-4">
+                <div class="form-group">
+                    <%= f.label :pledge_currency, _('Commitment Currency') %>
+                      <%= f.select :pledge_currency, TwitterCldr::Shared::Currencies.currency_codes,
+                                   {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
+                </div>
             </div>
           </div>
           <div class="row">
