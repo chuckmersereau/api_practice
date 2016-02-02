@@ -79,6 +79,13 @@
                                    {class: 'country_select form-control'} %>
                 </div>
               </div>
+              <div class="col-md-6">
+                  <div class="form-group">
+                      <%=  f.label _('Currency') %>
+                      <%= f.select :currency, TwitterCldr::Shared::Currencies.currency_codes,
+                                   {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
+                  </div>
+              </div>
             </div>
 
             <div class="row">

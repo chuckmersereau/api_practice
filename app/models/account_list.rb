@@ -16,7 +16,7 @@ class AccountList < ActiveRecord::Base
   include Sidekiq::Worker
   sidekiq_options queue: :import, retry: false, unique: true
 
-  store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country]
+  store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :currency]
 
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
   has_many :account_list_users, dependent: :destroy
