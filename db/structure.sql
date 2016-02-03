@@ -669,7 +669,8 @@ CREATE TABLE contacts (
     envelope_greeting character varying(255),
     no_appeals boolean,
     prayer_letters_params text,
-    pls_id character varying(255)
+    pls_id character varying(255),
+    pledge_currency character varying(4)
 );
 
 
@@ -4854,4 +4855,6 @@ INSERT INTO schema_migrations (version) VALUES ('20151221004231');
 INSERT INTO schema_migrations (version) VALUES ('20151221154339');
 
 INSERT INTO schema_migrations (version) VALUES ('20160202192709');
+
+INSERT INTO schema_migrations (version) VALUES ('20160202105600');
 
