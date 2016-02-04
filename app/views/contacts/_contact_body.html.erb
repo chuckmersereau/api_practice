@@ -96,6 +96,7 @@
                                       value: contact.pledge_amount, place_holder: '0.0') %>
                   </td>
                 </tr>
+                <% if $rollout.active?(:currencies, current_account_list) %>
                 <tr>
                   <td class="meta_name"><%= _('Currency') %></td>
                   <td class="meta_data">
@@ -105,6 +106,7 @@
                                       collection: TwitterCldr::Shared::Currencies.currency_codes.collect { |s| [s, _(s)] }) %>
                   </td>
                 </tr>
+                <% end %>
                 <tr>
                   <td class="meta_name"><%= _('Frequency') %></td>
                   <td class="meta_data">
