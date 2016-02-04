@@ -3968,6 +3968,27 @@ CREATE INDEX index_google_contacts_on_remote_id ON google_contacts USING btree (
 
 
 --
+-- Name: index_google_email_activities_on_activity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_google_email_activities_on_activity_id ON google_email_activities USING btree (activity_id);
+
+
+--
+-- Name: index_google_email_activities_on_google_email_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_google_email_activities_on_google_email_id ON google_email_activities USING btree (google_email_id);
+
+
+--
+-- Name: index_google_emails_on_google_account_id_and_google_email_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_google_emails_on_google_account_id_and_google_email_id ON google_emails USING btree (google_account_id, google_email_id);
+
+
+--
 -- Name: index_google_events_on_activity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4049,6 +4070,13 @@ CREATE INDEX index_mail_chimp_members_on_list_id ON mail_chimp_members USING btr
 --
 
 CREATE INDEX index_mail_chimp_members_on_mail_chimp_account_id ON mail_chimp_members USING btree (mail_chimp_account_id);
+
+
+--
+-- Name: index_master_addresses_on_latitude; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_master_addresses_on_latitude ON master_addresses USING btree (latitude);
 
 
 --
@@ -4413,6 +4441,13 @@ CREATE INDEX related_object_index ON versions USING btree (item_type, related_ob
 --
 
 CREATE UNIQUE INDEX taggings_idx ON taggings USING btree (tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type);
+
+
+--
+-- Name: tags_on_lower_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX tags_on_lower_name ON tags USING btree (lower((name)::text));
 
 
 --
@@ -4854,7 +4889,17 @@ INSERT INTO schema_migrations (version) VALUES ('20151221004231');
 
 INSERT INTO schema_migrations (version) VALUES ('20151221154339');
 
+INSERT INTO schema_migrations (version) VALUES ('20160202105600');
+
 INSERT INTO schema_migrations (version) VALUES ('20160202192709');
 
-INSERT INTO schema_migrations (version) VALUES ('20160202105600');
+INSERT INTO schema_migrations (version) VALUES ('20160204190034');
+
+INSERT INTO schema_migrations (version) VALUES ('20160204190056');
+
+INSERT INTO schema_migrations (version) VALUES ('20160204190101');
+
+INSERT INTO schema_migrations (version) VALUES ('20160204190107');
+
+INSERT INTO schema_migrations (version) VALUES ('20160204190113');
 
