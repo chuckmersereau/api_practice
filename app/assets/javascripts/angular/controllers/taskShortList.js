@@ -35,9 +35,12 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
                 return;
             }
 
+            contactIds = _(tData.tasks, 'contacts').flatten()
+              .map(function (contact) { return contact.id }).uniq().join()
+
             //retrieve contacts
             api.call('get', 'contacts?account_list_id=' + window.current_account_list_id +
-                '&filters[status]=*&filters[ids]=' + _.uniq(_.flatten(tData.tasks, 'contacts')).join(), {}, function (data) {
+                '&filters[status]=*&filters[ids]=' + contactIds, {}, function (data) {
                 angular.forEach(data.contacts, function (contact) {
                     contactCache.update(contact.id, {
                         addresses: _.filter(data.addresses, function (addr) {
