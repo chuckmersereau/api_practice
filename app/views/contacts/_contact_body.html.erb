@@ -97,15 +97,15 @@
                   </td>
                 </tr>
                 <% if $rollout.active?(:currencies, current_account_list) %>
-                <tr>
-                  <td class="meta_name"><%= _('Currency') %></td>
-                  <td class="meta_data">
-                    <%= best_in_place(contact_exhibit, :pledge_currency,
-                                      as: :select,
-                                      place_holder: current_currency,
-                                      collection: TwitterCldr::Shared::Currencies.currency_codes.collect { |s| [s, _(s)] }) %>
-                  </td>
-                </tr>
+                  <tr>
+                    <td class="meta_name"><%= _('Currency') %></td>
+                    <td class="meta_data">
+                      <%= best_in_place(contact_exhibit, :pledge_currency,
+                                        as: :select,
+                                        place_holder: current_currency,
+                                        collection: TwitterCldr::Shared::Currencies.currency_codes.collect { |s| [s, _(s)] }) %>
+                    </td>
+                  </tr>
                 <% end %>
                 <tr>
                   <td class="meta_name"><%= _('Frequency') %></td>

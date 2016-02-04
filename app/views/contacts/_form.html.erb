@@ -26,9 +26,9 @@
           </div>
           <div class="row">
             <% if $rollout.active?(:currencies, current_account_list) %>
-            <div class="col-md-4">
+              <div class="col-md-4">
             <% else %>
-            <div class="col-md-8">
+              <div class="col-md-8">
             <% end %>
               <div class="form-group">
                 <%= f.label :greeting, _('Greeting (used in csv download)') %>
@@ -42,12 +42,12 @@
               </div>
             </div>
             <% if $rollout.active?(:currencies, current_account_list) %>
-            <div class="col-md-4">
-                <div class="form-group">
-                    <%= f.label :pledge_currency, _('Commitment Currency') %>
-                      <%= f.select :pledge_currency, [''] + TwitterCldr::Shared::Currencies.currency_codes, {}, {class: 'form-control'} %>
-                </div>
-            </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <%= f.label :pledge_currency, _('Commitment Currency') %>
+                        <%= f.select :pledge_currency, [''] + TwitterCldr::Shared::Currencies.currency_codes, {}, {class: 'form-control'} %>
+                  </div>
+              </div>
             <% end %>
           </div>
           <div class="row">
