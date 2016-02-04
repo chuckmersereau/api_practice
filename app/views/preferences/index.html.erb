@@ -79,6 +79,15 @@
                                    {class: 'country_select form-control'} %>
                 </div>
               </div>
+              <% if $rollout.active?(:currencies, current_account_list) %>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <%=  f.label _('Default Currency') %>
+                        <%= f.select :currency, TwitterCldr::Shared::Currencies.currency_codes,
+                                     {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
+                    </div>
+                </div>
+              <% end %>
             </div>
 
             <div class="row">
