@@ -6,7 +6,6 @@ class DonationSerializer < ActiveModel::Serializer
 
   def amount
     account_list = scope[:account_list]
-    user = scope[:user]
     current_currency(account_list)
 
     number_to_current_currency(object.amount, locale: scope[:locale])
