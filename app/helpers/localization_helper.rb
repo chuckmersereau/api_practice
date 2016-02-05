@@ -10,7 +10,7 @@ module LocalizationHelper
     end
   end
 
-  def current_currency()
-    @current_currency ||= current_account_list.default_currency
+  def current_currency(account_list = current_account_list)
+    @current_currency ||= account_list.default_currency
   end
 end
