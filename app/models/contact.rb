@@ -331,7 +331,7 @@ class Contact < ActiveRecord::Base
   end
 
   def pledge_currency
-    read_attribute(:pledge_currency) || account_list.currency
+    read_attribute(:pledge_currency) || account_list.default_currency
   end
 
   def pledge_currency_symbol

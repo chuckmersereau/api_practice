@@ -77,6 +77,10 @@ class AccountList < ActiveRecord::Base
     settings[:monthly_goal].present? && settings[:monthly_goal].to_i > 0 ? settings[:monthly_goal].to_i : nil
   end
 
+  def default_currency
+    settings[:currency] || designation_profiles.first.organization.default_currency_code
+  end
+
   def multiple_designations
     designation_accounts.length > 1 ? true : false
   end
