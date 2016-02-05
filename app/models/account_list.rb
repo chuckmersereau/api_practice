@@ -78,7 +78,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def default_currency
-    settings[:currency] || designation_profiles.first.organization.default_currency_code
+    settings[:currency] || designation_profiles.try(:first).try(:organization).try(:default_currency_code) || 'USD'
   end
 
   def multiple_designations

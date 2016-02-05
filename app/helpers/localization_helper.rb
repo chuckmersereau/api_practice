@@ -11,6 +11,6 @@ module LocalizationHelper
   end
 
   def current_currency()
-    current_account_list.default_currency
+    @current_currency ||= current_account_list.default_currency
   end
 end
