@@ -331,11 +331,7 @@ class Contact < ActiveRecord::Base
   end
 
   def pledge_currency
-    if !read_attribute(:pledge_currency).present? || read_attribute(:pledge_currency).blank?
-      account_list.currency
-    else
-      read_attribute(:pledge_currency)
-    end
+    read_attribute(:pledge_currency) || account_list.currency
   end
 
   def pledge_currency_symbol
