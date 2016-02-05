@@ -40,7 +40,7 @@
 <td class="contact-tasks" nowrap="nowrap">
     <div ng-show="contact.status !== ''">{{contact.status | gettext}}</div>
     <div ng-show="contact.pledge_amount > 0">
-      {{contact.pledge_amount | currency: current_currency_symbol}} {{contact.pledge_frequency | pledgeFrequencyStr}}
+      {{contact.pledge_amount | currency: contact.pledge_currency_symbol}} {{contact.pledge_frequency | pledgeFrequencyStr}}
       <i ng-show="contact.pledge_received" class="fa fa-check" title="<%= _('Commitment Received') %>"></i>
       <span ng-hide="contact.pledge_received" class="fa-stack pledge_not_received_icon" title="<%= _('Commitment Not Received') %>">
         <i class="fa fa-check fa-stack-1x"></i>
