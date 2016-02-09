@@ -39,7 +39,7 @@ angular.module('mpdxApp')
                             };
                             api.call('get',
                                      'contacts?filters[status]=*&per_page=5000'+
-                                         '&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts'+
+                                         '&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts,Contact.pledge_currency_symbol'+
                                          '&account_list_id=' + (window.current_account_list_id || ''),
                                      {}, function(data) {
                                 $scope.contacts = data.contacts;
@@ -127,9 +127,8 @@ angular.module('mpdxApp')
                                 }else{
                                     var str = [];
                                     angular.forEach(donations, function(d){
-                                      var amount = (_.isNull(d.appeal_amount) || _.isEmpty(d.appeal_amount)) ?
-                                                   d.amount : d.appeal_amount;
-                                      amount = $filter('currency')(amount, window.current_currency_symbol);
+                                      var amount = d.appeal_amount ? d.appeal_amount : d.amount;
+                                      amount = $filter('currency')(amount, contact.pledge_currency_symbol);
                                       str.push(d.donation_date + ' - ' + amount);
                                     });
                                     return str;
