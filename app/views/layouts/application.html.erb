@@ -56,6 +56,11 @@
                         <li role="presentation"><%= link_to(_('Networks & Imports'), "/accounts", :class => "") %></li>
                         <li role="presentation"><%= link_to(_('Integrations'), "/settings/integrations", :class => "") %></li>
                         <li role="presentation"><%= link_to(_('Account Sharing'), sharing_account_lists_path, :class => "") %></li>
+                        <% if current_user.admin %>
+                          <li role="presentation">
+                            <%= link_to(_('Admin'), admin_home_index_path, :class => "") %>
+                          </li>
+                        <% end %>
                         <li role="presentation"><%= link_to(_('Log out'), '/logout', :class => "") %></li>
                       </ul>
                     </div>

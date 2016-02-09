@@ -12,6 +12,7 @@ class Organization < ActiveRecord::Base
   has_many :master_people, through: :master_person_sources
 
   validates :name, :query_ini_url, presence: true
+  validates_uniqueness_of :name, uniqueness: true, case_sensitive: false
   scope :active, -> { where('addresses_url is not null') }
 
   # attr_accessible :name, :query_ini_url, :iso3166, :redirect_query_ini, :abbreviation, :logo, :account_help_url,
