@@ -330,6 +330,14 @@ class Contact < ActiveRecord::Base
     %w(Physical Both).include?(send_newsletter)
   end
 
+  def pledge_currency
+    self[:pledge_currency] || account_list.default_currency
+  end
+
+  def pledge_currency_symbol
+    TwitterCldr::Shared::Currencies.for_code(pledge_currency)[:symbol]
+  end
+
   def not_same_as?(other)
     not_duplicated_with.to_s.split(',').include?(other.id.to_s) ||
       other.not_duplicated_with.to_s.split(',').include?(id.to_s)

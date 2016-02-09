@@ -10,14 +10,10 @@ module LocalizationHelper
     end
   end
 
-  def current_currency(account_list = nil, user = nil)
+  def current_currency(account_list = nil)
     unless @current_currency
       account_list ||= current_account_list
-      user ||= current_user
-      if designation_profile = account_list.designation_profile(user)
-        @current_currency = designation_profile.organization.default_currency_code
-      end
-      @current_currency ||= 'USD'
+      @current_currency = account_list ? account_list.default_currency : 'USD'
     end
     @current_currency
   end
