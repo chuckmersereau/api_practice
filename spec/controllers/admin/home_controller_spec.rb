@@ -7,7 +7,7 @@ describe Admin::HomeController do
       get :index
       expect(response).to be_success
     end
- 
+
     it 'does not work for non-admin users' do
       login(create(:user))
       get :index
