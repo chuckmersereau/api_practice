@@ -83,11 +83,7 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <%=  f.label _('Default Currency') %>
-                        <%= hash = {}
-                            TwitterCldr::Shared::Currencies.currency_codes.each_with_index {
-                                |key, index| hash[key] = key + ' (' + TwitterCldr::Shared::Currencies.for_code(key)[:symbol] + ')'
-                            }
-                            f.select :currency, hash.invert, {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
+                        <%= f.select :currency, currency_select, {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
                     </div>
                 </div>
               <% end %>

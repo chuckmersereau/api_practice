@@ -45,11 +45,7 @@
               <div class="col-md-4">
                   <div class="form-group">
                       <%= f.label :pledge_currency, _('Commitment Currency') %>
-                      <%= hash = {'' => '- Account default -'}
-                          TwitterCldr::Shared::Currencies.currency_codes.each_with_index {
-                              |key, index| hash[key] = key + ' (' + TwitterCldr::Shared::Currencies.for_code(key)[:symbol] + ')'
-                          }
-                          f.select :pledge_currency, hash.invert, {}, {class: 'form-control'} %>
+                      <%= f.select :pledge_currency, currency_select(true), {}, {class: 'form-control'} %>
                   </div>
               </div>
             <% end %>
