@@ -15,4 +15,8 @@ FactoryGirl.define do
       create(:account_list_user, user: u, account_list: account_list)
     end
   end
+
+  factory :admin_user, parent: :user_with_account do
+    admin true
+  end
 end
