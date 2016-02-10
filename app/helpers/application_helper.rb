@@ -125,10 +125,11 @@ module ApplicationHelper
   end
 
   def currency_select(include_empty = false)
-    hash = {'' => current_account_list.currency} if include_empty
-    hash = {} if !include_empty
+    hash = {}
+    hash[current_account_list.currency] = '' if include_empty
     TwitterCldr::Shared::Currencies.currency_codes.each_with_index {
         |key, index| hash[key + ' (' + TwitterCldr::Shared::Currencies.for_code(key)[:symbol] + ')'] = key
     }
+    hash
   end
 end
