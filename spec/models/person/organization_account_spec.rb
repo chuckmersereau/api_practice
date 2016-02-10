@@ -1,7 +1,10 @@
 require 'spec_helper'
 
 describe Person::OrganizationAccount do
-  let(:org_account) { create(:organization_account) }
+  let(:org_account) do
+    create(:organization_account,
+           organization: create(:fake_org, name: 'MyString'))
+  end
   let(:api) { FakeApi.new }
 
   before do

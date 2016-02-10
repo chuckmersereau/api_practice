@@ -186,7 +186,6 @@ def logout_test_user
   $request_test = false
   $user = nil
   sign_out(:user)
-  sign_out(:admin_user)
 end
 
 def stub_google_geocoder
