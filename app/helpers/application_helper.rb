@@ -128,8 +128,7 @@ module ApplicationHelper
     hash = {'' => current_account_list.currency} if include_empty
     hash = {} if !include_empty
     TwitterCldr::Shared::Currencies.currency_codes.each_with_index {
-        |key, index| hash[key] = key + ' (' + TwitterCldr::Shared::Currencies.for_code(key)[:symbol] + ')'
+        |key, index| hash[key + ' (' + TwitterCldr::Shared::Currencies.for_code(key)[:symbol] + ')'] = key
     }
-    hash.invert
   end
 end
