@@ -4073,6 +4073,20 @@ CREATE INDEX index_mail_chimp_members_on_mail_chimp_account_id ON mail_chimp_mem
 
 
 --
+-- Name: index_master_addresses_on_city; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_master_addresses_on_city ON master_addresses USING btree (city);
+
+
+--
+-- Name: index_master_addresses_on_country; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_master_addresses_on_country ON master_addresses USING btree (country);
+
+
+--
 -- Name: index_master_addresses_on_latitude; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4084,6 +4098,20 @@ CREATE INDEX index_master_addresses_on_latitude ON master_addresses USING btree 
 --
 
 CREATE INDEX index_master_addresses_on_postal_code ON master_addresses USING btree (postal_code);
+
+
+--
+-- Name: index_master_addresses_on_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_master_addresses_on_state ON master_addresses USING btree (state);
+
+
+--
+-- Name: index_master_addresses_on_street; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_master_addresses_on_street ON master_addresses USING btree (street);
 
 
 --
@@ -4902,4 +4930,12 @@ INSERT INTO schema_migrations (version) VALUES ('20160204190101');
 INSERT INTO schema_migrations (version) VALUES ('20160204190107');
 
 INSERT INTO schema_migrations (version) VALUES ('20160204190113');
+
+INSERT INTO schema_migrations (version) VALUES ('20160210153932');
+
+INSERT INTO schema_migrations (version) VALUES ('20160210153937');
+
+INSERT INTO schema_migrations (version) VALUES ('20160210153943');
+
+INSERT INTO schema_migrations (version) VALUES ('20160210153951');
 
