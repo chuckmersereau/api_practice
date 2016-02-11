@@ -45,7 +45,7 @@
               <div class="col-md-4">
                   <div class="form-group">
                       <%= f.label :pledge_currency, _('Commitment Currency') %>
-                        <%= f.select :pledge_currency, [''] + TwitterCldr::Shared::Currencies.currency_codes, {}, {class: 'form-control'} %>
+                      <%= f.select :pledge_currency, currency_select(true), {}, {class: 'form-control'} %>
                   </div>
               </div>
             <% end %>
