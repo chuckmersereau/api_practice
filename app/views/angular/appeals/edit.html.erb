@@ -45,7 +45,7 @@
                         <td>{{contactName(c)}}</td>
                           <td>
                             <span ng-if="contactDetails(c).status === 'Partner - Financial'">
-                              {{contactDetails(c).pledge_amount | currency : current_currency_symbol}}
+                              {{contactDetails(c).pledge_amount | currency : contactDetails(c).pledge_currency_symbol}}
                               {{ contactDetails(c).pledge_frequency | pledgeFrequencyStr }}
                             </span>
                           </td>
