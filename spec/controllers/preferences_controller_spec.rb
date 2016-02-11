@@ -17,8 +17,12 @@ describe PreferencesController do
 
   context '#update' do
     it 'updates successfully' do
-      put :update, id: 1, preference_set: { first_name: 'John', email: 'john@example.com' }
+      preferences = {
+        first_name: 'John', email: 'john@example.com', account_list_name: 'New'
+      }
+      put :update, id: 1, preference_set: preferences
       expect(response).to redirect_to(preferences_path)
+      expect(user.account_lists.first.reload.name).to eq 'New'
     end
 
     it 'renders errors when update fails' do

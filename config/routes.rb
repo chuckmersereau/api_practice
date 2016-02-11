@@ -188,14 +188,24 @@ Rails.application.routes.draw do
   get '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
 
-  developer_user_constraint = lambda { |request|
-      request.env["rack.session"] and
-      request.env["rack.session"]["warden.user.user.key"] and
-      request.env["rack.session"]["warden.user.user.key"][0] and
-      User.find(request.env["rack.session"]["warden.user.user.key"][0].first).developer }
-  constraints developer_user_constraint do
+  def user_constraint(request, attribute)
+    request.env["rack.session"] &&
+      request.env["rack.session"]["warden.user.user.key"] &&
+      request.env["rack.session"]["warden.user.user.key"][0] &&
+      User.find(request.env["rack.session"]["warden.user.user.key"][0].first)
+      .public_send(attribute)
+  end
+
+  constraints -> (request) { user_constraint(request, :developer) }  do
     mount Sidekiq::Web => '/sidekiq'
     mount RolloutUi::Server => "/rollout"
+  end
+
+  constraints -> (request) { user_constraint(request, :admin) }  do
+    namespace :admin do
+      resources :home, only: [:index]
+      resources :offline_org, only: [:create]
+    end
   end
 
   get '/404', :to => "errors#error_404"

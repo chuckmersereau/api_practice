@@ -1,0 +1,20 @@
+<b><%= _('Add offline org') %></b>
+
+<%= form_tag admin_offline_org_index_path, method: :post do |f| %>
+  <div class="container">
+    <div class="col-md-4">
+      <%= label_tag :name, _('Name') %>
+      <%= text_field_tag :name, '', class: 'form-control' %>
+    </div>
+    <div class="col-md-4">
+      <%= label_tag :name, _('Website (optional)') %>
+      <%= text_field_tag :website, '', class: 'form-control' %>
+    </div>
+  </div>
+  <br/>
+  <div class="container">
+    <div class="col-md-3">
+    <%= submit_tag _('Create'), class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>

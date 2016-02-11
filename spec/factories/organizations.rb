@@ -5,7 +5,7 @@ FactoryGirl.define do
     n
   end
   factory :organization do
-    name 'MyString'
+    sequence(:name) { |n| "Organization#{n}" }
     query_ini_url { FactoryGirl.generate(:query_ini_url) }
     api_class 'DataServer'
     profiles_url 'http://example.com/profiles'

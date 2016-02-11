@@ -13,7 +13,7 @@ describe DataServer do
   end
 
   before(:each) do
-    @org = create(:organization)
+    @org = create(:organization, name: 'MyString')
     @person = create(:person)
     @org_account = build(:organization_account, person: @person, organization: @org)
     @data_server = DataServer.new(@org_account)
