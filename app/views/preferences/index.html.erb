@@ -83,11 +83,18 @@
                 <div class="col-md-6">
                     <div class="form-group">
                         <%=  f.label _('Default Currency') %>
-                        <%= f.select :currency, TwitterCldr::Shared::Currencies.currency_codes,
-                                     {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
+                        <%= f.select :currency, currency_select, {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
                     </div>
                 </div>
               <% end %>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <%= f.label :account_list_name, _('Account Name') %>
+                  <%= f.text_field :account_list_name, class: 'form-control' %>
+                </div>
+              </div>
             </div>
 
             <div class="row">

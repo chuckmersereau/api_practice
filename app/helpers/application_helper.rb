@@ -123,4 +123,13 @@ module ApplicationHelper
             end
     text_field_tag(name, value, options)
   end
+
+  def currency_select(include_empty = false)
+    hash = {}
+    hash[current_account_list.currency] = '' if include_empty
+    TwitterCldr::Shared::Currencies.currency_codes.each_with_index do |key, _index|
+      hash[key + ' (' + TwitterCldr::Shared::Currencies.for_code(key)[:symbol] + ')'] = key
+    end
+    hash
+  end
 end
