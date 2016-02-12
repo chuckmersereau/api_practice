@@ -142,6 +142,7 @@ class ContactsController < ApplicationController
     end
 
     attributes_to_update = contact_params.select { |_, v| v.present? }
+    attributes_to_update['send_newsletter'] = '' if attributes_to_update['send_newsletter'] == 'none'
     return unless attributes_to_update.present?
     contacts.update_all(attributes_to_update)
 

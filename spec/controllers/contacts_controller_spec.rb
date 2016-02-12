@@ -230,6 +230,14 @@ describe ContactsController do
                     { 'next_ask(3i)': '3', 'next_ask(1i)': '2012' }
         expect(contact.reload.next_ask).to be_nil
       end
+
+      describe 'send_newsletter' do
+        it 'updates to None' do
+          contact.update(send_newsletter: 'Email')
+          xhr :put, :bulk_update, bulk_edit_contact_ids: '1', contact: { send_newsletter: 'none' }
+          expect(contact.reload.send_newsletter).to be_blank
+        end
+      end
     end
 
     describe '#find_duplicates' do
