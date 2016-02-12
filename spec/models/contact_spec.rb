@@ -786,4 +786,13 @@ describe Contact do
       expect(contact.mailing_address.street).to be_nil
     end
   end
+
+  context '#pledge_currency_symbol' do
+    context 'with account_list#currency ""' do
+      it 'returns default currency' do
+        account_list.update(currency: '')
+        expect(contact.pledge_currency_symbol).to eq '$'
+      end
+    end
+  end
 end
