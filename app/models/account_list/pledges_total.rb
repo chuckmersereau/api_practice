@@ -3,28 +3,22 @@ class AccountList::PledgesTotal
     @account_list = account_list
   end
 
+  def default_currency_rate
+    return 1 if @account_list.default_currency === 'USD'
+
+    rate = CurrencyRate.where(code: @account_list.default_currency).order(exchanged_on: :desc).limit(1).first
+    rate ? rate.rate : 1
+  end
+
+  def monthly_pledge_usd(partner)
+    return partner.monthly_pledge if partner.pledge_currency === 'USD'
+
+    rate = CurrencyRate.where(code: partner.pledge_currency).order(exchanged_on: :desc).limit(1).first
+    partner.monthly_pledge / rate.rate if rate
+  end
+
   def total(partners)
-    sum = 0
-    partners.each do |partner|
-      if @account_list.default_currency === partner.pledge_currency
-        sum = sum + partner.monthly_pledge
-        next
-      end
-
-      # convert to USD
-      usd_total = 0
-      rate = CurrencyRate.where(code: partner.pledge_currency).order(exchanged_on: :desc).limit(1).first
-      usd_total = partner.monthly_pledge / rate.rate if rate
-
-      # convert to account currency
-      if @account_list.default_currency === 'USD'
-        sum = sum + usd_total
-      else
-        rate = CurrencyRate.where(code: @account_list.default_currency).order(exchanged_on: :desc).limit(1).first
-        sum = sum + usd_total / rate.rate if rate
-      end
-    end
-
-    sum
+    total_usd = partners.map(&method(:monthly_pledge_usd)).reduce(&:+)
+    total_usd / default_currency_rate
   end
 end
