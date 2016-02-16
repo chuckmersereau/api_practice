@@ -3590,6 +3590,13 @@ CREATE INDEX index_activities_on_completed ON activities USING btree (completed)
 
 
 --
+-- Name: index_activities_on_completed_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_activities_on_completed_at ON activities USING btree (completed_at);
+
+
+--
 -- Name: index_activities_on_notification_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4938,4 +4945,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160210153937');
 INSERT INTO schema_migrations (version) VALUES ('20160210153943');
 
 INSERT INTO schema_migrations (version) VALUES ('20160210153951');
+
+INSERT INTO schema_migrations (version) VALUES ('20160215185431');
 
