@@ -1,7 +1,7 @@
 class Person < ActiveRecord::Base
   RELATIONSHIPS_MALE = [_('Husband'), _('Son'), _('Father'), _('Brother'), _('Uncle'), _('Nephew'), _('Cousin (Male)'), _('Grandfather'), _('Grandson')]
   RELATIONSHIPS_FEMALE = [_('Wife'), _('Daughter'), _('Mother'), _('Sister'), _('Aunt'), _('Niece'), _('Cousin (Female)'), _('Grandmother'), _('Granddaughter')]
-  TITLES = [_('Mr.'), _('Mrs.'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')]
+  TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')]
   SUFFIXES = [_('Jr.'), _('Sr.')]
   MARITAL_STATUSES = [_('Single'), _('Engaged'), _('Married'), _('Separated'), _('Divorced'), _('Widowed')]
   has_paper_trail on: [:destroy],
