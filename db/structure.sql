@@ -650,7 +650,7 @@ CREATE TABLE contacts (
     pledge_start_date date,
     next_ask date,
     likely_to_give character varying(255),
-    church_name character varying(255),
+    church_name text,
     send_newsletter character varying(255),
     direct_deposit boolean DEFAULT false NOT NULL,
     magazine boolean DEFAULT false NOT NULL,
@@ -4947,4 +4947,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160210153943');
 INSERT INTO schema_migrations (version) VALUES ('20160210153951');
 
 INSERT INTO schema_migrations (version) VALUES ('20160215185431');
+
+INSERT INTO schema_migrations (version) VALUES ('20160217173440');
 
