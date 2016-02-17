@@ -4,7 +4,6 @@ class AccountList::PledgesTotal
   end
 
   def default_currency_rate
-    return 1 if @account_list.default_currency === 'USD'
     latest_rate(@account_list.default_currency)
   end
 
@@ -19,6 +18,8 @@ class AccountList::PledgesTotal
   end
 
   def latest_rate(currency)
+    return 1 if currency === 'USD'
+
     rate = CurrencyRate.where(code: currency).order(exchanged_on: :desc).limit(1).first
     rate ? rate.rate : 1
   end
