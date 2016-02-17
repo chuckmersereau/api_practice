@@ -276,7 +276,7 @@ describe GoogleContactSync do
       expect(phone1.location).to eq('mobile')
       expect(phone1.primary).to be true
       phone2 = person.phone_numbers.last
-      expect(phone2.number).to eq('(717) 888-9999')
+      expect(phone2.number).to eq('+17178889999')
       expect(phone2.location).to eq('other')
       expect(phone2.primary).to be false
     end

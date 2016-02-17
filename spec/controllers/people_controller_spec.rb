@@ -58,7 +58,7 @@ describe PeopleController do
           post :create,  contact_id: @contact.id,
                          person: valid_attributes.merge('phone_number' => { 'number' => '213-312-2134' })
         end.to change(PhoneNumber, :count).by(1)
-        expect(assigns(:person).phone_number.number).to eq('213-312-2134')
+        expect(assigns(:person).phone_number.number).to eq('+12133122134')
       end
 
       # it "creates a nested address" do

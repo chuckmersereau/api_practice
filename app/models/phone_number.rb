@@ -19,10 +19,11 @@ class PhoneNumber < ActiveRecord::Base
 
   def self.add_for_person(person, attributes)
     attributes = attributes.with_indifferent_access.except(:_destroy)
-    normalized_number = PhoneNumber.new(attributes)
+    normalized_number = PhoneNumber.new(attributes.merge(person: person))
     normalized_number.clean_up_number
+    normalized_or_not = [normalized_number.number, attributes[:number]]
 
-    if number = person.phone_numbers.find_by_number(normalized_number.number)
+    if number = person.phone_numbers.find_by(number: normalized_or_not)
       number.update_attributes(attributes)
     else
       attributes['primary'] = (person.phone_numbers.present? ? false : true) if attributes['primary'].nil?
@@ -33,9 +34,12 @@ class PhoneNumber < ActiveRecord::Base
   end
 
   def clean_up_number
+    # Default country to United States to help prevent duplicate numbers from
+    # being created when the user has not selected a home country.
+    country = user_country || 'US'
+
     # Use PhoneLib for parsing because PhoneLib supports extensions
-    return unless user_country
-    phone = Phonelib.parse(number, user_country)
+    phone = Phonelib.parse(number, country)
     return false if phone.e164.blank?
     self.number = phone.extension.present? ? "#{phone.e164};#{phone.extension}" : phone.e164
     self.country_code = phone.country_code

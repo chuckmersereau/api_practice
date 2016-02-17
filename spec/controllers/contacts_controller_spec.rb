@@ -234,7 +234,9 @@ describe ContactsController do
       describe 'send_newsletter' do
         it 'updates to None' do
           contact.update(send_newsletter: 'Email')
-          xhr :put, :bulk_update, bulk_edit_contact_ids: '1', contact: { send_newsletter: 'none' }
+          xhr :put, :bulk_update,
+              bulk_edit_contact_ids: contact.id.to_s,
+              contact: { send_newsletter: 'none' }
           expect(contact.reload.send_newsletter).to be_blank
         end
       end
