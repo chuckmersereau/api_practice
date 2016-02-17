@@ -3,9 +3,16 @@ require 'spec_helper'
 describe AccountList::PledgesTotal do
   let(:account_list) { create(:account_list) }
 
-  it 'assign contact currency' do
-    contact = create(:contact, account_list: account_list, pledge_currency: 'EUR')
-    expect(contact.pledge_currency).to eq('EUR')
+  it 'missing currency rate defaults to 1' do
+    rate = AccountList::PledgesTotal.new(account_list, account_list.contacts).latest_rate('ANY')
+    expect(rate).to eq(1)
+  end
+
+  it 'total pledges calculation with no Financial Partners' do
+    create(:contact, account_list: account_list, pledge_amount: 15, pledge_currency: 'USD', status: 'Partner - Special')
+    create(:contact, account_list: account_list, pledge_amount: 10, pledge_currency: 'USD', status: '')
+
+    expect(account_list.total_pledges).to eq(0)
   end
 
   it 'total pledges calculation' do

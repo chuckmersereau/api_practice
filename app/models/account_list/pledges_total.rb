@@ -1,6 +1,7 @@
 class AccountList::PledgesTotal
-  def initialize(account_list)
+  def initialize(account_list, contacts)
     @account_list = account_list
+    @contacts = contacts
     @rates = {}
   end
 
@@ -13,7 +14,7 @@ class AccountList::PledgesTotal
   end
 
   def total
-    total_usd = @account_list.contacts.financial_partners.map(&method(:monthly_pledge_usd)).sum
+    total_usd = @contacts.map(&method(:monthly_pledge_usd)).sum
     total_usd / default_currency_rate
   end
 
