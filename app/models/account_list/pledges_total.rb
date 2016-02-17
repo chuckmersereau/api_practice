@@ -13,8 +13,8 @@ class AccountList::PledgesTotal
     partner.monthly_pledge / latest_rate(partner.pledge_currency)
   end
 
-  def total(partners)
-    total_usd = partners.map(&method(:monthly_pledge_usd)).reduce(&:+)
+  def total
+    total_usd = @account_list.contacts.financial_partners.map(&method(:monthly_pledge_usd)).reduce(&:+)
     total_usd / default_currency_rate
   end
 

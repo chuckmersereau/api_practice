@@ -154,7 +154,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def total_pledges
-    @total_pledges ||= AccountList::PledgesTotal.new(self).total(contacts.financial_partners)
+    @total_pledges ||= AccountList::PledgesTotal.new(self).total
   end
 
   def received_pledges
