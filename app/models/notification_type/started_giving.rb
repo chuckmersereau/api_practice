@@ -16,10 +16,8 @@ class NotificationType::StartedGiving < NotificationType
                   contact.donations.where('donation_date < ?', 2.weeks.ago).count == 0
 
       # update pledge amount
-      if contact.pledge_amount.blank?
-        contact.pledge_amount = donation.amount
-        contact.pledge_currency = donation.currency
-      end
+      contact.pledge_amount = donation.amount if contact.pledge_amount.blank?
+      contact.pledge_currency = donation.currency if contact.pledge_currency.blank?
 
       # recheck pledge_received in case pledge_amount was blank before
       contact.pledge_received = true if contact.pledge_amount == donation.amount
