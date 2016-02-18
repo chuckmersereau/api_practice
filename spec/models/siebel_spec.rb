@@ -573,7 +573,7 @@ describe Siebel do
         siebel.send(:add_or_update_phone_number, siebel_phone_number, person)
       end.not_to change { PhoneNumber.count }
 
-      expect(pn.reload.number).to eq('408/269-4782')
+      expect(pn.reload.number).to eq('+14082694782')
     end
   end
 

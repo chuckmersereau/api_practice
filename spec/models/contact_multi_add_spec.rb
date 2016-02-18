@@ -41,7 +41,7 @@ describe ContactMultiAdd do
       expect(john.first_name).to eq('John')
       expect(john.last_name).to eq('Doe')
       expect(john.phone_numbers.count).to eq(1)
-      expect(john.phone_numbers.first.number).to eq('213-222-3333')
+      expect(john.phone_numbers.first.number).to eq('+12132223333')
       expect(john.email_addresses.count).to eq(1)
       expect(john.email_addresses.first.email).to eq('john@example.com')
 
@@ -49,7 +49,7 @@ describe ContactMultiAdd do
       expect(jane.first_name).to eq('Jane')
       expect(jane.last_name).to eq('Doe')
       expect(jane.phone_numbers.count).to eq(1)
-      expect(jane.phone_numbers.first.number).to eq('407-555-6666')
+      expect(jane.phone_numbers.first.number).to eq('+14075556666')
       expect(jane.email_addresses.count).to eq(1)
       expect(jane.email_addresses.first.email).to eq('jane@example.com')
     end

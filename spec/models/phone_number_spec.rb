@@ -7,42 +7,74 @@ describe PhoneNumber do
     u
   end
   let(:contact) { create(:contact, account_list: user.account_lists.first) }
-  let(:person) { contact.people.create(first_name: 'test') }
+  let(:person) { contact.people.create(first_name: 'test').reload }
 
   describe 'adding a phone number to a person' do
-    before(:each) do
-      @person = FactoryGirl.create(:person)
-      @attributes = { number: '213-345-2313' }
-    end
-    it "creates a phone number if it's new" do
+    it "creates a phone number normalized to home country if it's new" do
       expect do
-        PhoneNumber.add_for_person(@person, @attributes)
-        phone_number = @person.reload.phone_numbers.first
-        expect(phone_number.number).to eq('213-345-2313')
+        PhoneNumber.add_for_person(person, number: '(02) 7010 1111')
+        phone_number = person.reload.phone_numbers.first
+        expect(phone_number.number).to eq('+61270101111')
       end.to change(PhoneNumber, :count).from(0).to(1)
     end
 
+    it 'accepts phone numbers with country code different from home country' do
+      PhoneNumber.add_for_person(person, number: '+161712345678')
+      expect(person.reload.phone_numbers.first.number).to eq('+161712345678')
+    end
+
+    it 'adds a number invalid for home country but without country code' do
+      # In this case the user's home country is Australia, but the number they
+      # are entering does not look like an Australian phone number. In that
+      # case, at least normalize it in a consistent way to avoid duplicates
+      # (note that there is no +1 on the number, just a + in front of the 617).
+      PhoneNumber.add_for_person(person, number: '617-123-5678')
+      expect(person.reload.phone_numbers.first.number).to eq('+6171235678')
+    end
+
     it "doesn't create a phone number if it exists" do
-      expect(@person.phone_numbers).to be_empty
-      PhoneNumber.add_for_person(@person, @attributes)
+      PhoneNumber.add_for_person(person, number: '213-345-2313')
       expect do
-        PhoneNumber.add_for_person(@person, @attributes)
-        expect(@person.phone_numbers.first.number).to eq('213-345-2313')
+        PhoneNumber.add_for_person(person, number: '213-345-2313')
+      end.to_not change(PhoneNumber, :count)
+    end
+
+    it "doesn't create a phone number if it exists in normalized form" do
+      contact.account_list.update(home_country: 'United States')
+      PhoneNumber.add_for_person(person, number: '+12133452313')
+      expect do
+        PhoneNumber.add_for_person(person, number: '213-345-2313')
+      end.to_not change(PhoneNumber, :count)
+    end
+
+    it "doesn't create a phone number if it exists in non-normalized form" do
+      PhoneNumber.add_for_person(person, number: '213-345-2313')
+      person.phone_numbers.last.update_column(:number, '213-345-2313')
+      expect do
+        PhoneNumber.add_for_person(person, number: '213-345-2313')
+      end.to_not change(PhoneNumber, :count)
+    end
+
+    it "doesn't duplicated numbers with different formats if home country nil" do
+      contact.account_list.update(home_country: nil)
+      PhoneNumber.add_for_person(person, number: '213-345-2313')
+      expect do
+        PhoneNumber.add_for_person(person, number: '(213) 345-2313')
       end.to_not change(PhoneNumber, :count)
     end
 
     it 'sets only the first phone number to primary' do
-      PhoneNumber.add_for_person(@person, @attributes)
-      expect(@person.phone_numbers.first.primary?).to eq(true)
-      PhoneNumber.add_for_person(@person, @attributes.merge(number: '313-313-3142'))
-      expect(@person.phone_numbers.last.primary?).to eq(false)
+      PhoneNumber.add_for_person(person, number: '213-345-2313')
+      expect(person.phone_numbers.first.primary?).to eq(true)
+      PhoneNumber.add_for_person(person, number: '313-313-3142')
+      expect(person.phone_numbers.last.primary?).to eq(false)
     end
 
     it 'sets a prior phone number to not-primary if the new one is primary' do
-      phone1 = PhoneNumber.add_for_person(@person, @attributes)
+      phone1 = PhoneNumber.add_for_person(person, number: '213-345-2313')
       expect(phone1.primary?).to eq(true)
 
-      phone2 = PhoneNumber.add_for_person(@person, number: '313-313-3142', primary: true)
+      phone2 = PhoneNumber.add_for_person(person, number: '313-313-3142', primary: true)
       expect(phone2.primary?).to eq(true)
       phone2.send(:ensure_only_one_primary)
       expect(phone1.reload.primary?).to eq(false)
@@ -62,11 +94,11 @@ describe PhoneNumber do
       expect(phone.number).to eq('+12133452313;23')
     end
 
-    it 'does not run when user home country is unset' do
+    it 'defaults to United States normalizating when user home country unset' do
       user.account_lists.first.update(home_country: '')
       phone = PhoneNumber.add_for_person(person, number: '213-345-2313;23')
       phone.clean_up_number
-      expect(phone.number).to eq('213-345-2313;23')
+      expect(phone.number).to eq('+12133452313;23')
     end
 
     # Badly formatted numbers can be imported into MPDX by the TntMPD import.
@@ -92,7 +124,7 @@ describe PhoneNumber do
     end
   end
 
-  describe 'normalizing saved numbers' do
+  describe 'comparing numbers' do
     it 'returns true for two numbers that are the same except for formatting' do
       user.account_lists.first.update(home_country: 'United States')
       pn = PhoneNumber.add_for_person(person, number: '+16173194567')
@@ -106,17 +138,4 @@ describe PhoneNumber do
       expect(pn).to_not eq(pn2)
     end
   end
-
-  # it 'should format a US number based on country code' do
-  # p = PhoneNumber.new(number: '1567890', country_code: '1')
-  # expect(p.to_s).to eq('156-7890')
-  # end
-  # it 'should format a US number based on length' do
-  # p = PhoneNumber.new(number: '1234567890', country_code: nil)
-  # expect(p.to_s).to eq('(123) 456-7890')
-  # end
-  # it 'should leave all other countries alone' do
-  # p = PhoneNumber.new(number: '1234567890', country_code: '999999999')
-  # expect(p.to_s).to eq('1234567890')
-  # end
 end
