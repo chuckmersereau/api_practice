@@ -4,7 +4,7 @@ describe NotificationType::StartedGiving do
   let!(:started_giving) { NotificationType::StartedGiving.first_or_initialize }
   let!(:da) { create(:designation_account_with_donor) }
   let(:contact) { da.contacts.financial_partners.first }
-  let(:donation) { create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 5.days.ago) }
+  let(:donation) { create(:donation, currency: 'USD', donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 5.days.ago) }
 
   context '#check' do
     before { contact.update_column(:direct_deposit, true) }
