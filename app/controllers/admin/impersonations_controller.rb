@@ -2,7 +2,9 @@ class Admin::ImpersonationsController < ApplicationController
   def create
     @impersonation = Admin::Impersonation.new(impersonation_params)
     if @impersonation.save
-      sign_in(:user, @impersonation.impersonated)
+      sign_out(current_user)
+      sign_in(@impersonation.impersonated)
+      session[:impersonator_id] = @impersonation.impersonator.id
       redirect_to root_path
     else
       flash[:alert] = @impersonation.errors.full_messages.join('. ')
