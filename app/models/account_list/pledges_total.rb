@@ -5,17 +5,21 @@ class AccountList::PledgesTotal
     @rates = {}
   end
 
+  def total
+    if $rollout.active?(:currencies, @account_list)
+      total_usd = @contacts.map(&method(:monthly_pledge_usd)).sum
+      (total_usd * default_currency_rate).round(2)
+    else
+      @contacts.to_a.sum(&:monthly_pledge).round(2)
+    end
+  end
+
   def default_currency_rate
     latest_rate(@account_list.default_currency)
   end
 
   def monthly_pledge_usd(partner)
     partner.monthly_pledge / latest_rate(partner.pledge_currency)
-  end
-
-  def total
-    total_usd = @contacts.map(&method(:monthly_pledge_usd)).sum
-    total_usd / default_currency_rate
   end
 
   def latest_rate(currency)

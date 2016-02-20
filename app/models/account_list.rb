@@ -154,11 +154,11 @@ class AccountList < ActiveRecord::Base
   end
 
   def total_pledges
-    @total_pledges ||= AccountList::PledgesTotal.new(self, contacts.financial_partners).total.round(2)
+    @total_pledges ||= AccountList::PledgesTotal.new(self, contacts.financial_partners).total
   end
 
   def received_pledges
-    @received_pledges ||= AccountList::PledgesTotal.new(self, contacts.financial_partners.where(pledge_received: true)).total.round(2)
+    @received_pledges ||= AccountList::PledgesTotal.new(self, contacts.financial_partners.where(pledge_received: true)).total
   end
 
   def people_with_birthdays(start_date, end_date)
