@@ -1,7 +1,7 @@
 # These methods are useful in setting the initial currency values
 # as we prepare to deploy the multi-currency feature.
 
-def set_pledge_currencies
+def default_pledge_currencies!
   sql = <<-EOS
     update contacts
     set pledge_currency = (
@@ -19,14 +19,14 @@ def set_pledge_currencies
   ActiveRecord::Base.connection.execute(sql)
 end
 
-def set_account_list_currencies
+def default_account_list_currencies!
   org_currencies = Hash[Organization.pluck(:id, :default_currency_code)]
   AccountList.where.not("settings like '%currency%'").find_each do |account_list|
-    set_account_list_currency(account_list, org_currencies)
+    default_account_list_currency!(account_list, org_currencies)
   end
 end
 
-def set_account_list_currency(account_list, org_currencies)
+def default_account_list_currency!(account_list, org_currencies)
   org_ids = account_list.organization_accounts.map(&:organization_id)
   account_org_currencies = org_ids.map { |id| org_currencies[id] }.compact.uniq
 
@@ -35,11 +35,11 @@ def set_account_list_currency(account_list, org_currencies)
     account_list.update(currency: currency)
     puts "Set currency for account #{account_list.id} to #{currency} by org"
   else
-    set_currency_by_pledges(account_list)
+    default_currencies_by_pledges!(account_list)
   end
 end
 
-def set_currency_by_pledges(account_list)
+def default_currencies_by_pledges!(account_list)
   currency_counts = account_list.contacts.where
                     .not(pledge_currency: nil).group(:pledge_currency).count
   if currency_counts.empty?
