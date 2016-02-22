@@ -9,7 +9,17 @@ class ApplicationController < ActionController::Base
   before_action :ensure_setup_finished, except: [:error_404, :error_500]
   around_action :do_with_current_user, :set_user_time_zone, :set_locale
 
+  def user_for_paper_trail
+    impersonator_user || current_user
+  end
+
   private
+
+  def impersonator_user
+    return nil unless session[:impersonator_id]
+    @impersonator_user ||= User.find(session[:impersonator_id])
+  end
+  helper_method :impersonator_user
 
   def peek_enabled?
     user_signed_in? && current_user.developer == true

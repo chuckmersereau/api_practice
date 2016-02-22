@@ -187,3 +187,11 @@ $appealHeight: 20px;
     border: 1px solid $color-gray-light;
   }
 }
+
+.impersonation-bar {
+  color: $error_red;
+  background: $gray_light;
+  text-align: center;
+  font-weight: bold;
+  font-size: 20px;
+}

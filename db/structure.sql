@@ -324,6 +324,39 @@ ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
 
 
 --
+-- Name: admin_impersonation_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE admin_impersonation_logs (
+    id integer NOT NULL,
+    reason text NOT NULL,
+    impersonator_id integer NOT NULL,
+    impersonated_id integer NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: admin_impersonation_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE admin_impersonation_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: admin_impersonation_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE admin_impersonation_logs_id_seq OWNED BY admin_impersonation_logs.id;
+
+
+--
 -- Name: appeal_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2574,6 +2607,13 @@ ALTER TABLE ONLY addresses ALTER COLUMN id SET DEFAULT nextval('addresses_id_seq
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY admin_impersonation_logs ALTER COLUMN id SET DEFAULT nextval('admin_impersonation_logs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY appeal_contacts ALTER COLUMN id SET DEFAULT nextval('appeal_contacts_id_seq'::regclass);
 
 
@@ -3045,6 +3085,14 @@ ALTER TABLE ONLY activity_contacts
 
 ALTER TABLE ONLY addresses
     ADD CONSTRAINT addresses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: admin_impersonation_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY admin_impersonation_logs
+    ADD CONSTRAINT admin_impersonation_logs_pkey PRIMARY KEY (id);
 
 
 --
@@ -4949,4 +4997,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160210153951');
 INSERT INTO schema_migrations (version) VALUES ('20160215185431');
 
 INSERT INTO schema_migrations (version) VALUES ('20160217173440');
+
+INSERT INTO schema_migrations (version) VALUES ('20160211113711');
 
