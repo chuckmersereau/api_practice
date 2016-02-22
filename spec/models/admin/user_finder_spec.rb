@@ -28,9 +28,9 @@ describe Admin::UserFinder, '.find_users' do
   end
 
   it 'finds user by key account' do
-    account = create(:key_account, email: 'john@t.co')
+    account = create(:key_account, email: 'john2@t.co')
 
-    found_user = Admin::UserFinder.find_users('John@T.co').first
+    found_user = Admin::UserFinder.find_users('John2@T.co').first
 
     expect(found_user).to be_a User
     expect(found_user.id).to eq account.person.id
