@@ -3,9 +3,8 @@ class Admin::FixWorker
 
   sidekiq_options unique: true, retry: false
 
-  def perform(fix_class, account_list_id)
-    AccountList.find(account_list_id).contacts.find_each do |contact|
-      Admin::PrimaryAddressFix.new(contact).fix!
-    end
+  def perform(fix_name, record_class, id)
+    record = record_class.constantize.find(id)
+    "Admin::#{fix_name.camelize}Fix".constantize.new(record).fix
   end
 end
