@@ -1,0 +1,20 @@
+<b><%= _('Impersonate User') %></b>
+
+<%= form_tag admin_impersonations_path, method: :post do |f| %>
+  <div class="container">
+    <div class="col-md-4">
+      <%= label_tag :impersonate_lookup, _('User Name, ID or Key/Relay Email') %>
+      <%= text_field_tag :impersonate_lookup, '', class: 'form-control' %>
+    </div>
+    <div class="col-md-4">
+      <%= label_tag :reason, _('Reason / Support Ticket Link') %>
+      <%= text_field_tag :reason, '', class: 'form-control' %>
+    </div>
+  </div>
+  <br/>
+  <div class="container">
+    <div class="col-md-3">
+    <%= submit_tag _('Impersonate User'), class: 'btn btn-primary' %>
+    </div>
+  </div>
+<% end %>

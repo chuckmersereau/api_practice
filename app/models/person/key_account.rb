@@ -1,8 +1,6 @@
 class Person::KeyAccount < ActiveRecord::Base
   include Person::Account
 
-  # attr_accessible :email
-
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.key_accounts
     @remote_id = auth_hash.extra.attributes.first.ssoGuid.upcase

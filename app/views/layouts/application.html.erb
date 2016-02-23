@@ -13,6 +13,7 @@
     <%= csrf_meta_tags %>
   </head>
   <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller" ng-app="mpdxApp">
+    <%= render 'impersonation_bar' %>
     <%= render 'peek/bar' %>
 
     <header id="global">
