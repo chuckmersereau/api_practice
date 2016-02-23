@@ -1,7 +1,7 @@
 class Admin::UserFinder < ActiveRecord::Base
   class << self
     def find_users(id_name_or_email)
-      if id_name_or_email =~ /\d+/
+      if id_name_or_email =~ /\A\d+\Z/
         users_by_id(id_name_or_email)
       elsif id_name_or_email =~ /@/
         users_by_login_email(id_name_or_email)
