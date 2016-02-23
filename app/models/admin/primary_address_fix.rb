@@ -30,6 +30,6 @@ class Admin::PrimaryAddressFix
 
   def make_historic_non_primary
     @contact.addresses.where(historic: true, primary_mailing_address: true)
-      .each { |address| address.update(primary_mailing_address: false) }
+      .find_each { |address| address.update(primary_mailing_address: false) }
   end
 end
