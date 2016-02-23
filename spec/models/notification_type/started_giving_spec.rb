@@ -4,7 +4,7 @@ describe NotificationType::StartedGiving do
   let!(:started_giving) { NotificationType::StartedGiving.first_or_initialize }
   let!(:da) { create(:designation_account_with_donor) }
   let(:contact) { da.contacts.financial_partners.first }
-  let(:donation) { create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 5.days.ago) }
+  let(:donation) { create(:donation, donor_account: contact.donor_accounts.first, designation_account: da, donation_date: 5.days.ago, currency: '') }
 
   context '#check' do
     before { contact.update_column(:direct_deposit, true) }
@@ -67,7 +67,7 @@ describe NotificationType::StartedGiving do
       end
 
       def create_donation(donation_date)
-        create(:donation, donor_account: contact.donor_accounts.first,
+        create(:donation, donor_account: contact.donor_accounts.first, currency: '',
                           designation_account: da, donation_date: donation_date)
       end
 
@@ -86,11 +86,23 @@ describe NotificationType::StartedGiving do
     end
 
     it 'sets pledge received and defaults to a monthly pledge when first gift given for financial partner ' do
-      contact.update(pledge_amount: nil, pledge_frequency: nil, pledge_received: false)
+      contact.update(pledge_amount: nil, pledge_currency: nil, pledge_frequency: nil, pledge_received: false)
       donation
       started_giving.check(contact.account_list)
       contact.reload
       expect(contact.pledge_amount).to eq(9.99)
+      expect(contact.pledge_frequency).to eq(1)
+      expect(contact.pledge_received).to be true
+    end
+
+    it 'sets pledge received and defaults to a monthly pledge and currency when first gift given for financial partner ' do
+      contact.update(pledge_amount: nil, pledge_currency: nil, pledge_frequency: nil, pledge_received: false)
+      donation.update(currency: 'EUR', amount: 21.50)
+      started_giving.check(contact.account_list)
+
+      contact.reload
+      expect(contact.pledge_amount).to eq(21.50)
+      expect(contact.pledge_currency).to eq('EUR')
       expect(contact.pledge_frequency).to eq(1)
       expect(contact.pledge_received).to be true
     end

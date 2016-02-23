@@ -7,9 +7,9 @@ FactoryGirl.define do
     association :designation_account
     motivation 'MyString'
     payment_method 'MyString'
-    tendered_currency 'MyString'
+    tendered_currency 'ZAR'
     tendered_amount '9.99'
-    currency 'MyString'
+    currency 'ZAR'
     amount '9.99'
     memo 'MyText'
     donation_date { Date.today }
