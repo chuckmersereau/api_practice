@@ -8,7 +8,7 @@ describe Admin::PrimaryAddressFix, '#fix!' do
 
     Admin::PrimaryAddressFix.new(contact).fix!
 
-    expect(address1.reload.primary_mailing_address).to be true
+    expect(address1.reload).to be_primary_mailing_address
   end
 
   it 'does not create a new address if there are none' do
@@ -29,8 +29,8 @@ describe Admin::PrimaryAddressFix, '#fix!' do
 
     Admin::PrimaryAddressFix.new(contact).fix!
 
-    expect(address1.reload.primary_mailing_address).to be true
-    expect(address2.reload.primary_mailing_address).to be false
+    expect(address1.reload).to be_primary_mailing_address
+    expect(address2.reload).to_not be_primary_mailing_address
   end
 
   it 'does not set historic address to primary' do
@@ -40,7 +40,7 @@ describe Admin::PrimaryAddressFix, '#fix!' do
 
     Admin::PrimaryAddressFix.new(contact).fix!
 
-    expect(address.reload.primary_mailing_address).to be false
+    expect(address.reload).to_not be_primary_mailing_address
   end
 
   it 'sets mailing address as the only primary if had two primary addresses' do
@@ -53,8 +53,7 @@ describe Admin::PrimaryAddressFix, '#fix!' do
 
     Admin::PrimaryAddressFix.new(contact).fix!
 
-    expect(address1.reload.primary_mailing_address).to be true
-    expect(address2.reload.primary_mailing_address).to be false
+    expect(address1.reload).to be_primary_mailing_address
   end
 
   it 'set historic addresses to non-primary' do
@@ -64,6 +63,6 @@ describe Admin::PrimaryAddressFix, '#fix!' do
 
     Admin::PrimaryAddressFix.new(contact).fix!
 
-    expect(address.reload.primary_mailing_address).to be false
+    expect(address.reload).to_not be_primary_mailing_address
   end
 end
