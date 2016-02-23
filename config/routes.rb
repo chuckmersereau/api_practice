@@ -205,6 +205,7 @@ Rails.application.routes.draw do
     namespace :admin do
       resources :home, only: [:index]
       resources :offline_org, only: [:create]
+      resources :impersonations, only: [:create]
     end
   end
 

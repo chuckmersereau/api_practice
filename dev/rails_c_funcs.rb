@@ -1,5 +1,4 @@
-# To load in a production rails console run:
-# load('./dev/rails_c_funcs.rb')
+load('./dev/address_history.rb')
 
 def fix_donation_totals(account_list)
   account_list = account_list.id unless account_list.blank? || account_list.is_a?(Integer)
