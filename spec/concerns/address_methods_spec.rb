@@ -17,9 +17,9 @@ describe AddressMethods do
         addressable.merge_addresses
       end.to change(Address, :count).from(3).to(2)
 
-      expect(Address.find_by_id(address1.id)).to be_nil
-      expect(Address.find_by_id(address2.id)).to eq(address2)
-      expect(Address.find_by_id(address3.id)).to eq(address3)
+      expect(Address.find_by(id: address1.id)).to be_nil
+      expect(Address.find_by(id: address2.id)).to eq(address2)
+      expect(Address.find_by(id: address3.id)).to eq(address3)
     end
 
     it 'works for contact' do
@@ -63,6 +63,36 @@ describe AddressMethods do
   end
 
   context '#primary_address' do
+    it 'gives the first (by id) non-deleted, non-historic primary address' do
+      contact = create(:contact)
+      addr1 = create(:address, street: '1', primary_mailing_address: true, deleted: true)
+      addr2 = create(:address, street: '2', primary_mailing_address: true, historic: true)
+      addr3 = create(:address, street: '3', primary_mailing_address: false)
+      addr4 = create(:address, street: '4', primary_mailing_address: true, city: 'b')
+      addr5 = create(:address, street: '5', primary_mailing_address: true, city: 'a')
+      contact.addresses << [addr1, addr2, addr3, addr4, addr5]
 
+      # Check that we get the same address even if db record order changes
+      Address.connection.execute('CLUSTER addresses USING index_addresses_on_lower_city')
+      expect(contact.primary_address).to eq addr4
+      Address.connection.execute('CLUSTER addresses USING addresses_pkey')
+      expect(contact.primary_address).to eq addr4
+    end
+  end
+
+  context '#addresses' do
+    it 'gives first (by id) address if none are primary' do
+      contact = create(:contact)
+      addr1 = create(:address, street: '1', primary_mailing_address: false,
+                               city: 'b', addressable: contact)
+      create(:address, street: '2', primary_mailing_address: false, city: 'a',
+                       addressable: contact)
+
+      # Check that we get the same address even if db record order changes
+      Address.connection.execute('CLUSTER addresses USING index_addresses_on_lower_city')
+      expect(contact.addresses.first).to eq addr1
+      Address.connection.execute('CLUSTER addresses USING addresses_pkey')
+      expect(contact.addresses.first).to eq addr1
+    end
   end
 end
