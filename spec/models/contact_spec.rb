@@ -794,5 +794,17 @@ describe Contact do
         expect(contact.pledge_currency_symbol).to eq '$'
       end
     end
+
+    context 'with account list currency not in twitter list' do
+      it 'returns currency string' do
+        # Some currencies come in from data server with their
+        # non-official labels, e.g. Kenyan shillings are officially KES, but
+        # may come in as KSH (which doesn't exist in the Twitter list)
+        account_list.update(currency: 'KSH')
+        allow(TwitterCldr::Shared::Currencies)
+          .to receive(:for_code).with('KSH') { nil }
+        expect(contact.pledge_currency_symbol).to eq 'KSH'
+      end
+    end
   end
 end
