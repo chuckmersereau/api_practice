@@ -88,12 +88,12 @@ class User < Person
     end
 
     json = JSON.parse(response.to_str)
-    if account = Person::RelayAccount.find_by_remote_id(json['guid'])
-      user = account.person.to_user
-      user.update_attribute(:access_token, token)
+    relay_account = Person::RelayAccount.find_by('lower(remote_id) = ?',
+                                                 json['guid'].downcase)
+    if relay_account.present?
+      user = relay_account.person.to_user
+      user.update(access_token: token)
       user
-    else
-      return nil
     end
   end
 
