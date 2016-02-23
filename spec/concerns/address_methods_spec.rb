@@ -63,7 +63,7 @@ describe AddressMethods do
   end
 
   context '#primary_address' do
-    it 'gives the first (by id) non-deleted, non-historic primary address' do
+    it 'gives a consistent non-deleted, non-historic primary address' do
       contact = create(:contact)
       addr1 = create(:address, street: '1', primary_mailing_address: true, deleted: true)
       addr2 = create(:address, street: '2', primary_mailing_address: true, historic: true)
@@ -81,7 +81,7 @@ describe AddressMethods do
   end
 
   context '#addresses' do
-    it 'gives first (by id) address if none are primary' do
+    it 'gives a consistent first if none are primary and record order changes' do
       contact = create(:contact)
       addr1 = create(:address, street: '1', primary_mailing_address: false,
                                city: 'b', addressable: contact)
