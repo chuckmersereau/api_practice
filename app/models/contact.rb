@@ -335,7 +335,8 @@ class Contact < ActiveRecord::Base
   end
 
   def pledge_currency_symbol
-    TwitterCldr::Shared::Currencies.for_code(pledge_currency)[:symbol]
+    cldr_currency = TwitterCldr::Shared::Currencies.for_code(pledge_currency)
+    cldr_currency.present? ? cldr_currency[:symbol] : pledge_currency
   end
 
   def not_same_as?(other)
