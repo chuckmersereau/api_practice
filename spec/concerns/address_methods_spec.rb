@@ -61,4 +61,8 @@ describe AddressMethods do
                                                  postal_code: a.postal_code)).to be true
     end
   end
+
+  context '#primary_address' do
+
+  end
 end
