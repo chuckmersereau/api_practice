@@ -1,7 +1,9 @@
 "<%==(
     ['Contact Name', 'First Name', 'Last Name', 'Spouse First Name', 'Greeting', 'Envelope Greeting',
      'Mailing Street Address', 'Mailing City', 'Mailing State', 'Mailing Postal Code', 'Mailing Country', 'Status',
-     'Commitment Amount', 'Commitment Frequency', 'Newsletter', 'Pledge Received', 'Tags'] +
+     'Commitment Amount'] +
+    ($rollout.active?(:currencies, current_account_list) ? ['Commitment Currency'] : []) + 
+    ['Commitment Frequency', 'Newsletter', 'Commitment Received', 'Tags'] +
     (@csv_primary_emails_only ? ['Primary Email', 'Spouse Email'] : ['Email 1', 'Email 2', 'Email 3', 'Email 4']) +
     ['Phone 1', 'Phone 2', 'Phone 3', 'Phone 4']
   ).map {|h| _(h)}.join('","') %>"
@@ -23,6 +25,9 @@
     row << contact.mailing_address.csv_country(contact.account_list.home_country)
     row << contact.status
     row << contact.pledge_amount
+    if $rollout.active?(:currencies, current_account_list)
+      row << contact.pledge_currency
+    end
     row << Contact.pledge_frequencies[contact.pledge_frequency || 1.0]
     row << contact.send_newsletter
     row << (contact.pledge_received ? 'Yes' : 'No')

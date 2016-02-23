@@ -366,7 +366,9 @@ class AccountList < ActiveRecord::Base
   def physical_newsletter_csv
     newsletter_contacts = ContactFilter.new(newsletter: 'address').filter(contacts)
     views = ActionView::Base.new('app/views', {}, ActionController::Base.new)
-    views.render(file: 'contacts/index.csv.erb', locals: { contacts: newsletter_contacts })
+    views.render(file: 'contacts/index.csv.erb',
+                 locals: { contacts: newsletter_contacts,
+                           current_account_list: self })
   end
 
   def users_combined_name
