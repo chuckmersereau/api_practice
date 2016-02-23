@@ -4,7 +4,7 @@ describe NotificationType do
   let(:notification_type) { create(:notification_type) }
   let(:account_list) { create(:account_list) }
   let(:contact) { create(:contact, account_list: account_list) }
-  let!(:donation) { create(:donation) }
+  let!(:donation) { create(:donation, currency: 'MyString') }
   let(:designation_account) { create(:designation_account) }
   let!(:special_gift) { NotificationType::SpecialGift.create! }
 

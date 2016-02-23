@@ -38,7 +38,7 @@ describe NotificationType::LongTimeFrameGift do
     it 'adds the gift frequency in correctly' do
       donation.update(donation_date: Date.new(2015, 3, 18))
       notification = contact.notifications.new(donation: donation)
-      description = 'Doe, John gave their Annual gift of MyString9.99 on March 18, 2015. Send them a Thank You.'
+      description = 'Doe, John gave their Annual gift of R9.99 on March 18, 2015. Send them a Thank You.'
       expect(long_time_frame_gift.task_description(notification)).to eq(description)
     end
   end
