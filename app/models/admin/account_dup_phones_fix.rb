@@ -4,7 +4,7 @@ class Admin::AccountDupPhonesFix
   end
 
   def fix
-    Person.where(id: person_ids_multi_phones)
+    Person.where(id: person_ids_multi_phones).includes(:phone_numbers)
       .find_each(&method(:clean_dup_person_phones))
   end
 
@@ -15,7 +15,7 @@ class Admin::AccountDupPhonesFix
   end
 
   def person_ids_multi_phones
-    people_phone_counts.select do |person, num_phones|
+    people_phone_counts.select do |_person_id, num_phones|
       num_phones > 1
     end.keys
   end
