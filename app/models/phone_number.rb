@@ -2,7 +2,7 @@ class PhoneNumber < ActiveRecord::Base
   include HasPrimary
   @@primary_scope = :person
 
-  has_paper_trail on: [:destroy],
+  has_paper_trail on: [:destroy, :update], ignore: [:updated_at],
                   meta: { related_object_type: 'Person',
                           related_object_id: :person_id }
 
