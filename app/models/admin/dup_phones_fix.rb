@@ -5,7 +5,7 @@ class Admin::DupPhonesFix
 
   def fix
     phones.each(&method(:normalize))
-    phones_by_number.each(&method(:merge_dup_phones))
+    phones.group_by(&:number).each(&method(:merge_dup_phones))
   end
 
   private
@@ -34,15 +34,6 @@ class Admin::DupPhonesFix
     # complete.
     return unless phone.number =~ /\A\+[2-9]\d{9}/ && phone.country_code == '1'
     phone.number = "+1#{phone.number[1..-1]}"
-  end
-
-  def phones_by_number
-    by_number = {}
-    phones.each do |phone|
-      by_number[phone.number] ||= []
-      by_number[phone.number] << phone
-    end
-    by_number
   end
 
   def merge_dup_phones(_number, phones)
