@@ -18,14 +18,14 @@ describe Admin::DupPhonesFix, '#fix' do
 
   it 'combines dup US phone numbers that differ by missing 1 after +' do
     expect_fix_result(
-      [{ number: '+6174567890' }, { number: '+16174567890' }], 
+      [{ number: '+6174567890' }, { number: '+16174567890' }],
       ['+16174567890'])
   end
 
   it 'leaves alone non-dup int numbers that look US number missing +1' do
     expect_fix_result(
-      [{ number: '+4412345678', country_code: '1'}, 
-       { number: '+6431234567', country_code: '64'}],
+      [{ number: '+4412345678', country_code: '1' },
+       { number: '+6431234567', country_code: '64' }],
       ['+4412345678', '+6431234567'])
   end
 
