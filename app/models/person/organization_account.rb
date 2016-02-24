@@ -57,39 +57,53 @@ class Person::OrganizationAccount < ActiveRecord::Base
   end
 
   def import_all_data
-    return if locked_at || new_record? || !valid_credentials
+    return if locked_at || new_record? || !valid_rechecked_credentials
     update_column(:downloading, true)
-    begin
-      # we only want to set the last_download date if at least one donation was downloaded
-      starting_donation_count = user.donations.count
-
-      update_attributes(downloading: true, locked_at: Time.now)
-      date_from = last_download ? (last_download - 50.days) : ''
-      organization.api(self).import_all(date_from)
-
-      ending_donation_count = user.donations.count
-
-      if ending_donation_count - starting_donation_count > 0
-        # If this is the first time downloading, update the financial status of partners
-        account_list.update_partner_statuses if last_download.nil? && account_list
-
-        # Set the last download date to whenever the last donation was received
-        update_column(:last_download,
-                      user.donations.where.not(remote_id: nil).order('donation_date desc').first.donation_date)
-      end
-    rescue OrgAccountInvalidCredentialsError
-      update_column(:valid_credentials, false)
-      ImportMailer.credentials_error(self).deliver
-    ensure
-      begin
-        update_column(:downloading, false)
-        update_column(:locked_at, nil)
-      rescue ActiveRecord::ActiveRecordError
-      end
-    end
+    import_donations
+  rescue OrgAccountInvalidCredentialsError
+    update_column(:valid_credentials, false)
+    ImportMailer.credentials_error(self).deliver
+  ensure
+    clear_lock_fields
   end
 
   private
+
+  def valid_rechecked_credentials
+    # Trigger validation to check if the credentials are actually valid in case
+    # they were previously incorrectly indicated by a data server as invalid.
+    valid_credentials || valid?
+  end
+
+  def import_donations
+    starting_donation_count = user.donations.count
+    import_donations_from_api
+
+    # we only want to set the last_download date if at least one donation was downloaded
+    return unless user.donations.count > starting_donation_count
+    process_new_donations_downloaded
+  end
+
+  def import_donations_from_api
+    update(downloading: true, locked_at: Time.now)
+    date_from = last_download ? (last_download - 50.days) : ''
+    organization.api(self).import_all(date_from)
+  end
+
+  def process_new_donations_downloaded
+    # If this is the first time downloading, update the financial status of partners
+    account_list.update_partner_statuses if last_download.nil? && account_list
+
+    # Set the last download date to whenever the last donation was received
+    last_donation_date = user.donations
+                         .where.not(remote_id: nil).order('donation_date desc').first.donation_date
+    update_column(:last_download, last_donation_date)
+  end
+
+  def clear_lock_fields
+    update_columns(downloading: false, locked_at: nil)
+  rescue ActiveRecord::ActiveRecordError
+  end
 
   def set_valid_credentials
     self.valid_credentials = true
