@@ -1,7 +1,7 @@
 window.railsConstants = {
   contact: {
-    ACTIVE_STATUSES: <%= (Contact.new.assignable_statuses - Contact.inactive_statuses).inspect %>,
-    INACTIVE_STATUSES: <%= Contact.inactive_statuses.inspect %>
+    ACTIVE_STATUSES: <%= Contact::ACTIVE_STATUSES.inspect %>,
+    INACTIVE_STATUSES: <%= Contact::INACTIVE_STATUSES.inspect %>
   },
     task: {
       ACTIONS: <%= Task::TASK_ACTIVITIES %>,

@@ -16,4 +16,8 @@ class MonitorsController < ApplicationController
       render text: 'OK'
     end
   end
+
+  def ruby_version
+    render text: RUBY_VERSION
+  end
 end

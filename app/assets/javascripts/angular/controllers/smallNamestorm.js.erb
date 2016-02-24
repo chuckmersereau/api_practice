@@ -2,7 +2,7 @@ angular.module('mpdxApp').controller('smallNamestorm', function (api) {
   this.contacts = [];
   this.newContactName = '';
   this.newContactStatus = 'Contact for Appointment';
-  this.contactStatuses = _.map(['<%= Contact.new.assignable_statuses.join("','") %>'], function(status) {
+  this.contactStatuses = _.map(['<%= Contact::ASSIGNABLE_STATUSES.join("','") %>'], function(status) {
     return { value: status, text: __(status) };
   });
 

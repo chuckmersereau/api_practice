@@ -92,7 +92,7 @@ gem 'snail'
 gem 'twitter_cldr', '~> 2.4.0'
 # gem 'typhoeus'
 gem 'versionist', '~> 1.2.1'
-gem 'virtus', '~> 0.5.4'
+gem 'virtus', '~> 1.0.5'
 gem 'wicked', '~> 1.0.2'
 gem 'will_paginate', '~> 3.0.3'
 
