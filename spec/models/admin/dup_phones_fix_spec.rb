@@ -17,21 +17,24 @@ describe Admin::DupPhonesFix, '#fix' do
   end
 
   it 'combines dup US phone numbers that differ by missing 1 after +' do
-    expect_numbers_merged(['+6174567890', '+16174567890'], 
-                          ['+16174567890'])
+    expect_fix_result(
+      [{ number: '+6174567890' }, { number: '+16174567890' }], 
+      ['+16174567890'])
   end
 
-  it 'leaves non-dup international numbers that look US number missing +1' do
-    expect_numbers_merged(['+4412345678', '+6431234567'],
-                          ['+4412345678', '+6431234567'])
+  it 'leaves alone non-dup int numbers that look US number missing +1' do
+    expect_fix_result(
+      [{ number: '+4412345678', country_code: '1'}, 
+       { number: '+6431234567', country_code: '64'}],
+      ['+4412345678', '+6431234567'])
   end
 
-  def expect_numbers_merged(unmerged, merged)
-    person = build_person(*unmerged.map { |n| { number: n } })
+  def expect_fix_result(unfixed_numbers_attrs, fixed_numbers)
+    person = build_person(*unfixed_numbers_attrs)
 
     Admin::DupPhonesFix.new(person).fix
 
-    expect(person.reload.phone_numbers.pluck(:number)).to eq merged
+    expect(person.reload.phone_numbers.pluck(:number)).to eq fixed_numbers
   end
 
   def build_person(*numbers_attrs)
@@ -40,7 +43,8 @@ describe Admin::DupPhonesFix, '#fix' do
       phone = create(:phone_number, attrs.merge(person: person))
       # Calling update_column is needed to get around the auto-normalization of
       # the current phone number code (we are simulating old non-normalized numbers)
-      phone.update_column(:number, attrs[:number])
+      phone.update_columns(number: attrs[:number],
+                           country_code: attrs[:country_code])
     end
     person
   end
