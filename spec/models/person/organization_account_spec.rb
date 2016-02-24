@@ -14,10 +14,10 @@ describe Person::OrganizationAccount do
   end
 
   context '#import_all_data' do
-    it 'updates the last_download column if no donations are downloaded' do
+    it 'does not update the last_download column if no donations downloaded' do
       org_account.downloading = false
       org_account.last_download = nil
-      org_account.send(:import_all_data)
+      org_account.import_all_data
       expect(org_account.reload.last_download).to be_nil
     end
 
@@ -42,6 +42,19 @@ describe Person::OrganizationAccount do
       it 'marks as not valid' do
         org_account.import_all_data
         expect(org_account.valid_credentials).to be false
+      end
+    end
+
+    context 'when previous password error' do
+      it 'retries donor import but does not re-send email' do
+        org_account.valid_credentials = false
+        allow(api).to receive(:import_all)
+        ActionMailer::Base.deliveries.clear
+
+        org_account.import_all_data
+
+        expect(api).to have_received(:import_all)
+        expect(ActionMailer::Base.deliveries).to be_empty
       end
     end
   end
