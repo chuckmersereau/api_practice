@@ -18,8 +18,8 @@ describe Admin::DupPhonesFix, '#fix' do
 
   it 'combines dup US phone numbers that differ by missing 1 after +' do
     expect_fix_result(
-      [{ number: '+6174567890' }, { number: '+16174567890' }],
-      ['+16174567890'])
+      [{ number: '+6042345678', country_code: '60' }, { number: '+16042345678' }],
+      ['+16042345678'])
   end
 
   it 'leaves alone non-dup int numbers that look US number missing +1' do
@@ -43,8 +43,8 @@ describe Admin::DupPhonesFix, '#fix' do
       phone = create(:phone_number, attrs.merge(person: person))
       # Calling update_column is needed to get around the auto-normalization of
       # the current phone number code (we are simulating old non-normalized numbers)
-      phone.update_columns(number: attrs[:number],
-                           country_code: attrs[:country_code])
+      phone.update_column(:number, attrs[:number])
+      phone.update_column(:country_code, attrs[:country_code]) if attrs[:country_code]
     end
     person
   end
