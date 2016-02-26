@@ -179,7 +179,6 @@ Rails.application.routes.draw do
 
   get 'monitors/lb' => 'monitors#lb'
   get 'monitors/sidekiq' => 'monitors#sidekiq'
-  get 'monitors/ruby_version' => 'monitors#ruby_version'
 
   get '/auth/prayer_letters/callback', to: 'prayer_letters_accounts#create'
   get '/auth/pls/callback', to: 'pls_accounts#create'
