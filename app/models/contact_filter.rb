@@ -47,6 +47,7 @@ class ContactFilter
       filtered_contacts = newsletter(filtered_contacts)
       filtered_contacts = contact_name(filtered_contacts)
       filtered_contacts = timezone(filtered_contacts)
+      filtered_contacts = pledge_currency(filtered_contacts)
       filtered_contacts = related_task_action(filtered_contacts)
       filtered_contacts = appeal(filtered_contacts)
       filtered_contacts = contact_type(filtered_contacts)
@@ -183,6 +184,13 @@ class ContactFilter
   def timezone(filtered_contacts)
     if @filters[:timezone].present? && @filters[:timezone].first != ''
       filtered_contacts = filtered_contacts.where('contacts.timezone' => @filters[:timezone])
+    end
+    filtered_contacts
+  end
+
+  def pledge_currency(filtered_contacts)
+    if @filters[:pledge_currency].present? && @filters[:pledge_currency].first != ''
+      filtered_contacts = filtered_contacts.where('contacts.pledge_currency' => @filters[:pledge_currency])
     end
     filtered_contacts
   end

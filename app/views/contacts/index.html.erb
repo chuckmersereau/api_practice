@@ -181,6 +181,12 @@
                     <%= select_tag 'filters[timezone]', options_for_select([[_('-- Any --'), '']] + current_account_list.timezones.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.timezone' %>
                   </div>
                 </li>
+                <li class="filter_set">
+                  <label id="filter_currency" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Currency']);"><%= _('Currency') %></label>
+                  <div class="filter_set_inner">
+                    <%= select_tag 'filters[currency]', options_for_select([[_('-- Any --'), '']] + current_account_list.currencies.select(&:present?)), multiple: true, size: 5, class: 'form-control', :'ng-model' => 'contactQuery.currency' %>
+                  </div>
+                </li>
                 <li class="controls">
                   <a href="#" ng-click="mapContacts()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Map These Contacts']);"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
                 </li>

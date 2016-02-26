@@ -125,6 +125,10 @@ class AccountList < ActiveRecord::Base
     @timezones ||= contacts.order(:timezone).pluck('DISTINCT timezone')
   end
 
+  def currencies
+    @currencies ||= contacts.order(:pledge_currency).pluck('DISTINCT pledge_currency')
+  end
+
   def valid_mail_chimp_account
     mail_chimp_account.try(:active?) && mail_chimp_account.primary_list.present?
   end
