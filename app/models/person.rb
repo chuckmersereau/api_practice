@@ -256,6 +256,10 @@ class Person < ActiveRecord::Base
   end
 
   def phone_number=(hash)
+    add_phone_number(hash)
+  end
+
+  def add_phone_number(hash)
     hash = hash.with_indifferent_access
     PhoneNumber.add_for_person(self, hash) if hash.with_indifferent_access['number'].present?
   end
