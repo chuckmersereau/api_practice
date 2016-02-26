@@ -283,5 +283,13 @@ describe ContactFilter do
       expect(filtered_contacts).to include no_email
       expect(filtered_contacts).to include has_email
     end
+
+    it 'includes contacts no currency if account default currency is selected' do
+      no_currency_contact = create(:contact)
+      cf = ContactFilter.new(pledge_currency: 'USD')
+
+      filtered_contacts = cf.filter(Contact, user.account_lists.first)
+      expect(filtered_contacts).to include no_currency_contact
+    end
   end
 end
