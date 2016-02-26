@@ -9,7 +9,7 @@ class ContactFilter
     @filters.map { |k, v| @filters[k] = v.strip if v.is_a?(String) }
   end
 
-  def filter(contacts)
+  def filter(contacts, account_list)
     @contacts = filtered_contacts = contacts
 
     if filters.present?
@@ -47,7 +47,7 @@ class ContactFilter
       filtered_contacts = newsletter(filtered_contacts)
       filtered_contacts = contact_name(filtered_contacts)
       filtered_contacts = timezone(filtered_contacts)
-      filtered_contacts = pledge_currency(filtered_contacts)
+      filtered_contacts = pledge_currency(filtered_contacts, account_list)
       filtered_contacts = related_task_action(filtered_contacts)
       filtered_contacts = appeal(filtered_contacts)
       filtered_contacts = contact_type(filtered_contacts)
@@ -188,9 +188,13 @@ class ContactFilter
     filtered_contacts
   end
 
-  def pledge_currency(filtered_contacts)
+  def pledge_currency(filtered_contacts, account_list)
     if @filters[:pledge_currency].present? && @filters[:pledge_currency].first != ''
-      filtered_contacts = filtered_contacts.where('contacts.pledge_currency' => @filters[:pledge_currency])
+      if @filters[:pledge_currency].include?(account_list.default_currency)
+        filtered_contacts = filtered_contacts.where(pledge_currency: [@filters[:pledge_currency], '', nil])
+      else
+        filtered_contacts = filtered_contacts.where(pledge_currency: @filters[:pledge_currency])
+      end
     end
     filtered_contacts
   end
