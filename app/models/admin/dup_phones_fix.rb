@@ -25,7 +25,7 @@ class Admin::DupPhonesFix
   def fix_missing_us_country_prefix(phone)
     # Sometimes (in past or present code), a US phone number got saved
     # without the +1 but with a +, i.e. +6171234567 instead of +1617234567.
-    return unless phone.number =~ /\A\+[2-9]\d{9}/ && phone.country_code == '1'
+    return unless phone.number =~ /\A\+[2-9]\d{9}/
 
     us_country_code_added = "+1#{phone.number[1..-1]}"
 
