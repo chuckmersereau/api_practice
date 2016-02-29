@@ -9,15 +9,14 @@ def balance(a, u)
   e.balances(u)
 end
 
-def fix_dup_balance(u)
-  u.account_lists.each do |a|
-    fix_dup_balance(a)
-  end
+def fix_dup_balances(u)
+  u.account_lists.each(&method(:fix_dup_balance))
 end
 
 def fix_dup_balance(a)
   balance_to_account = {}
-  a.designation_accounts.order(created_at: :desc).each do |da|
+  a.designation_accounts.order("CASE WHEN name LIKE '%and%' THEN 0 ELSE 1 END")
+    .order(created_at: :desc).each do |da|
     next unless da.balance.present?
     if balance_to_account[da.balance].present?
       da.update!(active: false)
