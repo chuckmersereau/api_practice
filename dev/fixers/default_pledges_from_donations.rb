@@ -28,15 +28,17 @@ end
 def try_frequency!(contact, frequency)
   look_back_period = (frequency * 3).to_i.months.ago.beginning_of_month.to_date
   donations = contact.donations.where('donation_date >= ?', look_back_period)
-  if donations.count >= 3 && donations.count <= 4 &&
-     contact.pledge_frequency.nil?
-    amount = donations.first.amount
-    puts "Pledge for #{contact} ##{contact.id} set to #{amount} "\
-      "#{Contact.pledge_frequencies[frequency.to_d]}"
-    contact.update!(
-      status: 'Partner - Financial', pledge_frequency: frequency,
-      pledge_amount: amount, pledge_received: true)
-    return true
-  end
-  false
+
+  # If the person gave between 3 and 4 times in the past 3 complete periods +
+  # partial current period then assuming they give at this frequency.
+  return false unless (3..4).include?(donations.count) &&
+                      contact.pledge_frequency.nil?
+
+  amount = donations.first.amount
+  puts "Pledge for #{contact} ##{contact.id} set to #{amount} "\
+    "#{Contact.pledge_frequencies[frequency.to_d]}"
+  contact.update!(
+    status: 'Partner - Financial', pledge_frequency: frequency,
+    pledge_amount: amount, pledge_received: true)
+  true
 end
