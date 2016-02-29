@@ -331,7 +331,8 @@ class Contact < ActiveRecord::Base
   end
 
   def pledge_currency
-    self[:pledge_currency].present? ? self[:pledge_currency] : account_list.default_currency
+    return self[:pledge_currency] if self[:pledge_currency].present?
+    return account_list.default_currency if account_list
   end
 
   def pledge_currency_symbol
