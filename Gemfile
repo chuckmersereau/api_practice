@@ -3,7 +3,7 @@ source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro'
 end
 
-gem 'rails', '~> 4.1.10'
+gem 'rails', '~> 4.1.14'
 
 # Gems used only for assets and not required
 # in production environments by default.
