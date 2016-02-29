@@ -3,7 +3,7 @@ class Admin::PrimaryAddressFix
     @contact = contact
   end
 
-  def fix!
+  def fix
     mailing_address = @contact.mailing_address
 
     # Contact#mailing_address returns Address.new if there is no mailing address

@@ -7,11 +7,12 @@
             <i class="fa fa-envelope" ng-class="{'icon-error-red': hasSendNewsletterError()}"
                title="{{contact.send_newsletter | gettext}}" ng-show="contact.send_newsletter"></i>
 
-            <i class="fa fa-<%= current_currency.downcase %>" title="<%= _('Partner - Special') %>"
-               ng-show="contact.status === 'Partner - Special'"></i>
+            <span title="<%= _('Partner - Special')   %>" ng-show="contact.status === 'Partner - Special'">
+              <span>{{contact.pledge_currency_symbol}}</span>
+            </span>
             <span title="<%= _('Partner - Financial') %>" ng-show="contact.status === 'Partner - Financial'">
-              <i class="fa fa-<%= current_currency.downcase %>"></i>
-              <i class="fa fa-<%= current_currency.downcase %>"></i>
+              <span>{{contact.pledge_currency_symbol}}</span>
+              <span>{{contact.pledge_currency_symbol}}</span>
             </span>
         </h4>
         <div class="people">
