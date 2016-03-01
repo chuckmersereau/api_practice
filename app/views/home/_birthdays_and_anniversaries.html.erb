@@ -8,10 +8,17 @@
         p_exhibit = exhibit(person, self)%>
       <li>
         <%= link_to(p_exhibit, person) %>:
-        <%= l(Date.new(Time.zone.now.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
+        <% if Date.valid_date?(Time.current.year, person.birthday_month, person.birthday_day) %>
+          <%= l(Date.new(Time.current.year, person.birthday_month, person.birthday_day), format: 'MMM-d') %>
+        <% else %>
+          <%= _('Invalid birthday: month %{month}, day %{day}').localize %
+            { month: person.birthday_month, day: person.birthday_day }
+          %>
+        <% end %>
         <%= p_exhibit.facebook_link %>
         <%= p_exhibit.twitter_link %>
         <%= p_exhibit.email_link %>
+      </li>
     <% end %>
   </ul>
   <% more_bdays_text = '<i class="fa fa-plus-square-o"></i> '.html_safe +
