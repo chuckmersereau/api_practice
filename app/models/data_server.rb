@@ -34,22 +34,16 @@ class DataServer
     if @org.profiles_url.present?
       check_credentials!
 
-      # Remove any profiles this user no longer has access to
-      # designation_profiles.each do |_designation_profile|
-      # unless profiles.detect { |profile| profile[:name] == designation_profile.name && profile[:code] == designation_profile.code}
-      # designation_profile.destroy
-      # end
-      # end
-
       profiles.each do |profile|
         Retryable.retryable do
           designation_profile = @org.designation_profiles.where(user_id: @org_account.person_id, name: profile[:name], code: profile[:code]).first_or_create
           import_profile_balance(designation_profile)
-          AccountList.find_or_create_from_profile(designation_profile, @org_account)
+          AccountList::FromProfileLinker.new(designation_profile, @org_account)
+            .link_account_list!
         end
       end
-
-    else # still want to update balance if possible
+    else
+      # still want to update balance if possible
       designation_profiles.each do |designation_profile|
         Retryable.retryable do
           import_profile_balance(designation_profile)
@@ -246,8 +240,6 @@ class DataServer
 
         break
       end
-      # rescue NoMethodError
-      #   raise response.inspect
     end
     balance
   end
