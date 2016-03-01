@@ -14,6 +14,19 @@ class EmailAddress < ActiveRecord::Base
     email
   end
 
+  # When we upgraded to Rails 4.1.14, the mail_to link helper that used to
+  # happily accept an EmailAddress instance complained that there was no to_str
+  # method defined on it. In Ruby, to_s means "represent this object as a string",
+  # while to_str means "this object really behaves like a string". Likely the
+  # mail_to helper was upgraded to check for to_str to avoid mistakes where
+  # someone would pass in a non-string that had a to_s method (e.g. a number).
+  # But as a precaution we thought it best to alias to_str on email address just
+  # in case there are other places in the app we don't have specs for that would
+  # crash expecting email address to have a to_str method.
+  # For more on to_s vs. to_str, see:
+  # http://stackoverflow.com/questions/11182052/to-s-vs-to-str-and-to-i-to-a-to-h-vs-to-int-to-ary-to-hash-in-ruby
+  alias_method :to_str, :to_s
+
   def self.add_for_person(person, attributes)
     attributes = attributes.with_indifferent_access.except(:_destroy)
     then_cb = proc do |_exception, _handler, _attempts, _retries, _times|
