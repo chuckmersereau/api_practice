@@ -157,14 +157,7 @@ describe Appeal do
         { amounts: [1, 2, 1, 2, 1, 2], pledge_frequency: 1 } => true,
         { amounts: [1, 1, 1, 2, 0, 0], pledge_frequency: 1 } => false
       }.each do |giving_info, increased|
-        Donation.destroy_all
-        contact.update(pledge_frequency: giving_info[:pledge_frequency], last_donation_date: nil)
-        giving_info[:amounts].reverse.each_with_index do |amount, i|
-          next if amount == 0
-          d = create(:donation, donor_account: donor_account, amount: amount,
-                                donation_date: Date.today << i, designation_account: da)
-          contact.update_donation_totals(d)
-        end
+        import_giving_info(giving_info)
 
         expect(appeal.contacts_by_opts(['Partner - Financial'], [], increasedGiving3months: true).count)
           .to eq(increased ? 0 : 1)
@@ -172,6 +165,23 @@ describe Appeal do
         donor_account.donations.update_all(designation_account_id: nil)
         expect(appeal.contacts_by_opts(['Partner - Financial'], [], increasedGiving3months: true).count).to eq(1)
       end
+    end
+
+    def import_giving_info(giving_info)
+      Donation.destroy_all
+      contact.update(pledge_frequency: giving_info[:pledge_frequency], last_donation_date: nil)
+
+      donations = []
+      giving_info[:amounts].reverse.each_with_index do |amount, i|
+        next if amount == 0
+        donations << build(:donation,
+                           donor_account: donor_account,
+                           amount: amount, donation_date: Date.today << i,
+                           designation_account: da)
+      end
+      Donation.import(donations)
+      contact.update(first_donation_date: donations.map(&:donation_date).min,
+                     last_donation_date: donations.map(&:donation_date).max)
     end
   end
 end
