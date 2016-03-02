@@ -21,9 +21,9 @@ class AccountList::FromProfileLinker
   delegate :user, to: :org_account
 
   def account_from_designation_numbers
-    organization = org_account.organization
     designation_numbers = profile.designation_accounts.map(&:designation_number)
-    AccountList::FromDesignationsFinder.new(designation_numbers, organization)
+    AccountList::FromDesignationsFinder
+      .new(designation_numbers, org_account.organization_id)
       .account_list
   end
 

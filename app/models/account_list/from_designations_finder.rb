@@ -1,7 +1,7 @@
 class AccountList::FromDesignationsFinder
-  def initialize(numbers, organization)
+  def initialize(numbers, organization_id)
     @numbers = numbers
-    @organization = organization
+    @organization_id = organization_id
   end
 
   def account_list
@@ -10,8 +10,6 @@ class AccountList::FromDesignationsFinder
   end
 
   private
-
-  attr_reader :numbers, :organization
 
   def account_list_ids_with_designations
     # By using a count query we can filter for only those account lists that
@@ -24,7 +22,7 @@ class AccountList::FromDesignationsFinder
 
   def designation_ids
     @designation_ids ||=
-      DesignationAccount.where(designation_number: numbers)
-      .where(organization_id: organization.id).pluck(:id).sort
+      DesignationAccount.where(designation_number: @numbers)
+      .where(organization_id: @organization_id).pluck(:id).sort
   end
 end

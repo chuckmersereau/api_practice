@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe AccountList::FromDesignationsFinder, '#account_list' do
   it 'returns nil if no account list contains the specified designations' do
-    finder = AccountList::FromDesignationsFinder.new('1', double(id: 0))
+    org = create(:organization)
+    finder = AccountList::FromDesignationsFinder.new('1', org.id)
     expect(finder.account_list).to be_nil
   end
 
@@ -13,7 +14,7 @@ describe AccountList::FromDesignationsFinder, '#account_list' do
     da3 = create(:designation_account, designation_number: '3', organization: org)
     account_list = create(:account_list)
     account_list.designation_accounts << [da1, da2, da3]
-    finder = AccountList::FromDesignationsFinder.new(%w(1 2), org)
+    finder = AccountList::FromDesignationsFinder.new(%w(1 2), org.id)
 
     expect(finder.account_list).to eq account_list
   end
@@ -24,7 +25,7 @@ describe AccountList::FromDesignationsFinder, '#account_list' do
     account_list = create(:account_list)
     account_list.designation_accounts << da1
     create(:designation_account, designation_number: '2', organization: org)
-    finder = AccountList::FromDesignationsFinder.new(%w(1 2), org)
+    finder = AccountList::FromDesignationsFinder.new(%w(1 2), org.id)
 
     expect(finder.account_list).to be_nil
   end
