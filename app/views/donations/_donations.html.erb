@@ -49,11 +49,7 @@
     </tbody>
     <% unless @contact %>
       <tfoot>
-        <% donations_by_currency = donations.group_by{ |d| d.currency == '' ? current_account_list.default_currency : d.currency }
-            .map{ |currency, amount| {:currency => currency, :count => amount.sum {1}, :sum => amount.sum {|j| j.amount.to_f} }}
-
-          donations_by_currency.each do |d|
-        %>
+        <% totals_by_currency(donations).each do |d| %>
           <tr class="sum">
             <td></td>
             <td class="right"><strong><%= _('Total %{currency} Donations (%{count}):').localize % {currency: d[:currency], count: d[:count]} %></strong></td>
