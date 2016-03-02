@@ -16,10 +16,6 @@ class PersonExhibit < DisplayCase::Exhibit
     description.html_safe
   end
 
-  # def location
-  # [address.city, address.state, address.country].select(&:present?).join(', ') if address
-  # end
-
   def contact_info
     [phone_number, email].compact.map { |e| exhibit(e, @context) }.join('<br />').html_safe
   end
@@ -78,6 +74,6 @@ class PersonExhibit < DisplayCase::Exhibit
 
   def email_link
     return unless primary_email_address
-    @context.mail_to(primary_email_address, '', class: 'fa fa-envelope')
+    @context.mail_to(primary_email_address.to_s, '', class: 'fa fa-envelope')
   end
 end

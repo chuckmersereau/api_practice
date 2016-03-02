@@ -58,4 +58,20 @@ describe User do
       expect(account_list.reload.users).to_not include subject
     end
   end
+
+  context '.get_user_from_cas_oauth' do
+    it 'looks up the user by guid case-insensitive' do
+      user = create(:user)
+      relay_account = create(:relay_account, remote_id: 'AAAA-0000')
+      user.relay_accounts << relay_account
+      token = 'token123'
+      allow(RestClient).to receive(:get).with('http://oauth.ccci.us/users/token123')
+        .and_return('{"guid":"aaaa-0000"}')
+
+      result_user = User.get_user_from_cas_oauth(token)
+
+      expect(result_user.access_token).to eq 'token123'
+      expect(result_user.id).to eq user.id
+    end
+  end
 end
