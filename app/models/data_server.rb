@@ -47,7 +47,8 @@ class DataServer
       designation_profiles.each do |designation_profile|
         Retryable.retryable do
           import_profile_balance(designation_profile)
-          AccountList.find_or_create_from_profile(designation_profile, @org_account)
+          AccountList::FromProfileLinker.new(designation_profile, @org_account)
+            .link_account_list!
         end
       end
     end
