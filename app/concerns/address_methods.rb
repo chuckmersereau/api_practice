@@ -11,7 +11,7 @@ module AddressMethods
     has_many :addresses_including_deleted, class_name: 'Address', as: :addressable
 
     has_one :primary_address, (lambda do
-      where(primary_mailing_address: true, deleted: false).where.not(historic: true) 
+      where(primary_mailing_address: true, deleted: false).where.not(historic: true)
         .order(:master_address_id).order(:street).order(:id)
     end), class_name: 'Address', as: :addressable
 

@@ -433,7 +433,7 @@ describe GoogleContactSync do
         address.attributes.symbolize_keys.slice(:street, :city, :state, :postal_code, :country, :location,
                                                 :primary_mailing_address)
       end
-      expect(addresses).to eq([
+      expect(addresses.to_set).to eq([
         { street: '7229 Forest Avenue #208', city: 'Richmond', state: 'VA', postal_code: '23226',
           country: 'United States', location: 'Home', primary_mailing_address: true },
         { street: '2421 East Tudor Road #102', city: 'Anchorage', state: 'AK', postal_code: '99507-1166',
@@ -442,7 +442,7 @@ describe GoogleContactSync do
           country: 'United States', location: 'Business', primary_mailing_address: false },
         { street: '1025 South 6th Street', city: 'Springfield', state: 'IL', postal_code: '62703',
           country: 'United States', location: 'Business', primary_mailing_address: false }
-      ])
+      ].to_set)
     end
   end
 
