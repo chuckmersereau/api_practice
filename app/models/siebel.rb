@@ -39,7 +39,9 @@ class Siebel < DataServer
       end
 
       next if designation_profile.account_list
-      AccountList.find_or_create_from_profile(designation_profile, @org_account)
+
+      AccountList::FromProfileLinker.new(designation_profile, @org_account)
+        .link_account_list!
     end
 
     designation_profiles
