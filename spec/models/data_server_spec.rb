@@ -63,6 +63,21 @@ describe DataServer do
         data_server.import_profiles
       end.to change(DesignationProfile, :count).by(3)
     end
+
+    it 'links from profile correctly if no profile url present' do
+      @org.designation_profiles << profile
+      @org.update(profiles_url: nil)
+      profile_linker = double(link_account_list!: nil)
+      allow(data_server).to receive(:import_profile_balance)
+      allow(AccountList::FromProfileLinker).to receive(:new) { profile_linker }
+
+      data_server.import_profiles
+
+      expect(data_server).to have_received(:import_profile_balance)
+      expect(AccountList::FromProfileLinker).to have_received(:new)
+        .with(profile, @org_account)
+      expect(profile_linker).to have_received(:link_account_list!)
+    end
   end
 
   describe 'import donors' do
