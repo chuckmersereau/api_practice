@@ -6,7 +6,7 @@ class ContactsController < ApplicationController
 
   def index
     if params[:q].present?
-      contacts_quick_find = ContactFilter.new(wildcard_search: params[:q], status: ['*']).filter(current_account_list.contacts)
+      contacts_quick_find = ContactFilter.new(wildcard_search: params[:q], status: ['*']).filter(current_account_list.contacts, current_account_list)
       redirect_to contacts_quick_find.first if contacts_quick_find.count == 1
     end
 
@@ -313,7 +313,7 @@ class ContactsController < ApplicationController
   def filtered_contacts
     filtered_contacts = current_account_list.contacts.order('contacts.name')
     if filters_params.present?
-      filtered_contacts = ContactFilter.new(filters_params).filter(filtered_contacts)
+      filtered_contacts = ContactFilter.new(filters_params).filter(filtered_contacts, current_account_list)
     else
       filtered_contacts = filtered_contacts.active
     end

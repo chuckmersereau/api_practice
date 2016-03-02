@@ -1,12 +1,15 @@
 require 'spec_helper'
 
 describe ContactFilter do
+  let(:user) { create(:user_with_account) }
+  let(:account_list) { user.account_lists.first }
+
   describe 'filters' do
     it 'filters by comma separated ids' do
       c1 = create(:contact)
       c2 = create(:contact)
       create(:contact)
-      filtered = ContactFilter.new(ids: "#{c1.id},#{c2.id}").filter(Contact)
+      filtered = ContactFilter.new(ids: "#{c1.id},#{c2.id}").filter(Contact, account_list)
       expect(filtered.count).to eq(2)
       expect(filtered).to include(c1)
       expect(filtered).to include(c2)
@@ -14,7 +17,7 @@ describe ContactFilter do
 
     it 'allows all if ids blank' do
       create(:contact)
-      expect(ContactFilter.new(ids: '').filter(Contact).count).to eq(1)
+      expect(ContactFilter.new(ids: '').filter(Contact, account_list).count).to eq(1)
     end
 
     it 'filters contacts with newsletter = Email and state' do
@@ -25,7 +28,7 @@ describe ContactFilter do
       create(:email_address, person: p)
       cf = ContactFilter.new(newsletter: 'email', state: a.state)
       expect(
-        cf.filter(Contact)
+        cf.filter(Contact, user.account_lists.first)
           .includes([{ primary_person: [:facebook_account, :primary_picture] },
                      :tags, :primary_address, { people: :primary_phone_number }])
       ).to eq([c])
@@ -36,7 +39,7 @@ describe ContactFilter do
       has_status = create(:contact, status: 'Never Contacted')
       cf = ContactFilter.new(status: ['null', 'Never Contacted'])
 
-      filtered_contacts = cf.filter(Contact)
+      filtered_contacts = cf.filter(Contact, account_list)
       expect(filtered_contacts).to include nil_status
       expect(filtered_contacts).to include has_status
     end
@@ -45,15 +48,15 @@ describe ContactFilter do
       c = create(:contact, name: 'Doe, John')
       p = create(:person, first_name: 'John', last_name: 'Doe')
       c.people << p
-      expect(ContactFilter.new(wildcard_search: 'john doe').filter(Contact)).to include c
-      expect(ContactFilter.new(wildcard_search: ' Doe,  John ').filter(Contact)).to include c
+      expect(ContactFilter.new(wildcard_search: 'john doe').filter(Contact, account_list)).to include c
+      expect(ContactFilter.new(wildcard_search: ' Doe,  John ').filter(Contact, account_list)).to include c
     end
 
     it 'does not cause an error if wildcard search less than two words with or without comma' do
-      expect { ContactFilter.new(wildcard_search: 'john').filter(Contact) }.to_not raise_error
-      expect { ContactFilter.new(wildcard_search: '').filter(Contact) }.to_not raise_error
-      expect { ContactFilter.new(wildcard_search: ',').filter(Contact) }.to_not raise_error
-      expect { ContactFilter.new(wildcard_search: 'doe,').filter(Contact) }.to_not raise_error
+      expect { ContactFilter.new(wildcard_search: 'john').filter(Contact, account_list) }.to_not raise_error
+      expect { ContactFilter.new(wildcard_search: '').filter(Contact, account_list) }.to_not raise_error
+      expect { ContactFilter.new(wildcard_search: ',').filter(Contact, account_list) }.to_not raise_error
+      expect { ContactFilter.new(wildcard_search: 'doe,').filter(Contact, account_list) }.to_not raise_error
     end
 
     it 'filters by commitment received' do
@@ -61,15 +64,15 @@ describe ContactFilter do
       not_received = create(:contact, pledge_received: false)
 
       cf = ContactFilter.new(pledge_received: 'true')
-      filtered_contacts = cf.filter(Contact)
+      filtered_contacts = cf.filter(Contact, account_list)
       expect(filtered_contacts).to eq [received]
 
       cf = ContactFilter.new(pledge_received: 'false')
-      filtered_contacts = cf.filter(Contact)
+      filtered_contacts = cf.filter(Contact, account_list)
       expect(filtered_contacts).to eq [not_received]
 
       cf = ContactFilter.new(pledge_received: '')
-      filtered_contacts = cf.filter(Contact)
+      filtered_contacts = cf.filter(Contact, account_list)
       expect(filtered_contacts.length).to be 2
     end
 
@@ -90,19 +93,19 @@ describe ContactFilter do
 
       it 'filters when looking for emails' do
         cf = ContactFilter.new(contact_info_email: 'Yes')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to eq [has_email]
       end
 
       it 'filters when looking for no emails' do
         cf = ContactFilter.new(contact_info_email: 'No')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to eq [no_email]
       end
 
       it 'works when combined with newsletter and ordered by name' do
         cf = ContactFilter.new(contact_info_email: 'No', newsletter: 'address')
-        expect(cf.filter(Contact.order('name')).to_a).to eq([])
+        expect(cf.filter(Contact.order('name'), account_list).to_a).to eq([])
       end
 
       it 'works when combined with facebook and status' do
@@ -114,7 +117,7 @@ describe ContactFilter do
         p.facebook_accounts << create(:facebook_account)
         another_contact.people << p
         cf = ContactFilter.new(contact_info_email: 'Yes', contact_info_facebook: 'Yes', status: ['Contact for Appointment'])
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to eq [another_contact]
       end
     end
@@ -150,13 +153,13 @@ describe ContactFilter do
 
       it 'filters when looking for home phone' do
         cf = ContactFilter.new(contact_info_phone: 'Yes')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to include has_home
         expect(filtered_contacts).to_not include has_mobile
         expect(filtered_contacts).to_not include no_phone
 
         cf = ContactFilter.new(contact_info_phone: 'Yes', contact_info_mobile: 'No')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to include has_home
         expect(filtered_contacts).to_not include has_mobile
         expect(filtered_contacts).to_not include no_phone
@@ -164,13 +167,13 @@ describe ContactFilter do
 
       it 'filters when looking for mobile phone' do
         cf = ContactFilter.new(contact_info_mobile: 'Yes')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to include has_mobile
         expect(filtered_contacts).to_not include has_home
         expect(filtered_contacts).to_not include no_phone
 
         cf = ContactFilter.new(contact_info_mobile: 'Yes', contact_info_phone: 'No')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to include has_mobile
         expect(filtered_contacts).to_not include has_home
         expect(filtered_contacts).to_not include no_phone
@@ -178,7 +181,7 @@ describe ContactFilter do
 
       it 'filters when looking for both phones' do
         cf = ContactFilter.new(contact_info_mobile: 'Yes', contact_info_phone: 'Yes')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to include has_both
         expect(filtered_contacts).to_not include has_home
         expect(filtered_contacts).to_not include has_mobile
@@ -187,7 +190,7 @@ describe ContactFilter do
 
       it 'filters when looking for no phones' do
         cf = ContactFilter.new(contact_info_phone: 'No', contact_info_mobile: 'No')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to_not include has_home
         expect(filtered_contacts).to_not include has_mobile
         expect(filtered_contacts).to include no_phone
@@ -195,7 +198,7 @@ describe ContactFilter do
 
       it 'works when combined with newsletter and order by name' do
         cf = ContactFilter.new(contact_info_phone: 'No', newsletter: 'address')
-        expect(cf.filter(Contact.order('name')).to_a).to eq([])
+        expect(cf.filter(Contact.order('name'), account_list).to_a).to eq([])
       end
     end
 
@@ -213,13 +216,13 @@ describe ContactFilter do
         historic_address_contact.addresses << create(:address, historic: true)
 
         cf = ContactFilter.new(contact_info_addr: 'Yes')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to include has_address
         expect(filtered_contacts).to_not include no_address
         expect(filtered_contacts).to_not include historic_address_contact
 
         cf = ContactFilter.new(contact_info_addr: 'No', contact_info_email: 'No')
-        no_address_contacts = cf.filter(Contact)
+        no_address_contacts = cf.filter(Contact, account_list)
         expect(no_address_contacts).to_not include has_address
         expect(no_address_contacts).to include no_address
         expect(no_address_contacts).to include historic_address_contact
@@ -228,7 +231,7 @@ describe ContactFilter do
       it 'works when combined with newsletter and ordered by name' do
         create(:contact).addresses << create(:address)
         cf = ContactFilter.new(contact_info_addr: 'No', newsletter: 'address')
-        expect(cf.filter(Contact.order('name')).to_a).to eq([])
+        expect(cf.filter(Contact.order('name'), account_list).to_a).to eq([])
       end
 
       it 'works when combined with status' do
@@ -236,7 +239,7 @@ describe ContactFilter do
         another_contact = create(:contact, status: 'Contact for Appointment')
         another_contact.addresses << create(:address)
         cf = ContactFilter.new(contact_info_addr: 'Yes', status: ['Contact for Appointment'])
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to eq [another_contact]
       end
     end
@@ -257,13 +260,13 @@ describe ContactFilter do
 
       it 'filters when looking for facebook_account' do
         cf = ContactFilter.new(contact_info_facebook: 'Yes')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to eq [has_fb]
       end
 
       it 'filters when looking for no facebook_account' do
         cf = ContactFilter.new(contact_info_facebook: 'No')
-        filtered_contacts = cf.filter(Contact)
+        filtered_contacts = cf.filter(Contact, account_list)
         expect(filtered_contacts).to include no_fb
         expect(filtered_contacts).to_not include has_fb
       end
@@ -277,9 +280,27 @@ describe ContactFilter do
       no_email = create(:contact, send_newsletter: 'Email')
       cf = ContactFilter.new(newsletter: 'email')
 
-      filtered_contacts = cf.filter(Contact)
+      filtered_contacts = cf.filter(Contact, account_list)
       expect(filtered_contacts).to include no_email
       expect(filtered_contacts).to include has_email
+    end
+
+    it 'includes contacts no currency if account default currency is selected' do
+      no_currency_contact = create(:contact, pledge_currency: nil)
+      cf = ContactFilter.new(pledge_currency: 'USD')
+
+      filtered_contacts = cf.filter(Contact, account_list)
+      expect(filtered_contacts).to include no_currency_contact
+    end
+
+    it 'filters when looking for EUR contacts' do
+      no_currency_contact = create(:contact, pledge_currency: nil)
+      eur_contact = create(:contact, pledge_currency: 'EUR')
+      cf = ContactFilter.new(pledge_currency: 'EUR')
+
+      filtered_contacts = cf.filter(Contact, account_list)
+      expect(filtered_contacts).to include eur_contact
+      expect(filtered_contacts).not_to include no_currency_contact
     end
   end
 end
