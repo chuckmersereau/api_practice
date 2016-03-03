@@ -72,4 +72,10 @@ FactoryGirl.define do
     source 'csv'
     file { File.new(Rails.root.join('spec/fixtures/csv_invalid_phone.csv')) }
   end
+
+  factory :tnt_import_multi_org, parent: :import do
+    association :account_list
+    source 'tnt'
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_multi_org.xml')) }
+  end
 end

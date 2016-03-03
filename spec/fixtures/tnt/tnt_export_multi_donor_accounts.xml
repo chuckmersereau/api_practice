@@ -25,7 +25,7 @@
       <PhoneIsValid>true</PhoneIsValid>
       <Email>John.Doe@example.com</Email>
       <EmailIsValid>false</EmailIsValid>
-      <IsOrganization>false</IsOrganization>
+      <IsOrganization>true</IsOrganization>
       <Title>Mr</Title>
       <FirstName>John</FirstName>
       <LastName>Doe</LastName>
@@ -210,5 +210,15 @@
       <MemoLastUpdate>1899-12-30</MemoLastUpdate>
     </row>
   </Donor>
-  </Tables>
+  <Organization>
+    <row id="925479547">
+      <LastEdit>2014-10-03 12:35:11</LastEdit>
+      <Code>CCC-USA</Code>
+      <QueryIni>https://staffweb.cru.org/ss/tntmpd/query.ini</QueryIni>
+      <QueryIniName>Campus Crusade for Christ - USA</QueryIniName>
+      <Description>Cru</Description>
+      <Abbreviation>Cru</Abbreviation>
+    </row>
+  </Organization>
+</Tables>
 </Database>

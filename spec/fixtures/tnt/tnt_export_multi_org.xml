@@ -1,0 +1,375 @@
+<Database>
+  <Tables>
+    <Contact>
+      <row id="1">
+        <LastEdit>2013-06-17 13:45:59</LastEdit>
+        <CreatedDate>2011-04-11</CreatedDate>
+        <FileAs>Doe, Jane</FileAs>
+        <FileAsIsCustom>false</FileAsIsCustom>
+        <FullName>Jane Doe</FullName>
+        <FullNameIsCustom>false</FullNameIsCustom>
+        <Greeting>Jane</Greeting>
+        <GreetingIsCustom>false</GreetingIsCustom>
+        <Salutation>Dear Jane,</Salutation>
+        <SalutationIsCustom>false</SalutationIsCustom>
+        <ShortName>Jane Doe</ShortName>
+        <ShortNameIsCustom>false</ShortNameIsCustom>
+        <MailingAddressBlock>Jane Doe
+          12345 Monahan Crt.
+          Langley, British Columbia  V3A 8N1</MailingAddressBlock>
+        <MailingAddressIsDeliverable>true</MailingAddressIsDeliverable>
+        <Phone>(778) 123.1229</Phone>
+        <PhoneIsValid>true</PhoneIsValid>
+        <Email>jane.doe@gmail.com</Email>
+        <EmailIsValid>true</EmailIsValid>
+        <IsOrganization>false</IsOrganization>
+        <FirstName>Jane</FirstName>
+        <LastName>Doe</LastName>
+        <Deceased>false</Deceased>
+        <MailingAddressType>1</MailingAddressType>
+        <MailingStreetAddress>12345 Monahan Crt.</MailingStreetAddress>
+        <MailingCity>Langley</MailingCity>
+        <MailingState>British Columbia</MailingState>
+        <MailingPostalCode>V3A 8N1</MailingPostalCode>
+        <HomeStreetAddress>12345 Monahan Crt.</HomeStreetAddress>
+        <HomeCity>Langley</HomeCity>
+        <HomeState>British Columbia</HomeState>
+        <HomePostalCode>V3A 8N1</HomePostalCode>
+        <HomeCountryID>124</HomeCountryID>
+        <HomeCountry>Canada</HomeCountry>
+        <HomeAddressIsDeliverable>true</HomeAddressIsDeliverable>
+        <HomeAddressBlock>Jane Doe
+          12345 Monahan Crt.
+          Langley, British Columbia  V3A 8N1</HomeAddressBlock>
+        <HomeAddressBlockIsCustom>false</HomeAddressBlockIsCustom>
+        <OtherCountryID>124</OtherCountryID>
+        <OtherCountry>Canada</OtherCountry>
+        <OtherAddressIsDeliverable>false</OtherAddressIsDeliverable>
+        <OtherAddressBlockIsCustom>false</OtherAddressBlockIsCustom>
+        <BusinessCountryID>124</BusinessCountryID>
+        <BusinessCountry>Canada</BusinessCountry>
+        <BusinessAddressIsDeliverable>false</BusinessAddressIsDeliverable>
+        <BusinessAddressBlockIsCustom>false</BusinessAddressBlockIsCustom>
+        <SpouseBusinessCountryID>124</SpouseBusinessCountryID>
+        <SpouseBusinessCountry>Canada</SpouseBusinessCountry>
+        <SpouseBusinessAddressIsDeliverable>false</SpouseBusinessAddressIsDeliverable>
+        <SpouseBusinessAddressBlockIsCustom>false</SpouseBusinessAddressBlockIsCustom>
+        <PreferredPhoneType>0</PreferredPhoneType>
+        <PhoneIsValidMask>1</PhoneIsValidMask>
+        <PhoneCountryIDs>0=124</PhoneCountryIDs>
+        <HomePhone>(778) 123.1234</HomePhone>
+        <PreferredEmailTypes>2</PreferredEmailTypes>
+        <Email1>jane.doe@gmail.com</Email1>
+        <Email1IsValid>true</Email1IsValid>
+        <Email2IsValid>false</Email2IsValid>
+        <Email3IsValid>false</Email3IsValid>
+        <SpouseEmail1IsValid>false</SpouseEmail1IsValid>
+        <SpouseEmail2IsValid>false</SpouseEmail2IsValid>
+        <SpouseEmail3IsValid>false</SpouseEmail3IsValid>
+        <FamilySideID>0</FamilySideID>
+        <FamilyLevelID>0</FamilyLevelID>
+        <MapAddressType>0</MapAddressType>
+        <MapLat>0</MapLat>
+        <MapLng>0</MapLng>
+        <PledgeAmount>0</PledgeAmount>
+        <PledgeFrequencyID>0</PledgeFrequencyID>
+        <PledgeReceived>false</PledgeReceived>
+        <PledgeStartDate>1899-12-30</PledgeStartDate>
+        <MPDPhaseID>0</MPDPhaseID>
+        <NextAsk>1899-12-30</NextAsk>
+        <NeverAsk>false</NeverAsk>
+        <LikelyToGiveID>0</LikelyToGiveID>
+        <SendNewsletter>true</SendNewsletter>
+        <NewsletterMediaPref>+P+E</NewsletterMediaPref>
+        <DirectDeposit>false</DirectDeposit>
+        <Magazine>false</Magazine>
+        <MonthlyPledge>0</MonthlyPledge>
+        <FirstGiftDate>2012-04-26</FirstGiftDate>
+        <LastGiftDate>2012-07-09</LastGiftDate>
+        <LastGiftAmount>-1000</LastGiftAmount>
+        <LastGiftOrganizationID>1</LastGiftOrganizationID>
+        <LastGiftOrgDonorCode>2</LastGiftOrgDonorCode>
+        <PrevYearTotal>0</PrevYearTotal>
+        <YearTotal>0</YearTotal>
+        <LifetimeTotal>0</LifetimeTotal>
+        <LifetimeNumberOfGifts>3</LifetimeNumberOfGifts>
+        <LargestGift>500</LargestGift>
+        <GoodUntil>1899-12-30</GoodUntil>
+        <AveMonthlyGift>0</AveMonthlyGift>
+        <LastDateInAve>1899-12-30</LastDateInAve>
+        <TwelveMonthTotal>0</TwelveMonthTotal>
+        <LastActivity>2012-12-10</LastActivity>
+        <LastAppointment>1899-12-30</LastAppointment>
+        <LastCall>1899-12-30</LastCall>
+        <LastPreCall>1899-12-30</LastPreCall>
+        <LastLetter>1899-12-30</LastLetter>
+        <LastVisit>1899-12-30</LastVisit>
+        <LastThank>2012-12-10</LastThank>
+        <LastChallenge>1899-12-30</LastChallenge>
+        <AppealsSinceLastGift>0</AppealsSinceLastGift>
+        <ChallengesSinceLastGift>0</ChallengesSinceLastGift>
+        <OrgDonorCodes>1,2</OrgDonorCodes>
+      </row>
+      <row id="2">
+        <LastEdit>2014-05-03 10:49:43</LastEdit>
+        <CreatedDate>2014-03-19</CreatedDate>
+        <FileAs>Smith, John</FileAs>
+        <FileAsIsCustom>false</FileAsIsCustom>
+        <FullName>John Smith</FullName>
+        <FullNameIsCustom>false</FullNameIsCustom>
+        <Greeting>John</Greeting>
+        <GreetingIsCustom>false</GreetingIsCustom>
+        <Salutation>Dear John,</Salutation>
+        <SalutationIsCustom>false</SalutationIsCustom>
+        <ShortName>John Smith</ShortName>
+        <ShortNameIsCustom>false</ShortNameIsCustom>
+        <MailingAddressIsDeliverable>false</MailingAddressIsDeliverable>
+        <PhoneIsValid>false</PhoneIsValid>
+        <Email>john.smith@gmail.com</Email>
+        <EmailIsValid>true</EmailIsValid>
+        <IsOrganization>false</IsOrganization>
+        <FirstName>John</FirstName>
+        <LastName>Smith</LastName>
+        <Deceased>false</Deceased>
+        <MailingAddressType>1</MailingAddressType>
+        <HomeCountryID>124</HomeCountryID>
+        <HomeCountry>Canada</HomeCountry>
+        <HomeAddressIsDeliverable>false</HomeAddressIsDeliverable>
+        <HomeAddressBlockIsCustom>false</HomeAddressBlockIsCustom>
+        <OtherCountryID>124</OtherCountryID>
+        <OtherCountry>Canada</OtherCountry>
+        <OtherAddressIsDeliverable>false</OtherAddressIsDeliverable>
+        <OtherAddressBlockIsCustom>false</OtherAddressBlockIsCustom>
+        <BusinessCountryID>124</BusinessCountryID>
+        <BusinessCountry>Canada</BusinessCountry>
+        <BusinessAddressIsDeliverable>false</BusinessAddressIsDeliverable>
+        <BusinessAddressBlockIsCustom>false</BusinessAddressBlockIsCustom>
+        <SpouseBusinessCountryID>124</SpouseBusinessCountryID>
+        <SpouseBusinessCountry>Canada</SpouseBusinessCountry>
+        <SpouseBusinessAddressIsDeliverable>false</SpouseBusinessAddressIsDeliverable>
+        <SpouseBusinessAddressBlockIsCustom>false</SpouseBusinessAddressBlockIsCustom>
+        <PreferredPhoneType>0</PreferredPhoneType>
+        <PhoneIsValidMask>133693440</PhoneIsValidMask>
+        <PreferredEmailTypes>2</PreferredEmailTypes>
+        <Email1>john.smith@gmail.com</Email1>
+        <Email1IsValid>true</Email1IsValid>
+        <Email2IsValid>false</Email2IsValid>
+        <Email3IsValid>false</Email3IsValid>
+        <SpouseEmail1IsValid>false</SpouseEmail1IsValid>
+        <SpouseEmail2IsValid>false</SpouseEmail2IsValid>
+        <SpouseEmail3IsValid>false</SpouseEmail3IsValid>
+        <FamilySideID>0</FamilySideID>
+        <FamilyLevelID>0</FamilyLevelID>
+        <MapAddressType>0</MapAddressType>
+        <MapLat>0</MapLat>
+        <MapLng>0</MapLng>
+        <PledgeAmount>0</PledgeAmount>
+        <PledgeFrequencyID>0</PledgeFrequencyID>
+        <PledgeReceived>false</PledgeReceived>
+        <PledgeStartDate>1899-12-30</PledgeStartDate>
+        <MPDPhaseID>0</MPDPhaseID>
+        <NextAsk>1899-12-30</NextAsk>
+        <NeverAsk>false</NeverAsk>
+        <LikelyToGiveID>0</LikelyToGiveID>
+        <SendNewsletter>false</SendNewsletter>
+        <NewsletterMediaPref>+P+E</NewsletterMediaPref>
+        <DirectDeposit>false</DirectDeposit>
+        <Magazine>false</Magazine>
+        <MonthlyPledge>0</MonthlyPledge>
+        <FirstGiftDate>1899-12-30</FirstGiftDate>
+        <LastGiftDate>1899-12-30</LastGiftDate>
+        <LastGiftAmount>0</LastGiftAmount>
+        <LastGiftOrganizationID>0</LastGiftOrganizationID>
+        <PrevYearTotal>0</PrevYearTotal>
+        <YearTotal>0</YearTotal>
+        <LifetimeTotal>0</LifetimeTotal>
+        <LifetimeNumberOfGifts>0</LifetimeNumberOfGifts>
+        <LargestGift>0</LargestGift>
+        <GoodUntil>1899-12-30</GoodUntil>
+        <AveMonthlyGift>0</AveMonthlyGift>
+        <LastDateInAve>1899-12-30</LastDateInAve>
+        <TwelveMonthTotal>0</TwelveMonthTotal>
+        <LastActivity>1899-12-30</LastActivity>
+        <LastAppointment>1899-12-30</LastAppointment>
+        <LastCall>1899-12-30</LastCall>
+        <LastPreCall>1899-12-30</LastPreCall>
+        <LastLetter>1899-12-30</LastLetter>
+        <LastVisit>1899-12-30</LastVisit>
+        <LastThank>1899-12-30</LastThank>
+        <LastChallenge>1899-12-30</LastChallenge>
+        <AppealsSinceLastGift>0</AppealsSinceLastGift>
+        <ChallengesSinceLastGift>0</ChallengesSinceLastGift>
+        <OrgDonorCodes>1</OrgDonorCodes>
+      </row>
+    </Contact>
+    <Donor>
+      <row id="84195050">
+        <LastEdit>2012-01-20 13:06:35</LastEdit>
+        <ContactID>1</ContactID>
+        <IsSpouse>false</IsSpouse>
+        <OrganizationID>1</OrganizationID>
+        <OrgDonorCode>1</OrgDonorCode>
+        <OrgDonorName>Jane Doe</OrgDonorName>
+        <Deceased>false</Deceased>
+        <IsOrganization>false</IsOrganization>
+        <Title>Miss</Title>
+        <FirstName>Jane</FirstName>
+        <LastName>Doe</LastName>
+        <NameLastUpdate>1899-12-30</NameLastUpdate>
+        <StreetAddress>123 76B Crescent</StreetAddress>
+        <City>Langley</City>
+        <State>BC</State>
+        <PostalCode>V1M 2J8</PostalCode>
+        <CountryID>124</CountryID>
+        <AddressLastUpdate>2001-09-14</AddressLastUpdate>
+        <AddressReviewed>true</AddressReviewed>
+        <AddressAutoAccepted>false</AddressAutoAccepted>
+        <Phone>604-888-1234</Phone>
+        <PhoneLastUpdate>2001-09-14</PhoneLastUpdate>
+        <PhoneReviewed>true</PhoneReviewed>
+        <PhoneAutoAccepted>false</PhoneAutoAccepted>
+        <MobilePhoneLastUpdate>1899-12-30</MobilePhoneLastUpdate>
+        <MobilePhoneReviewed>true</MobilePhoneReviewed>
+        <MobilePhoneAutoAccepted>false</MobilePhoneAutoAccepted>
+        <SpouseMobilePhoneLastUpdate>1899-12-30</SpouseMobilePhoneLastUpdate>
+        <SpouseMobilePhoneReviewed>true</SpouseMobilePhoneReviewed>
+        <SpouseMobilePhoneAutoAccepted>false</SpouseMobilePhoneAutoAccepted>
+        <EmailLastUpdate>1899-12-30</EmailLastUpdate>
+        <EmailReviewed>true</EmailReviewed>
+        <EmailAutoAccepted>false</EmailAutoAccepted>
+        <SpouseEmailLastUpdate>1899-12-30</SpouseEmailLastUpdate>
+        <SpouseEmailReviewed>true</SpouseEmailReviewed>
+        <SpouseEmailAutoAccepted>false</SpouseEmailAutoAccepted>
+        <MemoLastUpdate>1899-12-30</MemoLastUpdate>
+      </row>
+      <row id="84195050">
+        <LastEdit>2012-01-20 13:06:35</LastEdit>
+        <ContactID>1</ContactID>
+        <IsSpouse>false</IsSpouse>
+        <OrganizationID>1</OrganizationID>
+        <OrgDonorCode>2</OrgDonorCode>
+        <OrgDonorName>Janet Doe</OrgDonorName>
+        <Deceased>false</Deceased>
+        <IsOrganization>false</IsOrganization>
+        <Title>Miss</Title>
+        <FirstName>Jane</FirstName>
+        <LastName>Doe</LastName>
+        <NameLastUpdate>1899-12-30</NameLastUpdate>
+        <StreetAddress>123 76B Crescent</StreetAddress>
+        <City>Langley</City>
+        <State>BC</State>
+        <PostalCode>V1M 2J8</PostalCode>
+        <CountryID>124</CountryID>
+        <AddressLastUpdate>2001-09-14</AddressLastUpdate>
+        <AddressReviewed>true</AddressReviewed>
+        <AddressAutoAccepted>false</AddressAutoAccepted>
+        <Phone>604-888-1234</Phone>
+        <PhoneLastUpdate>2001-09-14</PhoneLastUpdate>
+        <PhoneReviewed>true</PhoneReviewed>
+        <PhoneAutoAccepted>false</PhoneAutoAccepted>
+        <MobilePhoneLastUpdate>1899-12-30</MobilePhoneLastUpdate>
+        <MobilePhoneReviewed>true</MobilePhoneReviewed>
+        <MobilePhoneAutoAccepted>false</MobilePhoneAutoAccepted>
+        <SpouseMobilePhoneLastUpdate>1899-12-30</SpouseMobilePhoneLastUpdate>
+        <SpouseMobilePhoneReviewed>true</SpouseMobilePhoneReviewed>
+        <SpouseMobilePhoneAutoAccepted>false</SpouseMobilePhoneAutoAccepted>
+        <EmailLastUpdate>1899-12-30</EmailLastUpdate>
+        <EmailReviewed>true</EmailReviewed>
+        <EmailAutoAccepted>false</EmailAutoAccepted>
+        <SpouseEmailLastUpdate>1899-12-30</SpouseEmailLastUpdate>
+        <SpouseEmailReviewed>true</SpouseEmailReviewed>
+        <SpouseEmailAutoAccepted>false</SpouseEmailAutoAccepted>
+        <MemoLastUpdate>1899-12-30</MemoLastUpdate>
+      </row>
+      <row id="84195050">
+        <LastEdit>2012-01-20 13:06:35</LastEdit>
+        <ContactID>2</ContactID>
+        <IsSpouse>false</IsSpouse>
+        <OrganizationID>2</OrganizationID>
+        <OrgDonorCode>1</OrgDonorCode>
+        <OrgDonorName>John Smith</OrgDonorName>
+        <Deceased>false</Deceased>
+        <IsOrganization>false</IsOrganization>
+        <Title>Mr</Title>
+        <FirstName>John</FirstName>
+        <LastName>Smith</LastName>
+        <NameLastUpdate>1899-12-30</NameLastUpdate>
+        <StreetAddress>12345 Crescent</StreetAddress>
+        <City>Langley</City>
+        <State>BC</State>
+        <PostalCode>V1M 2J8</PostalCode>
+        <CountryID>124</CountryID>
+        <AddressLastUpdate>2001-09-14</AddressLastUpdate>
+        <AddressReviewed>true</AddressReviewed>
+        <AddressAutoAccepted>false</AddressAutoAccepted>
+        <Phone>604-888-1234</Phone>
+        <PhoneLastUpdate>2001-09-14</PhoneLastUpdate>
+        <PhoneReviewed>true</PhoneReviewed>
+        <PhoneAutoAccepted>false</PhoneAutoAccepted>
+        <MobilePhoneLastUpdate>1899-12-30</MobilePhoneLastUpdate>
+        <MobilePhoneReviewed>true</MobilePhoneReviewed>
+        <MobilePhoneAutoAccepted>false</MobilePhoneAutoAccepted>
+        <SpouseMobilePhoneLastUpdate>1899-12-30</SpouseMobilePhoneLastUpdate>
+        <SpouseMobilePhoneReviewed>true</SpouseMobilePhoneReviewed>
+        <SpouseMobilePhoneAutoAccepted>false</SpouseMobilePhoneAutoAccepted>
+        <EmailLastUpdate>1899-12-30</EmailLastUpdate>
+        <EmailReviewed>true</EmailReviewed>
+        <EmailAutoAccepted>false</EmailAutoAccepted>
+        <SpouseEmailLastUpdate>1899-12-30</SpouseEmailLastUpdate>
+        <SpouseEmailReviewed>true</SpouseEmailReviewed>
+        <SpouseEmailAutoAccepted>false</SpouseEmailAutoAccepted>
+        <MemoLastUpdate>1899-12-30</MemoLastUpdate>
+      </row>
+    </Donor>
+    <Organization>
+      <row id="1">
+        <LastEdit>2012-09-06 14:19:35</LastEdit>
+        <Code>PTC-CAN</Code>
+        <QueryIni>http://tntmpd.powertochange.org/tntmpd/Query.ini</QueryIni>
+        <QueryIniName>Power to Change - Canada</QueryIniName>
+        <Description>Power to Change, Canada</Description>
+        <Abbreviation>PTC</Abbreviation>
+      </row>
+      <row id="2">
+        <LastEdit>2014-10-03 12:35:11</LastEdit>
+        <Code>CCC-USA</Code>
+        <QueryIni>https://staffweb.cru.org/ss/tntmpd/query.ini</QueryIni>
+        <QueryIniName>Campus Crusade for Christ - USA</QueryIniName>
+        <Description>Cru</Description>
+        <Abbreviation>Cru</Abbreviation>
+      </row>
+    </Organization>
+    <Country>
+      <row id="124">
+        <LastEdit>2013-11-14 17:37:29</LastEdit>
+        <Code>CAN</Code>
+        <ISO3166Alpha2Code>CA</ISO3166Alpha2Code>
+        <Description>Canada</Description>
+        <PhoneCountryCode>1</PhoneCountryCode>
+        <AndWord>and</AndWord>
+        <GreetingFormat></GreetingFormat>
+        <SalutationFormat></SalutationFormat>
+        <FullNameFormat></FullNameFormat>
+        <AddressFormat></AddressFormat>
+        <PostalCodeMinDigits>5</PostalCodeMinDigits>
+        <PostalCodeRegDigits>5</PostalCodeRegDigits>
+        <PostalCodeMaxDigits>10</PostalCodeMaxDigits>
+        <DefaultCurrencyCode>CAD</DefaultCurrencyCode>
+        <DescriptionIsCustom>false</DescriptionIsCustom>
+        <PhoneCountryCodeIsCustom>false</PhoneCountryCodeIsCustom>
+        <AndWordIsCustom>false</AndWordIsCustom>
+        <GreetingFormatIsCustom>false</GreetingFormatIsCustom>
+        <SalutationFormatIsCustom>false</SalutationFormatIsCustom>
+        <FullNameFormatIsCustom>false</FullNameFormatIsCustom>
+        <AddressFormatIsCustom>false</AddressFormatIsCustom>
+        <PostalCodeMinDigitsIsCustom>false</PostalCodeMinDigitsIsCustom>
+        <PostalCodeRegDigitsIsCustom>false</PostalCodeRegDigitsIsCustom>
+        <PostalCodeMaxDigitsIsCustom>false</PostalCodeMaxDigitsIsCustom>
+        <DefaultCurrencyCodeIsCustom>false</DefaultCurrencyCodeIsCustom>
+        <FormatApplied>true</FormatApplied>
+        <Obsolete>false</Obsolete>
+        <Custom>false</Custom>
+      </row>
+    </Country>
+  </Tables>
+</Database>

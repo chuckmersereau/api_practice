@@ -127,5 +127,56 @@
         <OrgDonorCodes>139111</OrgDonorCodes>
       </row>
     </Contact>
+    <Donor>
+      <row id="84195050">
+        <LastEdit>2012-01-20 13:06:35</LastEdit>
+        <ContactID>1232831904</ContactID>
+        <IsSpouse>false</IsSpouse>
+        <OrganizationID>1</OrganizationID>
+        <OrgDonorCode>139111</OrgDonorCode>
+        <OrgDonorName>Jane Doe</OrgDonorName>
+        <Deceased>false</Deceased>
+        <IsOrganization>false</IsOrganization>
+        <Title>Miss</Title>
+        <FirstName>Jane</FirstName>
+        <LastName>Doe</LastName>
+        <NameLastUpdate>1899-12-30</NameLastUpdate>
+        <StreetAddress>123 76B Crescent</StreetAddress>
+        <City>Langley</City>
+        <State>BC</State>
+        <PostalCode>V1M 2J8</PostalCode>
+        <CountryID>124</CountryID>
+        <AddressLastUpdate>2001-09-14</AddressLastUpdate>
+        <AddressReviewed>true</AddressReviewed>
+        <AddressAutoAccepted>false</AddressAutoAccepted>
+        <Phone>604-888-1234</Phone>
+        <PhoneLastUpdate>2001-09-14</PhoneLastUpdate>
+        <PhoneReviewed>true</PhoneReviewed>
+        <PhoneAutoAccepted>false</PhoneAutoAccepted>
+        <MobilePhoneLastUpdate>1899-12-30</MobilePhoneLastUpdate>
+        <MobilePhoneReviewed>true</MobilePhoneReviewed>
+        <MobilePhoneAutoAccepted>false</MobilePhoneAutoAccepted>
+        <SpouseMobilePhoneLastUpdate>1899-12-30</SpouseMobilePhoneLastUpdate>
+        <SpouseMobilePhoneReviewed>true</SpouseMobilePhoneReviewed>
+        <SpouseMobilePhoneAutoAccepted>false</SpouseMobilePhoneAutoAccepted>
+        <EmailLastUpdate>1899-12-30</EmailLastUpdate>
+        <EmailReviewed>true</EmailReviewed>
+        <EmailAutoAccepted>false</EmailAutoAccepted>
+        <SpouseEmailLastUpdate>1899-12-30</SpouseEmailLastUpdate>
+        <SpouseEmailReviewed>true</SpouseEmailReviewed>
+        <SpouseEmailAutoAccepted>false</SpouseEmailAutoAccepted>
+        <MemoLastUpdate>1899-12-30</MemoLastUpdate>
+      </row>
+    </Donor>
+    <Organization>
+      <row id="1">
+        <LastEdit>2014-10-03 12:35:11</LastEdit>
+        <Code>CCC-USA</Code>
+        <QueryIni>https://staffweb.cru.org/ss/tntmpd/query.ini</QueryIni>
+        <QueryIniName>Campus Crusade for Christ - USA</QueryIniName>
+        <Description>Cru</Description>
+        <Abbreviation>Cru</Abbreviation>
+      </row>
+    </Organization>
   </Tables>
 </Database>
