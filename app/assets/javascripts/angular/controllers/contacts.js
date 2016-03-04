@@ -200,6 +200,11 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                || prefs.contact_info_addr || prefs.contact_info_facebook)
                 jQuery("#filter_contact_info").trigger("click");
         }
+
+        if(angular.isDefined(prefs.page)){
+          $scope.page.current = prefs.page;
+          $scope.contactQuery.page = prefs.page;
+        }
     });
 
     $scope.tagIsActive = function(tag){
@@ -236,7 +241,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
 
     $scope.isEmptyFilter = function() {
         return isEmptyFilter($scope.contactQuery);
-    }
+    };
 
     var refreshContacts = function () {
       var q = $scope.contactQuery;
@@ -353,7 +358,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           contact_info_phone: q.contact_info_phone,
           contact_info_mobile: q.contact_info_mobile,
           contact_info_addr: q.contact_info_addr,
-          contact_info_facebook: q.contact_info_facebook
+          contact_info_facebook: q.contact_info_facebook,
+          page: q.page
         };
         if (!isEmptyFilter(prefsToSave)) {
           viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
@@ -387,7 +393,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           !_.isEmpty(q.contact_info_phone) ||
           !_.isEmpty(q.contact_info_mobile) ||
           !_.isEmpty(q.contact_info_addr) ||
-          !_.isEmpty(q.contact_info_facebook))
+          !_.isEmpty(q.contact_info_facebook) ||
+          q.page !== 1)
       {
         return false;
       }
