@@ -31,7 +31,8 @@ class CsvImport
       name: line['Contact Name'], greeting: line['Greeting'], envelope_greeting: line['Envelope Greeting'],
       status: line['Status'], pledge_amount: line['Commitment Amount'], notes: line['Notes'],
       pledge_frequency: parse_pledge_frequency(line['Commitment Frequency']),
-      send_newsletter: line['Newsletter'], pledge_received: true?(line['Commitment Received'])
+      send_newsletter: parse_send_newsletter(line['Newsletter']),
+      pledge_received: true?(line['Commitment Received'])
     )
     contact.tag_list = line['Tags']
 
@@ -59,6 +60,10 @@ class CsvImport
 
   def parse_pledge_frequency(freq_str)
     Contact.pledge_frequencies.invert[freq_str]
+  end
+
+  def parse_send_newsletter(newsletter_str)
+    newsletter_str.gsub('None', '') if newsletter_str
   end
 
   def true?(val)
