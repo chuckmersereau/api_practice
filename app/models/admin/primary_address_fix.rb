@@ -3,8 +3,10 @@ class Admin::PrimaryAddressFix
     @contact = contact
   end
 
-  def fix!
+  def fix
     mailing_address = @contact.mailing_address
+
+    make_historic_non_primary
 
     # Contact#mailing_address returns Address.new if there is no mailing address
     return if mailing_address.new_record?
@@ -14,8 +16,6 @@ class Admin::PrimaryAddressFix
     else
       mailing_address.update(primary_mailing_address: true)
     end
-
-    make_historic_non_primary
   end
 
   private

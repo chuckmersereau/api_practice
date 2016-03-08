@@ -1,29 +1,6 @@
 require 'spec_helper'
 
 describe AccountList do
-  context '.find_or_create_from_profile' do
-    let(:org_account) { create(:organization_account) }
-    let(:profile) { create(:designation_profile, user_id: org_account.person_id, organization: org_account.organization) }
-
-    it 'should create a new account list if none is found' do
-      da = create(:designation_account, organization: org_account.organization)
-      profile.designation_accounts << da
-      expect do
-        AccountList.find_or_create_from_profile(profile, org_account)
-      end.to change(AccountList, :count).by(1)
-    end
-
-    it 'should not create a new account list if one is found' do
-      da = create(:designation_account, organization: org_account.organization)
-      profile.designation_accounts << da
-      account_list = create(:account_list)
-      profile2 = create(:designation_profile, account_list: account_list)
-      profile2.designation_accounts << da
-      expect(AccountList.find_or_create_from_profile(profile, org_account))
-        .to eq(account_list)
-    end
-  end
-
   context '#send_account_notifications' do
     it 'checks all notification types' do
       expect(NotificationType).to receive(:check_all).and_return({})
@@ -266,48 +243,6 @@ describe AccountList do
     end
   end
 
-  context '#merge' do
-    let(:loser) { create(:account_list) }
-    let(:winner) { create(:account_list) }
-
-    it 'deletes old AccountList' do
-      expect { winner.merge(loser) }.to change(AccountList, :count).by(1)
-    end
-
-    it 'merges appeals' do
-      create(:appeal, account_list: loser)
-      expect do
-        winner.merge(loser)
-      end.to change(winner.appeals.reload, :count).by(1)
-    end
-
-    it 'moves the prayer letters account from the loser if winner lacked one' do
-      create(:prayer_letters_account, account_list: loser)
-      winner.merge(loser)
-      expect(winner.reload.prayer_letters_account).to_not be_nil
-    end
-
-    it 'leaves the winner prayer letter account if both winner and loser have one' do
-      create(:prayer_letters_account, account_list: loser)
-      winner_pla = create(:prayer_letters_account, account_list: winner)
-      expect { winner.merge(loser) }.to change(PrayerLettersAccount, :count).to(1)
-      expect(winner.reload.prayer_letters_account).to eq(winner_pla)
-    end
-
-    it 'moves designation accounts if they are missing in the winner' do
-      loser.designation_accounts << create(:designation_account)
-      expect { winner.merge(loser) }.to change(winner.designation_accounts, :count).from(0).to(1)
-    end
-
-    it 'does not create a duplicate if a designation account is in both winner and loser' do
-      da = create(:designation_account)
-      loser.designation_accounts << da
-      winner.designation_accounts << da
-      winner.reload
-      expect(winner.designation_accounts.count).to eq(1)
-    end
-  end
-
   it 'percent calculations' do
     account_list = create(:account_list, monthly_goal: '200')
     create(:contact, pledge_amount: 100, account_list: account_list)
@@ -381,6 +316,11 @@ describe AccountList do
     it 'does not import from org accounts with skip_downloads set' do
       organization_account.update(disable_downloads: true)
       expect_any_instance_of(Person::OrganizationAccount).to_not receive(:import_all_data)
+      account_list.send(:import_data)
+    end
+
+    it 'runs dup balance fix' do
+      expect(DesignationAccount::DupByBalanceFix).to receive(:deactivate_dups)
       account_list.send(:import_data)
     end
   end

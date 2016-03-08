@@ -57,18 +57,6 @@ class AccountList < ActiveRecord::Base
     joins(:organization_accounts).where('locked_at is null').order('last_download asc')
   }
 
-  def self.find_with_designation_numbers(numbers, organization)
-    designation_account_ids = DesignationAccount.where(designation_number: numbers, organization_id: organization.id).pluck(:id).sort
-    query = "select account_list_id,array_to_string(array_agg(designation_account_id), ',') as designation_account_ids from account_list_entries group by account_list_id"
-    results = AccountList.connection.select_all(query)
-    results.each do |hash|
-      if hash['designation_account_ids'].split(',').map(&:to_i).sort == designation_account_ids
-        return AccountList.find(hash['account_list_id'])
-      end
-    end
-    nil
-  end
-
   def monthly_goal=(val)
     settings[:monthly_goal] = val.to_s.gsub(/[^\d\.]/, '').to_i if val
   end
@@ -123,6 +111,10 @@ class AccountList < ActiveRecord::Base
 
   def timezones
     @timezones ||= contacts.order(:timezone).pluck('DISTINCT timezone')
+  end
+
+  def currencies
+    @currencies ||= contacts.order(:pledge_currency).pluck('DISTINCT pledge_currency')
   end
 
   def valid_mail_chimp_account
@@ -255,56 +247,8 @@ class AccountList < ActiveRecord::Base
     AsyncScheduler.schedule_over_24h(with_linked_org_accounts, :import_data)
   end
 
-  def self.find_or_create_from_profile(profile, org_account)
-    user = org_account.user
-    organization = org_account.organization
-    designation_numbers = profile.designation_accounts.map(&:designation_number)
-    # look for an existing account list with the same designation numbers in it
-    account_list = AccountList.find_with_designation_numbers(designation_numbers, organization)
-    # otherwise create a new account list for this profile
-    account_list ||= AccountList.where(name: profile.name, creator_id: user.id).first_or_create!
-
-    # Add designation accounts to account_list
-    profile.designation_accounts.each do |da|
-      account_list.designation_accounts << da unless account_list.designation_accounts.include?(da)
-    end
-
-    # Add user to account list
-    account_list.users << user unless account_list.users.include?(user)
-    profile.update_attributes(account_list_id: account_list.id)
-
-    account_list
-  end
-
   def merge(other)
-    AccountList.transaction do
-      # Intentionally don't copy over notification_preferences since they may conflict between accounts
-      [:activities, :appeals, :company_partnerships, :contacts, :designation_profiles,
-       :google_integrations, :help_requests, :imports, :messages, :recurring_recommendation_results
-      ].each { |has_many| other.send(has_many).update_all(account_list_id: id) }
-
-      [:mail_chimp_account, :prayer_letters_account].each do |has_one|
-        next unless send(has_one).nil? && other.send(has_one).present?
-        other.send(has_one).update(account_list_id: id)
-      end
-
-      [:designation_accounts, :companies].each do |copy_if_missing|
-        other.send(copy_if_missing).each do |item|
-          send(copy_if_missing) << item unless send(copy_if_missing).include?(item)
-        end
-      end
-
-      other.users.each do |user|
-        next if users.include?(user)
-        users << user
-        user.update(preferences: nil)
-      end
-
-      other.reload
-      other.destroy
-
-      save(validate: false)
-    end
+    AccountList::Merge.new(self, other).merge
   end
 
   # This method checks all of your donors and tries to intelligently determin which partners are regular givers
@@ -364,7 +308,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def physical_newsletter_csv
-    newsletter_contacts = ContactFilter.new(newsletter: 'address').filter(contacts)
+    newsletter_contacts = ContactFilter.new(newsletter: 'address').filter(contacts, self)
     views = ActionView::Base.new('app/views', {}, ActionController::Base.new)
     views.render(file: 'contacts/index.csv.erb',
                  locals: { contacts: newsletter_contacts,
@@ -444,6 +388,16 @@ class AccountList < ActiveRecord::Base
     end
   end
 
+  def import_data
+    import_donations
+    if fix_dup_balances
+      # Import donations again if we fixed any dup balances
+      import_donations
+    end
+    send_account_notifications
+    queue_sync_with_google_contacts
+  end
+
   private
 
   def sync_with_google_contacts
@@ -453,10 +407,12 @@ class AccountList < ActiveRecord::Base
       .find_each(batch_size: 1) { |g_i| g_i.sync_data('contacts') }
   end
 
-  def import_data
+  def import_donations
     organization_accounts.reject(&:disable_downloads).each(&:import_all_data)
-    send_account_notifications
-    queue_sync_with_google_contacts
+  end
+
+  def fix_dup_balances
+    DesignationAccount::DupByBalanceFix.deactivate_dups(designation_accounts)
   end
 
   def subscribe_tester_to_mailchimp

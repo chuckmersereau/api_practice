@@ -2,16 +2,14 @@ require 'spec_helper'
 
 describe NotificationMailer do
   describe 'notify' do
-    # let(:mail) { NotificationMailer.notify }
+    it 'renders the email correctly' do
+      notifications_by_type = {}
+      email = build(:email_address)
+      account_list = double(users: [double(email: email)])
 
-    # it "renders the headers" do
-    # expect(mail.subject).to eq("Notify")
-    # expect(mail.to).to eq(["to@example.org"])
-    # expect(mail.from).to eq(["from@example.com"])
-    # end
+      email = NotificationMailer.notify(account_list, notifications_by_type)
 
-    # it "renders the body" do
-    # expect(mail.body.encoded).to match("Hi")
-    # end
+      expect(email.to)
+    end
   end
 end

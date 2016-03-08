@@ -3,7 +3,7 @@ class Api::V1::ContactsController < Api::V1::BaseController
     order = params[:order] || 'contacts.name'
 
     if params[:filters].present?
-      filtered_contacts = ContactFilter.new(params[:filters]).filter(contacts)
+      filtered_contacts = ContactFilter.new(params[:filters]).filter(contacts, current_account_list)
     else
       filtered_contacts = contacts.active
     end
@@ -65,7 +65,7 @@ class Api::V1::ContactsController < Api::V1::BaseController
 
   def count
     if params[:filters].present?
-      filtered_contacts = ContactFilter.new(params[:filters]).filter(contacts)
+      filtered_contacts = ContactFilter.new(params[:filters]).filter(contacts, current_account_list)
     else
       filtered_contacts = contacts.active
     end

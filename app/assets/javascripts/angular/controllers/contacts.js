@@ -23,6 +23,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         church: [''],
         referrer: [''],
         timezone: [''],
+        currency: [''],
         relatedTaskAction: [''],
         appeal: [''],
         pledge_frequencies: [''],
@@ -60,6 +61,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         $scope.contactQuery.church = [''];
         $scope.contactQuery.referrer = [''];
         $scope.contactQuery.timezone = [''];
+        $scope.contactQuery.currency = [''];
         $scope.contactQuery.relatedTaskAction = [''];
         $scope.contactQuery.appeal = [''];
         $scope.contactQuery.pledge_frequencies = [''];
@@ -143,6 +145,12 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
             jQuery("#leftmenu #filter_timezone").trigger("click");
           }
         }
+        if(angular.isDefined(prefs.currency)){
+          $scope.contactQuery.currency = prefs.currency;
+          if(prefs.currency[0]){
+            jQuery("#leftmenu #filter_currency").trigger("click");
+          }
+        }
         if(angular.isDefined(prefs.relatedTaskAction)){
             $scope.contactQuery.relatedTaskAction = prefs.relatedTaskAction;
             if(prefs.relatedTaskAction[0]){
@@ -192,6 +200,11 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                || prefs.contact_info_addr || prefs.contact_info_facebook)
                 jQuery("#filter_contact_info").trigger("click");
         }
+
+        if(angular.isDefined(prefs.page)){
+          $scope.page.current = prefs.page;
+          $scope.contactQuery.page = prefs.page;
+        }
     });
 
     $scope.tagIsActive = function(tag){
@@ -228,7 +241,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
 
     $scope.isEmptyFilter = function() {
         return isEmptyFilter($scope.contactQuery);
-    }
+    };
 
     var refreshContacts = function () {
       var q = $scope.contactQuery;
@@ -269,6 +282,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
                 '&filters[church][]=' + encodeURLarray(q.church).join('&filters[church][]=') +
                 '&filters[referrer][]=' + encodeURLarray(q.referrer).join('&filters[referrer][]=') +
                 '&filters[timezone][]=' + encodeURLarray(q.timezone).join('&filters[timezone][]=') +
+                '&filters[pledge_currency][]=' + encodeURLarray(q.currency).join('&filters[pledge_currency][]=') +
                 '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
                 '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
                 '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch) +
@@ -335,6 +349,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           church: q.church,
           referrer: q.referrer,
           timezone: q.timezone,
+          currency: q.currency,
           relatedTaskAction: q.relatedTaskAction,
           appeal: q.appeal,
           pledge_frequencies: q.pledge_frequencies,
@@ -343,7 +358,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           contact_info_phone: q.contact_info_phone,
           contact_info_mobile: q.contact_info_mobile,
           contact_info_addr: q.contact_info_addr,
-          contact_info_facebook: q.contact_info_facebook
+          contact_info_facebook: q.contact_info_facebook,
+          page: q.page
         };
         if (!isEmptyFilter(prefsToSave)) {
           viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
@@ -369,6 +385,7 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           !_.isEmpty(_.without(q.referrer, '')) ||
           !_.isEmpty(_.without(q.relatedTaskAction, '')) ||
           !_.isEmpty(_.without(q.timezone, '')) ||
+          !_.isEmpty(_.without(q.currency, '')) ||
           !_.isEmpty(_.without(q.appeal, '')) ||
           !_.isEmpty(_.without(q.pledge_frequencies, '')) ||
           !_.isEmpty(_.without(q.pledge_received, '')) ||
@@ -376,7 +393,8 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
           !_.isEmpty(q.contact_info_phone) ||
           !_.isEmpty(q.contact_info_mobile) ||
           !_.isEmpty(q.contact_info_addr) ||
-          !_.isEmpty(q.contact_info_facebook))
+          !_.isEmpty(q.contact_info_facebook) ||
+          q.page !== 1)
       {
         return false;
       }

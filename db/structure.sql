@@ -4471,6 +4471,13 @@ CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (it
 
 
 --
+-- Name: index_versions_on_whodunnit; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_versions_on_whodunnit ON versions USING btree (whodunnit);
+
+
+--
 -- Name: mail_chimp_members_email_list_account_uniq; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4994,9 +5001,11 @@ INSERT INTO schema_migrations (version) VALUES ('20160210153943');
 
 INSERT INTO schema_migrations (version) VALUES ('20160210153951');
 
+INSERT INTO schema_migrations (version) VALUES ('20160211113711');
+
 INSERT INTO schema_migrations (version) VALUES ('20160215185431');
 
 INSERT INTO schema_migrations (version) VALUES ('20160217173440');
 
-INSERT INTO schema_migrations (version) VALUES ('20160211113711');
+INSERT INTO schema_migrations (version) VALUES ('20160302160145');
 
