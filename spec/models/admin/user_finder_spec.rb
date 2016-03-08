@@ -53,4 +53,11 @@ describe Admin::UserFinder, '.find_users' do
 
     expect(found_users).to eq [john]
   end
+
+  it 'does not error if given a non-email string without a space or comma' do
+    expect do
+      result = Admin::UserFinder.find_users('joe')
+      expect(result).to be_empty
+    end.to_not raise_error
+  end
 end
