@@ -28,8 +28,8 @@ class AccountList::Merge
     end
 
     @loser.users.each do |user|
-      next if users.include?(user)
-      users << user
+      next if @winner.users.include?(user)
+      @winner.users << user
       user.update(preferences: nil)
     end
 
