@@ -52,4 +52,8 @@ def load_sidekiq_cron_hash
   Sidekiq::Cron::Job.load_from_hash! SIDEKIQ_CRON_HASH
 end
 
-load_sidekiq_cron_hash if Rails.env.production?
+def precompiling_assets?
+  ARGV.any? { |e| e =~ /\Aassets:.+/ }
+end
+
+load_sidekiq_cron_hash if Rails.env.production? && !precompiling_assets?

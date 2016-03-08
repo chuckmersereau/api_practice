@@ -98,16 +98,28 @@ class Contact < ActiveRecord::Base
 
   attr_accessor :user_changed
 
+  # Don't change these willy-nilly, they break the mobile app
+  ASSIGNABLE_STATUSES = [
+    'Never Contacted', 'Ask in Future', 'Cultivate Relationship', 'Contact for Appointment',
+    'Appointment Scheduled', 'Call for Decision', 'Partner - Financial', 'Partner - Special',
+    'Partner - Pray', 'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
+    'Expired Referral'
+  ]
   assignable_values_for :status, allow_blank: true do
-    # Don't change these willy-nilly, they break the mobile app
-    ['Never Contacted', 'Ask in Future', 'Cultivate Relationship', 'Contact for Appointment',
-     'Appointment Scheduled', 'Call for Decision', 'Partner - Financial', 'Partner - Special',
-     'Partner - Pray', 'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
-     'Expired Referral']
+    ASSIGNABLE_STATUSES
   end
 
-  IN_PROGRESS_STATUSES = ['Never Contacted', 'Ask in Future', 'Contact for Appointment', 'Appointment Scheduled',
-                          'Call for Decision']
+  INACTIVE_STATUSES = [
+    'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
+    'Expired Referral'
+  ]
+  ACTIVE_STATUSES = ASSIGNABLE_STATUSES - INACTIVE_STATUSES
+
+  IN_PROGRESS_STATUSES = [
+    'Never Contacted', 'Ask in Future', 'Contact for Appointment',
+    'Appointment Scheduled',
+    'Call for Decision'
+  ]
 
   def status=(val)
     # handle deprecated values
@@ -195,7 +207,7 @@ class Contact < ActiveRecord::Base
   end
 
   def self.inactive_statuses
-    ['Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned', 'Expired Referral']
+    INACTIVE_STATUSES
   end
 
   def self.create_from_donor_account(donor_account, account_list)
