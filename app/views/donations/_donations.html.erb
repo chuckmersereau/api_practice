@@ -53,7 +53,7 @@
           <tr class="sum">
             <td></td>
             <td class="right"><strong><%= _('Total %{currency} Donations (%{count}):').localize % {currency: d[:currency], count: d[:count]} %></strong></td>
-            <td class="right"><%= d[:sum].round(2).localize.to_currency.to_s(currency: d[:currency]) %></td>
+            <td class="right"><%= d[:sum].localize.to_currency.to_s(currency: d[:currency], precision: 0) %></td>
             <td colspan="4"></td>
           </tr>
         <% end %>
