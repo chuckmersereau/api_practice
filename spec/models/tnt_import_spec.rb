@@ -252,7 +252,7 @@ describe TntImport do
     end
 
     it 'matches an existing contact with leading zeros in their donor account' do
-      donor_account = create(:donor_account, account_number: '000139111')
+      donor_account = create(:donor_account, account_number: '000139111', name: nil)
 
       organization = org_for_code('CCC-USA')
       organization.donor_accounts << donor_account
@@ -272,6 +272,9 @@ describe TntImport do
       # Should match existing contact based on the donor account with leading zeros
       expect(DonorAccount.all.count).to eq(1)
       expect(Contact.all.count).to eq(1)
+
+      # The donor account name should get set to the contact name if it was nil
+      expect(donor_account.reload.name).to eq 'Smith, Joe and Jane'
     end
   end
 
@@ -503,6 +506,7 @@ describe TntImport do
       john = contacts.second
       expect(john.donor_accounts.count).to eq 1
       expect(john.donor_accounts.first.organization).to eq cru
+      expect(john.donor_accounts.first.name).to eq 'Smith, John'
       john_donor_address = john.donor_accounts.first.addresses.first
       expect(john_donor_address.street).to eq '12345 Crescent'
       expect(john_donor_address.country).to eq 'Canada'

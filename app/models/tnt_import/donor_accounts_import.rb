@@ -14,25 +14,30 @@ class TntImport::DonorAccountsImport
 
     Array.wrap(@xml['Donor']['row']).each do |row|
       contact_tnt_id = row['ContactID']
+
+      # Name the donor account after the contact FileAs
+      name = contact_rows_by_tnt_id[contact_tnt_id]['FileAs']
+      donor = add_or_update_donor(row, name)
+
       donors_by_tnt_contact_id[contact_tnt_id] ||= []
-      donor = add_or_update_donor(row)
       donors_by_tnt_contact_id[contact_tnt_id] << donor if donor.present?
     end
 
     donors_by_tnt_contact_id
   end
 
-  def add_or_update_donor(row)
+  def add_or_update_donor(row, name)
     org = @orgs_by_tnt_id[row['OrganizationID']]
     return unless org.present?
 
     account_number = row['OrgDonorCode']
     da = find_donor_account(org, account_number)
     if da
-      da.update(name: row['OrgDonorName']) if da.name.blank?
+      # Donor accounts for non-Cru orgs could have nil names so update with the name from tnt
+      da.update(name: name) if da.name.blank?
       da
     else
-      create_donor_account(org, account_number, row)
+      create_donor_account(org, account_number, row, name)
     end
   end
 
@@ -41,9 +46,8 @@ class TntImport::DonorAccountsImport
     org.donor_accounts.find_by(account_number: [account_number, padded_account_number])
   end
 
-  def create_donor_account(org, account_number, row)
-    da = org.donor_accounts.new(account_number: account_number,
-                                name: row['OrgDonorName'])
+  def create_donor_account(org, account_number, row, name)
+    da = org.donor_accounts.new(account_number: account_number, name: name)
     add_address(da, row)
     da.save!
     da
@@ -71,5 +75,12 @@ class TntImport::DonorAccountsImport
 
   def tnt_countries
     @tnt_countries ||= TntImport::CountriesParser.countries_by_tnt_id(@xml)
+  end
+
+  def contact_rows_by_tnt_id
+    @contact_rows_by_tnt_id ||=
+      Hash[Array.wrap(@xml['Contact']['row']).map do |contact_row|
+        [contact_row['id'], contact_row]
+      end]
   end
 end
