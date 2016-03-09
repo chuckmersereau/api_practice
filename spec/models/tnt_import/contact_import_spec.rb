@@ -7,11 +7,9 @@ describe TntImport::ContactImport do
   end
   let(:contact_rows) { Array.wrap(xml['Contact']['row']) }
   let(:import) do
-    account_list = create(:account_list)
-    tags = []
-    override = false
     donor_accounts = []
-    TntImport::ContactImport.new(account_list, tags, donor_accounts, override)
+    tags = []
+    TntImport::ContactImport.new(tnt_import, tags, donor_accounts)
   end
 
   before { stub_smarty_streets }
