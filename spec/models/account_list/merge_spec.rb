@@ -8,6 +8,13 @@ describe AccountList::Merge, '#merge' do
     expect { winner.merge(loser) }.to change(AccountList, :count).by(1)
   end
 
+  it 'moves over users' do
+    user = create(:user)
+    loser.users << user
+    winner.merge(loser)
+    expect(winner.users).to include user
+  end
+
   it 'merges appeals' do
     create(:appeal, account_list: loser)
     expect do
