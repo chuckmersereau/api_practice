@@ -113,6 +113,7 @@ class Siebel < DataServer
 
       # Double check removed donations straight from Siebel
       all_current_donations_array.each do |donation|
+        next if donation.appeal.present?
         donation_date = donation.donation_date.strftime('%Y-%m-%d')
         siebel_donations = SiebelDonations::Donation.find(designations: da.designation_number, donors: donation.donor_account.account_number,
                                                           start_date: donation_date, end_date: donation_date)
