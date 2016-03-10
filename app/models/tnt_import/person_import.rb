@@ -37,7 +37,14 @@ class TntImport::PersonImport
   def update_person_attributes(person, row, prefix = '')
     person.attributes = { first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'], middle_name: row[prefix + 'MiddleName'],
                           title: row[prefix + 'Title'], suffix: row[prefix + 'Suffix'], gender: prefix.present? ? 'female' : 'male',
-                          profession: prefix.present? ? nil : row['Profession'] }
+                          profession: prefix.present? ? nil : row['Profession'],
+                          birthday_month: row[prefix + 'BirthdayMonth'],
+                          birthday_day: row[prefix + 'BirthdayDay'],
+                          birthday_year: row[prefix + 'BirthdayYear'],
+                          anniversary_month: row[prefix + 'AnniversaryMonth'],
+                          anniversary_day: row[prefix + 'AnniversaryDay'],
+                          anniversary_year: row[prefix + 'AnniversaryYear']
+    }
 
     update_person_phones(person, row, prefix)
     update_person_emails(person, row, prefix)
