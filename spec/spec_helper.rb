@@ -233,3 +233,10 @@ def clear_uniqueness_locks
     redis.keys('*unique*').each { |k| redis.del(k) }
   end
 end
+
+# locally, the orgs are seeded if you run rake db:test:prepare, but in
+# Travis the database is fully empty since it just loads structure.sql
+def org_for_code(code)
+  Organization.find_by(code: code) ||
+    create(:organization, name: code, code: code)
+end
