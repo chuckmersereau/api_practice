@@ -28,14 +28,14 @@
   <div class="radio">
     <label class="field radiocheck">
       <%= f.radio_button :override, false %>
-      <%= _('This import is only to fill in the blanks in current contacts and/or add new contacts.') %>
+      <%= _('This TNTMPD import should only fill in the blanks in current contacts and/or add new contacts.') %>
     </label>
   </div>
 
   <div class="radio">
     <label>
       <%= f.radio_button :override, true %>
-      <%= _('This import should override everything in MPDX') %>
+      <%= _('This TNTMPD import should override the info in MPDX. (Contact info, notes, status, prayerletter settings, etc).') %>
     </label>
   </div>
 
