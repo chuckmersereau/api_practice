@@ -115,12 +115,24 @@ describe TntImport::PersonImport do
         'HomePhone' => '(515) 555-1234',
         'MobilePhone' => '213-211-1111',
         'BusinessPhone' => '(515) 555-9771;ext=301',
-        'SpouseMobilePhone' => '212-222-2222'
+        'SpouseMobilePhone' => '212-222-2222',
+        'BirthdayMonth' => '9',
+        'BirthdayDay' => '20',
+        'BirthdayYear' => '1989',
+        'AnniversaryMonth' => '11',
+        'AnniversaryDay' => '4',
+        'AnniversaryYear' => '1994'
       }
       person = Person.new
       expect do
         person = import.send(:update_person_attributes, person, contact_row)
       end.to change(person.phone_numbers, :length).by(3)
+      expect(person.birthday_month).to eq(9)
+      expect(person.birthday_day).to eq(20)
+      expect(person.birthday_year).to eq(1989)
+      expect(person.anniversary_month).to eq(11)
+      expect(person.anniversary_day).to eq(4)
+      expect(person.anniversary_year).to eq(1994)
     end
   end
 end
