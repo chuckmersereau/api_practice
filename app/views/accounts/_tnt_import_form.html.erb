@@ -1,6 +1,25 @@
 <%= form_for Import.new(source: 'tnt') do |f| %>
   <%= f.hidden_field :source %>
 
+  <p><%= _('You can migrate all your contact information and history from TNTMPD into MPDX. Most of your information will
+    import straight into MPDX, including contact info, task history (with notes), notes, user groups, and appeals. MPDX
+    hides contacts with any of the not interested statuses, including not interested and never ask in MPDX. These
+    contacts import in, but do not show up unless you search for hidden contacts.') %></p>
+
+  <p><strong><%= _('Export your Database from TNTMPD:') %></strong>
+    <ul>
+      <li><%= _('Click on file, choose Utilities from the list. Then Maintenance.') %></li>
+      <li><%= _('In the popup box, choose the top button, export to .xml.') %></li>
+      <li><%= _('Then save to your computer.') %></li>
+    </ul>
+  </p>
+  <p><i class="fa fa-play-circle-o"></i> <%= link_to(_('If you need help, watch this video.'),
+                 'http://www.youtube.com/watch?v=EoWFRFIYMkQ&list=UUTjqVT-m3YXICbwaIu9_Gqg&index=22',
+                 target: '_blank') %></p>
+
+  <p><%= _('Note: You must have at least TNTMPD 3.0.') %> <%= _('To download the latest version,') %>
+    <%= link_to(_('click here'), 'http://www.tntware.com/tntmpd/downloads/', target: '_blank') %>.</p>
+
   <div class="form-group">
     <%= f.file_field :file, class: 'form-control', required: true %>
     <%= f.hidden_field :file_cache %>
@@ -9,33 +28,20 @@
   <div class="radio">
     <label class="field radiocheck">
       <%= f.radio_button :override, false %>
-      <%= _('Only add data to matched contact records when the current field is blank.') %>
+      <%= _('This TNTMPD import should only fill in the blanks in current contacts and/or add new contacts.') %>
     </label>
   </div>
 
   <div class="radio">
     <label>
       <%= f.radio_button :override, true %>
-      <%= _('Override existing contact fields with data in the uploaded file.') %>
+      <%= _('This TNTMPD import should override the info in MPDX. (Contact info, notes, status, prayerletter settings, etc).') %>
     </label>
   </div>
 
   <div class="field importtags">
-    <%= f.text_field :tags, placeholder: _('Add tags to these contacts') %>
+    <%= f.text_field :tags, placeholder: _('Add tags to imported contacts') %>
   </div>
-  <div class="hint">
-    <p>
-      <%= link_to('<i class="fa  fa-cloud-download"></i> '.html_safe+
-                    _('Note: You must be upgraded to the latest version of TntMPD to do this. '+
-                      'Click here to download the latest version.'),
-                  'http://www.tntware.com/tntmpd/downloads/') %>
-    </p>
-    <p>
-      <%= link_to('<i class="fa fa-play-circle-o"></i> '.html_safe+
-                    _('Please watch this video to learn how to export from TNT in the specific format for MPDx.'),
-                  'http://www.youtube.com/watch?v=EoWFRFIYMkQ&list=UUTjqVT-m3YXICbwaIu9_Gqg&index=22',
-                  target: '_blank') %>
-    </p>
-  </div>
+
   <%= f.submit _('Import'), class: 'btn btn-primary' %>
 <% end %>

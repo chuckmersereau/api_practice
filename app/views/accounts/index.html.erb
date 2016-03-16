@@ -24,7 +24,12 @@
               <%= render "#{provider}_import_form" %>
             </div>
             <a href="#" class="btn btn-xs btn-secondary" data-behavior="show_import">
-              <i class="fa fa-user-plus"></i> <%= _('Import Contacts') %>
+              <i class="fa fa-user-plus"></i>
+              <% if provider == 'tnt' %>
+                <%= _('Migrate Database') %>
+              <% else %>
+                <%= _('Import Contacts') %>
+              <% end %>
             </a>
           </td>
         </tr>
