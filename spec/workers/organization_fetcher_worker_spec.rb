@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe OrganizationFetcherWorker do
   it 'fetches organizations' do
-    tnt_stub = stub_request(:get, 'http://download.tntware.com/tntmpd/TntMPD_Organizations.csv')
+    tnt_stub = stub_request(:get, 'https://download.tntware.com/tntconnect/TntConnect_Organizations.csv')
                .to_return(body: "Name,QueryIni\nCru,http://cru.example.com")
     org_stub = stub_request(:get, 'http://cru.example.com')
     expect do
