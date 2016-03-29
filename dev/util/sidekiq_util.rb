@@ -78,3 +78,16 @@ def remove_enqueued_account_list_imports
     puts job.delete
   end
 end
+
+# Be careful in using this method: it will clear all of the uniqueness
+# locks for Sidekiq jobs which can result in duplicate jobs running. It is
+# useful in cases though when there are incorrect uniqueness locks set for a
+# particular job and you want to clear them all to start over.
+# What you should probably do first is make sure the currently running Sidekiq
+# jobs finish (or clear the reliability queue, clear out donor imports from the
+# import queue and re-promote the build to restart Sidekiq).
+def clear_uniqueness_locks
+  r = Redis.current
+  uniqueness_locks = r.keys('resque:sidekiq_unique:*')
+  r.pipelined { uniqueness_locks.each { |k| r.del(k) } }
+end
