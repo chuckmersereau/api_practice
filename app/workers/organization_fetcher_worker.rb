@@ -4,7 +4,7 @@ class OrganizationFetcherWorker
 
   def perform
     # Download the org csv from tnt and update orgs
-    organizations = open('http://download.tntware.com/tntmpd/TntMPD_Organizations.csv').read.unpack('C*').pack('U*')
+    organizations = open('https://download.tntware.com/tntconnect/TntConnect_Organizations.csv').read.unpack('C*').pack('U*')
     CSV.new(organizations, headers: :first_row).each do |line|
       next unless line[1].present?
 
