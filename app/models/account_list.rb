@@ -14,7 +14,12 @@ require 'mail'
 class AccountList < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
-  sidekiq_options queue: :import, retry: false, unique: true
+
+  # Expire the uniqueness for AccountList import after 24 hours because the
+  # uniqueness locks were staying around incorrectly and causing some people's
+  # donor import to not go through.
+  sidekiq_options queue: :import, retry: false, unique: true,
+                  unique_job_expiration: 24.hours
 
   store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :currency]
 
