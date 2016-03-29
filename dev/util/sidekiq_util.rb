@@ -87,9 +87,7 @@ end
 # jobs finish (or clear the reliability queue, clear out donor imports from the
 # import queue and re-promote the build to restart Sidekiq).
 def clear_uniqueness_locks
-  Sidekiq.redis do |r|
-    r.pipelined do
-      r.keys('*unique*').each { |k| r.del(k) }
-    end
-  end
+  r = Redis.current
+  uniqueness_locks = r.keys('resque:sidekiq_unique:*')
+  r.pipelined { uniqueness_locks.each { |k| r.del(k) } }
 end
