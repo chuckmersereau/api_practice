@@ -42,6 +42,7 @@ class RelayAccountDupTrimmer
                                    object: PaperTrail::Serializers::YAML.dump(person),
                                    whodunnit: 'RelayAccountDupTrimmer')
         person.organization_accounts.each do |oa|
+          oa.password = nil
           PaperTrail::Version.create(item_type: 'Person::OrganizationAccount', item_id: oa.id, event: 'destroy',
                                      object: PaperTrail::Serializers::YAML.dump(oa),
                                      related_object_type: 'Person', related_object_id: person.id,
@@ -59,7 +60,7 @@ class RelayAccountDupTrimmer
     end
     to_keep = account_sign_ins.max[0]
     people = accounts.collect(&:person).uniq
-    people.delete to_keep.person
+    people.delete(to_keep.person)
     [to_keep, people]
   end
 end
