@@ -40,19 +40,9 @@ body {
 
 .network_connect {
   border-bottom: 1px solid $gray_light;
-  padding: 8px 20px;
+  padding: 8px;
   height: auto;
   min-height: 55px;
-  .network_logo {
-    display: block;
-    float: left;
-    width: 135px;
-      img {
-        max-height: 30px;
-        padding-top: 4px;
-      }
-    }
-  .network_connections {display: block; margin-left: 135px; width: 370px; padding-top: 0px;}
   .actions { float: right;}
   .network_button {
     display: block;

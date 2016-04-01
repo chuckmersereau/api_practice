@@ -44,7 +44,7 @@
             <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
           </td>
           <td class="connections">
-            <%= render 'network_connections', provider: provider %>
+            <%= render 'network_connections', provider: provider, actions: true %>
 
             <% if provider == 'facebook' %>
               <div class="alert alert-warning" role="alert">

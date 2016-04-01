@@ -9,7 +9,6 @@ class SetupController < ApplicationController
   def show
     case step
     when :org_accounts
-      skip_step if current_user.organization_accounts.present?
     when :social_accounts
     when :finish
       current_user.setup_finished!

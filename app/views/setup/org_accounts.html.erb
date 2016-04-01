@@ -1,10 +1,6 @@
 <div class="network_wrap">
   <div class="network_connect">
-    <div class="network_logo">
-      <%= image_tag("logos/organization_logo.png", alt: 'organization') %>
-    </div>
-
-    <%= render 'network_connections', provider: 'organization' %>
+    <%= render 'network_connections', provider: 'organization', actions: false %>
     <div class="network_button form-inline">
       <div class="form-group">
         <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">

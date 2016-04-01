@@ -172,20 +172,7 @@ $sidebarwidth: 400px;
   padding: 8px 20px;
   height: auto;
   min-height: 55px;
-  .network_logo {
-    display: block;
-    float: left;
-    width: 135px;
-      img {
-        max-height: 30px;
-        padding-top: 4px;
-      }
-    }
   .network_connections {
-    display: block;
-    margin-left: 135px;
-    width: auto;
-    padding-top: 0px;
     p {
       line-height: 1.25em;
     }
@@ -206,7 +193,7 @@ $sidebarwidth: 400px;
    border-radius: 4px;
    font-weight: bold;
    margin: 0 8px 8px 0;
-   font-size: 11px;
+   font-size: 14px;
  }
 }
 #logo {
