@@ -1,5 +1,5 @@
 Airbrake.configure do |config|
-  config.api_key = ENV.fetch('ROLLBAR_TOKEN')
+  config.api_key = ENV['ROLLBAR_TOKEN']
   config.host = 'api.rollbar.com'
   config.port = 443
   config.secure = config.port == 443
