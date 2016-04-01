@@ -57,7 +57,6 @@ class Person::OrganizationAccount < ActiveRecord::Base
   end
 
   def import_all_data
-    Rollbar.raise_or_notify('Unknown PERSON_TYPE: test')
     return if locked_at || new_record? || !valid_rechecked_credentials
     update_column(:downloading, true)
     import_donations

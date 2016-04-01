@@ -19,6 +19,6 @@ class LowerRetryWorker
     end
   end
 
-  class RetryJobButNoAirbrakeError < StandardError
+  class RetryJobButNoRollbarError < StandardError
   end
 end

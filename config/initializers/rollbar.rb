@@ -29,7 +29,7 @@ Rollbar.configure do |config|
   #
   # You can also specify a callable, which will be called with the exception instance.
   ignore = %w(Google::APIClient::ServerError Net::IMAP::BadResponseError
-              LowerRetryWorker::RetryJobButNoAirbrakeError ActionController::RoutingError)
+              LowerRetryWorker::RetryJobButNoRollbarError ActionController::RoutingError)
   ignore = ignore.each_with_object({}) { |key, hash| hash[key] = 'ignore' }
   config.exception_level_filters.merge!(ignore)
 
@@ -60,9 +60,9 @@ end
 module Rollbar
   def self.raise_or_notify(e, opts = {})
     if Rollbar.configuration.enabled
-      fail e
-    else
       Rollbar.error(e, opts)
+    else
+      fail e
     end
   end
 end

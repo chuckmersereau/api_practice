@@ -19,11 +19,11 @@ class GoogleContactsIntegrator
     yield
   rescue GoogleContactsApi::UnauthorizedError
     # Try job again which will refresh the token
-    raise LowerRetryWorker::RetryJobButNoAirbrakeError
+    raise LowerRetryWorker::RetryJobButNoRollbarError
   rescue OAuth2::Error => e
     if e.response && e.response.status >= 500 || e.response.status == 403
       # Try again on server errs or rate limit exceeded
-      raise LowerRetryWorker::RetryJobButNoAirbrakeError
+      raise LowerRetryWorker::RetryJobButNoRollbarError
     else
       raise e
     end
@@ -314,12 +314,12 @@ class GoogleContactsIntegrator
           else
             save_g_contact_links(g_contacts_and_links)
           end
-        rescue LowerRetryWorker::RetryJobButNoAirbrakeError => e
+        rescue LowerRetryWorker::RetryJobButNoRollbarError => e
           raise e
         rescue => e
           # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
           Rollbar.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
-                                                    batch_xml: api_user.last_batch_xml })
+                                                   batch_xml: api_user.last_batch_xml })
         end
       end
     end
@@ -350,7 +350,7 @@ class GoogleContactsIntegrator
       return true
     when 403
       # 403 is user rate limit exceeded, so don't retry the particular contact, just queue the whole job for retry
-      fail LowerRetryWorker::RetryJobButNoAirbrakeError
+      fail LowerRetryWorker::RetryJobButNoRollbarError
     else
       # Failed but can't just fix by resyncing the contact, so raise an error
       fail(status.inspect)

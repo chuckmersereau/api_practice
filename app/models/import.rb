@@ -57,7 +57,7 @@ class Import < ActiveRecord::Base
       true
     rescue UnsurprisingImportError
       # Only send a failure email, don't re-raise the error, as it was not considered a surprising error by the
-      # import function, so don't re-raise it (that will prevent non-surprising errors from being logged via Airbrake).
+      # import function, so don't re-raise it (that will prevent non-surprising errors from being logged via Rollbar).
       ImportMailer.failed(self).deliver
     rescue => e
       ImportMailer.failed(self).deliver
