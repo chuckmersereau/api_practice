@@ -69,7 +69,7 @@ class PrayerLettersAccount < ActiveRecord::Base
     # do nothing
   rescue RestClient::BadRequest => e
     # BadRequest: A contact must have a name or company. Monitor those cases for pattern / underlying causes.
-    Airbrake.raise_or_notify(e, parameters: contact_params)
+    Rollbar.raise_or_notify(e, parameters: contact_params)
   end
 
   def contact_needs_sync?(contact)

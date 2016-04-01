@@ -74,7 +74,7 @@ class FacebookImport
           end
 
         rescue => e
-          Airbrake.raise_or_notify(e)
+          Rollbar.raise_or_notify(e)
           next
         end
       end

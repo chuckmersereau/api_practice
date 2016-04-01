@@ -42,7 +42,7 @@ class GoogleContactsIntegrator
     # Don't log this exception as we expect it to happen from time to time.
     # Person::GoogleAccount will turn off the contacts integration and send the user an email to refresh their Google login.
   rescue => e
-    Airbrake.raise_or_notify(e)
+    Rollbar.raise_or_notify(e)
   end
 
   def sync_and_return_num_synced
@@ -105,7 +105,7 @@ class GoogleContactsIntegrator
       g_contact_link.destroy
     else
       # Otherwise we couldn't successfully delete the remote Google Contact, so keep the link to try deleting again later
-      Airbrake.raise_or_notify(e)
+      Rollbar.raise_or_notify(e)
     end
   end
 
@@ -143,7 +143,7 @@ class GoogleContactsIntegrator
       fail status.inspect
     end
   rescue => e
-    Airbrake.raise_or_notify(e)
+    Rollbar.raise_or_notify(e)
   end
 
   def api_user
@@ -239,7 +239,7 @@ class GoogleContactsIntegrator
       save_g_contacts_then_links(contact, g_contacts_to_save, g_contacts_and_links)
     end
   rescue => e
-    Airbrake.raise_or_notify(e, parameters: { contact_id: contact.id, last_batch_xml: api_user.last_batch_xml })
+    Rollbar.raise_or_notify(e, parameters: { contact_id: contact.id, last_batch_xml: api_user.last_batch_xml })
   end
 
   def get_g_contact_and_link(contact_person)
@@ -318,7 +318,7 @@ class GoogleContactsIntegrator
           raise e
         rescue => e
           # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
-          Airbrake.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
+          Rollbar.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
                                                     batch_xml: api_user.last_batch_xml })
         end
       end

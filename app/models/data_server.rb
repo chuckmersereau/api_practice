@@ -93,9 +93,8 @@ class DataServer
 
         # handle bad data
         unless %w(P O).include?(line['PERSON_TYPE'])
-          Airbrake.notify(
-            error_class: 'Unknown PERSON_TYPE',
-            error_message: "Unknown PERSON_TYPE: #{line['PERSON_TYPE']}",
+          Rollbar.error(
+            "Unknown PERSON_TYPE: #{line['PERSON_TYPE']}",
             parameters: { line: line, org: @org.inspect, user: @user.inspect, org_account: @org_account.inspect }
           )
           # Go ahead and assume this is a person

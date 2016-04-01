@@ -57,6 +57,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
   end
 
   def import_all_data
+    Rollbar.raise_or_notify('Unknown PERSON_TYPE: test')
     return if locked_at || new_record? || !valid_rechecked_credentials
     update_column(:downloading, true)
     import_donations
@@ -116,7 +117,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
     begin
       organization.api(self).import_profiles
     rescue DataServerError => e
-      Airbrake.notify(e)
+      Rollbar.error(e)
     end
     # If this org account doesn't have any profiles, create a default account list and profile for them
     if user.account_lists.reload.empty? || organization.designation_profiles.where(user_id: person_id).blank?

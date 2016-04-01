@@ -99,9 +99,6 @@ GEM
     acts-as-taggable-on (3.0.2)
       rails (>= 3, < 5)
     addressable (2.3.8)
-    airbrake (4.3.0)
-      builder
-      multi_json
     akami (1.2.2)
       gyoku (>= 0.4.0)
       nokogiri
@@ -628,6 +625,8 @@ GEM
       mime-types (~> 1.16)
     retriable (2.0.2)
     retryable-rb (1.1.0)
+    rollbar (2.8.3)
+      multi_json
     rollout (2.0.0)
       redis
     rspec (3.3.0)
@@ -801,7 +800,6 @@ DEPENDENCIES
   activerecord-import (~> 0.7.0)
   activesupport-json_encoder
   acts-as-taggable-on (~> 3.0.0)
-  airbrake
   angular-ui-bootstrap-rails
   angularjs-rails
   assignable_values (~> 0.5.3)
@@ -900,6 +898,7 @@ DEPENDENCIES
   resque_spec
   rest-client (~> 1.6.7)
   retryable-rb (~> 1.1.0)
+  rollbar
   rollout (~> 2.0.0)
   rollout_ui!
   rspec (~> 3.3.0)
