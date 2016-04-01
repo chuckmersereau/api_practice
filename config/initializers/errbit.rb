@@ -1,5 +1,5 @@
 Airbrake.configure do |config|
-  config.api_key = 'd65b57308fbe49fe8903198f8b2a1c52'
+  config.api_key = ENV['ROLLBAR_TOKEN']
   config.host = 'api.rollbar.com'
   config.port = 443
   config.secure = config.port == 443
@@ -12,7 +12,7 @@ end
 module Airbrake
   def self.raise_or_notify(e, opts = {})
     if ::Rails.env.development? || ::Rails.env.test?
-      raise e
+      fail e
     else
       Airbrake.notify_or_ignore(e, opts)
     end
