@@ -23,7 +23,8 @@ class Person::OrganizationAccount < ActiveRecord::Base
 
   def to_s
     str = organization.to_s
-    postfix = username || remote_id
+    employee_id = user.relay_accounts.where(remote_id: remote_id).pluck(:employee_id).first
+    postfix = username || employee_id || remote_id
     str += ': ' + postfix if postfix
     str
   end

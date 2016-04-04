@@ -1,4 +1,8 @@
 $ ->
+  if $('#accounts_index')[0]? || $('#csv_import_preview')[0]? || $('#setup_show')[0]?
+    $(document).on 'change', '#organization_id', (e) ->
+      $('#connect_to_org').toggleClass('disabled', !e.target.value)
+
   $(document).on 'click', '#connect_to_org', ->
     return false if $('#organization_id').val() == ''
     el = $('#org_connection_box')

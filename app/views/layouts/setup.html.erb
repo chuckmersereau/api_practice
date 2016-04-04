@@ -1,6 +1,6 @@
 <% wizard_scope = wizard_path[1..-1].sub('/','.') %>
 <!DOCTYPE html>
-<html>
+<html lang="<%= I18n.locale %>">
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <title><%= _('Setup') %> - MPDX</title>
@@ -13,7 +13,7 @@
     <script src="//use.typekit.net/ddm2mzv.js"></script>
     <script>try{Typekit.load();}catch(e){}</script>
   </head>
-  <body>
+  <body id="<%= controller.controller_name %>_<%= controller.action_name %>">
     <div class="container-fluid container-first">
     </div>
 
@@ -43,7 +43,7 @@
                 <div class="callout row">
                   <div class="col-md-12 text-center">
                     <% if wizard_scope == 'setup.org_accounts' %>
-                      <h3><%= _('Start by connecting to your organization.') %></h3>
+                      <h3><%= _("Let's start by connecting to your organizations") %></h3>
                     <% else %>
                       <div class="alert alert-success" role="alert">
                         <p><strong><%= _('Sweet! Your Account is activated!') %></strong> <br/>
@@ -94,13 +94,26 @@
 
     <div id="missing_org_modal" title="<%= _("Don't see your organization here?") %>" style="display:none">
       <div class="form_wrapper">
-        <p><%= _("We are sorry, but you must have an organization selected to continue. MPDX is open to any missions organization or church. If your organization is listed in the dropdown box, you can just sign up. If not, we need to add your organization. There are two routes to go about this.") %></p>
-        <p><%= _("The first is to create an offline organization which is a quick process. However, this means that you have to enter in your contacts and donations in manually. If you would like to go this route, please email us at support@mpdx.org with the name of your organization.") %></p>
-        <p><%= _("The second is to set up your organization to sync your donations with MPDx. This is actually not done by us, but here is where you can go to get started: ") %>
+        <p>
+          <%= _('We are sorry, but you must have an organization selected to continue. MPDX is open ' +
+                'to any missions organization or church. If your organization is listed in the dropdown ' +
+                'box, you can just sign up. If not, we need to add your organization. There are two ' +
+                'routes to go about this.') %>
+        </p>
+        <p>
+          <%== format(_('The first is to create an offline organization which is a quick process. However, this ' +
+                        'means that you have to enter in your contacts and donations in manually. If you would ' +
+                        'like to go this route, please email us at %{email_link} with the name of your organization.'),
+                 email_link: mail_to('support@mpdx.org')) %>
+        </p>
+        <p>
+          <%= _('The second is to set up your organization to sync your donations with MPDx. This is ' +
+                'actually not done by us, but here is where you can go to get started: ') %>
           <%= link_to('http://www.tntware.com/tntmpd.dataserver/', 'http://www.tntware.com/tntmpd.dataserver/') %>.
         </p>
       </div>
     </div>
+    <div id="confirmation_modal" title="<%= _('Are you sure?') %>"></div>
 
   </body>
 </html>

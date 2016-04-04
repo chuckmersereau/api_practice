@@ -3,7 +3,7 @@
     <div class="account_single <%= 'error_element' if account.try(:valid_credentials) == false %>"
          data-behavior="account" id="<%= provider%>-account-<%= account.id %>">
       <div class="actions">
-        <% if provider == 'organization' %>
+        <% if provider == 'organization' && account.organization.requires_username_and_password? %>
           <%= link_to(_('edit'), edit_person_organization_account_path(account, format: :js),
                       class: "edit ico ico_edit no-new-tab",
                       data: { behavior: "edit_#{provider}_account" }) %>

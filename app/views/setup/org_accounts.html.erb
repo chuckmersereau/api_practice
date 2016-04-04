@@ -5,13 +5,19 @@
       <div class="form-group">
         <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
           <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}),
-                         include_blank: true, class: 'form-control margin-bottom') %>
-          <%= link_to(_('Connect'), new_person_organization_account_path, class: 'btn btn-primary btn-lg', id: 'connect_to_org') %>
+                         class: 'form-control margin-bottom', prompt: _('Select your organization')) %>
+          <%= link_to(_('Connect'), new_person_organization_account_path, class: 'btn btn-primary btn-lg disabled', id: 'connect_to_org') %>
           <br>
           <%= link_to(_("Don't see your organization here?"), '#missing_org_modal', class: 'btn missing_org_btn') %>
         </div>
       </div>
     </div>
+    <% if current_user.organization_accounts.any? %>
+      <div style="text-align: right">
+        <%= _("You can add more later from your 'Networks & Imports' settings") %>
+        <%= link_to(_("That's all for now"), setup_path(:social_accounts), class: 'btn btn-primary btn-lg') %>
+      </div>
+    <% end %>
   </div>
 </div>
 
