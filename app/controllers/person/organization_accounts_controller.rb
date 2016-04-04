@@ -25,7 +25,7 @@ class Person::OrganizationAccountsController < ApplicationController
     @organization = @organization_account.organization
 
     respond_to do |format|
-      if @organization && @organization_account.save
+      if save_account
         format.js
       else
         format.js { render :new }
@@ -51,6 +51,16 @@ class Person::OrganizationAccountsController < ApplicationController
   end
 
   private
+
+  def save_account
+    return false unless @organization
+    @organization_account.save
+  rescue RuntimeError => e
+    Rollbar.error(e)
+    error_message = format(_('Error connecting to %{org_name} server'), org_name: @organization.name)
+    @organization_account.errors.add(:base, error_message)
+    false
+  end
 
   def person_organization_account_params
     params.require(:person_organization_account).permit(:username, :password, :organization_id)

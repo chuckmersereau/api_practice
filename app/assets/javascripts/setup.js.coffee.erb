@@ -19,6 +19,9 @@ $ ->
     }
     false
 
+  $(document).on 'submit', '#new_person_organization_account', ->
+    $('#org_connection_box').dialog("option", "buttons", []).html('<%= image_tag('spinner.gif', class: 'spinner') %>');
+
   $('.missing_org_btn').click ->
     $('#missing_org_modal').dialog
       resizable: false,
