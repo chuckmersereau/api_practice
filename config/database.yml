@@ -7,6 +7,7 @@ development: &dev
   username: <%= ENV.fetch('DB_ENV_POSTGRESQL_USER') %>
   password: <%= ENV.fetch('DB_ENV_POSTGRESQL_PASS') %>
   host: <%= ENV.fetch('DB_PORT_5432_TCP_ADDR') %>
+  port: <%= ENV['DB_PORT_5432_TCP_PORT'] %>
 
 
 staging:
@@ -24,3 +25,4 @@ test: &test
   username: <%= ENV['DB_ENV_POSTGRESQL_USER_TEST'] || ENV.fetch('DB_ENV_POSTGRESQL_USER') %>
   password: <%= ENV['DB_ENV_POSTGRESQL_PASS_TEST'] || ENV.fetch('DB_ENV_POSTGRESQL_PASS') %>
   host: <%= ENV['DB_PORT_5432_TCP_ADDR_TEST'] || ENV.fetch('DB_PORT_5432_TCP_ADDR') %>
+  port: <%= ENV['DB_PORT_5432_TCP_PORT_TEST'] || ENV['DB_PORT_5432_TCP_PORT'] %>
