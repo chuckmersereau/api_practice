@@ -98,7 +98,7 @@ class MailChimpAccount < ActiveRecord::Base
       # sending or if the campaign is for some reason stuck in the "sending"
       # status, so keep retrying the job for one hour then give up.
       if Time.now.utc - campaign_send_time(campaign_id) < 1.hour
-        raise LowerRetryWorker::RetryJobButNoAirbrakeError
+        raise LowerRetryWorker::RetryJobButNoRollbarError
       end
     else
       raise e
@@ -154,7 +154,7 @@ class MailChimpAccount < ActiveRecord::Base
       update_column(:active, false)
       AccountMailer.invalid_mailchimp_key(account_list).deliver
     when e.message.include?('code -50') # No more than 10 simultaneous connections allowed.
-      raise LowerRetryWorker::RetryJobButNoAirbrakeError
+      raise LowerRetryWorker::RetryJobButNoRollbarError
     when e.message.include?('code -91') # A backend database error has occurred. Please try again later or report this issue. (code -91)
       # raise the exception and the background queue will retry
       raise e

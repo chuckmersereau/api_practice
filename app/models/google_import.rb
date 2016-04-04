@@ -28,7 +28,7 @@ class GoogleImport
       import_contacts_batch(google_account.contacts, @import.tags)
     end
   rescue Person::GoogleAccount::MissingRefreshToken
-    # This triggers an "import failed" email to the user but won't log the error in Errbit
+    # This triggers an "import failed" email to the user but won't log the error in Rollbar
     raise Import::UnsurprisingImportError
   end
 
@@ -37,7 +37,7 @@ class GoogleImport
       begin
         import_contact(g_contact, tags)
       rescue => e
-        Airbrake.raise_or_notify(e)
+        Rollbar.raise_or_notify(e)
         next
       end
     end

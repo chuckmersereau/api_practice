@@ -116,7 +116,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
     begin
       organization.api(self).import_profiles
     rescue DataServerError => e
-      Airbrake.notify(e)
+      Rollbar.error(e)
     end
     # If this org account doesn't have any profiles, create a default account list and profile for them
     if user.account_lists.reload.empty? || organization.designation_profiles.where(user_id: person_id).blank?

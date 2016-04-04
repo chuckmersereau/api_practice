@@ -111,7 +111,7 @@ class GoogleCalendarIntegrator
       when 'Invalid attendee email.'
         fail InvalidEmail, event_attributes(object).inspect
       when 'Rate Limit Exceeded', 'Backend Error'
-        fail LowerRetryWorker::RetryJobButNoAirbrakeError
+        fail LowerRetryWorker::RetryJobButNoRollbarError
       else
         fail Error, result.data['error']['message'] + " -- #{result.data.inspect}"
       end

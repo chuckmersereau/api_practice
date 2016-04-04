@@ -340,7 +340,7 @@ describe MailChimpAccount do
       expect(account).to receive(:sync_contacts).with(1).and_raise(Gibbon::MailChimpError.new(msg))
       expect do
         account.call_mailchimp(:sync_contacts, 1)
-      end.to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
+      end.to raise_error(LowerRetryWorker::RetryJobButNoRollbarError)
     end
   end
 
@@ -477,7 +477,7 @@ describe MailChimpAccount do
         stub_campaign_members_err('code 301')
         travel_to Time.new(2015, 9, 18, 16, 52, 49, '+00:00') do
           expect { account.log_sent_campaign('c1', 'subject') }
-            .to raise_error(LowerRetryWorker::RetryJobButNoAirbrakeError)
+            .to raise_error(LowerRetryWorker::RetryJobButNoRollbarError)
         end
       end
 

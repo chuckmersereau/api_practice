@@ -833,10 +833,10 @@ describe GoogleContactsIntegrator do
       end
     end
 
-    it 'raises a LowerRetryWorker::RetryJobButNoAirbrakeError error on 500s, 403 errs' do
-      expect_err_for_response_code(500, LowerRetryWorker::RetryJobButNoAirbrakeError)
-      expect_err_for_response_code(503, LowerRetryWorker::RetryJobButNoAirbrakeError)
-      expect_err_for_response_code(403, LowerRetryWorker::RetryJobButNoAirbrakeError)
+    it 'raises a LowerRetryWorker::RetryJobButNoRollbarError error on 500s, 403 errs' do
+      expect_err_for_response_code(500, LowerRetryWorker::RetryJobButNoRollbarError)
+      expect_err_for_response_code(503, LowerRetryWorker::RetryJobButNoRollbarError)
+      expect_err_for_response_code(403, LowerRetryWorker::RetryJobButNoRollbarError)
     end
 
     it 'raise an OAuth2 error for other error codes' do

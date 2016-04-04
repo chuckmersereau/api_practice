@@ -125,7 +125,7 @@ describe PrayerLettersAccount do
       expect(stub).to have_been_requested
     end
 
-    it 'does not raise an error on a 400 bad request code but logs it via Airbrake' do
+    it 'does not raise an error on a 400 bad request code but logs it via Rollbar' do
       missing_name_body = <<-EOS
         {
             "status": 400,
@@ -135,7 +135,7 @@ describe PrayerLettersAccount do
       EOS
       stub_request(:post, 'https://www.prayerletters.com/api/v1/contacts').to_return(body: missing_name_body, status: 400)
 
-      expect(Airbrake).to receive(:raise_or_notify)
+      expect(Rollbar).to receive(:raise_or_notify)
       pla.create_contact(contact)
     end
   end
