@@ -4450,6 +4450,13 @@ CREATE INDEX index_prayer_letters_accounts_on_account_list_id ON prayer_letters_
 
 
 --
+-- Name: index_remote_id_on_person_relay_account; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_remote_id_on_person_relay_account ON person_relay_accounts USING btree (lower((remote_id)::text));
+
+
+--
 -- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -5008,4 +5015,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160215185431');
 INSERT INTO schema_migrations (version) VALUES ('20160217173440');
 
 INSERT INTO schema_migrations (version) VALUES ('20160302160145');
+
+INSERT INTO schema_migrations (version) VALUES ('20160401173537');
 
