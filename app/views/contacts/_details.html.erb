@@ -1,60 +1,127 @@
 <% exhibit(contact, self).tap do |contact_exhibit| %>
-  <div class="cols col_50">
-    <table class="meta">
-      <tr>
-        <th colspan="2"><%= _('Addresses') %></th>
-      </tr>
-      <% contact.addresses.each do |address| %>
-        <% exhibit(address, self).tap do |address_exhibit| %>
-          <tr>
-            <td class="meta_name" nowrap="nowrap">
-              <%= _(address.location.present? ? address.location : 'Mailing') %>
-              <% if contact.addresses.length > 1 && address.primary_mailing_address? %>
-                <i class="fa fa-check green"></i>
+    <div class="row">
+      <div class="col-sm-6">
+        <h3><%= _('Financial') %></h3>
+        <dl class="dl-horizontal">
+          <dt><%= _('Status') %></dt>
+          <dd>
+            <%= best_in_place(contact_exhibit, :status,
+                              as: :select,
+                              collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
+                              place_holder: _('None')) %>
+            <% if contact.status == 'Partner - Financial' %>
+                <%
+                  pledge_received =
+                      '<i class="fa fa-check" title="' + _('Commitment Received') + '"></i>'
+                  pledge_not_received =
+                      '<span class="fa-stack" title="' + _('Commitment Not Received') + '">
+                      <i class="fa fa-check fa-stack-1x"></i>
+                      <i class="fa fa-ban fa-stack-2x"></i>
+                    </span>'
+                %>
+                <%= best_in_place(contact_exhibit, :pledge_received, as: :checkbox,
+                                  collection: { 'false' => pledge_not_received.html_safe,
+                                                'true' => pledge_received.html_safe })%>
+            <% end %>
+            <i class="fa fa-question-circle" data-toggle="tooltip"
+               data-placement="top" data-behavior="explain_statuses"
+               title="<%= _('Click for explanation of contact status options.') %>"></i>
+            <%= render 'explain_statuses_modal' %>
+          </dd>
+
+          <dt><%= _('Commitment') %></dt>
+          <dd>
+            <%= best_in_place(contact_exhibit, :pledge_amount,
+                              value: contact.pledge_amount, place_holder: '0.0') %>
+          </dd>
+          <% if $rollout.active?(:currencies, current_account_list) %>
+              <dt><%= _('Currency') %></dt>
+              <dd>
+                <%= best_in_place(contact_exhibit, :pledge_currency,
+                                  as: :select,
+                                  place_holder: current_currency,
+                                  collection: TwitterCldr::Shared::Currencies.currency_codes.collect { |s| [s, _(s)] }) %>
+              </dd>
+          <% end %>
+          <dt><%= _('Frequency') %></dt>
+          <dd>
+            <%= best_in_place(contact, :pledge_frequency,
+                              as: :select,
+                              collection: [['',_('Unspecified')]] + Contact.pledge_frequencies.to_a) %>
+          </dd>
+          <% if contact_exhibit.pledge_start_date.present? %>
+              <dt><%= _('Commitment Start Date') %></dt>
+              <dd><%= _(contact_exhibit.pledge_start_date) %></dd>
+          <% end %>
+          <% if contact.total_donations_query.to_f > 0.0 %>
+              <dt><%= _('Lifetime Donations') %></dt>
+              <dd><%= number_to_current_currency(contact_exhibit.total_donations_query) %></dd>
+          <% end %>
+          <% if contact_exhibit.likely_to_give.present? %>
+              <dt><%= _('Likelihood') %></dt>
+              <dd><%= _(contact_exhibit.likely_to_give) %></dd>
+          <% end %>
+          <dt><%= _('Direct Deposit') %></dt>
+          <dd><%= contact_exhibit.direct_deposit ? _('Yes') : _('No') %></dd>
+          <% if contact_exhibit.donor_ids.present? %>
+              <dt><%= _('Donor ID') %></dt>
+              <dd><%= contact_exhibit.donor_ids %></dd>
+          <% end %>
+        </dl>
+        <h3><%= _('Communications') %></h3>
+        <dl class="dl-horizontal">
+          <dt><%= _('Newsletter') %> </dt>
+          <dd>
+            <%= best_in_place(contact_exhibit, :send_newsletter,
+                              as: :select,
+                              collection: [['',_('None')]] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
+          </dd>
+          <dt><%= _('Greeting Name') %> </dt>
+          <dd>
+            <%= best_in_place(contact_exhibit, :greeting,
+                              value: contact.greeting) %>
+          </dd>
+          <dt><%= _('Envelope Name') %> </dt>
+          <dd>
+            <%= best_in_place(contact_exhibit, :envelope_greeting,
+                              value: contact.envelope_greeting) %>
+          </dd>
+          <dt><%= _('Send appeals') %></dt>
+          <dd><%= !contact_exhibit.no_appeals ? _('Yes') : _('No') %></dd>
+          <dt><%= _('Magazine') %></dt>
+          <dd><%= contact_exhibit.magazine ? _('Yes') : _('No') %></dd>
+        </dl>
+        <h3><%= _('Other Details') %></h3>
+        <dl class="dl-horizontal dl-spacing-below-xs">
+          <% if contact.church_name.present? %>
+              <dt><%= _('Church') %></dt>
+              <dd><%= contact_exhibit.church_name %></dd>
+          <% end %>
+          <% if contact.website.present? %>
+              <dt class="meta_name"><%= _('Website') %></dt>
+              <dd class="meta_data"><%= contact_exhibit.website %></dd>
+          <% end %>
+        </dl>
+      </div>
+      <div class="col-sm-6">
+        <h3><%= _('Addresses') %></h3>
+        <dl class="dl-horizontal dl-horizontal-sm">
+          <% contact.addresses.each do |address| %>
+              <% exhibit(address, self).tap do |address_exhibit| %>
+                  <dt>
+                    <% if contact.addresses.length > 1 && address.primary_mailing_address? %>
+                        <i class="fa fa-check green"></i>
+                    <% end %>
+                    <%= _(address.location.present? ? address.location : 'Mailing') %>
+                  </dt>
+                  <dd<% if address.historic %> style="text-decoration: line-through;"<% end %>>
+                    <%= address_exhibit.to_i18n_html %>
+                    <br />
+                    <%= link_to(_('Map It'), "http://maps.google.com?q=#{address_exhibit.to_google}", target: '_blank', class: 'mapit') %>
+                  </dd>
               <% end %>
-            </td>
-            <td class="meta_data"<% if address.historic %> style="text-decoration: line-through;"<% end %>>
-              <%= address_exhibit.to_i18n_html %>
-              <br />
-              <%= link_to(_('Map It'), "http://maps.google.com?q=#{address_exhibit.to_google}", target: '_blank', class: 'mapit') %>
-            </td>
-          </tr>
-        <% end %>
-      <% end %>
-    </table>
-  </div>
-  <div class="cols col_50">
-    <table class="meta">
-      <tr>
-        <th colspan="2"><%= _('Other Details') %></th>
-      </tr>
-      <% if contact_exhibit.likely_to_give.present? %>
-        <tr>
-          <td class="meta_name_wide"><%= _('Likelihood') %></td>
-          <td class="meta_data"><%= _(contact_exhibit.likely_to_give) %></td>
-        </tr>
-      <% end %>
-      <tr>
-        <td class="meta_name_wide"><%= _('Magazine') %></td>
-        <td class="meta_data"><%= contact_exhibit.magazine ? _('Yes') : _('No') %></td>
-      </tr>
-      <tr>
-        <td class="meta_name_wide"><%= _('Direct Deposit') %></td>
-        <td class="meta_data"><%= contact_exhibit.direct_deposit ? _('Yes') : _('No') %></td>
-      </tr>
-      <% if contact.church_name.present? %>
-        <tr>
-          <td class="meta_name_wide"><%= _('Church') %></td>
-          <td class="meta_data"><%= contact_exhibit.church_name %></td>
-        </tr>
-      <% end %>
-      <% if contact.total_donations_query.to_f > 0.0 %>
-        <tr>
-          <td class="meta_name_wide"><%= _('Lifetime Donations') %></td>
-          <td class="meta_data"><%= number_to_current_currency(contact_exhibit.total_donations_query) %></td>
-        </tr>
-      <% end %>
-      </table>
+          <% end %>
+        </dl>
+      </div>
     </div>
-  <div class="clr"></div>
 <% end %>
