@@ -7,10 +7,7 @@ class SetupController < ApplicationController
   steps :org_accounts, :social_accounts, :finish
 
   def show
-    case step
-    when :org_accounts
-    when :social_accounts
-    when :finish
+    if step == :finish
       current_user.setup_finished!
       redirect_to '/'
       return
