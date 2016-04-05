@@ -29,9 +29,10 @@ Rollbar.configure do |config|
   #
   # You can also specify a callable, which will be called with the exception instance.
   ignore = %w(Google::APIClient::ServerError Net::IMAP::BadResponseError
-              LowerRetryWorker::RetryJobButNoRollbarError ActionController::RoutingError)
-  ignore = ignore.each_with_object({}) { |key, hash| hash[key] = 'ignore' }
+              LowerRetryWorker::RetryJobButNoRollbarError)
+  ignore = ignore.each_with_object({}) { |key, hash| hash[key] = 'ignored' }
   config.exception_level_filters.merge!(ignore)
+  config.exception_level_filters.merge!('ActionController::RoutingError' => 'ignore')
 
   # Enable asynchronous reporting (uses girl_friday or Threading if girl_friday
   # is not installed)
