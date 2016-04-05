@@ -31,7 +31,7 @@ class TntImport
 
   def import_contacts
     TntImport::ContactsImport.new(@import, @designation_profile, xml)
-      .import_contacts
+                             .import_contacts
   end
 
   def import_referrals(tnt_contacts)
@@ -57,6 +57,6 @@ class TntImport
 
   def import_appeals(contacts_by_tnt_appeal_id)
     TntImport::AppealsImport.new(@account_list, contacts_by_tnt_appeal_id, xml)
-      .import
+                            .import
   end
 end

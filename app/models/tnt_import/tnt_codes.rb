@@ -23,7 +23,7 @@ class TntImport::TntCodes
     { field: 'SpouseBusinessPhone2', location: 'work', person: :spouse },
     { field: 'SpouseBusinessFax', location: 'fax', person: :spouse },
     { field: 'SpouseCompanyMainPhone', location: 'work', person: :spouse } # index 18
-  ]
+  ].freeze
 
   class << self
     def task_type(task_type_id)

@@ -17,7 +17,7 @@ class TntImport::PersonImport
 
     # See if there's already a person by this name on this contact (This is a contact with multiple donation accounts)
     person = contact.people.where(first_name: row[prefix + 'FirstName'], last_name: row[prefix + 'LastName'])
-             .find_by("middle_name = ? OR middle_name = '' OR middle_name is NULL", row[prefix + 'MiddleName'])
+                    .find_by("middle_name = ? OR middle_name = '' OR middle_name is NULL", row[prefix + 'MiddleName'])
     person ||= Person.new
 
     update_person_attributes(person, row, prefix)
@@ -98,7 +98,7 @@ class TntImport::PersonImport
   end
 
   def true?(val)
-    val.upcase == 'TRUE'
+    val.casecmp('TRUE').zero?
   end
 
   # TntMPD allows multiple emails to be marked as preferred and expresses that array of booleans as a

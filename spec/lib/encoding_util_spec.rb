@@ -9,10 +9,10 @@ describe EncodingUtil do
         [nil, ''],
         %w(USA USA),
         ["a\r\nb", "a\nb"],
-        ["a\nb", "a\nb"],
+        %W(a\nb a\nb),
         %w(Agapé Agapé),
         %w(Agapé Agapé),
-        ["Agap\xC3\xA9", 'Agapé'], # ISO-8859-1
+        %w(Agapé Agapé), # ISO-8859-1
         ["Lan\xE9", 'Lané'], # ISO-8859-2
         ["\xEF\xBB\xBFAgapé".force_encoding('UTF-8'), 'Agapé'] # byte-order-mark
       ].each do |str, normalized|

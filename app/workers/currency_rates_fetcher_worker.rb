@@ -27,7 +27,7 @@ class CurrencyRatesFetcherWorker
 
   def fetch_rates(date)
     json = rates(date)
-    fail 'Currency Layer api call failed' unless json['success']
+    raise 'Currency Layer api call failed' unless json['success']
     import_quotes(json['quotes'], date)
   end
 

@@ -68,7 +68,7 @@ describe MailChimpWebhookController do
 
   it 'calls account hook on email update' do
     params = {
-      type: 'upemail', fired_at: "2009-03-26\ 22:15:09",
+      type: 'upemail', fired_at: '2009-03-26 22:15:09',
       data: {
         list_id: 'MyString', new_id: '51da8c3259',
         new_email: 'api+new@mailchimp.com', old_email: 'api+old@mailchimp.com'

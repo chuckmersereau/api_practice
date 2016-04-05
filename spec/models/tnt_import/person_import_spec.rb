@@ -92,7 +92,6 @@ describe TntImport::PersonImport do
         [{ 'PreferredEmailTypes' => '8' }, 2, ''] => false,
         [{ 'PreferredEmailTypes' => '8' }, 3, ''] => true,
         [{ 'PreferredEmailTypes' => '2' }, 1, 'Spouse'] => false,
-        [{ 'PreferredEmailTypes' => '2' }, 1, 'Spouse'] => false,
         [{ 'PreferredEmailTypes' => '16' }, 1, 'Spouse'] => true,
         [{ 'PreferredEmailTypes' => '16' }, 2, 'Spouse'] => false,
         [{ 'PreferredEmailTypes' => '24' }, 1, 'Spouse'] => true,

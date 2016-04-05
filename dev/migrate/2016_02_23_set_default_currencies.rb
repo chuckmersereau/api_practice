@@ -41,7 +41,7 @@ end
 
 def default_currencies_by_pledges!(account_list)
   currency_counts = account_list.contacts.where
-                    .not(pledge_currency: nil).group(:pledge_currency).count
+                                .not(pledge_currency: nil).group(:pledge_currency).count
   if currency_counts.empty?
     puts "No currency info for account #{account_list.id}"
     return

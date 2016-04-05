@@ -1,8 +1,8 @@
 class NotificationType::RemindPartnerInAdvance < NotificationType
   def check_contacts_filter(contacts)
     contacts.financial_partners.where(['pledge_start_date is NULL OR pledge_start_date < ?', 30.days.ago])
-      .where(direct_deposit: false)
-      .where('pledge_frequency >= ?', 3.0)
+            .where(direct_deposit: false)
+            .where('pledge_frequency >= ?', 3.0)
   end
 
   def check(account_list)
@@ -11,7 +11,7 @@ class NotificationType::RemindPartnerInAdvance < NotificationType
       next unless contact.pledge_received?
       next unless early_by?(1.month, contact)
       prior_notification = Notification.active.where(contact_id: contact.id, notification_type_id: id)
-                           .find_by('event_date > ?', 2.months.ago)
+                                       .find_by('event_date > ?', 2.months.ago)
       next if prior_notification
       next unless contact.donations.any?
       notification = contact.notifications.create!(notification_type_id: id, event_date: Time.zone.today)

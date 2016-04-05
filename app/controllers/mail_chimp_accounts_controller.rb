@@ -72,6 +72,6 @@ class MailChimpAccountsController < ApplicationController
 
   def mail_chimp_account_params
     params.require(:mail_chimp_account)
-      .permit(:api_key, :grouping_id, :primary_list_id, :auto_log_campaigns)
+          .permit(:api_key, :grouping_id, :primary_list_id, :auto_log_campaigns)
   end
 end

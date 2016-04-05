@@ -81,7 +81,7 @@ class ReportsController < ApplicationController
         # should be $50/month.
         # Thus we find the first month in the report (from left to right) where they
         # gave a donation and exclude earlier months from the average.
-        month_of_first_donation = (0..11).to_a.reverse.find_index do|index|
+        month_of_first_donation = (0..11).to_a.reverse.find_index do |index|
           !row[:amounts][index.month.ago(@end_date).strftime '%b %y'].nil?
         end
         months_for_average = 12.0 - month_of_first_donation
@@ -125,12 +125,12 @@ class ReportsController < ApplicationController
 
   def monthly_pledges_not_given
     contacts_who_have_given = current_account_list.contacts.financial_partners
-                              .includes(donor_accounts: :donations)
-                              .where('donations.donation_date BETWEEN ? AND ?', @start_date, @end_date)
-                              .pluck(:id)
+                                                  .includes(donor_accounts: :donations)
+                                                  .where('donations.donation_date BETWEEN ? AND ?', @start_date, @end_date)
+                                                  .pluck(:id)
     current_account_list.contacts.financial_partners
-      .where.not(id: contacts_who_have_given)
-      .to_a.sum(&:monthly_pledge)
+                        .where.not(id: contacts_who_have_given)
+                        .to_a.sum(&:monthly_pledge)
   end
 
   private

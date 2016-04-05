@@ -24,7 +24,7 @@ class Person::GoogleAccount < ActiveRecord::Base
   end
 
   def self.create_user_from_auth(_auth_hash)
-    fail Person::Account::NoSessionError, 'Somehow a user without an account/session is trying to sign in using google'
+    raise Person::Account::NoSessionError, 'Somehow a user without an account/session is trying to sign in using google'
   end
 
   def google_integration(account_list_id)
@@ -56,7 +56,7 @@ class Person::GoogleAccount < ActiveRecord::Base
   end
 
   def contacts_api_user
-    fail Person::GoogleAccount::MissingRefreshToken if token_expired? && !refresh_token!
+    raise Person::GoogleAccount::MissingRefreshToken if token_expired? && !refresh_token!
 
     unless @contact_api_user
       client = OAuth2::Client.new(ENV.fetch('GOOGLE_KEY'), ENV.fetch('GOOGLE_SECRET'))
@@ -89,7 +89,7 @@ class Person::GoogleAccount < ActiveRecord::Base
       refresh_token: refresh_token,
       grant_type: 'refresh_token'
     }
-    RestClient.post('https://accounts.google.com/o/oauth2/token', params, content_type: 'application/x-www-form-urlencoded') do|response, _request, _result, &_block|
+    RestClient.post('https://accounts.google.com/o/oauth2/token', params, content_type: 'application/x-www-form-urlencoded') do |response, _request, _result, &_block|
       json = JSON.parse(response)
       if response.code == 200
         self.token = json['access_token']
@@ -101,7 +101,7 @@ class Person::GoogleAccount < ActiveRecord::Base
           needs_refresh
           return false
         else
-          fail response.inspect
+          raise response.inspect
         end
       end
     end

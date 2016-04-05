@@ -31,9 +31,9 @@ class Admin::UserFinder < ActiveRecord::Base
 
     def users_by_first_last(first_name, last_name)
       User.joins(:account_list_users)
-        .where('lower(people.first_name) = ?', first_name.to_s.downcase.strip)
-        .where('lower(people.last_name) = ?', last_name.to_s.downcase.strip)
-        .uniq
+          .where('lower(people.first_name) = ?', first_name.to_s.downcase.strip)
+          .where('lower(people.last_name) = ?', last_name.to_s.downcase.strip)
+          .uniq
     end
 
     def user_id_by_email(email)
@@ -42,12 +42,12 @@ class Admin::UserFinder < ActiveRecord::Base
 
     def user_id_by_relay(email)
       Person::RelayAccount.where('lower(username) = ?', email.downcase)
-        .try(:first).try(:person_id)
+                          .try(:first).try(:person_id)
     end
 
     def user_id_by_key(email)
       Person::KeyAccount.where('lower(email) = ?', email.downcase)
-        .try(:first).try(:person_id)
+                        .try(:first).try(:person_id)
     end
   end
 end

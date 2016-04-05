@@ -22,11 +22,11 @@ class Task < Activity
       activity_comment: [:body],
       activity_contacts_attributes: [:contact_id, :_destroy]
     }
-  ]
+  ].freeze
 
   # validates :activity_type, :presence => { :message => _( '/ Action is required') }
 
-  CALL_RESULTS = ['Attempted - Left Message', 'Attempted', 'Completed', 'Received']
+  CALL_RESULTS = ['Attempted - Left Message', 'Attempted', 'Completed', 'Received'].freeze
   CALL_NEXT_ACTIONS = ['Call Again',
                        'Email', 'Text', 'Message',
                        'Talk to In Person',
@@ -39,9 +39,9 @@ class Task < Activity
                        'Not Interested',
                        'None',
                        'Prayer Request',
-                       'Thank']
+                       'Thank'].freeze
 
-  APPOINTMENT_RESULTS = %w(Completed Attempted)
+  APPOINTMENT_RESULTS = %w(Completed Attempted).freeze
   APPOINTMENT_NEXT_ACTIONS = ['Call for Decision',
                               'Call',
                               'Email',
@@ -57,9 +57,9 @@ class Task < Activity
                               'Reschedule',
                               'None',
                               'Prayer Request',
-                              'Thank']
+                              'Thank'].freeze
 
-  EMAIL_RESULTS = %w(Completed Received)
+  EMAIL_RESULTS = %w(Completed Received).freeze
   EMAIL_NEXT_ACTIONS = ['Email Again',
                         'Call', 'Text', 'Message',
                         'Talk to In Person',
@@ -72,9 +72,9 @@ class Task < Activity
                         'Not Interested',
                         'None',
                         'Prayer Request',
-                        'Thank']
+                        'Thank'].freeze
 
-  FACEBOOK_MESSAGE_RESULTS = %w(Completed Received)
+  FACEBOOK_MESSAGE_RESULTS = %w(Completed Received).freeze
   FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again',
                                    'Call', 'Email',
                                    'Text',
@@ -88,9 +88,9 @@ class Task < Activity
                                    'Not Interested',
                                    'None',
                                    'Prayer Request',
-                                   'Thank']
+                                   'Thank'].freeze
 
-  TEXT_RESULTS = %w(Completed Received)
+  TEXT_RESULTS = %w(Completed Received).freeze
   TEXT_NEXT_ACTIONS = ['Text Again',
                        'Call', 'Email', 'Message',
                        'Talk to In Person',
@@ -103,9 +103,9 @@ class Task < Activity
                        'Not Interested',
                        'None',
                        'Prayer Request',
-                       'Thank']
+                       'Thank'].freeze
 
-  TALK_TO_IN_PERSON_RESULTS = %w(Completed)
+  TALK_TO_IN_PERSON_RESULTS = %w(Completed).freeze
   TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again',
                                     'Call', 'Email', 'Message', 'Text',
                                     'Cultivate Relationship',
@@ -117,9 +117,9 @@ class Task < Activity
                                     'Not Interested',
                                     'None',
                                     'Prayer Request',
-                                    'Thank']
+                                    'Thank'].freeze
 
-  PRAYER_REQUEST_RESULTS = %w(Completed)
+  PRAYER_REQUEST_RESULTS = %w(Completed).freeze
   PRAYER_REQUEST_NEXT_ACTIONS = ['Prayer Request',
                                  'Call', 'Email', 'Message', 'Text',
                                  'Talk to In Person',
@@ -131,26 +131,26 @@ class Task < Activity
                                  'Ask in Future',
                                  'Not Interested',
                                  'None',
-                                 'Thank']
+                                 'Thank'].freeze
 
   PRE_CALL_LETTER_NEXT_ACTIONS = ['Call to Follow Up',
                                   'Email',
                                   'Text',
                                   'Message',
                                   'Talk to In Person',
-                                  'None']
+                                  'None'].freeze
 
   REMINDER_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
   SUPPORT_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
 
-  MESSAGE_RESULTS = [_('Done'), _('Received')]
-  STANDARD_RESULTS = [_('Done')]
+  MESSAGE_RESULTS = [_('Done'), _('Received')].freeze
+  STANDARD_RESULTS = [_('Done')].freeze
 
   ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS + TALK_TO_IN_PERSON_RESULTS + PRAYER_REQUEST_RESULTS
 
   TASK_ACTIVITIES = ['Call', 'Appointment', 'Email', 'Text Message', 'Facebook Message',
                      'Letter', 'Newsletter', 'Pre Call Letter', 'Reminder Letter',
-                     'Support Letter', 'Thank', 'To Do', 'Talk to In Person', 'Prayer Request']
+                     'Support Letter', 'Thank', 'To Do', 'Talk to In Person', 'Prayer Request'].freeze
 
   assignable_values_for :activity_type, allow_blank: true do
     TASK_ACTIVITIES

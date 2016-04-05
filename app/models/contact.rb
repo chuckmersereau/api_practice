@@ -9,7 +9,7 @@ class Contact < ActiveRecord::Base
     :updated_at, :total_donations, :last_donation_date, :first_donation_date,
     :notes_saved_at, :last_activity, :last_letter, :last_phone_call,
     :last_pre_call, :last_thank, :uncompleted_tasks_count, :notes, :notes_saved_at
-  ]
+  ].freeze
 
   has_paper_trail on: [:destroy, :update],
                   meta: { related_object_type: 'AccountList',
@@ -74,14 +74,14 @@ class Contact < ActiveRecord::Base
       ],
       people_attributes: Person::PERMITTED_ATTRIBUTES
     }
-  ]
+  ].freeze
 
   MERGE_COPY_ATTRIBUTES = [
     :name, :pledge_amount, :status, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
     :pledge_start_date, :next_ask, :likely_to_give, :church_name, :no_appeals, :pls_id,
     :direct_deposit, :magazine, :pledge_received, :timezone, :last_activity, :last_appointment, :last_letter,
     :last_phone_call, :last_pre_call, :last_thank, :prayer_letters_id, :last_donation_date, :first_donation_date, :tnt_id
-  ]
+  ].freeze
 
   validates :name, presence: true
   validates :addresses, single_primary: { primary_field: :primary_mailing_address }, if: :user_changed
@@ -94,7 +94,7 @@ class Contact < ActiveRecord::Base
   before_save :set_notes_saved_at
   after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
   before_destroy :delete_from_letter_services, :delete_people
-  LETTER_SERVICES = [:pls, :prayer_letters]
+  LETTER_SERVICES = [:pls, :prayer_letters].freeze
 
   attr_accessor :user_changed
 
@@ -104,7 +104,7 @@ class Contact < ActiveRecord::Base
     'Appointment Scheduled', 'Call for Decision', 'Partner - Financial', 'Partner - Special',
     'Partner - Pray', 'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
     'Expired Referral'
-  ]
+  ].freeze
   assignable_values_for :status, allow_blank: true do
     ASSIGNABLE_STATUSES
   end
@@ -112,23 +112,23 @@ class Contact < ActiveRecord::Base
   INACTIVE_STATUSES = [
     'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
     'Expired Referral'
-  ]
+  ].freeze
   ACTIVE_STATUSES = ASSIGNABLE_STATUSES - INACTIVE_STATUSES
 
   IN_PROGRESS_STATUSES = [
     'Never Contacted', 'Ask in Future', 'Contact for Appointment',
     'Appointment Scheduled',
     'Call for Decision'
-  ]
+  ].freeze
 
   def status=(val)
     # handle deprecated values
-    case val
-    when 'Call for Appointment'
-      self[:status] = 'Contact for Appointment'
-    else
-      self[:status] = val
-    end
+    self[:status] = case val
+                    when 'Call for Appointment'
+                      'Contact for Appointment'
+                    else
+                      val
+                    end
   end
 
   assignable_values_for :likely_to_give, allow_blank: true do
@@ -184,14 +184,14 @@ class Contact < ActiveRecord::Base
     date_to_check = last_donation_date || pledge_start_date
     return false unless status == 'Partner - Financial' && pledge_frequency.present? && date_to_check.present?
 
-    case
-    when pledge_frequency >= 1.0
-      late_date = date_to_check + pledge_frequency.to_i.months
-    when pledge_frequency >= 0.4
-      late_date = date_to_check + 2.weeks
-    else
-      late_date = date_to_check + 1.week
-    end
+    late_date = case
+                when pledge_frequency >= 1.0
+                  date_to_check + pledge_frequency.to_i.months
+                when pledge_frequency >= 0.4
+                  date_to_check + 2.weeks
+                else
+                  date_to_check + 1.week
+                end
 
     min_late_date = Date.today - min_days
     max_late_date = max_days ? Date.today - max_days : Date.new(1951, 1, 1)
@@ -224,12 +224,12 @@ class Contact < ActiveRecord::Base
     return @primary_or_first_person if @primary_or_first_person
     return Person.new if people.blank?
 
-    if people.count == 1
-      @primary_or_first_person = people.first
-    else
-      @primary_or_first_person = people.alive.find_by(gender: 'male') || people.alive.order('created_at').first
-    end
-    if @primary_or_first_person && @primary_or_first_person.new_record? && !self.new_record?
+    @primary_or_first_person = if people.count == 1
+                                 people.first
+                               else
+                                 people.alive.find_by(gender: 'male') || people.alive.order('created_at').first
+                               end
+    if @primary_or_first_person && @primary_or_first_person.new_record? && !new_record?
       self.primary_person_id = @primary_or_first_person.id
     end
     @primary_or_first_person || Person.new
@@ -295,11 +295,12 @@ class Contact < ActiveRecord::Base
     if first_names[0] =~ /\((\w|\W)*\)/
       first_names.each { |first_name| first_name.sub!(/\((\w|\W)*\)/, '') }
       first_names.each(&:strip!)
-      if first_names[1].present?
-        return "#{first_names[0]} #{_('and')} #{first_names[1]} #{last_name}"
-      else
-        return "#{first_names[0]} #{last_name}"
-      end
+      env_greeting = if first_names[1].present?
+                       "#{first_names[0]} #{_('and')} #{first_names[1]} #{last_name}"
+                     else
+                       "#{first_names[0]} #{last_name}"
+                     end
+      return env_greeting
     end
     if donor_accounts.where(name: name).any?
       # Contacts from the donor system usually have nicknames, not a different
@@ -382,15 +383,15 @@ class Contact < ActiveRecord::Base
 
   def self.pledge_frequencies
     {
-      (0.23076923076923).to_d => _('Weekly'),
-      (0.46153846153846).to_d => _('Fortnightly'),
-      (1.0).to_d => _('Monthly'),
-      (2.0).to_d => _('Bi-Monthly'),
-      (3.0).to_d => _('Quarterly'),
-      (4.0).to_d => _('Quad-Monthly'),
-      (6.0).to_d => _('Semi-Annual'),
-      (12.0).to_d => _('Annual'),
-      (24.0).to_d => _('Biennial')
+      0.23076923076923.to_d => _('Weekly'),
+      0.46153846153846.to_d => _('Fortnightly'),
+      1.0.to_d => _('Monthly'),
+      2.0.to_d => _('Bi-Monthly'),
+      3.0.to_d => _('Quarterly'),
+      4.0.to_d => _('Quad-Monthly'),
+      6.0.to_d => _('Semi-Annual'),
+      12.0.to_d => _('Annual'),
+      24.0.to_d => _('Biennial')
     }
   end
 
@@ -406,9 +407,9 @@ class Contact < ActiveRecord::Base
       next if merged_people.include?(person)
 
       other_people = people.select do |p|
-        p.first_name.to_s.strip.downcase == person.first_name.to_s.strip.downcase &&
-        p.last_name.to_s.strip.downcase == person.last_name.to_s.strip.downcase &&
-        p.id != person.id
+        p.first_name.to_s.strip.casecmp(person.first_name.to_s.strip.downcase).zero? &&
+          p.last_name.to_s.strip.casecmp(person.last_name.to_s.strip.downcase).zero? &&
+          p.id != person.id
       end
       next unless other_people
       other_people.each do |other_person|
@@ -425,7 +426,7 @@ class Contact < ActiveRecord::Base
     donor_accounts.reload.each do |account|
       other = donor_accounts.find do |da|
         da.id != account.id &&
-        da.account_number == account.account_number
+          da.account_number == account.account_number
       end
       next unless other
       account.merge(other)
@@ -462,7 +463,7 @@ class Contact < ActiveRecord::Base
 
   def donations
     Donation.where(donor_account_id: donor_accounts.pluck(:id))
-      .for_accounts(account_list.designation_accounts)
+            .for_accounts(account_list.designation_accounts)
   end
 
   def last_donation
@@ -475,7 +476,7 @@ class Contact < ActiveRecord::Base
 
   def prev_month_donation_date
     donations.where('donation_date <= ?', (last_donation_month_end << 1).end_of_month)
-      .pluck(:donation_date).first
+             .pluck(:donation_date).first
   end
 
   def monthly_avg_current

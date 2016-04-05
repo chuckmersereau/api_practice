@@ -170,7 +170,8 @@ describe Address do
     it 'does not update start date and source for changes affecting only whitespace or nil to blank' do
       start = Date.new(2014, 1, 15)
       [:street, :city, :state, :postal_code, :country].each do |field|
-        { nil => '', ' a ' => 'a', ' ' => nil, nil => ' ', 'a' => ' a ' }.each do |from_val, to_val|
+        # rubocop:disable DuplicatedKey
+        { nil => '', ' a ' => 'a', ' ' => nil, nil => ' ', 'b' => ' b ' }.each do |from_val, to_val|
           a = Address.create(source: 'import', start_date: start, field => from_val)
           a.update(field => to_val, user_changed: true)
           expect(a.start_date).to eq(start)

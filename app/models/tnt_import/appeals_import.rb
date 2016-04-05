@@ -53,13 +53,13 @@ class TntImport::AppealsImport
       next unless donor_account
 
       donor_contacts = @account_list.contacts.joins(:donor_accounts)
-                       .where(donor_accounts: { id: donor_account.id }).to_a
+                                    .where(donor_accounts: { id: donor_account.id }).to_a
       donor_contacts_by_appeal_id[appeal.id] ||= []
       donor_contacts_by_appeal_id[appeal.id].push(*donor_contacts)
 
       donation = donor_account.donations.where(donation_date: row['GiftDate'], amount: row['Amount'])
-                 .where(designation_account_id: designation_account_ids)
-                 .find_by('appeal_id is null or appeal_id = ?', appeal.id)
+                              .where(designation_account_id: designation_account_ids)
+                              .find_by('appeal_id is null or appeal_id = ?', appeal.id)
       next if donation.blank?
       donation.update(appeal: appeal, appeal_amount: row['AppealAmount'])
     end

@@ -257,7 +257,7 @@ class ContactDuplicatesFinder
               and dup_name_male_ratios.male_ratio > #{MALE_NAME_CONFIDENCE_LVL}))",
     'CREATE INDEX ON tmp_dups (person_id)',
     'CREATE INDEX ON tmp_dups (dup_person_id)'
-  ]
+  ].freeze
 
   def create_temp_tables
     drop_temp_tables_if_exist
@@ -294,7 +294,7 @@ class ContactDuplicatesFinder
       and addresses.street is not null and dup_addresses.street is not null
       and addresses.street <> '' and dup_addresses.street <> ''
       and addresses.deleted <> 't' and dup_addresses.deleted <> 't'
-      and addresses.master_address_id = dup_addresses.master_address_id"
+      and addresses.master_address_id = dup_addresses.master_address_id".freeze
   def dup_contacts_query
     exec_query(DUP_CONTACTS_SQL).rows
   end
@@ -320,7 +320,7 @@ class ContactDuplicatesFinder
     WHERE contact_people.contact_id = dup_contact_people.contact_id
     and contacts.name NOT ilike ('%' || ppl.first_name || '% and %' || dups.first_name || '%')
       and contacts.name NOT ilike ('%' || dups.first_name || '% and %' || ppl.first_name || '%')
-      ORDER BY priority desc"
+      ORDER BY priority desc".freeze
   def dup_people_query
     exec_query(DUP_PEOPLE_NEW_SQL).to_hash.map(&:symbolize_keys)
   end

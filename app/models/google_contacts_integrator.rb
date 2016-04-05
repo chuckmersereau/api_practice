@@ -4,11 +4,11 @@ require 'google_contacts_cache'
 class GoogleContactsIntegrator
   attr_accessor :assigned_remote_ids, :cache, :client
 
-  CONTACTS_GROUP_TITLE = 'MPDX'
+  CONTACTS_GROUP_TITLE = 'MPDX'.freeze
 
   # If a contact in MPDX gets marked as inactive, e.g. 'Not Interested', then they won't be synced with Google anymore
   # but they will be assigned to this Google group so the user can delete it if they want to.
-  INACTIVE_GROUP_TITLE = 'Inactive'
+  INACTIVE_GROUP_TITLE = 'Inactive'.freeze
 
   def initialize(google_integration)
     @integration = google_integration
@@ -24,9 +24,8 @@ class GoogleContactsIntegrator
     if e.response && e.response.status >= 500 || e.response.status == 403
       # Try again on server errs or rate limit exceeded
       raise LowerRetryWorker::RetryJobButNoRollbarError
-    else
-      raise e
     end
+    raise e
   end
 
   def sync_contacts
@@ -89,9 +88,9 @@ class GoogleContactsIntegrator
     # Look for records that have both the contact_id and person_id set, because the Google Import uses an old method
     # of just setting the person_id and we don't want to wrongly interpret imported Google contacts as merge losers.
     @account.google_contacts
-      .joins('LEFT JOIN contact_people ON '\
+            .joins('LEFT JOIN contact_people ON '\
         'google_contacts.person_id = contact_people.person_id AND contact_people.contact_id = google_contacts.contact_id')
-      .where('contact_people.id IS NULL').where.not(contact_id: nil).where.not(person_id: nil).readonly(false)
+            .where('contact_people.id IS NULL').where.not(contact_id: nil).where.not(person_id: nil).readonly(false)
   end
 
   def delete_g_contact_merge_loser(g_contact_link)
@@ -111,8 +110,8 @@ class GoogleContactsIntegrator
 
   def cleanup_inactive_g_contacts
     GoogleContact.joins(:contact).where(contacts: { account_list_id: @integration.account_list.id })
-      .where(Contact.inactive_conditions).where(google_account: @account).readonly(false)
-      .each(&method(:cleanup_inactive_g_contact))
+                 .where(Contact.inactive_conditions).where(google_account: @account).readonly(false)
+                 .each(&method(:cleanup_inactive_g_contact))
     api_user.send_batched_requests
   end
 
@@ -135,12 +134,12 @@ class GoogleContactsIntegrator
       # For success or contact not found, just go ahead and delete the link
       g_contact_link.destroy
     when 412
-      fail status.inspect if num_retries < 1
+      raise status.inspect if num_retries < 1
       # For 412 Etags Mismatch, remove the cached Google contact and retry the operation again
       @cache.remove_g_contact(g_contact)
       cleanup_inactive_g_contact(g_contact_link, num_retries - 1)
     else
-      fail status.inspect
+      raise status.inspect
     end
   rescue => e
     Rollbar.raise_or_notify(e)
@@ -152,8 +151,8 @@ class GoogleContactsIntegrator
 
   def setup_assigned_remote_ids
     @assigned_remote_ids = @integration.account_list.contacts.joins(:people)
-                           .joins('INNER JOIN google_contacts ON google_contacts.person_id = people.id')
-                           .pluck('google_contacts.remote_id').to_set
+                                       .joins('INNER JOIN google_contacts ON google_contacts.person_id = people.id')
+                                       .pluck('google_contacts.remote_id').to_set
   end
 
   def contacts_to_sync
@@ -182,21 +181,21 @@ class GoogleContactsIntegrator
     updated_link_ids = updated_g_contact_links(updated_g_contacts).map(&:id)
 
     @integration.account_list.active_contacts
-      .joins(:people)
-      .joins("LEFT JOIN addresses ON addresses.addressable_id = contacts.id AND addresses.addressable_type = 'Contact'")
-      .joins('LEFT JOIN email_addresses ON people.id = email_addresses.person_id')
-      .joins('LEFT JOIN phone_numbers ON people.id = phone_numbers.person_id')
-      .joins('LEFT JOIN person_websites ON people.id = person_websites.person_id')
-      .joins('LEFT JOIN google_contacts ON google_contacts.person_id = people.id AND google_contacts.contact_id = contacts.id '\
+                .joins(:people)
+                .joins("LEFT JOIN addresses ON addresses.addressable_id = contacts.id AND addresses.addressable_type = 'Contact'")
+                .joins('LEFT JOIN email_addresses ON people.id = email_addresses.person_id')
+                .joins('LEFT JOIN phone_numbers ON people.id = phone_numbers.person_id')
+                .joins('LEFT JOIN person_websites ON people.id = person_websites.person_id')
+                .joins('LEFT JOIN google_contacts ON google_contacts.person_id = people.id AND google_contacts.contact_id = contacts.id '\
           "AND google_contacts.google_account_id = #{quote_sql(@account.id)}")
-      .group('contacts.id, google_contacts.last_synced, google_contacts.id')
-      .having('google_contacts.last_synced IS NULL ' \
+                .group('contacts.id, google_contacts.last_synced, google_contacts.id')
+                .having('google_contacts.last_synced IS NULL ' \
         'OR google_contacts.last_synced < ' \
             'GREATEST(contacts.updated_at, MAX(contact_people.updated_at), MAX(people.updated_at), MAX(addresses.updated_at), ' \
                 'MAX(email_addresses.updated_at), MAX(phone_numbers.updated_at), MAX(person_websites.updated_at))' +
         (updated_link_ids.empty? ? '' : " OR google_contacts.id IN (#{quote_sql_list(updated_link_ids)})"))
-      .distinct
-      .readonly(false)
+                .distinct
+                .readonly(false)
   end
 
   # Finds Google contact link record that have been remotely modified since their last sync given a list of recently
@@ -207,7 +206,7 @@ class GoogleContactsIntegrator
 
     g_contacts_by_id = Hash[updated_g_contacts.map { |g_contact| [g_contact.id, g_contact] }]
     g_contact_links = GoogleContact.select(:id, :remote_id, :last_synced)
-                      .where(google_account: @account).where(remote_id: updated_remote_ids).where.not(last_synced: nil).to_a
+                                   .where(google_account: @account).where(remote_id: updated_remote_ids).where.not(last_synced: nil).to_a
 
     g_contact_links.select do |g_contact_link|
       g_contact = g_contacts_by_id[g_contact_link.remote_id]
@@ -225,8 +224,8 @@ class GoogleContactsIntegrator
 
   def sync_contact(contact)
     g_contacts_and_links = contact.contact_people.joins(:person)
-                           .order('contact_people.primary::int desc').order(:person_id)
-                           .map(&method(:get_g_contact_and_link))
+                                  .order('contact_people.primary::int desc').order(:person_id)
+                                  .map(&method(:get_g_contact_and_link))
     return if g_contacts_and_links.empty?
 
     GoogleContactSync.sync_contact(contact, g_contacts_and_links)
@@ -350,15 +349,15 @@ class GoogleContactsIntegrator
       return true
     when 403
       # 403 is user rate limit exceeded, so don't retry the particular contact, just queue the whole job for retry
-      fail LowerRetryWorker::RetryJobButNoRollbarError
+      raise LowerRetryWorker::RetryJobButNoRollbarError
     else
       # Failed but can't just fix by resyncing the contact, so raise an error
-      fail(status.inspect)
+      raise(status.inspect)
     end
   end
 
   def save_g_contact_links(g_contacts_and_links)
-    g_contacts_and_links.each do|g_contact_and_link|
+    g_contacts_and_links.each do |g_contact_and_link|
       g_contact, g_contact_link = g_contact_and_link
       @assigned_remote_ids.add(g_contact.id)
       g_contact_link.update(last_data: g_contact.formatted_attrs, remote_id: g_contact.id, last_etag: g_contact.etag, last_synced: Time.now)

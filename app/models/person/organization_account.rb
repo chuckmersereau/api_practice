@@ -96,7 +96,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
 
     # Set the last download date to whenever the last donation was received
     last_donation_date = user.donations
-                         .where.not(remote_id: nil).order('donation_date desc').first.donation_date
+                             .where.not(remote_id: nil).order('donation_date desc').first.donation_date
     update_column(:last_download, last_donation_date)
   end
 

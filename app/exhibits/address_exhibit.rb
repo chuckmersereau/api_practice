@@ -38,11 +38,11 @@ class AddressExhibit < DisplayCase::Exhibit
   end
 
   def address_change_email_body
-    if source_donor_account.present?
-      donor_info = "\"#{source_donor_account.name}\" (donor ##{source_donor_account.account_number})"
-    else
-      donor_info = "\"#{addressable.name}\""
-    end
+    donor_info = if source_donor_account.present?
+                   "\"#{source_donor_account.name}\" (donor ##{source_donor_account.account_number})"
+                 else
+                   "\"#{addressable.name}\""
+                 end
 
     "Dear Donation Services,\n\n"\
     "One of my donors, #{donor_info} has a new current address.\n\n"\

@@ -9,9 +9,15 @@ AllCops:
     - 'vendor/**/*'
     - 'bin/**/*'
 
-  RunRailsCops: true
   UseCache: true
   CacheRootDirectory: 'cache/'
+  TargetRubyVersion: 2.3
+
+Rails:
+  Enabled: true
+
+FrozenStringLiteralComment:
+  Enabled: false
 
 Metrics/MethodLength:
   Enabled: false

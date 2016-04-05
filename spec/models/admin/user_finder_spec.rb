@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Admin::UserFinder, '.find_users' do
   it 'finds user by id' do
     user = create(:user)
-    expect(Admin::UserFinder.find_users("#{user.id}")).to eq [user]
+    expect(Admin::UserFinder.find_users(user.id.to_s)).to eq [user]
   end
 
   it 'finds users by name' do

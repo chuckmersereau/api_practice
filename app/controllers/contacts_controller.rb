@@ -219,7 +219,7 @@ class ContactsController < ApplicationController
     contacts_attrs = params[:account_list][:contacts_attributes]
     @contacts, @bad_contacts_count = multi_add.add_contacts(contacts_attrs)
 
-    if @contacts.length > 0
+    unless @contacts.empty?
       flash[:notice] = _('You have successfully added %{contacts_count:referrals}.').to_str.localize %
                        { contacts_count: @contacts.length, referrals: { one: _('1 referral'), other: _('%{contacts_count} referrals') } }
     end
@@ -245,7 +245,7 @@ class ContactsController < ApplicationController
     contacts_attrs = params[:account_list][:contacts_attributes]
     @contacts, @bad_contacts_count = multi_add.add_contacts(contacts_attrs)
 
-    if @contacts.length > 0
+    unless @contacts.empty?
       flash[:notice] = _('You have successfully added %{contacts_count:contacts}.').to_str.localize %
                        { contacts_count: @contacts.length,
                          contacts: { one: _('1 contact'), other: _('%{contacts_count} contacts') } }
@@ -312,11 +312,11 @@ class ContactsController < ApplicationController
 
   def filtered_contacts
     filtered_contacts = current_account_list.contacts.order('contacts.name')
-    if filters_params.present?
-      filtered_contacts = ContactFilter.new(filters_params).filter(filtered_contacts, current_account_list)
-    else
-      filtered_contacts = filtered_contacts.active
-    end
+    filtered_contacts = if filters_params.present?
+                          ContactFilter.new(filters_params).filter(filtered_contacts, current_account_list)
+                        else
+                          filtered_contacts.active
+                        end
     filtered_contacts
   end
 
@@ -326,8 +326,8 @@ class ContactsController < ApplicationController
       view_options = current_user.contacts_view_options[current_account_list.id.to_s] || {}
       if params[:per_page] && view_options[:per_page].to_s != params[:per_page]
         view_options[:page] = 1
-      else
-        view_options[:page] = params[:page] if params[:page]
+      elsif params[:page]
+        view_options[:page] = params[:page]
       end
       view_options[:per_page] = params[:per_page]
 

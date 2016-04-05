@@ -5,7 +5,7 @@ class Admin::AccountDupPhonesFix
 
   def fix
     Person.where(id: person_ids_multi_phones).includes(:phone_numbers)
-      .find_each(&method(:clean_dup_person_phones))
+          .find_each(&method(:clean_dup_person_phones))
   end
 
   private

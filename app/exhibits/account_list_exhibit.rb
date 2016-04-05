@@ -8,7 +8,7 @@ class AccountListExhibit < DisplayCase::Exhibit
   end
 
   def balances(user)
-    return '' if designation_accounts.length == 0
+    return '' if designation_accounts.empty?
     if designation_accounts.length > 1
       balance =
         if designation_profile(user).try(:balance)

@@ -12,6 +12,6 @@ class Api::V1::PeopleController < Api::V1::BaseController
   def people
     # We want all the people associated with contacts, and also other users of this account list
     Person.where(id: current_account_list.people.pluck('people.id') + current_account_list.users.pluck('people.id'))
-      .includes(:phone_numbers, :email_addresses)
+          .includes(:phone_numbers, :email_addresses)
   end
 end

@@ -344,7 +344,7 @@ module GoogleContactSync
 
   def normalize_address(address)
     address.find_or_create_master_address unless address.master_address_id
-    fail "No master_address_id for address: #{address}" unless address.master_address_id
+    raise "No master_address_id for address: #{address}" unless address.master_address_id
     address.master_address_id
   end
 

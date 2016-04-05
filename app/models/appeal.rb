@@ -8,7 +8,7 @@ class Appeal < ActiveRecord::Base
 
   default_scope { order(created_at: :desc) }
 
-  PERMITTED_ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :account_list_id]
+  PERMITTED_ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :account_list_id].freeze
 
   def add_and_remove_contacts(account_list, contact_ids)
     contact_ids ||= []
@@ -46,12 +46,10 @@ class Appeal < ActiveRecord::Base
   def statuses_and_tags_where(statuses, tags)
     if statuses.nil? || statuses.empty?
       tags.nil? || tags.empty? ? '1=0' : "tags.name IN (#{quote_sql_list(tags)})"
+    elsif tags.nil? || tags.empty?
+      "contacts.status IN (#{quote_sql_list(statuses)})"
     else
-      if tags.nil? || tags.empty?
-        "contacts.status IN (#{quote_sql_list(statuses)})"
-      else
-        "contacts.status IN (#{quote_sql_list(statuses)}) OR tags.name IN (#{quote_sql_list(tags)})"
-      end
+      "contacts.status IN (#{quote_sql_list(statuses)}) OR tags.name IN (#{quote_sql_list(tags)})"
     end
   end
 
@@ -130,9 +128,9 @@ class Appeal < ActiveRecord::Base
   def no_increased_recently(contacts, prev_full_months = 3)
     increased_recently_ids = contacts.scoping do
       account_list.contacts
-      .where('pledge_amount is not null AND pledge_amount > 0 AND pledge_frequency <= 4')
-      .where('last_donation_date >= ?', (Date.today.prev_month << prev_full_months).beginning_of_month)
-      .to_a.select { |contact| increased_recently?(contact, prev_full_months) }.map(&:id)
+                  .where('pledge_amount is not null AND pledge_amount > 0 AND pledge_frequency <= 4')
+                  .where('last_donation_date >= ?', (Date.today.prev_month << prev_full_months).beginning_of_month)
+                  .to_a.select { |contact| increased_recently?(contact, prev_full_months) }.map(&:id)
     end
 
     return contacts if increased_recently_ids.empty?
@@ -163,10 +161,10 @@ class Appeal < ActiveRecord::Base
 
   def monthly_donation_totals(contact, months_ago)
     contact.donations
-      .select("SUM(amount) total, date_part('year', donation_date) as year, date_part('month', donation_date) as month")
-      .where('donation_date > ?', months_ago.months.ago.beginning_of_month)
-      .group("date_part('year', donation_date), date_part('month', donation_date)").reorder('2, 3')
-      .to_a.map { |mt| { total: mt.total, date: Date.new(mt.year, mt.month, 1) } }
+           .select("SUM(amount) total, date_part('year', donation_date) as year, date_part('month', donation_date) as month")
+           .where('donation_date > ?', months_ago.months.ago.beginning_of_month)
+           .group("date_part('year', donation_date), date_part('month', donation_date)").reorder('2, 3')
+           .to_a.map { |mt| { total: mt.total, date: Date.new(mt.year, mt.month, 1) } }
   end
 
   def calc_all_elapsed_months(monthly_totals, pledge_frequency)

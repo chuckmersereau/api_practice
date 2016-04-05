@@ -5,9 +5,9 @@ class CsvImport
     'Mailing City', 'Mailing State', 'Mailing Postal Code', 'Mailing Country', 'First Name',
     'Last Name', 'Primary Email', 'Primary Phone', 'Spouse First Name', 'Spouse Last Name',
     'Spouse Email', 'Spouse Phone'
-  ]
+  ].freeze
 
-  REQUIRED_HEADERS = ['Contact Name', 'First Name']
+  REQUIRED_HEADERS = ['Contact Name', 'First Name'].freeze
 
   def initialize(import)
     @import = import

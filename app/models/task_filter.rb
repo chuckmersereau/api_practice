@@ -23,11 +23,11 @@ class TaskFilter
     end
 
     if @filters[:overdue].present?
-      if @filters[:overdue].to_s == 'true'
-        filtered_tasks = filtered_tasks.overdue
-      else
-        filtered_tasks = filtered_tasks.where('start_at > ?', Time.now.beginning_of_day)
-      end
+      filtered_tasks = if @filters[:overdue].to_s == 'true'
+                         filtered_tasks.overdue
+                       else
+                         filtered_tasks.where('start_at > ?', Time.now.beginning_of_day)
+                       end
     end
 
     if @filters[:tags].present? && @filters[:tags].first != ''

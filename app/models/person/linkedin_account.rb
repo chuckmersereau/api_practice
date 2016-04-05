@@ -35,7 +35,7 @@ class Person::LinkedinAccount < ActiveRecord::Base
 
     # grab some valid linkedin credentials
     l = Person::LinkedinAccount.valid_token.first
-    fail LinkedIn::Errors::UnauthorizedError, _('The connection to your LinkedIn account needs to be renewed.') unless l
+    raise LinkedIn::Errors::UnauthorizedError, _('The connection to your LinkedIn account needs to be renewed.') unless l
 
     begin
       LINKEDIN.authorize_from_access(l.token, l.secret)

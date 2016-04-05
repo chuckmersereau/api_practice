@@ -22,7 +22,7 @@ class Admin::PrimaryAddressFix
 
   def make_others_non_primary(mailing_address)
     @contact.addresses.where.not(id: mailing_address.id)
-      .where(primary_mailing_address: true).find_each do |address|
+            .where(primary_mailing_address: true).find_each do |address|
       # Update each record one-by-one so PaperTrail tracks changes
       address.update(primary_mailing_address: false)
     end
@@ -30,6 +30,6 @@ class Admin::PrimaryAddressFix
 
   def make_historic_non_primary
     @contact.addresses.where(historic: true, primary_mailing_address: true)
-      .find_each { |address| address.update(primary_mailing_address: false) }
+            .find_each { |address| address.update(primary_mailing_address: false) }
   end
 end

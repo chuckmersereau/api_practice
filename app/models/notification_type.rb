@@ -59,7 +59,7 @@ class NotificationType < ActiveRecord::Base
   protected
 
   def task_description_template
-    fail 'This method (or create_task and task_description) must be implemented in a subclass'
+    raise 'This method (or create_task and task_description) must be implemented in a subclass'
   end
 
   def task_activity_type
@@ -71,6 +71,6 @@ class NotificationType < ActiveRecord::Base
   end
 
   def check_for_donation_to_notify(_contact)
-    fail 'This method (or check) must be implemented in a subclass'
+    raise 'This method (or check) must be implemented in a subclass'
   end
 end

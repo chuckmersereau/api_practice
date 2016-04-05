@@ -1,12 +1,12 @@
 class Api::V1::ProgressController < Api::V1::BaseController
-  ACTIVE_STATUSES_FOR_STAT = ['Never Contacted', 'Contact for Appointment', '', nil]
+  ACTIVE_STATUSES_FOR_STAT = ['Never Contacted', 'Contact for Appointment', '', nil].freeze
 
   def index
-    if params[:start_date]
-      @start_date = Date.parse(params[:start_date])
-    else
-      @start_date = Date.today.beginning_of_week
-    end
+    @start_date = if params[:start_date]
+                    Date.parse(params[:start_date])
+                  else
+                    Date.today.beginning_of_week
+                  end
     @end_date = @start_date.end_of_week
 
     @counts = {
@@ -67,16 +67,16 @@ class Api::V1::ProgressController < Api::V1::BaseController
   def contact_counts
     {
       active: current_account_list.contacts
-        .where(status: ACTIVE_STATUSES_FOR_STAT)
-        .count,
+                                  .where(status: ACTIVE_STATUSES_FOR_STAT)
+                                  .count,
       referrals: current_account_list.contacts
-        .joins(:contact_referrals_to_me).uniq
-        .where('contact_referrals.created_at BETWEEN ? AND ?', @start_date, @end_date)
-        .count,
+                                     .joins(:contact_referrals_to_me).uniq
+                                     .where('contact_referrals.created_at BETWEEN ? AND ?', @start_date, @end_date)
+                                     .count,
       referrals_on_hand: current_account_list.contacts
-        .joins(:contact_referrals_to_me).uniq
-        .where(status: Contact::IN_PROGRESS_STATUSES)
-        .count
+                                             .joins(:contact_referrals_to_me).uniq
+                                             .where(status: Contact::IN_PROGRESS_STATUSES)
+                                             .count
     }
   end
 

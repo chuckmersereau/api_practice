@@ -88,20 +88,17 @@ class MailChimpAccount < ActiveRecord::Base
     sent_emails = gb.campaign_members(cid: campaign_id, status: 'sent')['data']
                   .map { |member| member['email'] }
     account_list.contacts.joins(people: :primary_email_address)
-      .where(email_addresses: { email: sent_emails }).references(:email_addresses)
-      .uniq.each { |contact| create_campaign_activity(contact, subject) }
+                .where(email_addresses: { email: sent_emails }).references(:email_addresses)
+                .uniq.each { |contact| create_campaign_activity(contact, subject) }
   rescue Gibbon::MailChimpError => e
-    if e.message.include?('code 301')
-      # Campaign stats are not available until the campaign has been completely
-      # sent. (code 301)
-      # This erorr occurs either if the campaign really is in the midst of
-      # sending or if the campaign is for some reason stuck in the "sending"
-      # status, so keep retrying the job for one hour then give up.
-      if Time.now.utc - campaign_send_time(campaign_id) < 1.hour
-        raise LowerRetryWorker::RetryJobButNoRollbarError
-      end
-    else
-      raise e
+    raise e unless e.message.include?('code 301')
+    # Campaign stats are not available until the campaign has been completely
+    # sent. (code 301)
+    # This erorr occurs either if the campaign really is in the midst of
+    # sending or if the campaign is for some reason stuck in the "sending"
+    # status, so keep retrying the job for one hour then give up.
+    if Time.now.utc - campaign_send_time(campaign_id) < 1.hour
+      raise LowerRetryWorker::RetryJobButNoRollbarError
     end
   end
 
@@ -179,7 +176,7 @@ class MailChimpAccount < ActiveRecord::Base
     when e.message.include?('code 214')
       # The new email address "xxxxx@example.com" is already subscribed to this list
     else
-      fail e
+      raise e
     end
   end
 
@@ -226,8 +223,8 @@ class MailChimpAccount < ActiveRecord::Base
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
     contacts.includes(people: :primary_email_address)
-      .where.not(email_addresses: { historic: true })
-      .references('email_addresses')
+            .where.not(email_addresses: { historic: true })
+            .references('email_addresses')
   end
 
   def export_to_list(list_id, contacts)

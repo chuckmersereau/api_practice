@@ -163,7 +163,7 @@ class AccountList < ActiveRecord::Base
     end_month = end_date.month
     if start_month == end_month
       people_with_birthdays = people.where('people.birthday_month = ?', start_month)
-                              .where('people.birthday_day BETWEEN ? AND ?', start_date.day, end_date.day)
+                                    .where('people.birthday_day BETWEEN ? AND ?', start_date.day, end_date.day)
     else
       people_with_birthdays = people.where("(people.birthday_month = ? AND people.birthday_day >= ?)
                                            OR (people.birthday_month = ? AND people.birthday_day <= ?)",
@@ -171,7 +171,7 @@ class AccountList < ActiveRecord::Base
 
     end
     people_with_birthdays.alive
-      .order('people.birthday_month, people.birthday_day').merge(contacts.active)
+                         .order('people.birthday_month, people.birthday_day').merge(contacts.active)
   end
 
   def contacts_with_anniversaries(start_date, end_date)
@@ -200,15 +200,15 @@ class AccountList < ActiveRecord::Base
     return @top_50_percent if @top_50_percent
     financial_partners_count = contacts.where('pledge_amount > 0').count
     @top_50_percent = contacts.where('pledge_amount > 0')
-                      .order('(pledge_amount::numeric / (pledge_frequency::numeric)) desc')
-                      .limit(financial_partners_count / 2)
+                              .order('(pledge_amount::numeric / (pledge_frequency::numeric)) desc')
+                              .limit(financial_partners_count / 2)
   end
 
   def bottom_50_percent
     return @button if @bottom_50_percent
     @bottom_50_percent = contacts.where('pledge_amount > 0')
-                         .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
-                         .limit(contacts.where('pledge_amount > 0').count / 2)
+                                 .order('(pledge_amount::numeric / (pledge_frequency::numeric))')
+                                 .limit(contacts.where('pledge_amount > 0').count / 2)
   end
 
   def no_activity_since(date, contacts_scope = nil, activity_type = nil)
@@ -231,9 +231,9 @@ class AccountList < ActiveRecord::Base
 
       other_contacts = ordered_contacts.select do |c|
         c.name == contact.name &&
-        c.id != contact.id &&
-        (c.donor_accounts.first == contact.donor_accounts.first ||
-         c.addresses.find { |a| contact.addresses.find { |ca| ca.equal_to? a } })
+          c.id != contact.id &&
+          (c.donor_accounts.first == contact.donor_accounts.first ||
+           c.addresses.find { |a| contact.addresses.find { |ca| ca.equal_to? a } })
       end
       next unless other_contacts.present?
       other_contacts.each do |other_contact|
@@ -265,7 +265,7 @@ class AccountList < ActiveRecord::Base
       # a monthly donor.
       gifts = donations.where(donor_account_id: contact.donor_account_ids,
                               designation_account_id: designation_account_ids)
-              .order('donation_date desc')
+                       .order('donation_date desc')
       latest_donation = gifts[0]
 
       next unless latest_donation
@@ -409,7 +409,7 @@ class AccountList < ActiveRecord::Base
     # Find the Google integrations 1 by 1 so accounts with multiple integrations
     # can release memory associated with the sync.
     google_integrations.where(contacts_integration: true)
-      .find_each(batch_size: 1) { |g_i| g_i.sync_data('contacts') }
+                       .find_each(batch_size: 1) { |g_i| g_i.sync_data('contacts') }
   end
 
   def import_donations

@@ -31,7 +31,7 @@ def try_frequency!(contact, frequency)
 
   # If the person gave between 3 and 4 times in the past 3 complete periods +
   # partial current period then assuming they give at this frequency.
-  return false unless (3..4).include?(donations.count) &&
+  return false unless (3..4).cover?(donations.count) &&
                       contact.pledge_frequency.nil?
 
   amount = donations.first.amount

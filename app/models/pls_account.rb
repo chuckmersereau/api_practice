@@ -10,7 +10,7 @@ class PlsAccount < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
   sidekiq_options unique: true
-  SERVICE_URL = 'https://www.myletterservice.org'
+  SERVICE_URL = 'https://www.myletterservice.org'.freeze
 
   belongs_to :account_list
   after_create :queue_subscribe_contacts
@@ -22,7 +22,7 @@ class PlsAccount < ActiveRecord::Base
 
   def subscribe_contacts
     contacts = account_list.contacts.includes([:primary_address, { primary_person: :companies }])
-               .select(&:should_be_in_prayer_letters?)
+                           .select(&:should_be_in_prayer_letters?)
     contacts.each(&method(:add_or_update_contact))
 
     contact_subscribe_params = contacts.map { |c| contact_params(c, true) }
@@ -143,7 +143,7 @@ class PlsAccount < ActiveRecord::Base
     update_column(:valid_token, false)
     AccountMailer.pls_invalid_token(account_list).deliver
 
-    fail AccessError
+    raise AccessError
   end
 
   class AccessError < StandardError

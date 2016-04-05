@@ -6,26 +6,26 @@ class DonationsController < ApplicationController
 
   def index
     if @contact
-      if @contact.donor_account_ids.present?
-        @all_donations = current_account_list.donations.where(donor_account_id: @contact.donor_account_ids)
-      else
-        # If the contact isn't linked to a donor account, they're not going to have any donations.
-        @all_donations = Donation.where('1 <> 1')
-      end
+      @all_donations = if @contact.donor_account_ids.present?
+                         current_account_list.donations.where(donor_account_id: @contact.donor_account_ids)
+                       else
+                         # If the contact isn't linked to a donor account, they're not going to have any donations.
+                         Donation.where('1 <> 1')
+                       end
       @donations = @all_donations.page(params[:page])
       setup_chart unless params[:page]
     else
       @page_title = _('Donations')
 
-      if params[:start_date]
-        @start_date = Date.parse(params[:start_date])
-      else
-        @start_date = Date.today.beginning_of_month
-      end
+      @start_date = if params[:start_date]
+                      Date.parse(params[:start_date])
+                    else
+                      Date.today.beginning_of_month
+                    end
       @end_date = @start_date.end_of_month
       @donations = current_account_list.donations.where('donation_date BETWEEN ? AND ?', @start_date, @end_date)
-                   .where('contacts.account_list_id' => current_account_list.id)
-                   .includes(donor_account: :contacts)
+                                       .where('contacts.account_list_id' => current_account_list.id)
+                                       .includes(donor_account: :contacts)
     end
   end
 
@@ -63,7 +63,7 @@ class DonationsController < ApplicationController
     @by_month = @all_donations.where('donation_date >= ?', 12.months.ago.beginning_of_month).group_by { |r| r.donation_date.beginning_of_month }
     @by_month_index = 12.downto(0).map { |i| i.months.ago.to_date.beginning_of_month }
     @prior_year = @all_donations.where('donation_date >= ? AND donation_date < ?', 24.months.ago.beginning_of_month, 11.months.ago.beginning_of_month)
-                  .group_by { |r| r.donation_date.beginning_of_month }
+                                .group_by { |r| r.donation_date.beginning_of_month }
     @prior_year_index = 24.downto(12).map { |i| i.months.ago.to_date.beginning_of_month }
   end
 

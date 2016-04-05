@@ -17,12 +17,12 @@ class Address < ActiveRecord::Base
   after_destroy :clean_up_master_address
   after_save :update_contact_timezone
 
-  alias_method :destroy!, :destroy
+  alias destroy! destroy
 
   attr_accessor :user_changed
 
   # Indicates an address was manually created/updated. Otherwise source is usually the import class name.
-  MANUAL_SOURCE = 'manual'
+  MANUAL_SOURCE = 'manual'.freeze
 
   assignable_values_for :location, allow_blank: true do
     [_('Home'), _('Business'), _('Mailing'), _('Seasonal'), _('Other'), _('Temporary')]
@@ -32,11 +32,11 @@ class Address < ActiveRecord::Base
     if other
       return true if other.master_address_id && other.master_address_id == master_address_id
 
-      return true if other.street.to_s.downcase == street.to_s.downcase &&
-                     other.city.to_s.downcase == city.to_s.downcase &&
-                     other.state.to_s.downcase == state.to_s.downcase &&
-                     (other.country.to_s.downcase == country.to_s.downcase || country.blank? || other.country.blank?) &&
-                     other.postal_code.to_s[0..4].downcase == postal_code.to_s[0..4].downcase
+      return true if other.street.to_s.casecmp(street.to_s.downcase).zero? &&
+                     other.city.to_s.casecmp(city.to_s.downcase).zero? &&
+                     other.state.to_s.casecmp(state.to_s.downcase).zero? &&
+                     (other.country.to_s.casecmp(country.to_s.downcase).zero? || country.blank? || other.country.blank?) &&
+                     other.postal_code.to_s[0..4].casecmp(postal_code.to_s[0..4].downcase).zero?
     end
 
     false
@@ -72,7 +72,7 @@ class Address < ActiveRecord::Base
 
     countries = CountrySelect::COUNTRIES
 
-    country = countries.find { |c| c[:name].downcase == val.downcase }
+    country = countries.find { |c| c[:name].casecmp(val.downcase).zero? }
     return country[:name] if country
 
     countries.each do |c|
@@ -130,8 +130,6 @@ class Address < ActiveRecord::Base
     ).to_s
   end
 
-  private
-
   def self.find_country_iso(val)
     return nil if val.nil? || val.empty?
     val = val.upcase
@@ -140,6 +138,8 @@ class Address < ActiveRecord::Base
       Snail::Iso3166::ALPHA2.select { |_key, array| array.include? val }.keys.first ||
       Snail::Iso3166::ALPHA2_EXCEPTIONS.select { |_key, array| array.include? val }.keys.first
   end
+
+  private
 
   def set_manual_source_if_user_changed
     return unless user_changed && (new_record? || place_fields_changed?)
@@ -191,18 +191,18 @@ class Address < ActiveRecord::Base
 
     # See if another address in the database matches this one and has a master address
     where_clause = attributes_for_master_address.symbolize_keys
-                   .slice(:street, :city, :state, :country, :postal_code)
-                   .map { |k, _v| "lower(#{k}) = :#{k}" }.join(' AND ')
+                                                .slice(:street, :city, :state, :country, :postal_code)
+                                                .map { |k, _v| "lower(#{k}) = :#{k}" }.join(' AND ')
 
     master_address ||= Address.where(where_clause, attributes_for_master_address)
-                       .find_by('master_address_id is not null')
-                       .try(:master_address)
+                              .find_by('master_address_id is not null')
+                              .try(:master_address)
 
     if !master_address &&
        (attributes_for_master_address[:state].to_s.length == 2 ||
         attributes_for_master_address[:postal_code].to_s.length == 5 ||
         attributes_for_master_address[:postal_code].to_s.length == 10) &&
-       (attributes_for_master_address[:country].to_s.downcase == 'united states' ||
+       (attributes_for_master_address[:country].to_s.casecmp('united states').zero? ||
         (attributes_for_master_address[:country].blank? && US_STATES.flatten.map(&:upcase).include?(attributes_for_master_address[:state].to_s.upcase)))
 
       begin
@@ -257,9 +257,9 @@ class Address < ActiveRecord::Base
 
   def attributes_for_master_address
     @attributes_for_master_address ||= Hash[attributes.symbolize_keys
-                                            .slice(:street, :city, :state, :country, :postal_code)
-                                            .select { |_k, v| v.present? }
-                                            .map { |k, v| [k, v.downcase] }]
+                                                      .slice(:street, :city, :state, :country, :postal_code)
+                                                      .select { |_k, v| v.present? }
+                                                      .map { |k, v| [k, v.downcase] }]
   end
 
   US_STATES =  [
@@ -315,5 +315,5 @@ class Address < ActiveRecord::Base
     ['West Virginia', 'WV'],
     %w(Wisconsin WI),
     %w(Wyoming WY)
-  ]
+  ].freeze
 end

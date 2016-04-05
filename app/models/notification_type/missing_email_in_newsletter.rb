@@ -7,9 +7,9 @@ class NotificationType::MissingEmailInNewsletter < NotificationType::MissingCont
 
   def contacts_with_email
     Contact.joins(:contact_people)
-      .joins('INNER JOIN email_addresses '\
+           .joins('INNER JOIN email_addresses '\
              'ON email_addresses.person_id = contact_people.person_id')
-      .where(email_addresses: { historic: [nil, false] })
+           .where(email_addresses: { historic: [nil, false] })
   end
 
   def task_description_template

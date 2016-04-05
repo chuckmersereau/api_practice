@@ -3,7 +3,7 @@ module ApplicationHelper
   include LocalizationHelper
 
   def auth_link(provider)
-    if current_user.send("#{provider}_accounts".to_sym).length == 0
+    if current_user.send("#{provider}_accounts".to_sym).empty?
       prompt = _('Add an Account')
     else
       prompt = _('Add another Account') unless "Person::#{provider.camelcase}Account".constantize.one_per_user?
@@ -109,9 +109,9 @@ module ApplicationHelper
   end
 
   def calendar_date_select_tag(name, value = nil, options = {})
-    options.merge!('data-calendar-jquery' => true)
-    options.merge!('id' => '')
-    options.merge!('style' => 'width:100px;')
+    options['data-calendar-jquery'] = true
+    options['id'] = ''
+    options['style'] = 'width:100px;'
     # options.merge!('readonly' => '')
     value = case
             when value.is_a?(Time) || value.is_a?(DateTime)

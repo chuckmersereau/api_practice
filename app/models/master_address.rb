@@ -9,7 +9,7 @@ class MasterAddress < ActiveRecord::Base
 
   def self.populate_lat_long
     MasterAddress.where("latitude is null or latitude = ''")
-      .order('created_at desc').find_each do |ma|
+                 .order('created_at desc').find_each do |ma|
       ma.geocode
       sleep 1 unless Rails.env.test?
     end

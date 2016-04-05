@@ -22,7 +22,7 @@ def donors_response(org_account, profile)
   params = d.send(:get_params,
                   org.addresses_params,
                   profile: profile.code.to_s,
-                  datefrom: (org.minimum_gift_date).to_s,
+                  datefrom: org.minimum_gift_date.to_s,
                   personid: org_account.remote_id)
   d.send(:get_response, org.addresses_url, params)
 end

@@ -16,13 +16,11 @@ class NotificationType::StoppedGiving < NotificationType
             notifications << notification
           end
         end
-      else
+      elsif prior_notification
         # Clear a prior notification if there was one
-        if prior_notification
-          prior_notification.update_attributes(cleared: true)
-          # Remove any tasks associated with this notification
-          prior_notification.tasks.destroy_all
-        end
+        prior_notification.update_attributes(cleared: true)
+        # Remove any tasks associated with this notification
+        prior_notification.tasks.destroy_all
       end
     end
     notifications

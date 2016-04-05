@@ -76,6 +76,6 @@ class Activity < ActiveRecord::Base
     return account_list.active_contacts if assigned_contact_ids.empty?
 
     account_list.contacts
-      .where(Contact.active_conditions + ' OR contacts.id IN (?)', assigned_contact_ids)
+                .where(Contact.active_conditions + ' OR contacts.id IN (?)', assigned_contact_ids)
   end
 end

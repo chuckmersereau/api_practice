@@ -26,7 +26,7 @@ class TntImport::ContactsImport
 
   def import_contact(row, tags, donor_accounts)
     TntImport::ContactImport.new(@import, tags, donor_accounts)
-      .import_contact(row)
+                            .import_contact(row)
   end
 
   def donor_accounts_by_tnt_contact_id

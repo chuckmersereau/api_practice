@@ -7,8 +7,8 @@ class ContactMultiAdd
   def add_contacts(contacts_attributes)
     contacts = Contact.transaction do
       contacts_attributes.values
-      .select { |attrs| attrs.values.any?(&:present?) }
-      .map(&method(:create_contact_and_people))
+                         .select { |attrs| attrs.values.any?(&:present?) }
+                         .map(&method(:create_contact_and_people))
     end
     [contacts.compact, contacts.count(&:nil?)]
   end
@@ -31,7 +31,7 @@ class ContactMultiAdd
     attrs[:last_name] = _('Unknown') if attrs[:last_name].blank?
     contact_name = "#{attrs[:last_name]}, #{attrs[:first_name]}"
     contact_name += " & #{attrs[:spouse_first_name]}" if attrs[:spouse_first_name].present?
-    contact_greeting = "#{attrs[:first_name]}"
+    contact_greeting = (attrs[:first_name]).to_s
     contact_greeting += " & #{attrs[:spouse_first_name]}" if attrs[:spouse_first_name].present?
     contact = @account_list.contacts.create(name: contact_name, greeting: contact_greeting,
                                             notes: attrs[:notes])

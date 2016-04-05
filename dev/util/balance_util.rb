@@ -16,7 +16,7 @@ end
 def fix_dup_balance(a)
   balance_to_account = {}
   a.designation_accounts.order("CASE WHEN name LIKE '% and %' THEN 0 ELSE 1 END")
-    .order(created_at: :desc).each do |da|
+   .order(created_at: :desc).each do |da|
     next unless da.balance.present?
     if balance_to_account[da.balance].present?
       da.update!(active: false)

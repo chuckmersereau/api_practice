@@ -260,15 +260,15 @@ describe GoogleContactSync do
       person.save
 
       g_contact.update('gd$phoneNumber' => [
-        { '$t' => '(717) 888-9999', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
-      ])
+                         { '$t' => '(717) 888-9999', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
+                       ])
 
       sync.sync_numbers(g_contact, person, g_contact_link)
 
       expect(g_contact.prepped_changes).to eq(phone_numbers: [
-        { number: '(717) 888-9999', primary: true, rel: 'other' },
-        { number: '(212) 333-4444', primary: false, rel: 'mobile' }
-      ])
+                                                { number: '(717) 888-9999', primary: true, rel: 'other' },
+                                                { number: '(212) 333-4444', primary: false, rel: 'mobile' }
+                                              ])
 
       expect(person.phone_numbers.count).to eq(2)
       phone1 = person.phone_numbers.first
@@ -287,14 +287,14 @@ describe GoogleContactSync do
       person.phone_numbers.first.update_column(:number, '2123334444')
 
       g_contact.update('gd$phoneNumber' => [
-        { '$t' => '(212) 333-4444', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
-      ])
+                         { '$t' => '(212) 333-4444', 'primary' => 'true', 'rel' => 'http://schemas.google.com/g/2005#other' }
+                       ])
 
       sync.sync_numbers(g_contact, person, g_contact_link)
 
       expect(g_contact.prepped_changes).to eq(phone_numbers: [
-        { number: '(212) 333-4444', primary: true, rel: 'other' }
-      ])
+                                                { number: '(212) 333-4444', primary: true, rel: 'other' }
+                                              ])
 
       person.save
 
@@ -456,9 +456,9 @@ describe GoogleContactSync do
       sync.sync_websites(g_contact, person, g_contact_link)
 
       expect(g_contact.prepped_changes).to eq(websites: [
-        { href: 'google.example.com', primary: true, rel: 'blog' },
-        { href: 'mpdx.example.com', primary: false, rel: 'other' }
-      ])
+                                                { href: 'google.example.com', primary: true, rel: 'blog' },
+                                                { href: 'mpdx.example.com', primary: false, rel: 'other' }
+                                              ])
 
       expect(person.websites.count).to eq(2)
       websites = person.websites.order(:url).to_a

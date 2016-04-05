@@ -8,18 +8,16 @@ module Person::Account
 
   module ClassMethods
     def find_or_create_from_auth(_auth_hash, person)
-      @attributes.merge!(authenticated: true)
+      @attributes[:authenticated] = true
       @account = find_related_account(@rel, @remote_id)
       if @account
         @account.update_attributes(@attributes)
-      else
+      elsif other_account = find_by_remote_id_and_authenticated(@remote_id, true)
         # if creating this authentication record is a duplicate, we have a duplicate person to merge
-        if other_account = find_by_remote_id_and_authenticated(@remote_id, true)
-          other_account.update_attributes(person_id: person.id)
-          @account = other_account
-        else
-          @account = @rel.create!(@attributes)
-        end
+        other_account.update_attributes(person_id: person.id)
+        @account = other_account
+      else
+        @account = @rel.create!(@attributes)
       end
 
       person.first_name = @attributes[:first_name] if person.first_name.blank?

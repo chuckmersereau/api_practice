@@ -87,13 +87,13 @@ class GoogleCalendarIntegrator
 
     if task.default_length
       end_at = task.end_at || task.start_at + task.default_length
-      attributes.merge!(start: { dateTime: task.start_at.to_datetime.rfc3339, date: nil },
-                        end: { dateTime: end_at.to_datetime.rfc3339, date: nil })
+      attributes[:start] = { dateTime: task.start_at.to_datetime.rfc3339, date: nil }
+      attributes[:end] = { dateTime: end_at.to_datetime.rfc3339, date: nil }
     else
       user = User.find(@google_account.person.id)
       task_date = task.start_at.to_datetime.in_time_zone(user.time_zone).to_date.to_s(:db)
-      attributes.merge!(start: { date: task_date, dateTime: nil },
-                        end: { date: task_date, dateTime: nil })
+      attributes[:start] = { date: task_date, dateTime: nil }
+      attributes[:end] = { date: task_date, dateTime: nil }
     end
 
     attributes
@@ -102,18 +102,18 @@ class GoogleCalendarIntegrator
   def handle_error(result, object)
     case result.status
     when 404
-      fail NotFound, result.data.inspect
+      raise NotFound, result.data.inspect
     when 410
-      fail Deleted, result.data.inspect
+      raise Deleted, result.data.inspect
     else
       return unless result.data && result.data['error'] # no error, everything is fine.
       case result.data['error']['message']
       when 'Invalid attendee email.'
-        fail InvalidEmail, event_attributes(object).inspect
+        raise InvalidEmail, event_attributes(object).inspect
       when 'Rate Limit Exceeded', 'Backend Error'
-        fail LowerRetryWorker::RetryJobButNoRollbarError
+        raise LowerRetryWorker::RetryJobButNoRollbarError
       else
-        fail Error, result.data['error']['message'] + " -- #{result.data.inspect}"
+        raise Error, result.data['error']['message'] + " -- #{result.data.inspect}"
       end
     end
   end

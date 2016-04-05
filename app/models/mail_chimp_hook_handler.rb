@@ -11,12 +11,12 @@ class MailChimpHookHandler
   def unsubscribe_hook(email)
     # No need to trigger a callback because MailChimp has already unsubscribed this email
     @account_list.people.joins(:email_addresses).where(email_addresses: { email: email, primary: true })
-      .update_all(optout_enewsletter: true)
+                 .update_all(optout_enewsletter: true)
   end
 
   def email_update_hook(old_email, new_email)
     ids_of_people_to_update = @account_list.people.joins(:email_addresses)
-                              .where(email_addresses: { email: old_email, primary: true }).pluck(:id)
+                                           .where(email_addresses: { email: old_email, primary: true }).pluck(:id)
 
     Person.where(id: ids_of_people_to_update).includes(:email_addresses).each do |person|
       update_person_email(person, old_email, new_email)
@@ -27,7 +27,7 @@ class MailChimpHookHandler
     return unsubscribe_hook(email) if reason == 'abuse'
 
     emails = EmailAddress.joins(person: [:contacts])
-             .where(contacts: { account_list_id: @account_list.id }, email: email)
+                         .where(contacts: { account_list_id: @account_list.id }, email: email)
 
     emails.each do |email_to_clean|
       email_to_clean.update(historic: true, primary: false)

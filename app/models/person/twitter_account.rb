@@ -30,11 +30,11 @@ class Person::TwitterAccount < ActiveRecord::Base
 
   def screen_name=(value)
     return unless value
-    if value =~ /https?:/
-      handle = value.split('/').last
-    else
-      handle = value.delete('@')
-    end
+    handle = if value =~ /https?:/
+               value.split('/').last
+             else
+               value.delete('@')
+             end
     self[:remote_id] = handle
     self[:screen_name] = handle
   end

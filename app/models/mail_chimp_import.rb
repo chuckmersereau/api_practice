@@ -57,7 +57,7 @@ class MailChimpImport
 
   def person_by_email(email)
     @account_list.people.joins(:primary_email_address)
-      .find_by(email_addresses: { email: email })
+                 .find_by(email_addresses: { email: email })
   end
 
   def person_by_name_with_no_email(first_name, last_name)
@@ -67,7 +67,7 @@ class MailChimpImport
 
   def reject_extra_subscribe_causers(matched_person_ids_map)
     contacts = @account_list.contacts.joins(:people)
-               .where(people: { id: matched_person_ids_map.keys }).distinct
+                            .where(people: { id: matched_person_ids_map.keys }).distinct
 
     contacts_with_extras = contacts.select do |contact|
       extra_emails_if_subscribed?(contact, matched_person_ids_map)

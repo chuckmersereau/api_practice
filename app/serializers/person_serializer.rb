@@ -4,11 +4,11 @@ class PersonSerializer < ActiveModel::Serializer
   embed :ids, include: true
   ATTRIBUTES = [:id, :first_name, :last_name, :middle_name, :birthday_month, :birthday_year,
                 :anniversary_month, :anniversary_year, :anniversary_day, :title, :suffix, :gender,
-                :marital_status, :master_person_id, :birthday_day, :avatar, :deceased]
+                :marital_status, :master_person_id, :birthday_day, :avatar, :deceased].freeze
 
   attributes(*ATTRIBUTES)
 
-  INCLUDES = [:phone_numbers, :email_addresses, :facebook_accounts]
+  INCLUDES = [:phone_numbers, :email_addresses, :facebook_accounts].freeze
   INCLUDES.each do |i|
     has_many i
   end

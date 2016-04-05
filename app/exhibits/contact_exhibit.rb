@@ -9,7 +9,7 @@ class ContactExhibit < DisplayCase::Exhibit
     'history' => _('History'),
     'referrals' => _('Referrals'),
     'notes' => _('Notes')
-  }
+  }.freeze
 
   def self.applicable_to?(object)
     object.class.name == 'Contact'
@@ -33,7 +33,7 @@ class ContactExhibit < DisplayCase::Exhibit
   end
 
   def contact_info
-    people.order('contact_people.primary::int desc').references(:contact_people).map do|p|
+    people.order('contact_people.primary::int desc').references(:contact_people).map do |p|
       person_exhibit = exhibit(p, @context)
       phone_and_email_exhibits = [person_exhibit.phone_number, person_exhibit.email].compact.map { |e| exhibit(e, @context) }.join('<br />')
       [@context.link_to(person_exhibit, @context.contact_person_path(to_model, p)), phone_and_email_exhibits].select(&:present?).join(':<br />')
@@ -54,14 +54,14 @@ class ContactExhibit < DisplayCase::Exhibit
         return "https://graph.facebook.com/#{fb.remote_id}/picture?type=#{size}"
       end
 
-      if primary_or_first_person.gender == 'female'
-        url = ActionController::Base.helpers.image_url('avatar_f.png')
-      else
-        url = ActionController::Base.helpers.image_url('avatar.png')
-      end
+      url = if primary_or_first_person.gender == 'female'
+              ActionController::Base.helpers.image_url('avatar_f.png')
+            else
+              ActionController::Base.helpers.image_url('avatar.png')
+            end
 
       if url.start_with?('/')
-        root_url = (@context) ? @context.root_url : 'https://mpdx.org'
+        root_url = @context ? @context.root_url : 'https://mpdx.org'
         url = URI.join(root_url, url).to_s
       end
       return url
@@ -70,11 +70,11 @@ class ContactExhibit < DisplayCase::Exhibit
 
   def pledge_amount
     return unless to_model.pledge_amount.present?
-    if to_model.pledge_amount % 1 > 0
-      pledge = @context.number_to_currency(to_model.pledge_amount, precision: 2)
-    else
-      pledge = @context.number_to_currency(to_model.pledge_amount, precision: 0)
-    end
+    pledge = if to_model.pledge_amount % 1 > 0
+               @context.number_to_currency(to_model.pledge_amount, precision: 2)
+             else
+               @context.number_to_currency(to_model.pledge_amount, precision: 0)
+             end
     pledge
   end
 

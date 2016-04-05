@@ -130,8 +130,8 @@ group :development, :test do
   gem 'awesome_print'
   gem 'database_cleaner'
   gem 'spring-commands-rspec'
-  gem 'rspec', '~> 3.3.0'
-  gem 'rspec-rails', '~> 3.3.2'
+  gem 'rspec', '~> 3.4'
+  gem 'rspec-rails', '~> 3.4'
   gem 'factory_girl_rails'
   gem 'guard-rubocop'
   gem 'guard-rspec'
@@ -156,7 +156,7 @@ group :test do
   gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
-  gem 'rubocop', '~> 0.35.1'
+  gem 'rubocop', '~> 0.39'
   gem 'test_after_commit'
   gem 'coveralls', require: false
 end

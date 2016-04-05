@@ -5,7 +5,7 @@ class PrayerLettersAccount < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
   sidekiq_options unique: true
-  SERVICE_URL = 'https://www.prayerletters.com'
+  SERVICE_URL = 'https://www.prayerletters.com'.freeze
 
   belongs_to :account_list
 
@@ -19,7 +19,7 @@ class PrayerLettersAccount < ActiveRecord::Base
 
   def subscribe_contacts
     contacts = account_list.contacts.includes([:primary_address, { primary_person: :companies }])
-               .select(&:should_be_in_prayer_letters?)
+                           .select(&:should_be_in_prayer_letters?)
     contact_subscribe_params = contacts.map { |c| contact_params(c, true) }
     contact_params_map = Hash[contacts.map { |c| [c.id, contact_params(c)] }]
 
@@ -135,7 +135,7 @@ class PrayerLettersAccount < ActiveRecord::Base
     update_column(:valid_token, false)
     AccountMailer.prayer_letters_invalid_token(account_list).deliver
 
-    fail AccessError
+    raise AccessError
   end
 
   class AccessError < StandardError

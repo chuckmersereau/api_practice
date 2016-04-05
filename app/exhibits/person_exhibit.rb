@@ -35,14 +35,14 @@ class PersonExhibit < DisplayCase::Exhibit
       return "https://graph.facebook.com/#{facebook_account.remote_id}/picture?type=#{size}"
     end
 
-    if gender == 'female'
-      url = ActionController::Base.helpers.image_url('avatar_f.png')
-    else
-      url = ActionController::Base.helpers.image_url('avatar.png')
-    end
+    url = if gender == 'female'
+            ActionController::Base.helpers.image_url('avatar_f.png')
+          else
+            ActionController::Base.helpers.image_url('avatar.png')
+          end
 
     if url.start_with?('/')
-      root_url = (@context) ? @context.root_url : 'https://mpdx.org'
+      root_url = @context ? @context.root_url : 'https://mpdx.org'
       url = URI.join(root_url, url).to_s
     end
     url

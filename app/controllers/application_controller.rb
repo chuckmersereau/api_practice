@@ -77,11 +77,9 @@ class ApplicationController < ActionController::Base
     old_time_zone = Time.zone
     if user_signed_in? && current_user.preferences[:time_zone]
       Time.zone = current_user.preferences[:time_zone]
-    else
-      if cookies[:timezone]
-        Time.zone = ActiveSupport::TimeZone[-cookies[:timezone].to_i.minutes]
-        current_user.update_attribute(:time_zone, Time.zone.name) if user_signed_in?
-      end
+    elsif cookies[:timezone]
+      Time.zone = ActiveSupport::TimeZone[-cookies[:timezone].to_i.minutes]
+      current_user.update_attribute(:time_zone, Time.zone.name) if user_signed_in?
     end
     yield
   ensure
@@ -189,11 +187,11 @@ class ApplicationController < ActionController::Base
 
   def per_page
     @per_page = params[:per_page] || params[:limit]
-    if @per_page == 'All'
-      @per_page = MAX_PER_PAGE
-    else
-      @per_page = @per_page.to_i > 0 ? @per_page : 25
-    end
+    @per_page = if @per_page == 'All'
+                  MAX_PER_PAGE
+                else
+                  @per_page.to_i > 0 ? @per_page : 25
+                end
 
     @per_page.to_i if @per_page
   end

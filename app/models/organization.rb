@@ -41,8 +41,8 @@ class Organization < ActiveRecord::Base
     donor_accounts.find_each(batch_size: 5, &:merge_addresses)
 
     account_lists = AccountList.joins(:users)
-                    .joins('INNER JOIN person_organization_accounts ON person_organization_accounts.person_id = people.id')
-                    .where(person_organization_accounts: { organization_id: id })
+                               .joins('INNER JOIN person_organization_accounts ON person_organization_accounts.person_id = people.id')
+                               .where(person_organization_accounts: { organization_id: id })
     account_lists.find_each(batch_size: 1) do |account_list|
       account_list.contacts.find_each(batch_size: 5, &:merge_addresses)
     end

@@ -2,11 +2,11 @@ class Api::V1::ContactsController < Api::V1::BaseController
   def index
     order = params[:order] || 'contacts.name'
 
-    if params[:filters].present?
-      filtered_contacts = ContactFilter.new(params[:filters]).filter(contacts, current_account_list)
-    else
-      filtered_contacts = contacts.active
-    end
+    filtered_contacts = if params[:filters].present?
+                          ContactFilter.new(params[:filters]).filter(contacts, current_account_list)
+                        else
+                          contacts.active
+                        end
     inactivated = contacts.inactive.where('updated_at > ?', Time.at(params[:since].to_i)).pluck(:id)
 
     filtered_contacts = add_includes_and_order(filtered_contacts, order: order)
@@ -14,7 +14,7 @@ class Api::V1::ContactsController < Api::V1::BaseController
     if params[:since]
       meta = {
         deleted: Version.where(item_type: 'Contact', event: 'destroy', related_object_type: 'AccountList', related_object_id: current_account_list.id)
-                 .where('created_at > ?', Time.at(params[:since].to_i)).pluck(:item_id),
+                        .where('created_at > ?', Time.at(params[:since].to_i)).pluck(:item_id),
         inactivated: inactivated
       }
     else
@@ -64,11 +64,11 @@ class Api::V1::ContactsController < Api::V1::BaseController
   end
 
   def count
-    if params[:filters].present?
-      filtered_contacts = ContactFilter.new(params[:filters]).filter(contacts, current_account_list)
-    else
-      filtered_contacts = contacts.active
-    end
+    filtered_contacts = if params[:filters].present?
+                          ContactFilter.new(params[:filters]).filter(contacts, current_account_list)
+                        else
+                          contacts.active
+                        end
 
     render json: { total: filtered_contacts.count }, callback: params[:callback]
   end

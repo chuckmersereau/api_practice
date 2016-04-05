@@ -92,6 +92,14 @@ class Person::FacebookAccount < ActiveRecord::Base
     Person::FacebookAccount.where('token_expires_at < ? AND token_expires_at > ?', 2.days.from_now, Time.now).find_each(&:refresh_token)
   end
 
+  def self.search(user, params)
+    if account = user.facebook_accounts.first
+      FbGraph::User.search(params.slice(:first_name, :last_name).values.join(' '), access_token: account.token)
+    else
+      []
+    end
+  end
+
   private
 
   def import_contacts(import_id)
@@ -99,13 +107,5 @@ class Person::FacebookAccount < ActiveRecord::Base
     FacebookImport.new(self, import).import_contacts
   ensure
     update_column(:downloading, false)
-  end
-
-  def self.search(user, params)
-    if account = user.facebook_accounts.first
-      FbGraph::User.search(params.slice(:first_name, :last_name).values.join(' '), access_token: account.token)
-    else
-      []
-    end
   end
 end

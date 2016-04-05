@@ -25,8 +25,8 @@ class DesignationAccount::DupByBalanceFix
 
     def ordered_designations(designation_accounts)
       designation_accounts.where.not(balance: nil).where.not(balance: 0.0)
-        .order("CASE WHEN name LIKE '% and %' THEN 0 ELSE 1 END")
-        .order(created_at: :desc).to_a
+                          .order("CASE WHEN name LIKE '% and %' THEN 0 ELSE 1 END")
+                          .order(created_at: :desc).to_a
     end
   end
 end

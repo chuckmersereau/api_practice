@@ -21,8 +21,8 @@ end
 
 def find_a_by_e(email)
   alus = AccountListUser.joins(:user) \
-         .joins('inner join email_addresses on email_addresses.person_id = people.id') \
-         .where(email_addresses: { email: email })
+                        .joins('inner join email_addresses on email_addresses.person_id = people.id') \
+                        .where(email_addresses: { email: email })
   puts alus.count
   if alus.count == 1
     alus.first.account_list

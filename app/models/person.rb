@@ -1,9 +1,9 @@
 class Person < ActiveRecord::Base
-  RELATIONSHIPS_MALE = [_('Husband'), _('Son'), _('Father'), _('Brother'), _('Uncle'), _('Nephew'), _('Cousin (Male)'), _('Grandfather'), _('Grandson')]
-  RELATIONSHIPS_FEMALE = [_('Wife'), _('Daughter'), _('Mother'), _('Sister'), _('Aunt'), _('Niece'), _('Cousin (Female)'), _('Grandmother'), _('Granddaughter')]
-  TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')]
-  SUFFIXES = [_('Jr.'), _('Sr.')]
-  MARITAL_STATUSES = [_('Single'), _('Engaged'), _('Married'), _('Separated'), _('Divorced'), _('Widowed')]
+  RELATIONSHIPS_MALE = [_('Husband'), _('Son'), _('Father'), _('Brother'), _('Uncle'), _('Nephew'), _('Cousin (Male)'), _('Grandfather'), _('Grandson')].freeze
+  RELATIONSHIPS_FEMALE = [_('Wife'), _('Daughter'), _('Mother'), _('Sister'), _('Aunt'), _('Niece'), _('Cousin (Female)'), _('Grandmother'), _('Granddaughter')].freeze
+  TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')].freeze
+  SUFFIXES = [_('Jr.'), _('Sr.')].freeze
+  MARITAL_STATUSES = [_('Single'), _('Engaged'), _('Married'), _('Separated'), _('Divorced'), _('Widowed')].freeze
   has_paper_trail on: [:destroy],
                   meta: { related_object_type: 'Contact',
                           related_object_id: :contact_id }
@@ -69,7 +69,7 @@ class Person < ActiveRecord::Base
       family_relationships_attributes: [:related_person_id, :relationship, :_destroy, :id],
       websites_attributes: [:url, :primary, :_destroy, :id]
     }
-  ]
+  ].freeze
 
   before_create :find_master_person
   after_destroy :clean_up_master_person, :clean_up_contact_people
@@ -125,7 +125,7 @@ class Person < ActiveRecord::Base
   end
 
   def deceased_check
-    return unless deceased_changed? && self.deceased?
+    return unless deceased_changed? && deceased?
 
     self.optout_enewsletter = true
 
@@ -175,8 +175,8 @@ class Person < ActiveRecord::Base
             fr.destroy
           end
         end
-      else
-        FamilyRelationship.add_for_person(self, attributes) if attributes[:related_person_id].present?
+      elsif attributes[:related_person_id].present?
+        FamilyRelationship.add_for_person(self, attributes)
       end
     end
   end
@@ -235,8 +235,8 @@ class Person < ActiveRecord::Base
     hash = hash.with_indifferent_access
     if hash['_destroy'] == '1'
       email_addresses.find(hash['id']).destroy
-    else
-      EmailAddress.add_for_person(self, hash) if hash['email'].present?
+    elsif hash['email'].present?
+      EmailAddress.add_for_person(self, hash)
     end
   end
 
@@ -280,7 +280,7 @@ class Person < ActiveRecord::Base
     phone_numbers.reload.each do |phone_number|
       other_phone = phone_numbers.find do |pn|
         pn.id != phone_number.id &&
-        pn == phone_number
+          pn == phone_number
       end
       next unless other_phone
       phone_number.merge(other_phone)

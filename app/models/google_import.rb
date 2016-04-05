@@ -102,7 +102,7 @@ class GoogleImport
         found_primary = item[primary_attribute]
       end
     end
-    items[0][primary_attribute] = true if items.size > 0 && !found_primary
+    items[0][primary_attribute] = true if !items.empty? && !found_primary
   end
 
   def format_address_for_mpdx(google_address)
@@ -120,7 +120,7 @@ class GoogleImport
     elsif country.nil? || country.is_a?(String)
       country
     else
-      fail "Unexpected country from Google Contacts import: #{country}"
+      raise "Unexpected country from Google Contacts import: #{country}"
     end
   end
 
@@ -147,11 +147,11 @@ class GoogleImport
 
     return unless contact.people.where(first_name: first, last_name: last).empty?
 
-    if person.last_name == last
-      name = "#{person.last_name}, #{person.first_name} and #{first}"
-    else
-      name = "#{person.last_name}, #{person.first_name} and #{first} (#{last})"
-    end
+    name = if person.last_name == last
+             "#{person.last_name}, #{person.first_name} and #{first}"
+           else
+             "#{person.last_name}, #{person.first_name} and #{first} (#{last})"
+           end
     contact.update(name: name)
 
     Person.create!(first_name: first, last_name: last)
@@ -165,7 +165,7 @@ class GoogleImport
     update_person_websites(person, g_contact)
 
     google_contact = person.google_contacts.create_with(google_account_id: @import.source_account_id)
-                     .find_or_create_by(remote_id: g_contact.id)
+                           .find_or_create_by(remote_id: g_contact.id)
     update_person_picture(person, google_contact, g_contact)
 
     person.save
@@ -200,7 +200,7 @@ class GoogleImport
 
     # The Google Contacts Web UI seems to only let you add a single organization for a contact, so let's just
     # take the first one or the one that's primary and save that to the person's employer and occupation.
-    if g_contact.organizations.length > 0
+    unless g_contact.organizations.empty?
       primary_org = g_contact.organizations.first
       g_contact.organizations.each { |org| primary_org = org if org[:primary] }
       attrs[:occupation] = primary_org[:org_title]

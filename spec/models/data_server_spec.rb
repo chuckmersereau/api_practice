@@ -5,10 +5,10 @@ describe DataServer do
   let(:profile) { create(:designation_profile, organization: @org, user: @person.to_user, account_list: account_list) }
 
   let(:raw_data1) do
-    "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
-    "\"SP_LAST_NAME\",\"SP_FIRST_NAME\",\"SP_MIDDLE_NAME\",\"SP_TITLE\",\"ADDR2\",\"ADDR3\",\"ADDR4\",\"ADDR_CHANGED\",\"PHONE_CHANGED\",\"CNTRY_DESCR\","\
+    '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE","SUFFIX",'\
+    '"SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR",'\
     "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodriguez, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
-    "\"24555\",\"(376) 706-670\",\"MEX\",\"Ramon\",\"\",\"Sr.\",\"\",\"Moreno\",\"Celeste\",\"Gonzalez\",\"Sra.\",\"\",\"\",\"\",\"4/4/2003\",\"4/4/2003\","\
+    '"24555","(376) 706-670","MEX","Ramon","","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","","4/4/2003","4/4/2003",'\
     "\"\",\"P\",\"Rodriguez\",\"\"\r\n"
   end
 
@@ -99,8 +99,8 @@ describe DataServer do
 
     it 'should import a company' do
       stub_request(:post, /.*addresses/).to_return(body:
-                                                     "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
-        "\"SP_LAST_NAME\",\"SP_FIRST_NAME\",\"SP_MIDDLE_NAME\",\"SP_TITLE\",\"ADDR2\",\"ADDR3\",\"ADDR4\",\"ADDR_CHANGED\",\"PHONE_CHANGED\",\"CNTRY_DESCR\","\
+                                                     '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE","SUFFIX",'\
+        '"SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR",'\
         "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"19238\",\"ACorporation\",\"123 mi casa blvd.\",\"Colima\",\"COL\",\"456788\",\"(52) 45 456-5678\","\
         "\"MEX\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"\",\"8/15/2003\",\"8/15/2003\",\"\",\"O\",\"ACorporation\",\"\"\r\n")
       expect(@data_server).to receive(:add_or_update_donor_account)
@@ -148,10 +148,10 @@ describe DataServer do
       expect(new_person.donor_accounts.last).to eq donor_account
 
       stub_request(:post, /.*addresses/).to_return(body:
-                                                     "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
-        "\"SP_LAST_NAME\",\"SP_FIRST_NAME\",\"SP_MIDDLE_NAME\",\"SP_TITLE\",\"ADDR2\",\"ADDR3\",\"ADDR4\",\"ADDR_CHANGED\",\"PHONE_CHANGED\",\"CNTRY_DESCR\","\
+                                                     '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE","SUFFIX",'\
+        '"SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR",'\
         "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodrigues, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
-        "\"24555\",\"(376) 706-670\",\"MEX\",\"Ramon\",\"C\",\"Sr.\",\"\",\"Moreno\",\"Celeste\",\"Gonzalez\",\"Sra.\",\"\",\"\",\"\",\"4/4/2003\",\"4/4/2003\","\
+        '"24555","(376) 706-670","MEX","Ramon","C","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","","4/4/2003","4/4/2003",'\
         "\"\",\"P\",\"Rodrigues\",\"\"\r\n")
       @data_server.import_donors(profile)
       expect(new_person.reload.last_name).to eq 'Rodrigues'
@@ -160,10 +160,10 @@ describe DataServer do
 
     it "should notify Rollbar if PERSON_TYPE is not 'O' or 'P'" do
       stub_request(:post, /.*addresses/).to_return(body:
-                                                     "\"PEOPLE_ID\",\"ACCT_NAME\",\"ADDR1\",\"CITY\",\"STATE\",\"ZIP\",\"PHONE\",\"COUNTRY\",\"FIRST_NAME\",\"MIDDLE_NAME\",\"TITLE\",\"SUFFIX\","\
-        "\"SP_LAST_NAME\",\"SP_FIRST_NAME\",\"SP_MIDDLE_NAME\",\"SP_TITLE\",\"ADDR2\",\"ADDR3\",\"ADDR4\",\"ADDR_CHANGED\",\"PHONE_CHANGED\",\"CNTRY_DESCR\","\
+                                                     '"PEOPLE_ID","ACCT_NAME","ADDR1","CITY","STATE","ZIP","PHONE","COUNTRY","FIRST_NAME","MIDDLE_NAME","TITLE","SUFFIX",'\
+        '"SP_LAST_NAME","SP_FIRST_NAME","SP_MIDDLE_NAME","SP_TITLE","ADDR2","ADDR3","ADDR4","ADDR_CHANGED","PHONE_CHANGED","CNTRY_DESCR",'\
         "\"PERSON_TYPE\",\"LAST_NAME_ORG\",\"SP_SUFFIX\"\r\n\"17083\",\"Rodriguez, Ramon y Celeste (Moreno)\",\"Bahia Acapulco 379\",\"Chihuahua\",\"CHH\","\
-        "\"24555\",\"(376) 706-670\",\"MEX\",\"Ramon\",\"\",\"Sr.\",\"\",\"Moreno\",\"Celeste\",\"Gonzalez\",\"Sra.\",\"\",\"\",\"\",\"4/4/2003\",\"4/4/2003\","\
+        '"24555","(376) 706-670","MEX","Ramon","","Sr.","","Moreno","Celeste","Gonzalez","Sra.","","","","4/4/2003","4/4/2003",'\
         "\"\",\"BAD_PERSON_TYPE\",\"Rodriguez\",\"\"\r\n")
       expect(Rollbar).to receive(:error)
       @data_server.import_donors(profile)

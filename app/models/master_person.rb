@@ -23,9 +23,9 @@ class MasterPerson < ActiveRecord::Base
                                      'people.last_name' => person.last_name,
                                      'people.suffix' => person.suffix,
                                      'email_addresses.email' => email_address.email)
-                        .where('people.middle_name = ? OR people.middle_name is null', person.middle_name)
-                        .joins(:email_addresses)
-                        .first
+                              .where('people.middle_name = ? OR people.middle_name is null', person.middle_name)
+                              .joins(:email_addresses)
+                              .first
         return other_person.master_person
       end
     end
@@ -39,8 +39,8 @@ class MasterPerson < ActiveRecord::Base
                                   'people.suffix' => person.suffix,
                                   'phone_numbers.number' => phone_number.number,
                                   'phone_numbers.country_code' => phone_number.country_code)
-                     .where('people.middle_name = ? OR people.middle_name is null', person.middle_name)
-                     .joins(:phone_numbers).first
+                           .where('people.middle_name = ? OR people.middle_name is null', person.middle_name)
+                           .joins(:phone_numbers).first
 
       return other_person.master_person if other_person
     end
@@ -50,7 +50,7 @@ class MasterPerson < ActiveRecord::Base
       if other_person = extra[:donor_account].people.where('people.first_name' => person.first_name,
                                                            'people.last_name' => person.last_name,
                                                            'people.suffix' => person.suffix)
-                        .find_by('people.middle_name = ? OR people.middle_name is null', person.middle_name)
+                                             .find_by('people.middle_name = ? OR people.middle_name is null', person.middle_name)
         return other_person.master_person
       end
 

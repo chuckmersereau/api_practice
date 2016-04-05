@@ -20,10 +20,10 @@ class Siebel < DataServer
       designation_profile = Retryable.retryable do
         if profile.id
           @org.designation_profiles.where(user_id: @org_account.person_id, code: profile.id)
-          .first_or_create(name: profile.name)
+              .first_or_create(name: profile.name)
         else
           @org.designation_profiles.where(user_id: @org_account.person_id, code: nil)
-          .first_or_create(name: profile.name)
+              .first_or_create(name: profile.name)
         end
       end
 
@@ -41,7 +41,7 @@ class Siebel < DataServer
       next if designation_profile.account_list
 
       AccountList::FromProfileLinker.new(designation_profile, @org_account)
-        .link_account_list!
+                                    .link_account_list!
     end
 
     designation_profiles
@@ -103,7 +103,7 @@ class Siebel < DataServer
 
       # Check for removed donations
       all_current_donations_relation = da.donations.where('donation_date >= ? AND donation_date <= ?', rails_start_date, rails_end_date)
-                                       .where.not(remote_id: nil)
+                                         .where.not(remote_id: nil)
       all_current_donations_array = all_current_donations_relation.to_a
       SiebelDonations::Donation.find(designations: da.designation_number, donation_date_start: start_date,
                                      donation_date_end: end_date).each do |siebel_donation|
@@ -238,7 +238,7 @@ class Siebel < DataServer
       donor_account.save!
 
       contact = donor_account.link_to_contact_for(account_list)
-      fail 'Failed to link to contact' unless contact
+      raise 'Failed to link to contact' unless contact
 
       # Save addresses
       if donor.addresses

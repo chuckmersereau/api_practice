@@ -44,7 +44,7 @@ describe ContactDuplicatesFinder do
     ['Hootee', 'Hoo Tee'],
     ['Mary Beth', 'Marybeth'],
     ['JW', 'john wilson']
-  ]
+  ].freeze
 
   NON_MATCHING_FIRST_NAMES = [
     %w(G Andy),
@@ -56,7 +56,7 @@ describe ContactDuplicatesFinder do
     ['Dad US', 'Scott'],
     ['Jonathan F', 'Florence'],
     %w(Unknown Unknown)
-  ]
+  ].freeze
 
   def create_records_for_name_list
     create(:nickname, name: 'andrew', nickname: 'andy', suggest_duplicates: true)

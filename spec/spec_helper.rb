@@ -100,6 +100,7 @@ RSpec.configure do |config|
                                       %w(google_contacts_api siebel_donations)))
 
   config.order = :random
+  config.silence_filter_announcements = true
 
   # Reset seed each time this file is loaded, so that spring won't cache seed
   # To run a spec with a specific seed, use --order=rand:[seed]
@@ -125,8 +126,8 @@ RSpec.configure do |config|
     end
   end
 
-  REDIS_PID = "#{Rails.root}/tmp/pids/redis-test.pid"
-  REDIS_CACHE_PATH = "#{Rails.root}/tmp/cache/"
+  REDIS_PID = "#{Rails.root}/tmp/pids/redis-test.pid".freeze
+  REDIS_CACHE_PATH = "#{Rails.root}/tmp/cache/".freeze
 
   # config.before(:suite) do
   # redis_options = {

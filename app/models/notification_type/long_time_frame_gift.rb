@@ -3,7 +3,7 @@ class NotificationType::LongTimeFrameGift < NotificationType
 
   def check_contacts_filter(contacts)
     contacts.financial_partners.where('pledge_amount > 0')
-      .where('pledge_frequency >= ?', LONG_TIME_FRAME_PLEDGE_FREQUENCY)
+            .where('pledge_frequency >= ?', LONG_TIME_FRAME_PLEDGE_FREQUENCY)
   end
 
   def check_for_donation_to_notify(contact)

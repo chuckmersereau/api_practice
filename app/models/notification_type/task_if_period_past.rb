@@ -9,7 +9,7 @@ class NotificationType::TaskIfPeriodPast < NotificationType
     check_contacts_filter(account_list.contacts).each do |contact|
       next unless contact.created_at < 1.year.ago || contact.activities.where('start_at < ?', 1.year.ago).any?
       prior_notification = Notification.active.where(contact_id: contact.id, notification_type_id: id)
-                           .find_by('event_date > ?', 1.year.ago)
+                                       .find_by('event_date > ?', 1.year.ago)
       next if prior_notification
       next unless notify_for_contact?(contact)
       notification = contact.notifications.create!(notification_type_id: id, event_date: Date.today)
@@ -36,6 +36,6 @@ class NotificationType::TaskIfPeriodPast < NotificationType
   end
 
   def task_description_template
-    fail 'This method must be implemented in a subclass'
+    raise 'This method must be implemented in a subclass'
   end
 end

@@ -39,7 +39,7 @@ class DataServer
           designation_profile = @org.designation_profiles.where(user_id: @org_account.person_id, name: profile[:name], code: profile[:code]).first_or_create
           import_profile_balance(designation_profile)
           AccountList::FromProfileLinker.new(designation_profile, @org_account)
-            .link_account_list!
+                                        .link_account_list!
         end
       end
     else
@@ -48,7 +48,7 @@ class DataServer
         Retryable.retryable do
           import_profile_balance(designation_profile)
           AccountList::FromProfileLinker.new(designation_profile, @org_account)
-            .link_account_list!
+                                        .link_account_list!
         end
       end
     end
@@ -147,8 +147,8 @@ class DataServer
     imported_by_designation = group_by_designation(imported_donations)
     imported_by_designation.keys.each do |designation_account|
       designation_account.donations.between(date_from, date_to)
-        .where.not(remote_id: imported_by_designation[designation_account].map(&:remote_id))
-        .where.not(remote_id: nil).each(&:destroy)
+                         .where.not(remote_id: imported_by_designation[designation_account].map(&:remote_id))
+                         .where.not(remote_id: nil).find_each(&:destroy)
     end
   end
 
@@ -176,15 +176,15 @@ class DataServer
     profile.update_attributes(attributes)
 
     return unless balance[:designation_numbers]
-    attributes.merge!(name: balance[:account_names].first) if balance[:designation_numbers].length == 1
+    attributes[:name] = balance[:account_names].first if balance[:designation_numbers].length == 1
     balance[:designation_numbers].each_with_index do |number, _i|
       find_or_create_designation_account(number, profile, attributes)
     end
   end
 
   def check_credentials!
-    fail OrgAccountMissingCredentialsError, _('Your username and password are missing for this account.') unless @org_account.username && @org_account.password
-    fail OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org } unless @org_account.valid_credentials?
+    raise OrgAccountMissingCredentialsError, _('Your username and password are missing for this account.') unless @org_account.username && @org_account.password
+    raise OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org } unless @org_account.valid_credentials?
   end
 
   def validate_username_and_password
@@ -199,11 +199,8 @@ class DataServer
         end
       end
     rescue DataServerError => e
-      if e.message =~ /password/
-        return false
-      else
-        raise e
-      end
+      return false if e.message =~ /password/
+      raise e
     rescue Errno::ETIMEDOUT
       return false
     end
@@ -214,7 +211,7 @@ class DataServer
     unless @profiles_with_designation_numbers
       @profiles_with_designation_numbers = profiles.map do |profile|
         { designation_numbers: designation_numbers(profile[:code]) }
-        .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
+          .merge(profile.slice(:name, :code, :balance, :balance_udated_at))
       end
     end
     @profiles_with_designation_numbers
@@ -291,7 +288,7 @@ class DataServer
                        password: u(@org_account.password))
     RestClient::Request.execute(method: :post, url: url, payload: params, timeout: -1, user: u(@org_account.username),
                                 password: u(@org_account.password)) do |response, _request, _result, &_block|
-      fail(DataServerError, response) if response.code == 500
+      raise(DataServerError, response) if response.code == 500
 
       response = EncodingUtil.normalized_utf8(response.to_str)
 
@@ -301,14 +298,14 @@ class DataServer
       case
       when first_line + lines[1].to_s =~ /password|not registered/i
         @org_account.update_column(:valid_credentials, false) if @org_account.valid_credentials? && !@org_account.new_record?
-        fail OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org }
+        raise OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org }
       when first_line.include?('ERROR') || first_line.include?('HTML')
-        fail DataServerError, response
+        raise DataServerError, response
       end
 
       # look for a redirect
       if lines[1] && lines[1].include?('RedirectQueryIni')
-        fail Errors::UrlChanged, lines[1].split('=')[1]
+        raise Errors::UrlChanged, lines[1].split('=')[1]
       end
 
       response
@@ -331,7 +328,7 @@ class DataServer
 
     contact = donor_account.link_to_contact_for(account_list)
     person = donor_account.people.joins(:contacts).where(master_person_id: master_person_from_source.id)
-             .where('contacts.account_list_id' => account_list.id).readonly(false).first if master_person_from_source
+                          .where('contacts.account_list_id' => account_list.id).readonly(false).first if master_person_from_source
     person ||= contact.people.find_by(first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME'])
     person ||= donor_account.people.find_by(master_person_id: master_person_from_source.id) if master_person_from_source
 
@@ -403,7 +400,7 @@ class DataServer
       donor_account
     end
     contact = donor_account.link_to_contact_for(account_list)
-    fail 'Failed to link to contact' unless contact
+    raise 'Failed to link to contact' unless contact
     donor_account
   end
 
