@@ -12,12 +12,6 @@ describe SetupController do
       expect(response).to be_success
     end
 
-    it 'should skip the org_accounts step if the user already has an org account' do
-      FactoryGirl.create(:organization_account, person: @user)
-      get :show, id: :org_accounts
-      expect(response).to redirect_to('/setup/social_accounts')
-    end
-
     it 'should get the social_accounts step' do
       FactoryGirl.create(:organization_account, person: @user)
       get :show, id: :social_accounts
