@@ -8,8 +8,10 @@ class OrganizationFetcherWorker
     CSV.new(organizations, headers: :first_row).each do |line|
       next unless line[1].present?
 
-      if org = Organization.where(name: line[0]).first
-        org.update_attributes(query_ini_url: line[1])
+      if org = Organization.find_by(name: line[0])
+        org.update(query_ini_url: line[1])
+      elsif org = Organization.find_by(query_ini_url: line[1])
+        org.update(name: line[0])
       else
         org = Organization.create(name: line[0], query_ini_url: line[1], iso3166: line[2], api_class: 'DataServer')
       end
