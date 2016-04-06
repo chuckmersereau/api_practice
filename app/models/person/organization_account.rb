@@ -67,6 +67,12 @@ class Person::OrganizationAccount < ActiveRecord::Base
     clear_lock_fields
   end
 
+  def import_profiles
+    organization.api(self).import_profiles
+  rescue DataServerError => e
+    Airbrake.notify(e)
+  end
+
   private
 
   def valid_rechecked_credentials
@@ -113,11 +119,8 @@ class Person::OrganizationAccount < ActiveRecord::Base
   # In general any time two people have access to a designation profile containing only one
   # designation account, the second person will be given access to the first person's account list
   def set_up_account_list
-    begin
-      organization.api(self).import_profiles
-    rescue DataServerError => e
-      Rollbar.error(e)
-    end
+    import_profiles
+
     # If this org account doesn't have any profiles, create a default account list and profile for them
     if user.account_lists.reload.empty? || organization.designation_profiles.where(user_id: person_id).blank?
       account_list = user.account_lists.create!(name: user.to_s, creator_id: user.id)

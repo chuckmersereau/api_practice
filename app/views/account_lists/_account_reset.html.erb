@@ -1,0 +1,54 @@
+<br/>
+<h4><%= _('Reset account data (contacts, tasks, history, etc.):') %></h4>
+<% if current_account_list.users.count > 1 %>
+  <div class="row">
+    <div class="col-md-12">
+      <%= _('This account is shared with other users (listed above). '\
+            'Resetting this account will reset it for them as well, so '\
+            '<b>make sure they are OK with that before you reset it</b>.').html_safe %>
+    </div>
+  </div>
+  <br/>
+<% end %>
+<div class="row">
+  <div class="col-md-12">
+    <%= _('Be sure to click Step 1 first to download a backup of your '\
+          'contacts before before clicking Step 2 to reset your account.') %>
+  </div>
+</div>
+<div class="row">
+  <div class="col-md-4">
+    <%= _('Account: ') %>
+    <b><%= current_account_list.name %></b>.
+  </div>
+  <div class="col-md-3">
+    <%= link_to _('Step 1: Export Contacts'),
+          contacts_path(format: :csv, filters: { status: '*' }),
+          class: 'btn btn-xs btn-secondary' %>
+  </div>
+  <%= form_tag account_reset_path do %>
+    <div class="col-md-3">
+      <%= submit_tag _('Step 2: Reset account'), class: 'btn btn-xs btn-danger',
+        data: { confirm: format(_("IMPORTANT: Resetting <b>%{account_name}</b> will "\
+                                  "clear its contacts, tasks, history, etc."),
+                                  account_name: current_account_list.name).html_safe } %>
+    </div>
+  <% end %>
+</div>
+<br/>
+<% if current_user.account_lists.count > 1 %>
+  <div class="row">
+    <div class="col-md-12">
+      <%= format(_('Note that this will only reset the account <b>%{account_name}</b> '\
+                    'not other accounts you have access to.'),
+                    account_name: current_account_list.name).html_safe %>
+    </div>
+  </div>
+<% end %>
+<div class="row">
+  <div class="col-md-12">
+  <%= _('If the account you reset came automatically from the donor system '\
+        'it will be regenerated from there and your donors and donations will begin to '\
+        'import fresh. If this account is for an offline organization and you have no other '\
+        'accounts you will be taken back to the MPDX setup page.') %>
+  </div>

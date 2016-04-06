@@ -14,7 +14,7 @@
       </div>
     </div>
     <div class="cw-top">
-      <%= _('Your currently selected MPDX Account is:') %> 
+      <%= _('Your currently selected MPDX Account is:') %>
       <b><%= current_account_list.name %></b>.
       <br/><br/>
 
@@ -58,7 +58,7 @@
 
       <% if current_user.can_manage_sharing?(current_account_list) %>
         <br/>
-        <%= _('To invite another user to access this account, enter their email:') %>
+        <h4><%= _('To invite another user to access this account, enter their email:') %></h4>
         <div class="row">
           <%= form_tag share_account_lists_path do %>
             <div class="col-md-4">
@@ -73,22 +73,30 @@
 
       <br/>
       <% if @mergeable_accounts.size == 0 %>
-        <%= _("You only have access to this account, so you can't merge it with another one yet.") %>
+        <p>
+          <%= _("You only have access to this account, so you can't merge it with another one yet.") %>
+        </p>
       <% else %>
-        <%= _('Merge this account with another of your accounts:') %>
+        <h4><%= _('Merge this account with another of your accounts:') %></h4>
         <div class="row">
           <%= form_tag merge_account_lists_path do %>
             <div class="col-md-4">
-              <%= select_tag :merge_id, 
+              <%= select_tag :merge_id,
                     options_from_collection_for_select(@mergeable_accounts, :id, :name),
                     class: 'form-control' %>
             </div>
-          <div class="col-md-2">
-            <%= submit_tag _('Merge...'), class: 'btn btn-xs btn-secondary',
-                  data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
+            <div class="col-md-2">
+              <%= submit_tag _('Merge...'), class: 'btn btn-xs btn-secondary',
+                    data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
+            </div>
           <% end %>
         </div>
       <% end %>
+
+      <% if impersonator_user.present? %>
+        <%= render('account_reset') %>
+      <% end %>
+      </div>
     </div>
   </div>
 </div>

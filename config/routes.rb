@@ -3,7 +3,6 @@ require 'sidekiq/cron/web'
 require 'rollout_ui/server'
 
 Rails.application.routes.draw do
-
   resources :google_integrations, only: [:show, :edit, :update, :create] do
     member do
       get :sync
@@ -36,14 +35,14 @@ Rails.application.routes.draw do
     end
   end
 
-  get "settings/integrations", as: :integrations_settings
+  get 'settings/integrations', as: :integrations_settings
 
   resources :tags, only: [:create, :destroy]
 
   resources :social_streams, only: :index
 
   namespace :api do
-    api_version(module: 'V1', header: {name: 'API-VERSION', value: 'v1'}, parameter: {name: "version", value: 'v1'}, path: {value: 'v1'}) do
+    api_version(module: 'V1', header: { name: 'API-VERSION', value: 'v1' }, parameter: { name: 'version', value: 'v1' }, path: { value: 'v1' }) do
       resources :contacts do
         collection do
           get :count
@@ -90,6 +89,7 @@ Rails.application.routes.draw do
       post :remove_access
       post :cancel_invite
       get :accept_invite
+      resource :account_reset, only: [:create]
     end
   end
 
@@ -163,19 +163,18 @@ Rails.application.routes.draw do
   end
 
   resource :home, only: [:index], controller: :home do
-    get "index"
-    get "change_account_list"
-    get "download_data_check"
+    get 'index'
+    get 'change_account_list'
+    get 'download_data_check'
   end
 
-  get "privacy" => "home#privacy"
-  get "login" => "home#login"
+  get 'privacy' => 'home#privacy'
+  get 'login' => 'home#login'
 
   devise_for :users
   as :user do
-    get "/logout" => "sessions#destroy"
+    get '/logout' => 'sessions#destroy'
   end
-
 
   get 'monitors/lb' => 'monitors#lb'
   get 'monitors/sidekiq' => 'monitors#sidekiq'
@@ -189,19 +188,19 @@ Rails.application.routes.draw do
   post '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
 
   def user_constraint(request, attribute)
-    request.env["rack.session"] &&
-      request.env["rack.session"]["warden.user.user.key"] &&
-      request.env["rack.session"]["warden.user.user.key"][0] &&
-      User.find(request.env["rack.session"]["warden.user.user.key"][0].first)
-      .public_send(attribute)
+    request.env['rack.session'] &&
+      request.env['rack.session']['warden.user.user.key'] &&
+      request.env['rack.session']['warden.user.user.key'][0] &&
+      User.find(request.env['rack.session']['warden.user.user.key'][0].first)
+          .public_send(attribute)
   end
 
-  constraints -> (request) { user_constraint(request, :developer) }  do
+  constraints -> (request) { user_constraint(request, :developer) } do
     mount Sidekiq::Web => '/sidekiq'
-    mount RolloutUi::Server => "/rollout"
+    mount RolloutUi::Server => '/rollout'
   end
 
-  constraints -> (request) { user_constraint(request, :admin) }  do
+  constraints -> (request) { user_constraint(request, :admin) } do
     namespace :admin do
       resources :home, only: [:index]
       resources :offline_org, only: [:create]
@@ -209,15 +208,15 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/404', :to => "errors#error_404"
-  get '/500', :to => "errors#error_500"
+  get '/404', to: 'errors#error_404'
+  get '/500', to: 'errors#error_500'
 
   get '/mobile', to: redirect(subdomain: 'm', path: '/')
 
   mount Peek::Railtie => '/peek'
-  root :to => 'home#index'
+  root to: 'home#index'
 
-  get '/templates/:path.html' => 'templates#template', :constraints => { :path => /.+/  }
+  get '/templates/:path.html' => 'templates#template', :constraints => { path: /.+/ }
 
   # See how all your routes lay out with "rake routes"
 end
