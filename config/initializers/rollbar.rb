@@ -30,7 +30,7 @@ Rollbar.configure do |config|
   # You can also specify a callable, which will be called with the exception instance.
   ignore = %w(Google::APIClient::ServerError Net::IMAP::BadResponseError
               LowerRetryWorker::RetryJobButNoRollbarError)
-  ignore = ignore.each_with_object({}) { |key, hash| hash[key] = 'ignored' }
+  ignore = ignore.each_with_object({}) { |key, hash| hash[key] = 'ignore' }
   config.exception_level_filters.merge!(ignore)
   config.exception_level_filters.merge!('ActionController::RoutingError' => 'ignore')
 
@@ -64,6 +64,25 @@ module Rollbar
       Rollbar.error(e, opts)
     else
       fail e
+    end
+  end
+
+  class Sidekiq
+    def self.custom_skip_report?(msg_or_context, e)
+      return true if ignored(msg_or_context, e)
+      original_skip_report?(msg_or_context, e)
+    end
+
+    singleton_class.send(:alias_method, :original_skip_report?, :skip_report?)
+    singleton_class.send(:alias_method, :skip_report?, :custom_skip_report?)
+
+    def self.ignored(msg_or_context, e)
+      ignore = Rollbar.configuration.exception_level_filters.select { |_e, level| level == 'ignore' }.keys
+      ignore.each do |exception_ignore|
+        return true if e.class.name.include?(exception_ignore) || e.message.include?(exception_ignore)
+      end
+      ::Sidekiq::Logging.logger.info("[Rollbar Debugging] #{e}: #{msg_or_context}")
+      false
     end
   end
 end
