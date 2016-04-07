@@ -74,27 +74,41 @@ class User < Person
   end
 
   def self.from_access_token(token)
-    User.find_by_access_token(token) ||
+    return unless token.present?
+    get_user_from_access_token(token) ||
       get_user_from_cas_oauth(token)
   end
 
-  def self.get_user_from_cas_oauth(token)
-    return nil unless token.present?
+  def self.get_user_from_access_token(token)
+    user = User.find_by_access_token(token)
+    return user if user.blank? || user.relay_accounts.any?
+    real_user = get_relay_account_user_from_token(token)
 
+    return user unless real_user && real_user.id != user.id
+    real_user.merge(user)
+    real_user
+  end
+
+  def self.get_user_from_cas_oauth(token)
+    user = get_relay_account_user_from_token(token)
+    return unless user
+    user.update(access_token: token)
+    user
+  end
+
+  def self.get_relay_account_user_from_token(token)
     begin
       response = RestClient.get("http://oauth.ccci.us/users/#{token}")
     rescue RestClient::Unauthorized
-      return nil
+      return
     end
 
-    json = JSON.parse(response.to_str)
-    relay_account = Person::RelayAccount.find_by('lower(remote_id) = ?',
-                                                 json['guid'].downcase)
-    if relay_account.present?
-      user = relay_account.person.to_user
-      user.update(access_token: token)
-      user
-    end
+    return if response.blank?
+    guid = JSON.parse(response.to_s)['guid']
+    return unless guid.present?
+    relay_account = Person::RelayAccount.find_by('lower(remote_id) = ?', guid.downcase)
+    return unless relay_account && relay_account.person
+    relay_account.person.to_user
   end
 
   def to_person
