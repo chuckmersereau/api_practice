@@ -27,6 +27,8 @@ class PreferenceSet
   attribute :setup, String, default: -> (preference_set, _attribute) { preference_set.user.setup }
   attribute :home_country,
             String, default: -> (preference_set, _attribute) { preference_set.account_list.home_country }
+  attribute :ministry_country,
+            String, default: -> (preference_set, _attribute) { preference_set.account_list.ministry_country }
   attribute :currency,
             String, default: -> (preference_set, _attribute) { preference_set.account_list.currency }
   attribute :account_list_name, String,
@@ -47,6 +49,14 @@ class PreferenceSet
     method_name = (type.split('::').last.underscore + '=').to_sym
     define_method method_name do |val|
       set_preference(type, val)
+    end
+  end
+
+  def notification_settings
+  end
+
+  def notification_settings=(val)
+    if val == 'default'
     end
   end
 

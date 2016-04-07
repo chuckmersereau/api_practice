@@ -13,7 +13,7 @@
     <script src="//use.typekit.net/ddm2mzv.js"></script>
     <script>try{Typekit.load();}catch(e){}</script>
   </head>
-  <body>
+  <body setup-step="<%= step %>">
     <div class="container-fluid container-first">
     </div>
 
@@ -44,7 +44,7 @@
                   <div class="col-md-12 text-center">
                     <% if wizard_scope == 'setup.org_accounts' %>
                       <h3><%= _('Start by connecting to your organization.') %></h3>
-                    <% else %>
+                    <% elsif wizard_scope == 'setup.social_accounts' %>
                       <div class="alert alert-success" role="alert">
                         <p><strong><%= _('Sweet! Your Account is activated!') %></strong> <br/>
                         <%= _('Now you can connect some social accounts') %></p>

@@ -227,6 +227,18 @@ $sidebarwidth: 400px;
   }
 }
 
+.wizard-question {
+  label {
+    font-size: 18px;
+  }
+  .btn-group {
+    background-color: #eeeeee;
+    .active {
+      background-color: #f9b625;
+      color: #fff;
+    }
+  }
+}
 
 @media screen and (min-width: 0px) and (max-width: 960px) {
   body { margin: 0; }
