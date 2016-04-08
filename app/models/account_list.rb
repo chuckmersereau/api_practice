@@ -21,7 +21,7 @@ class AccountList < ActiveRecord::Base
   sidekiq_options queue: :import, retry: false, unique: true,
                   unique_job_expiration: 24.hours
 
-  store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :currency]
+  store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :currency, :log_debug_info]
 
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
   has_many :account_list_users, dependent: :destroy

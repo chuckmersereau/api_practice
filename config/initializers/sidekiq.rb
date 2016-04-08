@@ -4,7 +4,7 @@ require Rails.root.join('config', 'initializers', 'redis').to_s
 
 Sidekiq.configure_client do |config|
   config.redis = { url: Redis.current.client.id,
-                   namespace: "MPDX:#{Rails.env}:resque"}
+                   namespace: "MPDX:#{Rails.env}:resque" }
 end
 
 if Sidekiq::Client.method_defined? :reliable_push!
@@ -12,10 +12,12 @@ if Sidekiq::Client.method_defined? :reliable_push!
 end
 
 Sidekiq.configure_server do |config|
+  Rails.logger = Sidekiq::Logging.logger
+
   config.reliable_fetch!
   config.reliable_scheduler!
   config.redis = { url: Redis.current.client.id,
-                   namespace: "MPDX:#{Rails.env}:resque"}
+                   namespace: "MPDX:#{Rails.env}:resque" }
   config.server_middleware do |chain|
     chain.add SidekiqJobArgsLogger
     chain.add SidekiqWhodunnit

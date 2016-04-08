@@ -1,7 +1,8 @@
 require 'smarty_streets'
 
 class Address < ActiveRecord::Base
-  has_paper_trail on: [:destroy],
+  has_paper_trail on: [:create, :update, :destroy],
+                  if: proc { |address| address.record_paper_trail? },
                   meta: { related_object_type: :addressable_type,
                           related_object_id: :addressable_id },
                   ignore: [:updated_at]
@@ -26,6 +27,14 @@ class Address < ActiveRecord::Base
 
   assignable_values_for :location, allow_blank: true do
     [_('Home'), _('Business'), _('Mailing'), _('Seasonal'), _('Other'), _('Temporary')]
+  end
+
+  def record_paper_trail?
+    # This has the effect of logging all deletes, all creates and the updates
+    # associated with a "log_debug_info" account list.
+    changes['deleted'].present? || marked_for_destruction? ||
+      changes['id'].present? ||
+      (addressable.is_a?(Contact) && addressable&.account_list&.log_debug_info)
   end
 
   def equal_to?(other)

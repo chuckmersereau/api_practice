@@ -124,6 +124,7 @@ class GoogleContactsIntegrator
 
     g_contact.prep_add_to_group(inactive_group)
     api_user.batch_create_or_update(g_contact) do |status|
+      log_api_request_and_response(g_contact_link.contact, g_contact, status)
       inactive_cleanup_response(status, g_contact, g_contact_link, num_retries)
     end
   end
@@ -300,6 +301,8 @@ class GoogleContactsIntegrator
 
       # The Google Contacts API batch requests significantly speed up the sync by reducing HTTP requests
       api_user.batch_create_or_update(g_contact) do |status|
+        log_api_request_and_response(contact, g_contact, status)
+
         # This block is called for each saved g_contact once its batch completes
         begin
           # If any g_contact save failed but can be retried, then mark that we should queue the MPDX contact for a retry
@@ -362,5 +365,29 @@ class GoogleContactsIntegrator
       @assigned_remote_ids.add(g_contact.id)
       g_contact_link.update(last_data: g_contact.formatted_attrs, remote_id: g_contact.id, last_etag: g_contact.etag, last_synced: Time.now)
     end
+  end
+
+  private
+
+  def log_api_request_and_response(contact, g_contact, status)
+    return unless @integration.account_list.log_debug_info
+    log_request_if_not_already_logged
+    Rails.logger.info(
+      event: 'Google contacts API batch response',
+      account_list_id: @integration.account_list.id,
+      contact: contact, g_contact: g_contact.pretty_inspect, status: status
+    )
+  end
+
+  def log_request_if_not_already_logged
+    @logged_api_requests ||= Set.new
+    xml = api_user.last_batch_xml
+    return if @logged_api_requests.include?(xml)
+    Rails.logger.info(
+      event: 'Google contacts API batch request',
+      account_list_id: @integration.account_list_id,
+      batch_xml: xml
+    )
+    @logged_api_requests << xml
   end
 end

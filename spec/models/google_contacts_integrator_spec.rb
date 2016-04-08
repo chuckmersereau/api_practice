@@ -6,7 +6,7 @@ describe GoogleContactsIntegrator do
 
     @user = create(:user)
     @account = create(:google_account, person_id: @user.id)
-    @account_list = create(:account_list, creator: @user)
+    @account_list = create(:account_list, creator: @user, log_debug_info: true)
     @integration = create(:google_integration, google_account: @account, account_list: @account_list,
                                                contacts_integration: true, calendar_integration: false)
     @integrator = GoogleContactsIntegrator.new(@integration)

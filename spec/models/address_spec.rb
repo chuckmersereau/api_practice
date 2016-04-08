@@ -203,4 +203,63 @@ describe Address do
       expect(address.csv_country('')).to eq(address.country)
     end
   end
+
+  describe 'paper trail version logic', versioning: true do
+    it 'tracks destroys' do
+      donor_account = create(:donor_account)
+      donor_account.addresses << create(:address, addressable: donor_account)
+      donor_account.addresses.reload.first.mark_for_destruction
+
+      expect do
+        donor_account.save
+      end.to change(Version, :count).by_at_least(1)
+
+      expect(Version.last.event).to eq 'destroy'
+      expect(Version.last.item_type).to eq 'Address'
+    end
+
+    it 'tracks address creates' do
+      expect do
+        create(:address)
+      end.to change(Version, :count).by(1)
+
+      expect(Version.last.event).to eq 'create'
+      expect(Version.last.item_type).to eq 'Address'
+    end
+
+    it 'does not tracks updates if account list not logging debug info' do
+      stub_smarty_streets
+      account_list = create(:account_list, log_debug_info: nil)
+      contact = create(:contact, account_list: account_list)
+      address = create(:address, street: '1 St', addressable: contact)
+
+      expect do
+        address.reload.update(street: '2 St')
+      end.to_not change(Version, :count)
+    end
+
+    it 'tracks updates if account list logging debug info' do
+      stub_smarty_streets
+      account_list = create(:account_list, log_debug_info: true)
+      contact = create(:contact, account_list: account_list)
+      address = create(:address, street: '1 St', addressable: contact)
+
+      expect do
+        address.reload.update(street: '2 St')
+      end.to change(Version, :count).by(1)
+
+      expect(Version.last.event).to eq 'update'
+      expect(Version.last.item_type).to eq 'Address'
+    end
+
+    it 'does not track donor account address updates' do
+      stub_smarty_streets
+      donor_account = create(:donor_account)
+      address = create(:address, street: '1 St', addressable: donor_account)
+
+      expect do
+        address.reload.update(street: '2 St')
+      end.to_not change(Version, :count)
+    end
+  end
 end

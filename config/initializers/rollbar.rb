@@ -32,7 +32,7 @@ Rollbar.configure do |config|
               LowerRetryWorker::RetryJobButNoRollbarError)
   ignore = ignore.each_with_object({}) { |key, hash| hash[key] = 'ignore' }
   config.exception_level_filters.merge!(ignore)
-  config.exception_level_filters.merge!('ActionController::RoutingError' => 'ignore')
+  config.exception_level_filters['ActionController::RoutingError'] = 'ignore'
 
   # Enable asynchronous reporting (uses girl_friday or Threading if girl_friday
   # is not installed)
@@ -60,11 +60,8 @@ end
 
 module Rollbar
   def self.raise_or_notify(e, opts = {})
-    if Rollbar.configuration.enabled
-      Rollbar.error(e, opts)
-    else
-      fail e
-    end
+    raise e unless Rollbar.configuration.enabled
+    Rollbar.error(e, opts)
   end
 
   class Sidekiq
