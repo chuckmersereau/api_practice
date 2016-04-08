@@ -13,6 +13,7 @@ FactoryGirl.define do
       create(:organization_account, person: u)
       account_list = create(:account_list)
       create(:account_list_user, user: u, account_list: account_list)
+      create(:relay_account, person: u)
     end
   end
 

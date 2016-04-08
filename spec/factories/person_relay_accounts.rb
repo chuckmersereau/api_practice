@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :relay_account, class: Person::RelayAccount do
     association :person
-    remote_id 'MyString'
+    remote_id { SecureRandom.uuid }
     first_name 'MyString'
     last_name 'MyString'
     email 'MyString'

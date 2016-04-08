@@ -21,6 +21,7 @@ describe Api::V1::UsersController do
     let(:relay_account) { create(:relay_account, person: real_user) }
 
     before do
+      user.relay_accounts.first.delete
       stub_request(:get, 'http://oauth.ccci.us/users/' + user.access_token)
         .to_return(status: 200, body: { guid: relay_account.remote_id }.to_json)
     end

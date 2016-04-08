@@ -81,7 +81,8 @@ class User < Person
 
   def self.get_user_from_access_token(token)
     user = User.find_by_access_token(token)
-    return user if user.blank? || user.relay_accounts.any?
+    return if user.blank?
+    return user if user.relay_accounts.any?
     real_user = get_relay_account_user_from_token(token)
 
     return user unless real_user && real_user.id != user.id
