@@ -2,7 +2,7 @@ require 'spec_helper'
 require_relative 'api_spec_helper'
 
 describe Api::V1::UsersController do
-  context '#show' do
+  describe '#show' do
     let(:user) { create(:user_with_account) }
 
     before do
@@ -12,6 +12,24 @@ describe Api::V1::UsersController do
 
     it 'responds with success' do
       expect(response.status).to eq(200)
+    end
+  end
+
+  context 'with existing, unlinked user' do
+    let(:user) { create(:user_with_account) }
+    let(:real_user) { create(:user_with_account) }
+    let(:relay_account) { create(:relay_account, person: real_user) }
+
+    before do
+      user.relay_accounts.first.delete
+      stub_request(:get, 'http://oauth.ccci.us/users/' + user.access_token)
+        .to_return(status: 200, body: { guid: relay_account.remote_id }.to_json)
+    end
+
+    it 'merges with existing users' do
+      expect do
+        get '/api/v1/users/me?access_token=' + user.access_token
+      end.to change(Person, :count).by(-1)
     end
   end
 
