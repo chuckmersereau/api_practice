@@ -1,7 +1,8 @@
-<h1><%= _('Finally, we have a few questions to get you set up...') %></h1>
+<h1><%= _('Finally, a few questions to get you set up&hellip;') %></h1>
 <%= form_for @preference_set, url: preference_path(current_user, redirect: setup_path(:finish)), method: :put do |f| %>
   <%= f.hidden_field(:preferences_prefills, value: @preferences_prefills.to_json) %>
-  <% if current_user.account_lists.count > 1 %>
+  <%= f.hidden_field(:account_list_organizations, value: @account_list_organizations.to_json) %>
+  <% if @account_list_organizations.count > 1 %>
     <div class="wizard-question form-group">
       <%= f.label :default_account_list, _('Default Account List') %>
       <%= f.select :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {},
@@ -13,31 +14,40 @@
     <div class="wizard-question form-group">
       <%= label_tag :prefill_options, _('Default Organization') %>
       <p><%= _("We'll use this to prefill some questions below") %></p>
-      <%= select :preferences, :prefill_options, @preferences_prefills.keys, {},
+      <%= select :preferences, :prefill_options, @account_list_organizations.first[1], {},
                    {class: 'form-control'} %>
     </div>
   <% end %>
 
   <div class="wizard-question form-group">
-    <%= f.label(:ministry_country, _('What country do you do ministry from (Where are you payed):')) %>
-    <%= f.country_select :ministry_country, nil, {}, {class: 'form-control'} %>
+    <%= f.label(:home_country, _('Default Supporter Country')) %>
+    <%= f.text_field :home_country, class: 'form-control ui-autocomplete-input' %>
   </div>
-
-  <div class="wizard-question form-group">
-    <%= f.label(:home_country, _('Where do most of your supporters live:')) %>
-    <%= f.country_select :home_country, nil, {}, {class: 'form-control'} %>
-  </div>
-
   <% if $rollout.active?(:currencies, current_account_list) %>
-    <div class="wizard-question form-group">
-      <%=  f.label _('Default Currency') %>
-      <%= f.select :currency, currency_select, {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
+    <h2>Currency</h2>
+    <div class="row padding-top">
+      <div class="col-sm-6">
+        <div class="wizard-question form-group">
+          <%=  f.label :salary_currency, _('I Get Paid In') %>
+          <%= f.select :salary_currency, currency_select, {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
+        </div>
+      </div>
+      <div class="col-sm-6">
+        <div class="wizard-question form-group">
+          <%= f.label :currency, _('Most of my Supporters Give In') %>
+          <%= f.select :currency, currency_select, {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
+        </div>
+      </div>
     </div>
   <% end %>
 
+
   <div class="wizard-question form-group">
-    <%= f.label :monthly_goal, _('Monthly goal') %>
-    <%= f.text_field :monthly_goal, class: 'form-control' %>
+    <%= f.label :monthly_goal, _('Monthly Goal') %>
+    <div class="input-group">
+      <span class="input-group-addon goal-currency-symbol">$</span>
+      <%= f.text_field :monthly_goal, class: 'form-control', placeholder: _('In USD') %>
+    </div>
   </div>
 
   <div class="wizard-question form-group">

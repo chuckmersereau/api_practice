@@ -13,6 +13,7 @@ class SetupController < ApplicationController
     when :social_accounts
     when :settings
       @preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list)
+      @account_list_organizations = build_al_organizatoins
       @preferences_prefills = build_preferences_prefills
     when :finish
       current_user.setup_finished!
@@ -51,6 +52,14 @@ class SetupController < ApplicationController
         country: guess_country(org.name),
         currency: org.default_currency_code
       }
+    end
+  end
+
+  def build_al_organizatoins
+    current_user.account_lists.each_with_object({}) do |al, hash|
+      hash[al.name] = Organization.includes(designation_accounts: [:account_lists])
+                                  .where(account_lists: { id: al.id })
+                                  .uniq.pluck(:name)
     end
   end
 end
