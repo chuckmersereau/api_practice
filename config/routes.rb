@@ -195,7 +195,7 @@ Rails.application.routes.draw do
           .public_send(attribute)
   end
 
-  constraints -> (request) { user_constraint(request, :developer) } do
+  constraints -> (request) { user_constraint(request, :developer) || Rails.env.development? } do
     mount Sidekiq::Web => '/sidekiq'
     mount RolloutUi::Server => '/rollout'
   end
