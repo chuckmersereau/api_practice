@@ -12,7 +12,7 @@ class ImportsController < ApplicationController
           show_importing_notice(import)
         end
       else
-        flash[:alert] = import.errors.full_messages.join('<br>').html_safe
+        show_errors(import)
       end
     end
 
@@ -25,6 +25,7 @@ class ImportsController < ApplicationController
 
   def update
     find_import
+    @import.file.cache_stored_file!
     update_succeeded = @import.update(import_params)
 
     if @import.in_preview?
@@ -37,7 +38,11 @@ class ImportsController < ApplicationController
 
       redirect_to @import
     else
-      show_importing_notice(@import) if update_succeeded
+      if update_succeeded
+        show_importing_notice(@import)
+      else
+        show_errors(@import)
+      end
       redirect_to accounts_path
     end
   end
@@ -61,6 +66,10 @@ class ImportsController < ApplicationController
   def show_importing_notice(import)
     flash[:notice] = _('MPDX is currently importing your contacts from %{source}. You will receive an email when the import is complete.')
                      .localize % { source: import.user_friendly_source }
+  end
+
+  def show_errors(import)
+    flash[:alert] = import.errors.full_messages.join('<br>').html_safe
   end
 
   def find_import
