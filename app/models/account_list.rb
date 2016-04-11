@@ -256,8 +256,8 @@ class AccountList < ActiveRecord::Base
     AccountList::Merge.new(self, other).merge
   end
 
-  # This method checks all of your donors and tries to intelligently determin which partners are regular givers
-  # based on thier giving history.
+  # This method checks all of your donors and tries to intelligently determine which partners are regular givers
+  # based on their giving history.
   def update_partner_statuses
     contacts.where(status: nil).joins(:donor_accounts).each do |contact|
       # If they have a donor account id, they are at least a special donor
