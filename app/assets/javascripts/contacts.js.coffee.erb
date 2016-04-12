@@ -75,51 +75,9 @@ $ ->
           false
       })
 
-      # check all feature
-      $(document).on 'click', '.checkall', ->
-        $('.checks input[type=checkbox]').prop('checked', $(this).prop('checked'))
-
-        $.mpdx.updateSelectedContactIds()
-
-      $(document).on 'click', '.checks input[type=checkbox]', ->
-        unless $('.checks input').is(':checked')
-          $('#select_more').hide()
-          $('.checkall').prop('checked', false)
-
-        if $(this).is(':checked')
-          if $('.checks input:checked').length == $('.checks input').length
-            $('#select_all_prompt').show()
-        else
-          $('#select_all_prompt').hide()
-          $('#clear_selection_prompt').hide()
-
-        $.mpdx.updateSelectedContactIds()
-
-      $(document).on 'click', '[data-behavior=select_all]', ->
-        $('#select_all_prompt').hide()
-        $('#clear_selection_prompt').show()
-        $('#selected_ids').val(filtered_contacts_ids.join(','))
-
-      $(document).on 'click', '[data-behavior=clear_selection]', ->
-        $('#select_more').hide()
-        $('.checkall').prop('checked', false)
-        $('.checks input[type=checkbox]').prop('checked', false)
-        $('#select_all_prompt').show()
-        $('#clear_selection_prompt').hide()
-        $('#selected_ids').val('')
-
       # Actions
-      $(document).on 'click', '.actionbtn', ->
-        if $('.checks input:checked').length == 0 && !$(this).nextAll('.action_list').is(':visible')
-          alert(__("You must select at least one contact you'd like to perform an action on."))
-          return false
-
-        $(this).nextAll('.action_list').toggle()
-        $(this).toggleClass('on')
-        false
-
       $(document).on 'click', '[data-behavior=add_tag_to_list]', ->
-        $('#add_tag_modal #add_tag_contact_ids').val($('#selected_ids').val())
+        $('#add_tag_modal #add_tag_contact_ids').val($.mpdx.getSelectedContactIds())
         $('#add_tag_modal').dialog {
           buttons: [
             {
@@ -141,7 +99,7 @@ $ ->
         false
 
       $(document).on 'click', '[data-behavior=remove_tag_from_list]', ->
-        $('#remove_tag_modal #remove_tag_contact_ids').val($('#selected_ids').val())
+        $('#remove_tag_modal #remove_tag_contact_ids').val($.mpdx.getSelectedContactIds())
         $('#remove_tag_modal').dialog {
           buttons: [
             {
@@ -173,10 +131,10 @@ $ ->
 
       $(document).on 'click', '[data-behavior=add_task_to_list]', ->
         $('#add_task_modal .form_wrapper').html('<%= image_tag("spinner.gif") %>')
-        ids = $.mpdx.updateSelectedContactIds()
+        ids = $.mpdx.getSelectedContactIds()
         $.ajax {
           url: '/tasks/new',
-          data: {add_task_contact_ids: ids.join(','), completed: $(this).attr('data-completed')},
+          data: {add_task_contact_ids: ids, completed: $(this).attr('data-completed')},
           dataType: 'script',
           type: 'GET'
         }
@@ -449,7 +407,7 @@ $ ->
         $(this).closest('tr').remove()
 
     $(document).on 'click', '[data-behavior=bulk_hide_contact]', ->
-      ids = $.mpdx.updateSelectedContactIds()
+      ids = $.mpdx.getSelectedContactIds()
 
       # remove items
       $(ids).each ->
@@ -471,12 +429,8 @@ $ ->
     # fix to hide mysterious donations tab that won't go away
     $('#tabs_donations').remove()
 
-$.mpdx.updateSelectedContactIds = ->
-  ids = []
-  $('[name="contact_ids[]"]:checked').each ->
-    ids.push($(this).val())
-  $('#selected_ids').val(ids.join(','))
-  ids
+$.mpdx.getSelectedContactIds = ->
+  $('#selected_ids').val()
 
 $.mpdx.loadTabData = (hash) ->
   hash ||= window.location.hash || $('#contact .ui-tabs-anchor').first().attr('href')

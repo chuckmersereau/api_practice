@@ -64,7 +64,7 @@
      data-toggle="tooltip"
      data-placement="top"
      title="<%= _('Hide Contact') %>"><i class="fa fa-eye-slash"></i></a>
-  <button class="btn btn-sm btn-default checks">
-    <input type="checkbox" name="contact_ids[]" value="{{$ctrl.contact.id}}" />
+  <button class="btn btn-sm btn-default" ng-click="$parent.$ctrl.selectContacts($ctrl.contact.id)">
+    <input type="checkbox" ng-checked="$parent.$ctrl.contactsSelected($ctrl.contact.id)" />
   </button>
 </div>

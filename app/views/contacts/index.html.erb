@@ -242,24 +242,24 @@
                 </div>
               </div>
               <div class="col-md-5 col-sm-5 col-xs-12 text-right">
+                <input id="selected_ids" name="selected_ids" type="hidden" value="{{$ctrl.selectedContacts.toString()}}">
                 <div class="btn-group">
                   <div class="btn-group">
                     <div class="dropdown">
-                      <%= link_to(_('Actions') + ' <span class="caret"></span>'.html_safe, "#",
-                                  class: "btn btn-default dropdown-toggle", id: "action-drop",
-                                  onclick: "_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'Bulk Actions']);",
-                                  type: "button", 'data-toggle' => "dropdown",
-                                  "aria-expanded" => "true", "data-disabled" => "true") %>
+                      <a href="#" class="btn btn-default dropdown-toggle"
+                         onclick="_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'Bulk Actions']);"
+                         type="button" data-toggle="dropdown" aria-expanded="true">
+                        <%= _('Actions') %> <span class="caret"></span>
+                      </a>
                       <%= render 'contacts_action_list' %>
                     </div>
                   </div>
 
                   <%= link_to(_('Merge'), '#', class: 'btn btn-default', data: {behavior: 'merge'}) %>
-                  <%= hidden_field_tag :selected_ids %>
 
                   <%= link_to(_('Export'), '#', class: 'btn btn-default', data: {behavior: 'export'}) %>
-                  <span class="btn btn-default" data-toggle="tooltip" data-placement="top" title="<%= _('Select all') %>">
-                    <input type="checkbox" class="checkall" />
+                  <span class="btn btn-default" data-toggle="tooltip" data-placement="top" title="<%= _('Select all') %>" ng-click="$ctrl.selectAllContactsOnPage()">
+                    <input type="checkbox" ng-checked="$ctrl.allContactsOnPageSelected()"/>
                   </span>
                 </div>
               </div>
@@ -267,9 +267,12 @@
           </div>
 
           <div class="row page-controls">
-            <div class="col-md-8 col-sm-8">
-              <%= _('Showing') %> <b>{{$ctrl.page.from}}&nbsp;-&nbsp;{{$ctrl.page.to}}</b> <%= _('of') %> <b>{{$ctrl.totalContacts}}</b>
-              <div class="pagination">
+            <div class="col-md-5 col-sm-6">
+              <span><%= _('Showing') %> <b>{{$ctrl.page.from}}&nbsp;-&nbsp;{{$ctrl.page.to}}</b> <%= _('of') %> <b>{{$ctrl.totalContacts}}</b></span>
+              <span class="label label-primary" ng-if="!$ctrl.noContactsSelected()">{{$ctrl.selectedContacts.length}} <%= _('Contacts Selected') %></span>
+            </div>
+            <div class="col-md-7 col-sm-6 text-right">
+              <span class="pagination">
                 <span class="previous_page disabled" ng-if="$ctrl.page.current === 1">
                   <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
                 </span>
@@ -289,10 +292,8 @@
                 <a class="next_page" rel="next" href="#" ng-click="$ctrl.page.current = $ctrl.page.current+1" ng-if="$ctrl.page.current < $ctrl.page.total">
                   <%= _('Next') %> <i class="fa fa-chevron-right"></i>
                 </a>
-              </div>
-            </div>
-            <div class="col-md-4 col-sm-4 text-right form-inline">
-              <%= _('Show') %>: <select ng-model="$ctrl.contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]" class="form-control"></select>
+              </span>
+              <span><%= _('Show') %>: <select ng-model="$ctrl.contactQuery.limit" ng-options="i as i for i in [25, 50, 100, 1000]" class="form-control contacts-per-page"></select></span>
             </div>
           </div>
         </div>

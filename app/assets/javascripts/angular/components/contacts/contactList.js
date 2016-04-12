@@ -56,6 +56,7 @@
             to: 0
         };
 
+        vm.selectedContacts = [];
         vm.mapMarkers = [];
 
         vm.resetFilters = resetFilters;
@@ -67,6 +68,11 @@
         vm.runInsight = runInsight;
         vm.clearInsightFilter = clearInsightFilter;
         vm.insightFilterIsActive = insightFilterIsActive;
+        vm.selectContacts = selectContacts;
+        vm.selectAllContactsOnPage = selectAllContactsOnPage;
+        vm.contactsSelected = contactsSelected;
+        vm.allContactsOnPageSelected = allContactsOnPageSelected;
+        vm.noContactsSelected = noContactsSelected;
 
         activate();
 
@@ -558,6 +564,42 @@
 
         function insightFilterIsActive(){
             return angular.isDefined(vm.contactQuery.insightFilter);
+        }
+
+        function selectAllContactsOnPage(){
+            selectContacts(allContactIdsOnPage());
+        }
+
+        function selectContacts(ids){
+            if(!_.isArray(ids)){
+                ids = [ids];
+            }
+            if(contactsSelected(ids)){
+                vm.selectedContacts = _.difference(vm.selectedContacts, ids);
+            }else {
+                vm.selectedContacts = _.union(vm.selectedContacts, ids);
+            }
+        }
+
+        function allContactsOnPageSelected(){
+            return contactsSelected(allContactIdsOnPage());
+        }
+
+        function contactsSelected(ids){
+            if(!_.isArray(ids)){
+                ids = [ids];
+            }
+            return !_.isEmpty(vm.selectedContacts) && _(ids).difference(vm.selectedContacts).isEmpty();
+        }
+
+        function noContactsSelected(){
+            return _.isEmpty(vm.selectedContacts);
+        }
+
+        function allContactIdsOnPage(){
+            return _.map(vm.contacts, function(contact){
+                return contact.id;
+            });
         }
     }
 })();
