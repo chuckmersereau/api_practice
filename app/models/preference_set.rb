@@ -62,7 +62,7 @@ class PreferenceSet
       next if !$rollout.active?(:missing_info_notifications, account_list) &&
               type.type.in?(['NotificationType::MissingEmailInNewsletter',
                              'NotificationType::MissingAddressInNewsletter'])
-      pref = account_list.notification_preferences.find_or_initialize_by(notification_type_id: type.id)
+      pref = account_list.notification_preferences(true).find_or_initialize_by(notification_type_id: type.id)
       pref.actions = (val == 'default') ? NotificationPreference.default_actions : ['']
       pref.save if pref.actions_changed?
     end
