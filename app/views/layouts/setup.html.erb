@@ -47,15 +47,12 @@
                     <% else %>
                       <div class="alert alert-success" role="alert">
                         <p><strong><%= _('Sweet! Your Account is activated!') %></strong> <br/>
-                        <%= _('Now you can connect some social accounts') %></p>
                       </div>
                     <% end %>
                   </div>
                 </div>
 
                 <div id="content">
-
-                  <div class="">
 
                   <% if notice %>
                     <div class="alert alert-info" role="alert"><%= notice %></div>
@@ -68,18 +65,6 @@
 
                 </div>
               </div>
-
-              <aside id="right" style="display: none;">
-
-                <div class="modcontent">
-                  <% if wizard_scope == 'setup.org_accounts' %>
-                    <%= _("To use MPDX, you need to connect to your organization's donation system. If you raise funds through more than one organization, you can connect to multiple accounts.") %>
-                  <% else %>
-                      <p><%== _("Easily connect all of your contacts, calendars, communications and social conversations. MPDX will automatically identify contact's social profiles on Facebook, LinkedIn, and Twitter so that you connect, listen, and engage with your ministry partners.") %></p>
-                <% end %>
-                </div>
-
-              </aside>
 
               <footer class="well-login-footer text-center">
                 Ministry Partner Development ConneXion | <%= mail_to('support@mpdx.org', _('Support')) %> | <%= link_to(_('Privacy Policy'), '/privacy', target: '_blank') %><br/>

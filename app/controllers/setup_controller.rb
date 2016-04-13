@@ -4,7 +4,7 @@ class SetupController < ApplicationController
   skip_before_action :ensure_setup_finished
   before_action :ensure_org_account, only: :show
 
-  steps :org_accounts, :social_accounts, :finish
+  steps :org_accounts, :finish
 
   def show
     if step == :finish

@@ -15,7 +15,7 @@
     <% if current_user.organization_accounts.any? %>
       <div style="text-align: right">
         <%= _("You can add more later from your 'Networks & Imports' settings") %>
-        <%= link_to(_("That's all for now"), setup_path(:social_accounts), class: 'btn btn-primary btn-lg') %>
+        <%= link_to(_("That's all for now"), setup_path(:finish), class: 'btn btn-primary btn-lg') %>
       </div>
     <% end %>
   </div>
