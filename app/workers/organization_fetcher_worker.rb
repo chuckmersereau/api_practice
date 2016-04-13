@@ -13,7 +13,8 @@ class OrganizationFetcherWorker
       elsif org = Organization.find_by(query_ini_url: line[1])
         org.update(name: line[0])
       else
-        org = Organization.create(name: line[0], query_ini_url: line[1], iso3166: line[2], api_class: 'DataServer')
+        org = Organization.create(name: line[0], query_ini_url: line[1], iso3166: line[2],
+                                  api_class: 'DataServer', country: guess_country(line[0]))
       end
 
       # Grab latest query.ini file for this org
@@ -66,5 +67,19 @@ class OrganizationFetcherWorker
         Rails.logger.debug e.message
       end
     end
+  end
+
+  def guess_country(org_name)
+    ['Campus Crusade for Christ - ', 'Cru - ', 'Power To Change - ', 'Gospel For Asia'].each do |prefix|
+      org_name = org_name.gsub(prefix, '')
+    end
+    org_name = org_name.split(' - ').last if org_name.include? ' - '
+    org_name = org_name.strip
+    return 'Canada' if org_name == 'CAN'
+    match = ::CountrySelect::COUNTRIES_FOR_SELECT.find do |country|
+      country[:name] == org_name || country[:alternatives].split(' ').include?(org_name)
+    end
+    return match[:name] if match
+    nil
   end
 end

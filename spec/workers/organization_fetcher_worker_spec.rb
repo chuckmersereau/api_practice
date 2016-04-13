@@ -11,4 +11,20 @@ describe OrganizationFetcherWorker do
     expect(tnt_stub).to have_been_requested
     expect(org_stub).to have_been_requested
   end
+
+  describe 'guess_country' do
+    subject { OrganizationFetcherWorker.new }
+    it 'returns nil if no match found' do
+      expect(subject.guess_country('No match here')).to be_nil
+    end
+
+    it 'finds a country after Parent org name' do
+      expect(subject.guess_country('Cru - Panama')).to eq 'Panama'
+    end
+
+    it 'expands abbreviations' do
+      expect(subject.guess_country('CAN')).to eq 'Canada'
+      expect(subject.guess_country('Gospel For Asia   USA')).to eq 'United States'
+    end
+  end
 end
