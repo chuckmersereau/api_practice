@@ -9,6 +9,8 @@
             }
         });
 
+    contactController.$inject = ['$sce', 'contactCache'];
+
     function contactController($sce, contactCache) {
         var vm = this;
         vm.current_currency_symbol = window.current_currency_symbol;

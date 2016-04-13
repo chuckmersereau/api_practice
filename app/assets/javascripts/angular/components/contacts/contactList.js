@@ -6,7 +6,9 @@
             templateUrl: 'inline/contact_list.html' //declared inline at app/views/contacts/index.html.erb
         });
 
-    function contactListController($scope, $filter, $location, api, contactCache, urlParameter) {
+    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter'];
+
+    function contactListController($scope, api, contactCache, urlParameter) {
         var vm = this;
 
         var viewPrefs;
