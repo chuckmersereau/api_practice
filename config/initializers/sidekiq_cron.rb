@@ -1,4 +1,4 @@
-SIDEKIQ_CRON_HASH  = {
+SIDEKIQ_CRON_HASH = {
   'Google email sync' => {
     'class' => 'SidekiqCronWorker',
     'cron'  => '0 3 * * *',
@@ -46,7 +46,7 @@ SIDEKIQ_CRON_HASH  = {
     'cron'  => '0 11 * * *',
     'args'  => ['Person::FacebookAccount.refresh_tokens']
   }
-}
+}.freeze
 
 def load_sidekiq_cron_hash
   Sidekiq::Cron::Job.load_from_hash! SIDEKIQ_CRON_HASH
@@ -56,4 +56,9 @@ def precompiling_assets?
   ARGV.any? { |e| e =~ /\Aassets:.+/ }
 end
 
-load_sidekiq_cron_hash if Rails.env.production? && !precompiling_assets?
+def running_console?
+  defined?(Rails::Console)
+end
+
+load_sidekiq_cron_hash if Rails.env.production? && !precompiling_assets? &&
+                          !running_console?
