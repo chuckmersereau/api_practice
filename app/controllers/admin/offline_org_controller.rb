@@ -14,6 +14,7 @@ class Admin::OfflineOrgController < ApplicationController
     {
       name: params[:name], query_ini_url: "#{SecureRandom.hex(8)}.example.com",
       org_help_url: params[:website],
+      country: params[:organization][:country],
       api_class: 'OfflineOrg', addresses_url: 'example.com'
     }
   end
