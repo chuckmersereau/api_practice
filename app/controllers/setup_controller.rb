@@ -42,7 +42,7 @@ class SetupController < ApplicationController
 
   def build_account_list_organizations
     current_user.account_lists.each_with_object({}) do |al, hash|
-      hash[al.name] = Organization.includes(designation_accounts: [:account_lists])
+      hash[al.name] = Organization.includes(designation_profiles: [:account_list])
                                   .where(account_lists: { id: al.id })
                                   .uniq.pluck(:name)
     end
