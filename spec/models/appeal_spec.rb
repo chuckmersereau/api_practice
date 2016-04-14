@@ -83,6 +83,13 @@ describe Appeal do
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], {}).count).to eq(1)
     end
 
+    it 'does not exclude contacts with a nil pledge amount' do
+      contact.update_columns(pledge_amount: nil, first_donation_date: nil)
+
+      expect(appeal.contacts_by_opts(['Partner - Financial'], [],
+                                     joinedTeam3months: true).count).to eq(1)
+    end
+
     it 'excludes special givers in the past 3 months if specified' do
       contact.tag_list = ['tag']
       contact.save
@@ -106,6 +113,15 @@ describe Appeal do
 
       donation2.update(designation_account: nil)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
+    end
+
+    it 'does not exclude contacts with duplicate donor account links' do
+      # create duplicate donor account
+      contact.contact_donor_accounts.create(donor_account: donor_account)
+      contact.update(pledge_amount: 50, pledge_frequency: 1, status: 'Partner - Financial')
+      donation.update(amount: 100, donation_date: 2.months.ago)
+
+      expect(appeal.contacts_by_opts(['Partner - Financial'], [], specialGift3months: true).count).to eq(1)
     end
 
     it 'excludes contacts who stopped giving in the past 2 months if specified' do

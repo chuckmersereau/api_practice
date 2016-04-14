@@ -68,7 +68,9 @@ class Appeal < ActiveRecord::Base
   end
 
   def no_joined_recently(contacts, within_months)
-    contacts.where.not('pledge_amount > 0 AND contacts.first_donation_date >= ?',
+    contacts.where.not('pledge_amount is not null AND pledge_amount > 0 AND '\
+                       'contacts.first_donation_date is not null AND '\
+                       'contacts.first_donation_date >= ?',
                        within_months.months.ago)
   end
 
@@ -76,25 +78,34 @@ class Appeal < ActiveRecord::Base
     start_of_month = Date.today.beginning_of_month
     start_of_prev_month = (Date.today << prev_full_months).beginning_of_month
 
+    # I wrote this in SQL because we populate the appeal contacts for the user
+    # as part of the wizard (not in the background), so it needs to be fast.
     above_pledge_contacts_ids_sql = "
       SELECT contacts.id
-      FROM contacts
-      INNER JOIN contact_donor_accounts cda on cda.contact_id = contacts.id
-      INNER JOIN donor_accounts da on da.id = cda.donor_account_id
-      INNER JOIN donations ON donations.donor_account_id = da.id
-      WHERE contacts.account_list_id = :account_list_id AND donations.donation_date >= :start_of_prev_month
-        AND donations.designation_account_id IN (
-          SELECT designation_account_id FROM account_list_entries WHERE account_list_id = :account_list_id
-        )
-      GROUP BY contacts.id
+      FROM
+      (
+        SELECT DISTINCT contacts.id as contact_id,
+          contacts.last_donation_date, contacts.pledge_amount,
+          contacts.pledge_frequency, donations.id as donation_id,
+          donations.amount as donation_amount
+        FROM contacts
+        INNER JOIN contact_donor_accounts cda on cda.contact_id = contacts.id
+        INNER JOIN donor_accounts da on da.id = cda.donor_account_id
+        INNER JOIN donations ON donations.donor_account_id = da.id
+        WHERE contacts.account_list_id = :account_list_id AND donations.donation_date >= :start_of_prev_month
+          AND donations.designation_account_id IN (
+            SELECT designation_account_id FROM account_list_entries WHERE account_list_id = :account_list_id
+          )
+      ) contact_donations
+      GROUP BY contact_id, pledge_amount, pledge_frequency
       HAVING
-        SUM(donations.amount)
+        SUM(donation_amount)
           / ((CASE WHEN contacts.last_donation_date >= :start_of_month THEN 1 ELSE 0 END) + :prev_full_months)
         > coalesce(pledge_amount, 0.0) / coalesce(pledge_frequency, 1.0)"
 
-    contacts.where("contacts.id NOT IN (#{above_pledge_contacts_ids_sql})", account_list_id: account_list.id,
-                                                                            start_of_month: start_of_month, start_of_prev_month: start_of_prev_month,
-                                                                            prev_full_months: prev_full_months)
+    contacts.where("contacts.id NOT IN (#{above_pledge_contacts_ids_sql})",
+                   account_list_id: account_list.id, start_of_month: start_of_month,
+                   start_of_prev_month: start_of_prev_month, prev_full_months: prev_full_months)
   end
 
   # We define e.g. "stopped giving in the past 2 months" as no pledge set current, no gifts in the previous
