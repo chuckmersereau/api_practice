@@ -31,7 +31,9 @@ describe PreferenceSet, type: :model do
       notification_settings = notification_settings.reject do |ns|
         ns.actions == NotificationPreference.default_actions
       end
-      expect(notification_settings.count).to be 0
+      non_default_types = notification_settings.collect(&:notification_type).collect(&:type)
+      expect(non_default_types).to include 'NotificationType::CallPartnerOncePerYear'
+      expect(non_default_types).to include 'NotificationType::ThankPartnerOncePerYear'
     end
   end
 end

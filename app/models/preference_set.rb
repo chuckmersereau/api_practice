@@ -58,14 +58,21 @@ class PreferenceSet
   end
 
   def notification_settings=(val)
+    # reload preferences at this point
+    account_list.notification_preferences(true)
     NotificationType.all.find_each do |type|
       next if !$rollout.active?(:missing_info_notifications, account_list) &&
-              type.type.in?(['NotificationType::MissingEmailInNewsletter',
-                             'NotificationType::MissingAddressInNewsletter'])
-      pref = account_list.notification_preferences(true).find_or_initialize_by(notification_type_id: type.id)
-      pref.actions = (val == 'default') ? NotificationPreference.default_actions : ['']
+              type.type.in?(%w(NotificationType::MissingEmailInNewsletter NotificationType::MissingAddressInNewsletter))
+      pref = account_list.notification_preferences.find_or_initialize_by(notification_type_id: type.id)
+      pref.actions = which_notification_setting(type.type, val)
       pref.save if pref.actions_changed?
     end
+  end
+
+  def which_notification_setting(type, group_val)
+    return [''] if group_val != 'default' ||
+                   %w(NotificationType::CallPartnerOncePerYear NotificationType::ThankPartnerOncePerYear).include?(type)
+    NotificationPreference.default_actions
   end
 
   def save
