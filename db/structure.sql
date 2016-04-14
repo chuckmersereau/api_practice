@@ -1826,7 +1826,8 @@ CREATE TABLE organizations (
     redirect_query_ini character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    api_class character varying(255)
+    api_class character varying(255),
+    country character varying(255)
 );
 
 
@@ -5017,4 +5018,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160217173440');
 INSERT INTO schema_migrations (version) VALUES ('20160302160145');
 
 INSERT INTO schema_migrations (version) VALUES ('20160401173537');
+
+INSERT INTO schema_migrations (version) VALUES ('20160413150136');
 

@@ -1,20 +1,24 @@
 <b><%= _('Add offline organization') %></b>
 
-<%= form_tag admin_offline_org_index_path, method: :post do |f| %>
+<%= form_for @new_org, url: admin_offline_org_index_path, method: :post do |f| %>
   <div class="container">
     <div class="col-md-4">
       <%= label_tag :name, _('Name') %>
       <%= text_field_tag :name, '', class: 'form-control' %>
     </div>
     <div class="col-md-4">
-      <%= label_tag :name, _('Website (optional)') %>
+      <%= label_tag :website, _('Website (optional)') %>
       <%= text_field_tag :website, '', class: 'form-control' %>
+    </div>
+    <div class="col-md-4">
+      <%= f.label :country, _('Default Country') %>
+      <%= f.country_select :country, nil, {}, class: 'form-control' %>
     </div>
   </div>
   <br/>
   <div class="container">
     <div class="col-md-3">
-    <%= submit_tag _('Create Organization'), class: 'btn btn-primary' %>
+      <%= submit_tag _('Create Organization'), class: 'btn btn-primary' %>
     </div>
   </div>
 <% end %>
