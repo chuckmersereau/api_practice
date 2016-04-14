@@ -9,12 +9,11 @@ class MailChimpWebhookController < ApplicationController
   end
 
   def hook
-    unless @account.primary_list_id == data_param(:list_id)
-      render text: 'Non-primary list'
+    unless hook_handler_class
+      render text: 'Unrecognized list id'
       return
     end
 
-    handler = MailChimpHookHandler.new(@account)
     case hook_params[:type]
     when 'subscribe'
       handler.subscribe_hook(data_param(:email))
@@ -31,6 +30,20 @@ class MailChimpWebhookController < ApplicationController
   end
 
   private
+
+  def handler
+    @handler ||= hook_handler_class.new(@account)
+  end
+
+  def hook_handler_class
+    list_id = data_param(:list_id)
+    if list_id == @account.primary_list_id
+      MailChimpAccount::PrimaryListHookHandler
+    elsif @account.mail_chimp_appeal_list &&
+          list_id == @account.mail_chimp_appeal_list.appeal_list_id
+      MailChimpAccount::AppealListHookHandler
+    end
+  end
 
   def find_account_and_ensure_valid
     @account = MailChimpAccount.find_by(webhook_token: params[:token])

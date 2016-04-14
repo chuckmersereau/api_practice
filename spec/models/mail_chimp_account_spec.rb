@@ -104,10 +104,20 @@ describe MailChimpAccount do
       end.to change(MailChimpAccount.jobs, :size).by(1)
     end
 
-    it 'queues log sync campaign' do
-      expect do
-        account.queue_log_sent_campaign('campaign1', 'subject')
-      end.to change(MailChimpAccount.jobs, :size).by(1)
+    context '#queue_log_sent_campaign' do
+      it 'queues logging campaign if set to auto-log campaigns' do
+        account.auto_log_campaigns = true
+        expect do
+          account.queue_log_sent_campaign('campaign1', 'subject')
+        end.to change(MailChimpAccount.jobs, :size).by(1)
+      end
+
+      it 'does nothing if the mail chimp account not set to auto-log campaigns' do
+        account.auto_log_campaigns = false
+        expect do
+          account.queue_log_sent_campaign('campaign1', 'subject')
+        end.to_not change(MailChimpAccount.jobs, :size)
+      end
     end
 
     it 'queues sync contacts' do
@@ -397,13 +407,21 @@ describe MailChimpAccount do
     end
 
     it 'creates a webhook if the webhook token is missing' do
-      expect_webhook_created { account.setup_webhooks }
+      expect_webhook_created { account.setup_webhooks(account.primary_list_id) }
     end
 
-    it 'creates a webhook if the webhook token is missing' do
-      account.update(webhook_token: 'old')
+    it 're-uses previously set webhook token when creating webhooks' do
+      account.update(webhook_token: 'already_set_token')
       expect(account.gb).to receive(:list_webhooks).and_return([])
-      expect_webhook_created { account.setup_webhooks }
+      hook_params = {
+        id: 'list1', url: 'https://mpdx.org/mail_chimp_webhook/already_set_token',
+        actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
+                   upemail: true, campaign: true },
+        sources: { user: true, admin: true, api: false }
+      }
+      expect(account.gb).to receive(:list_webhook_add).with(hook_params)
+
+      account.setup_webhooks('list1')
     end
 
     it 'does not create a webhook if it already exists' do
@@ -411,7 +429,7 @@ describe MailChimpAccount do
       expect(account.gb).to receive(:list_webhooks)
         .and_return([{ 'url' => 'https://mpdx.org/mail_chimp_webhook/111' }])
       expect(account.gb).to_not receive(:list_webhook_add)
-      account.setup_webhooks
+      account.setup_webhooks(account.primary_list_id)
     end
   end
 
@@ -532,6 +550,7 @@ describe MailChimpAccount do
       end
 
       it 'exports appeal contacts' do
+        expect(account).to receive(:setup_webhooks).with('appeal_list1')
         expect(account).to receive(:contacts_with_email_addresses)
           .with([contact1.id, contact2.id]) { [contact2] }
         expect(account).to receive(:compare_and_unsubscribe).with([contact2], 'appeal_list1')

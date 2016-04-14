@@ -66,6 +66,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def queue_log_sent_campaign(campaign_id, subject)
+    return unless auto_log_campaigns
     async(:call_mailchimp, :log_sent_campaign, campaign_id, subject)
   end
 
@@ -130,6 +131,7 @@ class MailChimpAccount < ActiveRecord::Base
     contacts = contacts_with_email_addresses(contact_ids)
     compare_and_unsubscribe(contacts, list_id)
     export_to_list(list_id, contacts)
+    setup_webhooks(list_id)
     save_appeal_list_info(list_id, appeal_id)
   end
 
@@ -197,7 +199,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def export_to_primary_list
     update(importing: true)
-    setup_webhooks
+    setup_webhooks(primary_list_id)
 
     # clear the member records to force a full export
     mail_chimp_members.where(list_id: primary_list_id).destroy_all
@@ -321,17 +323,17 @@ class MailChimpAccount < ActiveRecord::Base
     queue_export_to_primary_list if changed.include?('primary_list_id')
   end
 
-  def setup_webhooks
+  def setup_webhooks(list_id)
     # Don't setup webhooks when developing on localhost because MailChimp can't
     # verify the URL and so it makes the sync fail
     return if Rails.env.development? &&
               Rails.application.routes.default_url_options[:host].include?('localhost')
 
     return if webhook_token.present? &&
-              gb.list_webhooks(id: primary_list_id).find { |hook| hook['url'] == webhook_url }
+              gb.list_webhooks(id: list_id).find { |hook| hook['url'] == webhook_url }
 
-    update(webhook_token: SecureRandom.hex(32))
-    gb.list_webhook_add(id: primary_list_id, url: webhook_url,
+    update(webhook_token: SecureRandom.hex(32)) if webhook_token.blank?
+    gb.list_webhook_add(id: list_id, url: webhook_url,
                         actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
                                    upemail: true, campaign: true },
                         sources: { user: true, admin: true, api: false })

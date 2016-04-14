@@ -1,11 +1,11 @@
 require 'spec_helper'
 
-describe MailChimpHookHandler do
+describe MailChimpAccount::PrimaryListHookHandler do
   let(:account_list) { create(:account_list) }
   let(:mc_account) do
     create(:mail_chimp_account, account_list: account_list, auto_log_campaigns: true)
   end
-  let(:handler) { MailChimpHookHandler.new(mc_account) }
+  let(:handler) { MailChimpAccount::PrimaryListHookHandler.new(mc_account) }
   let(:contact) { create(:contact, account_list: account_list) }
   let(:person) { create(:person) }
 
@@ -94,12 +94,6 @@ describe MailChimpHookHandler do
     it 'does nothing if the status is not sent' do
       expect(mc_account).to_not receive(:queue_log_sent_campaign)
       handler.campaign_status_hook('campaign1', 'not-sent', 'subject')
-    end
-
-    it 'does nothing if the mail chimp account not set to auto-log campaigns' do
-      mc_account.auto_log_campaigns = false
-      expect(mc_account).to_not receive(:queue_log_sent_campaign)
-      handler.campaign_status_hook('campaign1', 'sent', 'subject')
     end
 
     it 'asyncronously calls the mail chimp account to log the sent campaign' do

@@ -6,7 +6,7 @@ Rails.application.configure do
     HttpLogger.collapse_body_limit = 10_000
     HttpLogger.ignore = [/newrelic\.com/]
   else
-    HttpLogger.logger = Logger.new("/dev/null")
+    HttpLogger.logger = Logger.new('/dev/null')
   end
 
   # Settings specified here will take precedence over those in config/application.rb.
@@ -22,7 +22,7 @@ Rails.application.configure do
   # Show full error reports and disable caching.
   config.consider_all_requests_local       = true
   config.action_controller.perform_caching = false
-  #config.action_controller.perform_caching = true
+  # config.action_controller.perform_caching = true
   config.i18n.fallbacks = false
 
   # Don't care if the mailer can't send.
@@ -50,13 +50,13 @@ Rails.application.configure do
 
   config.assets.logger = false
 
-  config.assets.prefix = "/dev-assets"
+  config.assets.prefix = '/dev-assets'
 
   # config.action_mailer.default_url_options = { :host => 'mpdx.localhost:3000' }
-  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  config.action_mailer.default_url_options = { host: 'localhost:3000' }
 
   config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { :host => "localhost", :port => 1025 }
+  config.action_mailer.smtp_settings = { host: 'localhost', port: 1025 }
 
   Rails.application.routes.default_url_options[:host] = config.action_mailer.default_url_options[:host]
 

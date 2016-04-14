@@ -2,7 +2,7 @@
 <%=
   (
     _('Your MPDX contact "%{contact}" has a person <a href="%{edit_person_url}">%{person_name}</a> '\
-     'that syncs to MailChimp but now has an undeliverable email: %{email}')
+     'synced or exported to MailChimp but now has an undeliverable email: %{email}')
     .localize % { contact: @email.person.contacts.first, email: @email, person_name: @email.person.to_s,
                   edit_person_url: edit_person_path(@email.person, only_path: false) }
   ).html_safe
@@ -13,7 +13,8 @@
 <%=
   _('That email has been marked as "no longer valid." '\
     'Please edit the persons details by clicking their name above and verify that their info is correct. '\
-    'If that person had another valid email address is will become primary and will sync to MailChimp. '\
+    'If that person had another valid email address is will become primary and will sync '\
+    'to MailChimp if they are on your email newsletter. '\
     'If you do not want that email to be in MailChimp, please remove it, '\
     'choose "Opt-out of email newsletter" or make a different email primary.')
   %>

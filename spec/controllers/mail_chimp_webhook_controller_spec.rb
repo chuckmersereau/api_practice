@@ -24,7 +24,7 @@ describe MailChimpWebhookController do
   let(:handler) { double }
 
   before do
-    allow(MailChimpHookHandler).to receive(:new) { handler }
+    allow(MailChimpAccount::PrimaryListHookHandler).to receive(:new) { handler }
   end
 
   it 'returns 200 if you get the webhook index for a valid token' do
@@ -113,5 +113,23 @@ describe MailChimpWebhookController do
     account.update(active: false)
     expect(handler).to_not receive(:unsubscribe_hook)
     post_and_expect_success(unsubscribe_params)
+  end
+
+  it 'calls the appeal hook handler for an appeal list' do
+    appeal = create(:appeal)
+    account.create_mail_chimp_appeal_list(appeal: appeal,
+                                          appeal_list_id: 'appeal_list')
+    appeal_handler = double('appeal hook handler', email_cleaned_hook: nil)
+    allow(MailChimpAccount::AppealListHookHandler).to receive(:new)
+      .and_return(appeal_handler)
+    params = {
+      type: 'cleaned', fired_at: '2009-03-26 22:01:00',
+      data: { list_id: 'appeal_list', campaign_id: '4f', reason: 'hard',
+              email: 'cleaned@mailchimp.com' }
+    }
+    post_and_expect_success(params)
+
+    expect(appeal_handler).to have_received(:email_cleaned_hook)
+      .with('cleaned@mailchimp.com', 'hard')
   end
 end
