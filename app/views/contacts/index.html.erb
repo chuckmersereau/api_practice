@@ -269,7 +269,12 @@
           <div class="row page-controls">
             <div class="col-md-5 col-sm-6">
               <span><%= _('Showing') %> <b>{{$ctrl.page.from}}&nbsp;-&nbsp;{{$ctrl.page.to}}</b> <%= _('of') %> <b>{{$ctrl.totalContacts}}</b></span>
-              <span class="label label-primary" ng-if="!$ctrl.noContactsSelected()">{{$ctrl.selectedContacts.length}} <%= _('Contacts Selected') %></span>
+              <span class="label label-primary" ng-if="!$ctrl.noContactsSelected()">
+                <ng-pluralize count="$ctrl.selectedContacts.length"
+                              when="{'one': '1 <%= _('Contact Selected') %>',
+                                     'other': '{} <%= _('Contacts Selected') %>'}">
+                </ng-pluralize>
+              </span>
             </div>
             <div class="col-md-7 col-sm-6 text-right">
               <span class="pagination">
