@@ -15,7 +15,7 @@
 <body>
   <div class="container-fluid container-first">
   </div>
-  <div class="container">
+  <div class="container login-body">
     <% if false %>
       <div class="mwrap">
         <div class="inside notice">
@@ -31,11 +31,17 @@
           <div id="brand">
             <%= link_to("", "/", :class=> "logo", :title=> 'MPDX Logo') %>
           </div>
-          <p><%= _('Get started by choosing your login source:') %></p>
+          <h2><%== _('<strong>Get Started</strong> or <strong>Login</strong> with') %></h2>
 
           <div id="login_links">
-            <%= link_to(image_tag('splash/relay_logo.png'), '/auth/relay?origin=login', class: "loginlink relay", title: _('Relay Login Link')) %>
-            <%= link_to(image_tag('splash/key_logo.png'), '/auth/key?origin=login', class: "loginlink relay",  title: _('The Key Login Link')) %>
+            <div class="source">
+              <%= link_to(image_tag('splash/relay_logo.png'), '/auth/relay?origin=login', class: "loginlink relay", title: _('Relay Login Link')) %>
+              <%= link_to(_('Create Relay Account'), '/auth/relay?origin=login&create_account=true') %>
+            </div>
+            <div class="source">
+              <%= link_to(image_tag('splash/key_logo.png'), '/auth/key?origin=login', class: "loginlink relay",  title: _('The Key Login Link')) %>
+              <%= link_to(_('Create Key Account'), '/auth/key?origin=login&create_account=true') %>
+            </div>
           </div>
 
           <footer class="well-login-footer">

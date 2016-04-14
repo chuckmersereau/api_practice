@@ -79,6 +79,12 @@ img {
   }
 }
 
+#login_links {
+  .source {
+    width: 176px;
+    display: inline-block;
+  }
+}
 
 .loginlink {
   background: rgb(248,248,248); /* Old browsers */
@@ -237,4 +243,10 @@ $sidebarwidth: 400px;
   .headercontent { height: auto; }
   #mainwrap { margin-top: 60px; }
   #main h1 { margin-top: 1em; }
+}
+
+@media screen and (min-width: 0px) and (max-width: 750px) {
+  .login-body {
+    width: 100%;
+  }
 }
