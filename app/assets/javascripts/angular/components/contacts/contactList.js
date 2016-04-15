@@ -352,24 +352,24 @@
                     '&filters[name]=' + encodeURIComponent(q.name) +
                     '&filters[contact_type]=' + encodeURIComponent(q.type) +
                     '&filters[address_historic]=' + encodeURIComponent(!q.activeAddresses) +
-                    '&filters[city][]=' + encodeURLarray(q.city).join('&filters[city][]=') +
-                    '&filters[state][]=' + encodeURLarray(q.state).join('&filters[state][]=') +
-                    '&filters[region][]=' + encodeURLarray(q.region).join('&filters[region][]=') +
-                    '&filters[metro_area][]=' + encodeURLarray(q.metro_area).join('&filters[metro_area][]=') +
-                    '&filters[country][]=' + encodeURLarray(q.country).join('&filters[country][]=') +
+                    '&filters[city][]=' + api.encodeURLarray(q.city).join('&filters[city][]=') +
+                    '&filters[state][]=' + api.encodeURLarray(q.state).join('&filters[state][]=') +
+                    '&filters[region][]=' + api.encodeURLarray(q.region).join('&filters[region][]=') +
+                    '&filters[metro_area][]=' + api.encodeURLarray(q.metro_area).join('&filters[metro_area][]=') +
+                    '&filters[country][]=' + api.encodeURLarray(q.country).join('&filters[country][]=') +
                     '&filters[newsletter]=' + encodeURIComponent(q.newsletter) +
-                    '&filters[tags][]=' + encodeURLarray(q.tags).join('&filters[tags][]=') +
-                    '&filters[status][]=' + encodeURLarray(statusApiArray).join('&filters[status][]=') +
-                    '&filters[likely][]=' + encodeURLarray(q.likely).join('&filters[likely][]=') +
-                    '&filters[church][]=' + encodeURLarray(q.church).join('&filters[church][]=') +
-                    '&filters[referrer][]=' + encodeURLarray(q.referrer).join('&filters[referrer][]=') +
-                    '&filters[timezone][]=' + encodeURLarray(q.timezone).join('&filters[timezone][]=') +
-                    '&filters[pledge_currency][]=' + encodeURLarray(q.currency).join('&filters[pledge_currency][]=') +
-                    '&filters[relatedTaskAction][]=' + encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
-                    '&filters[appeal][]=' + encodeURLarray(q.appeal).join('&filters[appeal][]=') +
+                    '&filters[tags][]=' + api.encodeURLarray(q.tags).join('&filters[tags][]=') +
+                    '&filters[status][]=' + api.encodeURLarray(statusApiArray).join('&filters[status][]=') +
+                    '&filters[likely][]=' + api.encodeURLarray(q.likely).join('&filters[likely][]=') +
+                    '&filters[church][]=' + api.encodeURLarray(q.church).join('&filters[church][]=') +
+                    '&filters[referrer][]=' + api.encodeURLarray(q.referrer).join('&filters[referrer][]=') +
+                    '&filters[timezone][]=' + api.encodeURLarray(q.timezone).join('&filters[timezone][]=') +
+                    '&filters[pledge_currency][]=' + api.encodeURLarray(q.currency).join('&filters[pledge_currency][]=') +
+                    '&filters[relatedTaskAction][]=' + api.encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
+                    '&filters[appeal][]=' + api.encodeURLarray(q.appeal).join('&filters[appeal][]=') +
                     '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch) +
                     '&filters[pledge_received]=' + encodeURIComponent(q.pledge_received) +
-                    '&filters[pledge_frequencies][]=' + encodeURLarray(q.pledge_frequencies).join('&filters[pledge_frequencies][]=') +
+                    '&filters[pledge_frequencies][]=' + api.encodeURLarray(q.pledge_frequencies).join('&filters[pledge_frequencies][]=') +
                     '&filters[contact_info_email]=' + encodeURIComponent(q.contact_info_email) +
                     '&filters[contact_info_phone]=' + encodeURIComponent(q.contact_info_phone) +
                     '&filters[contact_info_mobile]=' + encodeURIComponent(q.contact_info_mobile) +
@@ -558,14 +558,6 @@
 
         function insightFilterIsActive(){
             return angular.isDefined(vm.contactQuery.insightFilter);
-        }
-
-        function encodeURLarray(array){
-            var encoded = [];
-            angular.forEach(array, function(value, key){
-                encoded.push(encodeURIComponent(value));
-            });
-            return encoded;
         }
     }
 })();

@@ -7,6 +7,8 @@ cache:
 language: ruby
 services:
 - redis-server
+before_install:
+- npm install
 before_script:
 - psql -c 'create database mpdx_test;' -U postgres
 - psql -c 'create database mpdx_test2;' -U postgres

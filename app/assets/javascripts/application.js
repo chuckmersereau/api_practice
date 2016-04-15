@@ -49,7 +49,7 @@
 //= require gettext/all
 
 //angular
-//= require angular
+//= require angular/angular
 //= require lodash
 //= require angular/mpdxApp
 //= require angular/railsConstants
