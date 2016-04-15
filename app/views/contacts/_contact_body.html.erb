@@ -47,58 +47,67 @@
           <div class="row">
             <div class="col-sm-6">
               <h2><%= contact_exhibit %></h2>
+              <% if contact_exhibit.mailing_address.street.present? && !contact_exhibit.mailing_address.historic %>
+                  <address>
+                    <%= best_in_place(contact_exhibit, :envelope_greeting,
+                                      value: contact.envelope_greeting) %><br>
+                    <%= exhibit(contact_exhibit.mailing_address, self).to_i18n_html %>
+                  </address>
+              <% end %>
             </div>
-            <div class="col-sm-6 text-sm-right financial-status spacing-below-xs">
-              <span>
-                <%= best_in_place(contact_exhibit, :status,
-                                  as: :select,
-                                  collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
-                                  place_holder: _('None')) %>
-              </span>
+            <div class="col-sm-6 spacing-below-xs">
+              <div class="text-sm-right financial-status">
+                <span>
+                  <%= best_in_place(contact_exhibit, :status,
+                                    as: :select,
+                                    collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
+                                    place_holder: _('None')) %>
+                </span>
 
-              <% if current_account_list.multi_currency? %>
+                <% if current_account_list.multi_currency? %>
                   <span><%= best_in_place(contact_exhibit, :pledge_currency,
                                           as: :select,
                                           place_holder: current_currency,
                                           collection: currency_options(current_account_list)) %></span>
-              <% end %>
-              <span><%= best_in_place(contact_exhibit, :pledge_amount,
-                                      value: contact.pledge_amount, place_holder: '0.0',
-                                      :inner_class => 'best-in-place-pledge',
-                                      display_with: contact_exhibit.pledge_amount_formatter) %></span>
+                <% end %>
+                <span><%= best_in_place(contact_exhibit, :pledge_amount,
+                                        value: contact.pledge_amount, place_holder: '0.0',
+                                        :inner_class => 'best-in-place-pledge',
+                                        display_with: contact_exhibit.pledge_amount_formatter) %></span>
 
-              <span><%= best_in_place(contact, :pledge_frequency,
-                                      as: :select,
-                                      collection: [['',_('Unspecified')]] + Contact.pledge_frequencies.to_a) %></span>
+                <span><%= best_in_place(contact, :pledge_frequency,
+                                        as: :select,
+                                        collection: [['',_('Unspecified')]] + Contact.pledge_frequencies.to_a) %></span>
 
-              <% if contact.status == 'Partner - Financial' %>
-                  <span>
-                    <%
-                      pledge_received =
-                          '<i class="fa fa-money text-success" title="' + _('Commitment Received') + '"></i>'
-                      pledge_not_received =
-                          '<i class="fa fa-hourglass-half text-danger" title="' + _('Commitment Not Received') + '"></i>'
-                    %>
-                    <%= best_in_place(contact_exhibit, :pledge_received, as: :checkbox,
-                                      collection: { 'false' => pledge_not_received.html_safe,
-                                                    'true' => pledge_received.html_safe })%>
-                  </span>
-              <% end %>
+                <% if contact.status == 'Partner - Financial' %>
+                    <div>
+                      <%
+                        pledge_received = "<span class='text-success'>" + _('Commitment Received') + '</span>'
+                        pledge_not_received = "<span class='text-warning'>" + _('Commitment Not Received') + '</span>'
+                      %>
+                      <%= best_in_place(contact_exhibit, :pledge_received, as: :checkbox,
+                                        collection: { 'false' => pledge_not_received.html_safe,
+                                                      'true' => pledge_received.html_safe })%>
+                    </div>
+                <% end %>
+              </div>
+              <dl class="dl-horizontal other-details">
+                <dt><%= _('Newsletter') %> </dt>
+                <dd>
+                  <%= best_in_place(contact_exhibit, :send_newsletter,
+                                    as: :select,
+                                    collection: [['',_('None')]] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
+                </dd>
+                <dt><%= _('Greeting Name') %> </dt>
+                <dd>
+                  <%= best_in_place(contact_exhibit, :greeting,
+                                    value: contact.greeting) %>
+                </dd>
+              </dl>
             </div>
           </div>
           <div class="row">
-            <div class="col-sm-4 col-sm-push-8 text-sm-right spacing-below-xs">
-              <% if contact_exhibit.mailing_address.street.present? && !contact_exhibit.mailing_address.historic %>
-                  <address><%= exhibit(contact_exhibit.mailing_address, self).to_i18n_html %></address>
-              <% end %>
-            </div>
-            <div class="col-sm-8 col-sm-pull-4">
-              <% if contact_exhibit.referrals_to_me.present? %>
-                  <div class="referrer">
-                    <%= _('Referred by') %>
-                    <strong><%= contact_exhibit.referrer_links %></strong>
-                  </div>
-              <% end %>
+            <div class="col-xs-12">
               <% if contact.tags.present? %>
                   <%= form_for(contact_exhibit) do |f| %>
                       <div class="form-group contact-tags">

@@ -1,12 +1,7 @@
 .contact-details {
   .profile-header{
     h2{
-      margin-bottom: 4px;
-    }
-    .referrer{
-      font-size: 0.85em;
-      line-height: 1.1;
-      margin-bottom: 6px;
+      margin-bottom: 8px;
     }
     .financial-status{
       span{
@@ -14,6 +9,19 @@
       }
       .best-in-place-pledge{
         width: 92px;
+      }
+      margin-bottom: 10px;
+    }
+    .other-details{
+      &.dl-horizontal{
+        @media (min-width: $screen-sm-min) {
+          dt {
+            width: 110px;
+          }
+          dd {
+            margin-left: 120px;
+          }
+        }
       }
     }
     address{
@@ -26,6 +34,7 @@
   .contact-tags {
     margin-bottom: 0;
     .bootstrap-tagsinput{
+      margin-bottom: 0;
       border: none;
       border-bottom: dashed 1px #0077ae;
       box-shadow: none;
