@@ -89,24 +89,25 @@
                     <td class="meta_data"><%= contact_exhibit.donor_ids %></td>
                   </tr>
                 <% end %>
-                <tr>
-                  <td class="meta_name"><%= _('Commitment') %></td>
-                  <td class="meta_data">
-                    <%= best_in_place(contact_exhibit, :pledge_amount,
-                                      value: contact.pledge_amount, place_holder: '0.0') %>
-                  </td>
-                </tr>
-                <% if $rollout.active?(:currencies, current_account_list) %>
+                <% if current_account_list.multi_currency? %>
                   <tr>
                     <td class="meta_name"><%= _('Currency') %></td>
                     <td class="meta_data">
                       <%= best_in_place(contact_exhibit, :pledge_currency,
                                         as: :select,
                                         place_holder: current_currency,
-                                        collection: TwitterCldr::Shared::Currencies.currency_codes.collect { |s| [s, _(s)] }) %>
+                                        collection: currency_options(current_account_list)) %>
                     </td>
                   </tr>
                 <% end %>
+                <tr>
+                  <td class="meta_name"><%= _('Commitment') %></td>
+                  <td class="meta_data">
+                    <%= best_in_place(contact_exhibit, :pledge_amount,
+                                      value: contact.pledge_amount, place_holder: '0.0',
+                                      display_with: contact_exhibit.pledge_amount_formatter) %>
+                  </td>
+                </tr>
                 <tr>
                   <td class="meta_name"><%= _('Frequency') %></td>
                   <td class="meta_data">

@@ -25,11 +25,7 @@
             <%= f.text_field :name, {placeholder: _('Last Name, First Name'), class: 'form-control'} %>
           </div>
           <div class="row">
-            <% if $rollout.active?(:currencies, current_account_list) %>
-              <div class="col-md-4">
-            <% else %>
-              <div class="col-md-8">
-            <% end %>
+            <div class="col-md-4">
               <div class="form-group">
                 <%= f.label :greeting, _('Greeting (used in csv download)') %>
                 <%= f.text_field :greeting, {placeholder: contact.generated_greeting, class: 'form-control'} %>
@@ -41,14 +37,15 @@
                   <%= f.text_field :envelope_greeting, {placeholder: contact.generated_envelope_greeting, class: 'form-control'} %>
               </div>
             </div>
-            <% if $rollout.active?(:currencies, current_account_list) %>
-              <div class="col-md-4">
-                  <div class="form-group">
-                      <%= f.label :pledge_currency, _('Commitment Currency') %>
-                      <%= f.select :pledge_currency, currency_select(true), {}, {class: 'form-control'} %>
-                  </div>
+            <div class="col-md-4">
+              <div class="form-group">
+                <%= f.label :pledge_start_date, _('Commitment Start Date') %>
+                <div class="input-group">
+                  <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
+                  <%= f.text_field :pledge_start_date, class: 'form-control', data: { 'calendar-jquery' => true } %>
+                </div>
               </div>
-            <% end %>
+            </div>
           </div>
           <div class="row">
             <div class="col-md-4">
@@ -65,11 +62,8 @@
             </div>
             <div class="col-md-4">
               <div class="form-group">
-                <%= f.label :pledge_start_date, _('Commitment Start Date') %>
-                <div class="input-group">
-                  <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                  <%= f.text_field :pledge_start_date, class: 'form-control', data: { 'calendar-jquery' => true } %>
-                </div>
+                <%= f.label :pledge_currency, _('Commitment Currency') %>
+                <%= f.select :pledge_currency, currency_select(true), {}, {class: 'form-control'} %>
               </div>
             </div>
           </div>

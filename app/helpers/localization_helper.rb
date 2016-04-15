@@ -17,4 +17,12 @@ module LocalizationHelper
     end
     @current_currency
   end
+
+  def currency_options(account_list)
+    Hash[account_list.currencies.map do |currency|
+      info = TwitterCldr::Shared::Currencies.for_code(currency)
+      symbol = info ? info[:symbol] : currency
+      [currency, "#{currency} (#{symbol})"]
+    end.compact]
+  end
 end

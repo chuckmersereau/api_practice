@@ -156,7 +156,7 @@ RSpec.configure do |config|
 end
 
 # This code will be run each time you run your specs.
-start_simplecov unless ENV['NO_COVERAGE']
+start_simplecov unless ENV['NO_COVERAGE'].present?
 Zonebie.quiet = true
 Zonebie.set_random_timezone
 FactoryGirl.reload

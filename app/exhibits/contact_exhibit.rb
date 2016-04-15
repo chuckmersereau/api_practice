@@ -1,6 +1,7 @@
 class ContactExhibit < DisplayCase::Exhibit
   include DisplayCase::ExhibitsHelper
   include ApplicationHelper
+  include ActionView::Helpers::NumberHelper
 
   # Use ||= to avoid "warning: already initialized contant" for specs
   TABS ||= {
@@ -68,14 +69,18 @@ class ContactExhibit < DisplayCase::Exhibit
     end
   end
 
-  def pledge_amount
-    return unless to_model.pledge_amount.present?
-    pledge = if to_model.pledge_amount % 1 > 0
-               @context.number_to_currency(to_model.pledge_amount, precision: 2)
-             else
-               @context.number_to_currency(to_model.pledge_amount, precision: 0)
-             end
-    pledge
+  def pledge_amount_formatter
+    proc { |pledge| format_pledge_amount(pledge) }
+  end
+
+  def format_pledge_amount(pledge)
+    return if pledge.blank?
+    precision = whole_number?(pledge) ? 0 : 2
+    if account_list.multi_currency?
+      number_with_precision(pledge, precision: precision)
+    else
+      number_to_currency(pledge, precision: precision)
+    end
   end
 
   def notes_saved_at
@@ -109,5 +114,11 @@ class ContactExhibit < DisplayCase::Exhibit
     when (send_newsletter == 'Email' || send_newsletter == 'Both') && missing_email_address
       _('No email addess on file')
     end
+  end
+
+  private
+
+  def whole_number?(number)
+    (number.to_f % 1).zero?
   end
 end

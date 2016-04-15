@@ -11,14 +11,12 @@
         </div>
       </div>
 
-      <% if $rollout.active?(:currencies, current_account_list) %>
-        <div class="col-md-4">
-          <div class="form-group">
-            <%= f.label :pledge_currency, _('Commitment Currency') %>
-            <%= f.select :pledge_currency, currency_select(), {include_blank: true}, {class: 'form-control'} %>
-          </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <%= f.label :pledge_currency, _('Commitment Currency') %>
+          <%= f.select :pledge_currency, currency_select(), {include_blank: true}, {class: 'form-control'} %>
         </div>
-      <% end %>
+      </div>
     </div>
   <% end %>
 </div>

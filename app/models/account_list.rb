@@ -27,6 +27,7 @@ class AccountList < ActiveRecord::Base
   has_many :account_list_users, dependent: :destroy
   has_many :users, through: :account_list_users
   has_many :organization_accounts, through: :users
+  has_many :organizations, -> { distinct }, through: :organization_accounts
   has_many :account_list_entries, dependent: :destroy
   has_many :designation_accounts, through: :account_list_entries
   has_many :contacts, dependent: :destroy
@@ -119,7 +120,14 @@ class AccountList < ActiveRecord::Base
   end
 
   def currencies
-    @currencies ||= contacts.order(:pledge_currency).pluck('DISTINCT pledge_currency')
+    @currencies ||=
+      (contacts.order(:pledge_currency).pluck('DISTINCT pledge_currency') +
+       organizations.pluck(:default_currency_code) +
+       [default_currency]).compact.uniq
+  end
+
+  def multi_currency?
+    currencies.count > 1
   end
 
   def valid_mail_chimp_account
@@ -223,28 +231,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def merge_contacts
-    merged_contacts = []
-
-    ordered_contacts = contacts.includes(:addresses, :donor_accounts).order('contacts.created_at')
-    ordered_contacts.each do |contact|
-      next if merged_contacts.include?(contact)
-
-      other_contacts = ordered_contacts.select do |c|
-        c.name == contact.name &&
-          c.id != contact.id &&
-          (c.donor_accounts.first == contact.donor_accounts.first ||
-           c.addresses.find { |a| contact.addresses.find { |ca| ca.equal_to? a } })
-      end
-      next unless other_contacts.present?
-      other_contacts.each do |other_contact|
-        contact.merge(other_contact)
-        merged_contacts << other_contact
-      end
-    end
-
-    contacts.reload
-    contacts.map(&:merge_people)
-    contacts.map(&:merge_addresses)
+    Contact::DupContactsMerge.new(contacts).merge_duplicates
   end
 
   # Download all donations / info for all accounts associated with this list
@@ -256,34 +243,11 @@ class AccountList < ActiveRecord::Base
     AccountList::Merge.new(self, other).merge
   end
 
-  # This method checks all of your donors and tries to intelligently determine which partners are regular givers
-  # based on their giving history.
+  # This method checks all of your donors and tries to intelligently determine
+  # which partners are regular givers based on their giving history.
   def update_partner_statuses
-    contacts.where(status: nil).joins(:donor_accounts).each do |contact|
-      # If they have a donor account id, they are at least a special donor
-      # If they have given the same amount for the past 3 months, we'll assume they are
-      # a monthly donor.
-      gifts = donations.where(donor_account_id: contact.donor_account_ids,
-                              designation_account_id: designation_account_ids)
-                       .order('donation_date desc')
-      latest_donation = gifts[0]
-
-      next unless latest_donation
-
-      pledge_frequency = contact.pledge_frequency
-      pledge_amount = contact.pledge_amount
-
-      if latest_donation.donation_date.to_time > 2.months.ago && latest_donation.channel == 'Recurring'
-        status = 'Partner - Financial'
-        pledge_frequency = 1 unless contact.pledge_frequency
-        pledge_amount = latest_donation.amount unless contact.pledge_amount.to_i > 0
-      else
-        status = 'Partner - Special'
-      end
-
-      # Re-query the contact to make it not read-only from the join
-      # (there are other ways to handle that, but this one was easy)
-      Contact.find(contact.id).update_attributes(status: status, pledge_frequency: pledge_frequency, pledge_amount: pledge_amount)
+    contacts.where(status: nil).joins(:donor_accounts).readonly(false).each do |contact|
+      Contact::PartnerStatusGuesser.new(contact).assign_guessed_status
     end
   end
 
@@ -363,34 +327,7 @@ class AccountList < ActiveRecord::Base
 
   # trigger any notifications for this account list
   def send_account_notifications
-    notifications = NotificationType.check_all(self)
-
-    notifications_to_email = {}
-
-    # Check preferences for what to do with each notification type
-    NotificationType.types.each do |notification_type_string|
-      notification_type = notification_type_string.constantize.first
-
-      next unless notifications[notification_type_string].present?
-      actions = notification_preferences.find_by_notification_type_id(notification_type.id).try(:actions) ||
-                NotificationPreference.default_actions
-
-      # Collect any emails that need sent
-      if actions.include?('email')
-        notifications_to_email[notification_type] = notifications[notification_type_string]
-      end
-
-      next unless actions.include?('task')
-      # Create a task for each notification
-      notifications[notification_type_string].each do |notification|
-        notification_type.create_task(self, notification)
-      end
-    end
-
-    # Send email if necessary
-    if notifications_to_email.present?
-      NotificationMailer.notify(self, notifications_to_email).deliver
-    end
+    AccountList::NotificationsSender.new(self).send_notifications
   end
 
   def import_data
