@@ -72,18 +72,18 @@
                 <dt><%= _('Referred by') %></dt>
                 <dd><%= contact_exhibit.referrer_links %></dd>
           <% end %>
-          <dt><%= _('Newsletter') %> </dt>
+          <dt><%= _('Newsletter') %></dt>
           <dd>
             <%= best_in_place(contact_exhibit, :send_newsletter,
                               as: :select,
                               collection: [['',_('None')]] + contact.assignable_send_newsletters.collect { |s| [s, _(s)] }) %>
           </dd>
-          <dt><%= _('Greeting Name') %> </dt>
+          <dt><%= _('Greeting Name') %></dt>
           <dd>
             <%= best_in_place(contact_exhibit, :greeting,
                               value: contact.greeting) %>
           </dd>
-          <dt><%= _('Envelope Name') %> </dt>
+          <dt><%= _('Envelope Name') %></dt>
           <dd>
             <%= best_in_place(contact_exhibit, :envelope_greeting,
                               value: contact.envelope_greeting) %>

@@ -49,8 +49,10 @@
               <h2><%= contact_exhibit %></h2>
               <% if contact_exhibit.mailing_address.street.present? && !contact_exhibit.mailing_address.historic %>
                   <address>
-                    <%= best_in_place(contact_exhibit, :envelope_greeting,
-                                      value: contact.envelope_greeting) %><br>
+                    <span data-toggle="tooltip" title="<%= _('Envelope Name') %>" data-placement="right" >
+                      <%= best_in_place(contact_exhibit, :envelope_greeting,
+                                        value: contact.envelope_greeting) %>
+                    </span><br>
                     <%= exhibit(contact_exhibit.mailing_address, self).to_i18n_html %>
                   </address>
               <% end %>
@@ -62,6 +64,10 @@
                                     as: :select,
                                     collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
                                     place_holder: _('None')) %>
+                  <i class="fa fa-question-circle" data-toggle="tooltip"
+                     data-placement="top" data-behavior="explain_statuses"
+                     title="<%= _('Click for explanation of contact status options.') %>"></i>
+                  <%= render 'explain_statuses_modal' %>
                 </span>
 
                 <% if current_account_list.multi_currency? %>
