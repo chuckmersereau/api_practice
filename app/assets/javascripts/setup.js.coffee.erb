@@ -38,12 +38,12 @@ $ ->
         $('#preference_set_home_country').val(settings.country).highlight()
       if settings.currency
         $('#preference_set_currency').val(settings.currency).highlight()
-        $('#preference_set_salary_currency').val(settings.currency).highlight()
+#        $('#preference_set_salary_currency').val(settings.currency).highlight()
         goal_currency_placeholder(settings.currency)
 
     goal_currency_placeholder = (currency) ->
       $('#preference_set_monthly_goal').attr('placeholder', 'In ' + currency)
-      symbol = $('#preference_set_salary_currency option[value="'+currency+'"]').text()
+      symbol = $('#preference_set_currency option[value="'+currency+'"]').text()
       $('.goal-currency-symbol').text(symbol.substring(5, symbol.length - 1))
 
     if Object.keys(preferences_prefills).length = 1
@@ -56,8 +56,8 @@ $ ->
     $(document).on 'change', '#preferences_prefill_options', ->
       fill_preferences_form_with(preferences_prefills[$(this).val()])
 
-    $(document).on 'change', '#preference_set_salary_currency', ->
-      goal_currency_placeholder($('#preference_set_salary_currency').val())
+    $(document).on 'change', '#preference_set_currency', ->
+      goal_currency_placeholder($(this).val())
 
     $('#preference_set_home_country, #preference_set_ministry_country').autocomplete({
       change: (event, ui) ->

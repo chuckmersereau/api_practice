@@ -24,17 +24,11 @@
     <%= f.text_field :home_country, class: 'form-control ui-autocomplete-input' %>
   </div>
   <% if $rollout.active?(:currencies, current_account_list) %>
-    <h2>Currency</h2>
     <div class="row padding-top">
-      <div class="col-sm-6">
+      <div class="col-sm-12">
         <div class="wizard-question form-group">
-          <%=  f.label :salary_currency, _('I Get Paid In') %>
-          <%= f.select :salary_currency, currency_select, {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
-        </div>
-      </div>
-      <div class="col-sm-6">
-        <div class="wizard-question form-group">
-          <%= f.label :currency, _('Most of my Supporters Give In') %>
+          <%= f.label :currency, _('Default Currency') %>
+          <p><%= _('We will convert donations and your account balance into this currency') %></p>
           <%= f.select :currency, currency_select, {prompt: current_currency ? current_currency : 'USD'}, {class: 'form-control'} %>
         </div>
       </div>
