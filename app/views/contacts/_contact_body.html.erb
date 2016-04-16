@@ -98,6 +98,10 @@
                 <% end %>
               </div>
               <dl class="dl-horizontal other-details">
+                <% if contact_exhibit.donor_ids.present? %>
+                    <dt><%= _('Donor ID') %></dt>
+                    <dd><%= contact_exhibit.donor_ids %></dd>
+                <% end %>
                 <dt><%= _('Newsletter') %> </dt>
                 <dd>
                   <%= best_in_place(contact_exhibit, :send_newsletter,
