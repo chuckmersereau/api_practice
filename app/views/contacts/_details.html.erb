@@ -14,24 +14,24 @@
                title="<%= _('Click for explanation of contact status options.') %>"></i>
             <%= render 'explain_statuses_modal' %>
           </dd>
-
-          <dt><%= _('Commitment') %></dt>
-          <dd>
-            <%= best_in_place(contact_exhibit, :pledge_amount,
-                              value: contact.pledge_amount, place_holder: '0.0') %>
-          </dd>
-          <% if $rollout.active?(:currencies, current_account_list) %>
+          <% if current_account_list.multi_currency? %>
               <dt><%= _('Currency') %></dt>
               <dd>
                 <%= best_in_place(contact_exhibit, :pledge_currency,
                                   as: :select,
                                   place_holder: current_currency,
-                                  collection: TwitterCldr::Shared::Currencies.currency_codes.collect { |s| [s, _(s)] }) %>
+                                  collection: currency_options(current_account_list)) %>
               </dd>
           <% end %>
-          <% if contact.status == 'Partner - Financial' %>
-          <dt><%= _('Commitment Received') %></dt>
+          <dt><%= _('Commitment') %></dt>
           <dd>
+            <%= best_in_place(contact_exhibit, :pledge_amount,
+                              value: contact.pledge_amount, place_holder: '0.0',
+                              display_with: contact_exhibit.pledge_amount_formatter) %>
+          </dd>
+          <% if contact.status == 'Partner - Financial' %>
+              <dt><%= _('Commitment Received') %></dt>
+              <dd>
                 <%
                   pledge_received = "<span class='text-success'>" + _('Yes') + '</span>'
                   pledge_not_received = "<span class='text-warning'>" + _('No') + '</span>'
@@ -39,7 +39,7 @@
                 <%= best_in_place(contact_exhibit, :pledge_received, as: :checkbox,
                                   collection: { 'false' => pledge_not_received.html_safe,
                                                 'true' => pledge_received.html_safe })%>
-          </dd>
+              </dd>
           <% end %>
           <dt><%= _('Frequency') %></dt>
           <dd>
@@ -69,8 +69,8 @@
         <h3><%= _('Communications') %></h3>
         <dl class="dl-horizontal">
           <% if contact_exhibit.referrals_to_me.present? %>
-                <dt><%= _('Referred by') %></dt>
-                <dd><%= contact_exhibit.referrer_links %></dd>
+              <dt><%= _('Referred by') %></dt>
+              <dd><%= contact_exhibit.referrer_links %></dd>
           <% end %>
           <dt><%= _('Newsletter') %></dt>
           <dd>
