@@ -98,7 +98,6 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[state][]=' + api.encodeURLarray($scope.filter.contactState).join('&filters[state][]=') +
             '&filters[country][]=' + api.encodeURLarray($scope.filter.contactCountry).join('&filters[country][]=') +
             '&filters[newsletter]=' + encodeURIComponent($scope.filter.contactNewsletter) +
-            //'&filters[tags][]=' + api.encodeURLarray(q.tags).join('&filters[tags][]=') +
             '&filters[status][]=' + api.encodeURLarray($scope.filter.contactStatus).join('&filters[status][]=') +
             '&filters[likely][]=' + api.encodeURLarray($scope.filter.contactLikely).join('&filters[likely][]=') +
             '&filters[church][]=' + api.encodeURLarray($scope.filter.contactChurch).join('&filters[church][]=') +
@@ -306,20 +305,4 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             $scope.filter.tagsSelect.push(tag);
         }
     };
-
-/*    $scope.contactTagIsActive = function(tag){
-        return _.contains($scope.filterContactTagSelect, tag);
-    };
-
-    $scope.contactTagClick = function(tag){
-        if($scope.contactTagIsActive(tag)){
-            _.remove($scope.filterContactTagSelect, function(i) { return i === tag; });
-            if($scope.filterContactTagSelect.length === 0){
-                $scope.filterContactTagSelect.push('');
-            }
-        }else{
-            _.remove($scope.filterContactTagSelect, function(i) { return i === ''; });
-            $scope.filterContactTagSelect.push(tag);
-        }
-    };*/
 });

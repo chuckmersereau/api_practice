@@ -42,10 +42,6 @@ angular.module('mpdxApp')
         };
 
         this.encodeURLarray = function encodeURLarray(array){
-            var encoded = [];
-            angular.forEach(array, function(value){
-                encoded.push(encodeURIComponent(value));
-            });
-            return encoded;
+            return _.map(array, encodeURIComponent);
         }
     });
