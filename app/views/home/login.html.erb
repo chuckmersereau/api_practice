@@ -16,43 +16,32 @@
   <div class="container-fluid container-first">
   </div>
   <div class="container login-body">
-    <% if false %>
-      <div class="mwrap">
-        <div class="inside notice">
-          <p><%= _('Your session has timed out. Please login again.') %></p>
+    <div class="col-md-6 col-md-offset-3 text-center">
+
+      <div class="well well-login">
+        <div id="brand">
+          <div class="logo"></div>
         </div>
-      </div>
-    <% end %>
+        <h2><%== _('<strong>Get Started</strong> or <strong>Login</strong> with') %></h2>
 
-    <div class="row">
-      <div class="col-md-6 col-md-offset-3 text-center">
-
-        <div class="well well-login">
-          <div id="brand">
-            <%= link_to("", "/", :class=> "logo", :title=> 'MPDX Logo') %>
+        <div id="login_links">
+          <div class="source">
+            <%= link_to(image_tag('splash/relay_logo.png'), '/auth/relay?origin=login', class: "loginlink relay", title: _('Relay Login Link')) %>
+            <%= link_to(_('Create Relay Account'), 'https://signin.relaysso.org/sso/selfservice/ssoSignup?theme=relay', target: '_blank') %>
           </div>
-          <h2><%== _('<strong>Get Started</strong> or <strong>Login</strong> with') %></h2>
-
-          <div id="login_links">
-            <div class="source">
-              <%= link_to(image_tag('splash/relay_logo.png'), '/auth/relay?origin=login', class: "loginlink relay", title: _('Relay Login Link')) %>
-              <%= link_to(_('Create Relay Account'), '/auth/relay?origin=login&create_account=true') %>
-            </div>
-            <div class="source">
-              <%= link_to(image_tag('splash/key_logo.png'), '/auth/key?origin=login', class: "loginlink relay",  title: _('The Key Login Link')) %>
-              <%= link_to(_('Create Key Account'), '/auth/key?origin=login&create_account=true') %>
-            </div>
+          <div class="source">
+            <%= link_to(image_tag('splash/key_logo.png'), '/auth/key?origin=login', class: "loginlink relay",  title: _('The Key Login Link')) %>
+            <%= link_to(_('Create Key Account'), @create_key_account_path) %>
           </div>
-
-          <footer class="well-login-footer">
-            Ministry Partner Development ConneXion | <%= mail_to('support@mpdx.org', _('Support')) %> | <%= link_to(_('Privacy Policy'), '/privacy', target: '_blank') %><br/>
-            &copy; Copyright <%= Time.now.year %> by <%= link_to('Cru', 'http://cru.org') %> | <a href="https://smartystreets.com ">Address Validation</a> by SmartyStreets
-          </footer>
         </div>
 
+        <footer class="well-login-footer">
+          Ministry Partner Development ConneXion | <%= mail_to('support@mpdx.org', _('Support')) %> | <%= link_to(_('Privacy Policy'), '/privacy', target: '_blank') %><br/>
+          &copy; Copyright <%= Time.now.year %> by <%= link_to('Cru', 'http://cru.org') %> | <a href="https://smartystreets.com ">Address Validation</a> by SmartyStreets
+        </footer>
       </div>
+
     </div>
-
   </div>
 </body>
 </html>

@@ -8,6 +8,16 @@ class HomeController < ApplicationController
   end
 
   def login
+    redirect_params = {
+      origin: 'login',
+      url: "#{OmniAuth.config.full_host}/login"
+    }
+    params = {
+      target: 'signup',
+      service: "#{OmniAuth.config.full_host}/auth/key/callback?#{redirect_params.to_query}"
+    }
+    @create_key_account_path = "https://thekey.me/cas/service/selfservice?#{params.to_query}"
+
     render layout: false
   end
 
