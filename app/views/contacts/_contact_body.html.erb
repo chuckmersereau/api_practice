@@ -59,16 +59,30 @@
             </div>
             <div class="col-sm-6 spacing-below-xs">
               <div class="text-sm-right financial-status">
-                <span>
-                  <%= best_in_place(contact_exhibit, :status,
-                                    as: :select,
-                                    collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
-                                    place_holder: _('None')) %>
-                  <i class="fa fa-question-circle" data-toggle="tooltip"
-                     data-placement="top" data-behavior="explain_statuses"
-                     title="<%= _('Click for explanation of contact status options.') %>"></i>
-                  <%= render 'explain_statuses_modal' %>
-                </span>
+                <div>
+                  <span>
+                    <%= best_in_place(contact_exhibit, :status,
+                                      as: :select,
+                                      collection: [['',_('None')]] + contact.assignable_statuses.collect { |s| [s, _(s)] },
+                                      place_holder: _('None')) %>
+                    <i class="fa fa-question-circle" data-toggle="tooltip"
+                       data-placement="top" data-behavior="explain_statuses"
+                       title="<%= _('Click for explanation of contact status options.') %>"></i>
+                    <%= render 'explain_statuses_modal' %>
+                  </span>
+
+                  <% if contact.status == 'Partner - Financial' %>
+                      <span>
+                        <%
+                          pledge_received = "<span class='text-success'>" + _('Commitment Received') + '</span>'
+                          pledge_not_received = "<span class='text-warning'>" + _('Commitment Not Received') + '</span>'
+                        %>
+                        <%= best_in_place(contact_exhibit, :pledge_received, as: :checkbox,
+                                          collection: { 'false' => pledge_not_received.html_safe,
+                                                        'true' => pledge_received.html_safe })%>
+                      </span>
+                  <% end %>
+                </div>
 
                 <% if current_account_list.multi_currency? %>
                   <span><%= best_in_place(contact_exhibit, :pledge_currency,
@@ -84,18 +98,6 @@
                 <span><%= best_in_place(contact, :pledge_frequency,
                                         as: :select,
                                         collection: [['',_('Unspecified')]] + Contact.pledge_frequencies.to_a) %></span>
-
-                <% if contact.status == 'Partner - Financial' %>
-                    <div>
-                      <%
-                        pledge_received = "<span class='text-success'>" + _('Commitment Received') + '</span>'
-                        pledge_not_received = "<span class='text-warning'>" + _('Commitment Not Received') + '</span>'
-                      %>
-                      <%= best_in_place(contact_exhibit, :pledge_received, as: :checkbox,
-                                        collection: { 'false' => pledge_not_received.html_safe,
-                                                      'true' => pledge_received.html_safe })%>
-                    </div>
-                <% end %>
               </div>
               <dl class="dl-horizontal other-details">
                 <% if contact_exhibit.donor_ids.present? %>
