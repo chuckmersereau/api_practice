@@ -138,8 +138,7 @@ describe GoogleIntegration do
       create(:google_integration, email_integration: true, calendar_integration: false)
       expect do
         GoogleIntegration.sync_all_email_accounts
-      end.to change(Sidekiq::Queue.new, :size).by(1)
-        .and change(Sidekiq::ScheduledSet.new, :size).by(1)
+      end.to change(Sidekiq::ScheduledSet.new, :size).by(2)
     end
   end
 end

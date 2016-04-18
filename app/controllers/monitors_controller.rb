@@ -16,4 +16,8 @@ class MonitorsController < ApplicationController
       render text: 'OK'
     end
   end
+
+  def commit
+    render text: ENV['GIT_COMMIT']
+  end
 end

@@ -49,19 +49,7 @@
                 </div>
               </div>
             </div>
-
             <div class="row">
-              <div class="col-md-12">
-                <h3><%= _('Account Settings') %></h3>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <%= f.label :monthly_goal, _('Monthly goal') %>
-                  <%= f.text_field :monthly_goal, class: 'form-control' %>
-                </div>
-              </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <%= f.label :default_account_list, _('Default Account List') %>
@@ -72,11 +60,30 @@
             </div>
 
             <div class="row">
+              <div class="col-md-12">
+                <h3><%= _('Account Settings') %></h3>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-md-6">
+                <div class="form-group">
+                  <%= f.label :account_list_name, _('Account Name') %>
+                  <%= f.text_field :account_list_name, class: 'form-control' %>
+                </div>
+              </div>
               <div class="col-md-6">
                 <div class="form-group">
                   <%=  f.label _('Home Country') %>
                   <%= f.country_select :home_country, ['None'], {},
                                    {class: 'country_select form-control'} %>
+                </div>
+              </div>
+            <div class="row">
+            </div>
+              <div class="col-md-6">
+                <div class="form-group">
+                  <%= f.label :monthly_goal, _('Monthly goal') %>
+                  <%= f.text_field :monthly_goal, class: 'form-control' %>
                 </div>
               </div>
               <% if $rollout.active?(:currencies, current_account_list) %>
@@ -87,14 +94,6 @@
                     </div>
                 </div>
               <% end %>
-            </div>
-            <div class="row">
-              <div class="col-md-6">
-                <div class="form-group">
-                  <%= f.label :account_list_name, _('Account Name') %>
-                  <%= f.text_field :account_list_name, class: 'form-control' %>
-                </div>
-              </div>
             </div>
 
             <div class="row">

@@ -21,4 +21,14 @@ describe MonitorsController do
       expect(response.status).to eq 500
     end
   end
+
+  context '#commit' do
+    it 'renders git GIT_COMMIT env var' do
+      ENV['GIT_COMMIT'] = 'abc123'
+
+      get :commit
+
+      expect(response.body).to eq 'abc123'
+    end
+  end
 end

@@ -1,8 +1,8 @@
 require 'spec_helper'
 
-describe AsyncScheduler do
+describe AsyncScheduler, sidekiq: :testing_disabled do
   context '.schedule_over_24h' do
-    it 'can schedule jobs randomly in next 24 hours', sidekiq: :testing_disabled do
+    it 'can schedule jobs evenly in next 24 hours' do
       clear_uniqueness_locks
 
       al1 = create(:account_list)
@@ -10,19 +10,18 @@ describe AsyncScheduler do
       al3 = create(:account_list)
 
       Sidekiq::ScheduledSet.new.clear
-      Sidekiq::Queue.new('import').clear
 
       account_lists_relation = AccountList.where(id: [al1.id, al2.id, al3.id])
       expect do
         AsyncScheduler.schedule_over_24h(account_lists_relation, :import_data)
-      end.to change(Sidekiq::ScheduledSet.new, :size).by(2)
+      end.to change(Sidekiq::ScheduledSet.new, :size).by(3)
 
-      # The first job is queued right away and the rest are scheduled evenly
-      job1 = Sidekiq::Queue.new('import').to_a.last
+      job1, job2, job3 = Sidekiq::ScheduledSet.new.to_a
+
       expect(job1.item['class']).to eq 'AccountList'
       expect(job1.item['args']).to eq [al1.id, 'import_data']
-
-      job2, job3 = Sidekiq::ScheduledSet.new.to_a
+      expect(job1.score).to be_within(1.0).of Time.now.to_i
+      expect(job1.queue).to eq 'import'
 
       expect(job2.item['class']).to eq 'AccountList'
       expect(job2.item['args']).to eq [al2.id, 'import_data']
@@ -35,6 +34,19 @@ describe AsyncScheduler do
 
     it 'does nothing for an empty relation' do
       AsyncScheduler.schedule_over_24h(AccountList.where('1 = 0'), :import_data)
+    end
+
+    it 'schedules jobs on the specified queue' do
+      clear_uniqueness_locks
+      Sidekiq::ScheduledSet.new.clear
+      Sidekiq::Queue.new.clear
+      account_list = create(:account_list)
+
+      AsyncScheduler.schedule_over_24h(AccountList.where(id: account_list.id),
+                                       :import_data, :default)
+
+      job = Sidekiq::ScheduledSet.new.to_a.first
+      expect(job.queue).to eq 'default'
     end
   end
 end
