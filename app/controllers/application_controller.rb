@@ -67,10 +67,15 @@ class ApplicationController < ActionController::Base
   end
 
   def ensure_setup_finished
-    if user_signed_in? && (current_user.setup_mode? || !current_account_list) && request.path != '/logout'
+    if user_signed_in? && (current_user.setup_mode? || !current_account_list) && !allowed_setup_request
       redirect_to setup_path(:org_accounts)
       return false
     end
+  end
+
+  def allowed_setup_request
+    return true if request.path == '/logout'
+    params[:controller] == 'preferences' && params[:action] == 'update'
   end
 
   def set_user_time_zone

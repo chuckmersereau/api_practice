@@ -1,0 +1,84 @@
+$ ->
+  $(document).on 'click', '#connect_to_org', ->
+    return false if $('#organization_id').val() == ''
+    el = $('#org_connection_box')
+    el.dialog
+      resizable: false,
+      height:'auto',
+      width:400,
+      modal: true
+
+    $.ajax {
+      url: $(this).attr('href'),
+      data: {id: $('#organization_id').val()},
+      dataType: 'script'
+    }
+    false
+
+  $('.missing_org_btn').click ->
+    $('#missing_org_modal').dialog
+      resizable: false,
+      height: 'auto',
+      width: 500
+    false
+
+  if $("body[setup-step='settings']")[0]
+    preferences_prefills = JSON.parse($('#preference_set_preferences_prefills').val())
+    account_list_organizations = JSON.parse($('#preference_set_account_list_organizations').val())
+
+    account_list_change = (account_list_organizations) ->
+      prefill_select = $('#preferences_prefill_options')
+      prefill_select[0].options.length=0
+      for org, i in account_list_organizations
+        prefill_select[0].options[i] = new Option(org, org, false, false)
+      fill_preferences_form_with(preferences_prefills[account_list_organizations[0]])
+
+    fill_preferences_form_with = (settings) ->
+      if settings.country
+        $('#preference_set_home_country').val(settings.country).highlight()
+      if settings.currency
+        $('#preference_set_currency').val(settings.currency).highlight()
+#        $('#preference_set_salary_currency').val(settings.currency).highlight()
+        goal_currency_placeholder(settings.currency)
+
+    goal_currency_placeholder = (currency) ->
+      $('#preference_set_monthly_goal').attr('placeholder', 'In ' + currency)
+      symbol = $('#preference_set_currency option[value="'+currency+'"]').text()
+      $('.goal-currency-symbol').text(symbol.substring(5, symbol.length - 1))
+
+    if Object.keys(preferences_prefills).length = 1
+      fill_preferences_form_with(preferences_prefills[Object.keys(preferences_prefills)[0]])
+
+    $(document).on 'change', '#preference_set_default_account_list', ->
+      index = parseInt($(this).val()) - 1
+      account_list_change(account_list_organizations[this.options[index].text])
+
+    $(document).on 'change', '#preferences_prefill_options', ->
+      fill_preferences_form_with(preferences_prefills[$(this).val()])
+
+    $(document).on 'change', '#preference_set_currency', ->
+      goal_currency_placeholder($(this).val())
+
+    $('#preference_set_home_country, #preference_set_ministry_country').autocomplete({
+      change: (event, ui) ->
+        if !ui.item
+          $(this).val('')
+      ,
+      source: <%= ::CountrySelect::COUNTRIES_FOR_SELECT.collect { |c| c[:name] }.to_json %>
+    })
+
+jQuery.fn.highlight = ->
+  $(this).each ->
+    el = $(this).parent()
+    el.before("<div/>")
+    el.prev()
+        .width(el.width())
+        .height(el.height())
+        .css({
+          "position": "absolute",
+          "background-color": "#ffff99",
+          "opacity": ".7"
+        })
+        .fadeOut(500, ->
+          $(this).remove();
+    );

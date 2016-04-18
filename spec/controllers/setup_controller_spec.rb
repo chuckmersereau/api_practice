@@ -36,5 +36,25 @@ describe SetupController do
       expect(response).to redirect_to('/')
       expect(@user.reload.setup_mode?).to eq(false)
     end
+
+    context 'settings step' do
+      let!(:org_account) { FactoryGirl.create(:organization_account, person: @user) }
+
+      before do
+        org_account.organization.update(country: 'Brazil', default_currency_code: 'AFN')
+        get :show, id: :settings
+      end
+
+      it 'sets up @account_list_organizations' do
+        account_list_organizations = assigns(:account_list_organizations)
+        expect(account_list_organizations.first[1]).to_not be_empty
+      end
+
+      it 'sets up preferences_prefills' do
+        preferences_prefills = assigns(:preferences_prefills)
+        org_preferences = preferences_prefills[org_account.organization.name]
+        expect(org_preferences).to_not be_empty
+      end
+    end
   end
 end
