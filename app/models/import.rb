@@ -4,7 +4,7 @@ require 'charlock_holmes'
 class Import < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
-  sidekiq_options queue: :import, retry: false, backtrace: true, unique: true
+  sidekiq_options queue: :default, retry: false, backtrace: true, unique: true
 
   belongs_to :user
   mount_uploader :file, ImportUploader
