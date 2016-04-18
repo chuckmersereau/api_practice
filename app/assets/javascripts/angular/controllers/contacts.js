@@ -399,7 +399,24 @@ angular.module('mpdxApp').controller('contactsController', function ($scope, $fi
         return false;
       }
 
-      if (!_.contains(q.status, 'active') || !_.contains(q.status, 'null')) {
+      // This is a temporary fix to make the karma tests past. What we really
+      // need to remove this is for the karma tests to run in the environment of
+      // the correctly evaluated sprokets pipeline (which would expand
+      // railsConstants.js.erb), but currently it does not, which makes
+      // railsConstants undefined.
+      if (!angular.isDefined(window.railsConstants)) {
+        window.railsConstants = {
+          contact: {
+            INACTIVE_STATUSES: []
+          }
+        };
+      }
+
+      inactiveQueryStatuses =
+        _.intersection(q.status, window.railsConstants.contact.INACTIVE_STATUSES);
+
+      if (!_.contains(q.status, 'active') || !_.contains(q.status, 'null') ||
+          !_.isEmpty(inactiveQueryStatuses) || _.contains(q.status, 'hidden')) {
         return false;
       }
 

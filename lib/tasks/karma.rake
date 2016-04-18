@@ -1,3 +1,9 @@
+# NOTE: If you run "bundle exec rake karma:run" on your local machine and it
+# fails with a "Syntax error" message for coffeescript/js in a gem, what you
+# need to do is run "bundle install --path vendor --without=production" which
+# will package the gems locally for you and will allow karma to run correctly in
+# the context of the Rails asset pipeline.
+
 namespace :karma do
   task start: :environment do
     with_tmp_config :start
