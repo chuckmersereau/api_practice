@@ -46,4 +46,12 @@ describe MasterPerson do
     expect(MasterPerson.find_for_person(new_person, donor_account: donor_account))
       .to eq(person.master_person)
   end
+
+  it 'deletes people even without callbacks' do
+    person = create(:person)
+
+    expect do
+      person.master_person.delete
+    end.to raise_error(ActiveRecord::InvalidForeignKey)
+  end
 end
