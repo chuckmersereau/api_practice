@@ -55,10 +55,16 @@ class Person::OrganizationAccountsController < ApplicationController
   def save_account
     return false unless @organization
     @organization_account.save
+  rescue ActiveRecord::RecordNotUnique
+    save_account_error format(_('Error connecting: you are already connected as %{org_account}'),
+                              org_account: @organization_account)
   rescue RuntimeError => e
     Rollbar.error(e)
-    error_message = format(_('Error connecting to %{org_name} server'), org_name: @organization.name)
-    @organization_account.errors.add(:base, error_message)
+    save_account_error format(_('Error connecting to %{org_name} server'), org_name: @organization.name)
+  end
+
+  def save_account_error(message)
+    @organization_account.errors.add(:base, message)
     false
   end
 

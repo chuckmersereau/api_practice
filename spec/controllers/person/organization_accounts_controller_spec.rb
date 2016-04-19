@@ -77,6 +77,18 @@ describe Person::OrganizationAccountsController do
           expect(response).to render_template('new')
         end
       end
+
+      it 'fails gracefully on duplicate' do
+        @user.organization_accounts.create(valid_attributes)
+
+        expect do
+          xhr :post, :create, person_organization_account: valid_attributes
+        end.to change(Person::OrganizationAccount, :count).by(0)
+
+        expect(response).to render_template('new')
+        oa = assigns(:organization_account)
+        expect(oa.errors.first.last).to eq 'Error connecting: you are already connected as Organization1: foo@example.com'
+      end
     end
 
     describe 'with invalid params' do
