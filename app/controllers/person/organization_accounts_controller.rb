@@ -58,6 +58,9 @@ class Person::OrganizationAccountsController < ApplicationController
   rescue ActiveRecord::RecordNotUnique
     save_account_error format(_('Error connecting: you are already connected as %{org_account}'),
                               org_account: @organization_account)
+  rescue DataServerError => e
+    Rollbar.info(e)
+    save_account_error e.message
   rescue RuntimeError => e
     Rollbar.error(e)
     save_account_error format(_('Error connecting to %{org_name} server'), org_name: @organization.name)

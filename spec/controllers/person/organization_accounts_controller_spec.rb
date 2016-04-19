@@ -87,7 +87,20 @@ describe Person::OrganizationAccountsController do
 
         expect(response).to render_template('new')
         oa = assigns(:organization_account)
-        expect(oa.errors.first.last).to eq 'Error connecting: you are already connected as Organization1: foo@example.com'
+        expect(oa.errors.first.last).to eq "Error connecting: you are already connected as #{@org.name}: foo@example.com"
+      end
+
+      it 'passes DataServerErrors on to the user' do
+        dataserver_org = create(:organization)
+        msg = 'This can really be whatever the DataServer feels like throwing at us...'
+        e = DataServerError.new(msg)
+        expect_any_instance_of(DataServer).to receive(:validate_username_and_password).and_raise(e)
+
+        xhr :post, :create, person_organization_account: valid_attributes.merge(organization_id: dataserver_org.id)
+
+        expect(response).to render_template('new')
+        oa = assigns(:organization_account)
+        expect(oa.errors.first.last).to eq msg
       end
     end
 
