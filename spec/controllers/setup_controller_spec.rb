@@ -12,24 +12,12 @@ describe SetupController do
       expect(response).to be_success
     end
 
-    it 'should skip the org_accounts step if the user already has an org account' do
-      FactoryGirl.create(:organization_account, person: @user)
-      get :show, id: :org_accounts
-      expect(response).to redirect_to('/setup/social_accounts')
-    end
-
-    it 'should get the social_accounts step' do
-      FactoryGirl.create(:organization_account, person: @user)
-      get :show, id: :social_accounts
-      expect(response).to be_success
-    end
-
     it 'should redirect to the org_accounts step if the user does not have an org account' do
-      get :show, id: :social_accounts
+      get :show, id: :finish
       expect(response).to redirect_to('/setup/org_accounts')
     end
 
-    it 'should mark setup false when finished' do
+    it 'should mark setup_mode false when finished' do
       FactoryGirl.create(:organization_account, person: @user)
       @user.update_attributes(preferences: { setup: true })
       get :show, id: :finish

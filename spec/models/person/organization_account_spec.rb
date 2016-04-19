@@ -3,7 +3,8 @@ require 'spec_helper'
 describe Person::OrganizationAccount do
   let(:org_account) do
     create(:organization_account,
-           organization: create(:fake_org, name: 'MyString'))
+           organization: create(:fake_org, name: 'MyString'),
+           remote_id: SecureRandom.uuid)
   end
   let(:api) { FakeApi.new }
 

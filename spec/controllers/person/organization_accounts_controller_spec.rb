@@ -65,6 +65,18 @@ describe Person::OrganizationAccountsController do
         xhr :post, :create, person_organization_account: valid_attributes
         expect(response).to render_template('create')
       end
+
+      context 'but error on server' do
+        it 'gracefully fails' do
+          expect_any_instance_of(FakeApi).to receive(:validate_username_and_password).and_raise(RuntimeError)
+
+          expect do
+            xhr :post, :create, person_organization_account: valid_attributes
+          end.to change(Person::OrganizationAccount, :count).by(0)
+
+          expect(response).to render_template('new')
+        end
+      end
     end
 
     describe 'with invalid params' do

@@ -52,7 +52,7 @@ img {
 
 .well-login,
 .well-splash-setup {
-  background: rgba(255,255,255,.85);
+  background: rgba(255,255,255,.9);
   border: none;
   overflow: hidden;
   border-radius: 8px;
@@ -172,20 +172,7 @@ $sidebarwidth: 400px;
   padding: 8px 20px;
   height: auto;
   min-height: 55px;
-  .network_logo {
-    display: block;
-    float: left;
-    width: 135px;
-      img {
-        max-height: 30px;
-        padding-top: 4px;
-      }
-    }
   .network_connections {
-    display: block;
-    margin-left: 135px;
-    width: auto;
-    padding-top: 0px;
     p {
       line-height: 1.25em;
     }
@@ -195,18 +182,19 @@ $sidebarwidth: 400px;
     display: block;
     padding-bottom: 8px;
     .btn {
-      padding: 4px 8px;
+      height: 39px;
+      padding: 8px;
     }
   }
  .account_single {
    display: block;
    background: #eee;
    border: 1px dotted #bbb;
-   padding: 5px;
+   padding: 8px;
    border-radius: 4px;
    font-weight: bold;
    margin: 0 8px 8px 0;
-   font-size: 11px;
+   font-size: 14px;
  }
 }
 #logo {

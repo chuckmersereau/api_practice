@@ -4,13 +4,10 @@ class SetupController < ApplicationController
   skip_before_action :ensure_setup_finished
   before_action :ensure_org_account, only: :show
 
-  steps :org_accounts, :social_accounts, :settings, :finish
+  steps :org_accounts, :settings, :finish
 
   def show
     case step
-    when :org_accounts
-      skip_step if current_user.organization_accounts.present?
-    when :social_accounts
     when :settings
       @preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list)
       @account_list_organizations = build_account_list_organizations

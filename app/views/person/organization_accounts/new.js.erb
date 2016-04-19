@@ -3,16 +3,17 @@
   document.location = '/auth/relay'
 <% else %>
   var nothing = function() {};
-  $('#org_connection_box').dialog('option', 
+  $('#org_connection_box').dialog('option',
                                   {
                                     title: '<%= j(_('Connect to %{org}').localize % {org: @organization}) %>',
                                     buttons: {
-                                      '<%= j(_('Connect!')) %>': function(e) {
-                                        $(this).dialog( "option", "buttons", []);
+                                      '<%= j(_('Connect!')) %>': function() {
                                         $('form', this).submit();
-                                        $('#org_connection_box').html('<%= spinner(visible: true) %>');
                                       },
-                                      '<%= j(_('Cancel')) %>': function() { $(this).dialog("close"); $(this).html(''); }
+                                      '<%= j(_('Cancel')) %>': function() {
+                                        $(this).dialog("close");
+                                        $(this).html('');
+                                      }
                                     },
                                   }
                                  );
