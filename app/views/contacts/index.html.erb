@@ -267,16 +267,14 @@
           </div>
 
           <div class="row page-controls">
-            <div class="col-md-5 col-sm-6">
+            <div class="col-sm-5">
               <span><%= _('Showing') %> <b>{{$ctrl.page.from}}&nbsp;-&nbsp;{{$ctrl.page.to}}</b> <%= _('of') %> <b>{{$ctrl.totalContacts}}</b></span>
               <span class="label label-primary" ng-if="!$ctrl.noContactsSelected()">
-                <ng-pluralize count="$ctrl.selectedContacts.length"
-                              when="{'one': '1 <%= _('Contact Selected') %>',
-                                     'other': '{} <%= _('Contacts Selected') %>'}">
-                </ng-pluralize>
+                {{$ctrl.selectedContacts.length}} <%= _('Selected') %>
+                <a href="javascript:;" class="label-action" ng-click="$ctrl.clearSelectedContacts()"><i class="fa fa-times"></i></a>
               </span>
             </div>
-            <div class="col-md-7 col-sm-6 text-right">
+            <div class="col-sm-7 text-right">
               <span class="pagination">
                 <span class="previous_page disabled" ng-if="$ctrl.page.current === 1">
                   <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
@@ -287,8 +285,8 @@
 
                 <span ng-repeat="n in [1, $ctrl.page.total] | makeRange">
                   <em class="current" ng-if="n === $ctrl.page.current">{{n}}</em>
-                  <a rel="next" ng-if="n !== $ctrl.page.current && ((n > ($ctrl.page.current-8) && n < ($ctrl.page.current+8)) || n === 1 || n === $ctrl.page.total)" href="#" ng-click="$ctrl.page.current=n">{{n}}</a>
-                  <span ng-if="(n === 2 && $ctrl.page.current > 9) || (n === $ctrl.page.total-1 && $ctrl.page.current < $ctrl.page.total - 8)">...</span>
+                  <a rel="next" ng-if="n !== $ctrl.page.current && ((n > ($ctrl.page.current-5) && n < ($ctrl.page.current+5)) || n === 1 || n === $ctrl.page.total)" href="#" ng-click="$ctrl.page.current=n">{{n}}</a>
+                  <span ng-if="(n === 2 && $ctrl.page.current > 6) || (n === $ctrl.page.total - 1 && $ctrl.page.current < $ctrl.page.total - 5)">...</span>
                 </span>
 
                 <span class="next_page disabled" ng-if="$ctrl.page.current === $ctrl.page.total || $ctrl.page.total === 0">

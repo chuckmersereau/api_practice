@@ -91,3 +91,12 @@ dl {
   .text-sm-center { text-align: center; }
   .text-sm-justify { text-align: justify; }
 }
+
+.label .label-action {
+  margin-left: 2px;
+  color: #FFF;
+  opacity: .6;
+  &:hover {
+    opacity: 1;
+  }
+}

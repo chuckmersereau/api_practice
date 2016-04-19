@@ -73,6 +73,7 @@
         vm.contactsSelected = contactsSelected;
         vm.allContactsOnPageSelected = allContactsOnPageSelected;
         vm.noContactsSelected = noContactsSelected;
+        vm.clearSelectedContacts = clearSelectedContacts;
 
         activate();
 
@@ -564,6 +565,10 @@
 
         function insightFilterIsActive(){
             return angular.isDefined(vm.contactQuery.insightFilter);
+        }
+
+        function clearSelectedContacts(){
+            vm.selectedContacts = [];
         }
 
         function selectAllContactsOnPage(){
