@@ -3087,6 +3087,8 @@ ALTER TABLE ONLY activity_contacts
 ALTER TABLE ONLY addresses
     ADD CONSTRAINT addresses_pkey PRIMARY KEY (id);
 
+ALTER TABLE addresses CLUSTER ON addresses_pkey;
+
 
 --
 -- Name: admin_impersonation_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
@@ -4451,6 +4453,7 @@ CREATE INDEX index_prayer_letters_accounts_on_account_list_id ON prayer_letters_
 
 
 --
+-- Name: index_remote_id_on_person_relay_account; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
 CREATE UNIQUE INDEX index_remote_id_on_person_relay_account ON person_relay_accounts USING btree (lower((remote_id)::text));
@@ -4602,6 +4605,14 @@ CREATE UNIQUE INDEX user_id_and_organization_id ON person_organization_accounts 
 
 ALTER TABLE ONLY master_person_sources
     ADD CONSTRAINT master_person_sources_master_person_id_fk FOREIGN KEY (master_person_id) REFERENCES master_people(id);
+
+
+--
+-- Name: people_master_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY people
+    ADD CONSTRAINT people_master_person_id_fk FOREIGN KEY (master_person_id) REFERENCES master_people(id) ON DELETE RESTRICT;
 
 
 --
@@ -5019,4 +5030,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160302160145');
 INSERT INTO schema_migrations (version) VALUES ('20160401173537');
 
 INSERT INTO schema_migrations (version) VALUES ('20160413150136');
+
+INSERT INTO schema_migrations (version) VALUES ('20160419135520');
 
