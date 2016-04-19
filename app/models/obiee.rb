@@ -6,14 +6,14 @@ class Obiee
 
   def initialize
     creds = { name: ENV.fetch('OBIEE_KEY'), password: ENV.fetch('OBIEE_SECRET') }
-    url = OBIEE_URL + '=nQSessionService'
+    url = OBIEE_URL + 'nQSessionService'
     client = get_client(url)
     auth_message = make_call(client, :logon, creds)
     @session_id = auth_message.body[:logon_result][:session_id]
   end
 
   def report_results(session_id, report_path, vars = {})
-    url = OBIEE_URL + '=xmlViewService'
+    url = OBIEE_URL + 'xmlViewService'
     run_report_client = get_client(url)
     run_params = { report: { reportPath: report_path },
                    outputFormat: 'SAWRowsetAndData',
