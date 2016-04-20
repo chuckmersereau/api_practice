@@ -67,11 +67,7 @@ class AccountsController < ApplicationController
   def redirect_path
     case
     when current_user.setup_mode?
-      if current_user.organization_accounts.present?
-        setup_path(:social_accounts)
-      else
-        setup_path(:org_accounts)
-      end
+      setup_path(:org_accounts)
     when session[:user_return_to]
       session[:user_return_to]
     else
