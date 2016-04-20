@@ -91,6 +91,23 @@ $ ->
   $('#preference_reset_welcome').click ->
     $('#preference_set_setup').val("[:goal, :import, :contacts]")
 
+  if _gaq?
+    action = getURLParameter('ga-action')
+    if action?
+      category = getURLParameter('ga-category') || 'Navigation Event'
+      _gaq.push(['_trackEvent', category, action, getURLParameter('ga-label')]);
+
+window.getURLParameter = (sParam) ->
+  sPageURL = window.location.search.substring(1)
+  sURLVariables = sPageURL.split('&')
+  i = 0
+  while i < sURLVariables.length
+    sParameterName = sURLVariables[i].split('=')
+    if sParameterName[0] == sParam
+      return sParameterName[1]
+    i++
+  return
+
 window.addFields = (link, association, content) ->
   new_id = new Date().getTime()
   regexp = new RegExp("new_" + association, "g")

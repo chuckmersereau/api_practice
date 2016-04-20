@@ -95,6 +95,7 @@ Rails.application.routes.draw do
 
   resources :insights
   resources :donations
+  resource :donation_syncs, only: [:create]
   resources :accounts
   resources :preferences do
     collection do

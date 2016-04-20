@@ -8,7 +8,7 @@
           <%= _('Previous Month') %>
         <% end %>
         <% unless @end_date >= Date.today %>
-          &nbsp; &nbsp; 
+          &nbsp; &nbsp;
           <%= link_to(donations_path(start_date: @start_date + 1.month)) do %>
             <%= _('Next Month') %>
             <i class="fa fa-chevron-right"></i>
