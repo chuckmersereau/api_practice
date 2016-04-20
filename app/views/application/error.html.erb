@@ -17,16 +17,18 @@
       <div id="brand"><%= link_to("", "/", :class=> "logo") %></div>
       <div class="links">
       <% if current_user.present? %>
-        <div class="section lists" data-behavior="account_selector" style="<%= 'display:none' unless current_user.account_lists.length > 1 %>">
-          <a data-behavior="current_account"><span class='cur'><%= current_account_list.name %></span><%= image_tag("list_select.png") %></a>
-          <div style="display:none" class="switcher">
-            <ul>
-              <% (current_user.account_lists - [current_account_list]).each do |al| %>
-                <li><%= link_to(al.name, "/home/change_account_list?id=#{al.id}") %></li>
-              <% end %>
-            </ul>
+        <% if current_account_list.present? %>
+          <div class="section lists" data-behavior="account_selector" style="<%= 'display:none' unless current_user.account_lists.length > 1 %>">
+            <a data-behavior="current_account"><span class='cur'><%= current_account_list.name %></span><%= image_tag("list_select.png") %></a>
+            <div style="display:none" class="switcher">
+              <ul>
+                <% (current_user.account_lists - [current_account_list]).each do |al| %>
+                  <li><%= link_to(al.name, "/home/change_account_list?id=#{al.id}") %></li>
+                <% end %>
+              </ul>
+            </div>
           </div>
-        </div>
+        <% end %>
 
         <div class="section"><%= link_to(_('Settings'), "/preferences") %></div>
         <div class="section"><%= link_to(_('Log out'), '/logout') %></div>
@@ -55,7 +57,7 @@
       <div id="content">
         <h1 class="error-status-huge" style="font-size: 7em; margin-top: 2rem; margin-bottom: 0;"><%= _("Whoops.").localize %></h1>
         <h1><%= _("We couldn't find what you were looking for. Sorry!").localize %></h1>
-        <h2><%== _("Try going back, or if you keep getting this message, %{link}.").localize % 
+        <h2><%== _("Try going back, or if you keep getting this message, %{link}.").localize %
                  {link: link_to(_('ask for help'), new_help_request_path)} %>
         </h2>
       </div>
