@@ -23,7 +23,7 @@ describe Api::V1::InsightsController do
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
     results_fixture = File.read('spec/fixtures/obiee_report_results2.xml')
-    run_params = { report: { reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations' },
+    run_params = { report: { reportPath: '/shared/MPD/Siebel Recurring Monthly/Recurring Gift Recommendations' },
                    reportParams: { filterExpressions: '',
                                    variables: { name: 'mpdxRecurrDesig', value: '2716653' }
                    },

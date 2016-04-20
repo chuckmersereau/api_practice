@@ -21,7 +21,7 @@ describe 'InsightAnalyses' do
   after(:all) { savon.unmock! }
 
   def report_params
-    { report: { reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations' },
+    { report: { reportPath: '/shared/MPD/Siebel Recurring Monthly/Recurring Gift Recommendations' },
       outputFormat: 'SAWRowsetAndData',
       executionOptions:
           { async: '',
