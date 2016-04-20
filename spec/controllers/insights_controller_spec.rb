@@ -22,7 +22,7 @@ describe InsightsController do
     fixture = File.read('spec/fixtures/obiee_auth_client.xml')
     savon.expects(:logon).with(message: creds).returns(fixture)
     results_fixture = File.read('spec/fixtures/obiee_report_results.xml')
-    run_params = { report: { reportPath: '/shared/Insight/Siebel Recurring Monthly/Recurring Gift Recommendations' },
+    run_params = { report: { reportPath: '/shared/MPD/Siebel Recurring Monthly/Recurring Gift Recommendations' },
                    outputFormat: 'SAWRowsetAndData',
                    executionOptions:
                       { async: '',
