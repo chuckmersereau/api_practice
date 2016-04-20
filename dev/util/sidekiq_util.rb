@@ -17,7 +17,7 @@ def remove_from_reliability(q = 'default', &_block)
     list = r.lrange(reliability_q, 0, -1)
     list.each do |item|
       json = JSON.parse(item)
-      r.lrem(q, 1, item) if yield(json)
+      r.lrem(reliability_q, 1, item) if yield(json)
     end
   end
 end
