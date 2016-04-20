@@ -9,6 +9,7 @@ gem 'rails', '~> 4.1.14'
 # in production environments by default.
 gem 'sass-rails',   '~> 5.0.1'
 gem 'coffee-rails', '~> 4.0.1'
+gem 'autoprefixer-rails'
 
 gem 'execjs' # , '~> 1.4.0'
 # gem 'therubyracer', platforms: :ruby
