@@ -63,7 +63,7 @@ describe AccountsController do
         @user.update_attributes(preferences: { setup: true })
         allow(Person::FacebookAccount).to receive(:find_or_create_from_auth)
         post 'create', provider: 'facebook'
-        expect(response).to redirect_to(setup_path(:social_accounts))
+        expect(response).to redirect_to(setup_path(:org_accounts))
       end
 
       it 'should redirect to a stored user_return_to' do
