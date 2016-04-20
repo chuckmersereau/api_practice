@@ -626,15 +626,20 @@ h2.section {
 .small-person {
   padding: 10px;
   margin-bottom: 0;
-  .set {
-    font-size: .9em;
-  }
-  .person_details {
+  .person-details {
     display: inline-block;
     line-height: initial;
-    padding: 0px .5em 0px 1em;
+    padding: 0 .5em 0 1em;
     vertical-align: top;
     width: 73%;
+    .name {
+      font-size: 1.15em;
+      font-weight: 400;
+      line-height: 1em;
+    }
+    .person-details-small {
+      font-size: .9em;
+    }
   }
   .person_avatar {
     padding: 0;
@@ -646,11 +651,6 @@ h2.section {
     width: 20%;
   }
 
-  .name {
-    font-size: 1.15em;
-    font-weight: 400;
-    line-height: 1em;
-  }
   &.merge-person-checked {
     box-shadow: 0 0 5px $blue;
   }
@@ -2194,61 +2194,3 @@ span.best_in_place_once {
   border: 2px solid #4e4001;
   border-radius: 6px;
 }
-
-/* ********************* Bootstrap Overwrites ****************** */
-
-.head-user-wrap {background: $color-white; border-top: 8px solid $color-gold;}
-.head-mainmenu-wrap {background: $color-gray-dark;}
-.bootstrap-tagsinput {
-  input {
-    outline: none;
-    border: none;
-    height: auto;
-  }
-}
-.form-group {
-  .bootstrap-tagsinput {
-    width: 100%;
-  }
-}
-.row-no-padding {
-  [class*="col-"] {
-    padding-left: 0 !important;
-    padding-right: 0 !important;
-  }
-}
-.panel-body {
-  padding: 15px;
-  display: block;
-}
-.panel-heading {
-  padding: 6px 15px;
-  text-transform: uppercase;
-  font-weight: 600;
-  font-family: $brand-font;
-  .badge {
-    border-radius: 15px;
-    display: inline-block;
-    font-size: 11px;
-    padding: 0 6px;
-  }
-  .badge-blue {
-    background: $color-blue-deep !important;
-    color: $color-white;
-  }
-  .badge-right-well {
-    float: right;
-    margin-top: 4px;
-  }
-}
-
-.marked_for_destruction { display: none; }
-
-.ui-datepicker {
-  z-index: 1100 !important;
-}
-.pac-container {
-  z-index: 1100 !important;
-}
-
-em.gold { color: $color-gold; font-style: normal; }

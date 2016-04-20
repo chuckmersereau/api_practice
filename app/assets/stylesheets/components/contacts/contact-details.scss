@@ -1,0 +1,48 @@
+.contact-details {
+  .profile-header{
+    h2{
+      margin-bottom: 8px;
+    }
+    .financial-status{
+      span{
+        margin-left: 2px;
+      }
+      .best-in-place-pledge{
+        width: 92px;
+      }
+    }
+    .other-details{
+      &.dl-horizontal{
+        @media (min-width: $screen-sm-min) {
+          dt {
+            width: 110px;
+          }
+          dd {
+            margin-left: 120px;
+          }
+        }
+      }
+    }
+    address{
+      display: inline-block;
+      text-align: left;
+      line-height: 1.25;
+      font-weight: 300;
+    }
+  }
+  .contact-tags {
+    margin-bottom: 0;
+    .bootstrap-tagsinput{
+      margin-bottom: 0;
+      border: none;
+      border-bottom: dashed 1px #0077ae;
+      box-shadow: none;
+      padding: 0;
+    }
+  }
+  #details-tab{
+    h3{
+      margin-bottom: 8px;
+    }
+  }
+}

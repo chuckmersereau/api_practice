@@ -1,12 +1,12 @@
-<div class="set phone">
+<div class="phone">
   <% if person.phone_numbers.present? %>
-    <% person.phone_numbers.map {|pn| exhibit(pn, self)}.each do |phone| next if phone.historic? %>
-      <%= phone %>
-      <% if person.phone_numbers.length > 1 && phone.primary? %>
-        <i class="fa fa-check green"></i>
+      <% person.phone_numbers.map {|pn| exhibit(pn, self)}.each do |phone| next if phone.historic? %>
+          <%= phone %>
+          <% if person.phone_numbers.length > 1 && phone.primary? %>
+              <i class="fa fa-check green"></i>
+          <% end %>
+          <br/>
       <% end %>
-      <br/>
-    <% end %>
   <% else %>
     <span class="best_in_place best_in_place_once" data-bip-attribute="number"
           data-bip-object="person[phone_numbers_attributes][0]"
@@ -15,16 +15,16 @@
   <% end %>
 </div>
 
-<div class="set email">
+<div class="email">
   <% if person.email_addresses.present? %>
-    <% person.email_addresses.each do |email| next if email.historic? %>
-      <%= exhibit(email, self) %>
+      <% person.email_addresses.each do |email| next if email.historic? %>
+          <%= exhibit(email, self) %>
 
-      <% if person.email_addresses.length > 1 && email.primary? %>
-        <i class="fa fa-check green"></i>
+          <% if person.email_addresses.length > 1 && email.primary? %>
+              <i class="fa fa-check green"></i>
+          <% end %>
+          <br/>
       <% end %>
-      <br/>
-    <% end %>
   <% else %>
     <span class="best_in_place best_in_place_once" data-bip-attribute="email"
           data-bip-object="person[email_addresses_attributes][0]"
@@ -33,27 +33,33 @@
   <% end %>
 </div>
 
+<% if person.optout_enewsletter.present? %>
+    <div>
+      <strong><%= _('Opted-out of email newsletter') %></strong>
+    </div>
+<% end %>
+
 <% if person.birthday_month.present? %>
-    <div class="set">
-      <strong><%= _('Birthday') %>:</strong> <%= I18n.t("date.month_names")[person.birthday_month] %> <%= person.birthday_day %>, <%= person.birthday_year %>
+    <div>
+      <strong><%= _('Birthday') %></strong> <%= I18n.t("date.month_names")[person.birthday_month] %> <%= person.birthday_day %>, <%= person.birthday_year %>
     </div>
 <% end %>
 
 <% if person.anniversary_month.present? %>
-    <div class="set">
-      <strong><%= _('Anniversary') %>:</strong> <%= I18n.t("date.month_names")[person.anniversary_month] %> <%= person.anniversary_day %>, <%= person.anniversary_year %>
+    <div>
+      <strong><%= _('Anniversary') %></strong> <%= I18n.t("date.month_names")[person.anniversary_month] %> <%= person.anniversary_day %>, <%= person.anniversary_year %>
     </div>
 <% end %>
 
 <% if person.occupation.present? %>
-    <div class="set">
-      <strong><%= _('Occupation') %>:</strong> <%= person.occupation %>
+    <div>
+      <strong><%= _('Occupation') %></strong> <%= person.occupation %>
     </div>
 <% end %>
 
 <% if person.employer.present? %>
-    <div class="set">
-      <strong><%= _('Employer') %>:</strong> <%= person.employer %>
+    <div>
+      <strong><%= _('Employer') %></strong> <%= person.employer %>
     </div>
 <% end %>
 

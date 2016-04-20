@@ -1,0 +1,93 @@
+/* ********************* Bootstrap Overwrites ****************** */
+
+.head-user-wrap {background: $color-white; border-top: 8px solid $color-gold;}
+.head-mainmenu-wrap {background: $color-gray-dark;}
+.bootstrap-tagsinput {
+  input {
+    outline: none;
+    border: none;
+    height: auto;
+  }
+}
+.form-group {
+  .bootstrap-tagsinput {
+    width: 100%;
+  }
+}
+.row-no-padding {
+  [class*="col-"] {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+}
+.panel-body {
+  padding: 15px;
+  display: block;
+}
+.panel-heading {
+  padding: 6px 15px;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-family: $brand-font;
+  .badge {
+    border-radius: 15px;
+    display: inline-block;
+    font-size: 11px;
+    padding: 0 6px;
+  }
+  .badge-blue {
+    background: $color-blue-deep !important;
+    color: $color-white;
+  }
+  .badge-right-well {
+    float: right;
+    margin-top: 4px;
+  }
+}
+
+.marked_for_destruction { display: none; }
+
+.ui-datepicker {
+  z-index: 1100 !important;
+}
+.pac-container {
+  z-index: 1100 !important;
+}
+
+em.gold { color: $color-gold; font-style: normal; }
+
+$dl-margin-bottom: 10px;
+dl {
+  margin-bottom: $dl-margin-bottom;
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+/* ********************* Bootstrap Add-on Classes ****************** */
+@media (min-width: $screen-sm-min) {
+  .dl-horizontal-sm {
+    dt {
+      width: 90px;
+    }
+    dd {
+      margin-left: 110px;
+    }
+  }
+}
+
+@media (max-width: $screen-xs-max) {
+  .spacing-below-xs {
+    margin-bottom: 5px;
+  }
+  .dl-spacing-below-xs {
+    margin-bottom: $dl-margin-bottom !important;
+  }
+}
+
+@media (min-width: $screen-sm-min) {
+  .text-sm-left { text-align: left; }
+  .text-sm-right { text-align: right; }
+  .text-sm-center { text-align: center; }
+  .text-sm-justify { text-align: justify; }
+}
