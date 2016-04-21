@@ -1,0 +1,43 @@
+require 'spec_helper'
+
+describe CurrencyRate do
+  context '.latest_for' do
+    it 'returns the latest exchange rate for currency' do
+      create(:currency_rate, code: 'EUR', exchanged_on: Date.new(2016, 1, 1), rate: 0.8)
+      create(:currency_rate, code: 'EUR', exchanged_on: Date.new(2016, 2, 1), rate: 0.7)
+
+      expect(CurrencyRate.latest_for('EUR')).to eq 0.7
+    end
+
+    it 'raise a missing rate exception if no rates present for currency' do
+      expect { CurrencyRate.latest_for('EUR') }
+        .to raise_error(CurrencyRate::RateNotFoundError)
+    end
+  end
+
+  context '.latest_for_pair' do
+    it 'retrieves composite rate between currencies' do
+      create(:currency_rate, code: 'EUR', exchanged_on: Date.new(2016, 4, 1), rate: 0.88)
+      create(:currency_rate, code: 'GBP', exchanged_on: Date.new(2016, 4, 1), rate: 0.69)
+
+      expect(CurrencyRate.latest_for_pair(from: 'EUR', to: 'GBP'))
+        .to be_within(0.001).of(0.607)
+    end
+
+    it 'returns 1.0 if the currencies are the same' do
+      create(:currency_rate, code: 'EUR', exchanged_on: Date.new(2016, 4, 1), rate: 0.88)
+
+      expect(CurrencyRate.latest_for_pair(from: 'EUR', to: 'EUR')).to eq 1.0
+    end
+  end
+
+  context '.convert_with_latest' do
+    it 'converts from one currency to other using latest rates' do
+      create(:currency_rate, code: 'EUR', exchanged_on: Date.new(2016, 4, 1), rate: 0.88)
+      create(:currency_rate, code: 'GBP', exchanged_on: Date.new(2016, 4, 1), rate: 0.69)
+
+      expect(CurrencyRate.convert_with_latest(amount: 10.0, from: 'EUR', to: 'GBP'))
+        .to be_within(0.01).of(6.07)
+    end
+  end
+end
