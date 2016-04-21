@@ -1,7 +1,7 @@
 require 'csv_util'
 
-class ReportsController < ApplicationController
-  def contributions
+class Reports::ContributionsController < ApplicationController
+  def show
     @page_title = _('Contribution Report')
 
     setup_dates

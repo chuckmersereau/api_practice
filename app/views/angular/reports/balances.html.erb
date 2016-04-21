@@ -1,0 +1,43 @@
+<div ng-if="$ctrl.errorOccurred">
+  <%= _('Report data could not load due to an error. Please try again or contact support.') %>
+</div>
+
+<table ng-if="!$ctrl.errorOccurred" class="table">
+  <tr>
+    <th><%= _('Organization') %></th>
+    <th><%= _('Designation') %></th>
+    <th><%= _('Last Synced') %></th>
+    <th><%= _('Balance') %></th>
+    <th><%= _('Exchange Rate') %></th>
+    <th><%= _('Converted Balance') %></th>
+  </tr>
+  <tr ng-repeat="designation in $ctrl.designations">
+    <td>{{designation.organization_name}}</td>
+    <td>{{designation.designation_number}}</td>
+    <td>{{designation.balance_updated_at | date : format : shortDate}}</td>
+    <td>
+      {{designation.currency_symbol}}
+      {{designation.balance | number : 0}}
+      {{designation.currency}}
+    </td>
+    <td>
+      {{designation.exchange_rate | number : 2}}
+      {{designation.currency_symbol}}
+      /
+      {{$ctrl.total_currency_symbol}}
+      {{$ctrl.total_currency}}
+    </td>
+    <td>
+      {{$ctrl.total_currency_symbol}}
+      {{designation.converted_balance | number : 0}}
+      {{$ctrl.total_currency}}
+    </td>
+  </tr>
+</table>
+
+<strong>
+  <%= _('Converted Total') %>
+  {{$ctrl.total_currency_symbol}}
+  {{$ctrl.converted_total | number : 0}}
+  {{$ctrl.total_currency}}
+</strong>

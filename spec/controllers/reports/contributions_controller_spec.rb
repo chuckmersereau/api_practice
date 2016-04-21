@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ReportsController do
+describe Reports::ContributionsController do
   before(:each) do
     @user = create(:user_with_account)
     sign_in(:user, @user)
@@ -14,14 +14,14 @@ describe ReportsController do
                      status: 'Partner - Financial')
   end
 
-  describe '#contributions' do
+  describe '#show' do
     before do
       contact.donor_accounts << donor_account
       create(:donation, donor_account: donor_account, designation_account: @designation_account,
                         donation_date: 1.month.ago)
     end
     it 'successfully loads html' do
-      get 'contributions'
+      get :show
       expect(response).to be_success
     end
 
@@ -29,12 +29,12 @@ describe ReportsController do
       contact.pledge_frequency = nil
       create(:donation, donor_account: donor_account, designation_account: @designation_account,
                         donation_date: 13.months.ago)
-      get 'contributions', start_date: Date.today.end_of_month - 1.year
+      get :show, start_date: Date.today.end_of_month - 1.year
       expect(response).to be_success
     end
 
     it 'successfully loads csv' do
-      get 'contributions', format: 'csv'
+      get :show, format: 'csv'
       expect(response).to be_success
     end
   end

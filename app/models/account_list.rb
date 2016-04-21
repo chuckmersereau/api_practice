@@ -71,6 +71,10 @@ class AccountList < ActiveRecord::Base
     settings[:monthly_goal].present? && settings[:monthly_goal].to_i > 0 ? settings[:monthly_goal].to_i : nil
   end
 
+  def salary_currency_or_default
+    salary_currency || default_currency
+  end
+
   def default_currency
     return @default_currency if @default_currency
     @default_currency = settings[:currency] if settings[:currency].present?

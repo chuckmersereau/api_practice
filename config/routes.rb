@@ -66,6 +66,11 @@ Rails.application.routes.draw do
           put :export_appeal_list
         end
       end
+
+      namespace :reports do
+        resource :balances, only: [:show]
+        resource :expected_monthly_total, only: [:show]
+      end
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
   end
@@ -105,10 +110,10 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :reports, only: [] do
-    collection do
-      get :contributions
-    end
+  namespace :reports do
+    resource :contributions, only: [:show]
+    resource :balances, only: [:show]
+    resource :expected_monthly_totals, only: [:show]
   end
 
   resources :contacts do

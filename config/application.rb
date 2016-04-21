@@ -34,10 +34,9 @@ module Mpdx
     config.assets.paths << "#{Rails.root}/app/assets/fonts"
     config.assets.paths << "#{Rails.root}/node_modules"
 
-    config.exceptions_app = self.routes
+    config.exceptions_app = routes
 
     config.log_formatter = ::Logger::Formatter.new
-    config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, :silence => ['/monitors/lb']
+    config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, silence: ['/monitors/lb']
   end
 end
-

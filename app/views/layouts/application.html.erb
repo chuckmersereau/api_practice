@@ -92,6 +92,9 @@
                       <li class="item <%= request.path =~ /\/contacts/ ? 'active' : '' %>"><%= link_to(_('Contacts'), "/contacts") %></li>
                       <li class="item <%= request.path =~ /\/tasks/ ? 'active' : '' %>"><%= link_to(_('Tasks'), "/tasks/") %></li>
                       <li class="item <%= request.path =~ /\/donations/ ? 'active' : '' %>"><%= link_to(_('Donations'), "/donations") %></li>
+                      <% if $rollout.active?(:multi_currency_reports, current_account_list) %>
+                        <li class="item <%= request.path =~ /\/reports/ ? 'active' : '' %>"><%= link_to(_('Reports'), reports_balances_path) %></li>
+                      <% end %>
                       <% if $rollout.active?(:research, current_account_list) %>
                         <li class="item <%= request.path =~ /\/research/ ? 'active' : '' %>"><%= link_to(_('Research'), "/research") %></li>
                       <% end %>
@@ -139,9 +142,14 @@
                 <% end %>
                 <% if params[:controller] == 'donations' %>
                   <div class="section"><%= link_to('<i class="fa fa-plus-square"></i> '.html_safe + _('Add a donation'), new_donation_path, remote: true, class: 'no-new-tab') %></div>
-                  <div class="section"><%= link_to(_('Contribution Report'), contributions_reports_path) %></div>
+                  <div class="section"><%= link_to(_('Contribution Report'), reports_contributions_path) %></div>
                   <div class="section">
                     <%= link_to(_('Sync Donations Now'), donation_syncs_path, method: :post) %>
+                  </div>
+                <% end %>
+                <% if request.path.start_with?('/reports') %>
+                  <div class="section <%= request.path =~ /\/balances/ ? 'active' : '' %>">
+                    <%= link_to(_('Balances'), reports_balances_path) %>
                   </div>
                 <% end %>
                 <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>

@@ -25,6 +25,10 @@ p:last-child {margin-bottom: 0;}
     a {
       color: $color-text;
     }
+    .active a {
+      font-weight: 600;
+      color: $color-gold;
+    }
   }
   .bal {
     font-size: 15px;
