@@ -9,7 +9,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :help_requests
+  resources :help_requests, only: [:new, :create] do
+    member do
+      get :attachment
+    end
+  end
 
   get '/help' => 'help_requests#new'
 

@@ -20,6 +20,14 @@ class HelpRequestsController < ApplicationController
     end
   end
 
+  def attachment
+    id = HelpRequest.decrypt_token(params[:id])
+    help_request = HelpRequest.find_by(id: id)
+
+    render(text: 'Unauthorized!', status: :unauthorized) && return unless help_request
+    redirect_to help_request.file_url
+  end
+
   private
 
   def help_request_params

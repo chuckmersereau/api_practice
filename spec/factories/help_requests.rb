@@ -12,5 +12,8 @@ FactoryGirl.define do
     user_preferences 'MyText'
     account_list_settings 'MyText'
     request_type 'Problem'
+    factory :help_request_with_attachment do
+      file Rack::Test::UploadedFile.new(File.open(File.join(Rails.root, '/spec/fixtures/obiee_json.txt')))
+    end
   end
 end
