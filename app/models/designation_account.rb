@@ -26,4 +26,18 @@ class DesignationAccount < ActiveRecord::Base
       contact.update_donation_totals(donation)
     end
   end
+
+  def currency
+    @currency ||= organization.default_currency_code || 'USD'
+  end
+
+  def converted_balance(convert_to_currency)
+    CurrencyRate.convert_with_latest(amount: balance, from: currency,
+                                     to: convert_to_currency)
+  rescue CurrencyRate::RateNotFoundError => e
+    # Log the error in rollbar, but then return a zero balance to prevent future
+    # errors and prevent this balance form adding to the total.
+    Rollbar.error(e)
+    0.0
+  end
 end
