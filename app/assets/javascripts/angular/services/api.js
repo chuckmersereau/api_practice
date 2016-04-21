@@ -40,4 +40,8 @@ angular.module('mpdxApp')
         this.post = function (url, data, successFn, errorFn, cache) {
             return this.call('post', url, data, successFn, errorFn, cache);
         };
+
+        this.encodeURLarray = function encodeURLarray(array){
+            return _.map(array, encodeURIComponent);
+        }
     });

@@ -190,7 +190,7 @@ class ContactsController < ApplicationController
   end
 
   def bulk_destroy
-    @contacts = current_account_list.contacts.find(params[:ids])
+    @contacts = current_account_list.contacts.find(params[:ids].split(','))
     @contacts.map(&:hide)
 
     respond_to do |format|

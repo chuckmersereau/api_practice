@@ -349,7 +349,9 @@ div.right {
   line-height: 34px;
   .pagination {
     width: auto;
-    margin-left: 20px;
+  }
+  & > div > span + span {
+    margin-left: 10px;
   }
 }
 

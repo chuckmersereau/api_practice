@@ -32,6 +32,7 @@ module Mpdx
     config.active_record.cache_timestamp_format = :nsec
 
     config.assets.paths << "#{Rails.root}/app/assets/fonts"
+    config.assets.paths << "#{Rails.root}/node_modules"
 
     config.exceptions_app = self.routes
 

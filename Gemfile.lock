@@ -103,7 +103,6 @@ GEM
       gyoku (>= 0.4.0)
       nokogiri
     angular-ui-bootstrap-rails (0.13.0)
-    angularjs-rails (1.4.3)
     arel (5.0.1.20140414130214)
     assignable_values (0.5.3)
       activerecord
@@ -801,7 +800,6 @@ DEPENDENCIES
   activesupport-json_encoder
   acts-as-taggable-on (~> 3.0.0)
   angular-ui-bootstrap-rails
-  angularjs-rails
   assignable_values (~> 0.5.3)
   attributes_history
   autoprefixer-rails

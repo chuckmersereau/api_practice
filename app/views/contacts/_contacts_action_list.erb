@@ -1,8 +1,11 @@
-<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="action-drop">
+<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="action-drop" ng-if="!$ctrl.noContactsSelected()">
   <li><%= link_to(_('Add Tags'), '#', class: 'none', data: {behavior: 'add_tag_to_list'}) %></li>
   <li><%= link_to(_('Remove Tag'), '#', class: 'none', data: {behavior: 'remove_tag_from_list'}) %></li>
   <li><%= link_to(_('Add Task'), '#', class: 'none', data: {behavior: 'add_task_to_list'}) %></li>
   <li><%= link_to(_('Log Task'), '#', class: 'none', data: {behavior: 'add_task_to_list', completed: true}) %></li>
   <li><%= link_to(_('Edit Fields'), '#', class: 'none', data: {behavior: 'bulk_edit'}) %></li>
   <li><%= link_to(_('Hide Contacts'), '#', class: 'none', data: {behavior: 'bulk_hide_contact'}) %></li>
+</ul>
+<ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="action-drop" ng-if="$ctrl.noContactsSelected()">
+  <li class="dropdown-header"><%= _('Please select at least one contact') %></li>
 </ul>

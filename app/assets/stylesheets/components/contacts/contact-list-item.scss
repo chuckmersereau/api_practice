@@ -1,0 +1,38 @@
+contact {
+  display: flex;
+  & + & { //all except first
+    border-top: 1px solid $color-gray-light;
+  }
+  padding: 15px 0;
+  font-size: .9em;
+  .avatar {
+    width: 50px;
+  }
+  .contact-details {
+    flex-grow: 1;
+    .main-details {
+      h4 {
+        margin-bottom: 0;
+        font-size: 1.05rem;
+      }
+      address {
+        display: inline-block;
+        text-align: left;
+        line-height: 1.25;
+        font-weight: 300;
+      }
+      .people {
+        margin: 5px 0;
+        .people-single-contact {
+          line-height: 1.25em;
+        }
+      }
+    }
+    .more-details {
+      line-height: 1.35em;
+      .pledge_not_received_icon {
+        font-size: 70%;
+      }
+    }
+  }
+}

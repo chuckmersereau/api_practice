@@ -1,17 +1,15 @@
 describe('contacts', function() {
     beforeEach(module('mpdxApp'));
-    var $scope, $location, $rootScope, createController;
+    var self = {};
 
-    beforeEach(inject(function($injector) {
-        $location = $injector.get('$location');
-        $rootScope = $injector.get('$rootScope');
+    beforeEach(inject(function($injector, $componentController, api) {
+        self.api = api;
         $httpBackend = $injector.get('$httpBackend');
-        $scope = $rootScope.$new();
+        var $rootScope = $injector.get('$rootScope');
+        var $scope = $rootScope.$new();
 
-        var $controller = $injector.get('$controller');
-
-        createController = function() {
-            return $controller('contactsController', {
+        self.createController = function() {
+            return $componentController('contactList', {
                 '$scope': $scope,
                 '$http': $httpBackend
             });
@@ -20,48 +18,46 @@ describe('contacts', function() {
 
 
     it('reset filter should clear filters', function() {
-        var controller = createController();
+        var controller = self.createController();
 
-        $scope.contactQuery.ids = '1,2';
-        $scope.contactQuery.tags = ['test'];
-        $scope.contactQuery.name = 'Steve';
-        $scope.contactQuery.type = 'person';
-        $scope.contactQuery.city = ['Green Bay'];
-        $scope.contactQuery.state = ['WI'];
-        $scope.contactQuery.newsletter = 'all';
-        $scope.contactQuery.status = ['test'];
-        $scope.contactQuery.likely = ['test'];
-        $scope.contactQuery.church = ['First Church', 'Second Church'];
-        $scope.contactQuery.referrer = ['-'];
+        controller.contactQuery.ids = '1,2';
+        controller.contactQuery.tags = ['test'];
+        controller.contactQuery.name = 'Steve';
+        controller.contactQuery.type = 'person';
+        controller.contactQuery.city = ['Green Bay'];
+        controller.contactQuery.state = ['WI'];
+        controller.contactQuery.newsletter = 'all';
+        controller.contactQuery.status = ['test'];
+        controller.contactQuery.likely = ['test'];
+        controller.contactQuery.church = ['First Church', 'Second Church'];
+        controller.contactQuery.referrer = ['-'];
 
-        $scope.resetFilters();
+        controller.resetFilters();
 
-        expect($scope.contactQuery.ids).toEqual('');
-        expect($scope.contactQuery.tags).toEqual(['']);
-        expect($scope.contactQuery.name).toEqual('');
-        expect($scope.contactQuery.type).toEqual('');
-        expect($scope.contactQuery.city).toEqual(['']);
-        expect($scope.contactQuery.state).toEqual(['']);
-        expect($scope.contactQuery.newsletter).toEqual('');
-        expect($scope.contactQuery.status).toEqual(['active', 'null']);
-        expect($scope.contactQuery.likely).toEqual(['']);
-        expect($scope.contactQuery.church).toEqual(['']);
-        expect($scope.contactQuery.referrer).toEqual(['']);
-        expect($scope.contactQuery.relatedTaskAction).toEqual(['']);
+        expect(controller.contactQuery.ids).toEqual('');
+        expect(controller.contactQuery.tags).toEqual(['']);
+        expect(controller.contactQuery.name).toEqual('');
+        expect(controller.contactQuery.type).toEqual('');
+        expect(controller.contactQuery.city).toEqual(['']);
+        expect(controller.contactQuery.state).toEqual(['']);
+        expect(controller.contactQuery.newsletter).toEqual('');
+        expect(controller.contactQuery.status).toEqual(['active', 'null']);
+        expect(controller.contactQuery.likely).toEqual(['']);
+        expect(controller.contactQuery.church).toEqual(['']);
+        expect(controller.contactQuery.referrer).toEqual(['']);
+        expect(controller.contactQuery.relatedTaskAction).toEqual(['']);
     });
 
     it('url array encode should encode vars', function() {
-        var controller = createController();
-
         var array = ['Testing', '$T$%&^V3'];
-        var encoded = encodeURLarray(array);
+        var encoded = self.api.encodeURLarray(array);
 
         expect(encoded[0]).toEqual('Testing');
         expect(encoded[1]).toEqual('%24T%24%25%26%5EV3');
     });
 
     it('contact api should return 1 contact', function() {
-        var controller = createController();
+        var controller = self.createController();
 
         window.current_account_list_id = 1;
 
@@ -99,6 +95,6 @@ describe('contacts', function() {
 
         $httpBackend.flush();
 
-        expect($scope.totalContacts).toEqual(1);
+        expect(controller.totalContacts).toEqual(1);
     });
 });

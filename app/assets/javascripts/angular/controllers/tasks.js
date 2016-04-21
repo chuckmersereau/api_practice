@@ -94,17 +94,16 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
         api.call('get','contacts?account_list_id=' + (window.current_account_list_id || '') +
             '&filters[name]=' + encodeURIComponent($scope.filter.contactName) +
             '&filters[contact_type]=' + encodeURIComponent($scope.filter.contactType) +
-            '&filters[city][]=' + encodeURLarray($scope.filter.contactCity).join('&filters[city][]=') +
-            '&filters[state][]=' + encodeURLarray($scope.filter.contactState).join('&filters[state][]=') +
-            '&filters[country][]=' + encodeURLarray($scope.filter.contactCountry).join('&filters[country][]=') +
+            '&filters[city][]=' + api.encodeURLarray($scope.filter.contactCity).join('&filters[city][]=') +
+            '&filters[state][]=' + api.encodeURLarray($scope.filter.contactState).join('&filters[state][]=') +
+            '&filters[country][]=' + api.encodeURLarray($scope.filter.contactCountry).join('&filters[country][]=') +
             '&filters[newsletter]=' + encodeURIComponent($scope.filter.contactNewsletter) +
-            //'&filters[tags][]=' + encodeURLarray(q.tags).join('&filters[tags][]=') +
-            '&filters[status][]=' + encodeURLarray($scope.filter.contactStatus).join('&filters[status][]=') +
-            '&filters[likely][]=' + encodeURLarray($scope.filter.contactLikely).join('&filters[likely][]=') +
-            '&filters[church][]=' + encodeURLarray($scope.filter.contactChurch).join('&filters[church][]=') +
-            '&filters[referrer][]=' + encodeURLarray($scope.filter.contactReferrer).join('&filters[referrer][]=') +
-            '&filters[timezone][]=' + encodeURLarray($scope.filter.contactTimezone).join('&filters[timezone][]=') +
-            '&filters[pledge_frequencies][]=' + encodeURLarray($scope.filter.contactPledgeFrequencies).join('&filters[pledge_frequencies][]=') +
+            '&filters[status][]=' + api.encodeURLarray($scope.filter.contactStatus).join('&filters[status][]=') +
+            '&filters[likely][]=' + api.encodeURLarray($scope.filter.contactLikely).join('&filters[likely][]=') +
+            '&filters[church][]=' + api.encodeURLarray($scope.filter.contactChurch).join('&filters[church][]=') +
+            '&filters[referrer][]=' + api.encodeURLarray($scope.filter.contactReferrer).join('&filters[referrer][]=') +
+            '&filters[timezone][]=' + api.encodeURLarray($scope.filter.contactTimezone).join('&filters[timezone][]=') +
+            '&filters[pledge_frequencies][]=' + api.encodeURLarray($scope.filter.contactPledgeFrequencies).join('&filters[pledge_frequencies][]=') +
             '&filters[contact_info_email]=' + encodeURIComponent($scope.filter.contactInfoEmail) +
             '&filters[contact_info_phone]=' + encodeURIComponent($scope.filter.contactInfoPhone) +
             '&filters[contact_info_mobile]=' + encodeURIComponent($scope.filter.contactInfoMobile) +
@@ -128,8 +127,8 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             '&filters[completed]=' + ($scope.filter.completed || 'false') +
             '&filters[date_range]=' + group.filter +
             '&filters[contact_ids]=' + _.uniq(contactFilterIds).join(',') +
-            '&filters[tags][]=' + encodeURLarray($scope.filter.tagsSelect).join('&filters[tags][]=') +
-            '&filters[activity_type][]=' + encodeURLarray($scope.filter.actionSelect).join('&filters[activity_type][]='), {}, function(tData) {
+            '&filters[tags][]=' + api.encodeURLarray($scope.filter.tagsSelect).join('&filters[tags][]=') +
+            '&filters[activity_type][]=' + api.encodeURLarray($scope.filter.actionSelect).join('&filters[activity_type][]='), {}, function(tData) {
 
             //save meta
             $scope.taskGroups[groupIndex].meta = tData.meta;
@@ -306,20 +305,4 @@ angular.module('mpdxApp').controller('tasksController', function ($scope, $timeo
             $scope.filter.tagsSelect.push(tag);
         }
     };
-
-/*    $scope.contactTagIsActive = function(tag){
-        return _.contains($scope.filterContactTagSelect, tag);
-    };
-
-    $scope.contactTagClick = function(tag){
-        if($scope.contactTagIsActive(tag)){
-            _.remove($scope.filterContactTagSelect, function(i) { return i === tag; });
-            if($scope.filterContactTagSelect.length === 0){
-                $scope.filterContactTagSelect.push('');
-            }
-        }else{
-            _.remove($scope.filterContactTagSelect, function(i) { return i === ''; });
-            $scope.filterContactTagSelect.push(tag);
-        }
-    };*/
 });

@@ -4,9 +4,17 @@ cache:
   directories:
     - node_modules
     - cache
+    - travis-phantomjs
 language: ruby
 services:
 - redis-server
+before_install:
+- "export PATH=$PWD/travis_phantomjs/phantomjs-2.1.1-linux-x86_64/bin:$PATH"
+- "if [ $(phantomjs --version) != '2.1.1' ]; then rm -rf $PWD/travis_phantomjs; mkdir -p $PWD/travis_phantomjs; fi"
+- "if [ $(phantomjs --version) != '2.1.1' ]; then tar -xvf $PWD/bin/phantomjs-2.1.1-linux-x86_64.tar.bz2 -C $PWD/travis_phantomjs; fi"
+- mkdir -p node_modules
+- rm -rf node_modules/phantomjs/
+- npm install
 before_script:
 - psql -c 'create database mpdx_test;' -U postgres
 - psql -c 'create database mpdx_test2;' -U postgres

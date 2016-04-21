@@ -21,4 +21,6 @@
 @import "_bootstrap_overrides";
 
 /* Components */
+@import "components/contacts/contact-list";
+@import "components/contacts/contact-list-item";
 @import "components/contacts/contact-details";

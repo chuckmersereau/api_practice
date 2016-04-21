@@ -1,4 +1,4 @@
-<li ng-class="{'selected': contactQuery.tags[0]}" ng-show="!insightFilterIsActive()">
+<li ng-class="{'selected': $ctrl.contactQuery.tags[0]}" ng-show="!$ctrl.insightFilterIsActive()">
   <span class="tags_title menu_item"><%= _('Tags') %></span>
   <ul class="left_tag_list tags">
     <li>
@@ -12,7 +12,7 @@
           else
             url_params['filters']['tags'] = (tags + [tag]).join(',')
           end %>
-          <span class="tag" ng-class="{'selected': tagIsActive('<%= j(tag) %>')}" ng-click="tagClick('<%= j(tag) %>', $event)"><%= tag %>
+          <span class="tag" ng-class="{'selected': $ctrl.tagIsActive('<%= j(tag) %>')}" ng-click="$ctrl.tagClick('<%= j(tag) %>', $event)"><%= tag %>
                 <% if params[:controller] == 'contacts' %>
                     <%= link_to '', "/tags/1?remove_tag_name=#{tag}&all_contacts=1", class: "tag_remove", namespace: 'remove_tag', method: :delete,
                                 data: { confirm: 'Are you sure you want to remove this tag from all contacts?'}, :remote => true %>
@@ -23,14 +23,14 @@
           </span>
         <% end %>
       <% end %>
-      <a href="#" 
-        class="show_all_tags_btn" 
+      <a href="#"
+        class="show_all_tags_btn"
         onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'See all tags']);">
-        <i class="fa fa-plus"></i> 
-        See 
+        <i class="fa fa-plus"></i>
+        See
         <span class="tagAll">all</span>
-        <span class="tagLess" style="display: none;">less</span> 
-        <span class="tagSize"></span> 
+        <span class="tagLess" style="display: none;">less</span>
+        <span class="tagSize"></span>
         tags
       </a>
     </li>
