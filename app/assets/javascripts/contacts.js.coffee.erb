@@ -192,10 +192,11 @@ $ ->
         false
 
       $(document).on 'click', '[data-behavior=merge]', ->
-        if $('#selected_ids').val().length >= 9
+        selectedContactsCount = $('#selected_ids').val().split(',').length
+        if selectedContactsCount >= 9
           alert(__('You can merge up to eight contacts at a time. Please uncheck a contact and try again.'))
           return false
-        if $('#selected_ids').val().length < 2
+        if selectedContactsCount < 2
           alert(__('You must select at least 2 contacts to merge.'))
           return false
 
