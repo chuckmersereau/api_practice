@@ -58,6 +58,7 @@
 
         vm.selectedContacts = [];
         vm.mapMarkers = [];
+        vm.showAllFilterTags = false;
 
         vm.resetFilters = resetFilters;
         vm.tagIsActive = tagIsActive;
