@@ -24,6 +24,8 @@ angular.module('mpdxApp')
                 }
 
                 $scope.editAppeal = function(id) {
+                    window.location = '/appeals/' + id;
+                    return;
                     var modalInstance = $modal.open({
                         templateUrl: '/templates/appeals/edit.html',
                         size: 'lg',
