@@ -36,3 +36,4 @@ public/dev-assets
 .env.*
 logfile
 /cache
+vendor/ruby

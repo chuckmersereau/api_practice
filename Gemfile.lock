@@ -208,7 +208,7 @@ GEM
     erubis (2.7.0)
     eventmachine (1.2.0.1)
     excon (0.45.4)
-    execjs (2.5.2)
+    execjs (2.6.0)
     extlib (0.9.16)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
