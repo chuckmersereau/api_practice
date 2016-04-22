@@ -28,113 +28,6 @@ angular.module('mpdxApp')
                         templateUrl: '/templates/appeals/edit.html',
                         size: 'lg',
                         controller: function($scope, $modalInstance, $filter, appeal){
-                            $scope.appeal = angular.copy(appeal);
-                            $scope.checkedContacts = {};
-                            $scope.taskTypes = window.railsConstants.task.ACTIONS;
-                            $scope.task = {
-                              subject: 'Appeal (' + $scope.appeal.name + ')',
-                              date: moment().format('YYYY-MM-DD'),
-                              hour: moment().hour(),
-                              min: moment().minute()
-                            };
-                            api.call('get',
-                                     'contacts?filters[status]=*&per_page=5000'+
-                                         '&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts,Contact.pledge_currency_symbol'+
-                                         '&account_list_id=' + (window.current_account_list_id || ''),
-                                     {}, function(data) {
-                                $scope.contacts = data.contacts;
-                                $scope.newContact = data.contacts[0].id;
-                            }, null, true);
-
-                            $scope.mail_chimp_account_present = $.mpdx.mail_chimp_account_present;
-
-                            if ($.mpdx.mail_chimp_lists == null) {
-                                $scope.mail_chimp_lists = [];
-                            } else {
-                                $scope.mail_chimp_lists = $.mpdx.mail_chimp_lists;
-                                if ($scope.mail_chimp_lists.length > 0) {
-                                    $scope.selected_mail_chimp_list = $scope.mail_chimp_lists[0].id
-                                }
-                            }
-
-                            $scope.mail_chimp_appeal_load_complete = false;
-
-
-                            $scope.cancel = function () {
-                                $modalInstance.dismiss('cancel');
-                            };
-
-                            $scope.save = function () {
-                                api.call('put','appeals/'+ $scope.appeal.id + '?account_list_id=' + (window.current_account_list_id || ''),
-                                    {"appeal": $scope.appeal},
-                                    function(data) {
-                                        $modalInstance.close($scope.appeal);
-                                    });
-                            };
-
-                            $scope.delete = function (){
-                                var r = confirm(__('Are you sure you want to delete this appeal?'));
-                                if(!r){
-                                    return;
-                                }
-                                api.call('delete', 'appeals/' + id + '?account_list_id=' + (window.current_account_list_id || ''), null, function() {
-                                    $modalInstance.dismiss('cancel');
-                                    refreshAppeals();
-                                });
-                            };
-
-                            $scope.contactDetails = function(id){
-                                var contact = _.find($scope.contacts, { 'id': id });
-                                if(angular.isDefined(contact)){
-                                    return contact;
-                                }
-                                return {};
-                            };
-
-                            $scope.contactName = function(id){
-                              var contact = _.find($scope.contacts, { 'id': id });
-                              if(angular.isDefined(contact)){
-                                return contact.name;
-                              }
-                              return '';
-                            };
-
-                            $scope.addContact = function(id){
-                                if(!id){ return; }
-                                if(_.contains($scope.appeal.contacts, id)){
-                                    alert(__('This contact already exists in this appeal.'));
-                                    return;
-                                }
-                                $scope.appeal.contacts.push(id);
-                            };
-
-                            $scope.deleteContact = function(id){
-                                _.remove($scope.appeal.contacts, function(c) { return c == id; });
-                            };
-
-                            $scope.listDonations = function(contactId){
-                                var contact = _.find($scope.contacts, { 'id': contactId });
-                                if(angular.isUndefined(contact) || angular.isUndefined(contact.donor_accounts)){
-                                    return '-';
-                                }
-                                var contactDonorIds = _.pluck(contact.donor_accounts, 'id');
-                                var donations = _.filter(appeal.donations, function(d) {
-                                  return _.contains(contactDonorIds, d.donor_account_id);
-                                });
-
-                                if(!donations.length){
-                                    return ['-'];
-                                }else{
-                                    var str = [];
-                                    angular.forEach(donations, function(d){
-                                      var amount = d.appeal_amount ? d.appeal_amount : d.amount;
-                                      amount = $filter('currency')(amount, contact.pledge_currency_symbol);
-                                      str.push(d.donation_date + ' - ' + amount);
-                                    });
-                                    return str;
-                                }
-                            };
-
                             $scope.createTask = function(task, inputContactsObject){
                                 var contactsObject = _.keys(_.pick(inputContactsObject, function(val){
                                   return val;
@@ -277,14 +170,6 @@ angular.module('mpdxApp')
                             $scope.donationAggregates = function() {
                                 return donationAggregates(appeal.donations);
                             };
-
-                          setTimeout(function() {
-                            jQuery('.dueDatePicker').datepicker({
-                              autoclose: true,
-                              todayHighlight: true,
-                              dateFormat: 'yy-mm-dd'
-                            });
-                          }, 1000);
 
                         },
                         resolve: {
