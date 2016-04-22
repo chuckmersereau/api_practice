@@ -32,7 +32,7 @@ class OrganizationFetcherWorker
         attributes[:abbreviation] = ini['ORGANIZATION']['Abbreviation']
         attributes[:logo] = ini['ORGANIZATION']['WebLogo-JPEG-470x120']
         attributes[:account_help_url] = ini['ORGANIZATION']['AccountHelpUrl']
-        attributes[:minimum_gift_date] = ini['ORGANIZATION']['MinimumWebGiftDate']
+        attributes[:minimum_gift_date] = org.minimum_gift_date || ini['ORGANIZATION']['MinimumWebGiftDate']
         attributes[:code] = ini['ORGANIZATION']['Code']
         attributes[:query_authentication] = ini['ORGANIZATION']['QueryAuthentication'].to_i == 1
         attributes[:org_help_email] = ini['ORGANIZATION']['OrgHelpEmail']
