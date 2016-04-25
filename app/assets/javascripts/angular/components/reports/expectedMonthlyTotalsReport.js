@@ -13,29 +13,35 @@
 
         vm.errorOccurred = false;
 
-        var sum = function(numbers) {
-          return _(numbers).reduce(function(total, value) { return total + value }, 0);
+        activate();
+
+        function activate(){
+            loadExpectedMonthlyTotals();
         }
 
-        var activate = function() {
+        function loadExpectedMonthlyTotals() {
             api.call('get', '/reports/expected_monthly_totals', {}, function(data) {
-                vm.donations = data.donations;
                 vm.total_currency = data.total_currency;
                 vm.total_currency_symbol = data.total_currency_symbol;
 
-                var donationsByType = _.groupBy(data.donations, 'type');
-                vm.totalsByType = {};
+                var availableDonationTypes = ['received', 'likely', 'unlikely'];
 
-                for (var type in donationsByType) {
-                    var donationsForType = donationsByType[type];
-                    vm.totalsByType[type] = sum(_.pluck(donationsForType,
-                                                        'converted_amount'));
-                }
+                vm.donationsByType = _(data.donations)
+                    .groupBy('type')
+                    .defaults(_.zipObject(availableDonationTypes))
+                    .map(function (donationsForType, type){
+                        return {
+                            type: type,
+                            order: _.indexOf(availableDonationTypes, type),
+                            donations: donationsForType,
+                            sum: _.sum(_.pluck(donationsForType, 'converted_amount'))
+                        };
+                    })
+                    .value();
             }, function() {
                 vm.errorOccurred = true;
             });
         }
 
-        activate();
     }
 })();
