@@ -1,12 +1,10 @@
 .git
 vendor/cache
-vendor/bundle
 log/*
 tmp
 cache
 coverage
 node_modules
-public/assets
 .sass-cache
 public/mobile
 public/docs
