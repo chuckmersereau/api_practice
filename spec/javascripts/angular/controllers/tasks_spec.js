@@ -1,17 +1,12 @@
 describe('tasks', function() {
     beforeEach(module('mpdxApp'));
-    var $scope, $location, $rootScope, createController;
+    var self = {};
 
-    beforeEach(inject(function($injector) {
-        $location = $injector.get('$location');
-        $rootScope = $injector.get('$rootScope');
-        $httpBackend = $injector.get('$httpBackend');
-        $scope = $rootScope.$new();
+    beforeEach(inject(function($componentController, $rootScope) {
+        var $scope = $rootScope.$new();
 
-        var $controller = $injector.get('$controller');
-
-        createController = function() {
-            return $controller('tasksController', {
+        self.createController = function() {
+            return $componentController('contactList', {
                 '$scope': $scope
             });
         };
@@ -55,11 +50,11 @@ describe('tasks', function() {
     ];
 
     it('tag should be active', function() {
-        var controller = createController();
+        var controller = self.createController();
 
-        $scope.filterTagsSelect = [''];
-        $scope.tagClick('university');
+        controller.filterTagsSelect = [''];
+        controller.tagClick('university');
 
-        expect($scope.tagIsActive('university')).toBe(true);
+        expect(controller.tagIsActive('university')).toBe(true);
     });
 });

@@ -1,4 +1,6 @@
-<div ng-controller="tasksController" id="tasksController">
+<tasks id="tasksController"></tasks>
+
+<script type="text/ng-template" id="inline/tasks.html">
   <div class="row">
     <div class="col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap">
       <%= render 'sidebar' %>
@@ -21,39 +23,39 @@
 
         <div class="wpp">
           <h1 style="display:none;"></h1>
-          <div class="mwrap" ng-show="totalTasksShown === 0 && !totalTasksLoading">
+          <div class="mwrap" ng-if="$ctrl.totalTasksShown === 0 && !$ctrl.totalTasksLoading">
             <div>
-              <span ng-show="filter.page === 'all'">
+              <span ng-if="$ctrl.filter.page === 'all'">
                 <p class="spacer-top"><a href="/tasks/new" class="btn btn-lg btn-primary add_task" data-remote="true"><%= _('Create Your First Task') %></a></p>
                 <h1><%= _("It's time to add your first task!") %></h1>
                 <p><%= _("Tasks are how MPDX helps you to stay on top of your MPD goals. From follow up, to making contact with someone for the first time, MPDX tasks will be your tool for keeping it all together. As you add and complete tasks, you will begin to see your dashboard, reports, contact details and other areas all come to life with real time information about your MPD.") %></p>
                 <h2><%= _("There's more!") %></h2>
                 <p><%= _("Once you've loaded up your tasks, you can use filters to quickly sort tasks that you're working on or have already completed.") %></p>
               </span>
-              <span ng-show="filter.page !== 'all'">
+              <span ng-if="$ctrl.filter.page !== 'all'">
                 <%= _("You don't have any tasks that are ") %>
-                <span ng-show="filter.page === 'today'"><%= _('set for today') %></span>
-                <span ng-show="filter.page === 'overdue'"><%= _('overdue') %></span>
-                <span ng-show="filter.page === 'upcoming'"><%= _('upcoming') %></span>
-                <span ng-show="filter.page === 'history'"><%= _('history') %></span>
-                <span ng-show="filter.page === 'starred'"><%= _('starred') %></span>
+                <span ng-show="$ctrl.filter.page === 'today'"><%= _('set for today') %></span>
+                <span ng-show="$ctrl.filter.page === 'overdue'"><%= _('overdue') %></span>
+                <span ng-show="$ctrl.filter.page === 'upcoming'"><%= _('upcoming') %></span>
+                <span ng-show="$ctrl.filter.page === 'history'"><%= _('history') %></span>
+                <span ng-show="$ctrl.filter.page === 'starred'"><%= _('starred') %></span>
                 <%= _('or match a filter you have set.') %>
                 <%= _('Try') %><a href="/tasks/new" class="add_task" data-remote="true">
                 <%= _('creating a new task') %></a>,
-                <a href="#" ng-click="resetFilters()"><%= _('resetting your filters') %></a><%= _(' or') %>
-                <a href="#" ng-click="filter.page = 'all'"><%= _('showing all tasks') %></a>.
+                <a href="#" ng-click="$ctrl.resetFilters()"><%= _('resetting your filters') %></a><%= _(' or') %>
+                <a href="#" ng-click="$ctrl.filter.page = 'all'"><%= _('showing all tasks') %></a>.
               </span>
             </div>
           </div>
 
-          <p ng-show="totalTasksShown === 0 && totalTasksLoading"><i class="fa fa-spinner fa-spin"></i> <%= _('Loading tasks') %>...</p>
+          <p ng-if="$ctrl.totalTasksShown === 0 && $ctrl.totalTasksLoading"><i class="fa fa-spinner fa-spin"></i> <%= _('Loading tasks') %>...</p>
 
-          <div ng-repeat="g in taskGroups" ng-class="{'contact_loading': g.loading}" ng-show="g.visible && tasks[g.filter].length > 0">
+          <div ng-repeat="g in $ctrl.taskGroups" ng-class="{'contact_loading': g.loading}" ng-if="g.visible && $ctrl.tasks[g.filter].length > 0">
             <table class="tablelist">
               <thead>
               <tr class="taskgroup" ng-class="g.class">
                 <th colspan="3">
-                  <div style="float:right" class="form-inline"><%= _('Show') %>: <select ng-model="filter.tasksPerGroup" ng-options="i as i for i in [10, 25, 50, 100, 500]" class="form-control"></select></div>
+                  <div style="float:right" class="form-inline"><%= _('Show') %>: <select ng-model="$ctrl.filter.tasksPerGroup" ng-options="i as i for i in [10, 25, 50, 100, 500]" class="form-control"></select></div>
                   {{g.title}}
                   <%= render 'actions' %>
                 </th>
@@ -62,30 +64,30 @@
               </thead>
 
               <tbody class="tasks">
-                <tr task="task" ng-repeat="task in tasks[g.filter]"
-                    id="task_{{task.id}}" class="tasklist" multiselect="true"></tr>
-                <tr>
-                  <td colspan="4">
-                    <div class="row">
-                      <div class="col-md-8 col-sm-8">
-                        <div class="pagination">
-                          <span class="previous_page disabled" ng-show="g.currentPage === 1">← <%= _('Previous') %></span>
-                          <a class="previous_page" rel="prev start" href="" ng-click="goToPage(g, g.currentPage-1)" ng-show="g.currentPage > 1">← <%= _('Previous') %></a>
+              <tr task="task" ng-repeat="task in $ctrl.tasks[g.filter]"
+                  id="task_{{task.id}}" class="tasklist" multiselect="true"></tr>
+              <tr>
+                <td colspan="4">
+                  <div class="row">
+                    <div class="col-md-8 col-sm-8">
+                      <div class="pagination">
+                        <span class="previous_page disabled" ng-if="g.currentPage === 1">← <%= _('Previous') %></span>
+                        <a class="previous_page" rel="prev start" href="" ng-click="$ctrl.goToPage(g, g.currentPage-1)" ng-show="g.currentPage > 1">← <%= _('Previous') %></a>
 
                         <span ng-repeat="n in [1, g.meta.total_pages] | makeRange">
                           <em class="current" ng-show="n === g.currentPage">{{n}}</em>
-                          <a rel="next" ng-show="n !== g.currentPage && ((n > (g.currentPage-8) && n < (g.currentPage+8)) || n === 1 || n === g.meta.total_pages)" href="" ng-click="goToPage(g, n)">{{n}}</a>
+                          <a rel="next" ng-show="n !== g.currentPage && ((n > (g.currentPage-8) && n < (g.currentPage+8)) || n === 1 || n === g.meta.total_pages)" href="" ng-click="$ctrl.goToPage(g, n)">{{n}}</a>
                           <span ng-show="(n === 2 && page.current > 9) || (n === page.total-1 && page.current < page.total - 8)">...</span>
                         </span>
 
-                          <span class="next_page disabled" ng-show="g.currentPage === g.meta.total_pages"><%= _('Next') %> →</span>
-                          <a class="next_page" rel="next" href="" ng-click="goToPage(g, g.currentPage+1)" ng-show="g.currentPage < g.meta.total_pages"><%= _('Next') %> →</a>
-                        </div>
+                        <span class="next_page disabled" ng-show="g.currentPage === g.meta.total_pages"><%= _('Next') %> →</span>
+                        <a class="next_page" rel="next" href="" ng-click="$ctrl.goToPage(g, g.currentPage+1)" ng-show="g.currentPage < g.meta.total_pages"><%= _('Next') %> →</a>
                       </div>
-                      <div class="col-md-4 col-sm-4 text-right"><%= _('Displaying') %> <b>{{g.meta.from}}&nbsp;-&nbsp;{{g.meta.to}}</b> <%= _('of') %> <b>{{g.meta.total}}</b></div>
                     </div>
-                  </td>
-                </tr>
+                    <div class="col-md-4 col-sm-4 text-right"><%= _('Displaying') %> <b>{{g.meta.from}}&nbsp;-&nbsp;{{g.meta.to}}</b> <%= _('of') %> <b>{{g.meta.total}}</b></div>
+                  </div>
+                </td>
+              </tr>
               </tbody>
             </table>
           </div>
@@ -102,4 +104,4 @@
   </div>
 
   <task-followup-dialog id="task-followup-dialog"></task-followup-dialog>
-</div>
+</script>
