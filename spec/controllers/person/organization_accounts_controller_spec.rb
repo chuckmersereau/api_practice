@@ -34,6 +34,16 @@ describe Person::OrganizationAccountsController do
       expect(assigns(:organization_account)).to be_a_new(Person::OrganizationAccount)
       expect(assigns(:organization)).to eq(org)
     end
+
+    it 'fails gracefully on duplicate' do
+      offline_org = create(:offline_org)
+      @user.organization_accounts.create(organization: offline_org)
+
+      xhr :get, :new, id: offline_org.id
+
+      expect(response).to render_template('error')
+      expect(assigns(:message)).to include offline_org.name
+    end
   end
 
   # describe "GET edit" do
