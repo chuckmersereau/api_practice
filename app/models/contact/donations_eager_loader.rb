@@ -13,6 +13,17 @@ class Contact::DonationsEagerLoader
     contacts
   end
 
+  def donations_and_contacts
+    donations = scoped_donations
+    contacts = Set.new
+    scoped_donations.each do |donation|
+      contact = contacts_by_donor_id[donation.donor_account_id]
+      donation.loaded_contact = contact
+      contacts << contact
+    end
+    [donations, contacts.to_a]
+  end
+
   private
 
   def scoped_contacts
@@ -36,10 +47,25 @@ class Contact::DonationsEagerLoader
     @donations_by_donor_id[donor_account_id] || []
   end
 
+  def contacts_by_donor_id
+    @contacts_by_donor_id ||= group_contacts_by_donor_id
+  end
+
+  def group_contacts_by_donor_id
+    scoped_contacts.each_with_object({}) do |contact, hash|
+      contact_donor_ids(contact).each do |donor_id|
+        hash[donor_id] ||= contact
+      end
+    end
+  end
+
   def scoped_donations
-    donations = contact_donations
-    donations = @donations_scoper.call(donations) if @donations_scoper
-    donations
+    @scoped_donations ||=
+      begin
+        donations = contact_donations
+        donations = @donations_scoper.call(donations) if @donations_scoper
+        donations.to_a
+      end
   end
 
   def contact_donations
