@@ -2101,6 +2101,23 @@ appeals-list .show-all {
     width: 100%;
   }
 }
+.panel-exception {
+  .panel-body {
+    padding-top: 10px;
+    padding-bottom: 10px;
+    line-height: 1.65em;
+  }
+}
+.exception-name {
+  .exception-toggle {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+  h4 {
+    display: inline-block;
+    margin: 0;
+  }
+}
 
 #dash-widgets {
   margin-top: 2em;
