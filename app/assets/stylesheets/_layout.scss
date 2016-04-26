@@ -12,7 +12,10 @@ body {
 
 table {padding: 0; margin: 0; border-collapse: collapse;}
 td, th {text-align: left; vertical-align: top;}
-.table_select_filters {font-size: 11px;}
+.table_select_filters {
+  font-size: auto;
+  label {display: inline-block;}
+}
 .table_select_check {padding-right: 4px;}
 hr.thin {margin: .5em 0; border: none; border-top: 1px solid $gray_mid;}
 hr.thick {margin: 1.5em 0; border: none; border-top: 6px solid $gray_mid; width: 100%;}
@@ -2102,10 +2105,42 @@ appeals-list .show-all {
   }
 }
 .panel-exception {
+  margin-bottom: .5em;
+  .toggle-exception {
+    color: #000;
+  }
+  .add-exception {
+    &:before {
+      content: "\f055";
+      display: inline-block;
+      font-family: "fontawesome";
+      margin-right: 4px;
+      margin-left: 8px;
+    }
+  }
   .panel-body {
     padding-top: 10px;
     padding-bottom: 10px;
     line-height: 1.65em;
+  }
+  &.panel-added {
+    color: #ddd;
+    .add-btn {
+
+    }
+    .toggle-exception {
+      color: #ddd;
+    }
+    a {
+      color: #ddd;
+    }
+    .add-exception {
+      content: "Remove";
+      &:before {
+        content: "\f056";
+        font-family: "fontawesome";
+      }
+    }
   }
 }
 .exception-name {
