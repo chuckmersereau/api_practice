@@ -64,6 +64,7 @@ class CurrencyRate < ActiveRecord::Base
     end
 
     def already_cached_rates_for_date_range?(currency_code:, from_date:, to_date:)
+      return false unless @cached_rates
       cached_rates_by_date = @cached_rates[currency_code]
       return false unless cached_rates_by_date.present?
       (from_date..to_date).all? do |date|

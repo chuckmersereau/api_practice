@@ -6,13 +6,30 @@
   <div ng-repeat="(currency, donationsByContactId) in $ctrl.donationsByCurrencyAndContactId"
     ng-init="currencySymbol = $ctrl.currencySymbols[currency]">
     <h2>{{currency}} ({{currencySymbol}})</h2>
-    <div ng-repeat="(contact_id, donations) in donationsByContactId"
-      ng-init="donor = $ctrl.donorsById[contact_id][0]">
 
-      {{donor.name}}
-      <div ng-repeat="donation in donations">
-        {{donation.amount}}
-      </div>
-    </div>
+    <table>
+      <tr>
+        <td></td>
+        <td ng-repeat="(year, monthCount) in $ctrl.yearsWithMonthCounts"
+          colspan="{{monthCount}}">
+          {{year}}
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td ng-repeat="pastMonth in $ctrl.pastMonthDates">
+          {{pastMonth | date : 'MMM'}}
+        </td>
+      </tr>
+      <tr ng-repeat="(contact_id, donations) in donationsByContactId"
+          ng-init="donor = $ctrl.donorsById[contact_id][0]">
+        <td>{{donor.name}}</td>
+        <td ng-repeat="(monthsAgo, monthlyTotal) in $ctrl.monthlyTotals(donations)">
+          <div ng-if="monthlyTotal > 0.0">
+            {{currencySymbol}}{{monthlyTotal | number : 0}}
+          </div>
+        </td>
+      </tr>
+    </table>
   </div>
 </div>

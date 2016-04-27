@@ -12,6 +12,52 @@
         var vm = this;
 
         vm.errorOccurred = false;
+        vm.monthsBack = 12;
+
+        vm.pastMonthDates = function() {
+            var monthsBackDates = [];
+            for (var i = vm.monthsBack - 1; i >= 0; i--) {
+                var current = new Date();
+                var date = new Date(current.setMonth(current.getMonth() - i));
+                monthsBackDates.push(date);
+            }
+            return monthsBackDates;
+        }();
+
+        vm.yearsWithMonthCounts = function() {
+            var datesByYear = _.groupBy(vm.pastMonthDates, function(date) {
+                return date.getFullYear();
+            });
+            for (var year in datesByYear) {
+                datesByYear[year] = datesByYear[year].length;
+            }
+            return datesByYear;
+        }();
+
+        var monthIndex = function(date) {
+            return date.getYear() * 12 + date.getMonth();
+        }
+
+        var currentMonthIndex = monthIndex(new Date());
+
+        var monthsAgo = function(dateStr) {
+            return currentMonthIndex - monthIndex(new Date(dateStr));
+        }
+
+        vm.monthlyTotals = function(donations) {
+            var monthlyTotals = {};
+            for (var i = 0; i < vm.monthsBack; i++) {
+                monthlyTotals[i] = 0.0;
+            }
+            if (angular.isUndefined(donations)) {
+                return monthlyTotals;
+            }
+            donations.forEach(function(donation) {
+                var monthIndex = vm.monthsBack - monthsAgo(donation.donation_date);
+                monthlyTotals[monthIndex] += donation.amount;
+            });
+            return monthlyTotals;
+        }
 
         var groupDonationsAndDonorsByCurrency = function(donations, donors) {
             vm.donorsById = _.groupBy(donors, 'id');
@@ -21,6 +67,7 @@
             for (var currency in donationsByCurrency) {
                 var donations = donationsByCurrency[currency];
                 vm.currencySymbols[currency] = donations[0].currency_symbol;
+
                 vm.donationsByCurrencyAndContactId[currency] =
                     _.groupBy(donations, 'contact_id');
             }
@@ -28,7 +75,9 @@
             // TODO: Fill this in with the totals by donation.converted_currency
             // for use in displaying the big bar at the top with the colors by
             // currency totals.
-            vm.totalsByCurrency = {};
+            vm.totalsByCurrency = {
+
+            };
         };
 
         var activate = function() {
