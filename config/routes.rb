@@ -73,7 +73,7 @@ Rails.application.routes.draw do
 
       namespace :reports do
         resource :balances, only: [:show]
-        resource :expected_monthly_total, only: [:show]
+        resource :expected_monthly_totals, only: [:show]
       end
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'

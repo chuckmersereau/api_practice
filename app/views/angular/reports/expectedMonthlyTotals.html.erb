@@ -1,0 +1,104 @@
+<div ng-if="$ctrl.errorOccurred">
+  <%= _('Report data could not load due to an error. Please try again or contact support.') %>
+</div>
+<div ng-if="!$ctrl.errorOccurred">
+
+  <h3><%= _('Received') %></h3>
+  <strong>
+    {{$ctrl.total_currency_symbol}}{{$ctrl.totalsByType['received'] | number : 0}}
+    {{$ctrl.total_currency}}
+  </strong>
+  <table class="table">
+    <tr>
+      <th><%= _('Donor') %></th>
+      <th><%= _('Status') %></th>
+      <th><%= _('Commitment') %></th>
+      <th><%= _('Frequency') %></th>
+      <th><%= _('Donation') %></th>
+      <th><%= _('Converted') %></th>
+    </tr>
+    <tr ng-repeat="donation in $ctrl.donations | filter : { type: 'received' } : true | orderBy : 'donor'">
+      <td><a href="/contacts/{{donation.contact_id}}" target="_blank">{{donation.donor}}</a></td>
+      <td>{{donation.status}}</td>
+      <td>
+        <div ng-if="donation.pledge_amount !== null">
+          {{donation.pledge_currency_symbol}}{{donation.pledge_amount | number : 0}}
+          {{donation.pledge_currency}}
+        </div>
+      </td>
+      <td>{{donation.pledge_frequency}}</td>
+      <td>
+        {{donation.donation_currency_symbol}}{{donation.donation_amount | number : 0 }}
+        {{donation.donation_currency}}
+      </td>
+      <td>
+        {{donation.converted_currency_symbol}}{{donation.converted_amount | number : 0}}
+      </td>
+    </tr>
+  </table>
+
+  <h3><%= _('Likely') %></h3>
+  <strong>
+    {{$ctrl.total_currency_symbol}}{{$ctrl.totalsByType['likely'] | number : 0}}
+    {{$ctrl.total_currency}}
+  </strong>
+  <table class="table">
+    <tr>
+      <th><%= _('Donor') %></th>
+      <th><%= _('Status') %></th>
+      <th><%= _('Commitment') %></th>
+      <th><%= _('Frequency') %></th>
+      <th><%= _('Donation') %></th>
+      <th><%= _('Converted') %></th>
+    </tr>
+    <tr ng-repeat="donation in $ctrl.donations | filter : { type: 'likely' } : true | orderBy : 'donor'">
+      <td><a href="/contacts/{{donation.contact_id}}" target="_blank">{{donation.donor}}</a></td>
+      <td>{{donation.status}}</td>
+      <td>
+        {{donation.pledge_currency_symbol}}{{donation.pledge_amount | number : 0}}
+        {{donation.pledge_currency}}
+      </td>
+      <td>{{donation.pledge_frequency}}</td>
+      <td>
+        {{donation.donation_currency_symbol}}{{donation.donation_amount | number : 0 }}
+        {{donation.donation_currency}}
+      </td>
+      <td>
+        {{donation.converted_currency_symbol}}{{donation.converted_amount | number : 0}}
+      </td>
+    </tr>
+  </table>
+
+  <h3><%= _('Unlikely') %></h3>
+  <strong>
+    {{$ctrl.total_currency_symbol}}{{$ctrl.totalsByType['unlikely'] | number : 0}}
+    {{$ctrl.total_currency}}
+  </strong>
+  <table class="table">
+    <tr>
+      <th><%= _('Donor') %></th>
+      <th><%= _('Status') %></th>
+      <th><%= _('Commitment') %></th>
+      <th><%= _('Frequency') %></th>
+      <th><%= _('Donation') %></th>
+      <th><%= _('Converted') %></th>
+    </tr>
+    <tr ng-repeat="donation in $ctrl.donations | filter : { type: 'unlikely' } : true | orderBy : 'donor'">
+      <td><a href="/contacts/{{donation.contact_id}}" target="_blank">{{donation.donor}}</a></td>
+      <td>{{donation.status}}</td>
+      <td>
+        {{donation.pledge_currency_symbol}}{{donation.pledge_amount | number : 0}}
+        {{donation.pledge_currency}}
+      </td>
+      <td>{{donation.pledge_frequency}}</td>
+      <td>
+        {{donation.donation_currency_symbol}}{{donation.donation_amount | number : 0 }}
+        {{donation.donation_currency}}
+      </td>
+      <td>
+        {{donation.converted_currency_symbol}}{{donation.converted_amount | number : 0}}
+      </td>
+    </tr>
+  </table>
+
+</div>

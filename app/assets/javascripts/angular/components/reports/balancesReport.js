@@ -18,7 +18,7 @@
         }
 
         var activate = function() {
-            api.call('get', '/reports/balances.json', {}, function(data) {
+            api.call('get', '/reports/balances', {}, function(data) {
                 vm.designations = data.designations;
                 vm.total_currency = data.total_currency;
                 vm.total_currency_symbol = data.total_currency_symbol;

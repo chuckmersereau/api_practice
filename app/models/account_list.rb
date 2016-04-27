@@ -151,10 +151,16 @@ class AccountList < ActiveRecord::Base
   end
 
   def donations
-    if designation_account_ids.present?
-      Donation.where(donor_account_id: donor_account_ids, designation_account_id: designation_account_ids)
-    else
+    scope_donations_by_designations(
       Donation.where(donor_account_id: donor_account_ids)
+    )
+  end
+
+  def scope_donations_by_designations(donations)
+    if designation_account_ids.present?
+      donations.where(designation_account_id: designation_account_ids)
+    else
+      donations
     end
   end
 

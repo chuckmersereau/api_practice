@@ -151,6 +151,9 @@
                   <div class="section <%= request.path =~ /\/balances/ ? 'active' : '' %>">
                     <%= link_to(_('Balances'), reports_balances_path) %>
                   </div>
+                  <div class="section <%= request.path =~ /\/expected_monthly_totals/ ? 'active' : '' %>">
+                    <%= link_to(_('Expected Monthly Total'), reports_expected_monthly_totals_path) %>
+                  </div>
                 <% end %>
                 <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
                   <div class="section right">
