@@ -58,76 +58,11 @@
   </div>
 </form>
 
-<form class="form_wrapper">
-  <div class="row">
-      <div class="col-md-4 field">
-          <label><%= _('Name') %></label>
-          <input autofocus="autofocus" type="text" ng-model="$ctrl.appeal.name">
-      </div>
+<hr />
 
-      <div class="col-md-4 field">
-          <label><%= _('Goal') %></label>
-          <input type="number" ng-model="$ctrl.appeal.amount" class="form-control" raw-number>
-      </div>
-  </div>
+<form class="form_wrapper">
 
   <div class="scroll">
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <h3><%= _('Contacts') %></h3>
-        <table class="table table-striped">
-            <thead>
-                <tr><td colspan="5" class="table_select_filters">
-                  <label><%= _('Select') %></label>
-                  <a href="" ng-click="$ctrl.selectAll('all')" class="btn btn-default btn-xs"><%= _('All') %></a>
-                  <a href="" ng-click="$ctrl.selectAll('none')" class="btn btn-default btn-xs"><%= _('None') %></a>
-                  <a href="" ng-click="$ctrl.selectAll('donated')" class="btn btn-default btn-xs"><%= _('All that have donated') %></a>
-                  <a href="" ng-click="$ctrl.selectAll('!donated')" class="btn btn-default btn-xs"><%= _('All that have not donated') %></a>
-                </td></tr>
-                <tr>
-                    <td style="width: 5px;"></td>
-                    <td><%= _('Contact') %></td>
-                    <td><%= _('Commitment') %></td>
-                    <td style="width:24%;"><%= _('Donation(s)') %></td>
-                    <td style="width:4%;"></td>
-                </tr>
-            </thead>
-            <tbody>
-              <tr ng-repeat="c in $ctrl.appeal.contacts | orderBy: $ctrl.contactName">
-                <td class="table_select_check"><input type="checkbox" ng-model="$ctrl.checkedContacts[c]"></td>
-                <td>{{ $ctrl.contactName(c) }}</td>
-                <td>
-                  <span ng-if="$ctrl.contactDetails(c).status === 'Partner - Financial'">
-                    {{ $ctrl.contactDetails(c).pledge_amount | currency : $ctrl.contactDetails(c).pledge_currency_symbol}}
-                    {{ $ctrl.contactDetails(c).pledge_frequency | pledgeFrequencyStr }}
-                  </span>
-                </td>
-                <td><div ng-repeat="d in $ctrl.listDonations(c)">{{d}}</div></td>
-                <td><a class="ico ico_trash" href ng-click="$ctrl.deleteContact(c)"><%= _('Delete') %></a></td>
-              </tr>
-              <tr>
-                <td colspan="2"></td>
-                <td style="text-align: right;"><strong>Total:</strong> </td>
-                <td colspan="2">{{$ctrl.donationAggregates().sum | currency : current_currency_symbol}}</td>
-              </tr>
-              <tr>
-                <td colspan="2"></td>
-                <td style="text-align: right;"><strong>Average:</strong> </td>
-                <td colspan="2">{{$ctrl.donationAggregates().average | currency : current_currency_symbol}}</td>
-              </tr>
-              <tr><td colspan="5" class="table_select_filters">
-                  <label><%= _('Select') %></label>
-                  <a href="" ng-click="$ctrl.selectAll('all')" class="btn btn-default btn-xs"><%= _('All') %></a>
-                  <a href="" ng-click="$ctrl.selectAll('none')" class="btn btn-default btn-xs"><%= _('None') %></a>
-                  <a href="" ng-click="$ctrl.selectAll('donated')" class="btn btn-default btn-xs"><%= _('All that have donated') %></a>
-                  <a href="" ng-click="$ctrl.selectAll('!donated')" class="btn btn-default btn-xs"><%= _('All that have not donated') %></a>
-                </td></tr>
-            </tbody>
-        </table>
-        <span ng-show="!$ctrl.contacts"><%= _('Loading contacts...') %></span>
-      </div>
-    </div>
-
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="row">
@@ -333,6 +268,78 @@
       </div>
     </div>
 
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4 field">
+                <label><%= _('Name') %></label>
+                <input autofocus="autofocus" type="text" class="input-lg" ng-model="$ctrl.appeal.name">
+            </div>
+
+            <div class="col-md-4 field">
+                <label><%= _('Goal') %></label>
+                <input type="number" ng-model="$ctrl.appeal.amount" class="form-control input-lg" raw-number>
+            </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default">
+      <div class="panel-body">
+        <h3><%= _('Contacts') %></h3>
+        <table class="table table-striped">
+            <thead>
+                <tr><td colspan="5" class="table_select_filters">
+                  <label><%= _('Select') %></label>
+                  <a href="" ng-click="$ctrl.selectAll('all')" class="btn btn-default btn-xs"><%= _('All') %></a>
+                  <a href="" ng-click="$ctrl.selectAll('none')" class="btn btn-default btn-xs"><%= _('None') %></a>
+                  <a href="" ng-click="$ctrl.selectAll('donated')" class="btn btn-default btn-xs"><%= _('All that have donated') %></a>
+                  <a href="" ng-click="$ctrl.selectAll('!donated')" class="btn btn-default btn-xs"><%= _('All that have not donated') %></a>
+                </td></tr>
+                <tr>
+                    <td style="width: 5px;"></td>
+                    <td><%= _('Contact') %></td>
+                    <td><%= _('Commitment') %></td>
+                    <td style="width:24%;"><%= _('Donation(s)') %></td>
+                    <td style="width:4%;"></td>
+                </tr>
+            </thead>
+            <tbody>
+              <tr ng-repeat="c in $ctrl.appeal.contacts | orderBy: $ctrl.contactName">
+                <td class="table_select_check"><input type="checkbox" ng-model="$ctrl.checkedContacts[c]"></td>
+                <td>{{ $ctrl.contactName(c) }}</td>
+                <td>
+                  <span ng-if="$ctrl.contactDetails(c).status === 'Partner - Financial'">
+                    {{ $ctrl.contactDetails(c).pledge_amount | currency : $ctrl.contactDetails(c).pledge_currency_symbol}}
+                    {{ $ctrl.contactDetails(c).pledge_frequency | pledgeFrequencyStr }}
+                  </span>
+                </td>
+                <td><div ng-repeat="d in $ctrl.listDonations(c)">{{d}}</div></td>
+                <td><a class="ico ico_trash" href ng-click="$ctrl.deleteContact(c)"><%= _('Delete') %></a></td>
+              </tr>
+              <tr>
+                <td colspan="2"></td>
+                <td style="text-align: right;"><strong>Total:</strong> </td>
+                <td colspan="2">{{$ctrl.donationAggregates().sum | currency : current_currency_symbol}}</td>
+              </tr>
+              <tr>
+                <td colspan="2"></td>
+                <td style="text-align: right;"><strong>Average:</strong> </td>
+                <td colspan="2">{{$ctrl.donationAggregates().average | currency : current_currency_symbol}}</td>
+              </tr>
+              <tr><td colspan="5" class="table_select_filters">
+                  <label><%= _('Select') %></label>
+                  <a href="" ng-click="$ctrl.selectAll('all')" class="btn btn-default btn-xs"><%= _('All') %></a>
+                  <a href="" ng-click="$ctrl.selectAll('none')" class="btn btn-default btn-xs"><%= _('None') %></a>
+                  <a href="" ng-click="$ctrl.selectAll('donated')" class="btn btn-default btn-xs"><%= _('All that have donated') %></a>
+                  <a href="" ng-click="$ctrl.selectAll('!donated')" class="btn btn-default btn-xs"><%= _('All that have not donated') %></a>
+                </td></tr>
+            </tbody>
+        </table>
+        <span ng-show="!$ctrl.contacts"><%= _('Loading contacts...') %></span>
+      </div>
+    </div>
   </div>
 </form>
 
