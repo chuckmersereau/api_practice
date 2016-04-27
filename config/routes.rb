@@ -9,7 +9,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :help_requests
+  resources :help_requests, only: [:new, :create] do
+    member do
+      get :attachment
+    end
+  end
 
   get '/help' => 'help_requests#new'
 
@@ -214,6 +218,8 @@ Rails.application.routes.draw do
       resources :impersonations, only: [:create]
     end
   end
+
+  resources :status, only: :index
 
   get '/404', to: 'errors#error_404'
   get '/500', to: 'errors#error_500'

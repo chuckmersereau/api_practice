@@ -26,6 +26,19 @@ class HelpRequest < ActiveRecord::Base
     self.browser = parse_browser(val)
   end
 
+  def self.attachment_token(id)
+    message_verifier.generate(id)
+  end
+
+  def self.decrypt_token(signed_message)
+    message_verifier.verify(signed_message)
+  rescue ActiveSupport::MessageVerifier::InvalidSignature
+  end
+
+  def self.message_verifier
+    @message_verifier ||= ActiveSupport::MessageVerifier.new(ENV.fetch('ATTACHMENT_SECRET'))
+  end
+
   private
 
   def parse_browser(user_agent)

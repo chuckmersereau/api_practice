@@ -28,4 +28,28 @@ describe HelpRequestsController do
       expect(response).to render_template('help_requests/new')
     end
   end
+
+  describe 'attachment' do
+    let(:hr) { create(:help_request_with_attachment) }
+    context 'with matching token' do
+      let(:token) { HelpRequest.attachment_token(hr.id) }
+      it 'redirects when token matches' do
+        get :attachment, id: token
+
+        expect(request).to redirect_to(hr.file_url)
+      end
+    end
+
+    context 'with bad token' do
+      it 'renders unauthorized with bad token' do
+        get :attachment, id: 'invalid_token'
+
+        expect(response).to have_http_status(:unauthorized)
+
+        get :attachment, id: ''
+
+        expect(response).to have_http_status(:unauthorized)
+      end
+    end
+  end
 end

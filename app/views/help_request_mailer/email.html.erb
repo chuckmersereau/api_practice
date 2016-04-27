@@ -17,7 +17,7 @@
   <% if @help_request.file? %>
     <tr>
       <th>Import File:</th>
-      <td><%= link_to('Click here to download the file', @help_request.file_url) %></td>
+      <td><%= link_to('Click here to download the file', @attachment_url) %></td>
     </tr>
   <% end %>
 </table>
