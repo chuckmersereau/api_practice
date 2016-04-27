@@ -4,10 +4,13 @@ class SetupController < ApplicationController
   skip_before_action :ensure_setup_finished
   before_action :ensure_org_account, only: :show
 
-  steps :org_accounts, :settings, :finish
+  steps :org_accounts, :social_accounts, :settings, :finish
 
   def show
     case step
+    when :social_accounts
+      redirect_to setup_path(:settings)
+      return
     when :settings
       @preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list)
       @account_list_organizations = build_account_list_organizations
