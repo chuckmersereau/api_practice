@@ -1,43 +1,65 @@
+<h2><%= _('Balances by Organization') %></h2>
 <div ng-if="$ctrl.errorOccurred">
   <%= _('Report data could not load due to an error. Please try again or contact support.') %>
 </div>
 
-<table ng-if="!$ctrl.errorOccurred" class="table">
-  <tr>
-    <th><%= _('Organization') %></th>
-    <th><%= _('Designation') %></th>
-    <th><%= _('Last Synced') %></th>
-    <th><%= _('Balance') %></th>
-    <th><%= _('Exchange Rate') %></th>
-    <th><%= _('Converted Balance') %></th>
-  </tr>
-  <tr ng-repeat="designation in $ctrl.designations">
-    <td>{{designation.organization_name}}</td>
-    <td>{{designation.designation_number}}</td>
-    <td>{{designation.balance_updated_at | date : format : shortDate}}</td>
-    <td>
-      {{designation.currency_symbol}}
-      {{designation.balance | number : 0}}
-      {{designation.currency}}
-    </td>
-    <td>
-      {{designation.exchange_rate | number : 2}}
-      {{designation.currency_symbol}}
-      /
-      {{$ctrl.total_currency_symbol}}
-      {{$ctrl.total_currency}}
-    </td>
-    <td>
-      {{$ctrl.total_currency_symbol}}
-      {{designation.converted_balance | number : 0}}
-      {{$ctrl.total_currency}}
-    </td>
-  </tr>
-</table>
+<div class="panel panel-default panel-report" ng-if="!$ctrl.errorOccurred">
+  <div class="panel-body panel-report-heading">
+    <div class="row">
+      <div class="col-xs-6">
+        <h4><%= _('Account Balances') %></h4>
+      </div>
+      <div class="col-xs-6 text-right">
+        <h4>
+          <%= _('Converted Report Total') %>:
+          {{$ctrl.total_currency_symbol}}
+          {{$ctrl.converted_total | number : 0}}
+          {{$ctrl.total_currency}}
+        </h4>
+      </div>
+    </div>
+  </div>
 
-<strong>
-  <%= _('Converted Total') %>
-  {{$ctrl.total_currency_symbol}}
-  {{$ctrl.converted_total | number : 0}}
-  {{$ctrl.total_currency}}
-</strong>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th><%= _('Organization') %></th>
+      <th><%= _('Designation') %></th>
+      <th><%= _('Last Synced') %></th>
+      <th class="text-right"><%= _('Balance') %></th>
+      <th class="text-right"><%= _('Exchange Rate') %></th>
+      <th class="text-right"><%= _('Converted Balance') %></th>
+      <th class="text-right">
+        <%= _('Include in Report') %>
+      </th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr ng-repeat="designation in $ctrl.designations">
+      <td>{{designation.organization_name}}</td>
+      <td>{{designation.designation_number}}</td>
+      <td>{{designation.balance_updated_at | date : format : shortDate}}</td>
+      <td class="text-right">
+        {{designation.currency_symbol}}
+        {{designation.balance | number : 0}}
+        {{designation.currency}}
+      </td>
+      <td class="text-right">
+        {{designation.exchange_rate | number : 2}}
+        {{designation.currency_symbol}}
+        /
+        {{$ctrl.total_currency_symbol}}
+        {{$ctrl.total_currency}}
+      </td>
+      <td class="text-right">
+        {{$ctrl.total_currency_symbol}}
+        {{designation.converted_balance | number : 0}}
+        {{$ctrl.total_currency}}
+      </td>
+      <td class="text-right">
+        <fa-checkbox ng-model="designation.balanceIncluded" ng-change="$ctrl.updateTotal()"></fa-checkbox>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
