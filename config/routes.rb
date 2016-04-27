@@ -219,6 +219,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :status, only: :index
+
   get '/404', to: 'errors#error_404'
   get '/500', to: 'errors#error_500'
 
