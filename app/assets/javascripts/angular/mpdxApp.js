@@ -1,5 +1,17 @@
-angular.module('mpdxApp', ['ui.bootstrap']).run(function () {
+angular
+    .module('mpdxApp', [
+        'ui.bootstrap',
+        'LocalForageModule'
+    ]);
 
-}).config(function() {
+angular
+    .module('mpdxApp')
+    .run(function () {
 
-});
+    });
+
+angular
+    .module('mpdxApp')
+    .config(function() {
+
+    });

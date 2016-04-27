@@ -3,9 +3,9 @@ angular.module('mpdxApp')
         return {
             restrict: 'E',
             templateUrl: '/templates/appeals/list.html',
-            controller: function ($scope, $modal, api) {
+            controller: function ($scope, $modal, api, state) {
                 var refreshAppeals = function(callback){
-                    api.call('get','appeals?account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
+                    api.call('get','appeals?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
                         $scope.appeals = data.appeals;
                       if(_.isFunction(callback)){
                         callback(data);
@@ -40,7 +40,7 @@ angular.module('mpdxApp')
                             api.call('get',
                                      'contacts?filters[status]=*&per_page=5000'+
                                          '&include=Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,Contact.pledge_amount,Contact.donor_accounts,Contact.pledge_currency_symbol'+
-                                         '&account_list_id=' + (window.current_account_list_id || ''),
+                                         '&account_list_id=' + (state.current_account_list_id || ''),
                                      {}, function(data) {
                                 $scope.contacts = data.contacts;
                                 $scope.newContact = data.contacts[0].id;
@@ -65,7 +65,7 @@ angular.module('mpdxApp')
                             };
 
                             $scope.save = function () {
-                                api.call('put','appeals/'+ $scope.appeal.id + '?account_list_id=' + (window.current_account_list_id || ''),
+                                api.call('put','appeals/'+ $scope.appeal.id + '?account_list_id=' + (state.current_account_list_id || ''),
                                     {"appeal": $scope.appeal},
                                     function(data) {
                                         $modalInstance.close($scope.appeal);
@@ -77,7 +77,7 @@ angular.module('mpdxApp')
                                 if(!r){
                                     return;
                                 }
-                                api.call('delete', 'appeals/' + id + '?account_list_id=' + (window.current_account_list_id || ''), null, function() {
+                                api.call('delete', 'appeals/' + id + '?account_list_id=' + (state.current_account_list_id || ''), null, function() {
                                     $modalInstance.dismiss('cancel');
                                     refreshAppeals();
                                 });
@@ -153,7 +153,7 @@ angular.module('mpdxApp')
                                     $scope.taskType = '';
                                     return;
                                   }
-                                  api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
+                                  api.call('post', 'tasks/?account_list_id=' + state.current_account_list_id, {
                                     task: {
                                       start_at: moment(task.date).hour(task.hour).minute(task.min).format('YYYY-MM-DD HH:mm:ss'),
                                       subject: task.subject,
@@ -192,7 +192,7 @@ angular.module('mpdxApp')
                               var tagList = _.find($scope.contacts, { 'id': Number(contactsObject[0]) }).tag_list;
                               tagList.push(newTag);
                               tagList = tagList.join();
-                              api.call('put', 'contacts/'+contactsObject[0]+'?account_list_id=' + window.current_account_list_id, {
+                              api.call('put', 'contacts/'+contactsObject[0]+'?account_list_id=' + state.current_account_list_id, {
                                 contact: {
                                   tag_list: tagList
                                 }
@@ -354,7 +354,7 @@ angular.module('mpdxApp')
                                   doNotAskAppeals: true
                               }
                             };
-                            api.call('get', 'contacts/tags?account_list_id=' + (window.current_account_list_id || ''), null, function(data) {
+                            api.call('get', 'contacts/tags?account_list_id=' + (state.current_account_list_id || ''), null, function(data) {
                               $scope.contactTags = data.tags.sort();
                             }, null, true);
 
@@ -387,7 +387,7 @@ angular.module('mpdxApp')
                           contact_statuses: _.keys(newAppeal.validStatus),
                           contact_tags: _.keys(newAppeal.validTags),
                           contact_exclude: newAppeal.exclude,
-                          account_list_id: (window.current_account_list_id || '')
+                          account_list_id: (state.current_account_list_id || '')
                         }, function(data) {
                           refreshAppeals(function(){
                             $scope.editAppeal(data.appeal.id);

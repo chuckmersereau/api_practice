@@ -2,7 +2,7 @@ angular.module('mpdxApp')
     .directive('replaceAvatar', function () {
         return {
             restrict: 'A',
-            controller: function ($scope, $modal, api) {
+            controller: function ($scope, $modal, api, state) {
 
               $scope.replaceFacebookLink = function(contactId, personId){
                 $modal.open({
@@ -30,7 +30,7 @@ angular.module('mpdxApp')
                       }]
                     }
                   };
-                  api.call('put', 'contacts/' + contactId + '?account_list_id=' + window.current_account_list_id, obj, function(){
+                  api.call('put', 'contacts/' + contactId + '?account_list_id=' + state.current_account_list_id, obj, function(){
                     location.reload();
                   });
                 });

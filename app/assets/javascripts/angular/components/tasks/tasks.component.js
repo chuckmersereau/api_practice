@@ -6,9 +6,9 @@
             templateUrl: 'inline/tasks.html' //declared inline at app/views/tasks/index.html.erb
         });
 
-    tasksController.$inject = ['$scope', '$timeout', 'api', 'urlParameter', 'contactCache'];
+    tasksController.$inject = ['$scope', '$timeout', 'api', 'urlParameter', 'contactCache', 'state'];
 
-    function tasksController($scope, $timeout, api, urlParameter, contactCache) {
+    function tasksController($scope, $timeout, api, urlParameter, contactCache, state) {
         var vm = this;
 
         vm.tasks = {};
@@ -118,7 +118,7 @@
         }
 
         function getContactFilterIds() {
-            api.call('get', 'contacts?account_list_id=' + (window.current_account_list_id || '') +
+            api.call('get', 'contacts?account_list_id=' + (state.current_account_list_id || '') +
                 '&filters[name]=' + encodeURIComponent(vm.filter.contactName) +
                 '&filters[contact_type]=' + encodeURIComponent(vm.filter.contactType) +
                 '&filters[city][]=' + api.encodeURLarray(vm.filter.contactCity).join('&filters[city][]=') +
@@ -146,7 +146,7 @@
         function refreshTasks(group, contactFilterIds) {
             var groupIndex = _.indexOf(vm.taskGroups, group);
             vm.taskGroups[groupIndex].loading = true;
-            api.call('get', 'tasks?account_list_id=' + window.current_account_list_id +
+            api.call('get', 'tasks?account_list_id=' + state.current_account_list_id +
                 '&per_page=' + vm.filter.tasksPerGroup +
                 '&page=' + group.currentPage +
                 '&order=' + (group.order || 'start_at') +
@@ -172,7 +172,7 @@
                 }
 
                 //retrieve contacts
-                api.call('get', 'contacts?account_list_id=' + window.current_account_list_id +
+                api.call('get', 'contacts?account_list_id=' + state.current_account_list_id +
                     '&filters[status]=*&filters[ids]=' + _.chain(tData.tasks).pluck('contacts').flatten().unique().join().value(), {}, function (data) {
                     angular.forEach(data.contacts, function (contact) {
                         contactCache.update(contact.id, {

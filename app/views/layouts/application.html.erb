@@ -218,13 +218,14 @@
     </div>
 
     <div id="toastPopup" style="display: none;"></div>
+    <preload-state name="current_user_id" data="<%= current_user.id %>"></preload-state>
+    <preload-state name="current_currency" data="<%= current_currency %>"></preload-state>
+    <preload-state name="current_currency_symbol"
+                   data="<%= TwitterCldr::Shared::Currencies.for_code(current_currency) ?
+                                                                TwitterCldr::Shared::Currencies.for_code(current_currency)[:symbol] :
+                                                                current_currency %>"></preload-state>
+    <preload-state name="current_account_list_id" data="<%= current_account_list.id %>"></preload-state>
     <script type="text/javascript">
-      window.current_currency = "<%= current_currency %>";
-      window.current_currency_symbol = "<%= TwitterCldr::Shared::Currencies.for_code(current_currency) ?
-                                            TwitterCldr::Shared::Currencies.for_code(current_currency)[:symbol] :
-                                            current_currency %>";
-      window.current_account_list_id = <%= current_account_list.id %>;
-      window.current_account_list_tester = '<%= current_account_list.tester %>';
       $('#nice-fonts').dblclick(function() {$('.data-font').toggleClass("on");});
 
       (function(d) {

@@ -1,4 +1,4 @@
-angular.module('mpdxApp').controller('smallNamestorm', function (api) {
+angular.module('mpdxApp').controller('smallNamestorm', function (api, state) {
   this.contacts = [];
   this.newContactName = '';
   this.newContactStatus = 'Contact for Appointment';
@@ -10,7 +10,7 @@ angular.module('mpdxApp').controller('smallNamestorm', function (api) {
     var scope = this;
     this.apiBusy = true;
     this.error = '';
-    api.post('contacts/?account_list_id=' + window.current_account_list_id,
+    api.post('contacts/?account_list_id=' + state.current_account_list_id,
              { contact: { name: this.newContactName, status: this.newContactStatus } })
        .success(function(response) {
         scope.contacts.push({id: response.contact.id, name: response.contact.name});

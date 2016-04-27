@@ -6,9 +6,9 @@
             templateUrl: 'inline/contact_list.html' //declared inline at app/views/contacts/index.html.erb
         });
 
-    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter'];
+    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$localForage', '$log', 'state'];
 
-    function contactListController($scope, api, contactCache, urlParameter) {
+    function contactListController($scope, api, contactCache, urlParameter, $localForage, $log, state) {
         var vm = this;
 
         var viewPrefs;
@@ -69,17 +69,18 @@
         vm.runInsight = runInsight;
         vm.clearInsightFilter = clearInsightFilter;
         vm.insightFilterIsActive = insightFilterIsActive;
-        vm.selectContacts = selectContacts;
-        vm.selectAllContactsOnPage = selectAllContactsOnPage;
-        vm.contactsSelected = contactsSelected;
-        vm.allContactsOnPageSelected = allContactsOnPageSelected;
-        vm.noContactsSelected = noContactsSelected;
         vm.clearSelectedContacts = clearSelectedContacts;
+        vm.toggleSelectedContacts = toggleSelectedContacts;
+        vm.toggleSelectedContactsAllOnPage = toggleSelectedContactsAllOnPage;
+        vm.anyContactIdsSelected = anyContactIdsSelected;
+        vm.anyContactsOnPageSelected = anyContactsOnPageSelected;
+        vm.noSelectedContacts = noSelectedContacts;
 
         activate();
 
         function activate() {
             loadViewPreferences();
+            loadSelectedContacts();
 
             $scope.$watch('$ctrl.contactQuery', function (q, oldq) {
                 if(!q.viewPrefsLoaded){
@@ -110,7 +111,7 @@
                     var prefs = null;
                     viewPrefs.user.preferences.contacts_filter = {};
                 } else {
-                    var prefs = viewPrefs.user.preferences.contacts_filter[window.current_account_list_id];
+                    var prefs = viewPrefs.user.preferences.contacts_filter[state.current_account_list_id];
                 }
 
                 if (!_.isNull(vm.contactQuery.wildcardSearch)) {
@@ -348,12 +349,12 @@
 
             var requestUrl;
             if(q.insightFilter){
-                requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
+                requestUrl = 'contacts?account_list_id=' + (state.current_account_list_id || '') +
                     '&per_page=' + q.limit +
                     '&page=' + q.page +
                     '&filters[ids]=' + q.insightFilter.join();
             } else {
-                requestUrl = 'contacts?account_list_id=' + (window.current_account_list_id || '') +
+                requestUrl = 'contacts?account_list_id=' + (state.current_account_list_id || '') +
                     '&per_page=' + q.limit +
                     '&page=' + q.page +
                     '&filters[ids]=' + encodeURIComponent(q.ids) +
@@ -452,9 +453,9 @@
                     page: q.page
                 };
                 if (!isEmptyFilter(prefsToSave)) {
-                    viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = prefsToSave;
+                    viewPrefs['user']['preferences']['contacts_filter'][state.current_account_list_id] = prefsToSave;
                 } else {
-                    viewPrefs['user']['preferences']['contacts_filter'][window.current_account_list_id] = null;
+                    viewPrefs['user']['preferences']['contacts_filter'][state.current_account_list_id] = null;
                 }
                 api.call('put', 'users/me', viewPrefs);
             }, null, true);
@@ -568,37 +569,59 @@
             return angular.isDefined(vm.contactQuery.insightFilter);
         }
 
+        function selectedContactsStorageKey(){
+            return 'selectedContacts-userId:' + state.current_user_id + '-accountListId:' + state.current_account_list_id;
+        }
+
+        function loadSelectedContacts(){
+            $localForage.getItem(selectedContactsStorageKey()).then(function(selectedContacts){
+                    vm.selectedContacts = selectedContacts;
+                },
+                function(){
+                    $log.error('Failed to load selected contacts');
+                });
+        }
+
+        function saveSelectedContacts(){
+            $localForage.setItem(selectedContactsStorageKey(), vm.selectedContacts).then(function(){},
+                function(){
+                    $log.error('Failed to save selected contacts');
+                });
+        }
+
         function clearSelectedContacts(){
             vm.selectedContacts = [];
+            saveSelectedContacts();
         }
 
-        function selectAllContactsOnPage(){
-            selectContacts(allContactIdsOnPage());
+        function toggleSelectedContactsAllOnPage(){
+            toggleSelectedContacts(allContactIdsOnPage());
         }
 
-        function selectContacts(ids){
+        function toggleSelectedContacts(ids){
             if(!_.isArray(ids)){
                 ids = [ids];
             }
-            if(contactsSelected(ids)){
+            if(anyContactIdsSelected(ids)){
                 vm.selectedContacts = _.difference(vm.selectedContacts, ids);
             }else {
                 vm.selectedContacts = _.union(vm.selectedContacts, ids);
             }
+            saveSelectedContacts();
         }
 
-        function allContactsOnPageSelected(){
-            return contactsSelected(allContactIdsOnPage());
+        function anyContactsOnPageSelected(){
+            return anyContactIdsSelected(allContactIdsOnPage());
         }
 
-        function contactsSelected(ids){
+        function anyContactIdsSelected(ids){
             if(!_.isArray(ids)){
                 ids = [ids];
             }
-            return !_.isEmpty(vm.selectedContacts) && _(ids).difference(vm.selectedContacts).isEmpty();
+            return !_.isEmpty(vm.selectedContacts) && !_.isEmpty(ids) && _(ids).difference(vm.selectedContacts).isEmpty();
         }
 
-        function noContactsSelected(){
+        function noSelectedContacts(){
             return _.isEmpty(vm.selectedContacts);
         }
 

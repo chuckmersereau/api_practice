@@ -34,8 +34,10 @@
   }
   &:hover:active, &:after {
     opacity: .5;
+    text-decoration: none;
   }
   &:hover:after, &:hover {
     opacity: 1;
+    text-decoration: none;
   }
 }

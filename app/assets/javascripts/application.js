@@ -50,6 +50,8 @@
 
 //angular
 //= require angular/angular
+//= require angular-localforage/bower_components/localforage/dist/localforage
+//= require angular-localforage/dist/angular-localForage
 //= require lodash
 //= require angular/mpdxApp
 //= require angular/railsConstants
