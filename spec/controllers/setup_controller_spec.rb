@@ -25,6 +25,16 @@ describe SetupController do
       expect(@user.reload.setup_mode?).to eq(false)
     end
 
+    context 'social accounts step' do
+      let!(:org_account) { FactoryGirl.create(:organization_account, person: @user) }
+      it 'redirects to settings' do
+        expect do
+          get :show, id: :social_accounts
+        end.to_not raise_exception
+        expect(response).to redirect_to('/setup/settings')
+      end
+    end
+
     context 'settings step' do
       let!(:org_account) { FactoryGirl.create(:organization_account, person: @user) }
 
