@@ -97,16 +97,23 @@
             vm.currencySymbols = {};
 
             var donationsByCurrency = _.groupBy(donations, 'currency');
+
+            // These converted amounts aren't used by the view of the report
+            // yet, but we are planning to use them for a bar at the top that
+            // shows how much support you received in the last year from each
+            // currency. The width of the bars should reflect the percentages
+            // based on the converted amounts.
+            vm.convertedTotalsByCurrency = {};
+            vm.convertedCurrency = donations[0].converted_currency;
+            vm.convertedCurrencySymbol = donations[0].converted_currency_symbol;
+
             for (var currency in donationsByCurrency) {
                 groupDonorsAndDonations(currency, donationsByCurrency);
+
+                var donations = donationsByCurrency[currency];
+                vm.convertedTotalsByCurrency[currency] =
+                    _.sum(_.map(donations, 'converted_amount'));
             }
-
-            // TODO: Fill this in with the totals by donation.converted_currency
-            // for use in displaying the big bar at the top with the colors by
-            // currency totals.
-            vm.totalsByCurrency = {
-
-            };
         };
 
         var groupDonorsAndDonations = function(currency, donationsByCurrency) {
