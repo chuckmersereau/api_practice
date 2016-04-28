@@ -34,7 +34,9 @@
           <a href="/contacts/{{donor.id}}"
              title="{{donorAndDonations.tooltip}}"
              data-toggle="tooltip" data-placement="bottom"
-          >{{donor.name}}</a>
+                                   >{{donor.name}}</a>
+          <span ng-if="donor.late_by_30_days" class="late-by-30-days"></span>
+          <span ng-if="donor.late_by_60_days" class="late-by-30-days"></span>
         </td>
         <td ng-repeat="(monthIndex, monthlyTotal) in donorAndDonations.amountsByMonthsAgo">
           <div ng-if="monthlyTotal > 0.0">

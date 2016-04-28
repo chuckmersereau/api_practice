@@ -35,7 +35,8 @@ describe Api::V1::Reports::YearDonationsController, '#show' do
       [{
         id: contact.id, name: 'John', pledge_amount: 10,
         pledge_frequency: 'Monthly', pledge_currency: 'GBP',
-        status: 'Partner - Special'
+        status: 'Partner - Special',
+        late_by_30_days: false, late_by_60_days: false
       }]
     )
     expect(report_info[:donations]).to eq(
