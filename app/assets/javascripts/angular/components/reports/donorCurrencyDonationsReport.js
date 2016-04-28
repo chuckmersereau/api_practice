@@ -134,10 +134,10 @@
         };
 
         var currencyTooltip = function(aggregate, overallConvertedTotal) {
-            return __('Total ') +
+            return __('Total') + ' ' +
                 aggregate.currencySymbol +
                 Math.round(aggregate.total) + ' ' + aggregate.currency + ' ' +
-                __(' converted as ') + vm.convertedCurrencySymbol +
+                __('converted as') + ' ' + vm.convertedCurrencySymbol +
                 Math.round(aggregate.convertedTotal) + ' ' + vm.convertedCurrency +
                 ' (' + Math.round(aggregate.convertedPercent) + '% ' + __('of total') +
                 ' ' + vm.convertedCurrencySymbol + Math.round(overallConvertedTotal) +
