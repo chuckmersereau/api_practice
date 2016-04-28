@@ -2,6 +2,7 @@ class Appeal < ActiveRecord::Base
   belongs_to :account_list
   has_many :appeal_contacts
   has_many :contacts, through: :appeal_contacts
+  has_many :excluded_appeal_contacts, dependent: :delete_all
   has_many :donations
 
   validates :account_list_id, presence: true
@@ -36,7 +37,7 @@ class Appeal < ActiveRecord::Base
   end
 
   def contacts_by_opts(statuses, tags, excludes)
-    excluder = AppealContactsExcluder.new(account_list: account_list)
+    excluder = AppealContactsExcluder.new(appeal: self)
     excluder.excludes_scopes(account_list.contacts
       .joins("LEFT JOIN taggings ON taggings.taggable_type = 'Contact' AND taggings.taggable_id = contacts.id")
       .joins('LEFT JOIN tags ON tags.id = taggings.tag_id')

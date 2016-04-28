@@ -389,6 +389,37 @@ ALTER SEQUENCE appeal_contacts_id_seq OWNED BY appeal_contacts.id;
 
 
 --
+-- Name: appeal_excluded_appeal_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE appeal_excluded_appeal_contacts (
+    id integer NOT NULL,
+    appeal_id integer,
+    contact_id integer,
+    reasons text[]
+);
+
+
+--
+-- Name: appeal_excluded_appeal_contacts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE appeal_excluded_appeal_contacts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: appeal_excluded_appeal_contacts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE appeal_excluded_appeal_contacts_id_seq OWNED BY appeal_excluded_appeal_contacts.id;
+
+
+--
 -- Name: appeals; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
@@ -2622,6 +2653,13 @@ ALTER TABLE ONLY appeal_contacts ALTER COLUMN id SET DEFAULT nextval('appeal_con
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY appeal_excluded_appeal_contacts ALTER COLUMN id SET DEFAULT nextval('appeal_excluded_appeal_contacts_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY appeals ALTER COLUMN id SET DEFAULT nextval('appeals_id_seq'::regclass);
 
 
@@ -3104,6 +3142,14 @@ ALTER TABLE ONLY admin_impersonation_logs
 
 ALTER TABLE ONLY appeal_contacts
     ADD CONSTRAINT appeal_contacts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: appeal_excluded_appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY appeal_excluded_appeal_contacts
+    ADD CONSTRAINT appeal_excluded_appeal_contacts_pkey PRIMARY KEY (id);
 
 
 --
@@ -3977,6 +4023,13 @@ CREATE INDEX index_email_addresses_on_remote_id ON email_addresses USING btree (
 
 
 --
+-- Name: index_excluded_appeal_contacts_on_appeal_and_contact; Type: INDEX; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE UNIQUE INDEX index_excluded_appeal_contacts_on_appeal_and_contact ON appeal_excluded_appeal_contacts USING btree (appeal_id, contact_id);
+
+
+--
 -- Name: index_family_relationships_on_person_id_and_related_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
@@ -4600,6 +4653,22 @@ CREATE UNIQUE INDEX user_id_and_organization_id ON person_organization_accounts 
 
 
 --
+-- Name: appeal_excluded_appeal_contacts_appeal_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY appeal_excluded_appeal_contacts
+    ADD CONSTRAINT appeal_excluded_appeal_contacts_appeal_id_fk FOREIGN KEY (appeal_id) REFERENCES appeals(id) ON DELETE CASCADE;
+
+
+--
+-- Name: appeal_excluded_appeal_contacts_contact_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY appeal_excluded_appeal_contacts
+    ADD CONSTRAINT appeal_excluded_appeal_contacts_contact_id_fk FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE;
+
+
+--
 -- Name: master_person_sources_master_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5032,4 +5101,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160401173537');
 INSERT INTO schema_migrations (version) VALUES ('20160413150136');
 
 INSERT INTO schema_migrations (version) VALUES ('20160419135520');
+
+INSERT INTO schema_migrations (version) VALUES ('20160428125403');
 

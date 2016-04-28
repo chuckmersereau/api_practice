@@ -1,28 +1,48 @@
 class Appeal::AppealContactsExcluder
   include ActiveModel::Model
+  include ActiveRecord::Sanitization::ClassMethods
 
-  attr_accessor :account_list
+  attr_accessor :appeal
 
   def excludes_scopes(contacts, excludes)
     return contacts unless excludes.is_a? Hash
-    contacts = contacts.where("no_appeals is null OR no_appeals = 'f'") if excludes[:doNotAskAppeals]
-    contacts = no_joined_recently(contacts, 3) if excludes[:joinedTeam3months]
-    contacts = no_above_pledge_recently(contacts, 3) if excludes[:specialGift3months]
-    contacts = no_stopped_giving_recently(contacts, 2) if excludes[:stoppedGiving2months]
-    contacts = no_increased_recently(contacts, 3) if excludes[:increasedGiving3months]
+
+    @exclusions = {}
+    Appeal::ExcludedAppealContact.where(appeal: appeal).delete_all
+    @contacts = contacts
+
+    do_not_ask if excludes[:doNotAskAppeals]
+    no_joined_recently(3) if excludes[:joinedTeam3months]
+    no_above_pledge_recently(3) if excludes[:specialGift3months]
+    no_stopped_giving_recently(2) if excludes[:stoppedGiving2months]
+    no_increased_recently(3) if excludes[:increasedGiving3months]
+
+    contacts = contacts.where.not(id: @exclusions.keys) if @exclusions.any?
+
+    save_exclusions
     contacts
   end
 
   private
 
-  def no_joined_recently(contacts, within_months)
-    contacts.where.not('pledge_amount is not null AND pledge_amount > 0 AND '\
-                       'contacts.first_donation_date is not null AND '\
-                       'contacts.first_donation_date >= ?',
-                       within_months.months.ago)
+  def account_list
+    appeal.account_list
   end
 
-  def no_above_pledge_recently(contacts, prev_full_months)
+  def do_not_ask
+    ids = @contacts.where(no_appeals: true).pluck(:id)
+    mark_excluded(ids, 'marked_do_not_ask')
+  end
+
+  def no_joined_recently(within_months)
+    ids = @contacts.where('pledge_amount is not null AND pledge_amount > 0 AND '\
+                         'contacts.first_donation_date is not null AND '\
+                         'contacts.first_donation_date >= ?',
+                         within_months.months.ago).pluck(:id)
+    mark_excluded(ids, 'joined_recently')
+  end
+
+  def no_above_pledge_recently(prev_full_months)
     start_of_month = Date.today.beginning_of_month
     start_of_prev_month = (Date.today << prev_full_months).beginning_of_month
 
@@ -51,14 +71,15 @@ class Appeal::AppealContactsExcluder
           / ((CASE WHEN contacts.last_donation_date >= :start_of_month THEN 1 ELSE 0 END) + :prev_full_months)
         > coalesce(pledge_amount, 0.0) / coalesce(pledge_frequency, 1.0)'
 
-    contacts.where("contacts.id NOT IN (#{above_pledge_contacts_ids_sql})",
-                   account_list_id: account_list.id, start_of_month: start_of_month,
-                   start_of_prev_month: start_of_prev_month, prev_full_months: prev_full_months)
+    ids = @contacts.where("contacts.id IN (#{above_pledge_contacts_ids_sql})",
+                          account_list_id: account_list.id, start_of_month: start_of_month,
+                          start_of_prev_month: start_of_prev_month, prev_full_months: prev_full_months).pluck(:id)
+    mark_excluded(ids, 'special_gift')
   end
 
   # We define e.g. "stopped giving in the past 2 months" as no pledge set current, no gifts in the previous
   # 2 full months, and at least 3 gifts in the prior 10 months.
-  def no_stopped_giving_recently(contacts, prev_full_months = 2, prior_months = 10, prior_num_gifts = 3)
+  def no_stopped_giving_recently(prev_full_months = 2, prior_months = 10, prior_num_gifts = 3)
     prior_window_end = Date.today << prev_full_months
     prior_window_start = prior_window_end << prior_months
 
@@ -79,22 +100,21 @@ class Appeal::AppealContactsExcluder
       GROUP BY contacts.id
       HAVING COUNT(*) >= :prior_num_gifts'
 
-    contacts.where("contacts.id NOT IN (#{former_givers_sql})",
-                   account_list_id: account_list.id, prior_num_gifts: prior_num_gifts,
-                   prior_window_start: prior_window_start, prior_window_end: prior_window_end)
+    ids = @contacts.where("contacts.id IN (#{former_givers_sql})",
+                          account_list_id: account_list.id, prior_num_gifts: prior_num_gifts,
+                          prior_window_start: prior_window_start, prior_window_end: prior_window_end).pluck(:id)
+    mark_excluded(ids, 'stopped_giving')
   end
 
-  def no_increased_recently(contacts, prev_full_months = 3)
-    increased_recently_ids = contacts.scoping do
+  def no_increased_recently(prev_full_months = 3)
+    increased_recently_ids = @contacts.scoping do
       account_list.contacts
                   .where('pledge_amount is not null AND pledge_amount > 0 AND pledge_frequency <= 4')
                   .where('last_donation_date >= ?', (Date.today.prev_month << prev_full_months).beginning_of_month)
                   .to_a.select { |contact| increased_recently?(contact, prev_full_months) }.map(&:id)
     end
 
-    return contacts if increased_recently_ids.empty?
-
-    contacts.where("contacts.id NOT IN (#{quote_sql_list(increased_recently_ids)})")
+    mark_excluded(increased_recently_ids, 'increased_recently')
   end
 
   def increased_recently?(contact, prev_full_months, max_prior_months = 12)
@@ -148,5 +168,20 @@ class Appeal::AppealContactsExcluder
 
   def quote_sql_list(list)
     list.map { |item| ActiveRecord::Base.connection.quote(item) }.join(',')
+  end
+
+  def mark_excluded(ids, reason)
+    ids.each do |id|
+      @exclusions[id] ||= []
+      @exclusions[id].append reason
+    end
+  end
+
+  def save_exclusions
+    Appeal::ExcludedAppealContact.transaction do
+      @exclusions.each do |id, reasons|
+        Appeal::ExcludedAppealContact.create(contact_id: id, appeal: appeal, reasons: reasons)
+      end
+    end
   end
 end
