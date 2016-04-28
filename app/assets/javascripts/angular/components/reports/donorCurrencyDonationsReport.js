@@ -75,7 +75,9 @@
             }
             donations.forEach(function(donation) {
                 var monthIndex = vm.monthsBack - monthsAgo(donation.donation_date);
-                monthlyTotals[monthIndex] += donation.amount;
+                if (monthIndex < vm.monthsBack && monthIndex >= 0) {
+                    monthlyTotals[monthIndex] += donation.amount;
+                }
             });
             return monthlyTotals;
         }

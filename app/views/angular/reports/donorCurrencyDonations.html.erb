@@ -19,12 +19,14 @@
           colspan="{{monthCount}}">
           <h4>{{year}}</h4>
         </td>
+        <td></td>
       </tr>
       <tr>
         <td></td>
         <td ng-repeat="pastMonth in $ctrl.pastMonthDates">
           <b>{{pastMonth | date : 'MMM'}}</b>
         </td>
+        <td><b><%= _('Total') %></b></td>
       </tr>
       <tr ng-repeat="donorAndDonations in donorsAndDonations | orderBy : 'donor.name'"
           ng-init="donor = donorAndDonations.donor">
@@ -38,6 +40,9 @@
           <div ng-if="monthlyTotal > 0.0">
             {{currencySymbol}}{{monthlyTotal | number : 0}}
           </div>
+        </td>
+        <td>
+          <b>{{currencySymbol}}{{donorAndDonations.total | number : 0}}</b>
         </td>
       </tr>
     </table>
