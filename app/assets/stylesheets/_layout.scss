@@ -2106,6 +2106,9 @@ appeals-list .show-all {
 }
 .panel-exception {
   margin-bottom: .5em;
+  &:last-child {
+    margin-bottom: 0;
+  }
   .toggle-exception {
     color: #000;
   }
@@ -2121,36 +2124,53 @@ appeals-list .show-all {
   .panel-body {
     padding-top: 10px;
     padding-bottom: 10px;
-    line-height: 1.65em;
   }
-  &.panel-added {
-    color: #ddd;
-    .add-btn {
-
+  p {
+    margin-bottom: .5em;
+    &:last-child {
+      margin-bottom: 0;
     }
-    .toggle-exception {
-      color: #ddd;
+  }
+  ul {
+    padding-left: 20px;
+    &:last-child {
+      margin-bottom: 0;
     }
-    a {
-      color: #ddd;
+  }
+  .add-space {
+    padding-left: 60px;
+  }
+  .add-cta {
+    position: absolute;
+    left: -1px;
+    top: 50%;
+    margin-top: -20px;
+    padding: 3px 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    .fa {
+      font-size: 30px;
     }
-    .add-exception {
-      content: "Remove";
-      &:before {
-        content: "\f056";
-        font-family: "fontawesome";
-      }
+    .word {
+      display: block;
     }
   }
 }
+
+.panel-except-container {
+  background-color: #eee;
+}
+
+.table-summary {
+  margin-bottom: 0;
+}
+
 .exception-name {
   .exception-toggle {
     font-size: 18px;
     margin-right: 10px;
   }
   h4 {
-    display: inline-block;
-    margin: 0;
   }
 }
 

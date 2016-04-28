@@ -1,68 +1,143 @@
 <h1 id="ui-id-7" class="ui-dialog-title"
       ng-bind="$ctrl.appeal.name || '<%= _("Nameless Appeal") %>'"></h1>
 
-<form class="form_wrapper">
-  <div class="panel panel-default panel-exception">
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-md-5 exception-name">
-          <a role="button" data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample"><i class="fa fa-angle-down toggle-exception" aria-hidden="true"></i></a>
-          <h4>Full Name</h4>
-        </div>
-        <div class="col-md-2 text-right">
-          partnership status 
-        </div>
-        <div class="col-md-2 text-right">
-          $100.00/mo
-        </div>
-        <div class="col-md-3 text-right">
-          Monthly (Jan 12, 2016) 
-          <a href="" class="add-exception">Add</a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="collapse" id="collapseExample">
-              Graph Here
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="panel panel-default panel-exception panel-added">
-    <div class="panel-body">
-      <div class="row">
-        <div class="col-md-5 exception-name">
-          <a role="button" data-toggle="collapse" href="#collapseExample2" aria-expanded="false" aria-controls="collapseExample2"><i class="fa fa-angle-down toggle-exception" aria-hidden="true"></i></a>
-          <h4>Full Name</h4>
-        </div>
-        <div class="col-md-2 text-right">
-          partnership status 
-        </div>
-        <div class="col-md-2 text-right">
-          $100.00/mo
-        </div>
-        <div class="col-md-3 text-right">
-          Monthly (Jan 12, 2016) 
-          <a href="" class="add-exception">Add</a>
-        </div>
-      </div>
-      <div class="row">
-        <div class="col-md-12">
-          <div class="collapse" id="collapseExample2">
-              Graph Here
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</form>
 
 <hr />
 
 <form class="form_wrapper">
 
-  <div class="scroll">
+  <div class="scroll">    
+    <div class="panel panel-primary">
+      <div class="panel-body">
+        <div class="row">
+            <div class="col-md-4 field">
+                <label><%= _('Name') %></label>
+                <input autofocus="autofocus" type="text" class="input-lg" ng-model="$ctrl.appeal.name">
+            </div>
+
+            <div class="col-md-4 field">
+                <label><%= _('Goal') %></label>
+                <input type="number" ng-model="$ctrl.appeal.amount" class="form-control input-lg" raw-number>
+            </div>
+            <div class="col-md-2">
+              <a class="btn btn-primary" role="button" data-toggle="collapse" href="#exceptionsContainer" aria-expanded="false" aria-controls="exceptionsContainer">
+                Toggle Collapse
+              </a>
+            </div>
+        </div>
+      </div>
+    </div>
+
+
+    <form class="form_wrapper">
+      <div id="exceptionsContainer" class="collapse">
+        <div class="panel panel-default panel-except-container">
+          <div class="panel-body">
+            <div class="panel panel-default panel-exception">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-3 add-space">
+                    <p>
+                      <a href="" class="add-cta btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i></a>
+                      <Strong>Full Name</Strong>
+                    </p>
+                    <p>
+                      Partnership Status<br/>
+                      $100.00/mo
+                    </p>
+                  </div>
+                  <div class="col-md-3">
+                    <P>
+                      <strong>Reason for Exception:</strong>
+                    </P>
+                    <ul>
+                      <li>12 month lapse</li>
+                      <li>Do not ask</li>
+                    </ul>
+                    
+                  </div>
+                  <div class="col-md-6">
+                    <table class="table table-condensed table-bordered table-summary">
+                      <thead>
+                        <tr>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="panel panel-default panel-exception">
+              <div class="panel-body">
+                <div class="row">
+                  <div class="col-md-3 add-space">
+                    <p>
+                      <a href="" class="add-cta btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i></a>
+                      <Strong>Full Name</Strong>
+                    </p>
+                    <p>
+                      Partnership Status<br/>
+                      $100.00/mo
+                    </p>
+                  </div>
+                  <div class="col-md-3">
+                    <P>
+                      <strong>Reason for Exception:</strong>
+                    </P>
+                    <ul>
+                      <li>12 month lapse</li>
+                      <li>Do not ask</li>
+                    </ul>
+                    
+                  </div>
+                  <div class="col-md-6">
+                    <table class="table table-condensed table-bordered table-summary">
+                      <thead>
+                        <tr>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                          <td>June '16</td>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                          <td>$1000</td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </form>
+
     <div class="panel panel-default">
       <div class="panel-body">
         <div class="row">
@@ -268,23 +343,6 @@
       </div>
     </div>
 
-
-    <div class="panel panel-default">
-      <div class="panel-body">
-        <div class="row">
-            <div class="col-md-4 field">
-                <label><%= _('Name') %></label>
-                <input autofocus="autofocus" type="text" class="input-lg" ng-model="$ctrl.appeal.name">
-            </div>
-
-            <div class="col-md-4 field">
-                <label><%= _('Goal') %></label>
-                <input type="number" ng-model="$ctrl.appeal.amount" class="form-control input-lg" raw-number>
-            </div>
-        </div>
-      </div>
-    </div>
-
     <div class="panel panel-default">
       <div class="panel-body">
         <h3><%= _('Contacts') %></h3>
@@ -320,7 +378,13 @@
               </tr>
               <tr>
                 <td colspan="2"></td>
-                <td style="text-align: right;"><strong>Total:</strong> </td>
+                <td style="text-align: right;">
+                  Total USD: $5000<br/>
+                  Total Pesos: $90000000000000<br/>
+                  Total : @asdklfjaskldjfa<br/>
+                  <strong>Total [MY CURRENCY]: $5001 USD</strong>
+
+                </td>
                 <td colspan="2">{{$ctrl.donationAggregates().sum | currency : current_currency_symbol}}</td>
               </tr>
               <tr>
