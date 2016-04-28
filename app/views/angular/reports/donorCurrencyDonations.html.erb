@@ -7,7 +7,17 @@
   <%= _('Loading data...') %>
 </div>
 
-<div ng-if="!$ctrl.errorOccurred" class="table">
+<div ng-if="!$ctrl.errorOccurred" style="width: 100%; display: block">
+  <span ng-repeat="currencyAggregate in $ctrl.currencyAggregates | orderBy: 'convertedPercent' : true"
+        style="color: white; text-align: center; width: {{currencyAggregate.convertedPercent}}%; display: block; float: left"
+        class="currency-color-{{$index}}"
+        title="{{currencyAggregate.tooltip}}"
+        data-toggle="tooltip" data-placement="bottom">
+    {{currencyAggregate.currency}} ({{currencyAggregate.currencySymbol}})
+  </span>
+</div>
+
+<div ng-if="!$ctrl.errorOccurred">
   <div ng-repeat="(currency, donorsAndDonations) in $ctrl.donorsAndDonationsByCurrency"
     ng-init="currencySymbol = $ctrl.currencySymbols[currency]">
     <h2>{{currency}} ({{currencySymbol}})</h2>

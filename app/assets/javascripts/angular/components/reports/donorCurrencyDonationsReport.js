@@ -95,26 +95,53 @@
             vm.donorsById = _.groupBy(donors, 'id');
             vm.donorsAndDonationsByCurrency = {};
             vm.currencySymbols = {};
-
-            var donationsByCurrency = _.groupBy(donations, 'currency');
-
-            // These converted amounts aren't used by the view of the report
-            // yet, but we are planning to use them for a bar at the top that
-            // shows how much support you received in the last year from each
-            // currency. The width of the bars should reflect the percentages
-            // based on the converted amounts.
             vm.convertedTotalsByCurrency = {};
             vm.convertedCurrency = donations[0].converted_currency;
             vm.convertedCurrencySymbol = donations[0].converted_currency_symbol;
 
+            var donationsByCurrency = _.groupBy(donations, 'currency');
             for (var currency in donationsByCurrency) {
                 groupDonorsAndDonations(currency, donationsByCurrency);
+            }
+            generateCurrencyAggregates(donationsByCurrency);
+        };
 
+        var generateCurrencyAggregates = function(donationsByCurrency) {
+            var overallConvertedTotal = 0.0;
+            var convertedTotalsByCurrency = {};
+            var totalsByCurrency = {};
+            for (var currency in donationsByCurrency) {
                 var donations = donationsByCurrency[currency];
-                vm.convertedTotalsByCurrency[currency] =
-                    _.sum(_.map(donations, 'converted_amount'));
+                var convertedTotal = _.sum(_.map(donations, 'converted_amount'))
+                convertedTotalsByCurrency[currency] = convertedTotal;
+                overallConvertedTotal += convertedTotal;
+                totalsByCurrency[currency] = _.sum(_.map(donations, 'amount'));
+            }
+            vm.currencyAggregates = [];
+            for (var currency in donationsByCurrency) {
+                var convertedTotal = convertedTotalsByCurrency[currency];
+                var currencyAggregate = {
+                    currency: currency,
+                    currencySymbol: vm.currencySymbols[currency],
+                    total: totalsByCurrency[currency],
+                    convertedTotal: convertedTotal,
+                    convertedPercent: convertedTotal / overallConvertedTotal * 100.0
+                }
+                currencyAggregate.tooltip = currencyTooltip(currencyAggregate);
+                vm.currencyAggregates.push(currencyAggregate);
             }
         };
+
+        var currencyTooltip = function(aggregate) {
+            return __('Total ') +
+                aggregate.currencySymbol +
+                Math.round(aggregate.total) + ' ' + aggregate.currency + ' ' +
+                __(' converted as ') + vm.convertedCurrencySymbol +
+                Math.round(aggregate.convertedTotal) + ' ' + vm.convertedCurrency +
+                ' (' + Math.round(aggregate.convertedPercent) + '% ' + __('of total') +
+                ' ' + vm.convertedCurrencySymbol + Math.round(aggregate.convertedTotal) +
+                ' ' + vm.convertedCurrency + ')';
+        }
 
         var groupDonorsAndDonations = function(currency, donationsByCurrency) {
             vm.currencyMonthlyTotals[currency] = {};
