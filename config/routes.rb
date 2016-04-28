@@ -58,7 +58,9 @@ Rails.application.routes.draw do
       resources :progress, only: [:index]
       resources :preferences
       resources :users
-      resources :appeals
+      resources :appeals do
+        resources :exclusions, only: [:index, :delete], controller: :appeal_exclusions
+      end
       resources :insights
 
       resources :mail_chimp_accounts do
