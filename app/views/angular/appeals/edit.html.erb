@@ -1,13 +1,10 @@
 <h1 id="ui-id-7" class="ui-dialog-title"
-      ng-bind="$ctrl.appeal.name || '<%= _("Nameless Appeal") %>'"></h1>
-
-
-<hr />
+      ng-bind="$ctrl.appeal.name || '<%= _("Nameless Appeal") %>'" style="display: none;"></h1>
 
 <form class="form_wrapper">
 
   <div class="scroll">    
-    <div class="panel panel-primary">
+    <div class="panel panel-action">
       <div class="panel-body">
         <div class="row">
             <div class="col-md-4 field">
@@ -19,15 +16,15 @@
                 <label><%= _('Goal') %></label>
                 <input type="number" ng-model="$ctrl.appeal.amount" class="form-control input-lg" raw-number>
             </div>
-            <div class="col-md-2">
-              <a class="btn btn-primary" role="button" data-toggle="collapse" href="#exceptionsContainer" aria-expanded="false" aria-controls="exceptionsContainer">
-                Toggle Collapse
-              </a>
-            </div>
         </div>
       </div>
     </div>
 
+    <div class="">
+      <a class="btn btn-primary exception-toggle-btn" role="button" data-toggle="collapse" href="#exceptionsContainer" aria-expanded="false" aria-controls="exceptionsContainer">
+                Show/Hide Contacts Not Included
+              </a>
+    </div>
 
     <form class="form_wrapper">
       <div id="exceptionsContainer" class="collapse">
