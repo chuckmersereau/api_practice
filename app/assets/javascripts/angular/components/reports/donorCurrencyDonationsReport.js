@@ -129,7 +129,7 @@
         }
 
         function donorsAndDonationsForContact(currency, contactId, donationsByContactId) {
-            donations = donationsByContactId[contactId];
+            var donations = donationsByContactId[contactId];
             var amountsByMonthsAgo = donationMonthlyTotals(donations, vm.monthsBack);
             var monthlyAmounts = [];
             for (var monthsAgo in amountsByMonthsAgo) {
