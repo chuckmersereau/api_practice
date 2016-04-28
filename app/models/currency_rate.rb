@@ -42,6 +42,7 @@ class CurrencyRate < ActiveRecord::Base
       return if currency_code == 'USD'
       return if already_cached_rates_for_date_range?(
         currency_code: currency_code, from_date: from_date, to_date: to_date)
+
       (from_date..to_date).each do |date|
         rate_on_date(currency_code: currency_code, date: date)
       end

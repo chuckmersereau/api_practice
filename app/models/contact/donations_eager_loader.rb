@@ -48,15 +48,14 @@ class Contact::DonationsEagerLoader
   end
 
   def contacts_by_donor_id
-    @contacts_by_donor_id ||= group_contacts_by_donor_id
-  end
-
-  def group_contacts_by_donor_id
-    scoped_contacts.each_with_object({}) do |contact, hash|
+    return @contacts_by_donor_id if @contacts_by_donor_id
+    @contacts_by_donor_id = {}
+    scoped_contacts.each do |contact|
       contact_donor_ids(contact).each do |donor_id|
-        hash[donor_id] ||= contact
+        @contacts_by_donor_id[donor_id] ||= contact
       end
     end
+    @contacts_by_donor_id
   end
 
   def scoped_donations
