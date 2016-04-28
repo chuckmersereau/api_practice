@@ -8,11 +8,11 @@
 
     donorCurrencyDonationsReportController.$inject = ['api'];
 
-    var monthsAgo = function(dateStr) {
+    function monthsAgo(dateStr) {
         return currentMonthIndex - monthIndex(new Date(dateStr));
     }
 
-    var pastMonthDates = function(monthsBack) {
+    function pastMonthDates(monthsBack) {
         var monthsBackDates = [];
         for (var i = monthsBack - 1; i >= 0; i--) {
             var current = new Date();
@@ -22,7 +22,7 @@
         return monthsBackDates;
     }
 
-    var yearsWithMonthCounts = function(monthDates) {
+    function yearsWithMonthCounts(monthDates) {
         var datesByYear = _.groupBy(monthDates, function(date) {
             return date.getFullYear();
         });
@@ -32,7 +32,7 @@
         return datesByYear;
     }
 
-    var donationMonthlyTotals = function(donations, monthsBack) {
+    function donationMonthlyTotals(donations, monthsBack) {
         var monthlyTotals = {};
         for (var i = 0; i < monthsBack; i++) {
             monthlyTotals[i] = 0.0;
@@ -49,7 +49,7 @@
         return monthlyTotals;
     }
 
-    var monthIndex = function(date) {
+    function monthIndex(date) {
         return date.getYear() * 12 + date.getMonth();
     }
 
@@ -63,7 +63,7 @@
         vm.pastMonthDates = pastMonthDates(vm.monthsBack);
         vm.yearsWithMonthCounts = yearsWithMonthCounts(vm.pastMonthDates);
 
-        var donorTooltip = function(currency, currencySymbol, donorAndDonations) {
+        function donorTooltip(currency, currencySymbol, donorAndDonations) {
             var donor = donorAndDonations.donor;
             var tooltip = "";
             if (donor.pledge_amount === null || donor.pledge_amount <= 0.0) {
@@ -84,14 +84,14 @@
         }
 
         vm.currencyMonthlyTotals = {};
-        var addToCurrencyMonthlyTotals = function(currency, monthlyTotals) {
+        function addToCurrencyMonthlyTotals(currency, monthlyTotals) {
             for (var monthIndex in monthlyTotals) {
                 vm.currencyMonthlyTotals[currency][monthIndex] +=
                     monthlyTotals[monthIndex];
             }
         }
 
-        var groupDonationsAndDonorsByCurrency = function(donations, donors) {
+        function groupDonationsAndDonorsByCurrency(donations, donors) {
             vm.donorsById = _.groupBy(donors, 'id');
             vm.donorsAndDonationsByCurrency = {};
             vm.currencySymbols = {};
@@ -104,9 +104,9 @@
                 groupDonorsAndDonations(currency, donationsByCurrency);
             }
             generateCurrencyAggregates(donationsByCurrency);
-        };
+        }
 
-        var generateCurrencyAggregates = function(donationsByCurrency) {
+        function generateCurrencyAggregates(donationsByCurrency) {
             var overallConvertedTotal = 0.0;
             var convertedTotalsByCurrency = {};
             var totalsByCurrency = {};
@@ -131,9 +131,9 @@
                     currencyTooltip(currencyAggregate, overallConvertedTotal);
                 vm.currencyAggregates.push(currencyAggregate);
             }
-        };
+        }
 
-        var currencyTooltip = function(aggregate, overallConvertedTotal) {
+        function currencyTooltip(aggregate, overallConvertedTotal) {
             return __('Total') + ' ' +
                 aggregate.currencySymbol +
                 Math.round(aggregate.total) + ' ' + aggregate.currency + ' ' +
@@ -144,7 +144,7 @@
                 ' ' + vm.convertedCurrency + ')';
         }
 
-        var groupDonorsAndDonations = function(currency, donationsByCurrency) {
+        function groupDonorsAndDonations(currency, donationsByCurrency) {
             vm.currencyMonthlyTotals[currency] = {};
             for (var i = 0; i < vm.monthsBack; i++) {
                 vm.currencyMonthlyTotals[currency][i] = 0.0;
@@ -161,7 +161,7 @@
             }
         }
 
-        var donorsAndDonationsForContact = function(currency, contactId, donationsByContactId) {
+        function donorsAndDonationsForContact(currency, contactId, donationsByContactId) {
             donations = donationsByContactId[contactId];
             var amountsByMonthsAgo = donationMonthlyTotals(donations, vm.monthsBack);
             var monthlyAmounts = [];
@@ -186,7 +186,7 @@
             return donorAndDonations;
         }
 
-        var activate = function() {
+        function activate() {
             api.call('get', 'reports/year_donations', {}, function(data) {
                 groupDonationsAndDonorsByCurrency(
                     data.report_info.donations, data.report_info.donors

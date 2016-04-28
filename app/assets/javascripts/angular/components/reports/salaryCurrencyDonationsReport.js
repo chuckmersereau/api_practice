@@ -13,13 +13,13 @@
 
         vm.errorOccurred = false;
 
-        var activate = function() {
+        activate();
+
+        function activate() {
             api.call('get', 'reports/year_donations', {}, function(data) {
             }, function() {
                 vm.errorOccurred = true;
             });
         }
-
-        activate();
     }
 })();
