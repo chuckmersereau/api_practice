@@ -34,7 +34,7 @@ class CurrencyRate < ActiveRecord::Base
       return 1.0 if currency_code == 'USD'
       @cached_rates ||= {}
       @cached_rates[currency_code] ||= {}
-      @cached_rates[currency_code][date] = find_rate_on_date(
+      @cached_rates[currency_code][date] ||= find_rate_on_date(
         currency_code: currency_code, date: date)
     end
 

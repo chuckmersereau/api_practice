@@ -10,6 +10,7 @@
 
     function donorCurrencyDonationsReportController(api) {
         var vm = this;
+        vm.loading = true;
 
         vm.errorOccurred = false;
         vm.monthsBack = 12;
@@ -23,6 +24,10 @@
             }
             return monthsBackDates;
         }();
+
+        var donorTooltip = function(donorAndDonations) {
+            return "tooltip!";
+        }
 
         vm.yearsWithMonthCounts = function() {
             var datesByYear = _.groupBy(vm.pastMonthDates, function(date) {
@@ -44,7 +49,7 @@
             return currentMonthIndex - monthIndex(new Date(dateStr));
         }
 
-        vm.monthlyTotals = function(donations) {
+        var monthlyTotals = function(donations) {
             var monthlyTotals = {};
             for (var i = 0; i < vm.monthsBack; i++) {
                 monthlyTotals[i] = 0.0;
@@ -62,14 +67,37 @@
         var groupDonationsAndDonorsByCurrency = function(donations, donors) {
             vm.donorsById = _.groupBy(donors, 'id');
             var donationsByCurrency = _.groupBy(donations, 'currency');
-            vm.donationsByCurrencyAndContactId = {};
+            vm.donorsAndDonationsByCurrency = {};
             vm.currencySymbols = {};
             for (var currency in donationsByCurrency) {
                 var donations = donationsByCurrency[currency];
                 vm.currencySymbols[currency] = donations[0].currency_symbol;
 
-                vm.donationsByCurrencyAndContactId[currency] =
-                    _.groupBy(donations, 'contact_id');
+                var donationsByContactId = _.groupBy(donations, 'contact_id');
+                var donorsAndDonations = [];
+                for (var contactId in donationsByContactId) {
+                    donations = donationsByContactId[contactId];
+                    var amountsByMonthsAgo = monthlyTotals(donations);
+                    var monthlyAmounts = [];
+                    for (var monthsAgo in amountsByMonthsAgo) {
+                        var amount = amountsByMonthsAgo[monthsAgo];
+                        if (!isNaN(amount)) {
+                            monthlyAmounts.push(amount);
+                        }
+                    }
+                    var totalDonations = _.sum(monthlyAmounts);
+                    var donorAndDonations = {
+                        donor: vm.donorsById[contactId],
+                        amountsByMonthsAgo: amountsByMonthsAgo,
+                        total: totalDonations,
+                        average: totalDonations / vm.monthsBack,
+                        min: _.min(monthlyAmounts)
+                    }
+                    donorAndDonations.tooltip = donorTooltip(donorAndDonations);
+                    donorsAndDonations.push(donorAndDonations);
+                }
+
+                vm.donorsAndDonationsByCurrency[currency] = donorsAndDonations;
             }
 
             // TODO: Fill this in with the totals by donation.converted_currency
@@ -85,8 +113,10 @@
                 groupDonationsAndDonorsByCurrency(
                     data.report_info.donations, data.report_info.donors
                 );
+                vm.loading = false;
             }, function() {
                 vm.errorOccurred = true;
+                vm.loading = false;
             });
         }
 

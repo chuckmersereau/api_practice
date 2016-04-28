@@ -1,30 +1,37 @@
+<h2><%= _('Contributions by Donor Currency') %></h2>
 <div ng-if="$ctrl.errorOccurred">
   <%= _('Report data could not load due to an error. Please try again or contact support.') %>
 </div>
 
+<div ng-if="$ctrl.loading">
+  <%= _('Loading data...') %>
+</div>
+
 <div ng-if="!$ctrl.errorOccurred" class="table">
-  <div ng-repeat="(currency, donationsByContactId) in $ctrl.donationsByCurrencyAndContactId"
+  <div ng-repeat="(currency, donorsAndDonations) in $ctrl.donorsAndDonationsByCurrency"
     ng-init="currencySymbol = $ctrl.currencySymbols[currency]">
     <h2>{{currency}} ({{currencySymbol}})</h2>
 
-    <table>
+    <table class="table">
       <tr>
         <td></td>
         <td ng-repeat="(year, monthCount) in $ctrl.yearsWithMonthCounts"
           colspan="{{monthCount}}">
-          {{year}}
+          <h4>{{year}}</h4>
         </td>
       </tr>
       <tr>
         <td></td>
         <td ng-repeat="pastMonth in $ctrl.pastMonthDates">
-          {{pastMonth | date : 'MMM'}}
+          <b>{{pastMonth | date : 'MMM'}}</b>
         </td>
       </tr>
-      <tr ng-repeat="(contact_id, donations) in donationsByContactId"
-          ng-init="donor = $ctrl.donorsById[contact_id][0]">
-        <td>{{donor.name}}</td>
-        <td ng-repeat="(monthsAgo, monthlyTotal) in $ctrl.monthlyTotals(donations)">
+      <tr ng-repeat="donorAndDonations in donorsAndDonations | orderBy : 'donor[0].name'"
+          ng-init="donor = donorAndDonations.donor[0]">
+        <td>
+          <a href="/contacts/{{donor.id}}" data-tooltip="{{donorAndDonations.tooltip}}">{{donor.name}}</a>
+        </td>
+        <td ng-repeat="(monthsAgo, monthlyTotal) in donorAndDonations.amountsByMonthsAgo">
           <div ng-if="monthlyTotal > 0.0">
             {{currencySymbol}}{{monthlyTotal | number : 0}}
           </div>
