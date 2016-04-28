@@ -1,57 +1,76 @@
+<h2><%= _('Expected Monthly Total') %></h2>
+<uib-progress ng-if="!$ctrl.errorOccurred" class="report-progress-bar">
+  <uib-bar ng-repeat="donationType in $ctrl.donationsByType | orderBy: 'order'"
+           value="$ctrl.percentage(donationType)"
+           type="{{donationType.type === 'received' ? 'success' : (donationType.type === 'likely' ? 'default' : 'danger')}}"
+           uib-tooltip="{{$ctrl.total_currency_symbol}}{{donationType.sum | number : 0}}"
+           tooltip-placement="bottom">
+    <span ng-if="$ctrl.percentage(donationType) > 7" ng-switch="donationType.type">
+      <span ng-switch-when="received"><%= _('Received') %></span>
+      <span ng-switch-when="likely"><%= _('Likely') %></span>
+      <span ng-switch-when="unlikely"><%= _('Unlikely') %></span>
+    </span>
+  </uib-bar>
+</uib-progress>
 <div ng-if="$ctrl.errorOccurred">
   <%= _('Report data could not load due to an error. Please try again or contact support.') %>
 </div>
 <div ng-if="!$ctrl.errorOccurred" ng-repeat="donationType in $ctrl.donationsByType | orderBy: 'order'">
   <div class="panel panel-default panel-report">
     <div class="panel-body panel-report-heading">
-      <div class="row">
-        <div class="col-xs-6" ng-switch="donationType.type">
+      <div class="row" ng-switch="donationType.type">
+        <div class="col-xs-6">
           <h4 ng-switch-when="received"><%= _('Donations So Far This Month') %></h4>
           <h4 ng-switch-when="likely"><%= _('Likely Donors This Month') %></h4>
           <h4 ng-switch-when="unlikely"><%= _('Unlikely Donors This Month') %></h4>
           <h4 ng-switch-default>{{ donationType.type }}</h4>
         </div>
-        <div class="col-xs-6 text-right" ng-if="donationType.donations">
+        <div class="col-xs-6 text-right">
           <h4>
+            <span ng-switch-when="received"><%= _('Monthly Total So Far') %>:</span>
+            <span ng-switch-when="likely"><%= _('Likely Additional') %>:</span>
             {{$ctrl.total_currency_symbol}}{{donationType.sum | number : 0}}
             {{$ctrl.total_currency}}
           </h4>
         </div>
       </div>
     </div>
-
-    <table class="table table-striped" ng-if="donationType.donations">
-      <thead>
-      <tr>
-        <th><%= _('Donor') %></th>
-        <th><%= _('Status') %></th>
-        <th class="text-right"><%= _('Commitment') %></th>
-        <th class="text-right"><%= _('Frequency') %></th>
-        <th class="text-right" ng-if="donationType.type == 'received'"><%= _('Donation') %></th>
-        <th class="text-right"><%= _('Converted') %></th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr ng-repeat="donation in donationType.donations | orderBy : 'donor'">
-        <td><a href="/contacts/{{donation.contact_id}}" target="_blank">{{donation.donor}}</a></td>
-        <td>{{donation.status}}</td>
-        <td class="text-right">
-          <div ng-if="donation.pledge_amount !== null">
-            {{donation.pledge_currency_symbol}}{{donation.pledge_amount | number : 0}}
-            {{donation.pledge_currency}}
-          </div>
-        </td>
-        <td class="text-right">{{donation.pledge_frequency}}</td>
-        <td class="text-right" ng-if="donationType.type == 'received'">
-          {{donation.donation_currency_symbol}}{{donation.donation_amount | number : 0 }}
-          {{donation.donation_currency}}
-        </td>
-        <td class="text-right">
-          {{donation.converted_currency_symbol}}{{donation.converted_amount | number : 0}}
-        </td>
-      </tr>
-      </tbody>
-    </table>
+    <div class="table-responsive" ng-if="donationType.donations">
+      <table class="table table-striped">
+        <thead>
+        <tr>
+          <th style="width: 30%"><%= _('Donor') %></th>
+          <th style="width: 20%"><%= _('Status') %></th>
+          <th style="width: 10%" class="text-right"><%= _('Commitment') %></th>
+          <th style="width: 15%" class="text-right"><%= _('Frequency') %></th>
+          <th style="width: 15%" class="text-right"><span ng-if="donationType.type === 'received'"><%= _('Donation') %></span></th>
+          <th style="width: 10%" class="text-right"><%= _('Converted') %></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr ng-repeat="donation in donationType.donations | orderBy : 'donor'">
+          <td><a href="/contacts/{{donation.contact_id}}" target="_blank">{{donation.donor}}</a></td>
+          <td>{{donation.status}}</td>
+          <td class="text-right">
+            <div ng-if="donation.pledge_amount !== null">
+              {{donation.pledge_currency_symbol}}{{donation.pledge_amount | number : 0}}
+              {{donation.pledge_currency}}
+            </div>
+          </td>
+          <td class="text-right">{{donation.pledge_frequency}}</td>
+          <td class="text-right">
+            <span ng-if="donationType.type === 'received'">
+              {{donation.donation_currency_symbol}}{{donation.donation_amount | number : 0 }}
+              {{donation.donation_currency}}
+            </span>
+          </td>
+          <td class="text-right">
+            {{donation.converted_currency_symbol}}{{donation.converted_amount | number : 0}}
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </div>
 
     <div class="panel-footer" ng-if="!donationType.donations">
       <%= _('No donors found in this category') %>

@@ -2,21 +2,21 @@ angular.module('mpdxApp')
     .directive('replaceAvatar', function () {
         return {
             restrict: 'A',
-            controller: function ($scope, $modal, api, state) {
+            controller: function ($scope, $uibModal, api, state) {
 
               $scope.replaceFacebookLink = function(contactId, personId){
-                $modal.open({
+                $uibModal.open({
                   templateUrl: '/templates/contacts/editFacebookUrl.html',
-                  controller: function($scope, $modalInstance){
+                  controller: function($scope, $uibModalInstance){
                     $scope.facebookUrl = '';
 
                     $scope.cancel = function () {
-                      $modalInstance.dismiss();
+                      $uibModalInstance.dismiss();
                     };
 
                     $scope.save = function () {
                       console.log('sve');
-                      $modalInstance.close($scope.facebookUrl);
+                      $uibModalInstance.close($scope.facebookUrl);
                     };
                   }
                 }).result.then(function (facebookUrl) {

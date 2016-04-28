@@ -11,7 +11,10 @@
     function expectedMonthlyTotalsReportController(api) {
         var vm = this;
 
+        var sumOfAllCategories = 0;
+
         vm.errorOccurred = false;
+        vm.percentage = percentage;
 
         activate();
 
@@ -38,9 +41,17 @@
                         };
                     })
                     .value();
+                sumOfAllCategories = _.sum(_.pluck(vm.donationsByType, 'sum'));
             }, function() {
                 vm.errorOccurred = true;
             });
+        }
+
+        function percentage(donationType){
+            if(sumOfAllCategories === 0){
+                return 0;
+            }
+            return donationType.sum / sumOfAllCategories * 100;
         }
 
     }

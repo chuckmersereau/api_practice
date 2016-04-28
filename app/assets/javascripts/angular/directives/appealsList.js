@@ -3,7 +3,7 @@ angular.module('mpdxApp')
         return {
             restrict: 'E',
             templateUrl: '/templates/appeals/list.html',
-            controller: function ($scope, $modal, api, state) {
+            controller: function ($scope, $uibModal, api, state) {
                 var refreshAppeals = function(callback){
                     api.call('get','appeals?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
                         $scope.appeals = data.appeals;
@@ -24,10 +24,10 @@ angular.module('mpdxApp')
                 }
 
                 $scope.editAppeal = function(id) {
-                    var modalInstance = $modal.open({
+                    var modalInstance = $uibModal.open({
                         templateUrl: '/templates/appeals/edit.html',
                         size: 'lg',
-                        controller: function($scope, $modalInstance, $filter, appeal){
+                        controller: function($scope, $uibModalInstance, $filter, appeal){
                             $scope.appeal = angular.copy(appeal);
                             $scope.checkedContacts = {};
                             $scope.taskTypes = window.railsConstants.task.ACTIONS;
@@ -61,14 +61,14 @@ angular.module('mpdxApp')
 
 
                             $scope.cancel = function () {
-                                $modalInstance.dismiss('cancel');
+                                $uibModalInstance.dismiss('cancel');
                             };
 
                             $scope.save = function () {
                                 api.call('put','appeals/'+ $scope.appeal.id + '?account_list_id=' + (state.current_account_list_id || ''),
                                     {"appeal": $scope.appeal},
                                     function(data) {
-                                        $modalInstance.close($scope.appeal);
+                                        $uibModalInstance.close($scope.appeal);
                                     });
                             };
 
@@ -78,7 +78,7 @@ angular.module('mpdxApp')
                                     return;
                                 }
                                 api.call('delete', 'appeals/' + id + '?account_list_id=' + (state.current_account_list_id || ''), null, function() {
-                                    $modalInstance.dismiss('cancel');
+                                    $uibModalInstance.dismiss('cancel');
                                     refreshAppeals();
                                 });
                             };
@@ -328,10 +328,10 @@ angular.module('mpdxApp')
                 };
 
                 $scope.newAppeal = function(){
-                    var modalInstance = $modal.open({
+                    var modalInstance = $uibModal.open({
                         templateUrl: '/templates/appeals/wizard.html',
                         size: 'lg',
-                        controller: function($scope, $modalInstance){
+                        controller: function($scope, $uibModalInstance){
                             $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES;
 
                             defaultValidStatuses = {};
@@ -359,11 +359,11 @@ angular.module('mpdxApp')
                             }, null, true);
 
                             $scope.cancel = function () {
-                                $modalInstance.dismiss('cancel');
+                                $uibModalInstance.dismiss('cancel');
                             };
 
                             $scope.save = function () {
-                                $modalInstance.close($scope.appeal);
+                                $uibModalInstance.close($scope.appeal);
                             };
 
                           $scope.calculateGoal = function(goal){
