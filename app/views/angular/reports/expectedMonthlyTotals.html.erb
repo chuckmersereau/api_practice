@@ -17,7 +17,7 @@
 </div>
 <div ng-if="!$ctrl.errorOccurred" ng-repeat="donationType in $ctrl.donationsByType | orderBy: 'order'">
   <div class="panel panel-default panel-report">
-    <div class="panel-body panel-report-heading">
+    <div class="panel-body panel-report-heading panel-report-heading-collapsible" ng-click="tableCollapsed = !tableCollapsed" ng-init="tableCollapsed = true">
       <div class="row" ng-switch="donationType.type">
         <div class="col-xs-6">
           <h4 ng-switch-when="received"><%= _('Donations So Far This Month') %></h4>
@@ -35,7 +35,7 @@
         </div>
       </div>
     </div>
-    <div class="table-responsive" ng-if="donationType.donations">
+    <div class="table-responsive" ng-if="donationType.donations" uib-collapse="tableCollapsed">
       <table class="table table-striped">
         <thead>
         <tr>

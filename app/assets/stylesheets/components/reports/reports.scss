@@ -3,6 +3,12 @@
     h4{
       margin-bottom: 0;
     }
+    &.panel-report-heading-collapsible {
+      cursor: pointer;
+      &:hover {
+        background-color: #f4f4f4; //TODO: use $colorGrayscale-sand once crubrand is updated
+      }
+    }
   }
 }
 

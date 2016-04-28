@@ -1,7 +1,8 @@
 angular
     .module('mpdxApp', [
         'ui.bootstrap',
-        'LocalForageModule'
+        'LocalForageModule',
+        'ngAnimate'
     ]);
 
 angular
