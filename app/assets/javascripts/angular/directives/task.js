@@ -68,11 +68,11 @@ angular.module('mpdxApp')
                 }
 
                 $scope.getComment = function(id){
-                    return _.find($scope.$parent.comments, { 'id': id });
+                    return _.find($scope.$parent.$ctrl.comments, { 'id': id });
                 };
 
                 $scope.getPerson = function(id){
-                    var person = _.find($scope.$parent.people, { 'id': id });
+                    var person = _.find($scope.$parent.$ctrl.people, { 'id': id });
                     if(angular.isDefined(person)){
                       person.name = person.first_name + ' ' + person.last_name;
                       return person;
@@ -93,7 +93,7 @@ angular.module('mpdxApp')
                     api.call('put', 'tasks/'+$scope.task.id, {
                         task: $scope.task
                     }, function(){
-                        _.remove($scope.$parent.tasks, function(task) { return task.id === $scope.task.id; });
+                        _.remove($scope.$parent.$ctrl.tasks, function(task) { return task.id === $scope.task.id; });
                     });
                 };
 
@@ -107,7 +107,7 @@ angular.module('mpdxApp')
                         }
                     }, function(data){
                         var latestComment = _.max(data.comments, function(comment) { return comment.id; });
-                        $scope.$parent.comments.push(latestComment);
+                        $scope.$parent.$ctrl.comments.push(latestComment);
                         $scope.task.comments.push(latestComment.id);
                         $scope.postNewCommentMsg = '';
                     });
