@@ -127,19 +127,20 @@
                     convertedTotal: convertedTotal,
                     convertedPercent: convertedTotal / overallConvertedTotal * 100.0
                 }
-                currencyAggregate.tooltip = currencyTooltip(currencyAggregate);
+                currencyAggregate.tooltip =
+                    currencyTooltip(currencyAggregate, overallConvertedTotal);
                 vm.currencyAggregates.push(currencyAggregate);
             }
         };
 
-        var currencyTooltip = function(aggregate) {
+        var currencyTooltip = function(aggregate, overallConvertedTotal) {
             return __('Total ') +
                 aggregate.currencySymbol +
                 Math.round(aggregate.total) + ' ' + aggregate.currency + ' ' +
                 __(' converted as ') + vm.convertedCurrencySymbol +
                 Math.round(aggregate.convertedTotal) + ' ' + vm.convertedCurrency +
                 ' (' + Math.round(aggregate.convertedPercent) + '% ' + __('of total') +
-                ' ' + vm.convertedCurrencySymbol + Math.round(aggregate.convertedTotal) +
+                ' ' + vm.convertedCurrencySymbol + Math.round(overallConvertedTotal) +
                 ' ' + vm.convertedCurrency + ')';
         }
 
