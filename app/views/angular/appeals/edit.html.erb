@@ -3,7 +3,7 @@
 
 <form class="form_wrapper">
 
-  <div class="scroll">    
+  <div class="scroll">
     <div class="panel panel-action">
       <div class="panel-body">
         <div class="row">
@@ -26,114 +26,7 @@
               </a>
     </div>
 
-    <form class="form_wrapper">
-      <div id="exceptionsContainer" class="collapse">
-        <div class="panel panel-default panel-except-container">
-          <div class="panel-body">
-            <div class="panel panel-default panel-exception">
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-3 add-space">
-                    <p>
-                      <a href="" class="add-cta btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i></a>
-                      <Strong>Full Name</Strong>
-                    </p>
-                    <p>
-                      Partnership Status<br/>
-                      $100.00/mo
-                    </p>
-                  </div>
-                  <div class="col-md-3">
-                    <P>
-                      <strong>Reason for Exception:</strong>
-                    </P>
-                    <ul>
-                      <li>12 month lapse</li>
-                      <li>Do not ask</li>
-                    </ul>
-                    
-                  </div>
-                  <div class="col-md-6">
-                    <table class="table table-condensed table-bordered table-summary">
-                      <thead>
-                        <tr>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="panel panel-default panel-exception">
-              <div class="panel-body">
-                <div class="row">
-                  <div class="col-md-3 add-space">
-                    <p>
-                      <a href="" class="add-cta btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i></a>
-                      <Strong>Full Name</Strong>
-                    </p>
-                    <p>
-                      Partnership Status<br/>
-                      $100.00/mo
-                    </p>
-                  </div>
-                  <div class="col-md-3">
-                    <P>
-                      <strong>Reason for Exception:</strong>
-                    </P>
-                    <ul>
-                      <li>12 month lapse</li>
-                      <li>Do not ask</li>
-                    </ul>
-                    
-                  </div>
-                  <div class="col-md-6">
-                    <table class="table table-condensed table-bordered table-summary">
-                      <thead>
-                        <tr>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                          <td>June '16</td>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                          <td>$1000</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
+    <excluded-appeal-contacts></excluded-appeal-contacts>
 
     <div class="panel panel-default">
       <div class="panel-body">
@@ -157,7 +50,7 @@
           </div>
           <div class="col-md-3 col-sm-6 col-xs-12">
             <%= _('Create task for selected:') %>
-          
+
             <div class="field">
               <label for="task_subject">Subject</label>
               <input id="task_subject" type="text" ng-model="$ctrl.task.subject" ng-disabled="$ctrl.creatingBulkTasks">
@@ -202,7 +95,7 @@
                     <option value="21">09 PM</option>
                     <option value="22">10 PM</option>
                     <option value="23">11 PM</option>
-                  </select> : 
+                  </select> :
                 </div>
                 <div class="form-group">
                   <label>&nbsp;</label>
@@ -269,7 +162,7 @@
                     <option value="59">59</option>
                   </select>
                 </div>
-              </div>          
+              </div>
             </div>
             <div class="form-group">
               <button class="btn btn-default" ng-click="$ctrl.createTask($ctrl.task, $ctrl.checkedContacts)" ng-show="!$ctrl.creatingBulkTasks">
@@ -334,7 +227,7 @@
       </div>
       <div class="panel-footer">
           <button ng-click="$ctrl.save()" class="btn btn-primary"><%= _('Save') %></button>
-        
+
           <button ng-click="$ctrl.delete()" class="btn btn-secondary"><%= _('Delete') %></button>
 
       </div>
