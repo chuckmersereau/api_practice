@@ -14,7 +14,7 @@ end
 def default_pledge!(contact)
   if contact.pledge_amount.present?
     puts "Pledge for #{contact} ##{contact.id} already set to "\
-      "#{contact.plege_amount} "\
+      "#{contact.pledge_amount} "\
       "#{Contact.pledge_frequencies[contact.pledge_frequency]}"
     return
   end
