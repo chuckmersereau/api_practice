@@ -93,7 +93,7 @@
                     total: totalsByCurrency[currency],
                     convertedTotal: convertedTotal,
                     convertedPercent: convertedTotal / overallConvertedTotal * 100.0
-                }
+                };
                 currencyAggregate.tooltip =
                     currencyTooltip(currencyAggregate, overallConvertedTotal);
                 vm.currencyAggregates.push(currencyAggregate);
@@ -146,7 +146,7 @@
                 total: totalDonations,
                 average: totalDonations / vm.monthsBack,
                 min: _.min(monthlyAmounts)
-            }
+            };
             var currencySymbol = vm.currencySymbols[currency];
             donorAndDonations.tooltip =
                 donorTooltip(currency, currencySymbol, donorAndDonations);
