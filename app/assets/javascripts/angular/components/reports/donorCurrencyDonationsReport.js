@@ -8,53 +8,6 @@
 
     donorCurrencyDonationsReportController.$inject = ['api'];
 
-    function monthsAgo(dateStr) {
-        return currentMonthIndex - monthIndex(new Date(dateStr));
-    }
-
-    function pastMonthDates(monthsBack) {
-        var monthsBackDates = [];
-        for (var i = monthsBack - 1; i >= 0; i--) {
-            var current = new Date();
-            var date = new Date(current.setMonth(current.getMonth() - i));
-            monthsBackDates.push(date);
-        }
-        return monthsBackDates;
-    }
-
-    function yearsWithMonthCounts(monthDates) {
-        var datesByYear = _.groupBy(monthDates, function(date) {
-            return date.getFullYear();
-        });
-        for (var year in datesByYear) {
-            datesByYear[year] = datesByYear[year].length;
-        }
-        return datesByYear;
-    }
-
-    function donationMonthlyTotals(donations, monthsBack) {
-        var monthlyTotals = {};
-        for (var i = 0; i < monthsBack; i++) {
-            monthlyTotals[i] = 0.0;
-        }
-        if (angular.isUndefined(donations)) {
-            return monthlyTotals;
-        }
-        donations.forEach(function(donation) {
-            var monthIndex = monthsBack - monthsAgo(donation.donation_date);
-            if (monthIndex < monthsBack && monthIndex >= 0) {
-                monthlyTotals[monthIndex] += donation.amount;
-            }
-        });
-        return monthlyTotals;
-    }
-
-    function monthIndex(date) {
-        return date.getYear() * 12 + date.getMonth();
-    }
-
-    var currentMonthIndex = monthIndex(new Date());
-
     function donorCurrencyDonationsReportController(api) {
         var vm = this;
         vm.loading = true;
@@ -62,6 +15,21 @@
         vm.monthsBack = 12;
         vm.pastMonthDates = pastMonthDates(vm.monthsBack);
         vm.yearsWithMonthCounts = yearsWithMonthCounts(vm.pastMonthDates);
+        vm.currencyMonthlyTotals = {};
+
+        activate();
+
+        function activate() {
+            api.call('get', 'reports/year_donations', {}, function(data) {
+                groupDonationsAndDonorsByCurrency(
+                    data.report_info.donations, data.report_info.donors
+                );
+                vm.loading = false;
+            }, function() {
+                vm.errorOccurred = true;
+                vm.loading = false;
+            });
+        }
 
         function donorTooltip(currency, currencySymbol, donorAndDonations) {
             var donor = donorAndDonations.donor;
@@ -83,7 +51,6 @@
                         return tooltip;
         }
 
-        vm.currencyMonthlyTotals = {};
         function addToCurrencyMonthlyTotals(currency, monthlyTotals) {
             for (var monthIndex in monthlyTotals) {
                 vm.currencyMonthlyTotals[currency][monthIndex] +=
@@ -186,18 +153,53 @@
             return donorAndDonations;
         }
 
-        function activate() {
-            api.call('get', 'reports/year_donations', {}, function(data) {
-                groupDonationsAndDonorsByCurrency(
-                    data.report_info.donations, data.report_info.donors
-                );
-                vm.loading = false;
-            }, function() {
-                vm.errorOccurred = true;
-                vm.loading = false;
-            });
+
+        //***** Date Functions *****//
+        var currentMonthIndex = monthIndex(new Date());
+
+        function monthsAgo(dateStr) {
+            return currentMonthIndex - monthIndex(new Date(dateStr));
         }
 
-        activate();
+        function pastMonthDates(monthsBack) {
+            var monthsBackDates = [];
+            for (var i = monthsBack - 1; i >= 0; i--) {
+                var current = new Date();
+                var date = new Date(current.setMonth(current.getMonth() - i));
+                monthsBackDates.push(date);
+            }
+            return monthsBackDates;
+        }
+
+        function yearsWithMonthCounts(monthDates) {
+            var datesByYear = _.groupBy(monthDates, function(date) {
+                return date.getFullYear();
+            });
+            for (var year in datesByYear) {
+                datesByYear[year] = datesByYear[year].length;
+            }
+            return datesByYear;
+        }
+
+        function donationMonthlyTotals(donations, monthsBack) {
+            var monthlyTotals = {};
+            for (var i = 0; i < monthsBack; i++) {
+                monthlyTotals[i] = 0.0;
+            }
+            if (angular.isUndefined(donations)) {
+                return monthlyTotals;
+            }
+            donations.forEach(function(donation) {
+                var monthIndex = monthsBack - monthsAgo(donation.donation_date);
+                if (monthIndex < monthsBack && monthIndex >= 0) {
+                    monthlyTotals[monthIndex] += donation.amount;
+                }
+            });
+            return monthlyTotals;
+        }
+
+        function monthIndex(date) {
+            return date.getYear() * 12 + date.getMonth();
+        }
     }
 })();
