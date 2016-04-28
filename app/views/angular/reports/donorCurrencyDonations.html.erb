@@ -36,13 +36,19 @@
              data-toggle="tooltip" data-placement="bottom"
           >{{donor.name}}</a>
         </td>
-        <td ng-repeat="(monthsAgo, monthlyTotal) in donorAndDonations.amountsByMonthsAgo">
+        <td ng-repeat="(monthIndex, monthlyTotal) in donorAndDonations.amountsByMonthsAgo">
           <div ng-if="monthlyTotal > 0.0">
             {{currencySymbol}}{{monthlyTotal | number : 0}}
           </div>
         </td>
         <td>
           <b>{{currencySymbol}}{{donorAndDonations.total | number : 0}}</b>
+        </td>
+      </tr>
+      <tr>
+        <td></td>
+        <td ng-repeat="(monthIndex, monthlyTotal) in $ctrl.currencyMonthlyTotals[currency]">
+          <b>{{currencySymbol}}{{monthlyTotal | number : 0}}</b>
         </td>
       </tr>
     </table>

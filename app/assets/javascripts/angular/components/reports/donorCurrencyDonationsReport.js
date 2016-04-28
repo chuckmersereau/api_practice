@@ -82,12 +82,25 @@
             return monthlyTotals;
         }
 
+        vm.currencyMonthlyTotals = {};
+        var addToCurrencyMonthlyTotals = function(currency, monthlyTotals) {
+            for (var monthIndex in monthlyTotals) {
+                vm.currencyMonthlyTotals[currency][monthIndex] +=
+                    monthlyTotals[monthIndex];
+            }
+        }
+
         var groupDonationsAndDonorsByCurrency = function(donations, donors) {
             vm.donorsById = _.groupBy(donors, 'id');
             var donationsByCurrency = _.groupBy(donations, 'currency');
             vm.donorsAndDonationsByCurrency = {};
             vm.currencySymbols = {};
             for (var currency in donationsByCurrency) {
+                vm.currencyMonthlyTotals[currency] = {};
+                for (var i = 0; i < vm.monthsBack; i++) {
+                    vm.currencyMonthlyTotals[currency][i] = 0.0;
+                }
+
                 var donations = donationsByCurrency[currency];
                 var currencySymbol = donations[0].currency_symbol;
                 vm.currencySymbols[currency] = currencySymbol;
@@ -104,6 +117,7 @@
                             monthlyAmounts.push(amount);
                         }
                     }
+                    addToCurrencyMonthlyTotals(currency, amountsByMonthsAgo);
                     var totalDonations = _.sum(monthlyAmounts);
                     var donorAndDonations = {
                         donor: vm.donorsById[contactId][0],
