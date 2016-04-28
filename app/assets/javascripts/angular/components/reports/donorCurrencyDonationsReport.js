@@ -25,8 +25,24 @@
             return monthsBackDates;
         }();
 
-        var donorTooltip = function(donorAndDonations) {
-            return "tooltip!";
+        var donorTooltip = function(currency, currencySymbol, donorAndDonations) {
+            var donor = donorAndDonations.donor;
+            var tooltip = "";
+            if (donor.pledge_amount === null || donor.pledge_amount <= 0.0) {
+                if (donor.status !== null && donor.status != "") {
+                    tooltip += donor.status + ". ";
+                }
+            } else {
+                tooltip +=
+                    __('Commitment ') +
+                    currencySymbol + donor.pledge_amount + ' ' + currency +
+                    ' ' + donor.pledge_frequency + ". ";
+            }
+            tooltip +=
+                __('Avg.') + ' ' + currencySymbol + Math.round(donorAndDonations.average) +
+                ' / ' +
+                __('Min.') + ' ' + currencySymbol + Math.round(donorAndDonations.min);
+            return tooltip;
         }
 
         vm.yearsWithMonthCounts = function() {
@@ -71,7 +87,8 @@
             vm.currencySymbols = {};
             for (var currency in donationsByCurrency) {
                 var donations = donationsByCurrency[currency];
-                vm.currencySymbols[currency] = donations[0].currency_symbol;
+                var currencySymbol = donations[0].currency_symbol;
+                vm.currencySymbols[currency] = currencySymbol;
 
                 var donationsByContactId = _.groupBy(donations, 'contact_id');
                 var donorsAndDonations = [];
@@ -87,13 +104,15 @@
                     }
                     var totalDonations = _.sum(monthlyAmounts);
                     var donorAndDonations = {
-                        donor: vm.donorsById[contactId],
+                        donor: vm.donorsById[contactId][0],
                         amountsByMonthsAgo: amountsByMonthsAgo,
                         total: totalDonations,
                         average: totalDonations / vm.monthsBack,
                         min: _.min(monthlyAmounts)
                     }
-                    donorAndDonations.tooltip = donorTooltip(donorAndDonations);
+                    donorAndDonations.tooltip = donorTooltip(currency,
+                                                             currencySymbol,
+                                                             donorAndDonations);
                     donorsAndDonations.push(donorAndDonations);
                 }
 
