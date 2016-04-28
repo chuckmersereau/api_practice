@@ -10,6 +10,9 @@ angular.module('mpdxApp')
             link: function (scope, element, attrs){
             },
             controller: function ($scope, contactCache, api) {
+                //TODO: refactor taskShortListController to use controllerAs so this condition isn't needed or better yet provide the needed data in a binding
+                var parentComponentOrController = $scope.$parent.$ctrl || $scope.$parent;
+
                 $scope.visibleComments = false;
 
                 $scope.contacts = {};
@@ -68,11 +71,11 @@ angular.module('mpdxApp')
                 }
 
                 $scope.getComment = function(id){
-                    return _.find($scope.$parent.$ctrl.comments, { 'id': id });
+                    return _.find(parentComponentOrController.comments, { 'id': id });
                 };
 
                 $scope.getPerson = function(id){
-                    var person = _.find($scope.$parent.$ctrl.people, { 'id': id });
+                    var person = _.find(parentComponentOrController.people, { 'id': id });
                     if(angular.isDefined(person)){
                       person.name = person.first_name + ' ' + person.last_name;
                       return person;
@@ -93,7 +96,7 @@ angular.module('mpdxApp')
                     api.call('put', 'tasks/'+$scope.task.id, {
                         task: $scope.task
                     }, function(){
-                        _.remove($scope.$parent.$ctrl.tasks, function(task) { return task.id === $scope.task.id; });
+                        _.remove(parentComponentOrController.tasks, function(task) { return task.id === $scope.task.id; });
                     });
                 };
 
@@ -107,7 +110,7 @@ angular.module('mpdxApp')
                         }
                     }, function(data){
                         var latestComment = _.max(data.comments, function(comment) { return comment.id; });
-                        $scope.$parent.$ctrl.comments.push(latestComment);
+                        parentComponentOrController.comments.push(latestComment);
                         $scope.task.comments.push(latestComment.id);
                         $scope.postNewCommentMsg = '';
                     });
