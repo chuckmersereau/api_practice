@@ -9,8 +9,8 @@
 
 <div ng-if="!$ctrl.errorOccurred" style="width: 100%; display: block">
   <span ng-repeat="currencyAggregate in $ctrl.currencyAggregates | orderBy: 'convertedPercent' : true"
-        style="color: white; text-align: center; width: {{currencyAggregate.convertedPercent}}%; display: block; float: left"
-        class="currency-color-{{$index}}"
+        style="color: white; text-align: center; width: {{currencyAggregate.barWidth}}%; display: block; float: left"
+        class="currency-color-{{$index}} {{currencyAggregate.convertedPercent < 1.5 && 'hide-text' || ''}}"
         title="{{currencyAggregate.tooltip}}"
         data-toggle="tooltip" data-placement="bottom">
     {{currencyAggregate.currency}} ({{currencyAggregate.currencySymbol}})

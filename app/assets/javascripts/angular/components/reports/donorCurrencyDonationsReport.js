@@ -120,6 +120,32 @@
                 vm.currencyAggregates.push(currencyAggregate);
                 vm.aggregatesByCurrency[currency] = currencyAggregate;
             }
+            setBarWidthPercents();
+        }
+
+        function setBarWidthPercents() {
+            // For display purposes the minimum bar width should be 1.5%.
+            var minBarWidth = 1.5;
+
+            var biggestCurrency;
+            var biggestPercent = -1;
+            for (var currency in vm.aggregatesByCurrency) {
+                var aggregate = vm.aggregatesByCurrency[currency];
+                if (aggregate.convertedPercent > biggestPercent) {
+                    biggestCurrency = currency;
+                    biggestPercent = aggregate.convertedPercent;
+                }
+                aggregate.barWidth = aggregate.convertedPercent;
+            }
+
+            var biggestAggregate = vm.aggregatesByCurrency[biggestCurrency];
+            for (var currency in vm.aggregatesByCurrency) {
+                var aggregate = vm.aggregatesByCurrency[currency];
+                if (aggregate.barWidth < minBarWidth) {
+                    biggestAggregate.barWidth -= minBarWidth - aggregate.barWidth;
+                    aggregate.barWidth = minBarWidth;
+                }
+            }
         }
 
         function currencyTooltip(aggregate, overallConvertedTotal) {
