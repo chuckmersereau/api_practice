@@ -40,7 +40,7 @@
                 }
             } else {
                 tooltip +=
-                    __('Commitment ') +
+                    __('Commitment') + ' ' +
                         currencySymbol + donor.pledge_amount + ' ' + currency +
                             ' ' + donor.pledge_frequency + ". ";
             }

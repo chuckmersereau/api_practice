@@ -52,3 +52,11 @@ __('New Donation')
 
 # Alerts
 __('You must select at least 2 contacts to merge.')
+
+# For multi-currency reports
+__('Commitment')
+__('Avg.')
+__('Min.')
+__('Total')
+__('converted as')
+__('of total')
