@@ -6,9 +6,9 @@
             templateUrl: '/templates/reports/salaryCurrencyDonations.html'
         });
 
-    salaryCurrencyDonationsReportController.$inject = ['api'];
+    salaryCurrencyDonationsReportController.$inject = ['api', 'state'];
 
-    function salaryCurrencyDonationsReportController(api) {
+    function salaryCurrencyDonationsReportController(api, state) {
         var vm = this;
 
         vm.errorOccurred = false;
@@ -16,7 +16,8 @@
         activate();
 
         function activate() {
-            api.call('get', 'reports/year_donations', {}, function(data) {
+            var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
+            api.call('get', url, {}, function(data) {
             }, function() {
                 vm.errorOccurred = true;
             });

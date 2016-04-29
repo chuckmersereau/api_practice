@@ -6,9 +6,9 @@
         templateUrl: '/templates/reports/donorCurrencyDonations.html'
     });
 
-    donorCurrencyDonationsReportController.$inject = ['api'];
+    donorCurrencyDonationsReportController.$inject = ['api', 'state'];
 
-    function donorCurrencyDonationsReportController(api) {
+    function donorCurrencyDonationsReportController(api, state) {
         var vm = this;
         vm.loading = true;
         vm.errorOccurred = false;
@@ -20,7 +20,8 @@
         activate();
 
         function activate() {
-            api.call('get', 'reports/year_donations', {}, function(data) {
+            var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
+            api.call('get', url, {}, function(data) {
                 groupDonationsAndDonorsByCurrency(
                     data.report_info.donations, data.report_info.donors
                 );
@@ -59,6 +60,9 @@
         }
 
         function groupDonationsAndDonorsByCurrency(donations, donors) {
+            if (donations.length == 0) {
+                return;
+            }
             vm.donorsById = _.groupBy(donors, 'id');
             vm.convertedTotalsByCurrency = {};
             vm.convertedCurrency = donations[0].converted_currency;
