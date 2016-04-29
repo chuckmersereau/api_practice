@@ -60,23 +60,40 @@
 
         function groupDonationsAndDonorsByCurrency(donations, donors) {
             vm.donorsById = _.groupBy(donors, 'id');
-            vm.donorsAndDonationsByCurrency = {};
-            vm.currencySymbols = {};
             vm.convertedTotalsByCurrency = {};
             vm.convertedCurrency = donations[0].converted_currency;
             vm.convertedCurrencySymbol = donations[0].converted_currency_symbol;
 
             var donationsByCurrency = _.groupBy(donations, 'currency');
+
+            collectCurrencySymbols(donationsByCurrency);
+
+            vm.currenciesAndDonors = [];
             for (var currency in donationsByCurrency) {
-                groupDonorsAndDonations(currency, donationsByCurrency);
+                vm.currenciesAndDonors.push({
+                    currency: currency,
+                    currencySymbol: vm.currencySymbols[currency],
+                    donorsAndDonations: groupDonorsAndDonations(currency, donationsByCurrency)
+                });
             }
             generateCurrencyAggregates(donationsByCurrency);
+            vm.currenciesAndDonors = _.sortBy(vm.currenciesAndDonors, function(currencyAndDonor) {
+                return -vm.aggregatesByCurrency[currencyAndDonor.currency].convertedTotal;
+            });
+        }
+
+        function collectCurrencySymbols(donationsByCurrency) {
+            vm.currencySymbols = {};
+            for (var currency in donationsByCurrency) {
+                vm.currencySymbols[currency] = donationsByCurrency[currency][0].currency_symbol;
+            }
         }
 
         function generateCurrencyAggregates(donationsByCurrency) {
             var overallConvertedTotal = 0.0;
             var convertedTotalsByCurrency = {};
             var totalsByCurrency = {};
+            vm.aggregatesByCurrency = {};
             for (var currency in donationsByCurrency) {
                 var donations = donationsByCurrency[currency];
                 var convertedTotal = _.sum(_.map(donations, 'converted_amount'))
@@ -97,6 +114,7 @@
                 currencyAggregate.tooltip =
                     currencyTooltip(currencyAggregate, overallConvertedTotal);
                 vm.currencyAggregates.push(currencyAggregate);
+                vm.aggregatesByCurrency[currency] = currencyAggregate;
             }
         }
 
@@ -118,14 +136,14 @@
             }
 
             var donations = donationsByCurrency[currency];
-            vm.currencySymbols[currency] = donations[0].currency_symbol;
 
             var donationsByContactId = _.groupBy(donations, 'contact_id');
-            vm.donorsAndDonationsByCurrency[currency] = [];
+            var donorsAndDonations = [];
             for (var contactId in donationsByContactId) {
-                vm.donorsAndDonationsByCurrency[currency].push(
-                    donorsAndDonationsForContact(currency, contactId, donationsByContactId));
+                donorsAndDonations.push(donorsAndDonationsForContact(currency, contactId,
+                                                                     donationsByContactId));
             }
+            return donorsAndDonations;
         }
 
         function donorsAndDonationsForContact(currency, contactId, donationsByContactId) {

@@ -19,9 +19,9 @@
 </div>
 
 <div ng-if="!$ctrl.errorOccurred">
-  <div ng-repeat="(currency, donorsAndDonations) in $ctrl.donorsAndDonationsByCurrency"
-    ng-init="currencySymbol = $ctrl.currencySymbols[currency]">
-    <h2>{{currency}} ({{currencySymbol}})</h2>
+  <div ng-repeat="currencyAndDonors in $ctrl.currenciesAndDonors"
+       ng-init="donorsAndDonations = currencyAndDonors.donorsAndDonations">
+    <h2>{{currencyAndDonors.currency}} ({{currencyAndDonors.currencySymbol}})</h2>
 
     <table class="table">
       <tr>
@@ -53,7 +53,7 @@
           <div ng-if="monthlyTotal > 0.0">{{monthlyTotal | number : 0}}</div>
         </td>
         <td>
-          <b>{{currencySymbol}}{{donorAndDonations.total | number : 0}}</b>
+          <b>{{currencyAndDonors.currencySymbol}}{{donorAndDonations.total | number : 0}}</b>
         </td>
       </tr>
       <tr>
