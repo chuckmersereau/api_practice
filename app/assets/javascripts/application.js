@@ -56,7 +56,10 @@
 //= require angular-ui-bootstrap/dist/ui-bootstrap
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
 //= require lodash/lodash
+//= require moment/moment
+//= require moment-range/dist/moment-range
 //= require angular/mpdxApp
+//= require angular/mpdxApp.constants
 //= require angular/railsConstants
 //= require_tree ./angular/components
 //= require_tree ./angular/controllers

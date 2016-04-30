@@ -16,12 +16,50 @@
       }
     }
   }
-}
 
-.report-progress-bar{
-  height: 35px;
-  .progress-bar{
-    font-size: 1.1em;
-    line-height: 35px;
+  .report-progress-bar{
+    height: 35px;
+    .progress-bar{
+      font-size: 1.1em;
+      line-height: 35px;
+    }
+  }
+
+  table {
+    .currency-title{
+      padding-left: 15px;
+    }
+    .donor-name{
+      font-weight: 500;
+    }
+    .circle-late{
+      color: $color-gold;
+    }
+    .circle-very-late{
+      color: $color-danger;
+    }
+    & > thead > tr.year-header-row{
+      font-size: 1.3em;
+      margin-top: 5px;
+      margin-bottom: 5px;
+      & > th {
+        border-bottom: none;
+        & > div.year-header-range{
+          width: 100%;
+          text-align: center;
+          border-left: 1px solid #ddd;
+        }
+      }
+      & + tr > th {
+        border-top: none;
+      }
+    }
+    & > tbody > tr.row-total {
+      background-color: #FFFFFF;
+      td {
+        padding-top: 16px;
+        border-top: 1px solid #bbb;
+      }
+    }
   }
 }
