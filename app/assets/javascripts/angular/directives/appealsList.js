@@ -101,7 +101,7 @@ angular.module('mpdxApp')
 
                             $scope.addContact = function(id){
                                 if(!id){ return; }
-                                if(_.contains($scope.appeal.contacts, id)){
+                                if(_.includes($scope.appeal.contacts, id)){
                                     alert(__('This contact already exists in this appeal.'));
                                     return;
                                 }
@@ -117,9 +117,9 @@ angular.module('mpdxApp')
                                 if(angular.isUndefined(contact) || angular.isUndefined(contact.donor_accounts)){
                                     return '-';
                                 }
-                                var contactDonorIds = _.pluck(contact.donor_accounts, 'id');
+                                var contactDonorIds = _.map(contact.donor_accounts, 'id');
                                 var donations = _.filter(appeal.donations, function(d) {
-                                  return _.contains(contactDonorIds, d.donor_account_id);
+                                  return _.includes(contactDonorIds, d.donor_account_id);
                                 });
 
                                 if(!donations.length){

@@ -138,7 +138,7 @@
                 '&filters[contact_info_facebook]=' + encodeURIComponent(vm.filter.contactInfoFacebook) +
                 '&include=Contact.id&per_page=10000'
                 , {}, function (data) {
-                    vm.contactFilterIds = _.pluck(data.contacts, 'id');
+                    vm.contactFilterIds = _.map(data.contacts, 'id');
                     vm.refreshVisibleTasks(vm.contactFilterIds);
                 }, null, true);
         }
@@ -177,10 +177,10 @@
                     angular.forEach(data.contacts, function (contact) {
                         contactCache.update(contact.id, {
                             addresses: _.filter(data.addresses, function (addr) {
-                                return _.contains(contact.address_ids, addr.id);
+                                return _.includes(contact.address_ids, addr.id);
                             }),
                             people: _.filter(data.people, function (i) {
-                                return _.contains(contact.person_ids, i.id);
+                                return _.includes(contact.person_ids, i.id);
                             }),
                             email_addresses: data.email_addresses,
                             contact: _.find(data.contacts, {'id': contact.id}),
@@ -320,7 +320,7 @@
         }
 
         function tagIsActive(tag) {
-            return _.contains(vm.filter.tagsSelect, tag);
+            return _.includes(vm.filter.tagsSelect, tag);
         }
 
         function tagClick(tag, $event) {

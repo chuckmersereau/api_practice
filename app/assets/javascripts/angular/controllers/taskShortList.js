@@ -44,10 +44,10 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
                 angular.forEach(data.contacts, function (contact) {
                     contactCache.update(contact.id, {
                         addresses: _.filter(data.addresses, function (addr) {
-                            return _.contains(contact.address_ids, addr.id);
+                            return _.includes(contact.address_ids, addr.id);
                         }),
                         people: _.filter(data.people, function (i) {
-                            return _.contains(contact.person_ids, i.id);
+                            return _.includes(contact.person_ids, i.id);
                         }),
                         email_addresses: data.email_addresses,
                         contact: _.find(data.contacts, { 'id': contact.id }),

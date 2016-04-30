@@ -38,11 +38,11 @@
                             type: type,
                             order: _.indexOf(availableDonationTypes, type),
                             donations: donationsForType,
-                            sum: _.sum(_.pluck(donationsForType, 'converted_amount'))
+                            sum: _.sum(_.map(donationsForType, 'converted_amount'))
                         };
                     })
                     .value();
-                sumOfAllCategories = _.sum(_.pluck(vm.donationsByType, 'sum'));
+                sumOfAllCategories = _.sum(_.map(vm.donationsByType, 'sum'));
             }, function() {
                 vm.errorOccurred = true;
             });

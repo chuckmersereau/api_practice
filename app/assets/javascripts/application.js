@@ -55,7 +55,7 @@
 //= require angular-localforage/dist/angular-localForage
 //= require angular-ui-bootstrap/dist/ui-bootstrap
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
-//= require lodash
+//= require lodash/lodash
 //= require angular/mpdxApp
 //= require angular/railsConstants
 //= require_tree ./angular/components

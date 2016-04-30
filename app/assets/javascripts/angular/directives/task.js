@@ -136,7 +136,7 @@ angular.module('mpdxApp')
                             var person = _.find(contact.people, { 'id': i.id });
 
                             var phone = _.filter(contact.phone_numbers, function(i){
-                                return _.contains(person.phone_number_ids, i.id);
+                                return _.includes(person.phone_number_ids, i.id);
                             });
                             if(phone.length > 0){
                                 returnContact.people[key].phone_numbers = phone;
@@ -144,7 +144,7 @@ angular.module('mpdxApp')
                             }
 
                             var email = _.filter(contact.email_addresses, function(i){
-                                return _.contains(person.email_address_ids, i.id);
+                                return _.includes(person.email_address_ids, i.id);
                             });
                             if(email.length > 0){
                                 returnContact.people[key].email_addresses = email;
@@ -152,7 +152,7 @@ angular.module('mpdxApp')
                             }
 
                             var facebook_account = _.filter(contact.facebook_accounts, function(i){
-                                return _.contains(person.facebook_account_ids, i.id);
+                                return _.includes(person.facebook_account_ids, i.id);
                             });
                             if(facebook_account.length > 0){
                                 returnContact.people[key].facebook_accounts = facebook_account;
