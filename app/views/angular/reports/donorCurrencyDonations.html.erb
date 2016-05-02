@@ -31,7 +31,7 @@
             <h4>{{year}}</h4>
           </td>
           <td></td>
-        </tr>      
+        </tr>
         <tr>
           <td></td>
           <td ng-repeat="pastMonth in $ctrl.pastMonthDates" class="text-center">
@@ -62,7 +62,7 @@
       <tfoot>
         <tr>
           <td></td>
-          <td ng-repeat="(monthIndex, monthlyTotal) in $ctrl.currencyMonthlyTotals[currency]">
+          <td ng-repeat="(monthIndex, monthlyTotal) in $ctrl.currencyMonthlyTotals[currencyAndDonors.currency]">
             <b>{{currencySymbol}}{{monthlyTotal | number : 0}}</b>
           </td>
         </tr>
