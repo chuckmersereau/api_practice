@@ -9,9 +9,9 @@
             }
         });
 
-    excludedAppealContactsController.$inject = ['$scope', 'api'];
+    excludedAppealContactsController.$inject = ['$scope', 'api', 'state'];
 
-    function excludedAppealContactsController($scope, api) {
+    function excludedAppealContactsController($scope, api, state) {
         var vm = this;
         vm.loading = true;
         vm.error = false;
@@ -29,7 +29,7 @@
             if(exclusion.ajax)
                 return;
             exclusion.ajax = true;
-            var url = 'appeals/' + vm.appealId + '/exclusions/' + exclusion.id + '?account_list_id=' + (window.current_account_list_id || '');
+            var url = 'appeals/' + vm.appealId + '/exclusions/' + exclusion.id + '?account_list_id=' + (state.current_account_list_id || '');
             api.call('delete', url, {}).then(function() {
                 _.remove(vm.exclusions, function (e) {
                     return e == exclusion
@@ -48,7 +48,7 @@
         }
 
         function loadAppealExclusions(){
-            api.call('get','appeals/' + vm.appealId + '/exclusions?account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
+            api.call('get','appeals/' + vm.appealId + '/exclusions?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
                 vm.exclusions = data.appeal_exclusions;
                 vm.loading = false;
             }).then(function() {

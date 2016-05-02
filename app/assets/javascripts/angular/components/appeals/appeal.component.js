@@ -9,10 +9,11 @@
             }
         });
 
-    appealController.$inject = ['$filter', 'api'];
+    appealController.$inject = ['$filter', 'api', 'state'];
 
-    function appealController($filter, api) {
+    function appealController($filter, api, state) {
         var vm = this;
+        vm.mins = _(60).range().map(function(i) { return _.padLeft(i, 2, '0') }).value();
 
         activate();
 
@@ -21,7 +22,7 @@
         }
 
         vm.save = function (goBack) {
-            api.call('put','appeals/'+ vm.id + '?account_list_id=' + (window.current_account_list_id || ''),
+            api.call('put','appeals/'+ vm.id + '?account_list_id=' + (state.current_account_list_id || ''),
                 {"appeal": vm.appeal},
                 function() {
                     if(goBack === undefined || goBack)
@@ -39,7 +40,7 @@
             if(!r){
                 return;
             }
-            var appeal_url = 'appeals/' + vm.id + '?account_list_id=' + (window.current_account_list_id || '');
+            var appeal_url = 'appeals/' + vm.id + '?account_list_id=' + (state.current_account_list_id || '');
             api.call('delete', appeal_url, null, function() {
                 history.back()
             });
@@ -94,6 +95,43 @@
             }
         };
 
+        vm.createTask = function(inputContactsObject){
+            var task = vm.task;
+            var contactsObject = _.keys(_.pick(inputContactsObject, function(val){
+                return val;
+            }));
+
+            if(!contactsObject.length){
+                alert(__('You must check at least one contact.'));
+                return;
+            }
+
+            vm.creatingBulkTasks = 0;
+            var postTask = function(){
+                vm.creatingBulkTasks = contactsObject.length;
+                if(_.isEmpty(contactsObject)){
+                    alert('Task(s) created.');
+                    vm.taskType = '';
+                    return;
+                }
+                api.call('post', 'tasks/?account_list_id=' + state.current_account_list_id, {
+                    task: {
+                        start_at: moment(task.date).hour(task.hour).minute(task.min).format('YYYY-MM-DD HH:mm:ss'),
+                        subject: task.subject,
+                        activity_type: task.type,
+                        activity_contacts_attributes: [{
+                            'contact_id': Number(contactsObject[0])
+                        }]
+                    }
+                }, function(){
+                    contactsObject.shift();
+                    postTask();
+                });
+            };
+
+            postTask();
+        };
+
         vm.createTag = function (newTag, inputContactsObject) {
             var contactsObject = _.keys(_.pick(inputContactsObject, function (val) {
                 return val;
@@ -115,7 +153,7 @@
                 var tagList = _.find(vm.contacts, {'id': Number(contactsObject[0])}).tag_list;
                 tagList.push(newTag);
                 tagList = tagList.join();
-                api.call('put', 'contacts/' + contactsObject[0] + '?account_list_id=' + window.current_account_list_id, {
+                api.call('put', 'contacts/' + contactsObject[0] + '?account_list_id=' + state.current_account_list_id, {
                     contact: {
                         tag_list: tagList
                     }
@@ -222,7 +260,7 @@
             api.call('get',
                 'contacts?filters[status]=*&per_page=5000'+
                 '&include='+contact_fields+
-                '&account_list_id=' + (window.current_account_list_id || ''),
+                '&account_list_id=' + (state.current_account_list_id || ''),
                 {}, function(data) {
                     vm.contacts = data.contacts;
                     vm.newContact = data.contacts[0].id;
@@ -251,7 +289,7 @@
         }
 
         function loadAppeal(id){
-            api.call('get','appeals/' + id + '?account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
+            api.call('get','appeals/' + id + '?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
                 vm.appeal = data.appeal
             }).then(function() {
                 appealLoaded();
