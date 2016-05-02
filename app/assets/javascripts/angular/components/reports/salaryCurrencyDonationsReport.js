@@ -70,10 +70,11 @@
         }
 
         function groupDonationsByDonor(donors, donations){
+            var groupedDonations = _.groupBy(donations, 'contact_id');
             return _.map(donors, function(donor){
                 return {
                     donorInfo: donor,
-                    donations: _.filter(donations, {contact_id: donor.id})
+                    donations: groupedDonations[donor.id]
                 }
             });
         }

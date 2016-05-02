@@ -4,21 +4,6 @@
 </div>
 
 <div class="panel panel-default panel-report" ng-if="!$ctrl.errorOccurred">
-  <!--<div class="panel-body panel-report-heading">
-    <div class="row">
-      <div class="col-xs-6">
-        <h4><%= _('Account Balances') %></h4>
-      </div>
-      <div class="col-xs-6 text-right">
-        <h4>
-          <%= _('Converted Report Total') %>:
-          {{$ctrl.total_currency_symbol}}
-          {{$ctrl.converted_total | number : 0}}
-          {{$ctrl.total_currency}}
-        </h4>
-      </div>
-    </div>
-  </div>-->
   <div class="table-responsive">
     <table ng-if="!$ctrl.errorOccurred" class="table table-striped">
       <thead>
