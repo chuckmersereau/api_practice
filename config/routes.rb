@@ -59,7 +59,7 @@ Rails.application.routes.draw do
       resources :preferences
       resources :users
       resources :appeals do
-        resources :exclusions, only: [:index, :delete], controller: :appeal_exclusions
+        resources :exclusions, only: [:index, :destroy], controller: :appeal_exclusions
       end
       resources :insights
 

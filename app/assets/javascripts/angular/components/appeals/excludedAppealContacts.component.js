@@ -9,9 +9,9 @@
             }
         });
 
-    excludedAppealContactsController.$inject = ['$filter', 'api'];
+    excludedAppealContactsController.$inject = ['$scope', 'api'];
 
-    function excludedAppealContactsController($filter, api) {
+    function excludedAppealContactsController($scope, api) {
         var vm = this;
         vm.loading = true;
         vm.error = false;
@@ -25,6 +25,22 @@
             vm.lastSixMonths = ["Nov '15", "Dec '15","Jan '16","Feb '16","Mar '16","Apr '16"]
         }
 
+        vm.add = function (exclusion) {
+            if(exclusion.ajax)
+                return;
+            exclusion.ajax = true;
+            var url = 'appeals/' + vm.appealId + '/exclusions/' + exclusion.id + '?account_list_id=' + (window.current_account_list_id || '');
+            api.call('delete', url, {}).then(function() {
+                _.remove(vm.exclusions, function (e) {
+                    return e == exclusion
+                });
+                $scope.$parent.$ctrl.addExcluded(exclusion.contact);
+            }, function (error) {
+                exclusion.ajax = false;
+                alert('Exclusion failed to be added to the appeal: ' + error.statusText);
+            });
+        };
+
         function appealLoaded() {
             angular.forEach(vm.exclusions, function(exclusion) {
                 exclusion.lastSixMonths = groupDonations(exclusion.donations);
@@ -34,13 +50,12 @@
         function loadAppealExclusions(){
             api.call('get','appeals/' + vm.appealId + '/exclusions?account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
                 vm.exclusions = data.appeal_exclusions;
+                vm.loading = false;
             }).then(function() {
                 appealLoaded();
-                vm.loading = false;
                 vm.showByDefault = vm.exclusions.length > 0;
             }, function () {
                 vm.error = true;
-                vm.loading = false;
             });
         }
 

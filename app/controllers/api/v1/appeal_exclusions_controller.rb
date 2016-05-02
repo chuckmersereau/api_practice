@@ -4,6 +4,12 @@ class Api::V1::AppealExclusionsController < Api::V1::BaseController
     render json: result, callback: params[:callback], each_serializer: ExcludedAppealContactSerializer
   end
 
+  def destroy
+    exclusion = appeal.excluded_appeal_contacts.find(params[:id])
+    exclusion.delete
+    render json: exclusion, callback: params[:callback]
+  end
+
   private
 
   def appeal

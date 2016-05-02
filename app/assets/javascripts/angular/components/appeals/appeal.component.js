@@ -20,12 +20,18 @@
             loadAppeal(vm.id);
         }
 
-        vm.save = function () {
+        vm.save = function (goBack) {
             api.call('put','appeals/'+ vm.id + '?account_list_id=' + (window.current_account_list_id || ''),
                 {"appeal": vm.appeal},
                 function() {
-                    history.back()
+                    if(goBack === undefined || goBack)
+                        history.back()
                 });
+        };
+
+        vm.addExcluded = function (contact) {
+            vm.addContact(contact.id);
+            vm.save(false);
         };
 
         vm.delete = function (){

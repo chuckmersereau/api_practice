@@ -1,13 +1,14 @@
 <a ng-show="$ctrl.exclusions.length > 0" class="btn btn-primary exception-toggle-btn"
    role="button" data-toggle="collapse" href="#exceptionsContainer" aria-expanded="false"
    aria-controls="exceptionsContainer">
-  Show/Hide Contacts Not Included
+  <%= _('Show/Hide Contacts Not Included') %>
 </a>
 <a ng-show="$ctrl.error" class="btn btn-primary exception-toggle-btn" role="button" aria-expanded="false">
-  Error Loading Excluded Contacts
+  <%= _('Error Loading Excluded Contacts') %>
 </a>
 
-<div id="exceptionsContainer" class="collapse" ng-class="{'in' : $ctrl.showByDefault}">
+<div id="exceptionsContainer" class="collapse" ng-class="{'in' : $ctrl.showByDefault}"
+     ng-show="$ctrl.exclusions.length > 0">
   <div class="panel panel-default panel-except-container">
     <div class="panel-body">
       <div ng-repeat="c in $ctrl.exclusions | orderBy: $ctrl.contactName"
@@ -15,7 +16,9 @@
         <div class="panel-body row">
           <div class="col-lg-3 col-md-4 col-sm-6 add-space">
             <p>
-              <a href="" class="add-cta btn btn-primary btn-xs"><i class="fa fa-plus-circle"></i></a>
+              <a href="" class="add-cta btn btn-primary btn-xs" ng-click="$ctrl.add(c)">
+                <i class="fa fa-plus-circle" ng-class="{'fa-circle-o-notch fa-spin': c.ajax}"></i>
+              </a>
               <a href="/contacts/{{c.contact.id}}"><strong>{{c.contact.name}}</strong></a>
             </p>
             <p>
@@ -24,7 +27,7 @@
             </p>
           </div>
           <div class="col-lg-4 col-md-3 col-sm-6">
-            <strong>Reason for Exception:</strong>
+            <strong><%= _('Reason for Exclusion') %>:</strong>
             <ul>
               <li ng-repeat="r in c.reasons">{{r}}</li>
             </ul>
@@ -33,7 +36,7 @@
             <table class="table table-condensed table-bordered table-summary">
               <thead>
                 <tr>
-                  <td ng-repeat="m in c.lastSixMonths">{{m.month | date : "MMM '''yy"}}</td>
+                  <td ng-repeat="m in c.lastSixMonths">{{m.month | date : "MMM yy"}}</td>
                 </tr>
               </thead>
               <tbody>
