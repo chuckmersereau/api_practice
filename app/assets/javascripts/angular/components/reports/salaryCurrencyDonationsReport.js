@@ -11,10 +11,12 @@
     function salaryCurrencyDonationsReportController(api, state, moment, monthRange) {
         var vm = this;
 
+        var monthsBefore = 12;
+
         vm.moment = moment;
         vm.errorOccurred = false;
-        vm.allMonths = monthRange.allMonths;
-        vm.years = monthRange.yearsWithMonthCounts;
+        vm.allMonths = monthRange.getPastMonths(monthsBefore);
+        vm.years = monthRange.yearsWithMonthCounts(vm.allMonths);
         vm.donors = [];
         vm.monthlyTotals = [];
         vm.currentCurrency = state.current_currency;
@@ -22,7 +24,8 @@
 
         vm._parseReportInfo = parseReportInfo;
         vm._groupDonationsByDonor = groupDonationsByDonor;
-        vm._aggregateDonorDonations = aggregateDonorDonations;
+        vm._aggregateDonationsByMonth = aggregateDonationsByMonth;
+        vm._aggregateDonorDonationsByYear = aggregateDonorDonationsByYear;
         vm._addMissingMonths = addMissingMonths;
         vm._sumMonths = sumMonths;
 
@@ -31,8 +34,8 @@
         function activate() {
             var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
             api.call('get', url, {}, function(data) {
-                vm.donors = parseReportInfo(data.report_info, monthRange.allMonths);
-                vm.monthlyTotals = sumMonths(vm.donors, monthRange.allMonths);
+                vm.donors = parseReportInfo(data.report_info, vm.allMonths);
+                vm.monthlyTotals = sumMonths(vm.donors, vm.allMonths);
                 vm.yearTotal = _.sum(vm.monthlyTotals);
                 vm.loading = false;
             }, function() {
@@ -44,15 +47,25 @@
         function parseReportInfo(reportInfo, allMonths){
             _.mixin({
                 groupDonationsByDonor: groupDonationsByDonor,
-                aggregateDonorDonations: aggregateDonorDonations,
-                addMissingMonths: addMissingMonths
+                aggregateDonationsByMonth: aggregateDonationsByMonth,
+                aggregateDonorDonationsByYear: aggregateDonorDonationsByYear
             });
 
             return _(reportInfo.donors)
                 .groupDonationsByDonor(reportInfo.donations)
                 .sortBy('donorInfo.name')
-                .aggregateDonorDonations()
-                .addMissingMonths(allMonths)
+                .map(function(donor){
+                    //parse each donor's donations
+                    donor.donations = _(donor.donations)
+                        .aggregateDonationsByMonth()
+                        .value();
+                    return donor;
+                })
+                .aggregateDonorDonationsByYear()
+                .map(function(donor) {
+                    donor.donations = addMissingMonths(donor.donations, allMonths);
+                    return donor;
+                })
                 .value();
         }
 
@@ -65,35 +78,47 @@
             });
         }
 
-        function aggregateDonorDonations(donors){
+        function aggregateDonationsByMonth(donations){
+            return _(donations)
+                .groupBy(function(donation){
+                    return moment(donation.donation_date).format('YYYY-MM')
+                })
+                .map(function(donationsInMonth, month){
+                    return {
+                        converted_amount: _.sumBy(donationsInMonth, 'converted_amount'),
+                        donation_date: month,
+                        rawDonations: donationsInMonth
+                    }
+                })
+                .value();
+        }
+
+        function aggregateDonorDonationsByYear(donors){
             return _.map(donors, function(donor){
                 var sum = _.sumBy(donor.donations, 'converted_amount');
                 return _.assign(donor, {
                     aggregates: {
                         sum: sum,
-                        average: sum / 12, //TODO: replace 12 with monthsBack
+                        average: sum / monthsBefore,
                         min: _.minBy(donor.donations, 'converted_amount').converted_amount
                     }
                 })
             });
         }
 
-        function addMissingMonths(donors, allMonths){
-            return _.map(donors, function(donor){
-                donor.donations = _.map(allMonths, function (date) {
-                    var existingDonation = _.find(donor.donations, function(donation){
-                        return moment(donation.donation_date).isSame(date, 'month');
-                    });
-                    if(existingDonation){
-                        return existingDonation;
-                    }else{
-                        return {
-                            converted_amount: 0,
-                            donation_date: moment(date).format('YYYY-MM-DD')
-                        };
-                    }
+        function addMissingMonths(donations, allMonths){
+            return _.map(allMonths, function (date) {
+                var existingDonation = _.find(donations, function(donation){
+                    return moment(donation.donation_date).isSame(date, 'month');
                 });
-                return donor;
+                if(existingDonation){
+                    return existingDonation;
+                }else{
+                    return {
+                        converted_amount: 0,
+                        donation_date: moment(date).format('YYYY-MM')
+                    };
+                }
             });
         }
 

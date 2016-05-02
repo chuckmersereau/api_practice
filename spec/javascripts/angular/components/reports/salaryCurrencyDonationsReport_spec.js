@@ -56,7 +56,43 @@ describe('contacts', function() {
         });
     });
 
-    describe('aggregateDonorDonations', function() {
+    describe('aggregateDonationsByMonth', function() {
+        it('should group donations by month, save original donations into rawDonations, and sum them', function () {
+            var donations = [
+                {
+                    "converted_amount": 175.0,
+                    "contact_id": 8,
+                    "donation_date": "2015-01-31"
+                },
+                {
+                    "converted_amount": 25.0,
+                    "contact_id": 8,
+                    "donation_date": "2015-01-05"
+                },
+                {
+                    "converted_amount": 175.0,
+                    "contact_id": 8,
+                    "donation_date": "2015-02-01"
+                }
+            ];
+
+            expect(self.controller._aggregateDonationsByMonth(donations)).toEqual([
+                {
+                    converted_amount: 200,
+                    donation_date: '2015-01',
+                    rawDonations: [ { converted_amount: 175, contact_id: 8, donation_date: '2015-01-31' },
+                        { converted_amount: 25, contact_id: 8, donation_date: '2015-01-05' } ]
+                },
+                {
+                    converted_amount: 175,
+                    donation_date: '2015-02',
+                    rawDonations: [ { converted_amount: 175, contact_id: 8, donation_date: '2015-02-01' } ]
+                }
+            ]);
+        });
+    });
+
+    describe('aggregateDonorDonationsByYear', function() {
         it('should add an aggregates object to each donor that contains a sum, average, and min', function () {
             var donors = [
                 {
@@ -78,7 +114,7 @@ describe('contacts', function() {
                 }
             ];
 
-            expect(self.controller._aggregateDonorDonations(donors)).toEqual([
+            expect(self.controller._aggregateDonorDonationsByYear(donors)).toEqual([
                 {
                     donorInfo: donors[0].donorInfo,
                     donations: donors[0].donations,
@@ -94,48 +130,35 @@ describe('contacts', function() {
 
     describe('addMissingMonths', function() {
         it('should add empty donations for months with missing donations', function () {
-            var donors = [
+            var donations = [
                 {
-                    donorInfo: {
-                        "id": 7,
-                        "name": "Dalmation, Pongo and Perdita"
-                    },
-                    donations: [
-                        {
-                            "converted_amount": 10.0,
-                            "donation_date": "2015-04-01"
-                        },
-                        {
-                            "converted_amount": 20.0,
-                            "donation_date": "2015-01-31"
-                        }
-                    ]
+                    "converted_amount": 10.0,
+                    "donation_date": "2015-04"
+                },
+                {
+                    "converted_amount": 20.0,
+                    "donation_date": "2015-01"
                 }
             ];
 
             var allMonths = ["2015-01", "2015-02", "2015-03", "2015-04"];
 
-            expect(self.controller._addMissingMonths(donors, allMonths)).toEqual([
+            expect(self.controller._addMissingMonths(donations, allMonths)).toEqual([
                 {
-                    donorInfo: donors[0].donorInfo,
-                    donations: [
-                        {
-                            "converted_amount": 20.0,
-                            "donation_date": "2015-01-31"
-                        },
-                        {
-                            "converted_amount": 0.0,
-                            "donation_date": "2015-02-01"
-                        },
-                        {
-                            "converted_amount": 0.0,
-                            "donation_date": "2015-03-01"
-                        },
-                        {
-                            "converted_amount": 10.0,
-                            "donation_date": "2015-04-01"
-                        }
-                    ]
+                    "converted_amount": 20.0,
+                    "donation_date": "2015-01"
+                },
+                {
+                    "converted_amount": 0.0,
+                    "donation_date": "2015-02"
+                },
+                {
+                    "converted_amount": 0.0,
+                    "donation_date": "2015-03"
+                },
+                {
+                    "converted_amount": 10.0,
+                    "donation_date": "2015-04"
                 }
             ]);
         });
@@ -204,6 +227,11 @@ describe('contacts', function() {
                         "donation_date": "2015-01-31"
                     },
                     {
+                        "converted_amount": 25.0,
+                        "contact_id": 8,
+                        "donation_date": "2015-01-05"
+                    },
+                    {
                         "converted_amount": 100.0,
                         "contact_id": 7,
                         "donation_date": "2015-01-01"
@@ -230,13 +258,25 @@ describe('contacts', function() {
                         "name": "Bird, Tweety and Tweetilee"
                     },
                     donations: [
-                        { converted_amount: 175, contact_id: 8, donation_date: '2015-01-31' },
-                        { converted_amount: 175, contact_id: 8, donation_date: '2015-02-01' },
-                        { converted_amount: 0, donation_date: '2015-03-01' }
+                        {
+                            converted_amount: 200,
+                            donation_date: '2015-01',
+                            rawDonations: [ { converted_amount: 175, contact_id: 8, donation_date: '2015-01-31' },
+                                { converted_amount: 25, contact_id: 8, donation_date: '2015-01-05' } ]
+                        },
+                        {
+                            converted_amount: 175,
+                            donation_date: '2015-02',
+                            rawDonations: [ { converted_amount: 175, contact_id: 8, donation_date: '2015-02-01' } ]
+                        },
+                        {
+                            converted_amount: 0,
+                            donation_date: '2015-03'
+                        }
                     ],
                     aggregates: {
-                        sum: 350,
-                        average: 29.166666666666668,
+                        sum: 375,
+                        average: 31.25,
                         min: 175
                     }
                 },
@@ -246,9 +286,20 @@ describe('contacts', function() {
                         "name": "Dalmation, Pongo and Perdita"
                     },
                     donations: [
-                        { converted_amount: 100, contact_id: 7, donation_date: '2015-01-01' },
-                        { converted_amount: 0, donation_date: '2015-02-01' },
-                        { converted_amount: 100, contact_id: 7, donation_date: '2015-03-31' }
+                        {
+                            converted_amount: 100,
+                            donation_date: '2015-01',
+                            rawDonations: [ { converted_amount: 100, contact_id: 7, donation_date: '2015-01-01' } ]
+                        },
+                        {
+                            converted_amount: 0,
+                            donation_date: '2015-02'
+                        },
+                        {
+                            converted_amount: 100,
+                            donation_date: '2015-03',
+                            rawDonations: [ { converted_amount: 100, contact_id: 7, donation_date: '2015-03-31' } ]
+                        }
                     ],
                     aggregates: {
                         sum: 200,

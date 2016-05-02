@@ -21,7 +21,7 @@
 
         describe('yearsWithMonthCounts function', function () {
             it('should return an object of years containing month counts found in range', function () {
-                expect(monthRange._yearsWithMonthCounts(['2014-12','2015-01','2015-02'])).toEqual({
+                expect(monthRange.yearsWithMonthCounts(['2014-12','2015-01','2015-02'])).toEqual({
                     2014: 1,
                     2015: 2
                 });
