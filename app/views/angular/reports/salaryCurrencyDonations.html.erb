@@ -3,12 +3,12 @@
   <%= _('Report data could not load due to an error. Please try again or contact support.') %>
 </div>
 
-<div class="panel panel-default panel-report" ng-if="!$ctrl.errorOccurred">
+<div class="panel panel-default panel-report" ng-if="!$ctrl.errorOccurred" ng-repeat="currencyGroup in $ctrl.currencyGroups">
   <div class="table-responsive">
     <table ng-if="!$ctrl.errorOccurred" class="table table-striped">
       <thead>
       <tr class="year-header-row">
-        <th class="currency-title">{{$ctrl.currentCurrency}} ({{$ctrl.currentCurrencySymbol}})</th>
+        <th class="currency-title">{{currencyGroup.currency}} ({{currencyGroup.currencySymbol}})</th>
         <th ng-repeat="(year, numberOfMonths) in $ctrl.years" colspan="{{numberOfMonths}}">
           <div class="year-header-range">{{year}}</div>
         </th>
@@ -23,7 +23,7 @@
       </tr>
       </thead>
       <tbody>
-      <tr ng-repeat="donor in $ctrl.donors">
+      <tr ng-repeat="donor in currencyGroup.donors">
         <td>
           <span class="donor-name" uib-tooltip-template="'inline/salaryCurrencyDonations/nameTooltip.html'">
             <i class="fa fa-info-circle" aria-hidden="true"></i>
@@ -31,8 +31,8 @@
           </span>
           <script type="text/ng-template" id="inline/salaryCurrencyDonations/nameTooltip.html">
             <span>
-              {{$ctrl.currentCurrencySymbol}}{{donor.donorInfo.pledge_amount | number:0}} {{$ctrl.currentCurrency}} {{donor.donorInfo.pledge_frequency}}<br>
-              Avg: {{$ctrl.currentCurrencySymbol}}{{donor.aggregates.average | number:0}} / Min: {{$ctrl.currentCurrencySymbol}}{{donor.aggregates.min | number:0}}
+              {{currencyGroup.currencySymbol}}{{donor.donorInfo.pledge_amount | number:0}} {{currencyGroup.currency}} {{donor.donorInfo.pledge_frequency}}<br>
+              Avg: {{currencyGroup.currencySymbol}}{{donor.aggregates.average | number:0}} / Min: {{currencyGroup.currencySymbol}}{{donor.aggregates.min | number:0}}
             </span>
           </script>
           <span ng-switch="late = donor.donorInfo.late_by_60_days ? 60 : (donor.donorInfo.late_by_30_days ? 30 : false)">
@@ -41,21 +41,21 @@
           </span>
         </td>
         <td class="text-right" ng-repeat="donations in donor.donations">
-          <span ng-if="donations.converted_amount !== 0">{{donations.converted_amount | number:0}}</span>
+          <span ng-if="donations.amount !== 0">{{donations.amount | number:0}}</span>
         </td>
         <td class="text-right">
-          <strong>{{$ctrl.currentCurrencySymbol}}{{donor.aggregates.sum | number:0}}</strong>
+          <strong>{{currencyGroup.currencySymbol}}{{donor.aggregates.sum | number:0}}</strong>
         </td>
       </tr>
       <tr class="row-total">
         <td>
           <strong><%= _('Totals')%></strong>
         </td>
-        <td class="text-right" ng-repeat="monthTotal in $ctrl.monthlyTotals track by $index">
-          <strong>{{$ctrl.currentCurrencySymbol}}{{monthTotal | number:0}}</strong>
+        <td class="text-right" ng-repeat="monthTotal in currencyGroup.monthlyTotals track by $index">
+          <strong>{{currencyGroup.currencySymbol}}{{monthTotal | number:0}}</strong>
         </td>
         <td class="text-right">
-          <strong>{{$ctrl.currentCurrencySymbol}}{{$ctrl.yearTotal | number:0}}</strong>
+          <strong>{{currencyGroup.currencySymbol}}{{currencyGroup.yearTotal | number:0}}</strong>
         </td>
       </tr>
       </tbody>

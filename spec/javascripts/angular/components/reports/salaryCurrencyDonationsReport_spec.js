@@ -8,11 +8,48 @@ describe('contacts', function() {
         var $rootScope = $injector.get('$rootScope');
         var $scope = $rootScope.$new();
 
-        self.controller = $componentController('salaryCurrencyDonationsReport', {
+        self.controller = $componentController('currencyDonationsReport', {
             '$scope': $scope,
             '$http': $httpBackend
         });
     }));
+
+    describe('groupDonationsByCurrency', function() {
+        it('should group and map an array of donations into objects containing currency info and corresponding donations', function () {
+            var donations = [
+                {
+                    "amount": 175.0,
+                    "currency": 'USD',
+                    "currency_symbol": '$'
+                },
+                {
+                    "amount": 100.0,
+                    "currency": 'USD',
+                    "currency_symbol": '$'
+
+                },
+                {
+                    "amount": 50.0,
+                    "currency": 'CAD',
+                    "currency_symbol": '$'
+
+                }
+            ];
+
+            expect(self.controller._groupDonationsByCurrency(donations)).toEqual([
+                {
+                    currency: 'USD',
+                    currencySymbol: '$',
+                    donations: [ donations[0], donations[1] ]
+                },
+                {
+                    currency: 'CAD',
+                    currencySymbol: '$',
+                    donations: [ donations[2] ]
+                }
+            ]);
+        });
+    });
 
     describe('groupDonationsByDonor', function() {
         it('should return an array of objects containing donors and their matching donations', function () {
@@ -60,17 +97,17 @@ describe('contacts', function() {
         it('should group donations by month, save original donations into rawDonations, and sum them', function () {
             var donations = [
                 {
-                    "converted_amount": 175.0,
+                    "amount": 175.0,
                     "contact_id": 8,
                     "donation_date": "2015-01-31"
                 },
                 {
-                    "converted_amount": 25.0,
+                    "amount": 25.0,
                     "contact_id": 8,
                     "donation_date": "2015-01-05"
                 },
                 {
-                    "converted_amount": 175.0,
+                    "amount": 175.0,
                     "contact_id": 8,
                     "donation_date": "2015-02-01"
                 }
@@ -78,15 +115,15 @@ describe('contacts', function() {
 
             expect(self.controller._aggregateDonationsByMonth(donations)).toEqual([
                 {
-                    converted_amount: 200,
+                    amount: 200,
                     donation_date: '2015-01',
-                    rawDonations: [ { converted_amount: 175, contact_id: 8, donation_date: '2015-01-31' },
-                        { converted_amount: 25, contact_id: 8, donation_date: '2015-01-05' } ]
+                    rawDonations: [ { amount: 175, contact_id: 8, donation_date: '2015-01-31' },
+                        { amount: 25, contact_id: 8, donation_date: '2015-01-05' } ]
                 },
                 {
-                    converted_amount: 175,
+                    amount: 175,
                     donation_date: '2015-02',
-                    rawDonations: [ { converted_amount: 175, contact_id: 8, donation_date: '2015-02-01' } ]
+                    rawDonations: [ { amount: 175, contact_id: 8, donation_date: '2015-02-01' } ]
                 }
             ]);
         });
@@ -102,13 +139,13 @@ describe('contacts', function() {
                     },
                     donations: [
                         {
-                            "converted_amount": 10.0
+                            "amount": 10.0
                         },
                         {
-                            "converted_amount": 20.0
+                            "amount": 20.0
                         },
                         {
-                            "converted_amount": 40.0
+                            "amount": 40.0
                         }
                     ]
                 }
@@ -132,11 +169,11 @@ describe('contacts', function() {
         it('should add empty donations for months with missing donations', function () {
             var donations = [
                 {
-                    "converted_amount": 10.0,
+                    "amount": 10.0,
                     "donation_date": "2015-04"
                 },
                 {
-                    "converted_amount": 20.0,
+                    "amount": 20.0,
                     "donation_date": "2015-01"
                 }
             ];
@@ -145,19 +182,19 @@ describe('contacts', function() {
 
             expect(self.controller._addMissingMonths(donations, allMonths)).toEqual([
                 {
-                    "converted_amount": 20.0,
+                    "amount": 20.0,
                     "donation_date": "2015-01"
                 },
                 {
-                    "converted_amount": 0.0,
+                    "amount": 0.0,
                     "donation_date": "2015-02"
                 },
                 {
-                    "converted_amount": 0.0,
+                    "amount": 0.0,
                     "donation_date": "2015-03"
                 },
                 {
-                    "converted_amount": 10.0,
+                    "amount": 10.0,
                     "donation_date": "2015-04"
                 }
             ]);
@@ -174,11 +211,11 @@ describe('contacts', function() {
                     },
                     donations: [
                         {
-                            "converted_amount": 10.0,
+                            "amount": 10.0,
                             "donation_date": "2015-01-25"
                         },
                         {
-                            "converted_amount": 20.0,
+                            "amount": 20.0,
                             "donation_date": "2015-02-01"
                         }
                     ]
@@ -190,11 +227,11 @@ describe('contacts', function() {
                     },
                     donations: [
                         {
-                            "converted_amount": 30.0,
+                            "amount": 30.0,
                             "donation_date": "2015-01-31"
                         },
                         {
-                            "converted_amount": 40.0,
+                            "amount": 40.0,
                             "donation_date": "2015-02-10"
                         }
                     ]
@@ -222,29 +259,39 @@ describe('contacts', function() {
                 ],
                 donations: [
                     {
-                        "converted_amount": 175.0,
+                        "amount": 175.0,
                         "contact_id": 8,
-                        "donation_date": "2015-01-31"
+                        "donation_date": "2015-01-31",
+                        "currency": 'USD',
+                        "currency_symbol": '$'
                     },
                     {
-                        "converted_amount": 25.0,
+                        "amount": 25.0,
                         "contact_id": 8,
-                        "donation_date": "2015-01-05"
+                        "donation_date": "2015-01-05",
+                        "currency": 'USD',
+                        "currency_symbol": '$'
                     },
                     {
-                        "converted_amount": 100.0,
+                        "amount": 100.0,
                         "contact_id": 7,
-                        "donation_date": "2015-01-01"
+                        "donation_date": "2015-01-01",
+                        "currency": 'USD',
+                        "currency_symbol": '$'
                     },
                     {
-                        "converted_amount": 175.0,
+                        "amount": 175.0,
                         "contact_id": 8,
-                        "donation_date": "2015-02-01"
+                        "donation_date": "2015-02-01",
+                        "currency": 'USD',
+                        "currency_symbol": '$'
                     },
                     {
-                        "converted_amount": 100.0,
+                        "amount": 100.0,
                         "contact_id": 7,
-                        "donation_date": "2015-03-31"
+                        "donation_date": "2015-03-31",
+                        "currency": 'USD',
+                        "currency_symbol": '$'
                     }
                 ]
             };
@@ -253,59 +300,67 @@ describe('contacts', function() {
 
             expect(self.controller._parseReportInfo(reportInfo, allMonths)).toEqual([
                 {
-                    donorInfo: {
-                        "id": 8,
-                        "name": "Bird, Tweety and Tweetilee"
-                    },
-                    donations: [
+                    currency: 'USD',
+                    currencySymbol: '$',
+                    donors: [
                         {
-                            converted_amount: 200,
-                            donation_date: '2015-01',
-                            rawDonations: [ { converted_amount: 175, contact_id: 8, donation_date: '2015-01-31' },
-                                { converted_amount: 25, contact_id: 8, donation_date: '2015-01-05' } ]
+                            donorInfo: {
+                                "id": 8,
+                                "name": "Bird, Tweety and Tweetilee"
+                            },
+                            donations: [
+                                {
+                                    amount: 200,
+                                    donation_date: '2015-01',
+                                    rawDonations: [{amount: 175, contact_id: 8, donation_date: '2015-01-31', "currency": 'USD', "currency_symbol": '$'},
+                                        {amount: 25, contact_id: 8, donation_date: '2015-01-05', "currency": 'USD', "currency_symbol": '$'}]
+                                },
+                                {
+                                    amount: 175,
+                                    donation_date: '2015-02',
+                                    rawDonations: [{amount: 175, contact_id: 8, donation_date: '2015-02-01', "currency": 'USD', "currency_symbol": '$'}]
+                                },
+                                {
+                                    amount: 0,
+                                    donation_date: '2015-03'
+                                }
+                            ],
+                            aggregates: {
+                                sum: 375,
+                                average: 31.25,
+                                min: 175
+                            }
                         },
                         {
-                            converted_amount: 175,
-                            donation_date: '2015-02',
-                            rawDonations: [ { converted_amount: 175, contact_id: 8, donation_date: '2015-02-01' } ]
-                        },
-                        {
-                            converted_amount: 0,
-                            donation_date: '2015-03'
+                            donorInfo: {
+                                "id": 7,
+                                "name": "Dalmation, Pongo and Perdita"
+                            },
+                            donations: [
+                                {
+                                    amount: 100,
+                                    donation_date: '2015-01',
+                                    rawDonations: [{amount: 100, contact_id: 7, donation_date: '2015-01-01', "currency": 'USD', "currency_symbol": '$'}]
+                                },
+                                {
+                                    amount: 0,
+                                    donation_date: '2015-02'
+                                },
+                                {
+                                    amount: 100,
+                                    donation_date: '2015-03',
+                                    rawDonations: [{amount: 100, contact_id: 7, donation_date: '2015-03-31', "currency": 'USD', "currency_symbol": '$'}]
+                                }
+                            ],
+                            aggregates: {
+                                sum: 200,
+                                average: 16.666666666666668,
+                                min: 100
+                            }
                         }
                     ],
-                    aggregates: {
-                        sum: 375,
-                        average: 31.25,
-                        min: 175
-                    }
-                },
-                {
-                    donorInfo: {
-                        "id": 7,
-                        "name": "Dalmation, Pongo and Perdita"
-                    },
-                    donations: [
-                        {
-                            converted_amount: 100,
-                            donation_date: '2015-01',
-                            rawDonations: [ { converted_amount: 100, contact_id: 7, donation_date: '2015-01-01' } ]
-                        },
-                        {
-                            converted_amount: 0,
-                            donation_date: '2015-02'
-                        },
-                        {
-                            converted_amount: 100,
-                            donation_date: '2015-03',
-                            rawDonations: [ { converted_amount: 100, contact_id: 7, donation_date: '2015-03-31' } ]
-                        }
-                    ],
-                    aggregates: {
-                        sum: 200,
-                        average: 16.666666666666668,
-                        min: 100
-                    }
+                    monthlyTotals: [300, 175, 100],
+                    yearTotal: 575
                 }
             ]);
         });
