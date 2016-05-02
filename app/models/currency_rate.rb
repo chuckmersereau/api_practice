@@ -1,10 +1,7 @@
 class CurrencyRate < ActiveRecord::Base
   class << self
     def latest_for(currency_code)
-      return 1.0 if currency_code == 'USD'
-      rate_record = where(code: currency_code).order(exchanged_on: :desc).first
-      raise RateNotFoundError, currency_code unless rate_record
-      rate_record.rate
+      rate_on_date(currency_code: currency_code, date: Date.current)
     end
 
     def latest_for_pair(from:, to:)
@@ -25,6 +22,7 @@ class CurrencyRate < ActiveRecord::Base
     end
 
     def rate_for_pair_on_date(from:, to:, date:)
+      return 1.0 if from == to
       from_rate = rate_on_date(currency_code: from, date: date)
       to_rate = rate_on_date(currency_code: to, date: date)
       to_rate / from_rate
@@ -61,6 +59,11 @@ class CurrencyRate < ActiveRecord::Base
                                   .order(exchanged_on: :desc).first
       raise RateNotFoundError, currency_code unless rate_record
       rate_record.rate
+    rescue RateNotFoundError => e
+      # If a rate cannot be found, log that error to rollbar so we can debug it
+      # easily, but gracefully fall back to a rate of 1.0
+      Rollbar.error(e)
+      1.0
     end
 
     def cached_rates_for_date_range?(currency_code, from_date, to_date)

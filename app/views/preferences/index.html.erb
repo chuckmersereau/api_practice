@@ -95,6 +95,20 @@
                 </div>
               <% end %>
             </div>
+            <% if $rollout.active?(:multi_currency_balance, current_account_list) %>
+              <% if current_account_list.designation_organizations.count > 1 %>
+                <div class="row">
+                  <div class="col-md-6">
+                    <div class="form-group">
+                      <%= f.label :salary_organization_id, _('Primary Organization') %>
+                      <%= f.select :salary_organization_id,
+                            salary_organization_select(current_account_list), {},
+                            {class: 'form-control'} %>
+                    </div>
+                  </div>
+                </div>
+              <% end %>
+            <% end %>
 
             <div class="row">
               <div class="col-md-12">

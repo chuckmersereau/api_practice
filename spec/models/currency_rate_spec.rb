@@ -11,9 +11,12 @@ describe CurrencyRate do
       expect(CurrencyRate.latest_for('EUR')).to eq 0.7
     end
 
-    it 'raise a missing rate exception if no rates present for currency' do
-      expect { CurrencyRate.latest_for('EUR') }
-        .to raise_error(CurrencyRate::RateNotFoundError)
+    it 'logs a missing rate exception to Rollbar and returns 1.0 if rate missing' do
+      expect(Rollbar).to receive(:error) do |error|
+        expect(error).to be_a(CurrencyRate::RateNotFoundError)
+      end
+
+      expect(CurrencyRate.latest_for('EUR')).to eq 1.0
     end
   end
 
