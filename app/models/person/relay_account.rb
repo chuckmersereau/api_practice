@@ -46,6 +46,7 @@ class Person::RelayAccount < ActiveRecord::Base
   end
 
   def find_or_create_org_account(auth_hash)
+    return if Rails.env.development?
     return unless SiebelDonations::Profile.find(ssoGuid: remote_id).present?
     org = Organization.cru_usa
 
