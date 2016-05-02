@@ -17,6 +17,8 @@ describe Api::V1::AppealExclusionsController do
       expect(response).to be_success
       json = JSON.parse(response.body)['appeal_exclusions']
       expect(json.length).to eq(1)
+      expect(json[0].keys).to include 'contact'
+      expect(json[0].keys).to include 'reasons'
     end
   end
 end

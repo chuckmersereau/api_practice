@@ -20,13 +20,7 @@
       </div>
     </div>
 
-    <div class="">
-      <a class="btn btn-primary exception-toggle-btn" role="button" data-toggle="collapse" href="#exceptionsContainer" aria-expanded="false" aria-controls="exceptionsContainer">
-                Show/Hide Contacts Not Included
-              </a>
-    </div>
-
-    <excluded-appeal-contacts></excluded-appeal-contacts>
+    <excluded-appeal-contacts appeal-id="{{$ctrl.id}}"></excluded-appeal-contacts>
 
     <div class="panel panel-default">
       <div class="panel-body">
