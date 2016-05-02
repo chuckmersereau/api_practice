@@ -1,7 +1,9 @@
 angular.module('mpdxApp')
-    .controller('taskFollowupController', ['$scope', '$q', 'api', 'contactCache', function($scope, $q, api, contactCache) {
+    .controller('taskFollowupController', ['$scope', '$q', 'api', 'contactCache', 'state', function($scope, $q, api, contactCache, state) {
+        $scope.state = state;
+
         $scope.logTask = function(formData) {
-            api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
+            api.call('post', 'tasks/?account_list_id=' + state.current_account_list_id, {
                 task: {
                     subject: jQuery('#modal_task_subject').val(),
                     activity_type: jQuery('#modal_task_activity_type').val(),
@@ -39,7 +41,7 @@ angular.module('mpdxApp')
                 followUpDialogCallback(followUpTask, taskResult);
             }else{
                 //fetch task data (not on tasks page)
-                api.call('get', 'tasks/' + taskId + '?account_list_id=' + window.current_account_list_id, {}, function(tData){
+                api.call('get', 'tasks/' + taskId + '?account_list_id=' + state.current_account_list_id, {}, function(tData){
                     followUpDialogCallback(tData.task, taskResult);
                 });
             }
@@ -381,7 +383,7 @@ angular.module('mpdxApp')
         };
 
         var createTask = function(task, contactsObject, taskType){
-          return api.call('post', 'tasks/?account_list_id=' + window.current_account_list_id, {
+          return api.call('post', 'tasks/?account_list_id=' + state.current_account_list_id, {
               task: {
                   start_at: task.date + ' ' + task.hour + ':' + task.min + ':00',
                   subject: task.subject,
@@ -409,7 +411,7 @@ angular.module('mpdxApp')
         };
 
         var saveContact = function(contact){
-          return api.call('put', 'contacts/' + contact.id + '?account_list_id=' + window.current_account_list_id, {
+          return api.call('put', 'contacts/' + contact.id + '?account_list_id=' + state.current_account_list_id, {
               contact: contact
           });
         };
@@ -421,7 +423,7 @@ angular.module('mpdxApp')
         var allFinancialPartners = function(contactIds) {
           return _.all(contactIds, function (contactId) {
             record = contactCache.getFromCache(contactId);
-            return !angular.isUndefined(record) && 
+            return !angular.isUndefined(record) &&
               !angular.isUndefined(record.contact) &&
               record.contact.status == 'Partner - Financial';
           });

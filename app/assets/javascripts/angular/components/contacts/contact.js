@@ -9,11 +9,11 @@
             }
         });
 
-    contactController.$inject = ['$sce', 'contactCache'];
+    contactController.$inject = ['$sce', 'contactCache', 'state'];
 
-    function contactController($sce, contactCache) {
+    function contactController($sce, contactCache, state) {
         var vm = this;
-        vm.current_currency_symbol = window.current_currency_symbol;
+        vm.current_currency_symbol = state.current_currency_symbol;
 
         vm.getAddress = getAddress;
         vm.getFacebookId = getFacebookId;

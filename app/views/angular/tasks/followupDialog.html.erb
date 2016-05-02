@@ -28,9 +28,7 @@
                 <label>
                     <%= _('Commitment Amount') %>
                     <input type="text" class="form-control" ng-model="followUpDialogResult.financialCommitment.amount"
-                           placeholder="<%= TwitterCldr::Shared::Currencies.for_code(current_currency) ?
-                                            TwitterCldr::Shared::Currencies.for_code(current_currency)[:symbol] :
-                                            current_currency %>">
+                           placeholder="state.current_currency_symbol">
                 </label>
             </div>
             <div class="form-group">
@@ -72,7 +70,7 @@
                 <input ng-model="followUpDialogResult.givingTask.subject" class="form-control">
             </div>
 
-            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.givingTask' %> 
+            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.givingTask' %>
 
             <div style="padding-top:10px;">
                 <label><%= _('Action') %></label>
@@ -96,7 +94,7 @@
 
 
         <div ng-show="followUpDialogData.cultivateTask" style="padding-top:10px;">
-          <input type="checkbox" ng-model="followUpDialogResult.createCultivateTask"> 
+          <input type="checkbox" ng-model="followUpDialogResult.createCultivateTask">
           <%= _('Create "Cultivate Relationship" task') %>
         </div>
         <div ng-show="followUpDialogResult.createCultivateTask" style="padding-top:10px;">
@@ -105,7 +103,7 @@
                 <input ng-model="followUpDialogResult.cultivateTask.subject" class="form-control">
             </div>
 
-            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.cultivateTask' %> 
+            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.cultivateTask' %>
 
             <div style="padding-top:10px;">
                 <label><%= _('Action') %></label>
@@ -138,7 +136,7 @@
                 <input ng-model="followUpDialogResult.apptTask.subject" class="form-control">
             </div>
 
-            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.apptTask' %> 
+            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.apptTask' %>
 
             <div style="padding-top:10px;">
                 <label for="follow-up-task_location"><%= _('Location') %></label><br>
@@ -160,7 +158,7 @@
             <label><%= _('Subject') %></label><br>
             <input ng-model="followUpDialogResult.callTask.subject" class="form-control">
 
-            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.callTask' %> 
+            <%= render 'angular/tasks/due_date_with_time', task_var: 'followUpDialogResult.callTask' %>
 
             <div class="form-group">
                 <label><%= _('Tags') %></label>

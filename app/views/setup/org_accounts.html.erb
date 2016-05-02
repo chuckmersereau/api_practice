@@ -1,8 +1,14 @@
 <div class="network_wrap">
   <div class="network_connect">
+    <% if current_user.organization_accounts.any? %>
+      <h4><%= _('Already connected') %>:</h4>
+    <% end %>
     <%= render 'network_connections', provider: 'organization', actions: false %>
     <div class="network_button form-inline">
       <div class="form-group">
+        <% if current_user.organization_accounts.any? %>
+          <h4><%= _('Add another') %>:</h4>
+        <% end %>
         <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
           <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}),
                          class: 'form-control margin-bottom', prompt: _('Select your organization')) %>

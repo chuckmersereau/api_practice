@@ -1,0 +1,27 @@
+.panel-report{
+  & > .panel-report-heading{
+    h4{
+      margin-bottom: 0;
+    }
+    &.panel-report-heading-collapsible {
+      cursor: pointer;
+      &:hover {
+        background-color: #f4f4f4; //TODO: use $colorGrayscale-sand once crubrand is updated
+      }
+      .collapsible-heading-arrow{
+        margin-left: 5px;
+      }
+      .collapsible-heading-count{
+        color: $link-color;
+      }
+    }
+  }
+}
+
+.report-progress-bar{
+  height: 35px;
+  .progress-bar{
+    font-size: 1.1em;
+    line-height: 35px;
+  }
+}

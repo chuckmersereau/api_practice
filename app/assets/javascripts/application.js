@@ -50,6 +50,11 @@
 
 //angular
 //= require angular/angular
+//= require angular-animate/angular-animate
+//= require angular-localforage/bower_components/localforage/dist/localforage
+//= require angular-localforage/dist/angular-localForage
+//= require angular-ui-bootstrap/dist/ui-bootstrap
+//= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
 //= require lodash
 //= require angular/mpdxApp
 //= require angular/railsConstants
@@ -58,7 +63,6 @@
 //= require_tree ./angular/directives
 //= require_tree ./angular/services
 //= require_tree ./angular/filters
-//= require angular-ui-bootstrap-tpls
 //= require moment
 
 //= require bootstrap.min.js

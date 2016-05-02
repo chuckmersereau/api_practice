@@ -1,4 +1,4 @@
-angular.module('mpdxApp').controller('taskShortListController', function ($scope, api, $location, contactCache) {
+angular.module('mpdxApp').controller('taskShortListController', function ($scope, api, $location, contactCache, state) {
     $scope.init = function(page, contactId) {
         $scope.tasks = [];
         $scope.comments = {};
@@ -8,21 +8,21 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
 
         var taskUrl;
         if(page === 'contact') {
-            taskUrl = 'tasks?account_list_id=' + window.current_account_list_id +
+            taskUrl = 'tasks?account_list_id=' + state.current_account_list_id +
                 '&filters[completed]=false' +
                 '&filters[contact_ids][]=' + contactId +
                 '&per_page=' + 500 +
                 '&page=' + 1 +
                 '&order=start_at';
         }else if(page === 'contactHistory'){
-            taskUrl = 'tasks?account_list_id=' + window.current_account_list_id +
+            taskUrl = 'tasks?account_list_id=' + state.current_account_list_id +
                 '&filters[completed]=true' +
                 '&filters[contact_ids][]=' + contactId +
                 '&per_page=' + 500 +
                 '&page=' + 1 +
                 '&order=completed_at desc';
         }else{
-            taskUrl = 'tasks?account_list_id=' + window.current_account_list_id +
+            taskUrl = 'tasks?account_list_id=' + state.current_account_list_id +
                 '&filters[completed]=false' +
                 '&per_page=' + 5 +
                 '&page=' + 1 +
@@ -39,7 +39,7 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
               .map(function (contact) { return contact.id }).uniq().join()
 
             //retrieve contacts
-            api.call('get', 'contacts?account_list_id=' + window.current_account_list_id +
+            api.call('get', 'contacts?account_list_id=' + state.current_account_list_id +
                 '&filters[status]=*&filters[ids]=' + contactIds, {}, function (data) {
                 angular.forEach(data.contacts, function (contact) {
                     contactCache.update(contact.id, {

@@ -6,28 +6,40 @@
             templateUrl: '/templates/reports/balances.html'
         });
 
-    balancesReportController.$inject = ['$scope', 'api'];
+    balancesReportController.$inject = ['api'];
 
-    function balancesReportController($scope, api) {
+    function balancesReportController(api) {
         var vm = this;
 
         vm.errorOccurred = false;
 
-        var sum = function(numbers) {
-          return _(numbers).reduce(function(total, value) { return total + value }, 0);
-        }
+        vm.updateTotal = updateTotal;
 
-        var activate = function() {
-            api.call('get', '/reports/balances.json', {}, function(data) {
+        activate();
+
+        function activate() {
+            api.call('get', '/reports/balances', {}, function(data) {
                 vm.designations = data.designations;
                 vm.total_currency = data.total_currency;
                 vm.total_currency_symbol = data.total_currency_symbol;
-                vm.converted_total = sum(_.pluck(data.designations, 'converted_balance'));
+                includeAll(true);
             }, function() {
                 vm.errorOccurred = true;
             });
         }
 
-        activate();
+        function updateTotal(){
+            vm.converted_total = _.reduce(vm.designations, function(sum, designation){
+                return sum + (designation.balanceIncluded ? designation.converted_balance : 0);
+            }, 0);
+        }
+
+        function includeAll(){
+            vm.designations = _.map(vm.designations, function(designation){
+                designation.balanceIncluded = true;
+                return designation;
+            });
+            updateTotal();
+        }
     }
 })();

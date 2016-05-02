@@ -2,8 +2,9 @@ describe('contacts', function() {
     beforeEach(module('mpdxApp'));
     var self = {};
 
-    beforeEach(inject(function($injector, $componentController, api) {
+    beforeEach(inject(function($injector, $componentController, api, state) {
         self.api = api;
+        self.state = state
         $httpBackend = $injector.get('$httpBackend');
         var $rootScope = $injector.get('$rootScope');
         var $scope = $rootScope.$new();
@@ -59,7 +60,7 @@ describe('contacts', function() {
     it('contact api should return 1 contact', function() {
         var controller = self.createController();
 
-        window.current_account_list_id = 1;
+        self.state.current_account_list_id = 1;
 
         //get user view filters
         $httpBackend.when("GET", "/api/v1/users/me").respond({"user": {"preferences": {"contacts_filter": {"1": {"ids": "", "tags": "", "name": "",

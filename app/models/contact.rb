@@ -97,7 +97,8 @@ class Contact < ActiveRecord::Base
   before_destroy :delete_from_letter_services, :delete_people
   LETTER_SERVICES = [:pls, :prayer_letters].freeze
 
-  attr_accessor :user_changed
+  # loaded_donations is used by Contact::DonationsEagerLoader
+  attr_accessor :user_changed, :loaded_donations
 
   # Don't change these willy-nilly, they break the mobile app
   ASSIGNABLE_STATUSES = [

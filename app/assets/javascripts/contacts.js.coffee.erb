@@ -192,10 +192,11 @@ $ ->
         false
 
       $(document).on 'click', '[data-behavior=merge]', ->
-        if $('.checks input:checked').length >= 9
+        selectedContactsCount = $('#selected_ids').val().split(',').length
+        if selectedContactsCount >= 9
           alert(__('You can merge up to eight contacts at a time. Please uncheck a contact and try again.'))
           return false
-        if $('.checks input:checked').length < 2
+        if selectedContactsCount < 2
           alert(__('You must select at least 2 contacts to merge.'))
           return false
 
@@ -500,7 +501,7 @@ $.mpdx.saveContactTags = (tags, contactId) ->
   if lastSaveTagsValue == tags
     return
   jQuery.ajax
-    url: '/api/v1/contacts/' + contactId + '?account_list_id=' + window.current_account_list_id
+    url: '/api/v1/contacts/' + contactId + '?account_list_id=' + angular.element('*[ng-app]').injector().get("state").current_account_list_id
     type: 'PUT'
     contentType: 'application/json'
     data: JSON.stringify(contact: tag_list: tags)
@@ -508,3 +509,4 @@ $.mpdx.saveContactTags = (tags, contactId) ->
       lastSaveTagsValue = tags
       return
   return
+

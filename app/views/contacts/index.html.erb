@@ -258,8 +258,8 @@
                   <%= link_to(_('Merge'), '#', class: 'btn btn-default', data: {behavior: 'merge'}) %>
 
                   <%= link_to(_('Export'), '#', class: 'btn btn-default', data: {behavior: 'export'}) %>
-                  <span class="btn btn-default" data-toggle="tooltip" data-placement="top" title="<%= _('Select all') %>" ng-click="$ctrl.selectAllContactsOnPage()">
-                    <input type="checkbox" ng-checked="$ctrl.allContactsOnPageSelected()"/>
+                  <span class="btn btn-default" data-toggle="tooltip" data-placement="top" title="<%= _('Select all') %>" ng-click="$ctrl.toggleSelectedContactsAllOnPage()">
+                    <input type="checkbox" ng-checked="$ctrl.anyContactsOnPageSelected()"/>
                   </span>
                 </div>
               </div>
@@ -269,7 +269,7 @@
           <div class="row page-controls">
             <div class="col-sm-5">
               <span><%= _('Showing') %> <b>{{$ctrl.page.from}}&nbsp;-&nbsp;{{$ctrl.page.to}}</b> <%= _('of') %> <b>{{$ctrl.totalContacts}}</b></span>
-              <span class="label label-primary" ng-if="!$ctrl.noContactsSelected()">
+              <span class="label label-primary" ng-if="!$ctrl.noSelectedContacts()">
                 {{$ctrl.selectedContacts.length}} <%= _('Selected') %>
                 <a href="javascript:;" class="label-action" ng-click="$ctrl.clearSelectedContacts()"><i class="fa fa-times"></i></a>
               </span>

@@ -9,7 +9,11 @@ Rails.application.routes.draw do
     end
   end
 
-  resources :help_requests
+  resources :help_requests, only: [:new, :create] do
+    member do
+      get :attachment
+    end
+  end
 
   get '/help' => 'help_requests#new'
 
@@ -71,7 +75,7 @@ Rails.application.routes.draw do
 
       namespace :reports do
         resource :balances, only: [:show]
-        resource :expected_monthly_total, only: [:show]
+        resource :expected_monthly_totals, only: [:show]
       end
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
@@ -218,6 +222,8 @@ Rails.application.routes.draw do
       resources :impersonations, only: [:create]
     end
   end
+
+  resources :status, only: :index
 
   get '/404', to: 'errors#error_404'
   get '/500', to: 'errors#error_500'

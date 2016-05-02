@@ -19,7 +19,6 @@ gem 'uglifier', '~> 2.4.0'
 gem 'jquery-ui-rails', '~> 4.2.1'
 
 gem 'lodash-rails', '~> 3.5.0'
-gem 'angular-ui-bootstrap-rails'
 gem 'ngannotate-rails'
 gem 'momentjs-rails'
 gem 'best_in_place', '~> 3.0.1'
@@ -153,7 +152,6 @@ group :test do
   gem 'webmock', '~> 1.21.0'
   gem 'rb-fsevent', require: false
   gem 'growl'
-  gem 'capybara'
   gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'

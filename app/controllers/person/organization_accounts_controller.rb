@@ -18,6 +18,12 @@ class Person::OrganizationAccountsController < ApplicationController
         format.js { render :create }
       end
     end
+  rescue ActiveRecord::RecordNotUnique
+    @message = format(_('You are already connected to %{org}. You can only have one account per organization.'),
+                      org: @organization)
+    respond_to do |format|
+      format.js { render :error }
+    end
   end
 
   def create

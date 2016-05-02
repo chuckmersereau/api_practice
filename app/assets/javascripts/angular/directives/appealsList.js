@@ -3,9 +3,9 @@ angular.module('mpdxApp')
         return {
             restrict: 'E',
             templateUrl: '/templates/appeals/list.html',
-            controller: function ($scope, $modal, api) {
+            controller: function ($scope, $uibModal, api, state) {
                 var refreshAppeals = function(callback){
-                    api.call('get','appeals?account_list_id=' + (window.current_account_list_id || ''), {}, function(data) {
+                    api.call('get','appeals?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
                         $scope.appeals = data.appeals;
                       if(_.isFunction(callback)){
                         callback(data);
@@ -71,10 +71,10 @@ angular.module('mpdxApp')
                 };
 
                 $scope.newAppeal = function(){
-                    var modalInstance = $modal.open({
+                    var modalInstance = $uibModal.open({
                         templateUrl: '/templates/appeals/wizard.html',
                         size: 'lg',
-                        controller: function($scope, $modalInstance){
+                        controller: function($scope, $uibModalInstance){
                             $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES;
 
                             defaultValidStatuses = {};
@@ -97,16 +97,16 @@ angular.module('mpdxApp')
                                   doNotAskAppeals: true
                               }
                             };
-                            api.call('get', 'contacts/tags?account_list_id=' + (window.current_account_list_id || ''), null, function(data) {
+                            api.call('get', 'contacts/tags?account_list_id=' + (state.current_account_list_id || ''), null, function(data) {
                               $scope.contactTags = data.tags.sort();
                             }, null, true);
 
                             $scope.cancel = function () {
-                                $modalInstance.dismiss('cancel');
+                                $uibModalInstance.dismiss('cancel');
                             };
 
                             $scope.save = function () {
-                                $modalInstance.close($scope.appeal);
+                                $uibModalInstance.close($scope.appeal);
                             };
 
                           $scope.calculateGoal = function(goal){
@@ -130,7 +130,7 @@ angular.module('mpdxApp')
                           contact_statuses: _.keys(newAppeal.validStatus),
                           contact_tags: _.keys(newAppeal.validTags),
                           contact_exclude: newAppeal.exclude,
-                          account_list_id: (window.current_account_list_id || '')
+                          account_list_id: (state.current_account_list_id || '')
                         }, function(data) {
                           refreshAppeals(function(){
                             $scope.editAppeal(data.appeal.id);

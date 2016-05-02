@@ -254,14 +254,6 @@ $('#dash-tabs').on 'tabsactivate', $.respDialogs
 $(window).resize $.respDialogs
 
 $(document).ready ->
-  tagSize = $('.left_tag_list .tag').length
-  $('.tagSize').html tagSize
-  if tagSize < 15
-    $('.show_all_tags_btn').hide()
-  $('.show_all_tags_btn').click ->
-    $('.left_tag_list').toggleClass 'show_all_tags'
-    $('.tagLess, .tagSize, .tagAll').toggle()
-    return
   $('body').tooltip selector: '[data-toggle="tooltip"]'
 
 $.mpdx.confirm = (message, yesFunction) ->
