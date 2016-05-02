@@ -23,30 +23,6 @@ angular.module('mpdxApp')
                   return {sum: sum, average: sum/amounts.length};
                 }
 
-                $scope.editAppeal = function(id) {
-                    window.location = '/appeals/' + id;
-                    return;
-                    var modalInstance = $modal.open({
-                        templateUrl: '/templates/appeals/edit.html',
-                        size: 'lg',
-                        controller: function($scope, $modalInstance, $filter, appeal){},
-                        resolve: {
-                            appeal: function () {
-                                return _.find($scope.appeals, { 'id': id });
-                            }
-                        }
-                    });
-
-                    modalInstance.result.then(function (updatedAppeal) {
-                        var index = _.findIndex($scope.appeals, { 'id': updatedAppeal.id });
-                        $scope.appeals[index] = updatedAppeal;
-                    });
-                    modalInstance.opened.then(function() {
-                        //wait for browser render before resizing
-                        setTimeout($.respDialogs);
-                    });
-                };
-
                 $scope.donationAggregates = function(donations){
                   return donationAggregates(donations);
                 };

@@ -60,7 +60,6 @@
         }
 
         function groupDonations(donations) {
-            console.log(donations);
             var i = 0;
             var d = new Date();
             var begining = new Date(d.getFullYear(), d.getMonth() - 5, 1);
@@ -70,7 +69,6 @@
             while(i < 6) {
                 var monthObject = { month: new Date(begining.getTime()), donations: [] };
                 angular.forEach(donations, function (donation) {
-                    console.log(ymdDate(begining));
                     if(donation.donation_date < ymdDate(nextMonth) && donation.donation_date >= ymdDate(begining))
                         monthObject.donations.push(donation)
                 });
