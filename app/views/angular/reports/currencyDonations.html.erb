@@ -9,7 +9,7 @@
 <uib-progress ng-if="!$ctrl.errorOccurred && $ctrl.type === 'donor'" class="report-progress-bar">
   <uib-bar ng-repeat="currencyGroup in $ctrl.currencyGroups"
            value="$ctrl.percentage(currencyGroup.yearTotalConverted)"
-           type="{{$even ? 'default' : 'dark-gold'}}"
+           type="color-{{$index % 6}}"
            uib-tooltip-template="'inline/currencyDonationsReport/progressBarTooltip.html'"
            tooltip-placement="bottom">
     <script type="text/ng-template" id="inline/currencyDonationsReport/progressBarTooltip.html">

@@ -68,7 +68,22 @@
     font-size: 1.1em;
     line-height: 35px;
   }
-  .progress-bar-dark-gold {
-    background-color: darken($color-gold, 15%);
+  .progress-bar-color-0 {
+    background-color: $color-gold;
+  }
+  .progress-bar-color-1 {
+    background-color: $color-orange;
+  }
+  .progress-bar-color-2 {
+    background-color: #909b9c;
+  }
+  .progress-bar-color-3 {
+    background-color: $color-gray;
+  }
+  .progress-bar-color-4 {
+    background-color: $color-blue-bright;
+  }
+  .progress-bar-color-5 {
+    background-color: $color-blue-deep;
   }
 }

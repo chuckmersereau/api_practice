@@ -2197,25 +2197,3 @@ span.best_in_place_once {
   border: 2px solid #4e4001;
   border-radius: 6px;
 }
-
-.late-by-30-days:before {
-  content: "•";
-  font-size: 150%;
-  color: rgb(249, 182, 37);
-}
-
-.late-by-60-days:before {
-  content: "•";
-  font-size: 150%;
-  color: $error_red;
-}
-
-.currency-color-0 {
-  background: $brand-primary;
-}
-.currency-color-1 {
-  background: $green;
-}
-.currency-color-2 {
-  background: $color-gray-dark;
-}
