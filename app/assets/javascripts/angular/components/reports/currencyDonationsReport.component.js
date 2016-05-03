@@ -27,7 +27,7 @@
         vm.useConvertedValues = vm.type === 'salary';
 
         var monthsBefore = 12;
-        var sumOfAllCurrenciesConverted = 0;
+        vm.sumOfAllCurrenciesConverted = 0;
 
         vm.moment = moment;
         vm.errorOccurred = false;
@@ -52,7 +52,7 @@
             var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
             api.call('get', url, {}, function(data) {
                 vm.currencyGroups = parseReportInfo(data.report_info, vm.allMonths);
-                sumOfAllCurrenciesConverted = _.sumBy(vm.currencyGroups, 'yearTotalConverted');
+                vm.sumOfAllCurrenciesConverted = _.sumBy(vm.currencyGroups, 'yearTotalConverted');
                 vm.loading = false;
             }, function() {
                 vm.errorOccurred = true;
@@ -206,10 +206,10 @@
         }
 
         function percentage(currencyTotal){
-            if(sumOfAllCurrenciesConverted === 0){
+            if(vm.sumOfAllCurrenciesConverted === 0){
                 return 0;
             }
-            return currencyTotal / sumOfAllCurrenciesConverted * 100;
+            return currencyTotal / vm.sumOfAllCurrenciesConverted * 100;
         }
     }
 })();

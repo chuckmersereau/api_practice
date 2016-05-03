@@ -17,7 +17,10 @@
         {{currencyGroup.currencySymbol}}{{currencyGroup.yearTotal | number : 0}} {{currencyGroup.currency}}
       </div>
       <div>
-        <%= _('Converted') %>: {{currencyGroup.currencySymbolConverted}}{{currencyGroup.yearTotalConverted | number : 0}}
+        <%= _('Converted to') %>: {{currencyGroup.currencySymbolConverted}}{{currencyGroup.yearTotalConverted | number : 0}}
+      </div>
+      <div>
+        ({{$ctrl.percentage(currencyGroup.yearTotalConverted) | number:0}}% <%= _('of total') %> {{currencyGroup.currencySymbolConverted}}{{$ctrl.sumOfAllCurrenciesConverted}} {{currencyGroup.currencyConverted}})
       </div>
     </script>
     <span ng-if="$ctrl.percentage(currencyGroup.yearTotalConverted) > 7">
