@@ -3,7 +3,7 @@
         .module('mpdxApp')
         .component('currencyDonationsReport', {
             controller: currencyDonationsReportController,
-            templateUrl: '/templates/reports/salaryCurrencyDonations.html',
+            templateUrl: '/templates/reports/currencyDonations.html',
             bindings: {
                 'type': '@'
             }
@@ -31,6 +31,7 @@
 
         vm.moment = moment;
         vm.errorOccurred = false;
+        vm.loading = true;
         vm.allMonths = monthRange.getPastMonths(monthsBefore);
         vm.years = monthRange.yearsWithMonthCounts(vm.allMonths);
         vm.currencyGroups = [];

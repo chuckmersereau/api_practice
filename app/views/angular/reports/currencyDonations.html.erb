@@ -2,6 +2,10 @@
   <%= _('Report data could not load due to an error. Please try again or contact support.') %>
 </div>
 
+<div ng-if="$ctrl.loading">
+  <%= _('Loading data...') %>
+</div>
+
 <uib-progress ng-if="!$ctrl.errorOccurred && $ctrl.type === 'donor'" class="report-progress-bar">
   <uib-bar ng-repeat="currencyGroup in $ctrl.currencyGroups"
            value="$ctrl.percentage(currencyGroup.yearTotalConverted)"
