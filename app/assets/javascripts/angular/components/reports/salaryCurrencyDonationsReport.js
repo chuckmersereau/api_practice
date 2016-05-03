@@ -30,12 +30,15 @@
         }
 
         var monthsBefore = 12;
+        var sumOfAllCurrencies = 0;
 
         vm.moment = moment;
         vm.errorOccurred = false;
         vm.allMonths = monthRange.getPastMonths(monthsBefore);
         vm.years = monthRange.yearsWithMonthCounts(vm.allMonths);
         vm.currencyGroups = [];
+
+        vm.percentage = percentage;
 
         vm._parseReportInfo = parseReportInfo;
         vm._groupDonationsByCurrency = groupDonationsByCurrency;
@@ -51,6 +54,7 @@
             var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
             api.call('get', url, {}, function(data) {
                 vm.currencyGroups = parseReportInfo(data.report_info, vm.allMonths);
+                sumOfAllCurrencies = _.sumBy(vm.currencyGroups, 'yearTotal'); //TODO: use converted values for this
                 vm.loading = false;
             }, function() {
                 vm.errorOccurred = true;
@@ -172,6 +176,13 @@
                 });
                 return months;
             }, _.map(allMonths, _.constant(0)));
+        }
+
+        function percentage(currencyTotal){
+            if(sumOfAllCurrencies === 0){
+                return 0;
+            }
+            return currencyTotal / sumOfAllCurrencies * 100;
         }
     }
 })();
