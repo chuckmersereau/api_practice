@@ -1,10 +1,20 @@
 class AccountListExhibit < DisplayCase::Exhibit
+  include LocalizationHelper
+
   def self.applicable_to?(object)
     object.class.name == 'AccountList'
   end
 
   def to_s
     designation_accounts.map(&:name).join(', ')
+  end
+
+  def multi_currencies_for_same_symbol?
+    @multi_currencies_for_same_symbol ||=
+      begin
+        symbols = currencies.map { |c| currency_symbol(c) }.uniq
+        symbols.size < currencies.size
+      end
   end
 
   # This code is being kept temporarily to allow a slow rollout of the new

@@ -24,7 +24,7 @@
 
     <div class="form-group">
       <%= f.label :currency, _('Donation Currency') %>
-      <%= f.select :currency, currency_select(true), {}, {class: 'form-control'} %>
+      <%= f.select :currency, currency_select, {}, {class: 'form-control'} %>
     </div>
 
     <% if @donor_accounts.length > 1 %>

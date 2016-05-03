@@ -1,4 +1,5 @@
 <% @contact = exhibit(@contact, self) if @contact %>
+<% account_list_exhibit = exhibit(current_account_list) %>
 <% unless params[:page] %>
   <% if @start_date %>
     <div class="row page-controls">
@@ -31,6 +32,9 @@
           <th><%= _('Donor') %></th>
         <% end %>
         <th class="right"><%= _('Amount') %></th>
+        <% if account_list_exhibit.multi_currencies_for_same_symbol? %>
+          <th></th>
+        <% end %>
         <% if current_account_list.multiple_designations %>
           <th><%= _('Designation') %></th>
         <% end %>
@@ -43,7 +47,7 @@
     <tbody>
   <% end %>
 
-  <%= render donations %>
+  <%= render donations, account_list_exhibit: account_list_exhibit %>
 
   <% unless params[:page] %>
     </tbody>

@@ -124,12 +124,20 @@ module ApplicationHelper
     text_field_tag(name, value, options)
   end
 
-  def currency_select(include_empty = false)
+  def currency_select
     hash = {}
-    hash[current_account_list.currency] = '' if include_empty
-    TwitterCldr::Shared::Currencies.currency_codes.each_with_index do |key, _index|
-      hash[key + ' (' + TwitterCldr::Shared::Currencies.for_code(key)[:symbol] + ')'] = key
+
+    # show account default currency first
+    default = current_account_list.default_currency
+    hash[currency_code_and_symbol(default)] = default
+
+    TwitterCldr::Shared::Currencies.currency_codes.each do |code|
+      hash[currency_code_and_symbol(code)] = code
     end
     hash
+  end
+
+  def currency_code_and_symbol(code)
+    code + ' (' + currency_symbol(code) + ')'
   end
 end
