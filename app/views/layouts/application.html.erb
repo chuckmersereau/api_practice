@@ -162,6 +162,14 @@
                   <div class="section <%= request.path =~ /\/expected_monthly_totals/ ? 'active' : '' %>">
                     <%= link_to(_('Expected Monthly Total'), reports_expected_monthly_totals_path) %>
                   </div>
+                  <div class="section <%= request.path =~ /\/donor_currency_donations/ ? 'active' : '' %>">
+                    <%= link_to(_('Contributions by Donor Currency'), reports_donor_currency_donations_path) %>
+                  </div>
+                  <% if $rollout.active?(:contributions_by_salary_currency, current_account_list) %>
+                    <div class="section <%= request.path =~ /\/salary_currency_donations/ ? 'active' : '' %>">
+                      <%= link_to(_('Contributions by Salary Currency'), reports_salary_currency_donations_path) %>
+                    </div>
+                  <% end %>
                 <% end %>
                 <% if current_account_list.monthly_goal.present? && current_account_list.monthly_goal > 0 %>
                   <div class="section right">

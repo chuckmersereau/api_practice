@@ -14,6 +14,9 @@ class Donation < ActiveRecord::Base
   scope :since, -> (date) { where('donation_date > ?', date) }
   scope :between, -> (from, to) { where(donation_date: from.to_date..to.to_date) }
 
+  # Used by Contact::DonationsEagerLoader
+  attr_accessor :loaded_contact
+
   default_scope { order('donation_date desc') }
 
   after_create :update_totals

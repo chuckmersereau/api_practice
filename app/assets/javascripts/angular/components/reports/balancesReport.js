@@ -6,9 +6,9 @@
             templateUrl: '/templates/reports/balances.html'
         });
 
-    balancesReportController.$inject = ['api'];
+    balancesReportController.$inject = ['api', 'state'];
 
-    function balancesReportController(api) {
+    function balancesReportController(api, state) {
         var vm = this;
 
         vm.errorOccurred = false;
@@ -18,7 +18,8 @@
         activate();
 
         function activate() {
-            api.call('get', 'reports/balances', {}, function(data) {
+            var url = 'reports/balances?account_list_id=' + state.current_account_list_id;
+            api.call('get', url, {}, function(data) {
                 vm.designations = data.designations;
                 vm.designations.forEach(function (d) { d.balanceIncluded = d.active; });
                 vm.total_currency = data.total_currency;
