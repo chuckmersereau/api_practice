@@ -22,6 +22,14 @@ describe ExpectedTotalsReport::LikelyDonation, '#likely_more' do
     expect_zero_amount(contact)
   end
 
+  it 'gives zero if pledge_frequency is nil' do
+    contact = build_stubbed(:contact, pledge_received: true,
+                                      status: 'Partner - Financial', pledge_amount: 5,
+                                      pledge_frequency: nil)
+
+    expect_zero_amount(contact)
+  end
+
   def expect_zero_amount(contact)
     expect(ExpectedTotalsReport::LikelyDonation
       .new(contact: contact, recent_donations: [], date_in_month: Date.new(2016, 1, 1))
@@ -30,7 +38,7 @@ describe ExpectedTotalsReport::LikelyDonation, '#likely_more' do
   end
 
   # These are for a financial partner with a pledge amount of 5.
-  TEST_CASES = [
+  MONTH_BASED_TEST_CASES = [
     # Expect zero if no donations given yet
     { pledge_frequency: 1, recent_donations: [], likely_more: 0 },
 
@@ -148,7 +156,7 @@ describe ExpectedTotalsReport::LikelyDonation, '#likely_more' do
   it 'examines recent donation history and guesses expected gift amounts' do
     contact = build_stubbed(:contact, pledge_received: true,
                                       status: 'Partner - Financial', pledge_amount: 5)
-    TEST_CASES.each do |test_case|
+    MONTH_BASED_TEST_CASES.each do |test_case|
       expect_correct_amount(contact, test_case)
     end
   end
@@ -164,9 +172,7 @@ describe ExpectedTotalsReport::LikelyDonation, '#likely_more' do
                                             donation_date: date,
                                             channel: test_case[:channel])
     end
-    donation_dates = donations.map(&:donation_date)
-    contact.first_donation_date = donation_dates.min
-    contact.last_donation_date = donation_dates.max
+    update_donation_dates(contact, donations)
 
     actual_amount = ExpectedTotalsReport::LikelyDonation
                     .new(contact: contact, recent_donations: donations, date_in_month: Date.current)
@@ -176,5 +182,76 @@ describe ExpectedTotalsReport::LikelyDonation, '#likely_more' do
     message = "Expected #{test_case[:likely_more]} but got #{actual_amount} "\
         "for case #{test_case.inspect}"
     expect(actual_amount).to eq(test_case[:likely_more]), message
+  end
+
+  describe 'for weekly donors' do
+    let(:weekly) { Contact.pledge_frequencies.invert['Weekly'] }
+    let(:contact) do
+      build_stubbed(:contact, pledge_amount: 5, pledge_frequency: weekly,
+                              pledge_received: true)
+    end
+
+    it 'gives zero if fewer than two weeks worth of gifts in past 17 days' do
+      donations = [
+        build_stubbed(:donation, amount: 5, donation_date: Date.new(2016, 4, 20))
+      ]
+      update_donation_dates(contact, donations)
+
+      expect(ExpectedTotalsReport::LikelyDonation
+        .new(contact: contact, recent_donations: donations,
+             date_in_month: Date.new(2016, 4, 29)).likely_more)
+        .to eq 0.0
+    end
+
+    it 'gives pledge times full weeks remaining in month if recently consistent' do
+      donations = [
+        build_stubbed(:donation, amount: 5, donation_date: Date.new(2016, 4, 3)),
+        build_stubbed(:donation, amount: 5, donation_date: Date.new(2016, 4, 10))
+      ]
+      update_donation_dates(contact, donations)
+
+      expect(ExpectedTotalsReport::LikelyDonation
+        .new(contact: contact, recent_donations: donations,
+             date_in_month: Date.new(2016, 4, 13)).likely_more)
+        .to eq 10
+    end
+  end
+
+  describe 'for fortnightly donors' do
+    let(:fortnightly) { Contact.pledge_frequencies.invert['Fortnightly'] }
+    let(:contact) do
+      build_stubbed(:contact, pledge_amount: 5, pledge_received: true,
+                              pledge_frequency: fortnightly)
+    end
+
+    it 'gives zero if fewer than two gifts worth received in past 31 days' do
+      donations = [
+        build_stubbed(:donation, amount: 5, donation_date: Date.new(2016, 4, 20))
+      ]
+      update_donation_dates(contact, donations)
+
+      expect(ExpectedTotalsReport::LikelyDonation
+        .new(contact: contact, recent_donations: donations,
+             date_in_month: Date.new(2016, 4, 29)).likely_more)
+        .to eq 0.0
+    end
+
+    it 'gives pledge times full 14 day periods remaining in month' do
+      donations = [
+        build_stubbed(:donation, amount: 5, donation_date: Date.new(2016, 3, 27)),
+        build_stubbed(:donation, amount: 5, donation_date: Date.new(2016, 4, 10))
+      ]
+      update_donation_dates(contact, donations)
+
+      expect(ExpectedTotalsReport::LikelyDonation
+        .new(contact: contact, recent_donations: donations,
+             date_in_month: Date.new(2016, 4, 10)).likely_more)
+        .to eq 5
+    end
+  end
+
+  def update_donation_dates(contact, donations)
+    contact.first_donation_date = donations.map(&:donation_date).min
+    contact.last_donation_date = donations.map(&:donation_date).max
   end
 end

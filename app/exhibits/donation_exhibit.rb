@@ -8,6 +8,8 @@ class DonationExhibit < DisplayCase::Exhibit
   end
 
   def tendered_amount
-    @context.number_to_current_currency(self[:tendered_amount], currency: currency, precision: self[:tendered_amount] == self[:tendered_amount].to_i ? 0 : 2)
+    precision = self[:tendered_amount] == self[:tendered_amount].to_i ? 0 : 2
+    @context.number_to_current_currency(
+      self[:tendered_amount], currency: tendered_currency, precision: precision)
   end
 end

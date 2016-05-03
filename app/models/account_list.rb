@@ -21,7 +21,8 @@ class AccountList < ActiveRecord::Base
   sidekiq_options retry: false, unique: true, unique_job_expiration: 24.hours
 
   store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :ministry_country,
-                               :currency, :salary_currency, :log_debug_info]
+                               :currency, :salary_currency, :log_debug_info,
+                               :salary_organization_id]
 
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
   has_many :account_list_users, dependent: :destroy
@@ -30,6 +31,8 @@ class AccountList < ActiveRecord::Base
   has_many :organizations, -> { distinct }, through: :organization_accounts
   has_many :account_list_entries, dependent: :destroy
   has_many :designation_accounts, through: :account_list_entries
+  has_many :designation_organizations, -> { distinct }, through: :designation_accounts,
+                                                        source: :organization
   has_many :contacts, dependent: :destroy
   has_many :active_contacts, -> { where(Contact.active_conditions) }, class_name: 'Contact'
   has_many :notifications, through: :contacts
@@ -62,6 +65,21 @@ class AccountList < ActiveRecord::Base
   scope :with_linked_org_accounts, lambda {
     joins(:organization_accounts).where('locked_at is null').order('last_download asc')
   }
+
+  def salary_organization_id=(val)
+    settings[:salary_organization_id] = val
+    settings[:salary_currency] = Organization.find(val).default_currency_code
+  end
+
+  def salary_organization_id
+    settings[:salary_organization_id] || designation_organizations.first&.id ||
+      organizations&.first&.id
+  end
+
+  def salary_currency
+    @salary_currency ||= settings[:salary_currency] ||
+                         Organization.find(salary_organization_id).default_currency_code
+  end
 
   def monthly_goal=(val)
     settings[:monthly_goal] = val.to_s.gsub(/[^\d\.]/, '').to_i if val

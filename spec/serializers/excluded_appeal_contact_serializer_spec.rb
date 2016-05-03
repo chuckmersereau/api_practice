@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe UserSerializer do
+describe ExcludedAppealContactSerializer do
   let(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
   let(:designation_account) do
@@ -21,7 +21,7 @@ describe UserSerializer do
 
     excluded = appeal.excluded_appeal_contacts.create(contact: contact,
                                                       reasons: ['recent_increase'])
-    p ExcludedAppealContactSerializer.new(excluded).as_json[:excluded_appeal_contact]
+    ExcludedAppealContactSerializer.new(excluded).as_json[:excluded_appeal_contact]
   end
 
   it 'has correct attributes' do
