@@ -3,7 +3,7 @@ angular.module('mpdxApp')
         return {
             restrict: 'E',
             templateUrl: '/templates/appeals/list.html',
-            controller: function ($scope, $uibModal, api, state) {
+            controller: ['$scope', '$uibModal', 'api', 'state', function ($scope, $uibModal, api, state) {
                 var refreshAppeals = function(callback){
                     api.call('get','appeals?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
                         $scope.appeals = data.appeals;
@@ -401,7 +401,7 @@ angular.module('mpdxApp')
                         setTimeout($.respDialogs);
                     });
                 };
-            }
+            }]
         };
     })
     .directive('rawNumber', function() {
