@@ -53,6 +53,12 @@
         border-top: 1px solid #bbb;
       }
     }
+    [uib-popover-template] {
+      cursor: pointer;
+    }
+    .popover{
+      font-family: $data-font;
+    }
   }
 }
 

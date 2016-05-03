@@ -135,6 +135,10 @@
                     return {
                         amount: _.sumBy(donationsInMonth, 'amount'),
                         amountConverted: _.sumBy(donationsInMonth, 'converted_amount'),
+                        currency: donationsInMonth[0]['currency'],
+                        currencyConverted: donationsInMonth[0]['converted_currency'],
+                        currencySymbol: donationsInMonth[0]['currency_symbol'],
+                        currencySymbolConverted: donationsInMonth[0]['converted_currency_symbol'],
                         donation_date: month,
                         rawDonations: donationsInMonth
                     }
