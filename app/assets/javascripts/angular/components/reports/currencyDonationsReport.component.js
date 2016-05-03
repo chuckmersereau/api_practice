@@ -71,37 +71,41 @@
             return _(reportInfo.donations)
                 .groupDonationsByCurrency()
                 .map(function(currencyGroup){
-                    var donors = _(reportInfo.donors)
-                        .groupDonationsByDonor(currencyGroup.donations)
-                        .filter('donations') //removes donors with no donations in current currency
-                        .sortBy('donorInfo.name')
-                        .map(function(donor){
-                            //parse each donor's donations
-                            donor.donations = _(donor.donations)
-                                .aggregateDonationsByMonth()
-                                .value();
-                            return donor;
-                        })
-                        .aggregateDonorDonationsByYear()
-                        .map(function(donor) {
-                            donor.donations = addMissingMonths(donor.donations, allMonths);
-                            return donor;
-                        })
-                        .value();
-                    var monthlyTotals = sumMonths(donors, allMonths);
-                    return {
-                        currency: currencyGroup.currency,
-                        currencyConverted: currencyGroup.currencyConverted,
-                        currencySymbol: currencyGroup.currencySymbol,
-                        currencySymbolConverted: currencyGroup.currencySymbolConverted,
-                        donors: donors,
-                        monthlyTotals: monthlyTotals,
-                        yearTotal: _.sumBy(monthlyTotals, 'amount'),
-                        yearTotalConverted: _.sumBy(monthlyTotals, 'amountConverted')
-                    };
+                    return processCurrencyGroup(currencyGroup, reportInfo.donors, allMonths);
                 })
                 .orderBy('yearTotalConverted', 'desc')
                 .value();
+        }
+
+        function processCurrencyGroup(currencyGroup, rawDonors, allMonths){
+            var donors = _(rawDonors)
+                .groupDonationsByDonor(currencyGroup.donations)
+                .filter('donations') //removes donors with no donations in current currency
+                .sortBy('donorInfo.name')
+                .map(function(donor){
+                    //parse each donor's donations
+                    donor.donations = _(donor.donations)
+                        .aggregateDonationsByMonth()
+                        .value();
+                    return donor;
+                })
+                .aggregateDonorDonationsByYear()
+                .map(function(donor) {
+                    donor.donations = addMissingMonths(donor.donations, allMonths);
+                    return donor;
+                })
+                .value();
+            var monthlyTotals = sumMonths(donors, allMonths);
+            return {
+                currency: currencyGroup.currency,
+                currencyConverted: currencyGroup.currencyConverted,
+                currencySymbol: currencyGroup.currencySymbol,
+                currencySymbolConverted: currencyGroup.currencySymbolConverted,
+                donors: donors,
+                monthlyTotals: monthlyTotals,
+                yearTotal: _.sumBy(monthlyTotals, 'amount'),
+                yearTotalConverted: _.sumBy(monthlyTotals, 'amountConverted')
+            };
         }
 
         function groupDonationsByCurrency(donations){
