@@ -331,7 +331,7 @@ angular.module('mpdxApp')
                     var modalInstance = $uibModal.open({
                         templateUrl: '/templates/appeals/wizard.html',
                         size: 'lg',
-                        controller: function($scope, $uibModalInstance){
+                        controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance){
                             $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES;
 
                             defaultValidStatuses = {};
@@ -370,7 +370,7 @@ angular.module('mpdxApp')
                             var adminPercent = Number(goal.adminPercent) / 100 + 1;
                             $scope.appeal.amount = Math.round((Number(goal.initial) + Number(goal.letterCost)) * adminPercent * 100) / 100;
                           };
-                        }
+                        }]
                     });
                     modalInstance.result.then(function (newAppeal) {
                         //remove false values
