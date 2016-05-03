@@ -186,21 +186,19 @@
         }
 
         function sumMonths(donors, allMonths){
-            return _.reduce(donors,
-                function(months, donor){
-                    _.forEach(donor.donations, function(donation, index){
-                        months[index].amount += donation.amount;
-                        months[index].amountConverted += donation.amountConverted;
-                    });
-                    return months;
-                },
-                _.map(allMonths, function() {
-                    return {
-                        amount: 0,
-                        amountConverted: 0
-                    };
-                })
-            );
+            var emptyMonthlyTotals = _.map(allMonths, function() {
+                return {
+                    amount: 0,
+                    amountConverted: 0
+                };
+            });
+            return _.reduce(donors, function(months, donor){
+                _.forEach(donor.donations, function(donation, index){
+                    months[index].amount += donation.amount;
+                    months[index].amountConverted += donation.amountConverted;
+                });
+                return months;
+            }, emptyMonthlyTotals);
         }
 
         function percentage(currencyTotal){
