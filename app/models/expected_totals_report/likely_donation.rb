@@ -13,17 +13,20 @@ class ExpectedTotalsReport::LikelyDonation
   # How much we expect the contact will give more this month based on the logic
   # below.
   def likely_more
-    # Do some basic checks first for common cases when we would assume a partner
-    # will not give any more this month.
-    return 0.0 if unlikely_by_fields? || unlikely_by_donation_history?
+    # Start with some basic checks of cases that make a gift unlikely
+    return 0.0 if unlikely_by_fields?
 
-    # Assuming there isn't anything in the fields or the donation history that
-    # indicates that this partner would be unlikely to give this month, then
-    # by default assume they will give their pledge amount minus what they gave so
-    # far. This can happen e.g. if a contact gives $100/mo but they give twice
-    # per month. Then at one part of the month they have given $50, so assuming
-    # they are consistent, at that opint the likely amount more is still $50.
-    amount_under_pledge_this_month
+    # The calculation will have a different basis depending on whether the
+    # partner gives with a weekly basis (weekly or fortnightly) or a monthly
+    # basis (month, quarterly, annual, etc.).
+    # NOTE: if we add the "twice a month" as a pledge frequency in the future
+    # this logic would need to be updated if we wanted to track that precisely
+    # (right now it would be treated as fortnightly)
+    if pledge_frequency < 1.0
+      likely_more_weekly_base
+    else
+      likely_more_monthly_base
+    end
   end
 
   private
@@ -39,16 +42,82 @@ class ExpectedTotalsReport::LikelyDonation
   LONG_TIME_FRAME_NON_RECURRING_TRACK_RECORD_PERIODS = 2
 
   attr_reader :contact
-  delegate :pledge_received?, :first_donation_date, :status,
-           :last_donation_date, to: :contact
+  delegate :pledge_received?, :first_donation_date, :status, :pledge_amount,
+           :pledge_frequency, :last_donation_date, to: :contact
+
+  # Number of days of margin to allow for weekly gifts to still be considered
+  # consistent, e.g. if the margin is 3, then we consider someone as consistent
+  # for the past two weeks if they have two gifts in the past 2*7 + 3 = 17 days.
+  WEEKLY_MARGIN_DAYS = 3
+
+  # How many periods back to check for weekly / fortnightly donors.
+  WEEKLY_PERIODS_BACK_TO_CHECK = 2
 
   # If the ministry partner has no pledge received, has no pledge, has never
   # given or has already given their full pledge this month, assume they will
   # not give any more this month.
   def unlikely_by_fields?
     !pledge_received? || pledge_amount.to_f.zero? || first_donation_date.nil? ||
-      last_donation_date.nil? || @donations.empty? ||
-      received_this_month >= pledge_amount
+      last_donation_date.nil? || @donations.empty? || pledge_frequency.nil?
+  end
+
+  # How much more the ministry partner is expected to give if their pledge
+  # frequency basis is in weeks (weekly or fortnightly).
+  def likely_more_weekly_base
+    # Assume they will give zero if they didn't give recently
+    pledge_frequency_weeks = (pledge_frequency / weekly_frequency).round
+    return 0.0 unless gave_in_recent_weekly_periods?(pledge_frequency_weeks)
+
+    # Extrapolate the expected remaining they will give based on how many giving
+    # periods are left in the month.
+    periods_left_in_month(pledge_frequency_weeks) * pledge_amount
+  end
+
+  def periods_left_in_month(pledge_frequency_weeks)
+    (days_left_in_month / 7 / pledge_frequency_weeks).floor
+  end
+
+  def days_left_in_month
+    Time.days_in_month(@date_in_month.month, @date_in_month.year) -
+      @date_in_month.day
+  end
+
+  # Checks whether the ministry partner gave consistently in recent periods that
+  # have a weekly base. This is a fairly simple calculation for now that just
+  # checks whether a partner total gifts is at least their pledge over the
+  # recent period range.
+  def gave_in_recent_weekly_periods?(pledge_frequency_weeks)
+    # Add in a couple of margin days in case it takes a couple of days to
+    # process the weekly / fortnightly gifts.
+    days_back_to_check = pledge_frequency_weeks * 7 * WEEKLY_PERIODS_BACK_TO_CHECK +
+                         WEEKLY_MARGIN_DAYS
+
+    recent_total = sum_over_date_range(@date_in_month - days_back_to_check, @date_in_month)
+
+    recent_total >= pledge_amount * WEEKLY_PERIODS_BACK_TO_CHECK
+  end
+
+  def weekly_frequency
+    Contact.pledge_frequencies.keys.first
+  end
+
+  def sum_over_date_range(from, to)
+    @donations.select { |d| d.donation_date >= from && d.donation_date <= to }
+              .sum(&:amount)
+  end
+
+  def likely_more_monthly_base
+    # Do some basic checks first for common cases when we would assume a partner
+    # will not give any more this month.
+    return 0.0 if received_this_month >= pledge_amount || unlikely_by_donation_history?
+
+    # Assuming there isn't anything in the fields or the donation history that
+    # indicates that this partner would be unlikely to give this month, then
+    # by default assume they will give their pledge amount minus what they gave so
+    # far. This can happen e.g. if a contact gives $100/mo but they give twice
+    # per month. Then at one part of the month they have given $50, so assuming
+    # they are consistent, at that opint the likely amount more is still $50.
+    amount_under_pledge_this_month
   end
 
   # Use slightly different logic for using the donation history to identify
@@ -104,7 +173,7 @@ class ExpectedTotalsReport::LikelyDonation
   # cases above but it's a decent first approximation.
   def unlikely_for_bi_monthly_or_quarterly?
     last_gift_months_ago = months_ago(last_donation_date)
-    last_gift_months_ago != pledge_frequency
+    last_gift_months_ago != pledge_frequency.to_i
   end
 
   # For long time frame donors (every 6, 12 or 24 months), take the stance that
@@ -123,7 +192,7 @@ class ExpectedTotalsReport::LikelyDonation
 
   def gave_on_time_last_period_and_by_recurring_channel?
     given_pledge_in_past?(periods_back: 1) &&
-      gave_by_recurring_channel?(months_back: pledge_frequency)
+      gave_by_recurring_channel?(months_back: pledge_frequency.to_i)
   end
 
   def gave_by_recurring_channel?(months_back:)
@@ -144,19 +213,19 @@ class ExpectedTotalsReport::LikelyDonation
   def averaging_to_pledge?(periods_back:)
     periods_back = [periods_back, first_donation_periods_back].min
     total_for_periods = periods_back.times.sum do |periods_back_index|
-      months_ago = (periods_back_index + 1) * pledge_frequency
+      months_ago = (periods_back_index + 1) * pledge_frequency.to_i
       donations_total(months_ago: months_ago)
     end
     total_for_periods >= pledge_amount * periods_back
   end
 
   def first_donation_periods_back
-    months_ago(first_donation_date) / pledge_frequency
+    months_ago(first_donation_date) / pledge_frequency.to_i
   end
 
   def periods_below_pledge(periods_back:)
     periods_back.times.count do |periods_back_index|
-      months_ago = (periods_back_index + 1) * pledge_frequency
+      months_ago = (periods_back_index + 1) * pledge_frequency.to_i
       donations_total(months_ago: months_ago) < pledge_amount
     end
   end
@@ -179,27 +248,10 @@ class ExpectedTotalsReport::LikelyDonation
   end
 
   def current_month_index
-    @current_month_index ||= month_index(Date.current)
+    @current_month_index ||= month_index(@date_in_month)
   end
 
   def month_index(date)
     date.year * 12 + date.month
-  end
-
-  def pledge_frequency
-    # For simplicity, model weekly and bi-weekly donors as their average monthly
-    @pledge_frequency ||=
-      @contact.pledge_frequency < 1.0 ? 1 : @contact.pledge_frequency.to_i
-  end
-
-  def pledge_amount
-    return 0.0 if @contact.pledge_frequency.nil?
-    # For simplicity, model weekly and bi-weekly donors as their average monthly
-    @pledge_amount ||=
-      if @contact.pledge_frequency < 1.0
-        @contact.monthly_pledge
-      else
-        @contact.pledge_amount
-      end
   end
 end
