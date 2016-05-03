@@ -28,8 +28,8 @@ describe Api::V1::Reports::BalancesController do
       expect(designation['designation_number']).to eq 'A1'
       expect(designation['currency']).to eq 'EUR'
       expect(designation['currency_symbol']).to eq '€'
-      expect(designation['converted_balance'].to_f).to be_within(0.1).of(6.23)
-      expect(designation['exchange_rate'].to_f).to be_within(0.1).of(0.623)
+      expect(designation['converted_balance'].to_f).to be_within(0.1).of(7.8)
+      expect(designation['exchange_rate'].to_f).to be_within(0.1).of(0.78)
       expect(Time.parse(designation['balance_updated_at']))
         .to eq Time.new(2016, 4, 18, 1, 0, 0)
     end

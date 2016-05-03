@@ -25,7 +25,8 @@ class Api::V1::Reports::BalancesController < Api::V1::BaseController
         currency_symbol: currency_symbol(da.currency),
         converted_balance: da.converted_balance(total_currency).to_f,
         exchange_rate: exchange_rate(da.currency),
-        balance_updated_at: da.balance_updated_at
+        balance_updated_at: da.balance_updated_at,
+        active: da.active
       }
     end
   end

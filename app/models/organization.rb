@@ -31,6 +31,10 @@ class Organization < ActiveRecord::Base
     Organization.find_by_code('CCC-USA')
   end
 
+  def default_currency_code
+    self[:default_currency_code] || 'USD'
+  end
+
   # We had an organization, DiscipleMakers with a lot of duplicate addresses in its contacts and donor
   # accounts due to a difference in how their data server donor import worked and a previous iteration of
   # MPDX accepting duplicate addresses there. This will merge dup addresses in their donor accounts and

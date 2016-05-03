@@ -37,44 +37,33 @@ class AccountListExhibit < DisplayCase::Exhibit
   def balances
     return '' if designation_accounts.empty?
 
-    totals_by_currency = {}
-
-    main_balance = 0.0
-    balance_currency = salary_currency || default_currency ||
-                       designation_accounts.first&.currency
-
-    designation_accounts.select(&:active).each do |da|
-      next if da.balance.blank?
-      totals_by_currency[da.currency] ||= 0.0
-      totals_by_currency[da.currency] += da.balance
-      next if da.currency != balance_currency
-      main_balance += da.balance
+    tooltip = _('May take a few days to update')
+    if designation_organizations.count > 1
+      # For someone with multiple organizations, we only show the primary
+      # organization's balance. To make that clearer to the use, change the
+      # text, provide a link to the balances report and an explanation in the
+      # tooltip.
+      balance_text = _('Primary Balance: %{balance}')
+      tooltip += "\n" + _('Click to see all balances')
+      link_to_report = true
+    else
+      balance_text = _('Balance: %{balance}')
+      link_to_report = false
     end
-
-    balances_widget(main_balance, balance_currency, totals_by_currency)
+    balances_html(format(balance_text, balance: formatted_balance), tooltip, link_to_report)
   end
 
   private
 
-  def balances_widget(main_balance, balance_currency, totals_by_currency)
-    balance = @context.number_to_current_currency(main_balance, currency: balance_currency)
-    balance_text = format(_('Balance: %{balance}'), balance: balance)
-    tooltip = _('May take a few days to update')
-
-    if totals_by_currency.count > 1
-      tooltip += "\n#{_('All balances:')} #{format_currency_subtotals(totals_by_currency)}"
-    end
-
-    balances_html(tooltip, balance_text)
+  def formatted_balance
+    balance = designation_accounts.where(organization_id: salary_organization_id)
+                                  .where(active: true).sum(:balance)
+    @context.number_to_current_currency(balance, currency: salary_currency)
   end
 
-  def format_currency_subtotals(totals_by_currency)
-    totals_by_currency.map do |currency, sub_total|
-      @context.number_to_current_currency(sub_total, currency: currency, show_code: true)
-    end.join('; ')
-  end
-
-  def balances_html(tooltip, balance_text)
-    "<div class='account_balances tip' title='#{tooltip}'>#{balance_text}</div>".html_safe
+  def balances_html(balance_text, tooltip, link_to_report)
+    html = "<div class='account_balances tip' title='#{tooltip}'>#{balance_text}</div>"
+    html = "<a href=\"#{@context.reports_balances_path}\">#{html}</a>" if link_to_report
+    html.html_safe
   end
 end
