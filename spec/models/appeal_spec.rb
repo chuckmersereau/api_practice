@@ -79,6 +79,7 @@ describe Appeal do
 
       contact.update_column(:first_donation_date, 2.months.ago)
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], joinedTeam3months: true).count).to eq(0)
+      expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
 
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], {}).count).to eq(1)
     end
@@ -98,6 +99,7 @@ describe Appeal do
 
       expect(appeal.contacts_by_opts([], ['tag'], {}).count).to eq(1)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(0)
+      expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
 
       donation.update(amount: 150)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
@@ -110,6 +112,7 @@ describe Appeal do
 
       donation2.update(amount: 51)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(0)
+      expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
 
       donation2.update(designation_account: nil)
       expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
@@ -141,6 +144,7 @@ describe Appeal do
       donor_account.donations << donation3
       donor_account.donations << donation4
       expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(0)
+      expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
 
       donation2.update(designation_account: nil)
       donation3.update(designation_account: nil)
@@ -177,6 +181,10 @@ describe Appeal do
 
         expect(appeal.contacts_by_opts(['Partner - Financial'], [], increasedGiving3months: true).count)
           .to eq(increased ? 0 : 1)
+
+        if increased
+          expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
+        end
 
         donor_account.donations.update_all(designation_account_id: nil)
         expect(appeal.contacts_by_opts(['Partner - Financial'], [], increasedGiving3months: true).count).to eq(1)

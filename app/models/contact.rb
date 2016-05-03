@@ -44,6 +44,7 @@ class Contact < ActiveRecord::Base
   has_many :messages
   has_many :appeal_contacts
   has_many :appeals, through: :appeal_contacts
+  has_many :excluded_appeal_contacts, class_name: 'Appeal::ExcludedAppealContact', dependent: :delete_all
 
   serialize :prayer_letters_params, Hash
 
