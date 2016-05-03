@@ -16,7 +16,7 @@ angular.module('mpdxApp')
 
                 function donationAggregates(donations) {
                   var amounts = _.chain(donations)
-                    .map(function(d) { return d.appeal_amount || d.amount })
+                    .map(function(d) { return _.toNumber(d.appeal_amount || d.amount) })
                     .reject(function(n) {return !n})
                     .value();
                   var sum = _.sum(amounts);
