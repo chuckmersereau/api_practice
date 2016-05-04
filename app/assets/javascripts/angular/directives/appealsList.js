@@ -27,7 +27,7 @@ angular.module('mpdxApp')
                     var modalInstance = $uibModal.open({
                         templateUrl: '/templates/appeals/edit.html',
                         size: 'lg',
-                        controller: function($scope, $uibModalInstance, $filter, appeal){
+                        controller: ['$scope', '$uibModalInstance', '$filter', 'appeal', function($scope, $uibModalInstance, $filter, appeal){
                             $scope.appeal = angular.copy(appeal);
                             $scope.checkedContacts = {};
                             $scope.taskTypes = window.railsConstants.task.ACTIONS;
@@ -286,7 +286,7 @@ angular.module('mpdxApp')
                             });
                           }, 1000);
 
-                        },
+                        }],
                         resolve: {
                             appeal: function () {
                                 return _.find($scope.appeals, { 'id': id });
