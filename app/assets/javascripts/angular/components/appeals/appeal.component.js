@@ -62,7 +62,7 @@
 
         vm.addContact = function(id){
             if(!id){ return; }
-            if(_.contains(vm.appeal.contacts, id)){
+            if(_.includes(vm.appeal.contacts, id)){
                 alert(__('This contact already exists in this appeal.'));
                 return;
             }
