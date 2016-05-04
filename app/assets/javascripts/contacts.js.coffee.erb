@@ -198,6 +198,11 @@ $ ->
             {
               text: __('Merge')
               click: (e) ->
+                # This is non-ideal that we are reaching into Angular like
+                # this, but this was for a quick fix to make it so that the
+                # selected contats would reset when you do a merge of contacts.
+                angular.element('*[ng-app]').injector().get("selectionStore").saveSelectedContacts([])
+
                 $('form', this).submit()
                 $('.form_wrapper', this).html('<%= image_tag('spinner.gif') %>')
                 $(this).dialog( "option", "buttons", [])
