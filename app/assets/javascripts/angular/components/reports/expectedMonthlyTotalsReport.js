@@ -6,9 +6,9 @@
             templateUrl: '/templates/reports/expectedMonthlyTotals.html'
         });
 
-    expectedMonthlyTotalsReportController.$inject = ['api'];
+    expectedMonthlyTotalsReportController.$inject = ['api', 'state'];
 
-    function expectedMonthlyTotalsReportController(api) {
+    function expectedMonthlyTotalsReportController(api, state) {
         var vm = this;
 
         var sumOfAllCategories = 0;
@@ -23,7 +23,8 @@
         }
 
         function loadExpectedMonthlyTotals() {
-            api.call('get', '/reports/expected_monthly_totals', {}, function(data) {
+            var url = 'reports/expected_monthly_totals?account_list_id=' + state.current_account_list_id;
+            api.call('get', url, {}, function(data) {
                 vm.total_currency = data.total_currency;
                 vm.total_currency_symbol = data.total_currency_symbol;
 

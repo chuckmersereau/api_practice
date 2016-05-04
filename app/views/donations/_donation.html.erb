@@ -1,3 +1,4 @@
+<% account_list_exhibit ||= exhibit(current_account_list) %>
 <% exhibit(donation, self).tap do |donation_exhibit| %>
 <tr id="<%= dom_id(donation) %>">
   <% if @contact %>

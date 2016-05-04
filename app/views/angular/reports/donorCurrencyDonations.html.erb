@@ -1,0 +1,72 @@
+<h2><%= _('Contributions by Donor Currency') %></h2>
+<div ng-if="$ctrl.errorOccurred">
+  <%= _('Report data could not load due to an error. Please try again or contact support.') %>
+</div>
+
+<div ng-if="$ctrl.loading">
+  <%= _('Loading data...') %>
+</div>
+
+<div ng-if="!$ctrl.errorOccurred" style="width: 100%; display: block">
+  <span ng-repeat="currencyAggregate in $ctrl.currencyAggregates | orderBy: 'convertedPercent' : true"
+        style="color: white; text-align: center; width: {{currencyAggregate.barWidth}}%; display: block; float: left"
+        class="currency-color-{{$index}} {{currencyAggregate.convertedPercent < 1.5 && 'hide-text' || ''}}"
+        title="{{currencyAggregate.tooltip}}"
+        data-toggle="tooltip" data-placement="bottom">
+    {{currencyAggregate.currency}} ({{currencyAggregate.currencySymbol}})
+  </span>
+</div>
+
+<div ng-if="!$ctrl.errorOccurred">
+  <div ng-repeat="currencyAndDonors in $ctrl.currenciesAndDonors"
+       ng-init="donorsAndDonations = currencyAndDonors.donorsAndDonations">
+    <h2></h2>
+
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <td><h4>{{currencyAndDonors.currency}} ({{currencyAndDonors.currencySymbol}})</h4></td>
+          <td ng-repeat="(year, monthCount) in $ctrl.yearsWithMonthCounts"
+            colspan="{{monthCount}}" class="text-center">
+            <h4>{{year}}</h4>
+          </td>
+          <td></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td ng-repeat="pastMonth in $ctrl.pastMonthDates" class="text-center">
+            <strong>{{pastMonth | date : 'MMM'}}</strong>
+          </td>
+          <td><b><%= _('Total') %></b></td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="donorAndDonations in donorsAndDonations | orderBy : 'donor.name'"
+            ng-init="donor = donorAndDonations.donor">
+          <td>
+            <a href="/contacts/{{donor.id}}"
+               title="{{donorAndDonations.tooltip}}"
+               data-toggle="tooltip" data-placement="bottom"
+                                     ><i class="fa fa-info-circle" aria-hidden="true"></i> <strong>{{donor.name}}</strong></a>
+            <span ng-if="donor.late_by_30_days" class="late-by-30-days"></span>
+            <span ng-if="donor.late_by_60_days" class="late-by-60-days"></span>
+          </td>
+          <td ng-repeat="(monthIndex, monthlyTotal) in donorAndDonations.amountsByMonthsAgo" class="text-center">
+            <div ng-if="monthlyTotal > 0.0">{{monthlyTotal | number : 0}}</div>
+          </td>
+          <td>
+            <b>{{currencyAndDonors.currencySymbol}}{{donorAndDonations.total | number : 0}}</b>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <td></td>
+          <td ng-repeat="(monthIndex, monthlyTotal) in $ctrl.currencyMonthlyTotals[currencyAndDonors.currency]">
+            <b>{{currencySymbol}}{{monthlyTotal | number : 0}}</b>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+</div>

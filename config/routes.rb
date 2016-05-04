@@ -76,6 +76,7 @@ Rails.application.routes.draw do
       namespace :reports do
         resource :balances, only: [:show]
         resource :expected_monthly_totals, only: [:show]
+        resource :year_donations, only: [:show]
       end
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
@@ -122,6 +123,8 @@ Rails.application.routes.draw do
     resource :contributions, only: [:show]
     resource :balances, only: [:show]
     resource :expected_monthly_totals, only: [:show]
+    resource :donor_currency_donations, only: [:show]
+    resource :salary_currency_donations, only: [:show]
   end
 
   resources :contacts do
