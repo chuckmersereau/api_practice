@@ -78,9 +78,9 @@
             if(angular.isUndefined(contact) || angular.isUndefined(contact.donor_accounts)){
                 return '-';
             }
-            var contactDonorIds = _.pluck(contact.donor_accounts, 'id');
+            var contactDonorIds = _.map(contact.donor_accounts, 'id');
             var donations = _.filter(vm.appeal.donations, function(d) {
-                return _.contains(contactDonorIds, d.donor_account_id);
+                return _.includes(contactDonorIds, d.donor_account_id);
             });
 
             if(!donations.length){
