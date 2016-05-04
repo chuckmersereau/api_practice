@@ -5,7 +5,8 @@
             controller: appealController,
             templateUrl: '/templates/appeals/edit.html.erb',
             bindings: {
-                id: '@'
+                id: '@',
+                firstShow: '@'
             }
         });
 

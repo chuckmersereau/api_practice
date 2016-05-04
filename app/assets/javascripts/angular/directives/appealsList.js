@@ -47,7 +47,7 @@ angular.module('mpdxApp')
                 };
 
                 $scope.editAppeal = function(id) {
-                    window.location = '/appeals/' + id;
+                    window.location = '/appeals/' + id + '?firstShow';
                 };
 
                 $scope.newAppeal = function(){

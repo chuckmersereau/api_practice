@@ -5,7 +5,8 @@
             controller: excludedAppealContactsController,
             templateUrl: '/templates/appeals/excludedAppealContacts.html.erb',
             bindings: {
-                appealId: '@'
+                appealId: '@',
+                firstShow: '@'
             }
         });
 
@@ -19,6 +20,7 @@
         vm.error = false;
         vm.showByDefault = false;
         vm.exclusions = [];
+        vm.firstShow = (vm.firstShow === 'true' || vm.firstShow === true);
 
         activate();
 
@@ -56,7 +58,8 @@
                 vm.loading = false;
             }).then(function() {
                 appealLoaded();
-                vm.showByDefault = vm.exclusions.length > 0;
+                vm.firstShow = (vm.firstShow === 'true' || vm.firstShow === true);
+                vm.showByDefault = vm.firstShow && (vm.exclusions.length > 0);
             }, function () {
                 vm.error = true;
             });
