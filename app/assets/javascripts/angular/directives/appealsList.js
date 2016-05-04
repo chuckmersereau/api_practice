@@ -3,7 +3,7 @@ angular.module('mpdxApp')
         return {
             restrict: 'E',
             templateUrl: '/templates/appeals/list.html',
-            controller: function ($scope, $uibModal, api, state) {
+            controller: ['$scope', '$uibModal', 'api', 'state', function ($scope, $uibModal, api, state) {
                 var refreshAppeals = function(callback){
                     api.call('get','appeals?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
                         $scope.appeals = data.appeals;
@@ -50,7 +50,7 @@ angular.module('mpdxApp')
                     var modalInstance = $uibModal.open({
                         templateUrl: '/templates/appeals/wizard.html',
                         size: 'lg',
-                        controller: function($scope, $uibModalInstance){
+                        controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance){
                             $scope.contactStatuses = window.railsConstants.contact.ACTIVE_STATUSES;
 
                             defaultValidStatuses = {};
@@ -89,7 +89,7 @@ angular.module('mpdxApp')
                             var adminPercent = Number(goal.adminPercent) / 100 + 1;
                             $scope.appeal.amount = Math.round((Number(goal.initial) + Number(goal.letterCost)) * adminPercent * 100) / 100;
                           };
-                        }
+                        }]
                     });
                     modalInstance.result.then(function (newAppeal) {
                         //remove false values
@@ -120,7 +120,7 @@ angular.module('mpdxApp')
                         setTimeout($.respDialogs);
                     });
                 };
-            }
+            }]
         };
     })
     .directive('rawNumber', function() {
