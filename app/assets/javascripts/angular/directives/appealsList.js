@@ -46,6 +46,10 @@ angular.module('mpdxApp')
                     return 'progress-green';
                 };
 
+                $scope.editAppeal = function(id) {
+                    window.location = '/appeals/' + id;
+                };
+
                 $scope.newAppeal = function(){
                     var modalInstance = $uibModal.open({
                         templateUrl: '/templates/appeals/wizard.html',
