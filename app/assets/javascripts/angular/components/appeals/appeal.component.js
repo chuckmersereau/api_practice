@@ -13,7 +13,8 @@
 
     function appealController($filter, api, state) {
         var vm = this;
-        vm.mins = _(60).range().map(function(i) { return _.padLeft(i, 2, '0') }).value();
+        var padStart = _.padStart || _.padLeft;
+        vm.mins = _(60).range().map(function(i) { return padStart(i, 2, '0') }).value();
 
         activate();
 
