@@ -203,18 +203,12 @@
               </tr>
               <tr>
                 <td colspan="2"></td>
-                <td style="text-align: right;">
-                  Total USD: $5000<br/>
-                  Total Pesos: $90000000000000<br/>
-                  Total : @asdklfjaskldjfa<br/>
-                  <strong>Total [MY CURRENCY]: $5001 USD</strong>
-
-                </td>
+                <td style="text-align: right;"><strong><%= _('Total') %>:</strong> </td>
                 <td colspan="2">{{$ctrl.donationAggregates().sum | currency : current_currency_symbol}}</td>
               </tr>
               <tr>
                 <td colspan="2"></td>
-                <td style="text-align: right;"><strong>Average:</strong> </td>
+                <td style="text-align: right;"><strong><%= _('Average') %>:</strong> </td>
                 <td colspan="2">{{$ctrl.donationAggregates().average | currency : current_currency_symbol}}</td>
               </tr>
               <tr><td colspan="5" class="table_select_filters">

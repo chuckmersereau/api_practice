@@ -3,7 +3,7 @@
         .module('mpdxApp')
         .component('appeal', {
             controller: appealController,
-            templateUrl: '/templates/appeals/edit.html.erb', //Idk if this is the template you wanted
+            templateUrl: '/templates/appeals/edit.html.erb',
             bindings: {
                 id: '@'
             }
@@ -114,9 +114,11 @@
                     vm.taskType = '';
                     return;
                 }
+                var task_start_at = moment(task.date).hour(task.hour).minute(task.min)
+                                                     .format('YYYY-MM-DD HH:mm:ss');
                 api.call('post', 'tasks/?account_list_id=' + state.current_account_list_id, {
                     task: {
-                        start_at: moment(task.date).hour(task.hour).minute(task.min).format('YYYY-MM-DD HH:mm:ss'),
+                        start_at: task_start_at,
                         subject: task.subject,
                         activity_type: task.type,
                         activity_contacts_attributes: [{
@@ -153,7 +155,9 @@
                 var tagList = _.find(vm.contacts, {'id': Number(contactsObject[0])}).tag_list;
                 tagList.push(newTag);
                 tagList = tagList.join();
-                api.call('put', 'contacts/' + contactsObject[0] + '?account_list_id=' + state.current_account_list_id, {
+                var url = 'contacts/' + contactsObject[0] + '?account_list_id=' +
+                          state.current_account_list_id;
+                api.call('put', url, {
                     contact: {
                         tag_list: tagList
                     }
@@ -255,8 +259,9 @@
                 hour: moment().hour(),
                 min: moment().minute()
             };
-            var contact_fields = 'Contact.id,Contact.name,Contact.status,Contact.tag_list,Contact.pledge_frequency,'+
-                                 'Contact.pledge_amount,Contact.donor_accounts,Contact.pledge_currency_symbol'
+            var contact_fields = 'Contact.id,Contact.name,Contact.status,Contact.tag_list,'+
+                                 'Contact.pledge_frequency,Contact.pledge_amount,'+
+                                 'Contact.donor_accounts,Contact.pledge_currency_symbol';
             api.call('get',
                 'contacts?filters[status]=*&per_page=5000'+
                 '&include='+contact_fields+
@@ -289,7 +294,8 @@
         }
 
         function loadAppeal(id){
-            api.call('get','appeals/' + id + '?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
+            var url = 'appeals/' + id + '?account_list_id=' + (state.current_account_list_id || '');
+            api.call('get', url, {}, function(data) {
                 vm.appeal = data.appeal
             }).then(function() {
                 appealLoaded();
@@ -297,11 +303,3 @@
         }
     }
 })();
-
-
-//Call this anywhere in html using:
-//<appeal id="<%= appeal_id %>"></appeal>
-
-//In your template, because components use the controllerAs syntax, you can access vm.id with $ctrl.id
-//With controllerAs, vm.id === $scope.$ctrl.id
-//You could name $ctrl somethine else like appeal if you wanted https://toddmotto.com/exploring-the-angular-1-5-component-method/

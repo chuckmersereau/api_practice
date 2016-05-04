@@ -13,6 +13,8 @@
 
     function excludedAppealContactsController($scope, api, state) {
         var vm = this;
+
+        vm.add = add;
         vm.loading = true;
         vm.error = false;
         vm.showByDefault = false;
@@ -20,12 +22,13 @@
 
         activate();
 
+        ////////////
+
         function activate(){
             loadAppealExclusions();
-            vm.lastSixMonths = ["Nov '15", "Dec '15","Jan '16","Feb '16","Mar '16","Apr '16"]
         }
 
-        vm.add = function (exclusion) {
+        function add(exclusion) {
             if(exclusion.ajax)
                 return;
             exclusion.ajax = true;
@@ -39,7 +42,7 @@
                 exclusion.ajax = false;
                 alert('Exclusion failed to be added to the appeal: ' + error.statusText);
             });
-        };
+        }
 
         function appealLoaded() {
             angular.forEach(vm.exclusions, function(exclusion) {
