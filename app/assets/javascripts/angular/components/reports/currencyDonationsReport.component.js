@@ -26,7 +26,7 @@
          **/
         vm.useConvertedValues = vm.type === 'salary';
 
-        var monthsBefore = 12;
+        var monthsBefore = 11;
         vm.sumOfAllCurrenciesConverted = 0;
 
         vm.moment = moment;
@@ -133,9 +133,16 @@
 
         function aggregateDonationsByMonth(donations){
             return _(donations)
-                .groupBy(function(donation){
-                    return moment(donation.donation_date).format('YYYY-MM')
+                .filter(function(donation){
+                    // The API data includes a full 12 previous months plus the
+                    // current month, but we only show 11 previous months plus
+                    // the current month in the report, so exclude donations
+                    // that are not in the report date range.
+                    donation.donation_month = moment(donation.donation_date).format('YYYY-MM');
+                    return _.includes(vm.allMonths, donation.donation_month);
+
                 })
+                .groupBy('donation_month')
                 .map(function(donationsInMonth, month){
                     return {
                         amount: _.sumBy(donationsInMonth, 'amount'),

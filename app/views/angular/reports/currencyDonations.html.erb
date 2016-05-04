@@ -3,10 +3,10 @@
 </div>
 
 <div ng-if="$ctrl.loading">
-  <%= _('Loading data...') %>
+  <%= _('Loading data...') %><br/>
 </div>
 
-<uib-progress ng-if="!$ctrl.errorOccurred && $ctrl.type === 'donor'" class="report-progress-bar">
+<uib-progress ng-if="!$ctrl.loading && !$ctrl.errorOccurred && $ctrl.type === 'donor'" class="report-progress-bar">
   <uib-bar ng-repeat="currencyGroup in $ctrl.currencyGroups"
            value="$ctrl.percentage(currencyGroup.yearTotalConverted)"
            type="color-{{$index % 6}}"
@@ -20,7 +20,9 @@
         <%= _('Converted to') %>: {{currencyGroup.currencySymbolConverted}}{{currencyGroup.yearTotalConverted | number : 0}}
       </div>
       <div>
-        ({{$ctrl.percentage(currencyGroup.yearTotalConverted) | number:0}}% <%= _('of total') %> {{currencyGroup.currencySymbolConverted}}{{$ctrl.sumOfAllCurrenciesConverted}} {{currencyGroup.currencyConverted}})
+        ({{$ctrl.percentage(currencyGroup.yearTotalConverted) | number:0}}%
+        <%= _('of total') %>
+        {{currencyGroup.currencySymbolConverted}}{{$ctrl.sumOfAllCurrenciesConverted | number : 0}} {{currencyGroup.currencyConverted}})
       </div>
     </script>
     <span ng-if="$ctrl.percentage(currencyGroup.yearTotalConverted) > 7">
