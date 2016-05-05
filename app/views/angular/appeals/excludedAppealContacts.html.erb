@@ -1,7 +1,8 @@
 <a ng-show="$ctrl.exclusions.length > 0" class="btn btn-primary exception-toggle-btn"
    role="button" data-toggle="collapse" href="#exceptionsContainer" aria-expanded="false"
-   aria-controls="exceptionsContainer">
-  <%= _('Show/Hide Contacts Not Included') %>
+   aria-controls="exceptionsContainer" ng-click="$ctrl.showByDefault = !$ctrl.showByDefault">
+  <span ng-show="$ctrl.showByDefault" ng-cloak><%= _('Hide Contacts Not Included') %></span>
+  <span ng-hide="$ctrl.showByDefault"><%= _('Show Contacts Not Included') %></span>
 </a>
 <a ng-show="$ctrl.error" class="btn btn-primary exception-toggle-btn" role="button" aria-expanded="false">
   <%= _('Error Loading Excluded Contacts') %>
