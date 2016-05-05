@@ -8,7 +8,7 @@
     <span ng-if="$ctrl.percentage(donationType) > 7" ng-switch="donationType.type">
       <span ng-switch-when="received"><%= _('Received') %></span>
       <span ng-switch-when="likely"><%= _('Likely') %></span>
-      <span ng-switch-when="unlikely"><%= _('Unlikely') %></span>
+      <span ng-switch-when="unlikely"><%= _('Possible') %></span>
     </span>
   </uib-bar>
 </uib-progress>
@@ -23,7 +23,7 @@
           <h4>
             <span ng-switch-when="received"><%= _('Donations So Far This Month') %></span>
             <span ng-switch-when="likely"><%= _('Likely Donors This Month') %></span>
-            <span ng-switch-when="unlikely"><%= _('Unlikely Donors This Month') %></span>
+            <span ng-switch-when="unlikely"><%= _('Possible Donors This Month') %></span>
             <span ng-switch-default>{{ donationType.type }}</span>
             <i class="fa fa-chevron-down collapsible-heading-arrow" aria-hidden="true" ng-if="tableCollapsed"></i>
             <i class="fa fa-chevron-up collapsible-heading-arrow" aria-hidden="true" ng-if="!tableCollapsed"></i>
