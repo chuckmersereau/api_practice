@@ -23,6 +23,14 @@
             loadAppeal(vm.id);
         }
 
+        function selectedContactIds(selectedContactsMap) {
+            var pickMethod = _.pickBy || _.pick;
+            return _.keys(pickMethod(selectedContactsMap, function (selected) {
+                return selected;
+            }))
+        }
+        vm.selectedContactIds = selectedContactIds;
+
         vm.save = function (goBack) {
             api.call('put','appeals/'+ vm.id + '?account_list_id=' + (state.current_account_list_id || ''),
                 {"appeal": vm.appeal},
@@ -99,9 +107,7 @@
 
         vm.createTask = function(inputContactsObject){
             var task = vm.task;
-            var contactsObject = _.keys(_.pick(inputContactsObject, function(val){
-                return val;
-            }));
+            var contactsObject = selectedContactIds(inputContactsObject);
 
             if(!contactsObject.length){
                 alert(__('You must check at least one contact.'));
@@ -137,9 +143,7 @@
         };
 
         vm.createTag = function (newTag, inputContactsObject) {
-            var contactsObject = _.keys(_.pick(inputContactsObject, function (val) {
-                return val;
-            }));
+            var contactsObject = selectedContactIds(inputContactsObject);
 
             if (!contactsObject.length) {
                 alert(__('You must check at least one contact.'));
@@ -173,9 +177,7 @@
         };
 
         vm.exportContactsToCSV = function (selectedContactsMap) {
-            var selectedContactIds = _.keys(_.pick(selectedContactsMap, function (selected) {
-                return selected;
-            }));
+            var selectedContactIds = vm.selectedContactIds(selectedContactsMap);
 
             if (selectedContactIds.length == 0) {
                 alert(__('You must check at least one contact.'));
@@ -188,9 +190,7 @@
         };
 
         vm.exportContactsToMailChimpList = function (selectedContactsMap, appealListId) {
-            var selectedContactIds = _.keys(_.pick(selectedContactsMap, function (selected) {
-                return selected;
-            }));
+            var selectedContactIds = selectedContactIds(selectedContactsMap);
 
             if (selectedContactIds.length == 0) {
                 alert(__('You must check at least one contact.'));
