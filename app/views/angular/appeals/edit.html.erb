@@ -115,25 +115,21 @@
             </div>
 
             <div class="" ng-show="$ctrl.mail_chimp_account_present" >
-              <div class="col-sm-4">
-                <%= _('Export selected to a Mail Chimp list:') %>
-              </div>
-              <div class="col-sm-8">
-                <div class="form-group">
-                  <select class="form-control" ng-model="$ctrl.selected_mail_chimp_list"
-                          ng-options="m.id as m.name for m in $ctrl.mail_chimp_lists" ></select>
-                  <button class="btn btn-default"
-                          ng-click="$ctrl.exportContactsToMailChimpList($ctrl.checkedContacts, $ctrl.selected_mail_chimp_list)">
-                    <%= _('Export') %>
-                  </button>
-                  <div class="spacer"></div>
-                  <div class="alert alert-warning" role="alert">
-                    <span class="glyphicon glyphicon-exclamation-sign">
-                      <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ' +
-                            'as this one would overwrite it. Create a new list in MailChimp and choose ' +
-                            'it in this drop down. Subsequent exports to it will overwrite previous ones.') %>
-                    </span>
-                  </div>
+              <p><%= _('Export selected to a Mail Chimp list:') %></p>
+              <div class="form-group">
+                <select class="form-control" ng-model="$ctrl.selected_mail_chimp_list"
+                        ng-options="m.id as m.name for m in $ctrl.mail_chimp_lists" ></select>
+                <button class="btn btn-default"
+                        ng-click="$ctrl.exportContactsToMailChimpList($ctrl.checkedContacts, $ctrl.selected_mail_chimp_list)">
+                  <%= _('Export') %>
+                </button>
+                <div class="spacer"></div>
+                <div class="alert alert-warning" role="alert">
+                  <span class="glyphicon glyphicon-exclamation-sign">
+                    <%= _('You cannot use the MailChimp list you normally sync to for your newsletter, ' +
+                          'as this one would overwrite it. Create a new list in MailChimp and choose ' +
+                          'it in this drop down. Subsequent exports to it will overwrite previous ones.') %>
+                  </span>
                 </div>
               </div>
             </div>

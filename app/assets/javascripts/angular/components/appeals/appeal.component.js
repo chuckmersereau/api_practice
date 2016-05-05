@@ -273,12 +273,12 @@
                     vm.newContact = data.contacts[0].id;
                 }, null, true);
 
-            vm.mail_chimp_account_present = $.mpdx.mail_chimp_account_present;
+            vm.mail_chimp_account_present = state.mail_chimp_account_present == 'true';
 
-            if ($.mpdx.mail_chimp_lists == null) {
+            if (state.mail_chimp_lists == null || JSON.parse(state.mail_chimp_lists) == null) {
                 vm.mail_chimp_lists = [];
             } else {
-                vm.mail_chimp_lists = $.mpdx.mail_chimp_lists;
+                vm.mail_chimp_lists = JSON.parse(state.mail_chimp_lists);
                 if (vm.mail_chimp_lists.length > 0) {
                     vm.selected_mail_chimp_list = vm.mail_chimp_lists[0].id
                 }
