@@ -245,7 +245,7 @@
                 return { sum: 0, average: 0 };
             }
             var amounts = _.chain(vm.appeal.donations)
-                .map(function(d) { return d.appeal_amount || d.amount })
+                .map(function(d) { return parseFloat(d.appeal_amount || d.amount) })
                 .reject(function(n) {return !n})
                 .value();
             var sum = _.sum(amounts);
