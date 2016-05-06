@@ -133,16 +133,19 @@
 
         function aggregateDonationsByMonth(donations){
             return _(donations)
-                .filter(function(donation){
-                    // The API data includes a full 12 previous months plus the
-                    // current month, but we only show 11 previous months plus
-                    // the current month in the report, so exclude donations
-                    // that are not in the report date range.
-                    donation.donation_month = moment(donation.donation_date).format('YYYY-MM');
-                    return _.includes(vm.allMonths, donation.donation_month);
-
+                // .filter(function(donation){
+                //     // The API data includes a full 12 previous months plus the
+                //     // current month, but we only show 11 previous months plus
+                //     // the current month in the report, so exclude donations
+                //     // that are not in the report date range.
+                //     donation.donation_month = moment(donation.donation_date).format('YYYY-MM');
+                //     return _.includes(vm.allMonths, donation.donation_month);
+                //
+                // })
+                //.groupBy('donation_month')
+                .groupBy(function(donation){
+                    return moment(donation.donation_date).format('YYYY-MM');
                 })
-                .groupBy('donation_month')
                 .map(function(donationsInMonth, month){
                     return {
                         amount: _.sumBy(donationsInMonth, 'amount'),
@@ -159,24 +162,46 @@
         }
 
         function aggregateDonorDonationsByYear(donors){
+            var thisMonth = moment().format('YYYY-MM');
+
             return _.map(donors, function(donor){
+                // Calculate the average based on the first gift the partner
+                // made this year which works better for people who started
+                // giving recently.
+                var firstDonationMonth = _.minBy(donor.donations, 'donation_date').donation_date;
+                var monthsForAverage = monthsAgo(firstDonationMonth);
+
+                // If the partner gave this month, add in one more month to the
+                // average counting, but if they didn't then don't as it may be
+                // early in the month and they just haven't given yet.
+                var lastDonationMonth = _.maxBy(donor.donations, 'donation_date').donation_date;
+                if (lastDonationMonth = thisMonth) {
+                    monthsForAverage += 1;
+                }
+
                 var sum = _.sumBy(donor.donations, 'amount');
                 var sumConverted = _.sumBy(donor.donations, 'amountConverted');
                 var minDonation = _.minBy(donor.donations, 'amount');
                 var minDonationConverted = _.minBy(donor.donations, 'amountConverted');
+
                 return _.assign(donor, {
                     aggregates: {
                         sum: sum,
-                        average: sum / monthsBefore,
+                        average: sum / monthsForAverage,
                         min: minDonation ? minDonation.amount : 0
                     },
                     aggregatesConverted: {
                         sum: sumConverted,
-                        average: sumConverted / monthsBefore,
+                        average: sumConverted / monthsForAverage,
                         min: minDonationConverted ? minDonation.amountConverted : 0
                     }
                 })
             });
+        }
+
+        function monthsAgo(yearAndMonth) {
+            var beginningOfMonth = moment(yearAndMonth + '-01');
+            return moment().diff(beginningOfMonth, 'months');
         }
 
         function addMissingMonths(donations, allMonths){

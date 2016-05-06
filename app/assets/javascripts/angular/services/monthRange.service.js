@@ -53,7 +53,6 @@
             return allMonths;
         }
 
-
         /** Get object of years with values that are the number of months for that year found in range */
         function yearsWithMonthCounts(monthRange){
             return _.reduce(monthRange, function(years, month){
@@ -64,3 +63,4 @@
         }
     }
 })();
+

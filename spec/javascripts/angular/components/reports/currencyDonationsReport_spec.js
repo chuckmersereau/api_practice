@@ -30,7 +30,6 @@ describe('contacts', function() {
                     "currency_symbol": '$',
                     "converted_currency": 'USD',
                     "converted_currency_symbol": '$'
-
                 },
                 {
                     "amount": 50.0,
@@ -173,15 +172,18 @@ describe('contacts', function() {
                     donations: [
                         {
                             "amount": 10.0,
-                            "amountConverted": 15.0
+                            "amountConverted": 15.0,
+                            "donation_date": moment().subtract(2, 'months').format('YYYY-MM-DD')
                         },
                         {
                             "amount": 20.0,
-                            "amountConverted": 25.0
+                            "amountConverted": 25.0,
+                            "donation_date": moment().subtract(1, 'months').format('YYYY-MM-DD')
                         },
                         {
                             "amount": 40.0,
-                            "amountConverted": 45.0
+                            "amountConverted": 45.0,
+                            "donation_date": moment().format('YYYY-MM-DD')
                         }
                     ]
                 }
@@ -193,12 +195,12 @@ describe('contacts', function() {
                     donations: donors[0].donations,
                     aggregates: {
                         sum: 70,
-                        average: 70 / 12,
+                        average: 70 / 3,
                         min: 10
                     },
                     aggregatesConverted: {
                         sum: 85,
-                        average: 85 / 12,
+                        average: 85 / 3,
                         min: 15
                     }
                 }
@@ -298,7 +300,7 @@ describe('contacts', function() {
     });
 
     describe('parseReportInfo', function() {
-        it('should group donations by donor, sort them by name, aggregate each donor, and add empty donations for missing months', function () {
+        it('groups donations by donor, sort them by name, aggregate each donor, and add empty donations for missing months', function () {
             var reportInfo = {
                 donors: [
                     {
