@@ -164,6 +164,7 @@ describe('contacts', function() {
     describe('aggregateDonorDonationsByYear', function() {
         it('should add an aggregates object to each donor that contains a sum, average, and min', function () {
             self.controller.reportLastDate = moment('2015-04-15');
+            self.controller.reportLastMonth = '2015-04';
 
             // At this point the donation_date fields have been converted to
             // months.
@@ -306,7 +307,8 @@ describe('contacts', function() {
     describe('parseReportInfo', function() {
         it('groups donations by donor, sort them by name, aggregate each donor, and add empty donations for missing months', function () {
             self.controller.reportLastDate = moment('2015-03-15');
-            debugger;
+            self.controller.reportLastMonth = '2015-03';
+            self.controller.monthsBefore = 11;
 
             var reportInfo = {
                 donors: [

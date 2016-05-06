@@ -26,19 +26,20 @@
          **/
         vm.useConvertedValues = vm.type === 'salary';
 
-        var monthsBefore = 11;
+        vm.monthsBefore = 11;
         vm.sumOfAllCurrenciesConverted = 0;
 
         vm.moment = moment;
         vm.errorOccurred = false;
         vm.loading = true;
-        vm.allMonths = monthRange.getPastMonths(monthsBefore);
+        vm.allMonths = monthRange.getPastMonths(vm.monthsBefore);
         vm.years = monthRange.yearsWithMonthCounts(vm.allMonths);
         vm.currencyGroups = [];
 
         // For now we assume the report ends on the current date, but we may
         // want to support prior years in the future.
         vm.reportLastDate = moment();
+        vm.reportLastMonth = vm.reportLastDate.format('YYYY-MM');
 
         vm.percentage = percentage;
 
@@ -73,12 +74,23 @@
             });
 
             return _(reportInfo.donations)
+                .filter(function(donation) {
+                    var donationMonth = moment(donation.donation_date).format('YYYY-MM');
+                    return monthsAgo(donationMonth) <= vm.monthsBefore;
+                })
                 .groupDonationsByCurrency()
                 .map(function(currencyGroup){
                     return processCurrencyGroup(currencyGroup, reportInfo.donors, allMonths);
                 })
                 .orderBy('yearTotalConverted', 'desc')
                 .value();
+        }
+
+        function filterForDonationsInDateRange(donations) {
+            // The API data includes a full 12 previous months plus the
+            // current month, but we only show 11 previous months plus
+            // the current month in the report, so exclude donations
+            // that are not in the report date range.
         }
 
         function processCurrencyGroup(currencyGroup, rawDonors, allMonths){
@@ -137,16 +149,6 @@
 
         function aggregateDonationsByMonth(donations){
             return _(donations)
-                // .filter(function(donation){
-                //     // The API data includes a full 12 previous months plus the
-                //     // current month, but we only show 11 previous months plus
-                //     // the current month in the report, so exclude donations
-                //     // that are not in the report date range.
-                //     donation.donation_month = moment(donation.donation_date).format('YYYY-MM');
-                //     return _.includes(vm.allMonths, donation.donation_month);
-                //
-                // })
-                //.groupBy('donation_month')
                 .groupBy(function(donation){
                     return moment(donation.donation_date).format('YYYY-MM');
                 })
@@ -166,8 +168,6 @@
         }
 
         function aggregateDonorDonationsByYear(donors){
-            var thisMonth = vm.reportLastDate.format('YYYY-MM');
-
             return _.map(donors, function(donor){
                 // Calculate the average based on the first gift the partner
                 // made this year which works better for people who started
@@ -179,7 +179,7 @@
                 // average counting, but if they didn't then don't as it may be
                 // early in the month and they just haven't given yet.
                 var lastDonationMonth = _.maxBy(donor.donations, 'donation_date').donation_date;
-                if (lastDonationMonth = thisMonth) {
+                if (lastDonationMonth = vm.reportLastMonth) {
                     monthsForAverage += 1;
                 }
 
