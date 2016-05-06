@@ -17,7 +17,24 @@
         var padStart = _.padStart || _.padLeft;
         vm.mins = _(60).range().map(function(i) { return padStart(i, 2, '0') }).value();
 
+        vm.selectedContactIds = selectedContactIds;
+        vm.save = save;
+        vm.addExcluded = addExcluded;
+        vm.delete = deleteAppeal;
+        vm.contactDetails = contactDetails;
+        vm.contactName = contactName;
+        vm.addContact = addContact;
+        vm.deleteContact = deleteContact;
+        vm.listDonations = listDonations;
+        vm.createTask = createTask;
+        vm.createTag = createTag;
+        vm.exportContactsToCSV = exportContactsToCSV;
+        vm.exportContactsToMailChimpList = exportContactsToMailChimpList;
+        vm.selectAll = selectAll;
+
         activate();
+
+        ////////////
 
         function activate(){
             loadAppeal(vm.id);
@@ -29,23 +46,22 @@
                 return selected;
             }))
         }
-        vm.selectedContactIds = selectedContactIds;
 
-        vm.save = function (goBack) {
-            api.call('put','appeals/'+ vm.id + '?account_list_id=' + (state.current_account_list_id || ''),
+        function save(goBack) {
+            api.call('put', 'appeals/' + vm.id + '?account_list_id=' + (state.current_account_list_id || ''),
                 {"appeal": vm.appeal},
-                function() {
-                    if(goBack === undefined || goBack)
+                function () {
+                    if (goBack === undefined || goBack)
                         history.back()
                 });
-        };
+        }
 
-        vm.addExcluded = function (contact) {
+        function addExcluded(contact) {
             vm.addContact(contact.id);
             vm.save(false);
-        };
+        }
 
-        vm.delete = function (){
+        function deleteAppeal() {
             var r = confirm(__('Are you sure you want to delete this appeal?'));
             if(!r){
                 return;
@@ -54,76 +70,80 @@
             api.call('delete', appeal_url, null, function() {
                 history.back()
             });
-        };
+        }
 
-        vm.contactDetails = function(id){
-            var contact = _.find(vm.contacts, { 'id': id });
-            if(angular.isDefined(contact)){
+        function contactDetails(id) {
+            var contact = _.find(vm.contacts, {'id': id});
+            if (angular.isDefined(contact)) {
                 return contact;
             }
             return {};
-        };
+        }
 
-        vm.contactName = function(id){
+        function contactName(id) {
             var contact = vm.contactDetails(id);
             return contact.name || '';
-        };
+        }
 
-        vm.addContact = function(id){
-            if(!id){ return; }
-            if(_.includes(vm.appeal.contacts, id)){
+        function addContact(id) {
+            if (!id) {
+                return;
+            }
+            if (_.includes(vm.appeal.contacts, id)) {
                 alert(__('This contact already exists in this appeal.'));
                 return;
             }
             vm.appeal.contacts.push(id);
-        };
+        }
 
-        vm.deleteContact = function(id){
-            _.remove(vm.appeal.contacts, function(c) { return c == id; });
-        };
+        function deleteContact(id) {
+            _.remove(vm.appeal.contacts, function (c) {
+                return c == id;
+            });
+        }
 
-        vm.listDonations = function(contactId){
-            var contact = _.find(vm.contacts, { 'id': contactId });
-            if(angular.isUndefined(contact) || angular.isUndefined(contact.donor_accounts)){
+        function listDonations(contactId) {
+            var contact = _.find(vm.contacts, {'id': contactId});
+            if (angular.isUndefined(contact) || angular.isUndefined(contact.donor_accounts)) {
                 return '-';
             }
             var contactDonorIds = _.map(contact.donor_accounts, 'id');
-            var donations = _.filter(vm.appeal.donations, function(d) {
+            var donations = _.filter(vm.appeal.donations, function (d) {
                 return _.includes(contactDonorIds, d.donor_account_id);
             });
 
-            if(!donations.length){
+            if (!donations.length) {
                 return ['-'];
-            }else{
+            } else {
                 var str = [];
-                angular.forEach(donations, function(d){
+                angular.forEach(donations, function (d) {
                     var amount = d.appeal_amount ? d.appeal_amount : d.amount;
                     amount = $filter('currency')(amount, contact.pledge_currency_symbol);
                     str.push(d.donation_date + ' - ' + amount);
                 });
                 return str;
             }
-        };
+        }
 
-        vm.createTask = function(inputContactsObject){
+        function createTask(inputContactsObject) {
             var task = vm.task;
             var contactsObject = selectedContactIds(inputContactsObject);
 
-            if(!contactsObject.length){
+            if (!contactsObject.length) {
                 alert(__('You must check at least one contact.'));
                 return;
             }
 
             vm.creatingBulkTasks = 0;
-            var postTask = function(){
+            var postTask = function () {
                 vm.creatingBulkTasks = contactsObject.length;
-                if(_.isEmpty(contactsObject)){
+                if (_.isEmpty(contactsObject)) {
                     alert('Task(s) created.');
                     vm.taskType = '';
                     return;
                 }
                 var task_start_at = moment(task.date).hour(task.hour).minute(task.min)
-                                                     .format('YYYY-MM-DD HH:mm:ss');
+                    .format('YYYY-MM-DD HH:mm:ss');
                 api.call('post', 'tasks/?account_list_id=' + state.current_account_list_id, {
                     task: {
                         start_at: task_start_at,
@@ -133,16 +153,16 @@
                             'contact_id': Number(contactsObject[0])
                         }]
                     }
-                }, function(){
+                }, function () {
                     contactsObject.shift();
                     postTask();
                 });
             };
 
             postTask();
-        };
+        }
 
-        vm.createTag = function (newTag, inputContactsObject) {
+        function createTag(newTag, inputContactsObject) {
             var contactsObject = selectedContactIds(inputContactsObject);
 
             if (!contactsObject.length) {
@@ -162,7 +182,7 @@
                 tagList.push(newTag);
                 tagList = tagList.join();
                 var url = 'contacts/' + contactsObject[0] + '?account_list_id=' +
-                          state.current_account_list_id;
+                    state.current_account_list_id;
                 api.call('put', url, {
                     contact: {
                         tag_list: tagList
@@ -174,9 +194,9 @@
             };
 
             updateContact();
-        };
+        }
 
-        vm.exportContactsToCSV = function (selectedContactsMap) {
+        function exportContactsToCSV(selectedContactsMap) {
             var selectedContactIds = vm.selectedContactIds(selectedContactsMap);
 
             if (selectedContactIds.length == 0) {
@@ -187,9 +207,9 @@
             window.location.href =
                 '/contacts.csv?csv_primary_emails_only=true&' +
                 'filters[status]=*&filters[ids]=' + selectedContactIds.join();
-        };
+        }
 
-        vm.exportContactsToMailChimpList = function (selectedContactsMap, appealListId) {
+        function exportContactsToMailChimpList(selectedContactsMap, appealListId) {
             var selectedContactIds = selectedContactIds(selectedContactsMap);
 
             if (selectedContactIds.length == 0) {
@@ -212,33 +232,33 @@
                 function () {
                     vm.mail_chimp_appeal_load_complete = true;
                 });
-        };
+        }
 
-        vm.selectAll = function(type){
-            if(type === 'all'){
+        function selectAll(type) {
+            if (type === 'all') {
                 angular.forEach(vm.appeal.contacts, function (c) {
                     vm.checkedContacts[c] = true;
                 });
-            }else if(type === 'none'){
+            } else if (type === 'none') {
                 vm.checkedContacts = {};
-            }else if(type === 'donated'){
+            } else if (type === 'donated') {
                 angular.forEach(vm.appeal.contacts, function (c) {
-                    if(_.first(vm.listDonations(c)) === '-'){
+                    if (_.first(vm.listDonations(c)) === '-') {
                         vm.checkedContacts[c] = false;
-                    }else{
+                    } else {
                         vm.checkedContacts[c] = true;
                     }
                 });
-            }else if(type === '!donated'){
+            } else if (type === '!donated') {
                 angular.forEach(vm.appeal.contacts, function (c) {
-                    if(_.first(vm.listDonations(c)) === '-'){
+                    if (_.first(vm.listDonations(c)) === '-') {
                         vm.checkedContacts[c] = true;
-                    }else{
+                    } else {
                         vm.checkedContacts[c] = false;
                     }
                 });
             }
-        };
+        }
 
         vm.donationAggregates = function() {
             if(!vm.appeal) {
