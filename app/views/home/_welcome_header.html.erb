@@ -161,8 +161,12 @@
     <div class="row">
       <div class="col-md-12 donations_summary_panel">
         <% cache(['donations_summary_chart', current_account_list], expires_in: 24.hours) do %>
-            <div id="donations_summary_chart"></div>
+          <div id="donations_summary_chart"></div>
+          <% if $rollout.active?(:multi_currency_chart, current_account_list) %>
+            <%= render 'multi_currency_chart' %>
+          <% else %>
             <%= render 'donations_summary_chart' %>
+          <% end %>
         <% end %>
       </div>
     </div>

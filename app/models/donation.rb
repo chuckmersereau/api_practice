@@ -13,6 +13,7 @@ class Donation < ActiveRecord::Base
   scope :for_accounts, -> (designation_accounts) { where(designation_account_id: designation_accounts.pluck(:id)) }
   scope :since, -> (date) { where('donation_date > ?', date) }
   scope :between, -> (from, to) { where(donation_date: from.to_date..to.to_date) }
+  scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
 
   # Used by Contact::DonationsEagerLoader
   attr_accessor :loaded_contact
