@@ -36,8 +36,8 @@ class Appeal::AppealContactsExcluder
 
   def no_joined_recently(within_months)
     ids = @contacts.where('pledge_amount is not null AND pledge_amount > 0 AND '\
-                         'contacts.first_donation_date is not null AND '\
-                         'contacts.first_donation_date >= ?',
+                          'contacts.first_donation_date is not null AND '\
+                          'contacts.first_donation_date >= ?',
                           within_months.months.ago).pluck(:id)
     mark_excluded(ids, 'joined_recently')
   end
