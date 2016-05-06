@@ -6,9 +6,9 @@
             templateUrl: 'inline/contact_list.html' //declared inline at app/views/contacts/index.html.erb
         });
 
-    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$localForage', '$log', 'state'];
+    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore'];
 
-    function contactListController($scope, api, contactCache, urlParameter, $localForage, $log, state) {
+    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore) {
         var vm = this;
 
         var viewPrefs;
@@ -78,7 +78,23 @@
 
         activate();
 
+        function isSameExceptPage(contactQuery1, contactQuery2) {
+            for (var key in contactQuery1) {
+                if (key != 'page' && !_.isEqual(contactQuery1[key], contactQuery2[key])) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
         function activate() {
+            // Clear the selected contacts if the user did a search since they
+            // would be expecting to just be selecting on the resulting
+            // contacts.
+            if (vm.contactQuery.wildcardSearch !== null) {
+                clearSelectedContacts();
+            }
+
             loadViewPreferences();
             loadSelectedContacts();
 
@@ -91,6 +107,13 @@
                     if(q.page !== 1){
                         return;
                     }
+                }
+
+                // If the user changes the filters (by anything other than
+                // moving to another page), then clear their selection as their
+                // selected contacts might not be anywhere in the list anymore.
+                if (oldq.viewPrefsLoaded && !isSameExceptPage(q, oldq)) {
+                    clearSelectedContacts();
                 }
 
                 refreshContacts();
@@ -261,6 +284,7 @@
             vm.contactQuery.contact_info_mobile = '';
             vm.contactQuery.contact_info_addr = '';
             vm.contactQuery.contact_info_facebook = '';
+            clearSelectedContacts();
             if(!_.isNull(document.getElementById('globalContactSearch'))) {
                 document.getElementById('globalContactSearch').value = '';
             }
@@ -569,12 +593,8 @@
             return angular.isDefined(vm.contactQuery.insightFilter);
         }
 
-        function selectedContactsStorageKey(){
-            return 'selectedContacts-userId:' + state.current_user_id + '-accountListId:' + state.current_account_list_id;
-        }
-
         function loadSelectedContacts(){
-            $localForage.getItem(selectedContactsStorageKey()).then(function(selectedContacts){
+            selectionStore.loadSelectedContacts().then(function(selectedContacts){
                     vm.selectedContacts = selectedContacts;
                 },
                 function(){
@@ -583,10 +603,7 @@
         }
 
         function saveSelectedContacts(){
-            $localForage.setItem(selectedContactsStorageKey(), vm.selectedContacts).then(function(){},
-                function(){
-                    $log.error('Failed to save selected contacts');
-                });
+            selectionStore.saveSelectedContacts(vm.selectedContacts)
         }
 
         function clearSelectedContacts(){

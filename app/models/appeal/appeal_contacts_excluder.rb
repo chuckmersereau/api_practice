@@ -36,8 +36,8 @@ class Appeal::AppealContactsExcluder
 
   def no_joined_recently(within_months)
     ids = @contacts.where('pledge_amount is not null AND pledge_amount > 0 AND '\
-                         'contacts.first_donation_date is not null AND '\
-                         'contacts.first_donation_date >= ?',
+                          'contacts.first_donation_date is not null AND '\
+                          'contacts.first_donation_date >= ?',
                           within_months.months.ago).pluck(:id)
     mark_excluded(ids, 'joined_recently')
   end
@@ -49,7 +49,7 @@ class Appeal::AppealContactsExcluder
     # I wrote this in SQL because we populate the appeal contacts for the user
     # as part of the wizard (not in the background), so it needs to be fast.
     above_pledge_contacts_ids_sql = '
-      SELECT contacts.id
+      SELECT contact_donations.contact_id
       FROM
       (
         SELECT DISTINCT contacts.id as contact_id,
@@ -65,10 +65,10 @@ class Appeal::AppealContactsExcluder
             SELECT designation_account_id FROM account_list_entries WHERE account_list_id = :account_list_id
           )
       ) contact_donations
-      GROUP BY contact_id, pledge_amount, pledge_frequency
+      GROUP BY contact_id, pledge_amount, pledge_frequency, last_donation_date
       HAVING
         SUM(donation_amount)
-          / ((CASE WHEN contacts.last_donation_date >= :start_of_month THEN 1 ELSE 0 END) + :prev_full_months)
+          / ((CASE WHEN contact_donations.last_donation_date >= :start_of_month THEN 1 ELSE 0 END) + :prev_full_months)
         > coalesce(pledge_amount, 0.0) / coalesce(pledge_frequency, 1.0)'
 
     ids = @contacts.where("contacts.id IN (#{above_pledge_contacts_ids_sql})",

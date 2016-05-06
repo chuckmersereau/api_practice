@@ -1,6 +1,7 @@
 <div ng-class="{'show-all': show_all}">
-    <div ng-repeat="appeal in appeals | orderBy:'created_at':true"
-         class="appeal-single {{progressClass(appeal)}}" ng-click="editAppeal(appeal.id)">
+    <a ng-repeat="appeal in appeals | orderBy:'created_at':true"
+       class="appeal-single {{progressClass(appeal)}}"
+       href="/appeals/{{appeal.id}}">
          <div class="dash-stat">
             <span class="progress-total-donations count-big">
                 {{donationAggregates(appeal.donations).sum | currency : current_currency_symbol}}
@@ -16,7 +17,7 @@
             </span>
         </div>
         {{appeal.name}}
-    </div>
+    </a>
 </div>
 <a href="" class="see-all" ng-show="appeals.length > 2 && !show_all" ng-click="show_all = true">
     <i class="fa fa-plus-square-o"></i> <%= _('See all {{appeals.length}} Appeals') %>

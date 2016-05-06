@@ -105,6 +105,8 @@ Rails.application.routes.draw do
     end
   end
 
+  resources :appeals, only: [:show]
+
   resources :insights
   resources :donations
   resource :donation_syncs, only: [:create]

@@ -1,0 +1,128 @@
+<%
+totaler = DonationsChart::MonthlyTotaler.new(current_account_list)
+currency_monthly_totals = totaler.totals
+months_back = totaler.months_back
+
+total_converted = currency_monthly_totals.map { |t| t[:total_converted] }.sum
+salary_currency = current_account_list.salary_currency_or_default
+salary_currency_symbol = currency_symbol(salary_currency)
+
+monthly_average = total_converted / months_back.to_f
+pledges = current_account_list.total_pledges.to_i
+
+currency_colors = [
+  '#fdb800',
+  '#df7d00',
+  '#909b9c',
+  '#666062',
+  '#36b1ca',
+  '#00729a'
+]
+
+num_currencies = currency_monthly_totals.size
+series = currency_monthly_totals.reverse.each_with_index.map do |currency_totals, index|
+  {
+    name: currency_with_symbol(currency_totals[:currency]),
+    color: currency_colors[num_currencies - index - 1],
+    data: currency_totals[:month_totals].map { |t| t[:converted].to_f }
+  }
+end
+
+%>
+<script>
+$(function () {
+  $('#donations_summary_chart').highcharts({
+    chart: {
+      type: 'column'
+    },
+    title: {
+      text: '<span style="color:#007398"><%= j _('Commitments:') %> <%= number_to_current_currency(pledges, currency: salary_currency) %></span> | ' +
+        '<span style="color:#3eb1c8"><%= j _('Monthly Goal:') %> <%= number_to_current_currency(current_account_list.monthly_goal, currency: salary_currency) %></span> | ' +
+        '<span style="color:#666062"><%= j _('Monthly Average:') %> <%= number_to_current_currency(monthly_average, currency: salary_currency) %></span>',
+      useHTML: true,
+      style: {
+        fontSize: '12px'
+      }
+    },
+    xAxis: {
+      categories: [
+        <%== months_back.downto(0).map {|i| l(i.months.ago.to_date, format: :month_abbrv).inspect}.join(",\n") %>
+      ]
+    },
+    yAxis: {
+      min: 0,
+      title: {
+        text: '<%= j format(_('Amount %{currency}'), currency: currency_with_symbol(salary_currency)) %>'
+      },
+      plotLines: [{
+        value: <%= pledges %>,
+        width: 2,
+        color: "#007398"
+      },{
+        value: <%= current_account_list.monthly_goal || 0 %>,
+        width: 2,
+        color: "#3eb1c8"
+      },{
+        value: <%= monthly_average %>,
+        width: 2,
+        color: "#666062"
+      }]
+    },
+    legend: {
+      align: 'right',
+      x: -30,
+      verticalAlign: 'top',
+      y: 25,
+      floating: true,
+      backgroundColor: (Highcharts.theme && Highcharts.theme.background2) || 'white',
+      borderColor: '#CCC',
+      borderWidth: 1,
+      shadow: false
+    },
+    tooltip: {
+      formatter: function() {
+        var totalConverted = this.total;
+
+        var percentOfGoal = Math.round(Number(totalConverted) /
+            <%= current_account_list.monthly_goal || 0 %> * 100) + '%';
+        var percentOfAverage = Math.round(Number(totalConverted) /
+            <%= current_account_list.monthly_goal || 0 %> * 100) + '%';
+
+        var numberFilter = angular.injector(["ng"]).get("$filter")("number");
+        var formattedTotal = '<%= j salary_currency_symbol %>' +
+          numberFilter(totalConverted, 0) + ' ' + '<%= j salary_currency %>';
+
+        s = '<b>'+ this.x +'</b><br/>';
+
+        s += '<div style="white-space: nowrap">'
+        s +=   '<div style="display: inline-block; padding-right: 1em">';
+        s +=     '<%= j(current_account_list.multi_currency? ? _('Converted Total') : _('Donations')) %>';
+        s +=   '</div>';
+        s +=   '<div style="display: inline-block">' + formattedTotal + '</div>';
+        s += '</div>';
+
+        s += '<div style="white-space: nowrap">'
+        s +=   '<div style="display: inline-block"><%= j _('% of Monthly Goal') %>:</div>';
+        s +=   '<div style="display: inline-block; float: right">' + percentOfGoal + '</div>';
+        s += '</div>';
+
+        s += '<div style="white-space: nowrap">'
+        s +=   '<div style="display: inline-block"><%= j _('% of Average') %>:</div>';
+        s +=   '<div style="display: inline-block; float: right">' + percentOfAverage + '</div>';
+        s += '</div>';
+
+        return s;
+      },
+      useHTML: true,
+      shared: false
+    },
+    plotOptions: {
+      column: {
+        stacking: 'normal'
+      }
+    },
+    series: <%== series.to_json %>
+  });
+});
+</script>
+

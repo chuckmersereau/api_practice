@@ -21,6 +21,12 @@
                                  TwitterCldr::Shared::Currencies.for_code(current_currency)[:symbol] :
                                  current_currency %>"></preload-state>
     <preload-state name="current_account_list_id" data="<%= current_account_list.id %>"></preload-state>
+    <preload-state name="mail_chimp_account_present"
+                   data="<%= current_account_list.mail_chimp_account.present? &&
+                             current_account_list.mail_chimp_account.active %>"></preload-state>
+    <preload-state name="mail_chimp_lists"
+                   data='<%= current_account_list.mail_chimp_account.try(:lists_available_for_appeals)
+                                                 .to_json.html_safe %>'></preload-state>
     <%= render 'impersonation_bar' %>
     <%= render 'peek/bar' %>
 
@@ -244,6 +250,17 @@
         },
         h=d.documentElement,t=setTimeout(function(){h.className=h.className.replace(/\bwf-loading\b/g,"")+"wf-inactive";if(window.sessionStorage){sessionStorage.setItem("useTypekit","false")}},config.scriptTimeout),tk=d.createElement("script"),f=false,s=d.getElementsByTagName("script")[0],a;h.className+="wf-loading";tk.src='//use.typekit.net/'+config.kitId+'.js';tk.async=true;tk.onload=tk.onreadystatechange=function(){a=this.readyState;if(f||a&&a!="complete"&&a!="loaded")return;f=true;clearTimeout(t);try{Typekit.load(config)}catch(e){}};s.parentNode.insertBefore(tk,s)
       })(document);
+
+      if(window.Rollbar) {
+        Rollbar.configure({
+          payload: {
+            person: {
+              id: <%= current_user.id %>,
+              email: '<%= current_user.email %>'
+            }
+          }
+        });
+      }
     </script>
     <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=places,geometry"></script>
     <%= render 'google_analytics' %>

@@ -119,13 +119,13 @@
             <div class="progress-box-title"><i class="fa fa-users"></i> <%= _('Contacts') %></div>
             <div class="progress-stat">
               <a href="<%= contacts_path(filters: { status: Api::V1::ProgressController::ACTIVE_STATUSES_FOR_STAT }) %>">
-                <span class="count-big">{{progress.data.contacts.active}}</span> 
+                <span class="count-big">{{progress.data.contacts.active}}</span>
                 <%= _('Active') %>
               </a>
             </div>
             <div class="progress-stat">
               <a href="<%= contacts_path(filters: { referrer: '*', status: Contact::IN_PROGRESS_STATUSES }) %>">
-                <span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span> 
+                <span class="count-big">{{progress.data.contacts.referrals_on_hand}}</span>
                 <%= _('Referrals On-hand') %>
               </a>
             </div>
@@ -221,12 +221,3 @@
 <div id="generic_dialog"></div>
 <%= render 'home/late_partners_dialog' %>
 <%= render 'tasks/results_modal' %>
-<script type="text/javascript">
-    $.mpdx.mail_chimp_account_present =
-        <%= current_account_list.mail_chimp_account.present? &&
-            current_account_list.mail_chimp_account.active %>;
-    $.mpdx.mail_chimp_lists =
-       <%= current_account_list.mail_chimp_account.try(:lists_available_for_appeals)
-             .to_json.html_safe %>;
-</script>
-

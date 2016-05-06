@@ -12,7 +12,10 @@ body {
 
 table {padding: 0; margin: 0; border-collapse: collapse;}
 td, th {text-align: left; vertical-align: top;}
-.table_select_filters {font-size: 11px;}
+.table_select_filters {
+  font-size: auto;
+  label {display: inline-block;}
+}
 .table_select_check {padding-right: 4px;}
 hr.thin {margin: .5em 0; border: none; border-top: 1px solid $gray_mid;}
 hr.thick {margin: 1.5em 0; border: none; border-top: 6px solid $gray_mid; width: 100%;}
@@ -2100,6 +2103,90 @@ appeals-list .show-all {
   }
   table {
     width: 100%;
+  }
+}
+.panel-action {
+  border-width: 4px;
+  background: #909b9c;
+  color: #fff;
+  label {
+    color: #fff !important;
+  }
+}
+.exception-toggle-btn {
+  border-radius: 3px 3px 0 0;
+  border-bottom: 0;
+  margin-left: 15px;
+  font-size: 16px;
+  font-weight: bold;
+}
+.panel-exception {
+  margin-bottom: .5em;
+  &:last-child {
+    margin-bottom: 0;
+  }
+  .toggle-exception {
+    color: #000;
+  }
+  .add-exception {
+    &:before {
+      content: "\f055";
+      display: inline-block;
+      font-family: "fontawesome";
+      margin-right: 4px;
+      margin-left: 8px;
+    }
+  }
+  .panel-body {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+  p {
+    margin-bottom: .5em;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  ul {
+    padding-left: 20px;
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  .add-space {
+    padding-left: 60px;
+  }
+  .add-cta {
+    position: absolute;
+    left: -1px;
+    top: 50%;
+    margin-top: -20px;
+    padding: 3px 5px;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    .fa {
+      font-size: 30px;
+    }
+    .word {
+      display: block;
+    }
+  }
+}
+
+.panel-except-container {
+  background-color: #eee;
+}
+
+.table-summary {
+  margin-bottom: 0;
+}
+
+.exception-name {
+  .exception-toggle {
+    font-size: 18px;
+    margin-right: 10px;
+  }
+  h4 {
   }
 }
 
