@@ -36,6 +36,10 @@
         vm.years = monthRange.yearsWithMonthCounts(vm.allMonths);
         vm.currencyGroups = [];
 
+        // For now we assume the report ends on the current date, but we may
+        // want to support prior years in the future.
+        vm.reportLastDate = moment();
+
         vm.percentage = percentage;
 
         vm._parseReportInfo = parseReportInfo;
@@ -162,7 +166,7 @@
         }
 
         function aggregateDonorDonationsByYear(donors){
-            var thisMonth = moment().format('YYYY-MM');
+            var thisMonth = vm.reportLastDate.format('YYYY-MM');
 
             return _.map(donors, function(donor){
                 // Calculate the average based on the first gift the partner
@@ -201,7 +205,7 @@
 
         function monthsAgo(yearAndMonth) {
             var beginningOfMonth = moment(yearAndMonth + '-01');
-            return moment().diff(beginningOfMonth, 'months');
+            return vm.reportLastDate.diff(beginningOfMonth, 'months');
         }
 
         function addMissingMonths(donations, allMonths){

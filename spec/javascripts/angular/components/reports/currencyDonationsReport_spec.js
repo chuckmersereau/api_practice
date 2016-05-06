@@ -163,6 +163,10 @@ describe('contacts', function() {
 
     describe('aggregateDonorDonationsByYear', function() {
         it('should add an aggregates object to each donor that contains a sum, average, and min', function () {
+            self.controller.reportLastDate = moment('2015-04-15');
+
+            // At this point the donation_date fields have been converted to
+            // months.
             var donors = [
                 {
                     donorInfo: {
@@ -173,17 +177,17 @@ describe('contacts', function() {
                         {
                             "amount": 10.0,
                             "amountConverted": 15.0,
-                            "donation_date": moment().subtract(2, 'months').format('YYYY-MM-DD')
+                            "donation_date": '2015-02'
                         },
                         {
                             "amount": 20.0,
                             "amountConverted": 25.0,
-                            "donation_date": moment().subtract(1, 'months').format('YYYY-MM-DD')
+                            "donation_date": '2015-03'
                         },
                         {
                             "amount": 40.0,
                             "amountConverted": 45.0,
-                            "donation_date": moment().format('YYYY-MM-DD')
+                            "donation_date": '2015-04'
                         }
                     ]
                 }
@@ -301,6 +305,9 @@ describe('contacts', function() {
 
     describe('parseReportInfo', function() {
         it('groups donations by donor, sort them by name, aggregate each donor, and add empty donations for missing months', function () {
+            self.controller.reportLastDate = moment('2015-03-15');
+            debugger;
+
             var reportInfo = {
                 donors: [
                     {
@@ -409,12 +416,12 @@ describe('contacts', function() {
                             ],
                             aggregates: {
                                 sum: 375,
-                                average: 31.25,
+                                average: 125,
                                 min: 175
                             },
                             aggregatesConverted: {
                                 sum: 390,
-                                average: 32.5,
+                                average: 130,
                                 min: 180
                             }
                         },
@@ -452,12 +459,12 @@ describe('contacts', function() {
                             ],
                             aggregates: {
                                 sum: 200,
-                                average: 16.666666666666668,
+                                average: 200 / 3,
                                 min: 100
                             },
                             aggregatesConverted: {
                                 sum: 210,
-                                average: 17.5,
+                                average: 70,
                                 min: 105
                             }
                         }

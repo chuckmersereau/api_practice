@@ -6,7 +6,7 @@
 
 namespace :karma do
   task start: :environment do
-    with_tmp_config :start
+    with_tmp_config :start, '--browsers Chrome'
   end
 
   task run: :environment do
