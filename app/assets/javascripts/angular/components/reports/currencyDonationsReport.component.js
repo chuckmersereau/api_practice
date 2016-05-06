@@ -75,6 +75,10 @@
 
             return _(reportInfo.donations)
                 .filter(function(donation) {
+                    // The API data includes a full 12 previous months plus the
+                    // current month, but we only show 11 previous months plus
+                    // the current month in the report, so exclude donations
+                    // that are not in the report date range.
                     var donationMonth = moment(donation.donation_date).format('YYYY-MM');
                     return monthsAgo(donationMonth) <= vm.monthsBefore;
                 })
@@ -84,13 +88,6 @@
                 })
                 .orderBy('yearTotalConverted', 'desc')
                 .value();
-        }
-
-        function filterForDonationsInDateRange(donations) {
-            // The API data includes a full 12 previous months plus the
-            // current month, but we only show 11 previous months plus
-            // the current month in the report, so exclude donations
-            // that are not in the report date range.
         }
 
         function processCurrencyGroup(currencyGroup, rawDonors, allMonths){
