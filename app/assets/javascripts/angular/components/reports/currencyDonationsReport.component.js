@@ -176,7 +176,7 @@
                 // average counting, but if they didn't then don't as it may be
                 // early in the month and they just haven't given yet.
                 var lastDonationMonth = _.maxBy(donor.donations, 'donation_date').donation_date;
-                if (lastDonationMonth = vm.reportLastMonth) {
+                if (lastDonationMonth === vm.reportLastMonth) {
                     monthsForAverage += 1;
                 }
 
