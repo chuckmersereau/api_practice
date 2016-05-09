@@ -108,7 +108,7 @@ span.menu_item,
 .green_darkest { color: $green_darkest; }
 .red { color: $error_red }
 
-input:read-only,
+input:read-only:not([type="submit"]):not([type="button"]),
 textarea:read-only {
   background-color: #d3d3d3;
 }
