@@ -421,7 +421,7 @@ angular.module('mpdxApp')
         };
 
         var allFinancialPartners = function(contactIds) {
-          return _.all(contactIds, function (contactId) {
+          return _.every(contactIds, function (contactId) {
             record = contactCache.getFromCache(contactId);
             return !angular.isUndefined(record) &&
               !angular.isUndefined(record.contact) &&
