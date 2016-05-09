@@ -418,12 +418,12 @@ describe('contacts', function() {
                             ],
                             aggregates: {
                                 sum: 375,
-                                average: 125,
+                                average: 375 / 2,
                                 min: 175
                             },
                             aggregatesConverted: {
                                 sum: 390,
-                                average: 130,
+                                average: 390 / 2,
                                 min: 180
                             }
                         },
