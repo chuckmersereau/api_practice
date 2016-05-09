@@ -109,7 +109,7 @@ angular.module('mpdxApp')
                                 }}
                         }
                     }, function(data){
-                        var latestComment = _.max(data.comments, function(comment) { return comment.id; });
+                        var latestComment = _.maxBy(data.comments, 'id');
                         parentComponentOrController.comments.push(latestComment);
                         $scope.task.comments.push(latestComment.id);
                         $scope.postNewCommentMsg = '';
