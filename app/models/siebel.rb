@@ -138,13 +138,13 @@ class Siebel < DataServer
 
   def profiles
     unless @profiles
-      unless relay_account = @org_account.user.relay_accounts.first
+      if @org_account.user.relay_accounts.none?
         # This org account is no longer useful
         @org_account.destroy
         return []
       end
       Retryable.retryable on: RestClient::InternalServerError, sleep: 10 do
-        @profiles = SiebelDonations::Profile.find(ssoGuid: relay_account.remote_id)
+        @profiles = SiebelDonations::Profile.find(ssoGuid: @org_account.remote_id)
       end
     end
     @profiles

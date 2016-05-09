@@ -25,10 +25,10 @@ describe Siebel do
   end
 
   context '#import_profiles' do
-    let(:relay) { create(:relay_account, person: person) }
+    let!(:relay) { create(:relay_account, person: person) }
 
     it 'imports profiles for a relay guid' do
-      stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=#{relay.remote_id}")
+      stub_request(:get, "https://wsapi.ccci.org/wsapi/rest/profiles?response_timeout=60000&ssoGuid=#{org_account.remote_id}")
         .to_return(status: 200, body: '[ { "name": "Staff Account (0559826)", "designations": [ { "number": "0559826", "description": "Joshua and Amanda Starcher (0559826)", "staffAccountId": "000559826" } ] }]')
 
       expect(siebel).to receive(:find_or_create_designation_account)
