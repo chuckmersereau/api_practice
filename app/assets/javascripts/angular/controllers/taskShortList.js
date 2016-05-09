@@ -67,7 +67,7 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
     $scope.syncTask = function(resp) {
         var fn = function() {
             var task = resp.task || resp;
-            var old_task = _.findWhere($scope.tasks, {id: task.id});
+            var old_task = _.find($scope.tasks, {id: task.id});
             if(!old_task)
                 $scope.addTask(task);
             else if($scope.history == task.completed)

@@ -172,8 +172,9 @@
                 }
 
                 //retrieve contacts
+                var contactIds =  _.chain(tData.tasks).flatMap('contacts').uniq().join().value();
                 api.call('get', 'contacts?account_list_id=' + state.current_account_list_id +
-                    '&filters[status]=*&filters[ids]=' + _.chain(tData.tasks).pluck('contacts').flatten().unique().join().value(), {}, function (data) {
+                    '&filters[status]=*&filters[ids]=' + contactIds, {}, function (data) {
                     angular.forEach(data.contacts, function (contact) {
                         contactCache.update(contact.id, {
                             addresses: _.filter(data.addresses, function (addr) {
