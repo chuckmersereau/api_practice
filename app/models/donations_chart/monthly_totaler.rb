@@ -33,7 +33,12 @@ class DonationsChart::MonthlyTotaler
   end
 
   def currencies
-    @currencies ||= recent_donations.currencies
+    # It is possible for some donations to have a `nil` value for their
+    # currency, but that that is a rarer case and something we should fix
+    # earlier in the process than here. What we do to handle that case is to
+    # just ignore donations with no currencies to prevent an invalid call on
+    # `nil` in the chart itself.
+    @currencies ||= recent_donations.currencies.select(&:present?)
   end
 
   def totals_for_currency(currency)

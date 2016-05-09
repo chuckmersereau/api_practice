@@ -52,4 +52,14 @@ describe DonationsChart::MonthlyTotaler, '#monthly_totals' do
     create(:donation, donor_account: donor_account, designation_account: designation_account,
                       currency: currency, amount: amount, donation_date: date)
   end
+
+  it 'excludes donations with blank currencies' do
+    create(:donation, donor_account: donor_account, currency: nil, amount: 10,
+                      designation_account: designation_account,
+                      donation_date: Date.new(2016, 4, 1))
+
+    totaler = DonationsChart::MonthlyTotaler.new(account_list)
+
+    expect(totaler.totals).to be_empty
+  end
 end
