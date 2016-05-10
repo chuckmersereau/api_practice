@@ -8,7 +8,7 @@
     <span ng-if="$ctrl.percentage(donationType) > 7" ng-switch="donationType.type">
       <span ng-switch-when="received"><%= _('Received') %></span>
       <span ng-switch-when="likely"><%= _('Likely') %></span>
-      <span ng-switch-when="unlikely"><%= _('Unlikely') %></span>
+      <span ng-switch-when="unlikely"><%= _('Possible') %></span>
     </span>
   </uib-bar>
 </uib-progress>
@@ -22,16 +22,16 @@
         <div class="col-xs-6">
           <h4>
             <span ng-switch-when="received"><%= _('Donations So Far This Month') %></span>
-            <span ng-switch-when="likely"><%= _('Likely Donors This Month') %></span>
-            <span ng-switch-when="unlikely"><%= _('Unlikely Donors This Month') %></span>
+            <span ng-switch-when="likely"><%= _('Likely Partners This Month') %></span>
+            <span ng-switch-when="unlikely"><%= _('Possible Partners This Month') %></span>
             <span ng-switch-default>{{ donationType.type }}</span>
             <i class="fa fa-chevron-down collapsible-heading-arrow" aria-hidden="true" ng-if="tableCollapsed"></i>
             <i class="fa fa-chevron-up collapsible-heading-arrow" aria-hidden="true" ng-if="!tableCollapsed"></i>
             <small class="collapsible-heading-count">
               <ng-pluralize ng-if="tableCollapsed" count="donationType.donations.length || 0"
-                            when="{'0': '<%= _('No donors') %>',
-                                 'one': '<%= _('Show 1 donor') %>',
-                                 'other': '<%= _('Show {} donors') %>'}"></ng-pluralize>
+                            when="{'0': '<%= _('No partners') %>',
+                                 'one': '<%= _('Show 1 partner') %>',
+                                 'other': '<%= _('Show {} partners') %>'}"></ng-pluralize>
             </small>
           </h4>
         </div>
@@ -49,7 +49,7 @@
       <table class="table table-striped">
         <thead>
         <tr>
-          <th style="width: 30%"><%= _('Donor') %></th>
+          <th style="width: 30%"><%= _('Partner') %></th>
           <th style="width: 20%"><%= _('Status') %></th>
           <th style="width: 10%" class="text-right"><%= _('Commitment') %></th>
           <th style="width: 15%" class="text-right"><%= _('Frequency') %></th>
@@ -83,7 +83,7 @@
     </div>
 
     <div class="panel-footer" ng-if="!donationType.donations" uib-collapse="tableCollapsed">
-      <%= _('No donors found in this category') %>
+      <%= _('No partners found in this category') %>
     </div>
   </div>
 </div>

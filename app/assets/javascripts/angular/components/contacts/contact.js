@@ -48,7 +48,7 @@
         function getPrimaryPhone(id){
             var person = _.find(contactCache.getFromCache(vm.contact.id).people, { 'id': id });
             var phone =_.find(contactCache.getFromCache(vm.contact.id).phone_numbers, function (i) {
-                return _.contains(person.phone_number_ids, i.id) && i.primary;
+                return _.includes(person.phone_number_ids, i.id) && i.primary;
             });
             return phone || '';
         }

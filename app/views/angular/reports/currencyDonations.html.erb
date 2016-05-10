@@ -1,0 +1,123 @@
+<div ng-if="$ctrl.errorOccurred">
+  <%= _('Report data could not load due to an error. Please try again or contact support.') %>
+</div>
+
+<div ng-if="$ctrl.loading">
+  <%= _('Loading data...') %><br/>
+</div>
+
+<uib-progress ng-if="!$ctrl.loading && !$ctrl.errorOccurred && $ctrl.type === 'donor'" class="report-progress-bar">
+  <uib-bar ng-repeat="currencyGroup in $ctrl.currencyGroups"
+           value="$ctrl.percentage(currencyGroup.yearTotalConverted)"
+           type="color-{{$index % 6}}"
+           uib-tooltip-template="'inline/currencyDonationsReport/progressBarTooltip.html'"
+           tooltip-placement="bottom">
+    <script type="text/ng-template" id="inline/currencyDonationsReport/progressBarTooltip.html">
+      <div>
+        {{currencyGroup.currencySymbol}}{{currencyGroup.yearTotal | number : 0}} {{currencyGroup.currency}}
+      </div>
+      <div>
+        <%= _('Converted to') %>: {{currencyGroup.currencySymbolConverted}}{{currencyGroup.yearTotalConverted | number : 0}}
+      </div>
+      <div>
+        ({{$ctrl.percentage(currencyGroup.yearTotalConverted) | number:0}}%
+        <%= _('of total') %>
+        {{currencyGroup.currencySymbolConverted}}{{$ctrl.sumOfAllCurrenciesConverted | number : 0}} {{currencyGroup.currencyConverted}})
+      </div>
+    </script>
+    <span ng-if="$ctrl.percentage(currencyGroup.yearTotalConverted) > 7">
+      {{currencyGroup.currency}} ({{currencyGroup.currencySymbol}})
+    </span>
+  </uib-bar>
+</uib-progress>
+<div class="panel panel-default panel-report" ng-if="!$ctrl.errorOccurred" ng-repeat="currencyGroup in $ctrl.currencyGroups">
+  <div class="table-responsive">
+    <table ng-if="!$ctrl.errorOccurred" class="table table-striped">
+      <thead>
+      <tr class="year-header-row">
+        <th class="currency-title">
+          <span ng-if="!$ctrl.useConvertedValues">{{currencyGroup.currency}} ({{currencyGroup.currencySymbol}})</span>
+          <span ng-if="$ctrl.useConvertedValues">{{currencyGroup.currencyConverted}} ({{currencyGroup.currencySymbolConverted}})</span>
+        </th>
+        <th ng-repeat="(year, numberOfMonths) in $ctrl.years" colspan="{{numberOfMonths}}">
+          <div class="year-header-range">{{year}}</div>
+        </th>
+        <th>
+          <div class="year-header-range">&nbsp;</div>
+        </th>
+      </tr>
+      <tr>
+        <th><%= _('Partner')%></th>
+        <th class="text-right" ng-repeat="date in $ctrl.allMonths">{{$ctrl.moment(date).format('MMM')}}</th>
+        <th class="text-right"><%= _('Total') %></th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr ng-repeat="donor in currencyGroup.donors">
+        <td>
+          <span class="donor-name" uib-tooltip-template="'inline/currencyDonationsReport/nameTooltip.html'">
+            <i class="fa fa-info-circle" aria-hidden="true"></i>
+            <a href="/contacts/{{donor.donorInfo.id}}" target="_blank">{{donor.donorInfo.name}}</a>
+          </span>
+          <script type="text/ng-template" id="inline/currencyDonationsReport/nameTooltip.html">
+            <span ng-if="!$ctrl.useConvertedValues">
+              {{currencyGroup.currencySymbol}}{{donor.donorInfo.pledge_amount | number:0}} {{currencyGroup.currency}} {{donor.donorInfo.pledge_frequency}}<br>
+              Avg: {{currencyGroup.currencySymbol}}{{donor.aggregates.average | number:0}} / Min: {{currencyGroup.currencySymbol}}{{donor.aggregates.min | number:0}}
+            </span>
+            <span ng-if="$ctrl.useConvertedValues">
+              {{currencyGroup.currencySymbolConverted}}{{donor.donorInfo.pledge_amount | number:0}} {{currencyGroup.currencyConverted}} {{donor.donorInfo.pledge_frequency}}<br>
+              Avg: {{currencyGroup.currencySymbolConverted}}{{donor.aggregatesConverted.average | number:0}} / Min: {{currencyGroup.currencySymbolConverted}}{{donor.aggregatesConverted.min | number:0}}
+            </span>
+          </script>
+          <span ng-switch="late = donor.donorInfo.late_by_60_days ? 60 : (donor.donorInfo.late_by_30_days ? 30 : false)">
+            <i class="fa fa-circle circle-late" ng-switch-when="30" uib-tooltip="<%= _('30 days late') %>" aria-hidden="true"></i>
+            <i class="fa fa-circle circle-very-late" ng-switch-when="60" uib-tooltip="<%= _('60 days late') %>" aria-hidden="true"></i>
+          </span>
+        </td>
+        <td class="text-right" ng-repeat="donation in donor.donations">
+          <div uib-popover-template="'inline/currencyDonationsReport/donationDetailsTooltip.html'" popover-trigger="mouseenter">
+            <span ng-if="donation.amount !== 0 && !$ctrl.useConvertedValues">{{donation.amount | number:0}}</span>
+            <span ng-if="donation.amountConverted !== 0 && $ctrl.useConvertedValues">{{donation.amountConverted | number:0}}</span>
+            <script type="text/ng-template" id="inline/currencyDonationsReport/donationDetailsTooltip.html">
+              <strong><%= _('Monthly Total') %></strong>
+              <div>{{donation.currencySymbol}}{{donation.amount | number:0}} {{donation.currency}}</div>
+              <div><%= _('Converted') %>: {{donation.currencySymbolConverted}}{{donation.amountConverted | number:0}} {{donation.currencyConverted}}</div>
+              <table class="table table-condensed">
+                <thead>
+                <tr>
+                  <th><%= _('Date') %></th>
+                  <th class="text-right"><%= _('Amount') %></th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr ng-repeat="rawDonation in donation.rawDonations">
+                  <td>{{$ctrl.moment(rawDonation.donation_date).format('MMM Do')}}</td>
+                  <td class="text-right">{{rawDonation.currencySymbol}}{{rawDonation.amount | number:0}} {{rawDonation.currency}}</td>
+                </tr>
+                </tbody>
+              </table>
+            </script>
+          </div>
+        </td>
+        <td class="text-right">
+          <strong ng-if="!$ctrl.useConvertedValues">{{currencyGroup.currencySymbol}}{{donor.aggregates.sum | number:0}}</strong>
+          <strong ng-if="$ctrl.useConvertedValues">{{currencyGroup.currencySymbolConverted}}{{donor.aggregatesConverted.sum | number:0}}</strong>
+        </td>
+      </tr>
+      <tr class="row-total">
+        <td>
+          <strong><%= _('Totals')%></strong>
+        </td>
+        <td class="text-right" ng-repeat="monthTotal in currencyGroup.monthlyTotals track by $index">
+          <strong ng-if="!$ctrl.useConvertedValues">{{currencyGroup.currencySymbol}}{{monthTotal.amount | number:0}}</strong>
+          <strong ng-if="$ctrl.useConvertedValues">{{currencyGroup.currencySymbolConverted}}{{monthTotal.amountConverted | number:0}}</strong>
+        </td>
+        <td class="text-right">
+          <strong ng-if="!$ctrl.useConvertedValues">{{currencyGroup.currencySymbol}}{{currencyGroup.yearTotal | number:0}}</strong>
+          <strong ng-if="$ctrl.useConvertedValues">{{currencyGroup.currencySymbolConverted}}{{currencyGroup.yearTotalConverted | number:0}}</strong>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

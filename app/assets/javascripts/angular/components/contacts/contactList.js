@@ -291,7 +291,7 @@
         }
 
         function tagIsActive(tag){
-            return _.contains(vm.contactQuery.tags, tag);
+            return _.includes(vm.contactQuery.tags, tag);
         }
 
         function tagClick(tag, $event){
@@ -350,8 +350,8 @@
             inactiveQueryStatuses =
                 _.intersection(q.status, window.railsConstants.contact.INACTIVE_STATUSES);
 
-            if (!_.contains(q.status, 'active') || !_.contains(q.status, 'null') ||
-                !_.isEmpty(inactiveQueryStatuses) || _.contains(q.status, 'hidden')) {
+            if (!_.includes(q.status, 'active') || !_.includes(q.status, 'null') ||
+                !_.isEmpty(inactiveQueryStatuses) || _.includes(q.status, 'hidden')) {
                 return false;
             }
 
@@ -364,10 +364,10 @@
             vm.contactsLoading = true;
 
             var statusApiArray = q.status;
-            if (_.contains(q.status, 'active')) {
+            if (_.includes(q.status, 'active')) {
                 statusApiArray = _.uniq(_.union(statusApiArray, railsConstants.contact.ACTIVE_STATUSES));
             }
-            if (_.contains(q.status, 'hidden')) {
+            if (_.includes(q.status, 'hidden')) {
                 statusApiArray = _.uniq(_.union(statusApiArray, railsConstants.contact.INACTIVE_STATUSES));
             }
 
@@ -413,24 +413,24 @@
             api.call('get', requestUrl, {}, function (data) {
                 angular.forEach(data.contacts, function (contact) {
                     var people = _.filter(data.people, function (i) {
-                        return _.contains(contact.person_ids, i.id);
+                        return _.includes(contact.person_ids, i.id);
                     });
-                    var flattenedEmailAddresses = _.flatten(_.pluck(people, 'email_address_ids'));
-                    var flattenedFacebookAccounts = _.flatten(_.pluck(people, 'facebook_account_ids'));
+                    var flattenedEmailAddresses = _.flatMap(people, 'email_address_ids');
+                    var flattenedFacebookAccounts = _.flatMap(people, 'facebook_account_ids');
                     contact.pledge_received = contact.pledge_received == 'true'
 
                     contactCache.update(contact.id, {
                         addresses: _.filter(data.addresses, function (addr) {
-                            return _.contains(contact.address_ids, addr.id);
+                            return _.includes(contact.address_ids, addr.id);
                         }),
                         people: people,
                         email_addresses: _.filter(data.email_addresses, function (email) {
-                            return _.contains(flattenedEmailAddresses, email.id);
+                            return _.includes(flattenedEmailAddresses, email.id);
                         }),
                         contact: _.find(data.contacts, { 'id': contact.id }),
                         phone_numbers: data.phone_numbers,
                         facebook_accounts: _.filter(data.facebook_accounts, function (fb) {
-                            return _.contains(flattenedFacebookAccounts, fb.id);
+                            return _.includes(flattenedFacebookAccounts, fb.id);
                         })
                     });
                 });
