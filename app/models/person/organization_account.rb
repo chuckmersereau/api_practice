@@ -71,7 +71,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
   def import_profiles
     organization.api(self).import_profiles
   rescue DataServerError => e
-    Airbrake.notify(e)
+    Rollbar.error(e)
   end
 
   private
