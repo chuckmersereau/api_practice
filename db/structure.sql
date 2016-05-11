@@ -2202,7 +2202,8 @@ CREATE TABLE person_relay_accounts (
     updated_at timestamp without time zone,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
-    last_download timestamp without time zone
+    last_download timestamp without time zone,
+    key_remote_id character varying(255)
 );
 
 
@@ -5095,6 +5096,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160215185431');
 INSERT INTO schema_migrations (version) VALUES ('20160217173440');
 
 INSERT INTO schema_migrations (version) VALUES ('20160302160145');
+
+INSERT INTO schema_migrations (version) VALUES ('20160329200413');
 
 INSERT INTO schema_migrations (version) VALUES ('20160401173537');
 
