@@ -114,9 +114,14 @@ describe PhoneNumber do
   end
 
   describe 'validate phone number' do
-    it 'does not validate invalid numbers' do
-      expect(PhoneNumber.new(number: 'asdf')).to_not be_valid
-      expect(PhoneNumber.new(number: '(213)BAD-PHONE')).to_not be_valid
+    it 'allows numbers with non-numeric characters' do
+      # The reason for this is that the Tnt import and donor system import will
+      # sometimes have non-numeric values for phone numbers. We used to have
+      # validation for phone numbers to match a regex but it caused more
+      # problems in terms of failed imports than it helped with data
+      # cleanliness.
+      expect(PhoneNumber.new(number: 'asdf')).to be_valid
+      expect(PhoneNumber.new(number: '(213)BAD-PHONE')).to be_valid
     end
 
     it 'allows international numbers not in strict phonelib database' do

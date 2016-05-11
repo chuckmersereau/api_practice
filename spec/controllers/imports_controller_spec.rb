@@ -40,11 +40,11 @@ describe ImportsController do
   context '#csv_preview_partial' do
     render_views
 
-    it 'catches validation errors in contact people e.g. invalid phone number' do
-      import = create(:csv_import_invalid_phone, account_list: @account_list)
+    it 'catches validation errors in contact people e.g. invalid email' do
+      import = create(:csv_import_invalid, account_list: @account_list)
       get :csv_preview_partial, id: import.id
       expect(response).to be_success
-      expect(response.body).to match(/Number only allows numbers/)
+      expect(response.body).to match(/Email is invalid/)
     end
   end
 

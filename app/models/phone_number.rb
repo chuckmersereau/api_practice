@@ -12,8 +12,7 @@ class PhoneNumber < ActiveRecord::Base
 
   before_save :clean_up_number
 
-  validates :number, presence: true,
-                     format: { with: %r{\A\+?[\d\s\.\/\(\)x;-]+\z}, message: 'only allows numbers and -.x' }
+  validates :number, presence: true
 
   # attr_accessible :number, :primary, :country_code, :location, :remote_id
 
