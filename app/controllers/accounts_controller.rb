@@ -4,7 +4,7 @@ class AccountsController < ApplicationController
 
   def index
     @page_title = _('Accounts')
-    @providers = %w(google facebook key relay organization)
+    @providers = %w(google facebook key organization)
   end
 
   def new
@@ -46,8 +46,7 @@ class AccountsController < ApplicationController
     # if they're trying to delete a key or relay account, make sure they have at least
     # one way to log in
     if %w(key relay).include?(params[:provider])
-      unless current_user.key_accounts.length +
-             current_user.relay_accounts.length > 1
+      unless current_user.key_accounts.length > 1
         redirect_to redirect_path, alert: _("If we let you delete that account you won't be able to log in anymore")
         return
       end

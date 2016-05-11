@@ -107,7 +107,7 @@ class User < Person
     return if response.blank?
     guid = JSON.parse(response.to_s)['guid']
     return unless guid.present?
-    relay_account = Person::RelayAccount.find_by('lower(remote_id) = ?', guid.downcase)
+    relay_account = Person::RelayAccount.find_by('lower(relay_remote_id) = ?', guid.downcase)
     return unless relay_account && relay_account.person
     relay_account.person.to_user
   end

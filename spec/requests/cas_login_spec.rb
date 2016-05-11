@@ -10,7 +10,7 @@ describe 'Login with CAS (Relay and Key)' do
       allow(SiebelDonations::Profile).to receive(:find)
       create(:ccc)
 
-      stub_cas_validate(:relay, 'signin.relaysso.org', relay_validate_body)
+      stub_cas_validate(:relay, key_validate_body)
 
       create(:relay_account, remote_id: sso_guid.downcase, person: person,
                              authenticated: true)
@@ -21,24 +21,6 @@ describe 'Login with CAS (Relay and Key)' do
       expect(session['signed_in_with']).to eq 'relay'
       expect(session['warden.user.user.key'][0][0]).to eq person.id
     end
-
-    def relay_validate_body
-      <<-EOS
-      <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
-        <cas:authenticationSuccess>
-          <cas:user>test.user@cru.org</cas:user>
-          <cas:attributes>
-            <lastName>User</lastName>
-            <username>test.user@cru.org</username>
-            <designation>0123456</designation>
-            <ssoGuid>#{sso_guid}</ssoGuid>
-            <firstName>Test</firstName>
-            <emplid>000123456</emplid>
-          </cas:attributes>
-        </cas:authenticationSuccess>
-      </cas:serviceResponse>
-      EOS
-    end
   end
 
   describe 'login with Key' do
@@ -46,39 +28,40 @@ describe 'Login with CAS (Relay and Key)' do
       create(:key_account, remote_id: sso_guid.downcase, person: person,
                            authenticated: true)
 
-      stub_cas_validate(:key, 'thekey.me', key_validate_body)
+      stub_cas_validate(:key, key_validate_body)
+      allow_any_instance_of(Person::KeyAccount).to receive(:find_or_create_org_account)
       expect do
         get callback_path(:key)
       end.to_not change(Person::KeyAccount, :count)
       expect(session['signed_in_with']).to eq 'key'
       expect(session['warden.user.user.key'][0][0]).to eq person.id
     end
-
-    def key_validate_body
-      <<-EOS
-      <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
-        <cas:authenticationSuccess>
-          <cas:user>j@t.co</cas:user>
-          <cas:attributes>
-            <lastName>User</lastName>
-            <email>j@t.co</email>
-            <theKeyGuid>#{sso_guid}</theKeyGuid>
-            <relayGuid>#{sso_guid}</relayGuid>
-            <firstName>Test</firstName>
-            <ssoGuid>#{sso_guid}</ssoGuid>
-          </cas:attributes>
-        </cas:authenticationSuccess>
-      </cas:serviceResponse>
-      EOS
-    end
   end
 
-  def stub_cas_validate(service, host, body)
-    stub_request(:get, cas_validate_url(service, host)).to_return(body: body)
+  def key_validate_body
+    <<-EOS
+    <cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+      <cas:authenticationSuccess>
+        <cas:user>j@t.co</cas:user>
+        <cas:attributes>
+          <lastName>User</lastName>
+          <email>j@t.co</email>
+          <theKeyGuid>#{sso_guid}</theKeyGuid>
+          <relayGuid>#{sso_guid}</relayGuid>
+          <firstName>Test</firstName>
+          <ssoGuid>#{sso_guid}</ssoGuid>
+        </cas:attributes>
+      </cas:authenticationSuccess>
+    </cas:serviceResponse>
+    EOS
   end
 
-  def cas_validate_url(service, host)
-    "https://#{host}/cas/serviceValidate?"\
+  def stub_cas_validate(service, body)
+    stub_request(:get, cas_validate_url(service)).to_return(body: body)
+  end
+
+  def cas_validate_url(service)
+    'https://thekey.me/cas/serviceValidate?'\
       "service=https://localhost:3000/auth/#{service}/callback?"\
       'origin=login%26url=http%253A%252F%252Flocalhost%253A3000%252Flogin&'\
       "ticket=#{ticket}"

@@ -2190,7 +2190,7 @@ ALTER SEQUENCE person_organization_accounts_id_seq OWNED BY person_organization_
 CREATE TABLE person_relay_accounts (
     id integer NOT NULL,
     person_id integer,
-    remote_id character varying(255),
+    relay_remote_id character varying(255),
     first_name character varying(255),
     last_name character varying(255),
     email character varying(255),
@@ -2203,7 +2203,7 @@ CREATE TABLE person_relay_accounts (
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    key_remote_id character varying(255)
+    remote_id character varying(255)
 );
 
 
@@ -4451,10 +4451,10 @@ CREATE INDEX index_person_relay_accounts_on_person_id ON person_relay_accounts U
 
 
 --
--- Name: index_person_relay_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
+-- Name: index_person_relay_accounts_on_relay_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
-CREATE INDEX index_person_relay_accounts_on_remote_id ON person_relay_accounts USING btree (remote_id);
+CREATE INDEX index_person_relay_accounts_on_relay_remote_id ON person_relay_accounts USING btree (relay_remote_id);
 
 
 --
@@ -4510,7 +4510,7 @@ CREATE INDEX index_prayer_letters_accounts_on_account_list_id ON prayer_letters_
 -- Name: index_remote_id_on_person_relay_account; Type: INDEX; Schema: public; Owner: -; Tablespace:
 --
 
-CREATE UNIQUE INDEX index_remote_id_on_person_relay_account ON person_relay_accounts USING btree (lower((remote_id)::text));
+CREATE UNIQUE INDEX index_remote_id_on_person_relay_account ON person_relay_accounts USING btree (lower((relay_remote_id)::text));
 
 
 --
@@ -5104,6 +5104,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160401173537');
 INSERT INTO schema_migrations (version) VALUES ('20160413150136');
 
 INSERT INTO schema_migrations (version) VALUES ('20160419135520');
+
+INSERT INTO schema_migrations (version) VALUES ('20160427165242');
 
 INSERT INTO schema_migrations (version) VALUES ('20160428125403');
 
