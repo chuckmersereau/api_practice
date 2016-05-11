@@ -4,9 +4,9 @@
        href="/appeals/{{appeal.id}}">
          <div class="dash-stat">
             <span class="progress-total-donations count-big">
-                {{donationAggregates(appeal.donations).sum | currency : current_currency_symbol}}
+                {{donationAggregates(appeal.donations).sum | currency : current_currency_symbol : 0}}
             </span>
-            /{{appeal.amount | currency : current_currency_symbol}}
+            /{{appeal.amount | currency : current_currency_symbol : 0}}
         </div>
         <div class="dash-progress">
             <div class="progress-bar"

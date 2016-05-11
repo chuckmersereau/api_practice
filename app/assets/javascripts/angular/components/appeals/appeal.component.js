@@ -16,6 +16,7 @@
         var vm = this;
         var padStart = _.padStart || _.padLeft;
         vm.mins = _(60).range().map(function(i) { return padStart(i, 2, '0') }).value();
+        vm.donationAggregates = {};
 
         vm.selectedContactIds = selectedContactIds;
         vm.save = save;
@@ -118,8 +119,11 @@
                 var str = [];
                 angular.forEach(donations, function (d) {
                     var amount = d.appeal_amount ? d.appeal_amount : d.amount;
-                    amount = $filter('currency')(amount, contact.pledge_currency_symbol);
-                    str.push(d.donation_date + ' - ' + amount);
+                    amount = $filter('isoCurrency')(amount, d.currency);
+                    var string = d.donation_date + ' - ' + amount;
+                    if(state.multi_currencies_for_same_symbol)
+                        string += ' ' + d.currency;
+                    str.push(string);
                 });
                 return str;
             }
@@ -260,17 +264,23 @@
             }
         }
 
-        vm.donationAggregates = function() {
+        function donationAggregates() {
             if(!vm.appeal) {
                 return { sum: 0, average: 0 };
             }
-            var amounts = _.chain(vm.appeal.donations)
-                .map(function(d) { return parseFloat(d.appeal_amount || d.amount) })
-                .reject(function(n) {return !n})
-                .value();
+            var currencies = {};
+            var donations = _.reject(vm.appeal.donations, function(n) { return !n.converted_amount });
+            var amounts = _.map(donations, function (donation) {
+                var amount = parseFloat(donation.appeal_amount || donation.amount);
+                if(currencies[donation.currency] == undefined)
+                    currencies[donation.currency] = amount;
+                else
+                    currencies[donation.currency] += amount;
+                return parseFloat(donation.converted_amount);
+            });
             var sum = _.sum(amounts);
-            return { sum: sum, average: sum/amounts.length };
-        };
+            return { sum: sum, average: sum/amounts.length, currencies: currencies };
+        }
 
         function appealLoaded() {
             vm.checkedContacts = {};
@@ -281,6 +291,10 @@
                 hour: moment().hour(),
                 min: moment().minute()
             };
+            vm.donationAggregates = donationAggregates();
+            vm.appeal.multiCurrency = vm.appeal.currencies.length > 1 ||
+                (vm.appeal.currencies.length == 1 && vm.appeal.currencies[0] != vm.appeal.total_currency);
+
             var contact_fields = 'Contact.id,Contact.name,Contact.status,Contact.tag_list,'+
                                  'Contact.pledge_frequency,Contact.pledge_amount,'+
                                  'Contact.donor_accounts,Contact.pledge_currency_symbol';
@@ -293,7 +307,7 @@
                     vm.newContact = data.contacts[0].id;
                 }, null, true);
 
-            vm.mail_chimp_account_present = state.mail_chimp_account_present == 'true';
+            vm.mail_chimp_account_present = state.mail_chimp_account_present;
 
             if (state.mail_chimp_lists == null || JSON.parse(state.mail_chimp_lists) == null) {
                 vm.mail_chimp_lists = [];

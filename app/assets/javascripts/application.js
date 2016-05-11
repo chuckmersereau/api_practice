@@ -67,6 +67,7 @@
 //= require_tree ./angular/services
 //= require_tree ./angular/filters
 //= require moment
+//= require iso-currency/dist/isoCurrency
 
 //= require bootstrap.min.js
 //= require bootstrap-tagsinput

@@ -20,6 +20,8 @@ class Donation < ActiveRecord::Base
 
   default_scope { order('donation_date desc') }
 
+  scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
+
   after_create :update_totals
   after_save :add_appeal_contacts
 

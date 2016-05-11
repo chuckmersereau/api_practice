@@ -15,12 +15,15 @@ angular.module('mpdxApp')
                 refreshAppeals();
 
                 function donationAggregates(donations) {
-                  var amounts = _.chain(donations)
-                    .map(function(d) { return _.toNumber(d.appeal_amount || d.amount) })
-                    .reject(function(n) {return !n})
-                    .value();
-                  var sum = _.sum(amounts);
-                  return {sum: sum, average: sum/amounts.length};
+                    var amounts = _.chain(donations)
+                                   .map('converted_amount')
+                                   .reject(function(n) {return !n})
+                                   .value();
+                    if(_.sumBy)
+                        var sum = _.sumBy(amounts, _.toNumber);
+                    else
+                        var sum = _.sum(amounts);
+                    return {sum: sum, average: sum/amounts.length};
                 }
 
                 $scope.donationAggregates = function(donations){

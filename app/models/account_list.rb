@@ -77,8 +77,10 @@ class AccountList < ActiveRecord::Base
   end
 
   def salary_currency
-    @salary_currency ||= settings[:salary_currency] ||
-                         Organization.find(salary_organization_id).default_currency_code
+    return @salary_currency if @salary_currency
+    @salary_currency = settings[:salary_currency]
+    @salary_currency = Organization.find(salary_organization_id).default_currency_code if @salary_currency.blank?
+    @salary_currency
   end
 
   def monthly_goal=(val)

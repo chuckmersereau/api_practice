@@ -199,13 +199,32 @@
               </tr>
               <tr>
                 <td colspan="2"></td>
-                <td style="text-align: right;"><strong><%= _('Total') %>:</strong> </td>
-                <td colspan="2">{{$ctrl.donationAggregates().sum | currency : current_currency_symbol}}</td>
+                <td style="text-align: right;">
+                  <span ng-repeat="(currency, total) in $ctrl.donationAggregates.currencies"
+                        ng-if="$ctrl.appeal.multiCurrency">
+                    <%= _('Total') %> {{currency}}:<br/>
+                  </span>
+                  <strong>
+                    <span ng-if="$ctrl.appeal.multiCurrency">
+                      <%= _('Total converted to') %> {{$ctrl.appeal.total_currency }}:
+                    </span>
+                    <span ng-if="!$ctrl.appeal.multiCurrency">
+                      <%= _('Total') %>:
+                    </span>
+                  </strong>
+                </td>
+                <td colspan="2">
+                  <span ng-repeat="(currency, total) in $ctrl.donationAggregates.currencies"
+                        ng-if="$ctrl.appeal.multiCurrency">
+                    {{total | isoCurrency : currency : 0}}<br/>
+                  </span>
+                  <strong>{{$ctrl.donationAggregates.sum | isoCurrency : $ctrl.appeal.total_currency : 0}}</strong>
+                </td>
               </tr>
               <tr>
                 <td colspan="2"></td>
                 <td style="text-align: right;"><strong><%= _('Average') %>:</strong> </td>
-                <td colspan="2">{{$ctrl.donationAggregates().average | currency : current_currency_symbol}}</td>
+                <td colspan="2">{{$ctrl.donationAggregates.average | isoCurrency : $ctrl.appeal.total_currency : 0}}</td>
               </tr>
               <tr><td colspan="5" class="table_select_filters">
                   <label><%= _('Select') %></label>
