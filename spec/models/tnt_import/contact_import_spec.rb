@@ -35,7 +35,31 @@ describe TntImport::ContactImport do
   end
 
   it 'does not cause an error and increases contact count for case with first email not preferred' do
-    row = YAML.load(File.new(Rails.root.join('spec/fixtures/tnt/tnt_row_multi_email.yaml')).read)
+    row = load_yaml_row(:tnt_row_multi_email)
     expect { import.send(:import_contact, row) }.to change(Contact, :count).by(1)
+  end
+
+  it 'does not error if phone is invalid and person has email' do
+    account_list = create(:account_list)
+    tnt_import = double(user: double, account_list: account_list,
+                        override?: true)
+    import = TntImport::ContactImport.new(tnt_import, [], [])
+    row = load_yaml_row(:bad_phone_valid_email_row)
+
+    expect do
+      import.import_contact(row)
+    end.to change(Contact, :count).by(1)
+
+    contact = Contact.last
+    expect(contact.people.count).to eq 1
+    person = contact.people.first
+    expect(person.phone_numbers.count).to eq 1
+    expect(person.phone_numbers.first.number).to eq '(UNLISTED) call office'
+    expect(person.email_addresses.count).to eq 1
+    expect(person.email_addresses.first.email).to eq 'ron@t.co'
+  end
+
+  def load_yaml_row(filename)
+    YAML.load(File.new(Rails.root.join("spec/fixtures/tnt/#{filename}.yaml")).read)
   end
 end

@@ -1,0 +1,112 @@
+---
+id: '300735204'
+FileAs: Doe, Ron
+Greeting: Ron
+GreetingIsCustom: 'false'
+Salutation: Dear Ron
+SalutationIsCustom: 'false'
+ShortName: Ron
+ShortNameIsCustom: 'false'
+MailingAddressBlock: "Ron \n106 Some LaneSomewhere, TX  12345-6789"
+MailingAddressIsDeliverable: 'true'
+Phone: "(UNLISTED) call office"
+PhoneIsValid: 'true'
+Email: ron@t.co
+EmailIsValid: 'true'
+IsOrganization: 'false'
+Title: Dr.
+FirstName: Ron
+LastName: Doe
+Deceased: 'false'
+MailingAddressType: '1'
+MailingStreetAddress: 106 Some Lane
+MailingCity: Somewhere
+MailingState: TX
+MailingPostalCode: 12345-6789
+HomeStreetAddress: 106 Some Lane
+HomeCity: Somewhere
+HomeState: TX
+HomePostalCode: 12345-6789
+HomeCountryID: '840'
+HomeCountry: United States of America
+HomeAddressIsDeliverable: 'true'
+HomeAddressBlock: |-
+  Ron and Joyce Doe
+  106 Some LaneSomewhere, TX  12345-6789
+HomeAddressBlockIsCustom: 'false'
+OtherCountryID: '840'
+OtherCountry: United States of America
+OtherAddressIsDeliverable: 'false'
+OtherAddressBlockIsCustom: 'false'
+BusinessCountryID: '840'
+BusinessCountry: United States of America
+BusinessAddressIsDeliverable: 'false'
+BusinessAddressBlockIsCustom: 'false'
+SpouseBusinessCountryID: '840'
+SpouseBusinessCountry: United States of America
+SpouseBusinessAddressIsDeliverable: 'false'
+SpouseBusinessAddressBlockIsCustom: 'false'
+PreferredPhoneType: '0'
+PhoneIsValidMask: '801'
+PhoneCountryIDs: |-
+  0=840
+  5=840
+  8=840
+  9=840
+HomePhone: "(UNLISTED) call office"
+PreferredEmailTypes: '2'
+Email1: ron@t.co
+Email1IsValid: 'true'
+Email2IsValid: 'false'
+Email3IsValid: 'false'
+SpouseEmail1IsValid: 'false'
+SpouseEmail2IsValid: 'false'
+SpouseEmail3IsValid: 'false'
+NotesAsRTF: ''
+Notes: ''
+FamilySideID: '0'
+FamilyLevelID: '0'
+Children: Brad, Joy
+Categories: Email SU
+MapAddressType: '0'
+MapLat: '0'
+MapLng: '0'
+PledgeAmount: '400'
+PledgeFrequencyID: '12'
+PledgeReceived: 'true'
+PledgeStartDate: '2003-03-09'
+MPDPhaseID: '60'
+NextAsk: '1899-12-30'
+NeverAsk: 'false'
+LikelyToGiveID: '0'
+SendNewsletter: 'true'
+NewsletterMediaPref: "+E-P"
+DirectDeposit: 'false'
+Magazine: 'false'
+MonthlyPledge: '33.3333'
+FirstGiftDate: '1995-06-07'
+LastGiftDate: '2015-06-22'
+LastGiftAmount: '200'
+LastGiftOrganizationID: "-1028580923"
+LastGiftOrgDonorCode: '327796051'
+LastGiftPaymentMethod: Check
+PrevYearTotal: '200'
+YearTotal: '0'
+LifetimeTotal: '11700'
+LifetimeNumberOfGifts: '21'
+LargestGift: '1000'
+GoodUntil: '2015-12-21'
+AveMonthlyGift: '19.9074'
+LastDateInAve: '2016-05-31'
+TwelveMonthTotal: '200'
+LastActivity: '2011-08-30'
+LastAppointment: '1899-12-30'
+LastCall: '2003-06-23'
+LastPreCall: '1899-12-30'
+LastLetter: '2011-08-30'
+LastVisit: '1899-12-30'
+LastThank: '2005-10-28'
+LastChallenge: '1899-12-30'
+AppealsSinceLastGift: '0'
+ChallengesSinceLastGift: '0'
+OrgDonorCodes: '327796051'

@@ -9,9 +9,9 @@
         }
     });
 
-    currencySelectController.$inject = ['twitterCldr'];
+    currencySelectController.$inject = ['twitterCldr', '_'];
 
-    function currencySelectController(twitterCldr) {
+    function currencySelectController(twitterCldr, _) {
         var vm = this;
         vm.currencies = [];
 
