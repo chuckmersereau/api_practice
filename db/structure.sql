@@ -758,6 +758,39 @@ ALTER SEQUENCE contacts_id_seq OWNED BY contacts.id;
 
 
 --
+-- Name: currency_aliases; Type: TABLE; Schema: public; Owner: -; Tablespace:
+--
+
+CREATE TABLE currency_aliases (
+    id integer NOT NULL,
+    alias_code character varying(255) NOT NULL,
+    rate_api_code character varying(255) NOT NULL,
+    ratio numeric NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: currency_aliases_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE currency_aliases_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: currency_aliases_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE currency_aliases_id_seq OWNED BY currency_aliases.id;
+
+
+--
 -- Name: currency_rates; Type: TABLE; Schema: public; Owner: -; Tablespace:
 --
 
@@ -2724,6 +2757,13 @@ ALTER TABLE ONLY contacts ALTER COLUMN id SET DEFAULT nextval('contacts_id_seq':
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY currency_aliases ALTER COLUMN id SET DEFAULT nextval('currency_aliases_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY currency_rates ALTER COLUMN id SET DEFAULT nextval('currency_rates_id_seq'::regclass);
 
 
@@ -3223,6 +3263,14 @@ ALTER TABLE ONLY contact_referrals
 
 ALTER TABLE ONLY contacts
     ADD CONSTRAINT contacts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: currency_aliases_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace:
+--
+
+ALTER TABLE ONLY currency_aliases
+    ADD CONSTRAINT currency_aliases_pkey PRIMARY KEY (id);
 
 
 --
@@ -5108,4 +5156,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160419135520');
 INSERT INTO schema_migrations (version) VALUES ('20160427165242');
 
 INSERT INTO schema_migrations (version) VALUES ('20160428125403');
+
+INSERT INTO schema_migrations (version) VALUES ('20160429175451');
 
