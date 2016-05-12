@@ -10,3 +10,4 @@ Rails.application.config.assets.precompile += [/^[a-z0-9]\w+.(css|js)$/]
 Rails.application.config.assets.precompile += ['jquery-ui.css'] # Disable delivery errors, bad email addresses will be ignored
 
 Rails.application.config.assets.precompile += [/angular-i18n/]
+Rails.application.config.assets.precompile += [/twitter_cldr/]

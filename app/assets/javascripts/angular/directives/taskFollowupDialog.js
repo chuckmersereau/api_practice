@@ -94,6 +94,7 @@ angular.module('mpdxApp')
                             contact.pledge_amount = $scope.followUpDialogResult.financialCommitment.amount;
                             contact.pledge_frequency = $scope.followUpDialogResult.financialCommitment.frequency;
                             contact.pledge_start_date = $scope.followUpDialogResult.financialCommitment.date;
+                            contact.pledge_currency = $scope.followUpDialogResult.financialCommitment.currency;
                         }
                         httpPromises.push(saveContact(contact));
                     });
@@ -248,6 +249,9 @@ angular.module('mpdxApp')
                     newsletter: true
                 };
                 $scope.followUpDialogResult = {
+                    financialCommitment: {
+                        currency: state.default_currency
+                    },
                     thankTask: {
                         subject: 'For Financial Partnership',
                         date: dateTwoDaysFromToday

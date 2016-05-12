@@ -61,6 +61,7 @@
 //= require angular/mpdxApp
 //= require angular/mpdxApp.constants
 //= require angular/railsConstants
+//= require_tree ./angular/factories
 //= require_tree ./angular/components
 //= require_tree ./angular/controllers
 //= require_tree ./angular/directives
@@ -75,3 +76,5 @@
 
 //= require gmaps/google
 //= require insights
+
+//= require twitter_cldr/full/core

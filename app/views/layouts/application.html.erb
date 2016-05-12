@@ -11,6 +11,7 @@
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
     <%= javascript_include_tag "angular-i18n/angular-locale_#{locale}.js" %>
+    <%= javascript_include_tag "twitter_cldr/min/#{locale}.min.js" %>
     <%= csrf_meta_tags %>
   </head>
   <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller" ng-app="mpdxApp">
@@ -29,6 +30,8 @@
                                                  .to_json.html_safe %>'></preload-state>
     <preload-state name="multi_currencies_for_same_symbol"
                    data="<%= exhibit(current_account_list).multi_currencies_for_same_symbol? %>"></preload-state>
+    <preload-state name="default_currency" data="<%= current_account_list.default_currency %>"></preload-state>
+
     <%= render 'impersonation_bar' %>
     <%= render 'peek/bar' %>
 
