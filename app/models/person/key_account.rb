@@ -61,7 +61,7 @@ class Person::KeyAccount < ActiveRecord::Base
   end
 
   def find_or_create_org_account
-    return if Rails.env.development?
+    return if Rails.env.development? && ENV['DEV_SIEBEL_ORG_ACCOUNT'].blank?
     return unless SiebelDonations::Profile.find(ssoGuid: relay_remote_id).present?
     org = Organization.cru_usa
 

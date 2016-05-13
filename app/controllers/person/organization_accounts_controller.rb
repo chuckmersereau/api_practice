@@ -5,25 +5,22 @@ class Person::OrganizationAccountsController < ApplicationController
 
   def new
     @organization = Organization.find(params[:id])
-    if @organization.requires_username_and_password?
+    if @organization.uses_key_auth?
+      # If an organization uses Key for authentication then the organization
+      # account for the user is created right away when the user logs in not at
+      # this second step.
+      render_org_error(:requires_key)
+    elsif @organization.requires_username_and_password?
       @organization_account = current_user.organization_accounts.new(organization: @organization)
-
-      respond_to do |format|
-        format.js
-      end
+      respond_to { |format| format.js }
     else
       @organization_account = current_user.organization_accounts.create!(organization_id: @organization.id)
-
       respond_to do |format|
         format.js { render :create }
       end
     end
   rescue ActiveRecord::RecordNotUnique
-    @message = format(_('You are already connected to %{org}. You can only have one account per organization.'),
-                      org: @organization)
-    respond_to do |format|
-      format.js { render :error }
-    end
+    render_org_error(:duplicate)
   end
 
   def create
@@ -57,6 +54,13 @@ class Person::OrganizationAccountsController < ApplicationController
   end
 
   private
+
+  def render_org_error(message_type)
+    @message_type = message_type
+    respond_to do |format|
+      format.js { render :error }
+    end
+  end
 
   def save_account
     return false unless @organization
