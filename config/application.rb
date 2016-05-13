@@ -38,5 +38,14 @@ module Mpdx
 
     config.log_formatter = ::Logger::Formatter.new
     config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, silence: ['/monitors/lb']
+
+    require Rails.root.join('config', 'initializers', 'redis')
+    config.cache_store = :redis_store, {
+      host: Redis.current.client.host,
+      port: Redis.current.client.port,
+      db: 1,
+      namespace: "MPDX:#{Rails.env}:cache",
+      expires_in: 1.day
+    }
   end
 end
