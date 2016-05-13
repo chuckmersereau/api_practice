@@ -35,6 +35,15 @@ class Donation < ActiveRecord::Base
     I18n.l donation_date, format: :long
   end
 
+  def self.all_from_offline_orgs?(donations)
+    org_api_classes(donations).all? { |api_class| api_class == 'OfflineOrg' }
+  end
+
+  def self.org_api_classes(donations)
+    donations.reorder('').joins(:donor_account)
+             .joins(donor_account: :organization).pluck('DISTINCT api_class')
+  end
+
   private
 
   def update_totals

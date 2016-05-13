@@ -43,4 +43,25 @@ describe Donation do
       expect(appeal.contacts.reload).to include(contact)
     end
   end
+
+  context '.all_from_offline_orgs?' do
+    it 'returns true if all donations are from offline orgs' do
+      org = create(:organization, api_class: 'OfflineOrg')
+      donor_account = create(:donor_account, organization: org)
+      create(:donation, donor_account: donor_account)
+
+      expect(Donation.all_from_offline_orgs?(Donation.all)).to be true
+    end
+
+    it 'returns false if any donation is from an online org' do
+      offline_org = create(:organization, api_class: 'OfflineOrg')
+      da_offline = create(:donor_account, organization: offline_org)
+      create(:donation, donor_account: da_offline)
+      online_org = create(:organization, api_class: 'Siebel')
+      da_online = create(:donor_account, organization: online_org)
+      create(:donation, donor_account: da_online)
+
+      expect(Donation.all_from_offline_orgs?(Donation.all)).to be false
+    end
+  end
 end
