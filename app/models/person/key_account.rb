@@ -67,7 +67,7 @@ class Person::KeyAccount < ActiveRecord::Base
 
     # we need to create an organization account if we don't already have one
     account = person.organization_accounts.where(organization_id: org.id).first_or_initialize
-    account.assign_attributes(remote_id: remote_id,
+    account.assign_attributes(remote_id: relay_remote_id,
                               authenticated: true,
                               valid_credentials: true)
     account.save(validate: false)
