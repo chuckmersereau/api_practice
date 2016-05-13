@@ -143,4 +143,18 @@ describe PhoneNumber do
       expect(pn).to_not eq(pn2)
     end
   end
+
+  describe '==' do
+    it 'compares by numeric parts of number' do
+      p1 = PhoneNumber.new(number: '123')
+      p2 = PhoneNumber.new(number: '1-2x3')
+      expect(p1).to eq p2
+    end
+
+    it 'does not error if one of the numbers is nil' do
+      p1 = PhoneNumber.new(number: nil)
+      p2 = PhoneNumber.new(number: '1-2x3')
+      expect(p1).to_not eq p2
+    end
+  end
 end

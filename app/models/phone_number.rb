@@ -46,7 +46,7 @@ class PhoneNumber < ActiveRecord::Base
 
   def ==(other)
     return false unless other.is_a?(PhoneNumber)
-    number.gsub(/\D/, '') == other.number.gsub(/\D/, '')
+    number.to_s.gsub(/\D/, '') == other.number.to_s.gsub(/\D/, '')
   end
 
   def merge(other)
