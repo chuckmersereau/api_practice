@@ -1,20 +1,19 @@
 require_dependency 'data_server'
 class Siebel < DataServer
+  # Donations should sometimes be deleted if they were misclassifed and then
+  # later correctly re-classified. However, we have had 2 recent occasions when
+  # the Siebel API incorectly returned no donations (or a lot fewer than
+  # expected) and it caused MPDX users to unexpectedly lose bunches of
+  # donations. So as a safety measure for that only remove a few donations per
+  # import as typically only a couple at most will be misclassified.
+  MAX_DONATIONS_TO_DELETE_AT_ONCE = 3
+
   def self.requires_username_and_password?
     false
   end
 
   def import_profiles
     designation_profiles = []
-
-    # designation_profiles = @org.designation_profiles.where(user_id: @org_account.person_id)
-
-    # Remove any profiles this user no longer has access to
-    # designation_profiles.each do |designation_profile|
-    # unless profiles.detect { |profile| profile.name == designation_profile.name && profile.id == designation_profile.code}
-    # designation_profile.destroy
-    # end
-    # end
 
     profiles.each do |profile|
       designation_profile = Retryable.retryable do
@@ -96,32 +95,50 @@ class Siebel < DataServer
     end_date = rails_end_date.strftime('%Y-%m-%d')
 
     profile.designation_accounts.each do |da|
-      SiebelDonations::Donation.find(designations: da.designation_number, posted_date_start: start_date,
-                                     posted_date_end: end_date).each do |donation|
+      donations = SiebelDonations::Donation.find(designations: da.designation_number,
+                                                 posted_date_start: start_date,
+                                                 posted_date_end: end_date)
+      donations.each do |donation|
         add_or_update_donation(donation, da, profile)
       end
 
-      # Check for removed donations
-      all_current_donations_relation = da.donations.where('donation_date >= ? AND donation_date <= ?', rails_start_date, rails_end_date)
-                                         .where.not(remote_id: nil)
-      all_current_donations_array = all_current_donations_relation.to_a
-      SiebelDonations::Donation.find(designations: da.designation_number, donation_date_start: start_date,
-                                     donation_date_end: end_date).each do |siebel_donation|
-        donation = all_current_donations_relation.find_by(remote_id: siebel_donation.id)
-        all_current_donations_array.delete(donation)
-      end
+      # Sometimes the Siebel API flakes out and doesn't return any donations.
+      # When that happened before it would cause all MPDX's donation records to
+      # be destroyed (for Cru USA users). As a sanity check for that flaky API
+      # condition, don't remove any donations if there are no donations in the
+      # range we are checking (past 50 days typically).
+      next if donations.empty?
+      remove_deleted_siebel_donations(da, rails_start_date, rails_end_date,
+                                      start_date, end_date)
+    end
+  end
 
-      # Double check removed donations straight from Siebel
-      all_current_donations_array.each do |donation|
-        next if donation.appeal.present?
-        donation_date = donation.donation_date.strftime('%Y-%m-%d')
-        siebel_donations = SiebelDonations::Donation.find(designations: da.designation_number, donors: donation.donor_account.account_number,
-                                                          start_date: donation_date, end_date: donation_date)
-        # The previous query might return a donation for the same date, so check that the remote_id is equal
-        if siebel_donations.blank? || (siebel_donations.size == 1 && siebel_donations.first.id != donation.remote_id)
-          donation.destroy
-        end
-      end
+  def remove_deleted_siebel_donations(da, rails_start_date, rails_end_date,
+                                      start_date, end_date)
+    # Check for removed donations
+    all_current_donations_relation = da.donations.where('donation_date >= ? AND donation_date <= ?', rails_start_date, rails_end_date)
+                                       .where.not(remote_id: nil)
+    all_current_donations_array = all_current_donations_relation.to_a
+    SiebelDonations::Donation.find(designations: da.designation_number, donation_date_start: start_date,
+                                   donation_date_end: end_date).each do |siebel_donation|
+      donation = all_current_donations_relation.find_by(remote_id: siebel_donation.id)
+      all_current_donations_array.delete(donation)
+    end
+
+    donations_destroyed = 0
+    # Double check removed donations straight from Siebel
+    all_current_donations_array.each do |donation|
+      next if donation.appeal.present?
+      donation_date = donation.donation_date.strftime('%Y-%m-%d')
+      siebel_donations = SiebelDonations::Donation.find(designations: da.designation_number, donors: donation.donor_account.account_number,
+                                                        start_date: donation_date, end_date: donation_date)
+      # The previous query might return a donation for the same date, so check that the remote_id is equal
+      next unless siebel_donations.blank? ||
+                  (siebel_donations.size == 1 && siebel_donations.first.id != donation.remote_id)
+      donation.destroy
+
+      donations_destroyed += 1
+      return if donations_destroyed == MAX_DONATIONS_TO_DELETE_AT_ONCE
     end
   end
 

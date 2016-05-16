@@ -1,11 +1,11 @@
 require 'spec_helper'
 
 RSpec.describe NorthStarReport, type: :model do
-  describe 'weeks' do
-    around do |example|
-      travel_to(Date.new(2016, 4, 20)) { example.run }
-    end
+  around do |example|
+    travel_to(Date.new(2016, 4, 20)) { example.run }
+  end
 
+  describe 'weeks' do
     before do
       u1 = create(:user_with_account)
       u2 = create(:user_with_account)
@@ -28,8 +28,6 @@ RSpec.describe NorthStarReport, type: :model do
 
   describe 'months' do
     before do
-      travel_to Date.new(2016, 4, 20)
-
       u1 = create(:user_with_account)
       u2 = create(:user_with_account)
 
