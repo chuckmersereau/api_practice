@@ -177,7 +177,7 @@ class AccountList < ActiveRecord::Base
   end
 
   def scope_donations_by_designations(donations)
-    if Donation.all_from_offline_orgs?(donations) && designation_account_ids.empty?
+    if designation_account_ids.empty? && Donation.all_from_offline_orgs?(donations)
       donations
     else
       donations.where(designation_account_id: designation_account_ids)
