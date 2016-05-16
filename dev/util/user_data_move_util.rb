@@ -58,7 +58,7 @@ class UserDataMover
     from_user.organization_accounts.each do |org_account|
       next if org_account.organization_id.in?(to_user.organization_accounts.pluck(:organization_id))
       puts "  Moving org account #{org_account.id} from #{from_user.id} to #{to_user.id}"
-      org_account.update(person: to_user)
+      org_account.update_column(:person_id, to_user.id)
     end
   end
 
