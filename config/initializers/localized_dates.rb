@@ -1,0 +1,1 @@
+MONTH_FIRST_LOCALE = %w(en).freeze
