@@ -12,7 +12,6 @@ app/assets/javascripts/angular/components/reports/salaryCurrencyDonationsReport.
 app/assets/javascripts/angular/components/tasks/tasks.component.js
 app/assets/javascripts/angular/controllers/progress.js
 app/assets/javascripts/angular/controllers/taskShortList.js
-app/assets/javascripts/angular/directives/appealsList.js
 app/assets/javascripts/angular/directives/replaceAvatar.js
 app/assets/javascripts/angular/directives/task.js
 app/assets/javascripts/angular/directives/taskFollowupDialog.js
