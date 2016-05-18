@@ -15,9 +15,8 @@
       </div>
       <div class="cw-top">
 
-
         <p>
-          <strong>  
+          <strong>
           <%= _("You're currently modifying MPDX settings for:") %>
           <%= current_account_list.name %>
           </strong>
@@ -26,7 +25,7 @@
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head">
             <a data-toggle="collapse" href="#merge_accounts" class="trigger" aria-expanded="true">
-              <i class="fa fa-chevron-down panel-indicator"></i> 
+              <i class="fa fa-chevron-down panel-indicator"></i>
               <%= _('Merge Your Accounts') %>
             </a>
           </div>
@@ -37,16 +36,29 @@
                   <h5><%= _('Merge multiple personal donation accounts into one. (Multi-currency support)') %></h5>
                 </div>
                 <div class="col-md-8">
-                  <p><%= _('If you have personal donation accounts in different countries or organizations, you can bring them into one view in MPDX. Though the actual donation accounts will remain separate within their respective organizations, they will be merged together in MPDX permanently.') %></p>         
-                  <div class="alert alert-danger"><i class="fa fa-warning"></i><strong><%= _('THIS MERGE WILL AFFECT ALL PEOPLE WITH ACCESS TO THIS ACCOUNT AND CANNOT BE UNDONE.') %></strong></div>
+                  <p>
+                    <%= _('If you have personal donation accounts in different countries or organizations, '\
+                          'you can bring them into one view in MPDX. Though the actual donation accounts will '\
+                          'remain separate within their respective organizations, they will be merged together '\
+                          'in MPDX permanently.') %></p>
+                    <div class="alert alert-danger"><i class="fa fa-warning"></i>
+                      <strong><%= _('THIS MERGE WILL AFFECT ALL PEOPLE WITH ACCESS TO THIS ACCOUNT AND CANNOT BE UNDONE.') %></strong>
+                    </div>
 
                   <div class="well">
                   <% if @mergeable_accounts.size == 0 %>
                     <p>
-                      <i class="fa-warning fa"></i> <%= _('You only have access to this account, so you cannot merge it with another one yet. Share this account with someone else first. Once they accept your share, you will be able to merge your accounts together.') %>
+                      <i class="fa-warning fa"></i>
+                      <%= _('You only have access to this account, so you cannot merge it with another one yet. '\
+                            'Share this account with someone else first. Once they accept your share, you will be '\
+                            'able to merge your accounts together.') %>
                     </p>
                   <% else %>
-                    <p><%= _('You are merging the account below into your') %> <strong><%= current_account_list.name %></strong>. <%= _('Merges are irriversable. We recommend that you are logged into the primary account.') %></p>
+                    <p>
+                      <%= _('You are merging the account below into your') %>
+                      <strong><%= current_account_list.name %></strong>.
+                      <%= _('Merges are irriversable. We recommend that you are logged into the primary account.') %>
+                    </p>
 
                     <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
                       <div class="form-group">
@@ -68,7 +80,7 @@
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head">
             <a data-toggle="collapse" href="#merge_spouse" class="trigger" aria-expanded="true">
-              <i class="fa fa-chevron-down panel-indicator"></i> 
+              <i class="fa fa-chevron-down panel-indicator"></i>
               <%= _('Merge Spouse Accounts') %>
             </a>
           </div>
@@ -79,9 +91,12 @@
                   <h5><%= _('Merge (Combine) your account with your spouse\'s account for a unifed view.') %></h5>
                 </div>
                 <div class="col-md-8">
-
-
-                  <p><%= _('If you are getting married and have two separate donation accounts, you can merge your MPDX accounts together at any time. No data will be lost when they are merged, and we can do it at any time regardless of the status of your staff accounts being merged.') %></p>
+                  <p>
+                    <%= _('If you are getting married and have two separate donation accounts, '\
+                          'you can merge your MPDX accounts together at any time. No data will be '\
+                          'lost when they are merged, and we can do it at any time regardless of the '\
+                          'status of your staff accounts being merged.') %>
+                  </p>
 
                   <div class="well">
                   <h4><%= _('1. Share your accounts with each other.') %></h4>
@@ -99,10 +114,16 @@
 
                   <% if @mergeable_accounts.size == 0 %>
                     <p>
-                      <i class="fa-warning fa"></i> <%= _('You only have access to this account, so you cannot merge it with another one yet. Share this account with someone else first. Once they accept your share, you will be able to merge your accounts together.') %>
+                      <i class="fa-warning fa"></i>
+                      <%= _('You only have access to this account, so you cannot merge it with another one yet. '\
+                            'Share this account with someone else first. Once they accept your share, you will be '\
+                            'able to merge your accounts together.') %>
                     </p>
                   <% else %>
-                    <p><%= _('You are merging the account below into your') %> <strong><%= current_account_list.name %></strong>. <%= _('Merges are irriversable. We recommend that you are logged into the primary (usually husband) account.') %></p>
+                    <p>
+                      <%= _('You are merging the account below into your') %>
+                      <strong><%= current_account_list.name %></strong>.
+                      <%= _('Merges are irriversable. We recommend that you are logged into the primary (usually husband) account.') %></p>
 
                     <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
                       <div class="form-group">
@@ -124,7 +145,7 @@
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head">
             <a data-toggle="collapse" href="#share_account" class="trigger" aria-expanded="true">
-              <i class="fa fa-chevron-down panel-indicator"></i> 
+              <i class="fa fa-chevron-down panel-indicator"></i>
               <%= _('Share Account Access') %>
             </a>
           </div>
@@ -135,67 +156,70 @@
                   <h5><%= _('Share this ministry account with other team members') %></h5>
                 </div>
                 <div class="col-md-8 pref-content">
-                  <p><%= _('If you want to allow another mpdx user to have access to this ministry account, you can share access with them. Make sure you have the proper permissions and leadership consensus around this sharing before you do this. You will be able to remove access later.') %></p>
+                  <p>
+                    <%= _('If you want to allow another mpdx user to have access to this ministry account, '\
+                          'you can share access with them. Make sure you have the proper permissions and '\
+                          'leadership consensus around this sharing before you do this. '\
+                          'You will be able to remove access later.') %>
+                  </p>
 
-                 
-                    <strong><%= _('Account currently shared with') %></strong>
-                    <ul class="account-users">
-                    <% current_account_list.users.each do |user| %>
-                      <li>
-                          <%= "#{user.first_name} #{user.last_name} (#{user.email_addresses.first})" %>
+                  <strong><%= _('Account currently shared with') %></strong>
+                  <ul class="account-users">
+                  <% current_account_list.users.each do |user| %>
+                    <li>
+                        <%= "#{user.first_name} #{user.last_name} (#{user.email_addresses.first})" %>
 
 
-                          <% designation_profile = current_account_list.designation_profiles.find_by(user: user) %>
-                          <% if designation_profile  %>
-                            <span  data-toggle="tooltip" data-placement="top" title="<%= _('Linked by designation: ') + designation_profile.name %>">
-                              <i class="fa fa-info-circle"></i>
-                          </span>
-                            
-                          <% else  %>
-                            <% invite = current_account_list.account_list_invites.find_by(accepted_by_user: user) %>
-                            <% if invite %>
-                              <%= _('Invited by: ') + "#{invite.invited_by_user.first_name} #{invite.invited_by_user.last_name}" %>
-                              <% if current_user.can_manage_sharing?(current_account_list) %>
-                                <%= link_to _('Remove Access'), remove_access_account_lists_path(user_id: user.id),
-                                  class: 'btn btn-xs btn-danger', method: :post %>
-                              <% end %>
-                            <% else %>
-                              <%= _('Manually added by MPDX support') %>
+                        <% designation_profile = current_account_list.designation_profiles.find_by(user: user) %>
+                        <% if designation_profile  %>
+                          <span  data-toggle="tooltip" data-placement="top" title="<%= _('Linked by designation: ') + designation_profile.name %>">
+                            <i class="fa fa-info-circle"></i>
+                        </span>
+
+                        <% else  %>
+                          <% invite = current_account_list.account_list_invites.find_by(accepted_by_user: user) %>
+                          <% if invite %>
+                            <%= _('Invited by: ') + "#{invite.invited_by_user.first_name} #{invite.invited_by_user.last_name}" %>
+                            <% if current_user.can_manage_sharing?(current_account_list) %>
+                              <%= link_to _('Remove Access'), remove_access_account_lists_path(user_id: user.id),
+                                class: 'btn btn-xs btn-danger', method: :post %>
                             <% end %>
+                          <% else %>
+                            <%= _('Manually added by MPDX support') %>
                           <% end %>
+                        <% end %>
 
+                      </li>
+                  <% end %>
+                  </ul>
+
+                  <% invited = current_account_list.account_list_invites.active.where(accepted_by_user: nil) %>
+                  <% if invited %>
+                    <strong>Pending Invites</strong>
+                    <ul class="account-users">
+                    <% current_account_list.account_list_invites.active.where(accepted_by_user: nil).each do |invite| %>
+
+                        <li>
+                        <%= invite.recipient_email %>
+
+                        <i>(<%= _('Sent by ') + invite.invited_by_user.to_s %>)</i>
+                        <% if current_user.can_manage_sharing?(current_account_list) %>
+                          <%= link_to _('<i class="fa fa-remove"></i> Cancel'), cancel_invite_account_lists_path(invite_id: invite.id),
+                            class: 'btn btn-xxs btn-danger', method: :post %>
+                        <% end %>
                         </li>
                     <% end %>
                     </ul>
+                  <% end %>
 
-                    <% invited = current_account_list.account_list_invites.active.where(accepted_by_user: nil) %>
-                    <% if invited %>
-                      <strong>Pending Invites</strong>
-                      <ul class="account-users">
-                      <% current_account_list.account_list_invites.active.where(accepted_by_user: nil).each do |invite| %>
+                  <strong><%= _('Invite someone to share this account:') %></strong>
+                  <%= form_tag share_account_lists_path, :class => 'form-inline' do %>
+                    <div class="form-group">
+                      <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org'), :class=>'form-control fixed-width-input' %>
+                    </div>
+                    <%= submit_tag _('Share Account'), class: 'btn btn-secondary' %>
+                  <% end %>
 
-                          <li>
-                          <%= invite.recipient_email %>
-
-                          <i>(<%= _('Sent by ') + invite.invited_by_user.to_s %>)</i>
-                          <% if current_user.can_manage_sharing?(current_account_list) %>
-                            <%= link_to _('<i class="fa fa-remove"></i> Cancel'), cancel_invite_account_lists_path(invite_id: invite.id),
-                              class: 'btn btn-xxs btn-danger', method: :post %>
-                          <% end %>
-                          </li>
-                      <% end %>
-                      </ul>
-                    <% end %>
-
-
-                    <strong><%= _('Invite someone to share this account:') %></strong>
-                    <%= form_tag share_account_lists_path, :class => 'form-inline' do %>
-                      <div class="form-group">
-                        <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org'), :class=>'form-control fixed-width-input' %>
-                      </div>
-                      <%= submit_tag _('Share Account'), class: 'btn btn-secondary' %>
-                    <% end %>
-                    
                 </div>
               </div>
             </div>
