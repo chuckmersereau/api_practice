@@ -34,6 +34,22 @@ $userheight: 72px;
   }
 }
 
+.pref-head {
+  a.trigger {
+    display: block;
+    color: $base-text-color;
+    text-decoration: none;
+    &.collapsed {
+      .panel-indicator {
+        transform: rotate(180deg);
+      }
+    }
+    .panel-indicator {
+      transition: .25s all;
+    }
+  }
+}
+
 .form-inline {
   .fixed-width-input {
     width: 220px;
