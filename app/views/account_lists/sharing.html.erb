@@ -25,19 +25,117 @@
 
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head">
+            <a data-toggle="collapse" href="#merge_accounts" class="trigger" aria-expanded="true">
+              <i class="fa fa-chevron-down panel-indicator"></i> 
+              <%= _('Merge Your Accounts') %>
+            </a>
+          </div>
+          <div id="merge_accounts" class="panel-collapse collapse in">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <h5><%= _('Merge multiple personal donation accounts into one. (Multi-currency support)') %></h5>
+                </div>
+                <div class="col-md-8">
+                  <p><%= _('If you have personal donation accounts in different countries or organizations, you can bring them into one view in MPDX. Though the actual donation accounts will remain separate within their respective organizations, they will be merged together in MPDX permanently.') %></p>         
+                  <div class="alert alert-danger"><i class="fa fa-warning"></i><strong><%= _('THIS MERGE WILL AFFECT ALL PEOPLE WITH ACCESS TO THIS ACCOUNT AND CANNOT BE UNDONE.') %></strong></div>
+
+                  <div class="well">
+                  <% if @mergeable_accounts.size == 0 %>
+                    <p>
+                      <i class="fa-warning fa"></i> <%= _('You only have access to this account, so you cannot merge it with another one yet. Share this account with someone else first. Once they accept your share, you will be able to merge your accounts together.') %>
+                    </p>
+                  <% else %>
+                    <p><%= _('You are merging the account below into your') %> <strong><%= current_account_list.name %></strong>. <%= _('Merges are irriversable. We recommend that you are logged into the primary account.') %></p>
+
+                    <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
+                      <div class="form-group">
+                        <%= select_tag :merge_id,
+                              options_from_collection_for_select(@mergeable_accounts, :id, :name),
+                              class: 'form-control fixed-width-input' %>
+                      </div>
+                        <%= submit_tag _('Merge...'), class: 'btn btn-primary',
+                              data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
+                    <% end %>
+                  <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
+            <a data-toggle="collapse" href="#merge_spouse" class="trigger" aria-expanded="true">
+              <i class="fa fa-chevron-down panel-indicator"></i> 
+              <%= _('Merge Spouse Accounts') %>
+            </a>
+          </div>
+          <div id="merge_spouse" class="panel-collapse collapse in">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <h5><%= _('Merge (Combine) your account with your spouse\'s account for a unifed view.') %></h5>
+                </div>
+                <div class="col-md-8">
+
+
+                  <p><%= _('If you are getting married and have two separate donation accounts, you can merge your MPDX accounts together at any time. No data will be lost when they are merged, and we can do it at any time regardless of the status of your staff accounts being merged.') %></p>
+
+                  <div class="well">
+                  <h4><%= _('1. Share your accounts with each other.') %></h4>
+                  <%= form_tag share_account_lists_path, :class => 'form-inline' do %>
+                    <div class="form-group">
+                      <%= text_field_tag :email, nil, placeholder: _('your-spouse-email@cru.org'), :class=>'form-control fixed-width-input' %>
+                    </div>
+                    <%= submit_tag _('Share Account'), class: 'btn btn-secondary' %>
+                  <% end %>
+                  <p><%= _('You will each get an email (you might need to check your spam) and will need to accept access to each other’s accounts.') %></p>
+                  </div>
+
+                  <div class="well">
+                  <h4><%= _('2. Merge Accounts') %></h4>
+
+                  <% if @mergeable_accounts.size == 0 %>
+                    <p>
+                      <i class="fa-warning fa"></i> <%= _('You only have access to this account, so you cannot merge it with another one yet. Share this account with someone else first. Once they accept your share, you will be able to merge your accounts together.') %>
+                    </p>
+                  <% else %>
+                    <p><%= _('You are merging the account below into your') %> <strong><%= current_account_list.name %></strong>. <%= _('Merges are irriversable. We recommend that you are logged into the primary (usually husband) account.') %></p>
+
+                    <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
+                      <div class="form-group">
+                        <%= select_tag :merge_id,
+                              options_from_collection_for_select(@mergeable_accounts, :id, :name),
+                              class: 'form-control fixed-width-input' %>
+                      </div>
+                        <%= submit_tag _('Merge...'), class: 'btn btn-primary',
+                              data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
+                    <% end %>
+                  <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
             <a data-toggle="collapse" href="#share_account" class="trigger" aria-expanded="true">
               <i class="fa fa-chevron-down panel-indicator"></i> 
-              Share Account Access
+              <%= _('Share Account Access') %>
             </a>
           </div>
           <div id="share_account" class="panel-collapse collapse in">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
-                  <h5>Share this ministry account with other team members</h5>
+                  <h5><%= _('Share this ministry account with other team members') %></h5>
                 </div>
                 <div class="col-md-8 pref-content">
-                  <p>If you want to allow another mpdx user to have access to this ministry account, you can share access with them. Make sure you have the proper permissions and leadership consensus around this sharing before you do this. You will be able to remove access later.</p>
+                  <p><%= _('If you want to allow another mpdx user to have access to this ministry account, you can share access with them. Make sure you have the proper permissions and leadership consensus around this sharing before you do this. You will be able to remove access later.') %></p>
 
                  
                     <strong><%= _('Account currently shared with') %></strong>
@@ -98,104 +196,6 @@
                       <%= submit_tag _('Share Account'), class: 'btn btn-secondary' %>
                     <% end %>
                     
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel panel-default pref-panel">
-          <div class="panel-heading pref-head">
-            <a data-toggle="collapse" href="#merge_spouse" class="trigger" aria-expanded="true">
-              <i class="fa fa-chevron-down panel-indicator"></i> 
-              Merge Spouse Accounts
-            </a>
-          </div>
-          <div id="merge_spouse" class="panel-collapse collapse in">
-            <div class="panel-body pref-body">
-              <div class="row pref-row">
-                <div class="col-md-4 pref-lead">
-                  <h5>Merge (Combine) your account with your spouse's account for a unifed view.</h5>
-                </div>
-                <div class="col-md-8">
-
-
-                  <p>If you are getting married and have two separate donation accounts, you can merge your MPDX accounts together at any time. No data will be lost when they are merged, and we can do it at any time regardless of the status of your staff accounts being merged.</p>
-
-                  <div class="well">
-                  <h4>1. Share your accounts with each other.</h4>
-                  <%= form_tag share_account_lists_path, :class => 'form-inline' do %>
-                    <div class="form-group">
-                      <%= text_field_tag :email, nil, placeholder: _('your-spouse-email@cru.org'), :class=>'form-control fixed-width-input' %>
-                    </div>
-                    <%= submit_tag _('Share Account'), class: 'btn btn-secondary' %>
-                  <% end %>
-                  <p>You will each get an email (you might need to check your spam) and will need to accept access to each other’s accounts.</p>
-                  </div>
-
-                  <div class="well">
-                  <h4>2. Merge Accounts</h4>
-
-                  <% if @mergeable_accounts.size == 0 %>
-                    <p>
-                      <%= _('<i class="fa-warning fa"></i> You only have access to this account, so you cannot merge it with another one yet. Share this account with someone else first. Once they accept your share, you will be able to merge your accounts together.') %>
-                    </p>
-                  <% else %>
-                    <p>You are merging the account below into your <strong><%= current_account_list.name %></strong>. Merges are irriversable. We recommend that you are logged into the primary (usually husband) account.</p>
-
-                    <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
-                      <div class="form-group">
-                        <%= select_tag :merge_id,
-                              options_from_collection_for_select(@mergeable_accounts, :id, :name),
-                              class: 'form-control fixed-width-input' %>
-                      </div>
-                        <%= submit_tag _('Merge...'), class: 'btn btn-primary',
-                              data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
-                    <% end %>
-                  <% end %>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="panel panel-default pref-panel">
-          <div class="panel-heading pref-head">
-            <a data-toggle="collapse" href="#merge_accounts" class="trigger" aria-expanded="true">
-              <i class="fa fa-chevron-down panel-indicator"></i> 
-              Merge Your Accounts
-            </a>
-          </div>
-          <div id="merge_accounts" class="panel-collapse collapse in">
-            <div class="panel-body pref-body">
-              <div class="row pref-row">
-                <div class="col-md-4 pref-lead">
-                  <h5>Merge multiple personal donation accounts into one.</h5>
-                </div>
-                <div class="col-md-8">
-                  <p>If you have personal donation accounts in different countries or organizations, you can bring them into one view in MPDX. Though the actual donation accounts will remain separate within their respective organizations, they will be merged together in MPDX permanently.</p>         
-                  <div class="alert alert-danger"><i class="fa fa-warning"></i><strong>THIS MERGE WILL AFFECT ALL PEOPLE WITH ACCESS TO THIS ACCOUNT AND CANNOT BE UNDONE.</strong></div>
-
-                  <div class="well">
-                  <% if @mergeable_accounts.size == 0 %>
-                    <p>
-                      <%= _('<i class="fa-warning fa"></i> You only have access to this account, so you cannot merge it with another one yet. Share this account with someone else first. Once they accept your share, you will be able to merge your accounts together.') %>
-                    </p>
-                  <% else %>
-                    <p>You are merging the account below into your <strong><%= current_account_list.name %></strong>. Merges are irriversable. We recommend that you are logged into the primary account.</p>
-
-                    <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
-                      <div class="form-group">
-                        <%= select_tag :merge_id,
-                              options_from_collection_for_select(@mergeable_accounts, :id, :name),
-                              class: 'form-control fixed-width-input' %>
-                      </div>
-                        <%= submit_tag _('Merge...'), class: 'btn btn-primary',
-                              data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
-                    <% end %>
-                  <% end %>
-                  </div>
                 </div>
               </div>
             </div>
