@@ -90,7 +90,7 @@
                     <strong><%= _('Invite someone to share this account:') %></strong>
                     <%= form_tag share_account_lists_path, :class => 'form-inline' do %>
                       <div class="form-group">
-                        <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org'), :class=>'form-control' %>
+                        <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org'), :class=>'form-control fixed-width-input' %>
                       </div>
                       <%= submit_tag _('Share Account'), class: 'btn btn-secondary' %>
                     <% end %>
