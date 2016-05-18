@@ -734,7 +734,8 @@ CREATE TABLE contacts (
     no_appeals boolean,
     prayer_letters_params text,
     pls_id character varying(255),
-    pledge_currency character varying(4)
+    pledge_currency character varying(4),
+    locale character varying(255)
 );
 
 
@@ -1456,7 +1457,8 @@ CREATE TABLE mail_chimp_members (
     first_name character varying(255),
     last_name character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    contact_locale character varying(255)
 );
 
 
@@ -1892,7 +1894,8 @@ CREATE TABLE organizations (
     updated_at timestamp without time zone,
     api_class character varying(255),
     country character varying(255),
-    uses_key_auth boolean DEFAULT false
+    uses_key_auth boolean DEFAULT false,
+    locale character varying(255) DEFAULT 'en'::character varying NOT NULL
 );
 
 
@@ -5169,7 +5172,14 @@ INSERT INTO schema_migrations (version) VALUES ('20160429175451');
 
 INSERT INTO schema_migrations (version) VALUES ('20160513173621');
 
+INSERT INTO schema_migrations (version) VALUES ('20160517160526');
+
+INSERT INTO schema_migrations (version) VALUES ('20160517161104');
+
+INSERT INTO schema_migrations (version) VALUES ('20160517174101');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518143500');
+
 INSERT INTO schema_migrations (version) VALUES ('20160518122049');
 
 INSERT INTO schema_migrations (version) VALUES ('20160518122605');
-
