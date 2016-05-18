@@ -2237,7 +2237,7 @@ CREATE TABLE person_relay_accounts (
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    remote_id character varying(255)
+    remote_id character varying(255) NOT NULL
 );
 
 
@@ -4619,6 +4619,13 @@ CREATE UNIQUE INDEX person_account ON master_person_donor_accounts USING btree (
 
 
 --
+-- Name: person_relay_accounts_on_lower_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX person_relay_accounts_on_lower_remote_id ON person_relay_accounts USING btree (lower((remote_id)::text));
+
+
+--
 -- Name: picture_of; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -5161,4 +5168,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160428125403');
 INSERT INTO schema_migrations (version) VALUES ('20160429175451');
 
 INSERT INTO schema_migrations (version) VALUES ('20160513173621');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518122049');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518122605');
 
