@@ -1,101 +1,202 @@
 <div class="row">
-<div class="col-md-3 settings-sidebar" role="complementary">
-  <%= render 'settings_sidebar' %>
-</div>
-<div class="col-md-9">
-  <div id="contentbody" class="withleft">
-    <div class="wpp">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="page-filters">
-            <h2><%= _('Account Sharing & Merging') %></h2>
+  <div class="col-md-3 settings-sidebar" role="complementary">
+    <%= render 'settings_sidebar' %>
+  </div>
+  <div class="col-md-9">
+    <div id="contentbody" class="withleft">
+      <div class="wpp">
+        <div class="row">
+          <div class="col-md-12">
+            <div class="page-filters">
+              <h2><%= _('Account Sharing & Merging') %></h2>
+            </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="cw-top">
-      <%= _('Your currently selected MPDX Account is:') %>
-      <b><%= current_account_list.name %></b>.
-      <br/><br/>
+      <div class="cw-top">
 
-      <table class="account-users">
-        <tr><th><%= _('Account currently shared with') %></th><th><%= _('Status') %></th></tr>
-        <% current_account_list.users.each do |user| %>
-          <tr>
-            <td><%= "#{user.first_name} #{user.last_name} (#{user.email_addresses.first})" %></td>
-            <td>
-              <% designation_profile = current_account_list.designation_profiles.find_by(user: user) %>
-              <% if designation_profile  %>
-                <%= _('Linked by designation: ') + designation_profile.name %>
-              <% else  %>
-                <% invite = current_account_list.account_list_invites.find_by(accepted_by_user: user) %>
-                <% if invite %>
-                  <%= _('Invited by: ') + "#{invite.invited_by_user.first_name} #{invite.invited_by_user.last_name}" %>
-                  <% if current_user.can_manage_sharing?(current_account_list) %>
-                    <%= link_to _('Remove Access'), remove_access_account_lists_path(user_id: user.id),
-                      class: 'btn btn-xs btn-secondary', method: :post %>
-                  <% end %>
-                <% else %>
-                  <%= _('Manually added by MPDX support') %>
-                <% end %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-        <% current_account_list.account_list_invites.active.where(accepted_by_user: nil).each do |invite| %>
-          <tr>
-            <td><%= _('Pending invite for: ') + invite.recipient_email %></td>
-            <td>
-              <%= _('Sent by: ') + invite.invited_by_user.to_s %>
-              <% if current_user.can_manage_sharing?(current_account_list) %>
-                <%= link_to _('Cancel Invite'), cancel_invite_account_lists_path(invite_id: invite.id),
-                  class: 'btn btn-xs btn-secondary', method: :post %>
-              <% end %>
-            </td>
-          </tr>
-        <% end %>
-      </table>
 
-      <% if current_user.can_manage_sharing?(current_account_list) %>
-        <br/>
-        <h4><%= _('To invite another user to access this account, enter their email:') %></h4>
-        <div class="row">
-          <%= form_tag share_account_lists_path do %>
-            <div class="col-md-4">
-              <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org') %>
-            </div>
-            <div class="col-md-2">
-              <%= submit_tag _('Share Account'), class: 'btn btn-xs btn-secondary' %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
-
-      <br/>
-      <% if @mergeable_accounts.size == 0 %>
         <p>
-          <%= _("You only have access to this account, so you can't merge it with another one yet.") %>
+          <strong>  
+          <%= _("You're currently modifying MPDX settings for:") %>
+          <%= current_account_list.name %>
+          </strong>
         </p>
-      <% else %>
-        <h4><%= _('Merge this account with another of your accounts:') %></h4>
-        <div class="row">
-          <%= form_tag merge_account_lists_path do %>
-            <div class="col-md-4">
-              <%= select_tag :merge_id,
-                    options_from_collection_for_select(@mergeable_accounts, :id, :name),
-                    class: 'form-control' %>
-            </div>
-            <div class="col-md-2">
-              <%= submit_tag _('Merge...'), class: 'btn btn-xs btn-secondary',
-                    data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
-            </div>
-          <% end %>
-        </div>
-      <% end %>
 
-      <% if impersonator_user.present? %>
-        <%= render('account_reset') %>
-      <% end %>
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
+            <a data-toggle="collapse" href="#share_account">Share Account Access</a>
+          </div>
+          <div id="share_account" class="panel-collapse collapse">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <h5>Share this ministry account with other team members</h5>
+                </div>
+                <div class="col-md-8 pref-content">
+                  <p>If you want to allow another mpdx user to have access to this ministry account, you can share access with them. Make sure you have the proper permissions and leadership consensus around this sharing before you do this. You will be able to remove access later.</p>
+
+                 
+                    <strong><%= _('Account currently shared with') %></strong>
+                    <ul class="account-users">
+                    <% current_account_list.users.each do |user| %>
+                      <li>
+                          <%= "#{user.first_name} #{user.last_name} (#{user.email_addresses.first})" %>
+
+
+                          <% designation_profile = current_account_list.designation_profiles.find_by(user: user) %>
+                          <% if designation_profile  %>
+                            <span  data-toggle="tooltip" data-placement="top" title="<%= _('Linked by designation: ') + designation_profile.name %>">
+                              <i class="fa fa-info-circle"></i>
+                          </span>
+                            
+                          <% else  %>
+                            <% invite = current_account_list.account_list_invites.find_by(accepted_by_user: user) %>
+                            <% if invite %>
+                              <%= _('Invited by: ') + "#{invite.invited_by_user.first_name} #{invite.invited_by_user.last_name}" %>
+                              <% if current_user.can_manage_sharing?(current_account_list) %>
+                                <%= link_to _('Remove Access'), remove_access_account_lists_path(user_id: user.id),
+                                  class: 'btn btn-xs btn-danger', method: :post %>
+                              <% end %>
+                            <% else %>
+                              <%= _('Manually added by MPDX support') %>
+                            <% end %>
+                          <% end %>
+
+                        </li>
+                    <% end %>
+                    </ul>
+
+                    <% invited = current_account_list.account_list_invites.active.where(accepted_by_user: nil) %>
+                    <% if invited %>
+                      <strong>Pending Invites</strong>
+                      <ul class="account-users">
+                      <% current_account_list.account_list_invites.active.where(accepted_by_user: nil).each do |invite| %>
+
+                          <li>
+                          <%= invite.recipient_email %>
+
+                          <i>(<%= _('Sent by ') + invite.invited_by_user.to_s %>)</i>
+                          <% if current_user.can_manage_sharing?(current_account_list) %>
+                            <%= link_to _('<i class="fa fa-remove"></i> Cancel'), cancel_invite_account_lists_path(invite_id: invite.id),
+                              class: 'btn btn-xxs btn-danger', method: :post %>
+                          <% end %>
+                          </li>
+                      <% end %>
+                      </ul>
+                    <% end %>
+
+
+                    <strong><%= _('Invite someone to share this account:') %></strong>
+                    <%= form_tag share_account_lists_path, :class => 'form-inline' do %>
+                      <div class="form-group">
+                        <%= text_field_tag :email, nil, placeholder: _('person.to.share@cru.org'), :class=>'form-control' %>
+                      </div>
+                      <%= submit_tag _('Share Account'), class: 'btn btn-secondary' %>
+                    <% end %>
+                    
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
+            <a data-toggle="collapse" href="#merge_spouse">Merge Spouse Accounts</a>
+          </div>
+          <div id="merge_spouse" class="panel-collapse collapse">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <h5>Merge (Combine) your account with your spouse's account for a unifed view.</h5>
+                </div>
+                <div class="col-md-8">
+
+
+                  <p>If you are getting married and have two separate donation accounts, you can merge your MPDX accounts together at any time. No data will be lost when they are merged, and we can do it at any time regardless of the status of your staff accounts being merged.</p>
+
+                  <div class="well">
+                  <h4>1. Share your accounts with each other.</h4>
+                  <%= form_tag share_account_lists_path, :class => 'form-inline' do %>
+                    <div class="form-group">
+                      <%= text_field_tag :email, nil, placeholder: _('your-spouse-email@cru.org'), :class=>'form-control fixed-width-input' %>
+                    </div>
+                    <%= submit_tag _('Share Account'), class: 'btn btn-secondary' %>
+                  <% end %>
+                  <p>You will each get an email (you might need to check your spam) and will need to accept access to each other’s accounts.</p>
+                  </div>
+
+                  <div class="well">
+                  <h4>2. Merge Accounts</h4>
+
+                  <% if @mergeable_accounts.size == 0 %>
+                    <p>
+                      <%= _('<i class="fa-warning fa"></i> You only have access to this account, so you cannot merge it with another one yet. Share this account with someone else first. Once they accept your share, you will be able to merge your accounts together.') %>
+                    </p>
+                  <% else %>
+                    <p>You are merging the account below into your <strong><%= current_account_list.name %></strong>. Merges are irriversable. We recommend that you are logged into the primary (usually husband) account.</p>
+
+                    <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
+                      <div class="form-group">
+                        <%= select_tag :merge_id,
+                              options_from_collection_for_select(@mergeable_accounts, :id, :name),
+                              class: 'form-control fixed-width-input' %>
+                      </div>
+                        <%= submit_tag _('Merge...'), class: 'btn btn-primary',
+                              data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
+                    <% end %>
+                  <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
+            <a data-toggle="collapse" href="#merge_accounts">Merge Your Accounts</a>
+          </div>
+          <div id="merge_accounts" class="panel-collapse collapse">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <h5>Merge multiple personal donation accounts into one.</h5>
+                </div>
+                <div class="col-md-8">
+                  <p>If you have personal donation accounts in different countries or organizations, you can bring them into one view in MPDX. Though the actual donation accounts will remain separate within their respective organizations, they will be merged together in MPDX permanently.</p>         
+                  <div class="alert alert-danger"><i class="fa fa-warning"></i><strong>THIS MERGE WILL AFFECT ALL PEOPLE WITH ACCESS TO THIS ACCOUNT AND CANNOT BE UNDONE.</strong></div>
+
+                  <div class="well">
+                  <% if @mergeable_accounts.size == 0 %>
+                    <p>
+                      <%= _('<i class="fa-warning fa"></i> You only have access to this account, so you cannot merge it with another one yet. Share this account with someone else first. Once they accept your share, you will be able to merge your accounts together.') %>
+                    </p>
+                  <% else %>
+                    <p>You are merging the account below into your <strong><%= current_account_list.name %></strong>. Merges are irriversable. We recommend that you are logged into the primary account.</p>
+
+                    <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
+                      <div class="form-group">
+                        <%= select_tag :merge_id,
+                              options_from_collection_for_select(@mergeable_accounts, :id, :name),
+                              class: 'form-control fixed-width-input' %>
+                      </div>
+                        <%= submit_tag _('Merge...'), class: 'btn btn-primary',
+                              data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
+                    <% end %>
+                  <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <% if impersonator_user.present? %>
+          <%= render('account_reset') %>
+        <% end %>
+
       </div>
     </div>
   </div>
