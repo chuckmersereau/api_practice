@@ -52,6 +52,7 @@ class CurrencyRate < ActiveRecord::Base
     private
 
     def find_rate_on_date(currency_code:, date:)
+      return 1.0 if currency_code.blank?
       rate_record =
         where(code: currency_code).where('exchanged_on >= ?', date)
                                   .order(:exchanged_on).first ||
