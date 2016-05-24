@@ -24,7 +24,7 @@ class MailChimpAccount < ActiveRecord::Base
     @list_response ||= gb.lists
     return [] unless @list_response['data']
     @lists ||= @list_response['data'].map { |l| List.new(l['id'], l['name']) }
-  rescue Gibbon::MailChimpError
+  rescue Gibbon::MailChimpError, OpenSSL::SSL::SSLError, Faraday::SSLError
     []
   end
 
