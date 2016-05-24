@@ -12,6 +12,8 @@ if Sidekiq::Client.method_defined? :reliable_push!
 end
 
 Sidekiq.configure_server do |config|
+  Sidekiq::Logging.logger.level = Logger::WARN
+
   Rails.logger = Sidekiq::Logging.logger
 
   config.reliable_fetch!
@@ -19,7 +21,6 @@ Sidekiq.configure_server do |config|
   config.redis = { url: Redis.current.client.id,
                    namespace: "MPDX:#{Rails.env}:resque" }
   config.server_middleware do |chain|
-    chain.add SidekiqJobArgsLogger
     chain.add SidekiqWhodunnit
   end
 end
