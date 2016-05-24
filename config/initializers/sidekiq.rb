@@ -12,7 +12,7 @@ if Sidekiq::Client.method_defined? :reliable_push!
 end
 
 Sidekiq.configure_server do |config|
-  Sidekiq::Logging.logger.level = Logger::WARN
+  Sidekiq::Logging.logger.level = Logger::FATAL
 
   Rails.logger = Sidekiq::Logging.logger
 
