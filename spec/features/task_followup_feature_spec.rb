@@ -12,6 +12,9 @@ describe 'Task Followup Dialog', type: :feature, js: true do
   def visit_and_open_dialog(task)
     visit "/contacts/#{contact.id}"
     first('#tabs_tasks').click
+
+    wait_for_ajax
+
     within("#task_#{task.id}") do
       first('.complete_task').click
     end

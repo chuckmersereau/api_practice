@@ -1380,14 +1380,15 @@ CREATE TABLE mail_chimp_accounts (
     id integer NOT NULL,
     api_key character varying(255),
     active boolean DEFAULT false,
-    grouping_id integer,
+    grouping_id character varying(255),
     primary_list_id character varying(255),
     account_list_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     webhook_token character varying(255),
     auto_log_campaigns boolean DEFAULT false NOT NULL,
-    importing boolean DEFAULT false NOT NULL
+    importing boolean DEFAULT false NOT NULL,
+    status_interest_ids text
 );
 
 
@@ -5178,8 +5179,13 @@ INSERT INTO schema_migrations (version) VALUES ('20160517161104');
 
 INSERT INTO schema_migrations (version) VALUES ('20160517174101');
 
-INSERT INTO schema_migrations (version) VALUES ('20160518143500');
-
 INSERT INTO schema_migrations (version) VALUES ('20160518122049');
 
 INSERT INTO schema_migrations (version) VALUES ('20160518122605');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518143500');
+
+INSERT INTO schema_migrations (version) VALUES ('20160523162335');
+
+INSERT INTO schema_migrations (version) VALUES ('20160523203413');
+

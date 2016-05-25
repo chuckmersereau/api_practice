@@ -1,15 +1,13 @@
 require 'spec_helper'
 
 describe 'Contacts Filters' do
-  before(:all) do
-    @user = FactoryGirl.create(:user_with_account)
-    login(@user)
-  end
   describe 'GET /contacts' do
     it 'can filter on cities' do
-      # Run the generator again with the --webrat flag if you want to use webrat methods/matchers
+      login(create(:user_with_account))
+
       get contacts_path(city: %w(foo bar))
-      expect(response.status).to be(200)
+
+      expect(response).to be_success
     end
   end
 end

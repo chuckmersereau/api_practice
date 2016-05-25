@@ -101,7 +101,9 @@ describe MailChimpImport do
 
     it 'defaults to the name from email if MailChimp has a blank first name' do
       stub_list_members(email: 'john@example.com', fname: ' ')
+
       subject.import_contacts
+
       expect(Contact.last.name).to eq 'John'
       expect(Person.last.first_name).to eq 'John'
     end
@@ -196,13 +198,13 @@ describe MailChimpImport do
         merges['LNAME'] = member[:lname] if member[:lname]
         merges['GREETING'] = member[:greeting] if member[:greeting]
         merges['GROUPINGS'] = member[:groupings] if member[:groupings]
-        { 'email' => member[:email], 'merges' => merges }
+        { 'email_address' => member[:email], 'merge_fields' => merges }
       end
       allow(mc_account).to receive(:list_emails).with('list1') { member_emails }
       expect(mc_account).to receive(:list_member_info) do |list_id, emails|
         expect(list_id).to eq 'list1'
         expect(emails - member_emails).to be_empty
-        members_info.select { |info| info['email'].in?(emails) }
+        members_info.select { |info| info['email_address'].in?(emails) }
       end
     end
   end

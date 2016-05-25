@@ -60,7 +60,7 @@ class AccountList < ActiveRecord::Base
 
   accepts_nested_attributes_for :contacts, reject_if: :all_blank, allow_destroy: true
 
-  after_update :subscribe_tester_to_mailchimp, :subscribe_owners_to_mailchimp
+  after_update :queue_update_users_mailchimp
 
   scope :with_linked_org_accounts, lambda {
     joins(:organization_accounts).where('locked_at is null').order('last_download asc')
@@ -148,6 +148,10 @@ class AccountList < ActiveRecord::Base
       (contacts.order(:pledge_currency).pluck('DISTINCT pledge_currency') +
        organizations.pluck(:default_currency_code) +
        [default_currency]).compact.uniq
+  end
+
+  def contact_locales
+    @locales ||= contacts.pluck('DISTINCT locale')
   end
 
   def multi_currency?
@@ -387,56 +391,18 @@ class AccountList < ActiveRecord::Base
     DesignationAccount::DupByBalanceFix.deactivate_dups(designation_accounts)
   end
 
-  def subscribe_tester_to_mailchimp
-    return unless changes.keys.include?('settings') &&
-                  changes['settings'][0]['tester'] != changes['settings'][1]['tester']
-
-    if changes['settings'][1]['tester']
-      async_to_queue(:default, :mc_subscribe_users, 'Testers')
-    else
-      async_to_queue(:default, :mc_unsubscribe_users, 'Testers')
-    end
+  def queue_update_users_mailchimp
+    return unless tester_or_owner_setting_changed?
+    async_to_queue(:default, :update_mailchimp_subscription)
   end
 
-  def subscribe_owners_to_mailchimp
-    return unless changes.keys.include?('settings') &&
-                  changes['settings'][0]['owner'] != changes['settings'][1]['owner']
-
-    if changes['settings'][1]['owner']
-      async_to_queue(:default, :mc_subscribe_users, 'Owners')
-    else
-      async_to_queue(:default, :mc_unsubscribe_users, 'Owners')
-    end
+  def tester_or_owner_setting_changed?
+    changes.keys.include?('settings') &&
+      (changes['settings'][0]['tester'] != changes['settings'][1]['tester'] ||
+       changes['settings'][0]['owner'] != changes['settings'][1]['owner'])
   end
 
-  def mc_subscribe_users(group)
-    gb = Gibbon.new(ENV.fetch('MAILCHIMP_KEY'))
-    users.each do |u|
-      next unless u.email
-      vars = { EMAIL: u.email.email, FNAME: u.first_name, LNAME: u.last_name,
-               GROUPINGS: [{ id: ENV.fetch('MAILCHIMP_GROUPING_ID'), groups: group }] }
-      gb.list_subscribe(id: ENV.fetch('MAILCHIMP_LIST'), email_address: vars[:EMAIL], update_existing: true,
-                        double_optin: false, merge_vars: vars, send_welcome: false, replace_interests: false)
-    end
-  end
-
-  def mc_unsubscribe_users(group)
-    gb = Gibbon.new(ENV.fetch('MAILCHIMP_KEY'))
-    users.each do |u|
-      next if u.email.blank?
-      # subtract this group from the list of groups this email is subscribed to
-      result = gb.list_member_info(id: ENV.fetch('MAILCHIMP_LIST'), email_address: [u.email.email])
-      next unless result['success'] > 0
-      result['data'].each do |row|
-        next unless row['email'] && row['merges']
-        grouping = row['merges']['GROUPINGS'].detect { |g| g['id'] == ENV.fetch('MAILCHIMP_GROUPING_ID') }
-        next unless grouping
-        groups = grouping['groups'].split(', ')
-        groups -= [group]
-        vars = { GROUPINGS: [{ id: ENV.fetch('MAILCHIMP_GROUPING_ID'), groups: groups.join(', ') }] }
-        gb.list_update_member(id: ENV.fetch('MAILCHIMP_LIST'), email_address: row['email'], merge_vars: vars,
-                              replace_interests: true)
-      end
-    end
+  def update_mailchimp_subscription
+    users.each { |u| User::MailChimpManager.new(u).subscribe }
   end
 end

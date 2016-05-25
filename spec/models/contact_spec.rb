@@ -133,7 +133,7 @@ describe Contact do
       @donor_account = create(:donor_account)
     end
 
-    it "should copy the donor account's addresses" do
+    it "copies the donor account's addresses" do
       create(:address, addressable: @donor_account, remote_id: '1')
       expect do
         @contact = Contact.create_from_donor_account(@donor_account, @account_list)
@@ -141,6 +141,14 @@ describe Contact do
       expect(@contact.addresses.first.equal_to?(@donor_account.addresses.first)).to be true
       expect(@contact.addresses.first.source_donor_account).to eq(@donor_account)
       expect(@contact.addresses.first.remote_id).to eq('1')
+    end
+
+    it 'defaults the contact locale from organization locale' do
+      @donor_account.organization.update(locale: 'fr')
+
+      contact = Contact.create_from_donor_account(@donor_account, @account_list)
+
+      expect(contact.locale).to eq 'fr'
     end
   end
 

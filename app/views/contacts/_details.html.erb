@@ -88,6 +88,13 @@
             <%= best_in_place(contact_exhibit, :envelope_greeting,
                               value: contact.envelope_greeting) %>
           </dd>
+          <dt><%= _('Language') %></dt>
+          <dd>
+            <%= best_in_place(contact_exhibit, :locale,
+                              as: :select,
+                              collection: [['', _('Unspecified')]] + mail_chimp_locale_options.map(&:reverse),
+                              value: contact.locale) %>
+          </dd>
           <dt><%= _('Send appeals') %></dt>
           <dd><%= !contact_exhibit.no_appeals ? _('Yes') : _('No') %></dd>
           <dt><%= _('Magazine') %></dt>

@@ -65,7 +65,7 @@ class Contact < ActiveRecord::Base
     :name, :pledge_amount, :status, :notes, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
     :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :user_changed,
     :direct_deposit, :magazine, :pledge_received, :not_duplicated_with, :tag_list, :primary_person_id, :timezone,
-    :pledge_currency,
+    :pledge_currency, :locale,
     {
       contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
       donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
@@ -213,7 +213,8 @@ class Contact < ActiveRecord::Base
   end
 
   def self.create_from_donor_account(donor_account, account_list)
-    contact = account_list.contacts.new(name: donor_account.name)
+    contact = account_list.contacts.new(name: donor_account.name,
+                                        locale: donor_account.organization&.locale)
     contact.addresses_attributes = donor_account.addresses_attributes
     contact.addresses.each { |a| a.source_donor_account = donor_account }
     contact.save!
@@ -506,6 +507,10 @@ class Contact < ActiveRecord::Base
   def current_pledge_interval_start
     prev_months_to_include = [(pledge_frequency || 1) - 1, 0].max
     (last_donation_month_end << prev_months_to_include).beginning_of_month
+  end
+
+  def human_contact_locale
+    _(MailChimpAccount::Locales::LOCALE_NAMES[locale])
   end
 
   private

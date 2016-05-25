@@ -25,9 +25,9 @@ class MailChimpImport
   private
 
   def format_member_info(info)
-    { email: info['email'], first_name: info['merges']['FNAME'],
-      last_name: info['merges']['LNAME'], greeting: info['merges']['GREETING'],
-      groupings: info['merges']['GROUPINGS'] }
+    { email: info['email_address'], first_name: info['merge_fields']['FNAME'],
+      last_name: info['merge_fields']['LNAME'], greeting: info['merge_fields']['GREETING'],
+      groupings: info['merge_fields']['GROUPINGS'] }
   end
 
   def all_emails_to_import
