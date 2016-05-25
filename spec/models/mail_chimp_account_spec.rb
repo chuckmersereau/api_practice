@@ -781,11 +781,17 @@ describe MailChimpAccount do
     end
 
     it 'does nothing for invalid email address errors' do
-      expect do
-        detail = 'j@t.co looks fake or invalid, please enter a real email address.'
-        err = Gibbon::MailChimpError.new('', status_code: 400, detail: detail)
-        account.handle_newsletter_mc_error(err)
-      end.to_not raise_error
+      invalid_email_messages = [
+        'j@t.co looks fake or invalid, please enter a real email address.',
+        'The username portion of the email address is invalid (the portion before the @: or;vfc21)'
+      ]
+
+      invalid_email_messages.each do |message|
+        expect do
+          err = Gibbon::MailChimpError.new(message, status_code: 400, detail: message)
+          account.handle_newsletter_mc_error(err)
+        end.to_not raise_error
+      end
     end
 
     it 're-raises other mail chimp errors' do
