@@ -4,7 +4,7 @@ User::MailChimpManager = Struct.new(:user) do
     gb.lists(ENV.fetch('MAILCHIMP_LIST')).members(email_hash).upsert(body: subscribe_params)
     user.update_column(:subscribed_to_updates, true)
   rescue Gibbon::MailChimpError => e
-    if e.status_code == 400 && e.message =~ /looks fake or invalid, please enter a real email/
+    if MailChimpAccount.invalid_email_error?(e)
       # For an invalid email address mark subscribed to updates as false so we
       # won't try it again (nil means not currently subscribed but try again)
       user.update_column(:subscribed_to_updates, false)

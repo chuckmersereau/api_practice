@@ -180,7 +180,7 @@ class MailChimpAccount < ActiveRecord::Base
     when e.message.include?('code 200')
       # Invalid MailChimp List ID (code 200)
       update_column(:primary_list_id, nil)
-    when invalid_email_error?(e)
+    when self.class.invalid_email_error?(e)
       # Ignore invalid email failtures
     when e.message.include?('code 214')
       # The new email address "xxxxx@example.com" is already subscribed to this list
@@ -189,7 +189,7 @@ class MailChimpAccount < ActiveRecord::Base
     end
   end
 
-  def invalid_email_error?(e)
+  def self.invalid_email_error?(e)
     e.status_code == 400 &&
       (e.message =~ /looks fake or invalid, please enter a real email/ ||
        e.message =~ /username portion of the email address is invalid/)
