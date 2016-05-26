@@ -214,7 +214,7 @@
         }
 
         function exportContactsToMailChimpList(selectedContactsMap, appealListId) {
-            var selectedContactIds = selectedContactIds(selectedContactsMap);
+            var selectedContactIds = vm.selectedContactIds(selectedContactsMap);
 
             if (selectedContactIds.length == 0) {
                 alert(__('You must check at least one contact.'));

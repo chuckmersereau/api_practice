@@ -7,7 +7,7 @@
       <div class="col-md-4">
         <div class="form-group">
           <%= f.label :pledge_received, _('Commitment Received') %>
-          <%= f.select :pledge_received, [[_('Yes'), 1], [_('No'), 0]], include_blank: true %>
+          <%= f.select :pledge_received, [[_('Yes'), 1], [_('No'), 0]], { include_blank: true }, class: 'form-control' %>
         </div>
       </div>
 
@@ -15,6 +15,14 @@
         <div class="form-group">
           <%= f.label :pledge_currency, _('Commitment Currency') %>
           <%= f.select :pledge_currency, currency_select(), {include_blank: true}, {class: 'form-control'} %>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <%= f.label :locale, _('Language') %>
+          <%= f.select :locale, mail_chimp_locale_options,
+            { include_blank: true }, {class: 'form-control'} %>
         </div>
       </div>
     </div>

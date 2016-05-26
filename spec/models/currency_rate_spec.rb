@@ -18,6 +18,11 @@ describe CurrencyRate do
 
       expect(CurrencyRate.latest_for('EUR')).to eq 1.0
     end
+
+    it 'returns 1.0 and does not log a Rollbar exception for nil currency' do
+      expect(Rollbar).to_not receive(:error)
+      expect(CurrencyRate.latest_for(nil)).to eq 1.0
+    end
   end
 
   context '.latest_for_pair' do

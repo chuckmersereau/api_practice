@@ -44,7 +44,7 @@ Rails.application.configure do
   # config.force_ssl = true
 
   # Set to :debug to see everything in the log.
-  config.log_level = :info
+  config.log_level = :error
 
   # Prepend all log lines with the following tags.
   # config.log_tags = [ :subdomain, :uuid ]
@@ -77,9 +77,9 @@ Rails.application.configure do
 
   config.action_mailer.default_url_options = { host: 'mpdx.org' }
 
-  #config.font_assets.origin = 'https://mpdx.org'
+  # config.font_assets.origin = 'https://mpdx.org'
   config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new("mpdx-#{ENV['ENVIRONMENT']}", Syslog::LOG_LOCAL7))
-  config.log_tags = [lambda { |request| "ReqID:#{request.uuid}" }]
+  config.log_tags = [->(request) { "ReqID:#{request.uuid}" }]
 
   Rails.application.routes.default_url_options[:host] = 'mpdx.org'
 end

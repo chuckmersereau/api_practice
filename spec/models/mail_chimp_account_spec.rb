@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe MailChimpAccount do
   let(:account) { MailChimpAccount.new(api_key: 'fake-us4') }
+  let(:api_prefix) { 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0' }
   let(:account_list) { create(:account_list) }
   let(:appeal) { create(:appeal, account_list: account_list) }
 
@@ -13,29 +14,26 @@ describe MailChimpAccount do
   before(:each) do
     account.account_list = account_list
 
-    stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=lists')
-      .with(body: '%7B%22apikey%22%3A%22fake-us4%22%7D')
-      .to_return(body: '{"total":2,"data":['\
-        '{"id":"1e72b58b72","web_id":97593,"name":"MPDX","date_created":"2012-10-09 13:50:12","email_type_option":false,"use_awesomebar":true,'\
-        '"default_from_name":"MPDX","default_from_email":"support@mpdx.org","default_subject":"","default_language":"en","list_rating":3,'\
-        '"subscribe_url_short":"http:\/\/eepurl.com\/qnY35",'\
-        '"subscribe_url_long":"http:\/\/26am.us4.list-manage1.com\/subscribe?u=720971c5830c5228bdf461524&id=1e72b58b72",'\
-        '"beamer_address":"NzIwOTcxYzU4MzBjNTIyOGJkZjQ2MTUyNC1iYmNlYzBkNS05ZDhlLTQ5NDctYTg1OC00ZjQzYTAzOGI3ZGM=@campaigns.mailchimp.com","visibility":"pub",'\
-        '"stats":{"member_count":159,"unsubscribe_count":0,"cleaned_count":0,"member_count_since_send":159,"unsubscribe_count_since_send":0,'\
-        '"cleaned_count_since_send":0,"campaign_count":0,"grouping_count":1,"group_count":4,"merge_var_count":2,"avg_sub_rate":null,"avg_unsub_rate":null,'\
-        '"target_sub_rate":null,"open_rate":null,"click_rate":null},"modules":[]},'\
-        '{"id":"29a77ba541","web_id":97493,"name":"Newsletter","date_created":"2012-10-09 00:32:44","email_type_option":true,"use_awesomebar":true,'\
-        '"default_from_name":"Josh Starcher","default_from_email":"josh.starcher@cru.org","default_subject":"","default_language":"en","list_rating":0,'\
-        '"subscribe_url_short":"http:\/\/eepurl.com\/qmAWn",'\
-        '"subscribe_url_long":"http:\/\/26am.us4.list-manage.com\/subscribe?u=720971c5830c5228bdf461524&id=29a77ba541",'\
-        '"beamer_address":"NzIwOTcxYzU4MzBjNTIyOGJkZjQ2MTUyNC02ZmZiZDJhOS0zNWFmLTQ1YzQtOWE0ZC1iOTZhMmRlMTQ0ZDc=@campaigns.mailchimp.com","visibility":"pub",'\
-        '"stats":{"member_count":75,"unsubscribe_count":0,"cleaned_count":0,"member_count_since_send":75,"unsubscribe_count_since_send":0,'\
-        '"cleaned_count_since_send":0,"campaign_count":0,"grouping_count":1,"group_count":3,"merge_var_count":2,"avg_sub_rate":null,"avg_unsub_rate":null,'\
-        '"target_sub_rate":null,"open_rate":null,"click_rate":null},"modules":[]}]}')
+    lists_response = {
+      lists: [
+        { id: '1e72b58b72', name: 'Test 1' },
+        { id: '29a77ba541', name: 'Test 2' }
+      ]
+    }
+    stub_request(:get, "#{api_prefix}/lists").to_return(body: lists_response.to_json)
   end
 
-  it 'returns an array of lists' do
-    expect(account.lists.length).to eq(2)
+  context '#lists' do
+    it 'returns an array of lists' do
+      expect(account.lists.map(&:id)).to eq %w(1e72b58b72 29a77ba541)
+      expect(account.lists.map(&:name)).to eq ['Test 1', 'Test 2']
+    end
+
+    it 'works even if you call validate_key first' do
+      account.validate_key
+
+      expect(account.lists.map(&:name)).to eq ['Test 1', 'Test 2']
+    end
   end
 
   context '#lists_available_for_appeals' do
@@ -70,13 +68,17 @@ describe MailChimpAccount do
   end
 
   it 'deactivates the account if the api key is invalid' do
-    stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=lists')
-      .with(body: '%7B%22apikey%22%3A%22fake-us4%22%7D')
-      .to_return(body: '{"error":"Invalid Mailchimp API Key: fake-us4","code":104}')
+    error = {
+      title: 'API Key Invalid', status: 401,
+      detail: "Your API key may be invalid, or you've attempted to access the wrong datacenter."
+    }
+    stub_request(:get, "#{api_prefix}/lists").to_return(status: 401, body: error.to_json)
     account.active = true
+
     account.validate_key
+
     expect(account.active).to be false
-    expect(account.validation_error).to match(/Invalid Mailchimp API Key: fake-us4/)
+    expect(account.validation_error).to match(/Your API key may be invalid/)
   end
 
   it 'activates the account if the api key is valid' do
@@ -182,9 +184,9 @@ describe MailChimpAccount do
         expect(account).to receive(:add_greeting_merge_variable)
         expect(account).to receive(:list_emails) { ['j@t.co'] }
         expect(account).to receive(:list_member_info) do
-          [{ 'email' => 'j@t.co', 'merges' => {} }]
+          [{ 'email_address' => 'j@t.co', 'merge_fields' => {} }]
         end
-        expect(account.gb).to receive(:list_batch_subscribe)
+        expect(account).to receive(:list_batch_subscribe)
 
         expect(account).to_not receive(:unsubscribe_list_batch)
         account.send(:export_to_primary_list)
@@ -193,70 +195,32 @@ describe MailChimpAccount do
       it 'exports to a list and saves mail chimp member records' do
         account.primary_list_id = 'list1'
         account.save
-
-        stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listBatchSubscribe')
-          .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22list1%22%2C%22'\
-            'batch%22%3A%5B%7B%22EMAIL%22%3A%22foo%40example.com%22%2C%22'\
-            'FNAME%22%3A%22John%22%2C%22LNAME%22%3A%22Smith%22%2C%22GREETING%22%3A%22John%22%2C%22'\
-            'GROUPINGS%22%3A%5B%7B%22id%22%3A1%2C%22groups%22%3A%22Partner+-+Financial%22%7D%5D%7D%5D%2C%22'\
-            'update_existing%22%3Atrue%2C%22double_optin%22%3Afalse%2C%22send_welcome%22%3Afalse%2C%22'\
-            'replace_interests%22%3Atrue%7D')
-          .to_return(status: 200, body: '', headers: {})
-
+        member_json = {
+          status_if_new: 'subscribed', email_address: 'foo@example.com',
+          merge_fields: { EMAIL: 'foo@example.com', FNAME: 'John', LNAME: 'Smith', GREETING: 'John' },
+          language: 'fr',
+          interests: { i1: true }
+        }.to_json
+        stub_request(:put, "#{api_prefix}/lists/list1/members/b48def645758b95537d4424c84d1a9ff")
+          .with(body: member_json)
         account.grouping_id = 1
-
-        contact = create(:contact, send_newsletter: 'Email', account_list: account_list)
+        account.status_interest_ids = { 'Partner - Financial' => 'i1' }
+        contact = create(:contact, send_newsletter: 'Email', account_list: account_list,
+                                   locale: 'fr')
         contact.people << create(:person, email: 'foo@example.com')
-
         expect(account).to receive(:add_status_groups)
         expect(account).to receive(:add_greeting_merge_variable)
+
         expect do
           account.send(:export_to_list, account.primary_list_id, [contact])
         end.to change(account.mail_chimp_members, :count).by(1)
+
         member = account.mail_chimp_members.first
         expect(member.email).to eq 'foo@example.com'
         expect(member.status).to eq 'Partner - Financial'
         expect(member.greeting).to eq 'John'
         expect(member.first_name).to eq 'John'
         expect(member.last_name).to eq 'Smith'
-      end
-
-      context 'adding status groups' do
-        before do
-          @gb = double
-          allow(account).to receive(:gb).and_return(@gb)
-        end
-
-        it 'adds groups to an existing grouping' do
-          account.grouping_id = 1
-
-          list_id = 'foo'
-
-          expect(@gb).to receive(:list_interest_groupings).with(id: list_id)
-            .and_return([{ 'id' => 1, 'name' => 'Partner Status', 'groups' => [] }])
-
-          expect(@gb).to receive(:list_interest_grouping_update)
-            .with(grouping_id: 1, name: 'type', value: 'hidden')
-
-          expect(@gb).to receive(:list_interest_group_add)
-            .with(id: 'foo', group_name: 'Partner - Pray', grouping_id: 1)
-
-          account.send(:add_status_groups, list_id, ['Partner - Pray'])
-        end
-
-        it 'creates a new grouping if none exists' do
-          list_id = 'foo'
-
-          expect(@gb).to receive(:list_interest_groupings).with(id: list_id).and_return([])
-
-          expect(@gb).to receive(:list_interest_grouping_add).with(id: 'foo', name: 'Partner Status', type: 'hidden', groups: ['Partner - Pray'])
-
-          expect(@gb).to receive(:list_interest_groupings).with(id: list_id).and_return([{ 'id' => 1, 'name' => 'Partner Status', 'groups' => [] }])
-
-          expect(@gb).to receive(:list_interest_group_add).with(id: 'foo', group_name: 'Partner - Pray', grouping_id: 1)
-
-          account.send(:add_status_groups, list_id, ['Partner - Pray'])
-        end
       end
     end
 
@@ -343,11 +307,12 @@ describe MailChimpAccount do
   end
 
   context '#call_mailchimp' do
-    it 'raises an error to silently retry the job if it gets error code -50 (too many connections)' do
+    it 'raises an error to silently retry job on status 429 (too many requests)' do
       account.primary_list_id = 'list1'
       account.active = true
-      msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
-      expect(account).to receive(:sync_contacts).with(1).and_raise(Gibbon::MailChimpError.new(msg))
+      detail = 'You have exceeded the limit of 10 simultaneous connections.'
+      err = Gibbon::MailChimpError.new(detail, status_code: 429, detail: detail)
+      expect(account).to receive(:sync_contacts).with(1).and_raise(err)
       expect do
         account.call_mailchimp(:sync_contacts, 1)
       end.to raise_error(LowerRetryWorker::RetryJobButNoRollbarError)
@@ -360,27 +325,44 @@ describe MailChimpAccount do
     end
 
     it 'does not add a greeting merge variable if it already exists' do
-      merge_vars = [
-        { 'name' => 'Greeting', 'req' => false, 'field_type' => 'text', 'public' => true, 'show' => true,
-          'order' => '5', 'default' => '', 'helptext' => '', 'size' => '25', 'tag' => 'GREETING', 'id' => 3 }
-      ]
-      expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return(merge_vars)
-      expect(account.gb).to_not receive(:list_merge_var_add)
+      check_merge_fields = stub_request(:get, "#{api_prefix}/lists/list1/merge-fields")
+                           .to_return(body: { merge_fields: [{ name: 'Greeting', tag: 'GREETING' }] }.to_json)
+
       account.add_greeting_merge_variable(account.primary_list_id)
+
+      expect(check_merge_fields).to have_been_made
     end
 
     it 'adds the greeting merge variable if it does not exist' do
-      expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return([])
-      expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
+      stub_request(:get, "#{api_prefix}/lists/list1/merge-fields")
+        .to_return(body: { merge_fields: [] }.to_json)
+      create_merge_field = stub_request(:post, "#{api_prefix}/lists/list1/merge-fields")
+                           .with(body: { tag: 'GREETING', name: 'Greeting', type: 'text' }.to_json)
+
       account.add_greeting_merge_variable(account.primary_list_id)
+
+      expect(create_merge_field).to have_been_made
     end
 
     it 'does not raise an error if the greeting variable added after call to check for it' do
-      expect(account.gb).to receive(:list_merge_vars).with(id: 'list1').and_return([])
+      stub_request(:get, "#{api_prefix}/lists/list1/merge-fields")
+        .to_return(body: { merge_fields: [] }.to_json)
+      stub_request(:post, "#{api_prefix}/lists/list1/merge-fields")
+        .to_return(status: 400, body: {
+          detail: 'A Merge Field with the tag "GREETING" already exists for this list.'
+        }.to_json)
 
-      msg = 'MailChimp API Error: A Merge Field with the tag "GREETING" already exists for this list. (code 254)'
-      expect(account.gb).to receive(:list_merge_var_add).with(id: 'list1', tag: 'GREETING', name: 'Greeting')
-        .and_raise(Gibbon::MailChimpError.new(msg))
+      expect { account.add_greeting_merge_variable(account.primary_list_id) }.to_not raise_error
+    end
+
+    it 'does not error on a 500 status but does notify Rollbar' do
+      stub_request(:get, "#{api_prefix}/lists/list1/merge-fields")
+        .to_return(body: { merge_fields: [] }.to_json)
+      stub_request(:post, "#{api_prefix}/lists/list1/merge-fields")
+        .to_return(status: 500, body: {
+          detail: 'internal error has occurred during the processing of your request'
+        }.to_json)
+      expect(Rollbar).to receive(:error)
 
       expect { account.add_greeting_merge_variable(account.primary_list_id) }.to_not raise_error
     end
@@ -388,22 +370,23 @@ describe MailChimpAccount do
 
   context '#setup_webhooks' do
     before do
-      allow($rollout).to receive(:active?).with(:mailchimp_webhooks, account_list)
-        .at_least(:once).and_return(true)
       account.primary_list_id = 'list1'
     end
 
     def expect_webhook_created
       expect(SecureRandom).to receive(:hex).at_least(:once).and_return('abc123')
       hook_params = {
-        id: 'list1', url: 'https://mpdx.org/mail_chimp_webhook/abc123',
-        actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
-                   upemail: true, campaign: true },
+        url: 'https://mpdx.org/mail_chimp_webhook/abc123',
+        events: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
+                  upemail: true, campaign: true },
         sources: { user: true, admin: true, api: false }
       }
-      expect(account.gb).to receive(:list_webhook_add).with(hook_params)
+      hook_created = stub_request(:post, "#{api_prefix}/lists/list1/webhooks").with(body: hook_params.to_json)
+
       yield
+
       expect(account.webhook_token).to eq('abc123')
+      expect(hook_created).to have_been_requested
     end
 
     it 'creates a webhook if the webhook token is missing' do
@@ -412,37 +395,167 @@ describe MailChimpAccount do
 
     it 're-uses previously set webhook token when creating webhooks' do
       account.update(webhook_token: 'already_set_token')
-      expect(account.gb).to receive(:list_webhooks).and_return([])
+      stub_request(:get, "#{api_prefix}/lists/list1/webhooks")
+        .to_return(body: { webhooks: [] }.to_json)
+
       hook_params = {
-        id: 'list1', url: 'https://mpdx.org/mail_chimp_webhook/already_set_token',
-        actions: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
-                   upemail: true, campaign: true },
+        url: 'https://mpdx.org/mail_chimp_webhook/already_set_token',
+        events: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
+                  upemail: true, campaign: true },
         sources: { user: true, admin: true, api: false }
       }
-      expect(account.gb).to receive(:list_webhook_add).with(hook_params)
+      hook_created = stub_request(:post, "#{api_prefix}/lists/list1/webhooks").with(body: hook_params.to_json)
 
       account.setup_webhooks('list1')
+
+      expect(hook_created).to have_been_requested
     end
 
     it 'does not create a webhook if it already exists' do
       account.update(webhook_token: '111')
-      expect(account.gb).to receive(:list_webhooks)
-        .and_return([{ 'url' => 'https://mpdx.org/mail_chimp_webhook/111' }])
-      expect(account.gb).to_not receive(:list_webhook_add)
+      stub_request(:get, "#{api_prefix}/lists/list1/webhooks")
+        .to_return(body: {
+          webhooks: [{ url: 'https://mpdx.org/mail_chimp_webhook/111' }]
+        }.to_json)
+
       account.setup_webhooks(account.primary_list_id)
     end
   end
 
+  context '#find_grouping' do
+    it 'retrieves the list grouping based on grouping_id' do
+      categories_response = {
+        categories: [
+          { list_id: '1e72b58b72', id: 'a2be97f1fe', title: 'Partner Status' }
+        ]
+      }
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories")
+        .to_return(body: categories_response.to_json)
+      account.grouping_id = 'a2be97f1fe'
+
+      grouping = account.find_grouping('1e72b58b72')
+
+      expect(grouping['title']).to eq 'Partner Status'
+    end
+
+    it 'retrieves the list grouping for Partner Status if no grouping set' do
+      categories_response = {
+        categories: [
+          { list_id: '1e72b58b72', id: 'a2be97f1fe', title: 'Partner Status' }
+        ]
+      }
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories")
+        .to_return(body: categories_response.to_json)
+
+      grouping = account.find_grouping('1e72b58b72')
+
+      expect(grouping['title']).to eq 'Partner Status'
+      expect(grouping['id']).to eq 'a2be97f1fe'
+    end
+  end
+
+  context '#add_status_groups' do
+    it 'makes exsting status category hidden, adds status interest groups' do
+      categories = [
+        { list_id: '1e72b58b72', id: 'a2be97f1fe', title: 'Partner Status' }
+      ]
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories")
+        .to_return(body: { categories: categories }.to_json)
+      make_hidden = stub_request(:patch, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe")
+                    .with(body: { title: 'Partner Status', type: 'hidden' }.to_json)
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe/interests")
+        .to_return(body: { interests: [{ id: 'i1', name: 'Partner - Pray' }] }.to_json)
+      create_group = stub_request(:post, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe/interests")
+                     .with(body: '{"name":"Partner - Special"}')
+
+      account.add_status_groups('1e72b58b72', ['Partner - Special'])
+
+      expect(make_hidden).to have_been_made
+      expect(create_group).to have_been_made
+    end
+
+    it 'does not error if mailchimp says interest already added' do
+      categories = [
+        { list_id: '1e72b58b72', id: 'a2be97f1fe', title: 'Partner Status' }
+      ]
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories")
+        .to_return(body: { categories: categories }.to_json)
+      make_hidden = stub_request(:patch, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe")
+                    .with(body: { title: 'Partner Status', type: 'hidden' }.to_json)
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe/interests")
+        .to_return(body: { interests: [{ id: 'i1', name: 'Partner - Pray' }] }.to_json)
+      create_group =
+        stub_request(:post, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe/interests")
+        .with(body: '{"name":"Partner - Special"}')
+        .to_return(status: 400, body: {
+          detail: 'Cannot add "Partner - Party" because it already exists on the list."'
+        }.to_json)
+
+      account.add_status_groups('1e72b58b72', ['Partner - Special'])
+
+      expect(make_hidden).to have_been_made
+      expect(create_group).to have_been_made
+    end
+
+    it 'creates a new status category if none exists' do
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories")
+        .to_return(body: { categories: [] }.to_json)
+        .then.to_return(body: { categories: [
+          { list_id: '1e72b58b72', id: 'a2be97f1fe', title: 'Partner Status' }
+        ] }.to_json)
+      create_category = stub_request(:post, "#{api_prefix}/lists/1e72b58b72/interest-categories/")
+                        .with(body: { title: 'Partner Status', type: 'hidden' }.to_json)
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe/interests")
+        .to_return(body: { interests: [{ id: 'i1', name: 'Partner - Pray' }] }.to_json)
+
+      account.add_status_groups('1e72b58b72', [])
+
+      expect(create_category).to have_been_made
+    end
+  end
+
   context '#unsubscribe_list_batch' do
-    it 'unsubscribes members and destroys their related records' do
-      stub = stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listBatchUnsubscribe')
-             .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22list1%22%2C%22'\
-             'emails%22%3A%22john%40example.com%22%2C%22delete_member%22%3Atrue%2C%22'\
-             'send_goodbye%22%3Afalse%2C%22send_notify%22%3Afalse%7D')
-      member = create(:mail_chimp_member, mail_chimp_account: account)
-      account.unsubscribe_list_batch('list1', 'john@example.com')
-      expect(stub).to have_been_requested
+    it 'unsubscribes a single member with a single API call' do
+      member = create(:mail_chimp_member, mail_chimp_account: account,
+                                          email: 'john@example.com')
+      email_hash = 'd4c74594d841139328695756648b6bd6'
+      delete_member = stub_request(:delete, "#{api_prefix}/lists/list1/members/#{email_hash}")
+
+      account.unsubscribe_list_batch('list1', ['john@example.com'])
+
+      expect(delete_member).to have_been_requested
       expect(MailChimpMember.find_by(id: member.id)).to be_nil
+    end
+
+    it 'does not error on a 404 status and still deletes member record' do
+      create(:mail_chimp_member, mail_chimp_account: account, email: 'john@example.com')
+      email_hash = 'd4c74594d841139328695756648b6bd6'
+      delete_member = stub_request(:delete, "#{api_prefix}/lists/list1/members/#{email_hash}")
+                      .to_return(status: 404)
+
+      expect do
+        account.unsubscribe_list_batch('list1', ['john@example.com'])
+      end.to change(MailChimpMember, :count).by(-1)
+
+      expect(delete_member).to have_been_requested
+    end
+
+    it 'unsubscribes several members with a batch API call' do
+      emails = Array.new(3) { |i| "j#{i}@t.co" }
+      emails.each { |e| create(:mail_chimp_member, mail_chimp_account: account, email: e) }
+      batch_operations = [
+        { method: 'DELETE', path: '/lists/list1/members/6779e6bef717b2ad54df04be61d3441c' },
+        { method: 'DELETE', path: '/lists/list1/members/7f436bbb925adddaff9d1b85d053cf31' },
+        { method: 'DELETE', path: '/lists/list1/members/75576f0fd15e52eca2b83b46ffff2273' }
+      ]
+      batch_delete = stub_request(:post, "#{api_prefix}/batches")
+                     .with(body: { operations: batch_operations }.to_json)
+
+      expect do
+        account.unsubscribe_list_batch('list1', emails)
+      end.to change(MailChimpMember, :count).by(-3)
+
+      expect(batch_delete).to have_been_requested
     end
   end
 
@@ -482,47 +595,99 @@ describe MailChimpAccount do
       end.to change(contact.activities, :count).by(1)
     end
 
-    describe 'handling campaign not completely sent error (code 301)' do
-      let(:gb) { double }
-      before do
-        allow(account).to receive(:gb) { gb }
-        allow(gb).to receive(:campaigns).with(filters: { campaign_id: 'c1' }) do
-          { 'data' => [{ 'send_time' => '2015-09-18 16:52:47' }] }
-        end
-      end
+    def stub_campaign_members(*emails)
+      sent_to = emails.map { |email| { email_address: email } }
+      stub_request(:get, "#{api_prefix}/reports/c1/sent-to?count=15000")
+        .to_return(body: { sent_to: sent_to }.to_json)
+    end
+  end
 
-      it 'quietly retries the job if it has been less than one hour since sent' do
-        stub_campaign_members_err('code 301')
-        travel_to Time.new(2015, 9, 18, 16, 52, 49, '+00:00') do
-          expect { account.log_sent_campaign('c1', 'subject') }
-            .to raise_error(LowerRetryWorker::RetryJobButNoRollbarError)
-        end
-      end
+  context '#batch_params' do
+    it 'does not include interests for non-primary lists' do
+      contact = build(:contact, status: 'Partner - Special', greeting: 'Hi')
+      person = build(:person, first_name: 'John', last_name: 'Doe')
+      contact.people << person
+      email_address = build(:email_address, email: 'j@t.co', primary: true)
+      person.primary_email_address = email_address
+      account.grouping_id = '1a'
+      account.status_interest_ids = { 'Partner - Special' => 'i1', 'Partner - Pray' => 'i2' }
+      account.primary_list_id = 'primary_list'
 
-      it 'does nothing if more than one hour since sent (campaign status is stuck)' do
-        stub_campaign_members_err('code 301')
-        travel_to Time.new(2015, 9, 18, 17, 52, 49, '+00:00') do
-          expect { account.log_sent_campaign('c1', 'subject') }
-            .to_not raise_error
-        end
-      end
+      expect(account.batch_params([contact], 'not-primary-list').first)
+        .to_not have_key(:interests)
+    end
+  end
 
-      it 're-raises other mail chimp errors' do
-        stub_campaign_members_err('other mail chimp error')
-        expect { account.log_sent_campaign('c1', 'subject') }
-          .to raise_error(Gibbon::MailChimpError)
-      end
+  context '#create_member_records' do
+    it 'works even if interests parameter is missing' do
+      member_params = [
+        {
+          status_if_new: 'subscribed', email_address: 'j@t.co',
+          merge_fields: { EMAIL: 'j@t.co', FNAME: 'John', LNAME: 'Doe', GREETING: 'Hi' }
+        }
+      ]
+      account.primary_list_id = 'list1'
+      account.save
 
-      def stub_campaign_members_err(msg)
-        err = Gibbon::MailChimpError.new(msg)
-        expect(gb).to receive(:campaign_members).and_raise(err)
-      end
+      expect do
+        account.create_member_records(member_params, 'list1')
+      end.to change(MailChimpMember, :count).by(1)
+
+      expect(MailChimpMember.last.list_id).to eq 'list1'
+    end
+  end
+
+  context '#list_batch_subscribe' do
+    it 'subscribes a single member with a single API call' do
+      contact = build(:contact, status: 'Partner - Special', greeting: 'Hi')
+      person = build(:person, first_name: 'John', last_name: 'Doe')
+      contact.people << person
+      email_address = build(:email_address, email: 'j@t.co', primary: true)
+      person.primary_email_address = email_address
+      account.grouping_id = '1a'
+      account.status_interest_ids = { 'Partner - Special' => 'i1', 'Partner - Pray' => 'i2' }
+      account.primary_list_id = 'list1'
+      params = account.batch_params([contact], 'list1')
+      member_params_json = {
+        status_if_new: 'subscribed', email_address: 'j@t.co',
+        merge_fields: { EMAIL: 'j@t.co', FNAME: 'John', LNAME: 'Doe', GREETING: 'Hi' },
+        interests: { i1: true, i2: false }
+      }.to_json
+      subscribe_request =
+        stub_request(:put, "#{api_prefix}/lists/list1/members/47f62523d9b40ad2176baf884072aca5")
+        .with(body: member_params_json)
+
+      account.list_batch_subscribe(id: 'list1', batch: params)
+
+      expect(subscribe_request).to have_been_requested
     end
 
-    def stub_campaign_members(*emails)
-      expect(account.gb).to receive(:campaign_members).with(cid: 'c1', status: 'sent') do
-        { 'data' => emails.map { |email| { 'email' => email } } }
+    it 'subscribes several members with a batch API call' do
+      emails = Array.new(3) { |i| "j#{i}@t.co" }
+      batch_params = emails.map do |email|
+        { status_if_new: 'subscribed', email_address: email,
+          merge_fields: { EMAIL: email, FNAME: 'John', LNAME: 'Doe', GREETING: 'Hi' },
+          interests: { 'i1' => true } }
       end
+      batch_operations = [
+        { method: 'PUT', path: '/lists/list1/members/6779e6bef717b2ad54df04be61d3441c',
+          body: '{"status_if_new":"subscribed","email_address":"j0@t.co",'\
+          '"merge_fields":{"EMAIL":"j0@t.co","FNAME":"John","LNAME":"Doe","GREETING":"Hi"},'\
+          '"interests":{"i1":true}}' },
+        { method: 'PUT', path: '/lists/list1/members/7f436bbb925adddaff9d1b85d053cf31',
+          body: '{"status_if_new":"subscribed","email_address":"j1@t.co",'\
+          '"merge_fields":{"EMAIL":"j1@t.co","FNAME":"John","LNAME":"Doe","GREETING":"Hi"},'\
+          '"interests":{"i1":true}}' },
+        { method: 'PUT', path: '/lists/list1/members/75576f0fd15e52eca2b83b46ffff2273',
+          body: '{"status_if_new":"subscribed","email_address":"j2@t.co",'\
+          '"merge_fields":{"EMAIL":"j2@t.co","FNAME":"John","LNAME":"Doe","GREETING":"Hi"},"interests":{"i1":true}}' }
+      ]
+      batch_subscribe = stub_request(:post, "#{api_prefix}/batches")
+                        .with(body: { operations: batch_operations }.to_json)
+
+      account.list_batch_subscribe(id: 'list1', batch: batch_params)
+
+      expect(batch_subscribe).to have_been_requested
     end
   end
 
@@ -537,9 +702,8 @@ describe MailChimpAccount do
       contact2.people << create(:person, email: 'foo2@example.com')
       account.primary_list_id = 'list1'
 
-      stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listMembers')
-        .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22appeal_list1%22%2C%22limit%22%3A15000%7D')
-        .to_return(body: '{"total":1, "data":[{"email":"foo@example.com", "timestamp":"2015-07-31 14:39:19"}]}')
+      stub_request(:get, "#{api_prefix}/lists/appeal_list1/members?count=15000")
+        .to_return(body: { members: [{ email_address: 'foo@example.com', id: '1' }] }.to_json)
     end
 
     context '#export_appeal_contacts' do
@@ -575,7 +739,7 @@ describe MailChimpAccount do
     context '#list_members' do
       it 'returns members of a list, specifically emails' do
         expect(account.send(:list_members, list_id))
-          .to eq([{ 'email' => 'foo@example.com', 'timestamp' => '2015-07-31 14:39:19' }])
+          .to eq([{ 'email_address' => 'foo@example.com', 'id' => '1' }])
       end
     end
 
@@ -587,24 +751,13 @@ describe MailChimpAccount do
 
     context '#list_member_info' do
       it 'retrieves the list member info' do
-        response = '{"data":[{"email":"foo@example.com","merges":{"FNAME":"Joe"}}]}'
-        data = [{ 'email' => 'foo@example.com', 'merges' => { 'FNAME' => 'Joe' } }]
-        stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=listMemberInfo')
-          .with(body: '%7B%22apikey%22%3A%22fake-us4%22%2C%22id%22%3A%22'\
-                      'appeal_list1%22%2C%22email_address%22%3A%5B%22'\
-                      'foo%40example.com%22%5D%7D')
-          .and_return(body: response)
+        data = [{ 'email_address' => 'foo@example.com', 'id' => '1' }]
+
         expect(account.list_member_info(list_id, ['foo@example.com'])).to eq data
       end
 
-      it 'makes multiple batches of 50 for lots of emails' do
-        url = 'https://us4.api.mailchimp.com/1.3/?method=listMemberInfo'
-        data = Array.new(50, merges: { FNAME: 'Joe' })
-        stub = stub_request(:post, url).and_return(body: { data: data }.to_json)
-
-        expect(account.list_member_info(list_id, Array.new(100, 'j@example.com')))
-          .to eq Array.new(100, 'merges' => { 'FNAME' => 'Joe' })
-        expect(stub).to have_been_made.twice
+      it 'filters out member info that do not match given emails' do
+        expect(account.list_member_info(list_id, ['not-foo@example.com'])).to be_empty
       end
     end
 
@@ -651,10 +804,17 @@ describe MailChimpAccount do
       expect(account.reload.primary_list_id).to be_nil
     end
 
-    it 'does nothing for specified benign error codes' do
-      [502, 220, 214].each do |code|
-        msg = "Error (code #{code})"
-        account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
+    it 'does nothing for invalid email address errors' do
+      invalid_email_messages = [
+        'j@t.co looks fake or invalid, please enter a real email address.',
+        'The username portion of the email address is invalid (the portion before the @: or;vfc21)'
+      ]
+
+      invalid_email_messages.each do |message|
+        expect do
+          err = Gibbon::MailChimpError.new(message, status_code: 400, detail: message)
+          account.handle_newsletter_mc_error(err)
+        end.to_not raise_error
       end
     end
 

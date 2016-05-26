@@ -24,13 +24,25 @@ series = currency_monthly_totals.reverse.each_with_index.map do |currency_totals
   {
     name: currency_with_symbol(currency_totals[:currency]),
     color: currency_colors[num_currencies - index - 1],
-    data: currency_totals[:month_totals].map { |t| t[:converted].to_f }
+    data: currency_totals[:month_totals].map { |t| t[:converted].to_f },
+    cursor: 'pointer'
   }
 end
 
 %>
 <script>
 $(function () {
+  var months_to_dates = <%== months_back.downto(0).map {|i| i.months.ago.to_date.beginning_of_month}.to_json %>;
+  var seriesData = <%== series.to_json %>;
+  var seriesWithClickEvents = _.map(seriesData, function(series) {
+    series.events = {
+      click: function(event) {
+        window.location.href = '/donations?start_date=' + months_to_dates[event.point.x];
+      }
+    };
+    return series;
+  });
+
   $('#donations_summary_chart').highcharts({
     chart: {
       type: 'column'
@@ -83,33 +95,38 @@ $(function () {
       formatter: function() {
         var totalConverted = this.total;
 
-        var percentOfGoal = Math.round(Number(totalConverted) /
-            <%= current_account_list.monthly_goal || 0 %> * 100) + '%';
+        var monthlyGoal = <%= current_account_list.monthly_goal || 0 %>;
+        var percentOfGoal = Math.round(Number(totalConverted) / monthlyGoal * 100) + '%';
         var percentOfAverage = Math.round(Number(totalConverted) /
-            <%= current_account_list.monthly_goal || 0 %> * 100) + '%';
+            <%= monthly_average || 0 %> * 100) + '%';
 
         var numberFilter = angular.injector(["ng"]).get("$filter")("number");
         var formattedTotal = '<%= j salary_currency_symbol %>' +
           numberFilter(totalConverted, 0) + ' ' + '<%= j salary_currency %>';
 
-        s = '<b>'+ this.x +'</b><br/>';
-
-        s += '<div style="white-space: nowrap">'
-        s +=   '<div style="display: inline-block; padding-right: 1em">';
-        s +=     '<%= j(current_account_list.multi_currency? ? _('Converted Total') : _('Donations')) %>';
-        s +=   '</div>';
-        s +=   '<div style="display: inline-block">' + formattedTotal + '</div>';
-        s += '</div>';
-
-        s += '<div style="white-space: nowrap">'
-        s +=   '<div style="display: inline-block"><%= j _('% of Monthly Goal') %>:</div>';
-        s +=   '<div style="display: inline-block; float: right">' + percentOfGoal + '</div>';
-        s += '</div>';
-
-        s += '<div style="white-space: nowrap">'
-        s +=   '<div style="display: inline-block"><%= j _('% of Average') %>:</div>';
-        s +=   '<div style="display: inline-block; float: right">' + percentOfAverage + '</div>';
-        s += '</div>';
+        s = '<table>';
+        s += '<thead>';
+        s +=   '<tr>';
+        s +=     '<th colspan="2" class="text-left"><strong>' + this.x + '</strong></th>';
+        s +=   '</tr>';
+        s += '</thead>';
+        s += '<tbody>';
+        s +=   '<tr>';
+        s +=     '<td><%= j(current_account_list.multi_currency? ? _('Converted Total') : _('Donations')) %></td>';
+        s +=     '<td class="text-right">' + formattedTotal + '</td>';
+        s +=   '</tr>';
+        if (monthlyGoal > 0) {
+          s += '<tr>';
+          s +=   '<td><%= j _('% of Monthly Goal') %>:</td>';
+          s +=   '<td class="text-right">' + percentOfGoal + '</td>';
+          s += '</tr>';
+        }
+        s +=   '<tr>';
+        s +=     '<td><%= j _('% of Average') %>:</td>';
+        s +=     '<td class="text-right">' + percentOfAverage + '</td>';
+        s +=   '</tr>';
+        s += '</tbody>';
+        s += '</table>';
 
         return s;
       },
@@ -121,8 +138,7 @@ $(function () {
         stacking: 'normal'
       }
     },
-    series: <%== series.to_json %>
+    series: seriesWithClickEvents
   });
 });
 </script>
-

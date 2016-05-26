@@ -38,6 +38,8 @@ Capybara.register_driver :poltergeist do |app|
 end
 Capybara.javascript_driver = :poltergeist
 
+Capybara.default_max_wait_time = 4
+
 RSpec.configure do |config|
   config.before(:each) do |example|
     # Clears out the jobs for tests using the fake testing

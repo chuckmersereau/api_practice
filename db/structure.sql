@@ -734,7 +734,8 @@ CREATE TABLE contacts (
     no_appeals boolean,
     prayer_letters_params text,
     pls_id character varying(255),
-    pledge_currency character varying(4)
+    pledge_currency character varying(4),
+    locale character varying(255)
 );
 
 
@@ -1379,14 +1380,15 @@ CREATE TABLE mail_chimp_accounts (
     id integer NOT NULL,
     api_key character varying(255),
     active boolean DEFAULT false,
-    grouping_id integer,
+    grouping_id character varying(255),
     primary_list_id character varying(255),
     account_list_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     webhook_token character varying(255),
     auto_log_campaigns boolean DEFAULT false NOT NULL,
-    importing boolean DEFAULT false NOT NULL
+    importing boolean DEFAULT false NOT NULL,
+    status_interest_ids text
 );
 
 
@@ -1456,7 +1458,8 @@ CREATE TABLE mail_chimp_members (
     first_name character varying(255),
     last_name character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    contact_locale character varying(255)
 );
 
 
@@ -1892,7 +1895,8 @@ CREATE TABLE organizations (
     updated_at timestamp without time zone,
     api_class character varying(255),
     country character varying(255),
-    uses_key_auth boolean DEFAULT false
+    uses_key_auth boolean DEFAULT false,
+    locale character varying(255) DEFAULT 'en'::character varying NOT NULL
 );
 
 
@@ -2237,7 +2241,7 @@ CREATE TABLE person_relay_accounts (
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    remote_id character varying(255)
+    remote_id character varying(255) NOT NULL
 );
 
 
@@ -4619,6 +4623,13 @@ CREATE UNIQUE INDEX person_account ON master_person_donor_accounts USING btree (
 
 
 --
+-- Name: person_relay_accounts_on_lower_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX person_relay_accounts_on_lower_remote_id ON person_relay_accounts USING btree (lower((remote_id)::text));
+
+
+--
 -- Name: picture_of; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -5161,4 +5172,20 @@ INSERT INTO schema_migrations (version) VALUES ('20160428125403');
 INSERT INTO schema_migrations (version) VALUES ('20160429175451');
 
 INSERT INTO schema_migrations (version) VALUES ('20160513173621');
+
+INSERT INTO schema_migrations (version) VALUES ('20160517160526');
+
+INSERT INTO schema_migrations (version) VALUES ('20160517161104');
+
+INSERT INTO schema_migrations (version) VALUES ('20160517174101');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518122049');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518122605');
+
+INSERT INTO schema_migrations (version) VALUES ('20160518143500');
+
+INSERT INTO schema_migrations (version) VALUES ('20160523162335');
+
+INSERT INTO schema_migrations (version) VALUES ('20160523203413');
 

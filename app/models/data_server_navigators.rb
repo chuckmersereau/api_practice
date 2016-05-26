@@ -13,7 +13,7 @@ class DataServerNavigators < DataServer
       CSV.new(response, headers: :first_row).each do |line|
         balance[:designation_numbers] = [@org_account.username]
         balance[:account_names] = line['ACCT_NAME'].split('\n')
-        balance_match = line['BALANCE'].match(/([-]?\d+\.?\d*)/)
+        balance_match = line['BALANCE'].delete(',').match(/([-]?\d+\.?\d*)/)
         balance[:balance] = balance_match[0] if balance_match
         balance[:date] = line['EFFDT'] ? DateTime.strptime(line['EFFDT'], '%m/%d/%Y') : Time.now
         break

@@ -303,4 +303,43 @@ describe ContactFilter do
       expect(filtered_contacts).not_to include no_currency_contact
     end
   end
+
+  context '#locale' do
+    it 'filters contacts with locale null and another' do
+      contact1 = create(:contact, locale: nil)
+      contact2 = create(:contact, locale: 'es')
+      create(:contact, locale: 'fr')
+      cf = ContactFilter.new(locale: %w(null es))
+
+      expect(cf.filter(Contact, build_stubbed(:account_list)))
+        .to contain_exactly(contact1, contact2)
+    end
+
+    it 'does not filter out if contacts if locale filter blank' do
+      contact1 = create(:contact, locale: 'fr')
+      cf = ContactFilter.new(locale: [''])
+
+      expect(cf.filter(Contact, build_stubbed(:account_list)))
+        .to contain_exactly(contact1)
+    end
+
+    it 'filters only for nil locales if only null given' do
+      contact1 = create(:contact, locale: nil)
+      create(:contact, locale: 'es')
+      cf = ContactFilter.new(locale: ['null'])
+
+      expect(cf.filter(Contact, build_stubbed(:account_list)))
+        .to contain_exactly(contact1)
+    end
+
+    it 'filters for contacts with specified locales' do
+      contact1 = create(:contact, locale: 'de')
+      contact2 = create(:contact, locale: 'es')
+      create(:contact, locale: 'fr')
+      cf = ContactFilter.new(locale: %w(es de))
+
+      expect(cf.filter(Contact, build_stubbed(:account_list)))
+        .to contain_exactly(contact1, contact2)
+    end
+  end
 end

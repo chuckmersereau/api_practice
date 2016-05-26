@@ -48,6 +48,7 @@ class ContactFilter
       filtered_contacts = contact_name(filtered_contacts)
       filtered_contacts = timezone(filtered_contacts)
       filtered_contacts = pledge_currency(filtered_contacts, account_list)
+      filtered_contacts = locale(filtered_contacts, account_list)
       filtered_contacts = related_task_action(filtered_contacts)
       filtered_contacts = appeal(filtered_contacts)
       filtered_contacts = contact_type(filtered_contacts)
@@ -197,6 +198,15 @@ class ContactFilter
                           end
     end
     filtered_contacts
+  end
+
+  def locale(filtered_contacts, _account_list)
+    if @filters[:locale].present? && @filters[:locale].first != ''
+      locales = @filters[:locale].map { |l| l == 'null' ? nil : l }
+      filtered_contacts.where('contacts.locale' => locales)
+    else
+      filtered_contacts
+    end
   end
 
   def related_task_action(filtered_contacts)

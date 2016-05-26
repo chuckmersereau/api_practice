@@ -17,8 +17,6 @@ class Person::OrganizationAccount < ActiveRecord::Base
   after_validation :set_valid_credentials
   after_destroy :destroy_designation_profiles
 
-  # attr_accessible :username, :password, :organization, :organization_id
-
   belongs_to :organization
 
   def to_s

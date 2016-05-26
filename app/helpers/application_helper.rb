@@ -140,4 +140,18 @@ module ApplicationHelper
   def currency_code_and_symbol(code)
     code + ' (' + currency_symbol(code) + ')'
   end
+
+  def locale_select_options
+    TwitterCldr::Shared::Languages
+      .all_for(locale)
+      .select { |k, _| TwitterCldr.supported_locales.include?(k) }
+      .invert
+      .sort_by(&:first)
+  end
+
+  def mail_chimp_locale_options
+    MailChimpAccount::Locales::LOCALE_CODES
+      .map { |language, code| [_(language), code] }
+      .sort_by(&:first)
+  end
 end

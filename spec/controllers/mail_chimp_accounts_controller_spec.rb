@@ -10,9 +10,8 @@ describe MailChimpAccountsController do
     allow(controller).to receive(:current_account_list).and_return(@account_list)
     @contact = create(:contact, account_list: @account_list)
 
-    stub_request(:post, 'https://us4.api.mailchimp.com/1.3/?method=lists')
-      .with(body: '%7B%22apikey%22%3A%22foo-us4%22%7D')
-      .to_return(status: 200, body: '{"total": 0,"data": []}', headers: {})
+    stub_request(:get, 'https://apikey:foo-us4@us4.api.mailchimp.com/3.0/lists')
+      .to_return(body: { lists: [] }.to_json)
   end
 
   context 'index' do
