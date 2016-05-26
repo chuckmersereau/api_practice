@@ -307,11 +307,12 @@ describe MailChimpAccount do
   end
 
   context '#call_mailchimp' do
-    it 'raises an error to silently retry the job if it gets error code -50 (too many connections)' do
+    it 'raises an error to silently retry job on status 429 (too many requests)' do
       account.primary_list_id = 'list1'
       account.active = true
-      msg = 'MailChimp API Error: No more than 10 simultaneous connections allowed. (code -50)'
-      expect(account).to receive(:sync_contacts).with(1).and_raise(Gibbon::MailChimpError.new(msg))
+      detail = 'You have exceeded the limit of 10 simultaneous connections.'
+      err = Gibbon::MailChimpError.new(detail, status_code: 429, detail: detail)
+      expect(account).to receive(:sync_contacts).with(1).and_raise(err)
       expect do
         account.call_mailchimp(:sync_contacts, 1)
       end.to raise_error(LowerRetryWorker::RetryJobButNoRollbarError)

@@ -160,7 +160,8 @@ class MailChimpAccount < ActiveRecord::Base
     when e.message.include?('API Key Disabled') || e.message.include?('code 104')
       update_column(:active, false)
       AccountMailer.invalid_mailchimp_key(account_list).deliver
-    when e.message.include?('code -50') # No more than 10 simultaneous connections allowed.
+    when e.status_code == 429
+      # No more than 10 simultaneous connections allowed.
       raise LowerRetryWorker::RetryJobButNoRollbarError
     when e.message.include?('code -91') # A backend database error has occurred. Please try again later or report this issue. (code -91)
       # raise the exception and the background queue will retry
