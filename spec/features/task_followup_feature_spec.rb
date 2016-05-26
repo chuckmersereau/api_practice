@@ -14,6 +14,7 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     first('#tabs_tasks').click
 
     wait_for_ajax
+    sleep 1
 
     within("#task_#{task.id}") do
       first('.complete_task').click

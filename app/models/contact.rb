@@ -171,7 +171,7 @@ class Contact < ActiveRecord::Base
 
   def reload_mailing_address
     @mailing_address = nil
-    mailing_address.try(:reload)
+    mailing_address.reload unless mailing_address.new_record?
   end
 
   def hide

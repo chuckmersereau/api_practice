@@ -221,8 +221,9 @@ describe Contact do
     it 'should not remove the loser from prayer letters service' do
       pla = create(:prayer_letters_account, account_list: account_list)
       expect(pla).to_not receive(:delete_contact)
+      loser_contact.addresses << create(:address, primary_mailing_address: true)
 
-      loser_contact.update_column(:prayer_letters_id, 'foo')
+      loser_contact.update_columns(prayer_letters_id: 'foo', send_newsletter: 'Both')
 
       contact.merge(loser_contact)
     end
@@ -792,6 +793,12 @@ describe Contact do
     it 'gives a new address if contact only has a historic address' do
       contact.addresses << create(:address, street: '1', historic: true)
       expect(contact.mailing_address.street).to be_nil
+    end
+  end
+
+  context '#reload_mailing_address' do
+    it 'does not error if contact has no addresses' do
+      expect { create(:contact).reload_mailing_address }.to_not raise_error
     end
   end
 
