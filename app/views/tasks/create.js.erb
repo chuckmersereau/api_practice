@@ -11,5 +11,5 @@ if($('#tasks-tab')[0]){
 <% else %>
   angular.element($('#tasks-tab'))
 <% end %>
-  .scope().syncTask(<%== TaskSerializer.new(@task).to_json.gsub('/', '\/') %>)
+  .scope().syncTask(<%== TaskSerializer.new(@task).to_json.gsub('/', '\/').gsub('[null]','[]') %>)
 }
