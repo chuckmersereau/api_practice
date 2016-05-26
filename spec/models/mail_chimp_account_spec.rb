@@ -473,6 +473,29 @@ describe MailChimpAccount do
       expect(create_group).to have_been_made
     end
 
+    it 'does not error if mailchimp says interest already added' do
+      categories = [
+        { list_id: '1e72b58b72', id: 'a2be97f1fe', title: 'Partner Status' }
+      ]
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories")
+        .to_return(body: { categories: categories }.to_json)
+      make_hidden = stub_request(:patch, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe")
+                    .with(body: { title: 'Partner Status', type: 'hidden' }.to_json)
+      stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe/interests")
+        .to_return(body: { interests: [{ id: 'i1', name: 'Partner - Pray' }] }.to_json)
+      create_group =
+        stub_request(:post, "#{api_prefix}/lists/1e72b58b72/interest-categories/a2be97f1fe/interests")
+        .with(body: '{"name":"Partner - Special"}')
+        .to_return(status: 400, body: {
+          detail: 'Cannot add "Partner - Party" because it already exists on the list."'
+        }.to_json)
+
+      account.add_status_groups('1e72b58b72', ['Partner - Special'])
+
+      expect(make_hidden).to have_been_made
+      expect(create_group).to have_been_made
+    end
+
     it 'creates a new status category if none exists' do
       stub_request(:get, "#{api_prefix}/lists/1e72b58b72/interest-categories")
         .to_return(body: { categories: [] }.to_json)

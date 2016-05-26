@@ -378,16 +378,21 @@ class MailChimpAccount < ActiveRecord::Base
     end
 
     # Add any new groups
-    groups = gb.lists(list_id).interest_categories(grouping_id).interests
-               .retrieve['interests'].map { |i| i['name'] }
+    groups = gb.lists(list_id).interest_categories(grouping_id).interests.retrieve['interests'].map { |i| i['name'] }
+    create_interest_categories(statuses - groups, list_id)
 
-    (statuses - groups).each do |group|
-      gb.lists(list_id).interest_categories(grouping_id).interests
-        .create(body: { name: group })
-    end
     cache_status_interest_ids(list_id)
 
     save
+  end
+
+  def create_interest_categories(statuses, list_id)
+    statuses.each do |group|
+      gb.lists(list_id).interest_categories(grouping_id).interests.create(body: { name: group })
+    end
+  rescue Gibbon::MailChimpError => e
+    raise unless e.status_code == 400 &&
+                 e.detail =~ /Cannot add .* because it already exists on the list/
   end
 
   def cache_status_interest_ids(list_id = nil)
