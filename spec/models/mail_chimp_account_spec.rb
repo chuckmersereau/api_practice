@@ -662,6 +662,22 @@ describe MailChimpAccount do
       expect(subscribe_request).to have_been_requested
     end
 
+    it 'subscribes a single member with a single API call' do
+      params = {
+        status_if_new: 'subscribed', email_address: 'j@t.co',
+        merge_fields: { EMAIL: 'j@t.co', FNAME: 'John', LNAME: 'Doe', GREETING: 'Hi' }
+      }
+      subscribe_request =
+        stub_request(:put, "#{api_prefix}/lists/list1/members/47f62523d9b40ad2176baf884072aca5")
+        .to_return(status: 400, body: {
+          detail: 'The username portion of the email address is invalid'
+        }.to_json)
+
+      account.list_batch_subscribe(id: 'list1', batch: [params])
+
+      expect(subscribe_request).to have_been_requested
+    end
+
     it 'subscribes several members with a batch API call' do
       emails = Array.new(3) { |i| "j#{i}@t.co" }
       batch_params = emails.map do |email|

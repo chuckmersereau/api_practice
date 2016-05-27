@@ -272,9 +272,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def list_batch_subscribe(id:, batch:)
     if batch.size < THRESHOLD_SIZE_FOR_BATCH_OPERATION
-      batch.each do |params|
-        gb.lists(id).members(email_hash(params[:email_address])).upsert(body: params)
-      end
+      batch.each { |params| subscribe_member(id, params) }
     else
       operations = batch.map do |params|
         { method: 'PUT',
@@ -283,6 +281,12 @@ class MailChimpAccount < ActiveRecord::Base
       end
       gb.batches.create(body: { operations: operations })
     end
+  end
+
+  def subscribe_member(list_id, params)
+    gb.lists(list_id).members(email_hash(params[:email_address])).upsert(body: params)
+  rescue Gibbon::MailChimpError => e
+    raise unless self.class.invalid_email_error?(e)
   end
 
   def create_member_records(members_params, list_id)
