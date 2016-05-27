@@ -160,6 +160,9 @@ class MailChimpAccount < ActiveRecord::Base
     when e.message.include?('API Key Disabled') || e.message.include?('code 104')
       update_column(:active, false)
       AccountMailer.invalid_mailchimp_key(account_list).deliver
+    when e.status_code == 503
+      # The server is temporarily unable
+      raise LowerRetryWorker::RetryJobButNoRollbarError
     when e.status_code == 429
       # No more than 10 simultaneous connections allowed.
       raise LowerRetryWorker::RetryJobButNoRollbarError
