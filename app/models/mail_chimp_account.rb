@@ -196,7 +196,8 @@ class MailChimpAccount < ActiveRecord::Base
   def self.invalid_email_error?(e)
     e.status_code == 400 &&
       (e.message =~ /looks fake or invalid, please enter a real email/ ||
-       e.message =~ /username portion of the email address is invalid/)
+       e.message =~ /username portion of the email address is invalid/ ||
+       e.message =~ /domain portion of the email address is invalid/)
   end
 
   def compare_and_unsubscribe(contacts, list_id)
