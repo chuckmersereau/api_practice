@@ -184,7 +184,8 @@ describe MailChimpAccount do
         expect(account).to receive(:add_greeting_merge_variable)
         expect(account).to receive(:list_emails) { ['j@t.co'] }
         expect(account).to receive(:list_member_info) do
-          [{ 'email_address' => 'j@t.co', 'merge_fields' => {} }]
+          [{ 'email_address' => 'j@t.co', 'merge_fields' => {},
+             'status' => 'subscribed' }]
         end
         expect(account).to receive(:list_batch_subscribe)
 
@@ -784,10 +785,10 @@ describe MailChimpAccount do
       it 'retrieves member info by requesting multiple pages' do
         stub_request(:get, "#{api_prefix}/lists/appeal_list1/members?count=100&offset=0")
           .to_return(body: {
-            members: [{ email_address: 'f1@t.co', id: '1' }], total_items: 200
+            members: [{ email_address: 'f1@t.co', id: '1', status: 'subscribed' }], total_items: 200
           }.to_json)
         stub_request(:get, "#{api_prefix}/lists/appeal_list1/members?count=100&offset=100")
-          .to_return(body: { members: [{ email_address: 'f2@t.co', id: '2' }] }.to_json)
+          .to_return(body: { members: [{ email_address: 'f2@t.co', id: '2', status: 'subscribed' }] }.to_json)
 
         members_info = account.list_member_info(list_id, ['f1@t.co', 'f2@t.co'])
 
