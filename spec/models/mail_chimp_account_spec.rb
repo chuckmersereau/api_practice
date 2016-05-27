@@ -662,7 +662,7 @@ describe MailChimpAccount do
       expect(subscribe_request).to have_been_requested
     end
 
-    it 'subscribes a single member with a single API call' do
+    it 'does not error if the subscribe request gives an invalid email err' do
       params = {
         status_if_new: 'subscribed', email_address: 'j@t.co',
         merge_fields: { EMAIL: 'j@t.co', FNAME: 'John', LNAME: 'Doe', GREETING: 'Hi' }
@@ -673,7 +673,9 @@ describe MailChimpAccount do
           detail: 'The username portion of the email address is invalid'
         }.to_json)
 
-      account.list_batch_subscribe(id: 'list1', batch: [params])
+      expect do
+        account.list_batch_subscribe(id: 'list1', batch: [params])
+      end.to_not raise_error
 
       expect(subscribe_request).to have_been_requested
     end
@@ -718,8 +720,11 @@ describe MailChimpAccount do
       contact2.people << create(:person, email: 'foo2@example.com')
       account.primary_list_id = 'list1'
 
-      stub_request(:get, "#{api_prefix}/lists/appeal_list1/members?count=15000")
-        .to_return(body: { members: [{ email_address: 'foo@example.com', id: '1' }] }.to_json)
+      stub_request(:get, "#{api_prefix}/lists/appeal_list1/members?count=100&offset=0")
+        .to_return(body: {
+          members: [{ email_address: 'foo@example.com', id: '1' }],
+          total_items: 1
+        }.to_json)
     end
 
     context '#export_appeal_contacts' do
@@ -774,6 +779,20 @@ describe MailChimpAccount do
 
       it 'filters out member info that do not match given emails' do
         expect(account.list_member_info(list_id, ['not-foo@example.com'])).to be_empty
+      end
+
+      it 'retrieves member info by requesting multiple pages' do
+        stub_request(:get, "#{api_prefix}/lists/appeal_list1/members?count=100&offset=0")
+          .to_return(body: {
+            members: [{ email_address: 'f1@t.co', id: '1' }], total_items: 200
+          }.to_json)
+        stub_request(:get, "#{api_prefix}/lists/appeal_list1/members?count=100&offset=100")
+          .to_return(body: { members: [{ email_address: 'f2@t.co', id: '2' }] }.to_json)
+
+        members_info = account.list_member_info(list_id, ['f1@t.co', 'f2@t.co'])
+
+        expect(members_info.size).to eq 2
+        expect(members_info.map { |m| m['email_address'] }).to eq ['f1@t.co', 'f2@t.co']
       end
     end
 

@@ -6,7 +6,7 @@ class MailChimpAccount < ActiveRecord::Base
   sidekiq_options unique: true
 
   THRESHOLD_SIZE_FOR_BATCH_OPERATION = 3
-
+  COUNT_PER_PAGE = 100
   MAILCHIMP_MAX_ALLOWD_MERGE_FIELDS = 30
 
   List = Struct.new(:id, :name)
@@ -477,9 +477,17 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def list_members(list_id)
-    # This would require paging if there is an account with over 15000 emails,
-    # but that seems quite unlikely for regular staff members.
-    gb.lists(list_id).members.retrieve(params: { count: 15_000 })['members']
+    page = list_members_page(list_id, 0)
+    total_items = page['total_items'].to_i
+    members = page['members']
+
+    more_pages = (total_items / COUNT_PER_PAGE) - 1
+    more_pages.times do |i|
+      page = list_members_page(list_id, COUNT_PER_PAGE * (i + 1))
+      members.push(*page['members'])
+    end
+
+    members
   end
 
   def list_member_info(list_id, emails)
@@ -491,6 +499,12 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   private
+
+  def list_members_page(list_id, offset)
+    gb.lists(list_id).members.retrieve(
+      params: { count: COUNT_PER_PAGE, offset: offset }
+    )
+  end
 
   def email_hash(email)
     Digest::MD5.hexdigest(email.downcase)
