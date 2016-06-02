@@ -69,7 +69,7 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
             var task = resp.task || resp;
             var old_task = _.find($scope.tasks, {id: task.id});
             if(!old_task)
-                $scope.addTask(task);
+                $scope.addTask(task, resp.comments);
             else if($scope.history == task.completed)
                 $scope.updateTask(old_task, task);
             else
@@ -84,9 +84,12 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
         }
     };
 
-    $scope.addTask = function(newTask) {
+    $scope.addTask = function(newTask, comments) {
         if($scope.history == newTask.completed)
             $scope.tasks.push(newTask);
+            if(comments && Array.isArray(comments)) {
+                $scope.comments.push(comments[0]);
+            }
     };
 
     $scope.updateTask = function(oldTask, newTask) {
