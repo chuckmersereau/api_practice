@@ -1,8 +1,8 @@
 angular.module('mpdxApp').controller('taskShortListController', function ($scope, api, $location, contactCache, state) {
     $scope.init = function(page, contactId) {
         $scope.tasks = [];
-        $scope.comments = {};
-        $scope.people = {};
+        $scope.comments = [];
+        $scope.people = [];
         $scope.history = page == 'contactHistory';
         $scope.loading = true;
 
@@ -69,7 +69,7 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
             var task = resp.task || resp;
             var old_task = _.find($scope.tasks, {id: task.id});
             if(!old_task)
-                $scope.addTask(task, resp.comments);
+                $scope.addTask(task, resp.comments, resp.people);
             else if($scope.history == task.completed)
                 $scope.updateTask(old_task, task);
             else
@@ -84,12 +84,12 @@ angular.module('mpdxApp').controller('taskShortListController', function ($scope
         }
     };
 
-    $scope.addTask = function(newTask, comments) {
-        if($scope.history == newTask.completed)
+    $scope.addTask = function(newTask, comments, people) {
+        if($scope.history == newTask.completed) {
             $scope.tasks.push(newTask);
-            if(comments && Array.isArray(comments)) {
-                $scope.comments.push(comments[0]);
-            }
+            $scope.comments = _.union(comments, $scope.comments);
+            $scope.people   = _.union(people, $scope.people);
+        }
     };
 
     $scope.updateTask = function(oldTask, newTask) {
