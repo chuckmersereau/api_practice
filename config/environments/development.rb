@@ -53,7 +53,11 @@ Rails.application.configure do
   config.assets.prefix = '/dev-assets'
 
   # config.action_mailer.default_url_options = { :host => 'mpdx.localhost:3000' }
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  config.action_mailer.default_url_options = {
+    # The ngrok utility to tunnel connections to localhost is useful for testing
+    # the MailChimp webhooks feature
+    host: ENV['DEV_NGROK_HOST'].present? ? ENV['DEV_NGROK_HOST'] : 'localhost:3000'
+  }
 
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { host: 'localhost', port: 1025 }

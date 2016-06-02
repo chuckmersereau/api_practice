@@ -2,7 +2,8 @@ angular
     .module('mpdxApp', [
         'ui.bootstrap',
         'LocalForageModule',
-        'ngAnimate'
+        'ngAnimate',
+        'isoCurrency'
     ]);
 
 angular

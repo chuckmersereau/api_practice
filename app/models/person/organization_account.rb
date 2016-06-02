@@ -17,8 +17,6 @@ class Person::OrganizationAccount < ActiveRecord::Base
   after_validation :set_valid_credentials
   after_destroy :destroy_designation_profiles
 
-  # attr_accessible :username, :password, :organization, :organization_id
-
   belongs_to :organization
 
   def to_s
@@ -71,7 +69,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
   def import_profiles
     organization.api(self).import_profiles
   rescue DataServerError => e
-    Airbrake.notify(e)
+    Rollbar.error(e)
   end
 
   private

@@ -23,7 +23,7 @@ describe Api::V1::UsersController do
     before do
       user.relay_accounts.first.delete
       stub_request(:get, 'http://oauth.ccci.us/users/' + user.access_token)
-        .to_return(status: 200, body: { guid: relay_account.remote_id }.to_json)
+        .to_return(status: 200, body: { guid: relay_account.relay_remote_id }.to_json)
     end
 
     it 'merges with existing users' do

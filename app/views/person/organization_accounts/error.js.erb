@@ -1,2 +1,16 @@
 $('#org_connection_box').dialog('close');
-alert("<%= @message %>");
+$('#org_error_modals_container').html('<%= j(render('org_error_modals',
+                                                    organization: @organization)) %>')
+$('#org_error_modal_<%= @message_type %>').dialog({
+  resizable: false,
+  height: 'auto',
+  width: 500,
+  buttons: [
+    {
+      text: __('OK'),
+      click: function() {
+        $(this).dialog("close");
+      }
+    }
+  ]
+});

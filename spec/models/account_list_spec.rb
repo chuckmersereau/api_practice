@@ -427,4 +427,46 @@ describe AccountList do
       expect(account_list.currencies).to contain_exactly(*%w(EUR GBP JPY))
     end
   end
+
+  context '#donations' do
+    it 'shows no online org donations for account list with no designations' do
+      online_org = create(:organization, api_class: 'Siebel')
+      donor_account = create(:donor_account, organization: online_org)
+      designation_account = create(:designation_account, organization: online_org)
+      account_list = create(:account_list)
+      contact = create(:contact, account_list: account_list)
+      contact.donor_accounts << donor_account
+      create(:donation, donor_account: donor_account,
+                        designation_account: designation_account)
+
+      expect(account_list.donations).to be_empty
+    end
+
+    it 'shows donations for account list that has designations' do
+      online_org = create(:organization, api_class: 'Siebel')
+      donor_account = create(:donor_account, organization: online_org)
+      designation_account = create(:designation_account, organization: online_org)
+      account_list = create(:account_list)
+      donation = create(:donation, donor_account: donor_account,
+                                   designation_account: designation_account)
+      contact = create(:contact, account_list: account_list)
+      contact.donor_accounts << donor_account
+      account_list.designation_accounts << designation_account
+
+      expect(account_list.donations.to_a).to eq([donation])
+    end
+
+    it 'shows offline org donations for account with no designations' do
+      online_org = create(:organization, api_class: 'OfflineOrg')
+      donor_account = create(:donor_account, organization: online_org)
+      designation_account = create(:designation_account, organization: online_org)
+      account_list = create(:account_list)
+      donation = create(:donation, donor_account: donor_account,
+                                   designation_account: designation_account)
+      contact = create(:contact, account_list: account_list)
+      contact.donor_accounts << donor_account
+
+      expect(account_list.donations.to_a).to eq([donation])
+    end
+  end
 end

@@ -46,7 +46,8 @@ class MailChimpSync
     member.nil? || member.status != contact.status ||
       member.greeting != contact.greeting ||
       member.first_name != person.first_name ||
-      member.last_name != person.last_name
+      member.last_name != person.last_name ||
+      member.contact_locale != contact.locale
   end
 
   def members_by_email

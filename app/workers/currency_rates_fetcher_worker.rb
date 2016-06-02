@@ -8,6 +8,7 @@ class CurrencyRatesFetcherWorker
     num_days_to_fetch.times do |n|
       fetch_rates(Date.current - n)
     end
+    CurrencyRate::AliasedRatesFiller.new.fill_aliased_rates
   end
 
   private

@@ -36,6 +36,7 @@
             referrer: [''],
             timezone: [''],
             currency: [''],
+            locale: [''],
             relatedTaskAction: [''],
             appeal: [''],
             pledge_frequencies: [''],
@@ -199,6 +200,12 @@
                         jQuery("#leftmenu #filter_currency").trigger("click");
                     }
                 }
+                if (angular.isDefined(prefs.locale)) {
+                    vm.contactQuery.locale = prefs.locale;
+                    if (prefs.locale[0]) {
+                        jQuery("#leftmenu #contact_locale").trigger("click");
+                    }
+                }
                 if (angular.isDefined(prefs.relatedTaskAction)) {
                     vm.contactQuery.relatedTaskAction = prefs.relatedTaskAction;
                     if (prefs.relatedTaskAction[0]) {
@@ -274,6 +281,7 @@
             vm.contactQuery.referrer = [''];
             vm.contactQuery.timezone = [''];
             vm.contactQuery.currency = [''];
+            vm.contactQuery.locale = [''];
             vm.contactQuery.relatedTaskAction = [''];
             vm.contactQuery.appeal = [''];
             vm.contactQuery.pledge_frequencies = [''];
@@ -321,6 +329,7 @@
                 !_.isEmpty(_.without(q.relatedTaskAction, '')) ||
                 !_.isEmpty(_.without(q.timezone, '')) ||
                 !_.isEmpty(_.without(q.currency, '')) ||
+                !_.isEmpty(_.without(q.locale, '')) ||
                 !_.isEmpty(_.without(q.appeal, '')) ||
                 !_.isEmpty(_.without(q.pledge_frequencies, '')) ||
                 !_.isEmpty(_.without(q.pledge_received, '')) ||
@@ -398,6 +407,7 @@
                     '&filters[referrer][]=' + api.encodeURLarray(q.referrer).join('&filters[referrer][]=') +
                     '&filters[timezone][]=' + api.encodeURLarray(q.timezone).join('&filters[timezone][]=') +
                     '&filters[pledge_currency][]=' + api.encodeURLarray(q.currency).join('&filters[pledge_currency][]=') +
+                    '&filters[locale][]=' + api.encodeURLarray(q.locale).join('&filters[locale][]=') +
                     '&filters[relatedTaskAction][]=' + api.encodeURLarray(q.relatedTaskAction).join('&filters[relatedTaskAction][]=') +
                     '&filters[appeal][]=' + api.encodeURLarray(q.appeal).join('&filters[appeal][]=') +
                     '&filters[wildcard_search]=' + encodeURIComponent(q.wildcardSearch) +
@@ -465,6 +475,7 @@
                     referrer: q.referrer,
                     timezone: q.timezone,
                     currency: q.currency,
+                    locale: q.locale,
                     relatedTaskAction: q.relatedTaskAction,
                     appeal: q.appeal,
                     pledge_frequencies: q.pledge_frequencies,

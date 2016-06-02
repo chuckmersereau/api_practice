@@ -8,35 +8,44 @@
         </div>
 
         <div ng-show="followUpDialogData.financialCommitment" style="padding-top:10px;">
-            <label>
-              <%= _('Commitment Frequency') %><br>
-              <select ng-model="followUpDialogResult.financialCommitment.frequency">
-                  <option value=""></option>
-                  <option value="0.23076923076923"><%= _('Weekly') %></option>
-                  <option value="0.46153846153846"><%= _('Fortnightly') %></option>
-                  <option value="1.0"><%= _('Monthly') %></option>
-                  <option value="2.0"><%= _('Bi-Monthly') %></option>
-                  <option value="3.0"><%= _('Quarterly') %></option>
-                  <option value="4.0"><%= _('Quad-Monthly') %></option>
-                  <option value="6.0"><%= _('Semi-Annual') %></option>
-                  <option value="12.0"><%= _('Annual') %></option>
-                  <option value="24.0"><%= _('Biennial') %></option>
-              </select>
-            </label>
+            <div class="form-group">
+              <label>
+                <%= _('Commitment Frequency') %><br>
+                <select ng-model="followUpDialogResult.financialCommitment.frequency">
+                    <option value=""></option>
+                    <option value="0.23076923076923"><%= _('Weekly') %></option>
+                    <option value="0.46153846153846"><%= _('Fortnightly') %></option>
+                    <option value="1.0"><%= _('Monthly') %></option>
+                    <option value="2.0"><%= _('Bi-Monthly') %></option>
+                    <option value="3.0"><%= _('Quarterly') %></option>
+                    <option value="4.0"><%= _('Quad-Monthly') %></option>
+                    <option value="6.0"><%= _('Semi-Annual') %></option>
+                    <option value="12.0"><%= _('Annual') %></option>
+                    <option value="24.0"><%= _('Biennial') %></option>
+                </select>
+              </label>
+            </div>
 
             <div class="form-group">
                 <label>
+                    <%= _('Commitment Currency') %><br/>
+                    <currency-select ng-model="followUpDialogResult.financialCommitment.currency">
+                    </currency-select>
+                </label>
+            </div>
+            <div class="form-group">
+                <label>
                     <%= _('Commitment Amount') %>
-                    <input type="text" class="form-control" ng-model="followUpDialogResult.financialCommitment.amount"
-                           placeholder="state.current_currency_symbol">
+                    <input type="text" class="form-control"
+                           ng-model="followUpDialogResult.financialCommitment.amount">
                 </label>
             </div>
             <div class="form-group">
                 <label>
                     <%= _('Commitment Start Date') %>
+                    <input type="text" class="followUpDialogDatepicker form-control"
+                           ng-model="followUpDialogResult.financialCommitment.date" class="form-control">
                 </label>
-                <input type="text" class="followUpDialogDatepicker form-control"
-                         ng-model="followUpDialogResult.financialCommitment.date" class="form-control">
             </div>
         </div>
 
@@ -189,9 +198,9 @@
 
     <div class="ui-dialog-buttonpane ui-widget-content ui-helper-clearfix">
         <div class="ui-dialog-buttonset">
-            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" ng-click="followUpSaveFunc()">
+            <button type="button" class="btn btn-primary" role="button" aria-disabled="false" ng-click="followUpSaveFunc()">
                 <span class="ui-button-text"><%= _('Save') %></span></button>
-            <button type="button" class="ui-button ui-widget ui-state-default ui-corner-all ui-button-text-only" role="button" aria-disabled="false" onClick="jQuery('#complete_task_followup_modal').dialog('close');">
+            <button type="button" class="btn btn-default" role="button" aria-disabled="false" onClick="jQuery('#complete_task_followup_modal').dialog('close');">
                 <span class="ui-button-text"><%= _('Cancel') %></span></button>
         </div>
     </div>

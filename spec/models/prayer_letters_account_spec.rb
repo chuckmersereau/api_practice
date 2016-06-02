@@ -7,6 +7,9 @@ describe PrayerLettersAccount do
     { name: 'John Doe', greeting: '', file_as: 'Doe, John', external_id: contact.id, company: '',
       street: '123 Somewhere St', city: 'Fremont', state: 'CA', postal_code: '94539', country: '' }
   end
+  before do
+    contact.addresses << create(:address, primary_mailing_address: true)
+  end
 
   context '#get_response' do
     it 'marks token as invalid if response is a 401 for OAuth2' do

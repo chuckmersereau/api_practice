@@ -43,9 +43,8 @@
               <div class="col-md-6">
                 <div class="form-group">
                   <%= f.label :locale, _('Language') %>
-                  <%= f.select :locale, TwitterCldr::Shared::Languages.all_for(locale)
-                              .select { |k, _| TwitterCldr.supported_locales.include?(k) }.invert,
-                              {selected: locale}, {class: 'form-control'} %>
+                  <%= f.select :locale, locale_select_options,
+                               {selected: locale}, {class: 'form-control'} %>
                 </div>
               </div>
             </div>
@@ -142,7 +141,7 @@
             <div class="row">
               <div class="col-md-12">
                 <div class="page-filters page-filters-close">
-                  <%= f.submit _('Save Preferences'), class: 'btn btn-primary btn-default' %>
+                  <%= f.submit _('Save Preferences'), class: 'btn btn-primary' %>
                 </div>
               </div>
             </div>

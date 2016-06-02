@@ -33,6 +33,21 @@ describe MailChimpImport do
       end
     end
 
+    it 'does not use member name if it is 12 random hex chars' do
+      stub_list_members(email: 'john@example.com', fname: '57319de7df433',
+                        lname: '57319de7df471')
+
+      subject.import_contacts
+
+      contact = Contact.last
+      expect(contact.name).to eq 'John'
+      expect(contact.greeting).to eq 'John'
+      person = contact.people.first
+      expect(person.first_name).to eq('John')
+      expect(person.last_name).to be_nil
+      expect(person.email_addresses.count).to eq 1
+    end
+
     it 'creates a new contact and person if not there' do
       stub_list_members(email: 'j@example.com', fname: 'John', lname: 'Doe')
       expect do
@@ -101,9 +116,20 @@ describe MailChimpImport do
 
     it 'defaults to the name from email if MailChimp has a blank first name' do
       stub_list_members(email: 'john@example.com', fname: ' ')
+
       subject.import_contacts
+
       expect(Contact.last.name).to eq 'John'
       expect(Person.last.first_name).to eq 'John'
+    end
+
+    it 'does not import pending members' do
+      stub_list_members(email: 'john2@example.com', fname: ' ',
+                        subscriber_status: 'pending')
+
+      expect do
+        subject.import_contacts
+      end.to_not change(Contact, :count)
     end
 
     describe 'importing with an existing contact' do
@@ -196,13 +222,17 @@ describe MailChimpImport do
         merges['LNAME'] = member[:lname] if member[:lname]
         merges['GREETING'] = member[:greeting] if member[:greeting]
         merges['GROUPINGS'] = member[:groupings] if member[:groupings]
-        { 'email' => member[:email], 'merges' => merges }
+        {
+          'email_address' => member[:email],
+          'merge_fields' => merges,
+          'status' => member[:subscriber_status] || 'subscribed'
+        }
       end
       allow(mc_account).to receive(:list_emails).with('list1') { member_emails }
       expect(mc_account).to receive(:list_member_info) do |list_id, emails|
         expect(list_id).to eq 'list1'
         expect(emails - member_emails).to be_empty
-        members_info.select { |info| info['email'].in?(emails) }
+        members_info.select { |info| info['email_address'].in?(emails) }
       end
     end
   end

@@ -194,6 +194,16 @@
                                    'ng-model': '$ctrl.contactQuery.currency' %>
                   </div>
                 </li>
+                <li class="filter_set">
+                  <label id="filter_language" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Language']);"><%= _('Language') %></label>
+                  <div class="filter_set_inner">
+                    <%= select_tag 'filters[locale]',
+                                   contact_locale_filter_options(current_account_list),
+                                   multiple: true, size: 5, class: 'form-control',
+                                   'ng-model': '$ctrl.contactQuery.locale' %>
+                  </div>
+                </li>
+                <li class="controls">
                 <li class="controls">
                   <a href="#" ng-click="$ctrl.mapContacts()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Map These Contacts']);"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
                 </li>

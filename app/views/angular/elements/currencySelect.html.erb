@@ -1,0 +1,8 @@
+<select class="form-control"
+        ng-model="$ctrl.selectedCurrency"
+        ng-change="$ctrl.currencySelected()">
+  <option ng-repeat="currencyInfo in $ctrl.currencies | orderBy : currency"
+          value="{{currencyInfo.currency}}" >
+    {{currencyInfo.currency}} ({{currencyInfo.symbol}})
+  </option>
+</select>

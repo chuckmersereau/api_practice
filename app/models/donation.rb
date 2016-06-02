@@ -20,6 +20,8 @@ class Donation < ActiveRecord::Base
 
   default_scope { order('donation_date desc') }
 
+  scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
+
   after_create :update_totals
   after_save :add_appeal_contacts
 
@@ -31,6 +33,15 @@ class Donation < ActiveRecord::Base
 
   def localized_date
     I18n.l donation_date, format: :long
+  end
+
+  def self.all_from_offline_orgs?(donations)
+    org_api_classes(donations).all? { |api_class| api_class == 'OfflineOrg' }
+  end
+
+  def self.org_api_classes(donations)
+    donations.reorder('').joins(:donor_account)
+             .joins(donor_account: :organization).pluck('DISTINCT api_class')
   end
 
   private

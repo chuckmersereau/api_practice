@@ -91,3 +91,36 @@ def clear_uniqueness_locks
   uniqueness_locks = r.keys('resque:sidekiq_unique:*')
   r.pipelined { uniqueness_locks.each { |k| r.del(k) } }
 end
+
+# Removes items from the Sidekiq retry list. For selectively removing large
+# numbers of items this is much faster than the Sidekiq::RetrySet.new approach
+# since that would involve one Redis call per removed item vs. this method that
+# does it pipelined.
+# As an example, here's how to remove 40K mailchimp retry jobs with it while
+# keeping any other jobs the system is retrying still in the queue:
+# 40.times do
+#  remove_selected_from_retry_set(1000) do |item|
+#    item[:class] == 'MailChimpAccount'
+#  end
+# end
+def remove_selected_from_retry_set(count = 1000)
+  retry_q = 'resque:retry'
+  r = Redis.current
+  items = r.zrange(retry_q, 0, count)
+
+  kept = 0
+  removed = 0
+  r.pipelined do
+    items.each do |item_json|
+      item = JSON.parse(item_json).with_indifferent_access
+      if yield(item)
+        r.zrem(retry_q, item_json)
+        removed += 1
+      else
+        kept += 1
+      end
+    end
+  end
+
+  puts "Removed #{removed} items, kept #{kept} items"
+end

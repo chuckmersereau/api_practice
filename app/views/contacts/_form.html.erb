@@ -71,6 +71,23 @@
           <%= render 'contacts/bulk_fields', f: f %>
 
           <div class="row">
+            <div class="col-md-4">
+              <div class="form-group">
+                <%= f.label :locale, _('Language') %>
+                <%= f.select :locale, mail_chimp_locale_options,
+                                              { include_blank: true }, {class: 'form-control'} %>
+              </div>
+            </div>
+            <div class="col-md-8">
+              <div class="form-group">
+                <%= f.label :tag_list, _('Tags') %>
+                <%= f.text_field :tag_list %>
+              </div>
+              <script><%= render 'tags_input.js', input_selector: '#contact_tag_list',
+                  tags: current_account_list.contact_tags  %></script>
+            </div>
+          </div>
+          <div class="row">
             <div class="col-md-4 dense-checks">
               <div class="checkbox">
                 <%= f.label :magazine do %>
@@ -100,17 +117,8 @@
                 <% end %>
               </div>
             </div>
-            <div class="col-md-8">
-              <div class="form-group">
-                <%= f.label :tag_list, _('Tags') %>
-                <%= f.text_field :tag_list %>
-              </div>
-              <script><%= render 'tags_input.js', input_selector: '#contact_tag_list',
-                  tags: current_account_list.contact_tags  %></script>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-md-8 col-md-offset-4 referrers_field">
+
+            <div class="col-md-8 referrers_field">
               <label><%= _('Referrers') %></label>
               <% contact.contact_referrals_to_me.build if contact.contact_referrals_to_me.blank? %>
               <%= f.fields_for :contact_referrals_to_me do |builder| %>

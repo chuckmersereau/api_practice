@@ -13,7 +13,9 @@ class MailChimpImport
   def import_members_by_emails(member_emails)
     members_info =
       @mc_account.list_member_info(@mc_account.primary_list_id, member_emails)
-    import_members(members_info.map(&method(:format_member_info)))
+    formatted_info = members_info.map(&method(:format_member_info))
+    subscribed_members = formatted_info.select { |i| i[:status] == 'subscribed' }
+    import_members(subscribed_members)
   rescue Gibbon::MailChimpError => e
     @mc_account.handle_newsletter_mc_error(e)
   end
@@ -25,9 +27,21 @@ class MailChimpImport
   private
 
   def format_member_info(info)
-    { email: info['email'], first_name: info['merges']['FNAME'],
-      last_name: info['merges']['LNAME'], greeting: info['merges']['GREETING'],
-      groupings: info['merges']['GROUPINGS'] }
+    { email: info['email_address'],
+      first_name: nil_if_hex_chars(info['merge_fields']['FNAME']),
+      last_name: nil_if_hex_chars(info['merge_fields']['LNAME']),
+      greeting: nil_if_hex_chars(info['merge_fields']['GREETING']),
+      groupings: info['merge_fields']['GROUPINGS'],
+      status: info['status'] }
+  end
+
+  # Some users have unexpected random hex values in their mailchimp accounts:
+  # https://secure.helpscout.net/conversation/207704672/57384/?folderId=378967
+  # I'm not sure as to the cause yet, but one simple thing we can do now is to
+  # recognize the pattern (string of 12 hex chars) and then in that case don't
+  # use the name/greeting field from mailchimp in the `format_member_info`.
+  def nil_if_hex_chars(name)
+    name =~ /[0-9a-f]{12}/ ? nil : name
   end
 
   def all_emails_to_import

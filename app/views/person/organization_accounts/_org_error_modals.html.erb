@@ -1,0 +1,13 @@
+<div id="org_error_modal_requires_key" title="<%= _('Organization requires ministry email login') %>">
+  <%== format(_('The organization <b>%{org}</b> requires you to log into MPDX ' +
+                'with your ministry email to access it. '), org: organization) %>
+  <br/><br/>
+  <%== _('First you need to <a href="https://thekey.me/cas/logout" target="_blank">click here to log out of your personal Key account</a>.') %>
+  <br/><br/>
+  <%== _('Next, <a href="/logout">click here to log out of MPDX</a> so you can log back in with your offical key account.') %>
+</div>
+
+<div id="org_error_modal_duplicate" title="<%= _('Organization already connected') %>">
+  <%= format(_('You are already connected to %{org}. You can only have one account per organization.'),
+             org: organization) %>
+</div>

@@ -61,12 +61,14 @@
 //= require angular/mpdxApp
 //= require angular/mpdxApp.constants
 //= require angular/railsConstants
+//= require_tree ./angular/factories
 //= require_tree ./angular/components
 //= require_tree ./angular/controllers
 //= require_tree ./angular/directives
 //= require_tree ./angular/services
 //= require_tree ./angular/filters
 //= require moment
+//= require iso-currency/dist/isoCurrency
 
 //= require bootstrap.min.js
 //= require bootstrap-tagsinput
@@ -74,3 +76,5 @@
 
 //= require gmaps/google
 //= require insights
+
+//= require twitter_cldr/full/core

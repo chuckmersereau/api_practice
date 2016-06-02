@@ -12,8 +12,7 @@ class PhoneNumber < ActiveRecord::Base
 
   before_save :clean_up_number
 
-  validates :number, presence: true,
-                     format: { with: %r{\A\+?[\d\s\.\/\(\)x;-]+\z}, message: 'only allows numbers and -.x' }
+  validates :number, presence: true
 
   # attr_accessible :number, :primary, :country_code, :location, :remote_id
 
@@ -40,15 +39,14 @@ class PhoneNumber < ActiveRecord::Base
 
     # Use PhoneLib for parsing because PhoneLib supports extensions
     phone = Phonelib.parse(number, country)
-    return false if phone.e164.blank?
+    return if phone.e164.blank?
     self.number = phone.extension.present? ? "#{phone.e164};#{phone.extension}" : phone.e164
     self.country_code = phone.country_code
-    true
   end
 
   def ==(other)
     return false unless other.is_a?(PhoneNumber)
-    number.gsub(/\D/, '') == other.number.gsub(/\D/, '')
+    number.to_s.gsub(/\D/, '') == other.number.to_s.gsub(/\D/, '')
   end
 
   def merge(other)

@@ -112,7 +112,7 @@ class GoogleContactsIntegrator
     GoogleContact.joins(:contact).where(contacts: { account_list_id: @integration.account_list.id })
                  .where(Contact.inactive_conditions).where(google_account: @account).readonly(false)
                  .each(&method(:cleanup_inactive_g_contact))
-    api_user.send_batched_requests
+    self.class.retry_on_api_errs { api_user.send_batched_requests }
   end
 
   def cleanup_inactive_g_contact(g_contact_link, num_retries = 1)
@@ -300,28 +300,30 @@ class GoogleContactsIntegrator
       g_contact_link = g_contacts_and_links.find { |g_contact_and_link| g_contact_and_link.first == g_contact }.second
 
       # The Google Contacts API batch requests significantly speed up the sync by reducing HTTP requests
-      api_user.batch_create_or_update(g_contact) do |status|
-        log_api_request_and_response(contact, g_contact, status)
+      self.class.retry_on_api_errs do
+        api_user.batch_create_or_update(g_contact) do |status|
+          log_api_request_and_response(contact, g_contact, status)
 
-        # This block is called for each saved g_contact once its batch completes
-        begin
-          # If any g_contact save failed but can be retried, then mark that we should queue the MPDX contact for a retry
-          # sync once we get to the last associated g_cotnact
-          retry_sync = true if failed_but_can_retry?(status, g_contact, g_contact_link)
+          # This block is called for each saved g_contact once its batch completes
+          begin
+            # If any g_contact save failed but can be retried, then mark that we should queue the MPDX contact for a retry
+            # sync once we get to the last associated g_cotnact
+            retry_sync = true if failed_but_can_retry?(status, g_contact, g_contact_link)
 
-          # When we get to last associated g_contact, then either save or queue for retry the MPDX contact
-          next unless index == g_contacts_to_save.size - 1
-          if retry_sync
-            @contacts_to_retry_sync << contact
-          else
-            save_g_contact_links(g_contacts_and_links)
+            # When we get to last associated g_contact, then either save or queue for retry the MPDX contact
+            next unless index == g_contacts_to_save.size - 1
+            if retry_sync
+              @contacts_to_retry_sync << contact
+            else
+              save_g_contact_links(g_contacts_and_links)
+            end
+          rescue LowerRetryWorker::RetryJobButNoRollbarError => e
+            raise e
+          rescue => e
+            # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
+            Rollbar.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
+                                                     batch_xml: api_user.last_batch_xml })
           end
-        rescue LowerRetryWorker::RetryJobButNoRollbarError => e
-          raise e
-        rescue => e
-          # Rescue within this block so that the exception won't cause the response callbacks for the whole batch to break
-          Rollbar.raise_or_notify(e, parameters: { g_contact_attrs: g_contact.formatted_attrs,
-                                                   batch_xml: api_user.last_batch_xml })
         end
       end
     end

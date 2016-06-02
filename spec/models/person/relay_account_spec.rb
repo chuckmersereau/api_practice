@@ -5,7 +5,9 @@ describe Person::RelayAccount do
     @org = create(:ccc)
     user_attributes = [{ firstName: 'John', lastName: 'Doe', username: 'JOHN.DOE@EXAMPLE.COM',
                          email: 'johnnydoe@example.com', designation: '0000000', emplid: '000000000',
-                         ssoGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024' }]
+                         ssoGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024',
+                         relayGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024',
+                         keyGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024' }]
     @auth_hash = Hashie::Mash.new(uid: 'JOHN.DOE@EXAMPLE.COM', extra: { attributes: user_attributes })
     @wsapi_headers = { 'Accept' => '*/*; q=0.5, application/xml', 'Accept-Encoding' => 'gzip, deflate',
                        'Authorization' => "Bearer #{ENV.fetch('WSAPI_KEY')}", 'User-Agent' => 'Ruby' }
@@ -13,6 +15,7 @@ describe Person::RelayAccount do
       .with(headers: @wsapi_headers)
       .to_return(status: 200, body: '[]', headers: {})
   end
+
   describe 'find or create from auth' do
     it 'should create an account linked to a person' do
       person = create(:user)
@@ -20,16 +23,16 @@ describe Person::RelayAccount do
       expect do
         @account = Person::RelayAccount.find_or_create_from_auth(@auth_hash, person)
       end.to change(Person::RelayAccount, :count).by(1)
-      expect(person.relay_accounts).to include(@account)
+      expect(person.relay_accounts.pluck(:id)).to include(@account.id)
     end
 
     it 'should gracefully handle a duplicate' do
       @person = create(:user)
       @person2 = create(:user)
       allow(@org).to receive(:api).and_return(FakeApi.new)
-      @account = Person::RelayAccount.find_or_create_from_auth(@auth_hash, @person)
+      @account = Person::KeyAccount.find_or_create_from_auth(@auth_hash, @person)
       expect do
-        @account2 = Person::RelayAccount.find_or_create_from_auth(@auth_hash, @person2)
+        @account2 = Person::KeyAccount.find_or_create_from_auth(@auth_hash, @person2)
       end.to_not change(Person::RelayAccount, :count)
       expect(@account).to eq(@account2)
     end

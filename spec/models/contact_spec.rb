@@ -133,7 +133,7 @@ describe Contact do
       @donor_account = create(:donor_account)
     end
 
-    it "should copy the donor account's addresses" do
+    it "copies the donor account's addresses" do
       create(:address, addressable: @donor_account, remote_id: '1')
       expect do
         @contact = Contact.create_from_donor_account(@donor_account, @account_list)
@@ -141,6 +141,14 @@ describe Contact do
       expect(@contact.addresses.first.equal_to?(@donor_account.addresses.first)).to be true
       expect(@contact.addresses.first.source_donor_account).to eq(@donor_account)
       expect(@contact.addresses.first.remote_id).to eq('1')
+    end
+
+    it 'defaults the contact locale from organization locale' do
+      @donor_account.organization.update(locale: 'fr')
+
+      contact = Contact.create_from_donor_account(@donor_account, @account_list)
+
+      expect(contact.locale).to eq 'fr'
     end
   end
 
@@ -213,8 +221,9 @@ describe Contact do
     it 'should not remove the loser from prayer letters service' do
       pla = create(:prayer_letters_account, account_list: account_list)
       expect(pla).to_not receive(:delete_contact)
+      loser_contact.addresses << create(:address, primary_mailing_address: true)
 
-      loser_contact.update_column(:prayer_letters_id, 'foo')
+      loser_contact.update_columns(prayer_letters_id: 'foo', send_newsletter: 'Both')
 
       contact.merge(loser_contact)
     end
@@ -784,6 +793,12 @@ describe Contact do
     it 'gives a new address if contact only has a historic address' do
       contact.addresses << create(:address, street: '1', historic: true)
       expect(contact.mailing_address.street).to be_nil
+    end
+  end
+
+  context '#reload_mailing_address' do
+    it 'does not error if contact has no addresses' do
+      expect { create(:contact).reload_mailing_address }.to_not raise_error
     end
   end
 

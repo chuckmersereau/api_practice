@@ -13,8 +13,10 @@ class OrganizationFetcherWorker
       elsif org = Organization.find_by(query_ini_url: line[1])
         org.update(name: line[0])
       else
+        country = guess_country(line[0])
+        locale = guess_locale(country)
         org = Organization.create(name: line[0], query_ini_url: line[1], iso3166: line[2],
-                                  api_class: 'DataServer', country: guess_country(line[0]))
+                                  api_class: 'DataServer', country: country, locale: locale)
       end
 
       # Grab latest query.ini file for this org
@@ -70,7 +72,9 @@ class OrganizationFetcherWorker
   end
 
   def guess_country(org_name)
-    ['Campus Crusade for Christ - ', 'Cru - ', 'Power To Change - ', 'Gospel For Asia'].each do |prefix|
+    org_prefixes = ['Campus Crusade for Christ - ', 'Cru - ', 'Power To Change - ',
+                    'Gospel For Asia', 'Agape']
+    org_prefixes.each do |prefix|
       org_name = org_name.gsub(prefix, '')
     end
     org_name = org_name.split(' - ').last if org_name.include? ' - '
@@ -81,5 +85,10 @@ class OrganizationFetcherWorker
     end
     return match[:name] if match
     nil
+  end
+
+  def guess_locale(country)
+    return 'en' unless country.present?
+    ISO3166::Country.find_country_by_name(country)&.languages&.first || 'en'
   end
 end

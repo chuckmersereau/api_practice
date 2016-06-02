@@ -22,8 +22,39 @@ hr.thick {margin: 1.5em 0; border: none; border-top: 6px solid $gray_mid; width:
 hr.fullwidth {width: 100%;}
 img {max-width: 100%; height: auto;}
 .dropdown {display: inline-block;}
+ul.account-users {padding-left: 1.5em;}
+
 $progress-bar-height: 30px;
 $userheight: 72px;
+
+/* ************************************************************** */
+.pref-lead {
+  h5 {
+    line-height: 1.35em;
+  }
+}
+
+.pref-head {
+  a.trigger {
+    display: block;
+    color: $base-text-color;
+    text-decoration: none;
+    &.collapsed {
+      .panel-indicator {
+        transform: rotate(180deg);
+      }
+    }
+    .panel-indicator {
+      transition: .25s all;
+    }
+  }
+}
+
+.form-inline {
+  .fixed-width-input {
+    width: 220px;
+  }  
+}
 
 /* ************************************************************** */
 

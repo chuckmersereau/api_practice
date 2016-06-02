@@ -17,7 +17,10 @@
         activate();
 
         function activate() {
-            state[vm.name] = vm.data;
+            if(vm.data === 'true' || vm.data === 'false')
+                state[vm.name] = vm.data === 'true';
+            else
+                state[vm.name] = vm.data;
         }
     }
 })();
