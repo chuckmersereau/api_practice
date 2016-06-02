@@ -111,7 +111,8 @@ class Person::GoogleAccount < ActiveRecord::Base
   def needs_refresh
     google_integrations.each do |integration|
       AccountMailer.google_account_refresh(person, integration).deliver unless notified_failure
-      integration.update_columns(calendar_integration: false, email_integration: false, notified_failure: true) # no callbacks
+      integration.update_columns(calendar_integration: false, email_integration: false,
+                                 contacts_integration: false, notified_failure: true) # no callbacks
     end
   end
 
