@@ -12,5 +12,5 @@ if($('#tasks-tab')[0]){
   angular.element($('#tasks-tab'))
 <% end %>
   // @task needs to be reloaded here to remove empty comments created in app/views/tasks/_bulk_fields.html.erb:59
-  .scope().syncTask(<%== TaskSerializer.new(@task.reload).to_json.gsub('/', '\/').gsub('[null]','[]') %>)
+  .scope().syncTask(<%== TaskSerializer.new(@task.reload).to_json.gsub('/', '\/') %>)
 }
