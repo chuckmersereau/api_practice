@@ -117,7 +117,7 @@
                       <% if $rollout.active?(:research, current_account_list) %>
                         <li class="item <%= request.path =~ /\/research/ ? 'active' : '' %>"><%= link_to(_('Research'), "/research") %></li>
                       <% end %>
-                      <% if has_insights? %>
+                      <% if show_insights? %>
                         <li class="item <%= request.path =~ /\/insights/ ? 'active' : '' %>"><%= link_to(_('Insights'), "/insights") %></li>
                       <% end %>
                       <li class="item last"><%= link_to(_('Help'), new_help_request_path, target: '_blank') %></li>
