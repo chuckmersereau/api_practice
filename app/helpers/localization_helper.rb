@@ -33,10 +33,6 @@ module LocalizationHelper
     info ? info[:symbol] : currency_code
   end
 
-  def localized_date(date)
-    date.strftime(MONTH_FIRST_LOCALE.include?(locale) ? '%m-%d-%y' : '%d-%m-%y')
-  end
-
   private
 
   def format_with_currency_options(value, options)
