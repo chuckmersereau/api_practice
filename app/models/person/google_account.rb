@@ -94,6 +94,7 @@ class Person::GoogleAccount < ActiveRecord::Base
       if response.code == 200
         self.token = json['access_token']
         self.expires_at = 59.minutes.from_now
+        self.notified_failure = false
         save
       else
         case json['error']
@@ -109,8 +110,9 @@ class Person::GoogleAccount < ActiveRecord::Base
 
   def needs_refresh
     google_integrations.each do |integration|
-      integration.update_columns(calendar_integration: false, email_integration: false) # no callbacks
-      AccountMailer.google_account_refresh(person, integration).deliver
+      AccountMailer.google_account_refresh(person, integration).deliver unless notified_failure
+      integration.update_columns(calendar_integration: false, email_integration: false,
+                                 contacts_integration: false, notified_failure: true) # no callbacks
     end
   end
 
