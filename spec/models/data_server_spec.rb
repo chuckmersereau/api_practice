@@ -353,6 +353,17 @@ describe DataServer do
       expect(prior_address.reload.primary_mailing_address).to be true
       expect(contact.addresses.find_by_street(prior_address.street).primary_mailing_address).to be true
     end
+
+    it 'updates the contact address based on the donor account' do
+      allow($rollout).to receive(:active?) { true }
+      updater = instance_double(DataServer::ContactAddressUpdate,
+                                update_from_donor_account: nil)
+      allow(DataServer::ContactAddressUpdate).to receive(:new) { updater }
+
+      @data_server.send(:add_or_update_donor_account, line, profile)
+
+      expect(updater).to have_received(:update_from_donor_account)
+    end
   end
 
   describe 'check_credentials!' do

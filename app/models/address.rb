@@ -38,17 +38,10 @@ class Address < ActiveRecord::Base
   end
 
   def equal_to?(other)
-    if other
-      return true if other.master_address_id && other.master_address_id == master_address_id
-
-      return true if other.street.to_s.casecmp(street.to_s.downcase).zero? &&
-                     other.city.to_s.casecmp(city.to_s.downcase).zero? &&
-                     other.state.to_s.casecmp(state.to_s.downcase).zero? &&
-                     (other.country.to_s.casecmp(country.to_s.downcase).zero? || country.blank? || other.country.blank?) &&
-                     other.postal_code.to_s[0..4].casecmp(postal_code.to_s[0..4].downcase).zero?
-    end
-
-    false
+    return false unless other
+    other.master_address_id && master_address_id == other.master_address_id ||
+      (address_fields_equal?(other) && country_equal?(other) &&
+       postal_code_equals?(other))
   end
 
   def destroy
@@ -148,7 +141,53 @@ class Address < ActiveRecord::Base
       Snail::Iso3166::ALPHA2_EXCEPTIONS.select { |_key, array| array.include? val }.keys.first
   end
 
+  def fix_encoding_if_equal(other)
+    return unless equal_to?(other)
+    [:street, :city, :state, :country, :postal_code].each do |field|
+      next unless send(field) == old_encoding(other.send(field))
+      self[field] = other.send(field)
+    end
+    save
+  end
+
+  def postal_code_prefix
+    no_whitespace(postal_code).downcase[0..4]
+  end
+
   private
+
+  def postal_code_equals?(other)
+    postal_code_prefix == other.postal_code_prefix ||
+      equals_old_encoding?(postal_code, other.postal_code)
+  end
+
+  def address_fields_equal?(other)
+    [:street, :city, :state].all? do |field|
+      equals_old_encoding?(send(field), other.send(field))
+    end
+  end
+
+  def country_equal?(other)
+    country.blank? || other.country.blank? || equals_old_encoding?(country, other.country)
+  end
+
+  def equals_old_encoding?(s1, s2)
+    s1.blank? && s2.blank? || no_whitespace(s1).casecmp(no_whitespace(s2)).zero? ||
+      old_encoding(s1) == s2 || s1 == old_encoding(s2)
+  end
+
+  def no_whitespace(str)
+    str.to_s.gsub(/\s+/, '')
+  end
+
+  def old_encoding(str)
+    return unless str
+    # This encoding trick was used for a time in DataServer. It would mangle
+    # special characters and was eventually replaced. That means that some
+    # addresses be duplicated (having old and new encoding versions) if they
+    # contained special characters.
+    str.unpack('C*').pack('U*')
+  end
 
   def set_manual_source_if_user_changed
     return unless user_changed && (new_record? || place_fields_changed?)

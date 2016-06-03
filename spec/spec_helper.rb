@@ -26,6 +26,9 @@ require 'attributes_history/rspec'
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
 
+# Turn off sidekiq logging in test
+Sidekiq::Logging.logger = nil
+
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }

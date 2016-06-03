@@ -800,6 +800,14 @@ describe Contact do
     it 'does not error if contact has no addresses' do
       expect { create(:contact).reload_mailing_address }.to_not raise_error
     end
+
+    it 'returns the reloaded mailing address' do
+      contact = build(:contact)
+      address = build(:address)
+      contact.addresses << address
+
+      expect(contact.reload_mailing_address).to eq address
+    end
   end
 
   context '#pledge_currency_symbol' do

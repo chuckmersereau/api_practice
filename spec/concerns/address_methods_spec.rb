@@ -95,4 +95,20 @@ describe AddressMethods do
       expect(contact.addresses.first).to eq addr1
     end
   end
+
+  context '#copy_address' do
+    it 'moves over the main address attributes and sets source info' do
+      donor_account = create(:donor_account)
+      donor_address = create(:address, street: '1 Rd')
+      donor_account.addresses << donor_address
+      contact = create(:contact)
+
+      contact.copy_address(address: donor_address, source: 'DataServer', source_donor_account_id: 1)
+
+      expect(contact.addresses.size).to eq 1
+      contact_address = contact.addresses.first
+      expect(contact_address).to_not eq donor_address
+      expect(contact.addresses.first.street).to eq '1 Rd'
+    end
+  end
 end

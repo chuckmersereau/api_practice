@@ -14,6 +14,7 @@ class Organization < ActiveRecord::Base
   validates :name, :query_ini_url, presence: true
   validates :name, uniqueness: true, case_sensitive: false
   scope :active, -> { where('addresses_url is not null') }
+  scope :using_data_server, -> { where("api_class LIKE 'DataServer%'") }
 
   def to_s
     name

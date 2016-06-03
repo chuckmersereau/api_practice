@@ -1,6 +1,12 @@
 module AddressMethods
   extend ActiveSupport::Concern
 
+  # Used by the copy_address below to know which attributes to exclude
+  FIELDS_TO_NOT_COPY = [
+    :id, :addressable_id, :created_at, :updated_at, :primary_mailing_address,
+    :addressable_type, :remote_id, :source, :source_donor_account_id
+  ].freeze
+
   included do
     has_many :addresses, (lambda do
       where(deleted: false)
@@ -50,7 +56,20 @@ module AddressMethods
     merge_prepped_addresses(addresses_ordered)
   end
 
+  def copy_address(address:, source:, source_donor_account_id: nil)
+    attributes = attributes_to_copy(address).merge(
+      source_donor_account_id: source_donor_account_id,
+      source: source,
+      primary_mailing_address: !addresses.any?(&:primary_mailing_address)
+    )
+    addresses.create!(attributes)
+  end
+
   private
+
+  def attributes_to_copy(address)
+    address.attributes.symbolize_keys.except(*FIELDS_TO_NOT_COPY)
+  end
 
   # This aims to be efficient for large numbers of duplicate addresses
   def merge_prepped_addresses(addresses)

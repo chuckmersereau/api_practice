@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'spec_helper'
 
 describe Address do
@@ -204,6 +205,94 @@ describe Address do
     end
   end
 
+  context '#equal_to?' do
+    it 'matches addresses that share a master_address_id' do
+      a1 = build(:address, street: '1 Rd', master_address_id: 1)
+      a2 = build(:address, street: '1 Road', master_address_id: 1)
+
+      expect(a1).to be_equal_to a2
+    end
+
+    it 'matches addresses that match on address attributes' do
+      a1 = build(:address, master_address_id: 1, street: '1  way',
+                           city: 'Some Where', state: 'MA', country: 'USA',
+                           postal_code: '02472')
+      a2 = build(:address, master_address_id: 2, street: '1 Way',
+                           city: 'somewhere', state: 'ma', country: 'united states',
+                           postal_code: '02472-3061')
+
+      expect(a1).to be_equal_to a2
+    end
+
+    it 'matches if one country is blank and other fields match' do
+      a1 = build(:address, master_address_id: 1, street: '1 way',
+                           city: 'Somewhere ', state: 'MA  ', country: '',
+                           postal_code: '02 472')
+      a2 = build(:address, master_address_id: 2, street: '1 Way',
+                           city: 'somewhere', state: 'ma', country: 'Canada',
+                           postal_code: '02472-3061')
+
+      expect(a1).to be_equal_to a2
+    end
+
+    it 'does not match if address fields differ' do
+      a1 = build(:address, master_address_id: 1, street: '2 way',
+                           city: 'Nowhere', state: 'IL', country: 'USA',
+                           postal_code: '60201')
+      a2 = build(:address, master_address_id: 2, street: '1 Way',
+                           city: 'somewhere', state: 'ma', country: 'Canada',
+                           postal_code: '02472-3061')
+
+      expect(a1).to_not be_equal_to a2
+    end
+
+    it 'matches addresses that differ by old data server encoding' do
+      street = '16C Boulevard de la Liberté'
+      city = 'Cité'
+      state = 'état'
+      country = 'Rhône-Alpes'
+      postal_code = '35220'
+      a1 = build(:address, master_address_id: 1, street: street,
+                           city: city, state: state, country: country,
+                           postal_code: postal_code)
+      a2 = build(:address, master_address_id: 2, street: old_encoding(street),
+                           city: old_encoding(city), state: old_encoding(state),
+                           country: old_encoding(country),
+                           postal_code: old_encoding(postal_code))
+
+      expect(a1).to be_equal_to a2
+    end
+  end
+
+  context '#fix_encoding_if_equal' do
+    it 'leaves a correctly encoding address alone' do
+      a1 = build(:address, street: '1 Liberté')
+      a2 = build(:address, street: old_encoding('1 Liberté'))
+
+      a1.fix_encoding_if_equal(a2)
+
+      expect(a1.street).to eq '1 Liberté'
+    end
+
+    it 'updates fields to match correctly encoded address if equal' do
+      a1 = create(:address, street: old_encoding('1 Liberté'))
+      a2 = create(:address, street: '1 Liberté')
+
+      a1.fix_encoding_if_equal(a2)
+
+      expect(a1.street).to eq '1 Liberté'
+    end
+
+    it 'leaves address alone if other is not equal' do
+      a1 = build(:address, street: '1 Way')
+      a2 = build(:address, street: '2 Way')
+
+      a1.fix_encoding_if_equal(a2)
+
+      expect(a1.street).to eq '1 Way'
+    end
+  end
+
   describe 'paper trail version logic', versioning: true do
     it 'tracks destroys' do
       donor_account = create(:donor_account)
@@ -261,5 +350,10 @@ describe Address do
         address.reload.update(street: '2 St')
       end.to_not change(Version, :count)
     end
+  end
+
+  # Old way that DataServer used to do encoding that mangled special characters.
+  def old_encoding(str)
+    str.unpack('C*').pack('U*')
   end
 end
