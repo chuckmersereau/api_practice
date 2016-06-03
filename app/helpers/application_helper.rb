@@ -154,4 +154,9 @@ module ApplicationHelper
       .map { |language, code| [_(language), code] }
       .sort_by(&:first)
   end
+
+  def has_insights?
+    $rollout.active?(:insights, current_account_list) &&
+      current_user.organization_accounts.where(organization: Organization.cru_usa).any?
+  end
 end
