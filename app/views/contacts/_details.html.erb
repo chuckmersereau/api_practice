@@ -49,7 +49,7 @@
           </dd>
           <% if contact_exhibit.pledge_start_date.present? %>
               <dt><%= _('Commitment Start Date') %></dt>
-              <dd><%= _(contact_exhibit.pledge_start_date) %></dd>
+              <dd><%= I18n.l(contact_exhibit.pledge_start_date) %></dd>
           <% end %>
           <% if contact.total_donations_query.to_f > 0.0 %>
               <dt><%= _('Lifetime Donations') %></dt>

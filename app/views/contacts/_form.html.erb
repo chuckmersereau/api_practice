@@ -42,7 +42,7 @@
                 <%= f.label :pledge_start_date, _('Commitment Start Date') %>
                 <div class="input-group">
                   <div class="input-group-addon"><i class="fa fa-calendar"></i></div>
-                  <%= f.text_field :pledge_start_date, class: 'form-control', data: { 'calendar-jquery' => true } %>
+                  <%= f.text_field :pledge_start_date, value: (I18n.l(f.object.pledge_start_date) if f.object.pledge_start_date), class: 'form-control', data: { 'calendar-jquery' => true } %>
                 </div>
               </div>
             </div>

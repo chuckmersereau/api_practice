@@ -19,7 +19,7 @@
           <%= _("%{action} - %{time}").localize % {action: _(task.result),
                                           time: task_exhibit.completed_at} %>
         <% else %>
-          <%= task_exhibit.start_at %>
+          <%= I18n.l task_exhibit.start_at %>
         <% end %>
 
         <div style="display:inline" class="tags"><%= task_exhibit.tag_links %></div>

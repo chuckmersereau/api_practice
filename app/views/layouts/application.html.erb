@@ -10,7 +10,7 @@
     <link rel="icon" type="image/png" href="/mpdx-favicon.png" sizes="32x32">
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
-    <%= javascript_include_tag "angular-i18n/angular-locale_#{locale}.js" %>
+    <%= javascript_include_tag "angular-i18n/angular-locale_#{locale.downcase}.js" %>
     <%= javascript_include_tag "twitter_cldr/min/#{locale}.min.js" %>
     <%= csrf_meta_tags %>
   </head>

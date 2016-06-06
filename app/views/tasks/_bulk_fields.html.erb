@@ -38,7 +38,7 @@
 <% else %>
   <div class="field due_date">
     <%= f.label :start_at, _('Due Date') %>
-    <%= calendar_date_select_tag 'due-date', f.object.start_at %>
+    <%= calendar_date_select_tag 'due-date', (I18n.l(f.object.start_at.to_date) if f.object.start_at) %>
     <%= f.time_select :start_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
   </div>
 <% end %>

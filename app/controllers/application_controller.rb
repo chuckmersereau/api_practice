@@ -103,8 +103,10 @@ class ApplicationController < ActionController::Base
   end
 
   def locale
-    user_signed_in? && current_user.preferences[:locale].present? ? current_user.preferences[:locale] : :en
+    return 'en' unless user_signed_in?
+    current_user.preferences[:locale] || 'en'
   end
+
   helper_method :locale
 
   def current_account_list
@@ -144,10 +146,15 @@ class ApplicationController < ActionController::Base
   end
 
   def set_locale
-    old_locale = I18n.locale
-    FastGettext.locale = locale
+    old_locale = FastGettext.locale || 'en'
+    update_gettext_and_i18n(locale)
     yield
-    FastGettext.locale = old_locale
+    update_gettext_and_i18n(old_locale)
+  end
+
+  def update_gettext_and_i18n(setted_locale)
+    FastGettext.locale = setted_locale
+    I18n.locale = setted_locale.delete('-')
   end
 
   def render_csv(filename = nil)

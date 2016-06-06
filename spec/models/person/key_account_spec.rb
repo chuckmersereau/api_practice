@@ -42,8 +42,9 @@ describe Person::KeyAccount do
   it 'should use guid to find an authenticated user created with Relay' do
     user = FactoryGirl.create(:user)
     allow_any_instance_of(Person::KeyAccount).to receive(:find_or_create_org_account)
-    Person::KeyAccount.find_or_create_from_auth(@auth_hash, user)
-    expect(Person::KeyAccount.count).to be 1
+    expect do
+      Person::KeyAccount.find_or_create_from_auth(@auth_hash, user)
+    end.to change(Person::KeyAccount, :count).by(1)
     expect(Person::KeyAccount.find_authenticated_user(@auth_hash)).to eq(user)
   end
 

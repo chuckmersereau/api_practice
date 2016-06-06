@@ -9,8 +9,8 @@
 
         <a ng-hide="task.activity_type === ''" class="edit_task" data-id="{{task.id}}" data-remote="true" ng-href="/tasks/{{task.id}}/edit">{{task.activity_type}}</a>
         <strong><a class="tasktitle edit_task" data-id="{{task.id}}" data-remote="true" ng-href="/tasks/{{task.id}}/edit">{{task.subject}}</a></strong>
-        <span ng-show="task.completed">- {{task.result}} {{task.next_action}} - {{task.completed_at | ignoreTimezone | date:'MM/dd/yyyy, h:mma'}}</span>
-        <span ng-show="!task.completed">- {{task.due_date | ignoreTimezone | date:'MM/dd/yyyy, h:mma'}}</span>
+        <span ng-show="task.completed">- {{task.result}} {{task.next_action}} - {{task.completed_at | ignoreTimezone | date: 'short'}}</span>
+        <span ng-show="!task.completed">- {{task.due_date | ignoreTimezone | date : 'short'}}</span>
 
         <div style="display:inline" class="tags">
             <a class="tag" ng-repeat-start="tag in task.tag_list">{{tag}}</a>

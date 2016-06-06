@@ -18,7 +18,7 @@
       </div>
     </div>
     <div class="clr"></div>
-    <h2><%= _('Donations for %{start_date} through %{end_date}').localize % {start_date: l(@start_date), end_date: l(@end_date)} %></h2>
+    <h2><%= _('Donations for %{start_date} through %{end_date}').localize % {start_date: I18n.l(@start_date), end_date: I18n.l(@end_date)} %></h2>
   <% end %>
 <div class="table-responsive">
   <table class="tablelist donations" id="donations_table">
