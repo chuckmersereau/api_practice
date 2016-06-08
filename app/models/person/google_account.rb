@@ -113,7 +113,7 @@ class Person::GoogleAccount < ActiveRecord::Base
       integration.update_columns(calendar_integration: false, email_integration: false,
                                  contacts_integration: false) # no callbacks
       AccountMailer.google_account_refresh(person, integration).deliver unless notified_failure
-      self.update(notified_failure: true)
+      update(notified_failure: true)
     end
   end
 
