@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-09 15:54+1200\n"
-"PO-Revision-Date: 2016-06-09 15:54+1200\n"
+"POT-Creation-Date: 2016-06-09 16:14+1200\n"
+"PO-Revision-Date: 2016-06-09 16:14+1200\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -1142,6 +1142,18 @@ msgid "Error loading CSV import preview. The MPDX team has been notified. If the
 msgstr ""
 
 msgid "Estonian"
+msgstr ""
+
+msgid "Every 2 Weeks"
+msgstr ""
+
+msgid "Every 2 Years"
+msgstr ""
+
+msgid "Every 4 Months"
+msgstr ""
+
+msgid "Every 6 Months"
 msgstr ""
 
 msgid "Exchange Rate"

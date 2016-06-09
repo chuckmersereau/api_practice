@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.5\n"
-"POT-Creation-Date: 2016-06-09 15:54+1200\n"
+"POT-Creation-Date: 2016-06-09 16:14+1200\n"
 
 msgid " "
 msgstr ""
@@ -1189,6 +1189,18 @@ msgid "Error loading CSV import preview. The MPDX team has been notified. If the
 msgstr "Erreur lors du chargement de l'aperçu d'importation CSV.  L'équipe de MPDX a été notifiée. Si le problème persiste cliquez s'il vous plaît  sur \"Help\"  ci-dessus et soumettez une demande."
 
 msgid "Estonian"
+msgstr ""
+
+msgid "Every 2 Weeks"
+msgstr ""
+
+msgid "Every 2 Years"
+msgstr ""
+
+msgid "Every 4 Months"
+msgstr ""
+
+msgid "Every 6 Months"
 msgstr ""
 
 msgid "Exchange Rate"
@@ -3469,7 +3481,6 @@ msgstr ""
 
 #~ msgid "Import TntMPD DataSync file"
 #~ msgstr "Importer un fichier TntMPD DataSync"
-
 #~ msgid ""
 #~ "Are you sure you want to merge the selected contacts? This action cannot be un"
 #~ "done!"

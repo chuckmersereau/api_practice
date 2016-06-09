@@ -1189,6 +1189,18 @@ msgstr ""
 msgid "Estonian"
 msgstr ""
 
+msgid "Every 2 Weeks"
+msgstr ""
+
+msgid "Every 2 Years"
+msgstr ""
+
+msgid "Every 4 Months"
+msgstr ""
+
+msgid "Every 6 Months"
+msgstr ""
+
 msgid "Exchange Rate"
 msgstr ""
 
