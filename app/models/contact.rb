@@ -390,7 +390,7 @@ class Contact < ActiveRecord::Base
       0.23076923076923.to_d => _('Weekly'),
       0.46153846153846.to_d => _('Every 2 Weeks'),
       1.0.to_d => _('Monthly'),
-      2.0.to_d => _('Every 2 Weeks'),
+      2.0.to_d => _('Every 2 Months'),
       3.0.to_d => _('Quarterly'),
       4.0.to_d => _('Every 4 Months'),
       6.0.to_d => _('Every 6 Months'),
