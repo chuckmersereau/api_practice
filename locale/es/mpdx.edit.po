@@ -1498,7 +1498,7 @@ msgstr ""
 msgid "Import Preview:"
 msgstr ""
 
-msgid "Import TntMPD DataSync file"
+msgid "Import TNTConnect DataSync file"
 msgstr ""
 
 msgid "Import all contacts"

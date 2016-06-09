@@ -1508,7 +1508,8 @@ msgstr "Importer des contacts Google"
 msgid "Import Preview:"
 msgstr "Aperçu de l'import :"
 
-msgid "Import TntMPD DataSync file"
+#, fuzzy
+msgid "Import TNTConnect DataSync file"
 msgstr "Importer un fichier TntMPD DataSync"
 
 msgid "Import all contacts"
