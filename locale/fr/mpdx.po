@@ -1190,6 +1190,18 @@ msgstr "Erreur lors du chargement de l'aperçu d'importation CSV.  L'équipe de 
 msgid "Estonian"
 msgstr ""
 
+msgid "Every 2 Weeks"
+msgstr "Toutes les  2 semaines"
+
+msgid "Every 2 Years"
+msgstr "Tous les 2 ans"
+
+msgid "Every 4 Months"
+msgstr "Tous les 4 mois"
+
+msgid "Every 6 Months"
+msgstr "Tous les 6 mois"
+
 msgid "Exchange Rate"
 msgstr ""
 
