@@ -1,12 +1,12 @@
 <%= form_for Import.new(source: 'tnt') do |f| %>
   <%= f.hidden_field :source %>
 
-  <p><%= _('You can migrate all your contact information and history from TNTMPD into MPDX. Most of your information will
+  <p><%= _('You can migrate all your contact information and history from TNTConnect into MPDX. Most of your information will
     import straight into MPDX, including contact info, task history (with notes), notes, user groups, and appeals. MPDX
     hides contacts with any of the not interested statuses, including not interested and never ask in MPDX. These
     contacts import in, but do not show up unless you search for hidden contacts.') %></p>
 
-  <p><strong><%= _('Export your Database from TNTMPD:') %></strong>
+  <p><strong><%= _('Export your Database from TNTConnect:') %></strong>
     <ul>
       <li><%= _('Click on file, choose Utilities from the list. Then Maintenance.') %></li>
       <li><%= _('In the popup box, choose the top button, export to .xml.') %></li>
@@ -17,8 +17,8 @@
                  'http://www.youtube.com/watch?v=EoWFRFIYMkQ&list=UUTjqVT-m3YXICbwaIu9_Gqg&index=22',
                  target: '_blank') %></p>
 
-  <p><%= _('Note: You must have at least TNTMPD 3.0.') %> <%= _('To download the latest version,') %>
-    <%= link_to(_('click here'), 'http://www.tntware.com/tntmpd/downloads/', target: '_blank') %>.</p>
+  <p><%= _('Note: You must have at least TNTConnect 3.0.') %> <%= _('To download the latest version,') %>
+    <%= link_to(_('click here'), 'http://www.tntware.com/tntconnect/downloads/', target: '_blank') %>.</p>
 
   <div class="form-group">
     <%= f.file_field :file, class: 'form-control', required: true %>
@@ -28,14 +28,14 @@
   <div class="radio">
     <label class="field radiocheck">
       <%= f.radio_button :override, false %>
-      <%= _('This TNTMPD import should only fill in the blanks in current contacts and/or add new contacts.') %>
+      <%= _('This TNTConnect import should only fill in the blanks in current contacts and/or add new contacts.') %>
     </label>
   </div>
 
   <div class="radio">
     <label>
       <%= f.radio_button :override, true %>
-      <%= _('This TNTMPD import should override the info in MPDX. (Contact info, notes, status, prayerletter settings, etc).') %>
+      <%= _('This TNTConnect import should override the info in MPDX. (Contact info, notes, status, prayerletter settings, etc).') %>
     </label>
   </div>
 
