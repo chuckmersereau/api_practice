@@ -13,7 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.5\n"
-"POT-Creation-Date: 2016-06-09 15:31+1200\n"
+"POT-Creation-Date: 2016-06-09 15:54+1200\n"
 
 msgid " "
 msgstr ""
@@ -1509,7 +1509,8 @@ msgstr "Importer des contacts Google"
 msgid "Import Preview:"
 msgstr "Aperçu de l'import :"
 
-msgid "Import TntMPD DataSync file"
+#, fuzzy
+msgid "Import TNTConnect DataSync file"
 msgstr "Importer un fichier TntMPD DataSync"
 
 msgid "Import all contacts"
@@ -3466,19 +3467,19 @@ msgstr "vous avez essayé mais n'avez pas trouvé de moyen de contacter cette pe
 msgid "your-spouse-email@cru.org"
 msgstr ""
 
+#~ msgid "Import TntMPD DataSync file"
+#~ msgstr "Importer un fichier TntMPD DataSync"
+
 #~ msgid ""
 #~ "Are you sure you want to merge the selected contacts? This action cannot be un"
 #~ "done!"
 #~ msgstr ""
 #~ "Êtes-vous sûr de vouloir fusionner les contacts sélectionnés ? Cette action ne"
 #~ " peut pas être annulée !"
-
 #~ msgid "Cancel Invite"
 #~ msgstr "Annuler l'invitation"
-
 #~ msgid "Continue"
 #~ msgstr "Continuer"
-
 #~ msgid ""
 #~ "Easily connect all of your contacts, calendars, communications and social conv"
 #~ "ersations. MPDX will automatically identify contact's social profiles on Faceb"
@@ -3489,44 +3490,32 @@ msgstr ""
 #~ "nversations sociales. MPDX identifiera automatiquement les profils sociaux de "
 #~ "contact sur Facebook, LinkedIn et Twitter, afin que vous puissiez vous connect"
 #~ "er, écouter, et vous engager avec vos partenaires du ministère."
-
 #~ msgid "Get started by choosing your login source:"
 #~ msgstr "Commencez par choisir votre source de connexion:"
-
 #~ msgid "Merge this account with another of your accounts:"
 #~ msgstr "Fusionner ce compte avec un autre de vos comptes :"
-
 #~ msgid ""
 #~ "Note: You must be upgraded to the latest version of TntMPD to do this. Click h"
 #~ "ere to download the latest version."
 #~ msgstr ""
 #~ "Note : Vous devez avoir la dernière version de TntMPD pour faire cela. Cliquez"
 #~ " ici pour télécharger la dernière version."
-
 #~ msgid "Now you can connect some social accounts"
 #~ msgstr "Maintenant, vous pouvez connecter quelques comptes sociaux"
-
 #~ msgid "Pending invite for: "
 #~ msgstr "Invitation en attente pour : "
-
 #~ msgid "Select all that have donated"
 #~ msgstr "Sélectionner tous ceux qui ont fait un don"
-
 #~ msgid "Select all that have not donated"
 #~ msgstr "Sélectionner tous ceux qui n'ont pas fait de don"
-
 #~ msgid "Select none"
 #~ msgstr "Ne rien sélectionner "
-
 #~ msgid "Sent by: "
 #~ msgstr "Envoyé par : "
-
 #~ msgid "Start by connecting to your organization."
 #~ msgstr "Commencez par vous connectez à votre organisation"
-
 #~ msgid "Status:"
 #~ msgstr "Statut:"
-
 #~ msgid ""
 #~ "Thank you for suggesting ways we can make MPDX a better tool. We will take you"
 #~ "r suggestion into consideration\n"
@@ -3535,7 +3524,6 @@ msgstr ""
 #~ "Merci de nous suggérer vos avis pour que nous puissions faire de MPDX un meill"
 #~ "eur outil. Nous prendrons en considération vos suggestions et les ajouterons à"
 #~ " l'outil de projet de MPDX : %{link}"
-
 #~ msgid ""
 #~ "That email has been marked as \"no longer valid.\" Please edit the persons detai"
 #~ "ls by clicking their name above and verify that their info is correct. If that"
@@ -3550,7 +3538,6 @@ msgstr ""
 #~ " pas que le courriel soit dans MailChimp, supprimez le , choisissez  \"Exclure "
 #~ "de la lettre des nouvelles électronique \" ou faites un différent e-mail primai"
 #~ "re."
-
 #~ msgid ""
 #~ "The first is to create an offline organization which is a quick process. Howev"
 #~ "er, this means that you have to enter in your contacts and donations in manual"
@@ -3561,7 +3548,6 @@ msgstr ""
 #~ "pendant, cela signifie que vous devez entrer dans vos contacts et dons manuell"
 #~ "ement. Si vous voulez faire comme cela, écrivez-nous s'il vous plaît à support"
 #~ "@mpdx.org avec le nom de votre organisation."
-
 #~ msgid ""
 #~ "To use MPDX, you need to connect to your organization's donation system. If yo"
 #~ "u raise funds through more than one organization, you can connect to multiple "
@@ -3570,10 +3556,8 @@ msgstr ""
 #~ "Pour utiliser MPDX, vous devez vous connecter au système de don de votre organ"
 #~ "isation. Si vous soulevez des fonds à travers plus d'une organisation, vous po"
 #~ "uvez vous connecter à plusieurs comptes."
-
 #~ msgid "Total Donations (%{count}):"
 #~ msgstr "Total des dons (%{count}) :"
-
 #~ msgid ""
 #~ "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{per"
 #~ "son_name}</a> that syncs to MailChimp but now has an undeliverable email: %{em"
@@ -3582,9 +3566,7 @@ msgstr ""
 #~ "Votre contact MPDX \"%{contact}\" a une personne <a href=\"%{edit_person_url}\">%{"
 #~ "person_name}</a> qui est synchronisé avec MailChimp mais qui maintenant une ad"
 #~ "resse e-mail non distribuable : %{email}"
-
 #~ msgid "Your currently selected MPDX Account is:"
 #~ msgstr "Votre compte MPDX actuellement sélectionné est :"
-
 #~ msgid "Your session has timed out. Please login again."
 #~ msgstr "Votre session a expiré. S'il vous plaît reconnectez vous."
