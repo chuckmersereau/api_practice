@@ -1,0 +1,20 @@
+<aside id="leftmenu">
+  <ul class="nav nav-pills nav-stacked">
+    <li <% if request.path == preferences_path %>class="active"<% end %>>
+      <%= link_to(_('Preferences'), preferences_path) %>
+    </li>
+    <li <% if request.path == notifications_path %>class="active"<% end %>>
+      <%= link_to(_('Notifications'), notifications_path) %>
+    </li>
+    <li <% if request.path == accounts_path %>class="active"<% end %>>
+      <%= link_to(_('Networks & Imports'), accounts_path) %>
+    </li>
+    <li <% if request.path == integrations_settings_path %>class="active"<% end %>>
+      <%= link_to(_('Integrations'), integrations_settings_path) %>
+    </li>
+    <li <% if request.path == sharing_account_lists_path %>class="active"<% end %>>
+      <%= link_to(_('Accounts &amp; Sharing'), sharing_account_lists_path) %>
+    </li>
+  </ul>
+  </ul>
+</aside>
