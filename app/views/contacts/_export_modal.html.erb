@@ -10,5 +10,13 @@
         <%= _('All of the information for your contacts, best for advanced sorting/filtering and importing into other software.') %>
       </p>
     </div>
+    <% if $rollout.active?(:xlsx_export, current_account_list) %>
+      <div class="col-sm-6 col-sm-offset-3 excel_export">
+        <%= link_to _('XLSX format'), contacts_path(format: :xlsx), class: 'btn btn-success btn-block' %>
+        <p>
+          <%= _("All of the information for your contacts in Excel's default XLSX format.") %>
+        </p>
+      </div>
+    <% end %>
   </div>
 </div>

@@ -108,6 +108,10 @@ gem 'user_agent_decoder'
 gem 'puma'
 gem 'phonelib', '~> 0.5.4'
 gem 'silencer'
+gem 'rubyzip', '= 1.0.0'
+gem 'axlsx', '= 2.0.1'
+gem 'axlsx_rails'
+gem 'rack-timeout'
 
 group :development do
   gem 'railroady'

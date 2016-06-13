@@ -35,5 +35,6 @@ public/dev-assets
 .vagrant
 .env.*
 logfile
+dump.rdb
 /cache
 vendor/ruby

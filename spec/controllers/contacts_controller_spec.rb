@@ -100,6 +100,19 @@ describe ContactsController do
         expect(csv.second).to include "Attn: Test\n123 Street"
       end
 
+      it 'does not cause an error for the export and still assigns contact' do
+        get :index, format: 'xlsx'
+        expect(assigns(:contacts).size).to eq(2)
+      end
+
+      it 'does not have an error when exporting after searches' do
+        get :index, format: 'xlsx', filters: { newsletter: 'email' }
+      end
+
+      it 'does not have an error when exporting after searches' do
+        get :index, format: 'xlsx', filters: { newsletter: 'address' }
+      end
+
       it 'accepts and saves per_page option' do
         get :index, per_page: 100
         view_opts = user.reload.contacts_view_options[user.account_lists.first.id.to_s]

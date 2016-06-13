@@ -13,6 +13,8 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     visit "/contacts/#{contact.id}"
     first('#tabs_tasks').click
 
+    # various attempts at fixing this feature spec - still seems brittle!
+    expect(page).to have_selector("#task_#{task.id}")
     wait_for_ajax
     sleep 1
 

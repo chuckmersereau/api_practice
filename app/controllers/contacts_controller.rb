@@ -25,10 +25,13 @@ class ContactsController < ApplicationController
       end
 
       format.csv do
-        @csv_primary_emails_only = csv_primary_emails_only_param
-        @contacts = @filtered_contacts.includes(:primary_person, :spouse, :primary_address,
-                                                :tags, people: [:email_addresses, :phone_numbers])
-        render_csv("contacts-#{Time.now.strftime('%Y%m%d')}")
+        set_csv_xlsx_primary_emails_and_contacts
+        render_csv("contacts-#{file_timestamp}")
+      end
+
+      format.xlsx do
+        set_csv_xlsx_primary_emails_and_contacts
+        render xlsx: 'index', filename: "contacts-#{file_timestamp}.xlsx"
       end
     end
   end
@@ -288,6 +291,16 @@ class ContactsController < ApplicationController
   end
 
   private
+
+  def set_csv_xlsx_primary_emails_and_contacts
+    @csv_primary_emails_only = csv_primary_emails_only_param
+    @contacts = @filtered_contacts.includes(:primary_person, :spouse, :primary_address,
+                                            :tags, people: [:email_addresses, :phone_numbers])
+  end
+
+  def file_timestamp
+    Time.now.strftime('%Y%m%d')
+  end
 
   def find_contact
     @contact = current_account_list.contacts.includes(people: [:primary_email_address, :primary_phone_number, :email_addresses, :phone_numbers, :family_relationships]).find(params[:id])

@@ -4,3 +4,9 @@ contact-list{
     display: inline;
   }
 }
+
+#export_modal .excel_export {
+  border-top: solid 1px $gray_mid;
+  margin-top: 25px;
+  padding: 20px;
+}
