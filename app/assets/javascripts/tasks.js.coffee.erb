@@ -80,6 +80,12 @@ $ ->
         $('#task_modal_form').removeClass('dirty')
     false
 
+  $(document).on 'change', '#no_date_field', ->
+    if this.checked
+      $(".due_date").hide(true);
+    else
+      $(".due_date").show(true);
+
   # Edit task button
   $(document).on 'click', '.edit_task', ->
     $('#edit_task_modal .form_wrapper').html('<%= image_tag "spinner.gif" %>')

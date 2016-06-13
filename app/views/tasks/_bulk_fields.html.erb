@@ -41,6 +41,9 @@
     <%= calendar_date_select_tag 'due-date', (I18n.l(f.object.start_at.to_date) if f.object.start_at) %>
     <%= f.time_select :start_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
   </div>
+  <div class="field">
+    <%= check_box :no_date, 'field' %> No due date
+  </div>
 <% end %>
 
 <div class="field">
@@ -62,4 +65,3 @@
     <%= builder.text_area :body, rows: 3 %>
   <% end %>
 </div>
-
