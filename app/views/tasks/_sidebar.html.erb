@@ -20,6 +20,9 @@
       <li ng-class="{'selected': $ctrl.filter.page === 'upcoming'}" class="option">
         <a href="#" class="inbox" ng-click="$ctrl.filter.page = 'upcoming'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Upcoming']);"><%= _('Upcoming') %></a>
       </li>
+      <li ng-class="{'selected': $ctrl.filter.page === 'noDate'}" class="option">
+        <a href="#" class="inbox" ng-click="$ctrl.filter.page = 'noDate'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'noDate']);"><%= _('No Due Date') %></a>
+      </li>
       <li ng-class="{'selected': $ctrl.filter.page === 'starred'}" class="option">
         <a href="#" class="starred" ng-click="$ctrl.filter.page = 'starred'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Starred']);"><%= _('Starred') %></a>
       </li>

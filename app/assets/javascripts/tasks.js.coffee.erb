@@ -80,7 +80,7 @@ $ ->
         $('#task_modal_form').removeClass('dirty')
     false
 
-  $(document).on 'change', '#no_date_field', ->
+  $(document).on 'change', '#modal_no_date', ->
     if this.checked
       $(".due_date").hide(true);
     else

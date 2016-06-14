@@ -36,13 +36,13 @@
     <%= f.select :next_action, task.next_action_options %>
   </div>
 <% else %>
-  <div class="field due_date">
+  <div class="field due_date" style="display: <%= 'none' if task[:no_date] %>;">
     <%= f.label :start_at, _('Due Date') %>
     <%= calendar_date_select_tag 'due-date', (I18n.l(f.object.start_at.to_date) if f.object.start_at) %>
     <%= f.time_select :start_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
   </div>
   <div class="field">
-    <%= check_box :no_date, 'field' %> No due date
+    <%= f.check_box :no_date, { id: 'no_date' }, true, false %> No due date
   </div>
 <% end %>
 

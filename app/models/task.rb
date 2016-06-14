@@ -15,6 +15,7 @@ class Task < Activity
 
   PERMITTED_ATTRIBUTES = [
     :starred, :location, :subject, :start_at, :end_at, :activity_type, :result, :completed_at,
+    :no_date,
     :completed,
     :next_action,
     :tag_list, {

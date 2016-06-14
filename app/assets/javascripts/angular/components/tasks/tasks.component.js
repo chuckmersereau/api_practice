@@ -22,20 +22,22 @@
             {
                 filter: 'today',
                 title: 'Today',
-                class: 'taskgroup--green',
+                class: 'taskgroup--yellow',
                 currentPage: 1,
                 meta: {},
                 loading: false,
-                visible: false
+                visible: false,
+                noDate: false
             },
             {
                 filter: 'overdue',
                 title: 'Overdue',
-                class: 'taskgroup--red',
+                class: 'taskgroup--yellow',
                 currentPage: 1,
                 meta: {},
                 loading: false,
-                visible: false
+                visible: false,
+                noDate: false
             },
             {
                 filter: 'tomorrow',
@@ -44,16 +46,18 @@
                 currentPage: 1,
                 meta: {},
                 loading: false,
-                visible: false
+                visible: false,
+                noDate: false
             },
             {
                 filter: 'upcoming',
                 title: 'Upcoming',
-                class: 'taskgroup--gray',
+                class: 'taskgroup--dark-blue',
                 currentPage: 1,
                 meta: {},
                 loading: false,
-                visible: false
+                visible: false,
+                noDate: false
             },
             {
                 filter: 'history',
@@ -63,7 +67,19 @@
                 meta: {},
                 loading: false,
                 order: 'completed_at DESC',
-                visible: false
+                visible: false,
+                noDate: false
+            },
+            {
+              filter: 'no_date',
+              title: 'No due date',
+              class: 'taskgroup--light-blue',
+              currentPage: 1,
+              meta: {},
+              loading: false,
+              order: 'completed_at DESC',
+              visible: false,
+              noDate: true
             }
         ];
 
@@ -153,6 +169,7 @@
                 '&order=' + (group.order || 'start_at') +
                 '&filters[starred]=' + vm.filter.starred +
                 '&filters[completed]=' + (vm.filter.completed || 'false') +
+                '&filters[no_date]=' + group.noDate +
                 '&filters[date_range]=' + group.filter +
                 '&filters[contact_ids]=' + _.uniq(contactFilterIds).join(',') +
                 '&filters[tags][]=' + api.encodeURLarray(vm.filter.tagsSelect).join('&filters[tags][]=') +
@@ -206,6 +223,7 @@
                 page: 'all',
                 starred: '',
                 completed: '',
+                noDate: false,
                 contactsSelect: [(urlParameter.get('contact_ids') || '')],
                 tagsSelect: [''],
                 actionSelect: [''],
@@ -271,21 +289,25 @@
                 vm.taskGroups[2].visible = true;
                 vm.taskGroups[3].visible = true;
                 vm.taskGroups[4].visible = false;
+                vm.taskGroups[5].visible = true;
 
                 switch (f.page) {
                     case 'today':
                         vm.taskGroups[1].visible = false;
                         vm.taskGroups[2].visible = false;
                         vm.taskGroups[3].visible = false;
+                        vm.taskGroups[5].visible = false;
                         break;
                     case 'overdue':
                         vm.taskGroups[0].visible = false;
                         vm.taskGroups[2].visible = false;
                         vm.taskGroups[3].visible = false;
+                        vm.taskGroups[5].visible = false;
                         break;
                     case 'upcoming':
                         vm.taskGroups[0].visible = false;
                         vm.taskGroups[1].visible = false;
+                        vm.taskGroups[5].visible = false;
                         break;
                     case 'history':
                         vm.taskGroups[0].visible = false;
@@ -293,6 +315,15 @@
                         vm.taskGroups[2].visible = false;
                         vm.taskGroups[3].visible = false;
                         vm.taskGroups[4].visible = true;
+                        vm.taskGroups[5].visible = false;
+                        break;
+                    case 'noDate':
+                        vm.taskGroups[0].visible = false;
+                        vm.taskGroups[1].visible = false;
+                        vm.taskGroups[2].visible = false;
+                        vm.taskGroups[3].visible = false;
+                        vm.taskGroups[4].visible = false;
+                        vm.taskGroups[5].visible = true;
                         break;
                 }
                 vm.refreshVisibleTasks();

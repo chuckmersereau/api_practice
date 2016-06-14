@@ -189,7 +189,7 @@ CREATE TABLE activities (
     remote_id character varying(255),
     source character varying(255),
     next_action character varying(255),
-    no_date boolean
+    no_date boolean DEFAULT false
 );
 
 
