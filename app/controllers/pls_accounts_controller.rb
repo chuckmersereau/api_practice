@@ -14,6 +14,7 @@ class PlsAccountsController < ApplicationController
 
   def destroy
     current_account_list.pls_account.destroy
+    return render nothing: true if request.xhr?
     redirect_to integrations_settings_path
   end
 

@@ -1,0 +1,194 @@
+<div ng-show="!vm.preferences.loading">
+  <div id="contentbody" class="withleft">
+    <div class="wpp">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="page-filters">
+            <h2><%= _('Integrations') %></h2>
+          </div>
+        </div>
+      </div>
+      <p>&nbsp;</p>
+      <div id="preference_alerts">
+        <div id="preferences_success" class="hidden alert alert-success integration-alerts" role="alert">
+          MPDX is now syncing your newsletter recipients with {{vm.service}}
+        </div>
+          <div id="preferences_deletion_success" class="hidden alert alert-warning integration-alerts" role="alert">
+            MPDX removed your integration with {{vm.service}}
+          </div>
+        <div id="preferences_error" class="hidden alert alert-danger integration-alerts" role="alert">
+          <%= _("MPDX couldn't save your configuration changes to {{vm.service}}") %>
+        </div>
+      </div>
+      <div class="panel-group" id="accounts-group">
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
+            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_mailchimp" class="trigger" aria-expanded="true">
+              <i class="fa fa-angle-down panel-indicator"></i>
+              <%= _('Mailchimp Integration') %>
+              <div class="pull-right">
+                <div ng-show="vm.preferences.data.mail_chimp_account">
+                  <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_mail_chimp_account"><i class="fa fa-circle"></i></div>
+                  <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_mail_chimp_account"><i class="fa fa-circle-o"></i></div>
+                </div>
+                <div ng-hide="vm.preferences.data.mail_chimp_account">
+                  <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div id="integrate_mailchimp" class="panel-collapse collapse in">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <div class="network_logo">
+                    <%= image_tag("logos/mailchimp_logo.png", alt: 'MailChimp') %>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="network_button">
+                    <div ng-show="vm.preferences.data.valid_mail_chimp_account">
+                      <p>
+                        <%= _('You can now export your contacts to MailChimp.') %><br />
+                        <%= _('MailChimp API key:') %> <strong>{{vm.preferences.data.mail_chimp_api_key}}</strong><br />
+                        <%= _('MailChimp list to use for your newsletter:') %> <strong>{{vm.preferences.data.mail_chimp_primary_list_name}}</strong>
+                      </p>
+                      <p>
+                        <a class="btn btn-xs btn-primary" ng-click="vm.sync($event, 'MailChimp')"><%= _('Sync Now') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                        <a class="btn btn-xs btn-default" ng-href="/mail_chimp_accounts/{{vm.preferences.data.mail_chimp_account_id}}/edit" target="_self"><%= _('Modify Settings') %></a>
+                        <a class="btn btn-link" ng-click="vm.disconnect($event, 'MailChimp')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                      </p>
+                    </div>
+                    <div ng-hide="vm.preferences.data.valid_mail_chimp_account">
+                      <p><%= _('You can synchronize MPDX and Mailchimp contacts to simplify your process and take advantage of all of Mailchimp\'s great features.') %></p>
+                      <%= link_to(_('Enable'), new_mail_chimp_account_path, :class => "btn btn-xs btn-primary", target: 'self') %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
+            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_prayer" class="trigger" aria-expanded="true">
+              <i class="fa fa-angle-down panel-indicator"></i>
+              <%= _('PrayerLetters.com Integration') %>
+              <div class="pull-right">
+                <div ng-show="vm.preferences.data.prayer_letters_account">
+                  <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_prayer_letters_account"><i class="fa fa-circle"></i></div>
+                  <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_prayer_letters_account"><i class="fa fa-circle-o"></i></div>
+                </div>
+                <div ng-hide="vm.preferences.data.prayer_letters_account">
+                  <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div id="integrate_prayer" class="panel-collapse collapse in">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <div class="network_logo">
+                    <%= image_tag("logos/prayer_letters_logo.png", alt: 'Prayer Letters') %>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="network_button">
+                    <div class="alert alert-warning">
+                      <%= _('Enabling or Syncing will replace your prayerletters.com lists') %>
+                    </div>
+                    <div ng-show="vm.preferences.data.valid_prayer_letters_account">
+                      <a class="btn btn-xs btn-primary" ng-click="vm.sync($event, 'Prayer Letters')"><%= _('Sync Now') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                      <a class="btn btn-link" ng-click="vm.disconnect($event, 'Prayer Letters')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                    </div>
+                    <div ng-hide="vm.preferences.data.valid_prayer_letters_account">
+                      <p><%= _('You can keep PrayerLetters.com updated with all your MPDX contacts. Click Enable to begin.') %></p>
+                      <%= link_to(_('Enable'), '/auth/prayer_letters', :class => 'btn btn-xs btn-primary', target: '_self') %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% if $rollout.active?(:pls_integration, current_account_list) %>
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
+            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_prayer" class="trigger" aria-expanded="true">
+              <i class="fa fa-angle-down panel-indicator"></i>
+              <%= _('MyLetterService.org Integration') %>
+              <div class="pull-right">
+                <div ng-show="vm.preferences.data.pls_account">
+                  <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_pls_account"><i class="fa fa-circle"></i></div>
+                  <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_pls_account"><i class="fa fa-circle-o"></i></div>
+                </div>
+                <div ng-hide="vm.preferences.data.pls_account">
+                  <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
+                </div>
+              </div>
+            </a>
+          </div>
+          <div id="integrate_prayer" class="panel-collapse collapse in">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <div class="network_logo">
+                    <%= image_tag("logos/pls_logo.png", alt: 'Prayer Letters') %>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="network_button">
+                    <div class="alert alert-warning">
+                      <%= _('Enabling or Syncing will replace your myletterservice.org lists') %>
+                    </div>
+                    <div ng-show="vm.preferences.data.valid_pls_account">
+                      <a class="btn btn-xs btn-primary" ng-click="vm.sync($event, 'PLS')"><%= _('Sync Now') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                      <a class="btn btn-link" ng-click="vm.disconnect($event, 'PLS')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                    </div>
+                    <div ng-hide="vm.preferences.data.valid_pls_account">
+                      <p><%= _('You can keep myletterservice.org updated with all your MPDX contacts. Click Enable to begin.') %></p>
+                      <%= link_to _('Enable'), '/auth/pls', :class => 'btn btn-xs btn-primary', target: '_self' %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <% end %>
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head">
+            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_chalkline" class="trigger" aria-expanded="true">
+              <i class="fa fa-angle-down panel-indicator"></i>
+              <%= _('Chalkline Integration') %>
+              <div class="pull-right">
+                <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
+              </div>
+            </a>
+          </div>
+          <div id="integrate_chalkline" class="panel-collapse collapse in">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <div class="network_logo">
+                    <%= image_tag("logos/chalkline_logo.png", alt: 'Chalk Line') %>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="network_button">
+                    <div class="alert alert-warning">
+                      <%= _('Clicking "Send Paper Newsletter List" will email Chalkline your newsletter list and open their order form in a new tab') %>
+                    </div>
+                    <p><%= _('Chalkline is a great way of sending a variety of touch cards to your supporters.') %></p>
+                    <%= link_to _('Send Paper Newsletter List'), '#', id: 'chalkline_send_list', class: 'btn btn-xs btn-secondary' %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

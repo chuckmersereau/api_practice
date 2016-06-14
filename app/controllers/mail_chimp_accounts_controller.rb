@@ -35,6 +35,7 @@ class MailChimpAccountsController < ApplicationController
 
   def destroy
     current_account_list.mail_chimp_account.destroy
+    return render nothing: true if request.xhr?
     redirect_to integrations_settings_path
   end
 

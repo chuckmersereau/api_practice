@@ -9,8 +9,8 @@
     <li>
       <%= link_to _('Networks & Imports'), accounts_path, target: '_self' %>
     </li>
-    <li>
-      <%= link_to _('Integrations'), integrations_settings_path, target: '_self' %>
+    <li ui-sref-active="active">
+      <a ui-sref="integrations"><%= _('Integrations') %></a>
     </li>
     <li>
       <%= link_to _('Accounts &amp; Sharing'), sharing_account_lists_path, target: '_self' %>

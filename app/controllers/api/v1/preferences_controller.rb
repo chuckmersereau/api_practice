@@ -4,6 +4,7 @@ class Api::V1::PreferencesController < Api::V1::BaseController
     preferences = current_user.preferences.except(:setup)
     preferences = preferences.merge(fetch_base_preferences) if params[:base]
     preferences = preferences.merge(fetch_notification_preferences) if params[:notifications]
+    preferences = preferences.merge(fetch_integration_preferences) if params[:integrations]
     preferences[:account_list_id] ||= current_account_list.id
     preferences[:locale] ||= locale
     render json: { preferences: preferences }, callback: params[:callback]
@@ -36,12 +37,28 @@ class Api::V1::PreferencesController < Api::V1::BaseController
 
   def fetch_current_account_list_preferences
     {
-      account_list_name: current_account_list.try(:name),
-      home_country: current_account_list.try(:home_country),
-      monthly_goal: current_account_list.try(:monthly_goal),
-      salary_organization_id: current_account_list.try(:salary_organization_id),
-      currency: current_account_list.try(:currency),
-      tester: current_account_list.try(:tester)
+      account_list_name: current_account_list.name,
+      home_country: current_account_list.home_country,
+      monthly_goal: current_account_list.monthly_goal,
+      salary_organization_id: current_account_list.salary_organization_id.try(:to_s),
+      currency: current_account_list.currency,
+      tester: current_account_list.tester
+    }
+  end
+
+  def fetch_integration_preferences
+    {
+      mail_chimp_account: current_account_list.mail_chimp_account,
+      mail_chimp_account_id: current_account_list.mail_chimp_account.try(:id),
+      mail_chimp_api_key: current_account_list.mail_chimp_account.try(:api_key),
+      mail_chimp_primary_list_name: current_account_list.mail_chimp_account.try(:primary_list).try(:name),
+      valid_mail_chimp_account: current_account_list.valid_mail_chimp_account,
+      prayer_letters_account: current_account_list.prayer_letters_account,
+      prayer_letters_account_id: current_account_list.prayer_letters_account.try(:id),
+      valid_prayer_letters_account: current_account_list.valid_prayer_letters_account,
+      pls_account: current_account_list.pls_account,
+      pls_account_id: current_account_list.pls_account.try(:id),
+      valid_pls_account: current_account_list.valid_pls_account
     }
   end
 

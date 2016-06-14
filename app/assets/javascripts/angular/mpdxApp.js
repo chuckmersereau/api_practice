@@ -22,10 +22,14 @@ angular
           url: '/preferences',
           template: '<preferences></preferences>'
         })
-      .state('notifications', {
-        url: '/notifications',
-        template: '<notification-preferences></notification-preferences>'
-      });
+        .state('notifications', {
+          url: '/notifications',
+          template: '<notification-preferences></notification-preferences>'
+        })
+        .state('integrations', {
+          url: '/settings/integrations',
+          template: '<integration-preferences></integration-preferences>'
+        });
       $('a').each(function(){
         $a = $(this);
         if ($a.is('[target]') || $a.is('[ui-sref]')){
