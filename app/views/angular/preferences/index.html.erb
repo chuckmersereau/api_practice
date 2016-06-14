@@ -2,7 +2,7 @@
   <div class="col-md-3" role="complementary">
     <preferences-sidebar></preferences-sidebar>
   </div>
-  <div class="col-md-9">
+  <div class="col-md-9" ng-show="!vm.preferences.loading">
     <div id="contentbody" class="withleft">
       <div class="wpp">
         <div class="row">
@@ -38,7 +38,7 @@
                       <%= _('First Name') %>
                     </div>
                     <div class="col-sm-7 pref-current">
-                      {{vm.preference_data.first_name}}
+                      {{vm.preference.data.first_name}}
                     </div>
                     <div class="col-sm-1 text-right">
                       <span class="panel-open-btn"><%= _('Edit') %></span>
