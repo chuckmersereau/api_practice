@@ -7,9 +7,9 @@
             templateUrl: '/templates/preferences/notifications.html',
             bindings: {}
         });
-    notificationPreferencesController.$inject = ['preferencesService'];
-    function notificationPreferencesController(preferencesService) {
-      this.preferences = preferencesService;
+    notificationPreferencesController.$inject = ['notificationPreferencesService'];
+    function notificationPreferencesController(notificationPreferencesService) {
+      this.preferences = notificationPreferencesService;
 
       this.save = function () {
         $("button[type=submit]").prop('disabled', true).children('i.hidden').removeClass('hidden');

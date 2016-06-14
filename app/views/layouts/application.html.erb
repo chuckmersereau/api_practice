@@ -13,6 +13,7 @@
     <%= javascript_include_tag "angular-i18n/angular-locale_#{locale.downcase}.js" %>
     <%= javascript_include_tag "twitter_cldr/min/#{locale}.min.js" %>
     <%= csrf_meta_tags %>
+    <base href="/">
   </head>
   <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller" ng-app="mpdxApp">
     <preload-state name="current_user_id" data="<%= current_user.id %>"></preload-state>
@@ -73,6 +74,7 @@
                       </a>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="settings-drop">
                         <li role="presentation"><%= link_to(_('Preferences'), "/preferences") %></li>
+                        <li role="presentation"><%= link_to(_('Notifications'), "/notifications") %></li>
                         <li role="presentation"><%= link_to(_('Networks & Imports'), "/accounts") %></li>
                         <li role="presentation"><%= link_to(_('Integrations'), "/settings/integrations") %></li>
                         <li role="presentation"><%= link_to(_('Account Sharing'), sharing_account_lists_path) %></li>

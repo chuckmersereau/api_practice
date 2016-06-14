@@ -2,7 +2,8 @@ class Api::V1::PreferencesController < Api::V1::BaseController
   def index
     @preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list)
     preferences = current_user.preferences.except(:setup)
-    preferences = preferences.merge(fetch_all_preferences) if params[:all]
+    preferences = preferences.merge(fetch_base_preferences) if params[:base]
+    preferences = preferences.merge(fetch_notification_preferences) if params[:notifications]
     preferences[:account_list_id] ||= current_account_list.id
     preferences[:locale] ||= locale
     render json: { preferences: preferences }, callback: params[:callback]
@@ -17,11 +18,10 @@ class Api::V1::PreferencesController < Api::V1::BaseController
 
   protected
 
-  def fetch_all_preferences
-    preferences = {}
+  def fetch_base_preferences
+    preferences = fetch_required_preferences
     preferences = preferences.merge(fetch_current_user_preferences)
     preferences = preferences.merge(fetch_current_account_list_preferences)
-    preferences = preferences.merge(fetch_notification_preferences)
     preferences
   end
 
@@ -36,7 +36,6 @@ class Api::V1::PreferencesController < Api::V1::BaseController
 
   def fetch_current_account_list_preferences
     {
-      current_account_list_id: current_account_list.try(:id),
       account_list_name: current_account_list.try(:name),
       home_country: current_account_list.try(:home_country),
       monthly_goal: current_account_list.try(:monthly_goal),
@@ -46,8 +45,12 @@ class Api::V1::PreferencesController < Api::V1::BaseController
     }
   end
 
+  def fetch_required_preferences
+    { current_account_list_id: current_account_list.try(:id) }
+  end
+
   def fetch_notification_preferences
-    notification_preferences = {}
+    notification_preferences = fetch_required_preferences
     NotificationType.all.each do |notification_type|
       field_name = notification_type.class.to_s.split('::').last.to_s.underscore.to_sym
       notification_preferences =

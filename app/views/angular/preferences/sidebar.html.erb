@@ -1,19 +1,19 @@
 <aside id="leftmenu">
   <ul class="nav nav-pills nav-stacked">
-    <li <% if request.path == preferences_path %>class="active"<% end %>>
-      <%= link_to(_('Preferences'), preferences_path) %>
+    <li ui-sref-active="active">
+      <a ui-sref="preferences"><%= _('Preferences') %></a>
     </li>
-    <li <% if request.path == notifications_path %>class="active"<% end %>>
-      <%= link_to(_('Notifications'), notifications_path) %>
-    </li>
-    <li>
-      <%= link_to(_('Networks & Imports'), accounts_path) %>
+    <li ui-sref-active="active">
+      <a ui-sref="notifications"><%= _('Notifications') %></a>
     </li>
     <li>
-      <%= link_to(_('Integrations'), integrations_settings_path) %>
+      <%= link_to _('Networks & Imports'), accounts_path, target: '_self' %>
     </li>
     <li>
-      <%= link_to(_('Accounts &amp; Sharing'), sharing_account_lists_path) %>
+      <%= link_to _('Integrations'), integrations_settings_path, target: '_self' %>
+    </li>
+    <li>
+      <%= link_to _('Accounts &amp; Sharing'), sharing_account_lists_path, target: '_self' %>
     </li>
   </ul>
   </ul>
