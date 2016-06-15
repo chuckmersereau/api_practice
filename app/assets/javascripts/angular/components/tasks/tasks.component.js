@@ -16,6 +16,7 @@
         vm.people = {};
         vm.totalTasksLoading = true;
         vm.totalTasksShown = 0;
+        vm.showAllFilterTags = false;
 
         vm.taskGroups = [
             {
