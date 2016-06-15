@@ -111,7 +111,6 @@ gem 'silencer'
 gem 'rubyzip', '= 1.0.0'
 gem 'axlsx', '= 2.0.1'
 gem 'axlsx_rails'
-gem 'rack-timeout'
 
 group :development do
   gem 'railroady'
