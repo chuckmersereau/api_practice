@@ -13,7 +13,7 @@ module LocalizationHelper
   def current_currency(account_list = nil)
     unless @current_currency
       account_list ||= current_account_list
-      @current_currency = account_list ? account_list.salary_currency : 'USD'
+      @current_currency = account_list ? account_list.default_currency : 'USD'
     end
     @current_currency
   end

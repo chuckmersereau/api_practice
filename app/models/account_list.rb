@@ -79,7 +79,7 @@ class AccountList < ActiveRecord::Base
   def salary_currency
     return @salary_currency if @salary_currency
     @salary_currency = settings[:salary_currency]
-    @salary_currency ||= Organization.find(salary_organization_id).default_currency_code
+    @salary_currency = Organization.find(salary_organization_id).default_currency_code if @salary_currency.blank?
     @salary_currency
   end
 
