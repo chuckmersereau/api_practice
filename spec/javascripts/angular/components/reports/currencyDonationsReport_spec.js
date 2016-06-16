@@ -166,6 +166,9 @@ describe('contacts', function() {
             self.controller.reportLastDate = moment('2015-04-15');
             self.controller.reportLastMonth = '2015-04';
 
+            var today = moment('2015-04-01').toDate();
+            jasmine.clock().mockDate(today);
+
             // At this point the donation_date fields have been converted to
             // months.
             var donors = [
@@ -199,13 +202,13 @@ describe('contacts', function() {
                     donorInfo: donors[0].donorInfo,
                     donations: donors[0].donations,
                     aggregates: {
-                        sum: 70,
-                        average: 70 / 3,
+                        sum: 30,
+                        average: 30 / 2,
                         min: 10
                     },
                     aggregatesConverted: {
-                        sum: 85,
-                        average: 85 / 3,
+                        sum: 40,
+                        average: 40 / 2,
                         min: 15
                     }
                 }
@@ -308,7 +311,7 @@ describe('contacts', function() {
         it('groups donations by donor, sort them by name, aggregate each donor, and add empty donations for missing months', function () {
             self.controller.reportLastDate = moment('2015-03-15');
             self.controller.reportLastMonth = '2015-03';
-            self.controller.monthsBefore = 11;
+            self.controller.monthsToShow = 11;
 
             var reportInfo = {
                 donors: [
@@ -418,12 +421,12 @@ describe('contacts', function() {
                             ],
                             aggregates: {
                                 sum: 375,
-                                average: 375 / 2,
+                                average: 375 / 3,
                                 min: 175
                             },
                             aggregatesConverted: {
                                 sum: 390,
-                                average: 390 / 2,
+                                average: 390 / 3,
                                 min: 180
                             }
                         },
@@ -472,8 +475,8 @@ describe('contacts', function() {
                         }
                     ],
                     monthlyTotals: [ { amount: 300, amountConverted: 315 }, { amount: 175, amountConverted: 180 }, { amount: 100, amountConverted: 105 } ],
-                    yearTotal: 575,
-                    yearTotalConverted: 600
+                    yearTotal: 475,
+                    yearTotalConverted: 495
                 }
             ]);
         });

@@ -9,11 +9,10 @@
 
     function monthRangeService(moment){
         var factory = {
-
             getPastMonths: getPastMonths,
             yearsWithMonthCounts: yearsWithMonthCounts,
-            _getStartingMonth: getStartingMonth,
-            _getThisMonth: getThisMonth,
+            getStartingMonth: getStartingMonth,
+            _getEndOfThisMonth: getEndOfThisMonth,
             _generateMonthRange: generateMonthRange
         };
 
@@ -26,19 +25,20 @@
         }
 
         /** Get current date in format YYYY-MM-DD where DD is the last day of the month */
-        function getThisMonth(){
+        function getEndOfThisMonth(){
             return moment().format('YYYY-MM') + '-' + moment().daysInMonth();
         }
 
-        /** Get the month that is 12 months before current date in format YYYY-MM-DD where DD is the first day of the month */
-        function getStartingMonth(monthsBefore){
-            return moment().subtract(monthsBefore, 'months').format('YYYY-MM') + '-01';
+        /** Get the month that is at the start of a X month range before and including the current month in format YYYY-MM-DD where DD is the first day of the month */
+        function getStartingMonth(numberOfMonths){
+            // We subtract 1 so that the current month is included
+            return moment().subtract(numberOfMonths - 1, 'months').format('YYYY-MM') + '-01';
         }
 
         /** Get array of months from any number of months before */
-        function getPastMonths(monthsBefore){
-            monthsBefore = monthsBefore || 12;
-            return generateMonthRange(getStartingMonth(monthsBefore), getThisMonth())
+        function getPastMonths(numberOfMonths){
+            numberOfMonths = numberOfMonths || 12;
+            return generateMonthRange(getStartingMonth(numberOfMonths), getEndOfThisMonth())
         }
 
         /** Get array of months between dateFrom and dateTo */
