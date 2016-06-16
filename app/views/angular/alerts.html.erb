@@ -1,0 +1,8 @@
+<div ng-repeat="alert in vm.alerts.alerts">
+  <div class="alert" ng-class="alert.type" role="alert">
+    <button type="button" class="close" ng-click="vm.removeAlert(alert)">
+      <span aria-hidden="true">×</span>
+    </button>
+    {{alert.message}}
+  </div>
+</div>

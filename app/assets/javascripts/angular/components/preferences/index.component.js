@@ -7,26 +7,46 @@
             templateUrl: '/templates/preferences/index.html',
             bindings: {}
         });
-    indexController.$inject = ['preferencesService'];
-    function indexController(preferencesService) {
-      this.preferences = preferencesService;
-
-      this.save = function () {
-        $("button[type=submit]").prop('disabled', true).children('i.hidden').removeClass('hidden');
-        $('#preferences_success').addClass('hidden');
-        $('#preferences_error').addClass('hidden');
-        $('#preferences_error ul').html('');
-        this.preferences.save(function success(data) {
-          $("button[type=submit]").prop('disabled', false).children('i').addClass('hidden');
+    indexController.$inject = ['$scope', 'preferencesService', 'alertsService'];
+    function indexController($scope, preferencesService, alertsService) {
+      var vm = this;
+      vm.preferences = preferencesService;
+      vm.alerts = alertsService;
+      vm.saving = false;
+      vm.save = function () {
+        vm.saving = true;
+        vm.preferences.save(function success(data) {
+          vm.alerts.addAlert('Preferences saved successfully', 'success');
           $('.collapse.in').collapse('hide');
-          $('#preferences_success').removeClass('hidden');
+          vm.saving = false;
         }, function error(data) {
-          $("button[type=submit]").prop('disabled', false).children('i').addClass('hidden');
-          $.each(data.errors, function (index, value) {
-            $('#preferences_error ul').append('<li>'+ value +'</li>');
-          });
-          $('#preferences_error').removeClass('hidden');
+          $.each(data.errors, function (index, value) { vm.alerts.addAlert(value, 'danger'); });
+          vm.saving = false;
         });
       }
+
+      vm.locale_string = '';
+      $scope.$watch(
+        'vm.preferences.data.locale',
+        function (newValue) {
+          vm.locale_string = $('#_locale option[value=' + newValue + ']').text();
+        }
+      )
+
+      vm.default_account_string = '';
+      $scope.$watch(
+        'vm.preferences.data.default_account_list',
+        function (newValue) {
+          vm.default_account_string = $('#_default_account_list option[value=' + newValue + ']').text();
+        }
+      )
+
+      vm.salary_organization_string = '';
+      $scope.$watch(
+        'vm.preferences.data.salary_organization_id',
+        function (newValue) {
+          vm.salary_organization_string = $('#salary_organization_id_ option[value=' + newValue + ']').text();
+        }
+      )
     }
 })();
