@@ -318,7 +318,7 @@
 
         function isEmptyFilter(q) {
             q = q || vm.contactQuery;
-            if (!_.isEmpty(_.without(q.tags, '')) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
+            if (!isEmptyTagsFilter(q.tags) || !_.isEmpty(q.name) || !_.isEmpty(q.type) ||
                 !_.isEmpty(_.without(q.city, '')) || !_.isEmpty(_.without(q.state, '')) ||
                 !_.isEmpty(_.without(q.region, '')) || !_.isEmpty(q.ids) ||
                 !_.isEmpty(_.without(q.metro_area, '')) ||
@@ -365,6 +365,17 @@
             }
 
             return true;
+        }
+
+        // The tags filter is serialized in some places as a comma delimited
+        // string and sometimes as an array of tags. This method will check the
+        // tags for emptiness based on its representation.
+        function isEmptyTagsFilter(tags) {
+            if (Array.isArray(tags)) {
+                return _.isEmpty(_.without(tags, ''));
+            } else {
+                return _.isEmpty(tags);
+            }
         }
 
         function refreshContacts() {
