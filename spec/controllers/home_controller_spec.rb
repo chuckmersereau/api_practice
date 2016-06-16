@@ -68,7 +68,9 @@ describe HomeController do
             build_stubbed(:notification_type, type: 'AnotherTestType'))
         4.times { |i| al.contacts << create(:contact, name: i) }
         create(:tnt_import, user: @user)
+        
         get 'index'
+        
         expect(@user.reload.setup).to_not include :goal
         expect(@user.reload.setup).to_not include :contacts
         expect(@user.reload.setup).to_not include :import
@@ -77,15 +79,29 @@ describe HomeController do
       it 'removes completed steps even if they are strings' do
         @user.update_attribute(:setup, ['import'])
         create(:tnt_import, user: @user)
+        
         controller.send :check_welcome_stages
+        
         expect(@user.reload.setup).to eq []
       end
 
       it "doesn't error with setup unset" do
         @user.update_attribute(:setup, nil)
+        
         expect do
           controller.send :check_welcome_stages
         end.to_not raise_error
+      end
+
+      it 'removes :true if that happens to get there' do
+        # setup test
+        @user.update_attribute(:setup, [:true])
+
+        # do something
+        controller.send :check_welcome_stages
+
+        # have an expectation
+        expect(@user.reload.setup).to be_empty
       end
     end
   end

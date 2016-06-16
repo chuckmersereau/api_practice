@@ -42,8 +42,7 @@ class HomeController < ApplicationController
     return unless user.setup.is_a?(Array) && user.setup.any?
     old_setup = user.setup
     user.setup = user.setup.map(&:to_sym)
-    user.setup.delete :true
-    dirty_preferences = true unless old_setup == user.setup
+    dirty_preferences = true if old_setup != user.setup || user.setup.delete(:true)
     if user.setup.include?(:import) && user.imports.count > 0
       user.setup.delete :import
       dirty_preferences = true
