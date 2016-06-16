@@ -3,7 +3,7 @@
         .module('mpdxApp')
         .component('mpdProgress', {
             controller: progressController,
-            templateUrl: 'inline/progress.html' //declared inline at app/views/home/index.html.erb
+            templateUrl: 'inline/mpd_progress.html' //declared inline at app/views/home/index.html.erb
         });
 
     progressController.$inject = ['api', '$filter', 'state'];
@@ -17,6 +17,7 @@
         vm.end_date.setDate(vm.start_date.getDate() + 7);
         vm.nextWeek = nextWeek;
         vm.previousWeek = previousWeek;
+        vm.errorOccurred = false;
 
         activate();
 
@@ -70,6 +71,8 @@
 
             api.get(url).success(function(newData){
                 vm.data = newData;
+            }).error(function() {
+                vm.errorOccurred = true;
             });
         }
 

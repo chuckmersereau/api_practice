@@ -85,8 +85,11 @@
     </div>
 
     <mpd-progress></mpd-progress>
-    <script type="text/ng-template" id="inline/progress.html">
-      <section id="dash-progress">
+    <script type="text/ng-template" id="inline/mpd_progress.html">
+      <div ng-if="$ctrl.errorOccurred">
+        <%= _('Error loading progress stats. Please try again or contact support.') %>
+      </div>
+      <section id="dash-progress" ng-if="!$ctrl.errorOccurred">
         <div class="page-filters-plain">
           <div class="row">
             <div class="col-md-6 col-sm-4">
