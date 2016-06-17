@@ -5,7 +5,8 @@
             controller: currencyDonationsReportController,
             templateUrl: '/templates/reports/currencyDonations.html',
             bindings: {
-                'type': '@'
+                'type': '@',
+                'expanded': '@'
             }
         });
 
@@ -24,7 +25,10 @@
          Donors are grouped into a single category which is the user's salary currency
          The converted amount and currency fields are used (using 'converted_' prefix)
          **/
-        vm.useConvertedValues = vm.type === 'salary';
+        vm.type = vm.type || 'salary';
+
+        //Expand all columns
+        vm.expanded = vm.expanded || false;
 
         vm.monthsToShow = 13;
         vm.sumOfAllCurrenciesConverted = 0;
@@ -37,6 +41,7 @@
         vm.currencyGroups = [];
 
         vm.percentage = percentage;
+        vm.toggleReportType = toggleReportType;
 
         vm._parseReportInfo = parseReportInfo;
         vm._groupDonationsByCurrency = groupDonationsByCurrency;
@@ -51,13 +56,24 @@
         function activate() {
             var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
             api.call('get', url, {}, function(data) {
-                vm.currencyGroups = parseReportInfo(data.report_info, vm.allMonths);
-                vm.sumOfAllCurrenciesConverted = _.sumBy(vm.currencyGroups, 'yearTotalConverted');
+                vm.rawReportInfo = data.report_info;
+                updateReport();
                 vm.loading = false;
             }, function() {
                 vm.errorOccurred = true;
                 vm.loading = false;
             });
+        }
+
+        function toggleReportType(){
+            vm.type = vm.type === 'donor' ? 'salary' : 'donor';
+            updateReport();
+        }
+
+        function updateReport(){
+            vm.useConvertedValues = vm.type === 'salary';
+            vm.currencyGroups = parseReportInfo(vm.rawReportInfo, vm.allMonths);
+            vm.sumOfAllCurrenciesConverted = _.sumBy(vm.currencyGroups, 'yearTotalConverted');
         }
 
         function parseReportInfo(reportInfo, allMonths){
