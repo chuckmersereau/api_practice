@@ -52,6 +52,8 @@
 //angular
 //= require angular/angular
 //= require angular-animate/angular-animate
+//= require angular-sanitize/angular-sanitize
+//= require ng-csv/build/ng-csv
 //= require angular-localforage/bower_components/localforage/dist/localforage
 //= require angular-localforage/dist/angular-localForage
 //= require angular-ui-bootstrap/dist/ui-bootstrap

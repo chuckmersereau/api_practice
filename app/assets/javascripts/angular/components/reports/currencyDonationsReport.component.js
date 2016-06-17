@@ -42,6 +42,7 @@
 
         vm.percentage = percentage;
         vm.toggleReportType = toggleReportType;
+        vm.currencyGroupsToCSV = currencyGroupsToCSV;
 
         vm._parseReportInfo = parseReportInfo;
         vm._groupDonationsByCurrency = groupDonationsByCurrency;
@@ -244,6 +245,44 @@
                 return 0;
             }
             return currencyTotal / vm.sumOfAllCurrenciesConverted * 100;
+        }
+
+        function currencyGroupsToCSV(){
+            var csvHeaders = _.flatten([
+                'Partner',
+                'Status',
+                'Pledge',
+                'Average',
+                'Minimum',
+                vm.allMonths,
+                'Total (last month excluded from total)'
+            ]);
+            var converted = vm.useConvertedValues ? 'Converted' : '';
+
+            var output = _.flatMap(vm.currencyGroups, function (currencyGroup){
+                var currencyHeaders = [
+                    [
+                        'Currency',
+                        currencyGroup['currency' + converted],
+                        currencyGroup['currencySymbol' + converted]
+                    ],
+                    csvHeaders
+                ];
+                var donorRows = _.map(currencyGroup.donors, function(donor){
+                    return _.concat(
+                        donor.donorInfo.name,
+                        donor.donorInfo.status,
+                        currencyGroup.currencySymbol + donor.donorInfo.pledge_amount + currencyGroup.currency,
+                        donor['aggregates' + converted].average,
+                        donor['aggregates' + converted].min,
+                        _.map(donor.donations, 'amount' + converted),
+                        donor['aggregates' + converted].sum
+                    );
+                });
+                var totals = _.concat('Totals', _.times(4, _.constant('')), _.map(currencyGroup.monthlyTotals, 'amount' + converted), currencyGroup['yearTotal' + converted]);
+                return _.concat(currencyHeaders, donorRows, [totals], null);
+            });
+            return output;
         }
     }
 })();
