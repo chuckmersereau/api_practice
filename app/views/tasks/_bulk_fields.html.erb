@@ -42,7 +42,7 @@
     <%= f.time_select :start_at, ampm: true, default: 1.day.from_now, order: [:month, :day, :year] %>
   </div>
   <div class="field">
-    <%= f.check_box :no_date, { id: 'no_date' }, true, false %> No due date
+    <%= f.check_box :no_date, { id: 'no_date' }, true, false %> <%= _("No Due Date") %>
   </div>
 <% end %>
 
