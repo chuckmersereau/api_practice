@@ -218,7 +218,7 @@ describe ExpectedTotalsReport::LikelyDonation, '#likely_more' do
   end
 
   describe 'for fortnightly donors' do
-    let(:fortnightly) { Contact.pledge_frequencies.invert['Fortnightly'] }
+    let(:fortnightly) { Contact.pledge_frequencies.invert['Every 2 Weeks'] }
     let(:contact) do
       build_stubbed(:contact, pledge_amount: 5, pledge_received: true,
                               pledge_frequency: fortnightly)
