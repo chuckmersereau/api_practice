@@ -16,7 +16,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.5.4\n"
 
-msgid " "
+msgid "you tried but did not find a way to contact this person"
 msgstr ""
 
 msgid " For %{contact}"
@@ -2927,5 +2927,5 @@ msgstr ""
 msgid "you plan to ask them some time in the future"
 msgstr ""
 
-msgid "you tried but did not find a way to contact this person"
+msgid " "
 msgstr ""

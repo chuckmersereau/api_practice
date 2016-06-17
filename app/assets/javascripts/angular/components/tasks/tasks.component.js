@@ -21,7 +21,7 @@
         vm.taskGroups = [
             {
                 filter: 'today',
-                title: 'Today',
+                title: __('Today'),
                 class: 'taskgroup--yellow',
                 currentPage: 1,
                 meta: {},
@@ -31,7 +31,7 @@
             },
             {
                 filter: 'overdue',
-                title: 'Overdue',
+                title: __('Overdue'),
                 class: 'taskgroup--yellow',
                 currentPage: 1,
                 meta: {},
@@ -41,7 +41,7 @@
             },
             {
                 filter: 'tomorrow',
-                title: 'Tomorrow',
+                title: __('Tomorrow'),
                 class: 'taskgroup--orange',
                 currentPage: 1,
                 meta: {},
@@ -51,7 +51,7 @@
             },
             {
                 filter: 'upcoming',
-                title: 'Upcoming',
+                title: __('Upcoming'),
                 class: 'taskgroup--dark-blue',
                 currentPage: 1,
                 meta: {},
@@ -61,7 +61,7 @@
             },
             {
                 filter: 'history',
-                title: 'History',
+                title: __('History'),
                 class: 'taskgroup--gray',
                 currentPage: 1,
                 meta: {},
@@ -72,7 +72,7 @@
             },
             {
               filter: 'no_date',
-              title: 'No due date',
+              title: __('No Due Date'),
               class: 'taskgroup--light-blue',
               currentPage: 1,
               meta: {},

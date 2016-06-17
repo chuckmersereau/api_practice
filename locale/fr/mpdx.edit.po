@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: version 0.0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"PO-Revision-Date: 2015-12-15 10:59+0100\n"
+"PO-Revision-Date: 2016-01-27 17:41+0100\n"
 "Last-Translator: Josh Starcher <>\n"
 "Language-Team: French\n"
 "Language: fr\n"
@@ -13,6 +13,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Poedit 1.8.5\n"
+"POT-Creation-Date: 2016-01-26 12:22-0500\n"
 
 msgid " "
 msgstr ""
@@ -298,7 +299,7 @@ msgid "Admin %"
 msgstr "Admin %"
 
 msgid "Advanced CSV"
-msgstr ""
+msgstr "CSV avancé"
 
 msgid "Age"
 msgstr "Age"
@@ -310,7 +311,7 @@ msgid "All Inactive"
 msgstr "Tous inactifs"
 
 msgid "All of the information for your contacts, best for advanced sorting/filtering and importing into other software."
-msgstr ""
+msgstr "Toutes les informations de vos contacts, idéal pour des tris et filtres avancés et pour importer dans un autre logiciel."
 
 msgid "Amount"
 msgstr "Montant"
@@ -370,7 +371,7 @@ msgid "Are marked as do not ask for appeals"
 msgstr "Sont marqués de ne pas demander pour les appels"
 
 msgid "Are you sure you want to close?"
-msgstr ""
+msgstr "Etes-vous sûr de vouloir fermer?"
 
 msgid "Are you sure you want to delete this appeal?"
 msgstr "Etes-vous sûr de vouloir supprimer cet appel ?"
@@ -442,7 +443,7 @@ msgid "Before emailing us, please have a look at %{link} to see if your question
 msgstr "Avant de nous envoyer un email, merci de vérifier sur %{link} (le plus complet) ou sur <A HREF=\"https://www.gcx.org/MPDXaide\" target=\"_blank\">le site d'aide en français</A> si la réponse à votre question ne s'y trouve pas déjà."
 
 msgid "Best for making mailing labels. Addresses will be formatted based on country."
-msgstr ""
+msgstr "Idéal pour créer des étiquettes. Les adresses seront formatées selon le pays."
 
 msgid "Bi-Monthly"
 msgstr "Tous les 2 mois"
@@ -469,7 +470,7 @@ msgid "Business"
 msgstr "Entreprise"
 
 msgid "CSV for Mail Merge"
-msgstr ""
+msgstr "CSV pour fusion et publipostage"
 
 msgid "Calendar integration"
 msgstr "Intégration du calendrier"
@@ -941,9 +942,8 @@ msgstr "Référence expirée"
 msgid "Export"
 msgstr "Exporter"
 
-#, fuzzy
 msgid "Export Contacts"
-msgstr "Importer des contacts"
+msgstr "Exporter des contacts"
 
 msgid "Export selected to CSV:"
 msgstr "Exporter la sélection au format CSV :"
@@ -1208,7 +1208,7 @@ msgid "Invited by: "
 msgstr "Invité par :"
 
 msgid "It is recommended that you backup your Google contacts as a CSV before enabling integration."
-msgstr ""
+msgstr "Il est conseillé de sauvegarder vos contacts Google au format CSV avant d'activer l'intégration."
 
 msgid "It looks like you were adding a task. If you leave before submitting, your changes will be lost."
 msgstr "Il semble que vous êtes en train d'ajouter une tâche. Si vous partez avant de la soumettre, vos modifications seront perdues."
@@ -1263,7 +1263,7 @@ msgid "Last name"
 msgstr "Nom"
 
 msgid "Learn how"
-msgstr ""
+msgstr "Découvrir comment"
 
 msgid "Least Likely"
 msgstr "Peu probable"
@@ -1359,6 +1359,9 @@ msgid ""
 "         Once you enable this feature, you'll be able to choose which types of tasks you want to sync.\n"
 "         By default MPDX will add 'Appointment' tasks to your calendar."
 msgstr ""
+"MPDX peut mettre à jour automatiquement votre agenda Google avec vos tâches.\n"
+"         Une fois que vous aurez activé cette fonctionnalité, vous pourrez choisir quels types de tâches vous voulez synchroniser.\n"
+"         Par défaut MPDX ajoutera les tâches de type \"Rendez-vous\" dans votre agenda."
 
 msgid ""
 "MPDX encountered errors while trying to import your %{source} contacts.\n"
@@ -1484,7 +1487,7 @@ msgid "Metro area"
 msgstr "Région métropolitaine"
 
 msgid "Min"
-msgstr ""
+msgstr "Min"
 
 msgid "Mobile"
 msgstr "Mobile"
@@ -1529,9 +1532,8 @@ msgstr "Cacher les contacts"
 msgid "Name"
 msgstr "Nom"
 
-#, fuzzy
 msgid "Nameless Appeal"
-msgstr "Voir moins d'appels"
+msgstr "Appel sans nom"
 
 msgid "Need Help?"
 msgstr "Besoin d'aide ?"
@@ -1652,7 +1654,7 @@ msgid "Not showing ministry partners without gifts in these 12 months which tota
 msgstr "Les partenaires sans dons au cours des 12 derniers mois (totalisant donc %{missing}/mois) ne sont pas affichés."
 
 msgid "Note: You must be upgraded to the latest version of TntMPD to do this. Click here to download the latest version."
-msgstr ""
+msgstr "Note : Vous devez avoir la dernière version de TntMPD pour faire cela. Cliquez ici pour télécharger la dernière version."
 
 msgid "Note: this file should be in a TntMPD data sync (.tntmpd) text file from your organization, not your local TntMPD database file (.mpddb). To import your local Tnt database, click \"Import Contacts\" below next to the TntMPD logo."
 msgstr "Remarque : Ce fichier doit être un fichier texte de TntMPD Datasync (.tntmpd) de votre organisation, pas votre fichier de base de données TntMPD locale (.mpddb). Pour importer votre base de données locale TntMPD, cliquez sur \"Importer des contacts \" ci-dessus à côté du logo TntMPD."
@@ -2288,7 +2290,7 @@ msgid "These are not duplicates"
 msgstr "Ce ne sont pas des doublons"
 
 msgid "This contact already exists in this appeal."
-msgstr ""
+msgstr "Ce contact existe déjà dans cet appel."
 
 msgid "This contact doesn't have any recent facebook posts"
 msgstr "Ce contact n'a pas de messages Facebook récents"
@@ -2517,7 +2519,7 @@ msgid "You just merged %{count} people"
 msgstr "Vous venez de fusionner %{count} personnes"
 
 msgid "You must check at least one contact."
-msgstr ""
+msgstr "Vous devez cocher au moins un contact."
 
 msgid "You need to be connected to an organization to use MPDX."
 msgstr "Vous devez être connecté à une organisation pour utiliser MPDX."
@@ -2541,13 +2543,13 @@ msgid "You've never logged a prayer letter"
 msgstr "Vous n'avez aucune lettre de nouvelles dans votre historique"
 
 msgid "Your Appeal Contacts are loading to MailChimp"
-msgstr ""
+msgstr "Les contacts de votre appel sont en cours de chargement dans Mailchimp"
 
 msgid "Your MPDX contact \"%{contact}\" has a person <a href=\"%{edit_person_url}\">%{person_name}</a> that syncs to MailChimp but now has an undeliverable email: %{email}"
 msgstr "Votre contact MPDX \"%{contact}\" a une personne <a href=\"%{edit_person_url}\">%{person_name}</a> qui est synchronisé avec MailChimp mais qui maintenant une adresse e-mail non distribuable : %{email}"
 
 msgid "Your currently selected MPDX Account is:"
-msgstr ""
+msgstr "Votre compte MPDX actuellement sélectionné est :"
 
 msgid "Your first name"
 msgstr "Votre prénom"
@@ -2580,7 +2582,7 @@ msgid "ask for help"
 msgstr "Demander de l'aide"
 
 msgid "building more relationship before asking"
-msgstr ""
+msgstr "développer la relation avant de demander"
 
 msgid "can not be blank"
 msgstr "ne peut pas être vide"
@@ -2595,7 +2597,7 @@ msgid "close"
 msgstr "fermer"
 
 msgid "committed to ongoing financial support at a specific level"
-msgstr ""
+msgstr "engagé à un soutien financier régulier d'un montant précis"
 
 msgid "creating a new task"
 msgstr "de créer une nouvelle tâche"
@@ -2607,16 +2609,16 @@ msgid "edit"
 msgstr "modifier"
 
 msgid "expressed a choice to not partner with your ministry"
-msgstr ""
+msgstr "a exprimé la décision de ne pas être partenaire de votre ministère"
 
 msgid "first gift not received"
 msgstr "premiers dons non reçus"
 
 msgid "following up for an MPD decision"
-msgstr ""
+msgstr "suivre pour obtenir une décision de DEP"
 
 msgid "has not answered or replied to repeated contact attempts"
-msgstr ""
+msgstr "n'a pas répondu à des tentatives répétées de contact"
 
 msgid "history"
 msgstr "dans l'historique"
@@ -2625,7 +2627,7 @@ msgid "http://"
 msgstr "http://"
 
 msgid "in the process of setting up an MPD appointment"
-msgstr ""
+msgstr "en cours de prise de RDV de DEP"
 
 msgid "makes special gifts but not committed to a specific ongoing amount"
 msgstr "fait des dons ponctuels mais n'est pas engagé à un montant spécifique"
@@ -2691,16 +2693,10 @@ msgid "with invalid addresses"
 msgstr "Avec une adresse e-mail valide"
 
 msgid "you have intentionally chosen to not ask for financial support"
-msgstr ""
+msgstr "vous avez choisi intentionnellement de ne pas demander de soutien financier"
 
 msgid "you plan to ask them some time in the future"
-msgstr ""
+msgstr "vous prévoyez de leur demander dans le futur"
 
 msgid "you tried but did not find a way to contact this person"
-msgstr ""
-
-#~ msgid "Exclude your home country from the contacts export file here"
-#~ msgstr "Exclure votre pays d'origine ci-dessous du fichier d'export des contacts"
-
-#~ msgid "Number is invalid"
-#~ msgstr "Le numéro de téléphone n'est pas valide."
+msgstr "vous avez essayé mais n'avez pas trouvé de moyen de contacter cette personne"
