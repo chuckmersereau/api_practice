@@ -111,7 +111,7 @@
           {{currencyGroup.currencySymbol}}{{donor.donorInfo.pledge_amount | number:0}} {{currencyGroup.currency}}
           {{donor.donorInfo.pledge_frequency}}
         </td>
-        <td ng-if="$ctrl.expanded">
+        <td class="text-right" ng-if="$ctrl.expanded">
           <span ng-if="!$ctrl.useConvertedValues">
             {{donor.aggregates.average | number:0}}
           </span>
@@ -119,12 +119,12 @@
             {{donor.aggregatesConverted.average | number:0}}
           </span>
         </td>
-        <td ng-if="$ctrl.expanded">
+        <td class="text-right" ng-if="$ctrl.expanded">
           <span ng-if="!$ctrl.useConvertedValues">
-            {{currencyGroup.currencySymbol}}{{donor.aggregates.min | number:0}}
+            {{donor.aggregates.min | number:0}}
           </span>
           <span ng-if="$ctrl.useConvertedValues">
-            {{currencyGroup.currencySymbolConverted}}{{donor.aggregatesConverted.min | number:0}}
+            {{donor.aggregatesConverted.min | number:0}}
           </span>
         </td>
 

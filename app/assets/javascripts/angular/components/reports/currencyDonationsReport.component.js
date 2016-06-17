@@ -272,7 +272,7 @@
                     return _.concat(
                         donor.donorInfo.name,
                         donor.donorInfo.status,
-                        currencyGroup.currencySymbol + donor.donorInfo.pledge_amount + currencyGroup.currency,
+                        currencyGroup.currencySymbol + donor.donorInfo.pledge_amount + ' ' + currencyGroup.currency + ' ' + donor.donorInfo.pledge_frequency,
                         donor['aggregates' + converted].average,
                         donor['aggregates' + converted].min,
                         _.map(donor.donations, 'amount' + converted),
