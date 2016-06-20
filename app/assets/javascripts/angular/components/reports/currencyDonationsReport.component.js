@@ -10,9 +10,9 @@
             }
         });
 
-    currencyDonationsReportController.$inject = ['api', 'state', 'moment', 'monthRange'];
+    currencyDonationsReportController.$inject = ['_', 'api', 'state', 'moment', 'monthRange'];
 
-    function currencyDonationsReportController(api, state, moment, monthRange) {
+    function currencyDonationsReportController(_, api, state, moment, monthRange) {
         var vm = this;
 
         /**
@@ -273,7 +273,7 @@
                         donor.donorInfo.name,
                         donor.donorInfo.status,
                         currencyGroup.currencySymbol + donor.donorInfo.pledge_amount + ' ' + currencyGroup.currency + ' ' + donor.donorInfo.pledge_frequency,
-                        donor['aggregates' + converted].average,
+                        _.round(donor['aggregates' + converted].average, 2),
                         donor['aggregates' + converted].min,
                         _.map(donor.donations, 'amount' + converted),
                         donor['aggregates' + converted].sum
