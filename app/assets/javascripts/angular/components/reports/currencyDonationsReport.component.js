@@ -55,6 +55,9 @@
         activate();
 
         function activate() {
+            // Make this report fill the whole page width
+            angular.element('body > #body > #content').addClass('container-fluid').removeClass('container');
+
             var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
             api.call('get', url, {}, function(data) {
                 vm.rawReportInfo = data.report_info;
