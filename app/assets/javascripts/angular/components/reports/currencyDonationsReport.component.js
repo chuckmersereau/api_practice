@@ -41,7 +41,7 @@
         vm.currencyGroups = [];
 
         vm.percentage = percentage;
-        vm.toggleReportType = toggleReportType;
+        vm.updatePageWidth = updatePageWidth;
         vm.currencyGroupsToCSV = currencyGroupsToCSV;
 
         vm._parseReportInfo = parseReportInfo;
@@ -55,29 +55,16 @@
         activate();
 
         function activate() {
-            // Make this report fill the whole page width
-            angular.element('body > #body > #content').addClass('container-fluid').removeClass('container');
-
             var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
             api.call('get', url, {}, function(data) {
-                vm.rawReportInfo = data.report_info;
-                updateReport();
+                vm.useConvertedValues = vm.type === 'salary';
+                vm.currencyGroups = parseReportInfo(data.report_info, vm.allMonths);
+                vm.sumOfAllCurrenciesConverted = _.sumBy(vm.currencyGroups, 'yearTotalConverted');
                 vm.loading = false;
             }, function() {
                 vm.errorOccurred = true;
                 vm.loading = false;
             });
-        }
-
-        function toggleReportType(){
-            vm.type = vm.type === 'donor' ? 'salary' : 'donor';
-            updateReport();
-        }
-
-        function updateReport(){
-            vm.useConvertedValues = vm.type === 'salary';
-            vm.currencyGroups = parseReportInfo(vm.rawReportInfo, vm.allMonths);
-            vm.sumOfAllCurrenciesConverted = _.sumBy(vm.currencyGroups, 'yearTotalConverted');
         }
 
         function parseReportInfo(reportInfo, allMonths){
@@ -248,6 +235,16 @@
                 return 0;
             }
             return currencyTotal / vm.sumOfAllCurrenciesConverted * 100;
+        }
+
+        function updatePageWidth(){
+            var container = angular.element('body > #body > #content');
+            if(vm.expanded){
+                // Make report fill the whole page width
+                container.addClass('container-fluid').removeClass('container');
+            }else{
+                container.addClass('container').removeClass('container-fluid');
+            }
         }
 
         function currencyGroupsToCSV(){

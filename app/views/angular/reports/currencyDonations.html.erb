@@ -4,8 +4,7 @@
     <h2 ng-if="$ctrl.type === 'salary'"><%= _('Contributions by Salary Currency') %></h2>
   </div>
   <div class="col-sm-6 text-right report-action-buttons">
-    <fa-checkbox ng-model="showByPartnerCurrency" ng-change="$ctrl.toggleReportType()">Group by partner currency</fa-checkbox>
-    <fa-checkbox ng-model="$ctrl.expanded" ng-change="$ctrl.updateTotal()">Expand all columns</fa-checkbox>
+    <fa-checkbox ng-model="$ctrl.expanded" ng-change="$ctrl.updatePageWidth()">Expand all columns</fa-checkbox>
     <button class="btn btn-primary" ng-csv="$ctrl.currencyGroupsToCSV()" lazy-load="true" filename="mpdx-{{$ctrl.type}}-contributions-export-{{$ctrl.moment().format('Y-MM-DD-HH:mm')}}.csv">Export CSV</button>
   </div>
 </div>
