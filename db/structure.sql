@@ -1385,7 +1385,7 @@ CREATE TABLE mail_chimp_accounts (
     id integer NOT NULL,
     api_key character varying(255),
     active boolean DEFAULT false,
-    grouping_id character varying(255),
+    status_grouping_id character varying(255),
     primary_list_id character varying(255),
     account_list_id integer,
     created_at timestamp without time zone,
@@ -1393,7 +1393,9 @@ CREATE TABLE mail_chimp_accounts (
     webhook_token character varying(255),
     auto_log_campaigns boolean DEFAULT false NOT NULL,
     importing boolean DEFAULT false NOT NULL,
-    status_interest_ids text
+    status_interest_ids text,
+    tags_grouping_id character varying(255),
+    tags_interest_ids text
 );
 
 
@@ -1464,7 +1466,8 @@ CREATE TABLE mail_chimp_members (
     last_name character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    contact_locale character varying(255)
+    contact_locale character varying(255),
+    tags character varying(255)[]
 );
 
 
@@ -2080,7 +2083,8 @@ CREATE TABLE person_google_accounts (
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    last_email_sync timestamp without time zone
+    last_email_sync timestamp without time zone,
+    notified_failure boolean
 );
 
 
