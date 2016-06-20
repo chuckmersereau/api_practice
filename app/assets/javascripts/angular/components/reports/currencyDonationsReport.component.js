@@ -10,9 +10,9 @@
             }
         });
 
-    currencyDonationsReportController.$inject = ['_', 'api', 'state', 'moment', 'monthRange'];
+    currencyDonationsReportController.$inject = ['_', 'api', 'state', 'moment', 'monthRange', '__'];
 
-    function currencyDonationsReportController(_, api, state, moment, monthRange) {
+    function currencyDonationsReportController(_, api, state, moment, monthRange, __) {
         var vm = this;
 
         /**
@@ -249,20 +249,20 @@
 
         function currencyGroupsToCSV(){
             var csvHeaders = _.flatten([
-                'Partner',
-                'Status',
-                'Pledge',
-                'Average',
-                'Minimum',
+                __('Partner'),
+                __('Status'),
+                __('Pledge'),
+                __('Average'),
+                __('Minimum'),
                 vm.allMonths,
-                'Total (last month excluded from total)'
+                __('Total (last month excluded from total)')
             ]);
             var converted = vm.useConvertedValues ? 'Converted' : '';
 
             var output = _.flatMap(vm.currencyGroups, function (currencyGroup){
                 var currencyHeaders = [
                     [
-                        'Currency',
+                        __('Currency'),
                         currencyGroup['currency' + converted],
                         currencyGroup['currencySymbol' + converted]
                     ],
@@ -279,7 +279,7 @@
                         donor['aggregates' + converted].sum
                     );
                 });
-                var totals = _.concat('Totals', _.times(4, _.constant('')), _.map(currencyGroup.monthlyTotals, 'amount' + converted), currencyGroup['yearTotal' + converted]);
+                var totals = _.concat(__('Totals'), _.times(4, _.constant('')), _.map(currencyGroup.monthlyTotals, 'amount' + converted), currencyGroup['yearTotal' + converted]);
                 return _.concat(currencyHeaders, donorRows, [totals], null);
             });
             return output;

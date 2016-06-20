@@ -60,3 +60,13 @@ __('Min.')
 __('Total')
 __('converted as')
 __('of total')
+
+# Multi-currency report CSV Export
+__('Partner')
+__('Status')
+__('Pledge')
+__('Average')
+__('Minimum')
+__('Total (last month excluded from total)')
+__('Currency')
+__('Totals')
