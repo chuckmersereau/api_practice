@@ -211,7 +211,7 @@
             </form>
 
           </li>
-          <% if $rollout.active?(:insights, current_account_list) %>
+          <% if show_insights? %>
               <li ng-class="{'selected': $ctrl.insightFilterIsActive()}">
                 <span class="left_filters menu_item"><%= _('Insights') %></span>
                 <p style="text-indent:40px">
