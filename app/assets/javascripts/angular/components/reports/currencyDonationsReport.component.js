@@ -259,7 +259,7 @@
             ]);
             var converted = vm.useConvertedValues ? 'Converted' : '';
 
-            var output = _.flatMap(vm.currencyGroups, function (currencyGroup){
+            return _.flatMap(vm.currencyGroups, function (currencyGroup){
                 var currencyHeaders = [
                     [
                         __('Currency'),
@@ -282,7 +282,6 @@
                 var totals = _.concat(__('Totals'), _.times(4, _.constant('')), _.map(currencyGroup.monthlyTotals, 'amount' + converted), currencyGroup['yearTotal' + converted]);
                 return _.concat(currencyHeaders, donorRows, [totals], null);
             });
-            return output;
         }
     }
 })();
