@@ -23,7 +23,7 @@ module.exports = function(config) {
 
         // test results reporter to use
         // possible values: 'dots', 'progress', 'junit', 'growl', 'coverage'
-        reporters: ['progress'],
+        reporters: ['progress', 'mocha', 'coverage'],
 
 
         // web server port
@@ -64,7 +64,12 @@ module.exports = function(config) {
 
         // Preprocessors
         preprocessors: {
-            '/**/*.coffee':'coffee'
+            '/**/*.coffee':'coffee',
+            './app/assets/javascripts/**/*!(.spec).js': ['coverage']
+        },
+
+        coverageReporter: {
+            type : 'lcov'
         }
 
     });
