@@ -1385,7 +1385,7 @@ CREATE TABLE mail_chimp_accounts (
     id integer NOT NULL,
     api_key character varying(255),
     active boolean DEFAULT false,
-    status_grouping_id character varying(255),
+    grouping_id character varying(255),
     primary_list_id character varying(255),
     account_list_id integer,
     created_at timestamp without time zone,
@@ -1393,9 +1393,7 @@ CREATE TABLE mail_chimp_accounts (
     webhook_token character varying(255),
     auto_log_campaigns boolean DEFAULT false NOT NULL,
     importing boolean DEFAULT false NOT NULL,
-    status_interest_ids text,
-    tags_grouping_id character varying(255),
-    tags_interest_ids text
+    status_interest_ids text
 );
 
 
@@ -1466,8 +1464,7 @@ CREATE TABLE mail_chimp_members (
     last_name character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    contact_locale character varying(255),
-    tags character varying(255)[]
+    contact_locale character varying(255)
 );
 
 
@@ -3179,8 +3176,6 @@ ALTER TABLE ONLY activity_contacts
 
 ALTER TABLE ONLY addresses
     ADD CONSTRAINT addresses_pkey PRIMARY KEY (id);
-
-ALTER TABLE addresses CLUSTER ON addresses_pkey;
 
 
 --
@@ -5199,10 +5194,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160523162335');
 INSERT INTO schema_migrations (version) VALUES ('20160523203413');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602005533');
-
-INSERT INTO schema_migrations (version) VALUES ('20160603231000');
-
-INSERT INTO schema_migrations (version) VALUES ('20160606160232');
 
 INSERT INTO schema_migrations (version) VALUES ('20160610044352');
 
