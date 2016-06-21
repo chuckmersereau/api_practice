@@ -41,7 +41,7 @@
         vm.currencyGroups = [];
 
         vm.percentage = percentage;
-        vm.updatePageWidth = updatePageWidth;
+        vm.togglePageWidth = togglePageWidth;
         vm.currencyGroupsToCSV = currencyGroupsToCSV;
 
         vm._parseReportInfo = parseReportInfo;
@@ -237,7 +237,8 @@
             return currencyTotal / vm.sumOfAllCurrenciesConverted * 100;
         }
 
-        function updatePageWidth(){
+        function togglePageWidth(){
+            vm.expanded = !vm.expanded;
             var container = angular.element('body > #body > #content');
             if(vm.expanded){
                 // Make report fill the whole page width

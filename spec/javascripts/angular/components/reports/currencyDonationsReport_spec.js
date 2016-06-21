@@ -336,21 +336,24 @@ describe('contacts', function() {
         });
     });
 
-    xdescribe('updatePageWidth', function() {
+    describe('togglePageWidth', function() {
         it('should transition the page container from container to container-fluid', function () {
             self.controller.expanded = false;
-            self.controller.updatePageWidth();
+            self.controller.togglePageWidth();
+            expect(self.controller.expanded).toBe(true);
 
             //TODO: figure out how to get the container element when it is outside of this angular component
             //console.log('Element:', self.$rootElement.find('body > #body > #content'));
-            expect(angular.element('body > #body > #content').hasClass('container')).toBe(true);
-            expect(angular.element('body > #body > #content').hasClass('container-fluid')).toBe(false);
+            //expect(angular.element('body > #body > #content').hasClass('container')).toBe(true);
+            //expect(angular.element('body > #body > #content').hasClass('container-fluid')).toBe(false);
         });
         it('should transition the page container from container-fluid to container', function () {
             self.controller.expanded = true;
-            self.controller.updatePageWidth();
-            expect(angular.element('body > #body > #content').hasClass('container')).toBe(false);
-            expect(angular.element('body > #body > #content').hasClass('container-fluid')).toBe(true);
+            self.controller.togglePageWidth();
+            expect(self.controller.expanded).toBe(false);
+
+            //expect(angular.element('body > #body > #content').hasClass('container')).toBe(false);
+            //expect(angular.element('body > #body > #content').hasClass('container-fluid')).toBe(true);
         });
     });
 

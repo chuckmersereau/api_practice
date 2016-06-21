@@ -4,8 +4,17 @@
     <h2 ng-if="$ctrl.type === 'salary'"><%= _('Contributions by Salary Currency') %></h2>
   </div>
   <div class="col-sm-6 text-right report-action-buttons">
-    <fa-checkbox ng-model="$ctrl.expanded" ng-change="$ctrl.updatePageWidth()">Expand all columns</fa-checkbox>
-    <button class="btn btn-primary" ng-csv="$ctrl.currencyGroupsToCSV()" lazy-load="true" filename="mpdx-{{$ctrl.type}}-contributions-export-{{$ctrl.moment().format('Y-MM-DD-HH:mm')}}.csv">Export CSV</button>
+    <button class="btn btn-primary" ng-click="$ctrl.togglePageWidth()">
+      <span ng-if="!$ctrl.expanded">
+        <%= _('Expand all columns')%>
+        <i class="fa fa-arrows-alt" aria-hidden="true"></i>
+      </span>
+      <span ng-if="$ctrl.expanded">
+        <%= _('Hide some columns')%>
+        <i class="fa fa-compress" aria-hidden="true"></i>
+      </span>
+    </button>
+    <button class="btn btn-default" ng-csv="$ctrl.currencyGroupsToCSV()" lazy-load="true" filename="mpdx-{{$ctrl.type}}-contributions-export-{{$ctrl.moment().format('Y-MM-DD-HH:mm')}}.csv"><%= _('Export CSV')%></button>
   </div>
 </div>
 
