@@ -9,23 +9,12 @@
         </div>
       </div>
       <p>&nbsp;</p>
-      <div id="preference_alerts">
-        <div id="preferences_success" class="hidden alert alert-success integration-alerts" role="alert">
-          MPDX is now syncing your newsletter recipients with {{vm.service}}
-        </div>
-          <div id="preferences_deletion_success" class="hidden alert alert-warning integration-alerts" role="alert">
-            MPDX removed your integration with {{vm.service}}
-          </div>
-        <div id="preferences_error" class="hidden alert alert-danger integration-alerts" role="alert">
-          <%= _("MPDX couldn't save your configuration changes to {{vm.service}}") %>
-        </div>
-      </div>
       <div class="panel-group" id="accounts-group">
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head">
-            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_mailchimp" class="trigger" aria-expanded="true">
+            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_mailchimp" class="trigger" aria-expanded="false">
               <i class="fa fa-angle-down panel-indicator"></i>
-              <%= _('Mailchimp Integration') %>
+              <%= _('Mailchimp') %>
               <div class="pull-right">
                 <div ng-show="vm.preferences.data.mail_chimp_account">
                   <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_mail_chimp_account"><i class="fa fa-circle"></i></div>
@@ -37,7 +26,7 @@
               </div>
             </a>
           </div>
-          <div id="integrate_mailchimp" class="panel-collapse collapse in">
+          <div id="integrate_mailchimp" class="panel-collapse collapse">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
@@ -54,9 +43,9 @@
                         <%= _('MailChimp list to use for your newsletter:') %> <strong>{{vm.preferences.data.mail_chimp_primary_list_name}}</strong>
                       </p>
                       <p>
-                        <a class="btn btn-xs btn-primary" ng-click="vm.sync($event, 'MailChimp')"><%= _('Sync Now') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                        <button type="submit" ng-click="vm.sync('MailChimp')" ng-disabled="vm.saving" class="btn btn-xs btn-primary"><%= _('Sync Now') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
                         <a class="btn btn-xs btn-default" ng-href="/mail_chimp_accounts/{{vm.preferences.data.mail_chimp_account_id}}/edit" target="_self"><%= _('Modify Settings') %></a>
-                        <a class="btn btn-link" ng-click="vm.disconnect($event, 'MailChimp')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                        <a class="btn btn-link" ng-click="vm.disconnect('MailChimp')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
                       </p>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_mail_chimp_account">
@@ -71,9 +60,9 @@
         </div>
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head">
-            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_prayer" class="trigger" aria-expanded="true">
+            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_prayer_letters" class="trigger" aria-expanded="false">
               <i class="fa fa-angle-down panel-indicator"></i>
-              <%= _('PrayerLetters.com Integration') %>
+              <%= _('PrayerLetters.com') %>
               <div class="pull-right">
                 <div ng-show="vm.preferences.data.prayer_letters_account">
                   <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_prayer_letters_account"><i class="fa fa-circle"></i></div>
@@ -85,7 +74,7 @@
               </div>
             </a>
           </div>
-          <div id="integrate_prayer" class="panel-collapse collapse in">
+          <div id="integrate_prayer_letters" class="panel-collapse collapse">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
@@ -99,8 +88,8 @@
                       <%= _('Enabling or Syncing will replace your prayerletters.com lists') %>
                     </div>
                     <div ng-show="vm.preferences.data.valid_prayer_letters_account">
-                      <a class="btn btn-xs btn-primary" ng-click="vm.sync($event, 'Prayer Letters')"><%= _('Sync Now') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
-                      <a class="btn btn-link" ng-click="vm.disconnect($event, 'Prayer Letters')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                      <button type="submit" ng-click="vm.sync('Prayer Letters')" ng-disabled="vm.saving" class="btn btn-xs btn-primary"><%= _('Sync Now') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                      <a class="btn btn-link" ng-click="vm.disconnect('Prayer Letters')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_prayer_letters_account">
                       <p><%= _('You can keep PrayerLetters.com updated with all your MPDX contacts. Click Enable to begin.') %></p>
@@ -115,9 +104,9 @@
         <% if $rollout.active?(:pls_integration, current_account_list) %>
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head">
-            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_prayer" class="trigger" aria-expanded="true">
+            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_pls" class="trigger" aria-expanded="false">
               <i class="fa fa-angle-down panel-indicator"></i>
-              <%= _('MyLetterService.org Integration') %>
+              <%= _('MyLetterService.org') %>
               <div class="pull-right">
                 <div ng-show="vm.preferences.data.pls_account">
                   <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_pls_account"><i class="fa fa-circle"></i></div>
@@ -129,7 +118,7 @@
               </div>
             </a>
           </div>
-          <div id="integrate_prayer" class="panel-collapse collapse in">
+          <div id="integrate_pls" class="panel-collapse collapse">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
@@ -143,8 +132,8 @@
                       <%= _('Enabling or Syncing will replace your myletterservice.org lists') %>
                     </div>
                     <div ng-show="vm.preferences.data.valid_pls_account">
-                      <a class="btn btn-xs btn-primary" ng-click="vm.sync($event, 'PLS')"><%= _('Sync Now') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
-                      <a class="btn btn-link" ng-click="vm.disconnect($event, 'PLS')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
+                      <button type="submit" ng-click="vm.sync('PLS')" ng-disabled="vm.saving" class="btn btn-xs btn-primary"><%= _('Sync Now') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                      <a class="btn btn-link" ng-click="vm.disconnect('PLS')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_pls_account">
                       <p><%= _('You can keep myletterservice.org updated with all your MPDX contacts. Click Enable to begin.') %></p>
@@ -159,15 +148,15 @@
         <% end %>
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head">
-            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_chalkline" class="trigger" aria-expanded="true">
+            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_chalkline" class="trigger" aria-expanded="false">
               <i class="fa fa-angle-down panel-indicator"></i>
-              <%= _('Chalkline Integration') %>
+              <%= _('Chalkline') %>
               <div class="pull-right">
                 <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
               </div>
             </a>
           </div>
-          <div id="integrate_chalkline" class="panel-collapse collapse in">
+          <div id="integrate_chalkline" class="panel-collapse collapse">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">

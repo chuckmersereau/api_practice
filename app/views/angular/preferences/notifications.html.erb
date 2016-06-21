@@ -12,15 +12,6 @@
         <div class="col-md-12">
           <div class="row spacer-top">
             <div class="col-md-12">
-              <div id="preference_alerts">
-                <div id="preferences_success" class="hidden alert alert-success" role="alert">
-                  <strong>All done!</strong> Notifications saved successfully
-                </div>
-                <div id="preferences_error" class="hidden alert alert-danger" role="alert">
-                  <strong>Sorry, couldn't save your changes!</strong> The following errors occurred:
-                  <ul></ul>
-                </div>
-              </div>
               <p>
                 <%= _("Based on an analysis of a partner's giving history, MPDX can notify you "+
                       "of events that you will probably want to follow up on. The detection logic "+
@@ -35,7 +26,7 @@
           </div>
           <div class="panel panel-default pref-panel">
               <div class="panel-heading">
-                Select the types of notifications you'd like to receive.
+                <%= _("Select the types of notifications you'd like to receive.") %>
               </div>
               <ul class="list-group">
               <% NotificationType.all.each do |notification_type| %>
@@ -66,7 +57,7 @@
           <div class="row">
             <div class="col-md-12">
               <div class="page-filters page-filters-close">
-                <button type="submit" ng-click="vm.save()" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></button>
+                <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
               </div>
             </div>
           </div>

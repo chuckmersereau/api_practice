@@ -7,37 +7,35 @@
             templateUrl: '/templates/preferences/integrations.html',
             bindings: {}
         });
-    integrationPreferencesController.$inject = ['integrationPreferencesService'];
-    function integrationPreferencesController(integrationPreferencesService) {
+    integrationPreferencesController.$inject = ['integrationPreferencesService', 'alertsService'];
+    function integrationPreferencesController(integrationPreferencesService, alertsService) {
       var vm = this;
-      this.preferences = integrationPreferencesService;
+      vm.preferences = integrationPreferencesService;
+      vm.alerts = alertsService;
+      vm.saving = false;
 
-      this.sync = function($event, service) {
-        var $target = $($event.target);
-        $target.addClass('disabled').children('i.hidden').removeClass('hidden');
-        $('.integration-alerts').addClass('hidden');
-        this.service = service;
-        this.preferences.sync(service, function success(data) {
-          $target.removeClass('disabled').children('i').addClass('hidden');
-          $('#preferences_success').removeClass('hidden');
+      vm.sync = function(service) {
+        vm.saving = true;
+        vm.service = service;
+        vm.preferences.sync(service, function success(data) {
+          vm.saving = false;
+          vm.alerts.addAlert('MPDX is now syncing your newsletter recipients with ' + vm.service, 'success');
         }, function error(data) {
-          $target.removeClass('disabled').children('i').addClass('hidden');
-          $('#preferences_error').removeClass('hidden');
+          vm.saving = false;
+          vm.alerts.addAlert("MPDX couldn't save your configuration changes for " + vm.service, 'danger');
         });
       }
 
-      this.disconnect = function($event, service) {
-        var $target = $($event.target);
-        $target.addClass('disabled').children('i.hidden').removeClass('hidden');
-        $('.integration-alerts').addClass('hidden');
-        this.service = service;
-        this.preferences.disconnect(service, function success(data) {
-          $target.removeClass('disabled').children('i').addClass('hidden');
-          $('#preferences_deletion_success').removeClass('hidden');
+      vm.disconnect = function(service) {
+        vm.saving = true;
+        vm.service = service;
+        vm.preferences.disconnect(service, function success(data) {
+          vm.saving = false;
+          vm.alerts.addAlert('MPDX removed your integration with ' + vm.service, 'success');
           vm.preferences.load();
         }, function error(data) {
-          $target.removeClass('disabled').children('i').addClass('hidden');
-          $('#preferences_error').removeClass('hidden');
+          vm.alerts.addAlert("MPDX couldn't save your configuration changes for " + vm.service, 'danger');
+          vm.saving = false;
         });
       }
     }

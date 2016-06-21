@@ -7,25 +7,21 @@
             templateUrl: '/templates/preferences/notifications.html',
             bindings: {}
         });
-    notificationPreferencesController.$inject = ['notificationPreferencesService'];
-    function notificationPreferencesController(notificationPreferencesService) {
-      this.preferences = notificationPreferencesService;
-
-      this.save = function () {
-        $("button[type=submit]").prop('disabled', true).children('i.hidden').removeClass('hidden');
-        $('#preferences_success').addClass('hidden');
-        $('#preferences_error').addClass('hidden');
-        $('#preferences_error ul').html('');
-        this.preferences.save(function success(data) {
-          $("button[type=submit]").prop('disabled', false).children('i').addClass('hidden');
-          $('.collapse.in').collapse('hide');
-          $('#preferences_success').removeClass('hidden');
+    notificationPreferencesController.$inject = ['notificationPreferencesService', 'alertsService'];
+    function notificationPreferencesController(notificationPreferencesService, alertsService) {
+      var vm = this;
+      vm.preferences = notificationPreferencesService;
+      vm.alerts = alertsService;
+      vm.saving = false;
+      vm.save = function () {
+        vm.saving = true;
+        vm.preferences.save(function success(data) {
+          vm.alerts.addAlert('Notifications saved successfully', 'success');
+          vm.saving = false;
+          vm.saving = false;
         }, function error(data) {
-          $("button[type=submit]").prop('disabled', false).children('i').addClass('hidden');
-          $.each(data.errors, function (index, value) {
-            $('#preferences_error ul').append('<li>'+ value +'</li>');
-          });
-          $('#preferences_error').removeClass('hidden');
+          $.each(data.errors, function (index, value) { vm.alerts.addAlert(value, 'danger'); });
+          vm.saving = false;
         });
       }
     }
