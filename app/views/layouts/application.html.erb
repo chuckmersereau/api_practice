@@ -31,10 +31,10 @@
     <preload-state name="multi_currencies_for_same_symbol"
                    data="<%= exhibit(current_account_list).multi_currencies_for_same_symbol? %>"></preload-state>
     <preload-state name="default_currency" data="<%= current_account_list.default_currency %>"></preload-state>
+    <preload-state name="contact_limit" data="<%= session[:prefs].try(:[], :contacts).try(:[], :limit) || 25 %>"></preload-state>
 
     <%= render 'impersonation_bar' %>
     <%= render 'peek/bar' %>
-
     <header id="global">
       <div class="head-user-wrap">
         <div class="container">

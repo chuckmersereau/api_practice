@@ -60,15 +60,15 @@ class Api::V1::BaseController < ApplicationController
     false
   end
 
-  def current_user
-    super
-    @current_user ||= User.from_access_token(oauth_access_token)
-  end
-
   def current_account_list
     account_list = current_user.account_lists.find(params[:account_list_id]) if params[:account_list_id].present?
     account_list ||= default_account_list
     account_list
+  end
+
+  def current_user
+    super
+    @current_user ||= User.from_access_token(oauth_access_token)
   end
 
   def oauth_access_token

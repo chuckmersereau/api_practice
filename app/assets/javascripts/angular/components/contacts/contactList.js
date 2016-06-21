@@ -17,7 +17,7 @@
         vm.totalContacts = 0;
 
         vm.contactQuery = {
-            limit: 25,
+            limit: parseInt(state.contact_limit),
             page: 1,
             ids: '',
             tags: [''],
@@ -338,6 +338,7 @@
                 !_.isEmpty(q.contact_info_mobile) ||
                 !_.isEmpty(q.contact_info_addr) ||
                 !_.isEmpty(q.contact_info_facebook) ||
+                (q.limit != null) ||
                 q.page !== 1)
             {
                 return false;
@@ -470,6 +471,7 @@
 
                 //Save View Prefs
                 var prefsToSave = {
+                    limit: vm.contactQuery.limit,
                     tags: q.tags.join(),
                     ids: q.ids,
                     name: q.name,
@@ -503,6 +505,8 @@
                 } else {
                     viewPrefs['user']['preferences']['contacts_filter'][state.current_account_list_id] = null;
                 }
+                viewPrefs['account_list_id'] = state.current_account_list_id
+
                 api.call('put', 'users/me', viewPrefs);
             }, null, true);
         }
