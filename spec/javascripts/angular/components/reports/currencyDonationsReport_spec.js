@@ -10,8 +10,12 @@ describe('contacts', function() {
 
         self.controller = $componentController('currencyDonationsReport', {
             '$scope': $scope,
-            '$http': $httpBackend
+            '$http': $httpBackend,
+            '__': function(string){ return string; } // mock __ from gettext_i18n_rails_js
         });
+
+        self.reportInfo = __fixtures__['components/reports/reportInfo.fixture'];
+        self.currencyGroups = __fixtures__['components/reports/currencyGroups.fixture'];
     }));
 
     describe('groupDonationsByCurrency', function() {
@@ -313,172 +317,50 @@ describe('contacts', function() {
             self.controller.reportLastMonth = '2015-03';
             self.controller.monthsToShow = 11;
 
-            var reportInfo = {
-                donors: [
-                    {
-                        "id": 7,
-                        "name": "Dalmation, Pongo and Perdita"
-                    },
-                    {
-                        "id": 8,
-                        "name": "Bird, Tweety and Tweetilee"
-                    }
-                ],
-                donations: [
-                    {
-                        "amount": 175.0,
-                        "converted_amount": 180.0,
-                        "contact_id": 8,
-                        "donation_date": "2015-01-31",
-                        "currency": 'USD',
-                        "currency_symbol": '$',
-                        "converted_currency": 'USD',
-                        "converted_currency_symbol": '$'
-                    },
-                    {
-                        "amount": 25.0,
-                        "converted_amount": 30.0,
-                        "contact_id": 8,
-                        "donation_date": "2015-01-05",
-                        "currency": 'USD',
-                        "currency_symbol": '$',
-                        "converted_currency": 'USD',
-                        "converted_currency_symbol": '$'
-                    },
-                    {
-                        "amount": 100.0,
-                        "converted_amount": 105.0,
-                        "contact_id": 7,
-                        "donation_date": "2015-01-01",
-                        "currency": 'USD',
-                        "currency_symbol": '$',
-                        "converted_currency": 'USD',
-                        "converted_currency_symbol": '$'
-                    },
-                    {
-                        "amount": 175.0,
-                        "converted_amount": 180.0,
-                        "contact_id": 8,
-                        "donation_date": "2015-02-01",
-                        "currency": 'USD',
-                        "currency_symbol": '$',
-                        "converted_currency": 'USD',
-                        "converted_currency_symbol": '$'
-                    },
-                    {
-                        "amount": 100.0,
-                        "converted_amount": 105.0,
-                        "contact_id": 7,
-                        "donation_date": "2015-03-31",
-                        "currency": 'USD',
-                        "currency_symbol": '$',
-                        "converted_currency": 'USD',
-                        "converted_currency_symbol": '$'
-                    }
-                ]
-            };
-
             var allMonths = ["2015-01", "2015-02", "2015-03"];
 
-            expect(self.controller._parseReportInfo(reportInfo, allMonths)).toEqual([
-                {
-                    currency: 'USD',
-                    currencyConverted: 'USD',
-                    currencySymbol: '$',
-                    currencySymbolConverted: '$',
-                    donors: [
-                        {
-                            donorInfo: {
-                                "id": 8,
-                                "name": "Bird, Tweety and Tweetilee"
-                            },
-                            donations: [
-                                {
-                                    amount: 200,
-                                    amountConverted: 210,
-                                    currency: 'USD',
-                                    currencyConverted: 'USD',
-                                    currencySymbol: '$',
-                                    currencySymbolConverted: '$',
-                                    donation_date: '2015-01',
-                                    rawDonations: [ reportInfo.donations[0], reportInfo.donations[1] ]
-                                },
-                                {
-                                    amount: 175,
-                                    amountConverted: 180,
-                                    currency: 'USD',
-                                    currencyConverted: 'USD',
-                                    currencySymbol: '$',
-                                    currencySymbolConverted: '$',
-                                    donation_date: '2015-02',
-                                    rawDonations: [ reportInfo.donations[3] ]
-                                },
-                                {
-                                    amount: 0,
-                                    amountConverted: 0,
-                                    donation_date: '2015-03'
-                                }
-                            ],
-                            aggregates: {
-                                sum: 375,
-                                average: 375 / 3,
-                                min: 175
-                            },
-                            aggregatesConverted: {
-                                sum: 390,
-                                average: 390 / 3,
-                                min: 180
-                            }
-                        },
-                        {
-                            donorInfo: {
-                                "id": 7,
-                                "name": "Dalmation, Pongo and Perdita"
-                            },
-                            donations: [
-                                {
-                                    amount: 100,
-                                    amountConverted: 105,
-                                    currency: 'USD',
-                                    currencyConverted: 'USD',
-                                    currencySymbol: '$',
-                                    currencySymbolConverted: '$',
-                                    donation_date: '2015-01',
-                                    rawDonations: [ reportInfo.donations[2] ]
-                                },
-                                {
-                                    amount: 0,
-                                    amountConverted: 0,
-                                    donation_date: '2015-02'
-                                },
-                                {
-                                    amount: 100,
-                                    amountConverted: 105,
-                                    currency: 'USD',
-                                    currencyConverted: 'USD',
-                                    currencySymbol: '$',
-                                    currencySymbolConverted: '$',
-                                    donation_date: '2015-03',
-                                    rawDonations: [ reportInfo.donations[4] ]
-                                }
-                            ],
-                            aggregates: {
-                                sum: 200,
-                                average: 200 / 3,
-                                min: 100
-                            },
-                            aggregatesConverted: {
-                                sum: 210,
-                                average: 70,
-                                min: 105
-                            }
-                        }
-                    ],
-                    monthlyTotals: [ { amount: 300, amountConverted: 315 }, { amount: 175, amountConverted: 180 }, { amount: 100, amountConverted: 105 } ],
-                    yearTotal: 475,
-                    yearTotalConverted: 495
-                }
-            ]);
+            expect(self.controller._parseReportInfo(self.reportInfo, allMonths)).toEqual(self.currencyGroups);
         });
+    });
+
+    describe('percentage', function() {
+        it('should return 0% when given a 0', function () {
+            expect(self.controller.percentage(0)).toEqual(0);
+        });
+        it('should take a currency total and return the percentage that is of all currencies', function () {
+            self.controller.sumOfAllCurrenciesConverted = 1000;
+            expect(self.controller.percentage(20)).toEqual(2);
+            expect(self.controller.percentage(80)).toEqual(8);
+            self.controller.sumOfAllCurrenciesConverted = 2;
+            expect(self.controller.percentage(1)).toEqual(50);
+        });
+    });
+
+    xdescribe('updatePageWidth', function() {
+        it('should transition the page container from container to container-fluid', function () {
+            self.controller.expanded = false;
+            self.controller.updatePageWidth();
+
+            //TODO: figure out how to get the container element when it is outside of this angular component
+            //console.log('Element:', self.$rootElement.find('body > #body > #content'));
+            expect(angular.element('body > #body > #content').hasClass('container')).toBe(true);
+            expect(angular.element('body > #body > #content').hasClass('container-fluid')).toBe(false);
+        });
+        it('should transition the page container from container-fluid to container', function () {
+            self.controller.expanded = true;
+            self.controller.updatePageWidth();
+            expect(angular.element('body > #body > #content').hasClass('container')).toBe(false);
+            expect(angular.element('body > #body > #content').hasClass('container-fluid')).toBe(true);
+        });
+    });
+
+    describe('currencyGroupsToCSV', function(){
+        it('should return a 2D array that can be transformed into CSV', function(){
+            self.controller.currencyGroups = self.currencyGroups;
+
+            var csvExport = [ [ 'Currency', 'USD', '$' ], [ 'Partner', 'Status', 'Pledge', 'Average', 'Minimum', '2014-04', '2014-05', '2014-06', '2014-07', '2014-08', '2014-09', '2014-10', '2014-11', '2014-12', '2015-01', '2015-02', '2015-03', '2015-04', 'Total (last month excluded from total)' ], [ 'Bird, Tweety and Tweetilee', undefined, '$0 USD ', 125, 175, 200, 175, 0, 375 ], [ 'Dalmation, Pongo and Perdita', undefined, '$0 USD ', 66.67, 100, 100, 0, 100, 200 ], [ 'Totals', '', '', '', '', 300, 175, 100, 475 ], null ];
+
+            expect(self.controller.currencyGroupsToCSV()).toEqual(csvExport);
+        })
     });
 });

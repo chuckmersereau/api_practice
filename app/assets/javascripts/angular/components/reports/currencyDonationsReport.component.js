@@ -248,7 +248,7 @@
         }
 
         function currencyGroupsToCSV(){
-            var csvHeaders = _.flatten([
+            var columnHeaders = _.flatten([
                 __('Partner'),
                 __('Status'),
                 __('Pledge'),
@@ -260,19 +260,19 @@
             var converted = vm.useConvertedValues ? 'Converted' : '';
 
             return _.flatMap(vm.currencyGroups, function (currencyGroup){
-                var currencyHeaders = [
+                var combinedHeaders = [
                     [
                         __('Currency'),
                         currencyGroup['currency' + converted],
                         currencyGroup['currencySymbol' + converted]
                     ],
-                    csvHeaders
+                    columnHeaders
                 ];
                 var donorRows = _.map(currencyGroup.donors, function(donor){
                     return _.concat(
                         donor.donorInfo.name,
                         donor.donorInfo.status,
-                        currencyGroup.currencySymbol + donor.donorInfo.pledge_amount + ' ' + currencyGroup.currency + ' ' + donor.donorInfo.pledge_frequency,
+                        currencyGroup.currencySymbol + (donor.donorInfo.pledge_amount || 0) + ' ' + currencyGroup.currency + ' ' + _.toString(donor.donorInfo.pledge_frequency),
                         _.round(donor['aggregates' + converted].average, 2),
                         donor['aggregates' + converted].min,
                         _.map(donor.donations, 'amount' + converted),
@@ -280,7 +280,7 @@
                     );
                 });
                 var totals = _.concat(__('Totals'), _.times(4, _.constant('')), _.map(currencyGroup.monthlyTotals, 'amount' + converted), currencyGroup['yearTotal' + converted]);
-                return _.concat(currencyHeaders, donorRows, [totals], null);
+                return _.concat(combinedHeaders, donorRows, [totals], null);
             });
         }
     }
