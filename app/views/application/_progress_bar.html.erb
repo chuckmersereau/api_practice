@@ -1,8 +1,8 @@
 <a id="mpd_progress_bar" href="<%= contacts_path(filters: {status: ['Partner - Financial'], pledge_received: false}) %>"
    title="<%= _('%{received} received/%{pledged} committed of goal: %{goal}. Click to see outstanding financial partners.').localize %
-              { pledged: number_to_current_currency(current_account_list.total_pledges.to_i),
-                received: number_to_current_currency(current_account_list.received_pledges.to_i),
-                goal: number_to_current_currency(current_account_list.monthly_goal) } %>"
+              { pledged: number_to_current_currency(current_account_list.total_pledges.to_i, currency: current_account_list.salary_currency),
+                received: number_to_current_currency(current_account_list.received_pledges.to_i, currency: current_account_list.salary_currency),
+                goal: number_to_current_currency(current_account_list.monthly_goal, currency: current_account_list.salary_currency) } %>"
    data-toggle="tooltip" data-placement="bottom">
     <div class="bar bar-pledged" style="width: <%= current_account_list.pledged_percent %>%"></div>
       <div class="bar bar-received" style="width: <%= current_account_list.in_hand_percent %>%"></div>

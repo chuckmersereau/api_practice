@@ -15,7 +15,7 @@ class AccountList::PledgesTotal
   end
 
   def default_currency_rate
-    latest_rate(@account_list.default_currency)
+    latest_rate(@account_list.salary_currency)
   end
 
   def monthly_pledge_usd(partner)

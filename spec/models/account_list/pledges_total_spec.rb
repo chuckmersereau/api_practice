@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe AccountList::PledgesTotal do
-  let(:account_list) { create(:account_list) }
+  let(:account_list) { create(:account_list, salary_organization_id: create(:organization).id) }
 
   before do
     allow($rollout).to receive(:active?) { true }
@@ -35,6 +35,6 @@ describe AccountList::PledgesTotal do
     create(:contact, account_list: account_list, pledge_amount: 15, pledge_currency: 'USD', status: 'Partner - Financial')
     create(:contact, account_list: account_list, pledge_amount: 95, pledge_currency: 'RUB', status: 'Partner - Financial')
 
-    expect(account_list.total_pledges).to eq(13.01)
+    expect(account_list.total_pledges).to eq(16.26)
   end
 end
