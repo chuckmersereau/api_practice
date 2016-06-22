@@ -33,18 +33,6 @@ class MailChimpAccountsController < ApplicationController
     render :new unless @mail_chimp_account.active_and_valid?
   end
 
-  def destroy
-    current_account_list.mail_chimp_account.destroy
-    return render nothing: true if request.xhr?
-    redirect_to integrations_settings_path
-  end
-
-  def sync
-    flash[:notice] = _('MPDX is now syncing your newsletter recipients with MailChimp.')
-    @mail_chimp_account.queue_export_to_primary_list
-    redirect_to :back
-  end
-
   private
 
   def create_or_update

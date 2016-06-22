@@ -1,30 +1,42 @@
-angular.module('mpdxApp')
-    .service('notificationPreferencesService', ['api', function (api) {
-        var svc = this;
-        this.data = {};
-        this.loading = true;
-        this.load = function () {
-          api.call('get', 'preferences?notifications=true', {}, function(data) {
-            svc.data = data.preferences;
-            svc.loading = false;
-          });
-        };
 
-        this.toggleNotification = function (field_name, notification_type) {
-          var index = this.data[field_name].actions.indexOf(notification_type);
-          if (index === -1) {
-              this.data[field_name].actions.push(notification_type);
-          } else {
-              this.data[field_name].actions.splice(index, 1);
-          }
-        }
+(function() {
+  'use strict';
 
-        this.save = function(success, error) {
-          api.call('put', 'preferences/' + this.data.current_account_list_id,
-                   { preference_set: this.data },
-                   success,
-                   error);
-        }
+  angular
+    .module('mpdxApp')
+    .factory('notificationPreferencesService', notificationPreferencesService);
 
-        this.load();
-    }]);
+  notificationPreferencesService.$inject = ['api'];
+
+  function notificationPreferencesService(api) {
+    var svc = {};
+    svc.data = {};
+    svc.loading = true;
+    svc.load = function () {
+      api.call('get', 'preferences?notifications=true', {}, function(data) {
+        svc.data = data.preferences;
+        svc.loading = false;
+      });
+    };
+
+    svc.toggleNotification = function (field_name, notification_type) {
+      var index = svc.data[field_name].actions.indexOf(notification_type);
+      if (index === -1) {
+        svc.data[field_name].actions.push(notification_type);
+      } else {
+        svc.data[field_name].actions.splice(index, 1);
+      }
+    };
+
+    svc.save = function(success, error) {
+      api.call('put', 'preferences/' + svc.data.current_account_list_id,
+        { preference_set: svc.data },
+        success,
+        error);
+    };
+
+    svc.load();
+
+    return svc;
+  }
+})();

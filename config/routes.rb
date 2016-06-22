@@ -67,9 +67,22 @@ Rails.application.routes.draw do
       end
       resources :insights
 
-      resources :mail_chimp_accounts do
+      resources :mail_chimp_accounts, only: :destroy do
         collection do
           put :export_appeal_list
+          get :sync
+        end
+      end
+
+      resources :prayer_letters_accounts, only: :destroy do
+        collection do
+          get :sync
+        end
+      end
+
+      resources :pls_accounts, only: :destroy do
+        collection do
+          get :sync
         end
       end
 

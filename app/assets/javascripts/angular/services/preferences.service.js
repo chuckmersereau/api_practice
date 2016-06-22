@@ -1,21 +1,32 @@
-angular.module('mpdxApp')
-    .service('preferencesService', ['api', function (api) {
-        var svc = this;
-        this.data = {};
-        this.loading = true;
-        this.load = function () {
-          api.call('get', 'preferences?base=true', {}, function(data) {
-            svc.data = data.preferences;
-            svc.loading = false;
-          });
-        };
+(function() {
+  'use strict';
 
-        this.save = function(success, error) {
-          api.call('put', 'preferences/' + this.data.current_account_list_id,
-                   { preference_set: this.data },
-                   success,
-                   error);
-        }
+  angular
+    .module('mpdxApp')
+    .factory('preferencesService', preferencesService);
 
-        this.load();
-    }]);
+  preferencesService.$inject = ['api'];
+
+  function preferencesService(api) {
+    var svc = {};
+    svc.data = {};
+    svc.loading = true;
+    svc.load = function () {
+      api.call('get', 'preferences?base=true', {}, function(data) {
+        svc.data = data.preferences;
+        svc.loading = false;
+      });
+    };
+
+    svc.save = function(success, error) {
+      api.call('put', 'preferences/' + this.data.current_account_list_id,
+        { preference_set: this.data },
+        success,
+        error);
+    }
+
+    svc.load();
+
+    return svc;
+  }
+})();
