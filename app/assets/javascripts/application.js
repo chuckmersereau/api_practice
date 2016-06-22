@@ -56,6 +56,8 @@
 //= require angular-ui-bootstrap/dist/ui-bootstrap
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
 //= require angular-ui-router/release/angular-ui-router
+//= require angular-sanitize/angular-sanitize
+//= require ng-csv/build/ng-csv
 //= require lodash/lodash
 //= require moment/moment
 //= require moment-range/dist/moment-range

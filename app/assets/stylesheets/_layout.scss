@@ -53,7 +53,7 @@ $userheight: 72px;
 .form-inline {
   .fixed-width-input {
     width: 220px;
-  }  
+  }
 }
 
 /* ************************************************************** */
@@ -1692,6 +1692,10 @@ table.meta {
 .statusIcon-enabled {background-position: -6px -56px;}
 .statusIcon-disabled {background-position: -6px -1px;}
 .statusIcon-error {background-position: -6px -27px;}
+
+.accstatus-enabled {color: green;}
+.accstatus-error {color: red;}
+.accstatus-disabled {color: #999;}
 
 #footer {
   padding-bottom: 40px;
