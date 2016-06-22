@@ -1,41 +1,43 @@
 angular
-    .module('mpdxApp', [
-        'ui.bootstrap',
-        'LocalForageModule',
-        'ngAnimate',
-        'isoCurrency',
-        'ui.router'
-    ]);
+  .module('mpdxApp', [
+    'ui.bootstrap',
+    'LocalForageModule',
+    'ngAnimate',
+    'ngSanitize',
+    'ngCsv',
+    'isoCurrency',
+    'ui.router'
+  ]);
 
 angular
-    .module('mpdxApp')
-    .run(function () {
+  .module('mpdxApp')
+  .run(function () {
 
-    });
+  });
 
 angular
-    .module('mpdxApp')
-    .config(function($locationProvider, $stateProvider, $urlRouterProvider) {
-      $urlRouterProvider.otherwise('/preferences');
-      $stateProvider
-        .state('preferences', {
-          url: '/preferences',
-          template: '<preferences></preferences>'
-        })
-        .state('notifications', {
-          url: '/notifications',
-          template: '<notification-preferences></notification-preferences>'
-        })
-        .state('integrations', {
-          url: '/settings/integrations',
-          template: '<integration-preferences></integration-preferences>'
-        });
-      $('a').each(function(){
-        $a = $(this);
-        if ($a.is('[target]') || $a.is('[ui-sref]')){
-        } else {
-            $a.attr('target', '_self');
-        }
+  .module('mpdxApp')
+  .config(function($locationProvider, $stateProvider, $urlRouterProvider) {
+    $urlRouterProvider.otherwise('/preferences');
+    $stateProvider
+      .state('preferences', {
+        url: '/preferences',
+        template: '<preferences></preferences>'
+      })
+      .state('notifications', {
+        url: '/notifications',
+        template: '<notification-preferences></notification-preferences>'
+      })
+      .state('integrations', {
+        url: '/settings/integrations',
+        template: '<integration-preferences></integration-preferences>'
       });
-      $locationProvider.html5Mode(true).hashPrefix('!');
+    // make non-angular links navigatable
+    angular.element('a').each(function(){
+      var $a = angular.element(this);
+      if (!($a.is('[target]') || $a.is('[ui-sref]'))) {
+        $a.attr('target', '_self');
+      }
     });
+    $locationProvider.html5Mode(true).hashPrefix('!');
+  });
