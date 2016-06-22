@@ -18,25 +18,25 @@
   }
 
   table {
-    .currency-title{
+    .currency-title {
       padding-left: 15px;
     }
-    .donor-name{
+    .donor-name {
       font-weight: 500;
     }
-    .circle-late{
+    .circle-late {
       color: $color-gold;
     }
-    .circle-very-late{
+    .circle-very-late {
       color: $color-danger;
     }
-    & > thead > tr.year-header-row{
+    & > thead > tr.year-header-row {
       font-size: 1.3em;
       margin-top: 5px;
       margin-bottom: 5px;
       & > th {
         border-bottom: none;
-        & > div.year-header-range{
+        & > div.year-header-range {
           width: 100%;
           text-align: center;
           border-left: 1px solid #ddd;
@@ -56,8 +56,14 @@
     [uib-popover-template] {
       cursor: pointer;
     }
-    .popover{
+    .popover {
       font-family: $data-font;
+    }
+    th .excluded{
+      cursor: pointer;
+    }
+    th .excluded, td .excluded{
+      color: #999999;
     }
   }
 }

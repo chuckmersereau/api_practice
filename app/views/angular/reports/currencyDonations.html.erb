@@ -48,7 +48,11 @@
       </tr>
       <tr>
         <th><%= _('Partner')%></th>
-        <th class="text-right" ng-repeat="date in $ctrl.allMonths">{{$ctrl.moment(date).format('MMM')}}</th>
+        <th class="text-right" ng-repeat="date in $ctrl.allMonths">
+          <div uib-tooltip="<%= _('This last month is excluded from totals and averages') %>" tooltip-enable="$last" ng-class="{'excluded': $last}">
+            {{$ctrl.moment(date).format('MMM')}}
+          </div>
+        </th>
         <th class="text-right"><%= _('Total') %></th>
       </tr>
       </thead>
@@ -76,8 +80,8 @@
         </td>
         <td class="text-right" ng-repeat="donation in donor.donations">
           <div uib-popover-template="'inline/currencyDonationsReport/donationDetailsTooltip.html'" popover-trigger="mouseenter">
-            <span ng-if="donation.amount !== 0 && !$ctrl.useConvertedValues">{{donation.amount | number:0}}</span>
-            <span ng-if="donation.amountConverted !== 0 && $ctrl.useConvertedValues">{{donation.amountConverted | number:0}}</span>
+            <span ng-if="donation.amount !== 0 && !$ctrl.useConvertedValues" ng-class="{'excluded': $last}">{{donation.amount | number:0}}</span>
+            <span ng-if="donation.amountConverted !== 0 && $ctrl.useConvertedValues" ng-class="{'excluded': $last}">{{donation.amountConverted | number:0}}</span>
             <script type="text/ng-template" id="inline/currencyDonationsReport/donationDetailsTooltip.html">
               <strong><%= _('Monthly Total') %></strong>
               <div>{{donation.currencySymbol}}{{donation.amount | number:0}} {{donation.currency}}</div>
@@ -109,8 +113,8 @@
           <strong><%= _('Totals')%></strong>
         </td>
         <td class="text-right" ng-repeat="monthTotal in currencyGroup.monthlyTotals track by $index">
-          <strong ng-if="!$ctrl.useConvertedValues">{{currencyGroup.currencySymbol}}{{monthTotal.amount | number:0}}</strong>
-          <strong ng-if="$ctrl.useConvertedValues">{{currencyGroup.currencySymbolConverted}}{{monthTotal.amountConverted | number:0}}</strong>
+          <strong ng-if="!$ctrl.useConvertedValues" ng-class="{'excluded': $last}">{{currencyGroup.currencySymbol}}{{monthTotal.amount | number:0}}</strong>
+          <strong ng-if="$ctrl.useConvertedValues" ng-class="{'excluded': $last}">{{currencyGroup.currencySymbolConverted}}{{monthTotal.amountConverted | number:0}}</strong>
         </td>
         <td class="text-right">
           <strong ng-if="!$ctrl.useConvertedValues">{{currencyGroup.currencySymbol}}{{currencyGroup.yearTotal | number:0}}</strong>
