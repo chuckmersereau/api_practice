@@ -13,6 +13,8 @@ class MailChimpAccountsController < ApplicationController
       redirect_to edit_mail_chimp_account_path(@mail_chimp_account)
       return
     end
+
+    redirect_to integrations_settings_path
   end
 
   def create

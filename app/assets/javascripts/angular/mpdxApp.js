@@ -6,6 +6,7 @@ angular
     'ngSanitize',
     'ngCsv',
     'isoCurrency',
+    'ui.bootstrap',
     'ui.router'
   ]);
 
@@ -17,11 +18,14 @@ angular
 
 angular
   .module('mpdxApp')
-  .config(function($locationProvider, $stateProvider, $urlRouterProvider) {
-    $urlRouterProvider.otherwise('/preferences');
+  .config(function($locationProvider, $stateProvider) {
     $stateProvider
       .state('preferences', {
         url: '/preferences',
+        template: '<preferences></preferences>'
+      })
+      .state('preferences.tab', {
+        url: '/:id',
         template: '<preferences></preferences>'
       })
       .state('notifications', {
@@ -30,6 +34,10 @@ angular
       })
       .state('integrations', {
         url: '/settings/integrations',
+        template: '<integration-preferences></integration-preferences>'
+      })
+      .state('integrations.tab', {
+        url: '/:id',
         template: '<integration-preferences></integration-preferences>'
       });
     // make non-angular links navigatable

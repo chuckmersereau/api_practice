@@ -9,24 +9,23 @@
         </div>
       </div>
       <p>&nbsp;</p>
-      <div class="panel-group" id="accounts-group">
+
+      <div class="panel-group">
         <div class="panel panel-default pref-panel">
-          <div class="panel-heading pref-head">
-            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_mailchimp" class="trigger" aria-expanded="false">
-              <i class="fa fa-angle-down panel-indicator"></i>
-              <%= _('Mailchimp') %>
-              <div class="pull-right">
-                <div ng-show="vm.preferences.data.mail_chimp_account">
-                  <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_mail_chimp_account"><i class="fa fa-circle"></i></div>
-                  <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_mail_chimp_account"><i class="fa fa-circle-o"></i></div>
-                </div>
-                <div ng-hide="vm.preferences.data.mail_chimp_account">
-                  <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
-                </div>
+          <div class="panel-heading pref-head" ng-click="vm.setTab('mailchimp')">
+            <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('mailchimp') }"></i>
+            <%= _('Mailchimp') %>
+            <div class="pull-right">
+              <div ng-show="vm.preferences.data.mail_chimp_account">
+                <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_mail_chimp_account"><i class="fa fa-circle"></i></div>
+                <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_mail_chimp_account"><i class="fa fa-circle-o"></i></div>
               </div>
-            </a>
+              <div ng-hide="vm.preferences.data.mail_chimp_account">
+                <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
+              </div>
+            </div>
           </div>
-          <div id="integrate_mailchimp" class="panel-collapse collapse">
+        	<div class="panel-animate" ng-show="vm.tabSelected('mailchimp')">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
@@ -59,22 +58,20 @@
           </div>
         </div>
         <div class="panel panel-default pref-panel">
-          <div class="panel-heading pref-head">
-            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_prayer_letters" class="trigger" aria-expanded="false">
-              <i class="fa fa-angle-down panel-indicator"></i>
-              <%= _('PrayerLetters.com') %>
-              <div class="pull-right">
-                <div ng-show="vm.preferences.data.prayer_letters_account">
-                  <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_prayer_letters_account"><i class="fa fa-circle"></i></div>
-                  <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_prayer_letters_account"><i class="fa fa-circle-o"></i></div>
-                </div>
-                <div ng-hide="vm.preferences.data.prayer_letters_account">
-                  <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
-                </div>
+          <div class="panel-heading pref-head" ng-click="vm.setTab('prayerletters')">
+            <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('prayerletters') }"></i>
+            <%= _('PrayerLetters.com') %>
+            <div class="pull-right">
+              <div ng-show="vm.preferences.data.prayer_letters_account">
+                <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_prayer_letters_account"><i class="fa fa-circle"></i></div>
+                <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_prayer_letters_account"><i class="fa fa-circle-o"></i></div>
               </div>
-            </a>
+              <div ng-hide="vm.preferences.data.prayer_letters_account">
+                <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
+              </div>
+            </div>
           </div>
-          <div id="integrate_prayer_letters" class="panel-collapse collapse">
+          <div class="panel-animate" ng-show="vm.tabSelected('prayerletters')">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
@@ -103,22 +100,20 @@
         </div>
         <% if $rollout.active?(:pls_integration, current_account_list) %>
         <div class="panel panel-default pref-panel">
-          <div class="panel-heading pref-head">
-            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_pls" class="trigger" aria-expanded="false">
-              <i class="fa fa-angle-down panel-indicator"></i>
-              <%= _('MyLetterService.org') %>
-              <div class="pull-right">
-                <div ng-show="vm.preferences.data.pls_account">
-                  <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_pls_account"><i class="fa fa-circle"></i></div>
-                  <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_pls_account"><i class="fa fa-circle-o"></i></div>
-                </div>
-                <div ng-hide="vm.preferences.data.pls_account">
-                  <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
-                </div>
+          <div class="panel-heading pref-head" ng-click="vm.setTab('myletterservice')">
+            <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('myletterservice') }"></i>
+            <%= _('MyLetterService.org') %>
+            <div class="pull-right">
+              <div ng-show="vm.preferences.data.pls_account">
+                <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_pls_account"><i class="fa fa-circle"></i></div>
+                <div class="accstatus accstatus-error" ng-hide="vm.preferences.data.valid_pls_account"><i class="fa fa-circle-o"></i></div>
               </div>
-            </a>
+              <div ng-hide="vm.preferences.data.pls_account">
+                <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
+              </div>
+            </div>
           </div>
-          <div id="integrate_pls" class="panel-collapse collapse">
+          <div class="panel-animate" ng-show="vm.tabSelected('myletterservice')">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
@@ -147,16 +142,14 @@
         </div>
         <% end %>
         <div class="panel panel-default pref-panel">
-          <div class="panel-heading pref-head">
-            <a data-toggle="collapse" data-parent="#accounts-group" href="#integrate_chalkline" class="trigger" aria-expanded="false">
-              <i class="fa fa-angle-down panel-indicator"></i>
-              <%= _('Chalkline') %>
-              <div class="pull-right">
-                <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
-              </div>
-            </a>
+          <div class="panel-heading pref-head" ng-click="vm.setTab('chalkline')">
+            <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('chalkline') }"></i>
+            <%= _('Chalkline') %>
+            <div class="pull-right">
+              <div class="accstatus accstatus-disabled"><i class="fa fa-circle-o"></i></div>
+            </div>
           </div>
-          <div id="integrate_chalkline" class="panel-collapse collapse">
+          <div class="panel-animate" ng-show="vm.tabSelected('chalkline')">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">

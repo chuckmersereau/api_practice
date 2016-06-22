@@ -2287,6 +2287,40 @@ h4.title {
   margin-top: .5em;
 }
 
+/* ********************* Angular Animate (Slide) ************************** */
+
+.panel-animate {
+  -moz-transition-duration: 0.8s;
+  -webkit-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+  -moz-transition-timing-function: ease-in;
+  -webkit-transition-timing-function: ease-in;
+  -o-transition-timing-function: ease-in;
+  transition-timing-function: ease-in;
+  max-height: 1000px;
+  overflow: hidden;
+}
+
+.panel-animate.ng-hide {
+  max-height: 0;
+  -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.panel-heading.pref-head {
+  cursor: pointer;
+  i {
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+    margin-right: 5px;
+  }
+}
+
 /* ********************* Layout Hacks ************************** */
 .gm-style {
   img {

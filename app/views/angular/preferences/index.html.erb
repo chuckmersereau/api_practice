@@ -10,25 +10,23 @@
       </div>
       <form>
         <div class="row spacer-top"></div>
-        <div class="panel-group" id="preferences-group">
+        <div class="panel-group">
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#preferences-group" href="#prefdata_first_name" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('First Name') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.first_name}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('first_name')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('first_name') }"></i>
+                  <%= _('First Name') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.first_name}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_first_name" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('first_name')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -43,23 +41,21 @@
             </div>
           </div>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#preferences-group" href="#prefdata_last_name" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Last Name') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.last_name}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('last_name')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('last_name') }"></i>
+                  <%= _('Last Name') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.last_name}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_last_name" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('last_name')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -74,23 +70,21 @@
             </div>
           </div>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#preferences-group" href="#prefdata_email" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Email Address') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.email}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('email')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('email') }"></i>
+                  <%= _('Email Address') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.email}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_email" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('email')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -105,23 +99,22 @@
             </div>
           </div>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#preferences-group" href="#prefdata_timezone" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Time zone') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.time_zone}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('time_zone')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('time_zone') }"></i>
+                  <%= _('Time zone') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.time_zone}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
+
             </div>
-            <div id="prefdata_timezone" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('time_zone')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-7 col-md-offset-4">
@@ -136,23 +129,21 @@
             </div>
           </div>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#preferences-group" href="#prefdata_locale" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Locale') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.locale_string}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('locale')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('locale') }"></i>
+                  <%= _('Locale') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.locale_string}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_locale" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('locale')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -167,23 +158,21 @@
             </div>
           </div>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#preferences-group" href="#prefdata_defacc" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Default Account') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.default_account_string}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('default_account_list')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('default_account_list') }"></i>
+                  <%= _('Default Account') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.default_account_string}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_defacc" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('default_account_list')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -203,25 +192,23 @@
             <h3>Account Settings</h3>
           </div>
         </div>
-        <div class="panel-group" id="settings-group">
+        <div class="panel-group">
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#settings-group" href="#prefdata_accountname" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Account Name') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.account_list_name}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('account_list_name')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('account_list_name') }"></i>
+                  <%= _('Account Name') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.account_list_name}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_accountname" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('account_list_name')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -236,23 +223,21 @@
             </div>
           </div>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#settings-group" href="#prefdata_homecountry" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Home Country') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.home_country}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('home_country')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('home_country') }"></i>
+                  <%= _('Home Country') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.home_country}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_homecountry" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('home_country')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -267,23 +252,21 @@
             </div>
           </div>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#settings-group" href="#prefdata_monthlygoal" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Monthly Goal') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.monthly_goal}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('monthly_goal')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('monthly_goal') }"></i>
+                  <%= _('Monthly Goal') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.monthly_goal}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_monthlygoal" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('monthly_goal')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -299,23 +282,21 @@
           </div>
           <% if $rollout.active?(:currencies, current_account_list) %>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#settings-group" href="#prefdata_currency" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                  <i class="fa fa-angle-down panel-indicator"></i>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('currency')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('currency') }"></i>
                   <%= _('Default Currency') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.currency}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.currency}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_currency" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('currency')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
@@ -331,58 +312,54 @@
           </div>
           <% end %>
           <% if $rollout.active?(:multi_currency_balance, current_account_list) %>
-            <% if current_account_list.designation_organizations.count > 1 %>
-              <div class="panel panel-default pref-panel">
-                <div class="panel-heading pref-head">
-                  <a data-toggle="collapse" data-parent="#preferences-group" href="#prefdata_primaryorg" class="trigger collapsed" aria-expanded="false">
-                    <div class="row">
-                      <div class="col-sm-4">
-                      <i class="fa fa-angle-down panel-indicator"></i>
-                      <%= _('Primary Organization') %>
-                      </div>
-                      <div class="col-sm-7 pref-current">
-                        {{vm.salary_organization_string}}
-                      </div>
-                      <div class="col-sm-1 text-right">
-                        <span class="panel-open-btn"><%= _('Edit') %></span>
-                      </div>
-                    </div>
-                  </a>
+          <% if current_account_list.designation_organizations.count > 1 %>
+          <div class="panel panel-default pref-panel">
+            <div class="panel-heading pref-head" ng-click="vm.setTab('salary_organization_id')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('salary_organization_id') }"></i>
+                  <%= _('Primary Organization') %>
                 </div>
-                <div id="prefdata_primaryorg" class="panel-collapse collapse">
-                  <div class="panel-body pref-body">
-                    <div class="row pref-row">
-                      <div class="col-md-8 col-md-offset-4">
-                        <div class="form-group">
-                          <%= label :salary_organization_id, _('Primary Organization') %>
-                          <%= select :salary_organization_id, '', salary_organization_select(current_account_list), {}, { class: 'form-control', 'ng-model' => 'vm.preferences.data.salary_organization_id' } %>
-                        </div>
-                        <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
-                      </div>
+                <div class="col-sm-7 pref-current">
+                  {{vm.salary_organization_string}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
+            </div>
+            <div class="panel-animate" ng-show="vm.tabSelected('salary_organization_id')">
+              <div class="panel-body pref-body">
+                <div class="row pref-row">
+                  <div class="col-md-8 col-md-offset-4">
+                    <div class="form-group">
+                      <%= label :salary_organization_id, _('Primary Organization') %>
+                      <%= select :salary_organization_id, '', salary_organization_select(current_account_list), {}, { class: 'form-control', 'ng-model' => 'vm.preferences.data.salary_organization_id' } %>
                     </div>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
                   </div>
                 </div>
               </div>
-            <% end %>
+            </div>
+          </div>
+          <% end %>
           <% end %>
           <div class="panel panel-default pref-panel">
-            <div class="panel-heading pref-head">
-              <a data-toggle="collapse" data-parent="#preferences-group" href="#prefdata_earlyadopter" class="trigger collapsed" aria-expanded="false">
-                <div class="row">
-                  <div class="col-sm-4">
-                    <i class="fa fa-angle-down panel-indicator"></i>
-                    <%= _('Early Adopter') %>
-                  </div>
-                  <div class="col-sm-7 pref-current">
-                    {{vm.preferences.data.tester}}
-                  </div>
-                  <div class="col-sm-1 text-right">
-                    <span class="panel-open-btn"><%= _('Edit') %></span>
-                  </div>
+            <div class="panel-heading pref-head" ng-click="vm.setTab('tester')">
+              <div class="row">
+                <div class="col-sm-4">
+                  <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('tester') }"></i>
+                  <%= _('Early Adopter') %>
                 </div>
-              </a>
+                <div class="col-sm-7 pref-current">
+                  {{vm.preferences.data.tester}}
+                </div>
+                <div class="col-sm-1 text-right">
+                  <span class="panel-open-btn"><%= _('Edit') %></span>
+                </div>
+              </div>
             </div>
-            <div id="prefdata_earlyadopter" class="panel-collapse collapse">
+            <div class="panel-animate" ng-show="vm.tabSelected('tester')">
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-8 col-md-offset-4">
