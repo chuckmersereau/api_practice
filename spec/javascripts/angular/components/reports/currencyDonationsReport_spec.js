@@ -365,7 +365,7 @@ describe('contacts', function() {
                 [ 'Currency', 'USD', '$' ],
                 [ 'Partner', 'Status', 'Pledge', 'Average', 'Minimum', '2014-04', '2014-05', '2014-06', '2014-07', '2014-08', '2014-09', '2014-10', '2014-11', '2014-12', '2015-01', '2015-02', '2015-03', '2015-04', 'Total (last month excluded from total)' ],
                 [ 'Bird, Tweety and Tweetilee', undefined, '$0 USD ', 125, 175, 200, 175, 0, 375 ],
-                [ 'Dalmation, Pongo and Perdita', undefined, '$0 USD ', 66.67, 100, 100, 0, 100, 200 ],
+                [ 'Dalmation, Pongo and Perdita', undefined, '$0 USD ', 67, 100, 100, 0, 100, 200 ],
                 [ 'Totals', '', '', '', '', 300, 175, 100, 475 ],
                 null
             ];
