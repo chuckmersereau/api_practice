@@ -14,7 +14,7 @@ class MailChimpAccountsController < ApplicationController
       return
     end
 
-    redirect_to integrations_settings_path
+    redirect_to integrations_settings_tab_path(tab_id: 'mailchimp')
   end
 
   def create

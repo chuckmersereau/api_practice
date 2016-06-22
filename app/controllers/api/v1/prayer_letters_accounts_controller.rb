@@ -1,4 +1,4 @@
-class Api::V1::PrayerLettersAccountsController < ApplicationController
+class Api::V1::PrayerLettersAccountsController < Api::V1::BaseController
   def destroy
     load_prayer_letters_account
     @prayer_letters_account.destroy

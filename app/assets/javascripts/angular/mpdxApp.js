@@ -39,6 +39,14 @@ angular
       .state('integrations.tab', {
         url: '/:id',
         template: '<integration-preferences></integration-preferences>'
+      })
+      .state('networks', {
+        url: '/accounts',
+        template: '<network-preferences></network-preferences>'
+      })
+      .state('networks.tab', {
+        url: '/:id',
+        template: '<network-preferences></network-preferences>'
       });
     // make non-angular links navigatable
     angular.element('a').each(function(){

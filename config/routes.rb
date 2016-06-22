@@ -40,7 +40,7 @@ Rails.application.routes.draw do
   end
 
   get 'settings/integrations', as: :integrations_settings
-  get 'settings/integrations/:tab_id', to: 'settings#integrations'
+  get 'settings/integrations/:tab_id', to: 'settings#integrations', as: :integrations_settings_tab
 
   resources :tags, only: [:create, :destroy]
 
