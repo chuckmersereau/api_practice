@@ -25,7 +25,7 @@ class TasksController < ApplicationController
   def new
     @page_title = _('New Task')
 
-    @task = current_account_list.tasks.new(activity_type: params[:activity_type], no_date: true)
+    @task = current_account_list.tasks.new(activity_type: params[:activity_type], no_date: $rollout.active?(:no_date_task, current_account_list))
     @old_task = current_account_list.tasks.find_by_id(params[:from]) if params[:from]
     if @old_task
       @task.attributes = @old_task.attributes.select { |k, _v| [:starred, :location, :subject].include?(k.to_sym) }
