@@ -44,6 +44,7 @@
 //= require peek/views/performance_bar
 //= require best_in_place
 //= require integrations
+//= require markerclustererplus
 
 //= require_tree ./locale
 //= require gettext/all
