@@ -7,10 +7,10 @@
       templateUrl: '/templates/preferences/personal.html',
       bindings: {}
     });
-  personalPreferencesController.$inject = ['$state', '$stateParams', '$scope', 'preferencesService', 'alertsService'];
-  function personalPreferencesController($state, $stateParams, $scope, preferencesService, alertsService) {
+  personalPreferencesController.$inject = ['$state', '$stateParams', '$scope', 'preferences.personalService', 'alertsService'];
+  function personalPreferencesController($state, $stateParams, $scope, personalService, alertsService) {
     var vm = this;
-    vm.preferences = preferencesService;
+    vm.preferences = personalService;
     vm.alerts = alertsService;
     vm.saving = false;
     vm.tabId = '';
@@ -56,10 +56,10 @@
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {
         vm.tabId = '';
-        $state.go('preferences', {}, { notify: false })
+        $state.go('preferences.personal', {}, { notify: false })
       } else {
         vm.tabId = service;
-        $state.go('preferences.tab', { id: service }, { notify: false })
+        $state.go('preferences.personal.tab', { id: service }, { notify: false })
       }
     };
 

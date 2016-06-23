@@ -9,7 +9,6 @@
         </div>
       </div>
       <p>&nbsp;</p>
-
       <div class="panel-group">
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head" ng-click="vm.setTab('mailchimp')">
@@ -40,16 +39,19 @@
                         <%= _('You can now export your contacts to MailChimp.') %><br />
                         <%= _('MailChimp API key:') %> <strong>{{vm.preferences.data.mail_chimp_api_key}}</strong><br />
                         <%= _('MailChimp list to use for your newsletter:') %> <strong>{{vm.preferences.data.mail_chimp_primary_list_name}}</strong>
+                        <% if $rollout.active?(:mail_chimp_auto_log, current_account_list) %>
+                          <%= _('Automatic logging of campaigns: ') %><strong>{{vm.preferences.data.mail_chimp_auto_log_campaigns ? "<%= _('On') %>" : "<%= _('Off') %>"}}</strong>
+                        <% end %>
                       </p>
                       <p>
                         <button type="submit" ng-click="vm.sync('MailChimp')" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Sync Now') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
-                        <a class="btn btn-default" ng-href="/mail_chimp_accounts/{{vm.preferences.data.mail_chimp_account_id}}/edit" target="_self"><%= _('Modify Settings') %></a>
+                        <a class="btn btn-default" ui-sref="preferences.integrations.configure-mailchimp"><%= _('Modify Settings') %></a>
                         <a class="btn btn-link" ng-click="vm.disconnect('MailChimp')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
                       </p>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_mail_chimp_account">
                       <p><%= _('You can synchronize MPDX and Mailchimp contacts to simplify your process and take advantage of all of Mailchimp\'s great features.') %></p>
-                      <%= link_to(_('Enable'), new_mail_chimp_account_path, :class => "btn btn-primary", target: 'self') %>
+                      <a class="btn btn-primary" ui-sref="preferences.integrations.configure-mailchimp"><%= _('Enable') %></a>
                     </div>
                   </div>
                 </div>

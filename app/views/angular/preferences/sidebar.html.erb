@@ -1,16 +1,16 @@
 <aside id="leftmenu">
   <ul class="nav nav-pills nav-stacked">
     <li ui-sref-active="active">
-      <a ui-sref="personal"><%= _('Preferences') %></a>
+      <a ui-sref="preferences.personal"><%= _('Preferences') %></a>
     </li>
     <li ui-sref-active="active">
-      <a ui-sref="notifications"><%= _('Notifications') %></a>
+      <a ui-sref="preferences.notifications"><%= _('Notifications') %></a>
     </li>
     <li ui-sref-active="active">
-      <a ui-sref="networks"><%= _('Networks & Imports') %></a>
+      <a ui-sref="preferences.networks"><%= _('Networks & Imports') %></a>
     </li>
     <li ui-sref-active="active">
-      <a ui-sref="integrations"><%= _('Integrations') %></a>
+      <a ui-sref="preferences.integrations"><%= _('Integrations') %></a>
     </li>
     <li>
       <%= link_to _('Accounts &amp; Sharing'), sharing_account_lists_path, target: '_self' %>

@@ -3,16 +3,16 @@
 
   angular
     .module('mpdxApp')
-    .factory('preferencesService', preferencesService);
+    .factory('preferences.personalService', personalService);
 
-  preferencesService.$inject = ['api'];
+  personalService.$inject = ['api'];
 
-  function preferencesService(api) {
+  function personalService(api) {
     var svc = {};
     svc.data = {};
     svc.loading = true;
     svc.load = function () {
-      api.call('get', 'preferences?base=true', {}, function(data) {
+      api.call('get', 'preferences?personal=true', {}, function(data) {
         svc.data = data.preferences;
         svc.loading = false;
       });

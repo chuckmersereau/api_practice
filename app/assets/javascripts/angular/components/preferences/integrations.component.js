@@ -7,13 +7,14 @@
       templateUrl: '/templates/preferences/integrations.html',
       bindings: {}
     });
-  integrationPreferencesController.$inject = ['$window', '$state', '$stateParams', 'integrationPreferencesService', 'alertsService'];
-  function integrationPreferencesController($window, $state, $stateParams, integrationPreferencesService, alertsService) {
+  integrationPreferencesController.$inject = ['$window', '$state', '$stateParams', 'preferences.integrationsService', 'alertsService'];
+  function integrationPreferencesController($window, $state, $stateParams, integrationsService, alertsService) {
     var vm = this;
-    vm.preferences = integrationPreferencesService;
+    vm.preferences = integrationsService;
     vm.alerts = alertsService;
     vm.saving = false;
     vm.tabId = '';
+    vm.$state = $state;
 
     vm.sync = function(service) {
       vm.saving = true;
@@ -49,10 +50,10 @@
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {
         vm.tabId = '';
-        $state.go('integrations', {}, { notify: false })
+        $state.go('preferences.integrations', {}, { notify: false })
       } else {
         vm.tabId = service;
-        $state.go('integrations.tab', { id: service }, { notify: false })
+        $state.go('preferences.integrations.tab', { id: service }, { notify: false })
       }
     };
 

@@ -1,1 +1,57 @@
 hello world
+<div class="row">
+  <div class="col-md-3" role="complementary">
+    <%= render 'settings_sidebar' %>
+  </div>
+  <div class="col-md-9">
+    <div id="contentbody" class="withleft">
+      <div class="wpp">
+        <%= image_tag('logos/mailchimp_logo.png') %><br />
+
+        <% if @mail_chimp_account.api_key && !@mail_chimp_account.active? && !@mail_chimp_account.validate_key  %>
+          <%#Invalid api key%>
+          <%= @mail_chimp_account.validation_error %><br /><br />
+        <% end %>
+
+        <%= link_to('http://www.gcx.org/mpdxhelp/sync-with-mailchimp/', target: '_blank') do %>
+          <i class="fa fa-play-circle-o"></i>
+          <%= _('Watch a video showing you how to link to Mailchimp') %>
+        <% end %>
+        <br />
+        <%= form_for @mail_chimp_account do |f| %>
+          <div class="form-group">
+            <%= f.label :api_key, _('Api Key') %>
+            <%= f.text_field :api_key, class: 'form-control', size: '10' %><br />
+          </div>
+          <% if @mail_chimp_account.lists.present? %>
+          <div class="alert alert-warning" role="alert">
+            <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+            <%= _('Please choose a list to sync with MailChimp. If select a list with existing subscribers, MPDX ' +
+                  'will add those contacts and set them to receive the email newsletter. If some of the subscribers ' +
+                  'already exist in MPDX, their email addresses will be added and they will be set to receive the email ' +
+                  'newsletter (or Both if they already get the physical letter).') %>
+          </div>
+
+          <br />
+          <div class="field">
+            <%= f.label :primary_list_id, _('Pick a list to use for your newsletter') %>
+            <%= f.select :primary_list_id, @mail_chimp_account.lists_available_for_newsletters.collect { |l| [l.name, l.id] }, {},
+                         { :class => 'form-control' } %><br />
+            <% if $rollout.active?(:mail_chimp_auto_log, current_account_list) %>
+             <%= f.label :auto_log_campaigns do %>
+               <%= f.check_box :auto_log_campaigns  %>
+               <%= _('Automatically log sent MailChimp campaigns in contact task history.') %>
+             <% end %>
+            <% end %>
+          </div>
+
+          <% end %>
+          <div class="actions form-group">
+            <%= f.submit _('Save'), class: "btn btn-primary desired_action" %>
+            <%= link_to(_('Cancel'), request.referrer ? :back : integration_preferences_path, class: "btn") %>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </div>
+</div>

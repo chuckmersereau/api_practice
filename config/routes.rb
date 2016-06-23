@@ -73,6 +73,11 @@ Rails.application.routes.draw do
       resources :donations, only: [:index]
       resources :progress, only: [:index]
       resources :preferences
+      namespace :preferences do
+        namespace :integrations do
+          resource :mail_chimp, only: [:show, :update]
+        end
+      end
       resources :users
       resources :appeals do
         resources :exclusions, only: [:index, :destroy], controller: :appeal_exclusions

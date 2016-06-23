@@ -4,11 +4,11 @@
 
   angular
     .module('mpdxApp')
-    .factory('networkPreferencesService', networkPreferencesService);
+    .factory('preferences.notificationsService', notificationsService);
 
-  networkPreferencesService.$inject = ['api'];
+  notificationsService.$inject = ['api'];
 
-  function networkPreferencesService(api) {
+  function notificationsService(api) {
     var svc = {};
     svc.data = {};
     svc.loading = true;

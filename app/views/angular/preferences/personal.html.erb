@@ -352,7 +352,7 @@
                   <%= _('Early Adopter') %>
                 </div>
                 <div class="col-sm-6 pref-current">
-                  {{vm.preferences.data.tester}}
+                  {{vm.preferences.data.tester ? "<%= _('Yes') %>" : "<%= _('No') %>"}}
                 </div>
                 <div class="col-sm-2 text-right">
                   <span class="panel-open-btn"><span ng-hide="vm.tabSelected('tester')"><%= _('Expand') %></span><span ng-show="vm.tabSelected('tester')"><%= _('Close') %></span></span>

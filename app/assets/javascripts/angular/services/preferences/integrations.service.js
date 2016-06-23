@@ -3,11 +3,11 @@
 
   angular
     .module('mpdxApp')
-    .factory('integrationPreferencesService', integrationPreferencesService);
+    .factory('preferences.integrationsService', integrationsService);
 
-  integrationPreferencesService.$inject = ['api'];
+  integrationsService.$inject = ['api'];
 
-  function integrationPreferencesService(api) {
+  function integrationsService(api) {
     var svc = {};
     svc.data = {};
     svc.loading = true;

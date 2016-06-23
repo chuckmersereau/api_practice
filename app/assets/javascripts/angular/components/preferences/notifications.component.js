@@ -7,10 +7,10 @@
       templateUrl: '/templates/preferences/notifications.html',
       bindings: {}
     });
-  notificationPreferencesController.$inject = ['notificationPreferencesService', 'alertsService'];
-  function notificationPreferencesController(notificationPreferencesService, alertsService) {
+  notificationPreferencesController.$inject = ['preferences.notificationsService', 'alertsService'];
+  function notificationPreferencesController(notificationsService, alertsService) {
     var vm = this;
-    vm.preferences = notificationPreferencesService;
+    vm.preferences = notificationsService;
     vm.alerts = alertsService;
     vm.saving = false;
     vm.save = function () {

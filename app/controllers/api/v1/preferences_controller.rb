@@ -2,7 +2,7 @@ class Api::V1::PreferencesController < Api::V1::BaseController
   def index
     @preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list)
     preferences = current_user.preferences.except(:setup)
-    preferences = preferences.merge(fetch_base_preferences) if params[:base]
+    preferences = preferences.merge(fetch_personal_preferences) if params[:personal]
     preferences = preferences.merge(fetch_notification_preferences) if params[:notifications]
     preferences = preferences.merge(fetch_integration_preferences) if params[:integrations]
     preferences[:account_list_id] ||= current_account_list.id
@@ -19,7 +19,7 @@ class Api::V1::PreferencesController < Api::V1::BaseController
 
   protected
 
-  def fetch_base_preferences
+  def fetch_personal_preferences
     preferences = fetch_required_preferences
     preferences = preferences.merge(fetch_current_user_preferences)
     preferences = preferences.merge(fetch_current_account_list_preferences)
@@ -52,6 +52,7 @@ class Api::V1::PreferencesController < Api::V1::BaseController
       mail_chimp_account_id: current_account_list.mail_chimp_account.try(:id),
       mail_chimp_api_key: current_account_list.mail_chimp_account.try(:api_key),
       mail_chimp_primary_list_name: current_account_list.mail_chimp_account.try(:primary_list).try(:name),
+      mail_chimp_auto_log_campaigns: current_account_list.mail_chimp_account.try(:auto_log_campaigns),
       valid_mail_chimp_account: current_account_list.valid_mail_chimp_account,
       prayer_letters_account: current_account_list.prayer_letters_account,
       prayer_letters_account_id: current_account_list.prayer_letters_account.try(:id),

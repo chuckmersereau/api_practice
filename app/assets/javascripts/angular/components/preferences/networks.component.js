@@ -7,10 +7,10 @@
       templateUrl: '/templates/preferences/networks.html',
       bindings: {}
     });
-  networkPreferencesController.$inject = ['$state', '$stateParams', 'networkPreferencesService', 'alertsService'];
-  function networkPreferencesController($state, $stateParams, networkPreferencesService, alertsService) {
+  networkPreferencesController.$inject = ['$state', '$stateParams', 'preferences.networksService', 'alertsService'];
+  function networkPreferencesController($state, $stateParams, networksService, alertsService) {
     var vm = this;
-    vm.preferences = networkPreferencesService;
+    vm.preferences = networksService;
     vm.alerts = alertsService;
     vm.saving = false;
     vm.tabId = '';
@@ -31,10 +31,10 @@
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {
         vm.tabId = '';
-        $state.go('preferences', {}, { notify: false })
+        $state.go('preferences.networks', {}, { notify: false })
       } else {
         vm.tabId = service;
-        $state.go('preferences.tab', { id: service }, { notify: false })
+        $state.go('preferences.networks.tab', { id: service }, { notify: false })
       }
     };
 
