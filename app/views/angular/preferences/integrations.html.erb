@@ -90,7 +90,7 @@
                     </div>
                     <div ng-hide="vm.preferences.data.valid_prayer_letters_account">
                       <p><%= _('You can keep PrayerLetters.com updated with all your MPDX contacts. Click Enable to begin.') %></p>
-                      <%= link_to(_('Enable'), '/auth/prayer_letters', :class => 'btn btn-primary', target: '_self') %>
+                      <%= link_to(_('Enable'), '/auth/prayer_letters', :class => 'btn btn-primary', target: '_blank') %>
                     </div>
                   </div>
                 </div>
@@ -132,7 +132,7 @@
                     </div>
                     <div ng-hide="vm.preferences.data.valid_pls_account">
                       <p><%= _('You can keep myletterservice.org updated with all your MPDX contacts. Click Enable to begin.') %></p>
-                      <%= link_to _('Enable'), '/auth/pls', :class => 'btn btn-primary', target: '_self' %>
+                      <%= link_to _('Enable'), '/auth/pls', :class => 'btn btn-primary', target: '_blank' %>
                     </div>
                   </div>
                 </div>

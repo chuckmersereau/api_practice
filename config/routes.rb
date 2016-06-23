@@ -16,8 +16,21 @@ Rails.application.routes.draw do
   end
 
   get '/help' => 'help_requests#new'
+  get '/preferences*path', to: 'preferences#index'
+  get 'preferences/personal', as: :personal_preferences
+  get 'preferences/personal/:tab_id', to: 'preferences#index', as: :personal_preferences_tab
+  get 'preferences/notifications', as: :notification_preferences
+  get 'preferences/notifications/:tab_id', to: 'preferences#index', as: :notification_preferences_tab
+  get 'preferences/networks', as: :network_preferences
+  get 'preferences/networks/:tab_id', to: 'preferences#index', as: :network_preferences_tab
+  get 'preferences/integrations', as: :integration_preferences
+  get 'preferences/integrations/:tab_id', to: 'preferences#index', as: :integration_preferences_tab
 
-  resources :notifications
+  # old preferences routes (SEO and external link upkeep)
+  get '/preferences', to: redirect('preferences/personal'), as: :preferences
+  get '/notifications', to: redirect('preferences/notifications'), as: :notifications
+  get '/accounts', to: redirect('preferences/networks'), as: :accounts
+
 
   resources :account_lists, only: :update
 
@@ -39,8 +52,6 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'settings/integrations', as: :integrations_settings
-  get 'settings/integrations/:tab_id', to: 'settings#integrations', as: :integrations_settings_tab
 
   resources :tags, only: [:create, :destroy]
 
@@ -124,14 +135,7 @@ Rails.application.routes.draw do
   resources :insights
   resources :donations
   resource :donation_syncs, only: [:create]
-  resources :accounts
-  resources :preferences do
-    collection do
-      post :update_tab_order
-      post :complete_welcome_panel
-      get 'notifications', to: :notification_settings
-    end
-  end
+  resources :accounts, except: [:index]
 
   namespace :reports do
     resource :contributions, only: [:show]
@@ -212,12 +216,14 @@ Rails.application.routes.draw do
   get 'monitors/commit' => 'monitors#commit'
 
   get '/auth/prayer_letters/callback', to: 'prayer_letters_accounts#create'
+  get '/close', to: 'application#close', as: :application_close
   get '/auth/pls/callback', to: 'pls_accounts#create'
   get '/auth/:provider/callback', to: 'accounts#create'
   get '/auth/failure', to: 'accounts#failure'
 
   get '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
+
 
   def user_constraint(request, attribute)
     request.env['rack.session'] &&

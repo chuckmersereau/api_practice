@@ -2,11 +2,6 @@ class AccountsController < ApplicationController
   skip_before_action :ensure_login, only: :create
   skip_before_action :ensure_setup_finished, only: :create
 
-  def index
-    @page_title = _('Accounts')
-    @providers = %w(google facebook key organization)
-  end
-
   def new
     respond_to do |format|
       format.js

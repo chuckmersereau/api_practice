@@ -9,7 +9,7 @@ class PrayerLettersAccountsController < ApplicationController
     prayer_letters_account.save
     flash[:notice] = _('MPDX is now uploading your newsletter recipients to PrayerLetters.com.')
 
-    redirect_to integrations_settings_tab_path(tab_id: 'prayerletters')
+    redirect_to application_close_path(url: integration_preferences_tab_path(tab_id: 'prayerletters'))
   end
 
   private

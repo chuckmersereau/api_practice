@@ -42,7 +42,7 @@
                   <div class="col-md-8 connections" data-behavior="account">
                       <div class="network_button">
                         <div class="importoptions" data-behavior="import_options">
-                          <%= render "angular/preferences/#{provider}_import_form" %>
+                          <%= render "angular/preferences/networks/#{provider}_import_form" %>
                         </div>
                       </div>
                   </div>
@@ -72,7 +72,7 @@
                   <div class="col-md-8 connections">
                       <div class="network_button">
                         <!-- Desc -->
-                        <%= render 'network_connections', provider: provider, actions: true %>
+                        <%= render 'angular/preferences/networks/network_connections', provider: provider, actions: true %>
                         <div class="network_button">
                           <%= auth_link(provider) %>
                         </div>

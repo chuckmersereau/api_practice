@@ -1,14 +1,14 @@
 (function(){
   angular
     .module('mpdxApp')
-    .component('preferences', {
-      controller: indexController,
+    .component('personalPreferences', {
+      controller: personalPreferencesController,
       controllerAs: 'vm',
-      templateUrl: '/templates/preferences/index.html',
+      templateUrl: '/templates/preferences/personal.html',
       bindings: {}
     });
-  indexController.$inject = ['$state', '$stateParams', '$scope', 'preferencesService', 'alertsService'];
-  function indexController($state, $stateParams, $scope, preferencesService, alertsService) {
+  personalPreferencesController.$inject = ['$state', '$stateParams', '$scope', 'preferencesService', 'alertsService'];
+  function personalPreferencesController($state, $stateParams, $scope, preferencesService, alertsService) {
     var vm = this;
     vm.preferences = preferencesService;
     vm.alerts = alertsService;

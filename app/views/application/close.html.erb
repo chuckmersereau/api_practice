@@ -1,0 +1,10 @@
+<script type="text/javascript">
+  (function(){
+    if (typeof window.opener === "undefined") {
+      window.location.href = "<%= params[:url] %>";
+    } else {
+      window.opener.openerCallback();
+      window.close();
+    }
+  })();
+</script>

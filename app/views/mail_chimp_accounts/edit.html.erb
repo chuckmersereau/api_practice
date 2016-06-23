@@ -12,7 +12,7 @@
             <%= render 'lists_field', f: f %>
             <div class="actions">
               <%= f.submit _('Save'), class: "btn btn-primary desired_action" %>
-              <%= link_to(_('Cancel'), integrations_settings_path, class: "btn") %>
+              <%= link_to(_('Cancel'), integration_preferences_path, class: "btn") %>
             </div>
           <% end %>
         <% else %>

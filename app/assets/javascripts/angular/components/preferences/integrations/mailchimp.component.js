@@ -1,14 +1,14 @@
 (function(){
   angular
     .module('mpdxApp')
-    .component('integrationPreferences', {
-      controller: integrationPreferencesController,
+    .component('integrationMailchimpPreferences', {
+      controller: integrationMailchimpPreferencesController,
       controllerAs: 'vm',
-      templateUrl: '/templates/preferences/integrations.html',
+      templateUrl: '/templates/preferences/integrations/mailchimp.html',
       bindings: {}
     });
-  integrationPreferencesController.$inject = ['$window', '$state', '$stateParams', 'integrationPreferencesService', 'alertsService'];
-  function integrationPreferencesController($window, $state, $stateParams, integrationPreferencesService, alertsService) {
+  integrationMailchimpPreferencesController.$inject = ['$window', '$state', '$stateParams', 'integrationPreferencesService', 'alertsService'];
+  function integrationMailchimpPreferencesController($window, $state, $stateParams, integrationPreferencesService, alertsService) {
     var vm = this;
     vm.preferences = integrationPreferencesService;
     vm.alerts = alertsService;

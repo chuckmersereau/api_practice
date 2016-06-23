@@ -20,28 +20,32 @@ angular
   .module('mpdxApp')
   .config(function($locationProvider, $stateProvider) {
     $stateProvider
-      .state('preferences', {
-        url: '/preferences',
-        template: '<preferences></preferences>'
+      .state('personal', {
+        url: '/preferences/personal',
+        template: '<personal-preferences></personal-preferences>'
       })
-      .state('preferences.tab', {
+      .state('personal.tab', {
         url: '/:id',
-        template: '<preferences></preferences>'
+        template: '<personal-preferences></personal-preferences>'
       })
       .state('notifications', {
-        url: '/notifications',
+        url: 'preferences/notifications',
         template: '<notification-preferences></notification-preferences>'
       })
       .state('integrations', {
-        url: '/settings/integrations',
+        url: '/preferences/integrations',
         template: '<integration-preferences></integration-preferences>'
       })
       .state('integrations.tab', {
         url: '/:id',
         template: '<integration-preferences></integration-preferences>'
       })
+      .state('integrations.mailchimp', {
+        url: '/mailchimp/configuration',
+        template: '<integration-mailchimp-preferences></integration-mailchimp-preferences>'
+      })
       .state('networks', {
-        url: '/accounts',
+        url: '/preferences/networks',
         template: '<network-preferences></network-preferences>'
       })
       .state('networks.tab', {

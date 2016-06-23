@@ -9,7 +9,7 @@ class PlsAccountsController < ApplicationController
     pls_account.save
     flash[:notice] = _('MPDX is now uploading your newsletter recipients to myletterservice.org.')
 
-    redirect_to integrations_settings_tab_path(tab_id: 'myletterservice')
+    redirect_to application_close_path(url: integration_preferences_tab_path(tab_id: 'myletterservice'))
   end
 
   private

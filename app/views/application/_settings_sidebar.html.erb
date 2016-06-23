@@ -6,8 +6,8 @@
     <li <% if request.path == accounts_path %>class="active"<% end %>>
       <%= link_to(_('Networks & Imports'), accounts_path) %>
     </li>
-    <li <% if request.path == integrations_settings_path %>class="active"<% end %>>
-      <%= link_to(_('Integrations'), integrations_settings_path) %>
+    <li <% if request.path == integration_preferences_path %>class="active"<% end %>>
+      <%= link_to(_('Integrations'), integration_preferences_path) %>
     </li>
     <li <% if request.path == sharing_account_lists_path %>class="active"<% end %>>
       <%= link_to(_('Account Sharing'), sharing_account_lists_path) %>

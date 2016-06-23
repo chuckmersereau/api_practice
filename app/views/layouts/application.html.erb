@@ -73,10 +73,10 @@
                         <i class="fa fa-cog"></i>
                       </a>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="settings-drop">
-                        <li role="presentation"><%= link_to(_('Preferences'), "/preferences") %></li>
-                        <li role="presentation"><%= link_to(_('Notifications'), "/notifications") %></li>
-                        <li role="presentation"><%= link_to(_('Networks & Imports'), "/accounts") %></li>
-                        <li role="presentation"><%= link_to(_('Integrations'), "/settings/integrations") %></li>
+                        <li role="presentation"><%= link_to(_('Preferences'), personal_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Notifications'), notification_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Networks & Imports'), network_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Integrations'), integration_preferences_path) %></li>
                         <li role="presentation"><%= link_to(_('Account Sharing'), sharing_account_lists_path) %></li>
                         <% if current_user.admin %>
                           <li role="presentation">
