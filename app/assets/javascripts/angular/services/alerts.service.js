@@ -17,6 +17,7 @@
     };
 
     svc.addAlert = function (message, type, displayTime) {
+      svc.alerts = [];
       displayTime = angular.isDefined(displayTime) ? displayTime : 5000;
       var alert = { message: message, type: 'alert-' + type };
       svc.alerts.push(alert);

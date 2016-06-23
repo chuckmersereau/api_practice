@@ -48,12 +48,8 @@ angular
         url: '/:id',
         template: '<network-preferences></network-preferences>'
       });
-    // make non-angular links navigatable
-    angular.element('a').each(function(){
-      var $a = angular.element(this);
-      if (!($a.is('[target]') || $a.is('[ui-sref]'))) {
-        $a.attr('target', '_self');
-      }
-    });
-    $locationProvider.html5Mode(true).hashPrefix('!');
+    $locationProvider.html5Mode({
+      enabled: true,
+      rewriteLinks: false
+    }).hashPrefix('!');
   });

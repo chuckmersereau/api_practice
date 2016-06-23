@@ -2325,6 +2325,25 @@ h4.title {
   }
 }
 
+.btn-actionable {
+  -webkit-transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  -moz-transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  -ms-transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  -o-transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  position: relative;
+  .btn-progress {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    bottom: 5px;
+  }
+}
+
+.btn-actionable:disabled {
+    padding-right: 30px!important;
+}
+
 /* ********************* Layout Hacks ************************** */
 .gm-style {
   img {

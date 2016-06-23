@@ -34,7 +34,7 @@
                       <%= label :first_name, _('Your first name') %>
                       <%= text_field_tag :first_name, '', class: 'form-control', 'ng-model' => 'vm.preferences.data.first_name' %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -63,7 +63,7 @@
                       <%= label :last_name, _('Your last name') %>
                       <%= text_field_tag :last_name, '', class: 'form-control', 'ng-model' => 'vm.preferences.data.last_name' %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -92,7 +92,7 @@
                       <%= label :email, _('Email Address') %>
                       <%= text_field_tag :email, '', class: 'form-control', 'ng-model' => 'vm.preferences.data.email' %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -122,7 +122,7 @@
                       <%= label :time_zone, _('Time zone') %>
                       <%= time_zone_select( "user", "time_zone", nil, { include_blank: true }, { class: 'form-control', 'ng-model' => 'vm.preferences.data.time_zone' }) %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -151,7 +151,7 @@
                       <%= label :locale, _('Language') %>
                       <%= select '', :locale, locale_select_options, {}, { class: 'form-control', 'ng-model' => 'vm.preferences.data.locale' } %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -180,7 +180,7 @@
                       <%= label :default_account_list, _('Default Account List') %>
                       <%= select '', :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {}, { class: 'form-control', 'ng-model' => 'vm.preferences.data.default_account_list' } %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -216,7 +216,7 @@
                       <%= label :account_list_name, _('Account Name') %>
                       <%= text_field_tag :account_list_name, '', class: 'form-control', 'ng-model' => 'vm.preferences.data.account_list_name' %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -245,7 +245,7 @@
                       <%=  label :home_country, _('Home Country') %>
                       <%= country_select :preferences, :home_country, ['None'], {}, { class: 'country_select form-control', 'ng-model' => 'vm.preferences.data.home_country' } %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -274,7 +274,7 @@
                       <%= label :monthly_goal, _('Monthly goal') %>
                       <%= text_field_tag :monthly_goal, '', class: 'form-control', 'ng-model' => 'vm.preferences.data.monthly_goal' %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -304,7 +304,7 @@
                       <%= label :currency, _('Default Currency') %>
                       <%= select :currency, '', currency_select, {}, { class: 'form-control', 'ng-model' => 'vm.preferences.data.currency' } %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -336,7 +336,7 @@
                       <%= label :salary_organization_id, _('Primary Organization') %>
                       <%= select :salary_organization_id, '', salary_organization_select(current_account_list), {}, { class: 'form-control', 'ng-model' => 'vm.preferences.data.salary_organization_id' } %>
                     </div>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -370,7 +370,7 @@
                       account to test, and then ask for you to give us feedback - both if you experience bugs and also about
                       your thoughts about the feature(s) you are testing.
                     </p>
-                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                    <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save Preferences') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                   </div>
                 </div>
               </div>
@@ -383,7 +383,6 @@
               <div class="pull-right">
                 <button class="btn btn-link" id="preference_reset_welcome"><%= _('Reset Welcome Tour') %></button>
               </div>
-              <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary"><%= _('Save Preferences') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
             </div>
           </div>
         </div>

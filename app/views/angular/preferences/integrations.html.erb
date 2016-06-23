@@ -42,14 +42,14 @@
                         <%= _('MailChimp list to use for your newsletter:') %> <strong>{{vm.preferences.data.mail_chimp_primary_list_name}}</strong>
                       </p>
                       <p>
-                        <button type="submit" ng-click="vm.sync('MailChimp')" ng-disabled="vm.saving" class="btn btn-xs btn-primary"><%= _('Sync Now') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
-                        <a class="btn btn-xs btn-default" ng-href="/mail_chimp_accounts/{{vm.preferences.data.mail_chimp_account_id}}/edit" target="_self"><%= _('Modify Settings') %></a>
+                        <button type="submit" ng-click="vm.sync('MailChimp')" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Sync Now') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
+                        <a class="btn btn-default" ng-href="/mail_chimp_accounts/{{vm.preferences.data.mail_chimp_account_id}}/edit" target="_self"><%= _('Modify Settings') %></a>
                         <a class="btn btn-link" ng-click="vm.disconnect('MailChimp')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
                       </p>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_mail_chimp_account">
                       <p><%= _('You can synchronize MPDX and Mailchimp contacts to simplify your process and take advantage of all of Mailchimp\'s great features.') %></p>
-                      <%= link_to(_('Enable'), new_mail_chimp_account_path, :class => "btn btn-xs btn-primary", target: 'self') %>
+                      <%= link_to(_('Enable'), new_mail_chimp_account_path, :class => "btn btn-primary", target: 'self') %>
                     </div>
                   </div>
                 </div>
@@ -85,12 +85,12 @@
                       <%= _('Enabling or Syncing will replace your prayerletters.com lists') %>
                     </div>
                     <div ng-show="vm.preferences.data.valid_prayer_letters_account">
-                      <button type="submit" ng-click="vm.sync('Prayer Letters')" ng-disabled="vm.saving" class="btn btn-xs btn-primary"><%= _('Sync Now') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                      <button type="submit" ng-click="vm.sync('Prayer Letters')" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Sync Now') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                       <a class="btn btn-link" ng-click="vm.disconnect('Prayer Letters')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_prayer_letters_account">
                       <p><%= _('You can keep PrayerLetters.com updated with all your MPDX contacts. Click Enable to begin.') %></p>
-                      <%= link_to(_('Enable'), '/auth/prayer_letters', :class => 'btn btn-xs btn-primary', target: '_self') %>
+                      <%= link_to(_('Enable'), '/auth/prayer_letters', :class => 'btn btn-primary', target: '_self') %>
                     </div>
                   </div>
                 </div>
@@ -127,12 +127,12 @@
                       <%= _('Enabling or Syncing will replace your myletterservice.org lists') %>
                     </div>
                     <div ng-show="vm.preferences.data.valid_pls_account">
-                      <button type="submit" ng-click="vm.sync('PLS')" ng-disabled="vm.saving" class="btn btn-xs btn-primary"><%= _('Sync Now') %>&nbsp;<span ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></span></button>
+                      <button type="submit" ng-click="vm.sync('PLS')" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Sync Now') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
                       <a class="btn btn-link" ng-click="vm.disconnect('PLS')"><%= _('Disconnect') %>&nbsp;<i class="hidden fa fa-circle-o-notch fa-spin fa-fw"></i></a>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_pls_account">
                       <p><%= _('You can keep myletterservice.org updated with all your MPDX contacts. Click Enable to begin.') %></p>
-                      <%= link_to _('Enable'), '/auth/pls', :class => 'btn btn-xs btn-primary', target: '_self' %>
+                      <%= link_to _('Enable'), '/auth/pls', :class => 'btn btn-primary', target: '_self' %>
                     </div>
                   </div>
                 </div>
@@ -163,7 +163,7 @@
                       <%= _('Clicking "Send Paper Newsletter List" will email Chalkline your newsletter list and open their order form in a new tab') %>
                     </div>
                     <p><%= _('Chalkline is a great way of sending a variety of touch cards to your supporters.') %></p>
-                    <%= link_to _('Send Paper Newsletter List'), '#', id: 'chalkline_send_list', class: 'btn btn-xs btn-secondary' %>
+                    <%= link_to _('Send Paper Newsletter List'), '#', id: 'chalkline_send_list', class: 'btn btn-secondary' %>
                   </div>
                 </div>
               </div>
