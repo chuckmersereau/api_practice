@@ -63,7 +63,7 @@
         <div class="panel panel-default dash-panel">
           <div class="panel-heading">
             <%= _('Care') %>
-            <%= link_to('+ '+_('Log Prayer Letter'),
+            <%= link_to('+ '+_('Log Physical Newsletter'),
                         new_task_path(completed: true, activity_type: 'Newsletter'),
                         class: 'badge badge-blue badge-right-well add_task', remote: true) %>
           </div>
@@ -71,9 +71,9 @@
             <div class="dash-stat">
               <% current_account_list.tasks.completed.of_type('Newsletter').first.tap do |newsletter| %>
                 <% if newsletter %>
-                  <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> <%= _('since your last prayer letter') %>
+                  <span class="count-big"><%= _(time_ago_in_words(newsletter.completed_at)) %></span> <%= _('since your last physical newsletter') %>
                 <% else %>
-                  <%= _("You've never logged a prayer letter") %>
+                  <%= _("You've never logged a physical newsletter") %>
                 <% end %>
               <% end %>
             </div>
