@@ -1,11 +1,9 @@
-describe('contacts', function() {
+describe('currencyDonationsReport Component', function() {
     beforeEach(module('mpdxApp'));
     var self = {};
 
-    beforeEach(inject(function($injector, $componentController, api) {
+    beforeEach(inject(function($httpBackend, $rootScope, $componentController, api) {
         self.api = api;
-        $httpBackend = $injector.get('$httpBackend');
-        var $rootScope = $injector.get('$rootScope');
         var $scope = $rootScope.$new();
 
         self.controller = $componentController('currencyDonationsReport', {
@@ -337,23 +335,23 @@ describe('contacts', function() {
     });
 
     describe('togglePageWidth', function() {
+        var layoutSettings;
+        beforeEach(inject(function(_layoutSettings_) {
+            layoutSettings = _layoutSettings_;
+        }));
+
         it('should transition the page container from container to container-fluid', function () {
             self.controller.expanded = false;
             self.controller.togglePageWidth();
             expect(self.controller.expanded).toBe(true);
-
-            //TODO: figure out how to get the container element when it is outside of this angular component
-            //console.log('Element:', self.$rootElement.find('body > #body > #content'));
-            //expect(angular.element('body > #body > #content').hasClass('container')).toBe(true);
-            //expect(angular.element('body > #body > #content').hasClass('container-fluid')).toBe(false);
+            expect(layoutSettings.fullWidth).toBe(true);
         });
+
         it('should transition the page container from container-fluid to container', function () {
             self.controller.expanded = true;
             self.controller.togglePageWidth();
             expect(self.controller.expanded).toBe(false);
-
-            //expect(angular.element('body > #body > #content').hasClass('container')).toBe(false);
-            //expect(angular.element('body > #body > #content').hasClass('container-fluid')).toBe(true);
+            expect(layoutSettings.fullWidth).toBe(false);
         });
     });
 

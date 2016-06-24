@@ -10,9 +10,9 @@
             }
         });
 
-    currencyDonationsReportController.$inject = ['_', 'api', 'state', 'moment', 'monthRange', '__'];
+    currencyDonationsReportController.$inject = ['_', 'api', 'state', 'moment', 'monthRange', '__', 'layoutSettings'];
 
-    function currencyDonationsReportController(_, api, state, moment, monthRange, __) {
+    function currencyDonationsReportController(_, api, state, moment, monthRange, __, layoutSettings) {
         var vm = this;
 
         /**
@@ -239,13 +239,7 @@
 
         function togglePageWidth(){
             vm.expanded = !vm.expanded;
-            var container = angular.element('body > #body > #content');
-            if(vm.expanded){
-                // Make report fill the whole page width
-                container.addClass('container-fluid').removeClass('container');
-            }else{
-                container.addClass('container').removeClass('container-fluid');
-            }
+            layoutSettings.fullWidth = vm.expanded;
         }
 
         function currencyGroupsToCSV(){

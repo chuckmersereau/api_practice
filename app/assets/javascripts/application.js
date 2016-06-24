@@ -63,6 +63,7 @@
 //= require moment-range/dist/moment-range
 //= require angular/mpdxApp
 //= require angular/mpdxApp.constants
+//= require angular/mpdxApp.values
 //= require angular/mpdxApp.railsConstants.js.erb
 //= require_tree ./angular/factories
 //= require_tree ./angular/components
