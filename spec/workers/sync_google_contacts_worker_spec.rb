@@ -17,7 +17,7 @@ describe SyncGoogleContactsWorker, sidekiq: :testing_disabled do
       end.to change(Sidekiq::ScheduledSet.new, :size).by(1)
       job = Sidekiq::ScheduledSet.new.to_a.last
       expect(job['class']).to eq 'AccountList'
-      expect(job['args']).to include('queue_sync_with_google_contacts')
+      expect(job['args']).to contain_exactly(google_integration.account_list.id, 'queue_sync_with_google_contacts')
     end
   end
 end
