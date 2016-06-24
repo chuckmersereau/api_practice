@@ -8,31 +8,31 @@ RSpec.describe TaskFilter, type: :model do
   end
 
   it 'filters through completed tasks' do
-    task_filter = TaskFilter.new(:completed => true)
+    task_filter = TaskFilter.new(completed: true)
     filtered = task_filter.filter(Task.all)
     expect(filtered.length).to eq(1)
   end
 
   it 'filters through overdue tasks' do
-    task_filter = TaskFilter.new(:overdue => true)
+    task_filter = TaskFilter.new(overdue: true)
     filtered = task_filter.filter(Task.all)
     expect(filtered.length).to eq(2)
   end
 
   it 'filters through starred tasks' do
-    task_filter = TaskFilter.new(:starred => true)
+    task_filter = TaskFilter.new(starred: true)
     filtered = task_filter.filter(Task.all)
     expect(filtered.length).to eq(1)
   end
 
   it 'filters through no_date tasks' do
-    task_filter = TaskFilter.new(:no_date => true)
+    task_filter = TaskFilter.new(no_date: true)
     filtered = task_filter.filter(Task.all)
     expect(filtered.length).to eq(1)
   end
 
   it 'filters through tasks by activity_type' do
-    task_filter = TaskFilter.new(:activity_type => 'Email')
+    task_filter = TaskFilter.new(activity_type: 'Email')
     filtered = task_filter.filter(Task.all)
     expect(filtered.length).to eq(1)
   end
