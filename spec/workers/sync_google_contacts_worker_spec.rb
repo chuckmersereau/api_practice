@@ -14,7 +14,7 @@ describe SyncGoogleContactsWorker do
       expect do
         subject.perform
       end.to change(LowerRetryWorker.jobs, :count).by(1)
-      expect(LowerRetryWorker.jobs.last['args']).not_to eq google_integration.account_list.queue_sync_with_google_contacts
+      expect(LowerRetryWorker.jobs.last['args']).to eq google_integration.account_list.queue_sync_with_google_contacts
     end
   end
 end
