@@ -7,7 +7,7 @@ class SyncGoogleContactsWorker
 
   def perform
     account_lists = AccountList.joins(:google_integrations)
-                        .where(google_integrations: { contacts_integration: true })
+                               .where(google_integrations: { contacts_integration: true })
     AsyncScheduler.schedule_over_24h(account_lists, :queue_sync_with_google_contacts)
   end
 end
