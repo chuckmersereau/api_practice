@@ -13,8 +13,9 @@ describe('taskShortListController', function() {
 
         createController = function() {
             return $controller('taskShortListController', {
-                '$scope': $scope,
-                '$http': $httpBackend
+                $scope: $scope,
+                $http: $httpBackend,
+                railsConstants: {}
             });
         };
     }));

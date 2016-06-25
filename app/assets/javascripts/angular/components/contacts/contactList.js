@@ -6,9 +6,9 @@
             templateUrl: 'inline/contact_list.html' //declared inline at app/views/contacts/index.html.erb
         });
 
-    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore'];
+    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants'];
 
-    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore) {
+    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants) {
         var vm = this;
 
         var viewPrefs;
@@ -344,21 +344,8 @@
                 return false;
             }
 
-            // This is a temporary fix to make the karma tests past. What we really
-            // need to remove this is for the karma tests to run in the environment of
-            // the correctly evaluated sprokets pipeline (which would expand
-            // railsConstants.js.erb), but currently it does not, which makes
-            // railsConstants undefined.
-            if (!angular.isDefined(window.railsConstants)) {
-                window.railsConstants = {
-                    contact: {
-                        INACTIVE_STATUSES: []
-                    }
-                };
-            }
-
             inactiveQueryStatuses =
-                _.intersection(q.status, window.railsConstants.contact.INACTIVE_STATUSES);
+                _.intersection(q.status, railsConstants.contact.INACTIVE_STATUSES);
 
             if (!_.includes(q.status, 'active') || !_.includes(q.status, 'null') ||
                 !_.isEmpty(inactiveQueryStatuses) || _.includes(q.status, 'hidden')) {
