@@ -24,6 +24,7 @@ script:
 - bin/travis_parallel_test.sh
 - bundle exec rake coveralls:push
 - bin/travis_rubocop_or_karma.sh
+- bundle exec rake protractor:spec
 branches:
   only:
   - master

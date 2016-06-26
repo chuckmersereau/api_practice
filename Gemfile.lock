@@ -171,6 +171,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.9.1.1)
+    colorize (0.7.7)
     columnize (0.9.0)
     concurrent-ruby (1.0.0)
     connection_pool (2.2.0)
@@ -537,6 +538,9 @@ GEM
       multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
+    protractor-rails (0.0.19)
+      colorize
+      railties
     pry (0.10.1)
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
@@ -882,6 +886,7 @@ DEPENDENCIES
   pg (~> 0.18.2)
   phonelib (~> 0.5.4)
   poltergeist
+  protractor-rails
   pry-byebug
   pry-rails
   puma
