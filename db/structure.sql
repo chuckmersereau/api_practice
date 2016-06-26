@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.2
--- Dumped by pg_dump version 9.5.2
+-- Dumped from database version 9.5.3
+-- Dumped by pg_dump version 9.5.3
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -188,7 +188,8 @@ CREATE TABLE activities (
     notification_id integer,
     remote_id character varying(255),
     source character varying(255),
-    next_action character varying(255)
+    next_action character varying(255),
+    no_date boolean DEFAULT false
 );
 
 
@@ -5193,4 +5194,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160523162335');
 INSERT INTO schema_migrations (version) VALUES ('20160523203413');
 
 INSERT INTO schema_migrations (version) VALUES ('20160602005533');
+
+INSERT INTO schema_migrations (version) VALUES ('20160610044352');
 

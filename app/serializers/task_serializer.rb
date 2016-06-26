@@ -1,7 +1,8 @@
 class TaskSerializer < ActiveModel::Serializer
   embed :ids, include: true
 
-  attributes :id, :account_list_id, :starred, :subject, :created_at, :updated_at, :completed, :completed_at, :activity_type, :tag_list, :result, :next_action
+  attributes :id, :account_list_id, :starred, :subject, :created_at, :updated_at, :completed
+  attributes :completed_at, :activity_type, :tag_list, :result, :next_action, :no_date
   attribute :contact_ids, key: :contacts
   attribute :activity_comments_count, key: :comments_count
 
