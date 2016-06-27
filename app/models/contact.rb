@@ -478,6 +478,10 @@ class Contact < ActiveRecord::Base
     donations.where('donation_date >= ?', last_donation_month_end.beginning_of_month).sum(:amount)
   end
 
+  def last_long_time_frame_total
+    donations.where('donation_date >= ?', last_donation_long_time_frame_end.beginning_of_month).sum(:amount)
+  end
+
   def prev_month_donation_date
     donations.where('donation_date <= ?', (last_donation_month_end << 1).end_of_month)
              .pluck(:donation_date).first
@@ -533,6 +537,10 @@ class Contact < ActiveRecord::Base
       else
         Date.today.end_of_month
       end
+  end
+
+  def last_donation_long_time_frame_end
+    @recent_avg_long_range_end ||= Date.today.prev_month(3).end_of_month
   end
 
   def prev_donation_month_start
