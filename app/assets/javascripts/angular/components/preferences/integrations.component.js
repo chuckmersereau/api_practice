@@ -15,7 +15,7 @@
     vm.saving = false;
     vm.tabId = '';
     vm.$state = $state;
-
+    vm.mailchimpAccStatus = 'disabled';
     vm.sync = function(service) {
       vm.saving = true;
       vm.service = service;

@@ -8,7 +8,7 @@ class Api::V1::Preferences::Integrations::MailChimpsController < Api::V1::BaseCo
   def update
     load_mail_chimp
     build_mail_chimp
-    return render json: { errors: @mail_chimp.validation_errors }, status: 400 unless save_mail_chimp
+    return render json: { errors: @mail_chimp.validation_error }, status: 400 unless save_mail_chimp
     render_mail_chimp
   end
 
@@ -31,17 +31,23 @@ class Api::V1::Preferences::Integrations::MailChimpsController < Api::V1::BaseCo
     @mail_chimp.save
   end
 
-  def render_mail_chimp(status = :ok)
+  def render_mail_chimp
     render json: {
       mail_chimp: {
+        id: @mail_chimp.id,
         lists_present: @mail_chimp.lists.present?,
         api_key: @mail_chimp.api_key,
         validation_error: @mail_chimp.validation_error,
         active: @mail_chimp.active?,
         validate_key: @mail_chimp.validate_key,
-        lists_available_for_newsletters: @mail_chimp.lists_available_for_newsletters.collect { |l| [l.name, l.id] }
+        auto_log_campaigns: @mail_chimp.auto_log_campaigns,
+        primary_list_id: @mail_chimp.primary_list_id,
+        primary_list_name: @mail_chimp.primary_list.try(:name),
+        lists_available_for_newsletters: @mail_chimp.lists_available_for_newsletters.collect { |l| { name: l.name, id: l.id } },
+        lists_link: "https://#{@mail_chimp.datacenter}.admin.mailchimp.com/lists/",
+        valid: current_account_list.valid_mail_chimp_account
       }
-    }, status: status
+    }
   end
 
   def mail_chimp_params

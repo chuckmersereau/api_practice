@@ -5,63 +5,67 @@
       controller: MailchimpIntegrationPreferencesController,
       controllerAs: 'vm',
       templateUrl: '/templates/preferences/integrations/mailchimp.html',
-      bindings: {}
+      bindings: {
+        'state': '='
+      }
     });
-  MailchimpIntegrationPreferencesController.$inject = ['$window', '$state', '$stateParams', 'preferences.integrations.mailchimpService', 'alertsService'];
-  function MailchimpIntegrationPreferencesController($window, $state, $stateParams, mailchimpService, alertsService) {
+  MailchimpIntegrationPreferencesController.$inject = ['$scope', 'preferences.integrations.mailchimpService', 'alertsService'];
+  function MailchimpIntegrationPreferencesController($scope, mailchimpService, alertsService) {
     var vm = this;
     vm.preferences = mailchimpService;
     vm.alerts = alertsService;
     vm.saving = false;
-    vm.tabId = '';
+    vm.showSettings = false;
 
-    vm.sync = function(service) {
+    vm.save = function () {
       vm.saving = true;
-      vm.service = service;
-      vm.preferences.sync(service, function success() {
+      vm.preferences.save(function success() {
+        vm.alerts.addAlert('Preferences saved successfully', 'success');
         vm.saving = false;
-        vm.alerts.addAlert('MPDX is now syncing your newsletter recipients with ' + vm.service, 'success');
-      }, function error() {
+        if (vm.preferences.data.primary_list_id != null) {
+          vm.hide();
+        }
+      }, function error(data) {
+        angular.forEach(data.errors, function(value) {
+          vm.alerts.addAlert(value, 'danger');
+        });
         vm.saving = false;
-        vm.alerts.addAlert("MPDX couldn't save your configuration changes for " + vm.service, 'danger');
       });
     };
 
-    vm.disconnect = function(service) {
+    vm.hide = function () {
+      vm.preferences.loading = true;
+      vm.preferences.load();
+      vm.showSettings = false;
+    };
+
+    vm.sync = function() {
       vm.saving = true;
-      vm.service = service;
-      vm.preferences.disconnect(service, function success() {
+      vm.preferences.sync(function success() {
         vm.saving = false;
-        vm.alerts.addAlert('MPDX removed your integration with ' + vm.service, 'success');
+        vm.alerts.addAlert('MPDX is now syncing your newsletter recipients with Mailchimp', 'success');
+      }, function error() {
+        vm.saving = false;
+        vm.alerts.addAlert("MPDX couldn't save your configuration changes for Mailchimp", 'danger');
+      });
+    };
+
+    vm.disconnect = function() {
+      vm.saving = true;
+      vm.preferences.disconnect(function success() {
+        vm.saving = false;
+        vm.alerts.addAlert('MPDX removed your integration with MailChimp', 'success');
         vm.preferences.load();
       }, function error() {
-        vm.alerts.addAlert("MPDX couldn't save your configuration changes for " + vm.service, 'danger');
+        vm.alerts.addAlert("MPDX couldn't save your configuration changes for MailChimp", 'danger');
         vm.saving = false;
       });
     };
 
-    vm.reload = function() {
-      vm.preferences.load();
-    }
-
-    $window.openerCallback = vm.reload;
-
-    vm.setTab = function(service) {
-      if (service == '' || vm.tabId == service) {
-        vm.tabId = '';
-        $state.go('integrations', {}, { notify: false })
-      } else {
-        vm.tabId = service;
-        $state.go('integrations.tab', { id: service }, { notify: false })
-      }
-    };
-
-    vm.tabSelected = function(service) {
-      return vm.tabId == service;
-    };
-
-    if ($stateParams.id) {
-      vm.setTab($stateParams.id);
-    }
+    $scope.$watch(function() {
+      return vm.preferences.state;
+    }, function() {
+      vm.state = vm.preferences.state;
+    } )
   }
 })();

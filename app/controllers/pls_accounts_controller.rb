@@ -1,7 +1,6 @@
 class PlsAccountsController < ApplicationController
   def create
     auth_hash = request.env['omniauth.auth']
-
     pls_account.attributes = {
       oauth2_token: auth_hash.credentials.token,
       valid_token: true

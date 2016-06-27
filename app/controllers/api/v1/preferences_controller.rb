@@ -48,12 +48,6 @@ class Api::V1::PreferencesController < Api::V1::BaseController
 
   def fetch_integration_preferences
     {
-      mail_chimp_account: current_account_list.mail_chimp_account,
-      mail_chimp_account_id: current_account_list.mail_chimp_account.try(:id),
-      mail_chimp_api_key: current_account_list.mail_chimp_account.try(:api_key),
-      mail_chimp_primary_list_name: current_account_list.mail_chimp_account.try(:primary_list).try(:name),
-      mail_chimp_auto_log_campaigns: current_account_list.mail_chimp_account.try(:auto_log_campaigns),
-      valid_mail_chimp_account: current_account_list.valid_mail_chimp_account,
       prayer_letters_account: current_account_list.prayer_letters_account,
       prayer_letters_account_id: current_account_list.prayer_letters_account.try(:id),
       valid_prayer_letters_account: current_account_list.valid_prayer_letters_account,

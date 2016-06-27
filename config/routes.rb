@@ -31,26 +31,9 @@ Rails.application.routes.draw do
   get '/notifications', to: redirect('preferences/notifications'), as: :notifications
   get '/accounts', to: redirect('preferences/networks'), as: :accounts
 
-
   resources :account_lists, only: :update
-
-  resources :mail_chimp_accounts do
-    collection do
-      get :sync
-    end
-  end
-
-  resources :prayer_letters_accounts do
-    collection do
-      get :sync
-    end
-  end
-
-  resources :pls_accounts do
-    collection do
-      get :sync
-    end
-  end
+  resources :prayer_letters_accounts, only: :create
+  resources :pls_accounts, only: :create
 
 
   resources :tags, only: [:create, :destroy]

@@ -1,14 +1,11 @@
 class PrayerLettersAccountsController < ApplicationController
   def create
     auth_hash = request.env['omniauth.auth']
-
     prayer_letters_account.attributes = {
       oauth2_token: auth_hash.credentials.token,
       valid_token: true
     }
     prayer_letters_account.save
-    flash[:notice] = _('MPDX is now uploading your newsletter recipients to PrayerLetters.com.')
-
     redirect_to application_close_path(url: integration_preferences_tab_path(tab_id: 'prayerletters'))
   end
 

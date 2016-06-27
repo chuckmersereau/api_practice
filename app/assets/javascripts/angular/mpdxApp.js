@@ -40,10 +40,6 @@ angular
         url: '/integrations',
         template: '<integration-preferences></integration-preferences>'
       })
-      .state('preferences.integrations.configure-mailchimp', {
-        url: '/configuration/mailchimp',
-        template: '<integration-mailchimp-preferences></integration-mailchimp-preferences>'
-      })
       .state('preferences.integrations.tab', {
         url: '/:id',
         template: '<integration-preferences></integration-preferences>'
