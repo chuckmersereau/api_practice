@@ -266,7 +266,7 @@ class Task < Activity
   end
 
   def sync_to_google_calendar
-    return if result.present? || Time.now > start_at || no_date
+    return if result.present? || Time.now > start_at
 
     account_list.google_integrations.each do |google_integration|
       google_integration.lower_retry_async(:sync_task, id)
