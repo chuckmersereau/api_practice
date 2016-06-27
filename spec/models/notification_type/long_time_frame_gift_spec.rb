@@ -42,4 +42,10 @@ describe NotificationType::LongTimeFrameGift do
       expect(long_time_frame_gift.task_description(notification)).to eq(description)
     end
   end
+
+  context 'Partner gives a donation early' do
+    let!(:new_donation) do
+      create(:donation, donor_account: donor_account, designation_account: da, donation_date: Date.today << 12)
+    end
+  end
 end
