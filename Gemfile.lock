@@ -156,8 +156,15 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-angular (0.2.3)
+      capybara (>= 2.5.0)
+    capybara-screenshot (1.0.13)
+      capybara (>= 1.0, < 3)
+      launchy
+    capybara-webkit (1.11.1)
+      capybara (>= 2.3.0, < 2.8.0)
+      json
     charlock_holmes (0.7.3)
-    cliver (0.3.2)
     cloudinary (1.1.0)
       aws_cf_signer
       rest-client
@@ -532,11 +539,6 @@ GEM
     phonelib (0.5.4)
     po_to_json (1.0.0)
       json (>= 1.6.0)
-    poltergeist (1.9.0)
-      capybara (~> 2.1)
-      cliver (~> 0.3.1)
-      multi_json (~> 1.0)
-      websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
     protractor-rails (0.0.19)
       colorize
@@ -786,9 +788,6 @@ GEM
     webmock (1.21.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-    websocket-driver (0.6.3)
-      websocket-extensions (>= 0.1.0)
-    websocket-extensions (0.1.2)
     wicked (1.0.3)
       rails (>= 3.0.7)
     will_paginate (3.0.7)
@@ -816,6 +815,10 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bluepill
+  capybara
+  capybara-angular
+  capybara-screenshot
+  capybara-webkit
   carrierwave!
   charlock_holmes
   cloudinary
@@ -885,7 +888,6 @@ DEPENDENCIES
   peek-redis
   pg (~> 0.18.2)
   phonelib (~> 0.5.4)
-  poltergeist
   protractor-rails
   pry-byebug
   pry-rails

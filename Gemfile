@@ -155,12 +155,15 @@ group :test do
   gem 'webmock', '~> 1.21.0'
   gem 'rb-fsevent', require: false
   gem 'growl'
-  gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
   gem 'rubocop', '~> 0.39'
   gem 'test_after_commit'
   gem 'coveralls', require: false
+  gem 'capybara'
+  gem 'capybara-angular'
+  gem "capybara-webkit"
+  gem 'capybara-screenshot'
 end
 
 group :doc do
