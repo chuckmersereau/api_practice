@@ -14,7 +14,7 @@ class NotificationType::LargerGift < NotificationType
       return contact.last_donation.present? && contact.last_donation.amount > contact.pledge_amount
     end
 
-    return if is_long_time_frame_gift?(contact)
+    return if long_time_frame_gift?(contact)
 
     contact.monthly_avg_current > contact.monthly_pledge &&
       contact.monthly_avg_with_prev_gift > contact.monthly_pledge &&
@@ -30,10 +30,10 @@ class NotificationType::LargerGift < NotificationType
     end
   end
 
-  def is_long_time_frame_gift?(contact)
+  def long_time_frame_gift?(contact)
     contact.pledge_frequency >= LongTimeFrameGift::LONG_TIME_FRAME_PLEDGE_FREQUENCY &&
-        contact.prev_month_donation_date.present? &&
-        contact.last_long_time_frame_total == contact.pledge_amount
+      contact.prev_month_donation_date.present? &&
+      contact.last_long_time_frame_total == contact.pledge_amount
   end
 
   def larger_gift(contact)
