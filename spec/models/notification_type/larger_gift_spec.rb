@@ -4,13 +4,17 @@ describe NotificationType::LargerGift do
   let!(:larger_gift) { NotificationType::LargerGift.first_or_initialize }
   let!(:da) { create(:designation_account) }
   let!(:account_list) { create(:account_list) }
-  let!(:contact) { create(:contact, account_list: account_list, pledge_amount: 5) }
+  let!(:contact) { create(:contact, account_list: account_list, pledge_amount: 5, pledge_frequency: 6) }
   let!(:donor_account) { create(:donor_account) }
+  let!(:old_donation) do
+    create(:donation, donor_account: donor_account, designation_account: da, donation_date: Date.today << 5, amount: 5)
+  end
   let!(:donation) { create(:donation, donor_account: donor_account, designation_account: da) }
 
   before do
     account_list.account_list_entries.create!(designation_account: da)
     contact.donor_accounts << donor_account
+    contact.update_donation_totals(old_donation)
     contact.update_donation_totals(donation)
   end
 
@@ -26,6 +30,12 @@ describe NotificationType::LargerGift do
       expect(larger_gift.check(account_list).size).to eq(1)
     end
 
+    it "doesn't add a notification if gift is a long time frame gift that was given early" do
+      donation.update(amount: 5.0, donation_date: Date.today << 1)
+      contact.update_donation_totals(donation)
+      expect(larger_gift.check(account_list)).to be_empty
+    end
+
     it "doesn't add a notification if gift came before start of last month" do
       donation.update(donation_date: Date.today << 2)
       expect(larger_gift.check(account_list)).to be_empty
@@ -36,7 +46,7 @@ describe NotificationType::LargerGift do
       expect(larger_gift.check(account_list)).to be_empty
 
       donation2 = create(:donation, donor_account: donor_account,
-                                    designation_account: da, donation_date: Date.today.end_of_month)
+                         designation_account: da, donation_date: Date.today.end_of_month)
       expect(larger_gift.check(account_list).size).to eq(1)
       expect(Notification.count).to eq(1)
       expect(Notification.first.donation_id).to eq(donation2.id)
@@ -45,7 +55,7 @@ describe NotificationType::LargerGift do
     it 'does not add a notification for a regular gift after a larger gift in same month' do
       donation.update(amount: 15, donation_date: Date.today.beginning_of_month)
       create(:donation, donor_account: donor_account, amount: 5,
-                        designation_account: da, donation_date: Date.today.end_of_month)
+             designation_account: da, donation_date: Date.today.end_of_month)
 
       expect(larger_gift.check(account_list).size).to eq(1)
       expect(Notification.first.donation).to eq(donation)
@@ -57,7 +67,7 @@ describe NotificationType::LargerGift do
       expect(Notification.first.donation).to eq(donation)
 
       create(:donation, donor_account: donor_account, amount: 5,
-                        designation_account: da, donation_date: Date.today.end_of_month)
+             designation_account: da, donation_date: Date.today.end_of_month)
       expect(larger_gift.check(account_list)).to be_empty
     end
   end
@@ -65,7 +75,7 @@ describe NotificationType::LargerGift do
   context '#caught_up_earlier_months?' do
     it 'does not error if first_donation_date is nil' do
       create(:donation, donor_account: donor_account,
-                        designation_account: da, donation_date: Date.today << 1)
+             designation_account: da, donation_date: Date.today << 1)
       contact.update(first_donation_date: nil)
       expect { larger_gift.caught_up_earlier_months?(contact) }.to_not raise_error
     end
