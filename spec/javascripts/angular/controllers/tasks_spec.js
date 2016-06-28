@@ -7,7 +7,8 @@ describe('tasks', function() {
 
         self.createController = function() {
             return $componentController('contactList', {
-                '$scope': $scope
+                $scope: $scope,
+                railsConstants: {}
             });
         };
     }));

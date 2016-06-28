@@ -10,9 +10,9 @@
             }
         });
 
-    appealController.$inject = ['$filter', 'api', 'state'];
+    appealController.$inject = ['$filter', 'api', 'state', 'railsConstants'];
 
-    function appealController($filter, api, state) {
+    function appealController($filter, api, state, railsConstants) {
         var vm = this;
         var padStart = _.padStart || _.padLeft;
         vm.mins = _(60).range().map(function(i) { return padStart(i, 2, '0') }).value();
@@ -284,7 +284,7 @@
 
         function appealLoaded() {
             vm.checkedContacts = {};
-            vm.taskTypes = window.railsConstants.task.ACTIONS;
+            vm.taskTypes = railsConstants.task.ACTIONS;
             vm.task = {
                 subject: 'Appeal (' + vm.appeal.name + ')',
                 date: moment().format('YYYY-MM-DD'),

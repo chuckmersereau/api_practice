@@ -11,8 +11,13 @@ describe('contacts', function() {
 
         self.createController = function() {
             return $componentController('contactList', {
-                '$scope': $scope,
-                '$http': $httpBackend
+                $scope: $scope,
+                $http: $httpBackend,
+                railsConstants: {
+                    contact: {
+                        INACTIVE_STATUSES: []
+                    }
+                }
             });
         };
     }));
