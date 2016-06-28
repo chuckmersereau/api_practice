@@ -9,5 +9,8 @@ FactoryGirl.define do
     pledge_frequency 1
     pledge_start_date { 35.days.ago }
     notes 'Test Note.'
+    trait :with_tags do
+      after(:create) { |contact| contact.update_attributes(tag_list: 'one, two') }
+    end
   end
 end

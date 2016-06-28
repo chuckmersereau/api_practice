@@ -5,9 +5,7 @@ class MailChimpAccount < ActiveRecord::Base
   include Sidekiq::Worker
   sidekiq_options unique: true
 
-  THRESHOLD_SIZE_FOR_BATCH_OPERATION = 3
   COUNT_PER_PAGE = 100
-  MAILCHIMP_MAX_ALLOWD_MERGE_FIELDS = 30
 
   List = Struct.new(:id, :name)
 
@@ -24,6 +22,7 @@ class MailChimpAccount < ActiveRecord::Base
   after_save :queue_export_if_list_changed
 
   serialize :status_interest_ids, Hash
+  serialize :tags_interest_ids, Hash
 
   def lists
     return [] unless api_key.present?
@@ -135,17 +134,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def export_appeal_contacts(contact_ids, list_id, appeal_id)
-    return if primary_list_id == list_id
-    contacts = contacts_with_email_addresses(contact_ids)
-    compare_and_unsubscribe(contacts, list_id)
-    export_to_list(list_id, contacts)
-    setup_webhooks(list_id)
-    save_appeal_list_info(list_id, appeal_id)
-  end
-
-  def save_appeal_list_info(appeal_list_id, appeal_id)
-    build_mail_chimp_appeal_list unless mail_chimp_appeal_list
-    mail_chimp_appeal_list.update(appeal_list_id: appeal_list_id, appeal_id: appeal_id)
+    MailChimpAccount::Exporter.new(self, list_id).export_appeal_contacts(contact_ids, appeal_id)
   end
 
   def sync_contacts(contact_ids)
@@ -200,18 +189,10 @@ class MailChimpAccount < ActiveRecord::Base
        e.message =~ /domain portion of the email address is invalid/)
   end
 
-  def compare_and_unsubscribe(contacts, list_id)
-    # compare and unsubscribe email addresses from the prev mail chimp appeal list not on
-    # the current one.
-    members_to_unsubscribe = list_emails(list_id) -
-                             batch_params(contacts, list_id).map { |b| b[:EMAIL] }
-    unsubscribe_list_batch(list_id, members_to_unsubscribe) if members_to_unsubscribe.present?
-  end
-
   def unsubscribe_list_batch(list_id, members_to_unsubscribe)
     return if list_id.blank?
 
-    if members_to_unsubscribe.size < THRESHOLD_SIZE_FOR_BATCH_OPERATION
+    if members_to_unsubscribe.size < MailChimpAccount::Exporter::THRESHOLD_SIZE_FOR_BATCH_OPERATION
       members_to_unsubscribe.each do |email|
         begin
           gb.lists(list_id).members(email_hash(email)).delete
@@ -232,14 +213,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def export_to_primary_list
     update(importing: true)
-    setup_webhooks(primary_list_id)
-
-    # clear the member records to force a full export
-    mail_chimp_members.where(list_id: primary_list_id).destroy_all
-    mail_chimp_members.reload
-
-    MailChimpImport.new(self).import_contacts
-    MailChimpSync.new(self).sync_contacts
+    MailChimpAccount::Exporter.new(self).export_to_primary_list
   ensure
     update(importing: false)
   end
@@ -262,205 +236,12 @@ class MailChimpAccount < ActiveRecord::Base
             .references('email_addresses')
   end
 
-  def export_to_list(list_id, contacts)
-    # Make sure we have an interest group for each status of partner set
-    # to receive the newsletter
-    statuses = contacts.map(&:status).compact.uniq
-    add_status_groups(list_id, statuses)
-    add_greeting_merge_variable(list_id)
-
-    members_params = batch_params(contacts, list_id)
-    list_batch_subscribe(id: list_id, batch: members_params)
-    create_member_records(members_params, list_id)
-  end
-
-  def list_batch_subscribe(id:, batch:)
-    if batch.size < THRESHOLD_SIZE_FOR_BATCH_OPERATION
-      batch.each { |params| subscribe_member(id, params) }
-    else
-      operations = batch.map do |params|
-        { method: 'PUT',
-          path: "/lists/#{id}/members/#{email_hash(params[:email_address])}",
-          body: params.to_json }
-      end
-      gb.batches.create(body: { operations: operations })
-    end
-  end
-
-  def subscribe_member(list_id, params)
-    gb.lists(list_id).members(email_hash(params[:email_address])).upsert(body: params)
-  rescue Gibbon::MailChimpError => e
-    raise unless self.class.invalid_email_error?(e)
-  end
-
-  def create_member_records(members_params, list_id)
-    members_params.each do |params|
-      member = mail_chimp_members.find_or_create_by(list_id: list_id,
-                                                    email: params[:email_address])
-
-      status = if params[:interests]
-                 status_for_interest_id(params[:interests].invert[true])
-               end
-
-      member.update(first_name: params[:merge_fields][:FNAME],
-                    last_name: params[:merge_fields][:LNAME],
-                    greeting: params[:merge_fields][:GREETING],
-                    status: status)
-    end
-  end
-
-  def batch_params(contacts, list_id)
-    batch = []
-
-    contacts.each do |contact|
-      # Make sure we don't try to add to a blank group
-      contact.status = 'Partner - Pray' if contact.status.blank?
-
-      contact.people.each do |person|
-        params = {
-          status_if_new: 'subscribed',
-          email_address: person.primary_email_address.email,
-          merge_fields: {
-            EMAIL: person.primary_email_address.email, FNAME: person.first_name,
-            LNAME: person.last_name, GREETING: contact.greeting
-          }
-        }
-        params[:language] = contact.locale if contact.locale.present?
-
-        if grouping_id.present? && list_id == primary_list_id
-          params[:interests] = interests_for_status(contact.status)
-        end
-
-        batch << params
-      end
-    end
-
-    batch
-  end
-
-  def add_greeting_merge_variable(list_id)
-    merge_fields = gb.lists(list_id).merge_fields.retrieve['merge_fields']
-
-    return if merge_fields.find { |m| m['tag'] == 'GREETING' } ||
-              merge_fields.size == MAILCHIMP_MAX_ALLOWD_MERGE_FIELDS
-
-    gb.lists(list_id).merge_fields.create(
-      body: {
-        tag: 'GREETING', name: _('Greeting'), type: 'text'
-      }
-    )
-  rescue Gibbon::MailChimpError => e
-    # Check for the race condition of another thread having already added this
-    return if e.detail =~ /Merge Field .* already exists/
-
-    # If you try to add a merge field when list has 30 already, it gives 500 err
-    if e.status_code == 500
-      # Log the error but don't re-raise it
-      Rollbar.error(e)
-      return
-    end
-    raise e
-  end
-
-  def add_status_groups(list_id, statuses)
-    statuses = (statuses.select(&:present?) + ['Partner - Pray']).uniq
-
-    grouping = nil # define grouping variable outside of block
-    begin
-      grouping = find_grouping(list_id)
-      if grouping
-        self.grouping_id = grouping['id']
-
-        # make sure the grouping is hidden
-        gb.lists(list_id).interest_categories(grouping_id)
-          .update(body: { title: grouping['title'], type: 'hidden' })
-      end
-    rescue Gibbon::MailChimpError => e
-      raise e unless e.message.include?('code 211') # This list does not have interest groups enabled (code 211)
-    end
-    unless grouping
-      # create a new grouping
-      gb.lists(list_id).interest_categories(grouping_id)
-        .create(body: { title: _('Partner Status'), type: 'hidden' })
-      grouping = find_grouping(list_id)
-      self.grouping_id = grouping['id']
-    end
-
-    # Add any new groups
-    groups = gb.lists(list_id).interest_categories(grouping_id).interests.retrieve['interests'].map { |i| i['name'] }
-    create_interest_categories(statuses - groups, list_id)
-
-    cache_status_interest_ids(list_id)
-
-    save
-  end
-
-  def create_interest_categories(statuses, list_id)
-    statuses.each do |group|
-      gb.lists(list_id).interest_categories(grouping_id).interests.create(body: { name: group })
-    end
-  rescue Gibbon::MailChimpError => e
-    raise unless e.status_code == 400 &&
-                 e.detail =~ /Cannot add .* because it already exists on the list/
-  end
-
-  def cache_status_interest_ids(list_id = nil)
-    list_id ||= primary_list_id
-    interests = gb.lists(list_id).interest_categories(grouping_id).interests.retrieve['interests']
-    interests.each do |interest|
-      status_interest_ids[interest['name']] = interest['id']
-    end
-    save
-  end
-
-  def interests_for_status(contact_status)
-    cache_status_interest_ids unless status_interest_ids.present?
-
-    Hash[status_interest_ids.map do |status, interest_id|
-      [interest_id, status == _(contact_status)]
-    end]
-  end
-
-  def status_for_interest_id(interest_id)
-    return unless interest_id
-    cache_status_interest_ids unless status_interest_ids.present?
-    status_interest_ids.invert[interest_id]
-  end
-
-  def find_grouping(list_id)
-    groupings = gb.lists(list_id).interest_categories.retrieve['categories']
-    groupings.find { |g| g['id'] == grouping_id } ||
-      groupings.find { |g| g['title'] == _('Partner Status') }
+  def export_to_list(contacts)
+    MailChimpAccount::Exporter.new(self).export_to_list(contacts)
   end
 
   def queue_export_if_list_changed
     queue_export_to_primary_list if changed.include?('primary_list_id')
-  end
-
-  def setup_webhooks(list_id)
-    # Don't setup webhooks when developing on localhost because MailChimp can't
-    # verify the URL and so it makes the sync fail
-    return if Rails.env.development? &&
-              Rails.application.routes.default_url_options[:host].include?('localhost')
-
-    return if webhook_token.present? &&
-              gb.lists(list_id).webhooks.retrieve['webhooks'].find { |w| w['url'] == webhook_url }
-
-    update(webhook_token: SecureRandom.hex(32)) if webhook_token.blank?
-
-    gb.lists(list_id).webhooks.create(
-      body: {
-        url: webhook_url,
-        events: { subscribe: true, unsubscribe: true, profile: true, cleaned: true,
-                  upemail: true, campaign: true },
-        sources: { user: true, admin: true, api: false }
-      }
-    )
-  end
-
-  def webhook_url
-    (Rails.env.development? ? 'http://' : 'https://') +
-      Rails.application.routes.default_url_options[:host] + '/mail_chimp_webhook/' + webhook_token
   end
 
   def set_active
@@ -492,7 +273,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def list_member_info(list_id, emails)
-    # The MailChimp API v3 doesn't provde an easy, syncronous way to retrieve
+    # The MailChimp API v3 doesn't provide an easy, syncronous way to retrieve
     # member info scoped to a set of email addresses, so just pull it all and
     # filter it for now.
     email_set = emails.to_set
