@@ -10,6 +10,7 @@
   function alertsService($timeout) {
     var svc = {};
     svc.alerts = [];
+    svc.timeout = null;
 
     svc.removeAlert = function (alert) {
       var index = svc.alerts.indexOf(alert);
@@ -21,7 +22,10 @@
       displayTime = angular.isDefined(displayTime) ? displayTime : 5000;
       var alert = { message: message, type: 'alert-' + type };
       svc.alerts.push(alert);
-      $timeout(function () { svc.removeAlert(alert); }, displayTime);
+      if (svc.timeout !== null) {
+        $timeout.cancel(svc.timeout);
+      }
+      svc.timeout = $timeout(function () { svc.removeAlert(alert); }, displayTime);
     };
 
     return svc;
