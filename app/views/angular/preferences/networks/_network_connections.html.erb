@@ -8,7 +8,7 @@
                       class: "edit ico ico_edit no-new-tab",
                       data: { behavior: "edit_#{provider}_account" }) %>
         <% else %>
-          <%= link_to(_('delete'), account_path(account, provider: provider),
+          <%= link_to(_('delete'), auth_account_path(account, provider: provider),
                       method: :delete, :class => "inlineaction delete",
                       data: { confirm: _('Are you sure you want to remove this connection?') }) %>
         <% end %>
@@ -25,9 +25,9 @@
                     'Click "Refresh Google Account" to re-enable it. After that, '+
                     'you\'ll need to manually re-enable any integrations that you had set already.') %>
             </p>
-            <% new_account_path_opts = { provider: :google } %>
-            <% new_account_path_opts[:redirect] =  google_integration_path(google_integration) if google_integration %>
-            <%= link_to(_('Refresh Google Account'), new_account_path(new_account_path_opts), class: 'btn desired_action') %>
+            <% new_auth_account_path_opts = { provider: :google } %>
+            <% new_auth_account_path_opts[:redirect] =  google_integration_path(google_integration) if google_integration %>
+            <%= link_to(_('Refresh Google Account'), new_auth_account_path(new_auth_account_path_opts), class: 'btn desired_action') %>
           <% else %>
             <% if google_integration %>
               <%= link_to(google_integration_path(google_integration)) do %>

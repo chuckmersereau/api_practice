@@ -12,33 +12,30 @@
     svc.data = {};
     svc.loading = true;
     svc.load = function () {
-      api.call('get', 'preferences?integrations=true', {}, function(data) {
+      api.call('get', 'preferences/integrations', {}, function(data) {
         svc.data = data.preferences;
         svc.loading = false;
       });
     };
     svc.sync = function (service, success, error) {
       service = service.toLowerCase();
-      if(service == 'mailchimp') {
-        return api.call('get', 'mail_chimp_accounts/sync', { }, success, error);
-      }
       if(service == 'prayer letters') {
-        return api.call('get', 'prayer_letters_accounts/sync', { }, success, error);
+        return api.call('get', 'preferences/integrations/prayer_letters_account/sync', { }, success, error);
       }
       if(service == 'pls') {
-        return api.call('get', 'pls_accounts/sync', { }, success, error);
+        return api.call('get', 'preferences/integrations/pls_account/sync', { }, success, error);
       }
     }
-    svc.disconnect = function (service, success, error) {
+    svc.disconnect = function (service, success, error, id) {
       service = service.toLowerCase();
-      if(service == 'mailchimp') {
-        return api.call('delete', 'mail_chimp_accounts/' + svc.data.mail_chimp_account_id, { }, success, error);
+      if(service == 'google') {
+        return api.call('delete', 'preferences/integrations/google_accounts/' + id, { }, success, error);
       }
       if(service == 'prayer letters') {
-        return api.call('delete', 'prayer_letters_accounts/' + svc.data.prayer_letters_account_id, { }, success, error);
+        return api.call('delete', 'preferences/integrations/prayer_letters_account/', { }, success, error);
       }
       if(service == 'pls') {
-        return api.call('delete', 'pls_accounts/' + svc.data.pls_account_id, { }, success, error);
+        return api.call('delete', 'preferences/integrations/pls_account', { }, success, error);
       }
     }
     svc.load();

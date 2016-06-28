@@ -6,18 +6,6 @@ class Api::V1::MailChimpAccountsController < Api::V1::BaseController
     render json: { success: true }
   end
 
-  def sync
-    load_mail_chimp_account
-    @mail_chimp_account.queue_export_to_primary_list
-    render json: { success: true }
-  end
-
-  def destroy
-    load_mail_chimp_account
-    @mail_chimp_account.destroy
-    render json: { success: true }
-  end
-
   private
 
   def load_mail_chimp_account

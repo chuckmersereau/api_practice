@@ -1,4 +1,4 @@
-class Api::V1::PreferencesController < Api::V1::BaseController
+class Api::V1::Preferences::Controller < Api::V1::BaseController
   def index
     @preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list)
     preferences = current_user.preferences.except(:setup)

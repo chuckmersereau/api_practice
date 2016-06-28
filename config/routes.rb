@@ -32,9 +32,6 @@ Rails.application.routes.draw do
   get '/accounts', to: redirect('preferences/networks'), as: :accounts
 
   resources :account_lists, only: :update
-  resources :prayer_letters_accounts, only: :create
-  resources :pls_accounts, only: :create
-
 
   resources :tags, only: [:create, :destroy]
 
@@ -55,12 +52,29 @@ Rails.application.routes.draw do
       end
       resources :donations, only: [:index]
       resources :progress, only: [:index]
-      resources :preferences
       namespace :preferences do
+        resources :notifications, only: :index
+        resources :integrations, only: :index
         namespace :integrations do
-          resource :mail_chimp, only: [:show, :update]
+          resource :mail_chimp_account, only: [:show, :update, :destroy] do
+            member do
+              get :sync
+            end
+          end
+          resource :prayer_letters_account, only: :destroy do
+            member do
+              get :sync
+            end
+          end
+          resource :pls_account, only: :destroy do
+            member do
+              get :sync
+            end
+          end
+          resources :google_accounts, only: :destroy
         end
       end
+      resources :preferences
       resources :users
       resources :appeals do
         resources :exclusions, only: [:index, :destroy], controller: :appeal_exclusions
@@ -70,19 +84,6 @@ Rails.application.routes.draw do
       resources :mail_chimp_accounts, only: :destroy do
         collection do
           put :export_appeal_list
-          get :sync
-        end
-      end
-
-      resources :prayer_letters_accounts, only: :destroy do
-        collection do
-          get :sync
-        end
-      end
-
-      resources :pls_accounts, only: :destroy do
-        collection do
-          get :sync
         end
       end
 
@@ -123,7 +124,6 @@ Rails.application.routes.draw do
   resources :insights
   resources :donations
   resource :donation_syncs, only: [:create]
-  resources :accounts, except: [:index]
 
   namespace :reports do
     resource :contributions, only: [:show]
@@ -203,11 +203,15 @@ Rails.application.routes.draw do
   get 'monitors/sidekiq' => 'monitors#sidekiq'
   get 'monitors/commit' => 'monitors#commit'
 
-  get '/auth/prayer_letters/callback', to: 'prayer_letters_accounts#create'
-  get '/close', to: 'application#close', as: :application_close
-  get '/auth/pls/callback', to: 'pls_accounts#create'
-  get '/auth/:provider/callback', to: 'accounts#create'
-  get '/auth/failure', to: 'accounts#failure'
+  get '/close', to: 'auth#close', as: :application_close
+  namespace :auth do
+    get '/pls/callback', to: 'pls_accounts#create'
+    get '/google/callback', to: 'google_accounts#create'
+    get '/prayer_letters/callback', to: 'prayer_letters_accounts#create'
+    get '/:provider/callback', to: 'accounts#create'
+    get '/failure', to: 'accounts#failure'
+    resources :accounts, except: [:index]
+  end
 
   get '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'

@@ -1,4 +1,4 @@
-class PrayerLettersAccountsController < ApplicationController
+class Auth::PrayerLettersAccountsController < ApplicationController
   def create
     auth_hash = request.env['omniauth.auth']
     prayer_letters_account.attributes = {

@@ -1,4 +1,4 @@
-class AccountsController < ApplicationController
+class Auth::AccountsController < ApplicationController
   skip_before_action :ensure_login, only: :create
   skip_before_action :ensure_setup_finished, only: :create
 

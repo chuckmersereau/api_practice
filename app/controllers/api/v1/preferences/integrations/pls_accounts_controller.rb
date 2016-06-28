@@ -1,4 +1,4 @@
-class Api::V1::PlsAccountsController < Api::V1::BaseController
+class Api::V1::Preferences::Integrations::PlsAccountsController < Api::V1::BaseController
   def destroy
     load_pls_account
     @pls_account.destroy

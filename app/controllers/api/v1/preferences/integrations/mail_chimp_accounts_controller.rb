@@ -1,4 +1,4 @@
-class Api::V1::Preferences::Integrations::MailChimpsController < Api::V1::BaseController
+class Api::V1::Preferences::Integrations::MailChimpAccountsController < Api::V1::BaseController
   def show
     load_mail_chimp
     build_mail_chimp
@@ -10,6 +10,18 @@ class Api::V1::Preferences::Integrations::MailChimpsController < Api::V1::BaseCo
     build_mail_chimp
     return render json: { errors: @mail_chimp.validation_error }, status: 400 unless save_mail_chimp
     render_mail_chimp
+  end
+
+  def sync
+    load_mail_chimp
+    @mail_chimp.queue_export_to_primary_list
+    render json: { success: true }
+  end
+
+  def destroy
+    load_mail_chimp
+    @mail_chimp.destroy
+    render json: { success: true }
   end
 
   protected

@@ -11,6 +11,44 @@
       <p>&nbsp;</p>
       <div class="panel-group">
         <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head" ng-click="vm.setTab('google')">
+            <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('google') }"></i>
+            <%= _('Google') %>
+            <div class="pull-right">
+              <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_google_account"><i class="fa fa-circle"></i></div>
+              <div class="accstatus accstatus-disabled" ng-hide="vm.preferences.data.valid_google_account"><i class="fa fa-circle-o"></i></div>
+            </div>
+          </div>
+        	<div class="panel-animate" ng-show="vm.tabSelected('google')">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <div class="network_logo">
+                    <%= image_tag("logos/google_logo.png", alt: 'Google') %>
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="network_button network_connect">
+                    <div ng-repeat="account in vm.preferences.data.google_accounts" class="network_connections">
+                      <div class="account_single">
+                        <div class="actions">
+                            <a class="inlineaction delete" ng-click="vm.disconnect('Google', account.id)"><%= _('Delete') %></a>
+                        </div>
+                        <span class="account_name">{{account.email}}</span>
+                      </div>
+                    </div>
+                    <div ng-hide="vm.preferences.data.valid_google_account">
+                      You can keep Google in sync with your contacts, calendars, tasks and more. Click Add Account to begin.
+                    </div>
+                    <br />
+                    <%= link_to(_('Add Account'), '/auth/google', :class => 'btn btn-primary', target: '_blank') %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head" ng-click="vm.setTab('mailchimp')">
             <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('mailchimp') }"></i>
             <%= _('Mailchimp') %>

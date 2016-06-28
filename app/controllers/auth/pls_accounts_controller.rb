@@ -1,4 +1,4 @@
-class PlsAccountsController < ApplicationController
+class Auth::PlsAccountsController < ApplicationController
   def create
     auth_hash = request.env['omniauth.auth']
     pls_account.attributes = {
@@ -6,8 +6,6 @@ class PlsAccountsController < ApplicationController
       valid_token: true
     }
     pls_account.save
-    flash[:notice] = _('MPDX is now uploading your newsletter recipients to myletterservice.org.')
-
     redirect_to application_close_path(url: integration_preferences_tab_path(tab_id: 'myletterservice'))
   end
 

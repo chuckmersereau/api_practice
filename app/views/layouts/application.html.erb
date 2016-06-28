@@ -168,6 +168,12 @@
                     <%= link_to(_('Sync Donations Now'), donation_syncs_path, method: :post) %>
                   </div>
                 <% end %>
+                <% if params[:controller] == 'preferences' %>
+                  <div class="section">
+                    <account-preferences></account-preferences>
+                  </div>
+                <% end %>
+
                 <% if request.path.start_with?('/reports') %>
                   <div class="section <%= request.path =~ /\/balances/ ? 'active' : '' %>">
                     <%= link_to(_('Balances'), reports_balances_path) %>

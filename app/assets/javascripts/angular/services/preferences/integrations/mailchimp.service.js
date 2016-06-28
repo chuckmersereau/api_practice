@@ -13,7 +13,7 @@
     svc.loading = true;
     svc.state = 'disabled';
     svc.load = function () {
-      api.call('get', 'preferences/integrations/mail_chimp', {}, function(data) {
+      api.call('get', 'preferences/integrations/mail_chimp_account', {}, function(data) {
         svc.data = data.mail_chimp;
         svc.updateState();
         svc.loading = false;
@@ -21,7 +21,7 @@
     };
 
     svc.save = function(success, error) {
-      api.call('put', 'preferences/integrations/mail_chimp', { mail_chimp: this.data },
+      api.call('put', 'preferences/integrations/mail_chimp_account', { mail_chimp: this.data },
         function (data) {
           svc.data = data.mail_chimp;
           svc.updateState();
@@ -32,11 +32,11 @@
 
 
     svc.sync = function (success, error) {
-      api.call('get', 'mail_chimp_accounts/sync', { }, success, error);
+      api.call('get', 'preferences/integrations/mail_chimp_account/sync', { }, success, error);
     };
 
     svc.disconnect = function (success, error) {
-      api.call('delete', 'mail_chimp_accounts/' + svc.data.id, { }, success, error);
+      api.call('delete', 'preferences/integrations/mail_chimp_account', { }, success, error);
     };
 
     svc.updateState = function () {

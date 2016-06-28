@@ -28,7 +28,7 @@
       });
     };
 
-    vm.disconnect = function(service) {
+    vm.disconnect = function(service, id) {
       vm.saving = true;
       vm.service = service;
       vm.preferences.disconnect(service, function success() {
@@ -38,7 +38,7 @@
       }, function error() {
         vm.alerts.addAlert("MPDX couldn't save your configuration changes for " + vm.service, 'danger');
         vm.saving = false;
-      });
+      }, id);
     };
 
     vm.reload = function() {
