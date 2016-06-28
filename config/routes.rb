@@ -55,6 +55,7 @@ Rails.application.routes.draw do
       namespace :preferences do
         resources :notifications, only: :index
         resources :integrations, only: :index
+        resources :personal, only: :index
         namespace :integrations do
           resource :mail_chimp_account, only: [:show, :update, :destroy] do
             member do

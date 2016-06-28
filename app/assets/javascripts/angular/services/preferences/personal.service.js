@@ -12,7 +12,7 @@
     svc.data = {};
     svc.loading = true;
     svc.load = function () {
-      api.call('get', 'preferences?personal=true', {}, function(data) {
+      api.call('get', 'preferences/personal', {}, function(data) {
         svc.data = data.preferences;
         svc.loading = false;
       });
