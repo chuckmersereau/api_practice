@@ -267,14 +267,22 @@
                     return _.concat(
                         donor.donorInfo.name,
                         donor.donorInfo.status,
-                        currencyGroup.currencySymbol + (donor.donorInfo.pledge_amount || 0) + ' ' + currencyGroup.currency + ' ' + _.toString(donor.donorInfo.pledge_frequency),
+                        currencyGroup.currencySymbol +
+                            (donor.donorInfo.pledge_amount || 0) +' ' +
+                            currencyGroup.currency + ' ' +
+                            _.toString(donor.donorInfo.pledge_frequency),
                         _.round(donor['aggregates' + converted].average),
                         donor['aggregates' + converted].min,
                         _.map(donor.donations, 'amount' + converted),
                         donor['aggregates' + converted].sum
                     );
                 });
-                var totals = _.concat(__('Totals'), _.times(4, _.constant('')), _.map(currencyGroup.monthlyTotals, 'amount' + converted), currencyGroup['yearTotal' + converted]);
+                var totals = _.concat(
+                    __('Totals'),
+                    _.times(4, _.constant('')),
+                    _.map(currencyGroup.monthlyTotals, 'amount' + converted),
+                    currencyGroup['yearTotal' + converted]
+                );
                 return _.concat(combinedHeaders, donorRows, [totals], null);
             });
         }
