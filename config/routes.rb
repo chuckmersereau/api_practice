@@ -56,6 +56,7 @@ Rails.application.routes.draw do
         resources :notifications, only: :index
         resources :integrations, only: :index
         resources :personal, only: :index
+        resources :accounts, only: :index
         namespace :integrations do
           resource :mail_chimp_account, only: [:show, :update, :destroy] do
             member do
@@ -75,7 +76,7 @@ Rails.application.routes.draw do
           resources :google_accounts, only: :destroy
         end
       end
-      resources :preferences
+      resource :preferences
       resources :users
       resources :appeals do
         resources :exclusions, only: [:index, :destroy], controller: :appeal_exclusions

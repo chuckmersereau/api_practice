@@ -1,3 +1,7 @@
-<select ng-model="vm.preferences.data.account_list_id" class="form-control">
-  <option ng-repeat="option in vm.preferences.data.accounts" value="{{option.id}}">{{option.name}}</option>
-</select>
+<div ng-show="!vm.preferences.loading" ng-hide="vm.preferences.data.account_lists.length <= 1">
+  <%= _('You are currently editing settings for') %>
+  <select ng-model="vm.preferences.account_list_id" class="form-control" style="width: 100%;">
+    <option ng-repeat="option in vm.preferences.data.account_lists" value="{{option.id}}">{{option.name}}</option>
+  </select>
+  <br />
+</div>

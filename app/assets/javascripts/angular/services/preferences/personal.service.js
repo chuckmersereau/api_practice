@@ -5,12 +5,13 @@
     .module('mpdxApp')
     .factory('preferences.personalService', personalService);
 
-  personalService.$inject = ['api'];
+  personalService.$inject = ['$rootScope', 'api'];
 
-  function personalService(api) {
+  function personalService($rootScope, api) {
     var svc = {};
     svc.data = {};
     svc.loading = true;
+
     svc.load = function () {
       api.call('get', 'preferences/personal', {}, function(data) {
         svc.data = data.preferences;
@@ -19,14 +20,19 @@
     };
 
     svc.save = function(success, error) {
-      api.call('put', 'preferences/' + this.data.current_account_list_id,
+      api.call('put', 'preferences',
         { preference_set: this.data },
         success,
         error);
     }
 
-    svc.load();
+    svc.account_list_id_watcher = $rootScope.$watch(function() {
+      return api.account_list_id;
+    }, function watchCallback() {
+      svc.load();
+    });
 
+    svc.load();
     return svc;
   }
 })();
