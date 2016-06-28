@@ -3,6 +3,8 @@ angular
         'ui.bootstrap',
         'LocalForageModule',
         'ngAnimate',
+        'ngSanitize',
+        'ngCsv',
         'isoCurrency'
     ]);
 

@@ -6,12 +6,14 @@
     "angular-animate": "^1.5.5",
     "angular-i18n": "1.5.5",
     "angular-localforage": "^1.2.5",
+    "angular-sanitize": "^1.5.7",
     "angular-ui-bootstrap": "^1.3.2",
     "iso-currency": "^0.2.2",
     "lodash": "^4.11.1",
     "markerclustererplus": "^2.1.4",
     "moment": "^2.13.0",
     "moment-range": "^2.2.0",
+    "ng-csv": "^0.3.6",
     "twitter_cldr": "2.1.0"
   },
   "devDependencies": {
@@ -26,6 +28,7 @@
     "karma-coverage": "^1.0.0",
     "karma-jasmine": "~0.3.8",
     "karma-mocha-reporter": "^2.0.4",
+    "karma-json-fixtures-preprocessor": "0.0.6",
     "karma-ng-scenario": "~0.1.0",
     "karma-phantomjs-launcher": "~1.0.0",
     "phantomjs-prebuilt": "~2.1.1"

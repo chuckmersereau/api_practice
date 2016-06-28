@@ -52,6 +52,8 @@
 //angular
 //= require angular/angular
 //= require angular-animate/angular-animate
+//= require angular-sanitize/angular-sanitize
+//= require ng-csv/build/ng-csv
 //= require angular-localforage/bower_components/localforage/dist/localforage
 //= require angular-localforage/dist/angular-localForage
 //= require angular-ui-bootstrap/dist/ui-bootstrap
@@ -61,6 +63,7 @@
 //= require moment-range/dist/moment-range
 //= require angular/mpdxApp
 //= require angular/mpdxApp.constants
+//= require angular/mpdxApp.values
 //= require angular/mpdxApp.railsConstants.js.erb
 //= require_tree ./angular/factories
 //= require_tree ./angular/components
