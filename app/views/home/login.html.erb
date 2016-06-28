@@ -26,20 +26,20 @@
 
         <div id="login_links">
           <div class="source">
-            <%= link_to('/auth/relay?origin=login', class: "loginlink relay", title: _('Relay Login Link')) do %>
+            <%= link_to('/auth/relay?origin=login', class: "loginlink", title: _('Relay Login Link')) do %>
               <%= image_tag('splash/relay_logo.png') %>
               <small><%= _('Login into Relay') %></small>
             <% end %>
           </div>
           <div class="source">
-            <%= link_to('/auth/key?origin=login', class: "loginlink relay",  title: _('The Key Login Link')) do %>
+            <%= link_to('/auth/key?origin=login', class: "loginlink",  title: _('The Key Login Link')) do %>
               <%= image_tag('splash/key_logo.png') %>
               <small><%= _('Login into The Key') %></small>
             <% end %>
           </div>
 
           <p class="spacer-top no-spacer-bottom"> 
-            <%= _('Don\'t have a Key account?') %> <strong><%= link_to(_('Create An Account'), @create_key_account_path) %></strong>
+            <%= _("Don't have a Key account?") %> <strong><%= link_to(_('Create An Account'), @create_key_account_path) %></strong>
           </p>
         </div>
 
