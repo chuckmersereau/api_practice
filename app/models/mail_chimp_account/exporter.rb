@@ -20,10 +20,8 @@ class MailChimpAccount::Exporter
 
     # Make sure we have an interest group for each tag of the
     # partners set to receive the newsletter
-    if $rollout.active?(:mailchimp_tags_export, account.account_list)
-      tags = account.account_list.contact_tags
-      add_tags_groups(tags)
-    end
+    tags = account.account_list.contact_tags
+    add_tags_groups(tags)
 
     add_greeting_merge_variable
 
