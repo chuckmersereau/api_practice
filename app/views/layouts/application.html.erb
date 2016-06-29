@@ -193,8 +193,8 @@
     </header>
 
     <div id="body">
-
-      <div id="content" layout-settings ng-class="{'container-fluid': $ctrl.layoutSettings.fullWidth, 'container': !$ctrl.layoutSettings.fullWidth}">
+      <div id="content" layout-settings
+           ng-class="{'container-fluid': $layoutSettingsCtrl.layoutSettings.fullWidth, 'container': !$layoutSettingsCtrl.layoutSettings.fullWidth}">
         <%= render 'notices' %>
         <%= yield %>
         <a href="#" id="exit-fullscreen">

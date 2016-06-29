@@ -10,13 +10,13 @@ describe('layoutSettings Directive', function() {
 
     describe('fullPage', function() {
         it('should make default value available to template', function(){
-            var element = self.$compile("<div layout-settings>{{$ctrl.layoutSettings.fullWidth}}</div>")(self.$rootScope);
+            var element = self.$compile("<div layout-settings>{{$layoutSettingsCtrl.layoutSettings.fullWidth}}</div>")(self.$rootScope);
             self.$rootScope.$digest();
             expect(element.html()).toEqual('false');
         });
 
         it('should update value available to template when layoutSettings changes', function(){
-            var element = self.$compile("<div layout-settings>{{$ctrl.layoutSettings.fullWidth}}</div>")(self.$rootScope);
+            var element = self.$compile("<div layout-settings>{{$layoutSettingsCtrl.layoutSettings.fullWidth}}</div>")(self.$rootScope);
             self.$rootScope.$digest();
             expect(element.html()).toEqual('false');
             self.layoutSettings.fullWidth = true;

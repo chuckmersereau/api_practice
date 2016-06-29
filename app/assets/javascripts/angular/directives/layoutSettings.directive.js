@@ -5,7 +5,7 @@
             return {
                 restrict: 'A',
                 controller: layoutSettingsController,
-                controllerAs: '$ctrl',
+                controllerAs: '$layoutSettingsCtrl',
                 bindToController: true
             };
         });
