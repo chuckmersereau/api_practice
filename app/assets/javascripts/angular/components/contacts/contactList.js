@@ -79,26 +79,16 @@
         vm._refreshContacts = refreshContacts;
         vm._buildContactFilterUrl = buildContactFilterUrl;
         vm._handleContactQueryChanges = handleContactQueryChanges;
-        vm._diffContactFilters = diffContactFilters;
         vm._loadViewPreferences = loadViewPreferences;
+        vm._diffContactFilters = diffContactFilters;
+        vm._initializeFilters = initializeFilters;
         vm._getChangedFilterPanelGroups = getChangedFilterPanelGroups;
 
-        activate();
+        vm.$onInit = activate;
 
         function activate() {
-            // Set default filters, loading limit from stata and wildcardSearch from url param
-            _.assign(vm.contactQuery, defaultFilters, {
-                limit: parseInt(state.contact_limit || defaultFilters.limit),
-                wildcardSearch: urlParameter.get('q')
-            });
+            initializeFilters();
             refreshContacts();
-
-            // Clear the selected contacts if the user did a search since they
-            // would be expecting to just be selecting on the resulting
-            // contacts.
-            if (vm.contactQuery.wildcardSearch !== null) {
-                clearSelectedContacts();
-            }
 
             loadViewPreferences();
             loadSelectedContacts();
@@ -107,13 +97,6 @@
                 if(!vm.viewPrefsLoaded){
                     return;
                 }
-                //TODO: figure out what this does
-                /*if(q.page === oldq.page){
-                 vm.page.current = 1;
-                 if(q.page !== 1){
-                 return;
-                 }
-                 }*/
 
                 handleContactQueryChanges(oldq);
                 refreshContacts();
@@ -162,10 +145,12 @@
                     document.getElementById('contacts-scrollable').scrollTop = 0;
                 }
 
-                vm.totalContacts = data.meta.total;
-                vm.page.total = data.meta.total_pages;
-                vm.page.from = data.meta.from;
-                vm.page.to = data.meta.to;
+                if(data.meta) {
+                    vm.totalContacts = data.meta.total;
+                    vm.page.total = data.meta.total_pages;
+                    vm.page.from = data.meta.from;
+                    vm.page.to = data.meta.to;
+                }
 
                 vm.contactsLoading = false;
 
@@ -228,7 +213,7 @@
             // selected contacts might not be anywhere in the list anymore.
             if (vm.viewPrefsLoaded && !_.isEmpty(diffContactFilters(oldContactQuery, vm.contactQuery, ['limit', 'page']))) {
                 vm.clearSelectedContacts();
-                vm.page.current = 1; //TODO: Is this right?
+                vm.page.current = 1;
             }
         }
 
@@ -295,15 +280,33 @@
         }
 
         function diffContactFilters(left, right, ignore){
-            return _.reduce(left, function(result, value, key) {
-                return _.includes(ignore, key) || _.isEqual(value, right[key]) ?
+            var valueDifferences =  _.reduce(left, function(result, value, key) {
+                return _.isEqual(value, right[key]) ?
                     result : result.concat(key);
             }, []);
+            var missingKeys = _.xor(_.keys(left), _.keys(right));
+            var allChanges = _.union(valueDifferences, missingKeys);
+            return _.difference(allChanges, ignore);
         }
 
         function isEmptyFilter(q) {
             q = q || vm.contactQuery;
             return _.isEmpty(diffContactFilters(defaultFilters, q, ['limit', 'page']));
+        }
+
+        function initializeFilters(){
+            // Set default filters, loading limit from state and wildcardSearch from url param
+            _.assign(vm.contactQuery, defaultFilters, {
+                limit: parseInt(state.contact_limit || defaultFilters.limit),
+                wildcardSearch: urlParameter.get('q') || null
+            });
+
+            // Clear the selected contacts if the user did a search since they
+            // would be expecting to just be selecting on the resulting
+            // contacts.
+            if (vm.contactQuery.wildcardSearch !== null) {
+                vm.clearSelectedContacts();
+            }
         }
 
         function resetFilters(){
