@@ -12,7 +12,7 @@
       <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
         <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
         <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
-           ng-hide="$ctrl.isEmptyFilter()"
+           ng-if="!$ctrl.isEmptyFilter()"
            onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
           <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
         </a>
@@ -226,7 +226,7 @@
               </li>
           <% end %>
           <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
-             ng-hide="$ctrl.isEmptyFilter()"
+             ng-if="!$ctrl.isEmptyFilter()"
              onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
             <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
           </a>
@@ -313,7 +313,7 @@
 
         <div class="contacts-scrollable" id="contacts-scrollable" ng-cloak>
           <div ng-class="{'contact_loading': $ctrl.contactsLoading}">
-            <div ng-if="$ctrl.contacts.length === 0 && $ctrl.contactQuery.viewPrefsLoaded">
+            <div ng-if="$ctrl.contacts.length === 0 && $ctrl.viewPrefsLoaded">
               <p>
                 <% if current_account_list.contacts.any? %>
                     <strong><%= _('You have %{active_contacts} active contacts.').localize % { active_contacts: current_account_list.contacts.active.count } %></strong>
