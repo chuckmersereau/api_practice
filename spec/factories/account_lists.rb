@@ -5,6 +5,5 @@ FactoryGirl.define do
     name 'MyString'
     # association :creator, factory: :user
     # association :designation_profile
-    designation_accounts { build_list(:designation_account, 1) }
   end
 end

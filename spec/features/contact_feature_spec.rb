@@ -5,16 +5,17 @@ require 'capybara/angular'
 Capybara.default_max_wait_time = 2
 Capybara::Angular.default_max_wait_time = 10
 
-describe 'create new contact', js: true do
+describe 'contact list', js: true do
   include Capybara::Angular::DSL
 
   before :each do
     user = create(:user_with_account)
     login(user)
-    create(:contact, account_list: user.account_lists.first, name: 'Apostle John')
-    create(:contact, account_list: user.account_lists.first, name: 'Apostle Paul')
-    create(:contact, account_list: user.account_lists.first, name: 'Simon Peter')
-    create_list(:contact, 50, account_list: user.account_lists.first)
+
+    create(:contact_with_person, account_list: user.account_lists.first, name: 'Apostle John')
+    create(:contact_with_person, account_list: user.account_lists.first, name: 'Apostle Paul')
+    create(:contact_with_person, account_list: user.account_lists.first, name: 'Simon Peter')
+    create_list(:contact_with_person, 50, account_list: user.account_lists.first)
   end
 
   it 'displays a list of contacts' do
@@ -51,8 +52,9 @@ describe 'create new contact', js: true do
     expect(merged_names[1]).to have_content contact_name_2
     expect(find('#merge_modal .warning-text')).to have_content 'This action'
     click_button('Merge')
-    contact_people = all('contact .people a')
-    contact_people[0].to have_content contact_name_1
-    contact_people[1].to have_content contact_name_2
+    visit '/contacts'
+    contact_people = all('contact .people')
+    expect(contact_people[0]).to have_content contact_name_1
+    expect(contact_people[0]).to have_content contact_name_2
   end
 end
