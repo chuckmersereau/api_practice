@@ -2303,7 +2303,6 @@ h4.title {
   -o-transition-timing-function: ease-in;
   transition-timing-function: ease-in;
   max-height: 1000px;
-  overflow: hidden;
 }
 
 .panel-animate.ng-hide {
@@ -2312,6 +2311,10 @@ h4.title {
   -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
   transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.panel-animate.ng-animate {
+  overflow: hidden;
 }
 
 .panel-heading.pref-head {
@@ -2371,4 +2374,8 @@ span.best_in_place_once {
   padding: 5px 12px;
   border: 2px solid #4e4001;
   border-radius: 6px;
+}
+
+.chosen-container {
+  min-width: 250px;
 }

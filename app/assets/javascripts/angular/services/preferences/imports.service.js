@@ -4,16 +4,16 @@
 
   angular
     .module('mpdxApp')
-    .factory('preferences.networksService', networksService);
+    .factory('preferences.importsService', importsService);
 
-  networksService.$inject = ['api'];
+  importsService.$inject = ['api'];
 
-  function networksService(api) {
+  function importsService(api) {
     var svc = {};
     svc.data = {};
     svc.loading = true;
     svc.load = function () {
-      api.call('get', 'preferences?notifications=true', {}, function(data) {
+      api.call('get', 'preferences/personal', {}, function(data) {
         svc.data = data.preferences;
         svc.loading = false;
       });

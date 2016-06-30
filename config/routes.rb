@@ -74,6 +74,8 @@ Rails.application.routes.draw do
             end
           end
           resources :google_accounts, only: :destroy
+          resources :key_accounts, only: :destroy
+          resources :organization_accounts, only: [:index, :destroy]
         end
       end
       resource :preferences

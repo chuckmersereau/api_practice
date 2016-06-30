@@ -1,0 +1,16 @@
+<div class="network_button network_connect">
+  <div ng-repeat="account in vm.preferences.data.organization_accounts" class="network_connections">
+    <div class="account_single">
+      <div class="actions">
+        <a class="inlineaction delete" ng-click="vm.disconnect(account.id)"><%= _('Delete') %></a>
+      </div>
+      <span class="account_name">{{account.name}}</span>
+      <div ng-show="account.api_class == 'OfflineOrg'">
+        <a href="#"><%= _('Import TNTConnect DataSync file') %></a>
+      </div>
+    </div>
+  </div>
+  <div class="import_button">
+    <%= auth_link('organization') %>
+  </div>
+</div>

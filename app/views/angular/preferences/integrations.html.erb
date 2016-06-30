@@ -19,7 +19,7 @@
               <div class="accstatus accstatus-disabled" ng-hide="vm.preferences.data.valid_google_account"><i class="fa fa-circle-o"></i></div>
             </div>
           </div>
-        	<div class="panel-animate" ng-show="vm.tabSelected('google')">
+          <div class="panel-animate" ng-show="vm.tabSelected('google')">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
@@ -32,13 +32,13 @@
                     <div ng-repeat="account in vm.preferences.data.google_accounts" class="network_connections">
                       <div class="account_single">
                         <div class="actions">
-                            <a class="inlineaction delete" ng-click="vm.disconnect('Google', account.id)"><%= _('Delete') %></a>
+                          <a class="inlineaction delete" ng-click="vm.disconnect('Google', account.id)"><%= _('Delete') %></a>
                         </div>
                         <span class="account_name">{{account.email}}</span>
                       </div>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_google_account">
-                      You can keep Google in sync with your contacts, calendars, tasks and more. Click Add Account to begin.
+                      <%= _('You can keep Google in sync with your contacts, calendars, tasks and more. Click Add Account to begin.') %>
                     </div>
                     <br />
                     <%= link_to(_('Add Account'), '/auth/google', :class => 'btn btn-primary', target: '_blank') %>
@@ -58,7 +58,7 @@
               <div class="accstatus accstatus-disabled" ng-show="vm.mailchimpAccStatus == 'disabled'"><i class="fa fa-circle-o"></i></div>
             </div>
           </div>
-        	<div class="panel-animate" ng-show="vm.tabSelected('mailchimp')">
+          <div class="panel-animate" ng-show="vm.tabSelected('mailchimp')">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
@@ -188,6 +188,70 @@
             </div>
           </div>
         </div>
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head" ng-click="vm.setTab('key')">
+            <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('key') }"></i>
+            <%= _('Key / Relay') %>
+            <div class="pull-right">
+              <div class="accstatus accstatus-enabled" ng-show="vm.preferences.data.valid_key_account"><i class="fa fa-circle"></i></div>
+              <div class="accstatus accstatus-disabled" ng-hide="vm.preferences.data.valid_key_account"><i class="fa fa-circle-o"></i></div>
+            </div>
+          </div>
+          <div class="panel-animate" ng-show="vm.tabSelected('key')">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <div class="import_logo">
+                    <img alt="key" src="/dev-assets/logos/key_logo.png">
+                  </div>
+                </div>
+                <div class="col-md-8">
+                  <div class="network_button network_connect">
+                    <div ng-repeat="account in vm.preferences.data.key_accounts" class="network_connections">
+                      <div class="account_single">
+                        <div class="actions">
+                          <a class="inlineaction delete" ng-click="vm.disconnect('Key', account.id)"><%= _('Delete') %></a>
+                        </div>
+                        <span class="account_name">{{account.email}}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="panel panel-default pref-panel">
+          <div class="panel-heading pref-head" ng-click="vm.setTab('organization')">
+            <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('organization') }"></i>
+            <%= _('Organization') %>
+            <div class="pull-right">
+              <!-- Title Meta / Indicator -->
+            </div>
+          </div>
+          <div class="panel-animate" ng-show="vm.tabSelected('organization')">
+            <div class="panel-body pref-body">
+              <div class="row pref-row">
+                <div class="col-md-4 pref-lead">
+                  <div class="import_logo">
+                    <%= image_tag("logos/organization_logo.png", alt: 'organization') %>
+                  </div>
+                </div>
+                <div class="col-md-8 connections">
+                  <organization-integration-preferences state="vm.mailchimpAccStatus"></organization-integration-preferences>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="new_org_account" style="display:none" title="<%= _('Connect to your organization') %>">
+          <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
+            <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true) %>
+            <%= link_to(_('Connect to selected organization'), new_person_organization_account_path, class: 'btn btn-primary btn-xs', id: 'connect_to_org') %>
+          </div>
+        </div>
+        <div id="org_connection_box"></div>
+        <div id="org_error_modals_container"></div>
       </div>
     </div>
   </div>

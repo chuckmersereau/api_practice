@@ -1,16 +1,16 @@
 (function(){
   angular
     .module('mpdxApp')
-    .component('networkPreferences', {
-      controller: networkPreferencesController,
+    .component('importPreferences', {
+      controller: importPreferencesController,
       controllerAs: 'vm',
-      templateUrl: '/templates/preferences/networks.html',
+      templateUrl: '/templates/preferences/imports.html',
       bindings: {}
     });
-  networkPreferencesController.$inject = ['$state', '$stateParams', 'preferences.networksService', 'alertsService'];
-  function networkPreferencesController($state, $stateParams, networksService, alertsService) {
+  importPreferencesController.$inject = ['$state', '$stateParams', 'preferences.importsService', 'alertsService'];
+  function importPreferencesController($state, $stateParams, importsService, alertsService) {
     var vm = this;
-    vm.preferences = networksService;
+    vm.preferences = importsService;
     vm.alerts = alertsService;
     vm.saving = false;
     vm.tabId = '';
@@ -31,10 +31,10 @@
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {
         vm.tabId = '';
-        $state.go('preferences.networks', {}, { notify: false })
+        $state.go('preferences.imports', {}, { notify: false })
       } else {
         vm.tabId = service;
-        $state.go('preferences.networks.tab', { id: service }, { notify: false })
+        $state.go('preferences.imports.tab', { id: service }, { notify: false })
       }
     };
 

@@ -56,6 +56,8 @@
 //= require angular-ui-bootstrap/dist/ui-bootstrap
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
 //= require angular-ui-router/release/angular-ui-router
+//= require chosen-jquery
+//= require angular-chosen-localytics/dist/angular-chosen
 //= require angular-sanitize/angular-sanitize
 //= require ng-csv/build/ng-csv
 //= require lodash/lodash

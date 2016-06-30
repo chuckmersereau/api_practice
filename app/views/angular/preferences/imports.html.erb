@@ -31,7 +31,7 @@
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-4 pref-lead">
-                    <div class="network_logo">
+                    <div class="import_logo">
                       <% if provider == 'tnt' %>
                         <%= image_tag("logos/tnt_logo.png", alt: 'TntConnect') %>TntConnect
                       <% elsif provider == 'csv' %>
@@ -40,9 +40,9 @@
                     </div>
                   </div>
                   <div class="col-md-8 connections" data-behavior="account">
-                      <div class="network_button">
+                      <div class="import_button">
                         <div class="importoptions" data-behavior="import_options">
-                          <%= render "angular/preferences/networks/#{provider}_import_form" %>
+                          <%= render "angular/preferences/imports/#{provider}_import_form" %>
                         </div>
                       </div>
                   </div>
@@ -65,15 +65,15 @@
               <div class="panel-body pref-body">
                 <div class="row pref-row">
                   <div class="col-md-4 pref-lead">
-                    <div class="network_logo">
+                    <div class="import_logo">
                       <%= image_tag("logos/#{provider}_logo.png", alt: provider) %>
                     </div>
                   </div>
                   <div class="col-md-8 connections">
-                      <div class="network_button">
+                      <div class="import_button">
                         <!-- Desc -->
-                        <%= render 'angular/preferences/networks/network_connections', provider: provider, actions: true %>
-                        <div class="network_button">
+                        <%= render 'angular/preferences/imports/import_connections', provider: provider, actions: true %>
+                        <div class="import_button">
                           <%= auth_link(provider) %>
                         </div>
                       </div>
@@ -87,7 +87,7 @@
       </div>
       <div id="new_org_account" style="display:none" title="<%= _('Connect to your organization') %>">
         <div id="account_list" style="<% current_user.organization_accounts.blank? ? '' : 'display:none' %>">
-          <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true) %>
+          <%= select_tag(:organization_id, options_for_select(Organization.active.order('name').collect {|o| [o.name, o.id]}), include_blank: true, chosen: 'chosen') %>
           <%= link_to(_('Connect to selected organization'), new_person_organization_account_path, class: 'btn btn-primary btn-xs', id: 'connect_to_org') %>
         </div>
       </div>

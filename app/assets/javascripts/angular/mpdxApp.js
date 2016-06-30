@@ -7,7 +7,8 @@ angular
     'ngCsv',
     'isoCurrency',
     'ui.bootstrap',
-    'ui.router'
+    'ui.router',
+    'localytics.directives'
   ]);
 
 angular
@@ -44,13 +45,13 @@ angular
         url: '/:id',
         template: '<integration-preferences></integration-preferences>'
       })
-      .state('preferences.networks', {
-        url: '/networks',
-        template: '<network-preferences></network-preferences>'
+      .state('preferences.imports', {
+        url: '/imports',
+        template: '<import-preferences></import-preferences>'
       })
-      .state('preferences.networks.tab', {
+      .state('preferences.imports.tab', {
         url: '/:id',
-        template: '<network-preferences></network-preferences>'
+        template: '<import-preferences></import-preferences>'
       });
     $locationProvider.html5Mode({
       enabled: true,

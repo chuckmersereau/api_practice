@@ -34,6 +34,7 @@ gem 'attributes_history'
 gem 'carrierwave', git: 'https://github.com/carrierwaveuploader/carrierwave' # has cache err fix not release yet
 gem 'charlock_holmes'
 gem 'cloudinary'
+gem 'chosen-rails', '~> 1.5.2'
 gem 'country_select', git: 'http://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 gem 'deadlock_retry', '~> 1.2.0'
 gem 'devise', '~> 3.2.2'

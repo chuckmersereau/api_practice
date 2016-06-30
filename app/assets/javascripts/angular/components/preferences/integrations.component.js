@@ -35,8 +35,8 @@
         vm.saving = false;
         vm.alerts.addAlert('MPDX removed your integration with ' + vm.service, 'success');
         vm.preferences.load();
-      }, function error() {
-        vm.alerts.addAlert("MPDX couldn't save your configuration changes for " + vm.service, 'danger');
+      }, function error(data) {
+        vm.alerts.addAlert("MPDX couldn't save your configuration changes for " + vm.service + '. ' + data.error, 'danger');
         vm.saving = false;
       }, id);
     };

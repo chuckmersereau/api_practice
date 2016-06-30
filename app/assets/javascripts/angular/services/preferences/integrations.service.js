@@ -34,6 +34,9 @@
       if(service == 'google') {
         return api.call('delete', 'preferences/integrations/google_accounts/' + id, { }, success, error);
       }
+      if(service == 'key') {
+        return api.call('delete', 'preferences/integrations/key_accounts/' + id, { }, success, error);
+      }
       if(service == 'prayer letters') {
         return api.call('delete', 'preferences/integrations/prayer_letters_account', { }, success, error);
       }
