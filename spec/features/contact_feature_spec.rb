@@ -53,8 +53,8 @@ describe 'contact list', js: true do
     expect(find('#merge_modal .warning-text')).to have_content 'This action'
     click_button('Merge')
     visit '/contacts'
-    contact_people = all('contact .people')
+    contact_people = all('contact .people a')
     expect(contact_people[0]).to have_content contact_name_1
-    expect(contact_people[0]).to have_content contact_name_2
+    expect(contact_people[1]).to have_content contact_name_2
   end
 end
