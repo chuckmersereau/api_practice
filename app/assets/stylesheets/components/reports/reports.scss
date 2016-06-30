@@ -93,3 +93,14 @@
     background-color: $color-blue-deep;
   }
 }
+
+currency-donations-report{
+  .report-action-buttons{
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    & > * {
+      margin: 0 5px;
+    }
+  }
+}

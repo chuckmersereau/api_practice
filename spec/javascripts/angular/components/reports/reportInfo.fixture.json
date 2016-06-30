@@ -1,0 +1,64 @@
+{
+  "donors": [
+    {
+      "id": 7,
+      "name": "Dalmation, Pongo and Perdita"
+    },
+    {
+      "id": 8,
+      "name": "Bird, Tweety and Tweetilee"
+    }
+  ],
+  "donations": [
+    {
+      "amount": 175.0,
+      "converted_amount": 180.0,
+      "contact_id": 8,
+      "donation_date": "2015-01-31",
+      "currency": "USD",
+      "currency_symbol": "$",
+      "converted_currency": "USD",
+      "converted_currency_symbol": "$"
+    },
+    {
+      "amount": 25.0,
+      "converted_amount": 30.0,
+      "contact_id": 8,
+      "donation_date": "2015-01-05",
+      "currency": "USD",
+      "currency_symbol": "$",
+      "converted_currency": "USD",
+      "converted_currency_symbol": "$"
+    },
+    {
+      "amount": 100.0,
+      "converted_amount": 105.0,
+      "contact_id": 7,
+      "donation_date": "2015-01-01",
+      "currency": "USD",
+      "currency_symbol": "$",
+      "converted_currency": "USD",
+      "converted_currency_symbol": "$"
+    },
+    {
+      "amount": 175.0,
+      "converted_amount": 180.0,
+      "contact_id": 8,
+      "donation_date": "2015-02-01",
+      "currency": "USD",
+      "currency_symbol": "$",
+      "converted_currency": "USD",
+      "converted_currency_symbol": "$"
+    },
+    {
+      "amount": 100.0,
+      "converted_amount": 105.0,
+      "contact_id": 7,
+      "donation_date": "2015-03-31",
+      "currency": "USD",
+      "currency_symbol": "$",
+      "converted_currency": "USD",
+      "converted_currency_symbol": "$"
+    }
+  ]
+}

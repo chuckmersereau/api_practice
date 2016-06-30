@@ -9,7 +9,7 @@ angular.module('mpdxApp')
             },
             link: function (scope, element, attrs){
             },
-            controller: function ($scope, contactCache, api) {
+            controller: function ($scope, contactCache, api, railsConstants) {
                 //TODO: refactor taskShortListController to use controllerAs so this condition isn't needed or better yet provide the needed data in a binding
                 var parentComponentOrController = $scope.$parent.$ctrl || $scope.$parent;
 
