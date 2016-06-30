@@ -147,6 +147,7 @@ group :development, :test do
   gem 'equivalent-xml'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'rails-erd'
 end
 
 group :test do
