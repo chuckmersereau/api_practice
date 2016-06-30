@@ -170,13 +170,15 @@ class MailChimpAccount::Exporter
     account.update_attribute(:status_grouping_id, grouping['id'])
 
     # Add any new groups
-    groups = interest_categories(account.status_grouping_id).interests.retrieve['interests'].map { |i| i['name'] }
-    create_interest_categories_for(account.status_grouping_id, statuses - groups)
+    groups = interest_categories(grouping['id']).interests.retrieve['interests'].map { |i| i['name'] }
+    create_interest_categories_for(grouping['id'], statuses - groups)
 
     cache_status_interest_ids
   end
 
   def cache_status_interest_ids
+    raise LowerRetryWorker::RetryJobButNoRollbarError if account.status_grouping_id.blank?
+
     interests = interest_categories(account.status_grouping_id).interests.retrieve['interests']
     interests = Hash[interests.map { |interest| [interest['name'], interest['id']] }]
     account.update_attribute(:status_interest_ids, interests)
@@ -211,13 +213,15 @@ class MailChimpAccount::Exporter
     account.update_attribute(:tags_grouping_id, grouping['id'])
 
     # Add any new groups
-    groups = interest_categories(account.tags_grouping_id).interests.retrieve['interests'].map { |i| i['name'] }
-    create_interest_categories_for(account.tags_grouping_id, tags - groups)
+    groups = interest_categories(grouping['id']).interests.retrieve['interests'].map { |i| i['name'] }
+    create_interest_categories_for(grouping['id'], tags - groups)
 
     cache_tags_interest_ids
   end
 
   def cache_tags_interest_ids
+    raise LowerRetryWorker::RetryJobButNoRollbarError if account.tags_grouping_id.blank?
+
     interests = interest_categories(account.tags_grouping_id).interests.retrieve['interests']
     interests = Hash[interests.map { |interest| [interest['name'], interest['id']] }]
     account.update_attribute(:tags_interest_ids, interests)
