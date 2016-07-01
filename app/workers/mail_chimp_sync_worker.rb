@@ -1,6 +1,6 @@
 class MailChimpSyncWorker
   include Sidekiq::Worker
-  sidekiq_options backtrace: true, unique: true
+  sidekiq_options backtrace: false, unique: true
 
   CURRENT_USER_RANGE = 180.days.ago
 
