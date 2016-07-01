@@ -53,8 +53,7 @@
             wildcardSearch: null
         };
 
-        vm.page = {
-            current: 1,
+        vm.pageMeta = {
             total: 1,
             from: 0,
             to: 0
@@ -101,15 +100,6 @@
                 handleContactQueryChanges(oldq);
                 refreshContacts();
             }, true);
-
-            $scope.$watch('$ctrl.page', function (p) {
-                vm.contactQuery.page = p.current;
-
-                //Handles case where limit is increased which could result in the current page being out of range
-                if(vm.contactQuery.page.current > vm.contactQuery.page.total){
-                    vm.contactQuery.page.current = vm.contactQuery.page.total;
-                }
-            }, true);
         }
 
         function refreshContacts() {
@@ -147,9 +137,14 @@
 
                 if(data.meta) {
                     vm.totalContacts = data.meta.total;
-                    vm.page.total = data.meta.total_pages;
-                    vm.page.from = data.meta.from;
-                    vm.page.to = data.meta.to;
+                    vm.pageMeta.total = data.meta.total_pages;
+                    vm.pageMeta.from = data.meta.from;
+                    vm.pageMeta.to = data.meta.to;
+                }
+
+                //Handles case where limit is increased (or another filter change) which could result in the current page being out of range
+                if(vm.contactQuery.page > vm.pageMeta.total){
+                    vm.contactQuery.page = vm.pageMeta.total;
                 }
 
                 vm.contactsLoading = false;
@@ -224,7 +219,7 @@
             // selected contacts might not be anywhere in the list anymore.
             if (vm.viewPrefsLoaded && !_.isEmpty(diffContactFilters(oldContactQuery, vm.contactQuery, ['limit', 'page']))) {
                 vm.clearSelectedContacts();
-                vm.page.current = 1;
+                vm.contactQuery.page = 1;
             }
         }
 
@@ -236,13 +231,13 @@
                     return;
                 }
 
-                vm.contactQuery = _.defaults(_.pick(vm.contactQuery, 'wildcardSearch'), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], defaultFilters);
+                // Limit currently isn't stored with the rest of the view preferences and is loaded with preload-state
+                vm.contactQuery = _.defaults(_.pick(vm.contactQuery, 'wildcardSearch', 'limit'), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], defaultFilters);
 
                 if (_.isString(vm.contactQuery.tags)) {
                     vm.contactQuery.tags = vm.contactQuery.tags.split(',');
                 }
 
-                vm.page.current = vm.contactQuery.page;
                 openFilterPanels();
             });
         }

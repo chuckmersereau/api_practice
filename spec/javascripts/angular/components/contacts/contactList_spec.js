@@ -100,11 +100,21 @@ describe('contacts', function() {
 
             expect(self.controller.contactsLoading).toEqual(false);
             expect(self.controller.totalContacts).toEqual(1);
-            expect(self.controller.page.total).toEqual(1);
-            expect(self.controller.page.from).toEqual(1);
-            expect(self.controller.page.to).toEqual(1);
+            expect(self.controller.pageMeta.total).toEqual(1);
+            expect(self.controller.pageMeta.from).toEqual(1);
+            expect(self.controller.pageMeta.to).toEqual(1);
 
             expect(self.controller.contacts).toEqual([{ id: 20, name: 'Lightyear, Buzz', status: 'Partner - Special', likely_to_give: 'Likely', church_name: '', send_newsletter: '', avatar: 'http://res.cloudinary.com/cru/image/upload/c_pad,h_180,w_180/v1399573062/wxlkbf4gs9fumevf3whv.jpg', square_avatar: 'http://res.cloudinary.com/cru/image/upload/c_fill,g_face,h_50,w_50/v1399573062/wxlkbf4gs9fumevf3whv.jpg', referrals_to_me_ids: [  ], tag_list: [  ], uncompleted_tasks_count: 1, person_ids: [ 59 ], address_ids: [ 40 ], pledge_received: false }]);
+        });
+        it('should set the current page to the last page if the current page is larger than the last page', function(){
+            self.$httpBackend.when("GET", /^\/api\/v1\/contacts\?.*/).respond({
+                "meta":{"total_pages":10}
+            }, {});
+            self.$httpBackend.when("PUT", "/api/v1/users/me").respond(200, {});
+            self.controller.contactQuery.page = 11;
+            self.controller._refreshContacts();
+            self.$httpBackend.flush();
+            expect(self.controller.contactQuery.page).toEqual(10);
         });
     });
 
@@ -228,7 +238,7 @@ describe('contacts', function() {
             self.controller.contactQuery.status = ['active'];
             self.controller._handleContactQueryChanges(oldContactQuery);
             expect(self.controller.clearSelectedContacts).toHaveBeenCalled();
-            expect(self.controller.page.current).toEqual(1);
+            expect(self.controller.contactQuery.page).toEqual(1);
         });
     });
 
