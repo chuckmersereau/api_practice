@@ -117,6 +117,11 @@ describe('contacts', function() {
             self.controller.contactQuery.insightFilter = [1, 2];
             expect(self.controller._buildContactFilterUrl()).toEqual('contacts?account_list_id=2&per_page=25&page=1&filters[ids]=1,2');
         });
+        it('should exclude page and per_page from the filters object', function(){
+            self.controller.contactQuery.page = 5;
+            self.controller.contactQuery.limit = 100;
+            expect(self.controller._buildContactFilterUrl()).toEqual('contacts?account_list_id=2&page=5&per_page=100');
+        });
         it('should build a simple url with some filters', function(){
             self.controller.contactQuery.status = ['Never Contacted'];
             self.controller.contactQuery.name = 'testName';
@@ -181,8 +186,8 @@ describe('contacts', function() {
                 '&filters[contact_info_mobile]=3216549870' +
                 '&filters[contact_info_addr]=123%20First%20Street' +
                 '&filters[contact_info_facebook]=joe' +
-                '&filters[page]=2' +
-                '&filters[per_page]=50' +
+                '&page=2' +
+                '&per_page=50' +
                 '&filters[wildcard_search]=James');
         });
         it('should build a url with many values for the same filters', function(){

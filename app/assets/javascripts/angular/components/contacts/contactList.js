@@ -173,6 +173,8 @@
                     wildcardSearch: 'wildcard_search'
                 };
 
+                var excludeFromFilterObject = ['page', 'per_page'];
+
                 var filtersQueryString = _(vm.contactQuery)
                     .pick(diffContactFilters(defaultFilters, vm.contactQuery)) // Only send non-default filters
                     .thru(function(filters){
@@ -183,13 +185,22 @@
                         return filters;
                     })
                     .mapKeys(function(filterValue, filterName){
-                        return keysToRename[filterName] || filterName; // Rename keys that are different on the server
+                        // Rename keys that are different on the server
+                        var keyName = keysToRename[filterName] || filterName;
+
+                        // Create Query Param key
+                        if(_.includes(excludeFromFilterObject, keyName)){
+                            return keyName;
+                        }else{
+                            return 'filters[' + keyName + ']' + (_.isArray(filterValue) ? '[]' : '');
+                        }
                     })
-                    .reduce(function(queryString, filterValues, filterName){
-                        // Convert all values to arrays and add each array value separately as a query param
-                        var filterValuesArray = _.isArray(filterValues) ? filterValues : [filterValues];
-                        return queryString + _.reduce(filterValuesArray, function(acc, filterValue){
-                                return acc + '&filters[' + filterName + ']' + (_.isArray(filterValues) ? '[]' : '') + '=' + encodeURIComponent(filterValue);
+                    .reduce(function(queryString, filterValues, filterKey){
+                        // Force filterValues to be an array
+                        filterValues = _.concat(filterValues);
+                        // Reduce all values for this key into query params with the same key
+                        return queryString + _.reduce(filterValues, function(acc, filterValue){
+                                return acc + '&' + filterKey + '=' + encodeURIComponent(filterValue);
                             }, '');
                     }, '');
 
@@ -276,7 +287,6 @@
                 }
                 return filterIds;
             }, []);
-
         }
 
         function diffContactFilters(left, right, ignore){
