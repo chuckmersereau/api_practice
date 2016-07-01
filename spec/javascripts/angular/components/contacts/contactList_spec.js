@@ -284,6 +284,28 @@ describe('contacts', function() {
             self.$httpBackend.flush();
             expect(self.controller.contactQuery).toEqual(self.defaultFilters);
         });
+
+        it('should clone defaultFilters object on load and not just copy references', function(){
+            // Ignore http request but it needs this key defined
+            self.$httpBackend.whenGET('/api/v1/users/me').respond(200, {
+                user: {
+                    preferences: {
+                        contacts_filter: {
+                            2: {}
+                        }
+                    }
+                }
+            });
+
+            self.controller._loadViewPreferences(); // Might copy references
+            self.$httpBackend.flush();
+            self.controller.contactQuery.tags.push('test');
+
+
+            self.controller._loadViewPreferences(); // Test reset
+            self.$httpBackend.flush();
+            expect(self.controller.contactQuery).toEqual(self.defaultFilters);
+        });
     });
 
     describe('getChangedFilterPanelGroups', function(){
@@ -406,6 +428,13 @@ describe('contacts', function() {
             self.controller._initializeFilters();
             expect(self.controller.clearSelectedContacts).toHaveBeenCalled();
         });
+        it('should clone defaultFilters object on initialize and not just copy references', function(){
+            self.controller._initializeFilters(); // Might copy references
+            self.controller.contactQuery.tags.push('test');
+
+            self.controller._initializeFilters(); // Test reset
+            expect(self.controller.contactQuery).toEqual(self.defaultFilters);
+        });
 
         afterEach(function(){
             self.state.contact_limit = null;
@@ -433,6 +462,13 @@ describe('contacts', function() {
 
             self.controller.resetFilters();
 
+            expect(self.controller.contactQuery).toEqual(self.defaultFilters);
+        });
+        it('should clone defaultFilters object on reset and not just copy references', function(){
+            self.controller.resetFilters(); // Might copy references
+            self.controller.contactQuery.tags.push('test');
+
+            self.controller.resetFilters(); // Test reset
             expect(self.controller.contactQuery).toEqual(self.defaultFilters);
         });
     });

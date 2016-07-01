@@ -231,8 +231,8 @@
                     return;
                 }
 
-                // Limit currently isn't stored with the rest of the view preferences and is loaded with preload-state
-                vm.contactQuery = _.defaults(_.pick(vm.contactQuery, 'wildcardSearch', 'limit'), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], defaultFilters);
+                // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
+                _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
 
                 if (_.isString(vm.contactQuery.tags)) {
                     vm.contactQuery.tags = vm.contactQuery.tags.split(',');
@@ -301,7 +301,7 @@
 
         function initializeFilters(){
             // Set default filters, loading limit from state and wildcardSearch from url param
-            _.assign(vm.contactQuery, defaultFilters, {
+            _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), {
                 limit: parseInt(state.contact_limit || defaultFilters.limit),
                 wildcardSearch: urlParameter.get('q') || null
             });
@@ -315,7 +315,7 @@
         }
 
         function resetFilters(){
-            _.assign(vm.contactQuery, _.omit(defaultFilters, 'limit'));
+            _.assign(vm.contactQuery, _.omit(_.cloneDeep(defaultFilters), 'limit'));
             clearSelectedContacts();
             angular.element('#globalContactSearch').value = '';
         }
