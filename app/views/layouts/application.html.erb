@@ -194,6 +194,7 @@
 
     <div id="body">
       <div id="content" layout-settings
+           class="container"
            ng-class="{'container-fluid': $layoutSettingsCtrl.layoutSettings.fullWidth, 'container': !$layoutSettingsCtrl.layoutSettings.fullWidth}">
         <%= render 'notices' %>
         <%= yield %>
