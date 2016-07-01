@@ -1,6 +1,6 @@
 class CurrencyRatesFetcherWorker
   include Sidekiq::Worker
-  sidekiq_options unique: true, backtrace: false
+  sidekiq_options unique: true
 
   MAX_DAYS_TO_FETCH = 30
 

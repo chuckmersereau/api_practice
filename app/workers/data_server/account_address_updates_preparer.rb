@@ -2,7 +2,7 @@
 # See docs for DataServer::ContactAddressUpdatesPrep for details
 class DataServer::AccountAddressUpdatesPreparer
   include Sidekiq::Worker
-  sidekiq_options unique: true, queue: :import, backtrace: false
+  sidekiq_options unique: true, queue: :import
 
   def perform(account_list_id)
     account_list = AccountList.find_by(id: account_list_id)

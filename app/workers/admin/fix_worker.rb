@@ -1,7 +1,7 @@
 class Admin::FixWorker
   include Sidekiq::Worker
 
-  sidekiq_options unique: true, retry: false, backtrace: false
+  sidekiq_options unique: true, retry: false
 
   def perform(fix_name, record_class, id)
     record = record_class.constantize.find(id)
