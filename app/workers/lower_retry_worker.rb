@@ -1,7 +1,7 @@
 class LowerRetryWorker
   include Sidekiq::Worker
 
-  sidekiq_options backtrace: true, unique: true
+  sidekiq_options backtrace: false, unique: true
 
   sidekiq_retry_in do |count|
     count**6 + 30 # 30, 31, 94, 759, 4126 ... second delays
