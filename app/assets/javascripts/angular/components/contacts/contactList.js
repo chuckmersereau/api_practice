@@ -267,7 +267,7 @@
             var changedContactFilters = diffContactFilters(defaultFilters, vm.contactQuery, ['limit', 'page']);
 
             var filterDisplayGroups = {
-                single: ['type', 'newsletter', 'status', 'likely', 'church', 'referrer', 'timezone', 'locale', 'relatedTaskAction', 'appeal'],
+                single: ['type', 'newsletter', 'status', 'likely', 'church', 'referrer', 'timezone', 'locale', 'relatedTaskAction', 'appeal', 'currency', 'locale'],
                 commitment_details: ['pledge_frequencies', 'pledge_received'],
                 contact_location: ['city', 'state', 'region', 'metro_area', 'country'],
                 contact_info: ['contact_info_email', 'contact_info_phone', 'contact_info_mobile', 'contact_info_addr', 'contact_info_facebook']

@@ -195,7 +195,7 @@
                   </div>
                 </li>
                 <li class="filter_set">
-                  <label id="filter_language" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Language']);"><%= _('Language') %></label>
+                  <label id="filter_locale" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Language']);"><%= _('Language') %></label>
                   <div class="filter_set_inner">
                     <%= select_tag 'filters[locale]',
                                    contact_locale_filter_options(current_account_list),
