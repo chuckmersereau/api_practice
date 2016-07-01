@@ -338,17 +338,6 @@
             }
         }
 
-        // The tags filter is serialized in some places as a comma delimited
-        // string and sometimes as an array of tags. This method will check the
-        // tags for emptiness based on its representation.
-        function isEmptyTagsFilter(tags) {
-            if (Array.isArray(tags)) {
-                return _.isEmpty(_.without(tags, ''));
-            } else {
-                return _.isEmpty(tags);
-            }
-        }
-
         function generateContactMarker(contact) {
             var cc = contactCache.getFromCache(contact.id);
             var marker;
