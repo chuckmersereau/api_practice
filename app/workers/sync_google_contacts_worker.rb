@@ -3,7 +3,7 @@ require 'async'
 class SyncGoogleContactsWorker
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: true, backtrace: false
 
   def perform
     account_lists = AccountList.joins(:google_integrations)

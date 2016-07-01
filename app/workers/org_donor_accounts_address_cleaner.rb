@@ -3,7 +3,7 @@
 # special characters (and caused duplicated addresses once we fixed it).
 class OrgDonorAccountsAddressCleaner
   include Sidekiq::Worker
-  sidekiq_options unique: true, queue: :import
+  sidekiq_options unique: true, queue: :import, backtrace: false
 
   def self.queue_for_data_server_orgs
     Organization.using_data_server.pluck(:id).each_with_index do |org_id, index|
