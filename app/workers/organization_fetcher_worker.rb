@@ -1,6 +1,6 @@
 class OrganizationFetcherWorker
   include Sidekiq::Worker
-  sidekiq_options backtrace: false, unique: true
+  sidekiq_options unique: true
 
   def perform
     # Download the org csv from tnt and update orgs
