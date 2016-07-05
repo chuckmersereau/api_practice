@@ -478,8 +478,13 @@ class Contact < ActiveRecord::Base
     donations.where('donation_date >= ?', last_donation_month_end.beginning_of_month).sum(:amount)
   end
 
-  def last_long_time_frame_total
-    donations.where('donation_date >= ?', last_donation_long_time_frame_end.beginning_of_month).sum(:amount)
+  def long_time_frame_gift_given_early?
+    return unless pledge_frequency >= 6
+    prev_amount = donations.where('donation_date >= ? AND donation_date <= ?',
+                                  (last_donation_month_end << pledge_frequency - 1).beginning_of_month,
+                                  (last_donation_month_end << 1).end_of_month).sum(:amount)
+    result =  prev_amount == last_donation.amount &&  last_donation.amount == pledge_amount
+    return result
   end
 
   def prev_month_donation_date
@@ -537,10 +542,6 @@ class Contact < ActiveRecord::Base
       else
         Date.today.end_of_month
       end
-  end
-
-  def last_donation_long_time_frame_end
-    @recent_avg_long_range_end ||= Date.today.prev_month(3).end_of_month
   end
 
   def prev_donation_month_start
