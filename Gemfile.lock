@@ -722,6 +722,7 @@ GEM
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
+    simplecov-lcov (0.5.0)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -926,6 +927,7 @@ DEPENDENCIES
   siebel_donations (~> 1.0.6)
   silencer
   simplecov
+  simplecov-lcov
   sinatra
   slim
   snail

@@ -5,6 +5,12 @@ end
 
 def start_simplecov
   require 'simplecov'
+  require 'simplecov-lcov'
+  SimpleCov::Formatter::LcovFormatter.report_with_single_file = true
+  SimpleCov.formatters = [
+    SimpleCov::Formatter::HTMLFormatter,
+    SimpleCov::Formatter::LcovFormatter
+  ]
   SimpleCov.start 'rails' do
     add_filter 'vendor'
     add_filter '/dev/'
