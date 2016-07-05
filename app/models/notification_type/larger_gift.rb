@@ -33,7 +33,11 @@ class NotificationType::LargerGift < NotificationType
   def long_time_frame_gift_given_early?(contact)
     return unless contact.pledge_frequency.to_i >= LongTimeFrameGift::LONG_TIME_FRAME_PLEDGE_FREQUENCY &&
                   contact.prev_month_donation_date.present?
-    contact.prev_donation_amount == contact.last_donation.amount && contact.last_donation.amount == contact.pledge_amount
+    last_donation_month_end = contact.last_donation_month_end
+    prev_donation_amount = contact.donations.where('donation_date >= ? AND donation_date <= ?',
+                                                   (last_donation_month_end << contact.pledge_frequency - 1).beginning_of_month,
+                                                   (last_donation_month_end << 1).end_of_month).sum(:amount)
+    prev_donation_amount == contact.last_donation.amount && contact.last_donation.amount == contact.pledge_amount
   end
 
   def larger_gift(contact)

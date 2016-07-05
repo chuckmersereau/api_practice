@@ -61,18 +61,10 @@ describe NotificationType::LargerGift do
                         designation_account: da, donation_date: Date.today.end_of_month)
       expect(larger_gift.check(account_list)).to be_empty
     end
-  end
-
-  context '#check with old_donation' do
-    let!(:old_donation) do
-      create(:donation, donor_account: donor_account, designation_account: da, donation_date: Date.today << 5, amount: 5)
-    end
-
-    before do
-      contact.update_donation_totals(old_donation)
-    end
 
     it "doesn't add a notification if gift is a long time frame gift that was given early" do
+      old_donation = create(:donation, donor_account: donor_account, designation_account: da, donation_date: Date.today << 5, amount: 5)
+      contact.update_donation_totals(old_donation)
       donation.update(amount: 5.0)
       contact.update_donation_totals(donation)
       expect(larger_gift.check(account_list)).to be_empty
