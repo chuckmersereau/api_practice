@@ -478,14 +478,6 @@ class Contact < ActiveRecord::Base
     donations.where('donation_date >= ?', last_donation_month_end.beginning_of_month).sum(:amount)
   end
 
-  def long_time_frame_gift_given_early?
-    return unless pledge_frequency >= 6
-    prev_amount = donations.where('donation_date >= ? AND donation_date <= ?',
-                                  (last_donation_month_end << pledge_frequency - 1).beginning_of_month,
-                                  (last_donation_month_end << 1).end_of_month).sum(:amount)
-    prev_amount == last_donation.amount && last_donation.amount == pledge_amount
-  end
-
   def prev_month_donation_date
     donations.where('donation_date <= ?', (last_donation_month_end << 1).end_of_month)
              .pluck(:donation_date).first
@@ -520,6 +512,12 @@ class Contact < ActiveRecord::Base
 
   def human_contact_locale
     _(MailChimpAccount::Locales::LOCALE_NAMES[locale])
+  end
+
+  def prev_donation_amount
+    donations.where('donation_date >= ? AND donation_date <= ?',
+                    (last_donation_month_end << pledge_frequency - 1).beginning_of_month,
+                    (last_donation_month_end << 1).end_of_month).sum(:amount)
   end
 
   private
