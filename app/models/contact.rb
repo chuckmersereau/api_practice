@@ -514,15 +514,6 @@ class Contact < ActiveRecord::Base
     _(MailChimpAccount::Locales::LOCALE_NAMES[locale])
   end
 
-  def last_donation_month_end
-    @recent_avg_range_end ||=
-        if last_donation_date && month_diff(last_donation_date, Date.today) > 0
-          Date.today.prev_month.end_of_month
-        else
-          Date.today.end_of_month
-        end
-  end
-
   private
 
   def monthly_avg_over_range(start_date, end_date)
@@ -533,6 +524,15 @@ class Contact < ActiveRecord::Base
     donations
       .where('donation_date >= ?', start_date)
       .where('donation_date <= ?', end_date)
+  end
+
+  def last_donation_month_end
+    @last_donation_month_end ||=
+      if last_donation_date && month_diff(last_donation_date, Date.today) > 0
+        Date.today.prev_month.end_of_month
+      else
+        Date.today.end_of_month
+      end
   end
 
   def prev_donation_month_start
