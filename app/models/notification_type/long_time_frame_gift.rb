@@ -7,8 +7,8 @@ class NotificationType::LongTimeFrameGift < NotificationType
   end
 
   def check_for_donation_to_notify(contact)
-    contact.last_donation if contact.prev_month_donation_date.present?&&
-        contact.last_monthly_total == contact.pledge_amount
+    contact.last_donation if contact.prev_month_donation_date.present? &&
+                             contact.last_monthly_total == contact.pledge_amount
   end
 
   def task_description(notification)

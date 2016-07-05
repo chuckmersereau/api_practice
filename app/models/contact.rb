@@ -483,8 +483,7 @@ class Contact < ActiveRecord::Base
     prev_amount = donations.where('donation_date >= ? AND donation_date <= ?',
                                   (last_donation_month_end << pledge_frequency - 1).beginning_of_month,
                                   (last_donation_month_end << 1).end_of_month).sum(:amount)
-    result =  prev_amount == last_donation.amount &&  last_donation.amount == pledge_amount
-    return result
+    prev_amount == last_donation.amount && last_donation.amount == pledge_amount
   end
 
   def prev_month_donation_date
