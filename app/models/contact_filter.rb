@@ -275,7 +275,10 @@ class ContactFilter
 
   def pledge_freq(filtered_contacts)
     if @filters[:pledge_frequencies].present? && @filters[:pledge_frequencies].first != ''
-      filtered_contacts = filtered_contacts.where(pledge_frequency: @filters[:pledge_frequencies])
+      frequencies_not_null = Array.wrap(@filters[:pledge_frequencies]) - ['null']
+      return filtered_contacts unless frequencies_not_null.present?
+
+      filtered_contacts = filtered_contacts.where(pledge_frequency: frequencies_not_null)
     end
     filtered_contacts
   end

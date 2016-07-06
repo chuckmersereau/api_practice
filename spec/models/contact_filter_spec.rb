@@ -76,6 +76,16 @@ describe ContactFilter do
       expect(filtered_contacts.length).to be 2
     end
 
+    context 'pledge frequency' do
+      it "doesn't error when passed a 'null'" do
+        received = create(:contact, pledge_received: true)
+
+        cf = ContactFilter.new(pledge_frequencies: 'null', received: true)
+        filtered_contacts = cf.filter(Contact, account_list)
+        expect(filtered_contacts).to eq [received]
+      end
+    end
+
     context '#contact_info_email' do
       let!(:has_email) do
         c = create(:contact)
