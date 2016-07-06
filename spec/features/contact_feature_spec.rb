@@ -18,9 +18,11 @@ describe 'contact list', js: true do
     create_list(:contact_with_person, 50, account_list: user.account_lists.first)
   end
 
-  it 'displays a list of contacts' do
+  it 'displays a list of contacts with their details' do
     visit '/contacts'
     expect(all('contact').length).to eq 25
+    expect(all('address')[0]).to have_content '123 Somewhere St'
+    expect(all('address')[1]).to have_content 'Fremont'
   end
 
   it 'pagination works' do
@@ -56,5 +58,11 @@ describe 'contact list', js: true do
     contact_people = all('contact .people a')
     expect(contact_people[0]).to have_content contact_name_1
     expect(contact_people[1]).to have_content contact_name_2
+  end
+
+  it 'correctly hides contacts' do
+    visit '/contacts'
+    contact_checkboxes = all('contact input')
+
   end
 end
