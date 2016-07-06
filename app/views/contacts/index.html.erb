@@ -240,7 +240,7 @@
 
               <div class="col-md-7 col-sm-5 col-xs-9">
                 <div class="form-group has-feedback">
-                  <input autocomplete="off" class="search_filter form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="$ctrl.contactQuery.name" size="40">
+                  <input autocomplete="off" class="search_filter form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="$ctrl.contactQuery.name" ng-model-options="{ debounce: 200 }" size="40">
                   <span class="form-control-feedback">
                     <i class="fa fa-spinner fa-spin" ng-if="$ctrl.contactsLoading"></i>
                   </span>
