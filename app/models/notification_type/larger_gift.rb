@@ -40,7 +40,7 @@ class NotificationType::LargerGift < NotificationType
                                                    previous_frame_start_date,
                                                    previous_frame_end_date).sum(:amount)
     prev_donation_amount == contact.last_donation.amount &&
-        prev_donation_amount == contact.pledge_amount
+      prev_donation_amount == contact.pledge_amount
   end
 
   def larger_gift(contact)
