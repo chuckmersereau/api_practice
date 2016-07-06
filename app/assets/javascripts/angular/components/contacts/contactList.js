@@ -171,7 +171,8 @@
                 var excludeFromFilterObject = ['page', 'per_page'];
 
                 var filtersQueryString = _(vm.contactQuery)
-                    .pick(diffContactFilters(defaultFilters, vm.contactQuery)) // Only send non-default filters
+                    // Always send all filters. The api currently sends invalid sql if all the filters aren't defined
+                    // TODO: reenable this line: .pick(diffContactFilters(defaultFilters, vm.contactQuery)) // Only send non-default filters
                     .thru(function(filters){
                         // A false activeAddresses value should result in a true address_historic value
                         if(filters.activeAddresses === false){
