@@ -143,7 +143,7 @@
                 }
 
                 //Handles case where limit is increased (or another filter change) which could result in the current page being out of range
-                if(vm.contactQuery.page > vm.pageMeta.total){
+                if(vm.contactQuery.page > vm.pageMeta.total && vm.pageMeta.total !== 0){
                     vm.contactQuery.page = vm.pageMeta.total;
                 }
 
