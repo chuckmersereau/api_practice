@@ -432,7 +432,7 @@ describe('contacts', function() {
             self.controller._initializeFilters(); // Might copy references
             self.controller.contactQuery.tags.push('test');
 
-            self.controller._initializeFilters(); // Test reset
+            self.controller.resetFilters(); // Test reset
             expect(self.controller.contactQuery).toEqual(self.defaultFilters);
         });
 
