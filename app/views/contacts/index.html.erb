@@ -12,7 +12,7 @@
       <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
         <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
         <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
-           ng-hide="$ctrl.isEmptyFilter()"
+           ng-if="!$ctrl.isEmptyFilter()"
            onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
           <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
         </a>
@@ -195,7 +195,7 @@
                   </div>
                 </li>
                 <li class="filter_set">
-                  <label id="filter_language" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Language']);"><%= _('Language') %></label>
+                  <label id="filter_locale" class="filter_title" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Language']);"><%= _('Language') %></label>
                   <div class="filter_set_inner">
                     <%= select_tag 'filters[locale]',
                                    contact_locale_filter_options(current_account_list),
@@ -226,7 +226,7 @@
               </li>
           <% end %>
           <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
-             ng-hide="$ctrl.isEmptyFilter()"
+             ng-if="!$ctrl.isEmptyFilter()"
              onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
             <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
           </a>
@@ -278,7 +278,7 @@
 
           <div class="row page-controls">
             <div class="col-sm-5">
-              <span><%= _('Showing') %> <b>{{$ctrl.page.from}}&nbsp;-&nbsp;{{$ctrl.page.to}}</b> <%= _('of') %> <b>{{$ctrl.totalContacts}}</b></span>
+              <span><%= _('Showing') %> <b>{{$ctrl.pageMeta.from}}&nbsp;-&nbsp;{{$ctrl.pageMeta.to}}</b> <%= _('of') %> <b>{{$ctrl.totalContacts}}</b></span>
               <span class="label label-primary" ng-if="!$ctrl.noSelectedContacts()">
                 {{$ctrl.selectedContacts.length}} <%= _('Selected') %>
                 <a href="javascript:;" class="label-action" ng-click="$ctrl.clearSelectedContacts()"><i class="fa fa-times"></i></a>
@@ -286,23 +286,23 @@
             </div>
             <div class="col-sm-7 text-right">
               <span class="pagination">
-                <span class="previous_page disabled" ng-if="$ctrl.page.current === 1">
+                <span class="previous_page disabled" ng-if="$ctrl.contactQuery.page === 1">
                   <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
                 </span>
-                <a class="previous_page" rel="prev start" href="#" ng-click="$ctrl.page.current = $ctrl.page.current-1" ng-if="$ctrl.page.current > 1">
+                <a class="previous_page" rel="prev start" href="#" ng-click="$ctrl.contactQuery.page = $ctrl.contactQuery.page - 1" ng-if="$ctrl.contactQuery.page > 1">
                   <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
                 </a>
 
-                <span ng-repeat="n in [1, $ctrl.page.total] | makeRange">
-                  <em class="current" ng-if="n === $ctrl.page.current">{{n}}</em>
-                  <a rel="next" ng-if="n !== $ctrl.page.current && ((n > ($ctrl.page.current-5) && n < ($ctrl.page.current+5)) || n === 1 || n === $ctrl.page.total)" href="#" ng-click="$ctrl.page.current=n">{{n}}</a>
-                  <span ng-if="(n === 2 && $ctrl.page.current > 6) || (n === $ctrl.page.total - 1 && $ctrl.page.current < $ctrl.page.total - 5)">...</span>
+                <span ng-repeat="n in [1, $ctrl.pageMeta.total] | makeRange">
+                  <em class="current" ng-if="n === $ctrl.contactQuery.page">{{n}}</em>
+                  <a rel="next" ng-if="n !== $ctrl.contactQuery.page && ((n > ($ctrl.contactQuery.page-5) && n < ($ctrl.contactQuery.page+5)) || n === 1 || n === $ctrl.pageMeta.total)" href="#" ng-click="$ctrl.contactQuery.page=n">{{n}}</a>
+                  <span ng-if="(n === 2 && $ctrl.contactQuery.page > 6) || (n === $ctrl.pageMeta.total - 1 && $ctrl.contactQuery.page < $ctrl.pageMeta.total - 5)">...</span>
                 </span>
 
-                <span class="next_page disabled" ng-if="$ctrl.page.current === $ctrl.page.total || $ctrl.page.total === 0">
+                <span class="next_page disabled" ng-if="$ctrl.contactQuery.page === $ctrl.pageMeta.total || $ctrl.pageMeta.total === 0">
                   <%= _('Next') %> <i class="fa fa-chevron-right"></i>
                 </span>
-                <a class="next_page" rel="next" href="#" ng-click="$ctrl.page.current = $ctrl.page.current+1" ng-if="$ctrl.page.current < $ctrl.page.total">
+                <a class="next_page" rel="next" href="#" ng-click="$ctrl.contactQuery.page = $ctrl.contactQuery.page+1" ng-if="$ctrl.contactQuery.page < $ctrl.pageMeta.total">
                   <%= _('Next') %> <i class="fa fa-chevron-right"></i>
                 </a>
               </span>
@@ -313,7 +313,7 @@
 
         <div class="contacts-scrollable" id="contacts-scrollable" ng-cloak>
           <div ng-class="{'contact_loading': $ctrl.contactsLoading}">
-            <div ng-if="$ctrl.contacts.length === 0 && $ctrl.contactQuery.viewPrefsLoaded">
+            <div ng-if="$ctrl.contacts.length === 0 && $ctrl.viewPrefsLoaded">
               <p>
                 <% if current_account_list.contacts.any? %>
                     <strong><%= _('You have %{active_contacts} active contacts.').localize % { active_contacts: current_account_list.contacts.active.count } %></strong>

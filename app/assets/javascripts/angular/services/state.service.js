@@ -8,6 +8,7 @@
             current_currency: '',
             current_currency_symbol: '',
             current_account_list_id: '',
+            contact_limit: null
         };
 
         return service;
