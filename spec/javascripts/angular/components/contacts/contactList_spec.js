@@ -62,7 +62,7 @@ describe('contacts', function() {
         });
 
         it('should send a simple http request', function(){
-            self.$httpBackend.expectGET(/^\/api\/v1\/contacts\?account_list_id=2.*/).respond(200, {});
+            self.$httpBackend.expectGET('/api/v1/contacts?account_list_id=2').respond(200, {});
             self.$httpBackend.expectPUT('/api/v1/users/me').respond(200, {});
 
             self.controller._refreshContacts();
@@ -135,9 +135,7 @@ describe('contacts', function() {
         it('should build a simple url with some filters', function(){
             self.controller.contactQuery.status = ['Never Contacted'];
             self.controller.contactQuery.name = 'testName';
-
-
-            expect(self.controller._buildContactFilterUrl()).toEqual('contacts?account_list_id=2&filters[status][]=Never%20Contacted&filters[name]=testName');
+            expect(self.controller._buildContactFilterUrl()).toEqual('contacts?account_list_id=2&filters[name]=testName&filters[status][]=Never%20Contacted');
         });
         it('should build a complex url with all filters', function(){
             self.controller.contactQuery.ids = '1';
