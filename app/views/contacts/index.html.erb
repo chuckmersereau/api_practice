@@ -332,7 +332,7 @@
                 <%= link_to(_('Add New Contact'),'/contacts/new', class: 'btn btn-secondary') %>
               </p>
             </div>
-            <contact contact="contact" ng-repeat="contact in $ctrl.contacts | orderBy:'name'" id="contact_{{contact.id}}" data-hook="contact"></contact>
+            <contact-list-item contact="contact" ng-repeat="contact in $ctrl.contacts | orderBy:'name'" id="contact_{{contact.id}}" data-hook="contact"></contact-list-item>
           </div>
         </div>
       </div>

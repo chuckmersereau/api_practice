@@ -1,9 +1,9 @@
 (function(){
     angular
         .module('mpdxApp')
-        .component('contact', {
+        .component('contactListItem', {
             controller: contactController,
-            templateUrl: '/templates/contacts/contact.html',
+            templateUrl: '/templates/components/contacts/contactList/contactListItem.html',
             bindings: {
                 contact: '='
             }
