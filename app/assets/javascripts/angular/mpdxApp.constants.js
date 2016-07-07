@@ -1,3 +1,5 @@
+/* eslint angular/window-service: "off" */
+
 (function(){
     angular
         .module('mpdxApp')

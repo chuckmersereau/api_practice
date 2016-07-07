@@ -123,14 +123,14 @@
 
         function groupDonationsByCurrency(donations){
             var groupedDonationsByCurrency = _.groupBy(donations, vm.useConvertedValues ? 'converted_currency' : 'currency');
-            return _.map(groupedDonationsByCurrency, function(donations, currency){
+            return _.map(groupedDonationsByCurrency, function(donations){
                 return {
                     currency: donations[0]['currency'],
                     currencyConverted: donations[0]['converted_currency'],
                     currencySymbol: donations[0]['currency_symbol'],
                     currencySymbolConverted: donations[0]['converted_currency_symbol'],
                     donations: donations
-                }
+                };
             });
         }
 
@@ -140,7 +140,7 @@
                 return {
                     donorInfo: donor,
                     donations: groupedDonations[donor.id]
-                }
+                };
             });
         }
 
@@ -159,7 +159,7 @@
                         currencySymbolConverted: donationsInMonth[0]['converted_currency_symbol'],
                         donation_date: month,
                         rawDonations: donationsInMonth
-                    }
+                    };
                 })
                 .value();
         }
@@ -193,7 +193,7 @@
                         average: sumConverted / donationMonths,
                         min: minDonationConverted ? minDonation.amountConverted : 0
                     }
-                })
+                });
             });
         }
 

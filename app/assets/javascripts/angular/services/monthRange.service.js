@@ -5,9 +5,9 @@
         .module('mpdxApp')
         .factory('monthRange', monthRangeService);
 
-    monthRangeService.$inject = ['moment'];
+    monthRangeService.$inject = ['moment', '_'];
 
-    function monthRangeService(moment){
+    function monthRangeService(moment, _){
         var factory = {
             getPastMonths: getPastMonths,
             yearsWithMonthCounts: yearsWithMonthCounts,
@@ -16,13 +16,7 @@
             _generateMonthRange: generateMonthRange
         };
 
-        activate();
-
         return factory;
-
-        function activate(){
-
-        }
 
         /** Get current date in format YYYY-MM-DD where DD is the last day of the month */
         function getEndOfThisMonth(){
@@ -38,7 +32,7 @@
         /** Get array of months from any number of months before */
         function getPastMonths(numberOfMonths){
             numberOfMonths = numberOfMonths || 12;
-            return generateMonthRange(getStartingMonth(numberOfMonths), getEndOfThisMonth())
+            return generateMonthRange(getStartingMonth(numberOfMonths), getEndOfThisMonth());
         }
 
         /** Get array of months between dateFrom and dateTo */

@@ -15,7 +15,7 @@ angular.module('mpdxApp')
                     };
 
                     $scope.save = function () {
-                      console.log('sve');
+                      //console.log('sve');
                       $uibModalInstance.close($scope.facebookUrl);
                     };
                   }

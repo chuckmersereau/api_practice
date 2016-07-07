@@ -10,9 +10,9 @@
             }
         });
 
-    excludedAppealContactsController.$inject = ['$scope', 'api', 'state'];
+    excludedAppealContactsController.$inject = ['$scope', 'api', 'state', '_'];
 
-    function excludedAppealContactsController($scope, api, state) {
+    function excludedAppealContactsController($scope, api, state, _) {
         var vm = this;
 
         vm.add = add;
@@ -37,7 +37,7 @@
             var url = 'appeals/' + vm.appealId + '/exclusions/' + exclusion.id + '?account_list_id=' + (state.current_account_list_id || '');
             api.call('delete', url, {}).then(function() {
                 _.remove(vm.exclusions, function (e) {
-                    return e == exclusion
+                    return e == exclusion;
                 });
                 $scope.$parent.$ctrl.addExcluded(exclusion.contact);
             }, function (error) {
@@ -49,7 +49,7 @@
         function appealLoaded() {
             angular.forEach(vm.exclusions, function(exclusion) {
                 exclusion.lastSixMonths = groupDonations(exclusion.donations);
-            })
+            });
         }
 
         function loadAppealExclusions(){
@@ -76,7 +76,7 @@
                 var monthObject = { month: new Date(begining.getTime()), donations: [] };
                 angular.forEach(donations, function (donation) {
                     if(donation.donation_date < ymdDate(nextMonth) && donation.donation_date >= ymdDate(begining))
-                        monthObject.donations.push(donation)
+                        monthObject.donations.push(donation);
                 });
                 result.push(monthObject);
                 begining.setMonth(begining.getMonth() + 1);

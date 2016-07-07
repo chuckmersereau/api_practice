@@ -1,5 +1,5 @@
-angular.module('mpdxApp').filter('gettext', function(){
+angular.module('mpdxApp').filter('gettext', function(__){
   return function (val) {
-    return window.__ && val ? __(val) : val
+    return __ && val ? __(val) : val;
   };
 });

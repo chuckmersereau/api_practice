@@ -6,9 +6,9 @@
             templateUrl: '/templates/reports/balances.html'
         });
 
-    balancesReportController.$inject = ['api', 'state'];
+    balancesReportController.$inject = ['api', 'state', '_'];
 
-    function balancesReportController(api, state) {
+    function balancesReportController(api, state, _) {
         var vm = this;
 
         vm.errorOccurred = false;

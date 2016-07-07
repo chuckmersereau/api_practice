@@ -10,9 +10,9 @@
             }
         });
 
-    appealController.$inject = ['$filter', 'api', 'state', 'railsConstants'];
+    appealController.$inject = ['$filter', 'api', 'state', 'railsConstants', '_', '__'];
 
-    function appealController($filter, api, state, railsConstants) {
+    function appealController($filter, api, state, railsConstants, _, __) {
         var vm = this;
         var padStart = _.padStart || _.padLeft;
         vm.mins = _(60).range().map(function(i) { return padStart(i, 2, '0') }).value();
