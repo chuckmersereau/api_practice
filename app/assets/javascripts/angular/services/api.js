@@ -21,6 +21,9 @@
                 return;
             }
         }
+        if (data === undefined) {
+          data = {};
+        }
         if (svc.account_list_id !== null) {
           data.account_list_id = svc.account_list_id;
         }

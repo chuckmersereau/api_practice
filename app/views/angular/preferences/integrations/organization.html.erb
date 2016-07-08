@@ -1,16 +1,103 @@
 <div class="network_button network_connect">
-  <div ng-repeat="account in vm.preferences.data.organization_accounts" class="network_connections">
-    <div class="account_single">
-      <div class="actions">
-        <a class="inlineaction delete" ng-click="vm.disconnect(account.id)"><%= _('Delete') %></a>
+  <div ng-show="vm.page == 'org_list'">
+    <div ng-show="vm.preferences.data.organization_accounts.length == 0">
+      <h3><%= _("Let's start by connecting to your organizations") %></h3>
+      <div class="import_button">
+        <a class="btn btn-primary" ng-click="vm.page = 'select_org'"><%= _('Add Account') %></a>
       </div>
-      <span class="account_name">{{account.name}}</span>
-      <div ng-show="account.api_class == 'OfflineOrg'">
-        <a href="#"><%= _('Import TNTConnect DataSync file') %></a>
+    </div>
+    <div ng-show="vm.preferences.data.organization_accounts.length != 0">
+      <div ng-repeat="account in vm.preferences.data.organization_accounts" class="network_connections">
+        <div class="account_single">
+          <div class="actions">
+            <a class="inlineaction delete" ng-click="vm.disconnect(account.id)"><%= _('Delete') %></a>
+          </div>
+          <span class="account_name">
+            <strong>{{account.name}}</strong> {{account.username}}
+            <span ng-show="account.api_class == 'DataServer'">
+              <a class="edit ico ico_edit no-new-tab" ng-click="vm.editAccount(account)"><%= _('Edit') %></a>
+            </span>
+          </span>
+          <div ng-show="account.api_class == 'OfflineOrg'">
+            <a href="#"><%= _('Import TNTConnect DataSync file') %></a>
+          </div>
+        </div>
+      </div>
+      <div class="import_button">
+        <a class="btn btn-primary" ng-click="vm.page = 'select_org'"><%= _('Add another Account') %></a>
       </div>
     </div>
   </div>
-  <div class="import_button">
-    <%= auth_link('organization') %>
+  <div ng-show="vm.page == 'select_org'">
+    <h3><%= _("Add Account") %></h3>
+    <p>
+      <select ng-model="vm.selected" ng-disabled="vm.saving" ng-options="item as item.name for item in vm.preferences.data.organizations track by item.id" chosen>
+      </select>
+    </p>
+    <div ng-show="vm.selected.api_class === undefined">
+      <a data-toggle="collapse" data-target="#org_not_found" aria-expanded="false" aria-controls="org_not_found"><%= _("Can't find your organization?") %></a>
+      <br />
+      <p>
+        <div class="collapse" id="org_not_found">
+          <div class="well">
+            <h4><%= _('You must select an organization to continue') %></h4>
+            <p>
+              <%= _('MPDX is open ' +
+                    'to any missions organization or church. If your organization is listed in the dropdown ' +
+                    'box, you can just sign up. If not, we need to add your organization. There are two ' +
+                    'routes to go about this.') %>
+            </p>
+            <p>
+              <%== format(_('The first is to create an offline organization which is a quick process. However, this ' +
+                            'means that you have to enter in your contacts and donations in manually. If you would ' +
+                            'like to go this route, please email us at %{email_link} with the name of your organization.'),
+                     email_link: mail_to('support@mpdx.org')) %>
+            </p>
+            <p>
+              <%= _('The second is to set up your organization to sync your donations with MPDx. This is ' +
+                    'actually not done by us, but here is where you can go to get started: ') %>
+              <%= link_to('http://www.tntware.com/tntmpd.dataserver/', 'http://www.tntware.com/tntmpd.dataserver/') %>.
+            </p>
+          </div>
+        </p>
+      </div>
+      <a class="btn btn-default" ng-click="vm.revert()"><%= _('Back') %></a>
+    </div>
+    <div ng-show="vm.selected.api_class == 'Siebel'">
+      <p><%= _('This organization requires you to log into MPDX with your ministry email to access it.') %></p>
+      <p><%= _('First you need to %{key_logout_url}.') % { key_logout_url: link_to(_('click here to log out of your personal Key account'), 'https://thekey.me/cas/logout', target: '_blank') } %></p>
+      <p><%= _('Next, %{logout_url} so you can log back in with your offical key account.') % { logout_url: link_to(_('click here to log out of MPDX'), logout_path) } %></p>
+      <a class="btn btn-default" ng-click="vm.revert()"><%= _('Back') %></a>
+    </div>
+    <div ng-show="vm.selected.api_class == 'DataServer'">
+      <form>
+        <label for="organization_account_username"><%= _('Username') %></label>
+        <input id="organization_account_username" ng-disabled="vm.saving" name="organization_account[username]" type="text" ng-model="vm.username">
+        <label for="organization_account_password"><%= _('Password') %></label>
+        <input id="organization_account_password" ng-disabled="vm.saving" name="organization_account[password]" type="password" ng-model="vm.password">
+        <br />
+        <br />
+        <button type="submit" ng-click="vm.createAccount()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Add Account') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
+        <a class="btn" ng-click="vm.revert()"><%= _('Cancel') %></a>
+      </form>
+    </div>
+    <div ng-show="vm.selected.api_class == 'OfflineOrg'">
+      <button type="submit" ng-click="vm.createAccount()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Add Account') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
+      <a class="btn" ng-click="vm.revert()"><%= _('Cancel') %></a>
+    </div>
+  </div>
+  <div ng-show="vm.page == 'edit_account'">
+    <h3><%= _("Edit Account") %></h3>
+    <h4>{{vm.selected.name}}</h4>
+    <form>
+      <label for="edit_organization_account_username"><%= _('Username') %></label>
+      <input id="edit_organization_account_username" ng-disabled="vm.saving" name="organization_account[username]" type="text" ng-model="vm.username">
+      <label for="edit_organization_account_password"><%= _('Password') %></label>
+      <input id="edit_organization_account_password" ng-disabled="vm.saving" name="organization_account[password]" type="password" ng-model="vm.password">
+      <br />
+      <br />
+      <button type="submit" ng-click="vm.updateAccount()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Update Account') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
+      <a class="btn" ng-click="vm.revert()"><%= _('Cancel') %></a>
+    </form>
   </div>
 </div>

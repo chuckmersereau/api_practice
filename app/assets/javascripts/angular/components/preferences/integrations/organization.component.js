@@ -5,9 +5,7 @@
       controller: OrganizationIntegrationPreferencesController,
       controllerAs: 'vm',
       templateUrl: '/templates/preferences/integrations/organization.html',
-      bindings: {
-        'state': '='
-      }
+      bindings: {}
     });
   OrganizationIntegrationPreferencesController.$inject = ['$scope', 'preferences.integrations.organizationService', 'alertsService'];
   function OrganizationIntegrationPreferencesController($scope, organizationService, alertsService) {
@@ -15,7 +13,10 @@
     vm.preferences = organizationService;
     vm.alerts = alertsService;
     vm.saving = false;
-    vm.showSettings = false;
+    vm.page = 'org_list';
+    vm.selected = null;
+    vm.username = null;
+    vm.password = null;
 
     vm.save = function () {
       vm.saving = true;
@@ -52,10 +53,49 @@
       });
     };
 
-    $scope.$watch(function() {
-      return vm.preferences.state;
-    }, function() {
-      vm.state = vm.preferences.state;
-    } )
+    vm.createAccount = function() {
+      vm.saving = true;
+      vm.preferences.createAccount(vm.username, vm.password, vm.selected.id,
+        function success() {
+        vm.saving = false;
+        vm.preferences.load();
+        vm.revert();
+        vm.alerts.addAlert('MPDX added your organization account', 'success');
+      }, function error(data) {
+        angular.forEach(data.errors, function(value) {
+          vm.alerts.addAlert(value, 'danger');
+        });
+        vm.saving = false;
+      });
+    };
+
+    vm.updateAccount = function() {
+      vm.saving = true;
+      vm.preferences.updateAccount(vm.username, vm.password, vm.selected.id,
+        function success() {
+        vm.saving = false;
+        vm.preferences.load();
+        vm.revert();
+        vm.alerts.addAlert('MPDX updated your organization account', 'success');
+      }, function error(data) {
+        angular.forEach(data.errors, function(value) {
+          vm.alerts.addAlert(value, 'danger');
+        });
+        vm.saving = false;
+      });
+    };
+
+    vm.editAccount = function(account) {
+      vm.page = 'edit_account';
+      vm.selected = account;
+      vm.username = account.username;
+    }
+
+    vm.revert = function() {
+      vm.page = 'org_list';
+      vm.selected = null;
+      vm.username = null;
+      vm.password = null;
+    }
   }
 })();
