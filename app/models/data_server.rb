@@ -183,6 +183,7 @@ class DataServer
   end
 
   def check_credentials!
+    return unless @org_account.requires_username_and_password?
     raise OrgAccountMissingCredentialsError, _('Your username and password are missing for this account.') unless @org_account.username && @org_account.password
     raise OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org } unless @org_account.valid_credentials?
   end
@@ -220,6 +221,7 @@ class DataServer
   protected
 
   def profile_balance(profile_code)
+    return {} unless @org.account_balance_url
     balance = {}
     response = Retryable.retryable on: Errors::UrlChanged, times: 1, then: update_url(:account_balance_url) do
       get_response(@org.account_balance_url,
