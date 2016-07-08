@@ -67,7 +67,7 @@
             blankData();
             var start_date_string = $filter('date')(vm.start_date, 'yyyy-MM-dd');
             var url = 'progress.json?start_date='+start_date_string +
-                '&account_list_id=' + state.current_account_list_id
+                '&account_list_id=' + state.current_account_list_id;
 
             api.get(url).success(function(newData){
                 vm.data = newData;

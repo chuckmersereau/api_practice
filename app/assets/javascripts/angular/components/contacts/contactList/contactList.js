@@ -6,9 +6,9 @@
             templateUrl: 'inline/contact_list.html' //declared inline at app/views/contacts/index.html.erb
         });
 
-    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants'];
+    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants', '_', 'Gmaps', '$anchorScroll'];
 
-    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants) {
+    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants, _, Gmaps, $anchorScroll) {
         var vm = this;
 
         vm.contactsLoading = true;
@@ -131,9 +131,7 @@
                 });
                 vm.contacts = data.contacts;
 
-                if(!_.isNull(document.getElementById('contacts-scrollable'))) {
-                    document.getElementById('contacts-scrollable').scrollTop = 0;
-                }
+                $anchorScroll(); // Scroll to top of page
 
                 if(data.meta) {
                     vm.totalContacts = data.meta.total;
@@ -206,12 +204,12 @@
         function handleContactQueryChanges(oldContactQuery){
             // Include all active statuses with active
             if(_.includes(vm.contactQuery.status, 'active')){
-                vm.contactQuery.status = _.union(vm.contactQuery.status, railsConstants.contact.ACTIVE_STATUSES)
+                vm.contactQuery.status = _.union(vm.contactQuery.status, railsConstants.contact.ACTIVE_STATUSES);
             }
 
             // Include all inactive statuses with hidden
             if(_.includes(vm.contactQuery.status, 'hidden')){
-                vm.contactQuery.status = _.union(vm.contactQuery.status, railsConstants.contact.INACTIVE_STATUSES)
+                vm.contactQuery.status = _.union(vm.contactQuery.status, railsConstants.contact.INACTIVE_STATUSES);
             }
 
             // If the user changes the filters (by anything other than
@@ -353,14 +351,14 @@
                             'width':  20,
                             'height': 36
                         }
-                    }
+                    };
                 }
             }
             return marker;
         }
 
         function markerURL(status) {
-            var base = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|'
+            var base = 'https://chart.googleapis.com/chart?chst=d_map_pin_letter&chld=%E2%80%A2|';
             switch(status) {
                 case '':
                 case 'Never Contacted':
@@ -382,7 +380,7 @@
                 case 'Cultivate Relationship':
                     return base + 'cf641e';
             }
-            return base + '757575'
+            return base + '757575';
         }
 
         function mapContacts() {
@@ -398,7 +396,7 @@
                     contactsCounts.noAddress++;
                 }
             });
-            $('#contacts_map_modal').dialog({ width: 750, height: 615 });
+            angular.element('#contacts_map_modal').dialog({ width: 750, height: 615 });
             var addMarkers = function(){
                 vm.mapHandler.removeMarkers(vm.mapMarkers);
                 vm.mapMarkers = vm.mapHandler.addMarkers(newMarkers);
@@ -406,15 +404,15 @@
                 vm.mapHandler.fitMapToBounds();
             };
             vm.singleMap(addMarkers);
-            $('.contacts_counts').text(contactsCounts.noAddress + '/' + vm.contacts.length);
+            angular.element('.contacts_counts').text(contactsCounts.noAddress + '/' + vm.contacts.length);
         }
 
         function singleMap(methodToExec) {
-            if(methodToExec === undefined || typeof(methodToExec) != "function") {
-                methodToExec = $.noop;
+            if(typeof(methodToExec) != "function") {
+                methodToExec = _.noop;
             }
             var mapOptions = { streetViewControl: false };
-            if(vm.mapHandler === undefined) {
+            if(!vm.mapHandler) {
                 vm.mapHandler = Gmaps.build('Google');
                 vm.mapHandler.buildMap(
                     {
@@ -456,7 +454,7 @@
         }
 
         function saveSelectedContacts(){
-            selectionStore.saveSelectedContacts(vm.selectedContacts)
+            selectionStore.saveSelectedContacts(vm.selectedContacts);
         }
 
         function clearSelectedContacts(){
