@@ -108,8 +108,8 @@
                   <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
                     <ul class="nav navbar-nav">
                       <li class="item <%= request.path == '/' ? 'active' : '' %>"><%= link_to(_('Dashboard'), "/") %></li>
-                      <li class="item <%= request.path =~ /\/contacts/ ? 'active' : '' %>"><%= link_to(_('Contacts'), "/contacts") %></li>
-                      <li class="item <%= request.path =~ /\/tasks/ ? 'active' : '' %>"><%= link_to(_('Tasks'), "/tasks/") %></li>
+                      <li class="item <%= request.path =~ /\/contacts/ ? 'active' : '' %>"><%= link_to(_('Contacts'), "/contacts", target: "_self") %></li>
+                      <li class="item <%= request.path =~ /\/tasks/ ? 'active' : '' %>"><%= link_to(_('Tasks'), "/tasks/", target: "_self") %></li>
                       <li class="item <%= request.path =~ /\/donations/ ? 'active' : '' %>"><%= link_to(_('Donations'), "/donations") %></li>
                       <% if $rollout.active?(:multi_currency_reports, current_account_list) %>
                         <li class="item <%= request.path =~ /\/reports/ ? 'active' : '' %>"><%= link_to(_('Reports'), reports_expected_monthly_totals_path) %></li>
