@@ -50,6 +50,8 @@ Capybara::Webkit.configure do |config|
   config.allow_url('maps.google.com/*')
 end
 
+Capybara::Screenshot.webkit_options = { width: 1600, height: 1200 }
+
 RSpec.configure do |config|
   config.before(:each) do |example|
     # Clears out the jobs for tests using the fake testing

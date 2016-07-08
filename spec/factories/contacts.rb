@@ -11,8 +11,7 @@ FactoryGirl.define do
     notes 'Test Note.'
     factory :contact_with_person do
       after(:create) do |contact, evaluator|
-        create_list(:person, 1, contacts: [contact], first_name: evaluator.name, last_name: '')
-        create_list(:address, 1, addressable: contact, primary_mailing_address: true)
+        people = create(:person, contacts: [contact], first_name: evaluator.name, last_name: '')
       end
     end
   end

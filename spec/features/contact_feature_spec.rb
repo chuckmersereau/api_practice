@@ -12,9 +12,12 @@ describe 'contact list', js: true do
     user = create(:user_with_account)
     login(user)
 
-    create(:contact_with_person, account_list: user.account_lists.first, name: 'Apostle John')
+    contact_john = create(:contact_with_person, account_list: user.account_lists.first, name: 'Apostle John')
+    create(:email_address, person: contact_john.people.first)
+    create(:phone_number, person: contact_john.people.first)
+    create(:address, addressable: contact_john, primary_mailing_address: true)
     create(:contact_with_person, account_list: user.account_lists.first, name: 'Apostle Paul')
-    create(:contact_with_person, account_list: user.account_lists.first, name: 'Simon Peter')
+    create(:contact_with_person, account_list: user.account_lists.first, name: 'Simon Peter', )
     create_list(:contact_with_person, 50, account_list: user.account_lists.first)
   end
 
@@ -22,7 +25,7 @@ describe 'contact list', js: true do
     visit '/contacts'
     expect(all('contact').length).to eq 25
     expect(all('address')[0]).to have_content '123 Somewhere St'
-    expect(all('address')[1]).to have_content 'Fremont'
+    expect(all('address')[0]).to have_content 'Fremont'
   end
 
   it 'pagination works' do
@@ -55,14 +58,22 @@ describe 'contact list', js: true do
     expect(find('#merge_modal .warning-text')).to have_content 'This action'
     click_button('Merge')
     visit '/contacts'
-    contact_people = all('contact .people a')
-    expect(contact_people[0]).to have_content contact_name_1
-    expect(contact_people[1]).to have_content contact_name_2
+    expect(all('contact .people')[0]).to have_content contact_name_1
+    expect(all('contact .people')[0]).to have_content contact_name_2
   end
 
-  it 'correctly hides contacts' do
+  it 'correctly filters through contact information' do
     visit '/contacts'
-    contact_checkboxes = all('contact input')
+
+    filter_lis = all('ul.filters li.filter_set')
+    filter_lis[7].click
+    filter_lis[7].all('input')[1].click
+    expect(all('contact').length).to be (1)
+    filter_lis[7].all('input')[0].click
+
+    filter_lis[7].all('input')[10].click
+    expect(all('contact').length).to be (1)
+
 
   end
 end
