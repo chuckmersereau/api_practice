@@ -147,8 +147,8 @@
 
                 vm.contactsLoading = false;
 
-                saveViewPreferences();
             }, null, true);
+            saveViewPreferences();
         }
 
         function buildContactFilterUrl(){
