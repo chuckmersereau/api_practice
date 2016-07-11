@@ -1,6 +1,4 @@
 require 'spec_helper'
-require 'capybara/rspec'
-require 'capybara/angular'
 
 Capybara.default_max_wait_time = 2
 Capybara::Angular.default_max_wait_time = 10

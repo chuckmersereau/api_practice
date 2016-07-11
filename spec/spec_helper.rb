@@ -42,12 +42,7 @@ Capybara.javascript_driver = :webkit
 Capybara.default_max_wait_time = 4
 
 Capybara::Webkit.configure do |config|
-  config.allow_url('https://chart.googleapis.com/*')
-  config.allow_url('*.typekit.net/*')
-  config.allow_url('google-maps-utility-library-v3.googlecode.com/*')
-  config.allow_url('cru.org/*')
-  config.allow_url('csi.gstatic.com/*')
-  config.allow_url('maps.google.com/*')
+  config.allow_url('*')
 end
 
 Capybara::Screenshot.webkit_options = { width: 1600, height: 1200 }
