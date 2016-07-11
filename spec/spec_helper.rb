@@ -17,11 +17,12 @@ require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'webmock/rspec'
 require 'capybara/rspec'
-require 'capybara/poltergeist'
 require 'sidekiq/testing'
 require 'sidekiq_unique_jobs/testing'
 require 'paper_trail/frameworks/rspec'
 require 'attributes_history/rspec'
+require 'capybara/angular'
+require 'capybara-screenshot/rspec'
 
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
@@ -36,12 +37,15 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Base.establish_connection(:test)
 
 WebMock.disable_net_connect!(allow_localhost: true)
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, js_errors: false, timeout: 60)
-end
-Capybara.javascript_driver = :poltergeist
+Capybara.javascript_driver = :webkit
 
 Capybara.default_max_wait_time = 4
+
+Capybara::Webkit.configure do |config|
+  config.allow_url('*')
+end
+
+Capybara::Screenshot.webkit_options = { width: 1600, height: 1200 }
 
 RSpec.configure do |config|
   config.before(:each) do |example|
@@ -92,7 +96,7 @@ RSpec.configure do |config|
   # rspec-rails.
   config.infer_base_class_for_anonymous_controllers = false
   config.filter_run focus: true
-  config.filter_run_excluding js: true
+  # config.filter_run_excluding js: true
   config.run_all_when_everything_filtered = true
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods

@@ -70,6 +70,7 @@ gem 'omniauth-twitter', '~> 1.0.1'
 gem 'paper_trail', '~> 4.0.0'
 gem 'passenger'
 gem 'pg', '~> 0.18.2'
+gem 'protractor-rails'
 gem 'rails_autolink', '~> 1.1.5'
 gem 'rake'
 gem 'redis-namespace'
@@ -155,12 +156,15 @@ group :test do
   gem 'webmock', '~> 1.21.0'
   gem 'rb-fsevent', require: false
   gem 'growl'
-  gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
   gem 'rubocop', '~> 0.39'
   gem 'test_after_commit'
   gem 'coveralls', require: false
+  gem 'capybara'
+  gem 'capybara-angular'
+  gem "capybara-webkit"
+  gem 'capybara-screenshot'
 end
 
 group :doc do

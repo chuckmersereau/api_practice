@@ -9,5 +9,10 @@ FactoryGirl.define do
     pledge_frequency 1
     pledge_start_date { 35.days.ago }
     notes 'Test Note.'
+    factory :contact_with_person do
+      after(:create) do |contact, evaluator|
+        people = create(:person, contacts: [contact], first_name: evaluator.name, last_name: '')
+      end
+    end
   end
 end
