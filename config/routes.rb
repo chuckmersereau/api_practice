@@ -57,6 +57,11 @@ Rails.application.routes.draw do
         resources :integrations, only: :index
         resources :personal, only: :index
         resources :accounts, only: :index
+        namespace :accounts do
+          resources :invites, only: [:index, :create, :destroy]
+          resources :merges, only: [:index, :destroy]
+          resources :users, only: [:index, :destroy]
+        end
         namespace :integrations do
           resource :mail_chimp_account, only: [:show, :update, :destroy] do
             member do

@@ -45,6 +45,14 @@ angular
         url: '/:id',
         template: '<integration-preferences></integration-preferences>'
       })
+      .state('preferences.accounts', {
+        url: '/accounts',
+        template: '<account-preferences></account-preferences>'
+      })
+      .state('preferences.accounts.tab', {
+        url: '/:id',
+        template: '<account-preferences></account-preferences>'
+      })
       .state('preferences.imports', {
         url: '/imports',
         template: '<import-preferences></import-preferences>'

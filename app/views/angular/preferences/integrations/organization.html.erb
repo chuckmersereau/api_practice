@@ -64,12 +64,15 @@
       <a class="btn btn-default" ng-click="vm.revert()"><%= _('Back') %></a>
     </div>
     <div ng-show="vm.selected.api_class == 'Siebel'">
-      <p><%= _('This organization requires you to log into MPDX with your ministry email to access it.') %></p>
-      <p><%= _('First you need to %{key_logout_url}.') % { key_logout_url: link_to(_('click here to log out of your personal Key account'), 'https://thekey.me/cas/logout', target: '_blank') } %></p>
-      <p><%= _('Next, %{logout_url} so you can log back in with your offical key account.') % { logout_url: link_to(_('click here to log out of MPDX'), logout_path) } %></p>
+      <div class="well">
+        <h4><%= _('You must log into MPDX with your ministry email') %></h4>
+        <p><%= _('This organization requires you to log into MPDX with your ministry email to access it.') %></p>
+        <p><%= _('First you need to %{key_logout_url}.') % { key_logout_url: link_to(_('click here to log out of your personal Key account'), 'https://thekey.me/cas/logout', target: '_blank') } %></p>
+        <p><%= _('Next, %{logout_url} so you can log back in with your offical key account.') % { logout_url: link_to(_('click here to log out of MPDX'), logout_path) } %></p>
+      </div>
       <a class="btn btn-default" ng-click="vm.revert()"><%= _('Back') %></a>
     </div>
-    <div ng-show="vm.selected.api_class == 'DataServer'">
+    <div ng-show="vm.selected.api_class == 'DataServer' || vm.selected.api_class == 'DataServerPtc'">
       <form>
         <label for="organization_account_username"><%= _('Username') %></label>
         <input id="organization_account_username" ng-disabled="vm.saving" name="organization_account[username]" type="text" ng-model="vm.username">

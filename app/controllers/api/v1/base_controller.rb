@@ -1,4 +1,5 @@
 class Api::V1::BaseController < ApplicationController
+  class AuthorizationError < StandardError; end
   skip_before_action :redirect_to_mobile
   skip_before_action :verify_authenticity_token
   skip_before_action :redirect_to_mobile
@@ -7,6 +8,7 @@ class Api::V1::BaseController < ApplicationController
   after_action :cors_set_access_control_headers
 
   rescue_from ActiveRecord::RecordNotFound, with: :render_404
+  rescue_from AuthorizationError, with: :render_403
 
   # If this is a preflight OPTIONS request, then short-circuit the
   # request, return only the necessary headers and return an empty
@@ -85,6 +87,10 @@ class Api::V1::BaseController < ApplicationController
 
   def render_404
     render nothing: true, status: 404
+  end
+
+  def render_403
+    render nothing: true, status: 403
   end
 
   def add_includes_and_order(resource, options = {})

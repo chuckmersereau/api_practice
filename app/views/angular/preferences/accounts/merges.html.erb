@@ -1,0 +1,24 @@
+<div ng-if="vm.preferences.data.mergeable_accounts.length == 0">
+  <p>
+    <i class="fa-warning fa"></i>
+    <%= _('You only have access to this account, so you cannot merge it with another one yet. '\
+          'Share this account with someone else first. Once they accept your share, you will be '\
+          'able to merge your accounts together.') %>
+  </p>
+</div>
+<div ng-if="vm.preferences.data.mergeable_accounts.length > 0">
+  <p>
+    <%= _('You are merging the account below into your') %>
+    <strong><%= current_account_list.name %></strong>.
+    <%= _('Merges are irreversible. We recommend that you are logged into the primary (usually husband) account.') %></p>
+
+  <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
+    <div class="form-group">
+      <select class="form-control fixed-width-input" id="merge_id" name="merge_id" chosen>
+        <option ng-repeat="option in vm.preferences.data.mergeable_accounts" value="{{option.id}}">{{option.name}}</option>
+      </select>
+    </div>
+      <%= submit_tag _('Merge...'), class: 'btn btn-primary',
+            data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
+  <% end %>
+</div>

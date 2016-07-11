@@ -27,7 +27,7 @@
         if (svc.account_list_id !== null) {
           data.account_list_id = svc.account_list_id;
         }
-        if (method === 'get') {
+        if (method === 'get' || method === 'delete') {
           params = data;
         }
         return $http({

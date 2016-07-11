@@ -12,9 +12,9 @@
     svc.data = {};
     svc.loading = true;
     svc.account_list_id = null;
-    
+
     svc.load = function () {
-      api.call('get', 'preferences/accounts', {}, function(data) {
+      api.call('get', 'preferences/accounts', { list: true }, function(data) {
         svc.data = data.preferences;
         svc.account_list_id = data.preferences.account_list_id;
         svc.loading = false;

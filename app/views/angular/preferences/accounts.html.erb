@@ -1,8 +1,96 @@
-<div ng-show="!vm.preferences.loading" ng-hide="vm.preferences.data.account_lists.length <= 1">
-  <%= _('You are currently editing settings for') %>
-  <select ng-model="vm.preferences.account_list_id" class="form-control" chosen>
-    <option ng-repeat="option in vm.preferences.data.account_lists" value="{{option.id}}">{{option.name}}</option>
-  </select>
-  <br />
-  <br />
+<div id="contentbody" class="withleft">
+  <div class="wpp">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-filters">
+          <h2><%= _('Manage Accounts') %></h2>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p>&nbsp;</p>
+  <div class="panel-group" id="accounts-group">
+
+    <div class="panel panel-default pref-panel">
+      <div class="panel-heading pref-head" ng-click="vm.setTab('share_account')">
+        <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('share_account') }"></i>
+        <%= _('Manage Account Access') %>
+      </div>
+      <div class="panel-animate" ng-show="vm.tabSelected('share_account')">
+        <div class="panel-body pref-body">
+          <share-preferences></share-preferences>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default pref-panel">
+      <div class="panel-heading pref-head" ng-click="vm.setTab('merge_account')">
+          <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('merge_account') }"></i>
+          <%= _('Merge Your Accounts') %>
+      </div>
+      <div class="panel-animate" ng-show="vm.tabSelected('merge_account')">
+        <div class="panel-body pref-body">
+          <div class="row pref-row">
+            <div class="col-md-4 pref-lead">
+              <h5><%= _('Merge multiple personal donation accounts into one. (Multi-currency support)') %></h5>
+            </div>
+            <div class="col-md-8">
+              <p>
+                <%= _('If you have personal donation accounts in different countries or organizations, '\
+                      'you can bring them into one view in MPDX. Though the actual donation accounts will '\
+                      'remain separate within their respective organizations, they will be merged together '\
+                      'in MPDX permanently.') %></p>
+                <div class="alert alert-danger"><i class="fa fa-warning"></i>
+                  <strong><%= _('THIS MERGE WILL AFFECT ALL PEOPLE WITH ACCESS TO THIS ACCOUNT AND CANNOT BE UNDONE.') %></strong>
+                </div>
+
+              <div class="well">
+                <merge-preferences></merge-preferences>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="panel panel-default pref-panel">
+      <div class="panel-heading pref-head" ng-click="vm.setTab('merge_spouse_account')">
+        <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('merge_spouse_account') }"></i>
+        <%= _('Merge Spouse Accounts') %>
+      </div>
+      <div class="panel-animate" ng-show="vm.tabSelected('merge_spouse_account')">
+        <div class="panel-body pref-body">
+          <div class="row pref-row">
+            <div class="col-md-4 pref-lead">
+              <h5><%= _('Merge (Combine) your account with your spouse\'s account for a unifed view.') %></h5>
+            </div>
+            <div class="col-md-8">
+              <p>
+                <%= _('If you are getting married and have two separate donation accounts, '\
+                      'you can merge your MPDX accounts together at any time. No data will be '\
+                      'lost when they are merged, and we can do it at any time regardless of the '\
+                      'status of your staff accounts being merged.') %>
+              </p>
+
+              <div class="well">
+              <h4><%= _('1. Share your accounts with each other.') %></h4>
+              <invite-preferences></invite-preferences>
+              <p><%= _('You will each get an email (you might need to check your spam) and will need to accept access to each other’s accounts.') %></p>
+              </div>
+
+              <div class="well">
+                <h4><%= _('2. Merge Accounts') %></h4>
+                <merge-preferences></merge-preferences>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <% if impersonator_user.present? %>
+      <%= render('account_reset') %>
+    <% end %>
+
+  </div>
 </div>

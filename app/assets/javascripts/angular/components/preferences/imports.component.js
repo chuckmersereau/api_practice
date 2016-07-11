@@ -26,7 +26,7 @@
         });
         vm.saving = false;
       });
-    }
+    };
 
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {

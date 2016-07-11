@@ -1,0 +1,6 @@
+<form class="form-inline">
+  <div class="form-group">
+    <input class="form-control fixed-width-input" id="email" name="email" ng-model="vm.email" placeholder="person.to.share@cru.org" type="text" />
+    <button type="submit" ng-click="vm.sendInvite()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Share Account') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
+  </div>
+</form>
