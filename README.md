@@ -59,6 +59,11 @@ There are four different test sets that we are running:
 - Karma: `rake karma:run`
 - Rubocop: `rubocop -R`
 
+### Debugging Karma tests
+
+1. Run `rake karma:start`
+2. Click `Debug` in the browser window that opens
+
 ## Bugs Reports & Contributing
 
 * Bug Reports: https://github.com/CruGlobal/mpdx/issues

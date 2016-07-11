@@ -2,8 +2,6 @@ app/assets/javascripts/bootstrap.min.js
 
 app/assets/javascripts/angular/components/appeals/appeal.component.js
 app/assets/javascripts/angular/components/appeals/excludedAppealContacts.component.js
-app/assets/javascripts/angular/components/contacts/contact.js
-app/assets/javascripts/angular/components/contacts/contactList.js
 app/assets/javascripts/angular/components/reports/balancesReport.js
 app/assets/javascripts/angular/components/reports/currencyDonationsReport.component.js
 app/assets/javascripts/angular/components/reports/donorCurrencyDonationsReport.js

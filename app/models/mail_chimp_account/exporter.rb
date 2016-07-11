@@ -168,6 +168,7 @@ class MailChimpAccount::Exporter
       grouping = find_grouping(account.status_grouping_id, 'Partner Status')
     end
     account.update_attribute(:status_grouping_id, grouping['id'])
+    account.reload
 
     # Add any new groups
     groups = interest_categories(grouping['id']).interests.retrieve['interests'].map { |i| i['name'] }
@@ -182,6 +183,7 @@ class MailChimpAccount::Exporter
     interests = interest_categories(account.status_grouping_id).interests.retrieve['interests']
     interests = Hash[interests.map { |interest| [interest['name'], interest['id']] }]
     account.update_attribute(:status_interest_ids, interests)
+    account.reload
   end
 
   def interests_for_status(contact_status)
@@ -211,6 +213,7 @@ class MailChimpAccount::Exporter
       grouping = find_grouping(account.tags_grouping_id, 'Tags')
     end
     account.update_attribute(:tags_grouping_id, grouping['id'])
+    account.reload
 
     # Add any new groups
     groups = interest_categories(grouping['id']).interests.retrieve['interests'].map { |i| i['name'] }
@@ -225,6 +228,7 @@ class MailChimpAccount::Exporter
     interests = interest_categories(account.tags_grouping_id).interests.retrieve['interests']
     interests = Hash[interests.map { |interest| [interest['name'], interest['id']] }]
     account.update_attribute(:tags_interest_ids, interests)
+    account.reload
   end
 
   def interests_for_tags(tags)

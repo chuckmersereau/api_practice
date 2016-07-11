@@ -24,7 +24,7 @@
         function donationAggregates(donations) {
             var amounts = _.chain(donations)
             .map('converted_amount')
-            .reject(function(n) {return !n})
+            .reject(function(n) {return !n;})
             .value();
             var sum = _.sumBy(amounts, _.toNumber);
             return {sum: sum, average: sum/amounts.length};

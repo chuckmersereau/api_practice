@@ -6,7 +6,7 @@ angular.module('mpdxApp')
 
               $scope.replaceFacebookLink = function(contactId, personId){
                 $uibModal.open({
-                  templateUrl: '/templates/contacts/editFacebookUrl.html',
+                  templateUrl: '/templates/components/contacts/editFacebookUrl.html',
                   controller: function($scope, $uibModalInstance){
                     $scope.facebookUrl = '';
 

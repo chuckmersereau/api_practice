@@ -1,17 +1,17 @@
 (function(){
     angular
         .module('mpdxApp')
-        .component('contact', {
+        .component('contactListItem', {
             controller: contactController,
-            templateUrl: '/templates/contacts/contact.html',
+            templateUrl: '/templates/components/contacts/contactList/contactListItem.html',
             bindings: {
                 contact: '='
             }
         });
 
-    contactController.$inject = ['$sce', 'contactCache', 'state'];
+    contactController.$inject = ['$sce', 'contactCache', 'state', '_'];
 
-    function contactController($sce, contactCache, state) {
+    function contactController($sce, contactCache, state, _) {
         var vm = this;
         vm.current_currency_symbol = state.current_currency_symbol;
 
@@ -54,17 +54,17 @@
         }
 
         function hasSendNewsletterError() {
-            data = contactCache.getFromCache(vm.contact.id)
-            contact = data.contact
-            missing_address = data.addresses.length == 0
-            missing_email_address = data.email_addresses.length == 0
+            var data = contactCache.getFromCache(vm.contact.id);
+            var contact = data.contact;
+            var missing_address = data.addresses.length == 0;
+            var missing_email_address = data.email_addresses.length == 0;
             switch(contact.send_newsletter) {
                 case 'Both':
                     return missing_address || missing_email_address;
                 case 'Physical':
-                    return missing_address
+                    return missing_address;
                 case 'Email':
-                    return missing_email_address
+                    return missing_email_address;
             }
             return false;
         }
