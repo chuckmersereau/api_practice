@@ -1,8 +1,3 @@
-<script type="text/javascript" charset="utf-8">
-  var account_contacts_json = <%= contacts_for_filter.collect { |c| {value: c.name, id: c.id} }.to_json.html_safe %>;
-  var filtered_contacts_ids = <%= @filtered_contacts.collect { |c| c.id }.to_json.html_safe %>;
-</script>
-
 <contact-list></contact-list>
 
 <script type="text/ng-template" id="inline/contact_list.html">
@@ -245,7 +240,7 @@
 
               <div class="col-md-7 col-sm-5 col-xs-9">
                 <div class="form-group has-feedback">
-                  <input autocomplete="off" class="search_filter ui-autocomplete-input form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="$ctrl.contactQuery.name" size="40">
+                  <input autocomplete="off" class="search_filter form-control" id="contact_name" placeholder="<%= _('Filter by Name') %>" type="text" ng-model="$ctrl.contactQuery.name" size="40">
                   <span class="form-control-feedback">
                     <i class="fa fa-spinner fa-spin" ng-if="$ctrl.contactsLoading"></i>
                   </span>
