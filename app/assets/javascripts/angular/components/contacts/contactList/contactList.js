@@ -53,6 +53,8 @@
             wildcardSearch: null
         };
 
+        var filterChangeEventEmitter = new Rx.Subject();
+
         vm.pageMeta = {
             total: 1,
             from: 0,
@@ -75,7 +77,7 @@
         vm.anyContactsOnPageSelected = anyContactsOnPageSelected;
         vm.noSelectedContacts = noSelectedContacts;
 
-        vm._refreshContacts = refreshContacts;
+        vm._setupRefreshContacts = setupRefreshContacts;
         vm._buildContactFilterUrl = buildContactFilterUrl;
         vm._handleContactQueryChanges = handleContactQueryChanges;
         vm._loadViewPreferences = loadViewPreferences;
@@ -87,7 +89,7 @@
 
         function activate() {
             initializeFilters();
-            refreshContacts();
+            setupRefreshContacts();
 
             loadViewPreferences();
             loadSelectedContacts();
@@ -98,14 +100,19 @@
                 }
 
                 handleContactQueryChanges(oldq);
-                refreshContacts();
             }, true);
         }
 
-        function refreshContacts() {
-            vm.contactsLoading = true;
-
-            Rx.Observable.fromPromise(api.call('get', buildContactFilterUrl(), {}, null, null, true))
+        function setupRefreshContacts() {
+            filterChangeEventEmitter
+                .do(function(){
+                    vm.contactsLoading = true;
+                })
+                .debounceTime(200)
+                .switchMap(function(){
+                    // switchMap cancels the existing observable when a new event arrives and uses the latest
+                    return api.call('get', buildContactFilterUrl(), {}, null, null, true);
+                })
                 .subscribe(function(data){
                     angular.forEach(data.contacts, function (contact) {
                         var people = _.filter(data.people, function (i) {
@@ -147,8 +154,10 @@
                     }
 
                     vm.contactsLoading = false;
+                    saveViewPreferences();
+                }, function (error){
+                    $log.error('Contact filter query failed:', error);
                 });
-            saveViewPreferences();
         }
 
         function buildContactFilterUrl(){
@@ -219,25 +228,35 @@
                 vm.clearSelectedContacts();
                 vm.contactQuery.page = 1;
             }
+
+            // Emit event to refresh contacts with latest filters
+            filterChangeEventEmitter.next('filterChanged');
         }
 
         function loadViewPreferences() {
-            api.call('get', 'users/me', {}, function (viewPrefs) {
-                vm.viewPrefsLoaded = true;
+            api.call('get', 'users/me', {})
+                .then(function (viewPrefs) {
+                    // Emit event to refresh contacts with saved filters
+                    filterChangeEventEmitter.next('init with save filters');
 
-                if (!_.has(viewPrefs, 'user.preferences.contacts_filter[' + state.current_account_list_id + ']')) {
-                    return;
-                }
+                    vm.viewPrefsLoaded = true;
 
-                // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
-                _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
+                    if (!_.has(viewPrefs, 'user.preferences.contacts_filter[' + state.current_account_list_id + ']')) {
+                        return;
+                    }
 
-                if (_.isString(vm.contactQuery.tags)) {
-                    vm.contactQuery.tags = vm.contactQuery.tags.split(',');
-                }
+                    // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
+                    _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
 
-                openFilterPanels();
-            });
+                    if (_.isString(vm.contactQuery.tags)) {
+                        vm.contactQuery.tags = vm.contactQuery.tags.split(',');
+                    }
+
+                    openFilterPanels();
+                }, function (){
+                    // Emit event to refresh contacts with default filters since saved filters couldn't be loaded
+                    filterChangeEventEmitter.next('init');
+                });
         }
 
         function saveViewPreferences(){
