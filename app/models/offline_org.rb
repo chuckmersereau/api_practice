@@ -10,18 +10,18 @@ class OfflineOrg < DataServer
       creator_id: @org_account.user.id)
     account_list.update_attributes(name: @org_account.user.to_s)
 
+    designation_profile = DesignationProfile.create!(
+        user_id: @org_account.person_id,
+        organization_id: @org.id,
+        name: @org_account.user.to_s,
+        code: @org_account.id,
+        account_list_id: account_list.id)
+
     designation_account = DesignationAccount.create!(
       designation_number: @org_account.id,
       organization_id: @org.id,
       name: @org_account.user.to_s,
       active: true)
-
-    designation_profile = DesignationProfile.create!(
-      user_id: @org_account.person_id,
-      organization_id: @org.id,
-      name: @org_account.user.to_s,
-      code: @org_account.id,
-      account_list_id: account_list.id)
 
     DesignationProfileAccount.create!(
       designation_account_id: designation_account.id,
