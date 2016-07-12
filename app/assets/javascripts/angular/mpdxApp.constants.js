@@ -5,5 +5,6 @@
         .constant('_', window._)
         .constant('__', window.__)
         .constant('$', window.$)
-        .constant('Gmaps', window.Gmaps);
+        .constant('Gmaps', window.Gmaps)
+        .constant('Rx', window.Rx);
 })();

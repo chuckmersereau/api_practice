@@ -6,9 +6,9 @@
             templateUrl: 'inline/contact_list.html' //declared inline at app/views/contacts/index.html.erb
         });
 
-    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants', '_', '$window', '$anchorScroll'];
+    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants', '_', '$window', '$anchorScroll', 'Rx'];
 
-    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants, _, $window, $anchorScroll) {
+    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants, _, $window, $anchorScroll, Rx) {
         var vm = this;
 
         vm.contactsLoading = true;
@@ -105,49 +105,49 @@
         function refreshContacts() {
             vm.contactsLoading = true;
 
-            api.call('get', buildContactFilterUrl(), {}, function (data) {
-                angular.forEach(data.contacts, function (contact) {
-                    var people = _.filter(data.people, function (i) {
-                        return _.includes(contact.person_ids, i.id);
-                    });
-                    var flattenedEmailAddresses = _.flatMap(people, 'email_address_ids');
-                    var flattenedFacebookAccounts = _.flatMap(people, 'facebook_account_ids');
-                    contact.pledge_received = contact.pledge_received == 'true';
+            Rx.Observable.fromPromise(api.call('get', buildContactFilterUrl(), {}, null, null, true))
+                .subscribe(function(data){
+                    angular.forEach(data.contacts, function (contact) {
+                        var people = _.filter(data.people, function (i) {
+                            return _.includes(contact.person_ids, i.id);
+                        });
+                        var flattenedEmailAddresses = _.flatMap(people, 'email_address_ids');
+                        var flattenedFacebookAccounts = _.flatMap(people, 'facebook_account_ids');
+                        contact.pledge_received = contact.pledge_received == 'true';
 
-                    contactCache.update(contact.id, {
-                        addresses: _.filter(data.addresses, function (addr) {
-                            return _.includes(contact.address_ids, addr.id);
-                        }),
-                        people: people,
-                        email_addresses: _.filter(data.email_addresses, function (email) {
-                            return _.includes(flattenedEmailAddresses, email.id);
-                        }),
-                        contact: _.find(data.contacts, { 'id': contact.id }),
-                        phone_numbers: data.phone_numbers,
-                        facebook_accounts: _.filter(data.facebook_accounts, function (fb) {
-                            return _.includes(flattenedFacebookAccounts, fb.id);
-                        })
+                        contactCache.update(contact.id, {
+                            addresses: _.filter(data.addresses, function (addr) {
+                                return _.includes(contact.address_ids, addr.id);
+                            }),
+                            people: people,
+                            email_addresses: _.filter(data.email_addresses, function (email) {
+                                return _.includes(flattenedEmailAddresses, email.id);
+                            }),
+                            contact: _.find(data.contacts, { 'id': contact.id }),
+                            phone_numbers: data.phone_numbers,
+                            facebook_accounts: _.filter(data.facebook_accounts, function (fb) {
+                                return _.includes(flattenedFacebookAccounts, fb.id);
+                            })
+                        });
                     });
+                    vm.contacts = data.contacts;
+
+                    $anchorScroll(); // Scroll to top of page
+
+                    if(data.meta) {
+                        vm.totalContacts = data.meta.total;
+                        vm.pageMeta.total = data.meta.total_pages;
+                        vm.pageMeta.from = data.meta.from;
+                        vm.pageMeta.to = data.meta.to;
+                    }
+
+                    //Handles case where limit is increased (or another filter change) which could result in the current page being out of range
+                    if(vm.contactQuery.page > vm.pageMeta.total && vm.pageMeta.total !== 0){
+                        vm.contactQuery.page = vm.pageMeta.total;
+                    }
+
+                    vm.contactsLoading = false;
                 });
-                vm.contacts = data.contacts;
-
-                $anchorScroll(); // Scroll to top of page
-
-                if(data.meta) {
-                    vm.totalContacts = data.meta.total;
-                    vm.pageMeta.total = data.meta.total_pages;
-                    vm.pageMeta.from = data.meta.from;
-                    vm.pageMeta.to = data.meta.to;
-                }
-
-                //Handles case where limit is increased (or another filter change) which could result in the current page being out of range
-                if(vm.contactQuery.page > vm.pageMeta.total && vm.pageMeta.total !== 0){
-                    vm.contactQuery.page = vm.pageMeta.total;
-                }
-
-                vm.contactsLoading = false;
-
-            }, null, true);
             saveViewPreferences();
         }
 
