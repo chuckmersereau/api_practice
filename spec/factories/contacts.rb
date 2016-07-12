@@ -14,5 +14,8 @@ FactoryGirl.define do
         people = create(:person, contacts: [contact], first_name: evaluator.name, last_name: '')
       end
     end
+    trait :with_tags do
+      after(:create) { |contact| contact.update_attributes(tag_list: 'one, two') }
+    end
   end
 end

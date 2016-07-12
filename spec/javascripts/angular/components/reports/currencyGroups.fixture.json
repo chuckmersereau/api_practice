@@ -1,0 +1,152 @@
+[
+  {
+    "currency": "USD",
+    "currencyConverted": "USD",
+    "currencySymbol": "$",
+    "currencySymbolConverted": "$",
+    "donors": [
+      {
+        "donorInfo": {
+          "id": 8,
+          "name": "Bird, Tweety and Tweetilee"
+        },
+        "donations": [
+          {
+            "amount": 200,
+            "amountConverted": 210,
+            "currency": "USD",
+            "currencyConverted": "USD",
+            "currencySymbol": "$",
+            "currencySymbolConverted": "$",
+            "donation_date": "2015-01",
+            "rawDonations": [
+              {
+              "amount": 175.0,
+              "converted_amount": 180.0,
+              "contact_id": 8,
+              "donation_date": "2015-01-31",
+              "currency": "USD",
+              "currency_symbol": "$",
+              "converted_currency": "USD",
+              "converted_currency_symbol": "$"
+            },
+              {
+                "amount": 25.0,
+                "converted_amount": 30.0,
+                "contact_id": 8,
+                "donation_date": "2015-01-05",
+                "currency": "USD",
+                "currency_symbol": "$",
+                "converted_currency": "USD",
+                "converted_currency_symbol": "$"
+              } ]
+          },
+          {
+            "amount": 175,
+            "amountConverted": 180,
+            "currency": "USD",
+            "currencyConverted": "USD",
+            "currencySymbol": "$",
+            "currencySymbolConverted": "$",
+            "donation_date": "2015-02",
+            "rawDonations": [
+              {
+                "amount": 175.0,
+                "converted_amount": 180.0,
+                "contact_id": 8,
+                "donation_date": "2015-02-01",
+                "currency": "USD",
+                "currency_symbol": "$",
+                "converted_currency": "USD",
+                "converted_currency_symbol": "$"
+              }
+            ]
+          },
+          {
+            "amount": 0,
+            "amountConverted": 0,
+            "donation_date": "2015-03"
+          }
+        ],
+        "aggregates": {
+          "sum": 375,
+          "average": 125,
+          "min": 175
+        },
+        "aggregatesConverted": {
+          "sum": 390,
+          "average": 130,
+          "min": 180
+        }
+      },
+      {
+        "donorInfo": {
+          "id": 7,
+          "name": "Dalmation, Pongo and Perdita"
+        },
+        "donations": [
+          {
+            "amount": 100,
+            "amountConverted": 105,
+            "currency": "USD",
+            "currencyConverted": "USD",
+            "currencySymbol": "$",
+            "currencySymbolConverted": "$",
+            "donation_date": "2015-01",
+            "rawDonations": [
+              {
+                "amount": 100.0,
+                "converted_amount": 105.0,
+                "contact_id": 7,
+                "donation_date": "2015-01-01",
+                "currency": "USD",
+                "currency_symbol": "$",
+                "converted_currency": "USD",
+                "converted_currency_symbol": "$"
+              }
+            ]
+          },
+          {
+            "amount": 0,
+            "amountConverted": 0,
+            "donation_date": "2015-02"
+          },
+          {
+            "amount": 100,
+            "amountConverted": 105,
+            "currency": "USD",
+            "currencyConverted": "USD",
+            "currencySymbol": "$",
+            "currencySymbolConverted": "$",
+            "donation_date": "2015-03",
+            "rawDonations": [
+              {
+                "amount": 100.0,
+                "converted_amount": 105.0,
+                "contact_id": 7,
+                "donation_date": "2015-03-31",
+                "currency": "USD",
+                "currency_symbol": "$",
+                "converted_currency": "USD",
+                "converted_currency_symbol": "$"
+              }
+            ]
+          }
+        ],
+        "aggregates": {
+          "sum": 200,
+          "average": 66.66666666666667,
+          "min": 100
+        },
+        "aggregatesConverted": {
+          "sum": 210,
+          "average": 70,
+          "min": 105
+        }
+      }
+    ],
+    "monthlyTotals": [ { "amount": 300, "amountConverted": 315 }, { "amount": 175, "amountConverted": 180 }, { "amount": 100, "amountConverted": 105 } ],
+    "yearTotal": 475,
+    "yearTotalConverted": 495
+  }
+]

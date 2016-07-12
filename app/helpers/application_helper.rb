@@ -76,10 +76,6 @@ module ApplicationHelper
     end
   end
 
-  def contacts_for_filter
-    current_account_list.contacts.order('contacts.name').select(['contacts.id', 'contacts.name'])
-  end
-
   # Renders a message containing number of displayed vs. total entries.
   #
   #   <%= page_entries_info @posts %>

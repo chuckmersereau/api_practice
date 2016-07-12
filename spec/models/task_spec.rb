@@ -41,6 +41,12 @@ describe Task do
       create(:task, result: 'completed', account_list: account_list, activity_type: 'Appointment')
     end
 
+    it 'does not sync a task with has been specified as having no date' do
+      expect(google_integration).to_not receive(:lower_retry_async)
+
+      create(:task, start_at: 1.day.from_now, no_date: true, account_list: account_list, activity_type: 'Appointment')
+    end
+
     it 'syncs a task to google after a save call' do
       expect(google_integration).to receive(:lower_retry_async)
 

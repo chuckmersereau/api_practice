@@ -6,7 +6,8 @@
             templateUrl: '/templates/elements/faCheckbox.html',
             require: {
                 ngModel: 'ngModel'
-            }
+            },
+            transclude: true
         });
 
     faCheckboxController.$inject = [];

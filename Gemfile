@@ -139,6 +139,7 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'guard-rspec'
   gem 'simplecov', require: false
+  gem 'simplecov-lcov', require: false
   gem 'spring'
   # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
   gem 'gettext', '~> 3.1.6', require: false, group: :development
@@ -149,6 +150,7 @@ group :development, :test do
   gem 'equivalent-xml'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'rails-erd'
 end
 
 group :test do

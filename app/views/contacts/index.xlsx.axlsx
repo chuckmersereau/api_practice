@@ -1,7 +1,7 @@
 wb = xlsx_package.workbook
 wb.add_worksheet(name: _('Contacts')) do |sheet|
   sheet.add_row(spreadsheet_header_titles)
-  @contacts.find_each(batch_size: 500) do |contact|
+  @contacts.each do |contact|
     sheet.add_row(spreadsheet_values(contact), types: type_array)
   end
 end

@@ -3446,8 +3446,3 @@ msgstr ""
 
 msgid "your-spouse-email@cru.org"
 msgstr ""
-
-#~ msgid ""
-#~ "Are you sure you want to merge the selected contacts? This action cannot be un"
-#~ "done!"
-#~ msgstr "¿Estás seguro?"

@@ -26,7 +26,7 @@ Sidekiq.configure_server do |config|
 end
 
 Sidekiq.default_worker_options = {
-  backtrace: true,
+  backtrace: false,
   # Set uniqueness lock expiration to 24 hours to balance preventing
   # duplicate jobs from running (if uniqueness time is too short) and donor
   # import / email jobs not getting queued because the locks don't
