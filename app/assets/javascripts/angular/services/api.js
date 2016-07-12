@@ -1,14 +1,18 @@
 angular.module('mpdxApp')
-    .service('api', function ($rootScope, $http, $cacheFactory) {
+    .service('api', function ($rootScope, $http, $cacheFactory, $q, $log) {
         var apiUrl = '/api/v1/';
         var apiCache = $cacheFactory('api');
 
+        // This function supports both callbacks (successFn, errorFn) and returns a promise
+        // It would be preferred to use promises in the future
         this.call = function (method, url, data, successFn, errorFn, cache) {
             if(cache === true){
                 var cachedData = apiCache.get(url);
                 if (angular.isDefined(cachedData)) {
-                    successFn(cachedData, 200);
-                    return;
+                    if(_.isFunction(successFn)) {
+                        successFn(cachedData, 304);
+                    }
+                    return $q.resolve(cachedData);
                 }
             }
             return $http({
@@ -17,20 +21,21 @@ angular.module('mpdxApp')
                 data: data,
                 cache: false,
                 timeout: 50000
-            }).
-                success(function(data, status) {
+            })
+                .then(function(response) {
                     if(_.isFunction(successFn)){
-                        successFn(data, status);
+                        successFn(response.data, response.status);
                     }
                     if(cache === true){
-                        apiCache.put(url, data);
+                        apiCache.put(url, response.data);
                     }
-                }).
-                error(function(data, status) {
-                    console.log('API ERROR: ' + status);
+                    return response.data;
+                }, function(response) {
+                    $log.error('API ERROR:', response.status, response.data);
                     if(_.isFunction(errorFn)){
-                        errorFn(data, status);
+                        errorFn(response);
                     }
+                    return $q.reject(response);
                 });
         };
 
