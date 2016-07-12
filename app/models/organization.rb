@@ -10,7 +10,7 @@ class Organization < ActiveRecord::Base
   has_many :donor_accounts, dependent: :destroy
   has_many :master_person_sources, dependent: :destroy
   has_many :master_people, through: :master_person_sources
-  has_many :organization_accounts, :class_name => 'Person::OrganizationAccount'
+  has_many :organization_accounts, class_name: 'Person::OrganizationAccount'
 
   validates :name, :query_ini_url, presence: true
   validates :name, uniqueness: true, case_sensitive: false

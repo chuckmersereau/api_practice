@@ -456,16 +456,18 @@ describe AccountList do
       expect(account_list.donations.to_a).to eq([donation])
     end
 
-    it 'shows offline org donations for account with no designations' do
-      online_org = create(:organization, api_class: 'OfflineOrg')
-      donor_account = create(:donor_account, organization: online_org)
-      designation_account = create(:designation_account, organization: online_org)
+    it 'shows offline org donations for account with designations' do
       account_list = create(:account_list)
+      contact = create(:contact, account_list: account_list)
+      offline_org = create(:organization, api_class: 'OfflineOrg')
+      donor_account = create(:donor_account, organization: offline_org)
+      designation_account = create(:designation_account, organization: offline_org)
+      designation_profile = create(:designation_profile, account_list: account_list)
+      create(:designation_profile_account, designation_account: designation_account,
+                                           designation_profile: designation_profile)
       donation = create(:donation, donor_account: donor_account,
                                    designation_account: designation_account)
-      contact = create(:contact, account_list: account_list)
       contact.donor_accounts << donor_account
-
       expect(account_list.donations.to_a).to eq([donation])
     end
   end
