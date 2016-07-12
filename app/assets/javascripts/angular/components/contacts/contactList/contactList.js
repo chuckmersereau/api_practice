@@ -6,9 +6,9 @@
             templateUrl: 'inline/contact_list.html' //declared inline at app/views/contacts/index.html.erb
         });
 
-    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants', '_', 'Gmaps', '$anchorScroll'];
+    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants', '_', '$window', '$anchorScroll'];
 
-    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants, _, Gmaps, $anchorScroll) {
+    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants, _, $window, $anchorScroll) {
         var vm = this;
 
         vm.contactsLoading = true;
@@ -413,7 +413,7 @@
             }
             var mapOptions = { streetViewControl: false };
             if(!vm.mapHandler) {
-                vm.mapHandler = Gmaps.build('Google');
+                vm.mapHandler = $window.Gmaps.build('Google');
                 vm.mapHandler.buildMap(
                     {
                         provider: mapOptions,
