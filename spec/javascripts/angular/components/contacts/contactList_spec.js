@@ -2,10 +2,19 @@ describe('contactList', function() {
     beforeEach(module('mpdxApp'));
     var self = {};
 
-    beforeEach(inject(function($injector, $httpBackend, $rootScope, $componentController, api, state, $location) {
+    beforeEach(module(function ($provide) {
+        var $window = {
+            location: { search: '' },
+            scrollTo: function(){}
+        };
+        // use $provide to swap the real $window with a mock
+        $provide.value('$window', $window);
+    }));
+
+    beforeEach(inject(function($injector, $httpBackend, $rootScope, $componentController, api, state, $window) {
         self.api = api;
         self.$httpBackend = $httpBackend;
-        self.$location = $location;
+        self.$window = $window;
         var $scope = $rootScope.$new();
 
         self.controller = $componentController('contactList', {
@@ -415,7 +424,7 @@ describe('contactList', function() {
     describe('initializeFilters', function() {
         it('should initialize filters with limit from state and wildcardSearch from url param', function () {
             self.state.contact_limit = 100;
-            self.$location.search('q', 'searchQuery');
+            self.$window.location.search = '?q=searchQuery';
             self.controller._initializeFilters();
             expect(_.omit(self.controller.contactQuery, ['limit', 'wildcardSearch'])).toEqual(_.omit(self.defaultFilters, ['limit', 'wildcardSearch']));
             expect(self.controller.contactQuery.limit).toEqual(100);
@@ -423,7 +432,7 @@ describe('contactList', function() {
         });
         it('should call clearSelectedContacts if performing a wildcardSearch', function(){
             spyOn(self.controller, 'clearSelectedContacts');
-            self.$location.search('q', 'searchQuery');
+            self.$window.location.search = '?q=searchQuery';
 
             self.controller._initializeFilters();
             expect(self.controller.clearSelectedContacts).toHaveBeenCalled();
@@ -438,7 +447,7 @@ describe('contactList', function() {
 
         afterEach(function(){
             self.state.contact_limit = null;
-            self.$location.search('q', null);
+            self.$window.location.search = '';
         });
     });
 
