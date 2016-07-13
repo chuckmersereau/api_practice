@@ -2,33 +2,31 @@
     angular
         .module('mpdxApp')
         .component('contactListItem', {
-            controller: contactController,
+            controller: contactListItemController,
             templateUrl: '/templates/components/contacts/contactList/contactListItem.html',
             bindings: {
                 contact: '='
             }
         });
 
-    contactController.$inject = ['$sce', 'contactCache', 'state', '_'];
+    contactListItemController.$inject = ['contactCache', 'state', '_'];
 
-    function contactController($sce, contactCache, state, _) {
+    function contactListItemController(contactCache, state, _) {
         var vm = this;
         vm.current_currency_symbol = state.current_currency_symbol;
 
-        vm.getAddress = getAddress;
+        vm.getAddresses = getAddresses;
         vm.getFacebookId = getFacebookId;
         vm.getEmailAddress = getEmailAddress;
         vm.getPerson = getPerson;
         vm.getPrimaryPhone = getPrimaryPhone;
         vm.hasSendNewsletterError = hasSendNewsletterError;
 
-        function getAddress(id){
-            var address = _.find(contactCache.getFromCache(vm.contact.id).addresses, { 'id': id });
-            if(address.primary_mailing_address){
-                return $sce.trustAsHtml(address.street + '<br>' + address.city + ', ' + address.state + ' ' + address.postal_code);
-            }else{
-                return '';
-            }
+        function getAddresses(){
+            var cachedAddresses = contactCache.getFromCache(vm.contact.id).addresses;
+            return _.map(vm.contact.address_ids, function(id){
+                return _.find(cachedAddresses, { 'id': id });
+            });
         }
 
         function getFacebookId(id){

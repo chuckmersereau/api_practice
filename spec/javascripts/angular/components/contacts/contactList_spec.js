@@ -1,4 +1,4 @@
-describe('contacts', function() {
+describe('contactList', function() {
     beforeEach(module('mpdxApp'));
     var self = {};
 
