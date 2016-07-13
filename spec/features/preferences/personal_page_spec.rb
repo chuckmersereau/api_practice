@@ -3,7 +3,7 @@ require 'spec_helper'
 Capybara.default_max_wait_time = 2
 Capybara::Angular.default_max_wait_time = 5
 
-describe 'preferences list', js: true do
+describe 'personal preferences list', js: true do
   #include Capybara::Angular::DSL
   let!(:user) do
     user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
