@@ -14,7 +14,9 @@ class Api::V1::Preferences::IntegrationsController < Api::V1::Preferences::BaseC
 
   def load_google_preferences
     @preferences.merge!(
-      google_accounts: current_user.google_accounts.select(:id, :email),
+      google_accounts: current_user.google_accounts.map do |g|
+        { id: g.id, email: g.email, token_expired: g.token_expired?, refresh_token: g.refresh_token!, google_integration_id: g.google_integrations.find_by(account_list: current_account_list).try(:id) }
+      end,
       valid_google_account: (current_user.google_accounts.count > 0)
     )
   end

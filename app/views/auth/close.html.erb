@@ -1,6 +1,6 @@
 <script type="text/javascript">
   (function(){
-    if (typeof window.opener === "undefined") {
+    if (typeof window.opener === "undefined" || window.opener === null) {
       window.location.href = "<%= params[:url] %>";
     } else {
       window.opener.openerCallback();

@@ -75,9 +75,9 @@
                       <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="settings-drop">
                         <li role="presentation"><%= link_to(_('Preferences'), personal_preferences_path) %></li>
                         <li role="presentation"><%= link_to(_('Notifications'), notification_preferences_path) %></li>
-                        <li role="presentation"><%= link_to(_('Networks & Imports'), network_preferences_path) %></li>
-                        <li role="presentation"><%= link_to(_('Integrations'), integration_preferences_path) %></li>
-                        <li role="presentation"><%= link_to(_('Account Sharing'), sharing_account_lists_path) %></li>
+                        <li role="presentation"><%= link_to(_('Imports Contacts'), network_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Connect Services'), integration_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Manage Account'), account_preferences_path) %></li>
                         <% if current_user.admin %>
                           <li role="presentation">
                             <%= link_to(_('Admin'), admin_home_index_path) %>

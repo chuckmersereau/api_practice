@@ -1,16 +1,19 @@
 <aside id="leftmenu">
   <ul class="nav nav-pills nav-stacked">
-    <li <% if request.path == preferences_path %>class="active"<% end %>>
-      <%= link_to(_('Preferences'), preferences_path) %>
+    <li>
+      <%= link_to(_('Preferences'), personal_preferences_path) %>
     </li>
-    <li <% if request.path == accounts_path %>class="active"<% end %>>
-      <%= link_to(_('Networks & Imports'), accounts_path) %>
+    <li>
+      <%= link_to(_('Networks & Imports'), notification_preferences_path) %>
     </li>
-    <li <% if request.path == integration_preferences_path %>class="active"<% end %>>
-      <%= link_to(_('Integrations'), integration_preferences_path) %>
+    <li>
+      <%= link_to(_('Imports Contacts'), network_preferences_path) %>
     </li>
-    <li <% if request.path == sharing_account_lists_path %>class="active"<% end %>>
-      <%= link_to(_('Account Sharing'), sharing_account_lists_path) %>
+    <li>
+      <%= link_to(_('Connect Services'), integration_preferences_path) %>
+    </li>
+    <li>
+      <%= link_to(_('Manage Account'), account_preferences_path) %>
     </li>
   </ul>
   </ul>

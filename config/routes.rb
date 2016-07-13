@@ -25,6 +25,8 @@ Rails.application.routes.draw do
   get 'preferences/networks/:tab_id', to: 'preferences#index', as: :network_preferences_tab
   get 'preferences/integrations', as: :integration_preferences
   get 'preferences/integrations/:tab_id', to: 'preferences#index', as: :integration_preferences_tab
+  get 'preferences/accounts', as: :account_preferences
+  get 'preferences/accounts/:tab_id', to: 'preferences#index', as: :account_preferences_tab
 
   # old preferences routes (SEO and external link upkeep)
   get '/preferences', to: redirect('preferences/personal'), as: :preferences

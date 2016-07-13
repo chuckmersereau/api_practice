@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-12">
           <div class="page-filters">
-            <h2><%= _('Integrations') %></h2>
+            <h2><%= _('Connect Services') %></h2>
           </div>
         </div>
       </div>
@@ -103,6 +103,31 @@
                           <a class="inlineaction delete" ng-click="vm.disconnect('Google', account.id)"><%= _('Delete') %></a>
                         </div>
                         <span class="account_name">{{account.email}}</span>
+
+                        <div ng-show="account.token_expired == true">
+                          <p>
+                            <%= _('The link between MPDX and your Google account stopped working. '+
+                                  'Click "Refresh Google Account" to re-enable it. After that, '+
+                                  'you\'ll need to manually re-enable any integrations that you had set already.') %>
+                          </p>
+                          <%# new_account_path_opts = { provider: :google } %>
+                          <%# new_account_path_opts[:redirect] =  google_integration_path(google_integration) if google_integration %>
+                          <%#= link_to(_('Refresh Google Account'), new_account_path(new_account_path_opts), class: 'btn desired_action') %>
+                        </div>
+                        <div ng-show="account.token_expired == false">
+                          <div ng-show="account.google_integration_id != null">
+                            <a ng-href="/google_integrations/{{account.google_integration_id}}">
+                              <i class="fa fa-refresh"></i>
+                              <%= _('Configure synchronization') %>
+                            </a>
+                          </div>
+                          <div ng-show="account.google_integration_id == null">
+                            <a data-method="post" ng-href="/google_integrations?google_account_id={{account.id}}" rel="nofollow">
+                              <i class="fa fa-refresh"></i>
+                              <%= _('Configure synchronization') %>
+                            </a>
+                          </div>
+                        </div>
                       </div>
                     </div>
                     <div ng-hide="vm.preferences.data.valid_google_account">
