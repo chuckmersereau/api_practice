@@ -165,12 +165,11 @@ GEM
       capybara (>= 2.3.0, < 2.8.0)
       json
     charlock_holmes (0.7.3)
+    choice (0.2.0)
     chosen-rails (1.5.2)
       coffee-rails (>= 3.2)
       railties (>= 3.0)
       sass-rails (>= 3.2)
-    choice (0.2.0)
-    cliver (0.3.2)
     cloudinary (1.1.0)
       aws_cf_signer
       rest-client
