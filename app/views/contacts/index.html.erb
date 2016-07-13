@@ -3,10 +3,12 @@
 <script type="text/ng-template" id="inline/contact_list.html">
   <% contact_instance = Contact.new %>
   <div class="row">
-    <div class="col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap">
+    <div ng-class="$ctrl.showMobileFilters ? 'col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap show_mobile_filters' : 'col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap'">
       <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
-        <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
-        <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
+        <span  ng-click="$ctrl.toggleMobileFilters()" class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
+        <a href="#"
+           ng-click="$ctrl.resetFilters()"
+           class="btn btn-primary btn-xs btn-block btn-filter-left btn-filter-fullscreen ng-cloak"
            ng-if="!$ctrl.isEmptyFilter()"
            onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
           <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
@@ -220,7 +222,9 @@
                 <a href="" ng-click="$ctrl.clearInsightFilter()" class="btn"><%= _('Clear Insight Filter') %></a>
               </li>
           <% end %>
-          <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
+          <a href="#"
+             ng-click="$ctrl.resetFilters()"
+             class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
              ng-if="!$ctrl.isEmptyFilter()"
              onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
             <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
@@ -235,7 +239,7 @@
           <div class="page-filters">
             <div class="row">
               <div class="col-xs-2 col-sm-2 col-xs-3 hidden-md hidden-lg">
-                <a class="btn btn-default btn-secondary toggle-mobile-filters"><i class="fa fa-bars"></i> Filters</a>
+                <a ng-click="$ctrl.toggleMobileFilters()" class="btn btn-default btn-secondary toggle-mobile-filters"><i class="fa fa-bars"></i> Filters</a>
               </div>
 
               <div class="col-md-7 col-sm-5 col-xs-9">

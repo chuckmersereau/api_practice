@@ -18,6 +18,7 @@
         vm.mapMarkers = [];
         vm.showAllFilterTags = false;
         vm.contactQuery = {};
+        vm.showMobileFilters = false;
 
         // A status of 'null' corresponds with '-- NONE --' in the html select
         var defaultFilters = {
@@ -76,6 +77,7 @@
         vm.anyContactIdsSelected = anyContactIdsSelected;
         vm.anyContactsOnPageSelected = anyContactsOnPageSelected;
         vm.noSelectedContacts = noSelectedContacts;
+        vm.toggleMobileFilters = toggleMobileFilters;
 
         vm._setupRefreshContacts = setupRefreshContacts;
         vm._buildContactFilterUrl = buildContactFilterUrl;
@@ -516,6 +518,10 @@
             return _.map(vm.contacts, function(contact){
                 return contact.id;
             });
+        }
+
+        function toggleMobileFilters(){
+            vm.showMobileFilters = !vm.showMobileFilters;
         }
     }
 })();

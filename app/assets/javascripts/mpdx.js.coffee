@@ -236,11 +236,6 @@ $(document).ready ->
     $('#content').removeClass('fullscreen')
   $(document).on 'click', '.trigger-fullscreen-content', $.mpdx.fullscreenContent
 
-  $('.toggle-mobile-filters').click ->
-    $('html, body').animate { scrollTop: 0 }, 0
-    $('.mobile_filters_wrap').toggleClass 'show_mobile_filters'
-    $('body').toggleClass 'stopscroll'
-
   $(window).scroll ->
     filterWidth = $('.page-filters').parent().width()
     $('.page-filters').width filterWidth
