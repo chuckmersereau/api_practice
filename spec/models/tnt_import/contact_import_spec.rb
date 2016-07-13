@@ -15,22 +15,25 @@ describe TntImport::ContactImport do
   before { stub_smarty_streets }
 
   context '#update_contact' do
+    before do
+      @contact = Contact.new(notes: 'Another note')
+    end
+
     it 'updates notes correctly' do
-      contact = Contact.new
-      import.send(:update_contact, contact, contact_rows.first)
-      expect(contact.notes).to eq("Principal\nHas run into issues with Campus Crusade in the past...  Was told couldn't be involved because hadn't been baptized as an adult.")
+      import.send(:update_contact, @contact, contact_rows.first)
+      expect(@contact.notes).to eq("Another note \n \nPrincipal\nHas run into issues with Campus Crusade in the past...  Was told couldn't be involved because hadn't been baptized as an adult.")
+      import.send(:update_contact, @contact, contact_rows.first)
+      expect(@contact.notes).to eq("Another note \n \nPrincipal\nHas run into issues with Campus Crusade in the past...  Was told couldn't be involved because hadn't been baptized as an adult.")
     end
 
     it 'updates newsletter preferences correctly' do
-      contact = Contact.new
-      import.send(:update_contact, contact, contact_rows.first)
-      expect(contact.send_newsletter).to eq('Physical')
+      import.send(:update_contact, @contact, contact_rows.first)
+      expect(@contact.send_newsletter).to eq('Physical')
     end
 
     it 'sets the address region' do
-      contact = Contact.new
-      import.send(:update_contact, contact, contact_rows.first)
-      expect(contact.addresses.first.region).to eq('State College')
+      import.send(:update_contact, @contact, contact_rows.first)
+      expect(@contact.addresses.first.region).to eq('State College')
     end
   end
 

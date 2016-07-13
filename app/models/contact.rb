@@ -161,6 +161,16 @@ class Contact < ActiveRecord::Base
     new_person
   end
 
+  def add_to_notes(new_note)
+    return if notes.to_s.include?(new_note.to_s)
+    self.notes = if notes.present?
+                   "#{notes} \n \n#{new_note}"
+                 else
+                   new_note
+                 end
+    save
+  end
+
   def mailing_address
     # Use .reject(&:historic) and not .where.not(historic: true) because the
     # CSV import uses mailing_address for checking the addresses for contacts

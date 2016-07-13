@@ -71,7 +71,7 @@ class TntImport::ContactImport
     contact.website = row['WebPage'] if @override || contact.website.blank?
     contact.updated_at = parse_date(row['LastEdit']) if @override
     contact.created_at = parse_date(row['CreatedDate']) if @override
-    contact.notes = row['Notes'] if @override || contact.notes.blank?
+    contact.add_to_notes(row['Notes'])
     contact.pledge_amount = row['PledgeAmount'] if @override || contact.pledge_amount.blank?
     contact.pledge_frequency = row['PledgeFrequencyID'] if (@override || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i != 0
     contact.pledge_received = true?(row['PledgeReceived']) if @override || contact.pledge_received.blank?
