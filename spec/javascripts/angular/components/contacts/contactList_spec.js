@@ -11,10 +11,11 @@ describe('contactList', function() {
         $provide.value('$window', $window);
     }));
 
-    beforeEach(inject(function($injector, $httpBackend, $rootScope, $componentController, api, state, $window) {
+    beforeEach(inject(function($injector, $httpBackend, $rootScope, $componentController, api, state, $window, Rx) {
         self.api = api;
         self.$httpBackend = $httpBackend;
         self.$window = $window;
+        self.Rx = Rx;
         var $scope = $rootScope.$new();
 
         self.controller = $componentController('contactList', {
@@ -63,18 +64,27 @@ describe('contactList', function() {
             limit: 25,
             wildcardSearch: null
         };
+
+        // Setup fake debounceTime so it can be flushed synchronously
+        self.scheduler = new Rx.TestScheduler();
+        var originalDebounceTime = Rx.Observable.prototype.debounceTime;
+        spyOn(Rx.Observable.prototype, 'debounceTime').and.callFake(function(dueTime) {
+            return originalDebounceTime.call(this, dueTime, self.scheduler);
+        });
     }));
 
-    describe('refreshContacts', function(){
+    describe('setupRefreshContacts', function(){
         beforeEach(function(){
             self.controller._initializeFilters();
         });
 
-        it('should send a simple http request', function(){
+        it('should send a simple http request to first load contacts', function(){
             self.$httpBackend.expectGET('/api/v1/contacts?account_list_id=2').respond(200, {});
             self.$httpBackend.expectPUT('/api/v1/users/me').respond(200, {});
 
-            self.controller._refreshContacts();
+            self.controller._setupRefreshContacts();
+            self.controller._handleContactQueryChanges(); // Force a filter change to trigger refresh
+            self.scheduler.flush();
             self.$httpBackend.flush();
             expect(self.controller.contactsLoading).toEqual(false);
 
@@ -103,8 +113,10 @@ describe('contactList', function() {
 
             //save updated view filters
             self.$httpBackend.when("PUT", "/api/v1/users/me").respond(200, {});
-            self.controller._refreshContacts();
+            self.controller._setupRefreshContacts();
+            self.controller._handleContactQueryChanges(); // Force a filter change to trigger refresh
 
+            self.scheduler.flush();
             self.$httpBackend.flush();
 
             expect(self.controller.contactsLoading).toEqual(false);
@@ -121,8 +133,12 @@ describe('contactList', function() {
             }, {});
             self.$httpBackend.when("PUT", "/api/v1/users/me").respond(200, {});
             self.controller.contactQuery.page = 11;
-            self.controller._refreshContacts();
+            self.controller._setupRefreshContacts();
+            self.controller._handleContactQueryChanges(); // Force a filter change to trigger refresh
+
+            self.scheduler.flush();
             self.$httpBackend.flush();
+
             expect(self.controller.contactQuery.page).toEqual(10);
         });
     });
@@ -519,7 +535,9 @@ describe('contactList', function() {
 
             //save updated view filters
             self.$httpBackend.when("PUT", "/api/v1/users/me").respond(200, {});
+            self.$httpBackend.flush();
 
+            self.scheduler.flush();
             self.$httpBackend.flush();
 
             expect(self.controller.totalContacts).toEqual(1);
