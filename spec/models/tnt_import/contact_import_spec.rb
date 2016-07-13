@@ -20,10 +20,16 @@ describe TntImport::ContactImport do
     end
 
     it 'updates notes correctly' do
-      import.send(:update_contact, @contact, contact_rows.first)
-      expect(@contact.notes).to eq("Another note \n \nPrincipal\nHas run into issues with Campus Crusade in the past...  Was told couldn't be involved because hadn't been baptized as an adult.")
-      import.send(:update_contact, @contact, contact_rows.first)
-      expect(@contact.notes).to eq("Another note \n \nPrincipal\nHas run into issues with Campus Crusade in the past...  Was told couldn't be involved because hadn't been baptized as an adult.")
+      contact = Contact.new
+      import.send(:update_contact, contact, contact_rows.first)
+      expect(contact.notes).to eq("Principal\nHas run into issues with Campus Crusade. \n \nChildren: Mark and Robert")
+    end
+
+    it 'doesnt add the children and tnt notes twice to notes' do
+      contact = Contact.new
+      import.send(:update_contact, contact, contact_rows.first)
+      import.send(:update_contact, contact, contact_rows.first)
+      expect(contact.notes).to eq("Principal\nHas run into issues with Campus Crusade. \n \nChildren: Mark and Robert")
     end
 
     it 'updates newsletter preferences correctly' do
@@ -42,7 +48,7 @@ describe TntImport::ContactImport do
     expect { import.send(:import_contact, row) }.to change(Contact, :count).by(1)
   end
 
-  it 'does not error if phone is invalid and person has email' do
+  it 'does not cause an error if phone is invalid and person has email' do
     account_list = create(:account_list)
     tnt_import = double(user: double, account_list: account_list,
                         override?: true)
