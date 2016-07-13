@@ -8,7 +8,6 @@ class MailChimpAccount::Exporter
     @account = account
     @list_id = list_id || @account.primary_list_id
     @use_primary_list = @account.primary_list_id == @list_id
-    Gibbon::Request.api_key = @account.api_key
     Gibbon::Request.timeout = 600
   end
 
@@ -296,7 +295,9 @@ class MailChimpAccount::Exporter
   end
 
   def gb
-    Gibbon::Request
+    @gb = Gibbon::Request.new
+    @gb.api_key = @account.api_key
+    @gb
   end
 
   def mc_list
