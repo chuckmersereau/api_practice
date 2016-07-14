@@ -45,8 +45,8 @@
     <div ng-show="$ctrl.contact.pledge_amount > 0">
       {{$ctrl.contact.pledge_amount | currency: $ctrl.contact.pledge_currency_symbol}} {{$ctrl.contact.pledge_frequency | pledgeFrequencyStr}}
       <div ng-if="$ctrl.contact.status == 'Partner - Financial'" ng-switch="$ctrl.contact.pledge_received">
-        <div ng-switch-when="'true'" class="text-success" ><%= _('Commitment Received') %></div>
-        <div ng-switch-when="'false'" class="text-warning"><%= _('Commitment Not Received') %></div>
+        <div ng-switch-when="true" class="text-success" ><%= _('Commitment Received') %></div>
+        <div ng-switch-when="false" class="text-warning"><%= _('Commitment Not Received') %></div>
       </div>
     </div>
     <a href="/tasks?contact_ids={{$ctrl.contact.id}}" ng-show="$ctrl.contact.uncompleted_tasks_count > 0">
