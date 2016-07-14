@@ -120,7 +120,7 @@
                         });
                         var flattenedEmailAddresses = _.flatMap(people, 'email_address_ids');
                         var flattenedFacebookAccounts = _.flatMap(people, 'facebook_account_ids');
-                        contact.pledge_received = contact.pledge_received == 'true';
+                        //contact.pledge_received = contact.pledge_received == 'true';
 
                         contactCache.update(contact.id, {
                             addresses: _.filter(data.addresses, function (addr) {
