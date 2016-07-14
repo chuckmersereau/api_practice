@@ -7,8 +7,8 @@
       templateUrl: '/templates/preferences/imports.html',
       bindings: {}
     });
-  importPreferencesController.$inject = ['$state', '$stateParams', 'preferences.importsService', 'alertsService'];
-  function importPreferencesController($state, $stateParams, importsService, alertsService) {
+  importPreferencesController.$inject = ['$filter', '$state', '$stateParams', 'preferences.importsService', 'alertsService'];
+  function importPreferencesController($filter, $state, $stateParams, importsService, alertsService) {
     var vm = this;
     vm.preferences = importsService;
     vm.alerts = alertsService;
@@ -31,15 +31,27 @@
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {
         vm.tabId = '';
-        $state.go('preferences.imports', {}, { notify: false })
+        $state.go('preferences.imports', {}, { notify: false });
       } else {
         vm.tabId = service;
-        $state.go('preferences.imports.tab', { id: service }, { notify: false })
+        $state.go('preferences.imports.tab', { id: service }, { notify: false });
       }
     };
 
     vm.tabSelected = function(service) {
       return vm.tabId == service;
+    };
+
+    vm.checkAllGoogleContactGroups = function() {
+      vm.preferences.google_contact_import.import.groups = vm.preferences.selected_account.contact_groups.map(function(item) { return item.id; });
+    };
+
+    vm.uncheckAllGoogleContactGroups = function() {
+      vm.preferences.google_contact_import.import.groups = [];
+    };
+
+    vm.loadTags = function(query) {
+      return $filter('filter')(vm.preferences.data.tags, { text: query });
     };
 
     if ($stateParams.id) {

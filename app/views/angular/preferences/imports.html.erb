@@ -13,17 +13,14 @@
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head" ng-click="vm.setTab('tnt')">
             <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('tnt') }"></i>
-              TntConnect
-            <div class="pull-right pref-head-desc">
-                Import Contacts from TntConnect
-            </div>
+              <%= _('TntConnect') %>
           </div>
           <div class="panel-animate" ng-show="vm.tabSelected('tnt')">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
                   <div class="import_logo">
-                    <%= image_tag("logos/tnt_logo.png", alt: 'TntConnect') %> TntConnect
+                    <%= image_tag("logos/tnt_logo.png", alt: 'TntConnect') %>
                   </div>
                 </div>
                 <div class="col-md-8 connections" data-behavior="account">
@@ -40,17 +37,14 @@
         <div class="panel panel-default pref-panel">
           <div class="panel-heading pref-head" ng-click="vm.setTab('csv')">
             <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('csv') }"></i>
-            Excel and CSV File
-            <div class="pull-right pref-head-desc">
-              Import Contacts from Excel or Pages
-            </div>
+            <%= _('Excel and CSV File') %>
           </div>
           <div class="panel-animate" ng-show="vm.tabSelected('csv')">
             <div class="panel-body pref-body">
               <div class="row pref-row">
                 <div class="col-md-4 pref-lead">
                   <div class="import_logo">
-                    .CSV File
+                    <%= _('.CSV File') %>
                   </div>
                 </div>
                 <div class="col-md-8 connections" data-behavior="account">
@@ -64,6 +58,30 @@
               </div>
             </div>
           </div>
+          <div class="panel panel-default pref-panel">
+            <div class="panel-heading pref-head" ng-click="vm.setTab('google')">
+              <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('google') }"></i>
+              <%= _('Google Contacts') %>
+            </div>
+            <div class="panel-animate" ng-show="vm.tabSelected('google')">
+              <div class="panel-body pref-body">
+                <div class="row pref-row">
+                  <div class="col-md-4 pref-lead">
+                    <div class="import_logo">
+                      <%= image_tag("logos/google_logo.png", alt: 'Google') %>
+                    </div>
+                  </div>
+                  <div class="col-md-8 connections" data-behavior="account">
+                      <div class="import_button">
+                        <div class="importoptions" data-behavior="import_options">
+                          <%= render "angular/preferences/imports/google_import_form" %>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
         </div>
       </div>
     </div>

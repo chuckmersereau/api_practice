@@ -1,6 +1,5 @@
-<h3><%= _('Import Google Contacts') %></h3>
-<% account = account || current_user.google_accounts.find(params[:account_id]) %>
-<%= form_for Import.new(source: 'google', source_account_id: account.id) do |f| %>
+<% account = account || current_user.google_accounts.first %>
+<% form_for Import.new(source: 'google', source_account_id: account.id) do |f| %>
   <div class="field radiocheck">
     <%= f.radio_button(:import_by_group, 'false') %>
     <%= f.label(:import_by_group_false, _('Import all contacts')) %>
@@ -63,3 +62,72 @@
     $('#import_import_by_group_true').change(toggle_import_by_group_disabled);
   </script>
 <% end %>
+<div ng-show="vm.preferences.data.google_accounts.length > 1">
+  <label><%= _('Account to Import From') %></label>
+  <select ng-options="account as account.email for account in vm.preferences.data.google_accounts" ng-model="vm.preferences.selected_account" chosen></select>
+</div>
+<div ng-show="vm.preferences.data.google_accounts.length == 1">
+  <%= _('Importing From') %> <strong>{{vm.preferences.selected_account.email}}</strong>
+</div>
+<br />
+<div ng-repeat="account in vm.preferences.data.google_accounts" ng-show="account.id == vm.preferences.selected_account.id">
+<form>
+  <div class="field radiocheck">
+    <input id="import_by_group_false" type="radio" value="false" ng-model="vm.preferences.google_contact_import.import.import_by_group">
+    <label for="import_by_group_false"><%= _('Import all contacts') %></label>
+  </div>
+  <div class="field radiocheck">
+    <input id="import_by_group_true" type="radio" value="true" ng-model="vm.preferences.google_contact_import.import.import_by_group">
+    <label for="import_by_group_true"><%= _('Only import contacts from certain groups') %></label>
+  </div>
+  <div ng-show="vm.preferences.google_contact_import.import.import_by_group == 'true'">
+    <div class="well">
+      <table class="import-tags-table">
+        <thead>
+          <tr>
+            <th><%= _('Contact group') %></th>
+            <th><%= _('Tags for group') %></th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="group in account.contact_groups">
+            <td class="google_import_group">
+              <label class="field radiocheck google_import_group">
+                <input class="import_by_group" type="checkbox" checklist-value="group.id" checklist-model="vm.preferences.google_contact_import.import.groups">
+                {{group.title}}
+              </label>
+            </td>
+            <td class="google_import_tags">
+              <tags-input class="import_by_group import_contact_tags" ng-model="vm.preferences.google_contact_import.import.group_tags[group.id]">
+                <auto-complete source="vm.loadTags($query)" min-length="0" select-first-match="false"></auto-complete>
+              </tags-input>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="text-right">
+      <a ng-click="vm.checkAllGoogleContactGroups()" class="btn btn-secondary">Check all</a>
+      <a ng-click="vm.uncheckAllGoogleContactGroups()" class="btn btn-secondary">Uncheck all</a>
+    </div>
+  </div>
+  <br>
+  <div class="importtags">
+    <%= _('Tags for all imported Google contacts:') %>
+
+      <tags-input class="import_by_group import_contact_tags" ng-model="vm.preferences.google_contact_import.import.tags">
+        <auto-complete source="vm.loadTags($query)" min-length="0" select-first-match="false"></auto-complete>
+      </tags-input>
+  </div>
+  <br />
+  <div class="field radiocheck">
+    <input id="override_false" type="radio" value="false" ng-model="vm.preferences.google_contact_import.import.override">
+    <label for="override_false"><%= _('Only add data to matched contact records when the current field is blank') %></label>
+  </div>
+  <div class="field radiocheck">
+    <input id="override_true" type="radio" value="true" ng-model="vm.preferences.google_contact_import.import.override">
+    <label for="override_true"><%= _('Override existing contact fields with data in the uploaded file') %></label>
+  </div>
+  <input class="btn btn-primary" name="commit" type="submit" value="Import">
+</form>
+</div>

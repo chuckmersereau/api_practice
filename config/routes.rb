@@ -57,6 +57,7 @@ Rails.application.routes.draw do
       namespace :preferences do
         resources :notifications, only: :index
         resources :integrations, only: :index
+        resources :imports, only: :index
         resources :personal, only: :index
         resources :accounts, only: :index
         namespace :accounts do
