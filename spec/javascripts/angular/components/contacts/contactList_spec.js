@@ -554,4 +554,14 @@ describe('contactList', function() {
             expect(self.controller.tagIsActive('university')).toBe(true);
         });
     });
+
+    describe('mobile filters', function(){
+        it('function toggles modal', function(){
+            expect(self.controller.showMobileFilters).toBe(false);
+            self.controller.toggleMobileFilters();
+            expect(self.controller.showMobileFilters).toBe(true);
+            self.controller.toggleMobileFilters();
+            expect(self.controller.showMobileFilters).toBe(false);
+        });
+    });
 });
