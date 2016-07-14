@@ -43,7 +43,7 @@
       if(service == 'pls') {
         return api.call('delete', 'preferences/integrations/pls_account', { }, success, error);
       }
-    }
+    };
 
     svc.account_list_id_watcher = $rootScope.$watch(function() {
       return api.account_list_id;

@@ -8,7 +8,9 @@ angular
     'isoCurrency',
     'ui.bootstrap',
     'ui.router',
-    'localytics.directives'
+    'localytics.directives',
+    'checklist-model',
+    'ngTagsInput'
   ]);
 
 angular

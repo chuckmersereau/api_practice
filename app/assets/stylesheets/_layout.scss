@@ -2378,6 +2378,19 @@ span.best_in_place_once {
   border-radius: 6px;
 }
 
-.chosen-container {
-  min-width: 250px;
+.import_by_group {
+  margin-bottom: 10px;
+  tags-input .tags .tag-item {
+    background: #007398;
+  }
+}
+.import-tags-table {
+  width: 100%;
+  .google_import_group {
+    max-width: 100px;
+    margin-left: 20px;
+    input[type=checkbox] {
+      margin-left: -16px;
+    }
+  }
 }
