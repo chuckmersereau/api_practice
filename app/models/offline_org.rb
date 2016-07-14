@@ -29,18 +29,20 @@ class OfflineOrg < DataServer
     designation_profile = DesignationProfile.find_or_create_by!(
       user_id: @org_account.person_id,
       organization_id: @org.id,
-      account_list_id: account_list.id)
-    designation_profile.update_attributes(name: @org_account.user.to_s,
-                                          code: @org_account.id)
+      account_list_id: account_list.id) do |dp|
+      dp.code = @org_account.id.to_s
+    end
+    designation_profile.update_attributes(name: @org_account.user.to_s)
     designation_profile
   end
 
   def build_designation_account
     designation_account = DesignationAccount.find_or_create_by!(
       organization_id: @org.id,
-      active: true)
-    designation_account.update_attributes(name: @org_account.user.to_s,
-                                          designation_number: @org_account.id)
+      active: true) do |da|
+      da.designation_number = @org_account.id.to_s
+    end
+    designation_account.update_attributes(name: @org_account.user.to_s)
     designation_account
   end
 
