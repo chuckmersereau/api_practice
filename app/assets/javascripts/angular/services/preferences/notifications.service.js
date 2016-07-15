@@ -12,8 +12,9 @@
     var svc = {};
     svc.data = {};
     svc.loading = true;
-    
+
     svc.load = function () {
+      svc.loading = true;
       api.call('get', 'preferences/notifications', {}, function(data) {
         svc.data = data.preferences;
         svc.loading = false;

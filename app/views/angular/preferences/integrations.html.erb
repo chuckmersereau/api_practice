@@ -1,14 +1,18 @@
-<div ng-show="!vm.preferences.loading">
-  <div id="contentbody" class="withleft">
-    <div class="wpp">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="page-filters">
-            <h2><%= _('Connect Services') %></h2>
-          </div>
+<div id="contentbody" class="withleft">
+  <div class="wpp">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="page-filters">
+          <h2><%= _('Connect Services') %></h2>
         </div>
       </div>
-      <p>&nbsp;</p>
+    </div>
+    <p>&nbsp;</p>
+    <div ng-show="vm.preferences.loading" class="loading-spinner">
+      <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+      <span class="sr-only"><%= _('Loading') %></span>
+    </div>
+    <div ng-hide="vm.preferences.loading">
       <div class="row">
         <div class="col-md-12">
           <h3><%= _('Internal Services') %></h3>
@@ -135,6 +139,7 @@
                     </div>
                     <br />
                     <%= link_to(_('Add Account'), '/auth/google', :class => 'btn btn-primary', target: '_blank') %>
+                    <a ng-show="vm.preferences.data.valid_google_account" ui-sref="preferences.imports.tab({id: 'google'})" class="btn btn-secondary"><%= _('Import Google Contacts') %></a>
                   </div>
                 </div>
               </div>

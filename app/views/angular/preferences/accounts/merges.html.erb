@@ -8,17 +8,11 @@
 </div>
 <div ng-if="vm.preferences.data.mergeable_accounts.length > 0">
   <p>
-    <%= _('You are merging the account below into your') %>
-    <strong><%= current_account_list.name %></strong>.
-    <%= _('Merges are irreversible. We recommend that you are logged into the primary (usually husband) account.') %></p>
-
-  <%= form_tag merge_account_lists_path, :class=> 'form-inline' do %>
+    <%= _('You are merging the account below into your currently selected account. Merges are irreversible. We recommend that you are logged into the primary account.') %></p>
     <div class="form-group">
-      <select class="form-control fixed-width-input" id="merge_id" name="merge_id" chosen>
-        <option ng-repeat="option in vm.preferences.data.mergeable_accounts" value="{{option.id}}">{{option.name}}</option>
+      <select ng-options="account.id as account.name for account in vm.preferences.data.mergeable_accounts" ng-model="vm.preferences.selected_account_id" chosen>
+        <option style="display:none" value=""><%= _('Select an Account') %></option>
       </select>
+      <button type="submit" ng-click="vm.merge()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable">Merge&nbsp;<div class="btn-progress ng-hide" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
     </div>
-      <%= submit_tag _('Merge...'), class: 'btn btn-primary',
-            data: { confirm: _("IMPORTANT: Merging accounts is permanent and can't be undone.") } %>
-  <% end %>
 </div>

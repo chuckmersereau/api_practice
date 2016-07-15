@@ -13,6 +13,7 @@
     svc.loading = true;
     svc.state = 'disabled';
     svc.load = function () {
+      svc.loading = true;
       api.call('get', 'preferences/integrations/organization_accounts', {}, function(data) {
         svc.data.organization_accounts = data.organization_accounts;
         svc.updateState();

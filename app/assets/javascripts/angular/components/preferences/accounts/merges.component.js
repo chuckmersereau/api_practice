@@ -13,17 +13,15 @@
     vm.preferences = mergesService;
     vm.alerts = alertsService;
     vm.saving = false;
-    vm.email = '';
 
     vm.merge = function() {
       vm.saving = true;
-      vm.preferences.create(vm.email, function success() {
+      vm.preferences.create(function success() {
         vm.saving = false;
-        vm.alerts.addAlert('MPDX sent an merge to ' + vm.email, 'success');
-        vm.email = '';
+        vm.alerts.addAlert('MPDX merged your account successfully', 'success');
         vm.preferences.load();
       }, function error() {
-        vm.alerts.addAlert("MPDX couldn't send an merge (check to see if email address is valid)", 'danger');
+        vm.alerts.addAlert("MPDX couldn't merge your account", 'danger');
         vm.saving = false;
       });
     };

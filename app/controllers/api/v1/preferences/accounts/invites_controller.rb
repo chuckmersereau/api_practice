@@ -47,8 +47,8 @@ class Api::V1::Preferences::Accounts::InvitesController < Api::V1::Preferences::
           id: invite.id,
           email: invite.recipient_email,
           inviter: {
-            first_name: invite.invited_by_user.first_name,
-            last_name: invite.invited_by_user.last_name
+            first_name: invite.invited_by_user.try(:first_name) || '-',
+            last_name: invite.invited_by_user.try(:last_name) || '-'
           }
         }
       end,

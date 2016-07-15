@@ -21,8 +21,8 @@ Rails.application.routes.draw do
   get 'preferences/personal/:tab_id', to: 'preferences#index', as: :personal_preferences_tab
   get 'preferences/notifications', as: :notification_preferences
   get 'preferences/notifications/:tab_id', to: 'preferences#index', as: :notification_preferences_tab
-  get 'preferences/networks', as: :network_preferences
-  get 'preferences/networks/:tab_id', to: 'preferences#index', as: :network_preferences_tab
+  get 'preferences/imports', as: :network_preferences
+  get 'preferences/imports/:tab_id', to: 'preferences#index', as: :network_preferences_tab
   get 'preferences/integrations', as: :integration_preferences
   get 'preferences/integrations/:tab_id', to: 'preferences#index', as: :integration_preferences_tab
   get 'preferences/accounts', as: :account_preferences
@@ -57,12 +57,12 @@ Rails.application.routes.draw do
       namespace :preferences do
         resources :notifications, only: :index
         resources :integrations, only: :index
-        resources :imports, only: :index
+        resources :imports, only: [:index, :create]
         resources :personal, only: :index
         resources :accounts, only: :index
         namespace :accounts do
           resources :invites, only: [:index, :create, :destroy]
-          resources :merges, only: [:index, :destroy]
+          resources :merges, only: [:index, :create]
           resources :users, only: [:index, :destroy]
         end
         namespace :integrations do
