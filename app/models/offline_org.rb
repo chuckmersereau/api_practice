@@ -37,11 +37,11 @@ class OfflineOrg < DataServer
   end
 
   def build_designation_account
+    puts "Organization account: #{@org_account.id.to_s}"
     designation_account = DesignationAccount.find_or_create_by!(
       organization_id: @org.id,
-      active: true) do |da|
-      da.designation_number = @org_account.id.to_s
-    end
+      active: true,
+      designation_number: @org_account.id.to_s)
     designation_account.update_attributes(name: @org_account.user.to_s)
     designation_account
   end
