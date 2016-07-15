@@ -11,9 +11,9 @@ angular.module('mpdxApp')
             if (angular.isDefined(cachedContact)) {
                 callback(cachedContact, path);
             } else {
-                $http.get(path).success(function (contact) {
-                    cache.put(path, contact);
-                    callback(contact, path);
+                $http.get(path).then(function (response) {
+                    cache.put(path, response.data);
+                    callback(response.data, path);
                 });
             }
         };
