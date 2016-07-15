@@ -13,12 +13,16 @@
     svc.apiCache = $cacheFactory('api');
     svc.account_list_id = null;
 
+    // This function supports both callbacks (successFn, errorFn) and returns a promise
+    // It would be preferred to use promises in the future
     svc.call = function (method, url, data, successFn, errorFn, cache, params) {
         if(cache === true){
-            var cachedData = svc.apiCache.get(url);
+            var cachedData = apiCache.get(url);
             if (angular.isDefined(cachedData)) {
-                successFn(cachedData, 200);
-                return;
+                if(_.isFunction(successFn)) {
+                    successFn(cachedData, 304);
+                }
+                return $q.resolve(cachedData);
             }
         }
         if (data === undefined) {
@@ -37,20 +41,21 @@
             params: params,
             cache: false,
             timeout: 50000
-        }).
-            success(function(data, status) {
+        })
+            .then(function(response) {
                 if(_.isFunction(successFn)){
-                    successFn(data, status);
+                    successFn(response.data, response.status);
                 }
                 if(cache === true){
-                    svc.apiCache.put(url, data);
+                    svc.apiCache.put(url, response.data);
                 }
-            }).
-            error(function(data, status) {
-                console.log('API ERROR: ' + status);
+                return response.data;
+            }, function(response) {
+                $log.error('API ERROR:', response.status, response.data);
                 if(_.isFunction(errorFn)){
-                    errorFn(data, status);
+                    errorFn(response);
                 }
+                return $q.reject(response);
             });
     };
 
