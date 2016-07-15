@@ -62,7 +62,7 @@
             <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('google') }"></i>
             <%= _('Google Contacts') %>
           </div>
-          <div class="panel-animate" ng-show="vm.tabSelected('google')">
+          <div class="panel-animate" ng-show="vm.tabSelected('google')" style="max-height: 3000px;">
             <div ng-show="vm.preferences.loading" class="loading-spinner">
               <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
               <span class="sr-only"><%= _('Loading') %></span>
