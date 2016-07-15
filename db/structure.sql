@@ -2000,7 +2000,9 @@ CREATE TABLE people (
     optout_enewsletter boolean DEFAULT false,
     occupation character varying(255),
     employer character varying(255),
-    not_duplicated_with character varying(2000)
+    not_duplicated_with character varying(2000),
+    admin boolean DEFAULT false,
+    developer boolean DEFAULT false
 );
 
 
