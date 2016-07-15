@@ -30,7 +30,12 @@
         </a>
       </div>
     </div>
-    <address class="address" ng-repeat="i in $ctrl.contact.address_ids" ng-bind-html="$ctrl.getAddress(i)"></address>
+    <address class="address" ng-repeat="address in $ctrl.getAddresses()" ng-if="address.primary_mailing_address">
+      <span ng-if="address.street">{{ address.street }}<br></span>
+      <span ng-if="address.city">{{ address.city }},</span>
+      {{ address.state }}
+      {{ address.postal_code }}
+    </address>
     <div class="tags">
       <a class="tag" ng-repeat-start="tag in $ctrl.contact.tag_list">{{tag}}</a><span style="display:inline;" ng-repeat-end> </span>
     </div>

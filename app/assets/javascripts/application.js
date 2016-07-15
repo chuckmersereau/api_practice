@@ -68,6 +68,7 @@
 //= require lodash/lodash
 //= require moment/moment
 //= require moment-range/dist/moment-range
+//= require @reactivex/rxjs/dist/global/Rx.umd
 //= require angular/mpdxApp
 //= require angular/mpdxApp.constants
 //= require angular/mpdxApp.values

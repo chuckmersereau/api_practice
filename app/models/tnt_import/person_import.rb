@@ -43,7 +43,8 @@ class TntImport::PersonImport
                           birthday_year: row[prefix + 'BirthdayYear'],
                           anniversary_month: row[prefix + 'AnniversaryMonth'],
                           anniversary_day: row[prefix + 'AnniversaryDay'],
-                          anniversary_year: row[prefix + 'AnniversaryYear']
+                          anniversary_year: row[prefix + 'AnniversaryYear'],
+                          deceased: (row['Deceased'] == 'true')
     }
 
     update_person_phones(person, row, prefix)
