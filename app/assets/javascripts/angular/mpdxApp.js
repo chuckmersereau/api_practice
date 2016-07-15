@@ -24,10 +24,12 @@ angular
   .config(function($locationProvider, $stateProvider) {
     $stateProvider
       .state('preferences', {
+        title: 'Preferences',
         url: '/preferences',
         template: '<preferences></preferences>'
       })
       .state('preferences.personal', {
+        title: 'Preferences',
         url: '/personal',
         template: '<personal-preferences></personal-preferences>'
       })
@@ -36,10 +38,12 @@ angular
         template: '<personal-preferences></personal-preferences>'
       })
       .state('preferences.notifications', {
+        title: 'Notifications',
         url: '/notifications',
         template: '<notification-preferences></notification-preferences>'
       })
       .state('preferences.integrations', {
+        title: 'Connect Services',
         url: '/integrations',
         template: '<integration-preferences></integration-preferences>'
       })
@@ -48,6 +52,7 @@ angular
         template: '<integration-preferences></integration-preferences>'
       })
       .state('preferences.accounts', {
+        title: 'Manage Accounts',
         url: '/accounts',
         template: '<account-preferences></account-preferences>'
       })
@@ -56,6 +61,7 @@ angular
         template: '<account-preferences></account-preferences>'
       })
       .state('preferences.imports', {
+        title: 'Import Contacts',
         url: '/imports',
         template: '<import-preferences></import-preferences>'
       })

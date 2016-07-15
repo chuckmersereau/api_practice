@@ -1,86 +1,75 @@
-<div id="contentbody" class="withleft">
-  <div class="wpp">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="page-filters">
-          <h2><%= _('Imports Contacts') %></h2>
+<p>&nbsp;</p>
+<div class="panel-group">
+  <div class="panel panel-default pref-panel">
+    <div class="panel-heading pref-head" ng-click="vm.setTab('tnt')">
+      <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('tnt') }"></i>
+        <%= _('TntConnect') %>
+    </div>
+    <div class="panel-animate" ng-show="vm.tabSelected('tnt')">
+      <div class="panel-body pref-body">
+        <div class="row pref-row">
+          <div class="col-md-4 pref-lead">
+            <div class="import_logo">
+              <%= image_tag("logos/tnt_logo.png", alt: 'TntConnect') %>
+            </div>
+          </div>
+          <div class="col-md-8 connections" data-behavior="account">
+              <div class="import_button">
+                <div class="importoptions" data-behavior="import_options">
+                  <%= render "angular/preferences/imports/tnt_import_form" %>
+                </div>
+              </div>
+          </div>
         </div>
       </div>
     </div>
-    <p>&nbsp;</p>
-    <div class="panel-group" id="accounts-group">
-      <div class="panel panel-default pref-panel">
-        <div class="panel-heading pref-head" ng-click="vm.setTab('tnt')">
-          <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('tnt') }"></i>
-            <%= _('TntConnect') %>
-        </div>
-        <div class="panel-animate" ng-show="vm.tabSelected('tnt')">
-          <div class="panel-body pref-body">
-            <div class="row pref-row">
-              <div class="col-md-4 pref-lead">
-                <div class="import_logo">
-                  <%= image_tag("logos/tnt_logo.png", alt: 'TntConnect') %>
+  </div>
+  <div class="panel panel-default pref-panel">
+    <div class="panel-heading pref-head" ng-click="vm.setTab('csv')">
+      <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('csv') }"></i>
+      <%= _('Excel and CSV File') %>
+    </div>
+    <div class="panel-animate" ng-show="vm.tabSelected('csv')">
+      <div class="panel-body pref-body">
+        <div class="row pref-row">
+          <div class="col-md-4 pref-lead">
+            <div class="import_logo">
+              <%= _('.CSV File') %>
+            </div>
+          </div>
+          <div class="col-md-8 connections" data-behavior="account">
+              <div class="import_button">
+                <div class="importoptions" data-behavior="import_options">
+                  <%= render "angular/preferences/imports/csv_import_form" %>
                 </div>
-              </div>
-              <div class="col-md-8 connections" data-behavior="account">
-                  <div class="import_button">
-                    <div class="importoptions" data-behavior="import_options">
-                      <%= render "angular/preferences/imports/tnt_import_form" %>
-                    </div>
-                  </div>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="panel panel-default pref-panel">
-        <div class="panel-heading pref-head" ng-click="vm.setTab('csv')">
-          <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('csv') }"></i>
-          <%= _('Excel and CSV File') %>
+    </div>
+    <div class="panel panel-default pref-panel">
+      <div class="panel-heading pref-head" ng-click="vm.setTab('google')">
+        <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('google') }"></i>
+        <%= _('Google Contacts') %>
+      </div>
+      <div class="panel-animate" ng-show="vm.tabSelected('google')" style="max-height: 3000px;">
+        <div ng-show="vm.preferences.loading" class="loading-spinner">
+          <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
+          <span class="sr-only"><%= _('Loading') %></span>
         </div>
-        <div class="panel-animate" ng-show="vm.tabSelected('csv')">
+        <div ng-hide="vm.preferences.loading">
           <div class="panel-body pref-body">
             <div class="row pref-row">
               <div class="col-md-4 pref-lead">
                 <div class="import_logo">
-                  <%= _('.CSV File') %>
+                  <%= image_tag("logos/google_logo.png", alt: 'Google') %>
                 </div>
               </div>
               <div class="col-md-8 connections" data-behavior="account">
                   <div class="import_button">
                     <div class="importoptions" data-behavior="import_options">
-                      <%= render "angular/preferences/imports/csv_import_form" %>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="panel panel-default pref-panel">
-          <div class="panel-heading pref-head" ng-click="vm.setTab('google')">
-            <i class="fa fa-angle-right" ng-class="{ 'fa-rotate-90' : vm.tabSelected('google') }"></i>
-            <%= _('Google Contacts') %>
-          </div>
-          <div class="panel-animate" ng-show="vm.tabSelected('google')" style="max-height: 3000px;">
-            <div ng-show="vm.preferences.loading" class="loading-spinner">
-              <i class="fa fa-circle-o-notch fa-spin fa-3x fa-fw"></i>
-              <span class="sr-only"><%= _('Loading') %></span>
-            </div>
-            <div ng-hide="vm.preferences.loading">
-              <div class="panel-body pref-body">
-                <div class="row pref-row">
-                  <div class="col-md-4 pref-lead">
-                    <div class="import_logo">
-                      <%= image_tag("logos/google_logo.png", alt: 'Google') %>
-                    </div>
-                  </div>
-                  <div class="col-md-8 connections" data-behavior="account">
-                      <div class="import_button">
-                        <div class="importoptions" data-behavior="import_options">
-                          <%= render "angular/preferences/imports/google_import_form" %>
-                        </div>
-                      </div>
+                      <%= render "angular/preferences/imports/google_import_form" %>
                     </div>
                   </div>
                 </div>
