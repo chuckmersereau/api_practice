@@ -106,7 +106,7 @@ describe('contactList', function() {
                         "id":20,"name":"Lightyear, Buzz","status":"Partner - Special","likely_to_give":"Likely","church_name":"","send_newsletter":"",
                         "avatar":"http://res.cloudinary.com/cru/image/upload/c_pad,h_180,w_180/v1399573062/wxlkbf4gs9fumevf3whv.jpg",
                         "square_avatar":"http://res.cloudinary.com/cru/image/upload/c_fill,g_face,h_50,w_50/v1399573062/wxlkbf4gs9fumevf3whv.jpg",
-                        "referrals_to_me_ids":[],"tag_list":[],"uncompleted_tasks_count":1,"person_ids":[59],"address_ids":[40]}
+                        "referrals_to_me_ids":[],"tag_list":[],"uncompleted_tasks_count":1,"person_ids":[59],"address_ids":[40], "pledge_received": 'false'}
                 ],
                 "meta":{"total":1,"from":1,"to":1,"page":1,"total_pages":1}
             }, {});
@@ -125,7 +125,7 @@ describe('contactList', function() {
             expect(self.controller.pageMeta.from).toEqual(1);
             expect(self.controller.pageMeta.to).toEqual(1);
 
-            expect(self.controller.contacts).toEqual([{ id: 20, name: 'Lightyear, Buzz', status: 'Partner - Special', likely_to_give: 'Likely', church_name: '', send_newsletter: '', avatar: 'http://res.cloudinary.com/cru/image/upload/c_pad,h_180,w_180/v1399573062/wxlkbf4gs9fumevf3whv.jpg', square_avatar: 'http://res.cloudinary.com/cru/image/upload/c_fill,g_face,h_50,w_50/v1399573062/wxlkbf4gs9fumevf3whv.jpg', referrals_to_me_ids: [  ], tag_list: [  ], uncompleted_tasks_count: 1, person_ids: [ 59 ], address_ids: [ 40 ], pledge_received: false }]);
+            expect(self.controller.contacts).toEqual([{ id: 20, name: 'Lightyear, Buzz', status: 'Partner - Special', likely_to_give: 'Likely', church_name: '', send_newsletter: '', avatar: 'http://res.cloudinary.com/cru/image/upload/c_pad,h_180,w_180/v1399573062/wxlkbf4gs9fumevf3whv.jpg', square_avatar: 'http://res.cloudinary.com/cru/image/upload/c_fill,g_face,h_50,w_50/v1399573062/wxlkbf4gs9fumevf3whv.jpg', referrals_to_me_ids: [  ], tag_list: [  ], uncompleted_tasks_count: 1, person_ids: [ 59 ], address_ids: [ 40 ], pledge_received: 'false' }]);
         });
         it('should set the current page to the last page if the current page is larger than the last page', function(){
             self.$httpBackend.when("GET", /^\/api\/v1\/contacts\?.*/).respond({
