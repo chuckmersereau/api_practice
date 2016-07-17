@@ -34,6 +34,7 @@ angular
         template: '<personal-preferences></personal-preferences>'
       })
       .state('preferences.personal.tab', {
+        title: 'Preferences',
         url: '/:id',
         template: '<personal-preferences></personal-preferences>'
       })
@@ -48,6 +49,7 @@ angular
         template: '<integration-preferences></integration-preferences>'
       })
       .state('preferences.integrations.tab', {
+        title: 'Connect Services',
         url: '/:id',
         template: '<integration-preferences></integration-preferences>'
       })
@@ -57,6 +59,7 @@ angular
         template: '<account-preferences></account-preferences>'
       })
       .state('preferences.accounts.tab', {
+        title: 'Manage Accounts',
         url: '/:id',
         template: '<account-preferences></account-preferences>'
       })
@@ -66,6 +69,7 @@ angular
         template: '<import-preferences></import-preferences>'
       })
       .state('preferences.imports.tab', {
+        title: 'Import Contacts',
         url: '/:id',
         template: '<import-preferences></import-preferences>'
       });
