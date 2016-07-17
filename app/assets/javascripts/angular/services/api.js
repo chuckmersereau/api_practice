@@ -17,7 +17,7 @@
     // It would be preferred to use promises in the future
     svc.call = function (method, url, data, successFn, errorFn, cache, params) {
         if(cache === true){
-            var cachedData = apiCache.get(url);
+            var cachedData = svc.apiCache.get(url);
             if (angular.isDefined(cachedData)) {
                 if(_.isFunction(successFn)) {
                     successFn(cachedData, 304);
