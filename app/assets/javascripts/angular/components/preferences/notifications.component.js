@@ -6,7 +6,18 @@
       controllerAs: 'vm',
       templateUrl: '/templates/preferences/notifications.html',
       bindings: {}
-    });
+    }).config(notificationPreferencesRoute);
+
+  notificationPreferencesRoute.$inject = ['$stateProvider'];
+  function notificationPreferencesRoute($stateProvider) {
+    $stateProvider
+      .state('preferences.notifications', {
+        title: 'Notifications',
+        url: '/notifications',
+        template: '<notification-preferences></notification-preferences>'
+      });
+  }
+
   notificationPreferencesController.$inject = ['preferences.notificationsService', 'alertsService'];
   function notificationPreferencesController(notificationsService, alertsService) {
     var vm = this;

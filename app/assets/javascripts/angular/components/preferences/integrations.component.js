@@ -6,7 +6,23 @@
       controllerAs: 'vm',
       templateUrl: '/templates/preferences/integrations.html',
       bindings: {}
-    });
+    }).config(integrationPreferencesRoute);
+
+  integrationPreferencesRoute.$inject = ['$stateProvider'];
+  function integrationPreferencesRoute($stateProvider) {
+    $stateProvider
+      .state('preferences.integrations', {
+        title: 'Connect Services',
+        url: '/integrations',
+        template: '<integration-preferences></integration-preferences>'
+      })
+      .state('preferences.integrations.tab', {
+        title: 'Connect Services',
+        url: '/:id',
+        template: '<integration-preferences></integration-preferences>'
+      });
+  }
+
   integrationPreferencesController.$inject = ['$window', '$state', '$stateParams', 'preferences.integrationsService', 'alertsService'];
   function integrationPreferencesController($window, $state, $stateParams, integrationsService, alertsService) {
     var vm = this;

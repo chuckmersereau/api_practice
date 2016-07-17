@@ -6,7 +6,23 @@
       controllerAs: 'vm',
       templateUrl: '/templates/preferences/personal.html',
       bindings: {}
-    });
+    }).config(personalPreferencesRoute);
+
+  personalPreferencesRoute.$inject = ['$stateProvider'];
+  function personalPreferencesRoute($stateProvider) {
+    $stateProvider
+      .state('preferences.personal', {
+        title: 'Preferences',
+        url: '/personal',
+        template: '<personal-preferences></personal-preferences>'
+      })
+      .state('preferences.personal.tab', {
+        title: 'Preferences',
+        url: '/:id',
+        template: '<personal-preferences></personal-preferences>'
+      });
+  }
+
   personalPreferencesController.$inject = ['$state', '$stateParams', '$scope', 'preferences.personalService', 'alertsService'];
   function personalPreferencesController($state, $stateParams, $scope, personalService, alertsService) {
     var vm = this;

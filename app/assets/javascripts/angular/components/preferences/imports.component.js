@@ -6,7 +6,23 @@
       controllerAs: 'vm',
       templateUrl: '/templates/preferences/imports.html',
       bindings: {}
-    });
+    }).config(importPreferencesRoute);
+
+  importPreferencesRoute.$inject = ['$stateProvider'];
+  function importPreferencesRoute($stateProvider) {
+    $stateProvider
+      .state('preferences.imports', {
+        title: 'Import Contacts',
+        url: '/imports',
+        template: '<import-preferences></import-preferences>'
+      })
+      .state('preferences.imports.tab', {
+        title: 'Import Contacts',
+        url: '/:id',
+        template: '<import-preferences></import-preferences>'
+      });
+  }
+
   importPreferencesController.$inject = ['$filter', '$state', '$stateParams', 'preferences.importsService', 'alertsService'];
   function importPreferencesController($filter, $state, $stateParams, importsService, alertsService) {
     var vm = this;
