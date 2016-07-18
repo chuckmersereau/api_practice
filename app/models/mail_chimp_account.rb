@@ -249,7 +249,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def gb
-    @gb ||= Gibbon::Request.new(api_key: api_key)
+    @gb = Gibbon::Request.new(api_key: api_key)
     @gb.timeout = 600
     @gb
   end

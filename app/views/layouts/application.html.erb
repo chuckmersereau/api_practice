@@ -1,6 +1,6 @@
 <% @account_list_exhibit = exhibit(current_account_list, self) %>
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
+<html lang="<%= I18n.locale %>" ng-app="mpdxApp">
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <title>
@@ -15,7 +15,7 @@
     <%= csrf_meta_tags %>
     <base href="/">
   </head>
-  <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller" ng-app="mpdxApp">
+  <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller">
     <preload-state name="current_user_id" data="<%= current_user.id %>"></preload-state>
     <preload-state name="current_currency" data="<%= current_currency %>"></preload-state>
     <preload-state name="current_currency_symbol"

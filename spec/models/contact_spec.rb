@@ -34,6 +34,22 @@ describe Contact do
     end
   end
 
+  describe 'add_to_notes' do
+    before do
+      @contact = Contact.new(notes: 'Old notes')
+    end
+
+    it 'should append notes' do
+      @contact.add_to_notes('New notes')
+      expect(@contact.notes).to eq("Old notes \n \nNew notes")
+    end
+
+    it 'should not append notes a second time' do
+      @contact.add_to_notes('New notes')
+      expect(@contact.notes).to eq("Old notes \n \nNew notes")
+    end
+  end
+
   describe 'saving email addresses' do
     it 'should change which email address is primary' do
       person = create(:person)

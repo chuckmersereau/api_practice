@@ -5,12 +5,13 @@
     .module('mpdxApp')
     .factory('preferences.accounts.mergesService', mergesService);
 
-  mergesService.$inject = ['$rootScope', 'api'];
+  mergesService.$inject = ['$rootScope', 'api', 'preferences.accountsService'];
 
-  function mergesService($rootScope, api) {
+  function mergesService($rootScope, api, accountsService) {
     var svc = {};
     svc.data = {};
     svc.loading = true;
+    svc.selected_account_id = null;
 
     svc.load = function () {
       svc.loading = true;
@@ -20,8 +21,11 @@
       });
     };
 
-    svc.create = function (id, success, error) {
-      return api.call('post', 'preferences/accounts/merges', { merge: { id: id } }, success, error);
+    svc.create = function (success, error) {
+      return api.call('post', 'preferences/accounts/merges', { merge: { id: svc.selected_account_id } }, function() {
+        accountsService.load();
+        success();
+      }, error);
     };
 
     svc.account_list_id_watcher = $rootScope.$watch(function() {

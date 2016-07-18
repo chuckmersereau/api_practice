@@ -6,7 +6,23 @@
       controllerAs: 'vm',
       templateUrl: '/templates/preferences/accounts.html',
       bindings: {}
-    });
+    }).config(accountPreferencesRoute);
+
+  accountPreferencesRoute.$inject = ['$stateProvider'];
+  function accountPreferencesRoute($stateProvider) {
+    $stateProvider
+      .state('preferences.accounts', {
+        title: 'Manage Accounts',
+        url: '/accounts',
+        template: '<account-preferences></account-preferences>'
+      })
+      .state('preferences.accounts.tab', {
+        title: 'Manage Accounts',
+        url: '/:id',
+        template: '<account-preferences></account-preferences>'
+      });
+  }
+
   accountPreferencesController.$inject = ['$state', '$stateParams', 'alertsService'];
   function accountPreferencesController($state, $stateParams) {
     var vm = this;

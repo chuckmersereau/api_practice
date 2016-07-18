@@ -13,6 +13,7 @@
     svc.loading = true;
     svc.state = 'disabled';
     svc.load = function () {
+      svc.loading = true;
       api.call('get', 'preferences/integrations/mail_chimp_account', {}, function(data) {
         svc.data = data.mail_chimp;
         svc.updateState();

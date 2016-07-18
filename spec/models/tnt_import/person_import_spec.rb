@@ -63,6 +63,12 @@ describe TntImport::PersonImport do
       expect(person.email_addresses.where(primary: true).count).to eq(1)
       expect(person.email_addresses.find_by(email: 'a@a.com').primary).to be true
     end
+
+    it 'imports deceased boolean value' do
+      row = { 'Deceased' => 'true' }
+      import.send(:update_person_attributes, person, row)
+      expect(person.deceased).to eq(true)
+    end
   end
 
   context '#update_person_phones' do

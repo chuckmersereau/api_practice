@@ -1,11 +1,21 @@
-describe('contacts', function() {
+describe('contactList', function() {
     beforeEach(module('mpdxApp'));
     var self = {};
 
-    beforeEach(inject(function($injector, $httpBackend, $rootScope, $componentController, api, state, $location) {
+    beforeEach(module(function ($provide) {
+        var $window = {
+            location: { search: '' },
+            scrollTo: function(){}
+        };
+        // use $provide to swap the real $window with a mock
+        $provide.value('$window', $window);
+    }));
+
+    beforeEach(inject(function($injector, $httpBackend, $rootScope, $componentController, api, state, $window, Rx) {
         self.api = api;
         self.$httpBackend = $httpBackend;
-        self.$location = $location;
+        self.$window = $window;
+        self.Rx = Rx;
         var $scope = $rootScope.$new();
 
         self.controller = $componentController('contactList', {
@@ -54,18 +64,27 @@ describe('contacts', function() {
             limit: 25,
             wildcardSearch: null
         };
+
+        // Setup fake debounceTime so it can be flushed synchronously
+        self.scheduler = new Rx.TestScheduler();
+        var originalDebounceTime = Rx.Observable.prototype.debounceTime;
+        spyOn(Rx.Observable.prototype, 'debounceTime').and.callFake(function(dueTime) {
+            return originalDebounceTime.call(this, dueTime, self.scheduler);
+        });
     }));
 
-    describe('refreshContacts', function(){
+    describe('setupRefreshContacts', function(){
         beforeEach(function(){
             self.controller._initializeFilters();
         });
 
-        it('should send a simple http request', function(){
+        it('should send a simple http request to first load contacts', function(){
             self.$httpBackend.expectGET('/api/v1/contacts?account_list_id=2').respond(200, {});
             self.$httpBackend.expectPUT('/api/v1/users/me').respond(200, {});
 
-            self.controller._refreshContacts();
+            self.controller._setupRefreshContacts();
+            self.controller._handleContactQueryChanges(); // Force a filter change to trigger refresh
+            self.scheduler.flush();
             self.$httpBackend.flush();
             expect(self.controller.contactsLoading).toEqual(false);
 
@@ -87,15 +106,17 @@ describe('contacts', function() {
                         "id":20,"name":"Lightyear, Buzz","status":"Partner - Special","likely_to_give":"Likely","church_name":"","send_newsletter":"",
                         "avatar":"http://res.cloudinary.com/cru/image/upload/c_pad,h_180,w_180/v1399573062/wxlkbf4gs9fumevf3whv.jpg",
                         "square_avatar":"http://res.cloudinary.com/cru/image/upload/c_fill,g_face,h_50,w_50/v1399573062/wxlkbf4gs9fumevf3whv.jpg",
-                        "referrals_to_me_ids":[],"tag_list":[],"uncompleted_tasks_count":1,"person_ids":[59],"address_ids":[40]}
+                        "referrals_to_me_ids":[],"tag_list":[],"uncompleted_tasks_count":1,"person_ids":[59],"address_ids":[40], "pledge_received": 'false'}
                 ],
                 "meta":{"total":1,"from":1,"to":1,"page":1,"total_pages":1}
             }, {});
 
             //save updated view filters
             self.$httpBackend.when("PUT", "/api/v1/users/me").respond(200, {});
-            self.controller._refreshContacts();
+            self.controller._setupRefreshContacts();
+            self.controller._handleContactQueryChanges(); // Force a filter change to trigger refresh
 
+            self.scheduler.flush();
             self.$httpBackend.flush();
 
             expect(self.controller.contactsLoading).toEqual(false);
@@ -104,7 +125,7 @@ describe('contacts', function() {
             expect(self.controller.pageMeta.from).toEqual(1);
             expect(self.controller.pageMeta.to).toEqual(1);
 
-            expect(self.controller.contacts).toEqual([{ id: 20, name: 'Lightyear, Buzz', status: 'Partner - Special', likely_to_give: 'Likely', church_name: '', send_newsletter: '', avatar: 'http://res.cloudinary.com/cru/image/upload/c_pad,h_180,w_180/v1399573062/wxlkbf4gs9fumevf3whv.jpg', square_avatar: 'http://res.cloudinary.com/cru/image/upload/c_fill,g_face,h_50,w_50/v1399573062/wxlkbf4gs9fumevf3whv.jpg', referrals_to_me_ids: [  ], tag_list: [  ], uncompleted_tasks_count: 1, person_ids: [ 59 ], address_ids: [ 40 ], pledge_received: false }]);
+            expect(self.controller.contacts).toEqual([{ id: 20, name: 'Lightyear, Buzz', status: 'Partner - Special', likely_to_give: 'Likely', church_name: '', send_newsletter: '', avatar: 'http://res.cloudinary.com/cru/image/upload/c_pad,h_180,w_180/v1399573062/wxlkbf4gs9fumevf3whv.jpg', square_avatar: 'http://res.cloudinary.com/cru/image/upload/c_fill,g_face,h_50,w_50/v1399573062/wxlkbf4gs9fumevf3whv.jpg', referrals_to_me_ids: [  ], tag_list: [  ], uncompleted_tasks_count: 1, person_ids: [ 59 ], address_ids: [ 40 ], pledge_received: 'false' }]);
         });
         it('should set the current page to the last page if the current page is larger than the last page', function(){
             self.$httpBackend.when("GET", /^\/api\/v1\/contacts\?.*/).respond({
@@ -112,8 +133,12 @@ describe('contacts', function() {
             }, {});
             self.$httpBackend.when("PUT", "/api/v1/users/me").respond(200, {});
             self.controller.contactQuery.page = 11;
-            self.controller._refreshContacts();
+            self.controller._setupRefreshContacts();
+            self.controller._handleContactQueryChanges(); // Force a filter change to trigger refresh
+
+            self.scheduler.flush();
             self.$httpBackend.flush();
+
             expect(self.controller.contactQuery.page).toEqual(10);
         });
     });
@@ -415,7 +440,7 @@ describe('contacts', function() {
     describe('initializeFilters', function() {
         it('should initialize filters with limit from state and wildcardSearch from url param', function () {
             self.state.contact_limit = 100;
-            self.$location.search('q', 'searchQuery');
+            self.$window.location.search = '?q=searchQuery';
             self.controller._initializeFilters();
             expect(_.omit(self.controller.contactQuery, ['limit', 'wildcardSearch'])).toEqual(_.omit(self.defaultFilters, ['limit', 'wildcardSearch']));
             expect(self.controller.contactQuery.limit).toEqual(100);
@@ -423,7 +448,7 @@ describe('contacts', function() {
         });
         it('should call clearSelectedContacts if performing a wildcardSearch', function(){
             spyOn(self.controller, 'clearSelectedContacts');
-            self.$location.search('q', 'searchQuery');
+            self.$window.location.search = '?q=searchQuery';
 
             self.controller._initializeFilters();
             expect(self.controller.clearSelectedContacts).toHaveBeenCalled();
@@ -438,7 +463,7 @@ describe('contacts', function() {
 
         afterEach(function(){
             self.state.contact_limit = null;
-            self.$location.search('q', null);
+            self.$window.location.search = '';
         });
     });
 
@@ -510,7 +535,9 @@ describe('contacts', function() {
 
             //save updated view filters
             self.$httpBackend.when("PUT", "/api/v1/users/me").respond(200, {});
+            self.$httpBackend.flush();
 
+            self.scheduler.flush();
             self.$httpBackend.flush();
 
             expect(self.controller.totalContacts).toEqual(1);
