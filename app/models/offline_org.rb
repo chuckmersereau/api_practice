@@ -37,7 +37,6 @@ class OfflineOrg < DataServer
   end
 
   def build_designation_account
-    puts "Organization account: #{@org_account.id.to_s}"
     designation_account = DesignationAccount.find_or_create_by!(
       organization_id: @org.id,
       active: true,
