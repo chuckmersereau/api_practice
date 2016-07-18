@@ -31,7 +31,7 @@ class AddAccountsToDonations
     log_action(nil, 5)
   end
 
-  #private
+  private
 
   def donations_without_designation_accounts
     Donation.where(designation_account_id: nil)

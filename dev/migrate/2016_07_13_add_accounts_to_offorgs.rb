@@ -7,7 +7,7 @@ class AddAccountsToOfforgs
     end
   end
 
-  #private
+  private
 
   def off_orgs_with_no_designation_accounts
     off_orgs = []
