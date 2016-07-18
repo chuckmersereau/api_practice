@@ -3,7 +3,7 @@ require 'spec_helper'
 Capybara.default_max_wait_time = 2
 Capybara::Angular.default_max_wait_time = 5
 
-describe 'connect services page', js: true do
+describe 'internal services preferences', js: true do
   let!(:user) do
     user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
   end
@@ -45,7 +45,36 @@ describe 'connect services page', js: true do
     user_organization_accounts.reload
     expect(user_organization_accounts.length).to be 1
   end
+end
 
 
+describe 'external services preferences', js: true do
+  let!(:user) do
+    user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
+  end
 
+  def login_and_visit
+    login(user)
+    visit '/preferences/personal'
+    sleep 3
+    all('aside#leftmenu li')[3].click
+    sleep 1.5
+  end
+
+  it 'Google accounts shows and deletes' do
+    google_account = create(:google_account, person: user, email: 'foo@bar.com', refresh_token: nil)
+
+    user_google_accounts = user.google_accounts
+    expect(user_google_accounts.length).to be 1
+
+    login_and_visit
+
+    all('.panel-group .panel')[2].click
+    sleep 1
+    expect(all('.account_single').length).to eq 1
+    all('.account_single')[0].find('.delete').click
+    sleep 2
+    user_google_accounts.reload
+    expect(user_google_accounts.length).to be 0
+  end
 end
