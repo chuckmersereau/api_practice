@@ -10,10 +10,14 @@ class AddAccountsToOfforgs
   #private
 
   def off_orgs_with_no_designation_accounts
-    organizations = Organization.arel_table
-    Organization.where(
-      'api_class=? AND EXISTS (?) AND NOT EXISTS (?)', 'OfflineOrg',
-      DesignationProfile.where(organization_id: organizations[:id]),
-      DesignationAccount.where(organization_id: organizations[:id]))
+    off_orgs = []
+    Organization.where(api_class: 'OfflineOrg').find_each{ |org|
+      result = DesignationProfileAccount.where(
+          'designation_profile_id IN (?) AND designation_account_id NOT IN (?)',
+          org.designation_profiles.collect{ |dp| dp.id },
+          org.designation_accounts.collect{ |da| da.id })
+      off_orgs << org if result.empty?
+    }
+    off_orgs
   end
 end
