@@ -37,6 +37,8 @@ env:
     - TEST_SUITE=2
 addons:
   apt:
+    sources:
+      - debian-sid
     packages:
       - qt5-default
       - libqt5webkit5-dev
