@@ -5,9 +5,9 @@
     .module('mpdxApp')
     .factory('api', api);
 
-  api.$inject = ['$http', '$cacheFactory'];
+  api.$inject = ['$http', '$cacheFactory', '$log', '$q'];
 
-  function api($http, $cacheFactory) {
+  function api($http, $cacheFactory, $log, $q) {
     var svc = this;
     svc.apiUrl = '/api/v1/';
     svc.apiCache = $cacheFactory('api');
