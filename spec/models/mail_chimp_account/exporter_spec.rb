@@ -308,7 +308,7 @@ describe MailChimpAccount::Exporter do
           { list_id: primary_list_id, id: generic_group_id, title: 'Partner Status' }
         ]
       }
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: categories_response.to_json)
       account.status_grouping_id = generic_group_id
 
@@ -323,7 +323,7 @@ describe MailChimpAccount::Exporter do
           { list_id: primary_list_id, id: generic_group_id, title: 'Partner Status' }
         ]
       }
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: categories_response.to_json)
 
       grouping = export.find_grouping(nil, 'Partner Status')
@@ -342,7 +342,7 @@ describe MailChimpAccount::Exporter do
       categories = [
         { list_id: primary_list_id, id: generic_group_id, title: 'Partner Status' }
       ]
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: { categories: categories }.to_json)
       make_hidden = stub_request(:patch, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}")
                     .with(body: { title: 'Partner Status', type: 'hidden' }.to_json)
@@ -361,7 +361,7 @@ describe MailChimpAccount::Exporter do
       categories = [
         { list_id: primary_list_id, id: generic_group_id, title: 'Partner Status' }
       ]
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: { categories: categories }.to_json)
       make_hidden = stub_request(:patch, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}")
                     .with(body: { title: 'Partner Status', type: 'hidden' }.to_json)
@@ -381,7 +381,7 @@ describe MailChimpAccount::Exporter do
     end
 
     it 'creates a new status category if none exists' do
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: { categories: [] }.to_json)
         .then.to_return(body: { categories: [
           { list_id: primary_list_id, id: generic_group_id, title: 'Partner Status' }
@@ -407,7 +407,7 @@ describe MailChimpAccount::Exporter do
       categories = [
         { list_id: primary_list_id, id: generic_group_id, title: 'Tags' }
       ]
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: { categories: categories }.to_json)
       make_hidden = stub_request(:patch, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}")
                     .with(body: { title: 'Tags', type: 'hidden' }.to_json)
@@ -426,7 +426,7 @@ describe MailChimpAccount::Exporter do
       categories = [
         { list_id: primary_list_id, id: generic_group_id, title: 'Tags' }
       ]
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: { categories: categories }.to_json)
       make_hidden = stub_request(:patch, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}")
                     .with(body: { title: 'Tags', type: 'hidden' }.to_json)
@@ -446,7 +446,7 @@ describe MailChimpAccount::Exporter do
     end
 
     it 'creates a new tags category if none exists' do
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: { categories: [] }.to_json)
         .then.to_return(body: { categories: [
           { list_id: primary_list_id, id: generic_group_id, title: 'Tags' }
