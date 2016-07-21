@@ -5,12 +5,15 @@ class AddAccountsToDonations
     log_action(nil, 0)
 
     donations_without_designation_accounts.find_each do |donation|
-      unless donation.appeal.count == 1
+      if donation.donor_account.contacts.count == 1
+        org_accounts = donor_org_accounts(donation.donor_account.contacts.first.account_list)
+      elsif donation.appeal.count == 1
+        org_accounts = donor_org_accounts(donation.appeal.account_list)
+      else
         log_action(donation, 1)
         next
       end
 
-      org_accounts = donor_org_accounts(donation.appeal.account_list)
       unless org_accounts.count == 1
         log_action(donation, 2)
         next
@@ -51,7 +54,7 @@ class AddAccountsToDonations
 
   def log_action(donation, status)
     logger.info("Start script at #{Time.now}") if status == 0
-    logger.info("Don. ##{donation.id}: DonorAcc does not have just 1 appeal.") if status == 1
+    logger.info("Don. ##{donation.id}: DonorAcc has more than 1 Contact.") if status == 1
     logger.info("Don. ##{donation.id}: AccountList has more than 1 OrgAcc.") if status == 2
     logger.info("Don. ##{donation.id}: DesignationAcc was not found for OrgAcc.") if status == 3
     logger.info("Don. ##{donation.id}: DesignationAcc was added to donation.") if status == 4
