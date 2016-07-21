@@ -121,6 +121,7 @@ window.addFields = (link, association, content) ->
 
 $.mpdx = {}
 $.mpdx.activateTabs = ->
+  $('base').remove()
   $(".tabgroup").tabs(
     # activate: (event, ui) ->
       #window.location.hash = ui.newPanel[0].id
