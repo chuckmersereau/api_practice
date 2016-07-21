@@ -62,9 +62,10 @@ describe 'personal accounts preferences', js: true do
     current_panel.click
     sleep 0.5
     current_panel.find('.chosen-container').click
-    expect(all('.panel-group .panel')[2].all('.chosen-results li').length).to eq 1
-    current_panel.all('.chosen-results li')[0].click
-    click_button('Merge')
+    expect(current_panel.all('.chosen-results li').length).to eq 1
+    sleep 0.5
+    current_panel.find('.chosen-results li').click
+    current_panel.all('div.well')[1].find('button.btn').click
     sleep 1
     expect(page).to have_content 'You only have access to this account'
     expect(current_panel.all('.chosen-container').length).to be 0

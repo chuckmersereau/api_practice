@@ -22,9 +22,9 @@ describe 'import contacts page', js: true, sidekiq: 'acceptance' do
   end
 
   it 'imports tnt contacts' do
-    form_group = all('.panel-group .panel')[0].click
+    all('.panel-group .panel')[0].click
     attach_file('import_file', './spec/fixtures/tnt/tnt_export_new.xml')
-    click_button('Import')
+    all('.panel-group .panel')[0].find('input.btn').trigger('click')
     sleep 5
     expect( Contact.all.length ).to be > 0
   end

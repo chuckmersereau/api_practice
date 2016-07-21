@@ -1,10 +1,9 @@
 require 'spec_helper'
 
-Capybara.default_max_wait_time = 2
-Capybara::Angular.default_max_wait_time = 5
+Capybara.default_max_wait_time = 1
+
 
 describe 'personal preferences list', js: true do
-  #include Capybara::Angular::DSL
   let!(:user) do
     user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
     second_account_list = create(:account_list, name: 'Account Bar')
@@ -38,12 +37,10 @@ describe 'personal preferences list', js: true do
 
     expect(panels[i].find('.pref-current')).to have_content newVal.upcase
 
-    panels[i].find('button.btn').click
+    panels[i].find('button.btn').trigger('click')
 
-    sleep 2
-
-    expect(first('.alert')).to have_content 'Preferences saved successfully'
-    expect(panels[i].all('input').length).to eq 0
+    expect(find('.alert')).to have_content 'Preferences saved successfully'
+    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
   end
 
   def test_dropdown_panel( i, oldVal, newVal )
@@ -61,16 +58,14 @@ describe 'personal preferences list', js: true do
 
     panels[i].find('.chosen-single').click
     panels[i].find('.chosen-search input').set(newVal)
-    panels[i].all('.chosen-results .active-result')[0].click
+    panels[i].find('.chosen-results .active-result').click
 
     expect(panels[i].find('.pref-current')).to have_content newVal.upcase
 
-    panels[i].find('button.btn').click
+    panels[i].find('button.btn').trigger('click')
 
-    sleep 2
-
-    expect(first('.alert')).to have_content 'Preferences saved successfully'
-    expect(panels[i].all('input').length).to eq 0
+    expect(find('.alert')).to have_content 'Preferences saved successfully'
+    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
   end
 
   def test_checkbox_panel( i )
@@ -89,12 +84,10 @@ describe 'personal preferences list', js: true do
 
     expect(panels[i].find('.pref-current')).to have_content 'YES'
 
-    panels[i].find('button.btn').click
+    panels[i].find('button.btn').trigger('click')
 
-    sleep 2
-
-    expect(first('.alert')).to have_content 'Preferences saved successfully'
-    expect(panels[i].all('input').length).to eq 0
+    expect(find('.alert')).to have_content 'Preferences saved successfully'
+    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
   end
 
   it 'first name panel works correctly' do
@@ -126,7 +119,7 @@ describe 'personal preferences list', js: true do
   end
 
   it 'home country works correctly' do
-    test_dropdown_panel(7, '', 'China')
+    test_dropdown_panel(7, '', 'Bhutan')
   end
 
   it 'monthly goal panel works correctly' do

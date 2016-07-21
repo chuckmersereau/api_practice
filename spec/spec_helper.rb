@@ -32,6 +32,7 @@ require 'capybara-screenshot/rspec'
 
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
+require 'capybara/poltergeist'
 
 # Turn off sidekiq logging in test
 Sidekiq::Logging.logger = nil
@@ -43,13 +44,16 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Base.establish_connection(:test)
 
 WebMock.disable_net_connect!(allow_localhost: true)
-Capybara.javascript_driver = :webkit
+Capybara.javascript_driver = :poltergeist
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, {js_errors: false})
+end
 
 Capybara.default_max_wait_time = 4
 
-Capybara::Webkit.configure do |config|
-  config.allow_url('*')
-end
+# Capybara::Webkit.configure do |config|
+#   config.allow_url('*')
+# end
 
 Capybara::Screenshot.webkit_options = { width: 1600, height: 1200 }
 
