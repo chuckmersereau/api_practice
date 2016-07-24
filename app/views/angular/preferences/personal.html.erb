@@ -172,7 +172,7 @@
             <div class="col-md-8 col-md-offset-4">
               <div class="form-group">
                 <%= label :default_account_list, _('Default Account List') %>
-                <%= select '', :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {}, { class: 'form-control', 'ng-model' => 'vm.preferences.data.default_account_list', chosen: 'chosen' } %>
+                <%= select '', :default_account_list, current_user.account_lists.collect { |al| [al.name, al.id] }, {}, { class: 'form-control', 'ng-model' => 'vm.preferences.data.default_account_list', chosen: 'chosen', 'convert-to-number' => '' } %>
               </div>
               <button type="submit" ng-click="vm.save()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable"><%= _('Save') %>&nbsp;<div class="btn-progress" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
             </div>
