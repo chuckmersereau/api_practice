@@ -186,7 +186,8 @@ class MailChimpAccount < ActiveRecord::Base
     e.status_code == 400 &&
       (e.message =~ /looks fake or invalid, please enter a real email/ ||
        e.message =~ /username portion of the email address is invalid/ ||
-       e.message =~ /domain portion of the email address is invalid/)
+       e.message =~ /domain portion of the email address is invalid/ ||
+       e.message =~ /An email address must contain a single @/)
   end
 
   def unsubscribe_list_batch(list_id, members_to_unsubscribe)
