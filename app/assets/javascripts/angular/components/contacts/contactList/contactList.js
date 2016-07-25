@@ -263,14 +263,12 @@
         function saveViewPreferences(){
             var viewPrefs = {
                 user: {
-                    preferences: {
-                        contacts_filter: {}
-                    }
+                    contacts_filter: {}
                 },
                 account_list_id: state.current_account_list_id
             };
-            viewPrefs.user.preferences.contacts_filter[state.current_account_list_id] = _.omit(vm.contactQuery, ['wildcardSearch']);
-            viewPrefs.user.preferences.contacts_filter[state.current_account_list_id].tags = vm.contactQuery.tags.join();
+            viewPrefs.user.contacts_filter[state.current_account_list_id] = _.omit(vm.contactQuery, ['wildcardSearch']);
+            viewPrefs.user.contacts_filter[state.current_account_list_id].tags = vm.contactQuery.tags.join();
 
             api.call('put', 'users/me', viewPrefs);
         }
