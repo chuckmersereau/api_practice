@@ -73,6 +73,11 @@ describe('contactList', function() {
         });
     }));
 
+    afterEach(function() {
+        self.$httpBackend.verifyNoOutstandingExpectation();
+        self.$httpBackend.verifyNoOutstandingRequest();
+    });
+
     describe('setupRefreshContacts', function(){
         beforeEach(function(){
             self.controller._initializeFilters();
@@ -290,6 +295,16 @@ describe('contactList', function() {
             output.name = 'Test';
             output.status = [ 'active', 'null', 'Never Contacted' ];
             self.$httpBackend.flush();
+            expect(self.controller.contactQuery).toEqual(output);
+        });
+
+        it('should not load view preferences if a wildcard search is set', function(){
+            self.$window.location.search = '?q=searchQuery';
+            self.controller._initializeFilters();
+            self.controller._loadViewPreferences();
+
+            var output = _.clone(self.defaultFilters);
+            output.wildcardSearch = 'searchQuery';
             expect(self.controller.contactQuery).toEqual(output);
         });
         it('should not mutate contactQuery if response current_account_list_id isn\'t found', function(){

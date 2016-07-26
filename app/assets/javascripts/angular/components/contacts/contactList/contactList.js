@@ -235,29 +235,31 @@
         }
 
         function loadViewPreferences() {
-            api.call('get', 'users/me', {})
-                .then(function (viewPrefs) {
-                    // Emit event to refresh contacts with saved filters
-                    filterChangeEventEmitter.next('init with save filters');
+            if (vm.contactQuery.wildcardSearch === null) {
+                api.call('get', 'users/me', {})
+                    .then(function (viewPrefs) {
+                        // Emit event to refresh contacts with saved filters
+                        filterChangeEventEmitter.next('init with save filters');
 
-                    vm.viewPrefsLoaded = true;
+                        vm.viewPrefsLoaded = true;
 
-                    if (!_.has(viewPrefs, 'user.preferences.contacts_filter[' + state.current_account_list_id + ']')) {
-                        return;
-                    }
+                        if (!_.has(viewPrefs, 'user.preferences.contacts_filter[' + state.current_account_list_id + ']')) {
+                            return;
+                        }
 
-                    // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
-                    _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
+                        // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
+                        _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
 
-                    if (_.isString(vm.contactQuery.tags)) {
-                        vm.contactQuery.tags = vm.contactQuery.tags.split(',');
-                    }
+                        if (_.isString(vm.contactQuery.tags)) {
+                            vm.contactQuery.tags = vm.contactQuery.tags.split(',');
+                        }
 
-                    openFilterPanels();
-                }, function (){
-                    // Emit event to refresh contacts with default filters since saved filters couldn't be loaded
-                    filterChangeEventEmitter.next('init');
-                });
+                        openFilterPanels();
+                    }, function () {
+                        // Emit event to refresh contacts with default filters since saved filters couldn't be loaded
+                        filterChangeEventEmitter.next('init');
+                    });
+            }
         }
 
         function saveViewPreferences(){
