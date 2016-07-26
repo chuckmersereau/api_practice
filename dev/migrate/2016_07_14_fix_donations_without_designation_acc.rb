@@ -5,15 +5,16 @@ class AddAccountsToDonations
     log_action(nil, 0)
 
     donations_without_designation_accounts.find_each do |donation|
-      if donation.donor_account.contacts.count == 1
-        org_accounts = donor_org_accounts(donation.donor_account.contacts.first.account_list)
+      if donation.donor_account.contacts.map(&:account_list_id).uniq.count == 1
+        account_list = donation.donor_account.contacts.first.account_list
       elsif donation.appeal.count == 1
-        org_accounts = donor_org_accounts(donation.appeal.account_list)
+        account_list = donation.appeal.account_list
       else
         log_action(donation, 1)
         next
       end
 
+      org_accounts = donor_org_accounts(account_list)
       unless org_accounts.count == 1
         log_action(donation, 2)
         next

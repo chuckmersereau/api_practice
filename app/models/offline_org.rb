@@ -18,11 +18,12 @@ class OfflineOrg < DataServer
   private
 
   def create_designation_profile
-    @org.designation_profiles.where(
-      user_id: @org_account.person_id,
-      name: @org_account.user.to_s,
-      code: @org_account.id.to_s
+    dp = @org.designation_profiles.where(
+        user_id: @org_account.person_id,
+        code: @org_account.id.to_s
     ).first_or_create
+    dp.update(name: @org_account.user.to_s)
+    return dp
   end
 
   def create_designation_account(profile)
