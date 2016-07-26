@@ -259,6 +259,8 @@
                         // Emit event to refresh contacts with default filters since saved filters couldn't be loaded
                         filterChangeEventEmitter.next('init');
                     });
+            }else{
+                vm.viewPrefsLoaded = true;
             }
         }
 
@@ -335,7 +337,7 @@
         function resetFilters(){
             _.assign(vm.contactQuery, _.omit(_.cloneDeep(defaultFilters), 'limit'));
             clearSelectedContacts();
-            angular.element('#globalContactSearch').value = '';
+            angular.element('#globalContactSearch').val('');
         }
 
         function tagIsActive(tag){

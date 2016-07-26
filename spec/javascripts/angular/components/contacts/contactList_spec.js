@@ -306,6 +306,7 @@ describe('contactList', function() {
             var output = _.clone(self.defaultFilters);
             output.wildcardSearch = 'searchQuery';
             expect(self.controller.contactQuery).toEqual(output);
+            expect(self.controller.viewPrefsLoaded).toEqual(true);
         });
         it('should not mutate contactQuery if response current_account_list_id isn\'t found', function(){
             self.$httpBackend.expectGET('/api/v1/users/me').respond(200, {
