@@ -6,9 +6,10 @@ class OfflineOrg < DataServer
   end
 
   def import_profiles
-    profile = create_designation_profile
-    create_designation_account(profile)
-    AccountList::FromProfileLinker.new(profile, @org_account).link_account_list!
+    super
+    #profile = create_designation_profile
+    #create_designation_account(profile)
+    #AccountList::FromProfileLinker.new(profile, @org_account).link_account_list!
   end
 
   def self.requires_username_and_password?
@@ -21,8 +22,28 @@ class OfflineOrg < DataServer
     dp = @org.designation_profiles.where(
         user_id: @org_account.person_id,
         code: @org_account.id.to_s
-    ).first_or_create
-    dp.update(name: @org_account.user.to_s)
+    ).first
+
+    if dp.nil?
+      dp = @org.designation_profiles.where(
+          user_id: @org_account.person_id,
+          code: ''
+      ).first
+
+      if dp.nil?
+        dp = @org.designation_profiles.create!(
+            user_id: @org_account.person_id,
+            code: @org_account.id.to_s,
+            name: @org_account.user.to_s
+        )
+      else
+        dp.update(code: @org_account.id.to_s,
+                  name: @org_account.user.to_s)
+      end
+    else
+      dp.update(name: @org_account.user.to_s)
+    end
+
     return dp
   end
 
