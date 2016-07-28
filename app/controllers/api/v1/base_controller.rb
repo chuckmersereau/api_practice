@@ -95,7 +95,7 @@ class Api::V1::BaseController < ApplicationController
     resource = resource.where("#{resource.table.name}.updated_at > ?", Time.at(params[:since].to_i)) if params[:since].to_i > 0
     resource = resource.page(page).per_page(per_page)
     # Always order by id at the end to ensure consistent ordering during various pagination runs
-    resource = resource.order(options[:order]).order(:id) if options[:order]
+    resource = resource.order(options[:order], :id) if options[:order]
     resource
   end
 
