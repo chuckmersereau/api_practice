@@ -6,10 +6,9 @@ class OfflineOrg < DataServer
   end
 
   def import_profiles
-    super
-    #profile = create_designation_profile
-    #create_designation_account(profile)
-    #AccountList::FromProfileLinker.new(profile, @org_account).link_account_list!
+    profile = create_designation_profile
+    create_designation_account(profile)
+    AccountList::FromProfileLinker.new(profile, @org_account).link_account_list!
   end
 
   def self.requires_username_and_password?
