@@ -35,9 +35,3 @@ env:
   matrix:
     - TEST_SUITE=1
     - TEST_SUITE=2
-addons:
-  apt:
-    sources:
-      - debian-sid
-    packages:
-      - qt5-default
