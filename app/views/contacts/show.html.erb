@@ -1,7 +1,4 @@
 <div class="row">
-  <script>
-    $('base').remove() //TODO: This hack exists to fix a bug coming from jQuery UI, delete once contact show page is angularized
-  </script>
   <%= render 'contact_body', contacts: @filtered_contacts, contact: @contact %>
 
   <div id="contact_drawer" class="col-md-3">

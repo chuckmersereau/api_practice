@@ -1,7 +1,6 @@
 require 'spec_helper'
 
 Capybara.default_max_wait_time = 2
-Capybara::Angular.default_max_wait_time = 5
 
 describe 'personal accounts preferences', js: true do
   let!(:user) do

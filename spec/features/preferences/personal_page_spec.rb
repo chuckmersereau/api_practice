@@ -2,7 +2,6 @@ require 'spec_helper'
 
 Capybara.default_max_wait_time = 1
 
-
 describe 'personal preferences list', js: true do
   let!(:user) do
     user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
