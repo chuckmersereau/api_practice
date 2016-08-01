@@ -22,7 +22,7 @@
 
     svc.save = function(success, error) {
       api.call('put', 'preferences',
-        { preference_set: this.data },
+        { preference: this.data },
         success,
         error);
     }

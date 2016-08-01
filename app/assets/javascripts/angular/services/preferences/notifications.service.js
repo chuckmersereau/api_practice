@@ -32,7 +32,7 @@
 
     svc.save = function(success, error) {
       api.call('put', 'preferences',
-        { preference_set: svc.data },
+        { preference: svc.data },
         success,
         error);
     };
