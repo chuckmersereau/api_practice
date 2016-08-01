@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe AccountsController do
+describe Auth::AccountsController do
   describe 'when not signed in' do
     before do
       @user = create(:user_with_account)
@@ -29,13 +29,6 @@ describe AccountsController do
     before(:each) do
       @user = create(:user_with_account)
       sign_in(:user, @user)
-    end
-
-    describe 'GET index' do
-      it 'should be successful' do
-        get :index
-        expect(response).to be_success
-      end
     end
 
     describe "POST 'create'" do

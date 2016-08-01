@@ -4,7 +4,7 @@ Capybara.default_max_wait_time = 2
 
 describe 'internal services preferences', js: true do
   let!(:user) do
-    user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
+    create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
   end
 
   def login_and_visit
@@ -46,10 +46,9 @@ describe 'internal services preferences', js: true do
   end
 end
 
-
 describe 'external services preferences', js: true do
   let!(:user) do
-    user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
+    create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
   end
 
   def login_and_visit
@@ -61,7 +60,7 @@ describe 'external services preferences', js: true do
   end
 
   it 'Google accounts shows and deletes' do
-    google_account = create(:google_account, person: user, email: 'foo@bar.com', refresh_token: nil)
+    create(:google_account, person: user, email: 'foo@bar.com', refresh_token: nil)
 
     user_google_accounts = user.google_accounts
     expect(user_google_accounts.length).to be 1

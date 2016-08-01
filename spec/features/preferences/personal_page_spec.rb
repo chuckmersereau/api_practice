@@ -19,65 +19,65 @@ describe 'personal preferences list', js: true do
     sleep 2
   end
 
-  def test_text_input_panel( i, oldVal, newVal )
+  def test_text_input_panel(i, old_val, new_val)
     login_and_visit
 
     panels = all('.panel')
 
-    expect(panels[i].find('.pref-current')).to have_content oldVal.upcase
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
+    expect(panels[i].find('.pref-current')).to have_content old_val.upcase
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'EXPAND'
 
     panels[i].click
 
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'CLOSE'
-    expect(panels[i].find('input').value).to eq oldVal
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'CLOSE'
+    expect(panels[i].find('input').value).to eq old_val
 
-    panels[i].find('input').set(newVal)
+    panels[i].find('input').set(new_val)
 
-    expect(panels[i].find('.pref-current')).to have_content newVal.upcase
+    expect(panels[i].find('.pref-current')).to have_content new_val.upcase
 
     panels[i].find('button.btn').trigger('click')
 
     expect(find('.alert')).to have_content 'Preferences saved successfully'
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'EXPAND'
   end
 
-  def test_dropdown_panel( i, oldVal, newVal )
+  def test_dropdown_panel(i, old_val, new_val)
     login_and_visit
 
     panels = all('.panel')
 
-    expect(panels[i].find('.pref-current')).to have_content oldVal.upcase
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
+    expect(panels[i].find('.pref-current')).to have_content old_val.upcase
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'EXPAND'
 
     panels[i].click
 
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'CLOSE'
-    expect(panels[i].find('.chosen-single')).to have_content oldVal
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'CLOSE'
+    expect(panels[i].find('.chosen-single')).to have_content old_val
 
     panels[i].find('.chosen-single').click
-    panels[i].find('.chosen-search input').set(newVal)
+    panels[i].find('.chosen-search input').set(new_val)
     panels[i].find('.chosen-results .active-result').click
 
-    expect(panels[i].find('.pref-current')).to have_content newVal.upcase
+    expect(panels[i].find('.pref-current')).to have_content new_val.upcase
 
     panels[i].find('button.btn').trigger('click')
 
     expect(find('.alert')).to have_content 'Preferences saved successfully'
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'EXPAND'
   end
 
-  def test_checkbox_panel( i )
+  def test_checkbox_panel(i)
     login_and_visit
 
     panels = all('.panel')
 
     expect(panels[i].find('.pref-current')).to have_content 'NO'
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'EXPAND'
 
     panels[i].click
 
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'CLOSE'
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'CLOSE'
 
     panels[i].find('label').click
 
@@ -86,7 +86,7 @@ describe 'personal preferences list', js: true do
     panels[i].find('button.btn').trigger('click')
 
     expect(find('.alert')).to have_content 'Preferences saved successfully'
-    expect(panels[i].all('.panel-open-btn', :visible => true)[0]).to have_content 'EXPAND'
+    expect(panels[i].all('.panel-open-btn', visible: true)[0]).to have_content 'EXPAND'
   end
 
   it 'first name panel works correctly' do

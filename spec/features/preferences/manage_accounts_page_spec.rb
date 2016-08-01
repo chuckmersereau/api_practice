@@ -4,7 +4,7 @@ Capybara.default_max_wait_time = 2
 
 describe 'personal accounts preferences', js: true do
   let!(:user) do
-    user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
+    create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
   end
 
   def login_and_visit
@@ -16,7 +16,7 @@ describe 'personal accounts preferences', js: true do
   end
 
   it 'Accounts display and delete correctly' do
-    user_2 = create(:user, account_lists: user.account_lists)
+    create(:user, account_lists: user.account_lists)
     account_list = user.account_lists.first
 
     expect(account_list.users.length).to be 2

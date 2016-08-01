@@ -1,7 +1,12 @@
 class Api::V1::Preferences::Integrations::OrganizationAccountsController < Api::V1::BaseController
   def index
     load_organization_accounts
-    render json: { organization_accounts: @organization_accounts.map { |acc| { id: acc.id, name: acc.organization.name, username: acc.username, api_class: acc.organization.api_class } } }, callback: params[:callback]
+    render json: { organization_accounts: @organization_accounts.map do |acc|
+                                            { id: acc.id,
+                                              name: acc.organization.name,
+                                              username: acc.username,
+                                              api_class: acc.organization.api_class }
+                                          end }, callback: params[:callback]
   end
 
   def create

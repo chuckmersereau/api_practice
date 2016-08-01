@@ -33,6 +33,13 @@ Rails.application.routes.draw do
   get '/notifications', to: redirect('preferences/notifications'), as: :notifications
   get '/accounts', to: redirect('preferences/networks'), as: :accounts
 
+  resources :preferences do
+    collection do
+      post :update_tab_order
+      post :complete_welcome_panel
+    end
+  end
+
   resources :account_lists, only: :update
 
   resources :tags, only: [:create, :destroy]

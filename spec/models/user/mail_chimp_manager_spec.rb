@@ -6,7 +6,6 @@ describe User::MailChimpManager do
       user = create(:user, subscribed_to_updates: true, email: 'j@t.co')
       url = 'https://apikey:asdf-us6@us6.api.mailchimp.com/3.0/'\
         'lists/asdf/members/47f62523d9b40ad2176baf884072aca5'
-
       err = 'j@t.co looks fake or invalid, please enter a real email address.'
       create_request = stub_request(:put, url)
                        .to_return(status: 400, body: { detail: err }.to_json)

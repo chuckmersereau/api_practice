@@ -19,9 +19,9 @@ describe 'Task Followup Dialog', type: :feature, js: true do
     wait_for_ajax
     sleep 1
 
-     within("#task_#{task.id}") do
-       first('.complete_task').click
-     end
+    within("#task_#{task.id}") do
+      first('.complete_task').click
+    end
   end
 
   def select_task_next_action(val)

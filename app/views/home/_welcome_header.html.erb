@@ -52,11 +52,11 @@
                         <div class="account_single">
                           <span class="account_name"><%= account %></span>
                           <% if account.token_expired? && !account.refresh_token! %>
-                              <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: home_path),
+                              <%= link_to(_('Refresh Google Account'), integration_preferences_tab_path(tab_id: 'google'),
                                           class: 'btn btn-xs btn-secondary desired_action') %>
                           <% else %>
                               <%= link_to('<i class="fa fa-cloud-download"></i> '.html_safe+_('Import Contacts'),
-                                          new_account_path(provider: 'google_import', account_id: account.id),
+                                          network_preferences_tab_path(tab_id: 'google'),
                                           class: "btn btn-xs btn-secondary", remote: true, behavior: "show_import") %>
                           <% end %>
                         </div>
@@ -71,7 +71,7 @@
                       </td>
                       <td class="connections" data-behavior="account">
                         <%= link_to(_('Import %{source} Contacts') % {source: source[1]},
-                                    new_account_path(provider: source[1].downcase + '_import'),
+                                    network_preferences_tab_path(tab_id: source[1].downcase),
                                     class: 'btn btn-xs btn-secondary', remote: true, behavior: 'show_import') %>
                       </td>
                     </tr>
@@ -92,8 +92,7 @@
           <div class="panel panel-default">
             <div class="panel-body">
               <% preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list) %>
-              <%= form_for preference_set, url: preference_path(current_user, redirect: home_path),
-                           method: :put do |f| %>
+              <%= form_for preference_set, url: preference_path(current_user, redirect: home_path), method: :put do |f| %>
                   <%= f.label :monthly_goal, _('Monthly goal') %>
                   <div class="input-group">
                     <%= f.text_field :monthly_goal, class: 'form-control' %>
@@ -104,7 +103,7 @@
                   <p><%= _("You can change this in the future if you aren't sure.") %></p>
               <% end %>
               <hr>
-              <%= link_to(_('Setup Notifications'), notifications_preferences_path,
+              <%= link_to(_('Setup Notifications'), notification_preferences_path,
                           class: 'btn btn-secondary', remote: true) %>
               <p class="note">
                 <%= _("Change these in the future by clicking the gear "+
