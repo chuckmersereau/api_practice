@@ -164,7 +164,7 @@ group :test do
   gem 'coveralls', require: false
   gem 'capybara'
   gem 'capybara-angular'
-  gem 'poltergeist'
+  gem 'poltergeist', '~> 1.10.0'
   gem 'capybara-screenshot'
 end
 
