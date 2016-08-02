@@ -132,16 +132,12 @@ RSpec.configure do |config|
       Rails.application.load_seed
     end
 
-    config.before(:each, js: true) do
-      DatabaseCleaner.strategy = :truncation
-    end
-
-    config.before(:each) do
-      DatabaseCleaner.start
-    end
-
-    config.after(:each) do
-      DatabaseCleaner.clean
+    config.around(:each) do |example|
+      DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
+      DatabaseCleaner.cleaning do
+        example.run
+      end
+      Rails.application.load_seed if example.metadata[:js]
     end
   end
 
