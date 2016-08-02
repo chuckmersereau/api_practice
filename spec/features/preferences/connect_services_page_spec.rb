@@ -2,17 +2,17 @@ require 'spec_helper'
 
 Capybara.default_max_wait_time = 5
 
+def login_and_visit
+  login(user)
+  visit '/preferences/personal'
+  sleep 4
+  all('aside#leftmenu li')[3].click
+  sleep 1.5
+end
+
 describe 'internal services preferences', js: true do
   let!(:user) do
     create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
-  end
-
-  def login_and_visit
-    login(user)
-    visit '/preferences/personal'
-    sleep 4
-    all('aside#leftmenu li')[3].click
-    sleep 1.5
   end
 
   it 'Key/Relay panel shows and deletes correctly' do
@@ -49,14 +49,6 @@ end
 describe 'external services preferences', js: true do
   let!(:user) do
     create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
-  end
-
-  def login_and_visit
-    login(user)
-    visit '/preferences/personal'
-    sleep 3
-    all('aside#leftmenu li')[3].click
-    sleep 1.5
   end
 
   it 'Google accounts shows and deletes' do
