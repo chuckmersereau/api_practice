@@ -4,7 +4,7 @@ Capybara.default_max_wait_time = 5
 
 describe 'personal preferences list', js: true do
   let!(:user) do
-    user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon')
+    user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon', time_zone: 'Wellington')
     second_account_list = create(:account_list, name: 'Account Bar')
     create(:account_list_user, user: user, account_list: second_account_list)
     create(:email_address, person: user, email: 'foo@bar.com')
@@ -104,7 +104,7 @@ describe 'personal preferences list', js: true do
   end
 
   it 'time zone works correctly' do
-    test_dropdown_panel(3, 'Auckland', 'Jerusalem')
+    test_dropdown_panel(3, 'Wellington', 'Jerusalem')
   end
 
   it 'locale works correctly' do
