@@ -152,7 +152,7 @@ class MailChimpAccount::Exporter
   def subscribe_member(params)
     gb.lists(account.primary_list_id).members(email_hash(params[:email_address])).upsert(body: params)
   rescue Gibbon::MailChimpError => e
-    raise unless MailChimpAccount.invalid_email_error?(e)
+    raise LowerRetryWorker::RetryJobButNoRollbarError unless MailChimpAccount.invalid_email_error?(e)
   end
 
   def add_status_groups(statuses)
@@ -260,7 +260,7 @@ class MailChimpAccount::Exporter
     groupings = mc_list.interest_categories.retrieve(params: { 'count': '100' })['categories']
     groupings.find { |g| g['id'] == id } || groupings.find { |g| g['title'] == _(name) }
   rescue Gibbon::MailChimpError => e
-    raise e unless e.message.include?('code 211') # This list does not have interest groups enabled (code 211)
+    raise LowerRetryWorker::RetryJobButNoRollbarError unless e.message.include?('code 211') # This list does not have interest groups enabled (code 211)
     return nil
   end
 
