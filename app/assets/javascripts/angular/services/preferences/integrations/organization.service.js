@@ -39,7 +39,7 @@
       api.call('get', 'preferences/integrations/organizations', {}, function(data) {
         svc.data.organizations = data.organizations;
       });
-    }
+    };
 
     svc.updateState = function () {
       if (svc.data.active) {

@@ -66,6 +66,6 @@
       return vm.preferences.state;
     }, function() {
       vm.state = vm.preferences.state;
-    } )
+    });
   }
 })();

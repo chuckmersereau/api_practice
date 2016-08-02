@@ -59,17 +59,17 @@
 
     vm.reload = function() {
       vm.preferences.load();
-    }
+    };
 
     $window.openerCallback = vm.reload;
 
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {
         vm.tabId = '';
-        $state.go('preferences.integrations', {}, { notify: false })
+        $state.go('preferences.integrations', {}, { notify: false });
       } else {
         vm.tabId = service;
-        $state.go('preferences.integrations.tab', { id: service }, { notify: false })
+        $state.go('preferences.integrations.tab', { id: service }, { notify: false });
       }
     };
 

@@ -89,13 +89,13 @@
       vm.page = 'edit_account';
       vm.selected = account;
       vm.username = account.username;
-    }
+    };
 
     vm.revert = function() {
       vm.page = 'org_list';
       vm.selected = null;
       vm.username = null;
       vm.password = null;
-    }
+    };
   }
 })();

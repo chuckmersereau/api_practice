@@ -28,7 +28,7 @@
       if(service == 'pls') {
         return api.call('get', 'preferences/integrations/pls_account/sync', { }, success, error);
       }
-    }
+    };
 
     svc.disconnect = function (service, success, error, id) {
       service = service.toLowerCase();

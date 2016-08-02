@@ -30,10 +30,10 @@
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {
         vm.tabId = '';
-        $state.go('preferences.accounts', {}, { notify: false })
+        $state.go('preferences.accounts', {}, { notify: false });
       } else {
         vm.tabId = service;
-        $state.go('preferences.accounts.tab', { id: service }, { notify: false })
+        $state.go('preferences.accounts.tab', { id: service }, { notify: false });
       }
     };
 

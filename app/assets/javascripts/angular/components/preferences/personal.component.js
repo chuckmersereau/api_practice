@@ -43,7 +43,7 @@
         });
         vm.saving = false;
       });
-    }
+    };
 
     vm.locale_string = '';
     $scope.$watch(
@@ -51,7 +51,7 @@
       function (newValue) {
         vm.locale_string = angular.element('#_locale option[value=' + newValue + ']').text();
       }
-    )
+    );
 
     vm.default_account_string = '';
     $scope.$watch(
@@ -59,7 +59,7 @@
       function (newValue) {
         vm.default_account_string = angular.element('#_default_account_list option[value=' + newValue + ']').text();
       }
-    )
+    );
 
     vm.salary_organization_string = '';
     $scope.$watch(
@@ -67,15 +67,15 @@
       function (newValue) {
         vm.salary_organization_string = angular.element('#salary_organization_id_ option[value=' + newValue + ']').text();
       }
-    )
+    );
 
     vm.setTab = function(service) {
       if (service == '' || vm.tabId == service) {
         vm.tabId = '';
-        $state.go('preferences.personal', {}, { notify: false })
+        $state.go('preferences.personal', {}, { notify: false });
       } else {
         vm.tabId = service;
-        $state.go('preferences.personal.tab', { id: service }, { notify: false })
+        $state.go('preferences.personal.tab', { id: service }, { notify: false });
       }
     };
 
