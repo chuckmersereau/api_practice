@@ -4,6 +4,7 @@ Capybara.default_max_wait_time = 5
 
 def login_and_visit
   login(user)
+  sleep 5
   visit '/preferences/personal'
   sleep 4
   all('aside#leftmenu li')[3].click
