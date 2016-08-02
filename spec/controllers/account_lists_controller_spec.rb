@@ -11,10 +11,11 @@ describe AccountListsController do
   end
 
   context '#sharing' do
+    let(:mergeable_accounts) { user.account_lists - [account_list] }
     it "assigns mergeable_accounts to be the user's non current account lists" do
       expect(user.account_lists.count).to eq(2)
       get :sharing
-      expect(assigns(:mergeable_accounts)).to include(user.account_lists.second)
+      expect(assigns(:mergeable_accounts)).to eq(mergeable_accounts)
     end
   end
 
