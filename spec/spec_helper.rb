@@ -81,6 +81,8 @@ RSpec.configure do |config|
     Capybara.current_driver = Capybara.javascript_driver
   end
 
+  config.assets.compile = false
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
