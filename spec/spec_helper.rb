@@ -79,6 +79,7 @@ RSpec.configure do |config|
   config.before(:each, js: true) do
     page.driver.browser.url_blacklist = ['http://use.typekit.net']
     Capybara.current_driver = Capybara.javascript_driver
+    sleep 4
   end
 
   # ## Mock Framework
