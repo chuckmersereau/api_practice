@@ -76,6 +76,11 @@ RSpec.configure do |config|
     stub_google_geocoder
   end
 
+  config.before(:each, js: true) do
+    page.driver.browser.url_blacklist = ["http://use.typekit.net"]
+    Capybara.current_driver = Capybara.javascript_driver
+  end
+
   # ## Mock Framework
   #
   # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:

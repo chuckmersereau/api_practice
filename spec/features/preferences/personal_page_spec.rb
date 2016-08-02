@@ -3,10 +3,6 @@ require 'spec_helper'
 Capybara.default_max_wait_time = 5
 
 describe 'personal preferences list', js: true do
-  setup do
-    page.driver.browser.url_blacklist = ['http://use.typekit.net']
-  end
-  
   let!(:user) do
     user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon', time_zone: 'Wellington')
     second_account_list = create(:account_list, name: 'Account Bar')
@@ -61,6 +57,9 @@ describe 'personal preferences list', js: true do
 
     panels[i].find('.chosen-single').click
     panels[i].find('.chosen-search input').set(new_val)
+
+    sleep 0.5
+
     panels[i].find('.chosen-results li').click
 
     sleep 1
