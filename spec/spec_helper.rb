@@ -77,7 +77,7 @@ RSpec.configure do |config|
   end
 
   config.before(:each, js: true) do
-    page.driver.browser.url_blacklist = ["http://use.typekit.net"]
+    page.driver.browser.url_blacklist = ['http://use.typekit.net']
     Capybara.current_driver = Capybara.javascript_driver
   end
 
