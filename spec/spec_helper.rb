@@ -74,8 +74,6 @@ RSpec.configure do |config|
     # Stub the Google geocoder by default (creating an address calls it so it's
     # needed a lot)
     stub_google_geocoder
-
-    page.driver.browser.url_blacklist = ['http://use.typekit.net']
   end
 
   # ## Mock Framework

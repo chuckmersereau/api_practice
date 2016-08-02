@@ -3,6 +3,10 @@ require 'spec_helper'
 Capybara.default_max_wait_time = 5
 
 describe 'personal preferences list', js: true do
+  setup do
+    page.driver.browser.url_blacklist = ['http://use.typekit.net']
+  end
+  
   let!(:user) do
     user = create(:user_with_account, first_name: 'Charles', last_name: 'Spurgeon', time_zone: 'Wellington')
     second_account_list = create(:account_list, name: 'Account Bar')
