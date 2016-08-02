@@ -61,6 +61,7 @@ describe 'personal preferences list', js: true do
 
     sleep 1
 
+    panels = all('.panel')
     expect(panels[i].find('.pref-current')).to have_content new_val.upcase
 
     panels[i].find('button.btn').trigger('click')
