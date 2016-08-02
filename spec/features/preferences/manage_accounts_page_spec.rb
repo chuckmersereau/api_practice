@@ -10,7 +10,7 @@ describe 'personal accounts preferences', js: true do
   def login_and_visit
     login(user)
     visit '/preferences/personal'
-    sleep 1.5
+    sleep 4
     all('aside#leftmenu li')[4].click
     sleep 1.5
   end
