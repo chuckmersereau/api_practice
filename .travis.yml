@@ -25,7 +25,6 @@ script:
 - bin/travis_parallel_test.sh
 - bundle exec rake coveralls:push
 - bin/travis_rubocop_or_karma.sh
-- bundle exec rake protractor:spec
 after_success:
 - bash <(curl -s https://codecov.io/bash)
 branches:
