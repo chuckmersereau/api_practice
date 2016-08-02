@@ -16,7 +16,7 @@ describe 'personal preferences list', js: true do
   def login_and_visit
     login(user)
     visit '/preferences/personal'
-    sleep 2
+    sleep 4
   end
 
   def test_text_input_panel(i, old_val, new_val)
@@ -57,7 +57,7 @@ describe 'personal preferences list', js: true do
 
     panels[i].find('.chosen-single').click
     panels[i].find('.chosen-search input').set(new_val)
-    panels[i].find('.chosen-results .active-result').click
+    panels[i].find('.chosen-results li').click
 
     sleep 1
 

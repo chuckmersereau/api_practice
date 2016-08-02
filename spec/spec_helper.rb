@@ -27,7 +27,6 @@ require 'sidekiq/testing'
 require 'sidekiq_unique_jobs/testing'
 require 'paper_trail/frameworks/rspec'
 require 'attributes_history/rspec'
-require 'capybara/angular'
 require 'capybara-screenshot/rspec'
 
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
@@ -50,12 +49,6 @@ Capybara.register_driver :poltergeist do |app|
 end
 
 Capybara.default_max_wait_time = 4
-
-# Capybara::Webkit.configure do |config|
-#   config.allow_url('*')
-# end
-
-Capybara::Screenshot.webkit_options = { width: 1600, height: 1200 }
 
 RSpec.configure do |config|
   config.before(:each) do |example|
