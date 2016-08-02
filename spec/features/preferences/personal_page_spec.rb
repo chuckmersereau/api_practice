@@ -15,6 +15,7 @@ describe 'personal preferences list', js: true do
 
   def login_and_visit
     login(user)
+    sleep 4
     visit '/preferences/personal'
     sleep 4
   end

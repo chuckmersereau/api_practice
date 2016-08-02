@@ -14,6 +14,7 @@ describe 'import contacts page', js: true, sidekiq: 'acceptance' do
 
   def login_and_visit
     login(user)
+    sleep 4
     visit '/preferences/personal'
     sleep 4
     all('aside#leftmenu li')[2].click
