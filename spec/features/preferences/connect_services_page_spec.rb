@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-Capybara.default_max_wait_time = 2
+Capybara.default_max_wait_time = 5
 
 describe 'internal services preferences', js: true do
   let!(:user) do

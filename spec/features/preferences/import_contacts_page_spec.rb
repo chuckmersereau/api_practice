@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-Capybara.default_max_wait_time = 2
+Capybara.default_max_wait_time = 5
 
 describe 'import contacts page', js: true, sidekiq: 'acceptance' do
   let!(:user) do

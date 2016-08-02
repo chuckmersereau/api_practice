@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-Capybara.default_max_wait_time = 2
+Capybara.default_max_wait_time = 5
 
 describe 'personal accounts preferences', js: true do
   let!(:user) do
@@ -61,6 +61,7 @@ describe 'personal accounts preferences', js: true do
     current_panel.click
     sleep 0.5
     current_panel.find('.chosen-container').click
+    sleep 0.5
     expect(current_panel.all('.chosen-results li').length).to eq 1
     sleep 0.5
     current_panel.find('.chosen-results li').click
