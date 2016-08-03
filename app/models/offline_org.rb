@@ -18,26 +18,24 @@ class OfflineOrg < DataServer
   private
 
   def create_designation_profile
-    dp = @org.designation_profiles.find_by(user_id: @org_account.person_id,
-                                           code: @org_account.id.to_s)
+    dps = @org.designation_profiles.where(user_id: @org_account.person_id)
 
-    if dp.nil?
-      dp = @org.designation_profiles.find_by(user_id: @org_account.person_id,
-                                             code: '')
-
-      if dp.nil?
-        dp = @org.designation_profiles.create!(
-          user_id: @org_account.person_id,
-          code: @org_account.id.to_s,
-          name: @org_account.user.to_s
-        )
-      else
-        dp.update(code: @org_account.id.to_s,
-                  name: @org_account.user.to_s)
-      end
+    if dps.empty?
+      dp = @org.designation_profiles.create!(
+        user_id: @org_account.person_id,
+        code: @org_account.id.to_s,
+        name: @org_account.user.to_s
+      )
     else
-      dp.update(name: @org_account.user.to_s)
+      dp = dps.find_by(code: @org_account.id.to_s)
+      if dp.nil?
+        dp = dps.first
+        dp.update(code: @org_account.id.to_s, name: @org_account.user.to_s)
+      else
+        dp.update(name: @org_account.user.to_s)
+      end
     end
+
     dp
   end
 
