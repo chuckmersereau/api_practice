@@ -6,9 +6,9 @@
             templateUrl: '/templates/reports/expectedMonthlyTotals.html'
         });
 
-    expectedMonthlyTotalsReportController.$inject = ['api', 'state'];
+    expectedMonthlyTotalsReportController.$inject = ['api', 'state', '_'];
 
-    function expectedMonthlyTotalsReportController(api, state) {
+    function expectedMonthlyTotalsReportController(api, state, _) {
         var vm = this;
 
         var sumOfAllCategories = 0;

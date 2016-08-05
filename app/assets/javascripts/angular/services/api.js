@@ -1,11 +1,20 @@
 angular.module('mpdxApp')
-    .service('api', function ($rootScope, $http, $cacheFactory, $q, $log) {
+    .factory('api', function ($rootScope, $http, $cacheFactory, _, $q, $log) {
         var apiUrl = '/api/v1/';
         var apiCache = $cacheFactory('api');
 
+        var factory = {
+            call: call,
+            get: get,
+            post: post,
+            encodeURLarray: encodeURLarray
+        };
+
+        return factory;
+
         // This function supports both callbacks (successFn, errorFn) and returns a promise
         // It would be preferred to use promises in the future
-        this.call = function (method, url, data, successFn, errorFn, cache) {
+        function call(method, url, data, successFn, errorFn, cache) {
             if(cache === true){
                 var cachedData = apiCache.get(url);
                 if (angular.isDefined(cachedData)) {
@@ -37,16 +46,17 @@ angular.module('mpdxApp')
                     }
                     return $q.reject(response);
                 });
-        };
+        }
 
-        this.get = function (url, data, successFn, errorFn, cache) {
+        function get(url, data, successFn, errorFn, cache) {
             return this.call('get', url, data, successFn, errorFn, cache);
-        };
-        this.post = function (url, data, successFn, errorFn, cache) {
-            return this.call('post', url, data, successFn, errorFn, cache);
-        };
+        }
 
-        this.encodeURLarray = function encodeURLarray(array){
+        function post(url, data, successFn, errorFn, cache) {
+            return this.call('post', url, data, successFn, errorFn, cache);
+        }
+
+        function encodeURLarray(array){
             return _.map(array, encodeURIComponent);
         }
     });

@@ -7,9 +7,7 @@ angular.module('mpdxApp')
                 task: '=',
                 multiselect: '@'
             },
-            link: function (scope, element, attrs){
-            },
-            controller: function ($scope, contactCache, api, railsConstants) {
+            controller: function ($scope, contactCache, api, railsConstants, _) {
                 //TODO: refactor taskShortListController to use controllerAs so this condition isn't needed or better yet provide the needed data in a binding
                 var parentComponentOrController = $scope.$parent.$ctrl || $scope.$parent;
 

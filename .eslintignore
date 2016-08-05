@@ -1,26 +1,9 @@
 app/assets/javascripts/bootstrap.min.js
 
 app/assets/javascripts/angular/components/appeals/appeal.component.js
-app/assets/javascripts/angular/components/appeals/excludedAppealContacts.component.js
-app/assets/javascripts/angular/components/reports/balancesReport.js
-app/assets/javascripts/angular/components/reports/currencyDonationsReport.component.js
-app/assets/javascripts/angular/components/reports/donorCurrencyDonationsReport.js
-app/assets/javascripts/angular/components/reports/expectedMonthlyTotalsReport.js
-app/assets/javascripts/angular/components/reports/salaryCurrencyDonationsReport.js
 app/assets/javascripts/angular/components/tasks/tasks.component.js
-app/assets/javascripts/angular/controllers/progress.js
 app/assets/javascripts/angular/controllers/taskShortList.js
-app/assets/javascripts/angular/directives/replaceAvatar.js
-app/assets/javascripts/angular/directives/task.js
 app/assets/javascripts/angular/directives/taskFollowupDialog.js
-app/assets/javascripts/angular/filters/getTextFilter.js
-app/assets/javascripts/angular/filters/ignoreTimezone.js
-app/assets/javascripts/angular/filters/pledgeFrequencyStr.js
-app/assets/javascripts/angular/mpdxApp.constants.js
-app/assets/javascripts/angular/services/api.js
-app/assets/javascripts/angular/services/contactCache.js
-app/assets/javascripts/angular/services/monthRange.service.js
-app/assets/javascripts/angular/services/state.service.js
 app/assets/javascripts/angular/services/urlParameter.js
 app/assets/javascripts/bootstrap-tagsinput.js
 app/assets/javascripts/jquery.are-you-sure.js

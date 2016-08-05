@@ -1,4 +1,4 @@
-angular.module('mpdxApp').filter('pledgeFrequencyStr', function(){
+angular.module('mpdxApp').filter('pledgeFrequencyStr', function(__){
   return function (val) {
     val = parseFloat(val);
     switch(val) {
