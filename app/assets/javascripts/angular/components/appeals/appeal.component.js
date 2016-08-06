@@ -309,6 +309,8 @@
 
             vm.mail_chimp_account_present = state.mail_chimp_account_present;
 
+            vm.mail_chimp_open_rate = state.mail_chimp_open_rate;
+
             if (state.mail_chimp_lists == null || JSON.parse(state.mail_chimp_lists) == null) {
                 vm.mail_chimp_lists = [];
             } else {
