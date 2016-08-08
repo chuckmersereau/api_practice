@@ -21,56 +21,8 @@ describe ContactsController do
 
       it 'gets all' do
         get :index
+
         expect(response).to be_success
-        expect(assigns(:contacts).length).to eq(2)
-      end
-
-      it "filters out people you don't want to contact even when no filter is set" do
-        contact.update_attributes(status: 'Not Interested')
-        get :index
-        expect(response).to be_success
-        expect(assigns(:contacts).length).to eq(1)
-      end
-
-      it 'gets people' do
-        get :index, filters: { contact_type: 'person' }
-        expect(response).to be_success
-        expect(assigns(:contacts)).to eq([contact])
-      end
-
-      it 'gets companies' do
-        get :index, filters: { contact_type: 'company' }
-        expect(response).to be_success
-        expect(assigns(:contacts)).to eq([contact2])
-      end
-
-      it 'filters by tag' do
-        contact.update_attributes(tag_list: 'asdf')
-        get :index, filters: { tags: 'asdf' }
-        expect(response).to be_success
-        expect(assigns(:contacts)).to eq([contact])
-      end
-
-      it "doesn't display duplicate rows when filtering by Newsletter Recipients With Mailing Address" do
-        contact.update_attributes(send_newsletter: 'Physical')
-        2.times do
-          contact.addresses << create(:address, addressable: contact)
-        end
-
-        get :index, filters: { newsletter: 'address' }
-        expect(assigns(:contacts).length).to eq(1)
-      end
-
-      it "doesn't display duplicate rows when filtering by Newsletter Recipients With Email Address" do
-        contact.update_attributes(send_newsletter: 'Email')
-        p = create(:person)
-        contact.people << p
-        2.times do
-          create(:email_address, person: p)
-        end
-
-        get :index, filters: { newsletter: 'email' }
-        expect(assigns(:contacts).length).to eq(1)
       end
 
       it 'does error if the newsletter and address info filters are combined' do
@@ -149,6 +101,16 @@ describe ContactsController do
         get :show, id: contact.id
         expect(response).to be_success
         expect(contact).to eq(assigns(:contact))
+      end
+
+      it 'does error if the newsletter and facebook info filters are combined' do
+        user.update(contacts_filter: {
+                      user.account_lists.first.id.to_s => { newsletter: 'address', contact_info_facebook: 'No' }
+                    })
+
+        expect do
+          get :show, id: contact.id
+        end.to_not raise_error
       end
     end
 

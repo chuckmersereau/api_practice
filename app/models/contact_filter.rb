@@ -385,7 +385,7 @@ class ContactFilter
                                         .includes(people: :facebook_account)
     return contacts_with_fb if @filters[:contact_info_facebook] == 'Yes'
 
-    contacts_with_fb_ids = contacts_with_fb.pluck(:id)
+    contacts_with_fb_ids = contacts_with_fb.reorder('').pluck(:id)
     return filtered_contacts if contacts_with_fb_ids.empty?
     filtered_contacts.where.not(id: contacts_with_fb_ids)
   end
