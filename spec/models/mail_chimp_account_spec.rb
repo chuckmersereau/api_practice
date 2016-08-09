@@ -18,8 +18,8 @@ describe MailChimpAccount do
 
     lists_response = {
       lists: [
-        { id: primary_list_id, name: 'Test 1' },
-        { id: primary_list_id_2, name: 'Test 2' }
+        { id: primary_list_id, name: 'Test 1', stats: { open_rate: 30 } },
+        { id: primary_list_id_2, name: 'Test 2', stats: { open_rate: 20 } }
       ]
     }
     stub_request(:get, "#{api_prefix}/lists").to_return(body: lists_response.to_json)
@@ -293,6 +293,13 @@ describe MailChimpAccount do
         msg = 'other err'
         account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
       end.to raise_error(Gibbon::MailChimpError)
+    end
+  end
+
+  context '#appeal_open_rate' do
+    it 'returns the open rate given by the mail chimp api' do
+      MailChimpAppealList.create(mail_chimp_account: account, appeal_id: appeal.id, appeal_list_id: primary_list_id_2)
+      expect(account.appeal_open_rate).to eq(20)
     end
   end
 end
