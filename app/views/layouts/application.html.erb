@@ -28,8 +28,8 @@
     <preload-state name="mail_chimp_lists"
                    data='<%= current_account_list.mail_chimp_account.try(:lists_available_for_appeals)
                                                  .to_json.html_safe %>'></preload-state>
-    <preload-state name="mail_chimp_lists"
-                   data='<%= current_account_list.mail_chimp_account.appeal_open_rate %>'></preload-state>
+    <preload-state name="appeal_open_rate"
+                   data='<%= current_account_list.mail_chimp_account.try(:appeal_open_rate) %>'></preload-state>
     <preload-state name="multi_currencies_for_same_symbol"
                    data="<%= exhibit(current_account_list).multi_currencies_for_same_symbol? %>"></preload-state>
     <preload-state name="default_currency" data="<%= current_account_list.default_currency %>"></preload-state>
@@ -37,6 +37,7 @@
 
     <%= render 'impersonation_bar' %>
     <%= render 'peek/bar' %>
+
     <header id="global">
       <div class="head-user-wrap">
         <div class="container">

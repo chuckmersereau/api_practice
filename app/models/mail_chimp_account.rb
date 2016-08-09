@@ -28,7 +28,7 @@ class MailChimpAccount < ActiveRecord::Base
     return [] unless api_key.present?
     @list_response ||= gb.lists.retrieve
     return [] unless @list_response['lists']
-    @lists ||= @list_response['lists'].map { |l| List.new(l['id'], l['name'], l['open_rate']) }
+    @lists ||= @list_response['lists'].map { |l| List.new(l['id'], l['name'], l['stats']['open_rate']) }
   rescue Gibbon::MailChimpError, OpenSSL::SSL::SSLError, Faraday::SSLError
     []
   end
@@ -282,7 +282,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def appeal_open_rate
-    lists.find { |l| l.id == mail_chimp_appeal_list.try(:appeal_list_id) }.open_rate
+    lists.find { |l| l.id == mail_chimp_appeal_list.try(:appeal_list_id) }.try(:open_rate)
   end
 
   private
