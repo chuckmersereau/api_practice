@@ -308,7 +308,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def active_contacts_with_emails(contact_ids)
-    contacts_with_email_addresses(contact_ids)
+    contacts_with_email_addresses(contact_ids).active
     # add condition here
   end
 
