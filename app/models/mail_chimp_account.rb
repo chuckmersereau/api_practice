@@ -219,26 +219,6 @@ class MailChimpAccount < ActiveRecord::Base
     update(importing: false)
   end
 
-  def newsletter_emails
-    newsletter_contacts_with_emails(nil).pluck('email_addresses.email')
-  end
-
-  def newsletter_contacts_with_emails(contact_ids)
-    contacts_with_email_addresses(contact_ids)
-      .where(send_newsletter: %w(Email Both))
-      .where.not(people: { optout_enewsletter: true })
-  end
-
-  
-
-  def contacts_with_email_addresses(contact_ids)
-    contacts = account_list.contacts
-    contacts = contacts.where(id: contact_ids) if contact_ids
-    contacts.includes(people: :primary_email_address)
-            .where.not(email_addresses: { historic: true })
-            .references('email_addresses')
-  end
-
   def export_to_list(contacts)
     MailChimpAccount::Exporter.new(self).export_to_list(contacts)
   end
@@ -301,6 +281,24 @@ class MailChimpAccount < ActiveRecord::Base
     else
       newsletter_contacts_with_emails(contact_ids)
     end
+  end
+
+  def newsletter_emails
+    newsletter_contacts_with_emails(nil).pluck('email_addresses.email')
+  end
+
+  def newsletter_contacts_with_emails(contact_ids)
+    contacts_with_email_addresses(contact_ids)
+      .where(send_newsletter: %w(Email Both))
+      .where.not(people: { optout_enewsletter: true })
+  end
+
+  def contacts_with_email_addresses(contact_ids)
+    contacts = account_list.contacts
+    contacts = contacts.where(id: contact_ids) if contact_ids
+    contacts.includes(people: :primary_email_address)
+            .where.not(email_addresses: { historic: true })
+            .references('email_addresses')
   end
 
   private
