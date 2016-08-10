@@ -229,6 +229,15 @@ class MailChimpAccount < ActiveRecord::Base
       .where.not(people: { optout_enewsletter: true })
   end
 
+  def active_contacts_emails
+    active_contacts_with_emails(nil).pluck('email_addresses.email')
+  end
+
+  def active_contacts_with_emails(contact_ids)
+    contacts_with_email_addresses(contact_ids)
+    # add condition here
+  end
+
   def contacts_with_email_addresses(contact_ids)
     contacts = account_list.contacts
     contacts = contacts.where(id: contact_ids) if contact_ids
@@ -283,6 +292,14 @@ class MailChimpAccount < ActiveRecord::Base
 
   def appeal_open_rate
     lists.find { |l| l.id == mail_chimp_appeal_list.try(:appeal_list_id) }.try(:open_rate)
+  end
+
+  def relevant_emails
+    if sync_all_active_contacts
+      newsletter_emails
+    else
+      active_contacts_emails
+    end
   end
 
   private

@@ -302,4 +302,18 @@ describe MailChimpAccount do
       expect(account.appeal_open_rate).to eq(20)
     end
   end
+
+  context '#appeal_open_rate' do
+    it 'returns the open rate given by the mail chimp api' do
+      MailChimpAppealList.create(mail_chimp_account: account, appeal_id: appeal.id, appeal_list_id: primary_list_id_2)
+      expect(account.appeal_open_rate).to eq(20)
+    end
+  end
+
+  context '#appeal_open_rate' do
+    it 'returns the open rate given by the mail chimp api' do
+      MailChimpAppealList.create(mail_chimp_account: account, appeal_id: appeal.id, appeal_list_id: primary_list_id_2)
+      expect(account.appeal_open_rate).to eq(20)
+    end
+  end
 end
