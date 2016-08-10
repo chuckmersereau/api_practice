@@ -229,14 +229,7 @@ class MailChimpAccount < ActiveRecord::Base
       .where.not(people: { optout_enewsletter: true })
   end
 
-  def active_contacts_emails
-    active_contacts_with_emails(nil).pluck('email_addresses.email')
-  end
-
-  def active_contacts_with_emails(contact_ids)
-    contacts_with_email_addresses(contact_ids)
-    # add condition here
-  end
+  
 
   def contacts_with_email_addresses(contact_ids)
     contacts = account_list.contacts
@@ -295,14 +288,23 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def relevant_emails
-    if sync_all_active_contacts
-      newsletter_emails
-    else
+    if sync_all_active_contacts?
       active_contacts_emails
+    else
+      newsletter_emails
     end
   end
 
   private
+
+  def active_contacts_emails
+    active_contacts_with_emails(nil).pluck('email_addresses.email')
+  end
+
+  def active_contacts_with_emails(contact_ids)
+    contacts_with_email_addresses(contact_ids)
+    # add condition here
+  end
 
   def list_members_page(list_id, offset)
     gb.lists(list_id).members.retrieve(
