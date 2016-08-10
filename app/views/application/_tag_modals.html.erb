@@ -5,7 +5,7 @@
       <p><%= _('Choose an existing tag, or create new tag (separate multiple tags with commas):') %></p>
       <ul>
         <% current_account_list.contact_tags.each do |tag| %>
-          <li><a href="#" class="tag" data-name="<%= tag %>"><%= tag %></a></li>
+          <li><a class="tag" data-name="<%= tag %>"><%= tag %></a></li>
         <% end %>
       </ul>
       <%= label_tag :add_tag_name, _('New Tag') %>
@@ -22,11 +22,10 @@
       <ul>
           <%= label_tag :all_contacts, _('Remove tag from all contacts') %><%= check_box_tag :all_contacts %>
         <% current_account_list.contact_tags.each do |tag| %>
-          <li><a href="#" class="tag" data-name="<%= tag %>"><%= tag %></a></li>
+          <li><a class="tag" data-name="<%= tag %>"><%= tag %></a></li>
         <% end %>
       </ul>
       <%= hidden_field_tag :remove_tag_name %>
     <% end %>
   </div>
 </div>
-
