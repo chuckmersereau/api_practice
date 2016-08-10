@@ -6,7 +6,10 @@ describe MailChimpAccount do
   let(:account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
   let(:api_prefix) { 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0' }
   let(:account_list) { create(:account_list) }
+  let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: account)}
   let(:appeal) { create(:appeal, account_list: account_list) }
+  let(:newsletter_contacts) { 2.times { create(:contact, emails: [build(:email_address)], account_list: account_list_with_mailchimp, newsletter: true) } }
+  let(:non_newsletter_contact) { create(:contact, emails: [build(:email_address)], account_list: account_list_with_mailchimp, newsletter: true) } 
 
   it 'validates the format of an api key' do
     expect(MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
@@ -308,6 +311,16 @@ describe MailChimpAccount do
       expect(account.relevant_emails.size).to eq(2)
       account.update(sync_all_active_contacts: true)
       expect(account.relevant_emails.size).to eq(3)
+    end
+  end
+
+  context '#relevant_contacts' do
+    it 'returns the right list of contacts which again depends on the settings set by the user' do
+      newsletter_contacts
+      non_newsletter_contact
+      expect(account.relevant_contacts.last).to eq(newsletter_contacts.last)
+      account.update(sync_all_active_contacts: true)
+      expect(account.relevant_contacts.last).to eq(non_newsletter_contact)
     end
   end
 end
