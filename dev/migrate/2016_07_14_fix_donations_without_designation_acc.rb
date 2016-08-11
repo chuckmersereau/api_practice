@@ -4,7 +4,7 @@ class AddAccountsToDonations
   def add_accounts_to_donations
     log_action(nil, 0)
 
-    donations_without_designation_accounts.find_each do |donation|
+    donations_without_designation_accounts.find_each(batch_size: 400) do |donation|
       if donation.donor_account.contacts.map(&:account_list_id).uniq.count == 1
         account_list = donation.donor_account.contacts.first.account_list
       elsif donation.appeal.count == 1
