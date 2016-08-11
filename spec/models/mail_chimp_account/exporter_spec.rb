@@ -9,7 +9,14 @@ describe MailChimpAccount::Exporter do
   let(:api_prefix) { 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0' }
   let(:appeal) { create(:appeal, account_list: account_list) }
   let(:export) { MailChimpAccount::Exporter.new(account) }
+  let(:appeal_export) { MailChimpAccount::Exporter.new(account, '1e72b58b72') }
   let(:non_primary_export) { MailChimpAccount::Exporter.new(account, 'not-primary-list') }
+  let(:categories_response) do
+    { categories: [
+      { list_id: primary_list_id, id: generic_group_id, title: 'Partner Status' }
+    ]
+    }
+  end
 
   before do
     $rollout.activate(:mailchimp_tags_export)
@@ -66,7 +73,7 @@ describe MailChimpAccount::Exporter do
         export.send(:export_to_primary_list)
       end
 
-      it 'exports to a list and saves mail chimp member records' do
+      it 'exports to proper list and saves mail chimp member records for both general sync and appeal sync' do
         member_json = {
           status_if_new: 'subscribed', email_address: 'foo@example.com',
           merge_fields: { EMAIL: 'foo@example.com', FNAME: 'John', LNAME: 'Smith', GREETING: 'John' },
@@ -100,6 +107,13 @@ describe MailChimpAccount::Exporter do
         expect(member.greeting).to eq 'John'
         expect(member.first_name).to eq 'John'
         expect(member.last_name).to eq 'Smith'
+
+        expect(appeal_export).to receive(:add_status_groups)
+        expect(appeal_export).to receive(:add_tags_groups)
+        expect(appeal_export).to receive(:add_greeting_merge_variable)
+
+        account.primary_list_id = 'random_other_list_id'
+        appeal_export.send(:export_to_list, [contact])
       end
     end
 
@@ -303,11 +317,6 @@ describe MailChimpAccount::Exporter do
 
   context '#find_status_grouping' do
     it 'retrieves the list grouping based on status_grouping_id' do
-      categories_response = {
-        categories: [
-          { list_id: primary_list_id, id: generic_group_id, title: 'Partner Status' }
-        ]
-      }
       stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories?count=100")
         .to_return(body: categories_response.to_json)
       account.status_grouping_id = generic_group_id
@@ -597,7 +606,8 @@ describe MailChimpAccount::Exporter do
         appeal_export.send(:export_appeal_contacts, [contact1.id, contact2.id], appeal.id)
       end
 
-      it 'exports appeal contacts' do
+      it 'exports appeal contacts to the appeal list' do
+        account.primary_list_id = '1e72b58b72'
         expect(appeal_export).to receive(:setup_webhooks)
         expect(account).to receive(:contacts_with_email_addresses)
           .with([contact1.id, contact2.id]) { [contact2] }

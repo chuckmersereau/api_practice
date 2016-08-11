@@ -56,7 +56,7 @@ class MailChimpAccount::Exporter
     else
       operations = batch.map do |params|
         { method: 'PUT',
-          path: "/lists/#{account.primary_list_id}/members/#{email_hash(params[:email_address])}",
+          path: "/lists/#{list_id}/members/#{email_hash(params[:email_address])}",
           body: params.to_json }
       end
       gb.batches.create(body: { operations: operations })
@@ -150,7 +150,7 @@ class MailChimpAccount::Exporter
   end
 
   def subscribe_member(params)
-    gb.lists(account.primary_list_id).members(email_hash(params[:email_address])).upsert(body: params)
+    gb.lists(list_id).members(email_hash(params[:email_address])).upsert(body: params)
   rescue Gibbon::MailChimpError => e
     raise LowerRetryWorker::RetryJobButNoRollbarError unless MailChimpAccount.invalid_email_error?(e)
   end
