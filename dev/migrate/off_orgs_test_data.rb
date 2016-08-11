@@ -25,7 +25,8 @@ end
 
 def build_org_account(user, organization)
   Person::OrganizationAccount.create!(person_id: user.id,
-                                      organization_id: organization.id)
+                                      organization_id: organization.id,
+                                      test_scene: true)
 end
 
 def build_account_list(user)
