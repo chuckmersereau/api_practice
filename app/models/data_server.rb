@@ -85,6 +85,8 @@ class DataServer
 
   def import_donors_from_csv(account_list, profile, csv, user)
     CSV.new(csv, headers: :first_row, header_converters: ->(h) { h.upcase }).each do |line|
+      next unless line['PEOPLE_ID']
+
       line['LAST_NAME'] = line['LAST_NAME_ORG']
       line['FIRST_NAME'] = line['ACCT_NAME'] if line['FIRST_NAME'].blank?
 
