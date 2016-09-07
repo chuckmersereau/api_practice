@@ -35,7 +35,7 @@
       <% if person.facebook_account %>
         <tr>
           <td class="meta_name"><a href="" class="icos ico_fb"></a></td>
-          <td class="meta_data"><%= link_to(person_exhibit.to_s, "http://facebook.com/profile.php?id=#{person.facebook_account.remote_id}", target: '_blank') %></td>
+          <td class="meta_data"><%= link_to(person_exhibit.to_s, person.facebook_account.url, target: '_blank') %></td>
         </tr>
       <% end %>
     </table>

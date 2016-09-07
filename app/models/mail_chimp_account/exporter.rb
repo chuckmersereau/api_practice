@@ -56,7 +56,7 @@ class MailChimpAccount::Exporter
     else
       operations = batch.map do |params|
         { method: 'PUT',
-          path: "/lists/#{account.primary_list_id}/members/#{email_hash(params[:email_address])}",
+          path: "/lists/#{list_id}/members/#{email_hash(params[:email_address])}",
           body: params.to_json }
       end
       gb.batches.create(body: { operations: operations })
@@ -150,9 +150,9 @@ class MailChimpAccount::Exporter
   end
 
   def subscribe_member(params)
-    gb.lists(account.primary_list_id).members(email_hash(params[:email_address])).upsert(body: params)
+    gb.lists(list_id).members(email_hash(params[:email_address])).upsert(body: params)
   rescue Gibbon::MailChimpError => e
-    raise unless MailChimpAccount.invalid_email_error?(e)
+    raise LowerRetryWorker::RetryJobButNoRollbarError unless MailChimpAccount.invalid_email_error?(e)
   end
 
   def add_status_groups(statuses)
@@ -177,8 +177,6 @@ class MailChimpAccount::Exporter
   end
 
   def cache_status_interest_ids
-    raise LowerRetryWorker::RetryJobButNoRollbarError if account.status_grouping_id.blank?
-
     interests = interest_categories(account.status_grouping_id).interests.retrieve['interests']
     interests = Hash[interests.map { |interest| [interest['name'], interest['id']] }]
     account.update_attribute(:status_interest_ids, interests)
@@ -222,8 +220,6 @@ class MailChimpAccount::Exporter
   end
 
   def cache_tags_interest_ids
-    raise LowerRetryWorker::RetryJobButNoRollbarError if account.tags_grouping_id.blank?
-
     interests = interest_categories(account.tags_grouping_id).interests.retrieve['interests']
     interests = Hash[interests.map { |interest| [interest['name'], interest['id']] }]
     account.update_attribute(:tags_interest_ids, interests)
@@ -261,10 +257,10 @@ class MailChimpAccount::Exporter
   end
 
   def find_grouping(id, name)
-    groupings = mc_list.interest_categories.retrieve['categories']
+    groupings = mc_list.interest_categories.retrieve(params: { 'count': '100' })['categories']
     groupings.find { |g| g['id'] == id } || groupings.find { |g| g['title'] == _(name) }
   rescue Gibbon::MailChimpError => e
-    raise e unless e.message.include?('code 211') # This list does not have interest groups enabled (code 211)
+    raise LowerRetryWorker::RetryJobButNoRollbarError unless e.message.include?('code 211') # This list does not have interest groups enabled (code 211)
     return nil
   end
 

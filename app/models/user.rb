@@ -17,6 +17,10 @@ class User < Person
 
   after_create :set_setup_mode
 
+  PERMITTED_ATTRIBUTES = Person::PERMITTED_ATTRIBUTES.deep_dup.concat([:time_zone, :locale, :setup, :contacts_filter,
+                                                                       :tasks_filter, :default_account_list,
+                                                                       :contacts_view_options, :tab_orders])
+
   # Queue data imports
   def queue_imports
     organization_accounts.each do |oa|
@@ -135,6 +139,11 @@ class User < Person
 
   def remove_access(account_list)
     account_list_users.where(account_list: account_list).find_each(&:destroy)
+  end
+
+  def contacts_filter=(hash)
+    old_value = contacts_filter || {}
+    super(old_value.merge(hash))
   end
 
   private

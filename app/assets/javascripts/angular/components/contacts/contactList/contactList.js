@@ -18,6 +18,7 @@
         vm.mapMarkers = [];
         vm.showAllFilterTags = false;
         vm.contactQuery = {};
+        vm.showMobileFilters = false;
 
         // A status of 'null' corresponds with '-- NONE --' in the html select
         var defaultFilters = {
@@ -76,6 +77,7 @@
         vm.anyContactIdsSelected = anyContactIdsSelected;
         vm.anyContactsOnPageSelected = anyContactsOnPageSelected;
         vm.noSelectedContacts = noSelectedContacts;
+        vm.toggleMobileFilters = toggleMobileFilters;
 
         vm._setupRefreshContacts = setupRefreshContacts;
         vm._buildContactFilterUrl = buildContactFilterUrl;
@@ -233,42 +235,44 @@
         }
 
         function loadViewPreferences() {
-            api.call('get', 'users/me', {})
-                .then(function (viewPrefs) {
-                    // Emit event to refresh contacts with saved filters
-                    filterChangeEventEmitter.next('init with save filters');
+            if (vm.contactQuery.wildcardSearch === null) {
+                api.call('get', 'users/me', {})
+                    .then(function (viewPrefs) {
+                        // Emit event to refresh contacts with saved filters
+                        filterChangeEventEmitter.next('init with save filters');
 
-                    vm.viewPrefsLoaded = true;
+                        vm.viewPrefsLoaded = true;
 
-                    if (!_.has(viewPrefs, 'user.preferences.contacts_filter[' + state.current_account_list_id + ']')) {
-                        return;
-                    }
+                        if (!_.has(viewPrefs, 'user.preferences.contacts_filter[' + state.current_account_list_id + ']')) {
+                            return;
+                        }
 
-                    // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
-                    _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
+                        // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
+                        _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
 
-                    if (_.isString(vm.contactQuery.tags)) {
-                        vm.contactQuery.tags = vm.contactQuery.tags.split(',');
-                    }
+                        if (_.isString(vm.contactQuery.tags)) {
+                            vm.contactQuery.tags = vm.contactQuery.tags.split(',');
+                        }
 
-                    openFilterPanels();
-                }, function (){
-                    // Emit event to refresh contacts with default filters since saved filters couldn't be loaded
-                    filterChangeEventEmitter.next('init');
-                });
+                        openFilterPanels();
+                    }, function () {
+                        // Emit event to refresh contacts with default filters since saved filters couldn't be loaded
+                        filterChangeEventEmitter.next('init');
+                    });
+            }else{
+                vm.viewPrefsLoaded = true;
+            }
         }
 
         function saveViewPreferences(){
             var viewPrefs = {
                 user: {
-                    preferences: {
-                        contacts_filter: {}
-                    }
+                    contacts_filter: {}
                 },
                 account_list_id: state.current_account_list_id
             };
-            viewPrefs.user.preferences.contacts_filter[state.current_account_list_id] = _.omit(vm.contactQuery, ['wildcardSearch']);
-            viewPrefs.user.preferences.contacts_filter[state.current_account_list_id].tags = vm.contactQuery.tags.join();
+            viewPrefs.user.contacts_filter[state.current_account_list_id] = _.omit(vm.contactQuery, ['wildcardSearch']);
+            viewPrefs.user.contacts_filter[state.current_account_list_id].tags = vm.contactQuery.tags.join();
 
             api.call('put', 'users/me', viewPrefs);
         }
@@ -333,7 +337,7 @@
         function resetFilters(){
             _.assign(vm.contactQuery, _.omit(_.cloneDeep(defaultFilters), 'limit'));
             clearSelectedContacts();
-            angular.element('#globalContactSearch').value = '';
+            angular.element('#globalContactSearch').val('');
         }
 
         function tagIsActive(tag){
@@ -515,6 +519,10 @@
             return _.map(vm.contacts, function(contact){
                 return contact.id;
             });
+        }
+
+        function toggleMobileFilters(){
+            vm.showMobileFilters = !vm.showMobileFilters;
         }
     }
 })();

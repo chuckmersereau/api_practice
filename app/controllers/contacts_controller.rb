@@ -11,25 +11,19 @@ class ContactsController < ApplicationController
     end
 
     @page_title = _('Contacts')
-
-    @filtered_contacts = filtered_contacts
     @appeals = current_account_list.appeals
 
     respond_to do |format|
-      format.html do
-        @contacts = @filtered_contacts.includes([{ primary_person: [:facebook_account, :primary_picture] },
-                                                 :tags, :primary_address,
-                                                 { people: :primary_phone_number }])
-
-        @contacts = @contacts.page(@view_options[:page].to_i > 0 ? @view_options[:page].to_i : 1).per_page(@view_options[:per_page].to_i > 0 ? @view_options[:per_page].to_i : 25)
-      end
+      format.html {}
 
       format.csv do
+        @filtered_contacts = filtered_contacts
         set_csv_xlsx_primary_emails_and_contacts
         render_csv("contacts-#{file_timestamp}")
       end
 
       format.xlsx do
+        @filtered_contacts = filtered_contacts
         set_csv_xlsx_primary_emails_and_contacts
         render xlsx: 'index', filename: "contacts-#{file_timestamp}.xlsx"
       end
