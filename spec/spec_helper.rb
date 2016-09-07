@@ -43,10 +43,10 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Base.establish_connection(:test)
 
 WebMock.disable_net_connect!(allow_localhost: true)
-Capybara.javascript_driver = :poltergeist
 Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, js_errors: false)
+  Capybara::Poltergeist::Driver.new(app, js_errors: false, timeout: 60)
 end
+Capybara.javascript_driver = :poltergeist
 
 Capybara.default_max_wait_time = 4
 
@@ -76,10 +76,10 @@ RSpec.configure do |config|
     stub_google_geocoder
   end
 
-  config.before(:each, js: true) do
-    page.driver.browser.url_blacklist = ['http://use.typekit.net']
-    Capybara.current_driver = Capybara.javascript_driver
-  end
+  # config.before(:each, js: true) do
+  #   page.driver.browser.url_blacklist = ['http://use.typekit.net']
+  #   Capybara.current_driver = Capybara.javascript_driver
+  # end
 
   # ## Mock Framework
   #
