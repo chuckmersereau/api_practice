@@ -42,8 +42,8 @@
                 <%= _('or match a filter you have set.') %>
                 <%= _('Try') %><a href="/tasks/new" class="add_task" data-remote="true">
                 <%= _('creating a new task') %></a>,
-                <a href="#" ng-click="$ctrl.resetFilters()"><%= _('resetting your filters') %></a><%= _(' or') %>
-                <a href="#" ng-click="$ctrl.filter.page = 'all'"><%= _('showing all tasks') %></a>.
+                <a ng-click="$ctrl.resetFilters()"><%= _('resetting your filters') %></a><%= _(' or') %>
+                <a ng-click="$ctrl.filter.page = 'all'"><%= _('showing all tasks') %></a>.
               </span>
             </div>
           </div>

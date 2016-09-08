@@ -34,3 +34,5 @@ env:
   matrix:
     - TEST_SUITE=1
     - TEST_SUITE=2
+addons:
+  postgresql: "9.4"

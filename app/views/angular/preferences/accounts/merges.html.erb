@@ -1,0 +1,18 @@
+<div ng-if="vm.preferences.data.mergeable_accounts.length == 0">
+  <p>
+    <i class="fa-warning fa"></i>
+    <%= _('You only have access to this account, so you cannot merge it with another one yet. '\
+          'Share this account with someone else first. Once they accept your share, you will be '\
+          'able to merge your accounts together.') %>
+  </p>
+</div>
+<div ng-if="vm.preferences.data.mergeable_accounts.length > 0">
+  <p>
+    <%= _('You are merging the account below into your currently selected account. Merges are irreversible. We recommend that you are logged into the primary account.') %></p>
+    <div class="form-group">
+      <select ng-options="account.id as account.name for account in vm.preferences.data.mergeable_accounts" ng-model="vm.preferences.selected_account_id" chosen>
+        <option style="display:none" value=""><%= _('Select an Account') %></option>
+      </select>
+      <button type="submit" ng-click="vm.merge()" ng-disabled="vm.saving" class="btn btn-primary btn-actionable">Merge&nbsp;<div class="btn-progress ng-hide" ng-show="vm.saving"><i class="fa fa-circle-o-notch fa-spin fa-fw"></i></div></button>
+    </div>
+</div>

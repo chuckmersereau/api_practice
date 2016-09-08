@@ -1,62 +1,75 @@
-angular.module('mpdxApp')
-    .factory('api', function ($rootScope, $http, $cacheFactory, _, $q, $log) {
-        var apiUrl = '/api/v1/';
-        var apiCache = $cacheFactory('api');
+(function() {
+  'use strict';
 
-        var factory = {
-            call: call,
-            get: get,
-            post: post,
-            encodeURLarray: encodeURLarray
-        };
+  angular
+    .module('mpdxApp')
+    .factory('api', api);
 
-        return factory;
+  api.$inject = ['$http', '$cacheFactory', '$log', '$q', '_'];
 
-        // This function supports both callbacks (successFn, errorFn) and returns a promise
-        // It would be preferred to use promises in the future
-        function call(method, url, data, successFn, errorFn, cache) {
-            if(cache === true){
-                var cachedData = apiCache.get(url);
-                if (angular.isDefined(cachedData)) {
-                    if(_.isFunction(successFn)) {
-                        successFn(cachedData, 304);
-                    }
-                    return $q.resolve(cachedData);
+  function api($http, $cacheFactory, $log, $q, _) {
+    var svc = this;
+    svc.apiUrl = '/api/v1/';
+    svc.apiCache = $cacheFactory('api');
+    svc.account_list_id = null;
+
+    // This function supports both callbacks (successFn, errorFn) and returns a promise
+    // It would be preferred to use promises in the future
+    svc.call = function (method, url, data, successFn, errorFn, cache, params) {
+        if(cache === true){
+            var cachedData = svc.apiCache.get(url);
+            if (angular.isDefined(cachedData)) {
+                if(_.isFunction(successFn)) {
+                    successFn(cachedData, 304);
                 }
+                return $q.resolve(cachedData);
             }
-            return $http({
-                method: method,
-                url: apiUrl + url,
-                data: data,
-                cache: false,
-                timeout: 50000
-            })
-                .then(function(response) {
-                    if(_.isFunction(successFn)){
-                        successFn(response.data, response.status);
-                    }
-                    if(cache === true){
-                        apiCache.put(url, response.data);
-                    }
-                    return response.data;
-                }, function(response) {
-                    $log.error('API ERROR:', response.status, response.data);
-                    if(_.isFunction(errorFn)){
-                        errorFn(response);
-                    }
-                    return $q.reject(response);
-                });
         }
+        if ( !data ) {
+          data = {};
+        }
+        if (svc.account_list_id !== null) {
+          data.account_list_id = svc.account_list_id;
+        }
+        if (method === 'get' || method === 'delete') {
+          params = data;
+        }
+        return $http({
+            method: method,
+            url: svc.apiUrl + url,
+            data: data,
+            params: params,
+            cache: false,
+            timeout: 50000
+        })
+            .then(function(response) {
+                if(_.isFunction(successFn)){
+                    successFn(response.data, response.status);
+                }
+                if(cache === true){
+                    svc.apiCache.put(url, response.data);
+                }
+                return response.data;
+            }, function(response) {
+                $log.error('API ERROR:', response.status, response.data);
+                if(_.isFunction(errorFn)){
+                    errorFn(response);
+                }
+                return $q.reject(response);
+            });
+    };
 
-        function get(url, data, successFn, errorFn, cache) {
-            return this.call('get', url, data, successFn, errorFn, cache);
-        }
+    svc.get = function (url, data, successFn, errorFn, cache) {
+        return svc.call('get', url, data, successFn, errorFn, cache);
+    };
+    svc.post = function (url, data, successFn, errorFn, cache) {
+        return svc.call('post', url, data, successFn, errorFn, cache);
+    };
 
-        function post(url, data, successFn, errorFn, cache) {
-            return this.call('post', url, data, successFn, errorFn, cache);
-        }
+    svc.encodeURLarray = function encodeURLarray(array){
+        return _.map(array, encodeURIComponent);
+    };
 
-        function encodeURLarray(array){
-            return _.map(array, encodeURIComponent);
-        }
-    });
+    return svc;
+  }
+})();

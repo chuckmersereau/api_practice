@@ -3,12 +3,10 @@
 <script type="text/ng-template" id="inline/contact_list.html">
   <% contact_instance = Contact.new %>
   <div class="row">
-    <div ng-class="$ctrl.showMobileFilters ? 'col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap show_mobile_filters' : 'col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap'">
+    <div class="col-md-3 col-sm-12 hidden-sm hidden-xs mobile_filters_wrap">
       <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
-        <span ng-click="$ctrl.toggleMobileFilters()" class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
-        <a href="#"
-           ng-click="$ctrl.resetFilters()"
-           class="btn btn-primary btn-xs btn-block btn-filter-left btn-filter-fullscreen ng-cloak"
+        <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
+        <a href="javascript:;" ng-click="$ctrl.resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
            ng-if="!$ctrl.isEmptyFilter()"
            onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
           <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
@@ -202,7 +200,7 @@
                 </li>
                 <li class="controls">
                 <li class="controls">
-                  <a href="#" ng-click="$ctrl.mapContacts()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Map These Contacts']);"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
+                  <a ng-click="$ctrl.mapContacts()" class="btn btn-default btn-xs" onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Map These Contacts']);"><i class="fa fa-map-marker"></i> <%= _('Map These Contacts') %></a>
                 </li>
               </ul>
             </form>
@@ -212,19 +210,17 @@
               <li ng-class="{'selected': $ctrl.insightFilterIsActive()}">
                 <span class="left_filters menu_item"><%= _('Insights') %></span>
                 <p style="text-indent:40px">
-                  <a href="" ng-click="$ctrl.runInsight('recommendations')"
+                  <a ng-click="$ctrl.runInsight('recommendations')"
                      onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Increase Recommendations']);">
                     <%= _('Increase Recommendations') %>
                   </a>
                 </p>
               </li>
               <li class="controls" ng-if="$ctrl.insightFilterIsActive()">
-                <a href="" ng-click="$ctrl.clearInsightFilter()" class="btn"><%= _('Clear Insight Filter') %></a>
+                <a ng-click="$ctrl.clearInsightFilter()" class="btn"><%= _('Clear Insight Filter') %></a>
               </li>
           <% end %>
-          <a href="#"
-             ng-click="$ctrl.resetFilters()"
-             class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
+          <a ng-click="$ctrl.resetFilters()" class="btn btn-primary btn-xs btn-block btn-filter-left ng-cloak"
              ng-if="!$ctrl.isEmptyFilter()"
              onClick="_gaq.push(['_trackEvent', 'Contacts Events', 'Filter', 'Reset Filters']);">
             <i class="fa fa-undo"></i> <%= _('Reset Filters') %>
@@ -239,7 +235,7 @@
           <div class="page-filters">
             <div class="row">
               <div class="col-xs-2 col-sm-2 col-xs-3 hidden-md hidden-lg">
-                <a ng-click="$ctrl.toggleMobileFilters()" class="btn btn-default btn-secondary toggle-mobile-filters"><i class="fa fa-bars"></i> Filters</a>
+                <a class="btn btn-default btn-secondary toggle-mobile-filters"><i class="fa fa-bars"></i> Filters</a>
               </div>
 
               <div class="col-md-7 col-sm-5 col-xs-9">
@@ -261,7 +257,7 @@
                 <div class="btn-group">
                   <div class="btn-group">
                     <div class="dropdown">
-                      <a href="#" class="btn btn-default dropdown-toggle"
+                      <a class="btn btn-default dropdown-toggle"
                          onclick="_gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'Bulk Actions']);"
                          type="button" data-toggle="dropdown" aria-expanded="true">
                         <%= _('Actions') %> <span class="caret"></span>
@@ -294,20 +290,20 @@
                 <span class="previous_page disabled" ng-if="$ctrl.contactQuery.page === 1">
                   <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
                 </span>
-                <a class="previous_page" rel="prev start" href="#" ng-click="$ctrl.contactQuery.page = $ctrl.contactQuery.page - 1" ng-if="$ctrl.contactQuery.page > 1">
+                <a class="previous_page" rel="prev start" ng-click="$ctrl.contactQuery.page = $ctrl.contactQuery.page - 1" ng-if="$ctrl.contactQuery.page > 1">
                   <i class="fa fa-chevron-left"></i> <%= _('Previous') %>
                 </a>
 
                 <span ng-repeat="n in [1, $ctrl.pageMeta.total] | makeRange">
                   <em class="current" ng-if="n === $ctrl.contactQuery.page">{{n}}</em>
-                  <a rel="next" ng-if="n !== $ctrl.contactQuery.page && ((n > ($ctrl.contactQuery.page-5) && n < ($ctrl.contactQuery.page+5)) || n === 1 || n === $ctrl.pageMeta.total)" href="#" ng-click="$ctrl.contactQuery.page=n">{{n}}</a>
+                  <a rel="next" ng-if="n !== $ctrl.contactQuery.page && ((n > ($ctrl.contactQuery.page-5) && n < ($ctrl.contactQuery.page+5)) || n === 1 || n === $ctrl.pageMeta.total)" ng-click="$ctrl.contactQuery.page=n">{{n}}</a>
                   <span ng-if="(n === 2 && $ctrl.contactQuery.page > 6) || (n === $ctrl.pageMeta.total - 1 && $ctrl.contactQuery.page < $ctrl.pageMeta.total - 5)">...</span>
                 </span>
 
                 <span class="next_page disabled" ng-if="$ctrl.contactQuery.page === $ctrl.pageMeta.total || $ctrl.pageMeta.total === 0">
                   <%= _('Next') %> <i class="fa fa-chevron-right"></i>
                 </span>
-                <a class="next_page" rel="next" href="#" ng-click="$ctrl.contactQuery.page = $ctrl.contactQuery.page+1" ng-if="$ctrl.contactQuery.page < $ctrl.pageMeta.total">
+                <a class="next_page" rel="next" ng-click="$ctrl.contactQuery.page = $ctrl.contactQuery.page+1" ng-if="$ctrl.contactQuery.page < $ctrl.pageMeta.total">
                   <%= _('Next') %> <i class="fa fa-chevron-right"></i>
                 </a>
               </span>
@@ -330,7 +326,7 @@
               </p>
               <p>
                 <% if current_account_list.contacts.any? %>
-                    <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-primary"><%= _('Reset All Search Filters') %></a>
+                    <a ng-click="$ctrl.resetFilters()" class="btn btn-primary"><%= _('Reset All Search Filters') %></a>
                 <% else %>
                     <%= link_to(_('Import Contacts'), "/accounts", class: 'btn btn-primary') %>
                 <% end %>

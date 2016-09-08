@@ -58,6 +58,13 @@
 //= require angular-localforage/dist/angular-localForage
 //= require angular-ui-bootstrap/dist/ui-bootstrap
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
+//= require angular-ui-router/release/angular-ui-router
+//= require chosen-jquery
+//= require checklist-model/checklist-model
+//= require angular-chosen-localytics/dist/angular-chosen
+//= require angular-sanitize/angular-sanitize
+//= require ng-csv/build/ng-csv
+//= require ng-tags-input/build/ng-tags-input
 //= require lodash/lodash
 //= require moment/moment
 //= require moment-range/dist/moment-range

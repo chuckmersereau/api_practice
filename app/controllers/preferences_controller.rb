@@ -1,8 +1,6 @@
 class PreferencesController < ApplicationController
   def index
-    @page_title = _('Preferences')
-
-    @preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list)
+    @page_title = _('{{title}}')
   end
 
   def update

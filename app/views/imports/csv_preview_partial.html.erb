@@ -13,7 +13,7 @@
         contact.mailing_address.master_address_id = 0
 
         # this causes the people to be validated in the check below
-        contact.people = [contact.primary_person, contact.spouse].compact 
+        contact.people = [contact.primary_person, contact.spouse].compact
       %>
       <% if !contact.valid? %>
         <% any_invalid = true %>
@@ -135,7 +135,7 @@
       <% unless any_invalid %>
         <%= _('Current file: ') + @import.read_attribute(:file) %><br>
         <%= f.hidden_field :in_preview %>
-        <a href="#" class="btn btn-xs btn-default" data-behavior="run_previewed_import"><%= _('Run Import') %></a>
+        <a class="btn btn-xs btn-default" data-behavior="run_previewed_import"><%= _('Run Import') %></a>
         <br><br>
       <% end %>
 

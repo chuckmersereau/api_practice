@@ -3,6 +3,7 @@ class PreferenceSet
   extend ActiveModel::Naming
   include ActiveModel::Conversion
   include ActiveModel::Validations
+  include ActiveModel::SerializerSupport
 
   attr_reader :user, :account_list
 
@@ -12,12 +13,14 @@ class PreferenceSet
     @account_list = attributes[:account_list]
 
     attributes[:first_name] ||= @user.first_name
+    attributes[:last_name] ||= @user.last_name
     attributes[:email] ||= @user.email.try(:email)
     super
   end
 
   # User preferences
   attribute :first_name, String, default: -> (preference_set, _attribute) { preference_set.user.first_name }
+  attribute :last_name, String, default: -> (preference_set, _attribute) { preference_set.user.last_name }
   attribute :email, String, default: -> (preference_set, _attribute) { preference_set.user.email }
   attribute :time_zone, String, default: -> (preference_set, _attribute) { preference_set.user.time_zone }
   attribute :locale, String, default: -> (preference_set, _attribute) { preference_set.user.locale }
@@ -112,7 +115,7 @@ class PreferenceSet
   end
 
   def persist!
-    user.update_attributes(first_name: first_name, email: email, time_zone: time_zone,
+    user.update_attributes(first_name: first_name, last_name: last_name, email: email, time_zone: time_zone,
                            locale: locale, default_account_list: default_account_list, setup: setup_array)
     account_list.update(monthly_goal: monthly_goal, tester: tester, home_country: home_country,
                         currency: currency, name: account_list_name,
