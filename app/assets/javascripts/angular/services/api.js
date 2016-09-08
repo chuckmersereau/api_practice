@@ -5,9 +5,9 @@
     .module('mpdxApp')
     .factory('api', api);
 
-  api.$inject = ['$http', '$cacheFactory', '$log', '$q'];
+  api.$inject = ['$http', '$cacheFactory', '$log', '$q', '_'];
 
-  function api($http, $cacheFactory, $log, $q) {
+  function api($http, $cacheFactory, $log, $q, _) {
     var svc = this;
     svc.apiUrl = '/api/v1/';
     svc.apiCache = $cacheFactory('api');
@@ -25,7 +25,7 @@
                 return $q.resolve(cachedData);
             }
         }
-        if (data === undefined) {
+        if ( !data ) {
           data = {};
         }
         if (svc.account_list_id !== null) {
@@ -68,7 +68,7 @@
 
     svc.encodeURLarray = function encodeURLarray(array){
         return _.map(array, encodeURIComponent);
-    }
+    };
 
     return svc;
   }
