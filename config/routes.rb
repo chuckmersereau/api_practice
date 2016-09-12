@@ -31,7 +31,7 @@ Rails.application.routes.draw do
   # old preferences routes (SEO and external link upkeep)
   get '/preferences', to: redirect('preferences/personal'), as: :preferences
   get '/notifications', to: redirect('preferences/notifications'), as: :notifications
-  get '/accounts', to: redirect('preferences/networks'), as: :accounts
+  get '/accounts', to: redirect('preferences/integrations/organization'), as: :accounts
 
   resources :preferences do
     collection do

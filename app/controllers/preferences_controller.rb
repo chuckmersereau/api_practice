@@ -1,6 +1,8 @@
 class PreferencesController < ApplicationController
   def index
     @page_title = _('{{title}}')
+
+    redirect_to integration_preferences_tab_path('organization') if params[:path] == '/networks'
   end
 
   def update

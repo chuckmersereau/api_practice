@@ -2,5 +2,5 @@
   $('#org_connection_box').html('<%= j(spinner(visible: true)) %>');
   document.location = '<%= setup_path(:org_accounts) %>';
 <% else %>
-  document.location = '<%= accounts_path %>'
+  document.location = '<%= integration_preferences_tab_path('organization') %>'
 <% end %>
