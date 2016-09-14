@@ -11,7 +11,6 @@ MPDX is an online tool designed to help you maintain and improve your relationsh
 
 * Ruby version corresponding to the version in file `.ruby-version`
 * PostgreSQL
-* Memcached
 * Redis
 * npm
 
@@ -71,16 +70,6 @@ Use a [TheKey.me](http://thekey.me/) or Relay account to login.
 When you login for the first time you'll be asked to connect your user account to an organization. For dev purposes you can use the Toontown organization. To connect to Toontown you'll need to enter a username and password, please ask for it. Connecting to the Toontown org will allow your dev machine to import fake data for dev purposes.
 
 After you login successfully the sidekiq process should begin importing your fake account data. If you don't see any data make sure that sidekiq is running without errors.
-
-
-## Local development VM via Vagrant
-
-To setup a virtual machine with all of the MPDX dependencies, install
-[VirtualBox](https://www.virtualbox.org/) and [Vagrant](https://www.vagrantup.com/). Set local environment variables for `SIDEKIQ_USER` and `SIDEKIQ_PASS` then in the mpdx directory run `vagrant up`. That will create a local MPDX VM.
-
-To run the server run `vagrant ssh` then `rails server`. To view it, go to your machine and visit `localhost:3000`.
-
-To run sidekiq (background jobs processor), open a new terminal tab, run `vagrant ssh` again then run `bundle exec sidekiq`.
 
 
 ## Testing
