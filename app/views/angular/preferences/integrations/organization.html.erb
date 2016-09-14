@@ -19,22 +19,24 @@
             </span>
           </span>
           <div ng-show="account.api_class == 'OfflineOrg'" class="importoptions formstyles" data-behavior="org_import_options">
-            <%= _('Import TNTConnect DataSync file') %>
-            <%= form_for Import.new(source: 'tnt_data_sync') do |f| %>
-              <%= f.hidden_field :source %>
-              <%= f.hidden_field :source_account_id, 'ng-value' => 'vm.account_list_id' %>
+            <a ng-click="account.tntImportToggle = !account.tntImportToggle"><%= _('Import TNTConnect DataSync file') %></a>
+            <div ng-show="account.tntImportToggle">
+              <%= form_for Import.new(source: 'tnt_data_sync') do |f| %>
+                <%= f.hidden_field :source %>
+                <%= f.hidden_field :source_account_id, 'ng-value' => 'vm.account_list_id' %>
 
-              <div class="field">
-                <%= f.file_field :file, class: 'form-control' %>
-                <%= f.hidden_field :file_cache %>
-              </div>
-              <div class="hint">
-                <%= _('Note: this file should be in a TntMPD data sync (.tntmpd) text file from your organization, not your local TntMPD database file (.mpddb). To import your local Tnt database, click "Import Contacts" below next to the TntMPD logo.') %><br />
-              </div>
-              <div class="text-right">
-                <%= f.submit _('Import'), class: 'btn btn-secondary' %>
-              </div>
-            <% end %>
+                <div class="field">
+                  <%= f.file_field :file, class: 'form-control' %>
+                  <%= f.hidden_field :file_cache %>
+                </div>
+                <div class="hint">
+                  <%= _('Note: this file should be in a TntMPD data sync (.tntmpd) text file from your organization, not your local TntMPD database file (.mpddb). To import your local Tnt database, click "Import Contacts" below next to the TntMPD logo.') %><br />
+                </div>
+                <div class="text-right">
+                  <%= f.submit _('Import'), class: 'btn btn-secondary' %>
+                </div>
+              <% end %>
+            </div>
           </div>
         </div>
       </div>
