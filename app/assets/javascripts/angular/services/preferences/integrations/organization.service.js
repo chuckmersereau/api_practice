@@ -5,9 +5,9 @@
     .module('mpdxApp')
     .factory('preferences.integrations.organizationService', organizationService);
 
-  organizationService.$inject = ['api'];
+  organizationService.$inject = ['$rootScope', 'api'];
 
-  function organizationService(api) {
+  function organizationService($rootScope, api) {
     var svc = {};
     svc.data = {};
     svc.loading = true;
@@ -73,6 +73,15 @@
                 error
               );
     };
+
+    svc.account_list_id = api.account_list_id;
+
+    svc.account_list_id_watcher = $rootScope.$watch(function() {
+      return api.account_list_id;
+    }, function watchCallback() {
+      svc.account_list_id = api.account_list_id;
+      svc.load();
+    });
 
     svc.load();
     svc.loadOrganizations();

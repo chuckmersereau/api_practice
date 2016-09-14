@@ -17,6 +17,7 @@
     vm.selected = null;
     vm.username = null;
     vm.password = null;
+    vm.account_list_id = organizationService.account_list_id;
 
     vm.save = function () {
       vm.saving = true;
