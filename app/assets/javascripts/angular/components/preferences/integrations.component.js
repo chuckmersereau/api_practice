@@ -61,6 +61,11 @@
       vm.preferences.load();
     };
 
+    vm.sendToChalkline = function() {
+      vm.preferences.sendToChalkline();
+      $window.open('http://www.chalkline.org/order_mpdx.html','_blank');
+    };
+
     $window.openerCallback = vm.reload;
 
     vm.setTab = function(service) {

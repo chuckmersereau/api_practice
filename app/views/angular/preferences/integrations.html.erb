@@ -270,7 +270,7 @@
                   <%= _('Clicking "Send Paper Newsletter List" will email Chalkline your newsletter list and open their order form in a new tab') %>
                 </div>
                 <p><%= _('Chalkline is a great way of sending a variety of touch cards to your supporters.') %></p>
-                <%= link_to _('Send Paper Newsletter List'), '#', id: 'chalkline_send_list', class: 'btn btn-secondary' %>
+                <%= link_to _('Send Paper Newsletter List'), '', class: 'btn btn-secondary', 'ng-click' => 'vm.sendToChalkline()' %>
               </div>
             </div>
           </div>
