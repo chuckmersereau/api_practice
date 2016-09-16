@@ -1,4 +1,6 @@
 module ContactsHelper
+  COMMITMENT_AMOUNT_INDEX = 12
+
   def spreadsheet_header_titles
     [_('Contact Name'), _('First Name'), _('Last Name'), _('Spouse First Name'), _('Greeting'), _('Envelope Greeting'),
      _('Mailing Street Address'), _('Mailing City'), _('Mailing State'), _('Mailing Postal Code'), _('Mailing Country'), _('Status'),
@@ -14,7 +16,10 @@ module ContactsHelper
   end
 
   def type_array
-    Array.new(spreadsheet_header_titles.count, :string)
+    a = Array.new(spreadsheet_header_titles.count, :string)
+    # Commitment Amount is a number
+    a[COMMITMENT_AMOUNT_INDEX] = :float
+    a
   end
 
   private
