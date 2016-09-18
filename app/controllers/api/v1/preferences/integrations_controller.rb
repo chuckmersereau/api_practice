@@ -1,4 +1,9 @@
 class Api::V1::Preferences::IntegrationsController < Api::V1::Preferences::BaseController
+  def send_to_chalkline
+    current_account_list.async_send_chalkline_list
+    render text: 'OK'
+  end
+
   protected
 
   def load_preferences

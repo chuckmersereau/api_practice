@@ -30,6 +30,10 @@
       }
     };
 
+    svc.sendToChalkline = function(success, error) {
+      return api.call('post', 'preferences/integrations/send_to_chalkline', { }, success, error);
+    };
+
     svc.disconnect = function (service, success, error, id) {
       service = service.toLowerCase();
       if(service == 'google') {

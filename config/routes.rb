@@ -63,7 +63,11 @@ Rails.application.routes.draw do
       resources :progress, only: [:index]
       namespace :preferences do
         resources :notifications, only: :index
-        resources :integrations, only: :index
+        resources :integrations, only: :index do
+          collection do
+            post :send_to_chalkline
+          end
+        end
         resources :imports, only: [:index, :create]
         resources :personal, only: :index
         resources :accounts, only: :index
@@ -161,7 +165,6 @@ Rails.application.routes.draw do
       post :merge
       get  :find_duplicates
       put :not_duplicates
-      post :send_to_chalkline
       get :add_multi
       post :save_multi
       get :mailing
