@@ -23,7 +23,7 @@
             <div ng-show="account.tntImportToggle">
               <%= form_for Import.new(source: 'tnt_data_sync') do |f| %>
                 <%= f.hidden_field :source %>
-                <%= f.hidden_field :source_account_id, 'ng-value' => 'vm.account_list_id' %>
+                <%= f.hidden_field :source_account_id, 'ng-value' => 'account.id' %>
 
                 <div class="field">
                   <%= f.file_field :file, class: 'form-control' %>
