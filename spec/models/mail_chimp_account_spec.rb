@@ -263,7 +263,7 @@ describe MailChimpAccount do
 
     it 'notifies user and clears primary_list_id if required merge field missing' do
       account.save
-      msg = 'MMERGE3 must be provided - Please enter a value (code 250)'
+      msg = 'Your merge fields were invalid.'
 
       email = double
       expect(AccountMailer).to receive(:mailchimp_required_merge_field)

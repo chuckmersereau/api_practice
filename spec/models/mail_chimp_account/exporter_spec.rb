@@ -5,6 +5,7 @@ describe MailChimpAccount::Exporter do
   let(:primary_list_id_2) { '29a77ba541' }
   let(:generic_group_id) { 'a2be97f1fe' }
   let(:account_list) { create(:account_list) }
+  let(:account_list_user) { create(:user, account_lists: [account_list], email_addresses: [build(:email_address)]) }
   let(:account) { MailChimpAccount.create(api_key: 'fake-us4', primary_list_id: primary_list_id, account_list: account_list) }
   let(:api_prefix) { 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0' }
   let(:appeal) { create(:appeal, account_list: account_list) }
@@ -509,6 +510,13 @@ describe MailChimpAccount::Exporter do
   end
 
   context '#list_batch_subscribe' do
+    let(:some_params) do
+      {
+        status_if_new: 'subscribed', email_address: 'j@t.co',
+        merge_fields: { EMAIL: 'j@t.co', FNAME: 'John', LNAME: 'Doe', GREETING: 'Hi' }
+      }
+    end
+
     it 'subscribes a single member with a single API call' do
       contact = create(:contact, :with_tags, status: 'Partner - Special', greeting: 'Hi')
       person = create(:person, first_name: 'John', last_name: 'Doe')
@@ -535,10 +543,6 @@ describe MailChimpAccount::Exporter do
     end
 
     it 'does not error if the subscribe request gives an invalid email err' do
-      params = {
-        status_if_new: 'subscribed', email_address: 'j@t.co',
-        merge_fields: { EMAIL: 'j@t.co', FNAME: 'John', LNAME: 'Doe', GREETING: 'Hi' }
-      }
       subscribe_request =
         stub_request(:put, "#{api_prefix}/lists/#{primary_list_id}/members/47f62523d9b40ad2176baf884072aca5")
         .to_return(status: 400, body: {
@@ -546,8 +550,24 @@ describe MailChimpAccount::Exporter do
         }.to_json)
 
       expect do
-        export.list_batch_subscribe([params])
+        export.list_batch_subscribe([some_params])
       end.to_not raise_error
+
+      expect(subscribe_request).to have_been_requested
+    end
+
+    it 'sends an email if the subscribe request gives a merge_field error' do
+      subscribe_request =
+        stub_request(:put, "#{api_prefix}/lists/#{primary_list_id}/members/47f62523d9b40ad2176baf884072aca5")
+        .to_return(status: 400, body: {
+          detail: 'Your merge fields were invalid.'
+        }.to_json)
+
+      account_list_user
+
+      expect do
+        export.list_batch_subscribe([some_params])
+      end.to change { ActionMailer::Base.deliveries.count }
 
       expect(subscribe_request).to have_been_requested
     end
