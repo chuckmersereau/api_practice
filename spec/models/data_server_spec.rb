@@ -176,6 +176,17 @@ describe DataServer do
       expect(@data_server).to receive(:add_or_update_person)
       @data_server.send(:add_or_update_spouse, create(:account_list), '', create(:donor_account))
     end
+    it 'should put the spouse last name correctly if it downloads a blank SP_LAST_NAME' do
+      adams_line = { 'PEOPLE_ID' => '11111', 'ACCT_NAME' => 'Adams, Tim and Leah', 'ADDR1' => '123 mi casa blvd.', 'CITY' => 'Colima', 'STATE' => 'COL',
+                     'ZIP' => '456788', 'PHONE' => '(52) 45 456-5678', 'COUNTRY' => 'MEX', 'FIRST_NAME' => 'Tim', 'MIDDLE_NAME' => '', 'TITLE' => 'Mr',
+                     'SUFFIX' => '', 'SP_LAST_NAME' => '', 'SP_FIRST_NAME' => 'Leah', 'SP_MIDDLE_NAME' => '', 'SP_TITLE' => 'Mrs', 'ADDR2' => '', 'ADDR3' => '',
+                     'ADDR4' => '', 'ADDR_CHANGED' => '8/15/2003', 'PHONE_CHANGED' => '8/15/2003', 'CNTRY_DESCR' => '', 'PERSON_TYPE' => 'O',
+                     'LAST_NAME' => 'Adams', 'SP_SUFFIX' => '' }
+      al = create(:account_list)
+      @data_server.send(:add_or_update_spouse, al, adams_line, create(:donor_account))
+      person = Person.where(first_name: 'Leah').last
+      expect(person.last_name).to eql('Adams')
+    end
 
     describe 'add or update a company' do
       let(:line) do

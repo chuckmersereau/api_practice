@@ -156,7 +156,17 @@ GEM
       rack (>= 1.0.0)
       rack-test (>= 0.5.4)
       xpath (~> 2.0)
+    capybara-angular (0.2.3)
+      capybara (>= 2.5.0)
+    capybara-screenshot (1.0.13)
+      capybara (>= 1.0, < 3)
+      launchy
     charlock_holmes (0.7.3)
+    choice (0.2.0)
+    chosen-rails (1.5.2)
+      coffee-rails (>= 3.2)
+      railties (>= 3.0)
+      sass-rails (>= 3.2)
     cliver (0.3.2)
     cloudinary (1.1.0)
       aws_cf_signer
@@ -531,10 +541,9 @@ GEM
     phonelib (0.5.4)
     po_to_json (1.0.0)
       json (>= 1.6.0)
-    poltergeist (1.9.0)
+    poltergeist (1.10.0)
       capybara (~> 2.1)
       cliver (~> 0.3.1)
-      multi_json (~> 1.0)
       websocket-driver (>= 0.2.0)
     powerpack (0.1.1)
     pry (0.10.1)
@@ -573,6 +582,11 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.1.14.2)
       sprockets-rails (~> 2.0)
+    rails-erd (1.4.6)
+      activerecord (>= 3.2)
+      activesupport (>= 3.2)
+      choice (~> 0.2.0)
+      ruby-graphviz (~> 1.2)
     rails-footnotes (4.1.7)
       rails (>= 3.2)
     rails_autolink (1.1.6)
@@ -657,6 +671,7 @@ GEM
       rainbow (>= 1.99.1, < 3.0)
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
+    ruby-graphviz (1.2.2)
     ruby-progressbar (1.7.5)
     ruby-rtf (0.0.1)
     ruby_parser (3.7.1)
@@ -715,6 +730,7 @@ GEM
       json (~> 1.8)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.0)
+    simplecov-lcov (0.5.0)
     sinatra (1.4.6)
       rack (~> 1.4)
       rack-protection (~> 1.4)
@@ -782,7 +798,7 @@ GEM
     webmock (1.21.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-    websocket-driver (0.6.3)
+    websocket-driver (0.6.4)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.2)
     wicked (1.0.3)
@@ -812,8 +828,12 @@ DEPENDENCIES
   better_errors
   binding_of_caller
   bluepill
+  capybara
+  capybara-angular
+  capybara-screenshot
   carrierwave!
   charlock_holmes
+  chosen-rails (~> 1.5.2)
   cloudinary
   coffee-rails (~> 4.0.1)
   country_select!
@@ -822,7 +842,7 @@ DEPENDENCIES
   deadlock_retry (~> 1.2.0)
   devise (~> 3.2.2)
   display_case (= 0.0.5)
-  dotenv-rails
+  dotenv-rails (~> 2.0.2)
   email_reply_parser
   email_validator
   emoji_spec!
@@ -881,7 +901,7 @@ DEPENDENCIES
   peek-redis
   pg (~> 0.18.2)
   phonelib (~> 0.5.4)
-  poltergeist
+  poltergeist (~> 1.10.0)
   pry-byebug
   pry-rails
   puma
@@ -889,6 +909,7 @@ DEPENDENCIES
   rack-livereload
   railroady
   rails (~> 4.1.14)
+  rails-erd
   rails-footnotes
   rails_autolink (~> 1.1.5)
   rake
@@ -918,6 +939,7 @@ DEPENDENCIES
   siebel_donations (~> 1.0.6)
   silencer
   simplecov
+  simplecov-lcov
   sinatra
   slim
   snail

@@ -13,6 +13,10 @@ class ApplicationController < ActionController::Base
     impersonator_user || current_user
   end
 
+  def close
+    render layout: false
+  end
+
   private
 
   def impersonator_user

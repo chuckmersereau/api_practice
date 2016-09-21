@@ -11,13 +11,17 @@ class NotificationType::LargerGift < NotificationType
     return unless contact.pledge_frequency && contact.pledge_amount
 
     if contact.pledge_frequency < 1
-      return contact.last_donation.present? && contact.last_donation.amount > contact.pledge_amount
+      return contact.last_donation.present? && contact.amount_with_gift_aid(contact.donations
+                                                                                   .without_gift_aid
+                                                                                   .first.amount) > contact.pledge_amount
     end
-
+    
     return if long_time_frame_gift_given_early?(contact)
 
-    contact.monthly_avg_current > contact.monthly_pledge &&
-      contact.monthly_avg_with_prev_gift > contact.monthly_pledge &&
+    monthly_avg_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_current(except_payment_method: Donation::GIFT_AID))
+    monthly_avg_with_prev_gift_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_with_prev_gift)
+    monthly_avg_without_gift_aid > contact.monthly_pledge &&
+      monthly_avg_with_prev_gift_without_gift_aid > contact.monthly_pledge &&
       !caught_up_earlier_months?(contact)
   end
 
@@ -25,7 +29,8 @@ class NotificationType::LargerGift < NotificationType
     return unless contact.prev_month_donation_date
     from_date = contact.prev_month_donation_date << 1
     while from_date >= [Date.today << 12, contact.first_donation_date].compact.max
-      return true if contact.monthly_avg_from(from_date) == contact.monthly_pledge
+      monthly_avg_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_from(from_date, except_payment_method: Donation::GIFT_AID))
+      return true if monthly_avg_without_gift_aid == contact.monthly_pledge
       from_date <<= contact.pledge_frequency
     end
   end

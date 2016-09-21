@@ -66,15 +66,6 @@ $ ->
           location.reload(true)
 
     if $('#contacts_index')[0]?
-
-      # quick search for contact
-      $('#contact_name').autocomplete({
-        source: account_contacts_json,
-        select: (event, ui) ->
-          document.location = '/contacts/' + ui.item.id
-          false
-      })
-
       # Actions
       $(document).on 'click', '[data-behavior=add_tag_to_list]', ->
         $('#add_tag_modal #add_tag_contact_ids').val($.mpdx.getSelectedContactIds())
@@ -466,7 +457,7 @@ $.mpdx.getSelectedContactIds = ->
   $('#selected_ids').val()
 
 $.mpdx.loadTabData = (hash) ->
-  hash ||= window.location.hash || $('#contact .ui-tabs-anchor').first().attr('href')
+  hash ||= window.location.hash || '#' + $('#contact .ui-tabs-anchor').first().attr('href').split('#').pop()
   switch hash
     when '#details-tab'
       $.mpdx.loadContactDetails()
@@ -541,4 +532,3 @@ $.mpdx.saveContactTags = (tags, contactId) ->
       lastSaveTagsValue = tags
       return
   return
-

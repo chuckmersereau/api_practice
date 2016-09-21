@@ -7,10 +7,10 @@
         });
 
     appealsListController.$inject = [
-        '$scope', '$uibModal', 'api', 'state', '_', '$window', '__', '$timeout', '$'
+        '$scope', '$uibModal', 'api', 'state', '_', '$window', '__', '$timeout', '$', 'railsConstants'
     ];
 
-    function appealsListController($scope, $uibModal, api, state, _, $window, __, $timeout, $) {
+    function appealsListController($scope, $uibModal, api, state, _, $window, __, $timeout, $, railsConstants) {
         var refreshAppeals = function(callback){
             api.call('get','appeals?account_list_id=' + (state.current_account_list_id || ''), {}, function(data) {
                 $scope.appeals = data.appeals;
@@ -24,7 +24,7 @@
         function donationAggregates(donations) {
             var amounts = _.chain(donations)
             .map('converted_amount')
-            .reject(function(n) {return !n})
+            .reject(function(n) {return !n;})
             .value();
             var sum = _.sumBy(amounts, _.toNumber);
             return {sum: sum, average: sum/amounts.length};
@@ -62,7 +62,7 @@
                 templateUrl: '/templates/appeals/wizard.html',
                 size: 'lg',
                 controller: ['$scope', '$uibModalInstance', function($scope, $uibModalInstance){
-                    $scope.contactStatuses = $window.railsConstants.contact.ACTIVE_STATUSES;
+                    $scope.contactStatuses = railsConstants.contact.ACTIVE_STATUSES;
 
                     var defaultValidStatuses = {};
                     angular.forEach($scope.contactStatuses, function(status){

@@ -11,7 +11,6 @@ describe PreferencesController do
     it 'gets the index' do
       get :index
       expect(response).to be_success
-      expect(assigns(:preference_set).user).to eq(user)
     end
   end
 

@@ -25,14 +25,13 @@ working on):
     $> git checkout -b 325-add-japanese-translations
 
 
-### 3. Create database.yml, config.yml and cloudinary.yml
+### 3. Follow setup steps in README.md
 
-In the config folder, copy database.example.yml to database.yml,
-config.example.yml to config.yml and cloudinary.example.yml to
-cloudinary.yml. Edit the new files and
-fill in the required values. In config.yml, `encryption_key` and
-`itg_auth_key` can both be random values that you make up. The
-rest should be real credentials for the corresponding service.
+The readme contains requirements and steps for setting up your local development environment.
+
+If something in the readme is wrong or missing please submit an issue or PR to help fix it!
+
+https://github.com/CruGlobal/mpdx/blob/master/README.md
 
 
 ### 4. Get the test suite running
@@ -43,30 +42,17 @@ we pride ourselves on writing well tested code. I hope you do too :)
 
 MPDX uses rspec for it's test suite.
 
-Make sure you have a recent version of bundler:
+Most of the tests can be run with this command, see the readme for more details:
 
-    $> gem install bundler
+    $> bin/rspec spec
 
-Then install the development the development dependencies:
-
-    $> bundle install
-
-Make sure the database specified in database.yml exists, then run:
-
-    $> bundle exec rake db:migrate
-    $> bundle exec rake db:migrate RAILS_ENV=test
-    
-Make sure memcached and redis are running
-
-Now you should be able to run the entire suite using:
-
-    $> bundle exec rspec spec
-
-MPDX also includes the `guard` gem, so if you like continous testing during development, run:
+MPDX also includes the `guard` gem, so if you like continuous testing during development, run:
 
     $> bundle exec guard
 
+
 ### 5. Add an entry to /etc/hosts
+
 Several callback services (including facebook and CAS) like to have a real hostname
 to redirect to. To work with those we recommend that you create an entry in your `hosts`
 file for local.mpdx.org like this:
@@ -84,14 +70,14 @@ changes).
 
 To boot up a test rails application, use:
 
-    $> bundle exec rails s
+    $> bin/rails s
 
 You should be able to open `http://localhost:3000/` and view a test
 environment.
 
 Run:
 
-`rake organizations:fetch`
+`bin/rake organizations:fetch`
 
 
 ### 7. Make a pull request

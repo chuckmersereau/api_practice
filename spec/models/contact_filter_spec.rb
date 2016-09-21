@@ -76,6 +76,16 @@ describe ContactFilter do
       expect(filtered_contacts.length).to be 2
     end
 
+    context 'pledge frequency' do
+      it "doesn't error when passed a 'null'" do
+        received = create(:contact, pledge_received: true)
+
+        cf = ContactFilter.new(pledge_frequencies: 'null', received: true)
+        filtered_contacts = cf.filter(Contact, account_list)
+        expect(filtered_contacts).to eq [received]
+      end
+    end
+
     context '#contact_info_email' do
       let!(:has_email) do
         c = create(:contact)
@@ -302,6 +312,46 @@ describe ContactFilter do
       expect(filtered_contacts).to include eur_contact
       expect(filtered_contacts).not_to include no_currency_contact
     end
+
+    it 'filters based on tag' do
+      contact1 = create(:contact, tag_list: 'asdf')
+      contact2 = create(:contact)
+      contact2.donor_accounts << create(:donor_account, master_company: create(:master_company))
+      cf = ContactFilter.new(tags: 'asdf')
+
+      expect(cf.filter(Contact.all, build_stubbed(:account_list)))
+        .to contain_exactly(contact1)
+    end
+
+    it "doesn't display entries when filtering by Newsletter Recipients With Mailing Address" do
+      contact = create(:contact, send_newsletter: 'Physical')
+      create(:contact)
+      2.times do
+        contact.addresses << create(:address, addressable: contact)
+      end
+      cf = ContactFilter.new(newsletter: 'address')
+
+      filtered = cf.filter(Contact.all, build_stubbed(:account_list))
+
+      expect(filtered.length).to be 1
+      expect(filtered).to match_array [contact]
+    end
+
+    it "doesn't display entries when filtering by Newsletter Recipients With Email Address" do
+      contact = create(:contact, send_newsletter: 'Email')
+      create(:contact)
+      p = create(:person)
+      contact.people << p
+      2.times do
+        create(:email_address, person: p)
+      end
+      cf = ContactFilter.new(newsletter: 'email')
+
+      filtered = cf.filter(Contact.all, build_stubbed(:account_list))
+
+      expect(filtered.length).to be 1
+      expect(filtered).to match_array [contact]
+    end
   end
 
   context '#locale' do
@@ -340,6 +390,38 @@ describe ContactFilter do
 
       expect(cf.filter(Contact, build_stubbed(:account_list)))
         .to contain_exactly(contact1, contact2)
+    end
+
+    context '#contact_type' do
+      it 'includes both when not filtered' do
+        contact1 = create(:contact)
+        contact2 = create(:contact)
+        contact2.donor_accounts << create(:donor_account, master_company: create(:master_company))
+        cf = ContactFilter.new
+
+        expect(cf.filter(Contact.all, build_stubbed(:account_list)))
+          .to contain_exactly(contact1, contact2)
+      end
+
+      it 'filters out companies' do
+        contact1 = create(:contact)
+        contact2 = create(:contact)
+        contact2.donor_accounts << create(:donor_account, master_company: create(:master_company))
+        cf = ContactFilter.new(contact_type: 'person')
+
+        expect(cf.filter(Contact.all, build_stubbed(:account_list)))
+          .to contain_exactly(contact1)
+      end
+
+      it 'filters out people' do
+        create(:contact)
+        contact2 = create(:contact)
+        contact2.donor_accounts << create(:donor_account, master_company: create(:master_company))
+        cf = ContactFilter.new(contact_type: 'company')
+
+        expect(cf.filter(Contact.all, build_stubbed(:account_list)))
+          .to contain_exactly(contact2)
+      end
     end
   end
 end

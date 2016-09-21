@@ -16,30 +16,31 @@ Rails.application.routes.draw do
   end
 
   get '/help' => 'help_requests#new'
+  get '/preferences*path', to: 'preferences#index'
+  get 'preferences/personal', as: :personal_preferences
+  get 'preferences/personal/:tab_id', to: 'preferences#index', as: :personal_preferences_tab
+  get 'preferences/notifications', as: :notification_preferences
+  get 'preferences/notifications/:tab_id', to: 'preferences#index', as: :notification_preferences_tab
+  get 'preferences/imports', as: :network_preferences
+  get 'preferences/imports/:tab_id', to: 'preferences#index', as: :network_preferences_tab
+  get 'preferences/integrations', as: :integration_preferences
+  get 'preferences/integrations/:tab_id', to: 'preferences#index', as: :integration_preferences_tab
+  get 'preferences/accounts', as: :account_preferences
+  get 'preferences/accounts/:tab_id', to: 'preferences#index', as: :account_preferences_tab
 
-  resources :notifications
+  # old preferences routes (SEO and external link upkeep)
+  get '/preferences', to: redirect('preferences/personal'), as: :preferences
+  get '/notifications', to: redirect('preferences/notifications'), as: :notifications
+  get '/accounts', to: redirect('preferences/integrations/organization'), as: :accounts
+
+  resources :preferences do
+    collection do
+      post :update_tab_order
+      post :complete_welcome_panel
+    end
+  end
 
   resources :account_lists, only: :update
-
-  resources :mail_chimp_accounts do
-    collection do
-      get :sync
-    end
-  end
-
-  resources :prayer_letters_accounts do
-    collection do
-      get :sync
-    end
-  end
-
-  resources :pls_accounts do
-    collection do
-      get :sync
-    end
-  end
-
-  get 'settings/integrations', as: :integrations_settings
 
   resources :tags, only: [:create, :destroy]
 
@@ -60,14 +61,51 @@ Rails.application.routes.draw do
       end
       resources :donations, only: [:index]
       resources :progress, only: [:index]
-      resources :preferences
+      namespace :preferences do
+        resources :notifications, only: :index
+        resources :integrations, only: :index do
+          collection do
+            post :send_to_chalkline
+          end
+        end
+        resources :imports, only: [:index, :create]
+        resources :personal, only: :index
+        resources :accounts, only: :index
+        namespace :accounts do
+          resources :invites, only: [:index, :create, :destroy]
+          resources :merges, only: [:index, :create]
+          resources :users, only: [:index, :destroy]
+        end
+        namespace :integrations do
+          resource :mail_chimp_account, only: [:show, :update, :destroy] do
+            member do
+              get :sync
+            end
+          end
+          resource :prayer_letters_account, only: :destroy do
+            member do
+              get :sync
+            end
+          end
+          resource :pls_account, only: :destroy do
+            member do
+              get :sync
+            end
+          end
+          resources :google_accounts, only: :destroy
+          resources :key_accounts, only: :destroy
+          resources :organizations, only: :index
+          resources :organization_accounts, only: [:index, :create, :update, :destroy]
+        end
+      end
+      resource :preferences
       resources :users
       resources :appeals do
         resources :exclusions, only: [:index, :destroy], controller: :appeal_exclusions
       end
       resources :insights
 
-      resources :mail_chimp_accounts do
+      resources :mail_chimp_accounts, only: :destroy do
         collection do
           put :export_appeal_list
         end
@@ -110,14 +148,6 @@ Rails.application.routes.draw do
   resources :insights
   resources :donations
   resource :donation_syncs, only: [:create]
-  resources :accounts
-  resources :preferences do
-    collection do
-      post :update_tab_order
-      post :complete_welcome_panel
-      get 'notifications', to: :notification_settings
-    end
-  end
 
   namespace :reports do
     resource :contributions, only: [:show]
@@ -135,7 +165,6 @@ Rails.application.routes.draw do
       post :merge
       get  :find_duplicates
       put :not_duplicates
-      post :send_to_chalkline
       get :add_multi
       post :save_multi
       get :mailing
@@ -197,13 +226,19 @@ Rails.application.routes.draw do
   get 'monitors/sidekiq' => 'monitors#sidekiq'
   get 'monitors/commit' => 'monitors#commit'
 
-  get '/auth/prayer_letters/callback', to: 'prayer_letters_accounts#create'
-  get '/auth/pls/callback', to: 'pls_accounts#create'
-  get '/auth/:provider/callback', to: 'accounts#create'
-  get '/auth/failure', to: 'accounts#failure'
+  get '/close', to: 'auth#close', as: :application_close
+  namespace :auth do
+    get '/pls/callback', to: 'pls_accounts#create'
+    get '/google/callback', to: 'google_accounts#create'
+    get '/prayer_letters/callback', to: 'prayer_letters_accounts#create'
+    get '/:provider/callback', to: 'accounts#create'
+    get '/failure', to: 'accounts#failure'
+    resources :accounts, except: [:index]
+  end
 
   get '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
+
 
   def user_constraint(request, attribute)
     request.env['rack.session'] &&

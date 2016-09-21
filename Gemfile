@@ -34,6 +34,7 @@ gem 'attributes_history'
 gem 'carrierwave', git: 'https://github.com/carrierwaveuploader/carrierwave' # has cache err fix not release yet
 gem 'charlock_holmes'
 gem 'cloudinary'
+gem 'chosen-rails', '~> 1.5.2'
 gem 'country_select', git: 'http://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 gem 'deadlock_retry', '~> 1.2.0'
 gem 'devise', '~> 3.2.2'
@@ -127,7 +128,7 @@ end
 
 group :development, :test do
   gem 'parallel_tests'
-  gem 'dotenv-rails'
+  gem 'dotenv-rails', '~> 2.0.2'
   gem 'awesome_print'
   gem 'database_cleaner'
   gem 'spring-commands-rspec'
@@ -137,6 +138,7 @@ group :development, :test do
   gem 'guard-rubocop'
   gem 'guard-rspec'
   gem 'simplecov', require: false
+  gem 'simplecov-lcov', require: false
   gem 'spring'
   # only used for mo/po file generation in development, !do not load(:require=>false)! since it will eat 7mb ram
   gem 'gettext', '~> 3.1.6', require: false, group: :development
@@ -147,6 +149,7 @@ group :development, :test do
   gem 'equivalent-xml'
   gem 'pry-byebug'
   gem 'pry-rails'
+  gem 'rails-erd'
 end
 
 group :test do
@@ -154,12 +157,15 @@ group :test do
   gem 'webmock', '~> 1.21.0'
   gem 'rb-fsevent', require: false
   gem 'growl'
-  gem 'poltergeist'
   gem 'resque_spec'
   gem 'emoji_spec', git: 'https://gist.github.com/6112257.git'
   gem 'rubocop', '~> 0.39'
   gem 'test_after_commit'
   gem 'coveralls', require: false
+  gem 'capybara'
+  gem 'capybara-angular'
+  gem 'poltergeist', '~> 1.10.0'
+  gem 'capybara-screenshot'
 end
 
 group :doc do

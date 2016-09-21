@@ -74,4 +74,24 @@ describe User do
       expect(result_user.id).to eq user.id
     end
   end
+
+  context 'contacts_filter=' do
+    it 'merges instead of mass assigns' do
+      user = create(:user, contacts_filter: {
+                      '1' => {
+                        test: 'asdf'
+                      }
+                    })
+
+      user.update(contacts_filter: {
+                    '2' => {
+                      status: ['Partner - Financial']
+                    }
+                  })
+
+      user.reload
+      expect(user.contacts_filter['1']).to_not be_nil
+      expect(user.contacts_filter['2']).to_not be_nil
+    end
+  end
 end

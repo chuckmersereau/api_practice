@@ -17,7 +17,6 @@ class HomeController < ApplicationController
       service: "#{OmniAuth.config.full_host}/auth/key/callback?#{redirect_params.to_query}"
     }
     @create_key_account_path = "https://thekey.me/cas/service/selfservice?#{params.to_query}"
-    @create_relay_account_path = "https://thekey.me/cas/service/selfservice?#{params.merge(theme: 'relay').to_query}"
 
     render layout: false
   end

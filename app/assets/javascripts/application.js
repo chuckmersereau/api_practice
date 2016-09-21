@@ -43,7 +43,7 @@
 //= require peek
 //= require peek/views/performance_bar
 //= require best_in_place
-//= require integrations
+//= require markerclustererplus
 
 //= require_tree ./locale
 //= require gettext/all
@@ -51,16 +51,27 @@
 //angular
 //= require angular/angular
 //= require angular-animate/angular-animate
+//= require angular-sanitize/angular-sanitize
+//= require ng-csv/build/ng-csv
 //= require angular-localforage/bower_components/localforage/dist/localforage
 //= require angular-localforage/dist/angular-localForage
 //= require angular-ui-bootstrap/dist/ui-bootstrap
 //= require angular-ui-bootstrap/dist/ui-bootstrap-tpls
+//= require angular-ui-router/release/angular-ui-router
+//= require chosen-jquery
+//= require checklist-model/checklist-model
+//= require angular-chosen-localytics/dist/angular-chosen
+//= require angular-sanitize/angular-sanitize
+//= require ng-csv/build/ng-csv
+//= require ng-tags-input/build/ng-tags-input
 //= require lodash/lodash
 //= require moment/moment
 //= require moment-range/dist/moment-range
+//= require @reactivex/rxjs/dist/global/Rx.umd
 //= require angular/mpdxApp
 //= require angular/mpdxApp.constants
-//= require angular/railsConstants
+//= require angular/mpdxApp.values
+//= require angular/mpdxApp.railsConstants.js.erb
 //= require_tree ./angular/factories
 //= require_tree ./angular/components
 //= require_tree ./angular/controllers

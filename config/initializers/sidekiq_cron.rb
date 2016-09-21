@@ -1,4 +1,11 @@
 SIDEKIQ_CRON_HASH = {
+
+  'Task Notifications' => {
+    'class' => 'TaskNotificationsWorker',
+    'cron'  => '0 * * * *',
+    'args'  => []
+  },
+
   'Google email sync' => {
     'class' => 'SidekiqCronWorker',
     'cron'  => '0 3 * * *',
@@ -45,6 +52,12 @@ SIDEKIQ_CRON_HASH = {
     'class' => 'SidekiqCronWorker',
     'cron'  => '0 11 * * *',
     'args'  => ['Person::FacebookAccount.refresh_tokens']
+  },
+
+  'Sync Google Contacts' => {
+      'class' => 'SyncGoogleContactsWorker',
+      'cron'  => '0 11 * * *',
+      'args'  => []
   }
 }.freeze
 

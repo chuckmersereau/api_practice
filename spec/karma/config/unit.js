@@ -11,7 +11,8 @@ module.exports = function(config) {
         // list of files / patterns to load in the browser
         files: [
             APPLICATION_SPEC,
-            'spec/javascripts/angular/**/*_spec.js'
+            'spec/javascripts/angular/**/*_spec.js',
+            'spec/javascripts/angular/**/*.fixture.json'
         ],
 
         // list of files to exclude
@@ -65,12 +66,17 @@ module.exports = function(config) {
         // Preprocessors
         preprocessors: {
             '/**/*.coffee':'coffee',
-            './app/assets/javascripts/**/*!(.spec).js': ['coverage']
+            './app/assets/javascripts/**/*!(.spec).js': ['coverage'],
+            '/**/*.fixture.json': ['json_fixtures']
         },
 
         coverageReporter: {
             type : 'lcov'
-        }
+        },
 
+        jsonFixturesPreprocessor: {
+            stripPrefix: 'spec/javascripts/angular/',
+            camelizeFilenames: true
+        }
     });
 };

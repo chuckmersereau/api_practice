@@ -46,7 +46,7 @@
       <% end %>
     </td>
     <td class="qaction" id="<%= dom_id(contact) %>_quick" data-id="<%= contact.id %>">
-      <a href="#" class="btn smallbtn quick" style="display: none;"><%= _('Quick') %></a>
+      <a class="btn smallbtn quick" style="display: none;"><%= _('Quick') %></a>
       <%= link_to(_('Show'), contact_path(contact), :class => "btn btn-sm btn-default") %>
       <%= link_to(_('Edit'), edit_contact_path(contact), :class => "btn btn-sm btn-default") %>
       <%= link_to(_('Hide'), contact_path(contact), method: :delete, remote: true, :class => "btn btn-sm btn-default", data: {behavior: 'hide_contact'}) %>

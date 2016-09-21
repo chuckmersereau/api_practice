@@ -53,7 +53,7 @@ $userheight: 72px;
 .form-inline {
   .fixed-width-input {
     width: 220px;
-  }  
+  }
 }
 
 /* ************************************************************** */
@@ -887,6 +887,10 @@ div.name {font-size: 14px; margin-bottom: 4px;}
           }
         }
       }
+
+      .btn-filter-fullscreen{
+        display: none;
+      }
     }
     body.stopscroll {
       position: absolute;
@@ -1128,6 +1132,9 @@ table tbody.tasks {
   }
 }
 
+.taskgroup--yellow {background-color: #f9b625;}
+.taskgroup--light-blue{background-color: #3eb1c8;}
+.taskgroup--dark-blue {background-color: #007398;}
 .taskgroup--orange {background: #F6921E; border-color: #A55E00;}
 .taskgroup--green {background: $green; border-color: green;}
 .taskgroup--red {background: #EC1C24; border-color: #AF1524;}
@@ -1423,7 +1430,6 @@ table.meta {
 
 .network_connect {
 
-  border-bottom: 1px solid $gray_light;
   padding: 15px 0;
   display: block;
 
@@ -1692,6 +1698,10 @@ table.meta {
 .statusIcon-enabled {background-position: -6px -56px;}
 .statusIcon-disabled {background-position: -6px -1px;}
 .statusIcon-error {background-position: -6px -27px;}
+
+.accstatus-enabled {color: green;}
+.accstatus-error {color: red;}
+.accstatus-disabled {color: #999;}
 
 #footer {
   padding-bottom: 40px;
@@ -2287,6 +2297,62 @@ h4.title {
   margin-top: .5em;
 }
 
+/* ********************* Angular Animate (Slide) ************************** */
+
+.panel-animate {
+  -moz-transition-duration: 0.8s;
+  -webkit-transition-duration: 0.8s;
+  -o-transition-duration: 0.8s;
+  transition-duration: 0.8s;
+  -moz-transition-timing-function: ease-in;
+  -webkit-transition-timing-function: ease-in;
+  -o-transition-timing-function: ease-in;
+  transition-timing-function: ease-in;
+  max-height: 1000px;
+}
+
+.panel-animate.ng-hide {
+  max-height: 0;
+  -moz-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -webkit-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  -o-transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+  transition-timing-function: cubic-bezier(0, 1, 0.5, 1);
+}
+
+.panel-animate.ng-animate {
+  overflow: hidden;
+}
+
+.panel-heading.pref-head {
+  cursor: pointer;
+  i {
+    -webkit-transition: 0.5s ease-in-out;
+    -moz-transition: 0.5s ease-in-out;
+    -o-transition: 0.5s ease-in-out;
+    transition: 0.5s ease-in-out;
+    margin-right: 5px;
+  }
+}
+
+.btn-actionable {
+  -webkit-transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  -moz-transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  -ms-transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  -o-transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  transition: .3s cubic-bezier(.175,.885,.32,1.275) padding!important;
+  position: relative;
+  .btn-progress {
+    position: absolute;
+    right: 10px;
+    top: 5px;
+    bottom: 5px;
+  }
+}
+
+.btn-actionable:disabled {
+    padding-right: 30px!important;
+}
+
 /* ********************* Layout Hacks ************************** */
 .gm-style {
   img {
@@ -2314,4 +2380,26 @@ span.best_in_place_once {
   padding: 5px 12px;
   border: 2px solid #4e4001;
   border-radius: 6px;
+}
+
+.import_by_group {
+  margin-bottom: 10px;
+  tags-input .tags .tag-item {
+    background: #007398;
+  }
+}
+.import-tags-table {
+  width: 100%;
+  .google_import_group {
+    max-width: 100px;
+    margin-left: 20px;
+    input[type=checkbox] {
+      margin-left: -16px;
+    }
+  }
+}
+.loading-spinner {
+  color: #f9b625;
+  padding: 20px 0;
+  text-align: center;
 }

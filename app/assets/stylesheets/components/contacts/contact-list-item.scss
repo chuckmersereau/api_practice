@@ -1,4 +1,4 @@
-contact {
+contact-list-item {
   display: flex;
   & + & { //all except first
     border-top: 1px solid $color-gray-light;

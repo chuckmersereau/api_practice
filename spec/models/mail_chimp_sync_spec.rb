@@ -74,7 +74,7 @@ describe MailChimpSync do
     end
 
     def expect_contact_exported
-      expect(mc_account).to receive(:export_to_list).with('list1', [contact])
+      expect(mc_account).to receive(:export_to_list).with([contact])
       subject.sync_adds_and_updates(nil)
     end
   end

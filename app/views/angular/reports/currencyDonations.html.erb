@@ -1,3 +1,23 @@
+<div class="row">
+  <div class="col-sm-6">
+    <h2 ng-if="$ctrl.type === 'donor'"><%= _('Contributions by Partner Currency') %></h2>
+    <h2 ng-if="$ctrl.type === 'salary'"><%= _('Contributions by Salary Currency') %></h2>
+  </div>
+  <div class="col-sm-6 text-right report-action-buttons">
+    <button class="btn btn-primary" ng-click="$ctrl.togglePageWidth()">
+      <span ng-if="!$ctrl.expanded">
+        <%= _('Expand partner info')%>
+        <i class="fa fa-expand" aria-hidden="true"></i>
+      </span>
+      <span ng-if="$ctrl.expanded">
+        <%= _('Hide partner info')%>
+        <i class="fa fa-compress" aria-hidden="true"></i>
+      </span>
+    </button>
+    <button class="btn btn-default" ng-csv="$ctrl.currencyGroupsToCSV()" lazy-load="true" filename="mpdx-{{$ctrl.type}}-contributions-export-{{$ctrl.moment().format('Y-MM-DD-HH:mm')}}.csv"><%= _('Export CSV')%></button>
+  </div>
+</div>
+
 <div ng-if="$ctrl.errorOccurred">
   <%= _('Report data could not load due to an error. Please try again or contact support.') %>
 </div>
@@ -35,7 +55,7 @@
     <table ng-if="!$ctrl.errorOccurred" class="table table-striped">
       <thead>
       <tr class="year-header-row">
-        <th class="currency-title">
+        <th class="currency-title" colspan="{{$ctrl.expanded ? 5 : 1}}">
           <span ng-if="!$ctrl.useConvertedValues">{{currencyGroup.currency}} ({{currencyGroup.currencySymbol}})</span>
           <span ng-if="$ctrl.useConvertedValues">{{currencyGroup.currencyConverted}} ({{currencyGroup.currencySymbolConverted}})</span>
         </th>
@@ -48,6 +68,18 @@
       </tr>
       <tr>
         <th><%= _('Partner')%></th>
+        <th ng-if="$ctrl.expanded">
+          <%= _('Status')%>
+        </th>
+        <th ng-if="$ctrl.expanded">
+          <%= _('Pledge')%>
+        </th>
+        <th ng-if="$ctrl.expanded">
+          <%= _('Avg')%>
+        </th>
+        <th ng-if="$ctrl.expanded">
+          <%= _('Min')%>
+        </th>
         <th class="text-right" ng-repeat="date in $ctrl.allMonths">
           <div uib-tooltip="<%= _('This last month is excluded from totals and averages') %>" tooltip-enable="$last" ng-class="{'excluded': $last}">
             {{$ctrl.moment(date).format('MMM')}}
@@ -59,17 +91,18 @@
       <tbody>
       <tr ng-repeat="donor in currencyGroup.donors">
         <td>
-          <span class="donor-name" uib-tooltip-template="'inline/currencyDonationsReport/nameTooltip.html'">
-            <i class="fa fa-info-circle" aria-hidden="true"></i>
+          <span class="donor-name" uib-tooltip-template="'inline/currencyDonationsReport/nameTooltip.html'" tooltip-enable="!$ctrl.expanded">
+            <i class="fa fa-info-circle" aria-hidden="true" ng-if="!$ctrl.expanded"></i>
             <a href="/contacts/{{donor.donorInfo.id}}" target="_blank">{{donor.donorInfo.name}}</a>
           </span>
           <script type="text/ng-template" id="inline/currencyDonationsReport/nameTooltip.html">
+            <div>{{donor.donorInfo.status}}</div>
             <span ng-if="!$ctrl.useConvertedValues">
               {{currencyGroup.currencySymbol}}{{donor.donorInfo.pledge_amount | number:0}} {{currencyGroup.currency}} {{donor.donorInfo.pledge_frequency}}<br>
               Avg: {{currencyGroup.currencySymbol}}{{donor.aggregates.average | number:0}} / Min: {{currencyGroup.currencySymbol}}{{donor.aggregates.min | number:0}}
             </span>
             <span ng-if="$ctrl.useConvertedValues">
-              {{currencyGroup.currencySymbolConverted}}{{donor.donorInfo.pledge_amount | number:0}} {{currencyGroup.currencyConverted}} {{donor.donorInfo.pledge_frequency}}<br>
+              {{currencyGroup.currencySymbol}}{{donor.donorInfo.pledge_amount | number:0}} {{currencyGroup.currency}} {{donor.donorInfo.pledge_frequency}}<br>
               Avg: {{currencyGroup.currencySymbolConverted}}{{donor.aggregatesConverted.average | number:0}} / Min: {{currencyGroup.currencySymbolConverted}}{{donor.aggregatesConverted.min | number:0}}
             </span>
           </script>
@@ -78,6 +111,31 @@
             <i class="fa fa-circle circle-very-late" ng-switch-when="60" uib-tooltip="<%= _('60 days late') %>" aria-hidden="true"></i>
           </span>
         </td>
+
+        <td ng-if="$ctrl.expanded">
+          {{donor.donorInfo.status}}
+        </td>
+        <td ng-if="$ctrl.expanded">
+          {{currencyGroup.currencySymbol}}{{donor.donorInfo.pledge_amount | number:0}} {{currencyGroup.currency}}
+          {{donor.donorInfo.pledge_frequency}}
+        </td>
+        <td class="text-right" ng-if="$ctrl.expanded">
+          <span ng-if="!$ctrl.useConvertedValues">
+            {{donor.aggregates.average | number:0}}
+          </span>
+          <span ng-if="$ctrl.useConvertedValues">
+            {{donor.aggregatesConverted.average | number:0}}
+          </span>
+        </td>
+        <td class="text-right" ng-if="$ctrl.expanded">
+          <span ng-if="!$ctrl.useConvertedValues">
+            {{donor.aggregates.min | number:0}}
+          </span>
+          <span ng-if="$ctrl.useConvertedValues">
+            {{donor.aggregatesConverted.min | number:0}}
+          </span>
+        </td>
+
         <td class="text-right" ng-repeat="donation in donor.donations">
           <div uib-popover-template="'inline/currencyDonationsReport/donationDetailsTooltip.html'" popover-trigger="mouseenter">
             <span ng-if="donation.amount !== 0 && !$ctrl.useConvertedValues" ng-class="{'excluded': $last}">{{donation.amount | number:0}}</span>
@@ -109,7 +167,7 @@
         </td>
       </tr>
       <tr class="row-total">
-        <td>
+        <td colspan="{{$ctrl.expanded ? 5 : 1}}">
           <strong><%= _('Totals')%></strong>
         </td>
         <td class="text-right" ng-repeat="monthTotal in currencyGroup.monthlyTotals track by $index">

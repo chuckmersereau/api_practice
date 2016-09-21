@@ -167,7 +167,8 @@ msgstr ""
 msgid "<span class=\"count-big\">%{contact_count}</span> partners <strong>%{days}</strong> days late"
 msgstr "<span class=\"count-big\">%{contact_count}</span> partenaires avec <strong>%{days}</strong> jours de retard"
 
-msgid "<strong>95.91543%</strong> of all help requests are answered on our %{link} in theform of a Video or FAQ. Get answers to your questions on our %{link} now."
+#, fuzzy
+msgid "<strong>95.91543%</strong> of all help requests are answered on our %{link} in the form of a Video or FAQ. Get answers to your questions on our %{link} now."
 msgstr "<strong>95.91543%</strong> de toutes les demandes d'aide ont une réponse sur le %{link} sous forme d'une vidéo ou d'une FAQ. Obtenez des réponses à vos questions dès maintenant sur le %{link} (le plus complet) ou sur le <A HREF=\"https://www.gcx.org/MPDXaide\">site d'aide en français</A>."
 
 msgid "About you"
@@ -537,7 +538,8 @@ msgstr "A partir d'une analyse de l'historique des dons d'un partenaire, MPDX pe
 msgid "Be sure to click Step 1 first to download a backup of your contacts before before clicking Step 2 to reset your account."
 msgstr ""
 
-msgid "Before emailing us, please have a look at %{link} to see if your question isalready answered there."
+#, fuzzy
+msgid "Before emailing us, please have a look at %{link} to see if your question is already answered there."
 msgstr "Avant de nous envoyer un email, merci de vérifier sur %{link} (le plus complet) ou sur <A HREF=\"https://www.gcx.org/MPDXaide\" target=\"_blank\">le site d'aide en français</A> si la réponse à votre question ne s'y trouve pas déjà."
 
 msgid "Belarusian"
@@ -602,13 +604,6 @@ msgid "Care"
 msgstr "Rester en relation "
 
 msgid "Catalan"
-msgstr ""
-
-#, fuzzy
-msgid "Chalkline Integration"
-msgstr "Intégration du calendrier"
-
-msgid "Chalkline is a great way of sending a variety of touch cards to your supporters."
 msgstr ""
 
 msgid "Change these in the future by clicking the gear in the top right, and selecting 'Preferences'"
@@ -990,10 +985,6 @@ msgstr "Désactiver l' intégration de Gmail"
 msgid "Disable Google Contacts integration"
 msgstr "Désactiver l' intégration des contacts Google"
 
-#, fuzzy
-msgid "Disconnect"
-msgstr "Contacter"
-
 msgid "Displaying"
 msgstr "Affiche"
 
@@ -1187,22 +1178,32 @@ msgstr ""
 msgid "Error loading CSV import preview. The MPDX team has been notified. If the problem persists please click \"Help\" above and submit a request."
 msgstr "Erreur lors du chargement de l'aperçu d'importation CSV.  L'équipe de MPDX a été notifiée. Si le problème persiste cliquez s'il vous plaît  sur \"Help\"  ci-dessus et soumettez une demande."
 
+msgid "Error loading progress stats. Please try again or contact support."
+msgstr ""
+
 msgid "Estonian"
 msgstr ""
 
+#, fuzzy
+msgid "Every 2 Months"
+msgstr "Les 12 derniers mois"
+
 msgid "Every 2 Weeks"
-msgstr "Toutes les  2 semaines"
+msgstr ""
 
 msgid "Every 2 Years"
-msgstr "Tous les 2 ans"
+msgstr ""
 
 msgid "Every 4 Months"
-msgstr "Tous les 4 mois"
+msgstr ""
 
 msgid "Every 6 Months"
-msgstr "Tous les 6 mois"
+msgstr ""
 
 msgid "Exchange Rate"
+msgstr ""
+
+msgid "Expand partner info"
 msgstr ""
 
 msgid "Expected Monthly Total"
@@ -1212,6 +1213,10 @@ msgid "Expired Referral"
 msgstr "Référence expirée"
 
 msgid "Export"
+msgstr "Exporter"
+
+#, fuzzy
+msgid "Export CSV"
 msgstr "Exporter"
 
 msgid "Export Contacts"
@@ -1425,6 +1430,9 @@ msgid "Hide Contacts"
 msgstr "Cacher les contacts"
 
 msgid "Hide Contacts Not Included"
+msgstr ""
+
+msgid "Hide partner info"
 msgstr ""
 
 #, fuzzy
@@ -1729,8 +1737,9 @@ msgstr "Chargement des tâches"
 msgid "Location"
 msgstr "Emplacement"
 
-msgid "Log Prayer Letter"
-msgstr "Lettre de nouvelles"
+#, fuzzy
+msgid "Log Physical Newsletter"
+msgstr "Lettre de nouvelle"
 
 msgid "Log Task"
 msgstr "Ajouter une tâche terminée"
@@ -1835,10 +1844,6 @@ msgstr "Message MailChimp rejeté par la messagerie de l'abonné. "
 
 msgid "Mailchimp API Key no longer valid"
 msgstr "L'API Key de MailChimp n'est plus valide"
-
-#, fuzzy
-msgid "Mailchimp Integration"
-msgstr "Activer l'intégration de Gmail"
 
 msgid "Mailchimp List is requiring an additional merge field"
 msgstr "La liste de MailChimp requiert un champ à fusionner supplémentaire"
@@ -1975,6 +1980,9 @@ msgstr ""
 msgid "Min"
 msgstr "Min"
 
+msgid "Minimum"
+msgstr ""
+
 msgid "Miss"
 msgstr ""
 
@@ -1983,10 +1991,6 @@ msgstr "Mobile"
 
 msgid "Mobile Phone"
 msgstr "Téléphone portable"
-
-#, fuzzy
-msgid "Modify Settings"
-msgstr "Paramètres du compte"
 
 msgid "Monthly"
 msgstr "Tous les mois"
@@ -2112,6 +2116,10 @@ msgstr "Nièce"
 msgid "No"
 msgstr "Non"
 
+#, fuzzy
+msgid "No Due Date"
+msgstr "Date d'échéance "
+
 msgid "No Subject"
 msgstr "Aucun sujet"
 
@@ -2191,10 +2199,6 @@ msgstr "Remarque : Ce fichier doit être un fichier texte de TntMPD Datasync (.t
 
 msgid "Notes"
 msgstr "Remarques"
-
-#, fuzzy
-msgid "Notifications"
-msgstr "Motivation"
 
 msgid "Notifications / Alerts"
 msgstr "Notifications / Alertes"
@@ -2349,6 +2353,9 @@ msgstr ""
 msgid "Please specify a valid email to send the invite."
 msgstr ""
 
+msgid "Pledge"
+msgstr ""
+
 msgid "Polish"
 msgstr ""
 
@@ -2373,9 +2380,6 @@ msgstr "Code postal"
 
 msgid "Prayer Request"
 msgstr " Requête de prière"
-
-msgid "PrayerLetters.com Integration"
-msgstr ""
 
 msgid "Pre Call Letter"
 msgstr "Lettre pré-appel"
@@ -3012,6 +3016,9 @@ msgstr "Ce contact sera réglé sur \"Ne plus demander\". C'est ce que vous voul
 msgid "This invitation is no longer valid."
 msgstr "Cette invitation n'est plus valide."
 
+msgid "This last month is excluded from totals and averages"
+msgstr ""
+
 msgid "This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx."
 msgstr "Cela empêchera que l'adresse email primaire de cette personne soit synchronisé avec MailChimp et qu'un contact soit exporté de MPDx."
 
@@ -3048,10 +3055,16 @@ msgstr "Aujourd'hui"
 msgid "Toggle the radio buttons to change the person who will be the \"winner\" of the merge. All data from the \"loser\" of the merge will get copied into the \"winner.\" No data will be lost."
 msgstr ""
 
+msgid "Tomorrow"
+msgstr ""
+
 msgid "Total"
 msgstr "Total"
 
 msgid "Total %{currency} Donations (%{count}):"
+msgstr ""
+
+msgid "Total (last month excluded from total)"
 msgstr ""
 
 msgid "Total Donations"
@@ -3229,9 +3242,6 @@ msgstr ""
 msgid "You can change this in the future if you aren't sure."
 msgstr ""
 
-msgid "You can keep PrayerLetters.com updated with all your MPDX contacts. Click Enable to begin."
-msgstr ""
-
 msgid ""
 "You can migrate all your contact information and history from TNTConnect into MPDX. Most of your information will\n"
 "    import straight into MPDX, including contact info, task history (with notes), notes, user groups, and appeals. MPDX\n"
@@ -3241,9 +3251,6 @@ msgstr ""
 
 msgid "You can now export your contacts to MailChimp."
 msgstr "Vous pouvez maintenant exporter vos contacts vers MailChimp."
-
-msgid "You can synchronize MPDX and Mailchimp contacts to simplify your process and take advantage of all of Mailchimp's great features."
-msgstr ""
 
 msgid "You can then review the import to ensure it is correct and re-upload as needed. Note that the sample itself isn't fully valid because we included instructions at the bottom."
 msgstr "Vous pouvez ensuite passer en revue l'importation pour vous assurer qu'elle soit correcte et re-télécharger si besoin. Notez que l'échantillon n'est lui-même pas entièrement valide, car nous avons inclus des instructions au bas."
@@ -3312,7 +3319,8 @@ msgstr ""
 msgid "You're currently modifying MPDX settings for:"
 msgstr ""
 
-msgid "You've never logged a prayer letter"
+#, fuzzy
+msgid "You've never logged a physical newsletter"
 msgstr "Vous n'avez aucune lettre de nouvelles dans votre historique"
 
 msgid "Your Appeal Contacts are loading to MailChimp"
@@ -3444,7 +3452,8 @@ msgstr "planifiée pour aujourd'hui"
 msgid "showing all tasks"
 msgstr "d'afficher toutes les tâches"
 
-msgid "since your last prayer letter"
+#, fuzzy
+msgid "since your last physical newsletter"
 msgstr "depuis votre dernière lettre de nouvelles"
 
 msgid "starred"

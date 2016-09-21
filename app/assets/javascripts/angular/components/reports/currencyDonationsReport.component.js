@@ -5,13 +5,14 @@
             controller: currencyDonationsReportController,
             templateUrl: '/templates/reports/currencyDonations.html',
             bindings: {
-                'type': '@'
+                'type': '@',
+                'expanded': '@'
             }
         });
 
-    currencyDonationsReportController.$inject = ['api', 'state', 'moment', 'monthRange'];
+    currencyDonationsReportController.$inject = ['_', 'api', 'state', 'moment', 'monthRange', '__', 'layoutSettings'];
 
-    function currencyDonationsReportController(api, state, moment, monthRange) {
+    function currencyDonationsReportController(_, api, state, moment, monthRange, __, layoutSettings) {
         var vm = this;
 
         /**
@@ -24,7 +25,10 @@
          Donors are grouped into a single category which is the user's salary currency
          The converted amount and currency fields are used (using 'converted_' prefix)
          **/
-        vm.useConvertedValues = vm.type === 'salary';
+        vm.type = vm.type || 'salary';
+
+        //Expand all columns
+        vm.expanded = vm.expanded || false;
 
         vm.monthsToShow = 13;
         vm.sumOfAllCurrenciesConverted = 0;
@@ -37,6 +41,8 @@
         vm.currencyGroups = [];
 
         vm.percentage = percentage;
+        vm.togglePageWidth = togglePageWidth;
+        vm.currencyGroupsToCSV = currencyGroupsToCSV;
 
         vm._parseReportInfo = parseReportInfo;
         vm._groupDonationsByCurrency = groupDonationsByCurrency;
@@ -51,6 +57,7 @@
         function activate() {
             var url = 'reports/year_donations?account_list_id=' + state.current_account_list_id;
             api.call('get', url, {}, function(data) {
+                vm.useConvertedValues = vm.type === 'salary';
                 vm.currencyGroups = parseReportInfo(data.report_info, vm.allMonths);
                 vm.sumOfAllCurrenciesConverted = _.sumBy(vm.currencyGroups, 'yearTotalConverted');
                 vm.loading = false;
@@ -116,14 +123,14 @@
 
         function groupDonationsByCurrency(donations){
             var groupedDonationsByCurrency = _.groupBy(donations, vm.useConvertedValues ? 'converted_currency' : 'currency');
-            return _.map(groupedDonationsByCurrency, function(donations, currency){
+            return _.map(groupedDonationsByCurrency, function(donations){
                 return {
                     currency: donations[0]['currency'],
                     currencyConverted: donations[0]['converted_currency'],
                     currencySymbol: donations[0]['currency_symbol'],
                     currencySymbolConverted: donations[0]['converted_currency_symbol'],
                     donations: donations
-                }
+                };
             });
         }
 
@@ -133,7 +140,7 @@
                 return {
                     donorInfo: donor,
                     donations: groupedDonations[donor.id]
-                }
+                };
             });
         }
 
@@ -152,7 +159,7 @@
                         currencySymbolConverted: donationsInMonth[0]['converted_currency_symbol'],
                         donation_date: month,
                         rawDonations: donationsInMonth
-                    }
+                    };
                 })
                 .value();
         }
@@ -186,7 +193,7 @@
                         average: sumConverted / donationMonths,
                         min: minDonationConverted ? minDonation.amountConverted : 0
                     }
-                })
+                });
             });
         }
 
@@ -228,6 +235,56 @@
                 return 0;
             }
             return currencyTotal / vm.sumOfAllCurrenciesConverted * 100;
+        }
+
+        function togglePageWidth(){
+            vm.expanded = !vm.expanded;
+            layoutSettings.fullWidth = vm.expanded;
+        }
+
+        function currencyGroupsToCSV(){
+            var columnHeaders = _.flatten([
+                __('Partner'),
+                __('Status'),
+                __('Pledge'),
+                __('Average'),
+                __('Minimum'),
+                vm.allMonths,
+                __('Total (last month excluded from total)')
+            ]);
+            var converted = vm.useConvertedValues ? 'Converted' : '';
+
+            return _.flatMap(vm.currencyGroups, function (currencyGroup){
+                var combinedHeaders = [
+                    [
+                        __('Currency'),
+                        currencyGroup['currency' + converted],
+                        currencyGroup['currencySymbol' + converted]
+                    ],
+                    columnHeaders
+                ];
+                var donorRows = _.map(currencyGroup.donors, function(donor){
+                    return _.concat(
+                        donor.donorInfo.name,
+                        donor.donorInfo.status,
+                        currencyGroup.currencySymbol +
+                            (donor.donorInfo.pledge_amount || 0) +' ' +
+                            currencyGroup.currency + ' ' +
+                            _.toString(donor.donorInfo.pledge_frequency),
+                        _.round(donor['aggregates' + converted].average),
+                        donor['aggregates' + converted].min,
+                        _.map(donor.donations, 'amount' + converted),
+                        donor['aggregates' + converted].sum
+                    );
+                });
+                var totals = _.concat(
+                    __('Totals'),
+                    _.times(4, _.constant('')),
+                    _.map(currencyGroup.monthlyTotals, 'amount' + converted),
+                    currencyGroup['yearTotal' + converted]
+                );
+                return _.concat(combinedHeaders, donorRows, [totals], null);
+            });
         }
     }
 })();

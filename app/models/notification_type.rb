@@ -45,6 +45,7 @@ class NotificationType < ActiveRecord::Base
   def create_task(account_list, notification)
     contact = notification.contact
     task = account_list.tasks.create(subject: task_description(notification), start_at: Time.now,
+                                     no_date: $rollout.active?(:no_date_task, account_list),
                                      activity_type: _(task_activity_type), notification_id: notification.id)
     task.activity_contacts.create(contact_id: contact.id)
     task

@@ -23,6 +23,7 @@
         <GreetingIsCustom>false</GreetingIsCustom>
         <Salutation>Dear John and Jane,</Salutation>
         <SalutationIsCustom>false</SalutationIsCustom>
+        <Children>Mark and Robert</Children>
         <ShortName>John and Jane Smith</ShortName>
         <ShortNameIsCustom>false</ShortNameIsCustom>
         <MailingAddressBlock>John and Jane Smith
@@ -87,7 +88,7 @@ Nowhere, CA  12345</HomeAddressBlock>
 Has run into issues with Campus Crusade in the past...  Was told couldn&apos;t be involved because hadn&apos;t been baptized as an adult.\f1\par
 }</NotesAsRTF>
         <Notes>Principal
-Has run into issues with Campus Crusade in the past...  Was told couldn&apos;t be involved because hadn&apos;t been baptized as an adult.</Notes>
+Has run into issues with Campus Crusade.</Notes>
         <FamilyLevelID>0</FamilyLevelID>
         <FamilySideID>0</FamilySideID>
         <MapAddressType>0</MapAddressType>

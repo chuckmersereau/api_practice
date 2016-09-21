@@ -15,7 +15,7 @@
                         data: { confirm: _('Are you sure you want to remove this tag from all tasks?') }, :remote => true %>
         <% end %>
       </span>
-      <a href="#" class="show_all_tags_btn"
+      <a class="show_all_tags_btn"
          ng-if="tags.length > 15"
          ng-click="$ctrl.showAllFilterTags = !$ctrl.showAllFilterTags; _gaq.push(['_trackEvent', 'Contacts Events', 'Click', 'See all tags']);"
          ng-switch="$ctrl.showAllFilterTags">

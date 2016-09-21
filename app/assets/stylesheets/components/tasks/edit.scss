@@ -1,0 +1,29 @@
+.due_date input:disabled, .due_date select:disabled {
+    background: #dddddd;
+}
+
+#no_date_field{
+  margin: 13px 0 0 2px;
+}
+
+.inline{
+  display: inline-block;
+}
+
+.task_notification {
+  display: inline;
+
+  input {
+    width: 20%;
+  }
+
+  select {
+    display: inline;
+    width: 30%;
+  }
+
+  small { 
+    font-size: 120%;
+    margin-left: 2px;
+  }
+}

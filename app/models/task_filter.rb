@@ -38,6 +38,10 @@ class TaskFilter
       filtered_tasks = filtered_tasks.where(starred: @filters[:starred])
     end
 
+    if @filters[:no_date].present?
+      filtered_tasks = filtered_tasks.where(no_date: @filters[:no_date])
+    end
+
     if @filters[:activity_type].present? && @filters[:activity_type].first != ''
       filtered_tasks = filtered_tasks.where(activity_type: @filters[:activity_type])
     end
