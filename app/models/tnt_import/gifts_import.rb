@@ -38,7 +38,7 @@ class TntImport::GiftsImport
       # plus one. If that is a collision due to a race condition, an exception will be raised as there is a
       # unique constraint on (organization_id, account_number) for donor_accounts. Just wait and try
       # again in that case.
-      max = org.donor_accounts.where("account_number ~ '^[0-9]+$'").maximum('CAST(account_number AS int)')
+      max = org.donor_accounts.where("account_number ~ '^[0-9]+$'").maximum('CAST(account_number AS bigint)')
       org.donor_accounts.create!(account_number: (max.to_i + 1).to_s, name: contact.name)
     end
     contact.donor_accounts << donor_account

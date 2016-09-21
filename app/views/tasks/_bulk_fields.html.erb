@@ -47,6 +47,15 @@
     </div>
   <% end %>
 <% end %>
+<% if $rollout.active?(:task_notification, current_account_list) %>
+  <div class="field task_notification">
+    <%= f.label :notification_type, _('Notification') %>
+    <%= f.select :notification_type, { _('Email') => :email } %>
+    <%= f.text_field :notification_time_before, value: task.notification_time_before || 10 %>
+    <%= f.select :notification_time_unit, { _('Minutes') => :minutes, _('Hours') => :hours } %>
+    <small><%= _("before.") %></small>
+  </div>
+<% end %>
 
 <div class="field">
   <%= f.label :tag_list, _('Tags') %>

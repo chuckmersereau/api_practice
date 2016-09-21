@@ -2,10 +2,6 @@
 -- PostgreSQL database dump
 --
 
-
--- Dumped from database version 9.5.3
--- Dumped by pg_dump version 9.5.3
-
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
@@ -189,7 +185,11 @@ CREATE TABLE activities (
     remote_id character varying(255),
     source character varying(255),
     next_action character varying(255),
-    no_date boolean DEFAULT false
+    no_date boolean DEFAULT false,
+    notification_type integer,
+    notification_time_before integer,
+    notification_time_unit integer,
+    notification_scheduled boolean
 );
 
 
@@ -1904,7 +1904,8 @@ CREATE TABLE organizations (
     api_class character varying(255),
     country character varying(255),
     uses_key_auth boolean DEFAULT false,
-    locale character varying(255) DEFAULT 'en'::character varying NOT NULL
+    locale character varying(255) DEFAULT 'en'::character varying NOT NULL,
+    gift_aid_percentage numeric
 );
 
 
@@ -5205,4 +5206,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160603231000');
 INSERT INTO schema_migrations (version) VALUES ('20160606160232');
 
 INSERT INTO schema_migrations (version) VALUES ('20160610044352');
+
+INSERT INTO schema_migrations (version) VALUES ('20160627171818');
+
+INSERT INTO schema_migrations (version) VALUES ('20160728174747');
 

@@ -67,7 +67,7 @@ class GoogleImport
       contact = @account_list.contacts.find_or_create_by(name: name)
     end
 
-    contact.notes = g_contact.content if @import.override? || contact.notes.blank?
+    contact.add_to_notes(g_contact.content)
     contact.addresses_attributes = build_addresses(contact, g_contact)
     contact.tag_list.add(tags, parse: true) if tags.present?
     contact.save

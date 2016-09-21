@@ -6,9 +6,9 @@
             templateUrl: 'inline/contact_list.html' //declared inline at app/views/contacts/index.html.erb
         });
 
-    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants', '_', 'Gmaps', '$anchorScroll'];
+    contactListController.$inject = ['$scope', 'api', 'contactCache', 'urlParameter', '$log', 'state', 'selectionStore', 'railsConstants', '_', '$window', '$anchorScroll', 'Rx'];
 
-    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants, _, Gmaps, $anchorScroll) {
+    function contactListController($scope, api, contactCache, urlParameter, $log, state, selectionStore, railsConstants, _, $window, $anchorScroll, Rx) {
         var vm = this;
 
         vm.contactsLoading = true;
@@ -18,6 +18,7 @@
         vm.mapMarkers = [];
         vm.showAllFilterTags = false;
         vm.contactQuery = {};
+        vm.showMobileFilters = false;
 
         // A status of 'null' corresponds with '-- NONE --' in the html select
         var defaultFilters = {
@@ -53,6 +54,8 @@
             wildcardSearch: null
         };
 
+        var filterChangeEventEmitter = new Rx.Subject();
+
         vm.pageMeta = {
             total: 1,
             from: 0,
@@ -74,8 +77,9 @@
         vm.anyContactIdsSelected = anyContactIdsSelected;
         vm.anyContactsOnPageSelected = anyContactsOnPageSelected;
         vm.noSelectedContacts = noSelectedContacts;
+        vm.toggleMobileFilters = toggleMobileFilters;
 
-        vm._refreshContacts = refreshContacts;
+        vm._setupRefreshContacts = setupRefreshContacts;
         vm._buildContactFilterUrl = buildContactFilterUrl;
         vm._handleContactQueryChanges = handleContactQueryChanges;
         vm._loadViewPreferences = loadViewPreferences;
@@ -87,7 +91,7 @@
 
         function activate() {
             initializeFilters();
-            refreshContacts();
+            setupRefreshContacts();
 
             loadViewPreferences();
             loadSelectedContacts();
@@ -98,57 +102,63 @@
                 }
 
                 handleContactQueryChanges(oldq);
-                refreshContacts();
             }, true);
         }
 
-        function refreshContacts() {
-            vm.contactsLoading = true;
+        function setupRefreshContacts() {
+            filterChangeEventEmitter
+                .do(function(){
+                    vm.contactsLoading = true;
+                })
+                .debounceTime(200)
+                .switchMap(function(){
+                    // switchMap cancels the existing observable when a new event arrives and uses the latest
+                    return api.call('get', buildContactFilterUrl(), {}, null, null, true);
+                })
+                .subscribe(function(data){
+                    angular.forEach(data.contacts, function (contact) {
+                        var people = _.filter(data.people, function (i) {
+                            return _.includes(contact.person_ids, i.id);
+                        });
+                        var flattenedEmailAddresses = _.flatMap(people, 'email_address_ids');
+                        var flattenedFacebookAccounts = _.flatMap(people, 'facebook_account_ids');
 
-            api.call('get', buildContactFilterUrl(), {}, function (data) {
-                angular.forEach(data.contacts, function (contact) {
-                    var people = _.filter(data.people, function (i) {
-                        return _.includes(contact.person_ids, i.id);
+                        contactCache.update(contact.id, {
+                            addresses: _.filter(data.addresses, function (addr) {
+                                return _.includes(contact.address_ids, addr.id);
+                            }),
+                            people: people,
+                            email_addresses: _.filter(data.email_addresses, function (email) {
+                                return _.includes(flattenedEmailAddresses, email.id);
+                            }),
+                            contact: _.find(data.contacts, { 'id': contact.id }),
+                            phone_numbers: data.phone_numbers,
+                            facebook_accounts: _.filter(data.facebook_accounts, function (fb) {
+                                return _.includes(flattenedFacebookAccounts, fb.id);
+                            })
+                        });
                     });
-                    var flattenedEmailAddresses = _.flatMap(people, 'email_address_ids');
-                    var flattenedFacebookAccounts = _.flatMap(people, 'facebook_account_ids');
-                    contact.pledge_received = contact.pledge_received == 'true';
+                    vm.contacts = data.contacts;
 
-                    contactCache.update(contact.id, {
-                        addresses: _.filter(data.addresses, function (addr) {
-                            return _.includes(contact.address_ids, addr.id);
-                        }),
-                        people: people,
-                        email_addresses: _.filter(data.email_addresses, function (email) {
-                            return _.includes(flattenedEmailAddresses, email.id);
-                        }),
-                        contact: _.find(data.contacts, { 'id': contact.id }),
-                        phone_numbers: data.phone_numbers,
-                        facebook_accounts: _.filter(data.facebook_accounts, function (fb) {
-                            return _.includes(flattenedFacebookAccounts, fb.id);
-                        })
-                    });
+                    $anchorScroll(); // Scroll to top of page
+
+                    if(data.meta) {
+                        vm.totalContacts = data.meta.total;
+                        vm.pageMeta.total = data.meta.total_pages;
+                        vm.pageMeta.from = data.meta.from;
+                        vm.pageMeta.to = data.meta.to;
+                    }
+
+                    //Handles case where limit is increased (or another filter change) which could result in the current page being out of range
+                    if(vm.contactQuery.page > vm.pageMeta.total && vm.pageMeta.total !== 0){
+                        vm.contactQuery.page = vm.pageMeta.total;
+                    }
+
+                    vm.contactsLoading = false;
+                    saveViewPreferences();
+                }, function (error){
+                    $log.error('Contact filter query failed:', error);
                 });
-                vm.contacts = data.contacts;
-
-                $anchorScroll(); // Scroll to top of page
-
-                if(data.meta) {
-                    vm.totalContacts = data.meta.total;
-                    vm.pageMeta.total = data.meta.total_pages;
-                    vm.pageMeta.from = data.meta.from;
-                    vm.pageMeta.to = data.meta.to;
-                }
-
-                //Handles case where limit is increased (or another filter change) which could result in the current page being out of range
-                if(vm.contactQuery.page > vm.pageMeta.total && vm.pageMeta.total !== 0){
-                    vm.contactQuery.page = vm.pageMeta.total;
-                }
-
-                vm.contactsLoading = false;
-
-                saveViewPreferences();
-            }, null, true);
         }
 
         function buildContactFilterUrl(){
@@ -219,38 +229,50 @@
                 vm.clearSelectedContacts();
                 vm.contactQuery.page = 1;
             }
+
+            // Emit event to refresh contacts with latest filters
+            filterChangeEventEmitter.next('filterChanged');
         }
 
         function loadViewPreferences() {
-            api.call('get', 'users/me', {}, function (viewPrefs) {
+            if (vm.contactQuery.wildcardSearch === null) {
+                api.call('get', 'users/me', {})
+                    .then(function (viewPrefs) {
+                        // Emit event to refresh contacts with saved filters
+                        filterChangeEventEmitter.next('init with save filters');
+
+                        vm.viewPrefsLoaded = true;
+
+                        if (!_.has(viewPrefs, 'user.preferences.contacts_filter[' + state.current_account_list_id + ']')) {
+                            return;
+                        }
+
+                        // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
+                        _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
+
+                        if (_.isString(vm.contactQuery.tags)) {
+                            vm.contactQuery.tags = vm.contactQuery.tags.split(',');
+                        }
+
+                        openFilterPanels();
+                    }, function () {
+                        // Emit event to refresh contacts with default filters since saved filters couldn't be loaded
+                        filterChangeEventEmitter.next('init');
+                    });
+            }else{
                 vm.viewPrefsLoaded = true;
-
-                if (!_.has(viewPrefs, 'user.preferences.contacts_filter[' + state.current_account_list_id + ']')) {
-                    return;
-                }
-
-                // Limit and wildcardSearch aren't currently stored with the rest of the view preferences so we should keep original values
-                _.assign(vm.contactQuery, _.cloneDeep(defaultFilters), viewPrefs.user.preferences.contacts_filter[state.current_account_list_id], _.pick(vm.contactQuery, 'wildcardSearch', 'limit'));
-
-                if (_.isString(vm.contactQuery.tags)) {
-                    vm.contactQuery.tags = vm.contactQuery.tags.split(',');
-                }
-
-                openFilterPanels();
-            });
+            }
         }
 
         function saveViewPreferences(){
             var viewPrefs = {
                 user: {
-                    preferences: {
-                        contacts_filter: {}
-                    }
+                    contacts_filter: {}
                 },
                 account_list_id: state.current_account_list_id
             };
-            viewPrefs.user.preferences.contacts_filter[state.current_account_list_id] = _.omit(vm.contactQuery, ['wildcardSearch']);
-            viewPrefs.user.preferences.contacts_filter[state.current_account_list_id].tags = vm.contactQuery.tags.join();
+            viewPrefs.user.contacts_filter[state.current_account_list_id] = _.omit(vm.contactQuery, ['wildcardSearch']);
+            viewPrefs.user.contacts_filter[state.current_account_list_id].tags = vm.contactQuery.tags.join();
 
             api.call('put', 'users/me', viewPrefs);
         }
@@ -315,7 +337,7 @@
         function resetFilters(){
             _.assign(vm.contactQuery, _.omit(_.cloneDeep(defaultFilters), 'limit'));
             clearSelectedContacts();
-            angular.element('#globalContactSearch').value = '';
+            angular.element('#globalContactSearch').val('');
         }
 
         function tagIsActive(tag){
@@ -413,7 +435,7 @@
             }
             var mapOptions = { streetViewControl: false };
             if(!vm.mapHandler) {
-                vm.mapHandler = Gmaps.build('Google');
+                vm.mapHandler = $window.Gmaps.build('Google');
                 vm.mapHandler.buildMap(
                     {
                         provider: mapOptions,
@@ -497,6 +519,10 @@
             return _.map(vm.contacts, function(contact){
                 return contact.id;
             });
+        }
+
+        function toggleMobileFilters(){
+            vm.showMobileFilters = !vm.showMobileFilters;
         }
     }
 })();

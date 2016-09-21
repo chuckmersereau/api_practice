@@ -1,8 +1,8 @@
 class PreferencesController < ApplicationController
   def index
-    @page_title = _('Preferences')
+    @page_title = _('{{title}}')
 
-    @preference_set = PreferenceSet.new(user: current_user, account_list: current_account_list)
+    redirect_to integration_preferences_tab_path('organization') if params[:path] == '/networks'
   end
 
   def update

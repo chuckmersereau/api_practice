@@ -328,7 +328,7 @@ describe GoogleImport do
       @google_import.import
       @existing_person.reload
       @existing_contact.reload
-      expect(@existing_contact.notes).to eq('Notes here')
+      expect(@existing_contact.notes).to eq("Original notes \n \nNotes here")
       expect(@existing_person.first_name).to eq('John')
       expect(@existing_person.last_name).to eq('Google')
       expect(@existing_person.middle_name).to eq('Henry')
@@ -341,12 +341,22 @@ describe GoogleImport do
       expect(@existing_person.primary_picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
     end
 
-    it 'does not not update fields if not set to override' do
+    it 'does not append the contact notes twice' do
+      @import.override = true
+      @google_import.import
+      @existing_contact.reload
+      expect(@existing_contact.notes).to eq("Original notes \n \nNotes here")
+      @google_import.import
+      @existing_contact.reload
+      expect(@existing_contact.notes).to eq("Original notes \n \nNotes here")
+    end
+
+    it 'does not not update fields if not set to override (except for notes)' do
       @import.override = false
       @google_import.import
       @existing_person.reload
       @existing_contact.reload
-      expect(@existing_contact.notes).to eq('Original notes')
+      expect(@existing_contact.notes).to eq("Original notes \n \nNotes here")
       expect(@existing_person.first_name).to eq('Not-John')
       expect(@existing_person.last_name).to eq('Not-Doe')
       expect(@existing_person.middle_name).to eq('Not-Henry')

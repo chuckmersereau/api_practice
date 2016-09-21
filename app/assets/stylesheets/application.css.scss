@@ -7,6 +7,8 @@
 *= require bootstrap-tagsinput
 *= require typeahead
 *= require angularModal
+*= require ng-tags-input/build/ng-tags-input
+*= require ng-tags-input/build/ng-tags-input.bootstrap
 */
 
 @import "_crubrand";
@@ -19,6 +21,7 @@
 @import "_ico";
 @import "_errors";
 @import "_bootstrap_overrides";
+@import "_chosen_bootstrap";
 
 /* Components */
 @import "components/contacts/contact-list";

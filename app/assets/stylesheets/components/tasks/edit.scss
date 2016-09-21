@@ -9,3 +9,21 @@
 .inline{
   display: inline-block;
 }
+
+.task_notification {
+  display: inline;
+
+  input {
+    width: 20%;
+  }
+
+  select {
+    display: inline;
+    width: 30%;
+  }
+
+  small { 
+    font-size: 120%;
+    margin-left: 2px;
+  }
+}

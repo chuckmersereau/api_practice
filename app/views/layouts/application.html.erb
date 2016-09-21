@@ -1,6 +1,6 @@
 <% @account_list_exhibit = exhibit(current_account_list, self) %>
 <!DOCTYPE html>
-<html lang="<%= I18n.locale %>">
+<html lang="<%= I18n.locale %>" ng-app="mpdxApp">
   <head>
     <meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
     <title>
@@ -13,8 +13,9 @@
     <%= javascript_include_tag "angular-i18n/angular-locale_#{locale.downcase}.js" %>
     <%= javascript_include_tag "twitter_cldr/min/#{locale}.min.js" %>
     <%= csrf_meta_tags %>
+    <base href="/">
   </head>
-  <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller" ng-app="mpdxApp">
+  <body id="<%= controller.controller_name %>_<%= controller.action_name %>" class="<%= controller.controller_name %>_controller">
     <preload-state name="current_user_id" data="<%= current_user.id %>"></preload-state>
     <preload-state name="current_currency" data="<%= current_currency %>"></preload-state>
     <preload-state name="current_currency_symbol"
@@ -68,14 +69,15 @@
                   </div>
                   <div class="section">
                     <div class="dropdown">
-                      <a class="dropdown-toggle settings-drop" href="#" type="button" data-toggle="dropdown" aria-expanded="true" data-disabled="true">
+                      <a class="dropdown-toggle settings-drop" type="button" data-toggle="dropdown" aria-expanded="true" data-disabled="true">
                         <i class="fa fa-cog"></i>
                       </a>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="settings-drop">
-                        <li role="presentation"><%= link_to(_('Preferences'), "/preferences") %></li>
-                        <li role="presentation"><%= link_to(_('Networks & Imports'), "/accounts") %></li>
-                        <li role="presentation"><%= link_to(_('Integrations'), "/settings/integrations") %></li>
-                        <li role="presentation"><%= link_to(_('Account Sharing'), sharing_account_lists_path) %></li>
+                        <li role="presentation"><%= link_to(_('Preferences'), personal_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Notifications'), notification_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Import Contacts'), network_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Connect Services'), integration_preferences_path) %></li>
+                        <li role="presentation"><%= link_to(_('Manage Account'), account_preferences_path) %></li>
                         <% if current_user.admin %>
                           <li role="presentation">
                             <%= link_to(_('Admin'), admin_home_index_path) %>
@@ -134,7 +136,7 @@
                   </div>
                   <div class="text-right navbar-quick">
                     <div class="dropdown">
-                      <a class="dropdown-toggle btn btn-secondary" href="#" type="button" id="quick-drop" data-toggle="dropdown" aria-expanded="true" data-disabled="true"  onClick="_gaq.push(['_trackEvent', 'Global Events', 'Actions', 'Quick Add']);">
+                      <a class="dropdown-toggle btn btn-secondary" type="button" id="quick-drop" data-toggle="dropdown" aria-expanded="true" data-disabled="true"  onClick="_gaq.push(['_trackEvent', 'Global Events', 'Actions', 'Quick Add']);">
                         <i class="fa fa-plus-circle"></i> <%= _('Quick Add') %>
                       </a>
                       <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="quick-drop">
@@ -166,6 +168,7 @@
                     <%= link_to(_('Sync Donations Now'), donation_syncs_path, method: :post) %>
                   </div>
                 <% end %>
+
                 <% if request.path.start_with?('/reports') %>
                   <div class="section <%= request.path =~ /\/expected_monthly_totals/ ? 'active' : '' %>">
                     <%= link_to(_('Expected Monthly Total'), reports_expected_monthly_totals_path) %>
@@ -198,7 +201,7 @@
            ng-class="{'container-fluid': $layoutSettingsCtrl.layoutSettings.fullWidth, 'container': !$layoutSettingsCtrl.layoutSettings.fullWidth}">
         <%= render 'notices' %>
         <%= yield %>
-        <a href="#" id="exit-fullscreen">
+        <a id="exit-fullscreen">
           <span class="icons">
             <i class="fa fa-arrow-right"></i><i class="fa fa-arrow-left"></i>
           </span>
@@ -268,7 +271,7 @@
         });
       }
     </script>
-    <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3.13&amp;sensor=false&amp;libraries=places,geometry"></script>
+    <script type="text/javascript" src="//maps.google.com/maps/api/js?v=3.23&amp;libraries=places,geometry&amp;key=<%= ENV['GOOGLEMAPS_KEY'] %>"></script>
     <%= render 'google_analytics' %>
   </body>
 </html>

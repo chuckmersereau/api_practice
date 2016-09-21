@@ -10,7 +10,7 @@
 
     <span id="dash-tabs" class="tabgroup">
       <ul>
-        <li class="killround"><a href="#insights-increase"><%= _('Recurring Gift Recommendations') %></a></li>
+        <li class="killround"><a onclick='window.location.href=window.location.pathname + "#insights-increase"'><%= _('Recurring Gift Recommendations') %></a></li>
       </ul>
       <div id="insights-increase"><%= render partial: "recurring_recommendations" %></div>
     </span>

@@ -165,7 +165,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def handle_newsletter_mc_error(e)
     case
-    when e.message.include?('code 250')
+    when e.message.include?('Your merge fields were invalid.')
       # MMERGE3 must be provided - Please enter a value (code 250)
       # Notify user and nulify primary_list_id until they fix the problem
       update_column(:primary_list_id, nil)
@@ -186,7 +186,8 @@ class MailChimpAccount < ActiveRecord::Base
     e.status_code == 400 &&
       (e.message =~ /looks fake or invalid, please enter a real email/ ||
        e.message =~ /username portion of the email address is invalid/ ||
-       e.message =~ /domain portion of the email address is invalid/)
+       e.message =~ /domain portion of the email address is invalid/ ||
+       e.message =~ /An email address must contain a single @/)
   end
 
   def unsubscribe_list_batch(list_id, members_to_unsubscribe)
@@ -249,7 +250,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def gb
-    @gb ||= Gibbon::Request.new(api_key: api_key)
+    @gb = Gibbon::Request.new(api_key: api_key)
     @gb.timeout = 600
     @gb
   end

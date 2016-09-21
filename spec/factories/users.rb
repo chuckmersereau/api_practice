@@ -14,6 +14,7 @@ FactoryGirl.define do
       account_list = create(:account_list)
       create(:account_list_user, user: u, account_list: account_list)
       create(:relay_account, person: u)
+      create(:designation_profile, user: u, account_list: account_list)
     end
   end
 

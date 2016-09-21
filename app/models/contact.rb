@@ -161,6 +161,16 @@ class Contact < ActiveRecord::Base
     new_person
   end
 
+  def add_to_notes(new_note)
+    return if notes.to_s.include?(new_note.to_s)
+    self.notes = if notes.present?
+                   "#{notes} \n \n#{new_note}"
+                 else
+                   new_note
+                 end
+    save
+  end
+
   def mailing_address
     # Use .reject(&:historic) and not .where.not(historic: true) because the
     # CSV import uses mailing_address for checking the addresses for contacts
@@ -474,8 +484,11 @@ class Contact < ActiveRecord::Base
     donations.first
   end
 
-  def last_monthly_total
-    donations.where('donation_date >= ?', last_donation_month_end.beginning_of_month).sum(:amount)
+  def last_monthly_total(except_payment_method: nil)
+    scoped_donations = donations
+    scoped_donations = scoped_donations.where.not(payment_method: except_payment_method) if except_payment_method
+    scoped_donations.where('donation_date >= ?',
+                           last_donation_month_end.beginning_of_month).sum(:amount)
   end
 
   def prev_month_donation_date
@@ -483,17 +496,17 @@ class Contact < ActiveRecord::Base
              .pluck(:donation_date).first
   end
 
-  def monthly_avg_current
-    monthly_avg_over_range(current_pledge_interval_start, last_donation_month_end)
+  def monthly_avg_current(except_payment_method: nil)
+    monthly_avg_over_range(current_pledge_interval_start, last_donation_month_end, except_payment_method: except_payment_method)
   end
 
-  def monthly_avg_with_prev_gift
-    monthly_avg_over_range(prev_donation_month_start, last_donation_month_end)
+  def monthly_avg_with_prev_gift(except_payment_method: nil)
+    monthly_avg_over_range(prev_donation_month_start, last_donation_month_end, except_payment_method: except_payment_method)
   end
 
-  def monthly_avg_from(date)
+  def monthly_avg_from(date, except_payment_method: nil)
     return unless date
-    monthly_avg_over_range(start_of_pledge_interval(date), last_donation_month_end)
+    monthly_avg_over_range(start_of_pledge_interval(date), last_donation_month_end, except_payment_method: except_payment_method)
   end
 
   def months_from_prev_to_last_donation
@@ -514,10 +527,24 @@ class Contact < ActiveRecord::Base
     _(MailChimpAccount::Locales::LOCALE_NAMES[locale])
   end
 
+  def amount_with_gift_aid(amount)
+    (amount * gift_aid_coefficient).round(2)
+  end
+
   private
 
-  def monthly_avg_over_range(start_date, end_date)
-    interval_donations(start_date, end_date).sum(:amount) / months_in_range(start_date, end_date)
+  def gift_aid_coefficient
+    (1 + (gift_aid_percentage.to_f / 100))
+  end
+
+  def gift_aid_percentage
+    donor_accounts.first.try(:organization).try(:gift_aid_percentage) || 0
+  end
+
+  def monthly_avg_over_range(start_date, end_date, except_payment_method: nil)
+    scoped_donations = interval_donations(start_date, end_date)
+    scoped_donations = scoped_donations.where.not(payment_method: except_payment_method) if except_payment_method
+    scoped_donations.sum(:amount) / months_in_range(start_date, end_date)
   end
 
   def interval_donations(start_date, end_date)
@@ -527,7 +554,7 @@ class Contact < ActiveRecord::Base
   end
 
   def last_donation_month_end
-    @recent_avg_range_end ||=
+    @last_donation_month_end ||=
       if last_donation_date && month_diff(last_donation_date, Date.today) > 0
         Date.today.prev_month.end_of_month
       else

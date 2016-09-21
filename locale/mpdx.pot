@@ -8,8 +8,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: mpdx 1.0.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2016-06-09 16:14+1200\n"
-"PO-Revision-Date: 2016-06-09 16:14+1200\n"
+"POT-Creation-Date: 2016-07-25 16:27-0400\n"
+"PO-Revision-Date: 2016-07-25 16:27-0400\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
@@ -157,7 +157,7 @@ msgstr ""
 msgid "<span class=\"count-big\">%{contact_count}</span> partners <strong>%{days}</strong> days late"
 msgstr ""
 
-msgid "<strong>95.91543%</strong> of all help requests are answered on our %{link} in theform of a Video or FAQ. Get answers to your questions on our %{link} now."
+msgid "<strong>95.91543%</strong> of all help requests are answered on our %{link} in the form of a Video or FAQ. Get answers to your questions on our %{link} now."
 msgstr ""
 
 msgid "About you"
@@ -517,7 +517,7 @@ msgstr ""
 msgid "Be sure to click Step 1 first to download a backup of your contacts before before clicking Step 2 to reset your account."
 msgstr ""
 
-msgid "Before emailing us, please have a look at %{link} to see if your question isalready answered there."
+msgid "Before emailing us, please have a look at %{link} to see if your question is already answered there."
 msgstr ""
 
 msgid "Belarusian"
@@ -581,12 +581,6 @@ msgid "Care"
 msgstr ""
 
 msgid "Catalan"
-msgstr ""
-
-msgid "Chalkline Integration"
-msgstr ""
-
-msgid "Chalkline is a great way of sending a variety of touch cards to your supporters."
 msgstr ""
 
 msgid "Change these in the future by clicking the gear in the top right, and selecting 'Preferences'"
@@ -955,9 +949,6 @@ msgstr ""
 msgid "Disable Google Contacts integration"
 msgstr ""
 
-msgid "Disconnect"
-msgstr ""
-
 msgid "Displaying"
 msgstr ""
 
@@ -1141,7 +1132,13 @@ msgstr ""
 msgid "Error loading CSV import preview. The MPDX team has been notified. If the problem persists please click \"Help\" above and submit a request."
 msgstr ""
 
+msgid "Error loading progress stats. Please try again or contact support."
+msgstr ""
+
 msgid "Estonian"
+msgstr ""
+
+msgid "Every 2 Months"
 msgstr ""
 
 msgid "Every 2 Weeks"
@@ -1159,6 +1156,9 @@ msgstr ""
 msgid "Exchange Rate"
 msgstr ""
 
+msgid "Expand partner info"
+msgstr ""
+
 msgid "Expected Monthly Total"
 msgstr ""
 
@@ -1166,6 +1166,9 @@ msgid "Expired Referral"
 msgstr ""
 
 msgid "Export"
+msgstr ""
+
+msgid "Export CSV"
 msgstr ""
 
 msgid "Export Contacts"
@@ -1372,6 +1375,9 @@ msgid "Hide Contacts"
 msgstr ""
 
 msgid "Hide Contacts Not Included"
+msgstr ""
+
+msgid "Hide partner info"
 msgstr ""
 
 msgid "Hindi"
@@ -1663,7 +1669,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-msgid "Log Prayer Letter"
+msgid "Log Physical Newsletter"
 msgstr ""
 
 msgid "Log Task"
@@ -1762,9 +1768,6 @@ msgid "MailChimp subscriber email bounced"
 msgstr ""
 
 msgid "Mailchimp API Key no longer valid"
-msgstr ""
-
-msgid "Mailchimp Integration"
 msgstr ""
 
 msgid "Mailchimp List is requiring an additional merge field"
@@ -1890,6 +1893,9 @@ msgstr ""
 msgid "Min"
 msgstr ""
 
+msgid "Minimum"
+msgstr ""
+
 msgid "Miss"
 msgstr ""
 
@@ -1897,9 +1903,6 @@ msgid "Mobile"
 msgstr ""
 
 msgid "Mobile Phone"
-msgstr ""
-
-msgid "Modify Settings"
 msgstr ""
 
 msgid "Monthly"
@@ -2022,6 +2025,9 @@ msgstr ""
 msgid "No"
 msgstr ""
 
+msgid "No Due Date"
+msgstr ""
+
 msgid "No Subject"
 msgstr ""
 
@@ -2098,9 +2104,6 @@ msgid "Note: this file should be in a TntMPD data sync (.tntmpd) text file from 
 msgstr ""
 
 msgid "Notes"
-msgstr ""
-
-msgid "Notifications"
 msgstr ""
 
 msgid "Notifications / Alerts"
@@ -2250,6 +2253,9 @@ msgstr ""
 msgid "Please specify a valid email to send the invite."
 msgstr ""
 
+msgid "Pledge"
+msgstr ""
+
 msgid "Polish"
 msgstr ""
 
@@ -2272,9 +2278,6 @@ msgid "Postal code"
 msgstr ""
 
 msgid "Prayer Request"
-msgstr ""
-
-msgid "PrayerLetters.com Integration"
 msgstr ""
 
 msgid "Pre Call Letter"
@@ -2893,6 +2896,9 @@ msgstr ""
 msgid "This invitation is no longer valid."
 msgstr ""
 
+msgid "This last month is excluded from totals and averages"
+msgstr ""
+
 msgid "This will prevent this person's primary email address from being synced with MailChimp and from being included in a contact export from MPDx."
 msgstr ""
 
@@ -2929,10 +2935,16 @@ msgstr ""
 msgid "Toggle the radio buttons to change the person who will be the \"winner\" of the merge. All data from the \"loser\" of the merge will get copied into the \"winner.\" No data will be lost."
 msgstr ""
 
+msgid "Tomorrow"
+msgstr ""
+
 msgid "Total"
 msgstr ""
 
 msgid "Total %{currency} Donations (%{count}):"
+msgstr ""
+
+msgid "Total (last month excluded from total)"
 msgstr ""
 
 msgid "Total Donations"
@@ -3109,9 +3121,6 @@ msgstr ""
 msgid "You can change this in the future if you aren't sure."
 msgstr ""
 
-msgid "You can keep PrayerLetters.com updated with all your MPDX contacts. Click Enable to begin."
-msgstr ""
-
 msgid ""
 "You can migrate all your contact information and history from TNTConnect into MPDX. Most of your information will\n"
 "    import straight into MPDX, including contact info, task history (with notes), notes, user groups, and appeals. MPDX\n"
@@ -3120,9 +3129,6 @@ msgid ""
 msgstr ""
 
 msgid "You can now export your contacts to MailChimp."
-msgstr ""
-
-msgid "You can synchronize MPDX and Mailchimp contacts to simplify your process and take advantage of all of Mailchimp's great features."
 msgstr ""
 
 msgid "You can then review the import to ensure it is correct and re-upload as needed. Note that the sample itself isn't fully valid because we included instructions at the bottom."
@@ -3191,7 +3197,7 @@ msgstr ""
 msgid "You're currently modifying MPDX settings for:"
 msgstr ""
 
-msgid "You've never logged a prayer letter"
+msgid "You've never logged a physical newsletter"
 msgstr ""
 
 msgid "Your Appeal Contacts are loading to MailChimp"
@@ -3323,7 +3329,7 @@ msgstr ""
 msgid "showing all tasks"
 msgstr ""
 
-msgid "since your last prayer letter"
+msgid "since your last physical newsletter"
 msgstr ""
 
 msgid "starred"
