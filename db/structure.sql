@@ -1904,7 +1904,8 @@ CREATE TABLE organizations (
     api_class character varying(255),
     country character varying(255),
     uses_key_auth boolean DEFAULT false,
-    locale character varying(255) DEFAULT 'en'::character varying NOT NULL
+    locale character varying(255) DEFAULT 'en'::character varying NOT NULL,
+    gift_aid_percentage numeric
 );
 
 
@@ -5205,4 +5206,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160603231000');
 INSERT INTO schema_migrations (version) VALUES ('20160606160232');
 
 INSERT INTO schema_migrations (version) VALUES ('20160610044352');
+
+INSERT INTO schema_migrations (version) VALUES ('20160627171818');
 

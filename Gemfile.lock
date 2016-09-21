@@ -842,7 +842,7 @@ DEPENDENCIES
   deadlock_retry (~> 1.2.0)
   devise (~> 3.2.2)
   display_case (= 0.0.5)
-  dotenv-rails
+  dotenv-rails (~> 2.0.2)
   email_reply_parser
   email_validator
   emoji_spec!

@@ -128,7 +128,7 @@ end
 
 group :development, :test do
   gem 'parallel_tests'
-  gem 'dotenv-rails'
+  gem 'dotenv-rails', '~> 2.0.2'
   gem 'awesome_print'
   gem 'database_cleaner'
   gem 'spring-commands-rspec'
