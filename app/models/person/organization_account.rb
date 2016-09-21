@@ -16,9 +16,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
   validates_with CredentialValidator
   after_validation :set_valid_credentials
   after_destroy :destroy_designation_profiles
-
-  attr_accessor :test_scene
-
+  
   belongs_to :organization
 
   def to_s
@@ -69,11 +67,7 @@ class Person::OrganizationAccount < ActiveRecord::Base
   end
 
   def import_profiles
-    if test_scene && test_scene == true
-      organization.api(self).import_test_profiles
-    else
-      organization.api(self).import_profiles
-    end
+    organization.api(self).import_profiles
   rescue DataServerError => e
     Rollbar.error(e)
   end
