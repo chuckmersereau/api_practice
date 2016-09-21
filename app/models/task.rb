@@ -8,6 +8,9 @@ class Task < Activity
   after_save :update_contact_uncompleted_tasks_count, :sync_to_google_calendar
   after_destroy :update_contact_uncompleted_tasks_count, :sync_to_google_calendar
 
+  enum notification_type: %w(email)
+  enum notification_time_unit: %w(minutes hours)
+
   scope :of_type, ->(activity_type) { where(activity_type: activity_type) }
   scope :with_result, ->(result) { where(result: result) }
   scope :completed_between, -> (start_date, end_date) { where('completed_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
@@ -18,6 +21,9 @@ class Task < Activity
     :no_date,
     :completed,
     :next_action,
+    :notification_type,
+    :notification_time_before,
+    :notification_time_unit,
     :tag_list, {
       activity_comments_attributes: [:body],
       activity_comment: [:body],
