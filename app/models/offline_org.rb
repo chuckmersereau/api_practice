@@ -4,7 +4,7 @@ class OfflineOrg < DataServer
   def import_all(_date_from = nil)
     # Do nothing
   end
-  
+
   def import_profiles
     profile = create_designation_profile
     create_designation_account(profile)
