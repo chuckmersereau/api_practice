@@ -15,7 +15,7 @@ class NotificationType::LargerGift < NotificationType
                                                                                    .without_gift_aid
                                                                                    .first.amount) > contact.pledge_amount
     end
-    
+
     return if long_time_frame_gift_given_early?(contact)
 
     monthly_avg_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_current(except_payment_method: Donation::GIFT_AID))
