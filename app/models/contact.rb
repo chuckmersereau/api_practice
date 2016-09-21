@@ -554,7 +554,7 @@ class Contact < ActiveRecord::Base
   end
 
   def last_donation_month_end
-    @recent_avg_range_end ||=
+    @last_donation_month_end ||=
       if last_donation_date && month_diff(last_donation_date, Date.today) > 0
         Date.today.prev_month.end_of_month
       else
