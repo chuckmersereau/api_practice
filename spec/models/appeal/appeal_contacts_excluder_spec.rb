@@ -35,7 +35,7 @@ describe Appeal::AppealContactsExcluder do
           expect(subject).to match_array [contact_one, contact_two]
         end
         it 'excludes contacts that gave extra within the past 3 months' do
-          donation = create(:donation, donor_account: donor_account_one, designation_account: designation_account_one, amount: 100, donation_date: 1.day.ago) # Contact one gives extra
+          create(:donation, donor_account: donor_account_one, designation_account: designation_account_one, amount: 100, donation_date: 1.day.ago) # Contact one gives extra
           expect(subject).to match_array [contact_two]
         end
       end
@@ -50,7 +50,7 @@ describe Appeal::AppealContactsExcluder do
           expect(subject).to match_array [contact_one, contact_two]
         end
         it 'excludes contacts that gave extra within the past 3 months' do
-          donation = create(:donation, donor_account: donor_account_one, designation_account: designation_account_one, amount: 100, donation_date: 2.months.ago) # Contact one gives extra
+          create(:donation, donor_account: donor_account_one, designation_account: designation_account_one, amount: 100, donation_date: 2.months.ago) # Contact one gives extra
           expect(subject).to match_array [contact_two]
         end
       end
