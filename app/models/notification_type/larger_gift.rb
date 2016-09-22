@@ -16,6 +16,8 @@ class NotificationType::LargerGift < NotificationType
                                                                                    .first.amount) > contact.pledge_amount
     end
 
+    return if long_time_frame_gift_given_early?(contact)
+
     monthly_avg_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_current(except_payment_method: Donation::GIFT_AID))
     monthly_avg_with_prev_gift_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_with_prev_gift)
     monthly_avg_without_gift_aid > contact.monthly_pledge &&
@@ -31,6 +33,19 @@ class NotificationType::LargerGift < NotificationType
       return true if monthly_avg_without_gift_aid == contact.monthly_pledge
       from_date <<= contact.pledge_frequency
     end
+  end
+
+  def long_time_frame_gift_given_early?(contact)
+    return unless contact.pledge_frequency.to_i >= LongTimeFrameGift::LONG_TIME_FRAME_PLEDGE_FREQUENCY &&
+                  contact.prev_month_donation_date.present?
+    last_donation_month_end = contact.last_donation_date.end_of_month
+    previous_frame_start_date = (last_donation_month_end << contact.pledge_frequency - 1).beginning_of_month
+    previous_frame_end_date = (last_donation_month_end << 1).end_of_month
+    prev_donation_amount = contact.donations.where('donation_date >= ? AND donation_date <= ?',
+                                                   previous_frame_start_date,
+                                                   previous_frame_end_date).sum(:amount)
+    prev_donation_amount == contact.last_donation.amount &&
+      prev_donation_amount == contact.pledge_amount
   end
 
   def larger_gift(contact)
