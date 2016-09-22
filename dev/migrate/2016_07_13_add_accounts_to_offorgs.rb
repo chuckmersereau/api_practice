@@ -1,7 +1,7 @@
 class AddAccountsToOfforgs
   def add_accounts_to_off_orgs
     off_orgs_with_no_designation_accounts.each do |org|
-      org.organization_accounts.each do |org_account|
+      org.organization_accounts.find_each(batch_size: 400) do |org_account|
         org.api(org_account).import_profiles
       end
     end
