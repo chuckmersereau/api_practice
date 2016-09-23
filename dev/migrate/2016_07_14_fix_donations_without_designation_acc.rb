@@ -7,8 +7,6 @@ class AddAccountsToDonations
     donations_without_designation_accounts.find_each(batch_size: 400) do |donation|
       if donation.donor_account.contacts.map(&:account_list_id).uniq.count == 1
         account_list = donation.donor_account.contacts.first.account_list
-      elsif donation.appeal.count == 1
-        account_list = donation.appeal.account_list
       else
         log_action(donation, 1)
         next
