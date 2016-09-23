@@ -4,9 +4,11 @@ class AddAccountsToDonations
   def add_accounts_to_donations
     log_action(nil, 0)
 
-    donations_without_designation_accounts.find_each(batch_size: 400) do |donation|
-      if donation.donor_account.contacts.map(&:account_list_id).uniq.count == 1
-        account_list = donation.donor_account.contacts.first.account_list
+    donations_without_designation_accounts.limit(400).each do |donation|
+      donor_account = donation.donor_account
+
+      if donor_account.contacts.map(&:account_list_id).uniq.count == 1
+        account_list = donor_account.contacts.first.account_list
       else
         log_action(donation, 1)
         next
@@ -25,11 +27,14 @@ class AddAccountsToDonations
         next
       end
 
-      donation.update(designation_account_id: designation_account.id)
+      donor_account.donations.where(designation_account_id: nil).update_all(designation_account_id: designation_account.id)
+
       log_action(donation, 4)
     end
 
     log_action(nil, 5)
+
+    FixDonationsWorker.perform_async unless donations_without_designation_accounts.limit(1).empty?
   end
 
   private
