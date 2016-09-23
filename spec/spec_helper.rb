@@ -18,19 +18,20 @@ def start_simplecov
   end
 end
 
-ENV['RAILS_ENV'] ||= 'test'
+ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'webmock/rspec'
 require 'capybara/rspec'
-require 'capybara/poltergeist'
 require 'sidekiq/testing'
 require 'sidekiq_unique_jobs/testing'
 require 'paper_trail/frameworks/rspec'
 require 'attributes_history/rspec'
+require 'capybara-screenshot/rspec'
 
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
+require 'capybara/poltergeist'
 
 # Turn off sidekiq logging in test
 Sidekiq::Logging.logger = nil
@@ -74,6 +75,11 @@ RSpec.configure do |config|
     # needed a lot)
     stub_google_geocoder
   end
+
+  # config.before(:each, js: true) do
+  #   page.driver.browser.url_blacklist = ['http://use.typekit.net']
+  #   Capybara.current_driver = Capybara.javascript_driver
+  # end
 
   # ## Mock Framework
   #
@@ -124,16 +130,14 @@ RSpec.configure do |config|
       Rails.application.load_seed
     end
 
-    config.before(:each, js: true) do
-      DatabaseCleaner.strategy = :truncation
-    end
-
-    config.before(:each) do
+    config.before(:each) do |example|
+      DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
       DatabaseCleaner.start
     end
 
-    config.after(:each) do
+    config.after(:each) do |example|
       DatabaseCleaner.clean
+      Rails.application.load_seed if example.metadata[:js]
     end
   end
 

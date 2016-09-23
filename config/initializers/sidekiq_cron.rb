@@ -1,4 +1,11 @@
 SIDEKIQ_CRON_HASH = {
+
+  'Task Notifications' => {
+    'class' => 'TaskNotificationsWorker',
+    'cron'  => '0 * * * *',
+    'args'  => []
+  },
+
   'Google email sync' => {
     'class' => 'SidekiqCronWorker',
     'cron'  => '0 3 * * *',

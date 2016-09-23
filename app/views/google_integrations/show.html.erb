@@ -64,7 +64,7 @@
               <br/>
               <%= _('(You should only need to do this if you receive an email from MPDx.)') %>
               <br/><br/>
-              <%= link_to(_('Refresh Google Account'), new_account_path(provider: :google, redirect: google_integration_path(@google_integration)), class: 'btn btn-secondary desired_action') %>
+              <%= link_to(_('Refresh Google Account'), new_auth_account_path(provider: :google, redirect: google_integration_path(@google_integration)), class: 'btn btn-secondary desired_action') %>
             </div>
           </div>
         </div>

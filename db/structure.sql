@@ -1395,8 +1395,7 @@ CREATE TABLE mail_chimp_accounts (
     importing boolean DEFAULT false NOT NULL,
     status_interest_ids text,
     tags_grouping_id character varying(255),
-    tags_interest_ids text,
-    sync_all_active_contacts boolean
+    tags_interest_ids text
 );
 
 
@@ -5211,6 +5210,4 @@ INSERT INTO schema_migrations (version) VALUES ('20160610044352');
 INSERT INTO schema_migrations (version) VALUES ('20160627171818');
 
 INSERT INTO schema_migrations (version) VALUES ('20160728174747');
-
-INSERT INTO schema_migrations (version) VALUES ('20160809235201');
 

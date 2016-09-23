@@ -1,0 +1,52 @@
+<div class="row pref-row">
+  <div class="col-md-4 pref-lead">
+    <h5><%= _('Share this ministry account with other team members') %></h5>
+  </div>
+  <div class="col-md-8 pref-content">
+    <div class="alert alert-warning" ng-if="vm.userPreferences.data.manager">
+      <%= _("If you want to allow another mpdx user to have access to this ministry account, " +
+            "you can share access with them. Make sure you have the proper permissions and " +
+            "leadership consensus around this sharing before you do this. You will be able to remove access later.") %>
+    </div>
+
+    <div ng-if="vm.userPreferences.data.users.length > 0">
+      <strong><%= _('Account currently shared with') %></strong>
+      <ul class="account-users">
+        <li ng-repeat="user in vm.userPreferences.data.users">
+          {{user.first_name}}
+          {{user.last_name}}
+          ({{user.email}})
+          <span ng-if="user.method.type == 'designation'" data-toggle="tooltip" data-placement="top" title="<%= _('Linked by designation') %>: {{user.method.name}}">
+            <i class="fa fa-info-circle"></i>
+          </span>
+          <span ng-if="user.method.type == 'invite'" data-toggle="tooltip" data-placement="top" title="<%= _('Invited by') %>: {{user.method.inviter.first_name}} {{user.method.inviter.last_name}}">
+            <i class="fa fa-info-circle"></i>
+          </span>
+          <span ng-if="user.method.type == 'mpdx'" data-toggle="tooltip" data-placement="top" title="<%= _('Manually added by MPDX support') %>">
+            <i class="fa fa-info-circle"></i>
+          </span>
+          <span ng-if="vm.userPreferences.data.manager && user.deletable">
+            <button class="btn btn-xxs btn-danger" ng-click="vm.removeUser(user.id)" ng-disabled="vm.saving"><i class="fa fa-remove"></i> <%= _('Delete') %></button>
+          </span>
+        </li>
+      </ul>
+    </div>
+    <div ng-if="vm.invitePreferences.data.users.length > 0">
+      <strong><%= _('Pending Invites') %></strong>
+      <ul class="account-users">
+        <li ng-repeat="user in vm.invitePreferences.data.users">
+          {{user.email}}
+          <i>(<%= _('Sent by') %> {{user.inviter.first_name}} {{user.inviter.last_name}})</i>
+          <span ng-if="vm.invitePreferences.data.manager">
+            <button class="btn btn-xxs btn-danger" ng-click="vm.cancelInvite(user.id)" ng-disabled="vm.saving"><i class="fa fa-remove"></i> <%= _('Cancel') %></button>
+          </span>
+        </li>
+      </ul>
+    </div>
+
+    <div ng-if="vm.invitePreferences.data.manager" class="well">
+      <strong><%= _('Invite someone to share this account:') %></strong>
+      <invite-preferences></invite-preferences>
+    </div>
+  </div>
+</div>

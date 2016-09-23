@@ -85,6 +85,8 @@ class DataServer
 
   def import_donors_from_csv(account_list, profile, csv, user)
     CSV.new(csv, headers: :first_row, header_converters: ->(h) { h.upcase }).each do |line|
+      next unless line['PEOPLE_ID']
+
       line['LAST_NAME'] = line['LAST_NAME_ORG']
       line['FIRST_NAME'] = line['ACCT_NAME'] if line['FIRST_NAME'].blank?
 
@@ -183,6 +185,7 @@ class DataServer
   end
 
   def check_credentials!
+    return unless @org_account.requires_username_and_password?
     raise OrgAccountMissingCredentialsError, _('Your username and password are missing for this account.') unless @org_account.username && @org_account.password
     raise OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org } unless @org_account.valid_credentials?
   end
@@ -220,6 +223,7 @@ class DataServer
   protected
 
   def profile_balance(profile_code)
+    return {} unless @org.account_balance_url
     balance = {}
     response = Retryable.retryable on: Errors::UrlChanged, times: 1, then: update_url(:account_balance_url) do
       get_response(@org.account_balance_url,
@@ -335,6 +339,9 @@ class DataServer
     person ||= Person.new(master_person: master_person_from_source)
     person.attributes = { first_name: line[prefix + 'FIRST_NAME'], last_name: line[prefix + 'LAST_NAME'], middle_name: line[prefix + 'MIDDLE_NAME'],
                           title: line[prefix + 'TITLE'], suffix: line[prefix + 'SUFFIX'], gender: prefix.present? ? 'female' : 'male' }
+    # Make sure spouse always has a last name
+    person.last_name = line['LAST_NAME'] if person.last_name.blank?
+
     # Phone numbers
     person.phone_number = { 'number' => line[prefix + 'PHONE'] } if line[prefix + 'PHONE'].present? && line[prefix + 'PHONE'] != line[prefix + 'MOBILE_PHONE']
     person.phone_number = { 'number' => line[prefix + 'MOBILE_PHONE'], 'location' => 'mobile' } if line[prefix + 'MOBILE_PHONE'].present?

@@ -634,13 +634,15 @@ describe Contact do
   describe 'donation methods' do
     let!(:da) { create(:designation_account) }
     let!(:account_list) { create(:account_list) }
+    let!(:organization) { create(:organization, gift_aid_percentage: 25) }
+    let!(:donor_account) { create(:donor_account, organization: organization) }
     let!(:contact) { create(:contact, account_list: account_list) }
-    let!(:donor_account) { create(:donor_account) }
     let!(:donation) { create(:donation, donor_account: donor_account, designation_account: da) }
     let(:old_donation) do
       create(:donation, donor_account: donor_account, designation_account: da,
                         donation_date: Date.today << 3)
     end
+    let(:gift_aid_donation) { create(:donation, donor_account: donor_account, designation_account: da, payment_method: 'Gift Aid', amount: 2.50) }
 
     before do
       account_list.account_list_entries.create!(designation_account: da)
@@ -675,7 +677,7 @@ describe Contact do
       end
 
       it 'returns the total of the current month if it has a donation' do
-        expect(contact.last_monthly_total).to eq(9.99)
+        expect(contact.last_monthly_total).to eq(9.99.round(2))
       end
 
       it 'returns the total of the previous month if current month has no donations' do
@@ -684,7 +686,7 @@ describe Contact do
         old_donation.update(donation_date: Date.today << 1)
         contact.update_donation_totals(donation)
         contact.update_donation_totals(old_donation)
-        expect(contact.last_monthly_total).to eq(9.99 * 2)
+        expect(contact.last_monthly_total).to eq((9.99 * 2).round(2))
       end
 
       it 'returns zero if the previous and current months have no donations' do
@@ -757,6 +759,12 @@ describe Contact do
         expect(contact.monthly_avg_from(Date.today)).to eq(9.99 / 3)
         expect(contact.monthly_avg_from(Date.today << 2)).to eq(9.99 / 3)
         expect(contact.monthly_avg_from(Date.today << 3)).to eq(9.99 * 2 / 6)
+      end
+
+      it 'sums donations correctly when given a except_payment_method argumant' do
+        gift_aid_donation
+        expect(contact.monthly_avg_from(Date.today)).to eq(12.49)
+        expect(contact.monthly_avg_from(Date.today, except_payment_method: 'Gift Aid')).to eq(9.99)
       end
     end
 

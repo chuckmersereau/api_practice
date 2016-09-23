@@ -1,19 +1,34 @@
 class Api::V1::PreferencesController < Api::V1::BaseController
-  def index
-    preferences = current_user.preferences.except(:setup)
-    preferences[:account_list_id] ||= current_account_list.id
-    preferences[:locale] ||= locale
-    render json: { preferences: preferences }, callback: params[:callback]
+  def update
+    build_preference
+    return render json: @preference, serializer: PreferencesSetSerializer, root: 'preference' if save_preference
+    render json: { errors: @preference.errors.full_messages }, status: :bad_request
   end
 
-  def update
-    account_list = current_user.account_lists.find(params[:id])
-    account_list ||= current_account_list
-    @preference_set = PreferenceSet.new(params[:preference_set].merge!(user: current_user, account_list: account_list))
-    if @preference_set.save
-      render json: { preferences: @preference_set }, callback: params[:callback]
-    else
-      render json: { errors: @preference_set.errors.full_messages }, callback: params[:callback], status: :bad_request
+  protected
+
+  def build_preference
+    @preference ||= preference_scope.new(user: current_user, account_list: current_account_list)
+    @preference.attributes = preference_params
+  end
+
+  def save_preference
+    @preference.save
+  end
+
+  def preference_scope
+    ::PreferenceSet
+  end
+
+  def preference_params
+    return {} unless params[:preference]
+    preference_params = params[:preference]
+    notification_params = []
+    NotificationType.all.each do |type|
+      notification_params.push(type.class.to_s.split('::').last.to_s.underscore.to_sym => { actions: [] })
     end
+    preference_params.permit(:first_name, :last_name, :email, :time_zone, :locale, :monthly_goal, :default_account_list,
+                             :tester, :home_country, :ministry_country, :currency, :salary_organization_id,
+                             :account_list_name, *notification_params)
   end
 end

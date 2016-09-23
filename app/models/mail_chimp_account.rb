@@ -165,7 +165,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def handle_newsletter_mc_error(e)
     case
-    when e.message.include?('code 250')
+    when e.message.include?('Your merge fields were invalid.')
       # MMERGE3 must be provided - Please enter a value (code 250)
       # Notify user and nulify primary_list_id until they fix the problem
       update_column(:primary_list_id, nil)

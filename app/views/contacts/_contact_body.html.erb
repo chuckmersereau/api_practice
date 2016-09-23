@@ -179,7 +179,7 @@
       <div id="contact" class="module tabgroup ui-tabs">
         <ul class="ui-tabs-nav">
           <% (current_user.tab_order_by_location('contact') | ContactExhibit::TABS.keys).each do |tab_name| %>
-              <li id="tabs_<%= tab_name %>"><a href="#<%= tab_name %>-tab"><%= _(ContactExhibit::TABS[tab_name]) %></a></li>
+              <li id="tabs_<%= tab_name %>"><a href="<%= request.original_url %>#<%= tab_name %>-tab"><%= _(ContactExhibit::TABS[tab_name]) %></a></li>
           <% end %>
         </ul>
         <div class="clr"></div>

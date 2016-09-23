@@ -1,7 +1,7 @@
 <aside id="leftmenu" class="filters_menu" data-spy="affix" data-offset-top="182" data-offset-bottom="180">
   <span class="toggle-mobile-filters close-filters hidden-lg hidden-md"><i class="fa fa-times"></i> Close Filters</span>
   <ul>
-    <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
+    <a ng-click="$ctrl.resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
        ng-hide="$ctrl.isEmptyFilter()">
       <%= _('Reset Filters') %>
     </a>
@@ -12,22 +12,22 @@
         <a href="/tasks/#" class="inbox " ng-click="$ctrl.filter.page = 'all'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'All']);"><%= _('All') %></a>
       </li>
       <li ng-class="{'selected': $ctrl.filter.page === 'today'}" class="option">
-        <a href="#" class="inbox" ng-click="$ctrl.filter.page = 'today'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Today']);"><%= _('Today') %></a>
+        <a class="inbox" ng-click="$ctrl.filter.page = 'today'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Today']);"><%= _('Today') %></a>
       </li>
       <li ng-class="{'selected': $ctrl.filter.page === 'overdue'}" class="option">
-        <a href="#" class="inbox" ng-click="$ctrl.filter.page = 'overdue'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Overdue']);"><%= _('Overdue') %></a>
+        <a class="inbox" ng-click="$ctrl.filter.page = 'overdue'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Overdue']);"><%= _('Overdue') %></a>
       </li>
       <li ng-class="{'selected': $ctrl.filter.page === 'upcoming'}" class="option">
-        <a href="#" class="inbox" ng-click="$ctrl.filter.page = 'upcoming'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Upcoming']);"><%= _('Upcoming') %></a>
+        <a class="inbox" ng-click="$ctrl.filter.page = 'upcoming'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Upcoming']);"><%= _('Upcoming') %></a>
       </li>
       <li ng-class="{'selected': $ctrl.filter.page === 'noDate'}" class="option <%= 'hidden' unless $rollout.active?(:no_date_task, current_account_list) %>">
-        <a href="#" class="inbox" ng-click="$ctrl.filter.page = 'noDate'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'noDate']);"><%= _('No Due Date') %></a>
+        <a class="inbox" ng-click="$ctrl.filter.page = 'noDate'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'noDate']);"><%= _('No Due Date') %></a>
       </li>
       <li ng-class="{'selected': $ctrl.filter.page === 'starred'}" class="option">
-        <a href="#" class="starred" ng-click="$ctrl.filter.page = 'starred'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Starred']);"><%= _('Starred') %></a>
+        <a class="starred" ng-click="$ctrl.filter.page = 'starred'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'Starred']);"><%= _('Starred') %></a>
       </li>
       <li ng-class="{'selected': $ctrl.filter.page === 'history'}" class="option">
-        <a href="#" class="completed" ng-click="$ctrl.filter.page = 'history'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'History']);"><%= _('History') %></a>
+        <a class="completed" ng-click="$ctrl.filter.page = 'history'" onClick="_gaq.push(['_trackEvent', 'Tasks Page', 'Sort', 'History']);"><%= _('History') %></a>
       </li>
     </ul>
     <%= render 'sidebar_tags', tags: current_account_list.activity_tags if current_account_list.activity_tags.present? %>
@@ -188,7 +188,7 @@
         </ul>
       </form>
     </li>
-    <a href="#" ng-click="$ctrl.resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
+    <a ng-click="$ctrl.resetFilters()" class="btn btn-default btn-xs btn-block ng-cloak"
        ng-hide="$ctrl.isEmptyFilter()">
       <%= _('Reset Filters') %>
     </a>
