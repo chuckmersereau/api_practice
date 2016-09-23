@@ -268,7 +268,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def relevant_emails
-    if sync_all_active_contacts?
+    if sync_all_active_contacts
       active_contacts_emails
     else
       newsletter_emails
@@ -276,7 +276,7 @@ class MailChimpAccount < ActiveRecord::Base
   end
 
   def relevant_contacts(contact_ids = nil)
-    if sync_all_active_contacts?
+    if sync_all_active_contacts
       active_contacts_with_emails(contact_ids)
     else
       newsletter_contacts_with_emails(contact_ids)
