@@ -37,7 +37,7 @@ class AddAccountsToDonations
 
     log_action(nil, 5)
 
-    FixDonationsWorker.perform_async(offset + 1) unless donations_without_designation_accounts.limit(1).empty?
+    FixDonationsWorker.perform_async(offset + 1) if i < 300
   end
 
   private
