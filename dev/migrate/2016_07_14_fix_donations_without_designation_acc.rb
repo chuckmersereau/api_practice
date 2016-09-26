@@ -10,7 +10,9 @@ class AddAccountsToDonations
 
       donor_account = donation.donor_account
 
-      if donor_account.contacts.map(&:account_list_id).uniq.count == 1
+      next unless donor_account
+
+      if donor_account.contacts && donor_account.contacts.map(&:account_list_id).uniq.count == 1
         account_list = donor_account.contacts.first.account_list
       else
         log_action(donation, 1)
@@ -37,7 +39,7 @@ class AddAccountsToDonations
 
     log_action(nil, 5)
 
-    FixDonationsWorker.perform_async(offset + 1) if i < 300
+    FixDonationsWorker.perform_async(offset + 1) if offset < 300
   end
 
   private
