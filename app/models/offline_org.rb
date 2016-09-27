@@ -5,6 +5,10 @@ class OfflineOrg < DataServer
     # Do nothing
   end
 
+  def import_test_profiles
+    method(:import_profiles).super_method.call
+  end
+
   def import_profiles
     profile = create_designation_profile
     create_designation_account(profile)

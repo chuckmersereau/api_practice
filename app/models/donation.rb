@@ -49,7 +49,7 @@ class Donation < ActiveRecord::Base
   private
 
   def update_totals
-    donor_account.update_donation_totals(self)
+    donor_account.update_donation_totals(self) if donor_account
     designation_account.update_donation_totals(self) if designation_account
   end
 
