@@ -26,7 +26,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   def lists
     return [] unless api_key.present?
-    @list_response ||= gb.lists.retrieve
+    @list_response ||= gb.lists.retrieve(params: {count: 100})
     return [] unless @list_response['lists']
     @lists ||= @list_response['lists'].map { |l| List.new(l['id'], l['name']) }
   rescue Gibbon::MailChimpError, OpenSSL::SSL::SSLError, Faraday::SSLError
