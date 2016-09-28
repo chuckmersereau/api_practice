@@ -6,7 +6,7 @@ class AddAccountsToDonations
 
     donations_without_designation_accounts.limit(400).offset(400 * offset).each do |donation|
       donation.reload
-      next if donation.designation_account_id != nil
+      next unless donation.designation_account_id.nil?
 
       donor_account = donation.donor_account
 
