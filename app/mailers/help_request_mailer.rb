@@ -1,6 +1,4 @@
-class HelpRequestMailer < ActionMailer::Base
-  default from: 'support@mpdx.org'
-
+class HelpRequestMailer < ApplicationMailer
   # Subject can be set in your I18n file at config/locales/en.yml
   # with the following lookup:
   #

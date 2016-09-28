@@ -1,5 +1,4 @@
-class AccountListInviteMailer < ActionMailer::Base
-  default from: 'MPDX <support@mpdx.org>'
+class AccountListInviteMailer < ApplicationMailer
 
   def email(invite)
     @invite = invite

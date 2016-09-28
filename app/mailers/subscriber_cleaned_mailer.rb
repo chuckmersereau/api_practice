@@ -1,6 +1,4 @@
-class SubscriberCleanedMailer < ActionMailer::Base
-  default from: 'MPDX <support@mpdx.org>'
-
+class SubscriberCleanedMailer < ApplicationMailer
   def subscriber_cleaned(account_list, cleaned_email)
     return unless account_list.users.first
     @email = cleaned_email
