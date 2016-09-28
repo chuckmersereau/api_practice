@@ -1396,8 +1396,6 @@ CREATE TABLE mail_chimp_accounts (
     status_interest_ids text,
     tags_grouping_id character varying(255),
     tags_interest_ids text,
-    sync_all_active_contacts boolean,
-    last_prayer_email_sent timestamp without time zone,
     prayer_letter_last_sent timestamp without time zone
 );
 
@@ -5213,10 +5211,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160610044352');
 INSERT INTO schema_migrations (version) VALUES ('20160627171818');
 
 INSERT INTO schema_migrations (version) VALUES ('20160728174747');
-
-INSERT INTO schema_migrations (version) VALUES ('20160809235201');
-
-INSERT INTO schema_migrations (version) VALUES ('20160928174158');
 
 INSERT INTO schema_migrations (version) VALUES ('20160928195843');
 
