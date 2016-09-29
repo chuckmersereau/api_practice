@@ -1,13 +1,18 @@
 require 'logger'
 class AddAccountsToDonations
   @logger = nil
-  def add_accounts_to_donations
+  def add_accounts_to_donations(offset = 0)
     log_action(nil, 0)
 
-    donations_without_designation_accounts.limit(400).each do |donation|
+    donations_without_designation_accounts.limit(400).offset(400 * offset).each do |donation|
+      donation.reload
+      next unless donation.designation_account_id.nil?
+
       donor_account = donation.donor_account
 
-      if donor_account.contacts.map(&:account_list_id).uniq.count == 1
+      next unless donor_account
+
+      if donor_account.contacts && donor_account.contacts.map(&:account_list_id).uniq.count == 1
         account_list = donor_account.contacts.first.account_list
       else
         log_action(donation, 1)
@@ -34,7 +39,7 @@ class AddAccountsToDonations
 
     log_action(nil, 5)
 
-    FixDonationsWorker.perform_async unless donations_without_designation_accounts.limit(1).empty?
+    FixDonationsWorker.perform_async(offset + 1) if !donations_without_designation_accounts.limit(1).empty? && offset < 200
   end
 
   private
