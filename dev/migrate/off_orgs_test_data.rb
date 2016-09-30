@@ -16,7 +16,7 @@ def build_test_data
 end
 
 def users
-  User.offset(5).limit(10)
+  User.offset(30).limit(10)
 end
 
 def off_org
