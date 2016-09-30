@@ -854,4 +854,11 @@ describe Contact do
       end
     end
   end
+
+  context '#pledge_amount=' do
+    it 'stores the right value even with a comma' do
+      contact.update(pledge_amount: '100,000.00')
+      expect(contact.pledge_amount).to eq(100000.0)
+    end
+  end
 end
