@@ -1,6 +1,6 @@
-class ChalklineMailer < ActionMailer::Base
+class ChalklineMailer < ApplicationMailer
   TIME_ZONE = 'Central Time (US & Canada)'.freeze
-  default from: 'MPDX <support@mpdx.org>', to: ENV.fetch('CHALKLINE_NEWSLETTER_EMAIL')
+  default to: ENV.fetch('CHALKLINE_NEWSLETTER_EMAIL')
 
   def mailing_list(account_list)
     @name = account_list.users_combined_name

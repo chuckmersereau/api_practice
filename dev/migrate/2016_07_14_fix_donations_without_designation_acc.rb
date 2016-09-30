@@ -3,7 +3,6 @@ class AddAccountsToDonations
   @logger = nil
   def add_accounts_to_donations(offset = 0)
     log_action_for_donor(nil, 0)
-
     donor_accounts.limit(800).offset(800 * offset).each do |donor_account|
       if donor_account.contacts && donor_account.contacts.map(&:account_list_id).uniq.count == 1
         account_list = donor_account.contacts.first.account_list

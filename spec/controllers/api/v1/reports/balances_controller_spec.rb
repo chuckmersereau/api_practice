@@ -1,6 +1,8 @@
 require 'spec_helper'
 
 describe Api::V1::Reports::BalancesController do
+  before { CurrencyRate.clear_rate_cache }
+
   context '#show' do
     it 'renders designations' do
       account_list = create(:account_list, salary_currency: 'GBP')

@@ -1,6 +1,4 @@
-class NotificationMailer < ActionMailer::Base
-  default from: 'support@mpdx.org'
-
+class NotificationMailer < ApplicationMailer
   def notify(account_list, notifications_by_type)
     @notifications_by_type = notifications_by_type
 
