@@ -531,6 +531,11 @@ class Contact < ActiveRecord::Base
     (amount * gift_aid_coefficient).round(2)
   end
 
+  def pledge_amount=(pledge_amount)
+    pledge_amount = pledge_amount.gsub(",", "")
+    self[:pledge_amount] = pledge_amount.to_f
+  end
+
   private
 
   def gift_aid_coefficient
