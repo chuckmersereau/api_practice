@@ -532,7 +532,7 @@ class Contact < ActiveRecord::Base
   end
 
   def pledge_amount=(pledge_amount)
-    pledge_amount = pledge_amount.to_s.gsub(',', '')
+    pledge_amount = pledge_amount.to_s.delete(',')
     self[:pledge_amount] = pledge_amount.blank? ? nil : pledge_amount.to_f
   end
 
