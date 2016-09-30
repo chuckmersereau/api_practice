@@ -42,7 +42,7 @@ class AddAccountsToDonations
   end
 
   def donor_accounts
-    DonorAccount.joins(:donations).where(:donations => { designation_account_id: nil }).group('donor_accounts.id')
+    DonorAccount.joins(:donations).where(donations: { designation_account_id: nil }).group('donor_accounts.id')
   end
 
   def donor_org_accounts(account_list)
