@@ -11,15 +11,12 @@ def build_test_data
     # Creates a contact, with his donor account and generates a donation
     contact = build_contact(account_list)
     donor_account = build_donor_account(off_org, account_list, contact)
-
-    for i in 1..150
-      build_donation(donor_account)
-    end
+    build_donation(donor_account)
   end
 end
 
 def users
-  User.offset(30).limit(8)
+  User.offset(5).limit(10)
 end
 
 def off_org
