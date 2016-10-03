@@ -6,6 +6,8 @@ class AddAccountsToDonations
     log_action_for_donor(nil, 0)
     last_id = 0
     donor_accounts(last_donor_id).limit(800).each do |donor_account|
+      last_id = donor_account.id
+      
       if donor_account.contacts && donor_account.contacts.map(&:account_list_id).uniq.count == 1
         account_list = donor_account.contacts.first.account_list
       else
@@ -28,7 +30,6 @@ class AddAccountsToDonations
 
       donor_account.donations.where(designation_account_id: nil).update_all(designation_account_id: designation_account.id)
       log_action_for_donor(donor_account, 4)
-      last_id = donor_account.id
     end
 
     log_action_for_donor(nil, 5)
