@@ -1,6 +1,4 @@
-class AccountMailer < ActionMailer::Base
-  default from: 'support@mpdx.org'
-
+class AccountMailer < ApplicationMailer
   def invalid_mailchimp_key(account_list)
     mail to: account_list.users.map(&:email).compact.map(&:email),
          subject: _('Mailchimp API Key no longer valid')

@@ -1,6 +1,4 @@
-class ImportMailer < ActionMailer::Base
-  default from: 'support@mpdx.org'
-
+class ImportMailer < ApplicationMailer
   def complete(import)
     user = import.user
     @import = import
