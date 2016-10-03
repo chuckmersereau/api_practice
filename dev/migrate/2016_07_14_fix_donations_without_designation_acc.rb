@@ -43,10 +43,10 @@ class AddAccountsToDonations
 
   def donor_accounts(last_donor_id = 0)
     DonorAccount.joins(:donations)
-    .where(donations: { designation_account_id: nil })
-    .group('donor_accounts.id')
-    .order("donor_accounts.id asc")
-    .where('donor_accounts.id > ?', last_donor_id)
+                .where(donations: { designation_account_id: nil })
+                .group('donor_accounts.id')
+                .order('donor_accounts.id asc')
+                .where('donor_accounts.id > ?', last_donor_id)
   end
 
   def donor_org_accounts(account_list)
