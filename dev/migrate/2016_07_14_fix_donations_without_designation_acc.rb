@@ -1,9 +1,11 @@
 require 'logger'
 class AddAccountsToDonations
   @logger = nil
-  def add_accounts_to_donations(offset = 0)
+  def add_accounts_to_donations(last_donor_id = 0)
+    puts "Start executing for: #{last_donor_id}"
     log_action_for_donor(nil, 0)
-    donor_accounts.limit(800).offset(800 * offset).each do |donor_account|
+    last_id = 0
+    donor_accounts(last_donor_id).limit(800).each do |donor_account|
       if donor_account.contacts && donor_account.contacts.map(&:account_list_id).uniq.count == 1
         account_list = donor_account.contacts.first.account_list
       else
@@ -25,13 +27,12 @@ class AddAccountsToDonations
       end
 
       donor_account.donations.where(designation_account_id: nil).update_all(designation_account_id: designation_account.id)
-
       log_action_for_donor(donor_account, 4)
+      last_id = donor_account.id
     end
 
     log_action_for_donor(nil, 5)
-
-    FixDonationsWorker.perform_async(offset + 1) if !donor_accounts.limit(1).empty? && offset < 8
+    FixDonationsWorker.perform_async(last_id) if last_id > 0
   end
 
   private
@@ -40,8 +41,12 @@ class AddAccountsToDonations
     Donation.where(designation_account_id: nil)
   end
 
-  def donor_accounts
-    DonorAccount.joins(:donations).where(donations: { designation_account_id: nil }).group('donor_accounts.id')
+  def donor_accounts(last_donor_id = 0)
+    DonorAccount.joins(:donations)
+    .where(donations: { designation_account_id: nil })
+    .group('donor_accounts.id')
+    .order("donor_accounts.id asc")
+    .where('donor_accounts.id > ?', last_donor_id)
   end
 
   def donor_org_accounts(account_list)
