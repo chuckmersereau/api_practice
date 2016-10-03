@@ -2,12 +2,11 @@ require 'logger'
 class AddAccountsToDonations
   @logger = nil
   def add_accounts_to_donations(last_donor_id = 0)
-    puts "Start executing for: #{last_donor_id}"
     log_action_for_donor(nil, 0)
     last_id = 0
     donor_accounts(last_donor_id).limit(800).each do |donor_account|
       last_id = donor_account.id
-      
+
       if donor_account.contacts && donor_account.contacts.map(&:account_list_id).uniq.count == 1
         account_list = donor_account.contacts.first.account_list
       else
