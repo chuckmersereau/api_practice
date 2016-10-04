@@ -20,7 +20,7 @@ class ContactMerge
       end
 
       @other.activity_contacts.each do |other_activity_contact|
-        next if @winner.activities.map(&:subject).include?(other_activity_contact.activity.subject)
+        next if @winner.activities.include?(other_activity_contact.activity)
         other_activity_contact.update_column(:contact_id, @winner.id)
       end
       @winner.update_uncompleted_tasks_count
