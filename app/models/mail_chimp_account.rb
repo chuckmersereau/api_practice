@@ -7,7 +7,7 @@ class MailChimpAccount < ActiveRecord::Base
 
   COUNT_PER_PAGE = 100
 
-  List = Struct.new(:id, :name)
+  List = Struct.new(:id, :name, :open_rate)
 
   belongs_to :account_list
   has_one :mail_chimp_appeal_list, dependent: :destroy
@@ -28,7 +28,7 @@ class MailChimpAccount < ActiveRecord::Base
     return [] unless api_key.present?
     @list_response ||= gb.lists.retrieve(params: { count: 100 })
     return [] unless @list_response['lists']
-    @lists ||= @list_response['lists'].map { |l| List.new(l['id'], l['name']) }
+    @lists ||= @list_response['lists'].map { |l| List.new(l['id'], l['name'], l['stats'].try(:[], 'open_rate')) }
   rescue Gibbon::MailChimpError, OpenSSL::SSL::SSLError, Faraday::SSLError
     []
   end
@@ -279,6 +279,10 @@ class MailChimpAccount < ActiveRecord::Base
     # filter it for now.
     email_set = emails.to_set
     list_members(list_id).select { |m| m['email_address'].in?(email_set) }
+  end
+
+  def appeal_open_rate
+    lists.find { |l| l.id == mail_chimp_appeal_list.try(:appeal_list_id) }.try(:open_rate)
   end
 
   private
