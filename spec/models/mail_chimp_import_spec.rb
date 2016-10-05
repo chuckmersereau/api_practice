@@ -15,7 +15,7 @@ describe MailChimpImport do
       subject.import_contacts
     end
 
-    it 'handles mail chimp errors when importing specific members' do
+    it 'handles mail chimp errors when importing specific members and members with invalid email' do
       err = Gibbon::MailChimpError.new
       expect(mc_account).to receive(:list_member_info).and_raise(err)
       expect(mc_account).to receive(:handle_newsletter_mc_error).with(err)
@@ -210,6 +210,24 @@ describe MailChimpImport do
 
           expect(new_contact.name).to eq 'Smith, John'
           expect(new_contact.people.first.primary_email_address.email).to eq 'j2@t.co'
+        end
+      end
+
+      describe '#import_matched' do
+        let(:person) { create(:person, first_name: 'John', last_name: 'Doe') }
+        let!(:contact_with_person) do
+          contact = create(:contact)
+          contact.people << person
+          contact
+        end
+
+        let(:invalid_email_param) do
+          { person.id => { email: 'j@@t...co', first_name: 'John', last_name: 'Doe',
+                           greeting: nil, groupings: nil, status: 'subscribed' } }
+        end
+
+        it 'handles members with invalid emails' do
+          subject.send(:import_matched, invalid_email_param)
         end
       end
     end

@@ -108,6 +108,8 @@ class MailChimpImport
     add_contact_to_newsletter(person.contact)
     person.email = email
     person.save!
+  rescue ActiveRecord::RecordInvalid
+    nil
   end
 
   def add_contact_to_newsletter(contact)
