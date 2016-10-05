@@ -311,6 +311,10 @@ describe TntImport do
 
   context '#import gifts for offline orgs' do
     before do
+      stub_request(:post, 'http://foo:bar@example.com/profiles')
+        .with(body: { 'Action' => 'Profiles', 'Password' => 'Test1234', 'UserName' => 'test@test.com' })
+        .to_return(body: '')
+
       @account_list = create(:account_list)
       @offline_org = create(:offline_org)
       @user = create(:user)
@@ -319,17 +323,22 @@ describe TntImport do
 
       @import = create(:tnt_import_gifts, account_list: @account_list)
       @tnt_import = TntImport.new(@import)
+      @import_with_personal_gift = create(:tnt_import_with_personal_gift, account_list: @account_list)
+      @tnt_import_with_personal_gift = TntImport.new(@import_with_personal_gift)
     end
 
-    it 'does not import gifts for an online org or multiple orgs' do
-      stub_request(:post, 'http://foo:bar@example.com/profiles')
-        .with(body: { 'Action' => 'Profiles', 'Password' => 'Test1234', 'UserName' => 'test@test.com' })
-        .to_return(body: '')
-
+    it 'does import gifts for an online org when gift is marked as personal' do
       @user.organization_accounts.destroy_all
-
       online_org = create(:organization)
       @user.organization_accounts << create(:organization_account, organization: online_org)
+      expect { @tnt_import_with_personal_gift.import }.to change(Donation, :count).from(0).to(1)
+    end
+
+    it 'does not import gifts for an online org or multiple orgs when gift not marked as personal' do
+      @user.organization_accounts.destroy_all
+      online_org = create(:organization)
+      @user.organization_accounts << create(:organization_account, organization: online_org)
+
       expect { @tnt_import.import }.to_not change(Donation, :count).from(0)
 
       @user.organization_accounts.destroy_all
