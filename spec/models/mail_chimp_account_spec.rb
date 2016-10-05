@@ -32,6 +32,7 @@ describe MailChimpAccount do
       ]
     }
     stub_request(:get, "#{api_prefix}/lists").to_return(body: lists_response.to_json)
+    stub_request(:get, "#{api_prefix}/lists?count=100").to_return(body: lists_response.to_json)
   end
 
   context '#lists' do

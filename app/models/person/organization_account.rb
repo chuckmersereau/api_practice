@@ -16,7 +16,6 @@ class Person::OrganizationAccount < ActiveRecord::Base
   validates_with CredentialValidator
   after_validation :set_valid_credentials
   after_destroy :destroy_designation_profiles
-
   belongs_to :organization
 
   def to_s
