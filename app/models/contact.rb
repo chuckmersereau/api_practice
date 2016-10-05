@@ -531,12 +531,34 @@ class Contact < ActiveRecord::Base
     (amount * gift_aid_coefficient).round(2)
   end
 
+
   def pledge_amount=(pledge_amount)
     pledge_amount = pledge_amount.to_s.delete(',') if pledge_amount.to_s.include?(',')
     self[:pledge_amount] = pledge_amount.blank? ? nil : pledge_amount.to_f
   end
 
+  def mail_chimp_open_rate
+    return nil unless email
+    mail_chimp_member_request
+  end
+
   private
+
+  def mail_chimp_member_request
+    mail_chimp_account.gb.lists(mail_chimp_account.primary_list_id)
+                      .members(email_hash(email)).retrieve['stats']['avg_open_rate']
+  rescue Gibbon::MailChimpError => e
+    return nil if e.title =~ /Resource Not Found/
+    raise e
+  end
+
+  def mail_chimp_account
+    account_list.mail_chimp_account
+  end
+
+  def email_hash(email)
+    Digest::MD5.hexdigest(email.email.downcase)
+  end
 
   def gift_aid_coefficient
     (1 + (gift_aid_percentage.to_f / 100))

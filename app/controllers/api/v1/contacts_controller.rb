@@ -35,6 +35,7 @@ class Api::V1::ContactsController < Api::V1::BaseController
 
   def show
     render json: contacts.find(params[:id]),
+           methods: :mail_chimp_open_rate,
            scope: { include: includes, since: params[:since] },
            callback: params[:callback]
   end
