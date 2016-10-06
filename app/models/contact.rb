@@ -532,11 +532,11 @@ class Contact < ActiveRecord::Base
   end
 
   def pledge_amount=(pledge_amount)
-    if pledge_amount.to_s.index(',').to_i < pledge_amount.to_s.index('.').to_i
-      pledge_amount = pledge_amount.to_s.delete(',')
-    else
-      pledge_amount = pledge_amount.to_s.delete('.')
-    end
+    pledge_amount = if pledge_amount.to_s.index(',').to_i < pledge_amount.to_s.index('.').to_i
+                      pledge_amount.to_s.delete(',')
+                    else
+                      pledge_amount.to_s.delete('.')
+                    end
     self[:pledge_amount] = pledge_amount.blank? ? nil : pledge_amount.to_f
   end
 
