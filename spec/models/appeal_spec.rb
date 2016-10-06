@@ -191,6 +191,20 @@ describe Appeal do
       end
     end
 
+    context '#donated?' do
+      let(:donor_account) { create(:donor_account, contacts: [contact]) }
+      let(:donation) { create(:donation, donor_account: donor_account, appeal: appeal) }
+
+      it 'responds with false when a contact has not given' do
+        expect(appeal.donated?(contact)).to be_falsy
+      end
+
+      it 'responds with true when a contact has given' do
+        donation
+        expect(appeal.donated?(contact)).to be_truthy
+      end
+    end
+
     def import_giving_info(giving_info)
       Donation.destroy_all
       contact.update(pledge_frequency: giving_info[:pledge_frequency], last_donation_date: nil)

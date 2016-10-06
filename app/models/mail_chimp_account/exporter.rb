@@ -22,7 +22,8 @@ class MailChimpAccount::Exporter
     tags = account.account_list.contact_tags
     add_tags_groups(tags)
 
-    add_greeting_merge_variable
+    add_merge_variable('GREETING')
+    add_merge_variable('DONATED_TO_APPEAL') if appeal_export?
 
     members_params = batch_params(contacts)
     list_batch_subscribe(members_params)
@@ -31,6 +32,8 @@ class MailChimpAccount::Exporter
 
   def export_appeal_contacts(contact_ids, appeal_id)
     return if use_primary_list?
+    @is_appeal_export = true
+    @appeal = Appeal.find(appeal_id)
     contacts = account.contacts_with_email_addresses(contact_ids)
     compare_and_unsubscribe(contacts)
     export_to_list(contacts)
@@ -47,8 +50,6 @@ class MailChimpAccount::Exporter
     MailChimpImport.new(account).import_contacts
     MailChimpSync.new(account).sync_contacts
   end
-
-  # private
 
   def list_batch_subscribe(batch)
     if batch.size < THRESHOLD_SIZE_FOR_BATCH_OPERATION
@@ -92,6 +93,8 @@ class MailChimpAccount::Exporter
       }
     }
 
+    params[:merge_fields].merge(DONATED_TO_APPEAL: @appeal.donated?(contact)) if appeal_export?
+
     params[:language] = contact.locale if contact.locale.present?
 
     if account.status_grouping_id.present?
@@ -107,15 +110,15 @@ class MailChimpAccount::Exporter
     params
   end
 
-  def add_greeting_merge_variable
+  def add_merge_variable(variable_name)
     merge_fields = mc_list.merge_fields.retrieve['merge_fields']
 
-    return if merge_fields.find { |m| m['tag'] == 'GREETING' } ||
+    return if merge_fields.find { |m| m['tag'] == variable_name } ||
               merge_fields.size == MAILCHIMP_MAX_ALLOWD_MERGE_FIELDS
 
     mc_list.merge_fields.create(
       body: {
-        tag: 'GREETING', name: _('Greeting'), type: 'text'
+        tag: variable_name, name: _(variable_name.downcase.tr('-', '').capitalize), type: 'text'
       }
     )
   rescue Gibbon::MailChimpError => e
@@ -288,6 +291,12 @@ class MailChimpAccount::Exporter
         sources: { user: true, admin: true, api: false }
       }
     )
+  end
+
+  private
+
+  def appeal_export?
+    @is_appeal_export
   end
 
   def gb
