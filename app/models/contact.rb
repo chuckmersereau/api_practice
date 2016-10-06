@@ -531,7 +531,6 @@ class Contact < ActiveRecord::Base
     (amount * gift_aid_coefficient).round(2)
   end
 
-
   def pledge_amount=(pledge_amount)
     pledge_amount = pledge_amount.to_s.delete(',') if pledge_amount.to_s.include?(',')
     self[:pledge_amount] = pledge_amount.blank? ? nil : pledge_amount.to_f
