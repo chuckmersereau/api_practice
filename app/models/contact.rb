@@ -532,7 +532,7 @@ class Contact < ActiveRecord::Base
   end
 
   def pledge_amount=(pledge_amount)
-    if pledge_amount.to_s.index(',') < pledge_amount.to_s.index('.')
+    if pledge_amount.to_s.index(',').to_i < pledge_amount.to_s.index('.').to_i
       pledge_amount = pledge_amount.to_s.delete(',')
     else
       pledge_amount = pledge_amount.to_s.delete('.')

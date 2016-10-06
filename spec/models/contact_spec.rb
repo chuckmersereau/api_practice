@@ -866,11 +866,15 @@ describe Contact do
     it 'stores the right value even with a comma' do
       contact.update(pledge_amount: '100,000.00')
       expect(contact.pledge_amount).to eq(100_000.0)
+      contact.update(pledge_amount: '100.00')
+      expect(contact.pledge_amount).to eq(100.0)
     end
 
     it 'stores the right value even with a comma when written in a spanish way' do
       contact.update(pledge_amount: '100.000,00')
       expect(contact.pledge_amount).to eq(100_000.0)
+      contact.update(pledge_amount: '100,00')
+      expect(contact.pledge_amount).to eq(100.0)
     end
   end
 
