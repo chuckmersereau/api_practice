@@ -65,9 +65,11 @@ describe Admin::UserFinder do
 
   describe '.find_user_by_email' do
     it 'should find users with the email' do
-      create(:user_with_account, first_name: 'John', last_name: 'Doe', email: 'john@doe.com')
+      account = create(:key_account, email: 'john@doe.com')
 
-      expect(Admin::UserFinder.find_user_by_email('john@doe.com').first_name).to eq('John')
+      found_user = Admin::UserFinder.find_user_by_email('john@doe.com')
+      expect(found_user).to be_a User
+      expect(found_user.id).to eq account.person.id
     end
   end
 end

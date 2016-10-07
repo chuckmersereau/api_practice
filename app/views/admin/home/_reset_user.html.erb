@@ -3,7 +3,7 @@
 <%= form_tag admin_reset_index_path, method: :post do |f| %>
   <div class="container">
     <div class="col-md-4">
-      <%= label_tag :user_email, _('User Name, ID or Key/Relay Email') %>
+      <%= label_tag :user_resetted_email, _('Key/Relay Email') %>
       <%= text_field_tag :impersonate_lookup, '', class: 'form-control' %>
     </div>
     <div class="col-md-4">

@@ -1,7 +1,7 @@
 class Admin::Reset
   include ActiveModel::Model
-  attr_accessor :reason, :user_resetting_email, :user_finder, :reset_logger,
-                :found_user
+  attr_accessor :reason, :admin_resetting, :user_finder, :reset_logger,
+                :found_user, :user_resetted_email
 
   validates :reason, :found_user, presence: true
 

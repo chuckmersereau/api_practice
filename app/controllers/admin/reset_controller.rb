@@ -1,7 +1,7 @@
 class Admin::ResetController < ApplicationController
   def create
     @reset = Admin::Reset.new(reset_params)
-    if @reset.execute
+    if @reset.reset!
       flash[:success] = _('The user was successfully resetted.')
       redirect_to admin_home_index_path
     else
@@ -17,8 +17,8 @@ class Admin::ResetController < ApplicationController
       user_finder: Admin::UserFinder,
       reset_logger: Admin::ResetLog,
       reason: params[:reason],
-      user_resetting_email: params[:resetted_user_email],
-      admin_user: current_user
+      user_resetted_email: params[:user_resetted_email],
+      admin_resetting: current_user
     }
   end
 end
