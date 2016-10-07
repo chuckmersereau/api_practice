@@ -5,7 +5,7 @@ class Admin::ResetController < ApplicationController
       flash[:success] = _('The user was successfully resetted.')
       redirect_to admin_home_index_path
     else
-      flash[:alert] = @reset.errors.join('. ')
+      flash[:alert] = @reset.errors.full_messages.join('. ')
       redirect_to admin_home_index_path
     end
   end
