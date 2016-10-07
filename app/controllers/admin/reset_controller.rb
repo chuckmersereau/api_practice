@@ -17,7 +17,7 @@ class Admin::ResetController < ApplicationController
       user_finder: Admin::UserFinder,
       reset_logger: Admin::ResetLog,
       reason: params[:reason],
-      user_resetting_email: params[:email],
+      user_resetting_email: params[:resetted_user_email],
       admin_user: current_user
     }
   end
