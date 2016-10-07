@@ -258,6 +258,7 @@ Rails.application.routes.draw do
       resources :home, only: [:index]
       resources :offline_org, only: [:create]
       resources :impersonations, only: [:create]
+      resources :reset, only: [:create]
     end
   end
 
