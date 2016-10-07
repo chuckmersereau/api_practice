@@ -531,6 +531,15 @@ class Contact < ActiveRecord::Base
     (amount * gift_aid_coefficient).round(2)
   end
 
+  def pledge_amount=(pledge_amount)
+    pledge_amount = if pledge_amount.to_s.index(',').to_i < pledge_amount.to_s.index('.').to_i
+                      pledge_amount.to_s.delete(',')
+                    else
+                      pledge_amount.to_s.delete('.')
+                    end
+    self[:pledge_amount] = pledge_amount.blank? ? nil : pledge_amount.to_f
+  end
+
   def mail_chimp_open_rate
     return nil unless email
     mail_chimp_member_request
