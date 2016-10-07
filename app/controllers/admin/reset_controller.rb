@@ -3,11 +3,10 @@ class Admin::ResetController < ApplicationController
     @reset = Admin::Reset.new(reset_params)
     if @reset.reset!
       flash[:success] = _('The user was successfully resetted.')
-      redirect_to admin_home_index_path
     else
       flash[:alert] = @reset.errors.full_messages.join('. ')
-      redirect_to admin_home_index_path
     end
+    redirect_to admin_home_index_path
   end
 
   private

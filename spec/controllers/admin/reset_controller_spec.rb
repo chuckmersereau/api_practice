@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Admin::ResetController do
   context '#create' do
-    let!(:user) { create(:user_with_account)}
+    let!(:user) { create(:user_with_account) }
 
     it 'resets the user after the email is given as a param' do
       login(create(:admin_user))
