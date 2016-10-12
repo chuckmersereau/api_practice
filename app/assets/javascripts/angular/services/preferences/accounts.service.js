@@ -18,6 +18,7 @@
       api.call('get', 'preferences/accounts', {}, function(data) {
         svc.data = data.preferences;
         svc.account_list_id = data.preferences.account_list_id;
+        svc.account_list_id = data.preferences.account_list_id;
         svc.loading = false;
       });
     };

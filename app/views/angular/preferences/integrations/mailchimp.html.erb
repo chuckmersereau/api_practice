@@ -31,6 +31,9 @@
             <%= check_box_tag :mailchimp_auto_log_campaigns, '', '', 'ng-model' => 'vm.preferences.data.auto_log_campaigns' %>
             <%= label :mailchimp, :auto_log_campaigns, _('Automatically log sent MailChimp campaigns in contact task history.') %>
           <% end %>
+          {{vm.preferences.data.sync_all_active_contacts + '11111'}}
+          <%= check_box_tag :sync_all_active_contacts, '', '', 'ng-model' => 'vm.preferences.data.sync_all_active_contacts' %>
+          <%= label :mailchimp, :sync_all_active_contacts, _('Sync with all active contacts with a valid email address') %>
         </div>
       </div>
       <div ng-hide="vm.preferences.data.lists_present">
@@ -49,6 +52,8 @@
         <%= _('You can now export your contacts to MailChimp.') %><br />
         <%= _('MailChimp API key:') %> <strong>{{vm.preferences.data.api_key}}</strong><br />
         <%= _('MailChimp list to use for your newsletter:') %> <strong>{{vm.preferences.data.primary_list_name}}</strong>
+        <div ng-show="vm.preferences.data.sync_all_active_contacts"><%= _('You are syncing to all active contacts.') %></div>
+        <div ng-hide="vm.preferences.data.sync_all_active_contacts"><%= _('You are only syncing to contacts in your newsletter') %></div>
         <% if $rollout.active?(:mail_chimp_auto_log, current_account_list) %>
           <br /><%= _('Automatic logging of campaigns: ') %><strong>{{vm.preferences.data.auto_log_campaigns ? "<%= _('On') %>" : "<%= _('Off') %>"}}</strong>
         <% end %>

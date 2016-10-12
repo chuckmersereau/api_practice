@@ -64,6 +64,6 @@ class Api::V1::Preferences::Integrations::MailChimpAccountsController < Api::V1:
 
   def mail_chimp_params
     return {} unless mail_chimp_params = params[:mail_chimp]
-    mail_chimp_params.permit(:api_key, :grouping_id, :primary_list_id, :auto_log_campaigns)
+    mail_chimp_params.permit(:api_key, :grouping_id, :primary_list_id, :auto_log_campaigns, :sync_all_active_contacts)
   end
 end
