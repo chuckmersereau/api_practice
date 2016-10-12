@@ -57,7 +57,8 @@ class Api::V1::Preferences::Integrations::MailChimpAccountsController < Api::V1:
         primary_list_name: @mail_chimp.primary_list.try(:name),
         lists_available_for_newsletters: @mail_chimp.lists_available_for_newsletters.collect { |l| { name: l.name, id: l.id } },
         lists_link: "https://#{@mail_chimp.datacenter}.admin.mailchimp.com/lists/",
-        valid: current_account_list.valid_mail_chimp_account
+        valid: current_account_list.valid_mail_chimp_account,
+        sync_all_active_contacts: @mail_chimp.sync_all_active_contacts
       }
     }
   end

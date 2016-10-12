@@ -31,7 +31,6 @@
             <%= check_box_tag :mailchimp_auto_log_campaigns, '', '', 'ng-model' => 'vm.preferences.data.auto_log_campaigns' %>
             <%= label :mailchimp, :auto_log_campaigns, _('Automatically log sent MailChimp campaigns in contact task history.') %>
           <% end %>
-          {{vm.preferences.data.sync_all_active_contacts + '11111'}}
           <%= check_box_tag :sync_all_active_contacts, '', '', 'ng-model' => 'vm.preferences.data.sync_all_active_contacts' %>
           <%= label :mailchimp, :sync_all_active_contacts, _('Sync with all active contacts with a valid email address') %>
         </div>
