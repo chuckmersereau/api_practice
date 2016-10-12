@@ -10,6 +10,12 @@ class Admin::UserFinder < ActiveRecord::Base
       end
     end
 
+    def find_user_by_email(email)
+      @users = users_by_login_email(email)
+      return false if @users.count > 1
+      @users.first
+    end
+
     private
 
     def users_by_id(id)

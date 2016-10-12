@@ -362,6 +362,39 @@ ALTER SEQUENCE admin_impersonation_logs_id_seq OWNED BY admin_impersonation_logs
 
 
 --
+-- Name: admin_reset_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE admin_reset_logs (
+    id integer NOT NULL,
+    admin_resetting_id integer,
+    resetted_user_id integer,
+    reason character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: admin_reset_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE admin_reset_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: admin_reset_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE admin_reset_logs_id_seq OWNED BY admin_reset_logs.id;
+
+
+--
 -- Name: appeal_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -1395,7 +1428,10 @@ CREATE TABLE mail_chimp_accounts (
     importing boolean DEFAULT false NOT NULL,
     status_interest_ids text,
     tags_grouping_id character varying(255),
-    tags_interest_ids text
+    tags_interest_ids text,
+    sync_all_active_contacts boolean,
+    last_prayer_email_sent timestamp without time zone,
+    prayer_letter_last_sent timestamp without time zone
 );
 
 
@@ -2520,6 +2556,39 @@ ALTER SEQUENCE recurring_recommendation_results_id_seq OWNED BY recurring_recomm
 
 
 --
+-- Name: reset_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE reset_logs (
+    id integer NOT NULL,
+    admin_resetting_id integer,
+    resetted_user_id integer,
+    reason character varying(255),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: reset_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE reset_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: reset_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE reset_logs_id_seq OWNED BY reset_logs.id;
+
+
+--
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -2689,6 +2758,13 @@ ALTER TABLE ONLY addresses ALTER COLUMN id SET DEFAULT nextval('addresses_id_seq
 --
 
 ALTER TABLE ONLY admin_impersonation_logs ALTER COLUMN id SET DEFAULT nextval('admin_impersonation_logs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY admin_reset_logs ALTER COLUMN id SET DEFAULT nextval('admin_reset_logs_id_seq'::regclass);
 
 
 --
@@ -3101,6 +3177,13 @@ ALTER TABLE ONLY recurring_recommendation_results ALTER COLUMN id SET DEFAULT ne
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY reset_logs ALTER COLUMN id SET DEFAULT nextval('reset_logs_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY taggings ALTER COLUMN id SET DEFAULT nextval('taggings_id_seq'::regclass);
 
 
@@ -3190,6 +3273,14 @@ ALTER TABLE addresses CLUSTER ON addresses_pkey;
 
 ALTER TABLE ONLY admin_impersonation_logs
     ADD CONSTRAINT admin_impersonation_logs_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: admin_reset_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY admin_reset_logs
+    ADD CONSTRAINT admin_reset_logs_pkey PRIMARY KEY (id);
 
 
 --
@@ -3654,6 +3745,14 @@ ALTER TABLE ONLY prayer_letters_accounts
 
 ALTER TABLE ONLY recurring_recommendation_results
     ADD CONSTRAINT recurring_recommendation_results_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: reset_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY reset_logs
+    ADD CONSTRAINT reset_logs_pkey PRIMARY KEY (id);
 
 
 --
@@ -5210,4 +5309,14 @@ INSERT INTO schema_migrations (version) VALUES ('20160610044352');
 INSERT INTO schema_migrations (version) VALUES ('20160627171818');
 
 INSERT INTO schema_migrations (version) VALUES ('20160728174747');
+
+INSERT INTO schema_migrations (version) VALUES ('20160809235201');
+
+INSERT INTO schema_migrations (version) VALUES ('20160928174158');
+
+INSERT INTO schema_migrations (version) VALUES ('20160928195843');
+
+INSERT INTO schema_migrations (version) VALUES ('20161007231213');
+
+INSERT INTO schema_migrations (version) VALUES ('20161007231427');
 
