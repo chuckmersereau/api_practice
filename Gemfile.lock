@@ -45,10 +45,11 @@ GIT
       mime-types (>= 1.16)
 
 GIT
-  remote: https://github.com/gmailgem/gmail.git
-  revision: aecb73540892d4444fe0302720c7abc636aed756
+  remote: https://github.com/cynektix/gmail.git
+  revision: db93300b4ffe15b8da9537eea9b6ecb226d80b76
+  branch: fix-to-imap-date
   specs:
-    gmail (0.5.0)
+    gmail (0.6.0)
       gmail_xoauth (>= 0.3.0)
       mail (>= 2.2.1)
 
@@ -372,7 +373,7 @@ GEM
     gibbon (2.2.4)
       faraday (>= 0.9.1)
       multi_json (>= 1.11.0)
-    gmail_xoauth (0.4.1)
+    gmail_xoauth (0.4.2)
       oauth (>= 0.3.6)
     gmaps4rails (2.1.2)
     google-api-client (0.7.1)

@@ -3,6 +3,13 @@ require 'spec_helper'
 describe Contact do
   let(:account_list) { create(:account_list) }
   let(:contact) { create(:contact, account_list: account_list) }
+  let(:person) { create(:person) }
+  let(:email) { create(:email_address, primary: true, person: person) }
+  let(:person_and_email_address) do
+    email
+    contact.people << person
+  end
+  let(:mail_chimp_account) { create(:mail_chimp_account, account_list: account_list) }
 
   describe 'saving addresses' do
     it 'should create an address' do
@@ -852,6 +859,40 @@ describe Contact do
           .to receive(:for_code).with('KSH') { nil }
         expect(contact.pledge_currency_symbol).to eq 'KSH'
       end
+    end
+  end
+
+  context '#pledge_amount=' do
+    it 'stores the right value even with a comma' do
+      contact.update(pledge_amount: '100,000.00')
+      expect(contact.pledge_amount).to eq(100_000.0)
+      contact.update(pledge_amount: '100.00')
+      expect(contact.pledge_amount).to eq(100.0)
+    end
+
+    it 'stores the right value even with a comma when written in a spanish way' do
+      contact.update(pledge_amount: '100.000,00')
+      expect(contact.pledge_amount).to eq(100_000.0)
+      contact.update(pledge_amount: '100,00')
+      expect(contact.pledge_amount).to eq(100.0)
+    end
+  end
+
+  context '#mail_chimp_open_rate' do
+    before do
+      stub_request(:get, 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0/')
+        .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/json', 'User-Agent' => 'Faraday v0.9.1' })
+        .to_return(status: 200, body: '', headers: {})
+
+      stub_request(:get, "https://apikey:fake-us4@us4.api.mailchimp.com/3.0/lists/MyString/members/#{Digest::MD5.hexdigest(email.email.downcase)}")
+        .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/json', 'User-Agent' => 'Faraday v0.9.1' })
+        .to_return(status: 200, body: { 'stats' => { 'avg_open_rate' => 89 } }.to_json, headers: {})
+    end
+
+    it 'returns the open rate of the contact retrieved from Mail Chimp' do
+      mail_chimp_account
+      person_and_email_address
+      expect(contact.mail_chimp_open_rate).to eq(89)
     end
   end
 end

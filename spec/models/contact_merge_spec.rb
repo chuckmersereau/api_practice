@@ -18,6 +18,17 @@ describe ContactMerge do
     expect(winner.envelope_greeting).to eq 'Hello'
   end
 
+  it 'transfers activities, but does not duplicate them' do
+    winner = create(:contact)
+    loser = create(:contact)
+    winner.activities << create(:activity, subject: 'Random Task')
+    loser.activities << create(:activity, subject: 'Random Task')
+    loser.activities << create(:activity, subject: 'Random Task #2')
+    winner.merge(loser)
+    winner.reload
+    expect(winner.activities.count).to eq(2)
+  end
+
   context '.merged_send_newsletter' do
     it 'combines email and physical for all cases' do
       [

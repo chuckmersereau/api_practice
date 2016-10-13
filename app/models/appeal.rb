@@ -58,4 +58,8 @@ class Appeal < ActiveRecord::Base
   def quote_sql_list(list)
     list.map { |item| ActiveRecord::Base.connection.quote(item) }.join(',')
   end
+
+  def donated?(contact)
+    donations.joins(donor_account: :contact_donor_accounts).exists?(contact_donor_accounts: { contact_id: contact.id })
+  end
 end

@@ -8,7 +8,7 @@
             ng-repeat="tag in tags">
         {{ tag }}
         <% if params[:controller] == 'contacts' %>
-            <%= link_to '', "/tags/1?remove_tag_name={{tag}}&all_contacts=1", class: "tag_remove", namespace: 'remove_tag', method: :delete,
+            <%= link_to '', "/tags/1?remove_tag_name={{tag.replace('#', '%23')}}&all_contacts=1", class: "tag_remove", namespace: 'remove_tag', method: :delete,
                         data: { confirm: _('Are you sure you want to remove this tag from all contacts?') }, :remote => true %>
         <% else params[:controller] == 'tasks' %>
             <%= link_to '', "/tags/1?remove_tag_name={{tag}}&all_tasks=1", class: "tag_remove", namespace: 'remove_tag', method: :delete,

@@ -13,7 +13,7 @@ class Appeal::AppealContactsExcluder
 
     do_not_ask if excludes[:doNotAskAppeals]
     no_joined_recently(3) if excludes[:joinedTeam3months]
-    no_above_pledge_recently(3) if excludes[:specialGift3months]
+    no_special_gifts_recently(3) if excludes[:specialGift3months]
     no_stopped_giving_recently(2) if excludes[:stoppedGiving2months]
     no_increased_recently(3) if excludes[:increasedGiving3months]
 
@@ -42,7 +42,43 @@ class Appeal::AppealContactsExcluder
     mark_excluded(ids, 'joined_recently')
   end
 
-  def no_above_pledge_recently(prev_full_months)
+  # Exclude contacts that gave a special gift (beyond their pledge amount) in the past prev_full_months number of months.
+  # There is no easy way to tell if a gift is special, or just part of the normal pledge.
+  #
+  # We will sum all the gifts the contact gave within their previous pledge frequency time period,
+  # if the sum is greater than their pledge amount we know they gave a special gift at some point.
+  #
+  # For example, if a contact pledges to give $1000 per year, then their frequency is 12 and their pledge amount is 1000.
+  # If they give $1100 within the past 12 months then we assume they gave a special gift of $100 at some point.
+  #
+  # We don't know if the special gift was within the past prev_full_months number of months,
+  # but if the contact gave more than their pledge amount within their pledge frequency
+  # and they also gave at least one gift within the past prev_full_months number of months then we will exclude them.
+  def no_special_gifts_recently(prev_full_months)
+    contacts_that_gave_in_prev_months = @contacts.includes(donor_accounts: [:donations])
+                                                 .references(donor_accounts: [:donations])
+                                                 .where('donations.donation_date >= ?', prev_full_months.months.ago.beginning_of_month)
+
+    exclude_ids = []
+
+    # First handle all contacts with a pledge frequency less than or equal to the prev_full_months
+    exclude_ids += contacts_who_gave_more_than_pledged_amount_within_prev_months(
+      contacts_that_gave_in_prev_months.where('pledge_frequency <= ?', prev_full_months),
+      account_list,
+      prev_full_months).pluck(:id)
+
+    # Next handle contacts with pledge frequency more than the prev_full_months according to each frequency
+    Contact.pledge_frequencies.keys.select { |frequency| frequency > prev_full_months }.each do |frequency|
+      exclude_ids += contacts_who_gave_more_than_pledged_amount_within_prev_months(
+        contacts_that_gave_in_prev_months.where(pledge_frequency: frequency),
+        account_list,
+        frequency).pluck(:id)
+    end
+
+    mark_excluded(exclude_ids, 'special_gift')
+  end
+
+  def contacts_who_gave_more_than_pledged_amount_within_prev_months(contacts, account_list, prev_full_months)
     start_of_month = Date.today.beginning_of_month
     start_of_prev_month = (Date.today << prev_full_months).beginning_of_month
 
@@ -71,10 +107,11 @@ class Appeal::AppealContactsExcluder
           / ((CASE WHEN contact_donations.last_donation_date >= :start_of_month THEN 1 ELSE 0 END) + :prev_full_months)
         > coalesce(pledge_amount, 0.0) / coalesce(pledge_frequency, 1.0)'
 
-    ids = @contacts.where("contacts.id IN (#{above_pledge_contacts_ids_sql})",
-                          account_list_id: account_list.id, start_of_month: start_of_month,
-                          start_of_prev_month: start_of_prev_month, prev_full_months: prev_full_months).pluck(:id)
-    mark_excluded(ids, 'special_gift')
+    contacts.where("contacts.id IN (#{above_pledge_contacts_ids_sql})",
+                   account_list_id: account_list.id,
+                   start_of_month: start_of_month,
+                   start_of_prev_month: start_of_prev_month,
+                   prev_full_months: prev_full_months)
   end
 
   # We define e.g. "stopped giving in the past 2 months" as no pledge set current, no gifts in the previous

@@ -16,6 +16,12 @@
                 <label><%= _('Goal') %></label>
                 <input type="number" ng-model="$ctrl.appeal.amount" class="form-control input-lg" raw-number>
             </div>
+
+            <div class="col-md-4 field"
+                 ng-show="$ctrl.selected_mail_chimp_list == '<%= current_account_list.mail_chimp_account.try(:mail_chimp_appeal_list).try(:appeal_list_id) %>'">
+                <label><%= _('Mail Chimp Open Rate') %></label>
+                <input type="number" ng-model="$ctrl.appeal_open_rate" class="form-control input-lg" raw-number>
+            </div>
         </div>
       </div>
     </div>
@@ -121,7 +127,7 @@
                         ng-options="m.id as m.name for m in $ctrl.mail_chimp_lists" ></select>
                 <button class="btn btn-default"
                         ng-click="$ctrl.exportContactsToMailChimpList($ctrl.checkedContacts, $ctrl.selected_mail_chimp_list)">
-                  <%= _('Export') %>
+                  <%= _('Sync now') %>
                 </button>
                 <div class="spacer"></div>
                 <div class="alert alert-warning" role="alert">
