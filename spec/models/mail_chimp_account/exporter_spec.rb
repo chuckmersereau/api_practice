@@ -62,7 +62,7 @@ describe MailChimpAccount::Exporter do
         expect_any_instance_of(MailChimpAccount::Exporter).to receive(:setup_webhooks)
         expect_any_instance_of(MailChimpAccount::Exporter).to receive(:add_status_groups)
         expect_any_instance_of(MailChimpAccount::Exporter).to receive(:add_tags_groups)
-        expect_any_instance_of(MailChimpAccount::Exporter).to receive(:add_greeting_merge_variable)
+        expect_any_instance_of(MailChimpAccount::Exporter).to receive(:add_merge_variable)
         expect(account).to receive(:list_emails) { ['j@t.co'] }
         expect(account).to receive(:list_member_info) do
           [{ 'email_address' => 'j@t.co', 'merge_fields' => {},
@@ -95,7 +95,7 @@ describe MailChimpAccount::Exporter do
 
         expect(export).to receive(:add_status_groups)
         expect(export).to receive(:add_tags_groups)
-        expect(export).to receive(:add_greeting_merge_variable)
+        expect(export).to receive(:add_merge_variable)
 
         expect do
           export.send(:export_to_list, [contact])
@@ -111,7 +111,7 @@ describe MailChimpAccount::Exporter do
 
         expect(appeal_export).to receive(:add_status_groups)
         expect(appeal_export).to receive(:add_tags_groups)
-        expect(appeal_export).to receive(:add_greeting_merge_variable)
+        expect(appeal_export).to receive(:add_merge_variable)
 
         account.primary_list_id = 'random_other_list_id'
         appeal_export.send(:export_to_list, [contact])
@@ -213,16 +213,16 @@ describe MailChimpAccount::Exporter do
     end
   end
 
-  context '#add_greeting_merge_variable' do
+  context '#add_merge_variable' do
     before do
       account.primary_list_id = 'list1'
     end
 
-    it 'does not add a greeting merge variable if it already exists' do
+    it 'does not add a merge variable if it already exists' do
       check_merge_fields = stub_request(:get, "#{api_prefix}/lists/list1/merge-fields")
                            .to_return(body: { merge_fields: [{ name: 'Greeting', tag: 'GREETING' }] }.to_json)
 
-      export.add_greeting_merge_variable
+      export.add_merge_variable('GREETING')
 
       expect(check_merge_fields).to have_been_made
     end
@@ -233,7 +233,7 @@ describe MailChimpAccount::Exporter do
       create_merge_field = stub_request(:post, "#{api_prefix}/lists/list1/merge-fields")
                            .with(body: { tag: 'GREETING', name: 'Greeting', type: 'text' }.to_json)
 
-      export.add_greeting_merge_variable
+      export.add_merge_variable('GREETING')
 
       expect(create_merge_field).to have_been_made
     end
@@ -246,7 +246,7 @@ describe MailChimpAccount::Exporter do
           detail: 'A Merge Field with the tag "GREETING" already exists for this list.'
         }.to_json)
 
-      expect { export.add_greeting_merge_variable }.to_not raise_error
+      expect { export.add_merge_variable('GREETING') }.to_not raise_error
     end
 
     it 'does not error on a 500 status but does notify Rollbar' do
@@ -258,7 +258,7 @@ describe MailChimpAccount::Exporter do
         }.to_json)
       expect(Rollbar).to receive(:error)
 
-      expect { export.add_greeting_merge_variable }.to_not raise_error
+      expect { export.add_merge_variable('GREETING') }.to_not raise_error
     end
   end
 

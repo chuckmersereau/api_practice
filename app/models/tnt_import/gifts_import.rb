@@ -8,11 +8,11 @@ class TntImport::GiftsImport
   def import
     return unless @account_list.organization_accounts.count == 1
     org = @account_list.organization_accounts.first.organization
-    return unless org.api_class == 'OfflineOrg'
 
     Array.wrap(xml['Gift']['row']).each do |row|
       contact = tnt_contacts[row['ContactID']]
       next unless contact
+      next if org.api_class != 'OfflineOrg' && row['PersonallyReceived'] == 'false'
       account = donor_account_for_contact(org, contact)
 
       # If someone re-imports donations, assume that there is just one donation per date per amount;

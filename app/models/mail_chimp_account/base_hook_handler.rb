@@ -10,6 +10,8 @@ class MailChimpAccount
 
     def campaign_status_hook(campaign_id, status, subject)
       return unless status == 'sent'
+
+      @mc_account.update(prayer_letter_last_sent: Time.current)
       @mc_account.queue_log_sent_campaign(campaign_id, subject)
     end
   end
