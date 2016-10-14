@@ -45,7 +45,7 @@ class MailChimpImport
   end
 
   def all_emails_to_import
-    @mc_account.list_emails(@mc_account.primary_list_id) - @mc_account.newsletter_emails
+    @mc_account.list_emails(@mc_account.primary_list_id) - @mc_account.relevant_emails
   end
 
   def import_members(members)

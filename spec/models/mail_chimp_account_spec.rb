@@ -6,7 +6,16 @@ describe MailChimpAccount do
   let(:account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
   let(:api_prefix) { 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0' }
   let(:account_list) { create(:account_list) }
+  let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: account) }
   let(:appeal) { create(:appeal, account_list: account_list) }
+  let(:newsletter_contacts) do
+    contacts = []
+    2.times do
+      contacts << create(:contact, people: [create(:person, email_addresses: [build(:email_address)])], account_list: account_list_with_mailchimp, send_newsletter: 'Email')
+    end
+    contacts
+  end
+  let(:non_newsletter_contact) { create(:contact, people: [create(:person, email_addresses: [build(:email_address)])], account_list: account_list_with_mailchimp, send_newsletter: 'Physical') }
 
   it 'validates the format of an api key' do
     expect(MailChimpAccount.new(account_list_id: 1, api_key: 'DEFAULT__{8D2385FE-5B3A-4770-A399-1AF1A6436A00}')).not_to be_valid
@@ -301,6 +310,29 @@ describe MailChimpAccount do
     it 'returns the open rate given by the mail chimp api' do
       MailChimpAppealList.create(mail_chimp_account: account, appeal_id: appeal.id, appeal_list_id: primary_list_id_2)
       expect(account.appeal_open_rate).to eq(20)
+    end
+  end
+
+  context 'email generating methods' do
+    before do
+      newsletter_contacts
+      non_newsletter_contact
+    end
+
+    context '#relevant_emails' do
+      it 'returns the right list of emails which depends on the settings set by the user' do
+        expect(account.relevant_emails.size).to eq(2)
+        account.update(sync_all_active_contacts: true)
+        expect(account.relevant_emails.size).to eq(3)
+      end
+    end
+
+    context '#relevant_contacts' do
+      it 'returns the right list of contacts which again depends on the settings set by the user' do
+        expect(account.relevant_contacts.last).to eq(newsletter_contacts.last)
+        account.update(sync_all_active_contacts: true)
+        expect(account.relevant_contacts.last).to eq(non_newsletter_contact)
+      end
     end
   end
 end

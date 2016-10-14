@@ -29,7 +29,7 @@ class MailChimpSync
 
   def select_contacts_to_export(contact_ids)
     to_export = []
-    @mc_account.newsletter_contacts_with_emails(contact_ids).find_each do |contact|
+    @mc_account.relevant_contacts(contact_ids).find_each do |contact|
       to_export << contact if contact_changed_or_new?(contact)
     end
     to_export

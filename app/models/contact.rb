@@ -112,7 +112,7 @@ class Contact < ActiveRecord::Base
   end
 
   INACTIVE_STATUSES = [
-    'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
+    'Never Contacted', 'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
     'Expired Referral'
   ].freeze
   ACTIVE_STATUSES = ASSIGNABLE_STATUSES - INACTIVE_STATUSES
