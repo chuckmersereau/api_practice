@@ -63,9 +63,10 @@ class Api::V1::BaseController < ApplicationController
   end
 
   def current_account_list
-    account_list = current_user.account_lists.find(params[:account_list_id]) if params[:account_list_id].present?
-    account_list ||= default_account_list
-    account_list
+    @account_list ||= current_user.account_lists.find(params[:account_list_id]) if params[:account_list_id].present?
+    @account_list ||= current_user.account_lists.find(session[:current_account_list_id]) if session[:current_account_list_id].present?
+    @account_list ||= default_account_list
+    @account_list
   end
 
   def current_user
@@ -99,7 +100,7 @@ class Api::V1::BaseController < ApplicationController
       resource = resource.includes(available_includes) if available_includes.present?
     end
     resource = resource.where("#{resource.table.name}.updated_at > ?", Time.at(params[:since].to_i)) if params[:since].to_i > 0
-    resource = resource.page(page).per_page(per_page)
+    resource = resource.page(page).per(per_page)
     # Always order by id at the end to ensure consistent ordering during various pagination runs
     resource = resource.order(options[:order], :id) if options[:order]
     resource

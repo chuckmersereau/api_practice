@@ -1,0 +1,6 @@
+"<%== spreadsheet_header_titles.map {|h| _(h)}.join('","') %>"
+<%== CSV.generate do |csv|
+  @contacts.each do |contact|
+    csv << spreadsheet_values(contact)
+  end
+end %>

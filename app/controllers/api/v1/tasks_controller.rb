@@ -18,7 +18,10 @@ class Api::V1::TasksController < Api::V1::BaseController
   end
 
   def show
-    render json: tasks.find(params[:id]), callback: params[:callback]
+    task = tasks.find(params[:id])
+    render json: task, callback: params[:callback]
+  rescue
+    render json: { errors: ['Not Found'] }, callback: params[:callback], status: :not_found
   end
 
   def update
@@ -31,11 +34,33 @@ class Api::V1::TasksController < Api::V1::BaseController
   end
 
   def create
-    task = tasks.new(task_params)
-    if task.save
-      render json: task, callback: params[:callback], status: :created
+    # task = tasks.new(task_params)
+    # if task.save
+    #   render json: task, callback: params[:callback], status: :created
+    # else
+    #   render json: { errors: task.errors.full_messages }, callback: params[:callback], status: :bad_request
+    # end
+    #
+    # @task = current_account_list.tasks.new(task_params)
+
+    @task = current_account_list.tasks.new(task_params)
+    if params[:add_task_contact_ids].present?
+      # First validate the task fields
+      if @task.valid?
+        # Create a copy of the task for each contact selected
+        contacts = current_account_list.contacts.where(id: params[:add_task_contact_ids].split(','))
+        contacts.each do |c|
+          @task = current_account_list.tasks.create(task_params)
+          ActivityContact.create(activity_id: @task.id, contact_id: c.id)
+        end
+        render nothing: true
+      else
+        render nothing: true, status: 400
+      end
+    elsif @task.save
+      render nothing: true
     else
-      render json: { errors: task.errors.full_messages }, callback: params[:callback], status: :bad_request
+      render nothing: true, status: 400
     end
   end
 
@@ -43,6 +68,8 @@ class Api::V1::TasksController < Api::V1::BaseController
     task = tasks.find(params[:id])
     task.destroy
     render json: task, callback: params[:callback]
+  rescue
+    render json: { errors: ['Not Found'] }, callback: params[:callback], status: :not_found
   end
 
   # yields {"total": ##,"uncompleted": ##,"overdue": ##}
@@ -61,7 +88,7 @@ class Api::V1::TasksController < Api::V1::BaseController
   protected
 
   def tasks
-    filtered_tasks = TaskFilter.new(params[:filters]).filter(current_account_list.tasks)
+    filtered_tasks = Task::Filterer.new(params[:filters]).filter(current_account_list.tasks, current_account_list)
 
     add_includes_and_order(filtered_tasks.includes(:contacts, :activity_comments, :people), order: params[:order])
   end

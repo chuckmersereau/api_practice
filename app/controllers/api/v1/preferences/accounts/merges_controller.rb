@@ -1,20 +1,21 @@
 class Api::V1::Preferences::Accounts::MergesController < Api::V1::Preferences::BaseController
+  before_action :load_and_authorize_account_list, only: :create
+
   def create
-    load_account_list
-    return render json: { success: false }, status: 400 if @account_list == current_account_list
-    current_account_list.merge(@account_list)
+    current_account_list.merge(@account_list_object)
     render json: { success: true }
   end
 
   protected
 
-  def load_account_list
-    @account_list ||= current_user.account_lists.find(merge_params[:id])
+  def load_and_authorize_account_list
+    return error_response('You must provide a valid account id.') if !params[:merge] || !params[:merge][:id]
+    @account_list_object ||= current_user.account_lists.find(merge_params[:id])
+    return error_response('You cannot merge an account with itself.') if @account_list_object == current_account_list
   end
 
   def merge_params
     merge_params = params[:merge]
-    return {} unless merge_params
     merge_params.permit(:id)
   end
 
@@ -29,5 +30,10 @@ class Api::V1::Preferences::Accounts::MergesController < Api::V1::Preferences::B
     @preferences.merge!(
       mergeable_accounts: (current_user.account_lists - [current_account_list]).map { |a| { id: a.id, name: a.name } }
     )
+  end
+
+  def error_response(error_message)
+    render json: { error: _(error_message) }, status: 400
+    false
   end
 end
