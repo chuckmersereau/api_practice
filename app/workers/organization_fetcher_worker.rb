@@ -1,6 +1,6 @@
 class OrganizationFetcherWorker
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   def perform
     # Download the org csv from tnt and update orgs

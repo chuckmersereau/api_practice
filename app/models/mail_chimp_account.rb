@@ -3,7 +3,7 @@ require 'async'
 class MailChimpAccount < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   COUNT_PER_PAGE = 100
 

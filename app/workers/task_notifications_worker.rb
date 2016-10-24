@@ -3,7 +3,7 @@ require 'async'
 class TaskNotificationsWorker
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   def perform
     tasks = Task.where(start_at: Time.now..65.minutes.from_now, notification_scheduled: nil)

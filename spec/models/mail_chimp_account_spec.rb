@@ -101,7 +101,6 @@ describe MailChimpAccount do
 
   describe 'queueing methods' do
     before do
-      ResqueSpec.reset!
       account.save!
     end
 

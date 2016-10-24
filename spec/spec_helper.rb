@@ -22,16 +22,13 @@ ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
 require 'webmock/rspec'
-require 'capybara/rspec'
 require 'sidekiq/testing'
 require 'sidekiq_unique_jobs/testing'
 require 'paper_trail/frameworks/rspec'
 require 'attributes_history/rspec'
-require 'capybara-screenshot/rspec'
 
 require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
-require 'capybara/poltergeist'
 
 # Turn off sidekiq logging in test
 Sidekiq::Logging.logger = nil
@@ -43,12 +40,6 @@ Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 ActiveRecord::Base.establish_connection(:test)
 
 WebMock.disable_net_connect!(allow_localhost: true)
-Capybara.register_driver :poltergeist do |app|
-  Capybara::Poltergeist::Driver.new(app, js_errors: false, timeout: 60)
-end
-Capybara.javascript_driver = :poltergeist
-
-Capybara.default_max_wait_time = 4
 
 RSpec.configure do |config|
   config.before(:each) do |example|
@@ -108,6 +99,7 @@ RSpec.configure do |config|
   config.run_all_when_everything_filtered = true
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
+  config.include JsonApiHelpers, type: :acceptance
 
   # This adds automatic meta-data for specs by location (e.g. for controllers)
   config.infer_spec_type_from_file_location!

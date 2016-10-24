@@ -23,6 +23,7 @@ gem 'email_reply_parser', '~> 0.5.9'
 gem 'fb_graph', '~> 2.6.0'
 gem 'fog', '~> 1.36.0'
 gem 'pundit', '~> 1.1.0'
+gem 'snail'
 
 gem 'foreigner', '~> 1.7.4'
 gem 'gettext_i18n_rails', '~> 1.7.2'
