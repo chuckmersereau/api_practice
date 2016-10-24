@@ -37,4 +37,4 @@ public/dev-assets
 logfile
 dump.rdb
 /cache
-vendor/ruby
+vendor/cache
