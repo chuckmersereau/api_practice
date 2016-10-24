@@ -1,8 +1,0 @@
-<div class="field referral_field form-inline" data-behavior="field-wrapper">
-    <%#= builder.label :referred_by_id %>
-    <%= builder.select :referred_by_id, current_account_list.contacts.order('name').collect { |c| [c.name, c.id] }, {include_blank: true}, class: 'form-control' %>
-    <div class="field_action">
-      <%= link_to_remove_fields(builder) %>
-    </div>
-</div>
-

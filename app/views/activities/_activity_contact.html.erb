@@ -1,7 +1,0 @@
-<div class="sfield email_field">
-  <div class="field">
-    <%= builder.label :contact_id, _('Related To') %>
-    <%= builder.select :contact_id, object.assignable_contacts.order(:name).pluck(:name, :id), include_blank: true %>
-  </div>
-</div>
-
