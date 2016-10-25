@@ -56,10 +56,9 @@ class ApplicationController < ActionController::Base
       sign_in(:user, $user)
     else
       session[:user_return_to] = request.fullpath unless request.path == '/'
-      case
-      when request.host =~ /us/
+      if request.host =~ /us/
         redirect_to '/auth/relay'
-      when request.host =~ /mpdxs|key/
+      elsif request.host =~ /mpdxs|key/
         redirect_to '/auth/key'
       else
         flash[:timeout] = true
@@ -73,7 +72,7 @@ class ApplicationController < ActionController::Base
   def ensure_setup_finished
     if user_signed_in? && (current_user.setup_mode? || !current_account_list) && !allowed_setup_request
       redirect_to setup_path(:org_accounts)
-      return false
+      false
     end
   end
 

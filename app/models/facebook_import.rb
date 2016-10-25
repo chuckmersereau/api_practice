@@ -26,7 +26,7 @@ class FacebookImport
             end
           end
 
-          facebook_account.friends << friend.identifier
+          # facebook_account.friends << friend.identifier
 
           # Try to match an existing person
           fb_person = create_or_update_person(friend, @account_list)

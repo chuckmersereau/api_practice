@@ -116,7 +116,7 @@ class GoogleContactsIntegrator
   end
 
   def cleanup_inactive_g_contact(g_contact_link, num_retries = 1)
-    g_contact = @cache.find_by_id(g_contact_link.remote_id)
+    g_contact = @cache.find_by(id: g_contact_link.remote_id)
     unless g_contact
       g_contact_link.destroy
       return
@@ -279,7 +279,7 @@ class GoogleContactsIntegrator
 
   def get_or_query_g_contact(g_contact_link, person)
     if g_contact_link.remote_id
-      retrieved_g_contact = @cache.find_by_id(g_contact_link.remote_id)
+      retrieved_g_contact = @cache.find_by(id: g_contact_link.remote_id)
       return retrieved_g_contact if retrieved_g_contact
     end
 

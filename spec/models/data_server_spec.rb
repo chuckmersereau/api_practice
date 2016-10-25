@@ -362,7 +362,7 @@ describe DataServer do
       expect(donor_account.reload.addresses.where(primary_mailing_address: true).count).to eq(1)
 
       expect(prior_address.reload.primary_mailing_address).to be true
-      expect(contact.addresses.find_by_street(prior_address.street).primary_mailing_address).to be true
+      expect(contact.addresses.find_by(street: prior_address.street).primary_mailing_address).to be true
     end
 
     it 'updates the contact address based on the donor account' do

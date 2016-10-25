@@ -25,8 +25,7 @@ describe Api::V1::InsightsController do
     results_fixture = File.read('spec/fixtures/obiee_report_results2.xml')
     run_params = { report: { reportPath: '/shared/MPD/Siebel Recurring Monthly/Recurring Gift Recommendations' },
                    reportParams: { filterExpressions: '',
-                                   variables: { name: 'mpdxRecurrDesig', value: '2716653' }
-                   },
+                                   variables: { name: 'mpdxRecurrDesig', value: '2716653' } },
                    outputFormat: 'SAWRowsetAndData',
                    executionOptions:
                        { async: '',
@@ -37,7 +36,7 @@ describe Api::V1::InsightsController do
                    sessionID: 'sessionid22091522cru' }
     savon.expects(:executeXMLQuery).with(message: run_params).returns(results_fixture)
 
-    get :index, access_token: @user.access_token
+    get :index, params: { access_token: @user.access_token }
     expect(response).to be_success
     JSON.parse(response.body)
   end

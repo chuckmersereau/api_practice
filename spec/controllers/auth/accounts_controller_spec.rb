@@ -9,18 +9,18 @@ describe Auth::AccountsController do
       request.env['omniauth.auth'] = auth_hash
     end
     it 'should sign a user in' do
-      post 'create', provider: 'facebook'
+      post 'create', params: { provider: 'facebook' }
       expect(request.session['warden.user.user.key']).to eq([[@user.id], nil])
     end
 
     it 'should queue data imports on sign in' do
       expect(User).to receive(:from_omniauth).and_return(@user)
       expect(@user).to receive(:queue_imports)
-      post 'create', provider: 'facebook'
+      post 'create', params: { provider: 'facebook' }
     end
 
     it 'redirects to the homepage if someone tries to connect to google without a session' do
-      post 'create', provider: 'google'
+      post 'create', params: { provider: 'google' }
       assert_redirected_to '/'
     end
   end
@@ -36,7 +36,7 @@ describe Auth::AccountsController do
         mash = Hashie::Mash.new(uid: '5', credentials: { token: 'a', expires_at: 5 }, info: { first_name: 'John', last_name: 'Doe' })
         request.env['omniauth.auth'] = mash
         expect do
-          post 'create', provider: 'facebook', origin: 'login'
+          post 'create', params: { provider: 'facebook', origin: 'login' }
           expect(response).to redirect_to(setup_path(:org_accounts))
         end.to change(Person::FacebookAccount, :count).from(0).to(1)
         expect(subject.current_user).not_to eq @user
@@ -46,7 +46,7 @@ describe Auth::AccountsController do
         mash = Hashie::Mash.new(uid: '5', credentials: { token: 'a', expires_at: 5 }, info: { first_name: 'John', last_name: 'Doe' })
         request.env['omniauth.auth'] = mash
         expect do
-          post 'create', provider: 'facebook'
+          post 'create', params: { provider: 'facebook' }
           expect(response).to redirect_to(accounts_path)
           expect(@user.facebook_accounts).to include(assigns(:account))
         end.to change(Person::FacebookAccount, :count).from(0).to(1)
@@ -55,14 +55,14 @@ describe Auth::AccountsController do
       it 'should redirect to social accounts if the user is in setup mode' do
         @user.update_attributes(preferences: { setup: true })
         allow(Person::FacebookAccount).to receive(:find_or_create_from_auth)
-        post 'create', provider: 'facebook'
+        post 'create', params: { provider: 'facebook' }
         expect(response).to redirect_to(setup_path(:org_accounts))
       end
 
       it 'should redirect to a stored user_return_to' do
         session[:user_return_to] = '/foo'
         allow(Person::FacebookAccount).to receive(:find_or_create_from_auth)
-        post 'create', provider: 'facebook'
+        post 'create', params: { provider: 'facebook' }
         expect(response).to redirect_to('/foo')
       end
     end
@@ -71,7 +71,7 @@ describe Auth::AccountsController do
       it 'returns http success' do
         @account = FactoryGirl.create(:facebook_account, person: @user)
         expect do
-          get 'destroy', provider: 'facebook', id: @account.id
+          get 'destroy', params: { provider: 'facebook', id: @account.id }
           expect(response).to redirect_to(accounts_path)
         end.to change(Person::FacebookAccount, :count).from(1).to(0)
       end

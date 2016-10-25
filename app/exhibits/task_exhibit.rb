@@ -8,9 +8,8 @@ class TaskExhibit < DisplayCase::Exhibit
   end
 
   def css_class
-    case
-    when to_model.start_at < Time.now then 'high'
-    when to_model.start_at < Time.now + 1.day then 'mid'
+    if to_model.start_at < Time.now then 'high'
+    elsif to_model.start_at < Time.now + 1.day then 'mid'
     else ''
     end
   end

@@ -24,8 +24,7 @@ class Obiee
                          presentationInfo: true,
                          type: '' },
                    reportParams: { filterExpressions: '',
-                                   variables: vars
-                   },
+                                   variables: vars },
                    sessionID: session_id }
     returned_results = make_call(run_report_client, :executeXMLQuery, run_params)
     returned_results.body[:execute_xml_query_result][:return][:rowset]

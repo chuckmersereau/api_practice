@@ -25,7 +25,7 @@ class Auth::AccountsController < ApplicationController
 
       # queue up data imports
       current_user.queue_imports
-      current_account_list.async(:update_geocodes) if current_account_list
+      current_account_list&.async(:update_geocodes)
     end
 
     # Connect this account to the user
@@ -59,10 +59,9 @@ class Auth::AccountsController < ApplicationController
   private
 
   def redirect_path
-    case
-    when current_user.setup_mode?
+    if current_user.setup_mode?
       setup_path(:org_accounts)
-    when session[:user_return_to]
+    elsif session[:user_return_to]
       session[:user_return_to]
     else
       accounts_path

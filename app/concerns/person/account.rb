@@ -12,7 +12,7 @@ module Person::Account
       @account = find_related_account(@rel, @remote_id)
       if @account
         @account.update_attributes(@attributes)
-      elsif other_account = find_by_remote_id_and_authenticated(@remote_id, true)
+      elsif other_account = find_by(remote_id: @remote_id, authenticated: true)
         # if creating this authentication record is a duplicate, we have a duplicate person to merge
         other_account.update_attributes(person_id: person.id)
         @account = other_account
@@ -40,7 +40,7 @@ module Person::Account
     end
 
     def find_authenticated_user(auth_hash)
-      User.find_by_id(authenticated.where(remote_id: auth_hash.uid).pluck(:person_id).first)
+      User.find_by(id: authenticated.where(remote_id: auth_hash.uid).pluck(:person_id).first)
     end
 
     def one_per_user?

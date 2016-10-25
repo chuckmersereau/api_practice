@@ -50,16 +50,14 @@ describe ContactExhibit do
     it 'ignore images with nil content' do
       person = double(facebook_account: nil,
                       primary_picture: double(image: double(url: nil)),
-                      gender: nil
-                     )
+                      gender: nil)
       allow(contact).to receive(:primary_person).and_return(person)
       expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
     end
 
     it 'uses make facebook image if remote_id present' do
       person = double(facebook_account: double(remote_id: 1234),
-                      primary_picture: double(image: double(url: nil))
-                     )
+                      primary_picture: double(image: double(url: nil)))
       allow(contact).to receive(:primary_person).and_return(person)
       expect(exhib.avatar).to eq('https://graph.facebook.com/1234/picture?type=square')
     end
@@ -67,8 +65,7 @@ describe ContactExhibit do
     it 'uses default avatar if facebook remote_id not present' do
       person = double(facebook_account: double(remote_id: nil),
                       primary_picture: double(image: double(url: nil)),
-                      gender: nil
-                     )
+                      gender: nil)
       allow(contact).to receive(:primary_person).and_return(person)
       expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
     end

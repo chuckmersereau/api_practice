@@ -8,7 +8,7 @@ gem 'syslog-logger', '~> 1.6.8'
 
 gem 'active_model_serializers', '~> 0.8.1'
 gem 'activerecord-import', '~> 0.16.1'
-gem 'activesupport-json_encoder', '~> 1.1.0' 
+gem 'activesupport-json_encoder', '~> 1.1.0'
 gem 'acts-as-taggable-on', '~> 3.0.0'
 gem 'rollbar', '~> 2.8.3'
 gem 'assignable_values', '~> 0.11.2'

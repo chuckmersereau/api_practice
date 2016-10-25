@@ -28,8 +28,7 @@ describe Obiee do
           presentationInfo: true,
           type: '' },
       reportParams: { filterExpressions: '',
-                      variables: {}
-    },
+                      variables: {} },
       sessionID: session_id }
   end
 

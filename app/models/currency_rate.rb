@@ -33,7 +33,8 @@ class CurrencyRate < ActiveRecord::Base
       @cached_rates ||= {}
       @cached_rates[currency_code] ||= {}
       @cached_rates[currency_code][date] ||= find_rate_on_date(
-        currency_code: currency_code, date: date)
+        currency_code: currency_code, date: date
+      )
     end
 
     def cache_rates_for_dates(currency_code:, from_date:, to_date:)

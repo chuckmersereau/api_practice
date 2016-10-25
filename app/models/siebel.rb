@@ -71,8 +71,7 @@ class Siebel < DataServer
                                 contact_filter: :all,
                                 account_address_filter: :primary,
                                 contact_email_filter: :all,
-                                contact_phone_filter: :all
-                               ).each do |siebel_donor|
+                                contact_phone_filter: :all).each do |siebel_donor|
       donor_account = add_or_update_donor_account(account_list, siebel_donor, profile, date_from)
 
       next unless siebel_donor.type == 'Business'
@@ -187,7 +186,7 @@ class Siebel < DataServer
 
   def add_or_update_donation(siebel_donation, designation_account, profile)
     default_currency = @org.default_currency_code || 'USD'
-    donor_account = @org.donor_accounts.find_by_account_number(siebel_donation.donor_id)
+    donor_account = @org.donor_accounts.find_by(account_number: siebel_donation.donor_id)
 
     # find donor account from siebel if we don't already have this donor
     unless donor_account
@@ -224,7 +223,7 @@ class Siebel < DataServer
   end
 
   def add_or_update_company(account_list, siebel_donor, donor_account)
-    master_company = MasterCompany.find_by_name(siebel_donor.account_name)
+    master_company = MasterCompany.find_by(name: siebel_donor.account_name)
 
     company = @org_account.user.partner_companies.find_by(master_company_id: master_company.id) if master_company
     company ||= account_list.companies.new(master_company: master_company)
@@ -258,24 +257,20 @@ class Siebel < DataServer
       raise 'Failed to link to contact' unless contact
 
       # Save addresses
-      if donor.addresses
-        donor.addresses.each do |address|
-          next if date_from.present? && DateTime.parse(address.updated_at) < date_from && contact.addresses.present?
+      donor.addresses&.each do |address|
+        next if date_from.present? && DateTime.parse(address.updated_at) < date_from && contact.addresses.present?
 
-          add_or_update_address(address, donor_account, donor_account)
+        add_or_update_address(address, donor_account, donor_account)
 
-          # Make sure the contact has the primary address
-          add_or_update_address(address, contact, donor_account) if address.primary == true
-        end
+        # Make sure the contact has the primary address
+        add_or_update_address(address, contact, donor_account) if address.primary == true
       end
 
       # Save people (siebel calls them contacts)
-      if donor.contacts
-        donor.contacts.each do |person|
-          next if date_from.present? && DateTime.parse(person.updated_at) < date_from && contact.people.present?
+      donor.contacts&.each do |person|
+        next if date_from.present? && DateTime.parse(person.updated_at) < date_from && contact.people.present?
 
-          add_or_update_person(person, donor_account, contact, date_from)
-        end
+        add_or_update_person(person, donor_account, contact, date_from)
       end
 
       donor_account
@@ -330,27 +325,23 @@ class Siebel < DataServer
     end
 
     # Phone Numbers
-    if siebel_person.phone_numbers
-      siebel_person.phone_numbers.each do |pn|
-        next if date_from.present? && DateTime.parse(pn.updated_at) < date_from && contact_person.phone_numbers.present?
+    siebel_person.phone_numbers&.each do |pn|
+      next if date_from.present? && DateTime.parse(pn.updated_at) < date_from && contact_person.phone_numbers.present?
 
-        add_or_update_phone_number(pn, person)
+      add_or_update_phone_number(pn, person)
 
-        # Make sure the contact person has the primary phone number
-        add_or_update_phone_number(pn, contact_person) if pn.primary == true
-      end
+      # Make sure the contact person has the primary phone number
+      add_or_update_phone_number(pn, contact_person) if pn.primary == true
     end
 
     # Email Addresses
-    if siebel_person.email_addresses
-      siebel_person.email_addresses.each do |email|
-        next if date_from.present? && DateTime.parse(email.updated_at) < date_from && contact_person.email_addresses.present?
+    siebel_person.email_addresses&.each do |email|
+      next if date_from.present? && DateTime.parse(email.updated_at) < date_from && contact_person.email_addresses.present?
 
-        add_or_update_email_address(email, person)
+      add_or_update_email_address(email, person)
 
-        # Make sure the contact person has the primary phone number
-        add_or_update_email_address(email, contact_person) if email.primary == true
-      end
+      # Make sure the contact person has the primary phone number
+      add_or_update_email_address(email, contact_person) if email.primary == true
     end
 
     [person, contact_person]

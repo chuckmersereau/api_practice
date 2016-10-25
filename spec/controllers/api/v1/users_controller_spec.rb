@@ -12,7 +12,7 @@ describe Api::V1::UsersController do
 
     context '#show' do
       it 'gets preferences' do
-        get :show, id: 'me'
+        get :show, params: { id: 'me' }
         expect(response).to be_success
       end
     end
@@ -21,7 +21,7 @@ describe Api::V1::UsersController do
       it 'updates preferences' do
         allow_any_instance_of(AccountList).to receive(:id).and_return(1)
 
-        put :update, id: 'me', 'user' => { 'contacts_filter' => { '1' => { 'limit' => 1000, 'timezone' => 'EST' } } }
+        put :update, params: { id: 'me', 'user' => { 'contacts_filter' => { '1' => { 'limit' => 1000, 'timezone' => 'EST' } } } }
         expect(response).to be_success
         expect(session[:prefs][:contacts][:limit]).to eq('1000')
       end

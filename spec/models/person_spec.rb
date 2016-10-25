@@ -296,7 +296,7 @@ describe Person do
       other_person_loser_master = create(:person, master_person: loser.master_person)
       expect { winner.merge(loser) }.to_not raise_error
       expect(other_person_loser_master.reload.master_person).to eq(winner.master_person)
-      expect(MasterPerson.find_by_id(loser_master_person_id)).to be_nil
+      expect(MasterPerson.find_by(id: loser_master_person_id)).to be_nil
     end
 
     it 'merges two people correctly if they have the same master person' do

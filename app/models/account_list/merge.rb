@@ -13,8 +13,7 @@ class AccountList::Merge
   def merge_fields_and_associations
     # Intentionally don't copy over notification_preferences since they may conflict between accounts
     [:activities, :appeals, :company_partnerships, :contacts, :designation_profiles,
-     :google_integrations, :help_requests, :imports, :messages, :recurring_recommendation_results
-    ].each { |has_many| @loser.send(has_many).update_all(account_list_id: @winner.id) }
+     :google_integrations, :help_requests, :imports, :messages, :recurring_recommendation_results].each { |has_many| @loser.send(has_many).update_all(account_list_id: @winner.id) }
 
     [:mail_chimp_account, :prayer_letters_account].each do |has_one|
       next unless @winner.send(has_one).nil? && @loser.send(has_one).present?

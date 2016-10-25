@@ -241,12 +241,11 @@ class Person < ActiveRecord::Base
   end
 
   def email_addresses_attributes=(attributes)
-    case
-    when attributes.is_a?(Hash)
+    if attributes.is_a?(Hash)
       attributes.each do |_, v|
         self.email_address = v
       end
-    when attributes.is_a?(Array)
+    elsif attributes.is_a?(Array)
       attributes.each do |v|
         self.email_address = v
       end
@@ -318,7 +317,7 @@ class Person < ActiveRecord::Base
       end
 
       other.email_addresses.each do |email_address|
-        next if email_addresses.find_by_email(email_address.email)
+        next if email_addresses.find_by(email: email_address.email)
         email_address.update_attributes(person_id: id)
       end
 
@@ -362,7 +361,7 @@ class Person < ActiveRecord::Base
       Person.where(master_person_id: other_master_person_id).find_each do |person_same_master_other|
         person_same_master_other.update(master_person: master_person)
       end
-      MasterPerson.find_by_id(other_master_person_id).try(:destroy) unless other_master_person_id == master_person_id
+      MasterPerson.find_by(id: other_master_person_id).try(:destroy) unless other_master_person_id == master_person_id
       other_master_person_sources.each do |organization_id, remote_id|
         master_person.master_person_sources.find_or_create_by(organization_id: organization_id, remote_id: remote_id)
       end

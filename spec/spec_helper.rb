@@ -46,14 +46,13 @@ RSpec.configure do |config|
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all
 
-    case
-    when example.metadata[:sidekiq] == :fake
+    if example.metadata[:sidekiq] == :fake
       Sidekiq::Testing.fake!
-    when example.metadata[:sidekiq] == :testing_disabled
+    elsif example.metadata[:sidekiq] == :testing_disabled
       Sidekiq::Testing.disable!
-    when example.metadata[:sidekiq] == :acceptance
+    elsif example.metadata[:sidekiq] == :acceptance
       Sidekiq::Testing.inline!
-    when example.metadata[:type] == :acceptance
+    elsif example.metadata[:type] == :acceptance
       Sidekiq::Testing.inline!
     else
       Sidekiq::Testing.fake!

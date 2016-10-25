@@ -57,6 +57,7 @@ class Api::V1::DonationsController < Api::V1::BaseController
     return {} unless params[:donation]
     params[:donation].permit(
       :amount, :appeal_amount, :appeal_id, :currency, :designation_account_id,
-      :donation_date, :donor_account_id, :motivation, :payment_method)
+      :donation_date, :donor_account_id, :motivation, :payment_method
+    )
   end
 end

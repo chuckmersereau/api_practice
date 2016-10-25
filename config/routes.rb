@@ -3,6 +3,49 @@ require 'sidekiq/cron/web'
 require 'rollout_ui/server'
 
 Rails.application.routes.draw do
+  resources :google_integrations, only: [:show, :edit, :update, :create] do
+    member do
+      get :sync
+    end
+  end
+
+  resources :help_requests, only: [:new, :create] do
+    member do
+      get :attachment
+    end
+  end
+
+  get '/help' => 'help_requests#new'
+  get '/preferences*path', to: 'preferences#index'
+  get 'preferences/personal', as: :personal_preferences
+  get 'preferences/personal/:tab_id', to: 'preferences#index', as: :personal_preferences_tab
+  get 'preferences/notifications', as: :notification_preferences
+  get 'preferences/notifications/:tab_id', to: 'preferences#index', as: :notification_preferences_tab
+  get 'preferences/imports', as: :network_preferences
+  get 'preferences/imports/:tab_id', to: 'preferences#index', as: :network_preferences_tab
+  get 'preferences/integrations', as: :integration_preferences
+  get 'preferences/integrations/:tab_id', to: 'preferences#index', as: :integration_preferences_tab
+  get 'preferences/accounts', as: :account_preferences
+  get 'preferences/accounts/:tab_id', to: 'preferences#index', as: :account_preferences_tab
+
+  # old preferences routes (SEO and external link upkeep)
+  get '/preferences', to: redirect('preferences/personal'), as: :preferences
+  get '/notifications', to: redirect('preferences/notifications'), as: :notifications
+  get '/accounts', to: redirect('preferences/integrations/organization'), as: :accounts
+
+  resources :preferences do
+    collection do
+      post :update_tab_order
+      post :complete_welcome_panel
+    end
+  end
+
+  resources :account_lists, only: :update
+
+  resources :tags, only: [:create, :destroy]
+
+  resources :social_streams, only: :index
+
   namespace :api do
     api_version(module: 'V1', header: { name: 'API-VERSION', value: 'v1' }, parameter: { name: 'version', value: 'v1' }, path: { value: 'v1' }) do
       resource :current_account_list, only: :show
@@ -125,6 +168,108 @@ Rails.application.routes.draw do
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
   end
 
+  resources :imports do
+    collection do
+      get :sample
+    end
+    member do
+      get :csv_preview_partial
+    end
+  end
+
+  resources :activity_comments
+
+  resources :account_lists do
+    collection do
+      get :sharing
+      post :share
+      post :merge
+      post :remove_access
+      post :cancel_invite
+      get :accept_invite
+      resource :account_reset, only: [:create]
+    end
+  end
+
+  resources :appeals, only: [:show]
+
+  resources :insights
+  resources :donations
+  resource :donation_syncs, only: [:create]
+
+  namespace :reports do
+    resource :contributions, only: [:show]
+    resource :balances, only: [:show]
+    resource :expected_monthly_totals, only: [:show]
+    resource :donor_currency_donations, only: [:show]
+    resource :salary_currency_donations, only: [:show]
+  end
+
+  resources :contacts do
+    collection do
+      get :social_search
+      put :bulk_update
+      delete :bulk_destroy
+      post :merge
+      get  :find_duplicates
+      put :not_duplicates
+      get :add_multi
+      post :save_multi
+      get :mailing
+    end
+    member do
+      get :add_referrals
+      post :save_referrals
+      get :details
+      get :referrals
+    end
+    resources :people do
+      collection do
+        post :merge
+      end
+    end
+  end
+
+  resources :tasks do
+    collection do
+      delete :bulk_destroy
+      put :bulk_update
+    end
+  end
+
+  resources :people do
+    collection do
+      put :not_duplicates
+      post :merge_sets
+    end
+  end
+
+  resources :research, only: [:index] do
+    member do
+      get :search
+    end
+  end
+
+  resources :setup
+
+  namespace :person do
+    resources :organization_accounts, only: [:new, :create, :edit, :update, :destroy]
+  end
+
+  resource :home, only: [:index], controller: :home do
+    get 'index'
+    get 'change_account_list'
+    get 'download_data_check'
+  end
+
+  get 'privacy' => 'home#privacy'
+  get 'login' => 'home#login'
+
+  devise_for :users
+  as :user do
+    get '/logout' => 'sessions#destroy'
+  end
+
   get 'monitors/lb' => 'monitors#lb'
   get 'monitors/sidekiq' => 'monitors#sidekiq'
   get 'monitors/commit' => 'monitors#commit'
@@ -165,14 +310,17 @@ Rails.application.routes.draw do
     end
   end
 
-  get 'login' => 'home#login'
+  resources :status, only: :index
 
-  devise_for :users
-  as :user do
-    get '/logout' => 'sessions#destroy'
-  end
+  get '/404', to: 'errors#error_404'
+  get '/500', to: 'errors#error_500'
+
+  get '/mobile', to: redirect(subdomain: 'm', path: '/')
 
   mount Peek::Railtie => '/peek'
+  root to: 'home#index'
+
+  get '/templates/:path.html' => 'templates#template', :constraints => { path: /.+/ }
 
   # See how all your routes lay out with "rake routes"
 end

@@ -7,7 +7,7 @@ class PersonExhibit < DisplayCase::Exhibit
 
   def age(now = Time.now.utc.to_date)
     return nil unless [birthday_day, birthday_month, birthday_year].all?(&:present?)
-    now.year - birthday_year - ((now.month > birthday_month || (now.month == birthday_month && now.day >= birthday_day)) ? 0 : 1)
+    now.year - birthday_year - (now.month > birthday_month || (now.month == birthday_month && now.day >= birthday_day) ? 0 : 1)
   end
 
   def company_position_description

@@ -8,7 +8,7 @@ describe Admin::ResetController do
       login(create(:admin_user))
 
       expect do
-        post :create, resetted_user_email: user.relay_accounts.first.email, reason: 'having fun testing'
+        post :create, params: { resetted_user_email: user.relay_accounts.first.email, reason: 'having fun testing' }
       end.to change(AccountListUser, :count).by(-1)
     end
   end

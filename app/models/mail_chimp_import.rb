@@ -141,7 +141,8 @@ class MailChimpImport
   def contact_from_member(member)
     contact = @account_list.contacts.build(
       name: contact_name(member[:first_name], member[:last_name], member[:email]),
-      notes: 'Imported from MailChimp', greeting: member[:greeting])
+      notes: 'Imported from MailChimp', greeting: member[:greeting]
+    )
 
     grouping = member[:groupings].try(:first) || {}
     group_status = grouping['groups'].try(:split, ',').try(:first)

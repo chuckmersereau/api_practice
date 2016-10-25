@@ -8,10 +8,11 @@ describe Admin::ImpersonationsController do
       login(impersonator)
       impersonation = instance_double(
         Admin::Impersonation, impersonated: impersonated, save: true,
-                              impersonator: impersonator)
+                              impersonator: impersonator
+      )
       allow(Admin::Impersonation).to receive(:new) { impersonation }
 
-      post :create, reason: 'because', impersonate_lookup: 'joe to impersonate'
+      post :create, params: { reason: 'because', impersonate_lookup: 'joe to impersonate' }
 
       expect(subject.current_user).to eq impersonated
       expect(response).to redirect_to(root_path)
@@ -26,7 +27,7 @@ describe Admin::ImpersonationsController do
                                       save: false, errors: errors)
       allow(Admin::Impersonation).to receive(:new) { impersonation }
 
-      post :create, reason: 'because', impersonate_lookup: 'joe to impersonate'
+      post :create, params: { reason: 'because', impersonate_lookup: 'joe to impersonate' }
 
       expect(response).to redirect_to(admin_home_index_path)
       expect(flash[:alert]).to be_present

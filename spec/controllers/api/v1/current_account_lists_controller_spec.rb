@@ -12,7 +12,7 @@ describe Api::V1::AppealExclusionsController do
     end
 
     it 'gets excluded contacts' do
-      get :index, access_token: user.access_token, appeal_id: appeal.id
+      get :index, params: { access_token: user.access_token, appeal_id: appeal.id }
 
       expect(response).to be_success
       json = JSON.parse(response.body)['appeal_exclusions']

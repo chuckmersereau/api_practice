@@ -23,7 +23,8 @@ class Contact::Filter::WildcardSearch < Contact::Filter::Base
             'OR lower(contacts.name) like :search '\
             'OR lower(donor_accounts.account_number) like :search '\
             'OR lower(phone_numbers.number) like :search' + person_search,
-          search: "%#{filters[:wildcard_search].downcase}%", first_name: first_name, last_name: last_name)
+          search: "%#{filters[:wildcard_search].downcase}%", first_name: first_name, last_name: last_name
+        )
                            .includes(people: :email_addresses)
                            .references('email_addresses')
                            .includes(:donor_accounts)

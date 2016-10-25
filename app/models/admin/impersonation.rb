@@ -12,7 +12,8 @@ class Admin::Impersonation
     return false unless valid?
     @impersonated = @found_users.first
     impersonation_logger.create!(
-      impersonator: impersonator, impersonated: @impersonated, reason: reason)
+      impersonator: impersonator, impersonated: @impersonated, reason: reason
+    )
     true
   end
 

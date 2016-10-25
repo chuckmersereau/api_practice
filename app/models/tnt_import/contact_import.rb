@@ -126,7 +126,7 @@ class TntImport::ContactImport
   end
 
   def add_or_update_company(row, donor_account)
-    master_company = MasterCompany.find_by_name(row['OrganizationName'])
+    master_company = MasterCompany.find_by(name: row['OrganizationName'])
     company = @user.partner_companies.find_by(master_company_id: master_company.id) if master_company
 
     company ||= @account_list.companies.new(master_company: master_company)

@@ -59,7 +59,8 @@ class AddAccountsToDonations
     DesignationAccount.find_by(
       organization_id: org_account.organization_id,
       active: true,
-      designation_number: org_account.id.to_s)
+      designation_number: org_account.id.to_s
+    )
   end
 
   def log_action(donation, status)

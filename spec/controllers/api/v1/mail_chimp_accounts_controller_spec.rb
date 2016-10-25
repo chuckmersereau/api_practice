@@ -8,7 +8,7 @@ describe Api::V1::MailChimpAccountsController do
   context '#export_appeal_list' do
     it 'queues export' do
       expect(mail_chimp_account.account_list).to eq user.account_lists.first
-      get 'export_appeal_list', access_token: user.access_token, appeal_id: appeal.id
+      get 'export_appeal_list', params: { access_token: user.access_token, appeal_id: appeal.id }
       expect(response).to be_success
     end
   end

@@ -84,7 +84,7 @@ class User < Person
   end
 
   def self.get_user_from_access_token(token)
-    user = User.find_by_access_token(token)
+    user = User.find_by(access_token: token)
     return if user.blank?
     return user if user.relay_accounts.any?
     real_user = get_relay_account_user_from_token(token)

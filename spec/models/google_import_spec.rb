@@ -119,13 +119,13 @@ describe GoogleImport do
 
     it 'does not import a spouse if none specified' do
       @google_import.import
-      contact = Contact.find_by_name('Google, John')
+      contact = Contact.find_by(name: 'Google, John')
       expect(contact.people.count).to eq(1)
     end
 
     def import_and_expect_names(contact_name, person1_name, person2_name)
       @google_import.import
-      contact = Contact.find_by_name(contact_name)
+      contact = Contact.find_by(name: contact_name)
       people_names = contact.people.map { |p| [p.first_name, p.last_name] }
       expect(people_names.size).to eq(2)
       expect(people_names).to include(person1_name)

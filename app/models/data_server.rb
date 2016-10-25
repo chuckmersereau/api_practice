@@ -299,11 +299,10 @@ class DataServer
       # check for error response
       lines = response.split(/\r?\n|\r/)
       first_line = lines.first.to_s.upcase
-      case
-      when first_line + lines[1].to_s =~ /password|not registered/i
+      if first_line + lines[1].to_s =~ /password|not registered/i
         @org_account.update_column(:valid_credentials, false) if @org_account.valid_credentials? && !@org_account.new_record?
         raise OrgAccountInvalidCredentialsError, _('Your username and password for %{org} are invalid.').localize % { org: @org }
-      when first_line.include?('ERROR') || first_line.include?('HTML')
+      elsif first_line.include?('ERROR') || first_line.include?('HTML')
         raise DataServerError, response
       end
 
@@ -368,7 +367,7 @@ class DataServer
   end
 
   def add_or_update_company(account_list, user, line, donor_account)
-    master_company = MasterCompany.find_by_name(line['LAST_NAME_ORG'])
+    master_company = MasterCompany.find_by(name: line['LAST_NAME_ORG'])
     company = user.partner_companies.find_by(master_company_id: master_company.id) if master_company
 
     company ||= account_list.companies.new(master_company: master_company)
@@ -400,7 +399,7 @@ class DataServer
           country: line['CNTRY_DESCR'],
           source: 'DataServer',
           start_date: parse_date(line['ADDR_CHANGED']),
-          primary_mailing_address: donor_account.addresses.find_by_primary_mailing_address(true).blank?
+          primary_mailing_address: donor_account.addresses.find_by(primary_mailing_address: true).blank?
         }]
       end
       donor_account.save!

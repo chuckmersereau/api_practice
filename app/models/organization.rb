@@ -30,7 +30,7 @@ class Organization < ActiveRecord::Base
   end
 
   def self.cru_usa
-    Organization.find_by_code('CCC-USA')
+    Organization.find_by(code: 'CCC-USA')
   end
 
   def default_currency_code
