@@ -6,12 +6,11 @@ describe Api::V1::CurrentAccountListsController do
     let(:account_list) { user.account_lists.first }
 
     it 'gets current account list' do
-      get :show, params: { access_token: user.access_token }
+      get :show, access_token: user.access_token
       expect(response).to be_success
       json = JSON.parse(response.body)['account_list']
       expect(json.keys).to eq(
-        %w(id name created_at updated_at monthly_goal total_pledges designation_account_ids)
-      )
+        %w(id name created_at updated_at monthly_goal total_pledges default_organization_id designation_account_ids))
       expect(json['id']).to eq(account_list.id)
       expect(json['name']).to eq(account_list.name)
       expect(json['monthly_goal']).to eq(account_list.monthly_goal)
