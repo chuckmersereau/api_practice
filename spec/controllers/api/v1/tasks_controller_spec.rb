@@ -12,7 +12,7 @@ describe Api::V1::TasksController do
     end
 
     it 'gets count' do
-      get :count, params: { access_token: user.access_token }
+      get :count, access_token: user.access_token
       expect(response).to be_success
       json = JSON.parse(response.body)
       expect(json['total']).to eq(4)

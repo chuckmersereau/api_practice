@@ -5,7 +5,7 @@ describe Admin::OfflineOrgController do
     it 'creates a new offline org and redirects to admin home' do
       login(create(:admin_user))
       expect do
-        post :create, params: { name: 'new org', website: 'new.example.com', organization: { country: 'United Kingdom' } }
+        post :create, name: 'new org', website: 'new.example.com', organization: { country: 'United Kingdom' }
       end.to change(Organization, :count).by(1)
       org = Organization.last
       expect(org.name).to eq 'new org'

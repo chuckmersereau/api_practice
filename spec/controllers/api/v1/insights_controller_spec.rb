@@ -36,7 +36,7 @@ describe Api::V1::InsightsController do
                    sessionID: 'sessionid22091522cru' }
     savon.expects(:executeXMLQuery).with(message: run_params).returns(results_fixture)
 
-    get :index, params: { access_token: @user.access_token }
+    get :index, access_token: @user.access_token
     expect(response).to be_success
     JSON.parse(response.body)
   end

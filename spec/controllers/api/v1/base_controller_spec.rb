@@ -18,7 +18,7 @@ describe Api::V1::BaseController do
     end
 
     it 'uses the account_list_id param to set the current_account_list' do
-      get :index, params: { account_list_id: second_account.id }
+      get :index, account_list_id: second_account.id
       expect(session[:current_account_list_id]).to eq(second_account.id)
     end
   end

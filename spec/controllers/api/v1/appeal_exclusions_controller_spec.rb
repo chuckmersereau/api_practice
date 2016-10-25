@@ -10,7 +10,7 @@ describe Api::V1::CurrentAccountListsController do
       expect(response).to be_success
       json = JSON.parse(response.body)['account_list']
       expect(json.keys).to eq(
-        %w(id name created_at updated_at monthly_goal total_pledges default_organization_id designation_account_ids))
+        %w(id name created_at updated_at monthly_goal total_pledges designation_account_ids))
       expect(json['id']).to eq(account_list.id)
       expect(json['name']).to eq(account_list.name)
       expect(json['monthly_goal']).to eq(account_list.monthly_goal)

@@ -7,7 +7,7 @@ describe Api::V1::ContactsController do
 
     context '#count' do
       it 'succeeds' do
-        get :count, params: { access_token: user.access_token }
+        get :count, access_token: user.access_token
         expect(response).to be_success
       end
     end
@@ -17,7 +17,7 @@ describe Api::V1::ContactsController do
         contact.tag_list << 'test tag'
         contact.save!
 
-        get :tags, params: { access_token: user.access_token }
+        get :tags, access_token: user.access_token
         expect(response).to be_success
         json = JSON.parse(response.body)
         expect(json['tags'].length).to eq(1)
@@ -26,7 +26,7 @@ describe Api::V1::ContactsController do
 
     context '#index' do
       it 'filters address out' do
-        get :index, params: { access_token: user.access_token, include: 'Contact.name,Contact.id,Contact.avatar' }
+        get :index, access_token: user.access_token, include: 'Contact.name,Contact.id,Contact.avatar'
         expect(response).to be_success
         json = JSON.parse(response.body)
         expect(json).not_to include 'address'

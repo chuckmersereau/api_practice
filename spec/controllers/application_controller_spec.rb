@@ -27,7 +27,7 @@ describe ApplicationController do
       user = create(:user_with_account)
       sign_in(user)
       expect do
-        delete :destroy, params: { id: user.account_lists.first.id }
+        delete :destroy, id: user.account_lists.first.id
       end.to change(Version, :count).by_at_least(1)
       expect(Version.last.whodunnit).to eq user.id.to_s
     end
@@ -38,7 +38,7 @@ describe ApplicationController do
       impersonator = create(:user)
       session[:impersonator_id] = impersonator.id
       expect do
-        delete :destroy, params: { id: user.account_lists.first.id }
+        delete :destroy, id: user.account_lists.first.id
       end.to change(Version, :count).by_at_least(1)
       expect(Version.last.whodunnit).to eq impersonator.id.to_s
     end
