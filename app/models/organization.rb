@@ -3,7 +3,7 @@ require 'async'
 class Organization < ActiveRecord::Base
   include Async # To allow batch processing of address merges
   include Sidekiq::Worker
-  sidekiq_options retry: false, unique: true, queue: :import # use low priority import queue
+  sidekiq_options retry: false, unique: :until_executed, queue: :import # use low priority import queue
 
   has_many :designation_accounts, dependent: :destroy
   has_many :designation_profiles, dependent: :destroy
@@ -30,7 +30,7 @@ class Organization < ActiveRecord::Base
   end
 
   def self.cru_usa
-    Organization.find_by_code('CCC-USA')
+    Organization.find_by(code: 'CCC-USA')
   end
 
   def default_currency_code

@@ -13,7 +13,7 @@ class AccountList::NotificationsSender
       notification_type = notification_type_string.constantize.first
 
       next unless notifications[notification_type_string].present?
-      actions = notification_preferences.find_by_notification_type_id(notification_type.id).try(:actions) ||
+      actions = notification_preferences.find_by(notification_type_id: notification_type.id).try(:actions) ||
                 NotificationPreference.default_actions
 
       # Collect any emails that need sent

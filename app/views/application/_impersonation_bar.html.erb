@@ -1,9 +1,0 @@
-<% if impersonator_user.present? %>
-  <div class="impersonation-bar">
-    <%= 
-      _('You are %{impersonator} impersonating %{impersonated}.').localize % {
-        impersonator: impersonator_user, impersonated: current_user
-      } 
-    %>
-  </div>
-<% end %>

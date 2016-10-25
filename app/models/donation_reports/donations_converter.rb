@@ -8,7 +8,8 @@ class DonationReports::DonationsConverter
     donation_currencies.each do |currency|
       CurrencyRate.cache_rates_for_dates(
         currency_code: currency, from_date: min_donation_date,
-        to_date: max_donation_date)
+        to_date: max_donation_date
+      )
     end
     @donations.each(&method(:convert_donation))
   end
@@ -18,7 +19,8 @@ class DonationReports::DonationsConverter
   def convert_donation(donation)
     donation.converted_amount = CurrencyRate.convert_on_date(
       amount: donation.amount, from: donation.currency, to: total_currency,
-      date: donation.donation_date)
+      date: donation.donation_date
+    )
     donation.converted_currency = total_currency
   end
 

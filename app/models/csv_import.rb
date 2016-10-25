@@ -63,7 +63,7 @@ class CsvImport
   end
 
   def parse_send_newsletter(newsletter_str)
-    newsletter_str.gsub('None', '') if newsletter_str
+    newsletter_str&.gsub('None', '')
   end
 
   def true?(val)

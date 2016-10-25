@@ -35,7 +35,7 @@ class ContactMerge
       @winner.merge_addresses
 
       ContactReferral.where(referred_to_id: @other.id).find_each do |contact_referral|
-        contact_referral.update_column(:referred_to_id, @winner.id) unless @winner.contact_referrals_to_me.find_by_referred_by_id(contact_referral.referred_by_id)
+        contact_referral.update_column(:referred_to_id, @winner.id) unless @winner.contact_referrals_to_me.find_by(referred_by_id: contact_referral.referred_by_id)
       end
 
       ContactReferral.where(referred_by_id: @other.id).update_all(referred_by_id: @winner.id)

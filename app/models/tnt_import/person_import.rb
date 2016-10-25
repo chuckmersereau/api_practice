@@ -44,8 +44,7 @@ class TntImport::PersonImport
                           anniversary_month: row[prefix + 'AnniversaryMonth'],
                           anniversary_day: row[prefix + 'AnniversaryDay'],
                           anniversary_year: row[prefix + 'AnniversaryYear'],
-                          deceased: (row['Deceased'] == 'true')
-    }
+                          deceased: (row['Deceased'] == 'true') }
 
     update_person_phones(person, row, prefix)
     update_person_emails(person, row, prefix)

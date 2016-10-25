@@ -9,7 +9,8 @@ describe Admin::Impersonation, '#save' do
     subject = Admin::Impersonation.new(
       reason: 'because', impersonator: impersonator, user_finder: user_finder,
       impersonation_logger: impersonation_logger,
-      impersonate_lookup: 'joe to impersonate')
+      impersonate_lookup: 'joe to impersonate'
+    )
 
     result = subject.save
 
@@ -17,7 +18,8 @@ describe Admin::Impersonation, '#save' do
     expect(result).to be true
     expect(subject.impersonated).to eq impersonated
     expect(impersonation_logger).to have_received(:create!).with(
-      impersonator: impersonator, impersonated: impersonated, reason: 'because')
+      impersonator: impersonator, impersonated: impersonated, reason: 'because'
+    )
   end
 
   it 'returns false and adds an error if multiple users found' do

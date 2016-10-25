@@ -65,7 +65,7 @@ class ContactExhibit < DisplayCase::Exhibit
         root_url = @context ? @context.root_url : 'https://mpdx.org'
         url = URI.join(root_url, url).to_s
       end
-      return url
+      url
     end
   end
 
@@ -106,12 +106,11 @@ class ContactExhibit < DisplayCase::Exhibit
     missing_address = !mailing_address.id
     missing_email_address = people.joins(:email_addresses).blank?
 
-    case
-    when send_newsletter == 'Both' && missing_address && missing_email_address
+    if send_newsletter == 'Both' && missing_address && missing_email_address
       _('No mailing address or email addess on file')
-    when (send_newsletter == 'Physical' || send_newsletter == 'Both') && missing_address
+    elsif (send_newsletter == 'Physical' || send_newsletter == 'Both') && missing_address
       _('No mailing address on file')
-    when (send_newsletter == 'Email' || send_newsletter == 'Both') && missing_email_address
+    elsif (send_newsletter == 'Email' || send_newsletter == 'Both') && missing_email_address
       _('No email addess on file')
     end
   end

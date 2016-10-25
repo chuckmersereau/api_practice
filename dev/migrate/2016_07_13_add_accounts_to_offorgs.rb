@@ -15,7 +15,8 @@ class AddAccountsToOfforgs
       result = DesignationProfileAccount.where(
         'designation_profile_id IN (?) AND designation_account_id NOT IN (?)',
         org.designation_profiles.collect(&:id),
-        org.designation_accounts.collect(&:id))
+        org.designation_accounts.collect(&:id)
+      )
       off_orgs << org if result.empty?
     end
     off_orgs

@@ -29,6 +29,6 @@ class Api::V1::PreferencesController < Api::V1::BaseController
     end
     preference_params.permit(:first_name, :last_name, :email, :time_zone, :locale, :monthly_goal, :default_account_list,
                              :tester, :home_country, :ministry_country, :currency, :salary_organization_id,
-                             :account_list_name, *notification_params)
+                             :account_list_name, :contact_tabs_sort, *notification_params)
   end
 end

@@ -16,7 +16,7 @@ class ContactPerson < ActiveRecord::Base
     # See if there is any other contact_person with the same person id
     return if ContactPerson.where(person_id: person_id).where('id <> ?', id).any?
     # if there isn't, delete the associated person
-    person.destroy if person
+    person&.destroy
   end
 
   def set_primary_contact

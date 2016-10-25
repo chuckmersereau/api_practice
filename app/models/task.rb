@@ -2,7 +2,7 @@ require 'async'
 class Task < Activity
   include Async
   include Sidekiq::Worker
-  sidekiq_options backtrace: true, unique: true
+  sidekiq_options backtrace: true, unique: :until_executed
 
   before_validation :update_completed_at
   after_save :update_contact_uncompleted_tasks_count, :sync_to_google_calendar
@@ -150,6 +150,8 @@ class Task < Activity
   REMINDER_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
   SUPPORT_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
 
+  STANDRD_NEXT_ACTIONS = [_('None')].freeze
+
   MESSAGE_RESULTS = [_('Done'), _('Received')].freeze
   STANDARD_RESULTS = [_('Done')].freeze
 
@@ -249,8 +251,37 @@ class Task < Activity
     when 'Support Letter'
       SUPPORT_LETTER_NEXT_ACTIONS
     else
-      ['None']
+      STANDRD_NEXT_ACTIONS
     end
+  end
+
+  def self.all_next_action_options
+    options = {}
+    options['Call'] = CALL_NEXT_ACTIONS
+    options['Appointment'] = APPOINTMENT_NEXT_ACTIONS
+    options['Email'] = EMAIL_NEXT_ACTIONS
+    options['Facebook Message'] = FACEBOOK_MESSAGE_NEXT_ACTIONS
+    options['Text Message'] = TEXT_NEXT_ACTIONS
+    options['Talk to In Person'] = TALK_TO_IN_PERSON_NEXT_ACTIONS
+    options['Prayer Request'] = PRAYER_REQUEST_NEXT_ACTIONS
+    options['Pre Call Letter'] = PRE_CALL_LETTER_NEXT_ACTIONS
+    options['Reminder Letter'] = REMINDER_LETTER_NEXT_ACTIONS
+    options['Support Letter'] = SUPPORT_LETTER_NEXT_ACTIONS
+    options['default'] = STANDRD_NEXT_ACTIONS
+    options
+  end
+
+  def self.all_result_options
+    options = {}
+    options['Call'] = CALL_RESULTS
+    options['Appointment'] = APPOINTMENT_RESULTS
+    options['Email'] = EMAIL_RESULTS
+    options['Facebook Message'] = FACEBOOK_MESSAGE_RESULTS
+    options['Text Message'] = TEXT_RESULTS
+    options['Talk to In Person'] = TALK_TO_IN_PERSON_RESULTS
+    options['Prayer Request'] = PRAYER_REQUEST_RESULTS
+    options['default'] = STANDARD_RESULTS
+    options
   end
 
   private

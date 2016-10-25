@@ -39,6 +39,7 @@ def try_frequency!(contact, frequency)
     "#{Contact.pledge_frequencies[frequency.to_d]}"
   contact.update!(
     status: 'Partner - Financial', pledge_frequency: frequency,
-    pledge_amount: amount, pledge_received: true)
+    pledge_amount: amount, pledge_received: true
+  )
   true
 end

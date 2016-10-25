@@ -72,10 +72,7 @@ describe Contact do
                 '0' => { 'email' => email1.email, 'primary' => '0', '_destroy' => 'false', 'id' => email1.id },
                 '1' => { 'email' => email2.email, 'primary' => '1', '_destroy' => 'false', 'id' => email2.id }
               },
-              'id' => person.id
-            }
-          }
-        }
+              'id' => person.id } } }
       contact.update_attributes(people_attributes)
       expect(email1.reload.primary?).to be false
       expect(email2.reload.primary?).to be true
@@ -881,11 +878,9 @@ describe Contact do
   context '#mail_chimp_open_rate' do
     before do
       stub_request(:get, 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0/')
-        .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/json', 'User-Agent' => 'Faraday v0.9.1' })
         .to_return(status: 200, body: '', headers: {})
 
       stub_request(:get, "https://apikey:fake-us4@us4.api.mailchimp.com/3.0/lists/MyString/members/#{Digest::MD5.hexdigest(email.email.downcase)}")
-        .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/json', 'User-Agent' => 'Faraday v0.9.1' })
         .to_return(status: 200, body: { 'stats' => { 'avg_open_rate' => 89 } }.to_json, headers: {})
     end
 

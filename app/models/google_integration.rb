@@ -2,7 +2,7 @@ require 'async'
 class GoogleIntegration < ActiveRecord::Base
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: true
+  sidekiq_options unique: :until_executed
 
   sidekiq_retry_in do |count|
     count**6 + 30 # 30, 31, 94, 759, 4126 ... second delays

@@ -65,14 +65,16 @@ class Appeal::AppealContactsExcluder
     exclude_ids += contacts_who_gave_more_than_pledged_amount_within_prev_months(
       contacts_that_gave_in_prev_months.where('pledge_frequency <= ?', prev_full_months),
       account_list,
-      prev_full_months).pluck(:id)
+      prev_full_months
+    ).pluck(:id)
 
     # Next handle contacts with pledge frequency more than the prev_full_months according to each frequency
     Contact.pledge_frequencies.keys.select { |frequency| frequency > prev_full_months }.each do |frequency|
       exclude_ids += contacts_who_gave_more_than_pledged_amount_within_prev_months(
         contacts_that_gave_in_prev_months.where(pledge_frequency: frequency),
         account_list,
-        frequency).pluck(:id)
+        frequency
+      ).pluck(:id)
     end
 
     mark_excluded(exclude_ids, 'special_gift')

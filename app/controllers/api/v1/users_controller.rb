@@ -1,4 +1,3 @@
-
 class Api::V1::UsersController < Api::V1::BaseController
   before_action :extract_session_prefs, only: :update
 

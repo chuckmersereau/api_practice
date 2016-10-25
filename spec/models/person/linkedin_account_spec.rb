@@ -6,8 +6,7 @@ describe Person::LinkedinAccount do
       auth_hash = Hashie::Mash.new(uid: '5',
                                    credentials: { token: 'a', secret: 'b' },
                                    extra: { access_token: { params: { oauth_expires_in: 2, oauth_authorization_expires_in: 5 } } },
-                                   info: { first_name: 'John', last_name: 'Doe' }
-                                  )
+                                   info: { first_name: 'John', last_name: 'Doe' })
       person = FactoryGirl.create(:person)
       expect do
         @account = Person::LinkedinAccount.find_or_create_from_auth(auth_hash, person)

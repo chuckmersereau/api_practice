@@ -109,10 +109,9 @@ module ApplicationHelper
     options['id'] = ''
     options['style'] = 'width:100px;'
     # options.merge!('readonly' => '')
-    value = case
-            when value.is_a?(Time) || value.is_a?(DateTime)
+    value = if value.is_a?(Time) || value.is_a?(DateTime)
               value.to_date.to_s(:db)
-            when value.is_a?(Date)
+            elsif value.is_a?(Date)
               value.to_s(:db)
             else
               value

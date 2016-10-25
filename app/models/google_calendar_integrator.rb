@@ -22,10 +22,9 @@ class GoogleCalendarIntegrator
                                        calendar_id: @google_integration.calendar_id,
                                        activity_id: task_id)
 
-    case
-    when !task, !@google_integration.calendar_integrations.include?(task.activity_type)
+    if !task || !@google_integration.calendar_integrations.include?(task.activity_type)
       remove_google_event(google_event) if google_event
-    when google_event
+    elsif google_event
       update_task(task, google_event)
     else
       add_task(task)

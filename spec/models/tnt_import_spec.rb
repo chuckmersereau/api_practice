@@ -156,7 +156,7 @@ describe TntImport do
         it 'sets the primary email if override not set and no person existed' do
           @contact.destroy
           import.send(:import_contacts)
-          person = Person.find_by_first_name('Bob')
+          person = Person.find_by(first_name: 'Bob')
           expect(person.email_addresses.where(primary: true).count).to eq(1)
           expect(person.email_addresses.where(primary: true).first.email).to eq('fake2@example.com')
         end
@@ -195,7 +195,7 @@ describe TntImport do
         it 'sets the primary phone if override not set and no person existed' do
           @contact.destroy
           import.send(:import_contacts)
-          person = Person.find_by_first_name('Bob')
+          person = Person.find_by(first_name: 'Bob')
           expect(person.phone_numbers.where(primary: true).count).to eq(1)
           expect(person.phone_numbers.where(primary: true).first.number).to eq('+12123337890')
         end

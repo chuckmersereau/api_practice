@@ -59,7 +59,8 @@ describe CurrencyRate do
       create(:currency_rate, code: 'GBP', exchanged_on: Date.new(2016, 4, 2), rate: 0.5)
 
       expect(CurrencyRate.convert_on_date(
-               amount: 10, from: 'EUR', to: 'GBP', date: Date.new(2016, 4, 1)))
+               amount: 10, from: 'EUR', to: 'GBP', date: Date.new(2016, 4, 1)
+      ))
         .to be_within(0.1).of(7.8)
     end
 
@@ -68,7 +69,8 @@ describe CurrencyRate do
       create(:currency_rate, code: 'GBP', exchanged_on: Date.new(2016, 4, 1), rate: 0.69)
 
       expect(CurrencyRate.convert_on_date(
-               amount: 10, from: 'EUR', to: 'GBP', date: Date.new(2016, 3, 1)))
+               amount: 10, from: 'EUR', to: 'GBP', date: Date.new(2016, 3, 1)
+      ))
         .to be_within(0.1).of(7.8)
     end
 
@@ -77,10 +79,12 @@ describe CurrencyRate do
       create(:currency_rate, code: 'GBP', exchanged_on: Date.new(2016, 4, 1), rate: 0.69)
       CurrencyRate.cache_rates_for_dates(
         currency_code: 'EUR', from_date: Date.new(2016, 3, 30),
-        to_date: Date.new(2016, 4, 2))
+        to_date: Date.new(2016, 4, 2)
+      )
 
       expect(CurrencyRate.convert_on_date(
-               amount: 10, from: 'EUR', to: 'GBP', date: Date.new(2016, 4, 1)))
+               amount: 10, from: 'EUR', to: 'GBP', date: Date.new(2016, 4, 1)
+      ))
         .to be_within(0.1).of(7.8)
     end
   end

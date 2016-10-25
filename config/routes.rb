@@ -48,19 +48,59 @@ Rails.application.routes.draw do
 
   namespace :api do
     api_version(module: 'V1', header: { name: 'API-VERSION', value: 'v1' }, parameter: { name: 'version', value: 'v1' }, path: { value: 'v1' }) do
+      resource :current_account_list, only: :show
+      resources :constants, only: :index
+      resources :donor_accounts, only: :index
+      namespace :contacts do
+        resources :filters, only: :index
+        get 'export/primary', to: 'export#primary'
+        get 'export/mailing', to: 'export#mailing'
+        resources :tags, only: [:index] do
+          collection do
+            post :bulk_create
+          end
+        end
+        get 'basic_list'
+        get 'bulk_update_options'
+        put 'bulk_update'
+        post 'merge'
+        delete 'tags' => 'tags#destroy'
+      end
+      resources :tags, :only => :index
       resources :contacts do
         collection do
           get :count
           get :tags
+          delete :bulk_destroy
+          get :assignable_send_newsletters
+          get :assignable_statuses
+          get :pledge_frequencies
+          get :pledge_currencies
         end
+        post 'save_referrals'
+        scope module: :contacts do
+          resources :donations, only: [] do
+            collection do
+              get :graph
+            end
+          end
+          resources :referrals, only: :index
+        end
+      end
+      namespace :tasks do
+        get 'actions'
+        get 'next_actions'
+        get 'results'
       end
       resources :tasks do
         collection do
           get :count
         end
       end
-      resources :donations, only: [:index]
+      resources :designation_accounts, only: [:index]
+      resources :donations
       resources :progress, only: [:index]
+      resource :session, only: [:update]
       namespace :preferences do
         resources :notifications, only: :index
         resources :integrations, only: :index do
@@ -71,6 +111,7 @@ Rails.application.routes.draw do
         resources :imports, only: [:index, :create]
         resources :personal, only: :index
         resources :accounts, only: :index
+        resources :contacts, only: :index
         namespace :accounts do
           resources :invites, only: [:index, :create, :destroy]
           resources :merges, only: [:index, :create]
@@ -98,6 +139,11 @@ Rails.application.routes.draw do
           resources :organization_accounts, only: [:index, :create, :update, :destroy]
         end
       end
+      resources :people, only: [:index, :show] do
+        collection do
+          post 'merge'
+        end
+      end
       resource :preferences
       resources :users
       resources :appeals do
@@ -116,6 +162,8 @@ Rails.application.routes.draw do
         resource :expected_monthly_totals, only: [:show]
         resource :year_donations, only: [:show]
       end
+
+      resources :filters, only: :index
     end
     match '*all' => 'v1/base#cors_preflight_check', via: 'OPTIONS'
   end

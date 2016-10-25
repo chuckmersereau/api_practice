@@ -30,8 +30,7 @@ describe 'InsightAnalyses' do
             presentationInfo: true,
             type: '' },
       reportParams: { filterExpressions: '',
-                      variables: { name: 'mpdxRecurrDesig', value: '2716653' }
-      },
+                      variables: { name: 'mpdxRecurrDesig', value: '2716653' } },
       sessionID: 'sessionid22091522cru' }
   end
 
@@ -55,12 +54,8 @@ describe 'InsightAnalyses' do
                                                              'maxOccurs' => '1',
                                                              'saw_sql:displayFormula' => 'saw_1',
                                                              'saw_sql:tableHeading' => 'Designation',
-                                                             'saw_sql:columnHeading' => 'Designation Name'
-                                                          }] }
-                                       }
-                                      },
-                                   'Row' => { 'Column0' => '0', 'Column1' => 'Test Desig (2716653)' }
-    })
+                                                             'saw_sql:columnHeading' => 'Designation Name' }] } } },
+                                   'Row' => { 'Column0' => '0', 'Column1' => 'Test Desig (2716653)' } })
   end
 
   it 'fails with unknown desig' do

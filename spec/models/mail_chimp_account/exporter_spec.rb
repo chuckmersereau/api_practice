@@ -15,8 +15,7 @@ describe MailChimpAccount::Exporter do
   let(:categories_response) do
     { categories: [
       { list_id: primary_list_id, id: generic_group_id, title: 'Partner Status' }
-    ]
-    }
+    ] }
   end
 
   before do

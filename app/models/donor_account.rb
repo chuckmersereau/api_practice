@@ -49,7 +49,7 @@ class DonorAccount < ActiveRecord::Base
     save
 
     other.master_person_donor_accounts.each do |mpda|
-      next if master_person_donor_accounts.find_by_master_person_id(mpda.master_person_id)
+      next if master_person_donor_accounts.find_by(master_person_id: mpda.master_person_id)
       mpda.update_column(:donor_account_id, id)
     end
     other.donations.update_all(donor_account_id: id)

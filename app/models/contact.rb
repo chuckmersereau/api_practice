@@ -2,6 +2,7 @@ class Contact < ActiveRecord::Base
   include AddressMethods
   acts_as_taggable
   include TagsEagerLoading
+  extend ApplicationHelper
 
   # Don't create a new paper trail version if only a timestamp or de-normalized
   # field changes.
@@ -58,6 +59,7 @@ class Contact < ActiveRecord::Base
   scope :with_referrals, -> { joins(:contact_referrals_by_me).uniq }
   scope :active, -> { where(active_conditions) }
   scope :inactive, -> { where(inactive_conditions) }
+  scope :active_or_unassigned, -> { where(active_or_unassigned_conditions) }
   scope :late_by, -> (min_days, max_days = nil) { financial_partners.order(:name).to_a.keep_if { |c| c.late_by?(min_days, max_days) } }
   scope :created_between, -> (start_date, end_date) { where('contacts.created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
 
@@ -65,8 +67,9 @@ class Contact < ActiveRecord::Base
     :name, :pledge_amount, :status, :notes, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
     :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :user_changed,
     :direct_deposit, :magazine, :pledge_received, :not_duplicated_with, :tag_list, :primary_person_id, :timezone,
-    :pledge_currency, :locale,
+    :pledge_currency, :locale, :prefill_attributes_on_create,
     {
+      tag_list: [],
       contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
       donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
       addresses_attributes: [
@@ -94,11 +97,12 @@ class Contact < ActiveRecord::Base
 
   before_save :set_notes_saved_at
   after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
+  after_create :create_people_from_contact, if: :prefill_attributes_on_create
   before_destroy :delete_from_letter_services, :delete_people
   LETTER_SERVICES = [:pls, :prayer_letters].freeze
 
   # loaded_donations is used by Contact::DonationsEagerLoader
-  attr_accessor :user_changed, :loaded_donations
+  attr_accessor :user_changed, :loaded_donations, :prefill_attributes_on_create
 
   # Don't change these willy-nilly, they break the mobile app
   ASSIGNABLE_STATUSES = [
@@ -133,12 +137,15 @@ class Contact < ActiveRecord::Base
                     end
   end
 
+  ASSIGNABLE_LIKELY_TO_GIVE = ['Least Likely', 'Likely', 'Most Likely'].freeze
+
   assignable_values_for :likely_to_give, allow_blank: true do
-    ['Least Likely', 'Likely', 'Most Likely']
+    ASSIGNABLE_LIKELY_TO_GIVE
   end
 
+  ASSIGNABLE_SEND_NEWSLETTER = %w(Physical Email Both).freeze
   assignable_values_for :send_newsletter, allow_blank: true do
-    %w(Physical Email Both)
+    ASSIGNABLE_SEND_NEWSLETTER
   end
 
   delegate :first_name, :last_name, :phone, :email, to: :primary_or_first_person
@@ -197,10 +204,9 @@ class Contact < ActiveRecord::Base
     date_to_check = last_donation_date || pledge_start_date
     return false unless status == 'Partner - Financial' && pledge_frequency.present? && date_to_check.present?
 
-    late_date = case
-                when pledge_frequency >= 1.0
+    late_date = if pledge_frequency >= 1.0
                   date_to_check + pledge_frequency.to_i.months
-                when pledge_frequency >= 0.4
+                elsif pledge_frequency >= 0.4
                   date_to_check + 2.weeks
                 else
                   date_to_check + 1.week
@@ -212,11 +218,20 @@ class Contact < ActiveRecord::Base
   end
 
   def self.active_conditions
-    "status NOT IN('#{inactive_statuses.join("','")}') or status is null"
+    "status IN('#{active_statuses.join("','")}') or status is null"
   end
 
   def self.inactive_conditions
     "status IN('#{inactive_statuses.join("','")}')"
+  end
+
+  def self.active_or_unassigned_conditions
+    active_or_unassigned_statuses = active_statuses + ['']
+    "status IN('#{active_or_unassigned_statuses.join("','")}')"
+  end
+
+  def self.active_statuses
+    ACTIVE_STATUSES
   end
 
   def self.inactive_statuses
@@ -261,7 +276,7 @@ class Contact < ActiveRecord::Base
   def primary_person_id=(person_id)
     if person_id
       cp = contact_people.find_by(person_id: person_id)
-      cp.update_attributes(primary: true) if cp
+      cp&.update_attributes(primary: true)
     end
     person_id
   end
@@ -372,14 +387,14 @@ class Contact < ActiveRecord::Base
   end
 
   def donor_accounts_attributes=(attribute_collection)
+    attribute_collection = Hash[(0...attribute_collection.size).zip attribute_collection] if attribute_collection.is_a?(Array)
     attribute_collection = attribute_collection.with_indifferent_access.values
     attribute_collection.each do |attrs|
-      case
-      when attrs[:id].present? && (attrs[:account_number].blank? || attrs[:_destroy] == '1')
+      if attrs[:id].present? && (attrs[:account_number].blank? || attrs[:_destroy] == '1')
         ContactDonorAccount.where(donor_account_id: attrs[:id], contact_id: id).destroy_all
-      when attrs[:account_number].blank?
+      elsif attrs[:account_number].blank?
         next
-      when donor_account = DonorAccount.find_by(account_number: attrs[:account_number], organization_id: attrs[:organization_id])
+      elsif donor_account = DonorAccount.find_by(account_number: attrs[:account_number], organization_id: attrs[:organization_id])
         contact_donor_accounts.new(donor_account: donor_account) unless donor_account.contacts.include?(self)
       else
         assign_nested_attributes_for_collection_association(:donor_accounts, [attrs])
@@ -527,6 +542,17 @@ class Contact < ActiveRecord::Base
     _(MailChimpAccount::Locales::LOCALE_NAMES[locale])
   end
 
+  def self.bulk_update_options(current_account_list)
+    options = {}
+    options['likely_to_give'] = ASSIGNABLE_LIKELY_TO_GIVE
+    options['status'] = ASSIGNABLE_STATUSES
+    options['send_newsletter'] = ASSIGNABLE_SEND_NEWSLETTER
+    options['pledge_received'] = %w(Yes No)
+    options['pledge_currency'] = currency_select(current_account_list)
+    options['locale'] = mail_chimp_locale_options
+    options
+  end
+
   def amount_with_gift_aid(amount)
     (amount * gift_aid_coefficient).round(2)
   end
@@ -543,6 +569,23 @@ class Contact < ActiveRecord::Base
   def mail_chimp_open_rate
     return nil unless email
     mail_chimp_member_request
+  end
+
+  def create_people_from_contact
+    name_parts = name.split(',')
+    if name_parts.length > 1
+      last_name = name_parts[0]
+      self.greeting = name_parts[1].strip
+      self.envelope_greeting = name_parts[1].strip
+      name_parts[1].split(/and|&/).map { |i| i.strip if i.strip != '' }.uniq.compact.map do |first_name|
+        people << Person.new(first_name: first_name, last_name: last_name)
+      end
+    else
+      self.greeting = name
+      self.envelope_greeting = name
+      people << Person.new(first_name: name)
+    end
+    save
   end
 
   private

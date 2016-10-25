@@ -5320,3 +5320,5 @@ INSERT INTO schema_migrations (version) VALUES ('20161007231213');
 
 INSERT INTO schema_migrations (version) VALUES ('20161007231427');
 
+INSERT INTO schema_migrations (version) VALUES ('20161008010853');
+

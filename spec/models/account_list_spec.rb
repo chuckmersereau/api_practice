@@ -424,7 +424,7 @@ describe AccountList do
       org = create(:fake_org, default_currency_code: 'JPY')
       user.organization_accounts << create(:organization_account, organization: org)
 
-      expect(account_list.currencies).to contain_exactly(*%w(EUR GBP JPY))
+      expect(account_list.currencies).to contain_exactly('EUR', 'GBP', 'JPY')
     end
   end
 

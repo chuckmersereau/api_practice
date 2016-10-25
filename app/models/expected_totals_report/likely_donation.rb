@@ -187,7 +187,8 @@ class ExpectedTotalsReport::LikelyDonation
 
   def enough_track_record_for_long_time_frame_partner?
     given_pledge_in_past?(
-      periods_back: LONG_TIME_FRAME_NON_RECURRING_TRACK_RECORD_PERIODS)
+      periods_back: LONG_TIME_FRAME_NON_RECURRING_TRACK_RECORD_PERIODS
+    )
   end
 
   def gave_on_time_last_period_and_by_recurring_channel?
