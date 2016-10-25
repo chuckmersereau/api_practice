@@ -1,6 +1,6 @@
 require 'async'
 
-class MailChimpAccount < ActiveRecord::Base
+class MailChimpAccount < ActiveRecord::Base # rubocop:disable RedundantReturn
   include Async
   include Sidekiq::Worker
   sidekiq_options unique: :until_executed
@@ -93,7 +93,7 @@ class MailChimpAccount < ActiveRecord::Base
   def log_sent_campaign(campaign_id, subject)
     sent_emails = gb.reports(campaign_id).sent_to
                     .retrieve(params: { count: 15_000 })['sent_to']
-                    .map { |sent_to| sent_to['email_address'] }
+                  .map { |sent_to| sent_to['email_address'] }
 
     account_list.contacts.joins(people: :primary_email_address)
                 .where(email_addresses: { email: sent_emails }).references(:email_addresses)

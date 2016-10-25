@@ -9,6 +9,7 @@ AllCops:
     - 'vendor/**/*'
     - 'bin/**/*'
     - 'node_modules/**/*'
+    - 'vendor/**/*'
 
   UseCache: true
   CacheRootDirectory: 'cache/'
