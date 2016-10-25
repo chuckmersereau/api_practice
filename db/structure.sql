@@ -1902,6 +1902,113 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 
 
 --
+-- Name: oauth_access_grants; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE oauth_access_grants (
+    id integer NOT NULL,
+    resource_owner_id integer NOT NULL,
+    application_id integer NOT NULL,
+    token character varying(255) NOT NULL,
+    expires_in integer NOT NULL,
+    redirect_uri text NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    revoked_at timestamp without time zone,
+    scopes character varying(255)
+);
+
+
+--
+-- Name: oauth_access_grants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE oauth_access_grants_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: oauth_access_grants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE oauth_access_grants_id_seq OWNED BY oauth_access_grants.id;
+
+
+--
+-- Name: oauth_access_tokens; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE oauth_access_tokens (
+    id integer NOT NULL,
+    resource_owner_id integer,
+    application_id integer,
+    token character varying(255) NOT NULL,
+    refresh_token character varying(255),
+    expires_in integer,
+    revoked_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    scopes character varying(255)
+);
+
+
+--
+-- Name: oauth_access_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE oauth_access_tokens_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: oauth_access_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE oauth_access_tokens_id_seq OWNED BY oauth_access_tokens.id;
+
+
+--
+-- Name: oauth_applications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE oauth_applications (
+    id integer NOT NULL,
+    name character varying(255) NOT NULL,
+    uid character varying(255) NOT NULL,
+    secret character varying(255) NOT NULL,
+    redirect_uri text NOT NULL,
+    scopes character varying(255) DEFAULT ''::character varying NOT NULL,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: oauth_applications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE oauth_applications_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: oauth_applications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE oauth_applications_id_seq OWNED BY oauth_applications.id;
+
+
+--
 -- Name: organizations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3065,6 +3172,27 @@ ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notification
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY oauth_access_grants ALTER COLUMN id SET DEFAULT nextval('oauth_access_grants_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY oauth_access_tokens ALTER COLUMN id SET DEFAULT nextval('oauth_access_tokens_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY oauth_applications ALTER COLUMN id SET DEFAULT nextval('oauth_applications_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY organizations ALTER COLUMN id SET DEFAULT nextval('organizations_id_seq'::regclass);
 
 
@@ -3617,6 +3745,30 @@ ALTER TABLE ONLY notification_types
 
 ALTER TABLE ONLY notifications
     ADD CONSTRAINT notifications_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_access_grants_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY oauth_access_grants
+    ADD CONSTRAINT oauth_access_grants_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_access_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY oauth_access_tokens
+    ADD CONSTRAINT oauth_access_tokens_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: oauth_applications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY oauth_applications
+    ADD CONSTRAINT oauth_applications_pkey PRIMARY KEY (id);
 
 
 --
@@ -4494,6 +4646,41 @@ CREATE INDEX index_notifications_on_notification_type_id ON notifications USING 
 
 
 --
+-- Name: index_oauth_access_grants_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_oauth_access_grants_on_token ON oauth_access_grants USING btree (token);
+
+
+--
+-- Name: index_oauth_access_tokens_on_refresh_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_oauth_access_tokens_on_refresh_token ON oauth_access_tokens USING btree (refresh_token);
+
+
+--
+-- Name: index_oauth_access_tokens_on_resource_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_oauth_access_tokens_on_resource_owner_id ON oauth_access_tokens USING btree (resource_owner_id);
+
+
+--
+-- Name: index_oauth_access_tokens_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON oauth_access_tokens USING btree (token);
+
+
+--
+-- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_oauth_applications_on_uid ON oauth_applications USING btree (uid);
+
+
+--
 -- Name: index_organizations_on_query_ini_url; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -5321,4 +5508,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161007231213');
 INSERT INTO schema_migrations (version) VALUES ('20161007231427');
 
 INSERT INTO schema_migrations (version) VALUES ('20161008010853');
+
+INSERT INTO schema_migrations (version) VALUES ('20161025182448');
 
