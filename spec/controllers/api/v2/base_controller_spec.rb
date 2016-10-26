@@ -12,7 +12,7 @@ describe Api::V2::BaseController do
       end
     end
 
-    it 'doesnt allow signed in users to access the api' do
+    it 'doesnt allow not signed in users to access the api' do
       get :index, format: :json
       expect(response.status).to eq(401)
     end
