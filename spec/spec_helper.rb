@@ -189,6 +189,12 @@ def login(user)
   $user = user
 end
 
+def api_login(user)
+  token = double acceptable?: true
+  allow(controller).to receive(:doorkeeper_token) { token }
+  allow(token).to receive(:resource_owner_id) { user.id }
+end
+
 def logout_test_user
   $request_test = false
   $user = nil
