@@ -5,7 +5,7 @@ describe Api::V2::BaseController do
     let(:user) { create(:user_with_account) }
 
     before do
-      get '/oauth/authorize?access_token=' + user.access_token
+      get '/oauth/authorize?response_type=token&access_token=' + user.access_token
     end
 
     it 'responds 200' do
