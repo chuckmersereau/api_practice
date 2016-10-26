@@ -5,20 +5,8 @@ Doorkeeper.configure do
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
     # Put your resource owner authentication logic here.
-    User.from_access_token(oauth_access_token) ||
+    User.from_access_token(params[:access_token]) ||
       render(json: { errors: ['Missing access token'] }, status: :unauthorized, callback: params[:callback])
-  end
-
-  def oauth_access_token
-    @oauth_access_token ||= (params[:access_token] || oauth_access_token_from_header)
-  end
-
-  # grabs access_token from header if one is present
-  def oauth_access_token_from_header
-    auth_header = request.env['HTTP_AUTHORIZATION'] || ''
-    match       = auth_header.match(/^token\s(.*)/) || auth_header.match(/^Bearer\s(.*)/)
-    return match[1] if match.present?
-    false
   end
 
   # If you want to restrict access to the web interface for adding oauth authorized applications, you need to declare the block below.

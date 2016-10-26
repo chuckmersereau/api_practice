@@ -34,7 +34,7 @@ class CreateDoorkeeperTables < ActiveRecord::Migration
       # https://github.com/doorkeeper-gem/doorkeeper/tree/v3.0.0.rc1#custom-access-token-generator
       #
       # t.text     :token,             null: false
-      t.string   :token,             null: false
+      t.text   :token,             null: false
 
       t.string   :refresh_token
       t.integer  :expires_in

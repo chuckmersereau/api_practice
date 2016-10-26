@@ -1945,7 +1945,7 @@ CREATE TABLE oauth_access_tokens (
     id integer NOT NULL,
     resource_owner_id integer,
     application_id integer,
-    token character varying(255) NOT NULL,
+    token text NOT NULL,
     refresh_token character varying(255),
     expires_in integer,
     revoked_at timestamp without time zone,
@@ -5509,5 +5509,5 @@ INSERT INTO schema_migrations (version) VALUES ('20161007231427');
 
 INSERT INTO schema_migrations (version) VALUES ('20161008010853');
 
-INSERT INTO schema_migrations (version) VALUES ('20161025182448');
+INSERT INTO schema_migrations (version) VALUES ('20161026012402');
 

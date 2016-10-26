@@ -3,6 +3,7 @@ require 'sidekiq/cron/web'
 require 'rollout_ui/server'
 
 Rails.application.routes.draw do
+  use_doorkeeper
   resources :google_integrations, only: [:show, :edit, :update, :create] do
     member do
       get :sync
@@ -48,7 +49,6 @@ Rails.application.routes.draw do
 
   namespace :api do
     api_version(module: 'V2', header: { name: 'API-VERSION', value: 'v2' }, parameter: { name: 'version', value: 'v2' }, path: { value: 'v2' }) do
-      use_doorkeeper
       resources :account_lists, only: [:index, :show, :update] do 
         scope module: :account_lists do
           resources :designation_accounts, only: [:index, :show]
