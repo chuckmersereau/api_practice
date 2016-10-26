@@ -1,9 +1,11 @@
 [![Build Status](https://travis-ci.org/CruGlobal/mpdx.png?branch=master)](https://travis-ci.org/CruGlobal/mpdx)
 
-MPDX
-====
+MPDX API
+========
 
 MPDX is an online tool designed to help you maintain and improve your relationships with your ministry partners.
+
+This repo sets up the API endpoint necessary for the app to work.
 
 ## Local Setup
 
