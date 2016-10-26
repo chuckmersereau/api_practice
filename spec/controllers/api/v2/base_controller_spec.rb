@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Api::V2::BaseController do
   let(:user) { create(:user_with_account) }
-  let(:token) { double :acceptable? => true }
+  let(:token) { double acceptable?: true }
 
   describe '#current_account_list' do
     controller(Api::V2::BaseController) do
