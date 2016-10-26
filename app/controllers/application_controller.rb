@@ -4,10 +4,10 @@ class ApplicationController < ActionController::Base
   MAX_PER_PAGE = 4_294_967_296
 
   protect_from_forgery
-  # before_action :redirect_to_mobile
-  # before_action :ensure_login, except: [:error_404, :error_500]
-  # before_action :ensure_setup_finished, except: [:error_404, :error_500]
-  # around_action :do_with_current_user, :set_user_time_zone, :set_locale
+  before_action :redirect_to_mobile
+  before_action :ensure_login, except: [:error_404, :error_500]
+  before_action :ensure_setup_finished, except: [:error_404, :error_500]
+  around_action :do_with_current_user, :set_user_time_zone, :set_locale
 
   def user_for_paper_trail
     impersonator_user || current_user
