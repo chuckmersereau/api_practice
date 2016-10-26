@@ -2,7 +2,6 @@ class Api::V1::BaseController < ApplicationController
   class AuthorizationError < StandardError; end
   skip_before_action :redirect_to_mobile
   skip_before_action :verify_authenticity_token
-  skip_before_action :redirect_to_mobile
   before_action :cors_preflight_check
   before_action :set_default_limit_for_mobile
   after_action :cors_set_access_control_headers

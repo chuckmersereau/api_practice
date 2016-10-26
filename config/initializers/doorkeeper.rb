@@ -5,7 +5,6 @@ Doorkeeper.configure do
   # This block will be called to check whether the resource owner is authenticated or not.
   resource_owner_authenticator do
     # Put your resource owner authentication logic here.
-    puts 'yoo'
     User.from_access_token(oauth_access_token) ||
       render(json: { errors: ['Missing access token'] }, status: :unauthorized, callback: params[:callback])
   end
