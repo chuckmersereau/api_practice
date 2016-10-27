@@ -3,7 +3,6 @@ require 'sidekiq/cron/web'
 require 'rollout_ui/server'
 
 Rails.application.routes.draw do
-  use_doorkeeper
   resources :google_integrations, only: [:show, :edit, :update, :create] do
     member do
       get :sync
