@@ -2,7 +2,7 @@ require 'spec_helper'
 
 RSpec.describe Api::V2::AuthenticationController, type: :controller do
   let!(:user) { create(:user) }
-  
+
   describe '#create' do
     before do
       allow(User).to receive(:from_access_token).with('wrong_token').and_return(nil)

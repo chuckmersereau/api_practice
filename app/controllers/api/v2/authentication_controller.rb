@@ -17,8 +17,8 @@ class Api::V2::AuthenticationController < ActionController::Base
 
   def payload(user)
     {
-      auth_token: JsonWebToken.encode({user_id: user.id}),
-      user: {id: user.id, email: user.email}
+      auth_token: JsonWebToken.encode(user_id: user.id),
+      user: { id: user.id, email: user.email }
     }
   end
 end
