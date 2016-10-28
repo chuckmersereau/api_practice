@@ -184,6 +184,11 @@ Geocoder::Lookup::Test.set_default_stub(
   ]
 )
 
+def api_sign_in(user)
+  allow_any_instance_of(Api::V2::BaseController).to receive(:jwt_authorize!)
+  allow_any_instance_of(Api::V2::BaseController).to receive(:current_user).and_return(user)
+end
+
 def login(user)
   $request_test = true
   $user = user
