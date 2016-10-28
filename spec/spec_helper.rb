@@ -184,7 +184,7 @@ Geocoder::Lookup::Test.set_default_stub(
   ]
 )
 
-def api_sign_in(user)
+def api_login(user)
   allow_any_instance_of(Api::V2::BaseController).to receive(:jwt_authorize!)
   allow_any_instance_of(Api::V2::BaseController).to receive(:current_user).and_return(user)
 end
@@ -192,6 +192,12 @@ end
 def login(user)
   $request_test = true
   $user = user
+end
+
+def api_login(user)
+  token = double acceptable?: true
+  allow(controller).to receive(:doorkeeper_token) { token }
+  allow(token).to receive(:resource_owner_id) { user.id }
 end
 
 def logout_test_user
