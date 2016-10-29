@@ -176,6 +176,8 @@ class MailChimpAccount < ActiveRecord::Base # rubocop:disable RedundantReturn
       # Ignore invalid email failtures
     elsif e.message.include?('code 214')
       # The new email address "xxxxx@example.com" is already subscribed to this list
+    elsif e.message.include?('The requested resource could not be found.')
+      update_column(:primary_list_id, nil)
     else
       raise e
     end
