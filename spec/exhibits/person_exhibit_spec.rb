@@ -10,7 +10,7 @@ describe PersonExhibit do
       allow(person).to receive(:primary_picture).and_return(double(image: double(url: nil)))
       allow(person).to receive(:gender).and_return(nil)
 
-      expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
+      expect(exhib.avatar).to eq('https://mpdx.org/images/avatar.png')
     end
 
     it 'uses facebook image if remote_id set' do
@@ -25,7 +25,7 @@ describe PersonExhibit do
       allow(person).to receive(:primary_picture).and_return(double(image: double(url: nil)))
       allow(person).to receive(:gender).and_return(nil)
 
-      expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
+      expect(exhib.avatar).to eq('https://mpdx.org/images/avatar.png')
     end
   end
 

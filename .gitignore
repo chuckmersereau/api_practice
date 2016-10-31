@@ -38,3 +38,4 @@ logfile
 dump.rdb
 /cache
 vendor/cache
+recent_specs.txt
