@@ -3,7 +3,7 @@ require 'spec_helper'
 describe Api::V2::BaseController do
   let(:user) { create(:user_with_account) }
 
-  describe '#current_account_list' do
+  describe '#authorize_jwt' do
     controller(Api::V2::BaseController) do
       def index
         session[:current_account_list] = current_account_list
