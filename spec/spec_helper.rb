@@ -42,6 +42,11 @@ ActiveRecord::Base.establish_connection(:test)
 WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
+  config.filter_run_excluding :example_group => lambda { |metadata|
+    metadata[:file_path].include?('api/v1')
+    metadata[:file_path].include?('application_controller')
+  }
+
   config.before(:each) do |example|
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all

@@ -1,9 +1,7 @@
-class ApplicationController < ActionController::Base
+class ApplicationController < ActionController::API
   force_ssl(if: :ssl_configured?, except: :lb)
-  ensure_security_headers
   MAX_PER_PAGE = 4_294_967_296
 
-  protect_from_forgery
   before_action :redirect_to_mobile
   before_action :ensure_login, except: [:error_404, :error_500]
   before_action :ensure_setup_finished, except: [:error_404, :error_500]
