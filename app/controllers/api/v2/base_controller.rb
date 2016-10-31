@@ -34,6 +34,6 @@ class Api::V2::BaseController < ActionController::Base
   end
 
   def jwt_payload
-    @jwt_payload ||= JsonWebTonken.decode(http_token)
+    @jwt_payload ||= JsonWebToken.decode(http_token)
   end
 end
