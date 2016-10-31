@@ -6,7 +6,6 @@ describe Api::V2::BaseController do
   describe '#authorize_jwt' do
     controller(Api::V2::BaseController) do
       def index
-        session[:current_account_list] = current_account_list
         render nothing: true
       end
     end
@@ -20,7 +19,6 @@ describe Api::V2::BaseController do
       api_login(user)
       get :index, format: :json
       expect(response.status).to eq(200)
-      expect(session[:current_account_list]).to eq(user.account_lists.first)
     end
   end
 end
