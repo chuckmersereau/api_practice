@@ -14,8 +14,8 @@ before_script:
 - psql -U postgres -q -d mpdx_test2 -f db/structure.sql
 script:
 - bin/travis_parallel_test.sh
+- bin/travis_rubocop.sh
 - bundle exec rake coveralls:push
-- bundle exec rubocop
 branches:
   only:
   - master
