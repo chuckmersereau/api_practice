@@ -23,10 +23,6 @@ class ApplicationController < ActionController::API
   end
   helper_method :impersonator_user
 
-  def peek_enabled?
-    user_signed_in? && current_user.developer == true
-  end
-
   def ssl_configured?
     request.get? && !Rails.env.development? && !Rails.env.test?
   end
