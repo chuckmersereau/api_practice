@@ -43,7 +43,7 @@ WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
   # Remove this once the API V2 is ready to launch
-  config.filter_run_excluding :example_group => lambda { |metadata|
+  config.filter_run_excluding example_group: lambda { |metadata|
     metadata[:file_path].include?('api/v1') || metadata[:file_path].include?('appeal/appeal_contacts_excluder')
   }
 
