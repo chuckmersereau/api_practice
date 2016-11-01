@@ -14,19 +14,7 @@ Rails.application.routes.draw do
       get :attachment
     end
   end
-
-  get '/help' => 'help_requests#new'
-  get '/preferences*path', to: 'preferences#index'
-  get 'preferences/personal', as: :personal_preferences
-  get 'preferences/personal/:tab_id', to: 'preferences#index', as: :personal_preferences_tab
-  get 'preferences/notifications', as: :notification_preferences
-  get 'preferences/notifications/:tab_id', to: 'preferences#index', as: :notification_preferences_tab
-  get 'preferences/imports', as: :network_preferences
-  get 'preferences/imports/:tab_id', to: 'preferences#index', as: :network_preferences_tab
   get 'preferences/integrations', as: :integration_preferences
-  get 'preferences/integrations/:tab_id', to: 'preferences#index', as: :integration_preferences_tab
-  get 'preferences/accounts', as: :account_preferences
-  get 'preferences/accounts/:tab_id', to: 'preferences#index', as: :account_preferences_tab
 
   # old preferences routes (SEO and external link upkeep)
   get '/preferences', to: redirect('preferences/personal'), as: :preferences
@@ -41,10 +29,6 @@ Rails.application.routes.draw do
   end
 
   resources :account_lists, only: :update
-
-  resources :tags, only: [:create, :destroy]
-
-  resources :social_streams, only: :index
 
   namespace :api do
     api_version(module: 'V2', header: { name: 'API-VERSION', value: 'v2' }, parameter: { name: 'version', value: 'v2' }, path: { value: 'v2' }) do
