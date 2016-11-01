@@ -52,7 +52,7 @@ describe ContactExhibit do
                       primary_picture: double(image: double(url: nil)),
                       gender: nil)
       allow(contact).to receive(:primary_person).and_return(person)
-      expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
+      expect(exhib.avatar).to eq('https://mpdx.org/images/avatar.png')
     end
 
     it 'uses make facebook image if remote_id present' do
@@ -67,7 +67,7 @@ describe ContactExhibit do
                       primary_picture: double(image: double(url: nil)),
                       gender: nil)
       allow(contact).to receive(:primary_person).and_return(person)
-      expect(exhib.avatar).to eq('https://mpdx.org/assets/avatar.png')
+      expect(exhib.avatar).to eq('https://mpdx.org/images/avatar.png')
     end
   end
 

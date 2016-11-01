@@ -59,6 +59,8 @@ Rails.application.configure do
     host: ENV['DEV_NGROK_HOST'].present? ? ENV['DEV_NGROK_HOST'] : 'localhost:3000'
   }
 
+  config.debug_exception_response_format = :default
+
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = { host: 'localhost', port: 1025 }
 

@@ -4,6 +4,7 @@ source 'https://gems.contribsys.com/' do
 end
 
 gem 'rails', '~> 4.1.8'
+gem 'rails-api', '~> 0.4.0'
 gem 'syslog-logger', '~> 1.6.8'
 
 gem 'active_model_serializers', '~> 0.8.1'
@@ -24,7 +25,7 @@ gem 'fb_graph', '~> 2.6.0'
 gem 'fog', '~> 1.36.0'
 gem 'pundit', '~> 1.1.0'
 gem 'snail', '~> 2.2.1'
-gem 'jwt'
+gem 'jwt', '~> 1.5.6'
 
 gem 'foreigner', '~> 1.7.4'
 gem 'gettext_i18n_rails', '~> 1.7.2'
@@ -63,7 +64,6 @@ gem 'rollout', '~> 2.0.0'
 gem 'rollout_ui', git: 'https://github.com/CruGlobal/rollout_ui.git'
 gem 'ruby-rtf', '~> 0.0.1'
 gem 'savon', '~> 2.3.0'
-gem 'secure_headers', '~> 1.2.0'
 gem 'sidekiq-unique-jobs', git: 'https://github.com/mhenrixon/sidekiq-unique-jobs'
 gem 'sidekiq-cron', '~> 0.4.4'
 gem 'siebel_donations', '~> 1.0.6'

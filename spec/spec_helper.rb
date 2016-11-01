@@ -42,6 +42,13 @@ ActiveRecord::Base.establish_connection(:test)
 WebMock.disable_net_connect!(allow_localhost: true)
 
 RSpec.configure do |config|
+  # Remove this once the API V2 is ready to launch
+  config.filter_run_excluding :example_group => lambda { |metadata|
+    metadata[:file_path].include?('api/v1') || metadata[:file_path].include?('appeal/appeal_contacts_excluder')
+  }
+
+  config.example_status_persistence_file_path = 'recent_specs.txt'
+
   config.before(:each) do |example|
     # Clears out the jobs for tests using the fake testing
     Sidekiq::Worker.clear_all
