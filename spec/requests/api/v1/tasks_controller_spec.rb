@@ -1,7 +1,6 @@
 require 'spec_helper'
-require_relative 'api_spec_helper'
 
-describe Api::V1::TasksController do
+describe Api::V1::TasksController, deprecated: true do
   describe 'api' do
     let(:user) { create(:user_with_account) }
     let!(:contact) { create(:contact, account_list: user.account_lists.first) }
