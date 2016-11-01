@@ -3,90 +3,28 @@ if ENV['COVERALLS_REPO_TOKEN']
   Coveralls.wear_merged!('rails')
 end
 
-def start_simplecov
-  require 'simplecov'
-  require 'simplecov-lcov'
-  SimpleCov::Formatter::LcovFormatter.report_with_single_file = true
-  SimpleCov.formatters = [
-    SimpleCov::Formatter::HTMLFormatter,
-    SimpleCov::Formatter::LcovFormatter
-  ]
-  SimpleCov.start 'rails' do
-    add_filter 'vendor'
-    add_filter '/dev/'
-    add_group 'Roles', 'app/roles'
-  end
-end
-
 ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
 require 'rspec/rails'
-require 'webmock/rspec'
-require 'sidekiq/testing'
-require 'sidekiq_unique_jobs/testing'
+require 'rspec/matchers'
 require 'paper_trail/frameworks/rspec'
 require 'attributes_history/rspec'
-
-require 'rspec/matchers' # req by equivalent-xml custom matcher `be_equivalent_to`
 require 'equivalent-xml'
-
-# Turn off sidekiq logging in test
-Sidekiq::Logging.logger = nil
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
-ActiveRecord::Base.establish_connection(:test)
-
-WebMock.disable_net_connect!(allow_localhost: true)
+# Checks for pending migrations before tests are run.
+# If you are not using ActiveRecord, you can remove this line.
+ActiveRecord::Migration.maintain_test_schema!
 
 RSpec.configure do |config|
-  # Remove this once the API V2 is ready to launch
-  config.filter_run_excluding example_group: lambda { |metadata|
-    metadata[:file_path].include?('api/v1') || metadata[:file_path].include?('appeal/appeal_contacts_excluder')
-  }
-
+  # Reset seed each time this file is loaded, so that spring won't cache seed
+  # To run a spec with a specific seed, use --order=rand:[seed]
+  config.seed = srand % 0xFFFF unless ARGV.any? { |arg| arg =~ /seed/ }
+  config.order = :random
   config.example_status_persistence_file_path = 'recent_specs.txt'
-
-  config.before(:each) do |example|
-    # Clears out the jobs for tests using the fake testing
-    Sidekiq::Worker.clear_all
-
-    if example.metadata[:sidekiq] == :fake
-      Sidekiq::Testing.fake!
-    elsif example.metadata[:sidekiq] == :testing_disabled
-      Sidekiq::Testing.disable!
-    elsif example.metadata[:sidekiq] == :acceptance
-      Sidekiq::Testing.inline!
-    elsif example.metadata[:type] == :acceptance
-      Sidekiq::Testing.inline!
-    else
-      Sidekiq::Testing.fake!
-    end
-
-    # Travis had an issue where the locale sometimes switched to French
-    I18n.locale = :en_US
-
-    # Stub the Google geocoder by default (creating an address calls it so it's
-    # needed a lot)
-    stub_google_geocoder
-  end
-
-  # config.before(:each, js: true) do
-  #   page.driver.browser.url_blacklist = ['http://use.typekit.net']
-  #   Capybara.current_driver = Capybara.javascript_driver
-  # end
-
-  # ## Mock Framework
-  #
-  # If you prefer to use mocha, flexmock or RR, uncomment the appropriate line:
-  #
-  # config.mock_with :mocha
-  # config.mock_with :flexmock
-  # config.mock_with :rr
-
-  config.include ActiveSupport::Testing::TimeHelpers
 
   # Remove this line if you're not using ActiveRecord or ActiveRecord fixtures
   config.fixture_path = "#{::Rails.root}/spec/fixtures"
@@ -96,166 +34,31 @@ RSpec.configure do |config|
   # instead of true.
   config.use_transactional_fixtures = false
 
-  # If true, the base class of anonymous controllers will be inferred
-  # automatically. This will be the default behavior in future versions of
-  # rspec-rails.
-  config.infer_base_class_for_anonymous_controllers = false
-  config.filter_run focus: true
-  config.filter_run_excluding js: true
-  config.run_all_when_everything_filtered = true
-  config.include Devise::TestHelpers, type: :controller
-  config.include FactoryGirl::Syntax::Methods
-  config.include JsonApiHelpers, type: :acceptance
-
-  # This adds automatic meta-data for specs by location (e.g. for controllers)
+  # RSpec Rails can automatically mix in different behaviours to your tests
+  # based on their file location, for example enabling you to call `get` and
+  # `post` in specs under `spec/controllers`.
+  #
+  # You can disable this behaviour by removing the line below, and instead
+  # explicitly tag your specs with their type, e.g.:
+  #
+  #     RSpec.describe UsersController, :type => :controller do
+  #       # ...
+  #     end
+  #
+  # The different available types are documented in the features, such as in
+  # https://relishapp.com/rspec/rspec-rails/docs
   config.infer_spec_type_from_file_location!
 
   # Exclude gems from spec backtraces, except a few directly related to our app
-  config.filter_gems_from_backtrace(*(Gem::Specification.map(&:name) -
-                                      %w(google_contacts_api siebel_donations)))
+  config.filter_gems_from_backtrace(
+    *(Gem::Specification.map(&:name) - %w(google_contacts_api siebel_donations)))
 
-  config.order = :random
-  config.silence_filter_announcements = true
+  # Exclude tests that are deprecated
+  config.filter_run_excluding :deprecated
 
-  # Reset seed each time this file is loaded, so that spring won't cache seed
-  # To run a spec with a specific seed, use --order=rand:[seed]
-  config.seed = srand % 0xFFFF unless ARGV.any? { |arg| arg =~ /seed/ }
-
-  if Rails.env.test?
-    config.before(:suite) do
-      DatabaseCleaner.strategy = :transaction
-      DatabaseCleaner.clean_with(:truncation)
-      Rails.application.load_seed
-    end
-
-    config.before(:each) do |example|
-      DatabaseCleaner.strategy = example.metadata[:js] ? :truncation : :transaction
-      DatabaseCleaner.start
-    end
-
-    config.after(:each) do |example|
-      DatabaseCleaner.clean
-      Rails.application.load_seed if example.metadata[:js]
-    end
-  end
-
-  REDIS_PID = "#{Rails.root}/tmp/pids/redis-test.pid".freeze
-  REDIS_CACHE_PATH = "#{Rails.root}/tmp/cache/".freeze
-
-  # config.before(:suite) do
-  # redis_options = {
-  # "daemonize"     => 'yes',
-  # "pidfile"       => REDIS_PID,
-  # "port"          => 9736,
-  # "timeout"       => 300,
-  # "save 900"      => 1,
-  # "save 300"      => 1,
-  # "save 60"       => 10000,
-  # "dbfilename"    => "dump.rdb",
-  # "dir"           => REDIS_CACHE_PATH,
-  # "loglevel"      => "debug",
-  # "logfile"       => "stdout",
-  # "databases"     => 16
-  # }.map { |k, v| "#{k} #{v}" }.join('\n')
-  # `echo '#{redis_options}' | redis-server -`
-  # end
-
-  # config.after(:suite) do
-  # %x{
-  # cat #{REDIS_PID} | xargs kill -QUIT
-  # rm -f #{REDIS_CACHE_PATH}dump.rdb
-  # }
-  # end
-end
-
-# This code will be run each time you run your specs.
-start_simplecov unless ENV['NO_COVERAGE'].present?
-Zonebie.quiet = true
-Zonebie.set_random_timezone
-FactoryGirl.reload
-Dir[Rails.root.join('app/roles/**/*.rb')].each { |f| require f }
-
-# Suppress debug-level "Geocoder: HTTP request being made ..." in spec output
-Geocoder.configure(lookup: :test)
-Geocoder::Lookup::Test.set_default_stub(
-  [
-    {
-      'latitude'     => 40.7,
-      'longitude'    => -74.0,
-      'address'      => 'New York, NY, USA',
-      'state'        => 'New York',
-      'state_code'   => 'NY',
-      'country'      => 'United States',
-      'country_code' => 'US'
-    }
-  ]
-)
-
-def api_login(user)
-  allow_any_instance_of(Api::V2::BaseController).to receive(:jwt_authorize!)
-  allow_any_instance_of(Api::V2::BaseController).to receive(:current_user).and_return(user)
-end
-
-def login(user)
-  $request_test = true
-  $user = user
-end
-
-def logout_test_user
-  $request_test = false
-  $user = nil
-  sign_out(:user)
-end
-
-def stub_google_geocoder
-  stub_request(:get, %r{maps\.googleapis\.com/maps/api.*}).to_return(body: '{}')
-end
-
-def stub_smarty_streets
-  stub_request(:get, %r{https://api\.smartystreets\.com/street-address/.*})
-    .to_return(body: '[]')
-end
-
-class FakeApi
-  def initialize(*_args)
-  end
-
-  def self.requires_username_and_password?
-    true
-  end
-
-  def requires_username_and_password?
-    self.class.requires_username_and_password?
-  end
-
-  def validate_username_and_password(*_args)
-    true
-  end
-
-  def profiles
-    []
-  end
-
-  def profiles_with_designation_numbers
-    []
-  end
-
-  def method_missing(*_args, &_block)
-    true
-  end
-end
-
-# Clear out unique job locks. They can get into Redis if you interrupt a test
-# run or don't call Worker.clear after queuing jobs in a spec.
-def clear_uniqueness_locks
-  Sidekiq.redis do |redis|
-    redis.keys('*unique*').each { |k| redis.del(k) }
-  end
-end
-
-# locally, the orgs are seeded if you run rake db:test:prepare, but in
-# Travis the database is fully empty since it just loads structure.sql
-def org_for_code(code)
-  Organization.find_by(code: code) ||
-    create(:organization, name: code, code: code)
+  config.include Devise::TestHelpers, type: :controller
+  config.include FactoryGirl::Syntax::Methods
+  config.include JsonApiHelper, type: :acceptance
+  config.include MpdxHelper
+  config.include ActiveSupport::Testing::TimeHelpers
 end

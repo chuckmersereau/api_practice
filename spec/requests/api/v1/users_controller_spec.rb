@@ -1,7 +1,6 @@
 require 'spec_helper'
-require_relative 'api_spec_helper'
 
-describe Api::V1::UsersController do
+describe Api::V1::UsersController, deprecated: true do
   describe '#show' do
     let(:user) { create(:user_with_account) }
 

@@ -3,6 +3,7 @@ cache:
   bundler: true
   directories:
     - cache
+
 language: ruby
 services:
 - redis-server
@@ -13,10 +14,8 @@ before_script:
 - psql -U postgres -q -d mpdx_test2 -f db/structure.sql
 script:
 - bin/travis_parallel_test.sh
+- bin/travis_rubocop.sh
 - bundle exec rake coveralls:push
-- bundle exec rubocop
-after_success:
-- bash <(curl -s https://codecov.io/bash)
 branches:
   only:
   - master
@@ -25,5 +24,6 @@ env:
   matrix:
     - TEST_SUITE=1
     - TEST_SUITE=2
+    - TEST_SUITE=3
 addons:
   postgresql: "9.4"

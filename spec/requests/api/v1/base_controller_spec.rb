@@ -1,4 +1,4 @@
 require 'spec_helper'
 
-describe Api::V1::BaseController do
+describe Api::V1::BaseController, deprecated: true do
 end

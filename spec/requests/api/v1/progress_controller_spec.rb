@@ -1,7 +1,6 @@
 require 'spec_helper'
-require_relative 'api_spec_helper'
 
-describe Api::V1::ProgressController do
+describe Api::V1::ProgressController, deprecated: true do
   describe 'api' do
     let(:user) { create(:user_with_account) }
     let!(:contact) do
