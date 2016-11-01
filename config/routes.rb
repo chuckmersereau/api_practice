@@ -1,6 +1,5 @@
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
-require 'rollout_ui/server'
 
 Rails.application.routes.draw do
   resources :google_integrations, only: [:show, :edit, :update, :create] do
@@ -49,7 +48,7 @@ Rails.application.routes.draw do
   namespace :api do
     api_version(module: 'V2', header: { name: 'API-VERSION', value: 'v2' }, parameter: { name: 'version', value: 'v2' }, path: { value: 'v2' }) do
       resources :authentication, only: :create
-      resources :account_lists, only: [:index, :show, :update] do 
+      resources :account_lists, only: [:index, :show, :update] do
         scope module: :account_lists do
           resources :designation_accounts, only: [:index, :show]
           resources :donor_accounts, only: [:index, :show]
@@ -325,7 +324,6 @@ Rails.application.routes.draw do
 
   constraints -> (request) { user_constraint(request, :developer) || Rails.env.development? } do
     mount Sidekiq::Web => '/sidekiq'
-    mount RolloutUi::Server => '/rollout'
   end
 
   constraints -> (request) { user_constraint(request, :admin) } do
@@ -344,7 +342,6 @@ Rails.application.routes.draw do
 
   get '/mobile', to: redirect(subdomain: 'm', path: '/')
 
-  mount Peek::Railtie => '/peek'
   root to: 'home#index'
 
   get '/templates/:path.html' => 'templates#template', :constraints => { path: /.+/ }
