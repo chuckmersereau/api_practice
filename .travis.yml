@@ -1,5 +1,9 @@
 sudo: false
-cache: bundler
+cache:
+  bundler: true
+  directories:
+    - cache
+
 language: ruby
 services:
 - redis-server
