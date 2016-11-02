@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::AppealExclusionsController do
+describe Api::V1::AppealExclusionsController, deprecated: true do
   describe 'api' do
     let(:user) { create(:user_with_account) }
     let(:account_list) { user.account_lists.first }

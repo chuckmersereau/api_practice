@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::MailChimpAccountsController do
+describe Api::V1::MailChimpAccountsController, deprecated: true do
   let(:user) { create(:user_with_account) }
   let(:mail_chimp_account) { create :mail_chimp_account, account_list: user.account_lists.first }
   let(:appeal) { create(:appeal, account_list: user.account_lists.first) }

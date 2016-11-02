@@ -62,7 +62,7 @@ class ContactExhibit < DisplayCase::Exhibit
             end
 
       if url.start_with?('/')
-        root_url = @context ? @context.root_url : 'https://mpdx.org'
+        root_url = 'https://mpdx.org'
         url = URI.join(root_url, url).to_s
       end
       url

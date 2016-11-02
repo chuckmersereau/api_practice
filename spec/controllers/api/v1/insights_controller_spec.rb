@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'savon/mock/spec_helper'
 
-describe Api::V1::InsightsController do
+describe Api::V1::InsightsController, deprecated: true do
   before(:each) do
     @user = create(:user_with_account)
     sign_in(:user, @user)

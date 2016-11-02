@@ -88,17 +88,6 @@ class ApplicationController < ActionController::API
     Time.zone = old_time_zone
   end
 
-  def after_sign_out_path_for(_resource_or_scope = :user)
-    case session[:signed_in_with]
-    when 'relay'
-      "https://signin.relaysso.org/cas/logout?service=#{login_url}"
-    when 'key'
-      "https://thekey.me/cas/logout?service=#{login_url}"
-    else
-      login_url
-    end
-  end
-
   def locale
     return 'en' unless user_signed_in?
     current_user.preferences[:locale] || 'en'
