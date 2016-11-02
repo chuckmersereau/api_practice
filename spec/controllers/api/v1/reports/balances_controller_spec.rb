@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::Reports::BalancesController do
+describe Api::V1::Reports::BalancesController, deprecated: true do
   before { CurrencyRate.clear_rate_cache }
 
   context '#show' do

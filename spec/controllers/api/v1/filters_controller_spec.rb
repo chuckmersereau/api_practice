@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::FiltersController do
+describe Api::V1::FiltersController, deprecated: true do
   let!(:user) { create(:user_with_account) }
   let!(:contact) { create(:contact, account_list: user.account_lists.first) }
 

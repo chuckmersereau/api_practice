@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::BaseController do
+describe Api::V1::BaseController, deprecated: true do
   let(:user) { create(:user_with_account) }
   let(:second_account) { AccountList.create(name: 'Account 2') }
 

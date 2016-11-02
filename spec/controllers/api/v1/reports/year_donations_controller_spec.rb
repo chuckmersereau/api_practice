@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V1::Reports::YearDonationsController, '#show' do
+describe Api::V1::Reports::YearDonationsController, '#show', deprecated: true do
   around do |example|
     travel_to Date.new(2016, 4, 28) do
       example.run

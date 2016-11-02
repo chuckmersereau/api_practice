@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 module ExpectedTotalsReport
-  describe Api::V1::Reports::ExpectedMonthlyTotalsController do
+  describe Api::V1::Reports::ExpectedMonthlyTotalsController, deprecated: true do
     context '#show' do
       it 'works' do
         account_list = create(:account_list)
