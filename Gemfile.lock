@@ -22,13 +22,6 @@ GIT
       json
 
 GIT
-  remote: https://github.com/CruGlobal/rollout_ui.git
-  revision: df470f00267d0fba5e5ccd287d8c566f4c4b87ac
-  specs:
-    rollout_ui (0.3.0)
-      rollout
-
-GIT
   remote: https://github.com/cynektix/gmail.git
   revision: db93300b4ffe15b8da9537eea9b6ecb226d80b76
   branch: fix-to-imap-date
@@ -96,7 +89,6 @@ GEM
     assignable_values (0.11.2)
       activerecord
     ast (2.3.0)
-    atomic (1.1.99)
     attr_required (1.0.1)
     attributes_history (0.0.3)
       activerecord (>= 3.0, < 6.0)
@@ -134,8 +126,6 @@ GEM
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
     concurrent-ruby (1.0.2)
-    concurrent-ruby-ext (1.0.2)
-      concurrent-ruby (~> 1.0.2)
     connection_pool (2.2.0)
     countries (0.9.3)
       currencies (~> 0.4.2)
@@ -307,11 +297,6 @@ GEM
       text (>= 1.3.0)
     gettext_i18n_rails (1.7.2)
       fast_gettext (>= 0.9.0)
-    gettext_i18n_rails_js (1.0.4)
-      gettext (>= 3.0.2)
-      gettext_i18n_rails (>= 0.7.1)
-      po_to_json (>= 1.0.0)
-      rails (>= 3.2.0)
     gibberish (1.4.0)
     gibbon (2.2.4)
       faraday (>= 0.9.1)
@@ -453,28 +438,8 @@ GEM
       parallel
     parser (2.3.1.4)
       ast (~> 2.2)
-    peek (0.1.10)
-      atomic (>= 1.0.0)
-      railties (>= 3.0.0)
-    peek-gc (0.0.2)
-      peek
-    peek-git (1.0.2)
-      peek
-    peek-performance_bar (1.2.1)
-      peek (>= 0.1.0)
-    peek-pg (1.2.0)
-      concurrent-ruby
-      concurrent-ruby-ext
-      peek
-      pg
-    peek-redis (1.1.0)
-      atomic (>= 1.0.0)
-      peek
-      redis
     pg (0.18.4)
     phonelib (0.5.6)
-    po_to_json (1.0.1)
-      json (>= 1.6.0)
     powerpack (0.1.1)
     pry (0.10.4)
       coderay (~> 1.1.0)
@@ -706,8 +671,6 @@ GEM
     webmock (1.21.0)
       addressable (>= 2.3.6)
       crack (>= 0.3.2)
-    wicked (1.0.3)
-      rails (>= 3.0.7)
     xml-simple (1.1.5)
     yard (0.9.5)
     zonebie (0.6.1)
@@ -746,7 +709,6 @@ DEPENDENCIES
   geocoder (~> 1.4.0)
   gettext (~> 3.1.6)
   gettext_i18n_rails (~> 1.7.2)
-  gettext_i18n_rails_js (~> 1.0.0)
   gibberish (~> 1.4.0)
   gibbon (~> 2.2.4)
   gmail!
@@ -776,12 +738,6 @@ DEPENDENCIES
   omniauth-twitter (~> 1.0.1)
   paper_trail (~> 4.0.1)
   parallel_tests (~> 2.10.0)
-  peek (~> 0.1.10)
-  peek-gc (~> 0.0.2)
-  peek-git (~> 1.0.2)
-  peek-performance_bar (~> 1.2.1)
-  peek-pg (~> 1.2.0)
-  peek-redis (~> 1.1.0)
   pg (~> 0.18.2)
   phonelib (~> 0.5.4)
   pry-byebug (~> 3.4.0)
@@ -803,7 +759,6 @@ DEPENDENCIES
   retryable-rb (~> 1.1.0)
   rollbar (~> 2.8.3)
   rollout (~> 2.0.0)
-  rollout_ui!
   rspec (~> 3.4)
   rspec-rails (~> 3.4)
   rspec_api_documentation (~> 4.8.0)
@@ -832,7 +787,6 @@ DEPENDENCIES
   versionist (~> 1.2.1)
   virtus (~> 1.0.5)
   webmock (~> 1.21.0)
-  wicked (~> 1.0.2)
   zonebie (~> 0.6.1)
 
 BUNDLED WITH

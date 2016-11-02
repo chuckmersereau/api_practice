@@ -98,8 +98,7 @@ describe MailChimpAccount::PrimaryListHookHandler do
 
     it 'asyncronously calls the mail chimp account to log the sent campaign' do
       @time_now = Time.now
-      Time.stub(:current).and_return(@time_now)
-
+      allow(Time).to receive(:current).and_return(@time_now)
       expect(mc_account).to receive(:queue_log_sent_campaign).with('c1', 'subject')
       handler.campaign_status_hook('c1', 'sent', 'subject')
       expect(mc_account.prayer_letter_last_sent).to eq(@time_now)
