@@ -4,7 +4,7 @@
     _('Your MPDX contact "%{contact}" has a person <a href="%{edit_person_url}">%{person_name}</a> '\
      'synced or exported to MailChimp but now has an undeliverable email: %{email}')
     .localize % { contact: @email.person.contacts.first, email: @email, person_name: @email.person.to_s,
-                  edit_person_url: edit_person_path(@email.person, only_path: false) }
+                  edit_person_url: 'edit_person_path(@email.person, only_path: false)' }
   ).html_safe
   %>
 </p>

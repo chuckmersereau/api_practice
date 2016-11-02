@@ -12,12 +12,4 @@ describe HelpRequestMailer do
       expect(mail.from).to eq([help_request.email])
     end
   end
-
-  describe 'attachment_url' do
-    let(:help_request) { build_stubbed(:help_request_with_attachment) }
-
-    it 'build url with token' do
-      expect(mail.body.raw_source).to include "help_requests/#{HelpRequest.attachment_token(help_request.id)}/attachment"
-    end
-  end
 end

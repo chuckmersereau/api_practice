@@ -23,10 +23,6 @@ class ApplicationController < ActionController::API
   end
   helper_method :impersonator_user
 
-  def peek_enabled?
-    user_signed_in? && current_user.developer == true
-  end
-
   def ssl_configured?
     request.get? && !Rails.env.development? && !Rails.env.test?
   end
@@ -90,17 +86,6 @@ class ApplicationController < ActionController::API
     yield
   ensure
     Time.zone = old_time_zone
-  end
-
-  def after_sign_out_path_for(_resource_or_scope = :user)
-    case session[:signed_in_with]
-    when 'relay'
-      "https://signin.relaysso.org/cas/logout?service=#{login_url}"
-    when 'key'
-      "https://thekey.me/cas/logout?service=#{login_url}"
-    else
-      login_url
-    end
   end
 
   def locale
