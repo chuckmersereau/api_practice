@@ -18,7 +18,7 @@ class HelpRequestMailer < ApplicationMailer
          from: from, reply_to: "#{help_request.name} <#{help_request.email}>"
   end
 
-  def attachment_url(help_request_id)
+  def attachment_url(_help_request_id)
     '/attachment_help_request_url(HelpRequest.attachment_token(help_request_id))'
   end
 end
