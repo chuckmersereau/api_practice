@@ -64,19 +64,6 @@ class User < Person
     designation_accounts.where(organization_id: organization_id).pluck('designation_number')
   end
 
-  def self.from_omniauth(provider, auth_hash)
-    # look for an authenticated record from this provider
-    user = provider.find_authenticated_user(auth_hash)
-    unless user
-      # TODO: hook into IdM to find other identities for this person
-      # that might link to an existing user in MPDX
-
-      # Create a new user
-      user = provider.create_user_from_auth(auth_hash)
-    end
-    user
-  end
-
   def self.from_access_token(token)
     return unless token.present?
     get_user_from_access_token(token) ||

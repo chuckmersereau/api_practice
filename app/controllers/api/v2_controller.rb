@@ -1,5 +1,7 @@
-class Api::V2::BaseController < ActionController::API
+class Api::V2Controller < ApiController
   before_action :jwt_authorize!
+
+  protected
 
   def current_user
     @current_user ||= User.find(jwt_payload['user_id'])
@@ -8,13 +10,9 @@ class Api::V2::BaseController < ActionController::API
   private
 
   def jwt_authorize!
-    unauthorized unless user_id_in_token?
+    raise Exceptions::AuthenticationError unless user_id_in_token?
   rescue JWT::VerificationError, JWT::DecodeError
-    unauthorized
-  end
-
-  def unauthorized
-    render json: { errors: ['Not Authenticated'] }, status: :unauthorized
+    raise Exceptions::AuthenticationError
   end
 
   def user_id_in_token?

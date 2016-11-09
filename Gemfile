@@ -1,4 +1,4 @@
-source 'http://rubygems.org'
+source 'https://rubygems.org'
 source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro', '~> 3.4.0'
 end
@@ -34,22 +34,16 @@ gem 'gibbon', '~> 2.2.4'
 gem 'google-api-client', '~> 0.7.1'
 gem 'google_contacts_api', git: 'https://github.com/CruGlobal/google_contacts_api'
 gem 'gmail', git: 'https://github.com/cynektix/gmail.git', branch: 'fix-to-imap-date'
-gem 'country_select', git: 'http://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
+gem 'country_select', git: 'https://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 
 gem 'iniparse', '~> 1.1.6'
 gem 'koala', '~> 1.9.0'
 gem 'linkedin', '~> 0.3.7'
 gem 'newrelic_rpm', '~> 3.7.1'
 gem 'kaminari', '~> 0.16.3'
-gem 'oauth', git: 'http://github.com/CruGlobal/oauth-ruby'
+gem 'oauth', git: 'https://github.com/CruGlobal/oauth-ruby'
+gem 'oauth2', '~> 1.2.0'
 gem 'oj', '~> 2.14.0'
-gem 'omniauth-cas', '~> 1.1.1'
-gem 'omniauth-facebook', '~> 1.6.0'
-gem 'omniauth-google-oauth2', '~> 0.2.6'
-gem 'omniauth-linkedin', '~> 0.1.0'
-gem 'omniauth-pls', '~> 0.0.2'
-gem 'omniauth-prayer-letters'
-gem 'omniauth-twitter', '~> 1.0.1'
 gem 'paper_trail', '~> 4.0.1'
 gem 'pg', '~> 0.18.2'
 gem 'rails_autolink', '~> 1.1.5'
@@ -97,8 +91,14 @@ group :development, :test do
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4'
   gem 'factory_girl_rails', '~> 4.5.0'
-  gem 'guard-rubocop', '~> 1.2.0'
-  gem 'guard-rspec', '~> 4.7.3'
+  gem 'guard-bundler'
+  gem 'guard-rails'
+  gem 'guard-rspec'
+  gem 'guard-rubocop'
+  gem 'guard-puma'
+  gem 'guard-sidekiq'
+  gem 'guard-bundler-audit', git: 'https://github.com/christianhellsten/guard-bundler-audit.git'
+  gem 'guard-brakeman'
   gem 'simplecov', '~> 0.12.0', require: false
   gem 'simplecov-lcov', '~> 0.5.0', require: false
   gem 'spring', '~> 1.7.1'

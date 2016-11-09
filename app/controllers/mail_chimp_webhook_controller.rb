@@ -1,4 +1,4 @@
-class MailChimpWebhookController < ApplicationController
+class MailChimpWebhookController < ActionController::API
   skip_before_action :redirect_to_mobile, :verify_authenticity_token, :ensure_setup_finished,
                      :ensure_login
   before_action :find_account_and_ensure_valid

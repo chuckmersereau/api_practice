@@ -1,15 +1,9 @@
 GIT
-  remote: http://github.com/CruGlobal/country_select.git
+  remote: https://github.com/CruGlobal/country_select.git
   revision: 1ac18d07568b2a94b45818ae107bc3f08965301b
   specs:
     country_select (1.2.0)
       countries (= 0.9.3)
-
-GIT
-  remote: http://github.com/CruGlobal/oauth-ruby
-  revision: 8d659d10229df298eda8007b4f09d5d392f69b1c
-  specs:
-    oauth (0.4.7)
 
 GIT
   remote: https://github.com/CruGlobal/google_contacts_api
@@ -20,6 +14,20 @@ GIT
       hashie
       i18n
       json
+
+GIT
+  remote: https://github.com/CruGlobal/oauth-ruby
+  revision: 8d659d10229df298eda8007b4f09d5d392f69b1c
+  specs:
+    oauth (0.4.7)
+
+GIT
+  remote: https://github.com/christianhellsten/guard-bundler-audit.git
+  revision: 0b9d51c8a3bdd08c8eb1406ef171da97633d4c72
+  specs:
+    guard-bundler-audit (0.1.4)
+      bundler-audit (>= 0.3.1)
+      guard (~> 2.0)
 
 GIT
   remote: https://github.com/cynektix/gmail.git
@@ -39,7 +47,7 @@ GIT
       thor
 
 GEM
-  remote: http://rubygems.org/
+  remote: https://rubygems.org/
   remote: https://gems.contribsys.com/
   specs:
     CFPropertyList (2.3.3)
@@ -109,7 +117,11 @@ GEM
       activesupport (>= 3.2, < 5)
       blue-daemons (~> 1.1)
       state_machine (~> 1.1)
+    brakeman (3.4.1)
     builder (3.2.2)
+    bundler-audit (0.5.0)
+      bundler (~> 1.2)
+      thor (~> 0.18)
     byebug (9.0.6)
     carrierwave (0.11.2)
       activemodel (>= 3.2.0)
@@ -325,7 +337,21 @@ GEM
       pry (>= 0.9.12)
       shellany (~> 0.0)
       thor (>= 0.18.1)
+    guard-brakeman (0.8.3)
+      brakeman (>= 2.1.1)
+      guard (>= 2.0.0)
+    guard-bundler (2.1.0)
+      bundler (~> 1.0)
+      guard (~> 2.2)
+      guard-compat (~> 1.1)
     guard-compat (1.2.1)
+    guard-puma (0.3.2)
+      guard (~> 2.8)
+      guard-compat (~> 1.0)
+      puma
+    guard-rails (0.8.0)
+      guard (~> 2.11)
+      guard-compat (~> 1.0)
     guard-rspec (4.7.3)
       guard (~> 2.1)
       guard-compat (~> 1.1)
@@ -333,6 +359,9 @@ GEM
     guard-rubocop (1.2.0)
       guard (~> 2.0)
       rubocop (~> 0.20)
+    guard-sidekiq (0.1.0)
+      guard (>= 2)
+      sidekiq
     gyoku (1.1.1)
       builder (>= 2.1.2)
     hashie (1.2.0)
@@ -396,38 +425,6 @@ GEM
       multi_xml (~> 0.5)
       rack (>= 1.2, < 3)
     oj (2.14.6)
-    omniauth (1.3.1)
-      hashie (>= 1.2, < 4)
-      rack (>= 1.0, < 3)
-    omniauth-cas (1.1.1)
-      addressable (~> 2.3)
-      nokogiri (~> 1.5)
-      omniauth (~> 1.2)
-    omniauth-facebook (1.6.0)
-      omniauth-oauth2 (~> 1.1)
-    omniauth-google-oauth2 (0.2.10)
-      addressable (~> 2.3)
-      jwt (~> 1.0)
-      multi_json (~> 1.3)
-      omniauth (>= 1.1.1)
-      omniauth-oauth2 (~> 1.3.1)
-    omniauth-linkedin (0.1.0)
-      omniauth-oauth (~> 1.0)
-    omniauth-oauth (1.1.0)
-      oauth
-      omniauth (~> 1.0)
-    omniauth-oauth2 (1.3.1)
-      oauth2 (~> 1.0)
-      omniauth (~> 1.2)
-    omniauth-pls (0.0.2)
-      multi_json
-      omniauth-oauth2
-    omniauth-prayer-letters (0.0.3)
-      multi_json
-      omniauth-oauth2
-    omniauth-twitter (1.0.1)
-      multi_json (~> 1.3)
-      omniauth-oauth (~> 1.0)
     orm_adapter (0.5.0)
     paper_trail (4.0.2)
       activerecord (>= 3.0, < 6.0)
@@ -716,8 +713,14 @@ DEPENDENCIES
   google_contacts_api!
   google_timezone (~> 0.0.5)
   growl (~> 1.0.3)
-  guard-rspec (~> 4.7.3)
-  guard-rubocop (~> 1.2.0)
+  guard-brakeman
+  guard-bundler
+  guard-bundler-audit!
+  guard-puma
+  guard-rails
+  guard-rspec
+  guard-rubocop
+  guard-sidekiq
   http_logger (~> 0.5.1)
   iniparse (~> 1.1.6)
   jwt (~> 1.5.6)
@@ -728,14 +731,8 @@ DEPENDENCIES
   mock_redis (~> 0.17.0)
   newrelic_rpm (~> 3.7.1)
   oauth!
+  oauth2 (~> 1.2.0)
   oj (~> 2.14.0)
-  omniauth-cas (~> 1.1.1)
-  omniauth-facebook (~> 1.6.0)
-  omniauth-google-oauth2 (~> 0.2.6)
-  omniauth-linkedin (~> 0.1.0)
-  omniauth-pls (~> 0.0.2)
-  omniauth-prayer-letters
-  omniauth-twitter (~> 1.0.1)
   paper_trail (~> 4.0.1)
   parallel_tests (~> 2.10.0)
   pg (~> 0.18.2)
