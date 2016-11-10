@@ -1,0 +1,2 @@
+class AppealPolicy < AccountListPolicy
+end
