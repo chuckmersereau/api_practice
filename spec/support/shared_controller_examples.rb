@@ -16,13 +16,13 @@ RSpec.shared_examples 'show_examples' do
   describe '#show' do
     it 'shows resource object to users that are signed in' do
       api_login(user)
-      get :show, params: id_param
+      get :show, id_param
       expect(response.status).to eq(200)
       expect(response.body).to include(resource.send(reference_key).to_s)
     end
 
     it 'does not shows current_user object to users that are signed in' do
-      get :show, params: id_param
+      get :show, id_param
       expect(response.status).to eq(401)
     end
   end
@@ -34,7 +34,7 @@ RSpec.shared_examples 'update_examples' do
   describe '#update' do
     it 'updates resource for users that are signed in' do
       api_login(user)
-      put :update, params: full_correct_attributes
+      put :update, full_correct_attributes
       expect(response.status).to eq(200)
       expect(resource.reload.send(reference_key)).to eq(reference_value)
     end
@@ -42,7 +42,7 @@ RSpec.shared_examples 'update_examples' do
     it 'does not update the resource when there are errors in sent data' do
       if incorrect_attributes
         api_login(user)
-        put :update, params: full_incorrect_attributes
+        put :update, full_incorrect_attributes
         expect(response.status).to eq(400)
         expect(response.body).to include('errors')
         expect(resource.reload.send(reference_key)).to_not eq(incorrect_reference_value)
@@ -64,7 +64,7 @@ RSpec.shared_examples 'create_examples' do
     it 'updates resource for users that are signed in' do
       api_login(user)
       expect do
-        post :create, params: full_correct_attributes
+        post :create, full_correct_attributes
       end.to change { resource.class.count }
       expect(response.status).to eq(200)
     end
@@ -73,7 +73,7 @@ RSpec.shared_examples 'create_examples' do
       if incorrect_attributes
         api_login(user)
         expect do
-          post :create, params: full_incorrect_attributes
+          post :create, full_incorrect_attributes
         end.not_to change { resource.class.count }
         expect(response.status).to eq(400)
         expect(response.body).to include('errors')
@@ -82,7 +82,7 @@ RSpec.shared_examples 'create_examples' do
 
     it 'does not updates resource for users that are not signed in' do
       expect do
-        post :create, params: full_correct_attributes
+        post :create, full_correct_attributes
       end.not_to change { resource.class.count }
       expect(response.status).to eq(401)
     end
@@ -96,7 +96,7 @@ RSpec.shared_examples 'destroy_examples' do
     it 'shows resource object to users that are signed in' do
       api_login(user)
       expect do
-        delete :destroy, params: id_param
+        delete :destroy, id_param
       end.to change { resource.class.count }
       expect(response.status).to eq(200)
     end
