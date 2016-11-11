@@ -5,7 +5,7 @@ class Api::V2Controller < ApiController
   after_action :verify_authorized, except: [:index, :create]
 
   rescue_from Pundit::NotAuthorizedError, with: :render_403
-
+  
   protected
 
   def current_account_list
