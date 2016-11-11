@@ -13,7 +13,7 @@ describe Api::V2::AccountLists::AppealsController, type: :controller do
 
   let(:resource) { appeal }
   let(:parent_path) { { account_list_id: account_list_id } }
-  let(:correct_attributes) { attributes_for(:appeal) }
+  let(:correct_attributes) { attributes_for(:appeal, name: 'Appeal 2') }
   let(:incorrect_attributes) { { account_list_id: nil } }
 
   include_examples 'index_examples'
