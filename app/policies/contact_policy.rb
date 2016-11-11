@@ -1,0 +1,2 @@
+class ContactPolicy < AppealPolicy
+end
