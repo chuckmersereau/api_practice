@@ -1,5 +1,5 @@
 class AppealSerializer < ActiveModel::Serializer
-  embed :ids, include: true
+  # embed :ids, include: true
   # has_many :contacts
   ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :created_at, :currencies,
                 :total_currency, :donations].freeze
