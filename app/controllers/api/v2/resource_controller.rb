@@ -34,7 +34,6 @@ class Api::V2::ResourceController < Api::V2Controller
   end
 
   def load_resource
-    binding.pry
     @resource ||= resource_scope.find(params[:id])
   end
 

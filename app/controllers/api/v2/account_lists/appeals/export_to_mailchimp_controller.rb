@@ -5,12 +5,11 @@ class Api::V2::AccountLists::Appeals::ExportToMailchimpController < Api::V2::Acc
 	end
 
   def load_resource
-    binding.pry
     @resource ||= resource_scope
     raise ActiveRecord::RecordNotFound unless @resource
   end
 
-	def resource_scope
+	def resource_scope 
 		current_account_list.mail_chimp_account
 	end
 

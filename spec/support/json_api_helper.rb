@@ -1,9 +1,9 @@
 module JsonApiHelper
   def json_response
-    @json_response ||= JSON.parse(relevate_response)
+    @json_response ||= JSON.parse(relevant_response)
   end
 
-  def relevate_response
+  def relevant_response
     defined?(response_body) ? response_body : response.body
   end
 
