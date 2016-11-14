@@ -8,9 +8,6 @@ describe Api::V2::AccountLists::AppealsController, type: :controller do
   let!(:appeal) { create(:appeal, account_list: account_list) }
   let(:id) { appeal.id }
 
-  before do
-  end
-
   let(:resource) { appeal }
   let(:parent_path) { { account_list_id: account_list_id } }
   let(:correct_attributes) { attributes_for(:appeal, name: 'Appeal 2') }

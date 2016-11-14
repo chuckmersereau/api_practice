@@ -1,7 +1,7 @@
 class AppealSerializer < ActiveModel::Serializer
   # has_many :contacts
   ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :created_at, :currencies,
-                :total_currency, :donations].freeze
+                :total_currency, :donations, :contacts].freeze
   attributes(*ATTRIBUTES)
 
   attribute :contact_ids, key: :contacts

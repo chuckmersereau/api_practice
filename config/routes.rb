@@ -28,7 +28,7 @@ Rails.application.routes.draw do
           resources :appeals do
             scope module: :appeals do
               resources :contacts, only: [:index, :show, :destroy]
-              resource :export_to_mailchimp, only: [:show]
+              resource :export_to_mailchimp, only: [:show], controller: :export_to_mailchimp
             end
           end
         end
