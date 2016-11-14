@@ -1,16 +1,11 @@
-class Api::V2::UsersController < Api::V2Controller
-  def show
-    load_user
-    render json: @user
+class Api::V2::UsersController < Api::V2::ResourceController
+  private
+
+  def resource_attributes
+    User::PERMITTED_ATTRIBUTES
   end
 
-  protected
-
-  def load_user
-    @user ||= user_scope
-  end
-
-  def user_scope
-    current_user
+  def load_resource
+    @resource ||= current_user
   end
 end

@@ -1,7 +1,7 @@
 class PhoneNumberSerializer < ActiveModel::Serializer
   include DisplayCase::ExhibitsHelper
 
-  embed :ids, include: true
+  # embed :ids, include: true
   ATTRIBUTES = [:id, :number, :historic, :country_code, :location, :primary, :created_at, :updated_at].freeze
   attributes(*ATTRIBUTES)
 

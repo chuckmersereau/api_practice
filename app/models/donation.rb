@@ -17,6 +17,12 @@ class Donation < ActiveRecord::Base
   GIFT_AID = 'Gift Aid'.freeze
   scope :without_gift_aid, -> { where.not(payment_method: GIFT_AID) }
 
+  PERMITTED_ATTRIBUTES = [
+    :amount, :donation_date, :contact_id, :appeal_id, :appeal_amount, :donor_account_id, :designation_account_id,
+    :remote_id, :motivation, :payment_method, :tendered_currency, :tendered_amount, :currency, :memo, :payment_type,
+    :channel
+  ].freeze
+
   # Used by Contact::DonationsEagerLoader
   attr_accessor :loaded_contact
 

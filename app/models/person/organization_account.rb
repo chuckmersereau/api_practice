@@ -18,6 +18,8 @@ class Person::OrganizationAccount < ActiveRecord::Base
   after_destroy :destroy_designation_profiles
   belongs_to :organization
 
+  PERMITTED_ATTRIBUTES = [:person_id, :organization_id, :username, :password].freeze
+
   def to_s
     str = organization.to_s
     employee_id = user.relay_accounts.where(remote_id: remote_id).pluck(:employee_id).first

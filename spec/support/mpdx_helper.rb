@@ -1,6 +1,7 @@
 module MpdxHelper
   def api_login(user)
-    @request.headers['Authorization'] = JsonWebToken.encode(user_id: user.id)
+    allow_any_instance_of(Api::V2Controller).to receive(:jwt_authorize!)
+    allow_any_instance_of(Api::V2Controller).to receive(:current_user).and_return(user)
   end
 
   def login(user)

@@ -20,6 +20,8 @@ class AccountList < ActiveRecord::Base
   # donor import to not go through.
   sidekiq_options retry: false, unique: :until_executed, unique_job_expiration: 24.hours
 
+  validates :name, presence: true
+
   store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :ministry_country,
                                :currency, :salary_currency, :log_debug_info,
                                :salary_organization_id]
@@ -65,6 +67,10 @@ class AccountList < ActiveRecord::Base
   scope :with_linked_org_accounts, lambda {
     joins(:organization_accounts).where('locked_at is null').order('last_download asc')
   }
+
+  PERMITTED_ATTRIBUTES = [
+    :name, :settings
+  ].freeze
 
   def salary_organization_id=(val)
     settings[:salary_organization_id] = val

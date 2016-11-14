@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DonorAccount do
+describe DonorAccount, deprecated: true do
   before(:each) do
     @donor_account = create(:donor_account)
   end

@@ -3,6 +3,11 @@ class Person::KeyAccount < ActiveRecord::Base
 
   self.table_name = 'person_relay_accounts'
 
+  validates :remote_id, :email, :person_id, presence: true
+  validates :remote_id, uniqueness: true
+
+  PERMITTED_ATTRIBUTES = [:person_id, :remote_id, :first_name, :last_name, :email].freeze
+
   def self.find_or_create_from_auth(auth_hash, user)
     @rel = user.key_accounts
     extra_attributes = auth_hash.extra.attributes.first

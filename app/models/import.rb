@@ -23,6 +23,11 @@ class Import < ActiveRecord::Base
   serialize :groups, Array
   serialize :group_tags, JSON
 
+  PERMITTED_ATTRIBUTES = [
+    :id, :account_list_id, :source, :file, :tags, :override, :user_id, :source_account_id,
+    :import_by_group, :groups, :group_tags
+  ].freeze
+
   after_commit :queue_import
 
   def queue_import

@@ -8,6 +8,12 @@ class AccountListInvite < ActiveRecord::Base
 
   scope :active, -> { where(cancelled_by_user: nil) }
 
+  validates :recipient_email, presence: true
+
+  PERMITTED_ATTRIBUTES = [
+    :recipient_email
+  ].freeze
+
   def accept(accepting_user)
     return false if cancelled?
 

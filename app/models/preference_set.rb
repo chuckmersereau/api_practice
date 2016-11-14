@@ -3,7 +3,7 @@ class PreferenceSet
   extend ActiveModel::Naming
   include ActiveModel::Conversion
   include ActiveModel::Validations
-  include ActiveModel::SerializerSupport
+  include ActiveModel::Serializers
 
   attr_reader :user, :account_list
 

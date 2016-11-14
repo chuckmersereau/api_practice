@@ -6,4 +6,10 @@ class Notification < ActiveRecord::Base
   # attr_accessible :event_date, :cleared, :notification_type_id
 
   scope :active, -> { where(cleared: false) }
+
+  validates :event_date, presence: true
+
+  PERMITTED_ATTRIBUTES = [
+    :contact_id, :notification_type_id, :event_date, :cleared, :donation_id
+  ].freeze
 end

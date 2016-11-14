@@ -3,15 +3,15 @@ class Api::V2::User::AuthenticationsController < Api::V2::UsersController
   before_action :load_user
 
   def create
-    return render text: load_authentication if @user
+    render json: { json_web_token: load_authentication }
   end
 
   protected
 
   def load_user
     @user ||= User.from_access_token(params[:access_token])
-    return @user if @user
-    raise Exceptions::AuthenticationError
+    raise Exceptions::AuthenticationError unless @user
+    @user
   end
 
   def load_authentication

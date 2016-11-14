@@ -1,5 +1,6 @@
 require 'spec_helper'
 require 'rspec_api_documentation/dsl'
+require 'json'
 
 resource 'User / Authentication' do
   let(:user) { create(:user_with_account) }
@@ -12,13 +13,12 @@ resource 'User / Authentication' do
   end
 
   post '/api/v2/user/authentication' do
+    parameter :access_token, 'Access Token', type: 'String'
+    response_field :json_web_token, 'Json Web Token', type: 'String'
+
     example_request 'Get Authentication' do
       expect(status).to eq(200)
-      expect(JsonWebToken.decode(response_body)).to eq('user_id' => user.id)
-    end
-    example_request 'Get Authentication [Unathorized]', access_token: 'wrong_token' do
-      expect(status).to eq(401)
-      expect(json_response).to eq('errors' => ['Unauthorized'])
+      expect(JsonWebToken.decode(JSON.parse(response_body)['json_web_token'])).to eq('user_id' => user.id)
     end
   end
 end

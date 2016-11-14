@@ -1,10 +1,19 @@
 class Api::V2Controller < ApiController
+  include Pundit
+
   before_action :jwt_authorize!
+  after_action :verify_authorized, except: [:index, :create]
+
+  rescue_from Pundit::NotAuthorizedError, with: :render_403
 
   protected
 
+  def current_account_list
+    @current_account_list ||= current_user.account_lists.first
+  end
+
   def current_user
-    @current_user ||= User.find(jwt_payload['user_id'])
+    @current_user ||= User.find(jwt_payload['user_id']) if jwt_payload
   end
 
   private
@@ -28,6 +37,6 @@ class Api::V2Controller < ApiController
   end
 
   def jwt_payload
-    @jwt_payload ||= JsonWebToken.decode(http_token)
+    @jwt_payload ||= JsonWebToken.decode(http_token) if http_token
   end
 end

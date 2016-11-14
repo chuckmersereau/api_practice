@@ -1,6 +1,6 @@
 class DonationReports::DonationInfo
   include ActiveModel::Model
-  include ActiveModel::SerializerSupport
+  include ActiveModel::Serializers
 
   ATTRIBUTES = [
     :liklihood_type, :amount, :currency, :donation_date, :converted_amount,

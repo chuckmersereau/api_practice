@@ -1,0 +1,2 @@
+class ImportPolicy < AccountListPolicy
+end

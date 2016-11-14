@@ -2,7 +2,8 @@ require 'spec_helper'
 
 describe AccountListInviteMailer do
   context '#email' do
-    let(:invite) { build(:account_list_invite) }
+    let(:user_inviting) { create(:user) }
+    let(:invite) { build(:account_list_invite, invited_by_user_id: user_inviting.id) }
     let(:mail) { AccountListInviteMailer.email(invite) }
 
     it 'renders the headers' do

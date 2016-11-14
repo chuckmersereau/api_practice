@@ -4,6 +4,10 @@ FactoryGirl.define do
   factory :designation_account do
     sequence(:designation_number, &:to_s)
     association :organization
+    balance 9.99
+    name 'Designation Name'
+    created_at Date.new
+    updated_at Date.new
   end
 
   factory :designation_account_with_donor, parent: :designation_account do

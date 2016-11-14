@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe DonationSerializer do
+describe DonationSerializer, deprecated: true do
   let(:account_list) { create(:account_list) }
   let(:donor_account) { create(:donor_account) }
   let!(:contact) do

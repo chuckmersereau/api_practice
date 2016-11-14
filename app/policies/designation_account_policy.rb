@@ -1,0 +1,2 @@
+class DesignationAccountPolicy < AccountListPolicy
+end

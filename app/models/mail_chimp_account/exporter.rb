@@ -319,6 +319,8 @@ class MailChimpAccount::Exporter
   end
 
   def webhook_url
+    # return 'https://mpdx.org/mail_chimp_webhook/abc123' if Rails.env.test?
+
     (Rails.env.development? ? 'http://' : 'https://') +
       Rails.application.routes.default_url_options[:host] + '/mail_chimp_webhook/' + account.webhook_token
   end

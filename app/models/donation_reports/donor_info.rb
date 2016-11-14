@@ -1,6 +1,6 @@
 class DonationReports::DonorInfo
   include ActiveModel::Model
-  include ActiveModel::SerializerSupport
+  include ActiveModel::Serializers
 
   ATTRIBUTES = [
     :id, :name, :status, :pledge_amount, :pledge_frequency, :pledge_currency,

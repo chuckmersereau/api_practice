@@ -4,7 +4,6 @@ class CredentialValidator < ActiveModel::Validator
     # on username or password or organization
     return if record.errors[:username].present? || record.errors[:password].present? || record.errors[:organization_id].present?
     return if valid_credentials?(record)
-
     record.errors[:base] << _('Your username and password for %{org} are invalid.').localize % { org: record.organization }
   end
 

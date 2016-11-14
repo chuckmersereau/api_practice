@@ -6,6 +6,8 @@ class Person::GoogleAccount < ActiveRecord::Base
   has_many :google_emails, foreign_key: :google_account_id
   has_many :google_contacts, foreign_key: :google_account_id
 
+  PERMITTED_ATTRIBUTES = [:remote_id, :person_id, :token, :email, :primary].freeze
+
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.google_accounts
     Rails.logger.debug(auth_hash)

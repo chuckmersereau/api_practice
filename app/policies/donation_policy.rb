@@ -1,0 +1,2 @@
+class DonationPolicy < AccountListPolicy
+end

@@ -2,10 +2,10 @@
 
 FactoryGirl.define do
   factory :import do
+    source 'facebook'
     association :account_list
     association :user
     importing false
-    source 'facebook'
     after :create do |i|
       i.user.email_addresses << create(:email_address)
     end

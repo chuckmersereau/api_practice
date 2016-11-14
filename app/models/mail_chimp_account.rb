@@ -24,6 +24,10 @@ class MailChimpAccount < ActiveRecord::Base # rubocop:disable RedundantReturn
   serialize :status_interest_ids, Hash
   serialize :tags_interest_ids, Hash
 
+  PERMITTED_ATTRIBUTES = [
+    :api_key, :grouping_id, :primary_list_id, :auto_log_campaigns, :sync_all_active_contacts
+  ].freeze
+
   def lists
     return [] unless api_key.present?
     @list_response ||= gb.lists.retrieve(params: { count: 100 })
@@ -300,6 +304,18 @@ class MailChimpAccount < ActiveRecord::Base # rubocop:disable RedundantReturn
     contacts.includes(people: :primary_email_address)
             .where.not(email_addresses: { historic: true })
             .references('email_addresses')
+  end
+
+  def primary_list_name
+    primary_list.try(:name)
+  end
+
+  def lists_available_for_newsletters_formatted
+    lists_available_for_newsletters.collect { |l| { name: l.name, id: l.id } }
+  end
+
+  def lists_link
+    "https://#{datacenter}.admin.mailchimp.com/lists/"
   end
 
   private

@@ -1,9 +1,7 @@
-class AccountListSerializer < ActiveModel::Serializer
-  # cached
-  # delegate :cache_key, to: :object
+class AccountListSerializer < BaseSerializer
+  attributes :id, :name, :created_at, :updated_at, :monthly_goal, :total_pledges, :default_organization_id
 
-  embed :ids, include: true
-  attributes :id, :name, :created_at, :updated_at, :monthly_goal, :total_pledges
-
-  has_many :designation_accounts
+  def default_organization_id
+    object.designation_profiles.first.try(:organization_id) || object.users.first.try(:organization_accounts).try(:first).try(:organization_id)
+  end
 end

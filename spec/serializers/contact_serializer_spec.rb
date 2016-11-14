@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe ContactSerializer do
+describe ContactSerializer, deprecated: true do
   describe 'contacts list' do
     let(:contact) do
       c = create(:contact)
