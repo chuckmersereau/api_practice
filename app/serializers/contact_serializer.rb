@@ -1,6 +1,7 @@
 class ContactSerializer < ActiveModel::Serializer
   include DisplayCase::ExhibitsHelper
   include ActionView::Helpers::NumberHelper
+  include Rails.application.routes.url_helpers
 
   # cached
 
@@ -16,7 +17,7 @@ class ContactSerializer < ActiveModel::Serializer
     has_many i
   end
 
-  def attributes
+  def attributes(options={})
     hash = super
 
     if scope.is_a?(Hash) && scope[:since]
