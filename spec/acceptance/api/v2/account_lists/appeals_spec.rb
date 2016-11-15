@@ -30,8 +30,9 @@ resource 'Appeals' do
         response_field 'end-date',              'End Date', 'Type' => 'Date'
         response_field 'created-at',            'Created At', 'Type' => 'Date'
         response_field 'currencies',            'Currencies', 'Type' => 'Array'
-        response_field 'total-currency',        'Total currency', 'Type' => ''
+        response_field 'total-currency',        'Total currency', 'Type' => 'String'
         response_field 'donations',             'Donations', 'Type' => 'Array'
+        response_field 'contacts',              'Contacts', 'Type' => 'Array'
       end
       example_request 'get appeal' do
         expect(resource_object.keys).to eq %w(name amount description end-date created-at currencies total-currency donations contacts)
