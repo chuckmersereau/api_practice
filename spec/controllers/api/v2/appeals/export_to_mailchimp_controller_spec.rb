@@ -8,7 +8,7 @@ describe Api::V2::Appeals::ExportToMailchimpController, type: :controller do
   let(:account_list_id) { account_list.id }
   let(:appeal_id) { appeal.id }
   let(:primary_list_id) { '1e72b58b72' }
-  let(:mail_chimp_account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
+  let(:mail_chimp_account) { build(:mail_chimp_account, primary_list_id: primary_list_id) }
 
   before do
     stub_request(:get, "https://apikey:fake-us4@us4.api.mailchimp.com/3.0/lists/1/members?count=100&offset=0").

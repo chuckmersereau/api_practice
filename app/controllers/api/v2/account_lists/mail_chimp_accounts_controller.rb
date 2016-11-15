@@ -2,6 +2,10 @@ module Api
   module V2
     module AccountLists
       class MailChimpAccountsController < AccountListsController
+        def pundit_user
+          current_user
+        end
+
         def sync
           load_resource
           authorize @resource

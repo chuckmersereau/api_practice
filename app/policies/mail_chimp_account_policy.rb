@@ -1,4 +1,8 @@
 class MailChimpAccountPolicy < ApplicationPolicy
+	def sync?
+		resource_owner?
+	end
+
 	private
 
 	def resource_owner?
