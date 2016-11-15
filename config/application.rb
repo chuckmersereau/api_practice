@@ -26,7 +26,6 @@ module Mpdx
     config.active_record.cache_timestamp_format = :nsec
 
     config.log_formatter = ::Logger::Formatter.new
-    config.middleware.swap Rails::Rack::Logger, Silencer::Logger, config.log_tags, silence: ['/monitors/lb']
 
     config.assets.enabled = false
     config.api_only = true

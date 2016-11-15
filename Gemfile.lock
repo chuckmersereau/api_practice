@@ -611,8 +611,6 @@ GEM
       faraday (~> 0.9)
       jwt (~> 1.5)
       multi_json (~> 1.10)
-    silencer (0.6.0)
-      railties (>= 3)
     simplecov (0.12.0)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -777,7 +775,6 @@ DEPENDENCIES
   sidekiq-pro (~> 3.4.0)!
   sidekiq-unique-jobs!
   siebel_donations (~> 1.0.6)
-  silencer (~> 0.6.0)
   simplecov (~> 0.12.0)
   simplecov-lcov (~> 0.5.0)
   sinatra (~> 1.4.7)
