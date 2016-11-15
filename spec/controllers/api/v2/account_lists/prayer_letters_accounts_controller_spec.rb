@@ -8,7 +8,8 @@ describe Api::V2::AccountLists::PrayerLettersAccountsController, type: :controll
   let!(:contact) { create(:contact, account_list: account_list, send_newsletter: 'Both') }
 
   let!(:resource) { create(:prayer_letters_account, account_list: account_list) }
-  let(:parent_path) { { account_list_id: account_list_id } }
+  let(:parent_param) { { account_list_id: account_list_id } }
+  let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:prayer_letters_account) }
   let(:incorrect_attributes) { attributes_for(:prayer_letters_account, oauth2_token: nil) }
 

@@ -1,5 +1,6 @@
 class Api::V2::User::AuthenticationsController < Api::V2::UsersController
   skip_before_action :jwt_authorize!
+  skip_after_action :verify_authorized
   before_action :load_user
 
   def create

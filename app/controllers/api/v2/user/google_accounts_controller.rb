@@ -5,7 +5,7 @@ class Api::V2::User::GoogleAccountsController < Api::V2::ResourceController
     current_user.google_accounts
   end
 
-  def resource_attributes
-    Person::GoogleAccount::PERMITTED_ATTRIBUTES
+  def resource_class
+    Person::GoogleAccount
   end
 end

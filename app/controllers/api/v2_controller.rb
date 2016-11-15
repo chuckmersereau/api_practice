@@ -2,7 +2,7 @@ class Api::V2Controller < ApiController
   include Pundit
 
   before_action :jwt_authorize!
-  after_action :verify_authorized, except: [:index, :create]
+  after_action :verify_authorized, except: :index
 
   rescue_from Pundit::NotAuthorizedError, with: :render_403
 

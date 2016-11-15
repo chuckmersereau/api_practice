@@ -13,7 +13,7 @@ describe Api::V2::AccountLists::DesignationAccountsController, type: :controller
   end
 
   let(:resource) { designation_account }
-  let(:parent_path) { { account_list_id: account_list_id } }
+  let(:parent_param) { { account_list_id: account_list_id } }
   let(:correct_attributes) { attributes_for(:designation_account) }
 
   include_examples 'index_examples'

@@ -18,9 +18,10 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
   end
 
   let(:resource) { donation }
-  let(:parent_path) { { account_list_id: account_list_id } }
+  let(:parent_param) { { account_list_id: account_list_id } }
   let(:correct_attributes) { attributes_for(:donation) }
   let(:incorrect_attributes) { { donation_date: nil } }
+  let(:unpermitted_attributes) { nil }
 
   include_examples 'index_examples'
 

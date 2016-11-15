@@ -11,15 +11,11 @@ class Api::V2::ResourceController < Api::V2Controller
   end
 
   def create
-    build_resource
-    return show if save_resource
-    render_400_with_errors(@resource)
+    persist_resource
   end
 
   def update
-    build_resource
-    return show if save_resource
-    render_400_with_errors(@resource)
+    persist_resource
   end
 
   def destroy
@@ -29,12 +25,18 @@ class Api::V2::ResourceController < Api::V2Controller
 
   private
 
+  def persist_resource
+    build_resource
+    return show if save_resource
+    render_400_with_errors(@resource)
+  end
+
   def load_resources
     @resources ||= resource_scope.to_a
   end
 
   def load_resource
-    @resource ||= resource_scope.find(params[:id])
+    @resource ||= resource_class.find(params[:id])
   end
 
   def authorize_resource
@@ -48,6 +50,7 @@ class Api::V2::ResourceController < Api::V2Controller
   def build_resource
     @resource ||= resource_scope.build
     @resource.assign_attributes(resource_params)
+    authorize @resource
   end
 
   def save_resource
@@ -57,6 +60,10 @@ class Api::V2::ResourceController < Api::V2Controller
   def resource_params
     transform_params_field_names
     params.require(:data).require(:attributes).permit(resource_attributes)
+  end
+
+  def resource_attributes
+    "#{resource_class}::PERMITTED_ATTRIBUTES".constantize
   end
 
   def transform_params_field_names

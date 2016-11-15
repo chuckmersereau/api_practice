@@ -8,7 +8,7 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
   let(:primary_list_id) { '1e72b58b72' }
   let(:primary_list_id_2) { '29a77ba541' }
   let(:mail_chimp_account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
-  let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
+  let!(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
   let(:appeal) { create(:appeal, account_list: account_list) }
 
   before do
@@ -20,9 +20,10 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
   end
 
   let!(:resource) { mail_chimp_account }
-  let(:parent_path) { { account_list_id: account_list_id } }
-  let(:correct_attributes) { attributes_for(:mail_chimp_account, primary_list_id: primary_list_id) }
-  let(:incorrect_attributes) { attributes_for(:mail_chimp_account, api_key: nil) }
+  let(:parent_param) { { account_list_id: account_list_id } }
+  let(:correct_attributes) { build(:mail_chimp_account, primary_list_id: primary_list_id).attributes }
+  let(:incorrect_attributes) { build(:mail_chimp_account, api_key: nil).attributes }
+  let(:unpermitted_attributes) { nil }
 
   include_examples 'show_examples'
 

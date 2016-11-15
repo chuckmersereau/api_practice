@@ -9,9 +9,11 @@ describe Api::V2::AccountLists::InvitesController, type: :controller do
   let(:id) { invite.id }
 
   let(:resource) { invite }
-  let(:parent_path) { { account_list_id: account_list_id } }
+  let(:parent_param) { { account_list_id: account_list_id } }
+  let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { { recipient_email: 'test@example.com' } }
   let(:incorrect_attributes) { { recipient_email: nil } }
+  let(:unpermitted_attributes) { nil }
 
   include_examples 'index_examples'
 
