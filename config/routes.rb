@@ -25,12 +25,12 @@ Rails.application.routes.draw do
           end
           resources :notifications, only: [:index, :show, :create, :update, :destroy]
           resources :donations, only: [:index, :show, :create, :update]
-          resources :appeals do
-            scope module: :appeals do
-              resources :contacts, only: [:index, :show, :destroy]
-              resource :export_to_mailchimp, only: [:show], controller: :export_to_mailchimp
-            end
-          end
+        end
+      end
+      resources :appeals, only: [:index, :show, :create, :update, :destroy] do
+        scope module: :appeals do
+          resources :contacts, only: [:index, :show, :destroy]
+          resource :export_to_mailchimp, only: [:show], controller: :export_to_mailchimp
         end
       end
       resource :user, only: [:show, :update] do

@@ -1,4 +1,4 @@
-class Api::V2::AccountLists::Appeals::ContactsController < Api::V2::AccountLists::AppealsController
+class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
 	def resource_scope
 		params[:excluded] ? excluded_contacts : contacts
 	end

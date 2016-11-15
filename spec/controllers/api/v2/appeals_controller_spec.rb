@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Api::V2::AccountLists::AppealsController, type: :controller do
+describe Api::V2::AppealsController, type: :controller do
   let(:resource_type) { 'appeal' }
   let!(:user) { create(:user_with_full_account) }
   let!(:account_list) { user.account_lists.first }
