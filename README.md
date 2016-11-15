@@ -14,7 +14,6 @@ This repo sets up the API endpoint necessary for the app to work.
 * Ruby version corresponding to the version in file `.ruby-version`
 * PostgreSQL
 * Redis
-* npm
 
 On Mac OS you can use Homebrew to setup these requirements.
 
@@ -37,12 +36,6 @@ $ bundle config gems.contribsys.com user:password
 Then install gems:
 ```bash
 $ bundle install
-```
-
-### Install Javascript Dependencies
-
-```bash
-$ npm install
 ```
 
 ### Create Databases
@@ -79,14 +72,7 @@ After you login successfully the sidekiq process should begin importing your fak
 There are four different test sets that we are running:
 
 - Regular RSpec: `bin/rspec spec`
-- Poltergeist specs: `bin/rspec spec --tag js`
-- Karma: `bin/rake karma:run`
 - Rubocop: `bin/rubocop -R`
-
-### Debugging Karma tests
-
-1. Run `bin/rake karma:start`
-2. Click `Debug` in the browser window that opens
 
 ### Rubocop
 
