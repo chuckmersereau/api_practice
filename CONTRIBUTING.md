@@ -5,8 +5,8 @@ major steps to contributing code to the project.
 
 ### 1. Create an Issue on GitHub
 
-The first step to contributing to MPDX is creating a ticket in our
-[ticketing system on GitHub](https://github.com/CruGlobal/mpdx/issues).
+The first step to contributing to MPDX_API is creating a ticket in our
+[ticketing system on GitHub](https://github.com/CruGlobal/mpdx_api/issues).
 Please take a second to search for the issue or feature before creating a new one.
 
 All bug fixes should have a ticket. This makes it easy for everyone
@@ -15,7 +15,7 @@ to discuss the code and know if a fix is already in progress for an issue.
 
 ### 2. Fork & Create a Feature Branch
 
-The next step is to fork MPDX (if you haven't already done so) and
+The next step is to fork MPDX_API (if you haven't already done so) and
 create a new git branch based on the feature or issue you're working on. Please
 use a descriptive name for your branch.
 
@@ -31,7 +31,7 @@ The readme contains requirements and steps for setting up your local development
 
 If something in the readme is wrong or missing please submit an issue or PR to help fix it!
 
-https://github.com/CruGlobal/mpdx/blob/master/README.md
+https://github.com/CruGlobal/mpdx_api/blob/master/README.md
 
 
 ### 4. Get the test suite running
@@ -55,35 +55,17 @@ MPDX also includes the `guard` gem, so if you like continuous testing during dev
 
 Several callback services (including facebook and CAS) like to have a real hostname
 to redirect to. To work with those we recommend that you create an entry in your `hosts`
-file for local.mpdx.org like this:
+file for local.mpdx_api.org like this:
 
-`127.0.0.1 local.mpdx.org`
+`127.0.0.1 local.mpdx_api.org`
 
 You might have to reboot after editing /etc/hosts before your computer picks up on it.
 
 
-### 6. View your changes in a Rails application
-
-MPDX is meant to be used by humans, not cucumbers. So make sure to take
-a look at your changes in a browser (preferably a few browsers if you made view
-changes).
-
-To boot up a test rails application, use:
-
-    $> bin/rails s
-
-You should be able to open `http://localhost:3000/` and view a test
-environment.
-
-Run:
-
-`bin/rake organizations:fetch`
-
-
-### 7. Make a pull request
+### 6. Make a pull request
 
 At this point, you should switch back to your master branch and make sure it's
-up to date with MPDX's master branch. If there were any changes, you
+up to date with MPDX_API's master branch. If there were any changes, you
 should rebase your feature branch and make sure that it will merge correctly. If
 there are any merge conflicts, your pull request will not be merged in.
 
