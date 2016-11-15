@@ -9,7 +9,6 @@ describe Api::V2::AccountLists::Appeals::ExportToMailchimpController, type: :con
   let(:appeal_id) { appeal.id }
   let(:primary_list_id) { '1e72b58b72' }
   let(:mail_chimp_account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
-  let(:form_data) { build_data({appeal_list_id: primary_list_id}) }
 
   before do
     stub_request(:get, "https://apikey:fake-us4@us4.api.mailchimp.com/3.0/lists/1/members?count=100&offset=0").
@@ -27,13 +26,13 @@ describe Api::V2::AccountLists::Appeals::ExportToMailchimpController, type: :con
     it 'queues export' do
       api_login(user)
       expect(mail_chimp_account.account_list).to eq account_list
-      get :show, params: { account_list_id: account_list_id, appeal_id: appeal_id }
+      get :show, { account_list_id: account_list_id, appeal_id: appeal_id, 'appeal-list-id': primary_list_id }
       expect(response).to be_success
     end
 
     it 'fails authorization' do
-      get :show, params: { account_list_id: account_list_id, appeal_id: appeal_id }
-      expect(response).to eq(401)
+      get :show, { account_list_id: account_list_id, appeal_id: appeal_id, 'appeal-list-id': primary_list_id }
+      expect(response.status).to eq(401)
     end
   end
 end

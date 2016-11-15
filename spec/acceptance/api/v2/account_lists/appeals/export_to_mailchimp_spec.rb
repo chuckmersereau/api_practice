@@ -27,7 +27,7 @@ resource 'Mailchimp' do
 
   context 'authorized user' do
     get '/api/v2/account_lists/:account_list_id/appeals/:appeal_id/export_to_mailchimp' do
-      parameter 'appeal-list-id',              'Appeal List ID', required: true, scope: [:data, :attributes]
+      parameter 'appeal-list-id',              'Appeal List ID', required: true
       example 'list designation accounts of account list' do
         do_request data: form_data
         expect(status).to eq 200
