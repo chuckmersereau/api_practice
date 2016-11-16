@@ -4,6 +4,8 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
     render_200
   end
 
+  private
+
   def load_resource
     @resource ||= resource_scope
     raise ActiveRecord::RecordNotFound unless @resource
@@ -12,8 +14,6 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   def resource_scope
     current_account_list.mail_chimp_account
   end
-
-  private
 
   def contacts
     current_appeal.contacts
