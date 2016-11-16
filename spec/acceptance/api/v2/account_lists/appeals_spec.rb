@@ -8,7 +8,7 @@ resource 'Appeals' do
   let(:account_list_id) { account_list.id }
   let!(:appeal) { create(:appeal, account_list: account_list) }
   let(:id) { appeal.id }
-  let(:form_data) { build_data( { name: 'New Appeal Name' } ) }
+  let(:form_data) { build_data(name: 'New Appeal Name') }
 
   context 'authorized user' do
     before do

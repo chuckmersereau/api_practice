@@ -10,7 +10,7 @@ RSpec.describe Api::V2::User::AuthenticationsController, type: :controller do
     end
 
     it 'doesnt issue a token to users with invalid access token' do
-      post :create, params: { access_token: 'wrong_token' }
+      post :create, access_token: 'wrong_token'
       expect(response.status).to eq(401)
       expect(response.body).to include('Unauthorized')
     end

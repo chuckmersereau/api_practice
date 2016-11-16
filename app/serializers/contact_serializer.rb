@@ -17,7 +17,7 @@ class ContactSerializer < ActiveModel::Serializer
     has_many i
   end
 
-  def attributes(options={})
+  def attributes(options = {})
     hash = super
 
     if scope.is_a?(Hash) && scope[:since]

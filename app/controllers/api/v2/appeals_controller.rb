@@ -6,7 +6,7 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   def resource_attributes
     Appeal::PERMITTED_ATTRIBUTES
   end
-  
+
   def current_appeal
     @current_appeal ||= appeal_scope.find(relevant_appeal_id)
   end

@@ -9,7 +9,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
     raise ActiveRecord::RecordNotFound unless @resource
   end
 
-  def resource_scope 
+  def resource_scope
     current_account_list.mail_chimp_account
   end
 

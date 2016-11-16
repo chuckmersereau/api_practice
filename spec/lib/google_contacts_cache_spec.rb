@@ -23,9 +23,9 @@ describe GoogleContactsCache do
     it 'retrieves cached g_contacts; when set to cache all returns nil and not in cache' do
       cache.cache_g_contacts([john1, john2], true)
 
-      expect(cache.find_by(id: 'john1')).to eq(john1)
-      expect(cache.find_by(id: 'john2')).to eq(john2)
-      expect(cache.find_by(id: 'not-john')).to be_nil
+      expect(cache.find_by_id('john1')).to eq(john1)
+      expect(cache.find_by_id('john2')).to eq(john2)
+      expect(cache.find_by_id('not-john')).to be_nil
 
       expect(cache.query_by_full_name('John Doe')).to eq([john1, john2])
       expect(cache.query_by_full_name('Not-John')).to eq([])
@@ -33,8 +33,8 @@ describe GoogleContactsCache do
 
     it 'retrieves cached g_contacts; when not set to cache all, calls the api when not in cache' do
       cache.cache_g_contacts([john1, john2], false)
-      expect(cache.find_by(id: 'john1')).to eq(john1)
-      expect(cache.find_by(id: 'john2')).to eq(john2)
+      expect(cache.find_by_id('john1')).to eq(john1)
+      expect(cache.find_by_id('john2')).to eq(john2)
 
       api_user = double
 
@@ -42,7 +42,7 @@ describe GoogleContactsCache do
       api_john = double
       expect(api_user).to receive(:get_contact).with('api_john').and_return(api_john)
       expect(api_john).to receive(:deleted?).and_return(false)
-      expect(cache.find_by(id: 'api_john')).to eq(api_john)
+      expect(cache.find_by_id('api_john')).to eq(api_john)
 
       expect(account).to receive(:contacts_api_user).and_return(api_user)
       api_john_query = double
@@ -55,16 +55,16 @@ describe GoogleContactsCache do
     it 'allows you to remove a contact from the cache and then will call the api for get contact after that' do
       cache.cache_g_contacts([john1, john2], true)
 
-      expect(cache.find_by(id: 'john1')).to eq(john1)
-      expect(cache.find_by(id: 'john2')).to eq(john2)
+      expect(cache.find_by_id('john1')).to eq(john1)
+      expect(cache.find_by_id('john2')).to eq(john2)
       expect(cache.query_by_full_name('John Doe')).to eq([john1, john2])
 
-      expect(cache.find_by(id: 'not-john')).to be_nil
+      expect(cache.find_by_id('not-john')).to be_nil
       expect(cache.query_by_full_name('Not-John')).to eq([])
 
       cache.remove_g_contact(john1)
 
-      expect(cache.find_by(id: 'john2')).to eq(john2)
+      expect(cache.find_by_id('john2')).to eq(john2)
       expect(cache.query_by_full_name('John Doe')).to eq([john2])
 
       api_user = double
@@ -72,7 +72,7 @@ describe GoogleContactsCache do
       api_john1 = double
       expect(api_user).to receive(:get_contact).with('john1').and_return(api_john1)
       expect(api_john1).to receive(:deleted?).and_return(false)
-      expect(cache.find_by(id: 'john1')).to eq(api_john1)
+      expect(cache.find_by_id('john1')).to eq(api_john1)
     end
   end
 end

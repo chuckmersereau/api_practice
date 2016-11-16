@@ -20,10 +20,10 @@ resource 'Contacts' do
       parameter 'account-list-id',              'Account List ID', required: true
       response_field :data,                     'Data', 'Type' => 'Array'
       example_request 'list contacts of appeal of account list' do
-        expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol 
-          pledge-start-date pledge-received status deceased notes notes-saved-at next-ask no-appeals likely-to-give
-          church-name send-newsletter magazine last-activity last-appointment last-letter last-phone-call last-pre-call
-          last-thank avatar square-avatar referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
+        expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol
+                                               pledge-start-date pledge-received status deceased notes notes-saved-at next-ask no-appeals likely-to-give
+                                               church-name send-newsletter magazine last-activity last-appointment last-letter last-phone-call last-pre-call
+                                               last-thank avatar square-avatar referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
         expect(status).to eq 200
       end
     end
@@ -61,10 +61,10 @@ resource 'Contacts' do
         response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array'
       end
       example_request 'get appeal' do
-        expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol 
-          pledge-start-date pledge-received status deceased notes notes-saved-at next-ask no-appeals likely-to-give
-          church-name send-newsletter magazine last-activity last-appointment last-letter last-phone-call last-pre-call
-          last-thank avatar square-avatar referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
+        expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol
+                                               pledge-start-date pledge-received status deceased notes notes-saved-at next-ask no-appeals likely-to-give
+                                               church-name send-newsletter magazine last-activity last-appointment last-letter last-phone-call last-pre-call
+                                               last-thank avatar square-avatar referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
         expect(status).to eq 200
       end
     end
