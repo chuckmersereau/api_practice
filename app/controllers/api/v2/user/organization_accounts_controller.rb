@@ -5,7 +5,7 @@ class Api::V2::User::OrganizationAccountsController < Api::V2::ResourceControlle
     current_user.organization_accounts
   end
 
-  def resource_attributes
-    Person::OrganizationAccount::PERMITTED_ATTRIBUTES
+  def resource_class
+    Person::OrganizationAccount
   end
 end

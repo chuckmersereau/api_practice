@@ -6,6 +6,7 @@ RSpec.describe Api::V2::User::KeyAccountsController, type: :controller do
   let(:resource_type) { :key_account }
   let!(:resource) { create(:key_account, person: user) }
   let(:id) { resource.id }
+  let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { { email: 'test@email.com', remote_id: 200 } }
   let(:incorrect_attributes) { { remote_id: nil } }
 

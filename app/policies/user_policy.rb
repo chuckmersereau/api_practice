@@ -1,19 +1,11 @@
 class UserPolicy < ApplicationPolicy
-  def index?
-    true
-  end
-
-  def show?
-    true
-  end
-
   def destroy?
-    resource != user
+    resource != user && resource_owner?
   end
 
   private
 
   def resource_owner?
-    resource == user
+    user == resource || (user.account_lists.ids & resource.account_lists.ids).present?
   end
 end

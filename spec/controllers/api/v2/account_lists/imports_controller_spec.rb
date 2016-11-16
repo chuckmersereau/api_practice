@@ -19,9 +19,10 @@ describe Api::V2::AccountLists::ImportsController, type: :controller do
   end
 
   let(:resource) { import }
-  let(:parent_path) { { account_list_id: account_list_id } }
+  let(:parent_param) { { account_list_id: account_list_id } }
   let(:correct_attributes) { attributes_for(:import, account_list_id: account_list.id, user_id: user.id, source_account_id: fb_account) }
   let(:incorrect_attributes) { { source: nil } }
+  let(:unpermitted_attributes) { nil }
 
   include_examples 'show_examples'
 

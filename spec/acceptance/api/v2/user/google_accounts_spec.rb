@@ -6,7 +6,7 @@ resource 'Google Accounts' do
   let!(:user) { create(:user_with_full_account) }
   let!(:google_account) { create(:google_account, person: user) }
   let(:id) { google_account.id }
-  let(:new_google_account) { build(:google_account).attributes }
+  let(:new_google_account) { build(:google_account, person: user).attributes }
   let(:form_data) { build_data(new_google_account) }
 
   context 'authorized user' do

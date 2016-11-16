@@ -1,15 +1,11 @@
-module Api
-  module V2
-    module AccountLists
-      class ImportsController < AccountListsController
-        def resource_attributes
-          Import::PERMITTED_ATTRIBUTES
-        end
+class Api::V2::AccountLists::ImportsController < Api::V2::AccountListsController
+  private
 
-        def resource_scope
-          current_account_list.imports
-        end
-      end
-    end
+  def resource_class
+    Import
+  end
+
+  def resource_scope
+    current_account_list.imports
   end
 end

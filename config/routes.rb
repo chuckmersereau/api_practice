@@ -36,6 +36,12 @@ Rails.application.routes.draw do
       resource :user, only: [:show, :update] do
         resources :google_accounts, :key_accounts, :organization_accounts, module: :user
       end
+      resources :tasks do
+        scope module: :tasks do
+          resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
+          resources :analytics, only: :index
+        end
+      end
     end
   end
 

@@ -8,6 +8,7 @@ describe Api::V2::AccountListsController, type: :controller do
   let(:id) { account_list.id }
 
   let(:resource) { account_list }
+  let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:account_list) }
   let(:incorrect_attributes) { { name: nil } }
 

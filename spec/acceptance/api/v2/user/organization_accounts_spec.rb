@@ -6,7 +6,7 @@ resource 'Organization Accounts' do
   let!(:user) { create(:user_with_full_account) }
   let!(:organization_account) { create(:organization_account, person: user) }
   let(:id) { organization_account.id }
-  let(:new_organization_account_params) { build(:organization_account).attributes }
+  let(:new_organization_account_params) { build(:organization_account, person: user).attributes }
   let(:form_data) { build_data(new_organization_account_params) }
 
   context 'authorized user' do

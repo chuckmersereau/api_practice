@@ -1,11 +1,11 @@
-module Api
-  module V2
-    module AccountLists
-      class DonorAccountsController < AccountListsController
-        def resource_scope
-          current_account_list.donor_accounts
-        end
-      end
-    end
+class Api::V2::AccountLists::DonorAccountsController < Api::V2::AccountListsController
+  private
+
+  def resource_scope
+    current_account_list.donor_accounts
+  end
+
+  def resource_class
+    DonorAccount
   end
 end

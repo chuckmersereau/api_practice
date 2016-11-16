@@ -1,15 +1,11 @@
-module Api
-  module V2
-    module AccountLists
-      class NotificationsController < AccountListsController
-        def resource_attributes
-          Notification::PERMITTED_ATTRIBUTES
-        end
+class Api::V2::AccountLists::NotificationsController < Api::V2::AccountListsController
+  private
 
-        def resource_scope
-          current_account_list.notifications
-        end
-      end
-    end
+  def resource_class
+    Notification
+  end
+
+  def resource_scope
+    current_account_list.notifications
   end
 end

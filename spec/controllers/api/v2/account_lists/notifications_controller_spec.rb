@@ -11,7 +11,8 @@ describe Api::V2::AccountLists::NotificationsController, type: :controller do
   let(:id) { notification.id }
 
   let(:resource) { notification }
-  let(:parent_path) { { account_list_id: account_list_id } }
+  let(:parent_param) { { account_list_id: account_list_id } }
+  let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:notification, contact: contact, notification_type_id: 2) }
   let(:incorrect_attributes) { { event_date: nil, notification_type_id: 2 } }
 

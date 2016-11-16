@@ -3,8 +3,10 @@ class Api::V2::AccountListsController < Api::V2::ResourceController
     CurrentContext.new(current_user, current_account_list)
   end
 
-  def resource_attributes
-    AccountList::PERMITTED_ATTRIBUTES
+  protected
+
+  def resource_class
+    AccountList
   end
 
   def resource_scope
@@ -12,7 +14,7 @@ class Api::V2::AccountListsController < Api::V2::ResourceController
   end
 
   def current_account_list
-    @current_account_list ||= account_list_scope.find(relevant_account_list_id)
+    @current_account_list ||= AccountList.find(relevant_account_list_id)
   end
 
   private

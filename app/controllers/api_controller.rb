@@ -24,7 +24,15 @@ class ApiController < ActionController::API
     render json: { success: false }, status: 400
   end
 
-  def render_400_with_errors(resource)
-    render json: { success: false, errors: resource.errors.full_messages }, status: 400
+  def render_400_with_errors(resource_or_errors)
+    render json: { success: false, errors: fetch_errors(resource_or_errors) }, status: 400
+  end
+
+  def fetch_errors(resource_or_errors)
+    if resource_or_errors.is_a?(Hash)
+      resource_or_errors
+    else
+      resource_or_errors.errors.full_messages
+    end
   end
 end

@@ -6,7 +6,7 @@ resource 'Key Accounts' do
   let!(:user) { create(:user_with_full_account) }
   let!(:key_account) { create(:key_account, person: user) }
   let(:id) { key_account.id }
-  let(:new_key_account_params) { build(:key_account).attributes }
+  let(:new_key_account_params) { build(:key_account, person: user).attributes }
   let(:form_data) { build_data(new_key_account_params) }
 
   context 'authorized user' do

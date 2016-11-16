@@ -83,18 +83,18 @@ Run `bin/rubocop -D -R --auto-correct` to attempt auto-correction of your Ruboco
 
 ### master
 
-The master branch is deployed to production at [mpdx.org](https://mpdx.org/)
+The master branch is deployed to production at [api.mpdx.org](https://api.mpdx.org/)
 
 ### staging
 
-The staging branch is deployed to staging [stage.mpdx.org](https://stage.mpdx.org/), [Jenkins](http://jenkins.uscm.org/) will auto-deploy on successful builds.
+The staging branch is deployed to staging [stage.api.mpdx.org](https://stage.api.mpdx.org/), [Jenkins](http://jenkins.uscm.org/) will auto-deploy on successful builds.
 
 
 ## Issue Tracking, Bugs Reports, & Contributing
 
 * Issues Tracking: [Cru Jira](https://jira.cru.org)
 * Bug Reports: https://github.com/CruGlobal/mpdx/issues
-* Want to Contribute? Read the Guide: https://github.com/CruGlobal/mpdx/blob/master/CONTRIBUTING.md
+* Want to Contribute? Read the Guide: https://github.com/CruGlobal/mpdx_api/blob/master/CONTRIBUTING.md
 
 
 ## LICENSE:

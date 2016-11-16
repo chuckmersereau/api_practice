@@ -7,6 +7,7 @@ RSpec.describe Api::V2::UsersController, type: :controller do
   let(:resource) { user }
   let(:correct_attributes) { { first_name: 'test_first_name' } }
   let(:incorrect_attributes) { { first_name: nil } }
+  let(:unpermitted_attributes) { nil }
 
   include_examples 'show_examples'
 

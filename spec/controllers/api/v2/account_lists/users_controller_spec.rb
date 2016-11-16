@@ -15,9 +15,8 @@ describe Api::V2::AccountLists::UsersController, type: :controller do
   end
 
   let(:resource) { user2 }
-  let(:parent_path) { { account_list_id: account_list_id } }
+  let(:parent_param) { { account_list_id: account_list_id } }
   let(:correct_attributes) { attributes_for(:user) }
-  let(:incorrect_attributes) { { first_name: nil } }
 
   include_examples 'index_examples'
 
