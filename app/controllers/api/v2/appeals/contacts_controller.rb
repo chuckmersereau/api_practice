@@ -8,7 +8,7 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
   def resource_scope
     params[:excluded] ? excluded_contacts : contacts
   end
-  
+
   def contacts
     current_appeal.contacts
   end
