@@ -578,10 +578,10 @@ describe GoogleContactsIntegrator do
 
       expect(batch_create_or_update_calls).to eq(4)
       expect(GoogleContact.all.count).to eq(4)
-      expect(GoogleContact.find_by(contact: @contact, person: @person).remote_id).to eq(g_contact_ids['contact:John'])
-      expect(GoogleContact.find_by(contact: @contact, person: @person2).remote_id).to eq(g_contact_ids['contact:Jane'])
-      expect(GoogleContact.find_by(contact: @contact2, person: @person).remote_id).to eq(g_contact_ids['contact2:John'])
-      expect(GoogleContact.find_by(contact: @contact2, person: @person2).remote_id).to eq(g_contact_ids['contact2:Jane'])
+      expect(GoogleContact.where(contact: @contact, person: @person).first.remote_id).to eq(g_contact_ids['contact:John'])
+      expect(GoogleContact.where(contact: @contact, person: @person2).first.remote_id).to eq(g_contact_ids['contact:Jane'])
+      expect(GoogleContact.where(contact: @contact2, person: @person).first.remote_id).to eq(g_contact_ids['contact2:John'])
+      expect(GoogleContact.where(contact: @contact2, person: @person2).first.remote_id).to eq(g_contact_ids['contact2:Jane'])
 
       # Then we merge @contact with @contact2 (@contact wins), so we should delete the @contact2 g_contacts
       @contact.merge(@contact2)
@@ -589,15 +589,15 @@ describe GoogleContactsIntegrator do
       expect(@account.contacts_api_user).to receive(:delete_contact).with(g_contact_ids['contact2:Jane'])
       @integrator.sync_contacts
       expect(GoogleContact.all.count).to eq(2)
-      expect(GoogleContact.find_by(contact: @contact, person: @person).remote_id).to eq(g_contact_ids['contact:John'])
-      expect(GoogleContact.find_by(contact: @contact, person: @person2).remote_id).to eq(g_contact_ids['contact:Jane'])
+      expect(GoogleContact.where(contact: @contact, person: @person).first.remote_id).to eq(g_contact_ids['contact:John'])
+      expect(GoogleContact.where(contact: @contact, person: @person2).first.remote_id).to eq(g_contact_ids['contact:Jane'])
 
       # Then we merge @person with @person2 (@person wins), so we should delete @person2 g_contact
       @person.merge(@person2)
       expect(@account.contacts_api_user).to receive(:delete_contact).with(g_contact_ids['contact:Jane'])
       @integrator.sync_contacts
       expect(GoogleContact.all.count).to eq(1)
-      expect(GoogleContact.find_by(contact: @contact, person: @person).remote_id).to eq(g_contact_ids['contact:John'])
+      expect(GoogleContact.where(contact: @contact, person: @person).first.remote_id).to eq(g_contact_ids['contact:John'])
     end
   end
 

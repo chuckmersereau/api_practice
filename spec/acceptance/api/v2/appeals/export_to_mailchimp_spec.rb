@@ -21,7 +21,6 @@ resource 'Mailchimp' do
     allow_any_instance_of(MailChimpAccount).to receive(:validate_key)
     mail_chimp_account.account_list = account_list
     mail_chimp_account.save
-    mail_chimp_appeal_list = create(:mail_chimp_appeal_list, appeal_id: appeal.id, mail_chimp_account_id: mail_chimp_account.id, appeal_list_id: primary_list_id)
     api_login(user)
   end
 
