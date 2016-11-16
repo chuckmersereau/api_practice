@@ -8,7 +8,7 @@ resource 'Contacts' do
   let(:account_list_id) { account_list.id }
   let!(:appeal) { create(:appeal, account_list: account_list) }
   let(:appeal_id) { appeal.id }
-  let!(:contact) { create(:contact) }
+  let!(:contact) { create(:contact, account_list_id: account_list_id) }
   let(:id) { contact.id }
 
   context 'authorized user' do
@@ -16,8 +16,8 @@ resource 'Contacts' do
       appeal.contacts << contact
       api_login(user)
     end
-    get '/api/v2/account_lists/:account_list_id/appeals/:appeal_id/contacts' do
-      parameter 'account-list-id',              'Account List ID', required: true
+    get '/api/v2/appeals/:appeal_id/contacts' do
+      parameter 'account_list_id',              'Account List ID', required: true
       response_field :data,                     'Data', 'Type' => 'Array'
       example_request 'list contacts of appeal of account list' do
         expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol
@@ -27,7 +27,8 @@ resource 'Contacts' do
         expect(status).to eq 200
       end
     end
-    get '/api/v2/account_lists/:account_list_id/appeals/:appeal_id/contacts/:id' do
+    get '/api/v2/appeals/:appeal_id/contacts/:id' do
+      parameter 'account_list_id',              'Account List ID', required: true
       with_options scope: [:data, :attributes] do
         response_field 'name',                    'Name', 'Type' => 'String'
         response_field 'pledge-amount',           'Pledge Amount', 'Type' => 'Decimal'
@@ -60,7 +61,7 @@ resource 'Contacts' do
         response_field 'timezone',                'Timezone', 'Type' => 'String'
         response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array'
       end
-      example_request 'get appeal' do
+      example_request 'get contact' do
         expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol
                                                pledge-start-date pledge-received status deceased notes notes-saved-at next-ask no-appeals likely-to-give
                                                church-name send-newsletter magazine last-activity last-appointment last-letter last-phone-call last-pre-call
@@ -68,10 +69,10 @@ resource 'Contacts' do
         expect(status).to eq 200
       end
     end
-    delete '/api/v2/account_lists/:account_list_id/appeals/:appeal_id/contacts/:id' do
-      parameter 'account-list-id',              'Account List ID', required: true
+    delete '/api/v2/appeals/:appeal_id/contacts/:id' do
+      parameter 'account_list_id',              'Account List ID', required: true
       parameter 'id',                           'ID', required: true
-      example_request 'delete appeal' do
+      example_request 'delete contact from appeal' do
         expect(status).to eq 200
       end
     end
