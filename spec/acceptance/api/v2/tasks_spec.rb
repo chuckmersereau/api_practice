@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Google Accounts' do
+resource 'Tasks' do
   let(:resource_type) { 'tasks' }
   let!(:user) { create(:user_with_full_account) }
   let!(:task) { create(:task, account_list: user.account_lists.first) }
@@ -15,22 +15,22 @@ resource 'Google Accounts' do
     end
 
     get '/api/v2/tasks' do
-      response_field :data, 'list of google account objects', 'Type' => 'Array'
+      response_field :data, 'list of task objects', 'Type' => 'Array'
 
-      example_request 'get organization accounts' do
-        explanation 'List of Organization Accounts associated to current_user'
+      example_request 'get tasks' do
+        explanation 'List of Tasks associated to current_user'
         check_collection_resource(1, ['relationships'])
         expect(status).to eq 200
       end
     end
 
     get '/api/v2/tasks/:id' do
-      parameter :id, 'the Id of the Google Account'
+      parameter :id, 'the Id of the Task'
 
       with_options scope: :data do
-        response_field :id, 'google account id', 'Type' => 'Integer'
-        response_field :type, 'type of object (GoogleAccount in this case)', 'Type' => 'String'
-        response_field :relationships, 'list of relationships related to that google account object', 'Type' => 'Array'
+        response_field :id, 'task id', 'Type' => 'Integer'
+        response_field :type, 'type of object (Task in this case)', 'Type' => 'String'
+        response_field :relationships, 'list of relationships related to that task object', 'Type' => 'Array'
         with_options scope: :attributes do
           response_field :subject, 'Subject', type: 'Integer'
           response_field :account_list_id, 'Account List Id', type: 'Integer'
@@ -39,7 +39,7 @@ resource 'Google Accounts' do
           response_field :activity_type, 'Activity Type', type: 'String'
         end
       end
-      example_request 'get organization account' do
+      example_request 'get task' do
         check_resource(['relationships'])
         expect(status).to eq 200
       end
@@ -62,7 +62,7 @@ resource 'Google Accounts' do
     end
 
     put '/api/v2/tasks/:id' do
-      parameter :id, 'the Id of the Google Account'
+      parameter :id, 'the Id of the Task'
 
       with_options scope: [:data, :attributes] do
         parameter :subject, 'Subject', type: 'Integer', required: true
@@ -80,7 +80,7 @@ resource 'Google Accounts' do
     end
 
     delete '/api/v2/tasks/:id' do
-      parameter :id, 'the Id of the Google Account'
+      parameter :id, 'the Id of the Task'
 
       example_request 'delete task' do
         expect(status).to eq 200

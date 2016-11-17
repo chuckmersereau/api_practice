@@ -38,6 +38,7 @@ Rails.application.routes.draw do
       end
       resources :contacts do
         scope module: :contacts do
+          resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
           resources :people do
             scope module: :people do
               resources :relationships, only: [:show, :index, :create, :update, :destroy]
