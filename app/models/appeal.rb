@@ -5,7 +5,7 @@ class Appeal < ActiveRecord::Base
   has_many :excluded_appeal_contacts, dependent: :delete_all
   has_many :donations
 
-  validates :account_list_id, presence: true
+  validates :name, :account_list_id, presence: true
 
   default_scope { order(created_at: :desc) }
   scope :that_belongs_to, -> (account_list_id) { where(account_list_id: account_list_id) }

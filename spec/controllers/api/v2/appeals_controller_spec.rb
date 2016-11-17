@@ -10,8 +10,8 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
   let(:parent_param) { { account_list_id: account_list.id } }
   let(:correct_attributes) { attributes_for(:appeal, name: 'Appeal 2', account_list_id: account_list.id) }
   let(:unpermitted_attributes) { attributes_for(:appeal, name: 'Appeal 3', account_list_id: create(:account_list).id) }
-  let(:incorrect_attributes) { attributes_for(:appeal, account_list_id: nil) }
-  
+  let(:incorrect_attributes) { attributes_for(:appeal, account_list_id: account_list.id, name: nil) }
+
   include_examples 'show_examples'
 
   include_examples 'update_examples'
