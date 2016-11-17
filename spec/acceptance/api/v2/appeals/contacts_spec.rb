@@ -23,7 +23,7 @@ resource 'Contacts' do
         expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol
                                                pledge-start-date pledge-received status deceased notes notes-saved-at next-ask no-appeals likely-to-give
                                                church-name send-newsletter magazine last-activity last-appointment last-letter last-phone-call last-pre-call
-                                               last-thank avatar square-avatar referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
+                                               last-thank referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
         expect(status).to eq 200
       end
     end
@@ -53,8 +53,6 @@ resource 'Contacts' do
         response_field 'last-phone-call',         'Last phone call', 'Type' => 'Date'
         response_field 'last-pre-call',           'Last Pre-Call', 'Type' => 'Date'
         response_field 'last-thank',              'Last Thank', 'Type' => 'Date'
-        response_field 'avatar',                  'Avatar', 'Type' => 'String'
-        response_field 'square-avatar',           'Square Avatar', 'Type' => 'String'
         response_field 'referrals-to-me-ids',     'Referrals to me IDs', 'Type' => 'Array'
         response_field 'tag-list',                'Tag List', 'Type' => 'Array'
         response_field 'uncompleted-tasks-count', 'Uncompleted Tasks count', 'Type' => 'Integer'
@@ -65,7 +63,7 @@ resource 'Contacts' do
         expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol
                                                pledge-start-date pledge-received status deceased notes notes-saved-at next-ask no-appeals likely-to-give
                                                church-name send-newsletter magazine last-activity last-appointment last-letter last-phone-call last-pre-call
-                                               last-thank avatar square-avatar referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
+                                               last-thank referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
         expect(status).to eq 200
       end
     end
