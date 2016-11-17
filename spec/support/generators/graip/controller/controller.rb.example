@@ -1,0 +1,80 @@
+class Api::V2::ContactsController < Api::V2::ApplicationController
+  before_action :load_contact,      only: [:show, :update, :destroy]
+  before_action :authorize_contact, only: [:show, :update, :destroy]
+
+  def index
+    load_contacts
+    # make sure to authorize when needed
+
+    render json: @contacts
+  end
+
+  def show
+    render_contact
+  end
+
+  def create
+    persist_contact
+  end
+
+  def update
+    persist_contact
+  end
+
+  def destroy
+    @contact.destroy
+    render_200
+  end
+
+  private
+
+  def contact_params
+    params
+      .require(:data)
+      .require(:attributes)
+      .permit(contact_attributes)
+  end
+
+  def contact_attributes
+    Contact::PERMITTED_ATTRIBUTES
+  end
+
+  def contact_scope
+    # This is just a placeholder to remind you to properly scope the model
+    # ie: It's meant to blow up :)
+    Contact.that_belong_to(current_user)
+  end
+
+  def authorize_contact
+    authorize @contact
+  end
+
+  def build_contact
+    @contact ||= contact_scope.build
+    @contact.assign_attributes(contact_params)
+  end
+
+  def load_contact
+    @contact ||= contact_scope.find(params[:id])
+  end
+
+  def load_contacts
+    @contacts ||= contact_scope.to_a
+  end
+
+  def persist_contact
+    build_contact
+    authorize_contact
+    return show if save_contact
+
+    render_400_with_errors(@contact)
+  end
+
+  def render_contact
+    render json: @contact
+  end
+
+  def save_contact
+    @contact.save
+  end
+end

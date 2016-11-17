@@ -1,0 +1,42 @@
+require 'spec_helper'
+require 'rspec_api_documentation/dsl'
+
+resource '<%= resource_class_name.pluralize %>' do
+  let(:resource_type) { '<%= resources_name %>' }
+
+  get '/my-cool-url' do
+    example_request 'list <%= resources_name %>' do
+      expect(status).to eq 200
+    end
+  end
+
+  get '/my-cool-url' do
+    example_request 'show <%= resource_name %>' do
+      expect(status).to eq 200
+    end
+  end
+
+  post '/my-cool-url' do
+    example_request 'create <%= resource_name %>' do
+      expect(status).to eq 201
+    end
+  end
+
+  put '/my-cool-url' do
+    example_request 'update <%= resource_name %>' do
+      expect(status).to eq 200
+    end
+  end
+
+  patch '/my-cool-url' do
+    example_request 'update <%= resource_name %>' do
+      expect(status).to eq 200
+    end
+  end
+
+  delete '/my-cool-url' do
+    example_request 'delete <%= resource_name %>' do
+      expect(status).to eq 200
+    end
+  end
+end

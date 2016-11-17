@@ -1,0 +1,82 @@
+<% module_namespacing do -%>
+class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationController
+  before_action :load_<%= resource_name %>,      only: [:show, :update, :destroy]
+  before_action :authorize_<%= resource_name %>, only: [:show, :update, :destroy]
+
+  def index
+    load_<%= resources_name %>
+    # make sure to authorize when needed
+
+    render json: <%= resources_instance %>
+  end
+
+  def show
+    render_<%= resource_name %>
+  end
+
+  def create
+    persist_<%= resource_name %>
+  end
+
+  def update
+    persist_<%= resource_name %>
+  end
+
+  def destroy
+    <%= resource_instance %>.destroy
+    render_200
+  end
+
+  private
+
+  def <%= resource_name %>_params
+    params
+      .require(:data)
+      .require(:attributes)
+      .permit(<%= resource_name %>_attributes)
+  end
+
+  def <%= resource_name %>_attributes
+    <%= resource_class_name %>::PERMITTED_ATTRIBUTES
+  end
+
+  def <%= resource_name %>_scope
+    # This is just a placeholder to remind you to properly scope the model
+    # ie: It's meant to blow up :)
+    <%= resource_class_name %>.that_belong_to(current_user)
+  end
+
+  def authorize_<%= resource_name %>
+    authorize <%= resource_instance %>
+  end
+
+  def build_<%= resource_name %>
+    <%= resource_instance %> ||= <%= resource_name %>_scope.build
+    <%= resource_instance %>.assign_attributes(<%= resource_name %>_params)
+  end
+
+  def load_<%= resource_name %>
+    <%= resource_instance %> ||= <%= resource_name %>_scope.find(params[:id])
+  end
+
+  def load_<%= resources_name %>
+    <%= resources_instance %> ||= <%= resource_name %>_scope.to_a
+  end
+
+  def persist_<%= resource_name %>
+    build_<%= resource_name %>
+    authorize_<%= resource_name %>
+    return show if save_<%= resource_name %>
+
+    render_400_with_errors(<%= resource_instance %>)
+  end
+
+  def render_<%= resource_name %>
+    render json: <%= resource_instance %>
+  end
+
+  def save_<%= resource_name %>
+    <%= resource_instance %>.save
+  end
+end
+<% end -%>
