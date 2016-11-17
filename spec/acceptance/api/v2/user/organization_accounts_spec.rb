@@ -21,6 +21,11 @@ resource 'Organization Accounts' do
       end
     end
     get '/api/v2/user/organization_accounts/:id' do
+      with_options scope: [:data, :attributes] do
+        response_field :username, 'Username', 'Type' => 'String'
+        response_field :person_id, 'Person Id', 'Type' => 'String'
+        response_field :organization_id, 'Organization Id', 'Type' => 'Integer'
+      end
       example_request 'get organization account' do
         check_resource(['relationships'])
         expect(status).to eq 200

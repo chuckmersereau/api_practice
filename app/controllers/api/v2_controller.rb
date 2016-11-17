@@ -2,15 +2,12 @@ class Api::V2Controller < ApiController
   include Pundit
 
   before_action :jwt_authorize!
+  before_action :transform_params_field_names, only: [:create, :update]
   after_action :verify_authorized, except: :index
 
   rescue_from Pundit::NotAuthorizedError, with: :render_403
 
   protected
-
-  def current_account_list
-    @current_account_list ||= current_user.account_lists.first
-  end
 
   def current_user
     @current_user ||= User.find(jwt_payload['user_id']) if jwt_payload
@@ -38,5 +35,14 @@ class Api::V2Controller < ApiController
 
   def jwt_payload
     @jwt_payload ||= JsonWebToken.decode(http_token) if http_token
+  end
+
+  def transform_params_field_names
+    new_hash = {}
+    params[:data][:attributes].each do |key, value|
+      new_key = key.tr('-', '_')
+      new_hash[new_key.to_sym] = value
+    end
+    params[:data][:attributes] = new_hash
   end
 end

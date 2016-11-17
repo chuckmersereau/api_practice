@@ -23,6 +23,13 @@ resource 'Key Accounts' do
     end
 
     get '/api/v2/user/key_accounts/:id' do
+      with_options scope: [:data, :attributes] do
+        response_field :first_name, 'First Name', 'Type' => 'String'
+        response_field :last_name, 'Last Name', 'Type' => 'String'
+        response_field :email, 'Email', 'Type' => 'String'
+        response_field :remote_id, 'Remote Id', 'Type' => 'Integer'
+        response_field :person_id, 'Person Id', 'Type' => 'Integer'
+      end
       example_request 'get organization account' do
         check_resource
         expect(status).to eq 200

@@ -36,6 +36,15 @@ Rails.application.routes.draw do
           resources :analytics, only: :index
         end
       end
+      resources :contacts do
+        scope module: :contacts do
+          resources :people do
+            scope module: :people do
+              resources :relationships, only: [:show, :index, :create, :update, :destroy]
+            end
+          end
+        end
+      end
     end
   end
 
