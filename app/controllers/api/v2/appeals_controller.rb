@@ -1,6 +1,4 @@
 class Api::V2::AppealsController < Api::V2::ResourceController
-  include ParamsFilters
-
   private
 
   def resource_class
@@ -9,5 +7,9 @@ class Api::V2::AppealsController < Api::V2::ResourceController
 
   def resource_scope
     current_account_list.appeals
+  end
+
+  def params_keys
+  	%w(account-list-id)
   end
 end

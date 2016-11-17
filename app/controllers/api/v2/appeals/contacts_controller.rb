@@ -1,6 +1,4 @@
 class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
-  include ParamsFilters
-
   private
 
   def resource_class
@@ -17,5 +15,9 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
 
   def excluded_contacts
     current_appeal.excluded_contacts
+  end
+
+  def params_keys
+    %w(account-list-id appeal-id)
   end
 end
