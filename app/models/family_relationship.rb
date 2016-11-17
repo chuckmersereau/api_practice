@@ -2,6 +2,8 @@ class FamilyRelationship < ActiveRecord::Base
   belongs_to :person
   belongs_to :related_person, class_name: 'Person'
 
+  validates :person_id, :related_person_id, :relationship, presence: true
+
   # attr_accessible :related_person_id, :relationship
 
   def self.add_for_person(person, attributes)

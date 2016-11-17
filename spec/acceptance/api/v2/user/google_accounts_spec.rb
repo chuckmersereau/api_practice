@@ -23,6 +23,14 @@ resource 'Google Accounts' do
     end
 
     get '/api/v2/user/google_accounts/:id' do
+      with_options scope: [:data, :attributes] do
+        response_field :token, 'Token', 'Type' => 'String'
+        response_field :refresh_token, 'Refresh Token', 'Type' => 'String'
+        response_field :expires_at, 'Expires At', 'Type' => 'Datetime'
+        response_field :remote_id, 'Remote Id', 'Type' => 'Integer'
+        response_field :person_id, 'Person Id', 'Type' => 'Integer'
+      end
+
       example_request 'get organization account' do
         check_resource
         expect(status).to eq 200

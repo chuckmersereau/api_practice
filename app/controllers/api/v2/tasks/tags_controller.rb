@@ -1,15 +1,17 @@
-class Api::V2::Tasks::TagsController < Api::V2::ResourceController
+class Api::V2::Tasks::TagsController < Api::V2Controller
   def create
-    load_resource
-    authorize @resource
-    persist_resource(resource_params[:name]) do |tag_name|
-      @resource.tag_list.add(tag_name)
+    load_task
+    authorize_task
+    persist_resource(task_params[:name]) do |tag_name|
+      @task.tag_list.add(tag_name)
     end
   end
 
   def destroy
+    load_task
+    authorize_task
     persist_resource(params[:tag_name]) do |tag_name|
-      @resource.tag_list.remove(tag_name)
+      @task.tag_list.remove(tag_name)
     end
   end
 
@@ -21,16 +23,20 @@ class Api::V2::Tasks::TagsController < Api::V2::ResourceController
       render_400_with_errors(tag_error)
     else
       yield(tag_name)
-      @resource.save
-      render json: @resource
+      @task.save
+      render json: @task
     end
   end
 
-  def load_resource
-    @resource ||= Task.find(params[:task_id])
+  def load_task
+    @task ||= Task.find(params[:task_id])
   end
 
-  def resource_attributes
-    [:name]
+  def authorize_task
+    authorize @task
+  end
+
+  def task_params
+    params.require(:data).require(:attributes).permit(:name)
   end
 end
