@@ -10,6 +10,6 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   end
 
   def params_keys
-  	%w(account-list-id)
+  	%w(account_list_id)
   end
 end

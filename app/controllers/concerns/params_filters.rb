@@ -11,9 +11,9 @@ module ParamsFilters
 
       params_keys.each do |key|
       	value = params[key.to_sym]
-      	get_account_list(value) if key == 'account-list-id'
-        get_appeal(value) if key == 'appeal-id'
-        get_task(value) if key == 'task-id'
+      	get_account_list(value) if key == 'account_list_id'
+        get_appeal(value) if key == 'appeal_id'
+        get_task(value) if key == 'task_id'
       end
 
       @parent_object

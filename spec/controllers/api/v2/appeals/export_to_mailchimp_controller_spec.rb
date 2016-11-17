@@ -25,12 +25,12 @@ describe Api::V2::Appeals::ExportToMailchimpController, type: :controller do
     it 'queues export' do
       api_login(user)
       expect(mail_chimp_account.account_list).to eq account_list
-      get :show, 'account-list-id': account_list_id, 'appeal-id': appeal_id, 'appeal-list-id': primary_list_id
+      get :show, account_list_id: account_list_id, appeal_id: appeal_id, 'appeal-list-id': primary_list_id
       expect(response).to be_success
     end
 
     it 'fails authorization' do
-      get :show, 'account-list-id': account_list_id, 'appeal-id': appeal_id, 'appeal-list-id': primary_list_id
+      get :show, account_list_id: account_list_id, appeal_id: appeal_id, 'appeal-list-id': primary_list_id
       expect(response.status).to eq(401)
     end
   end

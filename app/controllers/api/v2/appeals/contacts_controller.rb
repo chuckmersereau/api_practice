@@ -18,6 +18,6 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
   end
 
   def params_keys
-    %w(account-list-id appeal-id)
+    %w(account_list_id appeal_id)
   end
 end

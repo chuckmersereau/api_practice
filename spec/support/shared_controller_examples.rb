@@ -163,7 +163,6 @@ RSpec.shared_examples 'index_examples' do
     it 'shows current_user object to users that are signed in' do
       api_login(user)
       create(resource_type)
-      binding.pry
       get :index, parent_param_if_needed
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['data'].count).to eq(resource.class.count - 1)
