@@ -1,4 +1,6 @@
 class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
+  include ParamsFilters
+
   private
 
   def resource_class

@@ -1,4 +1,6 @@
 class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
+  include ParamsFilters
+
   def show
     @resource.queue_export_appeal_contacts(contact_ids, params['appeal-list-id'], current_appeal.id)
     render_200
