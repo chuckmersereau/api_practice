@@ -6,6 +6,10 @@ class Api::V2::TasksController < Api::V2::ResourceController
   end
 
   def resource_scope
-    Task.that_belong_to(current_user)
+    current_account_list.tasks
+  end
+
+  def params_keys
+  	%w(account_list_id)
   end
 end
