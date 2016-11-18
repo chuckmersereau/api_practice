@@ -4,7 +4,7 @@ class AccountListChildrenPolicy < ApplicationPolicy
   def initialize(context, resource)
     @resource = resource
     @user = context.user
-    @current_account_list = context.user_data
+    @current_account_list = context.account_list
   end
 
   private

@@ -50,11 +50,11 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   end
 
   def authorize_index
-    authorize current_contact, :show?
+    authorize(current_contact, :show?)
   end
 
   def authorize_address
-    authorize current_contact
+    authorize(current_contact)
   end
 
   def build_address

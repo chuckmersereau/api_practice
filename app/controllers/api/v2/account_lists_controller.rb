@@ -1,6 +1,6 @@
 class Api::V2::AccountListsController < Api::V2::ResourceController
   def pundit_user
-    CurrentContext.new(current_user, current_account_list)
+    PunditContext.new(current_user, current_account_list)
   end
 
   protected

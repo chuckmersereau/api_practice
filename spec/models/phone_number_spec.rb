@@ -157,4 +157,10 @@ describe PhoneNumber do
       expect(p1).to_not eq p2
     end
   end
+
+  describe 'permitted attributes' do
+    it 'defines permitted attributes' do
+      expect(PhoneNumber::PERMITTED_ATTRIBUTES).to be_present
+    end
+  end
 end

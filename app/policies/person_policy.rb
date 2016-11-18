@@ -1,7 +1,7 @@
 class PersonPolicy < ApplicationPolicy
   def initialize(context, resource)
     @user = context.user
-    @current_contact = context.user_data
+    @current_contact = context.contact
     @resource = resource
   end
 
