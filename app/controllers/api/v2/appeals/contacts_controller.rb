@@ -1,20 +1,38 @@
 class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
-  private
-
-  def resource_class
-    Contact
+  def index
+    load_contacts
+    render json: @resources
   end
 
-  def resource_scope
-    params[:excluded] ? excluded_contacts : contacts
+  def show
+    load_contact
+    authorize_contact
+    render_appeal
+  end
+
+  def destroy
+    load_contact
+    authorize_contact
+    @resource.destroy
+    render_200
+  end
+
+  private
+
+  def load_contacts
+    @resources ||= contacts.to_a
+  end
+
+  def load_contact
+    @resource ||= contacts.find(params[:id])
+  end
+
+  def authorize_contact
+    authorize @resource
   end
 
   def contacts
-    contact_scope.contacts
-  end
-
-  def excluded_contacts
-    contact_scope.excluded_contacts
+    params[:excluded] ? contact_scope.excluded_contacts : contact_scope.contacts
   end
 
   def contact_scope
