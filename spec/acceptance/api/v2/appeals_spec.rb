@@ -15,7 +15,7 @@ resource 'Appeals' do
       api_login(user)
     end
     get '/api/v2/appeals' do
-      parameter 'account_list_id',              'Account List ID', required: true
+      parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
       response_field :data,                     'Data', 'Type' => 'Array'
       example_request 'list appeals of account list' do
         expect(resource_object.keys).to eq %w(name amount description end-date created-at currencies total-currency donations contacts)
@@ -23,7 +23,7 @@ resource 'Appeals' do
       end
     end
     get '/api/v2/appeals/:id' do
-      parameter 'account_list_id', 'Account List ID', required: true
+      parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         response_field 'name',                  'Name', 'Type' => 'String'
         response_field 'amount',                'Amount', 'Type' => 'Decimal'
@@ -41,7 +41,7 @@ resource 'Appeals' do
       end
     end
     post '/api/v2/appeals' do
-      parameter 'account_list_id', 'Account List ID', required: true
+      parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         parameter :name,                          'Name'
         parameter :amount,                        'Amount'
@@ -54,7 +54,7 @@ resource 'Appeals' do
       end
     end
     put '/api/v2/appeals/:id' do
-      parameter 'account_list_id', 'Account List ID', required: true
+      parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         parameter :name,                          'Name'
         parameter :amount,                        'Amount'
@@ -67,7 +67,7 @@ resource 'Appeals' do
       end
     end
     delete '/api/v2/appeals/:id' do
-      parameter 'account_list_id',              'Account List ID', required: true
+      parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
       parameter 'id',                           'ID', required: true
       example_request 'delete appeal' do
         expect(status).to eq 200

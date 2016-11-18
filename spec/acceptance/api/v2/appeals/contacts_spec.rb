@@ -17,7 +17,7 @@ resource 'Contacts' do
       api_login(user)
     end
     get '/api/v2/appeals/:appeal_id/contacts' do
-      parameter 'account_list_id',              'Account List ID', required: true
+      parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
       response_field :data,                     'Data', 'Type' => 'Array'
       example_request 'list contacts of appeal of account list' do
         expect(resource_object.keys).to eq %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol
@@ -28,7 +28,7 @@ resource 'Contacts' do
       end
     end
     get '/api/v2/appeals/:appeal_id/contacts/:id' do
-      parameter 'account_list_id',              'Account List ID', required: true
+      parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         response_field 'name',                    'Name', 'Type' => 'String'
         response_field 'pledge-amount',           'Pledge Amount', 'Type' => 'Decimal'
@@ -68,7 +68,7 @@ resource 'Contacts' do
       end
     end
     delete '/api/v2/appeals/:appeal_id/contacts/:id' do
-      parameter 'account_list_id',              'Account List ID', required: true
+      parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
       parameter 'id',                           'ID', required: true
       example_request 'delete contact from appeal' do
         expect(status).to eq 200
