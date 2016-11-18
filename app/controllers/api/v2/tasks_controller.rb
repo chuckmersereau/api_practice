@@ -6,10 +6,10 @@ class Api::V2::TasksController < Api::V2::ResourceController
   end
 
   def resource_scope
-    current_account_list.tasks
+    Task.where(filter_params)
   end
 
-  def params_keys
+  def permited_params
   	%w(account_list_id)
   end
 end

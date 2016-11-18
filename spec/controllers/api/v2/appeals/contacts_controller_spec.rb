@@ -15,7 +15,9 @@ describe Api::V2::Appeals::ContactsController, type: :controller do
   end
 
   let(:resource) { contact }
-  let(:parent_param) { { account_list_id: account_list_id, appeal_id: appeal_id } }
+  # let(:parent_param) { { filter: { account_list_id: account_list.id, appeal_id: appeal_id } } }
+  # let(:parent_param) { { account_list_id: account_list_id, appeal_id: appeal_id } }
+  let(:parent_param) { { appeal_id: appeal_id } }
   let(:correct_attributes) { attributes_for(:contact, name: 'Doe, Frank') }
 
   include_examples 'index_examples'

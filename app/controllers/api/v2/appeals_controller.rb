@@ -6,10 +6,10 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   end
 
   def resource_scope
-    current_account_list.appeals
+    Appeal.where(filter_params)
   end
 
-  def params_keys
-  	%w(account_list_id)
+  def permited_params
+    %w(account_list_id)
   end
 end
