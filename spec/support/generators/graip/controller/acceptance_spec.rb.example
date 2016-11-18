@@ -1,0 +1,42 @@
+require 'spec_helper'
+require 'rspec_api_documentation/dsl'
+
+resource 'Contacts' do
+  let(:resource_type) { 'contacts' }
+
+  get '/my-cool-url' do
+    example_request 'list contacts' do
+      expect(status).to eq 200
+    end
+  end
+
+  get '/my-cool-url' do
+    example_request 'show contact' do
+      expect(status).to eq 200
+    end
+  end
+
+  post '/my-cool-url' do
+    example_request 'create contact' do
+      expect(status).to eq 201
+    end
+  end
+
+  put '/my-cool-url' do
+    example_request 'update contact' do
+      expect(status).to eq 200
+    end
+  end
+
+  patch '/my-cool-url' do
+    example_request 'update contact' do
+      expect(status).to eq 200
+    end
+  end
+
+  delete '/my-cool-url' do
+    example_request 'delete contact' do
+      expect(status).to eq 200
+    end
+  end
+end

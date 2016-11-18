@@ -89,6 +89,23 @@ The master branch is deployed to production at [api.mpdx.org](https://api.mpdx.o
 
 The staging branch is deployed to staging [stage.api.mpdx.org](https://stage.api.mpdx.org/), [Jenkins](http://jenkins.uscm.org/) will auto-deploy on successful builds.
 
+## Generators
+
+### GRAIP Controller Generator
+
+This allows someone to run:
+
+```bash
+rails generate graip:controller Api/v2/Contacts
+```
+
+And it will automatically generate a controller template,
+controller spec, and acceptance spec for how controllers will be formatted for this project following paradigms from [Growing Rails Applications In Practice](https://pragprog.com/book/d-kegrap/growing-rails-applications-in-practice).
+
+#### Resources:
+- For examples of the controller and spec files - check out: [spec/support/generators/graip/controller/](spec/support/generators/graip/controller)
+- The generator templates can be found in [lib/generators/graip/controller/templates](lib/generators/graip/controller/templates).
+- For more information on how to use this generator, check out [lib/generators/graip/controller/USAGE](lib/generators/graip/controller/USAGE).
 
 ## Issue Tracking, Bugs Reports, & Contributing
 
