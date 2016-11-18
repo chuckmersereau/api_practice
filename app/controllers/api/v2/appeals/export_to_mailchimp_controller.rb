@@ -12,7 +12,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   end
 
   def resource_scope
-    current_account_list.mail_chimp_account
+    mailchimp_scope
   end
 
   def contacts
@@ -23,7 +23,15 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
     contacts.pluck(:id)
   end
 
-  def params_keys
-    %w(account_list_id appeal_id)
+  def mailchimp_scope
+    MailChimpAccount.that_belong_to(filter_params)
+  end
+
+  def current_appeal
+    appeal_scope.find(params[:appeal_id])
+  end
+
+  def permited_filters
+    %w(account_list_id)
   end
 end

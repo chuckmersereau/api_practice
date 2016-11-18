@@ -9,6 +9,8 @@ class Appeal < ActiveRecord::Base
 
   default_scope { order(created_at: :desc) }
 
+  scope :that_belong_to, -> (filters) { where(account_list_id: filters[:account_list_id]) }
+
   PERMITTED_ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :account_list_id].freeze
 
   def add_and_remove_contacts(account_list, contact_ids)

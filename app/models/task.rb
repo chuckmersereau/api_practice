@@ -15,7 +15,7 @@ class Task < Activity
   scope :with_result, -> (result) { where(result: result) }
   scope :completed_between, -> (start_date, end_date) { where('completed_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
   scope :created_between, -> (start_date, end_date) { where('created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
-  scope :that_belong_to, -> (user) { where(account_list_id: user.account_list_ids) }
+  scope :that_belong_to, -> (filters) { where(account_list_id: filters[:account_list_id]) }
 
   PERMITTED_ATTRIBUTES = [
     :starred, :location, :subject, :account_list_id, :start_at, :end_at, :activity_type, :result, :completed_at,

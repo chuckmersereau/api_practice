@@ -24,6 +24,8 @@ class MailChimpAccount < ActiveRecord::Base # rubocop:disable RedundantReturn
   serialize :status_interest_ids, Hash
   serialize :tags_interest_ids, Hash
 
+  scope :that_belong_to, -> (filters) { find_by(account_list_id: filters[:account_list_id]) }
+
   PERMITTED_ATTRIBUTES = [
     :api_key, :grouping_id, :primary_list_id, :auto_log_campaigns, :sync_all_active_contacts
   ].freeze
