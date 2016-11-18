@@ -64,7 +64,7 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   end
 
   def appeal_scope
-    Appeal.that_belong_to(filter_params)
+    Appeal.where(filter_params)
   end
 
   def authorize_appeal

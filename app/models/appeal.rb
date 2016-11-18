@@ -9,7 +9,7 @@ class Appeal < ActiveRecord::Base
 
   default_scope { order(created_at: :desc) }
 
-  scope :that_belong_to, -> (filters) { where(account_list_id: filters[:account_list_id]) }
+  scope :that_belong_to, -> (user) { where(account_list_id: user.account_list_ids) }
 
   PERMITTED_ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :account_list_id].freeze
 

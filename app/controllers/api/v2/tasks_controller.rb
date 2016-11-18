@@ -10,7 +10,7 @@ class Api::V2::TasksController < Api::V2::ResourceController
   end
 
   def task_scope
-    Task.that_belong_to(filter_params)
+    Task.where(filter_params)
   end
 
   def permited_filters

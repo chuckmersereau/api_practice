@@ -9,8 +9,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   private
 
   def load_mailchimp_account
-    @resource ||= mailchimp_scope
-    raise ActiveRecord::RecordNotFound unless @resource
+    @resource ||= mailchimp_scope.first
   end
 
   def authorize_mailchimp_account
@@ -22,7 +21,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   end
 
   def mailchimp_scope
-    MailChimpAccount.that_belong_to(filter_params)
+    MailChimpAccount.where(filter_params)
   end
 
   def current_appeal
