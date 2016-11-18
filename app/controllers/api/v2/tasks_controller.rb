@@ -14,6 +14,6 @@ class Api::V2::TasksController < Api::V2::ResourceController
   end
 
   def permited_filters
-  	%w(account_list_id)
+    [:account_list_id]
   end
 end

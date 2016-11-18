@@ -1,4 +1,6 @@
 class Api::V2::AppealsController < Api::V2::ResourceController
+  skip_before_action :load_resource, :authorize_resource
+
   def index
     load_appeals
     render json: @resources
@@ -70,6 +72,6 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   end
 
   def permited_filters
-    %w(account_list_id)
+    [:account_list_id]
   end
 end

@@ -1,6 +1,8 @@
 class Api::V2::ResourceController < Api::V2Controller
   include ParamsFilters
   
+  before_action :load_resource, :authorize_resource, only: [:show, :update, :destroy]
+
   def index
     load_resources
     render json: @resources

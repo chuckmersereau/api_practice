@@ -30,6 +30,6 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   end
 
   def permited_filters
-    %w(account_list_id)
+    [:account_list_id]
   end
 end

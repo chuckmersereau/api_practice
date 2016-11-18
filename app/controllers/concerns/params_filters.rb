@@ -3,7 +3,10 @@ module ParamsFilters
 
   included do
     def filter_params
-      params[:filters].keep_if { |k, _| permited_filters.include? k }.map{ |k, v| { k.to_sym => v } }.reduce({}, :merge)
+      params[:filters]
+      .map{ |k, v| { k.underscore.to_sym => v } }
+      .reduce({}, :merge)
+      .keep_if { |k, _| permited_filters.include? k }
     end
   end
 end
