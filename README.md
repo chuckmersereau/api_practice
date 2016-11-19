@@ -58,13 +58,23 @@ Sidekiq:
 $ bundle exec sidekiq
 ```
 
+### API Authentication
+
+[JSON Web Token](https://en.wikipedia.org/wiki/JSON_Web_Token) is used for authentication on the API. This is implemented with the [gem ruby-jwt](https://github.com/jwt/ruby-jwt).
+
+You can generate a token for a particular user by using the `JsonWebToken` class like so:
+```
+JsonWebToken.encode(user_id: 1)
+```
+Therefore, when you're developing, you can quickly generate a token and send it in a curl request to the API by running a command like this:
+```
+curl "http://localhost:3000/api/v2/user" -H "Authorization: `rails runner 'print JsonWebToken.encode(user_id: 1)'`"
+```
+
+
 ### Login
 
-Use a [TheKey.me](http://thekey.me/) or Relay account to login.
-
-When you login for the first time you'll be asked to connect your user account to an organization. For dev purposes you can use the Toontown organization. To connect to Toontown you'll need to enter a username and password, please ask for it. Connecting to the Toontown org will allow your dev machine to import fake data for dev purposes.
-
-After you login successfully the sidekiq process should begin importing your fake account data. If you don't see any data make sure that sidekiq is running without errors.
+On the front-end, users use a [TheKey.me](http://thekey.me/) account to login. TheKey is a single-sign-on system used by Cru for authentication. TheKey is an implementation of [CAS](https://en.wikipedia.org/wiki/Central_Authentication_Service). For the purposes of MPDX API development you don't need to understand TheKey or install anything, you only need to create an account if you are logging into MPDX from the front-end.
 
 
 ## Testing
