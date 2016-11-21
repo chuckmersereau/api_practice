@@ -27,7 +27,7 @@ resource 'Prayer Letters Account' do
       before do
         api_login(user)
       end
-      get '/api/v2/account_lists/:account_list_id/prayer_letters_account' do
+      get '/api/v2/account_lists/:account_list_id/prayer-letters-account' do
         parameter 'account-list-id', 'Account List ID', required: true
         with_options scope: [:data, :attributes] do
           response_field :token,                    'Token', 'Type' => 'String'
@@ -40,14 +40,14 @@ resource 'Prayer Letters Account' do
           expect(status).to eq 200
         end
       end
-      delete '/api/v2/account_lists/:account_list_id/prayer_letters_account' do
+      delete '/api/v2/account_lists/:account_list_id/prayer-letters-account' do
         parameter 'account-list-id',              'Account List ID', required: true
         parameter 'id',                           'ID', required: true
         example_request 'delete prayer letters account' do
           expect(status).to eq 200
         end
       end
-      get '/api/v2/account_lists/:account_list_id/prayer_letters_account/sync' do
+      get '/api/v2/account_lists/:account_list_id/prayer-letters-account/sync' do
         parameter 'account-list-id',              'Account List ID', required: true
         response_field :data,                     'Data', 'Type' => 'Array'
         example_request 'sync prayer letters account' do
@@ -58,7 +58,7 @@ resource 'Prayer Letters Account' do
   end
 
   context 'non-existent prayer letters account' do
-    post '/api/v2/account_lists/:account_list_id/prayer_letters_account' do
+    post '/api/v2/account_lists/:account_list_id/prayer-letters-account' do
       before do
         api_login(user)
       end

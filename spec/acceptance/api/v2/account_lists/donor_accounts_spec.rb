@@ -16,7 +16,7 @@ resource 'Donor Accounts' do
     before do
       api_login(user)
     end
-    get '/api/v2/account_lists/:account_list_id/donor_accounts' do
+    get '/api/v2/account_lists/:account_list_id/donor-accounts' do
       parameter 'account-list-id',              'Account List ID', required: true
       response_field :data,                     'Data', 'Type' => 'Array'
       example_request 'list donor accounts of account list' do
@@ -26,7 +26,7 @@ resource 'Donor Accounts' do
         expect(status).to eq 200
       end
     end
-    get '/api/v2/account_lists/:account_list_id/donor_accounts/:id' do
+    get '/api/v2/account_lists/:account_list_id/donor-accounts/:id' do
       with_options scope: [:data, :attributes] do
         response_field 'organization-id',         'Organization ID', 'Type' => 'Integer'
         response_field 'account-number',          'Account Number', 'Type' => 'String'

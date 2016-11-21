@@ -22,7 +22,7 @@ resource 'Mailchimp Account Spec' do
     api_login(user)
   end
 
-  get '/api/v2/account_lists/:account_list_id/mail_chimp_account' do
+  get '/api/v2/account_lists/:account_list_id/mail-chimp-account' do
     with_options scope: [:data, :attributes] do
       response_field 'api-key',                 'API Key', 'Type' => 'String'
       response_field 'valid',                   'Valid', 'Type' => 'Boolean'
@@ -44,14 +44,14 @@ resource 'Mailchimp Account Spec' do
       expect(status).to eq 200
     end
   end
-  delete '/api/v2/account_lists/:account_list_id/mail_chimp_account' do
+  delete '/api/v2/account_lists/:account_list_id/mail-chimp-account' do
     parameter 'account-list-id',              'Account List ID', required: true
     parameter 'id',                           'ID', required: true
     example_request 'delete mailchimp account' do
       expect(status).to eq 200
     end
   end
-  get '/api/v2/account_lists/:account_list_id/mail_chimp_account/sync' do
+  get '/api/v2/account_lists/:account_list_id/mail-chimp-account/sync' do
     parameter 'account-list-id', 'Account List ID', required: true
     example_request 'sync mailchimp account' do
       expect(status).to eq 200
