@@ -1,0 +1,21 @@
+Description:
+    Similar to the rails controller generator, but will template out the
+    controller actions to follow examples from the book
+    "Growing Rails Applications In Practice".
+
+    Stubs out a new controller and a spec. Pass the controller name, either
+    CamelCased or under_scored.
+
+    To create a controller within a module, specify the controller name as a
+    path like 'parent_module/controller_name'.
+
+    This generates a controller class in app/controllers, a spec in
+    spec/controllers, and an acceptance spec in spec/acceptance.
+
+Example:
+    `rails generate graip:controller Api/v2/Contacts`
+
+    This will generate:
+      Controller:      app/controllers/api/v2/contacts_controller.rb
+      Controller Spec: spec/controllers/api/v2/contacts_controller_spec.rb
+      Acceptance Spec: spec/acceptance/api/v2/contacts_spec.rb

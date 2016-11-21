@@ -113,6 +113,7 @@ group :development, :test do
 end
 
 group :test do
+  gem 'ammeter', '~> 1.1.4' # for testing generators
   gem 'mock_redis', '~> 0.17.0'
   gem 'webmock', '~> 1.21.0'
   gem 'rb-fsevent', require: false
