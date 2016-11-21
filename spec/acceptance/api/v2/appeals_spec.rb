@@ -8,7 +8,7 @@ resource 'Appeals' do
   let(:account_list_id) { account_list.id }
   let!(:appeal) { create(:appeal, account_list: account_list) }
   let(:id) { appeal.id }
-  let(:form_data) { build_data(name: 'New Appeal Name') }
+  let(:form_data) { build_data(name: 'New Appeal Name', 'account-list-id': account_list_id) }
 
   context 'authorized user' do
     before do
@@ -41,9 +41,9 @@ resource 'Appeals' do
       end
     end
     post '/api/v2/appeals' do
-      parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
-        parameter :name,                          'Name'
+        parameter 'account-list-id',              'Account List ID', required: true
+        parameter :name,                          'Name', required: true
         parameter :amount,                        'Amount'
         parameter :description,                   'Description'
         parameter 'end-date',                     'End Date'

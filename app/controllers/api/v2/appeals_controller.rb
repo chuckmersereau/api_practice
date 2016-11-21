@@ -32,11 +32,11 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   private
 
   def load_appeals
-    @appeals ||= appeal_scope.to_a
+    @appeals ||= appeal_scope.where(filter_params).to_a
   end
 
   def load_appeal
-    @appeal ||= Appeal.find(params[:id])
+    @appeal ||= appeal_scope.find(params[:id])
   end
 
   def render_appeal
@@ -64,7 +64,7 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   end
 
   def appeal_scope
-    current_user.account_lists.find(filter_params[:account_list_id]).appeals
+    Appeal.that_belong_to(current_user)
   end
 
   def authorize_appeal
