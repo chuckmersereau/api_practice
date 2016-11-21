@@ -113,6 +113,7 @@ class MailChimpImport
   end
 
   def add_contact_to_newsletter(contact)
+    return if @mc_account.sync_all_active_contacts?
     send_newsletter = contact.send_newsletter == 'Physical' ? 'Both' : 'Email'
     contact.update!(send_newsletter: send_newsletter)
   end
