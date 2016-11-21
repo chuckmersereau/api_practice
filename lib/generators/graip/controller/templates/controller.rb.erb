@@ -1,8 +1,5 @@
 <% module_namespacing do -%>
 class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationController
-  before_action :load_<%= resource_name %>,      only: [:show, :update, :destroy]
-  before_action :authorize_<%= resource_name %>, only: [:show, :update, :destroy]
-
   def index
     load_<%= resources_name %>
     # make sure to authorize when needed
@@ -11,6 +8,9 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
   end
 
   def show
+    load_<%= resource_name %>
+    authorize_<%= resource_name %>
+
     render_<%= resource_name %>
   end
 
@@ -19,11 +19,17 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
   end
 
   def update
+    load_<%= resource_name %>
+    authorize_<%= resource_name %>
+
     persist_<%= resource_name %>
   end
 
   def destroy
+    load_<%= resource_name %>
+    authorize_<%= resource_name %>
     <%= resource_instance %>.destroy
+
     render_200
   end
 
@@ -56,7 +62,7 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
   end
 
   def load_<%= resource_name %>
-    <%= resource_instance %> ||= <%= resource_name %>_scope.find(params[:id])
+    <%= resource_instance %> ||= <%= resource_class_name %>.find(params[:id])
   end
 
   def load_<%= resources_name %>

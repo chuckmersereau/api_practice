@@ -1,7 +1,4 @@
 class Api::V2::ContactsController < Api::V2::ApplicationController
-  before_action :load_contact,      only: [:show, :update, :destroy]
-  before_action :authorize_contact, only: [:show, :update, :destroy]
-
   def index
     load_contacts
     # make sure to authorize when needed
@@ -10,6 +7,9 @@ class Api::V2::ContactsController < Api::V2::ApplicationController
   end
 
   def show
+    load_contact
+    authorize_contact
+
     render_contact
   end
 
@@ -18,11 +18,17 @@ class Api::V2::ContactsController < Api::V2::ApplicationController
   end
 
   def update
+    load_contact
+    authorize_contact
+
     persist_contact
   end
 
   def destroy
+    load_contact
+    authorize_contact
     @contact.destroy
+
     render_200
   end
 
@@ -55,7 +61,7 @@ class Api::V2::ContactsController < Api::V2::ApplicationController
   end
 
   def load_contact
-    @contact ||= contact_scope.find(params[:id])
+    @contact ||= Contact.find(params[:id])
   end
 
   def load_contacts
