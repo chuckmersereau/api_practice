@@ -2,7 +2,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   def show
     load_mailchimp_account
     authorize_mailchimp_account
-    @mailchimp_account.queue_export_appeal_contacts(contact_ids, params['appeal-list-id'], load_appeal.id)
+    @mailchimp_account.queue_export_appeal_contacts(contact_ids, params['appeal-list-id'], appeal.id)
     render_200
   end
 
@@ -17,14 +17,14 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   end
 
   def contact_ids
-    load_appeal.contacts.pluck(:id)
+    appeal.contacts.pluck(:id)
   end
 
   def mailchimp_scope
     current_user.account_lists.find(filter_params[:account_list_id])
   end
 
-  def load_appeal
+  def appeal
     @appeal ||= current_user.account_lists.find(filter_params[:account_list_id]).appeals.find(params[:appeal_id])
   end
 end
