@@ -25,7 +25,7 @@ resource 'Mailchimp' do
   end
 
   context 'authorized user' do
-    get '/api/v2//appeals/:appeal_id/export_to_mailchimp' do
+    get '/api/v2//appeals/:appeal_id/export-to-mailchimp' do
       parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       parameter 'appeal_list_id', 'Appeal List ID', required: true
       example 'list designation accounts of account list' do
