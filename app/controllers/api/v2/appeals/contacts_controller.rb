@@ -1,34 +1,38 @@
 class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
   def index
     load_contacts
-    render json: @resources
+    render json: @contacts
   end
 
   def show
     load_contact
     authorize_contact
-    render_appeal
+    render_contact
   end
 
   def destroy
     load_contact
     authorize_contact
-    @resource.destroy
+    @contact.destroy
     render_200
   end
 
   private
 
   def load_contacts
-    @resources ||= contacts.to_a
+    @contacts ||= contacts.to_a
   end
 
   def load_contact
-    @resource ||= contacts.find(params[:id])
+    @contact ||= contacts.find(params[:id])
+  end
+
+  def render_contact
+    render json: @contact
   end
 
   def authorize_contact
-    authorize @resource
+    authorize @contact
   end
 
   def contacts
@@ -36,10 +40,10 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
   end
 
   def contact_scope
-    appeal_scope.find_by(filter_params)
+    load_appeals.find(params[:appeal_id])
   end
 
-  def permited_filters
-    [:account_list_id]
+  def load_appeals
+    @appeal ||= current_user.account_lists.find(filter_params[:account_list_id]).appeals
   end
 end

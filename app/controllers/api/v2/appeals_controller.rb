@@ -3,7 +3,7 @@ class Api::V2::AppealsController < Api::V2::ResourceController
 
   def index
     load_appeals
-    render json: @resources
+    render json: @appeals
   end
 
   def show
@@ -25,38 +25,38 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   def destroy
     load_appeal
     authorize_appeal
-    @resource.destroy
+    @appeal.destroy
     render_200
   end
 
   private
 
   def load_appeals
-    @resources ||= appeal_scope.to_a
+    @appeals ||= appeal_scope.to_a
   end
 
   def load_appeal
-    @resource ||= appeal_scope.find(params[:id])
+    @appeal ||= appeal_scope.find(params[:id])
   end
 
   def render_appeal
-    render json: @resource
+    render json: @appeal
   end
 
   def persist_appeal
     build_appeal
+    authorize_appeal
     return show if save_appeal
-    render_400_with_errors(@resource)
+    render_400_with_errors(@appeal)
   end
 
   def build_appeal
-    @resource ||= appeal_scope.build
-    @resource.assign_attributes(appeal_params)
-    authorize @resource
+    @appeal ||= appeal_scope.build
+    @appeal.assign_attributes(appeal_params)
   end
 
   def save_appeal
-    @resource.save
+    @appeal.save
   end
 
   def appeal_params
@@ -64,11 +64,11 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   end
 
   def appeal_scope
-    Appeal.where(filter_params)
+    current_user.account_lists.find(filter_params[:account_list_id]).appeals
   end
 
   def authorize_appeal
-    authorize @resource
+    authorize @appeal
   end
 
   def permited_filters

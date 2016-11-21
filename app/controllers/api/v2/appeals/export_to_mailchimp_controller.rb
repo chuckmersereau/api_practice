@@ -2,18 +2,18 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   def show
     load_mailchimp_account
     authorize_mailchimp_account
-    @resource.queue_export_appeal_contacts(contact_ids, params['appeal-list-id'], current_appeal.id)
+    @mailchimp_account.queue_export_appeal_contacts(contact_ids, params['appeal-list-id'], current_appeal.id)
     render_200
   end
 
   private
 
   def load_mailchimp_account
-    @resource ||= mailchimp_scope.first
+    @mailchimp_account ||= mailchimp_scope.first
   end
 
   def authorize_mailchimp_account
-    authorize @resource
+    authorize @mailchimp_account
   end
 
   def contact_ids
@@ -25,10 +25,10 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   end
 
   def current_appeal
-    appeal_scope.find(params[:appeal_id])
+    load_appeals.find(params[:appeal_id])
   end
 
-  def permited_filters
-    [:account_list_id]
+  def load_appeals
+    @appeal ||= current_user.account_lists.find(filter_params[:account_list_id]).appeals
   end
 end
