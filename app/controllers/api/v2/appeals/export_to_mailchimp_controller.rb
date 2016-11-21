@@ -9,7 +9,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   private
 
   def load_mailchimp_account
-    @mailchimp_account ||= mailchimp_scope.first
+    @mailchimp_account ||= MailChimpAccount.first
   end
 
   def authorize_mailchimp_account

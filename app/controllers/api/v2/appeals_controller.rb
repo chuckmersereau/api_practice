@@ -36,7 +36,7 @@ class Api::V2::AppealsController < Api::V2::ResourceController
   end
 
   def load_appeal
-    @appeal ||= appeal_scope.find(params[:id])
+    @appeal ||= Appeal.find(params[:id])
   end
 
   def render_appeal

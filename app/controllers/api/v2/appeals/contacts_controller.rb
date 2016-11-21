@@ -24,7 +24,7 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
   end
 
   def load_contact
-    @contact ||= contacts.find(params[:id])
+    @contact ||= Contact.find(params[:id])
   end
 
   def render_contact
