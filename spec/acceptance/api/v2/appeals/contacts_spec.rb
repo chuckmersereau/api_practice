@@ -56,11 +56,11 @@ resource 'Contacts' do
         response_field 'last-phone-call',         'Last phone call', 'Type' => 'String'
         response_field 'last-pre-call',           'Last Pre-Call', 'Type' => 'String'
         response_field 'last-thank',              'Last Thank', 'Type' => 'String'
-        response_field 'referrals-to-me-ids',     'Referrals to me IDs', 'Type' => 'Array'
-        response_field 'tag-list',                'Tag List', 'Type' => 'Array'
+        response_field 'referrals-to-me-ids',     'Referrals to me IDs', 'Type' => 'Array[Number]'
+        response_field 'tag-list',                'Tag List', 'Type' => 'Array[String]'
         response_field 'uncompleted-tasks-count', 'Uncompleted Tasks count', 'Type' => 'Number'
         response_field 'timezone',                'Timezone', 'Type' => 'String'
-        response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array'
+        response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array[Hash]'
       end
       example_request 'get contact' do
         expect(resource_object.keys).to eq contact_properties
