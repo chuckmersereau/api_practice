@@ -22,7 +22,7 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
 
   def load_contacts
     excluded = filter_params[:excluded].to_i
-    @contacts ||= load_appeal.selected_contacts(excluded).where(filter_params).to_a
+    @contacts ||= load_appeal.selected_contacts(excluded).where(filters_without_excluded).to_a
   end
 
   def load_contact
