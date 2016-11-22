@@ -21,7 +21,8 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
   private
 
   def load_contacts
-    @contacts ||= load_appeal.selected_contacts(filter_params[:excluded].to_i).to_a
+    excluded = filter_params[:excluded].to_i
+    @contacts ||= load_appeal.selected_contacts(excluded).where(filter_params).to_a
   end
 
   def load_contact
@@ -40,7 +41,11 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
     @appeal ||= Appeal.find(params[:appeal_id])
   end
 
+  def filters_without_excluded
+    filter_params.delete(:excluded)
+  end
+
   def permited_filters
-    [:excluded]
+    [:excluded, :account_list_id]
   end
 end
