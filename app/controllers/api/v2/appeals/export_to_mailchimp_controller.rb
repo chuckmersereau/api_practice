@@ -21,7 +21,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
   end
 
   def mailchimp_scope
-    filter_params[:account_list_id] ? current_account_list :first_account_list
+    filter_params[:account_list_id] ? current_account_list : first_account_list
   end
 
   def current_account_list
