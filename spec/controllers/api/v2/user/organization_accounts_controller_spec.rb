@@ -3,7 +3,7 @@ require 'support/shared_controller_examples'
 
 RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller do
   let(:user) { create(:user) }
-  let(:resource_type) { :organization_account }
+  let(:factory_type) { :organization_account }
   let!(:resource) { create(:organization_account, person: user) }
   let(:id) { resource.id }
   let(:unpermitted_attributes) do

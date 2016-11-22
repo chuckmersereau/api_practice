@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Api::V2::AccountLists::MergeController, type: :controller do
-  let(:resource_type) { 'merge' }
+  let(:factory_type) { 'merge' }
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.first }
   let!(:account_list2) { create(:account_list) }

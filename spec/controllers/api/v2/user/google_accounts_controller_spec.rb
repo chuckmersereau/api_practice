@@ -3,7 +3,7 @@ require 'support/shared_controller_examples'
 
 RSpec.describe Api::V2::User::GoogleAccountsController, type: :controller do
   let(:user) { create(:user) }
-  let(:resource_type) { :google_account }
+  let(:factory_type) { :google_account }
   let!(:resource) { create(:google_account, person: user) }
   let(:id) { resource.id }
   let(:unpermitted_attributes) { nil }

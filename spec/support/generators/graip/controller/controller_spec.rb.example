@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Api::V2::ContactsController, type: :controller do
+RSpec.describe Api::V2::EmailAddressesController, type: :controller do
   # This is required!
   let(:user) { create(:user_with_account) }
 
@@ -8,10 +8,10 @@ RSpec.describe Api::V2::ContactsController, type: :controller do
   let(:account_list) { user.account_lists.first }
 
   # This is required!
-  let(:resource_type) do
-    # Note: This may need to be adjusted based on namespace,
-    # ex: :contacts_address would be used for Api::V2::Contacts::Address
-    :contact
+  let(:factory_type) do
+    # This is the type used to auto-generate a resource using FactoryGirl,
+    # ex: The type `:email_address` would be used as create(:email_address)
+    :email_address
   end
 
   # This is required!

@@ -36,6 +36,14 @@ module Graip
         class_path.map(&:camelize).join('::').concat('::')
       end
 
+      def dashed_resource_name
+        @dashed_resource_name ||= resource_name.dasherize
+      end
+
+      def dashed_resources_name
+        @dashed_resources_name ||= resources_name.dasherize
+      end
+
       def parent_namespacing
         @parent_namespaces ||= build_parent_namespacing
       end
@@ -58,6 +66,14 @@ module Graip
 
       def resources_name
         @resources_name ||= file_name.pluralize
+      end
+
+      def resource_human_name
+        @resource_human_name ||= resource_name.humanize(capitalize: false)
+      end
+
+      def resources_human_name
+        @resources_human_name ||= resource_human_name.pluralize
       end
     end
   end

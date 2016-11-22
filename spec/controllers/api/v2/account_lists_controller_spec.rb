@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'support/shared_controller_examples'
 
 describe Api::V2::AccountListsController, type: :controller do
-  let(:resource_type) { :account_list }
+  let(:factory_type) { :account_list }
   let!(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
   let(:id) { account_list.id }

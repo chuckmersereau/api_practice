@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Api::V2::Appeals::ExportToMailchimpController, type: :controller do
-  let(:resource_type) { 'mail-chimp-account' }
+  let(:factory_type) { :mail_chimp_account }
   let!(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
   let!(:appeal) { create(:appeal, account_list: account_list) }

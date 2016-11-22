@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
-  let(:resource_type) { :donor_account }
+  let(:factory_type) { :donor_account }
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.first }
   let(:account_list_id) { account_list.id }

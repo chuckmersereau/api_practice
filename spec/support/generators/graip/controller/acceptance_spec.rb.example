@@ -1,42 +1,75 @@
 require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Contacts' do
-  let(:resource_type) { 'contacts' }
+resource 'Email Addresses' do
+  # This is required!
+  # This is the resource's JSONAPI.org `type` attribute to be validated against.
+  let(:resource_type) { 'email-address' }
 
-  get '/my-cool-url' do
-    example_request 'list contacts' do
-      expect(status).to eq 200
-    end
+  # Remove this and the authorized context below if not authorizing your requests.
+  let(:user) { create(:user_with_account) }
+
+  let(:expected_attribute_keys) do
+    # list your expected resource keys vertically here (alphabetical please!)
+    %w(
+      created-at
+      updated-at
+    )
   end
 
-  get '/my-cool-url' do
-    example_request 'show contact' do
-      expect(status).to eq 200
-    end
-  end
+  context 'authorized user' do
+    before { api_login(user) }
 
-  post '/my-cool-url' do
-    example_request 'create contact' do
-      expect(status).to eq 201
+    # index
+    get '/my-index-url' do
+      example_request 'list email addresses' do
+        check_collection_resource(1)
+        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(status).to eq 200
+      end
     end
-  end
 
-  put '/my-cool-url' do
-    example_request 'update contact' do
-      expect(status).to eq 200
+    # show
+    get '/my-show-url' do
+      example_request 'show email address' do
+        check_resource
+        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(status).to eq 200
+      end
     end
-  end
 
-  patch '/my-cool-url' do
-    example_request 'update contact' do
-      expect(status).to eq 200
+    # create
+    post '/my-create-url' do
+      example_request 'create email address' do
+        check_resource
+        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(status).to eq 201
+      end
     end
-  end
 
-  delete '/my-cool-url' do
-    example_request 'delete contact' do
-      expect(status).to eq 200
+    # update
+    put '/my-update-url' do
+      example_request 'update email address' do
+        check_resource
+        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(status).to eq 200
+      end
+    end
+
+    # update
+    patch '/my-update-url' do
+      example_request 'update email address' do
+        check_resource
+        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(status).to eq 200
+      end
+    end
+
+    # destroy
+    delete '/my-destroy-url' do
+      example_request 'delete email address' do
+        expect(status).to eq 200
+      end
     end
   end
 end

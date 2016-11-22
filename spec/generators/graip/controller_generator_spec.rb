@@ -7,10 +7,10 @@ RSpec.describe Graip::Generators::ControllerGenerator, type: :generator do
   before { prepare_destination }
 
   describe 'generated files' do
-    before { run_generator ['Api/v2/Contacts'] }
+    before { run_generator ['Api/v2/EmailAddresses'] }
 
     describe 'the controller' do
-      subject { file('app/controllers/api/v2/contacts_controller.rb') }
+      subject { file('app/controllers/api/v2/email_addresses_controller.rb') }
 
       it { is_expected.to exist }
       it { is_expected.to have_correct_syntax }
@@ -24,7 +24,10 @@ RSpec.describe Graip::Generators::ControllerGenerator, type: :generator do
     end
 
     describe 'the controller spec' do
-      subject { file('spec/controllers/api/v2/contacts_controller_spec.rb') }
+      subject do
+        filename = 'spec/controllers/api/v2/email_addresses_controller_spec.rb'
+        file(filename)
+      end
 
       it { is_expected.to exist }
       it { is_expected.to have_correct_syntax }
@@ -38,7 +41,7 @@ RSpec.describe Graip::Generators::ControllerGenerator, type: :generator do
     end
 
     describe 'the acceptance spec' do
-      subject { file('spec/acceptance/api/v2/contacts_spec.rb') }
+      subject { file('spec/acceptance/api/v2/email_addresses_spec.rb') }
 
       it { is_expected.to exist }
       it { is_expected.to have_correct_syntax }

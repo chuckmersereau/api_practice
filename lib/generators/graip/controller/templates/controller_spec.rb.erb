@@ -8,9 +8,9 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
   let(:account_list) { user.account_lists.first }
 
   # This is required!
-  let(:resource_type) do
-    # Note: This may need to be adjusted based on namespace,
-    # ex: :contacts_address would be used for Api::V2::Contacts::Address
+  let(:factory_type) do
+    # This is the type used to auto-generate a resource using FactoryGirl,
+    # ex: The type `:email_address` would be used as create(:email_address)
     <%= ":#{resource_name}" %>
   end
 

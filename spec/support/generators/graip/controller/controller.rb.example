@@ -1,86 +1,86 @@
-class Api::V2::ContactsController < Api::V2::ApplicationController
+class Api::V2::EmailAddressesController < Api::V2::ApplicationController
   def index
-    load_contacts
+    load_email_addresses
     # make sure to authorize when needed
 
-    render json: @contacts
+    render json: @email_addresses
   end
 
   def show
-    load_contact
-    authorize_contact
+    load_email_address
+    authorize_email_address
 
-    render_contact
+    render_email_address
   end
 
   def create
-    persist_contact
+    persist_email_address
   end
 
   def update
-    load_contact
-    authorize_contact
+    load_email_address
+    authorize_email_address
 
-    persist_contact
+    persist_email_address
   end
 
   def destroy
-    load_contact
-    authorize_contact
-    @contact.destroy
+    load_email_address
+    authorize_email_address
+    @email_address.destroy
 
     render_200
   end
 
   private
 
-  def contact_params
+  def email_address_params
     params
       .require(:data)
       .require(:attributes)
-      .permit(contact_attributes)
+      .permit(email_address_attributes)
   end
 
-  def contact_attributes
-    Contact::PERMITTED_ATTRIBUTES
+  def email_address_attributes
+    EmailAddress::PERMITTED_ATTRIBUTES
   end
 
-  def contact_scope
+  def email_address_scope
     # This is just a placeholder to remind you to properly scope the model
     # ie: It's meant to blow up :)
-    Contact.that_belong_to(current_user)
+    EmailAddress.that_belong_to(current_user)
   end
 
-  def authorize_contact
-    authorize @contact
+  def authorize_email_address
+    authorize @email_address
   end
 
-  def build_contact
-    @contact ||= contact_scope.build
-    @contact.assign_attributes(contact_params)
+  def build_email_address
+    @email_address ||= email_address_scope.build
+    @email_address.assign_attributes(email_address_params)
   end
 
-  def load_contact
-    @contact ||= Contact.find(params[:id])
+  def load_email_address
+    @email_address ||= EmailAddress.find(params[:id])
   end
 
-  def load_contacts
-    @contacts ||= contact_scope.to_a
+  def load_email_addresses
+    @email_addresses ||= email_address_scope.to_a
   end
 
-  def persist_contact
-    build_contact
-    authorize_contact
-    return show if save_contact
+  def persist_email_address
+    build_email_address
+    authorize_email_address
+    return show if save_email_address
 
-    render_400_with_errors(@contact)
+    render_400_with_errors(@email_address)
   end
 
-  def render_contact
-    render json: @contact
+  def render_email_address
+    render json: @email_address
   end
 
-  def save_contact
-    @contact.save
+  def save_email_address
+    @email_address.save
   end
 end
