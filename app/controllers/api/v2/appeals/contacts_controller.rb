@@ -42,7 +42,7 @@ class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
   end
 
   def filters_without_excluded
-    filter_params.delete(:excluded)
+    filter_params.except(:excluded)
   end
 
   def permited_filters
