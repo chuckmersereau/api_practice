@@ -14,7 +14,7 @@ class Appeal < ActiveRecord::Base
   PERMITTED_ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :account_list_id].freeze
 
   def selected_contacts(excluded)
-    excluded ? excluded_appeal_contacts : contacts
+    excluded == 1 ? excluded_appeal_contacts : contacts
   end
 
   def add_and_remove_contacts(account_list, contact_ids)
