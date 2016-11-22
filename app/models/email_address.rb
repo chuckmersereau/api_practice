@@ -1,4 +1,11 @@
 class EmailAddress < ActiveRecord::Base
+  PERMITTED_ATTRIBUTES = [
+    :email,
+    :historic,
+    :location,
+    :primary
+  ].freeze
+
   include HasPrimary
   @@primary_scope = :person
 

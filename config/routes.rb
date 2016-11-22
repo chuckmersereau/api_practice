@@ -37,8 +37,9 @@ Rails.application.routes.draw do
           resources :addresses, only: [:index, :show, :create, :update, :destroy]
           resources :people do
             scope module: :people do
-              resources :relationships, only: [:show, :index, :create, :update, :destroy]
+              resources :email_addresses, only: [:index, :show, :create, :update, :destroy], path: 'email-addresses'
               resources :phones, only: [:index, :show, :create, :update, :destroy]
+              resources :relationships, only: [:show, :index, :create, :update, :destroy]
             end
           end
         end
