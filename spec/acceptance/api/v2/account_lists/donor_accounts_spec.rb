@@ -22,7 +22,7 @@ resource 'Donor Accounts' do
     end
     get '/api/v2/account_lists/:account_list_id/donor-accounts' do
       parameter 'account-list-id',              'Account List ID', required: true
-      response_field :data,                     'Data', 'Type' => 'Array [Object]'
+      response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list donor accounts of account list' do
         check_collection_resource(1)
         expect(resource_object.keys).to eq expected_attribute_keys
@@ -39,7 +39,7 @@ resource 'Donor Accounts' do
         response_field 'last-donation-date',      'Last Donation Date', 'Type' => 'String'
         response_field 'first-donation-date',     'First Donation Date', 'Type' => 'String'
         response_field 'donor-type',              'Donor Type', 'Type' => 'String'
-        response_field 'contact-ids',             'Contact IDs', 'Type' => 'Array [Number]'
+        response_field 'contact-ids',             'Contact IDs', 'Type' => 'Array[Number]'
       end
       example_request 'get donor account' do
         check_resource

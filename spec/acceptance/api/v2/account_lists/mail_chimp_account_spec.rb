@@ -38,7 +38,7 @@ resource 'Mailchimp Account Spec' do
       response_field 'lists-link',              'Lists Link', 'Type' => 'String'
       response_field 'sync-all-active-contacts', 'Sync all active contacts', 'Type' => 'Boolean'
       response_field 'lists-present', 'Lists Present', 'Type' => 'Boolean'
-      response_field 'lists-available-for-newsletters', 'Lists available for newsletters', 'Type' => 'Array [Object]'
+      response_field 'lists-available-for-newsletters', 'Lists available for newsletters', 'Type' => 'Array[Object]'
     end
     example_request 'get mailchimp account' do
       check_resource

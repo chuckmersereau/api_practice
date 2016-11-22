@@ -24,7 +24,7 @@ resource 'Contacts' do
     end
     get '/api/v2/appeals/:appeal_id/contacts' do
       parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
-      response_field :data,                     'Data', 'Type' => 'Array [Object]'
+      response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list contacts of appeal of account list' do
         expect(resource_object.keys).to eq contact_properties
         expect(status).to eq 200
@@ -56,11 +56,11 @@ resource 'Contacts' do
         response_field 'last-phone-call',         'Last phone call', 'Type' => 'String'
         response_field 'last-pre-call',           'Last Pre-Call', 'Type' => 'String'
         response_field 'last-thank',              'Last Thank', 'Type' => 'String'
-        response_field 'referrals-to-me-ids',     'Referrals to me IDs', 'Type' => 'Array [Number]'
-        response_field 'tag-list',                'Tag List', 'Type' => 'Array [String]'
+        response_field 'referrals-to-me-ids',     'Referrals to me IDs', 'Type' => 'Array[Number]'
+        response_field 'tag-list',                'Tag List', 'Type' => 'Array[String]'
         response_field 'uncompleted-tasks-count', 'Uncompleted Tasks count', 'Type' => 'Number'
         response_field 'timezone',                'Timezone', 'Type' => 'String'
-        response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array [Object]'
+        response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array[Object]'
       end
       example_request 'get contact' do
         expect(resource_object.keys).to eq contact_properties

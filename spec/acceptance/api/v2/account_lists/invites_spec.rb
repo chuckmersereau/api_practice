@@ -19,7 +19,7 @@ resource 'Invites' do
     end
     get '/api/v2/account_lists/:account_list_id/invites' do
       parameter 'account-list-id',              'Account List ID', required: true
-      response_field :data,                     'Data', 'Type' => 'Array [Object]'
+      response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list invites of account list' do
         explanation 'Invites of selected account list'
         check_collection_resource(1)

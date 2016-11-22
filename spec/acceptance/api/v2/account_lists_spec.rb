@@ -15,7 +15,7 @@ resource 'Account Lists' do
       api_login(user)
     end
     get '/api/v2/account_lists' do
-      response_field :data, 'Data', 'Type' => 'Array [Object]'
+      response_field :data, 'Data', 'Type' => 'Array[Object]'
       example_request 'list account lists of current user' do
         check_collection_resource(1)
         expect(resource_object.keys).to eq expected_attribute_keys

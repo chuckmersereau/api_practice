@@ -18,7 +18,7 @@ resource 'Appeals' do
     end
     get '/api/v2/appeals' do
       parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
-      response_field :data,                     'Data', 'Type' => 'Array [Object]'
+      response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list appeals of account list' do
         expect(resource_object.keys).to eq expected_attribute_keys
         expect(status).to eq 200
@@ -33,10 +33,10 @@ resource 'Appeals' do
         response_field 'description',           'Description', 'Type' => 'String'
         response_field 'end-date',              'End Date', 'Type' => 'String'
         response_field 'created-at',            'Created At', 'Type' => 'String'
-        response_field 'currencies',            'Currencies', 'Type' => 'Array [String]'
+        response_field 'currencies',            'Currencies', 'Type' => 'Array[String]'
         response_field 'total-currency',        'Total currency', 'Type' => 'String'
-        response_field 'donations',             'Donations', 'Type' => 'Array [Object]'
-        response_field 'contacts',              'Contacts', 'Type' => 'Array [Contact]'
+        response_field 'donations',             'Donations', 'Type' => 'Array[Object]'
+        response_field 'contacts',              'Contacts', 'Type' => 'Array[Contact]'
       end
       example_request 'get appeal' do
         expect(resource_object.keys).to eq expected_attribute_keys

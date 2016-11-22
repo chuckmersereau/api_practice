@@ -20,7 +20,7 @@ resource 'Notifications' do
     end
     get '/api/v2/account_lists/:account_list_id/notifications' do
       parameter 'account-list-id',              'Account List ID', required: true
-      response_field :data,                     'Data', 'Type' => 'Array [Object]'
+      response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list notifications of account list' do
         check_collection_resource(2, ['relationships'])
         expect(resource_object.keys).to eq expected_attribute_keys

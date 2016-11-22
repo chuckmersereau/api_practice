@@ -17,7 +17,7 @@ resource 'Designation Accounts' do
     end
     get '/api/v2/account_lists/:account_list_id/designation-accounts' do
       parameter 'account-list-id',              'Account List ID', required: true
-      response_field :data,                     'Data', 'Type' => 'Array [Object]'
+      response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list designation accounts of account list' do
         check_collection_resource(1)
         expect(resource_object.keys).to eq expected_attribute_keys
