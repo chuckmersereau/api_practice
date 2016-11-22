@@ -9,6 +9,7 @@ resource 'Appeals' do
   let!(:appeal) { create(:appeal, account_list: account_list) }
   let(:id) { appeal.id }
   let(:form_data) { build_data(name: 'New Appeal Name', 'account-list-id': account_list_id) }
+  let(:appeal_properties) { %w(name amount description end-date created-at currencies total-currency donations contacts) }
 
   context 'authorized user' do
     before do
@@ -18,7 +19,7 @@ resource 'Appeals' do
       parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
       response_field :data,                     'Data', 'Type' => 'Array'
       example_request 'list appeals of account list' do
-        expect(resource_object.keys).to eq %w(name amount description end-date created-at currencies total-currency donations contacts)
+        expect(resource_object.keys).to eq appeal_properties
         expect(status).to eq 200
       end
     end
@@ -26,17 +27,17 @@ resource 'Appeals' do
       parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         response_field 'name',                  'Name', 'Type' => 'String'
-        response_field 'amount',                'Amount', 'Type' => 'Decimal'
+        response_field 'amount',                'Amount', 'Type' => 'Number'
         response_field 'description',           'Description', 'Type' => 'String'
-        response_field 'end-date',              'End Date', 'Type' => 'Date'
-        response_field 'created-at',            'Created At', 'Type' => 'Date'
+        response_field 'end-date',              'End Date', 'Type' => 'String'
+        response_field 'created-at',            'Created At', 'Type' => 'String'
         response_field 'currencies',            'Currencies', 'Type' => 'Array'
         response_field 'total-currency',        'Total currency', 'Type' => 'String'
         response_field 'donations',             'Donations', 'Type' => 'Array'
         response_field 'contacts',              'Contacts', 'Type' => 'Array'
       end
       example_request 'get appeal' do
-        expect(resource_object.keys).to eq %w(name amount description end-date created-at currencies total-currency donations contacts)
+        expect(resource_object.keys).to eq appeal_properties
         expect(status).to eq 200
       end
     end

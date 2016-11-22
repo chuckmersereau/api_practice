@@ -13,9 +13,6 @@ resource 'Mailchimp' do
   let(:form_data) { build_data(appeal_list_id: primary_list_id) }
 
   before do
-    stub_request(:get, 'https://apikey:fake-us4@us4.api.mailchimp.com/3.0/lists/1/members?count=100&offset=0')
-      .with(headers: { 'Accept' => '*/*', 'Accept-Encoding' => 'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'Content-Type' => 'application/json', 'User-Agent' => 'Faraday v0.9.2' })
-      .to_return(status: 200, body: '', headers: {})
     allow_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list)
     allow_any_instance_of(MailChimpAccount).to receive(:lists).and_return([])
     allow_any_instance_of(MailChimpAccount).to receive(:validate_key)
