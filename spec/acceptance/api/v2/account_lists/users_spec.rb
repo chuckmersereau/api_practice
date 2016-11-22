@@ -10,6 +10,8 @@ resource 'Users' do
   let(:user2) { users.last }
   let(:id) { user2.id }
   let(:original_user_id) { user.id }
+  let(:expected_attribute_keys) { %w(first-name last-name master-person-id preferences created-at updated-at) }
+  
   before do
     account_list.users += users
   end
@@ -21,14 +23,14 @@ resource 'Users' do
       example_request 'list users of account list' do
         explanation 'Users of selected account list'
         check_collection_resource(3, ['relationships'])
-        expect(resource_object.keys).to eq %w(first-name last-name master-person-id preferences created-at updated-at)
+        expect(resource_object.keys).to eq expected_attribute_keys
         expect(status).to eq 200
       end
     end
     get '/api/v2/account_lists/:account_list_id/users/:id' do
       example_request 'get user' do
         check_resource(['relationships'])
-        expect(resource_object.keys).to eq %w(first-name last-name master-person-id preferences created-at updated-at)
+        expect(resource_object.keys).to eq expected_attribute_keys
         expect(resource_object['first-name']).to eq user2.first_name
         expect(resource_object['last-name']).to eq user2.last_name
         expect(status).to eq 200

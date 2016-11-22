@@ -12,9 +12,10 @@ resource 'Import' do
                     source_account_id: fb_account.id)
   end
   let(:id) { import.id }
-
   let(:new_import) { build(:import, account_list_id: account_list.id, user_id: user.id, source_account_id: fb_account.id).attributes }
   let(:form_data) { build_data(new_import) }
+  let(:expected_attribute_keys) { %w(account-list-id source file tags override user-id source-account-id
+                                              import-by-group groups group-tags) }
 
   before do
     stub_request(:get, "https://graph.facebook.com/#{fb_account.remote_id}/friends?access_token=#{fb_account.token}")
@@ -34,16 +35,15 @@ resource 'Import' do
         response_field :file,                     'File', 'Type' => 'String'
         response_field :tags,                     'Tags', 'Type' => 'Array.new(10) { iii }'
         response_field :override,                 'Override', 'Type' => 'Boolean'
-        response_field 'user-id',                 'User ID', 'Type' => 'Integer'
-        response_field 'source-account-id',       'Source Account ID', 'Type' => 'Integer'
+        response_field 'user-id',                 'User ID', 'Type' => 'Number'
+        response_field 'source-account-id',       'Source Account ID', 'Type' => 'Number'
         response_field 'import-by-group',         'Import by Group', 'Type' => 'Boolean'
         response_field :groups,                   'Groups', 'Type' => 'String'
         response_field 'group-tags',              'Group Tags', 'Type' => 'String'
       end
       example_request 'get import' do
         check_resource
-        expect(resource_object.keys).to eq %w(account-list-id source file tags override user-id source-account-id
-                                              import-by-group groups group-tags)
+        expect(resource_object.keys).to eq expected_attribute_keys
         expect(status).to eq 200
       end
     end
