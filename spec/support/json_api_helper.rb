@@ -1,10 +1,6 @@
 module JsonApiHelper
   def json_response
-    @json_response ||= JSON.parse(relevate_response)
-  end
-
-  def relevate_response
-    defined?(response_body) ? response_body : response.body
+    @json_response ||= JSON.parse(response_body)
   end
 
   def check_collection_resource(total_items, additional_keys = [])

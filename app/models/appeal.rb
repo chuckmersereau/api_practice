@@ -5,11 +5,17 @@ class Appeal < ActiveRecord::Base
   has_many :excluded_appeal_contacts, dependent: :delete_all
   has_many :donations
 
-  validates :account_list_id, presence: true
+  validates :name, :account_list_id, presence: true
 
   default_scope { order(created_at: :desc) }
 
+  scope :that_belong_to, -> (user) { where(account_list_id: user.account_list_ids) }
+
   PERMITTED_ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :account_list_id].freeze
+
+  def selected_contacts(excluded)
+    excluded == 1 ? excluded_appeal_contacts : contacts
+  end
 
   def add_and_remove_contacts(account_list, contact_ids)
     contact_ids ||= []

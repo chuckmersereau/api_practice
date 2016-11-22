@@ -17,7 +17,7 @@ resource 'Users' do
     get '/api/v2/user' do
       response_field :id, 'user id', 'Type' => 'Integer'
       response_field :type, 'Will be User', 'Type' => 'String'
-      response_field :attributes, 'user object', 'Type' => 'Hash'
+      response_field :attributes, 'user object', 'Type' => 'Object'
       response_field :relationships, 'list of relationships related to that user object', 'Type' => 'Array'
       example_request 'get user' do
         check_resource(['relationships'])

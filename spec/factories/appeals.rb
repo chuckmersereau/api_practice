@@ -2,8 +2,8 @@
 
 FactoryGirl.define do
   factory :appeal do
-    account_list
     name 'Appeal 1'
+    account_list
     amount 1000.0
     description 'First appeal'
   end

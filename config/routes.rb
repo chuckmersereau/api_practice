@@ -11,20 +11,27 @@ Rails.application.routes.draw do
       end
       resources :account_lists, only: [:index, :show, :update] do
         scope module: :account_lists do
-          resources :donor_accounts, :designation_accounts, only: [:index, :show]
+          resources :donor_accounts, only: [:index, :show], path: 'donor-accounts'
+          resources :designation_accounts, only: [:index, :show], path: 'designation-accounts'
           resources :filters, only: [:index]
           resources :invites, only: [:index, :show, :create, :destroy]
           resources :users, only: [:index, :show, :destroy]
           resources :merge, only: [:create]
           resources :imports, only: [:show, :create]
-          resource :prayer_letters_account, only: [:show, :create, :destroy] do
+          resource :prayer_letters_account, only: [:show, :create, :destroy], path: 'prayer-letters-account' do
             get :sync, on: :member
           end
-          resource :mail_chimp_account, only: [:show, :create, :destroy] do
+          resource :mail_chimp_account, only: [:show, :create, :destroy], path: 'mail-chimp-account' do
             get :sync, on: :member
           end
           resources :notifications, only: [:index, :show, :create, :update, :destroy]
           resources :donations, only: [:index, :show, :create, :update]
+        end
+      end
+      resources :appeals, only: [:index, :show, :create, :update, :destroy] do
+        scope module: :appeals do
+          resources :contacts, only: [:index, :show, :destroy]
+          resource :export_to_mailchimp, only: [:show], controller: :export_to_mailchimp, path: 'export-to-mailchimp'
         end
       end
       resource :user, only: [:show, :update] do

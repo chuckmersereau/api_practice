@@ -1,4 +1,8 @@
 class Api::V2::AccountLists::MailChimpAccountsController < Api::V2::AccountListsController
+  def pundit_user
+    current_user
+  end
+
   def sync
     load_resource
     authorize @resource
