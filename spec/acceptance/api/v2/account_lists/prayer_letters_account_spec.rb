@@ -49,7 +49,7 @@ resource 'Prayer Letters Account' do
         end
       end
       get '/api/v2/account_lists/:account_list_id/prayer-letters-account/sync' do
-        parameter 'account-list-id',              'Account List ID', required: true
+        parameter 'account-list-id', 'Account List ID', required: true
         example_request 'sync prayer letters account' do
           expect(status).to eq 200
         end

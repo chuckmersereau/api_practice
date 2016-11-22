@@ -11,8 +11,10 @@ resource 'Mailchimp Account Spec' do
   let(:mail_chimp_account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
   let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
   let(:appeal) { create(:appeal, account_list: account_list) }
-  let(:expected_attribute_keys) { %w(api-key validation-error active validate-key auto-log-campaigns primary-list-id
-                                            primary-list-name lists-link sync-all-active-contacts lists-present valid lists-available-for-newsletters) }
+  let(:expected_attribute_keys) do
+    %w(api-key validation-error active validate-key auto-log-campaigns primary-list-id
+       primary-list-name lists-link sync-all-active-contacts lists-present valid lists-available-for-newsletters)
+  end
 
   before do
     allow_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list)

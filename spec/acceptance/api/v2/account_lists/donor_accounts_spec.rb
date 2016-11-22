@@ -9,8 +9,10 @@ resource 'Donor Accounts' do
   let!(:contact) { create(:contact, account_list: account_list) }
   let!(:donor_account) { create(:donor_account) }
   let(:id) { donor_account.id }
-  let(:expected_attribute_keys) { %w(organization-id account-number created-at updated-at
-                                              total-donations last-donation-date first-donation-date donor-type contact-ids) }
+  let(:expected_attribute_keys) do
+    %w(organization-id account-number created-at updated-at
+       total-donations last-donation-date first-donation-date donor-type contact-ids)
+  end
   before do
     contact.donor_accounts << donor_account
   end

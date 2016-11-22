@@ -14,9 +14,11 @@ resource 'Donations' do
   let(:id) { donation.id }
   let(:new_donation) { build(:donation, donor_account: donor_account, designation_account: designation_account, amount: 10.00).attributes }
   let(:form_data) { build_data(new_donation) }
-  let(:expected_attribute_keys) { %w(amount donation-date contact-id appeal-id appeal-amount donor-account-id
-                                              designation-account-id remote-id motivation payment-method tendered-currency tendered-amount currency memo
-                                              payment-type channel) }
+  let(:expected_attribute_keys) do
+    %w(amount donation-date contact-id appeal-id appeal-amount donor-account-id
+       designation-account-id remote-id motivation payment-method tendered-currency tendered-amount currency memo
+       payment-type channel)
+  end
 
   before do
     account_list.designation_accounts << designation_account

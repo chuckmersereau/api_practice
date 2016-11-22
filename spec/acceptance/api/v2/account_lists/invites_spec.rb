@@ -8,8 +8,10 @@ resource 'Invites' do
   let(:account_list_id) { account_list.id }
   let!(:invite) { create(:account_list_invite, account_list: account_list) }
   let(:id) { invite.id }
-  let(:expected_attribute_keys) { %w(account-list-id invited-by-user-id code recipient-email
-                                              accepted-by-user-id accepted-at cancelled-by-user-id) }
+  let(:expected_attribute_keys) do
+    %w(account-list-id invited-by-user-id code recipient-email
+       accepted-by-user-id accepted-at cancelled-by-user-id)
+  end
 
   context 'authorized user' do
     before do

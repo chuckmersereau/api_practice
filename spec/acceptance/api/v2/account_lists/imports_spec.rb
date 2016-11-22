@@ -14,8 +14,10 @@ resource 'Import' do
   let(:id) { import.id }
   let(:new_import) { build(:import, account_list_id: account_list.id, user_id: user.id, source_account_id: fb_account.id).attributes }
   let(:form_data) { build_data(new_import) }
-  let(:expected_attribute_keys) { %w(account-list-id source file tags override user-id source-account-id
-                                              import-by-group groups group-tags) }
+  let(:expected_attribute_keys) do
+    %w(account-list-id source file tags override user-id source-account-id
+       import-by-group groups group-tags)
+  end
 
   before do
     stub_request(:get, "https://graph.facebook.com/#{fb_account.remote_id}/friends?access_token=#{fb_account.token}")

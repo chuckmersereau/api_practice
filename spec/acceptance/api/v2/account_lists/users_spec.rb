@@ -11,7 +11,7 @@ resource 'Users' do
   let(:id) { user2.id }
   let(:original_user_id) { user.id }
   let(:expected_attribute_keys) { %w(first-name last-name master-person-id preferences created-at updated-at) }
-  
+
   before do
     account_list.users += users
   end
