@@ -22,9 +22,9 @@ resource 'Organization Accounts' do
     end
     get '/api/v2/user/organization-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field :username, 'Username', 'Type' => 'String'
-        response_field :person_id, 'Person Id', 'Type' => 'String'
-        response_field :organization_id, 'Organization Id', 'Type' => 'Integer'
+        response_field 'organization_id', 'Organization Id', 'Type' => 'Integer'
+        response_field 'person_id',       'Person Id', 'Type' => 'String'
+        response_field 'username',        'Username', 'Type' => 'String'
       end
       example_request 'get organization account' do
         check_resource(['relationships'])
@@ -33,10 +33,10 @@ resource 'Organization Accounts' do
     end
     post '/api/v2/user/organization-accounts' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter :username, 'Username'
-        parameter :password, 'Password'
-        parameter :person_id, 'Person Id'
-        parameter :organization_id, 'Organization Id'
+        parameter 'organization_id',  'Organization Id'
+        parameter 'password',         'Password'
+        parameter 'person_id',        'Person Id'
+        parameter 'username',         'Username'
       end
 
       example 'create organization account' do
@@ -48,10 +48,10 @@ resource 'Organization Accounts' do
 
     put '/api/v2/user/organization-accounts/:id' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter :username, 'Username'
-        parameter :password, 'Password'
-        parameter :person_id, 'Person Id'
-        parameter :organization_id, 'Organization Id'
+        parameter 'organization_id',  'Organization Id'
+        parameter 'password',         'Password'
+        parameter 'person_id',        'Person Id'
+        parameter 'username',         'Username'
       end
 
       example 'update notification' do

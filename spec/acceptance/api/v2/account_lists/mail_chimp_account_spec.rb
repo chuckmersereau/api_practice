@@ -12,8 +12,20 @@ resource 'Mailchimp Account Spec' do
   let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
   let(:appeal) { create(:appeal, account_list: account_list) }
   let(:expected_attribute_keys) do
-    %w(created-at updated-at active api-key auto-log-campaigns lists-available-for-newsletters lists-link lists-present
-       primary-list-id primary-list-name sync-all-active-contacts valid validate-key validation-error)
+    %w(active
+       api-key
+       auto-log-campaigns
+       created-at
+       lists-available-for-newsletters
+       lists-link
+       lists-present
+       primary-list-id
+       primary-list-name
+       sync-all-active-contacts
+       updated-at
+       valid
+       validate-key
+       validation-error)
   end
 
   before do
@@ -27,22 +39,22 @@ resource 'Mailchimp Account Spec' do
 
   get '/api/v2/account-lists/:account_list_id/mail-chimp-account' do
     with_options scope: [:data, :attributes] do
-      response_field 'api-key',                 'API Key', 'Type' => 'String'
-      response_field 'valid',                   'Valid', 'Type' => 'Boolean'
-      response_field 'validation-error',        'Validation Error', 'Type' => 'String'
-      response_field 'active',                  'Active', 'Type' => 'Boolean'
-      response_field 'validate-key',            'Validate Key', 'Type' => 'Boolean'
-      response_field 'auto-log-campaigns',      'Auto Log Campaigns', 'Type' => 'Boolean'
-      response_field 'primary-list-id',         'Primary List ID', 'Type' => 'Number'
-      response_field 'primary-list-name',       'Primary List Name', 'Type' => 'String'
-      response_field 'lists-link',              'Lists Link', 'Type' => 'String'
-      response_field 'sync-all-active-contacts', 'Sync all active contacts', 'Type' => 'Boolean'
-      response_field 'lists-present', 'Lists Present', 'Type' => 'Boolean'
+      response_field 'active',                          'Active', 'Type' => 'Boolean'
+      response_field 'api-key',                         'API Key', 'Type' => 'String'
+      response_field 'auto-log-campaigns',              'Auto Log Campaigns', 'Type' => 'Boolean'
       response_field 'lists-available-for-newsletters', 'Lists available for newsletters', 'Type' => 'Array[Object]'
+      response_field 'lists-link',                      'Lists Link', 'Type' => 'String'
+      response_field 'lists-present',                   'Lists Present', 'Type' => 'Boolean'
+      response_field 'primary-list-id',                 'Primary List ID', 'Type' => 'Number'
+      response_field 'primary-list-name',               'Primary List Name', 'Type' => 'String'
+      response_field 'sync-all-active-contacts',        'Sync all active contacts', 'Type' => 'Boolean'
+      response_field 'valid',                           'Valid', 'Type' => 'Boolean'
+      response_field 'validation-error',                'Validation Error', 'Type' => 'String'
+      response_field 'validate-key',                    'Validate Key', 'Type' => 'Boolean'
     end
     example_request 'get mailchimp account' do
       check_resource
-      expect(resource_object.keys).to match expected_attribute_keys
+      expect(resource_object.keys).to match_array expected_attribute_keys
       expect(status).to eq 200
     end
   end

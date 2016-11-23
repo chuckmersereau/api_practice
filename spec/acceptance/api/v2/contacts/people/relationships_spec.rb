@@ -28,9 +28,9 @@ resource 'Relationship' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       with_options scope: [:data, :attributes] do
-        response_field :person_id, 'Person Id', 'Type' => 'Integer'
-        response_field :related_person_id, 'Related Person', 'Type' => 'Integer'
-        response_field :relationship, 'Relationship', 'Type' => 'String'
+        response_field 'person_id', 'Person Id', 'Type' => 'Integer'
+        response_field 'related_person_id', 'Related Person', 'Type' => 'Integer'
+        response_field 'relationship', 'Relationship', 'Type' => 'String'
       end
 
       example_request 'get organization account' do
@@ -41,9 +41,9 @@ resource 'Relationship' do
 
     post '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter :person_id, 'Person Id'
-        parameter :related_person_id, 'Related Person Id'
-        parameter :relationship, 'Relationship'
+        parameter 'person_id', 'Person Id'
+        parameter 'related_person_id', 'Related Person Id'
+        parameter 'relationship', 'Relationship'
       end
 
       example 'create organization account' do
@@ -55,9 +55,9 @@ resource 'Relationship' do
 
     put '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter :person_id, 'Person Id'
-        parameter :related_person_id, 'Related Person Id'
-        parameter :relationship, 'Relationship'
+        parameter 'person_id', 'Person Id'
+        parameter 'related_person_id', 'Related Person Id'
+        parameter 'relationship', 'Relationship'
       end
 
       example 'update notification' do

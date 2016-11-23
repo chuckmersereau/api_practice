@@ -39,15 +39,15 @@ resource 'Appeals' do
       parameter 'account_list_id', 'Account List ID', scope: :filters
       parameter 'excluded',        'Show excluded contacts', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
-        response_field 'name',                  'Name', 'Type' => 'String'
         response_field 'amount',                'Amount', 'Type' => 'Number'
-        response_field 'description',           'Description', 'Type' => 'String'
-        response_field 'end-date',              'End Date', 'Type' => 'String'
+        response_field 'contacts',              'Contacts', 'Type' => 'Array[Contact]'
         response_field 'created-at',            'Created At', 'Type' => 'String'
         response_field 'currencies',            'Currencies', 'Type' => 'Array[String]'
-        response_field 'total-currency',        'Total currency', 'Type' => 'String'
+        response_field 'description',           'Description', 'Type' => 'String'
         response_field 'donations',             'Donations', 'Type' => 'Array[Object]'
-        response_field 'contacts',              'Contacts', 'Type' => 'Array[Contact]'
+        response_field 'end-date',              'End Date', 'Type' => 'String'
+        response_field 'name',                  'Name', 'Type' => 'String'
+        response_field 'total-currency',        'Total currency', 'Type' => 'String'
       end
       example_request 'get appeal' do
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -57,10 +57,10 @@ resource 'Appeals' do
     post '/api/v2/appeals' do
       with_options scope: [:data, :attributes] do
         parameter 'account-list-id',              'Account List ID', required: true
-        parameter :name,                          'Name', required: true
-        parameter :amount,                        'Amount'
-        parameter :description,                   'Description'
+        parameter 'amount',                       'Amount'
+        parameter 'description',                  'Description'
         parameter 'end-date',                     'End Date'
+        parameter 'name',                         'Name', required: true
       end
       example 'create appeal' do
         do_request data: form_data
@@ -70,10 +70,10 @@ resource 'Appeals' do
     put '/api/v2/appeals/:id' do
       parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
-        parameter :name,                          'Name'
-        parameter :amount,                        'Amount'
-        parameter :description,                   'Description'
+        parameter 'amount',                       'Amount'
+        parameter 'description',                  'Description'
         parameter 'end-date',                     'End Date'
+        parameter 'name',                         'Name'
       end
       example 'update appeals' do
         do_request data: form_data

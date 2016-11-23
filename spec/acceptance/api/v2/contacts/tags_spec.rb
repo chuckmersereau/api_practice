@@ -17,7 +17,7 @@ resource 'Tags' do
 
     post '/api/v2/contacts/:contact_id/tags' do
       with_options scope: [:data, :attributes] do
-        parameter :name, 'name of Tag'
+        parameter 'name', 'name of Tag'
       end
 
       example 'create tag' do
@@ -28,8 +28,8 @@ resource 'Tags' do
     end
 
     delete '/api/v2/contacts/:contact_id/tags/:tag_name' do
-      parameter :contact_id, 'the Contact id of the Tag'
-      parameter :tag_name, 'the Id of the Tag'
+      parameter 'contact_id', 'the Contact id of the Tag'
+      parameter 'tag_name',   'the Id of the Tag'
 
       example_request 'delete tag' do
         expect(status).to eq 200
