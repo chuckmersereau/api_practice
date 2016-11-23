@@ -4,7 +4,7 @@ require 'rspec_api_documentation/dsl'
 resource '<%= resource_class_name.pluralize.titleize %>' do
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
-  let(:resource_type) { '<%= dashed_resource_name %>' }
+  let(:resource_type) { '<%= dashed_resources_name %>' }
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user) { create(:user_with_account) }

@@ -4,7 +4,7 @@ require 'rspec_api_documentation/dsl'
 resource 'Email Addresses' do
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
-  let(:resource_type) { 'email-address' }
+  let(:resource_type) { 'email-addresses' }
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user) { create(:user_with_account) }
