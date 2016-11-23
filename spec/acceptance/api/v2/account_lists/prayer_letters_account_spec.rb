@@ -35,8 +35,8 @@ resource 'Prayer Letters Account' do
       get '/api/v2/account-lists/:account_list_id/prayer-letters-account' do
         parameter 'account-list-id', 'Account List ID', required: true
         with_options scope: [:data, :attributes] do
-          response_field :token,                    'Token', 'Type' => 'String'
           response_field 'created-at',              'Created At', 'Type' => 'String'
+          response_field 'token',                   'Token', 'Type' => 'String'
           response_field 'updated-at',              'Updated At', 'Type' => 'String'
         end
         example_request 'get prayer letters account' do

@@ -24,11 +24,11 @@ resource 'Google Accounts' do
 
     get '/api/v2/user/google-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field :token, 'Token', 'Type' => 'String'
-        response_field :refresh_token, 'Refresh Token', 'Type' => 'String'
-        response_field :expires_at, 'Expires At', 'Type' => 'Datetime'
-        response_field :remote_id, 'Remote Id', 'Type' => 'Integer'
-        response_field :person_id, 'Person Id', 'Type' => 'Integer'
+        response_field 'expires_at',    'Expires At', 'Type' => 'Datetime'
+        response_field 'person_id',     'Person Id', 'Type' => 'Integer'
+        response_field 'refresh_token', 'Refresh Token', 'Type' => 'String'
+        response_field 'remote_id',     'Remote Id', 'Type' => 'Integer'
+        response_field 'token',         'Token', 'Type' => 'String'
       end
 
       example_request 'get organization account' do
@@ -39,11 +39,11 @@ resource 'Google Accounts' do
 
     post '/api/v2/user/google-accounts' do
       with_options scope: [:data, :attributes] do
-        parameter :token, 'Token'
-        parameter :refresh_token, 'Refresh Token'
-        parameter :expires_at, 'Expires At'
-        parameter :remote_id, 'Remote Id', required: true
-        parameter :person_id, 'Person Id', required: true
+        parameter 'expires_at',     'Expires At'
+        parameter 'person_id',      'Person Id', required: true
+        parameter 'refresh_token',  'Refresh Token'
+        parameter 'remote_id',      'Remote Id', required: true
+        parameter 'token',          'Token'
       end
 
       example 'create organization account' do
@@ -55,11 +55,11 @@ resource 'Google Accounts' do
 
     put '/api/v2/user/google-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        parameter :token, 'Token'
-        parameter :refresh_token, 'Refresh Token'
-        parameter :expires_at, 'Expires At'
-        parameter :remote_id, 'Remote Id', required: true
-        parameter :person_id, 'Person Id', required: true
+        parameter 'expires_at',     'Expires At'
+        parameter 'person_id',      'Person Id', required: true
+        parameter 'refresh_token',  'Refresh Token'
+        parameter 'remote_id',      'Remote Id', required: true
+        parameter 'token',          'Token'
       end
 
       example 'update notification' do

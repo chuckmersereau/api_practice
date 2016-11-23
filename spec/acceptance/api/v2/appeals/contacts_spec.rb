@@ -52,7 +52,7 @@ resource 'Contacts' do
     end
     get '/api/v2/appeals/:appeal_id/contacts' do
       parameter 'account_list_id',              'Account List ID', scope: :filters
-      response_field :data,                     'Data', 'Type' => 'Array[Object]'
+      response_field 'data',                    'Data', 'Type' => 'Array[Object]'
       example_request 'list contacts of appeal of account list' do
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
@@ -61,34 +61,34 @@ resource 'Contacts' do
     get '/api/v2/appeals/:appeal_id/contacts/:id' do
       parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
-        response_field 'name',                    'Name', 'Type' => 'String'
-        response_field 'pledge-amount',           'Pledge Amount', 'Type' => 'Number'
-        response_field 'pledge-frequency',        'Pledge Frequency', 'Type' => 'Number'
-        response_field 'pledge-currency',         'Pledge Currency', 'Type' => 'String'
-        response_field 'pledge-currency-symbol',  'Pledge Currency Symbol', 'Type' => 'String'
-        response_field 'pledge-start-date',       'Pledge Start Date', 'Type' => 'String'
-        response_field 'pledge-received',         'Pledge Received', 'Type' => 'Boolean'
-        response_field 'status',                  'Status', 'Type' => 'String'
-        response_field 'deceased',                'Deceased', 'Type' => 'Boolean'
-        response_field 'notes',                   'Notes', 'Type' => 'String'
-        response_field 'notes-saved-at',          'Notes saved at', 'Type' => 'String'
-        response_field 'next-ask',                'Next ask', 'Type' => 'String'
-        response_field 'no-appeals',              'No Appeals', 'Type' => 'Boolean'
-        response_field 'likely-to-give',          'Likely to Give', 'Type' => 'String'
         response_field 'church-name',             'Church Name', 'Type' => 'String'
-        response_field 'send-newsletter',         'Send Newsletter', 'Type' => 'String'
-        response_field 'magazine',                'Magazine', 'Type' => 'Boolean'
+        response_field 'deceased',                'Deceased', 'Type' => 'Boolean'
+        response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array[Object]'
         response_field 'last-activity',           'Last Activity', 'Type' => 'String'
         response_field 'last-appointment',        'Last Appointment', 'Type' => 'String'
         response_field 'last-letter',             'Last letter', 'Type' => 'String'
         response_field 'last-phone-call',         'Last phone call', 'Type' => 'String'
         response_field 'last-pre-call',           'Last Pre-Call', 'Type' => 'String'
         response_field 'last-thank',              'Last Thank', 'Type' => 'String'
+        response_field 'likely-to-give',          'Likely to Give', 'Type' => 'String'
+        response_field 'magazine',                'Magazine', 'Type' => 'Boolean'
+        response_field 'name',                    'Name', 'Type' => 'String'
+        response_field 'next-ask',                'Next ask', 'Type' => 'String'
+        response_field 'no-appeals',              'No Appeals', 'Type' => 'Boolean'
+        response_field 'notes',                   'Notes', 'Type' => 'String'
+        response_field 'notes-saved-at',          'Notes saved at', 'Type' => 'String'
+        response_field 'pledge-amount',           'Pledge Amount', 'Type' => 'Number'
+        response_field 'pledge-currency',         'Pledge Currency', 'Type' => 'String'
+        response_field 'pledge-currency-symbol',  'Pledge Currency Symbol', 'Type' => 'String'
+        response_field 'pledge-frequency',        'Pledge Frequency', 'Type' => 'Number'
+        response_field 'pledge-received',         'Pledge Received', 'Type' => 'Boolean'
+        response_field 'pledge-start-date',       'Pledge Start Date', 'Type' => 'String'
         response_field 'referrals-to-me-ids',     'Referrals to me IDs', 'Type' => 'Array[Number]'
+        response_field 'send-newsletter',         'Send Newsletter', 'Type' => 'String'
+        response_field 'status',                  'Status', 'Type' => 'String'
         response_field 'tag-list',                'Tag List', 'Type' => 'Array[String]'
-        response_field 'uncompleted-tasks-count', 'Uncompleted Tasks count', 'Type' => 'Number'
         response_field 'timezone',                'Timezone', 'Type' => 'String'
-        response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array[Object]'
+        response_field 'uncompleted-tasks-count', 'Uncompleted Tasks count', 'Type' => 'Number'
       end
       example_request 'get contact' do
         expect(resource_object.keys).to match_array expected_attribute_keys

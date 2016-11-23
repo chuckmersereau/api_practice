@@ -8,6 +8,14 @@ resource 'Users' do
   let(:account_list) { user.account_lists.first }
   let(:new_user) { attributes_for :user }
   let(:form_data) { build_data(new_user) }
+  let(:expected_attribute_keys) do
+    %w(created-at
+       first-name
+       last-name
+       master-person-id
+       preferences
+       updated-at)
+  end
 
   context 'authorized user' do
     before do
@@ -15,38 +23,36 @@ resource 'Users' do
     end
 
     get '/api/v2/user' do
-      response_field :id, 'user id', 'Type' => 'Integer'
-      response_field :type, 'Will be User', 'Type' => 'String'
-      response_field :attributes, 'user object', 'Type' => 'Object'
-      response_field :relationships, 'list of relationships related to that user object', 'Type' => 'Array'
+      response_field 'attributes',        'user object', 'Type' => 'Object'
+      response_field 'id',                'user id', 'Type' => 'Integer'
+      response_field 'relationships',     'list of relationships related to that user object', 'Type' => 'Array'
+      response_field 'type',              'Will be User', 'Type' => 'String'
       example_request 'get user' do
         check_resource(['relationships'])
-        expect(resource_object.keys).to match(
-          %w(created-at updated-at first-name last-name master-person-id preferences)
-        )
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
 
     put '/api/v2/user' do
       with_options scope: [:data, :attributes] do
-        parameter :first_name, 'user first name', required: true
-        parameter :last_name, 'user last name', required: true
-        parameter :preferences, 'user preferences', required: true
-        parameter :legal_first_name, 'user legal first name'
-        parameter :birthday_month, 'user birthday month'
-        parameter :birthday_year, 'user birthday year'
-        parameter :birthday_day, 'user birthday day'
-        parameter :anniversary_year, 'user anniversary year'
-        parameter :anniversary_day, 'user anniversary day'
-        parameter :title, 'user title'
-        parameter :suffix, 'user suffix'
-        parameter :marital_status, 'user marital status'
-        parameter :middle_name, 'user middle name'
-        parameter :profession, 'user profession'
-        parameter :deceased, 'user deceased'
-        parameter :occupation, 'user occupation'
-        parameter :employer, 'user employer'
+        parameter 'anniversary_day',      'user anniversary day'
+        parameter 'anniversary_year',     'user anniversary year'
+        parameter 'birthday_day',         'user birthday day'
+        parameter 'birthday_month',       'user birthday month'
+        parameter 'birthday_year',        'user birthday year'
+        parameter 'deceased',             'user deceased'
+        parameter 'employer',             'user employer'
+        parameter 'first_name',           'user first name', required: true
+        parameter 'last_name',            'user last name', required: true
+        parameter 'legal_first_name',     'user legal first name'
+        parameter 'marital_status',       'user marital status'
+        parameter 'middle_name',          'user middle name'
+        parameter 'occupation',           'user occupation'
+        parameter 'preferences',          'user preferences', required: true
+        parameter 'profession',           'user profession'
+        parameter 'suffix',               'user suffix'
+        parameter 'title',                'user title'
       end
 
       example 'update user' do

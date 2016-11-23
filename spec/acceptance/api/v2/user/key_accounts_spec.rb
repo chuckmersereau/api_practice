@@ -24,11 +24,11 @@ resource 'Key Accounts' do
 
     get '/api/v2/user/key-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field :first_name, 'First Name', 'Type' => 'String'
-        response_field :last_name, 'Last Name', 'Type' => 'String'
-        response_field :email, 'Email', 'Type' => 'String'
-        response_field :remote_id, 'Remote Id', 'Type' => 'Integer'
-        response_field :person_id, 'Person Id', 'Type' => 'Integer'
+        response_field 'email',       'Email', 'Type' => 'String'
+        response_field 'first_name',  'First Name', 'Type' => 'String'
+        response_field 'last_name',   'Last Name', 'Type' => 'String'
+        response_field 'person_id',   'Person Id', 'Type' => 'Integer'
+        response_field 'remote_id',   'Remote Id', 'Type' => 'Integer'
       end
       example_request 'get organization account' do
         check_resource
@@ -38,11 +38,11 @@ resource 'Key Accounts' do
 
     post '/api/v2/user/key-accounts' do
       with_options scope: [:data, :attributes] do
-        parameter :first_name, 'First Name'
-        parameter :last_name, 'Last Name'
-        parameter :email, 'Email', required: true
-        parameter :remote_id, 'Remote Id', required: true
-        parameter :person_id, 'Person Id', required: true
+        parameter 'email',      'Email', required: true
+        parameter 'first_name', 'First Name'
+        parameter 'last_name',  'Last Name'
+        parameter 'person_id',  'Person Id', required: true
+        parameter 'remote_id',  'Remote Id', required: true
       end
 
       example 'create organization account' do
@@ -54,11 +54,11 @@ resource 'Key Accounts' do
 
     put '/api/v2/user/key-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        parameter :first_name, 'First Name'
-        parameter :last_name, 'Last Name'
-        parameter :email, 'Email', required: true
-        parameter :remote_id, 'Remote Id', required: true
-        parameter :person_id, 'Person Id', required: true
+        parameter 'email',      'Email', required: true
+        parameter 'first_name', 'First Name'
+        parameter 'last_name',  'Last Name'
+        parameter 'person_id',  'Person Id', required: true
+        parameter 'remote_id',  'Remote Id', required: true
       end
 
       example 'update notification' do

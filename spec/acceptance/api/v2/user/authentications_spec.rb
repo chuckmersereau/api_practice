@@ -13,8 +13,8 @@ resource 'User / Authentication' do
   end
 
   post '/api/v2/user/authentication' do
-    parameter :access_token, 'Access Token', type: 'String'
-    response_field :json_web_token, 'Json Web Token', type: 'String'
+    parameter 'access_token', 'Access Token', type: 'String'
+    response_field 'json_web_token', 'Json Web Token', type: 'String'
 
     example_request 'Get Authentication' do
       expect(status).to eq(200)

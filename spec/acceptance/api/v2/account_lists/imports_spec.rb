@@ -15,11 +15,19 @@ resource 'Import' do
   let(:new_import) { build(:import, account_list_id: account_list.id, user_id: user.id, source_account_id: fb_account.id).attributes }
   let(:form_data) { build_data(new_import) }
   let(:expected_attribute_keys) do
-    %w(account-list-id source file tags override user-id source-account-id
-       import-by-group groups group-tags)
+    %w(account-list-id
+       created-at
+       import-by-group
+       file
+       group-tags
+       groups
+       override
+       source
+       source-account-id
+       tags
+       updated-at
+       user-id)
   end
-
-  let(:expected_attribute_keys) { %w(created-at updated-at account-list-id file groups group-tags import-by-group override source source-account-id tags user-id) }
 
   before do
     stub_request(:get, "https://graph.facebook.com/#{fb_account.remote_id}/friends?access_token=#{fb_account.token}")
@@ -35,33 +43,33 @@ resource 'Import' do
     end
     get '/api/v2/account-lists/:account_list_id/imports/:id' do
       with_options scope: [:data, :attributes] do
-        response_field :source,                   'Source', 'Type' => 'String'
-        response_field :file,                     'File', 'Type' => 'String'
-        response_field :tags,                     'Tags', 'Type' => 'Array.new(10) { iii }'
-        response_field :override,                 'Override', 'Type' => 'Boolean'
-        response_field 'user-id',                 'User ID', 'Type' => 'Number'
-        response_field 'source-account-id',       'Source Account ID', 'Type' => 'Number'
-        response_field 'import-by-group',         'Import by Group', 'Type' => 'Boolean'
-        response_field :groups,                   'Groups', 'Type' => 'String'
+        response_field 'file',                    'File', 'Type' => 'String'
+        response_field 'groups',                  'Groups', 'Type' => 'String'
         response_field 'group-tags',              'Group Tags', 'Type' => 'String'
+        response_field 'import-by-group',         'Import by Group', 'Type' => 'Boolean'
+        response_field 'override',                'Override', 'Type' => 'Boolean'
+        response_field 'source',                  'Source', 'Type' => 'String'
+        response_field 'source-account-id',       'Source Account ID', 'Type' => 'Number'
+        response_field 'tags',                    'Tags', 'Type' => 'Array.new(10) { iii }'
+        response_field 'user-id',                 'User ID', 'Type' => 'Number'
       end
       example_request 'get import' do
         check_resource
-        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
     post '/api/v2/account-lists/:account_list_id/imports' do
       with_options scope: [:data, :attributes] do
-        parameter :source,                        'Amount'
-        parameter :file,                          'File'
-        parameter :tags,                          'Tags'
-        parameter :override,                      'Override'
-        parameter 'user-id',                      'User ID'
-        parameter 'source-account-id',            'Source Account ID'
-        parameter 'import-by-group',              'Import by Group'
-        parameter :groups,                        'Groups'
+        parameter 'file',                         'File'
+        parameter 'groups',                       'Groups'
         parameter 'group-tags',                   'Group Tags'
+        parameter 'import-by-group',              'Import by Group'
+        parameter 'override',                     'Override'
+        parameter 'source',                       'Source'
+        parameter 'source-account-id',            'Source Account ID'
+        parameter 'tags',                         'Tags'
+        parameter 'user-id',                      'User ID'
       end
       example 'create prayer letters account' do
         do_request data: form_data
