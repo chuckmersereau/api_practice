@@ -1,4 +1,4 @@
-class DonationReports::DonorsAndDonationsSerializer < ActiveModel::Serializer
-  has_many :donors
+class DonationReports::DonorsAndDonationsSerializer < ApplicationSerializer
   has_many :donations
+  has_many :donors
 end

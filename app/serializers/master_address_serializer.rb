@@ -1,3 +1,7 @@
-class MasterAddressSerializer < ActiveModel::Serializer
-  attributes :id, :street, :city, :state, :country, :postal_code
+class MasterAddressSerializer < ApplicationSerializer
+  attributes :city,
+             :country,
+             :postal_code,
+             :state,
+             :street
 end

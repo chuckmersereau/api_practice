@@ -1,6 +1,11 @@
-class DonorAccountSerializer < ActiveModel::Serializer
-  attributes :id, :organization_id, :account_number, :created_at, :updated_at, :total_donations,
-             :last_donation_date, :first_donation_date, :donor_type, :contact_ids
+class DonorAccountSerializer < ApplicationSerializer
+  attributes :account_number,
+             :contact_ids,
+             :donor_type,
+             :first_donation_date,
+             :last_donation_date,
+             :organization_id,
+             :total_donations
 
   def contact_ids
     object.contacts.pluck(:id)

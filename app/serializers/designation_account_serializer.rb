@@ -1,3 +1,5 @@
-class DesignationAccountSerializer < ActiveModel::Serializer
-  attributes :id, :designation_number, :balance, :name, :created_at, :updated_at
+class DesignationAccountSerializer < ApplicationSerializer
+  attributes :balance,
+             :designation_number,
+             :name
 end

@@ -12,7 +12,7 @@ resource 'Filters' do
     before do
       api_login(user)
     end
-    get '/api/v2/account_lists/:account_list_id/filters' do
+    get '/api/v2/account-lists/:account_list_id/filters' do
       let(:contact) { 1 }
       let(:task) { 1 }
       parameter :contact,                       'Contact', 'Type' => 'Boolean'

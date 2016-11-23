@@ -19,6 +19,8 @@ resource 'Import' do
        import-by-group groups group-tags)
   end
 
+  let(:expected_attribute_keys) { %w(created-at updated-at account-list-id file groups group-tags import-by-group override source source-account-id tags user-id) }
+
   before do
     stub_request(:get, "https://graph.facebook.com/#{fb_account.remote_id}/friends?access_token=#{fb_account.token}")
       .to_return(body: '{"data": [{"name": "David Hylden","id": "120581"}]}')
@@ -31,7 +33,7 @@ resource 'Import' do
     before do
       api_login(user)
     end
-    get '/api/v2/account_lists/:account_list_id/imports/:id' do
+    get '/api/v2/account-lists/:account_list_id/imports/:id' do
       with_options scope: [:data, :attributes] do
         response_field :source,                   'Source', 'Type' => 'String'
         response_field :file,                     'File', 'Type' => 'String'
@@ -49,7 +51,7 @@ resource 'Import' do
         expect(status).to eq 200
       end
     end
-    post '/api/v2/account_lists/:account_list_id/imports' do
+    post '/api/v2/account-lists/:account_list_id/imports' do
       with_options scope: [:data, :attributes] do
         parameter :source,                        'Amount'
         parameter :file,                          'File'

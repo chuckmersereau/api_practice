@@ -11,7 +11,7 @@ class FamilyRelationshipPolicy < ApplicationPolicy
   private
 
   def resource_owner?
-    user.account_lists.ids.include?(current_contact.account_list_id) &&
-      resource.person.contacts.ids.include?(current_contact.id)
+    user.account_lists.exists?(id: current_contact.account_list_id) &&
+      resource.person.contacts.exists?(id: current_contact.id)
   end
 end

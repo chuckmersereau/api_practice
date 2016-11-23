@@ -3,6 +3,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
 
   def index
     load_relationships
+    authorize @person, :show?
     render json: @relationships
   end
 

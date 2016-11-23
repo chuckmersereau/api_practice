@@ -9,15 +9,15 @@ resource 'Invites' do
   let!(:invite) { create(:account_list_invite, account_list: account_list) }
   let(:id) { invite.id }
   let(:expected_attribute_keys) do
-    %w(account-list-id invited-by-user-id code recipient-email
-       accepted-by-user-id accepted-at cancelled-by-user-id)
+    %w(created-at updated-at accepted-at accepted-by-user-id
+       account-list-id cancelled-by-user-id code invited-by-user-id recipient-email)
   end
 
   context 'authorized user' do
     before do
       api_login(user)
     end
-    get '/api/v2/account_lists/:account_list_id/invites' do
+    get '/api/v2/account-lists/:account_list_id/invites' do
       parameter 'account-list-id',              'Account List ID', required: true
       response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list invites of account list' do
@@ -27,7 +27,7 @@ resource 'Invites' do
         expect(status).to eq 200
       end
     end
-    get '/api/v2/account_lists/:account_list_id/invites/:id' do
+    get '/api/v2/account-lists/:account_list_id/invites/:id' do
       with_options scope: [:data, :attributes] do
         response_field 'account-list-id',         'Account List ID', 'Type' => 'Number'
         response_field 'invited-by-user-id',      'Invited by User ID', 'Type' => 'Number'
@@ -44,7 +44,7 @@ resource 'Invites' do
         expect(status).to eq 200
       end
     end
-    post '/api/v2/account_lists/:account_list_id/invites' do
+    post '/api/v2/account-lists/:account_list_id/invites' do
       let(:new_account_list_invite) { attributes_for :account_list_invite }
       let(:email) { new_account_list_invite[:recipient_email] }
       let('recipient-email') { email }
@@ -54,7 +54,7 @@ resource 'Invites' do
         expect(status).to eq 200
       end
     end
-    delete '/api/v2/account_lists/:account_list_id/invites/:id' do
+    delete '/api/v2/account-lists/:account_list_id/invites/:id' do
       example_request 'delete invite' do
         expect(status).to eq 200
       end

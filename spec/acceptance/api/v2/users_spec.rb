@@ -21,8 +21,8 @@ resource 'Users' do
       response_field :relationships, 'list of relationships related to that user object', 'Type' => 'Array'
       example_request 'get user' do
         check_resource(['relationships'])
-        expect(resource_object.keys).to eq(
-          %w(first-name last-name master-person-id preferences created-at updated-at)
+        expect(resource_object.keys).to match(
+          %w(created-at updated-at first-name last-name master-person-id preferences)
         )
         expect(status).to eq 200
       end

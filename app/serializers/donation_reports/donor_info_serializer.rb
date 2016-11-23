@@ -1,5 +1,12 @@
-class DonationReports::DonorInfoSerializer < ActiveModel::Serializer
-  attributes(*DonationReports::DonorInfo::ATTRIBUTES)
+class DonationReports::DonorInfoSerializer < ApplicationSerializer
+  attributes :amount,
+             :contact_id,
+             :converted_amount,
+             :currency,
+             :donation_date,
+             :pledge_amount,
+             :pledge_frequency,
+             :status
 
   def status
     _(object.status)

@@ -1,12 +1,15 @@
-class PhoneNumberSerializer < ActiveModel::Serializer
+class PhoneNumberSerializer < ApplicationSerializer
   include DisplayCase::ExhibitsHelper
 
-  # embed :ids, include: true
-  ATTRIBUTES = [:id, :number, :historic, :country_code, :location, :primary, :created_at, :updated_at].freeze
-  attributes(*ATTRIBUTES)
+  attributes :country_code,
+             :historic,
+             :number,
+             :location,
+             :primary
 
-  def number
-    phone_number_exhibit = exhibit(object)
-    phone_number_exhibit.number
+  delegate :number, to: :phone_number_exhibit
+
+  def phone_number_exhibit
+    exhibit(object)
   end
 end

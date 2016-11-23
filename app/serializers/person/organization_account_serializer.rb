@@ -1,7 +1,15 @@
-class Person::OrganizationAccountSerializer < ActiveModel::Serializer
-  attributes :id, :username, :password, :person_id, :organization_id, :remote_id,
-             :authenticated, :valid_credentials, :created_at, :updated_at,
-             :downloading, :last_download, :token, :locked_at, :disable_downloads
+class Person::OrganizationAccountSerializer < ApplicationSerializer
+  attributes :authenticated,
+             :disable_downloads,
+             :downloading,
+             :last_download,
+             :locked_at,
+             :organization_id,
+             :person_id,
+             :remote_id,
+             :token,
+             :username,
+             :valid_credentials
 
   belongs_to :organization
 end

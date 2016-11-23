@@ -12,13 +12,14 @@ resource 'Donations' do
   let!(:donations) { create_list(:donation, 2, donor_account: donor_account, designation_account: designation_account, amount: 10.00) }
   let(:donation) { donations.first }
   let(:id) { donation.id }
+  let(:expected_attribute_keys) do
+    %w(created-at updated-at amount appeal-id appeal-amount channel
+       currency contact-id designation-account-id donation-date
+       donor-account-id memo motivation payment-method payment-type
+       remote-id tendered-amount tendered-currency)
+  end
   let(:new_donation) { build(:donation, donor_account: donor_account, designation_account: designation_account, amount: 10.00).attributes }
   let(:form_data) { build_data(new_donation) }
-  let(:expected_attribute_keys) do
-    %w(amount donation-date contact-id appeal-id appeal-amount donor-account-id
-       designation-account-id remote-id motivation payment-method tendered-currency tendered-amount currency memo
-       payment-type channel)
-  end
 
   before do
     account_list.designation_accounts << designation_account
@@ -28,16 +29,16 @@ resource 'Donations' do
     before do
       api_login(user)
     end
-    get '/api/v2/account_lists/:account_list_id/donations' do
+    get '/api/v2/account-lists/:account_list_id/donations' do
       parameter 'account-list-id',              'Account List ID', required: true
       response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list donations of account list' do
         check_collection_resource(2)
-        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
-    get '/api/v2/account_lists/:account_list_id/donations/:id' do
+    get '/api/v2/account-lists/:account_list_id/donations/:id' do
       with_options scope: [:data, :attributes] do
         response_field :amount,                   'Amount', 'Type' => 'Number'
         response_field 'donation-date',           'Donation Date', 'Type' => 'String'
@@ -58,12 +59,12 @@ resource 'Donations' do
       end
       example_request 'get donation' do
         check_resource
-        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['amount']).to eq '$10'
         expect(status).to eq 200
       end
     end
-    post '/api/v2/account_lists/:account_list_id/donations' do
+    post '/api/v2/account-lists/:account_list_id/donations' do
       with_options scope: [:data, :attributes] do
         parameter :amount,                        'Amount'
         parameter 'donation-date',                'Donation Date'
@@ -79,7 +80,7 @@ resource 'Donations' do
         expect(status).to eq 200
       end
     end
-    put '/api/v2/account_lists/:account_list_id/donations/:id' do
+    put '/api/v2/account-lists/:account_list_id/donations/:id' do
       parameter :id, 'ID of the donation', required: true
       with_options scope: [:data, :attributes] do
         parameter :amount,                        'Amount'

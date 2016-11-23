@@ -1,14 +1,25 @@
-class DonationSerializer < ActiveModel::Serializer
+class DonationSerializer < ApplicationSerializer
   include LocalizationHelper
 
-  attributes :id, :amount, :donation_date, :contact_id, :appeal_id, :appeal_amount, :donor_account_id,
-             :designation_account_id, :remote_id, :motivation, :payment_method, :tendered_currency, :tendered_amount,
-             :currency, :memo, :payment_type, :channel
+  attributes :amount,
+             :appeal_amount,
+             :appeal_id,
+             :channel,
+             :contact_id,
+             :currency,
+             :designation_account_id,
+             :donation_date,
+             :donor_account_id,
+             :memo,
+             :motivation,
+             :payment_method,
+             :payment_type,
+             :remote_id,
+             :tendered_amount,
+             :tendered_currency
 
   def amount
-    account_list = scope[:account_list]
-    current_currency(account_list)
-
+    current_currency(scope[:account_list])
     number_to_current_currency(object.amount, locale: scope[:locale])
   end
 

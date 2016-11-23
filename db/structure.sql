@@ -73,7 +73,9 @@ CREATE TABLE account_list_invites (
     recipient_email character varying(255) NOT NULL,
     accepted_by_user_id integer,
     accepted_at timestamp without time zone,
-    cancelled_by_user_id integer
+    cancelled_by_user_id integer,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
 );
 
 
@@ -1911,7 +1913,7 @@ CREATE TABLE oauth_access_grants (
     application_id integer NOT NULL,
     token character varying(255) NOT NULL,
     expires_in integer NOT NULL,
-    redirect_uri text NOT NULL,
+    redirect_uri character varying(255),
     created_at timestamp without time zone NOT NULL,
     revoked_at timestamp without time zone,
     scopes character varying(255)
@@ -1982,7 +1984,7 @@ CREATE TABLE oauth_applications (
     name character varying(255) NOT NULL,
     uid character varying(255) NOT NULL,
     secret character varying(255) NOT NULL,
-    redirect_uri text NOT NULL,
+    redirect_uri character varying(255),
     scopes character varying(255) DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone
@@ -5510,4 +5512,8 @@ INSERT INTO schema_migrations (version) VALUES ('20161007231427');
 INSERT INTO schema_migrations (version) VALUES ('20161008010853');
 
 INSERT INTO schema_migrations (version) VALUES ('20161026012402');
+
+INSERT INTO schema_migrations (version) VALUES ('20161027202729');
+
+INSERT INTO schema_migrations (version) VALUES ('20161119005933');
 

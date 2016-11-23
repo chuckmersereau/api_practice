@@ -16,7 +16,7 @@ resource 'Merge' do
     before do
       api_login(user)
     end
-    post '/api/v2/account_lists/:account_list_id/merge' do
+    post '/api/v2/account-lists/:account_list_id/merge' do
       parameter :account_list_id,         'Account List ID', required: true
       parameter :id,                      'ID (id of account list to be merged)', required: true, scope: [:data, :attributes]
       example 'merge account lists' do

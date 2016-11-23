@@ -79,14 +79,14 @@ On the front-end, users use a [TheKey.me](http://thekey.me/) account to login. T
 
 ## Testing
 
-There are four different test sets that we are running:
+There are two different test sets that we are running:
 
-- Regular RSpec: `bin/rspec spec`
-- Rubocop: `bin/rubocop -R`
+- Regular RSpec: `bundle exec rspec`
+- Rubocop: `bundle exec rubocop`
 
 ### Rubocop
 
-Run `bin/rubocop -D -R --auto-correct` to attempt auto-correction of your Rubocop offenses.
+Run `bundle exec rubocop -a` to attempt auto-correction of your Rubocop offenses.
 
 
 ## Branches

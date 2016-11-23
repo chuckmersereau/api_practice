@@ -14,7 +14,7 @@ resource 'Google Accounts' do
       api_login(user)
     end
 
-    get '/api/v2/user/google_accounts' do
+    get '/api/v2/user/google-accounts' do
       example_request 'get organization accounts' do
         explanation 'List of Organization Accounts associated to current_user'
         check_collection_resource(1)
@@ -22,7 +22,7 @@ resource 'Google Accounts' do
       end
     end
 
-    get '/api/v2/user/google_accounts/:id' do
+    get '/api/v2/user/google-accounts/:id' do
       with_options scope: [:data, :attributes] do
         response_field :token, 'Token', 'Type' => 'String'
         response_field :refresh_token, 'Refresh Token', 'Type' => 'String'
@@ -37,7 +37,7 @@ resource 'Google Accounts' do
       end
     end
 
-    post '/api/v2/user/google_accounts' do
+    post '/api/v2/user/google-accounts' do
       with_options scope: [:data, :attributes] do
         parameter :token, 'Token'
         parameter :refresh_token, 'Refresh Token'
@@ -53,7 +53,7 @@ resource 'Google Accounts' do
       end
     end
 
-    put '/api/v2/user/google_accounts/:id' do
+    put '/api/v2/user/google-accounts/:id' do
       with_options scope: [:data, :attributes] do
         parameter :token, 'Token'
         parameter :refresh_token, 'Refresh Token'
@@ -69,7 +69,7 @@ resource 'Google Accounts' do
       end
     end
 
-    delete '/api/v2/user/google_accounts/:id' do
+    delete '/api/v2/user/google-accounts/:id' do
       example_request 'delete notification' do
         expect(status).to eq 200
       end

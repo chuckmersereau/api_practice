@@ -14,7 +14,7 @@ resource 'Key Accounts' do
       api_login(user)
     end
 
-    get '/api/v2/user/key_accounts' do
+    get '/api/v2/user/key-accounts' do
       example_request 'get organization accounts' do
         explanation 'List of Organization Accounts associated to current_user'
         check_collection_resource(2)
@@ -22,7 +22,7 @@ resource 'Key Accounts' do
       end
     end
 
-    get '/api/v2/user/key_accounts/:id' do
+    get '/api/v2/user/key-accounts/:id' do
       with_options scope: [:data, :attributes] do
         response_field :first_name, 'First Name', 'Type' => 'String'
         response_field :last_name, 'Last Name', 'Type' => 'String'
@@ -36,7 +36,7 @@ resource 'Key Accounts' do
       end
     end
 
-    post '/api/v2/user/key_accounts' do
+    post '/api/v2/user/key-accounts' do
       with_options scope: [:data, :attributes] do
         parameter :first_name, 'First Name'
         parameter :last_name, 'Last Name'
@@ -52,7 +52,7 @@ resource 'Key Accounts' do
       end
     end
 
-    put '/api/v2/user/key_accounts/:id' do
+    put '/api/v2/user/key-accounts/:id' do
       with_options scope: [:data, :attributes] do
         parameter :first_name, 'First Name'
         parameter :last_name, 'Last Name'
@@ -68,7 +68,7 @@ resource 'Key Accounts' do
       end
     end
 
-    delete '/api/v2/user/key_accounts/:id' do
+    delete '/api/v2/user/key-accounts/:id' do
       example_request 'delete notification' do
         expect(status).to eq 200
       end

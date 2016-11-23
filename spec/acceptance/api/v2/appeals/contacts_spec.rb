@@ -10,11 +10,39 @@ resource 'Contacts' do
   let(:appeal_id) { appeal.id }
   let!(:contact) { create(:contact, account_list_id: account_list_id) }
   let(:id) { contact.id }
-  let(:contact_properties) do
-    %w( name pledge-amount pledge-frequency pledge-currency pledge-currency-symbol
-        pledge-start-date pledge-received status deceased notes notes-saved-at next-ask no-appeals likely-to-give
-        church-name send-newsletter magazine last-activity last-appointment last-letter last-phone-call last-pre-call
-        last-thank referrals-to-me-ids tag-list uncompleted-tasks-count timezone donor-accounts )
+  let(:expected_attribute_keys) do
+    %w(avatar
+       church-name
+       created-at
+       deceased
+       donor-accounts
+       last-activity
+       last-appointment
+       last-letter
+       last-phone-call
+       last-pre-call
+       last-thank
+       likely-to-give
+       magazine
+       name
+       next-ask
+       no-appeals
+       notes
+       notes-saved-at
+       pledge-amount
+       pledge-currency
+       pledge-currency-symbol
+       pledge-frequency
+       pledge-received
+       pledge-start-date
+       referrals-to-me-ids
+       send-newsletter
+       square-avatar
+       status
+       tag-list
+       timezone
+       uncompleted-tasks-count
+       updated-at)
   end
 
   context 'authorized user' do
@@ -23,10 +51,10 @@ resource 'Contacts' do
       api_login(user)
     end
     get '/api/v2/appeals/:appeal_id/contacts' do
-      parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
+      parameter 'account_list_id',              'Account List ID', scope: :filters
       response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list contacts of appeal of account list' do
-        expect(resource_object.keys).to eq contact_properties
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
@@ -63,12 +91,12 @@ resource 'Contacts' do
         response_field 'donor-accounts',          'Donor Accounts', 'Type' => 'Array[Object]'
       end
       example_request 'get contact' do
-        expect(resource_object.keys).to eq contact_properties
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
     delete '/api/v2/appeals/:appeal_id/contacts/:id' do
-      parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
+      parameter 'account_list_id',              'Account List ID', scope: :filters
       parameter 'id',                           'ID', required: true
       example_request 'delete contact from appeal' do
         expect(status).to eq 200

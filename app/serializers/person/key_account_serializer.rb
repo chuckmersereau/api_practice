@@ -1,5 +1,10 @@
-class Person::KeyAccountSerializer < ActiveModel::Serializer
-  attributes :id, :email, :first_name, :last_name, :remote_id,
-             :authenticated, :created_at, :updated_at,
-             :downloading, :last_download, :primary
+class Person::KeyAccountSerializer < ApplicationSerializer
+  attributes :authenticated,
+             :downloading,
+             :email,
+             :first_name,
+             :last_download,
+             :last_name,
+             :primary,
+             :remote_id
 end

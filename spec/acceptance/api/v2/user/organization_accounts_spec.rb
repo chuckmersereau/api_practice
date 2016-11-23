@@ -13,14 +13,14 @@ resource 'Organization Accounts' do
     before do
       api_login(user)
     end
-    get '/api/v2/user/organization_accounts' do
+    get '/api/v2/user/organization-accounts' do
       example_request 'get organization accounts' do
         explanation 'List of Organization Accounts associated to current_user'
         check_collection_resource(2, ['relationships'])
         expect(status).to eq 200
       end
     end
-    get '/api/v2/user/organization_accounts/:id' do
+    get '/api/v2/user/organization-accounts/:id' do
       with_options scope: [:data, :attributes] do
         response_field :username, 'Username', 'Type' => 'String'
         response_field :person_id, 'Person Id', 'Type' => 'String'
@@ -31,7 +31,7 @@ resource 'Organization Accounts' do
         expect(status).to eq 200
       end
     end
-    post '/api/v2/user/organization_accounts' do
+    post '/api/v2/user/organization-accounts' do
       with_options required: true, scope: [:data, :attributes] do
         parameter :username, 'Username'
         parameter :password, 'Password'
@@ -46,7 +46,7 @@ resource 'Organization Accounts' do
       end
     end
 
-    put '/api/v2/user/organization_accounts/:id' do
+    put '/api/v2/user/organization-accounts/:id' do
       with_options required: true, scope: [:data, :attributes] do
         parameter :username, 'Username'
         parameter :password, 'Password'
@@ -61,7 +61,7 @@ resource 'Organization Accounts' do
       end
     end
 
-    delete '/api/v2/user/organization_accounts/:id' do
+    delete '/api/v2/user/organization-accounts/:id' do
       example_request 'delete notification' do
         expect(status).to eq 200
       end

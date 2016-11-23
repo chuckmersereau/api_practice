@@ -1,10 +1,62 @@
-class ContactSerializer < ActiveModel::Serializer
+class ContactSerializer < ApplicationSerializer
   include DisplayCase::ExhibitsHelper
   include ActionView::Helpers::NumberHelper
-  include Rails.application.routes.url_helpers
 
-  attributes :id, :name, :pledge_amount, :pledge_frequency, :pledge_currency, :pledge_currency_symbol, :pledge_start_date, :pledge_received, :status, :deceased,
-             :notes, :notes_saved_at, :next_ask, :no_appeals, :likely_to_give, :church_name, :send_newsletter,
-             :magazine, :last_activity, :last_appointment, :last_letter, :last_phone_call, :last_pre_call,
-             :last_thank, :referrals_to_me_ids, :tag_list, :uncompleted_tasks_count, :timezone, :donor_accounts
+  attributes :avatar,
+             :church_name,
+             :deceased,
+             :donor_accounts,
+             :last_activity,
+             :last_appointment,
+             :last_letter,
+             :last_phone_call,
+             :last_pre_call,
+             :last_thank,
+             :likely_to_give,
+             :magazine,
+             :name,
+             :next_ask,
+             :no_appeals,
+             :notes,
+             :notes_saved_at,
+             :pledge_amount,
+             :pledge_currency,
+             :pledge_currency_symbol,
+             :pledge_frequency,
+             :pledge_received,
+             :pledge_start_date,
+             :referrals_to_me_ids,
+             :send_newsletter,
+             :square_avatar,
+             :status,
+             :tag_list,
+             :timezone,
+             :uncompleted_tasks_count
+
+  has_many :addresses
+  has_many :people
+
+  def referrals_to_me_ids
+    object.contact_referrals_to_me.pluck(:referred_by_id)
+  end
+
+  def avatar
+    contact_exhibit.avatar(:large)
+  end
+
+  def square_avatar
+    contact_exhibit.avatar
+  end
+
+  def pledge_received
+    object[:pledge_received].to_s
+  end
+
+  def pledge_frequency
+    number_with_precision(object[:pledge_frequency], precision: 14, strip_insignificant_zeros: true)
+  end
+
+  def contact_exhibit
+    exhibit(object)
+  end
 end

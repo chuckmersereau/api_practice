@@ -12,8 +12,8 @@ resource 'Mailchimp Account Spec' do
   let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
   let(:appeal) { create(:appeal, account_list: account_list) }
   let(:expected_attribute_keys) do
-    %w(api-key validation-error active validate-key auto-log-campaigns primary-list-id
-       primary-list-name lists-link sync-all-active-contacts lists-present valid lists-available-for-newsletters)
+    %w(created-at updated-at active api-key auto-log-campaigns lists-available-for-newsletters lists-link lists-present
+       primary-list-id primary-list-name sync-all-active-contacts valid validate-key validation-error)
   end
 
   before do
@@ -25,7 +25,7 @@ resource 'Mailchimp Account Spec' do
     api_login(user)
   end
 
-  get '/api/v2/account_lists/:account_list_id/mail-chimp-account' do
+  get '/api/v2/account-lists/:account_list_id/mail-chimp-account' do
     with_options scope: [:data, :attributes] do
       response_field 'api-key',                 'API Key', 'Type' => 'String'
       response_field 'valid',                   'Valid', 'Type' => 'Boolean'
@@ -42,18 +42,18 @@ resource 'Mailchimp Account Spec' do
     end
     example_request 'get mailchimp account' do
       check_resource
-      expect(resource_object.keys).to eq expected_attribute_keys
+      expect(resource_object.keys).to match expected_attribute_keys
       expect(status).to eq 200
     end
   end
-  delete '/api/v2/account_lists/:account_list_id/mail-chimp-account' do
+  delete '/api/v2/account-lists/:account_list_id/mail-chimp-account' do
     parameter 'account-list-id',              'Account List ID', required: true
     parameter 'id',                           'ID', required: true
     example_request 'delete mailchimp account' do
       expect(status).to eq 200
     end
   end
-  get '/api/v2/account_lists/:account_list_id/mail-chimp-account/sync' do
+  get '/api/v2/account-lists/:account_list_id/mail-chimp-account/sync' do
     parameter 'account-list-id', 'Account List ID', required: true
     example_request 'sync mailchimp account' do
       expect(status).to eq 200

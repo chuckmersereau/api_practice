@@ -1,3 +1,2 @@
-class GoogleIntegrationSerializer < ActiveModel::Serializer
-  attributes :id
+class GoogleIntegrationSerializer < ApplicationSerializer
 end

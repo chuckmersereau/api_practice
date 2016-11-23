@@ -4,12 +4,7 @@ require 'sidekiq/cron/web'
 Rails.application.routes.draw do
   namespace :api do
     api_version(module: 'V2', header: { name: 'API-VERSION', value: 'v2' }, parameter: { name: 'version', value: 'v2' }, path: { value: 'v2' }) do
-      resource :user, only: :show do
-        scope module: :user do
-          resource :authentication, only: :create
-        end
-      end
-      resources :account_lists, only: [:index, :show, :update] do
+      resources :account_lists, only: [:index, :show, :update], path: 'account-lists' do
         scope module: :account_lists do
           resources :donor_accounts, only: [:index, :show], path: 'donor-accounts'
           resources :designation_accounts, only: [:index, :show], path: 'designation-accounts'
@@ -35,7 +30,12 @@ Rails.application.routes.draw do
         end
       end
       resource :user, only: [:show, :update] do
-        resources :google_accounts, :key_accounts, :organization_accounts, module: :user
+        scope module: :user do
+          resource :authentication, only: :create
+          resources :google_accounts, path: 'google-accounts'
+          resources :key_accounts, path: 'key-accounts'
+          resources :organization_accounts, path: 'organization-accounts'
+        end
       end
       resources :tasks do
         scope module: :tasks do

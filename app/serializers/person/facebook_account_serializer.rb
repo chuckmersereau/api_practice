@@ -1,3 +1,3 @@
-class Person::FacebookAccountSerializer < ActiveModel::Serializer
-  attributes :id, :remote_id
+class Person::FacebookAccountSerializer < ApplicationSerializer
+  attribute :remote_id
 end
