@@ -352,6 +352,12 @@ describe Address do
     end
   end
 
+  describe 'permitted attributes' do
+    it 'defines permitted attributes' do
+      expect(Address::PERMITTED_ATTRIBUTES).to be_present
+    end
+  end
+
   # Old way that DataServer used to do encoding that mangled special characters.
   def old_encoding(str)
     str.unpack('C*').pack('U*')

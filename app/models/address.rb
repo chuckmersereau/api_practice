@@ -25,6 +25,20 @@ class Address < ActiveRecord::Base
   # Indicates an address was manually created/updated. Otherwise source is usually the import class name.
   MANUAL_SOURCE = 'manual'.freeze
 
+  PERMITTED_ATTRIBUTES = [:city,
+                          :country,
+                          :end_date,
+                          :location,
+                          :metro_area,
+                          :postal_code,
+                          :primary_mailing_address,
+                          :region,
+                          :remote_id,
+                          :seasonal,
+                          :start_date,
+                          :state,
+                          :street].freeze
+
   assignable_values_for :location, allow_blank: true do
     [_('Home'), _('Business'), _('Mailing'), _('Seasonal'), _('Other'), _('Temporary')]
   end

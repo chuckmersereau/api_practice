@@ -8,6 +8,7 @@ RSpec.shared_examples 'common_variables' do
   let(:full_incorrect_attributes) { { data: { attributes: incorrect_attributes } }.merge(full_params) }
   let(:reference_key) { correct_attributes.keys.first }
   let(:reference_value) { correct_attributes.values.first }
+  let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
 end
 
 RSpec.shared_examples 'show_examples' do
@@ -133,7 +134,7 @@ RSpec.shared_examples 'destroy_examples' do
       api_login(user)
       expect do
         delete :destroy, full_params
-      end.to change { resource.class.count }.by(-1)
+      end.to change { resource_not_destroyed_scope.count }.by(-1)
       expect(response.status).to eq(200)
     end
 
@@ -142,7 +143,7 @@ RSpec.shared_examples 'destroy_examples' do
         api_login(create(:user))
         expect do
           delete :destroy, full_params
-        end.not_to change { resource.class.count }
+        end.not_to change { resource_not_destroyed_scope.count }
         expect(response.status).to eq(403)
       end
     end
@@ -150,7 +151,7 @@ RSpec.shared_examples 'destroy_examples' do
     it 'does not shows current_user object to users that are signed in' do
       expect do
         delete :destroy, full_params
-      end.not_to change { resource.class.count }
+      end.not_to change { resource_not_destroyed_scope.count }
       expect(response.status).to eq(401)
     end
   end
