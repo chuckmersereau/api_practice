@@ -1,6 +1,8 @@
 class Api::V2::AccountLists::UsersController < Api::V2::AccountListsController
-  def pundit_user
-    current_user
+  def index
+    load_resources
+    authorize @account_list, :show?
+    render json: @resources
   end
 
   def destroy
@@ -16,5 +18,9 @@ class Api::V2::AccountLists::UsersController < Api::V2::AccountListsController
 
   def resource_scope
     current_account_list.users
+  end
+
+  def pundit_user
+    current_user
   end
 end

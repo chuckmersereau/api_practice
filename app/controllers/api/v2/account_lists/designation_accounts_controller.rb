@@ -1,4 +1,10 @@
 class Api::V2::AccountLists::DesignationAccountsController < Api::V2::AccountListsController
+  def index
+    load_resources
+    authorize @account_list, :show?
+    render json: @resources
+  end
+
   private
 
   def resource_scope

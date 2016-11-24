@@ -1,2 +1,2 @@
-class ImportPolicy < AccountListPolicy
+class ImportPolicy < AccountListChildrenPolicy
 end

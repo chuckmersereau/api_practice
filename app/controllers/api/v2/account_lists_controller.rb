@@ -14,7 +14,7 @@ class Api::V2::AccountListsController < Api::V2::ResourceController
   end
 
   def current_account_list
-    @current_account_list ||= AccountList.find(relevant_account_list_id)
+    @account_list ||= AccountList.find(relevant_account_list_id)
   end
 
   private

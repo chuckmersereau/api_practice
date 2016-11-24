@@ -30,12 +30,6 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   include_examples 'index_examples'
 
   describe '#index authorization' do
-    it 'does not show resources for users that do not own the resources' do
-      api_login create(:user)
-      get :index, parent_param
-      expect(response.status).to eq 403
-    end
-
     it 'does not show resources for contact that user does not own' do
       api_login user
       contact = create(:contact, account_list: create(:user_with_account).account_lists.first)

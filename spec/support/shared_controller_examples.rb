@@ -130,7 +130,7 @@ RSpec.shared_examples 'destroy_examples' do
   include_examples 'common_variables'
 
   describe '#destroy' do
-    it 'shows current_user object to users that are signed in' do
+    it 'destroys resource object to users that are signed in' do
       api_login(user)
       expect do
         delete :destroy, full_params
@@ -148,7 +148,7 @@ RSpec.shared_examples 'destroy_examples' do
       end
     end
 
-    it 'does not shows current_user object to users that are signed in' do
+    it 'does not destroy resource object to users that are signed in' do
       expect do
         delete :destroy, full_params
       end.not_to change { resource_not_destroyed_scope.count }
@@ -161,7 +161,7 @@ RSpec.shared_examples 'index_examples' do
   include_examples 'common_variables'
 
   describe '#index' do
-    it 'shows current_user object to users that are signed in' do
+    it 'shows resources to users that are signed in' do
       api_login(user)
       create(factory_type)
       get :index, parent_param_if_needed
@@ -170,9 +170,17 @@ RSpec.shared_examples 'index_examples' do
       expect(response.body).to include(resource.class.first.send(reference_key).to_s)
     end
 
-    it 'does not shows current_user object to users that are signed in' do
+    it 'does not shows resources  to users that are signed in' do
       get :index, parent_param_if_needed
       expect(response.status).to eq(401)
+    end
+
+    it 'does not show resources for users that do not own the resources' do
+      if defined?(parent_param)
+        api_login(create(:user))
+        get :index, parent_param
+        expect(response.status).to eq(403)
+      end
     end
   end
 end

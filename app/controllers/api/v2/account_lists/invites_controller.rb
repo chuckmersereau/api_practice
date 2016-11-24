@@ -1,8 +1,12 @@
 class Api::V2::AccountLists::InvitesController < Api::V2::AccountListsController
-  before_action :authorize_management, except: [:destroy]
+  def index
+    load_resources
+    authorize @account_list, :show?
+    render json: @resources
+  end
 
   def create
-    return show if save_resource
+    return show if authorize_and_send_invite
     render json: { success: false, errors: ['Could not send invite'] }, status: 400
   end
 
@@ -15,7 +19,10 @@ class Api::V2::AccountLists::InvitesController < Api::V2::AccountListsController
 
   private
 
-  def save_resource
+  def authorize_and_send_invite
+    authorize AccountListInvite.new(invited_by_user: current_user,
+                                    recipient_email: resource_params['recipient_email'],
+                                    account_list: current_account_list)
     return false unless EmailValidator.valid?(resource_params['recipient_email'])
     @resource = AccountListInvite.send_invite(current_user, current_account_list, resource_params['recipient_email'])
   end
@@ -26,9 +33,5 @@ class Api::V2::AccountLists::InvitesController < Api::V2::AccountListsController
 
   def resource_scope
     current_account_list.account_list_invites
-  end
-
-  def authorize_management
-    authorize AccountListInvite.new
   end
 end

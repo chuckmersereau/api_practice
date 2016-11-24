@@ -1,4 +1,4 @@
-class PrayerLettersAccountPolicy < AccountListPolicy
+class PrayerLettersAccountPolicy < AccountListChildrenPolicy
   def sync?
     resource_owner?
   end

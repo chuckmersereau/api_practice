@@ -1,11 +1,11 @@
 class Api::V2::AccountLists::DonationsController < Api::V2::AccountListsController
   def index
     load_resources
+    authorize @account_list, :show?
     render json: @resources, scope: { account_list: current_account_list, locale: locale }
   end
 
   def show
-    load_resource
     render json: @resource, scope: { account_list: current_account_list, locale: locale }
   end
 
