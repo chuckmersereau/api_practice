@@ -8,6 +8,12 @@ class PhoneNumber < ActiveRecord::Base
 
   LOCATIONS = [_('Mobile'), _('Home'), _('Work')].freeze
 
+  PERMITTED_ATTRIBUTES = [:country_code,
+                          :location,
+                          :number,
+                          :primary,
+                          :remote_id].freeze
+
   belongs_to :person, touch: true
 
   before_save :clean_up_number

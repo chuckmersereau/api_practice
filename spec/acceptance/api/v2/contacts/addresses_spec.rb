@@ -18,9 +18,9 @@ resource 'Address' do
 
     get '/api/v2/contacts/:contact_id/addresses' do
       example_request 'get addresses' do
-        explanation 'List of Addresses associated to the contact'
+        explanation('List of Addresses associated to the contact')
         check_collection_resource 1
-        expect(status).to eq 200
+        expect(status).to eq(200)
       end
     end
 
@@ -41,7 +41,7 @@ resource 'Address' do
 
       example_request 'get address' do
         check_resource
-        expect(status).to eq 200
+        expect(status).to eq(200)
       end
     end
 
@@ -65,7 +65,7 @@ resource 'Address' do
       example 'create address' do
         do_request data: form_data
         expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
-        expect(status).to eq 200
+        expect(status).to eq(200)
       end
     end
 
@@ -89,13 +89,13 @@ resource 'Address' do
       example 'update address' do
         do_request data: form_data
         expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
-        expect(status).to eq 200
+        expect(status).to eq(200)
       end
     end
 
     delete '/api/v2/contacts/:contact_id/addresses/:id' do
       example_request 'delete address' do
-        expect(status).to eq 200
+        expect(status).to eq(200)
       end
     end
   end

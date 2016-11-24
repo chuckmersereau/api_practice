@@ -3,7 +3,7 @@ class AccountListPolicy < ApplicationPolicy
     @resource = resource
     return @user = context if context.is_a?(User)
     @user = context.user
-    @current_account_list = context.user_data
+    @current_account_list = context.account_list
   end
 
   private

@@ -50,6 +50,7 @@ Rails.application.routes.draw do
           resources :people do
             scope module: :people do
               resources :relationships, only: [:show, :index, :create, :update, :destroy]
+              resources :phones, only: [:index, :show, :create, :update, :destroy]
             end
           end
         end
