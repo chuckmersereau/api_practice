@@ -1,3 +1,3 @@
 class Person::FacebookAccountSerializer < ApplicationSerializer
-  attribute :remote_id
+  attributes :remote_id, :first_name, :last_name, :username
 end

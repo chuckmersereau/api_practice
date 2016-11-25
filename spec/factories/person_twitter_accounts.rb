@@ -2,9 +2,9 @@
 
 FactoryGirl.define do
   factory :twitter_account, class: 'Person::TwitterAccount' do
-    person_id 1
-    remote_id 1
-    screen_name 'MyString'
+  	person_id 1
+    sequence(:remote_id, &:to_s)
+    screen_name { Faker::Internet.user_name }
     token 'MyString'
     secret 'MyString'
   end

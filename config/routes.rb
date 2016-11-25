@@ -51,6 +51,10 @@ Rails.application.routes.draw do
             scope module: :people do
               resources :relationships, only: [:show, :index, :create, :update, :destroy]
               resources :phones, only: [:index, :show, :create, :update, :destroy]
+              resources :facebook_accounts, only: [:index, :show, :create, :update, :destroy], path: 'facebook-accounts'
+              resources :linkedin_accounts, only: [:index, :show, :create, :update, :destroy], path: 'linkedin-accounts'
+              resources :twitter_accounts, only: [:index, :show, :create, :update, :destroy], path: 'twitter-accounts'
+              resources :websites, only: [:index, :show, :create, :update, :destroy]
             end
           end
         end

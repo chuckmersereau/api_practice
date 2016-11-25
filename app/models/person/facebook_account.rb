@@ -11,6 +11,12 @@ class Person::FacebookAccount < ActiveRecord::Base
   # set :friends
   # attr_accessible :remote_id, :token, :token_expires_at, :first_name, :last_name, :valid_token, :authenticated, :url
 
+  PERMITTED_ATTRIBUTES = [
+    :remote_id, :first_name, :last_name, :username
+  ].freeze
+
+  validates :username, presence: true
+
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.facebook_accounts
     @remote_id = auth_hash['uid']

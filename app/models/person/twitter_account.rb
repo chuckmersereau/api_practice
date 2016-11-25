@@ -2,6 +2,12 @@ class Person::TwitterAccount < ActiveRecord::Base
   include Person::Account
   after_save :ensure_only_one_primary
 
+  PERMITTED_ATTRIBUTES = [
+    :remote_id, :screen_name, :primary
+  ].freeze
+
+  validates :screen_name, :person_id, presence: true
+
   # attr_accessible :screen_name
 
   def self.find_or_create_from_auth(auth_hash, person)
