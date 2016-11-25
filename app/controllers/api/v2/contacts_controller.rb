@@ -75,4 +75,8 @@ class Api::V2::ContactsController < Api::V2Controller
   def contact_scope
     current_user.contacts
   end
+
+  def pundit_user
+    PunditContext.new(current_user, contact: @contact)
+  end
 end

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Api::V2::AccountLists::ImportsController, type: :controller do
-  let(:factory_type) { 'imports' }
+  let(:factory_type) { :import }
   let!(:user) { create(:user_with_account) }
   let!(:fb_account) { create(:facebook_account, person_id: user.id) }
   let!(:account_list) { user.account_lists.first }

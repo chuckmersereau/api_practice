@@ -94,13 +94,6 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   end
 
   def pundit_user
-    return current_user if action_name == 'index'
-
-    extra_context = {
-      contact: current_contact,
-      person: current_person
-    }
-
-    @pundit_user ||= PunditContext.new(current_user, extra_context)
+    PunditContext.new(current_user, contact: current_contact, person: current_person)
   end
 end

@@ -39,4 +39,8 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
   def contact_params
     params.require(:data).require(:attributes).permit(:name)
   end
+
+  def pundit_user
+    PunditContext.new(current_user, contact: @contact)
+  end
 end

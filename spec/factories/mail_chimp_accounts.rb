@@ -5,5 +5,6 @@ FactoryGirl.define do
     api_key 'fake-us4'
     active false
     primary_list_id 'MyString'
+    association :account_list
   end
 end
