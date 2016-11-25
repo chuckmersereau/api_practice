@@ -1,4 +1,4 @@
-class Api::V2::User::AuthenticationsController < Api::V2::UsersController
+class Api::V2::User::AuthenticationsController < Api::V2Controller
   skip_before_action :jwt_authorize!, :transform_params_field_names
   skip_after_action :verify_authorized
   before_action :load_user

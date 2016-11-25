@@ -1,4 +1,4 @@
-class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
+class Api::V2::Appeals::ExportToMailchimpController < Api::V2Controller
   def show
     load_mailchimp_account
     authorize_mailchimp_account
@@ -34,5 +34,9 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2::AppealsController
 
   def load_appeal
     @appeal ||= Appeal.find(params[:appeal_id])
+  end
+
+  def permited_filters
+    []
   end
 end

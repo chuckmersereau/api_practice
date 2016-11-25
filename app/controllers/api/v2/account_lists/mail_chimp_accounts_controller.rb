@@ -1,37 +1,73 @@
-class Api::V2::AccountLists::MailChimpAccountsController < Api::V2::AccountListsController
-  def pundit_user
-    current_user
+class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
+  def show
+    load_mailchimp_account
+    authorize_mailchimp_account
+    render_mailchimp_account
+  end
+
+  def create
+    persist_mailchimp_account
+  end
+
+  def destroy
+    load_mailchimp_account
+    authorize_mailchimp_account
+    @mailchimp_account.destroy
+    render_200
   end
 
   def sync
-    load_resource
-    authorize @resource
-    @resource.queue_export_to_primary_list
+    load_mailchimp_account
+    authorize_mailchimp_account
+    @mailchimp_account.queue_export_to_primary_list
     render_200
   end
 
   private
 
-  def load_resource
-    @resource ||= resource_scope
-    raise ActiveRecord::RecordNotFound unless @resource
+  def load_mailchimp_account
+    @mailchimp_account ||= mailchimp_account_scope
+    raise ActiveRecord::RecordNotFound unless @mailchimp_account
   end
 
-  def build_resource
-    @resource = current_account_list.build_mail_chimp_account(auto_log_campaigns: true)
-    @resource.assign_attributes(resource_params)
-    authorize @resource
+  def render_mailchimp_account
+    render json: @mailchimp_account, scope: { current_account_list: load_account_list }
   end
 
-  def resource_class
-    MailChimpAccount
+  def persist_mailchimp_account
+    build_mailchimp_account
+    authorize_mailchimp_account
+    return show if save_mailchimp_account
+    render_400_with_errors(@mailchimp_account)
   end
 
-  def resource_scope
-    current_account_list.mail_chimp_account
+  def build_mailchimp_account
+    @mailchimp_account = load_account_list.build_mail_chimp_account(auto_log_campaigns: true)
+    @mailchimp_account.assign_attributes(mailchimp_account_params)
+    authorize_mailchimp_account
   end
 
-  def render_resource
-    render json: @resource, scope: { current_account_list: current_account_list }
+  def save_mailchimp_account
+    @mailchimp_account.save
+  end
+
+  def authorize_mailchimp_account
+    authorize @mailchimp_account
+  end
+
+  def mailchimp_account_params
+    params.require(:data).require(:attributes).permit(MailChimpAccount::PERMITTED_ATTRIBUTES)
+  end
+
+  def mailchimp_account_scope
+    load_account_list.mail_chimp_account
+  end
+
+  def load_account_list
+    @account_list ||= AccountList.find(params[:account_list_id])
+  end
+
+  def permited_filters
+    []
   end
 end

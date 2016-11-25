@@ -1,11 +1,46 @@
-class Api::V2::UsersController < Api::V2::ResourceController
-  private
-
-  def resource_class
-    User
+class Api::V2::UsersController < Api::V2Controller
+  def show
+    load_user
+    authorize_user
+    render_user
   end
 
-  def load_resource
-    @resource ||= current_user
+  def update
+    load_user
+    authorize_user
+    persist_user
+  end
+
+  private
+
+  def load_user
+    @user ||= current_user
+  end
+
+  def render_user
+    render json: @user
+  end
+
+  def persist_user
+    build_user
+    authorize_user
+    return show if save_user
+    render_400_with_errors(@user)
+  end
+
+  def build_user
+    @user.assign_attributes(user_params)
+  end
+
+  def save_user
+    @user.save
+  end
+
+  def user_params
+    params.require(:data).require(:attributes).permit(User::PERMITTED_ATTRIBUTES)
+  end
+
+  def authorize_user
+    authorize @user
   end
 end

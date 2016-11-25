@@ -13,6 +13,10 @@ class PrayerLettersAccount < ActiveRecord::Base
 
   validates :oauth2_token, :account_list_id, presence: true
 
+  PERMITTED_ATTRIBUTES = [
+    :oauth2_token, :valid_token
+  ].freeze
+
   def queue_subscribe_contacts
     async(:subscribe_contacts)
   end

@@ -1,6 +1,4 @@
-class Api::V2::AppealsController < Api::V2::ResourceController
-  skip_before_action :load_resource, :authorize_resource
-
+class Api::V2::AppealsController < Api::V2Controller
   def index
     load_appeals
     render json: @appeals

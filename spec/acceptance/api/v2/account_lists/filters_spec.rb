@@ -16,13 +16,14 @@ resource 'Filters' do
       api_login(user)
     end
     get '/api/v2/account-lists/:account_list_id/filters' do
-      let(:contact) { 1 }
-      let(:task) { 1 }
-      parameter 'contact',                      'Contact', 'Type' => 'Boolean'
-      parameter 'task',                         'Task', 'Type' => 'Boolean'
+      with_options scope: [:filters] do
+        parameter 'contact',                      'Contact', 'Type' => 'Boolean'
+        parameter 'task',                         'Task', 'Type' => 'Boolean'
+      end
       response_field 'contact-filters',         'Contact Filters', 'Type' => 'Object'
       response_field 'task-filters',            'Task Filters', 'Type' => 'Object'
-      example_request 'get filters for contacts and tasks' do
+      example 'get filters for contacts and tasks' do
+        do_request filters: { contact: 1, task: 1 }
         expect(json_response.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end

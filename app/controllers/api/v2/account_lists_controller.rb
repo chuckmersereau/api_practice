@@ -1,29 +1,68 @@
-class Api::V2::AccountListsController < Api::V2::ResourceController
-  def pundit_user
-    PunditContext.new(current_user, current_account_list)
+class Api::V2::AccountListsController < Api::V2Controller
+  def index
+    load_account_lists
+    render json: @account_lists
   end
 
-  protected
-
-  def resource_class
-    AccountList
+  def show
+    load_account_list
+    authorize_account_list
+    render_account_list
   end
 
-  def resource_scope
-    account_list_scope
-  end
-
-  def current_account_list
-    @account_list ||= AccountList.find(relevant_account_list_id)
+  def update
+    load_account_list
+    authorize_account_list
+    persist_account_list
   end
 
   private
+
+  def load_account_lists
+    @account_lists ||= account_list_scope.where(filter_params).to_a
+  end
+
+  def load_account_list
+    @account_list ||= AccountList.find(params[:id])
+  end
+
+  def render_account_list
+    render json: @account_list
+  end
+
+  def persist_account_list
+    build_account_list
+    authorize_account_list
+    return show if save_account_list
+    render_400_with_errors(@account_list)
+  end
+
+  def build_account_list
+    @account_list ||= account_list_scope.build
+    @account_list.assign_attributes(account_list_params)
+  end
+
+  def save_account_list
+    @account_list.save
+  end
+
+  def account_list_params
+    params.require(:data).require(:attributes).permit(AccountList::PERMITTED_ATTRIBUTES)
+  end
 
   def account_list_scope
     current_user.account_lists
   end
 
-  def relevant_account_list_id
-    params[:account_list_id] ? params[:account_list_id] : params[:id]
+  def authorize_account_list
+    authorize @account_list
+  end
+
+  def permited_filters
+    []
+  end
+
+  def pundit_user
+    PunditContext.new(current_user, load_account_list)
   end
 end

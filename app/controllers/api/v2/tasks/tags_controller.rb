@@ -2,7 +2,7 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
   def create
     load_task
     authorize_task
-    persist_resource(task_params[:name]) do |tag_name|
+    persist_tag(tag_params[:name]) do |tag_name|
       @task.tag_list.add(tag_name)
     end
   end
@@ -10,14 +10,14 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
   def destroy
     load_task
     authorize_task
-    persist_resource(params[:tag_name]) do |tag_name|
+    persist_tag(params[:tag_name]) do |tag_name|
       @task.tag_list.remove(tag_name)
     end
   end
 
   private
 
-  def persist_resource(tag_name)
+  def persist_tag(tag_name)
     tag_error = TagValidator.new.validate(tag_name)
     if tag_error
       render_400_with_errors(tag_error)
@@ -36,7 +36,7 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
     authorize @task
   end
 
-  def task_params
+  def tag_params
     params.require(:data).require(:attributes).permit(:name)
   end
 end

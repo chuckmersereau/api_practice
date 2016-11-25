@@ -1,5 +1,6 @@
 class Api::V2Controller < ApiController
   include Pundit
+  include ParamsFilters
 
   before_action :jwt_authorize!
   before_action :transform_params_field_names, only: [:create, :update]

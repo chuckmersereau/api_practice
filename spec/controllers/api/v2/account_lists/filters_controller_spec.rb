@@ -14,19 +14,19 @@ describe Api::V2::AccountLists::FiltersController, type: :controller do
 
     describe '#index' do
       it 'gets filters for contacts and tasks' do
-        get :index, account_list_id: account_list_id, contact: 1, task: 1
+        get :index, account_list_id: account_list_id, filters: { contact: 1, task: 1 }
         expect(JSON.parse(response.body).keys).to eq %w(contact_filters task_filters)
         expect(response.status).to eq 200
       end
 
       it 'gets filters for contacts' do
-        get :index, account_list_id: account_list_id, contact: 1
+        get :index, account_list_id: account_list_id, filters: { contact: 1 }
         expect(JSON.parse(response.body).keys).to eq %w(contact_filters)
         expect(response.status).to eq 200
       end
 
       it 'gets filters for tasks' do
-        get :index, account_list_id: account_list_id, task: 1
+        get :index, account_list_id: account_list_id, filters: { task: 1 }
         expect(JSON.parse(response.body).keys).to eq %w(task_filters)
         expect(response.status).to eq 200
       end

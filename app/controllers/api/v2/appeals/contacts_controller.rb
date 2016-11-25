@@ -1,4 +1,4 @@
-class Api::V2::Appeals::ContactsController < Api::V2::AppealsController
+class Api::V2::Appeals::ContactsController < Api::V2Controller
   def index
     authorize load_appeal, :show?
     load_contacts
