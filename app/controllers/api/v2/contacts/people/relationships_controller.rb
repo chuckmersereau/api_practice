@@ -79,6 +79,6 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def pundit_user
-    PunditContext.new(current_user, current_contact)
+    PunditContext.new(current_user, contact: current_contact)
   end
 end

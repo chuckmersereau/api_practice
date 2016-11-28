@@ -34,6 +34,6 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
   end
 
   def pundit_user
-    PunditContext.new(current_user, load_account_list)
+    PunditContext.new(current_user, account_list: load_account_list)
   end
 end
