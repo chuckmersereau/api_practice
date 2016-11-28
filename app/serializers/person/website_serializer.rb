@@ -1,4 +1,6 @@
 class Person::WebsiteSerializer < ApplicationSerializer
-  attributes :primary,
+  attributes :created_at,
+  					 :primary,
+  					 :updated_at,
   					 :url 
 end

@@ -34,17 +34,6 @@ class Person::TwitterAccount < ActiveRecord::Base
     false
   end
 
-  def screen_name=(value)
-    return unless value
-    handle = if value =~ /https?:/
-               value.split('/').last
-             else
-               value.delete('@')
-             end
-    self[:remote_id] = handle
-    self[:screen_name] = handle
-  end
-
   def queue_import_data
   end
 
