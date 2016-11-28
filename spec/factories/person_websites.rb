@@ -3,7 +3,7 @@
 FactoryGirl.define do
   factory :website, class: 'Person::Website' do
     url { Faker::Internet.url }
-  	primary true
+    primary true
     association :person
   end
 end

@@ -1,63 +1,63 @@
 class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
-	def index
+  def index
     authorize load_person, :show?
-		load_linkedin_accounts
-		render json: @linkedin_accounts
-	end
+    load_linkedin_accounts
+    render json: @linkedin_accounts
+  end
 
-	def show
-		load_linkedin_account
-		authorize_linkedin_account
-		render_linkedin_account
-	end
-
-	def create
-		persist_linkedin_account
-	end
-
-	def update
-		load_linkedin_account
-		authorize_linkedin_account
-		persist_linkedin_account
-	end
-
-	def destroy
-		load_linkedin_account
-		authorize_linkedin_account
-		@linkedin_account.destroy
-		render_200
-	end
-
-	private
-
-	def load_linkedin_accounts
-    @linkedin_accounts ||= linkedin_account_scope.where(filter_params).to_a
-	end
-
-	def load_linkedin_account
-		@linkedin_account ||= linkedin_account_scope.find(params[:id])
-	end
-
-	def authorize_linkedin_account
-		authorize @linkedin_account
-	end
-
-	def render_linkedin_account
-		render json: @linkedin_account
-	end
-
-	def persist_linkedin_account
-		build_linkedin_account
+  def show
+    load_linkedin_account
     authorize_linkedin_account
-		return show if save_linkedin_account
-		render_400_with_errors(@linkedin_account)
-	end
+    render_linkedin_account
+  end
 
-	def build_linkedin_account
+  def create
+    persist_linkedin_account
+  end
+
+  def update
+    load_linkedin_account
+    authorize_linkedin_account
+    persist_linkedin_account
+  end
+
+  def destroy
+    load_linkedin_account
+    authorize_linkedin_account
+    @linkedin_account.destroy
+    render_200
+  end
+
+  private
+
+  def load_linkedin_accounts
+    @linkedin_accounts ||= linkedin_account_scope.where(filter_params).to_a
+  end
+
+  def load_linkedin_account
+    @linkedin_account ||= linkedin_account_scope.find(params[:id])
+  end
+
+  def authorize_linkedin_account
+    authorize @linkedin_account
+  end
+
+  def render_linkedin_account
+    render json: @linkedin_account
+  end
+
+  def persist_linkedin_account
+    build_linkedin_account
+    authorize_linkedin_account
+    return show if save_linkedin_account
+    render_400_with_errors(@linkedin_account)
+  end
+
+  def build_linkedin_account
     @linkedin_account ||= linkedin_account_scope.build
     @linkedin_account.assign_attributes(linkedin_account_params)
     authorize @linkedin_account
-	end
+  end
 
   def save_linkedin_account
     @linkedin_account.save
@@ -67,16 +67,16 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
     params.require(:data).require(:attributes).permit(Person::LinkedinAccount::PERMITTED_ATTRIBUTES)
   end
 
-	def linkedin_account_scope
-		load_person.linkedin_accounts
-	end
+  def linkedin_account_scope
+    load_person.linkedin_accounts
+  end
 
   def load_person
     @person ||= load_contact.people.find(params[:person_id])
   end
 
   def load_contact
-  	@contact ||= Contact.find(params[:contact_id])
+    @contact ||= Contact.find(params[:contact_id])
   end
 
   def permited_filters

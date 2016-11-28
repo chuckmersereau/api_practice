@@ -15,7 +15,7 @@ class Person::FacebookAccount < ActiveRecord::Base
     :remote_id, :first_name, :last_name, :username
   ].freeze
 
-  validates :username, :person_id, presence: true
+  validates :username, presence: true
 
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.facebook_accounts
@@ -26,7 +26,8 @@ class Person::FacebookAccount < ActiveRecord::Base
       token_expires_at: Time.at(auth_hash.credentials.expires_at),
       first_name: auth_hash.info.first_name,
       last_name: auth_hash.info.last_name,
-      valid_token: true
+      valid_token: true,
+      username: @remote_id
     }
     super
   end

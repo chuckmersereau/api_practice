@@ -8,7 +8,7 @@ class Person::LinkedinAccount < ActiveRecord::Base
     :authenticated, :first_name, :last_name, :public_url, :remote_id
   ].freeze
 
-  validates :public_url, :person_id, :remote_id, presence: true
+  validates :public_url, :remote_id, presence: true
 
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.linkedin_accounts
@@ -22,7 +22,8 @@ class Person::LinkedinAccount < ActiveRecord::Base
       token_expires_at: expires_in > 0 ? expires_in.seconds.from_now : nil,
       first_name: auth_hash.info.first_name,
       last_name: auth_hash.info.last_name,
-      valid_token: true
+      valid_token: true,
+      public_url: 'https://www.linkedin.com'
     }
     super
   end

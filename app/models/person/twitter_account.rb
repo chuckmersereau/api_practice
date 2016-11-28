@@ -6,7 +6,7 @@ class Person::TwitterAccount < ActiveRecord::Base
     :remote_id, :screen_name, :primary
   ].freeze
 
-  validates :screen_name, :person_id, presence: true
+  validates :screen_name, presence: true
 
   # attr_accessible :screen_name
 

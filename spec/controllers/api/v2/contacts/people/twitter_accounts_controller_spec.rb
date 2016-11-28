@@ -11,7 +11,7 @@ RSpec.describe Api::V2::Contacts::People::TwitterAccountsController, type: :cont
   let(:id) { resource.id }
   let(:parent_param) { { contact_id: contact.id, person_id: person.id } }
   let(:unpermitted_attributes) { nil }
-  let(:correct_attributes) { attributes_for(:twitter_account, person_id: person2.id ) }
+  let(:correct_attributes) { attributes_for(:twitter_account, person_id: person2.id) }
   let(:incorrect_attributes) { attributes_for(:twitter_account, screen_name: nil) }
 
   before do
