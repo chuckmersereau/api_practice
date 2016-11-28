@@ -24,7 +24,7 @@ resource 'Email Addresses' do
     get '/my-index-url' do
       example_request 'list email addresses' do
         check_collection_resource(1)
-        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
@@ -33,7 +33,7 @@ resource 'Email Addresses' do
     get '/my-show-url' do
       example_request 'show email address' do
         check_resource
-        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
@@ -42,7 +42,7 @@ resource 'Email Addresses' do
     post '/my-create-url' do
       example_request 'create email address' do
         check_resource
-        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 201
       end
     end
@@ -51,7 +51,7 @@ resource 'Email Addresses' do
     put '/my-update-url' do
       example_request 'update email address' do
         check_resource
-        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
@@ -60,7 +60,7 @@ resource 'Email Addresses' do
     patch '/my-update-url' do
       example_request 'update email address' do
         check_resource
-        expect(resource_object.keys).to eq expected_attribute_keys
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
       end
     end
