@@ -4,6 +4,11 @@ class Person::LinkedinAccount < ActiveRecord::Base
   scope :valid_token, -> { where('(token_expires_at is null OR token_expires_at > ?) AND valid_token = ?', Time.now, true) }
 
   # attr_accessible :first_name, :last_name, :url
+  PERMITTED_ATTRIBUTES = [
+    :authenticated, :first_name, :last_name, :public_url, :remote_id
+  ].freeze
+
+  validates :public_url, :person_id, :remote_id, presence: true
 
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.linkedin_accounts

@@ -15,7 +15,7 @@ class Person::FacebookAccount < ActiveRecord::Base
     :remote_id, :first_name, :last_name, :username
   ].freeze
 
-  validates :username, presence: true
+  validates :username, :person_id, presence: true
 
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.facebook_accounts

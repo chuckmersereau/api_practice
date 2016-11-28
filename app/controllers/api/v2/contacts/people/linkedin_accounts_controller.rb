@@ -68,7 +68,7 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   end
 
 	def linkedin_account_scope
-		load_person.linkedinitter_accounts
+		load_person.linkedin_accounts
 	end
 
   def load_person
