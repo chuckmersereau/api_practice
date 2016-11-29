@@ -216,14 +216,14 @@ class MailChimpAccount::Exporter
     account.reload
 
     # Add any new groups
-    groups = interest_categories(grouping['id']).interests.retrieve['interests'].map { |i| i['name'] }
+    groups = interest_categories(grouping['id']).interests.retrieve(params: { 'count': '100' })['interests'].map { |i| i['name'] }
     create_interest_categories_for(grouping['id'], tags - groups)
 
     cache_tags_interest_ids
   end
 
   def cache_tags_interest_ids
-    interests = interest_categories(account.tags_grouping_id).interests.retrieve['interests']
+    interests = interest_categories(account.tags_grouping_id).interests.retrieve(params: { 'count': '100' })['interests']
     interests = Hash[interests.map { |interest| [interest['name'], interest['id']] }]
     account.update_attribute(:tags_interest_ids, interests)
     account.reload
