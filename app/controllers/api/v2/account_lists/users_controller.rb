@@ -49,6 +49,10 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
   end
 
   def pundit_user
-    action_name == 'index' ? PunditContext.new(current_user, load_account_list) : current_user
+    if action_name == 'index'
+      PunditContext.new(current_user, account_list: load_account_list)
+    else
+      current_user
+    end
   end
 end
