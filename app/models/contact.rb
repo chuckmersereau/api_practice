@@ -61,7 +61,9 @@ class Contact < ActiveRecord::Base
   scope :active, -> { where(active_conditions) }
   scope :inactive, -> { where(inactive_conditions) }
   scope :active_or_unassigned, -> { where(active_or_unassigned_conditions) }
-  scope :late_by, -> (min_days, max_days = nil) { financial_partners.order(:name).to_a.keep_if { |c| c.late_by?(min_days, max_days) } }
+  scope :late_by, lambda { |min_days, max_days = 100.years|
+    financial_partners.where(late_at: (max_days || 100.years).ago..min_days.ago)
+  }
   scope :created_between, -> (start_date, end_date) { where('contacts.created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
 
   PERMITTED_ATTRIBUTES = [
@@ -96,7 +98,7 @@ class Contact < ActiveRecord::Base
   accepts_nested_attributes_for :contact_people, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :contact_referrals_to_me, reject_if: :all_blank, allow_destroy: true
 
-  before_save :set_notes_saved_at
+  before_save :set_notes_saved_at, :update_late_at
   after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
   after_create :create_people_from_contact, if: :prefill_attributes_on_create
   before_destroy :delete_from_letter_services, :delete_people
@@ -202,20 +204,23 @@ class Contact < ActiveRecord::Base
   end
 
   def late_by?(min_days, max_days = nil)
-    date_to_check = last_donation_date || pledge_start_date
-    return false unless status == 'Partner - Financial' && pledge_frequency.present? && date_to_check.present?
-
-    late_date = if pledge_frequency >= 1.0
-                  date_to_check + pledge_frequency.to_i.months
-                elsif pledge_frequency >= 0.4
-                  date_to_check + 2.weeks
-                else
-                  date_to_check + 1.week
-                end
-
+    return false unless status == 'Partner - Financial' && pledge_frequency.present? && late_at
     min_late_date = Date.today - min_days
     max_late_date = max_days ? Date.today - max_days : Date.new(1951, 1, 1)
-    late_date > max_late_date && late_date < min_late_date
+    late_at > max_late_date && late_at < min_late_date
+  end
+
+  def update_late_at
+    initial_date = last_donation_date || pledge_start_date
+    return unless status == 'Partner - Financial' && pledge_frequency.present? && initial_date.present?
+    self.late_at = case
+                   when pledge_frequency >= 1.0
+                     initial_date + pledge_frequency.to_i.months
+                   when pledge_frequency >= 0.4
+                     initial_date + 2.weeks
+                   else
+                     initial_date + 1.week
+                   end
   end
 
   def self.active_conditions
