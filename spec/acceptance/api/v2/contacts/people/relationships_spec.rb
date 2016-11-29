@@ -22,7 +22,7 @@ resource 'Relationship' do
       example_request 'get relationships' do
         explanation 'List of Relationships associated to the person'
         check_collection_resource(1)
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -35,7 +35,7 @@ resource 'Relationship' do
 
       example_request 'get organization account' do
         check_resource
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -49,7 +49,7 @@ resource 'Relationship' do
       example 'create organization account' do
         do_request data: form_data
         expect(resource_object['username']).to eq new_family_relationship['username']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -63,13 +63,13 @@ resource 'Relationship' do
       example 'update notification' do
         do_request data: form_data
         expect(resource_object['username']).to eq new_family_relationship['username']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       example_request 'delete notification' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

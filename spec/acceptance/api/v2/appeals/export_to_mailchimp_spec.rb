@@ -27,7 +27,7 @@ resource 'Mailchimp' do
       parameter 'appeal_list_id',         'Appeal List ID', required: true
       example 'list designation accounts of account list' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

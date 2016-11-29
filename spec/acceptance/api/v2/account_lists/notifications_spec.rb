@@ -32,7 +32,7 @@ resource 'Notifications' do
       example_request 'list notifications of account list' do
         check_collection_resource(2, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/account-lists/:account_list_id/notifications/:id' do
@@ -46,7 +46,7 @@ resource 'Notifications' do
       example_request 'get notification' do
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/account-lists/:account_list_id/notifications' do
@@ -59,7 +59,7 @@ resource 'Notifications' do
       end
       example 'create notification' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     put '/api/v2/account-lists/:account_list_id/notifications/:id' do
@@ -72,14 +72,14 @@ resource 'Notifications' do
       end
       example 'update notification' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/account-lists/:account_list_id/notifications/:id' do
       parameter 'account-list-id',              'Account List ID', required: true
       parameter 'id',                           'ID', required: true
       example_request 'delete notification' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

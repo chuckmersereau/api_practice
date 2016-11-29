@@ -55,20 +55,20 @@ resource 'Mailchimp Account Spec' do
     example_request 'get mailchimp account' do
       check_resource
       expect(resource_object.keys).to match_array expected_attribute_keys
-      expect(status).to eq 200
+      expect(response_status).to eq 200
     end
   end
   delete '/api/v2/account-lists/:account_list_id/mail-chimp-account' do
     parameter 'account-list-id',              'Account List ID', required: true
     parameter 'id',                           'ID', required: true
     example_request 'delete mailchimp account' do
-      expect(status).to eq 200
+      expect(response_status).to eq 200
     end
   end
   get '/api/v2/account-lists/:account_list_id/mail-chimp-account/sync' do
     parameter 'account-list-id', 'Account List ID', required: true
     example_request 'sync mailchimp account' do
-      expect(status).to eq 200
+      expect(response_status).to eq 200
     end
   end
 end

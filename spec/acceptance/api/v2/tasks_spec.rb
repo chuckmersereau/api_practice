@@ -20,7 +20,7 @@ resource 'Tasks' do
       example_request 'get tasks' do
         explanation 'List of Tasks associated to current_user'
         check_collection_resource(1, ['relationships'])
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -41,7 +41,7 @@ resource 'Tasks' do
       end
       example_request 'get task' do
         check_resource(['relationships'])
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -57,7 +57,7 @@ resource 'Tasks' do
       example 'create task' do
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -75,7 +75,7 @@ resource 'Tasks' do
       example 'update task' do
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -83,7 +83,7 @@ resource 'Tasks' do
       parameter 'id', 'the Id of the Task'
 
       example_request 'delete task' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

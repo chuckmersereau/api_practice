@@ -17,7 +17,7 @@ resource 'User / Authentication' do
     response_field 'json_web_token', 'Json Web Token', type: 'String'
 
     example_request 'Get Authentication' do
-      expect(status).to eq(200)
+      expect(response_status).to eq(200)
       expect(JsonWebToken.decode(JSON.parse(response_body)['json_web_token'])).to eq('user_id' => user.id)
     end
   end

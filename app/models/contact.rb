@@ -53,6 +53,7 @@ class Contact < ActiveRecord::Base
   scope :companies, -> { where('donor_accounts.master_company_id is not null').includes(:donor_accounts).references('donor_accounts') }
   scope :with_person, -> (person) { includes(:people).where('people.id' => person.id) }
   scope :for_donor_account, -> (donor_account) { where('donor_accounts.id' => donor_account.id).includes(:donor_accounts).references('donor_accounts') }
+  scope :for_account_list, -> (account_list) { where(account_list_id: account_list.id) }
   scope :financial_partners, -> { where(status: 'Partner - Financial') }
   scope :non_financial_partners, -> { where("status <> 'Partner - Financial' OR status is NULL") }
 
@@ -65,9 +66,9 @@ class Contact < ActiveRecord::Base
 
   PERMITTED_ATTRIBUTES = [
     :name, :pledge_amount, :status, :notes, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
-    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals, :user_changed,
+    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals,
     :direct_deposit, :magazine, :pledge_received, :not_duplicated_with, :tag_list, :primary_person_id, :timezone,
-    :pledge_currency, :locale, :prefill_attributes_on_create,
+    :pledge_currency, :locale, :account_list_id,
     {
       tag_list: [],
       contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],

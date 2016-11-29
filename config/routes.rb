@@ -30,8 +30,7 @@ Rails.application.routes.draw do
           resource :export_to_mailchimp, only: [:show], controller: :export_to_mailchimp, path: 'export-to-mailchimp'
         end
       end
-
-      resources :contacts do
+      resources :contacts, only: [:index, :show, :create, :update, :destroy] do
         scope module: :contacts do
           resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
           resources :addresses, only: [:index, :show, :create, :update, :destroy]

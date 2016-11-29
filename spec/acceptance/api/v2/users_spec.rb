@@ -30,7 +30,7 @@ resource 'Users' do
       example_request 'get user' do
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -58,7 +58,7 @@ resource 'Users' do
       example 'update user' do
         do_request data: form_data
         expect(resource_object['first-name']).to eq new_user[:first_name]
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

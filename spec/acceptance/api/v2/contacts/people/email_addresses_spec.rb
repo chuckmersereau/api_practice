@@ -44,7 +44,7 @@ resource 'Contacts People Email Addresses' do
         check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq email_address.email
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -63,7 +63,7 @@ resource 'Contacts People Email Addresses' do
         check_resource(['relationships'])
         expect(resource_object.keys.sort).to eq expected_attribute_keys
         expect(resource_object['email']).to  eq email_address.email
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -84,7 +84,7 @@ resource 'Contacts People Email Addresses' do
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq attributes[:email]
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -107,7 +107,7 @@ resource 'Contacts People Email Addresses' do
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq 'new-email@example.com'
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -130,14 +130,14 @@ resource 'Contacts People Email Addresses' do
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq 'new-email@example.com'
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
     # destroy
     delete '/api/v2/contacts/:contact_id/people/:person_id/email-addresses/:id' do
       example_request 'delete email address' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

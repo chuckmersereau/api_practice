@@ -30,7 +30,7 @@ resource 'Users' do
         explanation 'Users of selected account list'
         check_collection_resource(3, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/account-lists/:account_list_id/users/:id' do
@@ -39,12 +39,12 @@ resource 'Users' do
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['first-name']).to eq user2.first_name
         expect(resource_object['last-name']).to eq user2.last_name
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/account-lists/:account_list_id/users/:id' do
       example_request 'delete user' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

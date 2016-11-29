@@ -6,11 +6,11 @@ class ApplicationPolicy
     @resource = resource
   end
 
-  def create?
+  def show?
     resource_owner?
   end
 
-  def show?
+  def create?
     resource_owner?
   end
 

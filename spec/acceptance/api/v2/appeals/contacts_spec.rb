@@ -55,7 +55,7 @@ resource 'Contacts' do
       response_field 'data',                    'Data', 'Type' => 'Array[Object]'
       example_request 'list contacts of appeal of account list' do
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/appeals/:appeal_id/contacts/:id' do
@@ -92,14 +92,14 @@ resource 'Contacts' do
       end
       example_request 'get contact' do
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/appeals/:appeal_id/contacts/:id' do
       parameter 'account_list_id',              'Account List ID', scope: :filters
       parameter 'id',                           'ID', required: true
       example_request 'delete contact from appeal' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

@@ -32,7 +32,7 @@ resource 'Appeals' do
       response_field :data,                     'Data', 'Type' => 'Array[Object]'
       example_request 'list appeals of account list' do
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/appeals/:id' do
@@ -51,7 +51,7 @@ resource 'Appeals' do
       end
       example_request 'get appeal' do
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/appeals' do
@@ -64,7 +64,7 @@ resource 'Appeals' do
       end
       example 'create appeal' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     put '/api/v2/appeals/:id' do
@@ -77,14 +77,14 @@ resource 'Appeals' do
       end
       example 'update appeals' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/appeals/:id' do
       parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
       parameter 'id',                           'ID', required: true
       example_request 'delete appeal' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

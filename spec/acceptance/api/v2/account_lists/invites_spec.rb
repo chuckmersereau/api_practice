@@ -31,7 +31,7 @@ resource 'Invites' do
         explanation 'Invites of selected account list'
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/account-lists/:account_list_id/invites/:id' do
@@ -48,7 +48,7 @@ resource 'Invites' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['code']).to eq invite.code
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/account-lists/:account_list_id/invites' do
@@ -58,12 +58,12 @@ resource 'Invites' do
       parameter 'recipient-email', 'Recipient Email', scope: [:data, :attributes], required: true
       example_request 'create invite' do
         expect(resource_object['recipient-email']).to eq email
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/account-lists/:account_list_id/invites/:id' do
       example_request 'delete invite' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end
