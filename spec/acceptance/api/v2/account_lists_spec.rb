@@ -33,7 +33,7 @@ resource 'Account Lists' do
       with_options scope: [:data, :attributes] do
         response_field 'created-at',              'Created At', 'Type' => 'String'
         response_field 'default-organization-id', 'Organization ID', 'Type' => 'Number'
-        response_field 'monthly-goal',            'Monthly Goal', 'Type' => 'String'
+        response_field 'monthly-goal',            'Monthly Goal', 'Type' => 'Number'
         response_field 'name',                    'Account Name', 'Type' => 'String'
         response_field 'updated-at',              'Updated At', 'Type' => 'String'
       end
