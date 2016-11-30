@@ -218,7 +218,7 @@ resource 'Facebook Accounts' do
       network = 'website'
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person-id',                    'Person ID', required: true
-      parameter 'network'                       'Network', required: true, scope: :filters
+      parameter 'network',                      'Network', required: true, scope: :filters
       example 'deletes network' do
         do_request filters: { network: network }
         expect(status).to eq 200

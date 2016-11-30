@@ -43,7 +43,6 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
   def load_networks
     @networks = []
     available_networks.map do |network|
-      serializer_name = "Person::#{network_name(network)}Serializer".constantize
       results = load_scope(network_name(network)).where(filter_params.except(:networks)).to_a
       response = ActiveModelSerializers::SerializableResource.new(results).as_json[:data]
       @networks += response
