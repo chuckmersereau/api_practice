@@ -215,7 +215,7 @@ resource 'Facebook Accounts' do
       end
     end
     delete '/api/v2/contacts/:contact_id/people/:person_id/networks/:facebook_id' do
-      network = 'website'
+      network = 'facebook'
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person-id',                    'Person ID', required: true
       parameter 'network',                      'Network', required: true, scope: :filters
