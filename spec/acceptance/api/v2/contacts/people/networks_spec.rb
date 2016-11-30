@@ -70,10 +70,10 @@ resource 'Facebook Accounts' do
       networks = 'facebook,linkedin,twitter,website'
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person-id',                    'Person ID', required: true
-      parameter 'networks'                      'Networks', required: true, scope: :filters
+      parameter 'networks',                     'Networks', required: true, scope: :filters
       response_field 'data',                    'Data', 'Type' => 'Array[Object]'
       example 'list facebook accounts of person' do
-        do_request filters: {networks: networks}
+        do_request filters: { networks: networks }
         check_collection_resource(8)
         expect(resource_data[0]['attributes'].keys).to match_array expected_facebook_attribute_keys
         expect(resource_data[2]['attributes'].keys).to match_array expected_linkedin_attribute_keys
@@ -84,7 +84,7 @@ resource 'Facebook Accounts' do
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/networks/:facebook_id' do
       network = 'facebook'
-      parameter 'network'                       'Network must be: facebook', required: true, scope: :filters
+      parameter 'network', 'Network must be: facebook', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         response_field 'created-at',              'Created At', 'Type' => 'String'
         response_field 'first-name',              'First Name', 'Type' => 'String'
@@ -94,14 +94,14 @@ resource 'Facebook Accounts' do
         response_field 'username',                'Username', 'Type' => 'String'
       end
       example 'get network [facebook account]' do
-        do_request filters: {network: network}
+        do_request filters: { network: network }
         expect(resource_object.keys).to match_array expected_facebook_attribute_keys
         expect(status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/networks/:linkedin_id' do
       network = 'linkedin'
-      parameter 'network'                       'Network must be: linkedin', required: true, scope: :filters
+      parameter 'network', 'Network must be: linkedin', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         response_field 'created-at',              'Created At', 'Type' => 'String'
         response_field 'first-name',              'First Name', 'Type' => 'String'
@@ -111,14 +111,14 @@ resource 'Facebook Accounts' do
         response_field 'updated-at',              'Updated At', 'Type' => 'String'
       end
       example 'get network [linkedin account]' do
-        do_request filters: {network: network}
+        do_request filters: { network: network }
         expect(resource_object.keys).to match_array expected_linkedin_attribute_keys
         expect(status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/networks/:twitter_id' do
       network = 'twitter'
-      parameter 'network'                       'Network must be: twitter', required: true, scope: :filters
+      parameter 'network', 'Network must be: twitter', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         response_field 'created-at',              'Created At', 'Type' => 'String'
         response_field 'primary',                 'Primary', 'Type' => 'Boolean'
@@ -127,14 +127,14 @@ resource 'Facebook Accounts' do
         response_field 'updated-at',              'Updated At', 'Type' => 'String'
       end
       example 'get network [twitter account]' do
-        do_request filters: {network: network}
+        do_request filters: { network: network }
         expect(resource_object.keys).to match_array expected_twitter_attribute_keys
         expect(status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/networks/:website_id' do
       network = 'website'
-      parameter 'network'                       'Network must be: website', required: true, scope: :filters
+      parameter 'network', 'Network must be: website', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         response_field 'created-at',              'Created At', 'Type' => 'String'
         response_field 'primary',                 'Primary', 'Type' => 'Boolean'
@@ -142,14 +142,14 @@ resource 'Facebook Accounts' do
         response_field 'url',                     'Url', 'Type' => 'String'
       end
       example 'get network [website account]' do
-        do_request filters: {network: network}
+        do_request filters: { network: network }
         expect(resource_object.keys).to match_array expected_website_attribute_keys
         expect(status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/networks' do
       network = 'facebook'
-      parameter 'network'                         'Network must be: facebook', required: true, scope: :filters
+      parameter 'network', 'Network must be: facebook', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         parameter 'first-name',                   'First Name'
         parameter 'last-name',                    'Last Name'
@@ -157,13 +157,13 @@ resource 'Facebook Accounts' do
         parameter 'username',                     'Username'
       end
       example 'creates network [facebook account]' do
-        do_request data: facebook_form_data, filters: {network: network}
+        do_request data: facebook_form_data, filters: { network: network }
         expect(status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/networks' do
       network = 'linkedin'
-      parameter 'network'                         'Network must be: linkedin', required: true, scope: :filters
+      parameter 'network', 'Network must be: linkedin', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         parameter 'first-name',                   'First Name'
         parameter 'last-name',                    'Last Name'
@@ -171,38 +171,38 @@ resource 'Facebook Accounts' do
         parameter 'remote-id',                    'Remote ID'
       end
       example 'creates network [linkedin account]' do
-        do_request data: linkedin_form_data, filters: {network: network}
+        do_request data: linkedin_form_data, filters: { network: network }
         expect(status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/networks' do
       network = 'twitter'
-      parameter 'network'                         'Network must be: twitter', required: true, scope: :filters
+      parameter 'network', 'Network must be: twitter', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         parameter 'primary',                      'Primary'
         parameter 'remote-id',                    'Remote ID'
         parameter 'screen-name',                  'Screen Name'
       end
       example 'creates network [twitter account]' do
-        do_request data: twitter_form_data, filters: {network: network}
+        do_request data: twitter_form_data, filters: { network: network }
         expect(status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/networks' do
       network = 'website'
-      parameter 'network'                         'Network must be: website', required: true, scope: :filters
+      parameter 'network', 'Network must be: website', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         parameter 'primary',                      'Primary'
         parameter 'url',                          'Url'
       end
       example 'creates network [website account]' do
-        do_request data: website_form_data, filters: {network: network}
+        do_request data: website_form_data, filters: { network: network }
         expect(status).to eq 200
       end
     end
     put '/api/v2/contacts/:contact_id/people/:person_id/networks/:facebook_id' do
-      network = 'website'
-      parameter 'network'                         'Network must be: website', required: true, scope: :filters
+      network = 'facebook'
+      parameter 'network', 'Network must be: website', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         parameter 'first-name',                   'First Name'
         parameter 'last-name',                    'Last Name'
@@ -210,7 +210,7 @@ resource 'Facebook Accounts' do
         parameter 'username',                     'Username'
       end
       example 'update facebook account' do
-        do_request data: facebook_form_data, filters: {network: network}
+        do_request data: facebook_form_data, filters: { network: network }
         expect(status).to eq 200
       end
     end
@@ -220,7 +220,7 @@ resource 'Facebook Accounts' do
       parameter 'person-id',                    'Person ID', required: true
       parameter 'network'                       'Network', required: true, scope: :filters
       example 'deletes network' do
-        do_request filters: {network: network}
+        do_request filters: { network: network }
         expect(status).to eq 200
       end
     end

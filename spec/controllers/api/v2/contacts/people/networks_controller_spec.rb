@@ -15,7 +15,7 @@ RSpec.describe Api::V2::Contacts::People::NetworksController, type: :controller 
     let(:factory_type) { :facebook_account }
     let!(:resource) { create(factory_type, person: person) }
     let(:id) { resource.id }
-    let(:parent_param) { { contact_id: contact.id, person_id: person.id, filters: {network: 'facebook'} } }
+    let(:parent_param) { { contact_id: contact.id, person_id: person.id, filters: { network: 'facebook' } } }
     let(:unpermitted_attributes) { nil }
     let(:correct_attributes) { attributes_for(factory_type, person: person2, first_name: 'Albert') }
     let(:incorrect_attributes) { attributes_for(factory_type, person: nil, username: nil) }
@@ -29,7 +29,7 @@ RSpec.describe Api::V2::Contacts::People::NetworksController, type: :controller 
     let(:factory_type) { :linkedin_account }
     let!(:resource) { create(factory_type, person: person) }
     let(:id) { resource.id }
-    let(:parent_param) { { contact_id: contact.id, person_id: person.id, filters: {network: 'linkedin'} } }
+    let(:parent_param) { { contact_id: contact.id, person_id: person.id, filters: { network: 'linkedin' } } }
     let(:unpermitted_attributes) { nil }
     let(:correct_attributes) { attributes_for(factory_type, person: person2, first_name: 'Albert') }
     let(:incorrect_attributes) { attributes_for(factory_type, person: nil, public_url: nil) }
@@ -43,7 +43,7 @@ RSpec.describe Api::V2::Contacts::People::NetworksController, type: :controller 
     let(:factory_type) { :twitter_account }
     let!(:resource) { create(factory_type, person: person) }
     let(:id) { resource.id }
-    let(:parent_param) { { contact_id: contact.id, person_id: person.id, filters: {network: 'twitter'} } }
+    let(:parent_param) { { contact_id: contact.id, person_id: person.id, filters: { network: 'twitter' } } }
     let(:unpermitted_attributes) { nil }
     let(:correct_attributes) { attributes_for(factory_type, person_id: person2.id) }
     let(:incorrect_attributes) { attributes_for(factory_type, screen_name: nil) }
@@ -57,7 +57,7 @@ RSpec.describe Api::V2::Contacts::People::NetworksController, type: :controller 
     let(:factory_type) { :website }
     let!(:resource) { create(factory_type, person: person) }
     let(:id) { resource.id }
-    let(:parent_param) { { contact_id: contact.id, person_id: person.id, filters: {network: 'website'} } }
+    let(:parent_param) { { contact_id: contact.id, person_id: person.id, filters: { network: 'website' } } }
     let(:unpermitted_attributes) { nil }
     let(:correct_attributes) { attributes_for(factory_type, person: person2, website: 'http://www.example192.com') }
     let(:incorrect_attributes) { attributes_for(factory_type, person: nil, url: nil) }
@@ -72,7 +72,7 @@ RSpec.describe Api::V2::Contacts::People::NetworksController, type: :controller 
     let!(:linkedin_accounts) { create_list(:linkedin_account, 2, person: person) }
     let!(:twitter_accounts) { create_list(:twitter_account, 3, person: person) }
     let!(:websites) { create_list(:website, 3, person: person) }
-    let(:params) { { contact_id: contact.id, person_id: person.id, filters: {networks: 'website,twitter,facebook, linkedin'} } }
+    let(:params) { { contact_id: contact.id, person_id: person.id, filters: { networks: 'website,twitter,facebook, linkedin' } } }
 
     describe '#index' do
       it 'shows resources to users that are signed in' do
@@ -97,6 +97,5 @@ RSpec.describe Api::V2::Contacts::People::NetworksController, type: :controller 
         expect(response.status).to eq(403)
       end
     end
-
   end
 end

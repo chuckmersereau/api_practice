@@ -1,5 +1,4 @@
 class Api::V2::Contacts::People::NetworksController < Api::V2Controller
-
   NETWORKS = { facebook: 'FacebookAccount',
                linkedin: 'LinkedinAccount',
                twitter: 'TwitterAccount',
@@ -42,13 +41,13 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
   end
 
   def load_networks
-    @networks = nil
-    available_networks.map{ |network| 
+    @networks = []
+    available_networks.map do |network|
       serializer_name = "Person::#{network_name(network)}Serializer".constantize
-      results = load_scope(network_name(network)).where(filter_params.except(:networks)).to_a 
+      results = load_scope(network_name(network)).where(filter_params.except(:networks)).to_a
       response = ActiveModelSerializers::SerializableResource.new(results).as_json[:data]
-      @networks = @networks ? @networks + response : response
-    }
+      @networks += response
+    end
     @networks = { data: @networks }
   end
 
