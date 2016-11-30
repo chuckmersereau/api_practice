@@ -3,7 +3,6 @@ cache:
   bundler: true
   directories:
     - cache
-
 language: ruby
 services:
 - redis-server
@@ -15,12 +14,16 @@ before_script:
 script:
 - bin/travis_parallel_test.sh
 - bin/travis_rubocop.sh
+- bin/travis_docs.sh
 - bundle exec rake coveralls:push
 branches:
   only:
   - master
   - staging
 env:
+  global:
+    - ENCRYPTION_LABEL: "badb2a42c21a"
+    - COMMIT_AUTHOR_EMAIL: "tataihono.nikora@gmail.com"
   matrix:
     - TEST_SUITE=1
     - TEST_SUITE=2

@@ -16,7 +16,7 @@ resource 'User / Authentication' do
       expect(status).to eq(200)
       expect(JsonWebToken.decode(response_body)).to eq('user_id' => user.id)
     end
-    example_request 'Get Authentication [Unathorized]', access_token: 'wrong_token' do
+    example_request 'Get Authentication [Unauthorized]', access_token: 'wrong_token' do
       expect(status).to eq(401)
       expect(json_response).to eq('errors' => ['Unauthorized'])
     end
