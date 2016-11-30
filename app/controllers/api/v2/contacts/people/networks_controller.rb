@@ -41,10 +41,6 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
     filter_params[:networks].delete(' ').split(',').keep_if { |k, _| permited_networks.include? k }
   end
 
-  def available_networks_associations
-    NETWORKS.select { |k, _| available_networks.include?(k.to_s) }.values.map{ |v| v.underscore.pluralize }
-  end
-
   def load_networks
     @networks = nil
     available_networks.map{ |network| 
