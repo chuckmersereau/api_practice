@@ -79,7 +79,7 @@ resource 'Facebook Accounts' do
         expect(resource_data[2]['attributes'].keys).to match_array expected_linkedin_attribute_keys
         expect(resource_data[4]['attributes'].keys).to match_array expected_twitter_attribute_keys
         expect(resource_data[6]['attributes'].keys).to match_array expected_website_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/networks/:facebook_id' do
@@ -96,7 +96,7 @@ resource 'Facebook Accounts' do
       example 'get network [facebook account]' do
         do_request filters: { network: network }
         expect(resource_object.keys).to match_array expected_facebook_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/networks/:linkedin_id' do
@@ -113,7 +113,7 @@ resource 'Facebook Accounts' do
       example 'get network [linkedin account]' do
         do_request filters: { network: network }
         expect(resource_object.keys).to match_array expected_linkedin_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/networks/:twitter_id' do
@@ -129,7 +129,7 @@ resource 'Facebook Accounts' do
       example 'get network [twitter account]' do
         do_request filters: { network: network }
         expect(resource_object.keys).to match_array expected_twitter_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/networks/:website_id' do
@@ -144,7 +144,7 @@ resource 'Facebook Accounts' do
       example 'get network [website account]' do
         do_request filters: { network: network }
         expect(resource_object.keys).to match_array expected_website_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/networks' do
@@ -158,7 +158,7 @@ resource 'Facebook Accounts' do
       end
       example 'creates network [facebook account]' do
         do_request data: facebook_form_data, filters: { network: network }
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/networks' do
@@ -172,7 +172,7 @@ resource 'Facebook Accounts' do
       end
       example 'creates network [linkedin account]' do
         do_request data: linkedin_form_data, filters: { network: network }
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/networks' do
@@ -185,7 +185,7 @@ resource 'Facebook Accounts' do
       end
       example 'creates network [twitter account]' do
         do_request data: twitter_form_data, filters: { network: network }
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/networks' do
@@ -197,7 +197,7 @@ resource 'Facebook Accounts' do
       end
       example 'creates network [website account]' do
         do_request data: website_form_data, filters: { network: network }
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     put '/api/v2/contacts/:contact_id/people/:person_id/networks/:facebook_id' do
@@ -211,7 +211,7 @@ resource 'Facebook Accounts' do
       end
       example 'update facebook account' do
         do_request data: facebook_form_data, filters: { network: network }
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/contacts/:contact_id/people/:person_id/networks/:facebook_id' do
@@ -221,7 +221,7 @@ resource 'Facebook Accounts' do
       parameter 'network',                      'Network', required: true, scope: :filters
       example 'deletes network' do
         do_request filters: { network: network }
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end
