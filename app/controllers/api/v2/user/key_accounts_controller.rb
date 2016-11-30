@@ -1,8 +1,7 @@
 class Api::V2::User::KeyAccountsController < Api::V2Controller
   def index
-    authorize load_user, :show?
     load_key_accounts
-    render json: @key_accounts
+    render json: @key_accounts, meta: meta_hash(@key_accounts)
   end
 
   def show
@@ -31,7 +30,10 @@ class Api::V2::User::KeyAccountsController < Api::V2Controller
   private
 
   def load_key_accounts
-    @key_accounts ||= key_account_scope.where(filter_params).to_a
+    @key_accounts = key_account_scope.where(filter_params)
+                                     .reorder(sorting_param)
+                                     .page(page_number_param)
+                                     .per(per_page_param)
   end
 
   def load_key_account

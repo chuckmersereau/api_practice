@@ -1,6 +1,8 @@
 class Api::V2Controller < ApiController
   include Pundit
-  include ParamsFilters
+  include Filtering
+  include Sorting
+  include Pagination
 
   before_action :jwt_authorize!
   before_action :transform_params_field_names, only: [:create, :update]
@@ -36,6 +38,14 @@ class Api::V2Controller < ApiController
 
   def jwt_payload
     @jwt_payload ||= JsonWebToken.decode(http_token) if http_token
+  end
+
+  def meta_hash(resources)
+    {
+      pagination: pagination_meta_params(resources),
+      sort: sorting_param,
+      filters: filter_params
+    }
   end
 
   def transform_params_field_names

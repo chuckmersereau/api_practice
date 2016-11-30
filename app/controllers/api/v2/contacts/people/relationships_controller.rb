@@ -4,7 +4,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   def index
     load_relationships
     authorize @person, :show?
-    render json: @relationships
+    render json: @relationships, meta: meta_hash(@relationships)
   end
 
   def show
@@ -33,7 +33,10 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def load_relationships
-    @relationships ||= relationship_scope.to_a
+    @relationships = relationship_scope.where(filter_params)
+                                       .reorder(sorting_param)
+                                       .page(page_number_param)
+                                       .per(per_page_param)
   end
 
   def load_relationship
@@ -68,6 +71,10 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
 
   def current_person
     @person ||= current_contact.people.find(params[:person_id])
+  end
+
+  def permitted_filters
+    []
   end
 
   def relationship_params

@@ -2,7 +2,7 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   def index
     authorize_index
     load_phones
-    render json: @phones
+    render json: @phones, meta: meta_hash(@phones)
   end
 
   def show
@@ -72,7 +72,10 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   end
 
   def load_phones
-    @phones ||= phone_scope.to_a
+    @phones = phone_scope.where(filter_params)
+                         .reorder(sorting_param)
+                         .page(page_number_param)
+                         .per(per_page_param)
   end
 
   def persist_phone
@@ -89,6 +92,10 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
 
   def save_phone
     @phone.save
+  end
+
+  def permitted_filters
+    []
   end
 
   def pundit_user

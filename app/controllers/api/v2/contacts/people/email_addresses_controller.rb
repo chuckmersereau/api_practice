@@ -3,7 +3,7 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
     load_email_addresses
     authorize current_contact, :show?
 
-    render json: @email_addresses
+    render json: @email_addresses, meta: meta_hash(@email_addresses)
   end
 
   def show
@@ -63,7 +63,10 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   end
 
   def load_email_addresses
-    @email_addresses ||= email_address_scope.to_a
+    @email_addresses = email_address_scope.where(filter_params)
+                                          .reorder(sorting_param)
+                                          .page(page_number_param)
+                                          .per(per_page_param)
   end
 
   def persist_email_address

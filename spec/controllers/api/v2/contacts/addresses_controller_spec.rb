@@ -7,6 +7,7 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   let(:resource_type) { :address }
   let(:contact) { create(:contact, account_list: user.account_lists.first) }
   let!(:resource) { create(:address, addressable: contact) }
+  let!(:second_resource) { create(:address, addressable: contact) }
   let(:id) { resource.id }
   let(:parent_param) { { contact_id: contact.id } }
   let(:correct_attributes) { { street: '123 Street' } }

@@ -1,7 +1,7 @@
 class Api::V2::ContactsController < Api::V2Controller
   def index
     load_contacts
-    render json: @contacts
+    render json: @contacts, meta: meta_hash(@contacts)
   end
 
   def show
@@ -30,7 +30,10 @@ class Api::V2::ContactsController < Api::V2Controller
   private
 
   def load_contacts
-    @contacts ||= contact_scope.to_a
+    @contacts = contact_scope.where(filter_params)
+                             .reorder(sorting_param)
+                             .page(page_number_param)
+                             .per(per_page_param)
   end
 
   def load_contact

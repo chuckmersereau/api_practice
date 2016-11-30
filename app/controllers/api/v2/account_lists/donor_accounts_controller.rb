@@ -2,7 +2,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_donor_accounts
-    render json: @donor_accounts
+    render json: @donor_accounts, meta: meta_hash(@donor_accounts)
   end
 
   def show
@@ -15,6 +15,10 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
 
   def load_donor_accounts
     @donor_accounts ||= filter_params[:contacts] ? filtered_donor_accounts : all_donor_accounts
+    @donor_accounts = @donor_accounts.where(filter_params_without_contacts)
+                                     .reorder(sorting_param)
+                                     .page(page_number_param)
+                                     .per(per_page_param)
   end
 
   def load_donor_account
@@ -37,7 +41,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
     @account_list ||= AccountList.find(params[:account_list_id])
   end
 
-  def permited_filters
+  def permitted_filters
     [:contacts]
   end
 
@@ -46,10 +50,14 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   end
 
   def all_donor_accounts
-    donor_account_scope.to_a
+    donor_account_scope
+  end
+
+  def filter_params_without_contacts
+    filter_params.except(:contacts)
   end
 
   def filtered_donor_accounts
-    donor_account_scope.where(contact_donor_accounts: { contact_id: filter_params[:contacts] }).to_a
+    donor_account_scope.where(contact_donor_accounts: { contact_id: filter_params[:contacts] })
   end
 end
