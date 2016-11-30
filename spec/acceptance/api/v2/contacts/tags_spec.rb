@@ -23,7 +23,7 @@ resource 'Tags' do
       example 'create tag' do
         do_request data: form_data
         expect(resource_object['tag-list'].first).to eq new_tag_params[:name]
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -32,7 +32,7 @@ resource 'Tags' do
       parameter 'tag_name',   'the Id of the Tag'
 
       example_request 'delete tag' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

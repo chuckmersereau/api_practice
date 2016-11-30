@@ -6,6 +6,7 @@ class Contact::Filterer < ApplicationFilterer
     PledgeFrequencies
     PledgeAmount
     PledgeCurrency
+    PledgeLateBy
     Donation
     DonationDate
     DonationAmountRange

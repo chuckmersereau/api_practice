@@ -21,7 +21,7 @@ resource 'Merge' do
       parameter 'id',                      'ID (id of account list to be merged)', required: true, scope: [:data, :attributes]
       example 'merge account lists' do
         do_request data: build_data(id: account_list2_id)
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

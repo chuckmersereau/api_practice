@@ -17,7 +17,7 @@ resource 'Organization Accounts' do
       example_request 'get organization accounts' do
         explanation 'List of Organization Accounts associated to current_user'
         check_collection_resource(2, ['relationships'])
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/user/organization-accounts/:id' do
@@ -28,7 +28,7 @@ resource 'Organization Accounts' do
       end
       example_request 'get organization account' do
         check_resource(['relationships'])
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/user/organization-accounts' do
@@ -42,7 +42,7 @@ resource 'Organization Accounts' do
       example 'create organization account' do
         do_request data: form_data
         expect(resource_object['username']).to eq new_organization_account_params['username']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -57,13 +57,13 @@ resource 'Organization Accounts' do
       example 'update notification' do
         do_request data: form_data
         expect(resource_object['username']).to eq new_organization_account_params['username']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
     delete '/api/v2/user/organization-accounts/:id' do
       example_request 'delete notification' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

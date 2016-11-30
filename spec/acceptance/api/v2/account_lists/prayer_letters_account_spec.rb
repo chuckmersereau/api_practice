@@ -42,20 +42,20 @@ resource 'Prayer Letters Account' do
         example_request 'get prayer letters account' do
           check_resource
           expect(resource_object.keys).to match_array expected_attribute_keys
-          expect(status).to eq 200
+          expect(response_status).to eq 200
         end
       end
       delete '/api/v2/account-lists/:account_list_id/prayer-letters-account' do
         parameter 'account-list-id',              'Account List ID', required: true
         parameter 'id',                           'ID', required: true
         example_request 'delete prayer letters account' do
-          expect(status).to eq 200
+          expect(response_status).to eq 200
         end
       end
       get '/api/v2/account-lists/:account_list_id/prayer-letters-account/sync' do
         parameter 'account-list-id', 'Account List ID', required: true
         example_request 'sync prayer letters account' do
-          expect(status).to eq 200
+          expect(response_status).to eq 200
         end
       end
     end
@@ -73,7 +73,7 @@ resource 'Prayer Letters Account' do
       let(:form_data) { build_data('oauth2-token': 'token', 'valid-token': true) }
       example 'create a prayer letters account' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

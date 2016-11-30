@@ -22,7 +22,7 @@ resource 'Phones' do
       example_request 'get phones' do
         explanation('List of phone numbers associated to the person')
         check_collection_resource(1)
-        expect(status).to eq(200)
+        expect(response_status).to eq(200)
       end
     end
 
@@ -39,7 +39,7 @@ resource 'Phones' do
 
       example_request 'get phone number' do
         check_resource
-        expect(status).to eq(200)
+        expect(response_status).to eq(200)
       end
     end
 
@@ -56,7 +56,7 @@ resource 'Phones' do
       example 'create phone number' do
         do_request data: form_data
         expect(resource_object['number']).to eq new_phone['number']
-        expect(status).to eq(200)
+        expect(response_status).to eq(200)
       end
     end
 
@@ -73,13 +73,13 @@ resource 'Phones' do
       example 'update phone number' do
         do_request data: form_data
         expect(resource_object['number']).to eq new_phone['number']
-        expect(status).to eq(200)
+        expect(response_status).to eq(200)
       end
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
       example_request 'delete phone number' do
-        expect(status).to eq(200)
+        expect(response_status).to eq(200)
       end
     end
   end

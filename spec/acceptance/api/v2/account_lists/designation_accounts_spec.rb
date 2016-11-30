@@ -27,7 +27,7 @@ resource 'Designation Accounts' do
       example_request 'list designation accounts of account list' do
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/account-lists/:account_list_id/designation-accounts/:id' do
@@ -42,7 +42,7 @@ resource 'Designation Accounts' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['designation-number']).to eq designation_account.designation_number
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

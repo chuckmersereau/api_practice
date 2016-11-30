@@ -56,7 +56,7 @@ resource 'Import' do
       example_request 'get import' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/account-lists/:account_list_id/imports' do
@@ -73,7 +73,7 @@ resource 'Import' do
       end
       example 'create prayer letters account' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

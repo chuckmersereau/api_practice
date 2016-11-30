@@ -18,7 +18,7 @@ resource 'Key Accounts' do
       example_request 'get organization accounts' do
         explanation 'List of Organization Accounts associated to current_user'
         check_collection_resource(2)
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -32,7 +32,7 @@ resource 'Key Accounts' do
       end
       example_request 'get organization account' do
         check_resource
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -48,7 +48,7 @@ resource 'Key Accounts' do
       example 'create organization account' do
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -64,13 +64,13 @@ resource 'Key Accounts' do
       example 'update notification' do
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
     delete '/api/v2/user/key-accounts/:id' do
       example_request 'delete notification' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

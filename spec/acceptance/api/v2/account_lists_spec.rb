@@ -26,7 +26,7 @@ resource 'Account Lists' do
       example_request 'list account lists of current user' do
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/account-lists/:id' do
@@ -41,7 +41,7 @@ resource 'Account Lists' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['name']).to eq account_list.name
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     put '/api/v2/account-lists/:id' do
@@ -53,7 +53,7 @@ resource 'Account Lists' do
       example 'update account list' do
         do_request data: form_data
         expect(resource_object['name']).to eq new_account_list['name']
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

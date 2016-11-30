@@ -49,7 +49,7 @@ resource 'Donations' do
       example_request 'list donations of account list' do
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/account-lists/:account_list_id/donations/:id' do
@@ -75,7 +75,7 @@ resource 'Donations' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['amount']).to eq '$10'
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/account-lists/:account_list_id/donations' do
@@ -91,7 +91,7 @@ resource 'Donations' do
       example 'create donation' do
         do_request data: form_data
         expect(resource_object['amount']).to eq '$10'
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     put '/api/v2/account-lists/:account_list_id/donations/:id' do
@@ -108,7 +108,7 @@ resource 'Donations' do
       example 'update donation' do
         do_request data: build_data(new_donation)
         expect(resource_object['amount']).to eq '$10'
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

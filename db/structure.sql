@@ -775,7 +775,8 @@ CREATE TABLE contacts (
     prayer_letters_params text,
     pls_id character varying(255),
     pledge_currency character varying(4),
-    locale character varying(255)
+    locale character varying(255),
+    late_at date
 );
 
 
@@ -5517,3 +5518,4 @@ INSERT INTO schema_migrations (version) VALUES ('20161027202729');
 
 INSERT INTO schema_migrations (version) VALUES ('20161119005933');
 
+INSERT INTO schema_migrations (version) VALUES ('20161128055225');

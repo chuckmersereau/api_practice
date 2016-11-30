@@ -33,7 +33,7 @@ resource 'Donor Accounts' do
       example_request 'list donor accounts of account list' do
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/account-lists/:account_list_id/donor-accounts/:id' do
@@ -52,7 +52,7 @@ resource 'Donor Accounts' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['account-number']).to eq donor_account.account_number
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end
