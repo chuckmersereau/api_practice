@@ -66,4 +66,37 @@ RSpec.describe Api::V2::Contacts::People::NetworksController, type: :controller 
     include_examples 'update_examples'
     include_examples 'destroy_examples'
   end
+
+  context 'List networks' do
+    let!(:facebook_accounts) { create_list(:facebook_account, 2, person: person) }
+    let!(:linkedin_accounts) { create_list(:linkedin_account, 2, person: person) }
+    let!(:twitter_accounts) { create_list(:twitter_account, 3, person: person) }
+    let!(:websites) { create_list(:website, 3, person: person) }
+    let(:params) { { contact_id: contact.id, person_id: person.id, filters: {networks: 'website,twitter,facebook, linkedin'} } }
+
+    describe '#index' do
+      it 'shows resources to users that are signed in' do
+        api_login(user)
+        get :index, params
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)['data'].count).to eq(10)
+        expect(response.body).to include(facebook_accounts.first.first_name)
+        expect(response.body).to include(linkedin_accounts.first.public_url)
+        expect(response.body).to include(twitter_accounts.first.screen_name)
+        expect(response.body).to include(websites.first.url)
+      end
+
+      it 'does not shows resources to users that are not signed in' do
+        get :index, params
+        expect(response.status).to eq(401)
+      end
+
+      it 'does not show resources for users that do not own the resources' do
+        api_login(create(:user))
+        get :index, params
+        expect(response.status).to eq(403)
+      end
+    end
+
+  end
 end

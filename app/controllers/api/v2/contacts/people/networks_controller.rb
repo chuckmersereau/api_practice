@@ -8,7 +8,7 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_networks
-    render json: @networks
+    render json: @networks.to_json
   end
 
   def show
@@ -38,11 +38,22 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
 
   def available_networks
     permited_networks = %w(facebook linkedin twitter website)
-    filter_params[:networks].keep_if { |k, _| permited_networks.include? k }
+    filter_params[:networks].delete(' ').split(',').keep_if { |k, _| permited_networks.include? k }
+  end
+
+  def available_networks_associations
+    NETWORKS.select { |k, _| available_networks.include?(k.to_s) }.values.map{ |v| v.underscore.pluralize }
   end
 
   def load_networks
-    @networks = available_networks.map{ |network| load_scope(network_name(network)).where(filter_params).to_a }
+    @networks = nil
+    available_networks.map{ |network| 
+      serializer_name = "Person::#{network_name(network)}Serializer".constantize
+      results = load_scope(network_name(network)).where(filter_params.except(:networks)).to_a 
+      response = ActiveModelSerializers::SerializableResource.new(results).as_json[:data]
+      @networks = @networks ? @networks + response : response
+    }
+    @networks = { data: @networks }
   end
 
   def load_network
