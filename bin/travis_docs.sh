@@ -34,7 +34,7 @@ git clone $REPO docs_repo
 
 # Run our compile script
 doCompile
-rm docs_repo/sources/includes/_generated_examples.markdown
+rm docs_repo/source/includes/_generated_examples.markdown
 cp docs/api/_generated_examples.markdown docs_repo/source/includes/
 
 # Now let's go have some fun with the cloned repo
