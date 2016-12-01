@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe Person::KeyAccount do
   before(:each) do
+    Organization.find_by(code: 'CCC-USA') || create(:ccc) # Spec requires CCC-USA org to exist.
     @auth_hash = Hashie::Mash.new(uid: 'john.doe@example.com', extra: {
                                     attributes: [{
                                       firstName: 'John', lastName: 'Doe', email: 'johnnydoe@example.com',

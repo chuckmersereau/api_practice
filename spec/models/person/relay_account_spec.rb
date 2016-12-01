@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe Person::RelayAccount do
   before(:each) do
-    @org = create(:ccc)
+    @org = Organization.find_by(code: 'CCC-USA') || create(:ccc) # Spec requires CCC-USA org to exist.
     user_attributes = [{ firstName: 'John', lastName: 'Doe', username: 'JOHN.DOE@EXAMPLE.COM',
                          email: 'johnnydoe@example.com', designation: '0000000', emplid: '000000000',
                          ssoGuid: 'F167605D-94A4-7121-2A58-8D0F2CA6E024',

@@ -1,5 +1,3 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
   factory :relay_account, class: Person::RelayAccount do
     association :person

@@ -1,5 +1,3 @@
-# Read about factories at http://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
   factory :designation_account do
     sequence(:designation_number, &:to_s)

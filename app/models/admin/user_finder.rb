@@ -1,4 +1,4 @@
-class Admin::UserFinder < ActiveRecord::Base
+class Admin::UserFinder
   class << self
     def find_users(id_name_or_email)
       if id_name_or_email =~ /\A\d+\Z/

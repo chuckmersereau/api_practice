@@ -1,4 +1,5 @@
 require 'spec_helper'
+require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
 
 describe PreferenceSet, type: :model do
   let(:user) { create(:user_with_account) }
@@ -6,6 +7,7 @@ describe PreferenceSet, type: :model do
 
   describe '#notification_settings=' do
     before do
+      NotificationTypesSeeder.new.seed # Specs depend on NotificationType records.
       NotificationType.all.each_with_index do |type, index|
         actions = index.even? ? %w(task) : %w(task email)
         account_list.notification_preferences.new(notification_type_id: type.id, actions: actions)
