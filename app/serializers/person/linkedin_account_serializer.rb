@@ -1,6 +1,6 @@
 class Person::LinkedinAccountSerializer < ApplicationSerializer
-  attributes :created_at,
-             :authenticated,
+  attributes :authenticated,
+  					 :created_at,
              :first_name,
              :last_name,
              :public_url,

@@ -7,7 +7,8 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_networks
-    render json: @networks.to_json
+    render json: @main_network, include: 'facebook_accounts, linkedin_accounts, twitter_accounts, websites'
+           #meta: meta_hash(@main_network)
   end
 
   def show
@@ -35,19 +36,8 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
 
   private
 
-  def available_networks
-    permited_networks = %w(facebook linkedin twitter website)
-    filter_params[:networks].delete(' ').split(',').keep_if { |k, _| permited_networks.include? k }
-  end
-
   def load_networks
-    @networks = []
-    available_networks.map do |network|
-      results = load_scope(network_name(network)).where(filter_params.except(:networks)).to_a
-      response = ActiveModelSerializers::SerializableResource.new(results).as_json[:data]
-      @networks += response
-    end
-    @networks = { data: @networks }
+    @main_network ||= Person::Network.new(person_id: load_person.id)
   end
 
   def load_network
@@ -68,7 +58,6 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
   def build_network
     @network ||= network_scope.build
     @network.assign_attributes(network_params)
-    authorize @network
   end
 
   def authorize_network
@@ -88,10 +77,10 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
   end
 
   def network_scope
-    load_scope(network_name(filter_params[:network]))
+    load_networks_from_name(network_name(filter_params[:network]))
   end
 
-  def load_scope(network)
+  def load_networks_from_name(network)
     load_person.send(network.underscore.pluralize)
   end
 
@@ -107,8 +96,8 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
     @contact ||= Contact.find(params[:contact_id])
   end
 
-  def permited_filters
-    [:networks, :network]
+  def permitted_filters
+    [:network]
   end
 
   def pundit_user

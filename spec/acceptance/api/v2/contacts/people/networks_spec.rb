@@ -71,14 +71,16 @@ resource 'Facebook Accounts' do
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person-id',                    'Person ID', required: true
       parameter 'networks',                     'Networks', required: true, scope: :filters
-      response_field 'data',                    'Data', 'Type' => 'Array[Object]'
+      response_field 'data',                    'Data', 'Type' => 'Object'
+      response_field 'relationships',           'Relationships', 'Type' => 'Array[Object]'
+      response_field 'included',                'Included networks', 'Type' => 'Array[Object]'
       example 'list facebook accounts of person' do
         do_request filters: { networks: networks }
-        check_collection_resource(8)
-        expect(resource_data[0]['attributes'].keys).to match_array expected_facebook_attribute_keys
-        expect(resource_data[2]['attributes'].keys).to match_array expected_linkedin_attribute_keys
-        expect(resource_data[4]['attributes'].keys).to match_array expected_twitter_attribute_keys
-        expect(resource_data[6]['attributes'].keys).to match_array expected_website_attribute_keys
+        expect(json_response['included'].count).to eq(8)
+        expect(json_response['included'][0]['attributes'].keys).to match_array expected_facebook_attribute_keys
+        expect(json_response['included'][2]['attributes'].keys).to match_array expected_linkedin_attribute_keys
+        expect(json_response['included'][4]['attributes'].keys).to match_array expected_twitter_attribute_keys
+        expect(json_response['included'][6]['attributes'].keys).to match_array expected_website_attribute_keys
         expect(response_status).to eq 200
       end
     end
