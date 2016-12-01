@@ -54,4 +54,4 @@ git add .
 git commit -m "Deploy to MPDX Docs: ${SHA}"
 
 # Now that we're all set up, we can push.
-git push $REPO $TARGET_BRANCH
+git push $REPO $SOURCE_BRANCH
