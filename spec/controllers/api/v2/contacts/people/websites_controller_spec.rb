@@ -7,8 +7,10 @@ RSpec.describe Api::V2::Contacts::People::WebsitesController, type: :controller 
   let!(:contact) { create(:contact, account_list_id: account_list.id) }
   let!(:person) { create(:person) }
   let!(:person2) { create(:person) }
-  let!(:resource) { create(:website, person: person) }
-  let(:id) { resource.id }
+  let!(:websites) { create_list(:website, 2, person: person) }
+  let(:website) { websites.first }
+  let(:resource) { website }
+  let(:id) { website.id }
   let(:parent_param) { { contact_id: contact.id, person_id: person.id } }
   let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:website, person: person2, website: 'http://www.example192.com') }

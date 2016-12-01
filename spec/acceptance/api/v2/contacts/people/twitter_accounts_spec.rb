@@ -35,7 +35,7 @@ resource 'Twitter Accounts' do
       example_request 'list twitter accounts of person' do
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts/:id' do
@@ -48,7 +48,7 @@ resource 'Twitter Accounts' do
       end
       example_request 'get twitter account' do
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts' do
@@ -59,7 +59,7 @@ resource 'Twitter Accounts' do
       end
       example 'create twitter account' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     put '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts/:id' do
@@ -70,14 +70,14 @@ resource 'Twitter Accounts' do
       end
       example 'update twitter account' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts/:id' do
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person-id',                    'Person ID', required: true
       example_request 'delete twitter account' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

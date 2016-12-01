@@ -36,7 +36,7 @@ resource 'Facebook Accounts' do
       example_request 'list facebook accounts of person' do
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts/:id' do
@@ -50,7 +50,7 @@ resource 'Facebook Accounts' do
       end
       example_request 'get facebook account' do
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts' do
@@ -62,7 +62,7 @@ resource 'Facebook Accounts' do
       end
       example 'create facebook account' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     put '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts/:id' do
@@ -74,14 +74,14 @@ resource 'Facebook Accounts' do
       end
       example 'update facebook account' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts/:id' do
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person-id',                    'Person ID', required: true
       example_request 'delete facebook account' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end

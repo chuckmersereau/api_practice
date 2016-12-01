@@ -7,8 +7,10 @@ RSpec.describe Api::V2::Contacts::People::TwitterAccountsController, type: :cont
   let!(:contact) { create(:contact, account_list_id: account_list.id) }
   let!(:person) { create(:person) }
   let!(:person2) { create(:person) }
-  let!(:resource) { create(:twitter_account, person: person) }
-  let(:id) { resource.id }
+  let!(:twitter_accounts) { create_list(:twitter_account, 2, person: person) }
+  let(:twitter_account) { twitter_accounts.first }
+  let(:resource) { twitter_account }
+  let(:id) { twitter_account.id }
   let(:parent_param) { { contact_id: contact.id, person_id: person.id } }
   let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:twitter_account, person_id: person2.id) }

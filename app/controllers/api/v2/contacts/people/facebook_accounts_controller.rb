@@ -2,7 +2,7 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_fb_accounts
-    render json: @fb_accounts, meta: meta_hash(@notifications)
+    render json: @fb_accounts, meta: meta_hash(@fb_accounts)
   end
 
   def show
@@ -87,6 +87,6 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   end
 
   def pundit_user
-    action_name == 'index' ? PunditContext.new(current_user, load_contact) : current_user
+    action_name == 'index' ? PunditContext.new(current_user, contact: load_contact) : current_user
   end
 end

@@ -34,7 +34,7 @@ resource 'Websites' do
       example_request 'list facebook websites of person' do
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/websites/:id' do
@@ -46,7 +46,7 @@ resource 'Websites' do
       end
       example_request 'get website' do
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/websites' do
@@ -56,7 +56,7 @@ resource 'Websites' do
       end
       example 'create website' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     put '/api/v2/contacts/:contact_id/people/:person_id/websites/:id' do
@@ -66,14 +66,14 @@ resource 'Websites' do
       end
       example 'update website' do
         do_request data: form_data
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
     delete '/api/v2/contacts/:contact_id/people/:person_id/websites/:id' do
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person-id',                    'Person ID', required: true
       example_request 'delete website' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end
