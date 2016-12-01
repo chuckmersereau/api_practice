@@ -25,7 +25,8 @@ eval `ssh-agent -s`
 ssh-add deploy_key
 
 # Save some useful information
-REPO="https://git@github.com/CruGlobal/mpdx_docs.git"
+REPO="https://github.com/CruGlobal/mpdx_docs.git"
+SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 SHA=`git rev-parse --verify HEAD`
 
 # Clone the existing gh-pages for this repo into docs/
@@ -54,4 +55,4 @@ git add .
 git commit -m "Deploy to MPDX Docs: ${SHA}"
 
 # Now that we're all set up, we can push.
-git push $REPO $SOURCE_BRANCH
+git push $SSH_REPO $SOURCE_BRANCH
