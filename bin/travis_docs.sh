@@ -31,7 +31,7 @@ SHA=`git rev-parse --verify HEAD`
 
 # Clone the existing gh-pages for this repo into docs/
 # Create a new empty branch if gh-pages doesn't exist yet (should only happen on first deply)
-git clone $REPO docs_repo
+git clone $SSH_REPO docs_repo
 
 # Run our compile script
 doCompile
