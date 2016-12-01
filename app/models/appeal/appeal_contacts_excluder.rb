@@ -81,8 +81,8 @@ class Appeal::AppealContactsExcluder
   end
 
   def contacts_who_gave_more_than_pledged_amount_within_prev_months(contacts, account_list, prev_full_months)
-    start_of_month = Date.today.beginning_of_month
-    start_of_prev_month = (Date.today << prev_full_months).beginning_of_month
+    start_of_month = Date.current.beginning_of_month
+    start_of_prev_month = (Date.current << prev_full_months).beginning_of_month
 
     # I wrote this in SQL because we populate the appeal contacts for the user
     # as part of the wizard (not in the background), so it needs to be fast.
@@ -119,7 +119,7 @@ class Appeal::AppealContactsExcluder
   # We define e.g. "stopped giving in the past 2 months" as no pledge set current, no gifts in the previous
   # 2 full months, and at least 3 gifts in the prior 10 months.
   def no_stopped_giving_recently(prev_full_months = 2, prior_months = 10, prior_num_gifts = 3)
-    prior_window_end = Date.today << prev_full_months
+    prior_window_end = Date.current << prev_full_months
     prior_window_start = prior_window_end << prior_months
 
     former_givers_sql = '
@@ -149,7 +149,7 @@ class Appeal::AppealContactsExcluder
     increased_recently_ids = @contacts.scoping do
       account_list.contacts
                   .where('pledge_amount is not null AND pledge_amount > 0 AND pledge_frequency <= 4')
-                  .where('last_donation_date >= ?', (Date.today.prev_month << prev_full_months).beginning_of_month)
+                  .where('last_donation_date >= ?', (Date.current.prev_month << prev_full_months).beginning_of_month)
                   .to_a.select { |contact| increased_recently?(contact, prev_full_months) }.map(&:id)
     end
 
@@ -164,12 +164,12 @@ class Appeal::AppealContactsExcluder
 
     # If they gave this month, make the cut off 3 months ago, if they didn't give this month yet, make it
     # 4 months ago so we are capturing 3 complete months of giving.
-    months_ago_cutoff = prev_full_months + (month_diff(contact.last_donation_date, Date.today) == 0 ? 0 : 1)
+    months_ago_cutoff = prev_full_months + (month_diff(contact.last_donation_date, Date.current) == 0 ? 0 : 1)
 
     net_increase = 0
     last_total = monthly_totals.pop
     monthly_totals.reverse_each do |prev_total|
-      break if month_diff(Date.today, last_total[:date]) >= months_ago_cutoff
+      break if month_diff(Date.current, last_total[:date]) >= months_ago_cutoff
       net_increase += last_total[:total] / last_total[:elapsed_months] - prev_total[:total] / prev_total[:elapsed_months]
       last_total = prev_total
     end
@@ -197,7 +197,7 @@ class Appeal::AppealContactsExcluder
     # For the most recent gift, add the months late to the elapsed time to handle cases where a donor
     # gives a larger gift early, i.e. $5, $5, $10, $0 is not an increase and a missed month, but the $10
     # is probably their gift for the past two months.
-    months_late = [0, month_diff(Date.today, older_total[:date]) - pledge_frequency].max
+    months_late = [0, month_diff(Date.current, older_total[:date]) - pledge_frequency].max
     older_total[:elapsed_months] += months_late
   end
 
