@@ -7,7 +7,10 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_networks
-    render json: @main_network, include: 'facebook_accounts, linkedin_accounts, twitter_accounts, websites'
+    # render json: @networks, serializer: Person::NetworkSerializer
+    render json: ActiveModel::SerializableResource.new(@networks, each_serializer: Person::NetworkSerializer).as_json,
+           meta: meta_hash(@networks)
+    # render json: @main_network, include: 'facebook_accounts, linkedin_accounts, twitter_accounts, websites'
            #meta: meta_hash(@main_network)
   end
 
@@ -37,7 +40,13 @@ class Api::V2::Contacts::People::NetworksController < Api::V2Controller
   private
 
   def load_networks
-    @main_network ||= Person::Network.new(person_id: load_person.id)
+    # @main_network ||= Person::Network.new(person_id: load_person.id)
+    @networks ||= load_contact.people.joins(:facebook_accounts, :linkedin_accounts, :twitter_accounts, :websites)
+                              .where(filter_params.merge({ people: { id: params[:person_id] } }))
+                              .reorder(sorting_param)
+                              .page(page_number_param)
+                              .per(per_page_param)
+    binding.pry
   end
 
   def load_network

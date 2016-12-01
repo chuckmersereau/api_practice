@@ -78,6 +78,7 @@ RSpec.describe Api::V2::Contacts::People::NetworksController, type: :controller 
       it 'shows resources to users that are signed in' do
         api_login(user)
         get :index, params
+        binding.pry
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)['included'].count).to eq(10)
         expect(response.body).to include(facebook_accounts.first.first_name)
