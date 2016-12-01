@@ -24,10 +24,10 @@ resource 'Google Accounts' do
 
     get '/api/v2/user/google-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'expires_at',    'Expires At', 'Type' => 'Datetime'
-        response_field 'person_id',     'Person Id', 'Type' => 'Integer'
+        response_field 'expires_at',    'Expires At', 'Type' => 'String'
+        response_field 'person_id',     'Person Id', 'Type' => 'Number'
         response_field 'refresh_token', 'Refresh Token', 'Type' => 'String'
-        response_field 'remote_id',     'Remote Id', 'Type' => 'Integer'
+        response_field 'remote_id',     'Remote Id', 'Type' => 'Number'
         response_field 'token',         'Token', 'Type' => 'String'
       end
 

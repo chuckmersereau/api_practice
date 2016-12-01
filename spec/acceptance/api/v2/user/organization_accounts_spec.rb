@@ -22,7 +22,7 @@ resource 'Organization Accounts' do
     end
     get '/api/v2/user/organization-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'organization_id', 'Organization Id', 'Type' => 'Integer'
+        response_field 'organization_id', 'Organization Id', 'Type' => 'Number'
         response_field 'person_id',       'Person Id', 'Type' => 'String'
         response_field 'username',        'Username', 'Type' => 'String'
       end

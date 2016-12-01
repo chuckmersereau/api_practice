@@ -28,9 +28,9 @@ resource 'Relationship' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'person_id', 'Person Id', 'Type' => 'Integer'
-        response_field 'related_person_id', 'Related Person', 'Type' => 'Integer'
-        response_field 'relationship', 'Relationship', 'Type' => 'String'
+        response_field 'person_id',           'Person Id', 'Type' => 'Number'
+        response_field 'related_person_id',   'Related Person', 'Type' => 'Number'
+        response_field 'relationship',        'Relationship', 'Type' => 'String'
       end
 
       example_request 'get organization account' do

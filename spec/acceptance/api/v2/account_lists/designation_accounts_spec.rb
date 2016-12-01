@@ -32,7 +32,7 @@ resource 'Designation Accounts' do
     end
     get '/api/v2/account-lists/:account_list_id/designation-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'balance',                 'Balance', 'Type' => 'String'
+        response_field 'balance',                 'Balance', 'Type' => 'Number'
         response_field 'created-at',              'Created At', 'Type' => 'String'
         response_field 'designation-number',      'Designation Number', 'Type' => 'String'
         response_field 'name',                    'Name', 'Type' => 'String'

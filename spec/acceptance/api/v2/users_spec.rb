@@ -24,7 +24,7 @@ resource 'Users' do
 
     get '/api/v2/user' do
       response_field 'attributes',        'user object', 'Type' => 'Object'
-      response_field 'id',                'user id', 'Type' => 'Integer'
+      response_field 'id',                'user id', 'Type' => 'Number'
       response_field 'relationships',     'list of relationships related to that user object', 'Type' => 'Array'
       response_field 'type',              'Will be User', 'Type' => 'String'
       example_request 'get user' do
