@@ -2,19 +2,21 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Google Accounts' do
-  let(:resource_type) { 'person-google-accounts' }
-  let!(:user) { create(:user_with_full_account) }
+  let(:resource_type) { 'person_google_accounts' }
+
+  let!(:user)           { create(:user_with_full_account) }
   let!(:google_account) { create(:google_account, person: user) }
-  let(:id) { google_account.id }
+  let(:id)              { google_account.id }
+
   let(:new_google_account) { build(:google_account, person: user).attributes }
-  let(:form_data) { build_data(new_google_account) }
+  let(:form_data)          { build_data(new_google_account) }
 
   context 'authorized user' do
     before do
       api_login(user)
     end
 
-    get '/api/v2/user/google-accounts' do
+    get '/api/v2/user/google_accounts' do
       example_request 'get organization accounts' do
         explanation 'List of Organization Accounts associated to current_user'
         check_collection_resource(1)
@@ -22,13 +24,13 @@ resource 'Google Accounts' do
       end
     end
 
-    get '/api/v2/user/google-accounts/:id' do
+    get '/api/v2/user/google_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'expires_at',    'Expires At', 'Type' => 'Datetime'
-        response_field 'person_id',     'Person Id', 'Type' => 'Integer'
+        response_field 'expires_at',    'Expires At',    'Type' => 'Datetime'
+        response_field 'person_id',     'Person Id',     'Type' => 'Integer'
         response_field 'refresh_token', 'Refresh Token', 'Type' => 'String'
-        response_field 'remote_id',     'Remote Id', 'Type' => 'Integer'
-        response_field 'token',         'Token', 'Type' => 'String'
+        response_field 'remote_id',     'Remote Id',     'Type' => 'Integer'
+        response_field 'token',         'Token',         'Type' => 'String'
       end
 
       example_request 'get organization account' do
@@ -37,7 +39,7 @@ resource 'Google Accounts' do
       end
     end
 
-    post '/api/v2/user/google-accounts' do
+    post '/api/v2/user/google_accounts' do
       with_options scope: [:data, :attributes] do
         parameter 'expires_at',     'Expires At'
         parameter 'person_id',      'Person Id', required: true
@@ -53,7 +55,7 @@ resource 'Google Accounts' do
       end
     end
 
-    put '/api/v2/user/google-accounts/:id' do
+    put '/api/v2/user/google_accounts/:id' do
       with_options scope: [:data, :attributes] do
         parameter 'expires_at',     'Expires At'
         parameter 'person_id',      'Person Id', required: true
@@ -69,7 +71,7 @@ resource 'Google Accounts' do
       end
     end
 
-    delete '/api/v2/user/google-accounts/:id' do
+    delete '/api/v2/user/google_accounts/:id' do
       example_request 'delete notification' do
         expect(response_status).to eq 200
       end

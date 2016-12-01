@@ -4,39 +4,44 @@ require 'sidekiq/cron/web'
 Rails.application.routes.draw do
   namespace :api do
     api_version(module: 'V2', header: { name: 'API-VERSION', value: 'v2' }, parameter: { name: 'version', value: 'v2' }, path: { value: 'v2' }) do
-      resources :account_lists, only: [:index, :show, :update], path: 'account-lists' do
+      resources :account_lists, only: [:index, :show, :update] do
         scope module: :account_lists do
-          resources :donor_accounts, only: [:index, :show], path: 'donor-accounts'
-          resources :designation_accounts, only: [:index, :show], path: 'designation-accounts'
+          resources :designation_accounts, only: [:index, :show]
+          resources :donor_accounts, only: [:index, :show]
           resources :filters, only: [:index]
-          resources :invites, only: [:index, :show, :create, :destroy]
-          resources :users, only: [:index, :show, :destroy]
-          resources :merge, only: [:create]
           resources :imports, only: [:show, :create]
-          resource :prayer_letters_account, only: [:show, :create, :destroy], path: 'prayer-letters-account' do
+          resources :invites, only: [:index, :show, :create, :destroy]
+          resources :merge, only: [:create]
+          resources :users, only: [:index, :show, :destroy]
+
+          resource :prayer_letters_account, only: [:show, :create, :destroy] do
             get :sync, on: :member
           end
-          resource :mail_chimp_account, only: [:show, :create, :destroy], path: 'mail-chimp-account' do
+
+          resource :mail_chimp_account, only: [:show, :create, :destroy] do
             get :sync, on: :member
           end
-          resources :notifications, only: [:index, :show, :create, :update, :destroy]
+
           resources :donations, only: [:index, :show, :create, :update]
+          resources :notifications, only: [:index, :show, :create, :update, :destroy]
         end
       end
 
       resources :appeals, only: [:index, :show, :create, :update, :destroy] do
         scope module: :appeals do
           resources :contacts, only: [:index, :show, :destroy]
-          resource :export_to_mailchimp, only: [:show], controller: :export_to_mailchimp, path: 'export-to-mailchimp'
+          resource :export_to_mailchimp, only: [:show], controller: :export_to_mailchimp
         end
       end
+
       resources :contacts, only: [:index, :show, :create, :update, :destroy] do
         scope module: :contacts do
-          resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
           resources :addresses, only: [:index, :show, :create, :update, :destroy]
+          resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
+
           resources :people do
             scope module: :people do
-              resources :email_addresses, only: [:index, :show, :create, :update, :destroy], path: 'email-addresses'
+              resources :email_addresses, only: [:index, :show, :create, :update, :destroy]
               resources :phones, only: [:index, :show, :create, :update, :destroy]
               resources :relationships, only: [:show, :index, :create, :update, :destroy]
             end
@@ -46,8 +51,8 @@ Rails.application.routes.draw do
 
       resources :tasks do
         scope module: :tasks do
-          resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
           resources :analytics, only: :index
+          resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
         end
       end
 
@@ -55,18 +60,18 @@ Rails.application.routes.draw do
         scope module: :user do
           resource :authentication, only: :create
 
-          resources :google_accounts, path: 'google-accounts'
-          resources :key_accounts, path: 'key-accounts'
-          resources :organization_accounts, path: 'organization-accounts'
+          resources :google_accounts
+          resources :key_accounts
+          resources :organization_accounts
         end
       end
     end
   end
 
-  get 'monitors/lb' => 'monitors#lb'
-  get 'monitors/sidekiq' => 'monitors#sidekiq'
-  get 'monitors/commit' => 'monitors#commit'
+  get 'monitors/commit',  to: 'monitors#commit'
+  get 'monitors/lb',      to: 'monitors#lb'
+  get 'monitors/sidekiq', to: 'monitors#sidekiq'
 
-  get '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
-  post '/mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
+  get  'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
+  post 'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
 end
