@@ -2,7 +2,7 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   def index
     authorize load_appeal, :show?
     load_contacts
-    render json: @contacts
+    render json: @contacts, meta: meta_hash(@contacts)
   end
 
   def show
@@ -22,7 +22,11 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
 
   def load_contacts
     excluded = filter_params[:excluded].to_i
-    @contacts ||= load_appeal.selected_contacts(excluded).where(filters_without_excluded).to_a
+    @contacts = load_appeal.selected_contacts(excluded)
+                           .where(filters_without_excluded)
+                           .reorder(sorting_param)
+                           .page(page_number_param)
+                           .per(per_page_param)
   end
 
   def load_contact
@@ -45,7 +49,7 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
     filter_params.except(:excluded)
   end
 
-  def permited_filters
+  def permitted_filters
     [:excluded, :account_list_id]
   end
 end

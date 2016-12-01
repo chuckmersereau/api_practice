@@ -22,6 +22,10 @@ RSpec.describe Api::V2::Contacts::People::EmailAddressesController, type: :contr
     create(:email_address, person: person)
   end
 
+  let!(:second_resource) do
+    create(:email_address, person: person)
+  end
+
   # If needed, keep this ;)
   let(:id) { resource.id }
 

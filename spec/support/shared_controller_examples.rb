@@ -160,7 +160,13 @@ end
 RSpec.shared_examples 'index_examples' do
   include_examples 'common_variables'
 
+  let(:active_record_association) { ActiveRecord::Relation }
+
   describe '#index' do
+    before do
+      resource.update(created_at: 2.days.ago)
+    end
+
     it 'shows resources to users that are signed in' do
       api_login(user)
       create(factory_type)
@@ -168,6 +174,36 @@ RSpec.shared_examples 'index_examples' do
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['data'].count).to eq(resource.class.count - 1)
       expect(response.body).to include(resource.class.first.send(reference_key).to_s)
+    end
+
+    it 'sorts resources if sorting_param is in list of permitted sorts' do
+      api_login(user)
+      get :index, parent_param_if_needed.merge(sort: 'created_at DESC')
+      expect do
+        get :index, parent_param_if_needed.merge(sort: 'created_at ASC')
+      end.to change { JSON.parse(response.body)['data'].first['id'] }
+      expect(JSON.parse(response.body)['meta']['sort']).to eq('created_at ASC')
+    end
+
+    it 'does not sort resources if sorting_param is not in list of permitted sorts' do
+      api_login(user)
+      get :index, parent_param_if_needed.merge(sort: 'id DESC')
+      expect do
+        get :index, parent_param_if_needed.merge(sort: 'id ASC')
+      end.not_to change { JSON.parse(response.body)['data'].first['id'] }
+      expect(JSON.parse(response.body)['meta']['sort']).to be_nil
+    end
+
+    it 'paginates differently when specified in params' do
+      api_login(user)
+      get :index, parent_param_if_needed.merge(per_page: 1, page: 2)
+      expect(response.status).to eq(200)
+      expect(JSON.parse(response.body)['data'].length).to eq(1)
+      expect(JSON.parse(response.body)['data'].first['id']).to_not eq(resource.id)
+      expect(JSON.parse(response.body)['meta']['pagination']['per-page']).to eq('1')
+      expect(JSON.parse(response.body)['meta']['pagination']['page']).to eq('2')
+      expect(JSON.parse(response.body)['meta']['pagination']['total-count']).not_to be_nil
+      expect(JSON.parse(response.body)['meta']['pagination']['total-pages']).not_to be_nil
     end
 
     it 'does not shows resources to users that are not signed in' do

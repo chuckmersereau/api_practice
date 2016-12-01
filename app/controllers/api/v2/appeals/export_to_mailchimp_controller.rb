@@ -36,7 +36,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2Controller
     @appeal ||= Appeal.find(params[:appeal_id])
   end
 
-  def permited_filters
+  def permitted_filters
     []
   end
 end

@@ -2,7 +2,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   def index
     authorize_index
     load_addresses
-    render json: @addresses
+    render json: @addresses, meta: meta_hash(@addresses)
   end
 
   def show
@@ -67,7 +67,10 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   end
 
   def load_addresses
-    @addresses ||= address_scope.to_a
+    @addresses = address_scope.where(filter_params)
+                              .reorder(sorting_param)
+                              .page(page_number_param)
+                              .per(per_page_param)
   end
 
   def persist_address
@@ -76,6 +79,10 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
     return show if save_address
 
     render_400_with_errors(@address)
+  end
+
+  def permitted_filters
+    []
   end
 
   def render_address

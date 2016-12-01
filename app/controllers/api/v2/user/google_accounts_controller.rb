@@ -1,8 +1,7 @@
 class Api::V2::User::GoogleAccountsController < Api::V2Controller
   def index
-    authorize load_user, :show?
     load_google_accounts
-    render json: @google_accounts
+    render json: @google_accounts, meta: meta_hash(@google_accounts)
   end
 
   def show
@@ -31,7 +30,10 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
   private
 
   def load_google_accounts
-    @google_accounts ||= google_account_scope.where(filter_params).to_a
+    @google_accounts = google_account_scope.where(filter_params)
+                                           .reorder(sorting_param)
+                                           .page(page_number_param)
+                                           .per(per_page_param)
   end
 
   def load_google_account
@@ -74,7 +76,7 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
     @user ||= current_user
   end
 
-  def permited_filters
+  def permitted_filters
     []
   end
 end

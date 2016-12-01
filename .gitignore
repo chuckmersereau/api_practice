@@ -38,3 +38,4 @@ logfile
 dump.rdb
 /cache
 recent_specs.txt
+_generated_examples.markdown

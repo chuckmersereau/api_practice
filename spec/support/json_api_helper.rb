@@ -4,7 +4,7 @@ module JsonApiHelper
   end
 
   def check_collection_resource(total_items, additional_keys = [])
-    expect(json_response.keys).to eq %w(data)
+    expect(json_response.keys).to eq %w(data links meta)
     expect(resource_data.count).to eq total_items
     expect(first_or_only_item.keys).to eq item_keys(additional_keys)
     expect(first_or_only_item['type']).to eq resource_type

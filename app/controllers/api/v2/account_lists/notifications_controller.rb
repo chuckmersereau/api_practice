@@ -2,7 +2,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_notifications
-    render json: @notifications
+    render json: @notifications, meta: meta_hash(@notifications)
   end
 
   def show
@@ -31,7 +31,10 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   private
 
   def load_notifications
-    @notifications ||= notification_scope.where(filter_params).to_a
+    @notifications = notification_scope.where(filter_params)
+                                       .reorder(sorting_param)
+                                       .page(page_number_param)
+                                       .per(per_page_param)
   end
 
   def load_notification
@@ -74,7 +77,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
     @account_list ||= AccountList.find(params[:account_list_id])
   end
 
-  def permited_filters
+  def permitted_filters
     []
   end
 

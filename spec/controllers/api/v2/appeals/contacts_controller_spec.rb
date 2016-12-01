@@ -7,12 +7,9 @@ describe Api::V2::Appeals::ContactsController, type: :controller do
   let(:account_list_id) { account_list.id }
   let!(:appeal) { create(:appeal, account_list: account_list) }
   let(:appeal_id) { appeal.id }
-  let!(:contact) { create(:contact, account_list_id: account_list_id) }
+  let!(:contact) { create(:contact, account_list_id: account_list_id, appeals: [appeal]) }
+  let!(:second_contact) { create(:contact, account_list_id: account_list_id, appeals: [appeal]) }
   let(:id) { contact.id }
-
-  before do
-    appeal.contacts << contact
-  end
 
   let(:resource) { contact }
   let(:parent_param) { { appeal_id: appeal_id, filters: { account_list_id: account_list.id, excluded: 0 } } }
