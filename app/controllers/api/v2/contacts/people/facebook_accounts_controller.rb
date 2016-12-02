@@ -32,9 +32,9 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
 
   def load_fb_accounts
     @fb_accounts = fb_account_scope.where(filter_params)
-                                     .reorder(sorting_param)
-                                     .page(page_number_param)
-                                     .per(per_page_param)
+                                   .reorder(sorting_param)
+                                   .page(page_number_param)
+                                   .per(per_page_param)
   end
 
   def load_fb_account

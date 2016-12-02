@@ -32,9 +32,9 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
 
   def load_tw_accounts
     @tw_accounts = tw_account_scope.where(filter_params)
-                                     .reorder(sorting_param)
-                                     .page(page_number_param)
-                                     .per(per_page_param)
+                                   .reorder(sorting_param)
+                                   .page(page_number_param)
+                                   .per(per_page_param)
   end
 
   def load_tw_account
