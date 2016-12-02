@@ -16,9 +16,9 @@ resource 'Websites' do
   let(:new_website) { build(:website).attributes }
   let(:form_data) { build_data(new_website) }
   let(:expected_attribute_keys) do
-    %w(created-at
+    %w(created_at
        primary
-       updated-at
+       updated_at
        url)
   end
 
@@ -29,7 +29,7 @@ resource 'Websites' do
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/websites' do
       parameter 'contact_id',                   'Contact ID', required: true
-      parameter 'person-id',                    'Person ID', required: true
+      parameter 'person_id',                    'Person ID', required: true
       response_field 'data',                    'Data', 'Type' => 'Array[Object]'
       example_request 'list facebook websites of person' do
         check_collection_resource(2)
@@ -39,9 +39,9 @@ resource 'Websites' do
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/websites/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created-at',              'Created At', 'Type' => 'String'
+        response_field 'created_at',              'Created At', 'Type' => 'String'
         response_field 'primary',                 'Primary', 'Type' => 'Boolean'
-        response_field 'updated-at',              'Updated At', 'Type' => 'String'
+        response_field 'updated_at',              'Updated At', 'Type' => 'String'
         response_field 'url',                     'Url', 'Type' => 'String'
       end
       example_request 'get website' do
@@ -71,7 +71,7 @@ resource 'Websites' do
     end
     delete '/api/v2/contacts/:contact_id/people/:person_id/websites/:id' do
       parameter 'contact_id',                   'Contact ID', required: true
-      parameter 'person-id',                    'Person ID', required: true
+      parameter 'person_id',                    'Person ID', required: true
       example_request 'delete website' do
         expect(response_status).to eq 200
       end

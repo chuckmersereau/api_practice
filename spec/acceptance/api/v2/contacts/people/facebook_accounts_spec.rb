@@ -16,11 +16,11 @@ resource 'Facebook Accounts' do
   let(:new_facebook_account) { build(:facebook_account).attributes }
   let(:form_data) { build_data(new_facebook_account) }
   let(:expected_attribute_keys) do
-    %w(created-at
-       first-name
-       last-name
-       remote-id
-       updated-at
+    %w(created_at
+       first_name
+       last_name
+       remote_id
+       updated_at
        username)
   end
 
@@ -31,7 +31,7 @@ resource 'Facebook Accounts' do
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts' do
       parameter 'contact_id',                   'Contact ID', required: true
-      parameter 'person-id',                    'Person ID', required: true
+      parameter 'person_id',                    'Person ID', required: true
       response_field 'data',                    'Data', 'Type' => 'Array[Object]'
       example_request 'list facebook accounts of person' do
         check_collection_resource(2)
@@ -41,11 +41,11 @@ resource 'Facebook Accounts' do
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created-at',              'Created At', 'Type' => 'String'
-        response_field 'first-name',              'First Name', 'Type' => 'String'
-        response_field 'last-name',               'Last name', 'Type' => 'Number'
-        response_field 'remote-id',               'Remote ID', 'Type' => 'Number'
-        response_field 'updated-at',              'Updated At', 'Type' => 'String'
+        response_field 'created_at',              'Created At', 'Type' => 'String'
+        response_field 'first_name',              'First Name', 'Type' => 'String'
+        response_field 'last_name',               'Last name', 'Type' => 'Number'
+        response_field 'remote_id',               'Remote ID', 'Type' => 'Number'
+        response_field 'updated_at',              'Updated At', 'Type' => 'String'
         response_field 'username',                'Username', 'Type' => 'String'
       end
       example_request 'get facebook account' do
@@ -55,9 +55,9 @@ resource 'Facebook Accounts' do
     end
     post '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts' do
       with_options scope: [:data, :attributes] do
-        parameter 'first-name',                   'First Name'
-        parameter 'last-name',                    'Last Name'
-        parameter 'remote-id',                    'Remote ID'
+        parameter 'first_name',                   'First Name'
+        parameter 'last_name',                    'Last Name'
+        parameter 'remote_id',                    'Remote ID'
         parameter 'username',                     'Username'
       end
       example 'create facebook account' do
@@ -67,9 +67,9 @@ resource 'Facebook Accounts' do
     end
     put '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        parameter 'first-name',                   'First Name'
-        parameter 'last-name',                    'Last Name'
-        parameter 'remote-id',                    'Remote ID'
+        parameter 'first_name',                   'First Name'
+        parameter 'last_name',                    'Last Name'
+        parameter 'remote_id',                    'Remote ID'
         parameter 'username',                     'Username'
       end
       example 'update facebook account' do
@@ -79,7 +79,7 @@ resource 'Facebook Accounts' do
     end
     delete '/api/v2/contacts/:contact_id/people/:person_id/facebook-accounts/:id' do
       parameter 'contact_id',                   'Contact ID', required: true
-      parameter 'person-id',                    'Person ID', required: true
+      parameter 'person_id',                    'Person ID', required: true
       example_request 'delete facebook account' do
         expect(response_status).to eq 200
       end

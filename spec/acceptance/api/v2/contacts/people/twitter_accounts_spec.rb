@@ -16,11 +16,11 @@ resource 'Twitter Accounts' do
   let(:new_twitter_account) { build(:twitter_account).attributes }
   let(:form_data) { build_data(new_twitter_account) }
   let(:expected_attribute_keys) do
-    %w(created-at
+    %w(created_at
        primary
-       remote-id
-       screen-name
-       updated-at)
+       remote_id
+       screen_name
+       updated_at)
   end
 
   context 'authorized user' do
@@ -30,7 +30,7 @@ resource 'Twitter Accounts' do
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts' do
       parameter 'contact_id',                   'Contact ID', required: true
-      parameter 'person-id',                    'Person ID', required: true
+      parameter 'person_id',                    'Person ID', required: true
       response_field 'data',                    'Data', 'Type' => 'Array[Object]'
       example_request 'list twitter accounts of person' do
         check_collection_resource(2)
@@ -40,11 +40,11 @@ resource 'Twitter Accounts' do
     end
     get '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created-at',              'Created At', 'Type' => 'String'
+        response_field 'created_at',              'Created At', 'Type' => 'String'
         response_field 'primary',                 'Primary', 'Type' => 'Boolean'
-        response_field 'remote-id',               'Remote ID', 'Type' => 'Number'
-        response_field 'screen-name',             'Screen Name', 'Type' => 'String'
-        response_field 'updated-at',              'Updated At', 'Type' => 'String'
+        response_field 'remote_id',               'Remote ID', 'Type' => 'Number'
+        response_field 'screen_name',             'Screen Name', 'Type' => 'String'
+        response_field 'updated_at',              'Updated At', 'Type' => 'String'
       end
       example_request 'get twitter account' do
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -54,8 +54,8 @@ resource 'Twitter Accounts' do
     post '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts' do
       with_options scope: [:data, :attributes] do
         parameter 'primary',                      'Primary'
-        parameter 'remote-id',                    'Remote ID'
-        parameter 'screen-name',                  'Screen Name'
+        parameter 'remote_id',                    'Remote ID'
+        parameter 'screen_name',                  'Screen Name'
       end
       example 'create twitter account' do
         do_request data: form_data
@@ -65,8 +65,8 @@ resource 'Twitter Accounts' do
     put '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts/:id' do
       with_options scope: [:data, :attributes] do
         parameter 'primary',                      'Primary'
-        parameter 'remote-id',                    'Remote ID'
-        parameter 'screen-name',                  'Screen Name'
+        parameter 'remote_id',                    'Remote ID'
+        parameter 'screen_name',                  'Screen Name'
       end
       example 'update twitter account' do
         do_request data: form_data
@@ -75,7 +75,7 @@ resource 'Twitter Accounts' do
     end
     delete '/api/v2/contacts/:contact_id/people/:person_id/twitter-accounts/:id' do
       parameter 'contact_id',                   'Contact ID', required: true
-      parameter 'person-id',                    'Person ID', required: true
+      parameter 'person_id',                    'Person ID', required: true
       example_request 'delete twitter account' do
         expect(response_status).to eq 200
       end
