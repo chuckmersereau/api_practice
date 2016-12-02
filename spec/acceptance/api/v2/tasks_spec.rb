@@ -17,7 +17,7 @@ resource 'Tasks' do
     end
 
     get '/api/v2/tasks' do
-      response_field :data, 'list of task objects', 'Type' => 'Array'
+      response_field :data, 'list of task objects', 'Type' => 'Array[Object]'
 
       example_request 'get tasks' do
         explanation 'List of Tasks associated to current_user'
@@ -32,7 +32,7 @@ resource 'Tasks' do
 
       with_options scope: :data do
         response_field 'id',            'Task id',                                           'Type' => 'Number'
-        response_field 'relationships', 'List of relationships related to that task object', 'Type' => 'Array'
+        response_field 'relationships', 'List of relationships related to that task object', 'Type' => 'Array[Object]'
         response_field 'type',          'Type of object (Task in this case)',                'Type' => 'String'
 
         with_options scope: :attributes do

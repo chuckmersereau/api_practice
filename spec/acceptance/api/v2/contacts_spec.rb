@@ -58,7 +58,7 @@ resource 'Contacts' do
     end
 
     get '/api/v2/contacts' do
-      response_field :data, 'Data', 'Type' => 'Array'
+      response_field :data, 'Data', 'Type' => 'Array[Object]'
 
       example_request 'list contacts of current user' do
         check_collection_resource(1, additional_keys)
