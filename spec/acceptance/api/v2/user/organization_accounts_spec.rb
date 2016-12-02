@@ -30,7 +30,7 @@ resource 'Organization Accounts' do
         do_request
         explanation 'List of Organization Accounts associated to current_user'
 
-        check_collection_resource(2, ['relationships'])
+        check_collection_resource(2)
         expect(response_status).to eq 200
       end
     end
@@ -45,7 +45,7 @@ resource 'Organization Accounts' do
       example 'Organization Account [GET]', document: :user do
         explanation 'The User\'s Organization Account with the given ID'
         do_request
-        check_resource(['relationships'])
+        check_resource
         expect(response_status).to eq 200
       end
     end

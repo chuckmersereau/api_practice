@@ -19,6 +19,10 @@ describe Api::V2::Appeals::ContactsController, type: :controller do
     resource.addresses << create(:address) # Test inclusion of related resources.
   end
 
+  before do
+    resource.addresses << create(:address) # Test inclusion of related resources.
+  end
+
   include_examples 'index_examples'
 
   include_examples 'show_examples'

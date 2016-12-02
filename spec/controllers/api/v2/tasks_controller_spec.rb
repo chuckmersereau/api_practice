@@ -16,6 +16,10 @@ RSpec.describe Api::V2::TasksController, type: :controller do
     resource.update(tag_list: 'tag1') # Test inclusion of related resources.
   end
 
+  before do
+    resource.update(tag_list: 'tag1') # Test inclusion of related resources.
+  end
+
   include_examples 'show_examples'
 
   include_examples 'update_examples'

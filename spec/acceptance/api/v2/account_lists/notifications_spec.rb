@@ -47,7 +47,7 @@ resource 'Notifications' do
       example 'Notification [LIST]', document: :account_lists do
         explanation 'List of Notifications associated with the Account List'
         do_request
-        check_collection_resource(2, ['relationships'])
+        check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -65,7 +65,7 @@ resource 'Notifications' do
       example 'Notification [GET]', document: :account_lists do
         explanation 'The Account List Notification with the given ID'
         do_request
-        check_resource(['relationships'])
+        check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end

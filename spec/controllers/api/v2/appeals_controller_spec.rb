@@ -16,6 +16,10 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
     resource.contacts << create(:contact) # Test inclusion of related resources.
   end
 
+  before do
+    resource.contacts << create(:contact) # Test inclusion of related resources.
+  end
+
   include_examples 'show_examples'
 
   include_examples 'update_examples'
