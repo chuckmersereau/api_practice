@@ -30,7 +30,7 @@ resource 'Phones' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'country-code', 'Country Code', 'Type' => 'Integer'
+        response_field 'country-code', 'Country Code', 'Type' => 'String'
         response_field 'created_at',   'Created At',   'Type' => 'String'
         response_field 'historic',     'Historic',     'Type' => 'Boolean'
         response_field 'location',     'Location',     'Type' => 'String'

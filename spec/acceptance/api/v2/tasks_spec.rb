@@ -17,7 +17,7 @@ resource 'Tasks' do
     end
 
     get '/api/v2/tasks' do
-      response_field :data, 'list of task objects', 'Type' => 'Array'
+      response_field :data, 'list of task objects', 'Type' => 'Array[Object]'
 
       example_request 'get tasks' do
         explanation 'List of Tasks associated to current_user'
@@ -31,16 +31,16 @@ resource 'Tasks' do
       parameter :id, 'the Id of the Task'
 
       with_options scope: :data do
-        response_field 'id',            'Task id',                                           'Type' => 'Integer'
-        response_field 'relationships', 'List of relationships related to that task object', 'Type' => 'Array'
+        response_field 'id',            'Task id',                                           'Type' => 'Number'
+        response_field 'relationships', 'List of relationships related to that task object', 'Type' => 'Array[Object]'
         response_field 'type',          'Type of object (Task in this case)',                'Type' => 'String'
 
         with_options scope: :attributes do
-          response_field 'account_list_id', 'Account List Id', type: 'Integer'
+          response_field 'account_list_id', 'Account List Id', type: 'Number'
           response_field 'activity_type',   'Activity Type',   type: 'String'
           response_field 'starred',         'Starred',         type: 'Boolean'
-          response_field 'start_at',        'Start At',        type: 'Datetime'
-          response_field 'subject',         'Subject',         type: 'Integer'
+          response_field 'start_at',        'Start At',        type: 'String'
+          response_field 'subject',         'Subject',         type: 'Number'
         end
       end
 
@@ -52,11 +52,11 @@ resource 'Tasks' do
 
     post '/api/v2/tasks' do
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id', 'Account List Id', type: 'Integer'
+        parameter 'account_list_id', 'Account List Id', type: 'Number'
         parameter 'activity_type',   'Activity Type',   type: 'String'
         parameter 'starred',         'Starred',         type: 'Boolean'
-        parameter 'start_at',        'Start At',        type: 'Datetime'
-        parameter 'subject',         'Subject',         type: 'Integer', required: true
+        parameter 'start_at',        'Start At',        type: 'String'
+        parameter 'subject',         'Subject',         type: 'Number', required: true
       end
 
       example 'create task' do
@@ -70,11 +70,11 @@ resource 'Tasks' do
       parameter :id, 'the Id of the Task'
 
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id', 'Account List Id', type: 'Integer'
+        parameter 'account_list_id', 'Account List Id', type: 'Number'
         parameter 'activity_type',   'Activity Type',   type: 'String'
         parameter 'starred',         'Starred',         type: 'Boolean'
-        parameter 'start_at',        'Start At',        type: 'Datetime'
-        parameter 'subject',         'Subject',         type: 'Integer', required: true
+        parameter 'start_at',        'Start At',        type: 'String'
+        parameter 'subject',         'Subject',         type: 'Number', required: true
       end
 
       example 'update task' do

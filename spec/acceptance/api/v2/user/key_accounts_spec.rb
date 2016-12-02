@@ -29,8 +29,8 @@ resource 'Key Accounts' do
         response_field 'email',       'Email',      'Type' => 'String'
         response_field 'first_name',  'First Name', 'Type' => 'String'
         response_field 'last_name',   'Last Name',  'Type' => 'String'
-        response_field 'person_id',   'Person Id',  'Type' => 'Integer'
-        response_field 'remote_id',   'Remote Id',  'Type' => 'Integer'
+        response_field 'person_id',   'Person Id',  'Type' => 'Number'
+        response_field 'remote_id',   'Remote Id',  'Type' => 'Number'
       end
 
       example_request 'get organization account' do

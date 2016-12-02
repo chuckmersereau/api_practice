@@ -43,6 +43,13 @@ resource 'Users' do
     end
 
     get '/api/v2/account_lists/:account_list_id/users/:id' do
+      with_options scope: [:data, :attributes] do
+        response_field 'first-name',              'First name', 'Type' => 'String'
+        response_field 'last-name',               'Last name', 'Type' => 'String'
+        response_field 'master-person-id',        'Master Person ID', 'Type' => 'Number'
+        response_field 'preferences',             'Preferences', 'Type' => 'Object'
+      end
+
       example_request 'get user' do
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
