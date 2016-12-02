@@ -1,7 +1,7 @@
 class Api::V2::AppealsController < Api::V2Controller
   def index
     load_appeals
-    render json: @appeals
+    render json: @appeals, meta: meta_hash(@appeals)
   end
 
   def show
@@ -30,7 +30,10 @@ class Api::V2::AppealsController < Api::V2Controller
   private
 
   def load_appeals
-    @appeals ||= appeal_scope.where(filter_params).to_a
+    @appeals = appeal_scope.where(filter_params)
+                           .reorder(sorting_param)
+                           .page(page_number_param)
+                           .per(per_page_param)
   end
 
   def load_appeal
@@ -69,7 +72,7 @@ class Api::V2::AppealsController < Api::V2Controller
     authorize @appeal
   end
 
-  def permited_filters
+  def permitted_filters
     [:account_list_id]
   end
 end

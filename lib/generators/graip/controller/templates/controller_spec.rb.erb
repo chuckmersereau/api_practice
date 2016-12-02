@@ -20,6 +20,12 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
     # Example: create(:contact, account_list: account_list)
   end
 
+  # This is required for the index action!
+  let!(:second_resource) do
+    # Creates a second resource for this spec - change as needed
+    # Example: create(:contact, account_list: account_list)
+  end
+
   # If needed, keep this ;)
   let(:id) { resource.id }
 

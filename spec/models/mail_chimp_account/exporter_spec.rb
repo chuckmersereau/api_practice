@@ -420,7 +420,7 @@ describe MailChimpAccount::Exporter do
         .to_return(body: { categories: categories }.to_json)
       make_hidden = stub_request(:patch, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}")
                     .with(body: { title: 'Tags', type: 'hidden' }.to_json)
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}/interests")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}/interests?count=100")
         .to_return(body: { interests: [{ id: 'i1', name: 'one' }] }.to_json)
       create_group = stub_request(:post, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}/interests")
                      .with(body: '{"name":"two"}')
@@ -439,7 +439,7 @@ describe MailChimpAccount::Exporter do
         .to_return(body: { categories: categories }.to_json)
       make_hidden = stub_request(:patch, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}")
                     .with(body: { title: 'Tags', type: 'hidden' }.to_json)
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}/interests")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}/interests?count=100")
         .to_return(body: { interests: [{ id: 'i1', name: 'one' }] }.to_json)
       create_group =
         stub_request(:post, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}/interests")
@@ -462,7 +462,7 @@ describe MailChimpAccount::Exporter do
         ] }.to_json)
       create_category = stub_request(:post, "#{api_prefix}/lists/#{primary_list_id}/interest-categories")
                         .with(body: { title: 'Tags', type: 'hidden' }.to_json)
-      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}/interests")
+      stub_request(:get, "#{api_prefix}/lists/#{primary_list_id}/interest-categories/#{generic_group_id}/interests?count=100")
         .to_return(body: { interests: [{ id: 'i1', name: 'one' }] }.to_json)
       account.tags_grouping_id = nil
 

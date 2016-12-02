@@ -29,7 +29,7 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
     @account_list ||= AccountList.find(params[:account_list_id])
   end
 
-  def permited_filters
+  def permitted_filters
     []
   end
 

@@ -1,8 +1,7 @@
 class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   def index
-    authorize load_user, :show?
     load_organization_accounts
-    render json: @organization_accounts
+    render json: @organization_accounts, meta: meta_hash(@organization_accounts)
   end
 
   def show
@@ -31,7 +30,10 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   private
 
   def load_organization_accounts
-    @organization_accounts ||= organization_account_scope.where(filter_params).to_a
+    @organization_accounts = organization_account_scope.where(filter_params)
+                                                       .reorder(sorting_param)
+                                                       .page(page_number_param)
+                                                       .per(per_page_param)
   end
 
   def load_organization_account
@@ -74,7 +76,7 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
     @user ||= current_user
   end
 
-  def permited_filters
+  def permitted_filters
     []
   end
 end

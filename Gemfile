@@ -6,8 +6,9 @@ end
 gem 'rails', '~> 4.1.8'
 gem 'rails-api', '~> 0.4.0'
 gem 'syslog-logger', '~> 1.6.8'
+gem 'rack-cors', '~> 0.4.0', require: 'rack/cors'
 
-gem 'active_model_serializers', '~> 0.10.0'
+gem 'active_model_serializers', '~> 0.10.3'
 gem 'activerecord-import', '~> 0.16.1'
 gem 'activesupport-json_encoder', '~> 1.1.0'
 gem 'acts-as-taggable-on', '~> 3.0.0'

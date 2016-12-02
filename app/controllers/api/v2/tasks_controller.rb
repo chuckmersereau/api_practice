@@ -2,7 +2,7 @@ class Api::V2::TasksController < Api::V2Controller
   def index
     authorize load_account_list, :show? if filter_params[:account_list_id]
     load_tasks
-    render json: @tasks
+    render json: @tasks, meta: meta_hash(@tasks)
   end
 
   def show
@@ -31,7 +31,10 @@ class Api::V2::TasksController < Api::V2Controller
   private
 
   def load_tasks
-    @tasks ||= task_scope.where(filter_params).to_a
+    @tasks = task_scope.where(filter_params)
+                       .reorder(sorting_param)
+                       .page(page_number_param)
+                       .per(per_page_param)
   end
 
   def load_task
@@ -74,7 +77,7 @@ class Api::V2::TasksController < Api::V2Controller
     @account_list ||= AccountList.find(params[:account_list_id])
   end
 
-  def permited_filters
+  def permitted_filters
     [:account_list_id]
   end
 end

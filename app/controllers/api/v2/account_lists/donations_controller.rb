@@ -2,7 +2,9 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_donations
-    render json: @donations, scope: { account_list: load_account_list, locale: locale }
+    render json: @donations,
+           scope: { account_list: load_account_list, locale: locale },
+           meta: meta_hash(@donations)
   end
 
   def show
@@ -24,7 +26,10 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   private
 
   def load_donations
-    @donations ||= donation_scope.where(filter_params).to_a
+    @donations = donation_scope.where(filter_params)
+                               .reorder(sorting_param)
+                               .page(page_number_param)
+                               .per(per_page_param)
   end
 
   def load_donation
@@ -67,7 +72,7 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
     @account_list ||= AccountList.find(params[:account_list_id])
   end
 
-  def permited_filters
+  def permitted_filters
     []
   end
 

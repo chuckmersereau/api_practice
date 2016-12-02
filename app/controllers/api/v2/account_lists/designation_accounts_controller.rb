@@ -2,7 +2,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_designation_accounts
-    render json: @designation_accounts
+    render json: @designation_accounts, meta: meta_hash(@designation_accounts)
   end
 
   def show
@@ -14,7 +14,10 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   private
 
   def load_designation_accounts
-    @designation_accounts ||= designation_account_scope.where(filter_params).to_a
+    @designation_accounts = designation_account_scope.where(filter_params)
+                                                     .reorder(sorting_param)
+                                                     .page(page_number_param)
+                                                     .per(per_page_param)
   end
 
   def load_designation_account
@@ -37,7 +40,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
     @account_list ||= AccountList.find(params[:account_list_id])
   end
 
-  def permited_filters
+  def permitted_filters
     []
   end
 

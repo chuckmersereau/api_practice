@@ -1,5 +1,8 @@
 class EmailAddressSerializer < ApplicationSerializer
   attributes :email,
-             :historic,
-             :primary
+             :location,
+             :primary,
+             :historic
+
+  belongs_to :person
 end

@@ -22,7 +22,7 @@ class GoogleImport
     if @import.import_by_group?
       @import.groups.each do |group_id|
         import_contacts_batch(google_account.contacts_for_group(group_id),
-                              @import.tags + ',' + @import.group_tags[group_id])
+                              Array.wrap(@import.tags) + Array.wrap(@import.group_tags[group_id]))
       end
     else
       import_contacts_batch(google_account.contacts, @import.tags)

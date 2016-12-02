@@ -2,7 +2,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_invites
-    render json: @invites
+    render json: @invites, meta: meta_hash(@invites)
   end
 
   def show
@@ -26,7 +26,10 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   private
 
   def load_invites
-    @invites ||= invite_scope.where(filter_params).to_a
+    @invites = invite_scope.where(filter_params)
+                           .reorder(sorting_param)
+                           .page(page_number_param)
+                           .per(per_page_param)
   end
 
   def load_invite
@@ -61,7 +64,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
     @account_list ||= AccountList.find(params[:account_list_id])
   end
 
-  def permited_filters
+  def permitted_filters
     []
   end
 
