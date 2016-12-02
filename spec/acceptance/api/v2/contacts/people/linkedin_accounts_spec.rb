@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Linkedin Accounts' do
-  let(:resource_type) { 'person-linkedin-accounts' }
+  let(:resource_type) { 'person_linkedin_accounts' }
   let!(:user) { create(:user_with_full_account) }
   let!(:account_list) { user.account_lists.first }
   let(:account_list_id) { account_list.id }
@@ -30,7 +30,7 @@ resource 'Linkedin Accounts' do
       contact.people << person
       api_login(user)
     end
-    get '/api/v2/contacts/:contact_id/people/:person_id/linkedin-accounts' do
+    get '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts' do
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person_id',                    'Person ID', required: true
       response_field 'data',                    'Data', 'Type' => 'Array[Object]'
@@ -40,7 +40,7 @@ resource 'Linkedin Accounts' do
         expect(response_status).to eq 200
       end
     end
-    get '/api/v2/contacts/:contact_id/people/:person_id/linkedin-accounts/:id' do
+    get '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts/:id' do
       with_options scope: [:data, :attributes] do
         response_field 'created_at',              'Created At', 'Type' => 'String'
         response_field 'first_name',              'First Name', 'Type' => 'String'
@@ -54,7 +54,7 @@ resource 'Linkedin Accounts' do
         expect(response_status).to eq 200
       end
     end
-    post '/api/v2/contacts/:contact_id/people/:person_id/linkedin-accounts' do
+    post '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts' do
       with_options scope: [:data, :attributes] do
         parameter 'first_name',                   'First Name'
         parameter 'last_name',                    'Last Name'
@@ -66,7 +66,7 @@ resource 'Linkedin Accounts' do
         expect(response_status).to eq 200
       end
     end
-    put '/api/v2/contacts/:contact_id/people/:person_id/linkedin-accounts/:id' do
+    put '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts/:id' do
       with_options scope: [:data, :attributes] do
         parameter 'first_name',                   'First Name'
         parameter 'last_name',                    'Last Name'
@@ -78,7 +78,7 @@ resource 'Linkedin Accounts' do
         expect(response_status).to eq 200
       end
     end
-    delete '/api/v2/contacts/:contact_id/people/:person_id/linkedin-accounts/:id' do
+    delete '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts/:id' do
       parameter 'contact_id',                   'Contact ID', required: true
       parameter 'person_id',                    'Person ID', required: true
       example_request 'delete linkedin account' do
