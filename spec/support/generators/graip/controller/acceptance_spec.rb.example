@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Email Addresses' do
+  header 'Content-Type', 'application/vnd.api+json'
+
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
   let(:resource_type) { 'email_addresses' }
