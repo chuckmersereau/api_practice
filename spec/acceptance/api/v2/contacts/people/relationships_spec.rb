@@ -2,16 +2,18 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Relationship' do
-  let(:resource_type) { 'family-relationships' }
-  let!(:user) { create(:user_with_full_account) }
-  let(:contact) { create(:contact, account_list: user.account_lists.first) }
-  let(:person) { create(:person, contacts: [contact]) }
+  let(:resource_type) { 'family_relationships' }
+
+  let!(:user)                { create(:user_with_full_account) }
+  let(:contact)              { create(:contact, account_list: user.account_lists.first) }
+  let(:person)               { create(:person, contacts: [contact]) }
   let!(:family_relationship) { create(:family_relationship, person: person) }
-  let(:contact_id) { contact.id }
-  let(:person_id) { person.id }
-  let(:id) { family_relationship.id }
+  let(:contact_id)           { contact.id }
+  let(:person_id)            { person.id }
+  let(:id)                   { family_relationship.id }
+
   let(:new_family_relationship) { build(:family_relationship, person: person).attributes }
-  let(:form_data) { build_data(new_family_relationship) }
+  let(:form_data)               { build_data(new_family_relationship) }
 
   context 'authorized user' do
     before do
@@ -28,9 +30,9 @@ resource 'Relationship' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'person_id', 'Person Id', 'Type' => 'Integer'
+        response_field 'person_id',         'Person Id',      'Type' => 'Integer'
         response_field 'related_person_id', 'Related Person', 'Type' => 'Integer'
-        response_field 'relationship', 'Relationship', 'Type' => 'String'
+        response_field 'relationship',      'Relationship',   'Type' => 'String'
       end
 
       example_request 'get organization account' do
@@ -41,9 +43,9 @@ resource 'Relationship' do
 
     post '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter 'person_id', 'Person Id'
+        parameter 'person_id',         'Person Id'
         parameter 'related_person_id', 'Related Person Id'
-        parameter 'relationship', 'Relationship'
+        parameter 'relationship',      'Relationship'
       end
 
       example 'create organization account' do
@@ -55,13 +57,14 @@ resource 'Relationship' do
 
     put '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter 'person_id', 'Person Id'
+        parameter 'person_id',         'Person Id'
         parameter 'related_person_id', 'Related Person Id'
-        parameter 'relationship', 'Relationship'
+        parameter 'relationship',      'Relationship'
       end
 
       example 'update notification' do
         do_request data: form_data
+
         expect(resource_object['username']).to eq new_family_relationship['username']
         expect(response_status).to eq 200
       end

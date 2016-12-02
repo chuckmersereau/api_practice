@@ -36,12 +36,12 @@ module Graip
         class_path.map(&:camelize).join('::').concat('::')
       end
 
-      def dashed_resource_name
-        @dashed_resource_name ||= resource_name.dasherize
+      def underscored_resource_name
+        @underscored_resource_name ||= resource_name.underscore
       end
 
-      def dashed_resources_name
-        @dashed_resources_name ||= resources_name.dasherize
+      def underscored_resources_name
+        @underscored_resources_name ||= resources_name.underscore
       end
 
       def parent_namespacing
