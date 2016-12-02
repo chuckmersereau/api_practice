@@ -2,6 +2,12 @@ class Person::TwitterAccount < ActiveRecord::Base
   include Person::Account
   after_save :ensure_only_one_primary
 
+  PERMITTED_ATTRIBUTES = [
+    :remote_id, :screen_name, :primary
+  ].freeze
+
+  validates :screen_name, presence: true
+
   # attr_accessible :screen_name
 
   def self.find_or_create_from_auth(auth_hash, person)
@@ -26,17 +32,6 @@ class Person::TwitterAccount < ActiveRecord::Base
 
   def self.one_per_user?
     false
-  end
-
-  def screen_name=(value)
-    return unless value
-    handle = if value =~ /https?:/
-               value.split('/').last
-             else
-               value.delete('@')
-             end
-    self[:remote_id] = handle
-    self[:screen_name] = handle
   end
 
   def queue_import_data

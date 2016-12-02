@@ -133,7 +133,8 @@ class FacebookImport
         fb_person.facebook_accounts.create!(remote_id: friend.identifier,
                                             authenticated: true,
                                             first_name: friend.first_name,
-                                            last_name: friend.last_name)
+                                            last_name: friend.last_name,
+                                            username: friend.identifier)
       rescue ActiveRecord::RecordNotUnique
       end
     end
