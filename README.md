@@ -43,8 +43,10 @@ $ bundle install
 Create, migrate, and seed your databases with:
 
 ```bash
-$ bin/rake db:setup
+$ bin/rake db:create && bin/rake db:migrate && bin/rake db:seed
 ```
+
+This application uses a structure.sql file instead of the Rails schema.rb file, the rake tasks `db:setup` and `db:schema:load` are not supported.
 
 ### Start Server
 

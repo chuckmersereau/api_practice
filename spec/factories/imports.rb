@@ -1,8 +1,6 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
   factory :import do
-    source 'facebook'
+    source 'twitter'
     association :account_list
     association :user
     importing false

@@ -6,5 +6,6 @@ FactoryGirl.define do
     first_name 'John'
     last_name 'Smith'
     greeting 'John'
+    association :mail_chimp_account
   end
 end

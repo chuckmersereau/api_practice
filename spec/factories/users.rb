@@ -1,4 +1,4 @@
-# Read about factories at http://github.com/thoughtbot/factory_girl
+require 'faker'
 
 FactoryGirl.define do
   factory :user do

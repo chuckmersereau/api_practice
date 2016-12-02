@@ -1,4 +1,4 @@
-# Read about factories at https://github.com/thoughtbot/factory_girl
+require_relative '../support/fake_api'
 
 FactoryGirl.define do
   sequence :query_ini_url do |n|

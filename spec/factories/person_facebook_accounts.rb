@@ -1,5 +1,3 @@
-# Read about factories at http://github.com/thoughtbot/factory_girl
-
 FactoryGirl.define do
   factory :facebook_account, class: 'Person::FacebookAccount' do
     first_name { Faker::Name.first_name }
