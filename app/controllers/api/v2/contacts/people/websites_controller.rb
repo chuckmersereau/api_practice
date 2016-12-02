@@ -31,7 +31,7 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   private
 
   def load_websites
-    @websites ||= website_scope.where(filter_params)
+    @websites = website_scope.where(filter_params)
                                .reorder(sorting_param)
                                .page(page_number_param)
                                .per(per_page_param)

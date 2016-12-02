@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe Api::V2::Contacts::People::WebsitesController, type: :controller do
+describe Api::V2::Contacts::People::WebsitesController, type: :controller do
   let(:factory_type) { :website }
   let!(:user) { create(:user_with_full_account) }
   let!(:account_list) { user.account_lists.first }
@@ -9,8 +9,9 @@ RSpec.describe Api::V2::Contacts::People::WebsitesController, type: :controller 
   let!(:person2) { create(:person) }
   let!(:websites) { create_list(:website, 2, person: person) }
   let(:website) { websites.first }
-  let(:resource) { website }
   let(:id) { website.id }
+
+  let(:resource) { website }
   let(:parent_param) { { contact_id: contact.id, person_id: person.id } }
   let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:website, person: person2, website: 'http://www.example192.com') }

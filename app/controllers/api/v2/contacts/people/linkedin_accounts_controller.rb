@@ -31,7 +31,7 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   private
 
   def load_linkedin_accounts
-    @linkedin_accounts ||= linkedin_account_scope.where(filter_params)
+    @linkedin_accounts = linkedin_account_scope.where(filter_params)
                                                  .reorder(sorting_param)
                                                  .page(page_number_param)
                                                  .per(per_page_param)
