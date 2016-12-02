@@ -59,7 +59,6 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   def build_fb_account
     @fb_account ||= fb_account_scope.build
     @fb_account.assign_attributes(fb_account_params)
-    authorize @fb_account
   end
 
   def save_fb_account

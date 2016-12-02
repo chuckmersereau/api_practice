@@ -59,7 +59,6 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   def build_linkedin_account
     @linkedin_account ||= linkedin_account_scope.build
     @linkedin_account.assign_attributes(linkedin_account_params)
-    authorize @linkedin_account
   end
 
   def save_linkedin_account

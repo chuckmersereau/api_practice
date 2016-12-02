@@ -59,7 +59,6 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   def build_website
     @website ||= website_scope.build
     @website.assign_attributes(website_params)
-    authorize @website
   end
 
   def save_website

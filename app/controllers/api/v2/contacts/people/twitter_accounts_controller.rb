@@ -59,7 +59,6 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   def build_tw_account
     @tw_account ||= tw_account_scope.build
     @tw_account.assign_attributes(tw_account_params)
-    authorize @tw_account
   end
 
   def save_tw_account
