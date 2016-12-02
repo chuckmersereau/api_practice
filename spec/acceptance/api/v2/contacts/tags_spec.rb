@@ -2,20 +2,21 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Tags' do
-  let(:resource_type) { 'contacts' }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:user)      { create(:user_with_full_account) }
+  let(:resource_type) { 'contacts' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let!(:contact)   { create(:contact, account_list: user.account_lists.first) }
   let(:contact_id) { contact.id }
+
   let(:tag_name)   { 'new_tag' }
 
   let(:new_tag_params) { { name: tag_name } }
   let(:form_data)      { build_data(new_tag_params) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     post '/api/v2/contacts/:contact_id/tags' do
       with_options scope: [:data, :attributes] do

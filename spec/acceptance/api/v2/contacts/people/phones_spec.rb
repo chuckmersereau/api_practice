@@ -2,23 +2,25 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Phones' do
-  let(:resource_type) { 'phone_numbers' }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:user)      { create(:user_with_full_account) }
+  let(:resource_type) { 'phone_numbers' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:person)     { create(:person, contacts: [contact]) }
-  let!(:phone)     { create(:phone_number, person: person) }
   let(:contact_id) { contact.id }
-  let(:person_id)  { person.id }
-  let(:id)         { phone.id }
+
+  let(:person)    { create(:person, contacts: [contact]) }
+  let(:person_id) { person.id }
+
+  let!(:phone) { create(:phone_number, person: person) }
+  let(:id)     { phone.id }
 
   let(:new_phone) { build(:phone_number, number: '3561987123', person: person).attributes }
   let(:form_data) { build_data(new_phone) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people/:person_id/phones' do
       example_request 'get phones' do

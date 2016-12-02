@@ -3,8 +3,11 @@ require 'rspec_api_documentation/dsl'
 require 'json'
 
 resource 'User / Authentication' do
-  let(:user) { create(:user_with_account) }
+  header 'Content-Type', 'application/vnd.api+json'
+
+  let(:user)         { create(:user_with_account) }
   let(:access_token) { 'right_token' }
+
   parameter :access_token, 'valid access token from The Key or Relay'
 
   before do

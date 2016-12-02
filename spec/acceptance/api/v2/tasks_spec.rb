@@ -2,9 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Tasks' do
-  let(:resource_type) { 'tasks' }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:user) { create(:user_with_full_account) }
+  let(:resource_type) { 'tasks' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let!(:task) { create(:task, account_list: user.account_lists.first) }
   let(:id)    { task.id }
 
@@ -12,9 +14,7 @@ resource 'Tasks' do
   let(:form_data) { build_data(new_task) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/tasks' do
       response_field :data, 'list of task objects', 'Type' => 'Array[Object]'

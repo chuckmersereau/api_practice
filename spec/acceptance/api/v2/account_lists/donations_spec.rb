@@ -2,6 +2,8 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Donations' do
+  header 'Content-Type', 'application/vnd.api+json'
+
   let(:resource_type) { 'donations' }
   let!(:user)         { create(:user_with_full_account) }
 
