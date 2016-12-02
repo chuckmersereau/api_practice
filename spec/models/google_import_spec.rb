@@ -264,8 +264,8 @@ describe GoogleImport do
       @person = build(:person, last_name: 'Google')
       @person.email_address = { email: 'existing_primary@example.com', primary: true }
       @person.phone_number = { number: '414-555-5555', primary: true }
-      @person.websites << Person::Website.create(url: 'original.example.com', primary: true)
       @person.save
+      Person::Website.create(url: 'original.example.com', primary: true, person: @person)
       @contact.people << @person
     end
 

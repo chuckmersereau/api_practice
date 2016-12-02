@@ -206,7 +206,7 @@ RSpec.shared_examples 'index_examples' do
       expect(JSON.parse(response.body)['meta']['pagination']['total_pages']).not_to be_nil
     end
 
-    it 'does not shows resources  to users that are signed in' do
+    it 'does not shows resources to users that are not signed in' do
       get :index, parent_param_if_needed
       expect(response.status).to eq(401)
     end
