@@ -1,6 +1,11 @@
 require 'spec_helper'
+require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
 
 describe AccountList do
+  before do
+    NotificationTypesSeeder.new.seed # Specs depend on NotificationType records.
+  end
+
   context '#send_account_notifications' do
     it 'checks all notification types' do
       expect(NotificationType).to receive(:check_all).and_return({})

@@ -1,9 +1,14 @@
 require 'spec_helper'
+require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
 
 describe TntDataSyncImport do
   let(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
-  before { stub_smarty_streets }
+
+  before do
+    stub_smarty_streets
+    NotificationTypesSeeder.new.seed # Specs depend on NotificationType records.
+  end
 
   it 'imports donors and donations, and sends notifications' do
     expect(account_list).to receive(:send_account_notifications)
