@@ -92,4 +92,8 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   def save_address
     @address.save
   end
+
+  def pundit_user
+    PunditContext.new(current_user, contact: current_contact)
+  end
 end

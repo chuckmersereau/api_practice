@@ -52,4 +52,8 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   def permitted_filters
     [:excluded, :account_list_id]
   end
+
+  def pundit_user
+    PunditContext.new(current_user, contact: @contact)
+  end
 end

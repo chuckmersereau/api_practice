@@ -39,7 +39,7 @@ Rails.application.routes.draw do
           resources :addresses, only: [:index, :show, :create, :update, :destroy]
           resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
 
-          resources :people do
+          resources :people, only: [:show, :index, :create, :update, :destroy] do
             scope module: :people do
               resources :email_addresses, only: [:index, :show, :create, :update, :destroy]
               resources :phones, only: [:index, :show, :create, :update, :destroy]

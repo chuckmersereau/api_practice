@@ -14,6 +14,18 @@ module JsonApiHelper
     expect(json_response.keys).to eq %w(data)
     expect(first_or_only_item.keys).to eq item_keys(additional_keys)
     expect(first_or_only_item['type']).to eq resource_type
+    check_resource_attributes
+    check_resource_relationships
+  end
+
+  def check_resource_attributes
+    return unless defined?(resource_attributes)
+    expect(resource_object.keys.sort).to eq(resource_attributes)
+  end
+
+  def check_resource_relationships
+    return unless defined?(resource_associations)
+    expect(first_or_only_item['relationships'].keys.sort).to eq(resource_associations)
   end
 
   def item_keys(additional_keys)

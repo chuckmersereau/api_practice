@@ -15,14 +15,14 @@ RSpec.shared_examples 'show_examples' do
   include_examples 'common_variables'
 
   describe '#show' do
-    it 'shows resource object to users that are signed in' do
+    it 'shows resource to users that are signed in' do
       api_login(user)
       get :show, full_params
       expect(response.status).to eq(200)
       expect(response.body).to include(resource.send(reference_key).to_s)
     end
 
-    it 'does not show resource for users that do not own the resource' do
+    it 'does not show resource to users that do not own the resource' do
       if defined?(id)
         api_login(create(:user))
         get :show, full_params
@@ -30,7 +30,7 @@ RSpec.shared_examples 'show_examples' do
       end
     end
 
-    it 'does not shows resource object to users that are signed in' do
+    it 'does not show resource to users that are not signed in' do
       get :show, full_params
       expect(response.status).to eq(401)
     end
@@ -169,11 +169,30 @@ RSpec.shared_examples 'index_examples' do
 
     it 'shows resources to users that are signed in' do
       api_login(user)
-      create(factory_type)
       get :index, parent_param_if_needed
       expect(response.status).to eq(200)
-      expect(JSON.parse(response.body)['data'].count).to eq(resource.class.count - 1)
       expect(response.body).to include(resource.class.first.send(reference_key).to_s)
+    end
+
+    it 'does not show resources that do not belong to the signed in user' do
+      api_login(user)
+      expect { create(factory_type) }.not_to change {
+        get :index, parent_param_if_needed
+        JSON.parse(response.body)['data'].count
+      }
+    end
+
+    it 'does not shows resources to users that are not signed in' do
+      get :index, parent_param_if_needed
+      expect(response.status).to eq(401)
+    end
+
+    it 'does not show resources to signed in users if they do not own the parent' do
+      if defined?(parent_param)
+        api_login(create(:user))
+        get :index, parent_param
+        expect(response.status).to eq(403)
+      end
     end
 
     it 'sorts resources if sorting_param is in list of permitted sorts' do
@@ -204,19 +223,6 @@ RSpec.shared_examples 'index_examples' do
       expect(JSON.parse(response.body)['meta']['pagination']['page']).to eq('2')
       expect(JSON.parse(response.body)['meta']['pagination']['total_count']).not_to be_nil
       expect(JSON.parse(response.body)['meta']['pagination']['total_pages']).not_to be_nil
-    end
-
-    it 'does not shows resources to users that are not signed in' do
-      get :index, parent_param_if_needed
-      expect(response.status).to eq(401)
-    end
-
-    it 'does not show resources for users that do not own the resources' do
-      if defined?(parent_param)
-        api_login(create(:user))
-        get :index, parent_param
-        expect(response.status).to eq(403)
-      end
     end
   end
 end
