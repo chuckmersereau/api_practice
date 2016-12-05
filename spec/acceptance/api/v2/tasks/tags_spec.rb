@@ -15,27 +15,27 @@ resource 'Tags' do
   let(:new_tag_params) { { name: tag_name } }
   let(:form_data)      { build_data(new_tag_params) }
 
-    before { api_login(user) }
+  before { api_login(user) }
 
-    post '/api/v2/tasks/:task_id/tags' do
-      with_options scope: [:data, :attributes] do
-        parameter 'name', 'Name of Tag'
-      end
-
-      example 'Tag [CREATE]', document: :tasks do
-        do_request data: form_data
-        expect(resource_object['new_tag']).to eq new_tag_params['new_tag']
-        expect(response_status).to eq 200
-      end
+  post '/api/v2/tasks/:task_id/tags' do
+    with_options scope: [:data, :attributes] do
+      parameter 'name', 'Name of Tag'
     end
 
-    delete '/api/v2/tasks/:task_id/tags/:tag_name' do
-      parameter 'tag_name', 'The name of the tag'
-      parameter 'task_id',  'The Task ID of the Tag'
-
-      example 'Tag [DELETE]', document: :tasks do
-        do_request
-        expect(response_status).to eq 200
-      end
+    example 'Tag [CREATE]', document: :tasks do
+      do_request data: form_data
+      expect(resource_object['new_tag']).to eq new_tag_params['new_tag']
+      expect(response_status).to eq 200
     end
+  end
+
+  delete '/api/v2/tasks/:task_id/tags/:tag_name' do
+    parameter 'tag_name', 'The name of the tag'
+    parameter 'task_id',  'The Task ID of the Tag'
+
+    example 'Tag [DELETE]', document: :tasks do
+      do_request
+      expect(response_status).to eq 200
+    end
+  end
 end
