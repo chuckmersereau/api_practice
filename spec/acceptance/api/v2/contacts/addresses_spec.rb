@@ -20,7 +20,8 @@ resource 'Address' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/addresses' do
-      example_request 'get addresses' do
+      example 'Address [LIST]', document: :contacts do
+        do_request
         explanation('List of Addresses associated to the contact')
 
         check_collection_resource 1
@@ -43,7 +44,8 @@ resource 'Address' do
         response_field 'street',                  'Street',                  'Type' => 'String'
       end
 
-      example_request 'get address' do
+      example 'Address [GET]', document: :contacts do
+        do_request
         check_resource
         expect(response_status).to eq(200)
       end
@@ -66,7 +68,7 @@ resource 'Address' do
         parameter 'street',                  'Street'
       end
 
-      example 'create address' do
+      example 'Address [CREATE]', document: :contacts do
         do_request data: form_data
 
         expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
@@ -91,7 +93,7 @@ resource 'Address' do
         parameter 'street',                  'Street'
       end
 
-      example 'update address' do
+      example 'Address [CREATE]', document: :contacts do
         do_request data: form_data
 
         expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
@@ -100,7 +102,8 @@ resource 'Address' do
     end
 
     delete '/api/v2/contacts/:contact_id/addresses/:id' do
-      example_request 'delete address' do
+      example 'Address [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq(200)
       end
     end

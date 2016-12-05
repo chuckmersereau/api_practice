@@ -34,7 +34,8 @@ resource 'Users' do
     before { api_login(user) }
 
     get '/api/v2/account_lists/:account_list_id/users' do
-      example_request 'list users of account list' do
+      example 'User [LIST]', document: :account_lists do
+        do_request
         explanation 'Users of selected account list'
 
         check_collection_resource(3, ['relationships'])
@@ -51,7 +52,8 @@ resource 'Users' do
         response_field 'preferences',      'Preferences',      'Type' => 'Object'
       end
 
-      example_request 'get user' do
+      example 'User [GET]', document: :account_lists do
+        do_request
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['first_name']).to eq user2.first_name
@@ -61,7 +63,8 @@ resource 'Users' do
     end
 
     delete '/api/v2/account_lists/:account_list_id/users/:id' do
-      example_request 'delete user' do
+      example 'User [DELETE]', document: :account_lists do
+        do_request
         expect(response_status).to eq 200
       end
     end

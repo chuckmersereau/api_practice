@@ -35,8 +35,20 @@ git clone $SSH_REPO docs_repo
 
 # Run our compile script
 doCompile
-rm docs_repo/source/includes/_generated_examples.markdown
-cp doc/api/_generated_examples.markdown docs_repo/source/includes/
+
+rm docs_repo/source/includes/_account_lists.markdown
+rm docs_repo/source/includes/_appeals.markdown
+rm docs_repo/source/includes/_contacts.markdown
+rm docs_repo/source/includes/_entities.markdown
+rm docs_repo/source/includes/_tasks.markdown
+rm docs_repo/source/includes/_user.markdown
+
+cp doc/api/account_lists/_generated_examples.markdown docs_repo/source/includes/_account_lists.markdown
+cp doc/api/appeals/_generated_examples.markdown docs_repo/source/includes/_appeals.markdown
+cp doc/api/contacts/_generated_examples.markdown docs_repo/source/includes/_contacts.markdown
+cp doc/api/entities/_generated_examples.markdown docs_repo/source/includes/_entities.markdown
+cp doc/api/tasks/_generated_examples.markdown docs_repo/source/includes/_tasks.markdown
+cp doc/api/user/_generated_examples.markdown docs_repo/source/includes/_user.markdown
 
 # Now let's go have some fun with the cloned repo
 cd docs_repo

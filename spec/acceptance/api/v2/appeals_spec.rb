@@ -38,7 +38,8 @@ resource 'Appeals' do
       parameter 'account_list_id', 'Account List ID', scope: :filters
       response_field :data,        'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list appeals of account list' do
+      example 'Appeal [LIST]', document: :entities do
+        do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -59,7 +60,8 @@ resource 'Appeals' do
         response_field 'total_currency', 'Total currency', 'Type' => 'String'
       end
 
-      example_request 'get appeal' do
+      example 'Appeal [GET]', document: :entities do
+        do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -74,7 +76,7 @@ resource 'Appeals' do
         parameter 'name',            'Name', required: true
       end
 
-      example 'create appeal' do
+      example 'Appeal [CREATE]', document: :entities do
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -90,7 +92,7 @@ resource 'Appeals' do
         parameter 'name',        'Name'
       end
 
-      example 'update appeals' do
+      example 'Appeal [UPDATE]', document: :entities do
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -100,7 +102,8 @@ resource 'Appeals' do
       parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       parameter 'id',              'ID', required: true
 
-      example_request 'delete appeal' do
+      example 'Appeal [DELETE]', document: :entities do
+        do_request
         expect(response_status).to eq 200
       end
     end

@@ -34,7 +34,8 @@ resource 'Invites' do
       parameter 'account_list_id', 'Account List ID', required: true
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list invites of account list' do
+      example 'Invite [LIST]', document: :account_lists do
+        do_request
         explanation 'Invites of selected account list'
 
         check_collection_resource(1)
@@ -54,7 +55,8 @@ resource 'Invites' do
         response_field 'recipient_email',      'Recipient Email',      'Type' => 'String'
       end
 
-      example_request 'get invite' do
+      example 'Invite [GET]', document: :account_lists do
+        do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['code']).to eq invite.code
@@ -69,14 +71,16 @@ resource 'Invites' do
 
       parameter 'recipient_email', 'Recipient Email', scope: [:data, :attributes], required: true
 
-      example_request 'create invite' do
+      example 'Invite [CREATE]', document: :account_lists do
+        do_request
         expect(resource_object['recipient_email']).to eq email
         expect(response_status).to eq 200
       end
     end
 
     delete '/api/v2/account_lists/:account_list_id/invites/:id' do
-      example_request 'delete invite' do
+      example 'Invite [DELETE]', document: :account_lists do
+        do_request
         expect(response_status).to eq 200
       end
     end

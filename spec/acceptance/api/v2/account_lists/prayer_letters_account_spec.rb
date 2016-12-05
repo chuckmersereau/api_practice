@@ -47,7 +47,8 @@ resource 'Prayer Letters Account' do
           response_field 'updated_at', 'Updated At', 'Type' => 'String'
         end
 
-        example_request 'get prayer letters account' do
+        example 'Prayer Letters Account [GET]', document: :account_lists do
+          do_request
           check_resource
           expect(resource_object.keys).to match_array expected_attribute_keys
           expect(response_status).to eq 200
@@ -58,7 +59,8 @@ resource 'Prayer Letters Account' do
         parameter 'account_list_id', 'Account List ID', required: true
         parameter 'id',              'ID', required: true
 
-        example_request 'delete prayer letters account' do
+        example 'Prayer Letters Account [DELETE]', document: :account_lists do
+          do_request
           expect(response_status).to eq 200
         end
       end
@@ -66,7 +68,8 @@ resource 'Prayer Letters Account' do
       get '/api/v2/account_lists/:account_list_id/prayer_letters_account/sync' do
         parameter 'account_list_id', 'Account List ID', required: true
 
-        example_request 'sync prayer letters account' do
+        example 'Prayer Letters Account [SYNC]', document: :account_lists do
+          do_request
           expect(response_status).to eq 200
         end
       end
@@ -84,7 +87,7 @@ resource 'Prayer Letters Account' do
 
       let(:form_data) { build_data('oauth2-token': 'token', 'valid-token': true) }
 
-      example 'create a prayer letters account' do
+      example 'Prayer Letters Account [CREATE]', document: :account_lists do
         do_request data: form_data
         expect(response_status).to eq 200
       end

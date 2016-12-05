@@ -44,7 +44,8 @@ resource 'Twitter Accounts' do
       parameter 'person_id',  'Person ID', required: true
       response_field 'data',  'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list twitter accounts of person' do
+      example 'Person / Twitter Account [LIST]', document: :contacts do
+        do_request
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -60,7 +61,8 @@ resource 'Twitter Accounts' do
         response_field 'updated_at',  'Updated At',  'Type' => 'String'
       end
 
-      example_request 'get twitter account' do
+      example 'Person / Twitter Account [GET]', document: :contacts do
+        do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -73,7 +75,7 @@ resource 'Twitter Accounts' do
         parameter 'screen_name', 'Screen Name'
       end
 
-      example 'create twitter account' do
+      example 'Person / Twitter Account [CREATE]', document: :contacts do
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -86,7 +88,7 @@ resource 'Twitter Accounts' do
         parameter 'screen_name', 'Screen Name'
       end
 
-      example 'update twitter account' do
+      example 'Person / Twitter Account [UPDATE]', document: :contacts do
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -96,7 +98,8 @@ resource 'Twitter Accounts' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID',  required: true
 
-      example_request 'delete twitter account' do
+      example 'Person / Twitter Account [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq 200
       end
     end

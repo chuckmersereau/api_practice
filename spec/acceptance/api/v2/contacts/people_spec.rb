@@ -51,7 +51,8 @@ resource 'People' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people' do
-      example_request 'get people' do
+      example 'Person [LIST]', document: :contacts do
+        do_request
         explanation('List of people associated to the contact')
         check_collection_resource(1, ['relationships'])
         expect(response_status).to eq(200)
@@ -88,7 +89,8 @@ resource 'People' do
         end
       end
 
-      example_request 'get person' do
+      example 'Person [GET]', document: :contacts do
+        do_request
         check_resource(['relationships'])
         expect(response_status).to eq(200)
       end
@@ -151,7 +153,7 @@ resource 'People' do
         parameter 'websites_attributes[:key][url]',                           'Website URL, where :key is an integer'
       end
 
-      example 'create person' do
+      example 'Person [CREATE]', document: :contacts do
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
         expect(response_status).to eq(200)
@@ -215,7 +217,7 @@ resource 'People' do
         parameter 'websites_attributes[:key][url]',                           'Website URL, where :key is an integer'
       end
 
-      example 'update person' do
+      example 'Person [UPDATE]', document: :contacts do
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
         expect(response_status).to eq(200)
@@ -223,7 +225,8 @@ resource 'People' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:id' do
-      example_request 'delete person' do
+      example 'Person [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq(200)
       end
     end

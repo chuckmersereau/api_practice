@@ -30,7 +30,8 @@ resource 'Users' do
       response_field 'relationships', 'list of relationships related to that User', 'Type' => 'Array[Object]'
       response_field 'type',          'Will be User',                               'Type' => 'String'
 
-      example_request 'get user' do
+      example 'User [GET]', document: :entities do
+        do_request
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -58,7 +59,7 @@ resource 'Users' do
         parameter 'title',            'User title'
       end
 
-      example 'update user' do
+      example 'User [UPDATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['first_name']).to eq new_user_attributes[:first_name]
         expect(response_status).to eq 200

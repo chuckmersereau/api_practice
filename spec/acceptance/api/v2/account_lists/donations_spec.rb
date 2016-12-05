@@ -55,7 +55,8 @@ resource 'Donations' do
       parameter 'account_list_id', 'Account List ID', required: true
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list donations of account list' do
+      example 'Donation [LIST]', document: :account_lists do
+        do_request
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -82,7 +83,8 @@ resource 'Donations' do
         response_field 'tendered_currency',      'Tendered Currency',      'Type' => 'String'
       end
 
-      example_request 'get donation' do
+      example 'Donation [GET]', document: :account_lists do
+        do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['amount']).to eq '$10'
@@ -101,7 +103,7 @@ resource 'Donations' do
         parameter 'donor_account_id',       'Donor Account ID'
       end
 
-      example 'create donation' do
+      example 'Donation [CREATE]', document: :account_lists do
         do_request data: form_data
 
         expect(resource_object['amount']).to eq '$10'
@@ -122,7 +124,7 @@ resource 'Donations' do
         parameter 'donor_account_id',       'Donor Account ID'
       end
 
-      example 'update donation' do
+      example 'Donation [UPDATE]', document: :account_lists do
         do_request data: build_data(new_donation)
 
         expect(resource_object['amount']).to eq '$10'

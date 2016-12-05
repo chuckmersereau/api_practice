@@ -71,7 +71,8 @@ resource 'Import' do
         response_field 'user_id',           'User ID',           'Type' => 'Number'
       end
 
-      example_request 'get import' do
+      example 'Import [GET]', document: :account_lists do
+        do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -91,7 +92,7 @@ resource 'Import' do
         parameter 'user_id',           'User ID'
       end
 
-      example 'create prayer letters account' do
+      example 'Import [CREATE]', document: :account_lists do
         do_request data: form_data
         expect(response_status).to eq 200
       end

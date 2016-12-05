@@ -43,7 +43,8 @@ resource 'Websites' do
       parameter 'person_id',  'Person ID', required: true
       response_field 'data',  'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list facebook websites of person' do
+      example 'Person / Website [LIST]', document: :contacts do
+        do_request
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -58,7 +59,8 @@ resource 'Websites' do
         response_field 'url',        'Url',        'Type' => 'String'
       end
 
-      example_request 'get website' do
+      example 'Person / Website [GET]', document: :contacts do
+        do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -70,7 +72,7 @@ resource 'Websites' do
         parameter 'url',     'Url'
       end
 
-      example 'create website' do
+      example 'Person / Website [CREATE]', document: :contacts do
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -82,7 +84,7 @@ resource 'Websites' do
         parameter 'url',     'Url'
       end
 
-      example 'update website' do
+      example 'Person / Website [UPDATE]', document: :contacts do
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -92,7 +94,8 @@ resource 'Websites' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID',  required: true
 
-      example_request 'delete website' do
+      example 'Person / Website [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq 200
       end
     end

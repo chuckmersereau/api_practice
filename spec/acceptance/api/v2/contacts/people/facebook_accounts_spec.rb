@@ -45,7 +45,8 @@ resource 'Facebook Accounts' do
       parameter 'person_id',  'Person ID', required: true
       response_field 'data',  'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list facebook accounts of person' do
+      example 'Person / Facebook Account [LIST]', document: :contacts do
+        do_request
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -62,7 +63,8 @@ resource 'Facebook Accounts' do
         response_field 'username',   'Username',   'Type' => 'String'
       end
 
-      example_request 'get facebook account' do
+      example 'Person / Facebook Account [GET]', document: :contacts do
+        do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -76,7 +78,7 @@ resource 'Facebook Accounts' do
         parameter 'username',   'Username'
       end
 
-      example 'create facebook account' do
+      example 'Person / Facebook Account [CREATE]', document: :contacts do
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -90,7 +92,7 @@ resource 'Facebook Accounts' do
         parameter 'username',   'Username'
       end
 
-      example 'update facebook account' do
+      example 'Person / Facebook Account [UPDATE]', document: :contacts do
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -100,7 +102,8 @@ resource 'Facebook Accounts' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID',  required: true
 
-      example_request 'delete facebook account' do
+      example 'Person / Facebook Account [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq 200
       end
     end

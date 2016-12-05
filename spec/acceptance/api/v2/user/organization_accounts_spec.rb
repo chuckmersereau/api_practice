@@ -17,7 +17,8 @@ resource 'Organization Accounts' do
     before { api_login(user) }
 
     get '/api/v2/user/organization_accounts' do
-      example_request 'get organization accounts' do
+      example 'Organization Account [LIST]', document: :user do
+        do_request
         explanation 'List of Organization Accounts associated to current_user'
 
         check_collection_resource(2, ['relationships'])
@@ -32,7 +33,8 @@ resource 'Organization Accounts' do
         response_field 'username',        'Username',        'Type' => 'String'
       end
 
-      example_request 'get organization account' do
+      example 'Organization Account [GET]', document: :user do
+        do_request
         check_resource(['relationships'])
         expect(response_status).to eq 200
       end
@@ -46,7 +48,7 @@ resource 'Organization Accounts' do
         parameter 'username',        'Username'
       end
 
-      example 'create organization account' do
+      example 'Organization Account [Create]', document: :user do
         do_request data: form_data
 
         expect(resource_object['username']).to eq new_organization_account_params['username']
@@ -62,7 +64,7 @@ resource 'Organization Accounts' do
         parameter 'username',        'Username'
       end
 
-      example 'update notification' do
+      example 'Organization Account [UPDATE]', document: :user do
         do_request data: form_data
 
         expect(resource_object['username']).to eq new_organization_account_params['username']
@@ -71,7 +73,8 @@ resource 'Organization Accounts' do
     end
 
     delete '/api/v2/user/organization_accounts/:id' do
-      example_request 'delete notification' do
+      example 'Organization Account [DELETE]', document: :user do
+        do_request
         expect(response_status).to eq 200
       end
     end

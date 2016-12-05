@@ -15,7 +15,6 @@ resource 'Tags' do
   let(:new_tag_params) { { name: tag_name } }
   let(:form_data)      { build_data(new_tag_params) }
 
-  context 'authorized user' do
     before { api_login(user) }
 
     post '/api/v2/tasks/:task_id/tags' do
@@ -23,7 +22,7 @@ resource 'Tags' do
         parameter 'name', 'Name of Tag'
       end
 
-      example 'create tag' do
+      example 'Tag [CREATE]', document: :tasks do
         do_request data: form_data
         expect(resource_object['new_tag']).to eq new_tag_params['new_tag']
         expect(response_status).to eq 200
@@ -34,9 +33,9 @@ resource 'Tags' do
       parameter 'tag_name', 'The name of the tag'
       parameter 'task_id',  'The Task ID of the Tag'
 
-      example_request 'delete tag' do
+      example 'Tag [DELETE]', document: :tasks do
+        do_request
         expect(response_status).to eq 200
       end
     end
-  end
 end

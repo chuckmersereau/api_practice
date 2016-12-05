@@ -30,7 +30,8 @@ resource 'Account Lists' do
     get '/api/v2/account_lists' do
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list account lists of current user' do
+      example 'Account List [LIST]', document: :entities do
+        do_request
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -46,7 +47,8 @@ resource 'Account Lists' do
         response_field 'updated_at',              'Updated At',      'Type' => 'String'
       end
 
-      example_request 'get account list' do
+      example 'Account List [GET]', document: :entities do
+        do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['name']).to eq account_list.name
@@ -62,7 +64,7 @@ resource 'Account Lists' do
         parameter 'settings', 'Settings'
       end
 
-      example 'update account list' do
+      example 'Account List [UPDATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['name']).to eq new_account_list['name']
         expect(response_status).to eq 200

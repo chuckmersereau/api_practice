@@ -17,8 +17,9 @@ resource 'Key Accounts' do
     before { api_login(user) }
 
     get '/api/v2/user/key_accounts' do
-      example_request 'get organization accounts' do
-        explanation 'List of Organization Accounts associated to current_user'
+      example 'Key Account [LIST]', document: :user do
+        do_request
+        explanation 'List of Key Accounts associated to current_user'
         check_collection_resource(2)
         expect(response_status).to eq 200
       end
@@ -33,7 +34,8 @@ resource 'Key Accounts' do
         response_field 'remote_id',   'Remote Id',  'Type' => 'Number'
       end
 
-      example_request 'get organization account' do
+      example 'Key Account [GET]', document: :user do
+        do_request
         check_resource
         expect(response_status).to eq 200
       end
@@ -48,7 +50,7 @@ resource 'Key Accounts' do
         parameter 'remote_id',  'Remote Id', required: true
       end
 
-      example 'create organization account' do
+      example 'Key Account [CREATE]', document: :user do
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
         expect(response_status).to eq 200
@@ -64,7 +66,7 @@ resource 'Key Accounts' do
         parameter 'remote_id',  'Remote Id', required: true
       end
 
-      example 'update notification' do
+      example 'Key Account [UPDATE]', document: :user do
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
         expect(response_status).to eq 200
@@ -72,7 +74,8 @@ resource 'Key Accounts' do
     end
 
     delete '/api/v2/user/key_accounts/:id' do
-      example_request 'delete notification' do
+      example 'Key Account [DELETE]', document: :user do
+        do_request
         expect(response_status).to eq 200
       end
     end

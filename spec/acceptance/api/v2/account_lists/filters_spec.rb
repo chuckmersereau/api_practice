@@ -29,7 +29,7 @@ resource 'Filters' do
       response_field 'contact_filters', 'Contact Filters', 'Type' => 'Object'
       response_field 'task_filters',    'Task Filters',    'Type' => 'Object'
 
-      example 'get filters for contacts and tasks' do
+      example 'Filter [LIST]', document: :account_lists do
         do_request filters: { contact: 1, task: 1 }
         expect(json_response.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200

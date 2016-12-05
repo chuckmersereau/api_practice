@@ -62,7 +62,8 @@ resource 'Contacts' do
       parameter 'account_list_id', 'Account List ID', scope: :filters
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list contacts of appeal of account list' do
+      example 'Contact [LIST]', document: :appeals do
+        do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -102,7 +103,8 @@ resource 'Contacts' do
         response_field 'uncompleted_tasks_count', 'Uncompleted Tasks count', 'Type' => 'Number'
       end
 
-      example_request 'get contact' do
+      example 'Contact [GET]', document: :appeals do
+        do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -112,7 +114,8 @@ resource 'Contacts' do
       parameter 'account_list_id', 'Account List ID', scope: :filters
       parameter 'id',              'ID', required: true
 
-      example_request 'delete contact from appeal' do
+      example 'Contact [DELETE]', document: :appeals do
+        do_request
         expect(response_status).to eq 200
       end
     end

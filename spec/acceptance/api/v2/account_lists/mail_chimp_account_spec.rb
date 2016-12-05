@@ -61,7 +61,8 @@ resource 'Mailchimp Account Spec' do
       response_field 'validate_key',                    'Validate Key',                    'Type' => 'Boolean'
     end
 
-    example_request 'get mailchimp account' do
+    example 'Mailchimp Account [GET]', document: :account_lists do
+      do_request
       check_resource
       expect(resource_object.keys).to match_array expected_attribute_keys
       expect(response_status).to eq 200
@@ -72,7 +73,8 @@ resource 'Mailchimp Account Spec' do
     parameter 'account_list_id', 'Account List ID', required: true
     parameter 'id',              'ID', required: true
 
-    example_request 'delete mailchimp account' do
+    example 'Mailchimp Account [DELETE]', document: :account_lists do
+      do_request
       expect(response_status).to eq 200
     end
   end
@@ -80,7 +82,8 @@ resource 'Mailchimp Account Spec' do
   get '/api/v2/account_lists/:account_list_id/mail_chimp_account/sync' do
     parameter 'account_list_id', 'Account List ID', required: true
 
-    example_request 'sync mailchimp account' do
+    example 'Mailchimp Account [SYNC]', document: :account_lists do
+      do_request
       expect(response_status).to eq 200
     end
   end

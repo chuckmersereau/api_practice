@@ -23,7 +23,8 @@ resource 'Relationship' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
-      example_request 'get relationships' do
+      example 'Person / Relationship [LIST]', document: :contacts do
+        do_request
         explanation 'List of Relationships associated to the person'
         check_collection_resource(1)
         expect(response_status).to eq 200
@@ -37,7 +38,8 @@ resource 'Relationship' do
         response_field 'relationship',      'Relationship',   'Type' => 'String'
       end
 
-      example_request 'get organization account' do
+      example 'Person / Relationship [GET]', document: :contacts do
+        do_request
         check_resource
         expect(response_status).to eq 200
       end
@@ -50,7 +52,7 @@ resource 'Relationship' do
         parameter 'relationship',      'Relationship'
       end
 
-      example 'create organization account' do
+      example 'Person / Relationship [CREATE]', document: :contacts do
         do_request data: form_data
         expect(resource_object['username']).to eq new_family_relationship['username']
         expect(response_status).to eq 200
@@ -64,7 +66,7 @@ resource 'Relationship' do
         parameter 'relationship',      'Relationship'
       end
 
-      example 'update notification' do
+      example 'Person / Relationship [UPDATE]', document: :contacts do
         do_request data: form_data
 
         expect(resource_object['username']).to eq new_family_relationship['username']
@@ -73,7 +75,8 @@ resource 'Relationship' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
-      example_request 'delete notification' do
+      example 'Person / Relationship [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq 200
       end
     end
