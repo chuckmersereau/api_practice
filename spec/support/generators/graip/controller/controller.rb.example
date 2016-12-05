@@ -65,7 +65,20 @@ class Api::V2::EmailAddressesController < Api::V2::ApplicationController
   end
 
   def load_email_addresses
-    @email_addresses ||= email_address_scope.to_a
+    @email_addresses ||= email_address_scope
+      .where(filter_params)
+      .reorder(sorting_param)
+      .page(page_number_param)
+      .per(per_page_param)
+  end
+
+  def permitted_filters
+    # These are the keys of the filters that are permitted to be used in
+    # scoping the resources returned in `#index`.
+    #
+    # This method _must_ be defined, with the very least returning an empty array
+
+    []
   end
 
   def persist_email_address
