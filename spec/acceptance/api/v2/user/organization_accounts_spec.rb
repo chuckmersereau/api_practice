@@ -2,9 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Organization Accounts' do
-  let(:resource_type) { 'person_organization_accounts' }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:user)                 { create(:user_with_full_account) }
+  let(:resource_type) { 'person_organization_accounts' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let!(:organization_account) { create(:organization_account, person: user) }
   let(:id)                    { organization_account.id }
 
@@ -12,9 +14,7 @@ resource 'Organization Accounts' do
   let(:form_data)                       { build_data(new_organization_account_params) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/user/organization_accounts' do
       example_request 'get organization accounts' do

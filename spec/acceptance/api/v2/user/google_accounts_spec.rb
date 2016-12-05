@@ -2,9 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Google Accounts' do
-  let(:resource_type) { 'person_google_accounts' }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:user)           { create(:user_with_full_account) }
+  let(:resource_type) { 'person_google_accounts' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let!(:google_account) { create(:google_account, person: user) }
   let(:id)              { google_account.id }
 
@@ -12,9 +14,7 @@ resource 'Google Accounts' do
   let(:form_data)          { build_data(new_google_account) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/user/google_accounts' do
       example_request 'get organization accounts' do

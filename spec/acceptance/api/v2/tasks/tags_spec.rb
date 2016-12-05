@@ -2,11 +2,14 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Tags' do
-  let(:resource_type) { 'tasks' }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:user)    { create(:user_with_full_account) }
-  let!(:task)    { create(:task, account_list: user.account_lists.first) }
-  let(:task_id)  { task.id }
+  let(:resource_type) { 'tasks' }
+  let!(:user)         { create(:user_with_full_account) }
+
+  let!(:task)   { create(:task, account_list: user.account_lists.first) }
+  let(:task_id) { task.id }
+
   let(:tag_name) { 'new_tag' }
 
   let(:new_tag_params) { { name: tag_name } }

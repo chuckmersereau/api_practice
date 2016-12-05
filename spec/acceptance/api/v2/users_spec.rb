@@ -2,14 +2,13 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Users' do
+  header 'Content-Type', 'application/vnd.api+json'
+
   let(:resource_type) { 'users' }
+  let(:user)          { create(:user_with_full_account) }
 
-  let(:user)            { create(:user_with_full_account) }
-  let(:user_attributes) { attributes_for :user_with_full_account }
-  let(:account_list)    { user.account_lists.first }
-
-  let(:new_user)  { attributes_for :user }
-  let(:form_data) { build_data(new_user) }
+  let(:new_user_attributes) { attributes_for :user_with_full_account }
+  let(:form_data)           { build_data(new_user_attributes) }
 
   let(:expected_attribute_keys) do
     %w(
@@ -23,9 +22,7 @@ resource 'Users' do
   end
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/user' do
       response_field 'attributes',    'User object',                                'Type' => 'Object'
@@ -42,28 +39,28 @@ resource 'Users' do
 
     put '/api/v2/user' do
       with_options scope: [:data, :attributes] do
-        parameter 'anniversary_day',      'User anniversary day'
-        parameter 'anniversary_year',     'User anniversary year'
-        parameter 'birthday_day',         'User birthday day'
-        parameter 'birthday_month',       'User birthday month'
-        parameter 'birthday_year',        'User birthday year'
-        parameter 'deceased',             'User deceased'
-        parameter 'employer',             'User employer'
-        parameter 'first_name',           'User first name', required: true
-        parameter 'last_name',            'User last name', required: true
-        parameter 'legal_first_name',     'User legal first name'
-        parameter 'marital_status',       'User marital status'
-        parameter 'middle_name',          'User middle name'
-        parameter 'occupation',           'User occupation'
-        parameter 'preferences',          'User preferences', required: true
-        parameter 'profession',           'User profession'
-        parameter 'suffix',               'User suffix'
-        parameter 'title',                'User title'
+        parameter 'anniversary_day',  'User anniversary day'
+        parameter 'anniversary_year', 'User anniversary year'
+        parameter 'birthday_day',     'User birthday day'
+        parameter 'birthday_month',   'User birthday month'
+        parameter 'birthday_year',    'User birthday year'
+        parameter 'deceased',         'User deceased'
+        parameter 'employer',         'User employer'
+        parameter 'first_name',       'User first name', required: true
+        parameter 'last_name',        'User last name', required: true
+        parameter 'legal_first_name', 'User legal first name'
+        parameter 'marital_status',   'User marital status'
+        parameter 'middle_name',      'User middle name'
+        parameter 'occupation',       'User occupation'
+        parameter 'preferences',      'User preferences', required: true
+        parameter 'profession',       'User profession'
+        parameter 'suffix',           'User suffix'
+        parameter 'title',            'User title'
       end
 
       example 'update user' do
         do_request data: form_data
-        expect(resource_object['first_name']).to eq new_user[:first_name]
+        expect(resource_object['first_name']).to eq new_user_attributes[:first_name]
         expect(response_status).to eq 200
       end
     end

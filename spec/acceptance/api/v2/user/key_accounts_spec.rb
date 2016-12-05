@@ -2,9 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Key Accounts' do
-  let(:resource_type) { 'person_key_accounts' }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:user)        { create(:user_with_full_account) }
+  let(:resource_type) { 'person_key_accounts' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let!(:key_account) { create(:key_account, person: user) }
   let(:id)           { key_account.id }
 
@@ -12,9 +14,7 @@ resource 'Key Accounts' do
   let(:form_data)              { build_data(new_key_account_params) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/user/key_accounts' do
       example_request 'get organization accounts' do

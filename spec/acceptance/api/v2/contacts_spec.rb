@@ -2,13 +2,16 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Contacts' do
-  let(:resource_type) { 'contacts' }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:user)           { create(:user_with_account) }
+  let(:resource_type) { 'contacts' }
+  let!(:user)         { create(:user_with_account) }
+
   let(:account_list)    { user.account_lists.first }
   let(:account_list_id) { account_list.id }
-  let!(:contact)        { create(:contact, account_list: account_list) }
-  let(:id)              { contact.id }
+
+  let!(:contact) { create(:contact, account_list: account_list) }
+  let(:id)       { contact.id }
 
   let(:new_contact) { build(:contact, account_list: account_list).attributes }
   let(:form_data)   { build_data(new_contact) }
@@ -53,9 +56,7 @@ resource 'Contacts' do
   end
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/contacts' do
       response_field :data, 'Data', 'Type' => 'Array[Object]'

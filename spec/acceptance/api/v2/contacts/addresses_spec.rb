@@ -2,21 +2,22 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Address' do
-  let!(:user) { create(:user_with_full_account) }
+  header 'Content-Type', 'application/vnd.api+json'
 
-  let!(:resource)     { create(:address, addressable: contact) }
+  let!(:user) { create(:user_with_full_account) }
   let(:resource_type) { 'addresses' }
-  let(:contact)       { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id)    { contact.id }
-  let(:id)            { resource.id }
+
+  let(:contact)    { create(:contact, account_list: user.account_lists.first) }
+  let(:contact_id) { contact.id }
+
+  let!(:resource) { create(:address, addressable: contact) }
+  let(:id)        { resource.id }
 
   let(:new_resource) { build(:address, addressable: contact).attributes }
   let(:form_data)    { build_data(new_resource) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/addresses' do
       example_request 'get addresses' do

@@ -2,14 +2,20 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'People' do
-  let!(:resource)     { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
+  header 'Content-Type', 'application/vnd.api+json'
+
   let!(:user)         { create(:user_with_full_account) }
-  let(:contact)       { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id)    { contact.id }
-  let(:form_data)     { build_data(new_resource) }
-  let(:id)            { resource.id }
-  let(:new_resource)  { build(:person, first_name: 'Mpdx').attributes }
   let(:resource_type) { 'people' }
+
+  let(:contact)    { create(:contact, account_list: user.account_lists.first) }
+  let(:contact_id) { contact.id }
+
+  let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
+  let(:id)        { resource.id }
+
+  let(:new_resource) { build(:person, first_name: 'Mpdx').attributes }
+  let(:form_data)    { build_data(new_resource) }
+
   let(:resource_attributes) do
     %w(
       anniversary_day
@@ -29,19 +35,20 @@ resource 'People' do
       middle_name
       suffix
       title
-      updated_at)
+      updated_at
+    )
   end
+
   let(:resource_associations) do
     %w(
       email_addresses
       facebook_accounts
-      phone_numbers)
+      phone_numbers
+    )
   end
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people' do
       example_request 'get people' do
@@ -73,6 +80,7 @@ resource 'People' do
           response_field 'title',             'Title',             'Type' => 'String'
           response_field 'updated_at',        'Updated At',        'Type' => 'String'
         end
+
         with_options scope: :relationships do
           response_field 'email_addresses',   'Email Addresses',  'Type' => 'Object'
           response_field 'facebook_accounts', 'Facebook Account', 'Type' => 'Object'
