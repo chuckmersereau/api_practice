@@ -31,7 +31,7 @@ resource 'Email Addresses' do
       example_request 'list email addresses' do
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -45,7 +45,7 @@ resource 'Email Addresses' do
       example_request 'show email address' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -63,7 +63,7 @@ resource 'Email Addresses' do
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 201
+        expect(response_status).to eq 201
       end
     end
 
@@ -81,7 +81,7 @@ resource 'Email Addresses' do
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -99,14 +99,14 @@ resource 'Email Addresses' do
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
     # destroy
     delete '/my-destroy-url' do
       example_request 'delete email address' do
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
   end
