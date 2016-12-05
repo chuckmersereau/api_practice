@@ -16,7 +16,6 @@ resource 'Appeals' do
   let(:expected_attribute_keys) do
     %w(
       amount
-      contacts
       created_at
       currencies
       description

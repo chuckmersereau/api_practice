@@ -41,7 +41,6 @@ resource 'Contacts' do
       pledge_frequency
       pledge_received
       pledge_start_date
-      referrals_to_me_ids
       send_newsletter
       square_avatar
       status

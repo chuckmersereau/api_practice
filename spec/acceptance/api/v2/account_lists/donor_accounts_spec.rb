@@ -14,12 +14,10 @@ resource 'Donor Accounts' do
   let(:expected_attribute_keys) do
     %w(
       account_number
-      contact_ids
       created_at
       donor_type
       first_donation_date
       last_donation_date
-      organization_id
       total_donations
       updated_at
     )
@@ -39,7 +37,7 @@ resource 'Donor Accounts' do
       response_field 'data', 'Data', 'Type' => 'Array[Object]'
 
       example_request 'list donor accounts of account list' do
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -59,7 +57,7 @@ resource 'Donor Accounts' do
       end
 
       example_request 'get donor account' do
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['account_number']).to eq donor_account.account_number
         expect(response_status).to eq 200

@@ -24,7 +24,6 @@ resource 'Mailchimp Account Spec' do
       lists_available_for_newsletters
       lists_link
       lists_present
-      primary_list_id
       primary_list_name
       sync_all_active_contacts
       updated_at
@@ -60,7 +59,7 @@ resource 'Mailchimp Account Spec' do
     end
 
     example_request 'get mailchimp account' do
-      check_resource
+      check_resource(['relationships'])
       expect(resource_object.keys).to match_array expected_attribute_keys
       expect(response_status).to eq 200
     end

@@ -4,12 +4,11 @@ class Person::OrganizationAccountSerializer < ApplicationSerializer
              :downloading,
              :last_download,
              :locked_at,
-             :organization_id,
-             :person_id,
              :remote_id,
              :token,
              :username,
              :valid_credentials
 
   belongs_to :organization
+  belongs_to :person
 end

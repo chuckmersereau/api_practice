@@ -3,13 +3,9 @@ class DonationSerializer < ApplicationSerializer
 
   attributes :amount,
              :appeal_amount,
-             :appeal_id,
              :channel,
-             :contact_id,
              :currency,
-             :designation_account_id,
              :donation_date,
-             :donor_account_id,
              :memo,
              :motivation,
              :payment_method,
@@ -17,6 +13,10 @@ class DonationSerializer < ApplicationSerializer
              :remote_id,
              :tendered_amount,
              :tendered_currency
+
+  belongs_to :appeal
+  belongs_to :designation_account
+  belongs_to :donor_account
 
   def amount
     current_currency(scope[:account_list])

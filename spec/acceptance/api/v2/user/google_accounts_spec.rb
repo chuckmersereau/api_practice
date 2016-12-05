@@ -19,7 +19,7 @@ resource 'Google Accounts' do
     get '/api/v2/user/google_accounts' do
       example_request 'get organization accounts' do
         explanation 'List of Organization Accounts associated to current_user'
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
     end
@@ -34,7 +34,7 @@ resource 'Google Accounts' do
       end
 
       example_request 'get organization account' do
-        check_resource
+        check_resource(['relationships'])
         expect(response_status).to eq 200
       end
     end

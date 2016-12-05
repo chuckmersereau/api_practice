@@ -5,12 +5,13 @@ class MailChimpAccountSerializer < ApplicationSerializer
              :lists_available_for_newsletters,
              :lists_link,
              :lists_present,
-             :primary_list_id,
              :primary_list_name,
              :sync_all_active_contacts,
              :valid,
              :validate_key,
              :validation_error
+
+  belongs_to :primary_list
 
   def valid
     scope[:current_account_list].valid_mail_chimp_account

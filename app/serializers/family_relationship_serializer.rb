@@ -1,5 +1,6 @@
 class FamilyRelationshipSerializer < ApplicationSerializer
-  attributes :person_id,
-             :related_person_id,
-             :relationship
+  attributes :relationship
+
+  belongs_to :person
+  belongs_to :related_person
 end

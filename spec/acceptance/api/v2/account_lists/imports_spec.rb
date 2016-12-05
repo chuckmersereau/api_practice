@@ -29,7 +29,6 @@ resource 'Import' do
 
   let(:expected_attribute_keys) do
     %w(
-      account_list_id
       created_at
       file
       group_tags
@@ -37,10 +36,8 @@ resource 'Import' do
       import_by_group
       override
       source
-      source_account_id
       tags
       updated_at
-      user_id
     )
   end
 
@@ -72,7 +69,7 @@ resource 'Import' do
       end
 
       example_request 'get import' do
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end

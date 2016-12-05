@@ -25,7 +25,6 @@ resource 'People' do
       gender
       last_name
       marital_status
-      master_person_id
       middle_name
       suffix
       title
@@ -35,7 +34,9 @@ resource 'People' do
     %w(
       email_addresses
       facebook_accounts
-      phone_numbers)
+      master_person
+      phone_numbers
+    )
   end
 
   context 'authorized user' do

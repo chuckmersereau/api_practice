@@ -1,12 +1,12 @@
 class ImportSerializer < ApplicationSerializer
-  attributes :account_list_id,
-             :file,
+  attributes :file,
              :groups,
              :group_tags,
              :import_by_group,
              :override,
              :source,
-             :source_account_id,
-             :tags,
-             :user_id
+             :tags
+
+  belongs_to :account_list
+  belongs_to :user
 end

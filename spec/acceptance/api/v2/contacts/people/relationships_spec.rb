@@ -23,7 +23,7 @@ resource 'Relationship' do
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
       example_request 'get relationships' do
         explanation 'List of Relationships associated to the person'
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
     end
@@ -36,7 +36,7 @@ resource 'Relationship' do
       end
 
       example_request 'get organization account' do
-        check_resource
+        check_resource(['relationships'])
         expect(response_status).to eq 200
       end
     end

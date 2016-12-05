@@ -1,8 +1,9 @@
 class ExcludedAppealContactSerializer < ApplicationSerializer
-  attributes :appeal_id,
-             :contact,
+  attributes :contact,
              :donations,
              :reasons
+
+  belongs_to :appeal
 
   def donations
     object.contact.donations.where(donation_date: start_date..end_date).collect do |d|

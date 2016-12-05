@@ -16,7 +16,6 @@ resource 'Users' do
       created_at
       first_name
       last_name
-      master_person_id
       preferences
       updated_at
     )
