@@ -35,6 +35,7 @@ class ContactSerializer < ApplicationSerializer
   has_many :addresses
   has_many :people
   has_many :referrals_to_me
+  belongs_to :account_list
 
   def avatar
     contact_exhibit.avatar(:large)

@@ -56,6 +56,7 @@ resource 'Contacts' do
 
   let(:resource_associations) do
     %w(
+      account_list
       addresses
       people
       referrals_to_me
