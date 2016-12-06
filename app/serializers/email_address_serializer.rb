@@ -3,4 +3,6 @@ class EmailAddressSerializer < ApplicationSerializer
              :location,
              :primary,
              :historic
+
+  belongs_to :person
 end

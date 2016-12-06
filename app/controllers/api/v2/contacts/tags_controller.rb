@@ -33,7 +33,8 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
       @contact.save
       render json: @contact,
              status: success_status,
-             include: include_params
+             include: include_params,
+             fields: field_params
     end
   end
 

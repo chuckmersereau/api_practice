@@ -2,7 +2,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_invites
-    render json: @invites, meta: meta_hash(@invites), include: include_params
+    render json: @invites, meta: meta_hash(@invites), include: include_params, fields: field_params
   end
 
   def show
@@ -15,7 +15,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
     if authorize_and_save_invite
       render_invite
     else
-      render json: { success: false, errors: ['Could not send invite'] }, status: 400, include: include_params
+      render json: { success: false, errors: ['Could not send invite'] }, status: 400, include: include_params, fields: field_params
     end
   end
 
@@ -46,7 +46,8 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   def render_invite
     render json: @invite,
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def authorize_and_save_invite

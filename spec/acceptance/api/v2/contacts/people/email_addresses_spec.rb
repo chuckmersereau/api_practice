@@ -45,7 +45,7 @@ resource 'Contacts People Email Addresses' do
         explanation 'List of Email Addresses associated to the Person'
         do_request
 
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq email_address.email
         expect(response_status).to eq 200
@@ -66,7 +66,7 @@ resource 'Contacts People Email Addresses' do
       example 'Person / Email Address [GET]', document: :contacts do
         explanation 'The Person\'s Email Address with the given ID'
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys.sort).to eq expected_attribute_keys
         expect(resource_object['email']).to  eq email_address.email
         expect(response_status).to eq 200
@@ -88,7 +88,7 @@ resource 'Contacts People Email Addresses' do
         explanation 'Create an Email Address associated with the Person'
         do_request data: form_data
 
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq attributes[:email]
         expect(response_status).to eq 201
@@ -112,7 +112,7 @@ resource 'Contacts People Email Addresses' do
         explanation 'Update the Person\'s Email Address with the given ID'
         do_request data: form_data
 
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq 'new-email@example.com'
         expect(response_status).to eq 200
@@ -136,7 +136,7 @@ resource 'Contacts People Email Addresses' do
         explanation 'Update the Person\'s Email Address with the given ID'
         do_request data: form_data
 
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq 'new-email@example.com'
         expect(response_status).to eq 200

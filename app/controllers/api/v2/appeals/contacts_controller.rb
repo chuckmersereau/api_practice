@@ -2,7 +2,7 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   def index
     authorize load_appeal, :show?
     load_contacts
-    render json: @contacts, meta: meta_hash(@contacts), include: include_params
+    render json: @contacts, meta: meta_hash(@contacts), include: include_params, fields: field_params
   end
 
   def show
@@ -40,7 +40,8 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   def render_contact
     render json: @contact,
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def authorize_contact

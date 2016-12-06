@@ -5,7 +5,8 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
     render json: @donations,
            scope: { account_list: load_account_list, locale: locale },
            meta: meta_hash(@donations),
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def show
@@ -41,7 +42,8 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
     render json: @donation,
            scope: { account_list: load_account_list, locale: locale },
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def persist_donation

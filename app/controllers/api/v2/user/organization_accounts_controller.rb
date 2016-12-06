@@ -1,7 +1,7 @@
 class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   def index
     load_organization_accounts
-    render json: @organization_accounts, meta: meta_hash(@organization_accounts), include: include_params
+    render json: @organization_accounts, meta: meta_hash(@organization_accounts), include: include_params, fields: field_params
   end
 
   def show
@@ -47,7 +47,8 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   def render_organization_account
     render json: @organization_account,
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def persist_organization_account

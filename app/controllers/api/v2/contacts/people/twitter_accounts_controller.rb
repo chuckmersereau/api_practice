@@ -2,7 +2,7 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_twitter_accounts
-    render json: @twitter_accounts, meta: meta_hash(@twitter_accounts), include: include_params
+    render json: @twitter_accounts, meta: meta_hash(@twitter_accounts), include: include_params, fields: field_params
   end
 
   def show
@@ -52,7 +52,8 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   def render_twitter_account
     render json: @twitter_account,
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def persist_twitter_account

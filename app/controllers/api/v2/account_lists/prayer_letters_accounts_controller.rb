@@ -37,7 +37,8 @@ class Api::V2::AccountLists::PrayerLettersAccountsController < Api::V2Controller
   def render_prayer_letters_account
     render json: @prayer_letters_account,
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def persist_prayer_letters_account

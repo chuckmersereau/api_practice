@@ -1,7 +1,7 @@
 class Api::V2::User::GoogleAccountsController < Api::V2Controller
   def index
     load_google_accounts
-    render json: @google_accounts, meta: meta_hash(@google_accounts), include: include_params
+    render json: @google_accounts, meta: meta_hash(@google_accounts), include: include_params, fields: field_params
   end
 
   def show
@@ -47,7 +47,8 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
   def render_google_account
     render json: @google_account,
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def persist_google_account

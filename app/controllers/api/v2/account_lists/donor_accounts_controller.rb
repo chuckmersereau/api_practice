@@ -2,7 +2,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_donor_accounts
-    render json: @donor_accounts, meta: meta_hash(@donor_accounts), include: include_params
+    render json: @donor_accounts, meta: meta_hash(@donor_accounts), include: include_params, fields: field_params
   end
 
   def show
@@ -26,7 +26,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   end
 
   def render_donor_account
-    render json: @donor_account, include: include_params
+    render json: @donor_account, include: include_params, fields: field_params
   end
 
   def authorize_donor_account
