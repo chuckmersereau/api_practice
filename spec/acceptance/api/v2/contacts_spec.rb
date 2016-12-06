@@ -2,13 +2,16 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Contacts' do
-  let(:resource_type) { 'contacts' }
+  include_context :json_headers
 
-  let!(:user)           { create(:user_with_account) }
+  let(:resource_type) { 'contacts' }
+  let!(:user)         { create(:user_with_account) }
+
   let(:account_list)    { user.account_lists.first }
   let(:account_list_id) { account_list.id }
-  let!(:contact)        { create(:contact, account_list: account_list) }
-  let(:id)              { contact.id }
+
+  let!(:contact) { create(:contact, account_list: account_list) }
+  let(:id)       { contact.id }
 
   let(:new_contact) { build(:contact, account_list: account_list).attributes }
   let(:form_data)   { build_data(new_contact) }
@@ -52,14 +55,13 @@ resource 'Contacts' do
   end
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/contacts' do
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list contacts of current user' do
+      example 'Contact [LIST]', document: :entities do
+        do_request
         check_collection_resource(1, additional_keys)
         expect(resource_object.keys).to match_array(expected_keys)
         expect(response_status).to eq 200
@@ -95,7 +97,7 @@ resource 'Contacts' do
         parameter 'website',             'Website'
       end
 
-      example 'create contact' do
+      example 'Contact [CREATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['name']).to eq new_contact['name']
         expect(response_status).to eq 200
@@ -139,7 +141,8 @@ resource 'Contacts' do
         response_field 'updated_at',              'Updated At',              'Type' => 'String'
       end
 
-      example_request 'get contact' do
+      example 'Contact [GET]', document: :entities do
+        do_request
         check_resource(additional_keys)
         expect(resource_object.keys).to match_array(expected_keys)
         expect(resource_object['name']).to eq contact.name
@@ -177,7 +180,7 @@ resource 'Contacts' do
         parameter 'website', 'Website'
       end
 
-      example 'update contact' do
+      example 'Contact [UPDATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['name']).to eq new_contact['name']
         expect(response_status).to eq 200
@@ -186,7 +189,7 @@ resource 'Contacts' do
 
     delete '/api/v2/contacts/:id' do
       parameter :id, 'ID of the Contact', required: true
-      example 'delete contact' do
+      example 'Contact [DELETE]', document: :entities do
         do_request
         expect(response_status).to eq 200
       end

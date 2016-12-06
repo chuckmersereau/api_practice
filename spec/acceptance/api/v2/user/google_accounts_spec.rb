@@ -2,9 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Google Accounts' do
-  let(:resource_type) { 'person_google_accounts' }
+  include_context :json_headers
 
-  let!(:user)           { create(:user_with_full_account) }
+  let(:resource_type) { 'person_google_accounts' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let!(:google_account) { create(:google_account, person: user) }
   let(:id)              { google_account.id }
 
@@ -12,13 +14,12 @@ resource 'Google Accounts' do
   let(:form_data)          { build_data(new_google_account) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/user/google_accounts' do
-      example_request 'get organization accounts' do
-        explanation 'List of Organization Accounts associated to current_user'
+      example 'Google Account [LIST]', document: :user do
+        do_request
+        explanation 'List of Google Accounts associated to current_user'
         check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
@@ -33,7 +34,8 @@ resource 'Google Accounts' do
         response_field 'token',         'Token',         'Type' => 'String'
       end
 
-      example_request 'get organization account' do
+      example 'Google Account [GET]', document: :user do
+        do_request
         check_resource(['relationships'])
         expect(response_status).to eq 200
       end
@@ -48,7 +50,7 @@ resource 'Google Accounts' do
         parameter 'token',          'Token'
       end
 
-      example 'create organization account' do
+      example 'Google Account [CREATE]', document: :user do
         do_request data: form_data
         expect(resource_object['username']).to eq new_google_account['username']
         expect(response_status).to eq 200
@@ -64,7 +66,7 @@ resource 'Google Accounts' do
         parameter 'token',          'Token'
       end
 
-      example 'update notification' do
+      example 'Google Account [UPDATE]', document: :user do
         do_request data: form_data
         expect(resource_object['username']).to eq new_google_account['username']
         expect(response_status).to eq 200
@@ -72,7 +74,8 @@ resource 'Google Accounts' do
     end
 
     delete '/api/v2/user/google_accounts/:id' do
-      example_request 'delete notification' do
+      example 'Google Account [DEKETE]', document: :user do
+        do_request
         expect(response_status).to eq 200
       end
     end

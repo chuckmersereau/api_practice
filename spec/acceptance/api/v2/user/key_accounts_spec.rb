@@ -2,9 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Key Accounts' do
-  let(:resource_type) { 'person_key_accounts' }
+  include_context :json_headers
 
-  let!(:user)        { create(:user_with_full_account) }
+  let(:resource_type) { 'person_key_accounts' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let!(:key_account) { create(:key_account, person: user) }
   let(:id)           { key_account.id }
 
@@ -12,13 +14,12 @@ resource 'Key Accounts' do
   let(:form_data)              { build_data(new_key_account_params) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/user/key_accounts' do
-      example_request 'get organization accounts' do
-        explanation 'List of Organization Accounts associated to current_user'
+      example 'Key Account [LIST]', document: :user do
+        do_request
+        explanation 'List of Key Accounts associated to current_user'
         check_collection_resource(2)
         expect(response_status).to eq 200
       end
@@ -33,7 +34,8 @@ resource 'Key Accounts' do
         response_field 'remote_id',   'Remote Id',  'Type' => 'Number'
       end
 
-      example_request 'get organization account' do
+      example 'Key Account [GET]', document: :user do
+        do_request
         check_resource
         expect(response_status).to eq 200
       end
@@ -48,7 +50,7 @@ resource 'Key Accounts' do
         parameter 'remote_id',  'Remote Id', required: true
       end
 
-      example 'create organization account' do
+      example 'Key Account [CREATE]', document: :user do
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
         expect(response_status).to eq 200
@@ -64,7 +66,7 @@ resource 'Key Accounts' do
         parameter 'remote_id',  'Remote Id', required: true
       end
 
-      example 'update notification' do
+      example 'Key Account [UPDATE]', document: :user do
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
         expect(response_status).to eq 200
@@ -72,7 +74,8 @@ resource 'Key Accounts' do
     end
 
     delete '/api/v2/user/key_accounts/:id' do
-      example_request 'delete notification' do
+      example 'Key Account [DELETE]', document: :user do
+        do_request
         expect(response_status).to eq 200
       end
     end

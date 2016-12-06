@@ -2,6 +2,7 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Contacts People Email Addresses' do
+  include_context :json_headers
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
   let(:resource_type) { 'email_addresses' }
@@ -38,7 +39,8 @@ resource 'Contacts People Email Addresses' do
 
     # index
     get '/api/v2/contacts/:contact_id/people/:person_id/email_addresses' do
-      example_request 'list email addresses' do
+      example 'Person / Email Address [LIST]', document: :contacts do
+        do_request
         explanation 'List of Email Addresses belonging to the Person'
 
         check_collection_resource(1, ['relationships'])
@@ -59,7 +61,8 @@ resource 'Contacts People Email Addresses' do
         response_field 'updated_at', 'Updated At', 'Type' => 'String'
       end
 
-      example_request 'show email address' do
+      example 'Person / Email Address [GET]', document: :contacts do
+        do_request
         check_resource(['relationships'])
         expect(resource_object.keys.sort).to eq expected_attribute_keys
         expect(resource_object['email']).to  eq email_address.email
@@ -78,7 +81,7 @@ resource 'Contacts People Email Addresses' do
 
       let(:attributes) { attributes_for(:email_address) }
 
-      example 'create email address' do
+      example 'Person / Email Address [CREATE]', document: :contacts do
         do_request data: form_data
 
         check_resource(['relationships'])
@@ -101,7 +104,7 @@ resource 'Contacts People Email Addresses' do
 
       before { attributes.merge!(email: 'new-email@example.com') }
 
-      example 'update email address' do
+      example 'Person / Email Address [UPDATE]', document: :contacts do
         do_request data: form_data
 
         check_resource(['relationships'])
@@ -124,7 +127,7 @@ resource 'Contacts People Email Addresses' do
 
       before { attributes.merge!(email: 'new-email@example.com') }
 
-      example 'update email address' do
+      example 'Person / Email Address [UPDATE]', document: :contacts do
         do_request data: form_data
 
         check_resource(['relationships'])
@@ -136,7 +139,8 @@ resource 'Contacts People Email Addresses' do
 
     # destroy
     delete '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
-      example_request 'delete email address' do
+      example 'Person / Email Address [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq 200
       end
     end

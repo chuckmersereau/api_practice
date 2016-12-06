@@ -2,26 +2,29 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Phones' do
-  let(:resource_type) { 'phone_numbers' }
+  include_context :json_headers
 
-  let!(:user)      { create(:user_with_full_account) }
+  let(:resource_type) { 'phone_numbers' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:person)     { create(:person, contacts: [contact]) }
-  let!(:phone)     { create(:phone_number, person: person) }
   let(:contact_id) { contact.id }
-  let(:person_id)  { person.id }
-  let(:id)         { phone.id }
+
+  let(:person)    { create(:person, contacts: [contact]) }
+  let(:person_id) { person.id }
+
+  let!(:phone) { create(:phone_number, person: person) }
+  let(:id)     { phone.id }
 
   let(:new_phone) { build(:phone_number, number: '3561987123', person: person).attributes }
   let(:form_data) { build_data(new_phone) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people/:person_id/phones' do
-      example_request 'get phones' do
+      example 'Person / Phone [LIST]', document: :contacts do
+        do_request
         explanation('List of phone numbers associated to the person')
         check_collection_resource(1)
         expect(response_status).to eq(200)
@@ -39,7 +42,8 @@ resource 'Phones' do
         response_field 'updated_at',   'Updated At',   'Type' => 'String'
       end
 
-      example_request 'get phone number' do
+      example 'Person / Phone [GET]', document: :contacts do
+        do_request
         check_resource
         expect(response_status).to eq(200)
       end
@@ -55,7 +59,7 @@ resource 'Phones' do
         parameter 'remote_id',    'Remote ID'
       end
 
-      example 'create phone number' do
+      example 'Person / Phone [CREATE]', document: :contacts do
         do_request data: form_data
 
         expect(resource_object['number']).to eq new_phone['number']
@@ -73,7 +77,7 @@ resource 'Phones' do
         parameter 'remote_id',    'Remote ID'
       end
 
-      example 'update phone number' do
+      example 'Person / Phone [UPDATE]', document: :contacts do
         do_request data: form_data
         expect(resource_object['number']).to eq new_phone['number']
         expect(response_status).to eq(200)
@@ -81,7 +85,8 @@ resource 'Phones' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
-      example_request 'delete phone number' do
+      example 'Person / Phone [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq(200)
       end
     end

@@ -2,9 +2,11 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Tasks' do
-  let(:resource_type) { 'tasks' }
+  include_context :json_headers
 
-  let!(:user) { create(:user_with_full_account) }
+  let(:resource_type) { 'tasks' }
+  let!(:user)         { create(:user_with_full_account) }
+
   let!(:task) { create(:task, account_list: user.account_lists.first) }
   let(:id)    { task.id }
 
@@ -12,14 +14,13 @@ resource 'Tasks' do
   let(:form_data) { build_data(new_task) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/tasks' do
       response_field :data, 'list of task objects', 'Type' => 'Array[Object]'
 
-      example_request 'get tasks' do
+      example 'Task [LIST]', document: :entities do
+        do_request
         explanation 'List of Tasks associated to current_user'
 
         check_collection_resource(1, ['relationships'])
@@ -44,7 +45,8 @@ resource 'Tasks' do
         end
       end
 
-      example_request 'get task' do
+      example 'Task [GET]', document: :entities do
+        do_request
         check_resource(['relationships'])
         expect(response_status).to eq 200
       end
@@ -59,7 +61,7 @@ resource 'Tasks' do
         parameter 'subject',         'Subject',         type: 'Number', required: true
       end
 
-      example 'create task' do
+      example 'Task [CREATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
         expect(response_status).to eq 200
@@ -77,7 +79,7 @@ resource 'Tasks' do
         parameter 'subject',         'Subject',         type: 'Number', required: true
       end
 
-      example 'update task' do
+      example 'Task [UPDATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
         expect(response_status).to eq 200
@@ -87,7 +89,8 @@ resource 'Tasks' do
     delete '/api/v2/tasks/:id' do
       parameter 'id', 'the Id of the Task'
 
-      example_request 'delete task' do
+      example 'Task [DELETE]', document: :entities do
+        do_request
         expect(response_status).to eq 200
       end
     end

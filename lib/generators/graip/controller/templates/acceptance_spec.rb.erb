@@ -2,12 +2,18 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource '<%= resource_class_name.pluralize.titleize %>' do
+  include_context :json_headers
+
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
   let(:resource_type) { '<%= underscored_resources_name %>' }
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user) { create(:user_with_account) }
+
+  # This is the reference data used to create/update a resource.
+  # specify the `attributes` specifically in your request actions below.
+  let(:form_data) { build_data(attributes) }
 
   let(:expected_attribute_keys) do
     # list your expected resource keys vertically here (alphabetical please!)
@@ -31,6 +37,11 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
 
     # show
     get '/my-show-url' do
+      with_options scope: [:data, :attributes] do
+        # list out the attributes here
+        response_field 'name_of_attribute', 'Name of Attribute', 'Type' => 'The Attribute Type (String, Boolean, etc)'
+      end
+
       example_request 'show <%= resource_human_name %>' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -40,7 +51,16 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
 
     # create
     post '/my-create-url' do
-      example_request 'create <%= resource_human_name %>' do
+      with_options scope: [:data, :attributes] do
+        # list out the POST params here
+        parameter 'attribute_name', 'Description of the Attribute'
+      end
+
+      let(:attributes) { "FILL ME IN WITH POST DATA" }
+
+      example 'create <%= resource_human_name %>' do
+        do_request data: form_data
+
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 201
@@ -49,7 +69,16 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
 
     # update
     put '/my-update-url' do
-      example_request 'update <%= resource_human_name %>' do
+      with_options scope: [:data, :attributes] do
+        # list out the PUT params here
+        parameter 'attribute_name', 'Description of the Attribute'
+      end
+
+      let(:attributes) { "FILL ME IN WITH PUT DATA" }
+
+      example 'update <%= resource_human_name %>' do
+        do_request data: form_data
+
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200
@@ -58,7 +87,16 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
 
     # update
     patch '/my-update-url' do
-      example_request 'update <%= resource_human_name %>' do
+      with_options scope: [:data, :attributes] do
+        # list out the PATCH params here
+        parameter 'attribute_name', 'Description of the Attribute'
+      end
+
+      let(:attributes) { "FILL ME IN WITH PATCH DATA" }
+
+      example 'update <%= resource_human_name %>' do
+        do_request data: form_data
+
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(status).to eq 200

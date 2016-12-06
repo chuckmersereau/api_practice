@@ -2,26 +2,29 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Relationship' do
-  let(:resource_type) { 'family_relationships' }
+  include_context :json_headers
 
-  let!(:user)                { create(:user_with_full_account) }
-  let(:contact)              { create(:contact, account_list: user.account_lists.first) }
-  let(:person)               { create(:person, contacts: [contact]) }
+  let(:resource_type) { 'family_relationships' }
+  let!(:user)         { create(:user_with_full_account) }
+
+  let(:contact)    { create(:contact, account_list: user.account_lists.first) }
+  let(:contact_id) { contact.id }
+
+  let(:person)    { create(:person, contacts: [contact]) }
+  let(:person_id) { person.id }
+
   let!(:family_relationship) { create(:family_relationship, person: person) }
-  let(:contact_id)           { contact.id }
-  let(:person_id)            { person.id }
   let(:id)                   { family_relationship.id }
 
   let(:new_family_relationship) { build(:family_relationship, person: person).attributes }
   let(:form_data)               { build_data(new_family_relationship) }
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
-      example_request 'get relationships' do
+      example 'Person / Relationship [LIST]', document: :contacts do
+        do_request
         explanation 'List of Relationships associated to the person'
         check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
@@ -35,7 +38,8 @@ resource 'Relationship' do
         response_field 'relationship',      'Relationship',   'Type' => 'String'
       end
 
-      example_request 'get organization account' do
+      example 'Person / Relationship [GET]', document: :contacts do
+        do_request
         check_resource(['relationships'])
         expect(response_status).to eq 200
       end
@@ -48,7 +52,7 @@ resource 'Relationship' do
         parameter 'relationship',      'Relationship'
       end
 
-      example 'create organization account' do
+      example 'Person / Relationship [CREATE]', document: :contacts do
         do_request data: form_data
         expect(resource_object['username']).to eq new_family_relationship['username']
         expect(response_status).to eq 200
@@ -62,7 +66,7 @@ resource 'Relationship' do
         parameter 'relationship',      'Relationship'
       end
 
-      example 'update notification' do
+      example 'Person / Relationship [UPDATE]', document: :contacts do
         do_request data: form_data
 
         expect(resource_object['username']).to eq new_family_relationship['username']
@@ -71,7 +75,8 @@ resource 'Relationship' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
-      example_request 'delete notification' do
+      example 'Person / Relationship [DELETE]', document: :contacts do
+        do_request
         expect(response_status).to eq 200
       end
     end

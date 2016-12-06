@@ -2,11 +2,14 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Account Lists' do
-  let(:resource_type) { 'account_lists' }
+  include_context :json_headers
 
-  let!(:user)            { create(:user_with_account) }
-  let(:account_list)     { user.account_lists.first }
-  let(:id)               { account_list.id }
+  let(:resource_type) { 'account_lists' }
+  let!(:user)         { create(:user_with_account) }
+
+  let(:account_list) { user.account_lists.first }
+  let(:id)           { account_list.id }
+
   let(:new_account_list) { build(:account_list).attributes }
   let(:form_data)        { build_data(new_account_list) }
 
@@ -22,14 +25,13 @@ resource 'Account Lists' do
   end
 
   context 'authorized user' do
-    before do
-      api_login(user)
-    end
+    before { api_login(user) }
 
     get '/api/v2/account_lists' do
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
-      example_request 'list account lists of current user' do
+      example 'Account List [LIST]', document: :entities do
+        do_request
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -45,7 +47,8 @@ resource 'Account Lists' do
         response_field 'updated_at',              'Updated At',      'Type' => 'String'
       end
 
-      example_request 'get account list' do
+      example 'Account List [GET]', document: :entities do
+        do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['name']).to eq account_list.name
@@ -61,7 +64,7 @@ resource 'Account Lists' do
         parameter 'settings', 'Settings'
       end
 
-      example 'update account list' do
+      example 'Account List [UPDATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['name']).to eq new_account_list['name']
         expect(response_status).to eq 200
