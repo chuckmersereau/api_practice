@@ -16,14 +16,18 @@ class Api::V2::AccountLists::ImportsController < Api::V2Controller
   end
 
   def render_import
-    render json: @import
+    render json: @import,
+           status: success_status
   end
 
   def persist_import
     build_import
     authorize_import
-    return show if save_import
-    render_400_with_errors(@import)
+    if save_import
+      render_import
+    else
+      render_400_with_errors(@import)
+    end
   end
 
   def build_import

@@ -37,14 +37,20 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   end
 
   def render_donation
-    render json: @donation, scope: { account_list: load_account_list, locale: locale }
+    render json: @donation,
+           scope: { account_list: load_account_list, locale: locale },
+           status: success_status
   end
 
   def persist_donation
     build_donation
     authorize_donation
-    return show if save_donation
-    render_400_with_errors(@donation)
+
+    if save_donation
+      render_donation
+    else
+      render_400_with_errors(@donation)
+    end
   end
 
   def build_donation

@@ -93,7 +93,7 @@ RSpec.shared_examples 'create_examples' do
       expect do
         post :create, full_correct_attributes
       end.to change { resource.class.count }.by(1)
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(201)
     end
 
     it 'does not create the resource when there are unpermitted params' do
@@ -135,7 +135,7 @@ RSpec.shared_examples 'destroy_examples' do
       expect do
         delete :destroy, full_params
       end.to change { resource_not_destroyed_scope.count }.by(-1)
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(204)
     end
 
     it 'does not destroy the resource for users that do not own the resource' do

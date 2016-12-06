@@ -3,7 +3,7 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
     load_email_addresses
     authorize current_contact, :show?
 
-    render json: @email_addresses, meta: meta_hash(@email_addresses)
+    render_email_addresses
   end
 
   def show
@@ -19,20 +19,32 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
 
   def update
     load_email_address
-    authorize_email_address
-
     persist_email_address
   end
 
   def destroy
     load_email_address
     authorize_email_address
-    @email_address.destroy
-
-    render_200
+    destroy_email_address
   end
 
   private
+
+  def destroy_email_address
+    @email_address.destroy
+    head :no_content
+  end
+
+  def persist_email_address
+    build_email_address
+    authorize_email_address
+
+    if save_email_address
+      render_email_address
+    else
+      render_400_with_errors(@email_address)
+    end
+  end
 
   def email_address_params
     params
@@ -69,16 +81,14 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
                                           .per(per_page_param)
   end
 
-  def persist_email_address
-    build_email_address
-    authorize_email_address
-    return show if save_email_address
-
-    render_400_with_errors(@email_address)
+  def render_email_address
+    render json: @email_address,
+           status: success_status
   end
 
-  def render_email_address
-    render json: @email_address
+  def render_email_addresses
+    render json: @email_addresses,
+           meta: meta_hash(@email_addresses)
   end
 
   def save_email_address

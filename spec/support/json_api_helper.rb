@@ -45,7 +45,9 @@ module JsonApiHelper
   end
 
   def build_data(params)
-    { type: resource_type,
-      attributes: params.except('id') }.merge(defined?(id) ? { id: id } : {})
+    {
+      type: resource_type,
+      attributes: params.except('id')
+    }
   end
 end

@@ -24,11 +24,15 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   def destroy
     load_notification
     authorize_notification
-    @notification.destroy
-    render_200
+    destroy_notification
   end
 
   private
+
+  def destroy_notification
+    @notification.destroy
+    head :no_content
+  end
 
   def load_notifications
     @notifications = notification_scope.where(filter_params)
@@ -42,14 +46,19 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   end
 
   def render_notification
-    render json: @notification
+    render json: @notification,
+           status: success_status
   end
 
   def persist_notification
     build_notification
     authorize_notification
-    return show if save_notification
-    render_400_with_errors(@notification)
+
+    if save_notification
+      render_notification
+    else
+      render_400_with_errors(@notification)
+    end
   end
 
   def build_notification

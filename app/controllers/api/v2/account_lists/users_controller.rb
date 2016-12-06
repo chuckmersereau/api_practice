@@ -14,11 +14,15 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
   def destroy
     load_user
     authorize_user
-    @user.remove_access(load_account_list)
-    render_200
+    destroy_user
   end
 
   private
+
+  def destroy_user
+    @user.remove_access(load_account_list)
+    head :no_content
+  end
 
   def load_users
     @users = user_scope.where(filter_params)
@@ -32,7 +36,8 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
   end
 
   def render_user
-    render json: @user
+    render json: @user,
+           status: success_status
   end
 
   def authorize_user

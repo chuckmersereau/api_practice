@@ -24,11 +24,15 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   def destroy
     load_person
     authorize_person
-    @person.destroy
-    render_200
+    destroy_person
   end
 
   private
+
+  def destroy_person
+    @person.destroy
+    head :no_content
+  end
 
   def person_params
     params
@@ -76,13 +80,17 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   def persist_person
     build_person
     authorize_person
-    return show if save_person
 
-    render_400_with_errors(@person)
+    if save_person
+      render_person
+    else
+      render_400_with_errors(@person)
+    end
   end
 
   def render_person
-    render json: @person
+    render json: @person,
+           status: success_status
   end
 
   def save_person

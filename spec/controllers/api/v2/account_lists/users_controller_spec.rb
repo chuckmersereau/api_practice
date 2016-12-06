@@ -30,7 +30,7 @@ describe Api::V2::AccountLists::UsersController, type: :controller do
     describe '#destroy' do
       it 'deletes an user' do
         delete :destroy, account_list_id: account_list_id, id: id
-        expect(response.status).to eq 200
+        expect(response.status).to eq 204
       end
 
       it 'does not deletes himself' do

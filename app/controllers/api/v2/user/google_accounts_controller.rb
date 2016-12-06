@@ -23,11 +23,15 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
   def destroy
     load_google_account
     authorize_google_account
-    @google_account.destroy
-    render_200
+    destroy_key_account
   end
 
   private
+
+  def destroy_key_account
+    @google_account.destroy
+    head :no_content
+  end
 
   def load_google_accounts
     @google_accounts = google_account_scope.where(filter_params)
@@ -41,14 +45,19 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
   end
 
   def render_google_account
-    render json: @google_account
+    render json: @google_account,
+           status: success_status
   end
 
   def persist_google_account
     build_google_account
     authorize_google_account
-    return show if save_google_account
-    render_400_with_errors(@google_account)
+
+    if save_google_account
+      render_google_account
+    else
+      render_400_with_errors(@google_account)
+    end
   end
 
   def build_google_account

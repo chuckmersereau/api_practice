@@ -17,7 +17,10 @@ resource 'Contacts People Email Addresses' do
   let(:person)        { create(:person, contacts: [contact]) }
   let(:person_id)     { person.id }
 
-  let!(:email_address) { create(:email_address, person: person) }
+  let(:email_address) {
+    create(:email_address, person: person)
+  }
+
   let(:id)             { email_address.id }
 
   let(:form_data) { build_data(attributes) }
@@ -39,6 +42,8 @@ resource 'Contacts People Email Addresses' do
 
     # index
     get '/api/v2/contacts/:contact_id/people/:person_id/email_addresses' do
+      before { email_address }
+
       example 'Person / Email Address [LIST]', document: :contacts do
         do_request
         explanation 'List of Email Addresses belonging to the Person'
@@ -87,7 +92,7 @@ resource 'Contacts People Email Addresses' do
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq attributes[:email]
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -141,7 +146,7 @@ resource 'Contacts People Email Addresses' do
     delete '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
       example 'Person / Email Address [DELETE]', document: :contacts do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

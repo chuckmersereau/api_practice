@@ -10,12 +10,18 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
   def destroy
     load_contact
     authorize_contact
-    persist_resource(params[:tag_name]) do |tag_name|
-      @contact.tag_list.remove(tag_name)
-    end
+    destroy_tag
   end
 
   private
+
+  def destroy_tag
+    persist_resource(params[:tag_name]) do |tag_name|
+      @contact.tag_list.remove(tag_name)
+    end
+
+    head :no_content
+  end
 
   def persist_resource(tag_name)
     tag_error = TagValidator.new.validate(tag_name)
@@ -24,7 +30,8 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
     else
       yield(tag_name)
       @contact.save
-      render json: @contact
+      render json: @contact,
+             status: success_status
     end
   end
 

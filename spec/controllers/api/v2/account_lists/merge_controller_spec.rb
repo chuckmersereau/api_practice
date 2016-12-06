@@ -18,7 +18,7 @@ describe Api::V2::AccountLists::MergeController, type: :controller do
       it 'makes a merge' do
         data = { attributes: { id: account_list2_id } }
         post :create, account_list_id: account_list_id, data: data
-        expect(response.status).to eq 200
+        expect(response.status).to eq 201
       end
 
       it 'does not make a merge' do

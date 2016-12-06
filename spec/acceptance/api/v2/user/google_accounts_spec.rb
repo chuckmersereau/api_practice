@@ -53,7 +53,7 @@ resource 'Google Accounts' do
       example 'Google Account [CREATE]', document: :user do
         do_request data: form_data
         expect(resource_object['username']).to eq new_google_account['username']
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -76,7 +76,7 @@ resource 'Google Accounts' do
     delete '/api/v2/user/google_accounts/:id' do
       example 'Google Account [DEKETE]', document: :user do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

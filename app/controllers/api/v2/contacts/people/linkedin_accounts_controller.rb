@@ -24,11 +24,15 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   def destroy
     load_linkedin_account
     authorize_linkedin_account
-    @linkedin_account.destroy
-    render_200
+    destroy_linkedin_account
   end
 
   private
+
+  def destroy_linkedin_account
+    @linkedin_account.destroy
+    head :no_content
+  end
 
   def load_linkedin_accounts
     @linkedin_accounts = linkedin_account_scope.where(filter_params)
@@ -46,14 +50,19 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   end
 
   def render_linkedin_account
-    render json: @linkedin_account
+    render json: @linkedin_account,
+           status: success_status
   end
 
   def persist_linkedin_account
     build_linkedin_account
     authorize_linkedin_account
-    return show if save_linkedin_account
-    render_400_with_errors(@linkedin_account)
+
+    if save_linkedin_account
+      render_linkedin_account
+    else
+      render_400_with_errors(@linkedin_account)
+    end
   end
 
   def build_linkedin_account

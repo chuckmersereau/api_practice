@@ -1,75 +1,84 @@
 class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   def index
     authorize load_person, :show?
-    load_tw_accounts
-    render json: @tw_accounts, meta: meta_hash(@tw_accounts)
+    load_twitter_accounts
+    render json: @twitter_accounts, meta: meta_hash(@twitter_accounts)
   end
 
   def show
-    load_tw_account
-    authorize_tw_account
-    render_tw_account
+    load_twitter_account
+    authorize_twitter_account
+    render_twitter_account
   end
 
   def create
-    persist_tw_account
+    persist_twitter_account
   end
 
   def update
-    load_tw_account
-    authorize_tw_account
-    persist_tw_account
+    load_twitter_account
+    authorize_twitter_account
+    persist_twitter_account
   end
 
   def destroy
-    load_tw_account
-    authorize_tw_account
-    @tw_account.destroy
-    render_200
+    load_twitter_account
+    authorize_twitter_account
+    destroy_twitter_account
   end
 
   private
 
-  def load_tw_accounts
-    @tw_accounts = tw_account_scope.where(filter_params)
-                                   .reorder(sorting_param)
-                                   .page(page_number_param)
-                                   .per(per_page_param)
+  def destroy_twitter_account
+    @twitter_account.destroy
+    head :no_content
   end
 
-  def load_tw_account
-    @tw_account ||= tw_account_scope.find(params[:id])
+  def load_twitter_accounts
+    @twitter_accounts = twitter_account_scope.where(filter_params)
+                                             .reorder(sorting_param)
+                                             .page(page_number_param)
+                                             .per(per_page_param)
   end
 
-  def authorize_tw_account
-    authorize @tw_account
+  def load_twitter_account
+    @twitter_account ||= twitter_account_scope.find(params[:id])
   end
 
-  def render_tw_account
-    render json: @tw_account
+  def authorize_twitter_account
+    authorize @twitter_account
   end
 
-  def persist_tw_account
-    build_tw_account
-    authorize_tw_account
-    return show if save_tw_account
-    render_400_with_errors(@tw_account)
+  def render_twitter_account
+    render json: @twitter_account,
+           status: success_status
   end
 
-  def build_tw_account
-    @tw_account ||= tw_account_scope.build
-    @tw_account.assign_attributes(tw_account_params)
+  def persist_twitter_account
+    build_twitter_account
+    authorize_twitter_account
+
+    if save_twitter_account
+      render_twitter_account
+    else
+      render_400_with_errors(@twitter_account)
+    end
   end
 
-  def save_tw_account
-    @tw_account.save
+  def build_twitter_account
+    @twitter_account ||= twitter_account_scope.build
+    @twitter_account.assign_attributes(twitter_account_params)
   end
 
-  def tw_account_params
+  def save_twitter_account
+    @twitter_account.save
+  end
+
+  def twitter_account_params
     params.require(:data).require(:attributes).permit(Person::TwitterAccount::PERMITTED_ATTRIBUTES)
   end
 
-  def tw_account_scope
+  def twitter_account_scope
     load_person.twitter_accounts
   end
 

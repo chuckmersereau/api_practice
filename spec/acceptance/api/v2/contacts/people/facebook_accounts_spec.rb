@@ -80,7 +80,7 @@ resource 'Facebook Accounts' do
 
       example 'Person / Facebook Account [CREATE]', document: :contacts do
         do_request data: form_data
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -104,7 +104,7 @@ resource 'Facebook Accounts' do
 
       example 'Person / Facebook Account [DELETE]', document: :contacts do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

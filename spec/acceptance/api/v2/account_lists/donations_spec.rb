@@ -107,7 +107,7 @@ resource 'Donations' do
         do_request data: form_data
 
         expect(resource_object['amount']).to eq '$10'
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 

@@ -63,7 +63,7 @@ resource 'Phones' do
         do_request data: form_data
 
         expect(resource_object['number']).to eq new_phone['number']
-        expect(response_status).to eq(200)
+        expect(response_status).to eq 201
       end
     end
 
@@ -87,7 +87,7 @@ resource 'Phones' do
     delete '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
       example 'Person / Phone [DELETE]', document: :contacts do
         do_request
-        expect(response_status).to eq(200)
+        expect(response_status).to eq 204
       end
     end
   end

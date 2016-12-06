@@ -64,7 +64,7 @@ resource 'Tasks' do
       example 'Task [CREATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -91,7 +91,7 @@ resource 'Tasks' do
 
       example 'Task [DELETE]', document: :entities do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

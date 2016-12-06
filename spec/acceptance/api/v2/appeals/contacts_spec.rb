@@ -116,7 +116,7 @@ resource 'Contacts' do
 
       example 'Contact [DELETE]', document: :appeals do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

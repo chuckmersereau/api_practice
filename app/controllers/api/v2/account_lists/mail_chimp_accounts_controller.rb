@@ -12,8 +12,7 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
   def destroy
     load_mailchimp_account
     authorize_mailchimp_account
-    @mailchimp_account.destroy
-    render_200
+    destroy_mailchimp_account
   end
 
   def sync
@@ -25,20 +24,31 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
 
   private
 
+  def destroy_mailchimp_account
+    @mailchimp_account.destroy
+    head :no_content
+  end
+
   def load_mailchimp_account
     @mailchimp_account ||= mailchimp_account_scope
     raise ActiveRecord::RecordNotFound unless @mailchimp_account
   end
 
   def render_mailchimp_account
-    render json: @mailchimp_account, scope: { current_account_list: load_account_list }
+    render json: @mailchimp_account,
+           scope: { current_account_list: load_account_list },
+           status: success_status
   end
 
   def persist_mailchimp_account
     build_mailchimp_account
     authorize_mailchimp_account
-    return show if save_mailchimp_account
-    render_400_with_errors(@mailchimp_account)
+
+    if save_mailchimp_account
+      render_mailchimp_account
+    else
+      render_400_with_errors(@mailchimp_account)
+    end
   end
 
   def build_mailchimp_account

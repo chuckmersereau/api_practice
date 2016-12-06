@@ -78,7 +78,7 @@ resource 'Appeals' do
 
       example 'Appeal [CREATE]', document: :entities do
         do_request data: form_data
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -104,7 +104,7 @@ resource 'Appeals' do
 
       example 'Appeal [DELETE]', document: :entities do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

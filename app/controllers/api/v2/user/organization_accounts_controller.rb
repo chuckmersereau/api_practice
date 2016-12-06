@@ -23,11 +23,15 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   def destroy
     load_organization_account
     authorize_organization_account
-    @organization_account.destroy
-    render_200
+    destroy_organization_account
   end
 
   private
+
+  def destroy_organization_account
+    @organization_account.destroy
+    head :no_content
+  end
 
   def load_organization_accounts
     @organization_accounts = organization_account_scope.where(filter_params)
@@ -41,14 +45,19 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   end
 
   def render_organization_account
-    render json: @organization_account
+    render json: @organization_account,
+           status: success_status
   end
 
   def persist_organization_account
     build_organization_account
     authorize_organization_account
-    return show if save_organization_account
-    render_400_with_errors(@organization_account)
+
+    if save_organization_account
+      render_organization_account
+    else
+      render_400_with_errors(@organization_account)
+    end
   end
 
   def build_organization_account

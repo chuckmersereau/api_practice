@@ -23,11 +23,15 @@ class Api::V2::User::KeyAccountsController < Api::V2Controller
   def destroy
     load_key_account
     authorize_key_account
-    @key_account.destroy
-    render_200
+    destroy_key_account
   end
 
   private
+
+  def destroy_key_account
+    @key_account.destroy
+    head :no_content
+  end
 
   def load_key_accounts
     @key_accounts = key_account_scope.where(filter_params)
@@ -41,14 +45,19 @@ class Api::V2::User::KeyAccountsController < Api::V2Controller
   end
 
   def render_key_account
-    render json: @key_account
+    render json: @key_account,
+           status: success_status
   end
 
   def persist_key_account
     build_key_account
     authorize_key_account
-    return show if save_key_account
-    render_400_with_errors(@key_account)
+
+    if save_key_account
+      render_key_account
+    else
+      render_400_with_errors(@key_account)
+    end
   end
 
   def build_key_account
