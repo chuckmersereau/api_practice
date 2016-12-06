@@ -43,22 +43,11 @@ rm docs_repo/source/includes/_entities.markdown
 rm docs_repo/source/includes/_tasks.markdown
 rm docs_repo/source/includes/_user.markdown
 
-sed -i 's/API Documentation/Account Lists API/g' doc/api/account_lists/_generated_examples.markdown
 cp doc/api/account_lists/_generated_examples.markdown docs_repo/source/includes/_account_lists.markdown
-
-sed -i 's/API Documentation/Appeals API/g' doc/api/appeals/_generated_examples.markdown
 cp doc/api/appeals/_generated_examples.markdown docs_repo/source/includes/_appeals.markdown
-
-sed -i 's/API Documentation/Contacts API/g' doc/api/contacts/_generated_examples.markdown
 cp doc/api/contacts/_generated_examples.markdown docs_repo/source/includes/_contacts.markdown
-
-sed -i 's/API Documentation/Entities/g' doc/api/entities/_generated_examples.markdown
 cp doc/api/entities/_generated_examples.markdown docs_repo/source/includes/_entities.markdown
-
-sed -i 's/API Documentation/Tasks API/g' doc/api/tasks/_generated_examples.markdown
 cp doc/api/tasks/_generated_examples.markdown docs_repo/source/includes/_tasks.markdown
-
-sed -i 's/API Documentation/User API/g' doc/api/user/_generated_examples.markdown
 cp doc/api/user/_generated_examples.markdown docs_repo/source/includes/_user.markdown
 
 # Now let's go have some fun with the cloned repo
