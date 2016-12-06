@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Linkedin Accounts' do
-  header 'Content-Type', 'application/vnd.api+json'
+  include_context :json_headers
 
   let(:resource_type) { 'person_linkedin_accounts' }
   let!(:user)         { create(:user_with_full_account) }

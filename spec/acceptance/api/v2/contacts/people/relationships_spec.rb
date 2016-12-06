@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Relationship' do
-  header 'Content-Type', 'application/vnd.api+json'
+  include_context :json_headers
 
   let(:resource_type) { 'family_relationships' }
   let!(:user)         { create(:user_with_full_account) }

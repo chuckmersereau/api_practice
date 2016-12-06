@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 require 'json'
 
 resource 'User / Authentication' do
-  header 'Content-Type', 'application/vnd.api+json'
+  include_context :json_headers
 
   let(:user)         { create(:user_with_account) }
   let(:access_token) { 'right_token' }

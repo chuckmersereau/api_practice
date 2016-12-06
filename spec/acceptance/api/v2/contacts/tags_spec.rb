@@ -2,7 +2,7 @@ require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Tags' do
-  header 'Content-Type', 'application/vnd.api+json'
+  include_context :json_headers
 
   let(:resource_type) { 'contacts' }
   let!(:user)         { create(:user_with_full_account) }
