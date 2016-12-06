@@ -23,6 +23,15 @@ resource 'Invites' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      accepted_by_user
+      account_list
+      cancelled_by_user
+      invited_by_user
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 

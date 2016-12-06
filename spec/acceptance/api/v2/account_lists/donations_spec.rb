@@ -39,6 +39,14 @@ resource 'Donations' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      appeal
+      designation_account
+      donor_account
+    )
+  end
+
   before do
     account_list.designation_accounts << designation_account
     contact.donor_accounts << donor_account

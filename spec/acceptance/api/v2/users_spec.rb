@@ -20,6 +20,13 @@ resource 'Users' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      account_lists
+      master_person
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 

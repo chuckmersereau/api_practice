@@ -13,6 +13,12 @@ resource 'Google Accounts' do
   let(:new_google_account) { build(:google_account, person: user).attributes }
   let(:form_data)          { build_data(new_google_account) }
 
+  let(:resource_associations) do
+    %w(
+      person
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 

@@ -35,6 +35,12 @@ resource 'Mailchimp Account Spec' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      primary_list
+    )
+  end
+
   before do
     allow_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list)
     allow_any_instance_of(MailChimpAccount).to receive(:lists).and_return([])

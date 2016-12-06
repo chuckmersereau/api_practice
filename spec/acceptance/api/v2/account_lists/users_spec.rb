@@ -25,6 +25,13 @@ resource 'Users' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      account_lists
+      master_person
+    )
+  end
+
   before do
     account_list.users += users
   end

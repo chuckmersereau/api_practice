@@ -43,6 +43,13 @@ resource 'Import' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      account_list
+      user
+    )
+  end
+
   before do
     stub_request(:get, "https://graph.facebook.com/#{fb_account.remote_id}/friends?access_token=#{fb_account.token}")
       .to_return(body: '{"data": [{"name": "David Hylden","id": "120581"}]}')

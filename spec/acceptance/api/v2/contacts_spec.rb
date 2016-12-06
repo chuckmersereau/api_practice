@@ -54,6 +54,14 @@ resource 'Contacts' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      addresses
+      people
+      referrals_to_me
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 

@@ -19,6 +19,13 @@ resource 'Relationship' do
   let(:new_family_relationship) { build(:family_relationship, person: person).attributes }
   let(:form_data)               { build_data(new_family_relationship) }
 
+  let(:resource_associations) do
+    %w(
+      person
+      related_person
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 

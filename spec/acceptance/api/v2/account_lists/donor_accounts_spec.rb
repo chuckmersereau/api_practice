@@ -26,6 +26,13 @@ resource 'Donor Accounts' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      contacts
+      organization
+    )
+  end
+
   before do
     contact.donor_accounts << donor_account
   end

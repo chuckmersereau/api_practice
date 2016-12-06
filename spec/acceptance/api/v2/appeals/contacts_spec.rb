@@ -51,6 +51,12 @@ resource 'Contacts' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      referrals_to_me
+    )
+  end
+
   context 'authorized user' do
     before do
       appeal.contacts << contact

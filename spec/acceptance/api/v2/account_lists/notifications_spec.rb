@@ -26,6 +26,14 @@ resource 'Notifications' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      contact
+      donation
+      notification_type
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
