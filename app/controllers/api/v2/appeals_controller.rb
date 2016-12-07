@@ -23,11 +23,15 @@ class Api::V2::AppealsController < Api::V2Controller
   def destroy
     load_appeal
     authorize_appeal
-    @appeal.destroy
-    render_200
+    destroy_appeal
   end
 
   private
+
+  def destroy_appeal
+    @appeal.destroy
+    head :no_content
+  end
 
   def load_appeals
     @appeals = appeal_scope.where(filter_params)
@@ -41,14 +45,19 @@ class Api::V2::AppealsController < Api::V2Controller
   end
 
   def render_appeal
-    render json: @appeal
+    render json: @appeal,
+           status: success_status
   end
 
   def persist_appeal
     build_appeal
     authorize_appeal
-    return show if save_appeal
-    render_400_with_errors(@appeal)
+
+    if save_appeal
+      render_appeal
+    else
+      render_400_with_errors(@appeal)
+    end
   end
 
   def build_appeal

@@ -28,10 +28,10 @@ resource 'Email Addresses' do
 
     # index
     get '/my-index-url' do
-      example_request 'list email addresses' do
+      example_request 'Email Address [LIST]' do
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -42,10 +42,10 @@ resource 'Email Addresses' do
         response_field 'name_of_attribute', 'Name of Attribute', 'Type' => 'The Attribute Type (String, Boolean, etc)'
       end
 
-      example_request 'show email address' do
+      example_request 'Email Address [GET]' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -58,12 +58,12 @@ resource 'Email Addresses' do
 
       let(:attributes) { "FILL ME IN WITH POST DATA" }
 
-      example 'create email address' do
+      example 'Email Address [CREATE]' do
         do_request data: form_data
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 201
+        expect(response_status).to eq 201
       end
     end
 
@@ -76,12 +76,12 @@ resource 'Email Addresses' do
 
       let(:attributes) { "FILL ME IN WITH PUT DATA" }
 
-      example 'update email address' do
+      example 'Email Address [UPDATE]' do
         do_request data: form_data
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -94,19 +94,19 @@ resource 'Email Addresses' do
 
       let(:attributes) { "FILL ME IN WITH PATCH DATA" }
 
-      example 'update email address' do
+      example 'Email Address [UPDATE]' do
         do_request data: form_data
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
     # destroy
     delete '/my-destroy-url' do
-      example_request 'delete email address' do
-        expect(status).to eq 200
+      example_request 'Email Address [DELETE]' do
+        expect(response_status).to eq 204
       end
     end
   end

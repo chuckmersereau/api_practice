@@ -53,7 +53,7 @@ resource 'Key Accounts' do
       example 'Key Account [CREATE]', document: :user do
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -76,7 +76,7 @@ resource 'Key Accounts' do
     delete '/api/v2/user/key_accounts/:id' do
       example 'Key Account [DELETE]', document: :user do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

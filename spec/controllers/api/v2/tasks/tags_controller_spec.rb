@@ -17,7 +17,7 @@ RSpec.describe Api::V2::Tasks::TagsController, type: :controller do
       expect do
         post :create, full_correct_attributes
       end.to change { task.reload.tag_list.length }.by(1)
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(201)
     end
 
     it 'does not create the resource when there are errors in sent data' do
@@ -45,7 +45,7 @@ RSpec.describe Api::V2::Tasks::TagsController, type: :controller do
       expect do
         delete :destroy, task_id: task.id, tag_name: first_tag
       end.to change { task.reload.tag_list.length }.by(-1)
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(204)
     end
 
     it 'does not destroy the resource for users that do not own the resource' do

@@ -156,7 +156,7 @@ resource 'People' do
       example 'Person [CREATE]', document: :contacts do
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
-        expect(response_status).to eq(200)
+        expect(response_status).to eq(201)
       end
     end
 
@@ -227,7 +227,7 @@ resource 'People' do
     delete '/api/v2/contacts/:contact_id/people/:id' do
       example 'Person [DELETE]', document: :contacts do
         do_request
-        expect(response_status).to eq(200)
+        expect(response_status).to eq(204)
       end
     end
   end

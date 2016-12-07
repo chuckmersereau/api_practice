@@ -10,21 +10,30 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
   def destroy
     load_task
     authorize_task
-    persist_tag(params[:tag_name]) do |tag_name|
-      @task.tag_list.remove(tag_name)
-    end
+    destroy_tag
   end
 
   private
 
+  def destroy_tag
+    persist_tag(params[:tag_name]) do |tag_name|
+      @task.tag_list.remove(tag_name)
+    end
+
+    head :no_content
+  end
+
   def persist_tag(tag_name)
     tag_error = TagValidator.new.validate(tag_name)
+
     if tag_error
       render_400_with_errors(tag_error)
     else
       yield(tag_name)
       @task.save
-      render json: @task
+
+      render json: @task,
+             status: success_status
     end
   end
 

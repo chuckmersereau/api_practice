@@ -101,7 +101,7 @@ resource 'Contacts' do
       example 'Contact [CREATE]', document: :entities do
         do_request data: form_data
         expect(resource_object['name']).to eq new_contact['name']
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -192,7 +192,7 @@ resource 'Contacts' do
       parameter :id, 'ID of the Contact', required: true
       example 'Contact [DELETE]', document: :entities do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

@@ -24,8 +24,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   def destroy
     load_address
     authorize_address
-    @address.destroy
-    render_200
+    destroy_address
   end
 
   private
@@ -62,6 +61,11 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
     @address.assign_attributes(address_params)
   end
 
+  def destroy_address
+    @address.destroy
+    head :no_content
+  end
+
   def load_address
     @address ||= address_scope.find(params[:id])
   end
@@ -76,9 +80,12 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   def persist_address
     build_address
     authorize_address
-    return show if save_address
 
-    render_400_with_errors(@address)
+    if save_address
+      render_address
+    else
+      render_400_with_errors(@address)
+    end
   end
 
   def permitted_filters
@@ -86,7 +93,8 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   end
 
   def render_address
-    render json: @address
+    render json: @address,
+           status: success_status
   end
 
   def save_address

@@ -48,12 +48,19 @@ class Api::V2Controller < ApiController
     }
   end
 
+  def permitted_filters
+    raise NotImplementedError,
+          'This method needs to be implemented in your controller'
+  end
+
   def transform_params_field_names
     new_hash = {}
+
     params[:data][:attributes].each do |key, value|
       new_key = key.tr('-', '_')
       new_hash[new_key.to_sym] = value
     end
+
     params[:data][:attributes] = new_hash
   end
 end

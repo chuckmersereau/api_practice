@@ -72,7 +72,7 @@ resource 'Address' do
         do_request data: form_data
 
         expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
-        expect(response_status).to eq(200)
+        expect(response_status).to eq(201)
       end
     end
 
@@ -104,7 +104,7 @@ resource 'Address' do
     delete '/api/v2/contacts/:contact_id/addresses/:id' do
       example 'Address [DELETE]', document: :contacts do
         do_request
-        expect(response_status).to eq(200)
+        expect(response_status).to eq(204)
       end
     end
   end

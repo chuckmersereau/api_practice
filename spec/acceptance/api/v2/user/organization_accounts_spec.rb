@@ -52,7 +52,7 @@ resource 'Organization Accounts' do
         do_request data: form_data
 
         expect(resource_object['username']).to eq new_organization_account_params['username']
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -75,7 +75,7 @@ resource 'Organization Accounts' do
     delete '/api/v2/user/organization_accounts/:id' do
       example 'Organization Account [DELETE]', document: :user do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

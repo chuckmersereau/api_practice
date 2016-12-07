@@ -14,11 +14,15 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   def destroy
     load_contact
     authorize_contact
-    @contact.destroy
-    render_200
+    destroy_contact
   end
 
   private
+
+  def destroy_contact
+    @contact.destroy
+    head :no_content
+  end
 
   def load_contacts
     excluded = filter_params[:excluded].to_i
@@ -34,7 +38,8 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   end
 
   def render_contact
-    render json: @contact
+    render json: @contact,
+           status: success_status
   end
 
   def authorize_contact

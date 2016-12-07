@@ -26,7 +26,7 @@ resource 'Merge' do
 
       example 'Account List [MERGE]', document: :account_lists do
         do_request data: build_data(id: account_list2_id)
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
   end

@@ -65,7 +65,7 @@ resource 'Users' do
     delete '/api/v2/account_lists/:account_list_id/users/:id' do
       example 'User [DELETE]', document: :account_lists do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

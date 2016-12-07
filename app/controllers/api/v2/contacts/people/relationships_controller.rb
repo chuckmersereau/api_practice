@@ -20,16 +20,24 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def destroy
-    @relationship.destroy
-    render_200
+    destroy_relationship
   end
 
   private
 
+  def destroy_relationship
+    @relationship.destroy
+    head :no_content
+  end
+
   def persist_relationship
     build_relationship
-    return show if save_relationship
-    render_400_with_errors(@relationship)
+
+    if save_relationship
+      render_relationship
+    else
+      render_400_with_errors(@relationship)
+    end
   end
 
   def load_relationships
@@ -48,7 +56,8 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def render_relationship
-    render json: @relationship
+    render json: @relationship,
+           status: success_status
   end
 
   def build_relationship
