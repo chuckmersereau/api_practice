@@ -17,11 +17,8 @@ resource 'Contacts People Email Addresses' do
   let(:person)        { create(:person, contacts: [contact]) }
   let(:person_id)     { person.id }
 
-  let(:email_address) {
-    create(:email_address, person: person)
-  }
-
-  let(:id)             { email_address.id }
+  let(:email_address) { create(:email_address, person: person) }
+  let(:id)            { email_address.id }
 
   let(:form_data) { build_data(attributes) }
 
