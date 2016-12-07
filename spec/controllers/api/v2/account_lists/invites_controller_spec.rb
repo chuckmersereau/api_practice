@@ -28,7 +28,7 @@ describe Api::V2::AccountLists::InvitesController, type: :controller do
     end
     it 'deletes a prayer letters account' do
       delete :destroy, account_list_id: account_list_id, id: id
-      expect(response.status).to eq 200
+      expect(response.status).to eq 204
     end
   end
 end

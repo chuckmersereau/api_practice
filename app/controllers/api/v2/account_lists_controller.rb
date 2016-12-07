@@ -30,14 +30,19 @@ class Api::V2::AccountListsController < Api::V2Controller
   end
 
   def render_account_list
-    render json: @account_list
+    render json: @account_list,
+           status: success_status
   end
 
   def persist_account_list
     build_account_list
     authorize_account_list
-    return show if save_account_list
-    render_400_with_errors(@account_list)
+
+    if save_account_list
+      render_account_list
+    else
+      render_400_with_errors(@account_list)
+    end
   end
 
   def build_account_list

@@ -18,14 +18,19 @@ class Api::V2::UsersController < Api::V2Controller
   end
 
   def render_user
-    render json: @user
+    render json: @user,
+           status: success_status
   end
 
   def persist_user
     build_user
     authorize_user
-    return show if save_user
-    render_400_with_errors(@user)
+
+    if save_user
+      render_user
+    else
+      render_400_with_errors(@user)
+    end
   end
 
   def build_user

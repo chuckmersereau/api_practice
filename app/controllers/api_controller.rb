@@ -35,4 +35,12 @@ class ApiController < ActionController::API
       resource_or_errors.errors.full_messages
     end
   end
+
+  def success_status
+    if action_name == 'create'
+      :created
+    else
+      :ok
+    end
+  end
 end

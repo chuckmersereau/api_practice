@@ -28,10 +28,10 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
 
     # index
     get '/my-index-url' do
-      example_request 'list <%= resources_human_name %>' do
+      example_request '<%= resource_human_name.titleize %> [LIST]' do
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -42,10 +42,10 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
         response_field 'name_of_attribute', 'Name of Attribute', 'Type' => 'The Attribute Type (String, Boolean, etc)'
       end
 
-      example_request 'show <%= resource_human_name %>' do
+      example_request '<%= resource_human_name.titleize %> [GET]' do
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -58,12 +58,12 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
 
       let(:attributes) { "FILL ME IN WITH POST DATA" }
 
-      example 'create <%= resource_human_name %>' do
+      example '<%= resource_human_name.titleize %> [CREATE]' do
         do_request data: form_data
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 201
+        expect(response_status).to eq 201
       end
     end
 
@@ -76,12 +76,12 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
 
       let(:attributes) { "FILL ME IN WITH PUT DATA" }
 
-      example 'update <%= resource_human_name %>' do
+      example '<%= resource_human_name.titleize %> [UPDATE]' do
         do_request data: form_data
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
@@ -94,19 +94,19 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
 
       let(:attributes) { "FILL ME IN WITH PATCH DATA" }
 
-      example 'update <%= resource_human_name %>' do
+      example '<%= resource_human_name.titleize %> [UPDATE]' do
         do_request data: form_data
 
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(status).to eq 200
+        expect(response_status).to eq 200
       end
     end
 
     # destroy
     delete '/my-destroy-url' do
-      example_request 'delete <%= resource_human_name %>' do
-        expect(status).to eq 200
+      example_request '<%= resource_human_name.titleize %> [DELETE]' do
+        expect(response_status).to eq 204
       end
     end
   end

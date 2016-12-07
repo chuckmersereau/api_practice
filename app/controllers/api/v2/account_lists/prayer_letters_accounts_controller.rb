@@ -12,8 +12,7 @@ class Api::V2::AccountLists::PrayerLettersAccountsController < Api::V2Controller
   def destroy
     load_prayer_letters_account
     authorize_prayer_letters_account
-    @prayer_letters_account.destroy
-    render_200
+    destroy_prayer_letters_account
   end
 
   def sync
@@ -25,20 +24,30 @@ class Api::V2::AccountLists::PrayerLettersAccountsController < Api::V2Controller
 
   private
 
+  def destroy_prayer_letters_account
+    @prayer_letters_account.destroy
+    head :no_content
+  end
+
   def load_prayer_letters_account
     @prayer_letters_account ||= prayer_letters_acount_scope.prayer_letters_account
     raise ActiveRecord::RecordNotFound unless @prayer_letters_account
   end
 
   def render_prayer_letters_account
-    render json: @prayer_letters_account
+    render json: @prayer_letters_account,
+           status: success_status
   end
 
   def persist_prayer_letters_account
     build_prayer_letters_account
     authorize_prayer_letters_account
-    return show if save_prayer_letters_account
-    render_400_with_errors(@prayer_letters_account)
+
+    if save_prayer_letters_account
+      render_prayer_letters_account
+    else
+      render_400_with_errors(@prayer_letters_account)
+    end
   end
 
   def build_prayer_letters_account

@@ -1,5 +1,10 @@
 module Sorting
-  PERMITTED_SORTING_PARAMS = ['created_at DESC', 'created_at ASC', 'updated_at DESC', 'updated_at ASC'].freeze
+  PERMITTED_SORTING_PARAMS = [
+    'created_at ASC',
+    'created_at DESC',
+    'updated_at ASC',
+    'updated_at DESC'
+  ].freeze
 
   private
 

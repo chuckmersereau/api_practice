@@ -62,7 +62,7 @@ resource 'Relationship' do
       example 'Person / Relationship [CREATE]', document: :contacts do
         do_request data: form_data
         expect(resource_object['username']).to eq new_family_relationship['username']
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
@@ -84,7 +84,7 @@ resource 'Relationship' do
     delete '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       example 'Person / Relationship [DELETE]', document: :contacts do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

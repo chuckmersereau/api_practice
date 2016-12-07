@@ -79,14 +79,14 @@ resource 'Invites' do
       example 'Invite [CREATE]', document: :account_lists do
         do_request
         expect(resource_object['recipient_email']).to eq email
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
 
     delete '/api/v2/account_lists/:account_list_id/invites/:id' do
       example 'Invite [DELETE]', document: :account_lists do
         do_request
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

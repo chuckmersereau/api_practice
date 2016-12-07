@@ -61,7 +61,7 @@ resource 'Prayer Letters Account' do
 
         example 'Prayer Letters Account [DELETE]', document: :account_lists do
           do_request
-          expect(response_status).to eq 200
+          expect(response_status).to eq 204
         end
       end
 
@@ -89,7 +89,7 @@ resource 'Prayer Letters Account' do
 
       example 'Prayer Letters Account [CREATE]', document: :account_lists do
         do_request data: form_data
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
   end

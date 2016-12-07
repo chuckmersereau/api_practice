@@ -24,11 +24,15 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   def destroy
     load_fb_account
     authorize_fb_account
-    @fb_account.destroy
-    render_200
+    destroy_fb_account
   end
 
   private
+
+  def destroy_fb_account
+    @fb_account.destroy
+    head :no_content
+  end
 
   def load_fb_accounts
     @fb_accounts = fb_account_scope.where(filter_params)
@@ -46,14 +50,19 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   end
 
   def render_fb_account
-    render json: @fb_account
+    render json: @fb_account,
+           status: success_status
   end
 
   def persist_fb_account
     build_fb_account
     authorize_fb_account
-    return show if save_fb_account
-    render_400_with_errors(@fb_account)
+
+    if save_fb_account
+      render_fb_account
+    else
+      render_400_with_errors(@fb_account)
+    end
   end
 
   def build_fb_account

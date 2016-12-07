@@ -23,11 +23,15 @@ class Api::V2::ContactsController < Api::V2Controller
   def destroy
     load_contact
     authorize_contact
-    @contact.destroy
-    render_200
+    destroy_contact
   end
 
   private
+
+  def destroy_contact
+    @contact.destroy
+    head :no_content
+  end
 
   def load_contacts
     @contacts = contact_scope.where(filter_params)
@@ -45,7 +49,8 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def render_contact
-    render json: @contact
+    render json: @contact,
+           status: success_status
   end
 
   def build_contact
@@ -60,8 +65,12 @@ class Api::V2::ContactsController < Api::V2Controller
   def persist_contact
     build_contact
     authorize_contact
-    return show if save_contact
-    render_400_with_errors(@contact)
+
+    if save_contact
+      render_contact
+    else
+      render_400_with_errors(@contact)
+    end
   end
 
   def contact_params

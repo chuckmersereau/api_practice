@@ -24,11 +24,15 @@ class Api::V2::TasksController < Api::V2Controller
   def destroy
     load_task
     authorize_task
-    @task.destroy
-    render_200
+    destroy_task
   end
 
   private
+
+  def destroy_task
+    @task.destroy
+    head :no_content
+  end
 
   def load_tasks
     @tasks = task_scope.where(filter_params)
@@ -42,14 +46,19 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def render_task
-    render json: @task
+    render json: @task,
+           status: success_status
   end
 
   def persist_task
     build_task
     authorize_task
-    return show if save_task
-    render_400_with_errors(@task)
+
+    if save_task
+      render_task
+    else
+      render_400_with_errors(@task)
+    end
   end
 
   def build_task

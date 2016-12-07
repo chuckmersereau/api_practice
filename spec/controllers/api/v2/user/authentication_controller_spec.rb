@@ -17,7 +17,7 @@ RSpec.describe Api::V2::User::AuthenticationsController, type: :controller do
 
     it 'does issue a token to users with valid access token' do
       post :create, access_token: 'right_token'
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(201)
       expect(response.body).to include('token')
     end
   end

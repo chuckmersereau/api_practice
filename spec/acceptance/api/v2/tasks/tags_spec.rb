@@ -25,7 +25,7 @@ resource 'Tags' do
     example 'Tag [CREATE]', document: :tasks do
       do_request data: form_data
       expect(resource_object['new_tag']).to eq new_tag_params['new_tag']
-      expect(response_status).to eq 200
+      expect(response_status).to eq 201
     end
   end
 
@@ -35,7 +35,7 @@ resource 'Tags' do
 
     example 'Tag [DELETE]', document: :tasks do
       do_request
-      expect(response_status).to eq 200
+      expect(response_status).to eq 204
     end
   end
 end

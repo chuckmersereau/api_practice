@@ -2,9 +2,13 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
   def create
     load_merge_account_list
     authorize_merge_account_list
-    return render_400 unless @merge_account_list != load_account_list
-    load_account_list.merge(@merge_account_list)
-    render_200
+
+    if @merge_account_list != load_account_list
+      load_account_list.merge(@merge_account_list)
+      head :created
+    else
+      render_400
+    end
   end
 
   private

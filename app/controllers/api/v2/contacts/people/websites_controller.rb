@@ -24,11 +24,15 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   def destroy
     load_website
     authorize_website
-    @website.destroy
-    render_200
+    destroy_website
   end
 
   private
+
+  def destroy_website
+    @website.destroy
+    head :no_content
+  end
 
   def load_websites
     @websites = website_scope.where(filter_params)
@@ -46,14 +50,19 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   end
 
   def render_website
-    render json: @website
+    render json: @website,
+           status: success_status
   end
 
   def persist_website
     build_website
     authorize_website
-    return show if save_website
-    render_400_with_errors(@website)
+
+    if save_website
+      render_website
+    else
+      render_400_with_errors(@website)
+    end
   end
 
   def build_website

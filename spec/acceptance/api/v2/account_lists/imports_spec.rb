@@ -98,7 +98,7 @@ resource 'Import' do
 
       example 'Import [CREATE]', document: :account_lists do
         do_request data: form_data
-        expect(response_status).to eq 200
+        expect(response_status).to eq 201
       end
     end
   end

@@ -12,18 +12,25 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def create
-    return show if authorize_and_save_invite
-    render json: { success: false, errors: ['Could not send invite'] }, status: 400
+    if authorize_and_save_invite
+      render_invite
+    else
+      render json: { success: false, errors: ['Could not send invite'] }, status: 400
+    end
   end
 
   def destroy
     load_invite
     authorize_invite
-    @invite.cancel(current_user)
-    render_200
+    destroy_invite
   end
 
   private
+
+  def destroy_invite
+    @invite.cancel(current_user)
+    head :no_content
+  end
 
   def load_invites
     @invites = invite_scope.where(filter_params)
@@ -37,7 +44,8 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def render_invite
-    render json: @invite
+    render json: @invite,
+           status: success_status
   end
 
   def authorize_and_save_invite
