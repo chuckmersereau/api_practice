@@ -28,9 +28,7 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
   def destroy
     load_<%= resource_name %>
     authorize_<%= resource_name %>
-    <%= resource_instance %>.destroy
-
-    render_200
+    destroy_<%= resource_name %>
   end
 
   private
@@ -61,6 +59,11 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
     <%= resource_instance %>.assign_attributes(<%= resource_name %>_params)
   end
 
+  def destroy_<%= resource_name %>
+    <%= resource_instance %>.destroy
+    head :no_content
+  end
+
   def load_<%= resource_name %>
     <%= resource_instance %> ||= <%= resource_class_name %>.find(params[:id])
   end
@@ -85,13 +88,17 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
   def persist_<%= resource_name %>
     build_<%= resource_name %>
     authorize_<%= resource_name %>
-    return show if save_<%= resource_name %>
 
-    render_400_with_errors(<%= resource_instance %>)
+    if save_<%= resource_name %>
+      render_<%= resource_name %>
+    else
+      render_400_with_errors(<%= resource_instance %>)
+    end
   end
 
   def render_<%= resource_name %>
-    render json: <%= resource_instance %>
+    render json: <%= resource_instance %>,
+           status: success_status
   end
 
   def save_<%= resource_name %>

@@ -106,7 +106,7 @@ resource '<%= resource_class_name.pluralize.titleize %>' do
     # destroy
     delete '/my-destroy-url' do
       example_request 'delete <%= resource_human_name %>' do
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

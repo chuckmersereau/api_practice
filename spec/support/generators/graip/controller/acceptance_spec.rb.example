@@ -106,7 +106,7 @@ resource 'Email Addresses' do
     # destroy
     delete '/my-destroy-url' do
       example_request 'delete email address' do
-        expect(response_status).to eq 200
+        expect(response_status).to eq 204
       end
     end
   end

@@ -27,9 +27,7 @@ class Api::V2::EmailAddressesController < Api::V2::ApplicationController
   def destroy
     load_email_address
     authorize_email_address
-    @email_address.destroy
-
-    render_200
+    destroy_email_address
   end
 
   private
@@ -60,6 +58,11 @@ class Api::V2::EmailAddressesController < Api::V2::ApplicationController
     @email_address.assign_attributes(email_address_params)
   end
 
+  def destroy_email_address
+    @email_address.destroy
+    head :no_content
+  end
+
   def load_email_address
     @email_address ||= EmailAddress.find(params[:id])
   end
@@ -84,13 +87,17 @@ class Api::V2::EmailAddressesController < Api::V2::ApplicationController
   def persist_email_address
     build_email_address
     authorize_email_address
-    return show if save_email_address
 
-    render_400_with_errors(@email_address)
+    if save_email_address
+      render_email_address
+    else
+      render_400_with_errors(@email_address)
+    end
   end
 
   def render_email_address
-    render json: @email_address
+    render json: @email_address,
+           status: success_status
   end
 
   def save_email_address
