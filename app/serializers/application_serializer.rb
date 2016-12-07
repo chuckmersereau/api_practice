@@ -6,4 +6,11 @@ class ApplicationSerializer < ActiveModel::Serializer
   def self.collection_serialize(resources)
     ActiveModelSerializers::SerializableResource.new(resources, each_serializer: self)
   end
+
+  def attributes(*args)
+    super(*args).transform_values do |value|
+      value = value.to_time.utc.iso8601 if value.respond_to?(:iso8601)
+      value
+    end
+  end
 end
