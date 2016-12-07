@@ -2,7 +2,8 @@ class ContactSerializer < ApplicationSerializer
   include DisplayCase::ExhibitsHelper
   include ActionView::Helpers::NumberHelper
 
-  attributes :avatar,
+  attributes :account_list_id,
+             :avatar,
              :church_name,
              :deceased,
              :donor_accounts,
