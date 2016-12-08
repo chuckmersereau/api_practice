@@ -37,6 +37,7 @@ Rails.application.routes.draw do
       resources :contacts, only: [:index, :show, :create, :update, :destroy] do
         scope module: :contacts do
           resources :addresses, only: [:index, :show, :create, :update, :destroy]
+          resources :referrers, only: [:index]
           resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
 
           resources :people, only: [:show, :index, :create, :update, :destroy] do
