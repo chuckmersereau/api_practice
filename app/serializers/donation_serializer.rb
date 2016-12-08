@@ -15,6 +15,7 @@ class DonationSerializer < ApplicationSerializer
              :tendered_currency
 
   belongs_to :appeal
+  belongs_to :contact
   belongs_to :designation_account
   belongs_to :donor_account
 
@@ -23,7 +24,7 @@ class DonationSerializer < ApplicationSerializer
     number_to_current_currency(object.amount, locale: scope[:locale])
   end
 
-  def contact_id
-    object.donor_account.contacts.where(account_list_id: scope[:account_list].id).first.id
+  def contact
+    object.donor_account.contacts.where(account_list_id: scope[:account_list].id).first
   end
 end

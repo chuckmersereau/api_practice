@@ -31,6 +31,7 @@ resource 'Import' do
 
   let(:expected_attribute_keys) do
     %w(
+      account_list_id
       created_at
       file
       group_tags

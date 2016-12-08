@@ -26,18 +26,13 @@ resource 'Mailchimp Account Spec' do
       lists_available_for_newsletters
       lists_link
       lists_present
+      primary_list_id
       primary_list_name
       sync_all_active_contacts
       updated_at
       valid
       validate_key
       validation_error
-    )
-  end
-
-  let(:resource_associations) do
-    %w(
-      primary_list
     )
   end
 
@@ -68,7 +63,7 @@ resource 'Mailchimp Account Spec' do
 
     example 'Mailchimp Account [GET]', document: :account_lists do
       do_request
-      check_resource(['relationships'])
+      check_resource
       expect(resource_object.keys).to match_array expected_attribute_keys
       expect(response_status).to eq 200
     end

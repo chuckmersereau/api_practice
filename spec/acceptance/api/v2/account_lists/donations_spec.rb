@@ -42,6 +42,7 @@ resource 'Donations' do
   let(:resource_associations) do
     %w(
       appeal
+      contact
       designation_account
       donor_account
     )

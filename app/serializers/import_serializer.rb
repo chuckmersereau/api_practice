@@ -1,5 +1,6 @@
 class ImportSerializer < ApplicationSerializer
-  attributes :file,
+  attributes :account_list_id,
+             :file,
              :groups,
              :group_tags,
              :import_by_group,

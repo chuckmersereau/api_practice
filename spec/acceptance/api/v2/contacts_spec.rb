@@ -20,6 +20,7 @@ resource 'Contacts' do
 
   let(:expected_keys) do
     %w(
+      account_list_id
       avatar
       church_name
       created_at

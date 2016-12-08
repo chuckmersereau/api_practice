@@ -18,6 +18,7 @@ resource 'Appeals' do
 
   let(:expected_attribute_keys) do
     %w(
+      account_list_id
       amount
       created_at
       currencies
