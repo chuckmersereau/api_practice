@@ -52,6 +52,7 @@ resource 'Referrers' do
     # index
     get '/api/v2/contacts/:contact_id/referrers' do
       example_request 'list referrers' do
+        explanation 'List of Contacts that have referred the given Contact'
         check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
