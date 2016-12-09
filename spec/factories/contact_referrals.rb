@@ -1,6 +1,6 @@
 FactoryGirl.define do
   factory :contact_referral do
-    referred_by nil
-    referred_to nil
+    referred_by { FactoryGirl.create(:contact) }
+    referred_to { FactoryGirl.create(:contact) }
   end
 end
