@@ -421,7 +421,7 @@ describe TntImport do
       import = create(:tnt_import_appeals)
       account_list = import.account_list
       tnt_import = TntImport.new(import)
-      contact = create(:contact, account_list: account_list)
+      contact = create(:contact, name: 'Doe, John', account_list: account_list)
       donor_account = create(:donor_account, account_number: '432294333')
       contact.donor_accounts << donor_account
       account_list.contacts << contact

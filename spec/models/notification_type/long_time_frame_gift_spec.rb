@@ -4,7 +4,7 @@ describe NotificationType::LongTimeFrameGift do
   let!(:long_time_frame_gift) { NotificationType::LongTimeFrameGift.first_or_initialize }
   let!(:da) { create(:designation_account) }
   let!(:account_list) { create(:account_list) }
-  let!(:contact) { create(:contact, account_list: account_list, pledge_amount: 9.99, pledge_frequency: 12) }
+  let!(:contact) { create(:contact, name: 'Doe, John', account_list: account_list, pledge_amount: 9.99, pledge_frequency: 12) }
   let!(:donor_account) { create(:donor_account) }
   let!(:donation) { create(:donation, donor_account: donor_account, designation_account: da) }
   let!(:old_donation) do

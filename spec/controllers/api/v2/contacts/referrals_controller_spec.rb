@@ -1,29 +1,45 @@
 require 'spec_helper'
 
-RSpec.describe <%= class_name %>Controller, type: :controller do
+RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
   # This is required!
   let(:user) { create(:user_with_account) }
 
   # This MAY be required!
   let(:account_list) { user.account_lists.first }
 
+  let(:contact)   { create(:contact, account_list: account_list) }
+  let(:referral)  { create(:contact, account_list: account_list) }
+  let(:alternate) { create(:contact, account_list: account_list) }
+
   # This is required!
   let(:factory_type) do
     # This is the type used to auto-generate a resource using FactoryGirl,
     # ex: The type `:email_address` would be used as create(:email_address)
-    <%= ":#{resource_name}" %>
+    :contact_referral
   end
 
   # This is required!
   let!(:resource) do
     # Creates the Singular Resource for this spec - change as needed
     # Example: create(:contact, account_list: account_list)
+    attributes = {
+      referred_by_id: contact.id,
+      referred_to_id: referral.id
+    }
+
+    create(:contact_referral, attributes)
   end
 
   # This is required for the index action!
   let!(:second_resource) do
     # Creates a second resource for this spec - change as needed
     # Example: create(:contact, account_list: account_list)
+    attributes = {
+      referred_by_id: contact.id,
+      referred_to_id: referral.id
+    }
+
+    create(:contact_referral, attributes)
   end
 
   # If needed, keep this ;)
@@ -37,12 +53,19 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
     # --
     # Note: Don't include :id
     # Example: { account_list_id: account_list_id }
+    {
+      contact_id: contact.id
+    }
   end
 
   # This is required!
   let(:correct_attributes) do
     # A hash of correct attributes for creating/updating the resource
     # Example: { subject: 'test subject', start_at: Time.now, account_list_id: account_list.id }
+    {
+      referred_by_id: contact.id,
+      referred_to_id: referral.id
+    }
   end
 
   # This is only required if you need your update attributes to be different
@@ -50,8 +73,9 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
   #
   # If you don't need it - remove it entirely.
   let(:update_attributes) do
-    # A hash of attributes for updating the resource
-    # Example: { subject: 'test subject', start_at: Time.now, account_list_id: account_list.id }
+    {
+      referred_to_id: alternate.id
+    }
   end
 
   # This is required!
@@ -61,6 +85,8 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
     # --
     # If there aren't attributes that are unpermitted,
     # you need to specifically return `nil`
+
+    nil
   end
 
   # This is required!
@@ -70,6 +96,11 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
     # --
     # If there aren't attributes that violate validations,
     # you need to specifically return `nil`
+    #
+    {
+      referred_by_id: contact.id,
+      referred_to_id: nil
+    }
   end
 
   # These includes can be found in:
