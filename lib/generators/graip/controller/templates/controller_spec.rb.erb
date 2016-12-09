@@ -45,6 +45,15 @@ RSpec.describe <%= class_name %>Controller, type: :controller do
     # Example: { subject: 'test subject', start_at: Time.now, account_list_id: account_list.id }
   end
 
+  # This is only required if you need your update attributes to be different
+  # than the value of correct_attributes.
+  #
+  # If you don't need it - remove it entirely.
+  let(:update_attributes) do
+    # A hash of attributes for updating the resource
+    # Example: { subject: 'test subject', start_at: Time.now, account_list_id: account_list.id }
+  end
+
   # This is required!
   let(:unpermitted_attributes) do
     # A hash of attributes that include unpermitted attributes for the current user to update
