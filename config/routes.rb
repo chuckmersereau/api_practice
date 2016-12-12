@@ -7,23 +7,24 @@ Rails.application.routes.draw do
       resources :account_lists, only: [:index, :show, :update] do
         scope module: :account_lists do
           resources :designation_accounts, only: [:index, :show]
+          resources :donations, only: [:index, :show, :create, :update]
           resources :donor_accounts, only: [:index, :show]
           resources :filters, only: [:index]
           resources :imports, only: [:show, :create]
           resources :invites, only: [:index, :show, :create, :destroy]
-          resources :merge, only: [:create]
-          resources :users, only: [:index, :show, :destroy]
-
-          resource :prayer_letters_account, only: [:show, :create, :destroy] do
-            get :sync, on: :member
-          end
 
           resource :mail_chimp_account, only: [:show, :create, :destroy] do
             get :sync, on: :member
           end
 
-          resources :donations, only: [:index, :show, :create, :update]
+          resources :merge, only: [:create]
           resources :notifications, only: [:index, :show, :create, :update, :destroy]
+
+          resource :prayer_letters_account, only: [:show, :create, :destroy] do
+            get :sync, on: :member
+          end
+
+          resources :users, only: [:index, :show, :destroy]
         end
       end
 
@@ -37,19 +38,22 @@ Rails.application.routes.draw do
       resources :contacts, only: [:index, :show, :create, :update, :destroy] do
         scope module: :contacts do
           resources :addresses, only: [:index, :show, :create, :update, :destroy]
-          resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
 
           resources :people, only: [:show, :index, :create, :update, :destroy] do
             scope module: :people do
               resources :email_addresses, only: [:index, :show, :create, :update, :destroy]
-              resources :phones, only: [:index, :show, :create, :update, :destroy]
               resources :facebook_accounts, only: [:index, :show, :create, :update, :destroy]
               resources :linkedin_accounts, only: [:index, :show, :create, :update, :destroy]
+              resources :phones, only: [:index, :show, :create, :update, :destroy]
+              resources :relationships, only: [:index, :show, :create, :update, :destroy]
               resources :twitter_accounts, only: [:index, :show, :create, :update, :destroy]
               resources :websites, only: [:index, :show, :create, :update, :destroy]
-              resources :relationships, only: [:show, :index, :create, :update, :destroy]
             end
           end
+
+          resources :referrals, only: [:index, :show, :create, :update, :destroy]
+          resources :referrers, only: [:index]
+          resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
         end
       end
 
