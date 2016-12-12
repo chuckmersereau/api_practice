@@ -24,8 +24,8 @@ resource 'Relationship' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
       example 'Person / Relationship [LIST]', document: :contacts do
+        explanation 'List of Relationships associated to the Person'
         do_request
-        explanation 'List of Relationships associated to the person'
         check_collection_resource(1)
         expect(response_status).to eq 200
       end
@@ -39,6 +39,7 @@ resource 'Relationship' do
       end
 
       example 'Person / Relationship [GET]', document: :contacts do
+        explanation 'The Person\'s Relationship with the given ID'
         do_request
         check_resource
         expect(response_status).to eq 200
@@ -53,6 +54,7 @@ resource 'Relationship' do
       end
 
       example 'Person / Relationship [CREATE]', document: :contacts do
+        explanation 'Create a Relationship associated with the Person'
         do_request data: form_data
         expect(resource_object['username']).to eq new_family_relationship['username']
         expect(response_status).to eq 201
@@ -67,6 +69,7 @@ resource 'Relationship' do
       end
 
       example 'Person / Relationship [UPDATE]', document: :contacts do
+        explanation 'Update the Person\'s Relationship with the given ID'
         do_request data: form_data
 
         expect(resource_object['username']).to eq new_family_relationship['username']
@@ -76,6 +79,7 @@ resource 'Relationship' do
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       example 'Person / Relationship [DELETE]', document: :contacts do
+        explanation 'Delete the Person\'s Relationship with the given ID'
         do_request
         expect(response_status).to eq 204
       end

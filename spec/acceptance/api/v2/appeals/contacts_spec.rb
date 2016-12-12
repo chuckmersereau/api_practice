@@ -63,6 +63,7 @@ resource 'Contacts' do
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
       example 'Contact [LIST]', document: :appeals do
+        explanation 'List of Contacts associated to the Appeal'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -104,6 +105,7 @@ resource 'Contacts' do
       end
 
       example 'Contact [GET]', document: :appeals do
+        explanation 'The Appeal Contact with the given ID'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -115,6 +117,7 @@ resource 'Contacts' do
       parameter 'id',              'ID', required: true
 
       example 'Contact [DELETE]', document: :appeals do
+        explanation 'Delete the Appeal Contact with the given ID'
         do_request
         expect(response_status).to eq 204
       end

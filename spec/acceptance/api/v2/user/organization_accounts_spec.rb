@@ -34,6 +34,7 @@ resource 'Organization Accounts' do
       end
 
       example 'Organization Account [GET]', document: :user do
+        explanation 'The User\'s Organization Account with the given ID'
         do_request
         check_resource(['relationships'])
         expect(response_status).to eq 200
@@ -49,6 +50,7 @@ resource 'Organization Accounts' do
       end
 
       example 'Organization Account [Create]', document: :user do
+        explanation 'Create an Organization Account associated with the current_user'
         do_request data: form_data
 
         expect(resource_object['username']).to eq new_organization_account_params['username']
@@ -65,6 +67,7 @@ resource 'Organization Accounts' do
       end
 
       example 'Organization Account [UPDATE]', document: :user do
+        explanation 'Update the current_user\'s Organization Account with the given ID'
         do_request data: form_data
 
         expect(resource_object['username']).to eq new_organization_account_params['username']
@@ -74,6 +77,7 @@ resource 'Organization Accounts' do
 
     delete '/api/v2/user/organization_accounts/:id' do
       example 'Organization Account [DELETE]', document: :user do
+        explanation 'Delete the current_user\'s Organization Account with the given ID'
         do_request
         expect(response_status).to eq 204
       end

@@ -46,6 +46,7 @@ resource 'Tasks' do
       end
 
       example 'Task [GET]', document: :entities do
+        explanation 'The current_user\'s Task with the given ID'
         do_request
         check_resource(['relationships'])
         expect(response_status).to eq 200
@@ -62,6 +63,7 @@ resource 'Tasks' do
       end
 
       example 'Task [CREATE]', document: :entities do
+        explanation 'Create a Task associated with the current_user'
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
         expect(response_status).to eq 201
@@ -80,6 +82,7 @@ resource 'Tasks' do
       end
 
       example 'Task [UPDATE]', document: :entities do
+        explanation 'Update the current_user\'s Task with the given ID'
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
         expect(response_status).to eq 200
@@ -90,6 +93,7 @@ resource 'Tasks' do
       parameter 'id', 'the Id of the Task'
 
       example 'Task [DELETE]', document: :entities do
+        explanation 'Delete the current_user\'s Task with the given ID'
         do_request
         expect(response_status).to eq 204
       end

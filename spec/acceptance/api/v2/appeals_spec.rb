@@ -39,6 +39,7 @@ resource 'Appeals' do
       response_field :data,        'Data', 'Type' => 'Array[Object]'
 
       example 'Appeal [LIST]', document: :entities do
+        explanation 'List of Appeals'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -61,6 +62,7 @@ resource 'Appeals' do
       end
 
       example 'Appeal [GET]', document: :entities do
+        explanation 'The Appeal with the given ID'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -77,6 +79,7 @@ resource 'Appeals' do
       end
 
       example 'Appeal [CREATE]', document: :entities do
+        explanation 'Create an Appeal'
         do_request data: form_data
         expect(response_status).to eq 201
       end
@@ -93,6 +96,7 @@ resource 'Appeals' do
       end
 
       example 'Appeal [UPDATE]', document: :entities do
+        explanation 'Update the Appeal with the given ID'
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -103,6 +107,7 @@ resource 'Appeals' do
       parameter 'id',              'ID', required: true
 
       example 'Appeal [DELETE]', document: :entities do
+        explanation 'Delete the Appeal with the given ID'
         do_request
         expect(response_status).to eq 204
       end

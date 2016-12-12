@@ -47,6 +47,7 @@ resource 'Linkedin Accounts' do
       response_field 'data',  'Data', 'Type' => 'Array[Object]'
 
       example 'Person / LinkedIn Account [LIST]', document: :contacts do
+        explanation 'List of LinkedIn Accounts associated to the Person'
         do_request
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -65,6 +66,7 @@ resource 'Linkedin Accounts' do
       end
 
       example 'Person / LinkedIn Account [GET]', document: :contacts do
+        explanation 'List of LinkedIn Accounts associated to the Person'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -80,6 +82,7 @@ resource 'Linkedin Accounts' do
       end
 
       example 'Person / LinkedIn Account [CREATE]', document: :contacts do
+        explanation 'Create a LinkedIn Account associated with the Person'
         do_request data: form_data
         expect(response_status).to eq 201
       end
@@ -94,6 +97,7 @@ resource 'Linkedin Accounts' do
       end
 
       example 'Person / LinkedIn Account [UPDATE]', document: :contacts do
+        explanation 'Update the Person\'s LinkedIn Account with the given ID'
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -104,6 +108,7 @@ resource 'Linkedin Accounts' do
       parameter 'person_id',  'Person ID',  required: true
 
       example 'Person / LinkedIn Account [DELETE]', document: :contacts do
+        explanation 'Delete the Person\'s LinkedIn Account with the given ID'
         do_request
         expect(response_status).to eq 204
       end

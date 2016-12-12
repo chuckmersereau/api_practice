@@ -72,6 +72,7 @@ resource 'Import' do
       end
 
       example 'Import [GET]', document: :account_lists do
+        explanation 'The Account List Import with the given ID'
         do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -93,6 +94,7 @@ resource 'Import' do
       end
 
       example 'Import [CREATE]', document: :account_lists do
+        explanation 'List of Imports associated with the Account List'
         do_request data: form_data
         expect(response_status).to eq 201
       end

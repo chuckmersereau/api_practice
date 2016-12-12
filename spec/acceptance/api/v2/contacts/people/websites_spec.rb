@@ -44,6 +44,7 @@ resource 'Websites' do
       response_field 'data',  'Data', 'Type' => 'Array[Object]'
 
       example 'Person / Website [LIST]', document: :contacts do
+        explanation 'List of Websites associated to the Person'
         do_request
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -60,6 +61,7 @@ resource 'Websites' do
       end
 
       example 'Person / Website [GET]', document: :contacts do
+        explanation 'The Person\'s Website with the given ID'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
@@ -73,6 +75,7 @@ resource 'Websites' do
       end
 
       example 'Person / Website [CREATE]', document: :contacts do
+        explanation 'Create a Website associated with the Person'
         do_request data: form_data
         expect(response_status).to eq 201
       end
@@ -85,6 +88,7 @@ resource 'Websites' do
       end
 
       example 'Person / Website [UPDATE]', document: :contacts do
+        explanation 'Update the Person\'s Website with the given ID'
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -95,6 +99,7 @@ resource 'Websites' do
       parameter 'person_id',  'Person ID',  required: true
 
       example 'Person / Website [DELETE]', document: :contacts do
+        explanation 'Delete the Person\'s Website with the given ID'
         do_request
         expect(response_status).to eq 204
       end

@@ -35,6 +35,7 @@ resource 'Google Accounts' do
       end
 
       example 'Google Account [GET]', document: :user do
+        explanation 'The current_user\'s Google Account with the given ID'
         do_request
         check_resource
         expect(response_status).to eq 200
@@ -51,6 +52,7 @@ resource 'Google Accounts' do
       end
 
       example 'Google Account [CREATE]', document: :user do
+        explanation 'Create a Google Account associated with the current_user'
         do_request data: form_data
         expect(resource_object['username']).to eq new_google_account['username']
         expect(response_status).to eq 201
@@ -67,6 +69,7 @@ resource 'Google Accounts' do
       end
 
       example 'Google Account [UPDATE]', document: :user do
+        explanation 'Update the current_user\'s Google Account with the given ID'
         do_request data: form_data
         expect(resource_object['username']).to eq new_google_account['username']
         expect(response_status).to eq 200
@@ -75,6 +78,7 @@ resource 'Google Accounts' do
 
     delete '/api/v2/user/google_accounts/:id' do
       example 'Google Account [DEKETE]', document: :user do
+        explanation 'Delete the current_user\'s Google Account with the given ID'
         do_request
         expect(response_status).to eq 204
       end

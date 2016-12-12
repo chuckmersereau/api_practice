@@ -40,6 +40,7 @@ resource 'Donor Accounts' do
       response_field 'data', 'Data', 'Type' => 'Array[Object]'
 
       example 'Donor Account [LIST]', document: :account_lists do
+        explanation 'List of Donor Accounts associated with the Account List'
         do_request
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -61,6 +62,7 @@ resource 'Donor Accounts' do
       end
 
       example 'Donor Account [GET]', document: :account_lists do
+        explanation 'The Account List Donor Account with the given ID'
         do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys

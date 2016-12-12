@@ -24,8 +24,8 @@ resource 'Phones' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/phones' do
       example 'Person / Phone [LIST]', document: :contacts do
+        explanation 'List of Phone Numbers associated to the Person'
         do_request
-        explanation('List of phone numbers associated to the person')
         check_collection_resource(1)
         expect(response_status).to eq(200)
       end
@@ -43,6 +43,7 @@ resource 'Phones' do
       end
 
       example 'Person / Phone [GET]', document: :contacts do
+        explanation 'The Person\'s Phone Number with the given ID'
         do_request
         check_resource
         expect(response_status).to eq(200)
@@ -60,6 +61,7 @@ resource 'Phones' do
       end
 
       example 'Person / Phone [CREATE]', document: :contacts do
+        explanation 'Create a Phone Number associated with the Person'
         do_request data: form_data
 
         expect(resource_object['number']).to eq new_phone['number']
@@ -78,6 +80,7 @@ resource 'Phones' do
       end
 
       example 'Person / Phone [UPDATE]', document: :contacts do
+        explanation 'Update Person\'s Phone Number with the given ID'
         do_request data: form_data
         expect(resource_object['number']).to eq new_phone['number']
         expect(response_status).to eq(200)
@@ -86,6 +89,7 @@ resource 'Phones' do
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
       example 'Person / Phone [DELETE]', document: :contacts do
+        explanation 'Delete Person\'s Phone Number with the given ID'
         do_request
         expect(response_status).to eq 204
       end

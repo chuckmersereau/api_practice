@@ -20,6 +20,7 @@ resource 'User / Authentication' do
     response_field 'json_web_token', 'Json Web Token', type: 'String'
 
     example 'Authentication [CREATE]', document: :user do
+      explanation 'Authenticate current_user with the provided Access Token'
       do_request
       expect(response_status).to eq(201)
       expect(JsonWebToken.decode(JSON.parse(response_body)['json_web_token'])).to eq('user_id' => user.id)
