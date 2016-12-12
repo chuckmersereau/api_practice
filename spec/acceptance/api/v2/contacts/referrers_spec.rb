@@ -11,6 +11,7 @@ resource 'Referrers' do
 
   let(:expected_attribute_keys) do
     %w(
+      account_list_id
       avatar
       church_name
       created_at
@@ -35,7 +36,6 @@ resource 'Referrers' do
       pledge_frequency
       pledge_received
       pledge_start_date
-      referrals_to_me_ids
       send_newsletter
       square_avatar
       status
@@ -43,6 +43,12 @@ resource 'Referrers' do
       timezone
       uncompleted_tasks_count
       updated_at
+    )
+  end
+
+  let(:resource_associations) do
+    %w(
+      referrals_to_me
     )
   end
 
