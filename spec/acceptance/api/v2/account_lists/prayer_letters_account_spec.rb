@@ -48,7 +48,7 @@ resource 'Prayer Letters Account' do
         end
 
         example 'Prayer Letters Account [GET]', document: :account_lists do
-        explanation 'The Prayer Letters Account associated with the Account List'
+          explanation 'The Prayer Letters Account associated with the Account List'
           do_request
           check_resource
           expect(resource_object.keys).to match_array expected_attribute_keys
