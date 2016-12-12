@@ -3,7 +3,6 @@ class DonationReports::DonationInfoSerializer < ApplicationSerializer
   alias symbol_for_currency_code currency_symbol
 
   attributes :amount,
-             :contact_id,
              :converted_amount,
              :converted_currency,
              :converted_currency_symbol,
@@ -11,6 +10,8 @@ class DonationReports::DonationInfoSerializer < ApplicationSerializer
              :currency_symbol,
              :donation_date,
              :likelihood_type
+
+  belongs_to :contact
 
   def currency_symbol
     symbol_for_currency_code(object.currency)

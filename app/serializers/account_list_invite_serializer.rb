@@ -1,9 +1,10 @@
 class AccountListInviteSerializer < ApplicationSerializer
   attributes :accepted_at,
-             :accepted_by_user_id,
-             :account_list_id,
-             :cancelled_by_user_id,
              :code,
-             :invited_by_user_id,
              :recipient_email
+
+  belongs_to :accepted_by_user
+  belongs_to :account_list
+  belongs_to :cancelled_by_user
+  belongs_to :invited_by_user
 end

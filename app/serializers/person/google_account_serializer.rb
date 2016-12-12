@@ -6,10 +6,11 @@ class Person::GoogleAccountSerializer < ApplicationSerializer
              :last_download,
              :last_email_sync,
              :notified_failure,
-             :person_id,
              :primary,
              :refresh_token,
              :remote_id,
              :token,
              :valid_token
+
+  belongs_to :person
 end

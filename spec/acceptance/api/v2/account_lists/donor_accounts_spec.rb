@@ -17,14 +17,19 @@ resource 'Donor Accounts' do
   let(:expected_attribute_keys) do
     %w(
       account_number
-      contact_ids
       created_at
       donor_type
       first_donation_date
       last_donation_date
-      organization_id
       total_donations
       updated_at
+    )
+  end
+
+  let(:resource_associations) do
+    %w(
+      contacts
+      organization
     )
   end
 
@@ -41,7 +46,7 @@ resource 'Donor Accounts' do
 
       example 'Donor Account [LIST]', document: :account_lists do
         do_request
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -62,7 +67,7 @@ resource 'Donor Accounts' do
 
       example 'Donor Account [GET]', document: :account_lists do
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['account_number']).to eq donor_account.account_number
         expect(response_status).to eq 200

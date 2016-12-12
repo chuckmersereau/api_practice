@@ -19,6 +19,13 @@ resource 'Relationship' do
   let(:new_family_relationship) { build(:family_relationship, person: person).attributes }
   let(:form_data)               { build_data(new_family_relationship) }
 
+  let(:resource_associations) do
+    %w(
+      person
+      related_person
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -26,7 +33,7 @@ resource 'Relationship' do
       example 'Person / Relationship [LIST]', document: :contacts do
         do_request
         explanation 'List of Relationships associated to the person'
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
     end
@@ -40,7 +47,7 @@ resource 'Relationship' do
 
       example 'Person / Relationship [GET]', document: :contacts do
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(response_status).to eq 200
       end
     end

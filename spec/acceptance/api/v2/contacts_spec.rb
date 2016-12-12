@@ -20,6 +20,7 @@ resource 'Contacts' do
 
   let(:expected_keys) do
     %w(
+      account_list_id
       avatar
       church_name
       created_at
@@ -44,7 +45,6 @@ resource 'Contacts' do
       pledge_frequency
       pledge_received
       pledge_start_date
-      referrals_to_me_ids
       send_newsletter
       square_avatar
       status
@@ -52,6 +52,15 @@ resource 'Contacts' do
       timezone
       uncompleted_tasks_count
       updated_at
+    )
+  end
+
+  let(:resource_associations) do
+    %w(
+      account_list
+      addresses
+      people
+      referrals_to_me
     )
   end
 

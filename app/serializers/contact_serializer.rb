@@ -2,7 +2,8 @@ class ContactSerializer < ApplicationSerializer
   include DisplayCase::ExhibitsHelper
   include ActionView::Helpers::NumberHelper
 
-  attributes :avatar,
+  attributes :account_list_id,
+             :avatar,
              :church_name,
              :deceased,
              :donor_accounts,
@@ -25,7 +26,6 @@ class ContactSerializer < ApplicationSerializer
              :pledge_frequency,
              :pledge_received,
              :pledge_start_date,
-             :referrals_to_me_ids,
              :send_newsletter,
              :square_avatar,
              :status,
@@ -35,10 +35,8 @@ class ContactSerializer < ApplicationSerializer
 
   has_many :addresses
   has_many :people
-
-  def referrals_to_me_ids
-    object.contact_referrals_to_me.pluck(:referred_by_id)
-  end
+  has_many :referrals_to_me
+  belongs_to :account_list
 
   def avatar
     contact_exhibit.avatar(:large)

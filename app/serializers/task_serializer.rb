@@ -11,9 +11,11 @@ class TaskSerializer < ApplicationSerializer
              :tag_list
 
   attribute :activity_comments_count, key: :comments_count
-  attribute :contact_ids, key: :contacts
   attribute :start_at, key: :due_date
 
   has_many :activity_comments, key: :comments, root: :comments
+  has_many :contacts
   has_many :people
+
+  belongs_to :account_list
 end

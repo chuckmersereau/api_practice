@@ -13,7 +13,6 @@ class PersonSerializer < ApplicationSerializer
              :gender,
              :last_name,
              :marital_status,
-             :master_person_id,
              :middle_name,
              :suffix,
              :title
@@ -21,6 +20,8 @@ class PersonSerializer < ApplicationSerializer
   has_many :email_addresses
   has_many :facebook_accounts
   has_many :phone_numbers
+
+  belongs_to :master_person
 
   def avatar
     person_exhibit.avatar(:large)
