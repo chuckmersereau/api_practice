@@ -25,6 +25,7 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
 
   def persist_resource(tag_name)
     tag_error = TagValidator.new.validate(tag_name)
+
     if tag_error
       render_400_with_errors(tag_error)
     else
