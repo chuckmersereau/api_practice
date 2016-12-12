@@ -1,14 +1,34 @@
 
 RSpec.shared_examples 'common_variables' do
-  let(:id_param) { defined?(id) ? { id: id } : {} }
-  let(:full_params) { id_param.merge(defined?(parent_param) ? parent_param : {}) }
-  let(:parent_param_if_needed) { defined?(parent_param) ? parent_param : {} }
-  let(:full_correct_attributes) { { data: { attributes: correct_attributes } }.merge(full_params) }
-  let(:full_unpermitted_attributes) { { data: { attributes: unpermitted_attributes } }.merge(full_params) }
-  let(:full_incorrect_attributes) { { data: { attributes: incorrect_attributes } }.merge(full_params) }
-  let(:reference_key) { correct_attributes.keys.first }
-  let(:reference_value) { correct_attributes.values.first }
+  let(:id_param)                     { defined?(id) ? { id: id } : {} }
+  let(:full_params)                  { id_param.merge(defined?(parent_param) ? parent_param : {}) }
+  let(:parent_param_if_needed)       { defined?(parent_param) ? parent_param : {} }
+  let(:full_correct_attributes)      { { data: { attributes: correct_attributes } }.merge(full_params) }
+  let(:full_unpermitted_attributes)  { { data: { attributes: unpermitted_attributes } }.merge(full_params) }
+  let(:full_incorrect_attributes)    { { data: { attributes: incorrect_attributes } }.merge(full_params) }
+  let(:reference_key)                { correct_attributes.keys.first }
+  let(:reference_value)              { correct_attributes.values.first }
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
+
+  let(:full_update_attributes) do
+    if defined?(update_attributes)
+      {
+        data: {
+          attributes: update_attributes
+        }
+      }.merge(full_params)
+    else
+      full_correct_attributes
+    end
+  end
+
+  let(:update_reference_key) do
+    full_update_attributes[:data][:attributes].keys.first
+  end
+
+  let(:update_reference_value) do
+    full_update_attributes[:data][:attributes].values.first
+  end
 end
 
 RSpec.shared_examples 'show_examples' do
@@ -43,17 +63,19 @@ RSpec.shared_examples 'update_examples' do
   describe '#update' do
     it 'updates resource for users that are signed in' do
       api_login(user)
-      put :update, full_correct_attributes
+      put :update, full_update_attributes
+
       expect(response.status).to eq(200)
-      expect(resource.reload.send(reference_key)).to eq(reference_value)
+      expect(resource.reload.send(update_reference_key)).to eq(update_reference_value)
     end
 
     it 'does not update the resource with unpermitted params' do
       if unpermitted_attributes
         api_login(user)
         put :update, full_unpermitted_attributes
+
         expect(response.status).to eq(403)
-        expect(resource.reload.send(reference_key)).to_not eq(reference_value)
+        expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       end
     end
 
@@ -61,25 +83,28 @@ RSpec.shared_examples 'update_examples' do
       if incorrect_attributes
         api_login(user)
         put :update, full_incorrect_attributes
+
         expect(response.status).to eq(400)
         expect(response.body).to include('errors')
-        expect(resource.reload.send(reference_key)).to_not eq(reference_value)
+        expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       end
     end
 
     it 'does not update resource for users that do not own the resource' do
       if defined?(id)
         api_login(create(:user))
-        put :update, full_correct_attributes
+        put :update, full_update_attributes
+
         expect(response.status).to eq(403)
-        expect(resource.reload.send(reference_key)).to_not eq(reference_value)
+        expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       end
     end
 
     it 'does not updates resource for users that are not signed in' do
-      put :update, full_correct_attributes
+      put :update, full_update_attributes
+
       expect(response.status).to eq(401)
-      expect(resource.reload.send(reference_key)).to_not eq(reference_value)
+      expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
     end
   end
 end
@@ -109,6 +134,7 @@ RSpec.shared_examples 'create_examples' do
     it 'does not create the resource when there are errors in sent data' do
       if incorrect_attributes
         api_login(user)
+
         expect do
           post :create, full_incorrect_attributes
         end.not_to change { resource.class.count }
@@ -198,9 +224,11 @@ RSpec.shared_examples 'index_examples' do
     it 'sorts resources if sorting_param is in list of permitted sorts' do
       api_login(user)
       get :index, parent_param_if_needed.merge(sort: 'created_at DESC')
+
       expect do
         get :index, parent_param_if_needed.merge(sort: 'created_at ASC')
       end.to change { JSON.parse(response.body)['data'].first['id'] }
+
       expect(JSON.parse(response.body)['meta']['sort']).to eq('created_at ASC')
     end
 
@@ -215,6 +243,7 @@ RSpec.shared_examples 'index_examples' do
 
     it 'paginates differently when specified in params' do
       api_login(user)
+
       get :index, parent_param_if_needed.merge(per_page: 1, page: 2)
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['data'].length).to eq(1)

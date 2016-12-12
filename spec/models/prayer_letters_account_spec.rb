@@ -2,11 +2,22 @@ require 'spec_helper'
 
 describe PrayerLettersAccount do
   let(:pla) { create(:prayer_letters_account) }
-  let(:contact) { create(:contact, account_list: pla.account_list, send_newsletter: 'Both') }
+  let(:contact) { create(:contact, name: 'Doe, John', account_list: pla.account_list, send_newsletter: 'Both') }
   let(:params) do
-    { name: 'John Doe', greeting: '', file_as: 'Doe, John', external_id: contact.id, company: '',
-      street: '123 Somewhere St', city: 'Fremont', state: 'CA', postal_code: '94539', country: '' }
+    {
+      name: 'John Doe',
+      greeting: '',
+      file_as: 'Doe, John',
+      external_id: contact.id,
+      company: '',
+      street: '123 Somewhere St',
+      city: 'Fremont',
+      state: 'CA',
+      postal_code: '94539',
+      country: ''
+    }
   end
+
   before do
     contact.addresses << create(:address, primary_mailing_address: true)
   end

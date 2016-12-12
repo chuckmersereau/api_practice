@@ -75,10 +75,11 @@ describe AddressExhibit do
   context '#address_change_email_body' do
     it 'gives a form email to donor services to request address change' do
       exhibit = AddressExhibit.new(build_stubbed(:address), double)
+      name = exhibit.addressable.name
 
       expected_email_body =
         "Dear Donation Services,\n\n"\
-        "One of my donors, \"Doe, John\" has a new current address.\n\n"\
+        "One of my donors, \"#{name}\" has a new current address.\n\n"\
         "Please update their address to:\n\n"\
         "REPLACE WITH NEW STREET\nREPLACE WITH NEW CITY, STATE, ZIP\n\n"\
         "Thanks!\n\n"
