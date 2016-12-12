@@ -18,8 +18,8 @@ resource 'Appeals' do
 
   let(:expected_attribute_keys) do
     %w(
+      account_list_id
       amount
-      contacts
       created_at
       currencies
       description
@@ -28,6 +28,12 @@ resource 'Appeals' do
       name
       total_currency
       updated_at
+    )
+  end
+
+  let(:resource_associations) do
+    %w(
+      contacts
     )
   end
 

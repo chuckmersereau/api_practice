@@ -15,9 +15,15 @@ resource 'Users' do
       created_at
       first_name
       last_name
-      master_person_id
       preferences
       updated_at
+    )
+  end
+
+  let(:resource_associations) do
+    %w(
+      account_lists
+      master_person
     )
   end
 

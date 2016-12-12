@@ -13,6 +13,12 @@ resource 'Google Accounts' do
   let(:new_google_account) { build(:google_account, person: user).attributes }
   let(:form_data)          { build_data(new_google_account) }
 
+  let(:resource_associations) do
+    %w(
+      person
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -20,7 +26,7 @@ resource 'Google Accounts' do
       example 'Google Account [LIST]', document: :user do
         do_request
         explanation 'List of Google Accounts associated to current_user'
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
     end
@@ -37,7 +43,7 @@ resource 'Google Accounts' do
       example 'Google Account [GET]', document: :user do
         explanation 'The current_user\'s Google Account with the given ID'
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(response_status).to eq 200
       end
     end

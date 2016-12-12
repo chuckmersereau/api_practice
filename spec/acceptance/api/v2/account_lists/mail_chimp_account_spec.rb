@@ -82,10 +82,10 @@ resource 'Mailchimp Account Spec' do
   end
 
   get '/api/v2/account_lists/:account_list_id/mail_chimp_account/sync' do
-    explanation "Synchronizes the Account List's contacts to the MailChimp server"
     parameter 'account_list_id', 'Account List ID', required: true
 
     example 'Mailchimp Account [SYNC]', document: :account_lists do
+      explanation "Synchronizes the Account List's contacts to the MailChimp server"
       do_request
       expect(response_status).to eq 200
     end

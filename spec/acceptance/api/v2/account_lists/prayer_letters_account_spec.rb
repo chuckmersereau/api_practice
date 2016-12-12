@@ -71,7 +71,7 @@ resource 'Prayer Letters Account' do
         parameter 'account_list_id', 'Account List ID', required: true
 
         example 'Prayer Letters Account [SYNC]', document: :account_lists do
-          explanation "Synchronizes The Prayer Letters Account's subscribers with #{PrayerLetterAccount::SERVICE_URL}"
+          explanation "Synchronizes The Prayer Letters Account's subscribers with #{PrayerLettersAccount::SERVICE_URL}"
           do_request
           expect(response_status).to eq 200
         end

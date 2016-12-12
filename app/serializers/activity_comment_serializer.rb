@@ -1,9 +1,10 @@
 class ActivityCommentSerializer < ActiveModel::Serializer
   include DisplayCase::ExhibitsHelper
 
-  attributes :activity_id,
-             :body,
-             :person_id
+  attributes :body
+
+  belongs_to :activity
+  belongs_to :person
 
   def body
     activity_comment_exhibit = exhibit(object)

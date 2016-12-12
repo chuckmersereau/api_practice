@@ -1,12 +1,13 @@
 class DonationReports::DonorInfoSerializer < ApplicationSerializer
   attributes :amount,
-             :contact_id,
              :converted_amount,
              :currency,
              :donation_date,
              :pledge_amount,
              :pledge_frequency,
              :status
+
+  belongs_to :contact
 
   def status
     _(object.status)

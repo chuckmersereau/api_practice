@@ -39,10 +39,15 @@ resource 'Import' do
       import_by_group
       override
       source
-      source_account_id
       tags
       updated_at
-      user_id
+    )
+  end
+
+  let(:resource_associations) do
+    %w(
+      account_list
+      user
     )
   end
 
@@ -74,7 +79,7 @@ resource 'Import' do
       example 'Import [GET]', document: :account_lists do
         explanation 'The Account List Import with the given ID'
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end

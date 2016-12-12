@@ -3,13 +3,9 @@ class DonationSerializer < ApplicationSerializer
 
   attributes :amount,
              :appeal_amount,
-             :appeal_id,
              :channel,
-             :contact_id,
              :currency,
-             :designation_account_id,
              :donation_date,
-             :donor_account_id,
              :memo,
              :motivation,
              :payment_method,
@@ -18,12 +14,17 @@ class DonationSerializer < ApplicationSerializer
              :tendered_amount,
              :tendered_currency
 
+  belongs_to :appeal
+  belongs_to :contact
+  belongs_to :designation_account
+  belongs_to :donor_account
+
   def amount
     current_currency(scope[:account_list])
     number_to_current_currency(object.amount, locale: scope[:locale])
   end
 
-  def contact_id
-    object.donor_account.contacts.where(account_list_id: scope[:account_list].id).first.id
+  def contact
+    object.donor_account.contacts.where(account_list_id: scope[:account_list].id).first
   end
 end

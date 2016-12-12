@@ -16,14 +16,19 @@ resource 'Invites' do
   let(:expected_attribute_keys) do
     %w(
       accepted_at
-      accepted_by_user_id
-      account_list_id
-      cancelled_by_user_id
       code
       created_at
-      invited_by_user_id
       recipient_email
       updated_at
+    )
+  end
+
+  let(:resource_associations) do
+    %w(
+      accepted_by_user
+      account_list
+      cancelled_by_user
+      invited_by_user
     )
   end
 
@@ -38,7 +43,7 @@ resource 'Invites' do
         explanation 'List of Invites associated with the Account List'
         do_request
 
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -58,7 +63,7 @@ resource 'Invites' do
       example 'Invite [GET]', document: :account_lists do
         explanation 'The Account List Invite with the given ID'
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['code']).to eq invite.code
         expect(response_status).to eq 200

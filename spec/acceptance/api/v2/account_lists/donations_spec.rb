@@ -24,14 +24,10 @@ resource 'Donations' do
     %w(
       amount
       appeal_amount
-      appeal_id
       channel
-      contact_id
       created_at
       currency
-      designation_account_id
       donation_date
-      donor_account_id
       memo
       motivation
       payment_method
@@ -40,6 +36,15 @@ resource 'Donations' do
       tendered_amount
       tendered_currency
       updated_at
+    )
+  end
+
+  let(:resource_associations) do
+    %w(
+      appeal
+      contact
+      designation_account
+      donor_account
     )
   end
 
@@ -58,7 +63,7 @@ resource 'Donations' do
       example 'Donation [LIST]', document: :account_lists do
         explanation 'List of Donations associated with the the Account List'
         do_request
-        check_collection_resource(2)
+        check_collection_resource(2, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -87,7 +92,7 @@ resource 'Donations' do
       example 'Donation [GET]', document: :account_lists do
         explanation 'The Account List Donation with the given ID'
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['amount']).to eq '$10'
         expect(response_status).to eq 200

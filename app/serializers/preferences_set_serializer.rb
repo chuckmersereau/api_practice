@@ -9,7 +9,8 @@ class PreferencesSetSerializer < ApplicationSerializer
              :locale,
              :ministry_country,
              :monthly_goal,
-             :salary_organization_id,
              :tester,
              :time_zone
+
+  belongs_to :salary_organization
 end

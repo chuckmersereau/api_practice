@@ -6,7 +6,8 @@ class ImportSerializer < ApplicationSerializer
              :import_by_group,
              :override,
              :source,
-             :source_account_id,
-             :tags,
-             :user_id
+             :tags
+
+  belongs_to :account_list
+  belongs_to :user
 end
