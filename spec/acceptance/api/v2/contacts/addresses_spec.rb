@@ -21,8 +21,8 @@ resource 'Address' do
 
     get '/api/v2/contacts/:contact_id/addresses' do
       example 'Address [LIST]', document: :contacts do
+        explanation 'List of Addresses associated to the Contact'
         do_request
-        explanation('List of Addresses associated to the contact')
 
         check_collection_resource 1
         expect(response_status).to eq(200)
@@ -45,6 +45,7 @@ resource 'Address' do
       end
 
       example 'Address [GET]', document: :contacts do
+        explanation 'The Contact\'s Address with the given ID'
         do_request
         check_resource
         expect(response_status).to eq(200)
@@ -69,6 +70,7 @@ resource 'Address' do
       end
 
       example 'Address [CREATE]', document: :contacts do
+        explanation 'Create a Address associated with the Contact'
         do_request data: form_data
 
         expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
@@ -94,6 +96,7 @@ resource 'Address' do
       end
 
       example 'Address [CREATE]', document: :contacts do
+        explanation 'Update the Contact\'s Address with the given ID'
         do_request data: form_data
 
         expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
@@ -103,6 +106,7 @@ resource 'Address' do
 
     delete '/api/v2/contacts/:contact_id/addresses/:id' do
       example 'Address [DELETE]', document: :contacts do
+        explanation 'Delete the Contact\'s Address with the given ID'
         do_request
         expect(response_status).to eq(204)
       end

@@ -48,6 +48,7 @@ resource 'Prayer Letters Account' do
         end
 
         example 'Prayer Letters Account [GET]', document: :account_lists do
+          explanation 'The Prayer Letters Account associated with the Account List'
           do_request
           check_resource
           expect(resource_object.keys).to match_array expected_attribute_keys
@@ -60,6 +61,7 @@ resource 'Prayer Letters Account' do
         parameter 'id',              'ID', required: true
 
         example 'Prayer Letters Account [DELETE]', document: :account_lists do
+          explanation 'Deletes the Prayer Letters Account associated with the Account List'
           do_request
           expect(response_status).to eq 204
         end
@@ -69,6 +71,7 @@ resource 'Prayer Letters Account' do
         parameter 'account_list_id', 'Account List ID', required: true
 
         example 'Prayer Letters Account [SYNC]', document: :account_lists do
+          explanation "Synchronizes The Prayer Letters Account's subscribers with #{PrayerLettersAccount::SERVICE_URL}"
           do_request
           expect(response_status).to eq 200
         end
@@ -88,6 +91,7 @@ resource 'Prayer Letters Account' do
       let(:form_data) { build_data('oauth2-token': 'token', 'valid-token': true) }
 
       example 'Prayer Letters Account [CREATE]', document: :account_lists do
+        explanation 'Create a Prayer Letters Account associated with the Account List'
         do_request data: form_data
         expect(response_status).to eq 201
       end

@@ -62,6 +62,7 @@ resource 'Mailchimp Account Spec' do
     end
 
     example 'Mailchimp Account [GET]', document: :account_lists do
+      explanation 'The MailChimp Account associated with the Account List'
       do_request
       check_resource
       expect(resource_object.keys).to match_array expected_attribute_keys
@@ -74,6 +75,7 @@ resource 'Mailchimp Account Spec' do
     parameter 'id',              'ID', required: true
 
     example 'Mailchimp Account [DELETE]', document: :account_lists do
+      explanation 'Deletes the MailChimp Account associated with the Account List'
       do_request
       expect(response_status).to eq 204
     end
@@ -83,6 +85,7 @@ resource 'Mailchimp Account Spec' do
     parameter 'account_list_id', 'Account List ID', required: true
 
     example 'Mailchimp Account [SYNC]', document: :account_lists do
+      explanation "Synchronizes the Account List's contacts to the MailChimp server"
       do_request
       expect(response_status).to eq 200
     end

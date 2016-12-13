@@ -42,6 +42,7 @@ resource 'Contacts People Email Addresses' do
       before { email_address }
 
       example 'Person / Email Address [LIST]', document: :contacts do
+        explanation 'List of Email Addresses associated to the Person'
         do_request
         explanation 'List of Email Addresses belonging to the Person'
 
@@ -64,6 +65,7 @@ resource 'Contacts People Email Addresses' do
       end
 
       example 'Person / Email Address [GET]', document: :contacts do
+        explanation 'The Person\'s Email Address with the given ID'
         do_request
         check_resource(['relationships'])
         expect(resource_object.keys.sort).to eq expected_attribute_keys
@@ -84,6 +86,7 @@ resource 'Contacts People Email Addresses' do
       let(:attributes) { attributes_for(:email_address) }
 
       example 'Person / Email Address [CREATE]', document: :contacts do
+        explanation 'Create an Email Address associated with the Person'
         do_request data: form_data
 
         check_resource(['relationships'])
@@ -107,6 +110,7 @@ resource 'Contacts People Email Addresses' do
       before { attributes.merge!(email: 'new-email@example.com') }
 
       example 'Person / Email Address [UPDATE]', document: :contacts do
+        explanation 'Update the Person\'s Email Address with the given ID'
         do_request data: form_data
 
         check_resource(['relationships'])
@@ -130,6 +134,7 @@ resource 'Contacts People Email Addresses' do
       before { attributes.merge!(email: 'new-email@example.com') }
 
       example 'Person / Email Address [UPDATE]', document: :contacts do
+        explanation 'Update the Person\'s Email Address with the given ID'
         do_request data: form_data
 
         check_resource(['relationships'])
@@ -142,6 +147,7 @@ resource 'Contacts People Email Addresses' do
     # destroy
     delete '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
       example 'Person / Email Address [DELETE]', document: :contacts do
+        explanation 'Delete the Person\'s Email Address with the given ID'
         do_request
         expect(response_status).to eq 204
       end

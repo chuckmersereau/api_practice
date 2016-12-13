@@ -41,8 +41,8 @@ resource 'Users' do
 
     get '/api/v2/account_lists/:account_list_id/users' do
       example 'User [LIST]', document: :account_lists do
+        explanation 'List of Users associated to the Account List'
         do_request
-        explanation 'Users of selected account list'
 
         check_collection_resource(3, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -59,6 +59,7 @@ resource 'Users' do
       end
 
       example 'User [GET]', document: :account_lists do
+        explanation 'The Account List User with the given ID'
         do_request
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -70,6 +71,7 @@ resource 'Users' do
 
     delete '/api/v2/account_lists/:account_list_id/users/:id' do
       example 'User [DELETE]', document: :account_lists do
+        explanation 'Destroy the Account List User with the given ID'
         do_request
         expect(response_status).to eq 204
       end

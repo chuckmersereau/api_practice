@@ -40,8 +40,8 @@ resource 'Invites' do
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
       example 'Invite [LIST]', document: :account_lists do
+        explanation 'List of Invites associated with the Account List'
         do_request
-        explanation 'Invites of selected account list'
 
         check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -61,6 +61,7 @@ resource 'Invites' do
       end
 
       example 'Invite [GET]', document: :account_lists do
+        explanation 'The Account List Invite with the given ID'
         do_request
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -77,6 +78,7 @@ resource 'Invites' do
       parameter 'recipient_email', 'Recipient Email', scope: [:data, :attributes], required: true
 
       example 'Invite [CREATE]', document: :account_lists do
+        explanation 'List of Invites associated with the Account List'
         do_request
         expect(resource_object['recipient_email']).to eq email
         expect(response_status).to eq 201

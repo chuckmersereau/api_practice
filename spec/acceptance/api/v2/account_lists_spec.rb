@@ -31,6 +31,7 @@ resource 'Account Lists' do
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
       example 'Account List [LIST]', document: :entities do
+        explanation 'List of Account Lists'
         do_request
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -48,6 +49,7 @@ resource 'Account Lists' do
       end
 
       example 'Account List [GET]', document: :entities do
+        explanation 'The Account List with the given ID'
         do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -65,6 +67,7 @@ resource 'Account Lists' do
       end
 
       example 'Account List [UPDATE]', document: :entities do
+        explanation 'Update the Account List with the given ID'
         do_request data: form_data
         expect(resource_object['name']).to eq new_account_list['name']
         expect(response_status).to eq 200

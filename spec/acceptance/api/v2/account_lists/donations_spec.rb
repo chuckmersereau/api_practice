@@ -61,6 +61,7 @@ resource 'Donations' do
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
       example 'Donation [LIST]', document: :account_lists do
+        explanation 'List of Donations associated with the the Account List'
         do_request
         check_collection_resource(2, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -89,6 +90,7 @@ resource 'Donations' do
       end
 
       example 'Donation [GET]', document: :account_lists do
+        explanation 'The Account List Donation with the given ID'
         do_request
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -109,6 +111,7 @@ resource 'Donations' do
       end
 
       example 'Donation [CREATE]', document: :account_lists do
+        explanation 'Creates a new Donation associated with the Account List'
         do_request data: form_data
 
         expect(resource_object['amount']).to eq '$10'
@@ -130,6 +133,7 @@ resource 'Donations' do
       end
 
       example 'Donation [UPDATE]', document: :account_lists do
+        explanation 'Updates a Donation associated with the Account List'
         do_request data: build_data(new_donation)
 
         expect(resource_object['amount']).to eq '$10'

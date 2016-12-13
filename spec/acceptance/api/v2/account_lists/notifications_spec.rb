@@ -42,6 +42,7 @@ resource 'Notifications' do
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
       example 'Notification [LIST]', document: :account_lists do
+        explanation 'List of Notifications associated with the Account List'
         do_request
         check_collection_resource(2, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -59,6 +60,7 @@ resource 'Notifications' do
       end
 
       example 'Notification [GET]', document: :account_lists do
+        explanation 'The Account List Notification with the given ID'
         do_request
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -76,6 +78,7 @@ resource 'Notifications' do
       end
 
       example 'Notification [CREATE]', document: :account_lists do
+        explanation 'Creates a new Notification associated with the Account List'
         do_request data: form_data
         expect(response_status).to eq 201
       end
@@ -91,6 +94,7 @@ resource 'Notifications' do
       end
 
       example 'Notification [UPDATE]', document: :account_lists do
+        explanation 'Updates the Account List Notification with the given ID'
         do_request data: form_data
         expect(response_status).to eq 200
       end
@@ -101,6 +105,7 @@ resource 'Notifications' do
       parameter 'id',              'ID', required: true
 
       example 'Notification [DELETE]', document: :account_lists do
+        explanation 'Deletes the Account List Notification with the given ID'
         do_request
         expect(response_status).to eq 204
       end

@@ -24,6 +24,7 @@ resource 'Tags' do
       end
 
       example 'Tag [CREATE]', document: :contacts do
+        explanation 'Create a Tag associated with the Contact'
         do_request data: form_data
         expect(resource_object['tag_list'].first).to eq new_tag_params[:name]
         expect(response_status).to eq 201
@@ -35,6 +36,7 @@ resource 'Tags' do
       parameter 'tag_name',   'the Id of the Tag'
 
       example 'Tag [DELETE]', document: :contacts do
+        explanation 'Delete the Contact\'s Tag with the given name'
         do_request
         expect(response_status).to eq 204
       end

@@ -23,6 +23,7 @@ resource 'Tags' do
     end
 
     example 'Tag [CREATE]', document: :tasks do
+      explanation 'Create a Tag associated with the Task'
       do_request data: form_data
       expect(resource_object['new_tag']).to eq new_tag_params['new_tag']
       expect(response_status).to eq 201
@@ -34,6 +35,7 @@ resource 'Tags' do
     parameter 'task_id',  'The Task ID of the Tag'
 
     example 'Tag [DELETE]', document: :tasks do
+      explanation 'Delete the Task\'s Tag with the given name'
       do_request
       expect(response_status).to eq 204
     end

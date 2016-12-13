@@ -34,6 +34,7 @@ resource 'Designation Accounts' do
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
       example 'Designation Account [LIST]', document: :account_lists do
+        explanation 'List of Designation Accounts associated to the Account List'
         do_request
         check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -51,6 +52,7 @@ resource 'Designation Accounts' do
       end
 
       example 'Designation Account [GET]', document: :account_lists do
+        explanation 'The Designation Account with the given ID'
         do_request
         check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys

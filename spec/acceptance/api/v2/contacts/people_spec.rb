@@ -52,8 +52,8 @@ resource 'People' do
 
     get '/api/v2/contacts/:contact_id/people' do
       example 'Person [LIST]', document: :contacts do
+        explanation 'List of People associated to the Contact'
         do_request
-        explanation('List of people associated to the contact')
         check_collection_resource(1, ['relationships'])
         expect(response_status).to eq(200)
       end
@@ -90,6 +90,7 @@ resource 'People' do
       end
 
       example 'Person [GET]', document: :contacts do
+        explanation 'The Contact\'s Person with the given ID'
         do_request
         check_resource(['relationships'])
         expect(response_status).to eq(200)
@@ -154,6 +155,7 @@ resource 'People' do
       end
 
       example 'Person [CREATE]', document: :contacts do
+        explanation 'Create a Person associated with the Contact'
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
         expect(response_status).to eq(201)
@@ -218,6 +220,7 @@ resource 'People' do
       end
 
       example 'Person [UPDATE]', document: :contacts do
+        explanation 'Update the Contact\'s Person with the given ID'
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
         expect(response_status).to eq(200)
@@ -226,6 +229,7 @@ resource 'People' do
 
     delete '/api/v2/contacts/:contact_id/people/:id' do
       example 'Person [DELETE]', document: :contacts do
+        explanation 'Delete the Contact\'s Person with the given ID'
         do_request
         expect(response_status).to eq(204)
       end

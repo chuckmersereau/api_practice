@@ -33,6 +33,7 @@ resource 'Mailchimp' do
       parameter 'appeal_list_id',  'Appeal List ID', required: true
 
       example 'Export to Mailchimp [GET]', document: :appeals do
+        explanation 'Export the Appeal with the given ID to the MailChimp server'
         do_request data: form_data
 
         expect(response_status).to eq 200

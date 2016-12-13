@@ -71,6 +71,7 @@ resource 'Contacts' do
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
       example 'Contact [LIST]', document: :entities do
+        explanation 'List of Contacts'
         do_request
         check_collection_resource(1, additional_keys)
         expect(resource_object.keys).to match_array(expected_keys)
@@ -108,6 +109,7 @@ resource 'Contacts' do
       end
 
       example 'Contact [CREATE]', document: :entities do
+        explanation 'Create a Contact'
         do_request data: form_data
         expect(resource_object['name']).to eq new_contact['name']
         expect(response_status).to eq 201
@@ -152,6 +154,7 @@ resource 'Contacts' do
       end
 
       example 'Contact [GET]', document: :entities do
+        explanation 'The Contact with the given ID'
         do_request
         check_resource(additional_keys)
         expect(resource_object.keys).to match_array(expected_keys)
@@ -191,6 +194,7 @@ resource 'Contacts' do
       end
 
       example 'Contact [UPDATE]', document: :entities do
+        explanation 'Update the Contact with the given ID'
         do_request data: form_data
         expect(resource_object['name']).to eq new_contact['name']
         expect(response_status).to eq 200
@@ -200,6 +204,7 @@ resource 'Contacts' do
     delete '/api/v2/contacts/:id' do
       parameter :id, 'ID of the Contact', required: true
       example 'Contact [DELETE]', document: :entities do
+        explanation 'Delete Contact with the given ID'
         do_request
         expect(response_status).to eq 204
       end
