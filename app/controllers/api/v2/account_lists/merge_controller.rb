@@ -5,7 +5,7 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
 
     if @merge_account_list != load_account_list
       load_account_list.merge(@merge_account_list)
-      head :created
+      render_201
     else
       render_400
     end
