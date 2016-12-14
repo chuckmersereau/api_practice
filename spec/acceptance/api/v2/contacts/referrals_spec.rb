@@ -13,16 +13,16 @@ resource 'Contact Referrals' do
   let(:account_list) { user.account_lists.first }
 
   let(:contact)     { create(:contact, account_list: account_list) }
-  let(:contact_id)  { contact.id }
+  let(:contact_id)  { contact.uuid }
 
   let(:referral)    { create(:contact, account_list: account_list) }
-  let(:referral_id) { referral.id }
+  let(:referral_id) { referral.uuid }
 
   let(:contact_referral) do
     create(:contact_referral, referred_by: contact, referred_to: referral)
   end
 
-  let(:id) { contact_referral.id }
+  let(:id) { contact_referral.uuid }
 
   # This is the reference data used to create/update a resource.
   # specify the `attributes` specifically in your request actions below.
@@ -87,23 +87,21 @@ resource 'Contact Referrals' do
 
       let(:attributes) do
         {
-          referred_by_id: contact.id,
-          referred_to_id: referral.id
+          referred_by_id: contact.uuid,
+          referred_to_id: referral.uuid
         }
       end
 
       example 'create referral' do
         do_request data: form_data
-
         check_resource(additional_attribute_keys)
 
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 201
 
-        contact_referrals_by_me_ids = contact.contact_referrals_by_me.ids
-        created_id = json_response['data']['id'].to_i
-
-        expect(contact_referrals_by_me_ids).to include created_id
+        contact_referrals_by_me_uuids = contact.contact_referrals_by_me.map(&:uuid)
+        created_id = json_response['data']['id']
+        expect(contact_referrals_by_me_uuids).to include created_id
       end
     end
 
@@ -118,7 +116,7 @@ resource 'Contact Referrals' do
 
       let(:attributes) do
         {
-          referred_to_id: alternate.id
+          referred_to_id: alternate.uuid
         }
       end
 
@@ -146,7 +144,7 @@ resource 'Contact Referrals' do
 
       let(:attributes) do
         {
-          referred_to_id: alternate.id
+          referred_to_id: alternate.uuid
         }
       end
 

@@ -7,10 +7,10 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
   let(:factory_type) { :appeal }
   let!(:resource) { create(:appeal, account_list: account_list) }
   let!(:second_resource) { create(:appeal, account_list: account_list) }
-  let(:id) { resource.id }
-  let(:correct_attributes) { attributes_for(:appeal, name: 'Appeal 2', account_list_id: account_list.id) }
-  let(:unpermitted_attributes) { attributes_for(:appeal, name: 'Appeal 3', account_list_id: create(:account_list).id) }
-  let(:incorrect_attributes) { attributes_for(:appeal, account_list_id: account_list.id, name: nil) }
+  let(:id) { resource.uuid }
+  let(:correct_attributes) { attributes_for(:appeal, name: 'Appeal 2').merge(account_list_id: account_list.uuid) }
+  let(:unpermitted_attributes) { attributes_for(:appeal, name: 'Appeal 3').merge(account_list_id: create(:account_list).uuid) }
+  let(:incorrect_attributes) { attributes_for(:appeal, name: nil).merge(account_list_id: account_list.uuid) }
 
   include_examples 'show_examples'
 

@@ -1,2 +1,2 @@
-class NameMaleRatio < ActiveRecord::Base
+class NameMaleRatio < ApplicationRecord
 end

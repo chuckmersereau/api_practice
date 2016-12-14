@@ -8,19 +8,19 @@ resource 'Facebook Accounts' do
   let!(:user)         { create(:user_with_full_account) }
 
   let!(:account_list)   { user.account_lists.first }
-  let(:account_list_id) { account_list.id }
+  let(:account_list_id) { account_list.uuid }
 
-  let!(:contact)   { create(:contact, account_list_id: account_list.id) }
-  let(:contact_id) { contact.id }
+  let!(:contact)   { create(:contact, account_list: account_list) }
+  let(:contact_id) { contact.uuid }
 
   let!(:person)   { create(:person) }
-  let(:person_id) { person.id }
+  let(:person_id) { person.uuid }
 
   let!(:facebook_accounts) { create_list(:facebook_account, 2, person: person) }
   let(:facebook_account)   { facebook_accounts.first }
-  let(:id)                 { facebook_account.id }
+  let(:id)                 { facebook_account.uuid }
 
-  let(:new_facebook_account) { build(:facebook_account).attributes }
+  let(:new_facebook_account) { build(:facebook_account).attributes.merge(person_id: person.uuid) }
   let(:form_data)            { build_data(new_facebook_account) }
 
   let(:expected_attribute_keys) do

@@ -1,3 +1,3 @@
-class ContactNotesLog < ActiveRecord::Base
+class ContactNotesLog < ApplicationRecord
   belongs_to :contact
 end

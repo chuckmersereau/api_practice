@@ -1,7 +1,7 @@
 require 'async'
 require 'open-uri'
 
-class PrayerLettersAccount < ActiveRecord::Base
+class PrayerLettersAccount < ApplicationRecord
   include Async
   include Sidekiq::Worker
   sidekiq_options unique: :until_executed

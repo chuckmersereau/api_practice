@@ -1,4 +1,4 @@
-class Appeal::ExcludedAppealContact < ActiveRecord::Base
+class Appeal::ExcludedAppealContact < ApplicationRecord
   belongs_to :appeal
   belongs_to :contact
 

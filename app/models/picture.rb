@@ -1,4 +1,4 @@
-class Picture < ActiveRecord::Base
+class Picture < ApplicationRecord
   include HasPrimary
   @@primary_scope = :picture_of
 

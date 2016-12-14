@@ -1,4 +1,4 @@
-class Nickname < ActiveRecord::Base
+class Nickname < ApplicationRecord
   def self.increment_times_merged(name, nickname)
     find_and_increment_counter(name, nickname, :num_merges)
   end

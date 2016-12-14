@@ -8,16 +8,19 @@ resource 'Relationship' do
   let!(:user)         { create(:user_with_full_account) }
 
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id) { contact.id }
+  let(:contact_id) { contact.uuid }
 
   let(:person)    { create(:person, contacts: [contact]) }
-  let(:person_id) { person.id }
+  let(:person_id) { person.uuid }
 
   let!(:family_relationship) { create(:family_relationship, person: person) }
-  let(:id)                   { family_relationship.id }
+  let(:id)                   { family_relationship.uuid }
 
-  let(:new_family_relationship) { build(:family_relationship, person: person).attributes }
-  let(:form_data)               { build_data(new_family_relationship) }
+  let(:new_family_relationship) do
+    build(:family_relationship).attributes.merge(related_person_id: create(:person).uuid,
+                                                 person_id: person.uuid)
+  end
+  let(:form_data) { build_data(new_family_relationship) }
 
   let(:resource_associations) do
     %w(
@@ -63,7 +66,7 @@ resource 'Relationship' do
       example 'Person / Relationship [CREATE]', document: :contacts do
         explanation 'Create a Relationship associated with the Person'
         do_request data: form_data
-        expect(resource_object['username']).to eq new_family_relationship['username']
+        expect(resource_object['relationship']).to eq new_family_relationship['relationship']
         expect(response_status).to eq 201
       end
     end
@@ -79,7 +82,7 @@ resource 'Relationship' do
         explanation 'Update the Person\'s Relationship with the given ID'
         do_request data: form_data
 
-        expect(resource_object['username']).to eq new_family_relationship['username']
+        expect(resource_object['relationship']).to eq new_family_relationship['relationship']
         expect(response_status).to eq 200
       end
     end

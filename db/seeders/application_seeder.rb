@@ -16,7 +16,7 @@ class ApplicationSeeder
 
   def all_models_seeded?
     Rails.application.eager_load!
-    unseeded = ActiveRecord::Base.descendants.reject(&:exists?)
+    unseeded = ActiveRecord::Base.descendants.reject(&:abstract_class?).reject(&:exists?)
     unseeded.each { |record_class| puts "Warning: No records seeded for class #{record_class}" } unless quiet
     unseeded.blank?
   end

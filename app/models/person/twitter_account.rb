@@ -1,4 +1,4 @@
-class Person::TwitterAccount < ActiveRecord::Base
+class Person::TwitterAccount < ApplicationRecord
   include Person::Account
   after_save :ensure_only_one_primary
 

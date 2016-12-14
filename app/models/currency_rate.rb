@@ -1,4 +1,4 @@
-class CurrencyRate < ActiveRecord::Base
+class CurrencyRate < ApplicationRecord
   class << self
     def latest_for(currency_code)
       rate_on_date(currency_code: currency_code, date: Date.current)

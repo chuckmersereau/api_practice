@@ -8,10 +8,19 @@ resource 'Organization Accounts' do
   let!(:user)         { create(:user_with_full_account) }
 
   let!(:organization_account) { create(:organization_account, person: user) }
-  let(:id)                    { organization_account.id }
+  let(:id)                    { organization_account.uuid }
 
-  let(:new_organization_account_params) { build(:organization_account, person: user).attributes }
-  let(:form_data)                       { build_data(new_organization_account_params) }
+  let(:new_organization_account_params) do
+    build(:organization_account).attributes.merge(organization_id: create(:organization).uuid, person_id: user.uuid)
+  end
+
+  let(:form_data) { build_data(new_organization_account_params) }
+
+  before do
+    allow_any_instance_of(DataServer).to receive(:validate_username_and_password).and_return(true)
+    allow_any_instance_of(Person::OrganizationAccount).to receive(:queue_import_data)
+    allow_any_instance_of(Person::OrganizationAccount).to receive(:set_up_account_list)
+  end
 
   context 'authorized user' do
     before { api_login(user) }

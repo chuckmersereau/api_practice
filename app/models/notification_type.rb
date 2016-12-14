@@ -1,4 +1,4 @@
-class NotificationType < ActiveRecord::Base
+class NotificationType < ApplicationRecord
   # attr_accessible :description, :type
 
   def initialize(*args)

@@ -1,4 +1,4 @@
-class Company < ActiveRecord::Base
+class Company < ApplicationRecord
   has_many :company_positions, dependent: :destroy
   has_many :people, through: :company_positions
   has_many :company_partnerships, dependent: :destroy

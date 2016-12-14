@@ -1,4 +1,4 @@
-class CompanyPosition < ActiveRecord::Base
+class CompanyPosition < ApplicationRecord
   belongs_to :person
   belongs_to :company
 

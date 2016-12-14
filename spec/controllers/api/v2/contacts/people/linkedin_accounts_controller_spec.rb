@@ -4,14 +4,14 @@ RSpec.describe Api::V2::Contacts::People::LinkedinAccountsController, type: :con
   let(:factory_type) { :linkedin_account }
   let!(:user) { create(:user_with_full_account) }
   let!(:account_list) { user.account_lists.first }
-  let!(:contact) { create(:contact, account_list_id: account_list.id) }
+  let!(:contact) { create(:contact, account_list: account_list) }
   let!(:person) { create(:person) }
   let!(:person2) { create(:person) }
   let!(:linkedin_accounts) { create_list(:linkedin_account, 2, person: person) }
   let(:linkedin_account) { linkedin_accounts.first }
   let(:resource) { linkedin_account }
-  let(:id) { linkedin_account.id }
-  let(:parent_param) { { contact_id: contact.id, person_id: person.id } }
+  let(:id) { linkedin_account.uuid }
+  let(:parent_param) { { contact_id: contact.uuid, person_id: person.uuid } }
   let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { attributes_for(:linkedin_account, person: person2, first_name: 'Albert') }
   let(:incorrect_attributes) { attributes_for(:linkedin_account, person: nil, public_url: nil) }

@@ -1,5 +1,5 @@
 require 'async'
-class GoogleIntegration < ActiveRecord::Base
+class GoogleIntegration < ApplicationRecord
   include Async
   include Sidekiq::Worker
   sidekiq_options unique: :until_executed

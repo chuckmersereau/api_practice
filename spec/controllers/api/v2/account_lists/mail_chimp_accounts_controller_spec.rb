@@ -4,7 +4,7 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
   let(:factory_type) { :mail_chimp_account }
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.first }
-  let(:account_list_id) { account_list.id }
+  let(:account_list_id) { account_list.uuid }
   let(:primary_list_id) { '1e72b58b72' }
   let(:primary_list_id_2) { '29a77ba541' }
   let(:mail_chimp_account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
@@ -21,9 +21,11 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
 
   let!(:resource) { mail_chimp_account }
   let(:parent_param) { { account_list_id: account_list_id } }
-  let(:correct_attributes) { build(:mail_chimp_account, primary_list_id: primary_list_id).attributes }
-  let(:incorrect_attributes) { build(:mail_chimp_account, api_key: nil).attributes }
+  let(:correct_attributes) { build(:mail_chimp_account, primary_list_id: primary_list_id).attributes.except('account_list_id') }
+  let(:incorrect_attributes) { build(:mail_chimp_account, api_key: nil).attributes.except('account_list_id') }
   let(:unpermitted_attributes) { nil }
+
+  let(:given_reference_key) { :primary_list_id }
 
   include_examples 'show_examples'
 

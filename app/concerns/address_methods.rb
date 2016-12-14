@@ -61,7 +61,7 @@ module AddressMethods
       source_donor_account_id: source_donor_account_id,
       source: source,
       primary_mailing_address: !addresses.any?(&:primary_mailing_address)
-    )
+    ).except(:uuid)
     addresses.create!(attributes)
   end
 

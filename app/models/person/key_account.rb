@@ -1,4 +1,4 @@
-class Person::KeyAccount < ActiveRecord::Base
+class Person::KeyAccount < ApplicationRecord
   include Person::Account
 
   self.table_name = 'person_relay_accounts'

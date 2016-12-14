@@ -3,6 +3,10 @@ class ApplicationSerializer < ActiveModel::Serializer
              :created_at,
              :updated_at
 
+  def id
+    object.uuid
+  end
+
   def self.collection_serialize(resources)
     ActiveModelSerializers::SerializableResource.new(resources, each_serializer: self)
   end

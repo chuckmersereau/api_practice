@@ -2,7 +2,7 @@ require_dependency 'data_server'
 require_dependency 'credential_validator'
 require 'async'
 
-class Person::OrganizationAccount < ActiveRecord::Base
+class Person::OrganizationAccount < ApplicationRecord
   include Person::Account
   include Async
   include Sidekiq::Worker

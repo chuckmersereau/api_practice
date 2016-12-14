@@ -1,4 +1,4 @@
-class DesignationProfileAccount < ActiveRecord::Base
+class DesignationProfileAccount < ApplicationRecord
   belongs_to :designation_profile
   belongs_to :designation_account
 

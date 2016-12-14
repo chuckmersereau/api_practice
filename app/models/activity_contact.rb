@@ -1,4 +1,4 @@
-class ActivityContact < ActiveRecord::Base
+class ActivityContact < ApplicationRecord
   has_paper_trail on: [:destroy],
                   meta: { related_object_type: 'Activity',
                           related_object_id: :activity_id }

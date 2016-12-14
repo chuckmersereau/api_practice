@@ -1,5 +1,5 @@
 require_dependency 'address_methods'
-class DonorAccount < ActiveRecord::Base
+class DonorAccount < ApplicationRecord
   include AddressMethods
 
   has_many :master_person_donor_accounts, dependent: :destroy

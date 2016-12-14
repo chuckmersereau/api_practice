@@ -1,4 +1,4 @@
-class Donation < ActiveRecord::Base
+class Donation < ApplicationRecord
   has_paper_trail on: [:destroy]
 
   belongs_to :donor_account

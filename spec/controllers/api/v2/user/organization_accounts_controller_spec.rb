@@ -6,15 +6,15 @@ RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller 
   let(:factory_type) { :organization_account }
   let!(:resource) { create(:organization_account, person: user) }
   let!(:second_resource) { create(:organization_account, person: user) }
-  let(:id) { resource.id }
+  let(:id) { resource.uuid }
   let(:unpermitted_attributes) do
-    { organization_id: create(:organization).id, person_id: create(:user).id,
-      username: 'random_username', password: 'random_password' }
+    { username: 'random_username', password: 'random_password',
+      organization_id: create(:organization).uuid, person_id: create(:user).uuid }
   end
 
   let(:correct_attributes) do
-    { organization_id: create(:organization).id, person_id: user.id,
-      username: 'random_username', password: 'random_password' }
+    { username: 'random_username', password: 'random_password',
+      organization_id: create(:organization).uuid, person_id: user.uuid }
   end
   let(:incorrect_attributes) { { username: nil } }
 

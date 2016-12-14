@@ -1,4 +1,4 @@
-class AccountListInvite < ActiveRecord::Base
+class AccountListInvite < ApplicationRecord
   has_paper_trail on: [:update], ignore: [:updated_at]
 
   belongs_to :account_list

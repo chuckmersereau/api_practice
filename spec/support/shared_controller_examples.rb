@@ -6,8 +6,8 @@ RSpec.shared_examples 'common_variables' do
   let(:full_correct_attributes)      { { data: { attributes: correct_attributes } }.merge(full_params) }
   let(:full_unpermitted_attributes)  { { data: { attributes: unpermitted_attributes } }.merge(full_params) }
   let(:full_incorrect_attributes)    { { data: { attributes: incorrect_attributes } }.merge(full_params) }
-  let(:reference_key)                { correct_attributes.keys.first }
-  let(:reference_value)              { correct_attributes.values.first }
+  let(:reference_key)                { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
+  let(:reference_value)              { defined?(given_reference_value) ? given_reference_value : correct_attributes.values.first }
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
 
   let(:full_update_attributes) do
@@ -23,11 +23,19 @@ RSpec.shared_examples 'common_variables' do
   end
 
   let(:update_reference_key) do
-    full_update_attributes[:data][:attributes].keys.first
+    if defined?(given_update_reference_key)
+      given_update_reference_key
+    else
+      full_update_attributes[:data][:attributes].keys.first
+    end
   end
 
   let(:update_reference_value) do
-    full_update_attributes[:data][:attributes].values.first
+    if defined?(given_update_reference_value)
+      given_update_reference_value
+    else
+      full_update_attributes[:data][:attributes].values.first
+    end
   end
 end
 
@@ -39,7 +47,7 @@ RSpec.shared_examples 'show_examples' do
       api_login(user)
       get :show, full_params
       expect(response.status).to eq(200)
-      expect(response.body).to include(resource.send(reference_key).to_s)
+      expect(response.body).to include(resource.send(reference_key).to_s) if reference_key
     end
 
     it 'does not show resource to users that do not own the resource' do
@@ -197,7 +205,7 @@ RSpec.shared_examples 'index_examples' do
       api_login(user)
       get :index, parent_param_if_needed
       expect(response.status).to eq(200)
-      expect(response.body).to include(resource.class.first.send(reference_key).to_s)
+      expect(response.body).to include(resource.class.first.send(reference_key).to_s) if reference_key
     end
 
     it 'does not show resources that do not belong to the signed in user' do

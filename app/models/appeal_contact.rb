@@ -1,4 +1,4 @@
-class AppealContact < ActiveRecord::Base
+class AppealContact < ApplicationRecord
   has_paper_trail on: [:destroy],
                   meta: { related_object_type: 'Appeal',
                           related_object_id: :appeal_id }

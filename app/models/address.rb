@@ -1,6 +1,6 @@
 require 'smarty_streets'
 
-class Address < ActiveRecord::Base
+class Address < ApplicationRecord
   has_paper_trail on: [:create, :update, :destroy],
                   if: proc { |address| address.record_paper_trail? },
                   meta: { related_object_type: :addressable_type,

@@ -1,4 +1,4 @@
-class Notification < ActiveRecord::Base
+class Notification < ApplicationRecord
   belongs_to :contact, inverse_of: :notifications
   belongs_to :notification_type
   belongs_to :donation

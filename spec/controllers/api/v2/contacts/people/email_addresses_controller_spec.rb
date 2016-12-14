@@ -27,7 +27,7 @@ RSpec.describe Api::V2::Contacts::People::EmailAddressesController, type: :contr
   end
 
   # If needed, keep this ;)
-  let(:id) { resource.id }
+  let(:id) { resource.uuid }
 
   # If needed, keep this ;)
   let(:parent_param) do
@@ -38,15 +38,15 @@ RSpec.describe Api::V2::Contacts::People::EmailAddressesController, type: :contr
     # Note: Don't include :id
     # Example: { account_list_id: account_list_id }
     {
-      contact_id: contact.id,
-      person_id: person.id
+      contact_id: contact.uuid,
+      person_id: person.uuid
     }
   end
 
   # This is required!
   let(:correct_attributes) do
     # A hash of correct attributes for creating/updating the resource
-    # Example: { subject: 'test subject', start_at: Time.now, account_list_id: account_list.id }
+    # Example: { subject: 'test subject', start_at: Time.now, account_list_id: account_list.uuid }
     {
       email: 'test@example.com',
       historic: false,
@@ -58,7 +58,7 @@ RSpec.describe Api::V2::Contacts::People::EmailAddressesController, type: :contr
   # This is required!
   let(:unpermitted_attributes) do
     # A hash of attributes that include unpermitted attributes for the current user to update
-    # Example: { subject: 'test subject', start_at: Time.now, account_list_id: create(:account_list).id } }
+    # Example: { subject: 'test subject', start_at: Time.now, account_list_id: create(:account_list).uuid } }
     # --
     # If there aren't attributes that are unpermitted,
     # you need to specifically return `nil`
@@ -73,7 +73,7 @@ RSpec.describe Api::V2::Contacts::People::EmailAddressesController, type: :contr
   # This is required!
   let(:incorrect_attributes) do
     # A hash of attributes that will fail validations
-    # Example: { subject: nil, account_list_id: account_list.id } }
+    # Example: { subject: nil, account_list_id: account_list.uuid } }
     # --
     # If there aren't attributes that violate validations,
     # you need to specifically return `nil`

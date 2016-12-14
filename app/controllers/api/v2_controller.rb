@@ -3,9 +3,11 @@ class Api::V2Controller < ApiController
   include Filtering
   include Sorting
   include Pagination
+  include UuidToIdTransformer
 
   before_action :jwt_authorize!
-  before_action :transform_params_field_names, only: [:create, :update]
+  before_action :transform_uuid_attributes_params_to_ids, only: [:create, :update]
+  before_action :transform_uuid_filters_params_to_ids, only: :index
   after_action :verify_authorized, except: :index
 
   rescue_from Pundit::NotAuthorizedError, with: :render_403
@@ -51,16 +53,5 @@ class Api::V2Controller < ApiController
   def permitted_filters
     raise NotImplementedError,
           'This method needs to be implemented in your controller'
-  end
-
-  def transform_params_field_names
-    new_hash = {}
-
-    params[:data][:attributes].each do |key, value|
-      new_key = key.tr('-', '_')
-      new_hash[new_key.to_sym] = value
-    end
-
-    params[:data][:attributes] = new_hash
   end
 end

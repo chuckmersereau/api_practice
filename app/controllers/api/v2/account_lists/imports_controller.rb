@@ -12,7 +12,7 @@ class Api::V2::AccountLists::ImportsController < Api::V2Controller
   private
 
   def load_import
-    @import ||= Import.find(params[:id])
+    @import ||= Import.find_by!(uuid: params[:id])
   end
 
   def render_import
@@ -52,7 +52,7 @@ class Api::V2::AccountLists::ImportsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find(params[:account_list_id])
+    @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
   end
 
   def permitted_filters

@@ -1,4 +1,4 @@
-class MasterPerson < ActiveRecord::Base
+class MasterPerson < ApplicationRecord
   has_many :people, dependent: :destroy
   has_many :master_person_donor_accounts, dependent: :destroy
   has_many :master_person_sources, dependent: :destroy

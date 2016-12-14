@@ -23,8 +23,8 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # Creates the Singular Resource for this spec - change as needed
     # Example: create(:contact, account_list: account_list)
     attributes = {
-      referred_by_id: contact.id,
-      referred_to_id: referral.id
+      referred_by: contact,
+      referred_to: referral
     }
 
     create(:contact_referral, attributes)
@@ -35,15 +35,15 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # Creates a second resource for this spec - change as needed
     # Example: create(:contact, account_list: account_list)
     attributes = {
-      referred_by_id: contact.id,
-      referred_to_id: referral.id
+      referred_by: contact,
+      referred_to: referral
     }
 
     create(:contact_referral, attributes)
   end
 
   # If needed, keep this ;)
-  let(:id) { resource.id }
+  let(:id) { resource.uuid }
 
   # If needed, keep this ;)
   let(:parent_param) do
@@ -54,7 +54,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # Note: Don't include :id
     # Example: { account_list_id: account_list_id }
     {
-      contact_id: contact.id
+      contact_id: contact.uuid
     }
   end
 
@@ -63,8 +63,8 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # A hash of correct attributes for creating/updating the resource
     # Example: { subject: 'test subject', start_at: Time.now, account_list_id: account_list.id }
     {
-      referred_by_id: contact.id,
-      referred_to_id: referral.id
+      referred_by_id: contact.uuid,
+      referred_to_id: referral.uuid
     }
   end
 
@@ -74,9 +74,11 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
   # If you don't need it - remove it entirely.
   let(:update_attributes) do
     {
-      referred_to_id: alternate.id
+      referred_to_id: alternate.uuid
     }
   end
+  let(:given_reference_key) { nil }
+  let(:given_update_reference_value) { alternate.id }
 
   # This is required!
   let(:unpermitted_attributes) do
@@ -98,7 +100,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # you need to specifically return `nil`
     #
     {
-      referred_by_id: contact.id,
+      referred_by_id: contact.uuid,
       referred_to_id: nil
     }
   end

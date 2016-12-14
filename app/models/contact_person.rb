@@ -1,4 +1,4 @@
-class ContactPerson < ActiveRecord::Base
+class ContactPerson < ApplicationRecord
   include HasPrimary
   @@primary_scope = :contact
 

@@ -41,7 +41,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def load_contact
-    @contact ||= Contact.find(params[:id])
+    @contact ||= Contact.find_by!(uuid: params[:id])
   end
 
   def authorize_contact

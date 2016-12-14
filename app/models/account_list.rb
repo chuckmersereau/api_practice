@@ -11,7 +11,7 @@
 require 'async'
 require 'mail'
 
-class AccountList < ActiveRecord::Base
+class AccountList < ApplicationRecord
   include Async
   include Sidekiq::Worker
 

@@ -6,7 +6,7 @@ RSpec.describe Api::V2::User::GoogleAccountsController, type: :controller do
   let(:factory_type) { :google_account }
   let!(:resource) { create(:google_account, person: user) }
   let!(:second_resource) { create(:google_account, person: user) }
-  let(:id) { resource.id }
+  let(:id) { resource.uuid }
   let(:unpermitted_attributes) { nil }
   let(:correct_attributes) { { email: 'test@email.com' } }
   let(:incorrect_attributes) { nil }

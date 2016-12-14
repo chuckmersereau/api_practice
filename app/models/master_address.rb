@@ -1,4 +1,4 @@
-class MasterAddress < ActiveRecord::Base
+class MasterAddress < ApplicationRecord
   has_many :addresses
   serialize :smarty_response, JSON
 

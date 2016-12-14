@@ -1,4 +1,4 @@
-class MasterCompany < ActiveRecord::Base
+class MasterCompany < ApplicationRecord
   has_many :companies, dependent: :destroy
   has_many :donor_accounts, dependent: :restrict_with_exception
 

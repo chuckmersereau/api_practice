@@ -114,6 +114,10 @@ rails generate graip:controller Api/v2/Contacts
 And it will automatically generate a controller template,
 controller spec, and acceptance spec for how controllers will be formatted for this project following paradigms from [Growing Rails Applications In Practice](https://pragprog.com/book/d-kegrap/growing-rails-applications-in-practice).
 
+## Universal Unique Identifiers (UUID)
+
+To allow clients to generate identifiers from their side, UUIDs are used in this project at the controller level. At the model level though, we are still using integer ids to refer to db objects. Things are setup this way, because a db migration would have been to risky.
+
 #### Resources:
 - For examples of the controller and spec files - check out: [spec/support/generators/graip/controller/](spec/support/generators/graip/controller)
 - The generator templates can be found in [lib/generators/graip/controller/templates](lib/generators/graip/controller/templates).

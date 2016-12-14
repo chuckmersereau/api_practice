@@ -1,4 +1,4 @@
-class ContactReferral < ActiveRecord::Base
+class ContactReferral < ApplicationRecord
   PERMITTED_ATTRIBUTES = [
     :referred_by_id,
     :referred_to_id

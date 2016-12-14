@@ -42,7 +42,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def load_task
-    @task ||= Task.find(params[:id])
+    @task ||= Task.find_by!(uuid: params[:id])
   end
 
   def render_task

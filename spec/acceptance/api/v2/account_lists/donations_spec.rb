@@ -8,17 +8,20 @@ resource 'Donations' do
   let!(:user)         { create(:user_with_full_account) }
 
   let!(:account_list)   { user.account_lists.first }
-  let(:account_list_id) { account_list.id }
+  let(:account_list_id) { account_list.uuid }
 
-  let!(:contact)             { create(:contact, account_list_id: account_list.id) }
+  let!(:contact)             { create(:contact, account_list: account_list) }
   let!(:donor_account)       { create(:donor_account) }
   let!(:designation_account) { create(:designation_account) }
   let!(:donations)           { create_list(:donation, 2, donor_account: donor_account, designation_account: designation_account, amount: 10.00) }
   let(:donation)             { donations.first }
-  let(:id)                   { donation.id }
+  let(:id)                   { donation.uuid }
 
-  let(:new_donation) { build(:donation, donor_account: donor_account, designation_account: designation_account, amount: 10.00).attributes }
-  let(:form_data)    { build_data(new_donation) }
+  let(:new_donation) do
+    build(:donation, amount: 10.00).attributes.merge(donor_account_id: donor_account.uuid,
+                                                     designation_account_id: designation_account.uuid)
+  end
+  let(:form_data) { build_data(new_donation) }
 
   let(:expected_attribute_keys) do
     %w(

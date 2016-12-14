@@ -1,4 +1,4 @@
-class AccountListUser < ActiveRecord::Base
+class AccountListUser < ApplicationRecord
   has_paper_trail on: [:destroy]
 
   belongs_to :user

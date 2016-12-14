@@ -8,7 +8,7 @@ resource 'Mailchimp Account Spec' do
   let!(:user)         { create(:user_with_account) }
 
   let!(:account_list)   { user.account_lists.first }
-  let(:account_list_id) { account_list.id }
+  let(:account_list_id) { account_list.uuid }
 
   let(:primary_list_id)   { '1e72b58b72' }
   let(:primary_list_id_2) { '29a77ba541' }

@@ -1,2 +1,2 @@
-class CurrencyAlias < ActiveRecord::Base
+class CurrencyAlias < ApplicationRecord
 end

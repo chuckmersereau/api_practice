@@ -42,7 +42,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   end
 
   def load_notification
-    @notification ||= Notification.find(params[:id])
+    @notification ||= Notification.find_by!(uuid: params[:id])
   end
 
   def render_notification
@@ -83,7 +83,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find(params[:account_list_id])
+    @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
   end
 
   def permitted_filters

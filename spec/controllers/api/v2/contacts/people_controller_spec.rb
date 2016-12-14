@@ -8,8 +8,8 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   let(:contact) { create(:contact, account_list: user.account_lists.first) }
   let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
   let!(:second_resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
-  let(:id) { resource.id }
-  let(:parent_param) { { contact_id: contact.id } }
+  let(:id) { resource.uuid }
+  let(:parent_param) { { contact_id: contact.uuid } }
   let(:correct_attributes) { { first_name: 'Billy' } }
   let(:unpermitted_attributes) { nil }
   let(:incorrect_attributes) { nil }

@@ -12,13 +12,13 @@ resource 'Contacts People Email Addresses' do
   let(:account_list)  { user.account_lists.first }
 
   let(:contact)       { create(:contact, account_list: account_list) }
-  let(:contact_id)    { contact.id }
+  let(:contact_id)    { contact.uuid }
 
   let(:person)        { create(:person, contacts: [contact]) }
-  let(:person_id)     { person.id }
+  let(:person_id)     { person.uuid }
 
-  let(:email_address) { create(:email_address, person: person) }
-  let(:id)            { email_address.id }
+  let!(:email_address) { create(:email_address, person: person) }
+  let(:id)             { email_address.uuid }
 
   let(:form_data) { build_data(attributes) }
 
@@ -82,7 +82,7 @@ resource 'Contacts People Email Addresses' do
         parameter 'historic', 'Set to true when an Email Address should no longer be used'
       end
 
-      let(:attributes) { attributes_for(:email_address) }
+      let(:attributes) { attributes_for(:email_address).merge(person_id: person.uuid) }
 
       example 'Person / Email Address [CREATE]', document: :contacts do
         explanation 'Create an Email Address associated with the Person'
@@ -104,7 +104,7 @@ resource 'Contacts People Email Addresses' do
         parameter 'historic', 'Set to true when an Email Address should no longer be used'
       end
 
-      let(:attributes) { email_address.attributes }
+      let(:attributes) { email_address.attributes.merge(person_id: person.uuid) }
 
       before { attributes.merge!(email: 'new-email@example.com') }
 
@@ -128,7 +128,7 @@ resource 'Contacts People Email Addresses' do
         parameter 'historic', 'Set to true when an Email Address should no longer be used'
       end
 
-      let(:attributes) { email_address.attributes }
+      let(:attributes) { email_address.attributes.merge(person_id: person.uuid) }
 
       before { attributes.merge!(email: 'new-email@example.com') }
 

@@ -1,6 +1,6 @@
 require 'user_agent_decoder'
 
-class HelpRequest < ActiveRecord::Base
+class HelpRequest < ApplicationRecord
   mount_uploader :file, HelpRequestUploader
 
   attr_accessor :user_agent

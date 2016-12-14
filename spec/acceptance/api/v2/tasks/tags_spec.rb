@@ -8,7 +8,7 @@ resource 'Tags' do
   let!(:user)         { create(:user_with_full_account) }
 
   let!(:task)   { create(:task, account_list: user.account_lists.first) }
-  let(:task_id) { task.id }
+  let(:task_id) { task.uuid }
 
   let(:tag_name) { 'new_tag' }
 

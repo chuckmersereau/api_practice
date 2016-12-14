@@ -1,4 +1,4 @@
-class PhoneNumber < ActiveRecord::Base
+class PhoneNumber < ApplicationRecord
   include HasPrimary
   @@primary_scope = :person
 

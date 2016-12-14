@@ -1,4 +1,4 @@
-class Activity < ActiveRecord::Base
+class Activity < ApplicationRecord
   acts_as_taggable
 
   has_paper_trail on: [:destroy],

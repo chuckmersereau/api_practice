@@ -40,7 +40,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def load_invite
-    @invite ||= AccountListInvite.find(params[:id])
+    @invite ||= AccountListInvite.find_by!(uuid: params[:id])
   end
 
   def render_invite
@@ -69,7 +69,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find(params[:account_list_id])
+    @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
   end
 
   def permitted_filters
@@ -78,5 +78,11 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
 
   def pundit_user
     PunditContext.new(current_user, account_list: load_account_list)
+  end
+
+  def transform_uuid_attributes_params_to_ids
+    change_specific_param_id_key_to_uuid(params[:data][:attributes], :accepted_by_user_id, User)
+    change_specific_param_id_key_to_uuid(params[:data][:attributes], :cancelled_by_user_id, User)
+    super
   end
 end

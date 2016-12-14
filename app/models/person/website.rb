@@ -1,4 +1,4 @@
-class Person::Website < ActiveRecord::Base
+class Person::Website < ApplicationRecord
   belongs_to :person
 
   PERMITTED_ATTRIBUTES = [

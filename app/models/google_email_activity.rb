@@ -1,4 +1,4 @@
-class GoogleEmailActivity < ActiveRecord::Base
+class GoogleEmailActivity < ApplicationRecord
   belongs_to :activity
   belongs_to :google_email
 end

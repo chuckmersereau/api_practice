@@ -8,12 +8,12 @@ resource 'People' do
   let(:resource_type) { 'people' }
 
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id) { contact.id }
+  let(:contact_id) { contact.uuid }
 
   let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
-  let(:id)        { resource.id }
+  let(:id)        { resource.uuid }
 
-  let(:new_resource) { build(:person, first_name: 'Mpdx').attributes }
+  let(:new_resource) { build(:person, first_name: 'Mpdx').attributes.merge(master_person_id: create(:master_person).uuid) }
   let(:form_data)    { build_data(new_resource) }
 
   let(:resource_attributes) do

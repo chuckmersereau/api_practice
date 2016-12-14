@@ -32,12 +32,10 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
 
   def persist_relationship
     build_relationship
+    authorize_relationship
+    return show if save_relationship
 
-    if save_relationship
-      render_relationship
-    else
-      render_400_with_errors(@relationship)
-    end
+    render_400_with_errors(@relationship)
   end
 
   def load_relationships
@@ -48,7 +46,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def load_relationship
-    @relationship ||= relationship_scope.find(params[:id])
+    @relationship ||= relationship_scope.find_by!(uuid: params[:id])
   end
 
   def authorize_relationship
@@ -63,7 +61,6 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   def build_relationship
     @relationship ||= relationship_scope.build
     @relationship.assign_attributes(relationship_params)
-    authorize @relationship
   end
 
   def save_relationship
@@ -75,11 +72,11 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def current_contact
-    @contact ||= Contact.find(params[:contact_id])
+    @contact ||= Contact.find_by!(uuid: params[:contact_id])
   end
 
   def current_person
-    @person ||= current_contact.people.find(params[:person_id])
+    @person ||= current_contact.people.find_by!(uuid: params[:person_id])
   end
 
   def permitted_filters
@@ -96,5 +93,10 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
 
   def pundit_user
     PunditContext.new(current_user, contact: current_contact)
+  end
+
+  def transform_uuid_attributes_params_to_ids
+    change_specific_param_id_key_to_uuid(params[:data][:attributes], :related_person_id, Person)
+    super
   end
 end

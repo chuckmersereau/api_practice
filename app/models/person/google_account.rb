@@ -1,5 +1,5 @@
 require 'google/api_client'
-class Person::GoogleAccount < ActiveRecord::Base
+class Person::GoogleAccount < ApplicationRecord
   include Person::Account
 
   has_many :google_integrations, foreign_key: :google_account_id, dependent: :destroy

@@ -1,4 +1,4 @@
-class EmailAddress < ActiveRecord::Base
+class EmailAddress < ApplicationRecord
   PERMITTED_ATTRIBUTES = [
     :email,
     :historic,

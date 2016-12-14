@@ -1,6 +1,6 @@
 require 'async'
 
-class MailChimpAccount < ActiveRecord::Base # rubocop:disable RedundantReturn
+class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
   include Async
   include Sidekiq::Worker
   sidekiq_options unique: :until_executed

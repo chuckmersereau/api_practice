@@ -1,3 +1,3 @@
-class PartnerStatusLog < ActiveRecord::Base
+class PartnerStatusLog < ApplicationRecord
   belongs_to :contact
 end

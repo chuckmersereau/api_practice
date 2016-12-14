@@ -1,4 +1,4 @@
-class NotificationPreference < ActiveRecord::Base
+class NotificationPreference < ApplicationRecord
   belongs_to :account_list
   belongs_to :notification_type
 

@@ -33,7 +33,7 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
   private
 
   def current_contact
-    @current_contact ||= Contact.find(params[:contact_id])
+    @current_contact ||= Contact.find_by!(uuid: params[:contact_id])
   end
 
   def referral_params
@@ -68,7 +68,7 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
   end
 
   def load_referral
-    @referral ||= referral_scope.find(params[:id])
+    @referral ||= referral_scope.find_by!(uuid: params[:id])
   end
 
   def load_referrals
@@ -96,6 +96,12 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
 
   def save_referral
     @referral.save
+  end
+
+  def transform_uuid_attributes_params_to_ids
+    change_specific_param_id_key_to_uuid(params[:data][:attributes], :referred_to_id, Contact)
+    change_specific_param_id_key_to_uuid(params[:data][:attributes], :referred_by_id, Contact)
+    super
   end
 
   def pundit_user

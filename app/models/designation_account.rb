@@ -1,4 +1,4 @@
-class DesignationAccount < ActiveRecord::Base
+class DesignationAccount < ApplicationRecord
   belongs_to :organization
   has_many :designation_profile_accounts, dependent: :destroy
   has_many :designation_profiles, through: :designation_profile_accounts

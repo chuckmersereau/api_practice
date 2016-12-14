@@ -1,4 +1,4 @@
-class Person < ActiveRecord::Base
+class Person < ApplicationRecord
   RELATIONSHIPS_MALE = [_('Husband'), _('Son'), _('Father'), _('Brother'), _('Uncle'), _('Nephew'), _('Cousin (Male)'), _('Grandfather'), _('Grandson')].freeze
   RELATIONSHIPS_FEMALE = [_('Wife'), _('Daughter'), _('Mother'), _('Sister'), _('Aunt'), _('Niece'), _('Cousin (Female)'), _('Grandmother'), _('Granddaughter')].freeze
   TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')].freeze
@@ -371,7 +371,7 @@ class Person < ActiveRecord::Base
   end
 
   def self.clone(person)
-    new_person = new(person.attributes.except('id', 'access_token', 'created_at', 'current_sign_in_at', 'current_sign_in_ip', 'last_sign_in_at', 'last_sign_in_ip', 'preferences',
+    new_person = new(person.attributes.except('id', 'uuid', 'access_token', 'created_at', 'current_sign_in_at', 'current_sign_in_ip', 'last_sign_in_at', 'last_sign_in_ip', 'preferences',
                                               'sign_in_count'))
     person.email_addresses.each { |e| new_person.email = e.email }
     person.phone_numbers.each { |pn| new_person.phone_number = pn.attributes.slice(:number, :country_code, :location) }

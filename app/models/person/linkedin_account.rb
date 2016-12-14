@@ -1,4 +1,4 @@
-class Person::LinkedinAccount < ActiveRecord::Base
+class Person::LinkedinAccount < ApplicationRecord
   include Person::Account
 
   scope :valid_token, -> { where('(token_expires_at is null OR token_expires_at > ?) AND valid_token = ?', Time.now, true) }

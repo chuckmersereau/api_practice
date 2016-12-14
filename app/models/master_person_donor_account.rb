@@ -1,4 +1,4 @@
-class MasterPersonDonorAccount < ActiveRecord::Base
+class MasterPersonDonorAccount < ApplicationRecord
   belongs_to :master_person
   belongs_to :donor_account
 

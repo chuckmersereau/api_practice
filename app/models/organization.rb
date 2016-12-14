@@ -1,6 +1,6 @@
 require 'async'
 
-class Organization < ActiveRecord::Base
+class Organization < ApplicationRecord
   include Async # To allow batch processing of address merges
   include Sidekiq::Worker
   sidekiq_options retry: false, unique: :until_executed, queue: :import # use low priority import queue

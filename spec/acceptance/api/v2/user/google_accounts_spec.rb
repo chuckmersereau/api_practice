@@ -8,9 +8,9 @@ resource 'Google Accounts' do
   let!(:user)         { create(:user_with_full_account) }
 
   let!(:google_account) { create(:google_account, person: user) }
-  let(:id)              { google_account.id }
+  let(:id)              { google_account.uuid }
 
-  let(:new_google_account) { build(:google_account, person: user).attributes }
+  let(:new_google_account) { build(:google_account).attributes.merge(person_id: user.uuid) }
   let(:form_data)          { build_data(new_google_account) }
 
   let(:resource_associations) do
@@ -60,7 +60,7 @@ resource 'Google Accounts' do
       example 'Google Account [CREATE]', document: :user do
         explanation 'Create a Google Account associated with the current_user'
         do_request data: form_data
-        expect(resource_object['username']).to eq new_google_account['username']
+        expect(resource_object['token']).to eq new_google_account['token']
         expect(response_status).to eq 201
       end
     end
@@ -77,7 +77,7 @@ resource 'Google Accounts' do
       example 'Google Account [UPDATE]', document: :user do
         explanation 'Update the current_user\'s Google Account with the given ID'
         do_request data: form_data
-        expect(resource_object['username']).to eq new_google_account['username']
+        expect(resource_object['token']).to eq new_google_account['token']
         expect(response_status).to eq 200
       end
     end

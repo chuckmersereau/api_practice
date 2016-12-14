@@ -23,6 +23,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
+--
+-- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION "uuid-ossp"; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UUIDs)';
+
+
 SET search_path = public, pg_catalog;
 
 SET default_tablespace = '';
@@ -38,7 +52,8 @@ CREATE TABLE account_list_entries (
     account_list_id integer,
     designation_account_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -75,7 +90,8 @@ CREATE TABLE account_list_invites (
     accepted_at timestamp without time zone,
     cancelled_by_user_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -107,7 +123,8 @@ CREATE TABLE account_list_users (
     user_id integer,
     account_list_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -140,7 +157,8 @@ CREATE TABLE account_lists (
     creator_id integer,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    settings text
+    settings text,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -191,7 +209,8 @@ CREATE TABLE activities (
     notification_type integer,
     notification_time_before integer,
     notification_time_unit integer,
-    notification_scheduled boolean
+    notification_scheduled boolean,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -224,7 +243,8 @@ CREATE TABLE activity_comments (
     person_id integer,
     body text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -256,7 +276,8 @@ CREATE TABLE activity_contacts (
     activity_id integer,
     contact_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -307,7 +328,8 @@ CREATE TABLE addresses (
     metro_area character varying(255),
     historic boolean DEFAULT false,
     source character varying(255),
-    source_donor_account_id integer
+    source_donor_account_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -340,7 +362,8 @@ CREATE TABLE admin_impersonation_logs (
     impersonator_id integer NOT NULL,
     impersonated_id integer NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -373,7 +396,8 @@ CREATE TABLE admin_reset_logs (
     resetted_user_id integer,
     reason character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -405,7 +429,8 @@ CREATE TABLE appeal_contacts (
     appeal_id integer,
     contact_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -436,7 +461,8 @@ CREATE TABLE appeal_excluded_appeal_contacts (
     id integer NOT NULL,
     appeal_id integer,
     contact_id integer,
-    reasons text[]
+    reasons text[],
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -472,7 +498,8 @@ CREATE TABLE appeals (
     end_date date,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    tnt_id integer
+    tnt_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -510,7 +537,8 @@ CREATE TABLE companies (
     postal_code character varying(255),
     country character varying(255),
     phone_number character varying(255),
-    master_company_id integer
+    master_company_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -542,7 +570,8 @@ CREATE TABLE company_partnerships (
     account_list_id integer,
     company_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -577,7 +606,8 @@ CREATE TABLE company_positions (
     end_date date,
     "position" character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -609,7 +639,8 @@ CREATE TABLE contact_donor_accounts (
     contact_id integer,
     donor_account_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -642,7 +673,8 @@ CREATE TABLE contact_notes_logs (
     recorded_on date,
     notes text,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -675,7 +707,8 @@ CREATE TABLE contact_people (
     person_id integer,
     "primary" boolean,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -707,7 +740,8 @@ CREATE TABLE contact_referrals (
     referred_by_id integer,
     referred_to_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -776,7 +810,8 @@ CREATE TABLE contacts (
     pls_id character varying(255),
     pledge_currency character varying(4),
     locale character varying(255),
-    late_at date
+    late_at date,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -809,7 +844,8 @@ CREATE TABLE currency_aliases (
     rate_api_code character varying(255) NOT NULL,
     ratio numeric NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -841,7 +877,8 @@ CREATE TABLE currency_rates (
     exchanged_on date NOT NULL,
     code character varying(255) NOT NULL,
     rate numeric(20,10) NOT NULL,
-    source character varying(255) NOT NULL
+    source character varying(255) NOT NULL,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -879,7 +916,8 @@ CREATE TABLE designation_accounts (
     name character varying(255),
     staff_account_id character varying(255),
     chartfield character varying(255),
-    active boolean DEFAULT true NOT NULL
+    active boolean DEFAULT true NOT NULL,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -911,7 +949,8 @@ CREATE TABLE designation_profile_accounts (
     designation_profile_id integer,
     designation_account_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -949,7 +988,8 @@ CREATE TABLE designation_profiles (
     code character varying(255),
     balance numeric(19,2),
     balance_updated_at timestamp without time zone,
-    account_list_id integer
+    account_list_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -994,7 +1034,8 @@ CREATE TABLE donations (
     payment_type character varying(255),
     channel character varying(255),
     appeal_id integer,
-    appeal_amount numeric(19,2)
+    appeal_amount numeric(19,2),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1026,7 +1067,8 @@ CREATE TABLE donor_account_people (
     donor_account_id integer,
     person_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1064,7 +1106,8 @@ CREATE TABLE donor_accounts (
     total_donations numeric(19,2),
     last_donation_date date,
     first_donation_date date,
-    donor_type character varying(20)
+    donor_type character varying(20),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1100,7 +1143,9 @@ CREATE TABLE email_addresses (
     updated_at timestamp without time zone,
     remote_id character varying(255),
     location character varying(50),
-    historic boolean DEFAULT false
+    historic boolean DEFAULT false,
+    deleted boolean DEFAULT false,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1133,7 +1178,8 @@ CREATE TABLE family_relationships (
     related_person_id integer,
     relationship character varying(255) NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1172,7 +1218,8 @@ CREATE TABLE google_contacts (
     last_synced timestamp without time zone,
     last_etag character varying(255),
     last_data text,
-    contact_id integer
+    contact_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1204,7 +1251,8 @@ CREATE TABLE google_email_activities (
     google_email_id integer,
     activity_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1236,7 +1284,8 @@ CREATE TABLE google_emails (
     google_account_id integer,
     google_email_id bigint,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1270,7 +1319,8 @@ CREATE TABLE google_events (
     google_event_id character varying(255),
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    calendar_id character varying(255)
+    calendar_id character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1307,7 +1357,8 @@ CREATE TABLE google_integrations (
     calendar_name character varying(255),
     email_integration boolean DEFAULT false NOT NULL,
     contacts_integration boolean DEFAULT false NOT NULL,
-    contacts_last_synced timestamp without time zone
+    contacts_last_synced timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1348,7 +1399,8 @@ CREATE TABLE help_requests (
     account_list_settings text,
     request_type character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1390,7 +1442,8 @@ CREATE TABLE imports (
     import_by_group boolean DEFAULT false,
     groups text,
     group_tags text,
-    in_preview boolean DEFAULT false NOT NULL
+    in_preview boolean DEFAULT false NOT NULL,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1434,7 +1487,8 @@ CREATE TABLE mail_chimp_accounts (
     tags_interest_ids text,
     sync_all_active_contacts boolean,
     last_prayer_email_sent timestamp without time zone,
-    prayer_letter_last_sent timestamp without time zone
+    prayer_letter_last_sent timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1467,7 +1521,8 @@ CREATE TABLE mail_chimp_appeal_lists (
     appeal_list_id character varying(255) NOT NULL,
     appeal_id integer NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1506,7 +1561,8 @@ CREATE TABLE mail_chimp_members (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     contact_locale character varying(255),
-    tags character varying(255)[]
+    tags character varying(255)[],
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1545,7 +1601,8 @@ CREATE TABLE master_addresses (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     latitude character varying(255),
-    longitude character varying(255)
+    longitude character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1576,7 +1633,8 @@ CREATE TABLE master_companies (
     id integer NOT NULL,
     name character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1606,7 +1664,8 @@ ALTER SEQUENCE master_companies_id_seq OWNED BY master_companies.id;
 CREATE TABLE master_people (
     id integer NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1639,7 +1698,8 @@ CREATE TABLE master_person_donor_accounts (
     donor_account_id integer,
     "primary" boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1672,7 +1732,8 @@ CREATE TABLE master_person_sources (
     organization_id integer,
     remote_id character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1711,7 +1772,8 @@ CREATE TABLE messages (
     contact_id integer,
     account_list_id integer,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1743,7 +1805,8 @@ CREATE TABLE name_male_ratios (
     name character varying(255) NOT NULL,
     male_ratio double precision NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1780,7 +1843,8 @@ CREATE TABLE nicknames (
     num_times_offered integer DEFAULT 0 NOT NULL,
     suggest_duplicates boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1813,7 +1877,8 @@ CREATE TABLE notification_preferences (
     account_list_id integer,
     actions text,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1846,7 +1911,8 @@ CREATE TABLE notification_types (
     description text,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    description_for_email text
+    description_for_email text,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1881,7 +1947,8 @@ CREATE TABLE notifications (
     cleared boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
-    donation_id integer
+    donation_id integer,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1917,7 +1984,8 @@ CREATE TABLE oauth_access_grants (
     redirect_uri character varying(255),
     created_at timestamp without time zone NOT NULL,
     revoked_at timestamp without time zone,
-    scopes character varying(255)
+    scopes character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1953,7 +2021,8 @@ CREATE TABLE oauth_access_tokens (
     expires_in integer,
     revoked_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
-    scopes character varying(255)
+    scopes character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1988,7 +2057,8 @@ CREATE TABLE oauth_applications (
     redirect_uri character varying(255),
     scopes character varying(255) DEFAULT ''::character varying NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2051,7 +2121,8 @@ CREATE TABLE organizations (
     country character varying(255),
     uses_key_auth boolean DEFAULT false,
     locale character varying(255) DEFAULT 'en'::character varying NOT NULL,
-    gift_aid_percentage numeric
+    gift_aid_percentage numeric,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2088,7 +2159,8 @@ CREATE TABLE partner_status_logs (
     pledge_received boolean,
     pledge_start_date date,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2147,7 +2219,8 @@ CREATE TABLE people (
     optout_enewsletter boolean DEFAULT false,
     occupation character varying(255),
     employer character varying(255),
-    not_duplicated_with character varying(2000)
+    not_duplicated_with character varying(2000),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2188,7 +2261,8 @@ CREATE TABLE person_facebook_accounts (
     authenticated boolean DEFAULT false NOT NULL,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    username character varying(255)
+    username character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2231,7 +2305,8 @@ CREATE TABLE person_google_accounts (
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
     last_email_sync timestamp without time zone,
-    notified_failure boolean
+    notified_failure boolean,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2270,7 +2345,8 @@ CREATE TABLE person_key_accounts (
     updated_at timestamp without time zone,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
-    last_download timestamp without time zone
+    last_download timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2312,7 +2388,8 @@ CREATE TABLE person_linkedin_accounts (
     authenticated boolean DEFAULT false NOT NULL,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    public_url character varying(255)
+    public_url character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2354,7 +2431,8 @@ CREATE TABLE person_organization_accounts (
     last_download timestamp without time zone,
     token character varying(255),
     locked_at timestamp without time zone,
-    disable_downloads boolean DEFAULT false NOT NULL
+    disable_downloads boolean DEFAULT false NOT NULL,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2397,7 +2475,8 @@ CREATE TABLE person_relay_accounts (
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    remote_id character varying(255) NOT NULL
+    remote_id character varying(255) NOT NULL,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2437,7 +2516,8 @@ CREATE TABLE person_twitter_accounts (
     authenticated boolean DEFAULT false NOT NULL,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
-    last_download timestamp without time zone
+    last_download timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2470,7 +2550,8 @@ CREATE TABLE person_websites (
     url character varying(255),
     "primary" boolean DEFAULT false,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2507,7 +2588,8 @@ CREATE TABLE phone_numbers (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     remote_id character varying(255),
-    historic boolean DEFAULT false
+    historic boolean DEFAULT false,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2541,7 +2623,8 @@ CREATE TABLE pictures (
     image character varying(255),
     "primary" boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2574,7 +2657,8 @@ CREATE TABLE pls_accounts (
     oauth2_token character varying(255),
     valid_token boolean DEFAULT true,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2609,7 +2693,8 @@ CREATE TABLE prayer_letters_accounts (
     created_at timestamp without time zone,
     updated_at timestamp without time zone,
     account_list_id integer,
-    oauth2_token character varying(255)
+    oauth2_token character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2642,7 +2727,8 @@ CREATE TABLE recurring_recommendation_results (
     contact_id integer,
     result character varying(255) NOT NULL,
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2675,7 +2761,8 @@ CREATE TABLE reset_logs (
     resetted_user_id integer,
     reason character varying(255),
     created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    updated_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2719,7 +2806,8 @@ CREATE TABLE taggings (
     tagger_id integer,
     tagger_type character varying(255),
     context character varying(128),
-    created_at timestamp without time zone
+    created_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2748,7 +2836,8 @@ ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
 
 CREATE TABLE tags (
     id integer NOT NULL,
-    name character varying(255)
+    name character varying(255),
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -2784,7 +2873,8 @@ CREATE TABLE versions (
     object text,
     related_object_type character varying(255),
     related_object_id integer,
-    created_at timestamp without time zone
+    created_at timestamp without time zone,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -3963,6 +4053,20 @@ CREATE INDEX index_account_list_entries_on_designation_account_id ON account_lis
 
 
 --
+-- Name: index_account_list_entries_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_account_list_entries_on_uuid ON account_list_entries USING btree (uuid);
+
+
+--
+-- Name: index_account_list_invites_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_account_list_invites_on_uuid ON account_list_invites USING btree (uuid);
+
+
+--
 -- Name: index_account_list_users_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3977,10 +4081,24 @@ CREATE UNIQUE INDEX index_account_list_users_on_user_id_and_account_list_id ON a
 
 
 --
+-- Name: index_account_list_users_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_account_list_users_on_uuid ON account_list_users USING btree (uuid);
+
+
+--
 -- Name: index_account_lists_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_account_lists_on_creator_id ON account_lists USING btree (creator_id);
+
+
+--
+-- Name: index_account_lists_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_account_lists_on_uuid ON account_lists USING btree (uuid);
 
 
 --
@@ -4026,6 +4144,13 @@ CREATE INDEX index_activities_on_start_at ON activities USING btree (start_at);
 
 
 --
+-- Name: index_activities_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_activities_on_uuid ON activities USING btree (uuid);
+
+
+--
 -- Name: index_activity_comments_on_activity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4037,6 +4162,13 @@ CREATE INDEX index_activity_comments_on_activity_id ON activity_comments USING b
 --
 
 CREATE INDEX index_activity_comments_on_person_id ON activity_comments USING btree (person_id);
+
+
+--
+-- Name: index_activity_comments_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_activity_comments_on_uuid ON activity_comments USING btree (uuid);
 
 
 --
@@ -4058,6 +4190,13 @@ CREATE INDEX index_activity_contacts_on_contact_id ON activity_contacts USING bt
 --
 
 CREATE UNIQUE INDEX index_activity_contacts_on_contact_id_and_activity_id ON activity_contacts USING btree (contact_id, activity_id);
+
+
+--
+-- Name: index_activity_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_activity_contacts_on_uuid ON activity_contacts USING btree (uuid);
 
 
 --
@@ -4089,6 +4228,27 @@ CREATE INDEX index_addresses_on_remote_id ON addresses USING btree (remote_id);
 
 
 --
+-- Name: index_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_addresses_on_uuid ON addresses USING btree (uuid);
+
+
+--
+-- Name: index_admin_impersonation_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_admin_impersonation_logs_on_uuid ON admin_impersonation_logs USING btree (uuid);
+
+
+--
+-- Name: index_admin_reset_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_admin_reset_logs_on_uuid ON admin_reset_logs USING btree (uuid);
+
+
+--
 -- Name: index_appeal_contacts_on_appeal_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4110,6 +4270,20 @@ CREATE INDEX index_appeal_contacts_on_contact_id ON appeal_contacts USING btree 
 
 
 --
+-- Name: index_appeal_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_appeal_contacts_on_uuid ON appeal_contacts USING btree (uuid);
+
+
+--
+-- Name: index_appeal_excluded_appeal_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_appeal_excluded_appeal_contacts_on_uuid ON appeal_excluded_appeal_contacts USING btree (uuid);
+
+
+--
 -- Name: index_appeals_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4117,10 +4291,31 @@ CREATE INDEX index_appeals_on_account_list_id ON appeals USING btree (account_li
 
 
 --
+-- Name: index_appeals_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_appeals_on_uuid ON appeals USING btree (uuid);
+
+
+--
+-- Name: index_companies_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_companies_on_uuid ON companies USING btree (uuid);
+
+
+--
 -- Name: index_company_partnerships_on_company_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_company_partnerships_on_company_id ON company_partnerships USING btree (company_id);
+
+
+--
+-- Name: index_company_partnerships_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_company_partnerships_on_uuid ON company_partnerships USING btree (uuid);
 
 
 --
@@ -4145,6 +4340,13 @@ CREATE INDEX index_company_positions_on_start_date ON company_positions USING bt
 
 
 --
+-- Name: index_company_positions_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_company_positions_on_uuid ON company_positions USING btree (uuid);
+
+
+--
 -- Name: index_contact_donor_accounts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4156,6 +4358,13 @@ CREATE INDEX index_contact_donor_accounts_on_contact_id ON contact_donor_account
 --
 
 CREATE INDEX index_contact_donor_accounts_on_donor_account_id ON contact_donor_accounts USING btree (donor_account_id);
+
+
+--
+-- Name: index_contact_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_contact_donor_accounts_on_uuid ON contact_donor_accounts USING btree (uuid);
 
 
 --
@@ -4173,6 +4382,13 @@ CREATE INDEX index_contact_notes_logs_on_recorded_on ON contact_notes_logs USING
 
 
 --
+-- Name: index_contact_notes_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_contact_notes_logs_on_uuid ON contact_notes_logs USING btree (uuid);
+
+
+--
 -- Name: index_contact_people_on_contact_id_and_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4187,10 +4403,24 @@ CREATE INDEX index_contact_people_on_person_id ON contact_people USING btree (pe
 
 
 --
+-- Name: index_contact_people_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_contact_people_on_uuid ON contact_people USING btree (uuid);
+
+
+--
 -- Name: index_contact_referrals_on_referred_to_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_contact_referrals_on_referred_to_id ON contact_referrals USING btree (referred_to_id);
+
+
+--
+-- Name: index_contact_referrals_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_contact_referrals_on_uuid ON contact_referrals USING btree (uuid);
 
 
 --
@@ -4222,6 +4452,20 @@ CREATE INDEX index_contacts_on_total_donations ON contacts USING btree (total_do
 
 
 --
+-- Name: index_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_contacts_on_uuid ON contacts USING btree (uuid);
+
+
+--
+-- Name: index_currency_aliases_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_currency_aliases_on_uuid ON currency_aliases USING btree (uuid);
+
+
+--
 -- Name: index_currency_rates_on_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4243,6 +4487,27 @@ CREATE INDEX index_currency_rates_on_exchanged_on ON currency_rates USING btree 
 
 
 --
+-- Name: index_currency_rates_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_currency_rates_on_uuid ON currency_rates USING btree (uuid);
+
+
+--
+-- Name: index_designation_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_designation_accounts_on_uuid ON designation_accounts USING btree (uuid);
+
+
+--
+-- Name: index_designation_profile_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_designation_profile_accounts_on_uuid ON designation_profile_accounts USING btree (uuid);
+
+
+--
 -- Name: index_designation_profiles_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4254,6 +4519,13 @@ CREATE INDEX index_designation_profiles_on_account_list_id ON designation_profil
 --
 
 CREATE INDEX index_designation_profiles_on_organization_id ON designation_profiles USING btree (organization_id);
+
+
+--
+-- Name: index_designation_profiles_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_designation_profiles_on_uuid ON designation_profiles USING btree (uuid);
 
 
 --
@@ -4278,6 +4550,13 @@ CREATE INDEX index_donations_on_donor_account_id ON donations USING btree (donor
 
 
 --
+-- Name: index_donations_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_donations_on_uuid ON donations USING btree (uuid);
+
+
+--
 -- Name: index_donor_account_people_on_donor_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4289,6 +4568,13 @@ CREATE INDEX index_donor_account_people_on_donor_account_id ON donor_account_peo
 --
 
 CREATE INDEX index_donor_account_people_on_person_id ON donor_account_people USING btree (person_id);
+
+
+--
+-- Name: index_donor_account_people_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_donor_account_people_on_uuid ON donor_account_people USING btree (uuid);
 
 
 --
@@ -4320,6 +4606,13 @@ CREATE INDEX index_donor_accounts_on_total_donations ON donor_accounts USING btr
 
 
 --
+-- Name: index_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_donor_accounts_on_uuid ON donor_accounts USING btree (uuid);
+
+
+--
 -- Name: index_email_addresses_on_email_and_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4341,6 +4634,13 @@ CREATE INDEX index_email_addresses_on_remote_id ON email_addresses USING btree (
 
 
 --
+-- Name: index_email_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_email_addresses_on_uuid ON email_addresses USING btree (uuid);
+
+
+--
 -- Name: index_excluded_appeal_contacts_on_appeal_and_contact; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4359,6 +4659,13 @@ CREATE UNIQUE INDEX index_family_relationships_on_person_id_and_related_person_i
 --
 
 CREATE INDEX index_family_relationships_on_related_person_id ON family_relationships USING btree (related_person_id);
+
+
+--
+-- Name: index_family_relationships_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_family_relationships_on_uuid ON family_relationships USING btree (uuid);
 
 
 --
@@ -4397,6 +4704,13 @@ CREATE INDEX index_google_contacts_on_remote_id ON google_contacts USING btree (
 
 
 --
+-- Name: index_google_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_google_contacts_on_uuid ON google_contacts USING btree (uuid);
+
+
+--
 -- Name: index_google_email_activities_on_activity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4411,10 +4725,24 @@ CREATE INDEX index_google_email_activities_on_google_email_id ON google_email_ac
 
 
 --
+-- Name: index_google_email_activities_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_google_email_activities_on_uuid ON google_email_activities USING btree (uuid);
+
+
+--
 -- Name: index_google_emails_on_google_account_id_and_google_email_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_google_emails_on_google_account_id_and_google_email_id ON google_emails USING btree (google_account_id, google_email_id);
+
+
+--
+-- Name: index_google_emails_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_google_emails_on_uuid ON google_emails USING btree (uuid);
 
 
 --
@@ -4432,6 +4760,13 @@ CREATE INDEX index_google_events_on_google_integration_id ON google_events USING
 
 
 --
+-- Name: index_google_events_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_google_events_on_uuid ON google_events USING btree (uuid);
+
+
+--
 -- Name: index_google_integrations_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4443,6 +4778,20 @@ CREATE INDEX index_google_integrations_on_account_list_id ON google_integrations
 --
 
 CREATE INDEX index_google_integrations_on_google_account_id ON google_integrations USING btree (google_account_id);
+
+
+--
+-- Name: index_google_integrations_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_google_integrations_on_uuid ON google_integrations USING btree (uuid);
+
+
+--
+-- Name: index_help_requests_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_help_requests_on_uuid ON help_requests USING btree (uuid);
 
 
 --
@@ -4460,10 +4809,24 @@ CREATE INDEX index_imports_on_user_id ON imports USING btree (user_id);
 
 
 --
+-- Name: index_imports_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_imports_on_uuid ON imports USING btree (uuid);
+
+
+--
 -- Name: index_mail_chimp_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_mail_chimp_accounts_on_account_list_id ON mail_chimp_accounts USING btree (account_list_id);
+
+
+--
+-- Name: index_mail_chimp_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_mail_chimp_accounts_on_uuid ON mail_chimp_accounts USING btree (uuid);
 
 
 --
@@ -4478,6 +4841,13 @@ CREATE INDEX index_mail_chimp_appeal_lists_on_appeal_list_id ON mail_chimp_appea
 --
 
 CREATE INDEX index_mail_chimp_appeal_lists_on_mail_chimp_account_id ON mail_chimp_appeal_lists USING btree (mail_chimp_account_id);
+
+
+--
+-- Name: index_mail_chimp_appeal_lists_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_mail_chimp_appeal_lists_on_uuid ON mail_chimp_appeal_lists USING btree (uuid);
 
 
 --
@@ -4499,6 +4869,13 @@ CREATE INDEX index_mail_chimp_members_on_list_id ON mail_chimp_members USING btr
 --
 
 CREATE INDEX index_mail_chimp_members_on_mail_chimp_account_id ON mail_chimp_members USING btree (mail_chimp_account_id);
+
+
+--
+-- Name: index_mail_chimp_members_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_mail_chimp_members_on_uuid ON mail_chimp_members USING btree (uuid);
 
 
 --
@@ -4544,6 +4921,27 @@ CREATE INDEX index_master_addresses_on_street ON master_addresses USING btree (s
 
 
 --
+-- Name: index_master_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_master_addresses_on_uuid ON master_addresses USING btree (uuid);
+
+
+--
+-- Name: index_master_companies_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_master_companies_on_uuid ON master_companies USING btree (uuid);
+
+
+--
+-- Name: index_master_people_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_master_people_on_uuid ON master_people USING btree (uuid);
+
+
+--
 -- Name: index_master_person_donor_accounts_on_donor_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4551,10 +4949,24 @@ CREATE INDEX index_master_person_donor_accounts_on_donor_account_id ON master_pe
 
 
 --
+-- Name: index_master_person_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_master_person_donor_accounts_on_uuid ON master_person_donor_accounts USING btree (uuid);
+
+
+--
 -- Name: index_master_person_sources_on_master_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_master_person_sources_on_master_person_id ON master_person_sources USING btree (master_person_id);
+
+
+--
+-- Name: index_master_person_sources_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_master_person_sources_on_uuid ON master_person_sources USING btree (uuid);
 
 
 --
@@ -4586,10 +4998,24 @@ CREATE INDEX index_messages_on_to_id ON messages USING btree (to_id);
 
 
 --
+-- Name: index_messages_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_messages_on_uuid ON messages USING btree (uuid);
+
+
+--
 -- Name: index_name_male_ratios_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_name_male_ratios_on_name ON name_male_ratios USING btree (name);
+
+
+--
+-- Name: index_name_male_ratios_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_name_male_ratios_on_uuid ON name_male_ratios USING btree (uuid);
 
 
 --
@@ -4614,6 +5040,13 @@ CREATE INDEX index_nicknames_on_nickname ON nicknames USING btree (nickname);
 
 
 --
+-- Name: index_nicknames_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_nicknames_on_uuid ON nicknames USING btree (uuid);
+
+
+--
 -- Name: index_notification_preferences_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4625,6 +5058,20 @@ CREATE INDEX index_notification_preferences_on_account_list_id ON notification_p
 --
 
 CREATE INDEX index_notification_preferences_on_notification_type_id ON notification_preferences USING btree (notification_type_id);
+
+
+--
+-- Name: index_notification_preferences_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_notification_preferences_on_uuid ON notification_preferences USING btree (uuid);
+
+
+--
+-- Name: index_notification_types_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_notification_types_on_uuid ON notification_types USING btree (uuid);
 
 
 --
@@ -4649,10 +5096,24 @@ CREATE INDEX index_notifications_on_notification_type_id ON notifications USING 
 
 
 --
+-- Name: index_notifications_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_notifications_on_uuid ON notifications USING btree (uuid);
+
+
+--
 -- Name: index_oauth_access_grants_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_oauth_access_grants_on_token ON oauth_access_grants USING btree (token);
+
+
+--
+-- Name: index_oauth_access_grants_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_oauth_access_grants_on_uuid ON oauth_access_grants USING btree (uuid);
 
 
 --
@@ -4677,6 +5138,13 @@ CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON oauth_access_tokens US
 
 
 --
+-- Name: index_oauth_access_tokens_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_oauth_access_tokens_on_uuid ON oauth_access_tokens USING btree (uuid);
+
+
+--
 -- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4684,10 +5152,24 @@ CREATE UNIQUE INDEX index_oauth_applications_on_uid ON oauth_applications USING 
 
 
 --
+-- Name: index_oauth_applications_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_oauth_applications_on_uuid ON oauth_applications USING btree (uuid);
+
+
+--
 -- Name: index_organizations_on_query_ini_url; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_organizations_on_query_ini_url ON organizations USING btree (query_ini_url);
+
+
+--
+-- Name: index_organizations_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_organizations_on_uuid ON organizations USING btree (uuid);
 
 
 --
@@ -4702,6 +5184,13 @@ CREATE INDEX index_partner_status_logs_on_contact_id ON partner_status_logs USIN
 --
 
 CREATE INDEX index_partner_status_logs_on_recorded_on ON partner_status_logs USING btree (recorded_on);
+
+
+--
+-- Name: index_partner_status_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_partner_status_logs_on_uuid ON partner_status_logs USING btree (uuid);
 
 
 --
@@ -4733,6 +5222,13 @@ CREATE INDEX index_people_on_master_person_id ON people USING btree (master_pers
 
 
 --
+-- Name: index_people_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_people_on_uuid ON people USING btree (uuid);
+
+
+--
 -- Name: index_person_facebook_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4754,6 +5250,13 @@ CREATE INDEX index_person_facebook_accounts_on_remote_id ON person_facebook_acco
 
 
 --
+-- Name: index_person_facebook_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_facebook_accounts_on_uuid ON person_facebook_accounts USING btree (uuid);
+
+
+--
 -- Name: index_person_google_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4765,6 +5268,13 @@ CREATE INDEX index_person_google_accounts_on_person_id ON person_google_accounts
 --
 
 CREATE INDEX index_person_google_accounts_on_remote_id ON person_google_accounts USING btree (remote_id);
+
+
+--
+-- Name: index_person_google_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_google_accounts_on_uuid ON person_google_accounts USING btree (uuid);
 
 
 --
@@ -4782,6 +5292,13 @@ CREATE INDEX index_person_key_accounts_on_remote_id ON person_key_accounts USING
 
 
 --
+-- Name: index_person_key_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_key_accounts_on_uuid ON person_key_accounts USING btree (uuid);
+
+
+--
 -- Name: index_person_linkedin_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4793,6 +5310,20 @@ CREATE UNIQUE INDEX index_person_linkedin_accounts_on_person_id_and_remote_id ON
 --
 
 CREATE INDEX index_person_linkedin_accounts_on_remote_id ON person_linkedin_accounts USING btree (remote_id);
+
+
+--
+-- Name: index_person_linkedin_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_linkedin_accounts_on_uuid ON person_linkedin_accounts USING btree (uuid);
+
+
+--
+-- Name: index_person_organization_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_organization_accounts_on_uuid ON person_organization_accounts USING btree (uuid);
 
 
 --
@@ -4810,6 +5341,13 @@ CREATE INDEX index_person_relay_accounts_on_relay_remote_id ON person_relay_acco
 
 
 --
+-- Name: index_person_relay_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_relay_accounts_on_uuid ON person_relay_accounts USING btree (uuid);
+
+
+--
 -- Name: index_person_twitter_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4824,10 +5362,24 @@ CREATE INDEX index_person_twitter_accounts_on_remote_id ON person_twitter_accoun
 
 
 --
+-- Name: index_person_twitter_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_twitter_accounts_on_uuid ON person_twitter_accounts USING btree (uuid);
+
+
+--
 -- Name: index_person_websites_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_person_websites_on_person_id ON person_websites USING btree (person_id);
+
+
+--
+-- Name: index_person_websites_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_websites_on_uuid ON person_websites USING btree (uuid);
 
 
 --
@@ -4845,10 +5397,31 @@ CREATE INDEX index_phone_numbers_on_remote_id ON phone_numbers USING btree (remo
 
 
 --
+-- Name: index_phone_numbers_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_phone_numbers_on_uuid ON phone_numbers USING btree (uuid);
+
+
+--
+-- Name: index_pictures_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_pictures_on_uuid ON pictures USING btree (uuid);
+
+
+--
 -- Name: index_pls_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE INDEX index_pls_accounts_on_account_list_id ON pls_accounts USING btree (account_list_id);
+
+
+--
+-- Name: index_pls_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_pls_accounts_on_uuid ON pls_accounts USING btree (uuid);
 
 
 --
@@ -4859,6 +5432,20 @@ CREATE INDEX index_prayer_letters_accounts_on_account_list_id ON prayer_letters_
 
 
 --
+-- Name: index_prayer_letters_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_prayer_letters_accounts_on_uuid ON prayer_letters_accounts USING btree (uuid);
+
+
+--
+-- Name: index_recurring_recommendation_results_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_recurring_recommendation_results_on_uuid ON recurring_recommendation_results USING btree (uuid);
+
+
+--
 -- Name: index_remote_id_on_person_relay_account; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -4866,10 +5453,31 @@ CREATE UNIQUE INDEX index_remote_id_on_person_relay_account ON person_relay_acco
 
 
 --
+-- Name: index_reset_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_reset_logs_on_uuid ON reset_logs USING btree (uuid);
+
+
+--
+-- Name: index_taggings_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_taggings_on_uuid ON taggings USING btree (uuid);
+
+
+--
 -- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
 CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
+
+
+--
+-- Name: index_tags_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_tags_on_uuid ON tags USING btree (uuid);
 
 
 --
@@ -4884,6 +5492,13 @@ CREATE INDEX index_versions_on_item_type ON versions USING btree (item_type, eve
 --
 
 CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
+
+
+--
+-- Name: index_versions_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_versions_on_uuid ON versions USING btree (uuid);
 
 
 --
@@ -5502,6 +6117,8 @@ INSERT INTO schema_migrations (version) VALUES ('20160728174747');
 
 INSERT INTO schema_migrations (version) VALUES ('20160809235201');
 
+INSERT INTO schema_migrations (version) VALUES ('20160811145356');
+
 INSERT INTO schema_migrations (version) VALUES ('20160928174158');
 
 INSERT INTO schema_migrations (version) VALUES ('20160928195843');
@@ -5519,3 +6136,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161027202729');
 INSERT INTO schema_migrations (version) VALUES ('20161119005933');
 
 INSERT INTO schema_migrations (version) VALUES ('20161128055225');
+
+INSERT INTO schema_migrations (version) VALUES ('20161130200449');
+

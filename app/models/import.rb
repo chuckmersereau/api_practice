@@ -1,7 +1,7 @@
 require 'async'
 require 'charlock_holmes'
 
-class Import < ActiveRecord::Base
+class Import < ApplicationRecord
   include Async
   include Sidekiq::Worker
   sidekiq_options queue: :default, retry: false, backtrace: true, unique: :until_executed

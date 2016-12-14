@@ -1,7 +1,7 @@
 require 'async'
 require 'retryable'
 
-class Person::FacebookAccount < ActiveRecord::Base
+class Person::FacebookAccount < ApplicationRecord
   include Person::Account
   include Redis::Objects
   include Async

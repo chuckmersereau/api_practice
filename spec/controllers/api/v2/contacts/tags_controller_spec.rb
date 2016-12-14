@@ -8,8 +8,8 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
   let(:second_tag) { 'tag_two' }
   let(:correct_attributes) { { name: second_tag } }
   let(:incorrect_attributes) { { name: nil } }
-  let(:full_correct_attributes) { { contact_id: contact.id, data: { attributes: correct_attributes } } }
-  let(:full_incorrect_attributes) { { contact_id: contact.id, data: { attributes: incorrect_attributes } } }
+  let(:full_correct_attributes) { { contact_id: contact.uuid, data: { attributes: correct_attributes } } }
+  let(:full_incorrect_attributes) { { contact_id: contact.uuid, data: { attributes: incorrect_attributes } } }
 
   describe '#create' do
     it 'creates resource for users that are signed in' do
@@ -43,7 +43,7 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
     it 'deletes the resource object for users that have that access' do
       api_login(user)
       expect do
-        delete :destroy, contact_id: contact.id, tag_name: first_tag
+        delete :destroy, contact_id: contact.uuid, tag_name: first_tag
       end.to change { contact.reload.tag_list.length }.by(-1)
       expect(response.status).to eq(204)
     end
@@ -51,14 +51,14 @@ RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
     it 'does not destroy the resource for users that do not own the resource' do
       api_login(create(:user))
       expect do
-        delete :destroy, contact_id: contact.id, tag_name: second_tag
+        delete :destroy, contact_id: contact.uuid, tag_name: second_tag
       end.not_to change { contact.tag_list.length }
       expect(response.status).to eq(403)
     end
 
     it 'does not delete the resource object for users that are not signed in' do
       expect do
-        delete :destroy, contact_id: contact.id, tag_name: second_tag
+        delete :destroy, contact_id: contact.uuid, tag_name: second_tag
       end.not_to change { contact.tag_list.length }
       expect(response.status).to eq(401)
     end

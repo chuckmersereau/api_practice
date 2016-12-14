@@ -8,15 +8,15 @@ resource 'Phones' do
   let!(:user)         { create(:user_with_full_account) }
 
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id) { contact.id }
+  let(:contact_id) { contact.uuid }
 
   let(:person)    { create(:person, contacts: [contact]) }
-  let(:person_id) { person.id }
+  let(:person_id) { person.uuid }
 
   let!(:phone) { create(:phone_number, person: person) }
-  let(:id)     { phone.id }
+  let(:id)     { phone.uuid }
 
-  let(:new_phone) { build(:phone_number, number: '3561987123', person: person).attributes }
+  let(:new_phone) { build(:phone_number, number: '3561987123').attributes.merge(person_id: person.uuid) }
   let(:form_data) { build_data(new_phone) }
 
   context 'authorized user' do

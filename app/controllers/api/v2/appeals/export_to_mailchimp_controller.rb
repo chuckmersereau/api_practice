@@ -25,7 +25,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2Controller
   end
 
   def current_account_list
-    current_user.account_lists.find(filter_params[:account_list_id])
+    current_user.account_lists.find_by!(uuid: filter_params[:account_list_id])
   end
 
   def first_account_list
@@ -33,7 +33,7 @@ class Api::V2::Appeals::ExportToMailchimpController < Api::V2Controller
   end
 
   def load_appeal
-    @appeal ||= Appeal.find(params[:appeal_id])
+    @appeal ||= Appeal.find_by!(uuid: params[:appeal_id])
   end
 
   def permitted_filters

@@ -8,7 +8,7 @@ resource 'Account Lists' do
   let!(:user)         { create(:user_with_account) }
 
   let(:account_list) { user.account_lists.first }
-  let(:id)           { account_list.id }
+  let(:id)           { account_list.uuid }
 
   let(:new_account_list) { build(:account_list).attributes }
   let(:form_data)        { build_data(new_account_list) }

@@ -1,4 +1,4 @@
-class ContactDonorAccount < ActiveRecord::Base
+class ContactDonorAccount < ApplicationRecord
   belongs_to :contact, inverse_of: :contact_donor_accounts
   belongs_to :donor_account, inverse_of: :contact_donor_accounts
 

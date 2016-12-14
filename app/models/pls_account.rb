@@ -1,7 +1,7 @@
 require 'async'
 require 'open-uri'
 
-class PlsAccount < ActiveRecord::Base
+class PlsAccount < ApplicationRecord
   # :nocov:
   # There are intentionally no specs for this yet as the PLS API is still buggy
   # and under development, but I wanted to get this on the master branch so it
