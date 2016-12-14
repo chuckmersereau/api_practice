@@ -2,7 +2,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_designation_accounts
-    render json: @designation_accounts, meta: meta_hash(@designation_accounts), include: include_params
+    render json: @designation_accounts, meta: meta_hash(@designation_accounts), include: include_params, fields: field_params
   end
 
   def show
@@ -29,7 +29,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   end
 
   def render_designation_account
-    render json: @designation_account, include: include_params
+    render json: @designation_account, include: include_params, fields: field_params
   end
 
   def designation_account_scope

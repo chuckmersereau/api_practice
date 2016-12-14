@@ -1,7 +1,7 @@
 class Api::V2::AppealsController < Api::V2Controller
   def index
     load_appeals
-    render json: @appeals, meta: meta_hash(@appeals), include: include_params
+    render json: @appeals, meta: meta_hash(@appeals), include: include_params, fields: field_params
   end
 
   def show
@@ -47,7 +47,8 @@ class Api::V2::AppealsController < Api::V2Controller
   def render_appeal
     render json: @appeal,
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def persist_appeal

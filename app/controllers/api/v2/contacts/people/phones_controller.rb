@@ -35,7 +35,7 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   end
 
   def render_phones
-    render json: @phones, meta: meta_hash(@phones), include: include_params
+    render json: @phones, meta: meta_hash(@phones), include: include_params, fields: field_params
   end
 
   def phone_params
@@ -100,7 +100,8 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   def render_phone
     render json: @phone,
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def save_phone

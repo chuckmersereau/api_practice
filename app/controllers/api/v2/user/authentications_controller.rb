@@ -6,7 +6,8 @@ class Api::V2::User::AuthenticationsController < Api::V2Controller
   def create
     render json: { json_web_token: load_authentication },
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   protected

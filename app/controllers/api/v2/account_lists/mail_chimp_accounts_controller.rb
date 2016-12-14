@@ -38,7 +38,8 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
     render json: @mailchimp_account,
            scope: { current_account_list: load_account_list },
            status: success_status,
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def persist_mailchimp_account
