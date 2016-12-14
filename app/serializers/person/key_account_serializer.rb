@@ -1,4 +1,6 @@
 class Person::KeyAccountSerializer < ApplicationSerializer
+  type :key_accounts
+
   attributes :authenticated,
              :downloading,
              :email,

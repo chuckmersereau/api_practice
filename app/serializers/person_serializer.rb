@@ -19,7 +19,11 @@ class PersonSerializer < ApplicationSerializer
 
   has_many :email_addresses
   has_many :facebook_accounts
+  has_many :family_relationships
+  has_many :linkedin_accounts
   has_many :phone_numbers
+  has_many :twitter_accounts
+  has_many :websites
 
   belongs_to :master_person
 

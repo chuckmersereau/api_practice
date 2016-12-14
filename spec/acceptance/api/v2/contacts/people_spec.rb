@@ -42,9 +42,12 @@ resource 'People' do
     %w(
       email_addresses
       facebook_accounts
+      family_relationships
+      linkedin_accounts
       master_person
       phone_numbers
-    )
+      twitter_accounts
+      websites)
   end
 
   context 'authorized user' do

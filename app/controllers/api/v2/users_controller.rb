@@ -19,7 +19,8 @@ class Api::V2::UsersController < Api::V2Controller
 
   def render_user
     render json: @user,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_user

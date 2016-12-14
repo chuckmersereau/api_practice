@@ -2,7 +2,7 @@ class Api::V2::AccountLists::FiltersController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_filters
-    render json: @filters
+    render json: @filters, include: include_params
   end
 
   private

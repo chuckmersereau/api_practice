@@ -20,8 +20,11 @@ resource 'Notifications' do
   let(:expected_attribute_keys) do
     %w(
       cleared
+      contact_id
       created_at
+      donation_id
       event_date
+      notification_type_id
       updated_at
     )
   end

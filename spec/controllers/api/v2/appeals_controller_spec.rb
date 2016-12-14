@@ -12,6 +12,10 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
   let(:unpermitted_attributes) { attributes_for(:appeal, name: 'Appeal 3').merge(account_list_id: create(:account_list).uuid) }
   let(:incorrect_attributes) { attributes_for(:appeal, name: nil).merge(account_list_id: account_list.uuid) }
 
+  before do
+    resource.contacts << create(:contact) # Test inclusion of related resources.
+  end
+
   include_examples 'show_examples'
 
   include_examples 'update_examples'

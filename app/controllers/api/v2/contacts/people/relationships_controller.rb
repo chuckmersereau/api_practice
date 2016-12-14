@@ -4,7 +4,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   def index
     load_relationships
     authorize @person, :show?
-    render json: @relationships, meta: meta_hash(@relationships)
+    render json: @relationships, meta: meta_hash(@relationships), include: include_params
   end
 
   def show
@@ -55,7 +55,8 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
 
   def render_relationship
     render json: @relationship,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def build_relationship

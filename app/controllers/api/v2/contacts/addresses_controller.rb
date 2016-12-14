@@ -2,7 +2,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   def index
     authorize_index
     load_addresses
-    render json: @addresses, meta: meta_hash(@addresses)
+    render json: @addresses, meta: meta_hash(@addresses), include: include_params
   end
 
   def show
@@ -94,7 +94,8 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
 
   def render_address
     render json: @address,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def save_address

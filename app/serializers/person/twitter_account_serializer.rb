@@ -1,4 +1,6 @@
 class Person::TwitterAccountSerializer < ApplicationSerializer
+  type :twitter_accounts
+
   attributes :created_at,
              :primary,
              :remote_id,

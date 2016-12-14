@@ -9,6 +9,7 @@ RSpec.shared_examples 'common_variables' do
   let(:reference_key)                { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
   let(:reference_value)              { defined?(given_reference_value) ? given_reference_value : correct_attributes.values.first }
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
+  let(:serializer) { ActiveModel::Serializer.serializer_for(resource).new(resource) }
 
   let(:full_update_attributes) do
     if defined?(update_attributes)
@@ -40,9 +41,11 @@ RSpec.shared_examples 'common_variables' do
 end
 
 RSpec.shared_examples 'show_examples' do
-  include_examples 'common_variables'
+  include_context 'common_variables'
 
   describe '#show' do
+    include_examples 'including related resources examples', action: :show
+
     it 'shows resource to users that are signed in' do
       api_login(user)
       get :show, full_params
@@ -66,9 +69,11 @@ RSpec.shared_examples 'show_examples' do
 end
 
 RSpec.shared_examples 'update_examples' do
-  include_examples 'common_variables'
+  include_context 'common_variables'
 
   describe '#update' do
+    include_examples 'including related resources examples', action: :update
+
     it 'updates resource for users that are signed in' do
       api_login(user)
       put :update, full_update_attributes
@@ -118,9 +123,11 @@ RSpec.shared_examples 'update_examples' do
 end
 
 RSpec.shared_examples 'create_examples' do
-  include_examples 'common_variables'
+  include_context 'common_variables'
 
   describe '#create' do
+    include_examples 'including related resources examples', action: :create
+
     it 'creates resource for users that are signed in' do
       api_login(user)
       expect do
@@ -161,7 +168,7 @@ RSpec.shared_examples 'create_examples' do
 end
 
 RSpec.shared_examples 'destroy_examples' do
-  include_examples 'common_variables'
+  include_context 'common_variables'
 
   describe '#destroy' do
     it 'destroys resource object to users that are signed in' do
@@ -192,11 +199,13 @@ RSpec.shared_examples 'destroy_examples' do
 end
 
 RSpec.shared_examples 'index_examples' do
-  include_examples 'common_variables'
+  include_context 'common_variables'
 
   let(:active_record_association) { ActiveRecord::Relation }
 
   describe '#index' do
+    include_examples 'including related resources examples', action: :index
+
     before do
       resource.update(created_at: 2.days.ago)
     end
@@ -260,6 +269,58 @@ RSpec.shared_examples 'index_examples' do
       expect(JSON.parse(response.body)['meta']['pagination']['page']).to eq('2')
       expect(JSON.parse(response.body)['meta']['pagination']['total_count']).not_to be_nil
       expect(JSON.parse(response.body)['meta']['pagination']['total_pages']).not_to be_nil
+    end
+  end
+end
+
+RSpec.shared_examples 'including related resources examples' do |options|
+  context "action #{options[:action]} including related resources" do
+    let(:action) { options[:action].to_sym }
+    let(:includes) { '*' }
+    let(:expected_response_code) do
+      case action
+      when :index, :show, :update
+        200
+      when :create
+        201
+      end
+    end
+
+    subject do
+      api_login(user)
+      case action
+      when :index
+        get action, parent_param_if_needed.merge(include: includes)
+      when :show
+        get action, full_params.merge(include: includes)
+      when :update
+        put action, full_correct_attributes.merge(include: includes)
+      when :create
+        post action, full_correct_attributes.merge(include: includes)
+      end
+    end
+
+    context 'with unpermitted filter params' do
+      let(:includes) { described_class::UNPERMITTED_FILTER_PARAMS.join(',') }
+
+      it 'does not permit unpermitted filter params' do
+        if serializer.associations.count > 0
+          expect(described_class::UNPERMITTED_FILTER_PARAMS).to be_present
+          subject
+          expect(response.status).to eq(expected_response_code)
+          expect(JSON.parse(response.body)['included']).to be_nil
+        end
+      end
+    end
+
+    it 'includes one level of related resources' do
+      if serializer.associations.count > 0
+        subject
+        expect(response.status).to eq(expected_response_code)
+        expect(JSON.parse(response.body).keys).to include('included')
+        included_types = JSON.parse(response.body)['included'].collect { |i| i['type'] }
+        expect(included_types).to be_present
+      end
     end
   end
 end

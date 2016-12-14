@@ -33,6 +33,7 @@ class ContactSerializer < ApplicationSerializer
              :timezone,
              :uncompleted_tasks_count
 
+  has_many :donor_accounts
   has_many :addresses
   has_many :people
   has_many :referrals_to_me

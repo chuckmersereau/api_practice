@@ -2,7 +2,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_notifications
-    render json: @notifications, meta: meta_hash(@notifications)
+    render json: @notifications, meta: meta_hash(@notifications), include: include_params
   end
 
   def show
@@ -47,7 +47,8 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
 
   def render_notification
     render json: @notification,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_notification

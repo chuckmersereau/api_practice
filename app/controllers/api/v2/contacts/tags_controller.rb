@@ -32,7 +32,8 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
       yield(tag_name)
       @contact.save
       render json: @contact,
-             status: success_status
+             status: success_status,
+             include: include_params
     end
   end
 

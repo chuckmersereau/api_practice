@@ -27,7 +27,9 @@ class Api::V2::Contacts::ReferrersController < Api::V2Controller
   end
 
   def render_referrers
-    render json: @referrers, meta: meta_hash(@referrers)
+    render json: @referrers,
+           meta: meta_hash(@referrers),
+           include: include_params
   end
 
   def pundit_user

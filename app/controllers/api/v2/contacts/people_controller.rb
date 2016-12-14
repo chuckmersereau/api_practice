@@ -2,7 +2,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   def index
     authorize_index
     load_people
-    render json: @people, meta: meta_hash(@people)
+    render json: @people, meta: meta_hash(@people), include: include_params
   end
 
   def show
@@ -90,7 +90,8 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
 
   def render_person
     render json: @person,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def save_person

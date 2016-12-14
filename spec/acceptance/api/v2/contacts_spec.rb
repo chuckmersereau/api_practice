@@ -59,6 +59,7 @@ resource 'Contacts' do
     %w(
       account_list
       addresses
+      donor_accounts
       people
       referrals_to_me
     )

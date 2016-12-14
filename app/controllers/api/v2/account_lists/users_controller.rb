@@ -2,7 +2,7 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_users
-    render json: @users, meta: meta_hash(@users)
+    render json: @users, meta: meta_hash(@users), include: include_params
   end
 
   def show
@@ -37,7 +37,8 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
 
   def render_user
     render json: @user,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def authorize_user

@@ -2,7 +2,7 @@ class Api::V2::TasksController < Api::V2Controller
   def index
     authorize load_account_list, :show? if filter_params[:account_list_id]
     load_tasks
-    render json: @tasks, meta: meta_hash(@tasks)
+    render json: @tasks, meta: meta_hash(@tasks), include: include_params
   end
 
   def show
@@ -47,7 +47,8 @@ class Api::V2::TasksController < Api::V2Controller
 
   def render_task
     render json: @task,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_task

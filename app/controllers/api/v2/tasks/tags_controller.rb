@@ -33,7 +33,8 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
       @task.save
 
       render json: @task,
-             status: success_status
+             status: success_status,
+             include: include_params
     end
   end
 

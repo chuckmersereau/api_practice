@@ -4,8 +4,8 @@ require 'rspec_api_documentation/dsl'
 resource 'Organization Accounts' do
   include_context :json_headers
 
-  let(:resource_type) { 'person_organization_accounts' }
   let!(:user)         { create(:user_with_full_account) }
+  let(:resource_type) { 'organization_accounts' }
 
   let!(:organization_account) { create(:organization_account, person: user) }
   let(:id)                    { organization_account.uuid }

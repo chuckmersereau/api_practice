@@ -83,12 +83,14 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
 
   def render_email_address
     render json: @email_address,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def render_email_addresses
     render json: @email_addresses,
-           meta: meta_hash(@email_addresses)
+           meta: meta_hash(@email_addresses),
+           include: include_params
   end
 
   def save_email_address

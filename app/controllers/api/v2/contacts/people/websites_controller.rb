@@ -2,7 +2,7 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_websites
-    render json: @websites, meta: meta_hash(@websites)
+    render json: @websites, meta: meta_hash(@websites), include: include_params
   end
 
   def show
@@ -51,7 +51,8 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
 
   def render_website
     render json: @website,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_website
