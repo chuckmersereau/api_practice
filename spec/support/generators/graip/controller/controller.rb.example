@@ -3,7 +3,7 @@ class Api::V2::EmailAddressesController < Api::V2::ApplicationController
     load_email_addresses
     # make sure to authorize when needed
 
-    render json: @email_addresses
+    render json: @email_addresses, meta: meta_hash(@email_addresses), include: include_params, fields: field_params
   end
 
   def show
@@ -97,7 +97,9 @@ class Api::V2::EmailAddressesController < Api::V2::ApplicationController
 
   def render_email_address
     render json: @email_address,
-           status: success_status
+           status: success_status,
+           include: include_params,
+           fields: field_params
   end
 
   def save_email_address

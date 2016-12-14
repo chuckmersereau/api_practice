@@ -4,7 +4,7 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
     load_<%= resources_name %>
     # make sure to authorize when needed
 
-    render json: <%= resources_instance %>
+    render json: <%= resources_instance %>, meta: meta_hash(<%= resources_instance %>), include: include_params, fields: field_params
   end
 
   def show
@@ -98,7 +98,9 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
 
   def render_<%= resource_name %>
     render json: <%= resource_instance %>,
-           status: success_status
+           status: success_status,
+           include: include_params,
+           fields: field_params
   end
 
   def save_<%= resource_name %>
