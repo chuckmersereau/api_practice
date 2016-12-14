@@ -90,7 +90,7 @@ describe MailChimpAccount::Exporter do
         account.save
 
         contact = create(:contact, :with_tags, send_newsletter: 'Email', account_list: account_list, locale: 'fr')
-        contact.people << create(:person, email: 'foo@example.com')
+        contact.people << create(:person, first_name: 'John', last_name: 'Smith', email: 'foo@example.com')
 
         expect(export).to receive(:add_status_groups)
         expect(export).to receive(:add_tags_groups)

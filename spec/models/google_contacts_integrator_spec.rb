@@ -13,7 +13,7 @@ describe GoogleContactsIntegrator do
 
     @contact = create(:contact, account_list: @account_list, status: 'Partner - Pray', notes: 'about')
 
-    @person = create(:person, last_name: 'Google', occupation: 'Worker', employer: 'Company, Inc')
+    @person = create(:person, first_name: 'John', last_name: 'Google', occupation: 'Worker', employer: 'Company, Inc')
     @contact.people << @person
 
     @g_contact = GoogleContactsApi::Contact.new(
