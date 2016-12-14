@@ -15,21 +15,44 @@ resource 'Email Addresses' do
   # specify the `attributes` specifically in your request actions below.
   let(:form_data) { build_data(attributes) }
 
+  # List your expected resource keys vertically here (alphabetical please!)
   let(:expected_attribute_keys) do
-    # list your expected resource keys vertically here (alphabetical please!)
     %w(
       created_at
       updated_at
     )
   end
 
+  # List out any additional attribute keys that will be alongside
+  # the attributes of the resources.
+  #
+  # Remove if not needed.
+  let(:additional_attribute_keys) do
+    %w(
+      relationships
+    )
+  end
+
+  # This is the scope in how these endpoints will be organized in the
+  # generated documentation.
+  #
+  # :entities should be used for "top level" resources, and the top level
+  # resources should be used for nested resources.
+  #
+  # Ex: Api > v2 > Contacts                   - :entities would be the scope
+  # Ex: Api > v2 > Contacts > Email Addresses - :contacts would be the scope
+  let(:document) { raise 'FILL ME IN' }
+
   context 'authorized user' do
     before { api_login(user) }
 
     # index
     get '/my-index-url' do
-      example_request 'Email Address [LIST]' do
-        check_collection_resource(1)
+      example 'Email Address [LIST]', document: document do
+        explanation 'List of Email Addresses'
+        do_request
+
+        check_collection_resource(1, additional_attribute_keys)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -42,8 +65,11 @@ resource 'Email Addresses' do
         response_field 'name_of_attribute', 'Name of Attribute', 'Type' => 'The Attribute Type (String, Boolean, etc)'
       end
 
-      example_request 'Email Address [GET]' do
-        check_resource
+      example 'Email Address [GET]', document: document do
+        explanation 'The Email Address for the given ID'
+        do_request
+
+        check_resource(additional_attribute_keys)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -58,10 +84,11 @@ resource 'Email Addresses' do
 
       let(:attributes) { "FILL ME IN WITH POST DATA" }
 
-      example 'Email Address [CREATE]' do
+      example 'Email Address [CREATE]', document: document do
+        explanation 'Create Email Address'
         do_request data: form_data
 
-        check_resource
+        check_resource(additional_attribute_keys)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 201
       end
@@ -76,10 +103,11 @@ resource 'Email Addresses' do
 
       let(:attributes) { "FILL ME IN WITH PUT DATA" }
 
-      example 'Email Address [UPDATE]' do
+      example 'Email Address [UPDATE]', document: document do
+        explanation 'Update Email Address'
         do_request data: form_data
 
-        check_resource
+        check_resource(additional_attribute_keys)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -94,10 +122,11 @@ resource 'Email Addresses' do
 
       let(:attributes) { "FILL ME IN WITH PATCH DATA" }
 
-      example 'Email Address [UPDATE]' do
+      example 'Email Address [UPDATE]', document: document do
+        explanation 'Update Email Address'
         do_request data: form_data
 
-        check_resource
+        check_resource(additional_attribute_keys)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -105,7 +134,10 @@ resource 'Email Addresses' do
 
     # destroy
     delete '/my-destroy-url' do
-      example_request 'Email Address [DELETE]' do
+      example 'Email Address [DELETE]', document: document do
+        explanation 'Delete Email Address'
+        do_request
+
         expect(response_status).to eq 204
       end
     end

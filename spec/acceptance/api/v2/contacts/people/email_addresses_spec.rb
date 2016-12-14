@@ -44,7 +44,6 @@ resource 'Contacts People Email Addresses' do
       example 'Person / Email Address [LIST]', document: :contacts do
         explanation 'List of Email Addresses associated to the Person'
         do_request
-        explanation 'List of Email Addresses belonging to the Person'
 
         check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
