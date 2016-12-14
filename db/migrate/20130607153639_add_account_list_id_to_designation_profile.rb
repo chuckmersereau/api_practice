@@ -1,7 +1,3 @@
-class AccountList < ActiveRecord::Base
-  belongs_to :designation_profile
-end
-
 class AddAccountListIdToDesignationProfile < ActiveRecord::Migration
   def change
     add_column :designation_profiles, :account_list_id, :integer

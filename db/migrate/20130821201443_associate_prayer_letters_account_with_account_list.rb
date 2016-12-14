@@ -1,6 +1,3 @@
-class PrayerLettersAccount < ActiveRecord::Base
-end
-
 class AssociatePrayerLettersAccountWithAccountList < ActiveRecord::Migration
   def up
     rename_table :person_prayer_letters_accounts, :prayer_letters_accounts
