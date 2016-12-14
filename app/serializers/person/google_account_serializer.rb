@@ -1,4 +1,6 @@
 class Person::GoogleAccountSerializer < ApplicationSerializer
+  type :google_accounts
+
   attributes :authenticated,
              :downloading,
              :email,

@@ -8,9 +8,13 @@ RSpec.describe Api::V2::TasksController, type: :controller do
   let!(:resource) { create(:task, account_list: account_list) }
   let!(:second_resource) { create(:task, account_list: account_list) }
   let(:id) { resource.uuid }
-  let(:correct_attributes) { { subject: 'test subject', start_at: Time.now, account_list_id: account_list.uuid } }
+  let(:correct_attributes) { { subject: 'test subject', start_at: Time.now, account_list_id: account_list.uuid, tag_list: 'tag1' } }
   let(:unpermitted_attributes) { { subject: 'test subject', start_at: Time.now, account_list_id: create(:account_list).uuid } }
   let(:incorrect_attributes) { { subject: nil, account_list_id: account_list.uuid } }
+
+  before do
+    resource.update(tag_list: 'tag1') # Test inclusion of related resources.
+  end
 
   include_examples 'show_examples'
 

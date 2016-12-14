@@ -9,9 +9,11 @@ describe Api::V2::AccountLists::UsersController, type: :controller do
   let(:user2) { users.last }
   let(:id) { user2.uuid }
   let(:original_user_id) { user.uuid }
+  let!(:google_accounts) {}
 
   before do
     account_list.users += users
+    create(:google_account, person: user2) # Test inclusion of related resources.
   end
 
   let(:resource) { user2 }

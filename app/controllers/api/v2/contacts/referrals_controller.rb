@@ -3,7 +3,9 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
     authorize current_contact, :show?
     load_referrals
 
-    render json: @referrals, meta: meta_hash(@referrals)
+    render json: @referrals,
+           meta: meta_hash(@referrals),
+           include: include_params
   end
 
   def show
@@ -91,7 +93,8 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
 
   def render_referral
     render json: @referral,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def save_referral

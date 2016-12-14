@@ -17,7 +17,8 @@ class Api::V2::AccountLists::ImportsController < Api::V2Controller
 
   def render_import
     render json: @import,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_import

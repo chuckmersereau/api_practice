@@ -1,7 +1,7 @@
 class Api::V2::User::KeyAccountsController < Api::V2Controller
   def index
     load_key_accounts
-    render json: @key_accounts, meta: meta_hash(@key_accounts)
+    render json: @key_accounts, meta: meta_hash(@key_accounts), include: include_params
   end
 
   def show
@@ -46,7 +46,8 @@ class Api::V2::User::KeyAccountsController < Api::V2Controller
 
   def render_key_account
     render json: @key_account,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_key_account

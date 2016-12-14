@@ -1,5 +1,6 @@
 class Appeal < ApplicationRecord
   belongs_to :account_list
+  has_one :mail_chimp_account, through: :account_list
   has_many :appeal_contacts
   has_many :contacts, through: :appeal_contacts
   has_many :excluded_appeal_contacts, dependent: :delete_all

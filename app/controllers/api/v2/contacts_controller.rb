@@ -1,7 +1,7 @@
 class Api::V2::ContactsController < Api::V2Controller
   def index
     load_contacts
-    render json: @contacts, meta: meta_hash(@contacts)
+    render json: @contacts, meta: meta_hash(@contacts), include: include_params
   end
 
   def show
@@ -50,7 +50,8 @@ class Api::V2::ContactsController < Api::V2Controller
 
   def render_contact
     render json: @contact,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def build_contact

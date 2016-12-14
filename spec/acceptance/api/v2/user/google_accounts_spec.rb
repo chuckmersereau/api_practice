@@ -4,8 +4,8 @@ require 'rspec_api_documentation/dsl'
 resource 'Google Accounts' do
   include_context :json_headers
 
-  let(:resource_type) { 'person_google_accounts' }
   let!(:user)         { create(:user_with_full_account) }
+  let(:resource_type) { 'google_accounts' }
 
   let!(:google_account) { create(:google_account, person: user) }
   let(:id)              { google_account.uuid }

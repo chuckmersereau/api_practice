@@ -82,7 +82,7 @@ resource 'Email Addresses' do
         parameter 'attribute_name', 'Description of the Attribute'
       end
 
-      let(:attributes) { "FILL ME IN WITH POST DATA" }
+      let(:attributes) { 'FILL ME IN WITH POST DATA' }
 
       example 'Email Address [CREATE]', document: document do
         explanation 'Create Email Address'
@@ -101,7 +101,7 @@ resource 'Email Addresses' do
         parameter 'attribute_name', 'Description of the Attribute'
       end
 
-      let(:attributes) { "FILL ME IN WITH PUT DATA" }
+      let(:attributes) { 'FILL ME IN WITH PUT DATA' }
 
       example 'Email Address [UPDATE]', document: document do
         explanation 'Update Email Address'
@@ -120,7 +120,7 @@ resource 'Email Addresses' do
         parameter 'attribute_name', 'Description of the Attribute'
       end
 
-      let(:attributes) { "FILL ME IN WITH PATCH DATA" }
+      let(:attributes) { 'FILL ME IN WITH PATCH DATA' }
 
       example 'Email Address [UPDATE]', document: document do
         explanation 'Update Email Address'

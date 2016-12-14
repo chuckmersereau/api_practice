@@ -1,7 +1,7 @@
 class Api::V2::AccountListsController < Api::V2Controller
   def index
     load_account_lists
-    render json: @account_lists, meta: meta_hash(@account_lists)
+    render json: @account_lists, meta: meta_hash(@account_lists), include: include_params
   end
 
   def show
@@ -31,7 +31,8 @@ class Api::V2::AccountListsController < Api::V2Controller
 
   def render_account_list
     render json: @account_list,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_account_list

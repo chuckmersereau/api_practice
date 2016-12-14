@@ -2,7 +2,7 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_linkedin_accounts
-    render json: @linkedin_accounts, meta: meta_hash(@linkedin_accounts)
+    render json: @linkedin_accounts, meta: meta_hash(@linkedin_accounts), include: include_params
   end
 
   def show
@@ -51,7 +51,8 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
 
   def render_linkedin_account
     render json: @linkedin_account,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_linkedin_account

@@ -4,6 +4,7 @@ class Api::V2Controller < ApiController
   include Sorting
   include Pagination
   include UuidToIdTransformer
+  include Including
 
   before_action :jwt_authorize!
   before_action :transform_uuid_attributes_params_to_ids, only: [:create, :update]

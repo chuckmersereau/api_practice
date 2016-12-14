@@ -1,4 +1,6 @@
 class Person::OrganizationAccountSerializer < ApplicationSerializer
+  type :organization_accounts
+
   attributes :authenticated,
              :disable_downloads,
              :downloading,

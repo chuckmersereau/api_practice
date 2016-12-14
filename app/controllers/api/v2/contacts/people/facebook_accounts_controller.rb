@@ -2,7 +2,7 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_fb_accounts
-    render json: @fb_accounts, meta: meta_hash(@fb_accounts)
+    render json: @fb_accounts, meta: meta_hash(@fb_accounts), include: include_params
   end
 
   def show
@@ -51,7 +51,8 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
 
   def render_fb_account
     render json: @fb_account,
-           status: success_status
+           status: success_status,
+           include: include_params
   end
 
   def persist_fb_account
