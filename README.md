@@ -123,6 +123,13 @@ To allow clients to generate identifiers from their side, UUIDs are used in this
 - The generator templates can be found in [lib/generators/graip/controller/templates](lib/generators/graip/controller/templates).
 - For more information on how to use this generator, check out [lib/generators/graip/controller/USAGE](lib/generators/graip/controller/USAGE).
 
+## API Documentation
+
+Public API documentation is available at [docs.mpdx.org](http://docs.mpdx.org/). This doc is automatically generated using the [gem rspec_api_documentation](https://github.com/zipmark/rspec_api_documentation).
+
+To generate the docs locally run `bin/rake docs:generate DOC_FORMAT=html`
+**Please note:** the output format will be different than what is used on [docs.mpdx.org](http://docs.mpdx.org/), but you could use this to verify your spec is correct before pushing it.
+
 ## Issue Tracking, Bugs Reports, & Contributing
 
 * Issues Tracking: [Cru Jira](https://jira.cru.org)
