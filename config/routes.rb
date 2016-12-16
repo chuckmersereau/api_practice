@@ -43,6 +43,8 @@ Rails.application.routes.draw do
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do
           scope module: :contacts do
+            get :analytics, to: 'analytics#show', on: :collection
+
             resources :addresses, only: [:index, :show, :create, :update, :destroy]
 
             resources :people, only: [:show, :index, :create, :update, :destroy] do
