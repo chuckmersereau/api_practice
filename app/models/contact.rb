@@ -235,6 +235,7 @@ class Contact < ApplicationRecord
   def update_late_at
     initial_date = last_donation_date || pledge_start_date
     return unless status == 'Partner - Financial' && pledge_frequency.present? && initial_date.present?
+
     self.late_at = case
                    when pledge_frequency >= 1.0
                      initial_date + pledge_frequency.to_i.months

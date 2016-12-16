@@ -42,7 +42,43 @@ class Person < ApplicationRecord
   has_many :messages_received, class_name: 'Message', foreign_key: :to_id, dependent: :destroy
   has_many :google_contacts, autosave: true
 
-  scope :alive, -> { where.not(deceased: true) }
+  scope :alive,          -> { where.not(deceased: true) }
+  scope :by_anniversary, -> { order('anniversary_month, anniversary_day') }
+  scope :by_birthday,    -> { order('birthday_month, birthday_day') }
+
+  scope :with_anniversary_between, lambda { |start_date, end_date|
+    start_month = start_date.month
+    end_month   = end_date.month
+
+    if start_month == end_month
+      where('anniversary_month = ?', start_month)
+        .where('anniversary_day BETWEEN ? AND ?', start_date.day, end_date.day)
+    else
+      sql = <<~SQL
+        (anniversary_month = ? AND anniversary_day >= ?) OR
+        (anniversary_month = ? AND anniversary_day <= ?)
+      SQL
+
+      where(sql, start_month, start_date.day, end_month, end_date.day)
+    end
+  }
+
+  scope :with_birthday_between, lambda { |start_date, end_date|
+    start_month = start_date.month
+    end_month   = end_date.month
+
+    if start_month == end_month
+      where('birthday_month = ?', start_month)
+        .where('birthday_day BETWEEN ? AND ?', start_date.day, end_date.day)
+    else
+      sql = <<~SQL
+        (birthday_month = ? AND birthday_day >=?) OR
+        (birthday_month = ? AND birthday_day <= ?)
+      SQL
+
+      where(sql, start_month, start_date.day, end_month, end_date.day)
+    end
+  }
 
   accepts_nested_attributes_for :email_addresses, reject_if: -> (e) { e[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers, reject_if: -> (p) { p[:number].blank? }, allow_destroy: true

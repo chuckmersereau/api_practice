@@ -211,8 +211,10 @@ class AccountList < ApplicationRecord
                                            start_month, start_date.day, end_month, end_date.day)
 
     end
+
     people_with_birthdays.alive
-                         .order('people.birthday_month, people.birthday_day').merge(contacts.active)
+                         .order('people.birthday_month, people.birthday_day')
+                         .merge(contacts.active)
   end
 
   def contacts_with_anniversaries(start_date, end_date)
