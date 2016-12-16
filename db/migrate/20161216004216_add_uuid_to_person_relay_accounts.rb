@@ -1,0 +1,6 @@
+class AddUuidToPersonRelayAccounts < ActiveRecord::Migration
+  def change
+    add_column :person_relay_accounts, :uuid, :uuid, null: false, default: 'uuid_generate_v4()'
+    add_index :person_relay_accounts, :uuid, unique: true
+  end
+end
