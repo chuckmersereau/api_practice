@@ -2,7 +2,7 @@ class Contact::Filter::ContactInfoEmail < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       contacts_with_emails = contacts.where.not(email_addresses: { email: nil })
                                      .where(email_addresses: { historic: false })
                                      .includes(people: :email_addresses)

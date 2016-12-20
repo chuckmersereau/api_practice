@@ -1,36 +1,36 @@
 class Contact::Filterer < ApplicationFilterer
   FILTERS_TO_DISPLAY = %w(
-    Status
+    AddressHistoric
+    Appeal
+    Church
+    City
+    ContactInfoAddr
+    ContactInfoEmail
+    ContactInfoFacebook
+    ContactInfoMobile
+    ContactInfoPhone
+    ContactInfoWorkPhone
+    ContactType
+    Country
+    Donation
+    DonationAmount
+    DonationAmountRange
+    DonationDate
+    Likely
+    Locale
+    MetroArea
     Newsletter
-    PledgeReceived
-    PledgeFrequencies
     PledgeAmount
     PledgeCurrency
+    PledgeFrequencies
     PledgeLateBy
-    Donation
-    DonationDate
-    DonationAmountRange
-    DonationAmount
-    RelatedTaskAction
-    TaskDueDate
+    PledgeReceived
     Referrer
-    City
-    State
     Region
-    Country
-    MetroArea
-    AddressHistoric
-    ContactInfoEmail
-    ContactInfoPhone
-    ContactInfoMobile
-    ContactInfoWorkPhone
-    ContactInfoAddr
-    ContactInfoFacebook
-    Locale
-    Church
-    Likely
-    ContactType
-    Appeal
+    RelatedTaskAction
+    State
+    Status
+    TaskDueDate
     Timezone
   ).freeze
 

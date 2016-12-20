@@ -2,7 +2,7 @@ class Contact::Filter::Likely < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       filters[:likely] << nil if Array(filters[:likely]).delete('none')
       contacts.where(likely_to_give: filters[:likely])
     end

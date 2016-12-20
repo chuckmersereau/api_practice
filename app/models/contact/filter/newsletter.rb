@@ -2,7 +2,7 @@ class Contact::Filter::Newsletter < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       contacts = case filters[:newsletter]
                  when 'all'
                    contacts.where.not(send_newsletter: [nil, ''])

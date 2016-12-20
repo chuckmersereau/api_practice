@@ -35,10 +35,11 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def load_tasks
-    @tasks = task_scope.where(filter_params)
-                       .reorder(sorting_param)
-                       .page(page_number_param)
-                       .per(per_page_param)
+    @tasks = Task::Filterer.new(filter_params)
+                           .filter(task_scope, current_user)
+                           .reorder(sorting_param)
+                           .page(page_number_param)
+                           .per(per_page_param)
   end
 
   def load_task
@@ -89,6 +90,6 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def permitted_filters
-    [:account_list_id]
+    @permitted_filters ||= Task::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym)
   end
 end

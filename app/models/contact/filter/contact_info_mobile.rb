@@ -2,7 +2,7 @@ class Contact::Filter::ContactInfoMobile < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       filter_mobile = filters[:contact_info_mobile]
       contacts_ids_with_mobile = contact_ids_with_phone(contacts, 'mobile')
       return contacts.where(id: contacts_ids_with_mobile) if filter_mobile == 'Yes'

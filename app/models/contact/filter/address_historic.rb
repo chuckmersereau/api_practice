@@ -2,7 +2,7 @@ class Contact::Filter::AddressHistoric < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       contacts.where('addresses.historic' => filters[:address_historic] == 'true')
               .includes(:addresses)
               .references('addresses')

@@ -1,4 +1,4 @@
-class AddressSerializer < ActiveModel::Serializer
+class AddressSerializer < ApplicationSerializer
   attributes :street,
              :city,
              :country,

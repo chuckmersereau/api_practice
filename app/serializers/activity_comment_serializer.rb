@@ -1,4 +1,4 @@
-class ActivityCommentSerializer < ActiveModel::Serializer
+class ActivityCommentSerializer < ApplicationSerializer
   include DisplayCase::ExhibitsHelper
 
   attributes :body

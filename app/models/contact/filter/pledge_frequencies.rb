@@ -2,7 +2,7 @@ class Contact::Filter::PledgeFrequencies < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       frequencies_not_null = Array.wrap(filters[:pledge_frequencies]) - ['null']
       return unless frequencies_not_null.present?
       contacts.where(pledge_frequency: frequencies_not_null)

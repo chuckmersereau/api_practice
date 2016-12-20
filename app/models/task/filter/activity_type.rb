@@ -2,7 +2,7 @@ class Task::Filter::ActivityType < Task::Filter::Base
   class << self
     protected
 
-    def execute_query(tasks, filters, _account_list)
+    def execute_query(tasks, filters, _user)
       tasks.where(activity_type: filters[:activity_type])
     end
 

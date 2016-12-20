@@ -10,11 +10,11 @@ class ApplicationFilterer
     @filters.map { |k, v| @filters[k] = v.strip if v.is_a?(String) }
   end
 
-  def filter(resource_scope, account_list)
+  def filter(resource_scope, user)
     self.class.filter_classes.each do |klass|
-      resource_scope = klass.query(resource_scope, @filters, account_list) || resource_scope
+      resource_scope = klass.query(resource_scope, @filters, user) || resource_scope
     end
-    resource_scope.all
+    resource_scope
   end
 
   def self.config(account_list)

@@ -2,9 +2,9 @@ class Contact::Filter::Appeal < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       contacts = contacts.where(no_appeals: true) if filters[:appeal].delete('no_appeals')
-      contacts = contacts.where('appeal_contacts.appeal_id' => filters[:appeal]).includes(:appeals).uniq if filters[:appeal].present?
+      contacts = contacts.where(appeals: { uuid: filters[:appeal] }).includes(:appeals).uniq if filters[:appeal].present?
       contacts
     end
 

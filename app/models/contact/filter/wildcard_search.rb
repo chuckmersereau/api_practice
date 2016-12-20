@@ -2,7 +2,7 @@ class Contact::Filter::WildcardSearch < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       if filters[:wildcard_search] != 'null'
         if filters[:wildcard_search].include?(',')
           last_name, first_name = filters[:wildcard_search].split(',')

@@ -2,7 +2,7 @@ class Contact::Filter::PledgeLateBy < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       return contacts unless filters[:pledge_late_by]
       min_days, max_days = filters[:pledge_late_by].split('_').map(&:to_i).map(&:days)
       contacts.late_by(min_days, max_days)

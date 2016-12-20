@@ -2,7 +2,7 @@ class Contact::Filter::ContactInfoAddr < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       contacts_with_addr = contacts.where.not(addresses: { street: '' })
                                    .where(addresses: { historic: false })
                                    .includes(:addresses)

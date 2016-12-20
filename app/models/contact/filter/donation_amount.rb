@@ -2,7 +2,7 @@ class Contact::Filter::DonationAmount < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations])
       contacts = contacts.where(donations: { amount: filters[:donation_amount] })
       contacts

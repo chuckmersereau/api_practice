@@ -2,7 +2,7 @@ class Contact::Filter::Referrer < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       filters = Array(filters[:referrer])
       filters << nil if filters.delete('none')
       contacts = contacts.includes(:contact_referrals_to_me).where.not(contact_referrals: { referred_by_id: nil }) if filters.delete('any')

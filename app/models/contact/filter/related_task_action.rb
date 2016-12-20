@@ -2,7 +2,7 @@ class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       if filters[:related_task_action].first == 'null'
         contacts_with_activities = contacts.where('activities.completed' => false)
                                            .includes(:activities).map(&:id)

@@ -2,7 +2,7 @@ class Contact::Filter::ContactInfoPhone < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       filter_home = filters[:contact_info_phone]
       contacts_ids_with_home = contact_ids_with_phone(contacts, 'home')
       return contacts.where(id: contacts_ids_with_home) if filter_home == 'Yes'

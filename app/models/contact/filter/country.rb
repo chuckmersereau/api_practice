@@ -2,7 +2,7 @@ class Contact::Filter::Country < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       filters[:country] << nil if Array(filters[:country]).delete('none')
       contacts.where('addresses.country' => filters[:country],
                      'addresses.historic' => filters[:address_historic] == 'true')

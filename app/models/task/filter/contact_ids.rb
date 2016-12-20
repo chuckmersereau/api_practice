@@ -2,9 +2,9 @@ class Task::Filter::ContactIds < Task::Filter::Base
   class << self
     protected
 
-    def execute_query(tasks, filters, _account_list)
+    def execute_query(tasks, filters, _user)
       filters[:contact_ids] = filters[:contact_ids].split(',') if filters[:contact_ids].is_a?(String)
-      tasks.includes(:contacts).references(:contacts).where(contacts: { id: filters[:contact_ids] })
+      tasks.includes(:contacts).references(:contacts).where(contacts: { uuid: filters[:contact_ids] })
     end
 
     def title

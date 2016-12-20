@@ -34,10 +34,11 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def load_contacts
-    @contacts = contact_scope.where(filter_params)
-                             .reorder(sorting_param)
-                             .page(page_number_param)
-                             .per(per_page_param)
+    @contacts = Contact::Filterer.new(filter_params)
+                                 .filter(contact_scope, current_user)
+                                 .reorder(sorting_param)
+                                 .page(page_number_param)
+                                 .per(per_page_param)
   end
 
   def load_contact
@@ -89,5 +90,9 @@ class Api::V2::ContactsController < Api::V2Controller
 
   def pundit_user
     PunditContext.new(current_user, contact: @contact)
+  end
+
+  def permitted_filters
+    @permitted_filters ||= Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym)
   end
 end

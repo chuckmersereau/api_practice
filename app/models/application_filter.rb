@@ -11,10 +11,10 @@ class ApplicationFilter
       }.merge(select_options(account_list)) if display_filter_option? && !empty?(account_list)
     end
 
-    def query(resource, filters, account_list)
+    def query(resource, filters, user)
       filters[class_symbol] ||= default_selection if default_selection.present?
       return unless valid_filters?(filters)
-      execute_query(resource, filters, account_list)
+      execute_query(resource, filters, user)
     end
 
     protected

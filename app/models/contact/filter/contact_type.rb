@@ -2,7 +2,7 @@ class Contact::Filter::ContactType < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       case filters[:contact_type]
       when 'person'
         contacts.people

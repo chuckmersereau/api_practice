@@ -2,7 +2,7 @@ class Contact::Filter::Status < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _account_list)
+    def execute_query(contacts, filters, _user)
       filters[:status] = Array(filters[:status])
       filters[:status] << 'null' if (filters[:status].include? '') && !filters[:status].include?('null')
       filters[:status] << '' if (filters[:status].include? 'null') && !filters[:status].include?('')
