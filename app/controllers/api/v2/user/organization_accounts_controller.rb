@@ -68,7 +68,7 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   end
 
   def save_organization_account
-    @organization_account.save
+    @organization_account.save(context: persistence_context)
   end
 
   def organization_account_params

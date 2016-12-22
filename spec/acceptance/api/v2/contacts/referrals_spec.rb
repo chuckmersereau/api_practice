@@ -116,7 +116,8 @@ resource 'Contact Referrals' do
 
       let(:attributes) do
         {
-          referred_to_id: alternate.uuid
+          referred_to_id: alternate.uuid,
+          updated_in_db_at: referral.updated_at
         }
       end
 
@@ -144,7 +145,8 @@ resource 'Contact Referrals' do
 
       let(:attributes) do
         {
-          referred_to_id: alternate.uuid
+          referred_to_id: alternate.uuid,
+          updated_in_db_at: referral.updated_at
         }
       end
 

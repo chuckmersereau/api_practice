@@ -13,9 +13,12 @@ class PrayerLettersAccount < ApplicationRecord
 
   validates :oauth2_token, :account_list_id, presence: true
 
-  PERMITTED_ATTRIBUTES = [
-    :oauth2_token, :valid_token
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :oauth2_token,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid,
+                          :valid_token].freeze
 
   def queue_subscribe_contacts
     async(:subscribe_contacts)

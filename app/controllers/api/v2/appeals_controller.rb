@@ -68,7 +68,7 @@ class Api::V2::AppealsController < Api::V2Controller
   end
 
   def save_appeal
-    @appeal.save
+    @appeal.save(context: persistence_context)
   end
 
   def appeal_params

@@ -20,7 +20,7 @@ resource 'Contacts People Email Addresses' do
   let!(:email_address) { create(:email_address, person: person) }
   let(:id)             { email_address.uuid }
 
-  let(:form_data) { build_data(attributes) }
+  let(:form_data) { build_data(attributes.merge(updated_in_db_at: email_address.updated_at)) }
 
   let(:expected_attribute_keys) do
     # list your expected resource keys vertically here (alphabetical please!)
@@ -97,30 +97,6 @@ resource 'Contacts People Email Addresses' do
 
     # update
     put '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
-      with_options scope: [:data, :attributes] do
-        parameter 'email',    'Email for the Email Address'
-        parameter 'primary',  "Whether or not the email should be the Person's primary email"
-        parameter 'location', 'The location of the Email Address, such as "home", "mobile", "office"'
-        parameter 'historic', 'Set to true when an Email Address should no longer be used'
-      end
-
-      let(:attributes) { email_address.attributes.merge(person_id: person.uuid) }
-
-      before { attributes.merge!(email: 'new-email@example.com') }
-
-      example 'Person / Email Address [UPDATE]', document: :contacts do
-        explanation 'Update the Person\'s Email Address with the given ID'
-        do_request data: form_data
-
-        check_resource(['relationships'])
-        expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(resource_object['email']).to eq 'new-email@example.com'
-        expect(response_status).to eq 200
-      end
-    end
-
-    # update
-    patch '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
       with_options scope: [:data, :attributes] do
         parameter 'email',    'Email for the Email Address'
         parameter 'primary',  "Whether or not the email should be the Person's primary email"

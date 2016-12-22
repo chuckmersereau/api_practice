@@ -11,7 +11,9 @@ resource 'Organization Accounts' do
   let(:id)                    { organization_account.uuid }
 
   let(:new_organization_account_params) do
-    build(:organization_account).attributes.merge(organization_id: create(:organization).uuid, person_id: user.uuid)
+    build(:organization_account).attributes.merge(organization_id: create(:organization).uuid,
+                                                  updated_in_db_at: organization_account.updated_at,
+                                                  person_id: user.uuid)
   end
 
   let(:form_data) { build_data(new_organization_account_params) }

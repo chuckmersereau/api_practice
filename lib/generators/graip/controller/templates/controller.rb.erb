@@ -104,7 +104,7 @@ class <%= class_name %>Controller < <%= parent_namespacing %>ApplicationControll
   end
 
   def save_<%= resource_name %>
-    <%= resource_instance %>.save
+    <%= resource_instance %>.save(context: persistence_context)
   end
 end
 <% end -%>

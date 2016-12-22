@@ -6,7 +6,15 @@ class Person::GoogleAccount < ApplicationRecord
   has_many :google_emails, foreign_key: :google_account_id
   has_many :google_contacts, foreign_key: :google_account_id
 
-  PERMITTED_ATTRIBUTES = [:remote_id, :person_id, :token, :email, :primary].freeze
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :email,
+                          :person_id,
+                          :primary,
+                          :remote_id,
+                          :token,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.google_accounts

@@ -18,6 +18,7 @@ resource 'Relationship' do
 
   let(:new_family_relationship) do
     build(:family_relationship).attributes.merge(related_person_id: create(:person).uuid,
+                                                 updated_in_db_at: family_relationship.updated_at,
                                                  person_id: person.uuid)
   end
   let(:form_data) { build_data(new_family_relationship) }

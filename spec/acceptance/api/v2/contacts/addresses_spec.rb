@@ -10,11 +10,14 @@ resource 'Address' do
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
   let(:contact_id) { contact.uuid }
 
-  let!(:resource) { create(:address, addressable: contact) }
-  let(:id)        { resource.uuid }
+  let!(:address) { create(:address, addressable: contact) }
+  let(:id) { address.uuid }
 
-  let(:new_resource) { build(:address, addressable: contact).attributes.except('master_address_id') }
-  let(:form_data)    { build_data(new_resource) }
+  let(:new_address) do
+    build(:address, addressable: contact).attributes.merge(updated_in_db_at: address.updated_at)
+                                         .except('master_address_id')
+  end
+  let(:form_data) { build_data(new_address) }
 
   context 'authorized user' do
     before { api_login(user) }
@@ -73,7 +76,7 @@ resource 'Address' do
         explanation 'Create a Address associated with the Contact'
         do_request data: form_data
 
-        expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
+        expect(resource_object['street']).to(be_present) && eq(new_address['street'])
         expect(response_status).to eq(201)
       end
     end
@@ -99,7 +102,7 @@ resource 'Address' do
         explanation 'Update the Contact\'s Address with the given ID'
         do_request data: form_data
 
-        expect(resource_object['street']).to(be_present) && eq(new_resource['street'])
+        expect(resource_object['street']).to(be_present) && eq(new_address['street'])
         expect(response_status).to eq(200)
       end
     end

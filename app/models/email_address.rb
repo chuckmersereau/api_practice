@@ -1,10 +1,12 @@
 class EmailAddress < ApplicationRecord
-  PERMITTED_ATTRIBUTES = [
-    :email,
-    :historic,
-    :location,
-    :primary
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :email,
+                          :historic,
+                          :location,
+                          :primary,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   include HasPrimary
   @@primary_scope = :person

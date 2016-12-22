@@ -14,8 +14,11 @@ resource 'Notifications' do
   let(:notification)    { notifications.first }
   let(:id)              { notification.uuid }
 
-  let(:new_notification) { build(:notification).attributes.except('notification_type_id') }
-  let(:form_data)        { build_data(new_notification) }
+  let(:new_notification) do
+    build(:notification).attributes.merge(updated_in_db_at: notification.updated_at)
+                        .except('notification_type_id')
+  end
+  let(:form_data) { build_data(new_notification) }
 
   let(:expected_attribute_keys) do
     %w(

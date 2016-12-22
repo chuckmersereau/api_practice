@@ -73,7 +73,7 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   end
 
   def save_website
-    @website.save
+    @website.save(context: persistence_context)
   end
 
   def website_params

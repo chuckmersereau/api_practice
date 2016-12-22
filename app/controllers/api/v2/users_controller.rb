@@ -40,7 +40,7 @@ class Api::V2::UsersController < Api::V2Controller
   end
 
   def save_user
-    @user.save
+    @user.save(context: persistence_context)
   end
 
   def user_params

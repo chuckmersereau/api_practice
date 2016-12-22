@@ -100,7 +100,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   end
 
   def save_address
-    @address.save
+    @address.save(context: persistence_context)
   end
 
   def pundit_user

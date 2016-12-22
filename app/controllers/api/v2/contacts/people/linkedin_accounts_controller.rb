@@ -73,7 +73,7 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   end
 
   def save_linkedin_account
-    @linkedin_account.save
+    @linkedin_account.save(context: persistence_context)
   end
 
   def linkedin_account_params

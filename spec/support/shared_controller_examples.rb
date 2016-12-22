@@ -3,9 +3,9 @@ RSpec.shared_examples 'common_variables' do
   let(:id_param)                     { defined?(id) ? { id: id } : {} }
   let(:full_params)                  { id_param.merge(defined?(parent_param) ? parent_param : {}) }
   let(:parent_param_if_needed)       { defined?(parent_param) ? parent_param : {} }
-  let(:full_correct_attributes)      { { data: { attributes: correct_attributes } }.merge(full_params) }
-  let(:full_unpermitted_attributes)  { { data: { attributes: unpermitted_attributes } }.merge(full_params) }
-  let(:full_incorrect_attributes)    { { data: { attributes: incorrect_attributes } }.merge(full_params) }
+  let(:full_correct_attributes)      { { data: { attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
+  let(:full_unpermitted_attributes)  { { data: { attributes: unpermitted_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
+  let(:full_incorrect_attributes)    { { data: { attributes: incorrect_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
   let(:reference_key)                { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
   let(:reference_value)              { defined?(given_reference_value) ? given_reference_value : correct_attributes.values.first }
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
@@ -103,6 +103,15 @@ RSpec.shared_examples 'update_examples' do
         expect(response.body).to include('errors')
         expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       end
+    end
+
+    it 'does not update resources with outdated updated_at field' do
+      api_login(user)
+      full_update_attributes[:data][:attributes][:updated_in_db_at] = 1.year.ago
+      put :update, full_update_attributes
+
+      expect(response.status).to eq(400)
+      expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
     end
 
     it 'does not update resource for users that do not own the resource' do

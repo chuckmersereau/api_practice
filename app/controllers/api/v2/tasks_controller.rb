@@ -69,7 +69,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def save_task
-    @task.save
+    @task.save(context: persistence_context)
   end
 
   def task_params

@@ -10,7 +10,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   let!(:second_resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
   let(:id) { resource.uuid }
   let(:parent_param) { { contact_id: contact.uuid } }
-  let(:correct_attributes) { { first_name: 'Billy', email_address: { email: 'billy@internet.com' } } }
+  let(:correct_attributes) { { first_name: 'Billy', email_address: { email: 'billy@internet.com' }, updated_at: Time.now + 1.day } }
   let(:unpermitted_attributes) { nil }
   let(:incorrect_attributes) { nil }
   let(:factory_type) { :person }

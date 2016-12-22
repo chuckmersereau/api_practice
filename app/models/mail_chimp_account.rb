@@ -26,9 +26,15 @@ class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
 
   scope :that_belong_to, -> (user) { where(account_list_id: user.account_list_ids) }
 
-  PERMITTED_ATTRIBUTES = [
-    :api_key, :grouping_id, :primary_list_id, :auto_log_campaigns, :sync_all_active_contacts
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:api_key,
+                          :auto_log_campaigns,
+                          :created_at,
+                          :grouping_id,
+                          :primary_list_id,
+                          :sync_all_active_contacts,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   def lists
     return [] unless api_key.present?

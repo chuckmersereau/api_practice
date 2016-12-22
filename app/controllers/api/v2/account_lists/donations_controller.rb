@@ -67,7 +67,7 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   end
 
   def save_donation
-    @donation.save
+    @donation.save(context: persistence_context)
   end
 
   def donation_params

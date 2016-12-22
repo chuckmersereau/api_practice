@@ -69,7 +69,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   end
 
   def save_notification
-    @notification.save
+    @notification.save(context: persistence_context)
   end
 
   def notification_params

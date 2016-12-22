@@ -19,7 +19,7 @@ resource 'Twitter Accounts' do
   let(:twitter_account)   { twitter_accounts.first }
   let(:id)                { twitter_account.uuid }
 
-  let(:new_twitter_account) { build(:twitter_account).attributes.except('person_id') }
+  let(:new_twitter_account) { build(:twitter_account).attributes.merge(updated_in_db_at: twitter_account.updated_at).except('person_id') }
   let(:form_data)           { build_data(new_twitter_account) }
 
   let(:expected_attribute_keys) do

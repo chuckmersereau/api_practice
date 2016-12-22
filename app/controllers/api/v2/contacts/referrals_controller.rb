@@ -100,7 +100,7 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
   end
 
   def save_referral
-    @referral.save
+    @referral.save(context: persistence_context)
   end
 
   def transform_uuid_attributes_params_to_ids

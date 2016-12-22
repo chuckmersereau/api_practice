@@ -11,9 +11,14 @@ class Person::FacebookAccount < ApplicationRecord
   # set :friends
   # attr_accessible :remote_id, :token, :token_expires_at, :first_name, :last_name, :valid_token, :authenticated, :url
 
-  PERMITTED_ATTRIBUTES = [
-    :remote_id, :first_name, :last_name, :username
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :first_name,
+                          :last_name,
+                          :remote_id,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :username,
+                          :uuid].freeze
 
   validates :username, presence: true
 

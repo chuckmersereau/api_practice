@@ -105,7 +105,7 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   end
 
   def save_phone
-    @phone.save
+    @phone.save(context: persistence_context)
   end
 
   def permitted_filters

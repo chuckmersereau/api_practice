@@ -73,7 +73,7 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   end
 
   def save_twitter_account
-    @twitter_account.save
+    @twitter_account.save(context: persistence_context)
   end
 
   def twitter_account_params

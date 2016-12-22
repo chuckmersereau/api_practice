@@ -66,22 +66,44 @@ class Contact < ApplicationRecord
   }
   scope :created_between, -> (start_date, end_date) { where('contacts.created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
 
-  PERMITTED_ATTRIBUTES = [
-    :name, :pledge_amount, :status, :notes, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
-    :pledge_start_date, :next_ask, :likely_to_give, :church_name, :send_newsletter, :no_appeals,
-    :direct_deposit, :magazine, :pledge_received, :not_duplicated_with, :tag_list, :primary_person_id, :timezone,
-    :pledge_currency, :locale, :account_list_id,
-    {
-      tag_list: [],
-      contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
-      donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
-      addresses_attributes: [
-        :remote_id, :master_address_id, :location, :street, :city, :state, :postal_code, :region, :metro_area,
-        :country, :historic, :primary_mailing_address, :_destroy, :id, :user_changed
-      ],
-      people_attributes: Person::PERMITTED_ATTRIBUTES
-    }
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:account_list_id,
+                          :church_name,
+                          :created_at,
+                          :direct_deposit,
+                          :envelope_greeting,
+                          :full_name,
+                          :greeting,
+                          :likely_to_give,
+                          :locale,
+                          :magazine,
+                          :name,
+                          :next_ask,
+                          :no_appeals,
+                          :not_duplicated_with,
+                          :notes,
+                          :pledge_amount,
+                          :pledge_currency,
+                          :pledge_frequency,
+                          :pledge_received,
+                          :pledge_start_date,
+                          :primary_person_id,
+                          :send_newsletter,
+                          :status,
+                          :tag_list,
+                          :timezone,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid,
+                          :website,
+                          { addresses_attributes: [
+                            :remote_id, :master_address_id, :location, :street, :city, :state, :postal_code, :region, :metro_area,
+                            :country, :historic, :primary_mailing_address, :_destroy, :id, :user_changed
+                          ],
+                            contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
+                            donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
+                            people_attributes: Person::PERMITTED_ATTRIBUTES,
+                            tag_list: []
+                          }].freeze
 
   MERGE_COPY_ATTRIBUTES = [
     :name, :pledge_amount, :status, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,

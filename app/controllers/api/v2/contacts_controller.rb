@@ -61,7 +61,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def save_contact
-    @contact.save
+    @contact.save(context: persistence_context)
   end
 
   def persist_contact

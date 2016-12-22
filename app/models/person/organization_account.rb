@@ -18,7 +18,14 @@ class Person::OrganizationAccount < ApplicationRecord
   after_destroy :destroy_designation_profiles
   belongs_to :organization
 
-  PERMITTED_ATTRIBUTES = [:person_id, :organization_id, :username, :password].freeze
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :organization_id,
+                          :password,
+                          :person_id,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :username,
+                          :uuid].freeze
 
   def to_s
     str = organization.to_s

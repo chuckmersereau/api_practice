@@ -68,7 +68,7 @@ class Api::V2::User::KeyAccountsController < Api::V2Controller
   end
 
   def save_key_account
-    @key_account.save
+    @key_account.save(context: persistence_context)
   end
 
   def key_account_params

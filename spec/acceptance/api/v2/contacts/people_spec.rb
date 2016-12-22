@@ -13,8 +13,11 @@ resource 'People' do
   let!(:resource) { create(:person).tap { |person| create(:contact_person, contact: contact, person: person) } }
   let(:id)        { resource.uuid }
 
-  let(:new_resource) { build(:person, first_name: 'Mpdx').attributes.merge(master_person_id: create(:master_person).uuid) }
-  let(:form_data)    { build_data(new_resource) }
+  let(:new_resource) do
+    build(:person, first_name: 'Mpdx').attributes.merge(master_person_id: create(:master_person).uuid,
+                                                        updated_in_db_at: contact.updated_at)
+  end
+  let(:form_data) { build_data(new_resource) }
 
   let(:resource_attributes) do
     %w(

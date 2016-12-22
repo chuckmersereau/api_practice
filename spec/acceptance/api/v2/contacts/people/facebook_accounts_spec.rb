@@ -19,8 +19,10 @@ resource 'Facebook Accounts' do
   let(:facebook_account)   { facebook_accounts.first }
   let(:id)                 { facebook_account.uuid }
 
-  let(:new_facebook_account) { build(:facebook_account).attributes.merge(person_id: person.uuid) }
-  let(:form_data)            { build_data(new_facebook_account) }
+  let(:new_facebook_account) do
+    build(:facebook_account).attributes.merge(updated_in_db_at: facebook_account.updated_at, person_id: person.uuid)
+  end
+  let(:form_data) { build_data(new_facebook_account) }
 
   let(:expected_attribute_keys) do
     %w(

@@ -74,7 +74,8 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
   # If you don't need it - remove it entirely.
   let(:update_attributes) do
     {
-      referred_to_id: alternate.uuid
+      referred_to_id: alternate.uuid,
+      updated_in_db_at: referral.updated_at
     }
   end
   let(:given_reference_key) { nil }

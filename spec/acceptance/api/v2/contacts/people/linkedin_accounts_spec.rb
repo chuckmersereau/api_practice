@@ -19,8 +19,11 @@ resource 'Linkedin Accounts' do
   let(:linkedin_account)   { linkedin_accounts.first }
   let(:id)                 { linkedin_account.uuid }
 
-  let(:new_facebook_account) { build(:linkedin_account).attributes.merge(person_id: person.uuid) }
-  let(:form_data)            { build_data(new_facebook_account) }
+  let(:new_facebook_account) do
+    build(:linkedin_account).attributes.merge(person_id: person.uuid,
+                                              updated_in_db_at: linkedin_account.updated_at)
+  end
+  let(:form_data) { build_data(new_facebook_account) }
 
   let(:expected_attribute_keys) do
     %w(

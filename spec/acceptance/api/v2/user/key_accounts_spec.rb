@@ -10,8 +10,10 @@ resource 'Key Accounts' do
   let!(:key_account) { create(:key_account, person: user) }
   let(:id)           { key_account.uuid }
 
-  let(:new_key_account_params) { build(:key_account).attributes.merge(person_id: user.uuid) }
-  let(:form_data)              { build_data(new_key_account_params) }
+  let(:new_key_account_params) do
+    build(:key_account).attributes.merge(person_id: user.uuid, updated_in_db_at: key_account.updated_at)
+  end
+  let(:form_data) { build_data(new_key_account_params) }
 
   context 'authorized user' do
     before { api_login(user) }

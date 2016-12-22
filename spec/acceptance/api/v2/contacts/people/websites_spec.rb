@@ -19,8 +19,11 @@ resource 'Websites' do
   let(:website)   { websites.first }
   let(:id)        { website.uuid }
 
-  let(:new_website) { build(:website).attributes.merge(person_id: person.uuid) }
-  let(:form_data)   { build_data(new_website) }
+  let(:new_website) do
+    build(:website).attributes.merge(person_id: person.uuid,
+                                     updated_in_db_at: website.updated_at)
+  end
+  let(:form_data) { build_data(new_website) }
 
   let(:expected_attribute_keys) do
     %w(

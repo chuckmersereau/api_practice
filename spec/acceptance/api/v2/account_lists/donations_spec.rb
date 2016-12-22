@@ -13,12 +13,16 @@ resource 'Donations' do
   let!(:contact)             { create(:contact, account_list: account_list) }
   let!(:donor_account)       { create(:donor_account) }
   let!(:designation_account) { create(:designation_account) }
-  let!(:donations)           { create_list(:donation, 2, donor_account: donor_account, designation_account: designation_account, amount: 10.00) }
+  let!(:donations)           do
+    create_list(:donation, 2, donor_account: donor_account,
+                              designation_account: designation_account, amount: 10.00)
+  end
   let(:donation)             { donations.first }
   let(:id)                   { donation.uuid }
 
   let(:new_donation) do
     build(:donation, amount: 10.00).attributes.merge(donor_account_id: donor_account.uuid,
+                                                     updated_in_db_at: donation.updated_at,
                                                      designation_account_id: designation_account.uuid)
   end
   let(:form_data) { build_data(new_donation) }

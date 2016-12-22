@@ -101,6 +101,24 @@ The master branch is deployed to production at [api.mpdx.org](https://api.mpdx.o
 
 The staging branch is deployed to staging [stage.api.mpdx.org](https://stage.api.mpdx.org/), [Jenkins](http://jenkins.uscm.org/) will auto-deploy on successful builds.
 
+## Offline Devices Data Syncing with the API
+
+### Created At & Updated At
+
+To allow offline clients to create and update resources and to ensure that the created_at and updated_at fields of that resource reflects the exact time of its creation and update, clients can provide the created_at or updated_at fields at the time of syncing.
+
+### Updated At In Db
+
+To allow offline clients to later sync resources with the API without overwriting valid data, the API will require that the updated_in_db_at field (which should reflect the value of the updated_at field that was last returned from the server) be provided in text format for each resource updated through a PUT request. The API will verify that the provided updated_in_db_at field has the exact same value that is currently stored in the database and reject the update if that is not the case. This will ensure that a client doesn't overwrite a resource without being aware of that resource's latest data.
+
+### UUID
+
+To allow offline clients to reference resources before having synced with the API, clients can generate a UUID and provide it with the id field when syncing with the API.
+
+## Universal Unique IDentifiers (UUID)
+
+To allow clients to generate identifiers from their side, UUIDs are used in this project at the controller level. At the model level though, we are still using integer ids to refer to db objects. Things are setup this way, because a db migration would have been to risky.
+
 ## Generators
 
 ### GRAIP Controller Generator
@@ -113,10 +131,6 @@ rails generate graip:controller Api/v2/Contacts
 
 And it will automatically generate a controller template,
 controller spec, and acceptance spec for how controllers will be formatted for this project following paradigms from [Growing Rails Applications In Practice](https://pragprog.com/book/d-kegrap/growing-rails-applications-in-practice).
-
-## Universal Unique Identifiers (UUID)
-
-To allow clients to generate identifiers from their side, UUIDs are used in this project at the controller level. At the model level though, we are still using integer ids to refer to db objects. Things are setup this way, because a db migration would have been to risky.
 
 #### Resources:
 - For examples of the controller and spec files - check out: [spec/support/generators/graip/controller/](spec/support/generators/graip/controller)

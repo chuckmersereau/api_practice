@@ -4,9 +4,15 @@ class Person::LinkedinAccount < ApplicationRecord
   scope :valid_token, -> { where('(token_expires_at is null OR token_expires_at > ?) AND valid_token = ?', Time.now, true) }
 
   # attr_accessible :first_name, :last_name, :url
-  PERMITTED_ATTRIBUTES = [
-    :authenticated, :first_name, :last_name, :public_url, :remote_id
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:authenticated,
+                          :created_at,
+                          :first_name,
+                          :last_name,
+                          :public_url,
+                          :remote_id,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   validates :public_url, :remote_id, presence: true
 

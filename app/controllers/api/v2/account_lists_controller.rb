@@ -53,7 +53,7 @@ class Api::V2::AccountListsController < Api::V2Controller
   end
 
   def save_account_list
-    @account_list.save
+    @account_list.save(context: persistence_context)
   end
 
   def account_list_params

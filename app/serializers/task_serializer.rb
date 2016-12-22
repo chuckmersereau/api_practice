@@ -18,4 +18,8 @@ class TaskSerializer < ApplicationSerializer
   has_many :people
 
   belongs_to :account_list
+
+  def account_list_id
+    object.account_list.uuid
+  end
 end

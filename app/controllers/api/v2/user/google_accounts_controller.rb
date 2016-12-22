@@ -68,7 +68,7 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
   end
 
   def save_google_account
-    @google_account.save
+    @google_account.save(context: persistence_context)
   end
 
   def google_account_params

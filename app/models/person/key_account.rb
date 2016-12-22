@@ -6,7 +6,15 @@ class Person::KeyAccount < ApplicationRecord
   validates :remote_id, :email, :person_id, presence: true
   validates :remote_id, uniqueness: true
 
-  PERMITTED_ATTRIBUTES = [:person_id, :remote_id, :first_name, :last_name, :email].freeze
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :email,
+                          :first_name,
+                          :last_name,
+                          :person_id,
+                          :remote_id,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   def self.find_or_create_from_auth(auth_hash, user)
     @rel = user.key_accounts

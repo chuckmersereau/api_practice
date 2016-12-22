@@ -59,7 +59,7 @@ class Api::V2::AccountLists::PrayerLettersAccountsController < Api::V2Controller
   end
 
   def save_prayer_letters_account
-    @prayer_letters_account.save
+    @prayer_letters_account.save(context: persistence_context)
   end
 
   def prayer_letters_account_params

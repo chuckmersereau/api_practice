@@ -10,9 +10,11 @@ class AccountListInvite < ApplicationRecord
 
   validates :recipient_email, presence: true
 
-  PERMITTED_ATTRIBUTES = [
-    :recipient_email
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :recipient_email,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   def accept(accepting_user)
     return false if cancelled?

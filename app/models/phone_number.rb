@@ -8,11 +8,15 @@ class PhoneNumber < ApplicationRecord
 
   LOCATIONS = [_('Mobile'), _('Home'), _('Work')].freeze
 
-  PERMITTED_ATTRIBUTES = [:country_code,
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :country_code,
                           :location,
                           :number,
                           :primary,
-                          :remote_id].freeze
+                          :remote_id,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   belongs_to :person, touch: true
 

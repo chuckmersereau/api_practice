@@ -13,7 +13,9 @@ resource 'Email Addresses' do
 
   # This is the reference data used to create/update a resource.
   # specify the `attributes` specifically in your request actions below.
-  let(:form_data) { build_data(attributes) }
+  let(:form_data) { build_data(attributes).merge(
+    # Merging with the updated_in_db_at value provided by the server. Ex: updated_in_db_at: email_address.updated_at 
+  ) }
 
   # List your expected resource keys vertically here (alphabetical please!)
   let(:expected_attribute_keys) do

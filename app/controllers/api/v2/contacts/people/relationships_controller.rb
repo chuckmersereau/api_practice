@@ -66,7 +66,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def save_relationship
-    @relationship.save
+    @relationship.save(context: persistence_context)
   end
 
   def relationship_scope
@@ -90,7 +90,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def relationship_attributes
-    [:relationship, :person_id, :related_person_id]
+    FamilyRelationship::PERMITTED_ATTRIBUTES
   end
 
   def pundit_user

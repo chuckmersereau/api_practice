@@ -2,9 +2,13 @@ class Person::TwitterAccount < ApplicationRecord
   include Person::Account
   after_save :ensure_only_one_primary
 
-  PERMITTED_ATTRIBUTES = [
-    :remote_id, :screen_name, :primary
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:created_at,
+                          :primary,
+                          :remote_id,
+                          :screen_name,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   validates :screen_name, presence: true
 

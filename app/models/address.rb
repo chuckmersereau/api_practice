@@ -26,6 +26,7 @@ class Address < ApplicationRecord
   MANUAL_SOURCE = 'manual'.freeze
 
   PERMITTED_ATTRIBUTES = [:city,
+                          :created_at,
                           :country,
                           :end_date,
                           :location,
@@ -37,7 +38,10 @@ class Address < ApplicationRecord
                           :seasonal,
                           :start_date,
                           :state,
-                          :street].freeze
+                          :street,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   assignable_values_for :location, allow_blank: true do
     [_('Home'), _('Business'), _('Mailing'), _('Seasonal'), _('Other'), _('Temporary')]

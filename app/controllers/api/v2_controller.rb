@@ -8,7 +8,7 @@ class Api::V2Controller < ApiController
   include Fields
 
   before_action :jwt_authorize!
-  before_action :transform_uuid_attributes_params_to_ids, only: [:create, :update]
+  before_action :transform_uuid_attributes_params_to_ids, :transform_id_attribute_key_to_uuid, only: [:create, :update]
   before_action :transform_uuid_filters_params_to_ids, only: :index
   after_action :verify_authorized, except: :index
 
@@ -55,5 +55,19 @@ class Api::V2Controller < ApiController
   def permitted_filters
     raise NotImplementedError,
           'This method needs to be implemented in your controller'
+  end
+
+  def persistence_context
+    action_name == 'update' ? :update_from_controller : :create
+  end
+
+  def transform_id_attribute_key_to_uuid
+    return unless data_attributes[:id]
+    data_attributes[:uuid] = data_attributes[:id]
+    data_attributes.delete(:id)
+  end
+
+  def data_attributes
+    params[:data][:attributes]
   end
 end

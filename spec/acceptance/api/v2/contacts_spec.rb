@@ -13,8 +13,11 @@ resource 'Contacts' do
   let!(:contact) { create(:contact, account_list: account_list) }
   let(:id)       { contact.uuid }
 
-  let(:new_contact) { build(:contact).attributes.merge(account_list_id: account_list.uuid) }
-  let(:form_data)   { build_data(new_contact) }
+  let(:new_contact) do
+    build(:contact).attributes.merge(account_list_id: account_list.uuid,
+                                     updated_in_db_at: contact.updated_at)
+  end
+  let(:form_data) { build_data(new_contact) }
 
   let(:additional_keys) { ['relationships'] }
 

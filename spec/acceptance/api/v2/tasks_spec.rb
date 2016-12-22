@@ -10,7 +10,10 @@ resource 'Tasks' do
   let!(:task) { create(:task, account_list: user.account_lists.first) }
   let(:id)    { task.uuid }
 
-  let(:new_task)  { build(:task).attributes.merge(account_list_id: user.account_lists.first.uuid) }
+  let(:new_task) do
+    build(:task).attributes.merge(account_list_id: user.account_lists.first.uuid,
+                                  updated_in_db_at: task.updated_at)
+  end
   let(:form_data) { build_data(new_task) }
 
   context 'authorized user' do

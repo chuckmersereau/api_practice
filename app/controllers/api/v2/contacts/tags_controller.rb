@@ -30,7 +30,7 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
       render_400_with_errors(tag_error)
     else
       yield(tag_name)
-      @contact.save
+      @contact.save(context: persistence_context)
       render json: @contact,
              status: success_status,
              include: include_params,

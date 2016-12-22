@@ -7,7 +7,7 @@ resource 'Users' do
   let(:resource_type) { 'users' }
   let(:user)          { create(:user_with_full_account) }
 
-  let(:new_user_attributes) { attributes_for :user_with_full_account }
+  let(:new_user_attributes) { attributes_for(:user_with_full_account).merge(updated_in_db_at: user.updated_at) }
   let(:form_data)           { build_data(new_user_attributes) }
 
   let(:expected_attribute_keys) do

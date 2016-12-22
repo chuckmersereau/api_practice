@@ -42,7 +42,7 @@ class Api::V2::AccountLists::ImportsController < Api::V2Controller
   end
 
   def save_import
-    @import.save
+    @import.save(context: persistence_context)
   end
 
   def import_params

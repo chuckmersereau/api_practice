@@ -53,23 +53,39 @@ class Person < ApplicationRecord
   accepts_nested_attributes_for :pictures, reject_if: -> (p) { p[:image].blank? && p[:image_cache].blank? }, allow_destroy: true
   accepts_nested_attributes_for :websites, reject_if: -> (p) { p[:url].blank? }, allow_destroy: true
 
-  PERMITTED_ATTRIBUTES = [
-    :first_name, :legal_first_name, :last_name, :birthday_month, :birthday_year, :birthday_day,
-    :anniversary_month, :anniversary_year, :anniversary_day, :title, :suffix, :gender, :marital_status,
-    :middle_name, :profession, :deceased, :optout_enewsletter, :occupation, :employer, :_destroy, :id,
-    {
-      email_address: :email,
-      phone_number: :number,
-      email_addresses_attributes: [:email, :historic, :primary, :_destroy, :id],
-      phone_numbers_attributes: [:number, :location, :historic, :primary, :_destroy, :id],
-      linkedin_accounts_attributes: [:url, :_destroy, :id],
-      facebook_accounts_attributes: [:url, :_destroy, :id],
-      twitter_accounts_attributes: [:screen_name, :_destroy, :id],
-      pictures_attributes: [:image, :image_cache, :primary, :_destroy, :id],
-      family_relationships_attributes: [:related_person_id, :relationship, :_destroy, :id],
-      websites_attributes: [:url, :primary, :_destroy, :id]
-    }
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:anniversary_day,
+                          :anniversary_month,
+                          :anniversary_year,
+                          :birthday_day,
+                          :birthday_month,
+                          :birthday_year,
+                          :created_at,
+                          :deceased,
+                          :employer,
+                          :first_name,
+                          :gender,
+                          :last_name,
+                          :legal_first_name,
+                          :marital_status,
+                          :middle_name,
+                          :occupation,
+                          :optout_enewsletter,
+                          :profession,
+                          :suffix,
+                          :title,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid,
+                          { email_addresses_attributes: [:email, :historic, :primary, :_destroy, :id],
+                            facebook_accounts_attributes: [:url, :_destroy, :id],
+                            family_relationships_attributes: [:related_person_id, :relationship, :_destroy, :id],
+                            linkedin_accounts_attributes: [:url, :_destroy, :id],
+                            phone_number: :number,
+                            phone_numbers_attributes: [:number, :location, :historic, :primary, :_destroy, :id],
+                            pictures_attributes: [:image, :image_cache, :primary, :_destroy, :id],
+                            twitter_accounts_attributes: [:screen_name, :_destroy, :id],
+                            websites_attributes: [:url, :primary, :_destroy, :id],
+                            email_address: :email }].freeze
 
   before_create :find_master_person
   after_destroy :clean_up_master_person, :clean_up_contact_people

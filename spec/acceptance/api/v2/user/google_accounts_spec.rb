@@ -10,8 +10,11 @@ resource 'Google Accounts' do
   let!(:google_account) { create(:google_account, person: user) }
   let(:id)              { google_account.uuid }
 
-  let(:new_google_account) { build(:google_account).attributes.merge(person_id: user.uuid) }
-  let(:form_data)          { build_data(new_google_account) }
+  let(:new_google_account) do
+    build(:google_account).attributes.merge(person_id: user.uuid,
+                                            updated_in_db_at: google_account.updated_at)
+  end
+  let(:form_data) { build_data(new_google_account) }
 
   let(:resource_associations) do
     %w(

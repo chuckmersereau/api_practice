@@ -10,7 +10,7 @@ resource 'Account Lists' do
   let(:account_list) { user.account_lists.first }
   let(:id)           { account_list.uuid }
 
-  let(:new_account_list) { build(:account_list).attributes }
+  let(:new_account_list) { build(:account_list).attributes.merge(updated_in_db_at: account_list.updated_at) }
   let(:form_data)        { build_data(new_account_list) }
 
   let(:expected_attribute_keys) do

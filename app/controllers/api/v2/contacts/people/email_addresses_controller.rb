@@ -96,7 +96,7 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   end
 
   def save_email_address
-    @email_address.save
+    @email_address.save(context: persistence_context)
   end
 
   def current_contact

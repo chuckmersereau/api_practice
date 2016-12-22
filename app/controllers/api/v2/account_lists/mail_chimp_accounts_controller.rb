@@ -60,7 +60,7 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
   end
 
   def save_mailchimp_account
-    @mailchimp_account.save
+    @mailchimp_account.save(context: persistence_context)
   end
 
   def authorize_mailchimp_account

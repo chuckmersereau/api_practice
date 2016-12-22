@@ -30,7 +30,7 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
       render_400_with_errors(tag_error)
     else
       yield(tag_name)
-      @task.save
+      @task.save(context: persistence_context)
 
       render json: @task,
              status: success_status,

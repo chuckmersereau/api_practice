@@ -9,7 +9,13 @@ class Notification < ApplicationRecord
 
   validates :event_date, presence: true
 
-  PERMITTED_ATTRIBUTES = [
-    :contact_id, :notification_type_id, :event_date, :cleared, :donation_id
-  ].freeze
+  PERMITTED_ATTRIBUTES = [:cleared,
+                          :contact_id,
+                          :created_at,
+                          :donation_id,
+                          :event_date,
+                          :notification_type_id,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 end

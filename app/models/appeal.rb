@@ -12,7 +12,15 @@ class Appeal < ApplicationRecord
 
   scope :that_belong_to, -> (user) { where(account_list_id: user.account_list_ids) }
 
-  PERMITTED_ATTRIBUTES = [:id, :name, :amount, :description, :end_date, :account_list_id].freeze
+  PERMITTED_ATTRIBUTES = [:account_list_id,
+                          :amount,
+                          :created_at,
+                          :description,
+                          :end_date,
+                          :name,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
 
   def selected_contacts(excluded)
     excluded == 1 ? excluded_appeal_contacts : contacts

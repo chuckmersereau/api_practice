@@ -96,7 +96,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def save_person
-    @person.save
+    @person.save(context: persistence_context)
   end
 
   def pundit_user

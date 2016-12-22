@@ -73,7 +73,7 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   end
 
   def save_fb_account
-    @fb_account.save
+    @fb_account.save(context: persistence_context)
   end
 
   def fb_account_params

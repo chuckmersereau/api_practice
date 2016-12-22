@@ -806,8 +806,8 @@ CREATE TABLE contacts (
     timezone character varying(255),
     envelope_greeting character varying(255),
     no_appeals boolean,
-    prayer_letters_params text,
     pls_id character varying(255),
+    prayer_letters_params text,
     pledge_currency character varying(4),
     locale character varying(255),
     late_at date,
@@ -1357,6 +1357,8 @@ CREATE TABLE google_integrations (
     email_integration boolean DEFAULT false NOT NULL,
     contacts_integration boolean DEFAULT false NOT NULL,
     contacts_last_synced timestamp without time zone,
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1485,7 +1487,6 @@ CREATE TABLE mail_chimp_accounts (
     tags_grouping_id character varying(255),
     tags_interest_ids text,
     sync_all_active_contacts boolean,
-    last_prayer_email_sent timestamp without time zone,
     prayer_letter_last_sent timestamp without time zone,
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -3259,27 +3260,6 @@ ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notification
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY oauth_access_grants ALTER COLUMN id SET DEFAULT nextval('oauth_access_grants_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY oauth_access_tokens ALTER COLUMN id SET DEFAULT nextval('oauth_access_tokens_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY oauth_applications ALTER COLUMN id SET DEFAULT nextval('oauth_applications_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY organizations ALTER COLUMN id SET DEFAULT nextval('organizations_id_seq'::regclass);
 
 
@@ -3392,13 +3372,6 @@ ALTER TABLE ONLY recurring_recommendation_results ALTER COLUMN id SET DEFAULT ne
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY reset_logs ALTER COLUMN id SET DEFAULT nextval('reset_logs_id_seq'::regclass);
-
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
 ALTER TABLE ONLY taggings ALTER COLUMN id SET DEFAULT nextval('taggings_id_seq'::regclass);
 
 
@@ -3478,8 +3451,6 @@ ALTER TABLE ONLY activity_contacts
 
 ALTER TABLE ONLY addresses
     ADD CONSTRAINT addresses_pkey PRIMARY KEY (id);
-
-ALTER TABLE addresses CLUSTER ON addresses_pkey;
 
 
 --
@@ -3835,30 +3806,6 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: oauth_access_grants_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY oauth_access_grants
-    ADD CONSTRAINT oauth_access_grants_pkey PRIMARY KEY (id);
-
-
---
--- Name: oauth_access_tokens_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY oauth_access_tokens
-    ADD CONSTRAINT oauth_access_tokens_pkey PRIMARY KEY (id);
-
-
---
--- Name: oauth_applications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY oauth_applications
-    ADD CONSTRAINT oauth_applications_pkey PRIMARY KEY (id);
-
-
---
 -- Name: organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -3984,14 +3931,6 @@ ALTER TABLE ONLY prayer_letters_accounts
 
 ALTER TABLE ONLY recurring_recommendation_results
     ADD CONSTRAINT recurring_recommendation_results_pkey PRIMARY KEY (id);
-
-
---
--- Name: reset_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
---
-
-ALTER TABLE ONLY reset_logs
-    ADD CONSTRAINT reset_logs_pkey PRIMARY KEY (id);
 
 
 --
@@ -4205,6 +4144,13 @@ CREATE INDEX index_addresses_on_addressable_id ON addresses USING btree (address
 --
 
 CREATE INDEX index_addresses_on_lower_city ON addresses USING btree (lower((city)::text));
+
+
+--
+-- Name: index_addresses_on_lower_street; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_addresses_on_lower_street ON addresses USING btree (lower(street));
 
 
 --
@@ -6076,25 +6022,161 @@ INSERT INTO schema_migrations (version) VALUES ('20160728174747');
 
 INSERT INTO schema_migrations (version) VALUES ('20160809235201');
 
-INSERT INTO schema_migrations (version) VALUES ('20160928174158');
-
 INSERT INTO schema_migrations (version) VALUES ('20160928195843');
-
-INSERT INTO schema_migrations (version) VALUES ('20161007231213');
 
 INSERT INTO schema_migrations (version) VALUES ('20161007231427');
 
-INSERT INTO schema_migrations (version) VALUES ('20161008010853');
-
-INSERT INTO schema_migrations (version) VALUES ('20161026012402');
-
-INSERT INTO schema_migrations (version) VALUES ('20161027202729');
+INSERT INTO schema_migrations (version) VALUES ('20160928174158');
 
 INSERT INTO schema_migrations (version) VALUES ('20161119005933');
 
 INSERT INTO schema_migrations (version) VALUES ('20161128055225');
 
 INSERT INTO schema_migrations (version) VALUES ('20161130200449');
+
+INSERT INTO schema_migrations (version) VALUES ('20161214195836');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004043');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004126');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004128');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004129');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004130');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004131');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004132');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004133');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004134');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004135');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004136');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004137');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004138');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004139');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004140');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004141');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004142');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004143');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004144');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004145');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004146');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004147');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004148');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004149');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004150');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004151');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004152');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004153');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004154');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004155');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004156');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004157');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004158');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004159');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004160');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004161');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004162');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004200');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004201');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004202');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004203');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004205');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004206');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004207');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004208');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004209');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004211');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004212');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004213');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004214');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004215');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004216');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004217');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004218');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004220');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004221');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004222');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004223');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004224');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004225');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004226');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004227');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004228');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004229');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004231');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004232');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004233');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004234');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004235');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004236');
+
+INSERT INTO schema_migrations (version) VALUES ('20161216004239');
 
 INSERT INTO schema_migrations (version) VALUES ('20161216004043');
 

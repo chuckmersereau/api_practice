@@ -14,7 +14,11 @@ resource 'Appeals' do
   let!(:appeal)  { create(:appeal, account_list: account_list) }
   let(:id)       { appeal.uuid }
 
-  let(:form_data) { build_data(name: 'New Appeal Name', account_list_id: account_list_id) }
+  let(:form_data) do
+    build_data(name: 'New Appeal Name',
+               account_list_id: account_list_id,
+               updated_in_db_at: appeal.updated_at)
+  end
 
   let(:expected_attribute_keys) do
     %w(

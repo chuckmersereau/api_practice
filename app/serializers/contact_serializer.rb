@@ -58,4 +58,8 @@ class ContactSerializer < ApplicationSerializer
   def contact_exhibit
     exhibit(object)
   end
+
+  def account_list_id
+    object.account_list.uuid
+  end
 end

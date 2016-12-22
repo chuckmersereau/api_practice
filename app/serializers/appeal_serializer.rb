@@ -35,4 +35,8 @@ class AppealSerializer < ApplicationSerializer
                                  to: total_currency,
                                  date: donation.donation_date)
   end
+
+  def account_list_id
+    object.account_list.uuid
+  end
 end
