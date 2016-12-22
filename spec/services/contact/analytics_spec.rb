@@ -132,6 +132,7 @@ RSpec.describe Contact::Analytics, type: :model do
       analytics = Contact::Analytics.new(contacts)
       found_ids = analytics.birthdays_this_week.ids
 
+      expect(found_ids.count).to eq(1)
       expect(found_ids).to     include person_with_birthday_this_week.id
       expect(found_ids).not_to include person_with_birthday_last_week.id
       expect(found_ids).not_to include person_with_birthday_next_week.id
