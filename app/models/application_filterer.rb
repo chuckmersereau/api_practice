@@ -1,5 +1,5 @@
 class ApplicationFilterer
-  attr_accessor :resource_scope, :filters
+  attr_accessor :filters
 
   FILTERS_TO_DISPLAY = [].freeze
 
@@ -10,16 +10,16 @@ class ApplicationFilterer
     @filters.map { |k, v| @filters[k] = v.strip if v.is_a?(String) }
   end
 
-  def filter(resource_scope, user)
+  def filter(scope:, account_lists:)
     self.class.filter_classes.each do |klass|
-      resource_scope = klass.query(resource_scope, @filters, user) || resource_scope
+      scope = klass.query(scope, filters, account_lists) || scope
     end
-    resource_scope
+    scope
   end
 
-  def self.config(account_list)
+  def self.config(account_lists)
     filter_classes.map do |klass|
-      klass.config(account_list)
+      klass.config(account_lists)
     end.compact
   end
 

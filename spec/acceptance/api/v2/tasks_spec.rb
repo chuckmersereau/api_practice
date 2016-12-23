@@ -20,6 +20,7 @@ resource 'Tasks' do
     before { api_login(user) }
 
     get '/api/v2/tasks' do
+      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
       parameter 'filters[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '\
                                             '"Text Message", "Facebook Message", "Letter", "Newsletter", "Pre Call Letter", "Reminder Letter", '\
                                             '"Support Letter", "Thank", "To Do", "Talk to In Person", or "Prayer Request"',                     required: false

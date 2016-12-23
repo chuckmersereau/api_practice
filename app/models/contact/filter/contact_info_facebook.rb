@@ -2,7 +2,7 @@ class Contact::Filter::ContactInfoFacebook < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       contacts_with_fb = contacts.where.not(person_facebook_accounts: { username: nil })
                                  .includes(people: :facebook_account)
       return contacts_with_fb if filters[:contact_info_facebook] == 'Yes'
@@ -23,7 +23,7 @@ class Contact::Filter::ContactInfoFacebook < Contact::Filter::Base
       'radio'
     end
 
-    def custom_options(_account_list)
+    def custom_options(_account_lists)
       [{ name: _('Yes'), id: 'Yes' }, { name: _('No'), id: 'No' }]
     end
   end

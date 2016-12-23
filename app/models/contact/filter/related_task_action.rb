@@ -2,7 +2,7 @@ class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       if filters[:related_task_action].first == 'null'
         contacts_with_activities = contacts.where('activities.completed' => false)
                                            .includes(:activities).map(&:id)
@@ -26,14 +26,14 @@ class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
       'multiselect'
     end
 
-    def custom_options(account_list)
-      [{ name: _('-- None --'), id: 'null' }] + related_tasks(account_list).collect { |a| { name: _(a), id: a } }
+    def custom_options(account_lists)
+      [{ name: _('-- None --'), id: 'null' }] + related_tasks(account_lists).collect { |a| { name: _(a), id: a } }
     end
 
     private
 
-    def related_tasks(account_list)
-      Task.new.assignable_activity_types & account_list.tasks.select(:activity_type).uniq.collect(&:activity_type)
+    def related_tasks(account_lists)
+      Task.new.assignable_activity_types & account_lists.collect(&:tasks).flatten.uniq.collect(&:activity_type)
     end
   end
 end

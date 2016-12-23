@@ -72,6 +72,7 @@ resource 'Contacts' do
     before { api_login(user) }
 
     get '/api/v2/contacts' do
+      parameter 'filters[account_list_id]',            'Filter by Account List; Accepts Account List ID',                                                     required: false
       parameter 'filters[address_historic]',           'Filter by Address No Longer Valid; Accepts values "true", or "false"',                                required: false
       parameter 'filters[appeal][]',                   'Filter by Appeal; Accepts multiple parameters, with value "no_appeals", or an appeal ID',             required: false
       parameter 'filters[church][]',                   'Filter by Church; Accepts multiple parameters, with value "none", or a church name',                  required: false

@@ -2,7 +2,7 @@ class Contact::Filter::AddressHistoric < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       contacts.where('addresses.historic' => filters[:address_historic] == 'true')
               .includes(:addresses)
               .references('addresses')
@@ -20,7 +20,7 @@ class Contact::Filter::AddressHistoric < Contact::Filter::Base
       'single_checkbox'
     end
 
-    def empty?(_account_list)
+    def empty?(_account_lists)
       false
     end
 

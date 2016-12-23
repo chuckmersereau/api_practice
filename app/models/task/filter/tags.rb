@@ -2,7 +2,7 @@ class Task::Filter::Tags < Task::Filter::Base
   class << self
     protected
 
-    def execute_query(tasks, filters, _user)
+    def execute_query(tasks, filters, _account_lists)
       tasks.tagged_with(filters[:tags])
     end
 

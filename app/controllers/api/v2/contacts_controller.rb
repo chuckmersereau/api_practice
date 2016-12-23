@@ -1,5 +1,6 @@
 class Api::V2::ContactsController < Api::V2Controller
   def index
+    authorize_index
     load_contacts
     render json: @contacts, meta: meta_hash(@contacts), include: include_params, fields: field_params
   end
@@ -35,7 +36,7 @@ class Api::V2::ContactsController < Api::V2Controller
 
   def load_contacts
     @contacts = Contact::Filterer.new(filter_params)
-                                 .filter(contact_scope, current_user)
+                                 .filter(scope: contact_scope, account_lists: account_lists)
                                  .reorder(sorting_param)
                                  .page(page_number_param)
                                  .per(per_page_param)
@@ -45,8 +46,18 @@ class Api::V2::ContactsController < Api::V2Controller
     @contact ||= Contact.find_by!(uuid: params[:id])
   end
 
+  def account_lists
+    return @account_lists if @account_lists
+    return @account_lists = current_user.account_lists if filter_params[:account_list_id].blank?
+    @account_lists = [current_user.account_lists.find_by!(uuid: filter_params[:account_list_id])]
+  end
+
   def authorize_contact
     authorize @contact
+  end
+
+  def authorize_index
+    account_lists.each { |account_list| authorize(account_list, :show?) }
   end
 
   def render_contact
@@ -85,7 +96,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def contact_scope
-    current_user.contacts
+    Contact.where(account_list_id: account_lists.collect(&:id))
   end
 
   def pundit_user

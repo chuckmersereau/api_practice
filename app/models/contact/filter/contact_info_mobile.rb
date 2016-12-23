@@ -2,7 +2,7 @@ class Contact::Filter::ContactInfoMobile < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       filter_mobile = filters[:contact_info_mobile]
       contacts_ids_with_mobile = contact_ids_with_phone(contacts, 'mobile')
       return contacts.where(id: contacts_ids_with_mobile) if filter_mobile == 'Yes'
@@ -21,7 +21,7 @@ class Contact::Filter::ContactInfoMobile < Contact::Filter::Base
       'radio'
     end
 
-    def custom_options(_account_list)
+    def custom_options(_account_lists)
       [{ name: _('Yes'), id: 'Yes' }, { name: _('No'), id: 'No' }]
     end
   end

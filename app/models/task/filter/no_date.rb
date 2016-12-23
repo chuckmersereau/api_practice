@@ -2,7 +2,7 @@ class Task::Filter::NoDate < Task::Filter::Base
   class << self
     protected
 
-    def execute_query(tasks, filters, _user)
+    def execute_query(tasks, filters, _account_lists)
       tasks.where(no_date: filters[:no_date])
     end
 

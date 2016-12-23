@@ -1,6 +1,6 @@
 class ApplicationFilter
   class << self
-    def config(account_list)
+    def config(account_lists)
       {
         name: class_symbol,
         title: title,
@@ -8,13 +8,13 @@ class ApplicationFilter
         priority: priority,
         parent: parent,
         default_selection: default_selection
-      }.merge(select_options(account_list)) if display_filter_option? && !empty?(account_list)
+      }.merge(select_options(account_lists)) if display_filter_option? && !empty?(account_lists)
     end
 
-    def query(resource, filters, user)
+    def query(resource, filters, account_lists)
       filters[class_symbol] ||= default_selection if default_selection.present?
       return unless valid_filters?(filters)
-      execute_query(resource, filters, user)
+      execute_query(resource, filters, account_lists)
     end
 
     protected
@@ -27,8 +27,8 @@ class ApplicationFilter
       filterer::FILTERS_TO_DISPLAY.index(name.demodulize).present?
     end
 
-    def empty?(account_list)
-      custom_options? ? custom_options(account_list).empty? : false
+    def empty?(account_lists)
+      custom_options? ? custom_options(account_lists).empty? : false
     end
 
     def custom_options?
@@ -42,16 +42,16 @@ class ApplicationFilter
     def parent
     end
 
-    def select_options(account_list)
+    def select_options(account_lists)
       return {
         multiple: %w(checkbox multiselect).include?(type),
-        options: options(account_list)
+        options: options(account_lists)
       } if custom_options?
       {}
     end
 
-    def options(account_list)
-      default_options + custom_options(account_list)
+    def options(account_lists)
+      default_options + custom_options(account_lists)
     end
 
     def default_options
@@ -64,7 +64,7 @@ class ApplicationFilter
       ''
     end
 
-    def custom_options(_account_list)
+    def custom_options(_account_lists)
       []
     end
 
@@ -76,7 +76,7 @@ class ApplicationFilter
       nil
     end
 
-    def execute_query(_contacts, _filters, _account_list)
+    def execute_query(_contacts, _filters, _account_lists)
     end
 
     def valid_filters?(filters)

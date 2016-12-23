@@ -2,7 +2,7 @@ class Contact::Filter::DonationDate < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       params = daterange_params(filters[:donation_date])
       contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations]) if params.present?
       contacts = contacts.where('donations.donation_date >= ?', params[:start]) if params[:start]
@@ -22,7 +22,7 @@ class Contact::Filter::DonationDate < Contact::Filter::Base
       'daterange'
     end
 
-    def custom_options(_account_list)
+    def custom_options(_account_lists)
       [
         { name: _('Last 30 Days'), start: 30.days.ago.beginning_of_day, end: Time.current },
         { name: _('This Month'), start: Time.current.beginning_of_month + 1.hour, end: Time.current.end_of_month },

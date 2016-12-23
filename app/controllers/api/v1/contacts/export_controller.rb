@@ -45,7 +45,7 @@ class Api::V1::Contacts::ExportController < Api::V1::BaseController
   protected
 
   def load_contacts
-    @contacts ||= Contact::Filterer.new(params[:filters]).filter(contact_scope, current_account_list)
+    @contacts ||= Contact::Filterer.new(params[:filters]).filter(scope: contact_scope, account_lists: [current_account_list])
   end
 
   def contact_scope

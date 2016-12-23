@@ -2,7 +2,7 @@ class Contact::Filter::DonationAmountRange < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       sanitize_filters(filters)
       contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations])
       contacts = contacts.where('donations.amount >= ?', filters[:donation_amount_range][:min]) if filters[:donation_amount_range][:min].present?
@@ -22,8 +22,8 @@ class Contact::Filter::DonationAmountRange < Contact::Filter::Base
       'text'
     end
 
-    def custom_options(account_list)
-      highest_account_donation = account_list.donations.where.not(amount: nil).pluck(:amount).uniq.sort.last
+    def custom_options(account_lists)
+      highest_account_donation = account_lists.collect { |account_list| account_list.donations.where.not(amount: nil).pluck(:amount).uniq.sort.last }.flatten.max
       [{ name: _('Gift Amount Higher Than or Equal To'), id: 'min', placeholder: 0 },
        { name: _('Gift Amount Less Than or Equal To'), id: 'max', placeholder: highest_account_donation }]
     end

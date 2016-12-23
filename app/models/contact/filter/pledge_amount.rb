@@ -2,7 +2,7 @@ class Contact::Filter::PledgeAmount < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       return unless filters[:pledge_amount].is_a?(Array)
       contacts.where(pledge_amount: filters[:pledge_amount])
     end
@@ -19,8 +19,11 @@ class Contact::Filter::PledgeAmount < Contact::Filter::Base
       'multiselect'
     end
 
-    def custom_options(account_list)
-      account_list.contacts.pluck(:pledge_amount).uniq.compact.sort.collect { |amount| { name: amount, id: amount } }
+    def custom_options(account_lists)
+      account_lists.collect { |account_list| account_list.contacts.pluck(:pledge_amount).uniq.compact.sort }
+                   .flatten
+                   .uniq
+                   .collect { |amount| { name: amount, id: amount } }
     end
   end
 end

@@ -2,7 +2,7 @@ class Contact::Filter::ContactInfoAddr < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       contacts_with_addr = contacts.where.not(addresses: { street: '' })
                                    .where(addresses: { historic: false })
                                    .includes(:addresses)
@@ -24,7 +24,7 @@ class Contact::Filter::ContactInfoAddr < Contact::Filter::Base
       'radio'
     end
 
-    def custom_options(_account_list)
+    def custom_options(_account_lists)
       [{ name: _('Yes'), id: 'Yes' },
        { name: _('No'), id: 'No' }]
     end

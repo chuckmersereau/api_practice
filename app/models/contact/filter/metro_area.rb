@@ -2,7 +2,7 @@ class Contact::Filter::MetroArea < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       filters[:metro_area] << nil if Array(filters[:metro_area]).delete('none')
       contacts.where('addresses.metro_area' => filters[:metro_area],
                      'addresses.historic' => filters[:address_historic] == 'true')
@@ -22,8 +22,8 @@ class Contact::Filter::MetroArea < Contact::Filter::Base
       'multiselect'
     end
 
-    def custom_options(account_list)
-      [{ name: _('-- None --'), id: 'none' }] + account_list.metro_areas.reject(&:blank?).map { |s| { name: _(s), id: s } }
+    def custom_options(account_lists)
+      [{ name: _('-- None --'), id: 'none' }] + account_lists.collect(&:metro_areas).flatten.uniq.reject(&:blank?).map { |s| { name: _(s), id: s } }
     end
   end
 end

@@ -2,7 +2,7 @@ class Task::Filter::DateRange < Task::Filter::Base
   class << self
     protected
 
-    def execute_query(tasks, filters, _user)
+    def execute_query(tasks, filters, _account_lists)
       case filters[:date_range]
       when 'last_month'
         tasks.where('completed_at > ?', 1.month.ago)

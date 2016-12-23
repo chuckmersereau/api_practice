@@ -2,7 +2,7 @@ class Contact::Filter::Status < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       filters[:status] = Array(filters[:status])
       filters[:status] << 'null' if (filters[:status].include? '') && !filters[:status].include?('null')
       filters[:status] << '' if (filters[:status].include? 'null') && !filters[:status].include?('')
@@ -30,7 +30,7 @@ class Contact::Filter::Status < Contact::Filter::Base
       %w(active null)
     end
 
-    def custom_options(_account_list)
+    def custom_options(_account_lists)
       [{ name: _('-- All Active --'), id: 'active' },
        { name: _('-- All Hidden --'), id: 'hidden' },
        { name: _('-- None --'), id: 'null' }] +

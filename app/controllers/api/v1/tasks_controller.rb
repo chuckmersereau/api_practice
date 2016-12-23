@@ -88,7 +88,7 @@ class Api::V1::TasksController < Api::V1::BaseController
   protected
 
   def tasks
-    filtered_tasks = Task::Filterer.new(params[:filters]).filter(current_account_list.tasks, current_account_list)
+    filtered_tasks = Task::Filterer.new(params[:filters]).filter(scope: current_account_list.tasks, account_lists: [current_account_list])
 
     add_includes_and_order(filtered_tasks.includes(:contacts, :activity_comments, :people), order: params[:order])
   end

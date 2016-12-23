@@ -2,7 +2,7 @@ class Task::Filter::Completed < Task::Filter::Base
   class << self
     protected
 
-    def execute_query(tasks, filters, _user)
+    def execute_query(tasks, filters, _account_lists)
       tasks.where(completed: filters[:completed])
     end
 

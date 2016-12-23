@@ -2,7 +2,7 @@ class Contact::Filter::Referrer < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       filters = Array(filters[:referrer])
       filters << nil if filters.delete('none')
       contacts = contacts.includes(:contact_referrals_to_me).where.not(contact_referrals: { referred_by_id: nil }) if filters.delete('any')
@@ -18,10 +18,13 @@ class Contact::Filter::Referrer < Contact::Filter::Base
       'multiselect'
     end
 
-    def custom_options(account_list)
+    def custom_options(account_lists)
       [{ name: _('-- None --'), id: 'none' },
        { name: _('-- Has referrer --'), id: 'any' }] +
-        account_list.contacts.with_referrals.order('name').collect { |c| { name: c.name, id: c.id } }
+        account_lists.map { |account_list| account_list.contacts.with_referrals.order('name') }
+                     .flatten
+                     .uniq
+                     .collect { |c| { name: c.name, id: c.id } }
     end
   end
 end

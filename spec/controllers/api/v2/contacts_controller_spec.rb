@@ -29,9 +29,10 @@ describe Api::V2::ContactsController, type: :controller do
   include_examples 'destroy_examples'
 
   describe 'filtering' do
+    before { api_login(user) }
+
     Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).each do |filter|
       it "accepts displayable filter #{filter}" do
-        api_login(user)
         get :index, filters: { filter => '' }
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)['meta']['filters'][filter]).to eq('')
@@ -40,7 +41,6 @@ describe Api::V2::ContactsController, type: :controller do
 
     Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore).each do |filter|
       it "does not accept hidden filter #{filter}" do
-        api_login(user)
         get :index, filters: { filter => '' }
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)['meta']['filters']).to be_blank

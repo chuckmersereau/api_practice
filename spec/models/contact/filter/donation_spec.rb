@@ -86,11 +86,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: ['none'],
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, user).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
         expect(Contact::Filterer.new(
           donation: ['none'],
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, user).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
       end
     end
 
@@ -99,11 +99,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: ['one'],
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, user).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
           donation: ['one'],
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, user).to_a).to match_array [contact_two]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_two]
       end
     end
 
@@ -112,11 +112,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: ['first'],
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, user).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
           donation: ['first'],
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, user).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
       end
     end
 
@@ -125,11 +125,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: ['last'],
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, user).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
           donation: ['last'],
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, user).to_a).to match_array [contact_two]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_two]
       end
     end
   end

@@ -2,7 +2,7 @@ class Contact::Filter::PledgeReceived < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       contacts.where(pledge_received: filters[:pledge_received])
     end
 
@@ -18,7 +18,7 @@ class Contact::Filter::PledgeReceived < Contact::Filter::Base
       'radio'
     end
 
-    def custom_options(_account_list)
+    def custom_options(_account_lists)
       [{ name: _('Received'), id: 'true' }, { name: _('Not Received'), id: 'false' }]
     end
   end

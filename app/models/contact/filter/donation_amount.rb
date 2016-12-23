@@ -2,7 +2,7 @@ class Contact::Filter::DonationAmount < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations])
       contacts = contacts.where(donations: { amount: filters[:donation_amount] })
       contacts
@@ -20,8 +20,12 @@ class Contact::Filter::DonationAmount < Contact::Filter::Base
       'multiselect'
     end
 
-    def custom_options(account_list)
-      account_list.donations.where.not(amount: nil).pluck(:amount).uniq.sort.collect { |amount| { name: amount, id: amount } }
+    def custom_options(account_lists)
+      account_lists.collect { |account_list| account_list.donations.where.not(amount: nil).pluck(:amount) }
+                   .flatten
+                   .uniq
+                   .sort
+                   .collect { |amount| { name: amount, id: amount } }
     end
 
     private

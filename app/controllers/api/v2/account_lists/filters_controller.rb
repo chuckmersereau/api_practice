@@ -1,6 +1,6 @@
 class Api::V2::AccountLists::FiltersController < Api::V2Controller
   def index
-    authorize load_account_list, :show?
+    authorize account_list, :show?
     load_filters
     render json: @filters, include: include_params, fields: field_params
   end
@@ -14,18 +14,14 @@ class Api::V2::AccountLists::FiltersController < Api::V2Controller
   end
 
   def contact_filters
-    Contact::Filterer.config(filter_scope)
+    Contact::Filterer.config([account_list])
   end
 
   def task_filters
-    Task::Filterer.config(filter_scope)
+    Task::Filterer.config([account_list])
   end
 
-  def filter_scope
-    load_account_list
-  end
-
-  def load_account_list
+  def account_list
     @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
   end
 
@@ -34,6 +30,6 @@ class Api::V2::AccountLists::FiltersController < Api::V2Controller
   end
 
   def pundit_user
-    PunditContext.new(current_user, account_list: load_account_list)
+    PunditContext.new(current_user, account_list: account_list)
   end
 end

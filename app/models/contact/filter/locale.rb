@@ -2,7 +2,7 @@ class Contact::Filter::Locale < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       contacts.where('contacts.locale' => filters[:locale].map { |l| l == 'null' ? nil : l })
     end
 
@@ -18,9 +18,9 @@ class Contact::Filter::Locale < Contact::Filter::Base
       'multiselect'
     end
 
-    def custom_options(account_list)
+    def custom_options(account_lists)
       [{ name: _('-- Unspecified --'), id: 'null' }] +
-        account_list.contact_locales.select(&:present?).map do |locale|
+        account_lists.map(&:contact_locales).flatten.uniq.select(&:present?).map do |locale|
           { name: _(MailChimpAccount::Locales::LOCALE_NAMES[locale]), id: locale }
         end
     end

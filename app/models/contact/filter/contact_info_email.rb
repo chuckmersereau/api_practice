@@ -2,7 +2,7 @@ class Contact::Filter::ContactInfoEmail < Contact::Filter::Base
   class << self
     protected
 
-    def execute_query(contacts, filters, _user)
+    def execute_query(contacts, filters, _account_lists)
       contacts_with_emails = contacts.where.not(email_addresses: { email: nil })
                                      .where(email_addresses: { historic: false })
                                      .includes(people: :email_addresses)
@@ -24,7 +24,7 @@ class Contact::Filter::ContactInfoEmail < Contact::Filter::Base
       'radio'
     end
 
-    def custom_options(_account_list)
+    def custom_options(_account_lists)
       [{ name: _('Yes'), id: 'Yes' }, { name: _('No'), id: 'No' }]
     end
   end
