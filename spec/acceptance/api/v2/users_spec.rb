@@ -5,7 +5,7 @@ resource 'Users' do
   include_context :json_headers
 
   let(:resource_type) { 'users' }
-  let(:user)          { create(:user_with_full_account) }
+  let(:user) { create(:user_with_full_account) }
 
   let(:new_user_attributes) { attributes_for(:user_with_full_account).merge(updated_in_db_at: user.updated_at) }
   let(:form_data)           { build_data(new_user_attributes) }
@@ -35,6 +35,12 @@ resource 'Users' do
       response_field 'id',            'User ID',                                    'Type' => 'Number'
       response_field 'relationships', 'list of relationships related to that User', 'Type' => 'Array[Object]'
       response_field 'type',          'Will be User',                               'Type' => 'String'
+
+      with_options scope: [:data, :attributes] do
+        response_field 'first_name',       'User first name',  'Type' => 'String'
+        response_field 'last_name',        'User last name',   'Type' => 'String'
+        response_field 'preferences',      'User preferences', 'Type' => 'Object'
+      end
 
       example 'User [GET]', document: :entities do
         explanation 'The current_user'
