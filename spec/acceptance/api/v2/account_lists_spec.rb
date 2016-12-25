@@ -21,6 +21,7 @@ resource 'Account Lists' do
       name
       total_pledges
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -46,6 +47,7 @@ resource 'Account Lists' do
         response_field 'monthly_goal',            'Monthly Goal',    'Type' => 'String'
         response_field 'name',                    'Account Name',    'Type' => 'String'
         response_field 'updated_at',              'Updated At',      'Type' => 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At','Type' => 'String'
       end
 
       example 'Account List [GET]', document: :entities do
@@ -62,8 +64,10 @@ resource 'Account Lists' do
       parameter 'id', 'ID of the Account List', required: true
 
       with_options scope: [:data, :attributes] do
-        parameter 'name',     'Account Name', required: true
-        parameter 'settings', 'Settings'
+        parameter 'name',             'Account Name',     required: true
+        parameter 'settings',         'Settings'
+        parameter 'updated_at',       'Updated At'
+        parameter 'updated_in_db_at', 'Updated In Db At', required: true
       end
 
       example 'Account List [UPDATE]', document: :entities do
