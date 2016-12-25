@@ -20,6 +20,6 @@ class ApplicationSerializer < ActiveModel::Serializer
   end
 
   def updated_in_db_at
-    object.updated_at
+    object.updated_at.to_s
   end
 end

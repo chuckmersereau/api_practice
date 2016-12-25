@@ -47,7 +47,9 @@ resource 'Account Lists' do
         response_field 'monthly_goal',            'Monthly Goal',    'Type' => 'String'
         response_field 'name',                    'Account Name',    'Type' => 'String'
         response_field 'updated_at',              'Updated At',      'Type' => 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At','Type' => 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At which will be
+                                                   required to update the resource 
+                                                   (Should be stored as a String)','Type' => 'String'
       end
 
       example 'Account List [GET]', document: :entities do
