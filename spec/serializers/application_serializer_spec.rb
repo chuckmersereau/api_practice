@@ -6,7 +6,7 @@ RSpec.describe ApplicationSerializer, type: :serializer do
     let(:email_address) { create(:email_address, created_at: timestamp) }
     let(:serializer) { ApplicationSerializer.new(email_address) }
     let(:parsed_json) { JSON.parse(serializer.to_json) }
-    
+
     it 'ensures that the timezone output is UTC ISO-8601' do
       expect(parsed_json['created_at']).to eq timestamp.utc.iso8601
     end

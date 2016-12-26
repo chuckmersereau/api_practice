@@ -95,7 +95,6 @@ resource 'Contact Referrals' do
         do_request data: form_data
         check_resource(additional_attribute_keys)
 
-
         expect(response_status).to eq 201
 
         contact_referrals_by_me_uuids = contact.contact_referrals_by_me.map(&:uuid)

@@ -52,7 +52,7 @@ resource 'Organization Accounts' do
     end
 
     get '/api/v2/user/organization_accounts/:id' do
-      with_options scope: [:data, :attributes] do    
+      with_options scope: [:data, :attributes] do
         response_field 'created_at',        'Created At',        'Type' => 'String'
         response_field 'disable_downloads', 'Disable Downloads', 'Type' => 'String'
         response_field 'last_download',     'Last Download',     'Type' => 'String'

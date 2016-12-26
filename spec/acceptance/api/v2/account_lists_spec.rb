@@ -63,7 +63,7 @@ resource 'Account Lists' do
       parameter 'id', 'ID of the Account List', required: true
 
       with_options scope: [:data, :attributes] do
-        parameter 'name',             'Account Name',     required: true
+        parameter 'name',             'Account Name', required: true
         parameter 'settings',         'Settings'
       end
 

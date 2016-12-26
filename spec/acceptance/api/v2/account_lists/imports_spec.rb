@@ -77,7 +77,7 @@ resource 'Import' do
         response_field 'tags',              'Tags',              'Type' => 'Array[String]'
         response_field 'user_id',           'User ID',           'Type' => 'Number'
         response_field 'updated_at',        'Updated At',  'Type' => 'String'
-        response_field 'updated_in_db_at',  'Updated In Db At',  'Type' => 'String'
+        response_field 'updated_in_db_at',  'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Import [GET]', document: :account_lists do

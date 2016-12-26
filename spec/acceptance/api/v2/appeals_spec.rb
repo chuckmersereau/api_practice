@@ -72,7 +72,7 @@ resource 'Appeals' do
         response_field 'name',            'Name',             'Type' => 'String'
         response_field 'total_currency',  'Total currency',   'Type' => 'String'
         response_field 'updated_at',      'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at','Updated In Db At', 'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Appeal [GET]', document: :entities do
