@@ -16,6 +16,27 @@ resource 'Tasks' do
   end
   let(:form_data) { build_data(new_task) }
 
+  let(:resource_attributes) do
+    %w(
+      account_list_id
+      activity_type
+      comments_count
+      completed
+      completed_at
+      created_at
+      due_date
+      next_action
+      no_date
+      result
+      starred
+      start_at
+      subject
+      tag_list
+      updated_at
+      updated_in_db_at
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -40,11 +61,22 @@ resource 'Tasks' do
         response_field 'type',          'Type of object (Task in this case)',                'Type' => 'String'
 
         with_options scope: :attributes do
-          response_field 'account_list_id', 'Account List Id', type: 'Number'
-          response_field 'activity_type',   'Activity Type',   type: 'String'
-          response_field 'starred',         'Starred',         type: 'Boolean'
-          response_field 'start_at',        'Start At',        type: 'String'
-          response_field 'subject',         'Subject',         type: 'Number'
+          response_field 'account_list_id',  'Account List Id',  type: 'Number'
+          response_field 'activity_type',    'Activity Type',    type: 'String'
+          response_field 'created_at',       'Created At',       type: 'String'
+          response_field 'comments_count',   'Comments Count',   type: 'Number'
+          response_field 'completed',        'Completed',        type: 'Boolean'
+          response_field 'completed_at',     'Completed At',     type: 'String'
+          response_field 'due_date',         'Due Date',         type: 'String'
+          response_field 'next_action',      'Next Action',      type: 'String'
+          response_field 'no_date',          'No Date',          type: 'Boolean'
+          response_field 'restult',          'Result',           type: 'String'
+          response_field 'starred',          'Starred',          type: 'Boolean'
+          response_field 'start_at',         'Start At',         type: 'String'
+          response_field 'subject',          'Subject',          type: 'String'
+          response_field 'tag_list',         'Tag List',         type: 'String'
+          response_field 'updated_at',       'Updated At',       type: 'String'
+          response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
         end
       end
 

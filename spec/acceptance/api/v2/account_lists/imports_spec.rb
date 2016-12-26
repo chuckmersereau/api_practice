@@ -41,6 +41,7 @@ resource 'Import' do
       source
       tags
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -65,6 +66,7 @@ resource 'Import' do
 
     get '/api/v2/account_lists/:account_list_id/imports/:id' do
       with_options scope: [:data, :attributes] do
+        response_field 'created_at',        'Created At',        'Type' => 'String'
         response_field 'file',              'File',              'Type' => 'String'
         response_field 'groups',            'Groups',            'Type' => 'String'
         response_field 'group_tags',        'Group Tags',        'Type' => 'String'
@@ -72,8 +74,10 @@ resource 'Import' do
         response_field 'override',          'Override',          'Type' => 'Boolean'
         response_field 'source',            'Source',            'Type' => 'String'
         response_field 'source_account_id', 'Source Account ID', 'Type' => 'Number'
-        response_field 'tags',              'Tags',              'Type' => 'Array.new(10) { iii }'
+        response_field 'tags',              'Tags',              'Type' => 'Array[String]'
         response_field 'user_id',           'User ID',           'Type' => 'Number'
+        response_field 'updated_at',        'Updated At',  'Type' => 'String'
+        response_field 'updated_in_db_at',  'Updated In Db At',  'Type' => 'String'
       end
 
       example 'Import [GET]', document: :account_lists do

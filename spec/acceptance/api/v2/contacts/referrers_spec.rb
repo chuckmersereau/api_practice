@@ -43,6 +43,7 @@ resource 'Referrers' do
       timezone
       uncompleted_tasks_count
       updated_at
+      updated_in_db_at
     )
   end
 

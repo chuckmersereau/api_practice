@@ -15,6 +15,20 @@ resource 'Key Accounts' do
   end
   let(:form_data) { build_data(new_key_account_params) }
 
+  let(:resource_attributes) do
+    %w(
+      created_at
+      email
+      first_name
+      last_download
+      last_name
+      primary
+      remote_id
+      updated_at
+      updated_in_db_at
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -22,24 +36,28 @@ resource 'Key Accounts' do
       example 'Key Account [LIST]', document: :user do
         do_request
         explanation 'List of Key Accounts associated to current_user'
-        check_collection_resource(2)
+        check_collection_resource(2, %w(relationships))
         expect(response_status).to eq 200
       end
     end
 
     get '/api/v2/user/key_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'email',       'Email',      'Type' => 'String'
-        response_field 'first_name',  'First Name', 'Type' => 'String'
-        response_field 'last_name',   'Last Name',  'Type' => 'String'
-        response_field 'person_id',   'Person Id',  'Type' => 'Number'
-        response_field 'remote_id',   'Remote Id',  'Type' => 'Number'
+        response_field 'created_at',       'Created At',       'Type' => 'String'
+        response_field 'email',            'Email',            'Type' => 'String'
+        response_field 'first_name',       'First Name',       'Type' => 'String'
+        response_field 'last_download',    'Last Download',    'Type' => 'String'
+        response_field 'last_name',        'Last Name',        'Type' => 'String'
+        response_field 'primary',          'Primary',          'Type' => 'Boolean'
+        response_field 'remote_id',        'Remote Id',        'Type' => 'Number'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Key Account [GET]', document: :user do
         explanation 'The current_user\'s Key Account with the given ID'
         do_request
-        check_resource
+        check_resource(%w(relationships))
         expect(response_status).to eq 200
       end
     end

@@ -17,6 +17,7 @@ resource 'Users' do
       last_name
       preferences
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -37,9 +38,12 @@ resource 'Users' do
       response_field 'type',          'Will be User',                               'Type' => 'String'
 
       with_options scope: [:data, :attributes] do
+        response_field 'created_at',       'Created At',       'Type' => 'String'
         response_field 'first_name',       'User first name',  'Type' => 'String'
         response_field 'last_name',        'User last name',   'Type' => 'String'
         response_field 'preferences',      'User preferences', 'Type' => 'Object'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'User [GET]', document: :entities do

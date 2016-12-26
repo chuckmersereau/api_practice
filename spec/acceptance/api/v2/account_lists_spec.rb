@@ -13,7 +13,7 @@ resource 'Account Lists' do
   let(:new_account_list) { build(:account_list).attributes.merge(updated_in_db_at: account_list.updated_at) }
   let(:form_data)        { build_data(new_account_list) }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       created_at
       default_organization_id
@@ -35,28 +35,25 @@ resource 'Account Lists' do
         explanation 'List of Account Lists'
         do_request
         check_collection_resource(1)
-        expect(resource_object.keys).to match_array expected_attribute_keys
+        expect(resource_object.keys).to match_array resource_attributes
         expect(response_status).to eq 200
       end
     end
 
     get '/api/v2/account_lists/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',              'Created At',      'Type' => 'String'
-        response_field 'default_organization_id', 'Organization ID', 'Type' => 'Number'
-        response_field 'monthly_goal',            'Monthly Goal',    'Type' => 'String'
-        response_field 'name',                    'Account Name',    'Type' => 'String'
-        response_field 'updated_at',              'Updated At',      'Type' => 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At which will be
-                                                   required to update the resource 
-                                                   (Should be stored as a String)','Type' => 'String'
+        response_field 'created_at',              'Created At',       'Type' => 'String'
+        response_field 'default_organization_id', 'Organization ID',  'Type' => 'Number'
+        response_field 'monthly_goal',            'Monthly Goal',     'Type' => 'String'
+        response_field 'name',                    'Account Name',     'Type' => 'String'
+        response_field 'updated_at',              'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Account List [GET]', document: :entities do
         explanation 'The Account List with the given ID'
         do_request
         check_resource
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['name']).to eq account_list.name
         expect(response_status).to eq 200
       end
@@ -68,8 +65,6 @@ resource 'Account Lists' do
       with_options scope: [:data, :attributes] do
         parameter 'name',             'Account Name',     required: true
         parameter 'settings',         'Settings'
-        parameter 'updated_at',       'Updated At'
-        parameter 'updated_in_db_at', 'Updated In Db At', required: true
       end
 
       example 'Account List [UPDATE]', document: :entities do

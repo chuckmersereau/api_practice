@@ -22,6 +22,22 @@ resource 'Google Accounts' do
     )
   end
 
+  let(:resource_attributes) do
+    %w(
+      created_at
+      email
+      expires_at
+      last_download
+      last_email_sync
+      primary
+      refresh_token
+      remote_id
+      token
+      updated_at
+      updated_in_db_at
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -36,11 +52,16 @@ resource 'Google Accounts' do
 
     get '/api/v2/user/google_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'expires_at',    'Expires At',    'Type' => 'String'
-        response_field 'person_id',     'Person Id',     'Type' => 'Number'
-        response_field 'refresh_token', 'Refresh Token', 'Type' => 'String'
-        response_field 'remote_id',     'Remote Id',     'Type' => 'Number'
-        response_field 'token',         'Token',         'Type' => 'String'
+        response_field 'created_at',       'Created At',       'Type' => 'String'
+        response_field 'expires_at',       'Expires At',       'Type' => 'String'
+        response_field 'last_download',    'Last Download',    'Type' => 'String'
+        response_field 'last_email_sync',  'Last Email Sync',  'Type' => 'String'
+        response_field 'primary',          'Primary',          'Type' => 'Boolean'
+        response_field 'refresh_token',    'Refresh Token',    'Type' => 'String'
+        response_field 'remote_id',        'Remote Id',        'Type' => 'Number'
+        response_field 'token',            'Token',            'Type' => 'String'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Google Account [GET]', document: :user do

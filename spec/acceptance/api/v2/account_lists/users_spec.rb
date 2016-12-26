@@ -15,13 +15,14 @@ resource 'Users' do
   let(:id)               { user2.uuid }
   let(:original_user_id) { user.uuid }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       created_at
       first_name
       last_name
       preferences
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -45,24 +46,26 @@ resource 'Users' do
         do_request
 
         check_collection_resource(3, ['relationships'])
-        expect(resource_object.keys).to match_array expected_attribute_keys
+        expect(resource_object.keys).to match_array resource_attributes
         expect(response_status).to eq 200
       end
     end
 
     get '/api/v2/account_lists/:account_list_id/users/:id' do
       with_options scope: [:data, :attributes] do
+        response_field 'created_at',       'Created At',       'Type' => 'String'
         response_field 'first_name',       'First name',       'Type' => 'String'
         response_field 'last_name',        'Last name',        'Type' => 'String'
         response_field 'master_person_id', 'Master Person ID', 'Type' => 'Number'
         response_field 'preferences',      'Preferences',      'Type' => 'Object'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'User [GET]', document: :account_lists do
         explanation 'The Account List User with the given ID'
         do_request
         check_resource(['relationships'])
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['first_name']).to eq user2.first_name
         expect(resource_object['last_name']).to eq user2.last_name
         expect(response_status).to eq 200

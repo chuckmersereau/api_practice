@@ -20,6 +20,7 @@ resource 'Designation Accounts' do
       designation_number
       name
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -49,6 +50,7 @@ resource 'Designation Accounts' do
         response_field 'designation_number', 'Designation Number', 'Type' => 'String'
         response_field 'name',               'Name',               'Type' => 'String'
         response_field 'updated_at',         'Updated At',         'Type' => 'String'
+        response_field 'updated_in_db_at',   'Updated In Db At',   'Type' => 'String'
       end
 
       example 'Designation Account [GET]', document: :account_lists do

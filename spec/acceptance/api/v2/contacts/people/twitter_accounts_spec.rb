@@ -29,6 +29,7 @@ resource 'Twitter Accounts' do
       remote_id
       screen_name
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -54,11 +55,12 @@ resource 'Twitter Accounts' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/twitter_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',  'Created At',  'Type' => 'String'
-        response_field 'primary',     'Primary',     'Type' => 'Boolean'
-        response_field 'remote_id',   'Remote ID',   'Type' => 'Number'
-        response_field 'screen_name', 'Screen Name', 'Type' => 'String'
-        response_field 'updated_at',  'Updated At',  'Type' => 'String'
+        response_field 'created_at',       'Created At',       'Type' => 'String'
+        response_field 'primary',          'Primary',          'Type' => 'Boolean'
+        response_field 'remote_id',        'Remote ID',        'Type' => 'Number'
+        response_field 'screen_name',      'Screen Name',      'Type' => 'String'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Person / Twitter Account [GET]', document: :contacts do

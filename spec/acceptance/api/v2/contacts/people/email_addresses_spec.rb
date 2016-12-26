@@ -31,6 +31,7 @@ resource 'Contacts People Email Addresses' do
       location
       primary
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -55,12 +56,13 @@ resource 'Contacts People Email Addresses' do
     # show
     get '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at', 'Created At', 'Type' => 'String'
-        response_field 'email',      'Email',      'Type' => 'String'
-        response_field 'historic',   'Historic',   'Type' => 'Boolean'
-        response_field 'location',   'Location',   'Type' => 'String'
-        response_field 'primary',    'Primary',    'Type' => 'Boolean'
-        response_field 'updated_at', 'Updated At', 'Type' => 'String'
+        response_field 'created_at',       'Created At',       'Type' => 'String'
+        response_field 'email',            'Email',            'Type' => 'String'
+        response_field 'historic',         'Historic',         'Type' => 'Boolean'
+        response_field 'location',         'Location',         'Type' => 'String'
+        response_field 'primary',          'Primary',          'Type' => 'Boolean'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Person / Email Address [GET]', document: :contacts do

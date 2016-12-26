@@ -30,6 +30,15 @@ resource 'Relationship' do
     )
   end
 
+  let(:resource_attributes) do
+    %w(
+      created_at
+      relationship
+      updated_at
+      updated_in_db_at
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -37,22 +46,23 @@ resource 'Relationship' do
       example 'Person / Relationship [LIST]', document: :contacts do
         explanation 'List of Relationships associated to the Person'
         do_request
-        check_collection_resource(1, ['relationships'])
+        check_collection_resource(1, %w(relationships))
         expect(response_status).to eq 200
       end
     end
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'person_id',         'Person Id',      'Type' => 'Number'
-        response_field 'related_person_id', 'Related Person', 'Type' => 'Number'
-        response_field 'relationship',      'Relationship',   'Type' => 'String'
+        response_field 'created_at',        'Created At',       'Type' => 'String'
+        response_field 'person_id',         'Person Id',        'Type' => 'Number'
+        response_field 'updated_at',        'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at',  'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Person / Relationship [GET]', document: :contacts do
         explanation 'The Person\'s Relationship with the given ID'
         do_request
-        check_resource(['relationships'])
+        check_resource(%w(relationships))
         expect(response_status).to eq 200
       end
     end

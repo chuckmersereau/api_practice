@@ -17,7 +17,7 @@ resource 'Mailchimp Account Spec' do
   let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
   let(:appeal)                      { create(:appeal, account_list: account_list) }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       active
       api_key
@@ -29,10 +29,11 @@ resource 'Mailchimp Account Spec' do
       primary_list_id
       primary_list_name
       sync_all_active_contacts
-      updated_at
       valid
       validate_key
       validation_error
+      updated_at
+      updated_in_db_at
     )
   end
 
@@ -50,12 +51,15 @@ resource 'Mailchimp Account Spec' do
       response_field 'active',                          'Active',                          'Type' => 'Boolean'
       response_field 'api_key',                         'API Key',                         'Type' => 'String'
       response_field 'auto_log_campaigns',              'Auto Log Campaigns',              'Type' => 'Boolean'
+      response_field 'created_at',                      'Created At',                      'Type' => 'String'
       response_field 'lists_available_for_newsletters', 'Lists available for newsletters', 'Type' => 'Array[Object]'
       response_field 'lists_link',                      'Lists Link',                      'Type' => 'String'
       response_field 'lists_present',                   'Lists Present',                   'Type' => 'Boolean'
       response_field 'primary_list_id',                 'Primary List ID',                 'Type' => 'Number'
       response_field 'primary_list_name',               'Primary List Name',               'Type' => 'String'
       response_field 'sync_all_active_contacts',        'Sync all active contacts',        'Type' => 'Boolean'
+      response_field 'updated_at',                      'Updated At',                      'Type' => 'String'
+      response_field 'updated_in_db_at',                'Updated In Db At',                'Type' => 'String'
       response_field 'valid',                           'Valid',                           'Type' => 'Boolean'
       response_field 'validation_error',                'Validation Error',                'Type' => 'String'
       response_field 'validate_key',                    'Validate Key',                    'Type' => 'Boolean'
@@ -65,7 +69,6 @@ resource 'Mailchimp Account Spec' do
       explanation 'The MailChimp Account associated with the Account List'
       do_request
       check_resource
-      expect(resource_object.keys).to match_array expected_attribute_keys
       expect(response_status).to eq 200
     end
   end
