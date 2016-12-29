@@ -4,7 +4,7 @@ require 'rspec_api_documentation/dsl'
 resource 'Contacts' do
   include_context :json_headers
 
-  let(:resource_type) { 'contact' }
+  let(:resource_type) { 'contacts' }
   let!(:user)         { create(:user_with_full_account) }
 
   let!(:account_list)   { user.account_lists.first }
@@ -49,6 +49,7 @@ resource 'Contacts' do
       timezone
       uncompleted_tasks_count
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -71,7 +72,7 @@ resource 'Contacts' do
       example 'Contact [LIST]', document: :appeals do
         explanation 'List of Contacts associated to the Appeal'
         do_request
-        expect(resource_object.keys).to match_array expected_attribute_keys
+        check_collection_resource(1, %w(relationships))
         expect(response_status).to eq 200
       end
     end
@@ -81,6 +82,7 @@ resource 'Contacts' do
 
       with_options scope: [:data, :attributes] do
         response_field 'church_name',             'Church Name',             'Type' => 'String'
+        response_field 'created_at',              'Created At',              'Type' => 'String'
         response_field 'deceased',                'Deceased',                'Type' => 'Boolean'
         response_field 'donor_accounts',          'Donor Accounts',          'Type' => 'Array[Object]'
         response_field 'last_activity',           'Last Activity',           'Type' => 'String'
@@ -108,6 +110,8 @@ resource 'Contacts' do
         response_field 'tag_list',                'Tag List',                'Type' => 'Array[String]'
         response_field 'timezone',                'Timezone',                'Type' => 'String'
         response_field 'uncompleted_tasks_count', 'Uncompleted Tasks count', 'Type' => 'Number'
+        response_field 'updated_at',              'Updated At',              'Type' => 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',        'Type' => 'String'
       end
 
       example 'Contact [GET]', document: :appeals do

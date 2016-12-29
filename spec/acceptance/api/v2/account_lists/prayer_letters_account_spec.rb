@@ -11,11 +11,12 @@ resource 'Prayer Letters Account' do
   let(:account_list_id) { account_list.uuid }
   let!(:contact)        { create(:contact, account_list: account_list, send_newsletter: 'Both') }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       created_at
       token
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -42,16 +43,16 @@ resource 'Prayer Letters Account' do
         parameter 'account_list_id', 'Account List ID', required: true
 
         with_options scope: [:data, :attributes] do
-          response_field 'created_at', 'Created At', 'Type' => 'String'
-          response_field 'token',      'Token',      'Type' => 'String'
-          response_field 'updated_at', 'Updated At', 'Type' => 'String'
+          response_field 'created_at',         'Created At',         'Type' => 'String'
+          response_field 'token',              'Token',              'Type' => 'String'
+          response_field 'updated_at',         'Updated At',         'Type' => 'String'
+          response_field 'updated_in_db_at',   'Updated In Db At',   'Type' => 'String'
         end
 
         example 'Prayer Letters Account [GET]', document: :account_lists do
           explanation 'The Prayer Letters Account associated with the Account List'
           do_request
           check_resource
-          expect(resource_object.keys).to match_array expected_attribute_keys
           expect(response_status).to eq 200
         end
       end

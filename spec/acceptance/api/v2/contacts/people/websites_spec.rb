@@ -30,6 +30,7 @@ resource 'Websites' do
       created_at
       primary
       updated_at
+      updated_in_db_at
       url
     )
   end
@@ -56,10 +57,11 @@ resource 'Websites' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/websites/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at', 'Created At', 'Type' => 'String'
-        response_field 'primary',    'Primary',    'Type' => 'Boolean'
-        response_field 'updated_at', 'Updated At', 'Type' => 'String'
-        response_field 'url',        'Url',        'Type' => 'String'
+        response_field 'created_at',       'Created At',       'Type' => 'String'
+        response_field 'primary',          'Primary',          'Type' => 'Boolean'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
+        response_field 'url',              'Url',              'Type' => 'String'
       end
 
       example 'Person / Website [GET]', document: :contacts do

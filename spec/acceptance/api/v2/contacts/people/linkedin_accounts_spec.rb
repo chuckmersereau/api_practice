@@ -34,6 +34,7 @@ resource 'Linkedin Accounts' do
       public_url
       remote_id
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -59,12 +60,13 @@ resource 'Linkedin Accounts' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at', 'Created At', 'Type' => 'String'
-        response_field 'first_name', 'First Name', 'Type' => 'String'
-        response_field 'last_name',  'Last name',  'Type' => 'Number'
-        response_field 'public_url', 'Public URL', 'Type' => 'String'
-        response_field 'remote_id',  'Remote ID',  'Type' => 'Number'
-        response_field 'updated_at', 'Updated At', 'Type' => 'String'
+        response_field 'created_at',       'Created At',       'Type' => 'String'
+        response_field 'first_name',       'First Name',       'Type' => 'String'
+        response_field 'last_name',        'Last name',        'Type' => 'Number'
+        response_field 'public_url',       'Public URL',       'Type' => 'String'
+        response_field 'remote_id',        'Remote ID',        'Type' => 'Number'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Person / LinkedIn Account [GET]', document: :contacts do

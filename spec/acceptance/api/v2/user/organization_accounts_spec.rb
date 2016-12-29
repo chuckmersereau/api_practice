@@ -18,6 +18,20 @@ resource 'Organization Accounts' do
 
   let(:form_data) { build_data(new_organization_account_params) }
 
+  let(:resource_attributes) do
+    %w(
+      created_at
+      disable_downloads
+      last_download
+      locked_at
+      remote_id
+      token
+      username
+      updated_at
+      updated_in_db_at
+    )
+  end
+
   before do
     allow_any_instance_of(DataServer).to receive(:validate_username_and_password).and_return(true)
     allow_any_instance_of(Person::OrganizationAccount).to receive(:queue_import_data)
@@ -32,22 +46,28 @@ resource 'Organization Accounts' do
         do_request
         explanation 'List of Organization Accounts associated to current_user'
 
-        check_collection_resource(2, ['relationships'])
+        check_collection_resource(2, %w(relationships))
         expect(response_status).to eq 200
       end
     end
 
     get '/api/v2/user/organization_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'organization_id', 'Organization Id', 'Type' => 'Number'
-        response_field 'person_id',       'Person Id',       'Type' => 'String'
-        response_field 'username',        'Username',        'Type' => 'String'
+        response_field 'created_at',        'Created At',        'Type' => 'String'
+        response_field 'disable_downloads', 'Disable Downloads', 'Type' => 'String'
+        response_field 'last_download',     'Last Download',     'Type' => 'String'
+        response_field 'locked_at',         'Locked At',         'Type' => 'String'
+        response_field 'remote_id',         'Remote Id',         'Type' => 'String'
+        response_field 'token',             'Token',             'Type' => 'String'
+        response_field 'username',          'Username',          'Type' => 'String'
+        response_field 'updated_at',        'Updated At',        'Type' => 'String'
+        response_field 'updated_in_db_at',  'Updated In Db At',  'Type' => 'String'
       end
 
       example 'Organization Account [GET]', document: :user do
         explanation 'The User\'s Organization Account with the given ID'
         do_request
-        check_resource(['relationships'])
+        check_resource(%w(relationships))
         expect(response_status).to eq 200
       end
     end

@@ -28,11 +28,12 @@ resource 'Contact Referrals' do
   # specify the `attributes` specifically in your request actions below.
   let(:form_data) { build_data(attributes) }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     # list your expected resource keys vertically here (alphabetical please!)
     %w(
       created_at
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -54,7 +55,6 @@ resource 'Contact Referrals' do
 
         creation_time = Time.zone.parse(resource_object['created_at'])
 
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(creation_time.to_s).to eq contact_referral.created_at.to_s
         expect(response_status).to eq 200
       end
@@ -72,7 +72,6 @@ resource 'Contact Referrals' do
 
         creation_time = Time.zone.parse(resource_object['created_at'])
 
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(creation_time.to_s).to eq contact_referral.created_at.to_s
         expect(response_status).to eq 200
       end
@@ -96,7 +95,6 @@ resource 'Contact Referrals' do
         do_request data: form_data
         check_resource(additional_attribute_keys)
 
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 201
 
         contact_referrals_by_me_uuids = contact.contact_referrals_by_me.map(&:uuid)
@@ -127,7 +125,6 @@ resource 'Contact Referrals' do
         do_request data: form_data
 
         check_resource(additional_attribute_keys)
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
 
         expect(contact_referral.reload.referred_to_id).to eq alternate.id
@@ -156,7 +153,6 @@ resource 'Contact Referrals' do
         do_request data: form_data
 
         check_resource(additional_attribute_keys)
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
 
         expect(contact_referral.reload.referred_to_id).to eq alternate.id

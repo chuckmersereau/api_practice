@@ -23,6 +23,7 @@ resource 'Donor Accounts' do
       last_donation_date
       total_donations
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -64,6 +65,7 @@ resource 'Donor Accounts' do
         response_field 'organization_id',     'Organization ID',     'Type' => 'Number'
         response_field 'total_donations',     'Total Donations',     'Type' => 'Number'
         response_field 'updated_at',          'Updated At',          'Type' => 'String'
+        response_field 'updated_in_db_at',    'Updated In Db At',    'Type' => 'String'
       end
 
       example 'Donor Account [GET]', document: :account_lists do

@@ -22,6 +22,19 @@ resource 'Phones' do
   end
   let(:form_data) { build_data(new_phone) }
 
+  let(:expected_attribute_keys) do
+    %w(
+      country_code
+      created_at
+      historic
+      location
+      number
+      primary
+      updated_at
+      updated_in_db_at
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -36,18 +49,20 @@ resource 'Phones' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'country-code', 'Country Code', 'Type' => 'String'
-        response_field 'created_at',   'Created At',   'Type' => 'String'
-        response_field 'historic',     'Historic',     'Type' => 'Boolean'
-        response_field 'location',     'Location',     'Type' => 'String'
-        response_field 'number',       'Number',       'Type' => 'String'
-        response_field 'primary',      'Primary',      'Type' => 'Boolean'
-        response_field 'updated_at',   'Updated At',   'Type' => 'String'
+        response_field 'country_code',     'Country Code',     'Type' => 'String'
+        response_field 'created_at',       'Created At',       'Type' => 'String'
+        response_field 'historic',         'Historic',         'Type' => 'Boolean'
+        response_field 'location',         'Location',         'Type' => 'String'
+        response_field 'number',           'Number',           'Type' => 'String'
+        response_field 'primary',          'Primary',          'Type' => 'Boolean'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
       example 'Person / Phone [GET]', document: :contacts do
         explanation 'The Person\'s Phone Number with the given ID'
         do_request
+        expect(resource_object.keys).to match_array expected_attribute_keys
         check_resource
         expect(response_status).to eq(200)
       end

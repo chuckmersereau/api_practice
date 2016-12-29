@@ -20,6 +20,7 @@ resource 'Invites' do
       created_at
       recipient_email
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -56,8 +57,11 @@ resource 'Invites' do
         response_field 'account_list_id',      'Account List ID',      'Type' => 'Number'
         response_field 'cancelled_by_user_id', 'Cancelled by user ID', 'Type' => 'Number'
         response_field 'code',                 'Code',                 'Type' => 'String'
+        response_field 'created_at',           'Created At',           'Type' => 'String'
         response_field 'invited_by_user_id',   'Invited by User ID',   'Type' => 'Number'
         response_field 'recipient_email',      'Recipient Email',      'Type' => 'String'
+        response_field 'updated_at',           'Updated At',           'Type' => 'String'
+        response_field 'updated_in_db_at',     'Updated In Db At',     'Type' => 'String'
       end
 
       example 'Invite [GET]', document: :account_lists do
