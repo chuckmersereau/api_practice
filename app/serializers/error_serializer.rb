@@ -68,7 +68,7 @@ class ErrorSerializer
   end
 
   def formatted_resource_errors
-    return unless resource && !resource.valid?
+    return unless resource && resource.errors.present?
 
     format_active_model_errors_object(resource.errors)
   end
