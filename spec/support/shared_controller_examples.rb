@@ -9,7 +9,14 @@ RSpec.shared_examples 'common_variables' do
   let(:reference_key)                { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
   let(:reference_value)              { defined?(given_reference_value) ? given_reference_value : correct_attributes.values.first }
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
-  let(:serializer) { ActiveModel::Serializer.serializer_for(resource).new(resource) }
+  let(:serializer)                   { ActiveModel::Serializer.serializer_for(resource).new(resource) }
+  let(:response_errors)              { JSON.parse(response.body)['errors'] }
+
+  let(:response_error_pointers) do
+    response_errors.map do |error|
+      error['source']['pointer'] if error['source']
+    end
+  end
 
   let(:full_update_attributes) do
     if defined?(update_attributes)
@@ -102,6 +109,17 @@ RSpec.shared_examples 'update_examples' do
         expect(response.status).to eq(400)
         expect(response.body).to include('errors')
         expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
+        expect(response_errors).to be_present
+
+        if response_error_pointers.present?
+          expect(
+            incorrect_attributes.keys.any? do |incorrect_attribute|
+              pointer_reference = "/data/attributes/#{incorrect_attribute}"
+
+              response_error_pointers.include?(pointer_reference)
+            end
+          ).to be true
+        end
       end
     end
 
@@ -112,6 +130,7 @@ RSpec.shared_examples 'update_examples' do
 
       expect(response.status).to eq(400)
       expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
+      expect(response_errors).to be_present
     end
 
     it 'does not update resource for users that do not own the resource' do
@@ -121,6 +140,7 @@ RSpec.shared_examples 'update_examples' do
 
         expect(response.status).to eq(403)
         expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
+        expect(response_errors).to be_present
       end
     end
 
@@ -129,6 +149,7 @@ RSpec.shared_examples 'update_examples' do
 
       expect(response.status).to eq(401)
       expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
+      expect(response_errors).to be_present
     end
   end
 end
@@ -155,6 +176,7 @@ RSpec.shared_examples 'create_examples' do
           post :create, full_unpermitted_attributes
         end.not_to change { resource.class.count }
         expect(response.status).to eq(403)
+        expect(response_errors).to be_present
       end
     end
 
@@ -165,6 +187,7 @@ RSpec.shared_examples 'create_examples' do
         expect do
           post :create, full_incorrect_attributes
         end.not_to change { resource.class.count }
+
         expect(response.status).to eq(400)
         expect(response.body).to include('errors')
       end
@@ -174,7 +197,9 @@ RSpec.shared_examples 'create_examples' do
       expect do
         post :create, full_correct_attributes
       end.not_to change { resource.class.count }
+
       expect(response.status).to eq(401)
+      expect(response_errors).to be_present
     end
   end
 end
