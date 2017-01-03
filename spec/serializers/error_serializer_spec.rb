@@ -123,15 +123,17 @@ RSpec.describe ErrorSerializer, type: :serializer do
     extend ActiveModel::Translation
 
     def errors
-      @errors ||= ActiveModel::Errors.new(self)
+      @errors ||= build_errors
     end
 
-    def valid?
-      errors.add(:name, 'must be in ALL CAPS')
-      errors.add(:name, 'must contain a ?')
-      errors.add(:email, 'has already been taken')
+    private
 
-      false
+    def build_errors
+      ActiveModel::Errors.new(self).tap do |errors|
+        errors.add(:name, 'must be in ALL CAPS')
+        errors.add(:name, 'must contain a ?')
+        errors.add(:email, 'has already been taken')
+      end
     end
   end
 end
