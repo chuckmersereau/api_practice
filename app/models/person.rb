@@ -1,4 +1,9 @@
 class Person < ApplicationRecord
+  include BetweenScopeable
+
+  between_scope_for :anniversary
+  between_scope_for :birthday
+
   RELATIONSHIPS_MALE = [_('Husband'), _('Son'), _('Father'), _('Brother'), _('Uncle'), _('Nephew'), _('Cousin (Male)'), _('Grandfather'), _('Grandson')].freeze
   RELATIONSHIPS_FEMALE = [_('Wife'), _('Daughter'), _('Mother'), _('Sister'), _('Aunt'), _('Niece'), _('Cousin (Female)'), _('Grandmother'), _('Granddaughter')].freeze
   TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')].freeze
@@ -45,24 +50,6 @@ class Person < ApplicationRecord
   scope :alive,          -> { where.not(deceased: true) }
   scope :by_anniversary, -> { order('anniversary_month, anniversary_day') }
   scope :by_birthday,    -> { order('birthday_month, birthday_day') }
-
-  scope :with_anniversary_between, lambda { |start_date, end_date|
-    RecordsWithSpecialDayBetweenDatesFinder.find(
-      scope: Person,
-      attribute: :anniversary,
-      start_date: start_date,
-      end_date: end_date
-    )
-  }
-
-  scope :with_birthday_between, lambda { |start_date, end_date|
-    RecordsWithSpecialDayBetweenDatesFinder.find(
-      scope: Person,
-      attribute: :birthday,
-      start_date: start_date,
-      end_date: end_date
-    )
-  }
 
   accepts_nested_attributes_for :email_addresses, reject_if: -> (e) { e[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers, reject_if: -> (p) { p[:number].blank? }, allow_destroy: true
