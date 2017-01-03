@@ -19,6 +19,25 @@ resource 'Address' do
   end
   let(:form_data) { build_data(new_address) }
 
+  let(:expected_attribute_keys) do
+    %w(
+      city
+      country
+      created_at
+      end_date
+      geo
+      historic
+      location
+      postal_code
+      primary_mailing_address
+      start_date
+      state
+      street
+      updated_at
+      updated_in_db_at
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -36,6 +55,7 @@ resource 'Address' do
       with_options scope: [:data, :attributes] do
         response_field 'city',                    'City',                    'Type' => 'String'
         response_field 'country',                 'Country',                 'Type' => 'String'
+        response_field 'created_at',              'Created At',              'Type' => 'String'
         response_field 'end_date',                'End Date',                'Type' => 'String'
         response_field 'geo',                     'Geo',                     'Type' => 'String'
         response_field 'historic',                'Historic',                'Type' => 'Boolean'
@@ -45,12 +65,15 @@ resource 'Address' do
         response_field 'start_date',              'Start Date',              'Type' => 'String'
         response_field 'state',                   'State',                   'Type' => 'String'
         response_field 'street',                  'Street',                  'Type' => 'String'
+        response_field 'updated_at',              'Updated At',              'Type' => 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',        'Type' => 'String'
       end
 
       example 'Address [GET]', document: :contacts do
         explanation 'The Contact\'s Address with the given ID'
         do_request
         check_resource
+        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq(200)
       end
     end

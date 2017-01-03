@@ -21,7 +21,7 @@ resource 'Contacts' do
 
   let(:additional_keys) { ['relationships'] }
 
-  let(:expected_keys) do
+  let(:resource_attributes) do
     %w(
       account_list_id
       avatar
@@ -55,6 +55,7 @@ resource 'Contacts' do
       timezone
       uncompleted_tasks_count
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -120,7 +121,6 @@ resource 'Contacts' do
         explanation 'List of Contacts'
         do_request
         check_collection_resource(1, additional_keys)
-        expect(resource_object.keys).to match_array(expected_keys)
         expect(response_status).to eq 200
       end
     end
@@ -197,13 +197,13 @@ resource 'Contacts' do
         response_field 'timezone',                'Time Zone',               'Type' => 'String'
         response_field 'uncompleted_tasks_count', 'Uncompleted Tasks Count', 'Type' => 'Number'
         response_field 'updated_at',              'Updated At',              'Type' => 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',        'Type' => 'String'
       end
 
       example 'Contact [GET]', document: :entities do
         explanation 'The Contact with the given ID'
         do_request
         check_resource(additional_keys)
-        expect(resource_object.keys).to match_array(expected_keys)
         expect(resource_object['name']).to eq contact.name
         expect(response_status).to eq 200
       end

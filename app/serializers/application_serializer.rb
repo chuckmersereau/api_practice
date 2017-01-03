@@ -1,7 +1,8 @@
 class ApplicationSerializer < ActiveModel::Serializer
   attributes :id,
              :created_at,
-             :updated_at
+             :updated_at,
+             :updated_in_db_at
 
   def id
     object.uuid
@@ -16,5 +17,9 @@ class ApplicationSerializer < ActiveModel::Serializer
       value = value.to_time.utc.iso8601 if value.respond_to?(:iso8601)
       value
     end
+  end
+
+  def updated_in_db_at
+    object.updated_at.to_s
   end
 end

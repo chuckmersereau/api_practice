@@ -31,6 +31,7 @@ resource 'Facebook Accounts' do
       last_name
       remote_id
       updated_at
+      updated_in_db_at
       username
     )
   end
@@ -57,12 +58,13 @@ resource 'Facebook Accounts' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/facebook_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at', 'Created At', 'Type' => 'String'
-        response_field 'first_name', 'First Name', 'Type' => 'String'
-        response_field 'last_name',  'Last name',  'Type' => 'Number'
-        response_field 'remote_id',  'Remote ID',  'Type' => 'Number'
-        response_field 'updated_at', 'Updated At', 'Type' => 'String'
-        response_field 'username',   'Username',   'Type' => 'String'
+        response_field 'created_at',       'Created At',       'Type' => 'String'
+        response_field 'first_name',       'First Name',       'Type' => 'String'
+        response_field 'last_name',        'Last name',        'Type' => 'Number'
+        response_field 'remote_id',        'Remote ID',        'Type' => 'Number'
+        response_field 'updated_at',       'Updated At',       'Type' => 'String'
+        response_field 'updated_at_in_db', 'Updated In Db At', 'Type' => 'String'
+        response_field 'username',         'Username',         'Type' => 'String'
       end
 
       example 'Person / Facebook Account [GET]', document: :contacts do

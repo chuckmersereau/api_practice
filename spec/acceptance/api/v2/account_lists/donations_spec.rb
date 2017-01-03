@@ -43,6 +43,7 @@ resource 'Donations' do
       tendered_amount
       tendered_currency
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -83,6 +84,7 @@ resource 'Donations' do
         response_field 'appeal_id',              'Appeal ID',              'Type' => 'Number'
         response_field 'channel',                'Channel',                'Type' => 'String'
         response_field 'contact_id',             'Contact ID',             'Type' => 'Number'
+        response_field 'created_at',             'Created At',             'Type' => 'String'
         response_field 'currency',               'Currency',               'Type' => 'String'
         response_field 'designation_account_id', 'Designation Account ID', 'Type' => 'Number'
         response_field 'donation_date',          'Donation Date',          'Type' => 'String'
@@ -94,6 +96,8 @@ resource 'Donations' do
         response_field 'remote_id',              'Remote ID',              'Type' => 'Number'
         response_field 'tendered_amount',        'Tendered Ammount',       'Type' => 'Number'
         response_field 'tendered_currency',      'Tendered Currency',      'Type' => 'String'
+        response_field 'updated_at',             'Updated At',             'Type' => 'String'
+        response_field 'updated_in_db_at',       'Updated In Db At',       'Type' => 'String'
       end
 
       example 'Donation [GET]', document: :account_lists do

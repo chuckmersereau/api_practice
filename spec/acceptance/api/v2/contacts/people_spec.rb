@@ -38,6 +38,7 @@ resource 'People' do
       suffix
       title
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -86,6 +87,7 @@ resource 'People' do
           response_field 'suffix',            'Suffix',            'Type' => 'String'
           response_field 'title',             'Title',             'Type' => 'String'
           response_field 'updated_at',        'Updated At',        'Type' => 'String'
+          response_field 'updated_in_db_at',  'Updated In Db At',  'Type' => 'String'
         end
 
         with_options scope: :relationships do

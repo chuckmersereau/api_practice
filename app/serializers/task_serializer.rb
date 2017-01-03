@@ -7,6 +7,7 @@ class TaskSerializer < ApplicationSerializer
              :no_date,
              :result,
              :starred,
+             :start_at,
              :subject,
              :tag_list
 

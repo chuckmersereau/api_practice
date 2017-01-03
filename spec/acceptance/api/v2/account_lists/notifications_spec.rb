@@ -20,7 +20,7 @@ resource 'Notifications' do
   end
   let(:form_data) { build_data(new_notification) }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       cleared
       contact_id
@@ -29,6 +29,7 @@ resource 'Notifications' do
       event_date
       notification_type_id
       updated_at
+      updated_in_db_at
     )
   end
 
@@ -51,7 +52,6 @@ resource 'Notifications' do
         explanation 'List of Notifications associated with the Account List'
         do_request
         check_collection_resource(2, ['relationships'])
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
     end
@@ -60,16 +60,18 @@ resource 'Notifications' do
       with_options scope: [:data, :attributes] do
         response_field 'cleared',              'Cleared',              'Type' => 'Boolean'
         response_field 'contact_id',           'Contact ID',           'Type' => 'Number'
+        response_field 'created_at',           'Created At',           'Type' => 'String'
         response_field 'donation_id',          'Donation ID',          'Type' => 'Number'
         response_field 'event_date',           'Event Date',           'Type' => 'String'
         response_field 'notification_type_id', 'Notification Type ID', 'Type' => 'Number'
+        response_field 'updated_at',           'Updated At',           'Type' => 'String'
+        response_field 'updated_in_db_at',     'Updated In Db At',     'Type' => 'String'
       end
 
       example 'Notification [GET]', document: :account_lists do
         explanation 'The Account List Notification with the given ID'
         do_request
         check_resource(['relationships'])
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
     end
