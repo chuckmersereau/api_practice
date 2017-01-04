@@ -17,7 +17,6 @@ class ApplicationFilter
       parent: filter.parent,
       default_selection: filter.default_selection
     }.merge(filter.select_options) if filter.display_filter_option? && !filter.empty?
-
   end
 
   def self.query(resource, filters, account_list)

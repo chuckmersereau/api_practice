@@ -31,15 +31,15 @@ RSpec.describe Contact::Filter::DonationAmount do
   describe '#config' do
     it 'returns expected config' do
       expect(described_class.config([account_list])).to include(default_selection: '',
-                                                              multiple: true,
-                                                              name: :donation_amount,
-                                                              options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                        { name: 9.99, id: 9.99 },
-                                                                        { name: 12.34, id: 12.34 },
-                                                                        { name: 4444.33, id: 4444.33 }],
-                                                              parent: 'Gift Details',
-                                                              title: 'Exact Gift Amount',
-                                                              type: 'multiselect')
+                                                                multiple: true,
+                                                                name: :donation_amount,
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
+                                                                          { name: 9.99, id: 9.99 },
+                                                                          { name: 12.34, id: 12.34 },
+                                                                          { name: 4444.33, id: 4444.33 }],
+                                                                parent: 'Gift Details',
+                                                                title: 'Exact Gift Amount',
+                                                                type: 'multiselect')
     end
   end
 

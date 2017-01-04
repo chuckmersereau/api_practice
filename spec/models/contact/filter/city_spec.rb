@@ -27,12 +27,12 @@ RSpec.describe Contact::Filter::City do
   describe '#config' do
     it 'returns expected config' do
       expect(described_class.config([account_list])).to include(multiple: true,
-                                                              name: :city,
-                                                              options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: '-- None --', id: 'none' }, { name: 'Fremont', id: 'Fremont' }],
-                                                              parent: 'Contact Location',
-                                                              title: 'City',
-                                                              type: 'multiselect',
-                                                              default_selection: '')
+                                                                name: :city,
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: '-- None --', id: 'none' }, { name: 'Fremont', id: 'Fremont' }],
+                                                                parent: 'Contact Location',
+                                                                title: 'City',
+                                                                type: 'multiselect',
+                                                                default_selection: '')
     end
   end
 

@@ -16,15 +16,15 @@ RSpec.describe Contact::Filter::Referrer do
   describe '#config' do
     it 'returns expected config' do
       expect(described_class.config([account_list])).to include(multiple: true,
-                                                              name: :referrer,
-                                                              options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                        { name: '-- None --', id: 'none' },
-                                                                        { name: '-- Has referrer --', id: 'any' },
-                                                                        { name: contact_one.name, id: contact_one.id }],
-                                                              parent: nil,
-                                                              title: 'Referrer',
-                                                              type: 'multiselect',
-                                                              default_selection: '')
+                                                                name: :referrer,
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
+                                                                          { name: '-- None --', id: 'none' },
+                                                                          { name: '-- Has referrer --', id: 'any' },
+                                                                          { name: contact_one.name, id: contact_one.id }],
+                                                                parent: nil,
+                                                                title: 'Referrer',
+                                                                type: 'multiselect',
+                                                                default_selection: '')
     end
   end
 

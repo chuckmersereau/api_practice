@@ -18,14 +18,14 @@ RSpec.describe Contact::Filter::Appeal do
   describe '#config' do
     it 'returns expected config' do
       expect(described_class.config([account_list])).to include(multiple: true,
-                                                              name: :appeal,
-                                                              options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                        { name: '-- Do not ask --', id: 'no_appeals' },
-                                                                        { name: 'Appeal 1', id: appeal_1.id }],
-                                                              parent: nil,
-                                                              title: 'Appeal',
-                                                              type: 'multiselect',
-                                                              default_selection: '')
+                                                                name: :appeal,
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
+                                                                          { name: '-- Do not ask --', id: 'no_appeals' },
+                                                                          { name: 'Appeal 1', id: appeal_1.id }],
+                                                                parent: nil,
+                                                                title: 'Appeal',
+                                                                type: 'multiselect',
+                                                                default_selection: '')
     end
   end
 

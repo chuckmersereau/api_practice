@@ -12,12 +12,12 @@ RSpec.describe Contact::Filter::PledgeAmount do
   describe '#config' do
     it 'returns expected config' do
       expect(described_class.config([account_list])).to include(multiple: true,
-                                                              name: :pledge_amount,
-                                                              options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: 1.0, id: 1.0 }, { name: 100.0, id: 100.0 }],
-                                                              parent: 'Commitment Details',
-                                                              title: 'Commitment Amount',
-                                                              type: 'multiselect',
-                                                              default_selection: '')
+                                                                name: :pledge_amount,
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: 1.0, id: 1.0 }, { name: 100.0, id: 100.0 }],
+                                                                parent: 'Commitment Details',
+                                                                title: 'Commitment Amount',
+                                                                type: 'multiselect',
+                                                                default_selection: '')
     end
   end
 

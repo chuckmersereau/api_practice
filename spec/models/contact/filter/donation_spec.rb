@@ -31,17 +31,17 @@ RSpec.describe Contact::Filter::Donation do
   describe '#config' do
     it 'returns expected config' do
       expect(described_class.config([account_list])).to include(default_selection: '',
-                                                              multiple: true,
-                                                              name: :donation,
-                                                              options: [
-                                                                { name: '-- Any --', id: '', placeholder: 'None' },
-                                                                { name: 'No Gifts', id: 'none' },
-                                                                { name: 'One or More Gifts', id: 'one' },
-                                                                { name: 'First Gift', id: 'first' },
-                                                                { name: 'Last Gift', id: 'last' }],
-                                                              parent: 'Gift Details',
-                                                              title: 'Gift Options',
-                                                              type: 'multiselect')
+                                                                multiple: true,
+                                                                name: :donation,
+                                                                options: [
+                                                                  { name: '-- Any --', id: '', placeholder: 'None' },
+                                                                  { name: 'No Gifts', id: 'none' },
+                                                                  { name: 'One or More Gifts', id: 'one' },
+                                                                  { name: 'First Gift', id: 'first' },
+                                                                  { name: 'Last Gift', id: 'last' }],
+                                                                parent: 'Gift Details',
+                                                                title: 'Gift Options',
+                                                                type: 'multiselect')
     end
   end
 

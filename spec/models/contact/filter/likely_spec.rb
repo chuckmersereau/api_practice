@@ -12,16 +12,16 @@ RSpec.describe Contact::Filter::Likely do
   describe '#config' do
     it 'returns expected config' do
       expect(described_class.config([account_list])).to include(multiple: true,
-                                                              name: :likely,
-                                                              options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                        { name: '-- None --', id: 'none' },
-                                                                        { name: 'Least Likely', id: 'Least Likely' },
-                                                                        { name: 'Likely', id: 'Likely' },
-                                                                        { name: 'Most Likely', id: 'Most Likely' }],
-                                                              parent: 'Contact Details',
-                                                              title: 'Likely To Give',
-                                                              type: 'multiselect',
-                                                              default_selection: '')
+                                                                name: :likely,
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
+                                                                          { name: '-- None --', id: 'none' },
+                                                                          { name: 'Least Likely', id: 'Least Likely' },
+                                                                          { name: 'Likely', id: 'Likely' },
+                                                                          { name: 'Most Likely', id: 'Most Likely' }],
+                                                                parent: 'Contact Details',
+                                                                title: 'Likely To Give',
+                                                                type: 'multiselect',
+                                                                default_selection: '')
     end
   end
 
