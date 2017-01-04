@@ -10,4 +10,8 @@ class Task::Filter::Completed < Task::Filter::Base
   def type
     'single_checkbox'
   end
+
+  def default_selection
+    nil
+  end
 end

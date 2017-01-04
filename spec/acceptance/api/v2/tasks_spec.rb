@@ -59,7 +59,6 @@ resource 'Tasks' do
       example 'Task [LIST]', document: :entities do
         do_request
         explanation 'List of Tasks associated to current_user'
-
         check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
