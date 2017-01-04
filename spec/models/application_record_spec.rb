@@ -46,4 +46,20 @@ describe ApplicationRecord do
       expect(contact.reload.name).to eq('New Name')
     end
   end
+
+  describe '#updated_in_db_at=' do
+    it 'accepts a Time' do
+      new_time = 1.day.ago
+      contact.updated_in_db_at = new_time
+      expect(contact.updated_in_db_at).to be_a(Time)
+      expect(contact.updated_in_db_at.iso8601).to eq(new_time.iso8601)
+    end
+
+    it 'accepts a String in ISO8601' do
+      new_time = '2016-12-09T17:36:19Z'
+      contact.updated_in_db_at = new_time
+      expect(contact.updated_in_db_at).to be_a(Time)
+      expect(contact.updated_in_db_at.iso8601).to eq(new_time)
+    end
+  end
 end
