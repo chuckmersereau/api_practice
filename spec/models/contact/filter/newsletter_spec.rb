@@ -11,7 +11,7 @@ RSpec.describe Contact::Filter::Newsletter do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(multiple: false,
+      expect(described_class.config([account_list])).to include(multiple: false,
                                                               name: :newsletter,
                                                               options: [{ name: '-- Any --', id: '', placeholder: 'None' },
                                                                         { name: 'None Selected', id: 'none' },

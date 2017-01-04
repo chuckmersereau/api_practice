@@ -6,7 +6,7 @@ describe ApplicationFilterer do
 
   describe '.config' do
     it 'returns an empty array' do
-      expect(described_class.config(account_list)).to eq []
+      expect(described_class.config([account_list])).to eq []
     end
   end
 
@@ -28,7 +28,7 @@ describe ApplicationFilterer do
   describe '#filter' do
     it 'returns the resource scope' do
       resource_scope = Contact.all
-      expect(described_class.new.filter(resource_scope, user)).to eq resource_scope
+      expect(described_class.new.filter(scope: resource_scope, account_lists: [account_list])).to eq resource_scope
     end
   end
 end

@@ -30,7 +30,7 @@ RSpec.describe Contact::Filter::DonationAmount do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(default_selection: '',
+      expect(described_class.config([account_list])).to include(default_selection: '',
                                                               multiple: true,
                                                               name: :donation_amount,
                                                               options: [{ name: '-- Any --', id: '', placeholder: 'None' },

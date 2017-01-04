@@ -26,7 +26,7 @@ RSpec.describe Contact::Filter::MetroArea do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(multiple: true,
+      expect(described_class.config([account_list])).to include(multiple: true,
                                                               name: :metro_area,
                                                               options: [{ name: '-- Any --', id: '', placeholder: 'None' },
                                                                         { name: '-- None --', id: 'none' },

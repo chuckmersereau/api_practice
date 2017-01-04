@@ -1,25 +1,21 @@
 class Contact::Filter::PledgeReceived < Contact::Filter::Base
-  class << self
-    protected
+  def execute_query(contacts, filters)
+    contacts.where(pledge_received: filters[:pledge_received])
+  end
 
-    def execute_query(contacts, filters, _account_lists)
-      contacts.where(pledge_received: filters[:pledge_received])
-    end
+  def title
+    _('Commitment Received')
+  end
 
-    def title
-      _('Commitment Received')
-    end
+  def parent
+    _('Commitment Details')
+  end
 
-    def parent
-      _('Commitment Details')
-    end
+  def type
+    'radio'
+  end
 
-    def type
-      'radio'
-    end
-
-    def custom_options(_account_lists)
-      [{ name: _('Received'), id: 'true' }, { name: _('Not Received'), id: 'false' }]
-    end
+  def custom_options
+    [{ name: _('Received'), id: 'true' }, { name: _('Not Received'), id: 'false' }]
   end
 end

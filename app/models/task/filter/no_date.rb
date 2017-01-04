@@ -1,17 +1,13 @@
 class Task::Filter::NoDate < Task::Filter::Base
-  class << self
-    protected
+  def execute_query(tasks, filters)
+    tasks.where(no_date: filters[:no_date])
+  end
 
-    def execute_query(tasks, filters, _account_lists)
-      tasks.where(no_date: filters[:no_date])
-    end
+  def title
+    _('No Date')
+  end
 
-    def title
-      _('No Date')
-    end
-
-    def type
-      'checkbox'
-    end
+  def type
+    'checkbox'
   end
 end

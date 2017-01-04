@@ -23,7 +23,7 @@ RSpec.describe Contact::Filter::AddressHistoric do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(name: :address_historic,
+      expect(described_class.config([account_list])).to include(name: :address_historic,
                                                               parent: 'Contact Location',
                                                               title: 'Address No Longer Valid',
                                                               type: 'single_checkbox',

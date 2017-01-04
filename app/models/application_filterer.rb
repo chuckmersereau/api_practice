@@ -12,14 +12,15 @@ class ApplicationFilterer
 
   def filter(scope:, account_lists:)
     self.class.filter_classes.each do |klass|
-      scope = klass.query(scope, filters, account_lists) || scope
+      scope = klass.new(account_lists).query(scope, filters) || scope
     end
     scope
   end
 
   def self.config(account_lists)
     filter_classes.map do |klass|
-      klass.config(account_lists)
+      filter = klass.new(account_lists)
+      filter if filter.display_filter_option? && !filter.empty?
     end.compact
   end
 

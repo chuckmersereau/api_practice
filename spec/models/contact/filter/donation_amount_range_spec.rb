@@ -30,7 +30,7 @@ RSpec.describe Contact::Filter::DonationAmountRange do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(default_selection: '',
+      expect(described_class.config([account_list])).to include(default_selection: '',
                                                               multiple: false,
                                                               name: :donation_amount_range,
                                                               options: [{ name: 'Gift Amount Higher Than or Equal To', id: 'min', placeholder: 0 },

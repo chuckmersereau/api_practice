@@ -28,7 +28,7 @@ RSpec.describe Contact::Filter::ContactInfoPhone do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(multiple: false,
+      expect(described_class.config([account_list])).to include(multiple: false,
                                                               name: :contact_info_phone,
                                                               options: [{ name: '-- Any --', id: '', placeholder: 'None' }, { name: 'Yes', id: 'Yes' }, { name: 'No', id: 'No' }],
                                                               parent: 'Contact Information',

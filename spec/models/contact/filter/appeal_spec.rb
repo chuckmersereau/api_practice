@@ -17,7 +17,7 @@ RSpec.describe Contact::Filter::Appeal do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(multiple: true,
+      expect(described_class.config([account_list])).to include(multiple: true,
                                                               name: :appeal,
                                                               options: [{ name: '-- Any --', id: '', placeholder: 'None' },
                                                                         { name: '-- Do not ask --', id: 'no_appeals' },

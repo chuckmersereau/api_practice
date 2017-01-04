@@ -6,7 +6,7 @@ RSpec.describe Contact::Filter::Status do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(default_selection: %w(active null),
+      expect(described_class.config([account_list])).to include(default_selection: %w(active null),
                                                               multiple: true,
                                                               name: :status,
                                                               options: [{ name: '-- All Active --', id: 'active' },

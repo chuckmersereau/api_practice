@@ -22,7 +22,7 @@ class Contact::Filterer < ApplicationFilterer
     Newsletter
     PledgeAmount
     PledgeCurrency
-    PledgeFrequencies
+    PledgeFrequency
     PledgeLateBy
     PledgeReceived
     Referrer

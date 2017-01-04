@@ -30,7 +30,7 @@ RSpec.describe Contact::Filter::Donation do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(default_selection: '',
+      expect(described_class.config([account_list])).to include(default_selection: '',
                                                               multiple: true,
                                                               name: :donation,
                                                               options: [
@@ -59,25 +59,25 @@ RSpec.describe Contact::Filter::Donation do
 
     context 'filter by no gifts' do
       it 'returns only contacts that have never given a donation' do
-        expect(described_class.query(contacts, { donation: ['none'] }, user).to_a).to match_array [contact_three, contact_four]
+        expect(described_class.query(contacts, { donation: ['none'] }, [account_list]).to_a).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by one or more gifts' do
       it 'returns only contacts that have given at least one gift' do
-        expect(described_class.query(contacts, { donation: ['one'] }, user).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: ['one'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by first gift' do
       it 'returns only contacts that have given a first gift' do
-        expect(described_class.query(contacts, { donation: ['first'] }, user).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: ['first'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by last gift' do
       it 'returns only contacts that have given a last gift' do
-        expect(described_class.query(contacts, { donation: ['last'] }, user).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: ['last'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 

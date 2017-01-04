@@ -11,7 +11,7 @@ RSpec.describe Contact::Filter::Church do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(multiple: true,
+      expect(described_class.config([account_list])).to include(multiple: true,
                                                               name: :church,
                                                               options: [{ name: '-- Any --', id: '', placeholder: 'None' },
                                                                         { name: '-- None --', id: 'none' },

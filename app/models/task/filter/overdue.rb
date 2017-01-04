@@ -1,18 +1,14 @@
 class Task::Filter::Overdue < Task::Filter::Base
-  class << self
-    protected
+  def execute_query(tasks, filters)
+    return tasks.overdue if filters[:overdue].to_s == 'true'
+    tasks.where('start_at > ?', Time.current.beginning_of_day)
+  end
 
-    def execute_query(tasks, filters, _account_lists)
-      return tasks.overdue if filters[:overdue].to_s == 'true'
-      tasks.where('start_at > ?', Time.current.beginning_of_day)
-    end
+  def title
+    _('Overdue')
+  end
 
-    def title
-      _('Overdue')
-    end
-
-    def type
-      'checkbox'
-    end
+  def type
+    'checkbox'
   end
 end

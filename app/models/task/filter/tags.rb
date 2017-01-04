@@ -1,17 +1,13 @@
 class Task::Filter::Tags < Task::Filter::Base
-  class << self
-    protected
+  def execute_query(tasks, filters)
+    tasks.tagged_with(filters[:tags])
+  end
 
-    def execute_query(tasks, filters, _account_lists)
-      tasks.tagged_with(filters[:tags])
-    end
+  def title
+    _('Tags')
+  end
 
-    def title
-      _('Tags')
-    end
-
-    def type
-      'multiselect'
-    end
+  def type
+    'multiselect'
   end
 end

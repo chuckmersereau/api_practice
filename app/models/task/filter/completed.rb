@@ -1,17 +1,13 @@
 class Task::Filter::Completed < Task::Filter::Base
-  class << self
-    protected
+  def execute_query(tasks, filters)
+    tasks.where(completed: filters[:completed])
+  end
 
-    def execute_query(tasks, filters, _account_lists)
-      tasks.where(completed: filters[:completed])
-    end
+  def title
+    _('Completed')
+  end
 
-    def title
-      _('Completed')
-    end
-
-    def type
-      'checkbox'
-    end
+  def type
+    'single_checkbox'
   end
 end

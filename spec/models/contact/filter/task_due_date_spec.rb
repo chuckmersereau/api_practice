@@ -16,7 +16,7 @@ RSpec.describe Contact::Filter::TaskDueDate do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list).except(:options)).to include(
+      expect(described_class.config([account_list]).except(:options)).to include(
         default_selection: '',
         multiple: false,
         name: :task_due_date,
