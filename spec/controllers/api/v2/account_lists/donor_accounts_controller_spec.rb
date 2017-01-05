@@ -29,7 +29,7 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
     it 'shows donor accounts from selected contacts' do
       api_login(user)
       create(factory_type)
-      get :index, account_list_id: account_list_id, filters: { contacts: [contact] }
+      get :index, account_list_id: account_list_id, filter: { contacts: [contact] }
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['data'].count).to eq(2)
     end
