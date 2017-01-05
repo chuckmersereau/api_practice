@@ -96,6 +96,8 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def permitted_filters
-    @permitted_filters ||= Task::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym)
+    @permitted_filters ||=
+      Task::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +
+      Task::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym)
   end
 end

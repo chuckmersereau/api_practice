@@ -13,6 +13,6 @@ class Task::Filter::ContactIds < Task::Filter::Base
   end
 
   def custom_options
-    account_lists.collect(&:contacts).flatten.uniq.collect { |contact| { name: contact.to_s, id: contact.id } }
+    account_lists.collect(&:contacts).flatten.uniq.collect { |contact| { name: contact.to_s, id: contact.uuid } }
   end
 end

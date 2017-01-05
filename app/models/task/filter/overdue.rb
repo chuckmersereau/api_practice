@@ -9,6 +9,10 @@ class Task::Filter::Overdue < Task::Filter::Base
   end
 
   def type
-    'checkbox'
+    'single_checkbox'
+  end
+
+  def default_selection
+    nil
   end
 end

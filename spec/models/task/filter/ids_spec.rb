@@ -9,7 +9,7 @@ RSpec.describe Task::Filter::Ids do
   let!(:task_three) { create(:task, account_list_id: account_list.id) }
 
   describe '#query' do
-    let(:tasks) { Task.all }
+    let(:tasks) { account_list.tasks }
 
     context 'no filter params' do
       it 'returns nil' do
