@@ -38,10 +38,6 @@ class Contact::Analytics
     @beginning_of_week ||= Time.current.beginning_of_week
   end
 
-  def end_of_week
-    @end_of_week ||= Time.current.end_of_week
-  end
-
   def fetch_active_contacts_who_have_people_with_anniversaries_this_week
     people_ids = fetch_people_with_anniversaries_this_week_who_are_alive
                  .select(:id)
@@ -57,13 +53,13 @@ class Contact::Analytics
 
     Person.joins(:contact_people)
           .where(contact_people: { contact_id: contact_ids })
-          .with_birthday_between(beginning_of_week, end_of_week)
+          .with_birthday_this_week(beginning_of_week)
           .alive
           .by_birthday
   end
 
   def fetch_people_with_anniversaries_this_week_who_are_alive
-    Person.with_anniversary_between(beginning_of_week, end_of_week)
+    Person.with_anniversary_this_week(beginning_of_week)
           .by_anniversary
           .alive
   end

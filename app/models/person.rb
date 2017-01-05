@@ -1,8 +1,8 @@
 class Person < ApplicationRecord
   include BetweenScopeable
 
-  between_scope_for :anniversary
-  between_scope_for :birthday
+  between_scopes_for :anniversary
+  between_scopes_for :birthday
 
   RELATIONSHIPS_MALE = [_('Husband'), _('Son'), _('Father'), _('Brother'), _('Uncle'), _('Nephew'), _('Cousin (Male)'), _('Grandfather'), _('Grandson')].freeze
   RELATIONSHIPS_FEMALE = [_('Wife'), _('Daughter'), _('Mother'), _('Sister'), _('Aunt'), _('Niece'), _('Cousin (Female)'), _('Grandmother'), _('Granddaughter')].freeze
