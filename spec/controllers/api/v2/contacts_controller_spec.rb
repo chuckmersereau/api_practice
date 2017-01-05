@@ -31,19 +31,11 @@ describe Api::V2::ContactsController, type: :controller do
   describe 'filtering' do
     before { api_login(user) }
 
-    Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).each do |filter|
+    (Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore) + Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore)).each do |filter|
       it "accepts displayable filter #{filter}" do
         get :index, filters: { filter => '' }
         expect(response.status).to eq(200)
         expect(JSON.parse(response.body)['meta']['filters'][filter]).to eq('')
-      end
-    end
-
-    Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore).each do |filter|
-      it "does not accept hidden filter #{filter}" do
-        get :index, filters: { filter => '' }
-        expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)['meta']['filters']).to be_blank
       end
     end
   end
