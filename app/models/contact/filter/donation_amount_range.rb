@@ -20,7 +20,8 @@ class Contact::Filter::DonationAmountRange < Contact::Filter::Base
   end
 
   def custom_options
-    highest_account_donation = account_lists.collect { |account_list| account_list.donations.where.not(amount: nil).pluck(:amount).uniq.sort.last }.flatten.max
+    highest_account_donation =
+      account_lists.collect { |account_list| account_list.donations.where.not(amount: nil).pluck(:amount).uniq.sort.last }.flatten.compact.max
     [{ name: _('Gift Amount Higher Than or Equal To'), id: 'min', placeholder: 0 },
      { name: _('Gift Amount Less Than or Equal To'), id: 'max', placeholder: highest_account_donation }]
   end

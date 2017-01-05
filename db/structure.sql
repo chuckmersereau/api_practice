@@ -1357,9 +1357,9 @@ CREATE TABLE google_integrations (
     email_integration boolean DEFAULT false NOT NULL,
     contacts_integration boolean DEFAULT false NOT NULL,
     contacts_last_synced timestamp without time zone,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -1969,113 +1969,6 @@ CREATE SEQUENCE notifications_id_seq
 --
 
 ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
-
-
---
--- Name: oauth_access_grants; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE oauth_access_grants (
-    id integer NOT NULL,
-    resource_owner_id integer NOT NULL,
-    application_id integer NOT NULL,
-    token character varying(255) NOT NULL,
-    expires_in integer NOT NULL,
-    redirect_uri character varying(255),
-    created_at timestamp without time zone NOT NULL,
-    revoked_at timestamp without time zone,
-    scopes character varying(255)
-);
-
-
---
--- Name: oauth_access_grants_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE oauth_access_grants_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: oauth_access_grants_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE oauth_access_grants_id_seq OWNED BY oauth_access_grants.id;
-
-
---
--- Name: oauth_access_tokens; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE oauth_access_tokens (
-    id integer NOT NULL,
-    resource_owner_id integer,
-    application_id integer,
-    token text NOT NULL,
-    refresh_token character varying(255),
-    expires_in integer,
-    revoked_at timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    scopes character varying(255)
-);
-
-
---
--- Name: oauth_access_tokens_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE oauth_access_tokens_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: oauth_access_tokens_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE oauth_access_tokens_id_seq OWNED BY oauth_access_tokens.id;
-
-
---
--- Name: oauth_applications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE oauth_applications (
-    id integer NOT NULL,
-    name character varying(255) NOT NULL,
-    uid character varying(255) NOT NULL,
-    secret character varying(255) NOT NULL,
-    redirect_uri character varying(255),
-    scopes character varying(255) DEFAULT ''::character varying NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: oauth_applications_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE oauth_applications_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: oauth_applications_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE oauth_applications_id_seq OWNED BY oauth_applications.id;
 
 
 --
@@ -2746,39 +2639,6 @@ CREATE SEQUENCE recurring_recommendation_results_id_seq
 --
 
 ALTER SEQUENCE recurring_recommendation_results_id_seq OWNED BY recurring_recommendation_results.id;
-
-
---
--- Name: reset_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE TABLE reset_logs (
-    id integer NOT NULL,
-    admin_resetting_id integer,
-    resetted_user_id integer,
-    reason character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
-);
-
-
---
--- Name: reset_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE reset_logs_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: reset_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE reset_logs_id_seq OWNED BY reset_logs.id;
 
 
 --
@@ -5043,41 +4903,6 @@ CREATE UNIQUE INDEX index_notifications_on_uuid ON notifications USING btree (uu
 
 
 --
--- Name: index_oauth_access_grants_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_oauth_access_grants_on_token ON oauth_access_grants USING btree (token);
-
-
---
--- Name: index_oauth_access_tokens_on_refresh_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_oauth_access_tokens_on_refresh_token ON oauth_access_tokens USING btree (refresh_token);
-
-
---
--- Name: index_oauth_access_tokens_on_resource_owner_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE INDEX index_oauth_access_tokens_on_resource_owner_id ON oauth_access_tokens USING btree (resource_owner_id);
-
-
---
--- Name: index_oauth_access_tokens_on_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON oauth_access_tokens USING btree (token);
-
-
---
--- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
---
-
-CREATE UNIQUE INDEX index_oauth_applications_on_uid ON oauth_applications USING btree (uid);
-
-
---
 -- Name: index_organizations_on_query_ini_url; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -6026,8 +5851,6 @@ INSERT INTO schema_migrations (version) VALUES ('20160928195843');
 
 INSERT INTO schema_migrations (version) VALUES ('20161007231427');
 
-INSERT INTO schema_migrations (version) VALUES ('20160928174158');
-
 INSERT INTO schema_migrations (version) VALUES ('20161119005933');
 
 INSERT INTO schema_migrations (version) VALUES ('20161128055225');
@@ -6035,148 +5858,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161128055225');
 INSERT INTO schema_migrations (version) VALUES ('20161130200449');
 
 INSERT INTO schema_migrations (version) VALUES ('20161214195836');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004043');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004126');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004128');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004129');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004130');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004131');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004132');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004133');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004134');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004135');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004136');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004137');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004138');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004139');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004140');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004141');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004142');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004143');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004144');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004145');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004146');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004147');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004148');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004149');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004150');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004151');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004152');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004153');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004154');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004155');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004156');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004157');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004158');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004159');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004160');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004161');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004162');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004200');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004201');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004202');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004203');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004205');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004206');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004207');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004208');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004209');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004211');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004212');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004213');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004214');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004215');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004216');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004217');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004218');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004220');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004221');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004222');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004223');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004224');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004225');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004226');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004227');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004228');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004229');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004231');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004232');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004233');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004234');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004235');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004236');
-
-INSERT INTO schema_migrations (version) VALUES ('20161216004239');
 
 INSERT INTO schema_migrations (version) VALUES ('20161216004043');
 
