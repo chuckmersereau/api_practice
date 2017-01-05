@@ -11,18 +11,18 @@ RSpec.describe Contact::Filter::PledgeLateBy do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(multiple: false,
-                                                              name: :pledge_late_by,
-                                                              options: [
-                                                                { name: '-- Any --', id: '', placeholder: 'None' },
-                                                                { name: _('Less than 30 days late'), id: '0_30' },
-                                                                { name: _('More than 30 days late'), id: '30_60' },
-                                                                { name: _('More than 60 days late'), id: '60_90' },
-                                                                { name: _('More than 90 days late'), id: '90' }],
-                                                              parent: 'Commitment Details',
-                                                              title: 'Late By',
-                                                              type: 'radio',
-                                                              default_selection: '')
+      expect(described_class.config([account_list])).to include(multiple: false,
+                                                                name: :pledge_late_by,
+                                                                options: [
+                                                                  { name: '-- Any --', id: '', placeholder: 'None' },
+                                                                  { name: _('Less than 30 days late'), id: '0_30' },
+                                                                  { name: _('More than 30 days late'), id: '30_60' },
+                                                                  { name: _('More than 60 days late'), id: '60_90' },
+                                                                  { name: _('More than 90 days late'), id: '90' }],
+                                                                parent: 'Commitment Details',
+                                                                title: 'Late By',
+                                                                type: 'radio',
+                                                                default_selection: '')
     end
   end
 

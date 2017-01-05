@@ -25,4 +25,15 @@ RSpec.describe Api::V2::TasksController, type: :controller do
   include_examples 'destroy_examples'
 
   include_examples 'index_examples'
+
+  describe 'filtering' do
+    before { api_login(user) }
+    (Task::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore) + Task::Filterer::FILTERS_TO_HIDE.collect(&:underscore)).each do |filter|
+      it "accepts displayable filter #{filter}" do
+        get :index, filter: { filter => '' }
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
+      end
+    end
+  end
 end

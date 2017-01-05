@@ -1,4 +1,4 @@
-class ActsAsTaggableOn::TagSerializer < ActiveModel::Serializer
+class ActsAsTaggableOn::TagSerializer < ApplicationSerializer
   type 'tags'
 
   attribute :name

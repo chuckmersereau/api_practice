@@ -41,12 +41,24 @@ resource 'Tasks' do
     before { api_login(user) }
 
     get '/api/v2/tasks' do
-      response_field :data, 'list of task objects', 'Type' => 'Array[Object]'
+      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
+      parameter 'filters[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '\
+                                            '"Text Message", "Facebook Message", "Letter", "Newsletter", "Pre Call Letter", "Reminder Letter", '\
+                                            '"Support Letter", "Thank", "To Do", "Talk to In Person", or "Prayer Request"',                     required: false
+      parameter 'filters[completed]',       'Filter by Completed; Accepts values "true", or "false"',                                           required: false
+      parameter 'filters[contact_ids][]',   'Filter by Contact IDs; Accepts multiple parameters, with Contact IDs',                             required: false
+      parameter 'filters[date_range]',      'Filter by Date Range; Accepts values "last_month", "last_year", "last_two_years", "last_week", '\
+                                            '"overdue", "today", "tomorrow", "future", and "upcoming"',                                         required: false
+      parameter 'filters[no_date]',         'Filter by No Date; Accepts values "true", or "false"',                                             required: false
+      parameter 'filters[overdue]',         'Filter by Overdue; Accepts values "true", or "false"',                                             required: false
+      parameter 'filters[starred]',         'Filter by Starred; Accepts values "true", or "false"',                                             required: false
+      parameter 'filters[tags][]',          'Filter by Tags; Accepts multiple parameters, with text values',                                    required: false
+
+      response_field :data,                 'list of task objects', 'Type' => 'Array[Object]'
 
       example 'Task [LIST]', document: :entities do
         do_request
         explanation 'List of Tasks associated to current_user'
-
         check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end

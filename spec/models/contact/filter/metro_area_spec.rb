@@ -26,15 +26,15 @@ RSpec.describe Contact::Filter::MetroArea do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(multiple: true,
-                                                              name: :metro_area,
-                                                              options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                        { name: '-- None --', id: 'none' },
-                                                                        { name: 'My Metro', id: 'My Metro' }],
-                                                              parent: 'Contact Location',
-                                                              title: 'Metro Area',
-                                                              type: 'multiselect',
-                                                              default_selection: '')
+      expect(described_class.config([account_list])).to include(multiple: true,
+                                                                name: :metro_area,
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
+                                                                          { name: '-- None --', id: 'none' },
+                                                                          { name: 'My Metro', id: 'My Metro' }],
+                                                                parent: 'Contact Location',
+                                                                title: 'Metro Area',
+                                                                type: 'multiselect',
+                                                                default_selection: '')
     end
   end
 

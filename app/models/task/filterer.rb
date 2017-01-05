@@ -1,15 +1,16 @@
 class Task::Filterer < ApplicationFilterer
   FILTERS_TO_DISPLAY = %w(
-    ContactIds
-    Completed
     ActivityType
+    Completed
+    ContactIds
   ).freeze
 
   FILTERS_TO_HIDE = %w(
-    Overdue
-    Tags
-    Starred
-    NoDate
     DateRange
+    NoDate
+    Overdue
+    Starred
+    Tags
+    Ids
   ).freeze
 end

@@ -1,23 +1,19 @@
 class Contact::Filter::Appeal < Contact::Filter::Base
-  class << self
-    protected
+  def execute_query(contacts, filters)
+    contacts = contacts.where(no_appeals: true) if filters[:appeal].delete('no_appeals')
+    contacts = contacts.where(appeals: { uuid: filters[:appeal] }).includes(:appeals).uniq if filters[:appeal].present?
+    contacts
+  end
 
-    def execute_query(contacts, filters, _account_list)
-      contacts = contacts.where(no_appeals: true) if filters[:appeal].delete('no_appeals')
-      contacts = contacts.where('appeal_contacts.appeal_id' => filters[:appeal]).includes(:appeals).uniq if filters[:appeal].present?
-      contacts
-    end
+  def title
+    _('Appeal')
+  end
 
-    def title
-      _('Appeal')
-    end
+  def type
+    'multiselect'
+  end
 
-    def type
-      'multiselect'
-    end
-
-    def custom_options(account_list)
-      [{ name: '-- Do not ask --', id: 'no_appeals' }] + account_list.appeals.map { |a| { name: a.name, id: a.id } }
-    end
+  def custom_options
+    [{ name: '-- Do not ask --', id: 'no_appeals' }] + account_lists.map(&:appeals).flatten.uniq.map { |a| { name: a.name, id: a.id } }
   end
 end

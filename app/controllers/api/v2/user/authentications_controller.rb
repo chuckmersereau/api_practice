@@ -13,7 +13,7 @@ class Api::V2::User::AuthenticationsController < Api::V2Controller
   protected
 
   def load_user
-    @user ||= User.from_access_token(params[:access_token])
+    @user ||= ::User.from_access_token(params[:access_token])
     raise Exceptions::AuthenticationError unless @user
     @user
   end

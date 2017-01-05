@@ -2,7 +2,7 @@ class Api::V1::ContactsController < Api::V1::BaseController
   def index
     order = params[:order] || 'contacts.name'
 
-    filtered_contacts = Contact::Filterer.new(params[:filters]).filter(contacts, current_account_list)
+    filtered_contacts = Contact::Filterer.new(params[:filters]).filter(scope: contacts, account_lists: [current_account_list])
     inactivated = contacts.inactive.where('updated_at > ?', Time.at(params[:since].to_i)).pluck(:id)
 
     filtered_contacts = add_includes_and_order(filtered_contacts, order: order)
@@ -86,7 +86,7 @@ class Api::V1::ContactsController < Api::V1::BaseController
 
   def count
     filtered_contacts = if params[:filters].present?
-                          Contact::Filterer.new(params[:filters]).filter(contacts, current_account_list)
+                          Contact::Filterer.new(params[:filters]).filter(scope: contacts, account_lists: [current_account_list])
                         else
                           contacts.active
                         end

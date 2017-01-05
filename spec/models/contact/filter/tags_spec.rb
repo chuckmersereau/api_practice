@@ -11,7 +11,7 @@ RSpec.describe Contact::Filter::Tags do
 
   describe '#config' do
     it 'does not have config' do
-      expect(described_class.config(account_list)).to eq(nil)
+      expect(described_class.config([account_list])).to eq(nil)
     end
   end
 

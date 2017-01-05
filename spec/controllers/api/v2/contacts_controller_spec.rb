@@ -27,4 +27,16 @@ describe Api::V2::ContactsController, type: :controller do
   include_examples 'update_examples'
 
   include_examples 'destroy_examples'
+
+  describe 'filtering' do
+    before { api_login(user) }
+
+    (Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore) + Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore)).each do |filter|
+      it "accepts displayable filter #{filter}" do
+        get :index, filter: { filter => '' }
+        expect(response.status).to eq(200)
+        expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
+      end
+    end
+  end
 end

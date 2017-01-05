@@ -73,6 +73,48 @@ resource 'Contacts' do
     before { api_login(user) }
 
     get '/api/v2/contacts' do
+      parameter 'filters[account_list_id]',            'Filter by Account List; Accepts Account List ID',                                                     required: false
+      parameter 'filters[address_historic]',           'Filter by Address No Longer Valid; Accepts values "true", or "false"',                                required: false
+      parameter 'filters[appeal][]',                   'Filter by Appeal; Accepts multiple parameters, with value "no_appeals", or an appeal ID',             required: false
+      parameter 'filters[church][]',                   'Filter by Church; Accepts multiple parameters, with value "none", or a church name',                  required: false
+      parameter 'filters[city][]',                     'Filter by City; Accepts multiple parameters, with value "none", or a city name',                      required: false
+      parameter 'filters[contact_info_addr]',          'Filter by Address; Accepts values "Yes", or "No"',                                                    required: false
+      parameter 'filters[contact_info_email]',         'Filter by Email; Accepts values "Yes", or "No"',                                                      required: false
+      parameter 'filters[contact_info_facebook]',      'Filter by Facebook Profile; Accepts values "Yes", or "No"',                                           required: false
+      parameter 'filters[contact_info_mobile]',        'Filter by Mobile Phone; Accepts values "Yes", or "No"',                                               required: false
+      parameter 'filters[contact_info_phone]',         'Filter by Home Phone; Accepts values "Yes", or "No"',                                                 required: false
+      parameter 'filters[contact_info_work_phone]',    'Filter by Work Phone; Accepts values "Yes", or "No"',                                                 required: false
+      parameter 'filters[contact_type][]',             'Filter by Type; Accepts multiple parameters, with values "person", and "company"',                    required: false
+      parameter 'filters[country][]',                  'Filter by Country; Accepts multiple parameters, with values "none", or a country',                    required: false
+      parameter 'filters[donation][]',                 'Filter by Gift Options; Accepts multiple parameters, with values "none", "one", "first", and "last"', required: false
+      parameter 'filters[donation_amount][]',          'Filter by Exact Gift Amount; Accepts multiple parameters, with values like "9.99"',                   required: false
+      parameter 'filters[donation_amount_range][min]', 'Filter by Gift Amount Range, Minimum; Accepts values like "9.99"',                                    required: false
+      parameter 'filters[donation_amount_range][max]', 'Filter by Gift Amount Range, Maximum; Accepts values like "9.99"',                                    required: false
+      parameter 'filters[donation_date]',              'Filter by Gift Date; Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',              required: false
+      parameter 'filters[likely][]',                   'Filter by Likely To Give; Accepts multiple parameters, with values "none", "Least Likely", "Likely", '\
+                                                       'and "Most Likely"',                                                                                   required: false
+      parameter 'filters[locale][]',                   'Filter by Language; Accepts multiple parameters,',                                                    required: false
+      parameter 'filters[metro_area][]',               'Filter by Metro Area; Accepts multiple parameters, with values "none", or a metro area name',         required: false
+      parameter 'filters[newsletter]',                 'Filter by Newsletter Recipients; Accepts values "none", "all", "address", "email", and "both"',       required: false
+      parameter 'filters[pledge_amount][]',            'Filter by Commitment Amount; Accepts multiple parameters, with values like "100.0"',                  required: false
+      parameter 'filters[pledge_currency][]',          'Filter by Commitment Currency; Accepts multiple parameters, with values like "USD"',                  required: false
+      parameter 'filters[pledge_frequencies][]',       'Filter by Commitment Frequency; Accepts multiple parameters, with numeric values like "0.23076923076923" (Weekly), '\
+                                                       '"0.46153846153846" (Every 2 Weeks), "1.0" (Monthly), "2.0" (Every 2 Months), "3.0", "4.0", "6.0", "12.0" (Yearly), '\
+                                                       'and "24.0" (Every 2 Years)',                                                                          required: false
+      parameter 'filters[pledge_late_by]',             'Filter by Late By; Accepts values "", "0_30" (Less than 30 days late), "30_60" (More than 30 days late), '\
+                                                       '"60_90" (More than 60 days late), or "90" (More than 90 days late)',                                  required: false
+      parameter 'filters[pledge_received]',            'Filter by Commitment Received; Accepts values "true", or "false"',                                    required: false
+      parameter 'filters[referrer][]',                 'Filter by Referrer; Accepts multiple parameters, with values "none", "any", or a Contact ID',         required: false
+      parameter 'filters[region][]',                   'Filter by Region; Accepts multiple parameters, with values "none", or a region name',                 required: false
+      parameter 'filters[related_task_action][]',      'Filter by Action; Accepts multiple parameters, with values "null", or an activity type like "Call"',  required: false
+      parameter 'filters[state][]',                    'Filter by State; Accepts multiple parameters, with values "none", or a state',                        required: false
+      parameter 'filters[status][]',                   'Filter by Status; Accepts multiple parameters, with values "active", "hidden", "null", "Never Contacted", '\
+                                                       '"Ask in Future", "Cultivate Relationship", "Contact for Appointment", "Appointment Scheduled", '\
+                                                       '"Call for Decision", "Partner - Financial", "Partner - Special", "Partner - Pray", "Not Interested", '\
+                                                       '"Unresponsive", "Never Ask", "Research Abandoned", and "Expired Referral"',                           required: false
+      parameter 'filters[task_due_date]',              'Filter by Due Date; Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',               required: false
+      parameter 'filters[timezone][]',                 'Filter by Timezone; Accepts multiple parameters,',                                                    required: false
+
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
       example 'Contact [LIST]', document: :entities do

@@ -1,6 +1,6 @@
 class Api::V2::TasksController < Api::V2Controller
   def index
-    authorize load_account_list, :show? if filter_params[:account_list_id]
+    authorize_index
     load_tasks
     render json: @tasks, meta: meta_hash(@tasks), include: include_params, fields: field_params
   end
@@ -35,14 +35,21 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def load_tasks
-    @tasks = task_scope.where(filter_params)
-                       .reorder(sorting_param)
-                       .page(page_number_param)
-                       .per(per_page_param)
+    @tasks = Task::Filterer.new(filter_params)
+                           .filter(scope: task_scope, account_lists: account_lists)
+                           .reorder(sorting_param)
+                           .page(page_number_param)
+                           .per(per_page_param)
   end
 
   def load_task
     @task ||= Task.find_by!(uuid: params[:id])
+  end
+
+  def account_lists
+    return @account_lists if @account_lists
+    return @account_lists = current_user.account_lists if filter_params[:account_list_id].blank?
+    @account_lists = [current_user.account_lists.find_by!(uuid: filter_params[:account_list_id])]
   end
 
   def render_task
@@ -77,18 +84,20 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def authorize_task
-    authorize @task
+    authorize(@task)
+  end
+
+  def authorize_index
+    account_lists.each { |account_list| authorize(account_list, :show?) }
   end
 
   def task_scope
-    Task.that_belong_to(current_user)
-  end
-
-  def load_account_list
-    @account_list ||= AccountList.find(params[:account_list_id])
+    Task.where(account_list_id: account_lists.collect(&:id))
   end
 
   def permitted_filters
-    [:account_list_id]
+    @permitted_filters ||=
+      Task::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +
+      Task::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym)
   end
 end

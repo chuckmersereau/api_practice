@@ -1,17 +1,17 @@
 class Task::Filter::Starred < Task::Filter::Base
-  class << self
-    protected
+  def execute_query(tasks, filters)
+    tasks.where(starred: filters[:starred])
+  end
 
-    def execute_query(tasks, filters, _account_list)
-      tasks.where(starred: filters[:starred])
-    end
+  def title
+    _('Starred')
+  end
 
-    def title
-      _('Starred')
-    end
+  def type
+    'single_checkbox'
+  end
 
-    def type
-      'checkbox'
-    end
+  def default_selection
+    nil
   end
 end

@@ -11,16 +11,16 @@ RSpec.describe Contact::Filter::Church do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(multiple: true,
-                                                              name: :church,
-                                                              options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                        { name: '-- None --', id: 'none' },
-                                                                        { name: 'First Pedestrian Church', id: 'First Pedestrian Church' },
-                                                                        { name: 'My Church', id: 'My Church' }],
-                                                              parent: 'Contact Details',
-                                                              title: 'Church',
-                                                              type: 'multiselect',
-                                                              default_selection: '')
+      expect(described_class.config([account_list])).to include(multiple: true,
+                                                                name: :church,
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
+                                                                          { name: '-- None --', id: 'none' },
+                                                                          { name: 'First Pedestrian Church', id: 'First Pedestrian Church' },
+                                                                          { name: 'My Church', id: 'My Church' }],
+                                                                parent: 'Contact Details',
+                                                                title: 'Church',
+                                                                type: 'multiselect',
+                                                                default_selection: '')
     end
   end
 

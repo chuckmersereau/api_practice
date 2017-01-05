@@ -30,18 +30,18 @@ RSpec.describe Contact::Filter::Donation do
 
   describe '#config' do
     it 'returns expected config' do
-      expect(described_class.config(account_list)).to include(default_selection: '',
-                                                              multiple: true,
-                                                              name: :donation,
-                                                              options: [
-                                                                { name: '-- Any --', id: '', placeholder: 'None' },
-                                                                { name: 'No Gifts', id: 'none' },
-                                                                { name: 'One or More Gifts', id: 'one' },
-                                                                { name: 'First Gift', id: 'first' },
-                                                                { name: 'Last Gift', id: 'last' }],
-                                                              parent: 'Gift Details',
-                                                              title: 'Gift Options',
-                                                              type: 'multiselect')
+      expect(described_class.config([account_list])).to include(default_selection: '',
+                                                                multiple: true,
+                                                                name: :donation,
+                                                                options: [
+                                                                  { name: '-- Any --', id: '', placeholder: 'None' },
+                                                                  { name: 'No Gifts', id: 'none' },
+                                                                  { name: 'One or More Gifts', id: 'one' },
+                                                                  { name: 'First Gift', id: 'first' },
+                                                                  { name: 'Last Gift', id: 'last' }],
+                                                                parent: 'Gift Details',
+                                                                title: 'Gift Options',
+                                                                type: 'multiselect')
     end
   end
 
@@ -59,25 +59,25 @@ RSpec.describe Contact::Filter::Donation do
 
     context 'filter by no gifts' do
       it 'returns only contacts that have never given a donation' do
-        expect(described_class.query(contacts, { donation: ['none'] }, account_list).to_a).to match_array [contact_three, contact_four]
+        expect(described_class.query(contacts, { donation: ['none'] }, [account_list]).to_a).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by one or more gifts' do
       it 'returns only contacts that have given at least one gift' do
-        expect(described_class.query(contacts, { donation: ['one'] }, account_list).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: ['one'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by first gift' do
       it 'returns only contacts that have given a first gift' do
-        expect(described_class.query(contacts, { donation: ['first'] }, account_list).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: ['first'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by last gift' do
       it 'returns only contacts that have given a last gift' do
-        expect(described_class.query(contacts, { donation: ['last'] }, account_list).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: ['last'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 
@@ -86,11 +86,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: ['none'],
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, account_list).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
         expect(Contact::Filterer.new(
           donation: ['none'],
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, account_list).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
       end
     end
 
@@ -99,11 +99,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: ['one'],
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, account_list).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
           donation: ['one'],
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, account_list).to_a).to match_array [contact_two]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_two]
       end
     end
 
@@ -112,11 +112,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: ['first'],
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, account_list).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
           donation: ['first'],
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, account_list).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
       end
     end
 
@@ -125,11 +125,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: ['last'],
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, account_list).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
           donation: ['last'],
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
-        ).filter(contacts, account_list).to_a).to match_array [contact_two]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_two]
       end
     end
   end

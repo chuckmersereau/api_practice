@@ -12,7 +12,6 @@ Rails.application.routes.draw do
             resources :designation_accounts, only: [:index, :show]
             resources :donations, only: [:index, :show, :create, :update]
             resources :donor_accounts, only: [:index, :show]
-            resources :filters, only: [:index]
             resources :imports, only: [:show, :create]
             resources :invites, only: [:index, :show, :create, :destroy]
 
@@ -53,17 +52,26 @@ Rails.application.routes.draw do
                 resources :websites, only: [:index, :show, :create, :update, :destroy]
               end
             end
-
             resources :referrals, only: [:index, :show, :create, :update, :destroy]
             resources :referrers, only: [:index]
             resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
+          end
+          collection do
+            scope module: :contacts do
+              resources :filters, only: :index
+            end
           end
         end
 
         resources :tasks do
           scope module: :tasks do
-            resources :analytics, only: :index
             resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
+          end
+          collection do
+            scope module: :tasks do
+              resources :analytics, only: :index
+              resources :filters, only: :index
+            end
           end
         end
 
