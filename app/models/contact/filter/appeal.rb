@@ -14,6 +14,6 @@ class Contact::Filter::Appeal < Contact::Filter::Base
   end
 
   def custom_options
-    [{ name: '-- Do not ask --', id: 'no_appeals' }] + account_lists.map(&:appeals).flatten.uniq.map { |a| { name: a.name, id: a.id } }
+    [{ name: '-- Do not ask --', id: 'no_appeals' }] + account_lists.map(&:appeals).flatten.uniq.map { |a| { name: a.name, id: a.uuid } }
   end
 end

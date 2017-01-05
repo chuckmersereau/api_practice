@@ -21,6 +21,6 @@ class Contact::Filter::Referrer < Contact::Filter::Base
       account_lists.map { |account_list| account_list.contacts.with_referrals.order('name') }
                    .flatten
                    .uniq
-                   .collect { |c| { name: c.name, id: c.id } }
+                   .collect { |c| { name: c.name, id: c.uuid } }
   end
 end
