@@ -7,7 +7,7 @@ RSpec.describe Task::Filter::DateRange do
   let!(:task_last_week) { create(:task, account_list: account_list, completed: true, completed_at: 1.week.ago) }
   let!(:task_last_month) { create(:task, account_list: account_list, completed: true, completed_at: 1.month.ago) }
   let!(:task_last_year) { create(:task, account_list: account_list, completed: true, completed_at: 1.year.ago) }
-  let!(:task_last_two_years) { create(:task, account_list: account_list, completed: true, completed_at: 2.year.ago) }
+  let!(:task_last_two_years) { create(:task, account_list: account_list, completed: true, completed_at: 2.years.ago) }
   let!(:task_overdue) { create(:task, account_list: account_list, completed: false, start_at: 1.day.ago) }
   let!(:task_today) { create(:task, account_list: account_list, completed: false, start_at: 1.minute.from_now) }
   let!(:task_tomorrow) { create(:task, account_list: account_list, completed: false, start_at: 1.day.from_now) }
@@ -15,7 +15,6 @@ RSpec.describe Task::Filter::DateRange do
   let!(:task_upcoming) { create(:task, account_list: account_list, completed: false, start_at: 2.days.from_now) }
 
   describe '#query' do
-
     let(:tasks) { account_list.tasks }
 
     context 'no filter params' do
