@@ -32,7 +32,7 @@ RSpec.describe Api::V2::TasksController, type: :controller do
       it "accepts displayable filter #{filter}" do
         get :index, filter: { filter => '' }
         expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)['meta']['filters'][filter]).to eq('')
+        expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
       end
     end
   end

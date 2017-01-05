@@ -48,7 +48,7 @@ class Api::V2Controller < ApiController
     {
       pagination: pagination_meta_params(resources),
       sort: sorting_param,
-      filters: filter_params
+      filter: filter_params
     }
   end
 
