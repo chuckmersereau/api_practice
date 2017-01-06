@@ -20,7 +20,7 @@ RSpec.describe Contact::Filter::Referrer do
                                                                 options: [{ name: '-- Any --', id: '', placeholder: 'None' },
                                                                           { name: '-- None --', id: 'none' },
                                                                           { name: '-- Has referrer --', id: 'any' },
-                                                                          { name: contact_one.name, id: contact_one.uuiid }],
+                                                                          { name: contact_one.name, id: contact_one.uuid }],
                                                                 parent: nil,
                                                                 title: 'Referrer',
                                                                 type: 'multiselect',
