@@ -235,14 +235,23 @@ RSpec.shared_examples 'destroy_examples' do
   end
 end
 
-RSpec.shared_examples 'index_examples' do
+RSpec.shared_examples 'index_examples' do |options = {}|
+  options[:except] ||= []
+
   include_context 'common_variables'
 
   let(:active_record_association) { ActiveRecord::Relation }
 
   describe '#index' do
-    include_examples 'including related resources examples', action: :index
-    include_examples 'sparse fieldsets examples', action: :index
+    unless options[:except].include?(:includes)
+      include_examples 'including related resources examples', action: :index
+    end
+    unless options[:except].include?(:sparse_fieldsets)
+      include_examples 'sparse fieldsets examples', action: :index
+    end
+    unless options[:except].include?(:sorting)
+      include_examples 'sorting examples', action: :index
+    end
 
     before do
       resource.update(created_at: 2.days.ago)
@@ -274,26 +283,6 @@ RSpec.shared_examples 'index_examples' do
         get :index, parent_param
         expect(response.status).to eq(403)
       end
-    end
-
-    it 'sorts resources if sorting_param is in list of permitted sorts' do
-      api_login(user)
-      get :index, parent_param_if_needed.merge(sort: 'created_at DESC')
-
-      expect do
-        get :index, parent_param_if_needed.merge(sort: 'created_at ASC')
-      end.to change { JSON.parse(response.body)['data'].first['id'] }
-
-      expect(JSON.parse(response.body)['meta']['sort']).to eq('created_at ASC')
-    end
-
-    it 'does not sort resources if sorting_param is not in list of permitted sorts' do
-      api_login(user)
-      get :index, parent_param_if_needed.merge(sort: 'id DESC')
-      expect do
-        get :index, parent_param_if_needed.merge(sort: 'id ASC')
-      end.not_to change { JSON.parse(response.body)['data'].first['id'] }
-      expect(JSON.parse(response.body)['meta']['sort']).to be_nil
     end
 
     it 'paginates differently when specified in params' do
@@ -402,5 +391,27 @@ RSpec.shared_examples 'sparse fieldsets examples' do |options|
       expect(response.status).to eq(expected_response_code)
       expect(response_attributes.keys).to match_array(example_attributes)
     end
+  end
+end
+
+RSpec.shared_examples 'sorting examples' do |options|
+  it 'sorts resources if sorting_param is in list of permitted sorts' do
+    api_login(user)
+    get options[:action], parent_param_if_needed.merge(sort: 'created_at DESC')
+
+    expect do
+      get options[:action], parent_param_if_needed.merge(sort: 'created_at ASC')
+    end.to change { JSON.parse(response.body)['data'].first['id'] }
+
+    expect(JSON.parse(response.body)['meta']['sort']).to eq('created_at ASC')
+  end
+
+  it 'does not sort resources if sorting_param is not in list of permitted sorts' do
+    api_login(user)
+    get options[:action], parent_param_if_needed.merge(sort: 'id DESC')
+    expect do
+      get options[:action], parent_param_if_needed.merge(sort: 'id ASC')
+    end.not_to change { JSON.parse(response.body)['data'].first['id'] }
+    expect(JSON.parse(response.body)['meta']['sort']).to be_nil
   end
 end
