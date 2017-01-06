@@ -15,6 +15,8 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   let(:incorrect_attributes) { nil }
   let(:factory_type) { :person }
 
+  let(:resource_scope) { contact.people }
+
   before do
     create(:email_address, person: resource) # Test inclusion of related resources.
   end

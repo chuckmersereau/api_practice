@@ -45,6 +45,10 @@ RSpec.shared_examples 'common_variables' do
       full_update_attributes[:data][:attributes].values.first
     end
   end
+
+  def resources_count
+    defined?(reference_scope) ? reference_scope.count : resource.class.count
+  end
 end
 
 RSpec.shared_examples 'show_examples' do
@@ -54,11 +58,14 @@ RSpec.shared_examples 'show_examples' do
     include_examples 'including related resources examples', action: :show
     include_examples 'sparse fieldsets examples', action: :show
 
-    it 'shows resource to users that are signed in' do
+    it 'shows resource to users that are signed in with attributes and relationships properly displaying uuid' do
       api_login(user)
       get :show, full_params
       expect(response.status).to eq(200)
       expect(response.body).to include(resource.send(reference_key).to_s) if reference_key
+      if (relationships = JSON.parse(response.body)['data']['relationships'])
+        relationships.keys.each { |key| expect_uuids_in_relationships(relationships[key]['data']) }
+      end
     end
 
     it 'does not show resource to users that do not own the resource' do
@@ -72,6 +79,14 @@ RSpec.shared_examples 'show_examples' do
     it 'does not show resource to users that are not signed in' do
       get :show, full_params
       expect(response.status).to eq(401)
+    end
+  end
+
+  def expect_uuids_in_relationships(relationship_data)
+    if relationship_data.is_a?(Array)
+      relationship_data.each { |related| expect(related['id'].length).to eq(36) }
+    elsif relationship_data
+      expect(relationship_data['id'].length).to eq(36)
     end
   end
 end
@@ -165,7 +180,7 @@ RSpec.shared_examples 'create_examples' do
       api_login(user)
       expect do
         post :create, full_correct_attributes
-      end.to change { resource.class.count }.by(1)
+      end.to change { resources_count }.by(1)
       expect(response.status).to eq(201)
     end
 
@@ -174,7 +189,7 @@ RSpec.shared_examples 'create_examples' do
         api_login(user)
         expect do
           post :create, full_unpermitted_attributes
-        end.not_to change { resource.class.count }
+        end.not_to change { resources_count }
         expect(response.status).to eq(403)
         expect(response_errors).to be_present
       end
@@ -186,7 +201,7 @@ RSpec.shared_examples 'create_examples' do
 
         expect do
           post :create, full_incorrect_attributes
-        end.not_to change { resource.class.count }
+        end.not_to change { resources_count }
 
         expect(response.status).to eq(400)
         expect(response.body).to include('errors')
@@ -196,7 +211,7 @@ RSpec.shared_examples 'create_examples' do
     it 'does not create resource for users that are not signed in' do
       expect do
         post :create, full_correct_attributes
-      end.not_to change { resource.class.count }
+      end.not_to change { resources_count }
 
       expect(response.status).to eq(401)
       expect(response_errors).to be_present

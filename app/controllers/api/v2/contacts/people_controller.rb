@@ -96,7 +96,11 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def save_person
-    @person.save(context: persistence_context)
+    ActiveRecord::Base.transaction do
+      person_save_result = @person.save(context: persistence_context)
+      @person.contact_people.create(contact: @contact) if action_name == 'create'
+      person_save_result
+    end
   end
 
   def pundit_user
