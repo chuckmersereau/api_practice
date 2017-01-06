@@ -37,6 +37,10 @@ Rails.application.routes.draw do
           end
         end
 
+        namespace :constants do
+          resources :locales, only: [:index]
+        end
+
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do
           scope module: :contacts do
             resources :addresses, only: [:index, :show, :create, :update, :destroy]
