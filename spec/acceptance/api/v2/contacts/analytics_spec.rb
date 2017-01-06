@@ -110,7 +110,7 @@ resource 'Analytics' do
     context 'when specifying an `account_list_id`' do
       # show
       get '/api/v2/contacts/analytics' do
-        parameter 'filters[account_list_id]', 'An Account List ID to scope the analytics to'
+        parameter 'filter[account_list_id]', 'An Account List ID to scope the analytics to'
 
         with_options scope: [:data, :attributes] do
           response_field 'first_gift_not_received_count', 'First Gift Not Received Count', 'Type' => 'Number'
@@ -120,7 +120,7 @@ resource 'Analytics' do
 
         example 'Contact Analytics [GET]', document: :contacts do
           explanation "Viewing Analytical information for a specific Account List's Contacts"
-          do_request filters: { account_list_id: alternate_account_list.id }
+          do_request filter: { account_list_id: alternate_account_list.id }
 
           check_resource(additional_attribute_keys)
           expect(resource_object.keys).to match_array expected_attribute_keys
