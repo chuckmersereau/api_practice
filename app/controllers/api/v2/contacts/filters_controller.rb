@@ -11,12 +11,6 @@ class Api::V2::Contacts::FiltersController < Api::V2Controller
     @filters ||= Contact::Filterer.config(account_lists)
   end
 
-  def account_lists
-    return @account_lists if @account_lists
-    return @account_lists = current_user.account_lists if filter_params[:account_list_id].blank?
-    @account_lists = [current_user.account_lists.find_by!(uuid: filter_params[:account_list_id])]
-  end
-
   def authorize_index
     account_lists.each { |account_list| authorize(account_list, :show?) }
   end

@@ -46,12 +46,6 @@ class Api::V2::ContactsController < Api::V2Controller
     @contact ||= Contact.find_by!(uuid: params[:id])
   end
 
-  def account_lists
-    return @account_lists if @account_lists
-    return @account_lists = current_user.account_lists if filter_params[:account_list_id].blank?
-    @account_lists = [current_user.account_lists.find_by!(uuid: filter_params[:account_list_id])]
-  end
-
   def authorize_contact
     authorize @contact
   end

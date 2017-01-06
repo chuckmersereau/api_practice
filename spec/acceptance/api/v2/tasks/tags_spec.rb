@@ -6,8 +6,9 @@ resource 'Tags' do
 
   let(:resource_type) { 'tasks' }
   let!(:user)         { create(:user_with_full_account) }
+  let!(:account_list) { user.account_lists.first }
 
-  let!(:task)   { create(:task, account_list: user.account_lists.first) }
+  let!(:task)   { create(:task, account_list: account_list) }
   let(:task_id) { task.uuid }
 
   let(:tag_name) { 'new_tag' }
@@ -16,6 +17,21 @@ resource 'Tags' do
   let(:form_data)      { build_data(new_tag_params) }
 
   before { api_login(user) }
+
+  get '/api/v2/tasks/tags' do
+    let!(:account_list_two) { create(:account_list) }
+    let!(:task_one) { create(:task, account_list: account_list, tag_list: [tag_name]) }
+    let!(:task_two) { create(:task, account_list: account_list_two, tag_list: [tag_name]) }
+    before { user.account_lists << account_list_two }
+    example 'Tag [LIST]', document: :tasks do
+      explanation 'List Task Tags'
+      do_request
+      expect(resource_data.count).to eq 1
+      expect(first_or_only_item['type']).to eq 'tags'
+      expect(resource_object.keys).to match_array(%w(name))
+      expect(response_status).to eq 200
+    end
+  end
 
   post '/api/v2/tasks/:task_id/tags' do
     with_options scope: [:data, :attributes] do

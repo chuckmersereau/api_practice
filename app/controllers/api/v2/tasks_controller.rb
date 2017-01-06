@@ -46,12 +46,6 @@ class Api::V2::TasksController < Api::V2Controller
     @task ||= Task.find_by!(uuid: params[:id])
   end
 
-  def account_lists
-    return @account_lists if @account_lists
-    return @account_lists = current_user.account_lists if filter_params[:account_list_id].blank?
-    @account_lists = [current_user.account_lists.find_by!(uuid: filter_params[:account_list_id])]
-  end
-
   def render_task
     render json: @task,
            status: success_status,

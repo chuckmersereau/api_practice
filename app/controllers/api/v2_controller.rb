@@ -20,6 +20,10 @@ class Api::V2Controller < ApiController
     @current_user ||= User.find(jwt_payload['user_id']) if jwt_payload
   end
 
+  def account_lists
+    @account_lists ||= fetch_account_lists
+  end
+
   private
 
   def jwt_authorize!
@@ -69,5 +73,10 @@ class Api::V2Controller < ApiController
 
   def data_attributes
     params[:data][:attributes]
+  end
+
+  def fetch_account_lists
+    return current_user.account_lists unless params[:filter] && params[:filter][:account_list_id]
+    [current_user.account_lists.find_by!(uuid: params[:filter][:account_list_id])]
   end
 end

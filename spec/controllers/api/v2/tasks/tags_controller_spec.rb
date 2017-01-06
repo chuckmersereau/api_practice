@@ -3,13 +3,33 @@ require 'support/shared_controller_examples'
 
 RSpec.describe Api::V2::Tasks::TagsController, type: :controller do
   let(:user) { create(:user_with_account) }
+  let(:account_list) { user.account_lists.first }
   let(:first_tag) { 'tag_one' }
-  let(:task) { create(:task, account_list: user.account_lists.first, tag_list: [first_tag]) }
+  let(:task) { create(:task, account_list: account_list, tag_list: [first_tag]) }
   let(:second_tag) { 'tag_two' }
   let(:correct_attributes) { { name: second_tag } }
   let(:incorrect_attributes) { { name: nil } }
   let(:full_correct_attributes) { { task_id: task.uuid, data: { attributes: correct_attributes } } }
   let(:full_incorrect_attributes) { { task_id: task.uuid, data: { attributes: incorrect_attributes } } }
+
+  describe '#index' do
+    let!(:account_list_two) { create(:account_list) }
+    let!(:task_one) { create(:task, account_list: account_list, tag_list: [first_tag]) }
+    let!(:task_two) { create(:task, account_list: account_list_two, tag_list: [first_tag]) }
+    before { user.account_lists << account_list_two }
+    it 'lists resources for users that are signed in' do
+      api_login(user)
+      get :index
+      expect(JSON.parse(response.body)['data'].length).to eq 1
+      expect(JSON.parse(response.body)['data'].first['attributes']['name']).to eq first_tag
+      expect(response.status).to eq(200)
+    end
+
+    it 'does not list resources for users that are not signed in' do
+      get :index
+      expect(response.status).to eq(401)
+    end
+  end
 
   describe '#create' do
     it 'creates resource for users that are signed in' do

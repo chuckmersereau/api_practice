@@ -1,4 +1,13 @@
 class Api::V2::Contacts::TagsController < Api::V2Controller
+  def index
+    authorize_index
+    load_tags
+    render json: @tags,
+           status: success_status,
+           include: include_params,
+           fields: field_params
+  end
+
   def create
     load_contact
     authorize_contact
@@ -14,6 +23,14 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
   end
 
   private
+
+  def load_tags
+    @tags ||= account_lists.map(&:contact_tags).flatten.uniq.sort_by(&:name)
+  end
+
+  def authorize_index
+    account_lists.each { |account_list| authorize(account_list, :show?) }
+  end
 
   def destroy_tag
     persist_resource(params[:tag_name]) do |tag_name|

@@ -43,6 +43,8 @@ class AccountList < ApplicationRecord
   has_many :active_people, through: :active_contacts, source: :people, class_name: 'Person'
   has_many :master_people, through: :people
   has_many :donor_accounts, through: :contacts
+  has_many :contact_tags, through: :contacts, source: :base_tags
+  has_many :activity_tags, through: :activities, source: :base_tags
   has_many :company_partnerships, dependent: :destroy
   has_many :companies, through: :company_partnerships
   has_many :tasks
@@ -114,14 +116,6 @@ class AccountList < ApplicationRecord
 
   def multiple_designations
     designation_accounts.length > 1 ? true : false
-  end
-
-  def contact_tags
-    @contact_tags ||= contacts.joins(:tags).order('tags.name').pluck('DISTINCT tags.name')
-  end
-
-  def activity_tags
-    @activity_tags ||= activities.joins(:tags).order('tags.name').pluck('DISTINCT tags.name')
   end
 
   def cities

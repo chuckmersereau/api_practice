@@ -19,7 +19,7 @@ class MailChimpAccount::Exporter
 
     # Make sure we have an interest group for each tag of the
     # partners set to receive the newsletter
-    tags = account.account_list.contact_tags
+    tags = account.account_list.contact_tags.map(&:name)
     add_tags_groups(tags)
 
     add_merge_variable('GREETING')

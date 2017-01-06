@@ -196,7 +196,6 @@ describe AccountList do
 
   context '#churches' do
     let(:account_list) { create(:account_list) }
-
     it 'returns all churches' do
       create(:contact, account_list: account_list, church_name: 'church2')
       create(:contact, account_list: account_list, church_name: 'church1')
@@ -205,46 +204,52 @@ describe AccountList do
     end
   end
 
-  context '#contact_tags and #activity_tags' do
+  context '#contact_tags' do
     let(:account_list) { create(:account_list) }
-
-    it 'returns all churches' do
-      create(:contact, account_list: account_list, tag_list: ['tag2'])
-      create(:contact, account_list: account_list, tag_list: ['tag1'])
+    it 'returns all tags for contacts' do
+      create(:contact, account_list: account_list, tag_list: ['c_tag2'])
+      create(:contact, account_list: account_list, tag_list: ['c_tag1'])
       create(:contact, tag_list: ['other tag'])
-
-      create(:activity, account_list: account_list, tag_list: ['t_tag2'])
-      create(:activity, account_list: account_list, tag_list: ['t_tag1'])
-      create(:activity, tag_list: ['other tag'])
-
-      expect(account_list.contact_tags).to eq %w(tag1 tag2)
-      expect(account_list.activity_tags).to eq %w(t_tag1 t_tag2)
+      expect(account_list.contact_tags.map(&:name)).to include('c_tag1', 'c_tag2')
     end
   end
 
-  context '#contact_tags and #activity_tags' do
+  context '#activity_tags' do
     let(:account_list) { create(:account_list) }
+    it 'returns all tags for activities' do
+      create(:activity, account_list: account_list, tag_list: ['t_tag2'])
+      create(:activity, account_list: account_list, tag_list: ['t_tag1'])
+      create(:activity, tag_list: ['other tag'])
+      expect(account_list.activity_tags.map(&:name)).to include('t_tag1', 't_tag2')
+    end
+  end
 
-    it 'returns all churches' do
+  context '#cities' do
+    let(:account_list) { create(:account_list) }
+    it 'returns all cities' do
       contact = create(:contact, account_list: account_list)
-      contact.addresses << create(:address, city: 'City1', state: 'WI')
-      contact.addresses << create(:address, city: 'City2', state: 'FL')
-      # contact.save!
-
+      contact.addresses << create(:address, city: 'City1')
+      contact.addresses << create(:address, city: 'City2')
       expect(account_list.cities).to eq %w(City1 City2)
+    end
+  end
+
+  context '#states' do
+    let(:account_list) { create(:account_list) }
+    it 'returns all states' do
+      contact = create(:contact, account_list: account_list)
+      contact.addresses << create(:address, state: 'WI')
+      contact.addresses << create(:address, state: 'FL')
       expect(account_list.states).to eq %w(FL WI)
     end
   end
 
   context '#all_contacts' do
     let(:account_list) { create(:account_list) }
-
-    it 'returns all churches' do
+    it 'returns all contacts' do
       c1 = create(:contact, account_list: account_list)
       c2 = create(:contact, account_list: account_list, status: 'Unresponsive')
-
-      expect(account_list.all_contacts).to include c1
-      expect(account_list.all_contacts).to include c2
+      expect(account_list.all_contacts).to include(c1, c2)
     end
   end
 

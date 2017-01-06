@@ -32,10 +32,24 @@ describe Api::V2::ContactsController, type: :controller do
     before { api_login(user) }
 
     (Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore) + Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore)).each do |filter|
-      it "accepts displayable filter #{filter}" do
-        get :index, filter: { filter => '' }
+      context "#{filter} filter" do
+        it 'filters results' do
+          get :index, filter: { filter => '' }
+          expect(response.status).to eq(200)
+          expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
+        end
+      end
+    end
+
+    context 'account_list_id filter' do
+      let!(:user) { create(:user_with_account) }
+      let!(:account_list_two) { create(:account_list) }
+      let!(:contact_two) { create(:contact, account_list: account_list_two) }
+      before { user.account_lists << account_list_two }
+      it 'filters results' do
+        get :index, filter: { account_list_id: account_list_two.uuid }
         expect(response.status).to eq(200)
-        expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
+        expect(JSON.parse(response.body)['data'].length).to eq(1)
       end
     end
   end

@@ -1,5 +1,8 @@
-class ActsAsTaggableOn::TagSerializer < ApplicationSerializer
+class ActsAsTaggableOn::TagSerializer < ActiveModel::Serializer
   type 'tags'
+  attributes :id, :name
 
-  attribute :name
+  def id
+    object.uuid
+  end
 end

@@ -59,6 +59,7 @@ Rails.application.routes.draw do
           collection do
             scope module: :contacts do
               resources :filters, only: :index
+              resources :tags, only: :index
             end
           end
         end
@@ -71,6 +72,7 @@ Rails.application.routes.draw do
             scope module: :tasks do
               resources :analytics, only: :index
               resources :filters, only: :index
+              resources :tags, only: :index
             end
           end
         end
