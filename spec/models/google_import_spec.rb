@@ -261,7 +261,7 @@ describe GoogleImport do
         country: 'United States', location: 'Home', primary_mailing_address: true
       }]
       @contact.save
-      @person = build(:person, last_name: 'Google')
+      @person = build(:person, first_name: 'John', last_name: 'Google')
       @person.email_address = { email: 'existing_primary@example.com', primary: true }
       @person.phone_number = { number: '414-555-5555', primary: true }
       @person.save

@@ -1,4 +1,9 @@
 class Person < ApplicationRecord
+  include BetweenScopeable
+
+  between_scopes_for :anniversary
+  between_scopes_for :birthday
+
   RELATIONSHIPS_MALE = [_('Husband'), _('Son'), _('Father'), _('Brother'), _('Uncle'), _('Nephew'), _('Cousin (Male)'), _('Grandfather'), _('Grandson')].freeze
   RELATIONSHIPS_FEMALE = [_('Wife'), _('Daughter'), _('Mother'), _('Sister'), _('Aunt'), _('Niece'), _('Cousin (Female)'), _('Grandmother'), _('Granddaughter')].freeze
   TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')].freeze
@@ -42,7 +47,9 @@ class Person < ApplicationRecord
   has_many :messages_received, class_name: 'Message', foreign_key: :to_id, dependent: :destroy
   has_many :google_contacts, autosave: true
 
-  scope :alive, -> { where.not(deceased: true) }
+  scope :alive,          -> { where.not(deceased: true) }
+  scope :by_anniversary, -> { order('anniversary_month, anniversary_day') }
+  scope :by_birthday,    -> { order('birthday_month, birthday_day') }
 
   accepts_nested_attributes_for :email_addresses, reject_if: -> (e) { e[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers, reject_if: -> (p) { p[:number].blank? }, allow_destroy: true

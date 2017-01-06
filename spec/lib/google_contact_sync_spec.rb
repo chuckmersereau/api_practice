@@ -6,7 +6,12 @@ describe GoogleContactSync do
   let(:contact) { build(:contact) }
   let(:g_contact_link) { build(:google_contact, last_data: { emails: [], websites: [], phone_numbers: [] }) }
   let(:person) do
-    build(:person, last_name: 'Doe', middle_name: 'Henry', title: 'Mr', suffix: 'III', occupation: 'Worker',
+    build(:person, first_name: 'John',
+                   last_name: 'Doe',
+                   middle_name: 'Henry',
+                   title: 'Mr',
+                   suffix: 'III',
+                   occupation: 'Worker',
                    employer: 'Company, Inc')
   end
   let(:g_contact) do

@@ -396,8 +396,8 @@ describe Contact do
   end
 
   context 'without set greeting or envelope_greeting' do
-    let(:person) { create(:person) }
-    let(:spouse) { create(:person, first_name: 'Jill') }
+    let(:person) { create(:person, last_name: 'Craig') }
+    let(:spouse) { create(:person, first_name: 'Jill', last_name: 'Craig') }
 
     before do
       contact.people << person
@@ -420,6 +420,7 @@ describe Contact do
       person.deceased_check
       person.save
       contact.reload
+
       expect(contact.greeting).to eq spouse.first_name
       expect(contact.envelope_greeting).to eq(spouse.first_name + ' ' + spouse.last_name)
     end
@@ -539,8 +540,8 @@ describe Contact do
     end
 
     it 'does not error but merges if last name is nil (first name cannot be blank)' do
-      contact.people << create(:person, last_name: nil)
-      contact.people << create(:person, last_name: nil)
+      contact.people << create(:person, first_name: 'John', last_name: nil)
+      contact.people << create(:person, first_name: 'John', last_name: nil)
       expect do
         contact.merge_people
       end.to change(Person, :count).by(-1)

@@ -5,7 +5,7 @@ UUID_REGEX = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.fre
 
 Rails.application.routes.draw do
   namespace :api do
-    api_version(module: 'V2', header: { name: 'API-VERSION', value: 'v2' }, parameter: { name: 'version', value: 'v2' }, path: { value: 'v2' }) do
+    api_version(module: 'V2', path: { value: 'v2' }) do
       constraints(id: UUID_REGEX) do
         resources :account_lists, only: [:index, :show, :update] do
           scope module: :account_lists do
@@ -43,6 +43,8 @@ Rails.application.routes.draw do
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do
           scope module: :contacts do
+            get :analytics, to: 'analytics#show', on: :collection
+
             resources :addresses, only: [:index, :show, :create, :update, :destroy]
 
             resources :people, only: [:show, :index, :create, :update, :destroy] do

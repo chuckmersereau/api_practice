@@ -62,7 +62,7 @@ describe Task do
 
   context '#calculate_location' do
     let(:contact) { create(:contact, account_list: account_list) }
-    let(:person) { create(:person) }
+    let(:person) { create(:person, first_name: 'John', last_name: 'Smith') }
     let(:task) { create(:task, account_list: account_list) }
     before do
       contact.people << person

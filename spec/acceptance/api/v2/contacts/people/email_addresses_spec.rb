@@ -66,8 +66,9 @@ resource 'Contacts People Email Addresses' do
       end
 
       example 'Person / Email Address [GET]', document: :contacts do
-        explanation 'The Person\'s Email Address with the given ID'
+        explanation "Getting a Person's Email Address by ID"
         do_request
+
         check_resource(['relationships'])
         expect(resource_object.keys.sort).to eq expected_attribute_keys
         expect(resource_object['email']).to  eq email_address.email

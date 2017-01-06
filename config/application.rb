@@ -17,7 +17,14 @@ module Mpdx
     # -- all .rb files in that directory are automatically loaded.
 
     # Custom directories with classes and modules you want to be autoloadable.
-    config.autoload_paths += %W(#{config.root}/app/concerns #{config.root}/app/roles #{config.root}/app/validators #{config.root}/app/errors #{config.root}/lib)
+    config.autoload_paths += %W(
+      #{config.root}/app/concerns
+      #{config.root}/app/roles
+      #{config.root}/app/validators
+      #{config.root}/app/errors
+      #{config.root}/lib
+    )
+
     # The default locale is :en and all translations from config/locales/*.rb,yml are auto loaded.
     config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :en

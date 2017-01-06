@@ -223,7 +223,7 @@ describe MailChimpAccount do
     let(:contact) { create(:contact, account_list: account_list) }
     before do
       account.account_list = account_list
-      contact.people << create(:person_with_email)
+      contact.people << create(:person_with_email, email: 'john@example.com')
     end
 
     it 'adds activity records to the contacts who received the campaign' do

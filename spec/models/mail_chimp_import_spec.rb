@@ -137,7 +137,8 @@ describe MailChimpImport do
 
     describe 'importing with an existing contact' do
       let(:contact) { create(:contact, account_list: account_list) }
-      let(:person) { create(:person_with_email) }
+      let(:person)  { create(:person_with_email, first_name: 'John', last_name: 'Smith') }
+
       before do
         contact.people << person
       end
@@ -151,6 +152,7 @@ describe MailChimpImport do
           opted_out.email = 'optout@example.com'
           no_email = create(:person, first_name: 'Dan')
           matches_name = create(:person, first_name: 'Andy', last_name: 'Test')
+
           contact.people << [opted_out, no_email, matches_name]
 
           expect { subject.import_contacts }.to_not change(Contact, :count)
