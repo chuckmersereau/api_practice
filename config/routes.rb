@@ -38,6 +38,7 @@ Rails.application.routes.draw do
         end
 
         namespace :constants do
+          resources :organizations, only: [:index]
           resources :currencies, only: [:index]
           resources :notifications, only: [:index]
           resources :locales, only: [:index]
