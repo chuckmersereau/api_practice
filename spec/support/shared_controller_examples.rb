@@ -7,7 +7,6 @@ RSpec.shared_examples 'common_variables' do
   let(:full_unpermitted_attributes)  { { data: { attributes: unpermitted_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
   let(:full_incorrect_attributes)    { { data: { attributes: incorrect_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
   let(:reference_key)                { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
-  let(:reference_value)              { defined?(given_reference_value) ? given_reference_value : correct_attributes.values.first }
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
   let(:serializer)                   { ActiveModel::Serializer.serializer_for(resource).new(resource) }
   let(:response_errors)              { JSON.parse(response.body)['errors'] }
@@ -62,7 +61,7 @@ RSpec.shared_examples 'show_examples' do
       api_login(user)
       get :show, full_params
       expect(response.status).to eq(200)
-      expect(response.body).to include(resource.send(reference_key).to_s) if reference_key
+      expect(response.body).to include(resource.send(reference_key).to_json) if reference_key
       if (relationships = JSON.parse(response.body)['data']['relationships'])
         relationships.keys.each { |key| expect_uuids_in_relationships(relationships[key]['data']) }
       end
@@ -317,6 +316,7 @@ end
 
 RSpec.shared_examples 'including related resources examples' do |options|
   context "action #{options[:action]} including related resources" do
+    let(:perform_specs) { serializer.associations.count > 0 }
     let(:action) { options[:action].to_sym }
     let(:includes) { '*' }
     let(:expected_response_code) do
@@ -346,7 +346,7 @@ RSpec.shared_examples 'including related resources examples' do |options|
       let(:includes) { described_class::UNPERMITTED_FILTER_PARAMS.join(',') }
 
       it 'does not permit unpermitted filter params' do
-        if serializer.associations.count > 0
+        if perform_specs
           expect(described_class::UNPERMITTED_FILTER_PARAMS).to be_present
           subject
           expect(response.status).to eq(expected_response_code)
@@ -356,7 +356,7 @@ RSpec.shared_examples 'including related resources examples' do |options|
     end
 
     it 'includes one level of related resources' do
-      if serializer.associations.count > 0
+      if perform_specs
         subject
         expect(response.status).to eq(expected_response_code)
         expect(JSON.parse(response.body).keys).to include('included')

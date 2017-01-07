@@ -354,10 +354,12 @@ class AccountList < ApplicationRecord
   end
 
   def in_hand_percent
+    return unless monthly_goal
     (received_pledges * 100 / monthly_goal).round(1)
   end
 
   def pledged_percent
+    return unless monthly_goal
     (total_pledges * 100 / monthly_goal).round(1)
   end
 

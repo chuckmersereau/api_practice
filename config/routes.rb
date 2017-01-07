@@ -9,6 +9,7 @@ Rails.application.routes.draw do
       constraints(id: UUID_REGEX) do
         resources :account_lists, only: [:index, :show, :update] do
           scope module: :account_lists do
+            resource :analytics, only: [:show]
             resources :designation_accounts, only: [:index, :show]
             resources :donations, only: [:index, :show, :create, :update]
             resources :donor_accounts, only: [:index, :show]
