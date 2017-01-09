@@ -7,10 +7,10 @@ resource 'Users' do
   let(:resource_type) { 'users' }
   let(:user) { create(:user_with_full_account) }
 
-  let(:new_user_attributes) { attributes_for(:user_with_full_account).merge(updated_in_db_at: user.updated_at) }
+  let(:new_user_attributes) { attributes_for(:user_with_full_account).merge(updated_in_db_at: user.updated_at).except(:email) }
   let(:form_data)           { build_data(new_user_attributes) }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       created_at
       first_name
@@ -24,6 +24,7 @@ resource 'Users' do
   let(:resource_associations) do
     %w(
       account_lists
+      email_addresses
       master_person
     )
   end
@@ -50,7 +51,6 @@ resource 'Users' do
         explanation 'The current_user'
         do_request
         check_resource(['relationships'])
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
     end

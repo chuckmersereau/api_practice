@@ -4,6 +4,7 @@ class UserSerializer < ApplicationSerializer
              :preferences
 
   has_many :account_lists
+  has_many :email_addresses
 
   belongs_to :master_person
 

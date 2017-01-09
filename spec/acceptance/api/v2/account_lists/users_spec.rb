@@ -29,6 +29,7 @@ resource 'Users' do
   let(:resource_associations) do
     %w(
       account_lists
+      email_addresses
       master_person
     )
   end
@@ -46,7 +47,6 @@ resource 'Users' do
         do_request
 
         check_collection_resource(3, ['relationships'])
-        expect(resource_object.keys).to match_array resource_attributes
         expect(response_status).to eq 200
       end
     end
