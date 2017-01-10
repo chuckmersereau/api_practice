@@ -57,6 +57,7 @@ RSpec.configure do |config|
 
   config.include Devise::TestHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
+  config.include HeaderHelpers, type: :controller
   config.include JsonApiHelper, type: :acceptance
   config.include MpdxHelper
   config.include ActiveSupport::Testing::TimeHelpers

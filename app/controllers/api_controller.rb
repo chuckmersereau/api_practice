@@ -1,8 +1,17 @@
 class ApiController < ActionController::API
   rescue_from Exceptions::AuthenticationError, with: :render_401
   rescue_from ActiveRecord::RecordNotFound,    with: :render_404
+  before_action :verify_request
+
+  MEDIA_TYPE_MATCHER = /.+".+"[^,]*|[^,]+/
+  ALL_MEDIA_TYPES = '*/*'.freeze
 
   protected
+
+  def verify_request
+    verify_request_content_type
+    verify_request_accept_type
+  end
 
   def render_200
     head :ok
@@ -23,6 +32,14 @@ class ApiController < ActionController::API
 
   def render_201
     head :created
+  end
+
+  def render_415
+    render_error(title: 'Unsupported Media Type', status: :unsupported_media_type)
+  end
+
+  def render_406
+    render_error(title: 'Not Acceptable', status: :not_acceptable)
   end
 
   def render_404
@@ -56,5 +73,29 @@ class ApiController < ActionController::API
     else
       :ok
     end
+  end
+
+  def verify_request_content_type
+    content_header = request.headers['CONTENT_TYPE']
+    render_415 unless content_header == 'application/vnd.api+json'
+  end
+
+  def verify_request_accept_type
+    render_406 unless valid_accept_header?
+  end
+
+  def valid_accept_header?
+    media_types = given_media_types('Accept')
+
+    media_types.blank? || media_types.any? do |media_type|
+      (media_type == 'application/vnd.api+json' || media_type.start_with?(ALL_MEDIA_TYPES))
+    end
+  end
+
+  def given_media_types(header)
+    (request.headers[header] || '')
+      .scan(MEDIA_TYPE_MATCHER)
+      .to_a
+      .map(&:strip)
   end
 end
