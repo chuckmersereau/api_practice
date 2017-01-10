@@ -12,10 +12,10 @@ class ActivityCommentSerializer < ApplicationSerializer
   end
 
   def person_id
-    object.person.uuid
+    object.try(:person).try(:uuid)
   end
 
   def person_name
-    object.person.to_s
+    object.try(:person).try(:to_s)
   end
 end
