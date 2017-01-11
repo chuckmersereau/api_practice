@@ -5,6 +5,24 @@ module DonationReports
       @donations_scoper = donations_scoper
     end
 
+    def donations
+      load_donors_and_donations
+      @donations
+    end
+
+    def donors
+      load_donors_and_donations
+      @donors
+    end
+
+    private
+
+    def donations_and_contacts
+      Contact::DonationsEagerLoader.new(
+        account_list: @account_list, donations_scoper: @donations_scoper
+      ).donations_and_contacts
+    end
+
     def donor_and_donation_info
       donations, contacts = donations_and_contacts
       donations_info = donations.map do |donation|
@@ -17,12 +35,9 @@ module DonationReports
       [donations_info, contacts_info]
     end
 
-    private
-
-    def donations_and_contacts
-      Contact::DonationsEagerLoader.new(
-        account_list: @account_list, donations_scoper: @donations_scoper
-      ).donations_and_contacts
+    def load_donors_and_donations
+      return if @donations && @donors
+      @donations, @donors = donor_and_donation_info
     end
   end
 end

@@ -1,13 +1,19 @@
-class DonationReports::DonorInfoSerializer < ApplicationSerializer
-  attributes :amount,
-             :converted_amount,
-             :currency,
-             :donation_date,
+class DonationReports::DonorInfoSerializer < ServiceSerializer
+  attributes :contact_id,
+             :contact_name,
+             :late_by_30_days,
+             :late_by_60_days,
              :pledge_amount,
+             :pledge_currency,
              :pledge_frequency,
              :status
 
-  belongs_to :contact
+  delegate :contact_id,
+           :contact_name,
+           :late_by_30_days,
+           :late_by_60_days,
+           :pledge_currency,
+           to: :object
 
   def status
     _(object.status)

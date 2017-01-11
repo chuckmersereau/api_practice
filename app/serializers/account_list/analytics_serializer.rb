@@ -1,4 +1,4 @@
-class AccountList::AnalyticsSerializer < AnalyticsSerializer
+class AccountList::AnalyticsSerializer < ServiceSerializer
   attributes :appointments,
              :contacts,
              :correspondence,

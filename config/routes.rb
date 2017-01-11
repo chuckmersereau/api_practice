@@ -96,6 +96,10 @@ Rails.application.routes.draw do
             resources :organization_accounts
           end
         end
+
+        namespace :reports do
+          resource :year_donations, only: :show
+        end
       end
     end
   end
