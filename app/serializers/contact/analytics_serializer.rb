@@ -1,5 +1,5 @@
 class Contact
-  class AnalyticsSerializer < ActiveModel::Serializer
+  class AnalyticsSerializer < ::ServiceSerializer
     attributes :first_gift_not_received_count,
                :partners_30_days_late_count,
                :partners_60_days_late_count

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Analytics' do
+resource 'Contact Analytics' do
   include_context :json_headers
 
   # This is required!
@@ -70,9 +70,12 @@ resource 'Analytics' do
   let(:expected_attribute_keys) do
     # list your expected resource keys vertically here (alphabetical please!)
     %w(
+      created_at
       first_gift_not_received_count
       partners_30_days_late_count
       partners_60_days_late_count
+      updated_at
+      updated_in_db_at
     )
   end
 

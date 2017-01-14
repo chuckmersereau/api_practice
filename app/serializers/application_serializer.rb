@@ -14,12 +14,18 @@ class ApplicationSerializer < ActiveModel::Serializer
 
   def attributes(*args)
     super(*args).transform_values do |value|
-      value = value.to_time.utc.iso8601 if value.respond_to?(:iso8601)
+      value = convert_to_utc_iso8601(value) if value.respond_to?(:utc)
       value
     end
   end
 
   def updated_in_db_at
     object.updated_at.to_s
+  end
+
+  private
+
+  def convert_to_utc_iso8601(value)
+    value.to_time.utc.iso8601
   end
 end

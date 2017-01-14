@@ -7,9 +7,6 @@ class Contact::Analytics
     @contacts = contacts
   end
 
-  def id
-  end
-
   def first_gift_not_received_count
     contacts.financial_partners
             .where(pledge_received: false)

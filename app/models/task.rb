@@ -1,4 +1,5 @@
 require 'async'
+
 class Task < Activity
   include Async
   include Sidekiq::Worker
@@ -165,9 +166,33 @@ class Task < Activity
 
   ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS + TALK_TO_IN_PERSON_RESULTS + PRAYER_REQUEST_RESULTS
 
-  TASK_ACTIVITIES = ['Call', 'Appointment', 'Email', 'Text Message', 'Facebook Message',
-                     'Letter', 'Newsletter', 'Pre Call Letter', 'Reminder Letter',
-                     'Support Letter', 'Thank', 'To Do', 'Talk to In Person', 'Prayer Request'].freeze
+  TASK_ACTIVITIES = [
+    'Call',
+    'Appointment',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Letter',
+    'Newsletter - Physical',
+    'Newsletter - Email',
+    'Pre Call Letter',
+    'Reminder Letter',
+    'Support Letter',
+    'Thank',
+    'To Do',
+    'Talk to In Person',
+    'Prayer Request'
+  ].freeze
+
+  TASK_ACTIVITIES.each do |activity_type|
+    singleton_class.instance_eval do
+      scope_name = activity_type.parameterize.underscore.to_sym
+
+      define_method scope_name do
+        where(activity_type: activity_type)
+      end
+    end
+  end
 
   assignable_values_for :activity_type, allow_blank: true do
     TASK_ACTIVITIES

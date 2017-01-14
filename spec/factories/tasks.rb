@@ -8,5 +8,39 @@ FactoryGirl.define do
     activity_type 'Call'
     result nil
     completed_at nil
+
+    trait :complete do
+      completed true
+      completed_at { Time.current }
+    end
+
+    trait :incomplete do
+      completed false
+    end
+
+    trait :overdue do
+      incomplete
+      yesterday
+    end
+
+    trait :today do
+      start_at { Time.current.beginning_of_day }
+    end
+
+    trait :tomorrow do
+      start_at { Time.current.beginning_of_day + 1.day }
+    end
+
+    trait :yesterday do
+      start_at { (Time.current - 1.day).end_of_day }
+    end
+
+    Task::TASK_ACTIVITIES.each do |activity_type|
+      trait_type = activity_type.parameterize.underscore.to_sym
+
+      trait trait_type do
+        activity_type activity_type
+      end
+    end
   end
 end

@@ -7,22 +7,24 @@ class Activity < ApplicationRecord
 
   belongs_to :account_list
   belongs_to :notification, inverse_of: :tasks
+
+  has_many :activity_comments, dependent: :destroy
   has_many :activity_contacts, dependent: :destroy
   has_many :contacts, through: :activity_contacts
-  has_many :activity_comments, dependent: :destroy
-  has_many :people, through: :activity_comments
-  has_many :google_events
   has_many :google_email_activities, dependent: :destroy
   has_many :google_emails, through: :google_email_activities
+  has_many :google_events
+  has_many :people, through: :activity_comments
 
-  scope :overdue, -> { where(completed: false).where('start_at < ?', Time.zone.now.beginning_of_day).order('start_at DESC') }
-  scope :today, -> { where('start_at BETWEEN ? AND ?', Time.zone.now.beginning_of_day, Time.zone.now.end_of_day).order('start_at') }
-  scope :tomorrow, -> { where('start_at BETWEEN ? AND ?', Time.zone.now.end_of_day, Time.zone.now.end_of_day + 1.day).order('start_at') }
-  scope :future, -> { where('start_at > ?', Time.zone.now.end_of_day).order('start_at') }
-  scope :upcoming, -> { where('start_at > ?', Time.zone.now.end_of_day + 1.day).order('start_at') }
-  scope :completed, -> { where(completed: true).order('completed_at desc, start_at desc') }
-  scope :uncompleted, -> { where(completed: false).order('start_at') }
-  scope :starred, -> { where(starred: true).order('start_at') }
+  scope :completed,         -> { where(completed: true).order('completed_at desc, start_at desc') }
+  scope :future,            -> { where('start_at > ?', Time.current.end_of_day).order('start_at') }
+  scope :overdue,           -> { where(completed: false).where('start_at < ?', Time.current.beginning_of_day).order('start_at DESC') }
+  scope :overdue_and_today, -> { where(completed: false).where('start_at < ?', Time.current.end_of_day) }
+  scope :starred,           -> { where(starred: true).order('start_at') }
+  scope :today,             -> { where('start_at BETWEEN ? AND ?', Time.current.beginning_of_day, Time.current.end_of_day).order('start_at') }
+  scope :tomorrow,          -> { where('start_at BETWEEN ? AND ?', Time.current.end_of_day, Time.current.end_of_day + 1.day).order('start_at') }
+  scope :uncompleted,       -> { where(completed: false).order('start_at') }
+  scope :upcoming,          -> { where('start_at > ?', Time.current.end_of_day + 1.day).order('start_at') }
 
   accepts_nested_attributes_for :activity_contacts, allow_destroy: true
   accepts_nested_attributes_for :activity_comments, reject_if: :all_blank
@@ -65,10 +67,6 @@ class Activity < ApplicationRecord
 
   def activity_comment=(hash)
     activity_comments.new(hash) if hash.values.any?(&:present?)
-  end
-
-  def self.overdue_and_today
-    where(completed: false).where('start_at < ?', Time.zone.now.end_of_day)
   end
 
   def assignable_contacts

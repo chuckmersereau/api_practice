@@ -9,6 +9,7 @@ class User < Person
   has_many :designation_profiles, dependent: :destroy
   has_many :partner_companies, through: :account_lists, source: :companies
   has_many :imports, dependent: :destroy
+  has_many :tasks, through: :account_lists
 
   devise :trackable
   store :preferences, accessors: [:time_zone, :locale, :setup, :contacts_filter,
