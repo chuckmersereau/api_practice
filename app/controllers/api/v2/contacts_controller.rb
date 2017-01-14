@@ -90,11 +90,15 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def contact_scope
-    Contact.where(account_list_id: account_lists.collect(&:id))
+    Contact.where(account_list_id: account_lists.select(:id))
   end
 
   def pundit_user
     PunditContext.new(current_user, contact: @contact)
+  end
+
+  def permitted_sorting_params
+    super + ['name ASC', 'name DESC']
   end
 
   def permitted_filters

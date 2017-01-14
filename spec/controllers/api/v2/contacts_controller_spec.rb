@@ -17,6 +17,7 @@ describe Api::V2::ContactsController, type: :controller do
   let(:incorrect_reference_value) { resource.send(reference_key) }
   let(:incorrect_attributes) { attributes_for(:contact, name: nil, account_list_id: account_list_id) }
   let(:unpermitted_attributes) { nil }
+  let(:sorting_param) { :name }
 
   include_examples 'index_examples'
 

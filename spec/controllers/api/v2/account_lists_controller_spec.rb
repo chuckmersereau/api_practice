@@ -13,6 +13,8 @@ describe Api::V2::AccountListsController, type: :controller do
   let(:correct_attributes) { attributes_for(:account_list) }
   let(:incorrect_attributes) { { name: nil } }
 
+  let!(:notification_preference) { create(:notification_preference, account_list: account_list) }
+
   include_examples 'index_examples'
 
   include_examples 'show_examples'

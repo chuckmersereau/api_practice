@@ -9,6 +9,10 @@ module Sorting
   private
 
   def sorting_param
-    params[:sort] if PERMITTED_SORTING_PARAMS.include?(params[:sort])
+    params[:sort] if permitted_sorting_params.include?(params[:sort])
+  end
+
+  def permitted_sorting_params
+    PERMITTED_SORTING_PARAMS
   end
 end

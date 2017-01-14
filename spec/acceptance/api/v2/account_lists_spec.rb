@@ -25,6 +25,12 @@ resource 'Account Lists' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      notification_preferences
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -34,8 +40,7 @@ resource 'Account Lists' do
       example 'Account List [LIST]', document: :entities do
         explanation 'List of Account Lists'
         do_request
-        check_collection_resource(1)
-        expect(resource_object.keys).to match_array resource_attributes
+        check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
     end
@@ -53,7 +58,7 @@ resource 'Account Lists' do
       example 'Account List [GET]', document: :entities do
         explanation 'The Account List with the given ID'
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object['name']).to eq account_list.name
         expect(response_status).to eq 200
       end

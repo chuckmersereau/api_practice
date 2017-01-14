@@ -315,7 +315,7 @@ RSpec.shared_examples 'index_examples' do |options = {}|
 end
 
 RSpec.shared_examples 'including related resources examples' do |options|
-  context "action #{options[:action]} including related resources" do
+  context "action #{options[:action]} including related resources (associated resource must be created)" do
     let(:perform_specs) { serializer.associations.count > 0 }
     let(:action) { options[:action].to_sym }
     let(:includes) { '*' }
@@ -410,15 +410,17 @@ RSpec.shared_examples 'sparse fieldsets examples' do |options|
 end
 
 RSpec.shared_examples 'sorting examples' do |options|
+  let(:sorting_param_or_created_at) { defined?(sorting_param) ? sorting_param : :created_at }
+
   it 'sorts resources if sorting_param is in list of permitted sorts' do
     api_login(user)
-    get options[:action], parent_param_if_needed.merge(sort: 'created_at DESC')
+    get options[:action], parent_param_if_needed.merge(sort: "#{sorting_param_or_created_at} DESC")
 
     expect do
-      get options[:action], parent_param_if_needed.merge(sort: 'created_at ASC')
+      get options[:action], parent_param_if_needed.merge(sort: "#{sorting_param_or_created_at} ASC")
     end.to change { JSON.parse(response.body)['data'].first['id'] }
 
-    expect(JSON.parse(response.body)['meta']['sort']).to eq('created_at ASC')
+    expect(JSON.parse(response.body)['meta']['sort']).to eq("#{sorting_param_or_created_at} ASC")
   end
 
   it 'does not sort resources if sorting_param is not in list of permitted sorts' do

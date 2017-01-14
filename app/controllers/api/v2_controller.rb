@@ -77,6 +77,6 @@ class Api::V2Controller < ApiController
 
   def fetch_account_lists
     return current_user.account_lists unless params[:filter] && params[:filter][:account_list_id]
-    [current_user.account_lists.find_by!(uuid: params[:filter][:account_list_id])]
+    current_user.account_lists.where(uuid: params[:filter][:account_list_id])
   end
 end

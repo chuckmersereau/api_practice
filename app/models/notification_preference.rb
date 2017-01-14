@@ -6,6 +6,8 @@ class NotificationPreference < ApplicationRecord
   # attr_accessible :actions, :notification_type_id
   validates :actions, :notification_type_id, presence: true
 
+  delegate :type, to: :notification_type
+
   def self.default_actions
     %w(email task)
   end
