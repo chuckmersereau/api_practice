@@ -1,7 +1,13 @@
 #!/bin/bash
 set -e # Exit with nonzero exit code if anything fails
 
-SOURCE_BRANCH="master"
+if [ "$TRAVIS_BRANCH" != "staging" ]; then
+  SOURCE_BRANCH="staging"
+  REPO="https://github.com/CruGlobal/mpdx_staging_docs.git"
+elif [ "$TRAVIS_BRANCH" != "master" ]; then
+  SOURCE_BRANCH="master"
+  REPO="https://github.com/CruGlobal/mpdx_docs.git"
+fi
 
 function doCompile {
   ./bin/rake docs:generate
@@ -25,7 +31,6 @@ eval `ssh-agent -s`
 ssh-add deploy_key
 
 # Save some useful information
-REPO="https://github.com/CruGlobal/mpdx_docs.git"
 SSH_REPO=${REPO/https:\/\/github.com\//git@github.com:}
 SHA=`git rev-parse --verify HEAD`
 
