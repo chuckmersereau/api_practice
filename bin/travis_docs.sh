@@ -9,13 +9,13 @@ ENCRYPTED_IV=${!ENCRYPTED_IV_VAR}
 openssl aes-256-cbc -K $ENCRYPTED_KEY -iv $ENCRYPTED_IV -in secrets.tar.enc -out secrets.tar -d
 tar xvf secrets.tar
 
-if [ "$TRAVIS_BRANCH" != "staging" ]; then
+if [ "$TRAVIS_BRANCH" == "staging" ]; then
   SOURCE_BRANCH="staging"
   REPO="https://github.com/CruGlobal/mpdx_staging_docs.git"
   chmod 600 deploy_staging_key
   eval `ssh-agent -s`
   ssh-add deploy_staging_key
-elif [ "$TRAVIS_BRANCH" != "master" ]; then
+elif [ "$TRAVIS_BRANCH" == "master" ]; then
   SOURCE_BRANCH="master"
   REPO="https://github.com/CruGlobal/mpdx_docs.git"
   chmod 600 deploy_key
