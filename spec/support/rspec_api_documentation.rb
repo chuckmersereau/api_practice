@@ -29,4 +29,12 @@ RspecApiDocumentation.configure do |config|
     group_config.api_name = 'User API'
     group_config.filter = :user
   end
+
+  config.response_body_formatter = proc do |content_type, response_body|
+    if content_type == 'application/json' || content_type == 'application/vnd.api+json'
+      JSON.pretty_generate(JSON.parse(response_body))
+    else
+      response_body
+    end
+  end
 end
