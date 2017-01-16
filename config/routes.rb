@@ -100,6 +100,7 @@ Rails.application.routes.draw do
         end
 
         namespace :reports do
+          resource :balances, only: :show
           resource :year_donations, only: :show
         end
       end

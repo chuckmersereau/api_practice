@@ -15,10 +15,17 @@ resource 'Designation Accounts' do
 
   let(:expected_attribute_keys) do
     %w(
+      active
       balance
+      balance_updated_at
+      converted_balance
       created_at
+      currency
+      currency_symbol
       designation_number
+      exchange_rate
       name
+      organization_name
       updated_at
       updated_in_db_at
     )
@@ -45,10 +52,17 @@ resource 'Designation Accounts' do
 
     get '/api/v2/account_lists/:account_list_id/designation_accounts/:id' do
       with_options scope: [:data, :attributes] do
+        response_field 'active',             'Active',             'Type' => 'Boolean'
         response_field 'balance',            'Balance',            'Type' => 'Number'
+        response_field 'balance_updated_at', 'Balance Updated At', 'Type' => 'String'
+        response_field 'converted_balance',  'Converted Balance',  'Type' => 'Number'
         response_field 'created_at',         'Created At',         'Type' => 'String'
+        response_field 'currency',           'Currency',           'Type' => 'String'
+        response_field 'currency_symbol',    'Currency Symbol',    'Type' => 'String'
         response_field 'designation_number', 'Designation Number', 'Type' => 'String'
+        response_field 'exchange_rate',      'Exchange Rate',      'Type' => 'Number'
         response_field 'name',               'Name',               'Type' => 'String'
+        response_field 'organization_name',  'Organization Name',  'Type' => 'String'
         response_field 'updated_at',         'Updated At',         'Type' => 'String'
         response_field 'updated_in_db_at',   'Updated In Db At',   'Type' => 'String'
       end
