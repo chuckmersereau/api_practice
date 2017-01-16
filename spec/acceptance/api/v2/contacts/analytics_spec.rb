@@ -123,7 +123,7 @@ resource 'Contact Analytics' do
 
         example 'Contact Analytics [GET]', document: :contacts do
           explanation "Viewing Analytical information for a specific Account List's Contacts"
-          do_request filter: { account_list_id: alternate_account_list.id }
+          do_request filter: { account_list_id: alternate_account_list.uuid }
 
           check_resource(additional_attribute_keys)
           expect(resource_object.keys).to match_array expected_attribute_keys

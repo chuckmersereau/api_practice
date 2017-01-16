@@ -7,22 +7,8 @@ class Api::V2::Contacts::AnalyticsController < Api::V2Controller
 
   private
 
-  def account_list
-    @account_list ||= load_account_list
-  end
-
   def authorize_analytics
-    if account_list
-      authorize account_list, :show?
-    else
-      authorize current_user, :show?
-    end
-  end
-
-  def load_account_list
-    return unless filter_params[:account_list_id]
-
-    AccountList.find(filter_params[:account_list_id])
+    account_lists.each { |account_list| authorize account_list, :show? }
   end
 
   def load_analytics
@@ -30,7 +16,7 @@ class Api::V2::Contacts::AnalyticsController < Api::V2Controller
   end
 
   def load_contacts
-    account_list&.contacts || current_user.contacts
+    Contact.where(account_list: account_lists.map(&:id))
   end
 
   def permitted_filters
