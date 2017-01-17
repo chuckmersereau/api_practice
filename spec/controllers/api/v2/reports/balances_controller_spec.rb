@@ -23,5 +23,6 @@ RSpec.describe Api::V2::Reports::BalancesController, type: :controller do
   end
 
   let(:correct_attributes) { {} }
-  include_examples 'show_examples'
+
+  include_examples 'show_examples', except: [:sparse_fieldsets]
 end

@@ -56,5 +56,5 @@ RSpec.describe Api::V2::Contacts::AnalyticsController, type: :controller do
 
   # These includes can be found in:
   # spec/support/shared_controller_examples.rb
-  include_examples 'show_examples'
+  include_examples 'show_examples', except: [:sparse_fieldsets]
 end

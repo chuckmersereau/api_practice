@@ -25,8 +25,8 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
   # This is required!
   let!(:resource) do
     Person::Duplicate.new(
-      person: person1,
-      dup_person: person2,
+      person: person3,
+      dup_person: person4,
       shared_contact: contact1
     )
   end
@@ -34,8 +34,8 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
   # This is required for the index action!
   let!(:second_resource) do
     Person::Duplicate.new(
-      person: person3,
-      dup_person: person4,
+      person: person1,
+      dup_person: person2,
       shared_contact: contact2
     )
   end
@@ -68,7 +68,7 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
   end
 
   # These includes can be found in:
-  # spec/support/shared_controller_examples.rb
+  # spec/support/shared_controller_examples
   include_examples 'index_examples', except: [:sparse_fieldsets, :sorting]
 
   include_examples 'destroy_examples'

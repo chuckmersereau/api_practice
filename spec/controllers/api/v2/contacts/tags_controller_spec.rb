@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'support/shared_controller_examples'
 
 RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
   let(:user) { create(:user_with_account) }

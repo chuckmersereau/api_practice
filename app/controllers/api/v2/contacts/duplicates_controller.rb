@@ -26,6 +26,7 @@ class Api::V2::Contacts::DuplicatesController < Api::V2Controller
     @dup_contacts = account_lists.flat_map do |account_list|
       Contact::DuplicatesFinder.new(account_list).find
     end
+
     @dup_contacts = Kaminari.paginate_array(@dup_contacts)
                             .page(page_number_param)
                             .per(per_page_param)

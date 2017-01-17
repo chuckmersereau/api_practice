@@ -18,5 +18,5 @@ RSpec.describe Api::V2::Reports::YearDonationsController, type: :controller do
 
   let(:given_reference_key) { 'donor_infos' }
 
-  include_examples 'show_examples'
+  include_examples 'show_examples', except: [:sparse_fieldsets]
 end

@@ -26,7 +26,7 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
 
   # This is required!
   let!(:resource) do
-    Contact::Duplicate.new(contact1, contact2)
+    Contact::Duplicate.new(contact3, contact4)
   end
 
   # This is required for the index action!

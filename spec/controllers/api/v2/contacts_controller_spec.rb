@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'support/shared_controller_examples'
 
 describe Api::V2::ContactsController, type: :controller do
   let(:factory_type) { :contact }

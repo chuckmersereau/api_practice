@@ -33,6 +33,7 @@ RSpec.describe Api::V2::Tasks::AnalyticsController, type: :controller do
   end
 
   # These includes can be found in:
-  # spec/support/shared_controller_examples.rb
-  include_examples 'show_examples'
+  # spec/support/shared_controller_examples
+
+  include_examples 'show_examples', except: [:sparse_fieldsets]
 end

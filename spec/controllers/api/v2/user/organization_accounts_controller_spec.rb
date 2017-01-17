@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'support/shared_controller_examples'
 
 RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller do
   let(:user) { create(:user) }

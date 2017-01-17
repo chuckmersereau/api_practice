@@ -73,7 +73,7 @@ RSpec.describe Api::V2::EmailAddressesController, type: :controller do
   end
 
   # These includes can be found in:
-  # spec/support/shared_controller_examples.rb
+  # spec/support/shared_controller_examples/*
   include_examples 'index_examples'
 
   include_examples 'show_examples'

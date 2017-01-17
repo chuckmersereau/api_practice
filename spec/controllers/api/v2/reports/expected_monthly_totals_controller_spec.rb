@@ -18,5 +18,5 @@ RSpec.describe Api::V2::Reports::ExpectedMonthlyTotalsController, type: :control
 
   let(:given_reference_key) { 'expected_donations' }
 
-  include_examples 'show_examples'
+  include_examples 'show_examples', except: [:sparse_fieldsets]
 end
