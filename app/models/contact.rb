@@ -415,7 +415,7 @@ class Contact < ApplicationRecord
       other.not_duplicated_with.to_s.split(',').include?(id.to_s)
   end
 
-  def confirm_not_duplicate_of!(other)
+  def mark_not_duplicate_of!(other)
     not_duplicated_with_set = not_duplicated_with.to_s.split(',').to_set
     not_duplicated_with_set << other.id.to_s
     update_column(:not_duplicated_with, not_duplicated_with_set.to_a.join(','))

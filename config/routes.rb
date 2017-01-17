@@ -53,6 +53,9 @@ Rails.application.routes.draw do
               resources :tags, only: :index
               constraints(id: /.+/) do
                 resources :duplicates, only: [:index, :destroy]
+                namespace :people do
+                  resources :duplicates, only: [:index, :destroy]
+                end
               end
             end
 

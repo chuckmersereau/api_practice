@@ -21,8 +21,8 @@ class Contact::Duplicate
   def invalidate!
     contact_1, contact_2 = contacts
     Contact.transaction do
-      contact_1.confirm_not_duplicate_of!(contact_2)
-      contact_2.confirm_not_duplicate_of!(contact_1)
+      contact_1.mark_not_duplicate_of!(contact_2)
+      contact_2.mark_not_duplicate_of!(contact_1)
     end
   end
 end
