@@ -8,6 +8,7 @@ RSpec.shared_examples 'common_variables' do
   let(:full_incorrect_attributes)    { { data: { attributes: incorrect_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
   let(:reference_key)                { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
+  let(:count_proc)                   { defined?(count) ? count : -> { resources_count } }
   let(:serializer)                   { ActiveModel::Serializer.serializer_for(resource).new(resource) }
   let(:response_errors)              { JSON.parse(response.body)['errors'] }
 
@@ -46,7 +47,7 @@ RSpec.shared_examples 'common_variables' do
   end
 
   def resources_count
-    defined?(reference_scope) ? reference_scope.count : resource.class.count
+    defined?(reference_scope) ? reference_scope.count : resource_not_destroyed_scope.count
   end
 end
 
@@ -179,7 +180,7 @@ RSpec.shared_examples 'create_examples' do
       api_login(user)
       expect do
         post :create, full_correct_attributes
-      end.to change { resources_count }.by(1)
+      end.to change(&count_proc).by(1)
       expect(response.status).to eq(201)
     end
 
@@ -188,7 +189,7 @@ RSpec.shared_examples 'create_examples' do
         api_login(user)
         expect do
           post :create, full_unpermitted_attributes
-        end.not_to change { resources_count }
+        end.not_to change(&count_proc)
         expect(response.status).to eq(403)
         expect(response_errors).to be_present
       end
@@ -200,7 +201,7 @@ RSpec.shared_examples 'create_examples' do
 
         expect do
           post :create, full_incorrect_attributes
-        end.not_to change { resources_count }
+        end.not_to change(&count_proc)
 
         expect(response.status).to eq(400)
         expect(response.body).to include('errors')
@@ -210,7 +211,7 @@ RSpec.shared_examples 'create_examples' do
     it 'does not create resource for users that are not signed in' do
       expect do
         post :create, full_correct_attributes
-      end.not_to change { resources_count }
+      end.not_to change(&count_proc)
 
       expect(response.status).to eq(401)
       expect(response_errors).to be_present
@@ -226,7 +227,7 @@ RSpec.shared_examples 'destroy_examples' do
       api_login(user)
       expect do
         delete :destroy, full_params
-      end.to change { resource_not_destroyed_scope.count }.by(-1)
+      end.to change(&count_proc).by(-1)
       expect(response.status).to eq(204)
     end
 
@@ -235,7 +236,7 @@ RSpec.shared_examples 'destroy_examples' do
         api_login(create(:user))
         expect do
           delete :destroy, full_params
-        end.not_to change { resource_not_destroyed_scope.count }
+        end.not_to change(&count_proc)
         expect(response.status).to eq(403)
       end
     end
@@ -243,7 +244,7 @@ RSpec.shared_examples 'destroy_examples' do
     it 'does not destroy resource object to users that are signed in' do
       expect do
         delete :destroy, full_params
-      end.not_to change { resource_not_destroyed_scope.count }
+      end.not_to change(&count_proc)
       expect(response.status).to eq(401)
     end
   end
@@ -265,10 +266,6 @@ RSpec.shared_examples 'index_examples' do |options = {}|
     end
     unless options[:except].include?(:sorting)
       include_examples 'sorting examples', action: :index
-    end
-
-    before do
-      resource.update(created_at: 2.days.ago)
     end
 
     it 'shows resources to users that are signed in' do
@@ -305,7 +302,6 @@ RSpec.shared_examples 'index_examples' do |options = {}|
       get :index, parent_param_if_needed.merge(per_page: 1, page: 2)
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['data'].length).to eq(1)
-      expect(JSON.parse(response.body)['data'].first['id']).to_not eq(resource.id)
       expect(JSON.parse(response.body)['meta']['pagination']['per_page']).to eq('1')
       expect(JSON.parse(response.body)['meta']['pagination']['page']).to eq('2')
       expect(JSON.parse(response.body)['meta']['pagination']['total_count']).not_to be_nil
@@ -411,6 +407,10 @@ end
 
 RSpec.shared_examples 'sorting examples' do |options|
   let(:sorting_param_or_created_at) { defined?(sorting_param) ? sorting_param : :created_at }
+
+  before do
+    resource.update_column(sorting_param_or_created_at, 2.days.ago)
+  end
 
   it 'sorts resources if sorting_param is in list of permitted sorts' do
     api_login(user)

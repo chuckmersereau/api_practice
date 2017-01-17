@@ -415,6 +415,12 @@ class Contact < ApplicationRecord
       other.not_duplicated_with.to_s.split(',').include?(id.to_s)
   end
 
+  def confirm_not_duplicate_of!(other)
+    not_duplicated_with_set = not_duplicated_with.to_s.split(',').to_set
+    not_duplicated_with_set << other.id.to_s
+    update_column(:not_duplicated_with, not_duplicated_with_set.to_a.join(','))
+  end
+
   def donor_accounts_attributes=(attribute_collection)
     attribute_collection = Hash[(0...attribute_collection.size).zip attribute_collection] if attribute_collection.is_a?(Array)
     attribute_collection = attribute_collection.with_indifferent_access.values

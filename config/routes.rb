@@ -47,6 +47,15 @@ Rails.application.routes.draw do
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do
           scope module: :contacts do
+            collection do
+              resource  :analytics, only: :show
+              resources :filters, only: :index
+              resources :tags, only: :index
+              constraints(id: /.+/) do
+                resources :duplicates, only: [:index, :destroy]
+              end
+            end
+
             resources :addresses, only: [:index, :show, :create, :update, :destroy]
 
             resources :people, only: [:show, :index, :create, :update, :destroy] do
@@ -64,14 +73,6 @@ Rails.application.routes.draw do
             resources :referrals, only: [:index, :show, :create, :update, :destroy]
             resources :referrers, only: [:index]
             resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
-          end
-
-          collection do
-            scope module: :contacts do
-              resource  :analytics, only: :show
-              resources :filters, only: :index
-              resources :tags, only: :index
-            end
           end
         end
 

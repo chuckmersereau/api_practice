@@ -30,7 +30,7 @@ module JsonApiHelper
   end
 
   def item_keys(additional_keys)
-    %w(id type attributes) + additional_keys
+    (resource_object.empty? ? %w(id type) : %w(id type attributes)) + additional_keys
   end
 
   def first_or_only_item
@@ -38,7 +38,7 @@ module JsonApiHelper
   end
 
   def resource_object
-    first_or_only_item['attributes']
+    first_or_only_item.fetch('attributes', {})
   end
 
   def resource_data

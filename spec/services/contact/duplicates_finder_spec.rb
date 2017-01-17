@@ -12,51 +12,55 @@ describe Contact::DuplicatesFinder do
 
   let(:nickname) { create(:nickname, name: 'john', nickname: 'johnny', suggest_duplicates: true) }
 
-  MATCHING_FIRST_NAMES = [
-    ['Grable A', 'Andy'],
-    ['Grable A', 'G Andrew'],
-    ['G Andrew', 'Andy'],
-    ['G Andrew', 'G Andy'],
-    %w(A Andy),
-    %w(A Andrew),
-    %w(Andy Andrew),
-    %w(GA Andrew),
-    %w(GA Andy),
-    ['GA', 'Grable A'],
-    ['G.A.', 'Grable A'],
-    ['G.A.', 'G A'],
-    ['G.A.', 'Andy'],
-    ['G.A.', 'Grable'],
-    ['G A.', 'Andy'],
-    ['G A.', 'Grable'],
-    ['G A.', 'Andy'],
-    ['G A.', 'Grable'],
-    ['A G', 'Grable'],
-    ['A G', 'Andrew'],
-    ['Grable Andy', 'Andrew'],
-    ['Grable Andrew', 'Andy'],
-    ['Grable Andy', 'G Andrew'],
-    ['Grable Andrew', 'G Andy'],
-    %w(CC Charlie),
-    %w(C Charlie),
-    ['Hoo-Tee', 'Hoo Tee'],
-    ['HooTee', 'Hoo Tee'],
-    ['Hootee', 'Hoo Tee'],
-    ['Mary Beth', 'Marybeth'],
-    ['JW', 'john wilson']
-  ].freeze
+  let(:matching_first_names) do
+    [
+      ['Grable A', 'Andy'],
+      ['Grable A', 'G Andrew'],
+      ['G Andrew', 'Andy'],
+      ['G Andrew', 'G Andy'],
+      %w(A Andy),
+      %w(A Andrew),
+      %w(Andy Andrew),
+      %w(GA Andrew),
+      %w(GA Andy),
+      ['GA', 'Grable A'],
+      ['G.A.', 'Grable A'],
+      ['G.A.', 'G A'],
+      ['G.A.', 'Andy'],
+      ['G.A.', 'Grable'],
+      ['G A.', 'Andy'],
+      ['G A.', 'Grable'],
+      ['G A.', 'Andy'],
+      ['G A.', 'Grable'],
+      ['A G', 'Grable'],
+      ['A G', 'Andrew'],
+      ['Grable Andy', 'Andrew'],
+      ['Grable Andrew', 'Andy'],
+      ['Grable Andy', 'G Andrew'],
+      ['Grable Andrew', 'G Andy'],
+      %w(CC Charlie),
+      %w(C Charlie),
+      ['Hoo-Tee', 'Hoo Tee'],
+      ['HooTee', 'Hoo Tee'],
+      ['Hootee', 'Hoo Tee'],
+      ['Mary Beth', 'Marybeth'],
+      ['JW', 'john wilson']
+    ].freeze
+  end
 
-  NON_MATCHING_FIRST_NAMES = [
-    %w(G Andy),
-    %w(Grable Andy),
-    ['Grable B', 'Andy'],
-    ['G B', 'Andy'],
-    %w(Andrew Andrea),
-    ['CCC NEHQ', 'Charlie'],
-    ['Dad US', 'Scott'],
-    ['Jonathan F', 'Florence'],
-    %w(Unknown Unknown)
-  ].freeze
+  let(:non_matching_first_names) do
+    [
+      %w(G Andy),
+      %w(Grable Andy),
+      ['Grable B', 'Andy'],
+      ['G B', 'Andy'],
+      %w(Andrew Andrea),
+      ['CCC NEHQ', 'Charlie'],
+      ['Dad US', 'Scott'],
+      ['Jonathan F', 'Florence'],
+      %w(Unknown Unknown)
+    ].freeze
+  end
 
   def create_records_for_name_list
     create(:nickname, name: 'andrew', nickname: 'andy', suggest_duplicates: true)
@@ -196,8 +200,8 @@ describe Contact::DuplicatesFinder do
 
     it 'finds contacts by matching initials and middle names in the first name field' do
       create_records_for_name_list
-      MATCHING_FIRST_NAMES.each(&method(:expect_matching_contacts))
-      NON_MATCHING_FIRST_NAMES.each(&method(:expect_non_matching_contacts))
+      matching_first_names.each(&method(:expect_matching_contacts))
+      non_matching_first_names.each(&method(:expect_non_matching_contacts))
     end
 
     it 'does not find duplicate contacts by middle_name field (too aggressive for contact match)' do
