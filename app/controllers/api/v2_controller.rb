@@ -8,9 +8,12 @@ class Api::V2Controller < ApiController
   include Fields
 
   before_action :jwt_authorize!
-  before_action :transform_uuid_attributes_params_to_ids, :transform_id_attribute_key_to_uuid, only: [:create, :update]
-  before_action :transform_uuid_filters_params_to_ids, only: :index
-  after_action :verify_authorized, except: :index
+  before_action :verify_primary_id_placement,             only: [:create]
+  before_action :transform_id_param_to_uuid_attribute,    only: [:create, :update]
+  before_action :transform_uuid_attributes_params_to_ids, only: [:create, :update]
+  before_action :transform_uuid_filters_params_to_ids,    only: :index
+
+  after_action  :verify_authorized, except: :index
 
   rescue_from Pundit::NotAuthorizedError, with: :render_403
 
@@ -65,18 +68,24 @@ class Api::V2Controller < ApiController
     action_name == 'update' ? :update_from_controller : :create
   end
 
-  def transform_id_attribute_key_to_uuid
-    return unless data_attributes[:id]
-    data_attributes[:uuid] = data_attributes[:id]
-    data_attributes.delete(:id)
+  def transform_id_param_to_uuid_attribute
+    return unless params[:data] && params[:data][:id] && params[:data][:attributes]
+
+    data_attributes[:uuid] = params[:data][:id]
   end
 
   def data_attributes
-    params[:data][:attributes]
+    params[:data][:attributes] if params[:data]
   end
 
   def fetch_account_lists
     return current_user.account_lists unless params[:filter] && params[:filter][:account_list_id]
     current_user.account_lists.where(uuid: params[:filter][:account_list_id])
+  end
+
+  def verify_primary_id_placement
+    if data_attributes && data_attributes[:id]
+      render_403_with_title('A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`')
+    end
   end
 end

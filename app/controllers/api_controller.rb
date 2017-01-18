@@ -47,7 +47,11 @@ class ApiController < ActionController::API
   end
 
   def render_403
-    render_error(title: 'Forbidden', status: :forbidden)
+    render_403_with_title('Forbidden')
+  end
+
+  def render_403_with_title(title)
+    render_error(title: title, status: :forbidden)
   end
 
   def render_401

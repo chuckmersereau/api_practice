@@ -1,5 +1,6 @@
 class Api::V2::AccountLists::MergeController < Api::V2Controller
   skip_before_action :transform_id_attribute_key_to_uuid
+  skip_before_action :verify_primary_id_placement
 
   def create
     load_merge_account_list
