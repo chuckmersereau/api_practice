@@ -24,12 +24,13 @@ resource 'Designation Account Balances Report' do
 
     # show
     get '/api/v2/reports/balances' do
-      parameter 'filter[account_list_id]', 'Account List ID', required: true
-      response_field 'data',               'Data object',     'Type' => 'Object'
+      parameter 'filter[account_list_id]', 'Account List ID',                                                                            required: true
+      parameter 'include',                 "Use 'include=designation_accounts' to include Designation Accounts, which include balances", required: true
+      response_field 'data',               'Data object',                                                                                'Type' => 'Object'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at', 'Time when report was observed', 'Type' => 'String'
-        response_field 'total_currency', 'Total Currency', 'Type' => 'String'
+        response_field 'created_at',            'Time when report was observed',              'Type' => 'String'
+        response_field 'total_currency',        'Total Currency',                             'Type' => 'String'
         response_field 'total_currency_symbol', 'The symbol representing the Total Currency', 'Type' => 'String'
       end
 
