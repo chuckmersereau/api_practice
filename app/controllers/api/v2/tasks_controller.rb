@@ -77,6 +77,9 @@ class Api::V2::TasksController < Api::V2Controller
     params.require(:data).require(:attributes).permit(Task::PERMITTED_ATTRIBUTES)
   end
 
+  def task_attributes
+  end
+
   def authorize_task
     authorize(@task)
   end

@@ -16,6 +16,10 @@ resource 'Tasks' do
   end
   let(:form_data) { build_data(new_task) }
 
+  let(:bulk_update_form_data) do
+    [{ id: task.uuid, attributes: new_task }]
+  end
+
   let(:resource_attributes) do
     %w(
       account_list_id
@@ -132,6 +136,28 @@ resource 'Tasks' do
         explanation 'Update the current_user\'s Task with the given ID'
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
+        expect(response_status).to eq 200
+      end
+    end
+
+    put '/api/v2/tasks/bulk' do
+      parameter 'data', 'Array of Tasks that have to be updated'
+
+      with_options scope: :data do
+        parameter 'id', 'Each member of the array must contain the id of the contact being updated'
+        parameter 'attributes', 'Each member of the array must contain an object with the attributes that must be updated'
+      end
+
+      with_options scope: :data do
+        response_field 'data',
+                       'List of Task objects that have been successfully updated and list of errors related to Task objects that were not updated successfully',
+                       'Type' => 'Array[Object]'
+      end
+
+      example 'Task [BULK UPDATE]', document: :entities do
+        explanation 'Bulk Update a list of Tasks with an array of objects containing the ID and updated attributes'
+        do_request data: bulk_update_form_data
+        expect(json_response.first['data']['attributes']['name']).to eq new_task['name']
         expect(response_status).to eq 200
       end
     end

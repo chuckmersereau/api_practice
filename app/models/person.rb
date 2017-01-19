@@ -83,7 +83,8 @@ class Person < ApplicationRecord
                           :updated_at,
                           :updated_in_db_at,
                           :uuid,
-                          { email_addresses_attributes: [:email, :historic, :primary, :_destroy, :id],
+                          { email_address: :email,
+                            email_addresses_attributes: [:email, :historic, :primary, :_destroy, :id],
                             facebook_accounts_attributes: [:url, :_destroy, :id],
                             family_relationships_attributes: [:related_person_id, :relationship, :_destroy, :id],
                             linkedin_accounts_attributes: [:url, :_destroy, :id],
@@ -91,8 +92,7 @@ class Person < ApplicationRecord
                             phone_numbers_attributes: [:number, :location, :historic, :primary, :_destroy, :id],
                             pictures_attributes: [:image, :image_cache, :primary, :_destroy, :id],
                             twitter_accounts_attributes: [:screen_name, :_destroy, :id],
-                            websites_attributes: [:url, :primary, :_destroy, :id],
-                            email_address: :email }].freeze
+                            websites_attributes: [:url, :primary, :_destroy, :id] }].freeze
 
   before_create :find_master_person
   after_destroy :clean_up_master_person, :clean_up_contact_people

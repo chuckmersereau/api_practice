@@ -10,6 +10,8 @@ describe Api::V2::ContactsController, type: :controller do
   let(:id) { contact.uuid }
 
   let!(:resource) { contact }
+  let(:second_resource) { second_contact }
+
   let(:correct_attributes) { attributes_for(:contact, name: 'Michael Bluth', account_list_id: account_list_id, tag_list: 'tag1') }
   let(:reference_key) { :name }
   let(:reference_value) { correct_attributes[:name] }

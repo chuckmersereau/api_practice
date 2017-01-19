@@ -1,4 +1,5 @@
 ActiveModelSerializers.config.key_transform = :underscore
+ActiveModelSerializers.config.adapter = ActiveModelSerializers::Adapter::JsonApi
 
 class ActiveModelSerializers::Adapter::JsonApi
   Relationship.class_eval do

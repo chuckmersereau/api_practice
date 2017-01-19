@@ -111,10 +111,6 @@ To allow offline clients to create and update resources and to ensure that the c
 
 To allow offline clients to later sync resources with the API without overwriting valid data, the API will require that the updated_in_db_at field (which should reflect the value of the updated_at field that was last returned from the server) be provided in text format for each resource updated through a PUT request. The API will verify that the provided updated_in_db_at field has the exact same value that is currently stored in the database and reject the update if that is not the case. This will ensure that a client doesn't overwrite a resource without being aware of that resource's latest data.
 
-### UUID
-
-To allow offline clients to reference resources before having synced with the API, clients can generate a UUID and provide it with the id field when syncing with the API.
-
 ## Universal Unique IDentifiers (UUID)
 
 To allow clients to generate identifiers from their side, UUIDs are used in this project at the controller level. At the model level though, we are still using integer ids to refer to db objects. Things are setup this way, because a db migration would have been to risky.

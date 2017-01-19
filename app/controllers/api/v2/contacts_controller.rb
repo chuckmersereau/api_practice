@@ -82,11 +82,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def contact_params
-    params.require(:data).require(:attributes).permit(contact_attributes)
-  end
-
-  def contact_attributes
-    Contact::PERMITTED_ATTRIBUTES
+    params.require(:data).require(:attributes).permit(Contact::PERMITTED_ATTRIBUTES)
   end
 
   def contact_scope

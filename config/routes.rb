@@ -77,6 +77,12 @@ Rails.application.routes.draw do
             resources :referrers, only: [:index]
             resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
           end
+          collection do
+            scope module: :contacts do
+              resource :bulk, only: :update, controller: :bulk
+              resources :filters, only: :index
+            end
+          end
         end
 
         resources :tasks do
@@ -86,7 +92,8 @@ Rails.application.routes.draw do
 
           collection do
             scope module: :tasks do
-              resource  :analytics, only: :show
+              resource :analytics, only: :show
+              resource :bulk, only: :update, controller: :bulk
               resources :filters, only: :index
               resources :tags, only: :index
             end
