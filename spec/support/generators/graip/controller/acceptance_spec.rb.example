@@ -13,9 +13,7 @@ resource 'Email Addresses' do
 
   # This is the reference data used to create/update a resource.
   # specify the `attributes` specifically in your request actions below.
-  let(:form_data) { build_data(attributes).merge(
-    # Merging with the updated_in_db_at value provided by the server. Ex: updated_in_db_at: email_address.updated_at 
-  ) }
+  let(:form_data) { build_data(attributes) }
 
   # List your expected resource keys vertically here (alphabetical please!)
   let(:expected_attribute_keys) do
@@ -35,22 +33,29 @@ resource 'Email Addresses' do
     )
   end
 
+  # DOCUMENTATION SCOPE
+  #
   # This is the scope in how these endpoints will be organized in the
   # generated documentation.
   #
-  # :entities should be used for "top level" resources, and the top level
-  # resources should be used for nested resources.
+  # :entities should be used for "top level" route resources, like AccountList, Contacts, Tasks, etc
+  # For nested resources, a symbolized version of a "top level" resource should be used.
   #
   # Ex: Api > v2 > Contacts                   - :entities would be the scope
   # Ex: Api > v2 > Contacts > Email Addresses - :contacts would be the scope
-  let(:document) { raise 'FILL ME IN' }
+  # Ex: Api > v2 > Contacts > People > Phones - :contacts would be the scope
+  #
+  # As such, replace FIXME below for the desired scope for the endpoints below,
+  # and feel free to remove this sentence.
+
+  documentation_scope = FIXME
 
   context 'authorized user' do
     before { api_login(user) }
 
     # index
     get '/my-index-url' do
-      example 'Email Address [LIST]', document: document do
+      example 'Email Address [LIST]', document: documentation_scope do
         explanation 'List of Email Addresses'
         do_request
 
@@ -67,7 +72,7 @@ resource 'Email Addresses' do
         response_field 'name_of_attribute', 'Name of Attribute', 'Type' => 'The Attribute Type (String, Boolean, etc)'
       end
 
-      example 'Email Address [GET]', document: document do
+      example 'Email Address [GET]', document: documentation_scope do
         explanation 'The Email Address for the given ID'
         do_request
 
@@ -86,7 +91,7 @@ resource 'Email Addresses' do
 
       let(:attributes) { 'FILL ME IN WITH POST DATA' }
 
-      example 'Email Address [CREATE]', document: document do
+      example 'Email Address [CREATE]', document: documentation_scope do
         explanation 'Create Email Address'
         do_request data: form_data
 
@@ -105,9 +110,12 @@ resource 'Email Addresses' do
 
       let(:attributes) { 'FILL ME IN WITH PUT DATA' }
 
-      example 'Email Address [UPDATE]', document: document do
+      example 'Email Address [UPDATE]', document: documentation_scope do
         explanation 'Update Email Address'
-        do_request data: form_data
+
+        # Merge with the updated_in_db_at value provided by the server.
+        # Ex: updated_in_db_at: email_address.updated_at
+        do_request data: form_data.merge!(updated_in_db_at: email_address.updated_at)
 
         check_resource(additional_attribute_keys)
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -124,9 +132,12 @@ resource 'Email Addresses' do
 
       let(:attributes) { 'FILL ME IN WITH PATCH DATA' }
 
-      example 'Email Address [UPDATE]', document: document do
+      example 'Email Address [UPDATE]', document: documentation_scope do
         explanation 'Update Email Address'
-        do_request data: form_data
+
+        # Merge with the updated_in_db_at value provided by the server.
+        # Ex: updated_in_db_at: email_address.updated_at
+        do_request data: form_data.merge!(updated_in_db_at: email_address.updated_at)
 
         check_resource(additional_attribute_keys)
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -136,7 +147,7 @@ resource 'Email Addresses' do
 
     # destroy
     delete '/my-destroy-url' do
-      example 'Email Address [DELETE]', document: document do
+      example 'Email Address [DELETE]', document: documentation_scope do
         explanation 'Delete Email Address'
         do_request
 
