@@ -30,17 +30,17 @@ class Api::V2::Contacts::BulkController < Api::V2Controller
   def build_contacts_to_update
     @contacts.each do |contact|
       contact.assign_attributes(
-        contact_params(params[:data][data_attribute_index(contact)][:attributes])
+        contact_params(params[:data][data_attribute_index(contact)][:data][:attributes])
       )
     end
   end
 
   def data_attribute_index(contact)
-    params[:data].find_index { |contact_data| contact_data[:id] == contact.uuid }
+    params[:data].find_index { |contact_data| contact_data[:data][:id] == contact.uuid }
   end
 
   def contact_ids_from_update_list
-    params[:data].map { |contact_param| contact_param['id'] }
+    params[:data].map { |contact_param| contact_param[:data][:id] }
   end
 
   def contact_scope

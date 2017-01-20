@@ -29,17 +29,17 @@ class Api::V2::Tasks::BulkController < Api::V2Controller
   def build_tasks_to_update
     @tasks.each do |task|
       task.assign_attributes(
-        task_params(params[:data][data_attribute_index(task)][:attributes])
+        task_params(params[:data][data_attribute_index(task)][:data][:attributes])
       )
     end
   end
 
   def data_attribute_index(task)
-    params[:data].find_index { |task_data| task_data[:id] == task.uuid }
+    params[:data].find_index { |task_data| task_data[:data][:id] == task.uuid }
   end
 
   def task_ids_from_update_list
-    params[:data].map { |task_param| task_param['id'] }
+    params[:data].map { |task_param| task_param[:data][:id] }
   end
 
   def task_scope

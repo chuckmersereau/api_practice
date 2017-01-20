@@ -20,7 +20,7 @@ resource 'Contacts' do
   let(:form_data) { build_data(new_contact) }
 
   let(:bulk_update_form_data) do
-    [{ id: contact.uuid, attributes: new_contact }]
+    [{ data: { id: contact.uuid, attributes: new_contact } }]
   end
 
   let(:additional_keys) { ['relationships'] }
@@ -259,11 +259,9 @@ resource 'Contacts' do
         parameter 'attributes', 'Each member of the array must contain an object with the attributes that must be updated'
       end
 
-      with_options scope: :data do
-        response_field 'data',
-                       'List of Contact objects that have been successfully updated and list of errors related to Contact objects that were not updated successfully',
-                       'Type' => 'Array[Object]'
-      end
+      response_field 'data',
+                     'List of Contact objects that have been successfully updated and list of errors related to Contact objects that were not updated successfully',
+                     'Type' => 'Array[Object]'
 
       example 'Contact [BULK UPDATE]', document: :entities do
         explanation 'Bulk Update a list of Contacts with an array of objects containing the ID and updated attributes'

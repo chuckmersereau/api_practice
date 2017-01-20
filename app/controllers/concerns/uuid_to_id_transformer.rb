@@ -10,7 +10,7 @@ module UuidToIdTransformer
   def transform_uuid_attributes_params_to_ids
     if params[:data].is_a?(Array)
       params[:data].each do |updating_member|
-        transform_uuids_to_ids_for_keys_in(updating_member[:attributes])
+        transform_uuids_to_ids_for_keys_in(updating_member[:data][:attributes])
       end
     else
       transform_uuids_to_ids_for_keys_in(params[:data][:attributes])

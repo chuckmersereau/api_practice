@@ -4,9 +4,9 @@ RSpec.shared_examples 'bulk_update_examples' do
   describe '#update' do
     let(:unauthorized_resource) { create(factory_type) }
     let(:bulk_update_attributes) do
-      { data: [{ id: resource.uuid, attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) },
-               { id: second_resource.uuid, attributes: incorrect_attributes },
-               { id: unauthorized_resource.uuid, attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) }] }
+      { data: [{ data: { id: resource.uuid, attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) } },
+               { data: { id: second_resource.uuid, attributes: incorrect_attributes } },
+               { data: { id: unauthorized_resource.uuid, attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) } }] }
     end
     let(:parsed_body) { JSON.parse(response.body) }
     let(:successful_json_object_index) { parsed_body.find_index { |object| object['data'] } }
