@@ -40,3 +40,4 @@ dump.rdb
 recent_specs.txt
 _generated_examples.markdown
 /doc
+/.byebug_history

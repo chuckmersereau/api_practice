@@ -50,6 +50,7 @@ Rails.application.routes.draw do
           resources :currencies, only: [:index]
           resources :notifications, only: [:index]
           resources :locales, only: [:index]
+          resources :activities, only: [:index]
         end
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do

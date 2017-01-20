@@ -1,4 +1,4 @@
-class AccountListSerializer < ApplicationSerializer
+class AccountListSerializer < ServiceSerializer
   attributes :name,
              :default_organization_id,
              :monthly_goal,
