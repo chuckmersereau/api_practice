@@ -25,6 +25,4 @@ describe Api::V2::AccountLists::ImportsController, type: :controller do
   let(:unpermitted_attributes) { nil }
 
   include_examples 'show_examples'
-
-  include_examples 'create_examples'
 end

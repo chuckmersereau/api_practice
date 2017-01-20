@@ -5,6 +5,18 @@ class ApiController < ActionController::API
 
   MEDIA_TYPE_MATCHER = /.+".+"[^,]*|[^,]+/
   ALL_MEDIA_TYPES = '*/*'.freeze
+  DEFAULT_SUPPORTED_CONTENT_TYPE = 'application/vnd.api+json'.freeze
+
+  class << self
+    def supports_content_types(*content_types)
+      @supported_content_types = content_types.compact.presence
+    end
+
+    def supported_content_types
+      @supported_content_types ||= []
+      @supported_content_types.presence || [DEFAULT_SUPPORTED_CONTENT_TYPE]
+    end
+  end
 
   protected
 
@@ -80,8 +92,8 @@ class ApiController < ActionController::API
   end
 
   def verify_request_content_type
-    content_header = request.headers['CONTENT_TYPE']
-    render_415 unless content_header == 'application/vnd.api+json'
+    content_type = request.headers['CONTENT_TYPE'].try(:split, ';').try(:first)
+    render_415 unless self.class.supported_content_types.include?(content_type)
   end
 
   def verify_request_accept_type
@@ -92,7 +104,7 @@ class ApiController < ActionController::API
     media_types = given_media_types('Accept')
 
     media_types.blank? || media_types.any? do |media_type|
-      (media_type == 'application/vnd.api+json' || media_type.start_with?(ALL_MEDIA_TYPES))
+      (media_type == DEFAULT_SUPPORTED_CONTENT_TYPE || media_type.start_with?(ALL_MEDIA_TYPES))
     end
   end
 

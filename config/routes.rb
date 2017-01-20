@@ -13,8 +13,15 @@ Rails.application.routes.draw do
             resources :designation_accounts, only: [:index, :show]
             resources :donations, only: [:index, :show, :create, :update]
             resources :donor_accounts, only: [:index, :show]
-            resources :imports, only: [:show, :create]
             resources :invites, only: [:index, :show, :create, :destroy]
+
+            resources :imports, only: :show do
+              scope module: :imports do
+                collection do
+                  resources :tnt, only: :create
+                end
+              end
+            end
 
             resource :mail_chimp_account, only: [:show, :create, :destroy] do
               get :sync, on: :member

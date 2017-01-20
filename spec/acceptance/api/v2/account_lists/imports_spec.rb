@@ -88,25 +88,5 @@ resource 'Import' do
         expect(response_status).to eq 200
       end
     end
-
-    post '/api/v2/account_lists/:account_list_id/imports' do
-      with_options scope: [:data, :attributes] do
-        parameter 'file',              'File'
-        parameter 'groups',            'Groups'
-        parameter 'group_tags',        'Group Tags'
-        parameter 'import_by_group',   'Import by Group'
-        parameter 'override',          'Override'
-        parameter 'source',            'Source'
-        parameter 'source_account_id', 'Source Account ID'
-        parameter 'tags',              'Tags'
-        parameter 'user_id',           'User ID'
-      end
-
-      example 'Import [CREATE]', document: :account_lists do
-        explanation 'List of Imports associated with the Account List'
-        do_request data: form_data
-        expect(response_status).to eq 201
-      end
-    end
   end
 end
