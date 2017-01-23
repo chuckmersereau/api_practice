@@ -18,7 +18,11 @@ module UuidToIdTransformer
   end
 
   def transform_uuid_filters_params_to_ids
-    transform_uuids_to_ids_for_keys_in(params[:filters])
+    transform_uuids_to_ids_for_keys_in(filter_params_needing_transformation)
+  end
+
+  def filter_params_needing_transformation
+    params[:filter].except(:account_list_id) if params[:filter]
   end
 
   def transform_uuids_to_ids_for_keys_in(param_location)
@@ -47,7 +51,8 @@ module UuidToIdTransformer
   def get_id_from_model_and_key(param_location, key, model)
     model.where(uuid: param_location[key]).limit(1).ids.first
   rescue ActiveRecord::StatementInvalid
-    render json: { error: "Resource '#{key.chomp('_id')}' with id '#{param_location[key]}' does not exist." },
-           status: 404
+    render_404(
+      "Resource '#{key.chomp('_id')}' with id '#{param_location[key]}' does not exist."
+    )
   end
 end

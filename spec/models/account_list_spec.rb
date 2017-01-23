@@ -1,5 +1,6 @@
 require 'spec_helper'
 require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
+require 'csv'
 
 describe AccountList do
   before do

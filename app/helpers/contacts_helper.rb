@@ -9,6 +9,10 @@ module ContactsHelper
       [_('Phone 1'), _('Phone 2'), _('Phone 3'), _('Phone 4')]
   end
 
+  def spreadsheet_header_titles_joined
+    spreadsheet_header_titles.map { |h| _(h) }.join('","')
+  end
+
   def spreadsheet_values(contact)
     row = preliminary_values(contact)
     add_email_addresses(contact, row)

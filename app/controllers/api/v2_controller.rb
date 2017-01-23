@@ -80,7 +80,15 @@ class Api::V2Controller < ApiController
 
   def fetch_account_lists
     return current_user.account_lists unless params[:filter] && params[:filter][:account_list_id]
-    current_user.account_lists.where(uuid: params[:filter][:account_list_id])
+    fetch_account_list_with_filter
+  end
+
+  def fetch_account_list_with_filter
+    @account_lists = current_user.account_lists.where(uuid: params[:filter][:account_list_id])
+    render_404_with_detail(
+      "Resource 'account_list' with id '#{params[:filter][:account_list_id]}' does not exist."
+    ) if @account_lists.empty?
+    @account_lists
   end
 
   def verify_primary_id_placement

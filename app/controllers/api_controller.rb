@@ -12,9 +12,18 @@ class ApiController < ActionController::API
       @supported_content_types = content_types.compact.presence
     end
 
+    def supports_accept_header_content_types(*content_types)
+      @supported_accept_header_content_types = content_types.compact.presence
+    end
+
     def supported_content_types
       @supported_content_types ||= []
       @supported_content_types.presence || [DEFAULT_SUPPORTED_CONTENT_TYPE]
+    end
+
+    def supported_accept_header_content_types
+      @supported_accept_header_content_types ||= []
+      @supported_accept_header_content_types.presence || [DEFAULT_SUPPORTED_CONTENT_TYPE]
     end
   end
 
@@ -54,8 +63,8 @@ class ApiController < ActionController::API
     render_error(title: 'Not Acceptable', status: :not_acceptable)
   end
 
-  def render_404
-    render_error(title: 'Not Found', status: :not_found)
+  def render_404(detail = nil)
+    render_error(title: 'Not Found', detail: detail, status: :not_found)
   end
 
   def render_403
@@ -104,14 +113,13 @@ class ApiController < ActionController::API
     media_types = given_media_types('Accept')
 
     media_types.blank? || media_types.any? do |media_type|
-      (media_type == DEFAULT_SUPPORTED_CONTENT_TYPE || media_type.start_with?(ALL_MEDIA_TYPES))
+      (self.class.supported_accept_header_content_types.include?(media_type) || media_type.start_with?(ALL_MEDIA_TYPES))
     end
   end
 
   def given_media_types(header)
     (request.headers[header] || '')
       .scan(MEDIA_TYPE_MATCHER)
-      .to_a
       .map(&:strip)
   end
 end

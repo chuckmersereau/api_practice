@@ -89,7 +89,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def task_scope
-    Task.where(account_list_id: account_lists.collect(&:id))
+    Task.where(account_list_id: account_lists.select(:id))
   end
 
   def permitted_filters

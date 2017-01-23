@@ -84,9 +84,10 @@ Rails.application.routes.draw do
             resources :referrals, only: [:index, :show, :create, :update, :destroy]
             resources :referrers, only: [:index]
             resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
-          end
-          collection do
-            scope module: :contacts do
+
+            collection do
+              get :analytics, to: 'analytics#show'
+              resources :exports, only: :index
               resource :bulk, only: :update, controller: :bulk
               resources :filters, only: :index
             end

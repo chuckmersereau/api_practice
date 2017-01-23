@@ -16,3 +16,7 @@ api_mime_types = %w(
 
 Mime::Type.unregister :json
 Mime::Type.register 'application/vnd.api+json', :json, api_mime_types
+
+# For csv and xlsx exports
+Mime::Type.register "text/csv", :csv
+Mime::Type.register "application/xlsx", :xlsx

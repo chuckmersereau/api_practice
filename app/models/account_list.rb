@@ -315,7 +315,7 @@ class AccountList < ApplicationRecord
     newsletter_contacts = ContactFilter.new(newsletter: 'address').filter(contacts, self)
     views = ActionView::Base.new('app/views', {}, ActionController::Base.new)
     ActionView::Base.send :include, ContactsHelper
-    views.render(file: 'contacts/index.csv.erb',
+    views.render(file: 'api/v2/contacts/exports/index.csv.erb',
                  locals: { contacts: newsletter_contacts,
                            current_account_list: self })
   end
