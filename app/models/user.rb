@@ -18,14 +18,18 @@ class User < Person
 
   after_create :set_setup_mode
 
-  PERMITTED_ATTRIBUTES = Person::PERMITTED_ATTRIBUTES.deep_dup.concat([:contacts_filter,
-                                                                       :contacts_view_options,
-                                                                       :default_account_list,
-                                                                       :locale,
-                                                                       :setup,
-                                                                       :tasks_filter,
-                                                                       :tab_orders,
-                                                                       :time_zone]).freeze
+  PERMITTED_ATTRIBUTES = Person::PERMITTED_ATTRIBUTES.deep_dup.concat(
+    [preferences: [
+      :contacts_filter,
+      :contacts_view_options,
+      :default_account_list,
+      :locale,
+      :setup,
+      :tasks_filter,
+      :tab_orders,
+      :time_zone
+    ]]
+  ).freeze
 
   # Queue data imports
   def queue_imports
