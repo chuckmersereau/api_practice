@@ -4,6 +4,11 @@ module MpdxHelper
     allow_any_instance_of(Api::V2Controller).to receive(:current_user).and_return(user)
   end
 
+  def api_logout
+    allow_any_instance_of(Api::V2Controller).to receive(:jwt_authorize!).and_raise(Exceptions::AuthenticationError)
+    allow_any_instance_of(Api::V2Controller).to receive(:current_user).and_return(nil)
+  end
+
   def login(user)
     # rubocop:disable Style/GlobalVars
     $request_test = true

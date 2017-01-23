@@ -1,5 +1,6 @@
 class Api::V2Controller < ApiController
   include Pundit
+  include PunditHelpers
   include Filtering
   include Sorting
   include Pagination
@@ -15,7 +16,7 @@ class Api::V2Controller < ApiController
 
   after_action  :verify_authorized, except: :index
 
-  rescue_from Pundit::NotAuthorizedError, with: :render_403
+  rescue_from Pundit::NotAuthorizedError, with: :render_403_from_exception
 
   protected
 
@@ -93,7 +94,7 @@ class Api::V2Controller < ApiController
 
   def verify_primary_id_placement
     if data_attributes && data_attributes[:id]
-      render_403_with_title('A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`')
+      render_403(title: 'A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`')
     end
   end
 end

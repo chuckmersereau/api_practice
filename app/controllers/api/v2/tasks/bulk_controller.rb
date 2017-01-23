@@ -1,32 +1,52 @@
 class Api::V2::Tasks::BulkController < Api::V2Controller
   skip_before_action :transform_id_param_to_uuid_attribute
+
   def update
-    load_tasks_to_update
-    authorize_tasks_to_update
-    persist_tasks_to_update
+    load_tasks
+    authorize_tasks
+    persist_tasks
+  end
+
+  def destroy
+    load_tasks
+    authorize_tasks
+    destroy_tasks
   end
 
   private
 
-  def load_tasks_to_update
-    @tasks = task_scope.where(uuid: task_ids_from_update_list).tap(&:first!)
+  def load_tasks
+    @tasks = task_scope.where(uuid: task_uuid_params).tap(&:first!)
   end
 
-  def authorize_tasks_to_update
-    @tasks.each { |task| authorize task }
+  def authorize_tasks
+    bulk_authorize(@tasks)
   end
 
-  def persist_tasks_to_update
-    build_tasks_to_update
-    bulk_save_tasks
-    render json: BulkUpdateSerializer.new(resources: @tasks)
+  def destroy_tasks
+    @destroyed_tasks = @tasks.select(&:destroy)
+    render json: BulkResourceSerializer.new(resources: @destroyed_tasks)
   end
 
-  def bulk_save_tasks
+  def task_uuid_params
+    params.require(:data).collect { |hash| hash[:data][:id] }
+  end
+
+  def task_scope
+    current_user.tasks
+  end
+
+  def persist_tasks
+    build_tasks
+    save_tasks
+    render json: BulkResourceSerializer.new(resources: @tasks)
+  end
+
+  def save_tasks
     @tasks.each { |task| task.save(context: :update_from_controller) }
   end
 
-  def build_tasks_to_update
+  def build_tasks
     @tasks.each do |task|
       task.assign_attributes(
         task_params(params[:data][data_attribute_index(task)][:data][:attributes])
@@ -38,17 +58,12 @@ class Api::V2::Tasks::BulkController < Api::V2Controller
     params[:data].find_index { |task_data| task_data[:data][:id] == task.uuid }
   end
 
-  def task_ids_from_update_list
-    params[:data].map { |task_param| task_param[:data][:id] }
-  end
-
-  def task_scope
-    Task.where(account_list: account_lists)
-  end
-
   def task_params(attributes)
     attributes ||= params.require(:data).require(:attributes)
-
     attributes.permit(Task::PERMITTED_ATTRIBUTES)
+  end
+
+  def permitted_filters
+    []
   end
 end

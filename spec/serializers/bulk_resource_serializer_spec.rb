@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-RSpec.describe BulkUpdateSerializer, type: :serializer do
+RSpec.describe BulkResourceSerializer, type: :serializer do
   describe 'json output' do
     let(:contact_with_error) do
       contact = create(:contact)
@@ -11,7 +11,7 @@ RSpec.describe BulkUpdateSerializer, type: :serializer do
     let(:contact) { create(:contact) }
     let(:resources) { [contact, create(:contact), contact_with_error] }
 
-    let(:serializer) { BulkUpdateSerializer.new(resources: resources) }
+    let(:serializer) { BulkResourceSerializer.new(resources: resources) }
     let(:parsed_json_response) { JSON.parse(serializer.to_json) }
 
     it 'outputs the successes and failures in the correct format' do

@@ -88,7 +88,7 @@ Rails.application.routes.draw do
             collection do
               get :analytics, to: 'analytics#show'
               resources :exports, only: :index
-              resource :bulk, only: :update, controller: :bulk
+              resource :bulk, only: [:update, :destroy], controller: :bulk
               resources :filters, only: :index
             end
           end
@@ -102,7 +102,7 @@ Rails.application.routes.draw do
           collection do
             scope module: :tasks do
               resource :analytics, only: :show
-              resource :bulk, only: :update, controller: :bulk
+              resource :bulk, only: [:update, :destroy], controller: :bulk
               resources :filters, only: :index
               resources :tags, only: :index
             end

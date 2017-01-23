@@ -67,12 +67,14 @@ class ApiController < ActionController::API
     render_error(title: 'Not Found', detail: detail, status: :not_found)
   end
 
-  def render_403
-    render_403_with_title('Forbidden')
+  def render_403_from_exception(exception)
+    uuid = exception.try(:record).try(:uuid)
+    detail = uuid ? "Not allowed to perform that action on the resource with ID #{uuid}" : nil
+    render_403(detail: detail)
   end
 
-  def render_403_with_title(title)
-    render_error(title: title, status: :forbidden)
+  def render_403(title: 'Forbidden', detail: nil)
+    render_error(title: title, detail: detail, status: :forbidden)
   end
 
   def render_401

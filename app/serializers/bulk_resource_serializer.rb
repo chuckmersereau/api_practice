@@ -1,4 +1,4 @@
-class BulkUpdateSerializer
+class BulkResourceSerializer
   def initialize(resources: [])
     @resources = resources
   end
