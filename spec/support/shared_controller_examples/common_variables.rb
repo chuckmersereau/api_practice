@@ -1,20 +1,57 @@
 RSpec.shared_examples 'common_variables' do
-  let(:id_param)                     { defined?(id) ? { id: id } : {} }
-  let(:full_params)                  { id_param.merge(defined?(parent_param) ? parent_param : {}) }
-  let(:parent_param_if_needed)       { defined?(parent_param) ? parent_param : {} }
-  let(:full_correct_attributes)      { { data: { attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
-  let(:full_unpermitted_attributes)  { { data: { attributes: unpermitted_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
-  let(:full_incorrect_attributes)    { { data: { attributes: incorrect_attributes.merge(updated_in_db_at: resource.updated_at) } }.merge(full_params) }
-  let(:reference_key)                { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
-  let(:reference_value)              { defined?(given_reference_value) ? given_reference_value : correct_attributes.values.first }
-  let(:count_proc)                   { defined?(count) ? count : -> { resources_count } }
+  let(:id_param) { defined?(id) ? { id: id } : {} }
+
+  let(:full_params)            { id_param.merge(defined?(parent_param) ? parent_param : {}) }
+  let(:parent_param_if_needed) { defined?(parent_param) ? parent_param : {} }
+
+  let(:full_correct_attributes) do
+    {
+      data: {
+        type: resource_type,
+        attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+      }
+    }.merge(full_params)
+  end
+
+  let(:full_unpermitted_attributes) do
+    {
+      data: {
+        type: resource_type,
+        attributes: unpermitted_attributes.merge(updated_in_db_at: resource.updated_at)
+      }
+    }.merge(full_params)
+  end
+
+  let(:full_incorrect_attributes) do
+    {
+      data: {
+        type: resource_type,
+        attributes: incorrect_attributes.merge(updated_in_db_at: resource.updated_at)
+      }
+    }.merge(full_params)
+  end
+
+  let(:reference_key)   { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
+  let(:reference_value) { defined?(given_reference_value) ? given_reference_value : correct_attributes.values.first }
+  let(:count_proc)      { defined?(count) ? count : -> { resources_count } }
+
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
   let(:serializer) { ActiveModel::Serializer.serializer_for(resource).new(resource) }
+  let(:resource_type) { serializer._type || resource.class.to_s.underscore.tr('/', '_').pluralize }
+
+  let(:response_errors) { JSON.parse(response.body)['errors'] }
+
+  let(:response_error_pointers) do
+    response_errors.map do |error|
+      error['source']['pointer'] if error['source']
+    end
+  end
 
   let(:full_update_attributes) do
     if defined?(update_attributes)
       {
         data: {
+          type: resource_type,
           attributes: update_attributes
         }
       }.merge(full_params)
@@ -36,6 +73,12 @@ RSpec.shared_examples 'common_variables' do
       given_update_reference_value
     else
       full_update_attributes[:data][:attributes].values.first
+    end
+  end
+
+  let(:attributes_with_incorrect_resource_type) do
+    full_correct_attributes.tap do |params|
+      params[:data][:type] = :gummybear # should definitely fail
     end
   end
 

@@ -58,6 +58,7 @@ Rails.application.routes.draw do
             collection do
               resource  :analytics, only: :show
               resources :filters, only: :index
+              resources :merges, only: :create
               resources :tags, only: :index
               constraints(id: /.+/) do
                 resources :duplicates, only: [:index, :destroy]

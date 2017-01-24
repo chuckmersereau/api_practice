@@ -3,11 +3,15 @@ RSpec.shared_examples 'including related resources examples' do |options|
     let(:action) { options[:action].to_sym }
     let(:includes) { '*' }
     let(:expected_response_code) do
-      case action
-      when :index, :show, :update
-        200
-      when :create
-        201
+      if options[:expected_response_code]
+        options[:expected_response_code]
+      else
+        case action
+        when :index, :show, :update
+          200
+        when :create
+          201
+        end
       end
     end
 

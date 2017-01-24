@@ -5,11 +5,15 @@ RSpec.shared_examples 'sparse fieldsets examples' do |options|
     let(:example_attributes) { serializer.attributes.except(:id).keys.first(2).collect(&:to_s) }
     let(:fields) { { resource_type => example_attributes.join(',') } }
     let(:expected_response_code) do
-      case action
-      when :index, :show, :update
-        200
-      when :create
-        201
+      if options[:expected_response_code]
+        options[:expected_response_code]
+      else
+        case action
+        when :index, :show, :update
+          200
+        when :create
+          201
+        end
       end
     end
 
