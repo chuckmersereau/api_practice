@@ -1,4 +1,6 @@
 class Api::V2::AccountLists::InvitesController < Api::V2Controller
+  resource_type :account_list_invites
+
   def index
     authorize load_account_list, :show?
     load_invites

@@ -4,7 +4,7 @@ require 'rspec_api_documentation/dsl'
 resource 'Tags' do
   include_context :json_headers
 
-  let(:resource_type) { 'contacts' }
+  let(:resource_type) { :tags }
   let!(:user)         { create(:user_with_full_account) }
   let!(:account_list) { user.account_lists.first }
 

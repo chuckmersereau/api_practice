@@ -2,6 +2,8 @@ require 'spec_helper'
 
 describe Api::V2::AccountLists::Imports::TntController, type: :controller do
   let(:factory_type) { :import }
+  let(:resource_type) { :imports }
+
   let!(:user) { create(:user_with_account) }
   let!(:fb_account) { create(:facebook_account, person: user) }
   let!(:account_list) { user.account_lists.first }
@@ -30,6 +32,7 @@ describe Api::V2::AccountLists::Imports::TntController, type: :controller do
   describe '#create' do
     it 'creates a file' do
       api_login(user)
+
       expect do
         post :create, full_correct_attributes
       end.to change { resource.class.count }.by(1)

@@ -38,6 +38,17 @@ RSpec.shared_examples 'update_examples' do |options = {}|
         expect(response.status).to eq(400)
         expect(response.body).to include('errors')
         expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
+        expect(response_errors).to be_present
+
+        if response_error_pointers.present?
+          expect(
+            incorrect_attributes.keys.any? do |incorrect_attribute|
+              pointer_reference = "/data/attributes/#{incorrect_attribute}"
+
+              response_error_pointers.include?(pointer_reference)
+            end
+          ).to be true
+        end
       end
     end
 
@@ -48,6 +59,7 @@ RSpec.shared_examples 'update_examples' do |options = {}|
 
       expect(response.status).to eq(400)
       expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
+      expect(response_errors).to be_present
     end
 
     it 'does not update resource for users that do not own the resource' do
@@ -57,6 +69,7 @@ RSpec.shared_examples 'update_examples' do |options = {}|
 
         expect(response.status).to eq(403)
         expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
+        expect(response_errors).to be_present
       end
     end
 
@@ -65,6 +78,15 @@ RSpec.shared_examples 'update_examples' do |options = {}|
 
       expect(response.status).to eq(401)
       expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
+      expect(response_errors).to be_present
+    end
+
+    it 'does not update a resource if the resource_type is incorrect' do
+      api_login(user)
+      put :update, attributes_with_incorrect_resource_type
+
+      expect(response.status).to eq(409)
+      expect(response_errors).to be_present
     end
   end
 end

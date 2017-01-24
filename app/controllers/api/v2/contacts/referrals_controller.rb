@@ -1,4 +1,6 @@
 class Api::V2::Contacts::ReferralsController < Api::V2Controller
+  resource_type :contact_referrals
+
   def index
     authorize current_contact, :show?
     load_referrals

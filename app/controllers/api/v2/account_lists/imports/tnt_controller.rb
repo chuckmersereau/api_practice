@@ -8,6 +8,7 @@
 #        -F 'data[attributes][source]=tnt'
 
 class Api::V2::AccountLists::Imports::TntController < Api::V2Controller
+  resource_type :imports
   supports_content_types 'multipart/form-data'
 
   def create

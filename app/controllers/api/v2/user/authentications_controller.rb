@@ -1,5 +1,6 @@
 class Api::V2::User::AuthenticationsController < Api::V2Controller
   skip_before_action :jwt_authorize!, :transform_uuid_attributes_params_to_ids, :transform_id_attribute_key_to_uuid
+  skip_before_action :verify_resource_type
   skip_after_action :verify_authorized
   before_action :load_user
 

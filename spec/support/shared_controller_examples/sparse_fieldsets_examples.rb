@@ -1,7 +1,6 @@
 RSpec.shared_examples 'sparse fieldsets examples' do |options|
   context "action #{options[:action]} sparse fieldsets" do
     let(:action) { options[:action].to_sym }
-    let(:resource_type) { serializer._type || resource.class.to_s.underscore.pluralize }
     let(:example_attributes) { serializer.attributes.except(:id).keys.first(2).collect(&:to_s) }
     let(:fields) { { resource_type => example_attributes.join(',') } }
     let(:expected_response_code) do

@@ -36,6 +36,7 @@ class Task < Activity
                           :tag_list,
                           :updated_at,
                           :updated_in_db_at,
+                          :uuid,
                           { activity_comment: [:body],
                             activity_comments_attributes: [:body],
                             activity_contacts_attributes: [:contact_id, :_destroy] }].freeze

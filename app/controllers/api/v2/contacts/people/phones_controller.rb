@@ -1,4 +1,6 @@
 class Api::V2::Contacts::People::PhonesController < Api::V2Controller
+  resource_type :phone_numbers
+
   def index
     authorize_index
     load_phones

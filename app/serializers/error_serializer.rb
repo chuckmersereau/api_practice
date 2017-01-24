@@ -76,7 +76,7 @@ class ErrorSerializer
   def formatted_title_error
     return unless title
 
-    detail_hash = detail.present? ? { detail: detail } : {}
+    detail_hash = detail.present? ? { detail: detail.to_s } : {}
 
     [
       {

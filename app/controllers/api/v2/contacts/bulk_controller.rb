@@ -1,5 +1,6 @@
 class Api::V2::Contacts::BulkController < Api::V2Controller
   skip_before_action :transform_id_param_to_uuid_attribute
+  skip_before_action :verify_resource_type
 
   def update
     load_contacts

@@ -1,15 +1,17 @@
 class Api::V2Controller < ApiController
+  include Fields
+  include Filtering
+  include Including
+  include Pagination
   include Pundit
   include PunditHelpers
-  include Filtering
+  include ResourceType
   include Sorting
-  include Pagination
   include UuidToIdTransformer
-  include Including
-  include Fields
 
   before_action :jwt_authorize!
   before_action :verify_primary_id_placement,             only: [:create]
+  before_action :verify_resource_type,                    only: [:create, :update]
   before_action :transform_id_param_to_uuid_attribute,    only: [:create, :update]
   before_action :transform_uuid_attributes_params_to_ids, only: [:create, :update]
   before_action :transform_uuid_filters_params_to_ids,    only: :index

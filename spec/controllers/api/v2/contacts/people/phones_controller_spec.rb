@@ -3,7 +3,6 @@ require 'spec_helper'
 RSpec.describe Api::V2::Contacts::People::PhonesController, type: :controller do
   let(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
-  let(:resource_type) { :phone_number }
   let(:contact) { create(:contact, account_list: user.account_lists.first) }
   let(:person) { create(:person, contacts: [contact]) }
   let!(:resource) { create(:phone_number, person: person) }

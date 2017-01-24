@@ -7,14 +7,14 @@ module JsonApiHelper
     expect(json_response.keys).to eq %w(data links meta)
     expect(resource_data.count).to eq total_items
     expect(first_or_only_item.keys).to eq item_keys(additional_keys)
-    expect(first_or_only_item['type']).to eq resource_type
+    expect(first_or_only_item['type']).to eq resource_type.to_s
     expect(resource_object.keys).to match_array(resource_attributes) if defined?(resource_attributes)
   end
 
   def check_resource(additional_keys = [])
     expect(json_response.keys).to eq %w(data)
     expect(first_or_only_item.keys).to eq item_keys(additional_keys)
-    expect(first_or_only_item['type']).to eq resource_type
+    expect(first_or_only_item['type']).to eq resource_type.to_s
     check_resource_attributes
     check_resource_relationships
   end

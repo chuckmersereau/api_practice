@@ -6,6 +6,7 @@ describe Api::V2Controller do
 
   describe 'controller callbacks' do
     controller(Api::V2Controller) do
+      skip_before_action :verify_resource_type
       skip_after_action :verify_authorized
 
       def index
@@ -36,6 +37,7 @@ describe Api::V2Controller do
 
     context '#filters' do
       let(:contact) { create(:contact) }
+
       it 'allows a user to filter by id using a uuid' do
         api_login(user)
         get :index, filter: { contact_id: contact.uuid }
@@ -57,6 +59,7 @@ describe Api::V2Controller do
         expect(response.body).to include("Resource 'contact' with id 'AXXSAASA222Random' does not exist.")
       end
     end
+
     context '#uuid_to_id conversion in attributes' do
       it 'turns uuid ending attribute for create actions' do
         api_login(user)

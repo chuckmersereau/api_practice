@@ -3,13 +3,34 @@ require 'spec_helper'
 RSpec.describe Api::V2::Tasks::TagsController, type: :controller do
   let(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
+
+  let(:resource_type) { :tags }
+
   let(:first_tag) { 'tag_one' }
   let(:task) { create(:task, account_list: account_list, tag_list: [first_tag]) }
   let(:second_tag) { 'tag_two' }
   let(:correct_attributes) { { name: second_tag } }
   let(:incorrect_attributes) { { name: nil } }
-  let(:full_correct_attributes) { { task_id: task.uuid, data: { attributes: correct_attributes } } }
-  let(:full_incorrect_attributes) { { task_id: task.uuid, data: { attributes: incorrect_attributes } } }
+
+  let(:full_correct_attributes) do
+    {
+      task_id: task.uuid,
+      data: {
+        type: resource_type,
+        attributes: correct_attributes
+      }
+    }
+  end
+
+  let(:full_incorrect_attributes) do
+    {
+      task_id: task.uuid,
+      data: {
+        type: resource_type,
+        attributes: incorrect_attributes
+      }
+    }
+  end
 
   describe '#index' do
     let!(:account_list_two) { create(:account_list) }

@@ -1,6 +1,8 @@
 class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   before_action :load_relationship, :authorize_relationship, only: [:show, :update, :destroy]
 
+  resource_type :family_relationships
+
   def index
     load_relationships
     authorize @person, :show?

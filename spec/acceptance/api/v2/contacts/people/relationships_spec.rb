@@ -1,10 +1,10 @@
 require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Relationship' do
+resource 'Contacts > People > Relationships' do
   include_context :json_headers
 
-  let(:resource_type) { 'family_relationships' }
+  let(:resource_type) { :family_relationships }
   let!(:user)         { create(:user_with_full_account) }
 
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
@@ -46,8 +46,9 @@ resource 'Relationship' do
       example 'Person / Relationship [LIST]', document: :contacts do
         explanation 'List of Relationships associated to the Person'
         do_request
-        check_collection_resource(1, %w(relationships))
+
         expect(response_status).to eq 200
+        check_collection_resource(1, %w(relationships))
       end
     end
 
@@ -62,8 +63,9 @@ resource 'Relationship' do
       example 'Person / Relationship [GET]', document: :contacts do
         explanation 'The Person\'s Relationship with the given ID'
         do_request
-        check_resource(%w(relationships))
+
         expect(response_status).to eq 200
+        check_resource(%w(relationships))
       end
     end
 
@@ -77,8 +79,9 @@ resource 'Relationship' do
       example 'Person / Relationship [CREATE]', document: :contacts do
         explanation 'Create a Relationship associated with the Person'
         do_request data: form_data
-        expect(resource_object['relationship']).to eq new_family_relationship['relationship']
+
         expect(response_status).to eq 201
+        expect(resource_object['relationship']).to eq new_family_relationship['relationship']
       end
     end
 
@@ -93,8 +96,8 @@ resource 'Relationship' do
         explanation 'Update the Person\'s Relationship with the given ID'
         do_request data: form_data
 
-        expect(resource_object['relationship']).to eq new_family_relationship['relationship']
         expect(response_status).to eq 200
+        expect(resource_object['relationship']).to eq new_family_relationship['relationship']
       end
     end
 

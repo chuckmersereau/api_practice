@@ -78,14 +78,16 @@ resource 'Invites' do
       let(:new_account_list_invite) { attributes_for :account_list_invite }
       let(:email)                   { new_account_list_invite[:recipient_email] }
       let('recipient_email')        { email }
+      let(:form_data)               { build_data(recipient_email: recipient_email) }
 
       parameter 'recipient_email', 'Recipient Email', scope: [:data, :attributes], required: true
 
       example 'Invite [CREATE]', document: :account_lists do
         explanation 'List of Invites associated with the Account List'
-        do_request
-        expect(resource_object['recipient_email']).to eq email
+        do_request data: form_data
+
         expect(response_status).to eq 201
+        expect(resource_object['recipient_email']).to eq email
       end
     end
 

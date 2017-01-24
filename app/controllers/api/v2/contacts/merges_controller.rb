@@ -1,4 +1,6 @@
 class Api::V2::Contacts::MergesController < Api::V2Controller
+  resource_type :contacts
+
   def create
     load_contacts
     authorize_merge
