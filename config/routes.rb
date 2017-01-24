@@ -72,6 +72,10 @@ Rails.application.routes.draw do
 
             resources :people, only: [:show, :index, :create, :update, :destroy] do
               scope module: :people do
+                collection do
+                  resources :merges, only: :create
+                end
+
                 resources :email_addresses, only: [:index, :show, :create, :update, :destroy]
                 resources :facebook_accounts, only: [:index, :show, :create, :update, :destroy]
                 resources :linkedin_accounts, only: [:index, :show, :create, :update, :destroy]
