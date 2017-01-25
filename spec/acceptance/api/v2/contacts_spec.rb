@@ -33,13 +33,17 @@ resource 'Contacts' do
       created_at
       deceased
       donor_accounts
+      envelope_greeting
+      greeting
       last_activity
       last_appointment
+      last_donation
       last_letter
       last_phone_call
       last_pre_call
       last_thank
       likely_to_give
+      locale
       magazine
       name
       next_ask
@@ -57,6 +61,7 @@ resource 'Contacts' do
       status
       tag_list
       timezone
+      total_donations
       uncompleted_tasks_count
       updated_at
       updated_in_db_at
@@ -67,8 +72,10 @@ resource 'Contacts' do
     %w(
       account_list
       addresses
+      appeals
       donor_accounts
       people
+      referrals_by_me
       referrals_to_me
     )
   end

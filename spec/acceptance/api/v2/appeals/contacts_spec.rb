@@ -15,7 +15,7 @@ resource 'Contacts' do
   let!(:contact)  { create(:contact, account_list: account_list) }
   let(:id)        { contact.uuid }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       account_list_id
       avatar
@@ -23,13 +23,17 @@ resource 'Contacts' do
       created_at
       deceased
       donor_accounts
+      envelope_greeting
+      greeting
       last_activity
       last_appointment
+      last_donation
       last_letter
       last_phone_call
       last_pre_call
       last_thank
       likely_to_give
+      locale
       magazine
       name
       next_ask
@@ -47,6 +51,7 @@ resource 'Contacts' do
       status
       tag_list
       timezone
+      total_donations
       uncompleted_tasks_count
       updated_at
       updated_in_db_at
@@ -55,6 +60,12 @@ resource 'Contacts' do
 
   let(:resource_associations) do
     %w(
+      account_list
+      addresses
+      appeals
+      donor_accounts
+      people
+      referrals_by_me
       referrals_to_me
     )
   end
@@ -117,7 +128,7 @@ resource 'Contacts' do
       example 'Contact [GET]', document: :appeals do
         explanation 'The Appeal Contact with the given ID'
         do_request
-        expect(resource_object.keys).to match_array expected_attribute_keys
+        check_resource(%w(relationships))
         expect(response_status).to eq 200
       end
     end

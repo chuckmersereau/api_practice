@@ -7,10 +7,10 @@ class Task::Filterer < ApplicationFilterer
 
   FILTERS_TO_HIDE = %w(
     DateRange
+    Ids
     NoDate
     Overdue
     Starred
     Tags
-    Ids
   ).freeze
 end

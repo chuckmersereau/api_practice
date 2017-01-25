@@ -9,7 +9,7 @@ resource 'Referrers' do
   let(:contact_id) { contact.uuid }
   let!(:resource) { create(:contact).tap { |referrer| contact.referrals_to_me << referrer } }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       account_list_id
       avatar
@@ -17,13 +17,17 @@ resource 'Referrers' do
       created_at
       deceased
       donor_accounts
+      envelope_greeting
+      greeting
       last_activity
       last_appointment
+      last_donation
       last_letter
       last_phone_call
       last_pre_call
       last_thank
       likely_to_give
+      locale
       magazine
       name
       next_ask
@@ -41,6 +45,7 @@ resource 'Referrers' do
       status
       tag_list
       timezone
+      total_donations
       uncompleted_tasks_count
       updated_at
       updated_in_db_at
@@ -61,7 +66,6 @@ resource 'Referrers' do
       example_request 'list referrers' do
         explanation 'List of Contacts that have referred the given Contact'
         check_collection_resource(1, ['relationships'])
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
     end

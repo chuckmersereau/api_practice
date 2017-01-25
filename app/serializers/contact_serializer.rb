@@ -7,13 +7,17 @@ class ContactSerializer < ApplicationSerializer
              :church_name,
              :deceased,
              :donor_accounts,
+             :envelope_greeting,
+             :greeting,
              :last_activity,
              :last_appointment,
+             :last_donation,
              :last_letter,
              :last_phone_call,
              :last_pre_call,
              :last_thank,
              :likely_to_give,
+             :locale,
              :magazine,
              :name,
              :next_ask,
@@ -30,12 +34,15 @@ class ContactSerializer < ApplicationSerializer
              :square_avatar,
              :status,
              :tag_list,
+             :total_donations,
              :timezone,
              :uncompleted_tasks_count
 
+  has_many :appeals
   has_many :donor_accounts
   has_many :addresses
   has_many :people
+  has_many :referrals_by_me
   has_many :referrals_to_me
   belongs_to :account_list
 
