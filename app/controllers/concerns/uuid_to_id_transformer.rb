@@ -29,7 +29,19 @@ module UuidToIdTransformer
     return false unless param_location.present?
     param_location.keys.each do |key|
       change_specific_param_id_key_to_uuid(param_location, key) if uses_uuid?(key)
+      transform_uuids_to_ids_for_nested_resource(key, param_location[key]) if key.to_s.ends_with?('_attributes')
     end
+  end
+
+  def transform_uuids_to_ids_for_nested_resource(key, param_array)
+    param_array.each do |param_hash|
+      change_specific_param_id_key_to_uuid(param_hash, 'id', model_from_attributes_key(key)) if param_hash['id']
+      transform_uuids_to_ids_for_keys_in(param_hash)
+    end
+  end
+
+  def model_from_attributes_key(key)
+    key.chomp('_attributes').singularize.camelize.constantize
   end
 
   def uses_uuid?(key)

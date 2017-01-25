@@ -61,10 +61,24 @@ describe Api::V2Controller do
     end
 
     context '#uuid_to_id conversion in attributes' do
+      let(:contact) { create(:contact, account_list: account_list) }
+      let(:activity_contact) { create(:activity_contact) }
+
       it 'turns uuid ending attribute for create actions' do
         api_login(user)
-        post :create, data: { attributes: { account_list_id: account_list.uuid } }
+        post :create, data: {
+          attributes: {
+            account_list_id: account_list.uuid,
+            activity_contacts_attributes: [
+              id: activity_contact.uuid,
+              contact_id: contact.uuid
+            ]
+          }
+        }
+
         expect(JSON.parse(response.body)['account_list_id']).to eq(account_list.id)
+        expect(JSON.parse(response.body)['activity_contacts_attributes'].first['id']).to eq(activity_contact.id)
+        expect(JSON.parse(response.body)['activity_contacts_attributes'].first['contact_id']).to eq(contact.id)
       end
 
       it 'returns a 404 when the uuid is not present in the db table' do
