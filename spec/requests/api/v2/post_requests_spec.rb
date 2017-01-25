@@ -160,5 +160,32 @@ RSpec.describe 'Post Requests', type: :request do
         expect(json_data['errors'].first['detail']).to eq(error_message)
       end
     end
+
+    context 'when the resource type is missing' do
+      let!(:new_task_attributes) { attributes_for(:task) }
+
+      let!(:data) do
+        {
+          data: {
+            type: nil, # missing type
+            attributes: new_task_attributes.merge!(
+              account_list_id: account_list.uuid
+            )
+          }
+        }.to_json
+      end
+
+      let(:error_message) do
+        "MUST supply a resource type for POST and PATCH requests. Expected type for this endpoint is 'tasks'"
+      end
+
+      it 'returns a 409' do
+        post api_v2_tasks_path, data, headers
+
+        expect(response.status).to eq 409
+        expect(json_data['errors'].first['title']).to eq('Conflict')
+        expect(json_data['errors'].first['detail']).to eq(error_message)
+      end
+    end
   end
 end
