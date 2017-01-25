@@ -24,8 +24,8 @@ module ResourceType
   def verify_resource_type
     return if resource_type_from_params == resource_type
 
-    title = "'#{resource_type_from_params}' is not a valid resource type for this endpoint. Expected '#{resource_type}' instead"
-    render_409_with_title(title)
+    detail = "'#{resource_type_from_params}' is not a valid resource type for this endpoint. Expected '#{resource_type}' instead"
+    render_409(detail: detail)
   end
 
   module ClassMethods

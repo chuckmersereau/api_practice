@@ -1,7 +1,8 @@
 class ApiController < ActionController::API
-  rescue_from Exceptions::AuthenticationError, with: :render_401
-  rescue_from ActiveRecord::RecordNotFound,    with: :render_404
-  rescue_from ActiveRecord::RecordNotUnique,   with: :render_409
+  rescue_from Exceptions::AuthenticationError, with: :render_401_from_exception
+  rescue_from ActiveRecord::RecordNotFound,    with: :render_404_from_exception
+  rescue_from ActiveRecord::RecordNotUnique,   with: :render_409_from_exception
+  rescue_from Exceptions::BadRequestError,     with: :render_400_from_exception
 
   before_action :verify_request
 
@@ -45,8 +46,12 @@ class ApiController < ActionController::API
     head :created
   end
 
-  def render_400
-    head :bad_request
+  def render_400(title: 'Bad Request', detail: nil)
+    render_error(title: title, detail: detail, status: :bad_request)
+  end
+
+  def render_400_from_exception(exception)
+    render_400(detail: exception&.message)
   end
 
   def render_400_with_errors(resource_or_hash)
@@ -58,40 +63,44 @@ class ApiController < ActionController::API
     end
   end
 
-  def render_401
-    render_error(title: 'Unauthorized', status: :unauthorized)
+  def render_401(title: 'Unauthorized', detail: nil)
+    render_error(title: title, detail: detail, status: :unauthorized)
   end
 
-  def render_403_from_exception(exception)
-    uuid = exception.try(:record).try(:uuid)
-    detail = uuid ? "Not allowed to perform that action on the resource with ID #{uuid}" : nil
-
-    render_403(detail: detail)
+  def render_401_from_exception(exception)
+    render_401(detail: exception&.message)
   end
 
   def render_403(title: 'Forbidden', detail: nil)
     render_error(title: title, detail: detail, status: :forbidden)
   end
 
-  def render_404(detail = nil)
-    render_error(title: 'Not Found', detail: detail, status: :not_found)
+  def render_403_from_exception(exception)
+    uuid = exception&.record&.uuid
+    detail = uuid ? "Not allowed to perform that action on the resource with ID #{uuid}" : nil
+
+    render_403(detail: detail)
   end
 
-  def render_404_with_title(title)
-    render_error(title: title, status: :not_found)
+  def render_404(title: 'Not Found', detail: nil)
+    render_error(title: title, detail: detail, status: :not_found)
+  end
+
+  def render_404_from_exception(exception)
+    render_404(detail: exception&.message)
   end
 
   def render_406
     render_error(title: 'Not Acceptable', status: :not_acceptable)
   end
 
-  def render_409(error = nil)
-    title = error&.cause&.message || 'Conflict'
-    render_409_with_title(title)
+  def render_409(title: 'Conflict', detail: nil)
+    render_error(title: title, detail: detail, status: :conflict)
   end
 
-  def render_409_with_title(title)
-    render_error(title: title, status: :conflict)
+  def render_409_from_exception(exception)
+    detail = exception&.cause&.message || 'Conflict'
+    render_409(detail: detail)
   end
 
   def render_415
@@ -137,7 +146,7 @@ class ApiController < ActionController::API
   end
 
   def verify_request_content_type
-    content_type = request.headers['CONTENT_TYPE'].try(:split, ';').try(:first)
+    content_type = request.headers['CONTENT_TYPE']&.split(';')&.first
     render_415 unless self.class.supported_content_types.include?(content_type)
   end
 end

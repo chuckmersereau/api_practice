@@ -1,0 +1,16 @@
+<cas:serviceResponse xmlns:cas='http://www.yale.edu/tp/cas'>
+    <cas:authenticationSuccess>
+        <cas:user>cas.user@internet.com</cas:user>
+            <cas:attributes>
+                        <cas:ssoGuid>B163530-7372-551R-KO83-1FR05534129F</cas:ssoGuid>
+                        <cas:firstName>Cas</cas:firstName>
+                        <cas:lastName>User</cas:lastName>
+                        <cas:isFromNewLogin>true</cas:isFromNewLogin>
+                        <cas:theKeyGuid>B163530-7372-551R-KO83-1FR05534129F</cas:theKeyGuid>
+                        <cas:authenticationDate>Tue Jan 24 19:84:25 UTC 2017</cas:authenticationDate>
+                        <cas:relayGuid>B163530-7372-551R-KO83-1FR05534129F</cas:relayGuid>
+                        <cas:longTermAuthenticationRequestTokenUsed>false</cas:longTermAuthenticationRequestTokenUsed>
+                        <cas:email>cas.user@internet.com</cas:email>
+            </cas:attributes>
+    </cas:authenticationSuccess>
+</cas:serviceResponse>

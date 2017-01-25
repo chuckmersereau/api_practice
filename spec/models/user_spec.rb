@@ -57,6 +57,28 @@ describe User do
     end
   end
 
+  context '.find_by_guid' do
+    it 'finds a person with a relay account' do
+      user = create(:user)
+      user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
+      found_user = User.find_by_guid('B163530-7372-551R-KO83-1FR05534129F')
+      expect(found_user.id).to eq user.id
+      expect(found_user).to be_a User
+    end
+
+    it 'finds a person with a key account' do
+      user = create(:user)
+      user.key_accounts << create(:key_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F') # Key and relay account models both use the same db table
+      found_user = User.find_by_guid('B163530-7372-551R-KO83-1FR05534129F')
+      expect(found_user.id).to eq user.id
+      expect(found_user).to be_a User
+    end
+
+    it 'returns nil if user is not found' do
+      expect(User.find_by_guid('B163530-7372-551R-KO83-1FR05534129F')).to be_nil
+    end
+  end
+
   context 'contacts_filter=' do
     it 'merges instead of mass assigns' do
       user = create(:user, contacts_filter: {

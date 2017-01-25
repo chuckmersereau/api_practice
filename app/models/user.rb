@@ -113,6 +113,14 @@ class User < Person
     relay_account.person.to_user
   end
 
+  # Find a user from a guid, regardless of whether they have a Relay or a Key account,
+  # `Person::KeyAccount` and `Person::RelayAccount` both use the same db table,
+  # so we only need one query.
+  def self.find_by_guid(guid)
+    account = Person::RelayAccount.find_by('lower(relay_remote_id) = ?', guid.downcase)
+    account&.person&.to_user
+  end
+
   def to_person
     Person.find(id)
   end

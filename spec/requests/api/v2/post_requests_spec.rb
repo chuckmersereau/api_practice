@@ -156,7 +156,8 @@ RSpec.describe 'Post Requests', type: :request do
         post api_v2_tasks_path, data, headers
 
         expect(response.status).to eq 409
-        expect(json_data['errors'].first['title']).to eq(error_message)
+        expect(json_data['errors'].first['title']).to eq('Conflict')
+        expect(json_data['errors'].first['detail']).to eq(error_message)
       end
     end
   end
