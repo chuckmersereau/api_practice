@@ -46,13 +46,7 @@ Rails.application.routes.draw do
           end
         end
 
-        namespace :constants do
-          resources :organizations, only: [:index]
-          resources :currencies, only: [:index]
-          resources :notifications, only: [:index]
-          resources :locales, only: [:index]
-          resources :activities, only: [:index]
-        end
+        resources :constants, only: [:index]
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do
           scope module: :contacts do
