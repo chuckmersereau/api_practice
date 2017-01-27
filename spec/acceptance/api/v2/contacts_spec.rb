@@ -14,8 +14,17 @@ resource 'Contacts' do
   let(:id)       { contact.uuid }
 
   let(:new_contact) do
-    build(:contact).attributes.merge(account_list_id: account_list.uuid,
-                                     updated_in_db_at: contact.updated_at)
+    build(:contact).attributes
+                   .except(:first_donation_date, :notes_saved_at,
+                           :last_activity, :last_appointment,
+                           :last_donation_date, :last_letter,
+                           :last_phone_call, :last_pre_call,
+                           :last_thank, :late_at, :prayer_letters_id,
+                           :pls_id, :prayer_letters_params,
+                           :tnt_id, :total_donations,
+                           :uncompleted_tasks_count)
+                   .merge(account_list_id: account_list.uuid,
+                          updated_in_db_at: contact.updated_at)
   end
   let(:form_data) { build_data(new_contact) }
 
@@ -138,31 +147,31 @@ resource 'Contacts' do
 
     post '/api/v2/contacts' do
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id',     'Account List ID'
-        parameter 'church_name',         'Church Name'
-        parameter 'direct_deposit',      'Direct Deposite'
-        parameter 'envelope_greeting',   'Envelope Greeting'
-        parameter 'full_name',           'Full Name'
-        parameter 'greeting',            'Greeting'
-        parameter 'likely_to_give',      'Likely To Give'
-        parameter 'locale',              'Locale'
-        parameter 'magazine',            'Magazine'
-        parameter 'name',                'Contact Name'
-        parameter 'next_ask',            'Next Ask'
-        parameter 'no_appeals',          'No Appeals'
-        parameter 'not_duplicated_with', 'IDs of contacts that are known to not be duplicates'
-        parameter 'notes',               'Notes'
-        parameter 'pledge_amount',       'Pledge Amount'
-        parameter 'pledge_currency',     'Pledge Currency'
-        parameter 'pledge_frequency',    'Pledge Frequency'
-        parameter 'pledge_received',     'Pledge Received'
-        parameter 'pledge_start_date',   'Pledge Start Date'
-        parameter 'primary_person_id',   'Primary Person ID'
-        parameter 'send_newsletter',     'Send Newsletter'
-        parameter 'status',              'Status'
-        parameter 'tag_list',            'Tag List'
-        parameter 'timezone',            'Time Zone'
-        parameter 'website',             'Website'
+        parameter 'account_list_id',     'Account List ID',                                    'Type' => 'String'
+        parameter 'church_name',         'Church Name',                                        'Type' => 'String'
+        parameter 'direct_deposit',      'Direct Deposit',                                     'Type' => 'Boolean'
+        parameter 'envelope_greeting',   'Envelope Greeting',                                  'Type' => 'String'
+        parameter 'full_name',           'Full Name',                                          'Type' => 'String'
+        parameter 'greeting',            'Greeting',                                           'Type' => 'String'
+        parameter 'likely_to_give',      'Likely To Give',                                     'Type' => 'String'
+        parameter 'locale',              'Locale',                                             'Type' => 'String'
+        parameter 'magazine',            'Magazine',                                           'Type' => 'String'
+        parameter 'name',                'Contact Name',                                       'Type' => 'String'
+        parameter 'next_ask',            'Next Ask',                                           'Type' => 'String'
+        parameter 'no_appeals',          'No Appeals',                                         'Type' => 'String'
+        parameter 'not_duplicated_with', 'IDs of contacts that are known to not be duplicates', 'Type' => 'String'
+        parameter 'notes',               'Notes',                                              'Type' => 'String'
+        parameter 'pledge_amount',       'Pledge Amount',                                      'Type' => 'Number'
+        parameter 'pledge_currency',     'Pledge Currency',                                    'Type' => 'String'
+        parameter 'pledge_frequency',    'Pledge Frequency',                                   'Type' => 'String'
+        parameter 'pledge_received',     'Pledge Received',                                    'Type' => 'Boolean'
+        parameter 'pledge_start_date',   'Pledge Start Date',                                  'Type' => 'String'
+        parameter 'primary_person_id',   'Primary Person ID',                                  'Type' => 'String'
+        parameter 'send_newsletter',     'Send Newsletter',                                    'Type' => 'String'
+        parameter 'status',              'Status',                                             'Type' => 'String'
+        parameter 'tag_list',            'Tag List',                                           'Type' => 'String'
+        parameter 'timezone',            'Time Zone',                                          'Type' => 'String'
+        parameter 'website',             'Website',                                            'Type' => 'String'
       end
 
       example 'Contact [CREATE]', document: :entities do
@@ -223,31 +232,31 @@ resource 'Contacts' do
     put '/api/v2/contacts/:id' do
       parameter :id, 'ID of the Contact', required: true
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id', 'Account List ID'
-        parameter 'church_name', 'Church Name'
-        parameter 'direct_deposit', 'Direct Deposite'
-        parameter 'envelope_greeting', 'Envelope Greeting'
-        parameter 'full_name', 'Full Name'
-        parameter 'greeting', 'Greeting'
-        parameter 'likely_to_give', 'Likely To Give'
-        parameter 'locale', 'Locale'
-        parameter 'magazine', 'Magazine'
-        parameter 'name', 'Contact Name'
-        parameter 'next_ask', 'Next Ask'
-        parameter 'no_appeals', 'No Appeals'
-        parameter 'not_duplicated_with', 'IDs of contacts that are known to not be duplicates'
-        parameter 'notes', 'Notes'
-        parameter 'pledge_amount', 'Pledge Amount'
-        parameter 'pledge_currency', 'Pledge Currency'
-        parameter 'pledge_frequency', 'Pledge Frequency'
-        parameter 'pledge_received', 'Pledge Received'
-        parameter 'pledge_start_date', 'Pledge Start Date'
-        parameter 'primary_person_id', 'Primary Person ID'
-        parameter 'send_newsletter', 'Send Newsletter'
-        parameter 'status', 'Status'
-        parameter 'tag_list', 'Tag List'
-        parameter 'timezone', 'Time Zone'
-        parameter 'website', 'Website'
+        parameter 'account_list_id',     'Account List ID',                                    'Type' => 'String'
+        parameter 'church_name',         'Church Name',                                        'Type' => 'String'
+        parameter 'direct_deposit',      'Direct Deposit',                                     'Type' => 'Boolean'
+        parameter 'envelope_greeting',   'Envelope Greeting',                                  'Type' => 'String'
+        parameter 'full_name',           'Full Name',                                          'Type' => 'String'
+        parameter 'greeting',            'Greeting',                                           'Type' => 'String'
+        parameter 'likely_to_give',      'Likely To Give',                                     'Type' => 'String'
+        parameter 'locale',              'Locale',                                             'Type' => 'String'
+        parameter 'magazine',            'Magazine',                                           'Type' => 'String'
+        parameter 'name',                'Contact Name',                                       'Type' => 'String'
+        parameter 'next_ask',            'Next Ask',                                           'Type' => 'String'
+        parameter 'no_appeals',          'No Appeals',                                         'Type' => 'String'
+        parameter 'not_duplicated_with', 'IDs of contacts that are known to not be duplicates', 'Type' => 'String'
+        parameter 'notes',               'Notes',                                              'Type' => 'String'
+        parameter 'pledge_amount',       'Pledge Amount',                                      'Type' => 'Number'
+        parameter 'pledge_currency',     'Pledge Currency',                                    'Type' => 'String'
+        parameter 'pledge_frequency',    'Pledge Frequency',                                   'Type' => 'String'
+        parameter 'pledge_received',     'Pledge Received',                                    'Type' => 'Boolean'
+        parameter 'pledge_start_date',   'Pledge Start Date',                                  'Type' => 'String'
+        parameter 'primary_person_id',   'Primary Person ID',                                  'Type' => 'String'
+        parameter 'send_newsletter',     'Send Newsletter',                                    'Type' => 'String'
+        parameter 'status',              'Status',                                             'Type' => 'String'
+        parameter 'tag_list',            'Tag List',                                           'Type' => 'String'
+        parameter 'timezone',            'Time Zone',                                          'Type' => 'String'
+        parameter 'website',             'Website',                                            'Type' => 'String'
       end
 
       example 'Contact [UPDATE]', document: :entities do

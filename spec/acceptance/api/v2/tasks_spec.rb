@@ -11,8 +11,10 @@ resource 'Tasks' do
   let(:id)    { task.uuid }
 
   let(:new_task) do
-    build(:task).attributes.merge(account_list_id: user.account_lists.first.uuid,
-                                  updated_in_db_at: task.updated_at)
+    build(:task).attributes
+                .except(:completed, :notification_sent)
+                .merge(account_list_id: user.account_lists.first.uuid,
+                       updated_in_db_at: task.updated_at)
   end
   let(:form_data) { build_data(new_task) }
 
@@ -106,11 +108,23 @@ resource 'Tasks' do
 
     post '/api/v2/tasks' do
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id', 'Account List Id', type: 'Number'
-        parameter 'activity_type',   'Activity Type',   type: 'String'
-        parameter 'starred',         'Starred',         type: 'Boolean'
-        parameter 'start_at',        'Start At',        type: 'String'
-        parameter 'subject',         'Subject',         type: 'Number', required: true
+        parameter 'account_list_id',          'Account List Id',          'Type' => 'Number'
+        parameter 'activity_type',            'Activity Type',            'Type' => 'String'
+        parameter 'completed',                'Completed',                'Type' => 'Boolean'
+        parameter 'end_at',                   'End At',                   'Type' => 'String'
+        parameter 'location',                 'Location',                 'Type' => 'String'
+        parameter 'next_action',              'Next Action',              'Type' => 'String'
+        parameter 'no_date',                  'No Date',                  'Type' => 'Boolean'
+        parameter 'notification_time_before', 'Notification Time Before', 'Type' => 'Number'
+        parameter 'notification_time_unit',   'Notification Time Unit',   'Type' => 'String'
+        parameter 'notification_type',        'Notification Type',        'Type' => 'String'
+        parameter 'remote_id',                'Remote Id',                'Type' => 'String'
+        parameter 'result',                   'Result',                   'Type' => 'String'
+        parameter 'source',                   'Source',                   'Type' => 'String'
+        parameter 'starred',                  'Starred',                  'Type' => 'Boolean'
+        parameter 'start_at',                 'Start At',                 'Type' => 'String'
+        parameter 'subject',                  'Subject',                  'Type' => 'String', required: true
+        parameter 'type',                     'Type',                     'Type' => 'String'
       end
 
       example 'Task [CREATE]', document: :entities do
@@ -125,11 +139,23 @@ resource 'Tasks' do
       parameter :id, 'the Id of the Task'
 
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id', 'Account List Id', type: 'Number'
-        parameter 'activity_type',   'Activity Type',   type: 'String'
-        parameter 'starred',         'Starred',         type: 'Boolean'
-        parameter 'start_at',        'Start At',        type: 'String'
-        parameter 'subject',         'Subject',         type: 'Number', required: true
+        parameter 'account_list_id',          'Account List Id',          'Type' => 'Number'
+        parameter 'activity_type',            'Activity Type',            'Type' => 'String'
+        parameter 'completed',                'Completed',                'Type' => 'Boolean'
+        parameter 'end_at',                   'End At',                   'Type' => 'String'
+        parameter 'location',                 'Location',                 'Type' => 'String'
+        parameter 'next_action',              'Next Action',              'Type' => 'String'
+        parameter 'no_date',                  'No Date',                  'Type' => 'Boolean'
+        parameter 'notification_time_before', 'Notification Time Before', 'Type' => 'Number'
+        parameter 'notification_time_unit',   'Notification Time Unit',   'Type' => 'String'
+        parameter 'notification_type',        'Notification Type',        'Type' => 'String'
+        parameter 'remote_id',                'Remote Id',                'Type' => 'String'
+        parameter 'result',                   'Result',                   'Type' => 'String'
+        parameter 'source',                   'Source',                   'Type' => 'String'
+        parameter 'starred',                  'Starred',                  'Type' => 'Boolean'
+        parameter 'start_at',                 'Start At',                 'Type' => 'String'
+        parameter 'subject',                  'Subject',                  'Type' => 'String', required: true
+        parameter 'type',                     'Type',                     'Type' => 'String'
       end
 
       example 'Task [UPDATE]', document: :entities do

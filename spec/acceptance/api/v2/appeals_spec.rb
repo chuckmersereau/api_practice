@@ -62,16 +62,16 @@ resource 'Appeals' do
       parameter 'account_list_id', 'Account List ID', scope: :filters
       parameter 'excluded',        'Show excluded contacts', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
-        response_field 'amount',          'Amount',           'Type' => 'Number'
-        response_field 'contacts',        'Contacts',         'Type' => 'Array[Contact]'
-        response_field 'created_at',      'Created At',       'Type' => 'String'
-        response_field 'currencies',      'Currencies',       'Type' => 'Array[String]'
-        response_field 'description',     'Description',      'Type' => 'String'
-        response_field 'donations',       'Donations',        'Type' => 'Array[Object]'
-        response_field 'end_date',        'End Date',         'Type' => 'String'
-        response_field 'name',            'Name',             'Type' => 'String'
-        response_field 'total_currency',  'Total currency',   'Type' => 'String'
-        response_field 'updated_at',      'Updated At',       'Type' => 'String'
+        response_field 'amount',          'Amount',            'Type' => 'Number'
+        response_field 'contacts',        'Contacts',          'Type' => 'Array[Contact]'
+        response_field 'created_at',      'Created At',        'Type' => 'String'
+        response_field 'currencies',      'Currencies',        'Type' => 'Array[String]'
+        response_field 'description',     'Description',       'Type' => 'String'
+        response_field 'donations',       'Donations',         'Type' => 'Array[Object]'
+        response_field 'end_date',        'End Date',          'Type' => 'String'
+        response_field 'name',            'Name',              'Type' => 'String'
+        response_field 'total_currency',  'Total currency',    'Type' => 'String'
+        response_field 'updated_at',      'Updated At',        'Type' => 'String'
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
@@ -103,10 +103,10 @@ resource 'Appeals' do
       parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
 
       with_options scope: [:data, :attributes] do
-        parameter 'amount',      'Amount'
-        parameter 'description', 'Description'
-        parameter 'end_date',    'End Date'
-        parameter 'name',        'Name'
+        parameter 'amount',      'Amount',      'Type' => 'String'
+        parameter 'description', 'Description', 'Type' => 'String'
+        parameter 'end_date',    'End Date',    'Type' => 'String'
+        parameter 'name',        'Name',        'Type' => 'String'
       end
 
       example 'Appeal [UPDATE]', document: :entities do

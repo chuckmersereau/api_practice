@@ -7,7 +7,10 @@ resource 'Users' do
   let(:resource_type) { 'users' }
   let(:user) { create(:user_with_full_account) }
 
-  let(:new_user_attributes) { attributes_for(:user_with_full_account).merge(updated_in_db_at: user.updated_at).except(:email) }
+  let(:new_user_attributes) do
+    attributes_for(:user_with_full_account).except(:access_token, :email, :locale, :time_zone)
+                                           .merge(updated_in_db_at: user.updated_at).except(:email)
+  end
   let(:form_data)           { build_data(new_user_attributes) }
 
   let(:resource_attributes) do
@@ -57,23 +60,19 @@ resource 'Users' do
 
     put '/api/v2/user' do
       with_options scope: [:data, :attributes] do
-        parameter 'anniversary_day',  'User anniversary day'
-        parameter 'anniversary_year', 'User anniversary year'
-        parameter 'birthday_day',     'User birthday day'
-        parameter 'birthday_month',   'User birthday month'
-        parameter 'birthday_year',    'User birthday year'
-        parameter 'deceased',         'User deceased'
-        parameter 'employer',         'User employer'
-        parameter 'first_name',       'User first name', required: true
-        parameter 'last_name',        'User last name', required: true
-        parameter 'legal_first_name', 'User legal first name'
-        parameter 'marital_status',   'User marital status'
-        parameter 'middle_name',      'User middle name'
-        parameter 'occupation',       'User occupation'
-        parameter 'preferences',      'User preferences', required: true
-        parameter 'profession',       'User profession'
-        parameter 'suffix',           'User suffix'
-        parameter 'title',            'User title'
+        parameter 'first_name',       'User first name', 'Type' => 'String', required: true
+        parameter 'last_name',        'User last name',  'Type' => 'String'
+
+        with_options scope: :preferences do
+          parameter 'contacts_filter',       'Contacts Filter',        'Type' => 'String'
+          parameter 'contacts_view_options', 'Contacts View Options',  'Type' => 'String'
+          parameter 'default_account_list',  'Default Account List',   'Type' => 'String'
+          parameter 'locale',                'User Locale',            'Type' => 'String'
+          parameter 'setup',                 'User Preferences Setup', 'Type' => 'Boolean'
+          parameter 'tab_orders',            'Tab Orders',             'Type' => 'String'
+          parameter 'tasks_filter',          'Tasks Filter',           'Type' => 'String'
+          parameter 'time_zone',             'User Time Zone',         'Type' => 'String'
+        end
       end
 
       example 'User [UPDATE]', document: :entities do

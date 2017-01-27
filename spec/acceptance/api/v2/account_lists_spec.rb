@@ -10,7 +10,7 @@ resource 'Account Lists' do
   let(:account_list) { user.account_lists.first }
   let(:id)           { account_list.uuid }
 
-  let(:new_account_list) { build(:account_list).attributes.merge(updated_in_db_at: account_list.updated_at) }
+  let(:new_account_list) { build(:account_list).attributes.except(:creator_id).merge(updated_in_db_at: account_list.updated_at) }
   let(:form_data)        { build_data(new_account_list) }
 
   let(:resource_attributes) do
@@ -51,6 +51,7 @@ resource 'Account Lists' do
         response_field 'default_organization_id', 'Organization ID',  'Type' => 'Number'
         response_field 'monthly_goal',            'Monthly Goal',     'Type' => 'String'
         response_field 'name',                    'Account Name',     'Type' => 'String'
+        response_field 'settings',                'Settings',         'Type' => 'Object'
         response_field 'updated_at',              'Updated At',       'Type' => 'String'
         response_field 'updated_in_db_at',        'Updated In Db At', 'Type' => 'String'
       end
@@ -69,7 +70,18 @@ resource 'Account Lists' do
 
       with_options scope: [:data, :attributes] do
         parameter 'name',             'Account Name', required: true
-        parameter 'settings',         'Settings'
+
+        with_options scope: :settings do
+          parameter 'currency',               'Currency',               'Type' => 'String'
+          parameter 'home_country',           'Home Country',           'Type' => 'String'
+          parameter 'log_debug_info',         'Log Debug Info',         'Type' => 'String'
+          parameter 'ministry_country',       'Ministry Country',       'Type' => 'String'
+          parameter 'monthly_goal',           'Monthly Goal',           'Type' => 'Number'
+          parameter 'owner',                  'Owner',                  'Type' => 'String'
+          parameter 'salary_currency',        'Salary Currency',        'Type' => 'String'
+          parameter 'salary_organization_id', 'Salary Organization Id', 'Type' => 'String'
+          parameter 'tester',                 'Tester',                 'Type' => 'String'
+        end
       end
 
       example 'Account List [UPDATE]', document: :entities do
