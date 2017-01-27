@@ -8,6 +8,14 @@ class NotificationPreference < ApplicationRecord
 
   delegate :type, to: :notification_type
 
+  PERMITTED_ATTRIBUTES = [:account_list_id,
+                          :actions,
+                          :created_at,
+                          :notification_type_id,
+                          :updated_at,
+                          :updated_in_db_at,
+                          :uuid].freeze
+
   def self.default_actions
     %w(email task)
   end
