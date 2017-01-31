@@ -13,7 +13,7 @@ resource 'Exports' do
       parameter 'filter[account_list_id]',     'Account List ID', 'Type' => 'String'
       parameter 'filter[ids]',                 'Contact IDs',     'Type' => 'Array[String]'
 
-      example 'Export [GET] (CSV)', document: :contacts do
+      example 'Export [GET][CSV]', document: :contacts do
         explanation 'List of Contacts rendered in CSV format'
 
         do_request
@@ -27,7 +27,7 @@ resource 'Exports' do
       parameter 'filter[account_list_id]',     'Account List ID', 'Type' => 'String'
       parameter 'filter[ids]',                 'Contact IDs',     'Type' => 'Array[String]'
 
-      example 'Export [GET] (XLSX)', document: false do
+      example 'Export [GET][XLSX]', document: false do
         explanation 'List of Contacts rendered in XLSX format'
         do_request
         expect(response_status).to eq 200
