@@ -107,7 +107,7 @@ resource 'Google Accounts' do
     end
 
     delete '/api/v2/user/google_accounts/:id' do
-      example 'Google Account [DEKETE]', document: :user do
+      example 'Google Account [DELETE]', document: :user do
         explanation 'Delete the current_user\'s Google Account with the given ID'
         do_request
         expect(response_status).to eq 204
