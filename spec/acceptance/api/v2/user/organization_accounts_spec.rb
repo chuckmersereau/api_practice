@@ -80,7 +80,7 @@ resource 'Organization Accounts' do
         parameter 'username',        'Username'
       end
 
-      example 'Organization Account [Create]', document: :user do
+      example 'Organization Account [CREATE]', document: :user do
         explanation 'Create an Organization Account associated with the current_user'
         do_request data: form_data
 
