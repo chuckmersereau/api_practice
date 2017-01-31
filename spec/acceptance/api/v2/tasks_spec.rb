@@ -176,7 +176,7 @@ resource 'Tasks' do
                      'List of Task objects that have been successfully updated and list of errors related to Task objects that were not updated successfully',
                      'Type' => 'Array[Object]'
 
-      example 'Task [UPDATE](BULK)', document: :entities do
+      example 'Task [UPDATE] (BULK)', document: :entities do
         explanation 'Bulk Update a list of Tasks with an array of objects containing the ID and updated attributes'
         do_request data: bulk_update_form_data
         expect(json_response.first['data']['attributes']['name']).to eq new_task['name']

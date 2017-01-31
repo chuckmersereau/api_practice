@@ -18,7 +18,7 @@ resource 'Contacts Bulk' do
         parameter :id, 'Each member of the array must contain the id of the contact being deleted'
       end
 
-      example 'Contact [DELETE](BULK)', document: :entities do
+      example 'Contact [DELETE] (BULK)', document: :entities do
         explanation 'Bulk delete Contacts with the given IDs'
         do_request data: [{ data: { id: contact_one.uuid } }, { data: { id: contact_two.uuid } }]
         expect(response_status).to eq(200)

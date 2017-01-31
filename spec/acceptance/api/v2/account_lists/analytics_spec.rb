@@ -52,7 +52,7 @@ resource 'Account List Analytics' do
         response_field 'updated_at',     'Time when analytics were observed',  'Type' => 'String'
       end
 
-      example 'show analytics', document: :account_lists do
+      example 'Analytics [GET]', document: :account_lists do
         explanation 'List analytics related to the Account List'
         do_request(account_list_id: account_list_id, filter: { start_date: 1.week.ago.iso8601, end_date: Time.current.iso8601 })
         check_resource(['relationships'])

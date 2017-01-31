@@ -18,7 +18,7 @@ resource 'Tasks Bulk' do
         parameter :id, 'Each member of the array must contain the id of the task being deleted'
       end
 
-      example 'Task [DELETE](BULK)', document: :entities do
+      example 'Task [DELETE] (BULK)', document: :entities do
         explanation 'Bulk delete Tasks with the given IDs'
         do_request data: [{ data: { id: task_one.uuid } }, { data: { id: task_two.uuid } }]
         expect(response_status).to eq(200)
