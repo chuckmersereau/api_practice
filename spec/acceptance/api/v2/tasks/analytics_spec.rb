@@ -137,7 +137,7 @@ resource 'Tasks Analytics' do
           response_field 'total_tasks_due_count',                   'Total Tasks Due Count',                   'Type' => 'Number'
         end
 
-        example 'Tasks Analytics [GET]', document: :tasks do
+        example 'Analytics [GET]', document: :tasks do
           explanation "Viewing Analytical information for a specific Account Lists' Tasks"
           do_request filter: { account_list_id: alternate_account_list.uuid }
 
