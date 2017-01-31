@@ -39,7 +39,7 @@ resource 'Designation Account Balances Report' do
         response_field 'designation_accounts',  'Associated Designation Accounts', 'Type' => 'Array[Object]'
       end
 
-      example 'show report' do
+      example 'Balance [LIST]', document: :reports do
         explanation 'Lists balances for each Designation Account associated with the current Account List'
         do_request(filter: { account_list_id: account_list_id })
         check_resource(['relationships'])

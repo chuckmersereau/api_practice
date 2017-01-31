@@ -37,7 +37,7 @@ resource 'Year Donations Report' do
         response_field 'account_list', 'Account List', 'Type' => 'Object'
       end
 
-      example 'show report' do
+      example 'Donation Summary [LIST]', document: :reports do
         explanation 'Lists donors who donated in the past 12 months, along with their donation totals (related to the given Account List)'
         do_request(filter: { account_list_id: account_list_id })
         check_resource(['relationships'])

@@ -39,7 +39,7 @@ resource 'Expected Monthly Totals Report' do
         response_field 'account_list', 'Account List', 'Type' => 'Object'
       end
 
-      example 'show report' do
+      example 'Expected Monthly Total [LIST]', document: :reports do
         explanation 'Lists received and possible donations for the current month'
         do_request(filter: { account_list_id: account_list_id })
         check_resource(['relationships'])

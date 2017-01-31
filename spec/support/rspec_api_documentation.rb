@@ -22,7 +22,7 @@ RspecApiDocumentation.configure do |config|
     group_config.filter = :contacts
   end
   config.define_group :people do |group_config|
-    group_config.api_name = 'Person API'
+    group_config.api_name = 'People API'
     group_config.filter = :people
   end
   config.define_group :tasks do |group_config|
@@ -32,6 +32,10 @@ RspecApiDocumentation.configure do |config|
   config.define_group :user do |group_config|
     group_config.api_name = 'User API'
     group_config.filter = :user
+  end
+  config.define_group :reports do |group_config|
+    group_config.api_name = 'Reports API'
+    group_config.filter = :reports
   end
 
   config.response_body_formatter = proc do |content_type, response_body|
