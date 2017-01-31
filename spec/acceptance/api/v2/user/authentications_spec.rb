@@ -19,7 +19,7 @@ resource 'User / Authentication' do
     parameter 'access_token',        'Access Token',   type: 'String'
     response_field 'json_web_token', 'Json Web Token', type: 'String'
 
-    example 'Authentication [CREATE]', document: :user do
+    example 'Authentication [CREATE]', document: false do
       explanation 'Authenticate current_user with the provided Access Token'
       do_request
       expect(response_status).to eq(201)
