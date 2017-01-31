@@ -123,6 +123,7 @@ Rails.application.routes.draw do
           resource :balances, only: :show
           resource :year_donations, only: :show
           resource :expected_monthly_totals, only: :show
+          resource :monthly_giving_graph, only: :show
         end
       end
     end
