@@ -43,7 +43,7 @@ resource 'Contacts > People > Relationships' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
-      example 'Person / Relationship [LIST]', document: :contacts do
+      example 'Relationship [LIST]', document: :people do
         explanation 'List of Relationships associated to the Person'
         do_request
 
@@ -60,7 +60,7 @@ resource 'Contacts > People > Relationships' do
         response_field 'updated_in_db_at',  'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Person / Relationship [GET]', document: :contacts do
+      example 'Relationship [GET]', document: :people do
         explanation 'The Person\'s Relationship with the given ID'
         do_request
 
@@ -76,7 +76,7 @@ resource 'Contacts > People > Relationships' do
         parameter 'relationship',      'Relationship'
       end
 
-      example 'Person / Relationship [CREATE]', document: :contacts do
+      example 'Relationship [CREATE]', document: :people do
         explanation 'Create a Relationship associated with the Person'
         do_request data: form_data
 
@@ -92,7 +92,7 @@ resource 'Contacts > People > Relationships' do
         parameter 'relationship',      'Relationship'
       end
 
-      example 'Person / Relationship [UPDATE]', document: :contacts do
+      example 'Relationship [UPDATE]', document: :people do
         explanation 'Update the Person\'s Relationship with the given ID'
         do_request data: form_data
 
@@ -102,7 +102,7 @@ resource 'Contacts > People > Relationships' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
-      example 'Person / Relationship [DELETE]', document: :contacts do
+      example 'Relationship [DELETE]', document: :people do
         explanation 'Delete the Person\'s Relationship with the given ID'
         do_request
         expect(response_status).to eq 204

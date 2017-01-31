@@ -44,7 +44,7 @@ resource 'Twitter Accounts' do
       parameter 'person_id',  'Person ID', required: true
       response_field 'data',  'Data', 'Type' => 'Array[Object]'
 
-      example 'Person / Twitter Account [LIST]', document: :contacts do
+      example 'Twitter Account [LIST]', document: :people do
         explanation 'List of Twitter Accounts associated to the Person'
         do_request
         check_collection_resource(2)
@@ -63,7 +63,7 @@ resource 'Twitter Accounts' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Person / Twitter Account [GET]', document: :contacts do
+      example 'Twitter Account [GET]', document: :people do
         explanation 'The Person\'s Twitter Account with the given ID'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -78,7 +78,7 @@ resource 'Twitter Accounts' do
         parameter 'screen_name', 'Screen Name'
       end
 
-      example 'Person / Twitter Account [CREATE]', document: :contacts do
+      example 'Twitter Account [CREATE]', document: :people do
         explanation 'Create a Twitter Account associated with the Person'
         do_request data: form_data
         expect(response_status).to eq 201
@@ -92,7 +92,7 @@ resource 'Twitter Accounts' do
         parameter 'screen_name', 'Screen Name'
       end
 
-      example 'Person / Twitter Account [UPDATE]', document: :contacts do
+      example 'Twitter Account [UPDATE]', document: :people do
         explanation 'Update the Person\'s Twitter Account with the given ID'
         do_request data: form_data
         expect(response_status).to eq 200
@@ -103,7 +103,7 @@ resource 'Twitter Accounts' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID',  required: true
 
-      example 'Person / Twitter Account [DELETE]', document: :contacts do
+      example 'Twitter Account [DELETE]', document: :people do
         explanation 'Delete the Person\'s Twitter Account with the given ID'
         do_request
         expect(response_status).to eq 204

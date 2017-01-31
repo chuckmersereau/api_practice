@@ -279,7 +279,7 @@ resource 'Contacts' do
                      'List of Contact objects that have been successfully updated and list of errors related to Contact objects that were not updated successfully',
                      'Type' => 'Array[Object]'
 
-      example 'Contact [BULK UPDATE]', document: :entities do
+      example 'Contact [UPDATE](BULK)', document: :entities do
         explanation 'Bulk Update a list of Contacts with an array of objects containing the ID and updated attributes'
         do_request data: bulk_update_form_data
         expect(json_response.first['data']['attributes']['name']).to eq new_contact['name']

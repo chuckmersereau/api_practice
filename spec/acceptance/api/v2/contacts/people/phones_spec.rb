@@ -39,7 +39,7 @@ resource 'Phones' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people/:person_id/phones' do
-      example 'Person / Phone [LIST]', document: :contacts do
+      example 'Phone [LIST]', document: :people do
         explanation 'List of Phone Numbers associated to the Person'
         do_request
         check_collection_resource(1)
@@ -59,7 +59,7 @@ resource 'Phones' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Person / Phone [GET]', document: :contacts do
+      example 'Phone [GET]', document: :people do
         explanation 'The Person\'s Phone Number with the given ID'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -78,7 +78,7 @@ resource 'Phones' do
         parameter 'remote_id',    'Remote ID'
       end
 
-      example 'Person / Phone [CREATE]', document: :contacts do
+      example 'Phone [CREATE]', document: :people do
         explanation 'Create a Phone Number associated with the Person'
         do_request data: form_data
 
@@ -97,7 +97,7 @@ resource 'Phones' do
         parameter 'remote_id',    'Remote ID'
       end
 
-      example 'Person / Phone [UPDATE]', document: :contacts do
+      example 'Phone [UPDATE]', document: :people do
         explanation 'Update Person\'s Phone Number with the given ID'
         do_request data: form_data
         expect(resource_object['number']).to eq new_phone['number']
@@ -106,7 +106,7 @@ resource 'Phones' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
-      example 'Person / Phone [DELETE]', document: :contacts do
+      example 'Phone [DELETE]', document: :people do
         explanation 'Delete Person\'s Phone Number with the given ID'
         do_request
         expect(response_status).to eq 204

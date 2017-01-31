@@ -92,7 +92,7 @@ resource 'Tasks Analytics' do
           response_field 'total_tasks_due_count',                   'Total Tasks Due Count',                   'Type' => 'Number'
         end
 
-        example 'Tasks Analytics [GET]', document: :tasks do
+        example 'Analytics [GET]', document: :tasks do
           explanation "Viewing Analytical information for the User's Tasks for all Account Lists"
           do_request
 

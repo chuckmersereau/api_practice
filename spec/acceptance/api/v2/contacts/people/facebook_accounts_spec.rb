@@ -47,7 +47,7 @@ resource 'Facebook Accounts' do
       parameter 'person_id',  'Person ID', required: true
       response_field 'data',  'Data', 'Type' => 'Array[Object]'
 
-      example 'Person / Facebook Account [LIST]', document: :contacts do
+      example 'Facebook Account [LIST]', document: :people do
         explanation 'List of Facebook Accounts associated to the Person'
         do_request
         check_collection_resource(2)
@@ -67,7 +67,7 @@ resource 'Facebook Accounts' do
         response_field 'username',         'Username',         'Type' => 'String'
       end
 
-      example 'Person / Facebook Account [GET]', document: :contacts do
+      example 'Facebook Account [GET]', document: :people do
         explanation 'The Person\'s Facebook Account with the given ID'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -83,7 +83,7 @@ resource 'Facebook Accounts' do
         parameter 'username',   'Username'
       end
 
-      example 'Person / Facebook Account [CREATE]', document: :contacts do
+      example 'Facebook Account [CREATE]', document: :people do
         explanation 'Create a Facebook Account associated with the Person'
         do_request data: form_data
         expect(response_status).to eq 201
@@ -98,7 +98,7 @@ resource 'Facebook Accounts' do
         parameter 'username',   'Username'
       end
 
-      example 'Person / Facebook Account [UPDATE]', document: :contacts do
+      example 'Facebook Account [UPDATE]', document: :people do
         explanation 'Update the Person\'s Facebook Account with the given ID'
         do_request data: form_data
         expect(response_status).to eq 200
@@ -109,7 +109,7 @@ resource 'Facebook Accounts' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID',  required: true
 
-      example 'Person / Facebook Account [DELETE]', document: :contacts do
+      example 'Facebook Account [DELETE]', document: :people do
         explanation 'Delete the Person\'s Facebook Account with the given ID'
         do_request
         expect(response_status).to eq 204

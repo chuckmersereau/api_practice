@@ -8,7 +8,7 @@ resource 'Filters' do
     before { api_login(user) }
 
     get '/api/v2/tasks/filters' do
-      example 'Filter [LIST]', document: :contacts do
+      example 'Filter [LIST]', document: :tasks do
         explanation 'List of Task Filters'
         do_request
         filters_displayed = json_response['data'].map do |filter|

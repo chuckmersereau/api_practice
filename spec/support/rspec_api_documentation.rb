@@ -21,6 +21,10 @@ RspecApiDocumentation.configure do |config|
     group_config.api_name = 'Contacts API'
     group_config.filter = :contacts
   end
+  config.define_group :people do |group_config|
+    group_config.api_name = 'Person API'
+    group_config.filter = :people
+  end
   config.define_group :tasks do |group_config|
     group_config.api_name = 'Tasks API'
     group_config.filter = :tasks

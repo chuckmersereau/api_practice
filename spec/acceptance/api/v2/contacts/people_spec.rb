@@ -58,7 +58,7 @@ resource 'People' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people' do
-      example 'Person [LIST]', document: :contacts do
+      example 'Person [LIST]', document: :entities do
         explanation 'List of People associated to the Contact'
         do_request
         check_collection_resource(1, ['relationships'])
@@ -97,7 +97,7 @@ resource 'People' do
         end
       end
 
-      example 'Person [GET]', document: :contacts do
+      example 'Person [GET]', document: :entities do
         explanation 'The Contact\'s Person with the given ID'
         do_request
         check_resource(['relationships'])
@@ -162,7 +162,7 @@ resource 'People' do
         parameter 'websites_attributes[:key][url]',                           'Website URL, where :key is an integer',                                            'Type' => 'String'
       end
 
-      example 'Person [CREATE]', document: :contacts do
+      example 'Person [CREATE]', document: :entities do
         explanation 'Create a Person associated with the Contact'
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
@@ -227,7 +227,7 @@ resource 'People' do
         parameter 'websites_attributes[:key][url]',                           'Website URL, where :key is an integer',                                            'Type' => 'String'
       end
 
-      example 'Person [UPDATE]', document: :contacts do
+      example 'Person [UPDATE]', document: :entities do
         explanation 'Update the Contact\'s Person with the given ID'
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
@@ -236,7 +236,7 @@ resource 'People' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:id' do
-      example 'Person [DELETE]', document: :contacts do
+      example 'Person [DELETE]', document: :entities do
         explanation 'Delete the Contact\'s Person with the given ID'
         do_request
         expect(response_status).to eq(204)

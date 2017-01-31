@@ -42,7 +42,7 @@ resource 'Contacts People Email Addresses' do
     get '/api/v2/contacts/:contact_id/people/:person_id/email_addresses' do
       before { email_address }
 
-      example 'Person / Email Address [LIST]', document: :contacts do
+      example 'Email Address [LIST]', document: :people do
         explanation 'List of Email Addresses associated to the Person'
         do_request
 
@@ -65,7 +65,7 @@ resource 'Contacts People Email Addresses' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Person / Email Address [GET]', document: :contacts do
+      example 'Email Address [GET]', document: :people do
         explanation "Getting a Person's Email Address by ID"
         do_request
 
@@ -87,7 +87,7 @@ resource 'Contacts People Email Addresses' do
 
       let(:attributes) { attributes_for(:email_address).merge(person_id: person.uuid) }
 
-      example 'Person / Email Address [CREATE]', document: :contacts do
+      example 'Email Address [CREATE]', document: :people do
         explanation 'Create an Email Address associated with the Person'
         do_request data: form_data
 
@@ -111,7 +111,7 @@ resource 'Contacts People Email Addresses' do
 
       before { attributes.merge!(email: 'new-email@example.com') }
 
-      example 'Person / Email Address [UPDATE]', document: :contacts do
+      example 'Email Address [UPDATE]', document: :people do
         explanation 'Update the Person\'s Email Address with the given ID'
         do_request data: form_data
 
@@ -124,7 +124,7 @@ resource 'Contacts People Email Addresses' do
 
     # destroy
     delete '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
-      example 'Person / Email Address [DELETE]', document: :contacts do
+      example 'Email Address [DELETE]', document: :people do
         explanation 'Delete the Person\'s Email Address with the given ID'
         do_request
         expect(response_status).to eq 204
