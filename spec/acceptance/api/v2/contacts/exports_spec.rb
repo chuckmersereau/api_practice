@@ -27,7 +27,7 @@ resource 'Exports' do
       parameter 'filter[account_list_id]',     'Account List ID', 'Type' => 'String'
       parameter 'filter[ids]',                 'Contact IDs',     'Type' => 'Array[String]'
 
-      example 'XLSX export', document: :contacts do
+      example 'XLSX export', document: false do
         explanation 'List of Contacts rendered in XLSX format'
         do_request
         expect(response_status).to eq 200

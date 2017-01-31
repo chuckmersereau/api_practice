@@ -31,7 +31,7 @@ RspecApiDocumentation.configure do |config|
   end
 
   config.response_body_formatter = proc do |content_type, response_body|
-    if content_type == 'application/json' || content_type == 'application/vnd.api+json'
+    if content_type == 'application/json' || content_type.include?('application/vnd.api+json')
       JSON.pretty_generate(JSON.parse(response_body))
     else
       response_body
