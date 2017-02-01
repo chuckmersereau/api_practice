@@ -12,11 +12,17 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
   let!(:donation) do
     create(:donation, donor_account: donor_account,
                       designation_account: designation_account,
-                      donation_date: 3.months.ago,
+                      donation_date: Date.parse('2099-03-04'),
                       amount: '333')
   end
+  let(:time_now) { Time.zone.parse('2099-06-22 12:34:56') }
 
   subject { Reports::MonthlyGivingGraph.new(account_list: account_list) }
+
+  def mock_time
+    allow(Time).to receive(:current).and_return(time_now)
+    allow(Date).to receive(:today).and_return(time_now.to_date)
+  end
 
   before do
     contact.donor_accounts << donor_account
@@ -35,7 +41,10 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     it { expect(subject.totals).not_to be_empty }
 
     it { expect(subject.totals.first[:currency]).to eq donation.currency }
-    it { expect(subject.totals.first[:total_amount]).to eq donation.amount }
+    it do
+      mock_time
+      expect(subject.totals.first[:total_amount]).to eq donation.amount
+    end
   end
 
   describe '#pledges' do
@@ -45,7 +54,10 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
 
   describe '#monthly_average' do
     it { expect(subject.monthly_average).to be_a Numeric }
-    it { expect(subject.monthly_average).to eq 111 }
+    it do
+      mock_time
+      expect(subject.monthly_average).to eq 111
+    end
   end
 
   describe '#months_to_dates' do
@@ -53,7 +65,10 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     it { expect(subject.months_to_dates).not_to be_empty }
 
     it { expect(subject.months_to_dates.first).to be_a Date }
-    it { expect(subject.months_to_dates.first).to eq 3.months.ago.to_date.beginning_of_month }
+    it do
+      mock_time
+      expect(subject.months_to_dates.first).to eq Date.parse('2099-03-01')
+    end
   end
 
   describe '#salary_currency' do
@@ -63,6 +78,9 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
 
   describe '#months_back' do
     it { expect(subject.months_back).to be_a Numeric }
-    it { expect(subject.months_back).to eq 3 }
+    it do
+      mock_time
+      expect(subject.months_back).to eq 3
+    end
   end
 end
