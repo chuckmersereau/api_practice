@@ -19,7 +19,7 @@ module AddressMethods
     has_one :primary_address, (lambda do
       where(primary_mailing_address: true, deleted: false).where.not(historic: true)
         .order(:master_address_id).order(:street).order(:id)
-    end), class_name: 'Address', as: :addressable
+    end), class_name: 'Address', as: :addressable, autosave: true
 
     accepts_nested_attributes_for :addresses, reject_if: :blank_or_duplicate_address?, allow_destroy: true
 

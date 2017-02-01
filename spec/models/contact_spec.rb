@@ -276,12 +276,12 @@ describe Contact do
 
     it 'should not duplicate referrals' do
       referrer = create(:contact)
-      loser_contact.referrals_to_me << referrer
-      contact.referrals_to_me << referrer
+      loser_contact.contacts_that_referred_me << referrer
+      contact.contacts_that_referred_me << referrer
 
       contact.merge(loser_contact)
 
-      expect(contact.referrals_to_me.length).to eq(1)
+      expect(contact.contacts_that_referred_me.length).to eq(1)
     end
 
     it 'should not remove the facebook account of a person on the merged contact' do
@@ -889,6 +889,89 @@ describe Contact do
       mail_chimp_account
       person_and_email_address
       expect(contact.mail_chimp_open_rate).to eq(89)
+    end
+  end
+
+  describe 'accepts nested attributes for contact referrals' do
+    let!(:attributes) do
+      {
+        contacts_referred_by_me_attributes: [
+          {
+            name: 'First Referral Name',
+            primary_person_first_name: 'Primary Person First Name',
+            primary_person_last_name: 'Primary Person Last Name',
+            spouse_first_name: 'Spouse First Name',
+            spouse_last_name: 'Spouse Last Name',
+            primary_address_street: 'Primary Address Street'
+          },
+          {
+            name: 'Second Referral Name',
+            primary_person_first_name: 'Second Referral Primary Person First Name',
+            primary_person_last_name: 'Second Referral Primary Person Last Name',
+            spouse_first_name: 'Second Referral Spouse First Name',
+            spouse_last_name: 'Second Referral Spouse Last Name',
+            primary_address_street: 'Second Referral Primary Address Street'
+          }
+        ]
+      }
+    end
+
+    it 'does not save an invalid contact' do
+      contact.assign_attributes(contacts_referred_by_me_attributes: [{ name: '' }])
+      expect { contact.save! && contact.reload }.to_not change { Contact.count + Person.count + Address.count }
+    end
+
+    it 'creates new contacts' do
+      contact.assign_attributes(contacts_referred_by_me_attributes: [{ name: 'A Contact' }, { name: 'Another Contact' }])
+      expect { contact.save! && contact.reload }.to change { contact.contacts_referred_by_me.count }.from(0).to(2)
+        .and change { Contact.count }.by(2)
+        .and change { Person.count }.by(0)
+        .and change { Address.count }.by(0)
+    end
+
+    it 'creates new contacts, with people and address' do
+      contact.assign_attributes(attributes)
+
+      expect { contact.save! && contact.reload }.to change { contact.contacts_referred_by_me.count }.from(0).to(2)
+        .and change { Contact.count }.by(2)
+        .and change { Person.count }.by(4)
+        .and change { Address.count }.by(2)
+
+      referred_contact = Contact.find(contact.id).contacts_referred_by_me.first
+      expect(referred_contact.name).to eq 'First Referral Name'
+      expect(referred_contact.primary_person.first_name).to eq 'Primary Person First Name'
+      expect(referred_contact.primary_person.last_name).to eq 'Primary Person Last Name'
+      expect(referred_contact.spouse.first_name).to eq 'Spouse First Name'
+      expect(referred_contact.spouse.last_name).to eq 'Spouse Last Name'
+      expect(referred_contact.primary_address.street).to eq 'Primary Address Street'
+    end
+
+    it 'updates existing contacts, and their people and address' do
+      contact.update!(attributes) && contact.reload
+      referred_contact_id = contact.contacts_referred_by_me.first.id
+      contact.update!(contacts_referred_by_me_attributes: [{
+                        id: referred_contact_id,
+                        name: 'New Contact Name',
+                        primary_person_first_name: 'My New First Name',
+                        spouse_first_name: 'Their New First Name',
+                        primary_address_street: 'My New Street'
+                      }])
+      referred_contact = Contact.find(referred_contact_id)
+      expect(referred_contact.name).to eq 'New Contact Name'
+      expect(referred_contact.primary_person.first_name).to eq 'My New First Name'
+      expect(referred_contact.spouse.first_name).to eq 'Their New First Name'
+      expect(referred_contact.primary_address.street).to eq 'My New Street'
+    end
+
+    it 'does not allow destroy' do
+      contact.update!(attributes) && contact.reload
+      referred_contact_id = contact.contacts_referred_by_me.first.id
+      expect do
+        contact.update!(contacts_referred_by_me_attributes: [{
+                          id: referred_contact_id,
+                          _destroy: '1'
+                        }])
+      end.to_not change { contact.reload && contact.contacts_referred_by_me.count }
     end
   end
 end

@@ -12,7 +12,7 @@ class Api::V2::Contacts::ReferrersController < Api::V2Controller
   end
 
   def referrer_scope
-    current_contact.referrals_to_me
+    current_contact.contacts_that_referred_me
   end
 
   def authorize_index

@@ -90,7 +90,7 @@ describe ContactMultiAdd do
     it 'sets the referrer if specified' do
       referrer = create(:contact)
       ContactMultiAdd.new(account_list, referrer).add_contacts(0 => contact_attrs)
-      expect(account_list.contacts.last.referrals_to_me.to_a).to eq([referrer])
+      expect(account_list.contacts.last.contacts_that_referred_me.to_a).to eq([referrer])
     end
   end
 end

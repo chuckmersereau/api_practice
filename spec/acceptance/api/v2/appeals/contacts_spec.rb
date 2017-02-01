@@ -63,10 +63,10 @@ resource 'Contacts' do
       account_list
       addresses
       appeals
+      contacts_referred_by_me
+      contacts_that_referred_me
       donor_accounts
       people
-      referrals_by_me
-      referrals_to_me
     )
   end
 
@@ -91,38 +91,38 @@ resource 'Contacts' do
     get '/api/v2/appeals/:appeal_id/contacts/:id' do
       parameter 'account_list_id',              'Account List ID', required: true, scope: :filters
 
-      with_options scope: [:data, :attributes] do
-        response_field 'church_name',             'Church Name',             'Type' => 'String'
-        response_field 'created_at',              'Created At',              'Type' => 'String'
-        response_field 'deceased',                'Deceased',                'Type' => 'Boolean'
-        response_field 'donor_accounts',          'Donor Accounts',          'Type' => 'Array[Object]'
-        response_field 'last_activity',           'Last Activity',           'Type' => 'String'
-        response_field 'last_appointment',        'Last Appointment',        'Type' => 'String'
-        response_field 'last_letter',             'Last letter',             'Type' => 'String'
-        response_field 'last_phone_call',         'Last phone call',         'Type' => 'String'
-        response_field 'last_pre_call',           'Last Pre-Call',           'Type' => 'String'
-        response_field 'last_thank',              'Last Thank',              'Type' => 'String'
-        response_field 'likely_to_give',          'Likely to Give',          'Type' => 'String'
-        response_field 'magazine',                'Magazine',                'Type' => 'Boolean'
-        response_field 'name',                    'Name',                    'Type' => 'String'
-        response_field 'next_ask',                'Next ask',                'Type' => 'String'
-        response_field 'no_appeals',              'No Appeals',              'Type' => 'Boolean'
-        response_field 'notes',                   'Notes',                   'Type' => 'String'
-        response_field 'notes_saved_at',          'Notes saved at',          'Type' => 'String'
-        response_field 'pledge_amount',           'Pledge Amount',           'Type' => 'Number'
-        response_field 'pledge_currency',         'Pledge Currency',         'Type' => 'String'
-        response_field 'pledge_currency_symbol',  'Pledge Currency Symbol',  'Type' => 'String'
-        response_field 'pledge_frequency',        'Pledge Frequency',        'Type' => 'Number'
-        response_field 'pledge_received',         'Pledge Received',         'Type' => 'Boolean'
-        response_field 'pledge_start_date',       'Pledge Start Date',       'Type' => 'String'
-        response_field 'referrals_to_me_ids',     'Referrals to me IDs',     'Type' => 'Array[Number]'
-        response_field 'send_newsletter',         'Send Newsletter',         'Type' => 'String'
-        response_field 'status',                  'Status',                  'Type' => 'String'
-        response_field 'tag_list',                'Tag List',                'Type' => 'Array[String]'
-        response_field 'timezone',                'Timezone',                'Type' => 'String'
-        response_field 'uncompleted_tasks_count', 'Uncompleted Tasks count', 'Type' => 'Number'
-        response_field 'updated_at',              'Updated At',              'Type' => 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',        'Type' => 'String'
+      with_options scope: [:data,                       :attributes] do
+        response_field 'church_name',                   'Church Name',             'Type' => 'String'
+        response_field 'contacts_that_referred_me_ids', 'Referrals to me IDs',     'Type' => 'Array[Number]'
+        response_field 'created_at',                    'Created At',              'Type' => 'String'
+        response_field 'deceased',                      'Deceased',                'Type' => 'Boolean'
+        response_field 'donor_accounts',                'Donor Accounts',          'Type' => 'Array[Object]'
+        response_field 'last_activity',                 'Last Activity',           'Type' => 'String'
+        response_field 'last_appointment',              'Last Appointment',        'Type' => 'String'
+        response_field 'last_letter',                   'Last letter',             'Type' => 'String'
+        response_field 'last_phone_call',               'Last phone call',         'Type' => 'String'
+        response_field 'last_pre_call',                 'Last Pre-Call',           'Type' => 'String'
+        response_field 'last_thank',                    'Last Thank',              'Type' => 'String'
+        response_field 'likely_to_give',                'Likely to Give',          'Type' => 'String'
+        response_field 'magazine',                      'Magazine',                'Type' => 'Boolean'
+        response_field 'name',                          'Name',                    'Type' => 'String'
+        response_field 'next_ask',                      'Next ask',                'Type' => 'String'
+        response_field 'no_appeals',                    'No Appeals',              'Type' => 'Boolean'
+        response_field 'notes',                         'Notes',                   'Type' => 'String'
+        response_field 'notes_saved_at',                'Notes saved at',          'Type' => 'String'
+        response_field 'pledge_amount',                 'Pledge Amount',           'Type' => 'Number'
+        response_field 'pledge_currency',               'Pledge Currency',         'Type' => 'String'
+        response_field 'pledge_currency_symbol',        'Pledge Currency Symbol',  'Type' => 'String'
+        response_field 'pledge_frequency',              'Pledge Frequency',        'Type' => 'Number'
+        response_field 'pledge_received',               'Pledge Received',         'Type' => 'Boolean'
+        response_field 'pledge_start_date',             'Pledge Start Date',       'Type' => 'String'
+        response_field 'send_newsletter',               'Send Newsletter',         'Type' => 'String'
+        response_field 'status',                        'Status',                  'Type' => 'String'
+        response_field 'tag_list',                      'Tag List',                'Type' => 'Array[String]'
+        response_field 'timezone',                      'Timezone',                'Type' => 'String'
+        response_field 'uncompleted_tasks_count',       'Uncompleted Tasks count', 'Type' => 'Number'
+        response_field 'updated_at',                    'Updated At',              'Type' => 'String'
+        response_field 'updated_in_db_at',              'Updated In Db At',        'Type' => 'String'
       end
 
       example 'Contact [GET]', document: :appeals do

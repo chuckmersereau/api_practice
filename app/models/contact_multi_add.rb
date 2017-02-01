@@ -21,7 +21,7 @@ class ContactMultiAdd
     add_primary_person(contact, attrs)
     add_spouse(contact, attrs) if attrs[:spouse_first_name].present?
     add_address(contact, attrs)
-    @referring_contact.referrals_by_me << contact if @referring_contact
+    @referring_contact.contacts_referred_by_me << contact if @referring_contact
     contact
   rescue ActiveRecord::RecordInvalid
   end

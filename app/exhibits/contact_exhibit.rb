@@ -17,7 +17,7 @@ class ContactExhibit < DisplayCase::Exhibit
   end
 
   def referrer_links
-    referrals_to_me.map { |r| @context.link_to(exhibit(r, @context), r) }.join(', ').html_safe
+    contacts_that_referred_me.map { |r| @context.link_to(exhibit(r, @context), r) }.join(', ').html_safe
   end
 
   def location

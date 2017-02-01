@@ -9,13 +9,13 @@ RSpec.describe Api::V2::Contacts::ReferrersController, type: :controller do
 
   let!(:resource) do
     create(:contact_with_person, account_list: account_list).tap do |referrer|
-      contact.referrals_to_me << referrer
+      contact.contacts_that_referred_me << referrer
     end
   end
 
   let!(:second_resource) do
     create(:contact_with_person, account_list: account_list).tap do |referrer|
-      contact.referrals_to_me << referrer
+      contact.contacts_that_referred_me << referrer
     end
   end
 

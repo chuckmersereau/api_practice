@@ -7,7 +7,7 @@ resource 'Referrers' do
   let(:user) { create(:user_with_account) }
   let(:contact)    { create(:contact, account_list: user.account_lists.first) }
   let(:contact_id) { contact.uuid }
-  let!(:resource) { create(:contact).tap { |referrer| contact.referrals_to_me << referrer } }
+  let!(:resource) { create(:contact).tap { |referrer| contact.contacts_that_referred_me << referrer } }
 
   let(:resource_attributes) do
     %w(
@@ -54,7 +54,7 @@ resource 'Referrers' do
 
   let(:resource_associations) do
     %w(
-      referrals_to_me
+      contacts_that_referred_me
     )
   end
 

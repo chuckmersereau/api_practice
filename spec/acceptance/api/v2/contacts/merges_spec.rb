@@ -69,10 +69,10 @@ resource 'Merges' do
       account_list
       addresses
       appeals
+      contacts_referred_by_me
+      contacts_that_referred_me
       donor_accounts
       people
-      referrals_by_me
-      referrals_to_me
     )
   end
   # List out any additional attribute keys that will be alongside

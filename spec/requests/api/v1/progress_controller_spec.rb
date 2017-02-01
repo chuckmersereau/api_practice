@@ -34,8 +34,8 @@ describe Api::V1::ProgressController, deprecated: true do
       referral1 = create(:contact, account_list: contact.account_list, status: 'Ask in Future')
       referral1.update_column(:created_at, 1.month.ago)
       referral2 = create(:contact, account_list: contact.account_list, status: 'Contact for Appointment')
-      contact.referrals_by_me << referral1
-      contact.referrals_by_me << referral2
+      contact.contacts_referred_by_me << referral1
+      contact.contacts_referred_by_me << referral2
 
       get '/api/v1/progress?access_token=' + user.access_token
       counts = assigns(:counts)

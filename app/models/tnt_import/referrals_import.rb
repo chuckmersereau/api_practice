@@ -12,7 +12,7 @@ class TntImport::ReferralsImport
       end
       next unless referred_by
       contact = @tnt_contacts[row['id']]
-      contact.referrals_to_me << referred_by[1] unless contact.referrals_to_me.include?(referred_by[1])
+      contact.contacts_that_referred_me << referred_by[1] unless contact.contacts_that_referred_me.include?(referred_by[1])
     end
   end
 end

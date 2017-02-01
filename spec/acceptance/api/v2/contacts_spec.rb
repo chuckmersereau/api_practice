@@ -82,10 +82,10 @@ resource 'Contacts' do
       account_list
       addresses
       appeals
+      contacts_referred_by_me
+      contacts_that_referred_me
       donor_accounts
       people
-      referrals_by_me
-      referrals_to_me
     )
   end
 
@@ -147,31 +147,49 @@ resource 'Contacts' do
 
     post '/api/v2/contacts' do
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id',     'Account List ID',                                    'Type' => 'String'
-        parameter 'church_name',         'Church Name',                                        'Type' => 'String'
-        parameter 'direct_deposit',      'Direct Deposit',                                     'Type' => 'Boolean'
-        parameter 'envelope_greeting',   'Envelope Greeting',                                  'Type' => 'String'
-        parameter 'full_name',           'Full Name',                                          'Type' => 'String'
-        parameter 'greeting',            'Greeting',                                           'Type' => 'String'
-        parameter 'likely_to_give',      'Likely To Give',                                     'Type' => 'String'
-        parameter 'locale',              'Locale',                                             'Type' => 'String'
-        parameter 'magazine',            'Magazine',                                           'Type' => 'String'
-        parameter 'name',                'Contact Name',                                       'Type' => 'String'
-        parameter 'next_ask',            'Next Ask',                                           'Type' => 'String'
-        parameter 'no_appeals',          'No Appeals',                                         'Type' => 'String'
-        parameter 'not_duplicated_with', 'IDs of contacts that are known to not be duplicates', 'Type' => 'String'
-        parameter 'notes',               'Notes',                                              'Type' => 'String'
-        parameter 'pledge_amount',       'Pledge Amount',                                      'Type' => 'Number'
-        parameter 'pledge_currency',     'Pledge Currency',                                    'Type' => 'String'
-        parameter 'pledge_frequency',    'Pledge Frequency',                                   'Type' => 'String'
-        parameter 'pledge_received',     'Pledge Received',                                    'Type' => 'Boolean'
-        parameter 'pledge_start_date',   'Pledge Start Date',                                  'Type' => 'String'
-        parameter 'primary_person_id',   'Primary Person ID',                                  'Type' => 'String'
-        parameter 'send_newsletter',     'Send Newsletter',                                    'Type' => 'String'
-        parameter 'status',              'Status',                                             'Type' => 'String'
-        parameter 'tag_list',            'Tag List',                                           'Type' => 'String'
-        parameter 'timezone',            'Time Zone',                                          'Type' => 'String'
-        parameter 'website',             'Website',                                            'Type' => 'String'
+        parameter 'account_list_id',                    'Account List ID',                                     'Type' => 'String'
+        parameter 'church_name',                        'Church Name',                                         'Type' => 'String'
+        parameter 'contacts_referred_by_me_attributes', 'Create new contacts as referrals from this contact',  'Type' => 'Array[Object]'
+        parameter 'direct_deposit',                     'Direct Deposit',                                      'Type' => 'Boolean'
+        parameter 'envelope_greeting',                  'Envelope Greeting',                                   'Type' => 'String'
+        parameter 'full_name',                          'Full Name',                                           'Type' => 'String'
+        parameter 'greeting',                           'Greeting',                                            'Type' => 'String'
+        parameter 'likely_to_give',                     'Likely To Give',                                      'Type' => 'String'
+        parameter 'locale',                             'Locale',                                              'Type' => 'String'
+        parameter 'magazine',                           'Magazine',                                            'Type' => 'String'
+        parameter 'name',                               'Contact Name',                                        'Type' => 'String'
+        parameter 'next_ask',                           'Next Ask',                                            'Type' => 'String'
+        parameter 'no_appeals',                         'No Appeals',                                          'Type' => 'String'
+        parameter 'not_duplicated_with',                'IDs of contacts that are known to not be duplicates', 'Type' => 'String'
+        parameter 'notes',                              'Notes',                                               'Type' => 'String'
+        parameter 'pledge_amount',                      'Pledge Amount',                                       'Type' => 'Number'
+        parameter 'pledge_currency',                    'Pledge Currency',                                     'Type' => 'String'
+        parameter 'pledge_frequency',                   'Pledge Frequency',                                    'Type' => 'String'
+        parameter 'pledge_received',                    'Pledge Received',                                     'Type' => 'Boolean'
+        parameter 'pledge_start_date',                  'Pledge Start Date',                                   'Type' => 'String'
+        parameter 'primary_person_id',                  'Primary Person ID',                                   'Type' => 'String'
+        parameter 'send_newsletter',                    'Send Newsletter',                                     'Type' => 'String'
+        parameter 'status',                             'Status',                                              'Type' => 'String'
+        parameter 'tag_list',                           'Tag List',                                            'Type' => 'String'
+        parameter 'timezone',                           'Time Zone',                                           'Type' => 'String'
+        parameter 'website',                            'Website',                                             'Type' => 'String'
+      end
+
+      with_options scope: [:data, :attributes, :contacts_referred_by_me_attributes] do
+        parameter 'name',                        'Name of the Contact',                 'Type' => 'String', required: true
+        parameter 'notes',                       'Contact notes',                       'Type' => 'String'
+        parameter 'primary_address_city',        'Primary mailing address city',        'Type' => 'String'
+        parameter 'primary_address_postal_code', 'Primary mailing address postal code', 'Type' => 'String'
+        parameter 'primary_address_state',       'Primary mailing address state',       'Type' => 'String'
+        parameter 'primary_address_street',      'Primary mailing address street',      'Type' => 'String'
+        parameter 'primary_person_email',        'Primary person email address',        'Type' => 'String'
+        parameter 'primary_person_first_name',   'Primary person first name',           'Type' => 'String', required: true
+        parameter 'primary_person_last_name',    'Primary person last name',            'Type' => 'String'
+        parameter 'primary_person_phone',        'Primary person phone number',         'Type' => 'String'
+        parameter 'spouse_email',                'Spouse email address',                'Type' => 'String'
+        parameter 'spouse_first_name',           'Spouse first name',                   'Type' => 'String', required: true
+        parameter 'spouse_last_name',            'Spouse last name',                    'Type' => 'String'
+        parameter 'spouse_phone',                'Spouse phone number',                 'Type' => 'String'
       end
 
       example 'Contact [CREATE]', document: :entities do
@@ -185,39 +203,39 @@ resource 'Contacts' do
     get '/api/v2/contacts/:id' do
       parameter :id, 'ID of the Contact', required: true
       with_options scope: [:data, :attributes] do
-        response_field 'avatar',                  'Avatar',                  'Type' => 'String'
-        response_field 'church_name',             'Church Name',             'Type' => 'String'
-        response_field 'created_at',              'Created At',              'Type' => 'String'
-        response_field 'deceased',                'Deceased',                'Type' => 'Boolean'
-        response_field 'donor_accounts',          'Donor Accounts',          'Type' => 'Array[Object]'
-        response_field 'last_activity',           'Last Activity',           'Type' => 'String'
-        response_field 'last_appointment',        'Last Appointment',        'Type' => 'String'
-        response_field 'last_letter',             'Last Letter',             'Type' => 'String'
-        response_field 'last_phone_call',         'Last Phone Call',         'Type' => 'String'
-        response_field 'last_pre_call',           'Last Pre Call',           'Type' => 'String'
-        response_field 'last_thank',              'Last Thank',              'Type' => 'String'
-        response_field 'likely_to_give',          'Likely to Give',          'Type' => 'String'
-        response_field 'magazine',                'Magazine',                'Type' => 'Boolean'
-        response_field 'name',                    'Contact Name',            'Type' => 'String'
-        response_field 'next_ask',                'Next Ask',                'Type' => 'String'
-        response_field 'no_appeals',              'No Appeals',              'Type' => 'Boolean'
-        response_field 'notes',                   'Notes',                   'Type' => 'String'
-        response_field 'notes_saved_at',          'Notes Saved At',          'Type' => 'String'
-        response_field 'pledge_amount',           'Pledge Amount',           'Type' => 'Number'
-        response_field 'pledge_currency',         'Pledge Currency',         'Type' => 'String'
-        response_field 'pledge_currency_symbol',  'Pledge Currency Symbol',  'Type' => 'String'
-        response_field 'pledge_frequency',        'Pledge Frequency',        'Type' => 'String'
-        response_field 'pledge_received',         'Pledge Received',         'Type' => 'Boolean'
-        response_field 'pledge_start_date',       'Pledge Start Date',       'Type' => 'String'
-        response_field 'referrals_to_me_ids',     'IDs of Refferals to me',  'Type' => 'Array[Number]'
-        response_field 'send_newsletter',         'Send Newsletter',         'Type' => 'String'
-        response_field 'square_avatar',           'Square Avatar',           'Type' => 'String'
-        response_field 'status',                  'Status',                  'Type' => 'String'
-        response_field 'tag_list',                'Tags',                    'Type' => 'Array[String]'
-        response_field 'timezone',                'Time Zone',               'Type' => 'String'
-        response_field 'uncompleted_tasks_count', 'Uncompleted Tasks Count', 'Type' => 'Number'
-        response_field 'updated_at',              'Updated At',              'Type' => 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',        'Type' => 'String'
+        response_field 'avatar',                        'Avatar',                  'Type' => 'String'
+        response_field 'church_name',                   'Church Name',             'Type' => 'String'
+        response_field 'contacts_that_referred_me_ids', 'IDs of Refferals to me',  'Type' => 'Array[Number]'
+        response_field 'created_at',                    'Created At',              'Type' => 'String'
+        response_field 'deceased',                      'Deceased',                'Type' => 'Boolean'
+        response_field 'donor_accounts',                'Donor Accounts',          'Type' => 'Array[Object]'
+        response_field 'last_activity',                 'Last Activity',           'Type' => 'String'
+        response_field 'last_appointment',              'Last Appointment',        'Type' => 'String'
+        response_field 'last_letter',                   'Last Letter',             'Type' => 'String'
+        response_field 'last_phone_call',               'Last Phone Call',         'Type' => 'String'
+        response_field 'last_pre_call',                 'Last Pre Call',           'Type' => 'String'
+        response_field 'last_thank',                    'Last Thank',              'Type' => 'String'
+        response_field 'likely_to_give',                'Likely to Give',          'Type' => 'String'
+        response_field 'magazine',                      'Magazine',                'Type' => 'Boolean'
+        response_field 'name',                          'Contact Name',            'Type' => 'String'
+        response_field 'next_ask',                      'Next Ask',                'Type' => 'String'
+        response_field 'no_appeals',                    'No Appeals',              'Type' => 'Boolean'
+        response_field 'notes',                         'Notes',                   'Type' => 'String'
+        response_field 'notes_saved_at',                'Notes Saved At',          'Type' => 'String'
+        response_field 'pledge_amount',                 'Pledge Amount',           'Type' => 'Number'
+        response_field 'pledge_currency',               'Pledge Currency',         'Type' => 'String'
+        response_field 'pledge_currency_symbol',        'Pledge Currency Symbol',  'Type' => 'String'
+        response_field 'pledge_frequency',              'Pledge Frequency',        'Type' => 'String'
+        response_field 'pledge_received',               'Pledge Received',         'Type' => 'Boolean'
+        response_field 'pledge_start_date',             'Pledge Start Date',       'Type' => 'String'
+        response_field 'send_newsletter',               'Send Newsletter',         'Type' => 'String'
+        response_field 'square_avatar',                 'Square Avatar',           'Type' => 'String'
+        response_field 'status',                        'Status',                  'Type' => 'String'
+        response_field 'tag_list',                      'Tags',                    'Type' => 'Array[String]'
+        response_field 'timezone',                      'Time Zone',               'Type' => 'String'
+        response_field 'uncompleted_tasks_count',       'Uncompleted Tasks Count', 'Type' => 'Number'
+        response_field 'updated_at',                    'Updated At',              'Type' => 'String'
+        response_field 'updated_in_db_at',              'Updated In Db At',        'Type' => 'String'
       end
 
       example 'Contact [GET]', document: :entities do
@@ -232,31 +250,50 @@ resource 'Contacts' do
     put '/api/v2/contacts/:id' do
       parameter :id, 'ID of the Contact', required: true
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id',     'Account List ID',                                    'Type' => 'String'
-        parameter 'church_name',         'Church Name',                                        'Type' => 'String'
-        parameter 'direct_deposit',      'Direct Deposit',                                     'Type' => 'Boolean'
-        parameter 'envelope_greeting',   'Envelope Greeting',                                  'Type' => 'String'
-        parameter 'full_name',           'Full Name',                                          'Type' => 'String'
-        parameter 'greeting',            'Greeting',                                           'Type' => 'String'
-        parameter 'likely_to_give',      'Likely To Give',                                     'Type' => 'String'
-        parameter 'locale',              'Locale',                                             'Type' => 'String'
-        parameter 'magazine',            'Magazine',                                           'Type' => 'String'
-        parameter 'name',                'Contact Name',                                       'Type' => 'String'
-        parameter 'next_ask',            'Next Ask',                                           'Type' => 'String'
-        parameter 'no_appeals',          'No Appeals',                                         'Type' => 'String'
-        parameter 'not_duplicated_with', 'IDs of contacts that are known to not be duplicates', 'Type' => 'String'
-        parameter 'notes',               'Notes',                                              'Type' => 'String'
-        parameter 'pledge_amount',       'Pledge Amount',                                      'Type' => 'Number'
-        parameter 'pledge_currency',     'Pledge Currency',                                    'Type' => 'String'
-        parameter 'pledge_frequency',    'Pledge Frequency',                                   'Type' => 'String'
-        parameter 'pledge_received',     'Pledge Received',                                    'Type' => 'Boolean'
-        parameter 'pledge_start_date',   'Pledge Start Date',                                  'Type' => 'String'
-        parameter 'primary_person_id',   'Primary Person ID',                                  'Type' => 'String'
-        parameter 'send_newsletter',     'Send Newsletter',                                    'Type' => 'String'
-        parameter 'status',              'Status',                                             'Type' => 'String'
-        parameter 'tag_list',            'Tag List',                                           'Type' => 'String'
-        parameter 'timezone',            'Time Zone',                                          'Type' => 'String'
-        parameter 'website',             'Website',                                            'Type' => 'String'
+        parameter 'account_list_id',                    'Account List ID',                                      'Type' => 'String'
+        parameter 'church_name',                        'Church Name',                                          'Type' => 'String'
+        parameter 'contacts_referred_by_me_attributes', 'Update contacts that are referrals from this contact', 'Type' => 'Array[Object]'
+        parameter 'direct_deposit',                     'Direct Deposit',                                       'Type' => 'Boolean'
+        parameter 'envelope_greeting',                  'Envelope Greeting',                                    'Type' => 'String'
+        parameter 'full_name',                          'Full Name',                                            'Type' => 'String'
+        parameter 'greeting',                           'Greeting',                                             'Type' => 'String'
+        parameter 'likely_to_give',                     'Likely To Give',                                       'Type' => 'String'
+        parameter 'locale',                             'Locale',                                               'Type' => 'String'
+        parameter 'magazine',                           'Magazine',                                             'Type' => 'String'
+        parameter 'name',                               'Contact Name',                                         'Type' => 'String'
+        parameter 'next_ask',                           'Next Ask',                                             'Type' => 'String'
+        parameter 'no_appeals',                         'No Appeals',                                           'Type' => 'String'
+        parameter 'not_duplicated_with',                'IDs of contacts that are known to not be duplicates',  'Type' => 'String'
+        parameter 'notes',                              'Notes',                                                'Type' => 'String'
+        parameter 'pledge_amount',                      'Pledge Amount',                                        'Type' => 'Number'
+        parameter 'pledge_currency',                    'Pledge Currency',                                      'Type' => 'String'
+        parameter 'pledge_frequency',                   'Pledge Frequency',                                     'Type' => 'String'
+        parameter 'pledge_received',                    'Pledge Received',                                      'Type' => 'Boolean'
+        parameter 'pledge_start_date',                  'Pledge Start Date',                                    'Type' => 'String'
+        parameter 'primary_person_id',                  'Primary Person ID',                                    'Type' => 'String'
+        parameter 'send_newsletter',                    'Send Newsletter',                                      'Type' => 'String'
+        parameter 'status',                             'Status',                                               'Type' => 'String'
+        parameter 'tag_list',                           'Tag List',                                             'Type' => 'String'
+        parameter 'timezone',                           'Time Zone',                                            'Type' => 'String'
+        parameter 'website',                            'Website',                                              'Type' => 'String'
+      end
+
+      with_options scope: [:data, :attributes, :contacts_referred_by_me_attributes] do
+        parameter 'id',                          'ID of the Contact',                   'Type' => 'String', required: true
+        parameter 'name',                        'Name of the Contact',                 'Type' => 'String', required: true
+        parameter 'notes',                       'Contact notes',                       'Type' => 'String'
+        parameter 'primary_address_city',        'Primary mailing address city',        'Type' => 'String'
+        parameter 'primary_address_postal_code', 'Primary mailing address postal code', 'Type' => 'String'
+        parameter 'primary_address_state',       'Primary mailing address state',       'Type' => 'String'
+        parameter 'primary_address_street',      'Primary mailing address street',      'Type' => 'String'
+        parameter 'primary_person_email',        'Primary person email address',        'Type' => 'String'
+        parameter 'primary_person_first_name',   'Primary person first name',           'Type' => 'String', required: true
+        parameter 'primary_person_last_name',    'Primary person last name',            'Type' => 'String'
+        parameter 'primary_person_phone',        'Primary person phone number',         'Type' => 'String'
+        parameter 'spouse_email',                'Spouse email address',                'Type' => 'String'
+        parameter 'spouse_first_name',           'Spouse first name',                   'Type' => 'String', required: true
+        parameter 'spouse_last_name',            'Spouse last name',                    'Type' => 'String'
+        parameter 'spouse_phone',                'Spouse phone number',                 'Type' => 'String'
       end
 
       example 'Contact [UPDATE]', document: :entities do

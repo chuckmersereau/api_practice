@@ -31,13 +31,13 @@ class Contact < ApplicationRecord
   has_many :contact_people, dependent: :destroy
   has_many :people, through: :contact_people
   has_one :primary_contact_person, -> { where(primary: true) }, class_name: 'ContactPerson'
-  has_one :primary_person, through: :primary_contact_person, source: :person
+  has_one :primary_person, through: :primary_contact_person, source: :person, autosave: true
   has_one :spouse_contact_person, -> { where(primary: [false, nil]) }, class_name: 'ContactPerson'
-  has_one :spouse, through: :spouse_contact_person, source: :person
+  has_one :spouse, through: :spouse_contact_person, source: :person, autosave: true
   has_many :contact_referrals_to_me, foreign_key: :referred_to_id, class_name: 'ContactReferral', dependent: :destroy
   has_many :contact_referrals_by_me, foreign_key: :referred_by_id, class_name: 'ContactReferral', dependent: :destroy
-  has_many :referrals_to_me, through: :contact_referrals_to_me, source: :referred_by
-  has_many :referrals_by_me, through: :contact_referrals_by_me, source: :referred_to
+  has_many :contacts_that_referred_me, through: :contact_referrals_to_me, source: :referred_by, autosave: true
+  has_many :contacts_referred_by_me, through: :contact_referrals_by_me, source: :referred_to, autosave: true
   has_many :activity_contacts, dependent: :destroy
   has_many :activities, through: :activity_contacts
   has_many :tasks, through: :activity_contacts, source: :task
@@ -66,44 +66,54 @@ class Contact < ApplicationRecord
   }
   scope :created_between, -> (start_date, end_date) { where('contacts.created_at BETWEEN ? and ?', start_date.in_time_zone, (end_date + 1.day).in_time_zone) }
 
-  PERMITTED_ATTRIBUTES = [:account_list_id,
-                          :church_name,
-                          :created_at,
-                          :direct_deposit,
-                          :envelope_greeting,
-                          :full_name,
-                          :greeting,
-                          :likely_to_give,
-                          :locale,
-                          :magazine,
-                          :name,
-                          :next_ask,
-                          :no_appeals,
-                          :not_duplicated_with,
-                          :notes,
-                          :pledge_amount,
-                          :pledge_currency,
-                          :pledge_frequency,
-                          :pledge_received,
-                          :pledge_start_date,
-                          :primary_person_id,
-                          :send_newsletter,
-                          :status,
-                          :tag_list,
-                          :timezone,
-                          :updated_at,
-                          :updated_in_db_at,
-                          :uuid,
-                          :website,
-                          { addresses_attributes: [
-                            :remote_id, :master_address_id, :location, :street, :city, :state, :postal_code, :region, :metro_area,
-                            :country, :historic, :primary_mailing_address, :_destroy, :id, :user_changed
-                          ],
-                            contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
-                            donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
-                            people_attributes: Person::PERMITTED_ATTRIBUTES,
-                            tag_list: []
-                          }].freeze
+  PERMITTED_ATTRIBUTES = [
+    :account_list_id,
+    :church_name,
+    :created_at,
+    :direct_deposit,
+    :envelope_greeting,
+    :full_name,
+    :greeting,
+    :likely_to_give,
+    :locale,
+    :magazine,
+    :name,
+    :next_ask,
+    :no_appeals,
+    :not_duplicated_with,
+    :notes,
+    :pledge_amount,
+    :pledge_currency,
+    :pledge_frequency,
+    :pledge_received,
+    :pledge_start_date,
+    :primary_person_id,
+    :send_newsletter,
+    :status,
+    :tag_list,
+    :timezone,
+    :updated_at,
+    :updated_in_db_at,
+    :uuid,
+    :website,
+    {
+      addresses_attributes: [
+        :remote_id, :master_address_id, :location, :street, :city, :state, :postal_code, :region, :metro_area,
+        :country, :historic, :primary_mailing_address, :_destroy, :id, :user_changed
+      ],
+      contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
+      contact_referrals_by_me_attributes: [:referred_to_id, :_destroy, :id],
+      donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
+      people_attributes: Person::PERMITTED_ATTRIBUTES,
+      contacts_referred_by_me_attributes: [
+        :name, :notes,
+        :primary_person_first_name, :primary_person_last_name, :primary_person_phone, :primary_person_email,
+        :spouse_first_name, :spouse_last_name, :spouse_phone, :spouse_email,
+        :primary_address_street, :primary_address_city, :primary_address_state, :primary_address_postal_code
+      ],
+      tag_list: []
+    }
+  ].freeze
 
   MERGE_COPY_ATTRIBUTES = [
     :name, :pledge_amount, :status, :full_name, :greeting, :envelope_greeting, :website, :pledge_frequency,
@@ -119,6 +129,7 @@ class Contact < ApplicationRecord
   accepts_nested_attributes_for :donor_accounts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :contact_people, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :contact_referrals_to_me, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :contacts_referred_by_me, reject_if: :all_blank, allow_destroy: false
 
   before_save :set_notes_saved_at, :update_late_at
   after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
@@ -175,6 +186,11 @@ class Contact < ApplicationRecord
 
   delegate :first_name, :last_name, :phone, :email, to: :primary_or_first_person
   delegate :street, :city, :state, :postal_code, to: :mailing_address
+
+  # These delegations exist to facilitate creating referrals (as new contact records) with nested attributes
+  delegate :first_name, 'first_name=', :last_name, 'last_name=', :phone, 'phone=', :email, 'email=', to: :find_or_build_primary_person, prefix: :primary_person
+  delegate :first_name, 'first_name=', :last_name, 'last_name=', :phone, 'phone=', :email, 'email=', to: :find_or_build_spouse, prefix: :spouse
+  delegate :street, 'street=', :city, 'city=', :state, 'state=', :postal_code, 'postal_code=', to: :find_or_build_primary_address, prefix: :primary_address
 
   def to_s
     name
@@ -308,22 +324,6 @@ class Contact < ApplicationRecord
       cp&.update_attributes(primary: true)
     end
     person_id
-  end
-
-  def spouse_first_name
-    spouse.try(:first_name)
-  end
-
-  def spouse_last_name
-    spouse.try(:last_name)
-  end
-
-  def spouse_phone
-    spouse.try(:spouse_phone)
-  end
-
-  def spouse_email
-    spouse.try(:spouse_email)
   end
 
   def greeting
@@ -743,5 +743,17 @@ class Contact < ApplicationRecord
     return if account_list.contacts.where("#{service}_id" => send("#{service}_id")).where.not(id: id).present?
 
     account_list.send("#{service}_account").delete_contact(self)
+  end
+
+  def find_or_build_spouse
+    @find_or_build_spouse ||= (spouse || build_spouse_contact_person.build_person)
+  end
+
+  def find_or_build_primary_person
+    @find_or_build_primary_person ||= (primary_person || build_primary_contact_person.build_person)
+  end
+
+  def find_or_build_primary_address
+    @find_or_build_primary_address ||= (primary_address || build_primary_address)
   end
 end

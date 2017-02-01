@@ -17,7 +17,7 @@ RSpec.describe AccountList::Analytics, type: :model do
 
     # Contacts
     contact = create(:contact, account_list: account_list)
-    contact.referrals_to_me << create(:contact, account_list: account_list)
+    contact.contacts_that_referred_me << create(:contact, account_list: account_list)
 
     # Correspondence
     create_task(activity_type: 'Pre Call Letter', result: 'Done')

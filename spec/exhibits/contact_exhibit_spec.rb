@@ -6,7 +6,7 @@ describe ContactExhibit do
 
   it 'returns referrers as a list of links' do
     allow(context).to receive(:link_to).and_return('foo')
-    allow(exhib).to receive(:referrals_to_me).and_return(%w(foo foo))
+    allow(exhib).to receive(:contacts_that_referred_me).and_return(%w(foo foo))
     expect(exhib.referrer_links).to eq('foo, foo')
   end
 
