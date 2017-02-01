@@ -50,4 +50,16 @@ class Api::V2::UsersController < Api::V2Controller
   def authorize_user
     authorize @user
   end
+
+  def transform_uuid_attributes_params_to_ids
+    if preferences_params && preferences_params[:default_account_list]
+      preferences_params[:default_account_list] =
+        get_id_from_model_and_key(preferences_params, :default_account_list, AccountList)
+    end
+    super
+  end
+
+  def preferences_params
+    params.dig(:data, :attributes, :preferences)
+  end
 end

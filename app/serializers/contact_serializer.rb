@@ -16,6 +16,7 @@ class ContactSerializer < ApplicationSerializer
              :last_phone_call,
              :last_pre_call,
              :last_thank,
+             :lifetime_donations,
              :likely_to_give,
              :locale,
              :magazine,
@@ -68,5 +69,9 @@ class ContactSerializer < ApplicationSerializer
 
   def account_list_id
     object.account_list.uuid
+  end
+
+  def lifetime_donations
+    object.donations.sum(:amount)
   end
 end

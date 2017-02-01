@@ -78,24 +78,27 @@ class Api::V2Controller < ApiController
   end
 
   def data_attributes
-    params[:data][:attributes] if params[:data]
+    params.dig(:data, :attributes)
   end
 
   def fetch_account_lists
-    return current_user.account_lists unless params[:filter] && params[:filter][:account_list_id]
-    fetch_account_list_with_filter
+    return current_user.account_lists unless account_list_filter
+    @account_lists = fetch_account_list_with_filter
+    return @account_lists if @account_lists.present?
+    raise ActiveRecord::RecordNotFound,
+          "Resource 'AccountList' with id '#{account_list_filter}' does not exist."
+  end
+
+  def account_list_filter
+    params.dig(:filter, :account_list_id)
   end
 
   def fetch_account_list_with_filter
-    @account_lists = current_user.account_lists.where(uuid: params[:filter][:account_list_id])
-    render_404(
-      detail: "Resource 'account_list' with id '#{params[:filter][:account_list_id]}' does not exist."
-    ) if @account_lists.empty?
-    @account_lists
+    current_user.account_lists.where(uuid: account_list_filter)
   end
 
   def verify_primary_id_placement
-    if data_attributes && data_attributes[:id]
+    if params.dig(:data, :attributes, :id)
       render_403(title: 'A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`')
     end
   end

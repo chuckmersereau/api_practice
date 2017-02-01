@@ -42,7 +42,6 @@ Rails.application.routes.draw do
         resources :appeals, only: [:index, :show, :create, :update, :destroy] do
           scope module: :appeals do
             resources :contacts, only: [:index, :show, :destroy]
-            resource :export_to_mailchimp, only: [:show], controller: :export_to_mailchimp
           end
         end
 
@@ -51,6 +50,7 @@ Rails.application.routes.draw do
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do
           scope module: :contacts do
             collection do
+              post :export_to_mail_chimp, to: 'export_to_mail_chimp#create'
               resource  :analytics, only: :show
               resources :filters, only: :index
               resources :merges, only: :create

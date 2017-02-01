@@ -3,6 +3,10 @@ class MailChimpAccountPolicy < ApplicationPolicy
     resource_owner?
   end
 
+  def export?
+    resource_owner?
+  end
+
   private
 
   def resource_owner?

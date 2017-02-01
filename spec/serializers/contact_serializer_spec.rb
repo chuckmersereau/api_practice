@@ -5,6 +5,7 @@ describe ContactSerializer, deprecated: true do
     let(:contact) do
       c = create(:contact)
       c.addresses << build(:address)
+      c.donations << [create(:donation, amount: 21.00), create(:donation, amount: 7.00)]
       c
     end
     let(:person) do
@@ -43,6 +44,10 @@ describe ContactSerializer, deprecated: true do
       contact.reload
       weekly_json = ContactSerializer.new(contact).to_json
       expect(JSON.parse(weekly_json)['contact']['pledge_frequency']).to eq '0.23076923076923'
+    end
+
+    it 'returns lifetime_donations' do
+      expect(JSON.parse(json)['contact']['lifetime_donations']).to eq(28.00)
     end
 
     # it "cache_key is dependant on include params" do

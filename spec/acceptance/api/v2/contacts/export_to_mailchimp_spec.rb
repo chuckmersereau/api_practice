@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Mailchimp' do
+resource 'MailChimp' do
   include_context :json_headers
 
   let(:resource_type) { 'mail-chimp-account' }
@@ -16,8 +16,6 @@ resource 'Mailchimp' do
   let(:primary_list_id)    { '1e72b58b72' }
   let(:mail_chimp_account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
 
-  let(:form_data) { build_data(appeal_list_id: primary_list_id) }
-
   before do
     allow_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list)
     allow_any_instance_of(MailChimpAccount).to receive(:lists).and_return([])
@@ -28,13 +26,14 @@ resource 'Mailchimp' do
   end
 
   context 'authorized user' do
-    get '/api/v2/appeals/:appeal_id/export_to_mailchimp' do
-      parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
-      parameter 'appeal_list_id',  'Appeal List ID', required: true
+    post '/api/v2/contacts/export_to_mail_chimp' do
+      parameter 'account_list_id', 'Account List ID', scope: :filter
+      parameter 'contact_ids', 'Account List ID', scope: :filter
+      parameter 'mail_chimp_list_id', 'Mail Chimp List ID', required: true
 
-      example 'Export to Mailchimp [GET]', document: :appeals do
-        explanation 'Export the Appeal with the given ID to the MailChimp server'
-        do_request data: form_data
+      example 'Export to Mail Chimp [POST]', document: :appeals do
+        explanation 'Export the Appeal with the given ID to the Mail Chimp server'
+        do_request mail_chimp_list_id: primary_list_id
 
         expect(response_status).to eq 200
       end
