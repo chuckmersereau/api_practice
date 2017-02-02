@@ -31,27 +31,19 @@ RSpec.describe ConstantList, type: :model do
     end
   end
 
-  context '#organizations' do
-    it { expect(subject.notifications).to be_a Hash }
+  context '#notifications' do
+    before { create :notification_type }
 
-    it 'should consist of string/symbol pairs' do
-      subject.notifications.each do |id, record|
-        expect(id).to be_a Fixnum
-        expect(record).to be_a Notification
-      end
-    end
+    it { expect(subject.notifications).to be_a_hash_with_types Fixnum, String }
   end
 
   context '#organizations' do
     before { 5.times { create(:organization) } }
+    it { expect(subject.organizations).to be_a_hash_with_types Fixnum, String }
+  end
 
-    it { expect(subject.organizations).to be_a Hash }
-
-    it 'should consist of string/symbol pairs' do
-      subject.organizations.each do |id, record|
-        expect(id).to be_a Fixnum
-        expect(record).to be_a Organization
-      end
-    end
+  context '#assignable_locations' do
+    it { expect(subject.assignable_locations).to be_an Array }
+    it { subject.assignable_locations.each { |loc| expect(loc).to be_a String } }
   end
 end

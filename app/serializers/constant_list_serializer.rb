@@ -2,7 +2,8 @@ class ConstantListSerializer < ActiveModel::Serializer
   include DisplayCase::ExhibitsHelper
 
   delegate :activities, :assignable_likely_to_give, :assignable_send_newsletter,
-           :pledge_frequencies, :statuses, :codes, to: :object
+           :pledge_frequencies, :statuses, :codes, :notifications,
+           :organizations, to: :object
 
   type :constant_list
   attributes :activities, :assignable_likely_to_give,
@@ -11,23 +12,15 @@ class ConstantListSerializer < ActiveModel::Serializer
              :organizations, :currencies
 
   def currencies
-    constants_exhibit.currency_code_symbol_pairs
+    constants_exhibit.currency_code_symbol_map
   end
 
   def locales
-    constants_exhibit.locale_name_pairs
-  end
-
-  def notifications
-    constants_exhibit.notification_description_pairs
-  end
-
-  def organizations
-    constants_exhibit.organization_name_pairs
+    constants_exhibit.locale_name_map
   end
 
   def pledge_currencies
-    constants_exhibit.pledge_currencies_code_symbol_pairs
+    constants_exhibit.pledge_currencies_code_symbol_map
   end
 
   private

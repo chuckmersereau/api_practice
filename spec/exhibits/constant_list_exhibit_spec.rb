@@ -12,84 +12,28 @@ describe ConstantListExhibit do
     end
   end
 
-  context '#currency_code_symbol_pairs' do
-    it { expect(subject.currency_code_symbol_pairs).to be_an Array }
-
-    it 'should consist of string/symbol pairs' do
-      subject.currency_code_symbol_pairs.each do |currency|
-        expect(currency.size).to eq 2
-        expect(currency.first).to be_a(String)
-        expect(currency.second).to be_a(String)
-      end
-    end
+  context '#currency_code_symbol_map' do
+    it { expect(subject.currency_code_symbol_map).to be_a_hash_with_types String, String }
   end
 
-  context '#locale_name_pairs' do
-    it 'should be an array' do
-      expect(subject.locale_name_pairs).to be_an Array
-    end
-
-    it 'should consist of string/symbol pairs' do
-      subject.locale_name_pairs.each do |locale|
-        expect(locale.size).to eq 2
-        expect(locale.first).to be_a(String)
-        expect(locale.second).to be_a(Symbol)
-      end
-    end
+  context '#locale_name_map' do
+    it { expect(subject.locale_name_map).to be_a_hash_with_types Symbol, String }
 
     it 'should have a name with the locale code in parentheses' do
-      subject.locale_name_pairs.each do |locale|
-        expect(locale.first).to match(/\A[^\(]+\(\w+(?:-\w+)?\)\z/)
+      subject.locale_name_map.each do |_code, locale|
+        expect(locale).to match(/\A[^\(]+\(\w+(?:-\w+)?\)\z/)
       end
     end
 
     it 'should have ISO 3166-1 alpha-2 codes' do
-      subject.locale_name_pairs.each do |locale|
-        expect(locale.second).to match(/\w\w/)
+      subject.locale_name_map.each do |_code, locale|
+        expect(locale).to match(/\w\w/)
       end
     end
   end
 
-  context '#notification_description_pairs' do
-    before { 5.times { create(:notification) } }
-
-    it 'should be an array' do
-      expect(subject.notification_description_pairs).to be_an Array
-    end
-
-    it 'should consist of string/symbol pairs' do
-      subject.notification_description_pairs.each do |notification|
-        expect(notification.size).to eq 2
-        expect(notification.first).to be_a(String)
-        expect(notification.second).to be_a(Fixnum)
-      end
-    end
-  end
-
-  context '#organization_name_pairs' do
-    before { 5.times { create(:organization) } }
-
-    it 'should be an array' do
-      expect(subject.organization_name_pairs).to be_an Array
-    end
-
-    it 'should consist of string/symbol pairs' do
-      subject.organization_name_pairs.each do |organization|
-        expect(organization.size).to eq 2
-        expect(organization.first).to be_a(String)
-        expect(organization.second).to be_a(Fixnum)
-      end
-    end
-  end
-
-  context '#pledge_currencies_code_symbol_pairs' do
-    it 'should consist of string/symbol pairs' do
-      subject.pledge_currencies_code_symbol_pairs.each do |pledge|
-        expect(pledge.size).to eq 2
-        expect(pledge.first).to be_a(String)
-        expect(pledge.second).to be_a(String)
-      end
-    end
+  context '#pledge_currencies_code_symbol_map' do
+    it { expect(subject.pledge_currencies_code_symbol_map).to be_a_hash_with_types String, String }
   end
 
   context '#currency_code_and_symbol' do
