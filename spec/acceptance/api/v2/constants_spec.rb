@@ -35,7 +35,7 @@ resource 'Constants' do
         ) + contact_attribute_keys
       end
 
-      example 'Constant [LIST]', document: :constants do
+      example 'Constant [LIST]', document: :entities do
         explanation 'List of Constants'
         do_request
 
