@@ -119,6 +119,8 @@ class ApplicationSeeder
     create :notification_preference, notification_type: NotificationType.last, account_list: account_list
     create :notification
 
+    create :user_option, user: user
+
     create :partner_status_log, contact: contact
 
     create :facebook_account, person: person

@@ -119,6 +119,7 @@ group :test do
   gem 'rb-fsevent', require: false
   gem 'roo', '~> 1.13.2'
   gem 'rubocop', '= 0.39', require: false
+  gem 'shoulda-matchers', '~> 3.1.1'
   gem 'test_after_commit'
   gem 'webmock', '~> 1.21.0'
 end

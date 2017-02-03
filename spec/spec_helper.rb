@@ -11,6 +11,7 @@ require 'paper_trail/frameworks/rspec'
 require 'attributes_history/rspec'
 require 'equivalent-xml'
 require 'ammeter/init'
+require 'shoulda/matchers'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.

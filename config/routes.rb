@@ -127,6 +127,11 @@ Rails.application.routes.draw do
           resource :year_donations, only: :show
         end
       end
+      resource :user, only: [] do
+        scope module: :user do
+          resources :options
+        end
+      end
     end
   end
 

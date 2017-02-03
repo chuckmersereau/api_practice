@@ -2307,6 +2307,41 @@ ALTER SEQUENCE person_linkedin_accounts_id_seq OWNED BY person_linkedin_accounts
 
 
 --
+-- Name: person_options; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE TABLE person_options (
+    id integer NOT NULL,
+    key character varying(255) NOT NULL,
+    value character varying(255),
+    user_id integer,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone
+);
+
+
+--
+-- Name: person_options_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE person_options_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: person_options_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE person_options_id_seq OWNED BY person_options.id;
+
+
+--
+-- Name: person_organization_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
 -- Name: person_organization_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3173,6 +3208,13 @@ ALTER TABLE ONLY person_linkedin_accounts ALTER COLUMN id SET DEFAULT nextval('p
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
 --
 
+ALTER TABLE ONLY person_options ALTER COLUMN id SET DEFAULT nextval('person_options_id_seq'::regclass);
+
+
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
 ALTER TABLE ONLY person_organization_accounts ALTER COLUMN id SET DEFAULT nextval('person_organization_accounts_id_seq'::regclass);
 
 
@@ -3726,6 +3768,15 @@ ALTER TABLE ONLY person_linkedin_accounts
 
 
 --
+-- Name: person_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+--
+
+ALTER TABLE ONLY person_options
+    ADD CONSTRAINT person_options_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: person_organization_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
 -- Name: person_organization_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5068,6 +5119,21 @@ CREATE UNIQUE INDEX index_person_linkedin_accounts_on_uuid ON person_linkedin_ac
 
 
 --
+-- Name: index_person_options_on_key_and_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_options_on_key_and_user_id ON person_options USING btree (key, user_id);
+
+
+--
+-- Name: index_person_options_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE UNIQUE INDEX index_person_options_on_uuid ON person_options USING btree (uuid);
+
+
+--
+-- Name: index_person_organization_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 -- Name: index_person_organization_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6004,4 +6070,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161216004236');
 INSERT INTO schema_migrations (version) VALUES ('20161216004239');
 
 INSERT INTO schema_migrations (version) VALUES ('20170109220413');
+
+INSERT INTO schema_migrations (version) VALUES ('20170109201920');
 

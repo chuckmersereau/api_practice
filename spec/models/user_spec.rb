@@ -3,6 +3,7 @@ require 'spec_helper'
 describe User do
   subject { build(:user) }
   let(:account_list) { create(:account_list) }
+  it { is_expected.to have_many(:options).dependent(:destroy) }
 
   describe 'fundraiser role' do
     before(:each) do

@@ -605,6 +605,8 @@ GEM
       rdoc (~> 4.0)
     sexp_processor (4.7.0)
     shellany (0.0.1)
+    shoulda-matchers (3.1.1)
+      activesupport (>= 4.0.0)
     sidekiq (4.2.6)
       concurrent-ruby (~> 1.0)
       connection_pool (~> 2.2, >= 2.2.0)
@@ -793,6 +795,7 @@ DEPENDENCIES
   rubyzip (= 1.0.0)
   savon (~> 2.3.0)
   sdoc (~> 0.4.0)
+  shoulda-matchers (~> 3.1.1)
   sidekiq-cron (~> 0.4.4)
   sidekiq-pro (~> 3.4.0)!
   sidekiq-unique-jobs!
