@@ -16,7 +16,6 @@ class ContactSerializer < ApplicationSerializer
              :last_phone_call,
              :last_pre_call,
              :last_thank,
-             :lifetime_donations,
              :likely_to_give,
              :locale,
              :magazine,
@@ -72,6 +71,7 @@ class ContactSerializer < ApplicationSerializer
   end
 
   def lifetime_donations
+    # This causes performance issues, it should not be added until a solution is found.
     object.donations.sum(:amount)
   end
 end
