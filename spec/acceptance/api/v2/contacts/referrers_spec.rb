@@ -26,7 +26,6 @@ resource 'Referrers' do
       last_phone_call
       last_pre_call
       last_thank
-      lifetime_donations
       likely_to_give
       locale
       magazine
