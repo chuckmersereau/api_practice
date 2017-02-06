@@ -30,9 +30,8 @@ GIT
       guard (~> 2.0)
 
 GIT
-  remote: https://github.com/cynektix/gmail.git
-  revision: db93300b4ffe15b8da9537eea9b6ecb226d80b76
-  branch: fix-to-imap-date
+  remote: https://github.com/gmailgem/gmail.git
+  revision: 4f78039e9821340a24ad3d840180d2ec6c6e0115
   specs:
     gmail (0.6.0)
       gmail_xoauth (>= 0.3.0)
