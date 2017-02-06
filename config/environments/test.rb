@@ -16,12 +16,15 @@ Rails.application.configure do
   config.serve_static_assets = true
   config.static_cache_control = 'public, max-age=3600'
 
-  # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
+  # Prefer responses to be sent in JSON, so disable Rails error reports by considering requests as remote.
+  # (consider reverting this when upgrading to Rails 5)
+  config.consider_all_requests_local       = false
+
+  # Disable caching.
   config.action_controller.perform_caching = false
 
-  # Raise exceptions instead of rendering exception templates.
-  config.action_dispatch.show_exceptions = false
+  # Render exceptions so that they can be tested.
+  config.action_dispatch.show_exceptions = true
 
   # Disable request forgery protection in test environment.
   config.action_controller.allow_forgery_protection = false

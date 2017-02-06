@@ -83,7 +83,7 @@ class ApiController < ActionController::API
   end
 
   def render_404(title: 'Not Found', detail: nil)
-    render_error(title: title, detail: detail, status: :not_found)
+    render_error(title: title, detail: detail, status: '404')
   end
 
   def render_404_from_exception(exception)

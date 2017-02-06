@@ -41,6 +41,11 @@ RSpec.describe ErrorSerializer, type: :serializer do
   end
 
   describe '#as_json' do
+    it 'returns a Hash' do
+      serializer = ErrorSerializer.new(status: 400, resource: resource)
+      expect(serializer.as_json).to be_a Hash
+    end
+
     context 'with a resource' do
       it 'will correctly generate the json for the errors on the resource' do
         expected_json_hash = {
