@@ -3,7 +3,6 @@ class ActivityCommentSerializer < ApplicationSerializer
 
   attributes :body, :person_id, :person_name
 
-  belongs_to :activity
   belongs_to :person
 
   def body

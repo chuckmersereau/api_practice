@@ -27,7 +27,6 @@ resource 'Invites' do
   let(:resource_associations) do
     %w(
       accepted_by_user
-      account_list
       cancelled_by_user
       invited_by_user
     )

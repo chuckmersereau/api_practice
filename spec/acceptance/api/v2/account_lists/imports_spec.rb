@@ -47,7 +47,6 @@ resource 'Import' do
 
   let(:resource_associations) do
     %w(
-      account_list
       user
     )
   end

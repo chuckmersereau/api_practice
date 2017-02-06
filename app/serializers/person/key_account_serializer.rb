@@ -7,6 +7,4 @@ class Person::KeyAccountSerializer < ApplicationSerializer
              :last_name,
              :primary,
              :remote_id
-
-  belongs_to :person
 end

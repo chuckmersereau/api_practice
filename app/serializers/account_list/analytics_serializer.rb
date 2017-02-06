@@ -19,6 +19,4 @@ class AccountList::AnalyticsSerializer < ServiceSerializer
            :text_message,
            :phone,
            to: :object
-
-  belongs_to :account_list
 end

@@ -9,6 +9,4 @@ class Person::GoogleAccountSerializer < ApplicationSerializer
              :refresh_token,
              :remote_id,
              :token
-
-  belongs_to :person
 end

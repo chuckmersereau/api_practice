@@ -16,12 +16,6 @@ resource 'Google Accounts' do
   end
   let(:form_data) { build_data(new_google_account) }
 
-  let(:resource_associations) do
-    %w(
-      person
-    )
-  end
-
   let(:resource_attributes) do
     %w(
       created_at
@@ -45,7 +39,7 @@ resource 'Google Accounts' do
       example 'Google Account [LIST]', document: :user do
         do_request
         explanation 'List of Google Accounts associated to current_user'
-        check_collection_resource(1, ['relationships'])
+        check_collection_resource(1)
         expect(response_status).to eq 200
       end
     end
@@ -67,7 +61,7 @@ resource 'Google Accounts' do
       example 'Google Account [GET]', document: :user do
         explanation 'The current_user\'s Google Account with the given ID'
         do_request
-        check_resource(['relationships'])
+        check_resource
         expect(response_status).to eq 200
       end
     end

@@ -9,7 +9,7 @@ RSpec.describe Api::V2::AccountLists::NotificationPreferencesController, type: :
     create_list(:notification_preference, 2,
                 account_list_id: account_list.id,
                 actions: 'email',
-                notification_type_id: notification_type.id)
+                notification_type: notification_type)
   end
   let(:notification_preference) { notification_preferences.first }
   let(:notification_type) { create(:notification_type) }

@@ -46,7 +46,7 @@ resource 'Contacts People Email Addresses' do
         explanation 'List of Email Addresses associated to the Person'
         do_request
 
-        check_collection_resource(1, ['relationships'])
+        check_collection_resource(1)
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq email_address.email
         expect(response_status).to eq 200
@@ -69,7 +69,7 @@ resource 'Contacts People Email Addresses' do
         explanation "Getting a Person's Email Address by ID"
         do_request
 
-        check_resource(['relationships'])
+        check_resource
         expect(resource_object.keys.sort).to eq expected_attribute_keys
         expect(resource_object['email']).to  eq email_address.email
         expect(response_status).to eq 200
@@ -91,7 +91,7 @@ resource 'Contacts People Email Addresses' do
         explanation 'Create an Email Address associated with the Person'
         do_request data: form_data
 
-        check_resource(['relationships'])
+        check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq attributes[:email]
         expect(response_status).to eq 201
@@ -115,7 +115,7 @@ resource 'Contacts People Email Addresses' do
         explanation 'Update the Person\'s Email Address with the given ID'
         do_request data: form_data
 
-        check_resource(['relationships'])
+        check_resource
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['email']).to eq 'new-email@example.com'
         expect(response_status).to eq 200

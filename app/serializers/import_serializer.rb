@@ -8,6 +8,5 @@ class ImportSerializer < ApplicationSerializer
              :source,
              :tags
 
-  belongs_to :account_list
   belongs_to :user
 end

@@ -16,7 +16,6 @@ class TaskSerializer < ApplicationSerializer
 
   has_many :activity_comments, key: :comments, root: :comments
   has_many :contacts
-  has_many :people
 
   belongs_to :account_list
 

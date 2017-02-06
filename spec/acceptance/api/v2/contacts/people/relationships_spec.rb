@@ -25,7 +25,6 @@ resource 'Contacts > People > Relationships' do
 
   let(:resource_associations) do
     %w(
-      person
       related_person
     )
   end

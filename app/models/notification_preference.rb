@@ -3,7 +3,7 @@ class NotificationPreference < ApplicationRecord
   belongs_to :notification_type
 
   serialize :actions
-  # attr_accessible :actions, :notification_type_id
+
   validates :actions, :notification_type_id, presence: true
 
   delegate :type, to: :notification_type

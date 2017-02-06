@@ -36,7 +36,7 @@ resource 'Key Accounts' do
       example 'Key Account [LIST]', document: :user do
         do_request
         explanation 'List of Key Accounts associated to current_user'
-        check_collection_resource(2, %w(relationships))
+        check_collection_resource(2)
         expect(response_status).to eq 200
       end
     end
@@ -57,7 +57,7 @@ resource 'Key Accounts' do
       example 'Key Account [GET]', document: :user do
         explanation 'The current_user\'s Key Account with the given ID'
         do_request
-        check_resource(%w(relationships))
+        check_resource
         expect(response_status).to eq 200
       end
     end
