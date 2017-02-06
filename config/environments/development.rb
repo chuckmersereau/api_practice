@@ -19,8 +19,11 @@ Rails.application.configure do
   # Do not eager load code on boot.
   config.eager_load = false
 
-  # Show full error reports and disable caching.
-  config.consider_all_requests_local       = true
+  # Prefer responses to be sent in JSON, so disable Rails error reports by considering requests as remote.
+  # (consider reverting this when upgrading to Rails 5)
+  config.consider_all_requests_local       = false
+
+  # Disable caching.
   config.action_controller.perform_caching = false
   # config.action_controller.perform_caching = true
   config.i18n.fallbacks = true
