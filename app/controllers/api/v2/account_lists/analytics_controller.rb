@@ -8,7 +8,7 @@ class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
   private
 
   def authorize_analytics
-    authorize(@account_list, :show?)
+    authorize(load_account_list, :show?)
   end
 
   def analytics_scope
@@ -24,7 +24,11 @@ class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
   end
 
   def analytics_params
-    filter_params.merge(account_list: load_account_list)
+    {
+      start_date: 1.month.ago,
+      end_date: Time.current
+    }.merge(filter_params)
+      .merge(account_list: load_account_list)
   end
 
   def permitted_filters

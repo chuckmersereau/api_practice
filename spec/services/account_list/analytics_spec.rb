@@ -44,9 +44,9 @@ RSpec.describe AccountList::Analytics, type: :model do
 
   describe 'initialize' do
     it 'raises error if required arguments are not given' do
-      expect { AccountList::Analytics.new(account_list: account_list) }
+      expect { AccountList::Analytics.new }
         .to raise_error(ArgumentError)
-        .with_message("start_date can't be blank, end_date can't be blank")
+        .with_message("account_list can't be blank, start_date can't be blank, end_date can't be blank")
     end
 
     it 'initializes successfully' do
