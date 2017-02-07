@@ -37,7 +37,7 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
     authorize_relationship
     return show if save_relationship
 
-    render_400_with_errors(@relationship)
+    render_with_resource_errors(@relationship)
   end
 
   def load_relationships

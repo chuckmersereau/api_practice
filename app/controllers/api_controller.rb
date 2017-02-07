@@ -54,13 +54,18 @@ class ApiController < ActionController::API
     render_400(detail: exception&.message)
   end
 
-  def render_400_with_errors(resource_or_hash)
-    case resource_or_hash
-    when Hash
-      render_error(hash: resource_or_hash, status: :bad_request)
+  def render_with_resource_errors(resource)
+    if resource.is_a? Hash
+      render_error(hash: resource, status: :bad_request)
+    elsif resource.errors.keys.include?(:updated_in_db_at)
+      render_409(detail: detail_for_resource_first_error(resource))
     else
-      render_error(resource: resource_or_hash, status: :bad_request)
+      render_400_with_errors(resource)
     end
+  end
+
+  def render_400_with_errors(resource_or_hash)
+    render_error(resource: resource_or_hash, status: :bad_request)
   end
 
   def render_401(title: 'Unauthorized', detail: nil)
@@ -148,5 +153,11 @@ class ApiController < ActionController::API
   def verify_request_content_type
     content_type = request.headers['CONTENT_TYPE']&.split(';')&.first
     render_415 unless self.class.supported_content_types.include?(content_type)
+  end
+
+  def detail_for_resource_first_error(resource)
+    key = resource.errors.messages.keys.first
+    val = resource.errors.messages[:updated_in_db_at].first
+    "#{key} #{val}"
   end
 end

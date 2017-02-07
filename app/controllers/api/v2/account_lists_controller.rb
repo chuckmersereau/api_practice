@@ -43,7 +43,7 @@ class Api::V2::AccountListsController < Api::V2Controller
     if save_account_list
       render_account_list
     else
-      render_400_with_errors(@account_list)
+      render_with_resource_errors(@account_list)
     end
   end
 

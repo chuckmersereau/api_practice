@@ -31,7 +31,7 @@ class Api::V2::UsersController < Api::V2Controller
     if save_user
       render_user
     else
-      render_400_with_errors(@user)
+      render_with_resource_errors(@user)
     end
   end
 

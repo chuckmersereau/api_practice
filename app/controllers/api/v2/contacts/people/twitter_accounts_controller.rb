@@ -63,7 +63,7 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
     if save_twitter_account
       render_twitter_account
     else
-      render_400_with_errors(@twitter_account)
+      render_with_resource_errors(@twitter_account)
     end
   end
 

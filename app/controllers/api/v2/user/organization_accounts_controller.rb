@@ -58,7 +58,7 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
     if save_organization_account
       render_organization_account
     else
-      render_400_with_errors(@organization_account)
+      render_with_resource_errors(@organization_account)
     end
   end
 

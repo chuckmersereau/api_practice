@@ -42,7 +42,7 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
     if save_email_address
       render_email_address
     else
-      render_400_with_errors(@email_address)
+      render_with_resource_errors(@email_address)
     end
   end
 

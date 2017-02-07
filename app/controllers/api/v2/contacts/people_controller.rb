@@ -84,7 +84,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
     if save_person
       render_person
     else
-      render_400_with_errors(@person)
+      render_with_resource_errors(@person)
     end
   end
 

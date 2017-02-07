@@ -57,7 +57,7 @@ RSpec.shared_examples 'update_examples' do |options = {}|
       full_update_attributes[:data][:attributes][:updated_in_db_at] = 1.year.ago
       put :update, full_update_attributes
 
-      expect(response.status).to eq(400)
+      expect(response.status).to eq(409)
       expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       expect(response_errors).to be_present
     end

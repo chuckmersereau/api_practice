@@ -63,7 +63,7 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
     if save_fb_account
       render_fb_account
     else
-      render_400_with_errors(@fb_account)
+      render_with_resource_errors(@fb_account)
     end
   end
 

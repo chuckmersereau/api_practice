@@ -90,7 +90,7 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
     if save_referral
       render_referral
     else
-      render_400_with_errors(@referral)
+      render_with_resource_errors(@referral)
     end
   end
 

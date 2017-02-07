@@ -77,7 +77,7 @@ class Api::V2::ContactsController < Api::V2Controller
     if save_contact
       render_contact
     else
-      render_400_with_errors(@contact)
+      render_with_resource_errors(@contact)
     end
   end
 

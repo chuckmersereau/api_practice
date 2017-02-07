@@ -95,7 +95,7 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
     if save_phone
       render_phone
     else
-      render_400_with_errors(@phone)
+      render_with_resource_errors(@phone)
     end
   end
 

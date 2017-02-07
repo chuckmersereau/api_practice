@@ -58,7 +58,7 @@ class Api::V2::AppealsController < Api::V2Controller
     if save_appeal
       render_appeal
     else
-      render_400_with_errors(@appeal)
+      render_with_resource_errors(@appeal)
     end
   end
 

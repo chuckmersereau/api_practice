@@ -60,7 +60,7 @@ class Api::V2::TasksController < Api::V2Controller
     if save_task
       render_task
     else
-      render_400_with_errors(@task)
+      render_with_resource_errors(@task)
     end
   end
 

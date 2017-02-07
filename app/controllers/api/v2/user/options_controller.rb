@@ -82,7 +82,7 @@ class Api::V2::User::OptionsController < Api::V2Controller
     if save_option
       render_option
     else
-      render_400_with_errors(@option)
+      render_with_resource_errors(@option)
     end
   end
 

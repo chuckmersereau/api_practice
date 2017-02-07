@@ -63,7 +63,7 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
     if save_website
       render_website
     else
-      render_400_with_errors(@website)
+      render_with_resource_errors(@website)
     end
   end
 

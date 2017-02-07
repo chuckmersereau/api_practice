@@ -59,7 +59,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
     if save_notification
       render_notification
     else
-      render_400_with_errors(@notification)
+      render_with_resource_errors(@notification)
     end
   end
 

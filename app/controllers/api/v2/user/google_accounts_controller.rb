@@ -58,7 +58,7 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
     if save_google_account
       render_google_account
     else
-      render_400_with_errors(@google_account)
+      render_with_resource_errors(@google_account)
     end
   end
 

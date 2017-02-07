@@ -44,7 +44,7 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
     tag_error = TagValidator.new.validate(tag_name)
 
     if tag_error
-      render_400_with_errors(tag_error)
+      render_with_resource_errors(tag_error)
     else
       yield(tag_name)
       @task.save(context: persistence_context)

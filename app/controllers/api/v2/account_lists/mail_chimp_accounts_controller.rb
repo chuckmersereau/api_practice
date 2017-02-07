@@ -49,7 +49,7 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
     if save_mailchimp_account
       render_mailchimp_account
     else
-      render_400_with_errors(@mailchimp_account)
+      render_with_resource_errors(@mailchimp_account)
     end
   end
 

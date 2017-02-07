@@ -84,7 +84,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
     if save_address
       render_address
     else
-      render_400_with_errors(@address)
+      render_with_resource_errors(@address)
     end
   end
 

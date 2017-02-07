@@ -53,7 +53,7 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
     if save_donation
       render_donation
     else
-      render_400_with_errors(@donation)
+      render_with_resource_errors(@donation)
     end
   end
 
