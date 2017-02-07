@@ -10,7 +10,7 @@ describe Api::V2::Tasks::FiltersController, type: :controller do
     end
 
     describe '#index' do
-      it 'gets filters for taks' do
+      it 'gets filters for tasks' do
         get :index
         filters_displayed = JSON.parse(response.body)['data'].map do |filter|
           filter['type'].gsub('task_filter_', '').camelize

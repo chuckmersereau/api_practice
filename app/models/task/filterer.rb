@@ -12,5 +12,6 @@ class Task::Filterer < ApplicationFilterer
     Overdue
     Starred
     Tags
+    Wildcard
   ).freeze
 end
