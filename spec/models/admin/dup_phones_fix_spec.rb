@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Admin::DupPhonesFix, '#fix' do
   it 'combines dup numbers and keeps primary one the same' do

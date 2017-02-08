@@ -31,8 +31,7 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
 
   def address_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:address)
       .permit(address_attributes)
   end
 

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::UsersController, type: :controller do
   let(:user) { create(:user_with_account) }
@@ -32,8 +32,10 @@ RSpec.describe Api::V2::UsersController, type: :controller do
           preferences: {
             default_account_list: second_account_list.uuid
           },
-          updated_in_db_at: user.updated_at }
+          updated_in_db_at: user.updated_at
+        }
       }
+
       expect(
         JSON.parse(response.body)['data']['attributes']['preferences']['default_account_list']
       ).to eq(second_account_list.uuid)

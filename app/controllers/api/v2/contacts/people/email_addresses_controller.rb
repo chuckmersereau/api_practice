@@ -48,8 +48,7 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
 
   def email_address_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:email_address)
       .permit(email_address_attributes)
   end
 

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 describe ContactExhibit do
   let(:exhib) { ContactExhibit.new(contact, context) }
   let(:contact) { build(:contact) }

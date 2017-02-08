@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::People::TwitterAccountsController, type: :controller do
   let(:factory_type) { :twitter_account }

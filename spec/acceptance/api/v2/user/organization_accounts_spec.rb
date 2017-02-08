@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Organization Accounts' do
@@ -11,12 +11,33 @@ resource 'Organization Accounts' do
   let(:id)                    { organization_account.uuid }
 
   let(:new_organization_account_params) do
-    build(:organization_account).attributes.merge(organization_id: create(:organization).uuid,
-                                                  updated_in_db_at: organization_account.updated_at,
-                                                  person_id: user.uuid)
+    build(:organization_account)
+      .attributes
+      .merge(updated_in_db_at: organization_account.updated_at)
+      .tap do |attrs|
+        attrs.delete('person_id')
+        attrs.delete('organization_id')
+      end
   end
 
-  let(:form_data) { build_data(new_organization_account_params) }
+  let(:form_data) { build_data(new_organization_account_params, relationships: relationships) }
+
+  let(:relationships) do
+    {
+      person: {
+        data: {
+          type: 'people',
+          id: user.uuid
+        }
+      },
+      organization: {
+        data: {
+          type: 'organizations',
+          id: create(:organization).uuid
+        }
+      }
+    }
+  end
 
   let(:resource_attributes) do
     %w(

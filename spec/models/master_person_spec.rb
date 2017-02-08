@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MasterPerson do
   it 'should create a MasterPerson for a new person' do

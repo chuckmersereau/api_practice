@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MasterAddress do
   let!(:address) { create :master_address, latitude: '', longitude: nil }

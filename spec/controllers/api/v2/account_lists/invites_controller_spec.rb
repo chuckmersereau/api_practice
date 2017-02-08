@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::AccountLists::InvitesController, type: :controller do
   let(:factory_type) { :account_list_invite }
@@ -15,6 +15,17 @@ describe Api::V2::AccountLists::InvitesController, type: :controller do
   let(:correct_attributes) { { recipient_email: 'test@example.com' } }
   let(:incorrect_attributes) { { recipient_email: nil } }
   let(:unpermitted_attributes) { nil }
+
+  let(:correct_relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: account_list_id
+        }
+      }
+    }
+  end
 
   include_examples 'index_examples'
 

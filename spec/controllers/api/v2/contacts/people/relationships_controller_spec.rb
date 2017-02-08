@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::People::RelationshipsController, type: :controller do
   let(:user) { create(:user_with_account) }
@@ -10,9 +10,21 @@ RSpec.describe Api::V2::Contacts::People::RelationshipsController, type: :contro
   let!(:second_resource) { create(:family_relationship, person: person) }
   let(:id) { resource.uuid }
   let(:parent_param) { { contact_id: contact.uuid, person_id: person.uuid } }
-  let(:correct_attributes) { { relationship: 'Father', person_id: person.uuid, related_person_id: create(:person).uuid } }
-  let(:unpermitted_attributes) { { relationship: 'test relationship', person_id: create(:person).uuid, related_person_id: create(:person).uuid } }
+  let(:correct_attributes) { { relationship: 'Father' } }
+
+  let(:correct_relationships) do
+    {
+      related_person: {
+        data: {
+          type: 'Person',
+          id: create(:person, contacts: [contact]).uuid
+        }
+      }
+    }
+  end
+
   let(:incorrect_attributes) { { relationship: nil } }
+  let(:incorrect_relationships) { {} }
 
   include_examples 'show_examples'
 

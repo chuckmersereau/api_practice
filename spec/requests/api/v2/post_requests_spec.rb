@@ -1,12 +1,15 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'Post Requests', type: :request do
-  let(:headers) { { 'CONTENT_TYPE' => 'application/vnd.api+json' } }
+  let(:headers) do
+    {
+      'CONTENT_TYPE' => 'application/vnd.api+json',
+      'Accept'       => 'application/vnd.api+json'
+    }
+  end
 
   let(:user)         { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
-
-  let(:json_data) { JSON.parse(response.body) }
 
   describe 'with a related resource' do
     before { api_login(user) }
@@ -18,16 +21,22 @@ RSpec.describe 'Post Requests', type: :request do
         {
           data: {
             type: :tasks,
-            attributes: new_task_attributes.merge!(
-              account_list_id: 'non-existant-UUID'
-            )
+            attributes: new_task_attributes,
+            relationships: {
+              account_list: {
+                data: {
+                  id: 'non-existant-UUID',
+                  type: 'account_lists'
+                }
+              }
+            }
           }
         }.to_json
       end
 
       it 'returns a 404' do
         post api_v2_tasks_path, data, headers
-        expect(response.status).to eq 404
+        expect(response.status).to eq(404), invalid_status_detail
       end
     end
   end
@@ -44,9 +53,15 @@ RSpec.describe 'Post Requests', type: :request do
           data: {
             type: :contacts,
             id: desired_uuid,
-            attributes: contact_attributes.merge!(
-              account_list_id: account_list.uuid
-            )
+            attributes: contact_attributes,
+            relationships: {
+              account_list: {
+                data: {
+                  type: 'account_lists',
+                  id: account_list.uuid
+                }
+              }
+            }
           }
         }.to_json
       end
@@ -54,8 +69,8 @@ RSpec.describe 'Post Requests', type: :request do
       it 'creates a resource with the Client Generated UUID' do
         post api_v2_contacts_path, post_attributes, headers
 
-        expect(response.status).to eq 201
-        expect(json_data['data']['id']).to eq desired_uuid
+        expect(response.status).to eq(201), invalid_status_detail
+        expect(json_response['data']['id']).to eq desired_uuid
       end
     end
 
@@ -65,22 +80,32 @@ RSpec.describe 'Post Requests', type: :request do
           data: {
             type: :contacts,
             attributes: contact_attributes.merge!(
-              id: desired_uuid,
-              account_list_id: account_list.uuid
-            )
+              id: desired_uuid
+            ),
+            relationships: {
+              account_list: {
+                data: {
+                  type: 'account_lists',
+                  id: account_list.uuid
+                }
+              }
+            }
           }
         }.to_json
       end
 
       let(:error_message) do
-        'A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`'
+        [
+          'A primary key, if sent in a request, CANNOT be referenced in the #attributes of a JSONAPI resource object.',
+          "It must instead be sent as a top level member of the resource's `data` object. Reference: `/data/attributes/id`. Expected `/data/id`"
+        ].join(' ')
       end
 
       it 'returns an error' do
         post api_v2_contacts_path, post_attributes, headers
 
-        expect(response.status).to eq 403
-        expect(json_data['errors'].first['title']).to eq(error_message)
+        expect(response.status).to eq(409), invalid_status_detail
+        expect(json_response['errors'].first['detail']).to eq(error_message)
       end
     end
 
@@ -93,16 +118,22 @@ RSpec.describe 'Post Requests', type: :request do
           data: {
             id: pre_existing_task.uuid,
             type: :tasks,
-            attributes: new_task_attributes.merge!(
-              account_list_id: account_list.uuid
-            )
+            attributes: new_task_attributes,
+            relationships: {
+              account_list: {
+                data: {
+                  type: 'account_lists',
+                  id: account_list.uuid
+                }
+              }
+            }
           }
         }.to_json
       end
 
       it 'returns a 409' do
         post api_v2_tasks_path, data, headers
-        expect(response.status).to eq 409
+        expect(response.status).to eq(409), invalid_status_detail
       end
     end
   end
@@ -118,18 +149,24 @@ RSpec.describe 'Post Requests', type: :request do
         {
           data: {
             type: valid_type,
-            attributes: new_task_attributes.merge!(
-              account_list_id: account_list.uuid
-            )
+            attributes: new_task_attributes,
+            relationships: {
+              account_list: {
+                data: {
+                  type: 'account_lists',
+                  id: account_list.uuid
+                }
+              }
+            }
           }
         }.to_json
       end
 
-      it 'returns a 409' do
+      it 'returns a 201' do
         post api_v2_tasks_path, data, headers
 
-        expect(response.status).to eq 201
-        expect(json_data['errors']).to be_nil
+        expect(response.status).to eq(201), invalid_status_detail
+        expect(json_response['errors']).to be_nil
       end
     end
 
@@ -155,9 +192,9 @@ RSpec.describe 'Post Requests', type: :request do
       it 'returns a 409' do
         post api_v2_tasks_path, data, headers
 
-        expect(response.status).to eq 409
-        expect(json_data['errors'].first['title']).to eq('Conflict')
-        expect(json_data['errors'].first['detail']).to eq(error_message)
+        expect(response.status).to eq(409), invalid_status_detail
+        expect(json_response['errors'].first['title']).to eq('Conflict')
+        expect(json_response['errors'].first['detail']).to eq(error_message)
       end
     end
 
@@ -168,23 +205,29 @@ RSpec.describe 'Post Requests', type: :request do
         {
           data: {
             type: nil, # missing type
-            attributes: new_task_attributes.merge!(
-              account_list_id: account_list.uuid
-            )
+            attributes: new_task_attributes,
+            relationships: {
+              account_list: {
+                data: {
+                  type: 'account_lists',
+                  id: account_list.uuid
+                }
+              }
+            }
           }
         }.to_json
       end
 
       let(:error_message) do
-        "MUST supply a resource type for POST and PATCH requests. Expected type for this endpoint is 'tasks'"
+        'JSONAPI resource objects MUST contain a `type` top-level member of its hash for POST and PATCH requests. Expected to find a `type` member at /data/type'
       end
 
       it 'returns a 409' do
         post api_v2_tasks_path, data, headers
 
-        expect(response.status).to eq 409
-        expect(json_data['errors'].first['title']).to eq('Conflict')
-        expect(json_data['errors'].first['detail']).to eq(error_message)
+        expect(response.status).to eq(409), invalid_status_detail
+        expect(json_response['errors'].first['title']).to eq('Conflict')
+        expect(json_response['errors'].first['detail']).to eq(error_message)
       end
     end
   end

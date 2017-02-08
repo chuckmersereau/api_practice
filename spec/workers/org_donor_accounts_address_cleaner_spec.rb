@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe OrgDonorAccountsAddressCleaner, '#perform' do
   it 'merges donor account addresses and sets source to DataServer' do

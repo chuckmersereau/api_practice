@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe BetweenScopeable, type: :concern do
   describe '#with_`attribute`_this_week' do

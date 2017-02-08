@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Notifications' do
@@ -13,21 +13,47 @@ resource 'Notifications' do
   let!(:notifications)  { create_list(:notification, 2, contact: contact) }
   let(:notification)    { notifications.first }
   let(:id)              { notification.uuid }
+  let(:donation)        { create(:donation) }
 
   let(:new_notification) do
-    build(:notification).attributes.merge(updated_in_db_at: notification.updated_at)
-                        .except('notification_type_id')
+    build(:notification)
+      .attributes
+      .reject { |attr| attr.to_s.end_with?('_id') }
+      .merge(updated_in_db_at: notification.updated_at)
   end
-  let(:form_data) { build_data(new_notification) }
+
+  let(:form_data) do
+    build_data(new_notification, relationships: relationships)
+  end
+
+  let(:relationships) do
+    {
+      contact: {
+        data: {
+          type: 'contacts',
+          id: contact.uuid
+        }
+      },
+      donation: {
+        data: {
+          type: 'donations',
+          id: donation.uuid
+        }
+      },
+      notification_type: {
+        data: {
+          type: 'notification_types',
+          id: notification.notification_type.uuid
+        }
+      }
+    }
+  end
 
   let(:resource_attributes) do
     %w(
       cleared
-      contact_id
       created_at
-      donation_id
       event_date
-      notification_type_id
       updated_at
       updated_in_db_at
     )
@@ -88,6 +114,7 @@ resource 'Notifications' do
       example 'Notification [CREATE]', document: :account_lists do
         explanation 'Creates a new Notification associated with the Account List'
         do_request data: form_data
+
         expect(response_status).to eq 201
       end
     end
@@ -104,6 +131,7 @@ resource 'Notifications' do
       example 'Notification [UPDATE]', document: :account_lists do
         explanation 'Updates the Account List Notification with the given ID'
         do_request data: form_data
+
         expect(response_status).to eq 200
       end
     end

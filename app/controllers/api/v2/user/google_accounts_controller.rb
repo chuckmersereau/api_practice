@@ -72,7 +72,9 @@ class Api::V2::User::GoogleAccountsController < Api::V2Controller
   end
 
   def google_account_params
-    params.require(:data).require(:attributes).permit(Person::GoogleAccount::PERMITTED_ATTRIBUTES)
+    params
+      .require(:google_account)
+      .permit(Person::GoogleAccount::PERMITTED_ATTRIBUTES)
   end
 
   def authorize_google_account

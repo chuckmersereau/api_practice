@@ -88,7 +88,8 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
   end
 
   def relationship_params
-    params.require(:data).require(:attributes).permit(relationship_attributes)
+    params.require(:family_relationship)
+          .permit(relationship_attributes)
   end
 
   def relationship_attributes

@@ -98,18 +98,54 @@ class Contact < ApplicationRecord
     :website,
     {
       addresses_attributes: [
-        :remote_id, :master_address_id, :location, :street, :city, :state, :postal_code, :region, :metro_area,
-        :country, :historic, :primary_mailing_address, :_destroy, :id, :user_changed
+        :_destroy,
+        :city,
+        :country,
+        :historic,
+        :id,
+        :location,
+        :master_address_id,
+        :metro_area,
+        :postal_code,
+        :primary_mailing_address,
+        :region,
+        :remote_id,
+        :state,
+        :street,
+        :user_changed
       ],
-      contact_referrals_to_me_attributes: [:referred_by_id, :_destroy, :id],
-      contact_referrals_by_me_attributes: [:referred_to_id, :_destroy, :id],
-      donor_accounts_attributes: [:account_number, :organization_id, :_destroy, :id],
+      contact_referrals_to_me_attributes: [
+        :_destroy,
+        :id,
+        :referred_by_id
+      ],
+      contact_referrals_by_me_attributes: [
+        :_destroy,
+        :id,
+        :referred_to_id
+      ],
+      donor_accounts_attributes: [
+        :_destroy,
+        :account_number,
+        :id,
+        :organization_id
+      ],
       people_attributes: Person::PERMITTED_ATTRIBUTES,
       contacts_referred_by_me_attributes: [
-        :name, :notes,
-        :primary_person_first_name, :primary_person_last_name, :primary_person_phone, :primary_person_email,
-        :spouse_first_name, :spouse_last_name, :spouse_phone, :spouse_email,
-        :primary_address_street, :primary_address_city, :primary_address_state, :primary_address_postal_code
+        :name,
+        :notes,
+        :primary_address_city,
+        :primary_address_postal_code,
+        :primary_address_state,
+        :primary_address_street,
+        :primary_person_email,
+        :primary_person_first_name,
+        :primary_person_last_name,
+        :primary_person_phone,
+        :spouse_email,
+        :spouse_first_name,
+        :spouse_last_name,
+        :spouse_phone
       ],
       tag_list: []
     }
@@ -526,7 +562,7 @@ class Contact < ApplicationRecord
   end
 
   def donations
-    Donation.where(donor_account_id: donor_accounts.pluck(:id))
+    Donation.where(donor_account: donor_accounts)
             .for_accounts(account_list.designation_accounts)
   end
 

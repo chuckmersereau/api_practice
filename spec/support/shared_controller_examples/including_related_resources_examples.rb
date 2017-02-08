@@ -36,7 +36,7 @@ RSpec.shared_examples 'including related resources examples' do |options|
         if serializer.associations.count > 0
           expect(described_class::UNPERMITTED_FILTER_PARAMS).to be_present
           subject
-          expect(response.status).to eq(expected_response_code)
+          expect(response.status).to eq(expected_response_code), invalid_status_detail
           expect(JSON.parse(response.body)['included']).to be_nil
         end
       end
@@ -45,7 +45,7 @@ RSpec.shared_examples 'including related resources examples' do |options|
     it 'includes one level of related resources' do
       if serializer.associations.count > 0
         subject
-        expect(response.status).to eq(expected_response_code)
+        expect(response.status).to eq(expected_response_code), invalid_status_detail
         expect(JSON.parse(response.body).keys).to include('included')
         included_types = JSON.parse(response.body)['included'].collect { |i| i['type'] }
         expect(included_types).to be_present

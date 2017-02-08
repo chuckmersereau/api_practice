@@ -72,7 +72,9 @@ class Api::V2::AppealsController < Api::V2Controller
   end
 
   def appeal_params
-    params.require(:data).require(:attributes).permit(Appeal::PERMITTED_ATTRIBUTES)
+    params
+      .require(:appeal)
+      .permit(Appeal::PERMITTED_ATTRIBUTES)
   end
 
   def appeal_scope

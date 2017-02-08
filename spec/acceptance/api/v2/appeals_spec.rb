@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Appeals' do
@@ -15,9 +15,23 @@ resource 'Appeals' do
   let(:id)       { appeal.uuid }
 
   let(:form_data) do
-    build_data(name: 'New Appeal Name',
-               account_list_id: account_list_id,
-               updated_in_db_at: appeal.updated_at)
+    attributes = {
+      name: 'New Appeal Name',
+      updated_in_db_at: appeal.updated_at
+    }
+
+    build_data(attributes, relationships: relationships)
+  end
+
+  let(:relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: account_list.uuid
+        }
+      }
+    }
   end
 
   let(:resource_attributes) do
@@ -54,7 +68,7 @@ resource 'Appeals' do
         explanation 'List of Appeals'
         do_request
         check_collection_resource(1, %w(relationships))
-        expect(response_status).to eq 200
+        expect(response_status).to eq(200), invalid_status_detail
       end
     end
 
@@ -79,7 +93,7 @@ resource 'Appeals' do
         explanation 'The Appeal with the given ID'
         do_request
         check_resource(%w(relationships))
-        expect(response_status).to eq 200
+        expect(response_status).to eq(200), invalid_status_detail
       end
     end
 
@@ -95,7 +109,7 @@ resource 'Appeals' do
       example 'Appeal [CREATE]', document: :entities do
         explanation 'Create an Appeal'
         do_request data: form_data
-        expect(response_status).to eq 201
+        expect(response_status).to eq(201), invalid_status_detail
       end
     end
 
@@ -112,7 +126,7 @@ resource 'Appeals' do
       example 'Appeal [UPDATE]', document: :entities do
         explanation 'Update the Appeal with the given ID'
         do_request data: form_data
-        expect(response_status).to eq 200
+        expect(response_status).to eq(200), invalid_status_detail
       end
     end
 
@@ -123,7 +137,7 @@ resource 'Appeals' do
       example 'Appeal [DELETE]', document: :entities do
         explanation 'Delete the Appeal with the given ID'
         do_request
-        expect(response_status).to eq 204
+        expect(response_status).to eq(204), invalid_status_detail
       end
     end
   end

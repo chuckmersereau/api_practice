@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AddressMethods do
   let(:contact) { create(:contact) }

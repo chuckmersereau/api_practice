@@ -4,6 +4,11 @@ class ApiController < ActionController::API
   rescue_from ActiveRecord::RecordNotUnique,   with: :render_409_from_exception
   rescue_from Exceptions::BadRequestError,     with: :render_400_from_exception
 
+  rescue_from JsonApiService::InvalidTypeError,                with: :render_409_from_exception
+  rescue_from JsonApiService::MissingTypeError,                with: :render_409_from_exception
+  rescue_from JsonApiService::InvalidPrimaryKeyPlacementError, with: :render_409_from_exception
+  rescue_from JsonApiService::ForeignKeyPresentError,          with: :render_409_from_exception
+
   before_action :verify_request
 
   MEDIA_TYPE_MATCHER = /.+".+"[^,]*|[^,]+/
@@ -31,6 +36,11 @@ class ApiController < ActionController::API
   end
 
   protected
+
+  def current_account_list
+    @account_list ||= current_user.account_lists
+                                  .find_by(id: params[:account_list_id])
+  end
 
   def given_media_types(header)
     (request.headers[header] || '')
@@ -104,7 +114,7 @@ class ApiController < ActionController::API
   end
 
   def render_409_from_exception(exception)
-    detail = exception&.cause&.message || 'Conflict'
+    detail = exception&.cause&.message || exception&.message || 'Conflict'
     render_409(detail: detail)
   end
 

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Import from TNT XML' do
@@ -20,15 +20,39 @@ resource 'Import from TNT XML' do
 
   let(:new_import) do
     attrs = {
-      account_list_id: account_list.uuid,
-      user_id: user.uuid,
-      source_account_id: fb_account.uuid,
       file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_export.xml'))
     }
-    build(:import).attributes.tap { |a| a.delete('uuid') }.merge(attrs)
+
+    build(:import)
+      .attributes
+      .reject { |attr| attr.to_s.end_with?('_id') }
+      .tap { |attributes| attributes.delete('uuid') }.merge(attrs)
   end
 
-  let(:form_data) { build_data(new_import) }
+  let(:relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: account_list.uuid
+        }
+      },
+      user: {
+        data: {
+          type: 'users',
+          id: user.uuid
+        }
+      },
+      source_account: {
+        data: {
+          type: 'facebook_accounts',
+          id: fb_account.uuid
+        }
+      }
+    }
+  end
+
+  let(:form_data) { build_data(new_import, relationships: relationships) }
 
   context 'authorized user' do
     before { api_login(user) }
@@ -49,7 +73,8 @@ resource 'Import from TNT XML' do
       example 'Import [CREATE]', document: :account_lists do
         explanation 'Creates a new Import associated with the Account List, this endpoint supports Content-Type multipart/form-data to handle the file upload'
         do_request data: form_data
-        expect(response_status).to eq 201
+
+        expect(response_status).to eq(201), invalid_status_detail
         expect(response_headers['Content-Type']).to eq 'application/vnd.api+json; charset=utf-8'
         expect(resource_data['id']).to be_present
         expect(resource_data['attributes']['file']['file']['url']).to be_present

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Merges' do
@@ -7,6 +7,7 @@ resource 'Merges' do
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
   let(:resource_type) { 'contacts' }
+  let(:request_type)  { 'merges' }
 
   # Remove this and the authorized context below if not authorizing your requests.
   let(:user) { create(:user_with_account) }
@@ -18,7 +19,7 @@ resource 'Merges' do
 
   # This is the reference data used to create/update a resource.
   # specify the `attributes` specifically in your request actions below.
-  let(:form_data) { build_data(attributes) }
+  let(:form_data) { build_data(attributes, relationships: relationships) }
 
   # List your expected resource keys vertically here (alphabetical please!)
   let(:resource_attributes) do
@@ -105,7 +106,24 @@ resource 'Merges' do
         parameter 'loser_id', 'The ID of the contact that should lose the merge'
       end
 
-      let(:attributes) { { winner_id: winner.uuid, loser_id: loser.uuid } }
+      let(:relationships) do
+        {
+          loser: {
+            data: {
+              type: 'contacts',
+              id: loser.uuid
+            }
+          },
+          winner: {
+            data: {
+              type: 'contacts',
+              id: winner.uuid
+            }
+          }
+        }
+      end
+
+      let(:attributes) { {} }
 
       example 'Merge [CREATE]', document: document do
         explanation 'Create Merge'

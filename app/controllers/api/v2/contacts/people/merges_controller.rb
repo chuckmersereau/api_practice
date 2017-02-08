@@ -1,5 +1,5 @@
 class Api::V2::Contacts::People::MergesController < Api::V2Controller
-  resource_type :people
+  resource_type :merges
 
   def create
     load_records
@@ -12,8 +12,7 @@ class Api::V2::Contacts::People::MergesController < Api::V2Controller
 
   def merge_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:merge)
       .permit(merge_attributes)
   end
 
@@ -36,8 +35,8 @@ class Api::V2::Contacts::People::MergesController < Api::V2Controller
   end
 
   def load_people
-    @winner = Person.find_by!(uuid: merge_params[:winner_id])
-    @loser  = Person.find_by!(uuid: merge_params[:loser_id])
+    @winner = Person.find(merge_params[:winner_id])
+    @loser  = Person.find(merge_params[:loser_id])
   end
 
   def merge_people
@@ -48,6 +47,16 @@ class Api::V2::Contacts::People::MergesController < Api::V2Controller
     render json: @winner,
            include: include_params,
            fields: field_params
+  end
+
+  def field_params
+    fields = super[:merges]
+
+    return {} unless fields
+
+    {
+      people: fields
+    }
   end
 
   def pundit_user

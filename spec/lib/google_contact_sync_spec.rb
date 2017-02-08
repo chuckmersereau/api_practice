@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'google_contact_sync'
 
 describe GoogleContactSync do

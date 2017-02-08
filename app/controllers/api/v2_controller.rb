@@ -1,3 +1,5 @@
+require 'json_api_service'
+
 class Api::V2Controller < ApiController
   include Fields
   include Filtering
@@ -10,13 +12,14 @@ class Api::V2Controller < ApiController
   include UuidToIdTransformer
 
   before_action :jwt_authorize!
-  before_action :verify_primary_id_placement,             only: [:create]
-  before_action :verify_resource_type,                    only: [:create, :update]
-  before_action :transform_id_param_to_uuid_attribute,    only: [:create, :update]
-  before_action :transform_uuid_attributes_params_to_ids, only: [:create, :update]
-  before_action :transform_uuid_filters_params_to_ids,    only: :index
+  before_action :validate_and_transform_json_api_params
 
-  after_action  :verify_authorized, except: :index
+  def validate_and_transform_json_api_params
+    @original_params = params
+    @_params = JsonApiService.consume(params: params, context: self)
+  end
+
+  after_action :verify_authorized, except: :index
 
   rescue_from Pundit::NotAuthorizedError, with: :render_403_from_exception
 
@@ -94,7 +97,7 @@ class Api::V2Controller < ApiController
   end
 
   def fetch_account_list_with_filter
-    current_user.account_lists.where(uuid: account_list_filter)
+    current_user.account_lists.where(id: account_list_filter)
   end
 
   def verify_primary_id_placement

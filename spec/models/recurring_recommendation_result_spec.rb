@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe RecurringRecommendationResult do
   describe 'adding a recurring recommendation status' do

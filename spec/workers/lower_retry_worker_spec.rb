@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe LowerRetryWorker do
   it 'calls the specified method on the given class' do

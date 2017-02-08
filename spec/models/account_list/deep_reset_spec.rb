@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountList::DeepReset, '#reset' do
   it 'does nothing if called for a non-existing account list / user' do

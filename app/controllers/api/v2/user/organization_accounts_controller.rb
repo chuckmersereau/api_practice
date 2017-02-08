@@ -72,7 +72,9 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   end
 
   def organization_account_params
-    params.require(:data).require(:attributes).permit(Person::OrganizationAccount::PERMITTED_ATTRIBUTES)
+    params
+      .require(:organization_account)
+      .permit(Person::OrganizationAccount::PERMITTED_ATTRIBUTES)
   end
 
   def authorize_organization_account

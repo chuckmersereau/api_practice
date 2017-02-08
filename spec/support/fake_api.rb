@@ -25,4 +25,7 @@ class FakeApi
   def method_missing(*_args, &_block)
     true
   end
+
+  def import_all(args)
+  end
 end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe ConstantList, type: :model do
   subject { ConstantList.new }

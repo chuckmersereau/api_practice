@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Appeal do
   let(:account_list) { create(:account_list) }

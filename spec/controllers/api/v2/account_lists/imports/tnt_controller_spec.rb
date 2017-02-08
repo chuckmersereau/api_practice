@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::AccountLists::Imports::TntController, type: :controller do
   let(:factory_type) { :import }
@@ -13,14 +13,36 @@ describe Api::V2::AccountLists::Imports::TntController, type: :controller do
 
   let(:resource) { import }
   let(:parent_param) { { account_list_id: account_list_id } }
+
   let(:correct_attributes) do
-    attributes_for(:import,
-                   account_list_id: account_list.uuid,
-                   user_id: user.uuid,
-                   source_account_id: fb_account,
-                   file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_export.xml')))
+    attributes_for(:import, file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_export.xml')))
   end
+
+  let(:correct_relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: account_list.uuid
+        }
+      },
+      user: {
+        data: {
+          type: 'users',
+          id: user.uuid
+        }
+      },
+      source_account: {
+        data: {
+          type: 'facebook_accounts',
+          id: fb_account.uuid
+        }
+      }
+    }
+  end
+
   let(:incorrect_attributes) { { source: nil } }
+
   let(:unpermitted_attributes) { nil }
 
   before(:each) do

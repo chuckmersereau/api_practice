@@ -77,7 +77,8 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   end
 
   def linkedin_account_params
-    params.require(:data).require(:attributes).permit(Person::LinkedinAccount::PERMITTED_ATTRIBUTES)
+    params.require(:linkedin_account)
+          .permit(Person::LinkedinAccount::PERMITTED_ATTRIBUTES)
   end
 
   def linkedin_account_scope

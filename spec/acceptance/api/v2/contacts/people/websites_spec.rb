@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Websites' do
@@ -20,8 +20,9 @@ resource 'Websites' do
   let(:id)        { website.uuid }
 
   let(:new_website) do
-    build(:website).attributes.merge(person_id: person.uuid,
-                                     updated_in_db_at: website.updated_at)
+    build(:website).attributes
+                   .reject { |key| key.to_s.end_with?('_id') }
+                   .merge(updated_in_db_at: website.updated_at)
   end
   let(:form_data) { build_data(new_website) }
 

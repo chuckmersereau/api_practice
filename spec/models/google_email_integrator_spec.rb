@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe GoogleEmailIntegrator, '#sync_mail' do
   it 'imports emails if email integration enable' do

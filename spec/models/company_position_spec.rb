@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe CompanyPosition do
   it 'should return the position name for to_s' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DesignationProfile do
   it 'should return name for to_s' do

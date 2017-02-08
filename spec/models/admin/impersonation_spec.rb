@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Admin::Impersonation, '#save' do
   it 'finds the user to impersonate and logs the impersonation' do

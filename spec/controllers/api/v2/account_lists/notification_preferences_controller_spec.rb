@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::AccountLists::NotificationPreferencesController, type: :controller do
   let(:factory_type) { :notification_preference }
@@ -18,7 +18,30 @@ RSpec.describe Api::V2::AccountLists::NotificationPreferencesController, type: :
   let(:resource) { notification_preference }
   let(:parent_param) { { account_list_id: account_list.uuid } }
   let(:unpermitted_attributes) { nil }
-  let(:correct_attributes) { { actions: 'email', account_list_id: account_list.uuid, notification_type_id: notification_type.uuid } }
+
+  let(:correct_attributes) do
+    {
+      actions: 'email'
+    }
+  end
+
+  let(:correct_relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: account_list.uuid
+        }
+      },
+      notification_type: {
+        data: {
+          type: 'notification_types',
+          id: notification_type.uuid
+        }
+      }
+    }
+  end
+
   let(:incorrect_attributes) { nil }
   let!(:second_resource) { notification_preferences.second }
 

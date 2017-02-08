@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe CsvImport do
   let!(:csv_import) { build(:csv_import, tags: 'csv, test') }

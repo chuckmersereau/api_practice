@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Reports::MonthlyGivingGraphSerializer do
   let(:organization) { create(:organization) }

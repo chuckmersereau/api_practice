@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Nickname do
   describe '#increment_times_merged' do

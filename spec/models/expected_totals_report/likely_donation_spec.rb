@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ExpectedTotalsReport::LikelyDonation, '#likely_more' do
   it 'gives zero if pledge not received' do

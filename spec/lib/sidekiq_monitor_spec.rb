@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SidekiqMonitor do
   context '.queue_latency_too_high' do

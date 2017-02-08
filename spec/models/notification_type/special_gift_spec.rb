@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::SpecialGift do
   let!(:special_gift) { NotificationType::SpecialGift.first_or_initialize }

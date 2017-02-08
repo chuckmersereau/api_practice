@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountList::FromProfileLinker do
   context '#link_account_list' do

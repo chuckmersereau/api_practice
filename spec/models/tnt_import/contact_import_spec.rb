@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TntImport::ContactImport do
   let(:tnt_import) { create(:tnt_import, override: true) }

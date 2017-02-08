@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountList::DeepResetWorker, '#perform' do
   it 'runs a deep reset for the given account list id and user id' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe CurrencyRate do
   before { CurrencyRate.clear_rate_cache }

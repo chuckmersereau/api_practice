@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::LargerGift do
   let!(:larger_gift) { NotificationType::LargerGift.first_or_initialize }

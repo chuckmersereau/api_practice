@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::StartedGiving do
   let!(:started_giving) { NotificationType::StartedGiving.first_or_initialize }

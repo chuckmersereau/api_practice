@@ -1,4 +1,6 @@
 class Api::V2::UsersController < Api::V2Controller
+  before_action :transform_uuid_attributes_params_to_ids, only: :update
+
   def show
     load_user
     authorize_user
@@ -44,7 +46,9 @@ class Api::V2::UsersController < Api::V2Controller
   end
 
   def user_params
-    params.require(:data).require(:attributes).permit(User::PERMITTED_ATTRIBUTES)
+    params
+      .require(:user)
+      .permit(User::PERMITTED_ATTRIBUTES)
   end
 
   def authorize_user
@@ -53,13 +57,12 @@ class Api::V2::UsersController < Api::V2Controller
 
   def transform_uuid_attributes_params_to_ids
     if preferences_params && preferences_params[:default_account_list]
-      preferences_params[:default_account_list] =
-        get_id_from_model_and_key(preferences_params, :default_account_list, AccountList)
+      account_list = AccountList.find_by!(uuid: preferences_params[:default_account_list])
+      preferences_params[:default_account_list] = account_list.id
     end
-    super
   end
 
   def preferences_params
-    params.dig(:data, :attributes, :preferences)
+    params.dig(:user, :preferences)
   end
 end

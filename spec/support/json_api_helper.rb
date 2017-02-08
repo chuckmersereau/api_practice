@@ -1,6 +1,6 @@
 module JsonApiHelper
   def json_response
-    @json_response ||= JSON.parse(response_body)
+    @json_response ||= parse_response_body
   end
 
   def check_collection_resource(total_items, additional_keys = [])
@@ -26,11 +26,18 @@ module JsonApiHelper
 
   def check_resource_relationships
     return unless defined?(resource_associations)
+
     expect(first_or_only_item['relationships'].keys).to match_array(resource_associations)
   end
 
   def item_keys(additional_keys)
     (resource_object.empty? ? %w(id type) : %w(id type attributes)) + additional_keys
+  end
+
+  def invalid_status_detail
+    body = json_response.is_a?(String) ? '' : JSON.pretty_generate(json_response)
+
+    "\n\nResponse Status: #{returned_status}\nResponse Body: #{body}"
   end
 
   def first_or_only_item
@@ -45,10 +52,49 @@ module JsonApiHelper
     json_response['data']
   end
 
-  def build_data(params)
-    {
-      type: resource_type,
+  def build_data(params, account_list_id: nil, relationships: {})
+    params = {
+      type: (defined?(request_type) ? request_type : resource_type),
       attributes: params.except('id')
     }
+
+    if account_list_id
+      params.merge!(
+        relationships: {
+          account_list: {
+            data: {
+              type: 'account_lists',
+              id: account_list_id
+            }
+          }
+        }
+      )
+    elsif relationships.present?
+      params.merge(relationships: relationships)
+    else
+      params
+    end
+  end
+
+  def returned_status
+    if defined?(response_status)
+      response_status
+    else
+      response.status
+    end
+  end
+
+  private
+
+  def parse_response_body
+    if defined?(response_body)
+      return '' if response_body.blank?
+
+      JSON.parse(response_body)
+    else
+      return '' if response.body.blank?
+
+      JSON.parse(response.body)
+    end
   end
 end

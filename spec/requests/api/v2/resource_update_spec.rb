@@ -1,11 +1,19 @@
 # coding: utf-8
 require 'uuidtools'
-require 'spec_helper'
+require 'rails_helper'
 
-RSpec.describe 'Updating resource', type: :request do
+RSpec.describe 'Patch Requests', type: :request do
   let!(:user) { create(:user_with_account) }
-  let(:headers) { { 'CONTENT_TYPE' => 'application/vnd.api+json', 'ACCEPT' => 'application/vnd.api+json' } }
+
+  let(:headers) do
+    {
+      'CONTENT_TYPE' => 'application/vnd.api+json',
+      'ACCEPT' => 'application/vnd.api+json'
+    }
+  end
+
   let(:update_attributes) { { first_name: 'test_first_name' } }
+
   let(:full_update_attributes) do
     {
       data: {
@@ -21,7 +29,7 @@ RSpec.describe 'Updating resource', type: :request do
     context 'with correct parameters (200)' do
       it 'should return a success status (200)' do
         put api_v2_user_path, full_update_attributes.to_json, headers
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(200), invalid_status_detail
       end
 
       it 'should return a representation of the updated resource' do
@@ -48,7 +56,7 @@ RSpec.describe 'Updating resource', type: :request do
       it 'should return a forbidden status (403)' do
         api_login(create(:user))
         put api_v2_account_list_path(id), full_update_attributes.to_json, headers
-        expect(response.status).to eq(403)
+        expect(response.status).to eq(403), invalid_status_detail
       end
     end
 
@@ -60,7 +68,6 @@ RSpec.describe 'Updating resource', type: :request do
             id: mock_uuid,
             type: 'users',
             attributes: {
-              user_id: 123,
               first_name: 'foo_bar',
               updated_in_db_at: user.updated_at
             }
@@ -69,7 +76,7 @@ RSpec.describe 'Updating resource', type: :request do
       end
       it 'should return a not found status (404)' do
         put api_v2_user_path, missing_resource_attributes.to_json, headers
-        expect(response.status).to eq(404)
+        expect(response.status).to eq(404), invalid_status_detail
       end
     end
 
@@ -79,9 +86,11 @@ RSpec.describe 'Updating resource', type: :request do
         {
           data: {
             type: 'organization_accounts',
-            attributes: {
-              organization_id: 2,
-              name: 'Missing_organization_name'
+            relationships: {
+              data: {
+                type: 'organizations',
+                id: 'abc123'
+              }
             }
           }
         }
@@ -89,7 +98,7 @@ RSpec.describe 'Updating resource', type: :request do
 
       it 'should return a not found status (404)' do
         put api_v2_user_organization_account_path(user.uuid), missing_related_resource_attributes.to_json, headers
-        expect(response.status).to eq(404)
+        expect(response.status).to eq(404), invalid_status_detail
       end
     end
 
@@ -109,7 +118,7 @@ RSpec.describe 'Updating resource', type: :request do
       end
       it 'should return a conflict status (409)' do
         put api_v2_task_path(task.uuid), constrained_attributes.to_json, headers
-        expect(response.status).to eq(409)
+        expect(response.status).to eq(409), invalid_status_detail
       end
     end
 
@@ -130,7 +139,7 @@ RSpec.describe 'Updating resource', type: :request do
       end
       it 'should return a conflict status (409)' do
         put api_v2_task_path(task.uuid), constrained_attributes.to_json, headers
-        expect(response.status).to eq(409)
+        expect(response.status).to eq(409), invalid_status_detail
       end
     end
   end
@@ -151,7 +160,7 @@ RSpec.describe 'Updating resource', type: :request do
     end
     it 'should return a conflict status (409)' do
       put api_v2_task_path(task.uuid), expired_attributes.to_json, headers
-      expect(response.status).to eq(409)
+      expect(response.status).to eq(409), invalid_status_detail
     end
   end
 end

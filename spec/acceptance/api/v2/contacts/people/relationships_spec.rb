@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Contacts > People > Relationships' do
@@ -17,11 +17,28 @@ resource 'Contacts > People > Relationships' do
   let(:id)                   { family_relationship.uuid }
 
   let(:new_family_relationship) do
-    build(:family_relationship).attributes.merge(related_person_id: create(:person).uuid,
-                                                 updated_in_db_at: family_relationship.updated_at,
-                                                 person_id: person.uuid)
+    build(:family_relationship).attributes
+                               .reject { |key| key.to_s.end_with?('_id') }
+                               .merge(updated_in_db_at: family_relationship.updated_at)
   end
-  let(:form_data) { build_data(new_family_relationship) }
+  let(:relationships) do
+    {
+      person: {
+        data: {
+          type: 'people',
+          id: person.uuid
+        }
+      },
+      related_person: {
+        data: {
+          type: 'people',
+          id: create(:person).uuid
+        }
+      }
+    }
+  end
+
+  let(:form_data) { build_data(new_family_relationship, relationships: relationships) }
 
   let(:resource_associations) do
     %w(

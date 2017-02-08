@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Phones' do
@@ -17,8 +17,9 @@ resource 'Phones' do
   let(:id)     { phone.uuid }
 
   let(:new_phone) do
-    build(:phone_number, number: '3561987123').attributes.merge(person_id: person.uuid,
-                                                                updated_in_db_at: phone.updated_at)
+    build(:phone_number, number: '3561987123').attributes
+                                              .reject { |key| key.to_s.end_with?('_id') }
+                                              .merge(updated_in_db_at: phone.updated_at)
   end
   let(:form_data) { build_data(new_phone) }
 

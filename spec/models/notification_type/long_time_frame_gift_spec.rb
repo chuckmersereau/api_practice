@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::LongTimeFrameGift do
   let!(:long_time_frame_gift) { NotificationType::LongTimeFrameGift.first_or_initialize }

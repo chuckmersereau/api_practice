@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TntImport::SettingsImport do
   let(:xml) do

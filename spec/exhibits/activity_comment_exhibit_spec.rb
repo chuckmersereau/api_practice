@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ActivityCommentExhibit do
   subject { ActivityCommentExhibit.new(activity_comment, context) }

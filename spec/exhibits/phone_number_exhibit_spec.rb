@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 describe PhoneNumberExhibit do
   subject { PhoneNumberExhibit.new(phone_number, context) }
   let(:phone_number) { build(:phone_number, number: '2134567890', country_code: '1') }

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ContactNotesLog, versioning: true do
   it 'tracks notes at most once per day in separate table from partner status' do

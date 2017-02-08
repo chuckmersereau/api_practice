@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MailChimpSyncWorker, '#perform' do
   it 'subscribes users signed in recently' do

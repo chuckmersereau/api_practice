@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountList::Merge, '#merge' do
   let(:loser) { create(:account_list) }

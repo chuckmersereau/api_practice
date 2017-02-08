@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Person::LinkedinAccount do
   describe 'create from auth' do

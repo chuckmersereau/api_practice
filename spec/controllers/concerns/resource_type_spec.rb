@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe ResourceType, type: :concern do
   context 'when a custom resource_type is set' do

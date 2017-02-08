@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe User::MailChimpManager do
   context '#subscribe' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
   # This is required!
@@ -7,9 +7,9 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
   # This MAY be required!
   let(:account_list) { user.account_lists.first }
 
-  let(:contact)   { create(:contact, account_list: account_list) }
-  let(:referral)  { create(:contact, account_list: account_list) }
-  let(:alternate) { create(:contact, account_list: account_list) }
+  let(:contact)          { create(:contact, account_list: account_list) }
+  let(:contact_referred) { create(:contact, account_list: account_list) }
+  let(:alternate)        { create(:contact, account_list: account_list) }
 
   # This is required!
   let(:factory_type) do
@@ -24,7 +24,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # Example: create(:contact, account_list: account_list)
     attributes = {
       referred_by: contact,
-      referred_to: referral
+      referred_to: contact_referred
     }
 
     create(:contact_referral, attributes)
@@ -36,7 +36,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # Example: create(:contact, account_list: account_list)
     attributes = {
       referred_by: contact,
-      referred_to: referral
+      referred_to: contact_referred
     }
 
     create(:contact_referral, attributes)
@@ -62,9 +62,23 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
   let(:correct_attributes) do
     # A hash of correct attributes for creating/updating the resource
     # Example: { subject: 'test subject', start_at: Time.now, account_list_id: account_list.id }
+    {}
+  end
+
+  let(:correct_relationships) do
     {
-      referred_by_id: contact.uuid,
-      referred_to_id: referral.uuid
+      referred_by: {
+        data: {
+          type: 'contacts',
+          id: contact.uuid
+        }
+      },
+      referred_to: {
+        data: {
+          type: 'contacts',
+          id: contact_referred.uuid
+        }
+      }
     }
   end
 
@@ -74,11 +88,22 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
   # If you don't need it - remove it entirely.
   let(:update_attributes) do
     {
-      referred_to_id: alternate.uuid,
-      updated_in_db_at: referral.updated_at
+      updated_in_db_at: contact_referred.updated_at
+    }
+  end
+
+  let(:update_relationships) do
+    {
+      referred_to: {
+        data: {
+          type: 'contacts',
+          id: alternate.uuid
+        }
+      }
     }
   end
   let(:given_reference_key) { nil }
+  let(:given_update_reference_key) { :referred_to_id }
   let(:given_update_reference_value) { alternate.id }
 
   # This is required!
@@ -100,11 +125,14 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     # If there aren't attributes that violate validations,
     # you need to specifically return `nil`
     #
-    {
-      referred_by_id: contact.uuid,
-      referred_to_id: nil
-    }
+    {}
   end
+
+  let(:incorrect_relationships) do
+    {}
+  end
+
+  let(:dont_run_incorrect_update) { true }
 
   # These includes can be found in:
   # spec/support/shared_controller_examples.rb

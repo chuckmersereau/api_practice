@@ -19,7 +19,7 @@ RSpec.shared_examples 'bulk_update_examples' do
 
     it 'returns a 200 and the list of updated resources' do
       put :update, bulk_update_attributes
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(200), invalid_status_detail
       expect(response_body.length).to eq(3)
     end
 
@@ -47,7 +47,7 @@ RSpec.shared_examples 'bulk_update_examples' do
       it 'does not update resources that do not belong to current user' do
         put :update, data: [{ data: { id: unauthorized_resource.uuid, attributes: { reference_key => reference_value } } }]
         expect(unauthorized_resource.reload.send(reference_key)).to_not eq(reference_value)
-        expect(response.status).to eq(404)
+        expect(response.status).to eq(404), invalid_status_detail
         expect(response_errors.size).to eq(1)
       end
 
@@ -56,7 +56,7 @@ RSpec.shared_examples 'bulk_update_examples' do
         expect do
           put :update
         end.not_to change { resource.class.order(:updated_at).last.updated_at }
-        expect(response.status).to eq(401)
+        expect(response.status).to eq(401), invalid_status_detail
       end
     end
 
@@ -65,7 +65,7 @@ RSpec.shared_examples 'bulk_update_examples' do
         expect do
           put :update, data: [{ data: { id: SecureRandom.uuid } }]
         end.not_to change { resource.class.order(:updated_at).last.updated_at }
-        expect(response.status).to eq(404)
+        expect(response.status).to eq(404), invalid_status_detail
         expect(response_body['errors']).to be_present
         expect(response_body['data']).to be_blank
       end
@@ -75,7 +75,7 @@ RSpec.shared_examples 'bulk_update_examples' do
         expect do
           put :update, data: bulk_update_attributes[:data]
         end.to change { resource.class.order(:updated_at).last.updated_at }
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(200), invalid_status_detail
         expect(response_body.size).to eq(3)
       end
     end
@@ -93,7 +93,7 @@ RSpec.shared_examples 'bulk_update_examples' do
         expect do
           put :update, bulk_update_attributes
         end.to change { resource.class.order(:updated_at).last.updated_at }
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(200), invalid_status_detail
       end
     end
   end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe PartnerStatusLog, versioning: true do
   it 'gets added to track status and pledge details at most once per day' do

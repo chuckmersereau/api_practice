@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::AccountLists::DesignationAccountsController, type: :controller do
   let(:factory_type) { :designation_account }

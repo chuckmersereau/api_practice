@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ConstantListSerializer do
   subject { ConstantListSerializer.new(constant_list) }

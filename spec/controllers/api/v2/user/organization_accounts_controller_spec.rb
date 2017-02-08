@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller do
   let(:user) { create(:user) }
@@ -6,15 +6,44 @@ RSpec.describe Api::V2::User::OrganizationAccountsController, type: :controller 
   let!(:resource) { create(:organization_account, person: user) }
   let!(:second_resource) { create(:organization_account, person: user) }
   let(:id) { resource.uuid }
-  let(:unpermitted_attributes) do
-    { username: 'random_username', password: 'random_password',
-      organization_id: create(:organization).uuid, person_id: create(:user).uuid }
+  let(:unpermitted_relationships) do
+    {
+      person: {
+        data: {
+          type: 'people',
+          id: create(:user).uuid
+        }
+      },
+      organization: {
+        data: {
+          type: 'organizations',
+          id: create(:organization).uuid
+        }
+      }
+    }
   end
 
   let(:correct_attributes) do
-    { username: 'random_username', password: 'random_password',
-      organization_id: create(:organization).uuid, person_id: user.uuid }
+    { username: 'random_username', password: 'random_password' }
   end
+
+  let(:correct_relationships) do
+    {
+      person: {
+        data: {
+          type: 'people',
+          id: user.uuid
+        }
+      },
+      organization: {
+        data: {
+          type: 'organizations',
+          id: create(:organization).uuid
+        }
+      }
+    }
+  end
+
   let(:incorrect_attributes) { { username: nil } }
 
   before do

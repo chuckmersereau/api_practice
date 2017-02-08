@@ -1,6 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::AccountLists::MergeController, type: :controller do
+  include_examples 'common_variables'
+
   let(:resource_type) { :merge }
   let(:factory_type)  { :merge }
 
@@ -20,25 +22,35 @@ describe Api::V2::AccountLists::MergeController, type: :controller do
       it 'makes a merge' do
         data = {
           type: resource_type,
-          attributes: {
-            id: account_list2_id
+          relationships: {
+            account_list_to_merge: {
+              data: {
+                type: 'account_lists',
+                id: account_list2.uuid
+              }
+            }
           }
         }
 
         post :create, account_list_id: account_list_id, data: data
-        expect(response.status).to eq 201
+        expect(response.status).to eq(201), invalid_status_detail
       end
 
       it 'does not make a merge' do
         data = {
           type: resource_type,
-          attributes: {
-            id: account_list_id
+          relationships: {
+            account_list_to_merge: {
+              data: {
+                type: 'account_lists',
+                id: account_list.uuid
+              }
+            }
           }
         }
 
         post :create, account_list_id: account_list_id, data: data
-        expect(response.status).to eq 400
+        expect(response.status).to eq(400), invalid_status_detail
       end
     end
   end
@@ -47,7 +59,7 @@ describe Api::V2::AccountLists::MergeController, type: :controller do
     describe '#create' do
       it 'does not make a merge' do
         post :create, account_list_id: account_list_id
-        expect(response.status).to eq 401
+        expect(response.status).to eq(401), invalid_status_detail
       end
     end
   end

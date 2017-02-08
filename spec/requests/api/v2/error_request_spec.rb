@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'Error Response Format', type: :request do
   let!(:user) { create(:user_with_account) }

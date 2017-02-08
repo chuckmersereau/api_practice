@@ -1,8 +1,5 @@
 class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
-  skip_before_action :verify_primary_id_placement
-  skip_before_action :verify_resource_type
-  skip_before_action :transform_id_param_to_uuid_attribute
-  skip_before_action :transform_uuid_attributes_params_to_ids
+  skip_before_action :validate_and_transform_json_api_params
 
   def create
     require_mail_chimp_list_id
@@ -53,6 +50,10 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
 
   def account_list
     account_lists.first
+  end
+
+  def account_lists
+    @account_lists ||= current_user.account_lists.where(uuid: filter_params[:account_list_id]).presence || current_user.account_lists
   end
 
   def permitted_filters

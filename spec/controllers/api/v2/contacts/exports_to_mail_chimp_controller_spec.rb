@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::Contacts::ExportToMailChimpController, type: :controller do
   let(:factory_type) { :mail_chimp_account }

@@ -36,8 +36,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
 
   def person_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:person)
       .permit(person_attributes)
   end
 

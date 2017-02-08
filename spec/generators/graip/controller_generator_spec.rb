@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'generators/graip/controller/controller_generator'
 
 RSpec.describe Graip::Generators::ControllerGenerator, type: :generator do

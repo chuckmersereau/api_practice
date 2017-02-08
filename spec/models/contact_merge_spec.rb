@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 # Note, the Contact spec has a number of cases for contact merging as well
 describe ContactMerge do

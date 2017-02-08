@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AsyncScheduler, sidekiq: :testing_disabled do
   context '.schedule_over_24h' do

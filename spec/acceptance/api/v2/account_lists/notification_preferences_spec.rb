@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Notification Preferences' do
@@ -23,7 +23,20 @@ resource 'Notification Preferences' do
   #   build(:notification_preference).attributes.merge(updated_in_db_at: notification_preference.updated_at)
   #     .except('notification_type_id')
   # end
-  let(:form_data) { build_data(attributes) }
+  let(:form_data) do
+    build_data(attributes, relationships: relationships)
+  end
+
+  let(:relationships) do
+    {
+      notification_type: {
+        data: {
+          type: 'notification_types',
+          id: notification_type.uuid
+        }
+      }
+    }
+  end
 
   # This is the reference data used to create/update a resource.
   # specify the `attributes` specifically in your request actions below.
@@ -91,7 +104,11 @@ resource 'Notification Preferences' do
         parameter 'updated_in_db_at',    'Updated In Db At',  'Type' => 'String'
       end
 
-      let(:attributes) { { actions: 'email', notification_type_id: notification_type.uuid } }
+      let(:attributes) do
+        {
+          actions: 'email'
+        }
+      end
 
       example 'Notification Preference [CREATE]', document: documentation_scope do
         explanation 'Create Notification Preference'

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DonationReports::ReceivedDonations do
   let(:all_scoper) { -> (donations) { donations } }

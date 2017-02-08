@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TaskNotificationsWorker, sidekiq: :testing_disabled do
   context 'Create jobs for upcoming tasks' do

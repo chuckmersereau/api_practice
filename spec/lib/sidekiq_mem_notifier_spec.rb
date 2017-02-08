@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SidekiqMemNotifier do
   before { ENV['CONTAINER_MB'] = '1000' }

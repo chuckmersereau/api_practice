@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Admin::Reset, '#reset!' do
   let(:admin_user) { create(:admin_user) }

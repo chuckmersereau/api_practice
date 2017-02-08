@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::People::MergesController, type: :controller do
   # This is required!
@@ -11,6 +11,8 @@ RSpec.describe Api::V2::Contacts::People::MergesController, type: :controller do
   let(:factory_type) do
     :person
   end
+
+  let(:given_resource_type) { 'merges' }
 
   let!(:contact) { create(:contact, name: 'Doe, John', account_list: account_list) }
   let!(:winner) { create(:person, first_name: 'John', last_name: 'Doe') }
@@ -33,17 +35,33 @@ RSpec.describe Api::V2::Contacts::People::MergesController, type: :controller do
 
   # This is required!
   let(:correct_attributes) do
-    { winner_id: winner.uuid, loser_id: loser.uuid }
+    {}
   end
 
   # This is required!
-  let(:unpermitted_attributes) do
-    nil
+  let(:correct_relationships) do
+    {
+      winner: {
+        data: {
+          type: 'people',
+          id: winner.uuid
+        }
+      },
+      loser: {
+        data: {
+          type: 'people',
+          id: loser.uuid
+        }
+      }
+    }
   end
 
-  # This is required!
   let(:incorrect_attributes) do
-    { winner_id: nil, loser_id: nil }
+    {}
+  end
+
+  let(:incorrect_relationships) do
+    {}
   end
 
   include_context 'common_variables'
@@ -63,17 +81,6 @@ RSpec.describe Api::V2::Contacts::People::MergesController, type: :controller do
         post :create, full_correct_attributes
       end.to change(&count_proc).by(-1)
       expect(response.status).to eq(200)
-    end
-
-    it 'does not perform the merge when there are unpermitted params' do
-      if unpermitted_attributes
-        api_login(user)
-        expect do
-          post :create, full_unpermitted_attributes
-        end.not_to change(&count_proc)
-        expect(response.status).to be_between(400, 499)
-        expect(response_errors).to be_present
-      end
     end
 
     it 'does not perform the merge when there are errors in sent data' do

@@ -27,6 +27,7 @@ module UuidToIdTransformer
 
   def transform_uuids_to_ids_for_keys_in(param_location)
     return false unless param_location.present?
+
     param_location.keys.each do |key|
       change_specific_param_id_key_to_uuid(param_location, key) if uses_uuid?(key)
       transform_uuids_to_ids_for_nested_resource(key, param_location[key]) if key.to_s.ends_with?('_attributes')

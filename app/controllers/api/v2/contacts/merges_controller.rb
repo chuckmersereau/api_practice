@@ -1,5 +1,5 @@
 class Api::V2::Contacts::MergesController < Api::V2Controller
-  resource_type :contacts
+  resource_type :merges
 
   def create
     load_contacts
@@ -10,10 +10,19 @@ class Api::V2::Contacts::MergesController < Api::V2Controller
 
   private
 
+  def field_params
+    params = super[:merges]
+
+    return {} unless params
+
+    {
+      contacts: params
+    }
+  end
+
   def merge_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:merge)
       .permit(merge_attributes)
   end
 
@@ -27,8 +36,8 @@ class Api::V2::Contacts::MergesController < Api::V2Controller
   end
 
   def load_contacts
-    @winner = Contact.find_by!(uuid: merge_params[:winner_id])
-    @loser  = Contact.find_by!(uuid: merge_params[:loser_id])
+    @winner = Contact.find(merge_params[:winner_id])
+    @loser  = Contact.find(merge_params[:loser_id])
   end
 
   def merge_contacts

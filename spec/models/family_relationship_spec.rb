@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe FamilyRelationship do
   describe 'adding a family relationship to a person' do

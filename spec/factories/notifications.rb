@@ -1,9 +1,9 @@
 FactoryGirl.define do
   factory :notification do
-    notification_type_id 1
+    notification_type
     cleared false
     event_date '2012-10-23 17:03:15'
-    contact nil
-    donation nil
+    contact
+    donation
   end
 end

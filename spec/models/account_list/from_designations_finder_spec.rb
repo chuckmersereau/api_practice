@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountList::FromDesignationsFinder, '#account_list' do
   it 'returns nil if no account list contains the specified designations' do

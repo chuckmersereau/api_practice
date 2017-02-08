@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Tasks' do
@@ -11,12 +11,16 @@ resource 'Tasks' do
   let(:id)    { task.uuid }
 
   let(:new_task) do
-    build(:task).attributes
-                .except(:completed, :notification_sent)
-                .merge(account_list_id: user.account_lists.first.uuid,
-                       updated_in_db_at: task.updated_at)
+    build(:task)
+      .attributes
+      .reject { |key| key.to_s.end_with?('_id') }
+      .except('completed', 'notification_sent')
+      .merge(updated_in_db_at: task.updated_at)
   end
-  let(:form_data) { build_data(new_task) }
+
+  let(:form_data) do
+    build_data(new_task, account_list_id: user.account_lists.first.uuid)
+  end
 
   let(:bulk_update_form_data) do
     [{ data: { id: task.uuid, attributes: new_task } }]
@@ -24,7 +28,6 @@ resource 'Tasks' do
 
   let(:resource_attributes) do
     %w(
-      account_list_id
       activity_type
       comments_count
       completed
@@ -129,7 +132,9 @@ resource 'Tasks' do
 
       example 'Task [CREATE]', document: :entities do
         explanation 'Create a Task associated with the current_user'
+
         do_request data: form_data
+
         expect(resource_object['subject']).to eq new_task['subject']
         expect(response_status).to eq 201
       end
@@ -160,6 +165,7 @@ resource 'Tasks' do
 
       example 'Task [UPDATE]', document: :entities do
         explanation 'Update the current_user\'s Task with the given ID'
+
         do_request data: form_data
         expect(resource_object['subject']).to eq new_task['subject']
         expect(response_status).to eq 200

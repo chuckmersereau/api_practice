@@ -71,7 +71,9 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   end
 
   def donation_params
-    params.require(:data).require(:attributes).permit(Donation::PERMITTED_ATTRIBUTES)
+    params
+      .require(:donation)
+      .permit(Donation::PERMITTED_ATTRIBUTES)
   end
 
   def donation_scope

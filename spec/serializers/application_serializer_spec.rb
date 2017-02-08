@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe ApplicationSerializer, type: :serializer do
   describe 'time output' do

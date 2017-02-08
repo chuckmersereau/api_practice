@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ContactFilter do
   let(:user) { create(:user_with_account) }

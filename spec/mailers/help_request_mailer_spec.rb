@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe HelpRequestMailer do
   let(:mail) { HelpRequestMailer.email(help_request) }

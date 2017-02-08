@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe CsvImportHeadersValidator do
   let(:import) { build(:csv_import) }

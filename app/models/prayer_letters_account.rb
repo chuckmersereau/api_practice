@@ -61,6 +61,7 @@ class PrayerLettersAccount < ApplicationRecord
 
   def async_add_or_update_contact(contact_id)
     contact = account_list.contacts.find(contact_id)
+
     if contact.prayer_letters_id.present?
       update_contact(contact)
     else

@@ -57,7 +57,9 @@ class Api::V2::AccountListsController < Api::V2Controller
   end
 
   def account_list_params
-    params.require(:data).require(:attributes).permit(AccountList::PERMITTED_ATTRIBUTES)
+    params
+      .require(:account_list)
+      .permit(AccountList::PERMITTED_ATTRIBUTES)
   end
 
   def account_list_scope

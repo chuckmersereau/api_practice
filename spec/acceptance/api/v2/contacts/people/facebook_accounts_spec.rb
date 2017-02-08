@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Facebook Accounts' do
@@ -20,7 +20,9 @@ resource 'Facebook Accounts' do
   let(:id)                 { facebook_account.uuid }
 
   let(:new_facebook_account) do
-    build(:facebook_account).attributes.merge(updated_in_db_at: facebook_account.updated_at, person_id: person.uuid)
+    build(:facebook_account).attributes
+                            .reject { |key| key.to_s.end_with?('_id') }
+                            .merge(updated_in_db_at: facebook_account.updated_at)
   end
   let(:form_data) { build_data(new_facebook_account) }
 

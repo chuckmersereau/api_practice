@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe 'Server Responsibilites', type: :request do
   describe 'requests' do

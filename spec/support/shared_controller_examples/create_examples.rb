@@ -12,16 +12,16 @@ RSpec.shared_examples 'create_examples' do
         post :create, full_correct_attributes
       end.to change { resource.class.count }.by(1)
 
-      expect(response.status).to eq(201)
+      expect(response.status).to eq(201), invalid_status_detail
     end
 
-    it 'does not create the resource when there are unpermitted params' do
-      if unpermitted_attributes
+    it 'does not create the resource when there are unpermitted relationships' do
+      if defined?(unpermitted_relationships)
         api_login(user)
         expect do
           post :create, full_unpermitted_attributes
         end.not_to change { resource.class.count }
-        expect(response.status).to eq(403)
+        expect(response.status).to eq(403), invalid_status_detail
       end
     end
 
@@ -32,7 +32,7 @@ RSpec.shared_examples 'create_examples' do
         expect do
           post :create, full_incorrect_attributes
         end.not_to change { resource.class.count }
-        expect(response.status).to eq(400)
+        expect(response.status).to eq(400), invalid_status_detail
         expect(response.body).to include('errors')
       end
     end
@@ -41,7 +41,7 @@ RSpec.shared_examples 'create_examples' do
       expect do
         post :create, full_correct_attributes
       end.not_to change { resource.class.count }
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(401), invalid_status_detail
     end
 
     it 'does not create a resource if the resource_type is incorrect' do
@@ -50,7 +50,7 @@ RSpec.shared_examples 'create_examples' do
       expect { post :create, attributes_with_incorrect_resource_type }
         .not_to change { resources_count }
 
-      expect(response.status).to eq(409)
+      expect(response.status).to eq(409), invalid_status_detail
       expect(response_errors).to be_present
     end
   end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 describe PersonExhibit do
   let(:exhib) { PersonExhibit.new(person, context) }
   let(:person) { build(:person) }

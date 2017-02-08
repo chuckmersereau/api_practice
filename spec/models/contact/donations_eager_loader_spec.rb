@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Contact::DonationsEagerLoader, '#contacts_with_donations' do
   let(:account_list) { create(:account_list) }

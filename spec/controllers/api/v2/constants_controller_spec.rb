@@ -1,6 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::ConstantsController, type: :controller do
+  include_examples 'common_variables'
+
   let(:user) { create(:user_with_account) }
 
   describe '#index' do

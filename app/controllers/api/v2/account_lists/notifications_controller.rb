@@ -2,7 +2,11 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_notifications
-    render json: @notifications, meta: meta_hash(@notifications), include: include_params, fields: field_params
+    render json: @notifications,
+           scope: { account_list: load_account_list, locale: locale },
+           meta: meta_hash(@notifications),
+           include: include_params,
+           fields: field_params
   end
 
   def show
@@ -47,6 +51,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
 
   def render_notification
     render json: @notification,
+           scope: { account_list: @account_list, locale: locale },
            status: success_status,
            include: include_params,
            fields: field_params
@@ -73,7 +78,9 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   end
 
   def notification_params
-    params.require(:data).require(:attributes).permit(Notification::PERMITTED_ATTRIBUTES)
+    params
+      .require(:notification)
+      .permit(Notification::PERMITTED_ATTRIBUTES)
   end
 
   def authorize_notification

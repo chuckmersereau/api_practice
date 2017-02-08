@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountList::PledgesTotal do
   let(:account_list) { create(:account_list, salary_organization_id: create(:organization).id) }

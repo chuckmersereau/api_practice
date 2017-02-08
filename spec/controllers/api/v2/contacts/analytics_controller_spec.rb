@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::AnalyticsController, type: :controller do
   # This is required!

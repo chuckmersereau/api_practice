@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::People::PhonesController, type: :controller do
   let(:user) { create(:user_with_account) }
@@ -9,8 +9,7 @@ RSpec.describe Api::V2::Contacts::People::PhonesController, type: :controller do
   let!(:second_resource) { create(:phone_number, person: person) }
   let(:id) { resource.uuid }
   let(:parent_param) { { contact_id: contact.uuid, person_id: person.uuid } }
-  let(:correct_attributes) { { location: 'home', number: '+11134567890', person_id: person.uuid, country_code: '1', primary: true } }
-  let(:unpermitted_attributes) { nil }
+  let(:correct_attributes) { { location: 'home', number: '+11134567890', country_code: '1', primary: true } }
   let(:incorrect_attributes) { { number: nil } }
   let(:factory_type) { :phone_number }
 

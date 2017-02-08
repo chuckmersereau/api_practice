@@ -32,8 +32,7 @@ class Api::V2::User::OptionsController < Api::V2Controller
 
   def option_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:user_option)
       .permit(option_attributes)
   end
 

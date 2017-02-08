@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 describe EmailAddressExhibit do
   subject { EmailAddressExhibit.new(email_address, context) }
   let(:email_address) { build(:email_address) }

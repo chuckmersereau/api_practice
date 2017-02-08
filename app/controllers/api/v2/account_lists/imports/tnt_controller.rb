@@ -48,7 +48,9 @@ class Api::V2::AccountLists::Imports::TntController < Api::V2Controller
   end
 
   def import_params
-    params.require(:data).require(:attributes).permit(Import::PERMITTED_ATTRIBUTES)
+    params
+      .require(:import)
+      .permit(Import::PERMITTED_ATTRIBUTES)
   end
 
   def import_scope

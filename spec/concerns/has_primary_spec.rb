@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe HasPrimary do
   context '#ensure_only_one_primary? for person and email addresses (responds to :historic)' do

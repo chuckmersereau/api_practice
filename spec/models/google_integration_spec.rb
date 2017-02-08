@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe GoogleIntegration do
   let(:google_integration) { build(:google_integration) }

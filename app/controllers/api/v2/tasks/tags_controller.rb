@@ -65,6 +65,6 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
   end
 
   def tag_params
-    params.require(:data).require(:attributes).permit(:name)
+    params.require(:tag).permit(:name)
   end
 end

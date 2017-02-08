@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Donation do
   let(:donation) { create(:donation, donation_date: Date.new(2015, 4, 5)) }

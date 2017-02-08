@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::People::FacebookAccountsController, type: :controller do
   let(:factory_type) { :facebook_account }
@@ -13,8 +13,8 @@ RSpec.describe Api::V2::Contacts::People::FacebookAccountsController, type: :con
   let(:id) { facebook_account.uuid }
   let(:parent_param) { { contact_id: contact.uuid, person_id: person.uuid } }
   let(:unpermitted_attributes) { nil }
-  let(:correct_attributes) { attributes_for(:facebook_account, person: person2, first_name: 'Albert') }
-  let(:incorrect_attributes) { attributes_for(:facebook_account, person: nil, username: nil) }
+  let(:correct_attributes) { attributes_for(:facebook_account, first_name: 'Albert').except(:person_id) }
+  let(:incorrect_attributes) { { username: nil } }
 
   before do
     contact.people << person

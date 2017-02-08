@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Key Accounts' do
@@ -11,9 +11,25 @@ resource 'Key Accounts' do
   let(:id)           { key_account.uuid }
 
   let(:new_key_account_params) do
-    build(:key_account).attributes.merge(person_id: user.uuid, updated_in_db_at: key_account.updated_at)
+    build(:key_account)
+      .attributes
+      .merge(updated_in_db_at: key_account.updated_at)
+      .select { |(key, _)| Person::KeyAccount::PERMITTED_ATTRIBUTES.include?(key.to_sym) }
+      .tap { |attrs| attrs.delete('person_id') }
   end
-  let(:form_data) { build_data(new_key_account_params) }
+
+  let(:form_data) { build_data(new_key_account_params, relationships: relationships) }
+
+  let(:relationships) do
+    {
+      person: {
+        data: {
+          type: 'persons',
+          id: user.uuid
+        }
+      }
+    }
+  end
 
   let(:resource_attributes) do
     %w(

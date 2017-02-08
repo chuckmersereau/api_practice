@@ -77,7 +77,8 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   end
 
   def website_params
-    params.require(:data).require(:attributes).permit(Person::Website::PERMITTED_ATTRIBUTES)
+    params.require(:website)
+          .permit(Person::Website::PERMITTED_ATTRIBUTES)
   end
 
   def website_scope

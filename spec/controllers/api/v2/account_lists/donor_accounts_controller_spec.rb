@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
   let(:factory_type) { :donor_account }

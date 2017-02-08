@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   let(:user) { create(:user_with_account) }
@@ -10,7 +10,6 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   let(:id) { resource.uuid }
   let(:parent_param) { { contact_id: contact.uuid } }
   let(:correct_attributes) { { street: '123 Street' } }
-  let(:unpermitted_attributes) { nil }
   let(:incorrect_attributes) { nil }
   let!(:not_destroyed_scope) { Address.current }
   let(:factory_type) { :address }

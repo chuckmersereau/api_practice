@@ -65,7 +65,9 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def invite_params
-    params.require(:data).require(:attributes).permit(AccountListInvite::PERMITTED_ATTRIBUTES)
+    params
+      .require(:account_list_invite)
+      .permit(AccountListInvite::PERMITTED_ATTRIBUTES)
   end
 
   def invite_scope

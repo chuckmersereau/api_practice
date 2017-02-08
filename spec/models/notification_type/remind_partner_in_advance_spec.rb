@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::RemindPartnerInAdvance do
   let(:remind_partner_in_advance) { NotificationType::RemindPartnerInAdvance.first_or_initialize }

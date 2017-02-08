@@ -9,7 +9,7 @@ RSpec.shared_examples 'common_variables' do
       data: {
         type: resource_type,
         attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
-      }
+      }.merge(relationships_params)
     }.merge(full_params)
   end
 
@@ -17,8 +17,8 @@ RSpec.shared_examples 'common_variables' do
     {
       data: {
         type: resource_type,
-        attributes: unpermitted_attributes.merge(updated_in_db_at: resource.updated_at)
-      }
+        attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+      }.merge(unpermitted_relationships_params)
     }.merge(full_params)
   end
 
@@ -27,8 +27,43 @@ RSpec.shared_examples 'common_variables' do
       data: {
         type: resource_type,
         attributes: incorrect_attributes.merge(updated_in_db_at: resource.updated_at)
-      }
+      }.merge(incorrect_relationships_params)
     }.merge(full_params)
+  end
+
+  let(:relationships_params) do
+    return { relationships: correct_relationships } if defined?(correct_relationships)
+
+    if defined?(account_list)
+      {
+        relationships: {
+          account_list: {
+            data: {
+              type: 'account_lists',
+              id: account_list.uuid
+            }
+          }
+        }
+      }
+    else
+      {}
+    end
+  end
+
+  let(:update_relationships_params) do
+    defined?(update_relationships) ? { relationships: update_relationships } : relationships_params
+  end
+
+  let(:incorrect_relationships_params) do
+    defined?(incorrect_relationships) ? { relationships: incorrect_relationships } : relationships_params
+  end
+
+  let(:unpermitted_relationships_params) do
+    return {} unless defined?(unpermitted_relationships)
+
+    {
+      relationships: unpermitted_relationships
+    }
   end
 
   let(:reference_key)   { defined?(given_reference_key) ? given_reference_key : correct_attributes.keys.first }
@@ -37,7 +72,8 @@ RSpec.shared_examples 'common_variables' do
 
   let(:resource_not_destroyed_scope) { defined?(not_destroyed_scope) ? not_destroyed_scope : resource.class }
   let(:serializer) { ActiveModel::Serializer.serializer_for(resource).new(resource) }
-  let(:resource_type) { serializer._type || resource.class.to_s.underscore.tr('/', '_').pluralize }
+  let(:defined_resource_type) { defined?(given_resource_type) ? given_resource_type : nil }
+  let(:resource_type) { defined_resource_type || serializer._type || resource.class.to_s.underscore.tr('/', '_').pluralize }
 
   let(:response_errors) { JSON.parse(response.body)['errors'] }
 
@@ -53,7 +89,7 @@ RSpec.shared_examples 'common_variables' do
         data: {
           type: resource_type,
           attributes: update_attributes
-        }
+        }.merge(update_relationships_params)
       }.merge(full_params)
     else
       full_correct_attributes
@@ -80,6 +116,12 @@ RSpec.shared_examples 'common_variables' do
     full_correct_attributes.tap do |params|
       params[:data][:type] = :gummybear # should definitely fail
     end
+  end
+
+  let(:invalid_status_detail) do
+    body = response.body.blank? ? '' : JSON.pretty_generate(JSON.parse(response.body))
+
+    "\n\nResponse Status: #{response.status}\nResponse Body: #{body}"
   end
 
   def resources_count

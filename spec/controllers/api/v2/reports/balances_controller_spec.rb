@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Reports::BalancesController, type: :controller do
   let(:user)         { create(:user_with_account) }

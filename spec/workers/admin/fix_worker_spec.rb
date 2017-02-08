@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Admin::FixWorker, '#perform' do
   it 'finds account list and runs the specified fix for it' do

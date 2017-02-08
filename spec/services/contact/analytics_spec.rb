@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Contact::Analytics, type: :model do
   let(:today)        { Date.current }

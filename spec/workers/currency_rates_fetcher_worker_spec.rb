@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe CurrencyRatesFetcherWorker do
   before { ENV['CURRENCY_LAYER_KEY'] = 'asdf' }

@@ -1,6 +1,5 @@
 class TaskSerializer < ApplicationSerializer
-  attributes :account_list_id,
-             :activity_type,
+  attributes :activity_type,
              :completed,
              :completed_at,
              :next_action,

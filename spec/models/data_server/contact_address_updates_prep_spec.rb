@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DataServer::ContactAddressUpdatesPrep, '#prep_for_auto_address_updates' do
   let(:contact) { create(:contact) }

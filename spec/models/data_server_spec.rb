@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DataServer do
   let(:account_list) { create(:account_list) }

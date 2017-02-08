@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Google Accounts' do
@@ -11,10 +11,24 @@ resource 'Google Accounts' do
   let(:id)              { google_account.uuid }
 
   let(:new_google_account) do
-    build(:google_account).attributes.merge(person_id: user.uuid,
-                                            updated_in_db_at: google_account.updated_at)
+    build(:google_account)
+      .attributes
+      .merge(updated_in_db_at: google_account.updated_at)
+      .tap { |attrs| attrs.delete('person_id') }
   end
-  let(:form_data) { build_data(new_google_account) }
+
+  let(:relationships) do
+    {
+      person: {
+        data: {
+          type: 'people',
+          id: user.uuid
+        }
+      }
+    }
+  end
+
+  let(:form_data) { build_data(new_google_account, relationships: relationships) }
 
   let(:resource_attributes) do
     %w(

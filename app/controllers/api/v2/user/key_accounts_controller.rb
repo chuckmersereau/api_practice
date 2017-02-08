@@ -72,7 +72,7 @@ class Api::V2::User::KeyAccountsController < Api::V2Controller
   end
 
   def key_account_params
-    params.require(:data).require(:attributes).permit(Person::KeyAccount::PERMITTED_ATTRIBUTES)
+    params.require(:key_account).permit(Person::KeyAccount::PERMITTED_ATTRIBUTES)
   end
 
   def authorize_key_account

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'savon/mock/spec_helper'
 
 describe 'InsightAnalyses' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe ContactPerson do
   # its hard to test delete_orphaned_person because after_commit doesn't get

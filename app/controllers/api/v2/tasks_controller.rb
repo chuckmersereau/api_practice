@@ -1,3 +1,5 @@
+require 'json_api_service'
+
 class Api::V2::TasksController < Api::V2Controller
   def index
     authorize_index
@@ -74,7 +76,9 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def task_params
-    params.require(:data).require(:attributes).permit(Task::PERMITTED_ATTRIBUTES)
+    params
+      .require(:task)
+      .permit(Task::PERMITTED_ATTRIBUTES)
   end
 
   def task_attributes

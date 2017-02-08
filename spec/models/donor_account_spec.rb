@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DonorAccount, deprecated: true do
   before(:each) do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe PrayerLettersAccount do
   let(:pla) { create(:prayer_letters_account) }
@@ -94,7 +94,7 @@ describe PrayerLettersAccount do
     it 'does not call the api if the contact params are the same as the cached value' do
       params[:external_id] = params[:external_id].to_i
       contact.update(prayer_letters_params: params)
-      expect(pla).to_not receive(:get_request)
+      expect(pla).to_not receive(:get_response)
       pla.update_contact(contact)
     end
 

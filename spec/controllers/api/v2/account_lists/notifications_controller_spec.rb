@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::AccountLists::NotificationsController, type: :controller do
   let(:factory_type) { :notification }
@@ -14,8 +14,37 @@ describe Api::V2::AccountLists::NotificationsController, type: :controller do
   let(:resource) { notification }
   let(:parent_param) { { account_list_id: account_list.uuid } }
   let(:unpermitted_attributes) { nil }
-  let(:correct_attributes) { { cleared: true, event_date: Time.now, notification_type_id: notification_type.uuid, contact_id: contact.uuid } }
-  let(:incorrect_attributes) { { event_date: nil, notification_type_id: notification_type.uuid } }
+
+  let(:correct_attributes) do
+    {
+      cleared: true,
+      event_date: Time.now
+    }
+  end
+
+  let(:correct_relationships) do
+    {
+      notification_type: {
+        data: {
+          type: 'notification_types',
+          id: notification_type.uuid
+        }
+      },
+      contact: {
+        data: {
+          type: 'contacts',
+          id: contact.uuid
+        }
+      }
+    }
+  end
+
+  let(:incorrect_attributes) do
+    {
+      event_date: nil
+    }
+  end
+
   let(:reference_key) { :event_date }
 
   include_examples 'index_examples'

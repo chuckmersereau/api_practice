@@ -1,6 +1,8 @@
-require 'spec_helper'
+require 'rails_helper'
 
 class PunditHelpersTestController < Api::V2Controller
+  skip_before_action :validate_and_transform_json_api_params
+
   private
 
   def contact_uuid_params
@@ -13,10 +15,10 @@ class PunditHelpersTestController < Api::V2Controller
 end
 
 describe Api::V2Controller do
-  let!(:user) { create(:user_with_account) }
+  let!(:user)         { create(:user_with_account) }
   let!(:account_list) { user.account_lists.first }
-  let!(:contact_one) { create(:contact, account_list: account_list) }
-  let!(:contact_two) { create(:contact, account_list: account_list) }
+  let!(:contact_one)  { create(:contact, account_list: account_list) }
+  let!(:contact_two)  { create(:contact, account_list: account_list) }
 
   describe '#bulk_authorize' do
     controller PunditHelpersTestController do

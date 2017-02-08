@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DataServer::ContactAddressUpdate, '#update_from_donor_accont' do
   let(:contact) { create(:contact) }

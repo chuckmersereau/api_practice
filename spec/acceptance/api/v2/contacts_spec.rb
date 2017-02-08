@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Contacts' do
@@ -14,19 +14,41 @@ resource 'Contacts' do
   let(:id)       { contact.uuid }
 
   let(:new_contact) do
-    build(:contact).attributes
-                   .except(:first_donation_date, :notes_saved_at,
-                           :last_activity, :last_appointment,
-                           :last_donation_date, :last_letter,
-                           :last_phone_call, :last_pre_call,
-                           :last_thank, :late_at, :prayer_letters_id,
-                           :pls_id, :prayer_letters_params,
-                           :tnt_id, :total_donations,
-                           :uncompleted_tasks_count)
-                   .merge(account_list_id: account_list.uuid,
-                          updated_in_db_at: contact.updated_at)
+    attributes_for(:contact)
+      .except(
+        :first_donation_date,
+        :last_activity,
+        :last_appointment,
+        :last_donation_date,
+        :last_letter,
+        :last_phone_call,
+        :last_pre_call,
+        :last_thank,
+        :late_at,
+        :notes_saved_at,
+        :pls_id,
+        :prayer_letters_id,
+        :prayer_letters_params,
+        :tnt_id,
+        :total_donations,
+        :uncompleted_tasks_count
+      ).merge(updated_in_db_at: contact.updated_at)
   end
-  let(:form_data) { build_data(new_contact) }
+
+  let(:form_data) do
+    build_data(new_contact, relationships: relationships)
+  end
+
+  let(:relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: account_list.uuid
+        }
+      }
+    }
+  end
 
   let(:bulk_update_form_data) do
     [{ data: { id: contact.uuid, attributes: new_contact } }]
@@ -140,8 +162,8 @@ resource 'Contacts' do
       example 'Contact [LIST]', document: :entities do
         explanation 'List of Contacts'
         do_request
+        expect(response_status).to eq(200), invalid_status_detail
         check_collection_resource(1, additional_keys)
-        expect(response_status).to eq 200
       end
     end
 
@@ -195,8 +217,9 @@ resource 'Contacts' do
       example 'Contact [CREATE]', document: :entities do
         explanation 'Create a Contact'
         do_request data: form_data
-        expect(resource_object['name']).to eq new_contact['name']
-        expect(response_status).to eq 201
+
+        expect(response_status).to eq(201), invalid_status_detail
+        expect(resource_object['name']).to eq new_contact[:name]
       end
     end
 
@@ -299,8 +322,8 @@ resource 'Contacts' do
       example 'Contact [UPDATE]', document: :entities do
         explanation 'Update the Contact with the given ID'
         do_request data: form_data
-        expect(resource_object['name']).to eq new_contact['name']
-        expect(response_status).to eq 200
+        expect(response_status).to eq(200), invalid_status_detail
+        expect(resource_object['name']).to eq new_contact[:name]
       end
     end
 
@@ -319,8 +342,8 @@ resource 'Contacts' do
       example 'Contact [UPDATE] [BULK]', document: :entities do
         explanation 'Bulk Update a list of Contacts with an array of objects containing the ID and updated attributes'
         do_request data: bulk_update_form_data
-        expect(json_response.first['data']['attributes']['name']).to eq new_contact['name']
-        expect(response_status).to eq 200
+        expect(response_status).to eq(200), invalid_status_detail
+        expect(json_response.first['data']['attributes']['name']).to eq new_contact[:name]
       end
     end
 

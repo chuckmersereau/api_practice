@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Account Lists' do
@@ -10,8 +10,14 @@ resource 'Account Lists' do
   let(:account_list) { user.account_lists.first }
   let(:id)           { account_list.uuid }
 
-  let(:new_account_list) { build(:account_list).attributes.except(:creator_id).merge(updated_in_db_at: account_list.updated_at) }
-  let(:form_data)        { build_data(new_account_list) }
+  let(:new_account_list) do
+    build(:account_list)
+      .attributes
+      .except('creator_id')
+      .merge(updated_in_db_at: account_list.updated_at)
+  end
+
+  let(:form_data) { build_data(new_account_list) }
 
   let(:resource_attributes) do
     %w(

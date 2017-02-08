@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::MissingContactInfo do
   subject { NotificationType::MissingContactInfo.create }

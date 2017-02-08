@@ -1,7 +1,4 @@
 class Api::V2::AccountLists::MergeController < Api::V2Controller
-  skip_before_action :transform_id_attribute_key_to_uuid
-  skip_before_action :verify_primary_id_placement
-
   def create
     load_merge_account_list
     authorize_merge_account_list
@@ -10,14 +7,14 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
       load_account_list.merge(@merge_account_list)
       render_201
     else
-      render_400
+      render_400(detail: create_error_message)
     end
   end
 
   private
 
   def load_merge_account_list
-    @merge_account_list ||= merge_account_list_scope.find_by!(uuid: merge_account_list_params[:id])
+    @merge_account_list ||= merge_account_list_scope.find_by!(id: merge_account_list_params[:account_list_to_merge_id])
   end
 
   def authorize_merge_account_list
@@ -25,7 +22,9 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
   end
 
   def merge_account_list_params
-    params.require(:data).require(:attributes).permit(:id)
+    params
+      .require(:merge)
+      .permit(:account_list_to_merge_id)
   end
 
   def merge_account_list_scope
@@ -42,5 +41,9 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
 
   def pundit_user
     PunditContext.new(current_user, account_list: load_account_list)
+  end
+
+  def create_error_message
+    "Account List to be merged can't be the same as the Account List being merged into"
   end
 end

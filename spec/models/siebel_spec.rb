@@ -1,5 +1,5 @@
 # rubocop:disable Metrics/LineLength
-require 'spec_helper'
+require 'rails_helper'
 
 describe Siebel do
   let(:wsapi) { 'https://wsapi.ccci.org/wsapi/rest' }

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe JsonWebToken do
   let(:payload) { { 'user_id' => 1 } }

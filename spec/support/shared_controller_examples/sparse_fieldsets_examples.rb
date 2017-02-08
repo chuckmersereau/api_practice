@@ -37,7 +37,8 @@ RSpec.shared_examples 'sparse fieldsets examples' do |options|
 
     it 'supports sparse fieldsets' do
       subject
-      expect(response.status).to eq(expected_response_code)
+
+      expect(response.status).to eq(expected_response_code), invalid_status_detail
       expect(response_attributes.keys).to match_array(example_attributes)
     end
   end

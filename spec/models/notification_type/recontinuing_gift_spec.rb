@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::RecontinuingGift do
   let!(:recontinuing_gift) { NotificationType::RecontinuingGift.first_or_initialize }

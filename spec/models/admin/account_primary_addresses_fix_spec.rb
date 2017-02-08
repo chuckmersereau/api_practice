@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Admin::AccountPrimaryAddressesFix, '#fix!' do
   it 'fixes the primary addresses for each contact in the account list' do

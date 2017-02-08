@@ -1,16 +1,19 @@
 require 'async'
+require 'rails_helper'
 
 class Foo
   include Async
   include Sidekiq::Worker
 
   def kill(_person) end
+
+  def self.find(_var); end
 end
 
 describe 'Async' do
   it 'should perform a method with an id' do
     foo = double('foo')
-    expect(Foo).to receive(:find).with(5).and_return(foo)
+    allow(Foo).to receive(:find).with(5).and_return(foo)
     expect(foo).to receive(:kill).with('Todd')
     Foo.new.perform(5, :kill, 'Todd')
   end

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe TntImport::OrgsFinder, '#orgs_by_tnt_id' do
   it 'looks up the organizations by code' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Contacts People Email Addresses' do
@@ -20,7 +20,13 @@ resource 'Contacts People Email Addresses' do
   let!(:email_address) { create(:email_address, person: person) }
   let(:id)             { email_address.uuid }
 
-  let(:form_data) { build_data(attributes.merge(updated_in_db_at: email_address.updated_at)) }
+  let(:form_data) do
+    build_data(
+      attributes
+        .reject { |key| key.to_s.end_with?('_id') }
+        .merge(updated_in_db_at: email_address.updated_at)
+    )
+  end
 
   let(:expected_attribute_keys) do
     # list your expected resource keys vertically here (alphabetical please!)

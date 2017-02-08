@@ -16,26 +16,26 @@ RSpec.shared_examples 'update_examples' do |options = {}|
       api_login(user)
       put :update, full_update_attributes
 
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(200), invalid_status_detail
       expect(resource.reload.send(update_reference_key)).to eq(update_reference_value)
     end
 
-    it 'does not update the resource with unpermitted params' do
-      if unpermitted_attributes
+    it 'does not update the resource with unpermitted relationships' do
+      if defined?(unpermitted_relationships)
         api_login(user)
         put :update, full_unpermitted_attributes
 
-        expect(response.status).to eq(403)
+        expect(response.status).to eq(403), invalid_status_detail
         expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       end
     end
 
     it 'does not update the resource when there are errors in sent data' do
-      if incorrect_attributes
+      if can_run_incorrect_update_specs && incorrect_attributes
         api_login(user)
         put :update, full_incorrect_attributes
 
-        expect(response.status).to eq(400)
+        expect(response.status).to eq(400), invalid_status_detail
         expect(response.body).to include('errors')
         expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
         expect(response_errors).to be_present
@@ -57,7 +57,7 @@ RSpec.shared_examples 'update_examples' do |options = {}|
       full_update_attributes[:data][:attributes][:updated_in_db_at] = 1.year.ago
       put :update, full_update_attributes
 
-      expect(response.status).to eq(409)
+      expect(response.status).to eq(409), invalid_status_detail
       expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       expect(response_errors).to be_present
     end
@@ -67,7 +67,7 @@ RSpec.shared_examples 'update_examples' do |options = {}|
         api_login(create(:user))
         put :update, full_update_attributes
 
-        expect(response.status).to eq(403)
+        expect(response.status).to eq(403), invalid_status_detail
         expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
         expect(response_errors).to be_present
       end
@@ -76,7 +76,7 @@ RSpec.shared_examples 'update_examples' do |options = {}|
     it 'does not updates resource for users that are not signed in' do
       put :update, full_update_attributes
 
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(401), invalid_status_detail
       expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       expect(response_errors).to be_present
     end
@@ -85,8 +85,12 @@ RSpec.shared_examples 'update_examples' do |options = {}|
       api_login(user)
       put :update, attributes_with_incorrect_resource_type
 
-      expect(response.status).to eq(409)
+      expect(response.status).to eq(409), invalid_status_detail
       expect(response_errors).to be_present
     end
+  end
+
+  def can_run_incorrect_update_specs
+    !(defined?(dont_run_incorrect_update) && dont_run_incorrect_update)
   end
 end

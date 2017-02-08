@@ -63,7 +63,9 @@ class Api::V2::AccountLists::PrayerLettersAccountsController < Api::V2Controller
   end
 
   def prayer_letters_account_params
-    params.require(:data).require(:attributes).permit(PrayerLettersAccount::PERMITTED_ATTRIBUTES)
+    params
+      .require(:prayer_letters_account)
+      .permit(PrayerLettersAccount::PERMITTED_ATTRIBUTES)
   end
 
   def authorize_prayer_letters_account

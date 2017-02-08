@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SidekiqJobArgsLogger do
   it 'logs job arguments and yields to the passed in block' do

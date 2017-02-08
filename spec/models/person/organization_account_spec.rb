@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Person::OrganizationAccount do
   let(:org_account) do

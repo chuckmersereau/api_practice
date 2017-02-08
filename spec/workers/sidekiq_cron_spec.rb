@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe 'Sidekiq cron' do
   it 'has all existing worker classes with correct perform methods' do

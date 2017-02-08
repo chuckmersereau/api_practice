@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DataServer::AccountAddressUpdatesPreparer, '#perform' do
   it 'preps contacts with DataServer donors for address updates' do

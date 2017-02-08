@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Person::GmailAccount do
   let(:google_account) { create(:google_account) }

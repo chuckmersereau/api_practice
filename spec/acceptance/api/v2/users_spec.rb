@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Users' do
@@ -8,9 +8,11 @@ resource 'Users' do
   let(:user) { create(:user_with_full_account) }
 
   let(:new_user_attributes) do
-    attributes_for(:user_with_full_account).except(:access_token, :email, :locale, :time_zone)
-                                           .merge(updated_in_db_at: user.updated_at).except(:email)
+    attributes_for(:user_with_full_account)
+      .except(:access_token, :email, :locale, :time_zone)
+      .merge(updated_in_db_at: user.updated_at).except(:email)
   end
+
   let(:form_data)           { build_data(new_user_attributes) }
 
   let(:resource_attributes) do

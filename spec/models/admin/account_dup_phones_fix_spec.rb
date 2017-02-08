@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Admin::AccountDupPhonesFix, '#fix' do
   it 'does a dup phone number fix for every person with multiple numbers' do

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DesignationAccount do
   it 'should return designation_number for to_s' do

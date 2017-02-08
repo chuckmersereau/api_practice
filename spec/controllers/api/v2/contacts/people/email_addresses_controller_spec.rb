@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::People::EmailAddressesController, type: :controller do
   # This is required!
@@ -53,21 +53,6 @@ RSpec.describe Api::V2::Contacts::People::EmailAddressesController, type: :contr
       location: 'mobile',
       primary: true
     }
-  end
-
-  # This is required!
-  let(:unpermitted_attributes) do
-    # A hash of attributes that include unpermitted attributes for the current user to update
-    # Example: { subject: 'test subject', start_at: Time.now, account_list_id: create(:account_list).uuid } }
-    # --
-    # If there aren't attributes that are unpermitted,
-    # you need to specifically return `nil`
-    #
-    # The only case where you would need to _not_ return `nil` is if you are creating or updating
-    # a resource that has `account_list` as a foreign key that is not already nested under
-    # the account list controller namespace. Ex: Contact
-
-    nil
   end
 
   # This is required!

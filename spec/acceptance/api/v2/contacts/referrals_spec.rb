@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Contact Referrals' do
@@ -26,7 +26,7 @@ resource 'Contact Referrals' do
 
   # This is the reference data used to create/update a resource.
   # specify the `attributes` specifically in your request actions below.
-  let(:form_data) { build_data(attributes) }
+  let(:form_data) { build_data(attributes, relationships: relationships) }
 
   let(:resource_attributes) do
     # list your expected resource keys vertically here (alphabetical please!)
@@ -85,9 +85,23 @@ resource 'Contact Referrals' do
       end
 
       let(:attributes) do
+        {}
+      end
+
+      let(:relationships) do
         {
-          referred_by_id: contact.uuid,
-          referred_to_id: referral.uuid
+          referred_to: {
+            data: {
+              type: 'contacts',
+              id: referral.uuid
+            }
+          },
+          referred_by: {
+            data: {
+              type: 'contacts',
+              id: contact.uuid
+            }
+          }
         }
       end
 
@@ -113,9 +127,23 @@ resource 'Contact Referrals' do
       let(:alternate) { create(:contact, account_list: account_list) }
 
       let(:attributes) do
+        { updated_in_db_at: contact_referral.updated_at }
+      end
+
+      let(:relationships) do
         {
-          referred_to_id: alternate.uuid,
-          updated_in_db_at: referral.updated_at
+          referred_to: {
+            data: {
+              type: 'contacts',
+              id: alternate.uuid
+            }
+          },
+          referred_by: {
+            data: {
+              type: 'contacts',
+              id: contact.uuid
+            }
+          }
         }
       end
 
@@ -123,35 +151,6 @@ resource 'Contact Referrals' do
         expect(contact_referral.referred_to_id).to eq referral.id
 
         do_request data: form_data
-
-        check_resource(additional_attribute_keys)
-        expect(response_status).to eq 200
-
-        expect(contact_referral.reload.referred_to_id).to eq alternate.id
-      end
-    end
-
-    # update
-    patch '/api/v2/contacts/:contact_id/referrals/:id' do
-      with_options scope: [:data, :attributes] do
-        parameter 'referred_by_id', 'ID of the Contact making the Referral', 'Type' => 'Number'
-        parameter 'referred_to_id', 'ID of the Contact being Referred',      'Type' => 'Number'
-      end
-
-      let(:alternate) { create(:contact, account_list: account_list) }
-
-      let(:attributes) do
-        {
-          referred_to_id: alternate.uuid,
-          updated_in_db_at: referral.updated_at
-        }
-      end
-
-      example 'update referral' do
-        expect(contact_referral.referred_to_id).to eq referral.id
-
-        do_request data: form_data
-
         check_resource(additional_attribute_keys)
         expect(response_status).to eq 200
 

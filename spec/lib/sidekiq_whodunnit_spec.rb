@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SidekiqWhodunnit do
   it 'tracks the sidekiq job info to be accessed later in the job' do

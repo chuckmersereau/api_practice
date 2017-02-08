@@ -21,7 +21,7 @@ RSpec.shared_examples 'index_examples' do |options = {}|
     it 'shows resources to users that are signed in' do
       api_login(user)
       get :index, parent_param_if_needed
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(200), invalid_status_detail
       expect(response.body).to include(resource.class.first.send(reference_key).to_s) if reference_key
     end
 
@@ -35,14 +35,14 @@ RSpec.shared_examples 'index_examples' do |options = {}|
 
     it 'does not shows resources to users that are not signed in' do
       get :index, parent_param_if_needed
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(401), invalid_status_detail
     end
 
     it 'does not show resources to signed in users if they do not own the parent' do
       if defined?(parent_param)
         api_login(create(:user))
         get :index, parent_param
-        expect(response.status).to eq(403)
+        expect(response.status).to eq(403), invalid_status_detail
       end
     end
 
@@ -50,7 +50,7 @@ RSpec.shared_examples 'index_examples' do |options = {}|
       api_login(user)
 
       get :index, parent_param_if_needed.merge(per_page: 1, page: 2)
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(200), invalid_status_detail
       expect(JSON.parse(response.body)['data'].length).to eq(1)
       expect(JSON.parse(response.body)['data'].first['id']).to_not eq(resource.id)
       expect(JSON.parse(response.body)['meta']['pagination']['per_page']).to eq('1')

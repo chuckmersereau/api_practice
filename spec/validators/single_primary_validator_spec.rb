@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SinglePrimaryValidator do
   let(:email_validator) { SinglePrimaryValidator.new(attributes: [:email_addresses]) }

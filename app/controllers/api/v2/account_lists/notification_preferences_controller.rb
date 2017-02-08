@@ -25,8 +25,7 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
 
   def notification_preference_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:notification_preference)
       .permit(notification_preference_attributes)
   end
 

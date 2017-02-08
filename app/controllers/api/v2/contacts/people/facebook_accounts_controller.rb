@@ -77,7 +77,8 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   end
 
   def fb_account_params
-    params.require(:data).require(:attributes).permit(Person::FacebookAccount::PERMITTED_ATTRIBUTES)
+    params.require(:facebook_account)
+          .permit(Person::FacebookAccount::PERMITTED_ATTRIBUTES)
   end
 
   def fb_account_scope

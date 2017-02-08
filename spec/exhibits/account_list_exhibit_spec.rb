@@ -1,5 +1,5 @@
 # encoding: UTF-8
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountListExhibit do
   subject { AccountListExhibit.new(account_list, context) }

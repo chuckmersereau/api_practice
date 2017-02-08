@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::TaskIfPeriodPast do
   let!(:task_if_period_past) { NotificationType::TaskIfPeriodPast.first_or_initialize }

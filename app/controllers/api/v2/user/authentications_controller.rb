@@ -1,7 +1,6 @@
 # WARNING: This controller is DEPRECATED, but kept for now to allow clients to migrate to the new authenticate route (which uses a different auth scheme)
 class Api::V2::User::AuthenticationsController < Api::V2Controller
-  skip_before_action :jwt_authorize!, :transform_uuid_attributes_params_to_ids, :transform_id_attribute_key_to_uuid
-  skip_before_action :verify_resource_type
+  skip_before_action :jwt_authorize!, :validate_and_transform_json_api_params
   skip_after_action :verify_authorized
   before_action :load_user
 

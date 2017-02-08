@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::Contacts::People::WebsitesController, type: :controller do
   let(:factory_type) { :website }

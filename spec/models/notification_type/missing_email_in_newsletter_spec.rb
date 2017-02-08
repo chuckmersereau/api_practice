@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::MissingEmailInNewsletter do
   subject { NotificationType::MissingEmailInNewsletter.first_or_initialize }

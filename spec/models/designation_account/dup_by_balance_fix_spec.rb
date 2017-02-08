@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DesignationAccount::DupByBalanceFix, '#deactivate_dups!' do
   it 'returns false if no designation accounts were marked inactive' do

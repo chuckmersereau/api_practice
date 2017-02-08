@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::People::LinkedinAccountsController, type: :controller do
   let(:factory_type) { :linkedin_account }
@@ -13,8 +13,9 @@ RSpec.describe Api::V2::Contacts::People::LinkedinAccountsController, type: :con
   let(:id) { linkedin_account.uuid }
   let(:parent_param) { { contact_id: contact.uuid, person_id: person.uuid } }
   let(:unpermitted_attributes) { nil }
-  let(:correct_attributes) { attributes_for(:linkedin_account, person: person2, first_name: 'Albert') }
-  let(:incorrect_attributes) { attributes_for(:linkedin_account, person: nil, public_url: nil) }
+  let(:correct_attributes) { attributes_for(:linkedin_account, first_name: 'Albert').except(:person_id) }
+  let(:incorrect_attributes) { { public_url: nil } }
+  let(:incorrect_relationships) { {} }
 
   before do
     contact.people << person

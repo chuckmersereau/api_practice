@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Twitter Accounts' do
@@ -19,8 +19,13 @@ resource 'Twitter Accounts' do
   let(:twitter_account)   { twitter_accounts.first }
   let(:id)                { twitter_account.uuid }
 
-  let(:new_twitter_account) { build(:twitter_account).attributes.merge(updated_in_db_at: twitter_account.updated_at).except('person_id') }
-  let(:form_data)           { build_data(new_twitter_account) }
+  let(:new_twitter_account) do
+    build(:twitter_account).attributes
+                           .reject { |key| key.to_s.end_with?('_id') }
+                           .merge(updated_in_db_at: twitter_account.updated_at, remote_id: 'RandomID')
+  end
+
+  let(:form_data) { build_data(new_twitter_account) }
 
   let(:expected_attribute_keys) do
     %w(

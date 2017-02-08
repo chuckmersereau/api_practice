@@ -42,8 +42,7 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
 
   def phone_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:phone_number)
       .permit(phone_attributes)
   end
 

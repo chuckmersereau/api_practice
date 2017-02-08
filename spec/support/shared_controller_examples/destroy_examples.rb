@@ -4,10 +4,12 @@ RSpec.shared_examples 'destroy_examples' do |_options = {}|
   describe '#destroy' do
     it 'destroys resource object to users that are signed in' do
       api_login(user)
+
       expect do
         delete :destroy, full_params
       end.to change(&count_proc).by(-1)
-      expect(response.status).to eq(204)
+
+      expect(response.status).to eq(204), invalid_status_detail
     end
 
     it 'does not destroy the resource for users that do not own the resource' do
@@ -16,7 +18,7 @@ RSpec.shared_examples 'destroy_examples' do |_options = {}|
         expect do
           delete :destroy, full_params
         end.not_to change(&count_proc)
-        expect(response.status).to eq(403)
+        expect(response.status).to eq(403), invalid_status_detail
       end
     end
 
@@ -24,7 +26,7 @@ RSpec.shared_examples 'destroy_examples' do |_options = {}|
       expect do
         delete :destroy, full_params
       end.not_to change(&count_proc)
-      expect(response.status).to eq(401)
+      expect(response.status).to eq(401), invalid_status_detail
     end
   end
 end

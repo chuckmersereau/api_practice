@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe ServiceSerializer, type: :serializer do
   let(:account_list) { create(:account_list) }

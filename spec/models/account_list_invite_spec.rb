@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountListInvite do
   let(:invite) { create(:account_list_invite) }

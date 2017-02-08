@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe CasTicketValidatorService, type: :service do
   let!(:service) { CasTicketValidatorService.new(ticket: 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a', service: 'http://my.service') }

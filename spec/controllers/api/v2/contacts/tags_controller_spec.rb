@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::TagsController, type: :controller do
   let(:resource_type) { :tags }

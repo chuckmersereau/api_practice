@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe CurrencyRate::AliasedRatesFiller, '#fill_aliased_rates' do
   it 'fills in missing rate records for aliases according to their ratio' do

@@ -64,7 +64,7 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
   end
 
   def contact_params
-    params.require(:data).require(:attributes).permit(:name)
+    params.require(:tag).permit(:name)
   end
 
   def pundit_user

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DonationReports::DonorInfo do
   let(:account_list) { create(:account_list) }

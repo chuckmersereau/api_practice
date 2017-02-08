@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 describe TaskExhibit do
   subject { TaskExhibit.new(task, context) }
   let(:task) { build(:task) }

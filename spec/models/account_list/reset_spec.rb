@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe AccountList::Reset, '#reset_shallow_and_queue_deep' do
   it 'destroys the users links and queues the deep reset worker' do

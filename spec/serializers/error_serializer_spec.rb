@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe ErrorSerializer, type: :serializer do
   let(:resource) { MockResource.new }

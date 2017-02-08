@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::ContactsController, type: :controller do
   let(:factory_type) { :contact }
@@ -12,12 +12,33 @@ describe Api::V2::ContactsController, type: :controller do
   let!(:resource) { contact }
   let(:second_resource) { second_contact }
 
-  let(:correct_attributes) { attributes_for(:contact, name: 'Michael Bluth', account_list_id: account_list_id, tag_list: 'tag1') }
+  let(:unpermitted_relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: create(:account_list).uuid
+        }
+      }
+    }
+  end
+
+  let(:correct_attributes) do
+    {
+      name: 'Test Name'
+    }
+  end
+
+  let(:incorrect_attributes) do
+    {
+      name: nil
+    }
+  end
+
   let(:reference_key) { :name }
   let(:reference_value) { correct_attributes[:name] }
   let(:incorrect_reference_value) { resource.send(reference_key) }
-  let(:incorrect_attributes) { attributes_for(:contact, name: nil, account_list_id: account_list_id) }
-  let(:unpermitted_attributes) { nil }
+  let(:incorrect_attributes) { attributes_for(:contact, name: nil) }
   let(:sorting_param) { :name }
 
   include_examples 'index_examples'

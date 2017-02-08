@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 module ExpectedTotalsReport
   describe ReceivedDonations, '#donation_rows' do

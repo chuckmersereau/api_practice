@@ -43,8 +43,7 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
 
   def referral_params
     params
-      .require(:data)
-      .require(:attributes)
+      .require(:contact_referral)
       .permit(referral_attributes)
   end
 
@@ -103,12 +102,6 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
 
   def save_referral
     @referral.save(context: persistence_context)
-  end
-
-  def transform_uuid_attributes_params_to_ids
-    change_specific_param_id_key_to_uuid(params[:data][:attributes], :referred_to_id, Contact)
-    change_specific_param_id_key_to_uuid(params[:data][:attributes], :referred_by_id, Contact)
-    super
   end
 
   def pundit_user

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe DonationsChart::MonthlyTotaler, '#monthly_totals' do
   let(:account_list) { create(:account_list, salary_currency: 'EUR') }

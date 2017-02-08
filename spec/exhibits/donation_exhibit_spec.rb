@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 describe DonationExhibit do
   subject { DonationExhibit.new(donation, context) }
   let(:donation) { build(:donation, tendered_amount: '1.23', currency: 'USD') }

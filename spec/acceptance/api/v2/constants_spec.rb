@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
 

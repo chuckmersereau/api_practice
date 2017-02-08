@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe UserSerializer, type: :serializer do
   describe '#default_account_list' do

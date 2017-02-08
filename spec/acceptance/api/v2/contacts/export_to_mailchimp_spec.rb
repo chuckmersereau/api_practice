@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'MailChimp' do
@@ -32,7 +32,7 @@ resource 'MailChimp' do
       parameter 'mail_chimp_list_id', 'Mail Chimp List ID', required: true
 
       example 'Export to Mail Chimp [POST]', document: :appeals do
-        explanation 'Export the Appeal with the given ID to the Mail Chimp server'
+        explanation 'Export Contacts with the given ID to the Mail Chimp server'
         do_request mail_chimp_list_id: primary_list_id
 
         expect(response_status).to eq 200

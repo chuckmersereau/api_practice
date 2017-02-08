@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe SyncGoogleContactsWorker, sidekiq: :testing_disabled do
   context 'Sync users Google contacts' do

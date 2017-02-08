@@ -68,7 +68,9 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
   end
 
   def mailchimp_account_params
-    params.require(:data).require(:attributes).permit(MailChimpAccount::PERMITTED_ATTRIBUTES)
+    params
+      .require(:mail_chimp_account)
+      .permit(MailChimpAccount::PERMITTED_ATTRIBUTES)
   end
 
   def mailchimp_account_scope

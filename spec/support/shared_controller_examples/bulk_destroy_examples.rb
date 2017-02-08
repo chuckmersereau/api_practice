@@ -31,7 +31,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
         delete :destroy, bulk_destroy_attributes
       end.to change { resource_not_destroyed_scope.count }.by(-2)
 
-      expect(response.status).to eq(200)
+      expect(response.status).to eq(200), invalid_status_detail
       expect(response_body.size).to eq(2)
       expect(response_body.collect { |hash| hash.dig('data', 'id') }).to match_array([resource.uuid, second_resource.uuid])
     end
@@ -42,7 +42,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
         expect do
           delete :destroy, bulk_destroy_attributes
         end.not_to change { resource.class.count }
-        expect(response.status).to eq(404)
+        expect(response.status).to eq(404), invalid_status_detail
         expect(response_errors.size).to eq(1)
       end
 
@@ -50,7 +50,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
         expect do
           delete :destroy
         end.not_to change { resource.class.count }
-        expect(response.status).to eq(401)
+        expect(response.status).to eq(401), invalid_status_detail
       end
     end
 
@@ -60,7 +60,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
         expect do
           delete :destroy, data: [{ data: { id: SecureRandom.uuid } }]
         end.not_to change { resource.class.count }
-        expect(response.status).to eq(404)
+        expect(response.status).to eq(404), invalid_status_detail
         expect(response_body['errors']).to be_present
         expect(response_body['data']).to be_blank
       end
@@ -71,7 +71,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
         expect do
           delete :destroy, data: bulk_destroy_attributes[:data]
         end.to change { resource_not_destroyed_scope.count }.by(-2)
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(200), invalid_status_detail
         expect(response_body.size).to eq(2)
       end
     end
@@ -86,7 +86,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
         expect do
           delete :destroy, bulk_destroy_attributes
         end.to change { resource.class.count }.by(-1)
-        expect(response.status).to eq(200)
+        expect(response.status).to eq(200), invalid_status_detail
       end
     end
   end

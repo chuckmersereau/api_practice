@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
 resource 'Address' do
@@ -14,8 +14,9 @@ resource 'Address' do
   let(:id) { address.uuid }
 
   let(:new_address) do
-    build(:address, addressable: contact).attributes.merge(updated_in_db_at: address.updated_at)
-                                         .except('master_address_id')
+    build(:address, addressable: contact).attributes
+                                         .reject { |key| key.to_s.end_with?('_id') }
+                                         .merge(updated_in_db_at: address.updated_at)
   end
   let(:form_data) { build_data(new_address) }
 

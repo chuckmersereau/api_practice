@@ -77,7 +77,7 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   end
 
   def twitter_account_params
-    params.require(:data).require(:attributes).permit(Person::TwitterAccount::PERMITTED_ATTRIBUTES)
+    params.require(:twitter_account).permit(Person::TwitterAccount::PERMITTED_ATTRIBUTES)
   end
 
   def twitter_account_scope

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType::ThankPartnerOncePerYear do
   let!(:thank_partner_once_per_year) { NotificationType::ThankPartnerOncePerYear.first_or_initialize }

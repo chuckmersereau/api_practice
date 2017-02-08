@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe Api::V2::Tasks::BulkController, type: :controller do
   let!(:account_list)              { user.account_lists.first }

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe MailChimpAccount::Exporter do
   let(:primary_list_id) { '1e72b58b72' }

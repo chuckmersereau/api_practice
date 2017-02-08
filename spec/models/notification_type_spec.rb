@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 describe NotificationType do
   let(:notification_type) { create(:notification_type) }
