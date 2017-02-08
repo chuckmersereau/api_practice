@@ -60,7 +60,7 @@ class Api::V2Controller < ApiController
   def meta_hash(resources)
     {
       pagination: pagination_meta_params(resources),
-      sort: sorting_param,
+      sort: sorting_param_applied_to_query,
       filter: filter_params
     }
   end

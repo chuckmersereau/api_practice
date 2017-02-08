@@ -11,8 +11,8 @@ RSpec.describe ApplicationSerializer, type: :serializer do
       expect(parsed_json['created_at']).to eq timestamp.utc.iso8601
     end
 
-    it 'includes the updated_in_db_at fied' do
-      expect(parsed_json['updated_in_db_at']).to eq(email_address.updated_at.to_s)
+    it 'includes the updated_in_db_at fied in iso8601' do
+      expect(parsed_json['updated_in_db_at']).to eq(email_address.updated_at.utc.iso8601)
     end
   end
 end
