@@ -97,6 +97,7 @@ Rails.application.routes.draw do
         resources :tasks do
           scope module: :tasks do
             resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
+            resources :comments, only: [:index, :show, :create, :update, :destroy]
           end
 
           collection do

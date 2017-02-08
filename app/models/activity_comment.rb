@@ -10,6 +10,8 @@ class ActivityComment < ApplicationRecord
 
   before_create :ensure_person
 
+  PERMITTED_ATTRIBUTES = [:body, :updated_in_db_at, :uuid].freeze
+
   private
 
   def ensure_person

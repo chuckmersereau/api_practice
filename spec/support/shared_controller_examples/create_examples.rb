@@ -15,6 +15,15 @@ RSpec.shared_examples 'create_examples' do
       expect(response.status).to eq(201), invalid_status_detail
     end
 
+    it 'creates a resource associated to the correct parent' do
+      if parent_association_if_needed.present?
+        api_login(user)
+        post :create, full_correct_attributes
+        created_resource = resource.class.find_by_uuid(JSON.parse(response.body)['data']['id'])
+        expect(created_resource.send(parent_association_if_needed).uuid).to eq parent_param_if_needed.values.last
+      end
+    end
+
     it 'does not create the resource when there are unpermitted relationships' do
       if defined?(unpermitted_relationships)
         api_login(user)

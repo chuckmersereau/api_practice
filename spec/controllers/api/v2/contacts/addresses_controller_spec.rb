@@ -9,6 +9,7 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   let!(:second_resource) { create(:address, addressable: contact) }
   let(:id) { resource.uuid }
   let(:parent_param) { { contact_id: contact.uuid } }
+  let(:parent_association) { :addressable }
   let(:correct_attributes) { { street: '123 Street' } }
   let(:incorrect_attributes) { nil }
   let!(:not_destroyed_scope) { Address.current }

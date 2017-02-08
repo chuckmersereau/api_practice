@@ -3,6 +3,7 @@ RSpec.shared_examples 'common_variables' do
 
   let(:full_params)            { id_param.merge(defined?(parent_param) ? parent_param : {}) }
   let(:parent_param_if_needed) { defined?(parent_param) ? parent_param : {} }
+  let(:parent_association_if_needed) { defined?(parent_association) ? parent_association : parent_param_if_needed.keys.last.to_s.gsub('_id', '') }
 
   let(:full_correct_attributes) do
     {

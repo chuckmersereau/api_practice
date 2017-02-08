@@ -57,6 +57,7 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
       contact_id: contact.uuid
     }
   end
+  let!(:parent_association) { :referred_by }
 
   # This is required!
   let(:correct_attributes) do
