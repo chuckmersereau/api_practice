@@ -11,7 +11,6 @@ resource 'Referrers' do
 
   let(:resource_attributes) do
     %w(
-      account_list_id
       avatar
       church_name
       created_at

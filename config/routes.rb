@@ -41,7 +41,9 @@ Rails.application.routes.draw do
 
         resources :appeals, only: [:index, :show, :create, :update, :destroy] do
           scope module: :appeals do
-            resources :contacts, only: [:index, :show, :destroy]
+            resources :contacts, only: [:index, :show, :destroy] do
+              post :create, on: :member, path: ''
+            end
           end
         end
 

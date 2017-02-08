@@ -24,7 +24,6 @@ resource 'Merges' do
   # List your expected resource keys vertically here (alphabetical please!)
   let(:resource_attributes) do
     %w(
-      account_list_id
       avatar
       church_name
       created_at
