@@ -13,14 +13,17 @@ describe Reports::MonthlyGivingGraphSerializer do
                                     locale: locale)
   end
 
-  subject { Reports::MonthlyGivingGraphSerializer.new(report) }
+  subject { Reports::MonthlyGivingGraphSerializer.new(report).as_json }
 
-  it { expect(subject.totals).to be_an Array }
-  it { expect(subject.monthly_average).to be_a Fixnum }
-  it { expect(subject.monthly_goal).to be_a Fixnum }
-  it { expect(subject.months_to_dates).to be_an Array }
-  it { expect(subject.pledges).to be_a Fixnum }
+  it { should include :totals }
+  it { should include :pledges }
+  it { should include :monthly_average }
+  it { should include :monthly_goal }
+  it { should include :months_to_dates }
+  it { should include :multi_currency }
+  it { should include :salary_currency_symbol }
+  it { should include :salary_currency }
 
-  it { expect(subject.account_list).to be account_list }
-  it { expect(subject.monthly_goal).to eq 1234 }
+  it { expect(subject[:account_list][:name]).to be account_list.name }
+  it { expect(subject[:monthly_goal]).to eq 1234 }
 end

@@ -30,6 +30,10 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
     @months_back ||= calc_months_back
   end
 
+  def multi_currency
+    account_list.multi_currency?
+  end
+
   protected
 
   def calc_months_back

@@ -12,13 +12,16 @@ resource 'Monthly Giving Graph Report' do
   let(:resource_attributes) do
     %w(
       created_at
-      updated_at
-      updated_in_db_at
       monthly_average
       monthly_goal
       months_to_dates
+      multi_currency
       pledges
+      salary_currency
+      salary_currency_symbol
       totals
+      updated_at
+      updated_in_db_at
     )
   end
 
@@ -31,11 +34,14 @@ resource 'Monthly Giving Graph Report' do
       response_field 'data',               'Data object',     'Type' => 'Object'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',      'Time when report was observed',           'Type' => 'String'
-        response_field 'monthly_average', 'Average monthly total conversion',        'Type' => 'Number'
-        response_field 'monthly_goal',    'The Account List\'s monthly goal',        'Type' => 'Number'
-        response_field 'pledges',         'The sum of all pledges',                  'Type' => 'Array'
-        response_field 'months_to_dates', 'The first day of each month represented', 'Type' => 'Array'
+        response_field 'created_at',             'Time when report was observed',           'Type' => 'String'
+        response_field 'monthly_average',        'Average monthly total conversion',        'Type' => 'Number'
+        response_field 'monthly_goal',           'The Account List\'s monthly goal',        'Type' => 'Number'
+        response_field 'pledges',                'The sum of all pledges',                  'Type' => 'Array'
+        response_field 'months_to_dates',        'The first day of each month represented', 'Type' => 'Array'
+        response_field 'multi_currency',         'If multiple currencies are used',         'Type' => 'Boolean'
+        response_field 'salary_currency',        'Salary currency',                         'Type' => 'String'
+        response_field 'salary_currency_symbol', 'Salary currency symbol',                  'Type' => 'String'
       end
 
       with_options scope: [:data, :relationships] do

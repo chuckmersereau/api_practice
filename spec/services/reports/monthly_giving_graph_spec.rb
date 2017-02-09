@@ -76,6 +76,10 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     it { expect(subject.salary_currency).to eq organization.default_currency_code }
   end
 
+  describe '#multi_currency' do
+    it { expect(subject.multi_currency).to be false }
+  end
+
   describe '#months_back' do
     it { expect(subject.months_back).to be_a Numeric }
     it do

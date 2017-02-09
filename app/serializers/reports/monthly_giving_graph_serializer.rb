@@ -7,7 +7,12 @@ class Reports::MonthlyGivingGraphSerializer < ServiceSerializer
            :monthly_average,
            :monthly_goal,
            :months_to_dates,
+           :multi_currency,
+           :salary_currency,
            to: :object
+
+  delegate :salary_currency_symbol,
+           to: :report_exhibit
 
   belongs_to :account_list
 
@@ -15,5 +20,12 @@ class Reports::MonthlyGivingGraphSerializer < ServiceSerializer
              :pledges,
              :monthly_average,
              :monthly_goal,
-             :months_to_dates
+             :months_to_dates,
+             :multi_currency,
+             :salary_currency_symbol,
+             :salary_currency
+
+  def report_exhibit
+    exhibit(object)
+  end
 end
