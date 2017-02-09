@@ -1,6 +1,8 @@
 class ActivityCommentSerializer < ApplicationSerializer
   include DisplayCase::ExhibitsHelper
 
+  type :comments
+
   attributes :body, :person_name
 
   belongs_to :person

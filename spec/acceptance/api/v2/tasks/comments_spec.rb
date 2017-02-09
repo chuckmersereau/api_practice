@@ -5,7 +5,7 @@ resource 'Task Comments' do
   include_context :json_headers
 
   let!(:user) { create(:user_with_full_account) }
-  let(:resource_type) { 'activity_comments' }
+  let(:resource_type) { :comments }
 
   let(:task)    { create(:task, account_list: user.account_lists.first) }
   let(:task_id) { task.uuid }
@@ -16,7 +16,8 @@ resource 'Task Comments' do
   let(:new_comment) do
     build(:activity_comment, activity: task).attributes.with_indifferent_access.merge(updated_in_db_at: comment.updated_at, task_id: task_id).except(:activity_id)
   end
-  let(:form_data) { build_data(new_comment.except(:person_id, :task_id)) }
+
+  let(:form_data) { build_data(new_comment.slice(*ActivityComment::PERMITTED_ATTRIBUTES)) }
 
   let(:expected_attribute_keys) do
     %w(

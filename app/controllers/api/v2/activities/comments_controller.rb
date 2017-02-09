@@ -92,7 +92,7 @@ class Api::V2::Activities::CommentsController < Api::V2Controller
   end
 
   def comment_params
-    params.require(:activity_comment)
+    params.require(:comment)
           .permit(ActivityComment::PERMITTED_ATTRIBUTES)
   end
 
