@@ -12,7 +12,6 @@ describe ActivitySerializer do
   it { should include :completed }
   it { should include :completed_at }
   it { should include :created_at }
-  it { should include :due_date }
   it { should include :next_action }
   it { should include :no_date }
   it { should include :result }

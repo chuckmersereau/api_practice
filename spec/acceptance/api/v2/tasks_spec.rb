@@ -33,7 +33,6 @@ resource 'Tasks' do
       completed
       completed_at
       created_at
-      due_date
       next_action
       no_date
       result
