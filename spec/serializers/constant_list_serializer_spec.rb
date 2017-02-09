@@ -14,10 +14,6 @@ describe ConstantListSerializer do
     end
   end
 
-  context '#currencies' do
-    it { expect(subject.currencies).to be_a_hash_with_types String, String }
-  end
-
   context '#organizations' do
     before { 5.times { create(:organization) } }
     it { expect(subject.organizations).to be_a_hash_with_types String, String }

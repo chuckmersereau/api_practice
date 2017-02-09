@@ -26,7 +26,6 @@ resource 'Constants' do
       let(:expected_attribute_keys) do
         %w(
           activities
-          currencies
           locales
           notifications
           organizations
@@ -44,12 +43,6 @@ resource 'Constants' do
 
         resource_object['activities'].each do |activity|
           expect(activity).to be_a(String)
-        end
-
-        resource_object['currencies'].each do |currency|
-          expect(currency.size).to eq 2
-          expect(currency.first).to be_a(String)
-          expect(currency.second).to be_a(String)
         end
 
         resource_object['locales'].each do |currency|

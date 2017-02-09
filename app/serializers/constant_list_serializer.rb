@@ -9,11 +9,7 @@ class ConstantListSerializer < ActiveModel::Serializer
   attributes :activities, :assignable_likely_to_give,
              :assignable_send_newsletter, :pledge_currencies,
              :pledge_frequencies, :statuses, :locales, :notifications,
-             :organizations, :currencies
-
-  def currencies
-    constants_exhibit.currency_code_symbol_map
-  end
+             :organizations
 
   def locales
     constants_exhibit.locale_name_map

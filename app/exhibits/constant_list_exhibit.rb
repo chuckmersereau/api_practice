@@ -5,12 +5,6 @@ class ConstantListExhibit < DisplayCase::Exhibit
     object.class.name == 'ConstantList'
   end
 
-  def currency_code_symbol_map
-    Hash[
-      codes.map { |code| [code, currency_code_and_symbol(code)] }
-    ]
-  end
-
   def locale_name_map
     Hash[
       locales.map { |name, code| [code, locale_display_name(name, code)] }

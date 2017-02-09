@@ -12,10 +12,6 @@ describe ConstantListExhibit do
     end
   end
 
-  context '#currency_code_symbol_map' do
-    it { expect(subject.currency_code_symbol_map).to be_a_hash_with_types String, String }
-  end
-
   context '#locale_name_map' do
     it { expect(subject.locale_name_map).to be_a_hash_with_types Symbol, String }
 
