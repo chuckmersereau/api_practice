@@ -1,7 +1,10 @@
 class AccountListSerializer < ServiceSerializer
-  attributes :name,
+  attributes :default_currency,
              :default_organization_id,
+             :home_country,
              :monthly_goal,
+             :name,
+             :tester,
              :total_pledges
 
   has_many :notification_preferences

@@ -22,9 +22,12 @@ resource 'Account Lists' do
   let(:resource_attributes) do
     %w(
       created_at
+      default_currency
       default_organization_id
+      home_country
       monthly_goal
       name
+      tester
       total_pledges
       updated_at
       updated_in_db_at
