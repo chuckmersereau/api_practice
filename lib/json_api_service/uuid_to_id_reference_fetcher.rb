@@ -67,6 +67,8 @@ module JsonApiService
     end
 
     def pull_uuids_from_data_object(object, uuids)
+      return unless object
+
       resource_type = object.fetch(:type)
       uuid          = object.dig(:id)
 
@@ -95,13 +97,14 @@ module JsonApiService
 
     def pull_uuids_from_data_objects_array(objects_array, uuids)
       objects_array.each do |data_object|
-        pull_uuids_from_data_object(data_object, uuids)
+        pull_uuids_from_data_object(data_object, uuids) if data_object
       end
     end
 
     def pull_uuids_from_relationships(relationships, uuids)
       relationships.each do |_reference, relationships_object|
         data_object = relationships_object.dig(:data)
+        next unless data_object
 
         if data_object.is_a? Array
           pull_uuids_from_data_objects_array(data_object, uuids)
