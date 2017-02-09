@@ -70,13 +70,13 @@ class ConstantList < ActiveModelSerializers::Model
 
   def notifications_hash
     Hash[
-      NotificationType.all.map { |nt| [nt.id, nt.description] }
+      NotificationType.all.map { |nt| [nt.uuid, nt.description] }
     ]
   end
 
   def organizations_hash
     Hash[
-      Organization.active.all.map { |org| [org.id, org.name] }
+      Organization.active.all.map { |org| [org.uuid, org.name] }
     ]
   end
 end

@@ -34,12 +34,12 @@ RSpec.describe ConstantList, type: :model do
   context '#notifications' do
     before { create :notification_type }
 
-    it { expect(subject.notifications).to be_a_hash_with_types Fixnum, String }
+    it { expect(subject.notifications).to be_a_hash_with_types String, String }
   end
 
   context '#organizations' do
     before { 5.times { create(:organization) } }
-    it { expect(subject.organizations).to be_a_hash_with_types Fixnum, String }
+    it { expect(subject.organizations).to be_a_hash_with_types String, String }
   end
 
   context '#assignable_locations' do
