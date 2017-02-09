@@ -14,16 +14,16 @@ resource 'User / Authenticate' do
   end
 
   post '/api/v2/user/authenticate' do
-    with_options scope: :data do
+    with_options scope: [:data, :attributes] do
       parameter 'cas_ticket',          'A valid CAS Ticket from The Key or Relay', type: 'String'
       response_field 'json_web_token', 'JSON Web Token',                           type: 'String'
     end
 
     example 'Authenticate [CREATE]', document: :user do
       explanation 'Create a JSON Web Token from a provided valid CAS Ticket'
-      do_request data: { cas_ticket: 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a' }
+      do_request data: { type: 'authenticate', attributes: { cas_ticket: 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a' } }
       expect(response_status).to eq(200)
-      expect(JsonWebToken.decode(JSON.parse(response_body)['data']['json_web_token'])['user_id']).to eq(user.id)
+      expect(JsonWebToken.decode(JSON.parse(response_body)['data']['attributes']['json_web_token'])['user_id']).to eq(user.id)
     end
   end
 end

@@ -5,8 +5,7 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
   def create
     require_cas_ticket
     validate_cas_ticket
-    load_user
-    render_json_web_token
+    render_authenticate
   end
 
   private
@@ -14,7 +13,7 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
   def require_cas_ticket
     raise ActionController::ParameterMissing if cas_ticket_param.blank?
   rescue ActionController::ParameterMissing
-    raise(Exceptions::BadRequestError, 'Expected a cas_ticket in the json body, like {"data":{"cas_ticket":"..."}}')
+    raise Exceptions::BadRequestError, 'Expected a cas_ticket to be provided in the attributes'
   end
 
   def validate_cas_ticket
@@ -35,12 +34,16 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
     @user
   end
 
-  def json_web_token
-    JsonWebToken.encode(user_id: load_user.id)
+  def build_authenticate
+    @authenticate ||= User::Authenticate.new(authenticate_params)
+  end
+
+  def authenticate_params
+    { user: load_user }
   end
 
   def cas_ticket_param
-    params.require(:data)[:cas_ticket]
+    params.require('data').require('attributes')['cas_ticket']
   end
 
   # The service should be a predetermined service URL for the MPDX API.
@@ -51,8 +54,8 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
     [request.base_url, request.path].join
   end
 
-  def render_json_web_token
-    render json: { data: { json_web_token: json_web_token } },
+  def render_authenticate
+    render json: build_authenticate,
            status: :ok
   end
 end
