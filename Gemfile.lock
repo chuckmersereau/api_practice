@@ -189,6 +189,7 @@ GEM
       nokogiri (>= 1.4.3)
     erubis (2.7.0)
     excon (0.54.0)
+    execjs (2.7.0)
     extlib (0.9.16)
     factory_girl (4.5.0)
       activesupport (>= 3.0.0)
@@ -675,6 +676,8 @@ GEM
       tzinfo
     tzinfo (1.2.2)
       thread_safe (~> 0.1)
+    uglifier (3.0.1)
+      execjs (>= 0.3.0, < 3)
     unicode-display_width (1.1.1)
     user_agent_decoder (0.0.9)
     uuidtools (2.1.5)
@@ -814,6 +817,7 @@ DEPENDENCIES
   syslog-logger (~> 1.6.8)
   test_after_commit
   twitter_cldr (~> 2.4.0)
+  uglifier
   user_agent_decoder (~> 0.0.9)
   versionist (~> 1.2.1)
   virtus (~> 1.0.5)

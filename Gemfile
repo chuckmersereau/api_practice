@@ -72,6 +72,7 @@ gem 'snail', '~> 2.2.1'
 gem 'syslog-logger', '~> 1.6.8'
 gem 'twitter_cldr', '~> 2.4.0'
 gem 'user_agent_decoder', '~> 0.0.9'
+gem 'uglifier'
 gem 'versionist', '~> 1.2.1'
 gem 'virtus', '~> 1.0.5'
 
