@@ -1,1 +1,6 @@
-GraphiQL::Rails.config.headers['Authorization'] = -> (bearer) { "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJ1c2VyX2lkIjoyfQ.n81TMVCYwX6SiVROgyfMcJ0wr6h8gFNf-89SXRDQYOc" }
+GraphiQL::Rails.config.headers['Authorization'] = -> (bearer) do
+  if User.exists?
+    user = User.find_by(id: 2) || User.first
+    return JsonWebToken.encode(user_id: user.id)
+  end
+end

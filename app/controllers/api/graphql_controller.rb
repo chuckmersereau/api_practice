@@ -1,5 +1,7 @@
 class Api::GraphqlController < ApplicationController
   include JsonWebTokenAuthentication
+  rescue_from Exceptions::AuthenticationError, with: :render_401_from_exception
+  rescue_from Exceptions::BadRequestError,     with: :render_400_from_exception
 
   before_action :jwt_authorize!
 
