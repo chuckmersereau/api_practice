@@ -61,8 +61,10 @@ resource 'Appeals' do
     before { api_login(user) }
 
     get '/api/v2/appeals' do
-      parameter 'account_list_id', 'Account List ID', scope: :filters
-      response_field :data,        'Data', 'Type' => 'Array[Object]'
+      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID',  required: false,  scope: :filters
+      parameter 'filters[excluded]',        'Filter by excluded Contacts',                      required: true,   scope: :filters
+
+      response_field :data, 'Array of Appeals', 'Type' => 'Array[Object]'
 
       example 'Appeal [LIST]', document: :entities do
         explanation 'List of Appeals'
@@ -73,8 +75,6 @@ resource 'Appeals' do
     end
 
     get '/api/v2/appeals/:id' do
-      parameter 'account_list_id', 'Account List ID', scope: :filters
-      parameter 'excluded',        'Show excluded contacts', required: true, scope: :filters
       with_options scope: [:data, :attributes] do
         response_field 'amount',          'Amount',            'Type' => 'Number'
         response_field 'contacts',        'Contacts',          'Type' => 'Array[Contact]'
