@@ -1,10 +1,13 @@
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
+require 'doc_auth_constraint'
 
 UUID_REGEX = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.freeze
 
 Rails.application.routes.draw do
   namespace :api do
+    post :graphql, to: 'graphql#create'
+
     api_version(module: 'V2', path: { value: 'v2' }) do
       constraints(id: UUID_REGEX) do
         resources :account_lists, only: [:index, :show, :update] do
@@ -144,4 +147,12 @@ Rails.application.routes.draw do
 
   get  'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post 'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
+
+  namespace :docs do
+    get :login, to: "auth#login"
+
+    constraints DocAuthConstraint do
+      mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/graphql"
+    end
+  end
 end

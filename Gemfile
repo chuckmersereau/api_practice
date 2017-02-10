@@ -33,6 +33,7 @@ gem 'gmail', git: 'https://github.com/gmailgem/gmail.git'
 gem 'google-api-client', '~> 0.7.1'
 gem 'google_contacts_api', git: 'https://github.com/CruGlobal/google_contacts_api'
 gem 'google_timezone', '~> 0.0.5'
+gem 'graphql', '~> 1.4.2'
 gem 'iniparse', '~> 1.1.6'
 gem 'jwt', '~> 1.5.6'
 gem 'kaminari', '~> 0.16.3'
@@ -127,6 +128,8 @@ end
 group :doc do
   gem 'sdoc', '~> 0.4.0'
 end
+
+gem 'graphiql-rails'
 
 # add this at the end so it plays nice with pry
 gem 'marco-polo', '~> 1.2.1'

@@ -5,6 +5,7 @@ require 'active_record/railtie'
 require 'action_controller/railtie'
 require 'action_mailer/railtie'
 require 'action_view/railtie'
+require "sprockets/railtie"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -35,7 +36,7 @@ module Mpdx
     config.log_formatter = ::Logger::Formatter.new
 
     config.assets.enabled = false
-    config.api_only = true
+    config.api_only = false
 
     config.generators do |g|
       g.assets false

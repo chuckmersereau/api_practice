@@ -11,6 +11,7 @@ AllCops:
     - 'node_modules/**/*'
     - 'vendor/**/*'
     - 'tmp/**/*'
+    - 'app/graph/**/*'
 
   UseCache: true
   CacheRootDirectory: 'cache/'
