@@ -40,16 +40,12 @@ class ConstantList < ActiveModelSerializers::Model
     @organizations ||= organizations_hash
   end
 
-  def bulk_update_options
-    Contact.bulk_update_options(current_account_list)
-  end
-
   def next_actions
-    Task.all_next_action_options
+    @next_actions ||= dup_hash_of_arrays(Task.all_next_action_options.dup)
   end
 
   def results
-    Task.all_result_options
+    @results ||= dup_hash_of_arrays(Task.all_result_options.dup)
   end
 
   private
@@ -78,5 +74,12 @@ class ConstantList < ActiveModelSerializers::Model
     Hash[
       Organization.active.all.map { |org| [org.uuid, org.name] }
     ]
+  end
+
+  # For some reason, ActiveModelSerializer tries to somehow modify the elements
+  # that it serializes. If an array being serialized has been frozen, a "can't
+  # modify frozen Array" error will be raised.
+  def dup_hash_of_arrays(hash)
+    Hash[hash.map { |k, v| [k, v.dup] }]
   end
 end

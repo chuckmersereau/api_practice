@@ -24,4 +24,15 @@ class ConstantListExhibit < DisplayCase::Exhibit
   def locale_display_name(name, code)
     format '%s (%s)', name, code
   end
+
+  def bulk_update_options
+    {}.tap do |options|
+      options['likely_to_give'] = assignable_likely_to_give.dup
+      options['status'] = assignable_statuses.dup
+      options['send_newsletter'] = assignable_send_newsletter.dup
+      options['pledge_received'] = %w(Yes No)
+      options['pledge_currency'] = pledge_currencies_code_symbol_map
+      options['locale'] = mail_chimp_locale_options.dup
+    end
+  end
 end

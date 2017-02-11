@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe ConstantListSerializer do
-  subject { ConstantListSerializer.new(constant_list) }
+  let(:serializer) { ConstantListSerializer.new(constant_list) }
+  subject { serializer }
   let(:constant_list) { ConstantList.new }
 
   context '#activities' do
@@ -56,5 +57,24 @@ describe ConstantListSerializer do
         end
       end
     end
+  end
+
+  context '#as_json' do
+    subject { serializer.as_json }
+
+    it { should include :activities }
+    it { should include :assignable_likely_to_give }
+    it { should include :assignable_locations }
+    it { should include :assignable_send_newsletter }
+    it { should include :assignable_statuses }
+    it { should include :bulk_update_options }
+    it { should include :locales }
+    it { should include :next_actions }
+    it { should include :notifications }
+    it { should include :organizations }
+    it { should include :pledge_currencies }
+    it { should include :pledge_frequencies }
+    it { should include :results }
+    it { should include :statuses }
   end
 end

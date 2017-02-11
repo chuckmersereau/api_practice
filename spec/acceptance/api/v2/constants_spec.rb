@@ -26,11 +26,16 @@ resource 'Constants' do
       let(:expected_attribute_keys) do
         %w(
           activities
+          assignable_locations
+          assignable_statuses
+          bulk_update_options
           locales
+          next_actions
           notifications
           organizations
           pledge_currencies
           pledge_frequencies
+          results
         ) + contact_attribute_keys
       end
 

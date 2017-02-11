@@ -45,4 +45,12 @@ describe ConstantListExhibit do
       expect(subject.locale_display_name('Thai', :th)).to eq 'Thai (th)'
     end
   end
+
+  context '#bulk_update_options' do
+    let(:opts) { subject.bulk_update_options }
+
+    it { expect(opts['likely_to_give']).to eq subject.assignable_likely_to_give }
+    it { expect(opts['status']).to eq subject.assignable_statuses }
+    it { expect(opts['send_newsletter']).to eq subject.assignable_send_newsletter }
+  end
 end
