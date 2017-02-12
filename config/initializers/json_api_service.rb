@@ -10,6 +10,9 @@ JsonApiService.configure do |config|
   }
 
   config.ignored_foreign_keys = {
+    account_lists: [
+      :default_organization_id
+    ],
     donations: [
       :remote_id
     ],

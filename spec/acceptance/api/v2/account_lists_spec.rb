@@ -22,6 +22,7 @@ resource 'Account Lists' do
   let(:resource_attributes) do
     %w(
       created_at
+      currency
       default_currency
       default_organization_id
       home_country

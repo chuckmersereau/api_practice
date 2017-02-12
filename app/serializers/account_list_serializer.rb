@@ -1,5 +1,6 @@
-class AccountListSerializer < ServiceSerializer
-  attributes :default_currency,
+class AccountListSerializer < ApplicationSerializer
+  attributes :currency,
+             :default_currency,
              :default_organization_id,
              :home_country,
              :monthly_goal,

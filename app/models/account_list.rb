@@ -70,12 +70,19 @@ class AccountList < ApplicationRecord
     joins(:organization_accounts).where('locked_at is null').order('last_download asc')
   }
 
-  PERMITTED_ATTRIBUTES = [:created_at,
-                          :name,
-                          :settings,
-                          :updated_at,
-                          :updated_in_db_at,
-                          :uuid].freeze
+  PERMITTED_ATTRIBUTES = [
+    :created_at,
+    :currency,
+    :default_organization_id,
+    :home_country,
+    :monthly_goal,
+    :name,
+    :settings,
+    :tester,
+    :updated_at,
+    :updated_in_db_at,
+    :uuid
+  ].freeze
 
   def salary_organization_id=(val)
     settings[:salary_organization_id] = val
