@@ -59,7 +59,7 @@ class Api::V2::User::OptionsController < Api::V2Controller
   end
 
   def load_option
-    @option ||= ::User::Option.find_by!(key: params[:id])
+    @option ||= option_scope.find_by!(key: params[:id])
   end
 
   def load_options
