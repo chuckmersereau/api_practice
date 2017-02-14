@@ -18,6 +18,9 @@ resource 'People' do
                                       .reject { |key| key.to_s.end_with?('_id') }
                                       .merge(updated_in_db_at: contact.updated_at)
   end
+
+  let(:relationship_person) { create(:person) }
+
   let(:form_data) { build_data(new_resource) }
 
   let(:resource_attributes) do
@@ -52,7 +55,75 @@ resource 'People' do
       master_person
       phone_numbers
       twitter_accounts
-      websites)
+      websites
+    )
+  end
+
+  let(:nested_family_relationship_data) do
+    {
+      included: [
+        {
+          attributes: {
+            relationship: 'Nephew'
+          },
+          relationships: {
+            related_person: {
+              data: {
+                type: 'people',
+                id: relationship_person.uuid
+              }
+            }
+          },
+          type: 'family_relationships',
+          id: 'ce1e9746-2b34-4d3d-9357-292a950e681a'
+        }
+      ],
+      data: {
+        relationships: {
+          linkedin_accounts: {
+            data: nil
+          },
+          facebook_accounts: {
+            data: nil
+          },
+          family_relationships: {
+            data: [
+              {
+                type: 'family_relationships',
+                id: 'ce1e9746-2b34-4d3d-9357-292a950e681a'
+              }
+            ]
+          },
+          websites: {
+            data: nil
+          },
+          email_addresses: {
+            data: nil
+          }
+        },
+        attributes: {
+          birthday_year: nil,
+          first_name: 'new',
+          last_name: 'person',
+          middle_name: nil,
+          suffix: nil,
+          title: nil,
+          gender: 'female',
+          created_at: resource.created_at,
+          marital_status: 'Married',
+          updated_at: resource.updated_at,
+          anniversary_day: nil,
+          anniversary_month: nil,
+          birthday_day: nil,
+          updated_in_db_at: resource.updated_at,
+          anniversary_year: nil,
+          birthday_month: nil,
+          deceased: false
+        },
+        type: 'people',
+        id: resource.uuid
+      }
+    }
   end
 
   context 'authorized user' do
@@ -233,6 +304,18 @@ resource 'People' do
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
         expect(response_status).to eq(200)
+      end
+    end
+
+    put '/api/v2/contacts/:contact_id/people/:id' do
+      example 'Person Nested Family Relationships', document: :private do
+        explanation 'Create a family relationship for the person'
+        expect(resource.family_relationships).to be_empty
+
+        do_request nested_family_relationship_data
+
+        expect(response_status).to eq(200), invalid_status_detail
+        expect(resource.reload.family_relationships).not_to be_empty
       end
     end
 

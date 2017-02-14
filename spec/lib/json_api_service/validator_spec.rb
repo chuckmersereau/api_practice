@@ -485,6 +485,77 @@ module JsonApiService
       end
     end
 
+    context 'with invalid includes' do
+      let(:controller) { double(:controller, resource_type: 'contacts') }
+
+      context 'with a missing type' do
+        let(:params) do
+          params = {
+            included: [
+              {
+                type: 'comments',
+                id: 'uuid-comments-1'
+              },
+              {
+                type: nil, # missing
+                id: 'uuid-missing-type'
+              }
+            ],
+            data: {
+              type: 'contacts',
+              id: 'uuid-contacts-1'
+            },
+            action: 'create'
+          }
+
+          build_params_with(params)
+        end
+
+        it 'raises an error' do
+          message = missing_type_error('/included/1/type')
+
+          expect { validator.validate! }
+            .to raise_error(MissingTypeError)
+            .with_message(message)
+        end
+      end
+
+      context 'with a foreign key' do
+        let(:params) do
+          params = {
+            included: [
+              {
+                type: 'comments',
+                id: 'uuid-comments-1'
+              },
+              {
+                type: 'addresses',
+                id: 'uuid-addresses-1',
+                attributes: {
+                  contact_id: 'uuid-contacts-1'
+                }
+              }
+            ],
+            data: {
+              type: 'contacts',
+              id: 'uuid-contacts-1'
+            },
+            action: 'create'
+          }
+
+          build_params_with(params)
+        end
+
+        it 'raises an error' do
+          message = foreign_key_error('/included/1/attributes/contact_id')
+
+          expect { validator.validate! }
+            .to raise_error(ForeignKeyPresentError)
+            .with_message(message)
+        end
+      end
+    end
+
     def foreign_key_error(pointer_ref)
       "Foreign keys SHOULD NOT be referenced in the #attributes of a JSONAPI resource object. Reference: #{pointer_ref}"
     end

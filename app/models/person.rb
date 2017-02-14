@@ -229,23 +229,37 @@ class Person < ApplicationRecord
     end
   end
 
-  def family_relationships_attributes=(hash)
-    hash = hash.with_indifferent_access
-    hash.each do |_, attributes|
-      if attributes[:id]
-        fr = family_relationships.find(attributes[:id])
-        if attributes[:_destroy] == '1' || attributes[:related_person_id].blank?
+  def family_relationships_attributes=(data_object)
+    case data_object
+    when Array
+      data_object.each { |attributes| assign_family_relationships_from_data_attributes(attributes) }
+    when Hash
+      assign_family_relationships_with_data_hash(data_object)
+    end
+  end
+
+  def assign_family_relationships_from_data_attributes(attributes)
+    if attributes[:id]
+      fr = family_relationships.find(attributes[:id])
+      if attributes[:_destroy] == '1' || attributes[:related_person_id].blank?
+        fr.destroy
+      else
+        begin
+          fr.update_attributes(attributes.except(:id, :_destroy))
+        rescue ActiveRecord::RecordNotUnique
           fr.destroy
-        else
-          begin
-            fr.update_attributes(attributes.except(:id, :_destroy))
-          rescue ActiveRecord::RecordNotUnique
-            fr.destroy
-          end
         end
-      elsif attributes[:related_person_id].present?
-        FamilyRelationship.add_for_person(self, attributes)
       end
+    elsif attributes[:related_person_id].present?
+      FamilyRelationship.add_for_person(self, attributes)
+    end
+  end
+
+  def assign_family_relationships_with_data_hash(hash)
+    hash = hash.with_indifferent_access
+
+    hash.each do |_, attributes|
+      assign_family_relationships_from_data_attributes(attributes)
     end
   end
 

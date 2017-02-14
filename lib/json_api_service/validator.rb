@@ -101,10 +101,11 @@ module JsonApiService
     end
 
     def verify_absence_of_invalid_keys_in_attributes!
-      reference_array = [:data]
-      data_object     = params.dig(:data)
+      data_object      = params.dig(:data)
+      includes_objects = params.dig(:included) || []
 
-      verify_absence_of_invalid_key_attributes_in_data_object(data_object, reference_array)
+      verify_absence_of_invalid_key_attributes_in_data_object(data_object, [:data])
+      verify_absence_of_invalid_key_attributes_in_objects_array(includes_objects, [:included])
     end
 
     def verify_absence_of_invalid_key_attributes_in_data_object(data_object, reference_array)
@@ -153,10 +154,11 @@ module JsonApiService
     end
 
     def verify_type_existence!
-      reference_array = [:data]
       data_object     = params.dig(:data) || {}
+      includes_object = params.dig(:included) || []
 
-      verify_type_existence_in_data_object(data_object, reference_array)
+      verify_type_existence_in_data_object(data_object, [:data])
+      verify_type_existence_in_objects_array(includes_object, [:included])
     end
 
     def verify_type_existence_in_data_object(data_object, reference_array)

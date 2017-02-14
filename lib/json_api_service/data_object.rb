@@ -36,13 +36,17 @@ module JsonApiService
     end
 
     def validate_against_store
-      return unless id && !id.empty?
+      return unless version_from_store
 
-      version_from_store = store[type][id]
       merge(version_from_store)
 
       relationships.validate_against_store
       store.promote(self)
+    end
+
+    def version_from_store
+      return unless id && !id.to_s.empty?
+      store[type][id]
     end
 
     private
