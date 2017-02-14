@@ -4,12 +4,33 @@ RSpec.shared_examples 'bulk_update_examples' do
   describe '#update' do
     let(:unauthorized_resource) { create(factory_type) }
     let(:bulk_update_attributes) do
-      { data: [
-        { data: { id: resource.uuid,        attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) } },
-        { data: { id: second_resource.uuid, attributes: incorrect_attributes } },
-        { data: { id: third_resource.uuid,  attributes: correct_attributes.merge(updated_in_db_at: third_resource.updated_at) } }
-      ] }
+      {
+        data: [
+          {
+            data: {
+              type: resource_type,
+              id: resource.uuid,
+              attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+            }.merge!(relationships: relationships)
+          },
+          {
+            data: {
+              type: resource_type,
+              id: second_resource.uuid,
+              attributes: incorrect_attributes
+            }.merge!(relationships: relationships)
+          },
+          {
+            data: {
+              type: resource_type,
+              id: third_resource.uuid,
+              attributes: correct_attributes.merge(updated_in_db_at: third_resource.updated_at)
+            }.merge!(relationships: relationships)
+          }
+        ]
+      }
     end
+
     let(:response_body) { JSON.parse(response.body) }
     let(:response_errors) { response_body['errors'] }
 
@@ -45,7 +66,7 @@ RSpec.shared_examples 'bulk_update_examples' do
 
     context 'resources forbidden' do
       it 'does not update resources that do not belong to current user' do
-        put :update, data: [{ data: { id: unauthorized_resource.uuid, attributes: { reference_key => reference_value } } }]
+        put :update, data: [{ data: { type: resource_type, id: unauthorized_resource.uuid, attributes: { reference_key => reference_value } } }]
         expect(unauthorized_resource.reload.send(reference_key)).to_not eq(reference_value)
         expect(response.status).to eq(404), invalid_status_detail
         expect(response_errors.size).to eq(1)
@@ -63,7 +84,7 @@ RSpec.shared_examples 'bulk_update_examples' do
     context 'resources not found' do
       it 'responds correctly if all resources are not found' do
         expect do
-          put :update, data: [{ data: { id: SecureRandom.uuid } }]
+          put :update, data: [{ data: { type: resource_type, id: SecureRandom.uuid } }]
         end.not_to change { resource.class.order(:updated_at).last.updated_at }
         expect(response.status).to eq(404), invalid_status_detail
         expect(response_body['errors']).to be_present
@@ -71,7 +92,7 @@ RSpec.shared_examples 'bulk_update_examples' do
       end
 
       it 'responds correctly if only some resources are not found' do
-        bulk_update_attributes[:data] << { data: { id: SecureRandom.uuid } }
+        bulk_update_attributes[:data] << { data: { type: resource_type, id: SecureRandom.uuid } }
         expect do
           put :update, data: bulk_update_attributes[:data]
         end.to change { resource.class.order(:updated_at).last.updated_at }
@@ -82,11 +103,31 @@ RSpec.shared_examples 'bulk_update_examples' do
 
     context 'request mixes resources that do belong to and do not belong to the current user' do
       let!(:bulk_update_attributes) do
-        { data: [
-          { data: { id: resource.uuid,              attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) } },
-          { data: { id: second_resource.uuid,       attributes: incorrect_attributes } },
-          { data: { id: unauthorized_resource.uuid, attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at) } }
-        ] }
+        {
+          data: [
+            {
+              data: {
+                type: resource_type,
+                id: resource.uuid,
+                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+              }
+            },
+            {
+              data: {
+                type: resource_type,
+                id: second_resource.uuid,
+                attributes: incorrect_attributes
+              }
+            },
+            {
+              data: {
+                type: resource_type,
+                id: unauthorized_resource.uuid,
+                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+              }
+            }
+          ]
+        }
       end
 
       it 'still updates some resources' do

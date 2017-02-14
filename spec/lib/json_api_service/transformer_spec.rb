@@ -43,7 +43,7 @@ module JsonApiService
       end
 
       context 'WITHOUT an ActionController::Parameters object' do
-        let(:params) { 'not a params object' }
+        let(:params) { { hi: "I'm not an ActionController::Parameters object" } }
 
         it 'raises an ArgumentError' do
           expect { build_transformer(params: params) }
@@ -54,7 +54,7 @@ module JsonApiService
     end
 
     describe '#create?' do
-      context "when the controller action is 'create'" do
+      context 'when the controller action is "create"' do
         let(:params) do
           params = {
             action: 'create'
@@ -366,8 +366,7 @@ module JsonApiService
                   data: [
                     {
                       id: 'addresses-uuid-abc123',
-                      type: 'mock_addresses',
-                      attributes: {
+                      type: 'mock_addresses', attributes: {
                         location: 'Home',
                         city: 'Fremont',
                         street: '123 Somewhere St',
@@ -402,8 +401,8 @@ module JsonApiService
           expected_hash = {
             mock_contact: {
               name: 'Steve Rogers',
-              mock_addresses_attributes: {
-                0 => {
+              mock_addresses_attributes: [
+                {
                   location: 'Home',
                   city: 'Fremont',
                   street: '123 Somewhere St',
@@ -411,7 +410,7 @@ module JsonApiService
                   country: 'United States',
                   uuid: 'addresses-uuid-abc123'
                 },
-                1 => {
+                {
                   location: 'Work',
                   city: 'Orlando',
                   street: '100 Lake Hart Drive',
@@ -419,7 +418,7 @@ module JsonApiService
                   country: 'United States',
                   uuid: 'addresses-uuid-def456'
                 }
-              }
+              ]
             },
             action: 'create'
           }
@@ -474,23 +473,126 @@ module JsonApiService
           expected_hash = {
             mock_contact: {
               name: 'Steve Rogers',
-              mock_people_attributes: {
-                0 => {
+              mock_people_attributes: [
+                {
                   first_name: 'Steve',
                   last_name: 'Rogers',
-                  mock_email_addresses_attributes: {
-                    0 => {
+                  mock_email_addresses_attributes: [
+                    {
                       email: 'ca@avengers.co'
                     }
-                  }
+                  ]
                 }
-              }
+              ]
             },
             action: 'create'
           }
 
           expect(transformer.transform).to eq build_params_with(expected_hash)
         end
+      end
+    end
+
+    describe 'with includes and relationships' do
+      let(:params) do
+        params = {
+          included: [
+            {
+              type: 'mock_people',
+              id: '10e9f7f5-b027-4e04-8192-b9b698ac0b18',
+              attributes: {
+                first_name: 'Mike'
+              }
+            },
+            {
+              type: 'mock_comments',
+              id: '91374910-ef15-11e6-8787-ef17a057947e',
+              attributes: {
+                body: 'I love Orange Soda'
+              },
+              relationships: {
+                mock_person: {
+                  data: {
+                    type: 'mock_people',
+                    id: '10e9f7f5-b027-4e04-8192-b9b698ac0b18'
+                  }
+                }
+              }
+            }
+          ],
+          data: {
+            type: 'mock_tasks',
+            attributes: {
+              activity_type: 'Appointment',
+              start_at: '2017-02-09T22:17:28.854Z',
+              no_date: true,
+              subject: 'An appointment to talk about Orange Soda'
+            },
+            relationships: {
+              mock_account_list: {
+                data: {
+                  type: 'mock_account_lists',
+                  id: '144b83e8-b7f6-48c8-9c0e-688785bf6164'
+                }
+              },
+              mock_comments: {
+                data: [
+                  {
+                    type: 'mock_comments',
+                    id: '91374910-ef15-11e6-8787-ef17a057947e'
+                  }
+                ]
+              }
+            }
+          },
+          action: 'create'
+        }
+
+        build_params_with(params)
+      end
+
+      let(:transformer) { build_transformer(params: params) }
+
+      before do
+        mock_uuid_reference(
+          from: '10e9f7f5-b027-4e04-8192-b9b698ac0b18',
+          to: 20,
+          resource: MockPerson
+        )
+
+        mock_uuid_reference(
+          from: '144b83e8-b7f6-48c8-9c0e-688785bf6164',
+          to: 25,
+          resource: MockAccountList
+        )
+
+        mock_uuid_reference(
+          from: '91374910-ef15-11e6-8787-ef17a057947e',
+          to: 30,
+          resource: MockComment
+        )
+      end
+
+      it 'correctly transforms the values' do
+        expected_hash = {
+          mock_task: {
+            activity_type: 'Appointment',
+            start_at: '2017-02-09T22:17:28.854Z',
+            no_date: true,
+            subject: 'An appointment to talk about Orange Soda',
+            mock_account_list_id: 25,
+            mock_comments_attributes: [
+              {
+                body: 'I love Orange Soda',
+                uuid: '91374910-ef15-11e6-8787-ef17a057947e',
+                mock_person_id: 20
+              }
+            ]
+          },
+          action: 'create'
+        }
+
+        expect(transformer.transform).to eq build_params_with(expected_hash)
       end
     end
 

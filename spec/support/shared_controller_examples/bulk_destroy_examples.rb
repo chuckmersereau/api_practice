@@ -3,7 +3,22 @@ RSpec.shared_examples 'bulk_destroy_examples' do
 
   describe '#destroy' do
     let!(:bulk_destroy_attributes) do
-      { data: [{ data: { id: resource.uuid } }, { data: { id: second_resource.uuid } }] }
+      {
+        data: [
+          {
+            data: {
+              type: resource_type,
+              id: resource.uuid
+            }
+          },
+          {
+            data: {
+              type: resource_type,
+              id: second_resource.uuid
+            }
+          }
+        ]
+      }
     end
 
     let(:response_body) { JSON.parse(response.body) }
@@ -58,7 +73,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
       it 'responds correctly if all resources are not found' do
         api_login(user)
         expect do
-          delete :destroy, data: [{ data: { id: SecureRandom.uuid } }]
+          delete :destroy, data: [{ data: { type: resource_type, id: SecureRandom.uuid } }]
         end.not_to change { resource.class.count }
         expect(response.status).to eq(404), invalid_status_detail
         expect(response_body['errors']).to be_present
@@ -67,7 +82,7 @@ RSpec.shared_examples 'bulk_destroy_examples' do
 
       it 'responds correctly if only some resources are not found' do
         api_login(user)
-        bulk_destroy_attributes[:data] << { data: { id: SecureRandom.uuid } }
+        bulk_destroy_attributes[:data] << { data: { type: resource_type, id: SecureRandom.uuid } }
         expect do
           delete :destroy, data: bulk_destroy_attributes[:data]
         end.to change { resource_not_destroyed_scope.count }.by(-2)
@@ -78,7 +93,12 @@ RSpec.shared_examples 'bulk_destroy_examples' do
 
     context 'request mixes resources that do belong to and do not belong to the current user' do
       let!(:bulk_destroy_attributes) do
-        { data: [{ data: { id: resource.uuid } }, { data: { id: create(factory_type).uuid } }] }
+        {
+          data: [
+            { data: { id: resource.uuid, type: resource_type } },
+            { data: { id: create(factory_type).uuid, type: resource_type } }
+          ]
+        }
       end
 
       it 'still destroys some resources' do

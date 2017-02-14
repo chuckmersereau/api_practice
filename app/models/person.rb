@@ -42,7 +42,7 @@ class Person < ApplicationRecord
   has_many :account_lists, through: :contacts
   has_many :pictures, as: :picture_of, dependent: :destroy
   has_one :primary_picture, -> { where(primary: true) }, as: :picture_of, class_name: 'Picture'
-  has_many :activity_comments, dependent: :destroy
+  has_many :comments, dependent: :destroy, class_name: 'ActivityComment'
   has_many :messages_sent, class_name: 'Message', foreign_key: :from_id, dependent: :destroy
   has_many :messages_received, class_name: 'Message', foreign_key: :to_id, dependent: :destroy
   has_many :google_contacts, autosave: true

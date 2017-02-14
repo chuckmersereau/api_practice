@@ -2,6 +2,7 @@ require 'json_api_service'
 
 JsonApiService.configure do |config|
   config.custom_references = {
+    comments: 'ActivityComment',
     facebook_accounts: 'Person::FacebookAccount',
     google_accounts: 'Person::GoogleAccount',
     key_accounts: 'Person::KeyAccount',

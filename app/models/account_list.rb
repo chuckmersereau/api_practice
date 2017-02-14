@@ -73,7 +73,6 @@ class AccountList < ApplicationRecord
   PERMITTED_ATTRIBUTES = [
     :created_at,
     :currency,
-    :default_organization_id,
     :home_country,
     :monthly_goal,
     :name,

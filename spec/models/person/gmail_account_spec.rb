@@ -148,7 +148,7 @@ describe Person::GmailAccount do
       expect do
         gmail_account.log_email(mock_gmail_message("\0null\0!"), account_list, contact, person, 'Done')
       end.to change(Task, :count).by(1)
-      expect(Task.last.activity_comments.first.body).to eq 'null!'
+      expect(Task.last.comments.first.body).to eq 'null!'
     end
   end
 end

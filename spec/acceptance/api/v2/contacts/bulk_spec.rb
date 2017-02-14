@@ -20,7 +20,10 @@ resource 'Contacts Bulk' do
 
       example 'Contact [DELETE] [BULK]', document: :entities do
         explanation 'Bulk delete Contacts with the given IDs'
-        do_request data: [{ data: { id: contact_one.uuid } }, { data: { id: contact_two.uuid } }]
+        do_request data: [
+          { data: { type: resource_type, id: contact_one.uuid } },
+          { data: { type: resource_type, id: contact_two.uuid } }
+        ]
         expect(response_status).to eq(200)
         expect(json_response.size).to eq(2)
         expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([contact_one.uuid, contact_two.uuid])

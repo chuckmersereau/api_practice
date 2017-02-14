@@ -92,7 +92,7 @@ class Person::GmailAccount
                                  remote_id: gmail_message.envelope.message_id,
                                  source: 'gmail')
 
-    task.activity_comments.create!(body: message, person: person)
+    task.comments.create!(body: message, person: person)
     google_email.activities << task
     google_email.save!
     task

@@ -80,7 +80,7 @@ class GoogleCalendarIntegrator
     attributes = {
       summary: task.subject_with_contacts,
       location: task.location.to_s,
-      description: task.activity_comments.map(&:body).join("\n\n"),
+      description: task.comments.map(&:body).join("\n\n"),
       source: { title: 'MPDX', url: 'https://mpdx.org/tasks' }
     }
 

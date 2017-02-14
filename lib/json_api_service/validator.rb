@@ -19,8 +19,8 @@ module JsonApiService
     end
 
     def validate!
-      verify_resource_type!                         if create? || update?
-      verify_type_existence!                        if create? || update?
+      verify_resource_type!                         if create? || update? || (destroy? && data?)
+      verify_type_existence!                        if create? || update? || (destroy? && data?)
       verify_absence_of_invalid_keys_in_attributes! if create? || update?
 
       true
@@ -32,6 +32,14 @@ module JsonApiService
 
     def update?
       params.dig(:action).to_s.to_sym == :update
+    end
+
+    def destroy?
+      params.dig(:action).to_s.to_sym == :destroy
+    end
+
+    def data?
+      !params.dig(:data).nil?
     end
 
     private

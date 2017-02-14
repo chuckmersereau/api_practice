@@ -51,7 +51,7 @@ resource 'Contacts' do
   end
 
   let(:bulk_update_form_data) do
-    [{ data: { id: contact.uuid, attributes: new_contact } }]
+    [{ data: { type: resource_type, id: contact.uuid, attributes: new_contact } }]
   end
 
   let(:additional_keys) { ['relationships'] }

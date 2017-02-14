@@ -305,7 +305,7 @@ describe TntImport do
 
       import.send(:import_tasks)
 
-      expect(task.activity_comments.first.body).to eq('Notes')
+      expect(task.comments.first.body).to eq('Notes')
     end
   end
 

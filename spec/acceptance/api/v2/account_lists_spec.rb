@@ -24,7 +24,6 @@ resource 'Account Lists' do
       created_at
       currency
       default_currency
-      default_organization_id
       home_country
       monthly_goal
       name

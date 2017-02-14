@@ -20,7 +20,11 @@ resource 'Tasks Bulk' do
 
       example 'Task [DELETE] [BULK]', document: :entities do
         explanation 'Bulk delete Tasks with the given IDs'
-        do_request data: [{ data: { id: task_one.uuid } }, { data: { id: task_two.uuid } }]
+        do_request data: [
+          { data: { type: resource_type, id: task_one.uuid } },
+          { data: { type: resource_type, id: task_two.uuid } }
+        ]
+
         expect(response_status).to eq(200)
         expect(json_response.size).to eq(2)
         expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([task_one.uuid, task_two.uuid])

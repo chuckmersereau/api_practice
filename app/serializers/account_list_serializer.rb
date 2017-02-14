@@ -1,7 +1,6 @@
 class AccountListSerializer < ApplicationSerializer
   attributes :currency,
              :default_currency,
-             :default_organization_id,
              :home_country,
              :monthly_goal,
              :name,
@@ -9,9 +8,4 @@ class AccountListSerializer < ApplicationSerializer
              :total_pledges
 
   has_many :notification_preferences
-
-  def default_organization_id
-    object.designation_profiles.first.try(:organization).try(:uuid) ||
-      object.users.first.try(:organization_accounts).try(:first).try(:organization).try(:uuid)
-  end
 end

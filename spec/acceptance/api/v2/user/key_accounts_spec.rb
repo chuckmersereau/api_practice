@@ -116,7 +116,7 @@ resource 'Key Accounts' do
       example 'Key Account [DELETE]', document: :user do
         explanation 'Delete the current_user\'s Key Account with the given ID'
         do_request
-        expect(response_status).to eq 204
+        expect(response_status).to eq(204), invalid_status_detail
       end
     end
   end

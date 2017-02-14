@@ -2,6 +2,7 @@ require 'json_api_service/configuration'
 require 'json_api_service/errors'
 require 'json_api_service/validator'
 require 'json_api_service/transformer'
+require 'json_api_service/params_object'
 
 module JsonApiService
   class << self

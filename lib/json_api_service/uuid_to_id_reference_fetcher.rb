@@ -85,9 +85,9 @@ module JsonApiService
 
     def pull_uuids_from_filter_object(filter_object, uuids)
       filter_object.each do |key, value|
-        next unless key.end_with?('_id')
+        next unless key.to_s.end_with?('_id')
 
-        resource_type = key.sub('_id', '').pluralize
+        resource_type = key.to_s.sub('_id', '').pluralize
         uuids[resource_type] ||= []
         uuids[resource_type] << value
       end

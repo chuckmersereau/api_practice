@@ -8,13 +8,13 @@ class Activity < ApplicationRecord
   belongs_to :account_list
   belongs_to :notification, inverse_of: :tasks
 
-  has_many :activity_comments, dependent: :destroy
+  has_many :comments, dependent: :destroy, class_name: 'ActivityComment'
   has_many :activity_contacts, dependent: :destroy
   has_many :contacts, through: :activity_contacts
   has_many :google_email_activities, dependent: :destroy
   has_many :google_emails, through: :google_email_activities
   has_many :google_events
-  has_many :people, through: :activity_comments
+  has_many :people, through: :comments
 
   scope :completed,         -> { where(completed: true).order('completed_at desc, start_at desc') }
   scope :future,            -> { where('start_at > ?', Time.current.end_of_day).order('start_at') }
@@ -27,7 +27,7 @@ class Activity < ApplicationRecord
   scope :upcoming,          -> { where('start_at > ?', Time.current.end_of_day + 1.day).order('start_at') }
 
   accepts_nested_attributes_for :activity_contacts, allow_destroy: true
-  accepts_nested_attributes_for :activity_comments, reject_if: :all_blank
+  accepts_nested_attributes_for :comments, reject_if: :all_blank
 
   validates :subject, :start_at, presence: true
 
@@ -66,7 +66,7 @@ class Activity < ApplicationRecord
   end
 
   def activity_comment=(hash)
-    activity_comments.new(hash) if hash.values.any?(&:present?)
+    comments.new(hash) if hash.values.any?(&:present?)
   end
 
   def assignable_contacts

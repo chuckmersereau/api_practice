@@ -1,4 +1,6 @@
 class Api::V2::Contacts::BulkController < Api::V2::BulkController
+  resource_type :contacts
+
   def update
     load_contacts
     authorize_contacts
@@ -14,7 +16,7 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
   private
 
   def load_contacts
-    @contacts = contact_scope.where(uuid: contact_uuid_params).tap(&:first!)
+    @contacts = contact_scope.where(id: contact_id_params).tap(&:first!)
   end
 
   def authorize_contacts
@@ -30,8 +32,10 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
     PunditContext.new(current_user)
   end
 
-  def contact_uuid_params
-    params.require(:data).collect { |hash| hash[:data][:id] }
+  def contact_id_params
+    params
+      .require(:data)
+      .collect { |hash| hash[:contact][:id] }
   end
 
   def contact_scope
@@ -50,18 +54,23 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
 
   def build_contacts
     @contacts.each do |contact|
+      contact_index = data_attribute_index(contact)
+      attributes    = params.require(:data)[contact_index][:contact]
+
       contact.assign_attributes(
-        contact_params(params[:data][data_attribute_index(contact)][:data][:attributes])
+        contact_params(attributes)
       )
     end
   end
 
   def data_attribute_index(contact)
-    params[:data].find_index { |contact_data| contact_data[:data][:id] == contact.uuid }
+    params
+      .require(:data)
+      .find_index { |contact_data| contact_data[:contact][:id] == contact.id }
   end
 
   def contact_params(attributes)
-    attributes ||= params.require(:data).require(:attributes)
+    attributes ||= params.require(:contact)
     attributes.permit(Contact::PERMITTED_ATTRIBUTES)
   end
 

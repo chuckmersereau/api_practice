@@ -38,7 +38,7 @@ describe Activity do
       expect(
         task.update_attributes('subject' => 'zvxzcz', 'start_at(2i)' => '12', 'start_at(3i)' => '10', 'start_at(1i)' => '2013', 'start_at(4i)' => '15',
                                'start_at(5i)' => '15', 'activity_type' => 'Call', 'tag_list' => '',
-                               'activity_comments_attributes' => { '0' => { 'body' => 'asdf' } },
+                               'comments_attributes' => { '0' => { 'body' => 'asdf' } },
                                'activity_contacts_attributes' => { '0' => { 'contact_id' => '', 'id' => ac.id.to_s } })
       ).to be true
     end

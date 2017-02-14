@@ -12,7 +12,7 @@ class ActivitySerializer < ApplicationSerializer
 
   attribute :activity_comments_count, key: :comments_count
 
-  has_many :activity_comments, key: :comments, root: :comments
+  has_many :comments
   has_many :contacts
 
   belongs_to :account_list

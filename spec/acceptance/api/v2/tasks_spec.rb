@@ -14,7 +14,7 @@ resource 'Tasks' do
     build(:task)
       .attributes
       .reject { |key| key.to_s.end_with?('_id') }
-      .except('completed', 'notification_sent')
+      .except('id', 'completed', 'notification_sent')
       .merge(updated_in_db_at: task.updated_at)
   end
 
@@ -23,7 +23,15 @@ resource 'Tasks' do
   end
 
   let(:bulk_update_form_data) do
-    [{ data: { id: task.uuid, attributes: new_task } }]
+    [
+      {
+        data: {
+          type: resource_type,
+          id: task.uuid,
+          attributes: new_task
+        }
+      }
+    ]
   end
 
   let(:resource_attributes) do
@@ -184,8 +192,9 @@ resource 'Tasks' do
       example 'Task [UPDATE] [BULK]', document: :entities do
         explanation 'Bulk Update a list of Tasks with an array of objects containing the ID and updated attributes'
         do_request data: bulk_update_form_data
+
+        expect(response_status).to eq(200), invalid_status_detail
         expect(json_response.first['data']['attributes']['name']).to eq new_task['name']
-        expect(response_status).to eq 200
       end
     end
 

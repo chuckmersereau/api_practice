@@ -21,7 +21,7 @@ class TntImport::TasksImport
       }
       next unless task.save
       # Add any notes as a comment
-      task.activity_comments.create(body: row['Notes'].strip) if row['Notes'].present?
+      task.comments.create(body: row['Notes'].strip) if row['Notes'].present?
       tnt_tasks[row['id']] = task
     end
 

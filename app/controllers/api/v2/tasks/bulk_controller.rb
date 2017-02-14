@@ -1,5 +1,5 @@
-class Api::V2::Tasks::BulkController < Api::V2Controller
-  skip_before_action :validate_and_transform_json_api_params
+class Api::V2::Tasks::BulkController < Api::V2::BulkController
+  resource_type :tasks
 
   def update
     load_tasks
@@ -16,7 +16,7 @@ class Api::V2::Tasks::BulkController < Api::V2Controller
   private
 
   def load_tasks
-    @tasks = task_scope.where(uuid: task_uuid_params).tap(&:first!)
+    @tasks = task_scope.where(id: task_id_params).tap(&:first!)
   end
 
   def authorize_tasks
@@ -28,8 +28,10 @@ class Api::V2::Tasks::BulkController < Api::V2Controller
     render json: BulkResourceSerializer.new(resources: @destroyed_tasks)
   end
 
-  def task_uuid_params
-    params.require(:data).collect { |hash| hash[:data][:id] }
+  def task_id_params
+    params
+      .require(:data)
+      .collect { |hash| hash[:task][:id] }
   end
 
   def task_scope
@@ -48,18 +50,23 @@ class Api::V2::Tasks::BulkController < Api::V2Controller
 
   def build_tasks
     @tasks.each do |task|
+      task_index = data_attribute_index(task)
+      attributes = params.require(:data)[task_index][:task]
+
       task.assign_attributes(
-        task_params(params[:data][data_attribute_index(task)][:data][:attributes])
+        task_params(attributes)
       )
     end
   end
 
   def data_attribute_index(task)
-    params[:data].find_index { |task_data| task_data[:data][:id] == task.uuid }
+    params
+      .require(:data)
+      .find_index { |task_data| task_data[:task][:id] == task.id }
   end
 
   def task_params(attributes)
-    attributes ||= params.require(:data).require(:attributes)
+    attributes ||= params.require(:task)
     attributes.permit(Task::PERMITTED_ATTRIBUTES)
   end
 

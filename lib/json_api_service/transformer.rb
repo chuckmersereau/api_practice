@@ -1,5 +1,6 @@
 require 'action_controller'
 require 'json_api_service/uuid_to_id_reference_fetcher'
+require 'json_api_service/params_object'
 
 module JsonApiService
   class Transformer
@@ -12,10 +13,11 @@ module JsonApiService
                 :uuid_references
 
     def initialize(params:, configuration:)
-      @params          = params
+      @orig_params     = params
+      @params          = convert_params(params)
       @configuration   = configuration
       @uuid_references = UuidToIdReferenceFetcher.new(
-        params: params,
+        params: @params.dup,
         configuration: configuration
       )
 
@@ -30,6 +32,10 @@ module JsonApiService
       params.dig(:action).to_s.to_sym == :update
     end
 
+    def destroy?
+      params.dig(:action).to_s.to_sym == :destroy
+    end
+
     def transform
       ActionController::Parameters.new(transform_params)
     end
@@ -37,7 +43,7 @@ module JsonApiService
     private
 
     def after_initialize
-      unless params.is_a? ActionController::Parameters
+      unless @orig_params.is_a? ActionController::Parameters
         raise ArgumentError, argument_error_message
       end
     end
@@ -52,6 +58,10 @@ module JsonApiService
 
         attributes[:uuid] = uuid if (create? || update?) && uuid.present?
       end
+    end
+
+    def convert_params(params_object)
+      ParamsObject.new(params: params_object.to_h).to_h
     end
 
     def foreign_keys_for_object(object)
@@ -72,7 +82,7 @@ module JsonApiService
     def id_data_for_object(object)
       uuid = object.dig(:id)
 
-      if update? && uuid
+      if (update? || destroy?) && uuid
         type = object.dig(:type)
         id   = uuid_references[type][uuid]
 
@@ -98,9 +108,7 @@ module JsonApiService
     def objects_array_to_nested_attributes_hash(objects)
       objects
         .each_with_object({})
-        .with_index do |(object, hash), index|
-          hash[index] = transform_data_object(object)
-        end
+        .map { |object| transform_data_object(object) }
     end
 
     def primary_key
@@ -130,9 +138,9 @@ module JsonApiService
 
     def transform_filter_object(filter_object)
       transformed_object = filter_object.each_with_object({}) do |(foreign_key, uuid), hash|
-        next unless foreign_key.end_with?('_id')
+        next unless foreign_key.to_s.end_with?('_id')
 
-        resource_type = foreign_key.sub('_id', '').pluralize
+        resource_type = foreign_key.to_s.sub('_id', '').pluralize
         id            = uuid_references[resource_type][uuid]
 
         hash[foreign_key] = id
@@ -142,7 +150,7 @@ module JsonApiService
     end
 
     def transform_params
-      if create? || update?
+      if create? || update? || destroy?
         {
           primary_key => transform_data_object(params.dig(:data))
         }.merge!(transformed_non_data_params)
