@@ -35,6 +35,7 @@ class Contact::Filterer < ApplicationFilterer
   ).freeze
 
   FILTERS_TO_HIDE = %w(
+    ExcludeTags
     Ids
     Name
     NotIds

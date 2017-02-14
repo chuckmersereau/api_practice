@@ -7,6 +7,7 @@ class Task::Filterer < ApplicationFilterer
 
   FILTERS_TO_HIDE = %w(
     DateRange
+    ExcludeTags
     Ids
     NoDate
     Overdue

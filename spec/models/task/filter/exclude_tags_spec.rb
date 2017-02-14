@@ -1,6 +1,4 @@
-require 'rails_helper'
-
-RSpec.describe Task::Filter::Tags do
+RSpec.describe Task::Filter::ExcludeTags do
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.first }
 
@@ -21,24 +19,24 @@ RSpec.describe Task::Filter::Tags do
     context 'no filter params' do
       it 'returns nil' do
         expect(described_class.query(tasks, {}, nil)).to eq(nil)
-        expect(described_class.query(tasks, { tags: {} }, nil)).to eq nil
-        expect(described_class.query(tasks, { tags: [] }, nil)).to eq nil
-        expect(described_class.query(tasks, { tags: '' }, nil)).to eq nil
+        expect(described_class.query(tasks, { exclude_tags: {} }, nil)).to eq nil
+        expect(described_class.query(tasks, { exclude_tags: [] }, nil)).to eq nil
+        expect(described_class.query(tasks, { exclude_tags: '' }, nil)).to eq nil
       end
     end
 
-    context 'filter with tags' do
-      it 'returns only tasks that have the tag' do
-        expect(described_class.query(tasks, { tags: 'tag1' }, nil).to_a).to match_array [task_one, task_two]
+    context 'filter exclude tags' do
+      it 'returns only tasks that do not have the tag' do
+        expect(described_class.query(tasks, { exclude_tags: 'tag1' }, nil).to_a).to match_array [task_three, task_four]
       end
-      it 'returns only tasks that have multiple tags' do
-        expect(described_class.query(tasks, { tags: 'tag1,tag2' }, nil).to_a).to match_array [task_one]
+      it 'returns only tasks that do not have multiple tags' do
+        expect(described_class.query(tasks, { exclude_tags: 'tag1,tag2,tag3' }, nil).to_a).to match_array [task_four]
       end
       it 'accepts tags as comma separated string' do
-        expect(described_class.query(tasks, { tags: 'tag1,tag2' }, nil).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { exclude_tags: 'tag1,tag2,tag3' }, nil).to_a).to match_array [task_four]
       end
       it 'accepts tags as an array' do
-        expect(described_class.query(tasks, { tags: %w(tag1 tag2) }, nil).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { exclude_tags: %w(tag1 tag2 tag3) }, nil).to_a).to match_array [task_four]
       end
     end
   end
