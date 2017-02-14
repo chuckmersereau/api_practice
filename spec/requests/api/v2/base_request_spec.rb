@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe 'Server Responsibilites', type: :request do
-  describe 'requests' do
+  describe 'headers' do
     let(:user) { create(:user_with_account) }
     before { api_login(user) }
 

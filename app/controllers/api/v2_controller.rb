@@ -11,19 +11,23 @@ class Api::V2Controller < ApiController
   include Sorting
   include UuidToIdTransformer
 
+  rescue_from Pundit::NotAuthorizedError, with: :render_403_from_exception
+
   before_action :jwt_authorize!
   before_action :validate_and_transform_json_api_params
 
-  def validate_and_transform_json_api_params
-    @original_params = params
-    @_params = JsonApiService.consume(params: params, context: self)
-  end
-
-  after_action :verify_authorized, except: :index
-
-  rescue_from Pundit::NotAuthorizedError, with: :render_403_from_exception
+  after_action  :verify_authorized, except: :index
+  around_action :scope_request_to_time_zone
 
   protected
+
+  def current_time_zone
+    if current_user&.time_zone
+      Time.find_zone(current_user.time_zone) || Time.zone
+    else
+      Time.zone
+    end
+  end
 
   def current_user
     @current_user ||= User.find(jwt_payload['user_id']) if jwt_payload
@@ -104,5 +108,14 @@ class Api::V2Controller < ApiController
     if params.dig(:data, :attributes, :id)
       render_403(title: 'A primary `id` cannot be sent at `/data/attributes/id`, it must be sent at `/data/id`')
     end
+  end
+
+  def scope_request_to_time_zone(&block)
+    Time.use_zone(current_time_zone, &block)
+  end
+
+  def validate_and_transform_json_api_params
+    @original_params = params
+    @_params = JsonApiService.consume(params: params, context: self)
   end
 end

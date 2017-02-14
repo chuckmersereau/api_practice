@@ -124,6 +124,7 @@ group :test do
   gem 'shoulda-matchers', '~> 3.1.1'
   gem 'test_after_commit'
   gem 'webmock', '~> 1.21.0'
+  gem 'timecop', '~> 0.8.1'
 end
 
 group :doc do

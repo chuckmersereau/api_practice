@@ -3,8 +3,9 @@ require 'rails_helper'
 describe Api::V2Controller do
   include_examples 'common_variables'
 
-  let(:user) { create(:user_with_account) }
-  let(:account_list) { create(:account_list) }
+  let(:user)          { create(:user_with_account) }
+  let(:account_list)  { create(:account_list) }
+  let(:response_json) { JSON.parse(response.body).deep_symbolize_keys }
 
   describe 'controller callbacks' do
     controller(Api::V2Controller) do
@@ -13,7 +14,7 @@ describe Api::V2Controller do
       resource_type :contacts
 
       def index
-        render json: params[:filter] || {}
+        render json: (params[:filter] || {}).merge!(current_time_zone: current_time_zone.name)
       end
 
       def create
@@ -60,6 +61,54 @@ describe Api::V2Controller do
         get :index, filter: { contact_id: 'AXXSAASA222Random' }
         expect(response.status).to eq(404), invalid_status_detail
         expect(response.body).to include("Resource 'contact' with id 'AXXSAASA222Random' does not exist")
+      end
+    end
+
+    context 'Timezone specific requests' do
+      before do
+        time = Time.local(2017, 1, 1, 12, 0, 0)
+        Timecop.freeze(time)
+      end
+
+      context 'When the user has a specified Time Zone' do
+        let(:zone) do
+          ActiveSupport::TimeZone.all.detect { |zone| Time.zone != zone }
+        end
+
+        let(:user) do
+          create(:user).tap do |user|
+            user.assign_time_zone(zone)
+          end
+        end
+
+        it "returns the correct time in the user's timezone" do
+          api_login(user)
+          get :index
+
+          expect(response.status).to eq(200), invalid_status_detail
+
+          expect(response_json[:current_time_zone]).to     eq zone.name
+          expect(response_json[:current_time_zone]).not_to eq Time.zone.name
+        end
+      end
+
+      context "When the user doesn't have a specified Time Zone" do
+        let(:user) do
+          create(:user).tap do |user|
+            preferences = user.preferences
+            preferences[:time_zone] = nil
+
+            user.preferences = preferences
+          end
+        end
+
+        it "returns the application's Time Zone" do
+          api_login(user)
+          get :index
+
+          expect(response.status).to eq(200), invalid_status_detail
+          expect(response_json[:current_time_zone]).to eq Time.zone.name
+        end
       end
     end
   end

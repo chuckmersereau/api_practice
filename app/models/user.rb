@@ -130,6 +130,12 @@ class User < Person
     super || []
   end
 
+  def assign_time_zone(timezone_object)
+    raise ArgumentError unless timezone_object.is_a?(ActiveSupport::TimeZone)
+
+    self.time_zone = timezone_object.name
+  end
+
   def stale?
     return false unless last_sign_in_at
     last_sign_in_at < 6.months.ago
@@ -137,8 +143,8 @@ class User < Person
 
   def can_manage_sharing?(account_list)
     # We only allow users to manage sharing if the donor system linked them to
-    # the accoutn list via a designation profile. Otherwise, they only have
-    # access through a invite from another user and they are not allowed to
+    # the account list via a designation profile. Otherwise, they only have
+    # access through an invite from another user and they are not allowed to
     # manage sharing.
     designation_profiles.where(account_list: account_list).any?
   end

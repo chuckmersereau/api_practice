@@ -1,13 +1,13 @@
 class ApiController < ActionController::API
-  rescue_from Exceptions::AuthenticationError, with: :render_401_from_exception
   rescue_from ActiveRecord::RecordNotFound,    with: :render_404_from_exception
   rescue_from ActiveRecord::RecordNotUnique,   with: :render_409_from_exception
+  rescue_from Exceptions::AuthenticationError, with: :render_401_from_exception
   rescue_from Exceptions::BadRequestError,     with: :render_400_from_exception
 
+  rescue_from JsonApiService::ForeignKeyPresentError,          with: :render_409_from_exception
+  rescue_from JsonApiService::InvalidPrimaryKeyPlacementError, with: :render_409_from_exception
   rescue_from JsonApiService::InvalidTypeError,                with: :render_409_from_exception
   rescue_from JsonApiService::MissingTypeError,                with: :render_409_from_exception
-  rescue_from JsonApiService::InvalidPrimaryKeyPlacementError, with: :render_409_from_exception
-  rescue_from JsonApiService::ForeignKeyPresentError,          with: :render_409_from_exception
 
   before_action :verify_request
 

@@ -99,4 +99,29 @@ describe User do
       expect(user.contacts_filter['2']).to_not be_nil
     end
   end
+
+  describe '#assign_time_zone' do
+    let(:user) { build(:user) }
+
+    context "when the value isn't an ActiveSupport::Timezone object" do
+      it 'raises an Argument Error' do
+        expect { user.assign_time_zone('Non Time Zone Object') }
+          .to raise_error(ArgumentError)
+      end
+    end
+
+    context 'when the value is an ActiveSupport::Timezone object' do
+      let(:different_time_zone) do
+        ActiveSupport::TimeZone.all.detect { |zone| zone != Time.zone }
+      end
+
+      it "changes the user's timezone" do
+        expect(user.time_zone).to eq Time.zone.name
+        user.assign_time_zone(different_time_zone)
+
+        expect(user.time_zone).to     eq different_time_zone.name
+        expect(user.time_zone).not_to eq Time.zone.name
+      end
+    end
+  end
 end

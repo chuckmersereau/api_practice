@@ -28,7 +28,7 @@ FactoryGirl.define do
     end
 
     trait :tomorrow do
-      start_at { Time.current.beginning_of_day + 1.day }
+      start_at { (Date.current + 1.day).beginning_of_day }
     end
 
     trait :yesterday do

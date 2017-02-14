@@ -22,7 +22,7 @@ class Activity < ApplicationRecord
   scope :overdue_and_today, -> { where(completed: false).where('start_at < ?', Time.current.end_of_day) }
   scope :starred,           -> { where(starred: true).order('start_at') }
   scope :today,             -> { where('start_at BETWEEN ? AND ?', Time.current.beginning_of_day, Time.current.end_of_day).order('start_at') }
-  scope :tomorrow,          -> { where('start_at BETWEEN ? AND ?', Time.current.end_of_day, Time.current.end_of_day + 1.day).order('start_at') }
+  scope :tomorrow,          -> { where('start_at BETWEEN ? AND ?', (Date.current + 1.day).beginning_of_day, (Date.current + 1.day).end_of_day).order('start_at') }
   scope :uncompleted,       -> { where(completed: false).order('start_at') }
   scope :upcoming,          -> { where('start_at > ?', Time.current.end_of_day + 1.day).order('start_at') }
 

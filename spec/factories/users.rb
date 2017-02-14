@@ -4,7 +4,12 @@ FactoryGirl.define do
   factory :user do
     association :master_person
     first_name { Faker::Name.first_name }
-    preferences { { setup: false } }
+    preferences do
+      {
+        setup: false,
+        time_zone: Time.zone.name
+      }
+    end
   end
 
   factory :user_with_account, parent: :user do
