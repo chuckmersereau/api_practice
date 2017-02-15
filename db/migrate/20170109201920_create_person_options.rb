@@ -1,5 +1,5 @@
 class CreatePersonOptions < ActiveRecord::Migration
-  def change
+  def up
     unless table_exists?(:person_options)
       create_table :person_options do |t|
         t.string :key, null: false
@@ -10,6 +10,12 @@ class CreatePersonOptions < ActiveRecord::Migration
       end
       add_index :person_options, [:key, :user_id], unique: true
       add_index :person_options, :uuid, unique: true
+    end
+  end
+
+  def down
+    if table_exists?(:person_options)
+      drop_table(:person_options)
     end
   end
 end
