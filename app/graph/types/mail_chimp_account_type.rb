@@ -6,7 +6,7 @@ module Types
     field :id, !types.ID, 'The UUID of the Mail Chimp Account', property: :uuid
     field :accountList, AccountListType, 'The Account List for this Mail Chimp Account', property: :account_list
     field :active, types.Boolean, 'Whether or not this Mail Chimp Account is active'
-    field :apiKey, !types.String, 'The Mail Chimp API Key for this Account'
+    field :apiKey, !types.String, 'The Mail Chimp API Key for this Account', property: :api_key
     field :autoLogCampaigns, !types.Boolean, 'Whether or not to auto-log campaisng', property: :auto_log_campaigns
     field :createdAt, !types.String, 'The datetime in which the Mail Chimp Account was created', property: :created_at
     field :listsAvailableForNewsletters, types[MailChimpAccountListType], 'The lists for this Mail Chimp Account that are available for newsletters', property: :lists_available_for_newsletters_formatted

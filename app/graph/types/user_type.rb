@@ -12,7 +12,7 @@ module Types
     field :createdAt, !types.String, 'The timestamp the User was created', property: :created_at
     field :firstName, !types.String, 'The first name of the User', property: :first_name
     field :lastName, types.String, 'The last name of the User', property: :last_name
-    field :masterPerson, PersonType, 'TODO', property: :master_person
+    field :masterPerson, MasterPersonType, 'TODO', property: :master_person
     field :preferences, UserPreferencesType, 'The preferences for the User'
     field :updatedAt, !types.String, 'The timestamp of the last time this User was updated', property: :updated_at
     field :updatedInDbAt, !types.String, 'The timestamp of the last time this User was updated', property: :updated_at

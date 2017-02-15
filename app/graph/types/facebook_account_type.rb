@@ -10,6 +10,6 @@ module Types
     field :remoteId, !types.ID, 'The ID given by Facebook for the Facebook Account', property: :remote_id
     field :updatedAt, !types.String, 'The timestamp that the Facebook Account was last updated', property: :updated_at
     field :updatedInDbAt, !types.String, 'The timestamp that the Facebook Account was last updated', property: :updated_at
-    field :username, !types.String, 'The username on the Facebook Account'
+    field :username, types.String, 'The username on the Facebook Account'
   end
 end

@@ -18,7 +18,7 @@ module Types
       }
     end
     field :createdAt, !types.String, 'When the Contact was created', property: :created_at
-    field :churchName, !types.String, 'The name of the church of the Contact', property: :church_name
+    field :churchName, types.String, 'The name of the church of the Contact', property: :church_name
     field :deceased, !types.Boolean, 'Whether or not the Contact is deceased'
     field :envelopeGreeting, !types.String, 'The greeting for this Contact', property: :envelope_greeting
     field :greeting, !types.String, 'The greeting for this Contact'

@@ -32,6 +32,6 @@ module Types
     field :suffix, types.String, 'The suffix for this Person (Jr., III, etc.)'
     field :title, types.String, 'The title for this Person (Mr., Mrs., etc.)'
     field :updatedAt, !types.String, 'The timestamp of the last time this Person was updated', property: :updated_at
-    field :updatedInDbAt, !types.String, 'The timestamp of the last time this Person was updated', property: :updated_a
+    field :updatedInDbAt, !types.String, 'The timestamp of the last time this Person was updated', property: :updated_at
   end
 end

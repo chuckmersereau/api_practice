@@ -29,9 +29,9 @@ module Types
 
     field :id, !types.ID, 'The UUID of the Account List', property: :uuid
     field :name, !types.String, 'The name of the Account List'
-    field :defaultOrganizationId, !types.Int, 'The ID of the default Organization for this Account List'
+    field :defaultOrganizationId, !types.Int, 'The ID of the default Organization for this Account List', property: :default_organization_id
     field :mailChimpAccount, MailChimpAccountType, 'The Mail Chimp Account for this Account list', property: :mail_chimp_account
-    field :monthlyGoal, !types.String, 'The Monthly Goal of the Account List', property: :monthly_goal
+    field :monthlyGoal, types.String, 'The Monthly Goal of the Account List', property: :monthly_goal
     field :totalPledges, !types.Int, 'The total number of pledges', property: :total_pledges
   end
 end
