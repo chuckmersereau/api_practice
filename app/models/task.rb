@@ -52,6 +52,10 @@ class Task < Activity
       activity_contacts_attributes: [
         :_destroy,
         :contact_id
+      ],
+      contacts_attributes: [
+        :_destroy,
+        :id
       ]
     }
   ].freeze

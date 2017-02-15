@@ -81,15 +81,12 @@ module JsonApiService
 
     def id_data_for_object(object)
       uuid = object.dig(:id)
+      return {} unless uuid
 
-      if (update? || destroy?) && uuid
-        type = object.dig(:type)
-        id   = uuid_references[type][uuid]
+      type = object.dig(:type)
+      id   = uuid_references[type][uuid]
 
-        { id: id }
-      else
-        {}
-      end
+      id ? { id: id } : {}
     end
 
     def nested_attributes_for_object(object)

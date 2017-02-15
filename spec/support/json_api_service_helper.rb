@@ -19,6 +19,15 @@ module JsonApiServiceHelpers
       .and_return(return_collection)
   end
 
+  def mock_empty_uuid_reference(from:, resource:)
+    uuids = Array[from].flatten
+    return_collection = MockCollection.new([])
+    allow(resource)
+      .to receive(:where)
+      .with(uuid: uuids)
+      .and_return(return_collection)
+  end
+
   def build_params_with(hash)
     ActionController::Parameters.new(hash)
   end
@@ -44,6 +53,7 @@ end
 
 class MockAccountList < MockResource; end
 class MockComment < MockResource; end
+class MockAddress < MockResource; end
 class MockContact < MockResource; end
 class MockEmail < MockResource; end
 class MockPerson < MockResource; end

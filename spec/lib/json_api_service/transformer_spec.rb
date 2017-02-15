@@ -211,6 +211,13 @@ module JsonApiService
 
           let(:transformer) { build_transformer(params: params) }
 
+          before do
+            mock_empty_uuid_reference(
+              from: ['abc123'],
+              resource: MockContact
+            )
+          end
+
           it "moves the UUID into the resource's attributes" do
             expected_hash = {
               mock_contact: {
@@ -396,6 +403,13 @@ module JsonApiService
         end
 
         let(:transformer) { build_transformer(params: params) }
+
+        before do
+          mock_empty_uuid_reference(
+            from: ['addresses-uuid-abc123', 'addresses-uuid-def456'],
+            resource: MockAddress
+          )
+        end
 
         it 'correctly transforms the values' do
           expected_hash = {
@@ -583,6 +597,7 @@ module JsonApiService
             mock_account_list_id: 25,
             mock_comments_attributes: [
               {
+                id: 30,
                 body: 'I love Orange Soda',
                 uuid: '91374910-ef15-11e6-8787-ef17a057947e',
                 mock_person_id: 20
