@@ -48,8 +48,8 @@ resource 'Monthly Giving Graph Report' do
         response_field 'account_list', 'Account List', 'Type' => 'Object'
       end
 
-      example 'show report' do
-        explanation 'Lists balances for each Designation Account associated with the current Account List'
+      example 'Monthly Giving Graph [LIST]', document: :reports do
+        explanation 'Lists information related to the Monthly Giving Graph'
         do_request(filter: { account_list_id: account_list_id })
         check_resource(['relationships'])
         expect(response_status).to eq 200
