@@ -636,16 +636,39 @@ describe Contact do
     end
   end
 
-  context '#sync_with_mailchimp' do
-    it 'notifies the mail chimp account that it changed' do
-      mc_account = build(:mail_chimp_account)
-      account_list.mail_chimp_account = mc_account
-      expect(mc_account).to receive(:queue_sync_contacts).with([contact.id])
-      contact.send(:sync_with_mail_chimp)
+  context '#sync_with_mail_chimp' do
+    context 'with mail_chimp account' do
+      let(:mc_account) { build(:mail_chimp_account, account_list: account_list) }
+      before do
+        person_and_email_address
+      end
+
+      it 'notifies the mail chimp account of changes on certain fields' do
+        expect(mc_account).to receive(:queue_sync_contacts).with([contact.id])
+        contact.locale = 'en-US'
+        contact.send(:check_state_for_mail_chimp_sync)
+        contact.send(:sync_with_mail_chimp)
+      end
+
+      it 'notifies the mail chimp account of changes on certain nested fields' do
+        expect(mc_account).to receive(:queue_sync_contacts).with([contact.id])
+        contact.people.first.primary_email_address.email = 'new@email.com'
+        contact.send(:check_state_for_mail_chimp_sync)
+        contact.send(:sync_with_mail_chimp)
+      end
+
+      it 'does not notify the mail chimp account of changes on certain fields' do
+        expect(mc_account).to_not receive(:queue_sync_contacts).with([contact.id])
+        contact.timezone = 'PST'
+        contact.send(:check_state_for_mail_chimp_sync)
+        contact.send(:sync_with_mail_chimp)
+      end
     end
 
-    it 'does not error if there is no mail chimp account' do
-      expect { contact.send(:sync_with_mail_chimp) }.to_not raise_error
+    context 'without mail_chimp_account' do
+      it 'does not error if there is no mail chimp account' do
+        expect { contact.send(:sync_with_mail_chimp) }.to_not raise_error
+      end
     end
   end
 

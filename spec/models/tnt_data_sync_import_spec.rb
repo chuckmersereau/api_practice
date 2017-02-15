@@ -15,7 +15,7 @@ describe TntDataSyncImport do
     subject = build_import('tnt_data_sync_file.tntmpd')
     subject.import
     expect(account_list.contacts.count).to eq 1
-    contact = account_list.contacts.first
+    contact = account_list.contacts.first.reload
     expect(contact.name).to eq 'Mr. and Mrs. Cliff A. Doe'
     expect(contact.people.first.first_name).to eq 'Cliff'
     expect(account_list.donations.count).to eq 1

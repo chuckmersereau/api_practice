@@ -47,9 +47,9 @@ class ApplicationSeeder
     # Create some fundamental records first so that we can reference them below to establish associations:
     organization = create :organization
     user = create :user_with_full_account
-    account_list = user.account_lists.last
+    account_list = user.account_lists.reload.last
     contact = create :contact_with_person, account_list: account_list
-    person = contact.people.last
+    person = contact.people.reload.last
 
     create :contact_referral, referred_by: contact, referred_to: create(:contact)
     create :contact_notes_log, contact: contact

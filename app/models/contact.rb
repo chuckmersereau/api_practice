@@ -167,7 +167,7 @@ class Contact < ApplicationRecord
   accepts_nested_attributes_for :contact_referrals_to_me, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :contacts_referred_by_me, reject_if: :all_blank, allow_destroy: false
 
-  before_save :set_notes_saved_at, :update_late_at
+  before_save :set_notes_saved_at, :update_late_at, :check_state_for_mail_chimp_sync
   after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
   after_create :create_people_from_contact, if: :prefill_attributes_on_create
   before_destroy :delete_from_letter_services, :delete_people
@@ -740,7 +740,30 @@ class Contact < ApplicationRecord
     self.notes_saved_at = DateTime.now if changed.include?('notes')
   end
 
+  def check_state_for_mail_chimp_sync
+    @sync_mail_chimp = if relevant_nested_attribute_changed? || relevant_contact_attribute_changed?
+                         true
+                       else
+                         false
+                       end
+    true
+  end
+
+  def relevant_contact_attribute_changed?
+    (changed & %w(locale status tag_list)).present?
+  end
+
+  def relevant_nested_attribute_changed?
+    people.any? do |person|
+      person.primary_email_address&.email_changed? ||
+        person.first_name_changed? ||
+        person.last_name_changed?
+    end
+  end
+
   def sync_with_mail_chimp
+    return unless @sync_mail_chimp
+
     account_list.mail_chimp_account.try(:queue_sync_contacts, [id])
   end
 
