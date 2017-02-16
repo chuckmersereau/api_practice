@@ -55,8 +55,8 @@ resource 'Duplicates' do
 
     # index
     get '/api/v2/contacts/duplicates' do
-      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID',                                                     required: false
-      
+      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
+
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
       example 'Duplicate [LIST]', document: document do

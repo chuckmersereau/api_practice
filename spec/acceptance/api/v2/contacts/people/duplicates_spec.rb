@@ -61,8 +61,8 @@ resource 'Duplicates' do
 
     # index
     get '/api/v2/contacts/people/duplicates' do
-      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID',                                                     required: false
-      
+      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
+
       example 'Duplicate [LIST]', document: document do
         explanation 'List of Duplicates'
         do_request
