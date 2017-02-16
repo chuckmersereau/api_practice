@@ -59,6 +59,9 @@ Rails.application.routes.draw do
               resource  :analytics, only: :show
               resources :filters, only: :index
               resources :merges, only: :create
+              namespace :merges do
+                resource :bulk, only: [:create], controller: :bulk
+              end
               resources :tags, only: :index
               constraints(id: /.+/) do
                 resources :duplicates, only: [:index, :destroy]
