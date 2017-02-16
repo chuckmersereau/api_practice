@@ -69,6 +69,11 @@ Rails.application.routes.draw do
                   resources :duplicates, only: [:index, :destroy]
                 end
               end
+              namespace :people do
+                namespace :merges do
+                  resource :bulk, only: [:create], controller: :bulk
+                end
+              end
             end
 
             resources :addresses, only: [:index, :show, :create, :update, :destroy]
