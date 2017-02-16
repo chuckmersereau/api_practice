@@ -137,8 +137,16 @@ controller spec, and acceptance spec for how controllers will be formatted for t
 
 Public API documentation is available at [docs.mpdx.org](http://docs.mpdx.org/). This doc is automatically generated using the [gem rspec_api_documentation](https://github.com/zipmark/rspec_api_documentation).
 
-To generate the docs locally run `bin/rake docs:generate DOC_FORMAT=html`
-**Please note:** the output format will be different than what is used on [docs.mpdx.org](http://docs.mpdx.org/), but you could use this to verify your spec is correct before pushing it.
+Staging documentation is at [docs-stage.mpdx.org](http://docs-stage.mpdx.org/).
+
+To generate all of the docs locally run `DOC_FORMAT=html bin/rake docs:generate`
+
+To generate docs just for particular specs, run `DOC_FORMAT=html bin/rspec spec/acceptance/api/v2/path_to_my_spec.rb --format RspecApiDocumentation::ApiFormatter`
+
+The docs will be generated into a new directory named "docs".
+
+**Please note:** the output format will be different than what is used on [docs.mpdx.org](http://docs.mpdx.org/), but you can use this to verify your spec is correct before pushing it.
+
 
 ## Issue Tracking, Bugs Reports, & Contributing
 
