@@ -65,10 +65,8 @@ describe Api::V2Controller do
     end
 
     context 'Timezone specific requests' do
-      before do
-        time = Time.local(2017, 1, 1, 12, 0, 0)
-        Timecop.freeze(time)
-      end
+      before { travel_to(Time.local(2017, 1, 1, 12, 0, 0)) }
+      after { travel_back }
 
       context 'When the user has a specified Time Zone' do
         let(:zone) do

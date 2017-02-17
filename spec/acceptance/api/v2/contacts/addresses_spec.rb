@@ -15,7 +15,7 @@ resource 'Address' do
 
   let(:new_address) do
     build(:address, addressable: contact).attributes
-                                         .reject { |key| key.to_s.end_with?('_id') }
+                                         .reject { |key| key.to_s.end_with?('_id', '_at') }
                                          .merge(updated_in_db_at: address.updated_at)
   end
   let(:form_data) { build_data(new_address) }
@@ -122,7 +122,7 @@ resource 'Address' do
         parameter 'street',                  'Street'
       end
 
-      example 'Address [CREATE]', document: :contacts do
+      example 'Address [UPDATE]', document: :contacts do
         explanation 'Update the Contact\'s Address with the given ID'
         do_request data: form_data
 

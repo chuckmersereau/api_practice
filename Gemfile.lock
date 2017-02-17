@@ -670,7 +670,6 @@ GEM
     thor (0.19.1)
     thread_safe (0.3.5)
     tilt (2.0.5)
-    timecop (0.8.1)
     tins (1.13.0)
     twitter_cldr (2.4.3)
       json
@@ -817,7 +816,6 @@ DEPENDENCIES
   spring-commands-rspec (~> 1.0.4)
   syslog-logger (~> 1.6.8)
   test_after_commit
-  timecop (~> 0.8.1)
   twitter_cldr (~> 2.4.0)
   uglifier
   user_agent_decoder (~> 0.0.9)
