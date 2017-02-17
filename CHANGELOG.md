@@ -2,9 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
-## 16 February 2017
-- Added a bulk endpoint for merging contacts
-- Added a bulk endpoint for merging people
+## 17 February 2017
+- Added a serializer for Organization
+- Added a contact_id filter to Donations endpoint
 
 ## 13 February 2017
 - Nested Attributes with Included data can now be sent in POST/PATCH
