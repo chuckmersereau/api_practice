@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller do
+describe Api::V2::AccountLists::MailChimpAccountController, type: :controller do
   let(:factory_type) { :mail_chimp_account }
   let!(:user)        { create(:user_with_account) }
 

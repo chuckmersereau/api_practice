@@ -4,7 +4,7 @@ require 'rspec_api_documentation/dsl'
 resource 'Mailchimp Account Spec' do
   include_context :json_headers
 
-  let(:resource_type) { 'mail_chimp_accounts' }
+  let(:resource_type) { 'mail_chimp_account' }
   let!(:user)         { create(:user_with_account) }
 
   let!(:account_list)   { user.account_lists.first }
@@ -13,9 +13,10 @@ resource 'Mailchimp Account Spec' do
   let(:primary_list_id)   { '1e72b58b72' }
   let(:primary_list_id_2) { '29a77ba541' }
 
-  let(:mail_chimp_account)          { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
   let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
   let(:appeal)                      { create(:appeal, account_list: account_list) }
+  let(:mail_chimp_account)          { create(:mail_chimp_account, account_list: account_list, api_key: 'fake-us4', primary_list_id: primary_list_id) }
+  let(:form_data)                   { build_data(api_key: 'fake-us4', primary_list_id: primary_list_id) }
 
   let(:resource_attributes) do
     %w(
@@ -81,6 +82,32 @@ resource 'Mailchimp Account Spec' do
       explanation 'Deletes the MailChimp Account associated with the Account List'
       do_request
       expect(response_status).to eq 204
+    end
+  end
+
+  post '/api/v2/account_lists/:account_list_id/mail_chimp_account' do
+    parameter 'account_list_id', 'Account List ID', required: true
+
+    with_options scope: [:data, :attributes] do
+      parameter 'active',                          'Active Account or Not',           'Type' => 'Boolean'
+      parameter 'api_key',                         'API Key',                         'Type' => 'String', required: true
+      parameter 'auto_log_campaigns',              'Auto Log Campaigns or Not',       'Type' => 'Boolean'
+      parameter 'lists_available_for_newsletters', 'Lists available for newsletters', 'Type' => 'Array[Object]'
+      parameter 'lists_link',                      'Lists Link',                      'Type' => 'String'
+      parameter 'lists_present',                   'Lists Present or Not',            'Type' => 'Boolean'
+      parameter 'primary_list_id',                 'Primary List ID',                 'Type' => 'String', required: true
+      parameter 'primary_list_name',               'Primary List Name',               'Type' => 'String'
+      parameter 'sync_all_active_contacts',        'Sync all active contacts',        'Type' => 'Boolean'
+      parameter 'valid',                           'Valid',                           'Type' => 'Boolean'
+      parameter 'validation_error',                'Validation Error',                'Type' => 'String'
+      parameter 'validate_key',                    'Validate Key or Not',             'Type' => 'Boolean'
+    end
+
+    example 'Mailchimp Account [POST]', document: :account_lists do
+      explanation 'Add the MailChimp Account associated with the Account List'
+      do_request data: form_data
+      check_resource
+      expect(response_status).to eq 201
     end
   end
 

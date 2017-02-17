@@ -34,6 +34,9 @@ JsonApiService.configure do |config|
     linkedin_accounts: [
       :remote_id
     ],
+    mail_chimp_account: [
+      :primary_list_id
+    ],
     organization_accounts: [
       :remote_id
     ],
