@@ -48,6 +48,7 @@ class Contact < ApplicationRecord
   has_many :excluded_appeal_contacts, class_name: 'Appeal::ExcludedAppealContact', dependent: :delete_all
 
   serialize :prayer_letters_params, Hash
+  serialize :suggested_changes, Hash
 
   scope :people, -> { where('donor_accounts.master_company_id is null').includes(:donor_accounts).references('donor_accounts') }
   scope :companies, -> { where('donor_accounts.master_company_id is not null').includes(:donor_accounts).references('donor_accounts') }

@@ -811,7 +811,10 @@ CREATE TABLE contacts (
     pledge_currency character varying(4),
     locale character varying(255),
     late_at date,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    status_valid boolean,
+    status_validated_at timestamp without time zone,
+    suggested_changes text
 );
 
 
@@ -4288,6 +4291,13 @@ CREATE INDEX index_contacts_on_last_donation_date ON contacts USING btree (last_
 
 
 --
+-- Name: index_contacts_on_status_validated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+--
+
+CREATE INDEX index_contacts_on_status_validated_at ON contacts USING btree (status_validated_at);
+
+
+--
 -- Name: index_contacts_on_tnt_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
 --
 
@@ -6068,4 +6078,6 @@ INSERT INTO schema_migrations (version) VALUES ('20161216004239');
 INSERT INTO schema_migrations (version) VALUES ('20170109201920');
 
 INSERT INTO schema_migrations (version) VALUES ('20170109220413');
+
+INSERT INTO schema_migrations (version) VALUES ('20170210004955');
 
