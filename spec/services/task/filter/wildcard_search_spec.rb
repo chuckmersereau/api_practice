@@ -1,6 +1,6 @@
-require 'spec_helper'
+require 'rails_helper'
 
-RSpec.describe Task::Filter::Wildcard do
+RSpec.describe Task::Filter::WildcardSearch do
   let!(:user) { create(:user_with_account) }
   let!(:account_list) { user.account_lists.first }
 
@@ -13,15 +13,15 @@ RSpec.describe Task::Filter::Wildcard do
 
     context 'with wildcard subject' do
       it 'returns all tasks that match the subject' do
-        expect(described_class.query(tasks, { wildcard: 'subject1' }, nil).to_a).to match_array [task_one]
-        expect(described_class.query(tasks, { wildcard: 'subject1' }, nil).to_a).not_to match_array [task_one, task_two, task_three]
+        expect(described_class.query(tasks, { wildcard_search: 'subject1' }, nil).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { wildcard_search: 'subject1' }, nil).to_a).not_to match_array [task_one, task_two, task_three]
       end
     end
 
     context 'with a single wildcard tag' do
       it 'returns all tasks that match the tag' do
-        expect(described_class.query(tasks, { wildcard: 'tag1' }, nil).to_a).to match_array [task_one, task_two]
-        expect(described_class.query(tasks, { wildcard: 'tag1' }, nil).to_a).not_to match_array [task_one, task_two, task_three]
+        expect(described_class.query(tasks, { wildcard_search: 'tag1' }, nil).to_a).to match_array [task_one, task_two]
+        expect(described_class.query(tasks, { wildcard_search: 'tag1' }, nil).to_a).not_to match_array [task_one, task_two, task_three]
       end
     end
   end
