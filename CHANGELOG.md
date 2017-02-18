@@ -5,6 +5,7 @@ This changelog covers what's changed in the MPDX APIs.
 ## 17 February 2017
 - Added a serializer for Organization
 - Added a contact_id filter to Donations endpoint
+- Fixed assigning a person to a Task comment
 
 ## 15 February 2017
 - Changed mail_chimp_accounts controller to mail_chimp_account

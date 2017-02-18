@@ -7,6 +7,8 @@ resource 'Task Comments' do
   let!(:user) { create(:user_with_full_account) }
   let(:resource_type) { :comments }
 
+  let(:account_list) { user.account_lists.first }
+  let(:person) { create(:contact_with_person, account_list: account_list).reload.people.first }
   let(:task)    { create(:task, account_list: user.account_lists.first) }
   let(:task_id) { task.uuid }
 
@@ -14,16 +16,24 @@ resource 'Task Comments' do
   let(:id) { comment.uuid }
 
   let(:new_comment) do
-    build(:activity_comment, activity: task).attributes.with_indifferent_access.merge(updated_in_db_at: comment.updated_at, task_id: task_id).except(:activity_id)
+    build(:activity_comment, activity: task).attributes.with_indifferent_access.merge(updated_in_db_at: comment.updated_at, task_id: task_id).except(:activity_id, :person_id)
   end
 
-  let(:form_data) { build_data(new_comment.slice(*ActivityComment::PERMITTED_ATTRIBUTES)) }
+  let(:form_data) do
+    build_data(new_comment.slice(*ActivityComment::PERMITTED_ATTRIBUTES), relationships: {
+                 person: {
+                   data: {
+                     type: 'people',
+                     id: person.uuid
+                   }
+                 }
+               })
+  end
 
   let(:expected_attribute_keys) do
     %w(
       body
       created_at
-      person_name
       updated_at
       updated_in_db_at
     )
@@ -50,6 +60,10 @@ resource 'Task Comments' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
+      with_options scope: [:data, :relationships] do
+        response_field 'person', 'The person who wrote the comment', 'Type' => 'Object'
+      end
+
       example 'Comment [GET]', document: :tasks do
         explanation "The Task's Comment with the given ID"
         do_request
@@ -61,7 +75,11 @@ resource 'Task Comments' do
 
     post '/api/v2/tasks/:task_id/comments' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter 'body', 'Comment body'
+        parameter 'body', 'Comment body', 'Type' => 'String'
+      end
+
+      with_options scope: [:data, :relationships] do
+        parameter 'person', 'The person who wrote the comment', 'Type' => 'Object'
       end
 
       example 'Comment [CREATE]', document: :tasks do
@@ -75,7 +93,11 @@ resource 'Task Comments' do
 
     put '/api/v2/tasks/:task_id/comments/:id' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter 'body', 'Comment body'
+        parameter 'body', 'Comment body', 'Type' => 'String'
+      end
+
+      with_options scope: [:data, :relationships] do
+        parameter 'person', 'The person who wrote the comment', 'Type' => 'Object'
       end
 
       example 'Comment [UPDATE]', document: :tasks do

@@ -8,13 +8,5 @@ class ActivityComment < ApplicationRecord
 
   validates :body, presence: true
 
-  before_create :ensure_person
-
-  PERMITTED_ATTRIBUTES = [:body, :updated_in_db_at, :uuid].freeze
-
-  private
-
-  def ensure_person
-    self.person = Thread.current[:user] unless person_id
-  end
+  PERMITTED_ATTRIBUTES = [:body, :created_at, :person_id, :updated_at, :updated_in_db_at, :uuid].freeze
 end

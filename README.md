@@ -143,7 +143,7 @@ To generate all of the docs locally run `DOC_FORMAT=html bin/rake docs:generate`
 
 To generate docs just for particular specs, run `DOC_FORMAT=html bin/rspec spec/acceptance/api/v2/path_to_my_spec.rb --format RspecApiDocumentation::ApiFormatter`
 
-The docs will be generated into a new directory named "docs".
+The html files will be created in a new directory named "doc".
 
 **Please note:** the output format will be different than what is used on [docs.mpdx.org](http://docs.mpdx.org/), but you can use this to verify your spec is correct before pushing it.
 
