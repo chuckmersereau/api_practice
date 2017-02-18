@@ -91,6 +91,7 @@ class Person < ApplicationRecord
         :email,
         :historic,
         :id,
+        :location,
         :primary
       ],
       facebook_accounts_attributes: [

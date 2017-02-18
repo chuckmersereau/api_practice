@@ -3,7 +3,7 @@ class Task::Filter::WildcardSearch < Task::Filter::Base
     if filters[:wildcard_search] != 'null' && filters[:wildcard_search].present?
       @tasks = tasks
       @filters = filters
-      tasks = tasks.where('subject ilike ? OR id IN (?)', filters[:wildcard_search], tagged_tasks_ids)
+      tasks = tasks.where('subject ilike ? OR id IN (?)', "%#{filters[:wildcard_search]}%", tagged_tasks_ids)
     end
     tasks
   end
