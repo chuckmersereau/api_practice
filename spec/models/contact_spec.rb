@@ -710,6 +710,13 @@ describe Contact do
       end
     end
 
+    context '#last_six_donations' do
+      it 'returns the lastest six donations' do
+        create_list(:donation, 7, donor_account: donor_account, designation_account: da)
+        expect(contact.last_six_donations).to eq(contact.donations.first(6))
+      end
+    end
+
     context '#last_monthly_total' do
       it 'returns zero with no error if there are no donations' do
         Donation.destroy_all

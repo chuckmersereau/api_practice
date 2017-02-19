@@ -49,6 +49,8 @@ resource 'Contacts' do
       send_newsletter
       square_avatar
       status
+      status_valid
+      suggested_changes
       tag_list
       timezone
       total_donations
@@ -66,6 +68,7 @@ resource 'Contacts' do
       contacts_referred_by_me
       contacts_that_referred_me
       donor_accounts
+      last_six_donations
       people
     )
   end

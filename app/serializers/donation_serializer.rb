@@ -20,14 +20,14 @@ class DonationSerializer < ApplicationSerializer
   belongs_to :donor_account
 
   def amount
-    return unless scope
+    return unless scope&.[](:account_list)
 
     current_currency(scope[:account_list])
     number_to_current_currency(object.amount, locale: scope[:locale])
   end
 
   def contact
-    return unless scope
+    return unless scope&.[](:account_list)
 
     object.donor_account.contacts.where(account_list_id: scope[:account_list].id).first
   end

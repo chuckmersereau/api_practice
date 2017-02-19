@@ -39,6 +39,7 @@ class Contact::Filterer < ApplicationFilterer
     Ids
     Name
     NotIds
+    StatusValid
     Tags
     WildcardSearch
   ).freeze

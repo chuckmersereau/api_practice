@@ -21,12 +21,14 @@ describe ContactSerializer, deprecated: true do
     describe 'contact' do
       it { should include :id }
       it { should include :name }
+      it { should include :notes }
+      it { should include :person_ids }
       it { should include :pledge_amount }
       it { should include :pledge_frequency }
       it { should include :pledge_received }
       it { should include :status }
-      it { should include :notes }
-      it { should include :person_ids }
+      it { should include :status_valid }
+      it { should include :suggested_changes }
     end
 
     it 'people list' do

@@ -42,6 +42,8 @@ resource 'Referrers' do
       send_newsletter
       square_avatar
       status
+      status_valid
+      suggested_changes
       tag_list
       timezone
       total_donations

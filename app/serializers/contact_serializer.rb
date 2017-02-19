@@ -32,9 +32,11 @@ class ContactSerializer < ApplicationSerializer
              :send_newsletter,
              :square_avatar,
              :status,
+             :status_valid,
+             :suggested_changes,
              :tag_list,
-             :total_donations,
              :timezone,
+             :total_donations,
              :uncompleted_tasks_count
 
   has_many :addresses
@@ -43,6 +45,7 @@ class ContactSerializer < ApplicationSerializer
   has_many :contacts_that_referred_me
   has_many :donor_accounts
   has_many :people
+  has_many :last_six_donations
   belongs_to :account_list
 
   def avatar

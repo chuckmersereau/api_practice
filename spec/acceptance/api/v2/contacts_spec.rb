@@ -89,6 +89,8 @@ resource 'Contacts' do
       send_newsletter
       square_avatar
       status
+      status_valid
+      suggested_changes
       tag_list
       timezone
       total_donations
@@ -106,6 +108,7 @@ resource 'Contacts' do
       contacts_referred_by_me
       contacts_that_referred_me
       donor_accounts
+      last_six_donations
       people
     )
   end
@@ -153,6 +156,7 @@ resource 'Contacts' do
                                                        '"Ask in Future", "Cultivate Relationship", "Contact for Appointment", "Appointment Scheduled", '\
                                                        '"Call for Decision", "Partner - Financial", "Partner - Special", "Partner - Pray", "Not Interested", '\
                                                        '"Unresponsive", "Never Ask", "Research Abandoned", and "Expired Referral"',                           required: false
+      parameter 'filters[status_valid]',               'Filter by Status Valid; Accepts values "true", or "false"',                                           required: false
       parameter 'filters[task_due_date]',              'Filter by Due Date; Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',               required: false
       parameter 'filters[timezone][]',                 'Filter by Timezone; Accepts multiple parameters,',                                                    required: false
 

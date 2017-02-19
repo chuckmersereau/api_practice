@@ -567,6 +567,10 @@ class Contact < ApplicationRecord
             .for_accounts(account_list.designation_accounts)
   end
 
+  def last_six_donations
+    donations.limit(6)
+  end
+
   def last_donation
     donations.first
   end
