@@ -1,4 +1,6 @@
 class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
+  resource_type :people
+
   def index
     authorize_index
     load_duplicates

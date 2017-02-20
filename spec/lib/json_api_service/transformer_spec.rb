@@ -611,6 +611,36 @@ module JsonApiService
       end
     end
 
+    describe 'Transforming when the ID is "undefined"' do
+      let(:params) do
+        params = {
+          data: {
+            type: 'mock_tasks',
+            id: 'undefined',
+            attributes: {
+              activity_type: 'Appointment'
+            }
+          },
+          action: 'create'
+        }
+
+        build_params_with(params)
+      end
+
+      let(:transformer) { build_transformer(params: params) }
+
+      it "doesn't return #id in the hash" do
+        expected_hash = {
+          mock_task: {
+            activity_type: 'Appointment'
+          },
+          action: 'create'
+        }
+
+        expect(transformer.transform).to eq build_params_with(expected_hash)
+      end
+    end
+
     def build_transformer(params:, configuration: Configuration.new)
       Transformer.new(params: params, configuration: configuration)
     end

@@ -3,7 +3,8 @@ require 'uuidtools'
 require 'rails_helper'
 
 RSpec.describe 'Patch Requests', type: :request do
-  let!(:user) { create(:user_with_account) }
+  let!(:user)   { create(:user_with_account) }
+  let(:contact) { create(:contact) }
 
   let(:headers) do
     {
@@ -61,21 +62,22 @@ RSpec.describe 'Patch Requests', type: :request do
     end
 
     context 'against a resource that does not exist (404)' do
-      let(:mock_uuid) { UUIDTools::UUID.random_create }
+      let(:mock_uuid) { UUIDTools::UUID.random_create.to_s }
       let(:missing_resource_attributes) do
         {
           data: {
             id: mock_uuid,
-            type: 'users',
+            type: 'contacts',
             attributes: {
-              first_name: 'foo_bar',
-              updated_in_db_at: user.updated_at
+              name: 'foo_bar',
+              updated_in_db_at: contact.updated_at
             }
           }
         }
       end
+
       it 'should return a not found status (404)' do
-        put api_v2_user_path, missing_resource_attributes.to_json, headers
+        put api_v2_contact_path(mock_uuid), missing_resource_attributes.to_json, headers
         expect(response.status).to eq(404), invalid_status_detail
       end
     end

@@ -56,7 +56,9 @@ module JsonApiService
       (object.dig(:attributes) || {}).tap do |attributes|
         uuid = object.dig(:id)
 
-        attributes[:uuid] = uuid if (create? || update?) && uuid.present?
+        if (create? || update?) && uuid.present? && uuid.to_sym != :undefined
+          attributes[:uuid] = uuid
+        end
       end
     end
 
@@ -81,7 +83,7 @@ module JsonApiService
 
     def id_data_for_object(object)
       uuid = object.dig(:id)
-      return {} unless uuid
+      return {} unless uuid && uuid.to_sym != :undefined
 
       type = object.dig(:type)
       id   = uuid_references[type][uuid]
