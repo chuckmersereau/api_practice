@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Tasks' do
   include_context :json_headers
+  documentation_scope = :entities_tasks
 
   let(:resource_type) { 'tasks' }
   let!(:user)         { create(:user_with_full_account) }
@@ -72,7 +73,7 @@ resource 'Tasks' do
 
       response_field :data,                 'list of task objects', 'Type' => 'Array[Object]'
 
-      example 'Task [LIST]', document: :entities do
+      example 'List tasks', document: documentation_scope do
         do_request
         explanation 'List of Tasks associated to current_user'
         check_collection_resource(1, ['relationships'])
@@ -108,7 +109,7 @@ resource 'Tasks' do
         end
       end
 
-      example 'Task [GET]', document: :entities do
+      example 'Retrieve a task', document: documentation_scope do
         explanation 'The current_user\'s Task with the given ID'
         do_request
         check_resource(['relationships'])
@@ -137,7 +138,7 @@ resource 'Tasks' do
         parameter 'type',                     'Type',                     'Type' => 'String'
       end
 
-      example 'Task [CREATE]', document: :entities do
+      example 'Create a task', document: documentation_scope do
         explanation 'Create a Task associated with the current_user'
 
         do_request data: form_data
@@ -170,7 +171,7 @@ resource 'Tasks' do
         parameter 'type',                     'Type',                     'Type' => 'String'
       end
 
-      example 'Task [UPDATE]', document: :entities do
+      example 'Update a task', document: documentation_scope do
         explanation 'Update the current_user\'s Task with the given ID'
 
         do_request data: form_data
@@ -189,7 +190,7 @@ resource 'Tasks' do
                      'List of Task objects that have been successfully updated and list of errors related to Task objects that were not updated successfully',
                      'Type' => 'Array[Object]'
 
-      example 'Task [UPDATE] [BULK]', document: :entities do
+      example 'Bulk update tasks', document: documentation_scope do
         explanation 'Bulk Update a list of Tasks with an array of objects containing the ID and updated attributes'
         do_request data: bulk_update_form_data
 
@@ -201,7 +202,7 @@ resource 'Tasks' do
     delete '/api/v2/tasks/:id' do
       parameter 'id', 'the Id of the Task'
 
-      example 'Task [DELETE]', document: :entities do
+      example 'Delete a task', document: documentation_scope do
         explanation 'Delete the current_user\'s Task with the given ID'
         do_request
         expect(response_status).to eq 204

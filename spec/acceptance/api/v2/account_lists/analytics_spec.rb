@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Account List Analytics' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_analytics
 
   let(:resource_type) { 'account_list_analytics' }
   let(:user) { create(:user_with_account) }
@@ -51,7 +52,7 @@ resource 'Account List Analytics' do
         response_field 'updated_at',     'Time when analytics were observed',  'Type' => 'String'
       end
 
-      example 'Analytics for the past 30 days [GET]', document: :account_lists do
+      example 'Analytics for the past 30 days [GET]', document: documentation_scope do
         explanation 'List analytics related to the Account List for the past 30 days'
         do_request(account_list_id: account_list_id)
         check_resource
@@ -59,7 +60,7 @@ resource 'Account List Analytics' do
         expect(response_status).to eq 200
       end
 
-      example 'Analytics for a custom date range [GET]', document: :account_lists do
+      example 'Analytics for a custom date range [GET]', document: documentation_scope do
         explanation 'List analytics related to the Account List with a start and end date'
         do_request(account_list_id: account_list_id, filter: { start_date: 1.week.ago.iso8601, end_date: Time.current.iso8601 })
         check_resource

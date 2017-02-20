@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Tags' do
+resource 'Contacts > Tags' do
   include_context :json_headers
+  documentation_scope = :contacts_api_tags
 
   let(:resource_type) { :tags }
   let!(:user)         { create(:user_with_full_account) }
@@ -24,7 +25,7 @@ resource 'Tags' do
       let!(:contact_one) { create(:contact, account_list: account_list, tag_list: [tag_name]) }
       let!(:contact_two) { create(:contact, account_list: account_list_two, tag_list: [tag_name]) }
       before { user.account_lists << account_list_two }
-      example 'Tag [LIST]', document: :contacts do
+      example 'Tag [LIST]', document: documentation_scope do
         explanation 'List Contact Tags'
         do_request
         expect(resource_data.count).to eq 1
@@ -39,7 +40,7 @@ resource 'Tags' do
         parameter 'name', 'name of Tag'
       end
 
-      example 'Tag [CREATE]', document: :contacts do
+      example 'Tag [CREATE]', document: documentation_scope do
         explanation 'Create a Tag associated with the Contact'
         do_request data: form_data
         expect(resource_object['tag_list'].first).to eq new_tag_params[:name]
@@ -51,7 +52,7 @@ resource 'Tags' do
       parameter 'contact_id', 'the Contact id of the Tag'
       parameter 'tag_name',   'the Id of the Tag'
 
-      example 'Tag [DELETE]', document: :contacts do
+      example 'Tag [DELETE]', document: documentation_scope do
         explanation 'Delete the Contact\'s Tag with the given name'
         do_request
         expect(response_status).to eq 204

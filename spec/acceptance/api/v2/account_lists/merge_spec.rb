@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Merge' do
+resource 'Account Lists > Merges' do
   include_context :json_headers
+  documentation_scope = :account_list_api_merges
 
   let(:resource_type) { 'merge' }
   let!(:user)         { create(:user_with_account) }
@@ -40,7 +41,7 @@ resource 'Merge' do
       parameter 'account_list_id', 'Account List ID', required: true
       parameter 'id',              'ID (id of account list to be merged)', required: true, scope: [:data, :attributes]
 
-      example 'Account List [MERGE]', document: :account_lists do
+      example 'Account List [MERGE]', document: documentation_scope do
         explanation 'Merges the contacts of the given Account List into this Account List'
         do_request form_data
         expect(response_status).to eq(201), invalid_status_detail

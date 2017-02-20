@@ -1,3 +1,71 @@
+API_DOC_LEGEND = {
+  entities: %i(
+    account_lists
+    appeals
+    contacts
+    people
+    tasks
+    user
+  ),
+  account_lists_api: %i(
+    analytics
+    chalkline_mail
+    designation_accounts
+    donations
+    donor_accounts
+    imports
+    invites
+    mailchimp_accounts
+    merges
+    notification_preferences
+    notifications
+    prayer_letters_accounts
+    users
+  ),
+  appeals_api: %i(
+    contacts
+  ),
+  contacts_api: %i(
+    addresses
+    analytics
+    duplicates
+    exports
+    filter
+    merges
+    tags
+  ),
+  people_api: %i(
+    duplicates
+    email_addresses
+    facebook_accounts
+    linkedin_accounts
+    merges
+    phones
+    relationships
+    twitter_accounts
+    websites
+  ),
+  tasks_api: %i(
+    analytics
+    comments
+    filter
+    tags
+  ),
+  user_api: %i(
+    authenticate
+    google_accounts
+    key_accounts
+    options
+    organization_accounts
+  ),
+  reports_api: %i(
+    donation_summaries
+    monthly_totals
+    goal_progress
+    monthly_giving
+  )
+}.freeze
+
 RspecApiDocumentation.configure do |config|
   config.disable_dsl_status!
   config.format = ENV['DOC_FORMAT'] || :slate
@@ -5,37 +73,23 @@ RspecApiDocumentation.configure do |config|
   config.request_body_formatter = :json
   config.request_headers_to_include = %w(Authorization Content-Type)
   config.response_headers_to_include = %w(Content-Type)
-  config.define_group :entities do |group_config|
-    group_config.api_name = 'Entities'
-    group_config.filter = :entities
-  end
-  config.define_group :account_lists do |group_config|
-    group_config.api_name = 'Account Lists API'
-    group_config.filter = :account_lists
-  end
-  config.define_group :appeals do |group_config|
-    group_config.api_name = 'Appeals API'
-    group_config.filter = :appeals
-  end
-  config.define_group :contacts do |group_config|
-    group_config.api_name = 'Contacts API'
-    group_config.filter = :contacts
-  end
-  config.define_group :people do |group_config|
-    group_config.api_name = 'People API'
-    group_config.filter = :people
-  end
-  config.define_group :tasks do |group_config|
-    group_config.api_name = 'Tasks API'
-    group_config.filter = :tasks
-  end
-  config.define_group :user do |group_config|
-    group_config.api_name = 'User API'
-    group_config.filter = :user
-  end
-  config.define_group :reports do |group_config|
-    group_config.api_name = 'Reports API'
-    group_config.filter = :reports
+
+  API_DOC_LEGEND.each do |groups_parent, group_names|
+    config.define_group groups_parent do |group_config|
+      group_config.api_name = groups_parent.to_s.titleize
+      group_config.filter   = groups_parent
+    end
+
+    group_names.each do |group_name|
+      group_ref = "#{groups_parent}/#{group_name}"
+      api_name  = group_name.to_s.titleize
+      filter    = "#{groups_parent}_#{group_name}".to_sym
+
+      config.define_group group_ref do |group_config|
+        group_config.api_name = api_name
+        group_config.filter   = filter
+      end
+    end
   end
 
   config.response_body_formatter = proc do |content_type, response_body|

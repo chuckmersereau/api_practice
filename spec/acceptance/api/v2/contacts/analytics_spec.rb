@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Contact Analytics' do
+resource 'Contacts > Analytics' do
   include_context :json_headers
+  documentation_scope = :contacts_api_analytics
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -97,7 +98,7 @@ resource 'Contact Analytics' do
           response_field 'partners_60_days_late_count',   'Partners 60 Days Late Count',   'Type' => 'Number'
         end
 
-        example 'Analytics [GET]', document: :contacts do
+        example 'Analytics [GET]', document: documentation_scope do
           explanation "Viewing Analytical information for the User's Contacts for all Account Lists"
           do_request
 
@@ -121,7 +122,7 @@ resource 'Contact Analytics' do
           response_field 'partners_60_days_late_count',   'Partners 60 Days Late Count',   'Type' => 'Number'
         end
 
-        example 'Analytics [GET]', document: :contacts do
+        example 'Analytics [GET]', document: documentation_scope do
           explanation "Viewing Analytical information for a specific Account List's Contacts"
           do_request filter: { account_list_id: alternate_account_list.uuid }
 

@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Contacts' do
+resource 'Appeals > Contacts' do
   include_context :json_headers
+  documentation_scope = :appeals_api_contacts
 
   let(:resource_type) { 'contacts' }
   let!(:user)         { create(:user_with_full_account) }
@@ -83,7 +84,7 @@ resource 'Contacts' do
       parameter 'account_list_id', 'Account List ID', scope: :filters
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
-      example 'Contact [LIST]', document: :appeals do
+      example 'Contact [LIST]', document: documentation_scope do
         explanation 'List of Contacts associated to the Appeal'
         do_request
         check_collection_resource(1, %w(relationships))
@@ -94,7 +95,7 @@ resource 'Contacts' do
     post 'api/v2/appeals/:appeal_id/contacts/:id' do
       let(:id) { new_contact.uuid }
 
-      example 'Contact [POST]', document: :appeals do
+      example 'Contact [POST]', document: documentation_scope do
         explanation 'Add a contact to an Appeal'
         do_request
         check_resource(%w(relationships))
@@ -137,7 +138,7 @@ resource 'Contacts' do
         response_field 'updated_in_db_at',              'Updated In Db At',        'Type' => 'String'
       end
 
-      example 'Contact [GET]', document: :appeals do
+      example 'Contact [GET]', document: documentation_scope do
         explanation 'The Appeal Contact with the given ID'
         do_request
         check_resource(%w(relationships))
@@ -148,7 +149,7 @@ resource 'Contacts' do
     delete '/api/v2/appeals/:appeal_id/contacts/:id' do
       parameter 'id', 'ID', required: true
 
-      example 'Contact [DELETE]', document: :appeals do
+      example 'Contact [DELETE]', document: documentation_scope do
         explanation 'Remove the Contact with the given ID from the Appeal'
         do_request
         expect(response_status).to eq 204

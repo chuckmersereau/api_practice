@@ -4,6 +4,7 @@ require Rails.root.join('db', 'seeders', 'notification_types_seeder.rb')
 
 resource 'Constants' do
   include_context :json_headers
+  documentation_scope = :entities_constants
 
   let(:user) { create(:user_with_account) }
 
@@ -39,7 +40,7 @@ resource 'Constants' do
         ) + contact_attribute_keys
       end
 
-      example 'Constant [LIST]', document: :entities do
+      example 'List constants', document: documentation_scope do
         explanation 'List of Constants'
         do_request
 

@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Users' do
+resource 'Account Lists > Users' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_users
 
   let(:resource_type) { 'users' }
   let!(:user)         { create(:user_with_account) }
@@ -42,7 +43,7 @@ resource 'Users' do
     before { api_login(user) }
 
     get '/api/v2/account_lists/:account_list_id/users' do
-      example 'User [LIST]', document: :account_lists do
+      example 'User [LIST]', document: documentation_scope do
         explanation 'List of Users associated to the Account List'
         do_request
 
@@ -62,7 +63,7 @@ resource 'Users' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'User [GET]', document: :account_lists do
+      example 'User [GET]', document: documentation_scope do
         explanation 'The Account List User with the given ID'
         do_request
         check_resource(['relationships'])
@@ -73,7 +74,7 @@ resource 'Users' do
     end
 
     delete '/api/v2/account_lists/:account_list_id/users/:id' do
-      example 'User [DELETE]', document: :account_lists do
+      example 'User [DELETE]', document: documentation_scope do
         explanation 'Destroy the Account List User with the given ID'
         do_request
         expect(response_status).to eq 204

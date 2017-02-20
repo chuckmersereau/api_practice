@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Designation Accounts' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_designation_accounts
 
   let(:resource_type) { 'designation_accounts' }
   let(:user)          { create(:user_with_account) }
@@ -41,7 +42,7 @@ resource 'Designation Accounts' do
       parameter 'account_list_id', 'Account List ID', required: true
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
-      example 'Designation Account [LIST]', document: :account_lists do
+      example 'Designation Account [LIST]', document: documentation_scope do
         explanation 'List of Designation Accounts associated to the Account List'
         do_request
         check_collection_resource(1)
@@ -67,7 +68,7 @@ resource 'Designation Accounts' do
         response_field 'updated_in_db_at',   'Updated In Db At',   'Type' => 'String'
       end
 
-      example 'Designation Account [GET]', document: :account_lists do
+      example 'Designation Account [GET]', document: documentation_scope do
         explanation 'The Designation Account with the given ID'
         do_request
         check_resource

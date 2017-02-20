@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'People' do
   include_context :json_headers
+  documentation_scope = :entities_people
 
   let!(:user)         { create(:user_with_full_account) }
   let(:resource_type) { 'people' }
@@ -126,11 +127,13 @@ resource 'People' do
     }
   end
 
+  documentation_scope = :entities_people
+
   context 'authorized user' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people' do
-      example 'Person [LIST]', document: :entities do
+      example 'List people', document: documentation_scope do
         explanation 'List of People associated to the Contact'
         do_request
         check_collection_resource(1, ['relationships'])
@@ -169,7 +172,7 @@ resource 'People' do
         end
       end
 
-      example 'Person [GET]', document: :entities do
+      example 'Retrieve a person', document: documentation_scope do
         explanation 'The Contact\'s Person with the given ID'
         do_request
         check_resource(['relationships'])
@@ -234,7 +237,7 @@ resource 'People' do
         parameter 'websites_attributes[:key][url]',                           'Website URL, where :key is an integer',                                            'Type' => 'String'
       end
 
-      example 'Person [CREATE]', document: :entities do
+      example 'Create a person', document: documentation_scope do
         explanation 'Create a Person associated with the Contact'
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
@@ -299,7 +302,7 @@ resource 'People' do
         parameter 'websites_attributes[:key][url]',                           'Website URL, where :key is an integer',                                            'Type' => 'String'
       end
 
-      example 'Person [UPDATE]', document: :entities do
+      example 'Update a person', document: documentation_scope do
         explanation 'Update the Contact\'s Person with the given ID'
         do_request data: form_data
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
@@ -320,7 +323,7 @@ resource 'People' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:id' do
-      example 'Person [DELETE]', document: :entities do
+      example 'Delete a person', document: documentation_scope do
         explanation 'Delete the Contact\'s Person with the given ID'
         do_request
         expect(response_status).to eq(204)

@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Expected Monthly Totals Report' do
+resource 'Reports > Expected Monthly Totals Report' do
   include_context :json_headers
+  documentation_scope = :reports_api_monthly_totals
 
   let(:resource_type) { 'reports_expected_monthly_totals' }
   let(:user) { create(:user_with_account) }
@@ -39,7 +40,7 @@ resource 'Expected Monthly Totals Report' do
         response_field 'account_list', 'Account List', 'Type' => 'Object'
       end
 
-      example 'Expected Monthly Total [LIST]', document: :reports do
+      example 'Expected Monthly Total [LIST]', document: documentation_scope do
         explanation 'Lists received and possible donations for the current month'
         do_request(filter: { account_list_id: account_list_id })
         check_resource(['relationships'])

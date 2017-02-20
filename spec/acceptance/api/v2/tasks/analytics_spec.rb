@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Tasks Analytics' do
+resource 'Tasks > Analytics' do
   include_context :json_headers
+  documentation_scope = :tasks_api_analytics
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -92,7 +93,7 @@ resource 'Tasks Analytics' do
           response_field 'total_tasks_due_count',                   'Total Tasks Due Count',                   'Type' => 'Number'
         end
 
-        example 'Analytics [GET]', document: :tasks do
+        example 'Analytics [GET]', document: documentation_scope do
           explanation "Viewing Analytical information for the User's Tasks for all Account Lists"
           do_request
 
@@ -137,7 +138,7 @@ resource 'Tasks Analytics' do
           response_field 'total_tasks_due_count',                   'Total Tasks Due Count',                   'Type' => 'Number'
         end
 
-        example 'Analytics [GET]', document: :tasks do
+        example 'Analytics [GET]', document: documentation_scope do
           explanation "Viewing Analytical information for a specific Account Lists' Tasks"
           do_request filter: { account_list_id: alternate_account_list.uuid }
 

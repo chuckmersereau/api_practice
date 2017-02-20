@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Monthly Giving Graph Report' do
+resource 'Reports > Monthly Giving Graph Report' do
   include_context :json_headers
+  documentation_scope = :reports_api_monthly_giving
 
   let(:resource_type) { 'reports_monthly_giving_graphs' }
   let(:user) { create(:user_with_account) }
@@ -48,7 +49,7 @@ resource 'Monthly Giving Graph Report' do
         response_field 'account_list', 'Account List', 'Type' => 'Object'
       end
 
-      example 'Monthly Giving Graph [LIST]', document: :reports do
+      example 'Monthly Giving Graph [LIST]', document: documentation_scope do
         explanation 'Lists information related to the Monthly Giving Graph'
         do_request(filter: { account_list_id: account_list_id })
         check_resource(['relationships'])

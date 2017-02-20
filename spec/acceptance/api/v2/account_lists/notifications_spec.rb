@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Notifications' do
+resource 'Account Lists > Notifications' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_notifications
 
   let(:resource_type) { 'notifications' }
   let!(:user)         { create(:user_with_full_account) }
@@ -74,7 +75,7 @@ resource 'Notifications' do
       parameter 'account_list_id', 'Account List ID', required: true
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
-      example 'Notification [LIST]', document: :account_lists do
+      example 'Notification [LIST]', document: documentation_scope do
         explanation 'List of Notifications associated with the Account List'
         do_request
         check_collection_resource(2, ['relationships'])
@@ -94,7 +95,7 @@ resource 'Notifications' do
         response_field 'updated_in_db_at',     'Updated In Db At',     'Type' => 'String'
       end
 
-      example 'Notification [GET]', document: :account_lists do
+      example 'Notification [GET]', document: documentation_scope do
         explanation 'The Account List Notification with the given ID'
         do_request
         check_resource(['relationships'])
@@ -111,7 +112,7 @@ resource 'Notifications' do
         parameter 'notification_type_id', 'Notification Type ID'
       end
 
-      example 'Notification [CREATE]', document: :account_lists do
+      example 'Notification [CREATE]', document: documentation_scope do
         explanation 'Creates a new Notification associated with the Account List'
         do_request data: form_data
 
@@ -128,7 +129,7 @@ resource 'Notifications' do
         parameter 'notification_type_id', 'Notification Type ID'
       end
 
-      example 'Notification [UPDATE]', document: :account_lists do
+      example 'Notification [UPDATE]', document: documentation_scope do
         explanation 'Updates the Account List Notification with the given ID'
         do_request data: form_data
 
@@ -140,7 +141,7 @@ resource 'Notifications' do
       parameter 'account_list_id', 'Account List ID', required: true
       parameter 'id',              'ID', required: true
 
-      example 'Notification [DELETE]', document: :account_lists do
+      example 'Notification [DELETE]', document: documentation_scope do
         explanation 'Deletes the Account List Notification with the given ID'
         do_request
         expect(response_status).to eq 204

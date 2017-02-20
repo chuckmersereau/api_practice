@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Key Accounts' do
+resource 'User > Key Accounts' do
   include_context :json_headers
+  documentation_scope = :user_api_key_accounts
 
   let!(:user)         { create(:user_with_full_account) }
   let(:resource_type) { 'key_accounts' }
@@ -49,7 +50,7 @@ resource 'Key Accounts' do
     before { api_login(user) }
 
     get '/api/v2/user/key_accounts' do
-      example 'Key Account [LIST]', document: :user do
+      example 'Key Account [LIST]', document: documentation_scope do
         do_request
         explanation 'List of Key Accounts associated to current_user'
         check_collection_resource(2)
@@ -70,7 +71,7 @@ resource 'Key Accounts' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Key Account [GET]', document: :user do
+      example 'Key Account [GET]', document: documentation_scope do
         explanation 'The current_user\'s Key Account with the given ID'
         do_request
         check_resource
@@ -87,7 +88,7 @@ resource 'Key Accounts' do
         parameter 'remote_id',  'Remote Id', required: true
       end
 
-      example 'Key Account [CREATE]', document: :user do
+      example 'Key Account [CREATE]', document: documentation_scope do
         explanation 'Create a Key Account associated with the current_user'
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
@@ -104,7 +105,7 @@ resource 'Key Accounts' do
         parameter 'remote_id',  'Remote Id', required: true
       end
 
-      example 'Key Account [UPDATE]', document: :user do
+      example 'Key Account [UPDATE]', document: documentation_scope do
         explanation 'Update the current_user\'s Key Account with the given ID'
         do_request data: form_data
         expect(resource_object['email']).to eq new_key_account_params['email']
@@ -113,7 +114,7 @@ resource 'Key Accounts' do
     end
 
     delete '/api/v2/user/key_accounts/:id' do
-      example 'Key Account [DELETE]', document: :user do
+      example 'Key Account [DELETE]', document: documentation_scope do
         explanation 'Delete the current_user\'s Key Account with the given ID'
         do_request
         expect(response_status).to eq(204), invalid_status_detail

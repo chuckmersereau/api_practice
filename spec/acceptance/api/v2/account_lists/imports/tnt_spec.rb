@@ -1,9 +1,10 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Import from TNT XML' do
+resource 'Account Lists > Imports > from TNT XML' do
   include_context :multipart_form_data_headers
   include ActionDispatch::TestProcess
+  documentation_scope = :account_lists_api_imports
 
   let(:resource_type) { 'imports' }
   let!(:user)         { create(:user_with_account) }
@@ -70,7 +71,7 @@ resource 'Import from TNT XML' do
         parameter 'user_id',           'User ID',           'Type' => 'String'
       end
 
-      example 'Import [CREATE]', document: :account_lists do
+      example 'Import [CREATE]', document: documentation_scope do
         explanation 'Creates a new Import associated with the Account List, this endpoint supports Content-Type multipart/form-data to handle the file upload'
         do_request data: form_data
 

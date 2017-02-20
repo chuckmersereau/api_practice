@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Account List ChalkLine Mail' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_chalkline_mail
 
   let(:resource_type) { 'chalkline_mails' }
   let(:user) { create(:user_with_account) }
@@ -19,7 +20,7 @@ resource 'Account List ChalkLine Mail' do
     before { api_login(user) }
 
     post '/api/v2/account_lists/:account_list_id/chalkline_mail' do
-      example 'ChalkLine Mail [CREATE]', document: :account_lists do
+      example 'ChalkLine Mail [CREATE]', document: documentation_scope do
         explanation 'Enqueues a job that will send ChalkLine Mail for this Account List'
         travel_to Time.current do
           do_request account_list_id: account_list_id, data: { type: 'chalkline_mails' }

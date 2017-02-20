@@ -1,8 +1,17 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Merges' do
+resource 'Contacts > Merges' do
   include_context :json_headers
+  # This is the scope in how these endpoints will be organized in the
+  # generated documentation.
+  #
+  # :entities should be used for "top level" resources, and the top level
+  # resources should be used for nested resources.
+  #
+  # Ex: Api > v2 > Contacts                   - :entities would be the scope
+  # Ex: Api > v2 > Contacts > Email Addresses - :contacts would be the scope
+  documentation_scope = :contacts_api_merges
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -88,16 +97,6 @@ resource 'Merges' do
     )
   end
 
-  # This is the scope in how these endpoints will be organized in the
-  # generated documentation.
-  #
-  # :entities should be used for "top level" resources, and the top level
-  # resources should be used for nested resources.
-  #
-  # Ex: Api > v2 > Contacts                   - :entities would be the scope
-  # Ex: Api > v2 > Contacts > Email Addresses - :contacts would be the scope
-  document = :contacts
-
   context 'authorized user' do
     before { api_login(user) }
 
@@ -127,7 +126,7 @@ resource 'Merges' do
 
       let(:attributes) { {} }
 
-      example 'Merge [CREATE]', document: document do
+      example 'Merge [CREATE]', document: documentation_scope do
         explanation 'Create Merge'
         do_request data: form_data
 

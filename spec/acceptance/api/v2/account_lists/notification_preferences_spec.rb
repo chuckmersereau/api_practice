@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Notification Preferences' do
+resource 'Account Lists > Notification Preferences' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_notification_preferences
 
   let(:resource_type) { 'notification_preferences' }
   let(:user) { create(:user_with_account) }
@@ -65,8 +66,6 @@ resource 'Notification Preferences' do
       notification_type
     )
   end
-
-  documentation_scope = :account_lists
 
   context 'authorized user' do
     before { api_login(user) }

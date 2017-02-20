@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Address' do
+resource 'Contacts > Addresses' do
   include_context :json_headers
+  documentation_scope = :contacts_api_addresses
 
   let!(:user) { create(:user_with_full_account) }
   let(:resource_type) { 'addresses' }
@@ -43,7 +44,7 @@ resource 'Address' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/addresses' do
-      example 'Address [LIST]', document: :contacts do
+      example 'Address [LIST]', document: documentation_scope do
         explanation 'List of Addresses associated to the Contact'
         do_request
 
@@ -70,7 +71,7 @@ resource 'Address' do
         response_field 'updated_in_db_at',        'Updated In Db At',        'Type' => 'String'
       end
 
-      example 'Address [GET]', document: :contacts do
+      example 'Address [GET]', document: documentation_scope do
         explanation 'The Contact\'s Address with the given ID'
         do_request
         check_resource
@@ -96,7 +97,7 @@ resource 'Address' do
         parameter 'street',                  'Street'
       end
 
-      example 'Address [CREATE]', document: :contacts do
+      example 'Address [CREATE]', document: documentation_scope do
         explanation 'Create a Address associated with the Contact'
         do_request data: form_data
 
@@ -122,7 +123,7 @@ resource 'Address' do
         parameter 'street',                  'Street'
       end
 
-      example 'Address [UPDATE]', document: :contacts do
+      example 'Address [UPDATE]', document: documentation_scope do
         explanation 'Update the Contact\'s Address with the given ID'
         do_request data: form_data
 
@@ -132,7 +133,7 @@ resource 'Address' do
     end
 
     delete '/api/v2/contacts/:contact_id/addresses/:id' do
-      example 'Address [DELETE]', document: :contacts do
+      example 'Address [DELETE]', document: documentation_scope do
         explanation 'Delete the Contact\'s Address with the given ID'
         do_request
         expect(response_status).to eq(204)

@@ -1,8 +1,10 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Contacts People Email Addresses' do
+resource 'Contacts > People > Email Addresses' do
   include_context :json_headers
+  documentation_scope = :people_api_email_addresses
+
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
   let(:resource_type) { 'email_addresses' }
@@ -48,7 +50,7 @@ resource 'Contacts People Email Addresses' do
     get '/api/v2/contacts/:contact_id/people/:person_id/email_addresses' do
       before { email_address }
 
-      example 'Email Address [LIST]', document: :people do
+      example 'Email Address [LIST]', document: documentation_scope do
         explanation 'List of Email Addresses associated to the Person'
         do_request
 
@@ -71,7 +73,7 @@ resource 'Contacts People Email Addresses' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Email Address [GET]', document: :people do
+      example 'Email Address [GET]', document: documentation_scope do
         explanation "Getting a Person's Email Address by ID"
         do_request
 
@@ -93,7 +95,7 @@ resource 'Contacts People Email Addresses' do
 
       let(:attributes) { attributes_for(:email_address).merge(person_id: person.uuid) }
 
-      example 'Email Address [CREATE]', document: :people do
+      example 'Email Address [CREATE]', document: documentation_scope do
         explanation 'Create an Email Address associated with the Person'
         do_request data: form_data
 
@@ -117,7 +119,7 @@ resource 'Contacts People Email Addresses' do
 
       before { attributes.merge!(email: 'new-email@example.com') }
 
-      example 'Email Address [UPDATE]', document: :people do
+      example 'Email Address [UPDATE]', document: documentation_scope do
         explanation 'Update the Person\'s Email Address with the given ID'
         do_request data: form_data
 
@@ -130,7 +132,7 @@ resource 'Contacts People Email Addresses' do
 
     # destroy
     delete '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
-      example 'Email Address [DELETE]', document: :people do
+      example 'Email Address [DELETE]', document: documentation_scope do
         explanation 'Delete the Person\'s Email Address with the given ID'
         do_request
         expect(response_status).to eq 204

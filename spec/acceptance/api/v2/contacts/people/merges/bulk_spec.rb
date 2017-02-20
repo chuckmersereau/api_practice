@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'People Merge Bulk' do
+resource 'People > Merges > Bulk' do
   include_context :json_headers
+  documentation_scope = :people_api_merges
 
   let!(:account_list)    { user.account_lists.first }
   let!(:contact)         { create(:contact, account_list: account_list) }
@@ -20,7 +21,7 @@ resource 'People Merge Bulk' do
         parameter 'loser_id', 'The ID of the person that should lose the merge'
       end
 
-      example 'Merge People [BULK POST]', document: :contacts do
+      example 'Merge People [BULK POST]', document: documentation_scope do
         explanation 'Bulk merge People with the given IDs'
         do_request data: [{ data: { attributes: { winner_id: person_one.uuid, loser_id: person_two.uuid } } }]
         expect(response_status).to eq(200)

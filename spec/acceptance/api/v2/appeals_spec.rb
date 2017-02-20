@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Appeals' do
   include_context :json_headers
+  documentation_scope = :entities_appeals
 
   let(:resource_type) { 'appeals' }
   let!(:user)         { create(:user_with_full_account) }
@@ -66,7 +67,7 @@ resource 'Appeals' do
 
       response_field :data, 'Array of Appeals', 'Type' => 'Array[Object]'
 
-      example 'Appeal [LIST]', document: :entities do
+      example 'List appeals', document: documentation_scope do
         explanation 'List of Appeals'
         do_request
         check_collection_resource(1, %w(relationships))
@@ -89,7 +90,7 @@ resource 'Appeals' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Appeal [GET]', document: :entities do
+      example 'Retreive an Appeal', document: documentation_scope do
         explanation 'The Appeal with the given ID'
         do_request
         check_resource(%w(relationships))
@@ -106,7 +107,7 @@ resource 'Appeals' do
         parameter 'name',            'Name', required: true
       end
 
-      example 'Appeal [CREATE]', document: :entities do
+      example 'Create an appeal', document: documentation_scope do
         explanation 'Create an Appeal'
         do_request data: form_data
         expect(response_status).to eq(201), invalid_status_detail
@@ -123,7 +124,7 @@ resource 'Appeals' do
         parameter 'name',        'Name',        'Type' => 'String'
       end
 
-      example 'Appeal [UPDATE]', document: :entities do
+      example 'Update an appeal', document: documentation_scope do
         explanation 'Update the Appeal with the given ID'
         do_request data: form_data
         expect(response_status).to eq(200), invalid_status_detail
@@ -134,7 +135,7 @@ resource 'Appeals' do
       parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
       parameter 'id',              'ID', required: true
 
-      example 'Appeal [DELETE]', document: :entities do
+      example 'Delete an appeal', document: documentation_scope do
         explanation 'Delete the Appeal with the given ID'
         do_request
         expect(response_status).to eq(204), invalid_status_detail

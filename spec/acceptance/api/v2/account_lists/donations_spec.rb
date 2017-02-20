@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Donations' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_donations
 
   let(:resource_type) { 'donations' }
   let!(:user)         { create(:user_with_full_account) }
@@ -89,7 +90,7 @@ resource 'Donations' do
       parameter 'account_list_id', 'Account List ID', required: true
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
-      example 'Donation [LIST]', document: :account_lists do
+      example 'Donation [LIST]', document: documentation_scope do
         explanation 'List of Donations associated with the the Account List'
         do_request
         check_collection_resource(2, ['relationships'])
@@ -121,7 +122,7 @@ resource 'Donations' do
         response_field 'updated_in_db_at',       'Updated In Db At',       'Type' => 'String'
       end
 
-      example 'Donation [GET]', document: :account_lists do
+      example 'Donation [GET]', document: documentation_scope do
         explanation 'The Account List Donation with the given ID'
         do_request
         check_resource(['relationships'])
@@ -142,7 +143,7 @@ resource 'Donations' do
         parameter 'donor_account_id',       'Donor Account ID'
       end
 
-      example 'Donation [CREATE]', document: :account_lists do
+      example 'Donation [CREATE]', document: documentation_scope do
         explanation 'Creates a new Donation associated with the Account List'
         do_request data: form_data
 
@@ -164,7 +165,7 @@ resource 'Donations' do
         parameter 'donor_account_id',       'Donor Account ID'
       end
 
-      example 'Donation [UPDATE]', document: :account_lists do
+      example 'Donation [UPDATE]', document: documentation_scope do
         explanation 'Updates a Donation associated with the Account List'
         do_request data: build_data(new_donation)
 

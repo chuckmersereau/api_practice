@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Task Comments' do
+resource 'Tasks > Comments' do
   include_context :json_headers
+  documentation_scope = :tasks_api_comments
 
   let!(:user) { create(:user_with_full_account) }
   let(:resource_type) { :comments }
@@ -43,7 +44,7 @@ resource 'Task Comments' do
     before { api_login(user) }
 
     get '/api/v2/tasks/:task_id/comments' do
-      example 'Comment [LIST]', document: :tasks do
+      example 'Comment [LIST]', document: documentation_scope do
         explanation 'List of Comments associated to the Task'
         do_request
 
@@ -64,7 +65,7 @@ resource 'Task Comments' do
         response_field 'person', 'The person who wrote the comment', 'Type' => 'Object'
       end
 
-      example 'Comment [GET]', document: :tasks do
+      example 'Comment [GET]', document: documentation_scope do
         explanation "The Task's Comment with the given ID"
         do_request
         check_resource(['relationships'])
@@ -82,7 +83,7 @@ resource 'Task Comments' do
         parameter 'person', 'The person who wrote the comment', 'Type' => 'Object'
       end
 
-      example 'Comment [CREATE]', document: :tasks do
+      example 'Comment [CREATE]', document: documentation_scope do
         explanation 'Create a Comment associated with the Task'
         do_request data: form_data
 
@@ -100,7 +101,7 @@ resource 'Task Comments' do
         parameter 'person', 'The person who wrote the comment', 'Type' => 'Object'
       end
 
-      example 'Comment [UPDATE]', document: :tasks do
+      example 'Comment [UPDATE]', document: documentation_scope do
         explanation "Update the Task's Comment with the given ID"
         do_request data: form_data
 
@@ -110,7 +111,7 @@ resource 'Task Comments' do
     end
 
     delete '/api/v2/tasks/:task_id/comments/:id' do
-      example 'Comment [DELETE]', document: :tasks do
+      example 'Comment [DELETE]', document: documentation_scope do
         explanation "Delete the Task's Comment with the given ID"
         do_request
         expect(response_status).to eq(204)

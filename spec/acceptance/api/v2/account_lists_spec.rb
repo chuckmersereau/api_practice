@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Account Lists' do
   include_context :json_headers
+  documentation_scope = :entities_account_lists
 
   let(:resource_type) { 'account_lists' }
   let!(:user)         { create(:user_with_account) }
@@ -46,7 +47,7 @@ resource 'Account Lists' do
     get '/api/v2/account_lists' do
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
-      example 'Account List [LIST]', document: :entities do
+      example 'List account lists', document: documentation_scope do
         explanation 'List of Account Lists'
         do_request
         check_collection_resource(1, ['relationships'])
@@ -65,7 +66,7 @@ resource 'Account Lists' do
         response_field 'updated_in_db_at',        'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Account List [GET]', document: :entities do
+      example 'Retreive an account list', document: documentation_scope do
         explanation 'The Account List with the given ID'
         do_request
         check_resource(['relationships'])
@@ -93,7 +94,7 @@ resource 'Account Lists' do
         end
       end
 
-      example 'Account List [UPDATE]', document: :entities do
+      example 'Update an account list', document: documentation_scope do
         explanation 'Update the Account List with the given ID'
         do_request data: form_data
         expect(resource_object['name']).to eq new_account_list['name']

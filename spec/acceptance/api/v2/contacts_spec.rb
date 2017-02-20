@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts' do
   include_context :json_headers
+  documentation_scope = :entities_contacts
 
   let(:resource_type) { 'contacts' }
   let!(:user)         { create(:user_with_account) }
@@ -162,11 +163,58 @@ resource 'Contacts' do
 
       response_field :data, 'Data', 'Type' => 'Array[Object]'
 
-      example 'Contact [LIST]', document: :entities do
+      example 'List contacts', document: documentation_scope do
         explanation 'List of Contacts'
         do_request
         expect(response_status).to eq(200), invalid_status_detail
         check_collection_resource(1, additional_keys)
+      end
+    end
+
+    get '/api/v2/contacts/:id' do
+      parameter :id, 'ID of the Contact', required: true
+      with_options scope: [:data, :attributes] do
+        response_field 'avatar',                        'Avatar',                  'Type' => 'String'
+        response_field 'church_name',                   'Church Name',             'Type' => 'String'
+        response_field 'contacts_that_referred_me_ids', 'IDs of Refferals to me',  'Type' => 'Array[Number]'
+        response_field 'created_at',                    'Created At',              'Type' => 'String'
+        response_field 'deceased',                      'Deceased',                'Type' => 'Boolean'
+        response_field 'donor_accounts',                'Donor Accounts',          'Type' => 'Array[Object]'
+        response_field 'last_activity',                 'Last Activity',           'Type' => 'String'
+        response_field 'last_appointment',              'Last Appointment',        'Type' => 'String'
+        response_field 'last_letter',                   'Last Letter',             'Type' => 'String'
+        response_field 'last_phone_call',               'Last Phone Call',         'Type' => 'String'
+        response_field 'last_pre_call',                 'Last Pre Call',           'Type' => 'String'
+        response_field 'last_thank',                    'Last Thank',              'Type' => 'String'
+        response_field 'likely_to_give',                'Likely to Give',          'Type' => 'String'
+        response_field 'magazine',                      'Magazine',                'Type' => 'Boolean'
+        response_field 'name',                          'Contact Name',            'Type' => 'String'
+        response_field 'next_ask',                      'Next Ask',                'Type' => 'String'
+        response_field 'no_appeals',                    'No Appeals',              'Type' => 'Boolean'
+        response_field 'notes',                         'Notes',                   'Type' => 'String'
+        response_field 'notes_saved_at',                'Notes Saved At',          'Type' => 'String'
+        response_field 'pledge_amount',                 'Pledge Amount',           'Type' => 'Number'
+        response_field 'pledge_currency',               'Pledge Currency',         'Type' => 'String'
+        response_field 'pledge_currency_symbol',        'Pledge Currency Symbol',  'Type' => 'String'
+        response_field 'pledge_frequency',              'Pledge Frequency',        'Type' => 'String'
+        response_field 'pledge_received',               'Pledge Received',         'Type' => 'Boolean'
+        response_field 'pledge_start_date',             'Pledge Start Date',       'Type' => 'String'
+        response_field 'send_newsletter',               'Send Newsletter',         'Type' => 'String'
+        response_field 'square_avatar',                 'Square Avatar',           'Type' => 'String'
+        response_field 'status',                        'Status',                  'Type' => 'String'
+        response_field 'tag_list',                      'Tags',                    'Type' => 'Array[String]'
+        response_field 'timezone',                      'Time Zone',               'Type' => 'String'
+        response_field 'uncompleted_tasks_count',       'Uncompleted Tasks Count', 'Type' => 'Number'
+        response_field 'updated_at',                    'Updated At',              'Type' => 'String'
+        response_field 'updated_in_db_at',              'Updated In Db At',        'Type' => 'String'
+      end
+
+      example 'Retreive a contact', document: documentation_scope do
+        explanation 'The Contact with the given ID'
+        do_request
+        check_resource(additional_keys)
+        expect(resource_object['name']).to eq contact.name
+        expect(response_status).to eq 200
       end
     end
 
@@ -217,59 +265,12 @@ resource 'Contacts' do
         parameter 'spouse_phone',                'Spouse phone number',                 'Type' => 'String'
       end
 
-      example 'Contact [CREATE]', document: :entities do
+      example 'Create a contact', document: documentation_scope do
         explanation 'Create a Contact'
         do_request data: form_data
 
         expect(response_status).to eq(201), invalid_status_detail
         expect(resource_object['name']).to eq new_contact[:name]
-      end
-    end
-
-    get '/api/v2/contacts/:id' do
-      parameter :id, 'ID of the Contact', required: true
-      with_options scope: [:data, :attributes] do
-        response_field 'avatar',                        'Avatar',                  'Type' => 'String'
-        response_field 'church_name',                   'Church Name',             'Type' => 'String'
-        response_field 'contacts_that_referred_me_ids', 'IDs of Refferals to me',  'Type' => 'Array[Number]'
-        response_field 'created_at',                    'Created At',              'Type' => 'String'
-        response_field 'deceased',                      'Deceased',                'Type' => 'Boolean'
-        response_field 'donor_accounts',                'Donor Accounts',          'Type' => 'Array[Object]'
-        response_field 'last_activity',                 'Last Activity',           'Type' => 'String'
-        response_field 'last_appointment',              'Last Appointment',        'Type' => 'String'
-        response_field 'last_letter',                   'Last Letter',             'Type' => 'String'
-        response_field 'last_phone_call',               'Last Phone Call',         'Type' => 'String'
-        response_field 'last_pre_call',                 'Last Pre Call',           'Type' => 'String'
-        response_field 'last_thank',                    'Last Thank',              'Type' => 'String'
-        response_field 'likely_to_give',                'Likely to Give',          'Type' => 'String'
-        response_field 'magazine',                      'Magazine',                'Type' => 'Boolean'
-        response_field 'name',                          'Contact Name',            'Type' => 'String'
-        response_field 'next_ask',                      'Next Ask',                'Type' => 'String'
-        response_field 'no_appeals',                    'No Appeals',              'Type' => 'Boolean'
-        response_field 'notes',                         'Notes',                   'Type' => 'String'
-        response_field 'notes_saved_at',                'Notes Saved At',          'Type' => 'String'
-        response_field 'pledge_amount',                 'Pledge Amount',           'Type' => 'Number'
-        response_field 'pledge_currency',               'Pledge Currency',         'Type' => 'String'
-        response_field 'pledge_currency_symbol',        'Pledge Currency Symbol',  'Type' => 'String'
-        response_field 'pledge_frequency',              'Pledge Frequency',        'Type' => 'String'
-        response_field 'pledge_received',               'Pledge Received',         'Type' => 'Boolean'
-        response_field 'pledge_start_date',             'Pledge Start Date',       'Type' => 'String'
-        response_field 'send_newsletter',               'Send Newsletter',         'Type' => 'String'
-        response_field 'square_avatar',                 'Square Avatar',           'Type' => 'String'
-        response_field 'status',                        'Status',                  'Type' => 'String'
-        response_field 'tag_list',                      'Tags',                    'Type' => 'Array[String]'
-        response_field 'timezone',                      'Time Zone',               'Type' => 'String'
-        response_field 'uncompleted_tasks_count',       'Uncompleted Tasks Count', 'Type' => 'Number'
-        response_field 'updated_at',                    'Updated At',              'Type' => 'String'
-        response_field 'updated_in_db_at',              'Updated In Db At',        'Type' => 'String'
-      end
-
-      example 'Contact [GET]', document: :entities do
-        explanation 'The Contact with the given ID'
-        do_request
-        check_resource(additional_keys)
-        expect(resource_object['name']).to eq contact.name
-        expect(response_status).to eq 200
       end
     end
 
@@ -322,7 +323,7 @@ resource 'Contacts' do
         parameter 'spouse_phone',                'Spouse phone number',                 'Type' => 'String'
       end
 
-      example 'Contact [UPDATE]', document: :entities do
+      example 'Update a contact', document: documentation_scope do
         explanation 'Update the Contact with the given ID'
         do_request data: form_data
         expect(response_status).to eq(200), invalid_status_detail
@@ -342,7 +343,7 @@ resource 'Contacts' do
                      'List of Contact objects that have been successfully updated and list of errors related to Contact objects that were not updated successfully',
                      'Type' => 'Array[Object]'
 
-      example 'Contact [UPDATE] [BULK]', document: :entities do
+      example 'Bulk update contacts', document: documentation_scope do
         explanation 'Bulk Update a list of Contacts with an array of objects containing the ID and updated attributes'
         do_request data: bulk_update_form_data
         expect(response_status).to eq(200), invalid_status_detail
@@ -352,7 +353,7 @@ resource 'Contacts' do
 
     delete '/api/v2/contacts/:id' do
       parameter :id, 'ID of the Contact', required: true
-      example 'Contact [DELETE]', document: :entities do
+      example 'Delete a contact', document: documentation_scope do
         explanation 'Delete Contact with the given ID'
         do_request
         expect(response_status).to eq 204

@@ -2,8 +2,9 @@ require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 require 'json'
 
-resource 'User / Authenticate' do
+resource 'User > Authenticate' do
   include_context :json_headers
+  documentation_scope = :user_api_authenticate
 
   let!(:user) { create(:user) }
 
@@ -19,7 +20,7 @@ resource 'User / Authenticate' do
       response_field 'json_web_token', 'JSON Web Token',                           type: 'String'
     end
 
-    example 'Authenticate [CREATE]', document: :user do
+    example 'Authenticate [CREATE]', document: documentation_scope do
       explanation 'Create a JSON Web Token from a provided valid CAS Ticket'
       do_request data: { type: 'authenticate', attributes: { cas_ticket: 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a' } }
       expect(response_status).to eq(200)

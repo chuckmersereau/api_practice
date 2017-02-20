@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Twitter Accounts' do
+resource 'Contacts > People > Twitter Accounts' do
   include_context :json_headers
+  documentation_scope = :people_api_twitter_accounts
 
   let(:resource_type) { 'twitter_accounts' }
   let!(:user) { create(:user_with_full_account) }
@@ -49,7 +50,7 @@ resource 'Twitter Accounts' do
       parameter 'person_id',  'Person ID', required: true
       response_field 'data',  'Data', 'Type' => 'Array[Object]'
 
-      example 'Twitter Account [LIST]', document: :people do
+      example 'Twitter Account [LIST]', document: documentation_scope do
         explanation 'List of Twitter Accounts associated to the Person'
         do_request
         check_collection_resource(2)
@@ -68,7 +69,7 @@ resource 'Twitter Accounts' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Twitter Account [GET]', document: :people do
+      example 'Twitter Account [GET]', document: documentation_scope do
         explanation 'The Person\'s Twitter Account with the given ID'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -83,7 +84,7 @@ resource 'Twitter Accounts' do
         parameter 'screen_name', 'Screen Name'
       end
 
-      example 'Twitter Account [CREATE]', document: :people do
+      example 'Twitter Account [CREATE]', document: documentation_scope do
         explanation 'Create a Twitter Account associated with the Person'
         do_request data: form_data
         expect(response_status).to eq 201
@@ -97,7 +98,7 @@ resource 'Twitter Accounts' do
         parameter 'screen_name', 'Screen Name'
       end
 
-      example 'Twitter Account [UPDATE]', document: :people do
+      example 'Twitter Account [UPDATE]', document: documentation_scope do
         explanation 'Update the Person\'s Twitter Account with the given ID'
         do_request data: form_data
         expect(response_status).to eq 200
@@ -108,7 +109,7 @@ resource 'Twitter Accounts' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID',  required: true
 
-      example 'Twitter Account [DELETE]', document: :people do
+      example 'Twitter Account [DELETE]', document: documentation_scope do
         explanation 'Delete the Person\'s Twitter Account with the given ID'
         do_request
         expect(response_status).to eq 204

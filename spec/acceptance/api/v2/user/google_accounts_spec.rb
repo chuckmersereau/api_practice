@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Google Accounts' do
+resource 'User > Google Accounts' do
   include_context :json_headers
+  documentation_scope = :user_api_google_accounts
 
   let!(:user)         { create(:user_with_full_account) }
   let(:resource_type) { 'google_accounts' }
@@ -50,7 +51,7 @@ resource 'Google Accounts' do
     before { api_login(user) }
 
     get '/api/v2/user/google_accounts' do
-      example 'Google Account [LIST]', document: :user do
+      example 'Google Account [LIST]', document: documentation_scope do
         do_request
         explanation 'List of Google Accounts associated to current_user'
         check_collection_resource(1)
@@ -72,7 +73,7 @@ resource 'Google Accounts' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Google Account [GET]', document: :user do
+      example 'Google Account [GET]', document: documentation_scope do
         explanation 'The current_user\'s Google Account with the given ID'
         do_request
         check_resource
@@ -89,7 +90,7 @@ resource 'Google Accounts' do
         parameter 'token',          'Token'
       end
 
-      example 'Google Account [CREATE]', document: :user do
+      example 'Google Account [CREATE]', document: documentation_scope do
         explanation 'Create a Google Account associated with the current_user'
         do_request data: form_data
         expect(resource_object['token']).to eq new_google_account['token']
@@ -106,7 +107,7 @@ resource 'Google Accounts' do
         parameter 'token',          'Token'
       end
 
-      example 'Google Account [UPDATE]', document: :user do
+      example 'Google Account [UPDATE]', document: documentation_scope do
         explanation 'Update the current_user\'s Google Account with the given ID'
         do_request data: form_data
         expect(resource_object['token']).to eq new_google_account['token']
@@ -115,7 +116,7 @@ resource 'Google Accounts' do
     end
 
     delete '/api/v2/user/google_accounts/:id' do
-      example 'Google Account [DELETE]', document: :user do
+      example 'Google Account [DELETE]', document: documentation_scope do
         explanation 'Delete the current_user\'s Google Account with the given ID'
         do_request
         expect(response_status).to eq 204

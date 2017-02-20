@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts > People > Relationships' do
   include_context :json_headers
+  documentation_scope = :people_api_relationships
 
   let(:resource_type) { :family_relationships }
   let!(:user)         { create(:user_with_full_account) }
@@ -59,7 +60,7 @@ resource 'Contacts > People > Relationships' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
-      example 'Relationship [LIST]', document: :people do
+      example 'Relationship [LIST]', document: documentation_scope do
         explanation 'List of Relationships associated to the Person'
         do_request
 
@@ -76,7 +77,7 @@ resource 'Contacts > People > Relationships' do
         response_field 'updated_in_db_at',  'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Relationship [GET]', document: :people do
+      example 'Relationship [GET]', document: documentation_scope do
         explanation 'The Person\'s Relationship with the given ID'
         do_request
 
@@ -92,7 +93,7 @@ resource 'Contacts > People > Relationships' do
         parameter 'relationship',      'Relationship'
       end
 
-      example 'Relationship [CREATE]', document: :people do
+      example 'Relationship [CREATE]', document: documentation_scope do
         explanation 'Create a Relationship associated with the Person'
         do_request data: form_data
 
@@ -108,7 +109,7 @@ resource 'Contacts > People > Relationships' do
         parameter 'relationship',      'Relationship'
       end
 
-      example 'Relationship [UPDATE]', document: :people do
+      example 'Relationship [UPDATE]', document: documentation_scope do
         explanation 'Update the Person\'s Relationship with the given ID'
         do_request data: form_data
 
@@ -118,7 +119,7 @@ resource 'Contacts > People > Relationships' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
-      example 'Relationship [DELETE]', document: :people do
+      example 'Relationship [DELETE]', document: documentation_scope do
         explanation 'Delete the Person\'s Relationship with the given ID'
         do_request
         expect(response_status).to eq 204

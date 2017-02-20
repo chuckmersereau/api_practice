@@ -1,8 +1,17 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Duplicates' do
+resource 'People > Duplicates' do
   include_context :json_headers
+  # This is the scope in how these endpoints will be organized in the
+  # generated documentation.
+  #
+  # :entities should be used for "top level" resources, and the top level
+  # resources should be used for nested resources.
+  #
+  # Ex: Api > v2 > Contacts                   - :entities would be the scope
+  # Ex: Api > v2 > Contacts > Email Addresses - :contacts would be the scope
+  documentation_scope = :people_api_duplicates
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -41,16 +50,6 @@ resource 'Duplicates' do
     )
   end
 
-  # This is the scope in how these endpoints will be organized in the
-  # generated documentation.
-  #
-  # :entities should be used for "top level" resources, and the top level
-  # resources should be used for nested resources.
-  #
-  # Ex: Api > v2 > Contacts                   - :entities would be the scope
-  # Ex: Api > v2 > Contacts > Email Addresses - :contacts would be the scope
-  document = :people
-
   before do
     contact.people << person1
     contact.people << person2
@@ -63,7 +62,7 @@ resource 'Duplicates' do
     get '/api/v2/contacts/people/duplicates' do
       parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
 
-      example 'Duplicate [LIST]', document: document do
+      example 'Duplicate [LIST]', document: documentation_scope do
         explanation 'List of Duplicates'
         do_request
 
@@ -74,7 +73,7 @@ resource 'Duplicates' do
 
     # destroy
     delete '/api/v2/contacts/people/duplicates/:id' do
-      example 'Duplicate [DELETE]', document: document do
+      example 'Duplicate [DELETE]', document: documentation_scope do
         explanation 'Mark the two associated people as not duplicates'
         do_request
 

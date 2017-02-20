@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Account Goal Progress Report' do
+resource 'Reports > Account Goal Progress Report' do
   include_context :json_headers
+  documentation_scope = :reports_api_goal_progress
 
   let(:resource_type) { 'reports_goal_progresses' }
   let(:user) { create(:user_with_account) }
@@ -49,7 +50,7 @@ resource 'Account Goal Progress Report' do
         response_field 'account_list', 'Account List', 'Type' => 'Object'
       end
 
-      example 'Goal Progress [LIST]', document: :reports do
+      example 'Goal Progress [LIST]', document: documentation_scope do
         explanation 'Lists information related to the progress towards the current Account List monthly goal'
         do_request(filter: { account_list_id: account_list_id })
         check_resource(['relationships'])

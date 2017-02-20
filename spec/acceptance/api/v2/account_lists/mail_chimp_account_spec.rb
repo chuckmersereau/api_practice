@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Mailchimp Account Spec' do
+resource 'Account Lists > Mailchimp Accounts' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_mailchimp_accounts
 
   let(:resource_type) { 'mail_chimp_account' }
   let!(:user)         { create(:user_with_account) }
@@ -66,7 +67,7 @@ resource 'Mailchimp Account Spec' do
       response_field 'validate_key',                    'Validate Key',                    'Type' => 'Boolean'
     end
 
-    example 'Mailchimp Account [GET]', document: :account_lists do
+    example 'Mailchimp Account [GET]', document: documentation_scope do
       explanation 'The MailChimp Account associated with the Account List'
       do_request
       check_resource
@@ -78,7 +79,7 @@ resource 'Mailchimp Account Spec' do
     parameter 'account_list_id', 'Account List ID', required: true
     parameter 'id',              'ID', required: true
 
-    example 'Mailchimp Account [DELETE]', document: :account_lists do
+    example 'Mailchimp Account [DELETE]', document: documentation_scope do
       explanation 'Deletes the MailChimp Account associated with the Account List'
       do_request
       expect(response_status).to eq 204
@@ -103,7 +104,7 @@ resource 'Mailchimp Account Spec' do
       parameter 'validate_key',                    'Validate Key or Not',             'Type' => 'Boolean'
     end
 
-    example 'Mailchimp Account [POST]', document: :account_lists do
+    example 'Mailchimp Account [POST]', document: documentation_scope do
       explanation 'Add the MailChimp Account associated with the Account List'
       do_request data: form_data
       check_resource
@@ -114,7 +115,7 @@ resource 'Mailchimp Account Spec' do
   get '/api/v2/account_lists/:account_list_id/mail_chimp_account/sync' do
     parameter 'account_list_id', 'Account List ID', required: true
 
-    example 'Mailchimp Account [SYNC]', document: :account_lists do
+    example 'Mailchimp Account [SYNC]', document: documentation_scope do
       explanation "Synchronizes the Account List's contacts to the MailChimp server"
       do_request
       expect(response_status).to eq 200

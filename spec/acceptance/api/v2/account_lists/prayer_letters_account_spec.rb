@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Prayer Letters Account' do
+resource 'Account Lists > Prayer Letters Account' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_prayer_letters_accounts
 
   let(:resource_type) { 'prayer_letters_accounts' }
   let!(:user)         { create(:user_with_account) }
@@ -49,7 +50,7 @@ resource 'Prayer Letters Account' do
           response_field 'updated_in_db_at',   'Updated In Db At',   'Type' => 'String'
         end
 
-        example 'Prayer Letters Account [GET]', document: :account_lists do
+        example 'Prayer Letters Account [GET]', document: documentation_scope do
           explanation 'The Prayer Letters Account associated with the Account List'
           do_request
           check_resource
@@ -61,7 +62,7 @@ resource 'Prayer Letters Account' do
         parameter 'account_list_id', 'Account List ID', required: true
         parameter 'id',              'ID', required: true
 
-        example 'Prayer Letters Account [DELETE]', document: :account_lists do
+        example 'Prayer Letters Account [DELETE]', document: documentation_scope do
           explanation 'Deletes the Prayer Letters Account associated with the Account List'
           do_request
           expect(response_status).to eq 204
@@ -71,7 +72,7 @@ resource 'Prayer Letters Account' do
       get '/api/v2/account_lists/:account_list_id/prayer_letters_account/sync' do
         parameter 'account_list_id', 'Account List ID', required: true
 
-        example 'Prayer Letters Account [SYNC]', document: :account_lists do
+        example 'Prayer Letters Account [SYNC]', document: documentation_scope do
           explanation "Synchronizes The Prayer Letters Account's subscribers with #{PrayerLettersAccount::SERVICE_URL}"
           do_request
           expect(response_status).to eq 200
@@ -90,7 +91,7 @@ resource 'Prayer Letters Account' do
 
       let(:form_data) { build_data(oauth2_token: 'token') }
 
-      example 'Prayer Letters Account [CREATE]', document: :account_lists do
+      example 'Prayer Letters Account [CREATE]', document: documentation_scope do
         explanation 'Create a Prayer Letters Account associated with the Account List'
         do_request data: form_data
         expect(response_status).to eq 201

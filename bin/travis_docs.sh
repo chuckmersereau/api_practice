@@ -24,7 +24,7 @@ elif [ "$TRAVIS_BRANCH" == "master" ]; then
 fi
 
 function doCompile {
-  ./bin/rake docs:generate
+  ./bin/rake mpdx:generate_docs
 }
 
 

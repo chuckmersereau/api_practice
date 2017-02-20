@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Phones' do
+resource 'Contacts > People > Phones' do
   include_context :json_headers
+  documentation_scope = :people_api_phones
 
   let(:resource_type) { 'phone_numbers' }
   let!(:user)         { create(:user_with_full_account) }
@@ -40,7 +41,7 @@ resource 'Phones' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/people/:person_id/phones' do
-      example 'Phone [LIST]', document: :people do
+      example 'Phone [LIST]', document: documentation_scope do
         explanation 'List of Phone Numbers associated to the Person'
         do_request
         check_collection_resource(1)
@@ -60,7 +61,7 @@ resource 'Phones' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Phone [GET]', document: :people do
+      example 'Phone [GET]', document: documentation_scope do
         explanation 'The Person\'s Phone Number with the given ID'
         do_request
         expect(resource_object.keys).to match_array expected_attribute_keys
@@ -79,7 +80,7 @@ resource 'Phones' do
         parameter 'remote_id',    'Remote ID'
       end
 
-      example 'Phone [CREATE]', document: :people do
+      example 'Phone [CREATE]', document: documentation_scope do
         explanation 'Create a Phone Number associated with the Person'
         do_request data: form_data
 
@@ -98,7 +99,7 @@ resource 'Phones' do
         parameter 'remote_id',    'Remote ID'
       end
 
-      example 'Phone [UPDATE]', document: :people do
+      example 'Phone [UPDATE]', document: documentation_scope do
         explanation 'Update Person\'s Phone Number with the given ID'
         do_request data: form_data
         expect(resource_object['number']).to eq new_phone['number']
@@ -107,7 +108,7 @@ resource 'Phones' do
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
-      example 'Phone [DELETE]', document: :people do
+      example 'Phone [DELETE]', document: documentation_scope do
         explanation 'Delete Person\'s Phone Number with the given ID'
         do_request
         expect(response_status).to eq 204

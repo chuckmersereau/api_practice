@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'MailChimp' do
+resource 'Contacts > Export to MailChimp' do
   include_context :json_headers
+  documentation_scope = :contacts_api_exports
 
   let(:resource_type) { 'mail-chimp-account' }
   let!(:user)         { create(:user_with_account) }
@@ -31,7 +32,7 @@ resource 'MailChimp' do
       parameter 'contact_ids', 'Account List ID', scope: :filter
       parameter 'mail_chimp_list_id', 'Mail Chimp List ID', required: true
 
-      example 'Export to Mail Chimp [POST]', document: :appeals do
+      example 'Export to Mail Chimp [POST]', document: documentation_scope do
         explanation 'Export Contacts with the given ID to the Mail Chimp server'
         do_request mail_chimp_list_id: primary_list_id
 

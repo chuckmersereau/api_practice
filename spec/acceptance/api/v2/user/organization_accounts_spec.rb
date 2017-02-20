@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Organization Accounts' do
+resource 'User > Organization Accounts' do
   include_context :json_headers
+  documentation_scope = :user_api_organization_accounts
 
   let!(:user)         { create(:user_with_full_account) }
   let(:resource_type) { 'organization_accounts' }
@@ -63,7 +64,7 @@ resource 'Organization Accounts' do
     before { api_login(user) }
 
     get '/api/v2/user/organization_accounts' do
-      example 'Organization Account [LIST]', document: :user do
+      example 'Organization Account [LIST]', document: documentation_scope do
         do_request
         explanation 'List of Organization Accounts associated to current_user'
 
@@ -85,7 +86,7 @@ resource 'Organization Accounts' do
         response_field 'updated_in_db_at',  'Updated In Db At',  'Type' => 'String'
       end
 
-      example 'Organization Account [GET]', document: :user do
+      example 'Organization Account [GET]', document: documentation_scope do
         explanation 'The User\'s Organization Account with the given ID'
         do_request
         check_resource(%w(relationships))
@@ -101,7 +102,7 @@ resource 'Organization Accounts' do
         parameter 'username',        'Username'
       end
 
-      example 'Organization Account [CREATE]', document: :user do
+      example 'Organization Account [CREATE]', document: documentation_scope do
         explanation 'Create an Organization Account associated with the current_user'
         do_request data: form_data
 
@@ -118,7 +119,7 @@ resource 'Organization Accounts' do
         parameter 'username',        'Username'
       end
 
-      example 'Organization Account [UPDATE]', document: :user do
+      example 'Organization Account [UPDATE]', document: documentation_scope do
         explanation 'Update the current_user\'s Organization Account with the given ID'
         do_request data: form_data
 
@@ -128,7 +129,7 @@ resource 'Organization Accounts' do
     end
 
     delete '/api/v2/user/organization_accounts/:id' do
-      example 'Organization Account [DELETE]', document: :user do
+      example 'Organization Account [DELETE]', document: documentation_scope do
         explanation 'Delete the current_user\'s Organization Account with the given ID'
         do_request
         expect(response_status).to eq 204

@@ -1,8 +1,9 @@
 require 'spec_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Donor Currency Donations Report' do
+resource 'Reports > Donor Currency Donations Report' do
   include_context :json_headers
+  documentation_scope = :reports_api_donation_summaries
 
   let(:resource_type) { 'reports_donor_currency_donations' }
   let(:user) { create(:user_with_account) }
@@ -44,7 +45,7 @@ resource 'Donor Currency Donations Report' do
         response_field 'account_list', 'Account List', 'Type' => 'Object'
       end
 
-      example 'Donation Summary [LIST]', document: :reports do
+      example 'Donation Summary [LIST]', document: documentation_scope do
         explanation 'Lists donors who donated in the past 12 months, separated by into currency groups'
         do_request(filter: { account_list_id: account_list_id })
         check_resource(['relationships'])

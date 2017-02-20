@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Import' do
+resource 'Account Lists > Imports' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_imports
 
   let(:resource_type) { 'imports' }
   let!(:user)         { create(:user_with_account) }
@@ -79,7 +80,7 @@ resource 'Import' do
         response_field 'updated_in_db_at',  'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'Import [GET]', document: :account_lists do
+      example 'Import [GET]', document: documentation_scope do
         explanation 'The Account List Import with the given ID'
         do_request
         check_resource(['relationships'])

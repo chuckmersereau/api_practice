@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Tags' do
+resource 'Tasks > Tags' do
   include_context :json_headers
+  documentation_scope = :tasks_api_tags
 
   let(:resource_type) { 'tags' }
   let!(:user)         { create(:user_with_full_account) }
@@ -23,7 +24,7 @@ resource 'Tags' do
     let!(:task_one) { create(:task, account_list: account_list, tag_list: [tag_name]) }
     let!(:task_two) { create(:task, account_list: account_list_two, tag_list: [tag_name]) }
     before { user.account_lists << account_list_two }
-    example 'Tag [LIST]', document: :tasks do
+    example 'Tag [LIST]', document: documentation_scope do
       explanation 'List Task Tags'
       do_request
       expect(resource_data.count).to eq 1
@@ -38,7 +39,7 @@ resource 'Tags' do
       parameter 'name', 'Name of Tag'
     end
 
-    example 'Tag [CREATE]', document: :tasks do
+    example 'Tag [CREATE]', document: documentation_scope do
       explanation 'Create a Tag associated with the Task'
       do_request data: form_data
       expect(resource_object['new_tag']).to eq new_tag_params['new_tag']
@@ -50,7 +51,7 @@ resource 'Tags' do
     parameter 'tag_name', 'The name of the tag'
     parameter 'task_id',  'The Task ID of the Tag'
 
-    example 'Tag [DELETE]', document: :tasks do
+    example 'Tag [DELETE]', document: documentation_scope do
       explanation 'Delete the Task\'s Tag with the given name'
       do_request
       expect(response_status).to eq 204

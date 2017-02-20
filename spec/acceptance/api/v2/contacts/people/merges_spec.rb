@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Merges' do
+resource 'Contacts > People > Merges' do
   include_context :json_headers
+  documentation_scope = :people_api_merges
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -81,7 +82,7 @@ resource 'Merges' do
   #
   # Ex: Api > v2 > Contacts                   - :entities would be the scope
   # Ex: Api > v2 > Contacts > Email Addresses - :contacts would be the scope
-  document = :people
+  documentation_scope = :people
 
   context 'authorized user' do
     before { api_login(user) }
@@ -111,7 +112,7 @@ resource 'Merges' do
         }
       end
 
-      example 'Merge [CREATE]', document: document do
+      example 'Merge [CREATE]', document: documentation_scope do
         explanation 'Create Merge'
         do_request data: form_data
 

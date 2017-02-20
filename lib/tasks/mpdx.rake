@@ -1,3 +1,5 @@
+require 'rspec_doc_combiner'
+
 namespace :mpdx do
   task set_special: :environment do
     AccountList.find_each do |al|
@@ -96,5 +98,11 @@ namespace :mpdx do
       contact = Contact.find(c.id)
       contact.update_column(:timezone, zone.name)
     end
+  end
+
+  desc 'Generate Docs from Specs'
+  task generate_docs: :environment do
+    Rake::Task['docs:generate:ordered'].invoke
+    RSpecDocCombiner.combine!
   end
 end

@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Donor Accounts' do
+resource 'Account Lists Api > Donor Accounts' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_donor_accounts
 
   let(:resource_type) { 'donor_accounts' }
   let!(:user)         { create(:user_with_account) }
@@ -45,7 +46,7 @@ resource 'Donor Accounts' do
       parameter 'account_list_id', 'Account List ID', required: true
       response_field 'data', 'Data', 'Type' => 'Array[Object]'
 
-      example 'Donor Account [LIST]', document: :account_lists do
+      example 'Donor Account [LIST]', document: documentation_scope do
         explanation 'List of Donor Accounts associated with the Account List'
         do_request
         check_collection_resource(1, ['relationships'])
@@ -68,7 +69,7 @@ resource 'Donor Accounts' do
         response_field 'updated_in_db_at',    'Updated In Db At',    'Type' => 'String'
       end
 
-      example 'Donor Account [GET]', document: :account_lists do
+      example 'Donor Account [GET]', document: documentation_scope do
         explanation 'The Account List Donor Account with the given ID'
         do_request
         check_resource(['relationships'])

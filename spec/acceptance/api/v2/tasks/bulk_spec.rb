@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Tasks Bulk' do
   include_context :json_headers
+  documentation_scope = :entities_tasks
 
   let!(:account_list)  { user.account_lists.first }
   let!(:task_one)      { create(:task, account_list: account_list) }
@@ -18,7 +19,7 @@ resource 'Tasks Bulk' do
         parameter :id, 'Each member of the array must contain the id of the task being deleted'
       end
 
-      example 'Task [DELETE] [BULK]', document: :entities do
+      example 'Bulk delete Tasks', document: documentation_scope do
         explanation 'Bulk delete Tasks with the given IDs'
         do_request data: [
           { data: { type: resource_type, id: task_one.uuid } },

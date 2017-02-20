@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts Bulk' do
   include_context :json_headers
+  documentation_scope = :entities_contacts
 
   let!(:account_list)    { user.account_lists.first }
   let!(:contact_one)     { create(:contact, account_list: account_list) }
@@ -18,7 +19,7 @@ resource 'Contacts Bulk' do
         parameter :id, 'Each member of the array must contain the id of the contact being deleted'
       end
 
-      example 'Contact [DELETE] [BULK]', document: :entities do
+      example 'Bulk delete contacts', document: documentation_scope do
         explanation 'Bulk delete Contacts with the given IDs'
         do_request data: [
           { data: { type: resource_type, id: contact_one.uuid } },

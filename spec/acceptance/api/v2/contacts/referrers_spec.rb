@@ -1,13 +1,20 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Referrers' do
-  header 'Content-Type', 'application/vnd.api+json'
+resource 'Contacts > Referrers' do
+  include_context :json_headers
+  documentation_scope = :contacts_api_referrers
+
   let(:resource_type) { 'contacts' }
-  let(:user) { create(:user_with_account) }
-  let(:contact)    { create(:contact, account_list: user.account_lists.first) }
-  let(:contact_id) { contact.uuid }
-  let!(:resource) { create(:contact).tap { |referrer| contact.contacts_that_referred_me << referrer } }
+  let(:user)          { create(:user_with_account) }
+  let(:contact)       { create(:contact, account_list: user.account_lists.first) }
+  let(:contact_id)    { contact.uuid }
+
+  let!(:resource) do
+    create(:contact).tap do |referrer|
+      contact.contacts_that_referred_me << referrer
+    end
+  end
 
   let(:resource_attributes) do
     %w(
@@ -64,8 +71,10 @@ resource 'Referrers' do
 
     # index
     get '/api/v2/contacts/:contact_id/referrers' do
-      example_request 'list referrers' do
+      example 'list referrers', document: documentation_scope do
         explanation 'List of Contacts that have referred the given Contact'
+        do_request
+
         check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end

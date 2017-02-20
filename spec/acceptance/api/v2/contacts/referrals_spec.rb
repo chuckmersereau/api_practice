@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Contact Referrals' do
+resource 'Contacts > Referrals' do
   include_context :json_headers
+  documentation_scope = :contacts_api_referrals
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -105,7 +106,7 @@ resource 'Contact Referrals' do
         }
       end
 
-      example 'create referral' do
+      example 'create referral', document: documentation_scope do
         do_request data: form_data
         check_resource(additional_attribute_keys)
 
@@ -147,7 +148,7 @@ resource 'Contact Referrals' do
         }
       end
 
-      example 'update referral' do
+      example 'update referral', document: documentation_scope do
         expect(contact_referral.referred_to_id).to eq referral.id
 
         do_request data: form_data
@@ -158,9 +159,11 @@ resource 'Contact Referrals' do
       end
     end
 
-    # # destroy
+    # destroy
     delete '/api/v2/contacts/:contact_id/referrals/:id' do
-      example_request 'delete referral' do
+      example 'delete referral', document: documentation_scope do
+        explanation 'Delete a Referral'
+        do_request
         expect(response_status).to eq 204
       end
     end

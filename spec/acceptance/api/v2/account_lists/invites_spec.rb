@@ -1,8 +1,9 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Invites' do
+resource 'Account Lists > Invites' do
   include_context :json_headers
+  documentation_scope = :account_lists_api_invites
 
   let(:resource_type) { 'account_list_invites' }
   let!(:user)         { create(:user_with_account) }
@@ -39,7 +40,7 @@ resource 'Invites' do
       parameter 'account_list_id', 'Account List ID', required: true
       response_field 'data',       'Data', 'Type' => 'Array[Object]'
 
-      example 'Invite [LIST]', document: :account_lists do
+      example 'Invite [LIST]', document: documentation_scope do
         explanation 'List of Invites associated with the Account List'
         do_request
 
@@ -63,7 +64,7 @@ resource 'Invites' do
         response_field 'updated_in_db_at',     'Updated In Db At',     'Type' => 'String'
       end
 
-      example 'Invite [GET]', document: :account_lists do
+      example 'Invite [GET]', document: documentation_scope do
         explanation 'The Account List Invite with the given ID'
         do_request
         check_resource(['relationships'])
@@ -81,7 +82,7 @@ resource 'Invites' do
 
       parameter 'recipient_email', 'Recipient Email', scope: [:data, :attributes], required: true
 
-      example 'Invite [CREATE]', document: :account_lists do
+      example 'Invite [CREATE]', document: documentation_scope do
         explanation 'List of Invites associated with the Account List'
         do_request data: form_data
 
@@ -91,7 +92,7 @@ resource 'Invites' do
     end
 
     delete '/api/v2/account_lists/:account_list_id/invites/:id' do
-      example 'Invite [DELETE]', document: :account_lists do
+      example 'Invite [DELETE]', document: documentation_scope do
         do_request
         expect(response_status).to eq 204
       end

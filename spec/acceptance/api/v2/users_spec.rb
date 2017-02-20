@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Users' do
   include_context :json_headers
+  documentation_scope = :entities_user
 
   let(:resource_type) { 'users' }
   let(:user) { create(:user_with_full_account) }
@@ -52,7 +53,7 @@ resource 'Users' do
         response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
       end
 
-      example 'User [GET]', document: :entities do
+      example 'Retrieve the current user', document: documentation_scope do
         explanation 'The current_user'
         do_request
         check_resource(['relationships'])
@@ -77,7 +78,7 @@ resource 'Users' do
         end
       end
 
-      example 'User [UPDATE]', document: :entities do
+      example 'Update the current user', document: documentation_scope do
         explanation 'Update the current_user'
         do_request data: form_data
         expect(resource_object['first_name']).to eq new_user_attributes[:first_name]
