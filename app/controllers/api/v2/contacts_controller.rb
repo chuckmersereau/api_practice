@@ -87,7 +87,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def contact_scope
-    Contact.where(account_list_id: account_lists.select(:id))
+    Contact.where(account_list: account_lists)
   end
 
   def pundit_user

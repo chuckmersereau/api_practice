@@ -14,9 +14,10 @@ RSpec.describe Task::Filter::ContactIds do
       expect(described_class.config([account_list])).to include(default_selection: '',
                                                                 multiple: true,
                                                                 name: :contact_ids,
-                                                                options: [
-                                                                  { name: '-- Any --', id: '', placeholder: 'None' }] +
-                                                                  account_list.contacts.collect { |contact| { name: contact.to_s, id: contact.uuid } },
+                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' }] +
+                                                                           account_list.contacts.order('name ASC').collect do |contact|
+                                                                             { name: contact.to_s, id: contact.uuid, account_list_id: contact.account_list.uuid }
+                                                                           end,
                                                                 parent: nil,
                                                                 priority: 2,
                                                                 title: 'Contacts',

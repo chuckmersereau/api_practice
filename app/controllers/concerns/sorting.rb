@@ -1,7 +1,8 @@
 module Sorting
   PERMITTED_SORTING_PARAMS = %w(
     created_at
-    updated_at).freeze
+    updated_at
+  ).freeze
 
   private
 
@@ -42,8 +43,12 @@ module Sorting
   end
 
   def transformed_sorting_params
-    return "#{params[:sort].tr('-', '')} DESC" if descending_sorting_params?
+    return "#{db_resource_name}.#{params[:sort].tr('-', '')} DESC" if descending_sorting_params?
 
-    "#{params[:sort]} ASC"
+    "#{db_resource_name}.#{params[:sort]} ASC"
+  end
+
+  def db_resource_name
+    RESOURCE_TYPE_TO_DB_TYPE[resource_type] || resource_type.to_s
   end
 end

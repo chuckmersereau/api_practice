@@ -48,6 +48,10 @@ class Api::V2::Contacts::DuplicatesController < Api::V2Controller
            include: include_params
   end
 
+  def permitted_filters
+    [:account_list_id]
+  end
+
   def pundit_user
     PunditContext.new(current_user)
   end

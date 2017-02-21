@@ -7,8 +7,7 @@ JsonApiService.configure do |config|
     google_accounts: 'Person::GoogleAccount',
     key_accounts: 'Person::KeyAccount',
     organization_accounts: 'Person::OrganizationAccount',
-    user_options: 'User::Option',
-    related_person: 'Person'
+    user_options: 'User::Option'
   }
 
   config.ignored_foreign_keys = {

@@ -52,6 +52,10 @@ class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
     @duplicate&.shared_contact
   end
 
+  def permitted_filters
+    [:account_list_id]
+  end
+
   def pundit_user
     PunditContext.new(current_user, contact: current_contact)
   end

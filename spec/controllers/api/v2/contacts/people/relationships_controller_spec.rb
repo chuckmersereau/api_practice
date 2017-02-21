@@ -16,7 +16,7 @@ RSpec.describe Api::V2::Contacts::People::RelationshipsController, type: :contro
     {
       related_person: {
         data: {
-          type: 'Person',
+          type: 'people',
           id: create(:person, contacts: [contact]).uuid
         }
       }

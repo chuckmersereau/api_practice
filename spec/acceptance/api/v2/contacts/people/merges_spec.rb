@@ -39,11 +39,15 @@ resource 'Contacts > People > Merges' do
       birthday_year
       created_at
       deceased
+      employer
       first_name
       gender
       last_name
+      legal_first_name
       marital_status
       middle_name
+      occupation
+      optout_enewsletter
       suffix
       title
       updated_at

@@ -35,11 +35,15 @@ resource 'People' do
       birthday_year
       created_at
       deceased
+      employer
       first_name
       gender
       last_name
+      legal_first_name
       marital_status
       middle_name
+      occupation
+      optout_enewsletter
       suffix
       title
       updated_at
@@ -144,25 +148,29 @@ resource 'People' do
     get '/api/v2/contacts/:contact_id/people/:id' do
       with_options scope: :data do
         with_options scope: :attributes do
-          response_field 'anniversary_day',   'Anniversary Day',   'Type' => 'Number'
-          response_field 'anniversary_month', 'Anniversary Month', 'Type' => 'Number'
-          response_field 'anniversary_year',  'Anniversary Year',  'Type' => 'Number'
-          response_field 'avatar',            'Avatar',            'Type' => 'String'
-          response_field 'birthday_day',      'Birthday Day',      'Type' => 'Number'
-          response_field 'birthday_month',    'Birthday Month',    'Type' => 'Number'
-          response_field 'birthday_year',     'Birthday Year',     'Type' => 'Number'
-          response_field 'created_at',        'Created At',        'Type' => 'String'
-          response_field 'deceased',          'Deceased',          'Type' => 'Boolean'
-          response_field 'first_name',        'First Name',        'Type' => 'String'
-          response_field 'gender',            'Gender',            'Type' => 'String'
-          response_field 'last_name',         'Last Name',         'Type' => 'String'
-          response_field 'marital_status',    'Marital Status',    'Type' => 'String'
-          response_field 'master_person_id',  'Master Person ID',  'Type' => 'Number'
-          response_field 'middle_name',       'Middle Name',       'Type' => 'String'
-          response_field 'suffix',            'Suffix',            'Type' => 'String'
-          response_field 'title',             'Title',             'Type' => 'String'
-          response_field 'updated_at',        'Updated At',        'Type' => 'String'
-          response_field 'updated_in_db_at',  'Updated In Db At',  'Type' => 'String'
+          response_field 'anniversary_day',    'Anniversary Day',              'Type' => 'Number'
+          response_field 'anniversary_month',  'Anniversary Month',            'Type' => 'Number'
+          response_field 'anniversary_year',   'Anniversary Year',             'Type' => 'Number'
+          response_field 'avatar',             'Avatar',                       'Type' => 'String'
+          response_field 'birthday_day',       'Birthday Day',                 'Type' => 'Number'
+          response_field 'birthday_month',     'Birthday Month',               'Type' => 'Number'
+          response_field 'birthday_year',      'Birthday Year',                'Type' => 'Number'
+          response_field 'created_at',         'Created At',                   'Type' => 'String'
+          response_field 'deceased',           'Deceased',                     'Type' => 'Boolean'
+          response_field 'employer',           'Employer',                     'Type' => 'String'
+          response_field 'first_name',         'First Name',                   'Type' => 'String'
+          response_field 'gender',             'Gender',                       'Type' => 'String'
+          response_field 'last_name',          'Last Name',                    'Type' => 'String'
+          response_field 'legal_first_name',   'Legal First Name',             'Type' => 'String'
+          response_field 'marital_status',     'Marital Status',               'Type' => 'String'
+          response_field 'master_person_id',   'Master Person ID',             'Type' => 'Number'
+          response_field 'middle_name',        'Middle Name',                  'Type' => 'String'
+          response_field 'occupation',         'Occupation',                   'Type' => 'String'
+          response_field 'optout_enewsletter', 'Optout of Enewsletter or not', 'Type' => 'Boolean'
+          response_field 'suffix',             'Suffix',                       'Type' => 'String'
+          response_field 'title',              'Title',                        'Type' => 'String'
+          response_field 'updated_at',         'Updated At',                   'Type' => 'String'
+          response_field 'updated_in_db_at',   'Updated In Db At',             'Type' => 'String'
         end
 
         with_options scope: :relationships do
@@ -192,19 +200,23 @@ resource 'People' do
         parameter 'birthday_month',                                           'Birthday Month',                                                                   'Type' => 'Number'
         parameter 'birthday_year',                                            'Birthday Year',                                                                    'Type' => 'Number'
         parameter 'deceased',                                                 'Deceased',                                                                         'Type' => 'Boolean'
+        parameter 'email_address[email]',                                     'Email Address',                                                                    'Type' => 'String'
+        parameter 'employer',                                                 'Employer',                                                                         'Type' => 'String'
         parameter 'employer',                                                 'Employer',                                                                         'Type' => 'String'
         parameter 'gender',                                                   'Gender',                                                                           'Type' => 'String'
         parameter 'last_name',                                                'Last Name',                                                                        'Type' => 'String'
         parameter 'legal_first_name',                                         'Legal First Name',                                                                 'Type' => 'String'
+        parameter 'legal_first_name',                                         'Legal First Name',                                                                 'Type' => 'String'
         parameter 'marital_status',                                           'Marital Status',                                                                   'Type' => 'String'
         parameter 'middle_name',                                              'Middle Name',                                                                      'Type' => 'String'
         parameter 'occupation',                                               'Occupation',                                                                       'Type' => 'String'
+        parameter 'occupation',                                               'Occupation',                                                                       'Type' => 'String'
         parameter 'optout_enewsletter',                                       'Optout Enewsletter',                                                               'Type' => 'Boolean'
+        parameter 'optout_enewsletter',                                       'Optout of Enewsletter or not',                                                     'Type' => 'Boolean'
+        parameter 'phone_number[number]',                                     'Phone Number',                                                                     'Type' => 'String'
         parameter 'profession',                                               'Profession',                                                                       'Type' => 'String'
         parameter 'suffix',                                                   'Suffix',                                                                           'Type' => 'String'
         parameter 'title',                                                    'Title',                                                                            'Type' => 'String'
-        parameter 'email_address[email]',                                     'Email Address',                                                                    'Type' => 'String'
-        parameter 'phone_number[number]',                                     'Phone Number',                                                                     'Type' => 'String'
         parameter 'email_addresses_attributes[:key][_destroy]',               'Destroy Email Address if set to 1, where :key is an integer',                      'Type' => 'Number'
         parameter 'email_addresses_attributes[:key][email]',                  'Email Address Email, where :key is an integer',                                    'Type' => 'String'
         parameter 'email_addresses_attributes[:key][historic]',               'Email Address Historic, where :key is an integer',                                 'Type' => 'Boolean'

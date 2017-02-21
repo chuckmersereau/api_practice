@@ -3,6 +3,11 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 20 February 2017
+- Fixed sorting for cases when chained with filters
+- Added account_list_id filter to contacts and people duplicates endpoints
+- Added attributes to person_serializer
+- Removed html error pages from public folder
+- Contact_ids filter config is now returning contacts ordered by name and account_list_id is included with each.
 - Added an endpoint for deleting a named tag from all tasks (`DELETE /tasks/tags/bulk`) @ardation
 - Added an endpoint for deleting a named tag from all contacts (`DELETE /contacts/tags/bulk`) @ardation
 
@@ -21,6 +26,5 @@ This changelog covers what's changed in the MPDX APIs.
 - Activity Comments are now officially Comments
 
 ## 9 Feburary 2017
-
 - added an API changelog
 - updated contributing.md to suggest contribution to changelog
