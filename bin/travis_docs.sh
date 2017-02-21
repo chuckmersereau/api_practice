@@ -55,14 +55,14 @@ rm docs_repo/source/includes/_user.markdown
 rm docs_repo/source/includes/_reports.markdown
 rm docs_repo/source/includes/_changelog.markdown
 
-cp doc/api/account_lists/_generated_examples.markdown docs_repo/source/includes/_account_lists.markdown
-cp doc/api/appeals/_generated_examples.markdown docs_repo/source/includes/_appeals.markdown
-cp doc/api/contacts/_generated_examples.markdown docs_repo/source/includes/_contacts.markdown
-cp doc/api/people/_generated_examples.markdown docs_repo/source/includes/_people.markdown
+cp doc/api/account_lists_api/_generated_examples.markdown docs_repo/source/includes/_account_lists.markdown
+cp doc/api/appeals_api/_generated_examples.markdown docs_repo/source/includes/_appeals.markdown
+cp doc/api/contacts_api/_generated_examples.markdown docs_repo/source/includes/_contacts.markdown
+cp doc/api/people_api/_generated_examples.markdown docs_repo/source/includes/_people.markdown
 cp doc/api/entities/_generated_examples.markdown docs_repo/source/includes/_entities.markdown
-cp doc/api/tasks/_generated_examples.markdown docs_repo/source/includes/_tasks.markdown
-cp doc/api/user/_generated_examples.markdown docs_repo/source/includes/_user.markdown
-cp doc/api/reports/_generated_examples.markdown docs_repo/source/includes/_reports.markdown
+cp doc/api/tasks_api/_generated_examples.markdown docs_repo/source/includes/_tasks.markdown
+cp doc/api/user_api/_generated_examples.markdown docs_repo/source/includes/_user.markdown
+cp doc/api/reports_api/_generated_examples.markdown docs_repo/source/includes/_reports.markdown
 cp CHANGELOG.md docs_repo/source/includes/_changelog.markdown
 
 # Now let's go have some fun with the cloned repo
