@@ -2,6 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 20 February 2017
+- Added an endpoint for deleting a named tag from all tasks (`DELETE /tasks/tags/bulk`) @ardation
+- Added an endpoint for deleting a named tag from all contacts (`DELETE /contacts/tags/bulk`) @ardation
+
 ## 17 February 2017
 - Added a serializer for Organization
 - Added a contact_id filter to Donations endpoint

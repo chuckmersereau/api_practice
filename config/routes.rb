@@ -65,6 +65,9 @@ Rails.application.routes.draw do
                 resource :bulk, only: [:create], controller: :bulk
               end
               resources :tags, only: :index
+              namespace :tags do
+                resource :bulk, only: [:destroy], controller: :bulk
+              end
               constraints(id: /.+/) do
                 resources :duplicates, only: [:index, :destroy]
                 namespace :people do
@@ -121,6 +124,9 @@ Rails.application.routes.draw do
               resource :bulk, only: [:update, :destroy], controller: :bulk
               resources :filters, only: :index
               resources :tags, only: :index
+              namespace :tags do
+                resource :bulk, only: [:destroy], controller: :bulk
+              end
             end
           end
         end
