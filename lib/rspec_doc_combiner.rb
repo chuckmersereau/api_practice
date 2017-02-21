@@ -24,7 +24,7 @@ class RSpecDocCombiner
   end
 
   def fetch_files_for_folder(folder_name)
-    filepaths = Dir["#{base_path}/#{folder_name}/**/*.markdown"]
+    filepaths = Dir["#{base_path}/#{folder_name}/**/*.markdown"].sort
 
     parent = DocFile.new(filepaths.first, parent: true)
 
