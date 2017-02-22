@@ -18,6 +18,10 @@ RSpec.shared_examples 'index_examples' do |options = {}|
       include_examples 'sorting examples', action: :index
     end
 
+    unless options[:except].include?(:filtering)
+      include_examples 'filtering examples', action: :index
+    end
+
     it 'shows resources to users that are signed in' do
       api_login(user)
       get :index, parent_param_if_needed

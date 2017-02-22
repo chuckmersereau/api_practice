@@ -2,6 +2,14 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 21 February 2017
+- Accepts datetime range filters that match `YYYY-MM-DDThh:mm:ssZ..YYYY-MM-DDThh:mm:ssZ`
+  - Use two periods `..` to denote an inclusive range
+  - Use three periods `...` to denote an exclusive range
+- Accepts date range filters that match `YYYY-MM-DD..YYYY-MM-DD`
+  - Use two periods `..` to denote an inclusive range
+  - Use three periods `...` to denote an exclusive range
+
 ## 20 February 2017
 - Fixed sorting for cases when chained with filters
 - Added account_list_id filter to contacts and people duplicates endpoints
