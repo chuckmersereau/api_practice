@@ -69,11 +69,6 @@ class Api::V2Controller < ApiController
     }
   end
 
-  def permitted_filters
-    raise NotImplementedError,
-          'This method needs to be implemented in your controller'
-  end
-
   def persistence_context
     action_name == 'update' ? :update_from_controller : :create
   end

@@ -87,10 +87,6 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
     end
   end
 
-  def permitted_filters
-    []
-  end
-
   def render_address
     render json: @address,
            status: success_status,

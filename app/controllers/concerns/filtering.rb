@@ -2,15 +2,24 @@ module Filtering
   CastingError = Class.new(StandardError)
   DATE_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2})(\.\.\.?)(\d{4}\-\d{2}\-\d{2})/
   DATETIME_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)(\.\.\.?)(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)/
+  DEFAULT_PERMITTED_FILTERS = %w( updated_at ).freeze
 
   private
+
+  def permitted_filters_with_defaults
+    permitted_filters + DEFAULT_PERMITTED_FILTERS
+  end
+
+  def permitted_filters
+    []
+  end
 
   def filter_params
     return {} unless params[:filter]
     params[:filter]
       .map { |k, v| { k.underscore.to_sym => v } }
       .reduce({}, :merge)
-      .keep_if { |k, _| permitted_filters.include? k }
+      .keep_if { |k, _| permitted_filters_with_defaults.include? k }
       .transform_values { |v| cast_filter_value(v) }
   end
 

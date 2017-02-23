@@ -73,8 +73,4 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
     attributes ||= params.require(:contact)
     attributes.permit(Contact::PERMITTED_ATTRIBUTES)
   end
-
-  def permitted_filters
-    []
-  end
 end

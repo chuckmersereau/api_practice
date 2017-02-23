@@ -109,10 +109,6 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
     @phone.save(context: persistence_context)
   end
 
-  def permitted_filters
-    []
-  end
-
   def pundit_user
     PunditContext.new(current_user, contact: current_contact)
   end

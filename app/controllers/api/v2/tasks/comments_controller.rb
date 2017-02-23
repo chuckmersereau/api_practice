@@ -67,10 +67,6 @@ class Api::V2::Tasks::CommentsController < Api::V2Controller
     end
   end
 
-  def permitted_filters
-    []
-  end
-
   def activity_param_id
     params[:activity_id].presence || params[:task_id]
   end

@@ -82,8 +82,4 @@ class Api::V2::AccountLists::MailChimpAccountController < Api::V2Controller
   def load_account_list
     @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
   end
-
-  def permitted_filters
-    []
-  end
 end

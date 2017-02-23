@@ -83,10 +83,6 @@ class Api::V2::Contacts::People::RelationshipsController < Api::V2Controller
     @person ||= current_contact.people.find_by!(uuid: params[:person_id])
   end
 
-  def permitted_filters
-    []
-  end
-
   def relationship_params
     params.require(:family_relationship)
           .permit(relationship_attributes)

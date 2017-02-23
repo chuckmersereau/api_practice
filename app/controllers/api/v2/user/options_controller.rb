@@ -70,10 +70,6 @@ class Api::V2::User::OptionsController < Api::V2Controller
                .per(per_page_param)
   end
 
-  def permitted_filters
-    []
-  end
-
   def persist_option
     build_option
     authorize_option

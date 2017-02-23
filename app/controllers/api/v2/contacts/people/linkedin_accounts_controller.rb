@@ -93,10 +93,6 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
     @contact ||= Contact.find_by!(uuid: params[:contact_id])
   end
 
-  def permitted_filters
-    []
-  end
-
   def pundit_user
     action_name == 'index' ? PunditContext.new(current_user, contact: load_contact) : current_user
   end

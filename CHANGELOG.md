@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 23 February
+- Added `updated_at` as a filterable attribute on the LIST endpoint for all database backed Resources
+
 ## 21 February 2017
 - Accepts datetime range filters that match `YYYY-MM-DDThh:mm:ssZ..YYYY-MM-DDThh:mm:ssZ`
   - Use two periods `..` to denote an inclusive range
@@ -33,6 +36,6 @@ This changelog covers what's changed in the MPDX APIs.
 - Nested Attributes with Included data can now be sent in POST/PATCH
 - Activity Comments are now officially Comments
 
-## 9 Feburary 2017
+## 9 February 2017
 - added an API changelog
 - updated contributing.md to suggest contribution to changelog

@@ -88,8 +88,4 @@ class Api::V2::User::OrganizationAccountsController < Api::V2Controller
   def load_user
     @user ||= current_user
   end
-
-  def permitted_filters
-    []
-  end
 end

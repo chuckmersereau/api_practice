@@ -69,8 +69,4 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
     attributes ||= params.require(:task)
     attributes.permit(Task::PERMITTED_ATTRIBUTES)
   end
-
-  def permitted_filters
-    []
-  end
 end

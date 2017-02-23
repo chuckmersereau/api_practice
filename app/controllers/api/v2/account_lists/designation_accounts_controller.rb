@@ -40,10 +40,6 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
     @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
   end
 
-  def permitted_filters
-    []
-  end
-
   def pundit_user
     PunditContext.new(current_user, account_list: load_account_list)
   end

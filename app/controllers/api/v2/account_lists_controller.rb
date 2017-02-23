@@ -70,10 +70,6 @@ class Api::V2::AccountListsController < Api::V2Controller
     authorize @account_list
   end
 
-  def permitted_filters
-    []
-  end
-
   def pundit_user
     PunditContext.new(current_user, account_list: load_account_list)
   end

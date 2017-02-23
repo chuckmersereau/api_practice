@@ -65,15 +65,6 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
                                   .per(per_page_param)
   end
 
-  def permitted_filters
-    # These are the keys of the filters that are permitted to be used in
-    # scoping the resources returned in `#index`.
-    #
-    # This method _must_ be defined, with the very least returning an empty array
-
-    []
-  end
-
   def persist_notification_preference
     build_notification_preference
     authorize_notification_preference

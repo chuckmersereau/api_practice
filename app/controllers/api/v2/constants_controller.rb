@@ -15,8 +15,4 @@ class Api::V2::ConstantsController < Api::V2Controller
   def render_constants
     render json: @constants, fields: field_params
   end
-
-  def permitted_filters
-    []
-  end
 end
