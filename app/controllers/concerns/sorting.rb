@@ -1,5 +1,5 @@
 module Sorting
-  PERMITTED_SORTING_PARAMS = %w(
+  PERMITTED_SORTING_PARAM_DEFAULTS = %w(
     created_at
     updated_at
   ).freeze
@@ -15,7 +15,11 @@ module Sorting
   end
 
   def permitted_sorting_params
-    PERMITTED_SORTING_PARAMS
+    []
+  end
+
+  def permitted_sorting_params_with_defaults
+    permitted_sorting_params + PERMITTED_SORTING_PARAM_DEFAULTS
   end
 
   def raise_error_if_multiple_sorting_params
@@ -35,7 +39,7 @@ module Sorting
   end
 
   def sorting_param_allowed?
-    permitted_sorting_params.include?(params[:sort]&.tr('-', ''))
+    permitted_sorting_params_with_defaults.include?(params[:sort]&.tr('-', ''))
   end
 
   def sorting_param_applied_to_query
