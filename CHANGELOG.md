@@ -2,7 +2,8 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
-
+## 24 February 2017
+- Added notification fields to activity_serializer
 
 ## 23 February 2017
 - Added `updated_at` as a filterable attribute on the LIST endpoint for all database backed Resources

@@ -44,6 +44,9 @@ resource 'Tasks' do
       created_at
       next_action
       no_date
+      notification_time_before
+      notification_time_unit
+      notification_type
       result
       starred
       start_at
@@ -90,22 +93,25 @@ resource 'Tasks' do
         response_field 'type',          'Type of object (Task in this case)',                'Type' => 'String'
 
         with_options scope: :attributes do
-          response_field 'account_list_id',  'Account List Id',  type: 'Number'
-          response_field 'activity_type',    'Activity Type',    type: 'String'
-          response_field 'created_at',       'Created At',       type: 'String'
-          response_field 'comments_count',   'Comments Count',   type: 'Number'
-          response_field 'completed',        'Completed',        type: 'Boolean'
-          response_field 'completed_at',     'Completed At',     type: 'String'
-          response_field 'due_date',         'Due Date',         type: 'String'
-          response_field 'next_action',      'Next Action',      type: 'String'
-          response_field 'no_date',          'No Date',          type: 'Boolean'
-          response_field 'restult',          'Result',           type: 'String'
-          response_field 'starred',          'Starred',          type: 'Boolean'
-          response_field 'start_at',         'Start At',         type: 'String'
-          response_field 'subject',          'Subject',          type: 'String'
-          response_field 'tag_list',         'Tag List',         type: 'String'
-          response_field 'updated_at',       'Updated At',       type: 'String'
-          response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
+          response_field 'account_list_id',          'Account List Id',          'Type' => 'Number'
+          response_field 'activity_type',            'Activity Type',            'Type' => 'String'
+          response_field 'created_at',               'Created At',               'Type' => 'String'
+          response_field 'comments_count',           'Comments Count',           'Type' => 'Number'
+          response_field 'completed',                'Completed',                'Type' => 'Boolean'
+          response_field 'completed_at',             'Completed At',             'Type' => 'String'
+          response_field 'due_date',                 'Due Date',                 'Type' => 'String'
+          response_field 'next_action',              'Next Action',              'Type' => 'String'
+          response_field 'no_date',                  'No Date',                  'Type' => 'Boolean'
+          response_field 'notification_time_before', 'Notification Time Before', 'Type' => 'Number'
+          response_field 'notification_time_unit',   'Notification Time Unit',   'Type' => 'String'
+          response_field 'notification_type',        'Notification Type',        'Type' => 'String'
+          response_field 'restult',                  'Result',                   'Type' => 'String'
+          response_field 'starred',                  'Starred',                  'Type' => 'Boolean'
+          response_field 'start_at',                 'Start At',                 'Type' => 'String'
+          response_field 'subject',                  'Subject',                  'Type' => 'String'
+          response_field 'tag_list',                 'Tag List',                 'Type' => 'String'
+          response_field 'updated_at',               'Updated At',               'Type' => 'String'
+          response_field 'updated_in_db_at',         'Updated In Db At',         'Type' => 'String'
         end
       end
 
