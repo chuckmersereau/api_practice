@@ -5,10 +5,22 @@ class ConstantListExhibit < DisplayCase::Exhibit
     object.class.name == 'ConstantList'
   end
 
+  def date_formats_map
+    Hash[DATE_FORMATS]
+  end
+
+  def languages_map
+    Hash[LANGUAGES_CONSTANT]
+  end
+
   def locale_name_map
-    Hash[
-      locales.map { |name, code| [code, locale_display_name(name, code)] }
-    ]
+    locales.each_with_object({}) do |(name, code), hash|
+      native_name = TwitterCldr::Shared::Languages.translate_language(name, :en, code)
+      hash[code] = {
+        native_name: native_name,
+        english_name: locale_display_name(name, code)
+      }
+    end
   end
 
   def pledge_currencies_code_symbol_map

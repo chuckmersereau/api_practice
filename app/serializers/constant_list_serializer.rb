@@ -26,6 +26,8 @@ class ConstantListSerializer < ActiveModel::Serializer
              :assignable_send_newsletter,
              :assignable_statuses,
              :bulk_update_options,
+             :dates,
+             :languages,
              :next_actions,
              :pledge_currencies,
              :pledge_frequencies,
@@ -41,6 +43,14 @@ class ConstantListSerializer < ActiveModel::Serializer
 
   def pledge_currencies
     constants_exhibit.pledge_currencies_code_symbol_map
+  end
+
+  def dates
+    constants_exhibit.date_formats_map
+  end
+
+  def languages
+    constants_exhibit.languages_map
   end
 
   private

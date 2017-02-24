@@ -30,6 +30,8 @@ resource 'Constants' do
           assignable_locations
           assignable_statuses
           bulk_update_options
+          dates
+          languages
           locales
           next_actions
           notifications
@@ -51,10 +53,22 @@ resource 'Constants' do
           expect(activity).to be_a(String)
         end
 
+        resource_object['dates'].each do |date_format|
+          expect(date_format.size).to eq 2
+          expect(date_format.first).to be_a(String)
+          expect(date_format.second).to be_a(String)
+        end
+
+        resource_object['languages'].each do |language|
+          expect(language.size).to eq 2
+          expect(language.first).to be_a(String)
+          expect(language.second).to be_a(String)
+        end
+
         resource_object['locales'].each do |currency|
           expect(currency.size).to eq 2
           expect(currency.first).to be_a(String)
-          expect(currency.second).to be_a(String)
+          expect(currency.second).to be_a(Hash)
         end
 
         resource_object['notifications'].each do |notification|

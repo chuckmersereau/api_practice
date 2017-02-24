@@ -13,19 +13,32 @@ describe ConstantListExhibit do
   end
 
   context '#locale_name_map' do
-    it { expect(subject.locale_name_map).to be_a_hash_with_types Symbol, String }
+    it 'should have the correct data structure' do
+      subject.locale_name_map.each do |_code, locale|
+        expect(locale).to be_a_hash_with_types Symbol, String
+      end
+      expect(subject.locale_name_map).to be_a_hash_with_types Symbol, Hash
+    end
 
     it 'should have a name with the locale code in parentheses' do
       subject.locale_name_map.each do |_code, locale|
-        expect(locale).to match(/\A[^\(]+\(\w+(?:-\w+)?\)\z/)
+        expect(locale[:english_name]).to match(/\A[^\(]+\(\w+(?:-\w+)?\)\z/)
       end
     end
 
     it 'should have ISO 3166-1 alpha-2 codes' do
-      subject.locale_name_map.each do |_code, locale|
-        expect(locale).to match(/\w\w/)
+      subject.locale_name_map.each do |code, _locale|
+        expect(code).to match(/\w\w/)
       end
     end
+  end
+
+  context '#date_formats_map' do
+    it { expect(subject.date_formats_map).to be_a_hash_with_types String, String }
+  end
+
+  context '#languages_map' do
+    it { expect(subject.languages_map).to be_a_hash_with_types String, String }
   end
 
   context '#pledge_currencies_code_symbol_map' do

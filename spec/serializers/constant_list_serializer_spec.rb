@@ -26,11 +26,16 @@ describe ConstantListSerializer do
   end
 
   context '#locales' do
-    it { expect(subject.locales).to be_a_hash_with_types Symbol, String }
-
-    it 'should have a name with the locale code in parentheses' do
+    it 'should have the correct data structure' do
       subject.locales.each do |_code, locale|
-        expect(locale).to match(/\A[^\(]+\(\w+(?:-\w+)?\)\z/)
+        expect(locale).to be_a_hash_with_types Symbol, String
+      end
+      expect(subject.locales).to be_a_hash_with_types Symbol, Hash
+    end
+
+    it 'should have an english name with the locale code in parentheses' do
+      subject.locales.each do |_code, locale|
+        expect(locale[:english_name]).to match(/\A[^\(]+\(\w+(?:-\w+)?\)\z/)
       end
     end
 
@@ -43,6 +48,14 @@ describe ConstantListSerializer do
 
   context '#pledge_frequencies' do
     it { expect(subject.pledge_frequencies).to be_a_hash_with_types Numeric, String }
+  end
+
+  context '#dates' do
+    it { expect(subject.dates).to be_a_hash_with_types String, String }
+  end
+
+  context '#languages' do
+    it { expect(subject.languages).to be_a_hash_with_types String, String }
   end
 
   %w(
@@ -67,7 +80,9 @@ describe ConstantListSerializer do
     it { should include :assignable_locations }
     it { should include :assignable_send_newsletter }
     it { should include :assignable_statuses }
+    it { should include :dates }
     it { should include :bulk_update_options }
+    it { should include :languages }
     it { should include :locales }
     it { should include :next_actions }
     it { should include :notifications }
