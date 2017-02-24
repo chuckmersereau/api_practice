@@ -2,8 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
-## 23 February
+## 23 February 2017
 - Added `updated_at` as a filterable attribute on the LIST endpoint for all database backed Resources
+- Added sorting by `donation_date` to Account Lists > Donations > LIST
+- Added filtering by `donation_date` with a date range, on Account Lists > Donations > LIST
 
 ## 21 February 2017
 - Accepts datetime range filters that match `YYYY-MM-DDThh:mm:ssZ..YYYY-MM-DDThh:mm:ssZ`

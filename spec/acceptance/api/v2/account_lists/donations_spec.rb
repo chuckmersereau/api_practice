@@ -87,8 +87,9 @@ resource 'Donations' do
     before { api_login(user) }
 
     get '/api/v2/account_lists/:account_list_id/donations' do
-      parameter 'account_list_id', 'Account List ID', required: true
-      response_field 'data',       'Data', 'Type' => 'Array[Object]'
+      parameter 'account_list_id',        'Account List ID', required: true
+      parameter 'filters[donation_date]', 'A donation date range'
+      response_field 'data',              'Data', 'Type' => 'Array[Object]'
 
       example 'Donation [LIST]', document: documentation_scope do
         explanation 'List of Donations associated with the the Account List'

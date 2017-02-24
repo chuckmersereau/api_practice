@@ -85,7 +85,11 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   end
 
   def permitted_filters
-    [:contact_id]
+    [:contact_id, :donation_date]
+  end
+
+  def permitted_sorting_params
+    %w(donation_date)
   end
 
   def pundit_user
