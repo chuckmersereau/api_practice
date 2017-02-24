@@ -12,20 +12,20 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
     create_list(:donation, 2, donor_account: donor_account,
                               designation_account: designation_account,
                               amount: 10.00,
-                              donation_date: Date.new(2017, 2, 22))
+                              donation_date: Date.today)
   end
   let(:donation) { donations.first }
   let(:id) { donation.uuid }
 
   before do
-    donation.update(donation_date: Date.new(2017, 2, 20))
+    donation.update(donation_date: 2.days.ago)
     account_list.designation_accounts << designation_account
     contact.donor_accounts << donor_account
   end
 
   let(:resource) { donation }
   let(:parent_param) { { account_list_id: account_list_id } }
-  let(:filter_param) { { donation_date: '2017-02-21..2017-02-23' } }
+  let(:filter_param) { { donation_date: "#{1.day.ago}..#{1.day.from_now}" } }
   let(:sorting_param) { :donation_date }
   let(:correct_attributes) { attributes_for(:donation) }
   let(:incorrect_attributes) { { donation_date: nil } }
