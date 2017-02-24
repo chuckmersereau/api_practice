@@ -14,6 +14,17 @@ describe Api::V2::AccountListsController, type: :controller do
 
   let!(:notification_preference) { create(:notification_preference, account_list: account_list) }
 
+  let(:correct_relationships) do
+    {
+      notification_preferences: {
+        data: {
+          type: 'notification_preferences',
+          id: create(:notification_preference).uuid
+        }
+      }
+    }
+  end
+
   include_examples 'index_examples'
 
   include_examples 'show_examples'

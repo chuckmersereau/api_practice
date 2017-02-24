@@ -1,6 +1,6 @@
 class Contact::Filter::Status < Contact::Filter::Base
   def execute_query(contacts, filters)
-    filters[:status] = Array(filters[:status])
+    filters[:status] = filters[:status].split(',').collect(&:strip)
     filters[:status] << 'null' if (filters[:status].include? '') && !filters[:status].include?('null')
     filters[:status] << '' if (filters[:status].include? 'null') && !filters[:status].include?('')
     filters[:status] += Contact.active_statuses if filters[:status].include?('active')
@@ -24,7 +24,7 @@ class Contact::Filter::Status < Contact::Filter::Base
   end
 
   def default_selection
-    %w(active null)
+    'active, null'
   end
 
   def custom_options

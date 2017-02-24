@@ -54,7 +54,7 @@ describe Api::V2::ContactsController, type: :controller do
   describe 'filtering' do
     before { api_login(user) }
 
-    (Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore) + Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore)).each do |filter|
+    (Contact::Filterer::FILTERS_TO_DISPLAY.first(2).collect(&:underscore) + Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore)).each do |filter|
       context "#{filter} filter" do
         it 'filters results' do
           get :index, filter: { filter => '' }

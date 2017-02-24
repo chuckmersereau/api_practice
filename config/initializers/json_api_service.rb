@@ -6,6 +6,7 @@ JsonApiService.configure do |config|
     facebook_accounts: 'Person::FacebookAccount',
     google_accounts: 'Person::GoogleAccount',
     key_accounts: 'Person::KeyAccount',
+    linkedin_accounts: 'Person::LinkedinAccount',
     organization_accounts: 'Person::OrganizationAccount',
     user_options: 'User::Option'
   }

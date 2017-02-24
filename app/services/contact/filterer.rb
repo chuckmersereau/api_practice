@@ -1,38 +1,38 @@
 class Contact::Filterer < ApplicationFilterer
   FILTERS_TO_DISPLAY = %w(
-    AddressHistoric
-    Appeal
-    Church
-    City
-    ContactInfoAddr
-    ContactInfoEmail
-    ContactInfoFacebook
-    ContactInfoMobile
-    ContactInfoPhone
-    ContactInfoWorkPhone
-    ContactType
-    Country
-    Donation
-    DonationAmount
-    DonationAmountRange
-    DonationDate
-    Likely
-    Locale
-    MetroArea
-    Newsletter
+    Status
+    PledgeReceived
     PledgeAmount
     PledgeCurrency
     PledgeFrequency
     PledgeLateBy
-    PledgeReceived
+    Newsletter
     Referrer
-    Region
-    RelatedTaskAction
+    Likely
+    ContactType
+    City
     State
-    Status
-    TaskDueDate
+    Country
+    AddressHistoric
+    MetroArea
+    Region
+    ContactInfoEmail
+    ContactInfoPhone
+    ContactInfoMobile
+    ContactInfoWorkPhone
+    ContactInfoAddr
+    ContactInfoFacebook
+    Church
+    RelatedTaskAction
+    Appeal
     Timezone
-  ).freeze
+    Locale
+    Donation
+    DonationAmount
+    DonationAmountRange
+    DonationDate
+    TaskDueDate
+  ).freeze # These filters are displayed in this way on purpose, do not alphabetize them
 
   FILTERS_TO_HIDE = %w(
     ExcludeTags

@@ -67,6 +67,10 @@ class Api::V2::Contacts::TagsController < Api::V2Controller
     params.require(:tag).permit(:name)
   end
 
+  def permitted_filters
+    [:account_list_id]
+  end
+
   def pundit_user
     PunditContext.new(current_user, contact: @contact)
   end

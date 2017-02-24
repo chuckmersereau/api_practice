@@ -69,6 +69,10 @@ class Api::V2::Contacts::People::Merges::BulkController < Api::V2Controller
     merge.winner.merge(merge.loser)
   end
 
+  def permitted_filters
+    []
+  end
+
   def pundit_user
     PunditContext.new(current_user)
   end

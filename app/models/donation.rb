@@ -21,7 +21,6 @@ class Donation < ApplicationRecord
                           :appeal_amount,
                           :appeal_id,
                           :channel,
-                          :contact_id,
                           :created_at,
                           :currency,
                           :designation_account_id,

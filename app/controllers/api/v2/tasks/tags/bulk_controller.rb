@@ -37,4 +37,8 @@ class Api::V2::Tasks::Tags::BulkController < Api::V2Controller
     return "\'#{tag_name}\'" unless tag_name.include?("'")
     tag_name
   end
+
+  def permitted_filters
+    [:account_list_id]
+  end
 end

@@ -28,6 +28,10 @@ class Api::V2::AccountLists::ChalklineMailsController < Api::V2Controller
     load_chalkline_mails.send_later
   end
 
+  def permitted_filters
+    []
+  end
+
   def render_chalkline_mails
     render json: @chalkline_mails,
            status: success_status

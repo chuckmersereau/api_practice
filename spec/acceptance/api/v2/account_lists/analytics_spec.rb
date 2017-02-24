@@ -34,8 +34,7 @@ resource 'Account List Analytics' do
     # show
     get '/api/v2/account_lists/:account_list_id/analytics' do
       parameter 'account_list_id',    'Account List ID', required: true
-      parameter 'filter[start_date]', 'Starting Date for Analytics, in ISO8601'
-      parameter 'filter[end_date]',   'Ending Date for Analytics, in ISO8601'
+      parameter 'filter[date_range]', 'Date Range for Analytics, in ISO8601'
 
       with_options scope: [:data, :attributes] do
         response_field 'appointments',   'Appointment related analytics',      'Type' => 'Object'

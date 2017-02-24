@@ -52,7 +52,7 @@ RSpec.describe Task::Filter::ActivityType do
 
     context 'filter by activity_type' do
       it 'filters multiple activity_types' do
-        expect(described_class.query(tasks, { activity_type: %w(Call Appointment) }, nil).to_a).to include(task_one, task_two)
+        expect(described_class.query(tasks, { activity_type: 'Call, Appointment' }, nil).to_a).to include(task_one, task_two)
       end
       it 'filters a single activity_type' do
         expect(described_class.query(tasks, { activity_type: 'Email' }, nil).to_a).to include(task_three)

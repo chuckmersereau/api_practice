@@ -80,7 +80,8 @@ class AccountList < ApplicationRecord
     :tester,
     :updated_at,
     :updated_in_db_at,
-    :uuid
+    :uuid,
+    notification_preferences_attributes: NotificationPreference::PERMITTED_ATTRIBUTES
   ].freeze
 
   def salary_organization_id=(val)

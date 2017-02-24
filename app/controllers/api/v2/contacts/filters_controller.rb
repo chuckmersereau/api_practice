@@ -14,4 +14,8 @@ class Api::V2::Contacts::FiltersController < Api::V2Controller
   def authorize_index
     account_lists.each { |account_list| authorize(account_list, :show?) }
   end
+
+  def permitted_filters
+    [:account_list_id]
+  end
 end

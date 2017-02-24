@@ -64,6 +64,10 @@ class Api::V2::Tasks::TagsController < Api::V2Controller
     authorize @task
   end
 
+  def permitted_filters
+    [:account_list_id]
+  end
+
   def tag_params
     params.require(:tag).permit(:name)
   end

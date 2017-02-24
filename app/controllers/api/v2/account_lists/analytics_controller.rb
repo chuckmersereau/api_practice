@@ -12,7 +12,7 @@ class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
   end
 
   def analytics_scope
-    current_user.account_lists
+    account_lists
   end
 
   def load_analytics
@@ -25,14 +25,13 @@ class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
 
   def analytics_params
     {
-      start_date: 1.month.ago,
-      end_date: Time.current
-    }.merge(filter_params)
-      .merge(account_list: load_account_list)
+      start_date: (filter_params[:date_range].try(:first) || 1.month.ago),
+      end_date: (filter_params[:date_range].try(:last) || Time.current)
+    }.merge(account_list: load_account_list)
   end
 
   def permitted_filters
-    [:start_date, :end_date]
+    [:date_range]
   end
 
   def render_analytics

@@ -92,7 +92,7 @@ class Api::V2Controller < ApiController
   end
 
   def account_list_filter
-    params.dig(:filter, :account_list_id)
+    params.dig(:filter, :account_list_id) if permitted_filters.include?(:account_list_id)
   end
 
   def fetch_account_list_with_filter

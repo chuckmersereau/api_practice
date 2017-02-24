@@ -2,10 +2,21 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+
+
 ## 23 February 2017
 - Added `updated_at` as a filterable attribute on the LIST endpoint for all database backed Resources
 - Added sorting by `donation_date` to Account Lists > Donations > LIST
 - Added filtering by `donation_date` with a date range, on Account Lists > Donations > LIST
+
+## 22 February 2017
+- changed the account_lists method in V2 controller to only filter when account_list_id is in list of permitted_filters
+- reordered the list of contact options returned by the /contacts/filter
+- changed contact_id filter to donor_account_id filter for donations endpoint
+- fixed contact status and activity type filters to allow them to accept several params seperated by comma
+- account_list analytics endpoint now accepts datetime range in proper iso8601 format
+- account_list endpoint now accepts notification_preferences relationships
+- Fixed bug with person endpoint that took place when a linkedin account relationship was provided
 
 ## 21 February 2017
 - Accepts datetime range filters that match `YYYY-MM-DDThh:mm:ssZ..YYYY-MM-DDThh:mm:ssZ`

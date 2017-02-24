@@ -101,6 +101,7 @@ class Api::V2::ContactsController < Api::V2Controller
   def permitted_filters
     @permitted_filters ||=
       Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +
-      Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym)
+      Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym) +
+      [:account_list_id]
   end
 end
