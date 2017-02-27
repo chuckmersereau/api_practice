@@ -13,7 +13,7 @@ class User < Person
   has_many :tasks, through: :account_lists
 
   devise :trackable
-  store :preferences, accessors: [:time_zone, :locale, :setup, :contacts_filter,
+  store :preferences, accessors: [:time_zone, :locale, :locale_display, :setup, :contacts_filter,
                                   :tasks_filter, :default_account_list, :contacts_view_options,
                                   :tab_orders, :developer, :admin]
 
@@ -25,6 +25,7 @@ class User < Person
       :contacts_view_options,
       :default_account_list,
       :locale,
+      :locale_display,
       :setup,
       :tasks_filter,
       :tab_orders,
