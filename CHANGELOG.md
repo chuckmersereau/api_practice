@@ -4,6 +4,7 @@ This changelog covers what's changed in the MPDX APIs.
 
 ## 27 February 2017
 - Added locale_display to User model preferences
+- Added completed_at sorting param to tasks endpoint
 
 ## 24 February 2017
 - Added notification fields to activity_serializer

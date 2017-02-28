@@ -96,6 +96,10 @@ class Api::V2::TasksController < Api::V2Controller
     Task.where(account_list_id: account_lists.select(:id))
   end
 
+  def permitted_sorting_params
+    %w(completed_at)
+  end
+
   def permitted_filters
     @permitted_filters ||=
       Task::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +

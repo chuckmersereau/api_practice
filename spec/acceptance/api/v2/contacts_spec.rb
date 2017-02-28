@@ -118,6 +118,11 @@ resource 'Contacts' do
     before { api_login(user) }
 
     get '/api/v2/contacts' do
+      with_options scope: :sort do
+        parameter :created_at, 'Sort By CreatedAt'
+        parameter :name,       'Sort By Name'
+        parameter :updated_at, 'Sort By UpdatedAt'
+      end
       parameter 'filters[account_list_id]',            'Filter by Account List; Accepts Account List ID',                                                     required: false
       parameter 'filters[address_historic]',           'Filter by Address No Longer Valid; Accepts values "true", or "false"',                                required: false
       parameter 'filters[appeal][]',                   'Filter by Appeal; Accepts multiple parameters, with value "no_appeals", or an appeal ID',             required: false

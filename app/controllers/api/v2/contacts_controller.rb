@@ -95,7 +95,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def permitted_sorting_params
-    super + ['name']
+    %w(name)
   end
 
   def permitted_filters

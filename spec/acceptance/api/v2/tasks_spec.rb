@@ -74,7 +74,13 @@ resource 'Tasks' do
       parameter 'filters[starred]',         'Filter by Starred; Accepts values "true", or "false"',                                             required: false
       parameter 'filters[tags][]',          'Filter by Tags; Accepts multiple parameters, with text values',                                    required: false
 
-      response_field :data,                 'list of task objects', 'Type' => 'Array[Object]'
+      with_options scope: :sort do
+        parameter :completed_at, 'Sort by CompletedAt'
+        parameter :created_at,   'Sort By CreatedAt'
+        parameter :updated_at,   'Sort By UpdatedAt'
+      end
+
+      response_field :data, 'list of task objects', 'Type' => 'Array[Object]'
 
       example 'List tasks', document: documentation_scope do
         do_request
