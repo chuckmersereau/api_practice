@@ -62,7 +62,7 @@ class AccountList < ApplicationRecord
   has_many :help_requests
   has_many :recurring_recommendation_results
 
-  accepts_nested_attributes_for :contacts, reject_if: :all_blank, allow_destroy: true
+  accepts_nested_attributes_for :contacts, :notification_preferences, reject_if: :all_blank, allow_destroy: true
 
   after_update :queue_update_users_mailchimp
 

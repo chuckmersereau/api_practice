@@ -85,6 +85,7 @@ resource 'Contacts > Merges' do
       donor_accounts
       last_six_donations
       people
+      tasks
     )
   end
   # List out any additional attribute keys that will be alongside

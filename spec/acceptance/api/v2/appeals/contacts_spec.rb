@@ -71,6 +71,7 @@ resource 'Appeals > Contacts' do
       donor_accounts
       last_six_donations
       people
+      tasks
     )
   end
 

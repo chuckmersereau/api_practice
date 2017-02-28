@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 28 February 2017
+- Added tasks to contact_serializer
+
 ## 27 February 2017
 - Added locale_display to User model preferences
 - Added completed_at sorting param to tasks endpoint

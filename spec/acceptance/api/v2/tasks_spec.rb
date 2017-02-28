@@ -145,7 +145,7 @@ resource 'Tasks' do
         parameter 'result',                   'Result',                   'Type' => 'String'
         parameter 'source',                   'Source',                   'Type' => 'String'
         parameter 'starred',                  'Starred',                  'Type' => 'Boolean'
-        parameter 'start_at',                 'Start At',                 'Type' => 'String'
+        parameter 'start_at',                 'Start At',                 'Type' => 'String', required: true
         parameter 'subject',                  'Subject',                  'Type' => 'String', required: true
         parameter 'type',                     'Type',                     'Type' => 'String'
       end

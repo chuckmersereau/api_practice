@@ -44,8 +44,9 @@ class ContactSerializer < ApplicationSerializer
   has_many :contacts_referred_by_me
   has_many :contacts_that_referred_me
   has_many :donor_accounts
-  has_many :people
   has_many :last_six_donations
+  has_many :people
+  has_many :tasks
   belongs_to :account_list
 
   def avatar

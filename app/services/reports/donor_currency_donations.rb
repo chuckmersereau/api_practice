@@ -53,7 +53,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
     {
       contact_id: id,
       total: total,
-      average: total / amounts.size.to_f,
+      average: (total / amounts.size.to_f if total),
       minimum: amounts.min,
       maximum: amounts.max,
       months: summarize_months(contact_donations)
