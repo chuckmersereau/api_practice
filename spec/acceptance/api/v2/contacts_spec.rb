@@ -51,10 +51,6 @@ resource 'Contacts' do
     }
   end
 
-  let(:bulk_update_form_data) do
-    [{ data: { type: resource_type, id: contact.uuid, attributes: new_contact } }]
-  end
-
   let(:additional_keys) { ['relationships'] }
 
   let(:resource_attributes) do
@@ -334,26 +330,6 @@ resource 'Contacts' do
         do_request data: form_data
         expect(response_status).to eq(200), invalid_status_detail
         expect(resource_object['name']).to eq new_contact[:name]
-      end
-    end
-
-    put '/api/v2/contacts/bulk' do
-      parameter 'data', 'Array of Contacts that have to be updated'
-
-      with_options scope: :data do
-        parameter 'id', 'Each member of the array must contain the id of the contact being updated'
-        parameter 'attributes', 'Each member of the array must contain an object with the attributes that must be updated'
-      end
-
-      response_field 'data',
-                     'List of Contact objects that have been successfully updated and list of errors related to Contact objects that were not updated successfully',
-                     'Type' => 'Array[Object]'
-
-      example 'Bulk update contacts', document: documentation_scope do
-        explanation 'Bulk Update a list of Contacts with an array of objects containing the ID and updated attributes'
-        do_request data: bulk_update_form_data
-        expect(response_status).to eq(200), invalid_status_detail
-        expect(json_response.first['data']['attributes']['name']).to eq new_contact[:name]
       end
     end
 

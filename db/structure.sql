@@ -1147,8 +1147,8 @@ CREATE TABLE email_addresses (
     remote_id character varying(255),
     location character varying(50),
     historic boolean DEFAULT false,
-    uuid uuid DEFAULT uuid_generate_v4(),
-    deleted boolean DEFAULT false
+    deleted boolean DEFAULT false,
+    uuid uuid DEFAULT uuid_generate_v4()
 );
 
 
@@ -1361,8 +1361,8 @@ CREATE TABLE google_integrations (
     email_integration boolean DEFAULT false NOT NULL,
     contacts_integration boolean DEFAULT false NOT NULL,
     contacts_last_synced timestamp without time zone,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
+    created_at timestamp without time zone DEFAULT now() NOT NULL,
+    updated_at timestamp without time zone DEFAULT now() NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 

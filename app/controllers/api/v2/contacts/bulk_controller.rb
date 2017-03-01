@@ -1,9 +1,13 @@
 class Api::V2::Contacts::BulkController < Api::V2::BulkController
   resource_type :contacts
 
+  def create
+    build_empty_contacts
+    persist_contacts
+  end
+
   def update
     load_contacts
-    authorize_contacts
     persist_contacts
   end
 
@@ -44,12 +48,17 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
 
   def persist_contacts
     build_contacts
+    authorize_contacts
     save_contacts
     render json: BulkResourceSerializer.new(resources: @contacts)
   end
 
   def save_contacts
-    @contacts.each { |contact| contact.save(context: :update_from_controller) }
+    @contacts.each { |contact| contact.save(context: persistence_context) }
+  end
+
+  def build_empty_contacts
+    @contacts = params.require(:data).map { |data| Contact.new(uuid: data['contact']['uuid']) }
   end
 
   def build_contacts
@@ -66,7 +75,7 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
   def data_attribute_index(contact)
     params
       .require(:data)
-      .find_index { |contact_data| contact_data[:contact][:id] == contact.id }
+      .find_index { |contact_data| contact_data[:contact][:uuid] == contact.uuid }
   end
 
   def contact_params(attributes)

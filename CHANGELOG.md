@@ -9,6 +9,11 @@ This changelog covers what's changed in the MPDX APIs.
 - Added locale_display to User model preferences
 - Added completed_at sorting param to tasks endpoint
 
+## 25 February 2017
+- Added a contacts bulk create endpoint
+- Bulk endpoint are now returning 409 errors when appropriate
+- Fixed some of the documentation for the bulk update endpoints for tasks and contacts
+
 ## 24 February 2017
 - Added notification fields to activity_serializer
 

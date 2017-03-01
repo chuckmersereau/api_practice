@@ -3,7 +3,6 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
 
   def update
     load_tasks
-    authorize_tasks
     persist_tasks
   end
 
@@ -40,6 +39,7 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
 
   def persist_tasks
     build_tasks
+    authorize_tasks
     save_tasks
     render json: BulkResourceSerializer.new(resources: @tasks)
   end

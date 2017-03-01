@@ -37,6 +37,10 @@ class ApiController < ActionController::API
 
   protected
 
+  def conflict_error?(resource)
+    resource.errors[:updated_in_db_at].include?(ApplicationRecord::CONFLICT_ERROR_MESSAGE)
+  end
+
   def current_account_list
     @account_list ||= current_user.account_lists
                                   .find_by(id: params[:account_list_id])
@@ -67,7 +71,7 @@ class ApiController < ActionController::API
   def render_with_resource_errors(resource)
     if resource.is_a? Hash
       render_error(hash: resource, status: :bad_request)
-    elsif resource.errors.keys.include?(:updated_in_db_at)
+    elsif conflict_error?(resource)
       render_409(detail: detail_for_resource_first_error(resource))
     else
       render_400_with_errors(resource)

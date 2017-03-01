@@ -64,23 +64,6 @@ RSpec.shared_examples 'bulk_update_examples' do
       expect(response_with_errors['errors'].detect { |hash| hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}" }).to be_present
     end
 
-    context 'resources forbidden' do
-      it 'does not update resources that do not belong to current user' do
-        put :update, data: [{ data: { type: resource_type, id: unauthorized_resource.uuid, attributes: { reference_key => reference_value } } }]
-        expect(unauthorized_resource.reload.send(reference_key)).to_not eq(reference_value)
-        expect(response.status).to eq(404), invalid_status_detail
-        expect(response_errors.size).to eq(1)
-      end
-
-      it 'does not update resources for users that are not signed in' do
-        api_logout
-        expect do
-          put :update
-        end.not_to change { resource.class.order(:updated_at).last.updated_at }
-        expect(response.status).to eq(401), invalid_status_detail
-      end
-    end
-
     context 'resources not found' do
       it 'responds correctly if all resources are not found' do
         expect do
@@ -135,6 +118,66 @@ RSpec.shared_examples 'bulk_update_examples' do
           put :update, bulk_update_attributes
         end.to change { resource.class.order(:updated_at).last.updated_at }
         expect(response.status).to eq(200), invalid_status_detail
+      end
+    end
+
+    context 'resources forbidden' do
+      let!(:bulk_update_attributes_with_forbidden_resource) do
+        {
+          data: [
+            {
+              data: {
+                type: resource_type,
+                id: resource.uuid,
+                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+              }
+            },
+            {
+              data: {
+                type: resource_type,
+                id: second_resource.uuid,
+                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at),
+                relationships: {
+                  account_list: {
+                    data: {
+                      id: create(:account_list).uuid,
+                      type: 'account_lists'
+                    }
+                  }
+                }
+              }
+            },
+            {
+              data: {
+                type: resource_type,
+                id: third_resource.uuid,
+                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+              }
+            }
+          ]
+        }
+      end
+
+      it 'does not update resources that do not belong to current user' do
+        put :update, data: [{ data: { type: resource_type, id: unauthorized_resource.uuid, attributes: { reference_key => reference_value } } }]
+        expect(unauthorized_resource.reload.send(reference_key)).to_not eq(reference_value)
+        expect(response.status).to eq(404), invalid_status_detail
+        expect(response_errors.size).to eq(1)
+      end
+
+      it 'does not update resources for users that are not signed in' do
+        api_logout
+        expect do
+          put :update
+        end.not_to change { resource.class.order(:updated_at).last.updated_at }
+        expect(response.status).to eq(401), invalid_status_detail
+      end
+
+      it "returns a 403 when user tries to associate resource to an account list that doesn't belong to him" do
+        expect do
+          put :update, bulk_update_attributes_with_forbidden_resource
+        end.not_to change { resource.class.order(:updated_at).last.updated_at }
+        expect(response.status).to eq(403), invalid_status_detail
       end
     end
   end

@@ -9,6 +9,7 @@ FactoryGirl.define do
     pledge_frequency 1
     pledge_start_date { 35.days.ago }
     notes 'Test Note.'
+    uuid { SecureRandom.uuid }
 
     factory :contact_with_person do
       after(:create) do |contact, evaluator|

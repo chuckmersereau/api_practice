@@ -2,6 +2,7 @@ require 'securerandom'
 
 class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
+  CONFLICT_ERROR_MESSAGE = 'is not equal to the current value in the database'.freeze
 
   attr_reader :updated_in_db_at
 
@@ -27,6 +28,6 @@ class ApplicationRecord < ActiveRecord::Base
 
   def value_of_updated_in_db_at
     return if updated_at_was.to_i == updated_in_db_at.to_i
-    errors.add(:updated_in_db_at, 'is not equal to the current value in the database')
+    errors.add(:updated_in_db_at, CONFLICT_ERROR_MESSAGE)
   end
 end

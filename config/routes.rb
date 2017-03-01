@@ -106,7 +106,7 @@ Rails.application.routes.draw do
             collection do
               get :analytics, to: 'analytics#show'
               resources :exports, only: :index
-              resource :bulk, only: [:update, :destroy], controller: :bulk
+              resource :bulk, only: [:create, :update, :destroy], controller: :bulk
               resources :filters, only: :index
             end
           end

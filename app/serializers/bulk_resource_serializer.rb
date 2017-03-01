@@ -14,11 +14,19 @@ class BulkResourceSerializer
   def resource_or_error_json(resource, args)
     if resource.errors.any?
       { id: resource.uuid }.as_json(args).merge(
-        ErrorSerializer.new(hash: resource.errors, resource: resource, status: 400).as_json(args)
+        ErrorSerializer.new(hash: resource.errors, resource: resource, status: error_status_code(resource)).as_json(args)
       )
     else
       serializer = ActiveModel::Serializer.serializer_for(resource).new(resource)
       ActiveModelSerializers::Adapter.create(serializer).as_json(args)
     end
+  end
+
+  def error_status_code(resource)
+    conflict_error?(resource) ? 409 : 400
+  end
+
+  def conflict_error?(resource)
+    resource.errors[:updated_in_db_at].include?(ApplicationRecord::CONFLICT_ERROR_MESSAGE)
   end
 end

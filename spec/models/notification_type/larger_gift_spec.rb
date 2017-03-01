@@ -27,7 +27,7 @@ describe NotificationType::LargerGift do
     end
 
     it "doesn't add a notification if gift came before start of last month" do
-      donation.update(donation_date: Date.today << 2)
+      donation.update(donation_date: Date.today << 3)
       expect(larger_gift.check(account_list)).to be_empty
     end
 
