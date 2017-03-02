@@ -53,9 +53,14 @@ module JsonApiHelper
   end
 
   def build_data(params, account_list_id: nil, relationships: {})
+    attributes = params.deep_symbolize_keys
+                       .except(:id, :uuid)
+                       .sort
+                       .each_with_object({}) { |(key, value), hash| hash[key] = value }
+
     params = {
       type: (defined?(request_type) ? request_type : resource_type),
-      attributes: params.except('id')
+      attributes: attributes
     }
 
     if account_list_id

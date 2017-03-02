@@ -3,6 +3,7 @@ API_DOC_LEGEND = {
     account_lists
     appeals
     contacts
+    constants
     people
     tasks
     user

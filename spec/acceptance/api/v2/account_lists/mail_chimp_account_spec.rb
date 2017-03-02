@@ -50,21 +50,21 @@ resource 'Account Lists > Mailchimp Accounts' do
 
   get '/api/v2/account_lists/:account_list_id/mail_chimp_account' do
     with_options scope: [:data, :attributes] do
-      response_field 'active',                          'Active',                          'Type' => 'Boolean'
-      response_field 'api_key',                         'API Key',                         'Type' => 'String'
-      response_field 'auto_log_campaigns',              'Auto Log Campaigns',              'Type' => 'Boolean'
-      response_field 'created_at',                      'Created At',                      'Type' => 'String'
-      response_field 'lists_available_for_newsletters', 'Lists available for newsletters', 'Type' => 'Array[Object]'
-      response_field 'lists_link',                      'Lists Link',                      'Type' => 'String'
-      response_field 'lists_present',                   'Lists Present',                   'Type' => 'Boolean'
-      response_field 'primary_list_id',                 'Primary List ID',                 'Type' => 'Number'
-      response_field 'primary_list_name',               'Primary List Name',               'Type' => 'String'
-      response_field 'sync_all_active_contacts',        'Sync all active contacts',        'Type' => 'Boolean'
-      response_field 'updated_at',                      'Updated At',                      'Type' => 'String'
-      response_field 'updated_in_db_at',                'Updated In Db At',                'Type' => 'String'
-      response_field 'valid',                           'Valid',                           'Type' => 'Boolean'
-      response_field 'validation_error',                'Validation Error',                'Type' => 'String'
-      response_field 'validate_key',                    'Validate Key',                    'Type' => 'Boolean'
+      response_field 'active',                          'Active',                          type: 'Boolean'
+      response_field 'api_key',                         'API Key',                         type: 'String'
+      response_field 'auto_log_campaigns',              'Auto Log Campaigns',              type: 'Boolean'
+      response_field 'created_at',                      'Created At',                      type: 'String'
+      response_field 'lists_available_for_newsletters', 'Lists available for newsletters', type: 'Array[Object]'
+      response_field 'lists_link',                      'Lists Link',                      type: 'String'
+      response_field 'lists_present',                   'Lists Present',                   type: 'Boolean'
+      response_field 'primary_list_id',                 'Primary List ID',                 type: 'Number'
+      response_field 'primary_list_name',               'Primary List Name',               type: 'String'
+      response_field 'sync_all_active_contacts',        'Sync all active contacts',        type: 'Boolean'
+      response_field 'updated_at',                      'Updated At',                      type: 'String'
+      response_field 'updated_in_db_at',                'Updated In Db At',                type: 'String'
+      response_field 'valid',                           'Valid',                           type: 'Boolean'
+      response_field 'validation_error',                'Validation Error',                type: 'String'
+      response_field 'validate_key',                    'Validate Key',                    type: 'Boolean'
     end
 
     example 'Mailchimp Account [GET]', document: documentation_scope do
@@ -90,18 +90,18 @@ resource 'Account Lists > Mailchimp Accounts' do
     parameter 'account_list_id', 'Account List ID', required: true
 
     with_options scope: [:data, :attributes] do
-      parameter 'active',                          'Active Account or Not',           'Type' => 'Boolean'
-      parameter 'api_key',                         'API Key',                         'Type' => 'String', required: true
-      parameter 'auto_log_campaigns',              'Auto Log Campaigns or Not',       'Type' => 'Boolean'
-      parameter 'lists_available_for_newsletters', 'Lists available for newsletters', 'Type' => 'Array[Object]'
-      parameter 'lists_link',                      'Lists Link',                      'Type' => 'String'
-      parameter 'lists_present',                   'Lists Present or Not',            'Type' => 'Boolean'
-      parameter 'primary_list_id',                 'Primary List ID',                 'Type' => 'String', required: true
-      parameter 'primary_list_name',               'Primary List Name',               'Type' => 'String'
-      parameter 'sync_all_active_contacts',        'Sync all active contacts',        'Type' => 'Boolean'
-      parameter 'valid',                           'Valid',                           'Type' => 'Boolean'
-      parameter 'validation_error',                'Validation Error',                'Type' => 'String'
-      parameter 'validate_key',                    'Validate Key or Not',             'Type' => 'Boolean'
+      parameter 'active',                          'Active Account or Not',           type: 'Boolean'
+      parameter 'api_key',                         'API Key',                         type: 'String', required: true
+      parameter 'auto_log_campaigns',              'Auto Log Campaigns or Not',       type: 'Boolean'
+      parameter 'lists_available_for_newsletters', 'Lists available for newsletters', type: 'Array[Object]'
+      parameter 'lists_link',                      'Lists Link',                      type: 'String'
+      parameter 'lists_present',                   'Lists Present or Not',            type: 'Boolean'
+      parameter 'primary_list_id',                 'Primary List ID',                 type: 'String', required: true
+      parameter 'primary_list_name',               'Primary List Name',               type: 'String'
+      parameter 'sync_all_active_contacts',        'Sync all active contacts',        type: 'Boolean'
+      parameter 'valid',                           'Valid',                           type: 'Boolean'
+      parameter 'validation_error',                'Validation Error',                type: 'String'
+      parameter 'validate_key',                    'Validate Key or Not',             type: 'Boolean'
     end
 
     example 'Mailchimp Account [POST]', document: documentation_scope do

@@ -26,16 +26,16 @@ resource 'Reports > Year Donations Report' do
     # show
     get '/api/v2/reports/year_donations' do
       parameter 'filter[account_list_id]', 'Account List ID', required: true
-      response_field 'data',               'Data object',     'Type' => 'Object'
+      response_field 'data',               'Data object',     type: 'Object'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',     'Time when report was observed', 'Type' => 'String'
-        response_field 'donor_infos',    'Info on donors',                'Type' => 'Array[Object]'
-        response_field 'donation_infos', 'Info on donations',             'Type' => 'Array[Object]'
+        response_field 'created_at',     'Time when report was observed', type: 'String'
+        response_field 'donor_infos',    'Info on donors',                type: 'Array[Object]'
+        response_field 'donation_infos', 'Info on donations',             type: 'Array[Object]'
       end
 
       with_options scope: [:data, :relationships] do
-        response_field 'account_list', 'Account List', 'Type' => 'Object'
+        response_field 'account_list', 'Account List', type: 'Object'
       end
 
       example 'Donation Summary [LIST]', document: documentation_scope do

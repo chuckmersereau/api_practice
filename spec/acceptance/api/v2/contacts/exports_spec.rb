@@ -12,8 +12,8 @@ resource 'Contacts > Exports' do
     before { api_login(user) }
 
     get '/api/v2/contacts/exports.csv' do
-      parameter 'filter[account_list_id]',     'Account List ID', 'Type' => 'String'
-      parameter 'filter[ids]',                 'Contact IDs',     'Type' => 'Array[String]'
+      parameter 'filter[account_list_id]',     'Account List ID', type: 'String'
+      parameter 'filter[ids]',                 'Contact IDs',     type: 'Array[String]'
 
       example 'Export [GET] [CSV]', document: documentation_scope do
         explanation 'List of Contacts rendered in CSV format'
@@ -26,8 +26,8 @@ resource 'Contacts > Exports' do
     end
 
     get '/api/v2/contacts/exports.xlsx' do
-      parameter 'filter[account_list_id]',     'Account List ID', 'Type' => 'String'
-      parameter 'filter[ids]',                 'Contact IDs',     'Type' => 'Array[String]'
+      parameter 'filter[account_list_id]',     'Account List ID', type: 'String'
+      parameter 'filter[ids]',                 'Contact IDs',     type: 'Array[String]'
 
       example 'Export [GET] [XLSX]', document: false do
         explanation 'List of Contacts rendered in XLSX format'

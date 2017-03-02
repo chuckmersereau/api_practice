@@ -75,15 +75,15 @@ resource 'User > Organization Accounts' do
 
     get '/api/v2/user/organization_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',        'Created At',        'Type' => 'String'
-        response_field 'disable_downloads', 'Disable Downloads', 'Type' => 'String'
-        response_field 'last_download',     'Last Download',     'Type' => 'String'
-        response_field 'locked_at',         'Locked At',         'Type' => 'String'
-        response_field 'remote_id',         'Remote Id',         'Type' => 'String'
-        response_field 'token',             'Token',             'Type' => 'String'
-        response_field 'username',          'Username',          'Type' => 'String'
-        response_field 'updated_at',        'Updated At',        'Type' => 'String'
-        response_field 'updated_in_db_at',  'Updated In Db At',  'Type' => 'String'
+        response_field 'created_at',        'Created At',        type: 'String'
+        response_field 'disable_downloads', 'Disable Downloads', type: 'String'
+        response_field 'last_download',     'Last Download',     type: 'String'
+        response_field 'locked_at',         'Locked At',         type: 'String'
+        response_field 'remote_id',         'Remote Id',         type: 'String'
+        response_field 'token',             'Token',             type: 'String'
+        response_field 'username',          'Username',          type: 'String'
+        response_field 'updated_at',        'Updated At',        type: 'String'
+        response_field 'updated_in_db_at',  'Updated In Db At',  type: 'String'
       end
 
       example 'Organization Account [GET]', document: documentation_scope do

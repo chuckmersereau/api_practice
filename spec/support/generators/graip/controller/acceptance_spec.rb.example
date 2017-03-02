@@ -69,7 +69,7 @@ resource 'Email Addresses' do
     get '/my-show-url' do
       with_options scope: [:data, :attributes] do
         # list out the attributes here
-        response_field 'name_of_attribute', 'Name of Attribute', 'Type' => 'The Attribute Type (String, Boolean, etc)'
+        response_field 'name_of_attribute', 'Name of Attribute', type: 'The Attribute Type (String, Boolean, etc)'
       end
 
       example 'Email Address [GET]', document: documentation_scope do

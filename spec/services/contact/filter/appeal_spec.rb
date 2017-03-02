@@ -21,7 +21,7 @@ RSpec.describe Contact::Filter::Appeal do
                                                                 name: :appeal,
                                                                 options: [{ name: '-- Any --', id: '', placeholder: 'None' },
                                                                           { name: '-- Do not ask --', id: 'no_appeals' },
-                                                                          { name: 'Appeal 1', id: appeal_1.uuid }],
+                                                                          { name: appeal_1.name, id: appeal_1.uuid }],
                                                                 parent: nil,
                                                                 title: 'Appeal',
                                                                 type: 'multiselect',

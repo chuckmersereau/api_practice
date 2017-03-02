@@ -51,14 +51,14 @@ resource 'Contacts > People > Phones' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/phones/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'country_code',     'Country Code',     'Type' => 'String'
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'historic',         'Historic',         'Type' => 'Boolean'
-        response_field 'location',         'Location',         'Type' => 'String'
-        response_field 'number',           'Number',           'Type' => 'String'
-        response_field 'primary',          'Primary',          'Type' => 'Boolean'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
+        response_field 'country_code',     'Country Code',     type: 'String'
+        response_field 'created_at',       'Created At',       type: 'String'
+        response_field 'historic',         'Historic',         type: 'Boolean'
+        response_field 'location',         'Location',         type: 'String'
+        response_field 'number',           'Number',           type: 'String'
+        response_field 'primary',          'Primary',          type: 'Boolean'
+        response_field 'updated_at',       'Updated At',       type: 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
       end
 
       example 'Phone [GET]', document: documentation_scope do

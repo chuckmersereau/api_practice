@@ -87,10 +87,10 @@ resource 'Tasks > Analytics' do
       # show
       get '/api/v2/tasks/analytics' do
         with_options scope: [:data, :attributes] do
-          response_field 'last_electronic_newsletter_completed_at', 'Last Electronic Newsletter Completed At', 'Type' => 'DateTime'
-          response_field 'last_physical_newsletter_completed_at',   'Last Physical Newsletter Completed At',   'Type' => 'DateTime'
-          response_field 'tasks_overdue_or_due_today_counts',       'Tasks Overdue or Due Today Counts',       'Type' => 'Array[Object]'
-          response_field 'total_tasks_due_count',                   'Total Tasks Due Count',                   'Type' => 'Number'
+          response_field 'last_electronic_newsletter_completed_at', 'Last Electronic Newsletter Completed At', type: 'DateTime'
+          response_field 'last_physical_newsletter_completed_at',   'Last Physical Newsletter Completed At',   type: 'DateTime'
+          response_field 'tasks_overdue_or_due_today_counts',       'Tasks Overdue or Due Today Counts',       type: 'Array[Object]'
+          response_field 'total_tasks_due_count',                   'Total Tasks Due Count',                   type: 'Number'
         end
 
         example 'Analytics [GET]', document: documentation_scope do
@@ -132,10 +132,10 @@ resource 'Tasks > Analytics' do
       # show
       get '/api/v2/tasks/analytics' do
         with_options scope: [:data, :attributes] do
-          response_field 'last_electronic_newsletter_completed_at', 'Last Electronic Newsletter Completed At', 'Type' => 'DateTime'
-          response_field 'last_physical_newsletter_completed_at',   'Last Physical Newsletter Completed At',   'Type' => 'DateTime'
-          response_field 'tasks_overdue_or_due_today_counts',       'Tasks Overdue or Due Today Counts',       'Type' => 'Array[Object]'
-          response_field 'total_tasks_due_count',                   'Total Tasks Due Count',                   'Type' => 'Number'
+          response_field 'last_electronic_newsletter_completed_at', 'Last Electronic Newsletter Completed At', type: 'DateTime'
+          response_field 'last_physical_newsletter_completed_at',   'Last Physical Newsletter Completed At',   type: 'DateTime'
+          response_field 'tasks_overdue_or_due_today_counts',       'Tasks Overdue or Due Today Counts',       type: 'Array[Object]'
+          response_field 'total_tasks_due_count',                   'Total Tasks Due Count',                   type: 'Number'
         end
 
         example 'Analytics [GET]', document: documentation_scope do

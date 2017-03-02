@@ -66,18 +66,18 @@ resource 'Account Lists > Imports' do
 
     get '/api/v2/account_lists/:account_list_id/imports/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',        'Created At',        'Type' => 'String'
-        response_field 'file',              'File',              'Type' => 'String'
-        response_field 'groups',            'Groups',            'Type' => 'String'
-        response_field 'group_tags',        'Group Tags',        'Type' => 'String'
-        response_field 'import_by_group',   'Import by Group',   'Type' => 'Boolean'
-        response_field 'override',          'Override',          'Type' => 'Boolean'
-        response_field 'source',            'Source',            'Type' => 'String'
-        response_field 'source_account_id', 'Source Account ID', 'Type' => 'Number'
-        response_field 'tags',              'Tags',              'Type' => 'Array[String]'
-        response_field 'user_id',           'User ID',           'Type' => 'Number'
-        response_field 'updated_at',        'Updated At',  'Type' => 'String'
-        response_field 'updated_in_db_at',  'Updated In Db At', 'Type' => 'String'
+        response_field 'created_at',        'Created At',        type: 'String'
+        response_field 'file',              'File',              type: 'String'
+        response_field 'groups',            'Groups',            type: 'String'
+        response_field 'group_tags',        'Group Tags',        type: 'String'
+        response_field 'import_by_group',   'Import by Group',   type: 'Boolean'
+        response_field 'override',          'Override',          type: 'Boolean'
+        response_field 'source',            'Source',            type: 'String'
+        response_field 'source_account_id', 'Source Account ID', type: 'Number'
+        response_field 'tags',              'Tags',              type: 'Array[String]'
+        response_field 'user_id',           'User ID',           type: 'Number'
+        response_field 'updated_at',        'Updated At',  type: 'String'
+        response_field 'updated_in_db_at',  'Updated In Db At', type: 'String'
       end
 
       example 'Import [GET]', document: documentation_scope do

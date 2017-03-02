@@ -3,12 +3,13 @@ require 'faker'
 FactoryGirl.define do
   factory :contact do
     account_list
+    locale 'en'
     name { "#{Faker::Name.last_name}, #{Faker::Name.first_name}" }
-    status 'Partner - Financial'
+    notes 'Test Note.'
     pledge_amount 100
     pledge_frequency 1
     pledge_start_date { 35.days.ago }
-    notes 'Test Note.'
+    status 'Partner - Financial'
     uuid { SecureRandom.uuid }
 
     factory :contact_with_person do

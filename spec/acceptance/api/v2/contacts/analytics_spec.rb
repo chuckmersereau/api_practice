@@ -93,9 +93,9 @@ resource 'Contacts > Analytics' do
       # show
       get '/api/v2/contacts/analytics' do
         with_options scope: [:data, :attributes] do
-          response_field 'first_gift_not_received_count', 'First Gift Not Received Count', 'Type' => 'Number'
-          response_field 'partners_30_days_late_count',   'Partners 30 Days Late Count',   'Type' => 'Number'
-          response_field 'partners_60_days_late_count',   'Partners 60 Days Late Count',   'Type' => 'Number'
+          response_field 'first_gift_not_received_count', 'First Gift Not Received Count', type: 'Number'
+          response_field 'partners_30_days_late_count',   'Partners 30 Days Late Count',   type: 'Number'
+          response_field 'partners_60_days_late_count',   'Partners 60 Days Late Count',   type: 'Number'
         end
 
         example 'Analytics [GET]', document: documentation_scope do
@@ -117,9 +117,9 @@ resource 'Contacts > Analytics' do
         parameter 'filter[account_list_id]', 'An Account List ID to scope the analytics to'
 
         with_options scope: [:data, :attributes] do
-          response_field 'first_gift_not_received_count', 'First Gift Not Received Count', 'Type' => 'Number'
-          response_field 'partners_30_days_late_count',   'Partners 30 Days Late Count',   'Type' => 'Number'
-          response_field 'partners_60_days_late_count',   'Partners 60 Days Late Count',   'Type' => 'Number'
+          response_field 'first_gift_not_received_count', 'First Gift Not Received Count', type: 'Number'
+          response_field 'partners_30_days_late_count',   'Partners 30 Days Late Count',   type: 'Number'
+          response_field 'partners_60_days_late_count',   'Partners 60 Days Late Count',   type: 'Number'
         end
 
         example 'Analytics [GET]', document: documentation_scope do

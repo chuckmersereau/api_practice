@@ -41,8 +41,8 @@ resource 'User > Options' do
     # show
     get '/api/v2/user/options/:key' do
       with_options scope: [:data, :attributes] do
-        response_field 'key', 'Key to reference option (only contain alphanumeric and underscore chars)', 'Type' => 'String'
-        response_field 'value', 'Value of option', 'Type' => 'String'
+        response_field 'key', 'Key to reference option (only contain alphanumeric and underscore chars)', type: 'String'
+        response_field 'value', 'Value of option', type: 'String'
       end
 
       example 'Option [GET]', document: documentation_scope do

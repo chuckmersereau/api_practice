@@ -39,6 +39,8 @@ class ContactSerializer < ApplicationSerializer
              :total_donations,
              :uncompleted_tasks_count
 
+  belongs_to :account_list
+
   has_many :addresses
   has_many :appeals
   has_many :contacts_referred_by_me
@@ -47,7 +49,6 @@ class ContactSerializer < ApplicationSerializer
   has_many :last_six_donations
   has_many :people
   has_many :tasks
-  belongs_to :account_list
 
   def avatar
     contact_exhibit.avatar(:large)

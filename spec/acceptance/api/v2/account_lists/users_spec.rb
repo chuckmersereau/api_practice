@@ -54,13 +54,13 @@ resource 'Account Lists > Users' do
 
     get '/api/v2/account_lists/:account_list_id/users/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'first_name',       'First name',       'Type' => 'String'
-        response_field 'last_name',        'Last name',        'Type' => 'String'
-        response_field 'master_person_id', 'Master Person ID', 'Type' => 'Number'
-        response_field 'preferences',      'Preferences',      'Type' => 'Object'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
+        response_field 'created_at',       'Created At',       type: 'String'
+        response_field 'first_name',       'First name',       type: 'String'
+        response_field 'last_name',        'Last name',        type: 'String'
+        response_field 'master_person_id', 'Master Person ID', type: 'Number'
+        response_field 'preferences',      'Preferences',      type: 'Object'
+        response_field 'updated_at',       'Updated At',       type: 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
       end
 
       example 'User [GET]', document: documentation_scope do

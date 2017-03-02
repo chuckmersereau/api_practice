@@ -40,7 +40,7 @@ resource 'Designation Accounts' do
 
     get '/api/v2/account_lists/:account_list_id/designation_accounts' do
       parameter 'account_list_id', 'Account List ID', required: true
-      response_field 'data',       'Data', 'Type' => 'Array[Object]'
+      response_field 'data',       'Data', type: 'Array[Object]'
 
       example 'Designation Account [LIST]', document: documentation_scope do
         explanation 'List of Designation Accounts associated to the Account List'
@@ -53,19 +53,19 @@ resource 'Designation Accounts' do
 
     get '/api/v2/account_lists/:account_list_id/designation_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'active',             'Active',             'Type' => 'Boolean'
-        response_field 'balance',            'Balance',            'Type' => 'Number'
-        response_field 'balance_updated_at', 'Balance Updated At', 'Type' => 'String'
-        response_field 'converted_balance',  'Converted Balance',  'Type' => 'Number'
-        response_field 'created_at',         'Created At',         'Type' => 'String'
-        response_field 'currency',           'Currency',           'Type' => 'String'
-        response_field 'currency_symbol',    'Currency Symbol',    'Type' => 'String'
-        response_field 'designation_number', 'Designation Number', 'Type' => 'String'
-        response_field 'exchange_rate',      'Exchange Rate',      'Type' => 'Number'
-        response_field 'name',               'Name',               'Type' => 'String'
-        response_field 'organization_name',  'Organization Name',  'Type' => 'String'
-        response_field 'updated_at',         'Updated At',         'Type' => 'String'
-        response_field 'updated_in_db_at',   'Updated In Db At',   'Type' => 'String'
+        response_field 'active',             'Active',             type: 'Boolean'
+        response_field 'balance',            'Balance',            type: 'Number'
+        response_field 'balance_updated_at', 'Balance Updated At', type: 'String'
+        response_field 'converted_balance',  'Converted Balance',  type: 'Number'
+        response_field 'created_at',         'Created At',         type: 'String'
+        response_field 'currency',           'Currency',           type: 'String'
+        response_field 'currency_symbol',    'Currency Symbol',    type: 'String'
+        response_field 'designation_number', 'Designation Number', type: 'String'
+        response_field 'exchange_rate',      'Exchange Rate',      type: 'Number'
+        response_field 'name',               'Name',               type: 'String'
+        response_field 'organization_name',  'Organization Name',  type: 'String'
+        response_field 'updated_at',         'Updated At',         type: 'String'
+        response_field 'updated_in_db_at',   'Updated In Db At',   type: 'String'
       end
 
       example 'Designation Account [GET]', document: documentation_scope do

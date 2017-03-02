@@ -27,17 +27,17 @@ resource 'Reports > Expected Monthly Totals Report' do
     # show
     get '/api/v2/reports/expected_monthly_totals' do
       parameter 'filter[account_list_id]', 'Account List ID', required: true
-      response_field 'data',               'Data object',     'Type' => 'Object'
+      response_field 'data',               'Data object',     type: 'Object'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',            'Time when report was observed',              'Type' => 'String'
-        response_field 'expected_donations',    'Info about recieved and possible donations', 'Type' => 'Array[Object]'
-        response_field 'total_currency',        'Total currency',                             'Type' => 'String'
-        response_field 'total_currency_symbol', 'Total currency symbol',                      'Type' => 'String'
+        response_field 'created_at',            'Time when report was observed',              type: 'String'
+        response_field 'expected_donations',    'Info about recieved and possible donations', type: 'Array[Object]'
+        response_field 'total_currency',        'Total currency',                             type: 'String'
+        response_field 'total_currency_symbol', 'Total currency symbol',                      type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
-        response_field 'account_list', 'Account List', 'Type' => 'Object'
+        response_field 'account_list', 'Account List', type: 'Object'
       end
 
       example 'Expected Monthly Total [LIST]', document: documentation_scope do

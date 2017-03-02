@@ -64,8 +64,8 @@ resource 'Contacts > Referrals' do
     # show
     get '/api/v2/contacts/:contact_id/referrals/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at', 'Created At', 'Type' => 'String'
-        response_field 'updated_at', 'Updated At', 'Type' => 'String'
+        response_field 'created_at', 'Created At', type: 'String'
+        response_field 'updated_at', 'Updated At', type: 'String'
       end
 
       example_request 'show referral' do
@@ -81,8 +81,8 @@ resource 'Contacts > Referrals' do
     # create
     post '/api/v2/contacts/:contact_id/referrals/' do
       with_options scope: [:data, :attributes] do
-        parameter 'referred_by_id', 'ID of the Contact making the Referral', 'Type' => 'Number'
-        parameter 'referred_to_id', 'ID of the Contact being Referred',      'Type' => 'Number'
+        parameter 'referred_by_id', 'ID of the Contact making the Referral', type: 'Number'
+        parameter 'referred_to_id', 'ID of the Contact being Referred',      type: 'Number'
       end
 
       let(:attributes) do
@@ -121,8 +121,8 @@ resource 'Contacts > Referrals' do
     # update
     put '/api/v2/contacts/:contact_id/referrals/:id' do
       with_options scope: [:data, :attributes] do
-        parameter 'referred_by_id', 'ID of the Contact making the Referral', 'Type' => 'Number'
-        parameter 'referred_to_id', 'ID of the Contact being Referred',      'Type' => 'Number'
+        parameter 'referred_by_id', 'ID of the Contact making the Referral', type: 'Number'
+        parameter 'referred_to_id', 'ID of the Contact being Referred',      type: 'Number'
       end
 
       let(:alternate) { create(:contact, account_list: account_list) }

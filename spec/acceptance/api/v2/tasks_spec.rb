@@ -69,6 +69,7 @@ resource 'Tasks' do
       end
 
       response_field :data, 'list of task objects', 'Type' => 'Array[Object]'
+      response_field :data, 'list of task objects', type: 'Array[Object]'
 
       example 'List tasks', document: documentation_scope do
         do_request
@@ -82,9 +83,9 @@ resource 'Tasks' do
       parameter :id, 'the Id of the Task'
 
       with_options scope: :data do
-        response_field 'id',            'Task id',                                           'Type' => 'Number'
-        response_field 'relationships', 'List of relationships related to that task object', 'Type' => 'Array[Object]'
-        response_field 'type',          'Type of object (Task in this case)',                'Type' => 'String'
+        response_field 'id',            'Task id',                                           type: 'Number'
+        response_field 'relationships', 'List of relationships related to that task object', type: 'Array[Object]'
+        response_field 'type',          'Type of object (Task in this case)',                type: 'String'
 
         with_options scope: :attributes do
           response_field 'account_list_id',          'Account List Id',          'Type' => 'Number'
@@ -119,23 +120,23 @@ resource 'Tasks' do
 
     post '/api/v2/tasks' do
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id',          'Account List Id',          'Type' => 'Number'
-        parameter 'activity_type',            'Activity Type',            'Type' => 'String'
-        parameter 'completed',                'Completed',                'Type' => 'Boolean'
-        parameter 'end_at',                   'End At',                   'Type' => 'String'
-        parameter 'location',                 'Location',                 'Type' => 'String'
-        parameter 'next_action',              'Next Action',              'Type' => 'String'
-        parameter 'no_date',                  'No Date',                  'Type' => 'Boolean'
-        parameter 'notification_time_before', 'Notification Time Before', 'Type' => 'Number'
-        parameter 'notification_time_unit',   'Notification Time Unit',   'Type' => 'String'
-        parameter 'notification_type',        'Notification Type',        'Type' => 'String'
-        parameter 'remote_id',                'Remote Id',                'Type' => 'String'
-        parameter 'result',                   'Result',                   'Type' => 'String'
-        parameter 'source',                   'Source',                   'Type' => 'String'
-        parameter 'starred',                  'Starred',                  'Type' => 'Boolean'
-        parameter 'start_at',                 'Start At',                 'Type' => 'String', required: true
-        parameter 'subject',                  'Subject',                  'Type' => 'String', required: true
-        parameter 'type',                     'Type',                     'Type' => 'String'
+        parameter 'account_list_id',          'Account List Id',          type: 'Number'
+        parameter 'activity_type',            'Activity Type',            type: 'String'
+        parameter 'completed',                'Completed',                type: 'Boolean'
+        parameter 'end_at',                   'End At',                   type: 'String'
+        parameter 'location',                 'Location',                 type: 'String'
+        parameter 'next_action',              'Next Action',              type: 'String'
+        parameter 'no_date',                  'No Date',                  type: 'Boolean'
+        parameter 'notification_time_before', 'Notification Time Before', type: 'Number'
+        parameter 'notification_time_unit',   'Notification Time Unit',   type: 'String'
+        parameter 'notification_type',        'Notification Type',        type: 'String'
+        parameter 'remote_id',                'Remote Id',                type: 'String'
+        parameter 'result',                   'Result',                   type: 'String'
+        parameter 'source',                   'Source',                   type: 'String'
+        parameter 'starred',                  'Starred',                  type: 'Boolean'
+        parameter 'start_at',                 'Start At',                 type: 'String'
+        parameter 'subject',                  'Subject',                  type: 'String', required: true
+        parameter 'type',                     'Type',                     type: 'String'
       end
 
       example 'Create a task', document: documentation_scope do
@@ -152,23 +153,23 @@ resource 'Tasks' do
       parameter :id, 'the Id of the Task'
 
       with_options scope: [:data, :attributes] do
-        parameter 'account_list_id',          'Account List Id',          'Type' => 'Number'
-        parameter 'activity_type',            'Activity Type',            'Type' => 'String'
-        parameter 'completed',                'Completed',                'Type' => 'Boolean'
-        parameter 'end_at',                   'End At',                   'Type' => 'String'
-        parameter 'location',                 'Location',                 'Type' => 'String'
-        parameter 'next_action',              'Next Action',              'Type' => 'String'
-        parameter 'no_date',                  'No Date',                  'Type' => 'Boolean'
-        parameter 'notification_time_before', 'Notification Time Before', 'Type' => 'Number'
-        parameter 'notification_time_unit',   'Notification Time Unit',   'Type' => 'String'
-        parameter 'notification_type',        'Notification Type',        'Type' => 'String'
-        parameter 'remote_id',                'Remote Id',                'Type' => 'String'
-        parameter 'result',                   'Result',                   'Type' => 'String'
-        parameter 'source',                   'Source',                   'Type' => 'String'
-        parameter 'starred',                  'Starred',                  'Type' => 'Boolean'
-        parameter 'start_at',                 'Start At',                 'Type' => 'String'
-        parameter 'subject',                  'Subject',                  'Type' => 'String', required: true
-        parameter 'type',                     'Type',                     'Type' => 'String'
+        parameter 'account_list_id',          'Account List Id',          type: 'Number'
+        parameter 'activity_type',            'Activity Type',            type: 'String'
+        parameter 'completed',                'Completed',                type: 'Boolean'
+        parameter 'end_at',                   'End At',                   type: 'String'
+        parameter 'location',                 'Location',                 type: 'String'
+        parameter 'next_action',              'Next Action',              type: 'String'
+        parameter 'no_date',                  'No Date',                  type: 'Boolean'
+        parameter 'notification_time_before', 'Notification Time Before', type: 'Number'
+        parameter 'notification_time_unit',   'Notification Time Unit',   type: 'String'
+        parameter 'notification_type',        'Notification Type',        type: 'String'
+        parameter 'remote_id',                'Remote Id',                type: 'String'
+        parameter 'result',                   'Result',                   type: 'String'
+        parameter 'source',                   'Source',                   type: 'String'
+        parameter 'starred',                  'Starred',                  type: 'Boolean'
+        parameter 'start_at',                 'Start At',                 type: 'String'
+        parameter 'subject',                  'Subject',                  type: 'String', required: true
+        parameter 'type',                     'Type',                     type: 'String'
       end
 
       example 'Update a task', document: documentation_scope do

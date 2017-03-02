@@ -1,0 +1,22 @@
+attributes: &attrs
+  name:
+    description:
+      The name of the contact
+    required: true
+    type: string
+  greeting:
+    description:
+      The greeting for the contact
+    type: string
+
+parameters:
+  create:
+    attributes:
+      <<: *attrs
+      greeting:
+        ignore: true
+
+response_fields:
+  create:
+    attributes:
+      <<: *attrs

@@ -13,6 +13,9 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
   let(:unpermitted_attributes) { attributes_for(:appeal, name: 'Appeal 3') }
   let(:incorrect_attributes) { attributes_for(:appeal, name: nil) }
 
+  let(:given_update_reference_key)   { :name }
+  let(:given_update_reference_value) { 'Appeal 2' }
+
   let(:correct_relationships) do
     {
       account_list: {

@@ -60,15 +60,15 @@ resource 'Account Lists > Imports > from TNT XML' do
 
     post '/api/v2/account_lists/:account_list_id/imports/tnt' do
       with_options scope: [:data, :attributes] do
-        parameter 'file',              'File',              'Type' => 'String'
-        parameter 'groups',            'Groups',            'Type' => 'String'
-        parameter 'group_tags',        'Group Tags',        'Type' => 'String'
-        parameter 'import_by_group',   'Import by Group',   'Type' => 'String'
-        parameter 'override',          'Override',          'Type' => 'Boolean'
-        parameter 'source',            'Source',            'Type' => 'String'
-        parameter 'source_account_id', 'Source Account ID', 'Type' => 'String'
-        parameter 'tags',              'Tags',              'Type' => 'String'
-        parameter 'user_id',           'User ID',           'Type' => 'String'
+        parameter 'file',              'File',              type: 'String'
+        parameter 'groups',            'Groups',            type: 'String'
+        parameter 'group_tags',        'Group Tags',        type: 'String'
+        parameter 'import_by_group',   'Import by Group',   type: 'String'
+        parameter 'override',          'Override',          type: 'Boolean'
+        parameter 'source',            'Source',            type: 'String'
+        parameter 'source_account_id', 'Source Account ID', type: 'String'
+        parameter 'tags',              'Tags',              type: 'String'
+        parameter 'user_id',           'User ID',           type: 'String'
       end
 
       example 'Import [CREATE]', document: documentation_scope do

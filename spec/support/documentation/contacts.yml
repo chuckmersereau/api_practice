@@ -1,0 +1,525 @@
+actions:
+  bulk_create:
+    description: |
+      > an individual element of the `data` array
+
+      ```json
+      {
+        "data": {
+          "type": "contacts",
+          "id": "1d6393dd-f3f4-49d3-9fd8-7e758b056b1f",
+          "attributes": {
+            "name": "Steve Rogers",
+            "more_attributes": "...etc"
+          }
+        }
+      }
+      ```
+
+      For this bulk create endpoint, you are *required* to send an array of items within the `data` object.
+
+      - Each member of the array _must_ contain a _client generated `id`_ to be used for the Contact being created.
+      - Each member of the array _must_ contain a `type` that has the value of `'contacts'`.
+      - Each member of the array _must_ have an `attributes` hash of values to be used for the Contact being created.
+
+attributes: &attrs
+  avatar:
+    description:
+      The avatar url of the Contact
+    type: string
+  church_name:
+    description:
+      The name of the Church for this Contact
+    type: string
+  deceased:
+    description:
+      Whether or not the Contact is deceased
+    type: boolean
+  donor_accounts:
+    description:
+      The donor accounts for this Contact
+    type: '[Donor Account]'
+  envelope_greeting:
+    description:
+      The greeting for this Contact for use on an envelope
+    type: string
+  greeting:
+    description:
+      The greeting for this contact
+    type: string
+  last_activity:
+    description:
+      The date of the last activity for the Contact
+    type: string
+  last_appointment:
+    description:
+      The date of the last appointment for the Contact
+    type: string
+  last_donation:
+    description:
+      The date of the last donation for the Contact
+    type: string
+  last_letter:
+    description:
+      The date of the last letter for the Contact
+    type: string
+  last_phone_call:
+    description:
+      The date of the last phone call for the Contact
+    type: string
+  last_pre_call:
+    description:
+      The date of the last pre-phone call for the Contact
+    type: string
+  last_thank:
+    description:
+      The date of the last thank you for the Contact
+    type: string
+  likely_to_give:
+    description:
+      Whether or not the Contact is likely to give
+    type: boolean
+  locale:
+    description:
+      The locale of the Contact
+    type: string
+  magazine:
+    description:
+      Whether or not the Contact receives a magazine
+    type: booelan
+  name:
+    description:
+      The name of the Contact
+    type: string
+  next_ask:
+    description:
+      The date of the next ask for the Contact
+    type: string
+  no_appeals:
+    description:
+      Whether or not the Contact has no appeals
+    type: boolean
+  notes:
+    description:
+      Notes for this contact
+    type: string
+  notes_saved_at:
+    description:
+      the datetime of when the notes for this Contact were last saved
+    type: string
+  pledge_amount:
+    description:
+      The amount that the Contact has pledged
+    type: float
+  pledge_currency:
+    description:
+      "The currency format for the Contact's pledge"
+    type: string
+  pledge_currency_symbol:
+    description:
+      "The symbol that represents the currency format for the Contact's pledge"
+    type: string
+  pledge_frequency:
+    description:
+      The requency in which the Contact pledges
+    type: float
+  pledge_received:
+    description:
+      Whether or not a pledge has been received for this Contact
+    type: boolean
+  pledge_start_date:
+    description:
+      "Date in which the Contact's pledge starts"
+    type: string
+  send_newsletter:
+    description:
+      The type of newsletter to be sent to this Contact. Physical, Email, or Both
+    type: string
+  square_avatar:
+    description:
+      "A url for the Contact's avatar - but in a square format"
+    type: string
+  status:
+    description:
+      The partner status of the Contact
+    type: string
+  status_valid:
+    description:
+      "Whether or not the Contact's status is valid"
+    type: boolean
+  suggested_changes:
+    description:
+      thing
+    type: string
+  tag_list:
+    description:
+      A list of tags
+    type: '[string]'
+  timezone:
+    description:
+      "The Contact's timezone"
+    type: string
+  total_donations:
+    description:
+      The total amount of donations given by this Contact
+    type: float
+  uncompleted_tasks_count:
+    description:
+      The number of uncompleted tasks for this Contact
+    type: number
+
+relationships: &rels
+  account_list:
+    data:
+      id:
+        description:
+          The `id` of the Account List that the Appeal belongs to
+        type: UUID string
+        required: true
+  addresses:
+    data:
+      description:
+        An array of Address references for the Contact
+      type: '[Address]'
+  appeals:
+    data:
+      description:
+        An array of Appeal references for the Contact
+      type: '[Appeal]'
+  contacts_referred_by_me:
+    data:
+      description:
+        An array of referred Contact references for the Contact
+      type: '[Contact]'
+  contacts_that_referred_me:
+    data:
+      description:
+        An array of Contact referral references for the Contact
+      type: '[Contact]'
+  donor_accounts:
+    data:
+      description:
+        An array of Donor Account references for the Contact
+      type: '[Donor Account]'
+  last_six_donations:
+    data:
+      description:
+        An array of the last six Donation references for the Contact
+      type: '[Donation]'
+  people:
+    data:
+      description:
+        An array of People references for the Contact
+      type: '[People]'
+  tasks:
+    data:
+      description:
+        An array of Tasks references for the Contact
+      type: '[Tasks]'
+
+mutation_attributes: &mutation_attrs
+  <<: *attrs
+  donor_accounts:
+    ignore: true
+  donor_accounts:
+    ignore: true
+  last_activity:
+    ignore: true
+  last_appointment:
+    ignore: true
+  last_donation:
+    ignore: true
+  last_letter:
+    ignore: true
+  last_phone_call:
+    ignore: true
+  last_pre_call:
+    ignore: true
+  last_thank:
+    ignore: true
+  likely_to_give:
+    ignore: true
+  notes_saved_at:
+    ignore: true
+  pledge_currency_symbol:
+    ignore: true
+  status_valid:
+    ignore: true
+  suggested_changes:
+    ignore: true
+  uncompleted_tasks_count:
+    ignore: true
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+sort_params: &sorts
+  created_at:
+    description:
+      Sort objects by their `created_at` time
+    required: false
+  name:
+    description:
+      Sort objects by name
+    required: false
+  updated_at:
+    description:
+      Sort objects by their `updated_at` time
+    required: false
+
+filter_params: &filters
+  account_list_id:
+    description:
+      Filter by Account List; Accepts Account List ID
+    required: false
+  address_historic:
+    description:
+      Filter by Address No Longer Valid; Accepts values 'true', or 'false'
+    required: false
+  appeal:
+    description:
+      Filter by Appeal; Accepts multiple parameters, with value 'no_appeals', or an appeal ID
+    required: false
+  church:
+    description:
+      Filter by Church; Accepts multiple parameters, with value 'none', or a church name
+    required: false
+  city:
+    description:
+      Filter by City; Accepts multiple parameters, with value 'none', or a city name
+    required: false
+  contact_info_addr:
+    description:
+      Filter by Address; Accepts values 'Yes', or 'No'
+    required: false
+  contact_info_email:
+    description:
+      Filter by Email; Accepts values 'Yes', or 'No'
+    required: false
+  contact_info_facebook:
+    description:
+      Filter by Facebook Profile; Accepts values 'Yes', or 'No'
+    required: false
+  contact_info_mobile:
+    description:
+      Filter by Mobile Phone; Accepts values 'Yes', or 'No'
+    required: false
+  contact_info_phone:
+    description:
+      Filter by Home Phone; Accepts values 'Yes', or 'No'
+    required: false
+  contact_info_work_phone:
+    description:
+      Filter by Work Phone; Accepts values 'Yes', or 'No'
+    required: false
+  contact_type:
+    description:
+      Filter by Type; Accepts multiple parameters, with values 'person', and 'company'
+    required: false
+  country:
+    description:
+      Filter by Country; Accepts multiple parameters, with values 'none', or a country
+    required: false
+  donation:
+    description:
+      Filter by Gift Options; Accepts multiple parameters, with values 'none', 'one', 'first', and 'last'
+    required: false
+  donation_amount:
+    description:
+      Filter by Exact Gift Amount; Accepts multiple parameters, with values like '9.99'
+    required: false
+  'donation_amount_range[min]':
+    description:
+      Filter by Gift Amount Range, Minimum; Accepts values like '9.99'
+    required: false
+  'donation_amount_range[max]':
+    description:
+      Filter by Gift Amount Range, Maximum; Accepts values like '9.99'
+    required: false
+  donation_date:
+    description:
+      Filter by Gift Date; Accepts date range with text value like 'MM/DD/YYYY - MM/DD/YYYY'
+    required: false
+  likely:
+    description:
+      Filter by Likely To Give; Accepts multiple parameters, with values 'none', 'Least Likely', 'Likely',
+      and 'Most Likely'
+    required: false
+  locale:
+    description:
+      Filter by Language; Accepts multiple parameters,
+    required: false
+  metro_area:
+    description:
+      Filter by Metro Area; Accepts multiple parameters, with values 'none', or a metro area name
+    required: false
+  newsletter:
+    description:
+      Filter by Newsletter Recipients; Accepts values 'none', 'all', 'address', 'email', and 'both'
+    required: false
+  pledge_amount:
+    description:
+      Filter by Commitment Amount; Accepts multiple parameters, with values like '100.0'
+    required: false
+  pledge_currency:
+    description:
+      Filter by Commitment Currency; Accepts multiple parameters, with values like 'USD'
+    required: false
+  pledge_frequencies:
+    description:
+      Filter by Commitment Frequency; Accepts multiple parameters, with numeric values like '0.23076923076923' (Weekly),
+      '0.46153846153846' (Every 2 Weeks), '1.0' (Monthly), '2.0' (Every 2 Months), '3.0', '4.0', '6.0', '12.0' (Yearly),
+      and '24.0' (Every 2 Years)
+    required: false
+  pledge_late_by:
+    description:
+      Filter by Late By; Accepts values '', '0_30' (Less than 30 days late), '30_60' (More than 30 days late),
+      '60_90' (More than 60 days late), or '90' (More than 90 days late)
+    required: false
+  pledge_received:
+    description:
+      Filter by Commitment Received; Accepts values 'true', or 'false'
+    required: false
+  referrer:
+    description:
+      Filter by Referrer; Accepts multiple parameters, with values 'none', 'any', or a Contact ID
+    required: false
+  region:
+    description:
+      Filter by Region; Accepts multiple parameters, with values 'none', or a region name
+    required: false
+  related_task_action:
+    description:
+      Filter by Action; Accepts multiple parameters, with values 'null', or an activity type like 'Call'
+    required: false
+  state:
+    description:
+      Filter by State; Accepts multiple parameters, with values 'none', or a state
+    required: false
+  status:
+    description:
+      Filter by Status; Accepts multiple parameters, with values 'active', 'hidden', 'null', 'Never Contacted',
+      'Ask in Future', 'Cultivate Relationship', 'Contact for Appointment', 'Appointment Scheduled',
+      'Call for Decision', 'Partner - Financial', 'Partner - Special', 'Partner - Pray', 'Not Interested',
+      'Unresponsive', 'Never Ask', 'Research Abandoned', and 'Expired Referral'
+    required: false
+  status_valid:
+    description:
+      Filter by Status Valid; Accepts values 'true', or 'false'
+    required: false
+  task_due_date:
+    description:
+      Filter by Due Date; Accepts date range with text value like 'MM/DD/YYYY - MM/DD/YYYY'
+    required: false
+  timezone:
+    description:
+      Filter by Timezone; Accepts multiple parameters,
+    required: false
+
+
+ignored_attributes: &ignored_attrs
+  created_at:
+    ignore: true
+  updated_at:
+    ignore: true
+  updated_in_db_at:
+    ignore: true
+
+parameters:
+  index:
+    sorts:
+      <<: *sorts
+    filters:
+      <<: *filters
+
+  create:
+    attributes:
+      <<: *mutation_attrs
+    relationships:
+      <<: *rels
+      addresses:
+        ignore: true
+      appeals:
+        ignore: true
+      appeals:
+        ignore: true
+      contacts_referred_by_me:
+        ignore: true
+      contacts_that_referred_me:
+        ignore: true
+      donor_accounts:
+        ignore: true
+      last_six_donations:
+        ignore: true
+      people:
+        ignore: true
+      tasks:
+        ignore: true
+
+  update:
+    attributes:
+      <<: *mutation_attrs
+
+  bulk_create:
+    data:
+      description:
+        An array of Contacts to be created
+      type: '[Contact]'
+      required: true
+
+  bulk_update:
+    data:
+      description:
+        An array of Contacts to be updated
+      type: '[Contact]'
+      required: true
+
+  bulk_delete:
+    data:
+      description:
+        An array of objects that have both a `type` and `id` for the contacts being deleted
+      type: '[object w/ type and id]'
+      required: true
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Contact Objects
+      type: '[Contact]'
+
+  show:
+    <<: *obj
+
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj
+
+  bulk_create:
+    data:
+      description:
+        Array of both Contact objects that have been successfully created and of errors related to Contact objects that were not created successfully
+      type: '[Contact / error]'
+    attributes:
+      <<: *ignored_attrs
+
+  bulk_update:
+    data:
+      description:
+        Array of both Contact objects that have been successfully updated and of errors related to Contact objects that were not updated successfully
+      type: '[Contact / error]'
+    attributes:
+      <<: *ignored_attrs
+
+  bulk_delete:
+    data:
+      description:
+        An array of Contacts that have just been deleted
+      type: '[Contact]'
+    attributes:
+      <<: *ignored_attrs

@@ -1,8 +1,10 @@
 FactoryGirl.define do
   factory :appeal do
-    name 'Appeal 1'
     account_list
     amount 1000.0
-    description 'First appeal'
+    description 'The description for my new Appeal'
+    end_date { 1.week.from_now.to_date }
+
+    sequence(:name) { |num| "Appeal ##{num}" }
   end
 end

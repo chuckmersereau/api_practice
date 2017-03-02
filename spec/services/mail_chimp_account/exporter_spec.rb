@@ -530,6 +530,7 @@ describe MailChimpAccount::Exporter do
       member_params_json = {
         status_if_new: 'subscribed', email_address: 'j@t.co',
         merge_fields: { EMAIL: 'j@t.co', FNAME: 'John', LNAME: 'Doe', GREETING: 'Hi' },
+        language: 'en',
         interests: { i1: true, i2: false, i3: true, i4: true }
       }.to_json
       subscribe_request =

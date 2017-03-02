@@ -46,7 +46,7 @@ resource 'Contacts > People > Websites' do
     get '/api/v2/contacts/:contact_id/people/:person_id/websites' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID', required: true
-      response_field 'data',  'Data', 'Type' => 'Array[Object]'
+      response_field 'data',  'Data', type: 'Array[Object]'
 
       example 'Website [LIST]', document: documentation_scope do
         explanation 'List of Websites associated to the Person'
@@ -59,11 +59,11 @@ resource 'Contacts > People > Websites' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/websites/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'primary',          'Primary',          'Type' => 'Boolean'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
-        response_field 'url',              'Url',              'Type' => 'String'
+        response_field 'created_at',       'Created At',       type: 'String'
+        response_field 'primary',          'Primary',          type: 'Boolean'
+        response_field 'updated_at',       'Updated At',       type: 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
+        response_field 'url',              'Url',              type: 'String'
       end
 
       example 'Website [GET]', document: documentation_scope do

@@ -48,7 +48,7 @@ resource 'Contacts > People > Twitter Accounts' do
     get '/api/v2/contacts/:contact_id/people/:person_id/twitter_accounts' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID', required: true
-      response_field 'data',  'Data', 'Type' => 'Array[Object]'
+      response_field 'data',  'Data', type: 'Array[Object]'
 
       example 'Twitter Account [LIST]', document: documentation_scope do
         explanation 'List of Twitter Accounts associated to the Person'
@@ -61,12 +61,12 @@ resource 'Contacts > People > Twitter Accounts' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/twitter_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'primary',          'Primary',          'Type' => 'Boolean'
-        response_field 'remote_id',        'Remote ID',        'Type' => 'Number'
-        response_field 'screen_name',      'Screen Name',      'Type' => 'String'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
+        response_field 'created_at',       'Created At',       type: 'String'
+        response_field 'primary',          'Primary',          type: 'Boolean'
+        response_field 'remote_id',        'Remote ID',        type: 'Number'
+        response_field 'screen_name',      'Screen Name',      type: 'String'
+        response_field 'updated_at',       'Updated At',       type: 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
       end
 
       example 'Twitter Account [GET]', document: documentation_scope do

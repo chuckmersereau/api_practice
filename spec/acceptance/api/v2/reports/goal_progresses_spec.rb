@@ -32,22 +32,22 @@ resource 'Reports > Account Goal Progress Report' do
     # show
     get '/api/v2/reports/goal_progress' do
       parameter 'filter[account_list_id]', 'Account List ID', required: true
-      response_field 'data',               'Data object',     'Type' => 'Object'
+      response_field 'data',               'Data object',     type: 'Object'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',                 'Time when report was observed',           'Type' => 'String'
-        response_field 'in_hand_percent',            'Percent of monthly goal in hand',         'Type' => 'String'
-        response_field 'monthly_goal',               'The account list monthly goal',           'Type' => 'String'
-        response_field 'pledged_percent',            'Percent of monthly goal pledged',         'Type' => 'String'
-        response_field 'received_pledges',           'Percent of monthly goal received',        'Type' => 'String'
-        response_field 'salary_balance',             'Balance of organization salary accounts', 'Type' => 'String'
-        response_field 'salary_currency_or_default', 'Currency of salary',                      'Type' => 'String'
-        response_field 'salary_organization_id',     'ID of salary Organization',               'Type' => 'String'
-        response_field 'total_pledges',              'Total pledges',                           'Type' => 'String'
+        response_field 'created_at',                 'Time when report was observed',           type: 'String'
+        response_field 'in_hand_percent',            'Percent of monthly goal in hand',         type: 'String'
+        response_field 'monthly_goal',               'The account list monthly goal',           type: 'String'
+        response_field 'pledged_percent',            'Percent of monthly goal pledged',         type: 'String'
+        response_field 'received_pledges',           'Percent of monthly goal received',        type: 'String'
+        response_field 'salary_balance',             'Balance of organization salary accounts', type: 'String'
+        response_field 'salary_currency_or_default', 'Currency of salary',                      type: 'String'
+        response_field 'salary_organization_id',     'ID of salary Organization',               type: 'String'
+        response_field 'total_pledges',              'Total pledges',                           type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
-        response_field 'account_list', 'Account List', 'Type' => 'Object'
+        response_field 'account_list', 'Account List', type: 'Object'
       end
 
       example 'Goal Progress [LIST]', document: documentation_scope do

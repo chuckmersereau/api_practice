@@ -13,9 +13,12 @@ class ApplicationSerializer < ActiveModel::Serializer
   end
 
   def attributes(*args)
-    super(*args).transform_values do |value|
+    attrs = super(*args)
+
+    attrs.keys.sort.each_with_object({}) do |key, hash|
+      value = attrs[key]
       value = convert_to_utc_iso8601(value) if value.respond_to?(:utc)
-      value
+      hash[key] = value
     end
   end
 

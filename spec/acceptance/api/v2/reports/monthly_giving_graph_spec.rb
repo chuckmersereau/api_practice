@@ -32,21 +32,21 @@ resource 'Reports > Monthly Giving Graph Report' do
     # show
     get '/api/v2/reports/monthly_giving_graph' do
       parameter 'filter[account_list_id]', 'Account List ID', required: true
-      response_field 'data',               'Data object',     'Type' => 'Object'
+      response_field 'data',               'Data object',     type: 'Object'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',             'Time when report was observed',           'Type' => 'String'
-        response_field 'monthly_average',        'Average monthly total conversion',        'Type' => 'Number'
-        response_field 'monthly_goal',           'The Account List\'s monthly goal',        'Type' => 'Number'
-        response_field 'pledges',                'The sum of all pledges',                  'Type' => 'Array'
-        response_field 'months_to_dates',        'The first day of each month represented', 'Type' => 'Array'
-        response_field 'multi_currency',         'If multiple currencies are used',         'Type' => 'Boolean'
-        response_field 'salary_currency',        'Salary currency',                         'Type' => 'String'
-        response_field 'salary_currency_symbol', 'Salary currency symbol',                  'Type' => 'String'
+        response_field 'created_at',             'Time when report was observed',           type: 'String'
+        response_field 'monthly_average',        'Average monthly total conversion',        type: 'Number'
+        response_field 'monthly_goal',           'The Account List\'s monthly goal',        type: 'Number'
+        response_field 'pledges',                'The sum of all pledges',                  type: 'Array'
+        response_field 'months_to_dates',        'The first day of each month represented', type: 'Array'
+        response_field 'multi_currency',         'If multiple currencies are used',         type: 'Boolean'
+        response_field 'salary_currency',        'Salary currency',                         type: 'String'
+        response_field 'salary_currency_symbol', 'Salary currency symbol',                  type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
-        response_field 'account_list', 'Account List', 'Type' => 'Object'
+        response_field 'account_list', 'Account List', type: 'Object'
       end
 
       example 'Monthly Giving Graph [LIST]', document: documentation_scope do

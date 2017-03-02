@@ -33,22 +33,23 @@ resource 'Account List Analytics' do
 
     # show
     get '/api/v2/account_lists/:account_list_id/analytics' do
-      parameter 'account_list_id',    'Account List ID', required: true
-      parameter 'filter[date_range]', 'Date Range for Analytics, in ISO8601'
+      parameter 'account_list_id',    'Account List ID', required: true # type: 'Number'
+      parameter 'filter[start_date]', 'Starting Date for Analytics, in ISO8601' # type: 'String'
+      parameter 'filter[end_date]',   'Ending Date for Analytics, in ISO8601' # type: 'String'
 
       with_options scope: [:data, :attributes] do
-        response_field 'appointments',   'Appointment related analytics',      'Type' => 'Object'
-        response_field 'contacts',       'Contact related analytics',          'Type' => 'Object'
-        response_field 'correspondence', 'Correspondence related analytics',   'Type' => 'Object'
-        response_field 'created_at',     'Time when analytics were observed',  'Type' => 'String'
-        response_field 'electronic',     'Electronic related analytics',       'Type' => 'Object'
-        response_field 'email',          'Email related analytics',            'Type' => 'Object'
-        response_field 'end_date',       'Ending date for analytics period',   'Type' => 'String'
-        response_field 'facebook',       'Facebook related analytics',         'Type' => 'Object'
-        response_field 'phone',          'Phone related analytics',            'Type' => 'Object'
-        response_field 'start_date',     'Starting date for analytics period', 'Type' => 'String'
-        response_field 'text_message',   'Text message related analytics',     'Type' => 'Object'
-        response_field 'updated_at',     'Time when analytics were observed',  'Type' => 'String'
+        response_field 'appointments',   'Appointment related analytics',      type: 'Object'
+        response_field 'contacts',       'Contact related analytics',          type: 'Object'
+        response_field 'correspondence', 'Correspondence related analytics',   type: 'Object'
+        response_field 'created_at',     'Time when analytics were observed',  type: 'String'
+        response_field 'electronic',     'Electronic related analytics',       type: 'Object'
+        response_field 'email',          'Email related analytics',            type: 'Object'
+        response_field 'end_date',       'Ending date for analytics period',   type: 'String'
+        response_field 'facebook',       'Facebook related analytics',         type: 'Object'
+        response_field 'phone',          'Phone related analytics',            type: 'Object'
+        response_field 'start_date',     'Starting date for analytics period', type: 'String'
+        response_field 'text_message',   'Text message related analytics',     type: 'Object'
+        response_field 'updated_at',     'Time when analytics were observed',  type: 'String'
       end
 
       example 'Analytics for the past 30 days [GET]', document: documentation_scope do

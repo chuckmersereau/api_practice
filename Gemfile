@@ -97,13 +97,16 @@ group :development, :test do
   gem 'guard-rspec'
   gem 'guard-rubocop'
   gem 'guard-sidekiq'
+  gem 'indefinite_article' # used for documentation generation
   gem 'parallel_tests', '~> 2.10.0'
   gem 'pry-byebug', '~> 3.4.0'
   gem 'pry-rails', '~> 0.3.4'
   gem 'rails-erd', '~> 1.5.0'
   gem 'rspec', '~> 3.4'
   gem 'rspec-rails', '~> 3.4'
-  gem 'rspec_api_documentation', '~> 4.8.0'
+  gem 'rspec_api_documentation',
+      git: 'https://github.com/CruGlobal/rspec_api_documentation',
+      ref: '5e766726cfd9fe8e16bfcfc58e013b7b549d5945'
   gem 'ruby_parser', require: false, group: :development
   gem 'simplecov', '~> 0.12.0', require: false
   gem 'simplecov-lcov', '~> 0.5.0', require: false

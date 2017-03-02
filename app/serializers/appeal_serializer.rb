@@ -1,6 +1,5 @@
 class AppealSerializer < ApplicationSerializer
-  attributes :account_list_id,
-             :amount,
+  attributes :amount,
              :currencies,
              :description,
              :donations,
@@ -8,8 +7,8 @@ class AppealSerializer < ApplicationSerializer
              :name,
              :total_currency
 
-  has_many :contacts
   belongs_to :account_list
+  has_many :contacts
 
   def currencies
     object.donations.currencies

@@ -60,15 +60,15 @@ resource 'User > Key Accounts' do
 
     get '/api/v2/user/key_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'email',            'Email',            'Type' => 'String'
-        response_field 'first_name',       'First Name',       'Type' => 'String'
-        response_field 'last_download',    'Last Download',    'Type' => 'String'
-        response_field 'last_name',        'Last Name',        'Type' => 'String'
-        response_field 'primary',          'Primary',          'Type' => 'Boolean'
-        response_field 'remote_id',        'Remote Id',        'Type' => 'Number'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
+        response_field 'created_at',       'Created At',       type: 'String'
+        response_field 'email',            'Email',            type: 'String'
+        response_field 'first_name',       'First Name',       type: 'String'
+        response_field 'last_download',    'Last Download',    type: 'String'
+        response_field 'last_name',        'Last Name',        type: 'String'
+        response_field 'primary',          'Primary',          type: 'Boolean'
+        response_field 'remote_id',        'Remote Id',        type: 'Number'
+        response_field 'updated_at',       'Updated At',       type: 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
       end
 
       example 'Key Account [GET]', document: documentation_scope do

@@ -44,7 +44,7 @@ resource 'Account Lists Api > Donor Accounts' do
 
     get '/api/v2/account_lists/:account_list_id/donor_accounts' do
       parameter 'account_list_id', 'Account List ID', required: true
-      response_field 'data', 'Data', 'Type' => 'Array[Object]'
+      response_field 'data', 'Data', type: 'Array[Object]'
 
       example 'Donor Account [LIST]', document: documentation_scope do
         explanation 'List of Donor Accounts associated with the Account List'
@@ -57,16 +57,16 @@ resource 'Account Lists Api > Donor Accounts' do
 
     get '/api/v2/account_lists/:account_list_id/donor_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'account_number',      'Account Number',      'Type' => 'String'
-        response_field 'contact_ids',         'Contact IDs',         'Type' => 'Array[Number]'
-        response_field 'created_at',          'Created At',          'Type' => 'String'
-        response_field 'donor_type',          'Donor Type',          'Type' => 'String'
-        response_field 'first_donation_date', 'First Donation Date', 'Type' => 'String'
-        response_field 'last_donation_date',  'Last Donation Date',  'Type' => 'String'
-        response_field 'organization_id',     'Organization ID',     'Type' => 'Number'
-        response_field 'total_donations',     'Total Donations',     'Type' => 'Number'
-        response_field 'updated_at',          'Updated At',          'Type' => 'String'
-        response_field 'updated_in_db_at',    'Updated In Db At',    'Type' => 'String'
+        response_field 'account_number',      'Account Number',      type: 'String'
+        response_field 'contact_ids',         'Contact IDs',         type: 'Array[Number]'
+        response_field 'created_at',          'Created At',          type: 'String'
+        response_field 'donor_type',          'Donor Type',          type: 'String'
+        response_field 'first_donation_date', 'First Donation Date', type: 'String'
+        response_field 'last_donation_date',  'Last Donation Date',  type: 'String'
+        response_field 'organization_id',     'Organization ID',     type: 'Number'
+        response_field 'total_donations',     'Total Donations',     type: 'Number'
+        response_field 'updated_at',          'Updated At',          type: 'String'
+        response_field 'updated_in_db_at',    'Updated In Db At',    type: 'String'
       end
 
       example 'Donor Account [GET]', document: documentation_scope do

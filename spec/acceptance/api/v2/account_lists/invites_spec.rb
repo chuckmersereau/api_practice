@@ -38,7 +38,7 @@ resource 'Account Lists > Invites' do
 
     get '/api/v2/account_lists/:account_list_id/invites' do
       parameter 'account_list_id', 'Account List ID', required: true
-      response_field 'data',       'Data', 'Type' => 'Array[Object]'
+      response_field 'data',       'Data', type: 'Array[Object]'
 
       example 'Invite [LIST]', document: documentation_scope do
         explanation 'List of Invites associated with the Account List'
@@ -52,16 +52,16 @@ resource 'Account Lists > Invites' do
 
     get '/api/v2/account_lists/:account_list_id/invites/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'accepted_at',          'Accepted At',          'Type' => 'String'
-        response_field 'accepted_by_user_id',  'Accepted by User ID',  'Type' => 'Number'
-        response_field 'account_list_id',      'Account List ID',      'Type' => 'Number'
-        response_field 'cancelled_by_user_id', 'Cancelled by user ID', 'Type' => 'Number'
-        response_field 'code',                 'Code',                 'Type' => 'String'
-        response_field 'created_at',           'Created At',           'Type' => 'String'
-        response_field 'invited_by_user_id',   'Invited by User ID',   'Type' => 'Number'
-        response_field 'recipient_email',      'Recipient Email',      'Type' => 'String'
-        response_field 'updated_at',           'Updated At',           'Type' => 'String'
-        response_field 'updated_in_db_at',     'Updated In Db At',     'Type' => 'String'
+        response_field 'accepted_at',          'Accepted At',          type: 'String'
+        response_field 'accepted_by_user_id',  'Accepted by User ID',  type: 'Number'
+        response_field 'account_list_id',      'Account List ID',      type: 'Number'
+        response_field 'cancelled_by_user_id', 'Cancelled by user ID', type: 'Number'
+        response_field 'code',                 'Code',                 type: 'String'
+        response_field 'created_at',           'Created At',           type: 'String'
+        response_field 'invited_by_user_id',   'Invited by User ID',   type: 'Number'
+        response_field 'recipient_email',      'Recipient Email',      type: 'String'
+        response_field 'updated_at',           'Updated At',           type: 'String'
+        response_field 'updated_in_db_at',     'Updated In Db At',     type: 'String'
       end
 
       example 'Invite [GET]', document: documentation_scope do

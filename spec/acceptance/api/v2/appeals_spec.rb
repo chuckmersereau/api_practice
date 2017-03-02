@@ -3,23 +3,28 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Appeals' do
   include_context :json_headers
-  documentation_scope = :entities_appeals
+  doc_helper = DocumentationHelper.new(resource: :appeals)
 
   let(:resource_type) { 'appeals' }
   let!(:user)         { create(:user_with_full_account) }
-
   let!(:account_list)   { user.account_lists.first }
   let(:account_list_id) { account_list.uuid }
 
   let(:excluded) { 0 }
-  let!(:appeal)  { create(:appeal, account_list: account_list) }
-  let(:id)       { appeal.uuid }
+
+  let!(:appeal)  do
+    create(:appeal, account_list: account_list).tap do |appeal|
+      create(:donation, appeal: appeal)
+    end
+  end
+
+  let(:id) { appeal.uuid }
 
   let(:form_data) do
-    attributes = {
-      name: 'New Appeal Name',
-      updated_in_db_at: appeal.updated_at
-    }
+    attributes = attributes_for(:appeal).except(:account_list_id)
+                                        .merge(
+                                          updated_in_db_at: appeal.updated_at
+                                        )
 
     build_data(attributes, relationships: relationships)
   end
@@ -37,7 +42,6 @@ resource 'Appeals' do
 
   let(:resource_attributes) do
     %w(
-      account_list_id
       amount
       created_at
       currencies
@@ -62,82 +66,58 @@ resource 'Appeals' do
     before { api_login(user) }
 
     get '/api/v2/appeals' do
-      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID',  required: false,  scope: :filters
-      parameter 'filters[excluded]',        'Filter by excluded Contacts',                      required: true,   scope: :filters
+      doc_helper.insert_documentation_for(action: :index, context: self)
 
-      response_field :data, 'Array of Appeals', 'Type' => 'Array[Object]'
-
-      example 'List appeals', document: documentation_scope do
-        explanation 'List of Appeals'
+      example doc_helper.title_for(:index), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:index)
         do_request
+
         check_collection_resource(1, %w(relationships))
         expect(response_status).to eq(200), invalid_status_detail
       end
     end
 
     get '/api/v2/appeals/:id' do
-      with_options scope: [:data, :attributes] do
-        response_field 'amount',          'Amount',            'Type' => 'Number'
-        response_field 'contacts',        'Contacts',          'Type' => 'Array[Contact]'
-        response_field 'created_at',      'Created At',        'Type' => 'String'
-        response_field 'currencies',      'Currencies',        'Type' => 'Array[String]'
-        response_field 'description',     'Description',       'Type' => 'String'
-        response_field 'donations',       'Donations',         'Type' => 'Array[Object]'
-        response_field 'end_date',        'End Date',          'Type' => 'String'
-        response_field 'name',            'Name',              'Type' => 'String'
-        response_field 'total_currency',  'Total currency',    'Type' => 'String'
-        response_field 'updated_at',      'Updated At',        'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
-      end
+      doc_helper.insert_documentation_for(action: :show, context: self)
 
-      example 'Retreive an Appeal', document: documentation_scope do
-        explanation 'The Appeal with the given ID'
+      example doc_helper.title_for(:show), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:show)
         do_request
+
         check_resource(%w(relationships))
         expect(response_status).to eq(200), invalid_status_detail
       end
     end
 
     post '/api/v2/appeals' do
-      with_options scope: [:data, :attributes] do
-        parameter 'account_list_id', 'Account List ID', required: true
-        parameter 'amount',          'Amount'
-        parameter 'description',     'Description'
-        parameter 'end_date',        'End Date'
-        parameter 'name',            'Name', required: true
-      end
+      doc_helper.insert_documentation_for(action: :create, context: self)
 
-      example 'Create an appeal', document: documentation_scope do
-        explanation 'Create an Appeal'
+      example doc_helper.title_for(:create), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:create)
         do_request data: form_data
+
         expect(response_status).to eq(201), invalid_status_detail
       end
     end
 
     put '/api/v2/appeals/:id' do
-      parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
+      doc_helper.insert_documentation_for(action: :update, context: self)
 
-      with_options scope: [:data, :attributes] do
-        parameter 'amount',      'Amount',      'Type' => 'String'
-        parameter 'description', 'Description', 'Type' => 'String'
-        parameter 'end_date',    'End Date',    'Type' => 'String'
-        parameter 'name',        'Name',        'Type' => 'String'
-      end
+      example doc_helper.title_for(:update), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:update)
+        do_request data: form_data.except(:relationships)
 
-      example 'Update an appeal', document: documentation_scope do
-        explanation 'Update the Appeal with the given ID'
-        do_request data: form_data
         expect(response_status).to eq(200), invalid_status_detail
       end
     end
 
     delete '/api/v2/appeals/:id' do
-      parameter 'account_list_id', 'Account List ID', required: true, scope: :filters
-      parameter 'id',              'ID', required: true
+      doc_helper.insert_documentation_for(action: :delete, context: self)
 
-      example 'Delete an appeal', document: documentation_scope do
-        explanation 'Delete the Appeal with the given ID'
+      example doc_helper.title_for(:delete), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:delete)
         do_request
+
         expect(response_status).to eq(204), invalid_status_detail
       end
     end

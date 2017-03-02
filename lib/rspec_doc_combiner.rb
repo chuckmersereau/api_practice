@@ -24,13 +24,13 @@ class RSpecDocCombiner
   end
 
   def fetch_files_for_folder(folder_name)
-    filepaths = Dir["#{base_path}/#{folder_name}/**/*.markdown"].sort
+    parent_filepath    = "#{base_path}/#{folder_name}/index.html.md"
+    children_filepaths = Dir["#{base_path}/#{folder_name}/**/*.md"].reject do |path|
+      path == parent_filepath
+    end.sort
 
-    parent = DocFile.new(filepaths.first, parent: true)
-
-    filepaths[1..-1].each do |filepath|
-      parent.add_child(DocFile.new(filepath))
-    end
+    parent = DocFile.new(parent_filepath, parent: true)
+    children_filepaths.each { |path| parent.add_child(DocFile.new(path)) }
 
     parent
   end
@@ -46,7 +46,8 @@ class RSpecDocCombiner
       '.',
       '..',
       '.DS_Store',
-      '_generated_examples.markdown'
+      '_generated_examples.markdown',
+      'index.html.md'
     ]
   end
 

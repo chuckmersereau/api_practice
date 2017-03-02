@@ -1,0 +1,46 @@
+attributes: &attrs
+  email:
+    description:
+      The actual email address that this Email Address resource represents
+    required: true
+    type: string
+  location:
+    description:
+      Essentially a label for the Email Address, such as 'home', 'mobile', 'office'
+    type: string
+  historic:
+    description:
+      This should be `true` when an Email Address should no longer be used
+    type: boolean
+  primary:
+    description:
+      "Whether or not the `email` is the owner's primary email address. Ultimately there should only be _one_ of these."
+    type: boolean
+
+object: &obj
+  attributes:
+    <<: *attrs
+
+parameters:
+  create:
+    <<: *obj
+
+  update:
+    attributes:
+      <<: *attrs
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Email Address Objects
+      type: '[Email Address]'
+
+  show:
+    <<: *obj
+
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj

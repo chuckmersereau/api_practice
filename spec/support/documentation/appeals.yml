@@ -1,0 +1,100 @@
+attributes: &attrs
+  amount:
+    description:
+      The amount requested for this Appeal
+    type: float
+  currencies:
+    description:
+      The currencies of the donations for this Appeal
+    type: '[string]'
+  description:
+    description:
+      The description for this Appeal
+    type: string
+  donations:
+    description:
+      The donations given to this Appeal
+    type: '[Donation]'
+  end_date:
+    description:
+      The date in which this Appeal ends
+    type: date string
+  name:
+    description:
+      The name of the Appeal
+    type: string
+    required: true
+  total_currency:
+    description:
+      "The type of currency for the Appeal's donations to be converted to"
+    type: string
+
+relationships: &rels
+  account_list:
+    data:
+      id:
+        description:
+          The `id` of the Account List that the Appeal belongs to
+        type: UUID string
+        required: true
+
+  contacts:
+    data:
+      description:
+        An array of Contact references for the Appeal
+      type: '[Contact]'
+
+mutation_attributes: &mutation_attrs
+  <<: *attrs
+  currencies:
+    ignore: true
+  donations:
+    ignore: true
+  total_currency:
+    ignore: true
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+parameters:
+  index:
+    filters:
+      account_list_id:
+        description:
+          Filter by Account List; accepts an Account List `id`
+        type: UUID string
+      excluded:
+        description:
+          Filter by excluded Contacts
+        type: number
+
+  create:
+    attributes:
+      <<: *mutation_attrs
+    relationships:
+      <<: *rels
+      contacts:
+        ignore: true
+
+  update:
+    attributes:
+      <<: *mutation_attrs
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Appeal Objects
+      type: '[Appeal]'
+
+  show:
+    <<: *obj
+
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj

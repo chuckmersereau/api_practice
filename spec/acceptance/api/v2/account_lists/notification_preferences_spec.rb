@@ -72,7 +72,7 @@ resource 'Account Lists > Notification Preferences' do
 
     get '/api/v2/account_lists/:account_list_id/notification_preferences' do
       parameter 'account_list_id', 'Account List ID', required: true
-      response_field 'data',       'List of Notification Preferences', 'Type' => 'Array[Object]'
+      response_field 'data',       'List of Notification Preferences', type: 'Array[Object]'
 
       example 'Notification Preference [LIST]', document: documentation_scope do
         explanation 'List of Notification Preferences'
@@ -83,11 +83,11 @@ resource 'Account Lists > Notification Preferences' do
 
     get '/api/v2/account_lists/:account_list_id/notification_preferences/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'actions',              'Actions',              'Type' => 'String'
-        response_field 'created_at',           'Created At',           'Type' => 'String'
-        response_field 'type',                 'Notification Type',    'Type' => 'String'
-        response_field 'updated_at',           'Updated At',           'Type' => 'String'
-        response_field 'updated_in_db_at',     'Updated In Db At',     'Type' => 'String'
+        response_field 'actions',              'Actions',              type: 'String'
+        response_field 'created_at',           'Created At',           type: 'String'
+        response_field 'type',                 'Notification Type',    type: 'String'
+        response_field 'updated_at',           'Updated At',           type: 'String'
+        response_field 'updated_in_db_at',     'Updated In Db At',     type: 'String'
       end
 
       example 'Notification Preference [GET]', document: documentation_scope do
@@ -99,8 +99,8 @@ resource 'Account Lists > Notification Preferences' do
 
     post '/api/v2/account_lists/:account_list_id/notification_preferences' do
       with_options scope: [:data, :attributes] do
-        parameter 'actions',             'Actions',           'Type' => 'String'
-        parameter 'updated_in_db_at',    'Updated In Db At',  'Type' => 'String'
+        parameter 'actions',             'Actions',           type: 'String'
+        parameter 'updated_in_db_at',    'Updated In Db At',  type: 'String'
       end
 
       let(:attributes) do

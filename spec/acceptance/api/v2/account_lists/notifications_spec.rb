@@ -73,7 +73,7 @@ resource 'Account Lists > Notifications' do
 
     get '/api/v2/account_lists/:account_list_id/notifications' do
       parameter 'account_list_id', 'Account List ID', required: true
-      response_field 'data',       'Data', 'Type' => 'Array[Object]'
+      response_field 'data',       'Data', type: 'Array[Object]'
 
       example 'Notification [LIST]', document: documentation_scope do
         explanation 'List of Notifications associated with the Account List'
@@ -85,14 +85,14 @@ resource 'Account Lists > Notifications' do
 
     get '/api/v2/account_lists/:account_list_id/notifications/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'cleared',              'Cleared',              'Type' => 'Boolean'
-        response_field 'contact_id',           'Contact ID',           'Type' => 'Number'
-        response_field 'created_at',           'Created At',           'Type' => 'String'
-        response_field 'donation_id',          'Donation ID',          'Type' => 'Number'
-        response_field 'event_date',           'Event Date',           'Type' => 'String'
-        response_field 'notification_type_id', 'Notification Type ID', 'Type' => 'Number'
-        response_field 'updated_at',           'Updated At',           'Type' => 'String'
-        response_field 'updated_in_db_at',     'Updated In Db At',     'Type' => 'String'
+        response_field 'cleared',              'Cleared',              type: 'Boolean'
+        response_field 'contact_id',           'Contact ID',           type: 'Number'
+        response_field 'created_at',           'Created At',           type: 'String'
+        response_field 'donation_id',          'Donation ID',          type: 'Number'
+        response_field 'event_date',           'Event Date',           type: 'String'
+        response_field 'notification_type_id', 'Notification Type ID', type: 'Number'
+        response_field 'updated_at',           'Updated At',           type: 'String'
+        response_field 'updated_in_db_at',     'Updated In Db At',     type: 'String'
       end
 
       example 'Notification [GET]', document: documentation_scope do

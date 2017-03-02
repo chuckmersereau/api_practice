@@ -39,18 +39,18 @@ resource 'Users' do
     before { api_login(user) }
 
     get '/api/v2/user' do
-      response_field 'attributes',    'User object',                                'Type' => 'Object'
-      response_field 'id',            'User ID',                                    'Type' => 'Number'
-      response_field 'relationships', 'list of relationships related to that User', 'Type' => 'Array[Object]'
-      response_field 'type',          'Will be User',                               'Type' => 'String'
+      response_field 'attributes',    'User object',                                type: 'Object'
+      response_field 'id',            'User ID',                                    type: 'Number'
+      response_field 'relationships', 'list of relationships related to that User', type: 'Array[Object]'
+      response_field 'type',          'Will be User',                               type: 'String'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'first_name',       'User first name',  'Type' => 'String'
-        response_field 'last_name',        'User last name',   'Type' => 'String'
-        response_field 'preferences',      'User preferences', 'Type' => 'Object'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
+        response_field 'created_at',       'Created At',       type: 'String'
+        response_field 'first_name',       'User first name',  type: 'String'
+        response_field 'last_name',        'User last name',   type: 'String'
+        response_field 'preferences',      'User preferences', type: 'Object'
+        response_field 'updated_at',       'Updated At',       type: 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
       end
 
       example 'Retrieve the current user', document: documentation_scope do
@@ -63,18 +63,18 @@ resource 'Users' do
 
     put '/api/v2/user' do
       with_options scope: [:data, :attributes] do
-        parameter 'first_name',       'User first name', 'Type' => 'String', required: true
-        parameter 'last_name',        'User last name',  'Type' => 'String'
+        parameter 'first_name',       'User first name', type: 'String', required: true
+        parameter 'last_name',        'User last name',  type: 'String'
 
         with_options scope: :preferences do
-          parameter 'contacts_filter',       'Contacts Filter',        'Type' => 'String'
-          parameter 'contacts_view_options', 'Contacts View Options',  'Type' => 'String'
-          parameter 'default_account_list',  'Default Account List',   'Type' => 'String'
-          parameter 'locale',                'User Locale',            'Type' => 'String'
-          parameter 'setup',                 'User Preferences Setup', 'Type' => 'Boolean'
-          parameter 'tab_orders',            'Tab Orders',             'Type' => 'String'
-          parameter 'tasks_filter',          'Tasks Filter',           'Type' => 'String'
-          parameter 'time_zone',             'User Time Zone',         'Type' => 'String'
+          parameter 'contacts_filter',       'Contacts Filter',        type: 'String'
+          parameter 'contacts_view_options', 'Contacts View Options',  type: 'String'
+          parameter 'default_account_list',  'Default Account List',   type: 'String'
+          parameter 'locale',                'User Locale',            type: 'String'
+          parameter 'setup',                 'User Preferences Setup', type: 'Boolean'
+          parameter 'tab_orders',            'Tab Orders',             type: 'String'
+          parameter 'tasks_filter',          'Tasks Filter',           type: 'String'
+          parameter 'time_zone',             'User Time Zone',         type: 'String'
         end
       end
 

@@ -44,10 +44,10 @@ resource 'Account Lists > Prayer Letters Account' do
         parameter 'account_list_id', 'Account List ID', required: true
 
         with_options scope: [:data, :attributes] do
-          response_field 'created_at',         'Created At',         'Type' => 'String'
-          response_field 'token',              'Token',              'Type' => 'String'
-          response_field 'updated_at',         'Updated At',         'Type' => 'String'
-          response_field 'updated_in_db_at',   'Updated In Db At',   'Type' => 'String'
+          response_field 'created_at',         'Created At',         type: 'String'
+          response_field 'token',              'Token',              type: 'String'
+          response_field 'updated_at',         'Updated At',         type: 'String'
+          response_field 'updated_in_db_at',   'Updated In Db At',   type: 'String'
         end
 
         example 'Prayer Letters Account [GET]', document: documentation_scope do

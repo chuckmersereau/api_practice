@@ -4,6 +4,7 @@ FactoryGirl.define do
   sequence :query_ini_url do |n|
     n
   end
+
   factory :organization do
     sequence(:name) { |n| "Organization#{n}" }
     query_ini_url { FactoryGirl.generate(:query_ini_url) }

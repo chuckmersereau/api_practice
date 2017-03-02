@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts > People > Email Addresses' do
   include_context :json_headers
-  documentation_scope = :people_api_email_addresses
+  doc_helper = DocumentationHelper.new(resource: [:people, :email_addresses])
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -48,10 +48,12 @@ resource 'Contacts > People > Email Addresses' do
 
     # index
     get '/api/v2/contacts/:contact_id/people/:person_id/email_addresses' do
+      doc_helper.insert_documentation_for(action: :index, context: self)
+
       before { email_address }
 
-      example 'Email Address [LIST]', document: documentation_scope do
-        explanation 'List of Email Addresses associated to the Person'
+      example doc_helper.title_for(:index), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:index)
         do_request
 
         check_collection_resource(1)
@@ -63,18 +65,10 @@ resource 'Contacts > People > Email Addresses' do
 
     # show
     get '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
-      with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'email',            'Email',            'Type' => 'String'
-        response_field 'historic',         'Historic',         'Type' => 'Boolean'
-        response_field 'location',         'Location',         'Type' => 'String'
-        response_field 'primary',          'Primary',          'Type' => 'Boolean'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
-      end
+      doc_helper.insert_documentation_for(action: :show, context: self)
 
-      example 'Email Address [GET]', document: documentation_scope do
-        explanation "Getting a Person's Email Address by ID"
+      example doc_helper.title_for(:show), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:show)
         do_request
 
         check_resource
@@ -86,17 +80,12 @@ resource 'Contacts > People > Email Addresses' do
 
     # create
     post '/api/v2/contacts/:contact_id/people/:person_id/email_addresses' do
-      with_options scope: [:data, :attributes] do
-        parameter 'email',    'Email for the Email Address'
-        parameter 'primary',  "Whether or not the email should be the Person's primary email"
-        parameter 'location', 'The location of the Email Address, such as "home", "mobile", "office"'
-        parameter 'historic', 'Set to true when an Email Address should no longer be used'
-      end
+      doc_helper.insert_documentation_for(action: :create, context: self)
 
       let(:attributes) { attributes_for(:email_address).merge(person_id: person.uuid) }
 
-      example 'Email Address [CREATE]', document: documentation_scope do
-        explanation 'Create an Email Address associated with the Person'
+      example doc_helper.title_for(:create), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:create)
         do_request data: form_data
 
         check_resource
@@ -108,19 +97,14 @@ resource 'Contacts > People > Email Addresses' do
 
     # update
     put '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
-      with_options scope: [:data, :attributes] do
-        parameter 'email',    'Email for the Email Address'
-        parameter 'primary',  "Whether or not the email should be the Person's primary email"
-        parameter 'location', 'The location of the Email Address, such as "home", "mobile", "office"'
-        parameter 'historic', 'Set to true when an Email Address should no longer be used'
-      end
+      doc_helper.insert_documentation_for(action: :update, context: self)
 
       let(:attributes) { email_address.attributes.merge(person_id: person.uuid) }
 
       before { attributes.merge!(email: 'new-email@example.com') }
 
-      example 'Email Address [UPDATE]', document: documentation_scope do
-        explanation 'Update the Person\'s Email Address with the given ID'
+      example doc_helper.title_for(:update), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:update)
         do_request data: form_data
 
         check_resource
@@ -132,8 +116,10 @@ resource 'Contacts > People > Email Addresses' do
 
     # destroy
     delete '/api/v2/contacts/:contact_id/people/:person_id/email_addresses/:id' do
-      example 'Email Address [DELETE]', document: documentation_scope do
-        explanation 'Delete the Person\'s Email Address with the given ID'
+      doc_helper.insert_documentation_for(action: :delete, context: self)
+
+      example doc_helper.title_for(:delete), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:delete)
         do_request
         expect(response_status).to eq 204
       end

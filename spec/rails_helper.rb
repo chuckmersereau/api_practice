@@ -17,6 +17,7 @@ require 'attributes_history/rspec'
 require 'equivalent-xml'
 require 'ammeter/init'
 require 'shoulda/matchers'
+require 'documentation_helper'
 
 # Add additional requires below this line. Rails is not loaded until this point!
 

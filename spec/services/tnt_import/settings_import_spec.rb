@@ -4,8 +4,16 @@ describe TntImport::SettingsImport do
   let(:xml) do
     TntImport::XmlReader.new(tnt_import).parsed_xml
   end
+
   let(:tnt_import) { create(:tnt_import, override: true) }
-  let(:account_list) { tnt_import.account_list }
+
+  let(:account_list) do
+    account_list = tnt_import.account_list
+    account_list.settings[:monthly_goal] = nil
+    account_list.save
+    account_list
+  end
+
   let(:import) do
     TntImport::SettingsImport.new(tnt_import.account_list, xml, true)
   end

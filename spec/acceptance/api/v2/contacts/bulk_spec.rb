@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts Bulk' do
   include_context :json_headers
-  documentation_scope = :entities_contacts
+  doc_helper = DocumentationHelper.new(resource: :contacts)
 
   let!(:account_list)    { user.account_lists.first }
   let!(:contact_one)     { create(:contact, account_list: account_list) }
@@ -31,6 +31,7 @@ resource 'Contacts Bulk' do
         :uncompleted_tasks_count
       ).merge(updated_in_db_at: contact_one.updated_at)
   end
+
   let(:account_list_relationship) do
     {
       account_list: {
@@ -54,58 +55,39 @@ resource 'Contacts Bulk' do
     before { api_login(user) }
 
     post '/api/v2/contacts/bulk' do
-      parameter 'data', 'Array of Contacts that have to be created'
+      doc_helper.insert_documentation_for(action: :bulk_create, context: self)
 
-      with_options scope: :data do
-        parameter 'id',         'Each member of the array must contain a client generated id of the contact being created', 'Type' =>  'String'
-        parameter 'type',       "Each member of the array must contain the type 'contacts'",                                'Type' =>  'String'
-        parameter 'attributes', 'Each member of the array must contain an object with the attributes that must be created', 'Type' =>  'Object'
-      end
-
-      response_field 'data',
-                     'List of Contact objects that have been successfully created and list of errors related to Contact objects that were not updated successfully',
-                     'Type' => 'Array[Object]'
-
-      example 'Contact [CREATE] [BULK]', document: documentation_scope do
-        explanation 'Bulk Create a list of Contacts with an array of objects containing the attributes of each contact'
+      example doc_helper.title_for(:bulk_create), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:bulk_create)
         do_request data: bulk_create_form_data
+
         expect(response_status).to eq(200)
         expect(json_response.first['data']['attributes']['name']).to eq new_contact[:name]
       end
     end
 
     put '/api/v2/contacts/bulk' do
-      parameter 'data', 'Array of Contacts that have to be updated'
+      doc_helper.insert_documentation_for(action: :bulk_update, context: self)
 
-      with_options scope: :data do
-        parameter 'id',         'Each member of the array must contain the id of the contact being updated',                'Type' =>  'String'
-        parameter 'type',       "Each member of the array must contain the type 'contacts'",                                'Type' =>  'String'
-        parameter 'attributes', 'Each member of the array must contain an object with the attributes that must be updated', 'Type' =>  'Object'
-      end
-
-      response_field 'data',
-                     'List of Contact objects that have been successfully updated and list of errors related to Contact objects that were not updated successfully',
-                     'Type' => 'Array[Object]'
-
-      example 'Contact [UPDATE] [BULK]', document: documentation_scope do
-        explanation 'Bulk Update a list of Contacts with an array of objects containing the ID and updated attributes'
+      example doc_helper.title_for(:bulk_update), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:bulk_update)
         do_request data: bulk_update_form_data
+
         expect(response_status).to eq(200)
         expect(json_response.first['data']['attributes']['name']).to eq new_contact[:name]
       end
     end
 
     delete '/api/v2/contacts/bulk' do
-      with_options scope: :data do
-        parameter :id, 'Each member of the array must contain the id of the contact being deleted'
-      end
+      doc_helper.insert_documentation_for(action: :bulk_delete, context: self)
 
-      example 'Contact [DELETE] [BULK]', document: documentation_scope do
-        explanation 'Bulk delete Contacts with the given IDs'
+      example doc_helper.title_for(:bulk_delete), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:bulk_delete)
         do_request data: [
           { data: { type: resource_type, id: contact_one.uuid } },
           { data: { type: resource_type, id: contact_two.uuid } }
         ]
+
         expect(response_status).to eq(200)
         expect(json_response.size).to eq(2)
         expect(json_response.collect { |hash| hash.dig('data', 'id') }).to match_array([contact_one.uuid, contact_two.uuid])

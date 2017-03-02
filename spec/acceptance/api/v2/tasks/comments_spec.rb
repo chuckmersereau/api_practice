@@ -55,14 +55,14 @@ resource 'Tasks > Comments' do
 
     get '/api/v2/tasks/:task_id/comments/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'body',             'Comment body',     'Type' => 'String'
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', 'Type' => 'String'
+        response_field 'body',             'Comment body',     type: 'String'
+        response_field 'created_at',       'Created At',       type: 'String'
+        response_field 'updated_at',       'Updated At',       type: 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
-        response_field 'person', 'The person who wrote the comment', 'Type' => 'Object'
+        response_field 'person', 'The person who wrote the comment', type: 'Object'
       end
 
       example 'Comment [GET]', document: documentation_scope do
@@ -76,11 +76,11 @@ resource 'Tasks > Comments' do
 
     post '/api/v2/tasks/:task_id/comments' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter 'body', 'Comment body', 'Type' => 'String'
+        parameter 'body', 'Comment body', type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
-        parameter 'person', 'The person who wrote the comment', 'Type' => 'Object'
+        parameter 'person', 'The person who wrote the comment', type: 'Object'
       end
 
       example 'Comment [CREATE]', document: documentation_scope do
@@ -94,11 +94,11 @@ resource 'Tasks > Comments' do
 
     put '/api/v2/tasks/:task_id/comments/:id' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter 'body', 'Comment body', 'Type' => 'String'
+        parameter 'body', 'Comment body', type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
-        parameter 'person', 'The person who wrote the comment', 'Type' => 'Object'
+        parameter 'person', 'The person who wrote the comment', type: 'Object'
       end
 
       example 'Comment [UPDATE]', document: documentation_scope do

@@ -48,7 +48,7 @@ resource 'Contacts > People > Facebook Accounts' do
     get '/api/v2/contacts/:contact_id/people/:person_id/facebook_accounts' do
       parameter 'contact_id', 'Contact ID', required: true
       parameter 'person_id',  'Person ID', required: true
-      response_field 'data',  'Data', 'Type' => 'Array[Object]'
+      response_field 'data',  'Data', type: 'Array[Object]'
 
       example 'Facebook Account [LIST]', document: documentation_scope do
         explanation 'List of Facebook Accounts associated to the Person'
@@ -61,13 +61,13 @@ resource 'Contacts > People > Facebook Accounts' do
 
     get '/api/v2/contacts/:contact_id/people/:person_id/facebook_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       'Type' => 'String'
-        response_field 'first_name',       'First Name',       'Type' => 'String'
-        response_field 'last_name',        'Last name',        'Type' => 'Number'
-        response_field 'remote_id',        'Remote ID',        'Type' => 'Number'
-        response_field 'updated_at',       'Updated At',       'Type' => 'String'
-        response_field 'updated_at_in_db', 'Updated In Db At', 'Type' => 'String'
-        response_field 'username',         'Username',         'Type' => 'String'
+        response_field 'created_at',       'Created At',       type: 'String'
+        response_field 'first_name',       'First Name',       type: 'String'
+        response_field 'last_name',        'Last name',        type: 'Number'
+        response_field 'remote_id',        'Remote ID',        type: 'Number'
+        response_field 'updated_at',       'Updated At',       type: 'String'
+        response_field 'updated_at_in_db', 'Updated In Db At', type: 'String'
+        response_field 'username',         'Username',         type: 'String'
       end
 
       example 'Facebook Account [GET]', document: documentation_scope do

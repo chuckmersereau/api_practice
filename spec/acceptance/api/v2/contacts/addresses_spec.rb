@@ -55,20 +55,20 @@ resource 'Contacts > Addresses' do
 
     get '/api/v2/contacts/:contact_id/addresses/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'city',                    'City',                    'Type' => 'String'
-        response_field 'country',                 'Country',                 'Type' => 'String'
-        response_field 'created_at',              'Created At',              'Type' => 'String'
-        response_field 'end_date',                'End Date',                'Type' => 'String'
-        response_field 'geo',                     'Geo',                     'Type' => 'String'
-        response_field 'historic',                'Historic',                'Type' => 'Boolean'
-        response_field 'location',                'Location',                'Type' => 'String'
-        response_field 'postal_code',             'Postal Code',             'Type' => 'String'
-        response_field 'primary_mailing_address', 'Primary Mailing Address', 'Type' => 'Boolean'
-        response_field 'start_date',              'Start Date',              'Type' => 'String'
-        response_field 'state',                   'State',                   'Type' => 'String'
-        response_field 'street',                  'Street',                  'Type' => 'String'
-        response_field 'updated_at',              'Updated At',              'Type' => 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',        'Type' => 'String'
+        response_field 'city',                    'City',                    type: 'String'
+        response_field 'country',                 'Country',                 type: 'String'
+        response_field 'created_at',              'Created At',              type: 'String'
+        response_field 'end_date',                'End Date',                type: 'String'
+        response_field 'geo',                     'Geo',                     type: 'String'
+        response_field 'historic',                'Historic',                type: 'Boolean'
+        response_field 'location',                'Location',                type: 'String'
+        response_field 'postal_code',             'Postal Code',             type: 'String'
+        response_field 'primary_mailing_address', 'Primary Mailing Address', type: 'Boolean'
+        response_field 'start_date',              'Start Date',              type: 'String'
+        response_field 'state',                   'State',                   type: 'String'
+        response_field 'street',                  'Street',                  type: 'String'
+        response_field 'updated_at',              'Updated At',              type: 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',        type: 'String'
       end
 
       example 'Address [GET]', document: documentation_scope do

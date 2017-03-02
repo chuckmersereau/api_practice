@@ -1,0 +1,65 @@
+actions:
+  custom_action:
+    title: My Custom Title
+  create:
+    description: This is the endpoint for Creating an Email Address
+
+attributes: &attrs
+  email:
+    description:
+      The actual email address that this Email Address resource represents
+    required: true
+    type: string
+  primary:
+    description:
+      "Whether or not the `email` is the owner's primary email address"
+    type: boolean
+
+relationships: &rels
+  account_list:
+    data:
+      id:
+        description:
+          The `id` of the Account List needed for creating
+        type: number
+        required: true
+  emails:
+    data:
+      description:
+        An array of Emails sent by this Email Address
+      type: '[Email]'
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+parameters:
+  create:
+    attributes:
+      <<: *attrs
+    relationships:
+      <<: *rels
+      emails:
+        ignore: true
+
+  update:
+    attributes:
+      <<: *attrs
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Email Address objects
+      type: '[Email Address]'
+
+  show:
+    <<: *obj
+
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj

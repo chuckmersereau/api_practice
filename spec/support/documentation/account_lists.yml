@@ -1,0 +1,62 @@
+attributes: &attrs
+  currency:
+    description:
+      The currency code for the Account List, such as 'USD', 'CAD'
+    type: string
+  default_currency:
+    description:
+      The default currency code, 'USD'
+    type: string
+  home_country:
+    description:
+      The country of the Account List
+    type: string
+  monthly_goal:
+    description:
+      The monthly financial goal of the Account List
+    type: number
+  name:
+    description:
+      The name of the Account List
+    type: string
+  tester:
+    description:
+      Whether or not the Account List is a testing account
+    type: boolean
+  total_pledges:
+    description:
+      The total amount of pledges donated for the Account List
+    type: float
+
+relationships: &rels
+  notification_preferences:
+    data:
+      description:
+        An array of Notification Preference references for the Account List
+      type: '[Notification Preference]'
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+parameters:
+  update:
+    attributes:
+      <<: *attrs
+      default_currency:
+        ignore: true
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Account List Objects
+      type: '[Account List]'
+
+  show:
+    <<: *obj
+
+  update:
+    <<: *obj

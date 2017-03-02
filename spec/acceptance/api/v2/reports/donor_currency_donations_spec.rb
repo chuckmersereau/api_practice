@@ -27,22 +27,22 @@ resource 'Reports > Donor Currency Donations Report' do
     # show
     get '/api/v2/reports/donor_currency_donations' do
       parameter 'filter[account_list_id]', 'Account List ID', required: true
-      response_field 'data',               'Data object',     'Type' => 'Object'
+      response_field 'data',               'Data object',     type: 'Object'
 
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',      'Time when report was observed',                                     'Type' => 'String'
-        response_field 'donor_infos',     'Info on donors',                                                    'Type' => 'Array[Object]'
-        response_field 'months',          'The months represented in the data',                                'Type' => 'Array[Object]'
-        response_field 'currency_groups', 'The donations made each month, per contact, grouped by currencies', 'Type' => 'Array[Object]'
+        response_field 'created_at',      'Time when report was observed',                                     type: 'String'
+        response_field 'donor_infos',     'Info on donors',                                                    type: 'Array[Object]'
+        response_field 'months',          'The months represented in the data',                                type: 'Array[Object]'
+        response_field 'currency_groups', 'The donations made each month, per contact, grouped by currencies', type: 'Array[Object]'
       end
 
       with_options scope: [:data, :attributes, :currency_groups, :currency_code] do
-        response_field 'totals',         'The total donations for the year, and each individual month', 'Type' => 'Object'
-        response_field 'donation_infos', 'Info on each contact\'s donations each month of the year',    'Type' => 'Array[Object]'
+        response_field 'totals',         'The total donations for the year, and each individual month', type: 'Object'
+        response_field 'donation_infos', 'Info on each contact\'s donations each month of the year',    type: 'Array[Object]'
       end
 
       with_options scope: [:data, :relationships] do
-        response_field 'account_list', 'Account List', 'Type' => 'Object'
+        response_field 'account_list', 'Account List', type: 'Object'
       end
 
       example 'Donation Summary [LIST]', document: documentation_scope do
