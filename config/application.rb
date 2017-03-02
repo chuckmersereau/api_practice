@@ -48,5 +48,9 @@ module Mpdx
         resource '*', headers: :any, methods: [:get, :post, :delete, :put, :options]
       end
     end
+
+    config.after_initialize do |app|
+      app.routes.append{ match '*a', :to => 'error#not_found', via: [:get, :post] } unless config.consider_all_requests_local
+    end
   end
 end

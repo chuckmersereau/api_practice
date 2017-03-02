@@ -37,11 +37,22 @@ RSpec.describe 'Error Response Format', type: :request do
   end
 
   context 'ActionController::RoutingError' do
-    subject { get '/this_route_does_not_exist', nil, headers }
+    describe 'with complete headers' do
+      subject { get '/this_route_does_not_exist', nil, headers }
+      it 'has a response body that contains error objects in json api format' do
+        subject
+        expect(response.body).to eq '{"errors":[{"status":"404","title":"Not Found","detail":"Route not found"}]}'
+      end
+    end
 
-    it 'has a response body that contains error objects in json api format' do
-      subject
-      expect(response.body).to eq '{"errors":[{"status":"404","title":"Not Found"}]}'
+    describe 'without an ACCEPT header' do
+      let(:headers) { { 'ACCEPT' => '', 'CONTENT_TYPE' => 'application/vnd.api+json' } }
+      subject { get '/this_route_does_not_exist', nil, headers }
+
+      it 'has a response body that contains error objects in json api format' do
+        subject
+        expect(response.body).to eq '{"errors":[{"status":"404","title":"Not Found","detail":"Route not found"}]}'
+      end
     end
   end
 end
