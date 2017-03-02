@@ -12,6 +12,6 @@ class Contact::Filter::Timezone < Contact::Filter::Base
   end
 
   def custom_options
-    account_lists.map(&:timezones).flatten.uniq.select(&:present?).map { |a| { name: a, id: a } }
+    account_lists.map(&:timezones).flatten.uniq.select(&:present?).map { |timezone| { name: timezone, id: timezone } }
   end
 end

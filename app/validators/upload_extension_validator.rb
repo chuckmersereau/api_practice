@@ -1,6 +1,6 @@
 class UploadExtensionValidator < ActiveModel::EachValidator
   def initialize(options)
-    options[:message] ||= "You must specify a file with extension .#{options[:extension]}"
+    options[:message] ||= 'You must specify a file with extension .#{options[:extension]}'
     super
   end
 

@@ -2,11 +2,11 @@
 
 <table border="1" cellspacing="0" cellpadding="5">
   <tr>
-    <th>Name:</th>
+    <th><%= _('Name:') %></th>
     <td><%= @help_request.name %></td>
   </tr>
   <tr>
-    <th>Email:</th>
+    <th><%= _('Email:') %></th>
     <td><%= @help_request.email %></td>
   </tr>
   <tr>
@@ -16,45 +16,43 @@
 
   <% if @help_request.file? %>
     <tr>
-      <th>Import File:</th>
-      <td><%= link_to('Click here to download the file', @attachment_url) %></td>
+      <th><%= _('Import File:') %></th>
+      <td><%= link_to(_('Click here to download the file'), @attachment_url) %></td>
     </tr>
   <% end %>
 </table>
 
 <br /><br />
 
-<h2>User Info</h2>
+<h2><%= _('User Info') %></h2>
 <table border="1" cellspacing="0" cellpadding="5">
   <tr>
-    <th>Browser:</th>
+    <th><%= _('Browser:') %></th>
     <td><%= @help_request.browser %></td>
   </tr>
 
   <tr>
-    <th>User Agent:</th>
+    <th><%= _('User Agent:') %></th>
     <td><%= @help_request.user_agent %></td>
   </tr>
 
   <tr>
-    <th>User ID:</th>
+    <th><%= _('User ID:') %></th>
     <td><%= @help_request.user_id %></td>
   </tr>
 
   <tr>
-    <th>Account List ID:</th>
+    <th><%= _('Account List ID:') %></th>
     <td><%= @help_request.account_list_id %></td>
   </tr>
 
   <tr>
-    <th>User Preferences:</th>
+    <th><%= _('User Preferences:') %></th>
     <td><%= @help_request.user_preferences %></td>
   </tr>
 
   <tr>
-    <th>Account List Settings:</th>
+    <th><%= _('Account List Settings:') %></th>
     <td><%= @help_request.account_list_settings %></td>
   </tr>
-
-
 </table>

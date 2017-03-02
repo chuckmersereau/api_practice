@@ -12,10 +12,49 @@ _('Support Letter')
 _('Thank')
 _('To Do')
 
+# Alerts
+_('You must select at least 2 contacts to merge.')
+
+# Date Ranges
+_('Last Week')
+_('Last month')
+_('Last Year')
+_('Last Two Years')
+_('Overdue')
+_('Today')
+_('Tomorrow')
+_('Future')
+_('Upcoming')
+
+# For multi-currency reports
+_('Commitment')
+_('Avg.')
+_('Min.')
+_('Total')
+_('converted as')
+_('of total')
+
 # Giving likelihoods
 _('Least Likely')
 _('Likely')
 _('Most Likely')
+
+# Headings
+_('Insights for ')
+_('Balance: %{balance}')
+
+# Info Messages
+_('You have no monthly recurring gift recommendations.')
+
+# Multi-currency report CSV Export
+_('Partner')
+_('Status')
+_('Pledge')
+_('Average')
+_('Minimum')
+_('Total (last month excluded from total)')
+_('Currency')
+_('Totals')
 
 # Send newsletter
 _('Physical')
@@ -37,36 +76,8 @@ _('Never Ask')
 _('Research Abandoned')
 _('Expired Referral')
 
-# Headings
-_('Insights for ')
-_('Balance: %{balance}')
-
-# Info Messages
-_('You have no monthly recurring gift recommendations.')
+# Titles
+_('New Donation')
 
 # Tool Tips
 _('May take a few days to update')
-
-# Titles
-__('New Donation')
-
-# Alerts
-__('You must select at least 2 contacts to merge.')
-
-# For multi-currency reports
-__('Commitment')
-__('Avg.')
-__('Min.')
-__('Total')
-__('converted as')
-__('of total')
-
-# Multi-currency report CSV Export
-__('Partner')
-__('Status')
-__('Pledge')
-__('Average')
-__('Minimum')
-__('Total (last month excluded from total)')
-__('Currency')
-__('Totals')

@@ -8,6 +8,6 @@ class ChalklineMailer < ApplicationMailer
     time_formatted = Time.now.in_time_zone(TIME_ZONE).strftime('%Y%m%d %l%M%P')
     filename = "#{@name} #{time_formatted}.csv".gsub(/\s+/, '_').downcase
     attachments[filename] = { mime_type: 'text/csv', content: account_list.physical_newsletter_csv }
-    mail subject: "MPDX List: #{@name}", cc: user_emails, reply_to: user_emails
+    mail subject: _('MPDX List: %{name}').localize % { name: @name }, cc: user_emails, reply_to: user_emails
   end
 end

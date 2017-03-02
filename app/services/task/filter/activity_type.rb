@@ -12,6 +12,6 @@ class Task::Filter::ActivityType < Task::Filter::Base
   end
 
   def custom_options
-    Task::TASK_ACTIVITIES.collect { |activity_type| { name: activity_type, id: activity_type } }
+    Task::TASK_ACTIVITIES.collect { |activity_type| { name: _(activity_type), id: activity_type } }
   end
 end

@@ -22,8 +22,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def presence_of_updated_in_db_at
     return if updated_in_db_at
-    errors.add(:updated_in_db_at,
-               'has to be sent in the list of attributes in order to update resource')
+    errors.add(:updated_in_db_at, 'has to be sent in the list of attributes in order to update resource')
   end
 
   def value_of_updated_in_db_at

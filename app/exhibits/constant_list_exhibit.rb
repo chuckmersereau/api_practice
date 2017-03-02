@@ -47,4 +47,32 @@ class ConstantListExhibit < DisplayCase::Exhibit
       options['locale'] = mail_chimp_locale_options.dup
     end
   end
+
+  def activities_translated
+    translate_array(activities)
+  end
+
+  def assignable_likely_to_give_translated
+    translate_array(assignable_likely_to_give)
+  end
+
+  def assignable_send_newsletter_translated
+    translate_array(assignable_send_newsletter)
+  end
+
+  def statuses_translated
+    translate_array(statuses)
+  end
+
+  def notifications_translated
+    notifications.dup.tap do |n|
+      n.keys.each { |key| n[key] = _(n[key]) }
+    end
+  end
+
+  private
+
+  def translate_array(array)
+    array.map { |element| _(element) }
+  end
 end

@@ -13,7 +13,7 @@ class DataServer::AccountAddressUpdatesPreparer
       .where(donor_accounts: { organization_id: data_server_org_ids })
       .find_each(&method(:prep_for_address_auto_updates))
 
-    logger.info('Account #{account_list_id} prepped for DataServer address updates')
+    logger.info("Account #{account_list_id} prepped for DataServer address updates")
   end
 
   private

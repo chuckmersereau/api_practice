@@ -29,4 +29,10 @@ class Task::Filter::DateRange < Task::Filter::Base
   def type
     'radio'
   end
+
+  def custom_options
+    %w(last_week last_month last_year last_two_years overdue today tomorrow future upcoming).map do |range|
+      { name: _(range.humanize.titleize), id: range }
+    end
+  end
 end

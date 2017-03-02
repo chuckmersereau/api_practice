@@ -31,6 +31,6 @@ class Contact::Filter::Status < Contact::Filter::Base
     [{ name: _('-- All Active --'), id: 'active' },
      { name: _('-- All Hidden --'), id: 'hidden' },
      { name: _('-- None --'), id: 'null' }] +
-      contact_instance.assignable_statuses.map { |s| { name: _(s), id: s } }
+      contact_instance.assignable_statuses.map { |state| { name: _(state), id: state } }
   end
 end

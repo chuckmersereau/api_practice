@@ -22,7 +22,9 @@ class PhoneNumberExhibit < DisplayCase::Exhibit
     if phone.extension.blank?
       phone_num
     else
-      "#{phone_num} ext #{phone.extension}"
+      _('%{number} ext %{extension}').localize % {
+        number: phone_num, extension: phone.extension
+      }
     end
   end
 end

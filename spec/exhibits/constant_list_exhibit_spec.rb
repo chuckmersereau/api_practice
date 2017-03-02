@@ -66,4 +66,44 @@ describe ConstantListExhibit do
     it { expect(opts['status']).to eq subject.assignable_statuses }
     it { expect(opts['send_newsletter']).to eq subject.assignable_send_newsletter }
   end
+
+  context '#activities_translated' do
+    it do
+      subject.activities_translated.each do |activity|
+        expect(activity).to be_a String
+      end
+    end
+  end
+
+  context '#assignable_likely_to_give_translated' do
+    it do
+      subject.assignable_likely_to_give_translated.each do |likelihood|
+        expect(likelihood).to be_a String
+      end
+    end
+  end
+
+  context '#assignable_send_newsletter_translated' do
+    it do
+      subject.assignable_send_newsletter_translated.each do |newsletter|
+        expect(newsletter).to be_a String
+      end
+    end
+  end
+
+  context '#statuses_translated' do
+    it do
+      subject.statuses_translated.each do |status|
+        expect(status).to be_a String
+      end
+    end
+  end
+
+  context '#notifications_translated' do
+    it do
+      subject.notifications_translated.each do |_, status|
+        expect(status).to be_a String
+      end
+    end
+  end
 end

@@ -70,7 +70,7 @@ class ApplicationFilter
 
   def default_options
     return [] if %w(text dates daterange).include?(type)
-    [{ name: '-- Any --', id: '', placeholder: _('None') }]
+    [{ name: _('-- Any --'), id: '', placeholder: _('None') }]
   end
 
   def default_selection

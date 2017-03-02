@@ -28,27 +28,32 @@ class AddressExhibit < DisplayCase::Exhibit
 
   def user_friendly_source
     case source
-    when 'DataServer', 'Siebel' then 'Donor system'
-    when 'GoogleImport' then 'Google import'
-    when 'GoogleContactsSync' then 'Google sync'
-    when 'TntImport'  then 'Tnt import'
-    when Address::MANUAL_SOURCE then 'Manual entry'
+    when 'DataServer', 'Siebel' then _('Donor system')
+    when 'GoogleImport' then _('Google import')
+    when 'GoogleContactsSync' then _('Google sync')
+    when 'TntImport'  then _('Tnt import')
+    when Address::MANUAL_SOURCE then _('Manual entry')
     else source
     end
   end
 
   def address_change_email_body
     donor_info = if source_donor_account.present?
-                   "\"#{source_donor_account.name}\" (donor ##{source_donor_account.account_number})"
+                   _('"%{name}" (donor #%{account_number})').localize % {
+                     name: source_donor_account.name,
+                     account_number: source_donor_account.account_number
+                   }
                  else
                    "\"#{addressable.name}\""
                  end
 
-    "Dear Donation Services,\n\n"\
-    "One of my donors, #{donor_info} has a new current address.\n\n"\
-    "Please update their address to:\n\n"\
-    "REPLACE WITH NEW STREET\n"\
-    "REPLACE WITH NEW CITY, STATE, ZIP\n\n"\
-    "Thanks!\n\n"
+    [
+      _('Dear Donation Services') + ",\n\n",
+      _('One of my donors, %{donor} has a new current address.').localize % { donor: donor_info } + "\n\n",
+      _('Please update their address to') + ":\n\n",
+      _('REPLACE WITH NEW STREET') + "\n",
+      _('REPLACE WITH NEW CITY, STATE, ZIP') + "\n\n",
+      _('Thanks!') + "\n\n"
+    ].join
   end
 end
