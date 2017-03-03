@@ -8,13 +8,16 @@ class Activity < ApplicationRecord
   belongs_to :account_list
   belongs_to :notification, inverse_of: :tasks
 
-  has_many :comments, dependent: :destroy, class_name: 'ActivityComment'
   has_many :activity_contacts, dependent: :destroy
+  has_many :comments, dependent: :destroy, class_name: 'ActivityComment'
   has_many :contacts, through: :activity_contacts
+  has_many :email_addresses, through: :people
   has_many :google_email_activities, dependent: :destroy
   has_many :google_emails, through: :google_email_activities
   has_many :google_events
-  has_many :people, through: :comments
+  has_many :users, through: :comments
+  has_many :people, through: :contacts
+  has_many :phone_numbers, through: :people
 
   scope :completed,         -> { where(completed: true).order('completed_at desc, start_at desc') }
   scope :future,            -> { where('start_at > ?', Time.current.end_of_day).order('start_at') }

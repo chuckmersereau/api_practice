@@ -26,12 +26,24 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
   include_examples 'show_examples'
 
   describe '#index' do
+    let(:contact_one) { create(:contact, account_list: account_list) }
+    let(:contact_two) { create(:contact) }
+    let(:included_array_in_response) { JSON.parse(response.body)['included'] }
+
     it 'shows donor accounts from selected contacts' do
       api_login(user)
       create(factory_type)
       get :index, account_list_id: account_list_id, filter: { contacts: [contact] }
       expect(response.status).to eq(200)
       expect(JSON.parse(response.body)['data'].count).to eq(2)
+    end
+
+    it "doesn't include contacts from different account_list" do
+      api_login(user)
+      create(factory_type, contacts: [contact_one, contact_two])
+      get :index, account_list_id: account_list_id, include: '*'
+      expect(response.status).to eq(200)
+      expect(included_array_in_response.any? { |resource| resource['id'] == contact_two.uuid }).to eq(false)
     end
   end
 end

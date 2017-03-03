@@ -17,6 +17,9 @@ class ActivitySerializer < ApplicationSerializer
 
   has_many :comments
   has_many :contacts
+  has_many :people
+  has_many :email_addresses
+  has_many :phone_numbers
 
   belongs_to :account_list
 end

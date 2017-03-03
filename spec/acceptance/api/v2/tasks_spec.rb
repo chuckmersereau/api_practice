@@ -45,6 +45,17 @@ resource 'Tasks' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      account_list
+      comments
+      contacts
+      email_addresses
+      people
+      phone_numbers
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 

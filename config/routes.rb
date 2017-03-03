@@ -14,7 +14,7 @@ Rails.application.routes.draw do
           scope module: :account_lists do
             resource :analytics, only: [:show]
             resources :designation_accounts, only: [:index, :show]
-            resources :donations, only: [:index, :show, :create, :update]
+            resources :donations, only: [:index, :show, :create, :update, :destroy]
             resources :donor_accounts, only: [:index, :show]
             resources :invites, only: [:index, :show, :create, :destroy]
 

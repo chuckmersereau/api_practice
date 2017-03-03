@@ -25,7 +25,18 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
     persist_donation
   end
 
+  def destroy
+    load_donation
+    authorize_donation
+    destroy_donation
+  end
+
   private
+
+  def destroy_donation
+    @donation.destroy
+    head :no_content
+  end
 
   def load_donations
     @donations = donation_scope.where(filter_params)

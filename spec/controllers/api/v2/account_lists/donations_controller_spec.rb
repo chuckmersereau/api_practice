@@ -47,4 +47,6 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
   include_examples 'show_examples'
 
   include_examples 'update_examples'
+
+  include_examples 'destroy_examples'
 end

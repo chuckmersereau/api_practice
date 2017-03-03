@@ -1,5 +1,6 @@
 ActiveModelSerializers.config.key_transform = :underscore
 ActiveModelSerializers.config.adapter = ActiveModelSerializers::Adapter::JsonApi
+ActiveModelSerializers.config.jsonapi_pagination_links_enabled = false
 
 class ActiveModelSerializers::Adapter::JsonApi
   Relationship.class_eval do

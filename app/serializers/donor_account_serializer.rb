@@ -5,6 +5,5 @@ class DonorAccountSerializer < ApplicationSerializer
              :last_donation_date,
              :total_donations
 
-  has_many :contacts
   belongs_to :organization
 end

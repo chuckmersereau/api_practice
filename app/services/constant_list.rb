@@ -65,15 +65,15 @@ class ConstantList < ActiveModelSerializers::Model
   end
 
   def notifications_hash
-    Hash[
-      NotificationType.all.map { |nt| [nt.uuid, nt.description] }
-    ]
+    NotificationType.all.inject({}) do |hash, nt|
+      hash.merge!(nt.uuid => nt.description)
+    end
   end
 
   def organizations_hash
-    Hash[
-      Organization.active.all.map { |org| [org.uuid, org.name] }
-    ]
+    Organization.active.all.inject({}) do |hash, org|
+      hash.merge!(org.uuid => org.name)
+    end
   end
 
   # For some reason, ActiveModelSerializer tries to somehow modify the elements

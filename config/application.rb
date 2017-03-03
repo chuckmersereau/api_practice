@@ -50,7 +50,7 @@ module Mpdx
     end
 
     config.after_initialize do |app|
-      app.routes.append{ match '*a', :to => 'error#not_found', via: [:get, :post] } unless config.consider_all_requests_local
+      app.routes.append{ match '*a', :to => 'api/error#not_found', via: [:get, :post] } unless config.consider_all_requests_local
     end
   end
 end

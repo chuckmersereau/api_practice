@@ -1,4 +1,4 @@
-class ErrorController < ApiController
+class Api::ErrorController < ApiController
   rescue_from ActionController::RoutingError, with: :render_404_from_exception
 
   def not_found

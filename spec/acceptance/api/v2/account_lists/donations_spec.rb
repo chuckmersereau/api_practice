@@ -175,5 +175,16 @@ resource 'Donations' do
         expect(response_status).to eq 200
       end
     end
+
+    delete '/api/v2/account_lists/:account_list_id/donations/:id' do
+      parameter 'account_list_id', 'Account List ID', required: true
+      parameter 'id',              'ID', required: true
+
+      example 'Donation [DELETE]', document: documentation_scope do
+        explanation 'Deletes the Donation associated with the Account List'
+        do_request
+        expect(response_status).to eq 204
+      end
+    end
   end
 end

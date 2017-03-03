@@ -2,7 +2,8 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_donor_accounts
-    render json: @donor_accounts, meta: meta_hash(@donor_accounts), include: include_params, fields: field_params
+    render json: scoped_donor_accounts, meta: meta_hash(@donor_accounts),
+           include: include_params, fields: field_params
   end
 
   def show
@@ -12,6 +13,14 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   end
 
   private
+
+  def scoped_donor_accounts
+    @donor_accounts.map { |donor_account| scoped_donor_account(donor_account) }
+  end
+
+  def scoped_donor_account(donor_account)
+    ScopedDonorAccount.new(account_list: load_account_list, donor_account: donor_account)
+  end
 
   def load_donor_accounts
     @donor_accounts ||= filter_params[:contacts] ? filtered_donor_accounts : all_donor_accounts
@@ -26,7 +35,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   end
 
   def render_donor_account
-    render json: @donor_account, include: include_params, fields: field_params
+    render json: scoped_donor_account(@donor_account), include: include_params, fields: field_params
   end
 
   def authorize_donor_account

@@ -2,8 +2,14 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 1 March 2017
+- Added ability to sort by start_at field in donations endpoint
+- Added a delete donation endpoint
+- Added the ability to include people, email_addresses and phone_number in tasks endpoint
+- Removed the 'links' object from list endpoints
+
 ## 28 February 2017
-- Added tasks to contact_serializer
+- Added tasks to contacts endpoint
 
 ## 27 February 2017
 - Added locale_display to User model preferences

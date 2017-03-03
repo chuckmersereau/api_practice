@@ -97,7 +97,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def permitted_sorting_params
-    %w(completed_at)
+    %w(completed_at start_at)
   end
 
   def permitted_filters
