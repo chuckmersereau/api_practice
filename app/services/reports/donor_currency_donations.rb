@@ -18,6 +18,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
         grouped[currency] = {
           totals: {
             year: sum_donations(donations),
+            year_converted: sum_converted_donations(donations),
             months: sum_donations_by_month(donations)
           },
           donation_infos: contacts_donation_info(donations)
@@ -49,7 +50,6 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
     contact_donations = all_donations.select { |d| d.contact_id == id }
     amounts = contact_donations.map { |d| donation_amount(d) }
     total = amounts.inject(:+)
-
     {
       contact_id: id,
       total: total,
@@ -100,7 +100,11 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
   end
 
   def sum_donations(donations)
-    donations.map { |d| donation_amount(d) }.inject(:+) || 0
+    donations.map(&:amount).inject(:+) || 0
+  end
+
+  def sum_converted_donations(donations)
+    donations.map(&:converted_amount).inject(:+) || 0
   end
 
   def sum_donations_by_month(donations)

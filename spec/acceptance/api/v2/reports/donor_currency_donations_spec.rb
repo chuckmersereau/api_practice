@@ -16,6 +16,7 @@ resource 'Reports > Donor Currency Donations Report' do
       donor_infos
       months
       currency_groups
+      salary_currency
       updated_at
       updated_in_db_at
     )
