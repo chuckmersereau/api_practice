@@ -19,19 +19,42 @@ resource 'Tasks Bulk' do
       .merge(updated_in_db_at: task_one.updated_at)
   end
 
-  let(:bulk_update_form_data) do
-    [
-      {
+  let(:account_list_relationship) do
+    {
+      account_list: {
         data: {
-          type: resource_type,
-          id: task_one.uuid,
-          attributes: new_task
+          id: account_list.uuid,
+          type: 'account_lists'
         }
       }
-    ]
+    }
+  end
+
+  let(:bulk_create_form_data) do
+    [{ data: { type: resource_type, id: SecureRandom.uuid, attributes: new_task, relationships: account_list_relationship } }]
+  end
+
+  let(:bulk_update_form_data) do
+    [{ data: { type: resource_type, id: task_one.uuid, attributes: new_task } }]
   end
 
   context 'authorized user' do
+    post '/api/v2/tasks/bulk' do
+      with_options scope: :data do
+        parameter 'id',         'Each member of the array must contain the id of the task being created',                  'Type' =>  'String'
+        parameter 'type',       "Each member of the array must contain the type 'tasks'",                                  'Type' =>  'String'
+        parameter 'attributes', 'Each member of the array must contain an object with the attributes of the task created', 'Type' =>  'Object'
+      end
+
+      example 'Task [CREATE] [BULK]', document: documentation_scope do
+        explanation 'Bulk Create a list of Tasks with an array of objects containing the ID and attributes'
+        do_request data: bulk_create_form_data
+
+        expect(response_status).to eq(200)
+        expect(json_response.first['data']['attributes']['subject']).to eq new_task['subject']
+      end
+    end
+
     put '/api/v2/tasks/bulk' do
       with_options scope: :data do
         parameter 'id',         'Each member of the array must contain the id of the task being updated',                   'Type' =>  'String'

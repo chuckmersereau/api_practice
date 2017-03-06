@@ -33,6 +33,8 @@ describe Api::V2::Tasks::BulkController, type: :controller do
     }
   end
 
+  include_examples 'bulk_create_examples'
+
   include_examples 'bulk_update_examples'
 
   include_examples 'bulk_destroy_examples'

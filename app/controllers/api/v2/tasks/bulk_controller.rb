@@ -1,6 +1,11 @@
 class Api::V2::Tasks::BulkController < Api::V2::BulkController
   resource_type :tasks
 
+  def create
+    build_empty_tasks
+    persist_tasks
+  end
+
   def update
     load_tasks
     persist_tasks
@@ -45,7 +50,11 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
   end
 
   def save_tasks
-    @tasks.each { |task| task.save(context: :update_from_controller) }
+    @tasks.each { |task| task.save(context: persistence_context) }
+  end
+
+  def build_empty_tasks
+    @tasks = params.require(:data).map { |data| Task.new(uuid: data['task']['uuid']) }
   end
 
   def build_tasks
@@ -62,7 +71,7 @@ class Api::V2::Tasks::BulkController < Api::V2::BulkController
   def data_attribute_index(task)
     params
       .require(:data)
-      .find_index { |task_data| task_data[:task][:id] == task.id }
+      .find_index { |task_data| task_data[:task][:uuid] == task.uuid }
   end
 
   def task_params(attributes)
