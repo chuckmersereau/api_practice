@@ -119,7 +119,11 @@ class User < Person
   # `Person::KeyAccount` and `Person::RelayAccount` both use the same db table,
   # so we only need one query.
   def self.find_by_guid(guid)
-    account = Person::RelayAccount.find_by('lower(relay_remote_id) = ?', guid.downcase)
+    account = if guid.is_a?(Array)
+                Person::RelayAccount.find_by('lower(relay_remote_id) IN (?)', guid.map(&:downcase))
+              else
+                Person::RelayAccount.find_by('lower(relay_remote_id) = ?', guid.downcase)
+              end
     account&.person&.to_user
   end
 

@@ -25,7 +25,9 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
   end
 
   def guid
-    cas_ticket_validator.attribute('ssoGuid')
+    [cas_ticket_validator.attribute('ssoGuid'),
+     cas_ticket_validator.attribute('theKeyGuid'),
+     cas_ticket_validator.attribute('relayGuid')]
   end
 
   def load_user
@@ -35,7 +37,7 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
   end
 
   def build_authenticate
-    @authenticate ||= User::Authenticate.new(authenticate_params)
+    @authenticate ||= ::User::Authenticate.new(authenticate_params)
   end
 
   def authenticate_params
