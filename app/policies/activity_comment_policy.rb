@@ -7,7 +7,6 @@ class ActivityCommentPolicy < ApplicationPolicy
   end
 
   def person_authorized?
-    resource.person_id.blank? ||
-      user.account_lists.joins(:people).exists?(people: { id: resource.person_id })
+    resource.person_id.blank? || resource.person_id == user.id
   end
 end

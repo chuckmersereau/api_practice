@@ -47,6 +47,7 @@ describe Task do
       expect(google_integration).to_not receive(:lower_retry_async)
 
       create(:task, start_at: 1.day.from_now, no_date: true, account_list: account_list, activity_type: 'Appointment')
+      create(:task, start_at: nil, account_list: account_list, activity_type: 'Appointment')
     end
 
     it 'syncs a task to google after a save call' do

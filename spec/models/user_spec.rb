@@ -5,6 +5,18 @@ describe User do
   let(:account_list) { create(:account_list) }
   it { is_expected.to have_many(:options).dependent(:destroy) }
 
+  context '#validations' do
+    context '#default_account_list_is_valid' do
+      let(:user) { build(:user, default_account_list: account_list.id) }
+
+      it "doesn't allow you to save a default_account_list unless the account_list is associated to the user" do
+        expect(user.valid?).to be_falsey
+        user.account_lists << account_list
+        expect(user.valid?).to be_truthy
+      end
+    end
+  end
+
   describe 'fundraiser role' do
     before(:each) do
       @org = FactoryGirl.create(:organization)

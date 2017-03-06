@@ -5,7 +5,7 @@ RSpec.describe Api::V2::Tasks::CommentsController, type: :controller do
   let(:account_list) { user.account_lists.first }
   let(:person) { create(:contact_with_person, account_list: account_list).reload.people.first }
   let(:activity) { create(:activity, account_list: account_list) }
-  let!(:resource) { create(:activity_comment, activity: activity, person: person) }
+  let!(:resource) { create(:activity_comment, activity: activity, person: user) }
   let!(:second_resource) { create(:activity_comment, activity: activity, person: person) }
   let(:id) { resource.uuid }
   let(:parent_param) { { task_id: activity.uuid } }
@@ -20,7 +20,7 @@ RSpec.describe Api::V2::Tasks::CommentsController, type: :controller do
       person: {
         data: {
           type: 'people',
-          id: person.uuid
+          id: user.uuid
         }
       }
     }

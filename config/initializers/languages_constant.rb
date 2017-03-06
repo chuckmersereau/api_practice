@@ -1,7 +1,8 @@
 LANGUAGES_CONSTANT = {
   'en-us' => 'US English',
   'es-419' => 'Spanish (Latin America)',
-  'fr-fr' => 'French',
+  'fr-fr' => 'French (France)',
+  'fr-ca' => 'French (Canadian)',
   'ru' => 'Russian',
   'ar' => 'Arabic',
   'ko' => 'Korean',

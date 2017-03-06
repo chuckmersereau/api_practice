@@ -25,7 +25,7 @@ resource 'Tasks > Comments' do
                  person: {
                    data: {
                      type: 'people',
-                     id: person.uuid
+                     id: user.uuid
                    }
                  }
                })

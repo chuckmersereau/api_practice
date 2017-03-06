@@ -16,6 +16,7 @@ class User < Person
   store :preferences, accessors: [:time_zone, :locale, :locale_display, :setup, :contacts_filter,
                                   :tasks_filter, :default_account_list, :contacts_view_options,
                                   :tab_orders, :developer, :admin]
+  validate :default_account_list_is_valid, if: 'default_account_list.present?'
 
   after_create :set_setup_mode
 
@@ -164,6 +165,12 @@ class User < Person
   end
 
   private
+
+  def default_account_list_is_valid
+    return if account_lists.map(&:id).include?(default_account_list)
+
+    errors.add(:default_account_list, 'is not included in list of account_lists')
+  end
 
   def set_setup_mode
     if preferences[:setup].nil?

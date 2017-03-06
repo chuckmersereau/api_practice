@@ -5,6 +5,11 @@ This changelog covers what's changed in the MPDX APIs.
 ## 6 March 2017
 - Added bulk create tasks endpoint
 
+## 3 March 2017
+
+- removed validation on start_at and dropped no_date field
+- added fr-CA to language constants
+
 ## 1 March 2017
 - Added ability to sort by start_at field in donations endpoint
 - Added a delete donation endpoint

@@ -3,7 +3,6 @@ class ActivitySerializer < ApplicationSerializer
              :completed,
              :completed_at,
              :next_action,
-             :no_date,
              :notification_time_before,
              :notification_time_unit,
              :notification_type,

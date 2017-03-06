@@ -27,7 +27,6 @@ class Task < Activity
     :end_at,
     :location,
     :next_action,
-    :no_date,
     :notification_time_before,
     :notification_time_unit,
     :notification_type,
@@ -356,10 +355,14 @@ class Task < Activity
   end
 
   def sync_to_google_calendar
-    return if result.present? || Time.now > start_at || no_date
+    return if google_sync_should_not_take_place?
 
     account_list.google_integrations.each do |google_integration|
       google_integration.lower_retry_async(:sync_task, id)
     end
+  end
+
+  def google_sync_should_not_take_place?
+    result.present? || start_at.nil? || Time.now > start_at || no_date?
   end
 end

@@ -32,7 +32,7 @@ class Activity < ApplicationRecord
   accepts_nested_attributes_for :activity_contacts, allow_destroy: true
   accepts_nested_attributes_for :comments, reject_if: :all_blank
 
-  validates :subject, :start_at, presence: true
+  validates :subject, presence: true
 
   def to_s
     subject

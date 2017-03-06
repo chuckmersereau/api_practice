@@ -31,7 +31,6 @@ resource 'Tasks' do
       completed_at
       created_at
       next_action
-      no_date
       notification_time_before
       notification_time_unit
       notification_type
@@ -107,7 +106,6 @@ resource 'Tasks' do
           response_field 'completed_at',             'Completed At',             'Type' => 'String'
           response_field 'due_date',                 'Due Date',                 'Type' => 'String'
           response_field 'next_action',              'Next Action',              'Type' => 'String'
-          response_field 'no_date',                  'No Date',                  'Type' => 'Boolean'
           response_field 'notification_time_before', 'Notification Time Before', 'Type' => 'Number'
           response_field 'notification_time_unit',   'Notification Time Unit',   'Type' => 'String'
           response_field 'notification_type',        'Notification Type',        'Type' => 'String'
@@ -137,7 +135,6 @@ resource 'Tasks' do
         parameter 'end_at',                   'End At',                   type: 'String'
         parameter 'location',                 'Location',                 type: 'String'
         parameter 'next_action',              'Next Action',              type: 'String'
-        parameter 'no_date',                  'No Date',                  type: 'Boolean'
         parameter 'notification_time_before', 'Notification Time Before', type: 'Number'
         parameter 'notification_time_unit',   'Notification Time Unit',   type: 'String'
         parameter 'notification_type',        'Notification Type',        type: 'String'
