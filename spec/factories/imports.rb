@@ -76,6 +76,12 @@ FactoryGirl.define do
     file { File.new(Rails.root.join('spec/fixtures/csv_invalid.csv')) }
   end
 
+  factory :csv_import_custom_headers, parent: :import do
+    association :account_list
+    source 'csv'
+    file { File.new(Rails.root.join('spec/fixtures/sample_csv_with_custom_headers.csv')) }
+  end
+
   factory :tnt_import_multi_org, parent: :import do
     association :account_list
     source 'tnt'

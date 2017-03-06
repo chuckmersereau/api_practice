@@ -1,13 +1,13 @@
 # This controller supports Content-Type multipart/form-data for file uploads. An example request in curl could look like:
 #
-#   curl "http://localhost:3000/api/v2/account_lists/23882dc0-e7d2-4170-8667-f1896e8427fa/imports/tnt" \
-#        -X POST                                                                                       \
-#        -H "Authorization: ..."                                                                       \
-#        -H 'Content-Type: multipart/form-data'                                                        \
-#        -F 'data[attributes][file]=@/Users/sheldon/Dev/mpdx_api/spec/fixtures/tnt/tnt_export.xml'     \
+#   curl "http://localhost:3000/api/v2/account_lists/23882dc0-e7d2-4170-8667-f1896e8427fa/imports/csv"   \
+#        -X POST                                                                                         \
+#        -H "Authorization: ..."                                                                         \
+#        -H 'Content-Type: multipart/form-data'                                                          \
+#        -F 'data[attributes][file]=@/Users/sheldon/Dev/mpdx_api/spec/fixtures/sample_csv_to_import.csv' \
 #        -F "data[type]=imports"
 
-class Api::V2::AccountLists::Imports::TntController < Api::V2Controller
+class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
   resource_type :imports
   supports_content_types 'multipart/form-data'
 
@@ -51,7 +51,7 @@ class Api::V2::AccountLists::Imports::TntController < Api::V2Controller
     params
       .require(:import)
       .permit(Import::PERMITTED_ATTRIBUTES)
-      .merge(source: 'tnt')
+      .merge(source: 'csv', in_preview: true)
   end
 
   def import_scope

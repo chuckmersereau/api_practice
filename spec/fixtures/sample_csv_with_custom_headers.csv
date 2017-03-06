@@ -1,0 +1,2 @@
+name,fname,lname,spouse_fname,spouse_lname,greeting,envelope_greeting,street,city,state,zipcode,country,status,amount,frequency,newsletter,received,tags,email,spouse_email,phone,spouse_phone,note
+"Doe, John and Jane",John,Doe,Jane,,Hi John and Jane,Doe family,"1 Example Ave, Apt 6",Sample City,IL,60201,,Partner - Pray,50,Monthly,Both,Yes,"christmas-card, family",john@example.com,jane@example.com,(213) 222-3333,(407) 555-6666,test notes

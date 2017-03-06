@@ -1448,7 +1448,8 @@ CREATE TABLE imports (
     groups text,
     group_tags text,
     in_preview boolean DEFAULT false NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    file_headers text
 );
 
 
@@ -6080,4 +6081,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170109201920');
 INSERT INTO schema_migrations (version) VALUES ('20170109220413');
 
 INSERT INTO schema_migrations (version) VALUES ('20170210004955');
+
+INSERT INTO schema_migrations (version) VALUES ('20170301173502');
 

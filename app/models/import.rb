@@ -17,17 +17,20 @@ class Import < ApplicationRecord
   validates :file, if: ->(import) { 'tnt_data_sync' == import.source }, upload_extension: { extension: 'tntmpd', message: TNT_DATA_SYNC_MSG }
   CSV_MSG = 'You must specify a .csv spreadsheet file from to upload to MPDX.'.freeze
   validates :file, if: ->(import) { 'csv' == import.source }, upload_extension: { extension: 'csv', message: CSV_MSG }
-  validates_with CsvImportHeadersValidator, if: -> (import) { 'csv' == import.source }
+  validates_with CsvImportHeadersValidator, if: -> (import) { !in_preview? && 'csv' == import.source }
   validates_with FacebookImportValidator, if: -> (import) { 'facebook' == import.source }
+  validates_with FileSizeValidator
 
   serialize :groups, Array
   serialize :group_tags, JSON
 
   PERMITTED_ATTRIBUTES = [:account_list_id,
                           :file,
+                          :file_headers,
                           :group_tags,
                           :groups,
                           :import_by_group,
+                          :in_preview,
                           :override,
                           :source,
                           :source_account_id,
@@ -47,6 +50,11 @@ class Import < ApplicationRecord
 
   def file_contents
     @file_contents ||= read_file_contents
+  end
+
+  def file=(new_file)
+    super
+    assign_file_headers_from_file
   end
 
   private
@@ -77,6 +85,14 @@ class Import < ApplicationRecord
     end
   ensure
     update_column(:importing, false)
+  end
+
+  def assign_file_headers_from_file
+    self.file_headers = file.present? ? read_file_headers_from_file : nil
+  end
+
+  def read_file_headers_from_file
+    source == 'csv' ? File.open(file.path, &:gets)&.strip : nil
   end
 
   class UnsurprisingImportError < StandardError

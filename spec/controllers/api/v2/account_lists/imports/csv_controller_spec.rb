@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Api::V2::AccountLists::Imports::TntController, type: :controller do
+describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
   let(:factory_type) { :import }
   let(:resource_type) { :imports }
 
@@ -15,7 +15,7 @@ describe Api::V2::AccountLists::Imports::TntController, type: :controller do
   let(:parent_param) { { account_list_id: account_list_id } }
 
   let(:correct_attributes) do
-    attributes_for(:import, file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_export.xml')))
+    attributes_for(:import, file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'sample_csv_to_import.csv')))
   end
 
   let(:correct_relationships) do
@@ -60,14 +60,21 @@ describe Api::V2::AccountLists::Imports::TntController, type: :controller do
       expect(response.status).to eq(201)
       import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
       expect(import.file).to be_present
-      expect(import.file.path).to end_with("uploads/import/file/#{import.id}/tnt_export.xml")
+      expect(import.file.path).to end_with("uploads/import/file/#{import.id}/sample_csv_to_import.csv")
     end
 
-    it 'defaults source to tnt' do
+    it 'defaults source to csv' do
       api_login(user)
       post :create, full_correct_attributes.merge(source: 'bogus')
       import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
-      expect(import.source).to eq 'tnt'
+      expect(import.source).to eq 'csv'
+    end
+
+    it 'defaults in_preview to true' do
+      api_login(user)
+      post :create, full_correct_attributes.merge(in_preview: false)
+      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      expect(import.in_preview?).to eq true
     end
   end
 end

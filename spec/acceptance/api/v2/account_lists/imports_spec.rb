@@ -30,14 +30,16 @@ resource 'Account Lists > Imports' do
 
   let(:form_data) { build_data(new_import) }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       account_list_id
       created_at
       file
+      file_headers
       group_tags
       groups
       import_by_group
+      in_preview
       override
       source
       tags
@@ -84,7 +86,6 @@ resource 'Account Lists > Imports' do
         explanation 'The Account List Import with the given ID'
         do_request
         check_resource(['relationships'])
-        expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
     end

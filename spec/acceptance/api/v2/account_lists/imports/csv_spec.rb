@@ -1,7 +1,7 @@
 require 'rails_helper'
 require 'rspec_api_documentation/dsl'
 
-resource 'Account Lists > Imports > from TNT XML' do
+resource 'Account Lists > Imports > from CSV' do
   include_context :multipart_form_data_headers
   include ActionDispatch::TestProcess
   documentation_scope = :account_lists_api_imports
@@ -23,10 +23,10 @@ resource 'Account Lists > Imports > from TNT XML' do
 
   let(:new_import) do
     attrs = {
-      file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_export.xml'))
+      file: Rack::Test::UploadedFile.new(Rails.root.join('spec/fixtures/sample_csv_to_import.csv'))
     }
 
-    build(:import)
+    build(:csv_import)
       .attributes
       .reject { |attr| attr.to_s.end_with?('_id') }
       .tap { |attributes| attributes.delete('uuid') }.merge(attrs)
@@ -84,14 +84,13 @@ resource 'Account Lists > Imports > from TNT XML' do
   context 'authorized user' do
     before { api_login(user) }
 
-    post '/api/v2/account_lists/:account_list_id/imports/tnt' do
+    post '/api/v2/account_lists/:account_list_id/imports/csv' do
       with_options scope: [:data, :attributes] do
         parameter 'file',              'File',                                                   'Type' => 'String'
         parameter 'file_headers',      'File Headers',                                           'Type' => 'String'
         parameter 'groups',            'Groups',                                                 'Type' => 'String'
         parameter 'group_tags',        'Group Tags',                                             'Type' => 'String'
         parameter 'import_by_group',   'Import by Group',                                        'Type' => 'String'
-        parameter 'in_preview',        "The Import will not be performed while it's in preview", 'Type' => 'Boolean'
         parameter 'override',          'Override',                                               'Type' => 'Boolean'
         parameter 'source_account_id', 'Source Account ID',                                      'Type' => 'String'
         parameter 'tags',              'Tags',                                                   'Type' => 'String'
@@ -99,19 +98,19 @@ resource 'Account Lists > Imports > from TNT XML' do
       end
 
       with_options scope: [:data, :attributes] do
-        response_field 'account_list_id',  'Account List ID',                                                           'Type' => 'Number'
-        response_field 'created_at',       'Created At',                                                                'Type' => 'String'
-        response_field 'file',             'File',                                                                      'Type' => 'Object'
-        response_field 'file_headers',     'File Headers',                                                              'Type' => 'Array[String]'
-        response_field 'group_tags',       'Group Tags',                                                                'Type' => 'String'
-        response_field 'groups',           'Groups',                                                                    'Type' => 'Array[String]'
-        response_field 'import_by_group',  'Import by Group',                                                           'Type' => 'String'
-        response_field 'in_preview',       "The Import will not be performed while it's in preview; Defaults to false", 'Type' => 'Boolean'
-        response_field 'override',         'Override',                                                                  'Type' => 'String'
-        response_field 'source',           'Source; Defaults to "tnt"',                                                 'Type' => 'String'
-        response_field 'tags',             'Tags',                                                                      'Type' => 'String'
-        response_field 'updated_at',       'Updated At',                                                                'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At',                                                          'Type' => 'String'
+        response_field 'account_list_id',  'Account List ID',                                                          'Type' => 'Number'
+        response_field 'created_at',       'Created At',                                                               'Type' => 'String'
+        response_field 'file',             'File',                                                                     'Type' => 'Object'
+        response_field 'file_headers',     'File Headers',                                                             'Type' => 'Array[String]'
+        response_field 'group_tags',       'Group Tags',                                                               'Type' => 'String'
+        response_field 'groups',           'Groups',                                                                   'Type' => 'Array[String]'
+        response_field 'import_by_group',  'Import by Group',                                                          'Type' => 'String'
+        response_field 'in_preview',       "The Import will not be performed while it's in preview; Defaults to true", 'Type' => 'Boolean'
+        response_field 'override',         'Override',                                                                 'Type' => 'String'
+        response_field 'source',           'Source; Defaults to "csv"',                                                'Type' => 'String'
+        response_field 'tags',             'Tags',                                                                     'Type' => 'String'
+        response_field 'updated_at',       'Updated At',                                                               'Type' => 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At',                                                         'Type' => 'String'
       end
 
       with_options scope: [:data, :relationships] do
@@ -126,8 +125,8 @@ resource 'Account Lists > Imports > from TNT XML' do
         expect(response_headers['Content-Type']).to eq 'application/vnd.api+json; charset=utf-8'
         expect(resource_data['id']).to be_present
         expect(resource_data['attributes']['file']['file']['url']).to be_present
-        expect(resource_data['attributes']['source']).to eq 'tnt'
-        expect(resource_data['attributes']['in_preview']).to eq false
+        expect(resource_data['attributes']['source']).to eq 'csv'
+        expect(resource_data['attributes']['in_preview']).to eq true
       end
     end
   end

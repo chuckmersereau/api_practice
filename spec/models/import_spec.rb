@@ -44,7 +44,34 @@ describe Import do
     expect { create(:csv_import) }.to change(Import.jobs, :size).from(0).to(1)
   end
 
-  it 'does not queue an import when set to in preview' do
-    expect { create(:csv_import, in_preview: true) }.to_not change(Import.jobs, :size).from(0)
+  context 'in_preview' do
+    it 'does not queue an import' do
+      expect { create(:csv_import, in_preview: true) }.to_not change(Import.jobs, :size).from(0)
+    end
+
+    it 'does not validate csv headers' do
+      import = build(:csv_import_custom_headers, in_preview: true)
+      expect(import.valid?).to eq true
+      import.in_preview = false
+      expect(import.valid?).to eq false
+    end
+  end
+
+  context 'assigning file headers from csv file' do
+    it 'assigns file_headers when setting file' do
+      expect(build(:csv_import_custom_headers).file_headers).to eq 'name,fname,lname,spouse_fname,spouse_lname,greeting,envelope_greeting,street,city,' \
+        'state,zipcode,country,status,amount,frequency,newsletter,received,tags,email,spouse_email,phone,spouse_phone,note'
+    end
+
+    it 'assigns file_headers to nil if file is nil' do
+      expect(build(:csv_import_custom_headers, file: nil).file_headers).to be_blank
+    end
+  end
+
+  it 'validates size of file' do
+    import = build(:import)
+    allow(import.file).to receive(:size).and_return(FileSizeValidator::MAX_FILE_SIZE_IN_BYTES + 1)
+    expect(import.valid?).to eq false
+    expect(import.errors[:base]).to eq ['File size must be less than 10000000 bytes']
   end
 end

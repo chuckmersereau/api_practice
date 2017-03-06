@@ -1,3 +1,5 @@
+require 'csv'
+
 class CsvImport
   SUPPORTED_HEADERS = [
     'Contact Name', 'Greeting', 'Envelope Greeting', 'Status', 'Commitment Amount', 'Notes',
