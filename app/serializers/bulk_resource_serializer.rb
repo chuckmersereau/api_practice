@@ -27,6 +27,6 @@ class BulkResourceSerializer
   end
 
   def conflict_error?(resource)
-    resource.errors[:updated_in_db_at].include?(ApplicationRecord::CONFLICT_ERROR_MESSAGE)
+    resource.errors[:updated_in_db_at].any? { |error| error.include?(ApplicationRecord::CONFLICT_ERROR_MESSAGE) }
   end
 end

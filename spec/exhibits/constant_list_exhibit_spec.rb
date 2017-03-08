@@ -42,7 +42,11 @@ describe ConstantListExhibit do
   end
 
   context '#pledge_currencies_code_symbol_map' do
-    it { expect(subject.pledge_currencies_code_symbol_map).to be_a_hash_with_types String, String }
+    it { expect(subject.pledge_currencies_code_symbol_map).to be_a_hash_with_types String, Hash }
+    it { expect(subject.pledge_currencies_code_symbol_map['USD'][:code]).to eq('USD') }
+    it { expect(subject.pledge_currencies_code_symbol_map['USD'][:code_symbol_string]).to eq('USD ($)') }
+    it { expect(subject.pledge_currencies_code_symbol_map['USD'][:name]).to eq('US dollar') }
+    it { expect(subject.pledge_currencies_code_symbol_map['USD'][:symbol]).to eq('$') }
   end
 
   context '#currency_code_and_symbol' do

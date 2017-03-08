@@ -69,7 +69,20 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
 
   # These includes can be found in:
   # spec/support/shared_controller_examples
+  include_examples 'destroy_examples'
+
   include_examples 'index_examples', except: [:sparse_fieldsets, :sorting]
 
-  include_examples 'destroy_examples'
+  context '#index' do
+    let!(:person5) do
+      create(:person, first_name: 'John', last_name: 'Doe', contacts: [contact1])
+    end
+
+    it 'does not return duplicates that include people that were already included' do
+      api_login(user)
+      get :index, contact_id: contact1.uuid
+      expect(JSON.parse(response.body)['data'].count).to eq(3)
+      expect(JSON.parse(response.body)['data'].map { |duplicate| duplicate['id'] }).to_not include(person5.uuid)
+    end
+  end
 end

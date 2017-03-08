@@ -3,8 +3,8 @@ class Person::Duplicate < ActiveModelSerializers::Model
   alias read_attribute_for_serialization send
 
   def self.find(id)
-    people = id.split('~').map do |person_id|
-      Person.find(person_id)
+    people = id.split('~').map do |person_uuid|
+      Person.find_by!(uuid: person_uuid)
     end
 
     contact = (people[0].contacts & people[1].contacts).first
@@ -21,7 +21,7 @@ class Person::Duplicate < ActiveModelSerializers::Model
     @person = person
     @dup_person = dup_person
     @people = [@person, @dup_person].sort_by(&:id).freeze
-    @id = @people.map(&:id).join('~').freeze
+    @id = @people.map(&:uuid).join('~').freeze
   end
 
   def invalidate!
@@ -29,5 +29,9 @@ class Person::Duplicate < ActiveModelSerializers::Model
       @person.mark_not_duplicate_of!(@dup_person)
       @dup_person.mark_not_duplicate_of!(@person)
     end
+  end
+
+  def minimum_person_id
+    [person.id, dup_person.id].min
   end
 end

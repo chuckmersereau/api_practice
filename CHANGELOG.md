@@ -2,11 +2,15 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 7 March 2017
+- constant_list now returning a complete currency object instead of a string
+- person duplicates endpoint is now eliminating doubles
+- conflict error returns the value of update_at in db to client
+
 ## 6 March 2017
 - Added bulk create tasks endpoint
 
 ## 3 March 2017
-
 - removed validation on start_at and dropped no_date field
 - added fr-CA to language constants
 

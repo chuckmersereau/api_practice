@@ -92,7 +92,7 @@ resource 'Constants' do
         resource_object['pledge_currencies'].each do |currency|
           expect(currency.size).to eq 2
           expect(currency.first).to be_a(String)
-          expect(currency.second).to be_a(String)
+          expect(currency.second).to be_a(Hash)
         end
 
         contact_attribute_keys.each do |key|

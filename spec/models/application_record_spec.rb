@@ -33,7 +33,7 @@ describe ApplicationRecord do
       contact.save(context: :update_from_controller)
 
       expect(contact.errors[:updated_in_db_at]).to eq(
-        ['is not equal to the current value in the database']
+        ["is not equal to the current value in the database (#{contact.updated_at.utc.iso8601})"]
       )
       expect(contact.reload.name).not_to eq('New Name')
     end

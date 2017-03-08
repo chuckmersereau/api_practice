@@ -37,9 +37,13 @@ class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
     @dup_people = account_lists.flat_map do |account_list|
       Person::DuplicatesFinder.new(account_list).find
     end
-    @dup_people = Kaminari.paginate_array(@dup_people)
+    @dup_people = Kaminari.paginate_array(dup_people_without_doubles)
                           .page(page_number_param)
                           .per(per_page_param)
+  end
+
+  def dup_people_without_doubles
+    @dup_people.uniq(&:minimum_person_id)
   end
 
   def render_duplicates

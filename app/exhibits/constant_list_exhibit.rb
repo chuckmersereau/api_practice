@@ -25,12 +25,8 @@ class ConstantListExhibit < DisplayCase::Exhibit
 
   def pledge_currencies_code_symbol_map
     Hash[
-      codes.map { |c| [c, currency_code_and_symbol(c)] }
+      codes.map { |code| [code.upcase, currency_information(code.upcase)] }
     ]
-  end
-
-  def currency_code_and_symbol(code)
-    format '%s (%s)', code, currency_symbol(code)
   end
 
   def locale_display_name(name, code)
@@ -72,7 +68,20 @@ class ConstantListExhibit < DisplayCase::Exhibit
 
   private
 
+  def currency_information(code)
+    twitter_cldr_hash = twitter_cldr_currency_information_hash(code)
+    { code: code,
+      code_symbol_string: format('%s (%s)', code, twitter_cldr_hash[:symbol]),
+      name: twitter_cldr_hash[:name],
+      symbol: twitter_cldr_hash[:symbol]
+    }
+  end
+
   def translate_array(array)
     array.map { |element| _(element) }
+  end
+
+  def twitter_cldr_currency_information_hash(code)
+    TwitterCldr::Shared::Currencies.for_code(code)
   end
 end

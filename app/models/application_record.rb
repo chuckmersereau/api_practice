@@ -11,7 +11,7 @@ class ApplicationRecord < ActiveRecord::Base
   validate :value_of_updated_in_db_at, on: :update_from_controller
 
   def updated_in_db_at=(value)
-    @updated_in_db_at = value.is_a?(Time) ? value : Time.parse(value.to_s)
+    @updated_in_db_at = value&.is_a?(Time) ? value : Time.parse(value.to_s)
   end
 
   private
@@ -27,6 +27,10 @@ class ApplicationRecord < ActiveRecord::Base
 
   def value_of_updated_in_db_at
     return if updated_at_was.to_i == updated_in_db_at.to_i
-    errors.add(:updated_in_db_at, CONFLICT_ERROR_MESSAGE)
+    errors.add(:updated_in_db_at, full_conflict_error_message)
+  end
+
+  def full_conflict_error_message
+    "#{CONFLICT_ERROR_MESSAGE} (#{updated_at.to_time.utc.iso8601})"
   end
 end
