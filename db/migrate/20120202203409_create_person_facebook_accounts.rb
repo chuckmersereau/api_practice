@@ -6,7 +6,7 @@ class CreatePersonFacebookAccounts < ActiveRecord::Migration
       t.string :token
       t.datetime :token_expires_at
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :person_facebook_accounts, [:person_id, :remote_id], unique: true
     add_index :person_facebook_accounts, :remote_id

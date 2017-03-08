@@ -12,11 +12,10 @@ resource 'User > Key Accounts' do
   let(:id)           { key_account.uuid }
 
   let(:new_key_account_params) do
-    build(:key_account)
-      .attributes
+    attributes_for(:key_account)
       .merge(updated_in_db_at: key_account.updated_at)
       .select { |(key, _)| Person::KeyAccount::PERMITTED_ATTRIBUTES.include?(key.to_sym) }
-      .tap { |attrs| attrs.delete('person_id') }
+      .tap { |attrs| attrs.delete(:person_id) }
   end
 
   let(:form_data) { build_data(new_key_account_params, relationships: relationships) }
@@ -91,7 +90,7 @@ resource 'User > Key Accounts' do
       example 'Key Account [CREATE]', document: documentation_scope do
         explanation 'Create a Key Account associated with the current_user'
         do_request data: form_data
-        expect(resource_object['email']).to eq new_key_account_params['email']
+        expect(resource_object['email']).to eq new_key_account_params[:email]
         expect(response_status).to eq 201
       end
     end
@@ -108,7 +107,7 @@ resource 'User > Key Accounts' do
       example 'Key Account [UPDATE]', document: documentation_scope do
         explanation 'Update the current_user\'s Key Account with the given ID'
         do_request data: form_data
-        expect(resource_object['email']).to eq new_key_account_params['email']
+        expect(resource_object['email']).to eq new_key_account_params[:email]
         expect(response_status).to eq 200
       end
     end

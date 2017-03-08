@@ -9,7 +9,7 @@ class CreateMasterAddresses < ActiveRecord::Migration
       t.boolean :verified, default: false, null: false
       t.text :smarty_response
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_column :addresses, :master_address_id, :integer

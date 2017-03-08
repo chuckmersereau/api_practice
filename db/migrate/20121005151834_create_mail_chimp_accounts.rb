@@ -7,7 +7,7 @@ class CreateMailChimpAccounts < ActiveRecord::Migration
       t.string :primary_list_id
       t.integer :account_list_id
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :mail_chimp_accounts, :account_list_id

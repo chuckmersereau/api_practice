@@ -21,9 +21,9 @@ resource 'Contacts > People > Websites' do
   let(:id)        { website.uuid }
 
   let(:new_website) do
-    build(:website).attributes
-                   .reject { |key| key.to_s.end_with?('_id') }
-                   .merge(updated_in_db_at: website.updated_at)
+    attributes_for(:website)
+      .reject { |key| key.to_s.end_with?('_id') }
+      .merge(updated_in_db_at: website.updated_at)
   end
   let(:form_data) { build_data(new_website) }
 

@@ -3,7 +3,7 @@ class CreateGoogleContacts < ActiveRecord::Migration
     create_table :google_contacts do |t|
       t.string   "remote_id"
       t.integer  "person_id"
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :google_contacts, :remote_id
     add_index :google_contacts, :person_id

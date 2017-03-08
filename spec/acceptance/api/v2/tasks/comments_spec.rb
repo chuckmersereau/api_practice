@@ -17,7 +17,9 @@ resource 'Tasks > Comments' do
   let(:id) { comment.uuid }
 
   let(:new_comment) do
-    build(:activity_comment, activity: task).attributes.with_indifferent_access.merge(updated_in_db_at: comment.updated_at, task_id: task_id).except(:activity_id, :person_id)
+    attributes_for(:activity_comment, activity: task)
+      .merge(updated_in_db_at: comment.updated_at, task_id: task_id)
+      .except(:activity_id, :person_id)
   end
 
   let(:form_data) do
@@ -87,7 +89,7 @@ resource 'Tasks > Comments' do
         explanation 'Create a Comment associated with the Task'
         do_request data: form_data
 
-        expect(resource_object['body']).to(be_present) && eq(new_comment['body'])
+        expect(resource_object['body']).to(be_present) && eq(new_comment[:body])
         expect(response_status).to eq(201)
       end
     end
@@ -105,7 +107,7 @@ resource 'Tasks > Comments' do
         explanation "Update the Task's Comment with the given ID"
         do_request data: form_data
 
-        expect(resource_object['body']).to(be_present) && eq(new_comment['body'])
+        expect(resource_object['body']).to(be_present) && eq(new_comment[:body])
         expect(response_status).to eq(200)
       end
     end

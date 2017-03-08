@@ -5,7 +5,7 @@ class CreateContactPeople < ActiveRecord::Migration
       t.belongs_to :person
       t.boolean :primary
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :contact_people, :contact_id
     add_index :contact_people, :person_id

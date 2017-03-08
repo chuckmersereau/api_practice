@@ -8,7 +8,7 @@ class CreatePersonKeyAccounts < ActiveRecord::Migration
       t.string :email
       t.boolean :authenticated, default: false, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :person_key_accounts, :person_id
     add_index :person_key_accounts, [:remote_id, :authenticated], :unique => true

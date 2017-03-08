@@ -18,9 +18,9 @@ resource 'Contacts > People > Relationships' do
   let(:id)                   { family_relationship.uuid }
 
   let(:new_family_relationship) do
-    build(:family_relationship).attributes
-                               .reject { |key| key.to_s.end_with?('_id') }
-                               .merge(updated_in_db_at: family_relationship.updated_at)
+    attributes_for(:family_relationship)
+      .reject { |key| key.to_s.end_with?('_id') }
+      .merge(updated_in_db_at: family_relationship.updated_at)
   end
   let(:relationships) do
     {
@@ -98,7 +98,7 @@ resource 'Contacts > People > Relationships' do
         do_request data: form_data
 
         expect(response_status).to eq 201
-        expect(resource_object['relationship']).to eq new_family_relationship['relationship']
+        expect(resource_object['relationship']).to eq new_family_relationship[:relationship]
       end
     end
 
@@ -114,7 +114,7 @@ resource 'Contacts > People > Relationships' do
         do_request data: form_data
 
         expect(response_status).to eq 200
-        expect(resource_object['relationship']).to eq new_family_relationship['relationship']
+        expect(resource_object['relationship']).to eq new_family_relationship[:relationship]
       end
     end
 

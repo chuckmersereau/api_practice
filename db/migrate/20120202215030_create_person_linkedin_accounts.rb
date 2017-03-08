@@ -7,7 +7,7 @@ class CreatePersonLinkedinAccounts < ActiveRecord::Migration
       t.string :secret
       t.datetime :token_expires_at
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :person_linkedin_accounts, [:person_id, :remote_id], unique: true
     add_index :person_linkedin_accounts, :remote_id

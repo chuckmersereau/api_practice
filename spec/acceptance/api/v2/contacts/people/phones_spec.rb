@@ -18,9 +18,9 @@ resource 'Contacts > People > Phones' do
   let(:id)     { phone.uuid }
 
   let(:new_phone) do
-    build(:phone_number, number: '3561987123').attributes
-                                              .reject { |key| key.to_s.end_with?('_id') }
-                                              .merge(updated_in_db_at: phone.updated_at)
+    attributes_for(:phone_number, number: '3561987123')
+      .reject { |key| key.to_s.end_with?('_id') }
+      .merge(updated_in_db_at: phone.updated_at)
   end
   let(:form_data) { build_data(new_phone) }
 
@@ -84,7 +84,7 @@ resource 'Contacts > People > Phones' do
         explanation 'Create a Phone Number associated with the Person'
         do_request data: form_data
 
-        expect(resource_object['number']).to eq new_phone['number']
+        expect(resource_object['number']).to eq new_phone[:number]
         expect(response_status).to eq 201
       end
     end
@@ -102,7 +102,7 @@ resource 'Contacts > People > Phones' do
       example 'Phone [UPDATE]', document: documentation_scope do
         explanation 'Update Person\'s Phone Number with the given ID'
         do_request data: form_data
-        expect(resource_object['number']).to eq new_phone['number']
+        expect(resource_object['number']).to eq new_phone[:number]
         expect(response_status).to eq(200)
       end
     end

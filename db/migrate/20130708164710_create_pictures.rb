@@ -6,7 +6,7 @@ class CreatePictures < ActiveRecord::Migration
       t.string :image
       t.boolean :primary, default: false, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :pictures, [:picture_of_id, :picture_of_type], name: 'picture_of'

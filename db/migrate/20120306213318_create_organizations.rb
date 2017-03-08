@@ -30,7 +30,7 @@ class CreateOrganizations < ActiveRecord::Migration
       t.string :profiles_params, length: 2000
       t.string :redirect_query_ini, length: 2000
 
-      t.timestamps
+      t.timestamps null: false
     end
     rename_column :designation_accounts, :account_source, :profile
     add_column :designation_accounts, :organization_id, :integer

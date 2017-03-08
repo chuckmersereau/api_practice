@@ -5,7 +5,7 @@ class CreatePlsAccounts < ActiveRecord::Migration
       t.string :oauth2_token
       t.boolean :valid_token, default: true, nil: false
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :pls_accounts, :account_list_id

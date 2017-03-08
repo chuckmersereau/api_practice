@@ -4,7 +4,7 @@ class CreateDesignationProfileAccounts < ActiveRecord::Migration
       t.belongs_to :designation_profile
       t.belongs_to :designation_account
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :designation_profile_accounts, [:designation_profile_id, :designation_account_id], unique: true, name: 'designation_p_to_a'
   end

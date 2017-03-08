@@ -5,7 +5,7 @@ class CreateFamilyRelationships < ActiveRecord::Migration
       t.belongs_to :related_person
       t.string :relationship, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :family_relationships, [:person_id, :related_person_id], unique: true
     add_index :family_relationships, :related_person_id

@@ -9,7 +9,7 @@ class CreateDesignationProfiles < ActiveRecord::Migration
       t.belongs_to :organization, null: false
       t.string :name
 
-      t.timestamps
+      t.timestamps null: false
     end
     DesignationAccount.destroy_all
     add_column :designation_accounts, :designation_profile_id, :integer, null: false

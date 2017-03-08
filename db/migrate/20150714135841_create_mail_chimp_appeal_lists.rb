@@ -5,7 +5,7 @@ class CreateMailChimpAppealLists < ActiveRecord::Migration
       t.string :appeal_list_id, null: false
       t.integer :appeal_id, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :mail_chimp_appeal_lists, :mail_chimp_account_id
     add_index :mail_chimp_appeal_lists, :appeal_list_id

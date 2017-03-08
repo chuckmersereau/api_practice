@@ -5,7 +5,7 @@ class CreatePartners < ActiveRecord::Migration
       t.belongs_to :donor_account
       t.belongs_to :account_list
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :contacts, [:donor_account_id, :account_list_id], unique: true
     add_index :contacts, :account_list_id

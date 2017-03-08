@@ -6,7 +6,7 @@ class CreateNotifications < ActiveRecord::Migration
       t.datetime :event_date
       t.boolean :cleared, default: false, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :notifications, :contact_id
     add_index :notifications, :notification_type_id

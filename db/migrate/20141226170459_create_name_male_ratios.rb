@@ -3,7 +3,7 @@ class CreateNameMaleRatios < ActiveRecord::Migration
     create_table :name_male_ratios do |t|
       t.string "name", null: false
       t.float "male_ratio", null: false
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :name_male_ratios, :name

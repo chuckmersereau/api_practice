@@ -17,8 +17,7 @@ resource 'Account Lists > Notifications' do
   let(:donation)        { create(:donation) }
 
   let(:new_notification) do
-    build(:notification)
-      .attributes
+    attributes_for(:notification)
       .reject { |attr| attr.to_s.end_with?('_id') }
       .merge(updated_in_db_at: notification.updated_at)
   end

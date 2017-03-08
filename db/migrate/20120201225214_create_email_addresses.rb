@@ -5,7 +5,7 @@ class CreateEmailAddresses < ActiveRecord::Migration
       t.string :email, null: false
       t.boolean :primary, default: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :email_addresses, :person_id
   end

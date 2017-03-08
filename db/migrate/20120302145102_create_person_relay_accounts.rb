@@ -11,7 +11,7 @@ class CreatePersonRelayAccounts < ActiveRecord::Migration
       t.string :username
       t.boolean :authenticated, default: false, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_column :person_facebook_accounts, :authenticated, :boolean, default: false, null: false
     add_index :person_facebook_accounts, [:remote_id, :authenticated], :unique => true

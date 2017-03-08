@@ -13,7 +13,7 @@ class CreateHelpRequests < ActiveRecord::Migration
       t.text :account_list_settings
       t.string :request_type
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

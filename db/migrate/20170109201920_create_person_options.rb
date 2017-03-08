@@ -6,7 +6,7 @@ class CreatePersonOptions < ActiveRecord::Migration
         t.string :value
         t.integer :user_id
         t.uuid :uuid, null: false, default: 'uuid_generate_v4()'
-        t.timestamps
+        t.timestamps null: false
       end
       add_index :person_options, [:key, :user_id], unique: true
       add_index :person_options, :uuid, unique: true

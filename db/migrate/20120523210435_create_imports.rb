@@ -6,7 +6,7 @@ class CreateImports < ActiveRecord::Migration
       t.string :file
       t.boolean :importing
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :imports, :account_list_id
   end

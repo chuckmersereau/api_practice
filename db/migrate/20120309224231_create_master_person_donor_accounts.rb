@@ -5,7 +5,7 @@ class CreateMasterPersonDonorAccounts < ActiveRecord::Migration
       t.belongs_to :donor_account
       t.boolean :primary, null: false, default: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :master_person_donor_accounts, [:master_person_id, :donor_account_id], unique: true, name: 'person_account'
     add_index :master_person_donor_accounts, :donor_account_id

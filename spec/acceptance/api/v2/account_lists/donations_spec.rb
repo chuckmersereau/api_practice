@@ -24,8 +24,7 @@ resource 'Donations' do
   let(:id)       { donation.uuid }
 
   let(:new_donation) do
-    build(:donation, amount: 10.00)
-      .attributes
+    attributes_for(:donation, amount: 10.00)
       .reject { |attr| attr.to_s.end_with?('_id') }
       .merge(updated_in_db_at: donation.updated_at)
   end

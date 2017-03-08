@@ -5,13 +5,13 @@ class AddEmailIntegration < ActiveRecord::Migration
     create_table :google_emails do |t|
       t.integer :google_account_id
       t.integer :google_email_id, limit: 8
-      t.timestamps
+      t.timestamps null: false
     end
 
     create_table :google_email_activities do |t|
       t.integer :google_email_id
       t.integer :activity_id
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

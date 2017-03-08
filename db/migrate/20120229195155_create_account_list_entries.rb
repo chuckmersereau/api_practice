@@ -4,7 +4,7 @@ class CreateAccountListEntries < ActiveRecord::Migration
       t.belongs_to :account_list
       t.belongs_to :designation_account
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :account_list_entries, [:account_list_id, :designation_account_id], name: 'unique_account', unique: true
     add_index :account_list_entries, :designation_account_id

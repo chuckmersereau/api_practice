@@ -12,10 +12,9 @@ resource 'Tasks' do
   let(:id)    { task.uuid }
 
   let(:new_task) do
-    build(:task)
-      .attributes
+    attributes_for(:task)
       .reject { |key| key.to_s.end_with?('_id') }
-      .except('id', 'completed', 'notification_sent')
+      .except(:id, :completed, :notification_sent)
       .merge(updated_in_db_at: task.updated_at)
   end
 
@@ -152,7 +151,7 @@ resource 'Tasks' do
 
         do_request data: form_data
 
-        expect(resource_object['subject']).to eq new_task['subject']
+        expect(resource_object['subject']).to eq new_task[:subject]
         expect(response_status).to eq 201
       end
     end
@@ -184,7 +183,7 @@ resource 'Tasks' do
         explanation 'Update the current_user\'s Task with the given ID'
 
         do_request data: form_data
-        expect(resource_object['subject']).to eq new_task['subject']
+        expect(resource_object['subject']).to eq new_task[:subject]
         expect(response_status).to eq 200
       end
     end

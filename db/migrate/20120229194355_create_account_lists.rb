@@ -4,7 +4,7 @@ class CreateAccountLists < ActiveRecord::Migration
       t.string :name
       t.integer :creator_id
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :account_lists, :creator_id
     remove_column :people, :designation_account_id

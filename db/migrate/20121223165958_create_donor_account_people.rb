@@ -4,7 +4,7 @@ class CreateDonorAccountPeople < ActiveRecord::Migration
       t.belongs_to :donor_account
       t.belongs_to :person
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :donor_account_people, :donor_account_id
     add_index :donor_account_people, :person_id

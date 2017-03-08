@@ -5,7 +5,7 @@ class CreateCurrencyAliases < ActiveRecord::Migration
       t.string :rate_api_code, null: false
       t.decimal :ratio, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

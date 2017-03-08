@@ -12,10 +12,9 @@ resource 'User > Google Accounts' do
   let(:id)              { google_account.uuid }
 
   let(:new_google_account) do
-    build(:google_account)
-      .attributes
+    attributes_for(:google_account)
       .merge(updated_in_db_at: google_account.updated_at)
-      .tap { |attrs| attrs.delete('person_id') }
+      .tap { |attrs| attrs.delete(:person_id) }
   end
 
   let(:relationships) do
@@ -93,7 +92,7 @@ resource 'User > Google Accounts' do
       example 'Google Account [CREATE]', document: documentation_scope do
         explanation 'Create a Google Account associated with the current_user'
         do_request data: form_data
-        expect(resource_object['token']).to eq new_google_account['token']
+        expect(resource_object['token']).to eq new_google_account[:token]
         expect(response_status).to eq 201
       end
     end
@@ -110,7 +109,7 @@ resource 'User > Google Accounts' do
       example 'Google Account [UPDATE]', document: documentation_scope do
         explanation 'Update the current_user\'s Google Account with the given ID'
         do_request data: form_data
-        expect(resource_object['token']).to eq new_google_account['token']
+        expect(resource_object['token']).to eq new_google_account[:token]
         expect(response_status).to eq 200
       end
     end

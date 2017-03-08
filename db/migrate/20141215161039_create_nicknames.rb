@@ -8,7 +8,7 @@ class CreateNicknames < ActiveRecord::Migration
       t.integer "num_not_duplicates", default: 0, null: false
       t.integer "num_times_offered", default: 0, null: false
       t.boolean  "suggest_duplicates", default: false, null: false
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :nicknames, :name

@@ -5,7 +5,7 @@ class CreateDonorAccounts < ActiveRecord::Migration
       t.string :account_number
       t.string :name
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :donor_accounts, :organization_id
   end

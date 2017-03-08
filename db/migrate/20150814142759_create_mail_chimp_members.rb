@@ -9,7 +9,7 @@ class CreateMailChimpMembers < ActiveRecord::Migration
       t.string :first_name
       t.string :last_name
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_index :mail_chimp_members, :mail_chimp_account_id

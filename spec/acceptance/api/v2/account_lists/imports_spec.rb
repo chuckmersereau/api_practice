@@ -25,7 +25,7 @@ resource 'Account Lists > Imports' do
       source_account_id: fb_account.uuid
     }
 
-    build(:import).attributes.merge(attrs)
+    attributes_for(:import).merge(attrs)
   end
 
   let(:form_data) { build_data(new_import) }

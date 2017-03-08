@@ -15,9 +15,9 @@ resource 'People' do
   let(:id)        { resource.uuid }
 
   let(:new_resource) do
-    build(:person, first_name: 'Mpdx').attributes
-                                      .reject { |key| key.to_s.end_with?('_id') }
-                                      .merge(updated_in_db_at: contact.updated_at)
+    attributes_for(:person, first_name: 'Mpdx')
+      .reject { |key| key.to_s.end_with?('_id') }
+      .merge(updated_in_db_at: contact.updated_at)
   end
 
   let(:relationship_person) { create(:person) }

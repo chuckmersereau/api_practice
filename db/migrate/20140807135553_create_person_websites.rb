@@ -5,7 +5,7 @@ class CreatePersonWebsites < ActiveRecord::Migration
       t.string :url
       t.boolean :primary, default: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :person_websites, :person_id
   end

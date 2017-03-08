@@ -7,7 +7,7 @@ class CreateCompanyPositions < ActiveRecord::Migration
       t.date :end_date
       t.string :position
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :company_positions, :person_id
     add_index :company_positions, :company_id

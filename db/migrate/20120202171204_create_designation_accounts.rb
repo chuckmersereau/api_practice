@@ -4,7 +4,7 @@ class CreateDesignationAccounts < ActiveRecord::Migration
       t.string :account_number
       t.string :account_source
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

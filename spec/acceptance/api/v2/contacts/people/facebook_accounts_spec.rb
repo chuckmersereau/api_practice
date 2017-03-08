@@ -21,9 +21,9 @@ resource 'Contacts > People > Facebook Accounts' do
   let(:id)                 { facebook_account.uuid }
 
   let(:new_facebook_account) do
-    build(:facebook_account).attributes
-                            .reject { |key| key.to_s.end_with?('_id') }
-                            .merge(updated_in_db_at: facebook_account.updated_at)
+    attributes_for(:facebook_account)
+      .reject { |key| key.to_s.end_with?('_id') }
+      .merge(updated_in_db_at: facebook_account.updated_at)
   end
   let(:form_data) { build_data(new_facebook_account) }
 

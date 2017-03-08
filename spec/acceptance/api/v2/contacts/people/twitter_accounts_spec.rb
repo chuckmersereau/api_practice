@@ -21,9 +21,9 @@ resource 'Contacts > People > Twitter Accounts' do
   let(:id)                { twitter_account.uuid }
 
   let(:new_twitter_account) do
-    build(:twitter_account).attributes
-                           .reject { |key| key.to_s.end_with?('_id') }
-                           .merge(updated_in_db_at: twitter_account.updated_at, remote_id: 'RandomID')
+    attributes_for(:twitter_account)
+      .reject { |key| key.to_s.end_with?('_id') }
+      .merge(updated_in_db_at: twitter_account.updated_at, remote_id: 'RandomID')
   end
 
   let(:form_data) { build_data(new_twitter_account) }

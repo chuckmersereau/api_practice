@@ -5,7 +5,7 @@ class CreateGoogleEvents < ActiveRecord::Migration
       t.belongs_to :google_integration, index: true
       t.string :google_event_id
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     remove_column :activities, :google_event_id, :string

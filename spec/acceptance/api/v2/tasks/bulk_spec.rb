@@ -12,10 +12,9 @@ resource 'Tasks Bulk' do
   let!(:user)          { create(:user_with_account) }
 
   let(:new_task) do
-    build(:task)
-      .attributes
+    attributes_for(:task)
       .reject { |key| key.to_s.end_with?('_id') }
-      .except('id', 'completed', 'notification_sent')
+      .except(:id, :completed, :notification_sent)
       .merge(updated_in_db_at: task_one.updated_at)
   end
 
@@ -51,7 +50,7 @@ resource 'Tasks Bulk' do
         do_request data: bulk_create_form_data
 
         expect(response_status).to eq(200)
-        expect(json_response.first['data']['attributes']['subject']).to eq new_task['subject']
+        expect(json_response.first['data']['attributes']['subject']).to eq new_task[:subject]
       end
     end
 
@@ -71,7 +70,7 @@ resource 'Tasks Bulk' do
         do_request data: bulk_update_form_data
 
         expect(response_status).to eq(200)
-        expect(json_response.first['data']['attributes']['subject']).to eq new_task['subject']
+        expect(json_response.first['data']['attributes']['subject']).to eq new_task[:subject]
       end
     end
 

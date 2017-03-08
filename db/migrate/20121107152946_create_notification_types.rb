@@ -4,7 +4,7 @@ class CreateNotificationTypes < ActiveRecord::Migration
       t.string :type
       t.text :description
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

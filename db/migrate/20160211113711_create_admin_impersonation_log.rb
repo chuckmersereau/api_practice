@@ -4,7 +4,7 @@ class CreateAdminImpersonationLog < ActiveRecord::Migration
       t.text :reason, null: false
       t.integer :impersonator_id, null: false
       t.integer :impersonated_id, null: false
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

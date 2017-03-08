@@ -12,12 +12,11 @@ resource 'User > Organization Accounts' do
   let(:id)                    { organization_account.uuid }
 
   let(:new_organization_account_params) do
-    build(:organization_account)
-      .attributes
+    attributes_for(:organization_account)
       .merge(updated_in_db_at: organization_account.updated_at)
       .tap do |attrs|
-        attrs.delete('person_id')
-        attrs.delete('organization_id')
+        attrs.delete(:person_id)
+        attrs.delete(:organization_id)
       end
   end
 
@@ -106,7 +105,7 @@ resource 'User > Organization Accounts' do
         explanation 'Create an Organization Account associated with the current_user'
         do_request data: form_data
 
-        expect(resource_object['username']).to eq new_organization_account_params['username']
+        expect(resource_object['username']).to eq new_organization_account_params[:username]
         expect(response_status).to eq 201
       end
     end
@@ -123,7 +122,7 @@ resource 'User > Organization Accounts' do
         explanation 'Update the current_user\'s Organization Account with the given ID'
         do_request data: form_data
 
-        expect(resource_object['username']).to eq new_organization_account_params['username']
+        expect(resource_object['username']).to eq new_organization_account_params[:username]
         expect(response_status).to eq 200
       end
     end

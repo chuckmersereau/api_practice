@@ -5,7 +5,7 @@ class CreateAdminResetLogs < ActiveRecord::Migration
       t.integer :resetted_user_id
       t.string :reason
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

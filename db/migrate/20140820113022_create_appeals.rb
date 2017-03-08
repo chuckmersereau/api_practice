@@ -7,7 +7,7 @@ class CreateAppeals < ActiveRecord::Migration
       t.text :description
       t.date :end_date
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :appeals, :account_list_id
   end

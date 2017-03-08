@@ -7,7 +7,7 @@ class CreatePersonTwitterAccounts < ActiveRecord::Migration
       t.string :token
       t.string :secret
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :person_twitter_accounts, [:person_id, :remote_id], unique: true
     add_index :person_twitter_accounts, :remote_id

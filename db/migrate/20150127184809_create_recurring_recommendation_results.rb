@@ -5,7 +5,7 @@ class CreateRecurringRecommendationResults < ActiveRecord::Migration
       t.belongs_to :contact
       t.string :result, null: false
 
-      t.timestamps
+      t.timestamps null: false
     end
   end
 end

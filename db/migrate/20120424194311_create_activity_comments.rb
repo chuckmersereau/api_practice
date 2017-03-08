@@ -5,7 +5,7 @@ class CreateActivityComments < ActiveRecord::Migration
       t.belongs_to :person
       t.text :body
 
-      t.timestamps
+      t.timestamps null: false
     end
 
     add_column :activities, :activity_comments_count, :integer, default: 0

@@ -21,9 +21,9 @@ resource 'Contacts > People > Linkedin Accounts' do
   let(:id)                 { linkedin_account.uuid }
 
   let(:new_facebook_account) do
-    build(:linkedin_account).attributes
-                            .reject { |key| key.to_s.end_with?('_id') }
-                            .merge(updated_in_db_at: linkedin_account.updated_at, remote_id: 'RANDOMID')
+    attributes_for(:linkedin_account)
+      .reject { |key| key.to_s.end_with?('_id') }
+      .merge(updated_in_db_at: linkedin_account.updated_at, remote_id: 'RANDOMID')
   end
   let(:form_data) { build_data(new_facebook_account) }
 

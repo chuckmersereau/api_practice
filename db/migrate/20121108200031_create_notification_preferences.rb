@@ -5,7 +5,7 @@ class CreateNotificationPreferences < ActiveRecord::Migration
       t.integer :account_list_id
       t.text :actions
 
-      t.timestamps
+      t.timestamps null: false
     end
     
     add_index :notification_preferences, :account_list_id

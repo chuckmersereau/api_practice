@@ -5,7 +5,7 @@ class CreateMasterPersonSources < ActiveRecord::Migration
       t.belongs_to :organization
       t.string :remote_id
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :master_person_sources, [:organization_id, :remote_id], unique: true, name: 'organization_remote_id'
   end

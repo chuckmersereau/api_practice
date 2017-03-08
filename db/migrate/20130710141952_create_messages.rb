@@ -11,7 +11,7 @@ class CreateMessages < ActiveRecord::Migration
       t.belongs_to :contact
       t.belongs_to :account_list
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :messages, :from_id
     add_index :messages, :to_id

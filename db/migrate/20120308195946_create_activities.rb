@@ -10,7 +10,7 @@ class CreateActivities < ActiveRecord::Migration
       t.datetime :end_at
       t.string :type
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :activities, :account_list_id
     add_index :activities, :start_at

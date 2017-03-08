@@ -6,7 +6,7 @@ class CreateOrganizationAccounts < ActiveRecord::Migration
       t.string :username
       t.string :password
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :organization_accounts, [:user_id, :organization_id], unique: true, name: 'user_id_and_organization_id'
   end

@@ -8,7 +8,7 @@ class CreatePersonGoogleAccounts < ActiveRecord::Migration
       t.datetime :expires_at
       t.boolean :valid_token, default: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :person_google_accounts, :person_id
 

@@ -14,7 +14,7 @@ class CreateAddresses < ActiveRecord::Migration
       t.date :start_date
       t.date :end_date
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :addresses, :person_id
   end

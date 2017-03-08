@@ -6,7 +6,7 @@ class CreatePrayerLettersAccounts < ActiveRecord::Migration
       t.belongs_to :person
       t.boolean :valid_token, default: true, nil: false
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :person_prayer_letters_accounts, :person_id
     add_column :contacts, :prayer_letters_id, :string

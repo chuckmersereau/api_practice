@@ -20,10 +20,7 @@ resource 'Account Lists > Notification Preferences' do
   let(:id)                         { notification_preference.uuid }
 
   let(:notification_type) { create(:notification_type) }
-  # let(:new_notification_preference) do
-  #   build(:notification_preference).attributes.merge(updated_in_db_at: notification_preference.updated_at)
-  #     .except('notification_type_id')
-  # end
+
   let(:form_data) do
     build_data(attributes, relationships: relationships)
   end

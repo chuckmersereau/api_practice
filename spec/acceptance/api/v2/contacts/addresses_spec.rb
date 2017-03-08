@@ -15,9 +15,9 @@ resource 'Contacts > Addresses' do
   let(:id) { address.uuid }
 
   let(:new_address) do
-    build(:address, addressable: contact).attributes
-                                         .reject { |key| key.to_s.end_with?('_id', '_at') }
-                                         .merge(updated_in_db_at: address.updated_at)
+    attributes_for(:address, addressable: contact)
+      .reject { |key| key.to_s.end_with?('_id', '_at') }
+      .merge(updated_in_db_at: address.updated_at)
   end
   let(:form_data) { build_data(new_address) }
 

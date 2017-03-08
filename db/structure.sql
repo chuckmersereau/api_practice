@@ -2,12 +2,16 @@
 -- PostgreSQL database dump
 --
 
+-- Dumped from database version 9.5.1
+-- Dumped by pg_dump version 9.5.1
+
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
 SET client_min_messages = warning;
+SET row_security = off;
 
 --
 -- Name: plpgsql; Type: EXTENSION; Schema: -; Owner: -
@@ -44,15 +48,15 @@ SET default_tablespace = '';
 SET default_with_oids = false;
 
 --
--- Name: account_list_entries; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: account_list_entries; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE account_list_entries (
     id integer NOT NULL,
     account_list_id integer,
     designation_account_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -77,7 +81,7 @@ ALTER SEQUENCE account_list_entries_id_seq OWNED BY account_list_entries.id;
 
 
 --
--- Name: account_list_invites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: account_list_invites; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE account_list_invites (
@@ -115,15 +119,15 @@ ALTER SEQUENCE account_list_invites_id_seq OWNED BY account_list_invites.id;
 
 
 --
--- Name: account_list_users; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: account_list_users; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE account_list_users (
     id integer NOT NULL,
     user_id integer,
     account_list_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -148,15 +152,15 @@ ALTER SEQUENCE account_list_users_id_seq OWNED BY account_list_users.id;
 
 
 --
--- Name: account_lists; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: account_lists; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE account_lists (
     id integer NOT NULL,
     name character varying(255),
     creator_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     settings text,
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -182,7 +186,7 @@ ALTER SEQUENCE account_lists_id_seq OWNED BY account_lists.id;
 
 
 --
--- Name: activities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: activities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE activities (
@@ -194,8 +198,8 @@ CREATE TABLE activities (
     start_at timestamp without time zone,
     end_at timestamp without time zone,
     type character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     completed boolean DEFAULT false NOT NULL,
     activity_comments_count integer DEFAULT 0,
     activity_type character varying(255),
@@ -234,7 +238,7 @@ ALTER SEQUENCE activities_id_seq OWNED BY activities.id;
 
 
 --
--- Name: activity_comments; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: activity_comments; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE activity_comments (
@@ -242,8 +246,8 @@ CREATE TABLE activity_comments (
     activity_id integer,
     person_id integer,
     body text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -268,15 +272,15 @@ ALTER SEQUENCE activity_comments_id_seq OWNED BY activity_comments.id;
 
 
 --
--- Name: activity_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: activity_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE activity_contacts (
     id integer NOT NULL,
     activity_id integer,
     contact_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -301,7 +305,7 @@ ALTER SEQUENCE activity_contacts_id_seq OWNED BY activity_contacts.id;
 
 
 --
--- Name: addresses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: addresses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE addresses (
@@ -315,8 +319,8 @@ CREATE TABLE addresses (
     location character varying(255),
     start_date date,
     end_date date,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     primary_mailing_address boolean DEFAULT false,
     addressable_type character varying(255),
     remote_id character varying(255),
@@ -353,7 +357,7 @@ ALTER SEQUENCE addresses_id_seq OWNED BY addresses.id;
 
 
 --
--- Name: admin_impersonation_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: admin_impersonation_logs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE admin_impersonation_logs (
@@ -361,8 +365,8 @@ CREATE TABLE admin_impersonation_logs (
     reason text NOT NULL,
     impersonator_id integer NOT NULL,
     impersonated_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -387,7 +391,7 @@ ALTER SEQUENCE admin_impersonation_logs_id_seq OWNED BY admin_impersonation_logs
 
 
 --
--- Name: admin_reset_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: admin_reset_logs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE admin_reset_logs (
@@ -395,8 +399,8 @@ CREATE TABLE admin_reset_logs (
     admin_resetting_id integer,
     resetted_user_id integer,
     reason character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -421,15 +425,15 @@ ALTER SEQUENCE admin_reset_logs_id_seq OWNED BY admin_reset_logs.id;
 
 
 --
--- Name: appeal_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: appeal_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE appeal_contacts (
     id integer NOT NULL,
     appeal_id integer,
     contact_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -454,7 +458,7 @@ ALTER SEQUENCE appeal_contacts_id_seq OWNED BY appeal_contacts.id;
 
 
 --
--- Name: appeal_excluded_appeal_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: appeal_excluded_appeal_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE appeal_excluded_appeal_contacts (
@@ -486,7 +490,7 @@ ALTER SEQUENCE appeal_excluded_appeal_contacts_id_seq OWNED BY appeal_excluded_a
 
 
 --
--- Name: appeals; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: appeals; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE appeals (
@@ -496,8 +500,8 @@ CREATE TABLE appeals (
     amount numeric(19,2),
     description text,
     end_date date,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     tnt_id integer,
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -523,14 +527,14 @@ ALTER SEQUENCE appeals_id_seq OWNED BY appeals.id;
 
 
 --
--- Name: companies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: companies; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE companies (
     id integer NOT NULL,
     name character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     street text,
     city character varying(255),
     state character varying(255),
@@ -562,15 +566,15 @@ ALTER SEQUENCE companies_id_seq OWNED BY companies.id;
 
 
 --
--- Name: company_partnerships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: company_partnerships; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE company_partnerships (
     id integer NOT NULL,
     account_list_id integer,
     company_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -595,7 +599,7 @@ ALTER SEQUENCE company_partnerships_id_seq OWNED BY company_partnerships.id;
 
 
 --
--- Name: company_positions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: company_positions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE company_positions (
@@ -605,8 +609,8 @@ CREATE TABLE company_positions (
     start_date date,
     end_date date,
     "position" character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -631,15 +635,15 @@ ALTER SEQUENCE company_positions_id_seq OWNED BY company_positions.id;
 
 
 --
--- Name: contact_donor_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: contact_donor_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contact_donor_accounts (
     id integer NOT NULL,
     contact_id integer,
     donor_account_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -664,7 +668,7 @@ ALTER SEQUENCE contact_donor_accounts_id_seq OWNED BY contact_donor_accounts.id;
 
 
 --
--- Name: contact_notes_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: contact_notes_logs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contact_notes_logs (
@@ -698,7 +702,7 @@ ALTER SEQUENCE contact_notes_logs_id_seq OWNED BY contact_notes_logs.id;
 
 
 --
--- Name: contact_people; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: contact_people; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contact_people (
@@ -706,8 +710,8 @@ CREATE TABLE contact_people (
     contact_id integer,
     person_id integer,
     "primary" boolean,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -732,15 +736,15 @@ ALTER SEQUENCE contact_people_id_seq OWNED BY contact_people.id;
 
 
 --
--- Name: contact_referrals; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: contact_referrals; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contact_referrals (
     id integer NOT NULL,
     referred_by_id integer,
     referred_to_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -765,15 +769,15 @@ ALTER SEQUENCE contact_referrals_id_seq OWNED BY contact_referrals.id;
 
 
 --
--- Name: contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE contacts (
     id integer NOT NULL,
     name character varying(255),
     account_list_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     pledge_amount numeric(19,2),
     status character varying(255),
     total_donations numeric(19,2),
@@ -838,7 +842,7 @@ ALTER SEQUENCE contacts_id_seq OWNED BY contacts.id;
 
 
 --
--- Name: currency_aliases; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: currency_aliases; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE currency_aliases (
@@ -846,8 +850,8 @@ CREATE TABLE currency_aliases (
     alias_code character varying(255) NOT NULL,
     rate_api_code character varying(255) NOT NULL,
     ratio numeric NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -872,7 +876,7 @@ ALTER SEQUENCE currency_aliases_id_seq OWNED BY currency_aliases.id;
 
 
 --
--- Name: currency_rates; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: currency_rates; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE currency_rates (
@@ -905,14 +909,14 @@ ALTER SEQUENCE currency_rates_id_seq OWNED BY currency_rates.id;
 
 
 --
--- Name: designation_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: designation_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE designation_accounts (
     id integer NOT NULL,
     designation_number character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     organization_id integer,
     balance numeric(19,2),
     balance_updated_at timestamp without time zone,
@@ -944,15 +948,15 @@ ALTER SEQUENCE designation_accounts_id_seq OWNED BY designation_accounts.id;
 
 
 --
--- Name: designation_profile_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: designation_profile_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE designation_profile_accounts (
     id integer NOT NULL,
     designation_profile_id integer,
     designation_account_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -977,7 +981,7 @@ ALTER SEQUENCE designation_profile_accounts_id_seq OWNED BY designation_profile_
 
 
 --
--- Name: designation_profiles; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: designation_profiles; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE designation_profiles (
@@ -986,8 +990,8 @@ CREATE TABLE designation_profiles (
     user_id integer NOT NULL,
     organization_id integer NOT NULL,
     name character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     code character varying(255),
     balance numeric(19,2),
     balance_updated_at timestamp without time zone,
@@ -1016,7 +1020,7 @@ ALTER SEQUENCE designation_profiles_id_seq OWNED BY designation_profiles.id;
 
 
 --
--- Name: donations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: donations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE donations (
@@ -1032,8 +1036,8 @@ CREATE TABLE donations (
     amount numeric(19,2),
     memo text,
     donation_date date,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     payment_type character varying(255),
     channel character varying(255),
     appeal_id integer,
@@ -1062,15 +1066,15 @@ ALTER SEQUENCE donations_id_seq OWNED BY donations.id;
 
 
 --
--- Name: donor_account_people; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: donor_account_people; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE donor_account_people (
     id integer NOT NULL,
     donor_account_id integer,
     person_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1095,7 +1099,7 @@ ALTER SEQUENCE donor_account_people_id_seq OWNED BY donor_account_people.id;
 
 
 --
--- Name: donor_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: donor_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE donor_accounts (
@@ -1103,8 +1107,8 @@ CREATE TABLE donor_accounts (
     organization_id integer,
     account_number character varying(255),
     name character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     master_company_id integer,
     total_donations numeric(19,2),
     last_donation_date date,
@@ -1134,7 +1138,7 @@ ALTER SEQUENCE donor_accounts_id_seq OWNED BY donor_accounts.id;
 
 
 --
--- Name: email_addresses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: email_addresses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE email_addresses (
@@ -1142,8 +1146,8 @@ CREATE TABLE email_addresses (
     person_id integer,
     email character varying(255) NOT NULL,
     "primary" boolean DEFAULT false,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     remote_id character varying(255),
     location character varying(50),
     historic boolean DEFAULT false,
@@ -1172,7 +1176,7 @@ ALTER SEQUENCE email_addresses_id_seq OWNED BY email_addresses.id;
 
 
 --
--- Name: family_relationships; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: family_relationships; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE family_relationships (
@@ -1180,8 +1184,8 @@ CREATE TABLE family_relationships (
     person_id integer,
     related_person_id integer,
     relationship character varying(255) NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1206,15 +1210,15 @@ ALTER SEQUENCE family_relationships_id_seq OWNED BY family_relationships.id;
 
 
 --
--- Name: google_contacts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: google_contacts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE google_contacts (
     id integer NOT NULL,
     remote_id character varying(255),
     person_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     picture_etag character varying(255),
     picture_id integer,
     google_account_id integer,
@@ -1246,15 +1250,15 @@ ALTER SEQUENCE google_contacts_id_seq OWNED BY google_contacts.id;
 
 
 --
--- Name: google_email_activities; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: google_email_activities; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE google_email_activities (
     id integer NOT NULL,
     google_email_id integer,
     activity_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1279,15 +1283,15 @@ ALTER SEQUENCE google_email_activities_id_seq OWNED BY google_email_activities.i
 
 
 --
--- Name: google_emails; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: google_emails; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE google_emails (
     id integer NOT NULL,
     google_account_id integer,
     google_email_id bigint,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1312,7 +1316,7 @@ ALTER SEQUENCE google_emails_id_seq OWNED BY google_emails.id;
 
 
 --
--- Name: google_events; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: google_events; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE google_events (
@@ -1320,8 +1324,8 @@ CREATE TABLE google_events (
     activity_id integer,
     google_integration_id integer,
     google_event_id character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     calendar_id character varying(255),
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -1347,7 +1351,7 @@ ALTER SEQUENCE google_events_id_seq OWNED BY google_events.id;
 
 
 --
--- Name: google_integrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: google_integrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE google_integrations (
@@ -1387,7 +1391,7 @@ ALTER SEQUENCE google_integrations_id_seq OWNED BY google_integrations.id;
 
 
 --
--- Name: help_requests; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: help_requests; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE help_requests (
@@ -1403,8 +1407,8 @@ CREATE TABLE help_requests (
     user_preferences text,
     account_list_settings text,
     request_type character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1429,7 +1433,7 @@ ALTER SEQUENCE help_requests_id_seq OWNED BY help_requests.id;
 
 
 --
--- Name: imports; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: imports; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE imports (
@@ -1438,8 +1442,8 @@ CREATE TABLE imports (
     source character varying(255),
     file character varying(255),
     importing boolean,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     tags text,
     override boolean DEFAULT false NOT NULL,
     user_id integer,
@@ -1473,7 +1477,7 @@ ALTER SEQUENCE imports_id_seq OWNED BY imports.id;
 
 
 --
--- Name: mail_chimp_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: mail_chimp_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE mail_chimp_accounts (
@@ -1483,8 +1487,8 @@ CREATE TABLE mail_chimp_accounts (
     status_grouping_id character varying(255),
     primary_list_id character varying(255),
     account_list_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     webhook_token character varying(255),
     auto_log_campaigns boolean DEFAULT false NOT NULL,
     importing boolean DEFAULT false NOT NULL,
@@ -1517,7 +1521,7 @@ ALTER SEQUENCE mail_chimp_accounts_id_seq OWNED BY mail_chimp_accounts.id;
 
 
 --
--- Name: mail_chimp_appeal_lists; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: mail_chimp_appeal_lists; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE mail_chimp_appeal_lists (
@@ -1525,8 +1529,8 @@ CREATE TABLE mail_chimp_appeal_lists (
     mail_chimp_account_id integer NOT NULL,
     appeal_list_id character varying(255) NOT NULL,
     appeal_id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1551,7 +1555,7 @@ ALTER SEQUENCE mail_chimp_appeal_lists_id_seq OWNED BY mail_chimp_appeal_lists.i
 
 
 --
--- Name: mail_chimp_members; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: mail_chimp_members; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE mail_chimp_members (
@@ -1563,8 +1567,8 @@ CREATE TABLE mail_chimp_members (
     greeting character varying(255),
     first_name character varying(255),
     last_name character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     contact_locale character varying(255),
     tags character varying(255)[],
     uuid uuid DEFAULT uuid_generate_v4()
@@ -1591,7 +1595,7 @@ ALTER SEQUENCE mail_chimp_members_id_seq OWNED BY mail_chimp_members.id;
 
 
 --
--- Name: master_addresses; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: master_addresses; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE master_addresses (
@@ -1603,8 +1607,8 @@ CREATE TABLE master_addresses (
     postal_code character varying(255),
     verified boolean DEFAULT false NOT NULL,
     smarty_response text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     latitude character varying(255),
     longitude character varying(255),
     uuid uuid DEFAULT uuid_generate_v4()
@@ -1631,14 +1635,14 @@ ALTER SEQUENCE master_addresses_id_seq OWNED BY master_addresses.id;
 
 
 --
--- Name: master_companies; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: master_companies; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE master_companies (
     id integer NOT NULL,
     name character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1663,13 +1667,13 @@ ALTER SEQUENCE master_companies_id_seq OWNED BY master_companies.id;
 
 
 --
--- Name: master_people; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: master_people; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE master_people (
     id integer NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1694,7 +1698,7 @@ ALTER SEQUENCE master_people_id_seq OWNED BY master_people.id;
 
 
 --
--- Name: master_person_donor_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: master_person_donor_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE master_person_donor_accounts (
@@ -1702,8 +1706,8 @@ CREATE TABLE master_person_donor_accounts (
     master_person_id integer,
     donor_account_id integer,
     "primary" boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1728,7 +1732,7 @@ ALTER SEQUENCE master_person_donor_accounts_id_seq OWNED BY master_person_donor_
 
 
 --
--- Name: master_person_sources; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: master_person_sources; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE master_person_sources (
@@ -1736,8 +1740,8 @@ CREATE TABLE master_person_sources (
     master_person_id integer,
     organization_id integer,
     remote_id character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1762,7 +1766,7 @@ ALTER SEQUENCE master_person_sources_id_seq OWNED BY master_person_sources.id;
 
 
 --
--- Name: messages; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: messages; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE messages (
@@ -1776,8 +1780,8 @@ CREATE TABLE messages (
     remote_id character varying(255),
     contact_id integer,
     account_list_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1802,15 +1806,15 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 
 
 --
--- Name: name_male_ratios; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: name_male_ratios; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE name_male_ratios (
     id integer NOT NULL,
     name character varying(255) NOT NULL,
     male_ratio double precision NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1835,7 +1839,7 @@ ALTER SEQUENCE name_male_ratios_id_seq OWNED BY name_male_ratios.id;
 
 
 --
--- Name: nicknames; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: nicknames; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE nicknames (
@@ -1847,8 +1851,8 @@ CREATE TABLE nicknames (
     num_not_duplicates integer DEFAULT 0 NOT NULL,
     num_times_offered integer DEFAULT 0 NOT NULL,
     suggest_duplicates boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1873,7 +1877,7 @@ ALTER SEQUENCE nicknames_id_seq OWNED BY nicknames.id;
 
 
 --
--- Name: notification_preferences; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: notification_preferences; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE notification_preferences (
@@ -1881,8 +1885,8 @@ CREATE TABLE notification_preferences (
     notification_type_id integer,
     account_list_id integer,
     actions text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1907,15 +1911,15 @@ ALTER SEQUENCE notification_preferences_id_seq OWNED BY notification_preferences
 
 
 --
--- Name: notification_types; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: notification_types; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE notification_types (
     id integer NOT NULL,
     type character varying(255),
     description text,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     description_for_email text,
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -1941,7 +1945,7 @@ ALTER SEQUENCE notification_types_id_seq OWNED BY notification_types.id;
 
 
 --
--- Name: notifications; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: notifications; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE notifications (
@@ -1950,8 +1954,8 @@ CREATE TABLE notifications (
     notification_type_id integer,
     event_date timestamp without time zone,
     cleared boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     donation_id integer,
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -1977,7 +1981,7 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 
 
 --
--- Name: organizations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: organizations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE organizations (
@@ -2010,8 +2014,8 @@ CREATE TABLE organizations (
     profiles_url character varying(255),
     profiles_params character varying(255),
     redirect_query_ini character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     api_class character varying(255),
     country character varying(255),
     uses_key_auth boolean DEFAULT false,
@@ -2041,7 +2045,7 @@ ALTER SEQUENCE organizations_id_seq OWNED BY organizations.id;
 
 
 --
--- Name: partner_status_logs; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: partner_status_logs; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE partner_status_logs (
@@ -2079,7 +2083,7 @@ ALTER SEQUENCE partner_status_logs_id_seq OWNED BY partner_status_logs.id;
 
 
 --
--- Name: people; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: people; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE people (
@@ -2103,8 +2107,8 @@ CREATE TABLE people (
     last_sign_in_at timestamp without time zone,
     current_sign_in_ip character varying(255),
     last_sign_in_ip character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     master_person_id integer NOT NULL,
     middle_name character varying(255),
     access_token character varying(32),
@@ -2139,7 +2143,7 @@ ALTER SEQUENCE people_id_seq OWNED BY people.id;
 
 
 --
--- Name: person_facebook_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_facebook_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_facebook_accounts (
@@ -2148,8 +2152,8 @@ CREATE TABLE person_facebook_accounts (
     remote_id bigint,
     token character varying(255),
     token_expires_at timestamp without time zone,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     valid_token boolean DEFAULT false,
     first_name character varying(255),
     last_name character varying(255),
@@ -2181,7 +2185,7 @@ ALTER SEQUENCE person_facebook_accounts_id_seq OWNED BY person_facebook_accounts
 
 
 --
--- Name: person_google_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_google_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_google_accounts (
@@ -2192,8 +2196,8 @@ CREATE TABLE person_google_accounts (
     refresh_token character varying(255),
     expires_at timestamp without time zone,
     valid_token boolean DEFAULT false,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     email character varying(255) NOT NULL,
     authenticated boolean DEFAULT false NOT NULL,
     "primary" boolean DEFAULT false,
@@ -2225,7 +2229,7 @@ ALTER SEQUENCE person_google_accounts_id_seq OWNED BY person_google_accounts.id;
 
 
 --
--- Name: person_key_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_key_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_key_accounts (
@@ -2236,8 +2240,8 @@ CREATE TABLE person_key_accounts (
     last_name character varying(255),
     email character varying(255),
     authenticated boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
@@ -2265,7 +2269,7 @@ ALTER SEQUENCE person_key_accounts_id_seq OWNED BY person_key_accounts.id;
 
 
 --
--- Name: person_linkedin_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_linkedin_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_linkedin_accounts (
@@ -2275,8 +2279,8 @@ CREATE TABLE person_linkedin_accounts (
     token character varying(255),
     secret character varying(255),
     token_expires_at timestamp without time zone,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     valid_token boolean DEFAULT false,
     first_name character varying(255),
     last_name character varying(255),
@@ -2308,7 +2312,7 @@ ALTER SEQUENCE person_linkedin_accounts_id_seq OWNED BY person_linkedin_accounts
 
 
 --
--- Name: person_options; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_options; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_options (
@@ -2317,8 +2321,8 @@ CREATE TABLE person_options (
     value character varying(255),
     user_id integer,
     uuid uuid DEFAULT uuid_generate_v4(),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
 );
 
 
@@ -2342,7 +2346,7 @@ ALTER SEQUENCE person_options_id_seq OWNED BY person_options.id;
 
 
 --
--- Name: person_organization_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_organization_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_organization_accounts (
@@ -2351,8 +2355,8 @@ CREATE TABLE person_organization_accounts (
     organization_id integer,
     username character varying(255),
     password character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     remote_id character varying(255),
     authenticated boolean DEFAULT false NOT NULL,
     valid_credentials boolean DEFAULT false NOT NULL,
@@ -2385,7 +2389,7 @@ ALTER SEQUENCE person_organization_accounts_id_seq OWNED BY person_organization_
 
 
 --
--- Name: person_relay_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_relay_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_relay_accounts (
@@ -2399,8 +2403,8 @@ CREATE TABLE person_relay_accounts (
     employee_id character varying(255),
     username character varying(255),
     authenticated boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
@@ -2429,7 +2433,7 @@ ALTER SEQUENCE person_relay_accounts_id_seq OWNED BY person_relay_accounts.id;
 
 
 --
--- Name: person_twitter_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_twitter_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_twitter_accounts (
@@ -2439,8 +2443,8 @@ CREATE TABLE person_twitter_accounts (
     screen_name character varying(255),
     token character varying(255),
     secret character varying(255),
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     valid_token boolean DEFAULT false,
     authenticated boolean DEFAULT false NOT NULL,
     "primary" boolean DEFAULT false,
@@ -2470,7 +2474,7 @@ ALTER SEQUENCE person_twitter_accounts_id_seq OWNED BY person_twitter_accounts.i
 
 
 --
--- Name: person_websites; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: person_websites; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE person_websites (
@@ -2478,8 +2482,8 @@ CREATE TABLE person_websites (
     person_id integer,
     url character varying(255),
     "primary" boolean DEFAULT false,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2504,7 +2508,7 @@ ALTER SEQUENCE person_websites_id_seq OWNED BY person_websites.id;
 
 
 --
--- Name: phone_numbers; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: phone_numbers; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE phone_numbers (
@@ -2514,8 +2518,8 @@ CREATE TABLE phone_numbers (
     country_code character varying(255),
     location character varying(255),
     "primary" boolean DEFAULT false,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     remote_id character varying(255),
     historic boolean DEFAULT false,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -2542,7 +2546,7 @@ ALTER SEQUENCE phone_numbers_id_seq OWNED BY phone_numbers.id;
 
 
 --
--- Name: pictures; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pictures; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE pictures (
@@ -2551,8 +2555,8 @@ CREATE TABLE pictures (
     picture_of_type character varying(255),
     image character varying(255),
     "primary" boolean DEFAULT false NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2577,7 +2581,7 @@ ALTER SEQUENCE pictures_id_seq OWNED BY pictures.id;
 
 
 --
--- Name: pls_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: pls_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE pls_accounts (
@@ -2585,8 +2589,8 @@ CREATE TABLE pls_accounts (
     account_list_id integer,
     oauth2_token character varying(255),
     valid_token boolean DEFAULT true,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2611,7 +2615,7 @@ ALTER SEQUENCE pls_accounts_id_seq OWNED BY pls_accounts.id;
 
 
 --
--- Name: prayer_letters_accounts; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: prayer_letters_accounts; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE prayer_letters_accounts (
@@ -2619,8 +2623,8 @@ CREATE TABLE prayer_letters_accounts (
     token character varying(255),
     secret character varying(255),
     valid_token boolean DEFAULT true,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     account_list_id integer,
     oauth2_token character varying(255),
     uuid uuid DEFAULT uuid_generate_v4()
@@ -2647,7 +2651,7 @@ ALTER SEQUENCE prayer_letters_accounts_id_seq OWNED BY prayer_letters_accounts.i
 
 
 --
--- Name: recurring_recommendation_results; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: recurring_recommendation_results; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE recurring_recommendation_results (
@@ -2655,8 +2659,8 @@ CREATE TABLE recurring_recommendation_results (
     account_list_id integer,
     contact_id integer,
     result character varying(255) NOT NULL,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2681,7 +2685,7 @@ ALTER SEQUENCE recurring_recommendation_results_id_seq OWNED BY recurring_recomm
 
 
 --
--- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE schema_migrations (
@@ -2690,7 +2694,7 @@ CREATE TABLE schema_migrations (
 
 
 --
--- Name: taggings; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: taggings; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE taggings (
@@ -2726,7 +2730,7 @@ ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
 
 
 --
--- Name: tags; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: tags; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE tags (
@@ -2756,7 +2760,7 @@ ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
 
 
 --
--- Name: versions; Type: TABLE; Schema: public; Owner: -; Tablespace: 
+-- Name: versions; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE versions (
@@ -3296,7 +3300,7 @@ ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq':
 
 
 --
--- Name: account_list_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: account_list_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_entries
@@ -3304,7 +3308,7 @@ ALTER TABLE ONLY account_list_entries
 
 
 --
--- Name: account_list_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: account_list_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_invites
@@ -3312,7 +3316,7 @@ ALTER TABLE ONLY account_list_invites
 
 
 --
--- Name: account_list_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: account_list_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_users
@@ -3320,7 +3324,7 @@ ALTER TABLE ONLY account_list_users
 
 
 --
--- Name: account_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: account_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_lists
@@ -3328,7 +3332,7 @@ ALTER TABLE ONLY account_lists
 
 
 --
--- Name: activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activities
@@ -3336,7 +3340,7 @@ ALTER TABLE ONLY activities
 
 
 --
--- Name: activity_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: activity_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activity_comments
@@ -3344,7 +3348,7 @@ ALTER TABLE ONLY activity_comments
 
 
 --
--- Name: activity_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: activity_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activity_contacts
@@ -3352,7 +3356,7 @@ ALTER TABLE ONLY activity_contacts
 
 
 --
--- Name: addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY addresses
@@ -3360,7 +3364,7 @@ ALTER TABLE ONLY addresses
 
 
 --
--- Name: admin_impersonation_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: admin_impersonation_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admin_impersonation_logs
@@ -3368,7 +3372,7 @@ ALTER TABLE ONLY admin_impersonation_logs
 
 
 --
--- Name: admin_reset_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: admin_reset_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admin_reset_logs
@@ -3376,7 +3380,7 @@ ALTER TABLE ONLY admin_reset_logs
 
 
 --
--- Name: appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeal_contacts
@@ -3384,7 +3388,7 @@ ALTER TABLE ONLY appeal_contacts
 
 
 --
--- Name: appeal_excluded_appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: appeal_excluded_appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeal_excluded_appeal_contacts
@@ -3392,7 +3396,7 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts
 
 
 --
--- Name: appeals_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: appeals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeals
@@ -3400,7 +3404,7 @@ ALTER TABLE ONLY appeals
 
 
 --
--- Name: companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY companies
@@ -3408,7 +3412,7 @@ ALTER TABLE ONLY companies
 
 
 --
--- Name: company_partnerships_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: company_partnerships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_partnerships
@@ -3416,7 +3420,7 @@ ALTER TABLE ONLY company_partnerships
 
 
 --
--- Name: company_positions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: company_positions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_positions
@@ -3424,7 +3428,7 @@ ALTER TABLE ONLY company_positions
 
 
 --
--- Name: contact_donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: contact_donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_donor_accounts
@@ -3432,7 +3436,7 @@ ALTER TABLE ONLY contact_donor_accounts
 
 
 --
--- Name: contact_notes_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: contact_notes_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_notes_logs
@@ -3440,7 +3444,7 @@ ALTER TABLE ONLY contact_notes_logs
 
 
 --
--- Name: contact_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: contact_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_people
@@ -3448,7 +3452,7 @@ ALTER TABLE ONLY contact_people
 
 
 --
--- Name: contact_referrals_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: contact_referrals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_referrals
@@ -3456,7 +3460,7 @@ ALTER TABLE ONLY contact_referrals
 
 
 --
--- Name: contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts
@@ -3464,7 +3468,7 @@ ALTER TABLE ONLY contacts
 
 
 --
--- Name: currency_aliases_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: currency_aliases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY currency_aliases
@@ -3472,7 +3476,7 @@ ALTER TABLE ONLY currency_aliases
 
 
 --
--- Name: currency_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: currency_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY currency_rates
@@ -3480,7 +3484,7 @@ ALTER TABLE ONLY currency_rates
 
 
 --
--- Name: designation_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: designation_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_accounts
@@ -3488,7 +3492,7 @@ ALTER TABLE ONLY designation_accounts
 
 
 --
--- Name: designation_profile_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: designation_profile_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_profile_accounts
@@ -3496,7 +3500,7 @@ ALTER TABLE ONLY designation_profile_accounts
 
 
 --
--- Name: designation_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: designation_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_profiles
@@ -3504,7 +3508,7 @@ ALTER TABLE ONLY designation_profiles
 
 
 --
--- Name: donations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: donations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donations
@@ -3512,7 +3516,7 @@ ALTER TABLE ONLY donations
 
 
 --
--- Name: donor_account_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: donor_account_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donor_account_people
@@ -3520,7 +3524,7 @@ ALTER TABLE ONLY donor_account_people
 
 
 --
--- Name: donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donor_accounts
@@ -3528,7 +3532,7 @@ ALTER TABLE ONLY donor_accounts
 
 
 --
--- Name: email_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: email_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_addresses
@@ -3536,7 +3540,7 @@ ALTER TABLE ONLY email_addresses
 
 
 --
--- Name: family_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: family_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY family_relationships
@@ -3544,7 +3548,7 @@ ALTER TABLE ONLY family_relationships
 
 
 --
--- Name: google_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: google_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_contacts
@@ -3552,7 +3556,7 @@ ALTER TABLE ONLY google_contacts
 
 
 --
--- Name: google_email_activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: google_email_activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_email_activities
@@ -3560,7 +3564,7 @@ ALTER TABLE ONLY google_email_activities
 
 
 --
--- Name: google_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: google_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_emails
@@ -3568,7 +3572,7 @@ ALTER TABLE ONLY google_emails
 
 
 --
--- Name: google_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: google_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_events
@@ -3576,7 +3580,7 @@ ALTER TABLE ONLY google_events
 
 
 --
--- Name: google_integrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: google_integrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_integrations
@@ -3584,7 +3588,7 @@ ALTER TABLE ONLY google_integrations
 
 
 --
--- Name: help_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: help_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY help_requests
@@ -3592,7 +3596,7 @@ ALTER TABLE ONLY help_requests
 
 
 --
--- Name: imports_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: imports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY imports
@@ -3600,7 +3604,7 @@ ALTER TABLE ONLY imports
 
 
 --
--- Name: mail_chimp_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: mail_chimp_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_accounts
@@ -3608,7 +3612,7 @@ ALTER TABLE ONLY mail_chimp_accounts
 
 
 --
--- Name: mail_chimp_appeal_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: mail_chimp_appeal_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_appeal_lists
@@ -3616,7 +3620,7 @@ ALTER TABLE ONLY mail_chimp_appeal_lists
 
 
 --
--- Name: mail_chimp_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: mail_chimp_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_members
@@ -3624,7 +3628,7 @@ ALTER TABLE ONLY mail_chimp_members
 
 
 --
--- Name: master_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: master_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_addresses
@@ -3632,7 +3636,7 @@ ALTER TABLE ONLY master_addresses
 
 
 --
--- Name: master_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: master_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_companies
@@ -3640,7 +3644,7 @@ ALTER TABLE ONLY master_companies
 
 
 --
--- Name: master_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: master_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_people
@@ -3648,7 +3652,7 @@ ALTER TABLE ONLY master_people
 
 
 --
--- Name: master_person_donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: master_person_donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_person_donor_accounts
@@ -3656,7 +3660,7 @@ ALTER TABLE ONLY master_person_donor_accounts
 
 
 --
--- Name: master_person_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: master_person_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_person_sources
@@ -3664,7 +3668,7 @@ ALTER TABLE ONLY master_person_sources
 
 
 --
--- Name: messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY messages
@@ -3672,7 +3676,7 @@ ALTER TABLE ONLY messages
 
 
 --
--- Name: name_male_ratios_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: name_male_ratios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY name_male_ratios
@@ -3680,7 +3684,7 @@ ALTER TABLE ONLY name_male_ratios
 
 
 --
--- Name: nicknames_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: nicknames_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY nicknames
@@ -3688,7 +3692,7 @@ ALTER TABLE ONLY nicknames
 
 
 --
--- Name: notification_preferences_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: notification_preferences_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notification_preferences
@@ -3696,7 +3700,7 @@ ALTER TABLE ONLY notification_preferences
 
 
 --
--- Name: notification_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: notification_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notification_types
@@ -3704,7 +3708,7 @@ ALTER TABLE ONLY notification_types
 
 
 --
--- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -3712,7 +3716,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY organizations
@@ -3720,7 +3724,7 @@ ALTER TABLE ONLY organizations
 
 
 --
--- Name: partner_status_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: partner_status_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY partner_status_logs
@@ -3728,7 +3732,7 @@ ALTER TABLE ONLY partner_status_logs
 
 
 --
--- Name: people_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY people
@@ -3736,7 +3740,7 @@ ALTER TABLE ONLY people
 
 
 --
--- Name: person_facebook_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_facebook_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_facebook_accounts
@@ -3744,7 +3748,7 @@ ALTER TABLE ONLY person_facebook_accounts
 
 
 --
--- Name: person_google_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_google_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_google_accounts
@@ -3752,7 +3756,7 @@ ALTER TABLE ONLY person_google_accounts
 
 
 --
--- Name: person_key_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_key_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_key_accounts
@@ -3760,7 +3764,7 @@ ALTER TABLE ONLY person_key_accounts
 
 
 --
--- Name: person_linkedin_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_linkedin_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_linkedin_accounts
@@ -3768,7 +3772,7 @@ ALTER TABLE ONLY person_linkedin_accounts
 
 
 --
--- Name: person_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_options
@@ -3776,7 +3780,7 @@ ALTER TABLE ONLY person_options
 
 
 --
--- Name: person_organization_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_organization_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_organization_accounts
@@ -3784,7 +3788,7 @@ ALTER TABLE ONLY person_organization_accounts
 
 
 --
--- Name: person_relay_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_relay_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_relay_accounts
@@ -3792,7 +3796,7 @@ ALTER TABLE ONLY person_relay_accounts
 
 
 --
--- Name: person_twitter_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_twitter_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_twitter_accounts
@@ -3800,7 +3804,7 @@ ALTER TABLE ONLY person_twitter_accounts
 
 
 --
--- Name: person_websites_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: person_websites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_websites
@@ -3808,7 +3812,7 @@ ALTER TABLE ONLY person_websites
 
 
 --
--- Name: phone_numbers_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: phone_numbers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY phone_numbers
@@ -3816,7 +3820,7 @@ ALTER TABLE ONLY phone_numbers
 
 
 --
--- Name: pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pictures
@@ -3824,7 +3828,7 @@ ALTER TABLE ONLY pictures
 
 
 --
--- Name: pls_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: pls_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pls_accounts
@@ -3832,7 +3836,7 @@ ALTER TABLE ONLY pls_accounts
 
 
 --
--- Name: prayer_letters_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: prayer_letters_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY prayer_letters_accounts
@@ -3840,7 +3844,7 @@ ALTER TABLE ONLY prayer_letters_accounts
 
 
 --
--- Name: recurring_recommendation_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: recurring_recommendation_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY recurring_recommendation_results
@@ -3848,7 +3852,7 @@ ALTER TABLE ONLY recurring_recommendation_results
 
 
 --
--- Name: taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY taggings
@@ -3856,7 +3860,7 @@ ALTER TABLE ONLY taggings
 
 
 --
--- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags
@@ -3864,7 +3868,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -; Tablespace: 
+-- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions
@@ -3872,1561 +3876,1561 @@ ALTER TABLE ONLY versions
 
 
 --
--- Name: INDEX_TAGGINGS_ON_TAGGABLE_ID; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: INDEX_TAGGINGS_ON_TAGGABLE_ID; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX "INDEX_TAGGINGS_ON_TAGGABLE_ID" ON taggings USING btree (taggable_id);
 
 
 --
--- Name: all_fields; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: all_fields; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX all_fields ON master_addresses USING btree (street, city, state, country, postal_code);
 
 
 --
--- Name: designation_p_to_a; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: designation_p_to_a; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX designation_p_to_a ON designation_profile_accounts USING btree (designation_profile_id, designation_account_id);
 
 
 --
--- Name: index_account_list_entries_on_designation_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_account_list_entries_on_designation_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_account_list_entries_on_designation_account_id ON account_list_entries USING btree (designation_account_id);
 
 
 --
--- Name: index_account_list_entries_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_account_list_entries_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_account_list_entries_on_uuid ON account_list_entries USING btree (uuid);
 
 
 --
--- Name: index_account_list_invites_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_account_list_invites_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_account_list_invites_on_uuid ON account_list_invites USING btree (uuid);
 
 
 --
--- Name: index_account_list_users_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_account_list_users_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_account_list_users_on_account_list_id ON account_list_users USING btree (account_list_id);
 
 
 --
--- Name: index_account_list_users_on_user_id_and_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_account_list_users_on_user_id_and_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_account_list_users_on_user_id_and_account_list_id ON account_list_users USING btree (user_id, account_list_id);
 
 
 --
--- Name: index_account_list_users_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_account_list_users_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_account_list_users_on_uuid ON account_list_users USING btree (uuid);
 
 
 --
--- Name: index_account_lists_on_creator_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_account_lists_on_creator_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_account_lists_on_creator_id ON account_lists USING btree (creator_id);
 
 
 --
--- Name: index_account_lists_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_account_lists_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_account_lists_on_uuid ON account_lists USING btree (uuid);
 
 
 --
--- Name: index_activities_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activities_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activities_on_account_list_id ON activities USING btree (account_list_id);
 
 
 --
--- Name: index_activities_on_activity_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activities_on_activity_type; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activities_on_activity_type ON activities USING btree (activity_type);
 
 
 --
--- Name: index_activities_on_completed; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activities_on_completed; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activities_on_completed ON activities USING btree (completed);
 
 
 --
--- Name: index_activities_on_completed_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activities_on_completed_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activities_on_completed_at ON activities USING btree (completed_at);
 
 
 --
--- Name: index_activities_on_notification_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activities_on_notification_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activities_on_notification_id ON activities USING btree (notification_id);
 
 
 --
--- Name: index_activities_on_start_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activities_on_start_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activities_on_start_at ON activities USING btree (start_at);
 
 
 --
--- Name: index_activities_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activities_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_activities_on_uuid ON activities USING btree (uuid);
 
 
 --
--- Name: index_activity_comments_on_activity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activity_comments_on_activity_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activity_comments_on_activity_id ON activity_comments USING btree (activity_id);
 
 
 --
--- Name: index_activity_comments_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activity_comments_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activity_comments_on_person_id ON activity_comments USING btree (person_id);
 
 
 --
--- Name: index_activity_comments_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activity_comments_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_activity_comments_on_uuid ON activity_comments USING btree (uuid);
 
 
 --
--- Name: index_activity_contacts_on_activity_id_and_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activity_contacts_on_activity_id_and_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activity_contacts_on_activity_id_and_contact_id ON activity_contacts USING btree (activity_id, contact_id);
 
 
 --
--- Name: index_activity_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activity_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_activity_contacts_on_contact_id ON activity_contacts USING btree (contact_id);
 
 
 --
--- Name: index_activity_contacts_on_contact_id_and_activity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activity_contacts_on_contact_id_and_activity_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_activity_contacts_on_contact_id_and_activity_id ON activity_contacts USING btree (contact_id, activity_id);
 
 
 --
--- Name: index_activity_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_activity_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_activity_contacts_on_uuid ON activity_contacts USING btree (uuid);
 
 
 --
--- Name: index_addresses_on_addressable_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_addresses_on_addressable_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_addresses_on_addressable_id ON addresses USING btree (addressable_id);
 
 
 --
--- Name: index_addresses_on_lower_city; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_addresses_on_lower_city; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_addresses_on_lower_city ON addresses USING btree (lower((city)::text));
 
 
 --
--- Name: index_addresses_on_lower_street; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_addresses_on_lower_street; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_addresses_on_lower_street ON addresses USING btree (lower(street));
 
 
 --
--- Name: index_addresses_on_master_address_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_addresses_on_master_address_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_addresses_on_master_address_id ON addresses USING btree (master_address_id);
 
 
 --
--- Name: index_addresses_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_addresses_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_addresses_on_remote_id ON addresses USING btree (remote_id);
 
 
 --
--- Name: index_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_addresses_on_uuid ON addresses USING btree (uuid);
 
 
 --
--- Name: index_admin_impersonation_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_admin_impersonation_logs_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_admin_impersonation_logs_on_uuid ON admin_impersonation_logs USING btree (uuid);
 
 
 --
--- Name: index_admin_reset_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_admin_reset_logs_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_admin_reset_logs_on_uuid ON admin_reset_logs USING btree (uuid);
 
 
 --
--- Name: index_appeal_contacts_on_appeal_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_appeal_contacts_on_appeal_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_appeal_contacts_on_appeal_id ON appeal_contacts USING btree (appeal_id);
 
 
 --
--- Name: index_appeal_contacts_on_appeal_id_and_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_appeal_contacts_on_appeal_id_and_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_appeal_contacts_on_appeal_id_and_contact_id ON appeal_contacts USING btree (appeal_id, contact_id);
 
 
 --
--- Name: index_appeal_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_appeal_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_appeal_contacts_on_contact_id ON appeal_contacts USING btree (contact_id);
 
 
 --
--- Name: index_appeal_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_appeal_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_appeal_contacts_on_uuid ON appeal_contacts USING btree (uuid);
 
 
 --
--- Name: index_appeal_excluded_appeal_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_appeal_excluded_appeal_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_appeal_excluded_appeal_contacts_on_uuid ON appeal_excluded_appeal_contacts USING btree (uuid);
 
 
 --
--- Name: index_appeals_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_appeals_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_appeals_on_account_list_id ON appeals USING btree (account_list_id);
 
 
 --
--- Name: index_appeals_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_appeals_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_appeals_on_uuid ON appeals USING btree (uuid);
 
 
 --
--- Name: index_companies_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_companies_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_companies_on_uuid ON companies USING btree (uuid);
 
 
 --
--- Name: index_company_partnerships_on_company_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_company_partnerships_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_company_partnerships_on_company_id ON company_partnerships USING btree (company_id);
 
 
 --
--- Name: index_company_partnerships_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_company_partnerships_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_company_partnerships_on_uuid ON company_partnerships USING btree (uuid);
 
 
 --
--- Name: index_company_positions_on_company_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_company_positions_on_company_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_company_positions_on_company_id ON company_positions USING btree (company_id);
 
 
 --
--- Name: index_company_positions_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_company_positions_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_company_positions_on_person_id ON company_positions USING btree (person_id);
 
 
 --
--- Name: index_company_positions_on_start_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_company_positions_on_start_date; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_company_positions_on_start_date ON company_positions USING btree (start_date);
 
 
 --
--- Name: index_company_positions_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_company_positions_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_company_positions_on_uuid ON company_positions USING btree (uuid);
 
 
 --
--- Name: index_contact_donor_accounts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_donor_accounts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contact_donor_accounts_on_contact_id ON contact_donor_accounts USING btree (contact_id);
 
 
 --
--- Name: index_contact_donor_accounts_on_donor_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_donor_accounts_on_donor_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contact_donor_accounts_on_donor_account_id ON contact_donor_accounts USING btree (donor_account_id);
 
 
 --
--- Name: index_contact_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_contact_donor_accounts_on_uuid ON contact_donor_accounts USING btree (uuid);
 
 
 --
--- Name: index_contact_notes_logs_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_notes_logs_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contact_notes_logs_on_contact_id ON contact_notes_logs USING btree (contact_id);
 
 
 --
--- Name: index_contact_notes_logs_on_recorded_on; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_notes_logs_on_recorded_on; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contact_notes_logs_on_recorded_on ON contact_notes_logs USING btree (recorded_on);
 
 
 --
--- Name: index_contact_notes_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_notes_logs_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_contact_notes_logs_on_uuid ON contact_notes_logs USING btree (uuid);
 
 
 --
--- Name: index_contact_people_on_contact_id_and_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_people_on_contact_id_and_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_contact_people_on_contact_id_and_person_id ON contact_people USING btree (contact_id, person_id);
 
 
 --
--- Name: index_contact_people_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_people_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contact_people_on_person_id ON contact_people USING btree (person_id);
 
 
 --
--- Name: index_contact_people_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_people_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_contact_people_on_uuid ON contact_people USING btree (uuid);
 
 
 --
--- Name: index_contact_referrals_on_referred_to_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_referrals_on_referred_to_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contact_referrals_on_referred_to_id ON contact_referrals USING btree (referred_to_id);
 
 
 --
--- Name: index_contact_referrals_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contact_referrals_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_contact_referrals_on_uuid ON contact_referrals USING btree (uuid);
 
 
 --
--- Name: index_contacts_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contacts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contacts_on_account_list_id ON contacts USING btree (account_list_id);
 
 
 --
--- Name: index_contacts_on_last_donation_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contacts_on_last_donation_date; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contacts_on_last_donation_date ON contacts USING btree (last_donation_date);
 
 
 --
--- Name: index_contacts_on_status_validated_at; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contacts_on_status_validated_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contacts_on_status_validated_at ON contacts USING btree (status_validated_at);
 
 
 --
--- Name: index_contacts_on_tnt_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contacts_on_tnt_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contacts_on_tnt_id ON contacts USING btree (tnt_id);
 
 
 --
--- Name: index_contacts_on_total_donations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contacts_on_total_donations; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_contacts_on_total_donations ON contacts USING btree (total_donations);
 
 
 --
--- Name: index_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_contacts_on_uuid ON contacts USING btree (uuid);
 
 
 --
--- Name: index_currency_aliases_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_currency_aliases_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_currency_aliases_on_uuid ON currency_aliases USING btree (uuid);
 
 
 --
--- Name: index_currency_rates_on_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_currency_rates_on_code; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_currency_rates_on_code ON currency_rates USING btree (code);
 
 
 --
--- Name: index_currency_rates_on_code_and_exchanged_on; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_currency_rates_on_code_and_exchanged_on; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_currency_rates_on_code_and_exchanged_on ON currency_rates USING btree (code, exchanged_on);
 
 
 --
--- Name: index_currency_rates_on_exchanged_on; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_currency_rates_on_exchanged_on; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_currency_rates_on_exchanged_on ON currency_rates USING btree (exchanged_on);
 
 
 --
--- Name: index_currency_rates_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_currency_rates_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_currency_rates_on_uuid ON currency_rates USING btree (uuid);
 
 
 --
--- Name: index_designation_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_designation_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_designation_accounts_on_uuid ON designation_accounts USING btree (uuid);
 
 
 --
--- Name: index_designation_profile_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_designation_profile_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_designation_profile_accounts_on_uuid ON designation_profile_accounts USING btree (uuid);
 
 
 --
--- Name: index_designation_profiles_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_designation_profiles_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_designation_profiles_on_account_list_id ON designation_profiles USING btree (account_list_id);
 
 
 --
--- Name: index_designation_profiles_on_organization_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_designation_profiles_on_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_designation_profiles_on_organization_id ON designation_profiles USING btree (organization_id);
 
 
 --
--- Name: index_designation_profiles_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_designation_profiles_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_designation_profiles_on_uuid ON designation_profiles USING btree (uuid);
 
 
 --
--- Name: index_donations_on_appeal_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donations_on_appeal_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_donations_on_appeal_id ON donations USING btree (appeal_id);
 
 
 --
--- Name: index_donations_on_donation_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donations_on_donation_date; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_donations_on_donation_date ON donations USING btree (donation_date);
 
 
 --
--- Name: index_donations_on_donor_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donations_on_donor_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_donations_on_donor_account_id ON donations USING btree (donor_account_id);
 
 
 --
--- Name: index_donations_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donations_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_donations_on_uuid ON donations USING btree (uuid);
 
 
 --
--- Name: index_donor_account_people_on_donor_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donor_account_people_on_donor_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_donor_account_people_on_donor_account_id ON donor_account_people USING btree (donor_account_id);
 
 
 --
--- Name: index_donor_account_people_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donor_account_people_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_donor_account_people_on_person_id ON donor_account_people USING btree (person_id);
 
 
 --
--- Name: index_donor_account_people_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donor_account_people_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_donor_account_people_on_uuid ON donor_account_people USING btree (uuid);
 
 
 --
--- Name: index_donor_accounts_on_last_donation_date; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donor_accounts_on_last_donation_date; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_donor_accounts_on_last_donation_date ON donor_accounts USING btree (last_donation_date);
 
 
 --
--- Name: index_donor_accounts_on_organization_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donor_accounts_on_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_donor_accounts_on_organization_id ON donor_accounts USING btree (organization_id);
 
 
 --
--- Name: index_donor_accounts_on_organization_id_and_account_number; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donor_accounts_on_organization_id_and_account_number; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_donor_accounts_on_organization_id_and_account_number ON donor_accounts USING btree (organization_id, account_number);
 
 
 --
--- Name: index_donor_accounts_on_total_donations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donor_accounts_on_total_donations; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_donor_accounts_on_total_donations ON donor_accounts USING btree (total_donations);
 
 
 --
--- Name: index_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_donor_accounts_on_uuid ON donor_accounts USING btree (uuid);
 
 
 --
--- Name: index_email_addresses_on_email_and_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_email_addresses_on_email_and_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_email_addresses_on_email_and_person_id ON email_addresses USING btree (email, person_id);
 
 
 --
--- Name: index_email_addresses_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_email_addresses_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_email_addresses_on_person_id ON email_addresses USING btree (person_id);
 
 
 --
--- Name: index_email_addresses_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_email_addresses_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_email_addresses_on_remote_id ON email_addresses USING btree (remote_id);
 
 
 --
--- Name: index_email_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_email_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_email_addresses_on_uuid ON email_addresses USING btree (uuid);
 
 
 --
--- Name: index_excluded_appeal_contacts_on_appeal_and_contact; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_excluded_appeal_contacts_on_appeal_and_contact; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_excluded_appeal_contacts_on_appeal_and_contact ON appeal_excluded_appeal_contacts USING btree (appeal_id, contact_id);
 
 
 --
--- Name: index_family_relationships_on_person_id_and_related_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_family_relationships_on_person_id_and_related_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_family_relationships_on_person_id_and_related_person_id ON family_relationships USING btree (person_id, related_person_id);
 
 
 --
--- Name: index_family_relationships_on_related_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_family_relationships_on_related_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_family_relationships_on_related_person_id ON family_relationships USING btree (related_person_id);
 
 
 --
--- Name: index_family_relationships_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_family_relationships_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_family_relationships_on_uuid ON family_relationships USING btree (uuid);
 
 
 --
--- Name: index_google_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_contacts_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_contacts_on_contact_id ON google_contacts USING btree (contact_id);
 
 
 --
--- Name: index_google_contacts_on_google_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_contacts_on_google_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_contacts_on_google_account_id ON google_contacts USING btree (google_account_id);
 
 
 --
--- Name: index_google_contacts_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_contacts_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_contacts_on_person_id ON google_contacts USING btree (person_id);
 
 
 --
--- Name: index_google_contacts_on_person_id_and_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_contacts_on_person_id_and_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_contacts_on_person_id_and_contact_id ON google_contacts USING btree (person_id, contact_id);
 
 
 --
--- Name: index_google_contacts_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_contacts_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_contacts_on_remote_id ON google_contacts USING btree (remote_id);
 
 
 --
--- Name: index_google_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_contacts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_google_contacts_on_uuid ON google_contacts USING btree (uuid);
 
 
 --
--- Name: index_google_email_activities_on_activity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_email_activities_on_activity_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_email_activities_on_activity_id ON google_email_activities USING btree (activity_id);
 
 
 --
--- Name: index_google_email_activities_on_google_email_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_email_activities_on_google_email_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_email_activities_on_google_email_id ON google_email_activities USING btree (google_email_id);
 
 
 --
--- Name: index_google_email_activities_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_email_activities_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_google_email_activities_on_uuid ON google_email_activities USING btree (uuid);
 
 
 --
--- Name: index_google_emails_on_google_account_id_and_google_email_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_emails_on_google_account_id_and_google_email_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_emails_on_google_account_id_and_google_email_id ON google_emails USING btree (google_account_id, google_email_id);
 
 
 --
--- Name: index_google_emails_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_emails_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_google_emails_on_uuid ON google_emails USING btree (uuid);
 
 
 --
--- Name: index_google_events_on_activity_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_events_on_activity_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_events_on_activity_id ON google_events USING btree (activity_id);
 
 
 --
--- Name: index_google_events_on_google_integration_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_events_on_google_integration_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_events_on_google_integration_id ON google_events USING btree (google_integration_id);
 
 
 --
--- Name: index_google_events_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_events_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_google_events_on_uuid ON google_events USING btree (uuid);
 
 
 --
--- Name: index_google_integrations_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_integrations_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_integrations_on_account_list_id ON google_integrations USING btree (account_list_id);
 
 
 --
--- Name: index_google_integrations_on_google_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_integrations_on_google_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_google_integrations_on_google_account_id ON google_integrations USING btree (google_account_id);
 
 
 --
--- Name: index_google_integrations_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_google_integrations_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_google_integrations_on_uuid ON google_integrations USING btree (uuid);
 
 
 --
--- Name: index_help_requests_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_help_requests_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_help_requests_on_uuid ON help_requests USING btree (uuid);
 
 
 --
--- Name: index_imports_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_imports_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_imports_on_account_list_id ON imports USING btree (account_list_id);
 
 
 --
--- Name: index_imports_on_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_imports_on_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_imports_on_user_id ON imports USING btree (user_id);
 
 
 --
--- Name: index_imports_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_imports_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_imports_on_uuid ON imports USING btree (uuid);
 
 
 --
--- Name: index_mail_chimp_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_mail_chimp_accounts_on_account_list_id ON mail_chimp_accounts USING btree (account_list_id);
 
 
 --
--- Name: index_mail_chimp_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_mail_chimp_accounts_on_uuid ON mail_chimp_accounts USING btree (uuid);
 
 
 --
--- Name: index_mail_chimp_appeal_lists_on_appeal_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_appeal_lists_on_appeal_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_mail_chimp_appeal_lists_on_appeal_list_id ON mail_chimp_appeal_lists USING btree (appeal_list_id);
 
 
 --
--- Name: index_mail_chimp_appeal_lists_on_mail_chimp_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_appeal_lists_on_mail_chimp_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_mail_chimp_appeal_lists_on_mail_chimp_account_id ON mail_chimp_appeal_lists USING btree (mail_chimp_account_id);
 
 
 --
--- Name: index_mail_chimp_appeal_lists_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_appeal_lists_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_mail_chimp_appeal_lists_on_uuid ON mail_chimp_appeal_lists USING btree (uuid);
 
 
 --
--- Name: index_mail_chimp_members_on_email; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_members_on_email; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_mail_chimp_members_on_email ON mail_chimp_members USING btree (email);
 
 
 --
--- Name: index_mail_chimp_members_on_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_members_on_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_mail_chimp_members_on_list_id ON mail_chimp_members USING btree (list_id);
 
 
 --
--- Name: index_mail_chimp_members_on_mail_chimp_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_members_on_mail_chimp_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_mail_chimp_members_on_mail_chimp_account_id ON mail_chimp_members USING btree (mail_chimp_account_id);
 
 
 --
--- Name: index_mail_chimp_members_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_mail_chimp_members_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_mail_chimp_members_on_uuid ON mail_chimp_members USING btree (uuid);
 
 
 --
--- Name: index_master_addresses_on_city; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_addresses_on_city; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_addresses_on_city ON master_addresses USING btree (city);
 
 
 --
--- Name: index_master_addresses_on_country; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_addresses_on_country; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_addresses_on_country ON master_addresses USING btree (country);
 
 
 --
--- Name: index_master_addresses_on_latitude; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_addresses_on_latitude; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_addresses_on_latitude ON master_addresses USING btree (latitude);
 
 
 --
--- Name: index_master_addresses_on_postal_code; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_addresses_on_postal_code; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_addresses_on_postal_code ON master_addresses USING btree (postal_code);
 
 
 --
--- Name: index_master_addresses_on_state; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_addresses_on_state; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_addresses_on_state ON master_addresses USING btree (state);
 
 
 --
--- Name: index_master_addresses_on_street; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_addresses_on_street; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_addresses_on_street ON master_addresses USING btree (street);
 
 
 --
--- Name: index_master_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_master_addresses_on_uuid ON master_addresses USING btree (uuid);
 
 
 --
--- Name: index_master_companies_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_companies_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_master_companies_on_uuid ON master_companies USING btree (uuid);
 
 
 --
--- Name: index_master_people_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_people_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_master_people_on_uuid ON master_people USING btree (uuid);
 
 
 --
--- Name: index_master_person_donor_accounts_on_donor_account_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_person_donor_accounts_on_donor_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_person_donor_accounts_on_donor_account_id ON master_person_donor_accounts USING btree (donor_account_id);
 
 
 --
--- Name: index_master_person_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_person_donor_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_master_person_donor_accounts_on_uuid ON master_person_donor_accounts USING btree (uuid);
 
 
 --
--- Name: index_master_person_sources_on_master_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_person_sources_on_master_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_master_person_sources_on_master_person_id ON master_person_sources USING btree (master_person_id);
 
 
 --
--- Name: index_master_person_sources_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_master_person_sources_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_master_person_sources_on_uuid ON master_person_sources USING btree (uuid);
 
 
 --
--- Name: index_messages_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_messages_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_messages_on_account_list_id ON messages USING btree (account_list_id);
 
 
 --
--- Name: index_messages_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_messages_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_messages_on_contact_id ON messages USING btree (contact_id);
 
 
 --
--- Name: index_messages_on_from_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_messages_on_from_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_messages_on_from_id ON messages USING btree (from_id);
 
 
 --
--- Name: index_messages_on_to_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_messages_on_to_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_messages_on_to_id ON messages USING btree (to_id);
 
 
 --
--- Name: index_messages_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_messages_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_messages_on_uuid ON messages USING btree (uuid);
 
 
 --
--- Name: index_name_male_ratios_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_name_male_ratios_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_name_male_ratios_on_name ON name_male_ratios USING btree (name);
 
 
 --
--- Name: index_name_male_ratios_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_name_male_ratios_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_name_male_ratios_on_uuid ON name_male_ratios USING btree (uuid);
 
 
 --
--- Name: index_nicknames_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_nicknames_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_nicknames_on_name ON nicknames USING btree (name);
 
 
 --
--- Name: index_nicknames_on_name_and_nickname; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_nicknames_on_name_and_nickname; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_nicknames_on_name_and_nickname ON nicknames USING btree (name, nickname);
 
 
 --
--- Name: index_nicknames_on_nickname; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_nicknames_on_nickname; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_nicknames_on_nickname ON nicknames USING btree (nickname);
 
 
 --
--- Name: index_nicknames_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_nicknames_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_nicknames_on_uuid ON nicknames USING btree (uuid);
 
 
 --
--- Name: index_notification_preferences_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notification_preferences_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notification_preferences_on_account_list_id ON notification_preferences USING btree (account_list_id);
 
 
 --
--- Name: index_notification_preferences_on_notification_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notification_preferences_on_notification_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notification_preferences_on_notification_type_id ON notification_preferences USING btree (notification_type_id);
 
 
 --
--- Name: index_notification_preferences_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notification_preferences_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_notification_preferences_on_uuid ON notification_preferences USING btree (uuid);
 
 
 --
--- Name: index_notification_types_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notification_types_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_notification_types_on_uuid ON notification_types USING btree (uuid);
 
 
 --
--- Name: index_notifications_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notifications_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notifications_on_contact_id ON notifications USING btree (contact_id);
 
 
 --
--- Name: index_notifications_on_donation_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notifications_on_donation_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notifications_on_donation_id ON notifications USING btree (donation_id);
 
 
 --
--- Name: index_notifications_on_notification_type_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notifications_on_notification_type_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_notifications_on_notification_type_id ON notifications USING btree (notification_type_id);
 
 
 --
--- Name: index_notifications_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_notifications_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_notifications_on_uuid ON notifications USING btree (uuid);
 
 
 --
--- Name: index_organizations_on_query_ini_url; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_organizations_on_query_ini_url; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_organizations_on_query_ini_url ON organizations USING btree (query_ini_url);
 
 
 --
--- Name: index_organizations_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_organizations_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_organizations_on_uuid ON organizations USING btree (uuid);
 
 
 --
--- Name: index_partner_status_logs_on_contact_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_partner_status_logs_on_contact_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_partner_status_logs_on_contact_id ON partner_status_logs USING btree (contact_id);
 
 
 --
--- Name: index_partner_status_logs_on_recorded_on; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_partner_status_logs_on_recorded_on; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_partner_status_logs_on_recorded_on ON partner_status_logs USING btree (recorded_on);
 
 
 --
--- Name: index_partner_status_logs_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_partner_status_logs_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_partner_status_logs_on_uuid ON partner_status_logs USING btree (uuid);
 
 
 --
--- Name: index_people_on_access_token; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_people_on_access_token; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_people_on_access_token ON people USING btree (access_token);
 
 
 --
--- Name: index_people_on_first_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_people_on_first_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_people_on_first_name ON people USING btree (first_name);
 
 
 --
--- Name: index_people_on_last_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_people_on_last_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_people_on_last_name ON people USING btree (last_name);
 
 
 --
--- Name: index_people_on_master_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_people_on_master_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_people_on_master_person_id ON people USING btree (master_person_id);
 
 
 --
--- Name: index_people_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_people_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_people_on_uuid ON people USING btree (uuid);
 
 
 --
--- Name: index_person_facebook_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_facebook_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_facebook_accounts_on_person_id_and_remote_id ON person_facebook_accounts USING btree (person_id, remote_id);
 
 
 --
--- Name: index_person_facebook_accounts_on_person_id_and_username; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_facebook_accounts_on_person_id_and_username; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_facebook_accounts_on_person_id_and_username ON person_facebook_accounts USING btree (person_id, username);
 
 
 --
--- Name: index_person_facebook_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_facebook_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_facebook_accounts_on_remote_id ON person_facebook_accounts USING btree (remote_id);
 
 
 --
--- Name: index_person_facebook_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_facebook_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_facebook_accounts_on_uuid ON person_facebook_accounts USING btree (uuid);
 
 
 --
--- Name: index_person_google_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_google_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_google_accounts_on_person_id ON person_google_accounts USING btree (person_id);
 
 
 --
--- Name: index_person_google_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_google_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_google_accounts_on_remote_id ON person_google_accounts USING btree (remote_id);
 
 
 --
--- Name: index_person_google_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_google_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_google_accounts_on_uuid ON person_google_accounts USING btree (uuid);
 
 
 --
--- Name: index_person_key_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_key_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_key_accounts_on_person_id ON person_key_accounts USING btree (person_id);
 
 
 --
--- Name: index_person_key_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_key_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_key_accounts_on_remote_id ON person_key_accounts USING btree (remote_id);
 
 
 --
--- Name: index_person_key_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_key_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_key_accounts_on_uuid ON person_key_accounts USING btree (uuid);
 
 
 --
--- Name: index_person_linkedin_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_linkedin_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_linkedin_accounts_on_person_id_and_remote_id ON person_linkedin_accounts USING btree (person_id, remote_id);
 
 
 --
--- Name: index_person_linkedin_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_linkedin_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_linkedin_accounts_on_remote_id ON person_linkedin_accounts USING btree (remote_id);
 
 
 --
--- Name: index_person_linkedin_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_linkedin_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_linkedin_accounts_on_uuid ON person_linkedin_accounts USING btree (uuid);
 
 
 --
--- Name: index_person_options_on_key_and_user_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_options_on_key_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_options_on_key_and_user_id ON person_options USING btree (key, user_id);
 
 
 --
--- Name: index_person_options_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_options_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_options_on_uuid ON person_options USING btree (uuid);
 
 
 --
--- Name: index_person_organization_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_organization_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_organization_accounts_on_uuid ON person_organization_accounts USING btree (uuid);
 
 
 --
--- Name: index_person_relay_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_relay_accounts_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_relay_accounts_on_person_id ON person_relay_accounts USING btree (person_id);
 
 
 --
--- Name: index_person_relay_accounts_on_relay_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_relay_accounts_on_relay_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_relay_accounts_on_relay_remote_id ON person_relay_accounts USING btree (relay_remote_id);
 
 
 --
--- Name: index_person_relay_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_relay_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_relay_accounts_on_uuid ON person_relay_accounts USING btree (uuid);
 
 
 --
--- Name: index_person_twitter_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_twitter_accounts_on_person_id_and_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_twitter_accounts_on_person_id_and_remote_id ON person_twitter_accounts USING btree (person_id, remote_id);
 
 
 --
--- Name: index_person_twitter_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_twitter_accounts_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_twitter_accounts_on_remote_id ON person_twitter_accounts USING btree (remote_id);
 
 
 --
--- Name: index_person_twitter_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_twitter_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_twitter_accounts_on_uuid ON person_twitter_accounts USING btree (uuid);
 
 
 --
--- Name: index_person_websites_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_websites_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_person_websites_on_person_id ON person_websites USING btree (person_id);
 
 
 --
--- Name: index_person_websites_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_person_websites_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_person_websites_on_uuid ON person_websites USING btree (uuid);
 
 
 --
--- Name: index_phone_numbers_on_person_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_phone_numbers_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_phone_numbers_on_person_id ON phone_numbers USING btree (person_id);
 
 
 --
--- Name: index_phone_numbers_on_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_phone_numbers_on_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_phone_numbers_on_remote_id ON phone_numbers USING btree (remote_id);
 
 
 --
--- Name: index_phone_numbers_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_phone_numbers_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_phone_numbers_on_uuid ON phone_numbers USING btree (uuid);
 
 
 --
--- Name: index_pictures_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_pictures_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_pictures_on_uuid ON pictures USING btree (uuid);
 
 
 --
--- Name: index_pls_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_pls_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_pls_accounts_on_account_list_id ON pls_accounts USING btree (account_list_id);
 
 
 --
--- Name: index_pls_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_pls_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_pls_accounts_on_uuid ON pls_accounts USING btree (uuid);
 
 
 --
--- Name: index_prayer_letters_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_prayer_letters_accounts_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_prayer_letters_accounts_on_account_list_id ON prayer_letters_accounts USING btree (account_list_id);
 
 
 --
--- Name: index_prayer_letters_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_prayer_letters_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_prayer_letters_accounts_on_uuid ON prayer_letters_accounts USING btree (uuid);
 
 
 --
--- Name: index_recurring_recommendation_results_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_recurring_recommendation_results_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_recurring_recommendation_results_on_uuid ON recurring_recommendation_results USING btree (uuid);
 
 
 --
--- Name: index_remote_id_on_person_relay_account; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_remote_id_on_person_relay_account; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_remote_id_on_person_relay_account ON person_relay_accounts USING btree (lower((relay_remote_id)::text));
 
 
 --
--- Name: index_taggings_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_taggings_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_taggings_on_uuid ON taggings USING btree (uuid);
 
 
 --
--- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_tags_on_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_tags_on_name ON tags USING btree (name);
 
 
 --
--- Name: index_tags_on_uuid; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_tags_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_tags_on_uuid ON tags USING btree (uuid);
 
 
 --
--- Name: index_versions_on_item_type; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_versions_on_item_type; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_versions_on_item_type ON versions USING btree (item_type, event, related_object_type, related_object_id, created_at, item_id);
 
 
 --
--- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_versions_on_item_type_and_item_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_versions_on_item_type_and_item_id ON versions USING btree (item_type, item_id);
 
 
 --
--- Name: index_versions_on_whodunnit; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: index_versions_on_whodunnit; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_versions_on_whodunnit ON versions USING btree (whodunnit);
 
 
 --
--- Name: mail_chimp_members_email_list_account_uniq; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: mail_chimp_members_email_list_account_uniq; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX mail_chimp_members_email_list_account_uniq ON mail_chimp_members USING btree (mail_chimp_account_id, list_id, email);
 
 
 --
--- Name: notification_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: notification_index; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX notification_index ON notifications USING btree (contact_id, notification_type_id, donation_id);
 
 
 --
--- Name: organization_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: organization_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX organization_remote_id ON master_person_sources USING btree (organization_id, remote_id);
 
 
 --
--- Name: person_account; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: person_account; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX person_account ON master_person_donor_accounts USING btree (master_person_id, donor_account_id);
 
 
 --
--- Name: person_relay_accounts_on_lower_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: person_relay_accounts_on_lower_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX person_relay_accounts_on_lower_remote_id ON person_relay_accounts USING btree (lower((remote_id)::text));
 
 
 --
--- Name: picture_of; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: picture_of; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX picture_of ON pictures USING btree (picture_of_id, picture_of_type);
 
 
 --
--- Name: referrals; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: referrals; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX referrals ON contact_referrals USING btree (referred_by_id, referred_to_id);
 
 
 --
--- Name: related_object_index; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: related_object_index; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX related_object_index ON versions USING btree (item_type, related_object_type, related_object_id, created_at);
 
 
 --
--- Name: taggings_idx; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: taggings_idx; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX taggings_idx ON taggings USING btree (tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type);
 
 
 --
--- Name: tags_on_lower_name; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: tags_on_lower_name; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX tags_on_lower_name ON tags USING btree (lower((name)::text));
 
 
 --
--- Name: unique_account; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_account; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_account ON account_list_entries USING btree (account_list_id, designation_account_id);
 
 
 --
--- Name: unique_company_account; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_company_account; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_company_account ON company_partnerships USING btree (account_list_id, company_id);
 
 
 --
--- Name: unique_designation_org; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_designation_org; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_designation_org ON designation_accounts USING btree (organization_id, designation_number);
 
 
 --
--- Name: unique_donation_designation; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_donation_designation; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_donation_designation ON donations USING btree (designation_account_id, remote_id);
 
 
 --
--- Name: unique_remote_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_remote_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_remote_id ON designation_profiles USING btree (user_id, organization_id, remote_id);
 
 
 --
--- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: unique_schema_migrations; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX unique_schema_migrations ON schema_migrations USING btree (version);
 
 
 --
--- Name: user_id_and_organization_id; Type: INDEX; Schema: public; Owner: -; Tablespace: 
+-- Name: user_id_and_organization_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX user_id_and_organization_id ON person_organization_accounts USING btree (person_id, organization_id);
@@ -5468,7 +5472,7 @@ ALTER TABLE ONLY people
 -- PostgreSQL database dump complete
 --
 
-SET search_path TO "$user",public;
+SET search_path TO "$user", public;
 
 INSERT INTO schema_migrations (version) VALUES ('20120201152759');
 

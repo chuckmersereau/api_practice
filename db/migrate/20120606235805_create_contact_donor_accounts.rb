@@ -4,7 +4,7 @@ class CreateContactDonorAccounts < ActiveRecord::Migration
       t.belongs_to :contact
       t.belongs_to :donor_account
 
-      t.timestamps
+      t.timestamps null: false
     end
     remove_index :contacts, name: :index_contacts_on_donor_account_id_and_account_list_id
     Contact.all.each do |c|

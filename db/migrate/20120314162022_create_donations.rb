@@ -13,7 +13,7 @@ class CreateDonations < ActiveRecord::Migration
       t.text :memo
       t.date :donation_date
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :donations, :donor_account_id
     add_index :donations, [:designation_account_id, :remote_id], name: 'unique_donation_designation', unique: true

@@ -4,7 +4,7 @@ class CreateCompanyPartnerships < ActiveRecord::Migration
       t.belongs_to :account_list
       t.belongs_to :company
 
-      t.timestamps
+      t.timestamps null: false
     end
     add_index :company_partnerships, [:account_list_id, :company_id], name: 'unique_company_account', unique: true
     add_index :company_partnerships, :company_id

@@ -26,8 +26,7 @@ resource 'Account Lists > Imports > from TNT XML' do
       file: Rack::Test::UploadedFile.new(Rails.root.join('spec', 'fixtures', 'tnt', 'tnt_export.xml'))
     }
 
-    build(:import)
-      .attributes
+    attributes_for(:import)
       .reject { |attr| attr.to_s.end_with?('_id') }
       .tap { |attributes| attributes.delete('uuid') }.merge(attrs)
   end
