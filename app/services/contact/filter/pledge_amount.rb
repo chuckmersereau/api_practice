@@ -1,7 +1,6 @@
 class Contact::Filter::PledgeAmount < Contact::Filter::Base
   def execute_query(contacts, filters)
-    return unless filters[:pledge_amount].is_a?(Array)
-    contacts.where(pledge_amount: filters[:pledge_amount])
+    contacts.where(pledge_amount: filters[:pledge_amount].split(',').map(&:strip))
   end
 
   def title

@@ -1,7 +1,8 @@
 class Contact::Filter::MetroArea < Contact::Filter::Base
   def execute_query(contacts, filters)
-    filters[:metro_area] << nil if Array(filters[:metro_area]).delete('none')
-    contacts.where('addresses.metro_area' => filters[:metro_area],
+    metro_area_filters = filters[:metro_area].split(',').map(&:strip)
+    metro_area_filters << nil if metro_area_filters.delete('none')
+    contacts.where('addresses.metro_area' => metro_area_filters,
                    'addresses.historic' => filters[:address_historic] == 'true')
             .includes(:addresses)
             .references('addresses')

@@ -1,5 +1,5 @@
 class Contact::Filter::Ids < Contact::Filter::Base
   def execute_query(contacts, filters)
-    contacts.where('contacts.uuid' => filters[:ids].split(','))
+    contacts.where('contacts.uuid' => filters[:ids].split(',').map(&:strip))
   end
 end

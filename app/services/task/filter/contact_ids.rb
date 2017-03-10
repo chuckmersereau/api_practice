@@ -1,7 +1,6 @@
 class Task::Filter::ContactIds < Task::Filter::Base
   def execute_query(tasks, filters)
-    filters[:contact_ids] = filters[:contact_ids].split(',') if filters[:contact_ids].is_a?(String)
-    tasks.includes(:contacts).references(:contacts).where(contacts: { uuid: filters[:contact_ids] })
+    tasks.joins(:contacts).where(contacts: { uuid: filters[:contact_ids].split(',').map(&:strip) })
   end
 
   def title

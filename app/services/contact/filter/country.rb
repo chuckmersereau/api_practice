@@ -1,7 +1,8 @@
 class Contact::Filter::Country < Contact::Filter::Base
   def execute_query(contacts, filters)
-    filters[:country] << nil if Array(filters[:country]).delete('none')
-    contacts.where('addresses.country' => filters[:country],
+    country_filters = filters[:country].split(',').map(&:strip)
+    country_filters << nil if country_filters.delete('none')
+    contacts.where('addresses.country' => country_filters,
                    'addresses.historic' => filters[:address_historic] == 'true')
             .includes(:addresses)
             .references('addresses')

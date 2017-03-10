@@ -27,7 +27,8 @@ class Contact::Filter::DonationAmountRange < Contact::Filter::Base
   end
 
   def valid_filters?(filters)
-    super && (filters[:donation_amount_range][:min].present? || filters[:donation_amount_range][:max].present?)
+    filters[:donation_amount_range].is_a?(Hash) &&
+      (filters[:donation_amount_range][:min].present? || filters[:donation_amount_range][:max].present?)
   end
 
   def sanitize_filters(filters)

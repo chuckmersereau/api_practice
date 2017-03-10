@@ -1,14 +1,14 @@
 class Contact::Filter::Status < Contact::Filter::Base
   def execute_query(contacts, filters)
-    filters[:status] = filters[:status].split(',').collect(&:strip)
-    filters[:status] << 'null' if (filters[:status].include? '') && !filters[:status].include?('null')
-    filters[:status] << '' if (filters[:status].include? 'null') && !filters[:status].include?('')
-    filters[:status] += Contact.active_statuses if filters[:status].include?('active')
-    filters[:status] += Contact.inactive_statuses if filters[:status].include?('hidden')
-    if filters[:status].include? 'null'
-      return contacts.where('status is null OR status in (?)', filters[:status])
+    status_filters = filters[:status].split(',').map(&:strip)
+    status_filters << 'null' if (status_filters.include? '') && !status_filters.include?('null')
+    status_filters << '' if (status_filters.include? 'null') && !status_filters.include?('')
+    status_filters += Contact.active_statuses if status_filters.include?('active')
+    status_filters += Contact.inactive_statuses if status_filters.include?('hidden')
+    if status_filters.include? 'null'
+      return contacts.where('status is null OR status in (?)', status_filters)
     end
-    contacts.where(status: filters[:status])
+    contacts.where(status: status_filters)
   end
 
   def title

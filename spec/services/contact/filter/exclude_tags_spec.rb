@@ -35,9 +35,6 @@ RSpec.describe Contact::Filter::ExcludeTags do
       it 'accepts tags as comma separated string' do
         expect(described_class.query(contacts, { exclude_tags: 'tag1,tag2,tag3' }, nil).to_a).to match_array [contact_four]
       end
-      it 'accepts tags as an array' do
-        expect(described_class.query(contacts, { exclude_tags: %w(tag1 tag2 tag3) }, nil).to_a).to match_array [contact_four]
-      end
     end
   end
 end

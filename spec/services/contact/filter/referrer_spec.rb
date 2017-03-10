@@ -41,7 +41,7 @@ RSpec.describe Contact::Filter::Referrer do
 
     context 'filter by no referrer' do
       it 'returns only contacts that have no referrer' do
-        expect(described_class.query(contacts, { referrer: ['none'] }, nil).to_a).to match_array [contact_one, contact_three, contact_four]
+        expect(described_class.query(contacts, { referrer: 'none' }, nil).to_a).to match_array [contact_one, contact_three, contact_four]
       end
     end
 
@@ -53,7 +53,7 @@ RSpec.describe Contact::Filter::Referrer do
 
     context 'filter by referrer' do
       it 'filters multiple referrers' do
-        expect(described_class.query(contacts, { referrer: [contact_one.id.to_s, contact_one.id.to_s] }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { referrer: "#{contact_one.id}, #{contact_one.id}" }, nil).to_a).to match_array [contact_two]
       end
       it 'filters a single referrer' do
         expect(described_class.query(contacts, { referrer: contact_one.id.to_s }, nil).to_a).to match_array [contact_two]
@@ -62,7 +62,7 @@ RSpec.describe Contact::Filter::Referrer do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { referrer: [contact_one.id.to_s, 'none'] }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        expect(described_class.query(contacts, { referrer: "#{contact_one.id}, none" }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
   end

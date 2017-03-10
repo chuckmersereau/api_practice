@@ -38,13 +38,13 @@ RSpec.describe Contact::Filter::Likely do
 
     context 'filter by no likely to give' do
       it 'returns only contacts that have no likely to give' do
-        expect(described_class.query(contacts, { likely: ['none'] }, nil).to_a).to eq [contact_four]
+        expect(described_class.query(contacts, { likely: 'none' }, nil).to_a).to eq [contact_four]
       end
     end
 
     context 'filter by likely to give' do
       it 'filters multiple likely to give' do
-        expect(described_class.query(contacts, { likely: ['Least Likely', 'Likely'] }, nil).to_a).to eq [contact_one, contact_two]
+        expect(described_class.query(contacts, { likely: 'Least Likely, Likely' }, nil).to_a).to eq [contact_one, contact_two]
       end
       it 'filters a single likely to give' do
         expect(described_class.query(contacts, { likely: 'Most Likely' }, nil).to_a).to eq [contact_three]
@@ -53,7 +53,7 @@ RSpec.describe Contact::Filter::Likely do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { likely: ['none', 'Most Likely', 'Likely'] }, nil).to_a).to eq [contact_two, contact_three, contact_four]
+        expect(described_class.query(contacts, { likely: 'none, Most Likely, Likely' }, nil).to_a).to eq [contact_two, contact_three, contact_four]
       end
     end
   end

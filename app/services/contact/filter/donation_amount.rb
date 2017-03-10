@@ -1,7 +1,8 @@
+
 class Contact::Filter::DonationAmount < Contact::Filter::Base
   def execute_query(contacts, filters)
     contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations])
-    contacts = contacts.where(donations: { amount: filters[:donation_amount] })
+    contacts = contacts.where(donations: { amount: filters[:donation_amount].split(',').map(&:strip) })
     contacts
   end
 
@@ -23,9 +24,5 @@ class Contact::Filter::DonationAmount < Contact::Filter::Base
                  .uniq
                  .sort
                  .collect { |amount| { name: amount, id: amount } }
-  end
-
-  def valid_filters?(filters)
-    super && filters[:donation_amount].is_a?(Array)
   end
 end

@@ -1,6 +1,6 @@
 class Contact::Filter::Referrer < Contact::Filter::Base
   def execute_query(contacts, filters)
-    filters = Array(filters[:referrer])
+    filters = filters[:referrer].split(',').map(&:strip)
     filters << nil if filters.delete('none')
     contacts = contacts.includes(:contact_referrals_to_me).where.not(contact_referrals: { referred_by_id: nil }) if filters.delete('any')
     contacts = contacts.includes(:contact_referrals_to_me).where(contact_referrals: { referred_by_id: filters }) if filters.present?

@@ -52,13 +52,13 @@ RSpec.describe Contact::Filter::Country do
 
     context 'filter by no country' do
       it 'returns only contacts that have no country' do
-        expect(described_class.query(contacts, { country: ['none'] }, nil).to_a).to match_array [contact_three, contact_four]
+        expect(described_class.query(contacts, { country: 'none' }, nil).to_a).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by country' do
       it 'filters multiple countries' do
-        expect(described_class.query(contacts, { country: ['United States', 'United States'] }, nil).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { country: 'United States, United States' }, nil).to_a).to match_array [contact_one, contact_two]
       end
       it 'filters a single country' do
         expect(described_class.query(contacts, { country: 'United States' }, nil).to_a).to match_array [contact_one, contact_two]
@@ -67,7 +67,7 @@ RSpec.describe Contact::Filter::Country do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { country: ['United States', 'none'] }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        expect(described_class.query(contacts, { country: 'United States, none' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
 

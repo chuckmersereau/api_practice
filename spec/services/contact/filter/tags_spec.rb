@@ -32,13 +32,13 @@ RSpec.describe Contact::Filter::Tags do
         expect(described_class.query(contacts, { tags: 'tag1' }, nil).to_a).to match_array [contact_one, contact_two]
       end
       it 'returns only contacts that have multiple tags' do
-        expect(described_class.query(contacts, { tags: 'tag1,tag2' }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { tags: 'tag1, tag2' }, nil).to_a).to match_array [contact_one]
       end
       it 'accepts tags as comma separated string' do
-        expect(described_class.query(contacts, { tags: 'tag1,tag2' }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { tags: 'tag1, tag2' }, nil).to_a).to match_array [contact_one]
       end
       it 'accepts tags as an array' do
-        expect(described_class.query(contacts, { tags: %w(tag1 tag2) }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { tags: 'tag1, tag2' }, nil).to_a).to match_array [contact_one]
       end
     end
   end

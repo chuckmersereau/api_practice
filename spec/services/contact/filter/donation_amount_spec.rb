@@ -58,10 +58,10 @@ RSpec.describe Contact::Filter::DonationAmount do
 
     context 'filter by amounts' do
       it 'returns only contacts that have given the exact amount' do
-        expect(described_class.query(contacts, { donation_amount: ['9.99'] }, account_list).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { donation_amount: '9.99' }, account_list).to_a).to match_array [contact_one]
       end
       it 'returns only contacts that have given multiple exact amounts' do
-        expect(described_class.query(contacts, { donation_amount: ['9.99', '12.34'] }, account_list).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation_amount: '9.99, 12.34' }, account_list).to_a).to match_array [contact_one, contact_two]
       end
     end
   end

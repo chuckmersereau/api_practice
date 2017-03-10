@@ -31,6 +31,6 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def full_conflict_error_message
-    "#{CONFLICT_ERROR_MESSAGE} (#{updated_at.to_time.utc.iso8601})"
+    "#{CONFLICT_ERROR_MESSAGE} (#{updated_at_was.to_time.utc.iso8601})"
   end
 end

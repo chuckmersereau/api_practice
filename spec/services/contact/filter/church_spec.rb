@@ -37,13 +37,13 @@ RSpec.describe Contact::Filter::Church do
 
     context 'filter by no church' do
       it 'returns only contacts that have no church' do
-        expect(described_class.query(contacts, { church: ['none'] }, nil).to_a).to match_array [contact_three, contact_four]
+        expect(described_class.query(contacts, { church: 'none' }, nil).to_a).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by church' do
       it 'filters multiple churches' do
-        expect(described_class.query(contacts, { church: ['My Church', 'First Pedestrian Church'] }, nil).to_a).to eq [contact_one, contact_two]
+        expect(described_class.query(contacts, { church: 'My Church, First Pedestrian Church' }, nil).to_a).to eq [contact_one, contact_two]
       end
       it 'filters a single churche' do
         expect(described_class.query(contacts, { church: 'My Church' }, nil).to_a).to eq [contact_one]
@@ -52,7 +52,7 @@ RSpec.describe Contact::Filter::Church do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { church: ['My Church', 'none'] }, nil).to_a).to match_array [contact_one, contact_three, contact_four]
+        expect(described_class.query(contacts, { church: 'My Church, none' }, nil).to_a).to match_array [contact_one, contact_three, contact_four]
       end
     end
   end

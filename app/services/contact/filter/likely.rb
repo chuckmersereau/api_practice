@@ -1,7 +1,8 @@
 class Contact::Filter::Likely < Contact::Filter::Base
   def execute_query(contacts, filters)
-    filters[:likely] << nil if Array(filters[:likely]).delete('none')
-    contacts.where(likely_to_give: filters[:likely])
+    likely_filters = filters[:likely].split(',').map(&:strip)
+    likely_filters << nil if likely_filters.delete('none')
+    contacts.where(likely_to_give: likely_filters)
   end
 
   def title

@@ -59,36 +59,36 @@ RSpec.describe Contact::Filter::Donation do
 
     context 'filter by no gifts' do
       it 'returns only contacts that have never given a donation' do
-        expect(described_class.query(contacts, { donation: ['none'] }, [account_list]).to_a).to match_array [contact_three, contact_four]
+        expect(described_class.query(contacts, { donation: 'none' }, [account_list]).to_a).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by one or more gifts' do
       it 'returns only contacts that have given at least one gift' do
-        expect(described_class.query(contacts, { donation: ['one'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: 'one' }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by first gift' do
       it 'returns only contacts that have given a first gift' do
-        expect(described_class.query(contacts, { donation: ['first'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: 'first' }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by last gift' do
       it 'returns only contacts that have given a last gift' do
-        expect(described_class.query(contacts, { donation: ['last'] }, [account_list]).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation: 'last' }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
 
     context 'filter by no gift and gift date' do
       it 'currently is expected to return no contacts' do
         expect(Contact::Filterer.new(
-          donation: ['none'],
+          donation: 'none',
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
         ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
         expect(Contact::Filterer.new(
-          donation: ['none'],
+          donation: 'none',
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
         ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
       end
@@ -97,7 +97,7 @@ RSpec.describe Contact::Filter::Donation do
     context 'filter by one gift and gift date' do
       it 'returns only contacts that have given at least one gift within the dates specified' do
         expect(Contact::Filterer.new(
-          donation: ['one'],
+          donation: 'one',
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
         ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
@@ -110,11 +110,11 @@ RSpec.describe Contact::Filter::Donation do
     context 'filter by first gift and gift date' do
       it 'returns only contacts that have given a first gift within the dates specified' do
         expect(Contact::Filterer.new(
-          donation: ['first'],
+          donation: 'first',
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
         ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
-          donation: ['first'],
+          donation: 'first',
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
         ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
       end
@@ -123,11 +123,11 @@ RSpec.describe Contact::Filter::Donation do
     context 'filter by last gift and gift date' do
       it 'returns only contacts that have given a last gift within the dates specified' do
         expect(Contact::Filterer.new(
-          donation: ['last'],
+          donation: 'last',
           donation_date: "#{2.years.ago.strftime('%m/%d/%Y')} - #{6.months.ago.strftime('%m/%d/%Y')}"
         ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
         expect(Contact::Filterer.new(
-          donation: ['last'],
+          donation: 'last',
           donation_date: "#{2.weeks.ago.strftime('%m/%d/%Y')} - #{1.day.ago.strftime('%m/%d/%Y')}"
         ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_two]
       end

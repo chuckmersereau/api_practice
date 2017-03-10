@@ -1,10 +1,11 @@
 class Contact::Filter::Donation < Contact::Filter::Base
   def execute_query(contacts, filters)
+    donation_filters = filters[:donation].split(',').map(&:strip)
     contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations])
-    contacts = contacts.where(donations: { id: nil }) if filters[:donation].include?('none')
-    contacts = contacts.where.not(donations: { id: nil }) if filters[:donation].include?('one')
-    contacts = contacts.where(donations: { id: first_donation_ids_for_each_donor_account }) if filters[:donation].include?('first')
-    contacts = contacts.where(donations: { id: last_donation_ids_for_each_donor_account }) if filters[:donation].include?('last')
+    contacts = contacts.where(donations: { id: nil }) if donation_filters.include?('none')
+    contacts = contacts.where.not(donations: { id: nil }) if donation_filters.include?('one')
+    contacts = contacts.where(donations: { id: first_donation_ids_for_each_donor_account }) if donation_filters.include?('first')
+    contacts = contacts.where(donations: { id: last_donation_ids_for_each_donor_account }) if donation_filters.include?('last')
     contacts
   end
 
@@ -25,10 +26,6 @@ class Contact::Filter::Donation < Contact::Filter::Base
      { name: _('One or More Gifts'), id: 'one' },
      { name: _('First Gift'), id: 'first' },
      { name: _('Last Gift'), id: 'last' }]
-  end
-
-  def valid_filters?(filters)
-    super && filters[:donation].is_a?(Array)
   end
 
   private

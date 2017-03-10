@@ -50,13 +50,13 @@ RSpec.describe Contact::Filter::State do
 
     context 'filter by no state' do
       it 'returns only contacts that have no state' do
-        expect(described_class.query(contacts, { state: ['none'] }, nil).to_a).to match_array [contact_three, contact_four]
+        expect(described_class.query(contacts, { state: 'none' }, nil).to_a).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by state' do
       it 'filters multiple states' do
-        expect(described_class.query(contacts, { state: %w(CA CA) }, nil).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { state: 'CA, CA' }, nil).to_a).to match_array [contact_one, contact_two]
       end
       it 'filters a single state' do
         expect(described_class.query(contacts, { state: 'CA' }, nil).to_a).to match_array [contact_one, contact_two]
@@ -65,7 +65,7 @@ RSpec.describe Contact::Filter::State do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { state: %w(CA none) }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        expect(described_class.query(contacts, { state: 'CA, none' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
 

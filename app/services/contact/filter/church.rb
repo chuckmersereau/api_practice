@@ -1,7 +1,8 @@
 class Contact::Filter::Church < Contact::Filter::Base
   def execute_query(contacts, filters)
-    filters[:church] << nil if Array(filters[:church]).delete('none')
-    contacts.where('contacts.church_name' => filters[:church])
+    church_filters = filters[:church].split(',').map(&:strip)
+    church_filters << nil if church_filters.delete('none')
+    contacts.where('contacts.church_name' => church_filters)
   end
 
   def title

@@ -50,13 +50,13 @@ RSpec.describe Contact::Filter::City do
 
     context 'filter by no city' do
       it 'returns only contacts that have no city' do
-        expect(described_class.query(contacts, { city: ['none'] }, nil).to_a).to include(contact_three, contact_four)
+        expect(described_class.query(contacts, { city: 'none' }, nil).to_a).to include(contact_three, contact_four)
       end
     end
 
     context 'filter by city' do
       it 'filters multiple cities' do
-        expect(described_class.query(contacts, { city: %w(Fremont Fremont) }, nil).to_a).to include(contact_one, contact_two)
+        expect(described_class.query(contacts, { city: 'Fremont, Fremont' }, nil).to_a).to include(contact_one, contact_two)
       end
       it 'filters a single cities' do
         expect(described_class.query(contacts, { city: 'Fremont' }, nil).to_a).to include(contact_one, contact_two)
@@ -65,7 +65,7 @@ RSpec.describe Contact::Filter::City do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { city: %w(Fremont none) }, nil).to_a).to include(contact_one, contact_two, contact_three, contact_four)
+        expect(described_class.query(contacts, { city: 'Fremont, none' }, nil).to_a).to include(contact_one, contact_two, contact_three, contact_four)
       end
     end
 

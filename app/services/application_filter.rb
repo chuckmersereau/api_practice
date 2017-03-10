@@ -95,9 +95,9 @@ class ApplicationFilter
 
   def valid_filters?(filters)
     return false unless filters[name].present?
-    return true unless filters[name].is_a?(Array)
-    return true unless filters[name].first == ''
-    false
+    return false if filters[name].is_a?(Array)
+    return false if filters[name].is_a?(Hash)
+    true
   end
 
   def name

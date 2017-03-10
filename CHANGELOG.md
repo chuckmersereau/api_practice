@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 8 March 2017
+- all filters accept comma seperated items
+
 ## 7 March 2017
 - constant_list now returning a complete currency object instead of a string
 - person duplicates endpoint is now eliminating doubles

@@ -52,13 +52,13 @@ RSpec.describe Contact::Filter::Region do
 
     context 'filter by no region' do
       it 'returns only contacts that have no region' do
-        expect(described_class.query(contacts, { region: ['none'] }, nil).to_a).to match_array [contact_three, contact_four]
+        expect(described_class.query(contacts, { region: 'none' }, nil).to_a).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by region' do
       it 'filters multiple regions' do
-        expect(described_class.query(contacts, { region: ['My Region', 'My Region'] }, nil).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { region: 'My Region, My Region' }, nil).to_a).to match_array [contact_one, contact_two]
       end
       it 'filters a single region' do
         expect(described_class.query(contacts, { region: 'My Region' }, nil).to_a).to match_array [contact_one, contact_two]
@@ -67,7 +67,7 @@ RSpec.describe Contact::Filter::Region do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { region: ['My Region', 'none'] }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        expect(described_class.query(contacts, { region: 'My Region, none' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
 

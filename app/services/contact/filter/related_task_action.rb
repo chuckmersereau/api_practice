@@ -1,11 +1,12 @@
 class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
   def execute_query(contacts, filters)
-    if filters[:related_task_action].first == 'null'
+    related_task_action_filters = filters[:related_task_action].split(',').map(&:strip)
+    if related_task_action_filter.first == 'null'
       contacts_with_activities = contacts.where('activities.completed' => false)
                                          .includes(:activities).map(&:id)
       contacts.where('contacts.id not in (?)', contacts_with_activities)
     else
-      contacts.where('activities.activity_type' => filters[:related_task_action])
+      contacts.where('activities.activity_type' => related_task_action_filters)
               .where('activities.completed' => false)
               .includes(:activities)
     end

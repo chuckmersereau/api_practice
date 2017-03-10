@@ -52,13 +52,13 @@ RSpec.describe Contact::Filter::MetroArea do
 
     context 'filter by no metro_area' do
       it 'returns only contacts that have no metro_area' do
-        expect(described_class.query(contacts, { metro_area: ['none'] }, nil).to_a).to match_array [contact_three, contact_four]
+        expect(described_class.query(contacts, { metro_area: 'none' }, nil).to_a).to match_array [contact_three, contact_four]
       end
     end
 
     context 'filter by metro_area' do
       it 'filters multiple metro_areas' do
-        expect(described_class.query(contacts, { metro_area: ['My Metro', 'My Metro'] }, nil).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { metro_area: 'My Metro, My Metro' }, nil).to_a).to match_array [contact_one, contact_two]
       end
       it 'filters a single metro_area' do
         expect(described_class.query(contacts, { metro_area: 'My Metro' }, nil).to_a).to match_array [contact_one, contact_two]
@@ -67,7 +67,7 @@ RSpec.describe Contact::Filter::MetroArea do
 
     context 'multiple filters' do
       it 'returns contacts matching multiple filters' do
-        expect(described_class.query(contacts, { metro_area: ['My Metro', 'none'] }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
+        expect(described_class.query(contacts, { metro_area: 'My Metro, none' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_four]
       end
     end
 
