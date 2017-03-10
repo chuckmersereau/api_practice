@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= yield :title || 'MPDX' %></title>
+  <%= stylesheet_link_tag    "auth/application", media: "all" %>
+  <%= javascript_include_tag "auth/application" %>
+  <%= csrf_meta_tags %>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="initial-scale=1, minimum-scale=1, width=device-width">
+</head>
+<body>
+
+<%= yield %>
+
+</body>
+</html>

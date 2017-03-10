@@ -2,8 +2,12 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 10 March 2017
+- Added Google OAuth endpoint
+- Added Prayer Letters OAuth endpoint
+
 ## 8 March 2017
-- all filters accept comma seperated items
+- all filters accept comma separated items
 
 ## 7 March 2017
 - constant_list now returning a complete currency object instead of a string

@@ -12,7 +12,8 @@ module JsonWebTokenAuthentication
   end
 
   def http_token
-    @http_token ||= auth_header.split(' ').last if auth_header.present?
+    return @http_token ||= auth_header.split(' ').last if auth_header.present?
+    return @http_token ||= params[:access_token] if params[:access_token]
   end
 
   def auth_header

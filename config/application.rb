@@ -36,7 +36,7 @@ module Mpdx
     config.log_formatter = ::Logger::Formatter.new
 
     config.assets.enabled = false
-    config.api_only = false
+    config.api_only = true
 
     config.generators do |g|
       g.assets false

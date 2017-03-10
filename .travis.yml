@@ -16,6 +16,8 @@ script:
 - bin/travis_rubocop.sh
 - bin/travis_docs.sh
 - bundle exec rake coveralls:push
+after_failure:
+- cat log/test.log
 branches:
   only:
   - master

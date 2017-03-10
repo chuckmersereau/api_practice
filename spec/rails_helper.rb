@@ -81,5 +81,6 @@ RSpec.configure do |config|
   config.include JsonApiHelper, type: :acceptance
   config.include JsonApiHelper, type: :request
   config.include MpdxHelper
+  config.include AuthHelper, :auth
   config.include ActiveSupport::Testing::TimeHelpers
 end

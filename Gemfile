@@ -3,6 +3,7 @@ source 'https://gems.contribsys.com/' do
   gem 'sidekiq-pro', '~> 3.4.0'
 end
 
+gem 'auth', path: 'engines/auth'
 gem 'active_model_serializers', '~> 0.10.3'
 gem 'activerecord-import', '~> 0.16.1'
 gem 'activesupport-json_encoder', '~> 1.1.0'
@@ -41,7 +42,6 @@ gem 'koala', '~> 1.9.0'
 gem 'linkedin', '~> 0.3.7'
 gem 'newrelic_rpm', '~> 3.7.1'
 gem 'oauth', git: 'https://github.com/CruGlobal/oauth-ruby'
-gem 'oauth2', '~> 1.2.0'
 gem 'oj', '~> 2.14.0'
 gem 'paper_trail', '~> 4.0.1'
 gem 'pg', '~> 0.18.2'

@@ -1,0 +1,8 @@
+<%= content_for(:title) { 'Error 401 (Unauthorized)' } %>
+<a href="//mpdx.org/"><span id="logo" aria-label="MPDX"></span></a>
+<p>
+  <b>401.</b> <%= params[:message] ? "#{params[:message].titleize}." : '' %> <ins>That’s an error.</ins>
+</p>
+<p>
+  The request has not been applied because it lacks valid authentication credentials for the target resource.
+</p>

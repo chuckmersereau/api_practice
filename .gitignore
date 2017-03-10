@@ -33,7 +33,7 @@ public/mobile
 node_modules
 public/dev-assets
 .vagrant
-.env.*
+.env.local
 logfile
 dump.rdb
 /cache
