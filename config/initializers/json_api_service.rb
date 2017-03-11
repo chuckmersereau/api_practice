@@ -8,8 +8,9 @@ JsonApiService.configure do |config|
     key_accounts: 'Person::KeyAccount',
     linkedin_accounts: 'Person::LinkedinAccount',
     organization_accounts: 'Person::OrganizationAccount',
+    twitter_accounts: 'Person::TwitterAccount',
     user_options: 'User::Option',
-    website: 'Person::Website'
+    websites: 'Person::Website'
   }
 
   config.ignored_foreign_keys = {

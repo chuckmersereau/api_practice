@@ -128,16 +128,18 @@ RSpec.describe Contact::Analytics, type: :model do
       inactive_contact.people << person_with_birthday_this_week_belonging_to_inactive_contact
     end
 
-    it "pulls the people who's birthdays are this week" do
+    it "pulls the people and associated contacts who's birthdays are this week" do
       analytics = Contact::Analytics.new(contacts)
-      found_ids = analytics.birthdays_this_week.ids
+      found_person_ids = analytics.birthdays_this_week.map(&:person).map(&:id)
+      found_contact_ids = analytics.birthdays_this_week.map(&:parent_contact).map(&:id)
 
-      expect(found_ids.count).to eq(1)
-      expect(found_ids).to     include person_with_birthday_this_week.id
-      expect(found_ids).not_to include person_with_birthday_last_week.id
-      expect(found_ids).not_to include person_with_birthday_next_week.id
-      expect(found_ids).not_to include deceased_person_with_birthday_this_week.id
-      expect(found_ids).not_to include person_with_birthday_this_week_belonging_to_inactive_contact.id
+      expect(found_person_ids.count).to eq(1)
+      expect(found_person_ids).to     include person_with_birthday_this_week.id
+      expect(found_person_ids).not_to include person_with_birthday_last_week.id
+      expect(found_person_ids).not_to include person_with_birthday_next_week.id
+      expect(found_person_ids).not_to include deceased_person_with_birthday_this_week.id
+      expect(found_person_ids).not_to include person_with_birthday_this_week_belonging_to_inactive_contact.id
+      expect(found_contact_ids).to    include person_with_birthday_this_week.contacts.ids.first
     end
   end
 

@@ -85,6 +85,7 @@ resource 'Contacts > Merges' do
       donor_accounts
       last_six_donations
       people
+      primary_person
       tasks
     )
   end

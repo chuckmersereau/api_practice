@@ -14,7 +14,7 @@ describe Api::V2Controller do
       resource_type :contacts
 
       def index
-        render json: (params[:filter] || {}).merge!(current_time_zone: current_time_zone.name)
+        render json: (filter_params || {}).merge!(current_time_zone: current_time_zone.name)
       end
 
       def create
@@ -23,6 +23,12 @@ describe Api::V2Controller do
 
       def update
         render json: params[:test][:attributes] || {}
+      end
+
+      private
+
+      def permitted_filters
+        [:contact_id, :date_range]
       end
     end
 
@@ -61,6 +67,15 @@ describe Api::V2Controller do
         get :index, filter: { contact_id: 'AXXSAASA222Random' }
         expect(response.status).to eq(404), invalid_status_detail
         expect(response.body).to include("Resource 'contact' with id 'AXXSAASA222Random' does not exist")
+      end
+
+      context '#date range' do
+        it 'returns a 404 when a user tries to filter with a resource that does not exist' do
+          api_login(user)
+          get :index, filter: { date_range: '01-12-2012-02/03/2014' }
+          expect(response.status).to eq(400), invalid_status_detail
+          expect(response.body).to include("Wrong format of date range, should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates")
+        end
       end
     end
 

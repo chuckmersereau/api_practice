@@ -2,8 +2,6 @@ require 'sidekiq/web'
 require 'sidekiq/cron/web'
 require 'doc_auth_constraint'
 
-UUID_REGEX = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/i.freeze
-
 Rails.application.routes.draw do
   mount Auth::Engine, at: "/auth"
   namespace :api do

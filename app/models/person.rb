@@ -97,7 +97,7 @@ class Person < ApplicationRecord
       facebook_accounts_attributes: [
         :_destroy,
         :id,
-        :url
+        :username
       ],
       family_relationships_attributes: [
         :_destroy,
@@ -266,7 +266,6 @@ class Person < ApplicationRecord
 
   # Augment the built-in rails method to prevent duplicate facebook accounts
   def facebook_accounts_attributes=(hash)
-    split_facebook_urls(hash)
     reject_dup_facebook_accounts(hash)
 
     hash.each do |_, attributes|
@@ -284,15 +283,6 @@ class Person < ApplicationRecord
           fa.save unless new_record?
         end
       end
-    end
-  end
-
-  def split_facebook_urls(hash)
-    hash.each do |_, attributes|
-      remote_id = Person::FacebookAccount.id_from_url(attributes['url'])
-      username = Person::FacebookAccount.username_from_url(attributes['url'])
-      attributes['remote_id'] = remote_id if remote_id
-      attributes['username'] = username if username
     end
   end
 

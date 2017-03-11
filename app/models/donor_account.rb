@@ -12,7 +12,7 @@ class DonorAccount < ApplicationRecord
   belongs_to :organization
   belongs_to :master_company
   validates :account_number, uniqueness: { scope: :organization_id }
-  validates :organization_id, :account_number, presence: true
+  validates :account_number, presence: true
 
   def primary_master_person
     master_people.find_by('master_person_donor_accounts.primary' => true)

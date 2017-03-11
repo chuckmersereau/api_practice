@@ -3,6 +3,10 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 10 March 2017
+- FacebookAccount on person endpoint is now accepting username and remote_id as opposed to url
+- Person object will now have only one primary address at a time
+- Removed donor_account presence validation on organization_id as requested by Mike
+- Now displaying parent_contact for people objects under birthdays_this_week field of contacts analytics
 - Added Google OAuth endpoint
 - Added Prayer Letters OAuth endpoint
 

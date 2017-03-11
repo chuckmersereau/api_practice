@@ -1,6 +1,9 @@
 require 'smarty_streets'
 
 class Address < ApplicationRecord
+  include HasPrimary
+  @@primary_scope = :person
+
   has_paper_trail on: [:create, :update, :destroy],
                   if: proc { |address| address.record_paper_trail? },
                   meta: { related_object_type: :addressable_type,

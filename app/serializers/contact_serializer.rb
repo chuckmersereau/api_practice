@@ -50,6 +50,8 @@ class ContactSerializer < ApplicationSerializer
   has_many :people
   has_many :tasks
 
+  has_one :primary_person
+
   def avatar
     contact_exhibit.avatar(:large)
   end

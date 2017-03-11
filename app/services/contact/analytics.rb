@@ -22,7 +22,9 @@ class Contact::Analytics
   end
 
   def birthdays_this_week
-    fetch_people_with_birthdays_this_week_who_are_alive_from_active_contacts
+    fetch_contact_people_with_birthdays_this_week_who_are_alive_from_active_contacts.map do |contact_person|
+      PersonWithParentContact.new(person: contact_person.person, parent_contact: contact_person.contact)
+    end
   end
 
   def anniversaries_this_week
@@ -36,23 +38,23 @@ class Contact::Analytics
   end
 
   def fetch_active_contacts_who_have_people_with_anniversaries_this_week
-    people_ids = fetch_people_with_anniversaries_this_week_who_are_alive
+    person_ids = fetch_people_with_anniversaries_this_week_who_are_alive
                  .select(:id)
 
     contacts
       .active
       .joins(:contact_people)
-      .where(contact_people: { person_id: people_ids })
+      .where(contact_people: { person_id: person_ids })
   end
 
-  def fetch_people_with_birthdays_this_week_who_are_alive_from_active_contacts
+  def fetch_contact_people_with_birthdays_this_week_who_are_alive_from_active_contacts
     contact_ids = contacts.active.select(:id)
+    person_ids = Person.with_birthday_this_week(beginning_of_week)
+                       .alive
+                       .select(:id)
 
-    Person.joins(:contact_people)
-          .where(contact_people: { contact_id: contact_ids })
-          .with_birthday_this_week(beginning_of_week)
-          .alive
-          .by_birthday
+    ContactPerson.where(contact_id: contact_ids, person_id: person_ids)
+                 .includes(:person, :contact)
   end
 
   def fetch_people_with_anniversaries_this_week_who_are_alive

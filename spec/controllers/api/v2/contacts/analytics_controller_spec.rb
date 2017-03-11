@@ -57,4 +57,16 @@ RSpec.describe Api::V2::Contacts::AnalyticsController, type: :controller do
   # These includes can be found in:
   # spec/support/shared_controller_examples.rb
   include_examples 'show_examples', except: [:sparse_fieldsets]
+
+  context '#show' do
+    context '#birthdays_this_week' do
+      let(:parent_contact_relationship) { JSON.parse(response.body)['included'].first['relationships']['parent_contact'] }
+
+      it 'includes parent_contact relationship when birthdays_this_week is included' do
+        api_login(user)
+        get :show, include: :birthdays_this_week
+        expect(parent_contact_relationship['data']['id']).to eq(contact_with_birthday_this_week.uuid)
+      end
+    end
+  end
 end

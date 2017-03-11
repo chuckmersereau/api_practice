@@ -38,7 +38,7 @@ describe Person do
       person.update_attributes('facebook_accounts_attributes' => {
                                  '0' => {
                                    '_destroy' => 'false',
-                                   'url' => 'http://facebook.com/profile.php?id=500015648'
+                                   'username' => 'random_username'
                                  },
                                  '1' => {
                                    '_destroy' => 'false',
@@ -58,11 +58,11 @@ describe Person do
       person.update_attributes('facebook_accounts_attributes' => {
                                  '0' => {
                                    '_destroy' => 'false',
-                                   'url' => 'http://facebook.com/john.doe'
+                                   'username' => 'same_username'
                                  },
                                  '1' => {
                                    '_destroy' => 'false',
-                                   'url' => 'http://facebook.com/john.doe'
+                                   'username' => 'same_username'
                                  },
                                  '1354203866590' => {
                                    '_destroy' => 'false',

@@ -33,6 +33,9 @@ public/mobile
 node_modules
 public/dev-assets
 .vagrant
+.env.development
+.env.production
+.env.staging
 .env.local
 logfile
 dump.rdb

@@ -39,9 +39,16 @@ module Filtering
   end
 
   def raise_if_bad_date_range_value(value)
-    raise_bad_request if value.to_s.include?('..')
-
+    return raise_bad_request if value_includes_a_date?(value)
     value
+  end
+
+  def value_includes_a_date?(value)
+    return false unless value.is_a?(String)
+    return false if value.to_s.match(UUID_REGEX)
+    Date.parse(value.to_s)
+  rescue ArgumentError
+    false
   end
 
   def cast_to_datetime_range(match_data)
