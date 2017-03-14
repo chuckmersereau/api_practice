@@ -138,6 +138,8 @@ class DocumentationHelper
       {}
     when :delete
       {}
+    when :bulk_delete
+      {}
     else
       additional_attributes
     end

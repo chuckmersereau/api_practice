@@ -1,4 +1,8 @@
 class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
+  include BulkTagDeleteable
+
+  skip_before_action :validate_and_transform_json_api_params
+
   def destroy
     load_tags
     authorize_tags
@@ -7,12 +11,20 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
 
   private
 
-  def tags_scope
-    @contacts ||= Contact.where(account_list: account_lists).tap(&:first!)
-  end
-
   def authorize_tags
     account_lists.each { |account_list| authorize(account_list, :show?) }
+  end
+
+  def contact_uuids
+    filter_params[:contact_ids].to_s.split(',').map(&:strip)
+  end
+
+  def contacts_query
+    {
+      account_list: account_lists
+    }.tap do |query|
+      query[:uuid] = contact_uuids if contact_uuids.present?
+    end
   end
 
   def destroy_tags
@@ -25,20 +37,14 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
       ActsAsTaggableOn::Tagging.joins(:tag)
                                .where(taggable_type: 'Contact',
                                       taggable_id: taggable_ids,
-                                      tags: { name: params[:tag_name] })
+                                      tags: { name: tag_name })
   end
 
-  def taggable_ids
-    tags_scope.tagged_with(quote_tag(params[:tag_name])).pluck(:id)
-  end
-
-  def quote_tag(tag_name)
-    return "\"#{tag_name}\"" unless tag_name.include?('"')
-    return "\'#{tag_name}\'" unless tag_name.include?("'")
-    tag_name
+  def tags_scope
+    @contacts ||= Contact.where(contacts_query).tap(&:first!)
   end
 
   def permitted_filters
-    [:account_list_id]
+    [:account_list_id, :contact_ids]
   end
 end

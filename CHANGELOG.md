@@ -4,6 +4,9 @@ This changelog covers what's changed in the MPDX APIs.
 
 ## 14 March 2017
 - Add `website` attribute to `Contact` objects
+- Adjust Bulk Delete Tags endpoints (`api/v2/contacts/tags/bulk` and `api/v2/tasks/tags/bulk`)
+    - Allow for resource filtering, ie: `filter[contact_ids]`
+    - Adjust object format of Tag to be removed to better mirror `json:api`
 
 ## 10 March 2017
 - FacebookAccount on person endpoint is now accepting username and remote_id as opposed to url
@@ -43,7 +46,8 @@ This changelog covers what's changed in the MPDX APIs.
 
 ## 25 February 2017
 - Added a contacts bulk create endpoint
-- Bulk endpoint are now returning 409 errors when appropriate
+- Bulk endpoints now *require* an `id` to be provided for _every object within the sent data array for create and update requests_
+    - Without such, a 409 will be returned
 - Fixed some of the documentation for the bulk update endpoints for tasks and contacts
 
 ## 24 February 2017

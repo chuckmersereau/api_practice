@@ -1,4 +1,8 @@
 class Api::V2::Tasks::Tags::BulkController < Api::V2Controller
+  include BulkTagDeleteable
+
+  skip_before_action :validate_and_transform_json_api_params
+
   def destroy
     load_tags
     authorize_tags
@@ -6,10 +10,6 @@ class Api::V2::Tasks::Tags::BulkController < Api::V2Controller
   end
 
   private
-
-  def tags_scope
-    @tasks ||= Task.where(account_list: account_lists).tap(&:first!)
-  end
 
   def authorize_tags
     account_lists.each { |account_list| authorize(account_list, :show?) }
@@ -25,20 +25,26 @@ class Api::V2::Tasks::Tags::BulkController < Api::V2Controller
       ActsAsTaggableOn::Tagging.joins(:tag)
                                .where(taggable_type: 'Activity',
                                       taggable_id: taggable_ids,
-                                      tags: { name: params[:tag_name] })
-  end
-
-  def taggable_ids
-    tags_scope.tagged_with(quote_tag(params[:tag_name])).pluck(:id)
-  end
-
-  def quote_tag(tag_name)
-    return "\"#{tag_name}\"" unless tag_name.include?('"')
-    return "\'#{tag_name}\'" unless tag_name.include?("'")
-    tag_name
+                                      tags: { name: tag_name })
   end
 
   def permitted_filters
-    [:account_list_id]
+    [:account_list_id, :task_ids]
+  end
+
+  def tags_scope
+    @tasks ||= Task.where(tasks_query).tap(&:first!)
+  end
+
+  def task_uuids
+    filter_params[:task_ids].to_s.split(',').map(&:strip)
+  end
+
+  def tasks_query
+    {
+      account_list: account_lists
+    }.tap do |query|
+      query[:uuid] = task_uuids if task_uuids.present?
+    end
   end
 end

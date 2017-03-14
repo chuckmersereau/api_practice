@@ -1,0 +1,17 @@
+parameters:
+  bulk_delete:
+    filters:
+      account_list_id:
+        description:
+          The `ID` of an Account List to scope the tasks to
+        type: ID string
+      contact_ids:
+        description:
+          A comma delimited list of Contact IDs to remove the Tag from. If ommited
+          the Tag will be removed from _all_ Contacts.
+        type: string (comma delimited IDs)
+    attributes:
+      name:
+        description: The name of the Tag to be deleted
+        type: string
+        required: true

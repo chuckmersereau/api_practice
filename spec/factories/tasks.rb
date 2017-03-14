@@ -3,7 +3,7 @@ FactoryGirl.define do
     association :account_list
     starred false
     location 'MyString'
-    subject 'MyString'
+    subject { "#{activity_type} #{Faker::Name.name}" }
     start_at '2012-03-08 14:59:46'
     activity_type 'Call'
     result nil

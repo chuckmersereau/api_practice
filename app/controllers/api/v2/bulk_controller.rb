@@ -17,7 +17,7 @@ class Api::V2::BulkController < Api::V2Controller
 
   def bulk_data_from_array_params(data_array_params)
     data_array_params.map do |data|
-      require_id_for_all_data_objects unless data['data']['id']
+      missing_id_error unless data['data']['id']
 
       data[:action] = params[:action]
       data[:controller] = params[:controller]
@@ -32,7 +32,8 @@ class Api::V2::BulkController < Api::V2Controller
     params.dig(:data) || []
   end
 
-  def require_id_for_all_data_objects
-    raise Exceptions::BadRequestError, "An 'id' is required for every single object under /data"
+  def missing_id_error
+    raise Exceptions::BadRequestError,
+          'An `id` is required for every top-level object within the /data array being sent in bulk requests'
   end
 end
