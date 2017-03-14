@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 14 March 2017
+- Add `website` attribute to `Contact` objects
+
 ## 10 March 2017
 - FacebookAccount on person endpoint is now accepting username and remote_id as opposed to url
 - Person object will now have only one primary address at a time

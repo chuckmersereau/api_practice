@@ -167,6 +167,10 @@ attributes: &attrs
     description:
       The number of uncompleted tasks for this Contact
     type: number
+  website:
+    description:
+      The website of the Contact
+    type: string
 
 relationships: &rels
   account_list:
@@ -418,7 +422,6 @@ filter_params: &filters
     description:
       Filter by Timezone; Accepts multiple parameters,
     required: false
-
 
 ignored_attributes: &ignored_attrs
   created_at:

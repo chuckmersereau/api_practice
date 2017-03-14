@@ -57,6 +57,7 @@ resource 'Contacts > Referrers' do
       uncompleted_tasks_count
       updated_at
       updated_in_db_at
+      website
     )
   end
 

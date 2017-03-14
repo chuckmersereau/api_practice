@@ -11,6 +11,7 @@ FactoryGirl.define do
     pledge_start_date { 35.days.ago }
     status 'Partner - Financial'
     uuid { SecureRandom.uuid }
+    website { Faker::Internet.url }
 
     factory :contact_with_person do
       after(:create) do |contact, evaluator|

@@ -37,7 +37,8 @@ class ContactSerializer < ApplicationSerializer
              :tag_list,
              :timezone,
              :total_donations,
-             :uncompleted_tasks_count
+             :uncompleted_tasks_count,
+             :website
 
   belongs_to :account_list
 
