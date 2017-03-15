@@ -17,9 +17,28 @@ class Contact::Filter::Locale < Contact::Filter::Base
   end
 
   def custom_options
-    [{ name: _('-- Unspecified --'), id: 'null' }] +
-      account_lists.map(&:contact_locales).flatten.uniq.select(&:present?).map do |locale|
-        { name: _(MailChimpAccount::Locales::LOCALE_NAMES[locale]), id: locale }
-      end
+    options = locales.map do |locale|
+      {
+        name: _(MailChimpAccount::Locales::LOCALE_NAMES[locale]),
+        id: locale
+      }
+    end
+
+    default_custom_options + options
+  end
+
+  private
+
+  def default_custom_options
+    [
+      {
+        id: 'null',
+        name: _('-- Unspecified --')
+      }
+    ]
+  end
+
+  def locales
+    account_lists.map(&:contact_locales).flatten.uniq.select(&:present?).sort
   end
 end
