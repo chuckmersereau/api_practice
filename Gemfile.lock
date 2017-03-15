@@ -115,10 +115,6 @@ GEM
       activesupport (>= 3.0)
       railties (>= 3.0)
       rspec-rails (>= 2.2)
-    apitome (0.1.0)
-      kramdown
-      railties
-      rspec_api_documentation
     arel (5.0.1.20140414130214)
     assignable_values (0.11.3)
       activerecord
@@ -424,7 +420,6 @@ GEM
       addressable
       faraday
       multi_json
-    kramdown (1.13.1)
     launchy (2.4.3)
       addressable (~> 2.3)
     linkedin (0.3.7)
@@ -741,7 +736,6 @@ DEPENDENCIES
   activesupport-json_encoder (~> 1.1.0)
   acts-as-taggable-on (~> 3.0.0)
   ammeter (~> 1.1.4)
-  apitome (~> 0.1.0)
   assignable_values (~> 0.11.2)
   attributes_history (~> 0.0.3)
   auth!
