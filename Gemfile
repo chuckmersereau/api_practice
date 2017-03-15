@@ -133,7 +133,5 @@ group :doc do
   gem 'sdoc', '~> 0.4.0'
 end
 
-gem 'graphiql-rails'
-
 # add this at the end so it plays nice with pry
 gem 'marco-polo', '~> 1.2.1'

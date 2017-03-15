@@ -1,6 +1,5 @@
 require 'sidekiq/web'
 require 'sidekiq/cron/web'
-require 'doc_auth_constraint'
 
 Rails.application.routes.draw do
   mount Auth::Engine, at: "/auth"
@@ -165,12 +164,4 @@ Rails.application.routes.draw do
 
   get  'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post 'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
-
-  namespace :docs do
-    get :login, to: "auth#login"
-
-    constraints DocAuthConstraint do
-      mount GraphiQL::Rails::Engine, at: "/graphiql", graphql_path: "/api/graphql"
-    end
-  end
 end

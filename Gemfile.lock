@@ -361,8 +361,6 @@ GEM
       signet (>= 0.5.0)
       uuidtools (>= 2.1.0)
     google_timezone (0.0.5)
-    graphiql-rails (1.4.1)
-      rails
     graphql (1.4.2)
     growl (1.0.3)
     guard (2.14.0)
@@ -778,7 +776,6 @@ DEPENDENCIES
   google-api-client (~> 0.7.1)
   google_contacts_api!
   google_timezone (~> 0.0.5)
-  graphiql-rails
   graphql (~> 1.4.2)
   growl (~> 1.0.3)
   guard-brakeman
