@@ -86,12 +86,16 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
   # These includes can be found in:
   # spec/support/shared_controller_examples.rb
   include_examples 'index_examples', except: [:sparse_fieldsets, :sorting]
-  #
-  # include_examples 'show_examples'
-  #
-  # include_examples 'create_examples'
-  #
-  # include_examples 'update_examples'
-  #
   include_examples 'destroy_examples'
+
+  context '#index' do
+    describe 'sparse fieldsets' do
+      it 'only returns fields requested' do
+        api_login(user)
+        get :index, parent_param_if_needed.merge(fields: { contacts: 'name' }, include: 'contacts')
+
+        expect(JSON.parse(response.body)['included'].first['attributes'].keys).to contain_exactly('name')
+      end
+    end
+  end
 end

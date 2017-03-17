@@ -84,5 +84,14 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
       expect(JSON.parse(response.body)['data'].count).to eq(3)
       expect(JSON.parse(response.body)['data'].map { |duplicate| duplicate['id'] }).to_not include(person5.uuid)
     end
+
+    describe 'sparse fieldsets' do
+      it 'only returns fields requested' do
+        api_login(user)
+        get :index, parent_param_if_needed.merge(fields: { people: 'first_name' }, include: 'people')
+
+        expect(JSON.parse(response.body)['included'].first['attributes'].keys).to contain_exactly('first_name')
+      end
+    end
   end
 end

@@ -49,7 +49,8 @@ class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
   def render_duplicates
     render json: @dup_people,
            meta: meta_hash(@dup_people),
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def current_contact

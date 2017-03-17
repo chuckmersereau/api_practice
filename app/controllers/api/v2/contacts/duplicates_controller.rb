@@ -45,7 +45,8 @@ class Api::V2::Contacts::DuplicatesController < Api::V2Controller
   def render_duplicates
     render json: @dup_contacts,
            meta: meta_hash(@dup_contacts),
-           include: include_params
+           include: include_params,
+           fields: field_params
   end
 
   def permitted_filters
