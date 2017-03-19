@@ -93,8 +93,8 @@ CREATE TABLE account_list_invites (
     accepted_by_user_id integer,
     accepted_at timestamp without time zone,
     cancelled_by_user_id integer,
-    created_at timestamp without time zone,
-    updated_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2705,7 +2705,7 @@ CREATE TABLE taggings (
     tagger_id integer,
     tagger_type character varying(255),
     context character varying(128),
-    created_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2772,7 +2772,7 @@ CREATE TABLE versions (
     object text,
     related_object_type character varying(255),
     related_object_id integer,
-    created_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -6087,3 +6087,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170109220413');
 INSERT INTO schema_migrations (version) VALUES ('20170210004955');
 
 INSERT INTO schema_migrations (version) VALUES ('20170301173502');
+
+INSERT INTO schema_migrations (version) VALUES ('20170307220854');
+
