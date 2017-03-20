@@ -20,7 +20,7 @@ resource 'Tasks > Tags > Bulk Delete' do
   let(:form_data) do
     {
       data: {
-        type: 'tag',
+        type: 'tags',
         attributes: {
           name: 'tag_one'
         }

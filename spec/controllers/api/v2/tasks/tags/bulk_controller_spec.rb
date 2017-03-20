@@ -15,7 +15,7 @@ RSpec.describe Api::V2::Tasks::Tags::BulkController, type: :controller do
   let(:params) do
     {
       data: {
-        type: 'tasks',
+        type: 'tags',
         attributes: {
           name: first_tag
         }

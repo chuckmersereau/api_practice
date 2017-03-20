@@ -1,7 +1,7 @@
 class Api::V2::Tasks::Tags::BulkController < Api::V2Controller
   include BulkTagDeleteable
 
-  skip_before_action :validate_and_transform_json_api_params
+  resource_type :tags
 
   def destroy
     load_tags

@@ -1,7 +1,7 @@
 class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
   include BulkTagDeleteable
 
-  skip_before_action :validate_and_transform_json_api_params
+  resource_type :tags
 
   def destroy
     load_tags
@@ -40,11 +40,11 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
                                       tags: { name: tag_name })
   end
 
-  def tags_scope
-    @contacts ||= Contact.where(contacts_query).tap(&:first!)
-  end
-
   def permitted_filters
     [:account_list_id, :contact_ids]
+  end
+
+  def tags_scope
+    @contacts ||= Contact.where(contacts_query).tap(&:first!)
   end
 end

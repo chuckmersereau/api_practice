@@ -7,7 +7,7 @@ module BulkTagDeleteable
   end
 
   def tag_name
-    params.dig(:data, :attributes, :name)
+    params.dig(:tag, :name)
   end
 
   def taggable_ids
