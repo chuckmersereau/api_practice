@@ -64,7 +64,7 @@ class Api::V2::EmailAddressesController < Api::V2::ApplicationController
   end
 
   def load_email_address
-    @email_address ||= EmailAddress.find_by!(uuid: params[:id])
+    @email_address ||= EmailAddress.find_by_uuid_or_raise!(params[:id])
   end
 
   def load_email_addresses

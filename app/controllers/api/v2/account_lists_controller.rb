@@ -26,7 +26,7 @@ class Api::V2::AccountListsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(uuid: params[:id])
+    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:id])
   end
 
   def render_account_list

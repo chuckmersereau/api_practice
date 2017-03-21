@@ -28,11 +28,26 @@ RSpec.describe 'Error Response Format', type: :request do
   end
 
   context 'ActiveRecord::RecordNotFound' do
-    subject { get api_v2_contact_path(id: user.uuid), nil, headers }
+    let(:uuid) { SecureRandom.uuid }
+    let(:message) { "Couldn't find Contact with 'uuid'=#{uuid}" }
+
+    let(:expected_error_data) do
+      {
+        errors: [
+          {
+            status: '404',
+            title: 'Not Found',
+            detail: message
+          }
+        ]
+      }.deep_stringify_keys
+    end
+
+    subject { get api_v2_contact_path(id: uuid), nil, headers }
 
     it 'has a response body that contains error objects in json api format' do
       subject
-      expect(response.body).to eq '{"errors":[{"status":"404","title":"Not Found","detail":"ActiveRecord::RecordNotFound"}]}'
+      expect(JSON.parse(response.body)).to eq expected_error_data
     end
   end
 
@@ -41,6 +56,7 @@ RSpec.describe 'Error Response Format', type: :request do
       subject { get '/this_route_does_not_exist', nil, headers }
       it 'has a response body that contains error objects in json api format' do
         subject
+
         expect(response.body).to eq '{"errors":[{"status":"404","title":"Not Found","detail":"Route not found"}]}'
       end
     end

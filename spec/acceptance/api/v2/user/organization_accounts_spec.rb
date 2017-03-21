@@ -122,8 +122,8 @@ resource 'User > Organization Accounts' do
         explanation 'Update the current_user\'s Organization Account with the given ID'
         do_request data: form_data
 
+        expect(response_status).to eq(200), invalid_status_detail
         expect(resource_object['username']).to eq new_organization_account_params[:username]
-        expect(response_status).to eq 200
       end
     end
 

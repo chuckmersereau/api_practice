@@ -31,7 +31,7 @@ class Api::V2::Contacts::People::MergesController < Api::V2Controller
   end
 
   def load_contact
-    @current_contact = Contact.find_by!(uuid: params[:contact_id])
+    @current_contact = Contact.find_by_uuid_or_raise!(params[:contact_id])
   end
 
   def load_people

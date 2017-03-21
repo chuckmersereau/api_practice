@@ -14,6 +14,15 @@ class ApplicationRecord < ActiveRecord::Base
     @updated_in_db_at = value&.is_a?(Time) ? value : Time.parse(value.to_s)
   end
 
+  # for better error messages when finding a resource by UUID
+  def self.find_by_uuid_or_raise!(uuid)
+    if uuid && !uuid.empty?
+      find_by(uuid: uuid) || record_from_uuid_not_found_error(uuid)
+    else
+      record_from_uuid_not_found_error(uuid)
+    end
+  end
+
   private
 
   def generate_uuid
@@ -33,4 +42,12 @@ class ApplicationRecord < ActiveRecord::Base
   def full_conflict_error_message
     "#{CONFLICT_ERROR_MESSAGE} (#{updated_at_was.to_time.utc.iso8601})"
   end
+
+  def self.record_from_uuid_not_found_error(uuid)
+    message = "Couldn't find #{name} with 'uuid'=#{uuid}"
+
+    raise ActiveRecord::RecordNotFound, message
+  end
+
+  private_class_method :record_from_uuid_not_found_error
 end

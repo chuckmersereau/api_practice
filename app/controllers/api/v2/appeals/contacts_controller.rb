@@ -51,11 +51,11 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   end
 
   def load_contact
-    @contact ||= Contact.find_by!(uuid: params[:id])
+    @contact ||= Contact.find_by_uuid_or_raise!(params[:id])
   end
 
   def load_contact_from_appeal
-    @contact ||= @appeal.contacts.find_by!(uuid: params[:id])
+    @contact ||= @appeal.contacts.find_by_uuid_or_raise!(params[:id])
   end
 
   def render_contact
@@ -70,7 +70,7 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   end
 
   def load_appeal
-    @appeal ||= Appeal.find_by!(uuid: params[:appeal_id])
+    @appeal ||= Appeal.find_by_uuid_or_raise!(params[:appeal_id])
   end
 
   def filters_without_excluded

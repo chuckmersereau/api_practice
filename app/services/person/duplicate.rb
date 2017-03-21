@@ -4,7 +4,7 @@ class Person::Duplicate < ActiveModelSerializers::Model
 
   def self.find(id)
     people = id.split('~').map do |person_uuid|
-      Person.find_by!(uuid: person_uuid)
+      Person.find_by_uuid_or_raise!(person_uuid)
     end
 
     contact = (people[0].contacts & people[1].contacts).first
