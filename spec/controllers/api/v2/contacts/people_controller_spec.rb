@@ -27,6 +27,8 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
 
   include_examples 'destroy_examples'
 
+  include_examples 'index_examples'
+
   context 'all contacts' do
     let(:parent_param) { {} }
     include_examples 'index_examples'
@@ -41,5 +43,56 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
     let(:filter_params) { { phone_number_valid: 'false' } }
     before { Contact.first.people.first.delete }
     include_examples 'filtering examples', action: :index
+  end
+
+  describe 'Creating / Updating a Facebook Account nested under person' do
+    let(:generated_uuid) { SecureRandom.uuid }
+
+    let(:params) do
+      {
+        id: resource.uuid,
+        contact_id: contact.uuid,
+        data: {
+          type: 'people',
+          id: resource.uuid,
+          attributes: {
+            updated_in_db_at: Time.current
+          },
+          relationships: {
+            facebook_accounts: {
+              data: [
+                {
+                  type: 'facebook_accounts',
+                  id: generated_uuid
+                }
+              ]
+            }
+          }
+        },
+        included: [
+          {
+            type: 'facebook_accounts',
+            id: generated_uuid,
+            attributes: {
+              username: 'captain.america',
+              updated_in_db_at: Time.current
+            }
+          }
+        ]
+      }
+    end
+
+    it 'Correctly creates the Linkedin Account' do
+      expect(resource.facebook_accounts.count).to eq(0)
+
+      api_login(user)
+      put :update, params
+
+      expect(response.status).to eq(200), invalid_status_detail
+
+      expect(resource.reload.facebook_accounts.count).to   eq(1)
+      expect(resource.facebook_accounts.first.uuid).to     eq generated_uuid
+      expect(resource.facebook_accounts.first.username).to eq 'captain.america'
+    end
   end
 end

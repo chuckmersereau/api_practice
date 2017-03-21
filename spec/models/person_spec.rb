@@ -53,31 +53,61 @@ describe Person do
       expect(person.facebook_accounts.length).to eq(2)
     end
 
-    it 'gracefully handles having the same FB account assigned twice by username' do
+    it 'gracefully handles having the same FB account assigned twice a hash of usernames' do
       fb_account = create(:facebook_account, person: person)
-      person.update_attributes('facebook_accounts_attributes' => {
-                                 '0' => {
-                                   '_destroy' => 'false',
-                                   'username' => 'same_username'
-                                 },
-                                 '1' => {
-                                   '_destroy' => 'false',
-                                   'username' => 'same_username'
-                                 },
-                                 '1354203866590' => {
-                                   '_destroy' => 'false',
-                                   'id' => fb_account.id,
-                                   'url' => fb_account.url
-                                 }
-                               })
-      expect(person.facebook_accounts.length).to eq(2)
+
+      attributes = {
+        facebook_accounts_attributes: {
+          '0' => {
+            '_destroy' => 'false',
+            'username' => 'same_username'
+          },
+          '1' => {
+            '_destroy' => 'false',
+            'username' => 'same_username'
+          },
+          '1354203866590' => {
+            '_destroy' => 'false',
+            'id' => fb_account.id,
+            'url' => fb_account.url
+          }
+        }
+      }
+
+      person.update(attributes)
+      expect(person.reload.facebook_accounts.length).to eq(2)
     end
 
-    it 'gracefully handles having an fb account with a blank url' do
+    it 'gracefully handles having the same FB account assigned twice an array of usernames' do
+      fb_account = create(:facebook_account, person: person)
+
+      attributes = {
+        facebook_accounts_attributes: [
+          {
+            '_destroy' => 'false',
+            'username' => 'same_username'
+          },
+          {
+            '_destroy' => 'false',
+            'username' => 'same_username'
+          },
+          {
+            '_destroy' => 'false',
+            'id' => fb_account.id,
+            'url' => fb_account.url
+          }
+        ]
+      }
+
+      person.update(attributes)
+      expect(person.reload.facebook_accounts.length).to eq(2)
+    end
+
+    it 'gracefully handles having an fb account with a blank username' do
       person.update_attributes('facebook_accounts_attributes' => {
                                  '0' => {
                                    '_destroy' => 'false',
-                                   'url' => ''
+                                   'username' => ''
                                  }
                                })
       expect(person.facebook_accounts.length).to eq(0)

@@ -67,8 +67,8 @@ resource 'User > Organization Accounts' do
         do_request
         explanation 'List of Organization Accounts associated to current_user'
 
+        expect(response_status).to eq(200), invalid_status_detail
         check_collection_resource(2, %w(relationships))
-        expect(response_status).to eq 200
       end
     end
 
@@ -88,8 +88,9 @@ resource 'User > Organization Accounts' do
       example 'Organization Account [GET]', document: documentation_scope do
         explanation 'The User\'s Organization Account with the given ID'
         do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
         check_resource(%w(relationships))
-        expect(response_status).to eq 200
       end
     end
 
@@ -105,8 +106,8 @@ resource 'User > Organization Accounts' do
         explanation 'Create an Organization Account associated with the current_user'
         do_request data: form_data
 
+        expect(response_status).to eq(201), invalid_status_detail
         expect(resource_object['username']).to eq new_organization_account_params[:username]
-        expect(response_status).to eq 201
       end
     end
 
@@ -131,7 +132,8 @@ resource 'User > Organization Accounts' do
       example 'Organization Account [DELETE]', document: documentation_scope do
         explanation 'Delete the current_user\'s Organization Account with the given ID'
         do_request
-        expect(response_status).to eq 204
+
+        expect(response_status).to eq(204), invalid_status_detail
       end
     end
   end

@@ -54,7 +54,7 @@ class Person < ApplicationRecord
   accepts_nested_attributes_for :email_addresses, reject_if: -> (e) { e[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers, reject_if: -> (p) { p[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :family_relationships, reject_if: -> (p) { p[:related_contact_id].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :facebook_accounts, reject_if: -> (p) { p[:url].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :facebook_accounts, reject_if: -> (p) { p[:username].blank? }, allow_destroy: true
   accepts_nested_attributes_for :twitter_accounts, reject_if: -> (p) { p[:screen_name].blank? }, allow_destroy: true
   accepts_nested_attributes_for :linkedin_accounts, reject_if: -> (p) { p[:url].blank? }, allow_destroy: true
   accepts_nested_attributes_for :pictures, reject_if: -> (p) { p[:image].blank? && p[:image_cache].blank? }, allow_destroy: true
@@ -97,7 +97,8 @@ class Person < ApplicationRecord
       facebook_accounts_attributes: [
         :_destroy,
         :id,
-        :username
+        :username,
+        :uuid
       ],
       family_relationships_attributes: [
         :_destroy,
@@ -230,6 +231,11 @@ class Person < ApplicationRecord
     end
   end
 
+  def facebook_accounts_attributes=(attributes_data)
+    cleaned_data = reject_duplicate_facebook_username_data(attributes_data)
+    super(cleaned_data)
+  end
+
   def family_relationships_attributes=(data_object)
     case data_object
     when Array
@@ -261,46 +267,6 @@ class Person < ApplicationRecord
 
     hash.each do |_, attributes|
       assign_family_relationships_from_data_attributes(attributes)
-    end
-  end
-
-  # Augment the built-in rails method to prevent duplicate facebook accounts
-  def facebook_accounts_attributes=(hash)
-    reject_dup_facebook_accounts(hash)
-
-    hash.each do |_, attributes|
-      if attributes['id']
-        fa = facebook_accounts.find(attributes['id'])
-        if attributes['_destroy'] == '1'
-          fa.destroy
-        else
-          fa.update_attributes(attributes.except('id', '_destroy'))
-        end
-      else
-        unless attributes['_destroy'] == '1' ||
-               (attributes['remote_id'].blank? && attributes['username'].blank?)
-          fa = facebook_accounts.new(attributes.except('_destroy'))
-          fa.save unless new_record?
-        end
-      end
-    end
-  end
-
-  def reject_dup_facebook_accounts(hash)
-    fb_ids_and_users = facebook_accounts.pluck(:remote_id, :username)
-    facebook_ids = fb_ids_and_users.map(&:first).compact
-    facebook_usernames = fb_ids_and_users.map(&:second).compact
-
-    hash.each do |key, attributes|
-      next if attributes['_destroy'] == '1'
-
-      if facebook_ids.include?(attributes['remote_id']) ||
-         facebook_usernames.include?(attributes['username'])
-        hash.delete(key)
-      else
-        facebook_ids << attributes['remote_id'] if attributes['remote_id']
-        facebook_usernames << attributes['username'] if attributes['username']
-      end
     end
   end
 
@@ -489,6 +455,26 @@ class Person < ApplicationRecord
 
   def clean_up_contact_people
     contact_people.destroy_all
+  end
+
+  def reject_duplicate_facebook_username_data(attributes_data)
+    case attributes_data
+    when Array
+      reject_duplicate_facebook_usernames_from_data_array(attributes_data)
+    when Hash
+      reject_duplicate_facebook_usernames_from_data_array(attributes_data.values)
+    end
+  end
+
+  def reject_duplicate_facebook_usernames_from_data_array(data_array)
+    data_array = data_array.map(&:deep_symbolize_keys)
+    persisted_records, new_records = data_array.partition { |attrs| attrs[:id].present? }
+
+    new_records.each_with_object(persisted_records) do |new_record, records_to_keep|
+      unless records_to_keep.any? { |record_to_keep| record_to_keep[:username] == new_record[:username] }
+        records_to_keep << new_record
+      end
+    end
   end
 
   def touch_contacts
