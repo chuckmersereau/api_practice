@@ -17,6 +17,8 @@ RSpec.describe Api::V2::Contacts::People::LinkedinAccountsController, type: :con
   let(:incorrect_attributes) { { public_url: nil } }
   let(:incorrect_relationships) { {} }
 
+  let(:given_reference_key) { :public_url }
+
   before do
     contact.people << person
   end

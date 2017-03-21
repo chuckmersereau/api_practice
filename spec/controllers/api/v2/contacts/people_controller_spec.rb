@@ -45,54 +45,107 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
     include_examples 'filtering examples', action: :index
   end
 
-  describe 'Creating / Updating a Facebook Account nested under person' do
-    let(:generated_uuid) { SecureRandom.uuid }
+  describe 'Nested Examples' do
+    describe 'Creating / Updating a Facebook Account nested under person' do
+      let(:generated_uuid) { SecureRandom.uuid }
 
-    let(:params) do
-      {
-        id: resource.uuid,
-        contact_id: contact.uuid,
-        data: {
-          type: 'people',
+      let(:params) do
+        {
           id: resource.uuid,
-          attributes: {
-            updated_in_db_at: Time.current
-          },
-          relationships: {
-            facebook_accounts: {
-              data: [
-                {
-                  type: 'facebook_accounts',
-                  id: generated_uuid
-                }
-              ]
-            }
-          }
-        },
-        included: [
-          {
-            type: 'facebook_accounts',
-            id: generated_uuid,
+          contact_id: contact.uuid,
+          data: {
+            type: 'people',
+            id: resource.uuid,
             attributes: {
-              username: 'captain.america',
               updated_in_db_at: Time.current
+            },
+            relationships: {
+              facebook_accounts: {
+                data: [
+                  {
+                    type: 'facebook_accounts',
+                    id: generated_uuid
+                  }
+                ]
+              }
             }
-          }
-        ]
-      }
+          },
+          included: [
+            {
+              type: 'facebook_accounts',
+              id: generated_uuid,
+              attributes: {
+                username: 'captain.america',
+                updated_in_db_at: Time.current
+              }
+            }
+          ]
+        }
+      end
+
+      it 'Correctly creates the Linkedin Account' do
+        expect(resource.facebook_accounts.count).to eq(0)
+
+        api_login(user)
+        put :update, params
+
+        expect(response.status).to eq(200), invalid_status_detail
+
+        expect(resource.reload.facebook_accounts.count).to   eq(1)
+        expect(resource.facebook_accounts.first.uuid).to     eq generated_uuid
+        expect(resource.facebook_accounts.first.username).to eq 'captain.america'
+      end
     end
 
-    it 'Correctly creates the Linkedin Account' do
-      expect(resource.facebook_accounts.count).to eq(0)
+    describe 'Creating / Updating a Linkedin Account nested under person' do
+      let(:linkedin_account) do
+        create(:linkedin_account, public_url: 'https://linkedin.com/old-url',
+                                  person: resource)
+      end
 
-      api_login(user)
-      put :update, params
+      let(:params) do
+        {
+          id: resource.uuid,
+          contact_id: contact.uuid,
+          data: {
+            type: 'people',
+            id: resource.uuid,
+            attributes: {
+              updated_in_db_at: Time.current
+            },
+            relationships: {
+              linkedin_accounts: {
+                data: [
+                  {
+                    type: 'linkedin_accounts',
+                    id: linkedin_account.uuid
+                  }
+                ]
+              }
+            }
+          },
+          included: [
+            {
+              type: 'linkedin_accounts',
+              id: linkedin_account.uuid,
+              attributes: {
+                public_url: 'https://linkedin.com/new-url',
+                updated_in_db_at: Time.current
+              }
+            }
+          ]
+        }
+      end
 
-      expect(response.status).to eq(200), invalid_status_detail
+      it 'Correctly creates the Linkedin Account' do
+        expect(linkedin_account.public_url).to eq 'https://linkedin.com/old-url'
 
-      expect(resource.reload.facebook_accounts.count).to   eq(1)
-      expect(resource.facebook_accounts.first.uuid).to     eq generated_uuid
-      expect(resource.facebook_accounts.first.username).to eq 'captain.america'
+        api_login(user)
+        put :update, params
+
+        expect(response.status).to eq(200), invalid_status_detail
+        expect(linkedin_account.reload.public_url).to eq 'https://linkedin.com/new-url'
+      end
     end
   end
 end
