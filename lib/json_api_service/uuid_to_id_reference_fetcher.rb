@@ -89,7 +89,8 @@ module JsonApiService
 
         resource_type = key.to_s.sub('_id', '').pluralize
         uuids[resource_type] ||= []
-        uuids[resource_type] << value
+        uuids[resource_type] += value.to_s.split(',').uniq.map(&:strip).select(&:presence)
+        uuids[resource_type].uniq!
       end
 
       uuids

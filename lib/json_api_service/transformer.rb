@@ -66,6 +66,21 @@ module JsonApiService
       ParamsObject.new(params: params_object.to_h).to_h
     end
 
+    def fetch_id_from_resource_type_and_uuid(resource_type, uuid)
+      id = uuid.to_s
+               .split(',')
+               .uniq
+               .map(&:strip)
+               .select(&:presence)
+               .map { |single_uuid| uuid_references[resource_type][single_uuid] }
+
+      if id.one?
+        id.first
+      else
+        id
+      end
+    end
+
     def foreign_keys_for_object(object)
       relationships = object.dig(:relationships) || {}
 
@@ -140,7 +155,7 @@ module JsonApiService
         next unless foreign_key.to_s.end_with?('_id')
 
         resource_type = foreign_key.to_s.sub('_id', '').pluralize
-        id            = uuid_references[resource_type][uuid]
+        id            = fetch_id_from_resource_type_and_uuid(resource_type, uuid)
 
         hash[foreign_key] = id
       end
