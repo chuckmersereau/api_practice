@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts > People > Linkedin Accounts' do
   include_context :json_headers
-  documentation_scope = :people_api_linkedin_accounts
+  doc_helper = DocumentationHelper.new(resource: [:people, :linkedin_accounts])
 
   let(:resource_type) { 'linkedin_accounts' }
   let!(:user) { create(:user_with_full_account) }
@@ -20,21 +20,18 @@ resource 'Contacts > People > Linkedin Accounts' do
   let(:linkedin_account)   { linkedin_accounts.first }
   let(:id)                 { linkedin_account.uuid }
 
-  let(:new_facebook_account) do
+  let(:new_linked_in_account) do
     attributes_for(:linkedin_account)
-      .reject { |key| key.to_s.end_with?('_id') }
-      .merge(updated_in_db_at: linkedin_account.updated_at, remote_id: 'RANDOMID')
+      .select { |key| key.to_s.in? %w(public_url) }
+      .merge(updated_in_db_at: linkedin_account.updated_at)
   end
-  let(:form_data) { build_data(new_facebook_account) }
+
+  let(:form_data) { build_data(new_linked_in_account) }
 
   let(:expected_attribute_keys) do
     %w(
-      authenticated
       created_at
-      first_name
-      last_name
       public_url
-      remote_id
       updated_at
       updated_in_db_at
     )
@@ -47,76 +44,60 @@ resource 'Contacts > People > Linkedin Accounts' do
     end
 
     get '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts' do
-      parameter 'contact_id', 'Contact ID', required: true
-      parameter 'person_id',  'Person ID', required: true
-      response_field 'data',  'Data', type: 'Array[Object]'
+      doc_helper.insert_documentation_for(action: :index, context: self)
 
-      example 'LinkedIn Account [LIST]', document: documentation_scope do
-        explanation 'List of LinkedIn Accounts associated to the Person'
+      example doc_helper.title_for(:index), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:index)
         do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(response_status).to eq 200
       end
     end
 
     get '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts/:id' do
-      with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       type: 'String'
-        response_field 'first_name',       'First Name',       type: 'String'
-        response_field 'last_name',        'Last name',        type: 'Number'
-        response_field 'public_url',       'Public URL',       type: 'String'
-        response_field 'remote_id',        'Remote ID',        type: 'Number'
-        response_field 'updated_at',       'Updated At',       type: 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
-      end
+      doc_helper.insert_documentation_for(action: :show, context: self)
 
-      example 'LinkedIn Account [GET]', document: documentation_scope do
-        explanation 'List of LinkedIn Accounts associated to the Person'
+      example doc_helper.title_for(:show), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:show)
         do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(response_status).to eq 200
       end
     end
 
     post '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts' do
-      with_options scope: [:data, :attributes] do
-        parameter 'first_name', 'First Name'
-        parameter 'last_name',  'Last Name'
-        parameter 'public_url', 'Public URL'
-        parameter 'remote_id',  'Remote ID'
-      end
+      doc_helper.insert_documentation_for(action: :create, context: self)
 
-      example 'LinkedIn Account [CREATE]', document: documentation_scope do
-        explanation 'Create a LinkedIn Account associated with the Person'
+      example doc_helper.title_for(:create), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:create)
         do_request data: form_data
-        expect(response_status).to eq 201
+
+        expect(response_status).to eq(201), invalid_status_detail
       end
     end
 
     put '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts/:id' do
-      with_options scope: [:data, :attributes] do
-        parameter 'first_name', 'First Name'
-        parameter 'last_name',  'Last Name'
-        parameter 'public_url', 'Public URL'
-        parameter 'remote_id',  'Remote ID'
-      end
+      doc_helper.insert_documentation_for(action: :update, context: self)
 
-      example 'LinkedIn Account [UPDATE]', document: documentation_scope do
-        explanation 'Update the Person\'s LinkedIn Account with the given ID'
+      example doc_helper.title_for(:update), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:update)
         do_request data: form_data
-        expect(response_status).to eq 200
+
+        expect(response_status).to eq(200), invalid_status_detail
       end
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/linkedin_accounts/:id' do
-      parameter 'contact_id', 'Contact ID', required: true
-      parameter 'person_id',  'Person ID',  required: true
+      doc_helper.insert_documentation_for(action: :delete, context: self)
 
-      example 'LinkedIn Account [DELETE]', document: documentation_scope do
-        explanation 'Delete the Person\'s LinkedIn Account with the given ID'
+      example doc_helper.title_for(:delete), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:delete)
         do_request
-        expect(response_status).to eq 204
+
+        expect(response_status).to eq(204), invalid_status_detail
       end
     end
   end

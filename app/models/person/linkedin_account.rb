@@ -14,7 +14,7 @@ class Person::LinkedinAccount < ApplicationRecord
                           :updated_in_db_at,
                           :uuid].freeze
 
-  validates :public_url, :remote_id, presence: true
+  validates :public_url, presence: true
 
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.linkedin_accounts

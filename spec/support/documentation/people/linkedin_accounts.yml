@@ -1,0 +1,38 @@
+actions:
+  index:
+    description:
+      A list of the LinkedIn Accounts associated with the Person
+
+attributes: &attrs
+  public_url:
+    description:
+      "The URL of the Person's LinkedIn Account"
+    required: true
+    type: string
+
+object: &obj
+  attributes:
+    <<: *attrs
+
+parameters:
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of LinkedIn Account objects
+      type: '[LinkedIn Account]'
+
+  show:
+    <<: *obj
+
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj

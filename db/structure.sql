@@ -2278,7 +2278,7 @@ ALTER SEQUENCE person_key_accounts_id_seq OWNED BY person_key_accounts.id;
 CREATE TABLE person_linkedin_accounts (
     id integer NOT NULL,
     person_id integer NOT NULL,
-    remote_id character varying(255) NOT NULL,
+    remote_id character varying(255),
     token character varying(255),
     secret character varying(255),
     token_expires_at timestamp without time zone,
@@ -6153,6 +6153,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170217220712');
 INSERT INTO schema_migrations (version) VALUES ('20170221212815');
 
 INSERT INTO schema_migrations (version) VALUES ('20170223165218');
+
+INSERT INTO schema_migrations (version) VALUES ('20170315222249');
 
 INSERT INTO schema_migrations (version) VALUES ('20170317205005');
 

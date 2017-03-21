@@ -8,6 +8,9 @@ This changelog covers what's changed in the MPDX APIs.
 ## 17 March 2017
 - Sparse fieldsets enabled for contacts and people duplicates endpoints
 
+## 15 March 2017
+- Adjust attributes returned / required for Linkedin Accounts
+
 ## 14 March 2017
 - Add `website` attribute to `Contact` objects
 - Adjust Bulk Delete Tags endpoints (`api/v2/contacts/tags/bulk` and `api/v2/tasks/tags/bulk`)
