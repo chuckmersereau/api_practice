@@ -20,7 +20,7 @@ class Person::FacebookAccount < ApplicationRecord
                           :username,
                           :uuid].freeze
 
-  validates :username, presence: true
+  validates :username, presence: true, uniqueness: { scope: :person_id }
 
   def self.find_or_create_from_auth(auth_hash, person)
     @rel = person.facebook_accounts
