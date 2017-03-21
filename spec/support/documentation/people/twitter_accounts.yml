@@ -1,0 +1,41 @@
+attributes: &attrs
+  screen_name:
+    description:
+      "The screen name for the Person's Twitter Account"
+    required: true
+    type: string
+  remote_id:
+    description:
+      The `id` for this Twitter Account from Twitter.com (this will likely be `null`)
+    type: integer
+  primary:
+    description:
+      "Whether or not this Twitter Account is the Person's primary account"
+    type: boolean
+
+object: &obj
+  attributes:
+    <<: *attrs
+
+parameters:
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Twitter Account Objects
+      type: '[Twitter Account]'
+
+  show:
+    <<: *obj
+
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj

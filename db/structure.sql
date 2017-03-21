@@ -2442,7 +2442,7 @@ ALTER SEQUENCE person_relay_accounts_id_seq OWNED BY person_relay_accounts.id;
 CREATE TABLE person_twitter_accounts (
     id integer NOT NULL,
     person_id integer NOT NULL,
-    remote_id bigint NOT NULL,
+    remote_id bigint,
     screen_name character varying(255),
     token character varying(255),
     secret character varying(255),
@@ -6144,17 +6144,18 @@ INSERT INTO schema_migrations (version) VALUES ('20170209205030');
 
 INSERT INTO schema_migrations (version) VALUES ('20170210004955');
 
-INSERT INTO schema_migrations (version) VALUES ('20170301173502');
-
-INSERT INTO schema_migrations (version) VALUES ('20170307220854');
-
 INSERT INTO schema_migrations (version) VALUES ('20170217220712');
 
 INSERT INTO schema_migrations (version) VALUES ('20170221212815');
 
 INSERT INTO schema_migrations (version) VALUES ('20170223165218');
 
+INSERT INTO schema_migrations (version) VALUES ('20170301173502');
+
+INSERT INTO schema_migrations (version) VALUES ('20170307220854');
+
 INSERT INTO schema_migrations (version) VALUES ('20170315222249');
 
-INSERT INTO schema_migrations (version) VALUES ('20170317205005');
+INSERT INTO schema_migrations (version) VALUES ('20170316042808');
 
+INSERT INTO schema_migrations (version) VALUES ('20170317205005');
