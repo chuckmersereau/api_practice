@@ -131,7 +131,9 @@ class Person < ApplicationRecord
       twitter_accounts_attributes: [
         :_destroy,
         :id,
-        :screen_name
+        :primary,
+        :screen_name,
+        :uuid
       ],
       websites_attributes: [
         :_destroy,

@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts > People > Twitter Accounts' do
   include_context :json_headers
-  documentation_scope = :people_api_twitter_accounts
+  doc_helper = DocumentationHelper.new(resource: [:people, :twitter_accounts])
 
   let(:resource_type) { 'twitter_accounts' }
   let!(:user) { create(:user_with_full_account) }
@@ -22,8 +22,8 @@ resource 'Contacts > People > Twitter Accounts' do
 
   let(:new_twitter_account) do
     attributes_for(:twitter_account)
-      .reject { |key| key.to_s.end_with?('_id') }
-      .merge(updated_in_db_at: twitter_account.updated_at, remote_id: 'RandomID')
+      .reject { |key| key.to_s.end_with?('_id') || key.to_s.in?(%w(secret token)) }
+      .merge(updated_in_db_at: twitter_account.updated_at)
   end
 
   let(:form_data) { build_data(new_twitter_account) }
@@ -46,72 +46,59 @@ resource 'Contacts > People > Twitter Accounts' do
     end
 
     get '/api/v2/contacts/:contact_id/people/:person_id/twitter_accounts' do
-      parameter 'contact_id', 'Contact ID', required: true
-      parameter 'person_id',  'Person ID', required: true
-      response_field 'data',  'Data', type: 'Array[Object]'
+      doc_helper.insert_documentation_for(action: :index, context: self)
 
-      example 'Twitter Account [LIST]', document: documentation_scope do
-        explanation 'List of Twitter Accounts associated to the Person'
+      example doc_helper.title_for(:index), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:index)
         do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
         check_collection_resource(2)
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(response_status).to eq 200
       end
     end
 
     get '/api/v2/contacts/:contact_id/people/:person_id/twitter_accounts/:id' do
-      with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       type: 'String'
-        response_field 'primary',          'Primary',          type: 'Boolean'
-        response_field 'remote_id',        'Remote ID',        type: 'Number'
-        response_field 'screen_name',      'Screen Name',      type: 'String'
-        response_field 'updated_at',       'Updated At',       type: 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
-      end
+      doc_helper.insert_documentation_for(action: :show, context: self)
 
-      example 'Twitter Account [GET]', document: documentation_scope do
-        explanation 'The Person\'s Twitter Account with the given ID'
+      example doc_helper.title_for(:show), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:show)
         do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(response_status).to eq 200
       end
     end
 
     post '/api/v2/contacts/:contact_id/people/:person_id/twitter_accounts' do
-      with_options scope: [:data, :attributes] do
-        parameter 'primary',     'Primary'
-        parameter 'remote_id',   'Remote ID'
-        parameter 'screen_name', 'Screen Name'
-      end
+      doc_helper.insert_documentation_for(action: :create, context: self)
 
-      example 'Twitter Account [CREATE]', document: documentation_scope do
-        explanation 'Create a Twitter Account associated with the Person'
+      example doc_helper.title_for(:create), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:create)
         do_request data: form_data
-        expect(response_status).to eq 201
+
+        expect(response_status).to eq(201), invalid_status_detail
       end
     end
 
     put '/api/v2/contacts/:contact_id/people/:person_id/twitter_accounts/:id' do
-      with_options scope: [:data, :attributes] do
-        parameter 'primary',     'Primary'
-        parameter 'remote_id',   'Remote ID'
-        parameter 'screen_name', 'Screen Name'
-      end
+      doc_helper.insert_documentation_for(action: :update, context: self)
 
-      example 'Twitter Account [UPDATE]', document: documentation_scope do
-        explanation 'Update the Person\'s Twitter Account with the given ID'
+      example doc_helper.title_for(:update), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:update)
         do_request data: form_data
-        expect(response_status).to eq 200
+
+        expect(response_status).to eq(200), invalid_status_detail
       end
     end
 
     delete '/api/v2/contacts/:contact_id/people/:person_id/twitter_accounts/:id' do
-      parameter 'contact_id', 'Contact ID', required: true
-      parameter 'person_id',  'Person ID',  required: true
+      doc_helper.insert_documentation_for(action: :delete, context: self)
 
-      example 'Twitter Account [DELETE]', document: documentation_scope do
-        explanation 'Delete the Person\'s Twitter Account with the given ID'
+      example doc_helper.title_for(:delete), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:delete)
         do_request
+
         expect(response_status).to eq 204
       end
     end
