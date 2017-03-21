@@ -5,5 +5,6 @@ FactoryGirl.define do
     country_code 'MyString'
     location 'mobile'
     primary false
+    valid_values true
   end
 end

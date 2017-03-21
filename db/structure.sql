@@ -331,9 +331,10 @@ CREATE TABLE addresses (
     region character varying(255),
     metro_area character varying(255),
     historic boolean DEFAULT false,
-    source character varying(255),
+    source character varying(255) DEFAULT 'MPDX'::character varying,
     source_donor_account_id integer,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    valid_values boolean DEFAULT false
 );
 
 
@@ -1152,7 +1153,9 @@ CREATE TABLE email_addresses (
     location character varying(50),
     historic boolean DEFAULT false,
     deleted boolean DEFAULT false,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    valid_values boolean DEFAULT true,
+    source character varying(255) DEFAULT 'MPDX'::character varying
 );
 
 
@@ -2522,7 +2525,9 @@ CREATE TABLE phone_numbers (
     updated_at timestamp without time zone NOT NULL,
     remote_id character varying(255),
     historic boolean DEFAULT false,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    valid_values boolean DEFAULT true,
+    source character varying(255) DEFAULT 'MPDX'::character varying
 );
 
 
@@ -4086,10 +4091,24 @@ CREATE INDEX index_addresses_on_remote_id ON addresses USING btree (remote_id);
 
 
 --
+-- Name: index_addresses_on_source; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_addresses_on_source ON addresses USING btree (source);
+
+
+--
 -- Name: index_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_addresses_on_uuid ON addresses USING btree (uuid);
+
+
+--
+-- Name: index_addresses_on_valid_values; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_addresses_on_valid_values ON addresses USING btree (valid_values);
 
 
 --
@@ -4296,6 +4315,13 @@ CREATE INDEX index_contacts_on_last_donation_date ON contacts USING btree (last_
 
 
 --
+-- Name: index_contacts_on_status_valid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_contacts_on_status_valid ON contacts USING btree (status_valid);
+
+
+--
 -- Name: index_contacts_on_status_validated_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4499,10 +4525,24 @@ CREATE INDEX index_email_addresses_on_remote_id ON email_addresses USING btree (
 
 
 --
+-- Name: index_email_addresses_on_source; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_email_addresses_on_source ON email_addresses USING btree (source);
+
+
+--
 -- Name: index_email_addresses_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_email_addresses_on_uuid ON email_addresses USING btree (uuid);
+
+
+--
+-- Name: index_email_addresses_on_valid_values; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_email_addresses_on_valid_values ON email_addresses USING btree (valid_values);
 
 
 --
@@ -5220,10 +5260,24 @@ CREATE INDEX index_phone_numbers_on_remote_id ON phone_numbers USING btree (remo
 
 
 --
+-- Name: index_phone_numbers_on_source; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_phone_numbers_on_source ON phone_numbers USING btree (source);
+
+
+--
 -- Name: index_phone_numbers_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE UNIQUE INDEX index_phone_numbers_on_uuid ON phone_numbers USING btree (uuid);
+
+
+--
+-- Name: index_phone_numbers_on_valid_values; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_phone_numbers_on_valid_values ON phone_numbers USING btree (valid_values);
 
 
 --
@@ -6084,9 +6138,21 @@ INSERT INTO schema_migrations (version) VALUES ('20170109201920');
 
 INSERT INTO schema_migrations (version) VALUES ('20170109220413');
 
+INSERT INTO schema_migrations (version) VALUES ('20170209201959');
+
+INSERT INTO schema_migrations (version) VALUES ('20170209205030');
+
 INSERT INTO schema_migrations (version) VALUES ('20170210004955');
 
 INSERT INTO schema_migrations (version) VALUES ('20170301173502');
 
 INSERT INTO schema_migrations (version) VALUES ('20170307220854');
+
+INSERT INTO schema_migrations (version) VALUES ('20170217220712');
+
+INSERT INTO schema_migrations (version) VALUES ('20170221212815');
+
+INSERT INTO schema_migrations (version) VALUES ('20170223165218');
+
+INSERT INTO schema_migrations (version) VALUES ('20170317205005');
 

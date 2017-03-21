@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe ApplicationFilterer do
+describe Person::Filterer do
   let(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
 
@@ -12,28 +12,19 @@ describe ApplicationFilterer do
 
   describe '.filter_classes' do
     it 'returns an empty array' do
-      expect(described_class.filter_classes).to eq []
+      expect(described_class.filter_classes).to eq [Person::Filter::EmailAddressValid, Person::Filter::PhoneNumberValid]
     end
   end
 
   describe '.filter_params' do
     it 'returns an empty array' do
-      expect(described_class.filter_params).to eq []
-    end
-  end
-
-  describe '#initialize' do
-    it 'initializes filters variable' do
-      expect(described_class.new(abc: '123').filters).to eq(abc: '123')
-    end
-    it 'strips filter string params' do
-      expect(described_class.new(abc: ' 1 2 3 ').filters).to eq(abc: '1 2 3')
+      expect(described_class.filter_params).to eq [:email_address_valid, :phone_number_valid]
     end
   end
 
   describe '#filter' do
     it 'returns the resource scope' do
-      resource_scope = Contact.all
+      resource_scope = Person.all
       expect(described_class.new.filter(scope: resource_scope, account_lists: [account_list])).to eq resource_scope
     end
   end

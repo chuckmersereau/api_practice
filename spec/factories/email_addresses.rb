@@ -1,5 +1,6 @@
 FactoryGirl.define do
   factory :email_address do
+    association :person
     historic false
     location 'home'
     primary false

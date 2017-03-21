@@ -3,13 +3,8 @@ require 'rails_helper'
 describe HasPrimary do
   context '#ensure_only_one_primary? for person and email addresses (responds to :historic)' do
     let(:person) { create(:person) }
-    let(:email1) { create(:email_address, email: 'a@t.co', primary: true) }
-    let(:email2) { create(:email_address, email: 'b@t.co', primary: false) }
-
-    before do
-      person.email_addresses << email1
-      person.email_addresses << email2
-    end
+    let(:email1) { create(:email_address, email: 'a@t.co', person: person, primary: true) }
+    let(:email2) { create(:email_address, email: 'b@t.co', person: person, primary: false) }
 
     it 'leaves the existing primary one if one is specified' do
       email1.send(:ensure_only_one_primary)

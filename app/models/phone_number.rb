@@ -1,4 +1,5 @@
 class PhoneNumber < ApplicationRecord
+  include Concerns::BeforeCreateSetValidValuesBasedOnSource
   include HasPrimary
   @@primary_scope = :person
 
@@ -23,8 +24,7 @@ class PhoneNumber < ApplicationRecord
   before_save :clean_up_number
 
   validates :number, presence: true
-
-  # attr_accessible :number, :primary, :country_code, :location, :remote_id
+  validates :number, :country_code, :location, :remote_id, updatable_only_when_source_is_mpdx: true
 
   def self.add_for_person(person, attributes)
     attributes = attributes.with_indifferent_access.except(:_destroy)

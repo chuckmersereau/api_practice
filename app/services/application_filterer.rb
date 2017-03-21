@@ -29,4 +29,10 @@ class ApplicationFilterer
       "#{to_s.split('::').first}::Filter::#{class_name}".constantize
     end
   end
+
+  def self.filter_params
+    @filter_params ||= (self::FILTERS_TO_DISPLAY + self::FILTERS_TO_HIDE).sort.map do |class_name|
+      class_name.underscore.to_sym
+    end
+  end
 end
