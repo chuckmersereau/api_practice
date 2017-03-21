@@ -21,7 +21,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   end
 
   def load_designation_account
-    @designation_account ||= DesignationAccount.find_by!(uuid: params[:id])
+    @designation_account ||= DesignationAccount.find_by_uuid_or_raise!(params[:id])
   end
 
   def authorize_designation_account
@@ -37,7 +37,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
+    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
   end
 
   def pundit_user

@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 21 March 2017
+- The API will now return better 404 detail messages when unable to find a resource
+
 ## 17 March 2017
 - Sparse fieldsets enabled for contacts and people duplicates endpoints
 

@@ -46,7 +46,7 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   end
 
   def load_donation
-    @donation ||= Donation.find_by!(uuid: params[:id])
+    @donation ||= Donation.find_by_uuid_or_raise!(params[:id])
   end
 
   def render_donation
@@ -92,7 +92,7 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= AccountList.find_by!(uuid: params[:account_list_id])
+    @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
   end
 
   def permitted_filters

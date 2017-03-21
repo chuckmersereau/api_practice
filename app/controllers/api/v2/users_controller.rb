@@ -57,7 +57,7 @@ class Api::V2::UsersController < Api::V2Controller
 
   def transform_uuid_attributes_params_to_ids
     if preferences_params && preferences_params[:default_account_list]
-      account_list = AccountList.find_by!(uuid: preferences_params[:default_account_list])
+      account_list = AccountList.find_by_uuid_or_raise!(preferences_params[:default_account_list])
       preferences_params[:default_account_list] = account_list.id
     end
   end

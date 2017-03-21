@@ -38,7 +38,7 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
   private
 
   def current_contact
-    @current_contact ||= Contact.find_by!(uuid: params[:contact_id])
+    @current_contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
   end
 
   def referral_params
@@ -72,7 +72,7 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
   end
 
   def load_referral
-    @referral ||= referral_scope.find_by!(uuid: params[:id])
+    @referral ||= referral_scope.find_by_uuid_or_raise!(params[:id])
   end
 
   def load_referrals

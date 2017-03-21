@@ -42,7 +42,7 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   end
 
   def load_linkedin_account
-    @linkedin_account ||= linkedin_account_scope.find_by!(uuid: params[:id])
+    @linkedin_account ||= linkedin_account_scope.find_by_uuid_or_raise!(params[:id])
   end
 
   def authorize_linkedin_account
@@ -86,11 +86,11 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   end
 
   def load_person
-    @person ||= load_contact.people.find_by!(uuid: params[:person_id])
+    @person ||= load_contact.people.find_by_uuid_or_raise!(params[:person_id])
   end
 
   def load_contact
-    @contact ||= Contact.find_by!(uuid: params[:contact_id])
+    @contact ||= Contact.find_by_uuid_or_raise!(params[:contact_id])
   end
 
   def pundit_user

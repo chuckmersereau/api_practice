@@ -20,7 +20,7 @@ class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
   end
 
   def load_account_list
-    @account_list ||= analytics_scope.find_by!(uuid: params[:account_list_id])
+    @account_list ||= analytics_scope.find_by_uuid_or_raise!(params[:account_list_id])
   end
 
   def analytics_params

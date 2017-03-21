@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controller do
-  let(:user)         { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
-  let(:resource) { AccountList::ChalklineMails.new(account_list: account_list) }
-  let(:parent_param) { { account_list_id: account_list.uuid } }
+  let(:user)                 { create(:user_with_account) }
+  let(:account_list)         { user.account_lists.first }
+  let(:resource)             { AccountList::ChalklineMails.new(account_list: account_list) }
+  let(:parent_param)         { { account_list_id: account_list.uuid } }
   let(:parsed_response_body) { JSON.parse(response.body) }
 
   describe 'POST create' do
@@ -51,6 +51,17 @@ RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controlle
 
     context 'account list does not belong to user' do
       let(:account_list) { create(:account_list) }
+      let(:expected_error_data) do
+        {
+          errors: [
+            {
+              status: '404',
+              title: 'Not Found',
+              detail: "Couldn't find AccountList with 'uuid'=#{account_list.uuid}"
+            }
+          ]
+        }.deep_stringify_keys
+      end
 
       before do
         api_login(user)
@@ -62,9 +73,7 @@ RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controlle
       end
 
       it 'returns a json api spec body' do
-        expect(parsed_response_body).to eq('errors' => [{
-                                             'status' => '404', 'title' => 'Not Found', 'detail' => 'ActiveRecord::RecordNotFound'
-                                           }])
+        expect(parsed_response_body).to eq(expected_error_data)
       end
     end
   end

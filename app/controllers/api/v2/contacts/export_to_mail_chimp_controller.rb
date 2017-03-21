@@ -45,7 +45,7 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
 
   def fetch_appeal
     return account_list.appeals.first unless filter_params[:appeal_id]
-    account_list.appeals.find_by!(uuid: filter_params[:appeal_id])
+    account_list.appeals.find_by_uuid_or_raise!(filter_params[:appeal_id])
   end
 
   def account_list
