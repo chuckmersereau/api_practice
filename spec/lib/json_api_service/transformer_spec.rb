@@ -189,6 +189,45 @@ module JsonApiService
             expect(transformer.transform).to eq build_params_with(expected_hash)
           end
         end
+
+        context 'with filter params that have comma delimited IDs and empty IDs' do
+          let(:params) do
+            params = {
+              action: 'index',
+              controller: 'mock_contacts',
+              filter: {
+                mock_account_list_id: 'qwe123, rty890, ,'
+              }
+            }
+
+            build_params_with(params)
+          end
+
+          let(:transformer) { build_transformer(params: params) }
+
+          before do
+            mock_uuid_reference(
+              from: %w(qwe123 rty890),
+              to: [10, 15],
+              resource: MockAccountList
+            )
+          end
+
+          it 'correctly transforms the filter params' do
+            expected_hash = {
+              action: 'index',
+              controller: 'mock_contacts',
+              filter: {
+                mock_account_list_id: [
+                  10,
+                  15
+                ]
+              }
+            }
+
+            expect(transformer.transform).to eq build_params_with(expected_hash)
+          end
+        end
       end
 
       describe 'with a uuid as the primary id' do

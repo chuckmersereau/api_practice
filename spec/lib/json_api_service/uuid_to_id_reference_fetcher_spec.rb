@@ -64,7 +64,8 @@ module JsonApiService
           }
         },
         filter: {
-          mock_account_list_id: 'account-list-uuid-abc123'
+          mock_account_list_id: 'account-list-uuid-abc123',
+          mock_contact_id: 'contact-uuid-abc123, contact-uuid-def456'
         }
       }
 
@@ -87,7 +88,8 @@ module JsonApiService
             'email-uuid-def456'
           ],
           mock_contacts: [
-            'contact-uuid-abc123'
+            'contact-uuid-abc123',
+            'contact-uuid-def456'
           ],
           mock_people: [
             'person-uuid-abc123',
@@ -105,8 +107,8 @@ module JsonApiService
     describe '#[]()' do
       before do
         mock_uuid_reference(
-          from: 'contact-uuid-abc123',
-          to: 50,
+          from: ['contact-uuid-abc123', 'contact-uuid-def456'],
+          to: [50, 100],
           resource: MockContact
         )
 
@@ -127,7 +129,7 @@ module JsonApiService
         it 'fetches the ids from the resource and uuid' do
           expect(MockContact)
             .to receive(:where)
-            .with(uuid: ['contact-uuid-abc123'])
+            .with(uuid: ['contact-uuid-abc123', 'contact-uuid-def456'])
 
           fetcher[:mock_contacts]
         end
@@ -158,8 +160,8 @@ module JsonApiService
     describe '#fetch' do
       before do
         mock_uuid_reference(
-          from: 'contact-uuid-abc123',
-          to: 50,
+          from: ['contact-uuid-abc123', 'contact-uuid-def456'],
+          to: [50, 100],
           resource: MockContact
         )
 
@@ -185,7 +187,7 @@ module JsonApiService
       it 'fetches all the references' do
         expect(MockContact)
           .to receive(:where)
-          .with(uuid: ['contact-uuid-abc123'])
+          .with(uuid: ['contact-uuid-abc123', 'contact-uuid-def456'])
 
         expect(MockPerson)
           .to receive(:where)
@@ -201,7 +203,8 @@ module JsonApiService
       it 'returns the correct values' do
         expected_results = {
           mock_contacts: {
-            'contact-uuid-abc123' => 50
+            'contact-uuid-abc123' => 50,
+            'contact-uuid-def456' => 100
           },
           mock_people: {
             'person-uuid-abc123' => 12,
