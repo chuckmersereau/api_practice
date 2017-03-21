@@ -3,6 +3,7 @@ require 'smarty_streets'
 class Address < ApplicationRecord
   include HasPrimary
   @@primary_scope = :person
+  include Concerns::BeforeCreateSetValidValuesBasedOnSource
 
   has_paper_trail on: [:create, :update, :destroy],
                   if: proc { |address| address.record_paper_trail? },
@@ -17,16 +18,18 @@ class Address < ApplicationRecord
   scope :current, -> { where(deleted: false) }
 
   before_validation :determine_master_address
-  before_save :set_manual_source_if_user_changed
+  before_validation :set_manual_source_if_user_changed
   after_destroy :clean_up_master_address
   after_save :update_contact_timezone
+
+  validates :street, :city, :state, :country, :postal_code, :location, :start_date, :end_date, :remote_id, :region, :metro_area, updatable_only_when_source_is_mpdx: true
 
   alias destroy! destroy
 
   attr_accessor :user_changed
 
   # Indicates an address was manually created/updated. Otherwise source is usually the import class name.
-  MANUAL_SOURCE = 'manual'.freeze
+  MANUAL_SOURCE = 'MPDX'.freeze
 
   PERMITTED_ATTRIBUTES = [:city,
                           :created_at,

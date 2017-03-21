@@ -57,5 +57,27 @@ module JsonApiService
         end
       end
     end
+
+    describe '#find_type_by_class' do
+      let(:lookup) { ResourceLookup.new(custom_references) }
+
+      context 'nil argument' do
+        it 'returns nil' do
+          expect(lookup.find_type_by_class(nil)).to eq nil
+        end
+      end
+
+      context 'with a type that is not a custom reference' do
+        it 'returns the correct Resource' do
+          expect(lookup.find_type_by_class(MockContact)).to eq :mock_contacts
+        end
+      end
+
+      context 'with a type that requires a custom reference' do
+        it 'returns the correct Resource' do
+          expect(lookup.find_type_by_class(MockPerson::FacebookAccount)).to eq :mock_facebook_accounts
+        end
+      end
+    end
   end
 end

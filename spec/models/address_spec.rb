@@ -2,6 +2,15 @@
 require 'rails_helper'
 
 describe Address do
+  context 'validates updatable_only_when_source_is_mpdx' do
+    before { stub_smarty_streets }
+    include_examples 'updatable_only_when_source_is_mpdx_validation_examples',
+                     attributes: [:street, :city, :state, :country, :postal_code, :start_date, :end_date, :remote_id, :region, :metro_area],
+                     factory_type: :address
+  end
+
+  include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :address
+
   context '#find_master_address' do
     it 'normalized an address using smarty streets' do
       stub_request(:get, %r{https:\/\/api\.smartystreets\.com\/street-address})
@@ -114,10 +123,8 @@ describe Address do
       expect(a1.source).to eq('Siebel')
     end
 
-    it 'takes the non-nil source by default' do
-      a2.update(source: 'import')
-      a1.merge(a2)
-      expect(a1.source).to eq('import')
+    it 'it has the "MPDX" source by default' do
+      expect(a1.source).to eq('MPDX')
     end
 
     it 'taks the non-nil source_donor_account' do
@@ -151,7 +158,7 @@ describe Address do
       da = create(:donor_account)
       [:street, :city, :state, :postal_code, :country].each do |field|
         a = Address.create(start_date: Date.new(2014, 1, 15), source: 'import', source_donor_account: da)
-        a.update(field => 'not-nil', user_changed: true)
+        a.update!(field => 'not-nil', user_changed: true)
         expect(a.start_date).to eq(Date.today)
         expect(a.source).to eq(Address::MANUAL_SOURCE)
         expect(a.source_donor_account).to be_nil

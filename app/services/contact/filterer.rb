@@ -35,6 +35,7 @@ class Contact::Filterer < ApplicationFilterer
   ).freeze # These filters are displayed in this way on purpose, do not alphabetize them
 
   FILTERS_TO_HIDE = %w(
+    AddressValid
     ExcludeTags
     Ids
     Name

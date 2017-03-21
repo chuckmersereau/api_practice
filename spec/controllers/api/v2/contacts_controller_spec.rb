@@ -54,15 +54,10 @@ describe Api::V2::ContactsController, type: :controller do
   describe 'filtering' do
     before { api_login(user) }
 
-    (Contact::Filterer::FILTERS_TO_DISPLAY.first(2).collect(&:underscore) + Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore)).each do |filter|
-      context "#{filter} filter" do
-        it 'filters results' do
-          get :index, filter: { filter => '' }
-          expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
-        end
-      end
-    end
+    let(:filter_params) { { address_valid: 'false' } }
+    let(:filterer_class) { Contact::Filterer }
+    before { Address.create(addressable: Contact.first).update(valid_values: false) }
+    include_examples 'filtering examples', action: :index
 
     context 'account_list_id filter' do
       let!(:user) { create(:user_with_account) }

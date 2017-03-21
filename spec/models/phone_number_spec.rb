@@ -9,6 +9,10 @@ describe PhoneNumber do
   let(:contact) { create(:contact, account_list: user.account_lists.first) }
   let(:person) { contact.people.create(first_name: 'test').reload }
 
+  include_examples 'updatable_only_when_source_is_mpdx_validation_examples', attributes: [:number, :country_code, :location, :remote_id], factory_type: :phone_number
+
+  include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :phone_number
+
   describe 'adding a phone number to a person' do
     it "creates a phone number normalized to home country if it's new" do
       expect do

@@ -1,4 +1,8 @@
 class EmailAddress < ApplicationRecord
+  include Concerns::BeforeCreateSetValidValuesBasedOnSource
+  include HasPrimary
+  @@primary_scope = :person
+
   PERMITTED_ATTRIBUTES = [:created_at,
                           :email,
                           :historic,
@@ -8,16 +12,16 @@ class EmailAddress < ApplicationRecord
                           :updated_in_db_at,
                           :uuid].freeze
 
-  include HasPrimary
-  @@primary_scope = :person
-
   has_paper_trail on: [:destroy],
                   meta: { related_object_type: 'Person',
                           related_object_id: :person_id }
 
   belongs_to :person, touch: true
-  validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
+
   before_save :strip_email_attribute
+
+  validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
+  validates :email, :remote_id, :location, updatable_only_when_source_is_mpdx: true
 
   def to_s
     email

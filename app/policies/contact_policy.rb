@@ -7,6 +7,11 @@ class ContactPolicy < ApplicationPolicy
   private
 
   def resource_owner?
-    user.account_lists.exists?(id: resource.account_list_id)
+    user.account_lists.ids & resource_account_list_ids == resource_account_list_ids
+  end
+
+  def resource_account_list_ids
+    return [@resource.account_list_id] if @resource.is_a?(Contact)
+    @resource_account_list_ids ||= @resource.collect(&:account_list_id).uniq
   end
 end

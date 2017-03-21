@@ -358,7 +358,8 @@ class Siebel < DataServer
     remote_id_match.update(remote_id: nil) if remote_id_match && place_match && place_match != remote_id_match
 
     if address_to_update
-      address_to_update.update!(new_address.attributes.select { |_k, v| v.present? })
+      address_to_update.assign_attributes(new_address.attributes.select { |_k, v| v.present? })
+      address_to_update.save!(validate: false)
       new_or_updated_address = address_to_update
     else
       new_or_updated_address = object.addresses.create!(new_address.attributes)

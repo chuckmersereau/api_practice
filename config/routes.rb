@@ -107,6 +107,7 @@ Rails.application.routes.draw do
               resources :exports, only: :index
               resource :bulk, only: [:create, :update, :destroy], controller: :bulk
               resources :filters, only: :index
+              resources :people, only: :index
             end
           end
         end

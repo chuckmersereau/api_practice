@@ -27,5 +27,19 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
 
   include_examples 'destroy_examples'
 
-  include_examples 'index_examples'
+  context 'all contacts' do
+    let(:parent_param) { {} }
+    include_examples 'index_examples'
+  end
+
+  context 'a specific contact' do
+    let(:parent_param) { { contact_id: contact.uuid } }
+    include_examples 'index_examples'
+  end
+
+  context 'filter by phone_number_valid' do
+    let(:filter_params) { { phone_number_valid: 'false' } }
+    before { Contact.first.people.first.delete }
+    include_examples 'filtering examples', action: :index
+  end
 end

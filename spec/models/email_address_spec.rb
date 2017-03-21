@@ -5,6 +5,10 @@ describe EmailAddress do
     let(:person) { create(:person) }
     let(:address) { 'test@example.com' }
 
+    include_examples 'updatable_only_when_source_is_mpdx_validation_examples', attributes: [:email, :remote_id, :location], factory_type: :email_address
+
+    include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :email_address
+
     it "should create an email address if it's new" do
       expect do
         EmailAddress.add_for_person(person, email: address)

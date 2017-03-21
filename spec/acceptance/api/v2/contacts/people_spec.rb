@@ -136,8 +136,24 @@ resource 'People' do
   context 'authorized user' do
     before { api_login(user) }
 
-    get '/api/v2/contacts/:contact_id/people' do
+    get '/api/v2/contacts/people' do
+      parameter 'filters[email_address_valid]', %(Filter by Email Address Invalid; A Person's Email Address is invalid if \
+                                                  the Email Address's valid_values attribute is set to false, or if the Person has \
+                                                  multiple Email Addresses marked as primary; Accepts value "false"), required: false
+      parameter 'filters[phone_number_valid]',  %(Filter by Phone Number Invalid; A Person's Phone Number is invalid if \
+                                                  the Phone Number's valid_values attribute is set to false, or if the Person has \
+                                                  multiple Phone Numbers marked as primary; Accepts value "false"), required: false
+
       example 'List people', document: documentation_scope do
+        explanation 'List of People'
+        do_request
+        check_collection_resource(1, ['relationships'])
+        expect(response_status).to eq(200)
+      end
+    end
+
+    get '/api/v2/contacts/:contact_id/people' do
+      example 'List people for a contact', document: documentation_scope do
         explanation 'List of People associated to the Contact'
         do_request
         check_collection_resource(1, ['relationships'])

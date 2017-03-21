@@ -43,7 +43,7 @@ RSpec.shared_examples 'index_examples' do |options = {}|
     end
 
     it 'does not show resources to signed in users if they do not own the parent' do
-      if defined?(parent_param)
+      if defined?(parent_param) && parent_param.present?
         api_login(create(:user))
         get :index, parent_param
         expect(response.status).to eq(403), invalid_status_detail
