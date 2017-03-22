@@ -92,7 +92,8 @@ class Person < ApplicationRecord
         :historic,
         :id,
         :location,
-        :primary
+        :primary,
+        :uuid
       ],
       facebook_accounts_attributes: [
         :_destroy,
