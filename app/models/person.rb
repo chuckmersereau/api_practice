@@ -119,7 +119,8 @@ class Person < ApplicationRecord
         :id,
         :location,
         :number,
-        :primary
+        :primary,
+        :uuid
       ],
       pictures_attributes: [
         :_destroy,
