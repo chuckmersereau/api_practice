@@ -57,7 +57,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
             type: 'people',
             id: resource.uuid,
             attributes: {
-              updated_in_db_at: Time.current
+              updated_in_db_at: resource.updated_at
             },
             relationships: {
               facebook_accounts: {
@@ -83,7 +83,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
         }
       end
 
-      it 'Correctly creates the Linkedin Account' do
+      it 'Correctly creates the Facebook Account' do
         expect(resource.facebook_accounts.count).to eq(0)
 
         api_login(user)
@@ -111,7 +111,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
             type: 'people',
             id: resource.uuid,
             attributes: {
-              updated_in_db_at: Time.current
+              updated_in_db_at: resource.updated_at
             },
             relationships: {
               linkedin_accounts: {
@@ -145,6 +145,57 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
 
         expect(response.status).to eq(200), invalid_status_detail
         expect(linkedin_account.reload.public_url).to eq 'https://linkedin.com/new-url'
+      end
+    end
+
+    describe 'Creating / Updating a Phone Number nested under person' do
+      let(:generated_uuid) { SecureRandom.uuid }
+
+      let(:params) do
+        {
+          id: resource.uuid,
+          contact_id: contact.uuid,
+          data: {
+            type: 'people',
+            id: resource.uuid,
+            attributes: {
+              updated_in_db_at: resource.updated_at
+            },
+            relationships: {
+              phone_numbers: {
+                data: [
+                  {
+                    type: 'phone_numbers',
+                    id: generated_uuid
+                  }
+                ]
+              }
+            }
+          },
+          included: [
+            {
+              type: 'phone_numbers',
+              id: generated_uuid,
+              attributes: {
+                number: '5011231234',
+                updated_in_db_at: Time.current
+              }
+            }
+          ]
+        }
+      end
+
+      it 'Correctly creates the Phone Number' do
+        expect(resource.facebook_accounts.count).to eq(0)
+
+        api_login(user)
+        put :update, params
+
+        expect(response.status).to eq(200), invalid_status_detail
+
+        expect(resource.reload.phone_numbers.count).to eq(1)
+        expect(resource.phone_numbers.first.uuid).to   eq generated_uuid
+        expect(resource.phone_numbers.first.number).to eq '+5011231234'
       end
     end
   end
