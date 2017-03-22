@@ -430,7 +430,7 @@ class Contact < ApplicationRecord
   end
 
   def monthly_pledge
-    pledge_amount.to_f / (pledge_frequency || 1)
+    (pledge_amount.to_f / (pledge_frequency || 1)).round(2)
   end
 
   def send_email_letter?

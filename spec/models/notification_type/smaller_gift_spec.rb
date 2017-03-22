@@ -24,5 +24,11 @@ describe NotificationType::SmallerGift do
                         donation_date: Date.today)
       expect(smaller_gift.check(account_list)).to be_empty
     end
+
+    it 'does not experience rounding errors' do
+      contact.update(pledge_amount: 250, pledge_frequency: 3.0)
+      donation.update(amount: 250.0, tendered_amount: 250.0)
+      expect(smaller_gift.check(account_list).size).to eq(0)
+    end
   end
 end
