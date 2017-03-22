@@ -133,6 +133,7 @@ class Contact < ApplicationRecord
       ],
       people_attributes: Person::PERMITTED_ATTRIBUTES,
       contacts_referred_by_me_attributes: [
+        :account_list_id,
         :name,
         :notes,
         :primary_address_city,
@@ -146,7 +147,8 @@ class Contact < ApplicationRecord
         :spouse_email,
         :spouse_first_name,
         :spouse_last_name,
-        :spouse_phone
+        :spouse_phone,
+        :uuid
       ],
       tag_list: []
     }
@@ -159,8 +161,9 @@ class Contact < ApplicationRecord
     :last_phone_call, :last_pre_call, :last_thank, :prayer_letters_id, :last_donation_date, :first_donation_date, :tnt_id
   ].freeze
 
-  validates :name, presence: true
+  validates :account_list_id, presence: true
   validates :addresses, single_primary: { primary_field: :primary_mailing_address }, if: :user_changed
+  validates :name, presence: true
 
   accepts_nested_attributes_for :people, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :donor_accounts, reject_if: :all_blank, allow_destroy: true

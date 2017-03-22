@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 22 March 2017
+- When adding a referral under a Contact, ie: `contacts_referred_by_me`, you are now **required** to provide a related `account_list` for each referral.
+
 ## 21 March 2017
 - The API will now return better 404 detail messages when unable to find a resource
 

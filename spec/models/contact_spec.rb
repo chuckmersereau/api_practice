@@ -1,6 +1,14 @@
 require 'rails_helper'
 
 describe Contact do
+  describe 'Validations' do
+    subject { build(:contact) }
+
+    it { is_expected.to be_valid }
+    it { is_expected.to validate_presence_of(:account_list_id) }
+    it { is_expected.to validate_presence_of(:name) }
+  end
+
   let(:account_list) { create(:account_list) }
   let(:contact)      { create(:contact, account_list: account_list) }
   let(:person)       { create(:person) }
@@ -940,6 +948,7 @@ describe Contact do
       {
         contacts_referred_by_me_attributes: [
           {
+            account_list_id: contact.account_list_id,
             name: 'First Referral Name',
             primary_person_first_name: 'Primary Person First Name',
             primary_person_last_name: 'Primary Person Last Name',
@@ -948,6 +957,7 @@ describe Contact do
             primary_address_street: 'Primary Address Street'
           },
           {
+            account_list_id: contact.account_list_id,
             name: 'Second Referral Name',
             primary_person_first_name: 'Second Referral Primary Person First Name',
             primary_person_last_name: 'Second Referral Primary Person Last Name',
@@ -965,7 +975,13 @@ describe Contact do
     end
 
     it 'creates new contacts' do
-      contact.assign_attributes(contacts_referred_by_me_attributes: [{ name: 'A Contact' }, { name: 'Another Contact' }])
+      contact.assign_attributes(
+        contacts_referred_by_me_attributes: [
+          { name: 'A Contact', account_list_id: contact.account_list_id },
+          { name: 'Another Contact', account_list_id: contact.account_list_id }
+        ]
+      )
+
       expect { contact.save! && contact.reload }.to change { contact.contacts_referred_by_me.count }.from(0).to(2)
         .and change { Contact.count }.by(2)
         .and change { Person.count }.by(0)
@@ -994,6 +1010,7 @@ describe Contact do
       referred_contact_id = contact.contacts_referred_by_me.first.id
       contact.update!(contacts_referred_by_me_attributes: [{
                         id: referred_contact_id,
+                        account_list_id: contact.account_list_id,
                         name: 'New Contact Name',
                         primary_person_first_name: 'My New First Name',
                         spouse_first_name: 'Their New First Name',
@@ -1012,6 +1029,7 @@ describe Contact do
       expect do
         contact.update!(contacts_referred_by_me_attributes: [{
                           id: referred_contact_id,
+                          account_list_id: contact.account_list_id,
                           _destroy: '1'
                         }])
       end.to_not change { contact.reload && contact.contacts_referred_by_me.count }
