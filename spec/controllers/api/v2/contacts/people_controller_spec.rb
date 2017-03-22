@@ -46,7 +46,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
   end
 
   describe 'Nested Examples' do
-    describe 'Creating / Updating a Facebook Account nested under person' do
+    describe 'Creating / Updating a Facebook Account nested under Person' do
       let(:generated_uuid) { SecureRandom.uuid }
 
       let(:params) do
@@ -97,7 +97,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
       end
     end
 
-    describe 'Creating / Updating a Linkedin Account nested under person' do
+    describe 'Creating / Updating a Linkedin Account nested under Person' do
       let(:linkedin_account) do
         create(:linkedin_account, public_url: 'https://linkedin.com/old-url',
                                   person: resource)
@@ -148,7 +148,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
       end
     end
 
-    describe 'Creating / Updating a Phone Number nested under person' do
+    describe 'Creating / Updating a Phone Number nested under Person' do
       let(:generated_uuid) { SecureRandom.uuid }
 
       let(:params) do
@@ -196,6 +196,57 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
         expect(resource.reload.phone_numbers.count).to eq(1)
         expect(resource.phone_numbers.first.uuid).to   eq generated_uuid
         expect(resource.phone_numbers.first.number).to eq '+5011231234'
+      end
+    end
+
+    describe 'Creating / Updating an Email Address under Person' do
+      let(:generated_uuid) { SecureRandom.uuid }
+
+      let(:params) do
+        {
+          id: resource.uuid,
+          contact_id: contact.uuid,
+          data: {
+            type: 'people',
+            id: resource.uuid,
+            attributes: {
+              updated_in_db_at: resource.updated_at
+            },
+            relationships: {
+              email_addresses: {
+                data: [
+                  {
+                    type: 'email_addresses',
+                    id: generated_uuid
+                  }
+                ]
+              }
+            }
+          },
+          included: [
+            {
+              type: 'email_addresses',
+              id: generated_uuid,
+              attributes: {
+                email: 'tester@testing.com',
+                updated_in_db_at: Time.current
+              }
+            }
+          ]
+        }
+      end
+
+      it 'Correctly creates the Email Address' do
+        expect(resource.email_addresses.count).to eq(1)
+
+        api_login(user)
+        put :update, params
+
+        expect(response.status).to eq(200), invalid_status_detail
+
+        expect(resource.reload.email_addresses.count).to eq(2)
+        expect(resource.email_addresses.last.uuid).to    eq generated_uuid
+        expect(resource.email_addresses.last.email).to   eq 'tester@testing.com'
       end
     end
   end
