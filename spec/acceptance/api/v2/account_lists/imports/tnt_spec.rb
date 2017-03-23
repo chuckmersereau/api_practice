@@ -58,8 +58,11 @@ resource 'Account Lists > Imports > from TNT XML' do
     %w(
       account_list_id
       created_at
-      file
+      file_constants
+      file_constants_mappings
       file_headers
+      file_headers_mappings
+      file_url
       group_tags
       groups
       import_by_group
@@ -74,6 +77,7 @@ resource 'Account Lists > Imports > from TNT XML' do
 
   let(:resource_associations) do
     %w(
+      sample_contacts
       user
     )
   end
@@ -85,46 +89,50 @@ resource 'Account Lists > Imports > from TNT XML' do
 
     post '/api/v2/account_lists/:account_list_id/imports/tnt' do
       with_options scope: [:data, :attributes] do
-        parameter 'file',              'File',                                                   'Type' => 'String'
-        parameter 'file_headers',      'File Headers',                                           'Type' => 'String'
-        parameter 'groups',            'Groups',                                                 'Type' => 'String'
-        parameter 'group_tags',        'Group Tags',                                             'Type' => 'String'
-        parameter 'import_by_group',   'Import by Group',                                        'Type' => 'String'
-        parameter 'in_preview',        "The Import will not be performed while it's in preview", 'Type' => 'Boolean'
-        parameter 'override',          'Override',                                               'Type' => 'Boolean'
-        parameter 'source_account_id', 'Source Account ID',                                      'Type' => 'String'
-        parameter 'tags',              'Tags',                                                   'Type' => 'String'
-        parameter 'user_id',           'User ID',                                                'Type' => 'String'
+        parameter 'file',              'The file uploaded as form-data',                         type: 'String'
+        parameter 'groups',            'Groups',                                                 type: 'String'
+        parameter 'group_tags',        'Group Tags',                                             type: 'String'
+        parameter 'import_by_group',   'Import by Group',                                        type: 'String'
+        parameter 'in_preview',        "The Import will not be performed while it's in preview", type: 'Boolean'
+        parameter 'override',          'Override',                                               type: 'Boolean'
+        parameter 'source_account_id', 'Source Account ID',                                      type: 'String'
+        parameter 'tags',              'Tags',                                                   type: 'String'
+        parameter 'user_id',           'User ID',                                                type: 'String'
       end
 
       with_options scope: [:data, :attributes] do
-        response_field 'account_list_id',  'Account List ID',                                                           'Type' => 'Number'
-        response_field 'created_at',       'Created At',                                                                'Type' => 'String'
-        response_field 'file',             'File',                                                                      'Type' => 'Object'
-        response_field 'file_headers',     'File Headers',                                                              'Type' => 'Array[String]'
-        response_field 'group_tags',       'Group Tags',                                                                'Type' => 'String'
-        response_field 'groups',           'Groups',                                                                    'Type' => 'Array[String]'
-        response_field 'import_by_group',  'Import by Group',                                                           'Type' => 'String'
-        response_field 'in_preview',       "The Import will not be performed while it's in preview; Defaults to false", 'Type' => 'Boolean'
-        response_field 'override',         'Override',                                                                  'Type' => 'String'
-        response_field 'source',           'Source; Defaults to "tnt"',                                                 'Type' => 'String'
-        response_field 'tags',             'Tags',                                                                      'Type' => 'String'
-        response_field 'updated_at',       'Updated At',                                                                'Type' => 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At',                                                          'Type' => 'String'
+        response_field 'account_list_id',         'Account List ID',                                                           type: 'Number'
+        response_field 'created_at',              'Created At',                                                                type: 'String'
+        response_field 'file_url',                'A URL to download the file',                                                type: 'String'
+        response_field 'file_headers_mappings',   'Not applicable to TNT XML imports.',                                        type: 'Object'
+        response_field 'file_headers',            'Not applicable to TNT XML imports.',                                        type: 'Array[String]'
+        response_field 'file_constants',          'Not applicable to TNT XML imports.',                                        type: 'Object'
+        response_field 'file_constants_mappings', 'Not applicable to TNT XML imports.',                                        type: 'Object'
+        response_field 'group_tags',              'Group Tags',                                                                type: 'String'
+        response_field 'groups',                  'Groups',                                                                    type: 'Array[String]'
+        response_field 'import_by_group',         'Import by Group',                                                           type: 'String'
+        response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to false", type: 'Boolean'
+        response_field 'override',                'Override',                                                                  type: 'String'
+        response_field 'source',                  'Source; Defaults to "tnt"',                                                 type: 'String'
+        response_field 'tags',                    'Tags',                                                                      type: 'String'
+        response_field 'updated_at',              'Updated At',                                                                type: 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',                                                          type: 'String'
       end
 
       with_options scope: [:data, :relationships] do
-        response_field 'user', 'User that the Import belongs to', 'Type' => 'Object'
+        response_field 'user', 'User that the Import belongs to', type: 'Object'
       end
 
-      example 'Import [CREATE]', document: documentation_scope do
-        explanation 'Creates a new Import associated with the Account List, this endpoint supports Content-Type multipart/form-data to handle the file upload'
+      example 'TNT XML Import [CREATE]', document: documentation_scope do
+        explanation 'Creates a new TNT XML Import associated with the Account List. This endpoint expects a TNT file to be uploaded using Content-Type ' \
+                    '"multipart/form-data", this makes the endpoint unique in that it does not expect JSON content. Unless otherwise specified, the Import will be created with ' \
+                    '"in_preview" set to false, which will cause the import to begin after being created (the import runs asynchronously as a background job).'
         do_request data: form_data
         check_resource(['relationships'])
         expect(response_status).to eq(201), invalid_status_detail
         expect(response_headers['Content-Type']).to eq 'application/vnd.api+json; charset=utf-8'
         expect(resource_data['id']).to be_present
-        expect(resource_data['attributes']['file']['file']['url']).to be_present
+        expect(resource_data['attributes']['file_url']).to be_present
         expect(resource_data['attributes']['source']).to eq 'tnt'
         expect(resource_data['attributes']['in_preview']).to eq false
       end

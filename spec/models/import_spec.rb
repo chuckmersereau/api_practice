@@ -6,6 +6,29 @@ describe Import do
     allow(TntImport).to receive(:new).and_return(@tnt_import)
   end
 
+  Import::SOURCES.each do |source|
+    describe "#source_#{source}?" do
+      it "returns true if source is #{source} and false otherwise" do
+        import = build(:import, source: nil)
+        expect { import.source = source }.to change { import.send("source_#{source}?") }.from(false).to(true)
+      end
+    end
+  end
+
+  describe '#file=' do
+    it 'resets local attributes related to the file' do
+      import = create(:csv_import, in_preview: true)
+      import.file_headers = [:test]
+      import.file_constants = { test: 'test' }
+      import.file_row_samples = [:test]
+      expect { import.file = File.new(Rails.root.join('spec/fixtures/sample_csv_with_custom_headers.csv')) }
+        .to change { import.file_contents }
+        .and change { import.file_headers }.to([])
+        .and change { import.file_constants }.to({})
+        .and change { import.file_row_samples }.to([])
+    end
+  end
+
   it "should set 'importing' to false after an import" do
     import = create(:tnt_import, importing: true)
     import.send(:import)
@@ -41,7 +64,7 @@ describe Import do
   end
 
   it 'queues an import when saved' do
-    expect { create(:csv_import) }.to change(Import.jobs, :size).from(0).to(1)
+    expect { create(:import) }.to change(Import.jobs, :size).from(0).to(1)
   end
 
   context 'in_preview' do
@@ -57,21 +80,10 @@ describe Import do
     end
   end
 
-  context 'assigning file headers from csv file' do
-    it 'assigns file_headers when setting file' do
-      expect(build(:csv_import_custom_headers).file_headers).to eq 'name,fname,lname,spouse_fname,spouse_lname,greeting,envelope_greeting,street,city,' \
-        'state,zipcode,country,status,amount,frequency,newsletter,received,tags,email,spouse_email,phone,spouse_phone,note'
-    end
-
-    it 'assigns file_headers to nil if file is nil' do
-      expect(build(:csv_import_custom_headers, file: nil).file_headers).to be_blank
-    end
-  end
-
   it 'validates size of file' do
     import = build(:import)
-    allow(import.file).to receive(:size).and_return(FileSizeValidator::MAX_FILE_SIZE_IN_BYTES + 1)
+    allow(import.file).to receive(:size).and_return(Import::MAX_FILE_SIZE_IN_BYTES + 1)
     expect(import.valid?).to eq false
-    expect(import.errors[:base]).to eq ['File size must be less than 10000000 bytes']
+    expect(import.errors[:file]).to eq ['File size must be less than 10000000 bytes']
   end
 end

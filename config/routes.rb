@@ -20,7 +20,7 @@ Rails.application.routes.draw do
               scope module: :imports do
                 collection do
                   resources :tnt, only: :create
-                  resources :csv, only: :create
+                  resources :csv, only: [:index, :show, :create, :update]
                 end
               end
             end

@@ -10,6 +10,7 @@ This changelog covers what's changed in the MPDX APIs.
 
 ## 20 March 2017
 - Filters ending with `_id` now allow for comma-delimited ids to be sent
+- Add CSV Import get, list, and update endpoints
 
 ## 17 March 2017
 - Sparse fieldsets enabled for contacts and people duplicates endpoints

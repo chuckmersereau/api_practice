@@ -1,9 +1,13 @@
-class FileSizeValidator < ActiveModel::Validator
-  MAX_FILE_SIZE_IN_BYTES = 10_000_000
+class FileSizeValidator < ActiveModel::EachValidator
+  def initialize(options)
+    raise(ArgumentError, 'You must supply a validation value for less_than (in bytes)') unless options[:less_than]&.is_a?(Integer)
+    options[:message] ||= "File size must be less than #{options[:less_than]} bytes"
+    super
+  end
 
-  def validate(record)
-    return unless record&.file&.size
-    return if record.file.size <= MAX_FILE_SIZE_IN_BYTES
-    record.errors[:base] << _('File size must be less than %{size} bytes').localize % { size: MAX_FILE_SIZE_IN_BYTES }
+  def validate_each(record, attribute, value)
+    return unless value&.size
+    return if value.size <= options[:less_than]
+    record.errors[attribute] << options[:message]
   end
 end

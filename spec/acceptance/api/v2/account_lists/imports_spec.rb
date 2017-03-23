@@ -34,8 +34,11 @@ resource 'Account Lists > Imports' do
     %w(
       account_list_id
       created_at
-      file
+      file_constants
+      file_constants_mappings
       file_headers
+      file_headers_mappings
+      file_url
       group_tags
       groups
       import_by_group
@@ -50,6 +53,7 @@ resource 'Account Lists > Imports' do
 
   let(:resource_associations) do
     %w(
+      sample_contacts
       user
     )
   end
@@ -68,22 +72,28 @@ resource 'Account Lists > Imports' do
 
     get '/api/v2/account_lists/:account_list_id/imports/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',        'Created At',        type: 'String'
-        response_field 'file',              'File',              type: 'String'
-        response_field 'groups',            'Groups',            type: 'String'
-        response_field 'group_tags',        'Group Tags',        type: 'String'
-        response_field 'import_by_group',   'Import by Group',   type: 'Boolean'
-        response_field 'override',          'Override',          type: 'Boolean'
-        response_field 'source',            'Source',            type: 'String'
-        response_field 'source_account_id', 'Source Account ID', type: 'Number'
-        response_field 'tags',              'Tags',              type: 'Array[String]'
-        response_field 'user_id',           'User ID',           type: 'Number'
-        response_field 'updated_at',        'Updated At',  type: 'String'
-        response_field 'updated_in_db_at',  'Updated In Db At', type: 'String'
+        response_field 'created_at',              'Created At',                     type: 'String'
+        response_field 'file_url',                'A URL to download the file',     type: 'String'
+        response_field 'file_headers_mappings',   'Only applicable to CSV Imports', type: 'Object'
+        response_field 'file_headers',            'Only applicable to CSV Imports', type: 'Array[String]'
+        response_field 'file_constants',          'Only applicable to CSV Imports', type: 'Object'
+        response_field 'file_constants_mappings', 'Only applicable to CSV Imports', type: 'Object'
+        response_field 'groups',                  'Groups',                         type: 'String'
+        response_field 'group_tags',              'Group Tags',                     type: 'String'
+        response_field 'import_by_group',         'Import by Group',                type: 'Boolean'
+        response_field 'override',                'Override',                       type: 'Boolean'
+        response_field 'source',                  'Source',                         type: 'String'
+        response_field 'source_account_id',       'Source Account ID',              type: 'Number'
+        response_field 'tags',                    'Tags',                           type: 'Array[String]'
+        response_field 'user_id',                 'User ID',                        type: 'Number'
+        response_field 'updated_at',              'Updated At',                     type: 'String'
+        response_field 'updated_in_db_at',        'Updated In Db At',               type: 'String'
       end
 
       example 'Import [GET]', document: documentation_scope do
-        explanation 'The Account List Import with the given ID'
+        explanation 'Creates a new Import associated with the Account List. This endpoint accepts a file to be uploaded using Content-Type ' \
+                    '"multipart/form-data", this makes the endpoint unique in that it does not only accept JSON content. Unless otherwise specified, the Import will be created with ' \
+                    '"in_preview" set to false, which will cause the import to begin after being created (the import runs asynchronously as a background job).'
         do_request
         check_resource(['relationships'])
         expect(response_status).to eq 200
