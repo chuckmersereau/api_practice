@@ -49,16 +49,14 @@ class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
     render json: @import,
            status: success_status,
            include: include_params,
-           fields: field_params,
-           key_transform: :unaltered
+           fields: field_params
   end
 
   def render_imports
     render json: @imports,
            meta: meta_hash(@imports),
            include: include_params,
-           fields: field_params,
-           key_transform: :unaltered
+           fields: field_params
   end
 
   def persist_import

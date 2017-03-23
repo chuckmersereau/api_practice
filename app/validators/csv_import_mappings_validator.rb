@@ -26,15 +26,15 @@ class CsvImportMappingsValidator < ActiveModel::Validator
   attr_accessor :import, :csv_import
 
   def file_headers_mappings_contains_required_headers
-    return if (CsvImport::REQUIRED_HEADERS & import.file_headers_mappings.keys) == CsvImport::REQUIRED_HEADERS
+    return if (CsvImport.required_headers.keys & import.file_headers_mappings.keys) == CsvImport.required_headers.keys
 
-    import.errors[:file_headers_mappings] << "should specify a header mapping for each of the required headers. The required headers are: #{CsvImport::REQUIRED_HEADERS}"
+    import.errors[:file_headers_mappings] << "should specify a header mapping for each of the required headers. The required headers are: #{CsvImport.required_headers.keys}"
   end
 
   def file_headers_mappings_contains_only_supported_headers
-    return if (import.file_headers_mappings.keys & CsvImport::SUPPORTED_HEADERS) == import.file_headers_mappings.keys
+    return if (import.file_headers_mappings.keys & CsvImport.supported_headers.keys) == import.file_headers_mappings.keys
 
-    unsupported_keys = import.file_headers_mappings.keys - CsvImport::SUPPORTED_HEADERS
+    unsupported_keys = import.file_headers_mappings.keys - CsvImport.supported_headers.keys
     import.errors[:file_headers_mappings] << 'has unsupported headers. One or more of the headers specified in file_headers_mappings is not supported, ' \
                                              'please refer to the constants endpoints for a list of supported headers. ' \
                                              "The unsupported headers you specifed are #{unsupported_keys}"
@@ -50,7 +50,7 @@ class CsvImportMappingsValidator < ActiveModel::Validator
   end
 
   def file_constants_mappings_contains_the_constants_needed_for_import
-    constants_needing_to_be_imported = (CsvImport::CONSTANT_HEADERS.keys & import.file_headers_mappings.keys)
+    constants_needing_to_be_imported = (CsvImport.constants.keys & import.file_headers_mappings.keys)
     return if (constants_needing_to_be_imported & import.file_constants_mappings.keys) == constants_needing_to_be_imported
 
     missing_constant_mappings = constants_needing_to_be_imported - import.file_constants_mappings.keys
@@ -62,11 +62,11 @@ class CsvImportMappingsValidator < ActiveModel::Validator
   def file_constants_mappings_only_maps_constants_that_are_supported
     import.file_constants_mappings.each do |header, mappings|
       mapping_keys = mappings.keys
-      next if CsvImport::SUPPORTED_HEADERS.include?(header) &&
-              (mapping_keys & CsvImport::CONSTANT_HEADERS[header]) == mapping_keys
+      next if CsvImport.supported_headers.keys.include?(header) &&
+              (mapping_keys & CsvImport.constants[header].keys) == mapping_keys
 
-      if CsvImport::SUPPORTED_HEADERS.include?(header)
-        invalid_mapping_keys = mapping_keys - CsvImport::CONSTANT_HEADERS[header]
+      if CsvImport.supported_headers.keys.include?(header)
+        invalid_mapping_keys = mapping_keys - CsvImport.constants[header].keys
         import.errors[:file_constants_mappings] << %(has an invalid mapping. For the header "#{header}", you cannot map to the constants: #{invalid_mapping_keys})
       else
         import.errors[:file_constants_mappings] << %(has an invalid mapping. You cannot map to the constant "#{header}" because it's not a supported MPDX constant.)
@@ -93,7 +93,7 @@ class CsvImportMappingsValidator < ActiveModel::Validator
   end
 
   def file_constants_mappings_maps_all_constants_values_found_in_the_csv
-    constants_needing_to_be_imported = (CsvImport::CONSTANT_HEADERS.keys & import.file_headers_mappings.keys)
+    constants_needing_to_be_imported = (CsvImport.constants.keys & import.file_headers_mappings.keys)
 
     constants_needing_to_be_imported.each do |constant_header|
       mapped_constants = import.file_constants_mappings[constant_header].values.flatten

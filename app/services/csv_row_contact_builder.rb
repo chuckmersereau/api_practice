@@ -12,14 +12,15 @@ class CsvRowContactBuilder
 
   private
 
-  delegate :account_list, to: :import, prefix: false
+  delegate :account_list, to: :import
+  delegate :constants, to: CsvImport
 
   attr_accessor :csv_row, :import, :contact, :person, :spouse
 
   def contact_from_csv_row
     rebuild_csv_row_with_mpdx_headers_and_mpdx_constants
 
-    return if true?(csv_row['Do Not Import?'])
+    return if true?(csv_row['do_not_import'])
 
     build_contact
     build_addresses
@@ -34,73 +35,73 @@ class CsvRowContactBuilder
 
   def build_contact
     self.contact = account_list.contacts.build(
-      church_name: csv_row['Church'],
-      name: csv_row['Contact Name'],
-      greeting: csv_row['Greeting'],
-      envelope_greeting: csv_row['Envelope Greeting'],
-      status: csv_row['Status'],
-      pledge_amount: csv_row['Commitment Amount'],
-      notes: csv_row['Notes'],
-      pledge_frequency: csv_row['Commitment Frequency'],
-      send_newsletter: csv_row['Newsletter'],
-      pledge_currency: csv_row['Commitment Currency'],
-      likely_to_give: csv_row['Likely To Give'],
-      no_appeals: !true?(csv_row['Send Appeals?']),
-      website: csv_row['Website']
+      church_name: csv_row['church'],
+      name: csv_row['contact_name'],
+      greeting: csv_row['greeting'],
+      envelope_greeting: csv_row['envelope_greeting'],
+      status: csv_row['status'],
+      pledge_amount: csv_row['commitment_amount'],
+      notes: csv_row['notes'],
+      pledge_frequency: csv_row['commitment_frequency'],
+      send_newsletter: csv_row['newsletter'],
+      pledge_currency: csv_row['commitment_currency'],
+      likely_to_give: csv_row['likely_to_give'],
+      no_appeals: !true?(csv_row['send_appeals']),
+      website: csv_row['website']
     )
   end
 
   def build_addresses
-    return if csv_row['Street'].blank?
+    return if csv_row['street'].blank?
 
     contact.addresses.build(
-      street: csv_row['Street'],
-      city: csv_row['City'],
-      state: csv_row['State'],
-      postal_code: csv_row['Zip'],
-      country: csv_row['Country'],
-      metro_area: csv_row['Metro Area'],
-      region: csv_row['Region'],
+      street: csv_row['street'],
+      city: csv_row['city'],
+      state: csv_row['state'],
+      postal_code: csv_row['zip'],
+      country: csv_row['country'],
+      metro_area: csv_row['metro_area'],
+      region: csv_row['region'],
       primary_mailing_address: true
     )
   end
 
   def build_tags
-    contact.tag_list = csv_row['Tags']
+    contact.tag_list = csv_row['tags']
     contact.tag_list.add(import.tags, parse: true) if import.tags.present?
   end
 
   def build_primary_person
-    self.person = Person.new(first_name: csv_row['First Name'].presence || csv_row['Contact Name'],
-                             last_name: csv_row['Last Name'])
+    self.person = Person.new(first_name: csv_row['first_name'].presence || csv_row['contact_name'],
+                             last_name: csv_row['last_name'])
     contact.primary_person = person
   end
 
   def build_email_addresses
-    person.email_addresses.build(email: csv_row['Email 1'],
-                                 primary: true) if csv_row['Email 1'].present?
-    person.email_addresses.build(email: csv_row['Email 2'],
-                                 primary: person.email_addresses.blank?) if csv_row['Email 2'].present?
+    person.email_addresses.build(email: csv_row['email_1'],
+                                 primary: true) if csv_row['email_1'].present?
+    person.email_addresses.build(email: csv_row['email_2'],
+                                 primary: person.email_addresses.blank?) if csv_row['email_2'].present?
   end
 
   def build_phone_numbers
-    person.phone_numbers.build(number: csv_row['Phone 1'],
-                               primary: true) if csv_row['Phone 1'].present?
-    person.phone_numbers.build(number: csv_row['Phone 2'],
-                               primary: person.phone_numbers.blank?) if csv_row['Phone 2'].present?
-    person.phone_numbers.build(number: csv_row['Phone 3'],
-                               primary: person.phone_numbers.blank?) if csv_row['Phone 3'].present?
+    person.phone_numbers.build(number: csv_row['phone_1'],
+                               primary: true) if csv_row['phone_1'].present?
+    person.phone_numbers.build(number: csv_row['phone_2'],
+                               primary: person.phone_numbers.blank?) if csv_row['phone_2'].present?
+    person.phone_numbers.build(number: csv_row['phone_3'],
+                               primary: person.phone_numbers.blank?) if csv_row['phone_3'].present?
   end
 
   def build_spouse_person
-    return if csv_row['Spouse First Name'].blank?
+    return if csv_row['spouse_first_name'].blank?
 
-    spouse = Person.new(first_name: csv_row['Spouse First Name'],
-                        last_name: csv_row['Spouse Last Name'].presence || csv_row['Last Name'])
-    spouse.email_addresses.build(email: csv_row['Spouse Email'],
-                                 primary: true) if csv_row['Spouse Email'].present?
-    spouse.phone_numbers.build(number: csv_row['Spouse Phone'],
-                               primary: true) if csv_row['Spouse Phone'].present?
+    spouse = Person.new(first_name: csv_row['spouse_first_name'],
+                        last_name: csv_row['spouse_last_name'].presence || csv_row['last_name'])
+    spouse.email_addresses.build(email: csv_row['spouse_email'],
+                                 primary: true) if csv_row['spouse_email'].present?
+    spouse.phone_numbers.build(number: csv_row['spouse_phone'],
+                               primary: true) if csv_row['spouse_phone'].present?
 
     contact.spouse = spouse
   end
@@ -129,6 +130,7 @@ class CsvRowContactBuilder
       mpdx_constant_value = mpdx_constant_mappings.find do |_mpdx_constant_value, csv_constant_value|
         [csv_constant_value].flatten.include?(value_to_change)
       end&.first
+      mpdx_constant_value = constants[mpdx_constant_header]&.[](mpdx_constant_value)
       new_csv_row[mpdx_constant_header] = mpdx_constant_value
     end
     new_csv_row

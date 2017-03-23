@@ -22,42 +22,42 @@ describe CsvImport do
     before do
       csv_import.update(in_preview: true)
       csv_import.file_headers_mappings = {
-        'Church'               => 'Church',
-        'City'                 => 'Mailing City',
-        'Commitment Amount'    => 'Commitment Amount',
-        'Commitment Currency'  => 'Commitment Currency',
-        'Commitment Frequency' => 'Commitment Frequency',
-        'Contact Name'         => 'Contact Name',
-        'Country'              => 'Mailing Country',
-        'Email 1'              => 'Primary Email',
-        'Envelope Greeting'    => 'Envelope Greeting',
-        'First Name'           => 'First Name',
-        'Greeting'             => 'Greeting',
-        'Last Name'            => 'Last Name',
-        'Newsletter'           => 'Newsletter',
-        'Notes'                => 'Notes',
-        'Phone 1'              => 'Primary Phone',
-        'Spouse Email'         => 'Spouse Email',
-        'Spouse First Name'    => 'Spouse First Name',
-        'Spouse Phone'         => 'Spouse Phone',
-        'State'                => 'Mailing State',
-        'Status'               => 'Status',
-        'Street'               => 'Mailing Street Address',
-        'Tags'                 => 'Tags',
-        'Zip'                  => 'Mailing Postal Code'
+        'church'               => 'Church',
+        'city'                 => 'Mailing City',
+        'commitment_amount'    => 'Commitment Amount',
+        'commitment_currency'  => 'Commitment Currency',
+        'commitment_frequency' => 'Commitment Frequency',
+        'contact_name'         => 'Contact Name',
+        'country'              => 'Mailing Country',
+        'email_1'              => 'Primary Email',
+        'envelope_greeting'    => 'Envelope Greeting',
+        'first_name'           => 'First Name',
+        'greeting'             => 'Greeting',
+        'last_name'            => 'Last Name',
+        'newsletter'           => 'Newsletter',
+        'notes'                => 'Notes',
+        'phone_1'              => 'Primary Phone',
+        'spouse_email'         => 'Spouse Email',
+        'spouse_first_name'    => 'Spouse First Name',
+        'spouse_phone'         => 'Spouse Phone',
+        'state'                => 'Mailing State',
+        'status'               => 'Status',
+        'street'               => 'Mailing Street Address',
+        'tags'                 => 'Tags',
+        'zip'                  => 'Mailing Postal Code'
       }
       csv_import.file_constants_mappings = {
-        'Commitment Currency' => {
-          'CAD' => 'CAD'
+        'commitment_currency' => {
+          'cad' => 'CAD'
         },
-        'Commitment Frequency' => {
-          '1.0' => 'Monthly'
+        'commitment_frequency' => {
+          '1_0' => 'Monthly'
         },
-        'Newsletter' => {
-          'Both' => 'Both'
+        'newsletter' => {
+          'both' => 'Both'
         },
-        'Status' => {
-          'Partner - Pray' => 'Partner - Pray'
+        'status' => {
+          'partner_pray' => 'Partner - Pray'
         }
       }
     end
@@ -76,17 +76,17 @@ describe CsvImport do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_iso_8950_1.csv')))
       import.update_cached_file_data
       csv_import.file_constants_mappings = {
-        'Commitment Currency' => {
-          'CAD' => nil
+        'commitment_currency' => {
+          'cad' => nil
         },
-        'Commitment Frequency' => {
+        'commitment_frequency' => {
           nil => nil
         },
-        'Newsletter' => {
+        'newsletter' => {
           nil => nil
         },
-        'Status' => {
-          'Partner - Pray' => nil
+        'status' => {
+          'partner_pray' => nil
         }
       }
       csv_import.update(in_preview: false)
@@ -97,7 +97,7 @@ describe CsvImport do
     it 'changes None to an empty string in the send newsletter field' do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_none.csv')))
       import.update_cached_file_data
-      csv_import.file_constants_mappings['Newsletter'] = {
+      csv_import.file_constants_mappings['newsletter'] = {
         nil => 'None'
       }
       csv_import.update(in_preview: false)
@@ -120,65 +120,65 @@ describe CsvImport do
 
     before do
       csv_import.file_headers_mappings = {
-        'Church'               => 'church',
-        'City'                 => 'city',
-        'Commitment Amount'    => 'amount',
-        'Commitment Currency'  => 'currency',
-        'Commitment Frequency' => 'frequency',
-        'Contact Name'         => 'fname',
-        'Country'              => 'country',
-        'Do Not Import?'       => 'skip',
-        'Email 1'              => 'email-address',
-        'First Name'           => 'fname',
-        'Greeting'             => 'greeting',
-        'Envelope Greeting'    => 'mailing-greeting',
-        'Last Name'            => 'lname',
-        'Likely To Give'       => 'likely-giver',
-        'Metro Area'           => 'metro',
-        'Newsletter'           => 'newsletter',
-        'Notes'                => 'extra-notes',
-        'Phone 1'              => 'phone',
-        'Region'               => 'region',
-        'Send Appeals?'        => 'appeals',
-        'Spouse Email'         => 'Spouse-email-address',
-        'Spouse First Name'    => 'Spouse-fname',
-        'Spouse Last Name'     => 'Spouse-lname',
-        'Spouse Phone'         => 'Spouse-phone-number',
-        'State'                => 'province',
-        'Status'               => 'status',
-        'Street'               => 'street',
-        'Tags'                 => 'tags',
-        'Website'              => 'website',
-        'Zip'                  => 'zip-code'
+        'church'               => 'church',
+        'city'                 => 'city',
+        'commitment_amount'    => 'amount',
+        'commitment_currency'  => 'currency',
+        'commitment_frequency' => 'frequency',
+        'contact_name'         => 'fname',
+        'country'              => 'country',
+        'do_not_import'        => 'skip',
+        'email_1'              => 'email-address',
+        'first_name'           => 'fname',
+        'greeting'             => 'greeting',
+        'envelope_greeting'    => 'mailing-greeting',
+        'last_name'            => 'lname',
+        'likely_to_give'       => 'likely-giver',
+        'metro_area'           => 'metro',
+        'newsletter'           => 'newsletter',
+        'notes'                => 'extra-notes',
+        'phone_1'              => 'phone',
+        'region'               => 'region',
+        'send_appeals'         => 'appeals',
+        'spouse_email'         => 'Spouse-email-address',
+        'spouse_first_name'    => 'Spouse-fname',
+        'spouse_last_name'     => 'Spouse-lname',
+        'spouse_phone'         => 'Spouse-phone-number',
+        'state'                => 'province',
+        'status'               => 'status',
+        'street'               => 'street',
+        'tags'                 => 'tags',
+        'website'              => 'website',
+        'zip'                  => 'zip-code'
       }
 
       csv_import.file_constants_mappings = {
-        'Commitment Currency' => {
-          'CAD' => 'CAD',
-          'USD' => nil
+        'commitment_currency' => {
+          'cad' => 'CAD',
+          'usd' => nil
         },
-        'Commitment Frequency' => {
-          '1.0' => 'Monthly',
+        'commitment_frequency' => {
+          '1_0' => 'Monthly',
           nil => nil
         },
-        'Do Not Import?' => {
+        'do_not_import' => {
           'true' => 'Yes',
           'false' => ['No', nil]
         },
-        'Likely To Give' => {
-          'Most Likely' => 'Yes',
-          'Least Likely' => 'No'
+        'likely_to_give' => {
+          'most_likely' => 'Yes',
+          'least_likely' => 'No'
         },
-        'Newsletter' => {
-          'Both' => 'Both'
+        'newsletter' => {
+          'both' => 'Both'
         },
-        'Send Appeals?' => {
+        'send_appeals' => {
           'true' => 'Yes',
           'false' => 'No'
         },
-        'Status' => {
-          'Partner - Financial' => 'Praying and giving',
-          'Partner - Pray' => 'Praying'
+        'status' => {
+          'partner_financial' => 'Praying and giving',
+          'partner_pray' => 'Praying'
         }
       }
 
