@@ -5,7 +5,9 @@ class Api::V2::AccountLists::MergeController < Api::V2Controller
 
     if @merge_account_list != load_account_list
       load_account_list.merge(@merge_account_list)
-      render_201
+
+      render json: load_account_list,
+             status: :created
     else
       render_400(detail: create_error_message)
     end
