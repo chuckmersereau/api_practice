@@ -32,11 +32,13 @@ resource 'Contacts > Addresses' do
       location
       postal_code
       primary_mailing_address
+      source
       start_date
       state
       street
       updated_at
       updated_in_db_at
+      valid_values
     )
   end
 
@@ -64,11 +66,13 @@ resource 'Contacts > Addresses' do
         response_field 'location',                'Location',                type: 'String'
         response_field 'postal_code',             'Postal Code',             type: 'String'
         response_field 'primary_mailing_address', 'Primary Mailing Address', type: 'Boolean'
+        response_field 'source',                  'Source',                  type: 'String'
         response_field 'start_date',              'Start Date',              type: 'String'
         response_field 'state',                   'State',                   type: 'String'
         response_field 'street',                  'Street',                  type: 'String'
         response_field 'updated_at',              'Updated At',              type: 'String'
         response_field 'updated_in_db_at',        'Updated In Db At',        type: 'String'
+        response_field 'valid_values',            'Valid Values',            type: 'Boolean'
       end
 
       example 'Address [GET]', document: documentation_scope do
@@ -92,9 +96,11 @@ resource 'Contacts > Addresses' do
         parameter 'region',                  'Region'
         parameter 'remote_id',               'Remote ID'
         parameter 'seasonal',                'Seasonal'
+        parameter 'source',                  'Source'
         parameter 'start_date',              'Start Date'
         parameter 'state',                   'State'
         parameter 'street',                  'Street'
+        parameter 'valid_values',            'Valid Values'
       end
 
       example 'Address [CREATE]', document: documentation_scope do
@@ -118,9 +124,11 @@ resource 'Contacts > Addresses' do
         parameter 'region',                  'Region'
         parameter 'remote_id',               'Remote ID'
         parameter 'seasonal',                'Seasonal'
+        parameter 'source',                  'Source'
         parameter 'start_date',              'Start Date'
         parameter 'state',                   'State'
         parameter 'street',                  'Street'
+        parameter 'valid_values',            'Valid Values'
       end
 
       example 'Address [UPDATE]', document: documentation_scope do

@@ -247,8 +247,6 @@ mutation_attributes: &mutation_attrs
     ignore: true
   pledge_currency_symbol:
     ignore: true
-  status_valid:
-    ignore: true
   suggested_changes:
     ignore: true
   uncompleted_tasks_count:

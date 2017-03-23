@@ -93,7 +93,9 @@ class Person < ApplicationRecord
         :id,
         :location,
         :primary,
-        :uuid
+        :source,
+        :uuid,
+        :valid_values
       ],
       facebook_accounts_attributes: [
         :_destroy,
@@ -121,7 +123,9 @@ class Person < ApplicationRecord
         :location,
         :number,
         :primary,
-        :uuid
+        :source,
+        :uuid,
+        :valid_values
       ],
       pictures_attributes: [
         :_destroy,

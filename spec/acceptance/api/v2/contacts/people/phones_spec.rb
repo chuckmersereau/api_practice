@@ -32,8 +32,10 @@ resource 'Contacts > People > Phones' do
       location
       number
       primary
+      source
       updated_at
       updated_in_db_at
+      valid_values
     )
   end
 
@@ -57,8 +59,10 @@ resource 'Contacts > People > Phones' do
         response_field 'location',         'Location',         type: 'String'
         response_field 'number',           'Number',           type: 'String'
         response_field 'primary',          'Primary',          type: 'Boolean'
+        response_field 'source',           'Source',           type: 'String'
         response_field 'updated_at',       'Updated At',       type: 'String'
         response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
+        response_field 'valid_values',     'Valid',            type: 'Boolean'
       end
 
       example 'Phone [GET]', document: documentation_scope do
@@ -78,6 +82,8 @@ resource 'Contacts > People > Phones' do
         parameter 'person_id',    'Person ID'
         parameter 'primary',      'Primary'
         parameter 'remote_id',    'Remote ID'
+        parameter 'source',       'Source'
+        parameter 'valid_values', 'Valid Values'
       end
 
       example 'Phone [CREATE]', document: documentation_scope do
@@ -97,6 +103,8 @@ resource 'Contacts > People > Phones' do
         parameter 'person_id',    'Person ID'
         parameter 'primary',      'Primary'
         parameter 'remote_id',    'Remote ID'
+        parameter 'source',       'Source'
+        parameter 'valid_values', 'Valid Values'
       end
 
       example 'Phone [UPDATE]', document: documentation_scope do

@@ -91,6 +91,7 @@ class Contact < ApplicationRecord
     :primary_person_id,
     :send_newsletter,
     :status,
+    :status_valid,
     :tag_list,
     :timezone,
     :updated_at,
@@ -113,7 +114,9 @@ class Contact < ApplicationRecord
         :remote_id,
         :state,
         :street,
-        :user_changed
+        :source,
+        :user_changed,
+        :valid_values
       ],
       contact_referrals_to_me_attributes: [
         :_destroy,

@@ -57,6 +57,14 @@ class ConstantList < ActiveModelSerializers::Model
     }
   end
 
+  def sources
+    {
+      addresses: %w(DataServer GoogleContactSync GoogleImport MPDX Siebel TntImport),
+      email_addresses: ['MPDX'],
+      phone_numbers: ['MPDX']
+    }
+  end
+
   private
 
   def address

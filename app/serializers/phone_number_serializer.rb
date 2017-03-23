@@ -5,7 +5,9 @@ class PhoneNumberSerializer < ApplicationSerializer
              :historic,
              :number,
              :location,
-             :primary
+             :primary,
+             :source,
+             :valid_values
 
   delegate :number, to: :phone_number_exhibit
 

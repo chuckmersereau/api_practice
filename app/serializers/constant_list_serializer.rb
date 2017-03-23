@@ -10,6 +10,7 @@ class ConstantListSerializer < ActiveModel::Serializer
            :pledge_frequencies,
            :results,
            :csv_import,
+           :sources,
            to: :object
 
   delegate :bulk_update_options, to: :constants_exhibit
@@ -18,22 +19,26 @@ class ConstantListSerializer < ActiveModel::Serializer
 
   attributes :activities,
              :alert_frequencies,
-             :assignable_locations,
              :assignable_likely_to_give,
+             :assignable_locations,
              :assignable_send_newsletter,
              :assignable_statuses,
              :bulk_update_options,
+             :csv_import,
              :dates,
              :languages,
+             :locales,
+             :locales,
              :next_actions,
+             :notifications,
+             :notifications,
+             :organizations,
+             :organizations,
              :pledge_currencies,
              :pledge_frequencies,
              :results,
-             :statuses,
-             :locales,
-             :notifications,
-             :organizations,
-             :csv_import
+             :sources,
+             :statuses
 
   def locales
     constants_exhibit.locale_name_map
