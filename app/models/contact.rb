@@ -225,7 +225,7 @@ class Contact < ApplicationRecord
   end
 
   delegate :first_name, :last_name, :phone, :email, to: :primary_or_first_person
-  delegate :street, :city, :state, :postal_code, to: :mailing_address
+  delegate :street, :city, :csv_street, :state, :postal_code, to: :mailing_address
 
   # These delegations exist to facilitate creating referrals (as new contact records) with nested attributes
   delegate :first_name, 'first_name=', :last_name, 'last_name=', :phone, 'phone=', :email, 'email=', to: :find_or_build_primary_person, prefix: :primary_person

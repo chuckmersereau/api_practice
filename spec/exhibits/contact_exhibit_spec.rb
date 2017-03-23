@@ -71,6 +71,25 @@ describe ContactExhibit do
     end
   end
 
+  context '#csv_country' do
+    let(:account_list) { build(:account_list, home_country: 'Canada') }
+    let(:contact) { build(:contact, addresses: [build(:address)], account_list: account_list) }
+
+    it 'returns the country only if it is different from the account_list home country' do
+      expect(ContactExhibit.new(contact, nil).csv_country).to eq(contact.mailing_address.country)
+      contact.mailing_address.country = 'Canada'
+      expect(ContactExhibit.new(contact, nil).csv_country).to be_blank
+    end
+  end
+
+  context '#address_block' do
+    let(:contact) { build(:contact, addresses: [build(:address)]) }
+
+    it 'returns the greeting and mailing address' do
+      expect(ContactExhibit.new(contact, nil).address_block).to eq("#{contact.envelope_greeting}\n123 Somewhere St\nFremont CA  94539")
+    end
+  end
+
   # it "should show return the default avatar filename" do
   # contact.gender = 'female'
   # expect(exhib.avatar).to eq('avatar_f.png')

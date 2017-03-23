@@ -115,6 +115,14 @@ class ContactExhibit < DisplayCase::Exhibit
     end
   end
 
+  def csv_country
+    mailing_address.csv_country(account_list.home_country)
+  end
+
+  def address_block
+    "#{envelope_greeting}\n#{mailing_address.to_snail.gsub("\r\n", "\n")}"
+  end
+
   private
 
   def whole_number?(number)

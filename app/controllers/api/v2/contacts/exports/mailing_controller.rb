@@ -1,15 +1,28 @@
 require 'csv'
 
-class Api::V2::Contacts::ExportsController < Api::V2Controller
-  supports_accept_header_content_types 'text/csv', 'application/xlsx'
+class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
+  supports_accept_header_content_types 'text/csv'
 
   include ActionController::MimeResponds
   include ActionController::Helpers
-  include ContactsHelper
-  helper ContactsHelper
+  include MailingExportsHelper
+  helper MailingExportsHelper
+
+  FIELDS_MAPPING = {
+    'Contact Name' => :name,
+    'Greeting' => :greeting,
+    'Envelope Greeting' => :envelope_greeting,
+    'Mailing Street Address' => :csv_street,
+    'Mailing City' => :city,
+    'Mailing State' => :state,
+    'Mailing Postal Code' => :postal_code,
+    'Mailing Country' => :csv_country,
+    'Address Block' => :address_block
+  }.freeze
 
   def index
     load_contacts
+    load_rows
     render_export
   end
 
@@ -18,6 +31,12 @@ class Api::V2::Contacts::ExportsController < Api::V2Controller
   def load_contacts
     @contacts ||= filter_contacts.includes(:primary_person, :spouse, :primary_address,
                                            :tags, people: [:email_addresses, :phone_numbers])
+  end
+
+  def load_rows
+    @rows = @contacts.map do |contact|
+      FIELDS_MAPPING.values.map { |method| ContactExhibit.new(contact, nil).send(method) }
+    end
   end
 
   def filter_contacts
@@ -45,10 +64,6 @@ class Api::V2::Contacts::ExportsController < Api::V2Controller
       format.csv do
         render_csv("contacts-#{file_timestamp}.csv")
       end
-
-      format.xlsx do
-        render_xlsx("contacts-#{file_timestamp}.xlsx")
-      end
     end
   end
 
@@ -56,9 +71,5 @@ class Api::V2::Contacts::ExportsController < Api::V2Controller
     headers['Content-Type'] ||= 'text/csv'
     headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
     render csv: 'index', filename: filename
-  end
-
-  def render_xlsx(filename)
-    render xlsx: 'index', filename: filename
   end
 end

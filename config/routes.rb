@@ -104,7 +104,13 @@ Rails.application.routes.draw do
 
             collection do
               get :analytics, to: 'analytics#show'
-              resources :exports, only: :index
+              resources :exports, only: :index do
+                collection do
+                  scope module: :exports do
+                    resources :mailing, only: :index
+                  end
+                end
+              end
               resource :bulk, only: [:create, :update, :destroy], controller: :bulk
               resources :filters, only: :index
               resources :people, only: :index
