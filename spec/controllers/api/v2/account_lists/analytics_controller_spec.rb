@@ -74,7 +74,7 @@ RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
       end
 
       context 'with date only' do
-        let(:range) { "#{1.week.ago}...#{Time.current}" }
+        let(:range) { '10/12/2015...10/12/2016' }
 
         it 'raises a bad_request error when the datetime range follows the wrong format' do
           api_login(user)

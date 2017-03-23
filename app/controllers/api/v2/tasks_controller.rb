@@ -104,6 +104,6 @@ class Api::V2::TasksController < Api::V2Controller
     @permitted_filters ||=
       Task::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +
       Task::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym) +
-      [:account_list_id]
+      [:account_list_id, :any_tags]
   end
 end

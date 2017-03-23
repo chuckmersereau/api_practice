@@ -15,6 +15,7 @@ RSpec.describe Contact::Filter::Status do
         expect(described_class.query(contacts, { status: 'active' }, nil)).to match_array([active_contact])
         expect(described_class.query(contacts, { status: 'hidden' }, nil)).to match_array([inactive_contact])
         expect(described_class.query(contacts, { status: 'null' }, nil)).to match_array([contact_with_no_status])
+        expect(described_class.query(contacts, { status: 'Never Contacted' }, nil)).to match_array([inactive_contact])
       end
     end
 
