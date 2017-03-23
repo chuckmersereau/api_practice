@@ -27,6 +27,7 @@ resource 'Constants' do
       let(:expected_attribute_keys) do
         %w(
           activities
+          alert_frequencies
           assignable_locations
           assignable_statuses
           bulk_update_options

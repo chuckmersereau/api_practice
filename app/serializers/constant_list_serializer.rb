@@ -16,6 +16,7 @@ class ConstantListSerializer < ActiveModel::Serializer
   type :constant_list
 
   attributes :activities,
+             :alert_frequencies,
              :assignable_locations,
              :assignable_likely_to_give,
              :assignable_send_newsletter,

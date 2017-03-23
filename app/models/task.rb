@@ -336,6 +336,20 @@ class Task < Activity
     options
   end
 
+  def self.alert_frequencies
+    {
+      '0' => _('at the time of event'),
+      '300' => _('5 minutes before'),
+      '900' => _('15 minutes before'),
+      '1800' => _('30 minutes before'),
+      '3600' => _('1 hour before'),
+      '7200' => _('2 hours before'),
+      '86400' => _('1 day before'),
+      '172800' => _('2 days before'),
+      '604800' => _('1 week before')
+    }
+  end
+
   private
 
   def update_completed_at
