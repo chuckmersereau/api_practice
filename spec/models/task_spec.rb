@@ -85,4 +85,12 @@ describe Task do
       expect(task.calculated_location).to eq address
     end
   end
+
+  describe '.alert_frequencies' do
+    subject { Task.alert_frequencies }
+
+    it 'returns a hash of {String => String}' do
+      is_expected.to be_a_hash_with_types(String, String)
+    end
+  end
 end

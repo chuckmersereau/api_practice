@@ -1,6 +1,7 @@
 class ConstantList < ActiveModelSerializers::Model
   include DisplayCase::ExhibitsHelper
 
+  delegate :alert_frequencies, to: :Task
   delegate :assignable_locations, to: :address
   delegate :assignable_statuses, to: :contact
 
