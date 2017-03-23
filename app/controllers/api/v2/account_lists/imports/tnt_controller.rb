@@ -55,7 +55,7 @@ class Api::V2::AccountLists::Imports::TntController < Api::V2Controller
   end
 
   def import_scope
-    load_account_list.imports
+    load_account_list.imports.where(source: 'tnt')
   end
 
   def load_account_list

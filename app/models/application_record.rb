@@ -40,7 +40,7 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def full_conflict_error_message
-    "#{CONFLICT_ERROR_MESSAGE} (#{updated_at_was.to_time.utc.iso8601})"
+    "#{CONFLICT_ERROR_MESSAGE} (#{updated_at_was&.to_time&.utc&.iso8601})"
   end
 
   def self.record_from_uuid_not_found_error(uuid)

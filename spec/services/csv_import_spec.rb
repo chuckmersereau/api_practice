@@ -10,101 +10,298 @@ describe CsvImport do
       .to_return(status: 200, body: '{}', headers: {})
   end
 
-  def check_contacts(contacts)
-    expect(contacts.size).to eq(1)
-    contact = contacts.first
-    expect(contact.account_list).to eq(csv_import.account_list)
-    expect(contact.name).to eq('Doe, John and Jane')
-    expect(contact.greeting).to eq('Hi John and Jane')
-    expect(contact.envelope_greeting).to eq('Doe family')
-    expect(contact.status).to eq('Partner - Pray')
-    expect(contact.pledge_amount).to eq(50)
-    expect(contact.notes).to eq('test notes')
-    expect(contact.pledge_frequency).to eq(1)
-    expect(contact.send_newsletter).to eq('Both')
-    expect(contact.pledge_received?).to be true
-    expect(contact.tag_list.sort).to eq(%w(christmas-card csv family test))
-
-    address = contact.mailing_address
-    expect(address.street).to eq('1 Example Ave, Apt 6')
-    expect(address.city).to eq('Sample City')
-    expect(address.state).to eq('IL')
-    expect(address.postal_code).to eq('60201')
-    expect(address.country).to be_nil
-    expect(address.primary_mailing_address).to be true
-
-    person = contact.primary_person
-    expect(person.first_name).to eq('John')
-    expect(person.last_name).to eq('Doe')
-    expect(person.email_addresses.size).to eq(1)
-    expect(person.email_addresses.first.email).to eq('john@example.com')
-    expect(person.phone_numbers.size).to eq(1)
-    expect(person.phone_numbers.first.number.in?(['(213) 222-3333', '+12132223333'])).to be true
-
-    spouse = contact.spouse
-    expect(spouse.first_name).to eq('Jane')
-    expect(spouse.last_name).to eq('Doe')
-    expect(spouse.email_addresses.size).to eq(1)
-    expect(spouse.email_addresses.first.email).to eq('jane@example.com')
-    expect(spouse.phone_numbers.size).to eq(1)
-    expect(spouse.phone_numbers.first.number.in?(['(407) 555-6666', '+14075556666'])).to be true
+  it 'defines constants that are consistent with the supported headers' do
+    expect(CsvImport::SUPPORTED_HEADERS & CsvImport::CONSTANT_HEADERS.keys).to eq CsvImport::CONSTANT_HEADERS.keys
   end
 
-  context '#contacts' do
-    it 'parses the contacts from csv without saving them' do
-      def relevant_record_count
-        [Contact, Person, EmailAddress, Address, PhoneNumber].map(&:count).reduce(:+)
-      end
+  it 'defines required headers that are consistent with the supported headers' do
+    expect(CsvImport::SUPPORTED_HEADERS & CsvImport::REQUIRED_HEADERS).to eq CsvImport::REQUIRED_HEADERS
+  end
 
-      contacts = []
-      expect do
-        contacts = import.contacts
-      end.to_not change(self, :relevant_record_count)
-      check_contacts(contacts)
+  context 'csv file quirks' do
+    before do
+      csv_import.update(in_preview: true)
+      csv_import.file_headers_mappings = {
+        'Church'               => 'Church',
+        'City'                 => 'Mailing City',
+        'Commitment Amount'    => 'Commitment Amount',
+        'Commitment Currency'  => 'Commitment Currency',
+        'Commitment Frequency' => 'Commitment Frequency',
+        'Contact Name'         => 'Contact Name',
+        'Country'              => 'Mailing Country',
+        'Email 1'              => 'Primary Email',
+        'Envelope Greeting'    => 'Envelope Greeting',
+        'First Name'           => 'First Name',
+        'Greeting'             => 'Greeting',
+        'Last Name'            => 'Last Name',
+        'Newsletter'           => 'Newsletter',
+        'Notes'                => 'Notes',
+        'Phone 1'              => 'Primary Phone',
+        'Spouse Email'         => 'Spouse Email',
+        'Spouse First Name'    => 'Spouse First Name',
+        'Spouse Phone'         => 'Spouse Phone',
+        'State'                => 'Mailing State',
+        'Status'               => 'Status',
+        'Street'               => 'Mailing Street Address',
+        'Tags'                 => 'Tags',
+        'Zip'                  => 'Mailing Postal Code'
+      }
+      csv_import.file_constants_mappings = {
+        'Commitment Currency' => {
+          'CAD' => 'CAD'
+        },
+        'Commitment Frequency' => {
+          '1.0' => 'Monthly'
+        },
+        'Newsletter' => {
+          'Both' => 'Both'
+        },
+        'Status' => {
+          'Partner - Pray' => 'Partner - Pray'
+        }
+      }
     end
 
     it 'does not error if the csv file has a byte order mark' do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_bom.csv')))
-      check_contacts(import.contacts)
+      import.update_cached_file_data
+      csv_import.update(in_preview: false)
+      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      contact = Contact.first
+      expect(contact.account_list).to eq(csv_import.account_list)
+      expect(contact.to_s).to eq('Doe, John and Jane')
     end
 
     it 'does not error if the csv file has a non-utf-8 encoding' do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_iso_8950_1.csv')))
-      contacts = import.contacts
-      expect(contacts.size).to eq(1)
-      expect(contacts.first.name).to eq('Lané, John')
+      import.update_cached_file_data
+      csv_import.file_constants_mappings = {
+        'Commitment Currency' => {
+          'CAD' => nil
+        },
+        'Commitment Frequency' => {
+          nil => nil
+        },
+        'Newsletter' => {
+          nil => nil
+        },
+        'Status' => {
+          'Partner - Pray' => nil
+        }
+      }
+      csv_import.update(in_preview: false)
+      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect(Contact.first.name).to eq('Lané, John')
     end
 
     it 'changes None to an empty string in the send newsletter field' do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_none.csv')))
-      contacts = import.contacts
-      expect(contacts.first.send_newsletter).to eq('')
+      import.update_cached_file_data
+      csv_import.file_constants_mappings['Newsletter'] = {
+        nil => 'None'
+      }
+      csv_import.update(in_preview: false)
+      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect(Contact.first.send_newsletter).to eq(nil)
     end
 
     it 'does not error if csv file uses inconsistent newlines like \n then later \r\n' do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_inconsistent_newlines.csv')))
-      contacts = import.contacts
-      expect(contacts.size).to eq(1)
-      expect(contacts.first.name).to eq('Doe, John and Jane')
+      import.update_cached_file_data
+      csv_import.update(in_preview: false)
+      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect(Contact.first.name).to eq('Doe, John and Jane')
     end
   end
 
-  context '#import' do
-    it 'parses the csv and saves the contacts' do
-      expect { import.import }.to change(Contact, :count).from(0).to(1)
-      check_contacts(csv_import.account_list.contacts.reload)
+  context 'with mappings' do
+    let!(:csv_import) { create(:csv_import_custom_headers, tags: 'csv, test', in_preview: true) }
+    let!(:import) { CsvImport.new(csv_import) }
+
+    before do
+      csv_import.file_headers_mappings = {
+        'Church'               => 'church',
+        'City'                 => 'city',
+        'Commitment Amount'    => 'amount',
+        'Commitment Currency'  => 'currency',
+        'Commitment Frequency' => 'frequency',
+        'Contact Name'         => 'fname',
+        'Country'              => 'country',
+        'Do Not Import?'       => 'skip',
+        'Email 1'              => 'email-address',
+        'First Name'           => 'fname',
+        'Greeting'             => 'greeting',
+        'Envelope Greeting'    => 'mailing-greeting',
+        'Last Name'            => 'lname',
+        'Likely To Give'       => 'likely-giver',
+        'Metro Area'           => 'metro',
+        'Newsletter'           => 'newsletter',
+        'Notes'                => 'extra-notes',
+        'Phone 1'              => 'phone',
+        'Region'               => 'region',
+        'Send Appeals?'        => 'appeals',
+        'Spouse Email'         => 'Spouse-email-address',
+        'Spouse First Name'    => 'Spouse-fname',
+        'Spouse Last Name'     => 'Spouse-lname',
+        'Spouse Phone'         => 'Spouse-phone-number',
+        'State'                => 'province',
+        'Status'               => 'status',
+        'Street'               => 'street',
+        'Tags'                 => 'tags',
+        'Website'              => 'website',
+        'Zip'                  => 'zip-code'
+      }
+
+      csv_import.file_constants_mappings = {
+        'Commitment Currency' => {
+          'CAD' => 'CAD',
+          'USD' => nil
+        },
+        'Commitment Frequency' => {
+          '1.0' => 'Monthly',
+          nil => nil
+        },
+        'Do Not Import?' => {
+          'true' => 'Yes',
+          'false' => ['No', nil]
+        },
+        'Likely To Give' => {
+          'Most Likely' => 'Yes',
+          'Least Likely' => 'No'
+        },
+        'Newsletter' => {
+          'Both' => 'Both'
+        },
+        'Send Appeals?' => {
+          'true' => 'Yes',
+          'false' => 'No'
+        },
+        'Status' => {
+          'Partner - Financial' => 'Praying and giving',
+          'Partner - Pray' => 'Praying'
+        }
+      }
+
+      import.update_cached_file_data
     end
 
-    it 'errors if there is invalid data and does not save any contacts' do
-      expect(import).to receive(:contacts).and_return([build(:contact), build(:contact, name: '')])
-      expect { import.import }.to raise_error(/Validation failed/)
-      expect(Contact.count).to eq(0)
+    describe '#import' do
+      it 'parses the csv and saves the contacts' do
+        csv_import.in_preview = false
+        expect(csv_import).to be_valid
+        expect { import.import }.to change(Contact, :count).from(0).to(2)
+        expect(csv_import.account_list.contacts.reload.where(name: 'John')).to be_present
+      end
+
+      it 'errors if there is invalid data and does not save any contacts' do
+        csv_import.in_preview = false
+        expect(import).to receive(:contacts).and_return([build(:contact), build(:contact, name: '')])
+        expect { import.import }.to raise_error(/Validation failed/)
+        expect(Contact.count).to eq(0)
+      end
+
+      it 'aborts if the import is invalid' do
+        csv_import.in_preview = false
+        csv_import.file_constants_mappings = nil
+        csv_import.file_headers_mappings = nil
+        expect(csv_import).to be_invalid
+        expect do
+          expect { import.import }.to raise_error RuntimeError
+        end.not_to change { Contact.count }
+      end
+
+      it 'aborts if the import is in preview' do
+        csv_import.in_preview = true
+        expect(csv_import).to be_valid
+        expect do
+          expect { import.import }.to raise_error RuntimeError
+        end.not_to change { Contact.count }
+      end
+    end
+
+    describe '#sample_contacts' do
+      it 'returns sample contacts' do
+        expect(import.sample_contacts).to be_a Array
+        expect(import.sample_contacts.size).to eq 2
+        expect(import.sample_contacts.first.name).to eq 'John'
+        expect(import.sample_contacts.second.name).to eq 'Joe'
+        import.sample_contacts.each do |sample_contact|
+          expect(sample_contact).to be_a Contact
+          expect(sample_contact.uuid).to be_present
+          expect(Contact.find_by(uuid: sample_contact.uuid)).to be_blank
+        end
+      end
     end
   end
 
-  context '#contact_from_line' do
-    it 'does not error on a blank line' do
-      expect { import.contact_from_line({}) }.to_not raise_error
+  describe '#update_cached_file_data' do
+    it 'assigns file_headers when setting file' do
+      import = create(:csv_import_custom_headers, in_preview: true)
+      csv_import = CsvImport.new(import)
+      expect { csv_import.update_cached_file_data }.to change { import.reload.file_headers }.from([]).to %w(fname
+                                                                                                            lname
+                                                                                                            Spouse-fname
+                                                                                                            Spouse-lname
+                                                                                                            greeting
+                                                                                                            mailing-greeting
+                                                                                                            church
+                                                                                                            street
+                                                                                                            city
+                                                                                                            province
+                                                                                                            zip-code
+                                                                                                            country
+                                                                                                            status
+                                                                                                            amount
+                                                                                                            frequency
+                                                                                                            currency
+                                                                                                            newsletter
+                                                                                                            tags
+                                                                                                            email-address
+                                                                                                            Spouse-email-address
+                                                                                                            phone
+                                                                                                            Spouse-phone-number
+                                                                                                            extra-notes
+                                                                                                            skip
+                                                                                                            likely-giver
+                                                                                                            metro
+                                                                                                            region
+                                                                                                            appeals
+                                                                                                            website)
+    end
+
+    it 'assigns file_constants when setting file' do
+      import = create(:csv_import_custom_headers, in_preview: true)
+      csv_import = CsvImport.new(import)
+      expect { csv_import.update_cached_file_data }.to change { import.reload.file_constants }.from({}).to(
+        'greeting' => Set.new(['Hi John and Jane', 'Hello!', nil]),
+        'status' => Set.new(['Praying', 'Praying and giving']),
+        'amount' => Set.new(['50', '10', nil]),
+        'frequency' => Set.new(['Monthly', nil]),
+        'newsletter' => Set.new(['Both']),
+        'currency' => Set.new(['CAD', nil]),
+        'skip' => Set.new(['No', 'Yes', nil]),
+        'likely-giver' => Set.new(%w(Yes No)),
+        'appeals' => Set.new(%w(Yes No))
+      )
+    end
+
+    it 'assigns file_row_samples when setting file' do
+      import = create(:csv_import_custom_headers, in_preview: true)
+      csv_import = CsvImport.new(import)
+      expect { csv_import.update_cached_file_data }.to change { import.reload.file_row_samples }.from([]).to(
+        [
+          ['John', 'Doe', 'Jane', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
+           '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD',
+           'Both', 'christmas-card,      family', 'john@example.com', 'jane@example.com', '(213) 222-3333',
+           '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe'],
+          ['Bob', 'Park', 'Sara', 'Kim', 'Hello!', nil, nil, '123 Street West', 'A Small Town', 'Quebec',
+           'L8D 3B9', 'Canada', 'Praying and giving', '10', 'Monthly', nil, 'Both', 'bob', 'bob@park.com',
+           'sara@kim.com', '+12345678901', '+10987654321', nil, 'Yes', 'No', 'metro', 'region', 'No', 'website'],
+          ['Joe', 'Man', nil, nil, nil, nil, nil, 'Apartment, Unit 123', 'Big City', 'BC', nil, 'CA', 'Praying',
+           nil, nil, nil, 'Both', nil, 'joe@inter.net', nil, '123.456.7890', nil, 'notes', nil, 'Yes', 'metro',
+           'region', 'Yes', 'website']
+        ]
+      )
     end
   end
 end
