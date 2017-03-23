@@ -37,6 +37,9 @@ RSpec.describe Task::Filter::Tags do
       it 'accepts tags as comma separated string' do
         expect(described_class.query(tasks, { tags: 'tag1,tag2' }, nil).to_a).to match_array [task_one]
       end
+      it 'accepts tags as an array when any_tags is set to true' do
+        expect(described_class.query(tasks, { tags: 'tag1, tag3', any_tags: 'true' }, nil).to_a).to match_array [task_one, task_two, task_three]
+      end
     end
   end
 end

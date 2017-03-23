@@ -40,6 +40,9 @@ RSpec.describe Contact::Filter::Tags do
       it 'accepts tags as an array' do
         expect(described_class.query(contacts, { tags: 'tag1, tag2' }, nil).to_a).to match_array [contact_one]
       end
+      it 'accepts tags as an array when any_tags is set to true' do
+        expect(described_class.query(contacts, { tags: 'tag1, tag3', any_tags: 'true' }, nil).to_a).to match_array [contact_one, contact_two, contact_three]
+      end
     end
   end
 end

@@ -46,6 +46,8 @@ module Filtering
   def value_includes_a_date?(value)
     return false unless value.is_a?(String)
     return false if value.to_s.match(UUID_REGEX)
+    return false if value.to_s.include?(',') || value.to_s.include?(' ')
+
     Date.parse(value.to_s)
   rescue ArgumentError
     false

@@ -61,10 +61,6 @@ class ContactSerializer < ApplicationSerializer
     contact_exhibit.avatar
   end
 
-  def pledge_received
-    object[:pledge_received].to_s
-  end
-
   def pledge_frequency
     number_with_precision(object[:pledge_frequency], precision: 14, strip_insignificant_zeros: true)
   end
