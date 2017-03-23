@@ -1,4 +1,0 @@
-<%== @fields_mapping.keys.map { |h| "\"#{_(h)}\"" }.join(',') %>
-<%== CSV.generate do |csv|
-  @rows.each { |r| csv << r }
-end %>

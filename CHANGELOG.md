@@ -26,6 +26,7 @@ This changelog covers what's changed in the MPDX APIs.
     - Adjust object format of Tag to be removed to better mirror `json:api`
 
 ## 10 March 2017
+- Added a mailing csv export endpoint
 - FacebookAccount on person endpoint is now accepting username and remote_id as opposed to url
 - Person object will now have only one primary address at a time
 - Removed donor_account presence validation on organization_id as requested by Mike
