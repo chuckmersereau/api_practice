@@ -1,9 +1,8 @@
 class Contact::Filter::Referrer < Contact::Filter::Base
   def execute_query(contacts, filters)
     filters = filters[:referrer].split(',').map(&:strip)
-    filters << nil if filters.delete('none')
     contacts = contacts.includes(:contact_referrals_to_me).where.not(contact_referrals: { referred_by_id: nil }) if filters.delete('any')
-    contacts = contacts.includes(:contact_referrals_to_me).where(contact_referrals: { referred_by_id: filters }) if filters.present?
+    contacts = contacts.includes(:contact_referrals_to_me).where(contact_referrals: { referred_by_id: contact_referrer_ids(filters) }) if filters.present?
     contacts
   end
 
@@ -22,5 +21,13 @@ class Contact::Filter::Referrer < Contact::Filter::Base
                    .flatten
                    .uniq
                    .collect { |c| { name: c.name, id: c.uuid } }
+  end
+
+  private
+
+  def contact_referrer_ids(filters)
+    contact_referrer_ids = Contact.where(uuid: filters - ['none']).ids
+    contact_referrer_ids << nil if filters.include?('none')
+    contact_referrer_ids
   end
 end
