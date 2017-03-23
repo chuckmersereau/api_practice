@@ -8,6 +8,8 @@ class AddressSerializer < ApplicationSerializer
              :location,
              :postal_code,
              :primary_mailing_address,
+             :source,
              :start_date,
-             :state
+             :state,
+             :valid_values
 end

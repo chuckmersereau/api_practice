@@ -38,8 +38,10 @@ resource 'Contacts > People > Email Addresses' do
       historic
       location
       primary
+      source
       updated_at
       updated_in_db_at
+      valid_values
     )
   end
 

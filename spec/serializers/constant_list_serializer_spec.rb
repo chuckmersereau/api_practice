@@ -80,8 +80,9 @@ describe ConstantListSerializer do
     it { should include :assignable_locations }
     it { should include :assignable_send_newsletter }
     it { should include :assignable_statuses }
-    it { should include :dates }
     it { should include :bulk_update_options }
+    it { should include :csv_import }
+    it { should include :dates }
     it { should include :languages }
     it { should include :locales }
     it { should include :next_actions }
@@ -90,7 +91,7 @@ describe ConstantListSerializer do
     it { should include :pledge_currencies }
     it { should include :pledge_frequencies }
     it { should include :results }
+    it { should include :sources }
     it { should include :statuses }
-    it { should include :csv_import }
   end
 end

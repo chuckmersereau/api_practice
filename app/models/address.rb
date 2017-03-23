@@ -42,12 +42,14 @@ class Address < ApplicationRecord
                           :region,
                           :remote_id,
                           :seasonal,
+                          :source,
                           :start_date,
                           :state,
                           :street,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :uuid,
+                          :valid_values].freeze
 
   assignable_values_for :location, allow_blank: true do
     [_('Home'), _('Business'), _('Mailing'), _('Seasonal'), _('Other'), _('Temporary')]

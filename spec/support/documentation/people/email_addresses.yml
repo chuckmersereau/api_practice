@@ -16,6 +16,16 @@ attributes: &attrs
     description:
       "Whether or not the `email` is the owner's primary email address. Ultimately there should only be _one_ of these."
     type: boolean
+  source:
+    description:
+      The source of the email address
+    type:
+      string
+  valid_values:
+    description:
+      This boolean indicates whether the email address is accurate or not
+    type:
+      boolean
 
 object: &obj
   attributes:

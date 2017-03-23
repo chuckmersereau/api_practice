@@ -54,4 +54,8 @@ RSpec.describe ConstantList, type: :model do
     it { expect(subject.csv_import[:constants]).to be_an Hash }
     it { expect(subject.csv_import[:constants].keys & subject.csv_import[:supported_headers].keys).to eq subject.csv_import[:constants].keys }
   end
+
+  context '#sources' do
+    it { expect(subject.sources).to be_a_hash_with_types Symbol, Array }
+  end
 end

@@ -2,6 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 23 March 2017
+- Add sources to Constants endpoint
+- "source" and "valid_values" attributes are now updatable on phone_numbers, email_addresses, and addresses
+
 ## 22 March 2017
 - When adding a referral under a Contact, ie: `contacts_referred_by_me`, you are now **required** to provide a related `account_list` for each referral
 - When Merging Account Lists, the Target Account List (ie: the account that remains after the merge) is now returned in the response body of a successful merge

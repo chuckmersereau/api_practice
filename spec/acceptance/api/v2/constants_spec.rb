@@ -41,6 +41,7 @@ resource 'Constants' do
           pledge_currencies
           pledge_frequencies
           results
+          sources
         ) + contact_attribute_keys
       end
 
@@ -97,6 +98,11 @@ resource 'Constants' do
           expect(currency.size).to eq 2
           expect(currency.first).to be_a(String)
           expect(currency.second).to be_a(Hash)
+        end
+
+        expect(resource_object['sources'].size).to eq 3
+        resource_object['sources'].each do |source|
+          expect(source.second).to be_a(Array)
         end
 
         contact_attribute_keys.each do |key|

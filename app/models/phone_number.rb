@@ -15,9 +15,11 @@ class PhoneNumber < ApplicationRecord
                           :number,
                           :primary,
                           :remote_id,
+                          :source,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :uuid,
+                          :valid_values].freeze
 
   belongs_to :person, touch: true
 

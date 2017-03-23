@@ -8,9 +8,11 @@ class EmailAddress < ApplicationRecord
                           :historic,
                           :location,
                           :primary,
+                          :source,
                           :updated_at,
                           :updated_in_db_at,
-                          :uuid].freeze
+                          :uuid,
+                          :valid_values].freeze
 
   has_paper_trail on: [:destroy],
                   meta: { related_object_type: 'Person',
