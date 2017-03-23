@@ -91,5 +91,6 @@ describe ConstantListSerializer do
     it { should include :pledge_frequencies }
     it { should include :results }
     it { should include :statuses }
+    it { should include :csv_import }
   end
 end

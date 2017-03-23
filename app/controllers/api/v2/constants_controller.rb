@@ -13,6 +13,7 @@ class Api::V2::ConstantsController < Api::V2Controller
   end
 
   def render_constants
-    render json: @constants, fields: field_params
+    render json: @constants,
+           fields: field_params
   end
 end

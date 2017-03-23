@@ -31,6 +31,7 @@ resource 'Constants' do
           assignable_locations
           assignable_statuses
           bulk_update_options
+          csv_import
           dates
           languages
           locales
@@ -53,6 +54,8 @@ resource 'Constants' do
         resource_object['activities'].each do |activity|
           expect(activity).to be_a(String)
         end
+
+        expect(resource_object['csv_import'].keys.size).to eq 3
 
         resource_object['dates'].each do |date_format|
           expect(date_format.size).to eq 2

@@ -32,65 +32,65 @@ describe ImportSerializer do
   describe '#sample_contacts' do
     before do
       import.file_headers_mappings = {
-        'Church'               => 'church',
-        'City'                 => 'city',
-        'Commitment Amount'    => 'amount',
-        'Commitment Currency'  => 'currency',
-        'Commitment Frequency' => 'frequency',
-        'Contact Name'         => 'fname',
-        'Country'              => 'country',
-        'Do Not Import?'       => 'skip',
-        'Email 1'              => 'email-address',
-        'First Name'           => 'fname',
-        'Greeting'             => 'greeting',
-        'Envelope Greeting'    => 'mailing-greeting',
-        'Last Name'            => 'lname',
-        'Likely To Give'       => 'likely-giver',
-        'Metro Area'           => 'metro',
-        'Newsletter'           => 'newsletter',
-        'Notes'                => 'extra-notes',
-        'Phone 1'              => 'phone',
-        'Region'               => 'region',
-        'Send Appeals?'        => 'appeals',
-        'Spouse Email'         => 'Spouse-email-address',
-        'Spouse First Name'    => 'Spouse-fname',
-        'Spouse Last Name'     => 'Spouse-lname',
-        'Spouse Phone'         => 'Spouse-phone-number',
-        'State'                => 'province',
-        'Status'               => 'status',
-        'Street'               => 'street',
-        'Tags'                 => 'tags',
-        'Website'              => 'website',
-        'Zip'                  => 'zip-code'
+        'church'               => 'church',
+        'city'                 => 'city',
+        'commitment_amount'    => 'amount',
+        'commitment_currency'  => 'currency',
+        'commitment_frequency' => 'frequency',
+        'contact_name'         => 'fname',
+        'country'              => 'country',
+        'do_not_import'        => 'skip',
+        'email_1'              => 'email-address',
+        'first_name'           => 'fname',
+        'greeting'             => 'greeting',
+        'envelope_greeting'    => 'mailing-greeting',
+        'last_name'            => 'lname',
+        'likely_to_give'       => 'likely-giver',
+        'metro_area'           => 'metro',
+        'newsletter'           => 'newsletter',
+        'notes'                => 'extra-notes',
+        'phone_1'              => 'phone',
+        'region'               => 'region',
+        'send appeals'         => 'appeals',
+        'spouse_email'         => 'Spouse-email-address',
+        'spouse_first_name'    => 'Spouse-fname',
+        'spouse_last_name'     => 'Spouse-lname',
+        'spouse_phone'         => 'Spouse-phone-number',
+        'state'                => 'province',
+        'status'               => 'status',
+        'street'               => 'street',
+        'tags'                 => 'tags',
+        'website'              => 'website',
+        'zip'                  => 'zip-code'
       }
 
       import.file_constants_mappings = {
-        'Commitment Currency' => {
-          'CAD' => 'CAD',
-          'USD' => nil
+        'commitment_currency' => {
+          'cad' => 'CAD',
+          'usd' => nil
         },
-        'Commitment Frequency' => {
-          '1.0' => 'Monthly',
+        'commitment_frequency' => {
+          '1_0' => 'Monthly',
           nil => nil
         },
-        'Do Not Import?' => {
+        'do_not_import' => {
           'true' => 'Yes',
           'false' => ['No', nil]
         },
-        'Likely To Give' => {
-          'Most Likely' => 'Yes',
-          'Least Likely' => 'No'
+        'likely_to_give' => {
+          'most_likely' => 'Yes',
+          'least_likely' => 'No'
         },
-        'Newsletter' => {
-          'Both' => 'Both'
+        'newsletter' => {
+          'both' => 'Both'
         },
-        'Send Appeals?' => {
+        'send_appeals' => {
           'true' => 'Yes',
           'false' => 'No'
         },
-        'Status' => {
-          'Partner - Financial' => 'Praying and giving',
-          'Partner - Pray' => 'Praying'
+        'status' => {
+          'partner_financial' => 'Praying and giving',
+          'partner_pray' => 'Praying'
         }
       }
 

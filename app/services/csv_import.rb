@@ -62,6 +62,30 @@ class CsvImport
 
   delegate :account_list, to: :@import
 
+  def self.supported_headers
+    transform_array_to_hash_with_underscored_keys(SUPPORTED_HEADERS.dup)
+  end
+
+  def self.required_headers
+    transform_array_to_hash_with_underscored_keys(REQUIRED_HEADERS.dup)
+  end
+
+  def self.constants
+    CONSTANT_HEADERS.keys.each_with_object({}.with_indifferent_access) do |header, hash|
+      hash[header.parameterize.underscore.to_sym] = transform_array_to_hash_with_underscored_keys(CONSTANT_HEADERS[header].dup)
+      hash
+    end
+  end
+
+  # This helper method transforms an Array like ['A Test', 'B Test'] to a Hash like { a_test: 'A Test', b_test: 'B Test' }
+  def self.transform_array_to_hash_with_underscored_keys(array)
+    array.each_with_object({}.with_indifferent_access) do |value, hash|
+      hash[value&.parameterize&.underscore&.to_sym] = value
+      hash
+    end
+  end
+  private_class_method :transform_array_to_hash_with_underscored_keys
+
   def initialize(import)
     @import = import
   end

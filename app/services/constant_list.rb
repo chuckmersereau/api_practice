@@ -49,6 +49,14 @@ class ConstantList < ActiveModelSerializers::Model
     @results ||= dup_hash_of_arrays(Task.all_result_options.dup)
   end
 
+  def csv_import
+    @csv_import ||= {
+      supported_headers: CsvImport.supported_headers,
+      required_headers: CsvImport.required_headers,
+      constants: CsvImport.constants
+    }
+  end
+
   private
 
   def address

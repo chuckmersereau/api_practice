@@ -3,7 +3,7 @@ require 'rails_helper'
 RSpec.describe ConstantList, type: :model do
   subject { ConstantList.new }
 
-  context '#currencies' do
+  describe '#currencies' do
     it { expect(subject.codes).to be_a Array }
 
     it 'should consist of ISO 4217 currency codes' do
@@ -13,7 +13,7 @@ RSpec.describe ConstantList, type: :model do
     end
   end
 
-  context '#locales' do
+  describe '#locales' do
     it { expect(subject.locales).to be_an Array }
 
     it 'should consist of string/symbol pairs' do
@@ -31,19 +31,27 @@ RSpec.describe ConstantList, type: :model do
     end
   end
 
-  context '#notifications' do
+  describe '#notifications' do
     before { create :notification_type }
 
     it { expect(subject.notifications).to be_a_hash_with_types String, String }
   end
 
-  context '#organizations' do
+  describe '#organizations' do
     before { 5.times { create(:organization) } }
     it { expect(subject.organizations).to be_a_hash_with_types String, String }
   end
 
-  context '#assignable_locations' do
+  describe '#assignable_locations' do
     it { expect(subject.assignable_locations).to be_an Array }
     it { subject.assignable_locations.each { |loc| expect(loc).to be_a String } }
+  end
+
+  describe '#csv_import' do
+    it { expect(subject.csv_import).to be_an Hash }
+    it { expect(subject.csv_import[:supported_headers]).to be_an Hash }
+    it { expect(subject.csv_import[:required_headers]).to be_an Hash }
+    it { expect(subject.csv_import[:constants]).to be_an Hash }
+    it { expect(subject.csv_import[:constants].keys & subject.csv_import[:supported_headers].keys).to eq subject.csv_import[:constants].keys }
   end
 end

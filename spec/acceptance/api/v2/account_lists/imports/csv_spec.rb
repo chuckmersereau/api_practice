@@ -27,40 +27,40 @@ resource 'Account Lists > Imports > from CSV' do
 
   let(:file_headers_mappings) do
     {
-      'City' => 'city',
-      'Commitment Amount' => 'amount',
-      'Commitment Frequency' => 'frequency',
-      'Contact Name' => 'fname',
-      'Country' => 'country',
-      'Email 1' => 'email-address',
-      'Envelope Greeting' => 'envelope-greeting',
-      'First Name' => 'fname',
-      'Greeting' => 'greeting',
-      'Last Name' => 'lname',
-      'Newsletter' => 'newsletter',
-      'Notes' => 'extra-notes',
-      'Phone 1' => 'phone',
-      'Spouse Email' => 'Spouse-email-address',
-      'Spouse First Name' => 'Spouse-fname',
-      'Spouse Last Name' => 'Spouse-lname',
-      'Spouse Phone' => 'Spouse-phone-number',
-      'State' => 'province',
-      'Status' => 'status',
-      'Street' => 'street',
-      'Zip' => 'zip-code'
+      'city' => 'city',
+      'commitment_amount' => 'amount',
+      'commitment_frequency' => 'frequency',
+      'contact_name' => 'fname',
+      'country' => 'country',
+      'email_1' => 'email-address',
+      'envelope_greeting' => 'envelope-greeting',
+      'first_name' => 'fname',
+      'greeting' => 'greeting',
+      'last_name' => 'lname',
+      'newsletter' => 'newsletter',
+      'notes' => 'extra-notes',
+      'phone_1' => 'phone',
+      'spouse_email' => 'Spouse-email-address',
+      'spouse_first_name' => 'Spouse-fname',
+      'spouse_last_name' => 'Spouse-lname',
+      'spouse_phone' => 'Spouse-phone-number',
+      'state' => 'province',
+      'status' => 'status',
+      'street' => 'street',
+      'zip' => 'zip-code'
     }
   end
 
   let(:file_constants_mappings) do
     {
-      'Status' => {
-        'Partner - Financial' => 'Praying and giving'
+      'status' => {
+        'partner_financial' => 'Praying and giving'
       },
-      'Commitment Frequency' => {
-        '1.0' => 'Monthly'
+      'commitment_frequency' => {
+        '1_0' => 'Monthly'
       },
-      'Newsletter' => {
-        'Both' => 'Both'
+      'newsletter' => {
+        'both' => 'Both'
       }
     }
   end

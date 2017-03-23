@@ -12,6 +12,7 @@ This changelog covers what's changed in the MPDX APIs.
 - Filters ending with `_id` now allow for comma-delimited ids to be sent
 - Add CSV Import get, list, and update endpoints
 - Added alert frequencies to the constants endpoint
+- Add CSV Import constants to the constants endpoint
 
 ## 17 March 2017
 - Sparse fieldsets enabled for contacts and people duplicates endpoints
