@@ -6,8 +6,10 @@ DataServer::ContactAddressUpdate = Struct.new(:contact, :donor_account) do
       if contact.primary_address&.source == 'DataServer'
         contact.primary_address.update!(primary_mailing_address: false)
       end
-      contact.copy_address(address: latest_donor_address, source: 'DataServer',
-                           source_donor_account_id: latest_donor_address.addressable_id)
+      if latest_donor_address
+        contact.copy_address(address: latest_donor_address, source: 'DataServer',
+                             source_donor_account_id: latest_donor_address.addressable_id)
+      end
     end
   end
 
