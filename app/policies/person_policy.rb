@@ -1,11 +1,14 @@
 class PersonPolicy < ApplicationPolicy
   def initialize(context, resource)
     @user = context.user
-    @contacts = context.respond_to?(:contacts) ? context.contacts : [context.contact]
+    @contact_scope = context.respond_to?(:contact_scope) ? context.contact_scope : nil
+    @contacts = resource.contacts
     @resource = resource
   end
 
   def create?
+    # We trust that the created Person will be associated to a Contact in the contact_scope
+    @contacts = @contact_scope
     contacts_belongs_to_user?
   end
 
@@ -26,7 +29,8 @@ class PersonPolicy < ApplicationPolicy
   end
 
   def contacts_belongs_to_user?
-    user.account_lists.ids & contacts_account_list_ids == contacts_account_list_ids
+    @contacts.present? &&
+      (contacts_account_list_ids & user.account_lists.ids == contacts_account_list_ids)
   end
 
   def contacts_account_list_ids
