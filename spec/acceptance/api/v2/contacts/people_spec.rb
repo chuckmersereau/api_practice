@@ -152,6 +152,15 @@ resource 'People' do
       end
     end
 
+    put '/api/v2/contacts/people/:id' do
+      example 'Update a person', document: documentation_scope do
+        explanation 'Update the Person with the given ID'
+        do_request data: form_data
+        expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
+        expect(response_status).to eq(200)
+      end
+    end
+
     get '/api/v2/contacts/:contact_id/people' do
       example 'List people for a contact', document: documentation_scope do
         explanation 'List of People associated to the Contact'

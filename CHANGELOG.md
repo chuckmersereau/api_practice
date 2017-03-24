@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 24 March 2017
+- Added endpoint to update people without specifying a contact_id at PUT api/v2/contacts/people
+
 ## 23 March 2017
 - Add sources to Constants endpoint
 - "source" and "valid_values" attributes are now updatable on phone_numbers, email_addresses, and addresses

@@ -73,7 +73,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def load_person
-    @person ||= person_scope.find_by_uuid_or_raise!(params[:id])
+    @person ||= Person.find_by_uuid_or_raise!(params[:id])
   end
 
   def load_people
@@ -111,7 +111,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   end
 
   def pundit_user
-    PunditContext.new(current_user, contacts: contact_scope)
+    PunditContext.new(current_user, contact_scope: contact_scope)
   end
 
   def permitted_filters

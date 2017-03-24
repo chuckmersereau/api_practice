@@ -113,7 +113,7 @@ Rails.application.routes.draw do
               end
               resource :bulk, only: [:create, :update, :destroy], controller: :bulk
               resources :filters, only: :index
-              resources :people, only: :index
+              resources :people, only: [:index, :update]
             end
           end
         end
