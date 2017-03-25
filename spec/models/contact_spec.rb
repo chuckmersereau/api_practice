@@ -1035,4 +1035,19 @@ describe Contact do
       end.to_not change { contact.reload && contact.contacts_referred_by_me.count }
     end
   end
+
+  it 'delegated readers should not cause new associated records to be created' do
+    contact = Contact.create!(name: 'Tester', account_list_id: create(:account_list).id)
+
+    expect(ContactPerson.where(contact_id: contact.id).count).to eq 0
+    expect(Address.where(addressable_type: 'Contact', addressable_id: contact.id).count).to eq 0
+
+    contact.spouse_first_name
+    contact.primary_person_first_name
+    contact.primary_address_street
+    contact.save!
+
+    expect(ContactPerson.where(contact_id: contact.id).count).to eq 0
+    expect(Address.where(addressable_type: 'Contact', addressable_id: contact.id).count).to eq 0
+  end
 end
