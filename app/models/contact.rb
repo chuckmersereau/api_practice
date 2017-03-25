@@ -30,14 +30,14 @@ class Contact < ApplicationRecord
   belongs_to :account_list
   has_many :contact_people, dependent: :destroy
   has_many :people, through: :contact_people
-  has_one :primary_contact_person, -> { where(primary: true) }, class_name: 'ContactPerson'
+  has_one :primary_contact_person, -> { where(primary: true) }, class_name: 'ContactPerson', dependent: :destroy
   has_one :primary_person, through: :primary_contact_person, source: :person, autosave: true
-  has_one :spouse_contact_person, -> { where(primary: [false, nil]) }, class_name: 'ContactPerson'
+  has_one :spouse_contact_person, -> { where(primary: [false, nil]) }, class_name: 'ContactPerson', dependent: :destroy
   has_one :spouse, through: :spouse_contact_person, source: :person, autosave: true
   has_many :contact_referrals_to_me, foreign_key: :referred_to_id, class_name: 'ContactReferral', dependent: :destroy
   has_many :contact_referrals_by_me, foreign_key: :referred_by_id, class_name: 'ContactReferral', dependent: :destroy
-  has_many :contacts_that_referred_me, through: :contact_referrals_to_me, source: :referred_by, autosave: true
-  has_many :contacts_referred_by_me, through: :contact_referrals_by_me, source: :referred_to, autosave: true
+  has_many :contacts_that_referred_me, through: :contact_referrals_to_me, source: :referred_by
+  has_many :contacts_referred_by_me, through: :contact_referrals_by_me, source: :referred_to
   has_many :activity_contacts, dependent: :destroy
   has_many :activities, through: :activity_contacts
   has_many :tasks, through: :activity_contacts, source: :task
@@ -136,7 +136,9 @@ class Contact < ApplicationRecord
       ],
       people_attributes: Person::PERMITTED_ATTRIBUTES,
       contacts_referred_by_me_attributes: [
+        :_destroy,
         :account_list_id,
+        :id,
         :name,
         :notes,
         :primary_address_city,
@@ -231,9 +233,14 @@ class Contact < ApplicationRecord
   delegate :street, :city, :csv_street, :state, :postal_code, to: :mailing_address
 
   # These delegations exist to facilitate creating referrals (as new contact records) with nested attributes
-  delegate :first_name, 'first_name=', :last_name, 'last_name=', :phone, 'phone=', :email, 'email=', to: :find_or_build_primary_person, prefix: :primary_person
-  delegate :first_name, 'first_name=', :last_name, 'last_name=', :phone, 'phone=', :email, 'email=', to: :find_or_build_spouse, prefix: :spouse
-  delegate :street, 'street=', :city, 'city=', :state, 'state=', :postal_code, 'postal_code=', to: :find_or_build_primary_address, prefix: :primary_address
+  delegate :street, :city, :state, :postal_code, to: :primary_address, prefix: :primary_address, allow_nil: true
+  delegate 'street=', 'city=', 'state=', 'postal_code=', to: :find_or_build_primary_address, prefix: :primary_address
+
+  delegate :first_name, :last_name, :phone, :email, to: :primary_person, prefix: :primary_person, allow_nil: true
+  delegate 'first_name=', 'last_name=', 'phone=', 'email=', to: :find_or_build_primary_person, prefix: :primary_person
+
+  delegate :first_name, :last_name, :phone, :email, to: :spouse, prefix: :spouse, allow_nil: true
+  delegate 'first_name=', 'last_name=', 'phone=', 'email=', to: :find_or_build_spouse, prefix: :spouse
 
   def to_s
     name
