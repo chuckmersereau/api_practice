@@ -20,7 +20,7 @@ describe PreferenceSet, type: :model do
       notification_settings = account_list.notification_preferences.to_a
       expect(notification_settings.count).to_not be 0
       notification_settings = notification_settings.select do |ns|
-        ns.actions.none?(&:blank?)
+        ns.actions.any?
       end
       expect(notification_settings.count).to be 0
     end
