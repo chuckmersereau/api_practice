@@ -2,7 +2,11 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
   def index
     authorize load_account_list, :show?
     load_notification_preferences
-    render json: @notification_preferences, meta: meta_hash(@notification_preferences), include: include_params, fields: field_params
+
+    render json: @notification_preferences,
+           meta: meta_hash(@notification_preferences),
+           include: include_params,
+           fields: field_params
   end
 
   def show
