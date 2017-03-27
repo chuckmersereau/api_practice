@@ -3,6 +3,7 @@ class TntImport::AppealsImport
     @account_list = account_list
     @contacts_by_tnt_appeal_id = contacts_by_tnt_appeal_id
     @xml = xml
+    @xml_tables = xml.tables
   end
 
   def import
@@ -18,12 +19,12 @@ class TntImport::AppealsImport
 
   private
 
-  attr_reader :xml, :contacts_by_tnt_appeal_id
+  attr_reader :xml_tables, :contacts_by_tnt_appeal_id
 
   def find_or_create_appeals_by_tnt_id
-    return {} unless xml['Appeal'].present?
+    return {} unless xml_tables['Appeal'].present?
     appeals = {}
-    Array.wrap(xml['Appeal']['row']).each do |row|
+    Array.wrap(xml_tables['Appeal']['row']).each do |row|
       appeal = @account_list.appeals.find_by(tnt_id: row['id'])
       if appeal
         # This allows staff who imported from Tnt earlier before we added the LastEdit import
@@ -40,13 +41,13 @@ class TntImport::AppealsImport
   end
 
   def import_appeal_amounts(appeals_by_tnt_id)
-    return {} unless xml['Gift'].present?
+    return {} unless xml_tables['Gift'].present?
 
     donor_contacts_by_appeal_id = {}
     donor_accounts_by_tnt_id = find_donor_accounts_by_tnt_id
     designation_account_ids = @account_list.designation_accounts.pluck(:id)
 
-    Array.wrap(xml['Gift']['row']).each do |row|
+    Array.wrap(xml_tables['Gift']['row']).each do |row|
       next if row['AppealID'].blank?
       appeal = appeals_by_tnt_id[row['AppealID']]
       donor_account = donor_accounts_by_tnt_id[row['DonorID']]
@@ -68,9 +69,9 @@ class TntImport::AppealsImport
   end
 
   def find_donor_accounts_by_tnt_id
-    return {} unless xml['Donor'].present?
+    return {} unless xml_tables['Donor'].present?
     donors = {}
-    Array.wrap(xml['Donor']['row']).each do |row|
+    Array.wrap(xml_tables['Donor']['row']).each do |row|
       donors[row['id']] = @account_list.donor_accounts.find_by(account_number: row['OrgDonorCode'])
     end
     donors

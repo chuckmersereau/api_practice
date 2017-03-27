@@ -2,13 +2,14 @@ class TntImport::SettingsImport
   def initialize(account_list, xml, override)
     @account_list = account_list
     @xml = xml
+    @xml_tables = xml.tables
     @override = override
   end
 
   def import
-    return unless @xml['Property'].present?
+    return unless @xml_tables['Property'].present?
 
-    Array.wrap(@xml['Property']['row']).each do |row|
+    Array.wrap(@xml_tables['Property']['row']).each do |row|
       case row['PropName']
       when 'MonthlySupportGoal'
         @account_list.monthly_goal = row['PropValue'] if @override || @account_list.monthly_goal.blank?

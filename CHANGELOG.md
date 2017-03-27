@@ -6,6 +6,10 @@ This changelog covers what's changed in the MPDX APIs.
 - User creation now works. Now when you try to authenticate with a valid theKey ticket, and the User doesn't exist - it will create them
     - One thing to note - the User will be returned _without_ any `Account List` information, unless they are part of the Cru-USA organization
 
+## 27 March 2017
+- Updating TntImport::GroupTagsLoader to import from TNT v3.2
+- Added TntImport::Xml service class to assist TNT imports
+
 ## 24 March 2017
 - Added endpoint to update people without specifying a contact_id at PUT api/v2/contacts/people
 
@@ -21,7 +25,7 @@ This changelog covers what's changed in the MPDX APIs.
 - The API will now return better 404 detail messages when unable to find a resource
 
 ## 20 March 2017
-- Added a pledge endpoint to access pledges associated to an account_list ( /account_lists/pledges ) 
+- Added a pledge endpoint to access pledges associated to an account_list ( /account_lists/pledges )
 - Filters ending with `_id` now allow for comma-delimited ids to be sent
 - Add CSV Import get, list, and update endpoints
 - Added alert frequencies to the constants endpoint

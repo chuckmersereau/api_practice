@@ -6,13 +6,14 @@ class TntImport::ContactsImport
     @tags_for_all = import.tags
     @designation_profile = designation_profile
     @xml = xml
+    @xml_tables = xml.tables
   end
 
   def import_contacts
     tags_by_contact_id = TntImport::GroupTagsLoader.tags_by_tnt_contact_id(@xml)
     donors_by_tnt_id = donor_accounts_by_tnt_contact_id
 
-    rows = Array.wrap(@xml['Contact']['row'])
+    rows = Array.wrap(@xml_tables['Contact']['row'])
     tnt_contacts = {}
     rows.each do |row|
       tnt_id = row['id']

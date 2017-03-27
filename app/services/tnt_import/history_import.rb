@@ -3,14 +3,15 @@ class TntImport::HistoryImport
     @account_list = account_list
     @tnt_contacts = tnt_contacts
     @xml = xml
+    @xml_tables = xml.tables
   end
 
   def import_history
-    return unless @xml['History'].present?
+    return unless @xml_tables['History'].present?
     tnt_history = {}
     tnt_history_id_to_appeal_id = {}
 
-    Array.wrap(@xml['History']['row']).each do |row|
+    Array.wrap(@xml_tables['History']['row']).each do |row|
       task = Retryable.retryable do
         @account_list.tasks.where(remote_id: row['id'], source: 'tnt').first_or_initialize
       end
@@ -35,7 +36,7 @@ class TntImport::HistoryImport
     contacts_by_tnt_appeal_id = {}
 
     # Add contacts to tasks
-    Array.wrap(@xml['HistoryContact']['row']).each do |row|
+    Array.wrap(@xml_tables['HistoryContact']['row']).each do |row|
       contact = @tnt_contacts[row['ContactID']]
       task = tnt_history[row['HistoryID']]
       next unless contact && task

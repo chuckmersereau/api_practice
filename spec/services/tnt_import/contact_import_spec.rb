@@ -5,7 +5,7 @@ describe TntImport::ContactImport do
   let(:xml) do
     TntImport::XmlReader.new(tnt_import).parsed_xml
   end
-  let(:contact_rows) { Array.wrap(xml['Contact']['row']) }
+  let(:contact_rows) { Array.wrap(xml.tables['Contact']['row']) }
   let(:import) do
     donor_accounts = []
     tags = []
