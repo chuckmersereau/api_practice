@@ -15,11 +15,13 @@ class ImportSerializer < ApplicationSerializer
 
   belongs_to :user
 
-  has_many :sample_contacts do |serializer|
-    CsvImport.new(serializer.object).sample_contacts
-  end
+  has_many :sample_contacts
 
   def file_url
     object.file.url
+  end
+
+  def sample_contacts
+    @sample_contacts ||= CsvImport.new(object).sample_contacts
   end
 end
