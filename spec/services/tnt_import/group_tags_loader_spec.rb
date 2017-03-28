@@ -40,7 +40,6 @@ describe TntImport::GroupTagsLoader do
 
     describe '.tags_by_tnt_contact_id' do
       it 'returns a hash of expected tags grouped by contat id' do
-        p TntImport::GroupTagsLoader.tags_by_tnt_contact_id(xml)
         expect(TntImport::GroupTagsLoader.tags_by_tnt_contact_id(xml)).to eq('1' => ['Group-with-Dave-comma', 'Category-1-comma', 'Testers'])
       end
     end

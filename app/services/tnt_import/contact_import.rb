@@ -44,6 +44,8 @@ class TntImport::ContactImport
     contact
   end
 
+  private
+
   def update_contact(contact, row)
     update_contact_basic_fields(contact, row)
     update_contact_date_fields(contact, row)
@@ -150,8 +152,6 @@ class TntImport::ContactImport
     Date.parse(val)
   rescue
   end
-
-  private
 
   def must_add_children?(row, contact)
     row['Children'].present? && (!contact.notes || !contact.notes.include?(row['Children']))
