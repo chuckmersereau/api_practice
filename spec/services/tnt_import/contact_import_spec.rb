@@ -68,6 +68,14 @@ describe TntImport::ContactImport do
     expect(person.email_addresses.first.email).to eq 'ron@t.co'
   end
 
+  it 'ignores negative PledgeFrequencyID' do
+    row = contact_rows.first
+    row['PledgeFrequencyID'] = -11
+    tnt_import.override = true
+    import.import_contact(row)
+    expect(Contact.last.pledge_frequency).to eq nil
+  end
+
   def load_yaml_row(filename)
     YAML.load(File.new(Rails.root.join("spec/fixtures/tnt/#{filename}.yaml")).read)
   end
