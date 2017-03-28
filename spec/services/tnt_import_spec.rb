@@ -426,8 +426,7 @@ describe TntImport do
   end
 
   context '#import_appeals' do
-    it 'imports an appeal as well as its contacts and donations' do
-      import = create(:tnt_import_appeals)
+    def test_appeal_import(import)
       account_list = import.account_list
       tnt_import = TntImport.new(import)
       contact = create(:contact, name: 'Doe, John', account_list: account_list)
@@ -463,6 +462,18 @@ describe TntImport do
       appeal.reload
       expect(appeal.created_at).to eq(Time.zone.local(2005, 5, 21, 12, 56, 40))
       expect(appeal.contacts.count).to eq(2)
+    end
+
+    context 'version 3.1 and lower, appeals are called "Appeal"' do
+      it 'imports an appeal as well as its contacts and donations' do
+        test_appeal_import(create(:tnt_import_appeals))
+      end
+    end
+
+    context 'version 3.2 and higher, appeals are called "Campaign"' do
+      it 'imports an appeal as well as its contacts and donations' do
+        test_appeal_import(create(:tnt_import_campaigns))
+      end
     end
 
     it 'does not error if an appeal has no contacts' do

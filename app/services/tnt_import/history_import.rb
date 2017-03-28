@@ -25,7 +25,7 @@ class TntImport::HistoryImport
         result: TntImport::TntCodes.history_result(row['HistoryResultID'])
       }
 
-      tnt_history_id_to_appeal_id[row['id']] = row['AppealID'] if row['AppealID'].present?
+      tnt_history_id_to_appeal_id[row['id']] = row_appeal_id(row) if row_appeal_id(row).present?
 
       next unless task.save
       # Add any notes as a comment
@@ -57,5 +57,11 @@ class TntImport::HistoryImport
 
   def subject(row)
     row['Description'] || TntImport::TntCodes.task_type(row['TaskTypeID'])
+  end
+
+  private
+
+  def row_appeal_id(row)
+    row['AppealID'] || row['CampaignID']
   end
 end

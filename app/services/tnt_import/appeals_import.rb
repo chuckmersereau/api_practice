@@ -1,3 +1,5 @@
+# In version 3.2, TNT renamed the "Appeal" table to "Campaign".
+
 class TntImport::AppealsImport
   def initialize(account_list, contacts_by_tnt_appeal_id, xml)
     @account_list = account_list
@@ -22,9 +24,9 @@ class TntImport::AppealsImport
   attr_reader :xml_tables, :contacts_by_tnt_appeal_id
 
   def find_or_create_appeals_by_tnt_id
-    return {} unless xml_tables['Appeal'].present?
+    return {} unless xml_tables[appeal_table_name].present?
     appeals = {}
-    Array.wrap(xml_tables['Appeal']['row']).each do |row|
+    Array.wrap(xml_tables[appeal_table_name]['row']).each do |row|
       appeal = @account_list.appeals.find_by(tnt_id: row['id'])
       if appeal
         # This allows staff who imported from Tnt earlier before we added the LastEdit import
@@ -48,8 +50,8 @@ class TntImport::AppealsImport
     designation_account_ids = @account_list.designation_accounts.pluck(:id)
 
     Array.wrap(xml_tables['Gift']['row']).each do |row|
-      next if row['AppealID'].blank?
-      appeal = appeals_by_tnt_id[row['AppealID']]
+      next if row[appeal_id_name].blank?
+      appeal = appeals_by_tnt_id[row[appeal_id_name]]
       donor_account = donor_accounts_by_tnt_id[row['DonorID']]
       next unless donor_account
 
@@ -62,7 +64,7 @@ class TntImport::AppealsImport
                               .where(designation_account_id: designation_account_ids)
                               .find_by('appeal_id is null or appeal_id = ?', appeal.id)
       next if donation.blank?
-      donation.update(appeal: appeal, appeal_amount: row['AppealAmount'])
+      donation.update(appeal: appeal, appeal_amount: row[appeal_amount_name])
     end
 
     donor_contacts_by_appeal_id
@@ -75,5 +77,20 @@ class TntImport::AppealsImport
       donors[row['id']] = @account_list.donor_accounts.find_by(account_number: row['OrgDonorCode'])
     end
     donors
+  end
+
+  def appeal_table_name
+    return 'Appeal' if @xml.version < 3.2
+    'Campaign'
+  end
+
+  def appeal_id_name
+    return 'AppealID' if @xml.version < 3.2
+    'CampaignID'
+  end
+
+  def appeal_amount_name
+    return 'AppealAmount' if @xml.version < 3.2
+    'CampaignAmount'
   end
 end

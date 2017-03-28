@@ -6,6 +6,7 @@ This changelog covers what's changed in the MPDX APIs.
 - User creation now works. Now when you try to authenticate with a valid theKey ticket, and the User doesn't exist - it will create them
     - One thing to note - the User will be returned _without_ any `Account List` information, unless they are part of the Cru-USA organization
 - TNT imports user fields as tags
+- TNT imports Campaigns, renamed from Appeals in v3.2
 
 ## 27 March 2017
 - Updating TntImport::GroupTagsLoader to import from TNT v3.2

@@ -1,14 +1,14 @@
 <Database>
   <Application>TntConnect</Application>
-  <Version>3.0</Version>
+  <Version>3.2</Version>
   <Name>Z:\Users\keweijiang\Documents\Test.mpddb</Name>
   <Tables>
-    <Appeal>
+    <Campaign>
       <row id="-2079150908">
         <LastEdit>2005-05-21 12:56:40</LastEdit>
         <Description>CSU</Description>
       </row>
-    </Appeal>
+    </Campaign>
     <Contact>
       <row id="1620699916">
         <LastEdit>2011-12-16 15:29:33</LastEdit>
@@ -129,7 +129,7 @@
         <LastVisit>1899-12-30</LastVisit>
         <LastThank>2004-08-30</LastThank>
         <LastChallenge>1899-12-30</LastChallenge>
-        <AppealsSinceLastGift>0</AppealsSinceLastGift>
+        <CampaignsSinceLastGift>0</CampaignsSinceLastGift>
         <ChallengesSinceLastGift>0</ChallengesSinceLastGift>
         <OrgDonorCodes>413518908</OrgDonorCodes>
       </row>
@@ -147,8 +147,8 @@
         <PersonallyReceived>false</PersonallyReceived>
         <AvailableOnWeb>true</AvailableOnWeb>
         <PledgeFulfillmentType>0</PledgeFulfillmentType>
-        <AppealID>-2079150908</AppealID>
-        <AppealAmount>25</AppealAmount>
+        <CampaignID>-2079150908</CampaignID>
+        <CampaignAmount>25</CampaignAmount>
         <OrgGiftCode>ICWMY</OrgGiftCode>
         <OrgMotivationCode>S00000</OrgMotivationCode>
       </row>
@@ -188,7 +188,7 @@
     <History>
       <row id="1136396219">
         <LastEdit>2010-05-27 16:51:19</LastEdit>
-        <AppealID>-2079150908</AppealID>
+        <CampaignID>-2079150908</CampaignID>
         <TaskTypeID>100</TaskTypeID>
         <Description>for support</Description>
         <HistoryDate>2005-05-21 16:35:20</HistoryDate>
