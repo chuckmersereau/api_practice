@@ -81,7 +81,7 @@ RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controlle
     it 'does not return duplicates that include people that were already included' do
       api_login(user)
       get :index, contact_id: contact1.uuid
-      expect(JSON.parse(response.body)['data'].count).to eq(3)
+      expect(JSON.parse(response.body)['data'].count).to eq(2)
       expect(JSON.parse(response.body)['data'].map { |duplicate| duplicate['id'] }).to_not include(person5.uuid)
     end
 
