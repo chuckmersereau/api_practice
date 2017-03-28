@@ -37,6 +37,8 @@ public/dev-assets
 .env.production
 .env.staging
 .env.local
+.env.production
+.env.staging
 logfile
 dump.rdb
 /cache

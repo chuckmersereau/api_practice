@@ -5,6 +5,8 @@ class Donation < ApplicationRecord
   belongs_to :designation_account
   belongs_to :appeal
 
+  has_many :pledges
+
   validates :amount, :donation_date, presence: { message: _('can not be blank') }
 
   # attr_accessible :donor_account_id, :motivation, :payment_method, :tendered_currency, :donation_date, :amount, :tendered_amount, :currency, :channel, :payment_type
@@ -46,6 +48,7 @@ class Donation < ApplicationRecord
 
   after_create :update_totals
   after_save :add_appeal_contacts
+  after_create :update_related_pledge
 
   before_validation :set_amount_from_tendered_amount
 
@@ -68,6 +71,15 @@ class Donation < ApplicationRecord
 
   private
 
+  def update_related_pledge
+    pledge_match = AccountList::PledgeMatcher.new(donation: self, pledge_scope: pledge_scope).match
+    pledge_match.first.update(donation: self) if pledge_match.any?
+  end
+
+  def pledge_scope
+    Pledge.all
+  end
+
   def update_totals
     donor_account.update_donation_totals(self)
     designation_account&.update_donation_totals(self)
@@ -82,6 +94,7 @@ class Donation < ApplicationRecord
 
   def add_appeal_contacts
     return unless appeal
+
     contacts = appeal.account_list.contacts
                      .joins(:contact_donor_accounts)
                      .where(contact_donor_accounts: { donor_account_id: donor_account.id })

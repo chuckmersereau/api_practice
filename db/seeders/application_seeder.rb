@@ -86,6 +86,7 @@ class ApplicationSeeder
     create :designation_profile_account, designation_profile: DesignationProfile.last, designation_account: DesignationAccount.last
 
     create :donation, donor_account: DonorAccount.last, designation_account: DesignationAccount.last
+    create :pledge, account_list: account_list, contact: contact
 
     create :phone_number, person: person
     create :email_address

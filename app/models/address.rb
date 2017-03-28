@@ -1,8 +1,6 @@
 require 'smarty_streets'
 
 class Address < ApplicationRecord
-  include HasPrimary
-  @@primary_scope = :person
   include Concerns::BeforeCreateSetValidValuesBasedOnSource
 
   has_paper_trail on: [:create, :update, :destroy],

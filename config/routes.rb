@@ -32,6 +32,7 @@ Rails.application.routes.draw do
             resources :merge, only: [:create]
             resources :notification_preferences, only: [:index, :show, :create, :destroy]
             resources :notifications, only: [:index, :show, :create, :update, :destroy]
+            resources :pledges, only: [:index, :show, :create, :update, :destroy]
 
             resource :prayer_letters_account, only: [:show, :create, :destroy] do
               get :sync, on: :member

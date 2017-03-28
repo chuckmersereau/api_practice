@@ -2,7 +2,7 @@ RSpec.shared_examples 'sorting examples' do |options|
   let(:sorting_param_or_created_at) { defined?(sorting_param) ? sorting_param : :created_at }
 
   before do
-    resource.update_column(sorting_param_or_created_at, 2.days.ago)
+    resource.update_column(sorting_param_or_created_at, 5.days.ago)
   end
 
   it 'sorts resources if sorting_param is in list of permitted sorts' do

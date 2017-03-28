@@ -17,6 +17,7 @@ This changelog covers what's changed in the MPDX APIs.
 - The API will now return better 404 detail messages when unable to find a resource
 
 ## 20 March 2017
+- Added a pledge endpoint to access pledges associated to an account_list ( /account_lists/pledges ) 
 - Filters ending with `_id` now allow for comma-delimited ids to be sent
 - Add CSV Import get, list, and update endpoints
 - Added alert frequencies to the constants endpoint
@@ -31,8 +32,8 @@ This changelog covers what's changed in the MPDX APIs.
 ## 14 March 2017
 - Add `website` attribute to `Contact` objects
 - Adjust Bulk Delete Tags endpoints (`api/v2/contacts/tags/bulk` and `api/v2/tasks/tags/bulk`)
-    - Allow for resource filtering, ie: `filter[contact_ids]`
-    - Adjust object format of Tag to be removed to better mirror `json:api`
+- Allow for resource filtering, ie: `filter[contact_ids]`
+- Adjust object format of Tag to be removed to better mirror `json:api`
 
 ## 10 March 2017
 - Added a mailing csv export endpoint
