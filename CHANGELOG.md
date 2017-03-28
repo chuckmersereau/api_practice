@@ -13,6 +13,7 @@ This changelog covers what's changed in the MPDX APIs.
 - TNT imports user fields as tags
 - TNT imports Campaigns, renamed from Appeals in v3.2
 - TNT imports user fields as tags
+- TNT imports Campaigns, renamed from Appeals in v3.2
 
 ## 27 March 2017
 - Updating TntImport::GroupTagsLoader to import from TNT v3.2
