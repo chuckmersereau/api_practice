@@ -5,6 +5,7 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
   def create
     require_cas_ticket
     validate_cas_ticket
+    queue_imports
     render_authenticate
   end
 
@@ -46,6 +47,10 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
 
   def cas_ticket_param
     params.require('data').require('attributes')['cas_ticket']
+  end
+
+  def queue_imports
+    load_user.queue_imports
   end
 
   # The service should be a predetermined service URL for the MPDX API.
