@@ -40,10 +40,10 @@ class TntImport::PersonImport
                           profession: prefix.present? ? nil : row['Profession'],
                           birthday_month: row[prefix + 'BirthdayMonth'],
                           birthday_day: row[prefix + 'BirthdayDay'],
-                          birthday_year: row[prefix + 'BirthdayYear'],
+                          birthday_year: convert_two_digit_year_to_four_digits(row[prefix + 'BirthdayYear']),
                           anniversary_month: row[prefix + 'AnniversaryMonth'],
                           anniversary_day: row[prefix + 'AnniversaryDay'],
-                          anniversary_year: row[prefix + 'AnniversaryYear'],
+                          anniversary_year: convert_two_digit_year_to_four_digits(row[prefix + 'AnniversaryYear']),
                           deceased: (row['Deceased'] == 'true') }
 
     update_person_phones(person, row, prefix)
@@ -106,5 +106,13 @@ class TntImport::PersonImport
   def tnt_email_preferred?(row, email_num, person_prefix)
     preferred_bit_index = (person_prefix == 'Spouse' ? 3 : 0) + email_num
     row['PreferredEmailTypes'].present? && row['PreferredEmailTypes'].to_i[preferred_bit_index] == 1
+  end
+
+  # When deciding between 19xx and 20xx, the decision should be based on never having a calculated age or anniversary number over 100 years.
+  def convert_two_digit_year_to_four_digits(year)
+    return year if year.to_s.length != 2
+    nineteen_hundreds = "19#{year}".to_i
+    return nineteen_hundreds if Time.current.year - nineteen_hundreds < 100
+    "20#{year}".to_i
   end
 end
