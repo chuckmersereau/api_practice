@@ -38,7 +38,7 @@ class AccountList::Analytics < ActiveModelSerializers::Model
 
   def contacts
     @contacts ||= {
-      active: account_list.contacts.active.count,
+      active: account_list.contacts.where(status: ['Never Contacted', 'Contact for Appointment']).count,
       referrals: account_list.contacts
                              .joins(:contact_referrals_to_me).uniq
                              .where('contact_referrals.created_at BETWEEN ? AND ?', start_date, end_date)

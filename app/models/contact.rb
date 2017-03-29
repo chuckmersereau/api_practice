@@ -170,6 +170,7 @@ class Contact < ApplicationRecord
   validates :account_list_id, presence: true
   validates :addresses, single_primary: { primary_field: :primary_mailing_address }, if: :user_changed
   validates :name, presence: true
+  validates :pledge_amount, numericality: true, allow_nil: true
 
   accepts_nested_attributes_for :people, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :donor_accounts, reject_if: :all_blank, allow_destroy: true

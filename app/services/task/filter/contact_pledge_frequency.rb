@@ -4,4 +4,13 @@ class Task::Filter::ContactPledgeFrequency < Task::Filter::Base
     tasks.joins(:contacts)
          .where(contacts: { id: Contact::Filter::PledgeFrequency.query(contact_scope(tasks), filters, account_lists).ids })
   end
+
+  def title
+    'Contact Commitment Frequency'
+  end
+
+  delegate :custom_options,
+           :parent,
+           :type,
+           to: 'Contact::Filter::PledgeFrequency.new(account_lists)'
 end

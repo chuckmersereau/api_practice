@@ -4,4 +4,14 @@ class Task::Filter::ContactLikely < Task::Filter::Base
     tasks.includes(:contacts)
          .where(contacts: { id: Contact::Filter::Likely.query(contact_scope(tasks), filters, account_lists).ids })
   end
+
+  def title
+    'Contact Likely To Give'
+  end
+
+  delegate :custom_options,
+           :parent,
+           :type,
+           :title,
+           to: 'Contact::Filter::Likely.new(account_lists)'
 end

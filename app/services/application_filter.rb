@@ -3,7 +3,7 @@ class ApplicationFilter
 
   attr_reader :account_lists
 
-  def initialize(account_lists)
+  def initialize(account_lists = nil)
     @account_lists = account_lists
   end
 
@@ -83,7 +83,7 @@ class ApplicationFilter
   end
 
   def title
-    nil
+    raise NotImplementedError, 'You must add a title for this filter'
   end
 
   def type

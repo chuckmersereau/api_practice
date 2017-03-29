@@ -4,4 +4,13 @@ class Task::Filter::ContactStatus < Task::Filter::Base
     tasks.joins(:contacts)
          .where(contacts: { id: Contact::Filter::Status.query(contact_scope(tasks), filters, account_lists).ids })
   end
+
+  def title
+    'Contact Status'
+  end
+
+  delegate :custom_options,
+           :parent,
+           :type,
+           to: 'Contact::Filter::Status.new(account_lists)'
 end

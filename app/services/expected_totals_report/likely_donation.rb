@@ -240,7 +240,7 @@ class ExpectedTotalsReport::LikelyDonation
     @donations.each_with_object({}) do |donation, totals_by_month|
       months_ago = months_ago(donation.donation_date)
       totals_by_month[months_ago] ||= 0.0
-      totals_by_month[months_ago] += donation.tendered_amount
+      totals_by_month[months_ago] += donation.tendered_amount.to_f
     end
   end
 

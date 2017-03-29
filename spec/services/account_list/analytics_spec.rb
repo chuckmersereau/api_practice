@@ -16,7 +16,7 @@ RSpec.describe AccountList::Analytics, type: :model do
     create_task(activity_type: 'Appointment', result: 'Completed')
 
     # Contacts
-    contact = create(:contact, account_list: account_list)
+    contact = create(:contact, account_list: account_list, status: 'Never Contacted')
     contact.contacts_that_referred_me << create(:contact, account_list: account_list)
 
     # Correspondence
@@ -77,7 +77,7 @@ RSpec.describe AccountList::Analytics, type: :model do
   describe '#contacts' do
     subject { analytics.contacts }
     it 'returns counts of contacts' do
-      expect(subject).to eq(active: 2, referrals: 1, referrals_on_hand: 1)
+      expect(subject).to eq(active: 1, referrals: 1, referrals_on_hand: 1)
     end
   end
 

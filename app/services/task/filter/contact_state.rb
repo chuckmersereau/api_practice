@@ -5,4 +5,10 @@ class Task::Filter::ContactState < Task::Filter::Base
          .where(contacts: { id: Contact::Filter::State.query(contact_scope(tasks), filters, account_lists).ids })
          .references(:addresses)
   end
+
+  delegate :custom_options,
+           :parent,
+           :type,
+           :title,
+           to: 'Contact::Filter::State.new(account_lists)'
 end

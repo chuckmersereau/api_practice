@@ -4,4 +4,13 @@ class Task::Filter::ContactReferrer < Task::Filter::Base
     tasks.includes(contacts: :contact_referrals_to_me)
          .where(contacts: { id: Contact::Filter::Referrer.query(contact_scope(tasks), filters, account_lists).ids })
   end
+
+  def title
+    'Contact Referrer'
+  end
+
+  delegate :custom_options,
+           :parent,
+           :type,
+           to: 'Contact::Filter::Referrer.new(account_lists)'
 end
