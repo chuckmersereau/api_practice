@@ -156,8 +156,9 @@ resource 'People' do
       example 'Update a person', document: documentation_scope do
         explanation 'Update the Person with the given ID'
         do_request data: form_data
+
+        expect(response_status).to eq(200), invalid_status_detail
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
-        expect(response_status).to eq(200)
       end
     end
 
@@ -165,8 +166,9 @@ resource 'People' do
       example 'List people for a contact', document: documentation_scope do
         explanation 'List of People associated to the Contact'
         do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
         check_collection_resource(1, ['relationships'])
-        expect(response_status).to eq(200)
       end
     end
 
@@ -208,8 +210,9 @@ resource 'People' do
       example 'Retrieve a person', document: documentation_scope do
         explanation 'The Contact\'s Person with the given ID'
         do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
         check_resource(['relationships'])
-        expect(response_status).to eq(200)
       end
     end
 
@@ -277,8 +280,9 @@ resource 'People' do
       example 'Create a person', document: documentation_scope do
         explanation 'Create a Person associated with the Contact'
         do_request data: form_data
+
+        expect(response_status).to eq(201), invalid_status_detail
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
-        expect(response_status).to eq(201)
       end
     end
 
@@ -342,8 +346,9 @@ resource 'People' do
       example 'Update a person', document: documentation_scope do
         explanation 'Update the Contact\'s Person with the given ID'
         do_request data: form_data
+
+        expect(response_status).to eq(200), invalid_status_detail
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
-        expect(response_status).to eq(200)
       end
     end
 
@@ -363,7 +368,8 @@ resource 'People' do
       example 'Delete a person', document: documentation_scope do
         explanation 'Delete the Contact\'s Person with the given ID'
         do_request
-        expect(response_status).to eq(204)
+
+        expect(response_status).to eq(204), invalid_status_detail
       end
     end
   end
