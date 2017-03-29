@@ -197,5 +197,19 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       }
       expect(import.reload.file_constants_mappings).to eq('testing' => { 'nested' => '1234' })
     end
+
+    it 'permits assigning empty hashes to the mappings' do
+      api_login(user)
+      put :update, full_correct_attributes.tap { |params|
+        params[:data][:attributes][:file_constants_mappings] = params[:data][:attributes][:file_headers_mappings] = { 'testing' => '1234' }
+      }
+      expect(import.reload.file_constants_mappings).to eq('testing' => '1234')
+      expect(import.reload.file_headers_mappings).to eq('testing' => '1234')
+      put :update, full_correct_attributes.tap { |params|
+        params[:data][:attributes][:file_constants_mappings] = params[:data][:attributes][:file_headers_mappings] = {}
+      }
+      expect(import.reload.file_constants_mappings).to eq({})
+      expect(import.reload.file_headers_mappings).to eq({})
+    end
   end
 end

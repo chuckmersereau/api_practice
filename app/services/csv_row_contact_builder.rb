@@ -126,6 +126,7 @@ class CsvRowContactBuilder
     return old_csv_row if import.file_constants_mappings.blank?
     new_csv_row = old_csv_row
     import.file_constants_mappings.each do |mpdx_constant_header, mpdx_constant_mappings|
+      next unless mpdx_constant_mappings.is_a?(Hash)
       value_to_change = old_csv_row[mpdx_constant_header]
       mpdx_constant_value = mpdx_constant_mappings.find do |_mpdx_constant_value, csv_constant_value|
         [csv_constant_value].flatten.include?(value_to_change)
