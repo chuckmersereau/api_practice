@@ -15,6 +15,20 @@ class CasTicketValidatorService
     response.dig('serviceResponse', 'authenticationSuccess', 'attributes', attribute_name, '__content__')&.strip
   end
 
+  def attributes
+    {
+      authenticationDate: attribute('authenticationDate'),
+      email: attribute('email'),
+      firstName: attribute('firstName'),
+      isFromNewLogin: attribute('isFromNewLogin'),
+      lastName: attribute('lastName'),
+      longTermAuthenticationRequestTokenUsed: attribute('longTermAuthenticationRequestTokenUsed'),
+      relayGuid: attribute('relayGuid'),
+      ssoGuid: attribute('ssoGuid'),
+      theKeyGuid: attribute('theKeyGuid')
+    }
+  end
+
   private
 
   def authentication_success?
