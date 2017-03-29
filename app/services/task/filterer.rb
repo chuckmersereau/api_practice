@@ -31,6 +31,7 @@ class Task::Filterer < ApplicationFilterer
     Overdue
     Starred
     Tags
+    UpdatedAt
     WildcardSearch
   ).freeze
 end

@@ -42,6 +42,7 @@ class Contact::Filterer < ApplicationFilterer
     NotIds
     StatusValid
     Tags
+    UpdatedAt
     WildcardSearch
   ).freeze
 end

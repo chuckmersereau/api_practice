@@ -2,6 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 29 March 2017
+- Added updated_at as a filter for Contacts endpoint
+- Added updated_at as a filter for Tasks endpoint
+
 ## 28 March 2017
 - Added contact related filters to tasks endpoint
 - User creation now works. Now when you try to authenticate with a valid theKey ticket, and the User doesn't exist - it will create them
