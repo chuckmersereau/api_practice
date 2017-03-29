@@ -58,9 +58,9 @@ class Person::KeyAccount < ApplicationRecord
 
   def self.find_authenticated_user(auth_hash)
     extra_attributes = auth_hash.extra.attributes.first
-    key_guid = extra_attributes.ssoGuid.upcase
-    relay_guid = extra_attributes.relayGuid&.upcase
-    user_id = authenticated.where('upper(remote_id) = ?', key_guid).pluck(:person_id).first
+    key_guid         = extra_attributes.ssoGuid.upcase
+    relay_guid       = extra_attributes.relayGuid&.upcase
+    user_id          = authenticated.where('upper(remote_id) = ?', key_guid).pluck(:person_id).first
 
     # this is a fall back to cover the time while remote_id's are nil between when they are moved to
     # relay_remote_id's and when dev/migrate/2016_03_31_merge_key_relay.rb is run. During that time
@@ -76,6 +76,7 @@ class Person::KeyAccount < ApplicationRecord
   def find_or_create_org_account
     return if Rails.env.development? && ENV['DEV_SIEBEL_ORG_ACCOUNT'].blank?
     return unless SiebelDonations::Profile.find(ssoGuid: relay_remote_id).present?
+
     org = Organization.cru_usa
 
     # we need to create an organization account if we don't already have one
@@ -83,6 +84,7 @@ class Person::KeyAccount < ApplicationRecord
     account.assign_attributes(remote_id: relay_remote_id,
                               authenticated: true,
                               valid_credentials: true)
+
     account.save(validate: false)
   end
 end

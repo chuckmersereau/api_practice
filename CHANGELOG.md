@@ -2,6 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 28 March 2017
+- User creation now works. Now when you try to authenticate with a valid theKey ticket, and the User doesn't exist - it will create them
+    - One thing to note - the User will be returned _without_ any `Account List` information, unless they are part of the Cru-USA organization
+
 ## 24 March 2017
 - Added endpoint to update people without specifying a contact_id at PUT api/v2/contacts/people
 
