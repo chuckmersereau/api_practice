@@ -25,6 +25,7 @@ class TntImport
     import_offline_org_gifts(contact_ids_by_tnt_contact_id)
     import_settings
     import_appeals(contact_ids_by_tnt_appeal_id)
+    import_pledges
 
     false
   ensure
@@ -52,7 +53,7 @@ class TntImport
   end
 
   def import_offline_org_gifts(tnt_contacts)
-    TntImport::GiftsImport.new(@account_list, tnt_contacts, xml).import
+    TntImport::GiftsImport.new(@account_list, tnt_contacts, xml, @import).import
   end
 
   def import_settings
@@ -62,5 +63,9 @@ class TntImport
   def import_appeals(contact_ids_by_tnt_appeal_id)
     TntImport::AppealsImport.new(@account_list, contact_ids_by_tnt_appeal_id, xml)
                             .import
+  end
+
+  def import_pledges
+    TntImport::PledgesImport.new(@account_list, @import, xml).import
   end
 end

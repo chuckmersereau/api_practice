@@ -5,5 +5,5 @@ class PledgeSerializer < ApplicationSerializer
 
   belongs_to :account_list
   belongs_to :contact
-  belongs_to :donation
+  has_many :donations
 end

@@ -1,11 +1,14 @@
 class Pledge < ApplicationRecord
   belongs_to :account_list
+  belongs_to :appeal
   belongs_to :contact
-  belongs_to :donation
+  has_many :pledge_donations
+  has_many :donations, through: :pledge_donations
 
-  validates :contact_id, :account_list_id, :amount, :expected_date, presence: true
+  validates :contact_id, :account_list_id, :amount, :amount_currency, :expected_date, presence: true
 
   PERMITTED_ATTRIBUTES = [:amount,
+                          :amount_currency,
                           :created_at,
                           :contact_id,
                           :donation_id,

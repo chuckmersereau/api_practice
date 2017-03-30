@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.6
+-- Dumped from database version 9.6.2
 -- Dumped by pg_dump version 9.6.2
 
 SET statement_timeout = 0;
@@ -2596,6 +2596,39 @@ ALTER SEQUENCE pictures_id_seq OWNED BY pictures.id;
 
 
 --
+-- Name: pledge_donations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE pledge_donations (
+    id integer NOT NULL,
+    pledge_id integer,
+    donation_id integer,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: pledge_donations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pledge_donations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: pledge_donations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pledge_donations_id_seq OWNED BY pledge_donations.id;
+
+
+--
 -- Name: pledges; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2603,12 +2636,13 @@ CREATE TABLE pledges (
     id integer NOT NULL,
     amount numeric,
     expected_date timestamp without time zone,
-    donation_id integer,
     account_list_id integer,
     contact_id integer,
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    amount_currency character varying(255),
+    appeal_id integer,
     received_not_processed boolean
 );
 
@@ -2824,7 +2858,7 @@ CREATE TABLE versions (
     object text,
     related_object_type character varying(255),
     related_object_id integer,
-    created_at timestamp without time zone NOT NULL
+    created_at timestamp without time zone
 );
 
 
@@ -3307,6 +3341,13 @@ ALTER TABLE ONLY phone_numbers ALTER COLUMN id SET DEFAULT nextval('phone_number
 --
 
 ALTER TABLE ONLY pictures ALTER COLUMN id SET DEFAULT nextval('pictures_id_seq'::regclass);
+
+
+--
+-- Name: pledge_donations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pledge_donations ALTER COLUMN id SET DEFAULT nextval('pledge_donations_id_seq'::regclass);
 
 
 --
@@ -3884,6 +3925,14 @@ ALTER TABLE ONLY phone_numbers
 
 ALTER TABLE ONLY pictures
     ADD CONSTRAINT pictures_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pledge_donations pledge_donations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pledge_donations
+    ADD CONSTRAINT pledge_donations_pkey PRIMARY KEY (id);
 
 
 --
@@ -4499,7 +4548,7 @@ CREATE INDEX index_donations_on_created_at ON donations USING btree (created_at)
 -- Name: index_donations_on_des_acc_id_and_don_date_and_rem_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_donations_on_des_acc_id_and_don_date_and_rem_id ON donations USING btree (designation_account_id, donation_date, remote_id);
+CREATE INDEX index_donations_on_des_acc_id_and_don_date_and_rem_id ON donations USING btree (designation_account_id, donation_date DESC, remote_id);
 
 
 --
@@ -5385,10 +5434,38 @@ CREATE UNIQUE INDEX index_pictures_on_uuid ON pictures USING btree (uuid);
 
 
 --
+-- Name: index_pledge_donations_on_donation_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledge_donations_on_donation_id ON pledge_donations USING btree (donation_id);
+
+
+--
+-- Name: index_pledge_donations_on_pledge_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledge_donations_on_pledge_id ON pledge_donations USING btree (pledge_id);
+
+
+--
+-- Name: index_pledge_donations_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledge_donations_on_uuid ON pledge_donations USING btree (uuid);
+
+
+--
 -- Name: index_pledges_on_account_list_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_pledges_on_account_list_id ON pledges USING btree (account_list_id);
+
+
+--
+-- Name: index_pledges_on_appeal_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledges_on_appeal_id ON pledges USING btree (appeal_id);
 
 
 --
@@ -6277,6 +6354,16 @@ INSERT INTO schema_migrations (version) VALUES ('20170317205005');
 
 INSERT INTO schema_migrations (version) VALUES ('20170322001657');
 
+INSERT INTO schema_migrations (version) VALUES ('20170330210139');
+
+INSERT INTO schema_migrations (version) VALUES ('20170330210159');
+
+INSERT INTO schema_migrations (version) VALUES ('20170404210716');
+
+INSERT INTO schema_migrations (version) VALUES ('20170404211028');
+
+INSERT INTO schema_migrations (version) VALUES ('20170404211527');
+
 INSERT INTO schema_migrations (version) VALUES ('20170407154800');
 
 INSERT INTO schema_migrations (version) VALUES ('20170418035928');
@@ -6284,8 +6371,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170418035928');
 INSERT INTO schema_migrations (version) VALUES ('20170418040007');
 
 INSERT INTO schema_migrations (version) VALUES ('20170418040030');
-
-INSERT INTO schema_migrations (version) VALUES ('20170420161008');
 
 INSERT INTO schema_migrations (version) VALUES ('20170419001725');
 
@@ -6296,3 +6381,5 @@ INSERT INTO schema_migrations (version) VALUES ('20170419141659');
 INSERT INTO schema_migrations (version) VALUES ('20170419145350');
 
 INSERT INTO schema_migrations (version) VALUES ('20170405190646');
+
+INSERT INTO schema_migrations (version) VALUES ('20170420161008');

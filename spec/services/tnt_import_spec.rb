@@ -397,7 +397,7 @@ describe TntImport do
 
       expect(DonorAccount.first.account_number).to eq('1')
 
-      import2 = create(:tnt_import_gifts_added, account_list: @account_list)
+      import2 = create(:tnt_import_gifts_added, account_list: @account_list, user: @import.user)
       tnt_import2 = TntImport.new(import2)
 
       expect { tnt_import2.import  }.to change(Donation, :count).from(2).to(3)

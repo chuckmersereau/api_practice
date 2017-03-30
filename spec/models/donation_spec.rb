@@ -18,7 +18,8 @@ describe Donation do
     it 'calls the match service method whenever a new donation is created' do
       expect_any_instance_of(AccountList::PledgeMatcher).to receive(:match).and_return([pledge])
       donation.save
-      expect(pledge.donation).to eq(donation)
+      expect(pledge.donations.count).to eq(1)
+      expect(pledge.donations).to include(donation)
     end
 
     it "doesn't call the match service method whenever a new donation is updated" do

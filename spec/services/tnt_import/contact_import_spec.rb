@@ -87,7 +87,7 @@ describe TntImport::ContactImport do
 
   it 'does not cause an error if phone is invalid and person has email' do
     account_list = create(:account_list)
-    tnt_import = double(user: double, account_list: account_list,
+    tnt_import = double(user: build(:user), account_list: account_list,
                         override?: true)
     import = TntImport::ContactImport.new(tnt_import, [], [])
     row = load_yaml_row(:bad_phone_valid_email_row)

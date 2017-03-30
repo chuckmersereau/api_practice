@@ -3,7 +3,8 @@ class Donation < ApplicationRecord
   belongs_to :designation_account
   belongs_to :appeal
 
-  has_many :pledges
+  has_many :pledge_donations
+  has_many :pledges, through: :pledge_donations
 
   validates :amount, :donation_date, presence: { message: _('can not be blank') }
 
@@ -83,7 +84,7 @@ class Donation < ApplicationRecord
 
   def update_related_pledge
     pledge_match = AccountList::PledgeMatcher.new(donation: self, pledge_scope: pledge_scope).match
-    pledge_match.first.update(donation: self) if pledge_match.any?
+    pledge_match.first.donations << self if pledge_match.any?
   end
 
   def pledge_scope
