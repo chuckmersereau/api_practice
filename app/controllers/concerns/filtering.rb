@@ -1,6 +1,6 @@
 module Filtering
   DatetimeCastingError = Class.new(StandardError)
-  DATE_FIELD_ENDINGS = %w(_at _range).freeze
+  DATE_FIELD_ENDINGS = %w(_at).freeze
   DATE_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2})(\.\.\.?)(\d{4}\-\d{2}\-\d{2})/
   DATETIME_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)(\.\.\.?)(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)/
   DEFAULT_PERMITTED_FILTERS = %w( updated_at ).freeze
