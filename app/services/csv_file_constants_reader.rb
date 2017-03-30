@@ -47,17 +47,18 @@ class CsvFileConstantsReader
   def build_constant_sets
     csv.each do |row|
       row.each_with_index do |value, index|
-        header = headers[index]
+        header = headers[index]&.parameterize&.underscore
         next if exclude_column_with_header?(header)
         constant_set = constants_hash[header]
+        value = '' if value.blank? # Use empty strings instead of nil
         constant_set << value if constant_set.size < MAX_MAPPINGS_PER_HEADER
       end
     end
   end
 
   def exclude_column_with_header?(header)
-    return nil if header.blank?
-    header = header.downcase
+    return true if header.blank?
+    header = header.to_s.downcase
     EXCLUDE_HEADERS_CONTAINING_STRINGS.any? { |substring| header.include?(substring) }
   end
 end

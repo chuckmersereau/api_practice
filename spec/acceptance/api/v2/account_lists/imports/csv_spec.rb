@@ -32,22 +32,22 @@ resource 'Account Lists > Imports > from CSV' do
       'commitment_frequency' => 'frequency',
       'contact_name' => 'fname',
       'country' => 'country',
-      'email_1' => 'email-address',
-      'envelope_greeting' => 'envelope-greeting',
+      'email_1' => 'email_address',
+      'envelope_greeting' => 'envelope_greeting',
       'first_name' => 'fname',
       'greeting' => 'greeting',
       'last_name' => 'lname',
       'newsletter' => 'newsletter',
-      'notes' => 'extra-notes',
+      'notes' => 'extra_notes',
       'phone_1' => 'phone',
-      'spouse_email' => 'Spouse-email-address',
-      'spouse_first_name' => 'Spouse-fname',
-      'spouse_last_name' => 'Spouse-lname',
-      'spouse_phone' => 'Spouse-phone-number',
+      'spouse_email' => 'spouse_email_address',
+      'spouse_first_name' => 'spouse_fname',
+      'spouse_last_name' => 'spouse_lname',
+      'spouse_phone' => 'spouse_phone_number',
       'state' => 'province',
       'status' => 'status',
       'street' => 'street',
-      'zip' => 'zip-code'
+      'zip' => 'zip_code'
     }
   end
 
@@ -154,7 +154,7 @@ resource 'Account Lists > Imports > from CSV' do
         response_field 'file_headers_mappings',   "An Object that maps attributes in MPDX (keys) to headers in the users's " \
                                                   'CSV file (values); The client must supply this before import can begin; ' \
                                                   'Please see the Constants endpoint for a list of supported attributes',       type: 'Object'
-        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Array[String]'
+        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Object'
         response_field 'file_constants',          "File constants are intended to help map values in the user's CSV file to " \
                                                   'MPDX constants. This is a list of unique values for each column in the ' \
                                                   "CSV. Columns are ignored if they obviously aren't constants " \
@@ -212,7 +212,7 @@ resource 'Account Lists > Imports > from CSV' do
         response_field 'file_headers_mappings',   "An Object that maps attributes in MPDX (keys) to headers in the users's " \
                                                   'CSV file (values); The client must supply this before import can begin; ' \
                                                   'Please see the Constants endpoint for a list of supported attributes',       type: 'Object'
-        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Array[String]'
+        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Object'
         response_field 'file_constants',          "File constants are intended to help map values in the user's CSV file to " \
                                                   'MPDX constants. This is a list of unique values for each column in the ' \
                                                   "CSV. Columns are ignored if they obviously aren't constants " \
@@ -280,7 +280,7 @@ resource 'Account Lists > Imports > from CSV' do
         response_field 'file_headers_mappings',   "An Object that maps attributes in MPDX (keys) to headers in the users's " \
                                                   'CSV file (values); The client must supply this before import can begin; ' \
                                                   'Please see the Constants endpoint for a list of supported attributes',       type: 'Object'
-        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Array[String]'
+        response_field 'file_headers',            'A list of all the headers in the uploaded CSV file',                         type: 'Object'
         response_field 'file_constants',          "File constants are intended to help map values in the user's CSV file to " \
                                                   'MPDX constants. This is a list of unique values for each column in the ' \
                                                   "CSV. Columns are ignored if they obviously aren't constants " \
@@ -320,7 +320,6 @@ resource 'Account Lists > Imports > from CSV' do
                     '<p>3. In the third step the client is expected to update (via PUT) the file_constants_mappings ' \
                     "according to the user's desire (based on the file_constants). This step could take several attempts. </p>" \
                     '<p>4. The fourth step is to show a sample of the import to the user. The sample_contacts relationship should be used. ' \
-                    'If all of the sample contacts are marked Do Not Import in the CSV, then no sample contacts would be returned. </p>' \
                     '<p>5. The fifth step is to start the import. The client is expected to update (via PUT) the "in_preview" attribute to "false", ' \
                     'which will trigger the import to begin (as a background job). If the mappings are incorrect or incomplete, ' \
                     'or the record is otherwise invalid, then the import will not begin and an error object will be returned instead. </p>'

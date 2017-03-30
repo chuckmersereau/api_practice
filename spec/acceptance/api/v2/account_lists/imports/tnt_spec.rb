@@ -105,7 +105,7 @@ resource 'Account Lists > Imports > from TNT XML' do
         response_field 'created_at',              'Created At',                                                                type: 'String'
         response_field 'file_url',                'A URL to download the file',                                                type: 'String'
         response_field 'file_headers_mappings',   'Not applicable to TNT XML imports.',                                        type: 'Object'
-        response_field 'file_headers',            'Not applicable to TNT XML imports.',                                        type: 'Array[String]'
+        response_field 'file_headers',            'Not applicable to TNT XML imports.',                                        type: 'Object'
         response_field 'file_constants',          'Not applicable to TNT XML imports.',                                        type: 'Object'
         response_field 'file_constants_mappings', 'Not applicable to TNT XML imports.',                                        type: 'Object'
         response_field 'group_tags',              'Group Tags',                                                                type: 'String'

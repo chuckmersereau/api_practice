@@ -11,15 +11,15 @@ describe CsvFileConstantsReader do
   describe '#constants' do
     it 'returns a correct hash of sets' do
       expect(service.constants).to eq(
-        'greeting' => Set.new(['Hi John and Jane', 'Hello!', nil]),
+        'greeting' => Set.new(['Hi John and Jane', 'Hello!', '']),
         'status' => Set.new(['Praying', 'Praying and giving']),
-        'amount' => Set.new(['50', '10', nil]),
-        'frequency' => Set.new(['Monthly', nil]),
+        'amount' => Set.new(['50', '10', '']),
+        'frequency' => Set.new(['Monthly', '']),
         'newsletter' => Set.new(['Both']),
-        'currency' => Set.new(['CAD', nil]),
-        'skip' => Set.new(['No', 'Yes', nil]),
+        'currency' => Set.new(['CAD', '']),
+        'skip' => Set.new(['No', 'Yes', '']),
         'appeals' => Set.new(%w(Yes No)),
-        'likely-giver' => Set.new(%w(Yes No))
+        'likely_giver' => Set.new(%w(Yes No))
       )
     end
   end

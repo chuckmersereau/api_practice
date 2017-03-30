@@ -39,7 +39,6 @@ describe ImportSerializer do
         'commitment_frequency' => 'frequency',
         'contact_name'         => 'fname',
         'country'              => 'country',
-        'do_not_import'        => 'skip',
         'email_1'              => 'email-address',
         'first_name'           => 'fname',
         'greeting'             => 'greeting',
@@ -73,10 +72,6 @@ describe ImportSerializer do
           '1_0' => 'Monthly',
           nil => nil
         },
-        'do_not_import' => {
-          'true' => 'Yes',
-          'false' => ['No', nil]
-        },
         'likely_to_give' => {
           'most_likely' => 'Yes',
           'least_likely' => 'No'
@@ -98,9 +93,10 @@ describe ImportSerializer do
     end
 
     it 'returns the sample contacts' do
-      expect(subject[:sample_contacts].size).to eq 2
+      expect(subject[:sample_contacts].size).to eq 3
       expect(subject[:sample_contacts].first[:name]).to eq 'John'
-      expect(subject[:sample_contacts].second[:name]).to eq 'Joe'
+      expect(subject[:sample_contacts].second[:name]).to eq 'Bob'
+      expect(subject[:sample_contacts].third[:name]).to eq 'Joe'
     end
   end
 end

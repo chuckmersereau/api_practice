@@ -75,7 +75,7 @@ resource 'Account Lists > Imports' do
         response_field 'created_at',              'Created At',                     type: 'String'
         response_field 'file_url',                'A URL to download the file',     type: 'String'
         response_field 'file_headers_mappings',   'Only applicable to CSV Imports', type: 'Object'
-        response_field 'file_headers',            'Only applicable to CSV Imports', type: 'Array[String]'
+        response_field 'file_headers',            'Only applicable to CSV Imports', type: 'Object'
         response_field 'file_constants',          'Only applicable to CSV Imports', type: 'Object'
         response_field 'file_constants_mappings', 'Only applicable to CSV Imports', type: 'Object'
         response_field 'groups',                  'Groups',                         type: 'String'

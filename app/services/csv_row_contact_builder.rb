@@ -20,8 +20,6 @@ class CsvRowContactBuilder
   def contact_from_csv_row
     rebuild_csv_row_with_mpdx_headers_and_mpdx_constants
 
-    return if true?(csv_row['do_not_import'])
-
     build_contact
     build_addresses
     build_tags
@@ -117,9 +115,12 @@ class CsvRowContactBuilder
 
   def rebuild_csv_row_with_mpdx_headers(old_csv_row)
     return old_csv_row if import.file_headers_mappings.blank?
-    headers = import.file_headers_mappings.keys
-    fields = import.file_headers_mappings.values.collect { |csv_header| old_csv_row[csv_header] }
-    CSV::Row.new(headers, fields)
+    mpdx_headers = import.file_headers_mappings.keys
+    fields = mpdx_headers.collect do |mpdx_header|
+      csv_header = import.file_headers[import.file_headers_mappings[mpdx_header]]
+      old_csv_row[csv_header]
+    end
+    CSV::Row.new(mpdx_headers, fields)
   end
 
   def rebuild_csv_row_with_mpdx_constants(old_csv_row)

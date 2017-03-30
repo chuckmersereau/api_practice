@@ -13,7 +13,6 @@ class CsvImport
     'Commitment Frequency',
     'Contact Name',
     'Country',
-    'Do Not Import?',
     'Email 1',
     'Email 2',
     'Envelope Greeting',
@@ -46,18 +45,17 @@ class CsvImport
   # The user must supply values for these headers in their CSV.
   REQUIRED_HEADERS = ['Contact Name'].freeze
 
-  BOOLEAN_CONSTANTS = ['true', 'false', nil].freeze
+  BOOLEAN_CONSTANTS = ['true', 'false', ''].freeze
 
   # This is a list of supported headers that have constant values,
   # the user's CSV might have different values so we need to map the user's values to MPDX constant values.
   CONSTANT_HEADERS = {
-    'Commitment Currency'  => ConstantList.new.codes << nil,
-    'Commitment Frequency' => ConstantList.new.pledge_frequencies.keys.collect(&:to_s) << nil,
-    'Do Not Import?'       => BOOLEAN_CONSTANTS,
-    'Likely To Give'       => ConstantList.new.assignable_likely_to_give << nil,
-    'Newsletter'           => ConstantList.new.assignable_send_newsletter << nil,
+    'Commitment Currency'  => ConstantList.new.codes << '',
+    'Commitment Frequency' => ConstantList.new.pledge_frequencies.keys.collect(&:to_s) << '',
+    'Likely To Give'       => ConstantList.new.assignable_likely_to_give << '',
+    'Newsletter'           => ConstantList.new.assignable_send_newsletter << '',
     'Send Appeals?'        => BOOLEAN_CONSTANTS,
-    'Status'               => ConstantList.new.assignable_statuses << nil
+    'Status'               => ConstantList.new.assignable_statuses << ''
   }.freeze
 
   delegate :account_list, to: :@import
@@ -72,7 +70,7 @@ class CsvImport
 
   def self.constants
     CONSTANT_HEADERS.keys.each_with_object({}.with_indifferent_access) do |header, hash|
-      hash[header.parameterize.underscore.to_sym] = transform_array_to_hash_with_underscored_keys(CONSTANT_HEADERS[header].dup)
+      hash[header.parameterize.underscore] = transform_array_to_hash_with_underscored_keys(CONSTANT_HEADERS[header].dup)
       hash
     end
   end
@@ -80,11 +78,10 @@ class CsvImport
   # This helper method transforms an Array like ['A Test', 'B Test'] to a Hash like { a_test: 'A Test', b_test: 'B Test' }
   def self.transform_array_to_hash_with_underscored_keys(array)
     array.each_with_object({}.with_indifferent_access) do |value, hash|
-      hash[value&.parameterize&.underscore&.to_sym] = value
+      hash[value&.parameterize&.underscore] = value
       hash
     end
   end
-  private_class_method :transform_array_to_hash_with_underscored_keys
 
   def initialize(import)
     @import = import
@@ -102,7 +99,7 @@ class CsvImport
 
   def sample_contacts
     sample_contacts = @import.file_row_samples.collect do |sample_row|
-      contact_from_csv_row(CSV::Row.new(@import.file_headers, sample_row))
+      contact_from_csv_row(CSV::Row.new(@import.file_headers.values, sample_row))
     end.compact
     sample_contacts.each { |contact| contact.uuid = SecureRandom.uuid }
     sample_contacts
@@ -122,7 +119,7 @@ class CsvImport
   end
 
   def read_file_headers_from_file_contents
-    CSV.new(@import.file_contents).first
+    self.class.transform_array_to_hash_with_underscored_keys(CSV.new(@import.file_contents).first)
   end
 
   def read_file_constants_from_file_contents

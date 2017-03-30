@@ -23,7 +23,7 @@ describe Import do
       import.file_row_samples = [:test]
       expect { import.file = File.new(Rails.root.join('spec/fixtures/sample_csv_with_custom_headers.csv')) }
         .to change { import.file_contents }
-        .and change { import.file_headers }.to([])
+        .and change { import.file_headers }.to({})
         .and change { import.file_constants }.to({})
         .and change { import.file_row_samples }.to([])
     end

@@ -162,7 +162,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       post :create, full_correct_attributes.tap { |params| params[:data][:attributes].delete([:in_preview, 'in_preview']) }
       import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
       expect(import.file_headers).to be_present
-      expect(import.file_headers).to be_a Array
+      expect(import.file_headers).to be_a Hash
       expect(import.file_constants).to be_present
       expect(import.file_constants).to be_a Hash
       expect(import.file_row_samples).to be_present
@@ -200,16 +200,14 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
 
     it 'permits assigning empty hashes to the mappings' do
       api_login(user)
-      put :update, full_correct_attributes.tap { |params|
-        params[:data][:attributes][:file_constants_mappings] = params[:data][:attributes][:file_headers_mappings] = { 'testing' => '1234' }
-      }
+      import.update(file_constants_mappings: { 'testing' => '1234' }, file_headers_mappings: { 'testing' => '1234' })
       expect(import.reload.file_constants_mappings).to eq('testing' => '1234')
-      expect(import.reload.file_headers_mappings).to eq('testing' => '1234')
+      expect(import.file_headers_mappings).to eq('testing' => '1234')
       put :update, full_correct_attributes.tap { |params|
         params[:data][:attributes][:file_constants_mappings] = params[:data][:attributes][:file_headers_mappings] = {}
       }
       expect(import.reload.file_constants_mappings).to eq({})
-      expect(import.reload.file_headers_mappings).to eq({})
+      expect(import.file_headers_mappings).to eq({})
     end
   end
 end

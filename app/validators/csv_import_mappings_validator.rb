@@ -41,9 +41,9 @@ class CsvImportMappingsValidator < ActiveModel::Validator
   end
 
   def file_headers_mappings_only_maps_to_headers_in_the_file
-    return if (import.file_headers_mappings.values & import.file_headers) == import.file_headers_mappings.values.uniq
+    return if (import.file_headers_mappings.values & import.file_headers.keys) == import.file_headers_mappings.values.uniq
 
-    invalid_headers = import.file_headers_mappings.values - import.file_headers
+    invalid_headers = import.file_headers_mappings.values - import.file_headers.keys
     import.errors[:file_headers_mappings] << 'has unsupported mappings. One or more of the header mappings was not found in the headers of the given CSV file, ' \
                                              'refer to attribute "file_headers" for a list of headers extracted from the given file. ' \
                                              "The invalid headers are: #{invalid_headers}"
