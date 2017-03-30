@@ -1,7 +1,14 @@
-class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
-  include BulkTagDeleteable
+class Api::V2::Contacts::Tags::BulkController < Api::V2::BulkController
+  include BulkTaggable
 
   resource_type :tags
+
+  def create
+    load_contacts
+    authorize_contacts
+    add_tags_to_contacts
+    render_contacts
+  end
 
   def destroy
     load_tags
@@ -11,8 +18,21 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
 
   private
 
+  def add_tags_to_contacts
+    @contacts.each do |contact|
+      contact.tag_list.add(*tag_names)
+      contact.save!
+    end
+  end
+
   def authorize_tags
     account_lists.each { |account_list| authorize(account_list, :show?) }
+  end
+
+  def authorize_contacts
+    @contacts.each do |contact|
+      authorize(contact, :update?)
+    end
   end
 
   def contact_uuids
@@ -27,9 +47,18 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
     end
   end
 
+  def contacts_scope
+    Contact.where(contacts_query).tap(&:first!)
+  end
+  alias tags_scope contacts_scope
+
   def destroy_tags
     @tags.destroy_all
     head :no_content
+  end
+
+  def load_contacts
+    @contacts ||= contacts_scope
   end
 
   def load_tags
@@ -37,14 +66,18 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2Controller
       ActsAsTaggableOn::Tagging.joins(:tag)
                                .where(taggable_type: 'Contact',
                                       taggable_id: taggable_ids,
-                                      tags: { name: tag_name })
+                                      tags: { name: tag_names })
   end
 
   def permitted_filters
     [:account_list_id, :contact_ids]
   end
 
-  def tags_scope
-    @contacts ||= Contact.where(contacts_query).tap(&:first!)
+  def pundit_user
+    PunditContext.new(current_user)
+  end
+
+  def render_contacts
+    render json: BulkResourceSerializer.new(resources: @contacts)
   end
 end
