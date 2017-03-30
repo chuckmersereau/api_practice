@@ -6,6 +6,7 @@ This changelog covers what's changed in the MPDX APIs.
 - Added bulk create actions for contacts/tags and tasks/tags
 - Added a way to bulk remove multiple tags from multiple records on the contacts/tags and tasks/tags endpoints
   - Bulk contacts/tags and tasks/tags now work like any other bulk endpoint
+- Enabled being able to set `X-HTTP-Method-Override` header to override the request method
 
 ## 29 March 2017
 - Added updated_at as a filter for Contacts endpoint
