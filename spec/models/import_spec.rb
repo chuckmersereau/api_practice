@@ -84,6 +84,6 @@ describe Import do
     import = build(:import)
     allow(import.file).to receive(:size).and_return(Import::MAX_FILE_SIZE_IN_BYTES + 1)
     expect(import.valid?).to eq false
-    expect(import.errors[:file]).to eq ['File size must be less than 10000000 bytes']
+    expect(import.errors[:file]).to eq ['File size must be less than 100000000 bytes']
   end
 end
