@@ -112,7 +112,7 @@ resource 'Account Lists > Imports > from TNT XML' do
         response_field 'groups',                  'Groups',                                                                    type: 'Array[String]'
         response_field 'import_by_group',         'Import by Group',                                                           type: 'String'
         response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to false", type: 'Boolean'
-        response_field 'override',                'Override',                                                                  type: 'String'
+        response_field 'override',                'Override',                                                                  type: 'Boolean'
         response_field 'source',                  'Source; Defaults to "tnt"',                                                 type: 'String'
         response_field 'tags',                    'Tags',                                                                      type: 'String'
         response_field 'updated_at',              'Updated At',                                                                type: 'String'
