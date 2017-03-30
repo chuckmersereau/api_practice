@@ -1,6 +1,10 @@
 # In version 3.2, TNT renamed the "Appeal" table to "Campaign".
 
+require_relative 'concerns/appeal_helpers'
+
 class TntImport::AppealsImport
+  include TntImport::AppealHelpers
+
   def initialize(account_list, contact_ids_by_tnt_appeal_id, xml)
     @account_list = account_list
     @contact_ids_by_tnt_appeal_id = contact_ids_by_tnt_appeal_id
@@ -84,20 +88,5 @@ class TntImport::AppealsImport
       donors[row['id']] = @account_list.donor_accounts.find_by(account_number: row['OrgDonorCode'])
     end
     donors
-  end
-
-  def appeal_table_name
-    return 'Appeal' if @xml.version < 3.2
-    'Campaign'
-  end
-
-  def appeal_id_name
-    return 'AppealID' if @xml.version < 3.2
-    'CampaignID'
-  end
-
-  def appeal_amount_name
-    return 'AppealAmount' if @xml.version < 3.2
-    'CampaignAmount'
   end
 end

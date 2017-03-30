@@ -30,7 +30,7 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
 
   # This is required!
   let(:correct_attributes) do
-    { amount: 200.00, expected_date: Date.today }
+    { amount: 200.00, amount_currency: 'USD', expected_date: Date.today }
   end
 
   let(:correct_relationships) do

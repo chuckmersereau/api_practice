@@ -2,6 +2,13 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 08 May 2017
+- DB Migrations: AddAmountCurrencyToPledges, AddAppealIdToPledges, CreatePledgeDonations, MigratePledgesDonationIdDataToJoinTable, RemoveDonationIdFromPledges
+- Pledge now has many Donations (instead of belongs_to).
+- Pledge now has an amount_currency.
+- TNT Import parses dates according to the user's timezone.
+- TNT Import now imports Pledges (called "Promises" in TNT).
+
 ## 04 May 2017
 - Added 5 new filters.
   - Those are: gave_more_than_pledged, no_appeals, pledge_amount_increase_within, started_giving_within and

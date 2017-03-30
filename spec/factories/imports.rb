@@ -63,6 +63,11 @@ FactoryGirl.define do
     file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export_campaigns.xml')) }
   end
 
+  factory :tnt_import_campaigns_and_promises, parent: :tnt_import do
+    association :account_list
+    file { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_with_campaign_promises.xml')) }
+  end
+
   factory :csv_import, parent: :import do
     association :account_list
     source 'csv'

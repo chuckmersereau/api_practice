@@ -1,5 +1,10 @@
+require_relative 'concerns/date_helpers'
+
 class TntImport::ContactImport
+  include TntImport::DateHelpers
+
   def initialize(import, tags, donor_accounts)
+    @import = import
     @account_list = import.account_list
     @user = import.user
     @tags = tags
@@ -74,8 +79,8 @@ class TntImport::ContactImport
     contact.envelope_greeting = extract_envelope_greeting_from_row(row) if @override || contact.envelope_greeting.blank?
     contact.website = row['WebPage'] if @override || contact.website.blank?
     contact.church_name = row['ChurchName'] if @override || contact.church_name.blank?
-    contact.updated_at = parse_date(row['LastEdit']) if @override
-    contact.created_at = parse_date(row['CreatedDate']) if @override
+    contact.updated_at = parse_date(row['LastEdit'], @import.user) if @override
+    contact.created_at = parse_date(row['CreatedDate'], @import.user) if @override
 
     add_notes(contact, row)
 
@@ -98,16 +103,16 @@ class TntImport::ContactImport
   end
 
   def update_contact_date_fields(contact, row)
-    contact.pledge_start_date = parse_date(row['PledgeStartDate']) if (@override || contact.pledge_start_date.blank?) && row['PledgeStartDate'].present? &&
-                                                                      row['PledgeStartDate'] != '1899-12-30'
-    contact.next_ask = parse_date(row['NextAsk']) if (@override || contact.next_ask.blank?) && row['NextAsk'].present? && row['NextAsk'] != '1899-12-30'
-    contact.last_activity = parse_date(row['LastActivity']) if (@override || contact.last_activity.blank?) && row['LastActivity'].present? && row['LastActivity'] != '1899-12-30'
-    contact.last_appointment = parse_date(row['LastAppointment']) if (@override || contact.last_appointment.blank?) && row['LastAppointment'].present? &&
-                                                                     row['LastAppointment'] != '1899-12-30'
-    contact.last_letter = parse_date(row['LastLetter']) if (@override || contact.last_letter.blank?) && row['LastLetter'].present? && row['LastLetter'] != '1899-12-30'
-    contact.last_phone_call = parse_date(row['LastCall']) if (@override || contact.last_phone_call.blank?) && row['LastCall'].present? && row['LastCall'] != '1899-12-30'
-    contact.last_pre_call = parse_date(row['LastPreCall']) if (@override || contact.last_pre_call.blank?) && row['LastPreCall'].present? && row['LastPreCall'] != '1899-12-30'
-    contact.last_thank = parse_date(row['LastThank']) if (@override || contact.last_thank.blank?) && row['LastThank'].present? && row['LastThank'] != '1899-12-30'
+    contact.pledge_start_date = parse_date(row['PledgeStartDate'], @import.user) if (@override || contact.pledge_start_date.blank?) && row['PledgeStartDate'].present? &&
+                                                                                    row['PledgeStartDate'] != '1899-12-30'
+    contact.next_ask = parse_date(row['NextAsk'], @import.user) if (@override || contact.next_ask.blank?) && row['NextAsk'].present? && row['NextAsk'] != '1899-12-30'
+    contact.last_activity = parse_date(row['LastActivity'], @import.user) if (@override || contact.last_activity.blank?) && row['LastActivity'].present? && row['LastActivity'] != '1899-12-30'
+    contact.last_appointment = parse_date(row['LastAppointment'], @import.user) if (@override || contact.last_appointment.blank?) && row['LastAppointment'].present? &&
+                                                                                   row['LastAppointment'] != '1899-12-30'
+    contact.last_letter = parse_date(row['LastLetter'], @import.user) if (@override || contact.last_letter.blank?) && row['LastLetter'].present? && row['LastLetter'] != '1899-12-30'
+    contact.last_phone_call = parse_date(row['LastCall'], @import.user) if (@override || contact.last_phone_call.blank?) && row['LastCall'].present? && row['LastCall'] != '1899-12-30'
+    contact.last_pre_call = parse_date(row['LastPreCall'], @import.user) if (@override || contact.last_pre_call.blank?) && row['LastPreCall'].present? && row['LastPreCall'] != '1899-12-30'
+    contact.last_thank = parse_date(row['LastThank'], @import.user) if (@override || contact.last_thank.blank?) && row['LastThank'].present? && row['LastThank'] != '1899-12-30'
   end
 
   def add_or_update_primary_person(row, contact)
@@ -174,11 +179,6 @@ class TntImport::ContactImport
 
   def true?(val)
     val.to_s.casecmp('TRUE').zero?
-  end
-
-  def parse_date(val)
-    Date.parse(val)
-  rescue
   end
 
   def must_add_children?(row, contact)
