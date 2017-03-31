@@ -96,24 +96,34 @@ class Import < ApplicationRecord
 
   def import
     update_column(:importing, true)
-    begin
-      "#{source.camelize}Import".constantize.new(self).import
-      ImportMailer.complete(self).deliver
-
-      account_list.merge_contacts # clean up data
-      account_list.queue_sync_with_google_contacts
-      account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
-      true
-    rescue UnsurprisingImportError
-      # Only send a failure email, don't re-raise the error, as it was not considered a surprising error by the
-      # import function, so don't re-raise it (that will prevent non-surprising errors from being logged via Rollbar).
-      ImportMailer.failed(self).deliver
-    rescue => e
-      ImportMailer.failed(self).deliver
-      raise e
-    end
+    "#{source.camelize}Import".constantize.new(self).import
+    after_import_success
+    true
+  rescue UnsurprisingImportError
+    after_import_failure
+    false
+  rescue => exception
+    after_import_failure
+    raise exception
   ensure
     update_column(:importing, false)
+  end
+
+  def after_import_success
+    begin
+      ImportMailer.complete(self).deliver
+    rescue => mail_exception
+      Rollbar.error(mail_exception)
+    end
+    account_list.merge_contacts # clean up data
+    account_list.queue_sync_with_google_contacts
+    account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
+  end
+
+  def after_import_failure
+    ImportMailer.failed(self).deliver
+  rescue => mail_exception
+    Rollbar.error(mail_exception)
   end
 
   class UnsurprisingImportError < StandardError

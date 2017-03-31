@@ -67,6 +67,14 @@ describe Import do
     expect { create(:import) }.to change(Import.jobs, :size).from(0).to(1)
   end
 
+  it 'should finish import if sending mail fails' do
+    expect(ImportMailer).to receive(:complete).and_raise(StandardError)
+    import = create(:tnt_import)
+    expect(import.account_list).to receive(:merge_contacts)
+    expect(import.account_list).to receive(:queue_sync_with_google_contacts)
+    import.send(:import)
+  end
+
   context 'in_preview' do
     it 'does not queue an import' do
       expect { create(:csv_import, in_preview: true) }.to_not change(Import.jobs, :size).from(0)

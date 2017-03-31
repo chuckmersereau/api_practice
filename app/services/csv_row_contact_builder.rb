@@ -52,6 +52,7 @@ class CsvRowContactBuilder
   def build_addresses
     return if csv_row['street'].blank?
 
+    (require 'pry'; binding.pry)
     contact.addresses.build(
       street: csv_row['street'],
       city: csv_row['city'],
