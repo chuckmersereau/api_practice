@@ -30,8 +30,12 @@ resource 'Contacts > Addresses' do
       geo
       historic
       location
+      metro_area
       postal_code
       primary_mailing_address
+      region
+      remote_id
+      seasonal
       source
       start_date
       state
@@ -64,8 +68,12 @@ resource 'Contacts > Addresses' do
         response_field 'geo',                     'Geo',                     type: 'String'
         response_field 'historic',                'Historic',                type: 'Boolean'
         response_field 'location',                'Location',                type: 'String'
+        response_field 'metro_area',              'Metro Area',              type: 'String'
         response_field 'postal_code',             'Postal Code',             type: 'String'
         response_field 'primary_mailing_address', 'Primary Mailing Address', type: 'Boolean'
+        response_field 'region',                  'Region',                  type: 'String'
+        response_field 'remote_id',               'Remote ID',               type: 'String'
+        response_field 'seasonal',                'Seasonal',                type: 'Boolean'
         response_field 'source',                  'Source',                  type: 'String'
         response_field 'start_date',              'Start Date',              type: 'String'
         response_field 'state',                   'State',                   type: 'String'

@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 31 March 2017
+- Add missing attributes metro_area, region, remote_id, and seasonal to Address serialization
+
 ## 30 March 2017
 - Added bulk create actions for contacts/tags and tasks/tags
 - Added a way to bulk remove multiple tags from multiple records on the contacts/tags and tasks/tags endpoints
