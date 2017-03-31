@@ -1,4 +1,6 @@
 class Api::V2::ContactsController < Api::V2Controller
+  DATE_FIELD_ENDINGS = %w(_at _date).freeze
+
   def index
     authorize_index
     load_contacts

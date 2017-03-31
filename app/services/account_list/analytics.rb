@@ -43,9 +43,12 @@ class AccountList::Analytics < ActiveModelSerializers::Model
                              .joins(:contact_referrals_to_me).uniq
                              .where('contact_referrals.created_at BETWEEN ? AND ?', start_date, end_date)
                              .count,
-      referrals_on_hand: account_list.contacts
-                                     .joins(:contact_referrals_to_me).uniq
-                                     .count
+      referrals_on_hand: account_list.contacts.where(status: [nil,
+                                                              'Never Contacted',
+                                                              'Ask in Future',
+                                                              'Cultivate Relationship',
+                                                              'Contact for Appointment'])
+                                     .joins(:contact_referrals_to_me).uniq.count
     }
   end
 

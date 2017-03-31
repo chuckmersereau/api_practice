@@ -18,6 +18,13 @@ class DonationReports::DonationInfo < ActiveModelSerializers::Model
       amount: donation.tendered_amount || donation.amount,
       contact_id: donation.loaded_contact.try(:uuid),
       contact_name: donation.loaded_contact.try(:name),
+      converted_amount: CurrencyRate.convert_on_date(
+        amount: donation.amount,
+        date: donation.donation_date,
+        from: donation.currency,
+        to: default_currency
+      ),
+      converted_currency: default_currency,
       currency: donation.tendered_currency || donation.currency || default_currency,
       donation_date: donation.donation_date,
       donation_id: donation.uuid,

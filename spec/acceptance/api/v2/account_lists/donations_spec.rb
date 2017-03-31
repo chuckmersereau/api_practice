@@ -53,6 +53,8 @@ resource 'Donations' do
       amount
       appeal_amount
       channel
+      converted_currency
+      converted_amount
       created_at
       currency
       donation_date
@@ -106,8 +108,9 @@ resource 'Donations' do
         response_field 'appeal_amount',          'Appeal Amount',          type: 'Number'
         response_field 'appeal_id',              'Appeal ID',              type: 'Number'
         response_field 'channel',                'Channel',                type: 'String'
-        response_field 'contact_id',             'Contact ID',             type: 'Number'
         response_field 'created_at',             'Created At',             type: 'String'
+        response_field 'converted_amount',       'Converted Amount',       type: 'Number'
+        response_field 'converted_currency',     'Converted Currency',     type: 'String'
         response_field 'currency',               'Currency',               type: 'String'
         response_field 'designation_account_id', 'Designation Account ID', type: 'Number'
         response_field 'donation_date',          'Donation Date',          type: 'String'

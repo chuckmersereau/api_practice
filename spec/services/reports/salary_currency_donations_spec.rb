@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Reports::SalaryCurrencyDonations, type: :model do
   let!(:report) { Reports::SalaryCurrencyDonations.new(account_list: account_list) }
@@ -107,6 +107,7 @@ RSpec.describe Reports::SalaryCurrencyDonations, type: :model do
           info[:months].each do |month|
             expect(month.keys).to include :total, :donations
           end
+          expect(info[:months].last[:donations].first.attributes.keys).to include :converted_amount, :converted_currency
         end
       end
     end
