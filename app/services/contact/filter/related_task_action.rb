@@ -1,14 +1,14 @@
 class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
   def execute_query(contacts, filters)
     related_task_action_filters = filters[:related_task_action].split(',').map(&:strip)
-    if related_task_action_filter.first == 'null'
+    if related_task_action_filters.include?('null')
       contacts_with_activities = contacts.where('activities.completed' => false)
-                                         .includes(:activities).map(&:id)
+                                         .joins(:activities).ids
       contacts.where('contacts.id not in (?)', contacts_with_activities)
     else
       contacts.where('activities.activity_type' => related_task_action_filters)
               .where('activities.completed' => false)
-              .includes(:activities)
+              .joins(:activities)
     end
   end
 
@@ -25,7 +25,7 @@ class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
   end
 
   def custom_options
-    [{ name: _('-- None --'), id: 'null' }] + related_tasks.collect { |a| { name: _(a), id: a } }
+    related_tasks.collect { |a| { name: _(a), id: a } }
   end
 
   private

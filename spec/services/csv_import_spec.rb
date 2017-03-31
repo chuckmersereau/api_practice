@@ -22,29 +22,29 @@ describe CsvImport do
     before do
       csv_import.update(in_preview: true)
       csv_import.file_headers_mappings = {
-        'church'               => 'Church',
-        'city'                 => 'Mailing City',
-        'commitment_amount'    => 'Commitment Amount',
-        'commitment_currency'  => 'Commitment Currency',
-        'commitment_frequency' => 'Commitment Frequency',
-        'contact_name'         => 'Contact Name',
-        'country'              => 'Mailing Country',
-        'email_1'              => 'Primary Email',
-        'envelope_greeting'    => 'Envelope Greeting',
-        'first_name'           => 'First Name',
-        'greeting'             => 'Greeting',
-        'last_name'            => 'Last Name',
-        'newsletter'           => 'Newsletter',
-        'notes'                => 'Notes',
-        'phone_1'              => 'Primary Phone',
-        'spouse_email'         => 'Spouse Email',
-        'spouse_first_name'    => 'Spouse First Name',
-        'spouse_phone'         => 'Spouse Phone',
-        'state'                => 'Mailing State',
-        'status'               => 'Status',
-        'street'               => 'Mailing Street Address',
-        'tags'                 => 'Tags',
-        'zip'                  => 'Mailing Postal Code'
+        'church'               => 'church',
+        'city'                 => 'mailing_city',
+        'commitment_amount'    => 'commitment_amount',
+        'commitment_currency'  => 'commitment_currency',
+        'commitment_frequency' => 'commitment_frequency',
+        'contact_name'         => 'contact_name',
+        'country'              => 'mailing_country',
+        'email_1'              => 'primary_email',
+        'envelope_greeting'    => 'envelope_greeting',
+        'first_name'           => 'first_name',
+        'greeting'             => 'greeting',
+        'last_name'            => 'last_name',
+        'newsletter'           => 'newsletter',
+        'notes'                => 'notes',
+        'phone_1'              => 'primary_phone',
+        'spouse_email'         => 'spouse_email',
+        'spouse_first_name'    => 'spouse_first_name',
+        'spouse_phone'         => 'spouse_phone',
+        'state'                => 'mailing_state',
+        'status'               => 'status',
+        'street'               => 'mailing_street_address',
+        'tags'                 => 'tags',
+        'zip'                  => 'mailing_postal_code'
       }
       csv_import.file_constants_mappings = {
         'commitment_currency' => {
@@ -77,16 +77,16 @@ describe CsvImport do
       import.update_cached_file_data
       csv_import.file_constants_mappings = {
         'commitment_currency' => {
-          'cad' => nil
+          'cad' => ''
         },
         'commitment_frequency' => {
-          nil => nil
+          '' => ''
         },
         'newsletter' => {
-          nil => nil
+          '' => ''
         },
         'status' => {
-          'partner_pray' => nil
+          'partner_pray' => ''
         }
       }
       csv_import.update(in_preview: false)
@@ -98,11 +98,11 @@ describe CsvImport do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_none.csv')))
       import.update_cached_file_data
       csv_import.file_constants_mappings['newsletter'] = {
-        nil => 'None'
+        '' => 'None'
       }
       csv_import.update(in_preview: false)
       expect { import.import }.to change { Contact.count }.from(0).to(1)
-      expect(Contact.first.send_newsletter).to eq(nil)
+      expect(Contact.first.send_newsletter).to eq('')
     end
 
     it 'does not error if csv file uses inconsistent newlines like \n then later \r\n' do
@@ -127,43 +127,38 @@ describe CsvImport do
         'commitment_frequency' => 'frequency',
         'contact_name'         => 'fname',
         'country'              => 'country',
-        'do_not_import'        => 'skip',
-        'email_1'              => 'email-address',
+        'email_1'              => 'email_address',
         'first_name'           => 'fname',
         'greeting'             => 'greeting',
-        'envelope_greeting'    => 'mailing-greeting',
+        'envelope_greeting'    => 'mailing_greeting',
         'last_name'            => 'lname',
-        'likely_to_give'       => 'likely-giver',
+        'likely_to_give'       => 'likely_giver',
         'metro_area'           => 'metro',
         'newsletter'           => 'newsletter',
-        'notes'                => 'extra-notes',
+        'notes'                => 'extra_notes',
         'phone_1'              => 'phone',
         'region'               => 'region',
         'send_appeals'         => 'appeals',
-        'spouse_email'         => 'Spouse-email-address',
-        'spouse_first_name'    => 'Spouse-fname',
-        'spouse_last_name'     => 'Spouse-lname',
-        'spouse_phone'         => 'Spouse-phone-number',
+        'spouse_email'         => 'spouse_email_address',
+        'spouse_first_name'    => 'spouse_fname',
+        'spouse_last_name'     => 'spouse_lname',
+        'spouse_phone'         => 'spouse_phone_number',
         'state'                => 'province',
         'status'               => 'status',
         'street'               => 'street',
         'tags'                 => 'tags',
         'website'              => 'website',
-        'zip'                  => 'zip-code'
+        'zip'                  => 'zip_code'
       }
 
       csv_import.file_constants_mappings = {
         'commitment_currency' => {
           'cad' => 'CAD',
-          'usd' => nil
+          'usd' => ''
         },
         'commitment_frequency' => {
           '1_0' => 'Monthly',
-          nil => nil
-        },
-        'do_not_import' => {
-          'true' => 'Yes',
-          'false' => ['No', nil]
+          '' => ''
         },
         'likely_to_give' => {
           'most_likely' => 'Yes',
@@ -189,7 +184,7 @@ describe CsvImport do
       it 'parses the csv and saves the contacts' do
         csv_import.in_preview = false
         expect(csv_import).to be_valid
-        expect { import.import }.to change(Contact, :count).from(0).to(2)
+        expect { import.import }.to change(Contact, :count).from(0).to(3)
         expect(csv_import.account_list.contacts.reload.where(name: 'John')).to be_present
       end
 
@@ -222,9 +217,10 @@ describe CsvImport do
     describe '#sample_contacts' do
       it 'returns sample contacts' do
         expect(import.sample_contacts).to be_a Array
-        expect(import.sample_contacts.size).to eq 2
+        expect(import.sample_contacts.size).to eq 3
         expect(import.sample_contacts.first.name).to eq 'John'
-        expect(import.sample_contacts.second.name).to eq 'Joe'
+        expect(import.sample_contacts.second.name).to eq 'Bob'
+        expect(import.sample_contacts.third.name).to eq 'Joe'
         import.sample_contacts.each do |sample_contact|
           expect(sample_contact).to be_a Contact
           expect(sample_contact.uuid).to be_present
@@ -238,49 +234,49 @@ describe CsvImport do
     it 'assigns file_headers when setting file' do
       import = create(:csv_import_custom_headers, in_preview: true)
       csv_import = CsvImport.new(import)
-      expect { csv_import.update_cached_file_data }.to change { import.reload.file_headers }.from([]).to %w(fname
-                                                                                                            lname
-                                                                                                            Spouse-fname
-                                                                                                            Spouse-lname
-                                                                                                            greeting
-                                                                                                            mailing-greeting
-                                                                                                            church
-                                                                                                            street
-                                                                                                            city
-                                                                                                            province
-                                                                                                            zip-code
-                                                                                                            country
-                                                                                                            status
-                                                                                                            amount
-                                                                                                            frequency
-                                                                                                            currency
-                                                                                                            newsletter
-                                                                                                            tags
-                                                                                                            email-address
-                                                                                                            Spouse-email-address
-                                                                                                            phone
-                                                                                                            Spouse-phone-number
-                                                                                                            extra-notes
-                                                                                                            skip
-                                                                                                            likely-giver
-                                                                                                            metro
-                                                                                                            region
-                                                                                                            appeals
-                                                                                                            website)
+      expect { csv_import.update_cached_file_data }.to change { import.reload.file_headers }.from({}).to('fname' => 'fname',
+                                                                                                         'lname' => 'lname',
+                                                                                                         'spouse_fname' => 'Spouse-fname',
+                                                                                                         'spouse_lname' => 'Spouse-lname',
+                                                                                                         'greeting' => 'greeting',
+                                                                                                         'mailing_greeting' => 'mailing-greeting',
+                                                                                                         'church' => 'church',
+                                                                                                         'street' => 'street',
+                                                                                                         'city' => 'city',
+                                                                                                         'province' => 'province',
+                                                                                                         'zip_code' => 'zip-code',
+                                                                                                         'country' => 'country',
+                                                                                                         'status' => 'status',
+                                                                                                         'amount' => 'amount',
+                                                                                                         'frequency' => 'frequency',
+                                                                                                         'currency' => 'currency',
+                                                                                                         'newsletter' => 'newsletter',
+                                                                                                         'tags' => 'tags',
+                                                                                                         'email_address' => 'email-address',
+                                                                                                         'spouse_email_address' => 'Spouse-email-address',
+                                                                                                         'phone' => 'phone',
+                                                                                                         'spouse_phone_number' => 'Spouse-phone-number',
+                                                                                                         'extra_notes' => 'extra-notes',
+                                                                                                         'skip' => 'skip',
+                                                                                                         'likely_giver' => 'likely-giver',
+                                                                                                         'metro' => 'metro',
+                                                                                                         'region' => 'region',
+                                                                                                         'appeals' => 'appeals',
+                                                                                                         'website' => 'website')
     end
 
     it 'assigns file_constants when setting file' do
       import = create(:csv_import_custom_headers, in_preview: true)
       csv_import = CsvImport.new(import)
       expect { csv_import.update_cached_file_data }.to change { import.reload.file_constants }.from({}).to(
-        'greeting' => Set.new(['Hi John and Jane', 'Hello!', nil]),
+        'greeting' => Set.new(['Hi John and Jane', 'Hello!', '']),
         'status' => Set.new(['Praying', 'Praying and giving']),
-        'amount' => Set.new(['50', '10', nil]),
-        'frequency' => Set.new(['Monthly', nil]),
+        'amount' => Set.new(['50', '10', '']),
+        'frequency' => Set.new(['Monthly', '']),
         'newsletter' => Set.new(['Both']),
-        'currency' => Set.new(['CAD', nil]),
-        'skip' => Set.new(['No', 'Yes', nil]),
-        'likely-giver' => Set.new(%w(Yes No)),
+        'currency' => Set.new(['CAD', '']),
+        'skip' => Set.new(['No', 'Yes', '']),
+        'likely_giver' => Set.new(%w(Yes No)),
         'appeals' => Set.new(%w(Yes No))
       )
     end

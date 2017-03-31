@@ -5,7 +5,7 @@ describe TntImport::ContactImport do
   let(:xml) do
     TntImport::XmlReader.new(tnt_import).parsed_xml
   end
-  let(:contact_rows) { Array.wrap(xml['Contact']['row']) }
+  let(:contact_rows) { Array.wrap(xml.tables['Contact']['row']) }
   let(:import) do
     donor_accounts = []
     tags = []
@@ -66,6 +66,14 @@ describe TntImport::ContactImport do
     expect(person.phone_numbers.first.number).to eq '(UNLISTED) call office'
     expect(person.email_addresses.count).to eq 1
     expect(person.email_addresses.first.email).to eq 'ron@t.co'
+  end
+
+  it 'ignores negative PledgeFrequencyID' do
+    row = contact_rows.first
+    row['PledgeFrequencyID'] = -11
+    tnt_import.override = true
+    import.import_contact(row)
+    expect(Contact.last.pledge_frequency).to eq nil
   end
 
   def load_yaml_row(filename)

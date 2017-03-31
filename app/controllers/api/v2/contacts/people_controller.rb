@@ -105,7 +105,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   def save_person
     ActiveRecord::Base.transaction do
       person_save_result = @person.save(context: persistence_context)
-      @person.contact_people.create(contact: contact_scope.first) if action_name == 'create'
+      @person.contact_people.create(contact: contact_scope.first) if action_name == 'create' && person_save_result
       person_save_result
     end
   end

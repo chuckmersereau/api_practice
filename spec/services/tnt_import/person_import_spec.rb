@@ -140,4 +140,26 @@ describe TntImport::PersonImport do
       expect(person.anniversary_year).to eq(1994)
     end
   end
+
+  it 'converts two digit years to four digits' do
+    contact_row = {
+      'PreferredPhoneType' => '0',
+      'PhoneIsValidMask' => '4385',
+      'PhoneCountryIDs' => '0=840',
+      'HomePhone' => '(515) 555-1234',
+      'MobilePhone' => '213-211-1111',
+      'BusinessPhone' => '(515) 555-9771;ext=301',
+      'SpouseMobilePhone' => '212-222-2222',
+      'BirthdayMonth' => '9',
+      'BirthdayDay' => '20',
+      'BirthdayYear' => '89',
+      'AnniversaryMonth' => '11',
+      'AnniversaryDay' => '4',
+      'AnniversaryYear' => '10'
+    }
+    person = Person.new
+    person = import.send(:update_person_attributes, person, contact_row)
+    expect(person.birthday_year).to eq(1989)
+    expect(person.anniversary_year).to eq(2010)
+  end
 end

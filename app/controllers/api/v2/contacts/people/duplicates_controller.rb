@@ -34,21 +34,25 @@ class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
   end
 
   def load_duplicates
-    @dup_people = account_lists.flat_map do |account_list|
+    @duplicates = account_lists.flat_map do |account_list|
       Person::DuplicatesFinder.new(account_list).find
     end
-    @dup_people = Kaminari.paginate_array(dup_people_without_doubles)
+    @duplicates = Kaminari.paginate_array(duplicates_without_doubles)
                           .page(page_number_param)
                           .per(per_page_param)
   end
 
-  def dup_people_without_doubles
-    @dup_people.uniq(&:minimum_person_id)
+  def duplicates_without_doubles
+    @duplicates.each_with_object([]) do |duplicate, dups_to_keep|
+      if dups_to_keep.none? { |dup_to_keep| dup_to_keep.shares_an_id_with?(duplicate) }
+        dups_to_keep << duplicate
+      end
+    end
   end
 
   def render_duplicates
-    render json: @dup_people,
-           meta: meta_hash(@dup_people),
+    render json: @duplicates,
+           meta: meta_hash(@duplicates),
            include: include_params,
            fields: field_params
   end

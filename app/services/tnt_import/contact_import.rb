@@ -44,6 +44,8 @@ class TntImport::ContactImport
     contact
   end
 
+  private
+
   def update_contact(contact, row)
     update_contact_basic_fields(contact, row)
     update_contact_date_fields(contact, row)
@@ -76,7 +78,8 @@ class TntImport::ContactImport
     contact.add_to_notes("Children: #{row['Children']}") if must_add_children?(row, contact)
 
     contact.pledge_amount = row['PledgeAmount'] if @override || contact.pledge_amount.blank?
-    contact.pledge_frequency = row['PledgeFrequencyID'] if (@override || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i != 0
+    # PledgeFrequencyID: Since TNT 3.2, a negative number indicates a fequency in days. For example: -11 would be a frequency of 11 days. For now we are ignoring negatives.
+    contact.pledge_frequency = row['PledgeFrequencyID'] if (@override || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i >= 0
     contact.pledge_received = true?(row['PledgeReceived']) if @override || contact.pledge_received.blank?
     contact.status = TntImport::TntCodes.mpd_phase(row['MPDPhaseID']) if (@override || contact.status.blank?) && TntImport::TntCodes.mpd_phase(row['MPDPhaseID']).present?
     contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1] if (@override || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i != 0
@@ -150,8 +153,6 @@ class TntImport::ContactImport
     Date.parse(val)
   rescue
   end
-
-  private
 
   def must_add_children?(row, contact)
     row['Children'].present? && (!contact.notes || !contact.notes.include?(row['Children']))

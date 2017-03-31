@@ -2,6 +2,27 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 30 March 2017
+- Added bulk create actions for contacts/tags and tasks/tags
+- Added a way to bulk remove multiple tags from multiple records on the contacts/tags and tasks/tags endpoints
+  - Bulk contacts/tags and tasks/tags now work like any other bulk endpoint
+- Enabled being able to set `X-HTTP-Method-Override` header to override the request method
+
+## 29 March 2017
+- Added updated_at as a filter for Contacts endpoint
+- Added updated_at as a filter for Tasks endpoint
+
+## 28 March 2017
+- Added contact related filters to tasks endpoint
+- User creation now works. Now when you try to authenticate with a valid theKey ticket, and the User doesn't exist - it will create them
+    - One thing to note - the User will be returned _without_ any `Account List` information, unless they are part of the Cru-USA organization
+- TNT imports user fields as tags
+- TNT imports Campaigns, renamed from Appeals in v3.2
+
+## 27 March 2017
+- Updating TntImport::GroupTagsLoader to import from TNT v3.2
+- Added TntImport::Xml service class to assist TNT imports
+
 ## 24 March 2017
 - Added endpoint to update people without specifying a contact_id at PUT api/v2/contacts/people
 
@@ -17,6 +38,7 @@ This changelog covers what's changed in the MPDX APIs.
 - The API will now return better 404 detail messages when unable to find a resource
 
 ## 20 March 2017
+- Added a pledge endpoint to access pledges associated to an account_list ( /account_lists/pledges )
 - Filters ending with `_id` now allow for comma-delimited ids to be sent
 - Add CSV Import get, list, and update endpoints
 - Added alert frequencies to the constants endpoint
@@ -31,8 +53,8 @@ This changelog covers what's changed in the MPDX APIs.
 ## 14 March 2017
 - Add `website` attribute to `Contact` objects
 - Adjust Bulk Delete Tags endpoints (`api/v2/contacts/tags/bulk` and `api/v2/tasks/tags/bulk`)
-    - Allow for resource filtering, ie: `filter[contact_ids]`
-    - Adjust object format of Tag to be removed to better mirror `json:api`
+- Allow for resource filtering, ie: `filter[contact_ids]`
+- Adjust object format of Tag to be removed to better mirror `json:api`
 
 ## 10 March 2017
 - Added a mailing csv export endpoint

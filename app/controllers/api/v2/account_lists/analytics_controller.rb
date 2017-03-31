@@ -37,4 +37,10 @@ class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
   def render_analytics
     render json: @analytics, fields: field_params, include: include_params
   end
+
+  def raise_if_bad_date_range_value(key, value)
+    raise_bad_request if key == 'date_range'
+
+    super
+  end
 end

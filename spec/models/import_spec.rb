@@ -23,7 +23,7 @@ describe Import do
       import.file_row_samples = [:test]
       expect { import.file = File.new(Rails.root.join('spec/fixtures/sample_csv_with_custom_headers.csv')) }
         .to change { import.file_contents }
-        .and change { import.file_headers }.to([])
+        .and change { import.file_headers }.to({})
         .and change { import.file_constants }.to({})
         .and change { import.file_row_samples }.to([])
     end
@@ -84,6 +84,6 @@ describe Import do
     import = build(:import)
     allow(import.file).to receive(:size).and_return(Import::MAX_FILE_SIZE_IN_BYTES + 1)
     expect(import.valid?).to eq false
-    expect(import.errors[:file]).to eq ['File size must be less than 10000000 bytes']
+    expect(import.errors[:file]).to eq ['File size must be less than 100000000 bytes']
   end
 end

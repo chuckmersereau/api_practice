@@ -49,6 +49,8 @@ module Mpdx
       end
     end
 
+    config.middleware.insert_before 0, 'Rack::MethodOverride'
+
     config.after_initialize do |app|
       app.routes.append{ match '*a', :to => 'api/error#not_found', via: [:get, :post] } unless config.consider_all_requests_local
     end

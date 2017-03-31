@@ -35,7 +35,7 @@ class TntImport
   end
 
   def import_referrals(tnt_contacts)
-    rows = Array.wrap(xml['Contact']['row'])
+    rows = Array.wrap(xml.tables['Contact']['row'])
     TntImport::ReferralsImport.new(tnt_contacts, rows).import
   end
 

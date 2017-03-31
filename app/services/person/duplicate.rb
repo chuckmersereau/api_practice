@@ -31,7 +31,7 @@ class Person::Duplicate < ActiveModelSerializers::Model
     end
   end
 
-  def minimum_person_id
-    [person.id, dup_person.id].min
+  def shares_an_id_with?(candidate_duplicate)
+    id.include?(candidate_duplicate.person.uuid) || id.include?(candidate_duplicate.dup_person.uuid)
   end
 end

@@ -1,20 +1,29 @@
 require 'rails_helper'
 
 describe TntImport do
-  let(:xml) do
-    TntImport::XmlReader.new(tnt_import).parsed_xml
-  end
+  let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
   let(:tnt_import) { create(:tnt_import, override: true) }
   let(:import) { TntImport.new(tnt_import) }
   let(:contact) { create(:contact) }
-  let(:contact_rows) { Array.wrap(xml['Contact']['row']) }
-  let(:task_rows) { Array.wrap(xml['Task']['row']) }
-  let(:task_contact_rows) { Array.wrap(xml['TaskContact']['row']) }
-  let(:history_rows) { Array.wrap(xml['History']['row']) }
-  let(:history_contact_rows) { Array.wrap(xml['HistoryContact']['row']) }
-  let(:property_rows) { Array.wrap(xml['Property']['row']) }
+  let(:contact_rows) { Array.wrap(xml.tables['Contact']['row']) }
+  let(:task_rows) { Array.wrap(xml.tables['Task']['row']) }
+  let(:task_contact_rows) { Array.wrap(xml.tables['TaskContact']['row']) }
+  let(:history_rows) { Array.wrap(xml.tables['History']['row']) }
+  let(:history_contact_rows) { Array.wrap(xml.tables['HistoryContact']['row']) }
+  let(:property_rows) { Array.wrap(xml.tables['Property']['row']) }
 
   before { stub_smarty_streets }
+
+  describe '#xml' do
+    it 'returns an Xml object' do
+      import = TntImport.new(create(:tnt_import))
+      expect(import.xml).to be_a TntImport::Xml
+      expect(import.xml.tables.keys).to eq %w(Appeal Contact Designation Group GroupContact History HistoryContact
+                                              HistoryResult LikelyToGive Login LoginProfile LoginProfileDesignation PendingAction Picture Property Region
+                                              RegionLocation Task TaskContact TaskReason TaskType)
+      expect(import.xml.version).to eq 3.0
+    end
+  end
 
   context '#import contacts with multiple donor accounts in multiple existing contacts' do
     before do
@@ -417,8 +426,7 @@ describe TntImport do
   end
 
   context '#import_appeals' do
-    it 'imports an appeal as well as its contacts and donations' do
-      import = create(:tnt_import_appeals)
+    def test_appeal_import(import)
       account_list = import.account_list
       tnt_import = TntImport.new(import)
       contact = create(:contact, name: 'Doe, John', account_list: account_list)
@@ -454,6 +462,18 @@ describe TntImport do
       appeal.reload
       expect(appeal.created_at).to eq(Time.zone.local(2005, 5, 21, 12, 56, 40))
       expect(appeal.contacts.count).to eq(2)
+    end
+
+    context 'version 3.1 and lower, appeals are called "Appeal"' do
+      it 'imports an appeal as well as its contacts and donations' do
+        test_appeal_import(create(:tnt_import_appeals))
+      end
+    end
+
+    context 'version 3.2 and higher, appeals are called "Campaign"' do
+      it 'imports an appeal as well as its contacts and donations' do
+        test_appeal_import(create(:tnt_import_campaigns))
+      end
     end
 
     it 'does not error if an appeal has no contacts' do
@@ -519,6 +539,16 @@ describe TntImport do
       john_donor_address = john.donor_accounts.first.addresses.first
       expect(john_donor_address.street).to eq '12345 Crescent'
       expect(john_donor_address.country).to eq 'Canada'
+    end
+  end
+
+  context 'version support' do
+    context 'version 3.2 and higher' do
+      before { tnt_import.file = File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
+
+      it 'imports' do
+        expect { import.import }.to change { Contact.all.count }.from(0).to(3)
+      end
     end
   end
 end

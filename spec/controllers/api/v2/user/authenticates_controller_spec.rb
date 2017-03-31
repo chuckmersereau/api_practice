@@ -1,23 +1,38 @@
 require 'rails_helper'
 
 RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
-  let!(:user) { create(:user) }
-  let(:response_body) { JSON.parse(response.body) }
+  let!(:user)            { create(:user) }
+  let(:response_body)    { JSON.parse(response.body) }
   let(:valid_cas_ticket) { 'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a' }
+  let(:service)          { 'http://test.host/api/v2/user/authenticate' }
+
   let(:request_data) do
     {
       id: nil,
       type: 'authenticate',
-      attributes: { cas_ticket: valid_cas_ticket }
+      attributes: {
+        cas_ticket: valid_cas_ticket
+      }
     }
   end
 
   describe '#create' do
     context 'valid cas ticket' do
+      let!(:validator) do
+        CasTicketValidatorService.new(ticket: valid_cas_ticket, service: service)
+      end
+
       before do
-        user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
-        stub_request(:get, "https://thekey.me/cas/p3/serviceValidate?service=http://test.host/api/v2/user/authenticate&ticket=#{valid_cas_ticket}")
+        stub_request(:get, "https://thekey.me/cas/p3/serviceValidate?service=#{service}&ticket=#{valid_cas_ticket}")
           .to_return(status: 200, body: File.open(Rails.root.join('spec', 'fixtures', 'cas', 'successful_ticket_validation_response_body.xml')).read)
+
+        user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
+
+        allow(UserFromCasService)
+          .to receive(:find_or_create)
+          .with(validator.attributes)
+          .and_return(user)
+
         post :create, data: request_data
       end
 
@@ -27,6 +42,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
 
       it 'responds with a valid json web token' do
         json_web_token = response_body['data']['attributes']['json_web_token']
+
         expect(json_web_token).to be_present
         expect(User.find(JsonWebToken.decode(json_web_token)['user_id']).id).to eq user.id
       end

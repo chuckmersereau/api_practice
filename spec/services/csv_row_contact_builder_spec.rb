@@ -17,29 +17,28 @@ describe CsvRowContactBuilder do
       'commitment_frequency' => 'frequency',
       'contact_name'         => 'fname',
       'country'              => 'country',
-      'do_not_import'        => 'skip',
-      'email_1'              => 'email-address',
+      'email_1'              => 'email_address',
       'first_name'           => 'fname',
       'greeting'             => 'greeting',
-      'envelope_greeting'    => 'mailing-greeting',
+      'envelope_greeting'    => 'mailing_greeting',
       'last_name'            => 'lname',
-      'likely_to_give'       => 'likely-giver',
+      'likely_to_give'       => 'likely_giver',
       'metro_area'           => 'metro',
       'newsletter'           => 'newsletter',
-      'notes'                => 'extra-notes',
+      'notes'                => 'extra_notes',
       'phone_1'              => 'phone',
       'region'               => 'region',
       'send_appeals'         => 'appeals',
-      'spouse_email'         => 'Spouse-email-address',
-      'spouse_first_name'    => 'Spouse-fname',
-      'spouse_last_name'     => 'Spouse-lname',
-      'spouse_phone'         => 'Spouse-phone-number',
+      'spouse_email'         => 'spouse_email_address',
+      'spouse_first_name'    => 'spouse_fname',
+      'spouse_last_name'     => 'spouse_lname',
+      'spouse_phone'         => 'spouse_phone_number',
       'state'                => 'province',
       'status'               => 'status',
       'street'               => 'street',
       'tags'                 => 'tags',
       'website'              => 'website',
-      'zip'                  => 'zip-code'
+      'zip'                  => 'zip_code'
     }
 
     import.file_constants_mappings = {
@@ -50,10 +49,6 @@ describe CsvRowContactBuilder do
       'commitment_frequency' => {
         '1_0' => 'Monthly',
         nil => nil
-      },
-      'do_not_import' => {
-        'true' => 'Yes',
-        'false' => ['No', nil]
       },
       'likely_to_give' => {
         'most_likely' => 'Yes',

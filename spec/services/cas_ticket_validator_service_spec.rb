@@ -59,6 +59,24 @@ RSpec.describe CasTicketValidatorService, type: :service do
         expect(service.attribute('wut')).to be_nil
       end
     end
+
+    describe '#attributes' do
+      it 'returns attributes from the CAS response with normalized keys' do
+        expected_hash = {
+          authenticationDate: 'Tue Jan 24 19:84:25 UTC 2017',
+          email: 'cas.user@internet.com',
+          firstName: 'Cas',
+          isFromNewLogin: 'true',
+          lastName: 'User',
+          longTermAuthenticationRequestTokenUsed: 'false',
+          relayGuid: 'B163530-7372-551R-KO83-1FR05534129F',
+          ssoGuid: 'B163530-7372-551R-KO83-1FR05534129F',
+          theKeyGuid: 'B163530-7372-551R-KO83-1FR05534129F'
+        }
+
+        expect(service.attributes).to eq expected_hash
+      end
+    end
   end
 
   describe 'depends on CAS_BASE_URL environment variable' do

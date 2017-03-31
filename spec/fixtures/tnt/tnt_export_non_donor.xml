@@ -1,4 +1,7 @@
 <Database>
+  <Application>TntConnect</Application>
+  <Version>3.0</Version>
+  <Name>Z:\Users\keweijiang\Documents\Test.mpddb</Name>
   <Tables>
     <Contact>
       <row id="1885155404">

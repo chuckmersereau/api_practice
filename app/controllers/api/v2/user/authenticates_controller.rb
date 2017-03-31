@@ -5,6 +5,7 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
   def create
     require_cas_ticket
     validate_cas_ticket
+    queue_imports
     render_authenticate
   end
 
@@ -24,14 +25,9 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
     @cas_ticket_validator ||= CasTicketValidatorService.new(ticket: cas_ticket_param, service: service)
   end
 
-  def guid
-    [cas_ticket_validator.attribute('ssoGuid'),
-     cas_ticket_validator.attribute('theKeyGuid'),
-     cas_ticket_validator.attribute('relayGuid')]
-  end
-
   def load_user
-    @user ||= ::User.find_by_guid(guid)
+    @user ||= UserFromCasService.find_or_create(cas_ticket_validator.attributes)
+
     raise Exceptions::AuthenticationError unless @user
     @user
   end
@@ -46,6 +42,10 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
 
   def cas_ticket_param
     params.require('data').require('attributes')['cas_ticket']
+  end
+
+  def queue_imports
+    load_user.queue_imports
   end
 
   # The service should be a predetermined service URL for the MPDX API.

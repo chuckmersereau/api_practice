@@ -4,13 +4,16 @@ class TntImport::XmlReader
   end
 
   def parsed_xml
-    xml = read_xml(@import.file.file.file)
-    xml['Database']['Tables'] if xml.present? && xml['Database']
+    TntImport::Xml.new(read_xml)
   end
 
   private
 
-  def read_xml(import_file)
+  def file
+    @import.file.file.file
+  end
+
+  def read_xml(import_file = file)
     xml = {}
     begin
       File.open(import_file, 'r:utf-8') do |file|

@@ -2,9 +2,7 @@ class FamilyRelationship < ApplicationRecord
   belongs_to :person
   belongs_to :related_person, class_name: 'Person'
 
-  validates :person_id, :related_person_id, :relationship, presence: true
-
-  # attr_accessible :related_person_id, :relationship
+  validates :related_person_id, :relationship, presence: true
 
   PERMITTED_ATTRIBUTES = [:created_at,
                           :person_id,

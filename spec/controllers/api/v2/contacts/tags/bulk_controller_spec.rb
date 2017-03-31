@@ -14,13 +14,86 @@ RSpec.describe Api::V2::Contacts::Tags::BulkController, type: :controller do
 
   let(:params) do
     {
-      data: {
-        type: 'tags',
-        attributes: {
-          name: first_tag
+      data: [{
+        data: {
+          type: 'tags',
+          attributes: {
+            name: first_tag
+          }
         }
-      }
+      }]
     }
+  end
+
+  describe '#create' do
+    it 'creates the tag object for users that have that access' do
+      api_login(user)
+      expect do
+        post :create, params
+      end.to change { contact_two.reload.tag_list.length }.by(1)
+      expect(response.status).to eq(200)
+    end
+
+    context 'with contact_ids filter' do
+      let(:params) do
+        {
+          data: [{
+            data: {
+              type: 'tags',
+              attributes: {
+                name: first_tag
+              }
+            }
+          }, {
+            data: {
+              type: 'tags',
+              attributes: {
+                name: second_tag
+              }
+            }
+          }]
+        }
+      end
+
+      let(:filter_params) do
+        {
+          filter: {
+            contact_ids: contact_two.uuid
+          }
+        }
+      end
+
+      it 'applies the tag to the specified contacts' do
+        api_login(user)
+        expect do
+          post :create, params.merge(filter_params)
+        end.to change { contact_two.reload.tag_list.length }.by(1)
+        expect(response.status).to eq(200)
+      end
+
+      it 'does not apply the tag to unspecified contacts' do
+        api_login(user)
+        expect do
+          post :create, params.merge(filter_params)
+        end.to_not change { contact_one.reload.tag_list.length }
+        expect(response.status).to eq(200)
+      end
+    end
+
+    it 'does not create the tag for users that do not own the contact' do
+      api_login(create(:user_with_account))
+      expect do
+        post :create, params
+      end.not_to change { contact_two.reload.tag_list.length }
+      expect(response.status).to eq(404)
+    end
+
+    it 'does not create the tag object for users that are not signed in' do
+      expect do
+        post :create, params
+      end.not_to change { contact_two.reload.tag_list.length }
+      expect(response.status).to eq(401)
+    end
   end
 
   describe '#destroy' do

@@ -2588,6 +2588,33 @@ CREATE SEQUENCE pictures_id_seq
 
 ALTER SEQUENCE pictures_id_seq OWNED BY pictures.id;
 
+--
+-- Name: pledges; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE pledges (
+    id integer NOT NULL,
+    amount numeric,
+    expected_date timestamp without time zone,
+    donation_id integer,
+    account_list_id integer,
+    contact_id integer,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: pledges_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE pledges_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
 
 --
 -- Name: pls_accounts; Type: TABLE; Schema: public; Owner: -
@@ -3272,6 +3299,11 @@ ALTER TABLE ONLY pictures ALTER COLUMN id SET DEFAULT nextval('pictures_id_seq':
 
 ALTER TABLE ONLY pls_accounts ALTER COLUMN id SET DEFAULT nextval('pls_accounts_id_seq'::regclass);
 
+--
+-- Name: id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pledges ALTER COLUMN id SET DEFAULT nextval('pledges_id_seq'::regclass);
 
 --
 -- Name: id; Type: DEFAULT; Schema: public; Owner: -
@@ -3851,6 +3883,13 @@ ALTER TABLE ONLY pls_accounts
 ALTER TABLE ONLY prayer_letters_accounts
     ADD CONSTRAINT prayer_letters_accounts_pkey PRIMARY KEY (id);
 
+
+--
+-- Name: pledges_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pledges
+    ADD CONSTRAINT pledges_pkey PRIMARY KEY (id);
 
 --
 -- Name: recurring_recommendation_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
@@ -5250,6 +5289,20 @@ CREATE UNIQUE INDEX index_person_websites_on_uuid ON person_websites USING btree
 
 
 --
+-- Name: index_pledges_on_account_list_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledges_on_account_list_id ON pledges USING btree (account_list_id);
+
+
+--
+-- Name: index_pledges_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledges_on_uuid ON pledges USING btree (uuid);
+
+
+--
 -- Name: index_phone_numbers_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6158,6 +6211,16 @@ INSERT INTO schema_migrations (version) VALUES ('20170301173502');
 
 INSERT INTO schema_migrations (version) VALUES ('20170307220854');
 
+INSERT INTO schema_migrations (version) VALUES ('20170217220712');
+
+INSERT INTO schema_migrations (version) VALUES ('20170221212815');
+
+INSERT INTO schema_migrations (version) VALUES ('20170223165218');
+
+INSERT INTO schema_migrations (version) VALUES ('20170317205005');
+
+INSERT INTO schema_migrations (version) VALUES ('20170314185145');
+
 INSERT INTO schema_migrations (version) VALUES ('20170315222249');
 
 INSERT INTO schema_migrations (version) VALUES ('20170316042808');
@@ -6167,4 +6230,3 @@ INSERT INTO schema_migrations (version) VALUES ('20170317205005');
 INSERT INTO schema_migrations (version) VALUES ('20170306203922');
 
 INSERT INTO schema_migrations (version) VALUES ('20170322001657');
-

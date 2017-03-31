@@ -8,10 +8,8 @@ class Api::V2::BulkController < Api::V2Controller
   def validate_and_transform_bulk_json_api_params
     @original_params = params
 
-    @_params = ActionController::Parameters.new(
-      data: bulk_data_from_array_params(data_array_params),
-      action: params[:action],
-      controller: params[:controller]
+    @_params = params.merge(
+      data: bulk_data_from_array_params(data_array_params)
     )
   end
 
@@ -30,6 +28,10 @@ class Api::V2::BulkController < Api::V2Controller
 
   def data_array_params
     params.dig(:data) || []
+  end
+
+  def fetch_account_list_with_filter
+    current_user.account_lists.where(uuid: account_list_filter)
   end
 
   def missing_id_error

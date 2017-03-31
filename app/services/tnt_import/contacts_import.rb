@@ -3,25 +3,43 @@ class TntImport::ContactsImport
     @import = import
     @account_list = import.account_list
     @override = import.override?
-    @tags_for_all = import.tags
+    @tags_for_all = Array.wrap(import.tags)
     @designation_profile = designation_profile
     @xml = xml
+    @xml_tables = xml.tables
   end
 
   def import_contacts
-    tags_by_contact_id = TntImport::GroupTagsLoader.tags_by_tnt_contact_id(@xml)
     donors_by_tnt_id = donor_accounts_by_tnt_contact_id
 
-    rows = Array.wrap(@xml['Contact']['row'])
+    rows = Array.wrap(@xml_tables['Contact']['row'])
     tnt_contacts = {}
     rows.each do |row|
       tnt_id = row['id']
-      tags = (Array.wrap(@tags_for_all) + Array.wrap(tags_by_contact_id[tnt_id]))
+      tags = all_tags_for_tnt_contact_id(tnt_id)
       donor_accounts = donors_by_tnt_id[tnt_id]
       tnt_contacts[tnt_id] = import_contact(row, tags.compact, donor_accounts)
     end
 
     tnt_contacts
+  end
+
+  private
+
+  def all_tags_for_tnt_contact_id(tnt_id)
+    (@tags_for_all +
+      group_tags_for_tnt_contact_id(tnt_id) +
+      contact_tags_for_tnt_contact_id(tnt_id)).uniq
+  end
+
+  def group_tags_for_tnt_contact_id(tnt_id)
+    @group_tags_by_tnt_contact_id ||= TntImport::GroupTagsLoader.tags_by_tnt_contact_id(@xml)
+    Array.wrap(@group_tags_by_tnt_contact_id[tnt_id])
+  end
+
+  def contact_tags_for_tnt_contact_id(tnt_id)
+    @contact_tags_for_tnt_contact_id ||= TntImport::ContactTagsLoader.new(@xml).tags_by_tnt_contact_id
+    Array.wrap(@contact_tags_for_tnt_contact_id[tnt_id])
   end
 
   def import_contact(row, tags, donor_accounts)

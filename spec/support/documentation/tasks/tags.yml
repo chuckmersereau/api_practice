@@ -1,4 +1,20 @@
 parameters:
+  bulk_create:
+    filters:
+      account_list_id:
+        description:
+          The `ID` of an Account List to scope the tasks to
+        type: ID string
+      task_ids:
+        description:
+          A comma delimited list of Task IDs to add the Tag to. If ommited the
+          Tag will be added to _all_ Tasks.
+        type: string (comma delimited IDs)
+    attributes:
+      name:
+        description: The name of the Tag to be added
+        type: string
+        required: true
   bulk_delete:
     filters:
       account_list_id:

@@ -14,7 +14,7 @@ class Import < ApplicationRecord
     csv: 'You must specify a .csv spreadsheet file from to upload to MPDX.'.freeze,
     tnt_data_sync: 'You must specify a TntMPD .tntmpd donor export file from your organization to upload to MPDX.'.freeze
   }.freeze
-  MAX_FILE_SIZE_IN_BYTES = 10_000_000
+  MAX_FILE_SIZE_IN_BYTES = 100_000_000
   PERMITTED_ATTRIBUTES = [:account_list_id,
                           :created_at,
                           :file,
@@ -42,14 +42,14 @@ class Import < ApplicationRecord
   validates :file, upload_extension: { extension: 'tntmpd', message: SOURCE_ERROR_MESSAGES[:tnt_data_sync] }, if: :source_tnt_data_sync?
   validates :file, upload_extension: { extension: 'csv',    message: SOURCE_ERROR_MESSAGES[:csv]           }, if: :source_csv?
   validates :file, :file_headers, :file_constants, :file_headers_mappings, :file_row_samples, presence: true, if: :source_csv?, unless: :in_preview?
-  validates :file_constants, :file_headers_mappings, :file_constants_mappings, class: { is_a: Hash }
-  validates :file_headers, :file_row_samples, class: { is_a: Array }
+  validates :file_headers, :file_constants, :file_headers_mappings, :file_constants_mappings, class: { is_a: Hash }
+  validates :file_row_samples, class: { is_a: Array }
   validates_with CsvImportMappingsValidator, if: :source_csv?, unless: :in_preview?
   validates_with FacebookImportValidator, if: :source_facebook?
 
   serialize :groups, Array
   serialize :group_tags, JSON
-  serialize :file_headers, Array
+  serialize :file_headers, Hash
   serialize :file_constants, Hash
   serialize :file_row_samples, Array
   serialize :file_headers_mappings, Hash
@@ -83,7 +83,7 @@ class Import < ApplicationRecord
 
   def reset_file
     @file_contents = nil
-    self.file_headers = []
+    self.file_headers = {}
     self.file_constants = {}
     self.file_row_samples = []
   end

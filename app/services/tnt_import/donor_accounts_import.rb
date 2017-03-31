@@ -4,15 +4,16 @@ class TntImport::DonorAccountsImport
 
   def initialize(xml, orgs_by_tnt_id)
     @xml = xml
+    @xml_tables = xml.tables
     @orgs_by_tnt_id = orgs_by_tnt_id || {}
   end
 
   def import
-    return {} unless @xml['Donor'].present?
+    return {} unless @xml_tables['Donor'].present?
 
     donors_by_tnt_contact_id = {}
 
-    Array.wrap(@xml['Donor']['row']).each do |row|
+    Array.wrap(@xml_tables['Donor']['row']).each do |row|
       contact_tnt_id = row['ContactID']
 
       # Name the donor account after the contact FileAs
@@ -79,7 +80,7 @@ class TntImport::DonorAccountsImport
 
   def contact_rows_by_tnt_id
     @contact_rows_by_tnt_id ||=
-      Hash[Array.wrap(@xml['Contact']['row']).map do |contact_row|
+      Hash[Array.wrap(@xml_tables['Contact']['row']).map do |contact_row|
         [contact_row['id'], contact_row]
       end]
   end

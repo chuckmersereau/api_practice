@@ -27,40 +27,43 @@ class AccountList < ApplicationRecord
                                :salary_organization_id]
 
   belongs_to :creator, class_name: 'User', foreign_key: 'creator_id'
-  has_many :account_list_users, dependent: :destroy
-  has_many :users, through: :account_list_users
-  has_many :organization_accounts, through: :users
-  has_many :organizations, -> { distinct }, through: :organization_accounts
+
   has_many :account_list_entries, dependent: :destroy
+  has_many :account_list_invites, dependent: :destroy
+  has_many :account_list_users, dependent: :destroy
+  has_many :active_contacts, -> { where(Contact.active_conditions) }, class_name: 'Contact'
+  has_many :active_people, through: :active_contacts, source: :people, class_name: 'Person'
+  has_many :activities, dependent: :destroy
+  has_many :activity_tags, through: :activities, source: :base_tags
+  has_many :addresses, through: :contacts
+  has_many :appeals
+  has_many :companies, through: :company_partnerships
+  has_many :company_partnerships, dependent: :destroy
+  has_many :contact_tags, through: :contacts, source: :base_tags
+  has_many :contacts, dependent: :destroy
   has_many :designation_accounts, through: :account_list_entries
   has_many :designation_organizations, -> { distinct }, through: :designation_accounts,
                                                         source: :organization
-  has_many :contacts, dependent: :destroy
-  has_many :active_contacts, -> { where(Contact.active_conditions) }, class_name: 'Contact'
-  has_many :notifications, through: :contacts
-  has_many :addresses, through: :contacts
-  has_many :people, through: :contacts
-  has_many :active_people, through: :active_contacts, source: :people, class_name: 'Person'
-  has_many :master_people, through: :people
-  has_many :donor_accounts, through: :contacts
-  has_many :contact_tags, through: :contacts, source: :base_tags
-  has_many :activity_tags, through: :activities, source: :base_tags
-  has_many :company_partnerships, dependent: :destroy
-  has_many :companies, through: :company_partnerships
-  has_many :tasks
-  has_many :activities, dependent: :destroy
-  has_many :imports, dependent: :destroy
-  has_many :account_list_invites, dependent: :destroy
-  has_one :mail_chimp_account, dependent: :destroy
-  has_many :notification_preferences, dependent: :destroy, autosave: true
-  has_many :messages
   has_many :designation_profiles
+  has_many :donor_accounts, through: :contacts
+  has_many :google_integrations, dependent: :destroy
+  has_many :help_requests
+  has_many :imports, dependent: :destroy
+  has_many :master_people, through: :people
+  has_many :messages
+  has_many :notification_preferences, dependent: :destroy, autosave: true
+  has_many :notifications, through: :contacts
+  has_many :organization_accounts, through: :users
+  has_many :organizations, -> { distinct }, through: :organization_accounts
+  has_many :people, through: :contacts
+  has_many :pledges
+  has_many :recurring_recommendation_results
+  has_many :tasks
+  has_many :users, through: :account_list_users
+
+  has_one :mail_chimp_account, dependent: :destroy
   has_one :prayer_letters_account, dependent: :destroy, autosave: true
   has_one :pls_account, dependent: :destroy, autosave: true
-  has_many :google_integrations, dependent: :destroy
-  has_many :appeals
-  has_many :help_requests
-  has_many :recurring_recommendation_results
 
   accepts_nested_attributes_for :contacts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notification_preferences, reject_if: :all_blank, allow_destroy: true

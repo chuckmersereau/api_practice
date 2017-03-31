@@ -3,13 +3,14 @@ class TntImport::GiftsImport
     @account_list = account_list
     @tnt_contacts = tnt_contacts
     @xml = xml
+    @xml_tables = xml.tables
   end
 
   def import
     return unless @account_list.organization_accounts.count == 1
     org = @account_list.organization_accounts.first.organization
 
-    Array.wrap(xml['Gift']['row']).each do |row|
+    Array.wrap(xml_tables['Gift']['row']).each do |row|
       contact = tnt_contacts[row['ContactID']]
       next unless contact
       next if org.api_class != 'OfflineOrg' && row['PersonallyReceived'] == 'false'
@@ -50,5 +51,5 @@ class TntImport::GiftsImport
   rescue
   end
 
-  attr_reader :tnt_contacts, :xml
+  attr_reader :tnt_contacts, :xml_tables
 end
