@@ -227,6 +227,19 @@ describe CsvImport do
           expect(Contact.find_by(uuid: sample_contact.uuid)).to be_blank
         end
       end
+
+      it 'generates uuids for all of the objects' do
+        import.sample_contacts.each do |contact|
+          expect(contact.uuid).to be_present
+          expect(contact.primary_person.uuid).to be_present
+          expect(contact.spouse.uuid).to be_present if contact.spouse
+          contact.addresses.each { |address| expect(address.uuid).to be_present }
+          contact.primary_person.email_addresses.each { |email_address| expect(email_address.uuid).to be_present }
+          contact.spouse.email_addresses.each { |email_address| expect(email_address.uuid).to be_present } if contact.spouse
+          contact.primary_person.phone_numbers.each { |phone_number| expect(phone_number.uuid).to be_present }
+          contact.spouse.phone_numbers.each { |phone_number| expect(phone_number.uuid).to be_present } if contact.spouse
+        end
+      end
     end
   end
 
