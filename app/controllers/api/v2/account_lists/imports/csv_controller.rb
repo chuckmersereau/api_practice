@@ -91,7 +91,7 @@ class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
     params
       .require(:import)
       .permit(Import::PERMITTED_ATTRIBUTES)
-      .merge(source: 'csv')
+      .merge(source: 'csv', user_id: current_user.id)
       .tap do |permit_params| # Permit all parameters underneath the mappings params
         permit_params[:file_constants_mappings] = params[:import][:file_constants_mappings] unless params.dig(:import, :file_constants_mappings).nil?
         permit_params[:file_headers_mappings] = params[:import][:file_headers_mappings] unless params.dig(:import, :file_headers_mappings).nil?

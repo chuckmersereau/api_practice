@@ -157,6 +157,14 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       expect(import.in_preview?).to eq true
     end
 
+    it 'defaults user_id to current user' do
+      api_login(user)
+      full_correct_attributes[:data][:relationships].delete(:user)
+      post :create, full_correct_attributes
+      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      expect(import.user_id).to eq user.id
+    end
+
     it 'persists cached file data' do
       api_login(user)
       post :create, full_correct_attributes.tap { |params| params[:data][:attributes].delete([:in_preview, 'in_preview']) }

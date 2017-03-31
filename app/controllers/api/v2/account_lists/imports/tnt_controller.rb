@@ -51,7 +51,7 @@ class Api::V2::AccountLists::Imports::TntController < Api::V2Controller
     params
       .require(:import)
       .permit(Import::PERMITTED_ATTRIBUTES)
-      .merge(source: 'tnt')
+      .merge(source: 'tnt', user_id: current_user.id)
   end
 
   def import_scope
