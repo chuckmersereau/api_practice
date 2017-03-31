@@ -43,12 +43,12 @@ describe CsvRowContactBuilder do
 
     import.file_constants_mappings = {
       'commitment_currency' => {
-        'cad' => 'CAD',
-        'usd' => nil
+        'cad' => ['CAD'],
+        'usd' => ''
       },
       'commitment_frequency' => {
         '1_0' => 'Monthly',
-        nil => nil
+        '' => ''
       },
       'likely_to_give' => {
         'most_likely' => 'Yes',
@@ -58,12 +58,12 @@ describe CsvRowContactBuilder do
         'both' => 'Both'
       },
       'send_appeals' => {
-        'true' => 'Yes',
-        'false' => 'No'
+        'true' => ['Yes'],
+        'false' => ['No']
       },
       'status' => {
         'partner_financial' => 'Praying and giving',
-        'partner_pray' => 'Praying'
+        'partner_pray' => ['Praying']
       }
     }
 

@@ -126,15 +126,20 @@ class CsvRowContactBuilder
   def rebuild_csv_row_with_mpdx_constants(old_csv_row)
     return old_csv_row if import.file_constants_mappings.blank?
     new_csv_row = old_csv_row
-    import.file_constants_mappings.each do |mpdx_constant_header, mpdx_constant_mappings|
-      next unless mpdx_constant_mappings.is_a?(Hash)
+    import.file_constants_mappings.keys.each do |mpdx_constant_header|
       value_to_change = old_csv_row[mpdx_constant_header]
-      mpdx_constant_value = mpdx_constant_mappings.find do |_mpdx_constant_value, csv_constant_value|
-        [csv_constant_value].flatten.include?(value_to_change)
-      end&.first
-      mpdx_constant_value = constants[mpdx_constant_header]&.[](mpdx_constant_value)
-      new_csv_row[mpdx_constant_header] = mpdx_constant_value
+      new_csv_row[mpdx_constant_header] = convert_csv_constant_value_to_mpdx_value(mpdx_constant_header, value_to_change)
     end
     new_csv_row
+  end
+
+  def convert_csv_constant_value_to_mpdx_value(mpdx_constant_header, csv_constant_value)
+    constant_mappings = import.file_constants_mappings[mpdx_constant_header]
+    csv_constant_value = '' if csv_constant_value.blank? # We don't want to handle nil, only emtpy strings.
+    return unless constant_mappings.is_a?(Hash)
+    mpdx_constant_key = constant_mappings.find do |_, constant_mapping_values|
+      [constant_mapping_values].flatten.include?(csv_constant_value)
+    end&.first
+    constants[mpdx_constant_header]&.[](mpdx_constant_key)
   end
 end
