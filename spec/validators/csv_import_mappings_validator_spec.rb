@@ -11,11 +11,11 @@ describe CsvImportMappingsValidator do
   it 'validates that file_headers_mappings_contains_required_headers' do
     import.file_headers_mappings = { 'something_invalid' => 'fname' }
     expect(import.valid?).to eq false
-    expect(import.errors[:file_headers_mappings].any? { |error| error.starts_with?('should specify a header mapping for each of the required headers') }).to eq true
+    expect(import.errors[:file_headers_mappings].any? { |error| error.starts_with?('should specify a header mapping for at least one of the required headers') }).to eq true
 
-    import.file_headers_mappings = { 'contact_name' => 'fname' }
+    import.file_headers_mappings = { 'first_name' => 'fname' }
     import.valid?
-    expect(import.errors[:file_headers_mappings].any? { |error| error.starts_with?('should specify a header mapping for each of the required headers') }).to eq false
+    expect(import.errors[:file_headers_mappings].any? { |error| error.starts_with?('should specify a header mapping for at least one of the required headers') }).to eq false
   end
 
   it 'validates that file_headers_mappings_contains_only_supported_headers' do
@@ -25,7 +25,7 @@ describe CsvImportMappingsValidator do
       error.starts_with?('has unsupported headers. One or more of the headers specified in file_headers_mappings is not supported')
     end).to eq true
 
-    import.file_headers_mappings = { 'contact_name' => 'fname' }
+    import.file_headers_mappings = { 'first_name' => 'fname' }
     import.valid?
     expect(import.errors[:file_headers_mappings].any? do |error|
       error.starts_with?('has unsupported headers. One or more of the headers specified in file_headers_mappings is not supported')
@@ -33,13 +33,13 @@ describe CsvImportMappingsValidator do
   end
 
   it 'validates that file_headers_mappings_only_maps_to_headers_in_the_file' do
-    import.file_headers_mappings = { 'contact_name' => 'something invalid' }
+    import.file_headers_mappings = { 'first_name' => 'something invalid' }
     expect(import.valid?).to eq false
     expect(import.errors[:file_headers_mappings].any? do |error|
       error.starts_with?('has unsupported mappings. One or more of the header mappings was not found in the headers of the given CSV file')
     end).to eq true
 
-    import.file_headers_mappings = { 'contact_name' => 'fname' }
+    import.file_headers_mappings = { 'first_name' => 'fname' }
     import.valid?
     expect(import.errors[:file_headers_mappings].any? do |error|
       error.starts_with?('has unsupported mappings. One or more of the header mappings was not found in the headers of the given CSV file')
@@ -48,7 +48,7 @@ describe CsvImportMappingsValidator do
 
   it 'validates that file_constants_mappings_contains_the_constants_needed_for_import' do
     import.file_headers_mappings = {
-      'contact_name' => 'fname',
+      'first_name' => 'fname',
       'status' => 'status'
     }
     import.file_constants_mappings = {}
@@ -66,7 +66,7 @@ describe CsvImportMappingsValidator do
 
   it 'validates that file_constants_mappings_only_maps_constants_that_are_supported' do
     import.file_headers_mappings = {
-      'contact_name' => 'fname',
+      'first_name' => 'fname',
       'status' => 'status'
     }
     import.file_constants_mappings = {
@@ -92,7 +92,7 @@ describe CsvImportMappingsValidator do
 
   it 'validates that file_constants_mappings_only_maps_constants_that_are_also_in_file_headers_mappings' do
     import.file_headers_mappings = {
-      'contact_name' => 'fname'
+      'first_name' => 'fname'
     }
     import.file_constants_mappings = {
       'status' => {
@@ -113,7 +113,7 @@ describe CsvImportMappingsValidator do
 
   it 'validates that file_constants_mappings_only_maps_constants_to_values_found_in_the_csv' do
     import.file_headers_mappings = {
-      'contact_name' => 'fname',
+      'first_name' => 'fname',
       'status' => 'status'
     }
     import.file_constants_mappings = {
@@ -139,7 +139,7 @@ describe CsvImportMappingsValidator do
 
   it 'validates that file_constants_mappings_maps_all_constants_values_found_in_the_csv' do
     import.file_headers_mappings = {
-      'contact_name' => 'fname',
+      'first_name' => 'fname',
       'status' => 'status'
     }
     import.file_constants_mappings = {

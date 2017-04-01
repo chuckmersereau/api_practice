@@ -34,7 +34,7 @@ class CsvRowContactBuilder
   def build_contact
     self.contact = account_list.contacts.build(
       church_name: csv_row['church'],
-      name: csv_row['contact_name'],
+      name: build_contact_name,
       greeting: csv_row['greeting'],
       envelope_greeting: csv_row['envelope_greeting'],
       status: csv_row['status'],
@@ -47,6 +47,12 @@ class CsvRowContactBuilder
       no_appeals: !true?(csv_row['send_appeals']),
       website: csv_row['website']
     )
+  end
+
+  def build_contact_name
+    first_names = [csv_row['first_name'], csv_row['spouse_first_name']].select(&:present?).to_sentence
+    last_names = [csv_row['last_name'], csv_row['spouse_last_name']].select(&:present?).uniq.to_sentence
+    [last_names, first_names].select(&:present?).join(', ')
   end
 
   def build_addresses
@@ -70,7 +76,7 @@ class CsvRowContactBuilder
   end
 
   def build_primary_person
-    self.person = Person.new(first_name: csv_row['first_name'].presence || csv_row['contact_name'],
+    self.person = Person.new(first_name: csv_row['first_name'],
                              last_name: csv_row['last_name'])
     contact.primary_person = person
   end

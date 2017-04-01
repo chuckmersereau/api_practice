@@ -79,7 +79,7 @@ describe CsvRowContactBuilder do
       expect(contact).to be_a Contact
 
       expect(contact.account_list).to eq(import.account_list)
-      expect(['Doe, John and Jane', 'John']).to include(contact.name)
+      expect(contact.name).to eq('Doe, John and Jane')
       expect(contact.church_name).to eq('Westside Baptist Church')
       expect(contact.greeting).to eq('Hi John and Jane')
       expect(contact.envelope_greeting).to eq('Doe family')

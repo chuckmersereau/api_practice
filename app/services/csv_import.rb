@@ -11,7 +11,6 @@ class CsvImport
     'Commitment Amount',
     'Commitment Currency',
     'Commitment Frequency',
-    'Contact Name',
     'Country',
     'Email 1',
     'Email 2',
@@ -26,7 +25,6 @@ class CsvImport
     'Phone 1',
     'Phone 2',
     'Phone 3',
-    'Referred By',
     'Region',
     'Send Appeals?',
     'Spouse Email',
@@ -42,8 +40,8 @@ class CsvImport
   ].freeze
 
   # These are the headers that MPDX requires at minimum for CSV import.
-  # The user must supply values for these headers in their CSV.
-  REQUIRED_HEADERS = ['Contact Name'].freeze
+  # The user must supply values for at least one of these headers in their CSV (not all are needed).
+  REQUIRED_HEADERS = ['First Name', 'Last Name'].freeze
 
   BOOLEAN_CONSTANTS = ['true', 'false', ''].freeze
 

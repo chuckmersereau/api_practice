@@ -6,6 +6,9 @@ This changelog covers what's changed in the MPDX APIs.
 - Added converted_amount and converted_currency to donation objects returned by the API.
 - Added turkish to list of language constants.
 - Add missing attributes metro_area, region, remote_id, and seasonal to Address serialization
+- CSV Import: Remove support for Contact Name, instead we'll require at least First Name, or Last Name
+- CSV Import: Remove Referred By because it's not supported yet
+- CSV Import: Auto generate a Contact Name based on first and last names
 
 ## 30 March 2017
 - Added bulk create actions for contacts/tags and tasks/tags
