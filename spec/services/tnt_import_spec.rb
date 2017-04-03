@@ -311,10 +311,15 @@ describe TntImport do
 
     it 'adds notes as a task comment' do
       task = create(:task, source: 'tnt', remote_id: task_rows.first['id'], account_list: tnt_import.account_list)
-
       import.send(:import_tasks)
-
       expect(task.comments.first.body).to eq('Notes')
+    end
+
+    it 'does not add duplicate comments' do
+      task = create(:task, source: 'tnt', remote_id: task_rows.first['id'], account_list: tnt_import.account_list)
+      task.comments.create!(body: 'Notes')
+      import.send(:import_tasks)
+      expect(task.comments.count).to eq(1)
     end
   end
 
