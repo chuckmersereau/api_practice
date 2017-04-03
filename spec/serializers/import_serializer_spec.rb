@@ -19,7 +19,7 @@ describe ImportSerializer do
   it { should include :override }
   it { should include :sample_contacts }
   it { should include :source }
-  it { should include :tags }
+  it { should include :tag_list }
   it { should include :updated_at }
   it { should include :updated_in_db_at }
 

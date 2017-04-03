@@ -27,7 +27,7 @@ class Import < ApplicationRecord
                           :override,
                           :source,
                           :source_account_id,
-                          :tags,
+                          :tag_list,
                           :updated_at,
                           :updated_in_db_at,
                           :user_id,
@@ -77,6 +77,26 @@ class Import < ApplicationRecord
   def file=(new_file)
     reset_file
     super
+  end
+
+  # This model handles it's own tags in it's "tags" attribute,
+  # tags are persisted as a comma delimited list. We've created
+  # accessor methods tag_list and tags to provide consistency
+  # with the rest of the app.
+  def tags
+    attributes['tags'].try(:split, ',')
+  end
+
+  def tags=(new_tags)
+    super(Array.wrap(new_tags).join(','))
+  end
+
+  def tag_list
+    attributes['tags']
+  end
+
+  def tag_list=(new_tag_list)
+    self.tags = new_tag_list.split(',')
   end
 
   private

@@ -62,7 +62,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
 
   let(:update_attributes) do
     {
-      tags: 'test',
+      tag_list: 'test',
       updated_in_db_at: resource.updated_at
     }
   end

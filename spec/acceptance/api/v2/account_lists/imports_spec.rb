@@ -45,7 +45,7 @@ resource 'Account Lists > Imports' do
       in_preview
       override
       source
-      tags
+      tag_list
       updated_at
       updated_in_db_at
     )
@@ -84,7 +84,7 @@ resource 'Account Lists > Imports' do
         response_field 'override',                'Override',                       type: 'Boolean'
         response_field 'source',                  'Source',                         type: 'String'
         response_field 'source_account_id',       'Source Account ID',              type: 'Number'
-        response_field 'tags',                    'Tags',                           type: 'Array[String]'
+        response_field 'tag_list',                'Comma delimited list of Tags',   type: 'String'
         response_field 'user_id',                 'User ID',                        type: 'Number'
         response_field 'updated_at',              'Updated At',                     type: 'String'
         response_field 'updated_in_db_at',        'Updated In Db At',               type: 'String'

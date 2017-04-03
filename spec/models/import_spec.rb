@@ -29,6 +29,44 @@ describe Import do
     end
   end
 
+  context 'tags' do
+    let(:import) { build(:import, tags: 'a,b,c,d') }
+
+    describe '#tags' do
+      it 'returns tags as an Array' do
+        expect(import.tags).to be_a Array
+        expect(import.tags).to eq %w(a b c d)
+      end
+    end
+
+    describe '#tags=' do
+      it 'sets tags from an Array' do
+        import.tags = %w(1 2 3)
+        expect(import.tags).to eq %w(1 2 3)
+        import.save!
+        import.reload
+        expect(import.tags).to eq %w(1 2 3)
+      end
+    end
+
+    describe '#tag_list' do
+      it 'returns tags as a comma delimited String' do
+        expect(import.tag_list).to be_a String
+        expect(import.tag_list).to eq 'a,b,c,d'
+      end
+    end
+
+    describe '#tag_list=' do
+      it 'sets tags from a comma delimited String' do
+        import.tag_list = '1,2,3'
+        expect(import.tag_list).to eq '1,2,3'
+        import.save!
+        import.reload
+        expect(import.tag_list).to eq '1,2,3'
+      end
+    end
+  end
+
   it "should set 'importing' to false after an import" do
     import = create(:tnt_import, importing: true)
     import.send(:import)
