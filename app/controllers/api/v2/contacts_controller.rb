@@ -37,11 +37,11 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def load_contacts
-    @contacts = Contact::Filterer.new(filter_params)
-                                 .filter(scope: contact_scope, account_lists: account_lists)
-                                 .reorder(sorting_param)
-                                 .page(page_number_param)
-                                 .per(per_page_param)
+    @contacts = ::Contact::Filterer.new(filter_params)
+                                   .filter(scope: contact_scope, account_lists: account_lists)
+                                   .reorder(sorting_param)
+                                   .page(page_number_param)
+                                   .per(per_page_param)
   end
 
   def load_contact
@@ -89,7 +89,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def contact_scope
-    Contact.where(account_list: account_lists)
+    Contact.where(account_list: account_lists).includes(:tags, :account_list).includes(include_associations)
   end
 
   def pundit_user
@@ -102,8 +102,8 @@ class Api::V2::ContactsController < Api::V2Controller
 
   def permitted_filters
     @permitted_filters ||=
-      Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +
-      Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym) +
+      ::Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +
+      ::Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym) +
       [:account_list_id, :any_tags]
   end
 end

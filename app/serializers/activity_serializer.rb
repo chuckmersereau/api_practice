@@ -21,4 +21,8 @@ class ActivitySerializer < ApplicationSerializer
   has_many :phone_numbers
 
   belongs_to :account_list
+
+  def tag_list
+    object.tags.collect(&:name)
+  end
 end

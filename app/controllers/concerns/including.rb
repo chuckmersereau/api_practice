@@ -7,4 +7,8 @@ module Including
     return [] unless params[:include]
     params[:include].split(',') - UNPERMITTED_FILTER_PARAMS
   end
+
+  def include_associations
+    ::JSONAPI::IncludeDirective.new(include_params - ['*']).to_hash
+  end
 end
