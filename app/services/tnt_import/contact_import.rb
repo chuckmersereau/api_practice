@@ -70,6 +70,7 @@ class TntImport::ContactImport
     contact.name = row['FileAs'] if @override || contact.name.blank?
     contact.full_name = row['FullName'] if @override || contact.full_name.blank?
     contact.greeting = row['Greeting'] if @override || contact.greeting.blank?
+    contact.envelope_greeting = extract_envelope_greeting_from_row(row) if @override || contact.envelope_greeting.blank?
     contact.website = row['WebPage'] if @override || contact.website.blank?
     contact.updated_at = parse_date(row['LastEdit']) if @override
     contact.created_at = parse_date(row['CreatedDate']) if @override
@@ -158,6 +159,13 @@ class TntImport::ContactImport
 
     contact.add_to_notes("IM Address: #{row['IMAddress']}") if row['IMAddress']
     contact.add_to_notes("Spouse IM Address: #{row['SpouseIMAddress']}") if row['SpouseIMAddress']
+  end
+
+  def extract_envelope_greeting_from_row(row)
+    # TNT has something called a "MailingAddressBlock", the envelope greeting is the first line of this string.
+    block = row['MailingAddressBlock']
+    envelope_greeting = block.split("\n").detect(&:present?) # Find the first non-blank line of the string.
+    envelope_greeting.presence || row['FullName']
   end
 
   def true?(val)

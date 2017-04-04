@@ -43,6 +43,21 @@ describe TntImport::ContactImport do
       expect(@contact.addresses.first.region).to eq('State College')
     end
 
+    it 'sets the greeting' do
+      greeting = import.import_contact(tnt_import_parsed_xml_sample_contact_row).greeting
+      expect(greeting).to eq 'Parr Custom Greeting'
+    end
+
+    it 'sets the envelope_greeting' do
+      row = tnt_import_parsed_xml_sample_contact_row
+      envelope_greeting = import.import_contact(row).envelope_greeting
+      expect(envelope_greeting).to eq 'Parr Custom Fullname'
+      row['MailingAddressBlock'] = ''
+      row['FullName'] = 'My Special Full Name'
+      envelope_greeting = import.import_contact(row).envelope_greeting
+      expect(envelope_greeting).to eq 'My Special Full Name'
+    end
+
     context 'has social web fields' do
       let(:file) { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
 
