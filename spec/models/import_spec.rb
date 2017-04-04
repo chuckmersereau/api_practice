@@ -47,6 +47,11 @@ describe Import do
         import.reload
         expect(import.tags).to eq %w(1 2 3)
       end
+
+      it 'accepts nil' do
+        import.tags = nil
+        expect(import.tags).to eq []
+      end
     end
 
     describe '#tag_list' do
@@ -63,6 +68,11 @@ describe Import do
         import.save!
         import.reload
         expect(import.tag_list).to eq '1,2,3'
+      end
+
+      it 'accepts nil' do
+        import.tag_list = nil
+        expect(import.tag_list).to eq ''
       end
     end
   end

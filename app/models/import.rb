@@ -96,7 +96,7 @@ class Import < ApplicationRecord
   end
 
   def tag_list=(new_tag_list)
-    self.tags = new_tag_list.split(',')
+    self.tags = new_tag_list.try(:split, ',')
   end
 
   private
