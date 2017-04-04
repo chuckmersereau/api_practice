@@ -5,6 +5,9 @@ This changelog covers what's changed in the MPDX APIs.
 ## 3 April 2017
 - Imports API now accepts comma delimited tag_list, instead of tags.
 
+## 2 April 2017
+- Added Russian, Arabic, German and Korean to list of languages supported on the API side.
+
 ## 31 March 2017
 - Added converted_amount and converted_currency to donation objects returned by the API.
 - Added turkish to list of language constants.

@@ -115,7 +115,7 @@ RSpec.describe Contact::Analytics, type: :model do
     end
 
     let(:active_contact)   { create(:contact, status: 'Partner - Financial') }
-    let(:inactive_contact) { create(:contact, status: 'Never Contacted') }
+    let(:inactive_contact) { create(:contact, status: 'Not Interested') }
 
     let(:contacts) { Contact.where(id: [active_contact.id, inactive_contact.id]) }
 
@@ -190,7 +190,7 @@ RSpec.describe Contact::Analytics, type: :model do
     end
 
     let(:inactive_contact_with_person_with_anniversary_this_week) do
-      create(:contact, account_list_id: account_list.id, status: 'Never Contacted')
+      create(:contact, account_list_id: account_list.id, status: 'Not Interested')
     end
 
     let(:contacts) do

@@ -274,10 +274,7 @@ describe MailChimpAccount do
       account.save
       msg = 'Your merge fields were invalid.'
 
-      email = double
-      expect(AccountMailer).to receive(:mailchimp_required_merge_field)
-        .with(account_list) { email }
-      expect(email).to receive(:deliver)
+      expect_delayed_email(AccountMailer, :mailchimp_required_merge_field)
 
       account.handle_newsletter_mc_error(Gibbon::MailChimpError.new(msg))
       expect(account.reload.primary_list_id).to be_nil

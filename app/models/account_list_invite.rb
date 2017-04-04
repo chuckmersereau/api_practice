@@ -39,7 +39,7 @@ class AccountListInvite < ApplicationRecord
     code = SecureRandom.hex(32)
     invite = create(invited_by_user: inviting_user, code: code,
                     recipient_email: email, account_list: account_list)
-    AccountListInviteMailer.email(invite).deliver
+    AccountListInviteMailer.delay.email(invite)
     invite
   end
 end

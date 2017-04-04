@@ -30,7 +30,7 @@ class AccountList::NotificationsSender
 
     # Send email if necessary
     if notifications_to_email.present?
-      NotificationMailer.notify(account_list, notifications_to_email).deliver
+      NotificationMailer.delay.notify(account_list, notifications_to_email)
     end
   end
 

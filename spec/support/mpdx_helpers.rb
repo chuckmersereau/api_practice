@@ -1,4 +1,4 @@
-module MpdxHelper
+module MpdxHelpers
   def api_login(user)
     allow_any_instance_of(Api::V2Controller).to receive(:jwt_authorize!)
     allow_any_instance_of(Api::V2Controller).to receive(:current_user).and_return(user)
@@ -43,5 +43,11 @@ module MpdxHelper
   def stub_auth
     stub_request(:get, 'http://oauth.ccci.us/users/' + user.access_token)
       .to_return(status: 200)
+  end
+
+  def expect_delayed_email(mailer, mailing_method)
+    delayed = double
+    expect(mailer).to receive(:delay).and_return(delayed)
+    expect(delayed).to receive(mailing_method)
   end
 end

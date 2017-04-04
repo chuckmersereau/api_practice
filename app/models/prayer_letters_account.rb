@@ -141,7 +141,7 @@ class PrayerLettersAccount < ApplicationRecord
 
   def handle_bad_token
     update_column(:valid_token, false)
-    AccountMailer.prayer_letters_invalid_token(account_list).deliver
+    AccountMailer.delay.prayer_letters_invalid_token(account_list)
 
     raise AccessError
   end

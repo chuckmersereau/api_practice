@@ -84,7 +84,7 @@ describe Import do
   end
 
   it 'should send an success email when importing completes then merge contacts and queue google sync' do
-    expect(ImportMailer).to receive(:complete).and_return(OpenStruct.new)
+    expect_delayed_email(ImportMailer, :complete)
     import = create(:tnt_import)
     expect(import.account_list).to receive(:merge_contacts)
     expect(import.account_list).to receive(:queue_sync_with_google_contacts)
@@ -94,9 +94,9 @@ describe Import do
   it "should send a failure email if there's an error" do
     import = create(:tnt_import)
     expect(@tnt_import).to receive(:import).and_raise('foo')
+    expect_delayed_email(ImportMailer, :failed)
 
     expect do
-      expect(ImportMailer).to receive(:failed).and_return(OpenStruct.new)
       import.send(:import)
     end.to raise_error('foo')
   end
@@ -104,9 +104,9 @@ describe Import do
   it 'should send a failure error but not re-raise/notify the error if the error is UnsurprisingImportError' do
     import = create(:tnt_import)
     expect(@tnt_import).to receive(:import).and_raise(Import::UnsurprisingImportError)
+    expect_delayed_email(ImportMailer, :failed)
 
     expect do
-      expect(ImportMailer).to receive(:failed).and_return(OpenStruct.new)
       import.send(:import)
     end.to_not raise_error
   end
@@ -116,7 +116,8 @@ describe Import do
   end
 
   it 'should finish import if sending mail fails' do
-    expect(ImportMailer).to receive(:complete).and_raise(StandardError)
+    expect(ImportMailer).to receive(:delay).and_raise(StandardError)
+
     import = create(:tnt_import)
     expect(import.account_list).to receive(:merge_contacts)
     expect(import.account_list).to receive(:queue_sync_with_google_contacts)

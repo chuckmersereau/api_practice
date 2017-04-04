@@ -18,7 +18,7 @@ class HelpRequest < ApplicationRecord
   validates :email, email: true
 
   def send_email
-    HelpRequestMailer.email(self).deliver
+    HelpRequestMailer.delay.email(self)
   end
 
   def user_agent=(val)

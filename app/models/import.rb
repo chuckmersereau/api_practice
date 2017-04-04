@@ -131,7 +131,7 @@ class Import < ApplicationRecord
 
   def after_import_success
     begin
-      ImportMailer.complete(self).deliver
+      ImportMailer.delay.complete(self)
     rescue => mail_exception
       Rollbar.error(mail_exception)
     end
@@ -141,7 +141,7 @@ class Import < ApplicationRecord
   end
 
   def after_import_failure
-    ImportMailer.failed(self).deliver
+    ImportMailer.delay.failed(self)
   rescue => mail_exception
     Rollbar.error(mail_exception)
   end

@@ -37,8 +37,9 @@ describe Person::OrganizationAccount do
         end.to_not raise_error
       end
       it 'sends email' do
-        org_account.import_all_data
-        expect(ActionMailer::Base.deliveries.last.to.first).to eq(org_account.person.email.email)
+        expect do
+          org_account.import_all_data
+        end.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
       end
       it 'marks as not valid' do
         org_account.import_all_data
@@ -49,13 +50,11 @@ describe Person::OrganizationAccount do
     context 'when previous password error' do
       it 'retries donor import but does not re-send email' do
         org_account.valid_credentials = false
-        allow(api).to receive(:import_all)
-        ActionMailer::Base.deliveries.clear
+        expect(api).to receive(:import_all)
 
-        org_account.import_all_data
-
-        expect(api).to have_received(:import_all)
-        expect(ActionMailer::Base.deliveries).to be_empty
+        expect do
+          org_account.import_all_data
+        end.to_not change(Sidekiq::Extensions::DelayedMailer.jobs, :size)
       end
     end
   end

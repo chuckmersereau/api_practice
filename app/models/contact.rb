@@ -199,7 +199,7 @@ class Contact < ApplicationRecord
   end
 
   INACTIVE_STATUSES = [
-    'Never Contacted', 'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
+    'Not Interested', 'Unresponsive', 'Never Ask', 'Research Abandoned',
     'Expired Referral'
   ].freeze
   ACTIVE_STATUSES = ASSIGNABLE_STATUSES - INACTIVE_STATUSES

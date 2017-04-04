@@ -50,9 +50,7 @@ describe AccountListInvite do
   context '.send_invite' do
     it 'creates an invite with a random code and sends the invite email' do
       expect(SecureRandom).to receive(:hex).with(32) { 'code' }
-      mail = double
-      expect(mail).to receive(:deliver)
-      expect(AccountListInviteMailer).to receive(:email) { mail }
+      expect_delayed_email(AccountListInviteMailer, :email)
       invite = AccountListInvite.send_invite(user, account_list, 'test@example.com')
       expect(invite.invited_by_user).to eq(user)
       expect(invite.code).to eq('code')

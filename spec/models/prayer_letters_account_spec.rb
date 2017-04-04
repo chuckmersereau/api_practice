@@ -55,7 +55,7 @@ describe PrayerLettersAccount do
 
   context '#handle_bad_token' do
     it 'sends an email to the account users' do
-      expect(AccountMailer).to receive(:prayer_letters_invalid_token).with(an_instance_of(AccountList)).and_return(double(deliver: true))
+      expect_delayed_email(AccountMailer, :prayer_letters_invalid_token)
 
       expect do
         pla.handle_bad_token
