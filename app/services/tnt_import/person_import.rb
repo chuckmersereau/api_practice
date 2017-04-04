@@ -48,6 +48,7 @@ class TntImport::PersonImport
 
     update_person_phones(person, row, prefix)
     update_person_emails(person, row, prefix)
+    update_person_social_media_accounts(person, row, prefix)
     person
   end
 
@@ -95,6 +96,23 @@ class TntImport::PersonImport
         person.email_address = cleaned_attrs
       end
     end
+  end
+
+  def update_person_social_media_accounts(person, row, prefix)
+    facebook = row["#{prefix}SocialWeb1"]
+    person.facebook_accounts.find_or_initialize_by(username: facebook) if facebook
+
+    linkedin = row["#{prefix}SocialWeb2"]
+    person.linkedin_accounts.find_or_initialize_by(public_url: linkedin) if linkedin
+
+    twitter = row["#{prefix}SocialWeb3"]
+    person.twitter_accounts.find_or_initialize_by(screen_name: twitter) if twitter
+
+    webpage_1 = row["#{prefix}WebPage1"]
+    person.websites.find_or_initialize_by(url: webpage_1) if webpage_1
+
+    webpage_2 = row["#{prefix}WebPage2"]
+    person.websites.find_or_initialize_by(url: webpage_2) if webpage_2
   end
 
   def true?(val)

@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 4 April 2017
+- TNT Import now imports social media accounts.
+
 ## 3 April 2017
 - Imports API now accepts comma delimited tag_list, instead of tags.
 
