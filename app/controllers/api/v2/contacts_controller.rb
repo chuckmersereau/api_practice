@@ -89,7 +89,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def contact_scope
-    Contact.where(account_list: account_lists).includes(:tags, :account_list).includes(include_associations)
+    Contact.where(account_list: account_lists).includes(:tags, :account_list)
   end
 
   def pundit_user

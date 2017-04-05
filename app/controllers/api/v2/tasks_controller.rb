@@ -93,7 +93,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def task_scope
-    Task.where(account_list_id: account_lists.select(:id)).includes(:tags).includes(include_associations)
+    Task.where(account_list_id: account_lists.select(:id)).includes(:tags)
   end
 
   def permitted_sorting_params
