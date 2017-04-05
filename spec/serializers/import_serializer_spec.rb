@@ -19,7 +19,7 @@ describe ImportSerializer do
   it { should include :override }
   it { should include :sample_contacts }
   it { should include :source }
-  it { should include :tags }
+  it { should include :tag_list }
   it { should include :updated_at }
   it { should include :updated_in_db_at }
 
@@ -94,9 +94,9 @@ describe ImportSerializer do
 
     it 'returns the sample contacts' do
       expect(subject[:sample_contacts].size).to eq 3
-      expect(subject[:sample_contacts].first[:name]).to eq 'John'
-      expect(subject[:sample_contacts].second[:name]).to eq 'Bob'
-      expect(subject[:sample_contacts].third[:name]).to eq 'Joe'
+      expect(subject[:sample_contacts].first[:name]).to eq 'Doe, John'
+      expect(subject[:sample_contacts].second[:name]).to eq 'Park, Bob'
+      expect(subject[:sample_contacts].third[:name]).to eq 'Man, Joe'
     end
   end
 end

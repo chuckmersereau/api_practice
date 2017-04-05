@@ -11,7 +11,6 @@ class CsvImport
     'Commitment Amount',
     'Commitment Currency',
     'Commitment Frequency',
-    'Contact Name',
     'Country',
     'Email 1',
     'Email 2',
@@ -26,7 +25,6 @@ class CsvImport
     'Phone 1',
     'Phone 2',
     'Phone 3',
-    'Referred By',
     'Region',
     'Send Appeals?',
     'Spouse Email',
@@ -42,8 +40,8 @@ class CsvImport
   ].freeze
 
   # These are the headers that MPDX requires at minimum for CSV import.
-  # The user must supply values for these headers in their CSV.
-  REQUIRED_HEADERS = ['Contact Name'].freeze
+  # The user must supply values for at least one of these headers in their CSV (not all are needed).
+  REQUIRED_HEADERS = ['First Name', 'Last Name'].freeze
 
   BOOLEAN_CONSTANTS = ['true', 'false', ''].freeze
 
@@ -101,8 +99,7 @@ class CsvImport
     sample_contacts = @import.file_row_samples.collect do |sample_row|
       contact_from_csv_row(CSV::Row.new(@import.file_headers.values, sample_row))
     end.compact
-    sample_contacts.each { |contact| contact.uuid = SecureRandom.uuid }
-    sample_contacts
+    generate_uuids_for_contacts(sample_contacts)
   end
 
   def update_cached_file_data
@@ -140,5 +137,22 @@ class CsvImport
 
   def contact_from_csv_row(csv_row)
     CsvRowContactBuilder.new(csv_row: csv_row, import: @import).build
+  end
+
+  def generate_uuids_for_contacts(contacts)
+    objects_needing_uuid = contacts.collect do |contact|
+      [
+        contact,
+        contact.primary_person,
+        contact.spouse,
+        contact.addresses,
+        contact.primary_person&.email_addresses,
+        contact.spouse&.email_addresses,
+        contact.primary_person&.phone_numbers,
+        contact.spouse&.phone_numbers
+      ]
+    end.flatten.compact
+    objects_needing_uuid.each { |record| record.uuid ||= SecureRandom.uuid }
+    contacts
   end
 end

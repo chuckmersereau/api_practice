@@ -122,7 +122,7 @@ class Person::GoogleAccount < ApplicationRecord
     google_integrations.each do |integration|
       integration.update_columns(calendar_integration: false, email_integration: false,
                                  contacts_integration: false) # no callbacks
-      AccountMailer.google_account_refresh(person, integration).deliver unless notified_failure
+      AccountMailer.delay.google_account_refresh(person, integration) unless notified_failure
       update(notified_failure: true)
     end
   end

@@ -90,13 +90,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
   end
 
   def donations
-    @donations ||=
-      received_donations.donations.tap do |donations|
-        DonationReports::DonationsConverter.new(
-          account_list: account_list,
-          donations: donations
-        ).convert_amounts
-      end
+    @donations ||= received_donations.donations
   end
 
   def sum_donations(donations)

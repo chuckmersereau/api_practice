@@ -93,7 +93,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def task_scope
-    Task.where(account_list_id: account_lists.select(:id))
+    Task.where(account_list_id: account_lists.select(:id)).includes(:tags).includes(include_associations)
   end
 
   def permitted_sorting_params
@@ -101,7 +101,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def default_sorting
-    'completed ASC, completed_at DESC, start_at ASC NULLS LAST, created_at ASC'
+    'activities.completed ASC,activities.completed_at DESC,activities.start_at ASC NULLS LAST,activities.created_at ASC'
   end
 
   def permitted_filters

@@ -1,4 +1,4 @@
-require 'spec_helper'
+require 'rails_helper'
 
 RSpec.describe Reports::DonorCurrencyDonations, type: :model do
   let!(:report) { Reports::DonorCurrencyDonations.new(account_list: account_list) }

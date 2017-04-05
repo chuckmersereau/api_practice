@@ -21,16 +21,7 @@ describe DonationReports::DonationInfoSerializer do
     expect(subject[:currency_symbol]).to eq('R')
   end
 
-  it 'serializes converted_currency_symbol' do
-    expect(subject[:converted_currency_symbol]).to eq(nil)
-  end
-
   context 'converted currency' do
-    before do
-      account_list.salary_organization_id = create(:organization).id
-      DonationReports::DonationsConverter.new(account_list: account_list, donations: [donation_info]).convert_amounts
-    end
-
     it 'serializes converted_currency_symbol' do
       expect(subject[:converted_currency_symbol]).to eq('$')
     end

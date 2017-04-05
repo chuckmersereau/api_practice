@@ -80,7 +80,7 @@ RSpec.configure do |config|
   config.include HeaderHelpers, type: :controller
   config.include JsonApiHelper, type: :acceptance
   config.include JsonApiHelper, type: :request
-  config.include MpdxHelper
+  config.include MpdxHelpers
   config.include AuthHelper, :auth
   config.include ActiveSupport::Testing::TimeHelpers
 end

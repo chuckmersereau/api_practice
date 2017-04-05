@@ -88,7 +88,7 @@ class ConstantList < ActiveModelSerializers::Model
   end
 
   def organizations_hash
-    Organization.active.all.inject({}) do |hash, org|
+    Organization.active.order(name: :asc).inject({}) do |hash, org|
       hash.merge!(org.uuid => org.name)
     end
   end

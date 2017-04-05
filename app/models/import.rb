@@ -27,7 +27,7 @@ class Import < ApplicationRecord
                           :override,
                           :source,
                           :source_account_id,
-                          :tags,
+                          :tag_list,
                           :updated_at,
                           :updated_in_db_at,
                           :user_id,
@@ -79,6 +79,26 @@ class Import < ApplicationRecord
     super
   end
 
+  # This model handles it's own tags in it's "tags" attribute,
+  # tags are persisted as a comma delimited list. We've created
+  # accessor methods tag_list and tags to provide consistency
+  # with the rest of the app.
+  def tags
+    attributes['tags'].try(:split, ',')
+  end
+
+  def tags=(new_tags)
+    super(Array.wrap(new_tags).join(','))
+  end
+
+  def tag_list
+    attributes['tags']
+  end
+
+  def tag_list=(new_tag_list)
+    self.tags = new_tag_list.try(:split, ',')
+  end
+
   private
 
   def reset_file
@@ -96,24 +116,34 @@ class Import < ApplicationRecord
 
   def import
     update_column(:importing, true)
-    begin
-      "#{source.camelize}Import".constantize.new(self).import
-      ImportMailer.complete(self).deliver
-
-      account_list.merge_contacts # clean up data
-      account_list.queue_sync_with_google_contacts
-      account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
-      true
-    rescue UnsurprisingImportError
-      # Only send a failure email, don't re-raise the error, as it was not considered a surprising error by the
-      # import function, so don't re-raise it (that will prevent non-surprising errors from being logged via Rollbar).
-      ImportMailer.failed(self).deliver
-    rescue => e
-      ImportMailer.failed(self).deliver
-      raise e
-    end
+    "#{source.camelize}Import".constantize.new(self).import
+    after_import_success
+    true
+  rescue UnsurprisingImportError
+    after_import_failure
+    false
+  rescue => exception
+    after_import_failure
+    raise exception
   ensure
     update_column(:importing, false)
+  end
+
+  def after_import_success
+    begin
+      ImportMailer.delay.complete(self)
+    rescue => mail_exception
+      Rollbar.error(mail_exception)
+    end
+    account_list.merge_contacts # clean up data
+    account_list.queue_sync_with_google_contacts
+    account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
+  end
+
+  def after_import_failure
+    ImportMailer.delay.failed(self)
+  rescue => mail_exception
+    Rollbar.error(mail_exception)
   end
 
   class UnsurprisingImportError < StandardError

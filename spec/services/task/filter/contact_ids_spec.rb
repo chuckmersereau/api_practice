@@ -19,7 +19,7 @@ RSpec.describe Task::Filter::ContactIds do
                                                                              { name: contact.to_s, id: contact.uuid, account_list_id: contact.account_list.uuid }
                                                                            end,
                                                                 parent: nil,
-                                                                priority: 2,
+                                                                priority: 1,
                                                                 title: 'Contacts',
                                                                 type: 'multiselect')
     end

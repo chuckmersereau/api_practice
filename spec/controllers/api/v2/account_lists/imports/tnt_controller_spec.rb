@@ -69,5 +69,13 @@ describe Api::V2::AccountLists::Imports::TntController, type: :controller do
       import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
       expect(import.source).to eq 'tnt'
     end
+
+    it 'defaults user_id to current user' do
+      api_login(user)
+      full_correct_attributes[:data][:relationships].delete(:user)
+      post :create, full_correct_attributes
+      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      expect(import.user_id).to eq user.id
+    end
   end
 end

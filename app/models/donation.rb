@@ -69,6 +69,17 @@ class Donation < ApplicationRecord
              .joins(donor_account: :organization).pluck('DISTINCT api_class')
   end
 
+  def converted_amount
+    CurrencyRate.convert_on_date(amount: amount,
+                                 from: currency,
+                                 to: converted_currency,
+                                 date: donation_date)
+  end
+
+  def converted_currency
+    designation_account.currency
+  end
+
   private
 
   def update_related_pledge

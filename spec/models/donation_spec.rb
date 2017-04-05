@@ -1,7 +1,8 @@
 require 'rails_helper'
 
 describe Donation do
-  let(:donation) { create(:donation, donation_date: Date.new(2015, 4, 5)) }
+  let(:designation_account) { create(:designation_account) }
+  let(:donation) { create(:donation, donation_date: Date.new(2015, 4, 5), designation_account: designation_account) }
 
   context '#localized_date' do
     it 'is just date' do
@@ -23,6 +24,20 @@ describe Donation do
     it "doesn't call the match service method whenever a new donation is updated" do
       expect_any_instance_of(AccountList::PledgeMatcher).not_to receive(:match)
       persisted_donation.update(amount: 200.00)
+    end
+  end
+
+  context 'converted_amount and converted_currency' do
+    let(:designation_account) { create(:designation_account) }
+    let(:donation) { create(:donation, currency: 'EUR', designation_account: designation_account) }
+    let!(:currency_rate) { create(:currency_rate, exchanged_on: donation.donation_date) }
+
+    it 'returns the converted amount to designation_account currency' do
+      expect(donation.converted_amount).to be_within(0.001).of(donation.amount / currency_rate.rate)
+    end
+
+    it 'returns the converted designation_account currency' do
+      expect(donation.converted_currency).to eq('USD')
     end
   end
 

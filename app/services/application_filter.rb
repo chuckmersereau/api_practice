@@ -104,15 +104,9 @@ class ApplicationFilter
     class_name.demodulize.underscore.to_sym
   end
 
-  def daterange_params(string)
-    return {} unless string.is_a?(String) && string.include?(' - ')
-    split = string.split(' - ')
-    { start: parse_date(split.first).beginning_of_day,
-      end: parse_date(split.last).end_of_day }
-  end
-
-  def parse_date(string)
-    Date.strptime(string, '%m/%d/%Y')
+  def daterange_params(date_range)
+    { start: date_range.first.beginning_of_day,
+      end: date_range.last.end_of_day }
   end
 
   def class_name

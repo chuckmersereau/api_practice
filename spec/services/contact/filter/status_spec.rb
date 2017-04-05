@@ -6,7 +6,7 @@ RSpec.describe Contact::Filter::Status do
 
   describe '#query' do
     let!(:active_contact) { create(:contact, account_list: account_list, status: 'Ask in Future') }
-    let!(:inactive_contact) { create(:contact, account_list: account_list, status: 'Never Contacted') }
+    let!(:inactive_contact) { create(:contact, account_list: account_list, status: 'Not Interested') }
     let!(:contact_with_no_status) { create(:contact, account_list: account_list, status: nil) }
     let(:contacts) { Contact.all }
 
@@ -15,7 +15,7 @@ RSpec.describe Contact::Filter::Status do
         expect(described_class.query(contacts, { status: 'active' }, nil)).to match_array([active_contact])
         expect(described_class.query(contacts, { status: 'hidden' }, nil)).to match_array([inactive_contact])
         expect(described_class.query(contacts, { status: 'null' }, nil)).to match_array([contact_with_no_status])
-        expect(described_class.query(contacts, { status: 'Never Contacted' }, nil)).to match_array([inactive_contact])
+        expect(described_class.query(contacts, { status: 'Not Interested' }, nil)).to match_array([inactive_contact])
       end
     end
 

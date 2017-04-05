@@ -141,7 +141,7 @@ class PlsAccount < ApplicationRecord
 
   def handle_bad_token
     update_column(:valid_token, false)
-    AccountMailer.pls_invalid_token(account_list).deliver
+    AccountMailer.delay.pls_invalid_token(account_list)
 
     raise AccessError
   end

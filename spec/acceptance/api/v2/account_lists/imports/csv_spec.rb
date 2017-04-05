@@ -115,7 +115,7 @@ resource 'Account Lists > Imports > from CSV' do
       in_preview
       override
       source
-      tags
+      tag_list
       updated_at
       updated_in_db_at
     )
@@ -170,7 +170,7 @@ resource 'Account Lists > Imports > from CSV' do
         response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to true",   type: 'Boolean'
         response_field 'override',                'Override',                                                                   type: 'Boolean'
         response_field 'source',                  'Source; Defaults to "csv"',                                                  type: 'String'
-        response_field 'tags',                    'Tags to apply to the imported Contacts',                                     type: 'String'
+        response_field 'tag_list',                'Comma delimited list of tags to apply to the imported Contacts',             type: 'String'
         response_field 'updated_at',              'Updated At',                                                                 type: 'String'
         response_field 'updated_in_db_at',        'Updated In Db At',                                                           type: 'String'
       end
@@ -201,7 +201,7 @@ resource 'Account Lists > Imports > from CSV' do
         parameter 'import_by_group',         'Import by Group',                                                            type: 'String'
         parameter 'override',                'Override',                                                                   type: 'Boolean'
         parameter 'source_account_id',       'Source Account ID',                                                          type: 'String'
-        parameter 'tags',                    'Tags',                                                                       type: 'String'
+        parameter 'tag_list',                'Comma delimited list of Tags',                                               type: 'String'
         parameter 'user_id',                 'User ID',                                                                    type: 'String'
       end
 
@@ -228,7 +228,7 @@ resource 'Account Lists > Imports > from CSV' do
         response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to true",   type: 'Boolean'
         response_field 'override',                'Override',                                                                   type: 'Boolean'
         response_field 'source',                  'Source; Defaults to "csv"',                                                  type: 'String'
-        response_field 'tags',                    'Tags to apply to the imported Contacts',                                     type: 'String'
+        response_field 'tag_list',                'Comma delimited list of Tags to apply to the imported Contacts',             type: 'String'
         response_field 'updated_at',              'Updated At',                                                                 type: 'String'
         response_field 'updated_in_db_at',        'Updated In Db At',                                                           type: 'String'
       end
@@ -269,7 +269,7 @@ resource 'Account Lists > Imports > from CSV' do
         parameter 'import_by_group',         'Import by Group',                                                            type: 'String'
         parameter 'override',                'Override',                                                                   type: 'Boolean'
         parameter 'source_account_id',       'Source Account ID',                                                          type: 'String'
-        parameter 'tags',                    'Tags',                                                                       type: 'String'
+        parameter 'tag_list',                'Comma delimited list of Tags',                                               type: 'String'
         parameter 'user_id',                 'User ID',                                                                    type: 'String'
       end
 
@@ -296,7 +296,7 @@ resource 'Account Lists > Imports > from CSV' do
         response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to true",   type: 'Boolean'
         response_field 'override',                'Override',                                                                   type: 'Boolean'
         response_field 'source',                  'Source; Defaults to "csv"',                                                  type: 'String'
-        response_field 'tags',                    'Tags to apply to the imported Contacts',                                     type: 'String'
+        response_field 'tag_list',                'Comma delimited list of Tags to apply to the imported Contacts',             type: 'String'
         response_field 'updated_at',              'Updated At',                                                                 type: 'String'
         response_field 'updated_in_db_at',        'Updated In Db At',                                                           type: 'String'
       end

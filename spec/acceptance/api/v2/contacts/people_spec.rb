@@ -137,10 +137,10 @@ resource 'People' do
     before { api_login(user) }
 
     get '/api/v2/contacts/people' do
-      parameter 'filters[email_address_valid]', %(Filter by Email Address Invalid; A Person's Email Address is invalid if \
+      parameter 'filter[email_address_valid]', %(Filter by Email Address Invalid; A Person's Email Address is invalid if \
                                                   the Email Address's valid_values attribute is set to false, or if the Person has \
                                                   multiple Email Addresses marked as primary; Accepts value "false"), required: false
-      parameter 'filters[phone_number_valid]',  %(Filter by Phone Number Invalid; A Person's Phone Number is invalid if \
+      parameter 'filter[phone_number_valid]',  %(Filter by Phone Number Invalid; A Person's Phone Number is invalid if \
                                                   the Phone Number's valid_values attribute is set to false, or if the Person has \
                                                   multiple Phone Numbers marked as primary; Accepts value "false"), required: false
 

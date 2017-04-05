@@ -1,4 +1,6 @@
 class Api::V2::AccountLists::AnalyticsController < Api::V2Controller
+  DATE_FIELD_ENDINGS = %w(_at _range).freeze
+
   def show
     load_analytics
     authorize_analytics

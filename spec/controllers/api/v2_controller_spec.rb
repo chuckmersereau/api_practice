@@ -70,7 +70,7 @@ describe Api::V2Controller do
       end
 
       context '#date range' do
-        it 'returns a 404 when a user tries to filter with a resource that does not exist' do
+        it 'returns a 400 when a user tries to filter with an invalid date range' do
           api_login(user)
           get :index, filter: { time_at: '01-12-2012-02/03/2014' }
           expect(response.status).to eq(400), invalid_status_detail

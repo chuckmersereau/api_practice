@@ -29,6 +29,54 @@ describe Import do
     end
   end
 
+  context 'tags' do
+    let(:import) { build(:import, tags: 'a,b,c,d') }
+
+    describe '#tags' do
+      it 'returns tags as an Array' do
+        expect(import.tags).to be_a Array
+        expect(import.tags).to eq %w(a b c d)
+      end
+    end
+
+    describe '#tags=' do
+      it 'sets tags from an Array' do
+        import.tags = %w(1 2 3)
+        expect(import.tags).to eq %w(1 2 3)
+        import.save!
+        import.reload
+        expect(import.tags).to eq %w(1 2 3)
+      end
+
+      it 'accepts nil' do
+        import.tags = nil
+        expect(import.tags).to eq []
+      end
+    end
+
+    describe '#tag_list' do
+      it 'returns tags as a comma delimited String' do
+        expect(import.tag_list).to be_a String
+        expect(import.tag_list).to eq 'a,b,c,d'
+      end
+    end
+
+    describe '#tag_list=' do
+      it 'sets tags from a comma delimited String' do
+        import.tag_list = '1,2,3'
+        expect(import.tag_list).to eq '1,2,3'
+        import.save!
+        import.reload
+        expect(import.tag_list).to eq '1,2,3'
+      end
+
+      it 'accepts nil' do
+        import.tag_list = nil
+        expect(import.tag_list).to eq ''
+      end
+    end
+  end
+
   it "should set 'importing' to false after an import" do
     import = create(:tnt_import, importing: true)
     import.send(:import)
@@ -36,7 +84,7 @@ describe Import do
   end
 
   it 'should send an success email when importing completes then merge contacts and queue google sync' do
-    expect(ImportMailer).to receive(:complete).and_return(OpenStruct.new)
+    expect_delayed_email(ImportMailer, :complete)
     import = create(:tnt_import)
     expect(import.account_list).to receive(:merge_contacts)
     expect(import.account_list).to receive(:queue_sync_with_google_contacts)
@@ -46,9 +94,9 @@ describe Import do
   it "should send a failure email if there's an error" do
     import = create(:tnt_import)
     expect(@tnt_import).to receive(:import).and_raise('foo')
+    expect_delayed_email(ImportMailer, :failed)
 
     expect do
-      expect(ImportMailer).to receive(:failed).and_return(OpenStruct.new)
       import.send(:import)
     end.to raise_error('foo')
   end
@@ -56,15 +104,24 @@ describe Import do
   it 'should send a failure error but not re-raise/notify the error if the error is UnsurprisingImportError' do
     import = create(:tnt_import)
     expect(@tnt_import).to receive(:import).and_raise(Import::UnsurprisingImportError)
+    expect_delayed_email(ImportMailer, :failed)
 
     expect do
-      expect(ImportMailer).to receive(:failed).and_return(OpenStruct.new)
       import.send(:import)
     end.to_not raise_error
   end
 
   it 'queues an import when saved' do
     expect { create(:import) }.to change(Import.jobs, :size).from(0).to(1)
+  end
+
+  it 'should finish import if sending mail fails' do
+    expect(ImportMailer).to receive(:delay).and_raise(StandardError)
+
+    import = create(:tnt_import)
+    expect(import.account_list).to receive(:merge_contacts)
+    expect(import.account_list).to receive(:queue_sync_with_google_contacts)
+    import.send(:import)
   end
 
   context 'in_preview' do

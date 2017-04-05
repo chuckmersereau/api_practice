@@ -11,7 +11,7 @@ class ImportSerializer < ApplicationSerializer
              :in_preview,
              :override,
              :source,
-             :tags
+             :tag_list
 
   belongs_to :user
 

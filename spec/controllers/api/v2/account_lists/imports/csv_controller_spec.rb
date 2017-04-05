@@ -62,7 +62,7 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
 
   let(:update_attributes) do
     {
-      tags: 'test',
+      tag_list: 'test',
       updated_in_db_at: resource.updated_at
     }
   end
@@ -155,6 +155,14 @@ describe Api::V2::AccountLists::Imports::CsvController, type: :controller do
       post :create, full_correct_attributes.tap { |params| params[:data][:attributes].delete([:in_preview, 'in_preview']) }
       import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
       expect(import.in_preview?).to eq true
+    end
+
+    it 'defaults user_id to current user' do
+      api_login(user)
+      full_correct_attributes[:data][:relationships].delete(:user)
+      post :create, full_correct_attributes
+      import = Import.find_by_uuid(JSON.parse(response.body)['data']['id'])
+      expect(import.user_id).to eq user.id
     end
 
     it 'persists cached file data' do

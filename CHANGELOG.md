@@ -2,10 +2,24 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 3 April 2017
+- Imports API now accepts comma delimited tag_list, instead of tags.
+
+## 2 April 2017
+- Added Russian, Arabic, German and Korean to list of languages supported on the API side.
+
+## 31 March 2017
+- Added converted_amount and converted_currency to donation objects returned by the API.
+- Added turkish to list of language constants.
+- Add missing attributes metro_area, region, remote_id, and seasonal to Address serialization
+- CSV Import: Remove support for Contact Name, instead we'll require at least First Name, or Last Name
+- CSV Import: Remove Referred By because it's not supported yet
+- CSV Import: Auto generate a Contact Name based on first and last names
+
 ## 30 March 2017
 - Added bulk create actions for contacts/tags and tasks/tags
 - Added a way to bulk remove multiple tags from multiple records on the contacts/tags and tasks/tags endpoints
-  - Bulk contacts/tags and tasks/tags now work like any other bulk endpoint
+- Bulk contacts/tags and tasks/tags now work like any other bulk endpoint
 - Enabled being able to set `X-HTTP-Method-Override` header to override the request method
 
 ## 29 March 2017

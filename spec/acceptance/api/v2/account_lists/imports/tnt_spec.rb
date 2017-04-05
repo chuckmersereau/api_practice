@@ -69,7 +69,7 @@ resource 'Account Lists > Imports > from TNT XML' do
       in_preview
       override
       source
-      tags
+      tag_list
       updated_at
       updated_in_db_at
     )
@@ -96,7 +96,7 @@ resource 'Account Lists > Imports > from TNT XML' do
         parameter 'in_preview',        "The Import will not be performed while it's in preview", type: 'Boolean'
         parameter 'override',          'Override',                                               type: 'Boolean'
         parameter 'source_account_id', 'Source Account ID',                                      type: 'String'
-        parameter 'tags',              'Tags',                                                   type: 'String'
+        parameter 'tag_list',          'Comma delimited list of Tags',                           type: 'String'
         parameter 'user_id',           'User ID',                                                type: 'String'
       end
 
@@ -114,7 +114,7 @@ resource 'Account Lists > Imports > from TNT XML' do
         response_field 'in_preview',              "The Import will not be performed while it's in preview; Defaults to false", type: 'Boolean'
         response_field 'override',                'Override',                                                                  type: 'Boolean'
         response_field 'source',                  'Source; Defaults to "tnt"',                                                 type: 'String'
-        response_field 'tags',                    'Tags',                                                                      type: 'String'
+        response_field 'tag_list',                'Comma delimited list of Tags',                                              type: 'String'
         response_field 'updated_at',              'Updated At',                                                                type: 'String'
         response_field 'updated_in_db_at',        'Updated In Db At',                                                          type: 'String'
       end

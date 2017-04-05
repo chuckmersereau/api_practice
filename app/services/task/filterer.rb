@@ -1,7 +1,6 @@
 class Task::Filterer < ApplicationFilterer
   FILTERS_TO_DISPLAY = %w(
     ActivityType
-    Completed
     ContactIds
     ContactChurch
     ContactCity
@@ -24,6 +23,7 @@ class Task::Filterer < ApplicationFilterer
   ).freeze
 
   FILTERS_TO_HIDE = %w(
+    Completed
     DateRange
     ExcludeTags
     Ids

@@ -360,7 +360,7 @@ class Person < ApplicationRecord
          google_accounts relay_accounts organization_accounts).each do |relationship|
         other.send(relationship).each do |record|
           next if send(relationship).where(person_id: id, remote_id: record.remote_id).any?
-          record.update_attributes!(person_id: id)
+          record.update_attribute(:person_id, id)
         end
       end
 

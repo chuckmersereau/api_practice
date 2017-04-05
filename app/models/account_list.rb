@@ -319,7 +319,7 @@ class AccountList < ApplicationRecord
   end
 
   def send_chalkline_mailing_list
-    ChalklineMailer.mailing_list(self).deliver
+    ChalklineMailer.delay.mailing_list(self)
   end
 
   def physical_newsletter_csv

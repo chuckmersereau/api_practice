@@ -27,7 +27,6 @@ describe CsvImport do
         'commitment_amount'    => 'commitment_amount',
         'commitment_currency'  => 'commitment_currency',
         'commitment_frequency' => 'commitment_frequency',
-        'contact_name'         => 'contact_name',
         'country'              => 'mailing_country',
         'email_1'              => 'primary_email',
         'envelope_greeting'    => 'envelope_greeting',
@@ -125,7 +124,6 @@ describe CsvImport do
         'commitment_amount'    => 'amount',
         'commitment_currency'  => 'currency',
         'commitment_frequency' => 'frequency',
-        'contact_name'         => 'fname',
         'country'              => 'country',
         'email_1'              => 'email_address',
         'first_name'           => 'fname',
@@ -185,7 +183,7 @@ describe CsvImport do
         csv_import.in_preview = false
         expect(csv_import).to be_valid
         expect { import.import }.to change(Contact, :count).from(0).to(3)
-        expect(csv_import.account_list.contacts.reload.where(name: 'John')).to be_present
+        expect(csv_import.account_list.contacts.reload.where(name: 'Doe, John and Jane')).to be_present
       end
 
       it 'errors if there is invalid data and does not save any contacts' do
@@ -218,13 +216,26 @@ describe CsvImport do
       it 'returns sample contacts' do
         expect(import.sample_contacts).to be_a Array
         expect(import.sample_contacts.size).to eq 3
-        expect(import.sample_contacts.first.name).to eq 'John'
-        expect(import.sample_contacts.second.name).to eq 'Bob'
-        expect(import.sample_contacts.third.name).to eq 'Joe'
+        expect(import.sample_contacts.first.name).to eq 'Doe, John and Jane'
+        expect(import.sample_contacts.second.name).to eq 'Park and Kim, Bob and Sara'
+        expect(import.sample_contacts.third.name).to eq 'Man, Joe'
         import.sample_contacts.each do |sample_contact|
           expect(sample_contact).to be_a Contact
           expect(sample_contact.uuid).to be_present
           expect(Contact.find_by(uuid: sample_contact.uuid)).to be_blank
+        end
+      end
+
+      it 'generates uuids for all of the objects' do
+        import.sample_contacts.each do |contact|
+          expect(contact.uuid).to be_present
+          expect(contact.primary_person.uuid).to be_present
+          expect(contact.spouse.uuid).to be_present if contact.spouse
+          contact.addresses.each { |address| expect(address.uuid).to be_present }
+          contact.primary_person.email_addresses.each { |email_address| expect(email_address.uuid).to be_present }
+          contact.spouse.email_addresses.each { |email_address| expect(email_address.uuid).to be_present } if contact.spouse
+          contact.primary_person.phone_numbers.each { |phone_number| expect(phone_number.uuid).to be_present }
+          contact.spouse.phone_numbers.each { |phone_number| expect(phone_number.uuid).to be_present } if contact.spouse
         end
       end
     end

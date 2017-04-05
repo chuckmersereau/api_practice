@@ -567,7 +567,7 @@ describe MailChimpAccount::Exporter do
 
       expect do
         export.list_batch_subscribe([some_params])
-      end.to change { ActionMailer::Base.deliveries.count }
+      end.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
 
       expect(subscribe_request).to have_been_requested
     end

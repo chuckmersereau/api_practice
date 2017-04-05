@@ -45,7 +45,7 @@ module Filtering
   end
 
   def value_is_a_date?(key)
-    DATE_FIELD_ENDINGS.any? { |date_field_ending| key.to_s.include?(date_field_ending) }
+    self.class::DATE_FIELD_ENDINGS.any? { |date_field_ending| key.to_s.include?(date_field_ending) }
   end
 
   def cast_to_datetime_range(match_data)

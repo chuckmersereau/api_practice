@@ -69,7 +69,7 @@ class Person::OrganizationAccount < ApplicationRecord
     import_donations
   rescue OrgAccountInvalidCredentialsError
     update_column(:valid_credentials, false)
-    ImportMailer.credentials_error(self).deliver
+    ImportMailer.delay.credentials_error(self)
   ensure
     clear_lock_fields
   end

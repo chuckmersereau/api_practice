@@ -160,7 +160,7 @@ class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
   rescue Gibbon::MailChimpError => e
     if e.message.include?('API Key Disabled') || e.message.include?('code 104')
       update_column(:active, false)
-      AccountMailer.invalid_mailchimp_key(account_list).deliver
+      AccountMailer.delay.invalid_mailchimp_key(account_list)
     elsif e.status_code == 503
       # The server is temporarily unable
       raise LowerRetryWorker::RetryJobButNoRollbarError
@@ -180,7 +180,7 @@ class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
       # MMERGE3 must be provided - Please enter a value (code 250)
       # Notify user and nulify primary_list_id until they fix the problem
       update_column(:primary_list_id, nil)
-      AccountMailer.mailchimp_required_merge_field(account_list).deliver
+      AccountMailer.delay.mailchimp_required_merge_field(account_list)
     elsif e.message.include?('code 200')
       # Invalid MailChimp List ID (code 200)
       update_column(:primary_list_id, nil)

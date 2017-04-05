@@ -5,7 +5,7 @@ RSpec.describe Task::Filter::ContactStatus do
   let(:account_list) { user.account_lists.first }
 
   let!(:active_contact) { create(:contact, account_list: account_list, status: 'Ask in Future') }
-  let!(:inactive_contact) { create(:contact, account_list: account_list, status: 'Never Contacted') }
+  let!(:inactive_contact) { create(:contact, account_list: account_list, status: 'Not Interested') }
   let!(:contact_with_no_status) { create(:contact, account_list: account_list, status: nil) }
 
   let!(:task_one) { create(:task, account_list: account_list, contacts: [active_contact]) }
