@@ -77,8 +77,4 @@ class ContactSerializer < ApplicationSerializer
     # This causes performance issues, it should not be added until a solution is found.
     object.donations.sum(:amount)
   end
-
-  def tag_list
-    object.tags.collect(&:name)
-  end
 end
