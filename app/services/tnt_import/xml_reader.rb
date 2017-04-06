@@ -9,14 +9,15 @@ class TntImport::XmlReader
 
   private
 
-  def file
-    @import.file.file.file
+  def file_path
+    @import.file.cache_stored_file!
+    @import.file.path
   end
 
-  def read_xml(import_file = file)
+  def read_xml
     xml = {}
     begin
-      File.open(import_file, 'r:utf-8') do |file|
+      File.open(file_path, 'r:utf-8') do |file|
         contents = file.read
         begin
           xml = Hash.from_xml(contents)
@@ -35,7 +36,7 @@ class TntImport::XmlReader
         end
       end
     rescue ArgumentError
-      File.open(import_file, 'r:windows-1251:utf-8') do |file|
+      File.open(file_path, 'r:windows-1251:utf-8') do |file|
         xml = Hash.from_xml(file.read)
       end
     end

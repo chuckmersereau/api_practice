@@ -1,8 +1,9 @@
 require 'rails_helper'
 
-describe Api::V2::AccountLists::MailChimpAccountController, type: :controller do
+describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller do
   let(:factory_type) { :mail_chimp_account }
   let!(:user)        { create(:user_with_account) }
+  let(:given_resource_type) { 'mail_chimp_accounts' }
 
   let!(:account_list)     { user.account_lists.first }
   let(:account_list_id)   { account_list.uuid }

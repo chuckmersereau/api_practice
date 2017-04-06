@@ -37,6 +37,7 @@ class Address < ApplicationRecord
                           :metro_area,
                           :postal_code,
                           :primary_mailing_address,
+                          :historic,
                           :region,
                           :remote_id,
                           :seasonal,

@@ -1,12 +1,20 @@
 require 'rails_helper'
 
 describe TntImport::PersonImport do
+  include TntImportHelpers
+
+  let(:row) { tnt_import_parsed_xml_sample_contact_row }
+  let(:prefix) { '' }
   let(:import) do
     contact = create(:contact)
-    account_list = contact.account_list
-    prefix = ''
     override = true
-    TntImport::PersonImport.new(account_list, contact, prefix, override)
+    TntImport::PersonImport.new(row, contact, prefix, override)
+  end
+
+  describe '#add_or_update_person' do
+    it 'creates a person' do
+      expect { import.import }.to change { Person.count }.from(0).to(1)
+    end
   end
 
   context '#update_person_emails' do
@@ -82,6 +90,58 @@ describe TntImport::PersonImport do
       expect(person.phone_numbers.count).to eq(2)
       expect(person.phone_numbers.map { |p| [p.number, p.historic] }).to include(['+12122222222', true])
       expect(person.phone_numbers.map { |p| [p.number, p.historic] }).to include(['+13133333333', false])
+    end
+  end
+
+  context '#update_person_social_media_accounts' do
+    it 'creates the social accounts' do
+      expect { import.import }.to change { Person.count }.from(0).to(1)
+      person = Person.last
+      expect(person.facebook_accounts.size).to eq 1
+      expect(person.facebook_accounts.first.username).to eq '@bobfacebook'
+      expect(person.linkedin_accounts.size).to eq 1
+      expect(person.linkedin_accounts.first.public_url).to eq '@boblinkedin'
+      expect(person.twitter_accounts.size).to eq 1
+      expect(person.twitter_accounts.first.screen_name).to eq '@bobtwitter'
+      expect(person.websites.size).to eq 2
+      expect(person.websites.first.url).to eq 'www.bobwebpage.com'
+      expect(person.websites.second.url).to eq 'www.bobwebpage2.com'
+    end
+
+    context 'spouse' do
+      let(:prefix) { 'Spouse' }
+
+      it 'creates the social accounts' do
+        expect { import.import }.to change { Person.count }.from(0).to(1)
+        person = Person.last
+        expect(person.facebook_accounts.size).to eq 1
+        expect(person.facebook_accounts.first.username).to eq '@helenfacebook'
+        expect(person.linkedin_accounts.size).to eq 1
+        expect(person.linkedin_accounts.first.public_url).to eq '@helenlinkedin'
+        expect(person.twitter_accounts.size).to eq 1
+        expect(person.twitter_accounts.first.screen_name).to eq '@helentwitter'
+        expect(person.websites.size).to eq 2
+        expect(person.websites.first.url).to eq 'www.helenparr.com'
+        expect(person.websites.second.url).to eq 'www.helenparr2.com'
+      end
+    end
+
+    context 'no social accounts' do
+      before do
+        %w(SocialWeb1 SocialWeb2 SocialWeb3 SocialWeb4 WebPage1 WebPage2).each do |key|
+          row.delete(key)
+          row.delete("Spouse#{key}")
+        end
+      end
+
+      it 'does not create social accounts' do
+        expect { import.import }.to change { Person.count }.from(0).to(1)
+        person = Person.last
+        expect(person.facebook_accounts.size).to eq 0
+        expect(person.linkedin_accounts.size).to eq 0
+        expect(person.twitter_accounts.size).to eq 0
+        expect(person.websites.size).to eq 0
+      end
     end
   end
 

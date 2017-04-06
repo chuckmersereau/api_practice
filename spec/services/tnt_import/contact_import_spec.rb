@@ -1,10 +1,11 @@
 require 'rails_helper'
 
 describe TntImport::ContactImport do
-  let(:tnt_import) { create(:tnt_import, override: true) }
-  let(:xml) do
-    TntImport::XmlReader.new(tnt_import).parsed_xml
-  end
+  include TntImportHelpers
+
+  let(:file) { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export.xml')) }
+  let(:tnt_import) { create(:tnt_import, override: true, file: file) }
+  let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
   let(:contact_rows) { Array.wrap(xml.tables['Contact']['row']) }
   let(:import) do
     donor_accounts = []
@@ -40,6 +41,35 @@ describe TntImport::ContactImport do
     it 'sets the address region' do
       import.send(:update_contact, @contact, contact_rows.first)
       expect(@contact.addresses.first.region).to eq('State College')
+    end
+
+    it 'sets the greeting' do
+      greeting = import.import_contact(tnt_import_parsed_xml_sample_contact_row).greeting
+      expect(greeting).to eq 'Parr Custom Greeting'
+    end
+
+    it 'sets the envelope_greeting' do
+      row = tnt_import_parsed_xml_sample_contact_row
+      envelope_greeting = import.import_contact(row).envelope_greeting
+      expect(envelope_greeting).to eq 'Parr Custom Fullname'
+      row['MailingAddressBlock'] = ''
+      row['FullName'] = 'My Special Full Name'
+      envelope_greeting = import.import_contact(row).envelope_greeting
+      expect(envelope_greeting).to eq 'My Special Full Name'
+    end
+
+    context 'has social web fields' do
+      let(:file) { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
+
+      it 'adds unsupported social fields to the contact notes' do
+        notes = import.import_contact(tnt_import_parsed_xml_sample_contact_row).notes
+        expect(notes).to include('Other Social: bob-other-social')
+        expect(notes).to include('Spouse Other Social: @helenothersocial')
+        expect(notes).to include('Voice/Skype: bobparrskype')
+        expect(notes).to include('Spouse Voice/Skype: HelenParrSkype')
+        expect(notes).to include('IM Address: bobsIMaddress')
+        expect(notes).to include('Spouse IM Address: helenIMaddress')
+      end
     end
   end
 

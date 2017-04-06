@@ -4,7 +4,10 @@ class Api::V2::TasksController < Api::V2Controller
   def index
     authorize_index
     load_tasks
-    render json: @tasks, meta: meta_hash(@tasks), include: include_params, fields: field_params
+    render json: @tasks.includes(include_associations).includes(:tags),
+           meta: meta_hash(@tasks),
+           include: include_params,
+           fields: field_params
   end
 
   def show
@@ -93,7 +96,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def task_scope
-    Task.where(account_list_id: account_lists.select(:id)).includes(:tags)
+    Task.where(account_list: account_lists)
   end
 
   def permitted_sorting_params

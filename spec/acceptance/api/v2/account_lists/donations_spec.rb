@@ -131,7 +131,7 @@ resource 'Donations' do
         do_request
         check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
-        expect(resource_object['amount']).to eq '$10'
+        expect(resource_object['amount']).to eq '10.0'
         expect(response_status).to eq 200
       end
     end
@@ -151,7 +151,7 @@ resource 'Donations' do
         explanation 'Creates a new Donation associated with the Account List'
         do_request data: form_data
 
-        expect(resource_object['amount']).to eq '$10'
+        expect(resource_object['amount']).to eq '10.0'
         expect(response_status).to eq 201
       end
     end
@@ -173,7 +173,7 @@ resource 'Donations' do
         explanation 'Updates a Donation associated with the Account List'
         do_request data: build_data(new_donation)
 
-        expect(resource_object['amount']).to eq '$10'
+        expect(resource_object['amount']).to eq '10.0'
         expect(response_status).to eq 200
       end
     end

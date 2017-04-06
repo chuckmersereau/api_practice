@@ -1,6 +1,4 @@
-class Api::V2::AccountLists::MailChimpAccountController < Api::V2Controller
-  resource_type :mail_chimp_account
-
+class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
   def show
     load_mailchimp_account
     authorize_mailchimp_account

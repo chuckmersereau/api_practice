@@ -1,8 +1,9 @@
 class Contact::Filter::Referrer < Contact::Filter::Base
   def execute_query(contacts, filters)
     filters = filters[:referrer].split(',').map(&:strip)
-    contacts = contacts.includes(:contact_referrals_to_me).where.not(contact_referrals: { referred_by_id: nil }) if filters.delete('any')
-    contacts = contacts.includes(:contact_referrals_to_me).where(contact_referrals: { referred_by_id: contact_referrer_ids(filters) }) if filters.present?
+    contacts = contacts.joins(:contact_referrals_to_me).where.not(contact_referrals: { referred_by_id: nil }) if filters.delete('any')
+    contacts = contacts.joins('LEFT OUTER JOIN "contact_referrals" ON "contact_referrals"."referred_to_id" = "contacts"."id"')
+                       .where(contact_referrals: { referred_by_id: contact_referrer_ids(filters) }) if filters.present?
     contacts
   end
 
