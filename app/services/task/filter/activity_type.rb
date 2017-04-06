@@ -1,6 +1,6 @@
 class Task::Filter::ActivityType < Task::Filter::Base
   def execute_query(tasks, filters)
-    tasks.where(activity_type: filters[:activity_type].split(',').map(&:strip))
+    tasks.where(activity_type: parse_list(filters[:activity_type]))
   end
 
   def title

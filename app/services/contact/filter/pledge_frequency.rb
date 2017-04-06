@@ -1,6 +1,6 @@
 class Contact::Filter::PledgeFrequency < Contact::Filter::Base
   def execute_query(contacts, filters)
-    frequencies_not_null = filters[:pledge_frequency].split(',').map(&:strip) - ['null']
+    frequencies_not_null = parse_list(filters[:pledge_frequency]) - ['null']
     return unless frequencies_not_null.present?
     contacts.where(pledge_frequency: frequencies_not_null)
   end

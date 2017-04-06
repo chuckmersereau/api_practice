@@ -20,6 +20,10 @@ describe ContactFilter do
       expect(ContactFilter.new(ids: '').filter(Contact, account_list).count).to eq(1)
     end
 
+    it 'can handle a list of blank elements ",,"' do
+      expect { ContactFilter.new(ids: ',,').filter(Contact, account_list).count }.to_not raise_error
+    end
+
     it 'filters contacts with newsletter = Email and state' do
       c = create(:contact, send_newsletter: 'Email')
       a = create(:address, addressable: c)

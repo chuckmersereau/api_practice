@@ -1,6 +1,6 @@
 class Contact::Filter::Donation < Contact::Filter::Base
   def execute_query(contacts, filters)
-    donation_filters = filters[:donation].split(',').map(&:strip)
+    donation_filters = parse_list(filters[:donation])
     contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations])
     contacts = contacts.where(donations: { id: nil }) if donation_filters.include?('none')
     contacts = contacts.where.not(donations: { id: nil }) if donation_filters.include?('one')

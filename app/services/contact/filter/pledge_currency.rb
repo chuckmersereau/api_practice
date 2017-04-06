@@ -1,6 +1,6 @@
 class Contact::Filter::PledgeCurrency < Contact::Filter::Base
   def execute_query(contacts, filters)
-    pledge_currency_filters = filters[:pledge_currency].split(',').map(&:strip)
+    pledge_currency_filters = parse_list(filters[:pledge_currency])
     default_currencies = account_lists.collect(&:default_currency)
     if (pledge_currency_filters & default_currencies).present?
       contacts.where(pledge_currency: [pledge_currency_filters, '', nil])

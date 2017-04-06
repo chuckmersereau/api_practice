@@ -1,6 +1,6 @@
 class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
   def execute_query(contacts, filters)
-    related_task_action_filters = filters[:related_task_action].split(',').map(&:strip)
+    related_task_action_filters = parse_list(filters[:related_task_action])
     if related_task_action_filters.include?('null')
       contacts_with_activities = contacts.where('activities.completed' => false)
                                          .joins(:activities).ids

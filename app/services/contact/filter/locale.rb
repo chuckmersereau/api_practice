@@ -1,6 +1,6 @@
 class Contact::Filter::Locale < Contact::Filter::Base
   def execute_query(contacts, filters)
-    locale_filters = filters[:locale].split(',').map(&:strip)
+    locale_filters = parse_list(filters[:locale])
     contacts.where('contacts.locale' => locale_filters.map { |l| l == 'null' ? nil : l })
   end
 

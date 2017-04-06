@@ -1,6 +1,6 @@
 class Task::Filter::ContactIds < Task::Filter::Base
   def execute_query(tasks, filters)
-    tasks.joins(:contacts).where(contacts: { uuid: filters[:contact_ids].split(',').map(&:strip) })
+    tasks.joins(:contacts).where(contacts: { uuid: parse_list(filters[:contact_ids]) })
   end
 
   def title

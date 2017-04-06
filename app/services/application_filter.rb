@@ -93,20 +93,8 @@ class ApplicationFilter
   def execute_query(_contacts, _filters)
   end
 
-  def valid_filters?(filters)
-    return false unless filters[name].present?
-    return false if filters[name].is_a?(Array)
-    return false if filters[name].is_a?(Hash)
-    true
-  end
-
   def name
     class_name.demodulize.underscore.to_sym
-  end
-
-  def daterange_params(date_range)
-    { start: date_range.first.beginning_of_day,
-      end: date_range.last.end_of_day }
   end
 
   def class_name
@@ -114,4 +102,22 @@ class ApplicationFilter
   end
 
   alias id priority
+
+  private
+
+  def daterange_params(date_range)
+    { start: date_range.first.beginning_of_day,
+      end: date_range.last.end_of_day }
+  end
+
+  def parse_list(string)
+    string.split(',').select(&:present?).map(&:strip)
+  end
+
+  def valid_filters?(filters)
+    return false unless filters[name].present?
+    return false if filters[name].is_a?(Array)
+    return false if filters[name].is_a?(Hash)
+    true
+  end
 end
