@@ -89,6 +89,9 @@ class CsvImport
     raise 'Attempted an invalid import! Aborting.' if @import.invalid?
     raise 'Attempted an import that is in preview! Aborting.' if @import.in_preview?
     Contact.transaction { contacts.each(&:save!) }
+  rescue ActiveRecord::RecordInvalid => exception
+    Rollbar.error(exception)
+    raise exception
   end
 
   def file_constants_for_mpdx_header(mpdx_header)
