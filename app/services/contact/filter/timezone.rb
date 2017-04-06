@@ -18,6 +18,6 @@ class Contact::Filter::Timezone < Contact::Filter::Base
   private
 
   def timezone_filters(filters)
-    @timezone_filters ||= filters[:timezone].split(',').map(&:strip)
+    @timezone_filters ||= parse_list(filters[:timezone])
   end
 end

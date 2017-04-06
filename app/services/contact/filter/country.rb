@@ -1,6 +1,6 @@
 class Contact::Filter::Country < Contact::Filter::Base
   def execute_query(contacts, filters)
-    country_filters = filters[:country].split(',').map(&:strip)
+    country_filters = parse_list(filters[:country])
     country_filters << nil if country_filters.delete('none')
     contacts.where('addresses.country' => country_filters,
                    'addresses.historic' => filters[:address_historic] == 'true')

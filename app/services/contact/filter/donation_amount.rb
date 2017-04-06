@@ -1,7 +1,7 @@
 class Contact::Filter::DonationAmount < Contact::Filter::Base
   def execute_query(contacts, filters)
     contacts = contacts.joins(donor_accounts: [:donations]).references(donor_accounts: [:donations])
-    contacts = contacts.where(donations: { amount: filters[:donation_amount].split(',').map(&:strip) })
+    contacts = contacts.where(donations: { amount: parse_list(filters[:donation_amount]) })
     contacts
   end
 

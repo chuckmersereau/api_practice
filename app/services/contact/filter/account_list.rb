@@ -1,6 +1,6 @@
 class Contact::Filter::AccountList < Contact::Filter::Base
   def execute_query(contacts, filters)
-    contacts.where(account_list_uuid: filters[:account_list_id].split(',').map(&:strip))
+    contacts.where(account_list_uuid: parse_list(filters[:account_list_id]))
   end
 
   def title

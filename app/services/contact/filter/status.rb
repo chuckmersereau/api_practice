@@ -1,6 +1,6 @@
 class Contact::Filter::Status < Contact::Filter::Base
   def execute_query(contacts, filters)
-    status_filters = filters[:status].split(',').map(&:strip)
+    status_filters = parse_list(filters[:status])
     status_filters << 'null' if (status_filters.include? '') && !status_filters.include?('null')
     status_filters << '' if (status_filters.include? 'null') && !status_filters.include?('')
     status_filters += Contact.active_statuses if status_filters.include?('active')
