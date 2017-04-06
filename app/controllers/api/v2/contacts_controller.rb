@@ -1,6 +1,4 @@
 class Api::V2::ContactsController < Api::V2Controller
-  DATE_FIELD_ENDINGS = %w(_at _date).freeze
-
   def index
     authorize_index
     load_contacts
@@ -109,5 +107,9 @@ class Api::V2::ContactsController < Api::V2Controller
       ::Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +
       ::Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym) +
       [:account_list_id, :any_tags]
+  end
+
+  def excluded_filter_keys_from_casting_validation
+    [:donation_amount_range]
   end
 end

@@ -1,51 +1,34 @@
 module Filtering
-  DatetimeCastingError = Class.new(StandardError)
-  DATE_FIELD_ENDINGS = %w(_at).freeze
+  DATE_REGEX = /(\d{4}\-\d{2}\-\d{2})/
+  DATE_TIME_REGEX = /(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)/
   DATE_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2})(\.\.\.?)(\d{4}\-\d{2}\-\d{2})/
-  DATETIME_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)(\.\.\.?)(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)/
-  DEFAULT_PERMITTED_FILTERS = %w( updated_at ).freeze
-
-  private
-
-  def permitted_filters_with_defaults
-    permitted_filters + DEFAULT_PERMITTED_FILTERS
-  end
-
-  def permitted_filters
-    []
-  end
+  DATE_TIME_RANGE_REGEX = /(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)(\.\.\.?)(\d{4}\-\d{2}\-\d{2}T\d{2}\:\d{2}\:\d{2}Z)/
+  DEFAULT_PERMITTED_FILTERS = %i(updated_at).freeze
 
   def filter_params
     return {} unless params[:filter]
+
     params[:filter]
-      .map { |k, v| { k.underscore.to_sym => cast_filter_value(k, v) } }
+      .each_with_object({}) { |(key, value), hash| hash[key.underscore.to_sym] = value }
+      .keep_if { |key, _| permitted_filters_with_defaults.include?(key) }
+      .map { |key, value| { key => cast_filter_value(value) } }
       .reduce({}, :merge)
-      .keep_if { |k, _| permitted_filters_with_defaults.include? k }
+      .each { |key, value| validate_casted_filter_value!(key, value) }
   end
 
-  def cast_filter_value(key, value)
-    cast_filter_value!(key, value)
-  rescue DatetimeCastingError
-    raise_bad_request
-  end
+  private
 
-  def cast_filter_value!(key, value)
+  def cast_filter_value(value)
     case value
-    when DATE_RANGE_REGEX, DATETIME_RANGE_REGEX
+    when DATE_RANGE_REGEX, DATE_TIME_RANGE_REGEX
       cast_to_datetime_range($LAST_MATCH_INFO)
+    when DATE_REGEX
+      cast_date_to_datetime_range($LAST_MATCH_INFO)
+    when DATE_TIME_REGEX
+      cast_to_datetime($LAST_MATCH_INFO)
     else
-      raise_if_bad_date_range_value(key, value)
+      value
     end
-  end
-
-  def raise_if_bad_date_range_value(key, value)
-    return raise_bad_request if value.present? && value_is_a_date?(key)
-
-    value
-  end
-
-  def value_is_a_date?(key)
-    self.class::DATE_FIELD_ENDINGS.any? { |date_field_ending| key.to_s.include?(date_field_ending) }
   end
 
   def cast_to_datetime_range(match_data)
@@ -55,11 +38,49 @@ module Filtering
 
     Range.new(start_datetime, end_datetime, exclusive)
   rescue ArgumentError
-    raise DatetimeCastingError
+    match_data[0] # return the original string
   end
 
-  def raise_bad_request
-    raise Exceptions::BadRequestError,
-          "Wrong format of date range, should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates and 'YYYY-MM-DDThh:mm:ssZ...YYYY-MM-DDThh:mm:ssZ' for datetimes"
+  def cast_date_to_datetime_range(match_data)
+    datetime = DateTime.parse(match_data[1])
+    start_datetime = datetime.beginning_of_day
+    end_datetime   = datetime.end_of_day
+
+    Range.new(start_datetime, end_datetime)
+  rescue ArgumentError
+    match_data[0] # return the original string
+  end
+
+  def cast_to_datetime(match_data)
+    DateTime.parse(match_data[1])
+  rescue ArgumentError
+    match_data[0] # return the original string
+  end
+
+  def invalid_date_range_format_message(key)
+    "Wrong format of date range for filter '#{key}', should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates and 'YYYY-MM-DDThh:mm:ssZ...YYYY-MM-DDThh:mm:ssZ' for datetimes"
+  end
+
+  def permitted_filters
+    []
+  end
+
+  def permitted_filters_with_defaults
+    permitted_filters + DEFAULT_PERMITTED_FILTERS
+  end
+
+  def raise_invalid_date_range_message(key)
+    raise Exceptions::BadRequestError, invalid_date_range_format_message(key)
+  end
+
+  def excluded_filter_keys_from_casting_validation
+    []
+  end
+
+  def validate_casted_filter_value!(key, value)
+    return if key.in? excluded_filter_keys_from_casting_validation
+    CastedValueValidator.validate!(attribute: key, value: value)
+  rescue CastedValueValidator::DateTimeCastingError
+    raise_invalid_date_range_message(key)
   end
 end

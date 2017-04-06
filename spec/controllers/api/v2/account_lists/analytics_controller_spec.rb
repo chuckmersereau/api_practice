@@ -53,7 +53,7 @@ RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
       context 'with date only' do
         let(:range) { "#{1.week.ago.utc.to_date}...#{Time.current.utc.to_date}" }
 
-        it 'raises a bad_request error when the datetime range follows the wrong format' do
+        it 'filters out tasks that are not in the specified date range' do
           api_login(user)
           get :show, full_params
           expect(response.status).to eq(200)
@@ -64,12 +64,12 @@ RSpec.describe Api::V2::AccountLists::AnalyticsController, type: :controller do
 
     context 'with an invalid datetime or date range' do
       context 'with date and time' do
-        let(:range) { "#{1.week.ago.iso8601}...#{Time.current.iso8601}" }
+        let(:range) { '9999-99-99T99:99:99Z...9999-99-99T99:99:99Z' }
 
-        it 'filters out tasks that are not in the specified date range' do
+        it 'raises a bad_request error when the datetime range follows the wrong format' do
           api_login(user)
           get :show, full_params
-          expect(response.status).to eq(400)
+          expect(response.status).to eq(400), invalid_status_detail
         end
       end
 

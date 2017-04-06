@@ -1,7 +1,15 @@
 class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
-  attr_accessor :account_list, :locale
+  attr_accessor :account_list,
+                :filter_params,
+                :locale
 
   delegate :monthly_goal, to: :account_list
+
+  def initialize(attributes)
+    super
+
+    after_initialize
+  end
 
   def totals
     currencies.map(&method(:totals_for_currency))
@@ -15,11 +23,11 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
 
   def monthly_average
     total_converted = totals.map { |t| t[:total_converted] }.sum
-    (total_converted / months_back.to_f).to_i
+    (total_converted / number_of_months_in_range.to_f).to_i
   end
 
   def months_to_dates
-    months_back.downto(0).map { |i| i.months.ago.to_date.beginning_of_month }
+    filter_params[:donation_date].select { |d| d.day == 1 }
   end
 
   def salary_currency
@@ -27,28 +35,33 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
   end
 
   def months_back
-    @months_back ||= calc_months_back
+    @months_back ||= number_of_months_in_range
   end
 
   def multi_currency
     account_list.multi_currency?
   end
 
-  protected
-
-  def calc_months_back
-    first_donation = account_list.donations.select('donation_date').last
-    return 1 unless first_donation
-
-    first_donation_days_ago = Date.today.end_of_month - first_donation.donation_date
-    approx_months = (first_donation_days_ago.to_f / 30).floor
-
-    [[approx_months, 12].min, 1].max
+  def filter_params=(filter_params)
+    filter_params.delete(:account_list_id)
+    unless filter_params[:donation_date]
+      filter_params[:donation_date] = 11.months.ago.beginning_of_month.to_date..Date.today.end_of_month
+    end
+    @filter_params = filter_params
   end
 
-  def recent_donations
-    account_list.donations.where('donation_date > ?',
-                                 months_back.months.ago.utc.beginning_of_month)
+  protected
+
+  def number_of_months_in_range
+    (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
+  end
+
+  def start_date
+    filter_params[:donation_date].first
+  end
+
+  def end_date
+    filter_params[:donation_date].end
   end
 
   def currencies
@@ -57,7 +70,7 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
     # earlier in the process than here. What we do to handle that case is to
     # just ignore donations with no currencies to prevent an invalid call on
     # `nil` in the chart itself.
-    @currencies ||= recent_donations.currencies.select(&:present?)
+    @currencies ||= donation_scope.currencies.select(&:present?)
   end
 
   def totals_for_currency(currency)
@@ -72,13 +85,11 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
   end
 
   def currency_month_totals(currency)
-    months_back.downto(0).map do |month_index|
-      start_date = month_index.months.ago.utc.beginning_of_month
+    filter_params[:donation_date].select { |d| d.day == 1 }.map do |start_date|
       end_date = start_date.end_of_month
-      amount = account_list.donations
-                           .where(currency: currency)
-                           .where(donation_date: start_date..end_date)
-                           .sum(:amount)
+      amount = donation_scope.where(donation_date: start_date..end_date)
+                             .where(currency: currency)
+                             .sum(:amount)
 
       mid_month = Date.new(start_date.year, start_date.month, 15)
       converted = CurrencyRate.convert_on_date(amount: amount, from: currency,
@@ -86,5 +97,15 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
 
       { amount: amount, converted: converted }
     end
+  end
+
+  def donation_scope
+    account_list.donations.where(filter_params)
+  end
+
+  private
+
+  def after_initialize
+    self.filter_params ||= {}
   end
 end

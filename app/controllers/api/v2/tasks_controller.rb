@@ -113,4 +113,8 @@ class Api::V2::TasksController < Api::V2Controller
       Task::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym) +
       [:account_list_id, :any_tags]
   end
+
+  def excluded_filter_keys_from_casting_validation
+    [:date_range, :no_date]
+  end
 end
