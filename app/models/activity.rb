@@ -28,6 +28,7 @@ class Activity < ApplicationRecord
   scope :tomorrow,          -> { where('start_at BETWEEN ? AND ?', (Date.current + 1.day).beginning_of_day, (Date.current + 1.day).end_of_day).order('start_at') }
   scope :uncompleted,       -> { where(completed: false).order('start_at') }
   scope :upcoming,          -> { where('start_at > ?', Time.current.end_of_day + 1.day).order('start_at') }
+  scope :no_date,           -> { where('start_at IS NULL') }
 
   accepts_nested_attributes_for :activity_contacts, allow_destroy: true
   accepts_nested_attributes_for :comments, reject_if: :all_blank
