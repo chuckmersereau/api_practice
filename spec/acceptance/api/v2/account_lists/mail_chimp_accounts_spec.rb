@@ -5,7 +5,7 @@ resource 'Account Lists > Mailchimp Accounts' do
   include_context :json_headers
   documentation_scope = :account_lists_api_mailchimp_accounts
 
-  let(:resource_type) { 'mail_chimp_account' }
+  let(:resource_type) { 'mail_chimp_accounts' }
   let!(:user)         { create(:user_with_account) }
 
   let!(:account_list)   { user.account_lists.first }

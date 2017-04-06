@@ -4,7 +4,10 @@ class Api::V2::ContactsController < Api::V2Controller
   def index
     authorize_index
     load_contacts
-    render json: @contacts, meta: meta_hash(@contacts), include: include_params, fields: field_params
+    render json: @contacts.includes(include_associations).includes(:tags, :account_list),
+           meta: meta_hash(@contacts),
+           include: include_params,
+           fields: field_params
   end
 
   def show
@@ -60,7 +63,8 @@ class Api::V2::ContactsController < Api::V2Controller
     render json: @contact,
            status: success_status,
            include: include_params,
-           fields: field_params
+           fields: field_params,
+           each_serializer: ContactDetailSerializer
   end
 
   def build_contact
@@ -89,7 +93,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def contact_scope
-    Contact.where(account_list: account_lists).includes(:tags, :account_list).includes(include_associations)
+    Contact.where(account_list: account_lists)
   end
 
   def pundit_user

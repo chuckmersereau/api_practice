@@ -72,9 +72,4 @@ class ContactSerializer < ApplicationSerializer
   def account_list_id
     object.account_list.uuid
   end
-
-  def lifetime_donations
-    # This causes performance issues, it should not be added until a solution is found.
-    object.donations.sum(:amount)
-  end
 end

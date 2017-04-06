@@ -75,6 +75,10 @@ attributes: &attrs
     description:
       The date of the last thank you for the Contact
     type: string
+  lifetime_donations:
+    description:
+      Total donation amount
+    type: number
   likely_to_give:
     description:
       Whether or not the Contact is likely to give
@@ -240,6 +244,8 @@ mutation_attributes: &mutation_attrs
   last_pre_call:
     ignore: true
   last_thank:
+    ignore: true
+  lifetime_donations:
     ignore: true
   likely_to_give:
     ignore: true

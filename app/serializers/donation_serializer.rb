@@ -21,13 +21,6 @@ class DonationSerializer < ApplicationSerializer
   belongs_to :designation_account
   belongs_to :donor_account
 
-  def amount
-    return unless scope&.[](:account_list)
-
-    current_currency(scope[:account_list])
-    number_to_current_currency(object.amount, locale: scope[:locale])
-  end
-
   def contact
     return unless scope&.[](:account_list)
 

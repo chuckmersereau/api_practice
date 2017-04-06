@@ -30,11 +30,11 @@ RSpec.shared_examples 'including related resources examples' do |options|
     end
 
     context 'with unpermitted filter params' do
-      let(:includes) { described_class::UNPERMITTED_FILTER_PARAMS.join(',') }
+      let(:includes) { described_class::UNPERMITTED_INCLUDE_PARAMS.join(',') }
 
       it 'does not permit unpermitted filter params' do
         if serializer.associations.count > 0
-          expect(described_class::UNPERMITTED_FILTER_PARAMS).to be_present
+          expect(described_class::UNPERMITTED_INCLUDE_PARAMS).to be_present
           subject
           expect(response.status).to eq(expected_response_code), invalid_status_detail
           expect(JSON.parse(response.body)['included']).to be_nil

@@ -25,7 +25,7 @@ Rails.application.routes.draw do
               end
             end
 
-            resource :mail_chimp_account, only: [:show, :create, :destroy], controller: :mail_chimp_account do
+            resource :mail_chimp_account, only: [:show, :create, :destroy] do
               get :sync, on: :member
             end
 
