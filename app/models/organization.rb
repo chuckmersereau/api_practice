@@ -3,7 +3,7 @@ require 'async'
 class Organization < ApplicationRecord
   include Async # To allow batch processing of address merges
   include Sidekiq::Worker
-  sidekiq_options retry: false, unique: :until_executed, queue: :import # use low priority import queue
+  sidekiq_options queue: :api_organization, retry: false, unique: :until_executed
 
   has_many :designation_accounts, dependent: :destroy
   has_many :designation_profiles, dependent: :destroy

@@ -3,7 +3,7 @@ require 'async'
 class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_mail_chimp_account, unique: :until_executed
 
   COUNT_PER_PAGE = 100
 

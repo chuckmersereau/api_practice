@@ -1,7 +1,7 @@
 class LowerRetryWorker
   include Sidekiq::Worker
 
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_lower_retry_worker, unique: :until_executed
 
   sidekiq_retry_in do |count|
     count**6 + 30 # 30, 31, 94, 759, 4126 ... second delays

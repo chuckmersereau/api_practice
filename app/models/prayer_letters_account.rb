@@ -4,7 +4,7 @@ require 'open-uri'
 class PrayerLettersAccount < ApplicationRecord
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_prayer_letters_account, unique: :until_executed
   SERVICE_URL = 'https://www.prayerletters.com'.freeze
 
   belongs_to :account_list

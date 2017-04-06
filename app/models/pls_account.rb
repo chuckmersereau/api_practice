@@ -9,7 +9,7 @@ class PlsAccount < ApplicationRecord
 
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_pls_account, unique: :until_executed
   SERVICE_URL = 'https://www.myletterservice.org'.freeze
 
   belongs_to :account_list

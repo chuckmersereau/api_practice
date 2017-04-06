@@ -6,7 +6,7 @@ class Person::OrganizationAccount < ApplicationRecord
   include Person::Account
   include Async
   include Sidekiq::Worker
-  sidekiq_options retry: false, unique: :until_executed
+  sidekiq_options queue: :api_person_organization_account, retry: false, unique: :until_executed
 
   serialize :password, Encryptor.new
 

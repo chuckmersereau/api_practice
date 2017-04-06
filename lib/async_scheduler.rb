@@ -1,5 +1,5 @@
 class AsyncScheduler
-  def self.schedule_over_24h(relation, method, queue = :import)
+  def self.schedule_over_24h(relation, method, queue)
     count = relation.count
     return if count == 0
     interval = 24.hours / count

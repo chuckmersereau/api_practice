@@ -2,7 +2,7 @@ require 'async'
 class GoogleIntegration < ApplicationRecord
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_google_integration, unique: :until_executed
 
   sidekiq_retry_in do |count|
     count**6 + 30 # 30, 31, 94, 759, 4126 ... second delays
@@ -116,6 +116,6 @@ class GoogleIntegration < ApplicationRecord
 
   def self.sync_all_email_accounts
     email_integrations = GoogleIntegration.where(email_integration: true)
-    AsyncScheduler.schedule_over_24h(email_integrations, :sync_email)
+    AsyncScheduler.schedule_over_24h(email_integrations, :sync_email, :api_google_integration_sync_email)
   end
 end
