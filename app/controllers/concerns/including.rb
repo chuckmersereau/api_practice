@@ -11,8 +11,4 @@ module Including
   def include_associations
     ::JSONAPI::IncludeDirective.new(include_params - ['*']).to_hash
   end
-
-  def include_associations
-    ::JSONAPI::IncludeDirective.new(include_params - ['*']).to_hash
-  end
 end
