@@ -28,7 +28,7 @@ describe Api::V2Controller do
       private
 
       def permitted_filters
-        [:contact_id, :date_range]
+        [:contact_id, :time_at]
       end
     end
 
@@ -72,9 +72,9 @@ describe Api::V2Controller do
       context '#date range' do
         it 'returns a 400 when a user tries to filter with an invalid date range' do
           api_login(user)
-          get :index, filter: { time_at: '01-12-2012-02/03/2014' }
+          get :index, filter: { time_at: '2016-20-12...2016-23-12' }
           expect(response.status).to eq(400), invalid_status_detail
-          expect(response.body).to include("Wrong format of date range, should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates")
+          expect(response.body).to include("Wrong format of date range for filter 'time_at', should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates")
         end
       end
     end

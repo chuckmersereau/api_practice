@@ -13,7 +13,7 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     create(:donation, donor_account: donor_account,
                       designation_account: designation_account,
                       donation_date: Date.parse('2099-03-04'),
-                      amount: '333')
+                      amount: '1100')
   end
   let(:time_now) { Time.zone.parse('2099-06-22 12:34:56') }
 
@@ -37,14 +37,13 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
   end
 
   describe '#totals' do
+    before { mock_time }
+
     it { expect(subject.totals).to be_an Array }
     it { expect(subject.totals).not_to be_empty }
 
     it { expect(subject.totals.first[:currency]).to eq donation.currency }
-    it do
-      mock_time
-      expect(subject.totals.first[:total_amount]).to eq donation.amount
-    end
+    it { expect(subject.totals.first[:total_amount]).to eq donation.amount }
   end
 
   describe '#pledges' do
@@ -56,7 +55,7 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     it { expect(subject.monthly_average).to be_a Numeric }
     it do
       mock_time
-      expect(subject.monthly_average).to eq 111
+      expect(subject.monthly_average).to eq 100
     end
   end
 
@@ -67,7 +66,7 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     it { expect(subject.months_to_dates.first).to be_a Date }
     it do
       mock_time
-      expect(subject.months_to_dates.first).to eq Date.parse('2099-03-01')
+      expect(subject.months_to_dates.first).to eq Date.parse('2098-07-01')
     end
   end
 
@@ -84,7 +83,7 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     it { expect(subject.months_back).to be_a Numeric }
     it do
       mock_time
-      expect(subject.months_back).to eq 3
+      expect(subject.months_back).to eq 11
     end
   end
 end

@@ -65,10 +65,18 @@ RSpec.describe Api::V2::TasksController, type: :controller do
 
     FILTERS.each_with_index do |filter|
       context "#{filter} filter" do
+        let(:value) { filter == 'updated_at' ? Date.today.to_s : '' }
+
         it 'filters results' do
-          get :index, filter: { filter => '' }
-          expect(response.status).to eq(200)
-          expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
+          get :index, filter: { filter => value }
+          expect(response.status).to eq(200), invalid_status_detail
+
+          if filter == 'updated_at'
+            expect(JSON.parse(response.body)['meta']['filter'][filter])
+              .to eq("#{value.to_datetime.beginning_of_day}..#{value.to_datetime.end_of_day}")
+          else
+            expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
+          end
         end
       end
     end

@@ -119,7 +119,7 @@ RSpec.shared_examples 'common_variables' do
     end
   end
 
-  let(:invalid_status_detail) do
+  def invalid_status_detail
     body = response.body.blank? ? '' : JSON.pretty_generate(JSON.parse(response.body))
 
     "\n\nResponse Status: #{response.status}\nResponse Body: #{body}"
