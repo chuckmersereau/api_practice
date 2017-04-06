@@ -23,6 +23,8 @@ Sidekiq.configure_server do |config|
   config.server_middleware do |chain|
     chain.add SidekiqWhodunnit
   end
+
+  config.error_handlers << Proc.new { |exception, context_hash| Rollbar.error(exception, context_hash) }
 end
 
 Sidekiq.default_worker_options = {
