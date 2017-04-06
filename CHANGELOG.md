@@ -10,7 +10,6 @@ This changelog covers what's changed in the MPDX APIs.
 - TNT Import now imports social media accounts.
 - TNT Import now imports contact envelope_greeting.
 
-
 ## 3 April 2017
 - Imports API now accepts comma delimited tag_list, instead of tags.
 
