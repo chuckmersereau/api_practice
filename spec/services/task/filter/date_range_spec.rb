@@ -13,6 +13,7 @@ RSpec.describe Task::Filter::DateRange do
   let!(:task_tomorrow) { create(:task, account_list: account_list, completed: false, start_at: 1.day.from_now) }
   let!(:task_future) { create(:task, account_list: account_list, completed: false, start_at: 1.week.from_now) }
   let!(:task_upcoming) { create(:task, account_list: account_list, completed: false, start_at: 2.days.from_now) }
+  let!(:task_no_date) { create(:task, account_list: account_list, start_at: nil) }
 
   describe '#query' do
     let(:tasks) { account_list.tasks }
@@ -53,6 +54,9 @@ RSpec.describe Task::Filter::DateRange do
       end
       it 'filters where task start_at upcoming' do
         expect(described_class.query(tasks, { date_range: 'upcoming' }, nil).to_a).to include(task_upcoming)
+      end
+      it 'filters where task start_at upcoming' do
+        expect(described_class.query(tasks, { date_range: 'no_date' }, nil).to_a).to include(task_no_date)
       end
     end
   end

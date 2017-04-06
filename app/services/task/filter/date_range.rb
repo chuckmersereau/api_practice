@@ -19,6 +19,8 @@ class Task::Filter::DateRange < Task::Filter::Base
       tasks.future
     when 'upcoming'
       tasks.upcoming
+    when 'no_date'
+      tasks.no_date
     end
   end
 
