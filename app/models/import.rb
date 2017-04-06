@@ -119,10 +119,12 @@ class Import < ApplicationRecord
     "#{source.camelize}Import".constantize.new(self).import
     after_import_success
     true
-  rescue UnsurprisingImportError
+  rescue UnsurprisingImportError => exception
+    Rollbar.info(exception)
     after_import_failure
     false
   rescue => exception
+    Rollbar.error(exception)
     after_import_failure
     raise exception
   ensure
