@@ -5,7 +5,7 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
   let(:account_list) { user.account_lists.first }
   let(:resource_type) { :address }
   let(:contact) { create(:contact, account_list: user.account_lists.first) }
-  let!(:resource) { create(:address, addressable: contact) }
+  let!(:resource) { create(:address, addressable: contact, source_donor_account: build(:donor_account)) }
   let!(:second_resource) { create(:address, addressable: contact) }
   let(:id) { resource.uuid }
   let(:parent_param) { { contact_id: contact.uuid } }
@@ -23,7 +23,7 @@ RSpec.describe Api::V2::Contacts::AddressesController, type: :controller do
 
   include_examples 'update_examples'
 
-  include_examples 'create_examples'
+  include_examples 'create_examples', except: [:includes]
 
   include_examples 'destroy_examples'
 

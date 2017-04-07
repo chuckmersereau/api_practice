@@ -18,14 +18,19 @@ class Contact::Filter::WildcardSearch < Contact::Filter::Base
       contacts = contacts.where(
         'lower(email_addresses.email) like :search '\
           'OR lower(contacts.name) like :search '\
+          'OR lower(contacts.notes) like :search '\
           'OR lower(donor_accounts.account_number) like :search '\
           'OR lower(phone_numbers.number) like :search' + person_search,
         search: "%#{filters[:wildcard_search].downcase}%", first_name: first_name, last_name: last_name
       )
-                         .joins(people: :email_addresses)
-                         .joins(:donor_accounts)
-                         .joins(people: :phone_numbers)
+                         .includes(people: :email_addresses)
+                         .references('email_addresses')
+                         .includes(:donor_accounts)
+                         .references('donor_accounts')
+                         .includes(people: :phone_numbers)
+                         .references('phone_numbers')
     end
+
     contacts
   end
 end
