@@ -72,6 +72,7 @@ resource 'Appeals > Contacts' do
       donor_accounts
       last_six_donations
       people
+      primary_or_first_person
       primary_person
       tasks
     )
