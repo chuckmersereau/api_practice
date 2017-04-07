@@ -15,13 +15,14 @@ class Contact::Filter::WildcardSearch < Contact::Filter::Base
         person_search = ''
       end
 
+      search_term = filters[:wildcard_search].downcase
+
       contacts = contacts.where(
-        'lower(email_addresses.email) like :search '\
-          'OR lower(contacts.name) like :search '\
-          'OR lower(contacts.notes) like :search '\
-          'OR lower(donor_accounts.account_number) like :search '\
-          'OR lower(phone_numbers.number) like :search' + person_search,
-        search: "%#{filters[:wildcard_search].downcase}%", first_name: first_name, last_name: last_name
+        'lower(email_addresses.email) like :general_search '\
+          'OR lower(contacts.name) like :name_search '\
+          'OR lower(donor_accounts.account_number) like :general_search '\
+          'OR lower(phone_numbers.number) like :general_search' + person_search,
+        name_search: "#{search_term}%", general_search: "%#{search_term}%", first_name: first_name, last_name: last_name
       )
                          .includes(people: :email_addresses)
                          .references('email_addresses')

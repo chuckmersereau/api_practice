@@ -29,9 +29,8 @@ RSpec.describe Contact::Filter::WildcardSearch do
 
     context 'filter with wildcard search' do
       it 'returns only tasks that are within the updated_at range' do
-        expect(described_class.query(contacts, { wildcard_search: 'name' }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { wildcard_search: 'A name' }, nil).to_a).to match_array [contact_one]
         expect(described_class.query(contacts, { wildcard_search: "#{person.last_name}, #{person.first_name}" }, nil).to_a).to match_array [contact_three]
-        expect(described_class.query(contacts, { wildcard_search: 'notes' }, nil).to_a).to match_array [contact_one, contact_two]
         expect(described_class.query(contacts, { wildcard_search: '122' }, nil).to_a).to match_array [contact_three]
         expect(described_class.query(contacts, { wildcard_search: 'email' }, nil).to_a).to match_array [contact_three]
       end
