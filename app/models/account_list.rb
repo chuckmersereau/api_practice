@@ -99,9 +99,12 @@ class AccountList < ApplicationRecord
   end
 
   def salary_currency
-    return @salary_currency if @salary_currency
-    @salary_currency = settings[:salary_currency]
-    @salary_currency = Organization.find(salary_organization_id).default_currency_code if @salary_currency.blank?
+    return @salary_currency unless @salary_currency.blank?
+
+    @salary_currency ||= settings[:salary_currency] if settings[:salary_currency].present?
+    @salary_currency ||= Organization.find(salary_organization_id).default_currency_code if salary_organization_id
+    @salary_currency = 'USD' if @salary_currency.blank?
+
     @salary_currency
   end
 
@@ -118,10 +121,12 @@ class AccountList < ApplicationRecord
   end
 
   def default_currency
-    return @default_currency if @default_currency
-    @default_currency = settings[:currency] if settings[:currency].present?
+    return @default_currency unless @default_currency.blank?
+
+    @default_currency ||= settings[:currency] if settings[:currency].present?
     @default_currency ||= designation_profiles.try(:first).try(:organization).try(:default_currency_code)
     @default_currency = 'USD' if @default_currency.blank?
+
     @default_currency
   end
 
