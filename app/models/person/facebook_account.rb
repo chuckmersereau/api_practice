@@ -14,6 +14,7 @@ class Person::FacebookAccount < ApplicationRecord
   PERMITTED_ATTRIBUTES = [:created_at,
                           :first_name,
                           :last_name,
+                          :overwrite,
                           :remote_id,
                           :updated_at,
                           :updated_in_db_at,

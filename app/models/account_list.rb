@@ -80,6 +80,7 @@ class AccountList < ApplicationRecord
     :home_country,
     :monthly_goal,
     :name,
+    :overwrite,
     :settings,
     :tester,
     :updated_at,

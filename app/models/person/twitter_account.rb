@@ -3,6 +3,7 @@ class Person::TwitterAccount < ApplicationRecord
   after_save :ensure_only_one_primary
 
   PERMITTED_ATTRIBUTES = [:created_at,
+                          :overwrite,
                           :primary,
                           :remote_id,
                           :screen_name,

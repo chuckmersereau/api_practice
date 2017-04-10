@@ -30,6 +30,7 @@ class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
                           :auto_log_campaigns,
                           :created_at,
                           :grouping_id,
+                          :overwrite,
                           :primary_list_id,
                           :sync_all_active_contacts,
                           :updated_at,

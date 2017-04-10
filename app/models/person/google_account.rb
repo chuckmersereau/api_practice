@@ -8,6 +8,7 @@ class Person::GoogleAccount < ApplicationRecord
 
   PERMITTED_ATTRIBUTES = [:created_at,
                           :email,
+                          :overwrite,
                           :person_id,
                           :primary,
                           :remote_id,

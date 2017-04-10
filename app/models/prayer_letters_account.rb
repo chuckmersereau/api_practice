@@ -15,6 +15,7 @@ class PrayerLettersAccount < ApplicationRecord
 
   PERMITTED_ATTRIBUTES = [:created_at,
                           :oauth2_token,
+                          :overwrite,
                           :updated_at,
                           :updated_in_db_at,
                           :uuid,

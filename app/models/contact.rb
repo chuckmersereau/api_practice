@@ -84,6 +84,7 @@ class Contact < ApplicationRecord
     :no_appeals,
     :not_duplicated_with,
     :notes,
+    :overwrite,
     :pledge_amount,
     :pledge_currency,
     :pledge_frequency,

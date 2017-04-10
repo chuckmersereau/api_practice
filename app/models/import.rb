@@ -24,7 +24,7 @@ class Import < ApplicationRecord
                           :groups,
                           :import_by_group,
                           :in_preview,
-                          :override,
+                          :overwrite,
                           :source,
                           :source_account_id,
                           :tag_list,

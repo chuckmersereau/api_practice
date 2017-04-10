@@ -30,6 +30,7 @@ class Task < Activity
     :notification_time_before,
     :notification_time_unit,
     :notification_type,
+    :overwrite,
     :result,
     :starred,
     :start_at,

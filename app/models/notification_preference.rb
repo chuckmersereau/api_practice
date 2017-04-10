@@ -18,6 +18,7 @@ class NotificationPreference < ApplicationRecord
     :created_at,
     :id,
     :notification_type_id,
+    :overwrite,
     :updated_at,
     :updated_in_db_at,
     :uuid

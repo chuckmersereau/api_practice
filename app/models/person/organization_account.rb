@@ -20,6 +20,7 @@ class Person::OrganizationAccount < ApplicationRecord
 
   PERMITTED_ATTRIBUTES = [:created_at,
                           :organization_id,
+                          :overwrite,
                           :password,
                           :person_id,
                           :updated_at,

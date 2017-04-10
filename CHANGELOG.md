@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 7 April 2017
+- Added a way to overwrite data on PATCH requests without providing an `updated_in_db_at` value.
+
 ## 6 April 2017
 - Contacts Wildcard Search is now returning contacts where the value is in notes.
 - Addresses are now returning the source_donor_account relationship.
