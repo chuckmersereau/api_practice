@@ -7,7 +7,7 @@ module EncodingUtil
     return '' if contents == ''
 
     encoding_info = CharlockHolmes::EncodingDetector.detect(contents)
-    return nil unless encoding_info
+    return nil unless encoding_info && encoding_info[:encoding]
     encoding = encoding_info[:encoding]
     contents = CharlockHolmes::Converter.convert(contents, encoding, 'UTF-8')
 
