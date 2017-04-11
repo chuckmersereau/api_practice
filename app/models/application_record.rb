@@ -5,10 +5,14 @@ class ApplicationRecord < ActiveRecord::Base
   CONFLICT_ERROR_MESSAGE = 'is not equal to the current value in the database'.freeze
 
   attr_reader :updated_in_db_at
+  attr_accessor :overwrite
 
   before_save :generate_uuid, on: :create
-  validate :presence_of_updated_in_db_at, on: :update_from_controller
-  validate :value_of_updated_in_db_at, on: :update_from_controller
+
+  validate :presence_of_updated_in_db_at,
+           :value_of_updated_in_db_at,
+           on: :update_from_controller,
+           unless: :should_overwrite?
 
   def updated_in_db_at=(value)
     @updated_in_db_at = value&.is_a?(Time) ? value : Time.parse(value.to_s)
@@ -41,6 +45,10 @@ class ApplicationRecord < ActiveRecord::Base
 
   def full_conflict_error_message
     "#{CONFLICT_ERROR_MESSAGE} (#{updated_at_was&.to_time&.utc&.iso8601})"
+  end
+
+  def should_overwrite?
+    overwrite.to_s.to_sym == :true
   end
 
   def self.record_from_uuid_not_found_error(uuid)

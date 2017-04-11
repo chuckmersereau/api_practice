@@ -6,7 +6,7 @@ class Person::FacebookAccount < ApplicationRecord
   include Redis::Objects
   include Async
   include Sidekiq::Worker
-  sidekiq_options queue: :facebook, unique: :until_executed
+  sidekiq_options queue: :api_person_facebook_account, unique: :until_executed
 
   # set :friends
   # attr_accessible :remote_id, :token, :token_expires_at, :first_name, :last_name, :valid_token, :authenticated, :url
@@ -14,6 +14,7 @@ class Person::FacebookAccount < ApplicationRecord
   PERMITTED_ATTRIBUTES = [:created_at,
                           :first_name,
                           :last_name,
+                          :overwrite,
                           :remote_id,
                           :updated_at,
                           :updated_in_db_at,

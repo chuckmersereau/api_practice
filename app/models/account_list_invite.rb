@@ -11,6 +11,7 @@ class AccountListInvite < ApplicationRecord
   validates :recipient_email, presence: true
 
   PERMITTED_ATTRIBUTES = [:created_at,
+                          :overwrite,
                           :recipient_email,
                           :updated_at,
                           :updated_in_db_at,

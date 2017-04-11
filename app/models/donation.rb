@@ -30,6 +30,7 @@ class Donation < ApplicationRecord
                           :donor_account_id,
                           :memo,
                           :motivation,
+                          :overwrite,
                           :payment_method,
                           :payment_type,
                           :remote_id,

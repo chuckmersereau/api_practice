@@ -27,6 +27,15 @@ class DocumentationHelper
     }
   end
 
+  def additional_update_parameter_attributes
+    @additional_update_parameter_attributes ||= {
+      'attributes.overwrite': {
+        description: "Only used for updating a record where you want to ignore the server's `updated_in_db_at` value and _force overwrite_ the values for the record. Must be `true` to work.",
+        type: 'boolean'
+      }
+    }
+  end
+
   def data_for(type:, action:)
     data.dig(type, action) || parse_raw_data_for(type, action)
   end
@@ -124,14 +133,14 @@ class DocumentationHelper
       attributes[:'attributes.updated_in_db_at'].delete(:required)
       attributes
     when :update
-      attributes
+      attributes.merge(additional_update_parameter_attributes)
     else
       {}
     end
   end
 
   def additional_response_field_attributes_for(action)
-    additional_attributes.deep_dup
+    attributes = additional_attributes.deep_dup
 
     case action
     when :index
@@ -141,7 +150,7 @@ class DocumentationHelper
     when :bulk_delete
       {}
     else
-      additional_attributes
+      attributes
     end
   end
 

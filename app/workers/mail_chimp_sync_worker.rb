@@ -1,6 +1,6 @@
 class MailChimpSyncWorker
   include Sidekiq::Worker
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_mail_chimp_sync_worker, unique: :until_executed
 
   CURRENT_USER_RANGE = 180.days.ago
 

@@ -379,7 +379,7 @@ describe AccountList do
         [account_list]
       end
       expect(AsyncScheduler).to receive(:schedule_over_24h)
-        .with([account_list], :import_data)
+        .with([account_list], :import_data, :api_account_list_import_data)
 
       AccountList.update_linked_org_accounts
     end

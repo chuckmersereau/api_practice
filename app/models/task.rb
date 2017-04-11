@@ -3,7 +3,7 @@ require 'async'
 class Task < Activity
   include Async
   include Sidekiq::Worker
-  sidekiq_options backtrace: true, unique: :until_executed
+  sidekiq_options queue: :api_task, backtrace: true, unique: :until_executed
 
   before_validation :update_completed_at
   after_save :update_contact_uncompleted_tasks_count, :sync_to_google_calendar
@@ -30,6 +30,7 @@ class Task < Activity
     :notification_time_before,
     :notification_time_unit,
     :notification_type,
+    :overwrite,
     :result,
     :starred,
     :start_at,

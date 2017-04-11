@@ -33,7 +33,7 @@ resource 'Contacts' do
         :tnt_id,
         :total_donations,
         :uncompleted_tasks_count
-      ).merge(updated_in_db_at: contact.updated_at)
+      ).merge(overwrite: true)
   end
 
   let(:form_data) do

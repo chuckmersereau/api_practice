@@ -13,7 +13,7 @@ describe AsyncScheduler, sidekiq: :testing_disabled do
 
       account_lists_relation = AccountList.where(id: [al1.id, al2.id, al3.id])
       expect do
-        AsyncScheduler.schedule_over_24h(account_lists_relation, :import_data)
+        AsyncScheduler.schedule_over_24h(account_lists_relation, :import_data, :api_import)
       end.to change(Sidekiq::ScheduledSet.new, :size).by(3)
 
       job1, job2, job3 = Sidekiq::ScheduledSet.new.to_a
@@ -21,7 +21,7 @@ describe AsyncScheduler, sidekiq: :testing_disabled do
       expect(job1.item['class']).to eq 'AccountList'
       expect(job1.item['args']).to eq [al1.id, 'import_data']
       expect(job1.score).to be_within(1.0).of Time.now.to_i
-      expect(job1.queue).to eq 'import'
+      expect(job1.queue).to eq 'api_import'
 
       expect(job2.item['class']).to eq 'AccountList'
       expect(job2.item['args']).to eq [al2.id, 'import_data']
@@ -33,7 +33,7 @@ describe AsyncScheduler, sidekiq: :testing_disabled do
     end
 
     it 'does nothing for an empty relation' do
-      AsyncScheduler.schedule_over_24h(AccountList.where('1 = 0'), :import_data)
+      AsyncScheduler.schedule_over_24h(AccountList.where('1 = 0'), :import_data, :api_import)
     end
 
     it 'schedules jobs on the specified queue' do
@@ -43,10 +43,10 @@ describe AsyncScheduler, sidekiq: :testing_disabled do
       account_list = create(:account_list)
 
       AsyncScheduler.schedule_over_24h(AccountList.where(id: account_list.id),
-                                       :import_data, :default)
+                                       :import_data, :my_special_queue)
 
       job = Sidekiq::ScheduledSet.new.to_a.first
-      expect(job.queue).to eq 'default'
+      expect(job.queue).to eq 'my_special_queue'
     end
   end
 end

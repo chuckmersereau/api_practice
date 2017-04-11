@@ -6,6 +6,6 @@ class Task::Filter::Base < ApplicationFilter
   end
 
   def contact_scope(tasks)
-    Contact.joins(:activity_contacts).where(activity_contacts: { activity_id: tasks })
+    Contact.joins(:activity_contacts).where(activity_contacts: { activity_id: tasks.ids })
   end
 end
