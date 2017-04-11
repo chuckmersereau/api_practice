@@ -108,6 +108,8 @@ RSpec.describe Api::V2::User::OptionsController, type: :controller do
       expect(response.status).to eq(409), invalid_status_detail
       expect(resource.reload.send(update_reference_key)).to_not eq(update_reference_value)
       expect(response_errors).to be_present
+      expect(response_errors.first).to have_key('meta')
+      expect(response_errors.first['meta']).to have_key('updated_in_db_at')
     end
 
     it 'does not update resource for users that do not own the resource' do

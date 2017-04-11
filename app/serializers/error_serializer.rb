@@ -23,6 +23,12 @@ class ErrorSerializer
 
   private
 
+  def add_conflict_info_to_metadata(metadata, key, _error)
+    if key == :updated_in_db_at && resource.present?
+      metadata[:updated_in_db_at] = resource.updated_at
+    end
+  end
+
   def after_initialize
     unless status.present?
       raise ArgumentError,
@@ -32,6 +38,10 @@ class ErrorSerializer
     unless resource.present? || title.present? || hash.present?
       raise ArgumentError, error_data_validation_message
     end
+  end
+
+  def error_data_validation_message
+    'must provide at least an error title, resource instance, or hash of errors'
   end
 
   def errors_data
@@ -51,7 +61,7 @@ class ErrorSerializer
         source: { pointer: "/data/attributes/#{key}" },
         title: error,
         detail: full_message
-      }
+      }.merge(generate_metadata(key, error))
     end
   end
 
@@ -86,7 +96,15 @@ class ErrorSerializer
     ]
   end
 
-  def error_data_validation_message
-    'must provide at least an error title, resource instance, or hash of errors'
+  def generate_metadata(key, error)
+    metadata = {}
+
+    add_conflict_info_to_metadata(metadata, key, error)
+
+    if metadata.any?
+      { meta: metadata }
+    else
+      {}
+    end
   end
 end

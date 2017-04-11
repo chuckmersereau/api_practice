@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 11 April 2017
+- Added updated_in_db_at to all 409 Conflict error payloads
+
 ## 7 April 2017
 - Added a way to overwrite data on PATCH requests without providing an `updated_in_db_at` value.
 
