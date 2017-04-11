@@ -2,11 +2,12 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.1
--- Dumped by pg_dump version 9.5.1
+-- Dumped from database version 9.6.2
+-- Dumped by pg_dump version 9.6.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
+SET idle_in_transaction_session_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SET check_function_bodies = false;
@@ -2588,6 +2589,7 @@ CREATE SEQUENCE pictures_id_seq
 
 ALTER SEQUENCE pictures_id_seq OWNED BY pictures.id;
 
+
 --
 -- Name: pledges; Type: TABLE; Schema: public; Owner: -
 --
@@ -2615,6 +2617,14 @@ CREATE SEQUENCE pledges_id_seq
     NO MINVALUE
     NO MAXVALUE
     CACHE 1;
+
+
+--
+-- Name: pledges_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE pledges_id_seq OWNED BY pledges.id;
+
 
 --
 -- Name: pls_accounts; Type: TABLE; Schema: public; Owner: -
@@ -2832,516 +2842,518 @@ ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: account_list_entries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_entries ALTER COLUMN id SET DEFAULT nextval('account_list_entries_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: account_list_invites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_invites ALTER COLUMN id SET DEFAULT nextval('account_list_invites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: account_list_users id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_users ALTER COLUMN id SET DEFAULT nextval('account_list_users_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: account_lists id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_lists ALTER COLUMN id SET DEFAULT nextval('account_lists_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: activities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activities ALTER COLUMN id SET DEFAULT nextval('activities_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: activity_comments id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activity_comments ALTER COLUMN id SET DEFAULT nextval('activity_comments_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: activity_contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activity_contacts ALTER COLUMN id SET DEFAULT nextval('activity_contacts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: addresses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY addresses ALTER COLUMN id SET DEFAULT nextval('addresses_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: admin_impersonation_logs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admin_impersonation_logs ALTER COLUMN id SET DEFAULT nextval('admin_impersonation_logs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: admin_reset_logs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admin_reset_logs ALTER COLUMN id SET DEFAULT nextval('admin_reset_logs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: appeal_contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeal_contacts ALTER COLUMN id SET DEFAULT nextval('appeal_contacts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: appeal_excluded_appeal_contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeal_excluded_appeal_contacts ALTER COLUMN id SET DEFAULT nextval('appeal_excluded_appeal_contacts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: appeals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeals ALTER COLUMN id SET DEFAULT nextval('appeals_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: companies id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY companies ALTER COLUMN id SET DEFAULT nextval('companies_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: company_partnerships id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_partnerships ALTER COLUMN id SET DEFAULT nextval('company_partnerships_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: company_positions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_positions ALTER COLUMN id SET DEFAULT nextval('company_positions_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: contact_donor_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_donor_accounts ALTER COLUMN id SET DEFAULT nextval('contact_donor_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: contact_notes_logs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_notes_logs ALTER COLUMN id SET DEFAULT nextval('contact_notes_logs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: contact_people id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_people ALTER COLUMN id SET DEFAULT nextval('contact_people_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: contact_referrals id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_referrals ALTER COLUMN id SET DEFAULT nextval('contact_referrals_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts ALTER COLUMN id SET DEFAULT nextval('contacts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: currency_aliases id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY currency_aliases ALTER COLUMN id SET DEFAULT nextval('currency_aliases_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: currency_rates id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY currency_rates ALTER COLUMN id SET DEFAULT nextval('currency_rates_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: designation_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_accounts ALTER COLUMN id SET DEFAULT nextval('designation_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: designation_profile_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_profile_accounts ALTER COLUMN id SET DEFAULT nextval('designation_profile_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: designation_profiles id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_profiles ALTER COLUMN id SET DEFAULT nextval('designation_profiles_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: donations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donations ALTER COLUMN id SET DEFAULT nextval('donations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: donor_account_people id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donor_account_people ALTER COLUMN id SET DEFAULT nextval('donor_account_people_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: donor_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donor_accounts ALTER COLUMN id SET DEFAULT nextval('donor_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: email_addresses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_addresses ALTER COLUMN id SET DEFAULT nextval('email_addresses_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: family_relationships id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY family_relationships ALTER COLUMN id SET DEFAULT nextval('family_relationships_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: google_contacts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_contacts ALTER COLUMN id SET DEFAULT nextval('google_contacts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: google_email_activities id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_email_activities ALTER COLUMN id SET DEFAULT nextval('google_email_activities_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: google_emails id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_emails ALTER COLUMN id SET DEFAULT nextval('google_emails_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: google_events id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_events ALTER COLUMN id SET DEFAULT nextval('google_events_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: google_integrations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_integrations ALTER COLUMN id SET DEFAULT nextval('google_integrations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: help_requests id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY help_requests ALTER COLUMN id SET DEFAULT nextval('help_requests_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: imports id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY imports ALTER COLUMN id SET DEFAULT nextval('imports_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: mail_chimp_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_accounts ALTER COLUMN id SET DEFAULT nextval('mail_chimp_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: mail_chimp_appeal_lists id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_appeal_lists ALTER COLUMN id SET DEFAULT nextval('mail_chimp_appeal_lists_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: mail_chimp_members id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_members ALTER COLUMN id SET DEFAULT nextval('mail_chimp_members_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: master_addresses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_addresses ALTER COLUMN id SET DEFAULT nextval('master_addresses_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: master_companies id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_companies ALTER COLUMN id SET DEFAULT nextval('master_companies_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: master_people id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_people ALTER COLUMN id SET DEFAULT nextval('master_people_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: master_person_donor_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_person_donor_accounts ALTER COLUMN id SET DEFAULT nextval('master_person_donor_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: master_person_sources id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_person_sources ALTER COLUMN id SET DEFAULT nextval('master_person_sources_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: messages id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY messages ALTER COLUMN id SET DEFAULT nextval('messages_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: name_male_ratios id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY name_male_ratios ALTER COLUMN id SET DEFAULT nextval('name_male_ratios_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: nicknames id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY nicknames ALTER COLUMN id SET DEFAULT nextval('nicknames_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: notification_preferences id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notification_preferences ALTER COLUMN id SET DEFAULT nextval('notification_preferences_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: notification_types id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notification_types ALTER COLUMN id SET DEFAULT nextval('notification_types_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: notifications id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications ALTER COLUMN id SET DEFAULT nextval('notifications_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: organizations id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY organizations ALTER COLUMN id SET DEFAULT nextval('organizations_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: partner_status_logs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY partner_status_logs ALTER COLUMN id SET DEFAULT nextval('partner_status_logs_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: people id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY people ALTER COLUMN id SET DEFAULT nextval('people_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_facebook_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_facebook_accounts ALTER COLUMN id SET DEFAULT nextval('person_facebook_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_google_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_google_accounts ALTER COLUMN id SET DEFAULT nextval('person_google_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_key_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_key_accounts ALTER COLUMN id SET DEFAULT nextval('person_key_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_linkedin_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_linkedin_accounts ALTER COLUMN id SET DEFAULT nextval('person_linkedin_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_options id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_options ALTER COLUMN id SET DEFAULT nextval('person_options_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_organization_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_organization_accounts ALTER COLUMN id SET DEFAULT nextval('person_organization_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_relay_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_relay_accounts ALTER COLUMN id SET DEFAULT nextval('person_relay_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_twitter_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_twitter_accounts ALTER COLUMN id SET DEFAULT nextval('person_twitter_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: person_websites id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_websites ALTER COLUMN id SET DEFAULT nextval('person_websites_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: phone_numbers id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY phone_numbers ALTER COLUMN id SET DEFAULT nextval('phone_numbers_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: pictures id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pictures ALTER COLUMN id SET DEFAULT nextval('pictures_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pls_accounts ALTER COLUMN id SET DEFAULT nextval('pls_accounts_id_seq'::regclass);
-
---
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: pledges id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pledges ALTER COLUMN id SET DEFAULT nextval('pledges_id_seq'::regclass);
 
+
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: pls_accounts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pls_accounts ALTER COLUMN id SET DEFAULT nextval('pls_accounts_id_seq'::regclass);
+
+
+--
+-- Name: prayer_letters_accounts id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY prayer_letters_accounts ALTER COLUMN id SET DEFAULT nextval('prayer_letters_accounts_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: recurring_recommendation_results id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY recurring_recommendation_results ALTER COLUMN id SET DEFAULT nextval('recurring_recommendation_results_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: taggings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY taggings ALTER COLUMN id SET DEFAULT nextval('taggings_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: tags id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags ALTER COLUMN id SET DEFAULT nextval('tags_id_seq'::regclass);
 
 
 --
--- Name: id; Type: DEFAULT; Schema: public; Owner: -
+-- Name: versions id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq'::regclass);
 
 
 --
--- Name: account_list_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: account_list_entries account_list_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_entries
@@ -3349,7 +3361,7 @@ ALTER TABLE ONLY account_list_entries
 
 
 --
--- Name: account_list_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: account_list_invites account_list_invites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_invites
@@ -3357,7 +3369,7 @@ ALTER TABLE ONLY account_list_invites
 
 
 --
--- Name: account_list_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: account_list_users account_list_users_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_list_users
@@ -3365,7 +3377,7 @@ ALTER TABLE ONLY account_list_users
 
 
 --
--- Name: account_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: account_lists account_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY account_lists
@@ -3373,7 +3385,7 @@ ALTER TABLE ONLY account_lists
 
 
 --
--- Name: activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: activities activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activities
@@ -3381,7 +3393,7 @@ ALTER TABLE ONLY activities
 
 
 --
--- Name: activity_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: activity_comments activity_comments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activity_comments
@@ -3389,7 +3401,7 @@ ALTER TABLE ONLY activity_comments
 
 
 --
--- Name: activity_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: activity_contacts activity_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY activity_contacts
@@ -3397,7 +3409,7 @@ ALTER TABLE ONLY activity_contacts
 
 
 --
--- Name: addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: addresses addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY addresses
@@ -3405,7 +3417,7 @@ ALTER TABLE ONLY addresses
 
 
 --
--- Name: admin_impersonation_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: admin_impersonation_logs admin_impersonation_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admin_impersonation_logs
@@ -3413,7 +3425,7 @@ ALTER TABLE ONLY admin_impersonation_logs
 
 
 --
--- Name: admin_reset_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: admin_reset_logs admin_reset_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY admin_reset_logs
@@ -3421,7 +3433,7 @@ ALTER TABLE ONLY admin_reset_logs
 
 
 --
--- Name: appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: appeal_contacts appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeal_contacts
@@ -3429,7 +3441,7 @@ ALTER TABLE ONLY appeal_contacts
 
 
 --
--- Name: appeal_excluded_appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: appeal_excluded_appeal_contacts appeal_excluded_appeal_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeal_excluded_appeal_contacts
@@ -3437,7 +3449,7 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts
 
 
 --
--- Name: appeals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: appeals appeals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeals
@@ -3445,7 +3457,7 @@ ALTER TABLE ONLY appeals
 
 
 --
--- Name: companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: companies companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY companies
@@ -3453,7 +3465,7 @@ ALTER TABLE ONLY companies
 
 
 --
--- Name: company_partnerships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: company_partnerships company_partnerships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_partnerships
@@ -3461,7 +3473,7 @@ ALTER TABLE ONLY company_partnerships
 
 
 --
--- Name: company_positions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: company_positions company_positions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY company_positions
@@ -3469,7 +3481,7 @@ ALTER TABLE ONLY company_positions
 
 
 --
--- Name: contact_donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: contact_donor_accounts contact_donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_donor_accounts
@@ -3477,7 +3489,7 @@ ALTER TABLE ONLY contact_donor_accounts
 
 
 --
--- Name: contact_notes_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: contact_notes_logs contact_notes_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_notes_logs
@@ -3485,7 +3497,7 @@ ALTER TABLE ONLY contact_notes_logs
 
 
 --
--- Name: contact_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: contact_people contact_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_people
@@ -3493,7 +3505,7 @@ ALTER TABLE ONLY contact_people
 
 
 --
--- Name: contact_referrals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: contact_referrals contact_referrals_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contact_referrals
@@ -3501,7 +3513,7 @@ ALTER TABLE ONLY contact_referrals
 
 
 --
--- Name: contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: contacts contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY contacts
@@ -3509,7 +3521,7 @@ ALTER TABLE ONLY contacts
 
 
 --
--- Name: currency_aliases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: currency_aliases currency_aliases_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY currency_aliases
@@ -3517,7 +3529,7 @@ ALTER TABLE ONLY currency_aliases
 
 
 --
--- Name: currency_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: currency_rates currency_rates_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY currency_rates
@@ -3525,7 +3537,7 @@ ALTER TABLE ONLY currency_rates
 
 
 --
--- Name: designation_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: designation_accounts designation_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_accounts
@@ -3533,7 +3545,7 @@ ALTER TABLE ONLY designation_accounts
 
 
 --
--- Name: designation_profile_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: designation_profile_accounts designation_profile_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_profile_accounts
@@ -3541,7 +3553,7 @@ ALTER TABLE ONLY designation_profile_accounts
 
 
 --
--- Name: designation_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: designation_profiles designation_profiles_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY designation_profiles
@@ -3549,7 +3561,7 @@ ALTER TABLE ONLY designation_profiles
 
 
 --
--- Name: donations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: donations donations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donations
@@ -3557,7 +3569,7 @@ ALTER TABLE ONLY donations
 
 
 --
--- Name: donor_account_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: donor_account_people donor_account_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donor_account_people
@@ -3565,7 +3577,7 @@ ALTER TABLE ONLY donor_account_people
 
 
 --
--- Name: donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: donor_accounts donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY donor_accounts
@@ -3573,7 +3585,7 @@ ALTER TABLE ONLY donor_accounts
 
 
 --
--- Name: email_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: email_addresses email_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY email_addresses
@@ -3581,7 +3593,7 @@ ALTER TABLE ONLY email_addresses
 
 
 --
--- Name: family_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: family_relationships family_relationships_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY family_relationships
@@ -3589,7 +3601,7 @@ ALTER TABLE ONLY family_relationships
 
 
 --
--- Name: google_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: google_contacts google_contacts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_contacts
@@ -3597,7 +3609,7 @@ ALTER TABLE ONLY google_contacts
 
 
 --
--- Name: google_email_activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: google_email_activities google_email_activities_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_email_activities
@@ -3605,7 +3617,7 @@ ALTER TABLE ONLY google_email_activities
 
 
 --
--- Name: google_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: google_emails google_emails_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_emails
@@ -3613,7 +3625,7 @@ ALTER TABLE ONLY google_emails
 
 
 --
--- Name: google_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: google_events google_events_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_events
@@ -3621,7 +3633,7 @@ ALTER TABLE ONLY google_events
 
 
 --
--- Name: google_integrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: google_integrations google_integrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY google_integrations
@@ -3629,7 +3641,7 @@ ALTER TABLE ONLY google_integrations
 
 
 --
--- Name: help_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: help_requests help_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY help_requests
@@ -3637,7 +3649,7 @@ ALTER TABLE ONLY help_requests
 
 
 --
--- Name: imports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: imports imports_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY imports
@@ -3645,7 +3657,7 @@ ALTER TABLE ONLY imports
 
 
 --
--- Name: mail_chimp_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: mail_chimp_accounts mail_chimp_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_accounts
@@ -3653,7 +3665,7 @@ ALTER TABLE ONLY mail_chimp_accounts
 
 
 --
--- Name: mail_chimp_appeal_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: mail_chimp_appeal_lists mail_chimp_appeal_lists_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_appeal_lists
@@ -3661,7 +3673,7 @@ ALTER TABLE ONLY mail_chimp_appeal_lists
 
 
 --
--- Name: mail_chimp_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: mail_chimp_members mail_chimp_members_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY mail_chimp_members
@@ -3669,7 +3681,7 @@ ALTER TABLE ONLY mail_chimp_members
 
 
 --
--- Name: master_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: master_addresses master_addresses_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_addresses
@@ -3677,7 +3689,7 @@ ALTER TABLE ONLY master_addresses
 
 
 --
--- Name: master_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: master_companies master_companies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_companies
@@ -3685,7 +3697,7 @@ ALTER TABLE ONLY master_companies
 
 
 --
--- Name: master_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: master_people master_people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_people
@@ -3693,7 +3705,7 @@ ALTER TABLE ONLY master_people
 
 
 --
--- Name: master_person_donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: master_person_donor_accounts master_person_donor_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_person_donor_accounts
@@ -3701,7 +3713,7 @@ ALTER TABLE ONLY master_person_donor_accounts
 
 
 --
--- Name: master_person_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: master_person_sources master_person_sources_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_person_sources
@@ -3709,7 +3721,7 @@ ALTER TABLE ONLY master_person_sources
 
 
 --
--- Name: messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: messages messages_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY messages
@@ -3717,7 +3729,7 @@ ALTER TABLE ONLY messages
 
 
 --
--- Name: name_male_ratios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: name_male_ratios name_male_ratios_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY name_male_ratios
@@ -3725,7 +3737,7 @@ ALTER TABLE ONLY name_male_ratios
 
 
 --
--- Name: nicknames_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: nicknames nicknames_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY nicknames
@@ -3733,7 +3745,7 @@ ALTER TABLE ONLY nicknames
 
 
 --
--- Name: notification_preferences_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notification_preferences notification_preferences_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notification_preferences
@@ -3741,7 +3753,7 @@ ALTER TABLE ONLY notification_preferences
 
 
 --
--- Name: notification_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notification_types notification_types_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notification_types
@@ -3749,7 +3761,7 @@ ALTER TABLE ONLY notification_types
 
 
 --
--- Name: notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: notifications notifications_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY notifications
@@ -3757,7 +3769,7 @@ ALTER TABLE ONLY notifications
 
 
 --
--- Name: organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: organizations organizations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY organizations
@@ -3765,7 +3777,7 @@ ALTER TABLE ONLY organizations
 
 
 --
--- Name: partner_status_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: partner_status_logs partner_status_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY partner_status_logs
@@ -3773,7 +3785,7 @@ ALTER TABLE ONLY partner_status_logs
 
 
 --
--- Name: people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: people people_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY people
@@ -3781,7 +3793,7 @@ ALTER TABLE ONLY people
 
 
 --
--- Name: person_facebook_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_facebook_accounts person_facebook_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_facebook_accounts
@@ -3789,7 +3801,7 @@ ALTER TABLE ONLY person_facebook_accounts
 
 
 --
--- Name: person_google_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_google_accounts person_google_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_google_accounts
@@ -3797,7 +3809,7 @@ ALTER TABLE ONLY person_google_accounts
 
 
 --
--- Name: person_key_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_key_accounts person_key_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_key_accounts
@@ -3805,7 +3817,7 @@ ALTER TABLE ONLY person_key_accounts
 
 
 --
--- Name: person_linkedin_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_linkedin_accounts person_linkedin_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_linkedin_accounts
@@ -3813,7 +3825,7 @@ ALTER TABLE ONLY person_linkedin_accounts
 
 
 --
--- Name: person_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_options person_options_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_options
@@ -3821,7 +3833,7 @@ ALTER TABLE ONLY person_options
 
 
 --
--- Name: person_organization_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_organization_accounts person_organization_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_organization_accounts
@@ -3829,7 +3841,7 @@ ALTER TABLE ONLY person_organization_accounts
 
 
 --
--- Name: person_relay_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_relay_accounts person_relay_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_relay_accounts
@@ -3837,7 +3849,7 @@ ALTER TABLE ONLY person_relay_accounts
 
 
 --
--- Name: person_twitter_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_twitter_accounts person_twitter_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_twitter_accounts
@@ -3845,7 +3857,7 @@ ALTER TABLE ONLY person_twitter_accounts
 
 
 --
--- Name: person_websites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: person_websites person_websites_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY person_websites
@@ -3853,7 +3865,7 @@ ALTER TABLE ONLY person_websites
 
 
 --
--- Name: phone_numbers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: phone_numbers phone_numbers_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY phone_numbers
@@ -3861,7 +3873,7 @@ ALTER TABLE ONLY phone_numbers
 
 
 --
--- Name: pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pictures pictures_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pictures
@@ -3869,7 +3881,15 @@ ALTER TABLE ONLY pictures
 
 
 --
--- Name: pls_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: pledges pledges_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY pledges
+    ADD CONSTRAINT pledges_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: pls_accounts pls_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY pls_accounts
@@ -3877,7 +3897,7 @@ ALTER TABLE ONLY pls_accounts
 
 
 --
--- Name: prayer_letters_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: prayer_letters_accounts prayer_letters_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY prayer_letters_accounts
@@ -3885,14 +3905,7 @@ ALTER TABLE ONLY prayer_letters_accounts
 
 
 --
--- Name: pledges_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY pledges
-    ADD CONSTRAINT pledges_pkey PRIMARY KEY (id);
-
---
--- Name: recurring_recommendation_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: recurring_recommendation_results recurring_recommendation_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY recurring_recommendation_results
@@ -3900,7 +3913,7 @@ ALTER TABLE ONLY recurring_recommendation_results
 
 
 --
--- Name: taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: taggings taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY taggings
@@ -3908,7 +3921,7 @@ ALTER TABLE ONLY taggings
 
 
 --
--- Name: tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: tags tags_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY tags
@@ -3916,7 +3929,7 @@ ALTER TABLE ONLY tags
 
 
 --
--- Name: versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: versions versions_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY versions
@@ -5093,6 +5106,20 @@ CREATE UNIQUE INDEX index_people_on_access_token ON people USING btree (access_t
 
 
 --
+-- Name: index_people_on_anniversary_day; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_people_on_anniversary_day ON people USING btree (anniversary_day);
+
+
+--
+-- Name: index_people_on_anniversary_month; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_people_on_anniversary_month ON people USING btree (anniversary_month);
+
+
+--
 -- Name: index_people_on_first_name; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5289,20 +5316,6 @@ CREATE UNIQUE INDEX index_person_websites_on_uuid ON person_websites USING btree
 
 
 --
--- Name: index_pledges_on_account_list_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pledges_on_account_list_id ON pledges USING btree (account_list_id);
-
-
---
--- Name: index_pledges_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_pledges_on_uuid ON pledges USING btree (uuid);
-
-
---
 -- Name: index_phone_numbers_on_person_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5342,6 +5355,20 @@ CREATE INDEX index_phone_numbers_on_valid_values ON phone_numbers USING btree (v
 --
 
 CREATE UNIQUE INDEX index_pictures_on_uuid ON pictures USING btree (uuid);
+
+
+--
+-- Name: index_pledges_on_account_list_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledges_on_account_list_id ON pledges USING btree (account_list_id);
+
+
+--
+-- Name: index_pledges_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_pledges_on_uuid ON pledges USING btree (uuid);
 
 
 --
@@ -5548,7 +5575,7 @@ CREATE UNIQUE INDEX user_id_and_organization_id ON person_organization_accounts 
 
 
 --
--- Name: appeal_excluded_appeal_contacts_appeal_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: appeal_excluded_appeal_contacts appeal_excluded_appeal_contacts_appeal_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeal_excluded_appeal_contacts
@@ -5556,7 +5583,7 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts
 
 
 --
--- Name: appeal_excluded_appeal_contacts_contact_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: appeal_excluded_appeal_contacts appeal_excluded_appeal_contacts_contact_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY appeal_excluded_appeal_contacts
@@ -5564,7 +5591,7 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts
 
 
 --
--- Name: master_person_sources_master_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: master_person_sources master_person_sources_master_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY master_person_sources
@@ -5572,7 +5599,7 @@ ALTER TABLE ONLY master_person_sources
 
 
 --
--- Name: people_master_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: people people_master_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY people
@@ -6209,15 +6236,9 @@ INSERT INTO schema_migrations (version) VALUES ('20170223165218');
 
 INSERT INTO schema_migrations (version) VALUES ('20170301173502');
 
+INSERT INTO schema_migrations (version) VALUES ('20170306203922');
+
 INSERT INTO schema_migrations (version) VALUES ('20170307220854');
-
-INSERT INTO schema_migrations (version) VALUES ('20170217220712');
-
-INSERT INTO schema_migrations (version) VALUES ('20170221212815');
-
-INSERT INTO schema_migrations (version) VALUES ('20170223165218');
-
-INSERT INTO schema_migrations (version) VALUES ('20170317205005');
 
 INSERT INTO schema_migrations (version) VALUES ('20170314185145');
 
@@ -6227,6 +6248,7 @@ INSERT INTO schema_migrations (version) VALUES ('20170316042808');
 
 INSERT INTO schema_migrations (version) VALUES ('20170317205005');
 
-INSERT INTO schema_migrations (version) VALUES ('20170306203922');
-
 INSERT INTO schema_migrations (version) VALUES ('20170322001657');
+
+INSERT INTO schema_migrations (version) VALUES ('20170407154800');
+
