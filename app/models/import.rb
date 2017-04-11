@@ -115,7 +115,7 @@ class Import < ApplicationRecord
   def read_file_contents
     file.cache_stored_file!
     contents = File.open(file.file.file, &:read)
-    EncodingUtil.normalized_utf8(contents)
+    EncodingUtil.normalized_utf8(contents) || contents
   end
 
   def import
