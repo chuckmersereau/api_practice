@@ -63,118 +63,97 @@ class Task < Activity
   # validates :activity_type, :presence => { :message => _( '/ Action is required') }
 
   CALL_RESULTS = ['Attempted - Left Message', 'Attempted', 'Completed', 'Received'].freeze
-  CALL_NEXT_ACTIONS = ['Call Again',
-                       'Email', 'Text', 'Message',
-                       'Talk to In Person',
-                       'Cultivate Relationship',
-                       'Appointment Scheduled',
-                       'Partner - Financial',
-                       'Partner - Special',
-                       'Partner - Pray',
-                       'Ask in Future',
-                       'Not Interested',
-                       'None',
-                       'Prayer Request',
-                       'Thank'].freeze
+  CALL_NEXT_ACTIONS = [
+    'Call',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Talk to In Person',
+    'Appointment',
+    'Prayer Request',
+    'Thank'
+  ].freeze
 
   APPOINTMENT_RESULTS = %w(Completed Attempted).freeze
-  APPOINTMENT_NEXT_ACTIONS = ['Call for Decision',
-                              'Call',
-                              'Email',
-                              'Text',
-                              'Message',
-                              'Talk to In Person',
-                              'Cultivate Relationship',
-                              'Partner - Financial',
-                              'Partner - Special',
-                              'Partner - Pray',
-                              'Ask in Future',
-                              'Not Interested',
-                              'Reschedule',
-                              'None',
-                              'Prayer Request',
-                              'Thank'].freeze
+  APPOINTMENT_NEXT_ACTIONS = [
+    'Call',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Talk to In Person',
+    'Appointment',
+    'Prayer Request',
+    'Thank'
+  ].freeze
 
   EMAIL_RESULTS = %w(Completed Received).freeze
-  EMAIL_NEXT_ACTIONS = ['Email Again',
-                        'Call', 'Text', 'Message',
-                        'Talk to In Person',
-                        'Cultivate Relationship',
-                        'Appointment Scheduled',
-                        'Partner - Financial',
-                        'Partner - Special',
-                        'Partner - Pray',
-                        'Ask in Future',
-                        'Not Interested',
-                        'None',
-                        'Prayer Request',
-                        'Thank'].freeze
+  EMAIL_NEXT_ACTIONS = [
+    'Call',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Talk to In Person',
+    'Appointment',
+    'Prayer Request',
+    'Thank'
+  ].freeze
 
   FACEBOOK_MESSAGE_RESULTS = %w(Completed Received).freeze
-  FACEBOOK_MESSAGE_NEXT_ACTIONS = ['Message Again',
-                                   'Call', 'Email',
-                                   'Text',
-                                   'Talk to In Person',
-                                   'Cultivate Relationship',
-                                   'Appointment Scheduled',
-                                   'Partner - Financial',
-                                   'Partner - Special',
-                                   'Partner - Pray',
-                                   'Ask in Future',
-                                   'Not Interested',
-                                   'None',
-                                   'Prayer Request',
-                                   'Thank'].freeze
+  FACEBOOK_MESSAGE_NEXT_ACTIONS = [
+    'Call',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Talk to In Person',
+    'Appointment',
+    'Prayer Request',
+    'Thank'
+  ].freeze
 
   TEXT_RESULTS = %w(Completed Received).freeze
-  TEXT_NEXT_ACTIONS = ['Text Again',
-                       'Call', 'Email', 'Message',
-                       'Talk to In Person',
-                       'Cultivate Relationship',
-                       'Appointment Scheduled',
-                       'Partner - Financial',
-                       'Partner - Special',
-                       'Partner - Pray',
-                       'Ask in Future',
-                       'Not Interested',
-                       'None',
-                       'Prayer Request',
-                       'Thank'].freeze
+  TEXT_NEXT_ACTIONS = [
+    'Call',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Talk to In Person',
+    'Appointment',
+    'Prayer Request',
+    'Thank'
+  ].freeze
 
   TALK_TO_IN_PERSON_RESULTS = %w(Completed).freeze
-  TALK_TO_IN_PERSON_NEXT_ACTIONS = ['Talk to In Person Again',
-                                    'Call', 'Email', 'Message', 'Text',
-                                    'Cultivate Relationship',
-                                    'Appointment Scheduled',
-                                    'Partner - Financial',
-                                    'Partner - Special',
-                                    'Partner - Pray',
-                                    'Ask in Future',
-                                    'Not Interested',
-                                    'None',
-                                    'Prayer Request',
-                                    'Thank'].freeze
+  TALK_TO_IN_PERSON_NEXT_ACTIONS = [
+    'Call',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Talk to In Person',
+    'Appointment',
+    'Prayer Request',
+    'Thank'
+  ].freeze
 
   PRAYER_REQUEST_RESULTS = %w(Completed).freeze
-  PRAYER_REQUEST_NEXT_ACTIONS = ['Prayer Request',
-                                 'Call', 'Email', 'Message', 'Text',
-                                 'Talk to In Person',
-                                 'Cultivate Relationship',
-                                 'Appointment Scheduled',
-                                 'Partner - Financial',
-                                 'Partner - Special',
-                                 'Partner - Pray',
-                                 'Ask in Future',
-                                 'Not Interested',
-                                 'None',
-                                 'Thank'].freeze
+  PRAYER_REQUEST_NEXT_ACTIONS = [
+    'Call',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Talk to In Person',
+    'Appointment',
+    'Prayer Request',
+    'Thank'
+  ].freeze
 
-  PRE_CALL_LETTER_NEXT_ACTIONS = ['Call to Follow Up',
-                                  'Email',
-                                  'Text',
-                                  'Message',
-                                  'Talk to In Person',
-                                  'None'].freeze
+  PRE_CALL_LETTER_NEXT_ACTIONS = [
+    'Call',
+    'Email',
+    'Text Message',
+    'Facebook Message',
+    'Talk to In Person',
+    'None'
+  ].freeze
 
   REMINDER_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
   SUPPORT_LETTER_NEXT_ACTIONS = PRE_CALL_LETTER_NEXT_ACTIONS
