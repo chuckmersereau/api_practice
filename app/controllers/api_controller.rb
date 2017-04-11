@@ -72,7 +72,7 @@ class ApiController < ActionController::API
     if resource.is_a? Hash
       render_error(hash: resource, status: :bad_request)
     elsif conflict_error?(resource)
-      render_409(detail: detail_for_resource_first_error(resource))
+      render_409(detail: detail_for_resource_first_error(resource), resource: resource)
     else
       render_400_with_errors(resource)
     end
@@ -112,8 +112,8 @@ class ApiController < ActionController::API
     render_error(title: 'Not Acceptable', status: :not_acceptable)
   end
 
-  def render_409(title: 'Conflict', detail: nil)
-    render_error(title: title, detail: detail, status: :conflict)
+  def render_409(title: 'Conflict', detail: nil, resource: nil)
+    render_error(title: title, detail: detail, status: :conflict, resource: resource)
   end
 
   def render_409_from_exception(exception)
