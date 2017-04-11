@@ -1,7 +1,7 @@
 class Admin::FixWorker
   include Sidekiq::Worker
 
-  sidekiq_options unique: :until_executed, retry: false
+  sidekiq_options queue: :api_admin_fix_worker, unique: :until_executed, retry: false
 
   def perform(fix_name, record_class, id)
     record = record_class.constantize.find(id)

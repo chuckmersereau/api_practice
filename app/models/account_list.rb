@@ -18,7 +18,7 @@ class AccountList < ApplicationRecord
   # Expire the uniqueness for AccountList import after 24 hours because the
   # uniqueness locks were staying around incorrectly and causing some people's
   # donor import to not go through.
-  sidekiq_options retry: false, unique: :until_executed, unique_job_expiration: 24.hours
+  sidekiq_options queue: :api_account_list, retry: false, unique: :until_executed, unique_job_expiration: 24.hours
 
   validates :name, presence: true
 
@@ -80,6 +80,7 @@ class AccountList < ApplicationRecord
     :home_country,
     :monthly_goal,
     :name,
+    :overwrite,
     :settings,
     :tester,
     :updated_at,
@@ -99,9 +100,12 @@ class AccountList < ApplicationRecord
   end
 
   def salary_currency
-    return @salary_currency if @salary_currency
-    @salary_currency = settings[:salary_currency]
-    @salary_currency = Organization.find(salary_organization_id).default_currency_code if @salary_currency.blank?
+    return @salary_currency unless @salary_currency.blank?
+
+    @salary_currency ||= settings[:salary_currency] if settings[:salary_currency].present?
+    @salary_currency ||= Organization.find(salary_organization_id).default_currency_code if salary_organization_id
+    @salary_currency = 'USD' if @salary_currency.blank?
+
     @salary_currency
   end
 
@@ -118,10 +122,12 @@ class AccountList < ApplicationRecord
   end
 
   def default_currency
-    return @default_currency if @default_currency
-    @default_currency = settings[:currency] if settings[:currency].present?
+    return @default_currency unless @default_currency.blank?
+
+    @default_currency ||= settings[:currency] if settings[:currency].present?
     @default_currency ||= designation_profiles.try(:first).try(:organization).try(:default_currency_code)
     @default_currency = 'USD' if @default_currency.blank?
+
     @default_currency
   end
 
@@ -282,7 +288,7 @@ class AccountList < ApplicationRecord
 
   # Download all donations / info for all accounts associated with this list
   def self.update_linked_org_accounts
-    AsyncScheduler.schedule_over_24h(with_linked_org_accounts, :import_data)
+    AsyncScheduler.schedule_over_24h(with_linked_org_accounts, :import_data, :api_account_list_import_data)
   end
 
   def merge(other)
@@ -315,7 +321,7 @@ class AccountList < ApplicationRecord
   def async_send_chalkline_list
     # Since AccountList normally uses the lower priority :import queue use the :default queue for the
     # email to Chalkline which the user would expect to see soon after their clicking the button to send it.
-    Sidekiq::Client.enqueue_to(:default, self.class, id, :send_chalkline_mailing_list)
+    Sidekiq::Client.enqueue_to(:api_default, self.class, id, :send_chalkline_mailing_list)
   end
 
   def send_chalkline_mailing_list
@@ -408,7 +414,7 @@ class AccountList < ApplicationRecord
 
   def queue_update_users_mailchimp
     return unless tester_or_owner_setting_changed?
-    async_to_queue(:default, :update_mailchimp_subscription)
+    async(:update_mailchimp_subscription)
   end
 
   def tester_or_owner_setting_changed?

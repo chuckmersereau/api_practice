@@ -78,6 +78,7 @@ class Person < ApplicationRecord
     :middle_name,
     :occupation,
     :optout_enewsletter,
+    :overwrite,
     :profession,
     :suffix,
     :title,

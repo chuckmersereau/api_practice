@@ -1,0 +1,9 @@
+---
+:verbose: false
+:concurrency: 7
+:queues:
+  - ["default",  2]
+  - ["facebook", 1]
+  - ["general",  1]
+  - ["import",   1]
+  - ["mailers",  2]

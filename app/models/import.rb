@@ -5,7 +5,7 @@ require 'csv'
 class Import < ApplicationRecord
   include Async
   include Sidekiq::Worker
-  sidekiq_options queue: :default, retry: false, backtrace: true, unique: :until_executed
+  sidekiq_options queue: :api_import, retry: false, backtrace: true, unique: :until_executed
   mount_uploader :file, ImportUploader
 
   SOURCES = %w(facebook twitter linkedin tnt google tnt_data_sync csv).freeze
@@ -24,7 +24,7 @@ class Import < ApplicationRecord
                           :groups,
                           :import_by_group,
                           :in_preview,
-                          :override,
+                          :overwrite,
                           :source,
                           :source_account_id,
                           :tag_list,
@@ -63,7 +63,7 @@ class Import < ApplicationRecord
   end
 
   def queue_import
-    async(:import) unless in_preview?
+    async_to_queue(sidekiq_queue, :import) unless in_preview?
   end
 
   def user_friendly_source
@@ -101,6 +101,10 @@ class Import < ApplicationRecord
 
   private
 
+  def sidekiq_queue
+    "api_import_#{source}"
+  end
+
   def reset_file
     @file_contents = nil
     self.file_headers = {}
@@ -119,10 +123,12 @@ class Import < ApplicationRecord
     "#{source.camelize}Import".constantize.new(self).import
     after_import_success
     true
-  rescue UnsurprisingImportError
+  rescue UnsurprisingImportError => exception
+    Rollbar.info(exception)
     after_import_failure
     false
   rescue => exception
+    Rollbar.error(exception)
     after_import_failure
     raise exception
   ensure

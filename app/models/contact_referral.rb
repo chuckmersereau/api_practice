@@ -1,5 +1,6 @@
 class ContactReferral < ApplicationRecord
   PERMITTED_ATTRIBUTES = [:created_at,
+                          :overwrite,
                           :referred_by_id,
                           :referred_to_id,
                           :updated_at,

@@ -30,14 +30,15 @@ class Address < ApplicationRecord
   MANUAL_SOURCE = 'MPDX'.freeze
 
   PERMITTED_ATTRIBUTES = [:city,
-                          :created_at,
                           :country,
+                          :created_at,
                           :end_date,
+                          :historic,
                           :location,
                           :metro_area,
+                          :overwrite,
                           :postal_code,
                           :primary_mailing_address,
-                          :historic,
                           :region,
                           :remote_id,
                           :seasonal,

@@ -1,8 +1,11 @@
-RSpec.shared_examples 'create_examples' do
+RSpec.shared_examples 'create_examples' do |options = {}|
+  options[:except] ||= []
   include_context 'common_variables'
 
   describe '#create' do
-    include_examples 'including related resources examples', action: :create
+    unless options[:except].include?(:includes)
+      include_examples 'including related resources examples', action: :create
+    end
     include_examples 'sparse fieldsets examples', action: :create
 
     it 'creates resource for users that are signed in' do

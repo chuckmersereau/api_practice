@@ -16,4 +16,6 @@ class AddressSerializer < ApplicationSerializer
              :start_date,
              :state,
              :valid_values
+
+  belongs_to :source_donor_account
 end

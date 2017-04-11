@@ -8,6 +8,7 @@ class Person::LinkedinAccount < ApplicationRecord
                           :created_at,
                           :first_name,
                           :last_name,
+                          :overwrite,
                           :public_url,
                           :remote_id,
                           :updated_at,

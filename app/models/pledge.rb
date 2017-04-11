@@ -10,6 +10,7 @@ class Pledge < ApplicationRecord
                           :contact_id,
                           :donation_id,
                           :expected_date,
+                          :overwrite,
                           :updated_at,
                           :updated_in_db_at,
                           :uuid].freeze

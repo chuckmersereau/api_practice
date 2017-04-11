@@ -21,7 +21,7 @@ resource 'Contacts > Addresses' do
   end
   let(:form_data) { build_data(new_address) }
 
-  let(:expected_attribute_keys) do
+  let(:resource_attributes) do
     %w(
       city
       country
@@ -46,6 +46,12 @@ resource 'Contacts > Addresses' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      source_donor_account
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -54,7 +60,7 @@ resource 'Contacts > Addresses' do
         explanation 'List of Addresses associated to the Contact'
         do_request
 
-        check_collection_resource 1
+        check_collection_resource 1, %w(relationships)
         expect(response_status).to eq(200)
       end
     end
@@ -86,8 +92,7 @@ resource 'Contacts > Addresses' do
       example 'Address [GET]', document: documentation_scope do
         explanation 'The Contact\'s Address with the given ID'
         do_request
-        check_resource
-        expect(resource_object.keys).to match_array expected_attribute_keys
+        check_resource %w(relationships)
         expect(response_status).to eq(200)
       end
     end

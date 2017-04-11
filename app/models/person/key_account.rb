@@ -10,6 +10,7 @@ class Person::KeyAccount < ApplicationRecord
                           :email,
                           :first_name,
                           :last_name,
+                          :overwrite,
                           :person_id,
                           :remote_id,
                           :updated_at,

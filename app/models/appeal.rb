@@ -18,6 +18,7 @@ class Appeal < ApplicationRecord
                           :description,
                           :end_date,
                           :name,
+                          :overwrite,
                           :updated_at,
                           :updated_in_db_at,
                           :uuid].freeze

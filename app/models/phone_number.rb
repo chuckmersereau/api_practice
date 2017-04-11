@@ -13,6 +13,7 @@ class PhoneNumber < ApplicationRecord
                           :country_code,
                           :location,
                           :number,
+                          :overwrite,
                           :primary,
                           :remote_id,
                           :source,

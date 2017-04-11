@@ -3,7 +3,7 @@ require 'async'
 class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_mail_chimp_account, unique: :until_executed
 
   COUNT_PER_PAGE = 100
 
@@ -30,6 +30,7 @@ class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
                           :auto_log_campaigns,
                           :created_at,
                           :grouping_id,
+                          :overwrite,
                           :primary_list_id,
                           :sync_all_active_contacts,
                           :updated_at,

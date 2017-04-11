@@ -45,6 +45,24 @@ describe ApplicationRecord do
       expect(contact.errors[:updated_in_db_at]).to be_empty
       expect(contact.reload.name).to eq('New Name')
     end
+
+    it 'will ignore the updated_in_db_at requirements if #overwrite is true' do
+      contact.overwrite = true
+      expect(contact.valid?(:update_from_controller)).to be_truthy
+      contact.updated_in_db_at = 2.weeks.ago
+      expect(contact.valid?(:update_from_controller)).to be_truthy
+    end
+
+    it 'will NOT ignore the updated_in_db_at requirements if #overwrite is something OTHER than true' do
+      contact.overwrite = 'peanut butter'
+      expect(contact.valid?(:update_from_controller)).to eq false
+      contact.updated_in_db_at = 2.weeks.ago
+      expect(contact.valid?(:update_from_controller)).to eq false
+
+      # correct expectations
+      contact.updated_in_db_at = contact.updated_at
+      expect(contact.valid?(:update_from_controller)).to eq true
+    end
   end
 
   describe '#updated_in_db_at=' do

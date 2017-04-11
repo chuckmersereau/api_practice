@@ -1,6 +1,6 @@
 class CurrencyRatesFetcherWorker
   include Sidekiq::Worker
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_currency_rates_fetcher_worker, unique: :until_executed
 
   MAX_DAYS_TO_FETCH = 30
 

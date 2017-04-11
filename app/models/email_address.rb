@@ -7,6 +7,7 @@ class EmailAddress < ApplicationRecord
                           :email,
                           :historic,
                           :location,
+                          :overwrite,
                           :primary,
                           :source,
                           :updated_at,

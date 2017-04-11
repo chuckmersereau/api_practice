@@ -33,7 +33,7 @@ resource 'Contacts' do
         :tnt_id,
         :total_donations,
         :uncompleted_tasks_count
-      ).merge(updated_in_db_at: contact.updated_at)
+      ).merge(overwrite: true)
   end
 
   let(:form_data) do
@@ -108,6 +108,7 @@ resource 'Contacts' do
       donor_accounts
       last_six_donations
       people
+      primary_or_first_person
       primary_person
       tasks
     )
@@ -184,6 +185,10 @@ resource 'Contacts' do
 
     get '/api/v2/contacts/:id' do
       doc_helper.insert_documentation_for(action: :show, context: self)
+      with_options scope: :relationships do
+        response_field :primary_person,          'Primary Person Object',   'Type' => 'Object'
+        response_field :primary_or_first_person, 'Primary Or First Person', 'Type' => 'Object'
+      end
 
       example doc_helper.title_for(:show), document: doc_helper.document_scope do
         explanation doc_helper.description_for(:show)

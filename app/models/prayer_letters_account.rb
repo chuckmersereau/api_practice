@@ -4,7 +4,7 @@ require 'open-uri'
 class PrayerLettersAccount < ApplicationRecord
   include Async
   include Sidekiq::Worker
-  sidekiq_options unique: :until_executed
+  sidekiq_options queue: :api_prayer_letters_account, unique: :until_executed
   SERVICE_URL = 'https://www.prayerletters.com'.freeze
 
   belongs_to :account_list
@@ -15,6 +15,7 @@ class PrayerLettersAccount < ApplicationRecord
 
   PERMITTED_ATTRIBUTES = [:created_at,
                           :oauth2_token,
+                          :overwrite,
                           :updated_at,
                           :updated_in_db_at,
                           :uuid,
