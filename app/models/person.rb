@@ -282,7 +282,8 @@ class Person < ApplicationRecord
 
   def email_address=(hash)
     hash = hash.with_indifferent_access
-    if hash['_destroy'] == '1'
+
+    if hash['_destroy'].to_s == '1'
       email_addresses.find(hash['id']).destroy
     elsif hash['email'].present?
       EmailAddress.add_for_person(self, hash)

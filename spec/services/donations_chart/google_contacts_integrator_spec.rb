@@ -1139,7 +1139,6 @@ describe GoogleContactsIntegrator do
     def expect_second_sync_api_put
       xml_regex_str = '</atom:content>\s+'\
         '<gd:email\s+rel="http://schemas.google.com/g/2005#other"\s+primary="true"\s+address="johnsmith_MODIFIED@example.com"/>\s+'\
-        '<gd:email\s+rel="http://schemas.google.com/g/2005#home"\s+address="mpdx_MODIFIED@example.com"/>\s+'\
         '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#mobile"\s+primary="true"\s+>\(213\) 334-5555</gd:phoneNumber>\s+'\
         '<gd:phoneNumber\s+rel="http://schemas.google.com/g/2005#home"\s+>\(407\) 789-4444</gd:phoneNumber>\s+'\
         '<gd:structuredPostalAddress\s+rel="http://schemas.google.com/g/2005#home"\s+>\s+'\
@@ -1182,8 +1181,7 @@ describe GoogleContactsIntegrator do
 
     def second_sync_expectations
       @person.reload
-      expect(@person.email_addresses.count).to eq(2)
-      expect(@person.email_addresses.first.email).to eq('mpdx_MODIFIED@example.com')
+      expect(@person.email_addresses.count).to eq(1)
       expect(@person.email_addresses.last.email).to eq('johnsmith_MODIFIED@example.com')
 
       expect(@person.phone_numbers.count).to eq(2)
