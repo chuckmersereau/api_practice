@@ -6,6 +6,9 @@ This changelog covers what's changed in the MPDX APIs.
 - Added updated_in_db_at to all 409 Conflict error payloads
 - Permit override param on imports
 
+## 8 April 2017
+- Add `mobile_alert_frequencies` to Constants
+
 ## 7 April 2017
 - Added a way to overwrite data on PATCH requests without providing an `updated_in_db_at` value.
 
