@@ -3,14 +3,15 @@
 :concurrency: 2
 :queues:
   - ["api_account_list",                                 1]
-  - ["api_account_list_import_data",                     1]
-  - ["api_google_integration_sync_email",                1]
   - ["api_account_list_deep_reset_worker",               1]
+  - ["api_account_list_import_data",                     1]
   - ["api_admin_fix_worker",                             1]
+  - ["api_contact_suggested_changes_updater_worker",     10]
   - ["api_currency_rates_fetcher_worker",                1]
   - ["api_data_server_account_address_updates_preparer", 1]
   - ["api_default",                                      1]
   - ["api_google_integration",                           1]
+  - ["api_google_integration_sync_email",                1]
   - ["api_import",                                       1]
   - ["api_import_csv",                                   10]
   - ["api_import_facebook",                              1]

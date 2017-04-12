@@ -3,6 +3,9 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 11 April 2017
+- Update Contact suggested_changes after an import
+
+## 11 April 2017
 - Added updated_in_db_at to all 409 Conflict error payloads
 - Permit override param on imports
 

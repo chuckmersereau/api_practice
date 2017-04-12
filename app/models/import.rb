@@ -120,9 +120,10 @@ class Import < ApplicationRecord
   end
 
   def import
+    import_start_time = Time.current
     update_column(:importing, true)
     "#{source.camelize}Import".constantize.new(self).import
-    after_import_success
+    after_import_success(import_started_at: import_start_time)
     true
   rescue UnsurprisingImportError => exception
     Rollbar.info(exception)
@@ -136,7 +137,7 @@ class Import < ApplicationRecord
     update_column(:importing, false)
   end
 
-  def after_import_success
+  def after_import_success(import_started_at:)
     begin
       ImportMailer.delay.complete(self)
     rescue => mail_exception
@@ -145,6 +146,7 @@ class Import < ApplicationRecord
     account_list.merge_contacts # clean up data
     account_list.queue_sync_with_google_contacts
     account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
+    Contact::SuggestedChangesUpdaterWorker.perform_async(user.id, import_started_at)
   end
 
   def after_import_failure

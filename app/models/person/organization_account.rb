@@ -90,12 +90,13 @@ class Person::OrganizationAccount < ApplicationRecord
   end
 
   def import_donations
+    starting_time = Time.current
     starting_donation_count = user.donations.count
     import_donations_from_api
 
     # we only want to set the last_download date if at least one donation was downloaded
     return unless user.donations.count > starting_donation_count
-    process_new_donations_downloaded
+    process_new_donations_downloaded(import_started_at: starting_time)
   end
 
   def import_donations_from_api
@@ -104,9 +105,8 @@ class Person::OrganizationAccount < ApplicationRecord
     organization.api(self).import_all(date_from)
   end
 
-  def process_new_donations_downloaded
-    # If this is the first time downloading, update the financial status of partners
-    account_list.update_partner_statuses if last_download.nil? && account_list
+  def process_new_donations_downloaded(import_started_at:)
+    Contact::SuggestedChangesUpdaterWorker.perform_async(user.id, import_started_at)
 
     # Set the last download date to whenever the last donation was received
     last_donation_date = user.donations

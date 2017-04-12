@@ -295,14 +295,6 @@ class AccountList < ApplicationRecord
     AccountList::Merge.new(self, other).merge
   end
 
-  # This method checks all of your donors and tries to intelligently determine
-  # which partners are regular givers based on their giving history.
-  def update_partner_statuses
-    contacts.where(status: nil).joins(:donor_accounts).readonly(false).each do |contact|
-      Contact::PartnerStatusGuesser.new(contact).assign_guessed_status
-    end
-  end
-
   def all_contacts
     @all_contacts ||= contacts.order('contacts.name').select(['contacts.id', 'contacts.name'])
   end
