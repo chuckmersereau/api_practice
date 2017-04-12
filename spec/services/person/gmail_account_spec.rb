@@ -37,52 +37,51 @@ describe Person::GmailAccount do
   end
 
   context '#import_emails' do
+    let(:recipient_data) { double('recipient', mailbox: 'recipient', host: 'example.com') }
+    let(:sender_data)    { double('sender', mailbox: 'sender', host: 'example.com') }
+    let(:envelope)       { double('envelope', to: [recipient_data], sender: [sender_data]) }
+    let(:gmail_message)  { double('email', envelope: envelope) }
+
     let(:sent_mailbox) { double }
-    let(:all_mailbox) { double }
-    let(:client) { double(logout: true) }
-    let(:email) { double }
-    let!(:email_address) { create(:email_address, person: person) }
+    let(:all_mailbox)  { double }
+    let(:client)       { double(logout: true) }
+
+    let!(:recipient_email) { create(:email_address, email: 'recipient@example.com', person: person) }
+    let!(:sender_email)    { create(:email_address, email: 'sender@example.com', person: person) }
 
     before do
       contact.people << person
+
       google_account.person = user
       google_account.save
+
       account_list.users << user
 
-      allow(Gmail).to receive(:connect).and_return(client)
+      allow(Gmail).to  receive(:connect).and_return(client)
       allow(client).to receive(:mailbox).with('[Gmail]/Sent Mail').and_return(sent_mailbox)
       allow(client).to receive(:mailbox).with('[Gmail]/All Mail').and_return(all_mailbox)
     end
 
     it 'logs a sent email' do
-      expect(sent_mailbox).to receive(:emails).and_return([email])
-      expect(all_mailbox).to receive(:emails).and_return([])
-
+      expect(sent_mailbox).to  receive(:emails_in_batches).and_return([gmail_message])
+      expect(all_mailbox).to   receive(:emails_in_batches).and_return([])
       expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
     end
 
     it 'logs a received email' do
-      expect(sent_mailbox).to receive(:emails).and_return([])
-      expect(all_mailbox).to receive(:emails).and_return([email])
-
+      expect(sent_mailbox).to  receive(:emails_in_batches).and_return([])
+      expect(all_mailbox).to   receive(:emails_in_batches).and_return([gmail_message])
       expect(gmail_account).to receive(:log_email).once
 
-      gmail_account.import_emails(account_list)
-    end
-
-    it 'skips email addresses with unicode non-control characters' do
-      expect(sent_mailbox).to_not receive(:emails)
-      expect(all_mailbox).to_not receive(:emails)
-      email_address.update(email: "cat_emoji_\u{1f431}@t.co")
       gmail_account.import_emails(account_list)
     end
   end
 
   context '#log_email' do
     let(:gmail_message) { mock_gmail_message('message body') }
-    let(:google_email) { build(:google_email, google_email_id: gmail_message.msg_id, google_account: google_account) }
+    let(:google_email)  { build(:google_email, google_email_id: gmail_message.msg_id, google_account: google_account) }
 
     def mock_gmail_message(body)
       double(message: double(multipart?: false, body: double(decoded: body)),
@@ -93,11 +92,12 @@ describe Person::GmailAccount do
     it 'creates a completed task' do
       expect do
         expect do
-          gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
+          gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
         end.to change(Task, :count).by(1)
       end.to change(ActivityComment, :count).by(1)
 
       task = Task.last
+
       expect(task.subject).to eq('subject')
       expect(task.completed).to eq(true)
       expect(task.completed_at.to_s(:db)).to eq(gmail_message.envelope.date.to_s(:db))
@@ -106,13 +106,15 @@ describe Person::GmailAccount do
 
     it "creates a task even if the email doesn't have a subject" do
       expect(gmail_message).to receive(:subject).and_return('')
-      task = gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
+
+      task = gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       expect(task.subject).to eq('No Subject')
     end
 
     it 'truncates the subject if the subject is more than 2000 chars' do
-      expect(gmail_message).to receive(:subject).twice.and_return('x' * 2001)
-      task = gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
+      expect(gmail_message).to receive(:subject).once.and_return('x' * 2001)
+
+      task = gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       expect(task.subject).to eq('x' * 2000)
     end
 
@@ -123,13 +125,13 @@ describe Person::GmailAccount do
       create(:google_email_activity, google_email: google_email, activity: task)
 
       expect do
-        gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
+        gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       end.not_to change(Task, :count)
     end
 
     it 'creates a google_email' do
       expect do
-        gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
+        gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       end.to change(GoogleEmail, :count).by(1)
 
       task = GoogleEmail.last
@@ -140,14 +142,15 @@ describe Person::GmailAccount do
       google_email.save
 
       expect do
-        gmail_account.log_email(gmail_message, account_list, contact, person, 'Done')
+        gmail_account.log_email(gmail_message, account_list.id, contact.id, person.id, 'Done')
       end.not_to change(GoogleEmail, :count)
     end
 
     it 'handles messages with null bytes' do
       expect do
-        gmail_account.log_email(mock_gmail_message("\0null\0!"), account_list, contact, person, 'Done')
+        gmail_account.log_email(mock_gmail_message("\0null\0!"), account_list.id, contact.id, person.id, 'Done')
       end.to change(Task, :count).by(1)
+
       expect(Task.last.comments.first.body).to eq 'null!'
     end
   end
