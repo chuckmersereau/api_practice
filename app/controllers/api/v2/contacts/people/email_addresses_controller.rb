@@ -88,7 +88,7 @@ class Api::V2::Contacts::People::EmailAddressesController < Api::V2Controller
   end
 
   def render_email_addresses
-    render json: @email_addresses,
+    render json: @email_addresses.preload(include_associations),
            meta: meta_hash(@email_addresses),
            include: include_params,
            fields: field_params

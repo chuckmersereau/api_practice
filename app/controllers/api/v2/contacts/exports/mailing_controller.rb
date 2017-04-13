@@ -29,8 +29,8 @@ class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
   private
 
   def load_contacts
-    @contacts ||= filter_contacts.order(name: :asc).includes(:primary_person, :spouse, :primary_address,
-                                                             :tags, people: [:email_addresses, :phone_numbers])
+    @contacts ||= filter_contacts.order(name: :asc).preload(:primary_person, :spouse, :primary_address,
+                                                            :tags, people: [:email_addresses, :phone_numbers])
   end
 
   def load_rows

@@ -15,7 +15,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   private
 
   def scoped_donor_accounts
-    @donor_accounts.map { |donor_account| scoped_donor_account(donor_account) }
+    @donor_accounts.preload(include_associations).map { |donor_account| scoped_donor_account(donor_account) }
   end
 
   def scoped_donor_account(donor_account)

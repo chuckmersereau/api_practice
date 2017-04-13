@@ -2,7 +2,10 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_designation_accounts
-    render json: @designation_accounts, meta: meta_hash(@designation_accounts), include: include_params, fields: field_params
+    render json: @designation_accounts.preload(include_associations),
+           meta: meta_hash(@designation_accounts),
+           include: include_params,
+           fields: field_params
   end
 
   def show

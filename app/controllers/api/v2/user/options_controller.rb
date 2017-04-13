@@ -3,7 +3,10 @@ class Api::V2::User::OptionsController < Api::V2Controller
 
   def index
     load_options
-    render json: @options, meta: meta_hash(@options), include: include_params, fields: field_params
+    render json: @options.preload(include_associations),
+           meta: meta_hash(@options),
+           include: include_params,
+           fields: field_params
   end
 
   def show

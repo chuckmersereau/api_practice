@@ -3,7 +3,7 @@ class Api::V2::AccountLists::PledgesController < Api::V2Controller
     authorize_pledges
     load_pledges
 
-    render json: @pledges, meta: meta_hash(@pledges), include: include_params, fields: field_params
+    render json: @pledges.preload(include_associations), meta: meta_hash(@pledges), include: include_params, fields: field_params
   end
 
   def show
