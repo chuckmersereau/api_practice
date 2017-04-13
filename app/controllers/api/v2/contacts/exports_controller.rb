@@ -1,7 +1,8 @@
 require 'csv'
 
 class Api::V2::Contacts::ExportsController < Api::V2Controller
-  supports_accept_header_content_types 'text/csv', 'application/xlsx'
+  supports_accept_header_content_types :any
+  supports_content_types :any
 
   include ActionController::MimeResponds
   include ActionController::Helpers

@@ -78,6 +78,31 @@ RSpec.describe Contact::Analytics, type: :model do
     end
   end
 
+  describe '#partners_90_days_late_count' do
+    before do
+      create(:contact, account_list: account_list, status: 'Partner - Financial')
+        .update_columns(late_at: 10.days.ago)
+
+      create(:contact, account_list: account_list, status: 'Partner - Financial')
+        .update_columns(late_at: 60.days.ago)
+
+      create(:contact, account_list: account_list, status: 'Partner - Financial')
+        .update_columns(late_at: 91.days.ago)
+
+      create(:contact, account_list: account_list, status: 'Partner - Financial')
+        .update_columns(late_at: 100.days.ago)
+
+      create(:contact, account_list: account_list, status: nil, pledge_received: true)
+    end
+
+    let(:contacts) { Contact.where(account_list_id: account_list.id) }
+
+    it 'gives the count of financial partners who are late greater than 61 days' do
+      analytics = Contact::Analytics.new(contacts)
+      expect(analytics.partners_90_days_late_count).to eq(2)
+    end
+  end
+
   describe '#birthdays_this_week' do
     let(:person_with_birthday_this_week) do
       create(:person, birthday_month: today.month,

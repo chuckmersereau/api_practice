@@ -110,5 +110,16 @@ RSpec.describe 'Server Responsibilites', type: :request do
         expect(response.status).to eq 406
       end
     end
+
+    context 'with no Accept and/or CONTENT_TYPE header for controllers accepting it' do
+      it 'should return a succes status (200)' do
+        headers = {
+          'CONTENT_TYPE' => 'multipart/form-data',
+          'ACCEPT' => 'text/csv'
+        }
+        get api_v2_exports_path, nil, headers
+        expect(response.status).to eq 200
+      end
+    end
   end
 end

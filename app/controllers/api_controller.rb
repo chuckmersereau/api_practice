@@ -147,11 +147,19 @@ class ApiController < ActionController::API
   end
 
   def valid_accept_header?
+    return true if self.class.supported_accept_header_content_types.include?(:any)
     media_types = given_media_types('Accept')
 
     media_types.blank? || media_types.any? do |media_type|
       (self.class.supported_accept_header_content_types.include?(media_type) || media_type.start_with?(ALL_MEDIA_TYPES))
     end
+  end
+
+  def valid_content_type_header?
+    return true if self.class.supported_content_types.include?(:any)
+
+    content_type = request.headers['CONTENT_TYPE']&.split(';')&.first
+    self.class.supported_content_types.include?(content_type)
   end
 
   def verify_request
@@ -164,8 +172,7 @@ class ApiController < ActionController::API
   end
 
   def verify_request_content_type
-    content_type = request.headers['CONTENT_TYPE']&.split(';')&.first
-    render_415 unless self.class.supported_content_types.include?(content_type)
+    render_415 unless valid_content_type_header?
   end
 
   def detail_for_resource_first_error(resource)
