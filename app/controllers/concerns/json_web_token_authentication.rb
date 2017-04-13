@@ -2,13 +2,13 @@ module JsonWebTokenAuthentication
   private
 
   def jwt_authorize!
-    raise Exceptions::AuthenticationError unless user_id_in_token?
+    raise Exceptions::AuthenticationError unless user_uuid_in_token?
   rescue JWT::VerificationError, JWT::DecodeError
     raise Exceptions::AuthenticationError
   end
 
-  def user_id_in_token?
-    http_token && jwt_payload && jwt_payload['user_id'].to_i
+  def user_uuid_in_token?
+    http_token && jwt_payload && jwt_payload['user_uuid'].to_i
   end
 
   def http_token

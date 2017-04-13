@@ -20,6 +20,6 @@ class Api::V2::User::AuthenticationsController < Api::V2Controller
   end
 
   def load_authentication
-    @authentication ||= JsonWebToken.encode(user_id: @user.id)
+    @authentication ||= JsonWebToken.encode(user_uuid: @user.uuid)
   end
 end
