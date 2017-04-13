@@ -2,7 +2,10 @@ class Person::Filter::PhoneNumberValid < Person::Filter::Base
   def execute_query(people, filters)
     self.people = people
     return people unless filters[:phone_number_valid] == 'false'
-    people_with_invalid_phone_numbers
+
+    # Fetching a second time to allow loading of both valid and invalid phone numbers.
+    # Without this, it'll return people, but only invalid phone numbers will be included.
+    Person.where(id: people_with_invalid_phone_numbers.ids)
   end
 
   private

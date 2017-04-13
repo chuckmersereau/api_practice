@@ -2,7 +2,10 @@ class Contact::Filter::AddressValid < Contact::Filter::Base
   def execute_query(contacts, filters)
     self.contacts = contacts
     return contacts unless filters[:address_valid] == 'false'
-    contacts_with_invalid_addresses
+
+    # Fetching a second time to allow loading of both valid and invalid addresses.
+    # Without this, it'll return contacts, but only invalid addresses will be included.
+    Contact.where(id: contacts_with_invalid_addresses.ids)
   end
 
   private
