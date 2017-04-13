@@ -4,7 +4,7 @@ class Api::V2::Appeals::ContactsController < Api::V2Controller
   def index
     authorize load_appeal, :show?
     load_contacts
-    render json: @contacts, meta: meta_hash(@contacts), include: include_params, fields: field_params
+    render json: @contacts.preload(include_associations), meta: meta_hash(@contacts), include: include_params, fields: field_params
   end
 
   def create

@@ -2,7 +2,10 @@ class Person::Filter::EmailAddressValid < Person::Filter::Base
   def execute_query(people, filters)
     self.people = people
     return people unless filters[:email_address_valid] == 'false'
-    people_with_invalid_email_addresses
+
+    # Fetching a second time to allow loading of both valid and invalid email addresses.
+    # Without this, it'll return people, but only invalid email addresses will be included.
+    Person.where(id: people_with_invalid_email_addresses.ids)
   end
 
   private

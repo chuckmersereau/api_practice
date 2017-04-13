@@ -30,5 +30,13 @@ describe NotificationType::SmallerGift do
       donation.update(amount: 250.0, tendered_amount: 250.0)
       expect(smaller_gift.check(account_list).size).to eq(0)
     end
+
+    it 'does not add a notification if the correct size gift comes in' do
+      contact.update(pledge_amount: 1200.0, pledge_frequency: 12.0)
+      donation.update(amount: 1200.0, tendered_amount: 1200.0)
+      contact.update_donation_totals(donation)
+      contact.update(first_donation_date: nil, last_donation_date: nil) # sometimes these aren't set
+      expect(smaller_gift.check(account_list)).to be_empty
+    end
   end
 end

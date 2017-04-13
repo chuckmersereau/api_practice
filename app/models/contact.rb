@@ -443,7 +443,10 @@ class Contact < ApplicationRecord
   end
 
   def monthly_pledge
-    (pledge_amount.to_f / (pledge_frequency || 1)).round(2)
+    amount    = pledge_amount_for_monthly_pledge_calculation
+    frequency = pledge_frequency_for_monthly_pledge_calculation
+
+    (amount / frequency).round(2)
   end
 
   def send_email_letter?
@@ -835,5 +838,21 @@ class Contact < ApplicationRecord
 
   def find_or_build_primary_address
     @find_or_build_primary_address ||= (primary_address || build_primary_address)
+  end
+
+  def pledge_amount_for_monthly_pledge_calculation
+    if pledge_amount&.positive?
+      pledge_amount.to_f
+    else
+      0
+    end
+  end
+
+  def pledge_frequency_for_monthly_pledge_calculation
+    if pledge_frequency&.positive?
+      pledge_frequency
+    else
+      1 # default
+    end
   end
 end

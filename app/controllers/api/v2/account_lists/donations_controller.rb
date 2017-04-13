@@ -2,7 +2,7 @@ class Api::V2::AccountLists::DonationsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_donations
-    render json: @donations,
+    render json: @donations.preload(include_associations),
            scope: { account_list: load_account_list, locale: locale },
            meta: meta_hash(@donations),
            include: include_params,

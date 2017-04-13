@@ -385,32 +385,6 @@ describe AccountList do
     end
   end
 
-  context '#update_partner_statuses' do
-    it 'guesses the status for contacts based on giving history' do
-      account_list = create(:account_list)
-      designation = create(:designation_account)
-      account_list.designation_accounts << designation
-      financial_partner = create(:contact, account_list: account_list, status: nil,
-                                           pledge_amount: nil, pledge_frequency: nil)
-      financial_donor = create(:donor_account)
-      financial_partner.donor_accounts << financial_donor
-      create(:donation, amount: 50, channel: 'Recurring', donor_account: financial_donor,
-                        designation_account: designation, donation_date: 1.month.ago)
-      special_partner = create(:contact, account_list: account_list, status: nil)
-      special_donor = create(:donor_account)
-      special_partner.donor_accounts << special_donor
-      create(:donation, amount: 50, channel: 'Check', donor_account: special_donor,
-                        designation_account: designation, donation_date: 1.month.ago)
-
-      account_list.update_partner_statuses
-
-      expect(financial_partner.reload.status).to eq 'Partner - Financial'
-      expect(financial_partner.pledge_amount).to eq 50
-      expect(financial_partner.pledge_frequency).to eq 1
-      expect(special_partner.reload.status).to eq 'Partner - Special'
-    end
-  end
-
   context '#merge_contacts' do
     it 'merges duplicate contacts by common name and donor number / address' do
       account_list = create(:account_list)

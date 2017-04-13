@@ -1050,4 +1050,56 @@ describe Contact do
     expect(ContactPerson.where(contact_id: contact.id).count).to eq 0
     expect(Address.where(addressable_type: 'Contact', addressable_id: contact.id).count).to eq 0
   end
+
+  describe '#monthly_pledge' do
+    let(:contact) { build(:contact) }
+
+    context 'with a positive pledge_frequency' do
+      before { contact.pledge_frequency = 10 }
+
+      context 'when pledge_amount is nil or negative' do
+        it 'is 0' do
+          contact.pledge_amount = nil
+          expect(contact.monthly_pledge).to eq 0
+
+          contact.pledge_amount = 0
+          expect(contact.monthly_pledge).to eq 0
+
+          contact.pledge_amount = -1
+          expect(contact.monthly_pledge).to eq 0
+        end
+      end
+
+      context 'when pledge_amount is positive' do
+        it 'is the correct value' do
+          contact.pledge_amount = 100
+          expect(contact.monthly_pledge).to eq 10.00
+        end
+      end
+    end
+
+    context 'with a positive pledge_amount' do
+      before { contact.pledge_amount = 10 }
+
+      context 'when pledge_frequency is nil or negative' do
+        it 'is defaults to monthly, ie: (pledge_amount / 1)' do
+          contact.pledge_frequency = nil
+          expect(contact.monthly_pledge).to eq 10.0
+
+          contact.pledge_frequency = 0
+          expect(contact.monthly_pledge).to eq 10.0
+
+          contact.pledge_frequency = -1
+          expect(contact.monthly_pledge).to eq 10.0
+        end
+      end
+
+      context 'when pledge_frequency is positive' do
+        it 'is the correct value' do
+          contact.pledge_frequency = 2 # every 2 months
+          expect(contact.monthly_pledge).to eq 5.00
+        end
+      end
+    end
+  end
 end

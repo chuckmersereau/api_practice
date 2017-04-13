@@ -2,7 +2,7 @@ class Api::V2::Contacts::People::LinkedinAccountsController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_linkedin_accounts
-    render json: @linkedin_accounts, meta: meta_hash(@linkedin_accounts), include: include_params, fields: field_params
+    render json: @linkedin_accounts.preload(include_associations), meta: meta_hash(@linkedin_accounts), include: include_params, fields: field_params
   end
 
   def show

@@ -2,7 +2,7 @@ class Api::V2::AccountLists::NotificationsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_notifications
-    render json: @notifications,
+    render json: @notifications.preload(include_associations),
            scope: { account_list: load_account_list, locale: locale },
            meta: meta_hash(@notifications),
            include: include_params,

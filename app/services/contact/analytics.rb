@@ -18,7 +18,11 @@ class Contact::Analytics
   end
 
   def partners_60_days_late_count
-    contacts.late_by(61.days).count
+    contacts.late_by(61.days, 90.days).count
+  end
+
+  def partners_90_days_late_count
+    contacts.late_by(91.days).count
   end
 
   def birthdays_this_week

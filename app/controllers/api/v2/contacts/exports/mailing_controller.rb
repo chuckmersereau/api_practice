@@ -1,7 +1,8 @@
 require 'csv'
 
 class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
-  supports_accept_header_content_types 'text/csv'
+  supports_accept_header_content_types :any
+  supports_content_types :any
 
   include ActionController::MimeResponds
   include ActionController::Helpers
@@ -29,8 +30,8 @@ class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
   private
 
   def load_contacts
-    @contacts ||= filter_contacts.order(name: :asc).includes(:primary_person, :spouse, :primary_address,
-                                                             :tags, people: [:email_addresses, :phone_numbers])
+    @contacts ||= filter_contacts.order(name: :asc).preload(:primary_person, :spouse, :primary_address,
+                                                            :tags, people: [:email_addresses, :phone_numbers])
   end
 
   def load_rows

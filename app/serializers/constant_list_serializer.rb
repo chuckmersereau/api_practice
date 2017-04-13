@@ -29,6 +29,7 @@ class ConstantListSerializer < ActiveModel::Serializer
              :languages,
              :locales,
              :locales,
+             :mobile_alert_frequencies,
              :next_actions,
              :notifications,
              :notifications,

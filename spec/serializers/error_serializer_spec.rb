@@ -67,11 +67,59 @@ RSpec.describe ErrorSerializer, type: :serializer do
               source: { pointer: '/data/attributes/email' },
               title: 'has already been taken',
               detail: 'Email has already been taken'
+            },
+            {
+              status: 400,
+              source: { pointer: '/data/attributes/updated_in_db_at' },
+              title: 'is not equal to the current value in the database',
+              detail: 'Updated in db at is not equal to the current value in the database',
+              meta: {
+                updated_in_db_at: resource.updated_at
+              }
             }
           ]
         }.as_json
 
         serializer = ErrorSerializer.new(status: 400, resource: resource)
+        expect(serializer.as_json).to eq expected_json_hash
+      end
+    end
+
+    context 'with a resource with a 409 conflict' do
+      it 'will correctly generate the json for a 409 conflict' do
+        expected_json_hash = {
+          errors: [
+            {
+              status: 409,
+              source: { pointer: '/data/attributes/name' },
+              title: 'must be in ALL CAPS',
+              detail: 'Name must be in ALL CAPS'
+            },
+            {
+              status: 409,
+              source: { pointer: '/data/attributes/name' },
+              title: 'must contain a ?',
+              detail: 'Name must contain a ?'
+            },
+            {
+              status: 409,
+              source: { pointer: '/data/attributes/email' },
+              title: 'has already been taken',
+              detail: 'Email has already been taken'
+            },
+            {
+              status: 409,
+              source: { pointer: '/data/attributes/updated_in_db_at' },
+              title: 'is not equal to the current value in the database',
+              detail: 'Updated in db at is not equal to the current value in the database',
+              meta: {
+                updated_in_db_at: resource.updated_at
+              }
+            }
+          ]
+        }.as_json
+
+        serializer = ErrorSerializer.new(status: 409, resource: resource)
         expect(serializer.as_json).to eq expected_json_hash
       end
     end
@@ -131,6 +179,10 @@ RSpec.describe ErrorSerializer, type: :serializer do
       @errors ||= build_errors
     end
 
+    def updated_at
+      @updated_at ||= 1.hour.ago
+    end
+
     private
 
     def build_errors
@@ -138,6 +190,7 @@ RSpec.describe ErrorSerializer, type: :serializer do
         errors.add(:name, 'must be in ALL CAPS')
         errors.add(:name, 'must contain a ?')
         errors.add(:email, 'has already been taken')
+        errors.add(:updated_in_db_at, 'is not equal to the current value in the database')
       end
     end
   end

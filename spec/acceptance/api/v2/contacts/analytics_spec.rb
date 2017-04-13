@@ -75,6 +75,7 @@ resource 'Contacts > Analytics' do
       first_gift_not_received_count
       partners_30_days_late_count
       partners_60_days_late_count
+      partners_90_days_late_count
       updated_at
       updated_in_db_at
     )
@@ -93,9 +94,10 @@ resource 'Contacts > Analytics' do
       # show
       get '/api/v2/contacts/analytics' do
         with_options scope: [:data, :attributes] do
-          response_field 'first_gift_not_received_count', 'First Gift Not Received Count', type: 'Number'
-          response_field 'partners_30_days_late_count',   'Partners 30 Days Late Count',   type: 'Number'
-          response_field 'partners_60_days_late_count',   'Partners 60 Days Late Count',   type: 'Number'
+          response_field 'first_gift_not_received_count', 'First Gift Not Received Count',       type: 'Number'
+          response_field 'partners_30_days_late_count',   'Partners 31 to 60 Days Late Count',   type: 'Number'
+          response_field 'partners_60_days_late_count',   'Partners 61 to 90 Days Late Count',   type: 'Number'
+          response_field 'partners_90_days_late_count',   'Partners 91 Days Late Count',         type: 'Number'
         end
 
         example 'Analytics [GET]', document: documentation_scope do

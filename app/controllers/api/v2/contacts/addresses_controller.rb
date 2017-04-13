@@ -2,7 +2,10 @@ class Api::V2::Contacts::AddressesController < Api::V2Controller
   def index
     authorize_index
     load_addresses
-    render json: @addresses, meta: meta_hash(@addresses), include: include_params, fields: field_params
+    render json: @addresses.preload(include_associations),
+           meta: meta_hash(@addresses),
+           include: include_params,
+           fields: field_params
   end
 
   def show

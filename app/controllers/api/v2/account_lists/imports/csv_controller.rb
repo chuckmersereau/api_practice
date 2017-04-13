@@ -53,7 +53,7 @@ class Api::V2::AccountLists::Imports::CsvController < Api::V2Controller
   end
 
   def render_imports
-    render json: @imports,
+    render json: @imports.preload(include_associations),
            meta: meta_hash(@imports),
            include: include_params,
            fields: field_params

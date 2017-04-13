@@ -4,7 +4,7 @@ class Api::V2::Tasks::CommentsController < Api::V2Controller
   def index
     authorize_index
     load_comments
-    render json: @comments,
+    render json: @comments.preload(include_associations),
            meta: meta_hash(@comments),
            status: success_status,
            include: include_params,

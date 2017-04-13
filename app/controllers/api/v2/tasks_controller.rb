@@ -4,7 +4,7 @@ class Api::V2::TasksController < Api::V2Controller
   def index
     authorize_index
     load_tasks
-    render json: @tasks.includes(include_associations).includes(:tags),
+    render json: @tasks.preload(include_associations).preload(:tags),
            meta: meta_hash(@tasks),
            include: include_params,
            fields: field_params
