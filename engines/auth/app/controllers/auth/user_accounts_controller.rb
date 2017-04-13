@@ -18,7 +18,7 @@ module Auth
     private
 
     def fetch_current_user
-      @current_user ||= User.find(jwt_payload['user_id']) if jwt_payload
+      @current_user ||= User.find_by_uuid_or_raise!(jwt_payload['user_uuid']) if jwt_payload
     end
   end
 end

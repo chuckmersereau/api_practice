@@ -15,7 +15,7 @@ RSpec.describe User::Authenticate, type: :model do
 
     it 'returns a json_web_token which decodes to the same user id' do
       expect(subject).to be_present
-      expect(User.find(JsonWebToken.decode(subject)['user_id']).id).to eq user.id
+      expect(User.find_by(uuid: JsonWebToken.decode(subject)['user_uuid']).id).to eq user.id
     end
   end
 end

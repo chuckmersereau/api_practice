@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe JsonWebToken do
-  let(:payload) { { 'user_id' => 1 } }
-  let(:token) { JsonWebToken.encode(payload) }
+  let(:payload) { { 'user_uuid' => SecureRandom.uuid } }
+  let(:token)   { JsonWebToken.encode(payload) }
+
   context '.encode' do
     it 'returns encoded token' do
       expect(token.length).to be > 15
