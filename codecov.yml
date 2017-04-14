@@ -1,1 +1,5 @@
 comment: off
+ignore:
+  - "dev"
+  - "db"
+  - "vendor"
