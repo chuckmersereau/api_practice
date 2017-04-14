@@ -24,9 +24,6 @@ env:
   global:
     - ENCRYPTION_LABEL: "badb2a42c21a"
     - COMMIT_AUTHOR_EMAIL: "tataihono.nikora@gmail.com"
-  matrix:
-    - TEST_SUITE=1
-    - TEST_SUITE=2
-    - TEST_SUITE=3
+
 addons:
   postgresql: "9.4"
