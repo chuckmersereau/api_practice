@@ -12,7 +12,7 @@ before_script:
 - psql -U postgres -q -d mpdx_test -f db/structure.sql
 - psql -U postgres -q -d mpdx_test2 -f db/structure.sql
 script:
-- bin/travis_parallel_test.sh
+- rspec spec
 - bin/travis_rubocop.sh
 - bin/travis_docs.sh
 - bundle exec rake coveralls:push
