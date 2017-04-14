@@ -1,10 +1,6 @@
 class Activity < ApplicationRecord
   acts_as_taggable
 
-  has_paper_trail on: [:destroy],
-                  meta: { related_object_type: 'AccountList',
-                          related_object_id: :account_list_id }
-
   belongs_to :account_list
   belongs_to :notification, inverse_of: :tasks
 

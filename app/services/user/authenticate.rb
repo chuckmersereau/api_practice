@@ -6,6 +6,6 @@ class User::Authenticate < ActiveModelSerializers::Model
   end
 
   def json_web_token
-    @json_web_token ||= ::JsonWebToken.encode(user_id: user.id)
+    @json_web_token ||= ::JsonWebToken.encode(user_uuid: user.uuid)
   end
 end

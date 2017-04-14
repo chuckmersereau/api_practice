@@ -81,6 +81,8 @@ resource 'Contacts > Merges' do
       account_list
       addresses
       appeals
+      contact_referrals_by_me
+      contact_referrals_to_me
       contacts_referred_by_me
       contacts_that_referred_me
       donor_accounts

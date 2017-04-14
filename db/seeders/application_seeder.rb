@@ -141,7 +141,5 @@ class ApplicationSeeder
 
     create :tag
     create :tagging, tag: ActsAsTaggableOn::Tag.last, taggable: person
-
-    create :version, item_id: contact.id, item_type: contact.class.to_s, related_object_id: person.id, related_object_type: person.class.to_s
   end
 end

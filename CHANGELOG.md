@@ -2,17 +2,21 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 13 April 2017
+- Added api_class and help_email attributes to a new constant field called organizations_attributes.
+- Added contact referrals relationships to contact serializer.
+
 ## 11 April 2017
-- Update Contact suggested_changes after an import
-- Added updated_in_db_at to all 409 Conflict error payloads
-- Permit override param on imports
+- Update Contact suggested_changes after an import.
+- Added updated_in_db_at to all 409 Conflict error payloads.
+- Permit override param on imports.
 
 ## 10 April 2017
 - Allows the client not to specify a particular accept or content-type header on the contacts export endpoints.
 - Added a late_by_90_days field to contacts analytics endpoint.
 
 ## 8 April 2017
-- Add `mobile_alert_frequencies` to Constants
+- Add `mobile_alert_frequencies` to Constants.
 
 ## 7 April 2017
 - Added a way to overwrite data on PATCH requests without providing an `updated_in_db_at` value.

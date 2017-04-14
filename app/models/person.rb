@@ -9,9 +9,6 @@ class Person < ApplicationRecord
   TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')].freeze
   SUFFIXES = [_('Jr.'), _('Sr.')].freeze
   MARITAL_STATUSES = [_('Single'), _('Engaged'), _('Married'), _('Separated'), _('Divorced'), _('Widowed')].freeze
-  has_paper_trail on: [:destroy],
-                  meta: { related_object_type: 'Contact',
-                          related_object_id: :contact_id }
 
   belongs_to :master_person
   has_many :email_addresses, -> { order('email_addresses.primary::int desc') }, dependent: :destroy, autosave: true

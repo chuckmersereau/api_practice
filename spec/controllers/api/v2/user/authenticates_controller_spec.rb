@@ -44,7 +44,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
         json_web_token = response_body['data']['attributes']['json_web_token']
 
         expect(json_web_token).to be_present
-        expect(User.find(JsonWebToken.decode(json_web_token)['user_id']).id).to eq user.id
+        expect(User.find_by(uuid: JsonWebToken.decode(json_web_token)['user_uuid']).id).to eq user.id
       end
     end
 

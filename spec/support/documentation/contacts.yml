@@ -194,6 +194,16 @@ relationships: &rels
       description:
         An array of Appeal references for the Contact
       type: '[Appeal]'
+  contact_referrals_by_me:
+    data:
+      description:
+        An array of Contact Referrals references the Contacts that were referred by the current Contact
+      type: '[Contact Referral]'
+  contact_referrals_to_me:
+    data:
+      description:
+        An array of Contact Referrals references the Contacts that referred the current Contact
+      type: '[Contact Referral]'
   contacts_referred_by_me:
     data:
       description:

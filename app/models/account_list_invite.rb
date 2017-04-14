@@ -1,6 +1,4 @@
 class AccountListInvite < ApplicationRecord
-  has_paper_trail on: [:update], ignore: [:updated_at]
-
   belongs_to :account_list
   belongs_to :invited_by_user, class_name: 'User'
   belongs_to :accepted_by_user, class_name: 'User'

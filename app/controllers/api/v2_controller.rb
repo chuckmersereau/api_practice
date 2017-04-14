@@ -30,7 +30,7 @@ class Api::V2Controller < ApiController
   end
 
   def current_user
-    @current_user ||= User.find(jwt_payload['user_id']) if jwt_payload
+    @current_user ||= User.find_by(uuid: jwt_payload['user_uuid']) if jwt_payload
   end
 
   def account_lists
@@ -40,13 +40,13 @@ class Api::V2Controller < ApiController
   private
 
   def jwt_authorize!
-    raise Exceptions::AuthenticationError unless user_id_in_token?
+    raise Exceptions::AuthenticationError unless user_id_in_token? && current_user
   rescue JWT::VerificationError, JWT::DecodeError
     raise Exceptions::AuthenticationError
   end
 
   def user_id_in_token?
-    http_token && jwt_payload && jwt_payload['user_id'].to_i
+    http_token && jwt_payload && jwt_payload['user_uuid']
   end
 
   def http_token

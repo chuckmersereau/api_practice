@@ -63,9 +63,7 @@ describe AccountListInvite do
     it 'sets the canceling user and is then considered cancelled', versioning: true do
       expect(invite.cancelled?).to be false
       user2 = create(:user)
-      expect do
-        invite.cancel(user2)
-      end.to change(Version.where(item_type: 'AccountListInvite'), :count).by(1)
+      invite.cancel(user2)
       expect(invite.cancelled?).to be true
       expect(invite.cancelled_by_user).to eq user2
     end

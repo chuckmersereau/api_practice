@@ -337,20 +337,6 @@ describe Person do
       expect(winner.master_person_id).to eq(orig_winner_master_person_id)
       expect(winner.master_person).to_not be_nil
     end
-
-    it 'creates a Version with a related_object_id', versioning: true do
-      p1 = create(:person)
-      p2 = create(:person)
-      c = create(:contact)
-      p1.contacts << c
-      p2.contacts << c
-      expect do
-        p1.merge(p2)
-      end.to change(Version, :count).by(2) # 2 from the .destroy call and then the transaction commit I think
-
-      v = Version.last
-      expect(v.related_object_id).to eq(c.id)
-    end
   end
 
   context '#confirmed_non_duplicate_of?' do

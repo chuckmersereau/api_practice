@@ -1,6 +1,4 @@
 class Donation < ApplicationRecord
-  has_paper_trail on: [:destroy]
-
   belongs_to :donor_account
   belongs_to :designation_account
   belongs_to :appeal

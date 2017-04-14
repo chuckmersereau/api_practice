@@ -20,6 +20,11 @@ describe ConstantListSerializer do
     it { expect(subject.organizations).to be_a_hash_with_types String, String }
   end
 
+  context '#organizations_attributes' do
+    before { 5.times { create(:organization) } }
+    it { expect(subject.organizations_attributes).to be_a_hash_with_types String, Hash }
+  end
+
   context '#notifications' do
     before { 5.times { create(:notification) } }
     it { expect(subject.notifications).to be_a_hash_with_types String, String }

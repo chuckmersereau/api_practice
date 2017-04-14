@@ -23,7 +23,7 @@ resource 'User / Authentication' do
       explanation 'Authenticate current_user with the provided Access Token'
       do_request
       expect(response_status).to eq(201)
-      expect(JsonWebToken.decode(JSON.parse(response_body)['json_web_token'])).to eq('user_id' => user.id)
+      expect(JsonWebToken.decode(JSON.parse(response_body)['json_web_token'])).to eq('user_uuid' => user.uuid)
     end
   end
 end
