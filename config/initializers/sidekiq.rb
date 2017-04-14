@@ -20,9 +20,6 @@ Sidekiq.configure_server do |config|
   config.reliable_scheduler!
   config.redis = { url: Redis.current.client.id,
                    namespace: "MPDX:#{Rails.env}:resque" }
-  config.server_middleware do |chain|
-    chain.add SidekiqWhodunnit
-  end
 
   config.error_handlers << Proc.new { |exception, context_hash| Rollbar.error(exception, context_hash) }
 end
