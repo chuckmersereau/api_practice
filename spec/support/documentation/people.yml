@@ -1,0 +1,82 @@
+actions:
+  bulk_create:
+    description: |
+      > an individual element of the `data` array
+
+      ```json
+      {
+        "data": {
+          "type": "people",
+          "id": "1d6393dd-f3f4-49d3-9fd8-7e758b056b1f",
+          "attributes": {
+            "first_name": "Steve",
+            "last_name": "Rogers",
+            "more_attributes": "...etc"
+          }
+        }
+      }
+      ```
+
+      For this bulk create endpoint, you are *required* to send an array of items within the `data` object.
+      You are also *required* to send in a related Person. A Person cannot be created without a Contact.
+
+      - Each member of the array _must_ contain a _client generated `id`_ to be used for the Person being created.
+      - Each member of the array _must_ contain a `type` that has the value of `'people'`.
+      - Each member of the array _must_ have an `attributes` hash of values to be used for the Person being created.
+
+ignored_attributes: &ignored_attrs
+  created_at:
+    ignore: true
+  updated_at:
+    ignore: true
+  updated_in_db_at:
+    ignore: true
+  overwrite:
+    ignore: true
+
+parameters:
+  bulk_create:
+    data:
+      description:
+        An array of People to be created
+      type: '[Person]'
+      required: true
+
+  bulk_update:
+    data:
+      description:
+        An array of People to be updated
+      type: '[Person]'
+      required: true
+
+  bulk_delete:
+    data:
+      description:
+        An array of objects that have both a `type` and `id` for the People being deleted
+      type: '[object w/ type and id]'
+      required: true
+
+response_fields:
+  bulk_create:
+    data:
+      description:
+        Array of People objects that have been successfully created and of errors related to People objects that were not created successfully
+      type: '[Person / error]'
+    attributes:
+      <<: *ignored_attrs
+
+  bulk_update:
+    data:
+      description:
+        Array of People objects that have been successfully created and of errors related to People objects that were not created successfully
+      type: '[Person / error]'
+    attributes:
+      <<: *ignored_attrs
+
+  bulk_delete:
+    data:
+      description:
+        An array of People that have just been deleted
+      type: '[Person]'
+    attributes:
+      <<: *ignored_attrs

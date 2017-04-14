@@ -48,14 +48,14 @@ class Person < ApplicationRecord
   scope :by_anniversary, -> { order('anniversary_month, anniversary_day') }
   scope :by_birthday,    -> { order('birthday_month, birthday_day') }
 
-  accepts_nested_attributes_for :email_addresses, reject_if: -> (e) { e[:email].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :phone_numbers, reject_if: -> (p) { p[:number].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :email_addresses,      reject_if: -> (e) { e[:email].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :phone_numbers,        reject_if: -> (p) { p[:number].blank? }, allow_destroy: true
   accepts_nested_attributes_for :family_relationships, reject_if: -> (p) { p[:related_contact_id].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :facebook_accounts, reject_if: -> (p) { p[:username].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :twitter_accounts, reject_if: -> (p) { p[:screen_name].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :linkedin_accounts, reject_if: -> (p) { p[:public_url].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :pictures, reject_if: -> (p) { p[:image].blank? && p[:image_cache].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :websites, reject_if: -> (p) { p[:url].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :facebook_accounts,    reject_if: -> (p) { p[:username].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :twitter_accounts,     reject_if: -> (p) { p[:screen_name].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :linkedin_accounts,    reject_if: -> (p) { p[:public_url].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :pictures,             reject_if: -> (p) { p[:image].blank? && p[:image_cache].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :websites,             reject_if: -> (p) { p[:url].blank? }, allow_destroy: true
 
   PERMITTED_ATTRIBUTES = [
     :anniversary_day,
@@ -64,6 +64,7 @@ class Person < ApplicationRecord
     :birthday_day,
     :birthday_month,
     :birthday_year,
+    :contact_ids,
     :created_at,
     :deceased,
     :employer,
@@ -90,8 +91,7 @@ class Person < ApplicationRecord
         :historic,
         :id,
         :location,
-        :primary,
-        :source,
+        :primary, :source,
         :uuid,
         :valid_values
       ],
