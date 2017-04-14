@@ -1,12 +1,12 @@
+require 'simplecov'
+SimpleCov.start
+
 if ENV['COVERALLS_REPO_TOKEN']
   require 'coveralls'
   Coveralls.wear_merged!('rails')
 end
 
 if ENV['CODECOV_TOKEN']
-  require 'simplecov'
-  SimpleCov.start
-
   require 'codecov'
   SimpleCov.formatter = SimpleCov::Formatter::Codecov
 end
