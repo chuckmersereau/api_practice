@@ -75,6 +75,7 @@ Rails.application.routes.draw do
                 end
               end
               namespace :people do
+                resource :bulk, only: [:create, :update, :destroy], controller: :bulk
                 namespace :merges do
                   resource :bulk, only: [:create], controller: :bulk
                 end

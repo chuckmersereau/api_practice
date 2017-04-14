@@ -29,6 +29,7 @@ class Api::V2::Contacts::BulkController < Api::V2::BulkController
 
   def destroy_contacts
     @destroyed_contacts = @contacts.select(&:destroy)
+
     render json: BulkResourceSerializer.new(resources: @destroyed_contacts)
   end
 

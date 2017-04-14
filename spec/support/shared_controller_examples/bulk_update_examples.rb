@@ -1,4 +1,6 @@
-RSpec.shared_examples 'bulk_update_examples' do
+RSpec.shared_examples 'bulk_update_examples' do |options = {}|
+  options[:except] ||= []
+
   include_context 'common_variables'
 
   describe '#update' do
@@ -160,6 +162,7 @@ RSpec.shared_examples 'bulk_update_examples' do
 
       it 'does not update resources that do not belong to current user' do
         put :update, data: [{ data: { type: resource_type, id: unauthorized_resource.uuid, attributes: { reference_key => reference_value } } }]
+
         expect(unauthorized_resource.reload.send(reference_key)).to_not eq(reference_value)
         expect(response.status).to eq(404), invalid_status_detail
         expect(response_errors.size).to eq(1)
@@ -173,11 +176,14 @@ RSpec.shared_examples 'bulk_update_examples' do
         expect(response.status).to eq(401), invalid_status_detail
       end
 
-      it "returns a 403 when user tries to associate resource to an account list that doesn't belong to him" do
-        expect do
-          put :update, bulk_update_attributes_with_forbidden_resource
-        end.not_to change { resource.class.order(:updated_at).last.updated_at }
-        expect(response.status).to eq(403), invalid_status_detail
+      unless options[:except].include?(:forbidden_resources)
+        it "returns a 403 when user tries to associate resource to an account list that doesn't belong to him" do
+          expect do
+            put :update, bulk_update_attributes_with_forbidden_resource
+          end.not_to change { resource.class.order(:updated_at).last.updated_at }
+
+          expect(response.status).to eq(403), invalid_status_detail
+        end
       end
     end
   end

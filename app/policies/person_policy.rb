@@ -12,6 +12,10 @@ class PersonPolicy < ApplicationPolicy
     contacts_belongs_to_user?
   end
 
+  def bulk_create?
+    contacts_belongs_to_user?
+  end
+
   private
 
   def resource_owner?
