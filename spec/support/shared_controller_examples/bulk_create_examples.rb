@@ -66,6 +66,7 @@ RSpec.shared_examples 'bulk_create_examples' do
       expect do
         put :create, bulk_create_attributes
       end.to_not change { second_resource.reload.send(reference_key) }
+
       response_with_errors = response_body.detect { |hash| hash.dig('id') == second_uuid }
       expect(response_with_errors['errors']).to be_present
       expect(response_with_errors['errors'].detect { |hash| hash.dig('source', 'pointer') == "/data/attributes/#{reference_key}" }).to be_present
@@ -80,39 +81,48 @@ RSpec.shared_examples 'bulk_create_examples' do
                 type: resource_type,
                 id: first_uuid,
                 attributes: correct_attributes
-              }
+              }.merge(relationships: relationships)
             },
             {
               data: {
                 type: resource_type,
                 id: second_uuid,
-                attributes: correct_attributes,
-                relationships: {
-                  account_list: {
-                    data: {
-                      id: create(:account_list).uuid,
-                      type: 'account_lists'
-                    }
-                  }
-                }
-              }
+                attributes: correct_attributes
+              }.merge(relationships: found_forbidden_relationships)
             },
             {
               data: {
                 type: resource_type,
                 id: third_uuid,
                 attributes: correct_attributes
-              }
+              }.merge(relationships: relationships)
             }
           ]
         }
       end
 
+      let!(:found_forbidden_relationships) do
+        defined?(forbidden_relationships) ? forbidden_relationships : default_forbidden_relationships
+      end
+
+      let!(:default_forbidden_relationships) do
+        {
+          account_list: {
+            data: {
+              id: create(:account_list).uuid,
+              type: 'account_lists'
+            }
+          }
+        }
+      end
+
       it 'does not create resources for users that are not signed in' do
         api_logout
+
         expect do
           post :create
         end.not_to change { resource.class.count }
+
         expect(response.status).to eq(401), invalid_status_detail
       end
 
@@ -120,6 +130,7 @@ RSpec.shared_examples 'bulk_create_examples' do
         expect do
           post :create, bulk_create_attributes_with_forbidden_resource
         end.not_to change { resource.class.count }
+
         expect(response.status).to eq(403), invalid_status_detail
       end
     end
