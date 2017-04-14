@@ -3,6 +3,14 @@ if ENV['COVERALLS_REPO_TOKEN']
   Coveralls.wear_merged!('rails')
 end
 
+if ENV['CODECOV_TOKEN']
+  require 'simplecov'
+  SimpleCov.start
+
+  require 'codecov'
+  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+end
+
 ENV['RAILS_ENV'] ||= 'test'
 require File.expand_path('../../config/environment', __FILE__)
 
