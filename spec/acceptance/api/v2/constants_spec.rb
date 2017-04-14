@@ -39,6 +39,7 @@ resource 'Constants' do
           next_actions
           notifications
           organizations
+          organizations_attributes
           pledge_currencies
           pledge_frequencies
           results
@@ -87,6 +88,12 @@ resource 'Constants' do
           expect(organization.size).to eq 2
           expect(organization.first).to be_a(String)
           expect(organization.second).to be_a(String)
+        end
+
+        resource_object['organizations_attributes'].each do |organization_attributes|
+          expect(organization_attributes.size).to eq 2
+          expect(organization_attributes.first).to be_a(String)
+          expect(organization_attributes.second).to be_a(Hash)
         end
 
         resource_object['pledge_frequencies'].each do |frequency|

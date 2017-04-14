@@ -42,6 +42,11 @@ RSpec.describe ConstantList, type: :model do
     it { expect(subject.organizations).to be_a_hash_with_types String, String }
   end
 
+  describe '#organizations_attributes' do
+    before { 5.times { create(:organization) } }
+    it { expect(subject.organizations_attributes).to be_a_hash_with_types String, Hash }
+  end
+
   describe '#assignable_locations' do
     it { expect(subject.assignable_locations).to be_an Array }
     it { subject.assignable_locations.each { |loc| expect(loc).to be_a String } }
