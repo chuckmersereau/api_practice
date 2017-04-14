@@ -9,7 +9,7 @@ class TntImport::SettingsImport
   def import
     return unless @xml_tables['Property'].present?
 
-    Array.wrap(@xml_tables['Property']['row']).each do |row|
+    @xml_tables['Property'].each do |row|
       case row['PropName']
       when 'MonthlySupportGoal'
         @account_list.monthly_goal = row['PropValue'] if @override || @account_list.monthly_goal.blank?

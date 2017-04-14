@@ -10,7 +10,7 @@ class TntImport::GiftsImport
     return unless @account_list.organization_accounts.count == 1
     org = @account_list.organization_accounts.first.organization
 
-    Array.wrap(xml_tables['Gift']['row']).each do |row|
+    xml_tables['Gift'].each do |row|
       contact = tnt_contacts[row['ContactID']]
       next unless contact
       next if org.api_class != 'OfflineOrg' && row['PersonallyReceived'] == 'false'

@@ -4,7 +4,7 @@ class TntImport::OrgsFinder
       xml = xml.tables
       return unless xml && xml['Organization'].present?
       orgs_by_tnt_id = {}
-      Array.wrap(xml['Organization']['row']).each do |org_row|
+      xml['Organization'].each do |org_row|
         orgs_by_tnt_id[org_row['id']] =
           Organization.find_by(code: org_row['Code']) || default_org
       end

@@ -13,7 +13,7 @@ class TntImport::DonorAccountsImport
 
     donors_by_tnt_contact_id = {}
 
-    Array.wrap(@xml_tables['Donor']['row']).each do |row|
+    @xml_tables['Donor'].each do |row|
       contact_tnt_id = row['ContactID']
 
       # Name the donor account after the contact FileAs
@@ -80,8 +80,8 @@ class TntImport::DonorAccountsImport
 
   def contact_rows_by_tnt_id
     @contact_rows_by_tnt_id ||=
-      Hash[Array.wrap(@xml_tables['Contact']['row']).map do |contact_row|
+      Hash[@xml_tables['Contact'].map do |contact_row|
         [contact_row['id'], contact_row]
-      end]
+      end.to_a]
   end
 end

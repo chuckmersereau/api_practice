@@ -10,7 +10,7 @@ class TntImport::TasksImport
     return unless xml_tables['Task'].present? && xml_tables['TaskContact'].present?
     tnt_tasks = {}
 
-    Array.wrap(xml_tables['Task']['row']).each do |row|
+    xml_tables['Task'].each do |row|
       task = Retryable.retryable do
         @account_list.tasks.where(remote_id: row['id'], source: 'tnt').first_or_initialize
       end
@@ -29,7 +29,7 @@ class TntImport::TasksImport
     end
 
     # Add contacts to tasks
-    Array.wrap(xml_tables['TaskContact']['row']).each do |row|
+    xml_tables['TaskContact'].each do |row|
       next unless tnt_contacts[row['ContactID']] && tnt_tasks[row['TaskID']]
       tnt_tasks[row['TaskID']].contacts << tnt_contacts[row['ContactID']] unless tnt_tasks[row['TaskID']].contacts.include? tnt_contacts[row['ContactID']]
     end
