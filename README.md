@@ -1,3 +1,6 @@
+Staging: [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/staging/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
+Master: [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
+
 [![Build Status](https://travis-ci.org/CruGlobal/mpdx.png?branch=master)](https://travis-ci.org/CruGlobal/mpdx)
 
 MPDX API
