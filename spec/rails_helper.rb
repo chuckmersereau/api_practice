@@ -1,7 +1,7 @@
 require 'simplecov'
 SimpleCov.start 'rails' do
-  add_filter "dev/"
-  add_filter "vendor/"
+  add_filter 'dev/'
+  add_filter 'vendor/'
 end
 
 if ENV['COVERALLS_REPO_TOKEN']

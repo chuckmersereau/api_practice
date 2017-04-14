@@ -37,13 +37,13 @@ class Person::GmailAccount
       begin
         # sent emails
         sent = g.mailbox('[Gmail]/Sent Mail')
-        sent.emails_in_batches(after: since).each do |gmail_message|
+        sent.emails(after: since).each do |gmail_message|
           log_sent_email(message: gmail_message, email_collection: email_collection)
         end
 
         # received emails
         all = g.mailbox('[Gmail]/All Mail')
-        all.emails_in_batches(after: since).each do |gmail_message|
+        all.emails(after: since).each do |gmail_message|
           log_received_email(message: gmail_message, email_collection: email_collection)
         end
       rescue Net::IMAP::NoResponseError => e
