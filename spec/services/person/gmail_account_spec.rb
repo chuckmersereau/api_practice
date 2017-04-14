@@ -63,16 +63,16 @@ describe Person::GmailAccount do
     end
 
     it 'logs a sent email' do
-      expect(sent_mailbox).to  receive(:emails_in_batches).and_return([gmail_message])
-      expect(all_mailbox).to   receive(:emails_in_batches).and_return([])
+      expect(sent_mailbox).to  receive(:emails).and_return([gmail_message])
+      expect(all_mailbox).to   receive(:emails).and_return([])
       expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
     end
 
     it 'logs a received email' do
-      expect(sent_mailbox).to  receive(:emails_in_batches).and_return([])
-      expect(all_mailbox).to   receive(:emails_in_batches).and_return([gmail_message])
+      expect(sent_mailbox).to  receive(:emails).and_return([])
+      expect(all_mailbox).to   receive(:emails).and_return([gmail_message])
       expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
