@@ -164,6 +164,10 @@ GEM
     cloudinary (1.2.4)
       aws_cf_signer
       rest-client
+    codecov (0.1.10)
+      json
+      simplecov
+      url
     coderay (1.1.1)
     coercible (1.0.0)
       descendants_tracker (~> 0.0.1)
@@ -711,6 +715,7 @@ GEM
     uglifier (3.0.1)
       execjs (>= 0.3.0, < 3)
     unicode-display_width (1.1.1)
+    url (0.3.2)
     user_agent_decoder (0.0.9)
     uuidtools (2.1.5)
     versionist (1.2.1)
@@ -753,6 +758,7 @@ DEPENDENCIES
   carrierwave (~> 0.11.2)
   charlock_holmes (~> 0.7.3)
   cloudinary (~> 1.2.3)
+  codecov
   country_select!
   coveralls (~> 0.8.15)
   database_cleaner (~> 1.5.3)
