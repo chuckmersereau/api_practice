@@ -4,19 +4,6 @@ class Contact < ApplicationRecord
   include TagsEagerLoading
   extend ApplicationHelper
 
-  # Don't create a new paper trail version if only a timestamp or de-normalized
-  # field changes.
-  PAPER_TRAIL_IGNORED_FIELDS = [
-    :updated_at, :total_donations, :last_donation_date, :first_donation_date,
-    :notes_saved_at, :last_activity, :last_letter, :last_phone_call,
-    :last_pre_call, :last_thank, :uncompleted_tasks_count, :notes, :notes_saved_at
-  ].freeze
-
-  has_paper_trail on: [:destroy, :update],
-                  meta: { related_object_type: 'AccountList',
-                          related_object_id: :account_list_id },
-                  ignore: PAPER_TRAIL_IGNORED_FIELDS
-
   # Track status and pledge details at most once per day in separate table
   has_attributes_history for: [:status, :pledge_amount, :pledge_frequency,
                                :pledge_received, :pledge_start_date],

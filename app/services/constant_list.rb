@@ -41,6 +41,10 @@ class ConstantList < ActiveModelSerializers::Model
     @organizations ||= organizations_hash
   end
 
+  def organizations_attributes
+    @organizations_attributes ||= organizations_attributes_hash
+  end
+
   def next_actions
     @next_actions ||= dup_hash_of_arrays(Task.all_next_action_options.dup)
   end
@@ -91,6 +95,20 @@ class ConstantList < ActiveModelSerializers::Model
     Organization.active.order(name: :asc).inject({}) do |hash, org|
       hash.merge!(org.uuid => org.name)
     end
+  end
+
+  def organizations_attributes_hash
+    Organization.active.order(name: :asc).inject({}) do |hash, org|
+      hash.merge!(org.uuid => org_attributes_hash(org))
+    end
+  end
+
+  def org_attributes_hash(org)
+    {
+      name: org.name,
+      api_class: org.api_class,
+      help_email: org.org_help_email
+    }
   end
 
   # For some reason, ActiveModelSerializer tries to somehow modify the elements

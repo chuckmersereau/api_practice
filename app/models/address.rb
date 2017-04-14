@@ -3,12 +3,6 @@ require 'smarty_streets'
 class Address < ApplicationRecord
   include Concerns::BeforeCreateSetValidValuesBasedOnSource
 
-  has_paper_trail on: [:create, :update, :destroy],
-                  if: proc { |address| address.record_paper_trail? },
-                  meta: { related_object_type: :addressable_type,
-                          related_object_id: :addressable_id },
-                  ignore: [:updated_at]
-
   belongs_to :addressable, polymorphic: true, touch: true
   belongs_to :master_address
   belongs_to :source_donor_account, class_name: 'DonorAccount'

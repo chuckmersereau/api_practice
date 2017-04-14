@@ -12,8 +12,6 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'spec_helper'
 require 'rspec/rails'
 require 'rspec/matchers'
-require 'paper_trail/frameworks/rspec'
-require 'attributes_history/rspec'
 require 'equivalent-xml'
 require 'ammeter/init'
 require 'shoulda/matchers'

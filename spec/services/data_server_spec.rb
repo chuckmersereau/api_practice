@@ -531,9 +531,7 @@ describe DataServer do
       da.donations += [manual_donation, old_donation, removed_donation]
       other_designation = create(:donation)
 
-      expect do
-        @data_server.import_donations(profile, Date.today - 2.weeks, Date.today)
-      end.to change(Version.where(item_type: 'Donation'), :count).by(1)
+      @data_server.import_donations(profile, Date.today - 2.weeks, Date.today)
 
       expect(Donation.find_by(id: removed_donation.id)).to be_nil
       expect(Donation.find(manual_donation.id)).to be_present
