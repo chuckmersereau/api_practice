@@ -44,6 +44,8 @@ class ContactSerializer < ApplicationSerializer
 
   has_many :addresses
   has_many :appeals
+  has_many :contact_referrals_by_me
+  has_many :contact_referrals_to_me
   has_many :contacts_referred_by_me
   has_many :contacts_that_referred_me
   has_many :donor_accounts

@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 13 April 2017
+- Added contact referrals relationships to contact serializer.
+
 ## 11 April 2017
 - Update Contact suggested_changes after an import
 - Added updated_in_db_at to all 409 Conflict error payloads
