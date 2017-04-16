@@ -31,16 +31,47 @@ describe Person::OrganizationAccount do
         org_account.locked_at = nil
         expect(org_account.new_record?).to be false
       end
+
       it 'rescues invalid password error' do
         expect do
           org_account.import_all_data
         end.to_not raise_error
       end
+
       it 'sends email' do
         expect do
           org_account.import_all_data
         end.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
       end
+
+      it 'marks as not valid' do
+        org_account.import_all_data
+        expect(org_account.valid_credentials).to be false
+      end
+    end
+
+    context 'when password and username missing' do
+      before do
+        allow(api).to receive(:import_all).and_raise(OrgAccountMissingCredentialsError)
+        org_account.person.email = 'foo@example.com'
+
+        org_account.downloading = false
+        org_account.locked_at = nil
+        expect(org_account.new_record?).to be false
+      end
+
+      it 'rescues invalid password error' do
+        expect do
+          org_account.import_all_data
+        end.to_not raise_error
+      end
+
+      it 'sends email' do
+        expect do
+          org_account.import_all_data
+        end.to change(Sidekiq::Extensions::DelayedMailer.jobs, :size).by(1)
+      end
+
       it 'marks as not valid' do
         org_account.import_all_data
         expect(org_account.valid_credentials).to be false

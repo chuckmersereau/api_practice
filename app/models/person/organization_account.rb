@@ -68,7 +68,7 @@ class Person::OrganizationAccount < ApplicationRecord
     return if locked_at || new_record? || !valid_rechecked_credentials
     update_column(:downloading, true)
     import_donations
-  rescue OrgAccountInvalidCredentialsError
+  rescue OrgAccountInvalidCredentialsError, OrgAccountMissingCredentialsError
     update_column(:valid_credentials, false)
     ImportMailer.delay.credentials_error(self)
   ensure

@@ -636,6 +636,8 @@ class Contact < ApplicationRecord
   end
 
   def amount_with_gift_aid(amount)
+    amount ||= 0
+
     (amount * gift_aid_coefficient).round(2)
   end
 

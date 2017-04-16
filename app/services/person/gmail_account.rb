@@ -85,13 +85,14 @@ class Person::GmailAccount
   private
 
   def fetch_account_email_data(email_collection, email_address)
+    return unless email_address
+
     # While `email_collection.index_data[email_address]` could return an array of multiple items,
     # based on the possiblity that multiple Contacts can each have a person with the same email address -
     # we're selecting the first item in the array to maintain feature parity with legacy only fetching
     # and logging emails for an email address once.
     #
     # For context: https://github.com/CruGlobal/mpdx_api/blob/6412f535455c4959e3801c43143758f1438272ce/app/services/person/gmail_account.rb#L35-L46
-
     email_collection.indexed_data[email_address]&.first
   end
 
@@ -148,13 +149,15 @@ class Person::GmailAccount
   end
 
   def recipient_email_addresses_from_envelope(envelope)
-    envelope.to.map do |address|
+    envelope.to.to_a.map do |address|
       "#{address.mailbox}@#{address.host}"
     end
   end
 
   def sender_email_address_from_envelope(envelope)
-    address = envelope.sender.first
+    address = envelope.sender&.first
+
+    return unless address
 
     "#{address.mailbox}@#{address.host}"
   end

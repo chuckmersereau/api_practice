@@ -379,10 +379,12 @@ class AccountList < ApplicationRecord
 
   def import_data
     import_donations
+
     if fix_dup_balances
       # Import donations again if we fixed any dup balances
       import_donations
     end
+
     send_account_notifications
     queue_sync_with_google_contacts
   end
