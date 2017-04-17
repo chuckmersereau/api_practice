@@ -186,13 +186,6 @@ describe CsvImport do
         expect(csv_import.account_list.contacts.reload.where(name: 'Doe, John and Jane')).to be_present
       end
 
-      it 'errors if there is invalid data and does not save any contacts' do
-        csv_import.in_preview = false
-        expect(import).to receive(:contacts).and_return([build(:contact), build(:contact, name: '')])
-        expect { import.import }.to raise_error(/Validation failed/)
-        expect(Contact.count).to eq(0)
-      end
-
       it 'aborts if the import is invalid' do
         csv_import.in_preview = false
         csv_import.file_constants_mappings = nil

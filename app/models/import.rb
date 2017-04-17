@@ -100,6 +100,13 @@ class Import < ApplicationRecord
     self.tags = new_tag_list.try(:split, ',')
   end
 
+  def each_line
+    File.open(file.file.file).each_line do |line|
+      line = EncodingUtil.normalized_utf8(line) || line
+      yield(line)
+    end
+  end
+
   private
 
   def sidekiq_queue

@@ -143,4 +143,15 @@ describe Import do
     expect(import.valid?).to eq false
     expect(import.errors[:file]).to eq ['File size must be less than 100000000 bytes']
   end
+
+  describe '#each_line' do
+    it 'returns all lines' do
+      import = create(:csv_import, in_preview: true)
+      lines = []
+      import.each_line do |line|
+        lines << line
+      end
+      expect(lines.size).to eq(2)
+    end
+  end
 end
