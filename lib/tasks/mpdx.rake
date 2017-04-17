@@ -14,7 +14,7 @@ namespace :mpdx do
   task merge_contacts: :environment do
     AccountList.where('id > 125').find_each do |al|
       puts al.id
-      al.merge_contacts
+      al.async_merge_contacts(1.year.ago)
     end
   end
 
@@ -25,7 +25,7 @@ namespace :mpdx do
         next unless other_list # && other_contact.donor_accounts.first == contact.donor_accounts.first
         puts other_list.name
         al.merge(other_list)
-        al.merge_contacts
+        al.async_merge_contacts(1.year.ago)
         merge_account_lists
         return
       end

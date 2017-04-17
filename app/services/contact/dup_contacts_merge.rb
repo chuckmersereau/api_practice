@@ -1,34 +1,41 @@
 class Contact::DupContactsMerge
-  def initialize(contacts)
-    @contacts = contacts
+  def initialize(account_list:, contact:)
+    @account_list = account_list
+    @contact = contact
   end
 
   def merge_duplicates
-    merged_contacts = []
-
-    ordered_contacts = contacts.includes(:addresses, :donor_accounts).order('contacts.created_at')
-    ordered_contacts.each do |contact|
-      next if merged_contacts.include?(contact)
-
-      other_contacts = ordered_contacts.select do |c|
-        c.name == contact.name &&
-          c.id != contact.id &&
-          (c.donor_accounts.first == contact.donor_accounts.first ||
-           c.addresses.find { |a| contact.addresses.find { |ca| ca.equal_to? a } })
-      end
-      next unless other_contacts.present?
-      other_contacts.each do |other_contact|
-        contact.merge(other_contact)
-        merged_contacts << other_contact
-      end
+    contacts_to_merge = contacts_with_the_same_name_as(contact).select do |contact_with_the_same_name|
+      contacts_have_a_matching_donor_account?(contact, contact_with_the_same_name) ||
+        contacts_have_a_matching_address?(contact, contact_with_the_same_name)
     end
 
-    contacts.reload
-    contacts.each(&:merge_people)
-    contacts.each(&:merge_addresses)
+    contacts_to_merge.each do |contact_to_merge|
+      contact.merge(contact_to_merge)
+    end
+
+    contact.reload
+    contact.merge_people
+    contact.merge_addresses
   end
 
   private
 
-  attr_reader :contacts
+  attr_accessor :account_list, :contact
+
+  def contacts_with_the_same_name_as(contact)
+    account_list.contacts.includes(:addresses, :donor_accounts).where.not(id: contact.id).where(name: contact.name)
+  end
+
+  def contacts_have_a_matching_donor_account?(contact_a, contact_b)
+    (contact_a.donor_accounts & contact_b.donor_accounts).present?
+  end
+
+  def contacts_have_a_matching_address?(contact_a, contact_b)
+    contact_a.addresses.any? do |address_a|
+      contact_b.addresses.any? do |address_b|
+        address_a.equal_to?(address_b)
+      end
+    end
+  end
 end

@@ -282,8 +282,14 @@ class AccountList < ApplicationRecord
     no_activity_since
   end
 
-  def merge_contacts
-    Contact::DupContactsMerge.new(contacts).merge_duplicates
+  def async_merge_contacts(since_time)
+    batch = Sidekiq::Batch.new
+    batch.description = "AccountList #{id} #async_merge_contacts"
+    batch.jobs do
+      contacts.where('updated_at >= ?', since_time).pluck(:id).each do |contact_id|
+        Contact::DupContactsMergeWorker.perform_async(id, contact_id)
+      end
+    end
   end
 
   # Download all donations / info for all accounts associated with this list

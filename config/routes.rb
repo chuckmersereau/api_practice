@@ -1,4 +1,4 @@
-require 'sidekiq/web'
+require 'sidekiq/pro/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
@@ -173,4 +173,8 @@ Rails.application.routes.draw do
 
   get  'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post 'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
+
+  if Rails.env.development?
+    mount Sidekiq::Web => '/sidekiq'
+  end
 end

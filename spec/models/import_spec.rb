@@ -86,25 +86,28 @@ describe Import do
   it 'should send an success email when importing completes then merge contacts and queue google sync' do
     expect_delayed_email(ImportMailer, :complete)
     import = create(:tnt_import)
-    expect(import.account_list).to receive(:merge_contacts)
+    expect(import.account_list).to receive(:async_merge_contacts)
     expect(import.account_list).to receive(:queue_sync_with_google_contacts)
     import.send(:import)
   end
 
-  it "should send a failure email if there's an error" do
+  it "should send a failure email if there's an error and not re-raise it" do
     import = create(:tnt_import)
     expect(@tnt_import).to receive(:import).and_raise('foo')
     expect_delayed_email(ImportMailer, :failed)
+    expect(Rollbar).to receive(:error)
 
     expect do
       import.send(:import)
-    end.to raise_error('foo')
+    end.to_not raise_error
   end
 
-  it 'should send a failure error but not re-raise/notify the error if the error is UnsurprisingImportError' do
+  it 'should send a failure error but not re-raise the error if the error is UnsurprisingImportError' do
+    Sidekiq::Testing.inline!
     import = create(:tnt_import)
     expect(@tnt_import).to receive(:import).and_raise(Import::UnsurprisingImportError)
     expect_delayed_email(ImportMailer, :failed)
+    expect(Rollbar).to receive(:info)
 
     expect do
       import.send(:import)
@@ -119,7 +122,7 @@ describe Import do
     expect(ImportMailer).to receive(:delay).and_raise(StandardError)
 
     import = create(:tnt_import)
-    expect(import.account_list).to receive(:merge_contacts)
+    expect(import.account_list).to receive(:async_merge_contacts)
     expect(import.account_list).to receive(:queue_sync_with_google_contacts)
     import.send(:import)
   end

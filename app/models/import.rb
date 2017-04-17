@@ -139,21 +139,22 @@ class Import < ApplicationRecord
   rescue => exception
     Rollbar.error(exception)
     after_import_failure
-    raise exception
+    false
   ensure
     update_column(:importing, false)
   end
 
   def after_import_success(import_started_at:)
+    account_list.async_merge_contacts(import_started_at)
+    account_list.queue_sync_with_google_contacts
+    account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
+    Contact::SuggestedChangesUpdaterWorker.perform_async(user.id, import_started_at)
+
     begin
       ImportMailer.delay.complete(self)
     rescue => mail_exception
       Rollbar.error(mail_exception)
     end
-    account_list.merge_contacts # clean up data
-    account_list.queue_sync_with_google_contacts
-    account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
-    Contact::SuggestedChangesUpdaterWorker.perform_async(user.id, import_started_at)
   end
 
   def after_import_failure
