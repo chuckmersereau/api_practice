@@ -8,18 +8,20 @@ class NotificationType::LargerGift < NotificationType
   end
 
   def had_larger_gift?(contact)
-    return unless contact.pledge_frequency && contact.pledge_amount
+    return false unless contact.pledge_frequency && contact.pledge_amount
 
     if contact.pledge_frequency < 1
-      return contact.last_donation.present? && contact.amount_with_gift_aid(contact.donations
-                                                                                   .without_gift_aid
-                                                                                   .first.amount) > contact.pledge_amount
+      first_gift_without_aid_amount = contact.donations.without_gift_aid.first&.amount || 0
+
+      return contact.last_donation.present? &&
+             (contact.amount_with_gift_aid(first_gift_without_aid_amount) > contact.pledge_amount)
     end
 
-    return if long_time_frame_gift_given_early?(contact)
+    return false if long_time_frame_gift_given_early?(contact)
 
-    monthly_avg_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_current(except_payment_method: Donation::GIFT_AID))
+    monthly_avg_without_gift_aid                = contact.amount_with_gift_aid(contact.monthly_avg_current(except_payment_method: Donation::GIFT_AID))
     monthly_avg_with_prev_gift_without_gift_aid = contact.amount_with_gift_aid(contact.monthly_avg_with_prev_gift)
+
     monthly_avg_without_gift_aid > contact.monthly_pledge &&
       monthly_avg_with_prev_gift_without_gift_aid > contact.monthly_pledge &&
       !caught_up_earlier_months?(contact)

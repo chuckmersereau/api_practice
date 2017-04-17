@@ -5,7 +5,7 @@ require 'csv'
 class Import < ApplicationRecord
   include Async
   include Sidekiq::Worker
-  sidekiq_options queue: :api_import, retry: false, backtrace: true, unique: :until_executed
+  sidekiq_options queue: :api_import, retry: 0, backtrace: true, unique: :until_executed
   mount_uploader :file, ImportUploader
 
   SOURCES = %w(facebook twitter linkedin tnt google tnt_data_sync csv).freeze

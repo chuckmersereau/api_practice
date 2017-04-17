@@ -3,17 +3,19 @@ class TntImport::GroupTagsLoader
     def tags_by_tnt_contact_id(xml)
       return {} unless xml&.tables&.dig('Group').present?
 
-      groups = Array.wrap(xml.tables['Group']['row']).map do |row|
+      groups = xml.tables['Group'].map do |row|
         {
           id: row['id'],
           tags: extract_tags_from_group_row(row, xml.version)
         }
       end
-      groups_by_id = Hash[groups.map { |group| [group[:id], group] }]
+      groups_by_id = Hash[
+        groups.map { |group| [group[:id], group] }.to_a # force array from Enumerable::Lazy
+      ]
 
       tags_by_contact_id = {}
 
-      Array.wrap(xml.tables['GroupContact']['row']).each do |row|
+      xml.tables['GroupContact'].each do |row|
         group = groups_by_id[row['GroupID']]
 
         tags_by_contact_id[row['ContactID']] ||= []

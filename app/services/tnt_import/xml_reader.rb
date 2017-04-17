@@ -15,31 +15,27 @@ class TntImport::XmlReader
   end
 
   def read_xml
-    xml = {}
-    begin
-      File.open(file_path, 'r:utf-8') do |file|
-        contents = file.read
+    File.open(file_path, 'r:utf-8') do |file|
+      contents = file.read
+      begin
+        return Nokogiri::XML(contents)
+      rescue => e
+        # If the document contains characters that we don't know how to parse
+        # just strip them out.
+        # The eval is dirty, but it was all I could come up with at the time
+        # to unescape a unicode character.
         begin
-          xml = Hash.from_xml(contents)
-        rescue => e
-          # If the document contains characters that we don't know how to parse
-          # just strip them out.
-          # The eval is dirty, but it was all I could come up with at the time
-          # to unescape a unicode character.
-          begin
-            bad_char = e.message.match(/"([^"]*)"/)[1]
-            contents.gsub!(eval(%("#{bad_char}")), ' ') # rubocop:disable Eval
-          rescue
-            raise e
-          end
-          retry
+          bad_char = e.message.match(/"([^"]*)"/)[1]
+          contents.gsub!(eval(%("#{bad_char}")), ' ') # rubocop:disable Eval
+        rescue
+          raise e
         end
-      end
-    rescue ArgumentError
-      File.open(file_path, 'r:windows-1251:utf-8') do |file|
-        xml = Hash.from_xml(file.read)
+        retry
       end
     end
-    xml
+  rescue ArgumentError
+    File.open(file_path, 'r:windows-1251:utf-8') do |file|
+      return Nokogiri::XML(file.read)
+    end
   end
 end

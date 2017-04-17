@@ -5,12 +5,12 @@ describe TntImport do
   let(:tnt_import) { create(:tnt_import, override: true) }
   let(:import) { TntImport.new(tnt_import) }
   let(:contact) { create(:contact) }
-  let(:contact_rows) { Array.wrap(xml.tables['Contact']['row']) }
-  let(:task_rows) { Array.wrap(xml.tables['Task']['row']) }
-  let(:task_contact_rows) { Array.wrap(xml.tables['TaskContact']['row']) }
-  let(:history_rows) { Array.wrap(xml.tables['History']['row']) }
-  let(:history_contact_rows) { Array.wrap(xml.tables['HistoryContact']['row']) }
-  let(:property_rows) { Array.wrap(xml.tables['Property']['row']) }
+  let(:contact_rows) { xml.tables['Contact'] }
+  let(:task_rows) { xml.tables['Task'] }
+  let(:task_contact_rows) { xml.tables['TaskContact'] }
+  let(:history_rows) { xml.tables['History'] }
+  let(:history_contact_rows) { xml.tables['HistoryContact'] }
+  let(:property_rows) { xml.tables['Property'] }
 
   before { stub_smarty_streets }
 

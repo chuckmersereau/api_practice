@@ -103,11 +103,13 @@ class Donation < ApplicationRecord
   end
 
   def add_appeal_contacts
-    return unless appeal
+    return unless appeal&.account_list
 
-    contacts = appeal.account_list.contacts
+    contacts = appeal.account_list
+                     .contacts
                      .joins(:contact_donor_accounts)
                      .where(contact_donor_accounts: { donor_account_id: donor_account.id })
+
     appeal.bulk_add_contacts(contacts)
   end
 end

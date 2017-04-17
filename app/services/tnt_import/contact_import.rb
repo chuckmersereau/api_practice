@@ -164,7 +164,7 @@ class TntImport::ContactImport
   def extract_envelope_greeting_from_row(row)
     # TNT has something called a "MailingAddressBlock", the envelope greeting is the first line of this string.
     block = row['MailingAddressBlock']
-    envelope_greeting = block.split("\n").detect(&:present?) # Find the first non-blank line of the string.
+    envelope_greeting = block&.split("\n")&.detect(&:present?) # Find the first non-blank line of the string.
     envelope_greeting.presence || row['FullName']
   end
 

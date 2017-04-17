@@ -8,7 +8,7 @@ class TntImport::ContactTagsLoader
 
     tags_grouped_by_id = {}
 
-    Array.wrap(@xml.tables['Contact']['row']).each do |row|
+    @xml.tables['Contact'].each do |row|
       tags_grouped_by_id[row['id']] = extract_userfield_tags_from_contact_row(row)
     end
 
@@ -28,9 +28,9 @@ class TntImport::ContactTagsLoader
   end
 
   def display_label_for_userfield_number(number)
-    return unless @xml.tables['Property'] && @xml.tables['Property']['row']
+    return unless @xml.tables['Property']
 
-    Array.wrap(@xml.tables['Property']['row']).detect do |property|
+    @xml.tables['Property'].detect do |property|
       property['PropName'] == "User#{number}DisplayLabel"
     end&.[]('PropValue')
   end

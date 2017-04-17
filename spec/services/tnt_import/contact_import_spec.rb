@@ -6,7 +6,7 @@ describe TntImport::ContactImport do
   let(:file) { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export.xml')) }
   let(:tnt_import) { create(:tnt_import, override: true, file: file) }
   let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
-  let(:contact_rows) { Array.wrap(xml.tables['Contact']['row']) }
+  let(:contact_rows) { xml.tables['Contact'] }
   let(:import) do
     donor_accounts = []
     tags = []
