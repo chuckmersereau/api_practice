@@ -3,6 +3,9 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 13 April 2017
+- Removed total_donations from all contact endpoints.
+
+## 13 April 2017
 - Added api_class and help_email attributes to a new constant field called organizations_attributes.
 - Added contact referrals relationships to contact serializer.
 - Added people bulk endpoints.

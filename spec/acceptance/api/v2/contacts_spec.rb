@@ -90,7 +90,6 @@ resource 'Contacts' do
       suggested_changes
       tag_list
       timezone
-      total_donations
       uncompleted_tasks_count
       updated_at
       updated_in_db_at
@@ -185,6 +184,8 @@ resource 'Contacts' do
       end
     end
 
+    let(:additional_attributes) { %w(lifetime_donations) }
+
     get '/api/v2/contacts/:id' do
       doc_helper.insert_documentation_for(action: :show, context: self)
       with_options scope: :relationships do
@@ -196,7 +197,7 @@ resource 'Contacts' do
         explanation doc_helper.description_for(:show)
         do_request
 
-        check_resource(additional_keys)
+        check_resource(additional_keys, additional_attributes)
         expect(resource_object['name']).to eq contact.name
         expect(response_status).to eq 200
       end

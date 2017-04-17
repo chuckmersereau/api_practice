@@ -11,23 +11,23 @@ module JsonApiHelper
     expect(resource_object.keys).to match_array(resource_attributes) if defined?(resource_attributes)
   end
 
-  def check_resource(additional_keys = [])
+  def check_resource(additional_keys = [], additional_attributes = [], additional_relationships = [])
     expect(json_response.keys).to eq %w(data)
     expect(first_or_only_item.keys).to eq item_keys(additional_keys)
     expect(first_or_only_item['type']).to eq resource_type.to_s
-    check_resource_attributes
-    check_resource_relationships
+    check_resource_attributes(additional_attributes)
+    check_resource_relationships(additional_relationships)
   end
 
-  def check_resource_attributes
+  def check_resource_attributes(additional_attributes)
     return unless defined?(resource_attributes)
-    expect(resource_object.keys).to match_array(resource_attributes)
+    expect(resource_object.keys).to match_array(resource_attributes + additional_attributes)
   end
 
-  def check_resource_relationships
+  def check_resource_relationships(additional_relationships)
     return unless defined?(resource_associations)
 
-    expect(first_or_only_item['relationships'].keys).to match_array(resource_associations)
+    expect(first_or_only_item['relationships'].keys).to match_array(resource_associations + additional_relationships)
   end
 
   def item_keys(additional_keys)

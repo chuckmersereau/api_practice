@@ -36,7 +36,6 @@ class ContactSerializer < ApplicationSerializer
              :suggested_changes,
              :tag_list,
              :timezone,
-             :total_donations,
              :uncompleted_tasks_count,
              :website
 
