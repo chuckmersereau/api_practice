@@ -1,26 +1,20 @@
 class TntImport::Xml
-  delegate :present?, :blank?, to: '@xml'
+  attr_reader :table_names,
+              :tables,
+              :version
 
   def initialize(xml)
-    @xml = xml
-  end
+    @table_names = xml.css('Database > Tables > *').map(&:name)
 
-  def table_names
-    @table_names ||= @xml.css('Database > Tables > *').map(&:name)
-  end
-
-  def tables
-    @tables ||= table_names.each_with_object({}) do |table_name, hash|
-      hash[table_name] = table(table_name)
+    @tables = @table_names.each_with_object({}) do |table_name, hash|
+      hash[table_name] = xml.css("Database > Tables > #{table_name} > row").map(&method(:parse_row))
     end
+
+    @version = xml.at_css('Database > Version').content.to_f
   end
 
   def table(name)
-    @xml.css("Database > Tables > #{name} > row").lazy.map(&method(:parse_row))
-  end
-
-  def version
-    @xml.at_css('Database > Version').content.to_f
+    tables[name]
   end
 
   private
