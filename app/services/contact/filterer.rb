@@ -38,7 +38,7 @@ class Contact::Filterer < ApplicationFilterer
     AddressValid
     ExcludeTags
     Ids
-    Name
+    NameLike
     NotIds
     StatusValid
     Tags

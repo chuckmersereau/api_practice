@@ -2,6 +2,11 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 18 April 2017
+- Added direct deposit to contact endpoints.
+- Updated translations and added it, th and id.
+- Added a contact name_like filter.
+
 ## 13 April 2017
 - Removed total_donations from all contact endpoints.
 

@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.2
+-- Dumped from database version 9.5.6
 -- Dumped by pg_dump version 9.6.2
 
 SET statement_timeout = 0;
@@ -4483,6 +4483,20 @@ CREATE INDEX index_donations_on_appeal_id ON donations USING btree (appeal_id);
 
 
 --
+-- Name: index_donations_on_created_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_donations_on_created_at ON donations USING btree (created_at);
+
+
+--
+-- Name: index_donations_on_des_acc_id_and_don_date_and_rem_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_donations_on_des_acc_id_and_don_date_and_rem_id ON donations USING btree (designation_account_id, donation_date, remote_id);
+
+
+--
 -- Name: index_donations_on_donation_date; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4886,6 +4900,13 @@ CREATE INDEX index_master_addresses_on_street ON master_addresses USING btree (s
 --
 
 CREATE UNIQUE INDEX index_master_addresses_on_uuid ON master_addresses USING btree (uuid);
+
+
+--
+-- Name: index_master_companies_on_name; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_master_companies_on_name ON master_companies USING btree (name);
 
 
 --
@@ -6251,4 +6272,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170317205005');
 INSERT INTO schema_migrations (version) VALUES ('20170322001657');
 
 INSERT INTO schema_migrations (version) VALUES ('20170407154800');
+
+INSERT INTO schema_migrations (version) VALUES ('20170418035928');
+
+INSERT INTO schema_migrations (version) VALUES ('20170418040007');
+
+INSERT INTO schema_migrations (version) VALUES ('20170418040030');
 

@@ -37,6 +37,7 @@ resource 'Contacts > Merges' do
       church_name
       created_at
       deceased
+      direct_deposit
       donor_accounts
       envelope_greeting
       greeting

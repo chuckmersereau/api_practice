@@ -35,6 +35,10 @@ attributes: &attrs
     description:
       Whether or not the Contact is deceased
     type: boolean
+  direct_deposit:
+    description:
+      If the contact is setup for direct deposit
+    type: boolean
   donor_accounts:
     description:
       The donor accounts for this Contact

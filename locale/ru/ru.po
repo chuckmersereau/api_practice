@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-03-30 14:18+0000\n"
-"PO-Revision-Date: 2017-03-30 14:18+0000\n"
+"POT-Creation-Date: 2017-04-18 13:06+0000\n"
+"PO-Revision-Date: 2017-04-18 13:06+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ru\n"
@@ -311,6 +311,7 @@ msgstr "Эл. почта 3"
 msgid "Email 4"
 msgstr "Эл. почта 4"
 
+#. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "Помолвлен(-а)"
 
@@ -953,7 +954,7 @@ msgid "The link between MPDX and your Google account has stopped working. If you
 msgstr "Привязка MPDX к вашей учетной записи Google перестала работать. Если вы хотите, чтобы приложение MPDX продолжило\n  автоматически синхронизироваться с учетной записью Google, перейдите по адресу %{link}\n  и нажмите кнопку «Обновить учетную запись Google».  После этого вам необходимо вручную заново установить ранее\n  существовавшие интеграции."
 
 msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
-msgstr "Ключ API MailChimp, привязанный к вашей учетной записи MPDX, больше недоступен.\nЕсли вы хотите, чтобы синхронизация MailChimp продолжила работу, перейдите по адресу\n %{link} и обновите ключ ИПП."
+msgstr "Ключ API MailChimp, привязанный к вашей учетной записи MPDX, больше недоступен.\nЕсли вы хотите, чтобы синхронизация MailChimp продолжила работу, перейдите по адресу\n %{link} и обновите ключ API."
 
 msgid "This Month"
 msgstr "За этот месяц"

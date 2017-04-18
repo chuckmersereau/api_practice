@@ -5,6 +5,7 @@ class ContactSerializer < ApplicationSerializer
   attributes :avatar,
              :church_name,
              :deceased,
+             :direct_deposit,
              :donor_accounts,
              :envelope_greeting,
              :greeting,
