@@ -37,6 +37,7 @@ resource 'Contacts > Merges' do
       church_name
       created_at
       deceased
+      direct_deposit
       donor_accounts
       envelope_greeting
       greeting
@@ -68,7 +69,6 @@ resource 'Contacts > Merges' do
       suggested_changes
       tag_list
       timezone
-      total_donations
       uncompleted_tasks_count
       updated_at
       updated_in_db_at

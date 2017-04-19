@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-03-30 14:19+0000\n"
-"PO-Revision-Date: 2017-03-30 14:19+0000\n"
+"POT-Creation-Date: 2017-04-18 13:06+0000\n"
+"PO-Revision-Date: 2017-04-18 13:06+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: fr_FR\n"
@@ -311,6 +311,7 @@ msgstr "E-mail 3"
 msgid "Email 4"
 msgstr "E-mail 4"
 
+#. This is a marital status. The person is pledged to be married
 msgid "Engaged"
 msgstr "Fiancé(e)"
 

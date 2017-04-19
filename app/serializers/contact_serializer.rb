@@ -5,6 +5,7 @@ class ContactSerializer < ApplicationSerializer
   attributes :avatar,
              :church_name,
              :deceased,
+             :direct_deposit,
              :donor_accounts,
              :envelope_greeting,
              :greeting,
@@ -36,7 +37,6 @@ class ContactSerializer < ApplicationSerializer
              :suggested_changes,
              :tag_list,
              :timezone,
-             :total_donations,
              :uncompleted_tasks_count,
              :website
 

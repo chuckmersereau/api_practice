@@ -6,6 +6,7 @@
   - ["api_account_list_deep_reset_worker",               1]
   - ["api_account_list_import_data",                     1]
   - ["api_admin_fix_worker",                             1]
+  - ["api_contact_dup_contacts_merge_worker",            10]
   - ["api_contact_suggested_changes_updater_worker",     10]
   - ["api_currency_rates_fetcher_worker",                1]
   - ["api_data_server_account_address_updates_preparer", 1]

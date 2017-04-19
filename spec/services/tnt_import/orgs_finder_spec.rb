@@ -12,6 +12,9 @@ describe TntImport::OrgsFinder, '#orgs_by_tnt_id' do
               </row>
             </Organization>
           </Tables>
+          <Version>
+            3.2
+          </Version>
         </Database>
       XML
     )

@@ -35,6 +35,10 @@ attributes: &attrs
     description:
       Whether or not the Contact is deceased
     type: boolean
+  direct_deposit:
+    description:
+      If the contact is setup for direct deposit
+    type: boolean
   donor_accounts:
     description:
       The donor accounts for this Contact
@@ -163,10 +167,6 @@ attributes: &attrs
     description:
       "The Contact's timezone"
     type: string
-  total_donations:
-    description:
-      The total amount of donations given by this Contact
-    type: float
   uncompleted_tasks_count:
     description:
       The number of uncompleted tasks for this Contact

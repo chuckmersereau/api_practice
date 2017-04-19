@@ -169,7 +169,7 @@ class TntImport::ContactImport
   end
 
   def true?(val)
-    val.casecmp('TRUE').zero?
+    val.to_s.casecmp('TRUE').zero?
   end
 
   def parse_date(val)

@@ -28,6 +28,7 @@ class TntImport::AppealsImport
     appeals = {}
     xml_tables[appeal_table_name].each do |row|
       appeal = @account_list.appeals.find_by(tnt_id: row['id'])
+
       if appeal
         # This allows staff who imported from Tnt earlier before we added the LastEdit import
         # to re-run the import and get the dates for the previous appeals for the sake of the sort order.
@@ -46,13 +47,16 @@ class TntImport::AppealsImport
     return {} unless xml_tables['Gift'].present?
 
     donor_contacts_by_appeal_id = {}
-    donor_accounts_by_tnt_id = find_donor_accounts_by_tnt_id
-    designation_account_ids = @account_list.designation_accounts.pluck(:id)
+    donor_accounts_by_tnt_id    = find_donor_accounts_by_tnt_id
+    designation_account_ids     = @account_list.designation_accounts.pluck(:id)
 
     xml_tables['Gift'].each do |row|
-      next if row[appeal_id_name].blank?
-      appeal = appeals_by_tnt_id[row[appeal_id_name]]
+      appeal_reference = row[appeal_id_name]
+      next if appeal_reference.blank?
+
+      appeal = appeals_by_tnt_id[appeal_reference]
       donor_account = donor_accounts_by_tnt_id[row['DonorID']]
+
       next unless donor_account
 
       donor_contacts = @account_list.contacts.joins(:donor_accounts)

@@ -88,10 +88,16 @@ class CsvImport
   def import
     raise 'Attempted an invalid import! Aborting.' if @import.invalid?
     raise 'Attempted an import that is in preview! Aborting.' if @import.in_preview?
-    Contact.transaction { contacts.each(&:save!) }
-  rescue ActiveRecord::RecordInvalid => exception
-    Rollbar.error(exception)
-    raise exception
+
+    @import.each_line do |line|
+      next if @import.file_headers.values == CSV.new(line).first
+      begin
+        contact_from_file_line(line).save!
+      rescue ActiveRecord::RecordInvalid => exception
+        Rollbar.error(exception)
+        raise exception
+      end
+    end
   end
 
   def file_constants_for_mpdx_header(mpdx_header)
@@ -100,7 +106,7 @@ class CsvImport
 
   def sample_contacts
     sample_contacts = @import.file_row_samples.collect do |sample_row|
-      contact_from_csv_row(CSV::Row.new(@import.file_headers.values, sample_row))
+      contact_from_file_line(sample_row)
     end.compact
     generate_uuids_for_contacts(sample_contacts)
   end
@@ -132,13 +138,9 @@ class CsvImport
     [csv.first, csv.first, csv.first, csv.first].compact
   end
 
-  def contacts
-    CSV.new(@import.file_contents, headers: :first_row).map do |csv_row|
-      contact_from_csv_row(csv_row)
-    end.compact
-  end
-
-  def contact_from_csv_row(csv_row)
+  def contact_from_file_line(line)
+    line = CSV.new(line).first unless line.is_a?(Array)
+    csv_row = CSV::Row.new(@import.file_headers.values, line)
     CsvRowContactBuilder.new(csv_row: csv_row, import: @import).build
   end
 

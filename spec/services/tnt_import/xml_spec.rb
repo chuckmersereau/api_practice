@@ -43,15 +43,4 @@ describe TntImport::Xml do
       expect(xml.version).to eq 3.0
     end
   end
-
-  describe '#present? and #blank?' do
-    it 'returns true or false' do
-      xml = TntImport::Xml.new('')
-      expect(xml.present?).to eq false
-      expect(xml.blank?).to eq true
-      xml = TntImport::Xml.new('a')
-      expect(xml.present?).to eq true
-      expect(xml.blank?).to eq false
-    end
-  end
 end

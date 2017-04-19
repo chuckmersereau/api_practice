@@ -62,7 +62,7 @@ class Api::V2::ContactsController < Api::V2Controller
            status: success_status,
            include: include_params,
            fields: field_params,
-           each_serializer: ContactDetailSerializer
+           serializer: ContactDetailSerializer
   end
 
   def build_contact

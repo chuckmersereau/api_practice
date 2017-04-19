@@ -385,18 +385,30 @@ describe AccountList do
     end
   end
 
-  context '#merge_contacts' do
+  context '#async_merge_contacts' do
     it 'merges duplicate contacts by common name and donor number / address' do
+      Sidekiq::Testing.inline!
       account_list = create(:account_list)
       donor = create(:donor_account)
+
+      # Create the contacts that will be merged
       contact1 = create(:contact, name: 'John', account_list: account_list)
       contact2 = create(:contact, name: 'John', account_list: account_list)
+
+      # Create the contacts that won't be merged because they have a different name and were updated_at earlier
+      contact3 = create(:contact, name: 'Peter', account_list: account_list)
+      contact3.update_column(:updated_at, 2.hours.ago)
+      contact4 = create(:contact, name: 'Peter', account_list: account_list)
+      contact4.update_column(:updated_at, 2.hours.ago)
+
       contact1.donor_accounts << donor
       contact2.donor_accounts << donor
+      contact3.donor_accounts << donor
+      contact4.donor_accounts << donor
 
       expect do
-        account_list.merge_contacts
-      end.to change(Contact, :count).by(-1)
+        account_list.async_merge_contacts(1.hour.ago)
+      end.to change(Contact, :count).from(4).to(3)
     end
   end
 
