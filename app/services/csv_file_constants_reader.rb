@@ -28,24 +28,31 @@ class CsvFileConstantsReader
     zip
   ).freeze
 
-  def initialize(file_contents)
-    self.csv = CSV.new(file_contents)
+  def initialize(file_path)
+    self.file_path = file_path
     self.constants_hash = Hash.new { |hash, key| hash[key] = Set.new }
   end
 
   def constants
-    csv.rewind
-    self.headers = csv.first
+    self.file = File.open(file_path)
     build_constant_sets
     constants_hash
   end
 
   private
 
-  attr_accessor :file_path, :constants_hash, :csv, :headers
+  attr_accessor :file_path, :constants_hash, :file, :headers
 
   def build_constant_sets
-    csv.each do |row|
+    file.each do |row|
+      row = EncodingUtil.normalized_utf8(row) || row
+      row = CSV.new(row).first
+
+      if file.lineno == 1
+        self.headers = row
+        next
+      end
+
       row.each_with_index do |value, index|
         header = headers[index]&.parameterize&.underscore
         next if exclude_column_with_header?(header)

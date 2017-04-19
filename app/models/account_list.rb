@@ -287,7 +287,7 @@ class AccountList < ApplicationRecord
     batch.description = "AccountList #{id} #async_merge_contacts"
     batch.jobs do
       contacts.where('updated_at >= ?', since_time).pluck(:id).each do |contact_id|
-        Contact::DupContactsMergeWorker.perform_async(id, contact_id)
+        ContactDupMergeWorker.perform_async(id, contact_id)
       end
     end
   end

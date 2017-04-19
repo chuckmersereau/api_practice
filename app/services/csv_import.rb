@@ -89,15 +89,20 @@ class CsvImport
     raise 'Attempted an invalid import! Aborting.' if @import.invalid?
     raise 'Attempted an import that is in preview! Aborting.' if @import.in_preview?
 
-    @import.each_line do |line|
-      next if @import.file_headers.values == CSV.new(line).first
-      begin
-        contact_from_file_line(line).save!
-      rescue ActiveRecord::RecordInvalid => exception
-        Rollbar.error(exception)
-        raise exception
+    batch = Sidekiq::Batch.new
+    batch.description = "CsvImport #{@import.id} #import"
+    batch.on(:complete, 'CsvImportBatchCallbackHandler', import_id: @import.id)
+    batch.jobs do
+      @import.each_line do |line, file|
+        next if file.lineno == 1 # Skip csv header row.
+        next if CSV.new(line).first.compact.blank? # Skip line if it's blank.
+        CsvImportContactWorker.perform_async(@import.id, line)
       end
     end
+
+    # If there are no jobs the Batch callbacks won't fire,
+    # in that case treat this as a synchronous job by returning false.
+    !batch.jids.empty? ? true : false
   end
 
   def file_constants_for_mpdx_header(mpdx_header)
@@ -125,17 +130,27 @@ class CsvImport
   end
 
   def read_file_headers_from_file_contents
-    self.class.transform_array_to_hash_with_underscored_keys(CSV.new(@import.file_contents).first)
+    header_line = nil
+    @import.each_line do |line, _file|
+      header_line = line
+      break
+    end
+    self.class.transform_array_to_hash_with_underscored_keys(CSV.new(header_line).first)
   end
 
   def read_file_constants_from_file_contents
-    CsvFileConstantsReader.new(@import.file_contents).constants
+    CsvFileConstantsReader.new(@import.file_path).constants
   end
 
   def read_file_row_samples_from_file_contents
-    csv = CSV.new(@import.file_contents)
-    csv.first # Discard the header row
-    [csv.first, csv.first, csv.first, csv.first].compact
+    samples = []
+    @import.each_line do |line, file|
+      next if file.lineno == 1 # Skip csv header row.
+      sample = CSV.new(line).first
+      samples << sample if sample.compact.present?
+      break if samples.size >= 4
+    end
+    samples
   end
 
   def contact_from_file_line(line)

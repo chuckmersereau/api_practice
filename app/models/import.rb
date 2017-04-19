@@ -44,7 +44,7 @@ class Import < ApplicationRecord
   validates :file, upload_extension: { extension: 'csv',    message: SOURCE_ERROR_MESSAGES[:csv]           }, if: :source_csv?
   validates :file, :file_headers, :file_constants, :file_headers_mappings, :file_row_samples, presence: true, if: :source_csv?, unless: :in_preview?
   validates :file_headers, :file_constants, :file_headers_mappings, :file_constants_mappings, class: { is_a: Hash }
-  validates :file_row_samples, class: { is_a: Array }
+  validates :file_row_samples, :file_row_failures, class: { is_a: Array }
   validates_with CsvImportMappingsValidator, if: :source_csv?, unless: :in_preview?
   validates_with FacebookImportValidator, if: :source_facebook?
 
@@ -55,6 +55,7 @@ class Import < ApplicationRecord
   serialize :file_row_samples, Array
   serialize :file_headers_mappings, Hash
   serialize :file_constants_mappings, Hash
+  serialize :file_row_failures, Array
 
   after_commit :queue_import
 
@@ -64,15 +65,26 @@ class Import < ApplicationRecord
   end
 
   def queue_import
-    async_to_queue(sidekiq_queue, :import) unless in_preview?
+    return if in_preview? || queued_for_import_at
+    update_column(:queued_for_import_at, Time.current) if async_to_queue(sidekiq_queue, :import)
   end
 
   def user_friendly_source
     source.tr('_', ' ')
   end
 
-  def file_contents
-    @file_contents ||= read_file_contents
+  def each_line
+    file.cache_stored_file!
+    file_handler = File.open(file_path)
+    file_handler.each_line do |line|
+      line = EncodingUtil.normalized_utf8(line) || line
+      yield(line, file_handler)
+    end
+  end
+
+  # Note: the file may not be present on the local disk, this method is not concerned with that.
+  def file_path
+    file&.file&.file
   end
 
   def file=(new_file)
@@ -100,13 +112,6 @@ class Import < ApplicationRecord
     self.tags = new_tag_list.try(:split, ',')
   end
 
-  def each_line
-    File.open(file.file.file).each_line do |line|
-      line = EncodingUtil.normalized_utf8(line) || line
-      yield(line)
-    end
-  end
-
   private
 
   def sidekiq_queue
@@ -114,53 +119,36 @@ class Import < ApplicationRecord
   end
 
   def reset_file
-    @file_contents = nil
     self.file_headers = {}
     self.file_constants = {}
     self.file_row_samples = []
+    self.file_row_failures = []
   end
 
-  def read_file_contents
-    file.cache_stored_file!
-    contents = File.open(file.file.file, &:read)
-    EncodingUtil.normalized_utf8(contents) || contents
-  end
-
+  # Delegate the import process to a decorator class, each import source should have it's own decorator.
+  # The import might happen async in other jobs. If it is async we let the decorator handle the callbacks,
+  # but if not then we handle the callbacks right here.
   def import
-    import_start_time = Time.current
-    update_column(:importing, true)
-    "#{source.camelize}Import".constantize.new(self).import
-    after_import_success(import_started_at: import_start_time)
-    true
-  rescue UnsurprisingImportError => exception
-    Rollbar.info(exception)
-    after_import_failure
-    false
-  rescue => exception
-    Rollbar.error(exception)
-    after_import_failure
-    false
-  ensure
-    update_column(:importing, false)
-  end
-
-  def after_import_success(import_started_at:)
-    account_list.async_merge_contacts(import_started_at)
-    account_list.queue_sync_with_google_contacts
-    account_list.mail_chimp_account.queue_export_to_primary_list if account_list.valid_mail_chimp_account
-    Contact::SuggestedChangesUpdaterWorker.perform_async(user.id, import_started_at)
+    ImportCallbackHandler.new(self).handle_start
+    async = false
 
     begin
-      ImportMailer.delay.complete(self)
-    rescue => mail_exception
-      Rollbar.error(mail_exception)
+      async = "#{source.camelize}Import".safe_constantize.new(self).import
+    rescue => exception
+      exception.is_a?(Import::UnsurprisingImportError) ? Rollbar.info(exception) : Rollbar.error(exception)
+      ImportCallbackHandler.new(self).handle_failure
+      false
+    else
+      ImportCallbackHandler.new(self).handle_success unless async
+      true
     end
-  end
 
-  def after_import_failure
-    ImportMailer.delay.failed(self)
-  rescue => mail_exception
-    Rollbar.error(mail_exception)
+  rescue => exception
+    Rollbar.error(exception)
+    ImportCallbackHandler.new(self).handle_failure unless async
+    false
+  ensure
+    ImportCallbackHandler.new(self).handle_complete unless async
   end
 
   class UnsurprisingImportError < StandardError

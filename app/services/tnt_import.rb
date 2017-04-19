@@ -13,7 +13,7 @@ class TntImport
 
   def import
     @import.file.cache_stored_file!
-    return unless xml.present?
+    return false unless xml.present?
 
     contact_ids_by_tnt_contact_id = import_contacts
 
@@ -25,6 +25,8 @@ class TntImport
     import_offline_org_gifts(contact_ids_by_tnt_contact_id)
     import_settings
     import_appeals(contact_ids_by_tnt_appeal_id)
+
+    false
   ensure
     CarrierWave.clean_cached_files!
   end

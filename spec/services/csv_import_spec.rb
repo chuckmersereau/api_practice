@@ -5,6 +5,7 @@ describe CsvImport do
   let!(:import) { CsvImport.new(csv_import) }
 
   before do
+    Sidekiq::Testing.inline!
     stub_request(:get, %r{api.smartystreets.com/.*})
       .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
       .to_return(status: 200, body: '{}', headers: {})
@@ -65,7 +66,7 @@ describe CsvImport do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_bom.csv')))
       import.update_cached_file_data
       csv_import.update(in_preview: false)
-      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
       contact = Contact.first
       expect(contact.account_list).to eq(csv_import.account_list)
       expect(contact.to_s).to eq('Doe, John and Jane')
@@ -89,7 +90,7 @@ describe CsvImport do
         }
       }
       csv_import.update(in_preview: false)
-      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
       expect(Contact.first.name).to eq('Lané, John')
     end
 
@@ -100,7 +101,7 @@ describe CsvImport do
         '' => 'None'
       }
       csv_import.update(in_preview: false)
-      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
       expect(Contact.first.send_newsletter).to eq('')
     end
 
@@ -108,7 +109,7 @@ describe CsvImport do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_inconsistent_newlines.csv')))
       import.update_cached_file_data
       csv_import.update(in_preview: false)
-      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
       expect(Contact.first.name).to eq('Doe, John and Jane')
     end
   end
@@ -202,6 +203,31 @@ describe CsvImport do
         expect do
           expect { import.import }.to raise_error RuntimeError
         end.not_to change { Contact.count }
+      end
+
+      it 'returns true when queueing jobs' do
+        csv_import.in_preview = false
+        expect(import.import).to eq(true)
+      end
+
+      it 'returns false if no jobs were queued' do
+        allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_blank.csv'))
+        csv_import.in_preview = false
+        expect(import.import).to eq(false)
+      end
+
+      it 'queues a sidekiq batch' do
+        csv_import.in_preview = false
+        expect { import.import }.to change { Sidekiq::BatchSet.new.count }.by(1)
+      end
+
+      it 'imports valid contacts successfully and stores invalid contacts in the file_row_failures' do
+        allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv'))
+        csv_import.in_preview = false
+        expect do
+          expect(import.import).to eq(true)
+        end.to change { Contact.count }.by(1)
+        expect(csv_import.reload.file_row_failures.size).to eq(2)
       end
     end
 

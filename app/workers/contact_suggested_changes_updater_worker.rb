@@ -1,4 +1,4 @@
-class Contact::SuggestedChangesUpdaterWorker
+class ContactSuggestedChangesUpdaterWorker
   include Sidekiq::Worker
 
   sidekiq_options queue: :api_contact_suggested_changes_updater_worker

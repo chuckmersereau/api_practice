@@ -1461,7 +1461,11 @@ CREATE TABLE imports (
     file_constants text,
     file_headers_mappings text,
     file_constants_mappings text,
-    file_row_samples text
+    file_row_samples text,
+    file_row_failures text,
+    queued_for_import_at timestamp without time zone,
+    import_completed_at timestamp without time zone,
+    import_started_at timestamp without time zone
 );
 
 
@@ -6282,3 +6286,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170418040030');
 
 INSERT INTO schema_migrations (version) VALUES ('20170420161008');
 
+INSERT INTO schema_migrations (version) VALUES ('20170419001725');
+
+INSERT INTO schema_migrations (version) VALUES ('20170419004646');
+
+INSERT INTO schema_migrations (version) VALUES ('20170419141659');
+
+INSERT INTO schema_migrations (version) VALUES ('20170419145350');

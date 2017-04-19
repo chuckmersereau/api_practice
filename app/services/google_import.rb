@@ -16,6 +16,8 @@ class GoogleImport
     ensure
       google_account.update_column(:downloading, false)
     end
+
+    false
   end
 
   def import_contacts(google_account)
