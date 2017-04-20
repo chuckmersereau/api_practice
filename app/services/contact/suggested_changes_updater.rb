@@ -47,6 +47,7 @@ class Contact::SuggestedChangesUpdater
     end
 
     load_suggested_attribute(:status, suggested_status)
+    suggested_changes.delete(:status) if suggested_changes[:status].blank?
   end
 
   def load_suggested_attribute(suggested_change_attribute, suggested_change_value)

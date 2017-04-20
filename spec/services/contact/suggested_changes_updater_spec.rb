@@ -74,13 +74,24 @@ RSpec.describe Contact::SuggestedChangesUpdater, type: :model do
           expect { subject }.to change { contact.reload.status_validated_at }.to(Time.current)
         end
 
-        it 'does not updates suggested_changes' do
+        it 'updates suggested_changes' do
           subject
-          expect(contact.suggested_changes[:pledge_frequency]).to eq nil
+          expect(contact.suggested_changes.keys.include?(:pledge_frequency)).to eq false
           expect(contact.status_valid).to eq true
-          expect(contact.suggested_changes[:status]).to eq nil
-          expect(contact.suggested_changes[:pledge_amount]).to eq nil
-          expect(contact.suggested_changes[:pledge_currency]).to eq nil
+          expect(contact.suggested_changes.keys.include?(:status)).to eq false
+          expect(contact.suggested_changes.keys.include?(:pledge_amount)).to eq false
+          expect(contact.suggested_changes.keys.include?(:pledge_currency)).to eq false
+        end
+      end
+
+      context 'contact has status that we do not support suggesting' do
+        before do
+          contact.update_columns(status: 'Partner - Prayer')
+        end
+
+        it 'updates suggested_changes' do
+          subject
+          expect(contact.suggested_changes.keys.include?(:status)).to eq false
         end
       end
     end

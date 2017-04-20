@@ -27,6 +27,7 @@ class Contact::StatusSuggester
     @suggested_pledge_currency = suggested_pledge_amount.present? ? find_most_frequent_currency_in_sample_donations : nil
   end
 
+  # We currently only suggest two possible statuses: Partner - Financial, or Partner - Special
   def suggested_status
     if find_suggested_pledge_frequency.present? && !contact_has_stopped_giving?
       'Partner - Financial'
