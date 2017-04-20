@@ -1,14 +1,14 @@
 class TntImport::TasksImport
-  def initialize(account_list, tnt_contacts, xml)
+  def initialize(account_list, contact_ids_by_tnt_contact_id, xml)
     @account_list = account_list
-    @tnt_contacts = tnt_contacts
+    @contact_ids_by_tnt_contact_id = contact_ids_by_tnt_contact_id
     @xml = xml
     @xml_tables = xml.tables
   end
 
   def import
     return unless xml_tables['Task'].present? && xml_tables['TaskContact'].present?
-    tnt_tasks = {}
+    task_ids_by_tnt_task_id = {}
 
     xml_tables['Task'].each do |row|
       task = Retryable.retryable do
@@ -25,19 +25,34 @@ class TntImport::TasksImport
       # Add any notes as a comment
       task.comments.where(body: row['Notes'].strip).first_or_initialize.save if row['Notes'].present?
 
-      tnt_tasks[row['id']] = task
+      task_ids_by_tnt_task_id[row['id']] = task.id
     end
+
+    contact_ids_with_new_tasks = []
 
     # Add contacts to tasks
     xml_tables['TaskContact'].each do |row|
-      next unless tnt_contacts[row['ContactID']] && tnt_tasks[row['TaskID']]
-      tnt_tasks[row['TaskID']].contacts << tnt_contacts[row['ContactID']] unless tnt_tasks[row['TaskID']].contacts.include? tnt_contacts[row['ContactID']]
+      task_id = task_ids_by_tnt_task_id[row['TaskID']]
+      contact_id = contact_ids_by_tnt_contact_id[row['ContactID']]
+
+      next unless task_id && contact_id
+
+      ActivityContact.where(activity_id: task_id, contact_id: contact_id).first_or_create! do |activity_contact|
+        activity_contact.skip_task_counter_update = true
+        contact_ids_with_new_tasks << contact_id
+      end
     end
 
-    tnt_tasks
+    update_contacts_task_counters!(contact_ids_with_new_tasks)
+
+    task_ids_by_tnt_task_id
   end
 
   private
 
-  attr_reader :xml_tables, :tnt_contacts
+  attr_reader :xml_tables, :contact_ids_by_tnt_contact_id
+
+  def update_contacts_task_counters!(contact_ids)
+    Contact.where(id: contact_ids).find_each(&:update_uncompleted_tasks_count)
+  end
 end

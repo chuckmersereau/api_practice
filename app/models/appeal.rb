@@ -43,13 +43,18 @@ class Appeal < ApplicationRecord
   end
 
   def add_contacts_by_opts(statuses, tags, excludes)
-    bulk_add_contacts(contacts_by_opts(statuses, tags, excludes))
+    bulk_add_contacts(contacts: contacts_by_opts(statuses, tags, excludes))
   end
 
-  def bulk_add_contacts(contacts_to_add)
-    appeal_contact_ids = contacts.pluck(:id).to_set
-    contacts_to_add = contacts_to_add.uniq.reject { |c| appeal_contact_ids.include?(c.id) }
-    AppealContact.import(contacts_to_add.map { |c| AppealContact.new(contact: c, appeal: self) })
+  def bulk_add_contacts(contacts: [], contact_ids: contacts.map(&:id))
+    appeal_contact_ids = self.contact_ids
+    contact_ids_to_add = contact_ids.uniq - appeal_contact_ids
+
+    appeal_contacts_to_import = contact_ids_to_add.map do |contact_id|
+      AppealContact.new(contact_id: contact_id, appeal: self)
+    end
+
+    AppealContact.import(appeal_contacts_to_import)
   end
 
   def contacts_by_opts(statuses, tags, excludes)

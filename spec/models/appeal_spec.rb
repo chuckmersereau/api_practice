@@ -25,11 +25,11 @@ describe Appeal do
     it 'bulk adds the contacts but removes duplicates first and does not create dups when run again' do
       contact2 = create(:contact)
       expect do
-        appeal.bulk_add_contacts([contact, contact, contact2])
+        appeal.bulk_add_contacts(contacts: [contact, contact, contact2])
       end.to change(appeal.contacts, :count).from(0).to(2)
 
       expect do
-        appeal.bulk_add_contacts([contact, contact, contact2])
+        appeal.bulk_add_contacts(contacts: [contact, contact, contact2])
       end.to_not change(appeal.contacts, :count).from(2)
     end
   end

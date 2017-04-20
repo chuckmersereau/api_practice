@@ -12,16 +12,17 @@ class TntImport::ContactsImport
   def import_contacts
     donors_by_tnt_id = donor_accounts_by_tnt_contact_id
 
-    rows = @xml_tables['Contact']
-    tnt_contacts = {}
-    rows.each do |row|
+    contact_id_by_tnt_contact_id = {}
+
+    @xml_tables['Contact'].each do |row|
       tnt_id = row['id']
       tags = all_tags_for_tnt_contact_id(tnt_id)
       donor_accounts = donors_by_tnt_id[tnt_id]
-      tnt_contacts[tnt_id] = import_contact(row, tags.compact, donor_accounts)
+      contact = import_contact(row, tags.compact, donor_accounts)
+      contact_id_by_tnt_contact_id[tnt_id] = contact.id
     end
 
-    tnt_contacts
+    contact_id_by_tnt_contact_id
   end
 
   private

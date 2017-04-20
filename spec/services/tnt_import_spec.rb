@@ -290,8 +290,9 @@ describe TntImport do
   context '#import_tasks' do
     it 'creates a new task' do
       expect do
-        tasks = import.send(:import_tasks)
-        expect(tasks.first[1].remote_id).not_to be_nil
+        task_ids_by_tnt_task_id = import.send(:import_tasks)
+        task = Task.find(task_ids_by_tnt_task_id.first[1])
+        expect(task.remote_id).not_to be_nil
       end.to change(Task, :count).by(1)
     end
 
@@ -303,9 +304,9 @@ describe TntImport do
       end.not_to change(Task, :count)
     end
 
-    it 'accociates a contact with the task' do
+    it 'associates a contact with the task' do
       expect do
-        import.send(:import_tasks, task_contact_rows.first['ContactID'] => contact)
+        import.send(:import_tasks, task_contact_rows.first['ContactID'] => contact.id)
       end.to change(ActivityContact, :count).by(1)
     end
 
@@ -493,8 +494,7 @@ describe TntImport do
   context '#import_history' do
     it 'creates a new completed task' do
       expect do
-        tasks, _contacts_by_tnt_appeal_id = import.send(:import_history)
-        expect(tasks.first[1].remote_id).not_to be_nil
+        import.send(:import_history)
       end.to change(Task, :count).by(1)
     end
 
@@ -514,12 +514,12 @@ describe TntImport do
 
     it 'associates contacts with tnt appeal ids' do
       tnt_import = TntImport.new(create(:tnt_import_appeals))
-      _history, contacts_by_tnt_appeal_id = tnt_import.send(:import_history, import.send(:import_contacts))
-      expect(contacts_by_tnt_appeal_id.size).to eq(1)
-      contacts = contacts_by_tnt_appeal_id['-2079150908']
-      expect(contacts.size).to eq(1)
-      expect(contacts[0]).to_not be_nil
-      expect(contacts[0].name).to eq('Smith, John and Jane')
+      contact_ids_by_tnt_appeal_id = tnt_import.send(:import_history, import.send(:import_contacts))
+      expect(contact_ids_by_tnt_appeal_id.size).to eq(1)
+      contact_ids = contact_ids_by_tnt_appeal_id['-2079150908']
+      expect(contact_ids.size).to eq(1)
+      expect(contact_ids[0]).to_not be_nil
+      expect(Contact.find(contact_ids[0]).name).to eq('Smith, John and Jane')
     end
   end
 

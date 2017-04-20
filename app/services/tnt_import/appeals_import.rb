@@ -1,9 +1,9 @@
 # In version 3.2, TNT renamed the "Appeal" table to "Campaign".
 
 class TntImport::AppealsImport
-  def initialize(account_list, contacts_by_tnt_appeal_id, xml)
+  def initialize(account_list, contact_ids_by_tnt_appeal_id, xml)
     @account_list = account_list
-    @contacts_by_tnt_appeal_id = contacts_by_tnt_appeal_id
+    @contact_ids_by_tnt_appeal_id = contact_ids_by_tnt_appeal_id
     @xml = xml
     @xml_tables = xml.tables
   end
@@ -14,17 +14,20 @@ class TntImport::AppealsImport
     donor_contacts_by_appeal_id = import_appeal_amounts(appeals_by_tnt_id)
 
     appeals_by_tnt_id.each do |appeal_tnt_id, appeal|
-      appeal.bulk_add_contacts((contacts_by_tnt_appeal_id[appeal_tnt_id] || []) +
-                               (donor_contacts_by_appeal_id[appeal.id] || []))
+      contact_ids       = contact_ids_by_tnt_appeal_id[appeal_tnt_id] || []
+      donor_contact_ids = (donor_contacts_by_appeal_id[appeal.id] || []).map(&:id)
+
+      appeal.bulk_add_contacts(contact_ids: contact_ids | donor_contact_ids)
     end
   end
 
   private
 
-  attr_reader :xml_tables, :contacts_by_tnt_appeal_id
+  attr_reader :xml_tables, :contact_ids_by_tnt_appeal_id
 
   def find_or_create_appeals_by_tnt_id
     return {} unless xml_tables[appeal_table_name].present?
+
     appeals = {}
     xml_tables[appeal_table_name].each do |row|
       appeal = @account_list.appeals.find_by(tnt_id: row['id'])
