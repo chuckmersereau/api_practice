@@ -13,7 +13,7 @@ class CsvImportContactWorker
     rescue => exception
       Rollbar.error(exception) unless exception.is_a?(ActiveRecord::RecordInvalid)
       import.with_lock do
-        import.file_row_failures << csv_line
+        import.file_row_failures << [exception.message] + csv_line
         import.save!
       end
     end

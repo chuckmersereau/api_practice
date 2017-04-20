@@ -70,7 +70,12 @@ class Import < ApplicationRecord
   end
 
   def user_friendly_source
-    source.tr('_', ' ')
+    case source
+    when 'csv', 'tnt'
+      source.upcase
+    else
+      source.humanize
+    end
   end
 
   def each_line

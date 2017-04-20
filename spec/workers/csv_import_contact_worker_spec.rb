@@ -43,7 +43,8 @@ describe CsvImportContactWorker do
     it 'adds failed line to file_row_failures' do
       expect(import.reload.file_row_failures).to eq([])
       expect { CsvImportContactWorker.new.perform(import.id, csv_line) }.to_not change { Contact.count }.from(0)
-      expect(import.reload.file_row_failures).to eq([[nil, nil, 'Jane', 'Doe', 'Hi John and Jane', 'Doe family',
+      expect(import.reload.file_row_failures).to eq([["Validation failed: First name can't be blank", nil, nil, 'Jane',
+                                                      'Doe', 'Hi John and Jane', 'Doe family',
                                                       'Westside Baptist Church', '1 Example Ave, Apt 6', 'Sample City',
                                                       'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both',
                                                       'christmas-card,      family', 'john@example.com', 'jane@example.com',
@@ -66,7 +67,7 @@ describe CsvImportContactWorker do
       expect(Rollbar).to receive(:error).once
       expect(import.reload.file_row_failures).to eq([])
       expect { CsvImportContactWorker.new.perform(import.id, csv_lines.second) }.to_not change { Contact.count }.from(0)
-      expect(import.reload.file_row_failures).to eq([['John', 'Doe', 'Jane', 'Doe', 'Hi John and Jane', 'Doe family',
+      expect(import.reload.file_row_failures).to eq([['StandardError', 'John', 'Doe', 'Jane', 'Doe', 'Hi John and Jane', 'Doe family',
                                                       'Westside Baptist Church', '1 Example Ave, Apt 6', 'Sample City',
                                                       'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both',
                                                       'christmas-card,      family', 'john@example.com', 'jane@example.com',

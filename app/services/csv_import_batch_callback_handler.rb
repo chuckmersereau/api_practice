@@ -5,10 +5,13 @@ class CsvImportBatchCallbackHandler
     initialize_from_options(options)
 
     begin
-      if status.failures == 0
-        @import_callback_handler.handle_success
+      number_of_failures = @import.file_row_failures.size
+      number_of_successes = status.total - number_of_failures
+
+      if number_of_failures > 0
+        @import_callback_handler.handle_failure(failures: number_of_failures, successes: number_of_successes)
       else
-        @import_callback_handler.handle_failure
+        @import_callback_handler.handle_success(successes: number_of_successes)
       end
     ensure
       @import_callback_handler.handle_complete

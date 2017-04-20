@@ -9,19 +9,19 @@ class ImportCallbackHandler
     @import.update_columns(importing: true, import_started_at: Time.current)
   end
 
-  def handle_success
+  def handle_success(successes: nil)
     @account_list.queue_sync_with_google_contacts
     @account_list.mail_chimp_account.queue_export_to_primary_list if @account_list.valid_mail_chimp_account
 
     begin
-      ImportMailer.delay.complete(@import)
+      ImportMailer.delay.success(@import, successes)
     rescue => exception
       Rollbar.error(exception)
     end
   end
 
-  def handle_failure
-    ImportMailer.delay.failed(@import)
+  def handle_failure(failures: nil, successes: nil)
+    ImportMailer.delay.failed(@import, successes, failures)
   rescue => exception
     Rollbar.error(exception)
   end

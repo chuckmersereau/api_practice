@@ -15,6 +15,21 @@ describe Import do
     end
   end
 
+  describe '#user_friendly_source' do
+    let(:import) { build(:import, in_preview: true) }
+
+    it 'returns a human readable version of the source for each source' do
+      (Import::SOURCES - %w(csv tnt)).each do |source|
+        import.source = source
+        expect(import.user_friendly_source).to eq source.humanize
+      end
+      %w(csv tnt).each do |source|
+        import.source = source
+        expect(import.user_friendly_source).to eq source.upcase
+      end
+    end
+  end
+
   describe '#file=' do
     it 'resets local attributes related to the file' do
       import = create(:csv_import, in_preview: true)
@@ -85,7 +100,7 @@ describe Import do
   end
 
   it 'should send an success email when importing completes then merge contacts and queue google sync' do
-    expect_delayed_email(ImportMailer, :complete)
+    expect_delayed_email(ImportMailer, :success)
     import = create(:tnt_import)
     expect(import.account_list).to receive(:async_merge_contacts)
     expect(import.account_list).to receive(:queue_sync_with_google_contacts)

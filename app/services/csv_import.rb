@@ -121,6 +121,12 @@ class CsvImport
     @import.save
   end
 
+  def generate_csv_from_file_row_failures
+    csv = CSV.generate_line(['Error Message'] + @import.file_headers.values)
+    @import.file_row_failures.each_with_object(csv) { |failure, string| string << CSV.generate_line(failure) }
+    csv
+  end
+
   private
 
   def assign_cached_file_data
