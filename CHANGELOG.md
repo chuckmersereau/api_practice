@@ -3,6 +3,7 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 20 April 2017
+- Added received_not_processed to pledges.
 - Contact suggested_changes used to sometimes suggest a blank value for status, this was a bug that has been fixed.
 
 ## 18 April 2017

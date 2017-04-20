@@ -2603,7 +2603,8 @@ CREATE TABLE pledges (
     contact_id integer,
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    received_not_processed boolean
 );
 
 
@@ -6278,4 +6279,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170418035928');
 INSERT INTO schema_migrations (version) VALUES ('20170418040007');
 
 INSERT INTO schema_migrations (version) VALUES ('20170418040030');
+
+INSERT INTO schema_migrations (version) VALUES ('20170420161008');
 

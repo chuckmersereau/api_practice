@@ -11,6 +11,7 @@ class Pledge < ApplicationRecord
                           :donation_id,
                           :expected_date,
                           :overwrite,
+                          :received_not_processed,
                           :updated_at,
                           :updated_in_db_at,
                           :uuid].freeze
