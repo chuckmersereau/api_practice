@@ -89,9 +89,20 @@ RSpec.describe Contact::SuggestedChangesUpdater, type: :model do
           contact.update_columns(status: 'Partner - Prayer')
         end
 
-        it 'updates suggested_changes' do
+        it 'does not suggest a nil status' do
           subject
           expect(contact.suggested_changes.keys.include?(:status)).to eq false
+        end
+      end
+
+      context 'contact should have nil pledge_currency' do
+        before do
+          contact.update_columns(status: 'Partner - Prayer', pledge_amount: nil, pledge_frequency: nil, pledge_currency: 'CAD')
+        end
+
+        it 'does not suggest a nil pledge_currency' do
+          subject
+          expect(contact.suggested_changes.keys.include?(:pledge_currency)).to eq false
         end
       end
     end

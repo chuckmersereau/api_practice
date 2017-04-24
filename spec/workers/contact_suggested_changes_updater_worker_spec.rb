@@ -26,8 +26,8 @@ describe ContactSuggestedChangesUpdaterWorker do
     expect { ContactSuggestedChangesUpdaterWorker.new.perform(user.id, since_donation_date) }
       .to change { contact_two.reload.suggested_changes }
       .from({})
-      .to(pledge_frequency: nil, pledge_amount: nil, pledge_currency: nil, status: 'Partner - Special')
-    expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, pledge_currency: nil, status: 'Partner - Special')
+      .to(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
+    expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
   end
 
   context 'only updating contacts with updated donations' do
@@ -39,7 +39,7 @@ describe ContactSuggestedChangesUpdaterWorker do
       expect { ContactSuggestedChangesUpdaterWorker.new.perform(user.id, since_donation_date) }
         .to_not change { contact_two.reload.suggested_changes }
         .from({})
-      expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, pledge_currency: nil, status: 'Partner - Special')
+      expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
     end
   end
 end
