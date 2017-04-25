@@ -1,6 +1,10 @@
+# This is a mpdx_api Sidekiq worker config for jobs that are queued by mpdx Classic staging.
+# Jobs enqueued by Classic are executed by mpdx_api workers.
+# It should contains all queues for mpdx Classic.
+# The thread count (concurrency) is low, to support jobs that consume a lot of memory.
 ---
 :verbose: false
-:concurrency: 2
+:concurrency: 1
 :queues:
   - ["default",  2]
   - ["facebook", 1]

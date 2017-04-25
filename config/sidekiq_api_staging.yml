@@ -1,6 +1,9 @@
+# This is the default mpdx_api Sidekiq worker config for staging.
+# It should contain all queues for mpdx_api (but not Classic).
+# The thread count (concurrency) is low, to support jobs that consume a lot of memory.
 ---
 :verbose: false
-:concurrency: 2
+:concurrency: 1
 :queues:
   - ["api_account_list",                                 1]
   - ["api_account_list_deep_reset_worker",               1]

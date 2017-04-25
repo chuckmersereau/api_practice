@@ -1,0 +1,11 @@
+# This is an extra mpdx_api Sidekiq worker config for memory optimized jobs.
+# Sidekiq workers using this config will run with more threads (concurrency), to increase job throughput.
+# Only jobs that are known to consume little memory should be added to these workers.
+---
+:verbose: false
+:concurrency: 20
+:queues:
+  - ["api_contact_suggested_changes_updater_worker", 1]
+  - ["api_csv_import_contact_worker",                1]
+  - ["api_import_csv",                               1]
+  - ["mailers",                                      1]

@@ -49,19 +49,27 @@ Create, migrate, and seed your databases with:
 $ bin/rake db:create && bin/rake db:migrate && bin/rake db:seed
 ```
 
-This application uses a structure.sql file instead of the Rails schema.rb file, the rake tasks `db:setup` and `db:schema:load` are not supported.
+**Note:** This application uses a structure.sql file instead of the Rails schema.rb file, the rake tasks `db:setup` and `db:schema:load` are not supported.
 
 ### Start Server
 
-Rails server:
+Start Rails server:
 ```bash
 $ bin/rails s
 ```
 
-Sidekiq:
+### Sidekiq
+
+Many MPDX features rely on [Sidekiq](https://github.com/mperham/sidekiq/wiki) background jobs. Sidekiq requires Redis.
+
+Start Sidekiq:
 ```bash
-$ bundle exec sidekiq
+$ bundle exec sidekiq -C config/sidekiq_api.yml
 ```
+
+Visit [localhost:3000/sidekiq](http://localhost:3000/sidekiq) to view the Sidekiq web UI.
+
+The gem [sidekiq-cron](https://github.com/ondrejbartas/sidekiq-cron) is used to schedule daily background jobs.
 
 ### API Authentication
 
