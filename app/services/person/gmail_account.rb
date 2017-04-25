@@ -30,29 +30,44 @@ class Person::GmailAccount
   def import_emails(account_list)
     return false unless client
 
-    since = google_account.last_email_sync || 1.hour.ago
+    since = (google_account.last_email_sync || 1.day.ago).to_date
     email_collection = AccountListEmailCollection.new(account_list)
 
     gmail do |g|
       begin
-        # sent emails
-        sent = g.mailbox('[Gmail]/Sent Mail')
-        sent.emails(after: since).each do |gmail_message|
-          log_sent_email(message: gmail_message, email_collection: email_collection)
-        end
+        sent_mailbox     = g.mailbox('[Gmail]/Sent Mail')
+        received_mailbox = g.mailbox('[Gmail]/All Mail')
 
-        # received emails
-        all = g.mailbox('[Gmail]/All Mail')
-        all.emails(after: since).each do |gmail_message|
-          log_received_email(message: gmail_message, email_collection: email_collection)
+        (since..Date.today).each do |date|
+          sent_uids = sent_mailbox.fetch_uids(on: date) || []
+
+          sent_uids.each_slice(20) do |uid_group|
+            g.conn.uid_fetch(uid_group, Gmail::Message::PREFETCH_ATTRS).each do |imap_data|
+              next unless imap_data
+
+              gmail_message = Gmail::Message.new(sent_mailbox, nil, imap_data)
+              log_sent_email(message: gmail_message, email_collection: email_collection)
+            end
+          end
+
+          received_uids = received_mailbox.fetch_uids(on: date) || []
+
+          received_uids.each_slice(20) do |uid_group|
+            g.conn.uid_fetch(uid_group, Gmail::Message::PREFETCH_ATTRS).each do |imap_data|
+              next unless imap_data
+
+              gmail_message = Gmail::Message.new(received_mailbox, nil, imap_data)
+              log_received_email(message: gmail_message, email_collection: email_collection)
+            end
+          end
+
+          google_account.update_attributes(last_email_sync: date)
         end
       rescue Net::IMAP::NoResponseError => e
         # swallow it if the user doesn't have those mailboxes
         raise unless e.message.include?('Unknown Mailbox')
       end
     end
-
-    google_account.update_attributes(last_email_sync: Time.now)
   end
 
   def log_email(gmail_message, account_list_id, contact_id, person_id, result)

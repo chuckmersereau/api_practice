@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe Person::GmailAccount do
-  let(:google_account) { create(:google_account) }
+  let(:google_account) { create(:google_account, last_email_sync: Date.today) }
   let(:gmail_account) { Person::GmailAccount.new(google_account) }
   let(:account_list) { create(:account_list) }
   let(:contact) { create(:contact, account_list: account_list) }
@@ -37,14 +37,16 @@ describe Person::GmailAccount do
   end
 
   context '#import_emails' do
-    let(:recipient_data) { double('recipient', mailbox: 'recipient', host: 'example.com') }
-    let(:sender_data)    { double('sender', mailbox: 'sender', host: 'example.com') }
-    let(:envelope)       { double('envelope', to: [recipient_data], sender: [sender_data]) }
-    let(:gmail_message)  { double('email', envelope: envelope) }
+    let(:recipient_data)    { double('recipient', mailbox: 'recipient', host: 'example.com') }
+    let(:sender_data)       { double('sender', mailbox: 'sender', host: 'example.com') }
+    let(:envelope)          { double('envelope', to: [recipient_data], sender: [sender_data]) }
+    let(:gmail_uid)         { double('gmail_uid') }
+    let(:gmail_imap_struct) { double('gmail_imap_struct', attr: { 'ENVELOPE' => envelope }) }
 
     let(:sent_mailbox) { double }
     let(:all_mailbox)  { double }
     let(:client)       { double(logout: true) }
+    let(:client_conn)  { double('client_connection') }
 
     let!(:recipient_email) { create(:email_address, email: 'recipient@example.com', person: person) }
     let!(:sender_email)    { create(:email_address, email: 'sender@example.com', person: person) }
@@ -60,19 +62,22 @@ describe Person::GmailAccount do
       allow(Gmail).to  receive(:connect).and_return(client)
       allow(client).to receive(:mailbox).with('[Gmail]/Sent Mail').and_return(sent_mailbox)
       allow(client).to receive(:mailbox).with('[Gmail]/All Mail').and_return(all_mailbox)
+      allow(client).to receive(:conn).and_return(client_conn)
+      allow(client_conn).to receive(:uid_fetch).with([gmail_uid], kind_of(Array)).and_return([gmail_imap_struct])
+      allow(client_conn).to receive(:uid_fetch).with([], kind_of(Array)).and_return([])
     end
 
     it 'logs a sent email' do
-      expect(sent_mailbox).to  receive(:emails).and_return([gmail_message])
-      expect(all_mailbox).to   receive(:emails).and_return([])
+      expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
+      expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
       expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
     end
 
     it 'logs a received email' do
-      expect(sent_mailbox).to  receive(:emails).and_return([])
-      expect(all_mailbox).to   receive(:emails).and_return([gmail_message])
+      expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
+      expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
       expect(gmail_account).to receive(:log_email).once
 
       gmail_account.import_emails(account_list)
