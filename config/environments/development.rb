@@ -64,9 +64,9 @@ Rails.application.configure do
 
   config.debug_exception_response_format = :default
 
-  config.action_mailer.delivery_method = :letter_opener
-  # config.action_mailer.delivery_method = :smtp
-  # config.action_mailer.smtp_settings = { host: 'localhost', port: 1025 }
+  # Handle mail with MailCatcher: https://github.com/sj26/mailcatcher
+  config.action_mailer.delivery_method = :smtp
+  config.action_mailer.smtp_settings = { host: 'localhost', port: 1025 }
 
   Rails.application.routes.default_url_options[:host] = config.action_mailer.default_url_options[:host]
 end

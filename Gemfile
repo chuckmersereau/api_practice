@@ -77,7 +77,6 @@ gem 'virtus', '~> 1.0.5'
 group :development do
   gem 'bluepill', '~> 0.1.2'
   gem 'http_logger', '~> 0.5.1'
-  gem 'letter_opener', '~> 1.4.1'
   gem 'railroady', '~> 1.5.2'
   gem 'rails-footnotes', '~> 4.1.8'
 end

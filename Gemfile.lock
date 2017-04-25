@@ -427,8 +427,6 @@ GEM
       multi_json
     launchy (2.4.3)
       addressable (~> 2.3)
-    letter_opener (1.4.1)
-      launchy (~> 2.2)
     linkedin (0.3.7)
       hashie (~> 1.2)
       multi_json (~> 1.0)
@@ -797,7 +795,6 @@ DEPENDENCIES
   jwt (~> 1.5.6)
   kaminari (~> 0.16.3)
   koala (~> 1.9.0)
-  letter_opener (~> 1.4.1)
   linkedin (~> 0.3.7)
   marco-polo (~> 1.2.1)
   mock_redis (~> 0.17.0)

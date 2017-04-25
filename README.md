@@ -1,7 +1,6 @@
-Staging: [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/staging/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
-Master: [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
+[![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=master)](https://travis-ci.com/CruGlobal/mpdx_api)
+[![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
 
-[![Build Status](https://travis-ci.org/CruGlobal/mpdx.png?branch=master)](https://travis-ci.org/CruGlobal/mpdx)
 
 MPDX API
 ========
@@ -9,6 +8,7 @@ MPDX API
 MPDX is an online tool designed to help you maintain and improve your relationships with your ministry partners.
 
 This repo sets up the API endpoint necessary for the app to work.
+
 
 ## Local Setup
 
@@ -76,10 +76,13 @@ Therefore, when you're developing, you can quickly generate a token and send it 
 curl "http://localhost:3000/api/v2/user" -H "Authorization: `rails runner 'print JsonWebToken.encode(user_id: 1)'`"
 ```
 
-
 ### Login
 
 On the front-end, users use a [TheKey.me](http://thekey.me/) account to login. TheKey is a single-sign-on system used by Cru for authentication. TheKey is an implementation of [CAS](https://en.wikipedia.org/wiki/Central_Authentication_Service). For the purposes of MPDX API development you don't need to understand TheKey or install anything, you only need to create an account if you are logging into MPDX from the front-end.
+
+### Mail
+
+In development mail is sent to [MailCatcher](https://github.com/sj26/mailcatcher). Run `gem install mailcatcher` and then `mailcatcher` to start previewing emails.
 
 
 ## Testing
@@ -96,13 +99,14 @@ Run `bundle exec rubocop -a` to attempt auto-correction of your Rubocop offenses
 
 ## Branches
 
-### master
+### master [![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=master)](https://travis-ci.com/CruGlobal/mpdx_api) [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
 
 The master branch is deployed to production at [api.mpdx.org](https://api.mpdx.org/)
 
-### staging
+### staging [![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=staging)](https://travis-ci.com/CruGlobal/mpdx_api) [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/staging/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
 
-The staging branch is deployed to staging [stage.api.mpdx.org](https://stage.api.mpdx.org/), [Jenkins](http://jenkins.uscm.org/) will auto-deploy on successful builds.
+The staging branch is deployed to staging [stage.api.mpdx.org](https://stage.api.mpdx.org/)
+
 
 ## Offline Devices Data Syncing with the API
 
@@ -114,9 +118,11 @@ To allow offline clients to create and update resources and to ensure that the c
 
 To allow offline clients to later sync resources with the API without overwriting valid data, the API will require that the updated_in_db_at field (which should reflect the value of the updated_at field that was last returned from the server) be provided in text format for each resource updated through a PUT request. The API will verify that the provided updated_in_db_at field has the exact same value that is currently stored in the database and reject the update if that is not the case. This will ensure that a client doesn't overwrite a resource without being aware of that resource's latest data.
 
+
 ## Universal Unique IDentifiers (UUID)
 
 To allow clients to generate identifiers from their side, UUIDs are used in this project at the controller level. At the model level though, we are still using integer ids to refer to db objects. Things are setup this way, because a db migration would have been to risky.
+
 
 ## Generators
 
@@ -135,6 +141,7 @@ controller spec, and acceptance spec for how controllers will be formatted for t
 - For examples of the controller and spec files - check out: [spec/support/generators/graip/controller/](spec/support/generators/graip/controller)
 - The generator templates can be found in [lib/generators/graip/controller/templates](lib/generators/graip/controller/templates).
 - For more information on how to use this generator, check out [lib/generators/graip/controller/USAGE](lib/generators/graip/controller/USAGE).
+
 
 ## API Documentation
 
@@ -182,4 +189,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-# mpdx_auth
