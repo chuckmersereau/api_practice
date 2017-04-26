@@ -39,7 +39,7 @@ module JsonWebToken
 
     def fetch_jwt_payload(env)
       http_token = fetch_http_token(env)
-      JsonWebToken.decode(http_token) if http_token
+      ::JsonWebToken.decode(http_token) if http_token
     end
   end
 end
