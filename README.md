@@ -88,10 +88,6 @@ curl "http://localhost:3000/api/v2/user" -H "Authorization: `rails runner 'print
 
 On the front-end, users use a [TheKey.me](http://thekey.me/) account to login. TheKey is a single-sign-on system used by Cru for authentication. TheKey is an implementation of [CAS](https://en.wikipedia.org/wiki/Central_Authentication_Service). For the purposes of MPDX API development you don't need to understand TheKey or install anything, you only need to create an account if you are logging into MPDX from the front-end.
 
-### Mail
-
-In development mail is sent to [MailCatcher](https://github.com/sj26/mailcatcher). Run `gem install mailcatcher` and then `mailcatcher` to start previewing emails.
-
 
 ## Testing
 
