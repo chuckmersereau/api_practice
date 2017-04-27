@@ -4,7 +4,10 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_invites
-    render json: @invites.preload(include_associations), meta: meta_hash(@invites), include: include_params, fields: field_params
+    render json: @invites.preload_valid_associations(include_associations),
+           meta: meta_hash(@invites),
+           include: include_params,
+           fields: field_params
   end
 
   def show

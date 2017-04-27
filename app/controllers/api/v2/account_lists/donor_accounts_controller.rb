@@ -2,8 +2,10 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_donor_accounts
-    render json: scoped_donor_accounts, meta: meta_hash(@donor_accounts),
-           include: include_params, fields: field_params
+    render json: scoped_donor_accounts,
+           meta: meta_hash(@donor_accounts),
+           include: include_params,
+           fields: field_params
   end
 
   def show
@@ -15,7 +17,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
   private
 
   def scoped_donor_accounts
-    @donor_accounts.preload(include_associations).map { |donor_account| scoped_donor_account(donor_account) }
+    @donor_accounts.preload_valid_associations(include_associations).map { |donor_account| scoped_donor_account(donor_account) }
   end
 
   def scoped_donor_account(donor_account)

@@ -2,7 +2,7 @@ class Api::V2::Contacts::People::TwitterAccountsController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_twitter_accounts
-    render json: @twitter_accounts.preload(include_associations),
+    render json: @twitter_accounts.preload_valid_associations(include_associations),
            meta: meta_hash(@twitter_accounts),
            include: include_params,
            fields: field_params
