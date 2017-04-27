@@ -15,8 +15,7 @@ class Import < ApplicationRecord
     tnt_data_sync: 'You must specify a TntMPD .tntmpd donor export file from your organization to upload to MPDX.'.freeze
   }.freeze
   MAX_FILE_SIZE_IN_BYTES = 100_000_000
-  PERMITTED_ATTRIBUTES = [:account_list_id,
-                          :created_at,
+  PERMITTED_ATTRIBUTES = [:created_at,
                           :file,
                           :file_constants_mappings,
                           :file_headers_mappings,

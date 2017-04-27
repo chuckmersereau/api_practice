@@ -3,6 +3,7 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 26 April 2017
+- Now allowing anyone invited to share an account to edit any of the account's resources on MPDX.
 - Allowing reverse filters for any contacts or tasks filters.
     - To do so just add 'reverse_FILTER_NAME_HERE = true' to the filter hash.
 

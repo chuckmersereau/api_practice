@@ -73,6 +73,31 @@ RSpec.shared_examples 'update_examples' do |options = {}|
       end
     end
 
+    it 'does not allow account_list to be set if account_list_id is in url' do
+      if resource.respond_to?(:account_list_id) && parent_param_if_needed[:account_list_id].present?
+        api_login(user)
+        expect do
+          put :update, account_list_id: account_list.uuid,
+                       id: resource.uuid,
+                       data: { type: resource_type,
+                               id: resource.uuid,
+                               relationships: {
+                                 account_list: {
+                                   data: {
+                                     type: 'account_lists',
+                                     id: create(:account_list).uuid
+                                   }
+                                 }
+                               },
+                               attributes: {
+                                 overwrite: true
+                               }
+                             }
+        end.not_to change { resource.reload.account_list_id }
+        expect(response.status).to eq(200)
+      end
+    end
+
     it 'does not updates resource for users that are not signed in' do
       put :update, full_update_attributes
 

@@ -11,7 +11,6 @@ class NotificationPreference < ApplicationRecord
   delegate :type, to: :notification_type
 
   PERMITTED_ATTRIBUTES = [
-    :account_list_id,
     {
       actions: []
     },

@@ -94,7 +94,7 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
               data: {
                 type: resource_type,
                 id: resource.uuid,
-                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+                attributes: correct_attributes.merge(overwrite: true)
               }
             },
             {
@@ -108,7 +108,7 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
               data: {
                 type: resource_type,
                 id: unauthorized_resource.uuid,
-                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+                attributes: correct_attributes.merge(overwrite: true)
               }
             }
           ]
@@ -131,14 +131,14 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
               data: {
                 type: resource_type,
                 id: resource.uuid,
-                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+                attributes: correct_attributes.merge(overwrite: true)
               }
             },
             {
               data: {
                 type: resource_type,
                 id: second_resource.uuid,
-                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at),
+                attributes: correct_attributes.merge(overwrite: true),
                 relationships: {
                   account_list: {
                     data: {
@@ -153,7 +153,7 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
               data: {
                 type: resource_type,
                 id: third_resource.uuid,
-                attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+                attributes: correct_attributes.merge(overwrite: true)
               }
             }
           ]
