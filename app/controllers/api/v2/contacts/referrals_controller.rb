@@ -5,7 +5,7 @@ class Api::V2::Contacts::ReferralsController < Api::V2Controller
     authorize current_contact, :show?
     load_referrals
 
-    render json: @referrals.preload(include_associations),
+    render json: @referrals.preload_valid_associations(include_associations),
            meta: meta_hash(@referrals),
            include: include_params,
            fields: field_params

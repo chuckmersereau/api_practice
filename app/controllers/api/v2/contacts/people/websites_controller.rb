@@ -2,7 +2,10 @@ class Api::V2::Contacts::People::WebsitesController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_websites
-    render json: @websites.preload(include_associations), meta: meta_hash(@websites), include: include_params, fields: field_params
+    render json: @websites.preload_valid_associations(include_associations),
+           meta: meta_hash(@websites),
+           include: include_params,
+           fields: field_params
   end
 
   def show

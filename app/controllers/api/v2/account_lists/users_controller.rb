@@ -2,7 +2,10 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_users
-    render json: @users.preload(include_associations), meta: meta_hash(@users), include: include_params, fields: field_params
+    render json: @users.preload_valid_associations(include_associations),
+           meta: meta_hash(@users),
+           include: include_params,
+           fields: field_params
   end
 
   def show

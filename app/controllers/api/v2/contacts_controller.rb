@@ -2,7 +2,8 @@ class Api::V2::ContactsController < Api::V2Controller
   def index
     authorize_index
     load_contacts
-    render json: @contacts.preload(include_associations).preload(attributes_to_preload),
+    render json: @contacts.preload_valid_associations(include_associations)
+      .preload(attributes_to_preload),
            meta: meta_hash(@contacts),
            include: include_params,
            fields: field_params

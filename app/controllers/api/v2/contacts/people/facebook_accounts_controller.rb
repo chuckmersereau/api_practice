@@ -2,7 +2,10 @@ class Api::V2::Contacts::People::FacebookAccountsController < Api::V2Controller
   def index
     authorize load_person, :show?
     load_fb_accounts
-    render json: @fb_accounts.preload(include_associations), meta: meta_hash(@fb_accounts), include: include_params, fields: field_params
+    render json: @fb_accounts.preload_valid_associations(include_associations),
+           meta: meta_hash(@fb_accounts),
+           include: include_params,
+           fields: field_params
   end
 
   def show

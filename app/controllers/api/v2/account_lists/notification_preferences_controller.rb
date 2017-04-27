@@ -3,7 +3,7 @@ class Api::V2::AccountLists::NotificationPreferencesController < Api::V2Controll
     authorize load_account_list, :show?
     load_notification_preferences
 
-    render json: @notification_preferences.preload(include_associations),
+    render json: @notification_preferences.preload_valid_associations(include_associations),
            meta: meta_hash(@notification_preferences),
            include: include_params,
            fields: field_params

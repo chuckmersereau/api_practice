@@ -111,4 +111,16 @@ describe ApplicationRecord do
       end
     end
   end
+
+  describe '.preload_valid_associations' do
+    it 'does not raise error on invalid associations' do
+      create(:contact_with_person)
+      expect { Contact.preload(:people, :last_six_donations).first }.to raise_error(ActiveRecord::AssociationNotFoundError)
+      expect { Contact.preload_valid_associations(:people, :last_six_donations).first }.to_not raise_error
+    end
+
+    it 'sets preload_values with valid associations' do
+      expect(Contact.preload_valid_associations(:people, :last_six_donations).preload_values).to eq([:people])
+    end
+  end
 end

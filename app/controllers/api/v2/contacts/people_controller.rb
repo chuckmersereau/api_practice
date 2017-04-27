@@ -2,7 +2,7 @@ class Api::V2::Contacts::PeopleController < Api::V2Controller
   def index
     authorize_index
     load_people
-    render json: @people.preload(include_associations),
+    render json: @people.preload_valid_associations(include_associations),
            meta: meta_hash(@people),
            include: include_params,
            fields: field_params
