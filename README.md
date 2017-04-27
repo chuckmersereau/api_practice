@@ -15,7 +15,7 @@ This repo sets up the API endpoint necessary for the app to work.
 ### Requirements
 
 * Ruby version corresponding to the version in file `.ruby-version`
-* PostgreSQL
+* PostgreSQL version 9.6
 * Redis
 
 On Mac OS you can use Homebrew to setup these requirements.
