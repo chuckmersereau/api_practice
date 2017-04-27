@@ -58,6 +58,8 @@ resource 'Tasks' do
     before { api_login(user) }
 
     get '/api/v2/tasks' do
+      parameter 'filter', 'Filter the list of returned tasks. Any filter can be reversed by adding reverse_FILTER_NAME_HERE = true'
+
       parameter 'filter[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
       parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '\
                                             '"Text Message", "Facebook Message", "Letter", "Newsletter", "Pre Call Letter", "Reminder Letter", '\

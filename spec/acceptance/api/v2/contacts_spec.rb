@@ -128,6 +128,8 @@ resource 'Contacts' do
         parameter :updated_at, 'Sort By UpdatedAt'
       end
 
+      parameter 'filter', 'Filter the list of returned contacts. Any filter can be reversed by adding reverse_FILTER_NAME_HERE = true'
+
       parameter 'filter[account_list_id]',            'Filter by Account List; Accepts Account List ID',                                                     required: false
       parameter 'filter[address_historic]',           'Filter by Address Historic; Accepts values "true", or "false"',                                       required: false
       parameter 'filter[address_valid]',              %(Filter by Address Invalid; A Contact's Address is invalid if \

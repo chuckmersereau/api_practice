@@ -33,6 +33,7 @@ public/mobile
 node_modules
 public/dev-assets
 .vagrant
+.env.clone
 .env.development
 .env.production
 .env.staging
