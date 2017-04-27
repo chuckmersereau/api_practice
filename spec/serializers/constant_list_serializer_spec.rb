@@ -98,5 +98,6 @@ describe ConstantListSerializer do
     it { should include :results }
     it { should include :sources }
     it { should include :statuses }
+    it { should include :tnt_import }
   end
 end

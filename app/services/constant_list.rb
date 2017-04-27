@@ -57,7 +57,14 @@ class ConstantList < ActiveModelSerializers::Model
     @csv_import ||= {
       supported_headers: CsvImport.supported_headers,
       required_headers: CsvImport.required_headers,
-      constants: CsvImport.constants
+      constants: CsvImport.constants,
+      max_file_size_in_bytes: Import::MAX_FILE_SIZE_IN_BYTES
+    }
+  end
+
+  def tnt_import
+    {
+      max_file_size_in_bytes: Import::MAX_FILE_SIZE_IN_BYTES
     }
   end
 
