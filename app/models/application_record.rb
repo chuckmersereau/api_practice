@@ -27,6 +27,9 @@ class ApplicationRecord < ActiveRecord::Base
     end
   end
 
+  # Some resource relationships exposed on the api are not actually Rails associations in our backend (they might just be custom methods).
+  # We can't preload relationships if they are not actually Rails associations.
+  # This method is like .preload, but it filters out args that are not proper associations.
   def self.preload_valid_associations(*args)
     associations = args.select { |association| reflections.keys.include?(association) }
     return preload(*associations) unless associations.empty?
