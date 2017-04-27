@@ -30,7 +30,7 @@ class ApplicationRecord < ActiveRecord::Base
   def self.preload_valid_associations(*args)
     associations = args.select { |association| reflections.keys.include?(association) }
     return preload(*associations) unless associations.empty?
-    self
+    all
   end
 
   private
