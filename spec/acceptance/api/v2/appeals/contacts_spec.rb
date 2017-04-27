@@ -76,6 +76,7 @@ resource 'Appeals > Contacts' do
       people
       primary_or_first_person
       primary_person
+      spouse
       tasks
     )
   end

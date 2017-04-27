@@ -55,6 +55,7 @@ class ContactSerializer < ApplicationSerializer
 
   has_one :primary_person
   has_one :primary_or_first_person
+  has_one :spouse
 
   def avatar
     contact_exhibit.avatar(:large)

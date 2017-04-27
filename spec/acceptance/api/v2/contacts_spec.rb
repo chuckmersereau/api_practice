@@ -112,6 +112,7 @@ resource 'Contacts' do
       people
       primary_or_first_person
       primary_person
+      spouse
       tasks
     )
   end
@@ -194,6 +195,7 @@ resource 'Contacts' do
       with_options scope: :relationships do
         response_field :primary_person,          'Primary Person Object',   'Type' => 'Object'
         response_field :primary_or_first_person, 'Primary Or First Person', 'Type' => 'Object'
+        response_field :spouse,                  'Spouse Person Object',    'Type' => 'Object'
       end
 
       example doc_helper.title_for(:show), document: doc_helper.document_scope do
