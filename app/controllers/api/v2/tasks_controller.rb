@@ -5,7 +5,7 @@ class Api::V2::TasksController < Api::V2Controller
     authorize_index
     load_tasks
     render json: @tasks.preload_valid_associations(include_associations)
-                       .preload(:tags, :comments, :people, :email_addresses, :phone_numbers),
+      .preload(:tags, :comments, :people, :email_addresses, :phone_numbers),
            meta: meta_hash(@tasks),
            include: include_params,
            fields: field_params

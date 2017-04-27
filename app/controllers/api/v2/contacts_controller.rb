@@ -3,7 +3,7 @@ class Api::V2::ContactsController < Api::V2Controller
     authorize_index
     load_contacts
     render json: @contacts.preload_valid_associations(include_associations)
-                          .preload(attributes_to_preload),
+      .preload(attributes_to_preload),
            meta: meta_hash(@contacts),
            include: include_params,
            fields: field_params
