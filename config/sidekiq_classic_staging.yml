@@ -4,7 +4,7 @@
 # The thread count (concurrency) is low, to support jobs that consume a lot of memory.
 ---
 :verbose: false
-:concurrency: 1
+:concurrency: 2
 :queues:
   - ["default",  2]
   - ["facebook", 1]

@@ -1,6 +1,6 @@
 # This is an extra mpdx_api Sidekiq worker config for memory optimized jobs.
-# Sidekiq workers using this config will run with more threads (concurrency), to increase job throughput.
-# Only jobs that are known to consume little memory should be added to these workers.
+# Only jobs that are known to consume very little memory should be added to these workers.
+# The thread count is high, to maximize job throughput.
 ---
 :verbose: false
 :concurrency: 20
