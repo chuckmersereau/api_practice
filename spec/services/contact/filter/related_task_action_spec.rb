@@ -18,6 +18,7 @@ RSpec.describe Contact::Filter::RelatedTaskAction do
                                                                 name: :related_task_action,
                                                                 options: [
                                                                   { name: '-- Any --', id: '', placeholder: 'None' },
+                                                                  { name: '-- None --', id: 'none' },
                                                                   { name: 'Call', id: 'Call' },
                                                                   { name: 'Email', id: 'Email' }
                                                                 ],
