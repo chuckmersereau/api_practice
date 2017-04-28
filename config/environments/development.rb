@@ -64,8 +64,7 @@ Rails.application.configure do
 
   config.debug_exception_response_format = :default
 
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { host: 'localhost', port: 1025 }
+  config.action_mailer.delivery_method = :letter_opener
 
   Rails.application.routes.default_url_options[:host] = config.action_mailer.default_url_options[:host]
 end

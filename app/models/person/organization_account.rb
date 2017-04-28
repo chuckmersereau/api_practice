@@ -106,7 +106,7 @@ class Person::OrganizationAccount < ApplicationRecord
   end
 
   def process_new_donations_downloaded(import_started_at:)
-    Contact::SuggestedChangesUpdaterWorker.perform_async(user.id, import_started_at)
+    ContactSuggestedChangesUpdaterWorker.perform_async(user.id, import_started_at)
 
     # Set the last download date to whenever the last donation was received
     last_donation_date = user.donations

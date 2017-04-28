@@ -2,7 +2,7 @@ require 'sidekiq/pro/web'
 require 'sidekiq/cron/web'
 
 Rails.application.routes.draw do
-  mount Auth::Engine, at: "/auth"
+  mount Auth::Engine, at: '/', constraints: {subdomain: 'auth'}
   namespace :api do
     post :graphql, to: 'graphql#create'
 

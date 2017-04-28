@@ -1,7 +1,7 @@
 class Api::V2::User::GoogleAccountsController < Api::V2Controller
   def index
     load_google_accounts
-    render json: @google_accounts.preload(include_associations),
+    render json: @google_accounts.preload_valid_associations(include_associations),
            meta: meta_hash(@google_accounts),
            include: include_params,
            fields: field_params

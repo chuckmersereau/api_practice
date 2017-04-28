@@ -4,6 +4,10 @@ require 'erb'
 class DataServer
   include ERB::Util
 
+  KNOWN_DIFFERING_IMPORT_PERSON_TYPES = [
+    'I', # Navigators
+  ].freeze
+
   def self.requires_username_and_password?
     true
   end
@@ -95,11 +99,12 @@ class DataServer
 
         # handle bad data
         unless %w(P O).include?(line['PERSON_TYPE'])
-          Rollbar.error(
-            "Unknown PERSON_TYPE: #{line['PERSON_TYPE']}",
-            parameters: { line: line, org: @org.inspect, user: @user.inspect, org_account: @org_account.inspect }
-          )
+          report_invalid_import_person_type(line)
+
           # Go ahead and assume this is a person
+          # This follows the same expectations of TntConnect
+          #
+          # Contact Troy Wolbrink, troy@tntware.com, for questions about TntConnect
           line['PERSON_TYPE'] = 'P'
         end
 
@@ -466,6 +471,15 @@ class DataServer
       Date.strptime(date_obj, '%Y-%m-%d')
     rescue ArgumentError
     end
+  end
+
+  def report_invalid_import_person_type(line)
+    person_type = line['PERSON_TYPE']
+
+    Rollbar.error(
+      "Unknown PERSON_TYPE: #{line['PERSON_TYPE']}",
+      parameters: { line: line, org: @org.inspect, user: @user.inspect, org_account: @org_account.inspect }
+    ) unless KNOWN_DIFFERING_IMPORT_PERSON_TYPES.include?(person_type) || person_type.to_s.empty?
   end
 end
 

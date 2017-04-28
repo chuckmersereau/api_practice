@@ -1,7 +1,10 @@
 class Api::V2::AppealsController < Api::V2Controller
   def index
     load_appeals
-    render json: @appeals.preload(include_associations), meta: meta_hash(@appeals), include: include_params, fields: field_params
+    render json: @appeals.preload_valid_associations(include_associations),
+           meta: meta_hash(@appeals),
+           include: include_params,
+           fields: field_params
   end
 
   def show

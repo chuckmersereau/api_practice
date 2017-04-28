@@ -47,6 +47,16 @@ class Contact::SuggestedChangesUpdater
     end
 
     load_suggested_attribute(:status, suggested_status)
+
+    # Don't suggest nil for certain attributes.
+    [:status, :pledge_currency].each do |attribute|
+      suggested_changes.delete(attribute) if suggested_changes[attribute].blank?
+    end
+
+    # nil and 0 are equivalent for certain attributes.
+    [:pledge_frequency, :pledge_amount].each do |attribute|
+      suggested_changes.delete(attribute) if [0, nil].include?(suggested_changes[attribute]) && [0, nil].include?(@contact.send(attribute))
+    end
   end
 
   def load_suggested_attribute(suggested_change_attribute, suggested_change_value)

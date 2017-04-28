@@ -8,5 +8,8 @@ LANGUAGES_CONSTANT = {
   'ko'         => 'Korean',
   'zh-hans-cn' => 'Simplified Chineese',
   'de'         => 'German',
-  'tr'         => 'Turkish'
+  'tr'         => 'Turkish',
+  'id'         => 'Indonesian',
+  'it'         => 'Italian',
+  'th'         => 'Thai'
 }.freeze

@@ -128,8 +128,8 @@ resource 'Account Lists > Imports > from TNT XML' do
                     '"multipart/form-data", this makes the endpoint unique in that it does not expect JSON content. Unless otherwise specified, the Import will be created with ' \
                     '"in_preview" set to false, which will cause the import to begin after being created (the import runs asynchronously as a background job).'
         do_request data: form_data
-        check_resource(['relationships'])
         expect(response_status).to eq(201), invalid_status_detail
+        check_resource(['relationships'])
         expect(response_headers['Content-Type']).to eq 'application/vnd.api+json; charset=utf-8'
         expect(resource_data['id']).to be_present
         expect(resource_data['attributes']['file_url']).to be_present

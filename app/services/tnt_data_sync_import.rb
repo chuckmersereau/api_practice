@@ -12,6 +12,7 @@ class TntDataSyncImport
     @data_server.import_donors_from_csv(@account_list, @profile, section('DONORS'), @user)
     @data_server.import_donations_from_csv(@profile, section('GIFTS'))
     @account_list.send_account_notifications
+    false
   end
 
   private
@@ -21,7 +22,9 @@ class TntDataSyncImport
   end
 
   def section(heading)
-    @sections_by_heading ||= Hash[@import.file_contents.scan(/^\[(.*?)\]\r?\n(.*?)(?=^\[|\Z)/m)]
+    @import.file.cache_stored_file!
+    file_contents = File.open(@import.file_path).read
+    @sections_by_heading ||= Hash[file_contents.scan(/^\[(.*?)\]\r?\n(.*?)(?=^\[|\Z)/m)]
     @sections_by_heading[heading].try(:strip)
   end
 end

@@ -1,0 +1,42 @@
+# This is an extra mpdx_api Sidekiq worker config for memory gluttonous jobs (jobs that are known to use a lot of memory).
+# All jobs can be processed by these workers.
+# The thread count is 1, to decrease memory usage as much as possible.
+---
+:verbose: false
+:concurrency: 1
+:queues:
+  - ["api_account_list",                                 1]
+  - ["api_account_list_deep_reset_worker",               1]
+  - ["api_account_list_import_data",                     1]
+  - ["api_admin_fix_worker",                             1]
+  - ["api_contact_dup_contacts_merge_worker",            10]
+  - ["api_contact_suggested_changes_updater_worker",     10]
+  - ["api_csv_import_contact_worker",                    10]
+  - ["api_currency_rates_fetcher_worker",                1]
+  - ["api_data_server_account_address_updates_preparer", 1]
+  - ["api_default",                                      1]
+  - ["api_google_integration",                           1]
+  - ["api_google_integration_sync_email",                1]
+  - ["api_import",                                       1]
+  - ["api_import_csv",                                   10]
+  - ["api_import_facebook",                              1]
+  - ["api_import_google",                                1]
+  - ["api_import_linkedin",                              1]
+  - ["api_import_tnt",                                   10]
+  - ["api_import_tnt_data_sync",                         1]
+  - ["api_import_twitter",                               1]
+  - ["api_lower_retry_worker",                           1]
+  - ["api_mail_chimp_account",                           1]
+  - ["api_mail_chimp_sync_worker",                       1]
+  - ["api_org_donor_accounts_address_cleaner",           1]
+  - ["api_organization",                                 1]
+  - ["api_organization_fetcher_worker",                  1]
+  - ["api_person_facebook_account",                      1]
+  - ["api_person_organization_account",                  1]
+  - ["api_pls_account",                                  1]
+  - ["api_prayer_letters_account",                       1]
+  - ["api_sidekiq_cron_worker",                          1]
+  - ["api_sync_google_contacts_worker",                  1]
+  - ["api_task",                                         1]
+  - ["api_task_notifications_worker",                    1]
+  - ["mailers",                                          10]

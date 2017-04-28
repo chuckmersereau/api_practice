@@ -763,7 +763,7 @@ class Contact < ApplicationRecord
   end
 
   def relevant_contact_attribute_changed?
-    (changed & %w(locale status tag_list)).present?
+    (changed & %w(locale status tag_list send_newsletter)).present?
   end
 
   def relevant_nested_attribute_changed?

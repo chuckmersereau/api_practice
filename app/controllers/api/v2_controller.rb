@@ -13,7 +13,7 @@ class Api::V2Controller < ApiController
 
   rescue_from Pundit::NotAuthorizedError, with: :render_403_from_exception
 
-  before_action :jwt_authorize!
+  before_action :authenticate!
   before_action :validate_and_transform_json_api_params
 
   after_action  :verify_authorized, except: :index
@@ -30,7 +30,10 @@ class Api::V2Controller < ApiController
   end
 
   def current_user
-    @current_user ||= User.find_by(uuid: jwt_payload['user_uuid']) if jwt_payload
+    # See JsonWebToken::Middleware and application.rb where the middleware is
+    # initialized
+
+    @current_user ||= request.env['auth.user']
   end
 
   def account_lists
@@ -39,26 +42,8 @@ class Api::V2Controller < ApiController
 
   private
 
-  def jwt_authorize!
-    raise Exceptions::AuthenticationError unless user_id_in_token? && current_user
-  rescue JWT::VerificationError, JWT::DecodeError
-    raise Exceptions::AuthenticationError
-  end
-
-  def user_id_in_token?
-    http_token && jwt_payload && jwt_payload['user_uuid']
-  end
-
-  def http_token
-    @http_token ||= auth_header.split(' ').last if auth_header.present?
-  end
-
-  def auth_header
-    request.headers['Authorization']
-  end
-
-  def jwt_payload
-    @jwt_payload ||= JsonWebToken.decode(http_token) if http_token
+  def authenticate!
+    raise Exceptions::AuthenticationError unless current_user
   end
 
   def meta_hash(resources)

@@ -1,4 +1,4 @@
-class Contact::DupContactsMergeWorker
+class ContactDupMergeWorker
   include Sidekiq::Worker
 
   sidekiq_options queue: :api_contact_dup_contacts_merge_worker

@@ -1,7 +1,7 @@
 class Api::V2::User::KeyAccountsController < Api::V2Controller
   def index
     load_key_accounts
-    render json: @key_accounts.preload(include_associations),
+    render json: @key_accounts.preload_valid_associations(include_associations),
            meta: meta_hash(@key_accounts),
            include: include_params,
            fields: field_params

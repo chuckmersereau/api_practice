@@ -7,6 +7,7 @@ class FacebookImport
 
   def import
     import_contacts
+    false
   end
 
   def import_contacts

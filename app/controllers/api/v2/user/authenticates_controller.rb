@@ -1,5 +1,5 @@
 class Api::V2::User::AuthenticatesController < Api::V2Controller
-  skip_before_action :jwt_authorize!, :validate_and_transform_json_api_params
+  skip_before_action :authenticate!, :validate_and_transform_json_api_params
   skip_after_action :verify_authorized
 
   def create

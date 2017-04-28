@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe CsvRowContactBuilder do
   let(:import) { create(:csv_import_custom_headers, tags: 'csv, test', in_preview: true) }
-  let(:csv_row) { CSV.new(import.file_contents, headers: :first_row).first }
+  let(:csv_row) { CSV.new(File.open(import.file_path).read, headers: :first_row).first }
 
   subject { CsvRowContactBuilder.new(import: import, csv_row: csv_row) }
 

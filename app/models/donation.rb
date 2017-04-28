@@ -10,7 +10,7 @@ class Donation < ApplicationRecord
   # attr_accessible :donor_account_id, :motivation, :payment_method, :tendered_currency, :donation_date, :amount, :tendered_amount, :currency, :channel, :payment_type
 
   scope :for, -> (designation_account) { where(designation_account_id: designation_account.id) }
-  scope :for_accounts, -> (designation_accounts) { where(designation_account_id: designation_accounts.pluck(:id)) }
+  scope :for_accounts, -> (designation_accounts) { where(designation_account: designation_accounts) }
   scope :since, -> (date) { where('donation_date > ?', date) }
   scope :between, -> (from, to) { where(donation_date: from.to_date..to.to_date) }
   scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
@@ -110,6 +110,6 @@ class Donation < ApplicationRecord
                      .joins(:contact_donor_accounts)
                      .where(contact_donor_accounts: { donor_account_id: donor_account.id })
 
-    appeal.bulk_add_contacts(contacts)
+    appeal.bulk_add_contacts(contacts: contacts)
   end
 end

@@ -41,6 +41,7 @@ resource 'Pledges' do
       amount
       created_at
       expected_date
+      received_not_processed
       updated_at
       updated_in_db_at
     )
@@ -93,8 +94,9 @@ resource 'Pledges' do
       end
 
       with_options scope: :sort do
-        parameter 'amount',        'Sort by Amount',        type: 'Number'
-        parameter 'expected_date', 'Sort by Expected Date', type: 'String'
+        parameter 'amount',                 'Sort by Amount',                                                       type: 'Number'
+        parameter 'expected_date',          'Sort by Expected Date',                                                type: 'String'
+        parameter 'received_not_processed', 'Value is set to true if the donation was received, but not processed', type: 'Boolean'
       end
 
       example 'Pledge [LIST]', document: documentation_scope do
@@ -114,8 +116,9 @@ resource 'Pledges' do
       with_options scope: :data do
         with_options scope: :attributes do
           # list out the attributes here
-          response_field 'amount',        'Name of Attribute', type: 'Number'
-          response_field 'expected_date', 'Name of Attribute', type: 'String'
+          response_field 'amount',                 'Amount of Pledge',                                                     type: 'Number'
+          response_field 'expected_date',          'Expected Date of Donation',                                            type: 'String'
+          response_field 'received_not_processed', 'Value is set to true if the donation was received, but not processed', type: 'Boolean'
         end
 
         with_options scope: :relationships do

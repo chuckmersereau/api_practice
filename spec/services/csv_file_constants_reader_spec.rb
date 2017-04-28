@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe CsvFileConstantsReader do
   let(:file_path) { Rails.root.join('spec/fixtures/sample_csv_with_custom_headers.csv') }
-  let(:service) { CsvFileConstantsReader.new(File.open(file_path).read) }
+  let(:service) { CsvFileConstantsReader.new(file_path) }
 
   it 'initializes' do
     expect(service).to be_a CsvFileConstantsReader

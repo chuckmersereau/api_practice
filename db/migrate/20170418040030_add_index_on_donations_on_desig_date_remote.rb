@@ -5,6 +5,7 @@ class AddIndexOnDonationsOnDesigDateRemote < ActiveRecord::Migration
     add_index :donations,
               [:designation_account_id, :donation_date, :remote_id],
               name: 'index_donations_on_des_acc_id_and_don_date_and_rem_id',
+              order: { donation_date: :desc },
               algorithm: :concurrently
   end
 end

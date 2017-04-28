@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe Contact::SuggestedChangesUpdaterWorker do
+describe ContactSuggestedChangesUpdaterWorker do
   let!(:since_donation_date) { 1.year.ago }
   let!(:account_list) { create(:account_list) }
   let!(:contact_one) { create(:contact, account_list: account_list) }
@@ -23,11 +23,11 @@ describe Contact::SuggestedChangesUpdaterWorker do
   end
 
   it 'updates contacts suggested_changes' do
-    expect { Contact::SuggestedChangesUpdaterWorker.new.perform(user.id, since_donation_date) }
+    expect { ContactSuggestedChangesUpdaterWorker.new.perform(user.id, since_donation_date) }
       .to change { contact_two.reload.suggested_changes }
       .from({})
-      .to(pledge_frequency: nil, pledge_amount: nil, pledge_currency: nil, status: 'Partner - Special')
-    expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, pledge_currency: nil, status: 'Partner - Special')
+      .to(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
+    expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
   end
 
   context 'only updating contacts with updated donations' do
@@ -36,10 +36,10 @@ describe Contact::SuggestedChangesUpdaterWorker do
     end
 
     it 'updates only some contacts suggested_changes' do
-      expect { Contact::SuggestedChangesUpdaterWorker.new.perform(user.id, since_donation_date) }
+      expect { ContactSuggestedChangesUpdaterWorker.new.perform(user.id, since_donation_date) }
         .to_not change { contact_two.reload.suggested_changes }
         .from({})
-      expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, pledge_currency: nil, status: 'Partner - Special')
+      expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
     end
   end
 end

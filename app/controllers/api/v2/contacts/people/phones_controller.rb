@@ -37,7 +37,10 @@ class Api::V2::Contacts::People::PhonesController < Api::V2Controller
   end
 
   def render_phones
-    render json: @phones.preload(include_associations), meta: meta_hash(@phones), include: include_params, fields: field_params
+    render json: @phones.preload_valid_associations(include_associations),
+           meta: meta_hash(@phones),
+           include: include_params,
+           fields: field_params
   end
 
   def phone_params

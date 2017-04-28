@@ -1,7 +1,7 @@
 class Api::V2::AccountListsController < Api::V2Controller
   def index
     load_account_lists
-    render json: @account_lists.preload(include_associations),
+    render json: @account_lists.preload_valid_associations(include_associations),
            meta: meta_hash(@account_lists),
            include: include_params,
            fields: field_params

@@ -1,9 +1,11 @@
 class TntImport::GiftsImport
-  def initialize(account_list, tnt_contacts, xml)
-    @account_list = account_list
-    @tnt_contacts = tnt_contacts
-    @xml = xml
-    @xml_tables = xml.tables
+  attr_reader :contact_ids_by_tnt_contact_id, :xml_tables
+
+  def initialize(account_list, contact_ids_by_tnt_contact_id, xml)
+    @account_list                  = account_list
+    @contact_ids_by_tnt_contact_id = contact_ids_by_tnt_contact_id
+    @xml                           = xml
+    @xml_tables                    = xml.tables
   end
 
   def import
@@ -11,9 +13,12 @@ class TntImport::GiftsImport
     org = @account_list.organization_accounts.first.organization
 
     xml_tables['Gift'].each do |row|
-      contact = tnt_contacts[row['ContactID']]
+      tnt_contact_id = row['ContactID']
+      contact        = Contact.find_by(id: contact_ids_by_tnt_contact_id[tnt_contact_id])
+
       next unless contact
       next if org.api_class != 'OfflineOrg' && row['PersonallyReceived'] == 'false'
+
       account = donor_account_for_contact(org, contact)
 
       # If someone re-imports donations, assume that there is just one donation per date per amount;
@@ -50,6 +55,4 @@ class TntImport::GiftsImport
     Date.parse(val)
   rescue
   end
-
-  attr_reader :tnt_contacts, :xml_tables
 end

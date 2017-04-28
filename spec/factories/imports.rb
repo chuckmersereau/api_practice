@@ -87,6 +87,75 @@ FactoryGirl.define do
     file { File.new(Rails.root.join('spec/fixtures/sample_csv_with_custom_headers.csv')) }
   end
 
+  factory :csv_import_with_mappings, parent: :csv_import_custom_headers do
+    after :build do |import|
+      import.in_preview = true
+    end
+
+    after :create do |import|
+      CsvImport.new(import).update_cached_file_data
+
+      import.file_headers_mappings = {
+        'church'               => 'church',
+        'city'                 => 'city',
+        'commitment_amount'    => 'amount',
+        'commitment_currency'  => 'currency',
+        'commitment_frequency' => 'frequency',
+        'country'              => 'country',
+        'email_1'              => 'email_address',
+        'first_name'           => 'fname',
+        'greeting'             => 'greeting',
+        'envelope_greeting'    => 'mailing_greeting',
+        'last_name'            => 'lname',
+        'likely_to_give'       => 'likely_giver',
+        'metro_area'           => 'metro',
+        'newsletter'           => 'newsletter',
+        'notes'                => 'extra_notes',
+        'phone_1'              => 'phone',
+        'region'               => 'region',
+        'send_appeals'         => 'appeals',
+        'spouse_email'         => 'spouse_email_address',
+        'spouse_first_name'    => 'spouse_fname',
+        'spouse_last_name'     => 'spouse_lname',
+        'spouse_phone'         => 'spouse_phone_number',
+        'state'                => 'province',
+        'status'               => 'status',
+        'street'               => 'street',
+        'tags'                 => 'tags',
+        'website'              => 'website',
+        'zip'                  => 'zip_code'
+      }
+
+      import.file_constants_mappings = {
+        'commitment_currency' => {
+          'cad' => 'CAD',
+          'usd' => ''
+        },
+        'commitment_frequency' => {
+          '1_0' => 'Monthly',
+          '' => ''
+        },
+        'likely_to_give' => {
+          'most_likely' => 'Yes',
+          'least_likely' => 'No'
+        },
+        'newsletter' => {
+          'both' => 'Both'
+        },
+        'send_appeals' => {
+          'true' => 'Yes',
+          'false' => 'No'
+        },
+        'status' => {
+          'partner_financial' => 'Praying and giving',
+          'partner_pray' => 'Praying'
+        }
+      }
+
+      import.save
+    end
+  end
+
   factory :tnt_import_multi_org, parent: :import do
     association :account_list
     source 'tnt'

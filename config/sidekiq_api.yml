@@ -1,6 +1,10 @@
+# This is the default mpdx_api Sidekiq worker config.
+# It should contain most queues for mpdx_api (but not Classic).
+# Jobs that are known to be memory gluttons should be excluded from this config.
+# The thread count (concurrency) is moderate, to support jobs that need moderate memory.
 ---
 :verbose: false
-:concurrency: 7
+:concurrency: 3
 :queues:
   - ["api_account_list",                                 1]
   - ["api_account_list_deep_reset_worker",               1]
@@ -8,6 +12,7 @@
   - ["api_admin_fix_worker",                             1]
   - ["api_contact_dup_contacts_merge_worker",            10]
   - ["api_contact_suggested_changes_updater_worker",     10]
+  - ["api_csv_import_contact_worker",                    10]
   - ["api_currency_rates_fetcher_worker",                1]
   - ["api_data_server_account_address_updates_preparer", 1]
   - ["api_default",                                      1]
@@ -18,7 +23,6 @@
   - ["api_import_facebook",                              1]
   - ["api_import_google",                                1]
   - ["api_import_linkedin",                              1]
-  - ["api_import_tnt",                                   10]
   - ["api_import_tnt_data_sync",                         1]
   - ["api_import_twitter",                               1]
   - ["api_lower_retry_worker",                           1]

@@ -1,7 +1,6 @@
-Staging: [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/staging/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
-Master: [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
+[![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=master)](https://travis-ci.com/CruGlobal/mpdx_api)
+[![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
 
-[![Build Status](https://travis-ci.org/CruGlobal/mpdx.png?branch=master)](https://travis-ci.org/CruGlobal/mpdx)
 
 MPDX API
 ========
@@ -10,12 +9,13 @@ MPDX is an online tool designed to help you maintain and improve your relationsh
 
 This repo sets up the API endpoint necessary for the app to work.
 
+
 ## Local Setup
 
 ### Requirements
 
 * Ruby version corresponding to the version in file `.ruby-version`
-* PostgreSQL
+* PostgreSQL version 9.6
 * Redis
 
 On Mac OS you can use Homebrew to setup these requirements.
@@ -49,19 +49,27 @@ Create, migrate, and seed your databases with:
 $ bin/rake db:create && bin/rake db:migrate && bin/rake db:seed
 ```
 
-This application uses a structure.sql file instead of the Rails schema.rb file, the rake tasks `db:setup` and `db:schema:load` are not supported.
+**Note:** This application uses a structure.sql file instead of the Rails schema.rb file, the rake tasks `db:setup` and `db:schema:load` are not supported.
 
 ### Start Server
 
-Rails server:
+Start Rails server:
 ```bash
 $ bin/rails s
 ```
 
-Sidekiq:
+### Sidekiq
+
+Many MPDX features rely on [Sidekiq](https://github.com/mperham/sidekiq/wiki) background jobs. Sidekiq requires Redis.
+
+Start Sidekiq:
 ```bash
-$ bundle exec sidekiq
+$ bundle exec sidekiq -C config/sidekiq_api.yml
 ```
+
+Visit [localhost:3000/sidekiq](http://localhost:3000/sidekiq) to view the Sidekiq web UI.
+
+The gem [sidekiq-cron](https://github.com/ondrejbartas/sidekiq-cron) is used to schedule daily background jobs.
 
 ### API Authentication
 
@@ -75,7 +83,6 @@ Therefore, when you're developing, you can quickly generate a token and send it 
 ```
 curl "http://localhost:3000/api/v2/user" -H "Authorization: `rails runner 'print JsonWebToken.encode(user_id: 1)'`"
 ```
-
 
 ### Login
 
@@ -96,13 +103,14 @@ Run `bundle exec rubocop -a` to attempt auto-correction of your Rubocop offenses
 
 ## Branches
 
-### master
+### master [![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=master)](https://travis-ci.com/CruGlobal/mpdx_api) [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/master/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
 
 The master branch is deployed to production at [api.mpdx.org](https://api.mpdx.org/)
 
-### staging
+### staging [![Build Status](https://travis-ci.com/CruGlobal/mpdx_api.svg?token=uek23xg9pfmdzVvobNp3&branch=staging)](https://travis-ci.com/CruGlobal/mpdx_api) [![codecov](https://codecov.io/gh/CruGlobal/mpdx_api/branch/staging/graph/badge.svg?token=pfc2BagYCd)](https://codecov.io/gh/CruGlobal/mpdx_api)
 
-The staging branch is deployed to staging [stage.api.mpdx.org](https://stage.api.mpdx.org/), [Jenkins](http://jenkins.uscm.org/) will auto-deploy on successful builds.
+The staging branch is deployed to staging [stage.api.mpdx.org](https://stage.api.mpdx.org/)
+
 
 ## Offline Devices Data Syncing with the API
 
@@ -114,9 +122,11 @@ To allow offline clients to create and update resources and to ensure that the c
 
 To allow offline clients to later sync resources with the API without overwriting valid data, the API will require that the updated_in_db_at field (which should reflect the value of the updated_at field that was last returned from the server) be provided in text format for each resource updated through a PUT request. The API will verify that the provided updated_in_db_at field has the exact same value that is currently stored in the database and reject the update if that is not the case. This will ensure that a client doesn't overwrite a resource without being aware of that resource's latest data.
 
+
 ## Universal Unique IDentifiers (UUID)
 
 To allow clients to generate identifiers from their side, UUIDs are used in this project at the controller level. At the model level though, we are still using integer ids to refer to db objects. Things are setup this way, because a db migration would have been to risky.
+
 
 ## Generators
 
@@ -135,6 +145,7 @@ controller spec, and acceptance spec for how controllers will be formatted for t
 - For examples of the controller and spec files - check out: [spec/support/generators/graip/controller/](spec/support/generators/graip/controller)
 - The generator templates can be found in [lib/generators/graip/controller/templates](lib/generators/graip/controller/templates).
 - For more information on how to use this generator, check out [lib/generators/graip/controller/USAGE](lib/generators/graip/controller/USAGE).
+
 
 ## API Documentation
 
@@ -182,4 +193,3 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-# mpdx_auth

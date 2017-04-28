@@ -51,6 +51,12 @@ module Mpdx
 
     config.middleware.insert_before 0, 'Rack::MethodOverride'
 
+    config.middleware.insert_after 'ActiveRecord::ConnectionAdapters::ConnectionManagement', 'JsonWebToken::Middleware' do |env|
+      if user_uuid = env.dig('auth.jwt_payload', 'user_uuid')
+        env['auth.user'] = User.find_by(uuid: user_uuid)
+      end
+    end
+
     config.after_initialize do |app|
       app.routes.append{ match '*a', :to => 'api/error#not_found', via: [:get, :post] } unless config.consider_all_requests_local
     end

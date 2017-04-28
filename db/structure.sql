@@ -1461,7 +1461,11 @@ CREATE TABLE imports (
     file_constants text,
     file_headers_mappings text,
     file_constants_mappings text,
-    file_row_samples text
+    file_row_samples text,
+    file_row_failures text,
+    queued_for_import_at timestamp without time zone,
+    import_completed_at timestamp without time zone,
+    import_started_at timestamp without time zone
 );
 
 
@@ -2603,7 +2607,8 @@ CREATE TABLE pledges (
     contact_id integer,
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    received_not_processed boolean
 );
 
 
@@ -6279,3 +6284,12 @@ INSERT INTO schema_migrations (version) VALUES ('20170418040007');
 
 INSERT INTO schema_migrations (version) VALUES ('20170418040030');
 
+INSERT INTO schema_migrations (version) VALUES ('20170420161008');
+
+INSERT INTO schema_migrations (version) VALUES ('20170419001725');
+
+INSERT INTO schema_migrations (version) VALUES ('20170419004646');
+
+INSERT INTO schema_migrations (version) VALUES ('20170419141659');
+
+INSERT INTO schema_migrations (version) VALUES ('20170419145350');

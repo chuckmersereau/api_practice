@@ -13,16 +13,20 @@ class TntImport
 
   def import
     @import.file.cache_stored_file!
-    return unless xml.present?
+    return false unless xml.present?
 
-    tnt_contacts = import_contacts
-    import_referrals(tnt_contacts)
-    import_tasks(tnt_contacts)
-    _history, contacts_by_tnt_appeal_id = import_history(tnt_contacts)
+    contact_ids_by_tnt_contact_id = import_contacts
 
-    import_offline_org_gifts(tnt_contacts)
+    import_referrals(contact_ids_by_tnt_contact_id)
+    import_tasks(contact_ids_by_tnt_contact_id)
+
+    contact_ids_by_tnt_appeal_id = import_history(contact_ids_by_tnt_contact_id)
+
+    import_offline_org_gifts(contact_ids_by_tnt_contact_id)
     import_settings
-    import_appeals(contacts_by_tnt_appeal_id)
+    import_appeals(contact_ids_by_tnt_appeal_id)
+
+    false
   ensure
     CarrierWave.clean_cached_files!
   end
@@ -55,8 +59,8 @@ class TntImport
     TntImport::SettingsImport.new(@account_list, xml, @import.override?).import
   end
 
-  def import_appeals(contacts_by_tnt_appeal_id)
-    TntImport::AppealsImport.new(@account_list, contacts_by_tnt_appeal_id, xml)
+  def import_appeals(contact_ids_by_tnt_appeal_id)
+    TntImport::AppealsImport.new(@account_list, contact_ids_by_tnt_appeal_id, xml)
                             .import
   end
 end

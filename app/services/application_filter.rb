@@ -19,14 +19,16 @@ class ApplicationFilter
     }.merge(filter.select_options) if filter.display_filter_option? && !filter.empty?
   end
 
-  def self.query(resource, filters, account_list)
-    new(account_list).query(resource, filters)
+  def self.query(scope, filters, account_list)
+    new(account_list).query(scope, filters)
   end
 
-  def query(resource, filters)
+  def query(scope, filters)
     filters[name] ||= default_selection if default_selection.present?
+
     return unless valid_filters?(filters)
-    execute_query(resource, filters)
+    return scope.where.not(id: execute_query(scope, filters).ids) if filters["reverse_#{name}".to_sym].to_s == 'true'
+    execute_query(scope, filters)
   end
 
   def select_options

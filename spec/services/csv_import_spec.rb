@@ -5,6 +5,7 @@ describe CsvImport do
   let!(:import) { CsvImport.new(csv_import) }
 
   before do
+    Sidekiq::Testing.inline!
     stub_request(:get, %r{api.smartystreets.com/.*})
       .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
       .to_return(status: 200, body: '{}', headers: {})
@@ -65,7 +66,7 @@ describe CsvImport do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_with_bom.csv')))
       import.update_cached_file_data
       csv_import.update(in_preview: false)
-      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
       contact = Contact.first
       expect(contact.account_list).to eq(csv_import.account_list)
       expect(contact.to_s).to eq('Doe, John and Jane')
@@ -89,7 +90,7 @@ describe CsvImport do
         }
       }
       csv_import.update(in_preview: false)
-      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
       expect(Contact.first.name).to eq('Lané, John')
     end
 
@@ -100,7 +101,7 @@ describe CsvImport do
         '' => 'None'
       }
       csv_import.update(in_preview: false)
-      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
       expect(Contact.first.send_newsletter).to eq('')
     end
 
@@ -108,7 +109,7 @@ describe CsvImport do
       csv_import.update(file: File.new(Rails.root.join('spec/fixtures/sample_csv_inconsistent_newlines.csv')))
       import.update_cached_file_data
       csv_import.update(in_preview: false)
-      expect { import.import }.to change { Contact.count }.from(0).to(1)
+      expect { import.import }.to change { Contact.count }.from(1).to(2)
       expect(Contact.first.name).to eq('Doe, John and Jane')
     end
   end
@@ -202,6 +203,31 @@ describe CsvImport do
         expect do
           expect { import.import }.to raise_error RuntimeError
         end.not_to change { Contact.count }
+      end
+
+      it 'returns true when queueing jobs' do
+        csv_import.in_preview = false
+        expect(import.import).to eq(true)
+      end
+
+      it 'returns false if no jobs were queued' do
+        allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_blank.csv'))
+        csv_import.in_preview = false
+        expect(import.import).to eq(false)
+      end
+
+      it 'queues a sidekiq batch' do
+        csv_import.in_preview = false
+        expect { import.import }.to change { Sidekiq::BatchSet.new.count }.by(1)
+      end
+
+      it 'imports valid contacts successfully and stores invalid contacts in the file_row_failures' do
+        allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv'))
+        csv_import.in_preview = false
+        expect do
+          expect(import.import).to eq(true)
+        end.to change { Contact.count }.by(1)
+        expect(csv_import.reload.file_row_failures.size).to eq(2)
       end
     end
 
@@ -302,6 +328,30 @@ describe CsvImport do
            'region', 'Yes', 'website']
         ]
       )
+    end
+  end
+
+  describe '#generate_csv_from_file_row_failures' do
+    let(:import) { create(:csv_import_with_mappings) }
+    let(:csv_import) { CsvImport.new(import) }
+
+    before do
+      import.in_preview = false
+      allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv'))
+      csv_import.import
+      import.reload
+    end
+
+    it 'generates a csv file as a string that contains the failed rows' do
+      expect(csv_import.generate_csv_from_file_row_failures).to eq('Error Message,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
+                                                                   'street,city,province,zip-code,country,status,amount,frequency,currency,newsletter,tags,' \
+                                                                   'email-address,Spouse-email-address,phone,Spouse-phone-number,extra-notes,skip,likely-giver' \
+                                                                   ",metro,region,appeals,website\n\"Validation failed: Email is invalid, Email is invalid\",Bob" \
+                                                                   ',Park,Sara,Kim,Hello!,,,123 Street West,A Small Town,Quebec,L8D 3B9,Canada,Praying and giving' \
+                                                                   ',10,Monthly,,Both,bob,this is not a valid email,this is also not a valid email,+12345678901' \
+                                                                   ",+10987654321,,Yes,No,metro,region,No,website\n\"Validation failed: First name can't be blank, " \
+                                                                   "Name can't be blank\",,,,,,,,\"Apartment, Unit 123\",Big City,BC,,CA,Praying,,,,Both,,joe@inter.net" \
+                                                                   ",,123.456.7890,,notes,,Yes,metro,region,Yes,website\n")
     end
   end
 end

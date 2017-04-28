@@ -1,0 +1,5 @@
+fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,street,city,province,zip-code,country,status,amount,frequency,currency,newsletter,tags,email-address,Spouse-email-address,phone,Spouse-phone-number,extra-notes,skip,likely-giver,metro,region,appeals,website
+John,Doe,Jane,Doe,Hi John and Jane,Doe family,Westside Baptist Church,"1 Example Ave, Apt 6",Sample City,IL,60201,USA,Praying,50,Monthly,CAD,Both,"christmas-card,      family",john@example.com,jane@example.com,(213) 222-3333,(407) 555-6666,test notes,No,Yes,metro,region,Yes,http://www.john.doe
+Bob,Park,Sara,Kim,Hello!,,,"123 Street West",A Small Town,Quebec,L8D 3B9,Canada,Praying and giving,10,Monthly,,Both,"bob",this is not a valid email,this is also not a valid email,+12345678901,+10987654321,,Yes,No,metro,region,No,website
+,,,,,,,"Apartment, Unit 123",Big City,BC,,CA,Praying,,,,Both,,joe@inter.net,,123.456.7890,,notes,,Yes,metro,region,Yes,website
+,,,,,,,,,,,,,,,,,,,,,,,,,,,,
