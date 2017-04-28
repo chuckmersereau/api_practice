@@ -7,6 +7,9 @@ This changelog covers what's changed in the MPDX APIs.
 - Allowing reverse filters for any contacts or tasks filters.
     - To do so just add 'reverse_FILTER_NAME_HERE = true' to the filter hash.
 
+## 25 April 2017
+- Added /account_lists/invites/accept endpoint to allow users to accept an account list invite.
+
 ## 20 April 2017
 - Added received_not_processed to pledges.
 - Contact suggested_changes used to sometimes suggest a blank value for status, this was a bug that has been fixed.
@@ -18,8 +21,6 @@ This changelog covers what's changed in the MPDX APIs.
 
 ## 13 April 2017
 - Removed total_donations from all contact endpoints.
-
-## 13 April 2017
 - Added api_class and help_email attributes to a new constant field called organizations_attributes.
 - Added contact referrals relationships to contact serializer.
 - Added people bulk endpoints.

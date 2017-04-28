@@ -4,6 +4,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   def index
     authorize load_account_list, :show?
     load_invites
+
     render json: @invites.preload_valid_associations(include_associations),
            meta: meta_hash(@invites),
            include: include_params,
@@ -20,7 +21,21 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
     if authorize_and_save_invite
       render_invite
     else
-      render json: { success: false, errors: ['Could not send invite'] }, status: 400, include: include_params, fields: field_params
+      render json: { success: false, errors: ['Could not send invite'] },
+             status: 400
+    end
+  end
+
+  def update
+    authorize load_account_list
+    validate_account_list_invite_code
+    load_account_list_invite
+
+    if @invite.accept(current_user)
+      render_invite
+    else
+      render json: { success: false, errors: ['No longer valid'] },
+             status: 410
     end
   end
 
@@ -31,6 +46,10 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   private
+
+  def validate_account_list_invite_code
+    raise Exceptions::BadRequestError, "'data/attributes/code' cannot be blank" if params.dig(:account_list_invite, :code).blank?
+  end
 
   def destroy_invite
     @invite.cancel(current_user)
@@ -79,6 +98,12 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
 
   def load_account_list
     @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+  end
+
+  def load_account_list_invite
+    @invite ||= AccountListInvite.find_by!(uuid: params[:id],
+                                           code: params.dig(:account_list_invite, :code),
+                                           account_list: load_account_list)
   end
 
   def pundit_user
