@@ -5,7 +5,6 @@ require 'omniauth-prayer-letters'
 silence_warnings do
   OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 end
-OmniAuth.config.full_host = (Rails.env.development? ? 'http://' : 'https://') + ActionMailer::Base.default_url_options[:host]
 Auth::Engine.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2,
            ENV.fetch('GOOGLE_KEY'),
