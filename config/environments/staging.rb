@@ -83,4 +83,6 @@ Rails.application.configure do
   config.log_tags = [->(request) { "ReqID:#{request.uuid}" }]
 
   Rails.application.routes.default_url_options[:host] = 'stage.mpdx.org'
+
+  config.action_dispatch.tld_length = 2
 end

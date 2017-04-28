@@ -1,6 +1,6 @@
 Auth::Engine.routes.draw do
-  get '/google/callback', to: 'provider/google_accounts#create'
-  get '/prayer_letters/callback', to: 'provider/prayer_letters_accounts#create'
-  get '/user/:provider', to: 'user_accounts#create'
-  get '/failure', to: 'user_accounts#failure'
+  get '/auth/google/callback', to: 'provider/google_accounts#create'
+  get '/auth/prayer_letters/callback', to: 'provider/prayer_letters_accounts#create'
+  get '/auth/user/:provider', to: 'user_accounts#create'
+  get '/auth/failure', to: 'user_accounts#failure'
 end
