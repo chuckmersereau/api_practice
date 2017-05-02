@@ -31,7 +31,7 @@ describe Auth::UserAccountsController, :auth, type: :controller do
 
   context 'with no logged in user' do
     it 'should return an unauthorized response' do
-      get :create, { provider: provider }
+      get :create, provider: provider
       expect(response.status).to be(401)
     end
   end
