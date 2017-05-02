@@ -12,11 +12,13 @@ Auth::Engine.config.middleware.use OmniAuth::Builder do
            name: 'google',
            scope: 'userinfo.email,userinfo.profile,https://www.google.com/m8/feeds,https://mail.google.com/,https://www.googleapis.com/auth/calendar',
            access_type: 'offline',
-           prompt: 'consent select_account'
+           prompt: 'consent select_account',
+           provider_ignores_state: true
   provider :prayer_letters,
            ENV.fetch('PRAYER_LETTERS_CLIENT_ID'),
            ENV.fetch('PRAYER_LETTERS_CLIENT_SECRET'),
-           scope: 'contacts.read contacts.write'
+           scope: 'contacts.read contacts.write',
+           provider_ignores_state: true
 end
 
 OmniAuth.config.on_failure = proc { |env|
