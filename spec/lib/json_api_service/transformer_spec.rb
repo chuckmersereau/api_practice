@@ -324,7 +324,7 @@ module JsonApiService
                   referred_to: {
                     data: {
                       type: 'mock_contacts',
-                      id: 'def456'
+                      id: 'none'
                     }
                   }
                 }
@@ -339,8 +339,8 @@ module JsonApiService
 
           before do
             mock_uuid_reference(
-              from: %w(abc123 def456),
-              to: [10, 20],
+              from: %w(abc123 none),
+              to: [10, nil],
               resource: MockContact
             )
           end
@@ -349,7 +349,7 @@ module JsonApiService
             expected_hash = {
               mock_contact_referral: {
                 referred_by_id: 10,
-                referred_to_id: 20
+                referred_to_id: nil
               },
               action: 'create'
             }

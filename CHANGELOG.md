@@ -2,6 +2,11 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 01 May 2017
+- Added updated_at filter to people.
+- Allowing clients to set a foreign key to nil.
+  - To do so just set "id: 'none'" for a belongs_to relationship
+
 ## 26 April 2017
 - Now allowing anyone invited to share an account to edit any of the account's resources on MPDX.
 - Allowing reverse filters for any contacts or tasks filters.

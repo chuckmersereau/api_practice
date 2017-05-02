@@ -87,13 +87,22 @@ module JsonApiService
       relationships
         .select { |_type, value| value.dig(:data).is_a? Hash }
         .each_with_object({}) do |(key, value), hash|
-          foreign_key = "#{key}_id"
-          uuid        = value.dig(:data, :id)
-          type        = value.dig(:data, :type)
-          id          = uuid_references[type][uuid]
-
-          hash[foreign_key] = id
+          hash.merge!(generate_foreign_key_from_relationship(key, value))
         end
+    end
+
+    def generate_foreign_key_from_relationship(key, value)
+      foreign_key = "#{key}_id"
+      uuid        = value.dig(:data, :id)
+      type        = value.dig(:data, :type)
+
+      id = if uuid == 'none'
+             nil
+           else
+             uuid_references[type][uuid]
+           end
+
+      { foreign_key => id }
     end
 
     def id_data_for_object(object)
