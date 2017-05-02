@@ -6,7 +6,7 @@ module Auth
 
     def create
       session.clear
-      warden.set_user(current_user, scope: :user)
+      warden.set_user(fetch_current_user, scope: :user)
       session['redirect_to'] = params[:redirect_to]
       session['account_list_id'] = params[:account_list_id]
       redirect_to "/auth/#{params[:provider]}"
@@ -41,7 +41,7 @@ module Auth
       @jwt_payload ||= JsonWebToken.decode(http_token) if http_token
     end
 
-    def current_user
+    def fetch_current_user
       @current_user ||= User.find_by_uuid_or_raise!(jwt_payload['user_uuid']) if jwt_payload
     end
   end
