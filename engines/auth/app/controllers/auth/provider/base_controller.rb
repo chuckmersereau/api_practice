@@ -15,5 +15,16 @@ module Auth
     def auth_hash
       request.env['omniauth.auth']
     end
+
+    def current_user
+      @current_user ||= warden.user(:user)
+      raise AuthenticationError unless @current_user
+      @current_user
+    end
+
+    def current_account_list
+      @account_list ||= current_user.account_lists
+                                    .find_by(uuid: session['account_list_id'])
+    end
   end
 end

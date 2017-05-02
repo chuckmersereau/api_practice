@@ -65,6 +65,7 @@ PATH
       omniauth-prayer-letters (~> 0.0.3)
       rails (~> 4.1.16)
       sass-rails (~> 5.0.1)
+      warden (~> 1.2.3)
 
 GEM
   remote: https://rubygems.org/
@@ -860,4 +861,4 @@ DEPENDENCIES
   zonebie (~> 0.6.1)
 
 BUNDLED WITH
-   1.14.4
+   1.14.6

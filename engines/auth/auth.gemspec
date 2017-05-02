@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
   s.add_dependency 'omniauth-google-oauth2', '~> 0.4.1'
   s.add_dependency 'omniauth-prayer-letters', '~> 0.0.3'
   s.add_dependency 'sass-rails', '~> 5.0.1'
+  s.add_dependency 'warden', '~> 1.2.3'
 
   s.add_development_dependency 'dotenv-rails', '~> 2.1.1'
   s.add_development_dependency 'rubocop'
