@@ -186,6 +186,8 @@ GEM
       safe_yaml (~> 1.0.0)
     currencies (0.4.2)
     database_cleaner (1.5.3)
+    ddtrace (0.7.0)
+      msgpack
     deadlock_retry (1.2.0)
     descendants_tracker (0.0.4)
       thread_safe (~> 0.3, >= 0.3.1)
@@ -449,6 +451,7 @@ GEM
     mini_portile2 (2.1.0)
     minitest (5.10.1)
     mock_redis (0.17.1)
+    msgpack (1.1.0)
     multi_json (1.12.1)
     multi_xml (0.6.0)
     multipart-post (2.0.0)
@@ -761,6 +764,7 @@ DEPENDENCIES
   country_select!
   coveralls (~> 0.8.15)
   database_cleaner (~> 1.5.3)
+  ddtrace (~> 0.7.0)
   deadlock_retry (~> 1.2.0)
   devise (~> 3.4.0)
   display_case (= 0.0.5)
