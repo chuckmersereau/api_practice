@@ -1,6 +1,7 @@
 require 'json_api_service'
 
 class Api::V2Controller < ApiController
+  include BatchRequestHelpers
   include Fields
   include Filtering
   include Including

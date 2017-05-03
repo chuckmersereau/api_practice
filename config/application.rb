@@ -51,7 +51,16 @@ module Mpdx
 
     config.middleware.insert_before 0, 'Rack::MethodOverride'
 
-    config.middleware.insert_after 'ActiveRecord::ConnectionAdapters::ConnectionManagement', 'JsonWebToken::Middleware' do |env|
+    config.middleware.insert_before 'ActionDispatch::ShowExceptions', 'BatchRequestHandler::Middleware',
+      endpoint: '/api/v2/batch',
+      instruments: [
+        'BatchRequestHandler::Instruments::Logging',
+        'BatchRequestHandler::Instruments::RequestValidator',
+        'BatchRequestHandler::Instruments::RequestLimiter',
+        'BatchRequestHandler::Instruments::AbortOnError'
+      ]
+
+    config.middleware.insert_before 'BatchRequestHandler::Middleware', 'JsonWebToken::Middleware' do |env|
       if user_uuid = env.dig('auth.jwt_payload', 'user_uuid')
         env['auth.user'] = User.find_by(uuid: user_uuid)
       end

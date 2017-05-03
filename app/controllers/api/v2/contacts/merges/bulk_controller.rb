@@ -1,5 +1,6 @@
 class Api::V2::Contacts::Merges::BulkController < Api::V2Controller
   skip_before_action :validate_and_transform_json_api_params
+  before_action :reject_if_in_batch_request
 
   Merge = Struct.new(:winner, :loser)
 
