@@ -1,10 +1,12 @@
 class ConstantListSerializer < ActiveModel::Serializer
   include DisplayCase::ExhibitsHelper
 
-  delegate :assignable_locations,
+  delegate :alert_frequencies,
+           :assignable_locations,
            :assignable_statuses,
            :bulk_update_options,
            :codes,
+           :mobile_alert_frequencies,
            :next_actions,
            :organizations,
            :organizations_attributes,
@@ -29,7 +31,6 @@ class ConstantListSerializer < ActiveModel::Serializer
              :csv_import,
              :dates,
              :languages,
-             :locales,
              :locales,
              :mobile_alert_frequencies,
              :next_actions,
