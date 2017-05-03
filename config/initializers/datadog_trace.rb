@@ -16,4 +16,8 @@ if Rails.env.production? || Rails.env.staging?
     env: Rails.env,
     tags: {app: Rails.env.production? ? 'mpdx_api' : 'mpdx_api_staging' }
   }
+else
+  Rails.configuration.datadog_trace = {
+    enabled: false
+  }
 end
