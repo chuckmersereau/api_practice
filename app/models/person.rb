@@ -152,7 +152,6 @@ class Person < ApplicationRecord
   after_destroy :clean_up_master_person, :clean_up_contact_people
 
   before_save :deceased_check
-  after_save :touch_contacts
 
   validates :first_name, presence: true
 
@@ -162,11 +161,6 @@ class Person < ApplicationRecord
 
   def to_s_last_first
     [last_name, first_name].join(', ')
-  end
-
-  def touch
-    super
-    touch_contacts
   end
 
   def add_spouse(spouse)
@@ -483,9 +477,5 @@ class Person < ApplicationRecord
         records_to_keep << new_record
       end
     end
-  end
-
-  def touch_contacts
-    contacts.map(&:touch) if sign_in_count == 0
   end
 end
