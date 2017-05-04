@@ -1,23 +1,20 @@
-if Rails.env.production? || Rails.env.staging?
-  Rails.configuration.datadog_trace = {
-    enabled: true,
-    auto_instrument: true,
-    auto_instrument_redis: true,
-    auto_instrument_grape: false,
-    default_service: Rails.env.production? ? 'mpdx_api' : 'mpdx_api_staging',
-    default_controller_service: Rails.env.production? ? 'mpdx_api-controller' : 'mpdx_api_staging-controller',
-    default_cache_service: 'rails-cache',
-    default_database_service: Rails.env.production? ? 'mpdx_api_db' : 'mpdx_staging_api_db',
-    template_base_path: 'views/',
-    tracer: Datadog.tracer,
-    debug: false,
-    trace_agent_hostname: 'datadog-apm.aws.cru.org',
-    trace_agent_port: 8126,
-    env: Rails.env,
-    tags: {app: Rails.env.production? ? 'mpdx_api' : 'mpdx_api_staging' }
-  }
-else
-  Rails.configuration.datadog_trace = {
-    enabled: false
-  }
-end
+base_name = ENV['PROJECT_NAME']
+enabled = ENV['DATADOG_TRACE'].to_s == 'true'
+
+Rails.configuration.datadog_trace = {
+  enabled: enabled,
+  auto_instrument: true,
+  auto_instrument_redis: true,
+  auto_instrument_grape: false,
+  default_service: base_name,
+  default_controller_service: "#{base_name}-controller",
+  default_cache_service: 'rails-cache',
+  default_database_service: "#{base_name}-db",
+  template_base_path: 'views/',
+  tracer: Datadog.tracer,
+  debug: false,
+  trace_agent_hostname: 'datadog-apm.aws.cru.org',
+  trace_agent_port: 8126,
+  env: Rails.env,
+  tags: {app: base_name }
+}
