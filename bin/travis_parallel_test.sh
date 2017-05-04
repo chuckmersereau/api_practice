@@ -11,9 +11,5 @@ elif [ "$TEST_SUITE" = "4" ]
 then
 TEST_GROUPS=7,8
 fi
-
-if [ "$TEST_SUITE" != "5" ]
-then
-  DISABLE_SPRING=1 bundle exec parallel_test spec/ -n 8 \
-    --only-group $TEST_GROUPS --group-by filesize --type rspec --verbose
-fi
+DISABLE_SPRING=1 bundle exec parallel_test spec/ -n 8 \
+  --only-group $TEST_GROUPS --group-by filesize --type rspec --verbose
