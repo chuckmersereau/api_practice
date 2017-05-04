@@ -30,5 +30,6 @@ env:
     - TEST_SUITE=2
     - TEST_SUITE=3
     - TEST_SUITE=4
+    - TEST_SUITE=5
 addons:
   postgresql: "9.6"
