@@ -1,17 +1,19 @@
-require 'simplecov'
-SimpleCov.start 'rails' do
-  add_filter 'dev/'
-  add_filter 'vendor/'
-end
+if ENV['CI']
+  require 'simplecov'
+  SimpleCov.start 'rails' do
+    add_filter 'dev/'
+    add_filter 'vendor/'
+  end
 
-if ENV['COVERALLS_REPO_TOKEN']
-  require 'coveralls'
-  Coveralls.wear_merged!('rails')
-end
+  if ENV['COVERALLS_REPO_TOKEN']
+    require 'coveralls'
+    Coveralls.wear_merged!('rails')
+  end
 
-if ENV['CODECOV_TOKEN']
-  require 'codecov'
-  SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  if ENV['CODECOV_TOKEN']
+    require 'codecov'
+    SimpleCov.formatter = SimpleCov::Formatter::Codecov
+  end
 end
 
 ENV['RAILS_ENV'] ||= 'test'
