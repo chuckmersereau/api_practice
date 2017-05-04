@@ -7,7 +7,6 @@ then
 elif [ "$TEST_SUITE" = "3" ]
 then
   TEST_GROUPS=5,6
-fi
 elif [ "$TEST_SUITE" = "4" ]
 then
 TEST_GROUPS=7,8
