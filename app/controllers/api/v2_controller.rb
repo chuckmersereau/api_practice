@@ -1,6 +1,7 @@
 require 'json_api_service'
 
 class Api::V2Controller < ApiController
+  include BatchRequestHelpers
   include Fields
   include Filtering
   include Including
@@ -17,7 +18,7 @@ class Api::V2Controller < ApiController
   before_action :validate_and_transform_json_api_params
 
   after_action  :verify_authorized, except: :index
-  around_action :scope_request_to_time_zone
+  around_action :scope_request_to_time_zone, :scope_request_to_locale
 
   protected
 
@@ -92,6 +93,13 @@ class Api::V2Controller < ApiController
 
   def scope_request_to_time_zone(&block)
     Time.use_zone(current_time_zone, &block)
+  end
+
+  def scope_request_to_locale
+    I18n.locale = current_user&.locale || 'en-US'
+    yield
+  ensure
+    I18n.locale = 'en-US'
   end
 
   def validate_and_transform_json_api_params

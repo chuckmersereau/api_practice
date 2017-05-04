@@ -14,7 +14,8 @@ describe Api::V2Controller do
       resource_type :contacts
 
       def index
-        render json: (filter_params || {}).merge!(current_time_zone: current_time_zone.name)
+        raise 'Test Error' if params[:raise_error] == true
+        render json: (filter_params || {}).merge!(current_time_zone: current_time_zone.name, current_locale: I18n.locale)
       end
 
       def create
@@ -122,6 +123,30 @@ describe Api::V2Controller do
           expect(response.status).to eq(200), invalid_status_detail
           expect(response_json[:current_time_zone]).to eq Time.zone.name
         end
+      end
+    end
+
+    context 'Locale specific requests' do
+      let(:italian_user) { create(:user, locale: 'it') }
+
+      it 'sets the correct locale defined in user preferences' do
+        api_login(italian_user)
+        get :index
+        expect(response_json[:current_locale]).to eq 'it'
+      end
+
+      it 'defaults to english when no preference is defined' do
+        api_login(user)
+        get :index
+        expect(response_json[:current_locale]).to eq 'en'
+      end
+
+      it 'resets the locale constant to nil in case of error' do
+        api_login(italian_user)
+        expect do
+          get :index, raise_error: true
+        end.to raise_error 'Test Error'
+        expect(I18n.locale).to eq :en
       end
     end
   end

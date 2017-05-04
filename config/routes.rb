@@ -14,7 +14,9 @@ Rails.application.routes.draw do
             resources :designation_accounts, only: [:index, :show]
             resources :donations, only: [:index, :show, :create, :update, :destroy]
             resources :donor_accounts, only: [:index, :show]
-            resources :invites, only: [:index, :show, :create, :destroy]
+            resources :invites, only: [:index, :show, :create, :destroy] do
+              put :accept, on: :member, action: :update
+            end
 
             resources :imports, only: :show do
               scope module: :imports do

@@ -11,7 +11,7 @@ resource 'Account Lists > Invites' do
   let!(:account_list)   { user.account_lists.first }
   let(:account_list_id) { account_list.uuid }
 
-  let!(:invite)         { create(:account_list_invite, account_list: account_list) }
+  let!(:invite)         { create(:account_list_invite, account_list: account_list, accepted_by_user: nil) }
   let(:id)              { invite.uuid }
 
   let(:expected_attribute_keys) do
@@ -77,13 +77,13 @@ resource 'Account Lists > Invites' do
     post '/api/v2/account_lists/:account_list_id/invites' do
       let(:new_account_list_invite) { attributes_for :account_list_invite }
       let(:email)                   { new_account_list_invite[:recipient_email] }
-      let('recipient_email')        { email }
+      let(:recipient_email)         { email }
       let(:form_data)               { build_data(recipient_email: recipient_email) }
 
       parameter 'recipient_email', 'Recipient Email', scope: [:data, :attributes], required: true
 
       example 'Invite [CREATE]', document: documentation_scope do
-        explanation 'List of Invites associated with the Account List'
+        explanation 'Creates the invite associated to the given account_list'
         do_request data: form_data
 
         expect(response_status).to eq 201
@@ -91,8 +91,23 @@ resource 'Account Lists > Invites' do
       end
     end
 
+    put '/api/v2/account_lists/:account_list_id/invites/:id/accept' do
+      let(:form_data) { build_data(code: invite.code) }
+
+      parameter 'code', 'Acceptance code', scope: [:data, :attributes], required: true
+
+      example 'Invite [ACCEPT]', document: documentation_scope do
+        explanation 'Accepts the invite'
+        do_request data: form_data
+
+        expect(response_status).to eq 200
+        expect(resource_object['accepted_at']).to be_present
+      end
+    end
+
     delete '/api/v2/account_lists/:account_list_id/invites/:id' do
-      example 'Invite [DELETE]', document: documentation_scope do
+      example 'Invite [CANCEL]', document: documentation_scope do
+        explanation 'Cancels the invite'
         do_request
         expect(response_status).to eq 204
       end

@@ -2,6 +2,8 @@ class MailChimpAccount
   class PrimaryListHookHandler < BaseHookHandler
     def subscribe_hook(email)
       @mc_account.queue_import_new_member(email)
+      @account_list.people.joins(:email_addresses).where(email_addresses: { email: email, primary: true })
+                   .update_all(optout_enewsletter: false)
     end
 
     def unsubscribe_hook(email)

@@ -40,5 +40,12 @@ prayer_letters_mock_response = {
   }
 }
 
+mail_chimp_mock_response = {
+  extra: {
+    api_token_with_dc: 'token-us5'
+  }
+}
+
 OmniAuth.config.add_mock(:google, google_mock_response)
 OmniAuth.config.add_mock(:prayer_letters, prayer_letters_mock_response)
+OmniAuth.config.add_mock(:mailchimp, mail_chimp_mock_response)

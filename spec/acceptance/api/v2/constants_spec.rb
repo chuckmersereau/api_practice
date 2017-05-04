@@ -44,6 +44,7 @@ resource 'Constants' do
           pledge_frequencies
           results
           sources
+          tnt_import
         ) + contact_attribute_keys
       end
 
@@ -58,7 +59,11 @@ resource 'Constants' do
           expect(activity).to be_a(String)
         end
 
-        expect(resource_object['csv_import'].keys.size).to eq 3
+        expect(resource_object['alert_frequencies']).to be_a_hash_with_types String, String
+
+        expect(resource_object['csv_import'].keys.size).to eq 4
+
+        expect(resource_object['tnt_import'].keys.size).to eq 1
 
         resource_object['dates'].each do |date_format|
           expect(date_format.size).to eq 2
@@ -77,6 +82,8 @@ resource 'Constants' do
           expect(currency.first).to be_a(String)
           expect(currency.second).to be_a(Hash)
         end
+
+        expect(resource_object['mobile_alert_frequencies']).to be_a_hash_with_types String, String
 
         resource_object['notifications'].each do |notification|
           expect(notification.size).to eq 2

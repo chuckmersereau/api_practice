@@ -1,6 +1,7 @@
 class Api::V2::BulkController < Api::V2Controller
   skip_before_action :validate_and_transform_json_api_params
 
+  before_action :reject_if_in_batch_request
   before_action :validate_and_transform_bulk_json_api_params
 
   private

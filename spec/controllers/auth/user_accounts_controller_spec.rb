@@ -19,7 +19,7 @@ describe Auth::UserAccountsController, :auth, type: :controller do
     it 'adds the current user to the session' do
       auth_login(user)
       get :create, provider: provider
-      expect(session['warden.user.user.key']).to be(user)
+      expect(session['warden.user.user.key']).to be(user.id)
     end
 
     it 'stores an account_list_id param in the session' do
@@ -29,10 +29,10 @@ describe Auth::UserAccountsController, :auth, type: :controller do
     end
   end
 
-  # context 'with no logged in user' do
-  #   it 'should return an unauthorized response' do
-  #     get :create, { provider: provider }
-  #     expect(response.status).to be(401)
-  #   end
-  # end
+  context 'with no logged in user' do
+    it 'should return an unauthorized response' do
+      get :create, provider: provider
+      expect(response.status).to be(401)
+    end
+  end
 end

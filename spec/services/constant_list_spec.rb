@@ -58,6 +58,11 @@ RSpec.describe ConstantList, type: :model do
     it { expect(subject.csv_import[:required_headers]).to be_an Hash }
     it { expect(subject.csv_import[:constants]).to be_an Hash }
     it { expect(subject.csv_import[:constants].keys & subject.csv_import[:supported_headers].keys).to eq subject.csv_import[:constants].keys }
+    it { expect(subject.csv_import[:max_file_size_in_bytes]).to eq Import::MAX_FILE_SIZE_IN_BYTES }
+  end
+
+  describe '#tnt_import' do
+    it { expect(subject.tnt_import[:max_file_size_in_bytes]).to eq Import::MAX_FILE_SIZE_IN_BYTES }
   end
 
   context '#sources' do

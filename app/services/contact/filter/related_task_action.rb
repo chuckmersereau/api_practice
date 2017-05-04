@@ -25,7 +25,7 @@ class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
   end
 
   def custom_options
-    related_tasks.collect { |a| { name: _(a), id: a } }
+    [{ name: _('-- None --'), id: 'none' }] + related_tasks.collect { |a| { name: _(a), id: a } }
   end
 
   private

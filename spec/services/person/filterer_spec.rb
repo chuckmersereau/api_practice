@@ -12,13 +12,13 @@ describe Person::Filterer do
 
   describe '.filter_classes' do
     it 'returns an empty array' do
-      expect(described_class.filter_classes).to eq [Person::Filter::EmailAddressValid, Person::Filter::PhoneNumberValid]
+      expect(described_class.filter_classes).to eq [Person::Filter::EmailAddressValid, Person::Filter::PhoneNumberValid, Person::Filter::UpdatedAt]
     end
   end
 
   describe '.filter_params' do
     it 'returns an empty array' do
-      expect(described_class.filter_params).to eq [:email_address_valid, :phone_number_valid]
+      expect(described_class.filter_params).to eq [:email_address_valid, :phone_number_valid, :updated_at]
     end
   end
 

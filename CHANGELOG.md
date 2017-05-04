@@ -2,10 +2,25 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 01 May 2017
+- Added updated_at filter to people.
+- Allowing clients to set a foreign key to nil.
+  - To do so just set "id: 'none'" for a belongs_to relationship
+  
+## 28 April 2017
+- Added batch endpoint at `POST /api/v2/batch`
+  - It expects a JSON payload with a `requests` key that has an array of request objects. A request object needs to have a `method` key and a `path` key. It may also have a `body` key.
+  - The response will be a JSON array of response objects. A response object has a `status` key, a `headers` key, and a `body` key.  The `body` is a string of the server response.
+  - In addition to the `requests` key in the payload, you may also specify a `on_error` key which may be set to `CONTINUE`, or `ABORT`. `CONTINUE` is the default, and it will return a 200 no matter what, and give a response for every request, no matter if they errored or not. `ABORT` will end the batch request early if one of the requests fails. The batch response will have the status code of the failing request, and the response will include responses up to and including the errored request, but no more.
+  - Some endpoints are unable to be used within a batch request. At this time, only bulk endpoints are disallowed from being used in a batch request.
+
 ## 26 April 2017
 - Now allowing anyone invited to share an account to edit any of the account's resources on MPDX.
 - Allowing reverse filters for any contacts or tasks filters.
     - To do so just add 'reverse_FILTER_NAME_HERE = true' to the filter hash.
+
+## 25 April 2017
+- Added /account_lists/invites/accept endpoint to allow users to accept an account list invite.
 
 ## 20 April 2017
 - Added received_not_processed to pledges.
@@ -18,8 +33,6 @@ This changelog covers what's changed in the MPDX APIs.
 
 ## 13 April 2017
 - Removed total_donations from all contact endpoints.
-
-## 13 April 2017
 - Added api_class and help_email attributes to a new constant field called organizations_attributes.
 - Added contact referrals relationships to contact serializer.
 - Added people bulk endpoints.

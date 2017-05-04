@@ -1,5 +1,6 @@
 require 'omniauth'
 require 'omniauth-google-oauth2'
+require 'omniauth-mailchimp'
 require 'omniauth-prayer-letters'
 
 silence_warnings do
@@ -17,6 +18,9 @@ Auth::Engine.config.middleware.use OmniAuth::Builder do
            ENV.fetch('PRAYER_LETTERS_CLIENT_ID'),
            ENV.fetch('PRAYER_LETTERS_CLIENT_SECRET'),
            scope: 'contacts.read contacts.write'
+  provider :mailchimp,
+           ENV.fetch('MAILCHIMP_CLIENT_ID'),
+           ENV.fetch('MAILCHIMP_CLIENT_SECRET')
 end
 
 OmniAuth.config.on_failure = proc { |env|
