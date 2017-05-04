@@ -7,7 +7,7 @@ if Rails.env.production? || Rails.env.staging?
     default_service: Rails.env.production? ? 'mpdx_api' : 'mpdx_api_staging',
     default_controller_service: Rails.env.production? ? 'mpdx_api-controller' : 'mpdx_api_staging-controller',
     default_cache_service: 'rails-cache',
-    default_database_service: Rails.env.production? ? 'mpdx (next)' : 'mpdx_staging (next)',
+    default_database_service: Rails.env.production? ? 'mpdx_api_db' : 'mpdx_staging_api_db',
     template_base_path: 'views/',
     tracer: Datadog.tracer,
     debug: false,
