@@ -19,6 +19,27 @@ describe CsvImport do
     expect(CsvImport::SUPPORTED_HEADERS & CsvImport::REQUIRED_HEADERS).to eq CsvImport::REQUIRED_HEADERS
   end
 
+  describe '#each_row' do
+    let!(:csv_import) { build(:csv_import_custom_headers) }
+    let!(:import) { CsvImport.new(csv_import) }
+
+    it 'enumerates through the csv rows' do
+      rows = []
+      import.each_row do |csv_row|
+        expect(csv_row).to be_a(CSV::Row)
+        expect(csv_row.headers).to be_present
+        expect(csv_row.fields).to be_present
+        rows << csv_row
+      end
+      expect(rows.size).to eq(3)
+    end
+
+    it 'caches the stored file' do
+      expect_any_instance_of(Import).to receive(:cache_stored_file!)
+      import.each_row { |_csv_row| next }
+    end
+  end
+
   context 'csv file quirks' do
     before do
       csv_import.update(in_preview: true)
@@ -315,18 +336,16 @@ describe CsvImport do
       import = create(:csv_import_custom_headers, in_preview: true)
       csv_import = CsvImport.new(import)
       expect { csv_import.update_cached_file_data }.to change { import.reload.file_row_samples }.from([]).to(
-        [
-          ['John', 'Doe', 'Jane', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
-           '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD',
-           'Both', 'christmas-card,      family', 'john@example.com', 'jane@example.com', '(213) 222-3333',
-           '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe'],
-          ['Bob', 'Park', 'Sara', 'Kim', 'Hello!', nil, nil, '123 Street West', 'A Small Town', 'Quebec',
-           'L8D 3B9', 'Canada', 'Praying and giving', '10', 'Monthly', nil, 'Both', 'bob', 'bob@park.com',
-           'sara@kim.com', '+12345678901', '+10987654321', nil, 'Yes', 'No', 'metro', 'region', 'No', 'website'],
-          ['Joe', 'Man', nil, nil, nil, nil, nil, 'Apartment, Unit 123', 'Big City', 'BC', nil, 'CA', 'Praying',
-           nil, nil, nil, 'Both', nil, 'joe@inter.net', nil, '123.456.7890', nil, 'notes', nil, 'Yes', 'metro',
-           'region', 'Yes', 'website']
-        ]
+        [[' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
+          '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD',
+          'Both', 'christmas-card,      family', ' john@example.com ', ' jane@example.com ', '(213) 222-3333',
+          '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe'],
+         ['Bob', 'Park', 'Sara', 'Kim', 'Hello!', nil, nil, '123 Street West ', 'A Small Town', 'Quebec',
+          'L8D 3B9 ', 'Canada', 'Praying and giving', '10', 'Monthly', nil, 'Both', 'bob', 'bob@park.com',
+          'sara@kim.com', '+12345678901', '+10987654321', nil, 'Yes', 'No', 'metro', 'region', 'No', 'website'],
+         ['Joe', 'Man', nil, nil, nil, nil, nil, 'Apartment, Unit 123', 'Big City', 'BC', nil, 'CA', 'Praying',
+          nil, nil, nil, 'Both', nil, 'joe@inter.net', nil, '123.456.7890', nil, 'notes', nil, 'Yes', 'metro',
+          'region', 'Yes', 'website']]
       )
     end
   end

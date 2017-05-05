@@ -64,6 +64,8 @@ class Import < ApplicationRecord
     define_method("source_#{source_to_check}?") { source == source_to_check }
   end
 
+  delegate :cache_stored_file!, to: :file
+
   def queue_import
     return if in_preview? || queued_for_import_at
     update_column(:queued_for_import_at, Time.current) if async_to_queue(sidekiq_queue, :import)
@@ -77,15 +79,6 @@ class Import < ApplicationRecord
       source.titleize
     else
       source.humanize
-    end
-  end
-
-  def each_line
-    file.cache_stored_file!
-    file_handler = File.open(file_path)
-    file_handler.each_line do |line|
-      line = EncodingUtil.normalized_utf8(line) || line
-      yield(line, file_handler)
     end
   end
 

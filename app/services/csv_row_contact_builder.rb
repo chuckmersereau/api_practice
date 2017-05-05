@@ -19,6 +19,7 @@ class CsvRowContactBuilder
 
   def contact_from_csv_row
     rebuild_csv_row_with_mpdx_headers_and_mpdx_constants
+    strip_csv_row_fields
 
     build_contact
     build_addresses
@@ -112,6 +113,15 @@ class CsvRowContactBuilder
 
   def true?(val)
     val.to_s.casecmp('true').zero?
+  end
+
+  def strip_csv_row_fields
+    new_csv_row = csv_row
+    strippable_headers = csv_row.headers - import.file_constants_mappings.keys
+    strippable_headers.each do |header|
+      new_csv_row[header] = csv_row[header]&.strip
+    end
+    self.csv_row = new_csv_row
   end
 
   def rebuild_csv_row_with_mpdx_headers_and_mpdx_constants

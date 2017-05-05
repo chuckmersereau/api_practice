@@ -85,6 +85,13 @@ class CsvImport
     @import = import
   end
 
+  def each_row
+    @import.cache_stored_file!
+    CsvFileReader.new(@import.file_path).each_row do |csv_row|
+      yield(csv_row)
+    end
+  end
+
   def import
     raise 'Attempted an invalid import! Aborting.' if @import.invalid?
     raise 'Attempted an import that is in preview! Aborting.' if @import.in_preview?
@@ -93,10 +100,8 @@ class CsvImport
     batch.description = "CsvImport #{@import.id} #import"
     batch.on(:complete, 'CsvImportBatchCallbackHandler', import_id: @import.id)
     batch.jobs do
-      @import.each_line do |line, file|
-        next if file.lineno == 1 # Skip csv header row.
-        next if CSV.new(line).first.compact.blank? # Skip line if it's blank.
-        CsvImportContactWorker.perform_async(@import.id, line)
+      each_row do |csv_row|
+        CsvImportContactWorker.perform_async(@import.id, csv_row.headers, csv_row.fields)
       end
     end
 
@@ -136,12 +141,12 @@ class CsvImport
   end
 
   def read_file_headers_from_file_contents
-    header_line = nil
-    @import.each_line do |line, _file|
-      header_line = line
+    header_row = nil
+    each_row do |csv_row|
+      header_row = csv_row.headers
       break
     end
-    self.class.transform_array_to_hash_with_underscored_keys(CSV.new(header_line).first)
+    self.class.transform_array_to_hash_with_underscored_keys(header_row)
   end
 
   def read_file_constants_from_file_contents
@@ -150,10 +155,9 @@ class CsvImport
 
   def read_file_row_samples_from_file_contents
     samples = []
-    @import.each_line do |line, file|
-      next if file.lineno == 1 # Skip csv header row.
-      sample = CSV.new(line).first
-      samples << sample if sample.compact.present?
+    each_row do |csv_row|
+      row_fields = csv_row.fields
+      samples << row_fields
       break if samples.size >= 4
     end
     samples
