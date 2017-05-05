@@ -35,10 +35,9 @@ public/dev-assets
 .vagrant
 .env.clone
 .env.development
-.env.production
-.env.staging
 .env.local
 .env.production
+.env.qa
 .env.staging
 logfile
 dump.rdb

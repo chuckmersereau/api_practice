@@ -6,7 +6,8 @@ This changelog covers what's changed in the MPDX APIs.
 - Added updated_at filter to people.
 - Allowing clients to set a foreign key to nil.
   - To do so just set "id: 'none'" for a belongs_to relationship
-  
+- Add "qa" Rails environment
+
 ## 28 April 2017
 - Added batch endpoint at `POST /api/v2/batch`
   - It expects a JSON payload with a `requests` key that has an array of request objects. A request object needs to have a `method` key and a `path` key. It may also have a `body` key.

@@ -176,7 +176,7 @@ Rails.application.routes.draw do
   get  'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#index'
   post 'mail_chimp_webhook/:token', to: 'mail_chimp_webhook#hook'
 
-  if Rails.env.development?
+  if Rails.env.development? || Rails.env.qa?
     mount Sidekiq::Web => '/sidekiq'
   end
 end
