@@ -28,6 +28,7 @@ class Person < ApplicationRecord
   has_many :websites, class_name: 'Person::Website', foreign_key: :person_id, dependent: :destroy, autosave: true
   has_one :website, -> { where('person_websites.primary' => true) }, class_name: 'Person::Website', foreign_key: :person_id
   has_many :google_accounts, class_name: 'Person::GoogleAccount', foreign_key: :person_id, dependent: :destroy, autosave: true
+  has_many :google_integrations, through: :google_accounts
   has_many :relay_accounts, class_name: 'Person::RelayAccount', foreign_key: :person_id, dependent: :destroy
   has_many :organization_accounts, class_name: 'Person::OrganizationAccount', foreign_key: :person_id, dependent: :destroy
   has_many :key_accounts, class_name: 'Person::KeyAccount', foreign_key: :person_id, dependent: :destroy

@@ -38,9 +38,8 @@ resource 'User > Google Accounts' do
       last_download
       last_email_sync
       primary
-      refresh_token
       remote_id
-      token
+      token_expired
       updated_at
       updated_in_db_at
     )
@@ -84,15 +83,12 @@ resource 'User > Google Accounts' do
       with_options scope: [:data, :attributes] do
         parameter 'expires_at',     'Expires At'
         parameter 'person_id',      'Person Id', required: true
-        parameter 'refresh_token',  'Refresh Token'
         parameter 'remote_id',      'Remote Id', required: true
-        parameter 'token',          'Token'
       end
 
       example 'Google Account [CREATE]', document: documentation_scope do
         explanation 'Create a Google Account associated with the current_user'
         do_request data: form_data
-        expect(resource_object['token']).to eq new_google_account[:token]
         expect(response_status).to eq 201
       end
     end
@@ -101,15 +97,12 @@ resource 'User > Google Accounts' do
       with_options scope: [:data, :attributes] do
         parameter 'expires_at',     'Expires At'
         parameter 'person_id',      'Person Id', required: true
-        parameter 'refresh_token',  'Refresh Token'
         parameter 'remote_id',      'Remote Id', required: true
-        parameter 'token',          'Token'
       end
 
       example 'Google Account [UPDATE]', document: documentation_scope do
         explanation 'Update the current_user\'s Google Account with the given ID'
         do_request data: form_data
-        expect(resource_object['token']).to eq new_google_account[:token]
         expect(response_status).to eq 200
       end
     end
