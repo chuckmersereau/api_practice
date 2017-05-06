@@ -29,6 +29,9 @@ JsonApiService.configure do |config|
     google_accounts: [
       :remote_id
     ],
+    google_integrations: [
+      :calendar_id
+    ],
     key_accounts: [
       :relay_remote_id,
       :remote_id

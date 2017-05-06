@@ -12,7 +12,6 @@ class Person::GoogleAccount < ApplicationRecord
                           :person_id,
                           :primary,
                           :remote_id,
-                          :token,
                           :updated_at,
                           :updated_in_db_at,
                           :uuid].freeze
@@ -51,7 +50,7 @@ class Person::GoogleAccount < ApplicationRecord
   end
 
   def token_expired?
-    expires_at < Time.now
+    (expires_at || Time.now) <= Time.now
   end
 
   def contacts

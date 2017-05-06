@@ -96,10 +96,10 @@ class Api::V2Controller < ApiController
   end
 
   def scope_request_to_locale
-    I18n.locale = current_user&.locale || 'en-US'
+    I18n.locale = current_user&.locale.try(:tr, '-', '_') || 'en_US'
     yield
   ensure
-    I18n.locale = 'en-US'
+    I18n.locale = 'en_US'
   end
 
   def validate_and_transform_json_api_params

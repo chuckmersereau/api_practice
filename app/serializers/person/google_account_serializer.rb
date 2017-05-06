@@ -6,7 +6,10 @@ class Person::GoogleAccountSerializer < ApplicationSerializer
              :last_download,
              :last_email_sync,
              :primary,
-             :refresh_token,
              :remote_id,
-             :token
+             :token_expired
+
+  def token_expired
+    object.token_expired?
+  end
 end

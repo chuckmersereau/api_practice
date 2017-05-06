@@ -28,6 +28,7 @@ class Person < ApplicationRecord
   has_many :websites, class_name: 'Person::Website', foreign_key: :person_id, dependent: :destroy, autosave: true
   has_one :website, -> { where('person_websites.primary' => true) }, class_name: 'Person::Website', foreign_key: :person_id
   has_many :google_accounts, class_name: 'Person::GoogleAccount', foreign_key: :person_id, dependent: :destroy, autosave: true
+  has_many :google_integrations, through: :google_accounts
   has_many :relay_accounts, class_name: 'Person::RelayAccount', foreign_key: :person_id, dependent: :destroy
   has_many :organization_accounts, class_name: 'Person::OrganizationAccount', foreign_key: :person_id, dependent: :destroy
   has_many :key_accounts, class_name: 'Person::KeyAccount', foreign_key: :person_id, dependent: :destroy
@@ -152,7 +153,6 @@ class Person < ApplicationRecord
   after_destroy :clean_up_master_person, :clean_up_contact_people
 
   before_save :deceased_check
-  after_save :touch_contacts
 
   validates :first_name, presence: true
 
@@ -162,11 +162,6 @@ class Person < ApplicationRecord
 
   def to_s_last_first
     [last_name, first_name].join(', ')
-  end
-
-  def touch
-    super
-    touch_contacts
   end
 
   def add_spouse(spouse)
@@ -483,9 +478,5 @@ class Person < ApplicationRecord
         records_to_keep << new_record
       end
     end
-  end
-
-  def touch_contacts
-    contacts.map(&:touch) if sign_in_count == 0
   end
 end

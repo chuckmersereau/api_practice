@@ -21,6 +21,19 @@ class GoogleIntegration < ApplicationRecord
 
   delegate :sync_task, to: :calendar_integrator
 
+  PERMITTED_ATTRIBUTES = [
+    :account_list_id,
+    :calendar_integration,
+    :calendar_integrations,
+    :calendar_id,
+    :calendar_name,
+    :email_integration,
+    :contacts_integration,
+    :overwrite,
+    :updated_in_db_at,
+    :uuid
+  ].freeze
+
   def queue_sync_data(integration = nil)
     return unless integration
 
@@ -81,19 +94,18 @@ class GoogleIntegration < ApplicationRecord
       @calendars = calendar_list.items.select { |c| c.accessRole == 'owner' }
     end
 
-    @calendars
+    @calendars || []
   end
 
   def toggle_calendar_integration_for_appointments
     if calendar_integration?
-      calendar_integrations << 'Appointment' if calendar_integrations.blank?
+      self.calendar_integrations = ['Appointment'] if calendar_integrations.blank?
     else
       self.calendar_integrations = []
     end
   end
 
   def set_default_calendar
-    return false unless calendars
     return unless calendar_integration? && calendar_id.blank? && calendars.length == 1
 
     calendar = calendars.first

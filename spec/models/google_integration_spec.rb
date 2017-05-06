@@ -94,10 +94,10 @@ describe GoogleIntegration do
       expect(google_integration.calendar_name).to eq(first_calendar['summary'])
     end
 
-    it 'returns false if the api fails' do
+    it 'returns nil if the api fails' do
       allow(google_integration).to receive(:calendar_api).and_return(false)
 
-      expect(google_integration.set_default_calendar).to eq(false)
+      expect(google_integration.set_default_calendar).to eq(nil)
     end
 
     it 'returns nil if this google account has more than one calendar' do

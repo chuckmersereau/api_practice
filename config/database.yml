@@ -9,8 +9,10 @@ development: &dev
   host: <%= ENV.fetch('DB_PORT_5432_TCP_ADDR') %>
   port: <%= ENV['DB_PORT_5432_TCP_PORT'] %>
 
-
 staging:
+  <<: *dev
+
+qa:
   <<: *dev
 
 production:

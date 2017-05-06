@@ -17,7 +17,6 @@ class DesignationAccountSerializer < ApplicationSerializer
   end
 
   def total_currency
-    list = scope.is_a?(User) ? account_list(scope) : account_lists.first
     list.salary_currency_or_default
   end
 
@@ -26,5 +25,15 @@ class DesignationAccountSerializer < ApplicationSerializer
   rescue CurrencyRate::RateNotFoundError => e
     Rollbar.error(e)
     'missing'
+  end
+
+  def active
+    object.active && object.organization_id == list.salary_organization_id
+  end
+
+  private
+
+  def list
+    scope.is_a?(User) ? account_list(scope) : account_lists.first
   end
 end

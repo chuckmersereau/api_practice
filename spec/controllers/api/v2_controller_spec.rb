@@ -138,7 +138,7 @@ describe Api::V2Controller do
       it 'defaults to english when no preference is defined' do
         api_login(user)
         get :index
-        expect(response_json[:current_locale]).to eq 'en'
+        expect(response_json[:current_locale]).to eq 'en-US'
       end
 
       it 'resets the locale constant to nil in case of error' do
@@ -146,7 +146,7 @@ describe Api::V2Controller do
         expect do
           get :index, raise_error: true
         end.to raise_error 'Test Error'
-        expect(I18n.locale).to eq :en
+        expect(I18n.locale.to_s).to eq 'en-US'
       end
     end
   end
