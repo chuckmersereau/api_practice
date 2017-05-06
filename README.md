@@ -146,6 +146,12 @@ controller spec, and acceptance spec for how controllers will be formatted for t
 - The generator templates can be found in [lib/generators/graip/controller/templates](lib/generators/graip/controller/templates).
 - For more information on how to use this generator, check out [lib/generators/graip/controller/USAGE](lib/generators/graip/controller/USAGE).
 
+## Translation
+
+For translation, we are using [gem gettext_i18n_rails](https://github.com/grosser/gettext_i18n_rails).
+
+One thing to note is that to add a localized language set (eg. es-419) to MPDX API, you will have to create a folder using an underscore instead of a dash in the language code name (eg. es_419) and you will also have to add the localized language to the I18n.config.available_locales array defined at 'config/initializers/fast_gettext.rb'. 
+
 
 ## API Documentation
 
