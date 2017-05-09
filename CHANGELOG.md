@@ -2,6 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 04 May 2017
+- Migration: Add is_organization to contacts
+- TNT Import now imports Contact is_organization
+
 ## 01 May 2017
 - Added updated_at filter to people.
 - Allowing clients to set a foreign key to nil.

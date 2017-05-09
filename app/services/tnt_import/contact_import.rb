@@ -48,6 +48,7 @@ class TntImport::ContactImport
 
   def update_contact(contact, row)
     update_contact_basic_fields(contact, row)
+    update_contact_pledge_fields(contact, row)
     update_contact_date_fields(contact, row)
 
     if (@override || contact.send_newsletter.blank?) && true?(row['SendNewsletter'])
@@ -72,25 +73,28 @@ class TntImport::ContactImport
     contact.greeting = row['Greeting'] if @override || contact.greeting.blank?
     contact.envelope_greeting = extract_envelope_greeting_from_row(row) if @override || contact.envelope_greeting.blank?
     contact.website = row['WebPage'] if @override || contact.website.blank?
+    contact.church_name = row['ChurchName'] if @override || contact.church_name.blank?
     contact.updated_at = parse_date(row['LastEdit']) if @override
     contact.created_at = parse_date(row['CreatedDate']) if @override
 
     add_notes(contact, row)
 
+    contact.direct_deposit = true?(row['DirectDeposit']) if @override || contact.direct_deposit.nil?
+    contact.magazine = true?(row['Magazine']) if @override || contact.magazine.nil?
+    contact.tnt_id = row['id']
+    contact.addresses_attributes =
+      TntImport::AddressesBuilder.build_address_array(row, contact, @override)
+    contact.is_organization = true?(row['IsOrganization']) if @override || contact.is_organization.nil?
+  end
+
+  def update_contact_pledge_fields(contact, row)
     contact.pledge_amount = row['PledgeAmount'] if @override || contact.pledge_amount.blank?
     # PledgeFrequencyID: Since TNT 3.2, a negative number indicates a fequency in days. For example: -11 would be a frequency of 11 days. For now we are ignoring negatives.
     contact.pledge_frequency = row['PledgeFrequencyID'] if (@override || contact.pledge_frequency.blank?) && row['PledgeFrequencyID'].to_i > 0
     contact.pledge_received = true?(row['PledgeReceived']) if @override || contact.pledge_received.blank?
     contact.status = TntImport::TntCodes.mpd_phase(row['MPDPhaseID']) if (@override || contact.status.blank?) && TntImport::TntCodes.mpd_phase(row['MPDPhaseID']).present?
     contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1] if (@override || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i != 0
-    contact.no_appeals = true?(row['NeverAsk']) if @override || contact.no_appeals.blank?
-    contact.church_name = row['ChurchName'] if @override || contact.church_name.blank?
-
-    contact.direct_deposit = true?(row['DirectDeposit']) if @override || contact.direct_deposit.blank?
-    contact.magazine = true?(row['Magazine']) if @override || contact.magazine.blank?
-    contact.tnt_id = row['id']
-    contact.addresses_attributes =
-      TntImport::AddressesBuilder.build_address_array(row, contact, @override)
+    contact.no_appeals = true?(row['NeverAsk']) if @override || contact.no_appeals.nil?
   end
 
   def update_contact_date_fields(contact, row)

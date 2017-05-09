@@ -58,6 +58,13 @@ describe TntImport::ContactImport do
       expect(envelope_greeting).to eq 'My Special Full Name'
     end
 
+    it 'sets is_organization' do
+      row = tnt_import_parsed_xml_sample_contact_row
+      expect(import.import_contact(row).is_organization).to eq false
+      row['IsOrganization'] = 'true'
+      expect(import.import_contact(row).is_organization).to eq true
+    end
+
     context 'has social web fields' do
       let(:file) { File.new(Rails.root.join('spec/fixtures/tnt/tnt_3_2_broad.xml')) }
 
