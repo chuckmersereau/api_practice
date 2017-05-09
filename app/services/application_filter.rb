@@ -107,6 +107,16 @@ class ApplicationFilter
 
   private
 
+  def fetch_beginning_of_end_month_from_date_range(date_range)
+    return date_range.last.beginning_of_month unless date_range_in_same_month?(date_range)
+
+    date_range.last.end_of_month
+  end
+
+  def date_range_in_same_month?(date_range)
+    date_range.first.month == date_range.last.month
+  end
+
   def daterange_params(date_range)
     { start: date_range.first.beginning_of_day,
       end: date_range.last.end_of_day }
