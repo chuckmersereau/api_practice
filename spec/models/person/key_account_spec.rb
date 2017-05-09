@@ -3,6 +3,7 @@ require 'rails_helper'
 describe Person::KeyAccount do
   before(:each) do
     Organization.find_by(code: 'CCC-USA') || create(:ccc) # Spec requires CCC-USA org to exist.
+
     @auth_hash = Hashie::Mash.new(uid: 'john.doe@example.com', extra: {
                                     attributes: [{
                                       firstName: 'John', lastName: 'Doe', email: 'johnnydoe@example.com',
@@ -12,13 +13,16 @@ describe Person::KeyAccount do
                                     }]
                                   })
   end
+
   describe 'create from auth' do
     it 'should create an account linked to a person' do
       person = FactoryGirl.create(:person)
       allow_any_instance_of(Person::KeyAccount).to receive(:find_or_create_org_account)
+
       expect do
         @account = Person::KeyAccount.find_or_create_from_auth(@auth_hash, person)
       end.to change(Person::KeyAccount, :count).by(1)
+
       expect(person.key_accounts.pluck(:id)).to include(@account.id)
     end
   end

@@ -10,14 +10,18 @@ class UserFromCasService
   end
 
   def find_or_create
-    find_user || create_user
+    user = find_user || create_user || raise_missing_user
+
+    Person::KeyAccount.find_or_create_from_auth(omniauth_attributes_hash, user)
+
+    user
   end
 
   def guids
     [
-      cas_attributes[:ssoGuid],
+      cas_attributes[:relayGuid],
       cas_attributes[:theKeyGuid],
-      cas_attributes[:relayGuid]
+      cas_attributes[:ssoGuid]
     ].uniq
   end
 
@@ -61,14 +65,20 @@ class UserFromCasService
   # Specifically, the internals of this: https://github.com/CruGlobal/mpdx/blob/8d2f74a9955ad4eb2c2e3faa3c1caca50a7ce97e/app/controllers/auth/accounts_controller.rb#L23
   # and this: https://github.com/CruGlobal/mpdx/blob/8d2f74a9955ad4eb2c2e3faa3c1caca50a7ce97e/app/controllers/auth/accounts_controller.rb#L32
   def create_user
-    user = Person::KeyAccount.create_user_from_auth(omniauth_attributes_hash)
-
-    Person::KeyAccount.find_or_create_from_auth(omniauth_attributes_hash, user)
-
-    user
+    Person::KeyAccount.create_user_from_auth(omniauth_attributes_hash)
   end
 
   def find_user
     User.find_by_guid(guids)
   end
+
+  def raise_missing_user
+    message = <<~HEREDOC
+      Unable to find or create user from cas_attributes: #{cas_attributes}
+    HEREDOC
+
+    raise MissingUserError, message
+  end
+
+  class MissingUserError < StandardError; end
 end

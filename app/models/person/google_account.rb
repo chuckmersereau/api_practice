@@ -1,10 +1,11 @@
 require 'google/api_client'
+
 class Person::GoogleAccount < ApplicationRecord
   include Person::Account
 
   has_many :google_integrations, foreign_key: :google_account_id, dependent: :destroy
-  has_many :google_emails, foreign_key: :google_account_id
-  has_many :google_contacts, foreign_key: :google_account_id
+  has_many :google_emails,       foreign_key: :google_account_id
+  has_many :google_contacts,     foreign_key: :google_account_id
 
   PERMITTED_ATTRIBUTES = [:created_at,
                           :email,
@@ -17,20 +18,27 @@ class Person::GoogleAccount < ApplicationRecord
                           :uuid].freeze
 
   def self.find_or_create_from_auth(auth_hash, person)
-    @rel = person.google_accounts
     Rails.logger.debug(auth_hash)
-    creds = auth_hash.credentials
-    @remote_id = auth_hash.uid
-    expires_at = creds.expires ? Time.at(creds.expires_at) : nil
-    @attributes = {
-      remote_id: @remote_id,
+
+    relation_scope = person.google_accounts
+    creds          = auth_hash.credentials
+    remote_id      = auth_hash.uid
+    expires_at     = creds.expires ? Time.at(creds.expires_at) : nil
+
+    attributes = {
+      remote_id: remote_id,
       token: creds.token,
       refresh_token: creds.refresh_token,
       expires_at: expires_at,
       email: auth_hash.info.email,
       valid_token: true
     }
-    super
+
+    find_or_create_person_account(
+      person: person,
+      attributes: attributes,
+      relation_scope: relation_scope
+    )
   end
 
   def self.create_user_from_auth(_auth_hash)
