@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts > Addresses' do
   include_context :json_headers
-  documentation_scope = :contacts_api_addresses
+  doc_helper = DocumentationHelper.new(resource: [:contacts, :addresses])
 
   let!(:user) { create(:user_with_full_account) }
   let(:resource_type) { 'addresses' }
@@ -19,6 +19,7 @@ resource 'Contacts > Addresses' do
       .reject { |key| key.to_s.end_with?('_id', '_at') }
       .merge(updated_in_db_at: address.updated_at)
   end
+
   let(:form_data) { build_data(new_address) }
 
   let(:resource_attributes) do
@@ -56,106 +57,58 @@ resource 'Contacts > Addresses' do
     before { api_login(user) }
 
     get '/api/v2/contacts/:contact_id/addresses' do
-      example 'Address [LIST]', document: documentation_scope do
-        explanation 'List of Addresses associated to the Contact'
+      doc_helper.insert_documentation_for(action: :index, context: self)
+
+      example doc_helper.title_for(:index), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:index)
         do_request
 
+        expect(response_status).to eq(200), invalid_status_detail
         check_collection_resource 1, %w(relationships)
-        expect(response_status).to eq(200)
       end
     end
 
     get '/api/v2/contacts/:contact_id/addresses/:id' do
-      with_options scope: [:data, :attributes] do
-        response_field 'city',                    'City',                    type: 'String'
-        response_field 'country',                 'Country',                 type: 'String'
-        response_field 'created_at',              'Created At',              type: 'String'
-        response_field 'end_date',                'End Date',                type: 'String'
-        response_field 'geo',                     'Geo',                     type: 'String'
-        response_field 'historic',                'Historic',                type: 'Boolean'
-        response_field 'location',                'Location',                type: 'String'
-        response_field 'metro_area',              'Metro Area',              type: 'String'
-        response_field 'postal_code',             'Postal Code',             type: 'String'
-        response_field 'primary_mailing_address', 'Primary Mailing Address', type: 'Boolean'
-        response_field 'region',                  'Region',                  type: 'String'
-        response_field 'remote_id',               'Remote ID',               type: 'String'
-        response_field 'seasonal',                'Seasonal',                type: 'Boolean'
-        response_field 'source',                  'Source',                  type: 'String'
-        response_field 'start_date',              'Start Date',              type: 'String'
-        response_field 'state',                   'State',                   type: 'String'
-        response_field 'street',                  'Street',                  type: 'String'
-        response_field 'updated_at',              'Updated At',              type: 'String'
-        response_field 'updated_in_db_at',        'Updated In Db At',        type: 'String'
-        response_field 'valid_values',            'Valid Values',            type: 'Boolean'
-      end
+      doc_helper.insert_documentation_for(action: :show, context: self)
 
-      example 'Address [GET]', document: documentation_scope do
-        explanation 'The Contact\'s Address with the given ID'
+      example doc_helper.title_for(:show), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:show)
         do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
         check_resource %w(relationships)
-        expect(response_status).to eq(200)
       end
     end
 
     post '/api/v2/contacts/:contact_id/addresses' do
-      with_options required: true, scope: [:data, :attributes] do
-        parameter 'city',                    'City'
-        parameter 'country',                 'Country'
-        parameter 'end_date',                'End Date'
-        parameter 'location',                'Location'
-        parameter 'metro_area',              'Metro Area'
-        parameter 'postal_code',             'Postal Code'
-        parameter 'primary_mailing_address', 'Primary Mailing Address'
-        parameter 'region',                  'Region'
-        parameter 'remote_id',               'Remote ID'
-        parameter 'seasonal',                'Seasonal'
-        parameter 'source',                  'Source'
-        parameter 'start_date',              'Start Date'
-        parameter 'state',                   'State'
-        parameter 'street',                  'Street'
-        parameter 'valid_values',            'Valid Values'
-      end
+      doc_helper.insert_documentation_for(action: :create, context: self)
+      example doc_helper.title_for(:create), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:create)
 
-      example 'Address [CREATE]', document: documentation_scope do
-        explanation 'Create a Address associated with the Contact'
         do_request data: form_data
 
+        expect(response_status).to eq(201), invalid_status_detail
         expect(resource_object['street']).to(be_present) && eq(new_address['street'])
-        expect(response_status).to eq(201)
       end
     end
 
     put '/api/v2/contacts/:contact_id/addresses/:id' do
-      with_options required: true, scope: [:data, :attributes] do
-        parameter 'city',                    'City'
-        parameter 'country',                 'Country'
-        parameter 'end_date',                'End Date'
-        parameter 'location',                'Location'
-        parameter 'metro_area',              'Metro Area'
-        parameter 'postal_code',             'Postal Code'
-        parameter 'primary_mailing_address', 'Primary Mailing Address'
-        parameter 'region',                  'Region'
-        parameter 'remote_id',               'Remote ID'
-        parameter 'seasonal',                'Seasonal'
-        parameter 'source',                  'Source'
-        parameter 'start_date',              'Start Date'
-        parameter 'state',                   'State'
-        parameter 'street',                  'Street'
-        parameter 'valid_values',            'Valid Values'
-      end
+      doc_helper.insert_documentation_for(action: :update, context: self)
 
-      example 'Address [UPDATE]', document: documentation_scope do
-        explanation 'Update the Contact\'s Address with the given ID'
+      example doc_helper.title_for(:update), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:update)
         do_request data: form_data
 
+        expect(response_status).to eq(200), invalid_status_detail
         expect(resource_object['street']).to(be_present) && eq(new_address['street'])
-        expect(response_status).to eq(200)
       end
     end
 
     delete '/api/v2/contacts/:contact_id/addresses/:id' do
-      example 'Address [DELETE]', document: documentation_scope do
-        explanation 'Delete the Contact\'s Address with the given ID'
+      doc_helper.insert_documentation_for(action: :delete, context: self)
+
+      example doc_helper.title_for(:delete), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:delete)
         do_request
         expect(response_status).to eq(204)
       end

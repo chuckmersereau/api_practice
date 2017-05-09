@@ -1,0 +1,85 @@
+attributes: &attrs
+  city:
+    description:
+      The city of the Address
+    required: true
+    type: string
+  country:
+    description:
+      The country of the Address
+    required: true
+    type: string
+  end_date:
+    description:
+      The end date of this Address
+    required: true
+    type: string
+  geo:
+    description:
+      DESCRIPTION GOES HERE
+    required: true
+    type: string
+  historic:
+    description:
+      DESCRIPTION GOES HERE
+    required: true
+    type: boolean
+  location:
+    description:
+      The location of the Address
+    required: true
+    type: string
+  postal_code:
+    description:
+      The postal code for the Address
+    required: true
+    type: string
+  primary_mailing_address:
+    description:
+      The primary address for the Address
+    required: true
+    type: string
+  start_date:
+    description:
+      DESCRIPTION GOES HERE
+    required: true
+    type: string
+  state:
+    description:
+      The state for the Address
+    required: true
+    type: string
+  street:
+    description:
+      The street for the Address
+    required: true
+    type: string
+
+
+object: &obj
+  attributes:
+    <<: *attrs
+
+parameters:
+  create:
+    <<: *obj
+
+  update:
+    attributes:
+      <<: *attrs
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Address Objects
+      type: '[Address]'
+
+  show:
+    <<: *obj
+
+  create:
+    <<: *obj
+
+  update:
+    <<: *obj

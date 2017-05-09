@@ -3,7 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts > Analytics' do
   include_context :json_headers
-  documentation_scope = :contacts_api_analytics
+  doc_helper = DocumentationHelper.new(resource: [:contacts, :analytics])
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -93,15 +93,10 @@ resource 'Contacts > Analytics' do
     context 'without specifying an `account_list_id`' do
       # show
       get '/api/v2/contacts/analytics' do
-        with_options scope: [:data, :attributes] do
-          response_field 'first_gift_not_received_count', 'First Gift Not Received Count',       type: 'Number'
-          response_field 'partners_30_days_late_count',   'Partners 31 to 60 Days Late Count',   type: 'Number'
-          response_field 'partners_60_days_late_count',   'Partners 61 to 90 Days Late Count',   type: 'Number'
-          response_field 'partners_90_days_late_count',   'Partners 91 Days Late Count',         type: 'Number'
-        end
+        doc_helper.insert_documentation_for(action: :show, context: self)
 
-        example 'Analytics [GET]', document: documentation_scope do
-          explanation "Viewing Analytical information for the User's Contacts for all Account Lists"
+        example doc_helper.title_for(:show), document: doc_helper.document_scope do
+          explanation doc_helper.description_for(:show)
           do_request
 
           check_resource(additional_attribute_keys)
@@ -116,16 +111,10 @@ resource 'Contacts > Analytics' do
     context 'when specifying an `account_list_id`' do
       # show
       get '/api/v2/contacts/analytics' do
-        parameter 'filter[account_list_id]', 'An Account List ID to scope the analytics to'
+        doc_helper.insert_documentation_for(action: :show, context: self)
 
-        with_options scope: [:data, :attributes] do
-          response_field 'first_gift_not_received_count', 'First Gift Not Received Count', type: 'Number'
-          response_field 'partners_30_days_late_count',   'Partners 30 Days Late Count',   type: 'Number'
-          response_field 'partners_60_days_late_count',   'Partners 60 Days Late Count',   type: 'Number'
-        end
-
-        example 'Analytics [GET]', document: documentation_scope do
-          explanation "Viewing Analytical information for a specific Account List's Contacts"
+        example doc_helper.title_for(:show), document: doc_helper.document_scope do
+          explanation doc_helper.description_for(:show)
           do_request filter: { account_list_id: alternate_account_list.uuid }
 
           check_resource(additional_attribute_keys)

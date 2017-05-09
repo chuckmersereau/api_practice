@@ -1,0 +1,25 @@
+attributes: &attrs
+  first_gift_not_received_count:
+    description:
+      First gift not received count
+    type: number
+  partners_30_days_late_count:
+    description:
+      Partners 31 to 60 Days Late Count
+    type: number
+  partners_60_days_late_count:
+    description:
+      Partners 61 to 90 Days Late Count
+    type: number
+  partners_90_days_late_count:
+    description:
+      Partners 91 Days Late Count
+    type: number
+
+object: &obj
+  attributes:
+    <<: *attrs
+
+response_fields:
+  show:
+    <<: *obj

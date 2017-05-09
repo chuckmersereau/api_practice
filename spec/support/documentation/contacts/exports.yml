@@ -1,0 +1,41 @@
+actions:
+  index_csv:
+    title:
+      List all contacts in a CSV file
+    description:
+      List of Contacts rendered in CSV format
+  index_xlsx:
+    title:
+      List all contacts in an XLSX file
+    description:
+      List of Contacts rendered in XLSX format
+
+filter_params: &filters
+  account_list_id:
+    description:
+      Filter by Account List; Accepts Account List ID
+    type: String
+  id:
+    description:
+      Filter by Contact IDs; Accepts an array of Contact IDs
+    type: '[String]'
+
+parameters:
+  index_csv:
+    filters:
+      <<: *filters
+  index_xlsx:
+    filters:
+      <<: *filters
+
+response_fields:
+  index_csv:
+    data:
+      description:
+        List of Contacts rendered in CSV format
+      type: '[Contact]'
+  index_xlsx:
+    data:
+      description:
+        List of Contacts rendered in XLSX format
+      type: '[Contact]'

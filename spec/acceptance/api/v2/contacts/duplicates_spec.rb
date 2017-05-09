@@ -3,6 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Contacts > Duplicates' do
   include_context :json_headers
+  doc_helper = DocumentationHelper.new(resource: [:contacts, :duplicates])
   # This is the scope in how these endpoints will be organized in the
   # generated documentation.
   #
@@ -11,7 +12,7 @@ resource 'Contacts > Duplicates' do
   #
   # Ex: Api > v2 > Contacts                   - :entities would be the scope
   # Ex: Api > v2 > Contacts > Email Addresses - :contacts would be the scope
-  documentation_scope = :contacts_api_duplicates
+  # documentation_scope = :contacts_api_duplicates
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
@@ -54,12 +55,10 @@ resource 'Contacts > Duplicates' do
 
     # index
     get '/api/v2/contacts/duplicates' do
-      parameter 'filter[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
+      doc_helper.insert_documentation_for(action: :index, context: self)
 
-      response_field :data, 'Data', type: 'Array[Object]'
-
-      example 'Duplicate [LIST]', document: documentation_scope do
-        explanation 'List of Duplicates'
+      example doc_helper.title_for(:index), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:index)
         do_request
 
         check_collection_resource(1, additional_attribute_keys)
@@ -70,8 +69,10 @@ resource 'Contacts > Duplicates' do
 
     # destroy
     delete '/api/v2/contacts/duplicates/:id' do
-      example 'Duplicate [DELETE]', document: documentation_scope do
-        explanation 'Mark the two associated contacts as not duplicates'
+      doc_helper.insert_documentation_for(action: :delete, context: self)
+
+      example doc_helper.title_for(:delete), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:delete)
         do_request
 
         expect(response_status).to eq 204
