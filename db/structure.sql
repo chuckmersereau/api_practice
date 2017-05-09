@@ -820,7 +820,8 @@ CREATE TABLE contacts (
     uuid uuid DEFAULT uuid_generate_v4(),
     status_valid boolean,
     status_validated_at timestamp without time zone,
-    suggested_changes text
+    suggested_changes text,
+    is_organization boolean DEFAULT false
 );
 
 
@@ -6293,3 +6294,5 @@ INSERT INTO schema_migrations (version) VALUES ('20170419004646');
 INSERT INTO schema_migrations (version) VALUES ('20170419141659');
 
 INSERT INTO schema_migrations (version) VALUES ('20170419145350');
+
+INSERT INTO schema_migrations (version) VALUES ('20170405190646');
