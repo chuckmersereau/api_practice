@@ -5,6 +5,7 @@ describe Person::FacebookAccount do
     before do
       @auth_hash = Hashie::Mash.new(uid: '5', credentials: { token: 'a', expires_at: 5 }, info: { first_name: 'John', last_name: 'Doe' })
     end
+
     describe 'create from auth' do
       it 'creates an account linked to a person' do
         person = create(:person)

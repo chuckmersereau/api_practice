@@ -17,12 +17,13 @@ class Person::KeyAccount < ApplicationRecord
                           :updated_in_db_at,
                           :uuid].freeze
 
-  def self.find_or_create_from_auth(auth_hash, user)
-    @rel = user.key_accounts
+  def self.find_or_create_from_auth(auth_hash, person)
+    relation_scope   = person.key_accounts
     extra_attributes = auth_hash.extra.attributes.first
-    @remote_id = extra_attributes.ssoGuid.upcase
-    @attributes = {
-      remote_id: @remote_id,
+    remote_id        = extra_attributes.ssoGuid.upcase
+
+    attributes = {
+      remote_id: remote_id,
       relay_remote_id: extra_attributes.relayGuid.upcase,
       first_name: extra_attributes.firstName,
       last_name: extra_attributes.lastName,
@@ -32,29 +33,37 @@ class Person::KeyAccount < ApplicationRecord
       employee_id: extra_attributes.try(:emplid)
     }
 
-    account = super
-    if user.organization_accounts.where(organization_id: Organization.cru_usa.id).empty?
+    account = find_or_create_person_account(
+      person: person,
+      attributes: attributes,
+      relation_scope: relation_scope
+    )
+
+    if person.organization_accounts.where(organization_id: Organization.cru_usa.id).empty?
       account.find_or_create_org_account
     end
+
     account
   end
 
-  def self.find_related_account(rel, remote_id)
-    account = rel.authenticated.find_by('upper(remote_id) = ?', remote_id)
-    if @attributes && @attributes[:relay_remote_id]
+  def self.find_related_account(rel, attributes)
+    account = rel.authenticated.find_by('upper(remote_id) = ?', attributes[:remote_id])
+
+    if attributes && attributes[:relay_remote_id]
       # see comment inside self.find_authenticated_user
-      account ||= rel.authenticated.find_by('upper(relay_remote_id) = ?', @attributes[:relay_remote_id].upcase)
+      account ||= rel.find_by('upper(relay_remote_id) = ?', attributes[:relay_remote_id].upcase)
     end
+
     account
   end
 
   def self.create_user_from_auth(auth_hash)
-    @attributes = {
+    attributes = {
       first_name: auth_hash.extra.attributes.first.firstName || 'Unknown',
       last_name: auth_hash.extra.attributes.first.lastName
     }
 
-    super
+    super(attributes)
   end
 
   def self.find_authenticated_user(auth_hash)

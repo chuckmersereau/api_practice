@@ -1,7 +1,11 @@
 require 'rails_helper'
 
 RSpec.describe UserFromCasService, type: :service do
-  before { stub_cas_requests }
+  before do
+    stub_cas_requests
+    stub_siebel
+    create_cru_organization
+  end
 
   let(:validator) { build_validator_service }
   let(:service)   { UserFromCasService.new(validator.attributes) }
@@ -78,6 +82,24 @@ RSpec.describe UserFromCasService, type: :service do
         expect(service.find_or_create).to eq user
       end
     end
+
+    context "When a user can't be found or created" do
+      before do
+        allow(User)
+          .to receive(:find_by_guid)
+          .and_return(nil)
+
+        allow(Person::KeyAccount)
+          .to receive(:create_user_from_auth)
+          .with(service.omniauth_attributes_hash)
+          .and_return(nil)
+      end
+
+      it 'raises an error' do
+        expect { service.find_or_create }
+          .to raise_error(UserFromCasService::MissingUserError)
+      end
+    end
   end
 
   private
@@ -86,12 +108,22 @@ RSpec.describe UserFromCasService, type: :service do
     CasTicketValidatorService.new(ticket: mock_ticket, service: mock_service)
   end
 
+  def create_cru_organization
+    create(:ccc)
+  end
+
   def mock_service
     'http://my.service'
   end
 
   def mock_ticket
     'ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a'
+  end
+
+  def stub_siebel
+    allow(SiebelDonations::Profile)
+      .to receive(:find)
+      .and_return(nil)
   end
 
   def stub_cas_requests

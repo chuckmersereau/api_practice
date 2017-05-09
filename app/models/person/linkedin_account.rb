@@ -18,21 +18,27 @@ class Person::LinkedinAccount < ApplicationRecord
   validates :public_url, presence: true
 
   def self.find_or_create_from_auth(auth_hash, person)
-    @rel = person.linkedin_accounts
-    @remote_id = auth_hash['uid']
-    params = auth_hash.extra.access_token.params
-    expires_in = params[:oauth_expires_in].to_i > params[:oauth_authorization_expires_in].to_i ? params[:oauth_authorization_expires_in].to_i : params[:oauth_expires_in].to_i
-    @attributes = {
-      remote_id: @remote_id,
+    relation_scope = person.linkedin_accounts
+    remote_id      = auth_hash['uid']
+    params         = auth_hash.extra.access_token.params
+    expires_in     = params[:oauth_expires_in].to_i > params[:oauth_authorization_expires_in].to_i ? params[:oauth_authorization_expires_in].to_i : params[:oauth_expires_in].to_i
+
+    attributes = {
+      remote_id: remote_id,
       token: auth_hash.credentials.token,
       secret: auth_hash.credentials.secret,
-      token_expires_at: expires_in > 0 ? expires_in.seconds.from_now : nil,
+      token_expires_at: expires_in.positive? ? expires_in.seconds.from_now : nil,
       first_name: auth_hash.info.first_name,
       last_name: auth_hash.info.last_name,
       valid_token: true,
       public_url: 'https://www.linkedin.com'
     }
-    super
+
+    find_or_create_person_account(
+      person: person,
+      attributes: attributes,
+      relation_scope: relation_scope
+    )
   end
 
   def to_s

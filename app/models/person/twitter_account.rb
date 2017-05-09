@@ -16,11 +16,11 @@ class Person::TwitterAccount < ApplicationRecord
   # attr_accessible :screen_name
 
   def self.find_or_create_from_auth(auth_hash, person)
-    @rel = person.twitter_accounts
-    params = auth_hash.extra.access_token.params
-    primary = person.twitter_accounts.present? ? false : true
-    @remote_id = params[:screen_name]
-    @attributes = {
+    relation_scope = person.twitter_accounts
+    params         = auth_hash.extra.access_token.params
+    primary        = person.twitter_accounts.present? ? false : true
+
+    attributes = {
       remote_id: params[:screen_name],
       screen_name: params[:screen_name],
       token: params[:oauth_token],
@@ -28,7 +28,12 @@ class Person::TwitterAccount < ApplicationRecord
       valid_token: true,
       primary: primary
     }
-    super
+
+    find_or_create_person_account(
+      person: person,
+      attributes: attributes,
+      relation_scope: relation_scope
+    )
   end
 
   def to_s

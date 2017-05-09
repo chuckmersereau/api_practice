@@ -24,27 +24,33 @@ class Person::FacebookAccount < ApplicationRecord
   validates :username, presence: true, uniqueness: { scope: :person_id }
 
   def self.find_or_create_from_auth(auth_hash, person)
-    @rel = person.facebook_accounts
-    @remote_id = auth_hash['uid']
-    @attributes = {
-      remote_id: @remote_id,
+    relation_scope = person.facebook_accounts
+    remote_id      = auth_hash['uid']
+
+    attributes = {
+      remote_id: remote_id,
       token: auth_hash.credentials.token,
       token_expires_at: Time.at(auth_hash.credentials.expires_at),
       first_name: auth_hash.info.first_name,
       last_name: auth_hash.info.last_name,
       valid_token: true,
-      username: @remote_id
+      username: remote_id
     }
-    super
+
+    find_or_create_person_account(
+      person: person,
+      attributes: attributes,
+      relation_scope: relation_scope
+    )
   end
 
   def self.create_user_from_auth(auth_hash)
-    @attributes = {
+    attributes = {
       first_name: auth_hash.info.first_name,
       last_name: auth_hash.info.last_name
     }
 
-    super
+    super(attributes)
   end
 
   def to_s

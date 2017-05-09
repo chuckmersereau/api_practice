@@ -7,36 +7,43 @@ module Person::Account
   end
 
   module ClassMethods
-    def find_or_create_from_auth(_auth_hash, person)
-      @attributes[:authenticated] = true
-      @account = find_related_account(@rel, @remote_id)
-      if @account
-        @account.update_attributes(@attributes)
-      elsif other_account = find_by(remote_id: @remote_id, authenticated: true)
-        # if creating this authentication record is a duplicate, we have a duplicate person to merge
-        other_account.update_attributes(person_id: person.id)
-        @account = other_account
-      else
-        @account = @rel.create!(@attributes)
-      end
+    def find_or_create_from_auth(_auth_hash, _person)
+      message = <<~HEREDOC
+        `.find_or_create_from_auth` must be defined on #{self} instead of through inheritance from Person::Account.
 
-      person.first_name = @attributes[:first_name] if person.first_name.blank?
-      person.last_name = @attributes[:last_name] if person.last_name.blank?
-      person.email = @attributes[:email] if person.email.blank?
+        In order to work correctly, it must also pass:
+          - The person object
+          - A hash of attributes for the account
+          - A relation scope in which to look for and create the account, ie: `person.key_accounts`
 
-      # start a data import in the background
-      @account.queue_import_data if @account.respond_to?(:queue_import_data)
+        to `.find_or_create_person_account` in order to return the created account.
 
-      @account
+        Example:
+
+        def self.find_or_create_from_auth(auth_hash, person)
+          # ...
+          # pull needed arguments from auth_hash and person
+          # ...
+
+          find_or_create_person_account(
+            person: person,
+            attributes: attributes,
+            relation_scope: relation_scope
+          )
+        end
+
+      HEREDOC
+
+      raise NotImplementedError, message
     end
 
-    def find_related_account(rel, remote_id)
-      rel.authenticated.find_by(remote_id: remote_id)
+    def find_related_account(rel, attributes)
+      rel.authenticated.find_by(remote_id: attributes[:remote_id])
     end
 
-    def create_user_from_auth(_auth_hash)
-      @attributes ||= {}
-      User.create!(@attributes)
+    def create_user_from_auth(attributes)
+      attributes ||= {}
+      User.create!(attributes)
     end
 
     def find_authenticated_user(auth_hash)
@@ -49,6 +56,34 @@ module Person::Account
 
     def queue
       :import
+    end
+
+    private
+
+    def find_or_create_person_account(person:, attributes:, relation_scope:)
+      attributes[:authenticated] = true
+
+      remote_id = attributes[:remote_id]
+      account   = find_related_account(relation_scope, attributes)
+
+      if account
+        account.update_attributes(attributes)
+      elsif other_account = find_by(remote_id: remote_id, authenticated: true)
+        # if creating this authentication record is a duplicate, we have a duplicate person to merge
+        other_account.update_attributes(person_id: person.id)
+        account = other_account
+      else
+        account = relation_scope.create!(attributes)
+      end
+
+      person.first_name = attributes[:first_name] if person.first_name.blank?
+      person.last_name  = attributes[:last_name]  if person.last_name.blank?
+      person.email      = attributes[:email]      if person.email.blank?
+
+      # start a data import in the background
+      account.queue_import_data if account.respond_to?(:queue_import_data)
+
+      account
     end
   end
 

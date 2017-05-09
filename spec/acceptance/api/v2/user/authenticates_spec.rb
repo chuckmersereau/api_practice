@@ -6,12 +6,15 @@ resource 'User > Authenticate' do
   include_context :json_headers
   documentation_scope = :user_api_authenticate
 
-  let!(:user) { create(:user) }
+  let!(:user)        { create(:user) }
+  let!(:cru_usa_org) { create(:ccc) }
 
   before do
     user.relay_accounts << create(:relay_account, relay_remote_id: 'B163530-7372-551R-KO83-1FR05534129F')
     stub_request(:get, 'https://thekey.me/cas/p3/serviceValidate?service=http://example.org/api/v2/user/authenticate&ticket=ST-314971-9fjrd0HfOINCehJ5TKXX-cas2a')
       .to_return(status: 200, body: File.open(Rails.root.join('spec', 'fixtures', 'cas', 'successful_ticket_validation_response_body.xml')).read)
+
+    allow(SiebelDonations::Profile).to receive(:find).and_return(nil)
   end
 
   post '/api/v2/user/authenticate' do
