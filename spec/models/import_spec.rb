@@ -19,13 +19,17 @@ describe Import do
     let(:import) { build(:import, in_preview: true) }
 
     it 'returns a human readable version of the source for each source' do
-      (Import::SOURCES - %w(csv tnt)).each do |source|
+      (Import::SOURCES - %w(csv tnt tnt_data_sync)).each do |source|
         import.source = source
         expect(import.user_friendly_source).to eq source.humanize
       end
-      %w(csv tnt).each do |source|
+      %w(csv).each do |source|
         import.source = source
         expect(import.user_friendly_source).to eq source.upcase
+      end
+      %w(tnt tnt_data_sync).each do |source|
+        import.source = source
+        expect(import.user_friendly_source).to eq source.titleize
       end
     end
   end

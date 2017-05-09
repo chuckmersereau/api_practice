@@ -5,7 +5,9 @@ class UploadExtensionValidator < ActiveModel::EachValidator
   end
 
   def validate_each(record, attribute, value)
-    return if value.present? && File.extname(value&.path).to_s.downcase == ".#{options[:extension]}"
+    file_extension = File.extname(value&.path || '').delete('.').to_s.downcase
+    extensions = Array.wrap(options[:extension])
+    return if value.present? && extensions.include?(file_extension)
     record.errors[attribute] << _(options[:message])
   end
 end
