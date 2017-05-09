@@ -1,0 +1,22 @@
+actions:
+  delete:
+    description:
+      Mark the two associated contacts as not duplicates based on the passed `id`
+
+filter_params: &filters
+  account_list_id:
+    description:
+      Filter by Account List; Accepts Account List ID
+    required: false
+
+parameters:
+  index:
+    filters:
+      <<: *filters
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Duplicate contacts
+      type: '[Contact Duplicate]'

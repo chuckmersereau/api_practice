@@ -1,0 +1,239 @@
+attributes: &attrs
+  activity_type:
+    description:
+      The Task activity type
+    type: string
+  comments_count:
+    description:
+      The number of Task comments
+    type: integer
+  completed:
+    description:
+      Whether or not the Task has been completed
+    type: boolean
+  completed_at:
+    description:
+      Task completion time
+    type: string
+  end_at:
+    description:
+      End At
+    type: string
+  location:
+    description:
+      The Task location
+    type: string
+  next_action:
+    description:
+      The next Task action
+    type: string
+  notification_time_before:
+    description:
+      Notification time before
+    type: integer
+  notification_time_unit:
+    description:
+      Unit of time for Task notification
+    type: string
+  notification_type:
+    description:
+      Type of notification set for Task
+    type: string
+  remote_id:
+    description:
+      The remote id for the Task
+    type: string
+  result:
+    description:
+      The result of the Task
+    type: string
+  source:
+    description:
+      Source of the Task
+    type: string
+  starred:
+    description:
+      Whether or not the Task has been starred
+    type: boolean
+  start_at:
+    description:
+      Start at time for the Task
+    type: string
+  subject:
+    description:
+      The subject of the Task
+    type: string
+    required: true
+  tag_list:
+    description:
+      A list of tags associated with the Task
+    type: string
+  type:
+    description:
+      The type of Task
+    type: string
+
+relationships: &rels
+  account_list:
+    data:
+      id:
+        description:
+          The `id` of the Account List that the Task belongs to
+        type: UUID string
+        required: true
+  comments:
+    data:
+      description:
+        A list of comments associated to the Task
+      type: '[Comment]'
+  contacts:
+    data:
+      description:
+        An array of Contact references for the Task
+      type: '[Contact]'
+  email_addresses:
+    data:
+      description:
+        A list of email addresses associated to the Task
+      type: '[Email Address]'
+  people:
+    data:
+      description:
+        A list of people associated to the Task
+      type: '[Person]'
+  phone_numbers:
+    data:
+      description:
+        A list of phone numbers associated to the Task
+      type: '[Phone Number]'
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+ignored_attributes: &ignored_attrs
+  created_at:
+    ignore: true
+  updated_at:
+    ignore: true
+  updated_in_db_at:
+    ignore: true
+
+parameters:
+  index:
+    filters:
+      account_list_id:
+        description:
+          Filter by Account List; accepts an Account List `id`
+        type: UUID string
+      activity_type:
+        description:
+          Filter by Action; Accepts multiple parameters, with values "Call",
+          "Appointment", "Email", "Text Message", "Facebook Message",
+          "Letter", "Newsletter", "Pre Call Letter", "Reminder Letter",
+          "Support Letter", "Thank", "To Do", "Talk to In Person", or
+          "Prayer Request"
+        type: string
+      completed:
+        description:
+          Filter by Completed; Accepts values "true", or "false"
+        type: boolean
+      contact_ids:
+        description:
+          Filter by Contact IDs; Accepts multiple parameters, with Contact IDs
+        type: '[string]'
+      date_range:
+        description:
+          Filter by Date Range; Accepts values "last_month", "last_year",
+          "last_two_years", "last_week", "overdue", "today", "tomorrow",
+          "future", and "upcoming"
+        type: string
+      no_date:
+        description:
+          Filter by No Date; Accepts values "true", or "false"
+        type: boolean
+      overdue:
+        description:
+          Filter by overdue; Accepts values "true", or "false"
+        type: boolean
+      starred:
+        description:
+          Filter by starred; Accepts values "true", or "false"
+        type: boolean
+      tags:
+        description:
+          Filter by Tags; Accepts multiple parameters, with text values
+        type: '[string]'
+  create:
+    attributes:
+      <<: *attrs
+    relationships:
+      <<: *rels
+      comments:
+        ignore: true
+      contacts:
+        ignore: true
+      email_addresses:
+        ignore: true
+      people:
+        ignore: true
+      phone_numbers:
+        ignore: true
+
+  update:
+    attributes:
+      <<: *attrs
+  bulk_create:
+    data:
+      description:
+        An array of Tasks to be created
+      type: '[Task]'
+      required: true
+  bulk_update:
+    data:
+      description:
+        An array of Tasks to be updated
+      type: '[Task]'
+      required: true
+  bulk_delete:
+    data:
+      description:
+        An array of objects that have both a `type` and `id` for the Tasks being deleted
+      type: '[object w/ type and id]'
+      required: true
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Task Objects
+      type: '[Task]'
+  show:
+    <<: *obj
+  create:
+    <<: *obj
+  update:
+    <<: *obj
+  bulk_create:
+    data:
+      description:
+        List of Task objects that have been successfully updated and list of errors related to Task objects that were not updated successfully
+      type: '[Task / error]'
+    attributes:
+      <<: *ignored_attrs
+  bulk_update:
+    data:
+      description:
+        Array of both Task objects that have been successfully updated and of errors related to Contact objects that were not updated successfully
+      type: '[Task / error]'
+    attributes:
+      <<: *ignored_attrs
+  bulk_delete:
+    data:
+      description:
+        An array of Tasks that have just been deleted
+      type: '[Task]'
+    attributes:
+      <<: *ignored_attrs

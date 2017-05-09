@@ -3,7 +3,9 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Tasks' do
   include_context :json_headers
-  documentation_scope = :entities_tasks
+
+  documentation_scope = :entity_tasks
+  doc_helper = DocumentationHelper.new(resource: :tasks)
 
   let(:resource_type) { 'tasks' }
   let!(:user)         { create(:user_with_full_account) }
@@ -61,7 +63,9 @@ resource 'Tasks' do
       parameter 'filter', 'Filter the list of returned tasks. Any filter can be reversed by adding reverse_FILTER_NAME_HERE = true'
 
       parameter 'filter[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
-      parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '\
+      parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '
+      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
+      parameter 'filters[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '\
                                             '"Text Message", "Facebook Message", "Letter", "Newsletter", "Pre Call Letter", "Reminder Letter", '\
                                             '"Support Letter", "Thank", "To Do", "Talk to In Person", or "Prayer Request"',                     required: false
       parameter 'filter[completed]',       'Filter by Completed; Accepts values "true", or "false"',                                           required: false
@@ -82,9 +86,10 @@ resource 'Tasks' do
       response_field :data, 'list of task objects', 'Type' => 'Array[Object]'
       response_field :data, 'list of task objects', type: 'Array[Object]'
 
-      example 'List tasks', document: documentation_scope do
+      example doc_helper.title_for(:index), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:index)
         do_request
-        explanation 'List of Tasks associated to current_user'
+
         check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
@@ -120,9 +125,10 @@ resource 'Tasks' do
         end
       end
 
-      example 'Retrieve a task', document: documentation_scope do
-        explanation 'The current_user\'s Task with the given ID'
+      example doc_helper.title_for(:show), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:show)
         do_request
+
         check_resource(['relationships'])
         expect(response_status).to eq 200
       end
@@ -148,9 +154,8 @@ resource 'Tasks' do
         parameter 'type',                     'Type',                     type: 'String'
       end
 
-      example 'Create a task', document: documentation_scope do
-        explanation 'Create a Task associated with the current_user'
-
+      example doc_helper.title_for(:create), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:create)
         do_request data: form_data
 
         expect(resource_object['subject']).to eq new_task[:subject]
@@ -159,43 +164,22 @@ resource 'Tasks' do
     end
 
     put '/api/v2/tasks/:id' do
-      parameter :id, 'the Id of the Task'
+      doc_helper.insert_documentation_for(action: :update, context: self)
 
-      with_options scope: [:data, :attributes] do
-        parameter 'account_list_id',          'Account List Id',          type: 'Number'
-        parameter 'activity_type',            'Activity Type',            type: 'String'
-        parameter 'completed',                'Completed',                type: 'Boolean'
-        parameter 'end_at',                   'End At',                   type: 'String'
-        parameter 'location',                 'Location',                 type: 'String'
-        parameter 'next_action',              'Next Action',              type: 'String'
-        parameter 'no_date',                  'No Date',                  type: 'Boolean'
-        parameter 'notification_time_before', 'Notification Time Before', type: 'Number'
-        parameter 'notification_time_unit',   'Notification Time Unit',   type: 'String'
-        parameter 'notification_type',        'Notification Type',        type: 'String'
-        parameter 'remote_id',                'Remote Id',                type: 'String'
-        parameter 'result',                   'Result',                   type: 'String'
-        parameter 'source',                   'Source',                   type: 'String'
-        parameter 'starred',                  'Starred',                  type: 'Boolean'
-        parameter 'start_at',                 'Start At',                 type: 'String'
-        parameter 'subject',                  'Subject',                  type: 'String', required: true
-        parameter 'type',                     'Type',                     type: 'String'
-      end
-
-      example 'Update a task', document: documentation_scope do
-        explanation 'Update the current_user\'s Task with the given ID'
-
+      example doc_helper.title_for(:update), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:update)
         do_request data: form_data
+
         expect(resource_object['subject']).to eq new_task[:subject]
         expect(response_status).to eq 200
       end
     end
 
     delete '/api/v2/tasks/:id' do
-      parameter 'id', 'the Id of the Task'
-
       example 'Delete a task', document: documentation_scope do
         explanation 'Delete the current_user\'s Task with the given ID'
         do_request
+
         expect(response_status).to eq 204
       end
     end
