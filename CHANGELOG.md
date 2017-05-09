@@ -3,6 +3,9 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 04 May 2017
+- Added 5 new filters.
+  - Those are: gave_more_than_pledged, no_appeals, pledge_amount_increase_within, started_giving_within and
+    stopped_giving_within. View documentation for details.
 - Migration: Add is_organization to contacts
 - TNT Import now imports Contact is_organization
 
