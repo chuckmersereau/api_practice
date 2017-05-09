@@ -36,7 +36,7 @@ class ImportMailer < ApplicationMailer
     case @import.source
     when 'tnt', 'tnt_data_sync'
       _('There are a number of reasons an import can fail. The most common reason is a temporary server issue. Please try your import again. ' \
-      "If it fails again, send an email to support@mpdx.org with your tnt export attached. Having the file you're trying to import will greatly " \
+      "If it fails again, send an email to support@mpdx.org with your Tnt export attached. Having the file you're trying to import will greatly " \
       'help us in trying to determine why the import failed.')
     when 'csv'
       _('There are a number of reasons an import can fail. The most likely reason for a CSV import to fail is due to First Name. ' \
