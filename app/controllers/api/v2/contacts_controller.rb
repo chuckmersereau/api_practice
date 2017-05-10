@@ -68,7 +68,7 @@ class Api::V2::ContactsController < Api::V2Controller
   end
 
   def build_contact
-    @contact ||= Contact.new
+    @contact ||= Contact.new(prefill_attributes_on_create: true)
     @contact.assign_attributes(contact_params)
   end
 

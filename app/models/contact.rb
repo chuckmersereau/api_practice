@@ -659,14 +659,10 @@ class Contact < ApplicationRecord
     name_parts = name.split(',')
     if name_parts.length > 1
       last_name = name_parts[0]
-      self.greeting = name_parts[1].strip
-      self.envelope_greeting = name_parts[1].strip
       name_parts[1].split(/and|&/).map { |i| i.strip if i.strip != '' }.uniq.compact.map do |first_name|
         people << Person.new(first_name: first_name, last_name: last_name)
       end
     else
-      self.greeting = name
-      self.envelope_greeting = name
       people << Person.new(first_name: name)
     end
     save
