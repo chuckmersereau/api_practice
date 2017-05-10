@@ -77,6 +77,9 @@ resource 'Tasks' do
       parameter 'filter[starred]',         'Filter by Starred; Accepts values "true", or "false"',                                             required: false
       parameter 'filter[tags][]',          'Filter by Tags; Accepts multiple parameters, with text values',                                    required: false
 
+      parameter 'filter[any_filters]',         'If set to true any result where at least one of the filters apply will be returned',           required: false
+      parameter 'filter[reverse_FILTER_NAME]', "If set to true, the filter defined as FILTER_NAME will return results that don't apply",       required: false
+
       with_options scope: :sort do
         parameter :completed_at, 'Sort by CompletedAt'
         parameter :created_at,   'Sort By CreatedAt'
