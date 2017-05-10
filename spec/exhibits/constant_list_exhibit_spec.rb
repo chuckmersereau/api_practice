@@ -71,42 +71,42 @@ describe ConstantListExhibit do
     it { expect(opts['send_newsletter']).to eq subject.assignable_send_newsletter }
   end
 
-  context '#activities_translated' do
+  context '#activity_translated_hashes' do
     it do
-      subject.activities_translated.each do |activity|
-        expect(activity).to be_a String
+      subject.activity_translated_hashes.each do |activity|
+        expect(activity).to be_a Hash
       end
     end
   end
 
-  context '#assignable_likely_to_give_translated' do
+  context '#assignable_likely_to_give_translated_hashes' do
     it do
-      subject.assignable_likely_to_give_translated.each do |likelihood|
-        expect(likelihood).to be_a String
+      subject.assignable_likely_to_give_translated_hashes.each do |likelihood|
+        expect(likelihood).to be_a Hash
       end
     end
   end
 
-  context '#assignable_send_newsletter_translated' do
+  context '#assignable_send_newsletter_translated_hashes' do
     it do
-      subject.assignable_send_newsletter_translated.each do |newsletter|
-        expect(newsletter).to be_a String
+      subject.assignable_send_newsletter_translated_hashes.each do |newsletter|
+        expect(newsletter).to be_a Hash
       end
     end
   end
 
-  context '#statuses_translated' do
+  context '#status_translated_hashes' do
     it do
-      subject.statuses_translated.each do |status|
-        expect(status).to be_a String
+      subject.status_translated_hashes.each do |status|
+        expect(status).to be_a Hash
       end
     end
   end
 
-  context '#notifications_translated' do
+  context '#notification_translated_hashes' do
     it do
-      subject.notifications_translated.each do |_, status|
-        expect(status).to be_a String
+      subject.notification_translated_hashes.each do |_, status|
+        expect(status).to be_a Hash
       end
     end
   end

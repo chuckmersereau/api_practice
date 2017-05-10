@@ -6,7 +6,7 @@ class ConstantList < ActiveModelSerializers::Model
   delegate :assignable_statuses, to: :contact
 
   def activities
-    @activities ||= ::Task::TASK_ACTIVITIES
+    @activities ||= ::Task::TASK_ACTIVITIES.dup
   end
 
   def assignable_likely_to_give
