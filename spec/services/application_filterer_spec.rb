@@ -37,4 +37,36 @@ describe ApplicationFilterer do
       expect(described_class.new.filter(scope: resource_scope, account_lists: [account_list])).to eq resource_scope
     end
   end
+
+  describe '#with any_filter flag' do
+    let(:account_list) { create(:account_list) }
+
+    let!(:contact_one) { create(:contact, account_list: account_list) }
+    let!(:contact_two) { create(:contact, account_list: account_list, name: 'name') }
+    let!(:contact_three) { create(:contact, account_list: account_list) }
+
+    let(:filters) { { simple_name_search: 'name', simple_date_search: contact_one.created_at, any_filter: true } }
+
+    it 'returns results that apply to any filter' do
+      expect(Contact::ContactFilterer.new(filters).filter(scope: account_list.contacts, account_lists: [account_list])).to eq [contact_one, contact_two]
+    end
+
+    class Contact::ContactFilterer < ApplicationFilterer
+      FILTERS_TO_HIDE = %w(SimpleNameSearch SimpleDateSearch).freeze
+    end
+
+    module Contact::Filter
+      class SimpleNameSearch < ApplicationFilter
+        def execute_query(scope, filters)
+          scope.where(name: filters[:simple_name_search])
+        end
+      end
+
+      class SimpleDateSearch < ApplicationFilter
+        def execute_query(scope, filters)
+          scope.where(created_at: filters[:simple_date_search])
+        end
+      end
+    end
+  end
 end
