@@ -29,6 +29,16 @@ describe ContactMerge do
     expect(winner.activities.count).to eq(2)
   end
 
+  it 'marks loser addresses as not primary' do
+    winner = create(:contact)
+    loser = create(:contact)
+    create(:address, primary_mailing_address: true, addressable: winner, street: '1 Test Road')
+    loser_address = create(:address, primary_mailing_address: true, addressable: loser, street: '2 Test Road')
+    winner.merge(loser)
+    winner.reload
+    expect(winner.addresses.find(loser_address.id).primary_mailing_address).to eq false
+  end
+
   context '.merged_send_newsletter' do
     it 'combines email and physical for all cases' do
       [
