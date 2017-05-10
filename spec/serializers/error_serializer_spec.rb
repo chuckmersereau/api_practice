@@ -74,7 +74,7 @@ RSpec.describe ErrorSerializer, type: :serializer do
               title: 'is not equal to the current value in the database',
               detail: 'Updated in db at is not equal to the current value in the database',
               meta: {
-                updated_in_db_at: resource.updated_at
+                updated_in_db_at: resource.updated_at.utc.iso8601
               }
             }
           ]
@@ -113,7 +113,7 @@ RSpec.describe ErrorSerializer, type: :serializer do
               title: 'is not equal to the current value in the database',
               detail: 'Updated in db at is not equal to the current value in the database',
               meta: {
-                updated_in_db_at: resource.updated_at
+                updated_in_db_at: resource.updated_at.utc.iso8601
               }
             }
           ]

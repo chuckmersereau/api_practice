@@ -25,7 +25,7 @@ class ErrorSerializer
 
   def add_conflict_info_to_metadata(metadata, key, _error)
     if key == :updated_in_db_at && resource.present?
-      metadata[:updated_in_db_at] = resource.updated_at
+      metadata[:updated_in_db_at] = resource.updated_at&.utc&.iso8601
     end
   end
 
