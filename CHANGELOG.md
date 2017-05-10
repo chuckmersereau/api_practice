@@ -9,6 +9,9 @@ This changelog covers what's changed in the MPDX APIs.
 - TNT Import parses dates according to the user's timezone.
 - TNT Import now imports Pledges (called "Promises" in TNT).
 
+## 05 May 2017
+- Allow clients to apply merge the different filters together using an 'OR'. To do so add 'any_filter = true' to your list of filters.
+
 ## 04 May 2017
 - Added 5 new filters.
   - Those are: gave_more_than_pledged, no_appeals, pledge_amount_increase_within, started_giving_within and
