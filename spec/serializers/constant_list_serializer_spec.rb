@@ -63,6 +63,28 @@ describe ConstantListSerializer do
     it { expect(subject.languages).to be_a_hash_with_types String, String }
   end
 
+  context '#activity_hashes' do
+    it { expect(subject.activity_hashes.first).to be_a_hash_with_types Symbol, String }
+  end
+
+  context '#assignable_likely_to_give_hashes' do
+    it { expect(subject.assignable_likely_to_give_hashes.first).to be_a_hash_with_types Symbol, String }
+  end
+
+  context '#assignable_send_newsletter_hashes' do
+    it { expect(subject.assignable_send_newsletter_hashes.first).to be_a_hash_with_types Symbol, String }
+  end
+
+  context '#status_hashes' do
+    it { expect(subject.status_hashes.first).to be_a_hash_with_types Symbol, String }
+  end
+
+  context '#notification_translated_hashes' do
+    let!(:notification_type) { create(:notification_type) }
+
+    it { expect(subject.notification_translated_hashes.first).to be_a_hash_with_types Symbol, String }
+  end
+
   %w(
     assignable_likely_to_give
     assignable_send_newsletter

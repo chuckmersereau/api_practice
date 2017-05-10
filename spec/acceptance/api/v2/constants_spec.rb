@@ -27,8 +27,11 @@ resource 'Constants' do
       let(:expected_attribute_keys) do
         %w(
           activities
+          activity_hashes
           alert_frequencies
+          assignable_likely_to_give_hashes
           assignable_locations
+          assignable_send_newsletter_hashes
           assignable_statuses
           bulk_update_options
           csv_import
@@ -37,6 +40,7 @@ resource 'Constants' do
           locales
           mobile_alert_frequencies
           next_actions
+          notification_translated_hashes
           notifications
           organizations
           organizations_attributes
@@ -44,6 +48,7 @@ resource 'Constants' do
           pledge_frequencies
           results
           sources
+          status_hashes
           tnt_import
         ) + contact_attribute_keys
       end
@@ -57,6 +62,26 @@ resource 'Constants' do
 
         resource_object['activities'].each do |activity|
           expect(activity).to be_a(String)
+        end
+
+        resource_object['activity_hashes'].each do |activity|
+          expect(activity).to be_a(Hash)
+        end
+
+        resource_object['assignable_likely_to_give_hashes'].each do |activity|
+          expect(activity).to be_a(Hash)
+        end
+
+        resource_object['assignable_send_newsletter_hashes'].each do |activity|
+          expect(activity).to be_a(Hash)
+        end
+
+        resource_object['notification_translated_hashes'].each do |activity|
+          expect(activity).to be_a(Hash)
+        end
+
+        resource_object['status_hashes'].each do |activity|
+          expect(activity).to be_a(Hash)
         end
 
         expect(resource_object['alert_frequencies']).to be_a_hash_with_types String, String

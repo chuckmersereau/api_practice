@@ -44,25 +44,29 @@ class ConstantListExhibit < DisplayCase::Exhibit
     end
   end
 
-  def activities_translated
+  def activity_translated_hashes
     translate_array(activities)
   end
 
-  def assignable_likely_to_give_translated
+  def assignable_likely_to_give_translated_hashes
     translate_array(assignable_likely_to_give)
   end
 
-  def assignable_send_newsletter_translated
+  def assignable_send_newsletter_translated_hashes
     translate_array(assignable_send_newsletter)
   end
 
-  def statuses_translated
+  def status_translated_hashes
     translate_array(statuses)
   end
 
-  def notifications_translated
-    notifications.dup.tap do |n|
-      n.keys.each { |key| n[key] = _(n[key]) }
+  def notification_translated_hashes
+    notifications.dup.map do |key, value|
+      {
+        id: value,
+        key: key,
+        value: _(value)
+      }
     end
   end
 
@@ -70,15 +74,21 @@ class ConstantListExhibit < DisplayCase::Exhibit
 
   def currency_information(code)
     twitter_cldr_hash = twitter_cldr_currency_information_hash(code)
-    { code: code,
+    {
+      code: code,
       code_symbol_string: format('%s (%s)', code, twitter_cldr_hash[:symbol]),
       name: twitter_cldr_hash[:name],
       symbol: twitter_cldr_hash[:symbol]
     }
   end
 
-  def translate_array(array)
-    array.map { |element| _(element) }
+  def translate_array(array_of_strings)
+    array_of_strings.dup.map do |string|
+      {
+        id: string,
+        value: _(string)
+      }
+    end
   end
 
   def twitter_cldr_currency_information_hash(code)

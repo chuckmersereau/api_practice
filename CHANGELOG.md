@@ -2,6 +2,12 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 09 May 2017
+- Added translated constant hashes to list of constants at '/api/v2/constants'.
+  - 'activity_translated_hashes', 'assignable_likely_to_give_translated_hashes',
+    'assignable_send_newsletter_translated_hashes' and 'status_translated_hashes' were added.
+  - They contain hashes with the english and translated version of each constant.
+
 ## 08 May 2017
 - DB Migrations: AddAmountCurrencyToPledges, AddAppealIdToPledges, CreatePledgeDonations, MigratePledgesDonationIdDataToJoinTable, RemoveDonationIdFromPledges
 - Pledge now has many Donations (instead of belongs_to).

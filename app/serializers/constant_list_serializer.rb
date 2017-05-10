@@ -1,31 +1,41 @@
 class ConstantListSerializer < ActiveModel::Serializer
   include DisplayCase::ExhibitsHelper
 
-  delegate :alert_frequencies,
+  delegate :activities,
+           :alert_frequencies,
+           :assignable_likely_to_give,
            :assignable_locations,
+           :assignable_send_newsletter,
            :assignable_statuses,
            :bulk_update_options,
            :codes,
            :mobile_alert_frequencies,
            :next_actions,
+           :notifications,
            :organizations,
            :organizations_attributes,
            :pledge_frequencies,
            :results,
+           :statuses,
            :csv_import,
            :sources,
            :tnt_import,
            to: :object
 
-  delegate :bulk_update_options, to: :constants_exhibit
+  delegate :bulk_update_options,
+           :notification_translated_hashes,
+           to: :constants_exhibit
 
   type :constant_list
 
   attributes :activities,
+             :activity_hashes,
              :alert_frequencies,
              :assignable_likely_to_give,
+             :assignable_likely_to_give_hashes,
              :assignable_locations,
              :assignable_send_newsletter,
+             :assignable_send_newsletter_hashes,
              :assignable_statuses,
              :bulk_update_options,
              :csv_import,
@@ -35,8 +45,7 @@ class ConstantListSerializer < ActiveModel::Serializer
              :mobile_alert_frequencies,
              :next_actions,
              :notifications,
-             :notifications,
-             :organizations,
+             :notification_translated_hashes,
              :organizations,
              :organizations_attributes,
              :pledge_currencies,
@@ -44,6 +53,7 @@ class ConstantListSerializer < ActiveModel::Serializer
              :results,
              :sources,
              :statuses,
+             :status_hashes,
              :tnt_import
 
   def locales
@@ -54,24 +64,20 @@ class ConstantListSerializer < ActiveModel::Serializer
     constants_exhibit.pledge_currencies_code_symbol_map
   end
 
-  def activities
-    constants_exhibit.activities_translated
+  def activity_hashes
+    constants_exhibit.activity_translated_hashes
   end
 
-  def assignable_likely_to_give
-    constants_exhibit.assignable_likely_to_give_translated
+  def assignable_likely_to_give_hashes
+    constants_exhibit.assignable_likely_to_give_translated_hashes
   end
 
-  def assignable_send_newsletter
-    constants_exhibit.assignable_send_newsletter_translated
+  def assignable_send_newsletter_hashes
+    constants_exhibit.assignable_send_newsletter_translated_hashes
   end
 
-  def statuses
-    constants_exhibit.statuses_translated
-  end
-
-  def notifications
-    constants_exhibit.notifications_translated
+  def status_hashes
+    constants_exhibit.status_translated_hashes
   end
 
   def dates
