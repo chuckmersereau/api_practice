@@ -27,7 +27,10 @@ class ContactMerge
 
       @other.addresses.each do |other_address|
         next if @winner.addresses.find { |address| address.equal_to? other_address }
-        other_address.update_column(:addressable_id, @winner.id)
+        other_address.update_columns(
+          primary_mailing_address: false,
+          addressable_id: @winner.id
+        )
       end
 
       @other.notifications.update_all(contact_id: @winner.id)
