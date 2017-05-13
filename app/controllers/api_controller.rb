@@ -158,7 +158,7 @@ class ApiController < ActionController::API
   def valid_content_type_header?
     return true if self.class.supported_content_types.include?(:any)
 
-    content_types = request.headers['CONTENT_TYPE']&.gsub(',', ';')&.split(';')
+    content_types = request.headers['CONTENT_TYPE']&.gsub(',', ';')&.split(';') || []
     (self.class.supported_content_types & content_types).present?
   end
 

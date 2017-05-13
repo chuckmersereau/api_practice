@@ -1,6 +1,19 @@
 require 'rails_helper'
 
 describe ApiController do
+  let!(:user) { create(:user_with_account) }
+
+  controller(ApiController) do
+    def show
+      head :no_content
+    end
+  end
+
+  before do
+    routes.draw { get 'show' => 'api#show' }
+    api_login(user)
+  end
+
   context '#supports_content_types' do
     after(:each) do
       ApiController.supports_content_types(nil)
@@ -31,5 +44,10 @@ describe ApiController do
     it 'supports a default content type in accept header' do
       expect(ApiController.supported_accept_header_content_types).to include ApiController::DEFAULT_SUPPORTED_CONTENT_TYPE
     end
+  end
+
+  it 'successfully handles a request with nil content type' do
+    request.headers['CONTENT_TYPE'] = nil
+    get :show
   end
 end
