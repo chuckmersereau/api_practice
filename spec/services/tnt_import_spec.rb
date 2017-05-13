@@ -86,6 +86,14 @@ describe TntImport do
       expect(Contact.first.no_appeals).to be true
     end
 
+    context 'referred by contact cannot be found' do
+      it 'adds the referred by name into the contact notes' do
+        expect do
+          import.send(:import)
+        end.to change { Contact.last&.notes }.from(nil).to("call for amount \n \nReferred by: Steve and Lisa Moss")
+      end
+    end
+
     context 'updating an existing contact' do
       before do
         @account_list = create(:account_list)
