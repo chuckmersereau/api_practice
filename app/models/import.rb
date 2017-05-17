@@ -64,7 +64,8 @@ class Import < ApplicationRecord
     define_method("source_#{source_to_check}?") { source == source_to_check }
   end
 
-  delegate :cache_stored_file!, to: :file
+  delegate :cache_stored_file!, to: :file, prefix: false
+  delegate :path, to: :file, prefix: true
 
   def queue_import
     return if in_preview? || queued_for_import_at
@@ -80,11 +81,6 @@ class Import < ApplicationRecord
     else
       source.humanize
     end
-  end
-
-  # Note: the file may not be present on the local disk, this method is not concerned with that.
-  def file_path
-    file&.file&.file
   end
 
   def file=(new_file)

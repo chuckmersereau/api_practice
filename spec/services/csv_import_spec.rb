@@ -232,7 +232,7 @@ describe CsvImport do
       end
 
       it 'returns false if no jobs were queued' do
-        allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_blank.csv'))
+        allow_any_instance_of(ImportUploader).to receive(:path).and_return(Rails.root.join('spec/fixtures/sample_csv_blank.csv').to_s)
         csv_import.in_preview = false
         expect(import.import).to eq(false)
       end
@@ -243,7 +243,7 @@ describe CsvImport do
       end
 
       it 'imports valid contacts successfully and stores invalid contacts in the file_row_failures' do
-        allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv'))
+        allow_any_instance_of(ImportUploader).to receive(:path).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv').to_s)
         csv_import.in_preview = false
         expect do
           expect(import.import).to eq(true)
@@ -356,7 +356,7 @@ describe CsvImport do
 
     before do
       import.in_preview = false
-      allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv'))
+      allow_any_instance_of(ImportUploader).to receive(:path).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv').to_s)
       csv_import.import
       import.reload
     end
