@@ -4,11 +4,11 @@ class MailChimpSync
     @account_list = mail_chimp_account.account_list
   end
 
-  def sync_contacts(contact_ids = nil)
+  def sync_contacts(contact_ids = nil, delete = true)
     # Scope the search for edits and updates to the passed contact ids, but the
     # logic for the deletes requires checking the full list.
     sync_adds_and_updates(contact_ids)
-    sync_deletes
+    sync_deletes if delete
   rescue Gibbon::MailChimpError => e
     @mc_account.handle_newsletter_mc_error(e)
   end
