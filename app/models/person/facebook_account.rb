@@ -8,9 +8,6 @@ class Person::FacebookAccount < ApplicationRecord
   include Sidekiq::Worker
   sidekiq_options queue: :api_person_facebook_account, unique: :until_executed
 
-  # set :friends
-  # attr_accessible :remote_id, :token, :token_expires_at, :first_name, :last_name, :valid_token, :authenticated, :url
-
   PERMITTED_ATTRIBUTES = [:created_at,
                           :first_name,
                           :last_name,

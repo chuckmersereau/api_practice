@@ -150,7 +150,7 @@ controller spec, and acceptance spec for how controllers will be formatted for t
 
 For translation, we are using [gem gettext_i18n_rails](https://github.com/grosser/gettext_i18n_rails).
 
-One thing to note is that to add a localized language set (eg. es-419) to MPDX API, you will have to create a folder using an underscore instead of a dash in the language code name (eg. es_419) and you will also have to add the localized language to the I18n.config.available_locales array defined at 'config/initializers/fast_gettext.rb'. 
+One thing to note is that to add a localized language set (eg. es-419) to MPDX API, you will have to create a folder using an underscore instead of a dash in the language code name (eg. es_419) and you will also have to add the localized language to the I18n.config.available_locales array defined at 'config/initializers/fast_gettext.rb'.
 
 
 ## API Documentation
@@ -166,6 +166,11 @@ To generate docs just for particular specs, run `DOC_FORMAT=html bin/rspec spec/
 The html files will be created in a new directory named "doc".
 
 **Please note:** the output format will be different than what is used on [docs.mpdx.org](http://docs.mpdx.org/), but you can use this to verify your spec is correct before pushing it.
+
+
+## Account List Destroyer
+
+The AccountList::Destroyer class exists to efficiently delete an account list and all of it's associated data. Because it's a lot of data, it does this by calling delete_all instead of destroy. If you add callbacks on destroy, you may need to consider updating the AccountList::Destroyer class.
 
 
 ## Issue Tracking, Bugs Reports, & Contributing

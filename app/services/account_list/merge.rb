@@ -33,7 +33,7 @@ class AccountList::Merge
     end
 
     @loser.reload
-    @loser.destroy
+    @loser.unsafe_destroy
 
     @winner.save(validate: false)
 

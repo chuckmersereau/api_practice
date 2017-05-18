@@ -56,20 +56,20 @@ class ApplicationSeeder
     create :contact_referral, referred_by: contact, referred_to: create(:contact)
     create :contact_notes_log, contact: contact
 
-    create :account_list_invite
+    create :account_list_invite, account_list: account_list
 
     create :activity, account_list: account_list
     create :activity_comment, activity: Activity.last, person: person
     create :activity_contact, activity: Activity.last, contact: contact
 
-    create :address, addressable: person
+    create :address, addressable: contact
 
     create :admin_impersonation_log, impersonator: user, impersonated: create(:user)
     create :admin_reset_log
 
-    create :appeal, account_list: account_list
-    create :appeal_contact, appeal: Appeal.last, contact: contact
-    create :appeal_excluded_appeal_contact, appeal: Appeal.last, contact: contact
+    appeal = create(:appeal, account_list: account_list)
+    create :appeal_contact, appeal: appeal, contact: contact
+    create :appeal_excluded_appeal_contact, appeal: appeal, contact: contact
 
     create :company
     create :company_partnership, company: Company.last, account_list: account_list
@@ -90,21 +90,21 @@ class ApplicationSeeder
     create :pledge_donation, pledge: Pledge.last, donation: Donation.last
 
     create :phone_number, person: person
-    create :email_address
-    create :event
+    create :email_address, person: person
+    create :event, account_list: account_list
 
     create :family_relationship, person: person, related_person: create(:person)
 
     create :google_account, person: person
-    create :google_contact
+    create :google_contact, person: person
     create :google_email, google_account: Person::GoogleAccount.last
-    create :google_email_activity, google_email: GoogleEmail.last, activity: create(:activity)
+    create :google_email_activity, google_email: GoogleEmail.last, activity: create(:activity, account_list: account_list)
     create :google_integration, account_list: account_list, google_account: Person::GoogleAccount.last, calendar_integration: false
-    create :google_event, activity: create(:activity), google_integration: GoogleIntegration.last
+    create :google_event, activity: create(:activity, account_list: account_list), google_integration: GoogleIntegration.last
 
-    create :help_request
+    create :help_request, account_list: account_list
 
-    create :import
+    create :import, account_list: account_list
 
     create :mail_chimp_account, account_list: account_list
     create :mail_chimp_appeal_list, mail_chimp_account: MailChimpAccount.last, appeal: Appeal.last
@@ -121,7 +121,7 @@ class ApplicationSeeder
     create :nickname
 
     create :notification_preference, notification_type: NotificationType.last, account_list: account_list
-    create :notification
+    create :notification, contact: contact
 
     create :user_option, user: user
 
@@ -135,7 +135,7 @@ class ApplicationSeeder
     create :website, person: person
 
     create :picture, picture_of: person
-    create :pls_account
+    create :pls_account, account_list: account_list
     create :prayer_letters_account, account_list: account_list
     create :recurring_recommendation_result
     create :task, account_list: account_list

@@ -4,7 +4,6 @@ class Notification < ApplicationRecord
   belongs_to :donation
   has_one :account_list, through: :contact
   has_many :tasks, inverse_of: :notification, dependent: :destroy
-  # attr_accessible :event_date, :cleared, :notification_type_id
 
   scope :active, -> { where(cleared: false) }
 

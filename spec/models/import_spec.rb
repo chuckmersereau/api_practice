@@ -152,6 +152,12 @@ describe Import do
         expect { import.save }.to change { import.queued_for_import_at }.from(nil).to(Time.current)
       end
     end
+
+    it 'does not queue import on destroy' do
+      import = create(:import, in_preview: true)
+      import.update_columns(queued_for_import_at: nil, in_preview: false)
+      expect { import.destroy }.to_not change(Import.jobs, :size)
+    end
   end
 
   it 'should finish import if sending mail fails' do

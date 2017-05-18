@@ -1,16 +1,14 @@
 class DesignationAccount < ApplicationRecord
   belongs_to :organization
-  has_many :designation_profile_accounts, dependent: :destroy
+  has_many :designation_profile_accounts, dependent: :delete_all
   has_many :designation_profiles, through: :designation_profile_accounts
 
-  has_many :account_list_entries, dependent: :destroy
+  has_many :account_list_entries, dependent: :delete_all
   has_many :account_lists, through: :account_list_entries
   has_many :contacts, through: :account_lists
-  has_many :donations, dependent: :destroy
+  has_many :donations, dependent: :delete_all
 
   validates :organization_id, presence: true
-
-  # attr_accessible :designation_number, :staff_account_id, :balance, :balance_updated_at
 
   def to_s
     designation_number
