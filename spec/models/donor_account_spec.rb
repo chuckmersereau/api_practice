@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-describe DonorAccount, deprecated: true do
+describe DonorAccount do
   before(:each) do
     @donor_account = create(:donor_account)
   end
@@ -15,7 +15,7 @@ describe DonorAccount, deprecated: true do
     end.to_not change(MasterPersonDonorAccount.primary, :count)
   end
 
-  describe 'link_to_contact_for' do
+  describe '#link_to_contact_for' do
     before do
       @account_list = create(:account_list)
     end
@@ -48,7 +48,7 @@ describe DonorAccount, deprecated: true do
     end
   end
 
-  context '#merge' do
+  describe '#merge' do
     let(:winner) { create(:donor_account) }
     let(:loser) { create(:donor_account) }
     let(:donation1) { create(:donation, donation_date: Date.today) }
@@ -83,12 +83,47 @@ describe DonorAccount, deprecated: true do
         winner.merge(loser)
       end.to change(DonorAccount, :count).by(-1)
       winner.reload
-      expect(winner.total_donations).to eq(9.99 * 2)
+      expect(winner.total_donations).to eq(12.99 * 2)
       expect(winner.last_donation_date).to eq Date.today
       expect(winner.first_donation_date).to eq Date.yesterday
       expect(winner.donations.to_set).to eq([donation1, donation2].to_set)
       expect(winner.master_person_donor_accounts.to_a).to eq [mpda]
       expect(winner.contact_donor_accounts.to_a).to eq [contact_donor_account]
+    end
+  end
+
+  describe '.filter' do
+    context 'wildcard_search' do
+      context 'account_number starts with' do
+        let!(:donor_account) { create(:donor_account, account_number: '1234') }
+        it 'returns donor_account' do
+          expect(described_class.filter(wildcard_search: '12')).to eq([donor_account])
+        end
+      end
+      context 'account_number does not start with' do
+        let!(:donor_account) { create(:donor_account, account_number: '1234') }
+        it 'returns no donor_accounts' do
+          expect(described_class.filter(wildcard_search: '34')).to be_empty
+        end
+      end
+      context 'name contains' do
+        let!(:donor_account) { create(:donor_account, name: 'abcd') }
+        it 'returns dnor_account' do
+          expect(described_class.filter(wildcard_search: 'bc')).to eq([donor_account])
+        end
+      end
+      context 'name does not contain' do
+        let!(:donor_account) { create(:donor_account, name: 'abcd') }
+        it 'returns no donor_accounts' do
+          expect(described_class.filter(wildcard_search: 'def')).to be_empty
+        end
+      end
+    end
+    context 'not wildcard_search' do
+      let!(:donor_account) { create(:donor_account, account_number: '1234') }
+      it 'returns donor_account' do
+        expect(described_class.filter(account_number: donor_account.account_number)).to eq([donor_account])
+      end
     end
   end
 end

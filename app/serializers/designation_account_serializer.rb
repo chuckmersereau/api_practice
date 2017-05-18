@@ -6,7 +6,12 @@ class DesignationAccountSerializer < ApplicationSerializer
 
   attributes :designation_number, :organization_name, :balance, :name,
              :currency, :currency_symbol, :converted_balance, :exchange_rate,
-             :balance_updated_at, :active
+             :balance_updated_at, :active, :display_name
+
+  def display_name
+    return object.designation_number if object.name.blank?
+    "#{object.name} (#{object.designation_number})"
+  end
 
   def currency_symbol
     super(object.currency)

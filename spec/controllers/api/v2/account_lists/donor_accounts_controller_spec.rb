@@ -29,9 +29,9 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
     let(:contact_one) { create(:contact, account_list: account_list) }
     let(:contact_two) { create(:contact) }
     let(:included_array_in_response) { JSON.parse(response.body)['included'] }
+    before { api_login(user) }
 
     it 'shows donor accounts from selected contacts' do
-      api_login(user)
       create(factory_type)
       get :index, account_list_id: account_list_id, filter: { contacts: [contact] }
       expect(response.status).to eq(200)
@@ -39,11 +39,45 @@ describe Api::V2::AccountLists::DonorAccountsController, type: :controller do
     end
 
     it "doesn't include contacts from different account_list" do
-      api_login(user)
       create(factory_type, contacts: [contact_one, contact_two])
       get :index, account_list_id: account_list_id, include: '*'
       expect(response.status).to eq(200)
       expect(included_array_in_response.any? { |resource| resource['id'] == contact_two.uuid }).to eq(false)
+    end
+
+    describe 'filter[wildcard_search]' do
+      context 'account_number starts with' do
+        let!(:donor_account) { create(factory_type, account_number: '1234') }
+        before { contact.donor_accounts << donor_account }
+        it 'returns donor_account' do
+          get :index, account_list_id: account_list_id, filter: { wildcard_search: '12' }
+          expect(JSON.parse(response.body)['data'][0]['id']).to eq(donor_account.uuid)
+        end
+      end
+      context 'account_number does not start with' do
+        let!(:donor_account) { create(factory_type, account_number: '1234') }
+        before { contact.donor_accounts << donor_account }
+        it 'returns no donor_accounts' do
+          get :index, account_list_id: account_list_id, filter: { wildcard_search: '34' }
+          expect(JSON.parse(response.body)['data'].count).to eq(0)
+        end
+      end
+      context 'name contains' do
+        let!(:donor_account) { create(factory_type, name: 'abcd') }
+        before { contact.donor_accounts << donor_account }
+        it 'returns dnor_account' do
+          get :index, account_list_id: account_list_id, filter: { wildcard_search: 'bc' }
+          expect(JSON.parse(response.body)['data'][0]['id']).to eq(donor_account.uuid)
+        end
+      end
+      context 'name does not contain' do
+        let!(:donor_account) { create(factory_type, name: 'abcd') }
+        before { contact.donor_accounts << donor_account }
+        it 'returns no donor_accounts' do
+          get :index, account_list_id: account_list_id, filter: { wildcard_search: 'def' }
+          expect(JSON.parse(response.body)['data'].count).to eq(0)
+        end
+      end
     end
   end
 end

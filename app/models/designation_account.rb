@@ -40,4 +40,13 @@ class DesignationAccount < ApplicationRecord
     Rollbar.error(e)
     0.0
   end
+
+  def self.filter(filter_params)
+    chain = where(filter_params.except(:wildcard_search))
+    return chain unless filter_params.key?(:wildcard_search)
+    chain.where('LOWER("designation_accounts"."name") LIKE :name OR '\
+                '"designation_accounts"."designation_number" LIKE :account_number',
+                name: "%#{filter_params[:wildcard_search].downcase}%",
+                account_number: "#{filter_params[:wildcard_search]}%")
+  end
 end

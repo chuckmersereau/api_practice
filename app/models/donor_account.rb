@@ -68,4 +68,13 @@ class DonorAccount < ApplicationRecord
     attrs = %w(street city state country postal_code start_date primary_mailing_address source source_donor_account_id remote_id)
     Hash[addresses.collect.with_index { |address, i| [i, address.attributes.slice(*attrs)] }]
   end
+
+  def self.filter(filter_params)
+    chain = where(filter_params.except(:wildcard_search))
+    return chain unless filter_params.key?(:wildcard_search)
+    chain.where('LOWER("donor_accounts"."name") LIKE :name OR '\
+                '"donor_accounts"."account_number" LIKE :account_number',
+                name: "%#{filter_params[:wildcard_search].downcase}%",
+                account_number: "#{filter_params[:wildcard_search]}%")
+  end
 end
