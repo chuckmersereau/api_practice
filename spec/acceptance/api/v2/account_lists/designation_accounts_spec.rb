@@ -17,6 +17,7 @@ resource 'Designation Accounts' do
   let(:expected_attribute_keys) do
     %w(
       active
+      display_name
       balance
       balance_updated_at
       converted_balance
@@ -40,6 +41,8 @@ resource 'Designation Accounts' do
 
     get '/api/v2/account_lists/:account_list_id/designation_accounts' do
       parameter 'account_list_id', 'Account List ID', required: true
+      parameter 'filter', 'Filter the list of returned designation_accounts'
+      parameter 'filter[wildcard_search]', 'where name contains or designation_number starts with wildcard_search'
       response_field 'data',       'Data', type: 'Array[Object]'
 
       example 'Designation Account [LIST]', document: documentation_scope do
@@ -54,6 +57,7 @@ resource 'Designation Accounts' do
     get '/api/v2/account_lists/:account_list_id/designation_accounts/:id' do
       with_options scope: [:data, :attributes] do
         response_field 'active',             'Active',             type: 'Boolean'
+        response_field 'display_name',       'Name to Display',    type: 'String'
         response_field 'balance',            'Balance',            type: 'Number'
         response_field 'balance_updated_at', 'Balance Updated At', type: 'String'
         response_field 'converted_balance',  'Converted Balance',  type: 'Number'

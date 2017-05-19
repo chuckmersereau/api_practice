@@ -17,7 +17,7 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
   private
 
   def load_designation_accounts
-    @designation_accounts = designation_account_scope.where(filter_params)
+    @designation_accounts = designation_account_scope.filter(filter_params)
                                                      .reorder(sorting_param)
                                                      .page(page_number_param)
                                                      .per(per_page_param)
@@ -41,6 +41,10 @@ class Api::V2::AccountLists::DesignationAccountsController < Api::V2Controller
 
   def load_account_list
     @account_list ||= AccountList.find_by_uuid_or_raise!(params[:account_list_id])
+  end
+
+  def permitted_filters
+    [:wildcard_search]
   end
 
   def pundit_user

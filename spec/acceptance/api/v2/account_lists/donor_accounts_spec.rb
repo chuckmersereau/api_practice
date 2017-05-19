@@ -19,6 +19,7 @@ resource 'Account Lists Api > Donor Accounts' do
     %w(
       account_number
       created_at
+      display_name
       donor_type
       first_donation_date
       last_donation_date
@@ -44,6 +45,10 @@ resource 'Account Lists Api > Donor Accounts' do
 
     get '/api/v2/account_lists/:account_list_id/donor_accounts' do
       parameter 'account_list_id', 'Account List ID', required: true
+
+      parameter 'filter', 'Filter the list of returned donor_accounts'
+      parameter 'filter[wildcard_search]', 'where name contains or account_number starts with wildcard_search'
+
       response_field 'data', 'Data', type: 'Array[Object]'
 
       example 'Donor Account [LIST]', document: documentation_scope do
@@ -58,6 +63,7 @@ resource 'Account Lists Api > Donor Accounts' do
     get '/api/v2/account_lists/:account_list_id/donor_accounts/:id' do
       with_options scope: [:data, :attributes] do
         response_field 'account_number',      'Account Number',      type: 'String'
+        response_field 'display_name',        'Name to Display',     type: 'String'
         response_field 'contact_ids',         'Contact IDs',         type: 'Array[Number]'
         response_field 'created_at',          'Created At',          type: 'String'
         response_field 'donor_type',          'Donor Type',          type: 'String'

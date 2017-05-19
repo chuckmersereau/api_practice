@@ -52,4 +52,39 @@ describe DesignationAccount do
       expect(Rollbar).to have_received(:error)
     end
   end
+
+  describe '.filter' do
+    context 'wildcard_search' do
+      context 'designation_number starts with' do
+        let!(:designation_account) { create(:designation_account, designation_number: '1234') }
+        it 'returns designation_account' do
+          expect(described_class.filter(wildcard_search: '12')).to eq([designation_account])
+        end
+      end
+      context 'designation_number does not start with' do
+        let!(:designation_account) { create(:designation_account, designation_number: '1234') }
+        it 'returns no designation_accounts' do
+          expect(described_class.filter(wildcard_search: '34')).to be_empty
+        end
+      end
+      context 'name contains' do
+        let!(:designation_account) { create(:designation_account, name: 'abcd') }
+        it 'returns dnor_account' do
+          expect(described_class.filter(wildcard_search: 'bc')).to eq([designation_account])
+        end
+      end
+      context 'name does not contain' do
+        let!(:designation_account) { create(:designation_account, name: 'abcd') }
+        it 'returns no designation_accounts' do
+          expect(described_class.filter(wildcard_search: 'def')).to be_empty
+        end
+      end
+    end
+    context 'not wildcard_search' do
+      let!(:designation_account) { create(:designation_account, designation_number: '1234') }
+      it 'returns designation_account' do
+        expect(described_class.filter(designation_number: designation_account.designation_number)).to eq([designation_account])
+      end
+    end
+  end
 end

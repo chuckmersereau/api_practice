@@ -183,14 +183,11 @@ describe Import do
     expect(import.errors[:file]).to eq ["File size must be less than #{Import::MAX_FILE_SIZE_IN_BYTES} bytes"]
   end
 
-  describe '#each_line' do
-    it 'returns all lines' do
+  describe '#file_path' do
+    it 'returns the file_path' do
       import = create(:csv_import, in_preview: true)
-      lines = []
-      import.each_line do |line, _file|
-        lines << line
-      end
-      expect(lines.size).to eq(2)
+      expect(import.file_path).to eq(import.file.file.file)
+      expect(import.file_path).to end_with('sample_csv_to_import.csv')
     end
   end
 end

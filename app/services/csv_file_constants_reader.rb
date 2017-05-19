@@ -3,8 +3,6 @@
 # Columns are ignored if they obviously aren't constants (like "name"), so not every column is returned.
 # There is also a max number of values returned per column, to prevent an excessively large response.
 
-require 'csv'
-
 class CsvFileConstantsReader
   MAX_MAPPINGS_PER_HEADER = 100
   EXCLUDE_HEADERS_CONTAINING_STRINGS = %w(
@@ -34,26 +32,21 @@ class CsvFileConstantsReader
   end
 
   def constants
-    self.file = File.open(file_path)
     build_constant_sets
     constants_hash
   end
 
   private
 
-  attr_accessor :file_path, :constants_hash, :file, :headers
+  attr_accessor :file_path, :constants_hash, :headers
 
   def build_constant_sets
-    file.each do |row|
-      row = EncodingUtil.normalized_utf8(row) || row
-      row = CSV.new(row).first
+    @headers = nil
 
-      if file.lineno == 1
-        self.headers = row
-        next
-      end
+    CsvFileReader.new(file_path).each_row do |csv_row|
+      @headers ||= csv_row.headers
 
-      row.each_with_index do |value, index|
+      csv_row.fields.each_with_index do |value, index|
         header = headers[index]&.parameterize&.underscore
         next if exclude_column_with_header?(header)
         constant_set = constants_hash[header]

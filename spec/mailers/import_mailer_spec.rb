@@ -20,7 +20,7 @@ describe ImportMailer do
     context 'import source csv' do
       before do
         import.in_preview = false
-        allow_any_instance_of(CarrierWave::SanitizedFile).to receive(:file).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv'))
+        allow_any_instance_of(ImportUploader).to receive(:path).and_return(Rails.root.join('spec/fixtures/sample_csv_with_some_invalid_rows.csv').to_s)
         CsvImport.new(import).import
         import.reload
       end

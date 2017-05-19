@@ -15,15 +15,27 @@ class TntImport::ReferralsImport
   def import
     # Loop over the whole list again now that we've added everyone and try to link up referrals
     @tnt_contact_rows.each do |row|
+      next unless row['ReferredBy'].present?
+
       referred_by_id, *_the_rest = @contact_attributes_by_tnt_contact_id.values.find do |(_contact_id, name, full_name, greeting)|
         name == row['ReferredBy'] || full_name == row['ReferredBy'] || greeting == row['ReferredBy']
       end
 
-      next unless referred_by_id
+      import_referred_by_id(row, referred_by_id)
+    end
+  end
 
-      contact_id, *_the_rest = @contact_attributes_by_tnt_contact_id[row['id']]
+  private
 
+  def import_referred_by_id(row, referred_by_id)
+    contact_id, *_the_rest = @contact_attributes_by_tnt_contact_id[row['id']]
+
+    if referred_by_id
       ContactReferral.where(referred_to_id: contact_id, referred_by_id: referred_by_id).first_or_create!
+    else
+      contact = Contact.find(contact_id)
+      contact.tag_list.add('Missing Tnt Referred By')
+      contact.add_to_notes("Referred by: #{row['ReferredBy']}")
     end
   end
 end

@@ -48,7 +48,7 @@ class MailChimpAccount::Exporter
     account.mail_chimp_members.reload
 
     MailChimpImport.new(account).import_contacts
-    MailChimpSync.new(account).sync_contacts
+    MailChimpSync.new(account).sync_contacts(nil, false)
   end
 
   def list_batch_subscribe(batch)
