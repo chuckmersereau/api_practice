@@ -33,11 +33,6 @@ describe CsvImport do
       end
       expect(rows.size).to eq(3)
     end
-
-    it 'caches the stored file' do
-      expect_any_instance_of(Import).to receive(:cache_stored_file!)
-      import.each_row { |_csv_row| next }
-    end
   end
 
   context 'csv file quirks' do

@@ -64,9 +64,6 @@ class Import < ApplicationRecord
     define_method("source_#{source_to_check}?") { source == source_to_check }
   end
 
-  delegate :cache_stored_file!, to: :file, prefix: false
-  delegate :path, to: :file, prefix: true
-
   def queue_import
     return if in_preview? || queued_for_import_at
     update_column(:queued_for_import_at, Time.current) if async_to_queue(sidekiq_queue, :import)
@@ -81,6 +78,12 @@ class Import < ApplicationRecord
     else
       source.humanize
     end
+  end
+
+  def file_path
+    return unless file.present?
+    file.cache_stored_file! unless file.cached?
+    file.path
   end
 
   def file=(new_file)
