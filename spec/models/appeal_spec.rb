@@ -222,4 +222,27 @@ describe Appeal do
                      last_donation_date: donations.map(&:donation_date).max)
     end
   end
+
+  describe '.filter' do
+    context 'wildcard_search' do
+      context 'name contains' do
+        let!(:appeal) { create(:appeal, name: 'abcd', account_list: account_list) }
+        it 'returns dnor_account' do
+          expect(described_class.filter(wildcard_search: 'bc')).to eq([appeal])
+        end
+      end
+      context 'name does not contain' do
+        let!(:appeal) { create(:appeal, name: 'abcd', account_list: account_list) }
+        it 'returns no designation_accounts' do
+          expect(described_class.filter(wildcard_search: 'def')).to be_empty
+        end
+      end
+    end
+    context 'not wildcard_search' do
+      let!(:appeal) { create(:appeal, amount: 10, account_list: account_list) }
+      it 'returns designation_account' do
+        expect(described_class.filter(amount: 10)).to eq([appeal])
+      end
+    end
+  end
 end

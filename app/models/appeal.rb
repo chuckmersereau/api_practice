@@ -83,4 +83,11 @@ class Appeal < ApplicationRecord
   def donated?(contact)
     donations.joins(donor_account: :contact_donor_accounts).exists?(contact_donor_accounts: { contact_id: contact.id })
   end
+
+  def self.filter(filter_params)
+    chain = where(filter_params.except(:wildcard_search))
+    return chain unless filter_params.key?(:wildcard_search)
+    chain.where('LOWER("appeals"."name") LIKE :name',
+                name: "%#{filter_params[:wildcard_search].downcase}%")
+  end
 end

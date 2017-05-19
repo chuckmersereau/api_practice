@@ -51,4 +51,25 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
   include_examples 'destroy_examples'
 
   include_examples 'index_examples'
+
+  describe '#index' do
+    before { api_login(user) }
+    let(:account_list_id) { account_list.id }
+    describe 'filter[wildcard_search]' do
+      context 'name contains' do
+        let!(:appeal) { create(factory_type, name: 'abcd', account_list: account_list) }
+        it 'returns appeal' do
+          get :index, account_list_id: account_list_id, filter: { wildcard_search: 'bc' }
+          expect(JSON.parse(response.body)['data'][0]['id']).to eq(appeal.uuid)
+        end
+      end
+      context 'name does not contain' do
+        let!(:appeal) { create(factory_type, name: 'abcd', account_list: account_list) }
+        it 'returns no appeals' do
+          get :index, account_list_id: account_list_id, filter: { wildcard_search: 'def' }
+          expect(JSON.parse(response.body)['data'].count).to eq(0)
+        end
+      end
+    end
+  end
 end
