@@ -37,7 +37,7 @@ class Api::V2::AppealsController < Api::V2Controller
   end
 
   def load_appeals
-    @appeals = appeal_scope.where(filter_params)
+    @appeals = appeal_scope.filter(filter_params)
                            .reorder(sorting_param)
                            .page(page_number_param)
                            .per(per_page_param)
@@ -89,7 +89,7 @@ class Api::V2::AppealsController < Api::V2Controller
   end
 
   def permitted_filters
-    [:account_list_id]
+    [:account_list_id, :wildcard_search]
   end
 
   def pundit_user

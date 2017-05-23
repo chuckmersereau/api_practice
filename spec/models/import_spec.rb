@@ -189,5 +189,28 @@ describe Import do
       expect(import.file_path).to eq(import.file.file.file)
       expect(import.file_path).to end_with('sample_csv_to_import.csv')
     end
+
+    it 'returns the file path as a cached file, not a stored file' do
+      import = create(:csv_import, in_preview: true)
+      expect(import.file_path).to_not include(import.file.store_path)
+      expect(import.file_path).to end_with(import.file.cache_name)
+    end
+
+    it 'caches the stored file' do
+      import = create(:csv_import, in_preview: true)
+      expect_any_instance_of(CarrierWave::Uploader::Base).to receive(:cache_stored_file!)
+      import.file_path
+    end
+
+    it 'it does not recache file on subsequent calls' do
+      import = create(:csv_import, in_preview: true)
+      import.file_path
+      expect_any_instance_of(CarrierWave::Uploader::Base).to_not receive(:cache_stored_file!)
+      import.file_path
+    end
+
+    it 'returns nil if there is no file' do
+      expect(Import.new.file_path).to eq nil
+    end
   end
 end

@@ -86,7 +86,6 @@ class CsvImport
   end
 
   def each_row
-    @import.cache_stored_file!
     CsvFileReader.new(@import.file_path).each_row do |csv_row|
       yield(csv_row)
     end
