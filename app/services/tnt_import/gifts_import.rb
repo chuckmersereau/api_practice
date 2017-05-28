@@ -13,7 +13,8 @@ class TntImport::GiftsImport
   end
 
   def import
-    return unless @account_list.organization_accounts.count == 1
+    return {} unless @account_list.organization_accounts.count == 1 && xml_tables['Gift'].present?
+
     org = @account_list.organization_accounts.first.organization
 
     xml_tables['Gift'].each do |row|
