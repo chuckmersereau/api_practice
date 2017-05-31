@@ -2300,7 +2300,7 @@ CREATE TABLE person_linkedin_accounts (
     authenticated boolean DEFAULT false NOT NULL,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    public_url character varying(255),
+    public_url text,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2493,7 +2493,7 @@ ALTER SEQUENCE person_twitter_accounts_id_seq OWNED BY person_twitter_accounts.i
 CREATE TABLE person_websites (
     id integer NOT NULL,
     person_id integer,
-    url character varying(255),
+    url text,
     "primary" boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -6364,6 +6364,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170404211028');
 
 INSERT INTO schema_migrations (version) VALUES ('20170404211527');
 
+INSERT INTO schema_migrations (version) VALUES ('20170405190646');
+
 INSERT INTO schema_migrations (version) VALUES ('20170407154800');
 
 INSERT INTO schema_migrations (version) VALUES ('20170418035928');
@@ -6380,6 +6382,9 @@ INSERT INTO schema_migrations (version) VALUES ('20170419141659');
 
 INSERT INTO schema_migrations (version) VALUES ('20170419145350');
 
-INSERT INTO schema_migrations (version) VALUES ('20170405190646');
-
 INSERT INTO schema_migrations (version) VALUES ('20170420161008');
+
+INSERT INTO schema_migrations (version) VALUES ('20170529000340');
+
+INSERT INTO schema_migrations (version) VALUES ('20170529002918');
+

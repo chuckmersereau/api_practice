@@ -356,6 +356,12 @@ describe TntImport do
       @tnt_import_with_personal_gift = TntImport.new(@import_with_personal_gift)
     end
 
+    it 'handles an xml that has no gifts' do
+      @import = create(:tnt_import_no_gifts, account_list: @account_list)
+      @tnt_import = TntImport.new(@import)
+      expect { @tnt_import.import }.to_not change(Donation, :count).from(0)
+    end
+
     it 'does import gifts for an online org when gift is marked as personal' do
       @user.organization_accounts.destroy_all
       online_org = create(:organization)
