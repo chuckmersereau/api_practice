@@ -18,7 +18,7 @@ gem 'cloudinary', '~> 1.2.3'
 gem 'country_select', git: 'https://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 gem 'deadlock_retry', '~> 1.2.0'
 gem 'devise', '~> 3.4.0'
-gem 'ddtrace', '~> 0.7.0'
+gem 'ddtrace', '~> 0.7.2'
 gem 'display_case', '= 0.0.5'
 gem 'dotenv-rails', '~> 2.1.1'
 gem 'email_reply_parser', '~> 0.5.9'
