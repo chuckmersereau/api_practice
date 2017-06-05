@@ -1,0 +1,462 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VERSION\n"
+"POT-Creation-Date: 2017-06-05 18:43+0000\n"
+"PO-Revision-Date: 2017-06-05 18:43+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
+"Language: vi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Aunt"
+msgstr "Cô hoặc Dì"
+
+msgid "Ask in Future"
+msgstr "Sẽ hỏi trong tương lai"
+
+msgid "Appointment Scheduled"
+msgstr "Lịch hẹn"
+
+msgid "Average"
+msgstr "Trung bình"
+
+msgid "Arabic"
+msgstr "Tiếng Ả Rập"
+
+#. "Avg." is an abbreviation for "Average"
+msgid "Avg."
+msgstr "Trung bình"
+
+msgid "Balance: %{balance}"
+msgstr "Cân bằng: %{balance}"
+
+msgid "Belarusian"
+msgstr "Tiếng Belarus"
+
+msgid "Both"
+msgstr "Cả hai"
+
+msgid "Brother"
+msgstr "Anh em trai"
+
+msgid "Browser:"
+msgstr "Trình duyệt:"
+
+msgid "Business"
+msgstr "Công việc"
+
+msgid "Bulgarian"
+msgstr "Tiếng Bulgari"
+
+msgid "Call for Decision"
+msgstr "Gọi điện hỏi về sự quyết định"
+
+msgid "Catalan"
+msgstr "Tiếng Catalan"
+
+msgid "Call"
+msgstr "Gọi điện"
+
+msgid "Chinese (Simplified)"
+msgstr "Tiếng Trung (đơn giản)"
+
+msgid "Chinese (Traditional)"
+msgstr "Tiếng Trung (Truyền Thống)"
+
+msgid "Church"
+msgstr "Hội Thánh"
+
+msgid "City"
+msgstr "Thành Phố"
+
+msgid "Click here to download the file"
+msgstr "Nhấn vào đây để download tập tin"
+
+msgid "Click to see all balances"
+msgstr "Nhấn vào đây để xem tất cả cân bằng"
+
+msgid "Commitment"
+msgstr "Cam kết"
+
+msgid "Commitment Currency"
+msgstr "Loại tiền cam kết"
+
+msgid "Commitment Details"
+msgstr "Chi tiết cam kết"
+
+msgid "Commitment Frequency"
+msgstr "Lặp Lại Sự Cam Kết"
+
+msgid "Commitment Amount"
+msgstr "Số tiền cam kết"
+
+msgid "Commitment Received"
+msgstr "Đã nhận được từ cam kết"
+
+msgid "Company"
+msgstr "Công ty"
+
+msgid "Completed"
+msgstr "Hoàn tất"
+
+msgid "Contact Information"
+msgstr "Thông tin liên lạc"
+
+msgid "Contact Details"
+msgstr "Chi tiết liên hệ"
+
+msgid "Contact Location"
+msgstr "Khu vực liên hệ"
+
+msgid "Contact Name"
+msgstr "Tên liên lạc"
+
+msgid "Contact for Appointment"
+msgstr "Liên lạc để hẹn"
+
+msgid "Contacts"
+msgstr "Liên lạc"
+
+msgid "Country"
+msgstr "Quốc gia"
+
+msgid "Gift Amount Higher Than or Equal To"
+msgstr "Số tiền quà tặng cao hơn hoặc bằng"
+
+msgid "Gift Amount Less Than or Equal To"
+msgstr "Số tiền quà tặng thấp hơn hoặc bằng"
+
+msgid "Gift Date"
+msgstr "Ngày gởi quà"
+
+msgid "Gift Amount Range"
+msgstr "Loại quà tặng"
+
+msgid "Gift Details"
+msgstr "Chi tiết quà tặng"
+
+msgid "Granddaughter"
+msgstr "Cháu gái"
+
+msgid "Gift Options"
+msgstr "Những lựa chọn quà"
+
+msgid "Google import"
+msgstr "Nhập từ Google"
+
+msgid "Google account needs to be refreshed"
+msgstr "Tài khoản Google cần được làm mới"
+
+msgid "Google sync"
+msgstr "Đồng bộ Google"
+
+msgid "Grandfather"
+msgstr "Ông"
+
+msgid "Grandson"
+msgstr "Cháu trai"
+
+msgid "Grandmother"
+msgstr "Bà ngoại"
+
+msgid "Greek"
+msgstr "Tiếng Hy lạp"
+
+msgid "Hebrew"
+msgstr "Tiếng Hebrew"
+
+msgid "Hindi"
+msgstr "Tiếng Hindi"
+
+msgid "History"
+msgstr "Lịch sử"
+
+msgid "Home Phone"
+msgstr "Số điện thoại nhà"
+
+msgid "Home"
+msgstr "Nhà"
+
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
+msgid "Hon."
+msgstr "Hon."
+
+msgid "Hungarian"
+msgstr "Tiếng Hungrari "
+
+msgid "Husband"
+msgstr "Chồng"
+
+msgid "Icelandic"
+msgstr "Tiếng Iceland "
+
+msgid "If we let you delete that account you won't be able to log in anymore."
+msgstr "Nếu chúng tôi để bạn xóa tài khoản của bạn thì bạn sẽ không thể đăng nhập vào nữa."
+
+msgid "If you do want to stick with your existing list, you will need to make that extra merge field not a\n  required field."
+msgstr "Nếu bạn muốn gắn kết với danh sách hiện tại của bạn, bạn sẽ cần tạo thêm những mục đó, đây không phải mục bắt buộc."
+
+msgid "Increased their giving in the last 3 months"
+msgstr "Gia tăng phần dâng hiến trong 3 tháng qua"
+
+msgid "Import File:"
+msgstr "Nhập File:"
+
+msgid "Insights for "
+msgstr "Thông tin chi tiết"
+
+msgid "Indonesian"
+msgstr "Người Indonesia"
+
+msgid "Irish"
+msgstr "Người Irish "
+
+msgid "Italian"
+msgstr "Người Ý"
+
+msgid "Japanese"
+msgstr "Người Nhật "
+
+msgid "Joined my team in the last 3 months"
+msgstr "Đã gia nhập đội của tôi trong 3 tháng qua"
+
+msgid "Jr."
+msgstr "Jr."
+
+msgid "Korean"
+msgstr "Người Hàn Quốc"
+
+msgid "Khmer"
+msgstr "Người Khmer"
+
+msgid "Language"
+msgstr "Ngôn ngữ"
+
+msgid "More than one user found for that lookup"
+msgstr "Nhiều hơn một người sử dụng tìm thấy tra cứu"
+
+msgid "Most Likely"
+msgstr "Gần giống nhất"
+
+msgid "Mother"
+msgstr "Mẹ"
+
+msgid "Mrs."
+msgstr "Bà"
+
+msgid "Mr."
+msgstr "Ông"
+
+msgid "Ms."
+msgstr "Cô"
+
+msgid "Name:"
+msgstr "Tên:"
+
+msgid "Never Ask"
+msgstr "Không bao giờ hỏi"
+
+msgid "New Donation"
+msgstr "Mới dâng hiến"
+
+msgid "Nephew"
+msgstr "Cháu trai"
+
+msgid "Never Contacted"
+msgstr "Đã chưa bao giờ liên lạc"
+
+msgid "Newsletter"
+msgstr "Bản tin"
+
+msgid "Newsletter Recipients"
+msgstr "Những người nhận bản tin"
+
+msgid "Next Month"
+msgstr "Tháng tiếp"
+
+msgid "Next Week"
+msgstr "Tuần đến"
+
+msgid "Niece"
+msgstr "Tiếng Niece"
+
+msgid "No Gifts"
+msgstr "Không có quà "
+
+msgid "No Date"
+msgstr "Không có ngày tháng"
+
+msgid "No"
+msgstr "Không"
+
+msgid "No Subject"
+msgstr "Không chủ đề"
+
+msgid "No email addess on file"
+msgstr "Không có địa chỉ email trong tập tin"
+
+msgid "No mailing address on file"
+msgstr "Không có địa chỉ mail trong tập tin"
+
+msgid "No mailing address or email addess on file"
+msgstr "Không có địa chỉ thư hoặc địa chỉ email trong tập tin"
+
+msgid "No users found for that lookup"
+msgstr "Không tìm thấy người nào trong mục tìm kiếm"
+
+msgid "None"
+msgstr "Không"
+
+msgid "None Selected"
+msgstr "Không được chọn"
+
+msgid "Norwegian"
+msgstr "Tiếng Na Uy"
+
+msgid "Not Interested"
+msgstr "Không thích thú"
+
+msgid "Notes"
+msgstr "Ghi chú"
+
+msgid "Not Received"
+msgstr "Chưa nhận được"
+
+msgid "One of my donors, %{donor} has a new current address."
+msgstr "Một trong những người dâng hiến, %{donor} có địa chỉ mới"
+
+msgid "Notifications from MPDX"
+msgstr "Thông báo từ MPDX"
+
+msgid "One or More Gifts"
+msgstr "Một hoặc nhiều quà"
+
+msgid "Other"
+msgstr "Khác"
+
+msgid "Overdue"
+msgstr "Quá hạn"
+
+msgid "Partner"
+msgstr "Cộng tác"
+
+msgid "Partner - Financial"
+msgstr "Cộng tác _ tài Chính"
+
+msgid "Partner - Special"
+msgstr "Người cộng tác - Đặc biệt"
+
+msgid "Tamil"
+msgstr "Tamil"
+
+msgid "Tags"
+msgstr "Tags vào"
+
+msgid "Task on MPDX"
+msgstr "Nhiệm vụ trên MPDX"
+
+msgid "Tasks"
+msgstr "Nhiệm vụ"
+
+msgid "Temporary"
+msgstr "Tạm thời"
+
+msgid "Text Message"
+msgstr "Tin nhắn"
+
+msgid "Thai"
+msgstr "Tiếng Thái"
+
+msgid "Thank"
+msgstr "Cảm ơn"
+
+msgid "Thanks!"
+msgstr "Cảm ơn nhiều!"
+
+msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
+msgstr "Email này đã được đánh dấu không còn hiệu lực nữa. Xin vui lòng nhập lại chi tiết cá nhân bằng cách nhấn vào tên của họ ở trên và xác minh những thông tin của họ là chính xác. Nếu người này có email khác thì nó sẽ thành email chính và sẽ đồng bộ vào MailChimp, nếu họ thuộc trong danh sách bảng tin email của bạn. Nếu họ không muốn nhận email bằng MailChimp, thì vui lòng xóa khỏi danh sách, chọn \"Opt Out of email newsletter\" hoặc tạo một email chính khác. "
+
+msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
+msgstr "Danh sách mail trong MailChimp mà bạn đã liên kết đến tài khoản MPDX của bạn đã được trộn/thêm vào những mục mà bạn đã tạo và đánh dấu theo yêu cầu. MPDX không biết làm thế nào để trộn những mục thông tin khách hàng của bạn và vì vậy không thể đồng bộ hóa danh bạ của bạn với MailChimp."
+
+msgid "The link between MPDX and your prayerletters.com account has stopped working. If you'd like to continue to have MPDX\n  automatically push changes over to prayerletters.com, please go to\n  and click the 'Enable' button"
+msgstr "Liên kết giữa MPDX và tài khoản prayerletter.com của bạn đã ngưng hoạt động. Nếu bạn muốn tiếp tục để MPDX tự động thay đổi đến prayerletter.com, xin vui lòng nhấn vào nút 'Enable'."
+
+msgid "The connection to your LinkedIn account needs to be renewed."
+msgstr "Sự kết nối đến tài khoản Linkedln cần được làm mới lại."
+
+msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
+msgstr "Liên kết đến tài khoản Facebook cần được làm mới lại. <a href=\"/auth/facebook\"> Nhấn vào đây để kết nối lại đến Facebook</a> thử nhập lại lần nữa."
+
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "Liên kết giữa MPDX và tài khoản Google của bạn ngừng hoạt động. Nếu bạn muốn tiếp tục để MPDX tự động đồng bộ với tài khoản Google của bạn thì vui lòng vào %{link} và nhấn vào nút 'Refresh Google Account'. Sau đó, bạn sẽ cần làm thủ công để cho phép lại bất kỳ liên hợp nào mà bạn đã thiết lập."
+
+msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
+msgstr "Khóa API của mailchimp được liên kết với tài khoản MPDX của bạn không còn hiệu lực. Nếu bạn muốn MailChimp đồng bộ hóa để tiếp tục hoạt động, thì vui lòng vào %{link} và cập nhật khóa API của bạn."
+
+msgid "This Month"
+msgstr "Tháng này"
+
+msgid "This Week"
+msgstr "Tuần này"
+
+msgid "This Year"
+msgstr "Năm này"
+
+msgid "Timezone"
+msgstr "Vùng thời gian"
+
+msgid "Tnt import"
+msgstr "Nhập Tnt"
+
+msgid "To Do"
+msgstr "Để làm"
+
+msgid "To activate your invitation, click \"Accept\" below and log into MPDX."
+msgstr "Để kích hoạt thư mời, nhấn vào \"Accept\" bên dưới và đăng nhập vào MPDX."
+
+msgid "Today"
+msgstr "Hôm nay"
+
+msgid "Tomorrow"
+msgstr "Ngày mai"
+
+msgid "Total"
+msgstr "Tổng Cộng"
+
+msgid "Total (last month excluded from total)"
+msgstr "Tổng cộng (không bao gồm tháng trước)"
+
+msgid "Totals"
+msgstr "Tổng Cộng"
+
+msgid "Turkish"
+msgstr "Người Thổ Nhĩ Kỳ"
+
+msgid "Type"
+msgstr "Kiểu"
+
+msgid "Ukrainian"
+msgstr "Người Ucraina"
+
+msgid "Uncle"
+msgstr "Chú"
+
+msgid "Unknown"
+msgstr "Không biết"
+
+msgid "Unresponsive"
+msgstr "Không hồi đáp"
+
+msgid "User Agent:"
+msgstr "Đại lý người dùng:"
+
+msgid "User ID:"
+msgstr "ID người dùng"
+
+msgid "User Info"
+msgstr "Thông tin người dùng"
+

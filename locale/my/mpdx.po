@@ -1,0 +1,145 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VERSION\n"
+"POT-Creation-Date: 2017-06-01 11:42+0000\n"
+"PO-Revision-Date: 2017-06-01 11:42+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
+"Language: my\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Add an Account"
+msgstr "အကောင့်တခုဖွင် ပါ"
+
+msgid "Add another Account"
+msgstr "အခြားအကောင့် တခုဖွင် ပါ"
+
+msgid "Address"
+msgstr "လိပ်စာ"
+
+msgid "Appeal"
+msgstr "အယူခံဝင် Appeal"
+
+msgid "Appointment"
+msgstr "ရက်ချိန်းဆိုမှု"
+
+msgid "Ask in Future"
+msgstr "အနာဂတ်အတွက်မေးပါ"
+
+msgid "Appointment Scheduled"
+msgstr "ချိန်းဆိုချက်ဇယား"
+
+msgid "Brother"
+msgstr "ညီအစ်ကို"
+
+msgid "Browser:"
+msgstr "Browser:"
+
+msgid "Business"
+msgstr "စီးပွားရေးလုပ်ငန်း"
+
+msgid "Facebook Message"
+msgstr "FacebookMessage"
+
+msgid "Facebook Profile"
+msgstr "Facebook Profile"
+
+msgid "Father"
+msgstr "ဖခင်"
+
+msgid "French (France)"
+msgstr "ပြင်သစ်(France)"
+
+msgid "Future"
+msgstr "အနာဂတ်"
+
+msgid "German"
+msgstr "ဂျာမန်"
+
+msgid "Gave a special gift in the last 3 months"
+msgstr "ပြီးခဲ့သည့် 3 လအတွင်း အထူးလက်ဆောင်ပေးခဲ့"
+
+msgid "Gift Amount Higher Than or Equal To"
+msgstr "လက်ဆောင်ပေးမယ်ငွေပမာဏပိုမြင့်သောသို့မဟုတ်တူညီသောငွေပမာဏ"
+
+msgid "Gift Amount Less Than or Equal To"
+msgstr "လက်ဆောင်ပေးမယ်ငွေပမာဏထက်နည်းသို့မဟုတ်တူညီသောငွေပမာဏ"
+
+msgid "Gift Date"
+msgstr "လက်ဆောင်ပေးမယ်နေ့စွဲ"
+
+msgid "Grandfather"
+msgstr "အဘိုး"
+
+msgid "Grandson"
+msgstr "မြေး"
+
+msgid "Grandmother"
+msgstr "အဖွါး"
+
+msgid "Married"
+msgstr "အိမ်ထောင်သည်"
+
+msgid "Mobile Phone"
+msgstr "မိုဘိုင်းဖုန်း"
+
+msgid "Monthly"
+msgstr "လစဉ်"
+
+msgid "More than 30 days late"
+msgstr " ရက်ပေါင်း 60 ကျော်နောက်ကျ"
+
+msgid "More than 60 days late"
+msgstr " ရက်ပေါင်း 60 ကျော်နောက်ကျ"
+
+msgid "More than 90 days late"
+msgstr "90 ရက်ကျော် နောက်ကျ"
+
+msgid "More than one user found for that lookup"
+msgstr "lookup ပြုလုပ်နေသူတစ်ဦးထက်ပိုအသုံးပြုကြောင်းတွေ့ရှိခဲ့"
+
+msgid "Mother"
+msgstr "မိခင်"
+
+msgid "Name:"
+msgstr "အမည်"
+
+msgid "Nephew"
+msgstr "တူ"
+
+msgid "Newsletter"
+msgstr "သတင်းလွှာ Newsletter"
+
+msgid "Sister"
+msgstr "အစ်မ ညီမ"
+
+msgid "Son"
+msgstr "သား"
+
+msgid "Spouse Email"
+msgstr "အိမ်ထောင်ဖက်၏အီးမေးလ်"
+
+msgid "Spouse First Name"
+msgstr "အိမ်ထောင်ဖက်၏ပဌမ နာမည်"
+
+msgid "State"
+msgstr "ပြည်နယ်"
+
+msgid "Support Letter"
+msgstr "ထောက်ပံ့မှု ပေးစာ"
+
+msgid "Stopped giving for the last 2 months"
+msgstr "ပေးကမ်းခြင်းရပ်တန့်သည်မှာ 2 လကြာ"
+
+msgid "Swahili"
+msgstr "ဆွာဟီလီ Swahili"
+
+msgid "Swedish"
+msgstr "ဆွီဒင် Swedish"
+
+msgid "Tags"
+msgstr "Tags"
+

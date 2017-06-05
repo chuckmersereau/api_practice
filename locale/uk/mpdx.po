@@ -1,0 +1,43 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VERSION\n"
+"POT-Creation-Date: 2017-06-01 11:42+0000\n"
+"PO-Revision-Date: 2017-06-01 11:42+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
+"Language: uk\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Aunt"
+msgstr "Тітка"
+
+msgid "Ask in Future"
+msgstr "Спитати в майбутньому"
+
+msgid "Appointment Scheduled"
+msgstr "Запланована зустріч"
+
+msgid "Gift Amount Higher Than or Equal To"
+msgstr "Вартість подарунку не менш ніж"
+
+msgid "Gift Amount Less Than or Equal To"
+msgstr "Вартість подарунку не більш ніж"
+
+msgid "Gift Date"
+msgstr "Дата подарунку"
+
+msgid "Most Likely"
+msgstr "Ймовірно"
+
+msgid "Mother"
+msgstr "Мати"
+
+msgid "Mr."
+msgstr "Пан"
+
+msgid "Tags"
+msgstr "Теги"
+
