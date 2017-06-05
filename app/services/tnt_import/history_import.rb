@@ -7,7 +7,9 @@ class TntImport::HistoryImport
   end
 
   def import_history
-    return unless @xml_tables['History'].present?
+    contact_ids_by_tnt_appeal_id = Hash.new { |hash, key| hash[key] = [] }
+
+    return contact_ids_by_tnt_appeal_id unless @xml_tables['History'].present?
 
     task_id_by_tnt_history_id       = {}
     tnt_appeal_id_by_tnt_history_id = {}
@@ -36,8 +38,7 @@ class TntImport::HistoryImport
       task_id_by_tnt_history_id[tnt_history_id] = task.id
     end
 
-    contact_ids_by_tnt_appeal_id = Hash.new { |hash, key| hash[key] = [] }
-    contact_ids_with_new_tasks   = []
+    contact_ids_with_new_tasks = []
 
     # Add contacts to tasks
     @xml_tables['HistoryContact'].each do |row|
