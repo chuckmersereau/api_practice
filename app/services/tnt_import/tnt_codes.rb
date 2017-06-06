@@ -51,6 +51,7 @@ class TntImport::TntCodes
 
     def mpd_phase(phase)
       case phase.to_i
+      when 0  then nil # A "0" value for MPDPhaseID means "n/a" in Tnt
       when 10 then 'Never Contacted'
       when 20 then 'Ask in Future'
       when 30 then 'Contact for Appointment'
