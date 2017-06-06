@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 05 June 2017
+- Added Vietnamese, Ukrainian, Burmese and Polish to list of languages supported on the API side.
+
 ## 09 May 2017
 - Added translated constant hashes to list of constants at '/api/v2/constants'.
   - 'activity_translated_hashes', 'assignable_likely_to_give_translated_hashes',

@@ -1,0 +1,274 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VERSION\n"
+"POT-Creation-Date: 2017-06-01 11:42+0000\n"
+"PO-Revision-Date: 2017-06-01 11:42+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
+"Language: pl\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "Aunt"
+msgstr "Ciotka"
+
+msgid "Ask in Future"
+msgstr "Zapytaj w przyszłości"
+
+msgid "Appointment Scheduled"
+msgstr "Umówione spotkanie"
+
+msgid "Average"
+msgstr "Średnia"
+
+msgid "Arabic"
+msgstr "Arabski"
+
+msgid "Belarusian"
+msgstr "Białoruski"
+
+msgid "Both"
+msgstr "Oba"
+
+msgid "Brother"
+msgstr "Brat"
+
+msgid "Browser:"
+msgstr "Przeglądarka:"
+
+msgid "Bulgarian"
+msgstr "Bułgarski"
+
+msgid "Call for Decision"
+msgstr "Telefon po decyzję"
+
+msgid "Catalan"
+msgstr "Kataloński"
+
+msgid "Call"
+msgstr "Telefon"
+
+msgid "Chinese (Simplified)"
+msgstr "Chiński (uproszczony)"
+
+msgid "Chinese (Traditional)"
+msgstr "Chiński (tradycyjny)"
+
+msgid "Church"
+msgstr "Kościół"
+
+msgid "City"
+msgstr "Miasto"
+
+msgid "Click here to download the file"
+msgstr "Kliknij tutaj, żeby ściągnąć plik"
+
+msgid "Commitment"
+msgstr "Zobowiązanie"
+
+msgid "Commitment Currency"
+msgstr "Waluta zobowiązania"
+
+msgid "Commitment Details"
+msgstr "Szczegóły zobowiązania"
+
+msgid "Gift Amount Higher Than or Equal To"
+msgstr "Wysokość darowizny wyższa niż lub równa"
+
+msgid "Gift Amount Less Than or Equal To"
+msgstr "Wysokość darowizny niższa niż lub równa"
+
+msgid "Gift Date"
+msgstr "Data darowizny"
+
+msgid "Gift Details"
+msgstr "Szczegóły darowizny"
+
+msgid "Granddaughter"
+msgstr "Wnuczka"
+
+msgid "Gift Options"
+msgstr "Opcje dawania"
+
+msgid "Google import"
+msgstr "Importuj z Google"
+
+msgid "Google account needs to be refreshed"
+msgstr "Konto Google trzeba odświeżyć"
+
+msgid "Google sync"
+msgstr "Synchronizacja Google"
+
+msgid "Grandfather"
+msgstr "Dziadek"
+
+msgid "Grandson"
+msgstr "Wnuk"
+
+msgid "Grandmother"
+msgstr "Babcia"
+
+msgid "Greek"
+msgstr "Grecki"
+
+msgid "Greeting"
+msgstr "Powitanie"
+
+msgid "Hebrew"
+msgstr "Hebrajski"
+
+msgid "Hindi"
+msgstr "Hinduski"
+
+msgid "History"
+msgstr "Historia"
+
+msgid "Home Phone"
+msgstr "Telefon domowy"
+
+msgid "Home"
+msgstr "Dom"
+
+msgid "Hungarian"
+msgstr "Węgierski"
+
+msgid "Husband"
+msgstr "Mąż"
+
+msgid "Icelandic"
+msgstr "Islandzki"
+
+msgid "If we let you delete that account you won't be able to log in anymore."
+msgstr "Jeśli pozwolimy ci usunąć to konto już więcej nie będziesz mógł się zalogować."
+
+msgid "More than one user found for that lookup"
+msgstr "Znaleziono więcej niż jednego użytkownika dla tego wyszukiwania"
+
+msgid "Most Likely"
+msgstr "Najprawdopodobniej"
+
+msgid "Mother"
+msgstr "Matka"
+
+msgid "Mr."
+msgstr "Pan"
+
+msgid "Name:"
+msgstr "Imię:"
+
+msgid "Never Ask"
+msgstr "Nigdy nie proś"
+
+msgid "New Donation"
+msgstr "Nowa darowizna"
+
+msgid "Nephew"
+msgstr "Bratanek"
+
+msgid "Never Contacted"
+msgstr "Nigdy się nie kontaktowałem"
+
+msgid "Newsletter"
+msgstr "List modlitewny"
+
+msgid "Newsletter Recipients"
+msgstr "Odbiorcy listu modlitewnego"
+
+msgid "Next Month"
+msgstr "Następny miesiąc"
+
+msgid "Next Week"
+msgstr "Następny tydzień"
+
+msgid "No Gifts"
+msgstr "Brak darowizn"
+
+msgid "No Date"
+msgstr "Brak daty"
+
+msgid "No"
+msgstr "Nie"
+
+msgid "No Subject"
+msgstr "Brak tematu"
+
+msgid "No email addess on file"
+msgstr "Brak adresu email w pliku"
+
+msgid "No mailing address on file"
+msgstr "Brak adresu pocztowego w pliku"
+
+msgid "No mailing address or email addess on file"
+msgstr "Brak adresu pocztowego lub emailowego w pliku"
+
+msgid "None"
+msgstr "Żaden"
+
+msgid "Tamil"
+msgstr "?Tamil?"
+
+msgid "Task on MPDX"
+msgstr "Zadanie na ?MPDX?"
+
+msgid "Tasks"
+msgstr "Zadania"
+
+msgid "Temporary"
+msgstr "Tymczasowy"
+
+msgid "Text Message"
+msgstr "SMS"
+
+msgid "Thai"
+msgstr "Tajski"
+
+msgid "Thank"
+msgstr "Dziękuj"
+
+msgid "Thanks!"
+msgstr "Dzięki!"
+
+msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
+msgstr "Ten email został oznaczony jako \"już nie aktualny\". Proszę poprawić dane tej osoby klikając na jej imię powyżej i sprawdzić czy te informacje są prawidłowe. Jeśli ta osoba ma inny aktualny adres email proszę go wpisać i on stanie się podstawowym adresem email i zsynchronizuje się z MailChimp jeśli znajduje się na twojej liście do wysyłania emaili modlitewnych. Jeśli nie chcesz, żeby ten adres znajdował się w MailChimp, proszę usunąć go, wybierz ?\"Opt-out of email newsletter\" albo ustaw jako podstawowy inny adres email."
+
+msgid "The connection to your LinkedIn account needs to be renewed."
+msgstr "Połączenie z twoim kontem Linkedln musi być odnowione."
+
+msgid "The link to your facebook account needs to be refreshed. <a href=\"/auth/facebook\">Click here to re-connect to facebook</a> then try your import again."
+msgstr "Link do twojego konta na Facebooku musi być odświeżony. <a href=\"/auth/facebook\">Kliknij tutaj, żeby połączyć ponownie z Facebookiem</a> potem spróbuj jeszcze raz zaimportować."
+
+msgid "The link between MPDX and your Google account has stopped working. If you'd like to continue to have MPDX\n  automatically sync with your Google account, please go to %{link}\n  and click the 'Refresh Google Account' button.  After that, you'll need to manually re-enable any integrations\n  that you had set already."
+msgstr "Link pomiędzy ?MPDX? a twoim kontem Google przestał działać. Jeśli chciałbyś aby ?MPDX? w dalszym ciągu synchronizował się z twoim kontem Google, proszę idź do %{link} i kliknij \"Odśwież konto Goolge\". Potem będziesz musiał ręcznie ustanowić ponownie wszystkie ?integrations?, które miałeś wcześniej ustawione."
+
+msgid "The mailchimp API key associated with your MPDX account is no longer valid.\nIf you would like Mailchimp syncronization to continue to work, please go to\n %{link} and update your API key."
+msgstr "Mailchimp API key powiązany z twoim kontem ?MPDX? już nie działa. Jeśli chcesz, żeby działała synchronizacja z Mialchimp, proszę idź do %{link} i odśwież twój API key."
+
+msgid "This Month"
+msgstr "Ten miesiąc"
+
+msgid "This Week"
+msgstr "Ten tydzień"
+
+msgid "This Year"
+msgstr "Ten rok"
+
+msgid "Timezone"
+msgstr "Strefa czasowa"
+
+msgid "Tnt import"
+msgstr "Importuj z Tnt"
+
+msgid "To Do"
+msgstr "Do zrobienia"
+
+msgid "To activate your invitation, click \"Accept\" below and log into MPDX."
+msgstr "Aby aktywować swoje zaproszenie kliknij \"Akceptuj\" poniżej i zaloguj się do ?MPDX?"
+
+msgid "Today"
+msgstr "Dzisiaj"
+
+msgid "Tomorrow"
+msgstr "Jutro"
+
