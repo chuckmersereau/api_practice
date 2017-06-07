@@ -3,6 +3,7 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 06 June 2017
+- Added wildcard search filter on '/api/v2/contacts/people' endpoint.
 - Added location to list of task attributes displayed on '/api/v2/tasks' endpoint.
 
 ## 05 June 2017

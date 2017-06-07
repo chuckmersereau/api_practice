@@ -1,4 +1,7 @@
 require 'rails_helper'
+require_relative '../../../../app/services/contact/filter/base'
+require_relative '../../../../app/services/person/filter/wildcard_search'
+require_relative '../../../../app/services/person/filter/base'
 
 RSpec.describe Contact::Filter::WildcardSearch do
   let!(:user) { create(:user_with_account) }
