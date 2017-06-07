@@ -31,6 +31,7 @@ resource 'Tasks' do
       completed
       completed_at
       created_at
+      location
       next_action
       notification_time_before
       notification_time_unit
@@ -64,8 +65,8 @@ resource 'Tasks' do
 
       parameter 'filter[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
       parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '
-      parameter 'filters[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
-      parameter 'filters[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '\
+      parameter 'filter[account_list_id]', 'Filter by Account List; Accepts Account List ID', required: false
+      parameter 'filter[activity_type][]', 'Filter by Action; Accepts multiple parameters, with values "Call", "Appointment", "Email", '\
                                             '"Text Message", "Facebook Message", "Letter", "Newsletter", "Pre Call Letter", "Reminder Letter", '\
                                             '"Support Letter", "Thank", "To Do", "Talk to In Person", or "Prayer Request"',                     required: false
       parameter 'filter[completed]',       'Filter by Completed; Accepts values "true", or "false"',                                           required: false
@@ -114,6 +115,7 @@ resource 'Tasks' do
           response_field 'completed',                'Completed',                'Type' => 'Boolean'
           response_field 'completed_at',             'Completed At',             'Type' => 'String'
           response_field 'due_date',                 'Due Date',                 'Type' => 'String'
+          response_field 'location',                 'Location',                 'Type' => 'String'
           response_field 'next_action',              'Next Action',              'Type' => 'String'
           response_field 'notification_time_before', 'Notification Time Before', 'Type' => 'Number'
           response_field 'notification_time_unit',   'Notification Time Unit',   'Type' => 'String'

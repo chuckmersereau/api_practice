@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 06 June 2017
+- Added location to list of task attributes displayed on '/api/v2/tasks' endpoint.
+
 ## 05 June 2017
 - Added Vietnamese, Ukrainian, Burmese and Polish to list of languages supported on the API side.
 
