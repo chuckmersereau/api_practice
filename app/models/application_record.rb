@@ -31,9 +31,18 @@ class ApplicationRecord < ActiveRecord::Base
   # We can't preload relationships if they are not actually Rails associations.
   # This method is like .preload, but it filters out args that are not proper associations.
   def self.preload_valid_associations(*args)
-    associations = args.select { |association| reflections.keys.include?(association) }
+    associations = fetch_valid_associations(args)
+
     return preload(*associations) unless associations.empty?
     all
+  end
+
+  def self.fetch_valid_associations(*args)
+    args.flatten.map do |association|
+      next association if reflections.keys.include?(association)
+
+      fetch_hash_association(association) if association.is_a?(Hash)
+    end.compact
   end
 
   private
@@ -66,5 +75,16 @@ class ApplicationRecord < ActiveRecord::Base
     raise ActiveRecord::RecordNotFound, message
   end
 
-  private_class_method :record_from_uuid_not_found_error
+  def self.fetch_hash_association(association)
+    association_key = association.keys.first
+
+    child_model = reflections.values.detect { |reflection| reflection.name == association_key }
+                             .try(:class_name).try(:constantize)
+
+    return unless child_model
+
+    { association_key => child_model.fetch_valid_associations(association.values.first) }
+  end
+
+  private_class_method :record_from_uuid_not_found_error, :fetch_hash_association
 end

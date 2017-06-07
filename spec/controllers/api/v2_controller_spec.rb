@@ -15,7 +15,12 @@ describe Api::V2Controller do
 
       def index
         raise 'Test Error' if params[:raise_error] == true
-        render json: (filter_params || {}).merge!(current_time_zone: current_time_zone.name, current_locale: I18n.locale)
+        render json: {
+          filter_params: filter_params,
+          include_params: include_params,
+          current_time_zone: current_time_zone.name,
+          current_locale: I18n.locale
+        }
       end
 
       def create
@@ -53,7 +58,7 @@ describe Api::V2Controller do
         api_login(user)
         get :index, filter: { contact_id: contact.uuid }
         expect(response.status).to eq(200), invalid_status_detail
-        expect(JSON.parse(response.body)['contact_id']).to eq(contact.id)
+        expect(response_json[:filter_params][:contact_id]).to eq(contact.id)
       end
 
       it 'returns a 404 when a user tries to filter with the id of a resource' do
@@ -77,6 +82,17 @@ describe Api::V2Controller do
           expect(response.status).to eq(400), invalid_status_detail
           expect(response.body).to include("Wrong format of date range for filter 'time_at', should follow 'YYYY-MM-DD...YYYY-MM-DD' for dates")
         end
+      end
+    end
+
+    context '#includes' do
+      let(:contact) { create(:contact) }
+
+      it "includes all associated resources when the '*' flag is passed" do
+        api_login(user)
+        get :index, include: '*'
+        expect(response.status).to eq(200), invalid_status_detail
+        expect(response_json[:include_params]).to eq(ContactSerializer._reflections.keys.map(&:to_s))
       end
     end
 

@@ -3,8 +3,7 @@ class Api::V2::ContactsController < Api::V2Controller
     authorize_index
     load_contacts
 
-    render json: @contacts.preload_valid_associations(include_associations)
-      .preload(attributes_to_preload),
+    render json: Api::V2::ContactsPreloader.new(include_params, field_params).preload(@contacts),
            meta: meta_hash(@contacts),
            include: include_params,
            fields: field_params
@@ -113,15 +112,5 @@ class Api::V2::ContactsController < Api::V2Controller
 
   def excluded_filter_keys_from_casting_validation
     [:donation_amount_range]
-  end
-
-  def attributes_to_preload
-    return [] if does_not_need_preloading?
-
-    [:people, :addresses, { primary_person: [:primary_picture, :facebook_account] }]
-  end
-
-  def does_not_need_preloading?
-    field_params == { contacts: 'name' } || field_params == { contacts: '' }
   end
 end

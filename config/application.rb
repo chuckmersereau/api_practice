@@ -20,9 +20,10 @@ module Mpdx
     # Custom directories with classes and modules you want to be autoloadable.
     config.autoload_paths += %W(
       #{config.root}/app/concerns
+      #{config.root}/app/errors
+      #{config.root}/app/preloaders
       #{config.root}/app/roles
       #{config.root}/app/validators
-      #{config.root}/app/errors
       #{config.root}/lib
     )
 
