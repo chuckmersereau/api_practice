@@ -45,11 +45,11 @@ class TntImport
   end
 
   def import_tasks(tnt_contacts = {})
-    TntImport::TasksImport.new(@account_list, tnt_contacts, xml).import
+    TntImport::TasksImport.new(@import, tnt_contacts, xml).import
   end
 
   def import_history(tnt_contacts = {})
-    TntImport::HistoryImport.new(@account_list, tnt_contacts, xml).import_history
+    TntImport::HistoryImport.new(@import, tnt_contacts, xml).import_history
   end
 
   def import_offline_org_gifts(tnt_contacts)

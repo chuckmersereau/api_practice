@@ -1,7 +1,5 @@
-require_relative 'concerns/date_helpers'
-
 class TntImport::GiftsImport
-  include TntImport::DateHelpers
+  include Concerns::TntImport::DateHelpers
   attr_reader :contact_ids_by_tnt_contact_id, :xml_tables
 
   def initialize(account_list, contact_ids_by_tnt_contact_id, xml, import)

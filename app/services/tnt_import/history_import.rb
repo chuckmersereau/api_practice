@@ -1,6 +1,10 @@
 class TntImport::HistoryImport
-  def initialize(account_list, contact_ids_by_tnt_contact_id, xml)
-    @account_list                  = account_list
+  include Concerns::TntImport::DateHelpers
+
+  def initialize(import, contact_ids_by_tnt_contact_id, xml)
+    @import                        = import
+    @user                          = import.user
+    @account_list                  = import.account_list
     @contact_ids_by_tnt_contact_id = contact_ids_by_tnt_contact_id
     @xml                           = xml
     @xml_tables                    = xml.tables
@@ -24,11 +28,12 @@ class TntImport::HistoryImport
       task.attributes = {
         activity_type: TntImport::TntCodes.task_type(row['TaskTypeID']),
         subject: subject(row),
-        start_at: DateTime.parse(row['HistoryDate']),
-        completed_at: DateTime.parse(row['HistoryDate']),
+        completed_at: parse_date(row['HistoryDate'], @user),
         completed: true,
         result: TntImport::TntCodes.history_result(row['HistoryResultID'])
       }
+
+      task.start_at ||= parse_date(row['HistoryDate'], @user)
 
       tnt_appeal_id_by_tnt_history_id[tnt_history_id] = row_appeal_id(row) if row_appeal_id(row).present?
 

@@ -1,6 +1,10 @@
 class TntImport::TasksImport
-  def initialize(account_list, contact_ids_by_tnt_contact_id, xml)
-    @account_list = account_list
+  include Concerns::TntImport::DateHelpers
+
+  def initialize(import, contact_ids_by_tnt_contact_id, xml)
+    @import = import
+    @user = import.user
+    @account_list = import.account_list
     @contact_ids_by_tnt_contact_id = contact_ids_by_tnt_contact_id
     @xml = xml
     @xml_tables = xml.tables
@@ -11,15 +15,8 @@ class TntImport::TasksImport
     task_ids_by_tnt_task_id = {}
 
     xml_tables['Task'].each do |row|
-      task = Retryable.retryable do
-        @account_list.tasks.where(remote_id: row['id'], source: 'tnt').first_or_initialize
-      end
+      task = build_task_from_row(row)
 
-      task.attributes = {
-        activity_type: TntImport::TntCodes.task_type(row['TaskTypeID']),
-        subject: row['Description'],
-        start_at: DateTime.parse(row['TaskDate'] + ' ' + DateTime.parse(row['TaskTime']).strftime('%I:%M%p'))
-      }
       next unless task.save
 
       # Add any notes as a comment
@@ -54,5 +51,20 @@ class TntImport::TasksImport
 
   def update_contacts_task_counters!(contact_ids)
     Contact.where(id: contact_ids).find_each(&:update_uncompleted_tasks_count)
+  end
+
+  def build_task_from_row(row)
+    task = Retryable.retryable { @account_list.tasks.where(remote_id: row['id'], source: 'tnt').first_or_initialize }
+
+    task.attributes = {
+      activity_type: TntImport::TntCodes.task_type(row['TaskTypeID']),
+      subject: row['Description'],
+      start_at: parse_date("#{row['TaskDate']} #{row['TaskTime'].split(' ').second}", @user)
+    }
+
+    task.completed = TntImport::TntCodes.task_status_completed?(row['Status'])
+    task.completed_at = parse_date(row['LastEdit'], @user) if task.completed
+
+    task
   end
 end

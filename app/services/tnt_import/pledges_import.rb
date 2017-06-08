@@ -1,11 +1,8 @@
 # In TNT a Pledge is called a "Promise".
 
-require_relative 'concerns/appeal_helpers'
-require_relative 'concerns/date_helpers'
-
 class TntImport::PledgesImport
-  include TntImport::AppealHelpers
-  include TntImport::DateHelpers
+  include Concerns::TntImport::AppealHelpers
+  include Concerns::TntImport::DateHelpers
 
   DEFAULT_CURRENCY_CODE = 'USD'.freeze
 

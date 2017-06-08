@@ -2,7 +2,8 @@ require 'rails_helper'
 
 describe TntImport do
   let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
-  let(:tnt_import) { create(:tnt_import, override: true) }
+  let(:user) { create(:user) }
+  let(:tnt_import) { create(:tnt_import, override: true, user: user) }
   let(:import) { TntImport.new(tnt_import) }
   let(:contact) { create(:contact) }
   let(:contact_rows) { xml.tables['Contact'] }
@@ -12,7 +13,11 @@ describe TntImport do
   let(:history_contact_rows) { xml.tables['HistoryContact'] }
   let(:property_rows) { xml.tables['Property'] }
 
-  before { stub_smarty_streets }
+  before do
+    stub_smarty_streets
+    user.preferences['time_zone'] = ActiveSupport::TimeZone.all.last
+    user.save
+  end
 
   describe '#xml' do
     it 'returns an Xml object' do
@@ -306,8 +311,14 @@ describe TntImport do
       expect do
         task_ids_by_tnt_task_id = import.send(:import_tasks)
         task = Task.find(task_ids_by_tnt_task_id.first[1])
-        expect(task.remote_id).not_to be_nil
+        expect(task.remote_id).to eq('-1918558789')
       end.to change(Task, :count).by(1)
+    end
+
+    it 'sets start_at' do
+      task_ids_by_tnt_task_id = import.send(:import_tasks)
+      task = Task.find(task_ids_by_tnt_task_id.first[1])
+      expect(task.start_at).to eq(tnt_import.user.time_zone.parse('2006-09-09 16:30:00'))
     end
 
     it 'updates an existing task' do
@@ -335,6 +346,13 @@ describe TntImport do
       task.comments.create!(body: 'Notes')
       import.send(:import_tasks)
       expect(task.comments.count).to eq(1)
+    end
+
+    it 'sets the task as complete' do
+      expect(TntImport::TntCodes).to receive(:task_status_completed?).and_return(true)
+      task_ids_by_tnt_task_id = import.send(:import_tasks)
+      task = Task.find(task_ids_by_tnt_task_id.first[1])
+      expect(task.completed).to eq(true)
     end
   end
 
@@ -519,11 +537,13 @@ describe TntImport do
     end
 
     it 'marks an existing task as completed' do
-      create(:task, source: 'tnt', remote_id: history_rows.first['id'], account_list: tnt_import.account_list)
+      task = create(:task, source: 'tnt', remote_id: history_rows.first['id'], account_list: tnt_import.account_list, completed: false)
 
-      expect do
-        import.send(:import_history)
-      end.not_to change(Task, :count)
+      expect { import.send(:import_history) }.not_to change(Task, :count)
+
+      task.reload
+      expect(task.completed).to eq(true)
+      expect(task.completed_at.utc).to eq(tnt_import.user.time_zone.parse('2004-08-26 19:00:00').utc)
     end
 
     it 'accociates a contact with the task' do

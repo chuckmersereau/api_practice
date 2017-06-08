@@ -41,6 +41,10 @@ class TntImport::TntCodes
       end
     end
 
+    def task_status_completed?(task_status_id)
+      task_status_id.to_i == 2 ? true : false
+    end
+
     def history_result(history_result_id)
       case history_result_id.to_i
       when 1 then 'Done'
