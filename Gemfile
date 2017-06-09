@@ -79,6 +79,7 @@ gem 'user_agent_decoder', '~> 0.0.9'
 gem 'uglifier'
 gem 'versionist', '~> 1.2.1'
 gem 'virtus', '~> 1.0.5'
+gem 'nameable', '~> 1.1.3'
 
 group :development do
   gem 'bluepill', '~> 0.1.2'

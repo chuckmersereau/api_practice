@@ -26,6 +26,8 @@ class CsvImportMappingsValidator < ActiveModel::Validator
   attr_accessor :import, :csv_import
 
   def file_headers_mappings_contains_required_headers
+    return if CsvImport.required_headers.keys.blank?
+
     return unless (CsvImport.required_headers.keys & import.file_headers_mappings.keys).empty?
 
     import.errors[:file_headers_mappings] << "should specify a header mapping for at least one of the required headers. The required headers are: #{CsvImport.required_headers.keys}"

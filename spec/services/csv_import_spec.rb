@@ -291,7 +291,8 @@ describe CsvImport do
     it 'assigns file_headers when setting file' do
       import = create(:csv_import_custom_headers, in_preview: true)
       csv_import = CsvImport.new(import)
-      expect { csv_import.update_cached_file_data }.to change { import.reload.file_headers }.from({}).to('fname' => 'fname',
+      expect { csv_import.update_cached_file_data }.to change { import.reload.file_headers }.from({}).to('fullname' => 'fullname',
+                                                                                                         'fname' => 'fname',
                                                                                                          'lname' => 'lname',
                                                                                                          'spouse_fname' => 'Spouse-fname',
                                                                                                          'spouse_lname' => 'Spouse-lname',
@@ -342,14 +343,14 @@ describe CsvImport do
       import = create(:csv_import_custom_headers, in_preview: true)
       csv_import = CsvImport.new(import)
       expect { csv_import.update_cached_file_data }.to change { import.reload.file_row_samples }.from([]).to(
-        [[' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
+        [['Johnny and Janey Doey', ' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
           '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD',
           'Both', 'christmas-card,      family', ' john@example.com ', ' jane@example.com ', '(213) 222-3333',
           '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe'],
-         ['Bob', 'Park', 'Sara', 'Kim', 'Hello!', nil, nil, '123 Street West ', 'A Small Town', 'Quebec',
+         ['Bobby & Saray Parky', 'Bob', 'Park', 'Sara', 'Kim', 'Hello!', nil, nil, '123 Street West ', 'A Small Town', 'Quebec',
           'L8D 3B9 ', 'Canada', 'Praying and giving', '10', 'Monthly', nil, 'Both', 'bob', 'bob@park.com',
           'sara@kim.com', '+12345678901', '+10987654321', nil, 'Yes', 'No', 'metro', 'region', 'No', 'website'],
-         ['Joe', 'Man', nil, nil, nil, nil, nil, 'Apartment, Unit 123', 'Big City', 'BC', nil, 'CA', 'Praying',
+         ['Joey Many', 'Joe', 'Man', nil, nil, nil, nil, nil, 'Apartment, Unit 123', 'Big City', 'BC', nil, 'CA', 'Praying',
           nil, nil, nil, 'Both', nil, 'joe@inter.net', nil, '123.456.7890', nil, 'notes', nil, 'Yes', 'metro',
           'region', 'Yes', 'website']]
       )
@@ -368,7 +369,7 @@ describe CsvImport do
     end
 
     it 'generates a csv file as a string that contains the failed rows' do
-      expect(csv_import.generate_csv_from_file_row_failures).to eq('Error Message,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
+      expect(csv_import.generate_csv_from_file_row_failures).to eq('Error Message,fullname,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
                                                                    'street,city,province,zip-code,country,status,amount,frequency,currency,newsletter,tags,' \
                                                                    'email-address,Spouse-email-address,phone,Spouse-phone-number,extra-notes,skip,likely-giver' \
                                                                    ",metro,region,appeals,website\n\"Validation failed: Email is invalid, Email is invalid\",Bob" \

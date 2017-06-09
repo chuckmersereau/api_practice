@@ -462,6 +462,7 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.0.0)
     mustache (1.0.5)
+    nameable (1.1.3)
     nenv (0.3.0)
     newrelic_rpm (3.7.3.204)
     nokogiri (1.7.2)
@@ -830,6 +831,7 @@ DEPENDENCIES
   linkedin (~> 0.3.7)
   marco-polo (~> 1.2.1)
   mock_redis (~> 0.17.0)
+  nameable (~> 1.1.3)
   newrelic_rpm (~> 3.7.1)
   oauth!
   oj (~> 2.14.0)

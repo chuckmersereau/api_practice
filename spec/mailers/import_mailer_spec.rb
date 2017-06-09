@@ -29,7 +29,7 @@ describe ImportMailer do
         mail = ImportMailer.failed(import)
         expect(mail.attachments.size).to eq(1)
         expect(mail.attachments.first.content_type).to eq('text/csv; filename="MPDX Import Failures.csv"')
-        expect(mail.attachments.first.body.to_s).to eq('Error Message,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
+        expect(mail.attachments.first.body.to_s).to eq('Error Message,fullname,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
                                                                    'street,city,province,zip-code,country,status,amount,frequency,currency,newsletter,tags,' \
                                                                    'email-address,Spouse-email-address,phone,Spouse-phone-number,extra-notes,skip,likely-giver' \
                                                                    ",metro,region,appeals,website\n\"Validation failed: Email is invalid, Email is invalid\",Bob" \

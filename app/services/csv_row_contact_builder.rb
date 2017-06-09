@@ -15,11 +15,13 @@ class CsvRowContactBuilder
   delegate :account_list, to: :import
   delegate :constants, to: CsvImport
 
-  attr_accessor :csv_row, :import, :contact, :person, :spouse
+  attr_accessor :csv_row, :import, :contact, :person, :spouse, :names
 
   def contact_from_csv_row
     rebuild_csv_row_with_mpdx_headers_and_mpdx_constants
     strip_csv_row_fields
+
+    parse_names
 
     build_contact
     build_addresses
@@ -32,10 +34,24 @@ class CsvRowContactBuilder
     contact
   end
 
+  def parse_names
+    @names = HumanNameParser.new(csv_row['full_name'] || '').parse
+
+    # first_name and last_name columns take precedence over full_name column
+    @names[:first_name] = csv_row['first_name'] if csv_row['first_name'].present?
+    @names[:last_name] = csv_row['last_name'] if csv_row['last_name'].present?
+    @names[:spouse_first_name] = csv_row['spouse_first_name'] if csv_row['spouse_first_name'].present?
+    @names[:spouse_last_name] = csv_row['spouse_last_name'].presence || @names[:last_name]
+
+    @names[:full_contact_name] = Contact::NameBuilder.new(@names.to_h).name
+
+    @names = @names.with_indifferent_access
+  end
+
   def build_contact
     self.contact = account_list.contacts.build(
       church_name: csv_row['church'],
-      name: build_contact_name,
+      name: names['full_contact_name'],
       greeting: csv_row['greeting'],
       envelope_greeting: csv_row['envelope_greeting'],
       status: csv_row['status'],
@@ -48,12 +64,6 @@ class CsvRowContactBuilder
       no_appeals: !true?(csv_row['send_appeals']),
       website: csv_row['website']
     )
-  end
-
-  def build_contact_name
-    first_names = [csv_row['first_name'], csv_row['spouse_first_name']].select(&:present?).to_sentence
-    last_names = [csv_row['last_name'], csv_row['spouse_last_name']].select(&:present?).uniq.to_sentence
-    [last_names, first_names].select(&:present?).join(', ')
   end
 
   def build_addresses
@@ -77,8 +87,8 @@ class CsvRowContactBuilder
   end
 
   def build_primary_person
-    self.person = Person.new(first_name: csv_row['first_name'],
-                             last_name: csv_row['last_name'])
+    self.person = Person.new(first_name: names['first_name'],
+                             last_name: names['last_name'])
     contact.primary_person = person
   end
 
@@ -99,10 +109,10 @@ class CsvRowContactBuilder
   end
 
   def build_spouse_person
-    return if csv_row['spouse_first_name'].blank?
+    return if names['spouse_first_name'].blank?
 
-    spouse = Person.new(first_name: csv_row['spouse_first_name'],
-                        last_name: csv_row['spouse_last_name'].presence || csv_row['last_name'])
+    spouse = Person.new(first_name: names['spouse_first_name'],
+                        last_name: names['spouse_last_name'])
     spouse.email_addresses.build(email: csv_row['spouse_email'],
                                  primary: true) if csv_row['spouse_email'].present?
     spouse.phone_numbers.build(number: csv_row['spouse_phone'],

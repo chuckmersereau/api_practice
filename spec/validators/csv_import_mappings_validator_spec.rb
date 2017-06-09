@@ -9,6 +9,8 @@ describe CsvImportMappingsValidator do
   end
 
   it 'validates that file_headers_mappings_contains_required_headers' do
+    expect(CsvImport).to receive(:required_headers).and_return('first_name' => 'First Name').at_least(:once)
+
     import.file_headers_mappings = { 'something_invalid' => 'fname' }
     expect(import.valid?).to eq false
     expect(import.errors[:file_headers_mappings].any? { |error| error.starts_with?('should specify a header mapping for at least one of the required headers') }).to eq true

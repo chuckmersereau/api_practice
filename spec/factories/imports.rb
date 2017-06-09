@@ -118,6 +118,7 @@ FactoryGirl.define do
         'country'              => 'country',
         'email_1'              => 'email_address',
         'first_name'           => 'fname',
+        'full_name'            => 'fullname',
         'greeting'             => 'greeting',
         'envelope_greeting'    => 'mailing_greeting',
         'last_name'            => 'lname',

@@ -16,6 +16,7 @@ class CsvImport
     'Email 2',
     'Envelope Greeting',
     'First Name',
+    'Full Name',
     'Greeting',
     'Last Name',
     'Likely To Give',
@@ -40,7 +41,7 @@ class CsvImport
   ].freeze
 
   # These are the headers that MPDX requires at minimum for CSV import.
-  # The user must supply values for at least one of these headers in their CSV (not all are needed).
+  # In the future the names can be removed from REQUIRED_HEADERS, because the frontend will handle them specially. The frontend will require `(first_name && last_name) || full_name`
   REQUIRED_HEADERS = ['First Name', 'Last Name'].freeze
 
   BOOLEAN_CONSTANTS = ['true', 'false', ''].freeze
