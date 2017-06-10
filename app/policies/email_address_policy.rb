@@ -26,7 +26,7 @@ class EmailAddressPolicy < ApplicationPolicy
 
   def user_has_ownership_of_person?
     user.account_lists.exists?(id: contact.account_list_id) &&
-      person.contacts.exists?(id: contact)
+      person.contacts.exists?(id: contact.id)
   end
 
   def user_is_person?

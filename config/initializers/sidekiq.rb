@@ -34,4 +34,6 @@ Sidekiq.default_worker_options = {
   unique_job_expiration: 24.hours
 }
 
+Sidekiq::Extensions.enable_delay!
+
 SidekiqMemNotifier.start

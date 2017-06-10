@@ -63,7 +63,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
       it 'returns error details in the json body' do
         expect(response_body['data']).to be_nil
         expect(response_body['errors'].size).to eq 1
-        expect(response_body['errors'].first['status']).to eq 'unauthorized'
+        expect(response_body['errors'].first['status']).to eq '401'
         expect(response_body['errors'].first['detail']).to eq "INVALID_TICKET: Ticket '#{valid_cas_ticket}' not recognized"
       end
     end
@@ -80,7 +80,7 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
       it 'returns error details in the json body' do
         expect(response_body['data']).to be_nil
         expect(response_body['errors'].size).to eq 1
-        expect(response_body['errors'].first['status']).to eq 'bad_request'
+        expect(response_body['errors'].first['status']).to eq '400'
         expect(response_body['errors'].first['detail']).to eq 'Expected a cas_ticket to be provided in the attributes'
       end
     end

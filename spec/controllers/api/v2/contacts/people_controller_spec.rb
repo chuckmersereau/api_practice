@@ -76,8 +76,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
               type: 'facebook_accounts',
               id: generated_uuid,
               attributes: {
-                username: 'captain.america',
-                updated_in_db_at: Time.current
+                username: 'captain.america'
               }
             }
           ]
@@ -130,8 +129,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
               type: 'linkedin_accounts',
               id: linkedin_account.uuid,
               attributes: {
-                public_url: 'https://linkedin.com/new-url',
-                updated_in_db_at: Time.current
+                public_url: 'https://linkedin.com/new-url'
               }
             }
           ]
@@ -178,8 +176,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
               type: 'phone_numbers',
               id: generated_uuid,
               attributes: {
-                number: '5011231234',
-                updated_in_db_at: Time.current
+                number: '5011231234'
               }
             }
           ]
@@ -229,8 +226,7 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
               type: 'email_addresses',
               id: generated_uuid,
               attributes: {
-                email: 'tester@testing.com',
-                updated_in_db_at: Time.current
+                email: 'tester@testing.com'
               }
             }
           ]

@@ -97,8 +97,9 @@ class AccountList < ApplicationRecord
   alias destroy! destroy
 
   def salary_organization_id=(val)
-    settings[:salary_organization_id] = val
-    settings[:salary_currency] = Organization.find(val).default_currency_code
+    settings[:salary_organization_id] = val if val.is_a?(Integer)
+    settings[:salary_organization_id] ||= val.id
+    settings[:salary_currency] = Organization.find(settings[:salary_organization_id]).default_currency_code
   end
 
   def salary_organization_id

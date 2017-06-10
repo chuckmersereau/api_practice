@@ -1,6 +1,6 @@
 module JsonWebToken
   class Middleware
-    API_V2_ENDPOINT = '/api/v2/'.freeze
+    API_V2_ENDPOINT ||= '/api/v2/'.freeze
 
     def initialize(app, &block)
       @app = app

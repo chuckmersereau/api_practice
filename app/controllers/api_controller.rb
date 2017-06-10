@@ -38,7 +38,9 @@ class ApiController < ActionController::API
   protected
 
   def conflict_error?(resource)
-    resource.errors[:updated_in_db_at].any? { |error| error.include?(ApplicationRecord::CONFLICT_ERROR_MESSAGE) }
+    resource.errors.full_messages.any? do |error_message|
+      error_message.include?(ApplicationRecord::CONFLICT_ERROR_MESSAGE)
+    end
   end
 
   def current_account_list
@@ -61,7 +63,7 @@ class ApiController < ActionController::API
   end
 
   def render_400(title: 'Bad Request', detail: nil)
-    render_error(title: title, detail: detail, status: :bad_request)
+    render_error(title: title, detail: detail, status: '400')
   end
 
   def render_400_from_exception(exception)
@@ -70,7 +72,7 @@ class ApiController < ActionController::API
 
   def render_with_resource_errors(resource)
     if resource.is_a? Hash
-      render_error(hash: resource, status: :bad_request)
+      render_error(hash: resource, status: '400')
     elsif conflict_error?(resource)
       render_409(detail: detail_for_resource_first_error(resource), resource: resource)
     else
@@ -79,11 +81,11 @@ class ApiController < ActionController::API
   end
 
   def render_400_with_errors(resource_or_hash)
-    render_error(resource: resource_or_hash, status: :bad_request)
+    render_error(resource: resource_or_hash, status: '400')
   end
 
   def render_401(title: 'Unauthorized', detail: nil)
-    render_error(title: title, detail: detail, status: :unauthorized)
+    render_error(title: title, detail: detail, status: '401')
   end
 
   def render_401_from_exception(exception)
@@ -91,7 +93,7 @@ class ApiController < ActionController::API
   end
 
   def render_403(title: 'Forbidden', detail: nil)
-    render_error(title: title, detail: detail, status: :forbidden)
+    render_error(title: title, detail: detail, status: '403')
   end
 
   def render_403_from_exception(exception)
@@ -109,11 +111,11 @@ class ApiController < ActionController::API
   end
 
   def render_406
-    render_error(title: 'Not Acceptable', status: :not_acceptable)
+    render_error(title: 'Not Acceptable', status: '406')
   end
 
   def render_409(title: 'Conflict', detail: nil, resource: nil)
-    render_error(title: title, detail: detail, status: :conflict, resource: resource)
+    render_error(title: title, detail: detail, status: '409', resource: resource)
   end
 
   def render_409_from_exception(exception)
@@ -122,7 +124,7 @@ class ApiController < ActionController::API
   end
 
   def render_415
-    render_error(title: 'Unsupported Media Type', status: :unsupported_media_type)
+    render_error(title: 'Unsupported Media Type', status: '415')
   end
 
   def render_error(hash: nil, resource: nil, title: nil, detail: nil, status:)
@@ -176,8 +178,11 @@ class ApiController < ActionController::API
   end
 
   def detail_for_resource_first_error(resource)
-    key = resource.errors.messages.keys.first
-    val = resource.errors.messages[:updated_in_db_at].first
-    "#{key} #{val}"
+    first_key = resource.errors.messages.keys.first
+    val = resource.errors.messages.select do |key, _value|
+      key.to_s.include?('updated_in_db_at')
+    end.values.flatten.last
+
+    "#{first_key} #{val}"
   end
 end

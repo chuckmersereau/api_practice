@@ -37,7 +37,7 @@ describe Import do
   describe '#file=' do
     it 'resets local attributes related to the file' do
       import = create(:csv_import, in_preview: true)
-      import.file_headers = [:test]
+      import.file_headers = { test: 'test' }
       import.file_constants = { test: 'test' }
       import.file_row_samples = [:test]
       import.file_row_failures = [:test]

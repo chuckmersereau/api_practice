@@ -7,6 +7,10 @@ module JsonApiService
   RSpec.describe UuidToIdReferenceFetcher, type: :service do
     include JsonApiServiceHelpers
 
+    before do
+      allow(UUID_REGEX).to receive(:match).and_return(true)
+    end
+
     let(:params) do
       params = {
         data: {

@@ -29,7 +29,7 @@ class PersonPolicy < ApplicationPolicy
   def resource_belongs_to_user?
     contacts_belongs_to_user? &&
       Person.exists?(id: resource.id) &&
-      ContactPerson.exists?(contact_id: @contacts.collect(&:id), person_id: resource.id)
+      ContactPerson.exists?(contact_id: @contacts.ids, person_id: resource.id)
   end
 
   def contacts_belongs_to_user?

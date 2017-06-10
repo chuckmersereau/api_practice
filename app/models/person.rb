@@ -92,26 +92,35 @@ class Person < ApplicationRecord
         :historic,
         :id,
         :location,
-        :primary, :source,
+        :overwrite,
+        :primary,
+        :source,
+        :updated_in_db_at,
         :uuid,
         :valid_values
       ],
       facebook_accounts_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :username,
+        :updated_in_db_at,
         :uuid
       ],
       family_relationships_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :related_person_id,
-        :relationship
+        :relationship,
+        :updated_in_db_at
       ],
       linkedin_accounts_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :public_url,
+        :updated_in_db_at,
         :uuid
       ],
       phone_number: :number,
@@ -121,9 +130,11 @@ class Person < ApplicationRecord
         :id,
         :location,
         :number,
+        :overwrite,
         :primary,
         :source,
         :uuid,
+        :updated_in_db_at,
         :valid_values
       ],
       pictures_attributes: [
@@ -131,19 +142,25 @@ class Person < ApplicationRecord
         :id,
         :image,
         :image_cache,
-        :primary
+        :overwrite,
+        :primary,
+        :updated_in_db_at
       ],
       twitter_accounts_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :primary,
         :screen_name,
+        :updated_in_db_at,
         :uuid
       ],
       websites_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :primary,
+        :updated_in_db_at,
         :url
       ]
     }

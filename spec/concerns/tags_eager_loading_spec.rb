@@ -16,7 +16,7 @@ describe TagsEagerLoading do
   end
 
   def expect_correct_tag_list(tag_list)
-    expect(tag_list).to eq(%w(a b))
-    expect(tag_list.to_s).to eq('a, b')
+    expect(tag_list).to match_array(%w(a b))
+    expect(tag_list.to_s.split(', ')).to match_array(%w(a b))
   end
 end

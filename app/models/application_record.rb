@@ -39,7 +39,7 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.fetch_valid_associations(*args)
     args.flatten.map do |association|
-      next association if reflections.keys.include?(association)
+      next association if reflections.keys.include?(association.to_s)
 
       fetch_hash_association(association) if association.is_a?(Hash)
     end.compact
@@ -52,12 +52,14 @@ class ApplicationRecord < ActiveRecord::Base
   end
 
   def presence_of_updated_in_db_at
-    return if updated_in_db_at
+    return if updated_at_was.nil? || updated_in_db_at
+
     errors.add(:updated_in_db_at, 'has to be sent in the list of attributes in order to update resource')
   end
 
   def value_of_updated_in_db_at
-    return if updated_at_was.to_i == updated_in_db_at.to_i
+    return if updated_at_was.nil? || updated_at_was.to_i == updated_in_db_at.to_i
+
     errors.add(:updated_in_db_at, full_conflict_error_message)
   end
 

@@ -34,6 +34,9 @@ module Mpdx
     config.active_record.schema_format = :sql
     config.active_record.cache_timestamp_format = :nsec
 
+    config.active_job.queue_adapter = :sidekiq
+    config.active_record.raise_in_transactional_callbacks = true
+
     config.log_formatter = ::Logger::Formatter.new
 
     config.assets.enabled = false

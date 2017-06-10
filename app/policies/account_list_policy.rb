@@ -7,6 +7,6 @@ class AccountListPolicy < ApplicationPolicy
   private
 
   def resource_owner?
-    @user.account_lists.exists?(@resource)
+    @user.account_lists.exists?(id: @resource.id)
   end
 end

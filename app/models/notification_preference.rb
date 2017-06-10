@@ -4,8 +4,6 @@ class NotificationPreference < ApplicationRecord
 
   serialize :actions, Array
 
-  before_save :normalize_actions
-
   validates :notification_type_id, presence: true
 
   delegate :type, to: :notification_type
@@ -14,6 +12,7 @@ class NotificationPreference < ApplicationRecord
     {
       actions: []
     },
+    :actions,
     :created_at,
     :id,
     :notification_type_id,
@@ -27,14 +26,15 @@ class NotificationPreference < ApplicationRecord
     %w(email task)
   end
 
-  private
+  def actions=(actions)
+    actions = actions.split(',').map(&:strip) if actions.is_a?(String)
 
-  def normalize_actions
-    self.actions = Array[actions].tap do |array|
+    value = Array[actions].tap do |array|
       array.flatten!
       array.uniq!
       array.select!(&:present?)
       array.sort!
     end
+    self[:actions] = value
   end
 end

@@ -10,7 +10,7 @@ describe ContactSuggestedChangesUpdaterWorker do
   let!(:designation_account_one) { create(:designation_account) }
   let!(:designation_account_two) { create(:designation_account) }
   let!(:donation_one) { create(:donation, donation_date: 1.day.ago, designation_account: designation_account_one, donor_account: donor_account_one) }
-  let!(:donation_two) { create(:donation, donation_date: 1.day.ago, designation_account: designation_account_two, donor_account: donor_account_two) }
+  let!(:donation_two) { create(:donation, donation_date: 1.day.ago, designation_account: designation_account_two, donor_account: donor_account_two, created_at: 2.years.ago) }
 
   let(:user) { account_list.users.first }
 
@@ -32,13 +32,14 @@ describe ContactSuggestedChangesUpdaterWorker do
 
   context 'only updating contacts with updated donations' do
     before do
-      donation_two.update_columns(created_at: 2.years.ago)
+      contact_two.update_columns(suggested_changes: { pledge_frequency: nil })
     end
 
     it 'updates only some contacts suggested_changes' do
       expect { ContactSuggestedChangesUpdaterWorker.new.perform(user.id, since_donation_date) }
         .to_not change { contact_two.reload.suggested_changes }
-        .from({})
+        .from(pledge_frequency: nil)
+
       expect(contact_one.reload.suggested_changes).to eq(pledge_frequency: nil, pledge_amount: nil, status: 'Partner - Special')
     end
   end

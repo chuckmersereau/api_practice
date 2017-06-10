@@ -20,7 +20,7 @@ resource 'Contacts > People > Relationships' do
   let(:new_family_relationship) do
     attributes_for(:family_relationship)
       .reject { |key| key.to_s.end_with?('_id') }
-      .merge(updated_in_db_at: family_relationship.updated_at)
+      .merge(overwrite: true)
   end
   let(:relationships) do
     {
@@ -72,7 +72,6 @@ resource 'Contacts > People > Relationships' do
     get '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       with_options scope: [:data, :attributes] do
         response_field 'created_at',        'Created At',       type: 'String'
-        response_field 'person_id',         'Person Id',        type: 'Number'
         response_field 'updated_at',        'Updated At',       type: 'String'
         response_field 'updated_in_db_at',  'Updated In Db At', type: 'String'
       end
@@ -88,9 +87,7 @@ resource 'Contacts > People > Relationships' do
 
     post '/api/v2/contacts/:contact_id/people/:person_id/relationships' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter 'person_id',         'Person Id'
-        parameter 'related_person_id', 'Related Person Id'
-        parameter 'relationship',      'Relationship'
+        parameter 'relationship', 'Relationship'
       end
 
       example 'Relationship [CREATE]', document: documentation_scope do
@@ -104,8 +101,6 @@ resource 'Contacts > People > Relationships' do
 
     put '/api/v2/contacts/:contact_id/people/:person_id/relationships/:id' do
       with_options required: true, scope: [:data, :attributes] do
-        parameter 'person_id',         'Person Id'
-        parameter 'related_person_id', 'Related Person Id'
         parameter 'relationship',      'Relationship'
       end
 

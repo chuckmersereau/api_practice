@@ -95,7 +95,7 @@ describe SidekiqMemNotifier do
     it 'will email again after 2 hours' do
       expect(mail).to receive(:deliver).exactly(:twice)
       subject.notify_by_email(['Oops', ':('])
-      travel_to 2.hours.since do
+      travel_to 3.hours.since do
         subject.notify_by_email(['Oops', ':('])
       end
     end

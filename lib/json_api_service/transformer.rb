@@ -63,7 +63,7 @@ module JsonApiService
     end
 
     def convert_params(params_object)
-      ParamsObject.new(params: params_object.to_h).to_h
+      ParamsObject.new(params: params_object).to_h
     end
 
     def fetch_id_from_resource_type_and_uuid(resource_type, uuid)
@@ -124,7 +124,9 @@ module JsonApiService
           id_key  = "#{type}_attributes"
           objects = value.dig(:data)
 
-          hash[id_key] = objects_array_to_nested_attributes_hash(objects)
+          hash[id_key] = objects_array_to_nested_attributes_hash(objects).map do |attribute_hash|
+            attribute_hash.merge(overwrite: true)
+          end
         end
     end
 

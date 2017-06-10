@@ -37,7 +37,7 @@ describe PersonExhibit do
     it 'links to the facebook account url if person has an account' do
       exhib = PersonExhibit.new(person, ActionView::Base.new)
       allow(person).to receive(:facebook_account) { double(url: 'facebook.com/joe') }
-      expect(exhib.facebook_link).to eq '<a class="fa fa-facebook-square" href="facebook.com/joe" target="_blank"></a>'
+      expect(exhib.facebook_link).to eq %(<a target=\"_blank\" class=\"fa fa-facebook-square\" href=\"facebook.com/joe\"></a>)
     end
   end
 
@@ -49,7 +49,7 @@ describe PersonExhibit do
     it 'links to the twitter account url if the person has a twitter account' do
       exhib = PersonExhibit.new(person, ActionView::Base.new)
       allow(person).to receive(:twitter_account) { double(url: 'twitter.com/joe') }
-      expect(exhib.twitter_link).to eq '<a class="fa fa-twitter-square" href="twitter.com/joe" target="_blank"></a>'
+      expect(exhib.twitter_link).to eq %(<a target=\"_blank\" class=\"fa fa-twitter-square\" href=\"twitter.com/joe\"></a>)
     end
   end
 
@@ -62,7 +62,7 @@ describe PersonExhibit do
       person.email_address = { email: 'joe@example.com', primary: true }
       person.save
       exhib = PersonExhibit.new(person, ActionView::Base.new)
-      expect(exhib.email_link).to eq '<a class="fa fa-envelope" href="mailto:joe@example.com"></a>'
+      expect(exhib.email_link).to eq %(<a class="fa fa-envelope" href="mailto:joe@example.com"></a>)
     end
   end
 end

@@ -19,6 +19,6 @@ class Task::Filter::ContactIds < Task::Filter::Base
 
   def contact_attributes_from_account_lists
     Contact.joins(:account_list).where(account_list: account_lists)
-           .order('contacts.name ASC').distinct.select(:uuid, :name, :'account_lists.uuid AS account_list_uuid')
+           .order('contacts.name ASC').distinct.select('contacts.uuid, contacts.name, account_lists.uuid AS account_list_uuid')
   end
 end

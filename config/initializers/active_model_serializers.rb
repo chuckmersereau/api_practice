@@ -18,7 +18,6 @@ class ActiveModelSerializers::Adapter::JsonApi
   end
 end
 
-# Override the private instance method id_for to display the uuid as the resource identifier, instead of the id.
 module ActiveModelSerializers
   module Adapter
     class JsonApi
