@@ -1,0 +1,25 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VERSION\n"
+"POT-Creation-Date: 2017-06-08 14:34+0000\n"
+"PO-Revision-Date: 2017-06-08 14:34+0000\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
+"Language: zh_Hans_CN\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Least Likely"
+msgstr "小"
+
+msgid "Likely"
+msgstr "一般"
+
+msgid "Likely To Give"
+msgstr "支持可能性大"
+
+msgid "Most Likely"
+msgstr "大"
+

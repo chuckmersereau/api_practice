@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-04-18 13:06+0000\n"
-"PO-Revision-Date: 2017-04-18 13:06+0000\n"
+"POT-Creation-Date: 2017-06-08 14:35+0000\n"
+"PO-Revision-Date: 2017-06-08 14:35+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: th\n"
@@ -129,13 +129,13 @@ msgid "Another contact in your organization already has the donor account number
 msgstr "ผู้ติดต่ออีกคนในองค์กรของคุณใช้หมายเลขบัญชีผู้บริจาคนี้แล้ว โปรดกำหนดหมายเลขให้มีความแตกต่าง"
 
 msgid "Appeal"
-msgstr "การอนุเคราะห์"
+msgstr "สัญญาสนับสนุน"
 
 msgid "Appointment"
 msgstr "นัดหมาย"
 
 msgid "Are marked as do not ask for appeals"
-msgstr "ทำเครื่องหมายว่าอย่าขอการอนุเคราะห์"
+msgstr "ทำเครื่องหมายว่าอย่าขอสัญญาสนับสนุน"
 
 msgid "Aunt"
 msgstr "ป้า/น้า"
@@ -152,6 +152,7 @@ msgstr "เฉลี่ย"
 msgid "Arabic"
 msgstr "อารบิก"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "เฉลี่ย"
 
@@ -204,22 +205,22 @@ msgid "Click to see all balances"
 msgstr "คลิกเพื่อดูยอดดุลทั้งหมด"
 
 msgid "Commitment"
-msgstr "สัญญาบริจาค"
+msgstr "สัญญาถวาย"
 
 msgid "Commitment Currency"
-msgstr "สกุลเงินของสัญญาบริจาค"
+msgstr "สกุลเงินของสัญญาถวาย"
 
 msgid "Commitment Details"
-msgstr "รายละเอียดของสัญญาบริจาค"
+msgstr "รายละเอียดของสัญญาถวาย"
 
 msgid "Commitment Frequency"
-msgstr "ความถี่ของสัญญาบริจาค"
+msgstr "ความถี่ของสัญญาถวาย"
 
 msgid "Commitment Amount"
-msgstr "จำนวนสัญญาบริจาค"
+msgstr "จำนวนสัญญาถวาย"
 
 msgid "Commitment Received"
-msgstr "สัญญาบริจาคที่ได้รับ"
+msgstr "สัญญาถวายที่ได้รับ"
 
 msgid "Company"
 msgstr "บริษัท"
@@ -327,6 +328,7 @@ msgstr "เกิดข้อผิดพลาดในการเชื่อ
 msgid "Error connecting: you are already connected as %{org_account}"
 msgstr "ข้อผิดพลาดในการเชื่อมต่อ: คุณเชื่อมต่อในชื่อ %{org_account} อยู่แล้ว"
 
+#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "คำทักทายบนจดหมาย"
 
@@ -453,6 +455,7 @@ msgstr "โทรศัพท์บ้าน"
 msgid "Home"
 msgstr "บ้าน"
 
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "ท่าน"
 
@@ -754,22 +757,22 @@ msgid "Overdue"
 msgstr "เกินกำหนด"
 
 msgid "Partner"
-msgstr "พาร์ทเนอร์"
+msgstr "ผู้ร่วมทีมพันธกิจ"
 
 msgid "Partner - Financial"
-msgstr "พาร์ทเนอร์ - การเงิน"
+msgstr "ผู้ร่วมทีมพันธกิจ - การเงิน"
 
 msgid "Partner - Special"
-msgstr "พาร์ทเนอร์ - พิเศษ"
+msgstr "ผู้ร่วมทีมพันธกิจ - พิเศษ"
 
 msgid "Partner - Pray"
-msgstr "พาร์ทเนอร์ - อธิษฐาน"
+msgstr "ผู้ร่วมทีมพันธกิจ - อธิษฐาน"
 
 msgid "Person"
 msgstr "บุคคล"
 
 msgid "Partner Status"
-msgstr "สถานะพาร์ทเนอร์"
+msgstr "สถานะผู้ร่วมทีมพันธกิจ"
 
 msgid "Phone 1"
 msgstr "โทรศัพท์ 1"

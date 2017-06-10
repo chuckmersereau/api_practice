@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-06-01 11:42+0000\n"
-"PO-Revision-Date: 2017-06-01 11:42+0000\n"
+"POT-Creation-Date: 2017-06-08 14:36+0000\n"
+"PO-Revision-Date: 2017-06-08 14:36+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: uk\n"
@@ -10,6 +10,45 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+
+msgid "-- All Hidden --"
+msgstr "-- Всі приховані --"
+
+msgid "-- All Active --"
+msgstr "-- Всі активні --"
+
+msgid "-- Any --"
+msgstr "-- Все --"
+
+msgid "-- Do not ask --"
+msgstr "-- Не питати --"
+
+msgid "-- Unspecified --"
+msgstr "-- Не вказано --"
+
+msgid "-- None --"
+msgstr "-- Немає --"
+
+msgid "Action"
+msgstr "Дія"
+
+msgid "Address"
+msgstr "Адреса"
+
+msgid "Afrikaans"
+msgstr "Африкаанс"
+
+msgid "Annual"
+msgstr "Щорічний"
+
+msgid "All"
+msgstr "Все"
+
+msgid "Appeal"
+msgstr "Прохання"
+
+msgid "Appointment"
+msgstr "Зустріч"
 
 msgid "Aunt"
 msgstr "Тітка"
@@ -20,6 +59,176 @@ msgstr "Спитати в майбутньому"
 msgid "Appointment Scheduled"
 msgstr "Запланована зустріч"
 
+msgid "Average"
+msgstr "В середньому"
+
+msgid "Arabic"
+msgstr "Арабська"
+
+#. "Avg." is an abbreviation for "Average"
+msgid "Avg."
+msgstr "Сер."
+
+msgid "Balance: %{balance}"
+msgstr "Баланс: %{balance}"
+
+msgid "Belarusian"
+msgstr "Білоруська"
+
+msgid "Both"
+msgstr "Обидва"
+
+msgid "Brother"
+msgstr "Брат"
+
+msgid "Browser:"
+msgstr "Браузер:"
+
+msgid "Business"
+msgstr "Бізнес"
+
+msgid "Bulgarian"
+msgstr "Болгарська"
+
+msgid "Call for Decision"
+msgstr "Зателефонувати про рішення"
+
+msgid "Catalan"
+msgstr "Каталанська"
+
+msgid "Call"
+msgstr "Подзвонити"
+
+msgid "Chinese (Simplified)"
+msgstr "Китайська ( спрощена)"
+
+msgid "Chinese (Traditional)"
+msgstr "Китайська ( традиційна)"
+
+msgid "Church"
+msgstr "Церква"
+
+msgid "City"
+msgstr "Місто"
+
+msgid "Click to see all balances"
+msgstr "Натисніть, щоб побачити всі баланси"
+
+msgid "Commitment"
+msgstr "Платіж"
+
+msgid "Commitment Currency"
+msgstr "Валюта платежу"
+
+msgid "Commitment Details"
+msgstr "Дані про платіж"
+
+msgid "Commitment Frequency"
+msgstr "Частота платежів"
+
+msgid "Commitment Amount"
+msgstr "Сума платежу"
+
+msgid "Company"
+msgstr "Компанія"
+
+msgid "Completed"
+msgstr "Завершено"
+
+msgid "Contact Information"
+msgstr "Контактні дані"
+
+msgid "Contact Details"
+msgstr "Контактні дані"
+
+msgid "Contact Name"
+msgstr "Ім'я контакту"
+
+msgid "Contacts"
+msgstr "Контакти"
+
+msgid "Country"
+msgstr "Країна"
+
+msgid "Cousin (Female)"
+msgstr "Двоюрідна сестра"
+
+msgid "Cousin (Male)"
+msgstr "Двоюрідний брат"
+
+msgid "Croatian"
+msgstr "Хорватська"
+
+msgid "Currency"
+msgstr "Валюта"
+
+msgid "Danish"
+msgstr "Датська"
+
+msgid "Czech"
+msgstr "Чеська"
+
+msgid "Date Range"
+msgstr "Діапазон дат"
+
+msgid "Daughter"
+msgstr "Донька"
+
+msgid "Details"
+msgstr "Докладно"
+
+msgid "Done"
+msgstr "Готово"
+
+msgid "Donor system"
+msgstr "Система пожертвувань"
+
+msgid "Dutch"
+msgstr "Нідерландська"
+
+msgid "Email 1"
+msgstr "Ел. пошта 1"
+
+msgid "Email 2"
+msgstr "Ел. пошта 2"
+
+msgid "Email 3"
+msgstr "Ел. пошта 3"
+
+msgid "Email 4"
+msgstr "Ел. пошта 4"
+
+#. This is a marital status. The person is pledged to be married
+msgid "Engaged"
+msgstr "Заручений(-на)"
+
+msgid "English"
+msgstr "Англійська"
+
+msgid "Estonian"
+msgstr "Естонська"
+
+msgid "Farsi"
+msgstr "Фарсі"
+
+msgid "Father"
+msgstr "Батько"
+
+msgid "Finnish"
+msgstr "Фінська"
+
+msgid "First Name"
+msgstr "Ім'я"
+
+msgid "French (Canada)"
+msgstr "Французька ( Канада)"
+
+msgid "French (France)"
+msgstr "Французька ( Франція)"
+
+msgid "German"
+msgstr "Німецька"
+
 msgid "Gift Amount Higher Than or Equal To"
 msgstr "Вартість подарунку не менш ніж"
 
@@ -29,15 +238,436 @@ msgstr "Вартість подарунку не більш ніж"
 msgid "Gift Date"
 msgstr "Дата подарунку"
 
+msgid "Gift Amount Range"
+msgstr "Діапазон вартості подарунку"
+
+msgid "Gift Details"
+msgstr "Дані про подарунок"
+
+msgid "Granddaughter"
+msgstr "Онучка"
+
+msgid "Gift Options"
+msgstr "Варіанти подарунку"
+
+msgid "Google import"
+msgstr "Імпорт з Google"
+
+msgid "Google account needs to be refreshed"
+msgstr "Необхідно оновити обліковий запис Google"
+
+msgid "Google sync"
+msgstr "Синхронізація Google"
+
+msgid "Grandfather"
+msgstr "Дідусь"
+
+msgid "Grandson"
+msgstr "Онук"
+
+msgid "Grandmother"
+msgstr "Бабуся"
+
+msgid "Greek"
+msgstr "Грецька"
+
+msgid "Greeting"
+msgstr "Вітання"
+
+msgid "Hebrew"
+msgstr "Іврит"
+
+msgid "Hindi"
+msgstr "Хінді"
+
+msgid "History"
+msgstr "Історія"
+
+msgid "Home Phone"
+msgstr "Домашній телефон"
+
+msgid "Home"
+msgstr "Головна сторінка"
+
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
+msgid "Hon."
+msgstr "Шановн."
+
+msgid "Hungarian"
+msgstr "Угорська"
+
+msgid "Husband"
+msgstr "Чоловік"
+
+msgid "Icelandic"
+msgstr "Ісландська"
+
+msgid "Increased their giving in the last 3 months"
+msgstr "Збільшили свої пожертвування за остані 3 місяці"
+
+msgid "Insights for "
+msgstr "Дані для"
+
+msgid "Indonesian"
+msgstr "Індонезійська"
+
+msgid "Irish"
+msgstr "Ірландська"
+
+msgid "Italian"
+msgstr "Італійська"
+
+msgid "Japanese"
+msgstr "Японська"
+
+msgid "Korean"
+msgstr "Корейська"
+
+msgid "Khmer"
+msgstr "Кхмерська"
+
+msgid "Language"
+msgstr "Мова"
+
+msgid "Last 30 Days"
+msgstr "За останні 30 днів"
+
+msgid "Last Gift"
+msgstr "Остання пожертва ( подарунок)"
+
+msgid "Last Month"
+msgstr "За останній місяць"
+
+msgid "Last Name"
+msgstr "Прізвище"
+
+msgid "Last Three Months"
+msgstr "За останні три місяці"
+
+msgid "Last Two Months"
+msgstr "За останнні два місяці"
+
+msgid "Latvian"
+msgstr "Латиська"
+
+msgid "Last month"
+msgstr "За останній місяць"
+
+msgid "Letter"
+msgstr "Лист"
+
+msgid "Likely"
+msgstr "Ймовірно"
+
+msgid "Lithuanian"
+msgstr "Литовська"
+
+msgid "Macedonian"
+msgstr "Македонська"
+
+msgid "Mailing City"
+msgstr "Місто"
+
+msgid "Mailing Country"
+msgstr "Країна"
+
+msgid "Mailing State"
+msgstr "Регіон"
+
+msgid "Mailing Postal Code"
+msgstr "Поштовий індекс"
+
+msgid "Mailing Street Address"
+msgstr "Поштова адреса"
+
+msgid "Malay"
+msgstr "Малайська"
+
+msgid "Maltese"
+msgstr "Мальтійська"
+
+msgid "Married"
+msgstr "Одружений/Заміжня"
+
+msgid "Metro Area"
+msgstr "Район метро"
+
+msgid "Miss"
+msgstr "Пані"
+
+msgid "Monthly"
+msgstr "Щомісяця"
+
+msgid "More than one user found for that lookup"
+msgstr "Більш ніж один користувач в результатах пошуку"
+
 msgid "Most Likely"
 msgstr "Ймовірно"
 
 msgid "Mother"
 msgstr "Мати"
 
+msgid "Mrs."
+msgstr "Пані"
+
 msgid "Mr."
 msgstr "Пан"
 
+msgid "Ms."
+msgstr "Пані"
+
+msgid "Name:"
+msgstr "Ім'я:"
+
+msgid "Never Ask"
+msgstr "Не питати"
+
+msgid "New Donation"
+msgstr "Нова пожертва"
+
+msgid "Nephew"
+msgstr "Племінник"
+
+msgid "Never Contacted"
+msgstr "Ніколи не спілкувались"
+
+msgid "Newsletter"
+msgstr "Розсилка новин"
+
+msgid "Next Month"
+msgstr "Наступного місяця"
+
+msgid "Next Week"
+msgstr "Наступного тижня"
+
+msgid "Niece"
+msgstr "Племінниця"
+
+msgid "No Gifts"
+msgstr "Без подарунків"
+
+msgid "No Date"
+msgstr "Без дати"
+
+msgid "No"
+msgstr "Ні"
+
+msgid "No mailing address on file"
+msgstr "У файлі відсутня поштова адреса"
+
+msgid "No users found for that lookup"
+msgstr "Не знайдено жодного користувача за пошуком"
+
+msgid "None"
+msgstr "Ні"
+
+msgid "None Selected"
+msgstr "Немає обраних"
+
+msgid "Norwegian"
+msgstr "Норвезька"
+
+msgid "Not Interested"
+msgstr "Не цікаво"
+
+msgid "Notes"
+msgstr "Примітки"
+
+msgid "Not Received"
+msgstr "Не отримано"
+
+msgid "Notifications from MPDX"
+msgstr "Повідомлення від MPDX"
+
+msgid "One or More Gifts"
+msgstr "Не менше одного подарунку"
+
+msgid "Other"
+msgstr "Інше"
+
+msgid "Partner"
+msgstr "Партнер"
+
+msgid "Partner - Financial"
+msgstr "Фінансовий партнер"
+
+msgid "Partner - Special"
+msgstr "Особливий партнер"
+
+msgid "Partner - Pray"
+msgstr "Молитовний партнер"
+
+msgid "Person"
+msgstr "Людина"
+
+msgid "Partner Status"
+msgstr "Статус партнера"
+
+msgid "Phone 1"
+msgstr "Телефон 1"
+
+msgid "Phone 2"
+msgstr "Телефон 2"
+
+msgid "Phone 3"
+msgstr "Телефон 3"
+
+msgid "Phone 4"
+msgstr "Телефон 4"
+
+msgid "Polish"
+msgstr "Польська"
+
+msgid "Pledge"
+msgstr "Обіцянка"
+
+msgid "Portuguese (Brazil)"
+msgstr "Португальска ( Бразилія)"
+
+msgid "Portuguese (Portugal)"
+msgstr "Португальска ( Португалія)"
+
+msgid "Primary Email"
+msgstr "Основна адреса ел. пошти"
+
+msgid "Received"
+msgstr "Отримано"
+
+msgid "Referrals"
+msgstr "Рекомендації"
+
+msgid "Romanian"
+msgstr "Румуньска"
+
+msgid "Russian"
+msgstr "Російська"
+
+msgid "Serbian"
+msgstr "Сербська"
+
+msgid "Sister"
+msgstr "Сестра"
+
+msgid "Slovak"
+msgstr "Словацька"
+
+msgid "Slovenian"
+msgstr "Словенська"
+
+msgid "Son"
+msgstr "Син"
+
+msgid "Spanish (Mexico)"
+msgstr "Іспанська ( Мексика)"
+
+msgid "Spanish (Spain)"
+msgstr "Іспанська ( Іспанія)"
+
+msgid "State"
+msgstr "Регіон"
+
+msgid "Status"
+msgstr "Статус"
+
+msgid "Swedish"
+msgstr "Шведська"
+
+msgid "Tamil"
+msgstr "Тамільска"
+
 msgid "Tags"
 msgstr "Теги"
+
+msgid "Task on MPDX"
+msgstr "Завдання в MPDX"
+
+msgid "Tasks"
+msgstr "Завдання"
+
+msgid "Temporary"
+msgstr "Тимчасово"
+
+msgid "Text Message"
+msgstr "Текстове повідомлення"
+
+msgid "Thai"
+msgstr "Тайська"
+
+msgid "Thank"
+msgstr "Дякую"
+
+msgid "Thanks!"
+msgstr "Дякую!"
+
+msgid "The connection to your LinkedIn account needs to be renewed."
+msgstr "Необхідно оновити з'єднання з вашим акаунтом на  LinkedIn."
+
+msgid "This Month"
+msgstr "За цей місяць"
+
+msgid "This Week"
+msgstr "За цей тиждень"
+
+msgid "This Year"
+msgstr "За цей рік"
+
+msgid "Timezone"
+msgstr "Часовий пояс"
+
+msgid "Tnt import"
+msgstr "Імпорт Tnt"
+
+msgid "To Do"
+msgstr "Заплановано"
+
+msgid "Today"
+msgstr "Сьогодні"
+
+msgid "Tomorrow"
+msgstr "Завтра"
+
+msgid "Total"
+msgstr "Разом"
+
+msgid "Turkish"
+msgstr "Турецька"
+
+msgid "Type"
+msgstr "Тип"
+
+msgid "Ukrainian"
+msgstr "Українська"
+
+msgid "Uncle"
+msgstr "Дядько"
+
+msgid "Unknown"
+msgstr "Невідомо"
+
+msgid "Unresponsive"
+msgstr "Без відповіді"
+
+msgid "Upcoming"
+msgstr "Невдовзі"
+
+msgid "Vietnamese"
+msgstr "В'етнамська"
+
+msgid "Weekly"
+msgstr "Щотижня"
+
+msgid "Wife"
+msgstr "Дружина"
+
+msgid "Widowed"
+msgstr "Вдівець / Вдова"
+
+msgid "Work"
+msgstr "Робочий"
+
+msgid "Yes"
+msgstr "Так"
+
+msgid "Yesterday"
+msgstr "Вчора"
 

@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-06-01 11:42+0000\n"
-"PO-Revision-Date: 2017-06-01 11:42+0000\n"
+"POT-Creation-Date: 2017-06-08 14:36+0000\n"
+"PO-Revision-Date: 2017-06-08 14:36+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: my\n"
@@ -10,6 +10,42 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "... Show More"
+msgstr "နောက်ထပ်ပြရန်"
+
+msgid "1 hour before"
+msgstr "1 နာရီမတိုင်မီ"
+
+msgid "1 day before"
+msgstr "1 နေ့ကမတိုင်မီ"
+
+msgid "1 week before"
+msgstr " ရက်သတ္တပတ်မတိုင်မီ"
+
+msgid "15 minutes before"
+msgstr "15 မိနစ်မတိုင်မီ"
+
+msgid "2 days before"
+msgstr "2 ရက်မတိုင်မီ"
+
+msgid "30 minutes before"
+msgstr "မိနစ် 30 မတိုင်မီ"
+
+msgid "2 hours before"
+msgstr "2 နာရီမတိုင်မီ"
+
+msgid "5 minutes before"
+msgstr "မိနစ် 30 မတိုင်မီ"
+
+msgid "Accept MPDX Account Invite"
+msgstr "MPDX အကောင့် ဖိတ်ခေါ်ကိုလက်ခံ"
+
+msgid "Account List"
+msgstr "အကောင့်စာရင်း"
+
+msgid "Account List Settings:"
+msgstr "အကောင့်စာရင်း၏ Settings များ"
 
 msgid "Add an Account"
 msgstr "အကောင့်တခုဖွင် ပါ"
@@ -26,11 +62,33 @@ msgstr "အယူခံဝင် Appeal"
 msgid "Appointment"
 msgstr "ရက်ချိန်းဆိုမှု"
 
+msgid "Are marked as do not ask for appeals"
+msgstr "Are marked as do not ask for appeals"
+
+msgid "Aunt"
+msgstr "အဒေါ်"
+
 msgid "Ask in Future"
-msgstr "အနာဂတ်အတွက်မေးပါ"
+msgstr "အနာဂတ်တွင်မေးပါ"
 
 msgid "Appointment Scheduled"
 msgstr "ချိန်းဆိုချက်ဇယား"
+
+msgid "Average"
+msgstr "ပျမ်းမျှ"
+
+msgid "Arabic"
+msgstr "Arabic"
+
+#. "Avg." is an abbreviation for "Average"
+msgid "Avg."
+msgstr "Avg."
+
+msgid "Belarusian"
+msgstr "ဘီလာရု"
+
+msgid "Both"
+msgstr "နှစ်ခုလုံး"
 
 msgid "Brother"
 msgstr "ညီအစ်ကို"
@@ -40,6 +98,27 @@ msgstr "Browser:"
 
 msgid "Business"
 msgstr "စီးပွားရေးလုပ်ငန်း"
+
+msgid "Email:"
+msgstr "အီးမေးလ်"
+
+msgid "English"
+msgstr "အင်္ဂလိပ်"
+
+msgid "Error connecting to %{org_name} server"
+msgstr "\nError connecting to %{org_name} server            \n"
+
+msgid "Every 2 Weeks"
+msgstr "2 ပတ်တစ်ကြိမ်"
+
+msgid "Every 2 Months"
+msgstr "2 လတစ်ကြိမ်"
+
+msgid "Every 2 Years"
+msgstr "2 နှစ်တစ်ကြိမ်"
+
+msgid "Every 4 Months"
+msgstr "4 လတစ်ကြိမ်"
 
 msgid "Facebook Message"
 msgstr "FacebookMessage"
@@ -71,6 +150,21 @@ msgstr "လက်ဆောင်ပေးမယ်ငွေပမာဏထက်
 msgid "Gift Date"
 msgstr "လက်ဆောင်ပေးမယ်နေ့စွဲ"
 
+msgid "Gift Details"
+msgstr "Gift Details"
+
+msgid "Granddaughter"
+msgstr "မြေး"
+
+msgid "Google import"
+msgstr "Google Import"
+
+msgid "Google account needs to be refreshed"
+msgstr "Google account needs to be refreshed"
+
+msgid "Google sync"
+msgstr "Google sync"
+
 msgid "Grandfather"
 msgstr "အဘိုး"
 
@@ -79,6 +173,36 @@ msgstr "မြေး"
 
 msgid "Grandmother"
 msgstr "အဖွါး"
+
+msgid "MPDX has finished importing your %{source} contacts."
+msgstr "MPDXခြင်းပြီးဆုံး importing your %{source} contacts."
+
+msgid "MPDX encountered errors while trying to import your %{source} contacts.\n\n%{explanation}\n\nThanks!\nMPDX Support Team"
+msgstr "MPDX encountered errors while trying to import your %{source} contacts.\n\n%{explanation}\n\nကျေးဇူးတင်ပါတယ်\nMPDX Support Team"
+
+msgid "MailChimp subscriber email bounced"
+msgstr "MailChimp subscriber email bounced"
+
+msgid "Mailchimp API Key no longer valid"
+msgstr "Mailchimp API Key မရှိတော့"
+
+msgid "Mailing"
+msgstr "စာပို့"
+
+msgid "Mailing City"
+msgstr "စာပို့ထားသောမြို့"
+
+msgid "Mailchimp List is requiring an additional merge field"
+msgstr "Mailchimp List is requiring an additional merge field"
+
+msgid "Mailing Country"
+msgstr "စာပို့ထားသောတိုင်းပြည်"
+
+msgid "Mailing State"
+msgstr "စာပို့ထားသောပြည်နယ်"
+
+msgid "Mailing Street Address"
+msgstr "လမ်းလိပ်စာ"
 
 msgid "Married"
 msgstr "အိမ်ထောင်သည်"
@@ -101,17 +225,52 @@ msgstr "90 ရက်ကျော် နောက်ကျ"
 msgid "More than one user found for that lookup"
 msgstr "lookup ပြုလုပ်နေသူတစ်ဦးထက်ပိုအသုံးပြုကြောင်းတွေ့ရှိခဲ့"
 
+msgid "Most Likely"
+msgstr "လောက်နီးပါး"
+
 msgid "Mother"
 msgstr "မိခင်"
+
+msgid "Mr."
+msgstr "Mr."
 
 msgid "Name:"
 msgstr "အမည်"
 
+msgid "Never Ask"
+msgstr "ဘယ်တော့မှမမေးပါ"
+
+msgid "New Donation"
+msgstr "အသစ်လှူဒါန်းခြင်း"
+
 msgid "Nephew"
 msgstr "တူ"
 
+msgid "Never Contacted"
+msgstr "ဘယ်တော့မှဆက်သွယ်"
+
 msgid "Newsletter"
 msgstr "သတင်းလွှာ Newsletter"
+
+msgid "Referrer"
+msgstr "ရည်ညွှန်းပေးသူများ"
+
+msgid "Region"
+msgstr "ဒေသ"
+
+msgid "Reminder Letter"
+msgstr "သတိပေးစာ"
+
+#. "Rev." is an abbreviated title for Reverend.
+msgid "Rev."
+msgstr "Rev."
+
+msgid "Romanian"
+msgstr "ရိုမေးနီးယား"
+
+#. this is a relationship status
+msgid "Single"
+msgstr "တစ်ကိုယ်ရေအိမ်ထောင်မရှိ"
 
 msgid "Sister"
 msgstr "အစ်မ ညီမ"
@@ -140,6 +299,45 @@ msgstr "ဆွာဟီလီ Swahili"
 msgid "Swedish"
 msgstr "ဆွီဒင် Swedish"
 
+msgid "Tamil"
+msgstr "တမီး"
+
 msgid "Tags"
 msgstr "Tags"
+
+msgid "Task on MPDX"
+msgstr "MPDX ကိုTask လုပ်"
+
+msgid "Tasks"
+msgstr "လုပ်ငန်းတာဝန်များ"
+
+msgid "Temporary"
+msgstr "ယာယီ"
+
+msgid "Text Message"
+msgstr "Text Message"
+
+msgid "Thai"
+msgstr "ထိုင်း"
+
+msgid "Thank"
+msgstr "ကျေးဇူးတင်ပါသည်"
+
+msgid "Thanks!"
+msgstr "ကျေးဇူးတင်ပါသည်"
+
+msgid "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary."
+msgstr "That email has been marked as \"no longer valid.\" Please edit the persons details by clicking their name above and verify that their info is correct. If that person had another valid email address is will become primary and will sync to MailChimp if they are on your email newsletter. If you do not want that email to be in MailChimp, please remove it, choose \"Opt-out of email newsletter\" or make a different email primary"
+
+msgid "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\n  created and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\n  unable to sync your contacts to MailChimp."
+msgstr "The MailChimp mailing list that you have linked to your MPDX account has an extra merge field that you\ncreated and marked as required. MPDX doesn't know how to populate your customer merge field, and is therefore\nunable to sync your contacts to MailChimp."
+
+msgid "[MPDX] Your username and password for %{source} are invalid"
+msgstr "%{source} are invalidအတွက် [MPDX] သင့်ရဲ့အသုံးပြုသူအမည်နှင့်စကားဝှက်"
+
+msgid "can not be blank"
+msgstr "ကွက်လပ်ထားလို့မရပါ"
+
+msgid "converted as"
+msgstr "အဖြစ်ပြောင်းလဲ"
 
