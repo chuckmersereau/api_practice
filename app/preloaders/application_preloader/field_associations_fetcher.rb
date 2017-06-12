@@ -8,7 +8,7 @@ class ApplicationPreloader
     end
 
     def fetch_field_associations(field_params)
-      return all_associations unless field_params.present?
+      return all_associations unless field_params
 
       field_association_mapping.map do |field_name, association|
         association if field_params.include?(field_name.to_s)

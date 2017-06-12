@@ -9,7 +9,7 @@ RSpec.describe ApplicationPreloader::FieldAssociationsFetcher do
     subject { described_class.new(field_association_mapping, serializer_class) }
 
     it 'returns all associations if no field_params is provided' do
-      expect(subject.fetch_field_associations({})).to match_array(
+      expect(subject.fetch_field_associations(nil)).to match_array(
         [:email_addresses, :primary_email_address, :primary_picture]
       )
     end

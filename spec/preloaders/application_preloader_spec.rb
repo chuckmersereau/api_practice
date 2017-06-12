@@ -6,7 +6,7 @@ RSpec.describe ApplicationPreloader do
     let(:field_params) do
       {
         addresses: ['region'],
-        contacts: ['name'],
+        contacts: [],
         facebook_accounts: ['remote_id'],
         primary_person: %w(first_name avatar email)
       }
