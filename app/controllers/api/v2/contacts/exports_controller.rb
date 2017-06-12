@@ -35,7 +35,7 @@ class Api::V2::Contacts::ExportsController < Api::V2Controller
     @permitted_filters ||=
       Contact::Filterer::FILTERS_TO_DISPLAY.collect(&:underscore).collect(&:to_sym) +
       Contact::Filterer::FILTERS_TO_HIDE.collect(&:underscore).collect(&:to_sym) +
-      [:account_list_id]
+      [:account_list_id, :any_tags]
   end
 
   def file_timestamp
