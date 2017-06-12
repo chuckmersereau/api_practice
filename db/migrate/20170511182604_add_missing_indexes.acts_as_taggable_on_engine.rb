@@ -1,5 +1,7 @@
 # This migration comes from acts_as_taggable_on_engine (originally 6)
 class AddMissingIndexes < ActiveRecord::Migration
+  disable_ddl_transaction!
+
   def change
     add_index :taggings, :tag_id, algorithm: :concurrently
     add_index :taggings, :taggable_type, algorithm: :concurrently
