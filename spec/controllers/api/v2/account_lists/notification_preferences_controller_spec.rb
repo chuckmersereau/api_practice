@@ -8,7 +8,7 @@ RSpec.describe Api::V2::AccountLists::NotificationPreferencesController, type: :
   let!(:notification_preferences) do
     create_list(:notification_preference, 2,
                 account_list_id: account_list.id,
-                actions: 'email',
+                actions: ['email'],
                 notification_type: notification_type)
   end
   let(:notification_preference) { notification_preferences.first }

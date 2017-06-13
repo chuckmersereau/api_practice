@@ -403,7 +403,8 @@ CREATE TABLE admin_reset_logs (
     reason character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    completed_at timestamp without time zone
 );
 
 
@@ -2641,9 +2642,9 @@ CREATE TABLE pledges (
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    received_not_processed boolean,
     amount_currency character varying(255),
-    appeal_id integer,
-    received_not_processed boolean
+    appeal_id integer
 );
 
 
@@ -2822,7 +2823,8 @@ ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
 CREATE TABLE tags (
     id integer NOT NULL,
     name character varying(255),
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    taggings_count integer DEFAULT 0
 );
 
 
@@ -2858,7 +2860,7 @@ CREATE TABLE versions (
     object text,
     related_object_type character varying(255),
     related_object_id integer,
-    created_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -4548,7 +4550,7 @@ CREATE INDEX index_donations_on_created_at ON donations USING btree (created_at)
 -- Name: index_donations_on_des_acc_id_and_don_date_and_rem_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_donations_on_des_acc_id_and_don_date_and_rem_id ON donations USING btree (designation_account_id, donation_date DESC, remote_id);
+CREATE INDEX index_donations_on_des_acc_id_and_don_date_and_rem_id ON donations USING btree (designation_account_id, donation_date, remote_id);
 
 
 --
@@ -5518,6 +5520,48 @@ CREATE UNIQUE INDEX index_remote_id_on_person_relay_account ON person_relay_acco
 
 
 --
+-- Name: index_taggings_on_context; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taggings_on_context ON taggings USING btree (context);
+
+
+--
+-- Name: index_taggings_on_tag_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taggings_on_tag_id ON taggings USING btree (tag_id);
+
+
+--
+-- Name: index_taggings_on_taggable_id_and_taggable_type_and_context; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taggings_on_taggable_id_and_taggable_type_and_context ON taggings USING btree (taggable_id, taggable_type, context);
+
+
+--
+-- Name: index_taggings_on_taggable_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taggings_on_taggable_type ON taggings USING btree (taggable_type);
+
+
+--
+-- Name: index_taggings_on_tagger_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taggings_on_tagger_id ON taggings USING btree (tagger_id);
+
+
+--
+-- Name: index_taggings_on_tagger_id_and_tagger_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taggings_on_tagger_id_and_tagger_type ON taggings USING btree (tagger_id, tagger_type);
+
+
+--
 -- Name: index_taggings_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5620,6 +5664,13 @@ CREATE INDEX related_object_index ON versions USING btree (item_type, related_ob
 --
 
 CREATE UNIQUE INDEX taggings_idx ON taggings USING btree (tag_id, taggable_id, taggable_type, context, tagger_id, tagger_type);
+
+
+--
+-- Name: taggings_idy; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX taggings_idy ON taggings USING btree (taggable_id, taggable_type, tagger_id, context);
 
 
 --
@@ -6383,6 +6434,14 @@ INSERT INTO schema_migrations (version) VALUES ('20170419141659');
 INSERT INTO schema_migrations (version) VALUES ('20170419145350');
 
 INSERT INTO schema_migrations (version) VALUES ('20170420161008');
+
+INSERT INTO schema_migrations (version) VALUES ('20170511182601');
+
+INSERT INTO schema_migrations (version) VALUES ('20170511182602');
+
+INSERT INTO schema_migrations (version) VALUES ('20170511182604');
+
+INSERT INTO schema_migrations (version) VALUES ('20170518165122');
 
 INSERT INTO schema_migrations (version) VALUES ('20170529000340');
 

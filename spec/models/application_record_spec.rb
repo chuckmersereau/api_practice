@@ -120,7 +120,17 @@ describe ApplicationRecord do
     end
 
     it 'sets preload_values with valid associations' do
-      expect(Contact.preload_valid_associations(:people, :last_six_donations).preload_values).to eq([:people])
+      expect(
+        Contact.preload_valid_associations(:people,
+                                           :last_six_donations,
+                                           contacts_that_referred_me: [:people, :last_six_donations]).preload_values
+      ).to eq([:people, contacts_that_referred_me: [:people]])
+    end
+  end
+
+  describe '.fetch_valid_associations' do
+    it 'returns an array of valid associations that can be preloaded for the current model' do
+      expect(Contact.fetch_valid_associations(:people, :last_six_donations)).to eq([:people])
     end
   end
 end

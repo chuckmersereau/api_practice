@@ -1,7 +1,5 @@
-require_relative 'concerns/date_helpers'
-
 class TntImport::ContactImport
-  include TntImport::DateHelpers
+  include Concerns::TntImport::DateHelpers
 
   def initialize(import, tags, donor_accounts)
     @import = import

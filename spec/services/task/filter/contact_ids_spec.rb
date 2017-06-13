@@ -16,7 +16,7 @@ RSpec.describe Task::Filter::ContactIds do
                                                                 name: :contact_ids,
                                                                 options: [{ name: '-- Any --', id: '', placeholder: 'None' }] +
                                                                            account_list.contacts.order('name ASC').collect do |contact|
-                                                                             { name: contact.to_s, id: contact.uuid, account_list_id: contact.account_list.uuid }
+                                                                             { name: contact.to_s, id: contact.uuid, account_list_id: account_list.uuid }
                                                                            end,
                                                                 parent: nil,
                                                                 priority: 1,

@@ -22,6 +22,7 @@ Rails.application.routes.draw do
               scope module: :imports do
                 collection do
                   resources :tnt, only: :create
+                  resources :google, only: :create
                   resources :tnt_data_sync, only: :create
                   resources :csv, only: [:index, :show, :create, :update]
                 end
@@ -105,7 +106,7 @@ Rails.application.routes.draw do
 
             resources :referrals, only: [:index, :show, :create, :update, :destroy]
             resources :referrers, only: [:index]
-            resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
+            resources :tags, only: [:create, :destroy], param: :tag_name
 
             collection do
               get :analytics, to: 'analytics#show'
@@ -125,7 +126,7 @@ Rails.application.routes.draw do
 
         resources :tasks do
           scope module: :tasks do
-            resources :tags, only: [:create, :destroy], param: :tag_name, on: :member
+            resources :tags, only: [:create, :destroy], param: :tag_name
             resources :comments, only: [:index, :show, :create, :update, :destroy]
           end
 

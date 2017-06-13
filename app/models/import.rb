@@ -19,8 +19,7 @@ class Import < ApplicationRecord
                           :file,
                           :file_constants_mappings,
                           :file_headers_mappings,
-                          :group_tags,
-                          :groups,
+                          { groups: [] },
                           :import_by_group,
                           :in_preview,
                           :overwrite,
@@ -57,7 +56,7 @@ class Import < ApplicationRecord
   serialize :file_constants_mappings, Hash
   serialize :file_row_failures, Array
 
-  after_commit :queue_import
+  after_commit :queue_import, on: [:create, :update]
 
   # Define convenience methods for checking the import source
   SOURCES.each do |source_to_check|

@@ -7,7 +7,6 @@ class ContactSuggestedChangesUpdaterWorker
     @user = User.find_by_id(user_id)
     @since_time = since_time
     return unless @user
-
     Contact.includes(:donor_accounts, account_list: :designation_accounts).where(id: contact_ids).find_each do |contact|
       Contact::SuggestedChangesUpdater.new(contact: contact).update_status_suggestions
     end
@@ -22,7 +21,7 @@ class ContactSuggestedChangesUpdaterWorker
 
   def contact_ids_with_new_donations_since_time
     return [] if @since_time.blank?
-    Contact.includes(donor_accounts: :donations)
+    Contact.joins(donor_accounts: :donations)
            .where(account_list: @user.account_lists)
            .where('donations.created_at >= ?', @since_time)
            .ids

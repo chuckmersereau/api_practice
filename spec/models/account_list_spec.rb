@@ -7,6 +7,25 @@ describe AccountList do
     NotificationTypesSeeder.new.seed # Specs depend on NotificationType records.
   end
 
+  describe '#destroy' do
+    it 'raises an error' do
+      expect { AccountList.new.destroy }.to raise_error RuntimeError
+    end
+  end
+
+  describe '#destroy!' do
+    it 'raises an error' do
+      expect { AccountList.new.destroy! }.to raise_error RuntimeError
+    end
+  end
+
+  describe '#unsafe_destroy' do
+    it 'destroys the account list' do
+      account_list = create(:account_list)
+      expect { account_list.unsafe_destroy }.to change { AccountList.count }.by(-1)
+    end
+  end
+
   context '#send_account_notifications' do
     it 'checks all notification types' do
       expect(NotificationType).to receive(:check_all).and_return({})

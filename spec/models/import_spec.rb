@@ -37,7 +37,7 @@ describe Import do
   describe '#file=' do
     it 'resets local attributes related to the file' do
       import = create(:csv_import, in_preview: true)
-      import.file_headers = [:test]
+      import.file_headers = { test: 'test' }
       import.file_constants = { test: 'test' }
       import.file_row_samples = [:test]
       import.file_row_failures = [:test]
@@ -151,6 +151,12 @@ describe Import do
         import = build(:import)
         expect { import.save }.to change { import.queued_for_import_at }.from(nil).to(Time.current)
       end
+    end
+
+    it 'does not queue import on destroy' do
+      import = create(:import, in_preview: true)
+      import.update_columns(queued_for_import_at: nil, in_preview: false)
+      expect { import.destroy }.to_not change(Import.jobs, :size)
     end
   end
 

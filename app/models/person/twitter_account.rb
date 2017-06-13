@@ -13,8 +13,6 @@ class Person::TwitterAccount < ApplicationRecord
 
   validates :screen_name, presence: true
 
-  # attr_accessible :screen_name
-
   def self.find_or_create_from_auth(auth_hash, person)
     relation_scope = person.twitter_accounts
     params         = auth_hash.extra.access_token.params

@@ -2,6 +2,7 @@ class ActivitySerializer < ApplicationSerializer
   attributes :activity_type,
              :completed,
              :completed_at,
+             :location,
              :next_action,
              :notification_time_before,
              :notification_time_unit,

@@ -11,6 +11,12 @@ RSpec.describe ConstantList, type: :model do
         expect(currency).to match(/\A\w{3}\z/)
       end
     end
+
+    it 'should not include currencies no longer in use (eg. AFA and ADP)' do
+      subject.codes.each do |currency|
+        expect(currency).not_to include('ADP', 'AFA')
+      end
+    end
   end
 
   describe '#locales' do

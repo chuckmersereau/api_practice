@@ -7,6 +7,10 @@ module JsonApiService
   RSpec.describe Transformer, type: :service do
     include JsonApiServiceHelpers
 
+    before do
+      allow(UUID_REGEX).to receive(:match).and_return(true)
+    end
+
     describe '.transform' do
       let(:params) { double(:params) }
       let(:configuration) { double(:configuration) }
@@ -461,7 +465,8 @@ module JsonApiService
                   street: '123 Somewhere St',
                   state: 'CA',
                   country: 'United States',
-                  uuid: 'addresses-uuid-abc123'
+                  uuid: 'addresses-uuid-abc123',
+                  overwrite: true
                 },
                 {
                   location: 'Work',
@@ -469,7 +474,8 @@ module JsonApiService
                   street: '100 Lake Hart Drive',
                   state: 'FL',
                   country: 'United States',
-                  uuid: 'addresses-uuid-def456'
+                  uuid: 'addresses-uuid-def456',
+                  overwrite: true
                 }
               ]
             },
@@ -530,9 +536,11 @@ module JsonApiService
                 {
                   first_name: 'Steve',
                   last_name: 'Rogers',
+                  overwrite: true,
                   mock_email_addresses_attributes: [
                     {
-                      email: 'ca@avengers.co'
+                      email: 'ca@avengers.co',
+                      overwrite: true
                     }
                   ]
                 }
@@ -639,7 +647,8 @@ module JsonApiService
                 id: 30,
                 body: 'I love Orange Soda',
                 uuid: '91374910-ef15-11e6-8787-ef17a057947e',
-                mock_person_id: 20
+                mock_person_id: 20,
+                overwrite: true
               }
             ]
           },

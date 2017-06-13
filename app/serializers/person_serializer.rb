@@ -29,8 +29,6 @@ class PersonSerializer < ApplicationSerializer
   has_many :twitter_accounts
   has_many :websites
 
-  belongs_to :master_person
-
   def avatar
     person_exhibit.avatar(:large)
   end

@@ -1,18 +1,24 @@
 require 'rails_helper'
 
 describe AccountList::Merge, '#merge' do
-  let(:loser) { create(:account_list) }
-  let(:winner) { create(:account_list) }
+  let!(:loser_user) { create(:user_with_account) }
+  let!(:loser) { loser_user.account_lists.first }
+  let!(:winner_user) { create(:user_with_account) }
+  let!(:winner) { winner_user.account_lists.first }
+
+  before do
+    winner.users << loser_user
+  end
 
   it 'deletes old AccountList' do
-    expect { winner.merge(loser) }.to change(AccountList, :count).by(1)
+    expect { winner.merge(loser) }.to change(AccountList, :count).by(-1)
   end
 
   it 'moves over users' do
     user = create(:user)
     loser.users << user
     winner.merge(loser)
-    expect(winner.users).to include user
+    expect(winner.reload.users).to include user
   end
 
   it 'merges appeals' do
@@ -39,8 +45,7 @@ describe AccountList::Merge, '#merge' do
     da = create(:designation_account)
     loser.designation_accounts << da
     expect(winner).to receive(:async).with(:import_data)
-    expect(DesignationAccount::DupByBalanceFix)
-      .to receive(:deactivate_dups) do |designations|
+    expect(DesignationAccount::DupByBalanceFix).to receive(:deactivate_dups) do |designations|
       expect(designations.to_set).to eq([da].to_set)
       true
     end

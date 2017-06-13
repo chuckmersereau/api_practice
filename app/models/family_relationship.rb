@@ -6,6 +6,7 @@ class FamilyRelationship < ApplicationRecord
 
   PERMITTED_ATTRIBUTES = [:created_at,
                           :person_id,
+                          :overwrite,
                           :relationship,
                           :related_person_id,
                           :updated_at,

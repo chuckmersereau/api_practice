@@ -97,6 +97,10 @@ FactoryGirl.define do
     file { File.new(Rails.root.join('spec/fixtures/sample_csv_with_custom_headers.csv')) }
   end
 
+  factory :google_import, parent: :import do
+    source 'google'
+  end
+
   factory :csv_import_with_mappings, parent: :csv_import_custom_headers do
     after :build do |import|
       import.in_preview = true

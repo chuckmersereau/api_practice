@@ -1,7 +1,7 @@
 class DesignationProfile < ApplicationRecord
   belongs_to :user
   belongs_to :organization
-  has_many :designation_profile_accounts, dependent: :destroy
+  has_many :designation_profile_accounts, dependent: :delete_all
   has_many :designation_accounts, through: :designation_profile_accounts
   belongs_to :account_list
 

@@ -2,7 +2,7 @@
 module CastedValueValidator
   extend self
 
-  DATE_FIELD_ENDINGS = %w(_at _date _range).freeze
+  DATE_FIELD_ENDINGS ||= %w(_at _date _range).freeze
 
   def validate!(attribute:, value:)
     if DATE_FIELD_ENDINGS.any? { |ending| attribute.to_s.end_with?(ending) }
@@ -24,5 +24,5 @@ module CastedValueValidator
     end
   end
 
-  DateTimeCastingError = Class.new(StandardError)
+  class DateTimeCastingError < StandardError; end
 end

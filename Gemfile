@@ -4,10 +4,13 @@ source 'https://gems.contribsys.com/' do
 end
 
 gem 'auth', path: 'engines/auth'
-gem 'active_model_serializers', '~> 0.10.3'
+gem 'active_model_serializers', '= 0.10.3'
+# active_model_serializers is locked to '0.10.3' because future versions no longer support the use
+# of Json Api Spec serializer for resources that do not have an id. That was necessary, because we
+# have several serializers (eg. Reports and Analytics Serializers) that represent resources without an id.
 gem 'activerecord-import', '~> 0.16.1'
 gem 'activesupport-json_encoder', '~> 1.1.0'
-gem 'acts-as-taggable-on', '~> 3.0.0'
+gem 'acts-as-taggable-on', '~> 4.0.0'
 gem 'assignable_values', '~> 0.11.2'
 gem 'attributes_history', '~> 0.0.3'
 gem 'axlsx', '= 2.0.1'
@@ -17,7 +20,7 @@ gem 'charlock_holmes', '~> 0.7.3'
 gem 'cloudinary', '~> 1.2.3'
 gem 'country_select', git: 'https://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 gem 'deadlock_retry', '~> 1.2.0'
-gem 'devise', '~> 3.4.0'
+gem 'devise', '~> 4.2.1'
 gem 'ddtrace', '~> 0.7.2'
 gem 'display_case', '= 0.0.5'
 gem 'dotenv-rails', '~> 2.1.1'
@@ -48,14 +51,16 @@ gem 'phonelib', '~> 0.5.4'
 gem 'puma', '~> 3.6.0'
 gem 'pundit', '~> 1.1.0'
 gem 'rack-cors', '~> 0.4.0', require: 'rack/cors'
-gem 'rails', '~> 4.1.16'
+gem 'rails', '~> 4.2.0'
 gem 'rails-api', '~> 0.4.0'
 gem 'rails_autolink', '~> 1.1.5'
 gem 'rake', '~> 10.5.0'
-gem 'redis-namespace', '~> 1.5.2'
+gem 'redis-namespace', '~> 1.5.3'
 gem 'redis-objects', '~> 0.6.1'
 gem 'redis-rails', '~> 5.0.1'
+gem 'responders', '~> 2.4.0'
 gem 'rest-client', '~> 1.6.7'
+gem 'retriable', '= 3.0.1' # The next version has breaking changes
 gem 'retryable-rb', '~> 1.1.0'
 gem 'rollbar', '~> 2.8.3'
 gem 'rollout', '~> 2.0.0'
@@ -63,7 +68,7 @@ gem 'ruby-rtf', '~> 0.0.1'
 gem 'rubyzip', '= 1.0.0'
 gem 'savon', '~> 2.3.0'
 gem 'sidekiq-cron', '~> 0.4.4'
-gem 'sidekiq-unique-jobs', git: 'https://github.com/mhenrixon/sidekiq-unique-jobs'
+gem 'sidekiq-unique-jobs', '~> 5.0.8'
 gem 'siebel_donations', '~> 1.0.6'
 gem 'sinatra', '~> 1.4.7', require: nil
 gem 'slim', '~> 3.0.7' # used for sidekiq web

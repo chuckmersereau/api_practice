@@ -3,7 +3,7 @@ class Contact::Filter::PledgeCurrency < Contact::Filter::Base
     pledge_currency_filters = parse_list(filters[:pledge_currency])
     default_currencies = account_lists.collect(&:default_currency)
     if (pledge_currency_filters & default_currencies).present?
-      contacts.where(pledge_currency: [pledge_currency_filters, '', nil])
+      contacts.where(pledge_currency: [pledge_currency_filters, '', nil].flatten)
     else
       contacts.where(pledge_currency: pledge_currency_filters)
     end

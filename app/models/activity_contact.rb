@@ -6,8 +6,6 @@ class ActivityContact < ApplicationRecord
   after_save :update_contact_uncompleted_tasks_count, unless: :skip_task_counter_update
   after_destroy :update_contact_uncompleted_tasks_count
 
-  # attr_accessible :contact_id, :activity_id
-
   private
 
   def update_contact_uncompleted_tasks_count

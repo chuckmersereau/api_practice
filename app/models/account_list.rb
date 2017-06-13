@@ -89,9 +89,17 @@ class AccountList < ApplicationRecord
     notification_preferences_attributes: NotificationPreference::PERMITTED_ATTRIBUTES
   ].freeze
 
+  alias unsafe_destroy destroy
+  def destroy
+    raise "It's not safe to call #destroy on an AccountList record. Because the large amount of dependents " \
+      'and callbacks causes it to take too long and to consume too much memory. See AccountList::Destroyer class instead.'
+  end
+  alias destroy! destroy
+
   def salary_organization_id=(val)
-    settings[:salary_organization_id] = val
-    settings[:salary_currency] = Organization.find(val).default_currency_code
+    settings[:salary_organization_id] = val if val.is_a?(Integer)
+    settings[:salary_organization_id] ||= val.id
+    settings[:salary_currency] = Organization.find(settings[:salary_organization_id]).default_currency_code
   end
 
   def salary_organization_id

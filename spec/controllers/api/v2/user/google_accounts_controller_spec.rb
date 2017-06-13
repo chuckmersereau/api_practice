@@ -10,6 +10,20 @@ RSpec.describe Api::V2::User::GoogleAccountsController, type: :controller do
   let(:correct_attributes) { { email: 'test@email.com' } }
   let(:incorrect_attributes) { nil }
 
+  before do
+    allow_any_instance_of(Person::GoogleAccount).to receive(:contact_groups).and_return(
+      [
+        Person::GoogleAccount::ContactGroup.new(
+          id: 'contact_group_id_0',
+          title: 'System Group: My Family',
+          uuid: 'contact_group_id_0',
+          created_at: Date.today,
+          updated_at: Date.today
+        )
+      ]
+    )
+  end
+
   include_examples 'show_examples'
 
   include_examples 'update_examples'

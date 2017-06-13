@@ -12,7 +12,7 @@ class Contact < ApplicationRecord
   # Also track notes at most once per day in separate table
   has_attributes_history for: [:notes], with_model: ContactNotesLog
 
-  has_many :contact_donor_accounts, dependent: :destroy, inverse_of: :contact
+  has_many :contact_donor_accounts, dependent: :delete_all, inverse_of: :contact
   has_many :donor_accounts, through: :contact_donor_accounts, inverse_of: :contacts
   belongs_to :account_list
   has_many :contact_people, dependent: :destroy
@@ -21,8 +21,8 @@ class Contact < ApplicationRecord
   has_one :primary_person, through: :primary_contact_person, source: :person, autosave: true
   has_one :spouse_contact_person, -> { where(primary: [false, nil]) }, class_name: 'ContactPerson', dependent: :destroy
   has_one :spouse, through: :spouse_contact_person, source: :person, autosave: true
-  has_many :contact_referrals_to_me, foreign_key: :referred_to_id, class_name: 'ContactReferral', dependent: :destroy
-  has_many :contact_referrals_by_me, foreign_key: :referred_by_id, class_name: 'ContactReferral', dependent: :destroy
+  has_many :contact_referrals_to_me, foreign_key: :referred_to_id, class_name: 'ContactReferral', dependent: :delete_all
+  has_many :contact_referrals_by_me, foreign_key: :referred_by_id, class_name: 'ContactReferral', dependent: :delete_all
   has_many :contacts_that_referred_me, through: :contact_referrals_to_me, source: :referred_by
   has_many :contacts_referred_by_me, through: :contact_referrals_by_me, source: :referred_to
   has_many :activity_contacts, dependent: :destroy

@@ -6,8 +6,8 @@
 :concurrency: 2
 :queues:
   - ["api_account_list",                                 1]
-  - ["api_account_list_deep_reset_worker",               1]
   - ["api_account_list_import_data",                     1]
+  - ["api_admin_account_list_reset_worker",              1]
   - ["api_admin_fix_worker",                             1]
   - ["api_contact_dup_contacts_merge_worker",            10]
   - ["api_contact_suggested_changes_updater_worker",     10]

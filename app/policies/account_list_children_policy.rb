@@ -10,6 +10,6 @@ class AccountListChildrenPolicy < ApplicationPolicy
   private
 
   def resource_owner?
-    user.account_lists.exists?(current_account_list)
+    user.account_lists.exists?(id: current_account_list.id)
   end
 end

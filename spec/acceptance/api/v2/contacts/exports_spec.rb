@@ -38,7 +38,7 @@ resource 'Contacts > Exports' do
     #     do_request
 
     #     expect(response_status).to eq 200
-    #     expect(response_headers['Content-Type']).to eq('application/xlsx')
+    #     expect(response_headers['Content-Type']).to eq('application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
     #   end
     # end
   end

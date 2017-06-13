@@ -3,5 +3,6 @@ class Person::Filterer < ApplicationFilterer
     EmailAddressValid
     PhoneNumberValid
     UpdatedAt
+    WildcardSearch
   ).freeze
 end

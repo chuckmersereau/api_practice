@@ -26,6 +26,7 @@ class Api::V2::Tasks::AnalyticsController < Api::V2Controller
   def render_analytics
     render json: @analytics,
            include: include_params,
-           fields: field_params
+           fields: field_params,
+           serializer: Task::AnalyticsSerializer
   end
 end

@@ -1,6 +1,3 @@
-class DesignationAccount < ActiveRecord::Base
-end
-
 class CreateDesignationProfiles < ActiveRecord::Migration
   def change
     create_table :designation_profiles do |t|

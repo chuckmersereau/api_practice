@@ -4,11 +4,11 @@ class Activity < ApplicationRecord
   belongs_to :account_list
   belongs_to :notification, inverse_of: :tasks
 
+  has_many :comments, dependent: :delete_all, class_name: 'ActivityComment'
   has_many :activity_contacts, dependent: :destroy
-  has_many :comments, dependent: :destroy, class_name: 'ActivityComment'
   has_many :contacts, through: :activity_contacts
   has_many :email_addresses, through: :people
-  has_many :google_email_activities, dependent: :destroy
+  has_many :google_email_activities, dependent: :delete_all
   has_many :google_emails, through: :google_email_activities
   has_many :google_events
   has_many :users, through: :comments

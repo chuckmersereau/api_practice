@@ -56,7 +56,6 @@ RSpec.configure do |config|
   # To run a spec with a specific seed, use --order=rand:[seed]
   config.seed = srand % 0xFFFF unless ARGV.any? { |arg| arg =~ /seed/ }
   config.order = :random
-  config.example_status_persistence_file_path = 'recent_specs.txt'
 
   # If you're not using ActiveRecord, or you'd prefer not to run each of your
   # examples within a transaction, remove the following line or assign false
@@ -86,7 +85,7 @@ RSpec.configure do |config|
   # Exclude tests that are deprecated
   config.filter_run_excluding :deprecated
 
-  config.include Devise::TestHelpers, type: :controller
+  config.include Devise::Test::ControllerHelpers, type: :controller
   config.include FactoryGirl::Syntax::Methods
   config.include HeaderHelpers, type: :controller
   config.include JsonApiHelper, type: :acceptance

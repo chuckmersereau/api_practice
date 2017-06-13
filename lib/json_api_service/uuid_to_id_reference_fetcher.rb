@@ -2,6 +2,8 @@ require 'active_support/hash_with_indifferent_access'
 require 'active_support/inflector'
 require 'active_record'
 
+require_relative '../../config/initializers/regex_constants'
+
 module JsonApiService
   class UuidToIdReferenceFetcher
     attr_reader :params,
@@ -34,24 +36,27 @@ module JsonApiService
     def fetch_references_for(resource_type)
       resource_class  = resource_lookup.find(resource_type)
       found_uuids     = uuids[resource_type]
+
+      raise_record_not_found(resource_type, found_uuids) if found_uuids.any? { |uuid| !::UUID_REGEX.match(uuid) }
+
       found_resources = resource_class.where(uuid: found_uuids).pluck(:id, :uuid)
 
       found_resources.each_with_object({}) do |(id, uuid), hash|
         hash[uuid] = id
       end
-    rescue ActiveRecord::StatementInvalid => e
-      message = statement_invalid_error_message(resource_type.singularize, e)
+    end
+
+    def raise_record_not_found(resource_type, uuids)
+      message = statement_invalid_error_message(resource_type.to_s.singularize, uuids)
 
       raise ActiveRecord::RecordNotFound, message
     end
 
-    def statement_invalid_error_message(key, error)
-      uuids = error.message.split('(').last[0...-1].split(', ')
-
+    def statement_invalid_error_message(key, uuids)
       if uuids.count > 1
-        "Resource '#{key}' with ids #{uuids.join(', ')} do not exist"
+        "The resources '#{key}' with ids '#{uuids.join(', ')}' do not exist"
       else
-        "Resource '#{key}' with id #{uuids.first} does not exist"
+        "Resource '#{key}' with id '#{uuids.first}' does not exist"
       end
     end
 

@@ -21,7 +21,7 @@ RSpec.describe Api::V2::AccountLists::ChalklineMailsController, type: :controlle
 
       it 'returns a json api spec body' do
         expect(parsed_response_body).to eq('errors' => [{
-                                             'status' => 'unauthorized', 'title' => 'Unauthorized', 'detail' => 'Exceptions::AuthenticationError'
+                                             'status' => '401', 'title' => 'Unauthorized', 'detail' => 'Exceptions::AuthenticationError'
                                            }])
       end
     end

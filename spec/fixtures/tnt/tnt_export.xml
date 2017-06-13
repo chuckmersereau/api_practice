@@ -374,7 +374,7 @@ State, CA  12345</HomeAddressBlock>
         <TaskTypeID>20</TaskTypeID>
         <Description>for appointment</Description>
         <TaskDate>2006-09-09</TaskDate>
-        <TaskTime>1899-12-30</TaskTime>
+        <TaskTime>1899-12-30 16:30:00</TaskTime>
         <ApptLength>30</ApptLength>
         <AllDayEvent>false</AllDayEvent>
         <IsRecurring>false</IsRecurring>

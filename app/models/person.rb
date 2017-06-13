@@ -11,38 +11,38 @@ class Person < ApplicationRecord
   MARITAL_STATUSES = [_('Single'), _('Engaged'), _('Married'), _('Separated'), _('Divorced'), _('Widowed')].freeze
 
   belongs_to :master_person
-  has_many :email_addresses, -> { order('email_addresses.primary::int desc') }, dependent: :destroy, autosave: true
+  has_many :email_addresses, -> { order('email_addresses.primary::int desc') }, dependent: :delete_all, autosave: true
   has_one :primary_email_address, -> { where('email_addresses.primary' => true) }, class_name: 'EmailAddress', foreign_key: :person_id
-  has_many :phone_numbers, -> { order('phone_numbers.primary::int desc') }, dependent: :destroy
+  has_many :phone_numbers, -> { order('phone_numbers.primary::int desc') }, dependent: :delete_all
   has_one :primary_phone_number, -> { where('phone_numbers.primary' => true) }, class_name: 'PhoneNumber', foreign_key: :person_id
-  has_many :family_relationships, dependent: :destroy
+  has_many :family_relationships, dependent: :delete_all
   has_many :related_people, through: :family_relationships
   has_one :company_position, -> { where('company_positions.end_date is null').order('company_positions.start_date desc') }, class_name: 'CompanyPosition', foreign_key: :person_id
-  has_many :company_positions, dependent: :destroy
-  has_many :twitter_accounts, class_name: 'Person::TwitterAccount', foreign_key: :person_id, dependent: :destroy, autosave: true
+  has_many :company_positions, dependent: :delete_all
+  has_many :twitter_accounts, class_name: 'Person::TwitterAccount', foreign_key: :person_id, dependent: :delete_all, autosave: true
   has_one :twitter_account, -> { where('person_twitter_accounts.primary' => true) }, class_name: 'Person::TwitterAccount', foreign_key: :person_id
-  has_many :facebook_accounts, class_name: 'Person::FacebookAccount', foreign_key: :person_id, dependent: :destroy, autosave: true
+  has_many :facebook_accounts, class_name: 'Person::FacebookAccount', foreign_key: :person_id, dependent: :delete_all, autosave: true
   has_one :facebook_account, class_name: 'Person::FacebookAccount', foreign_key: :person_id
-  has_many :linkedin_accounts, class_name: 'Person::LinkedinAccount', foreign_key: :person_id, dependent: :destroy, autosave: true
+  has_many :linkedin_accounts, class_name: 'Person::LinkedinAccount', foreign_key: :person_id, dependent: :delete_all, autosave: true
   has_one :linkedin_account, -> { where('person_linkedin_accounts.valid_token' => true) }, class_name: 'Person::LinkedinAccount', foreign_key: :person_id
-  has_many :websites, class_name: 'Person::Website', foreign_key: :person_id, dependent: :destroy, autosave: true
+  has_many :websites, class_name: 'Person::Website', foreign_key: :person_id, dependent: :delete_all, autosave: true
   has_one :website, -> { where('person_websites.primary' => true) }, class_name: 'Person::Website', foreign_key: :person_id
   has_many :google_accounts, class_name: 'Person::GoogleAccount', foreign_key: :person_id, dependent: :destroy, autosave: true
   has_many :google_integrations, through: :google_accounts
-  has_many :relay_accounts, class_name: 'Person::RelayAccount', foreign_key: :person_id, dependent: :destroy
+  has_many :relay_accounts, class_name: 'Person::RelayAccount', foreign_key: :person_id, dependent: :delete_all
   has_many :organization_accounts, class_name: 'Person::OrganizationAccount', foreign_key: :person_id, dependent: :destroy
-  has_many :key_accounts, class_name: 'Person::KeyAccount', foreign_key: :person_id, dependent: :destroy
+  has_many :key_accounts, class_name: 'Person::KeyAccount', foreign_key: :person_id, dependent: :delete_all
   has_many :companies, through: :company_positions
   has_many :donor_account_people
   has_many :donor_accounts, through: :donor_account_people
-  has_many :contact_people
+  has_many :contact_people, dependent: :destroy
   has_many :contacts, through: :contact_people
   has_many :account_lists, through: :contacts
   has_many :pictures, as: :picture_of, dependent: :destroy
   has_one :primary_picture, -> { where(primary: true) }, as: :picture_of, class_name: 'Picture'
   has_many :comments, dependent: :destroy, class_name: 'ActivityComment'
-  has_many :messages_sent, class_name: 'Message', foreign_key: :from_id, dependent: :destroy
-  has_many :messages_received, class_name: 'Message', foreign_key: :to_id, dependent: :destroy
+  has_many :messages_sent, class_name: 'Message', foreign_key: :from_id, dependent: :delete_all
+  has_many :messages_received, class_name: 'Message', foreign_key: :to_id, dependent: :delete_all
   has_many :google_contacts, autosave: true
 
   scope :alive,          -> { where.not(deceased: true) }
@@ -92,26 +92,35 @@ class Person < ApplicationRecord
         :historic,
         :id,
         :location,
-        :primary, :source,
+        :overwrite,
+        :primary,
+        :source,
+        :updated_in_db_at,
         :uuid,
         :valid_values
       ],
       facebook_accounts_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :username,
+        :updated_in_db_at,
         :uuid
       ],
       family_relationships_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :related_person_id,
-        :relationship
+        :relationship,
+        :updated_in_db_at
       ],
       linkedin_accounts_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :public_url,
+        :updated_in_db_at,
         :uuid
       ],
       phone_number: :number,
@@ -121,9 +130,11 @@ class Person < ApplicationRecord
         :id,
         :location,
         :number,
+        :overwrite,
         :primary,
         :source,
         :uuid,
+        :updated_in_db_at,
         :valid_values
       ],
       pictures_attributes: [
@@ -131,26 +142,32 @@ class Person < ApplicationRecord
         :id,
         :image,
         :image_cache,
-        :primary
+        :overwrite,
+        :primary,
+        :updated_in_db_at
       ],
       twitter_accounts_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :primary,
         :screen_name,
+        :updated_in_db_at,
         :uuid
       ],
       websites_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :primary,
+        :updated_in_db_at,
         :url
       ]
     }
   ].freeze
 
   before_create :find_master_person
-  after_destroy :clean_up_master_person, :clean_up_contact_people
+  after_destroy :clean_up_master_person
 
   before_save :deceased_check
 
@@ -454,10 +471,6 @@ class Person < ApplicationRecord
 
   def clean_up_master_person
     master_person.destroy if master_person && (master_person.people - [self]).blank?
-  end
-
-  def clean_up_contact_people
-    contact_people.destroy_all
   end
 
   def reject_duplicate_facebook_username_data(attributes_data)

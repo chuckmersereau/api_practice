@@ -4,6 +4,7 @@ describe Person::GoogleAccountSerializer do
   let(:google_account) { create(:google_account) }
 
   subject { Person::GoogleAccountSerializer.new(google_account).as_json }
+  before { allow_any_instance_of(Person::GoogleAccount).to receive(:contact_groups).and_return([]) }
 
   it { is_expected.to include :id }
   it { is_expected.to include :email }

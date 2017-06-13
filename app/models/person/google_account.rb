@@ -66,7 +66,7 @@ class Person::GoogleAccount < ApplicationRecord
   end
 
   def contact_groups
-    @contact_groups ||= contacts_api_user.groups
+    @contact_groups ||= Person::GoogleAccount::ContactGroup.from_groups(contacts_api_user.groups)
   end
 
   def contacts_for_group(group_id)

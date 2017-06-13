@@ -41,6 +41,10 @@ class TntImport::TntCodes
       end
     end
 
+    def task_status_completed?(task_status_id)
+      task_status_id.to_i == 2 ? true : false
+    end
+
     def history_result(history_result_id)
       case history_result_id.to_i
       when 1 then 'Done'
@@ -51,6 +55,7 @@ class TntImport::TntCodes
 
     def mpd_phase(phase)
       case phase.to_i
+      when 0  then nil # A "0" value for MPDPhaseID means "n/a" in Tnt
       when 10 then 'Never Contacted'
       when 20 then 'Ask in Future'
       when 30 then 'Contact for Appointment'

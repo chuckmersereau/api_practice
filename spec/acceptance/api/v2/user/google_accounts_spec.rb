@@ -29,6 +29,7 @@ resource 'User > Google Accounts' do
   end
 
   let(:form_data) { build_data(new_google_account, relationships: relationships) }
+  before { allow_any_instance_of(Person::GoogleAccount).to receive(:contact_groups).and_return([]) }
 
   let(:resource_attributes) do
     %w(
@@ -45,6 +46,12 @@ resource 'User > Google Accounts' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      contact_groups
+    )
+  end
+
   context 'authorized user' do
     before { api_login(user) }
 
@@ -52,7 +59,7 @@ resource 'User > Google Accounts' do
       example 'Google Account [LIST]', document: documentation_scope do
         do_request
         explanation 'List of Google Accounts associated to current_user'
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(response_status).to eq 200
       end
     end
@@ -74,7 +81,7 @@ resource 'User > Google Accounts' do
       example 'Google Account [GET]', document: documentation_scope do
         explanation 'The current_user\'s Google Account with the given ID'
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(response_status).to eq 200
       end
     end

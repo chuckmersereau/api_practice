@@ -1,9 +1,7 @@
 # In version 3.2, TNT renamed the "Appeal" table to "Campaign".
 
-require_relative 'concerns/appeal_helpers'
-
 class TntImport::AppealsImport
-  include TntImport::AppealHelpers
+  include Concerns::TntImport::AppealHelpers
 
   def initialize(account_list, contact_ids_by_tnt_appeal_id, xml)
     @account_list = account_list

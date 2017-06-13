@@ -1,6 +1,8 @@
 class ConstantList < ActiveModelSerializers::Model
   include DisplayCase::ExhibitsHelper
 
+  CURRENCY_CODES_NOT_NEEDED = %w(ADP AFA).freeze
+
   delegate :alert_frequencies, :mobile_alert_frequencies, to: :Task
   delegate :assignable_locations, to: :address
   delegate :assignable_statuses, to: :contact
@@ -26,7 +28,7 @@ class ConstantList < ActiveModelSerializers::Model
   end
 
   def codes
-    @codes ||= TwitterCldr::Shared::Currencies.currency_codes
+    @codes ||= TwitterCldr::Shared::Currencies.currency_codes - CURRENCY_CODES_NOT_NEEDED
   end
 
   def locales

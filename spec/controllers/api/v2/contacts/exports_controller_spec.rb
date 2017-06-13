@@ -8,9 +8,11 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
   let!(:user) { create(:user_with_account) }
   let(:account_list) { user.account_lists.first }
   let(:account_list_id) { account_list.uuid }
+  let(:second_account_list) { create(:account_list, users: [user]) }
 
   let!(:contact) { create(:contact, account_list: account_list, name: 'Last Contact') }
   let!(:second_contact) { create(:contact, account_list: account_list, name: 'First Contact') }
+  let!(:third_contact) { create(:contact, account_list: second_account_list, name: 'Missing Contact') }
 
   let(:id) { contact.uuid }
 
@@ -45,11 +47,20 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
       expect(contact_index).to be_present
       expect(response.body).to be_present
     end
+
+    it 'allows filtering by account_list_id' do
+      api_login(user)
+      get :index, format: :csv, filter: { account_list_id: second_account_list.uuid }
+      expect(response.status).to eq(200)
+      expect(response.body).to include(third_contact.name)
+      expect(response.body).to_not include(contact.name)
+    end
   end
 
   context 'XLSX export' do
     let(:contact_index) { spreadsheet.to_csv.index(contact.name) }
     let(:second_contact_index) { spreadsheet.to_csv.index(second_contact.name) }
+    let(:third_contact_index) { spreadsheet.to_csv.index(third_contact.name) }
 
     it 'renders the export sorted alphabetically for users that are signed in' do
       api_login(user)
@@ -65,6 +76,14 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
       expect(response.status).to eq(200)
       expect(contact_index).to be_present
       expect(second_contact_index).to be_blank
+    end
+
+    it 'allows filtering by account_list_id' do
+      api_login(user)
+      get :index, format: :xlsx, filter: { account_list_id: second_account_list.uuid }
+      expect(response.status).to eq(200)
+      expect(contact_index).to be_blank
+      expect(third_contact_index).to be_present
     end
   end
 
