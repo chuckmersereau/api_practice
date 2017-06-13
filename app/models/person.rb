@@ -1,5 +1,6 @@
 class Person < ApplicationRecord
   include BetweenScopeable
+  include YearCompletable
 
   between_scopes_for :anniversary
   between_scopes_for :birthday
@@ -459,6 +460,14 @@ class Person < ApplicationRecord
     not_duplicated_with_set = not_duplicated_with.to_s.split(',').to_set
     not_duplicated_with_set << other.id.to_s
     update_column(:not_duplicated_with, not_duplicated_with_set.to_a.join(','))
+  end
+
+  def birthday_year
+    get_four_digit_year_from_value(attributes['birthday_year'])
+  end
+
+  def anniversary_year
+    get_four_digit_year_from_value(attributes['anniversary_year'])
   end
 
   private
