@@ -32,6 +32,16 @@ describe Person::GoogleAccount do
     expect(account.to_s).to eq('john.doe@example.com')
   end
 
+  context '#contact_groups' do
+    subject { create(:google_account) }
+
+    it 'calls Person::GoogleAccount::ContactGroup' do
+      expect(subject).to receive(:contacts_api_user).and_return(OpenStruct.new(groups: []))
+      expect(Person::GoogleAccount::ContactGroup).to receive(:from_groups)
+      subject.contact_groups
+    end
+  end
+
   context '#refresh_token!' do
     subject { build(:google_account) }
 

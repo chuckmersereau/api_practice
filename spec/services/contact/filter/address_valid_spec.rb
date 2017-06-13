@@ -54,9 +54,9 @@ RSpec.describe Contact::Filter::AddressValid do
 
       it 'returns all of the contacts addresses' do
         contact_four.addresses.create(valid_values: true)
-        found_contacts = described_class.query(contacts, { address_valid: 'false' }, nil).to_a
-        expect(found_contacts.first.addresses.size).to eq 3
-        expect(found_contacts.second.addresses.size).to eq 2
+        found_contacts = described_class.query(contacts, { address_valid: 'false' }, nil)
+        expect(found_contacts.find(contact_one.id).addresses.size).to eq 3
+        expect(found_contacts.find(contact_four.id).addresses.size).to eq 2
       end
     end
   end
