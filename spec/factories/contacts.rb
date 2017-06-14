@@ -15,7 +15,7 @@ FactoryGirl.define do
 
     factory :contact_with_person do
       after(:create) do |contact, evaluator|
-        create(:person, contacts: [contact], first_name: evaluator.name, last_name: '')
+        create(:person, contacts: [contact], first_name: evaluator.name.split(', ').first, last_name: evaluator.name.split(', ').last)
       end
     end
 

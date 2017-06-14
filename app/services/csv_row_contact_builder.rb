@@ -17,6 +17,10 @@ class CsvRowContactBuilder
 
   attr_accessor :csv_row, :import, :contact, :person, :spouse, :names
 
+  def contact_scope
+    account_list.contacts
+  end
+
   def contact_from_csv_row
     rebuild_csv_row_with_mpdx_headers_and_mpdx_constants
     strip_csv_row_fields
@@ -30,6 +34,7 @@ class CsvRowContactBuilder
     build_email_addresses
     build_phone_numbers
     build_spouse_person
+    build_referral
 
     contact
   end
@@ -49,7 +54,7 @@ class CsvRowContactBuilder
   end
 
   def build_contact
-    self.contact = account_list.contacts.build(
+    self.contact = contact_scope.build(
       church_name: csv_row['church'],
       name: names['full_contact_name'],
       greeting: csv_row['greeting'],
@@ -119,6 +124,19 @@ class CsvRowContactBuilder
                                primary: true) if csv_row['spouse_phone'].present?
 
     contact.spouse = spouse
+  end
+
+  def build_referral
+    return if csv_row['referred_by'].blank?
+
+    referrer_contact = Contact::FindFromName.new(contact_scope, csv_row['referred_by']).first
+
+    if referrer_contact.blank?
+      contact.tag_list.add('Missing Csv Referred By')
+      contact.add_to_notes("Referred by: #{csv_row['referred_by']}")
+    else
+      contact.contact_referrals_to_me.build(referred_by: referrer_contact)
+    end
   end
 
   def true?(val)

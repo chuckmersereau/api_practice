@@ -2,13 +2,16 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 20 June 2017
+- CSV Import should support importing Referred By
+
 ## 19 June 2017
 - TNT import now allows to import Campaign information related to all manually added gifts.
 
 ## 13 June 2017
 - Added parent_contacts field to person object.
   - That field contains the ids of contacts associated to the person object.
-  
+
 ## 09 June 2017
 - Added a tools analytics endpoint:
   - Gives the number of contacts, addresses, phone numbers and email addresses that

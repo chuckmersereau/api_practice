@@ -36,7 +36,7 @@ describe CsvImportContactWorker do
       expect(import.reload.file_row_failures).to eq([["Validation failed: First name can't be blank", nil, nil, nil, 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
                                                       '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both', 'christmas-card,      family',
                                                       ' john@example.com ', ' jane@example.com ', '(213) 222-3333', '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes',
-                                                      'http://www.john.doe']])
+                                                      'http://www.john.doe', 'Mary Kim']])
     end
 
     it 'does not report to Rollbar' do
@@ -58,7 +58,8 @@ describe CsvImportContactWorker do
       expect(import.reload.file_row_failures).to eq([['Record not unique error: Please ensure you are not importing duplicate data (such as duplicate email addresses, which must be unique)',
                                                       'Johnny and Janey Doey', ' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church', '1 Example Ave, Apt 6',
                                                       'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both', 'christmas-card,      family', ' john@example.com ',
-                                                      ' jane@example.com ', '(213) 222-3333', '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe']])
+                                                      ' jane@example.com ', '(213) 222-3333', '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe',
+                                                      'Mary Kim']])
     end
 
     it 'does not report to Rollbar' do
@@ -82,7 +83,7 @@ describe CsvImportContactWorker do
                                                       'Westside Baptist Church', '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201',
                                                       'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both', 'christmas-card,      family',
                                                       ' john@example.com ', ' jane@example.com ', '(213) 222-3333', '(407) 555-6666',
-                                                      'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe']])
+                                                      'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe', 'Mary Kim']])
     end
   end
 end

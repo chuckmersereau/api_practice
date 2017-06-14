@@ -1,8 +1,9 @@
 require 'rails_helper'
 
 describe CsvRowContactBuilder do
-  let(:import) { create(:csv_import_custom_headers, tags: 'csv, test', in_preview: true) }
-  let(:csv_row) { CSV.new(File.open(import.file_path).read, headers: :first_row).first }
+  let!(:import) { create(:csv_import_custom_headers, tags: 'csv, test', in_preview: true) }
+  let!(:csv_row) { CSV.new(File.open(import.file_path).read, headers: :first_row).first }
+  let!(:existing_contact) { create(:contact, name: 'Mary Kim', account_list: import.account_list) }
 
   subject { CsvRowContactBuilder.new(import: import, csv_row: csv_row) }
 
@@ -28,6 +29,7 @@ describe CsvRowContactBuilder do
       'newsletter'           => 'newsletter',
       'notes'                => 'extra_notes',
       'phone_1'              => 'phone',
+      'referred_by'          => 'referred_by',
       'region'               => 'region',
       'send_appeals'         => 'appeals',
       'spouse_email'         => 'spouse_email_address',
@@ -120,6 +122,20 @@ describe CsvRowContactBuilder do
       expect(spouse.email_addresses.first.email).to eq('jane@example.com')
       expect(spouse.phone_numbers.size).to eq(1)
       expect(spouse.phone_numbers.first.number.in?(['(407) 555-6666', '+14075556666'])).to be(true)
+
+      expect(contact.contact_referrals_to_me.size).to eq(1)
+      contact_referral = contact.contact_referrals_to_me.first
+      expect(contact_referral.referred_by.name).to eq('Mary Kim')
+    end
+
+    context 'referred_by cannot be found' do
+      it 'adds referred_by to contact notes and tag' do
+        Contact.delete_all
+        contact = subject.build
+        expect(contact.contact_referrals_to_me.size).to eq(0)
+        expect(contact.notes).to include('Referred by: Mary Kim')
+        expect(contact.tag_list).to include('missing csv referred by')
+      end
     end
   end
 

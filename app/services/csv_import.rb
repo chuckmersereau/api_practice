@@ -26,6 +26,7 @@ class CsvImport
     'Phone 1',
     'Phone 2',
     'Phone 3',
+    'Referred By',
     'Region',
     'Send Appeals?',
     'Spouse Email',
