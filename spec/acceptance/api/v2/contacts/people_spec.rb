@@ -44,6 +44,7 @@ resource 'People' do
       middle_name
       occupation
       optout_enewsletter
+      parent_contacts
       suffix
       title
       updated_at
@@ -198,6 +199,7 @@ resource 'People' do
           response_field 'middle_name',        'Middle Name',                  type: 'String'
           response_field 'occupation',         'Occupation',                   type: 'String'
           response_field 'optout_enewsletter', 'Optout of Enewsletter or not', type: 'Boolean'
+          response_field 'parent_contacts',    'Array of Parent Contact Ids',  type: 'Array'
           response_field 'suffix',             'Suffix',                       type: 'String'
           response_field 'title',              'Title',                        type: 'String'
           response_field 'updated_at',         'Updated At',                   type: 'String'

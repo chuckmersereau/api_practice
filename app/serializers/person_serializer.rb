@@ -18,6 +18,7 @@ class PersonSerializer < ApplicationSerializer
              :middle_name,
              :occupation,
              :optout_enewsletter,
+             :parent_contacts,
              :suffix,
              :title
 
@@ -35,5 +36,9 @@ class PersonSerializer < ApplicationSerializer
 
   def person_exhibit
     exhibit(object)
+  end
+
+  def parent_contacts
+    object.contacts.map(&:uuid)
   end
 end

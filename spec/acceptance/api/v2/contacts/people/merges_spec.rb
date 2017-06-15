@@ -48,6 +48,7 @@ resource 'Contacts > People > Merges' do
       middle_name
       occupation
       optout_enewsletter
+      parent_contacts
       suffix
       title
       updated_at
