@@ -52,7 +52,7 @@ class Person < ApplicationRecord
 
   accepts_nested_attributes_for :email_addresses,      reject_if: -> (e) { e[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers,        reject_if: -> (p) { p[:number].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :family_relationships, reject_if: -> (p) { p[:related_contact_id].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :family_relationships, reject_if: -> (p) { p[:related_person_id].blank? }, allow_destroy: true
   accepts_nested_attributes_for :facebook_accounts,    reject_if: -> (p) { p[:username].blank? }, allow_destroy: true
   accepts_nested_attributes_for :twitter_accounts,     reject_if: -> (p) { p[:screen_name].blank? }, allow_destroy: true
   accepts_nested_attributes_for :linkedin_accounts,    reject_if: -> (p) { p[:public_url].blank? }, allow_destroy: true
