@@ -97,6 +97,7 @@ class Contact < ApplicationRecord
         :location,
         :master_address_id,
         :metro_area,
+        :overwrite,
         :postal_code,
         :primary_mailing_address,
         :region,
@@ -110,26 +111,30 @@ class Contact < ApplicationRecord
       contact_referrals_to_me_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :referred_by_id
       ],
       contact_referrals_by_me_attributes: [
         :_destroy,
         :id,
+        :overwrite,
         :referred_to_id
       ],
       donor_accounts_attributes: [
         :_destroy,
         :account_number,
         :id,
-        :organization_id
+        :organization_id,
+        :overwrite
       ],
-      people_attributes: Person::PERMITTED_ATTRIBUTES,
+      people_attributes: Person::PERMITTED_ATTRIBUTES + [:overwrite],
       contacts_referred_by_me_attributes: [
         :_destroy,
         :account_list_id,
         :id,
         :name,
         :notes,
+        :overwrite,
         :primary_address_city,
         :primary_address_postal_code,
         :primary_address_state,
