@@ -145,6 +145,7 @@ resource 'People' do
                                                   multiple Phone Numbers marked as primary; Accepts value "false"),                      required: false
       parameter 'filter[updated_at]',          %(Filter by Updated At Date range; Accepts date range with text value like\
                                                   "MM/DD/YYYY - MM/DD/YYYY"),                                                            required: false
+      parameter 'filter[wildcard_search]',     %(Filter by keyword, searches through name, email_addresses and phone_numbers),           required: false
 
       parameter 'filter[any_filters]',         'If set to true any result where at least one of the filters apply will be returned',     required: false
       parameter 'filter[reverse_FILTER_NAME]', "If set to true, the filter defined as FILTER_NAME will return results that don't apply", required: false

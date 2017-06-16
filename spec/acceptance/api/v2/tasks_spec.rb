@@ -77,6 +77,7 @@ resource 'Tasks' do
       parameter 'filter[overdue]',         'Filter by Overdue; Accepts values "true", or "false"',                                             required: false
       parameter 'filter[starred]',         'Filter by Starred; Accepts values "true", or "false"',                                             required: false
       parameter 'filter[tags][]',          'Filter by Tags; Accepts multiple parameters, with text values',                                    required: false
+      parameter 'filter[wildcard_search]', 'Filter by keyword, searches through subject and tags',                                             required: false
 
       parameter 'filter[any_filters]',         'If set to true any result where at least one of the filters apply will be returned',           required: false
       parameter 'filter[reverse_FILTER_NAME]', "If set to true, the filter defined as FILTER_NAME will return results that don't apply",       required: false
