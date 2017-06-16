@@ -109,13 +109,53 @@
         <ChallengesSinceLastGift>0</ChallengesSinceLastGift>
       </row>
     </Contact>
+    <Currency>
+      <row id="0">
+        <LastEdit>2016-11-16 11:54:53</LastEdit>
+        <Description>Unknown</Description>
+        <DecimalPlaces>2</DecimalPlaces>
+        <Color>10708548</Color>
+        <LocalExchangeRate>1</LocalExchangeRate>
+        <IsBase>false</IsBase>
+        <AutoUpdateRate>true</AutoUpdateRate>
+        <DaysBetweenAutoUpdateRate>30</DaysBetweenAutoUpdateRate>
+        <LastRateUpdate>1899-12-30</LastRateUpdate>
+      </row>
+      <row id="997892546">
+        <LastEdit>2016-11-16 12:08:50</LastEdit>
+        <Code>CAD</Code>
+        <Symbol>$</Symbol>
+        <Description>Canadian dollar</Description>
+        <DecimalPlaces>2</DecimalPlaces>
+        <Color>10708548</Color>
+        <LocalExchangeRate>1</LocalExchangeRate>
+        <IsBase>true</IsBase>
+        <AutoUpdateRate>true</AutoUpdateRate>
+        <DaysBetweenAutoUpdateRate>30</DaysBetweenAutoUpdateRate>
+        <LastRateUpdate>1899-12-30</LastRateUpdate>
+      </row>
+      <row id="1828601813">
+        <LastEdit>2016-11-16 12:08:58</LastEdit>
+        <Code>USD</Code>
+        <Symbol>$</Symbol>
+        <Description>United States dollar</Description>
+        <DecimalPlaces>2</DecimalPlaces>
+        <Color>128</Color>
+        <LocalExchangeRate>1</LocalExchangeRate>
+        <IsBase>false</IsBase>
+        <AutoUpdateRate>true</AutoUpdateRate>
+        <DaysBetweenAutoUpdateRate>30</DaysBetweenAutoUpdateRate>
+        <LastRateUpdate>1899-12-30</LastRateUpdate>
+      </row>
+    </Currency>
     <Gift>
       <row id="3">
         <LastEdit>2013-12-01 21:42:55</LastEdit>
-        <ContactID>3</ContactID>
+        <ContactID>1</ContactID>
         <OrganizationID>0</OrganizationID>
         <GiftDate>2013-11-20</GiftDate>
         <Amount>50</Amount>
+        <CurrencyID>997892546</CurrencyID>
         <PersonallyReceived>true</PersonallyReceived>
         <AvailableOnWeb>true</AvailableOnWeb>
         <PledgeFulfillmentType>0</PledgeFulfillmentType>
@@ -127,6 +167,7 @@
         <OrganizationID>0</OrganizationID>
         <GiftDate>2013-11-21</GiftDate>
         <Amount>25</Amount>
+        <CurrencyID>1828601813</CurrencyID>
         <PersonallyReceived>true</PersonallyReceived>
         <AvailableOnWeb>true</AvailableOnWeb>
         <PledgeFulfillmentType>0</PledgeFulfillmentType>

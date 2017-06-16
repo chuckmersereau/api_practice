@@ -384,7 +384,7 @@ describe TntImport do
       @user.organization_accounts.destroy_all
       online_org = create(:organization)
       @user.organization_accounts << create(:organization_account, organization: online_org)
-      expect { @tnt_import_with_personal_gift.import }.to change(Donation, :count).from(0).to(1)
+      expect { @tnt_import_with_personal_gift.import }.to change(Donation, :count).from(0).to(2)
     end
 
     it 'does not import gifts for an online org or multiple orgs when gift not marked as personal' do
@@ -454,6 +454,15 @@ describe TntImport do
       donor_account = contact.donor_accounts.first
       expect(donor_account.account_number).to eq('1')
       expect(donor_account.total_donations).to eq(175.0)
+    end
+
+    it 'assigns the gift currency code' do
+      @user.organization_accounts.destroy_all
+      online_org = create(:organization)
+      @user.organization_accounts << create(:organization_account, organization: online_org)
+      @tnt_import_with_personal_gift.import
+      expect(Donation.exists?(tendered_amount: 50, tendered_currency: 'CAD')).to eq(true)
+      expect(Donation.exists?(tendered_amount: 25, tendered_currency: 'USD')).to eq(true)
     end
   end
 

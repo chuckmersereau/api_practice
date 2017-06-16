@@ -52,8 +52,8 @@ class TntImport
     TntImport::HistoryImport.new(@import, tnt_contacts, xml).import_history
   end
 
-  def import_offline_org_gifts(tnt_contacts)
-    TntImport::GiftsImport.new(@account_list, tnt_contacts, xml, @import).import
+  def import_offline_org_gifts(contact_ids_by_tnt_contact_id)
+    TntImport::GiftsImport.new(@account_list, contact_ids_by_tnt_contact_id, xml, @import).import
   end
 
   def import_settings

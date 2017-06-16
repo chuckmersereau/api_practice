@@ -1,6 +1,6 @@
 class TntImport::GiftsImport
   include Concerns::TntImport::DateHelpers
-  attr_reader :contact_ids_by_tnt_contact_id, :xml_tables
+  attr_reader :contact_ids_by_tnt_contact_id, :xml_tables, :account_list
 
   def initialize(account_list, contact_ids_by_tnt_contact_id, xml, import)
     @account_list                  = account_list
@@ -17,7 +17,7 @@ class TntImport::GiftsImport
 
     xml_tables['Gift'].each do |row|
       tnt_contact_id = row['ContactID']
-      contact        = Contact.find_by(id: contact_ids_by_tnt_contact_id[tnt_contact_id])
+      contact        = account_list.contacts.find_by(id: contact_ids_by_tnt_contact_id[tnt_contact_id])
 
       next unless contact
       next if org.api_class != 'OfflineOrg' && row['PersonallyReceived'] == 'false'
@@ -28,8 +28,7 @@ class TntImport::GiftsImport
       # that's not a perfect assumption but it seems reasonable solution for offline orgs for now.
       donation_key_attrs = { amount: row['Amount'], donation_date: parse_date(row['GiftDate'], @import.user).to_date }
       account.donations.find_or_create_by(donation_key_attrs) do |donation|
-        # Assume the currency is USD. Tnt doesn't have great currency support and USD is a decent default.
-        donation.update(tendered_currency: 'USD', tendered_amount: row['Amount'])
+        donation.update(tendered_currency: currency_code_for_id(row['CurrencyID']), tendered_amount: row['Amount'])
 
         contact.update_donation_totals(donation)
       end
@@ -52,5 +51,12 @@ class TntImport::GiftsImport
     end
     contact.donor_accounts << donor_account
     donor_account
+  end
+
+  def currency_code_for_id(tnt_currency_id)
+    found_currency_row = xml_tables['Currency']&.detect do |currency_row|
+      currency_row['id'] == tnt_currency_id
+    end
+    found_currency_row&.[]('Code').presence || account_list.default_currency
   end
 end
