@@ -454,7 +454,7 @@ class Contact < ApplicationRecord
   end
 
   def pledge_currency_symbol
-    cldr_currency = TwitterCldr::Shared::Currencies.for_code(pledge_currency)
+    cldr_currency = TwitterCldr::Shared::Currencies.for_code(pledge_currency.upcase)
     cldr_currency.present? ? cldr_currency[:symbol] : pledge_currency
   end
 

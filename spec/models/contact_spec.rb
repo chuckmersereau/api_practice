@@ -1101,5 +1101,14 @@ describe Contact do
         end
       end
     end
+
+    context '#pledge_currency_symbol' do
+      it 'returns the currency symbol regardless of if the pledge currency is upcased or not' do
+        contact.pledge_currency = 'USD'
+        expect(contact.pledge_currency_symbol).to eq '$'
+        contact.pledge_currency = 'usd'
+        expect(contact.pledge_currency_symbol).to eq '$'
+      end
+    end
   end
 end
