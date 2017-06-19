@@ -664,7 +664,7 @@ class Contact < ApplicationRecord
     name_parts = name.split(',')
     if name_parts.length > 1
       last_name = name_parts[0]
-      name_parts[1].split(/and|&/).map { |i| i.strip if i.strip != '' }.uniq.compact.map do |first_name|
+      name_parts[1].split(/\sand\s|\s&\s/).map { |i| i.strip if i.strip != '' }.uniq.compact.map do |first_name|
         people << Person.new(first_name: first_name, last_name: last_name)
       end
     else
