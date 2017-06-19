@@ -41,21 +41,25 @@ class Task < Activity
     :uuid,
     {
       comment: [
-        :body
+        :body,
+        :overwrite
       ],
       comments_attributes: [
         :body,
         :id,
         :person_id,
+        :overwrite,
         :uuid
       ],
       activity_contacts_attributes: [
         :_destroy,
-        :contact_id
+        :contact_id,
+        :overwrite
       ],
       contacts_attributes: [
         :_destroy,
-        :id
+        :id,
+        :overwrite
       ]
     }
   ].freeze
