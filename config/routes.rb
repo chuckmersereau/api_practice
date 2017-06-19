@@ -168,6 +168,10 @@ Rails.application.routes.draw do
           resource :salary_currency_donations, only: :show
           resource :year_donations, only: :show
         end
+
+        namespace :tools do
+          get :analytics, to: 'analytics#show'
+        end
       end
       resource :user, only: [] do
         scope module: :user do
