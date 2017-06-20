@@ -245,6 +245,17 @@ describe CsvImport do
         end.to change { Contact.count }.by(1)
         expect(csv_import.reload.file_row_failures.size).to eq(2)
       end
+
+      it 'imports if file_constants is blank' do
+        csv_import.file_headers = { 'first_name' => 'first_name', 'church' => 'church' }
+        csv_import.file_headers_mappings = { 'first_name' => 'first_name', 'church' => 'church' }
+        csv_import.file_constants_mappings = {}
+        csv_import.file_constants = {}
+        csv_import.in_preview = false
+        expect(csv_import).to be_valid
+        expect { import.import }.to change(Contact, :count).from(0).to(3)
+        expect(csv_import.account_list.contacts.reload.where(name: 'Doe, John and Jane')).to be_present
+      end
     end
 
     describe '#sample_contacts' do

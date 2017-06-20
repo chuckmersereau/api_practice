@@ -3,10 +3,10 @@ class Api::V2::ContactsPreloader < ApplicationPreloader
     account_list: Api::V2::AccountListsPreloader,
     appeals: Api::V2::AppealsPreloader,
     contacts: Api::V2::AppealsPreloader,
-    contact_referrals_by_me: Api::V2::ContactsPreloader,
-    contact_referrals_to_me: Api::V2::ContactsPreloader,
-    contacts_referred_by_me: Api::V2::ContactsPreloader,
-    contacts_that_referred_me: Api::V2::ContactsPreloader,
+    contact_referrals_by_me: self,
+    contact_referrals_to_me: self,
+    contacts_referred_by_me: self,
+    contacts_that_referred_me: self,
     donor_accounts: Api::V2::AccountLists::DonorAccountsPreloader
   }.freeze
 

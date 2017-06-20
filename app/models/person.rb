@@ -1,5 +1,6 @@
 class Person < ApplicationRecord
   include BetweenScopeable
+  include YearCompletable
 
   between_scopes_for :anniversary
   between_scopes_for :birthday
@@ -51,7 +52,7 @@ class Person < ApplicationRecord
 
   accepts_nested_attributes_for :email_addresses,      reject_if: -> (e) { e[:email].blank? }, allow_destroy: true
   accepts_nested_attributes_for :phone_numbers,        reject_if: -> (p) { p[:number].blank? }, allow_destroy: true
-  accepts_nested_attributes_for :family_relationships, reject_if: -> (p) { p[:related_contact_id].blank? }, allow_destroy: true
+  accepts_nested_attributes_for :family_relationships, reject_if: -> (p) { p[:related_person_id].blank? }, allow_destroy: true
   accepts_nested_attributes_for :facebook_accounts,    reject_if: -> (p) { p[:username].blank? }, allow_destroy: true
   accepts_nested_attributes_for :twitter_accounts,     reject_if: -> (p) { p[:screen_name].blank? }, allow_destroy: true
   accepts_nested_attributes_for :linkedin_accounts,    reject_if: -> (p) { p[:public_url].blank? }, allow_destroy: true
@@ -459,6 +460,14 @@ class Person < ApplicationRecord
     not_duplicated_with_set = not_duplicated_with.to_s.split(',').to_set
     not_duplicated_with_set << other.id.to_s
     update_column(:not_duplicated_with, not_duplicated_with_set.to_a.join(','))
+  end
+
+  def birthday_year
+    get_four_digit_year_from_value(attributes['birthday_year'])
+  end
+
+  def anniversary_year
+    get_four_digit_year_from_value(attributes['anniversary_year'])
   end
 
   private

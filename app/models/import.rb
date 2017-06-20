@@ -5,6 +5,7 @@ require 'csv'
 class Import < ApplicationRecord
   include Async
   include Sidekiq::Worker
+
   sidekiq_options queue: :api_import, retry: 0, backtrace: true, unique: :until_executed
   mount_uploader :file, ImportUploader
 
@@ -40,7 +41,7 @@ class Import < ApplicationRecord
   validates :file, upload_extension: { extension: 'xml', message: SOURCE_ERROR_MESSAGES[:tnt] }, if: :source_tnt?
   validates :file, upload_extension: { extension: 'csv', message: SOURCE_ERROR_MESSAGES[:csv] }, if: :source_csv?
   validates :file, upload_extension: { extension: %w(tntmpd tntdatasync), message: SOURCE_ERROR_MESSAGES[:tnt_data_sync] }, if: :source_tnt_data_sync?
-  validates :file, :file_headers, :file_constants, :file_headers_mappings, :file_row_samples, presence: true, if: :source_csv?, unless: :in_preview?
+  validates :file, :file_headers, :file_headers_mappings, :file_row_samples, presence: true, if: :source_csv?, unless: :in_preview?
   validates :file_headers, :file_constants, :file_headers_mappings, :file_constants_mappings, class: { is_a: Hash }
   validates :file_row_samples, :file_row_failures, class: { is_a: Array }
   validates :source_account_id, presence: true, if: :source_tnt_data_sync?

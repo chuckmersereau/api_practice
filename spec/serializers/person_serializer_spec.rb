@@ -11,4 +11,15 @@ describe PersonSerializer do
 
   it { should include :email_addresses }
   it { should include :phone_numbers }
+
+  describe '#parent_contacts' do
+    before do
+      person.contacts = create_list(:contact, 2)
+    end
+
+    it 'returns an array of parent contacts' do
+      expect(subject[:parent_contacts].first).to eq(person.contacts.first.uuid)
+      expect(subject[:parent_contacts].count).to eq(2)
+    end
+  end
 end

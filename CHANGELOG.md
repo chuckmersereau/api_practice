@@ -2,8 +2,17 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 13 June 2017
+- Added parent_contacts field to person object.
+  - That field contains the ids of contacts associated to the person object.
+  
+## 09 June 2017
+- Added a tools analytics endpoint:
+  - Gives the number of contacts, addresses, phone numbers and email addresses that
+    need to be fixed by the user. It also gives a count of the number of duplicated contacts and people associated to him/her.
+
 ## 08 June 2017
-- Tnt import: improve setting task completed status, and timezone parsing
+- Tnt import: improve setting task completed status, and timezone parsing.
 
 ## 06 June 2017
 - Added wildcard search filter on '/api/v2/contacts/people' endpoint.

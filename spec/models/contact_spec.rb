@@ -1101,5 +1101,30 @@ describe Contact do
         end
       end
     end
+
+    context '#create_people_from_contact' do
+      it 'seperates contact name into primary person and spouse when applicable' do
+        expect do
+          contact.name = 'Triss, Harold and Mary'
+          contact.send(:create_people_from_contact)
+        end.to change { Person.count }.by(2)
+      end
+
+      it 'does not separate a contact name when "and" is part of a word' do
+        expect do
+          contact.name = 'Chris, Alexander'
+          contact.send(:create_people_from_contact)
+        end.to change { Person.count }.by(1)
+      end
+    end
+
+    context '#pledge_currency_symbol' do
+      it 'returns the currency symbol regardless of if the pledge currency is upcased or not' do
+        contact.pledge_currency = 'USD'
+        expect(contact.pledge_currency_symbol).to eq '$'
+        contact.pledge_currency = 'usd'
+        expect(contact.pledge_currency_symbol).to eq '$'
+      end
+    end
   end
 end

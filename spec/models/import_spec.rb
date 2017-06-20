@@ -219,4 +219,12 @@ describe Import do
       expect(Import.new.file_path).to eq nil
     end
   end
+
+  it 'allows no file_constants' do
+    import = create(:csv_import, in_preview: true)
+    import.file_constants = nil
+    import.in_preview = false
+    import.valid?
+    expect(import.errors[:file_constants].present?).to eq(false)
+  end
 end

@@ -352,4 +352,30 @@ describe Person do
       expect(p2.confirmed_non_duplicate_of?(p1)).to be true
     end
   end
+
+  context '#anniversary_year' do
+    it 'outputs a 4 digits year' do
+      person.anniversary_year = 76
+      expect(person.anniversary_year).to eq(1976)
+      person.anniversary_year = 3
+      expect(person.anniversary_year).to eq(2003)
+      person.anniversary_year = 15
+      expect(person.anniversary_year).to eq(2015)
+      person.anniversary_year = 1988
+      expect(person.anniversary_year).to eq(1988)
+    end
+  end
+
+  context '#birthday_year' do
+    it 'outputs a 4 digits year' do
+      person.birthday_year = 76
+      expect(person.birthday_year).to eq(1976)
+      person.birthday_year = 3
+      expect(person.birthday_year).to eq(2003)
+      person.birthday_year = 15
+      expect(person.birthday_year).to eq(2015)
+      person.birthday_year = 1988
+      expect(person.birthday_year).to eq(1988)
+    end
+  end
 end
