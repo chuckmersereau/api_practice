@@ -102,6 +102,7 @@ RSpec.describe Api::V2::User::OptionsController, type: :controller do
 
     it 'does not update resources with outdated updated_at field' do
       api_login(user)
+      full_update_attributes[:data][:attributes][:overwrite] = false
       full_update_attributes[:data][:attributes][:updated_in_db_at] = 1.year.ago
       put :update, full_update_attributes
 

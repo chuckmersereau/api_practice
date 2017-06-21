@@ -71,12 +71,7 @@ RSpec.describe Api::V2::TasksController, type: :controller do
           get :index, filter: { filter => value }
           expect(response.status).to eq(200), invalid_status_detail
 
-          if filter == 'updated_at'
-            expect(JSON.parse(response.body)['meta']['filter'][filter])
-              .to eq("#{value.to_datetime.beginning_of_day}..#{value.to_datetime.end_of_day}")
-          else
-            expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
-          end
+          expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq(value)
         end
       end
     end

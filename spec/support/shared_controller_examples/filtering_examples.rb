@@ -10,6 +10,16 @@ RSpec.shared_examples 'filtering examples' do |options|
     end
   end
 
+  it 'returns the uuid in the meta tag when passed as a filter' do
+    if options[:action] == :index && described_class.new.send(:permitted_filters).include?(:account_list_id)
+      api_login(user)
+
+      get :index, parent_param_if_needed.merge(filter: { account_list_id: account_list.uuid })
+      expect(response.status).to eq(200), invalid_status_detail
+      expect(JSON.parse(response.body)['meta']['filter']['account_list_id']).to eq(account_list.uuid)
+    end
+  end
+
   it 'returns meta for given filter' do
     if defined?(filterer_class)
       api_login(user)
@@ -24,13 +34,7 @@ RSpec.shared_examples 'filtering examples' do |options|
         get :index, filter: { filter => filter_value }
 
         expect(response.status).to eq(200), invalid_status_detail
-
-        if CastedValueValidator::DATE_FIELD_ENDINGS.any? { |ending| filter.to_s.end_with?(ending) }
-          filter_range = filter_value.to_datetime.beginning_of_day..filter_value.to_datetime.end_of_day
-          expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq(filter_range.to_s)
-        else
-          expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq('')
-        end
+        expect(JSON.parse(response.body)['meta']['filter'][filter]).to eq(filter_value.to_s)
       end
     end
   end
