@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 19 June 2017
+- TNT import now allows to import Campaign information related to all manually added gifts.
+
 ## 13 June 2017
 - Added parent_contacts field to person object.
   - That field contains the ids of contacts associated to the person object.
