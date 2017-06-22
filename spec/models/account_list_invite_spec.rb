@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 describe AccountListInvite do
-  let(:invite) { create(:account_list_invite) }
+  let(:invite) { create(:account_list_invite, accepted_by_user: nil) }
   let(:user) { create(:user) }
   let(:account_list) { create(:account_list) }
 
