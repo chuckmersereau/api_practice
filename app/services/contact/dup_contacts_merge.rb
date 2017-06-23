@@ -4,13 +4,15 @@ class Contact::DupContactsMerge
     @contact = contact
   end
 
-  def merge_duplicates
-    contacts_to_merge = contacts_with_the_same_name_as(contact).select do |contact_with_the_same_name|
+  def find_duplicates
+    contacts_with_the_same_name_as(contact).select do |contact_with_the_same_name|
       contacts_have_a_matching_donor_account?(contact, contact_with_the_same_name) ||
         contacts_have_a_matching_address?(contact, contact_with_the_same_name)
     end
+  end
 
-    contacts_to_merge.each do |contact_to_merge|
+  def merge_duplicates
+    find_duplicates.each do |contact_to_merge|
       contact.merge(contact_to_merge)
     end
 
