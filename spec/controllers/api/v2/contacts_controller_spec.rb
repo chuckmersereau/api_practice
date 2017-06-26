@@ -41,7 +41,6 @@ describe Api::V2::ContactsController, type: :controller do
   let(:reference_value) { correct_attributes[:name] }
   let(:incorrect_reference_value) { resource.send(reference_key) }
   let(:incorrect_attributes) { attributes_for(:contact, name: nil) }
-  let(:sorting_param) { :name }
 
   include_examples 'index_examples'
 

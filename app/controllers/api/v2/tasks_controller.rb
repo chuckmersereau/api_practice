@@ -1,6 +1,8 @@
 require 'json_api_service'
 
 class Api::V2::TasksController < Api::V2Controller
+  PERMIT_MULTIPLE_SORTING_PARAMS = true
+
   def index
     authorize_index
     load_tasks
@@ -100,7 +102,7 @@ class Api::V2::TasksController < Api::V2Controller
   end
 
   def permitted_sorting_params
-    %w(completed_at start_at)
+    %w(start_at completed_at)
   end
 
   def default_sorting

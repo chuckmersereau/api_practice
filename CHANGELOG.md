@@ -2,6 +2,10 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 27 June 2017
+- Tasks endpoint can now sort by multiple parameters.
+- Sorting now allows specifying the NULLS sort order (FIRST or LAST).
+
 ## 26 June 2017
 - Added contact name search to donor accounts endpoint.
 

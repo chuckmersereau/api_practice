@@ -18,7 +18,7 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
   let(:id) { donation.uuid }
 
   before do
-    donation.update(donation_date: 2.days.ago)
+    donation.update(donation_date: 2.days.ago, amount: 12.00)
     account_list.designation_accounts << designation_account
     contact.donor_accounts << donor_account
   end
@@ -26,7 +26,6 @@ describe Api::V2::AccountLists::DonationsController, type: :controller do
   let(:resource) { donation }
   let(:parent_param) { { account_list_id: account_list_id } }
   let(:filter_param) { { donation_date: "#{1.day.ago}..#{1.day.from_now}" } }
-  let(:sorting_param) { :donation_date }
   let(:correct_attributes) { attributes_for(:donation) }
   let(:incorrect_attributes) { { donation_date: nil } }
   let(:unpermitted_attributes) { nil }
