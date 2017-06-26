@@ -12,12 +12,12 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
 
   # This is required!
   let!(:resource) do
-    create(:pledge, account_list: account_list, contact: contact)
+    create(:pledge, account_list: account_list, contact: contact, amount: 9.99)
   end
 
   # This is required for the index action!
   let!(:second_resource) do
-    create(:pledge, account_list: account_list, contact: contact)
+    create(:pledge, account_list: account_list, contact: contact, amount: 10.00)
   end
 
   # If needed, keep this ;)
@@ -60,8 +60,6 @@ RSpec.describe Api::V2::AccountLists::PledgesController, type: :controller do
   let(:incorrect_attributes) do
     { amount: 200.00, expected_date: nil }
   end
-
-  let(:sorting_param) { :expected_date }
 
   # These includes can be found in:
   # spec/support/shared_controller_examples/*

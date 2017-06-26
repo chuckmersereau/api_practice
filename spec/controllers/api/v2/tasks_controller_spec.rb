@@ -39,7 +39,6 @@ RSpec.describe Api::V2::TasksController, type: :controller do
       subject: nil
     }
   end
-  let(:sorting_param) { :completed_at }
 
   before do
     resource.update(tag_list: 'tag1') # Test inclusion of related resources.

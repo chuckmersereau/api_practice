@@ -4,14 +4,12 @@ module Sorting
     updated_at
   ).freeze
 
+  PERMIT_MULTIPLE_SORTING_PARAMS = false
+
   private
 
-  def descending_sorting_params?
-    params[:sort].starts_with?('-')
-  end
-
   def multiple_sorting_params?
-    params[:sort].include?(',')
+    sorting_params_split.length > 1
   end
 
   def permitted_sorting_params
@@ -22,34 +20,55 @@ module Sorting
     permitted_sorting_params + PERMITTED_SORTING_PARAM_DEFAULTS
   end
 
-  def raise_error_if_multiple_sorting_params
-    raise Exceptions::BadRequestError, 'The current API does not support multiple sorting parameters.' if multiple_sorting_params?
+  def raise_error_if_multiple_sorting_params_are_not_permitted
+    raise Exceptions::BadRequestError, 'This endpoint does not support multiple sorting parameters.' if multiple_sorting_params? && !self.class::PERMIT_MULTIPLE_SORTING_PARAMS
   end
 
   def raise_error_unless_sorting_param_allowed
-    raise Exceptions::BadRequestError, "Sorting by '#{params[:sort]}' is not supported for this endpoint." unless sorting_param_allowed?
+    raise Exceptions::BadRequestError, "Sorting by #{unpermitted_sorting_params.to_sentence} is not supported for this endpoint." if unpermitted_sorting_params.present?
   end
 
   def sorting_param
     return nil unless params[:sort]
 
-    raise_error_if_multiple_sorting_params
+    raise_error_if_multiple_sorting_params_are_not_permitted
     raise_error_unless_sorting_param_allowed
-    transformed_sorting_params
+    convert_sorting_params_to_sql
   end
 
-  def sorting_param_allowed?
-    permitted_sorting_params_with_defaults.include?(params[:sort]&.tr('-', ''))
+  def unpermitted_sorting_params
+    sorting_params = sorting_params_split.collect { |param| db_column_for_sorting_param(param) }
+    sorting_params - permitted_sorting_params_with_defaults
+  end
+
+  def sorting_params_split
+    params[:sort]&.split(',') || []
   end
 
   def sorting_param_applied_to_query
-    params[:sort] if sorting_param_allowed?
+    params[:sort] unless unpermitted_sorting_params.present?
   end
 
-  def transformed_sorting_params
-    return "#{db_resource_name}.#{params[:sort].tr('-', '')} DESC" if descending_sorting_params?
+  def convert_sorting_params_to_sql
+    sorting_params_split.collect do |param|
+      ["#{db_resource_name}.#{db_column_for_sorting_param(param)}", sorting_direction_for_param(param), sorting_nulls_for_param(param)].select(&:present?).join(' ')
+    end.join(', ')
+  end
 
-    "#{db_resource_name}.#{params[:sort]} ASC"
+  def db_column_for_sorting_param(param)
+    param.split(' ').first.tr('-', '')
+  end
+
+  def sorting_direction_for_param(param)
+    param.starts_with?('-') ? 'DESC' : 'ASC'
+  end
+
+  def sorting_nulls_for_param(param)
+    split_param = param.split(' ')
+    return unless split_param.size > 1
+    null_param = split_param.second
+    raise Exceptions::BadRequestError, 'Bad format for sort param.' unless null_param.tr('-', '') == 'nulls'
+    null_param.starts_with?('-') ? 'NULLS LAST' : 'NULLS FIRST'
   end
 
   def db_resource_name
