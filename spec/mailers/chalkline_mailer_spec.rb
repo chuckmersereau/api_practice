@@ -8,7 +8,7 @@ describe ChalklineMailer do
     it 'pulls in the newsletter list, and users name and emails from account list' do
       expect(account_list).to receive(:users_combined_name).and_return('John and Jane Doe')
       expect(account_list).to receive(:user_emails_with_names).and_return(['john@d.com', 'jane@d.com'])
-      expect(account_list).to receive(:physical_newsletter_csv).and_return("a,b\n1,2\n")
+      expect(CsvExport).to receive(:mailing_addresses).with(account_list.contacts).and_return("a,b\n1,2\n")
 
       time = Time.new(2013, 3, 15, 18, 35, 20)
       expect(Time).to receive(:now).at_least(:once).and_return(time)

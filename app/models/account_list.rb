@@ -328,15 +328,6 @@ class AccountList < ApplicationRecord
     ChalklineMailer.delay.mailing_list(self)
   end
 
-  def physical_newsletter_csv
-    newsletter_contacts = ContactFilter.new(newsletter: 'address').filter(contacts, self)
-    views = ActionView::Base.new('app/views', {}, ActionController::Base.new)
-    ActionView::Base.send :include, ContactsHelper
-    views.render(file: 'api/v2/contacts/exports/index.csv.erb',
-                 locals: { contacts: newsletter_contacts,
-                           current_account_list: self })
-  end
-
   def users_combined_name
     user1, user2 = users.order('created_at').limit(2).to_a[0..1]
     return name unless user1

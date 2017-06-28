@@ -155,23 +155,6 @@ describe AccountList do
     end
   end
 
-  context '#physical_newsletter_csv' do
-    it 'does not cause an error or give an empty string' do
-      contact = create(:contact, name: 'Doe, John', send_newsletter: 'Both')
-      contact.addresses << create(:address)
-      account_list = create(:account_list)
-      account_list.contacts << contact
-
-      csv_rows = CSV.parse(account_list.physical_newsletter_csv)
-      expect(csv_rows.size).to eq(3)
-      csv_rows.each_with_index do |row, index|
-        expect(row[0]).to eq('Contact Name') if index == 0
-        expect(row[0]).to eq('Doe, John') if index == 1
-        expect(row[0]).to be_nil if index == 2
-      end
-    end
-  end
-
   context '#user_emails_with_names' do
     let(:account_list) { create(:account_list) }
 

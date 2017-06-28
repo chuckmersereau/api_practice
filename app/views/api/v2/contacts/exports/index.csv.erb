@@ -1,6 +1,6 @@
 "<%== spreadsheet_header_titles_joined %>"
 <%== CSV.generate do |csv|
-  # Handles the assignments in contacts_controller#index and account_list#physical_newsletter_csv
+  # Handles the assignments in contacts_controller#index
   contacts ||= @contacts
   contacts.each do |contact|
     csv << spreadsheet_values(contact)

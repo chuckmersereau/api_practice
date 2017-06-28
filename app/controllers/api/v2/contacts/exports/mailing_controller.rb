@@ -5,25 +5,9 @@ class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
   supports_content_types :any
 
   include ActionController::MimeResponds
-  include ActionController::Helpers
-  include MailingExportsHelper
-  helper MailingExportsHelper
-
-  FIELDS_MAPPING = {
-    'Contact Name' => :name,
-    'Greeting' => :greeting,
-    'Envelope Greeting' => :envelope_greeting,
-    'Mailing Street Address' => :csv_street,
-    'Mailing City' => :city,
-    'Mailing State' => :state,
-    'Mailing Postal Code' => :postal_code,
-    'Mailing Country' => :csv_country,
-    'Address Block' => :address_block
-  }.freeze
 
   def index
     load_contacts
-    load_rows
     render_export
   end
 
@@ -32,12 +16,6 @@ class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
   def load_contacts
     @contacts ||= filter_contacts.order(name: :asc).preload(:primary_person, :spouse, :primary_address,
                                                             :tags, people: [:email_addresses, :phone_numbers])
-  end
-
-  def load_rows
-    @rows = @contacts.map do |contact|
-      FIELDS_MAPPING.values.map { |method| ContactExhibit.new(contact, nil).send(method) }
-    end
   end
 
   def filter_contacts
@@ -57,21 +35,17 @@ class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
       [:account_list_id, :any_tags]
   end
 
-  def file_timestamp
-    Time.now.strftime('%Y%m%d')
+  def filename
+    @filename ||= "contacts-#{Time.now.strftime('%Y%m%d')}.csv"
   end
 
   def render_export
     respond_to do |format|
       format.csv do
-        render_csv("contacts-#{file_timestamp}.csv")
+        headers['Content-Type'] ||= 'text/csv'
+        headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
+        render text: CsvExport.mailing_addresses(@contacts), filename: filename
       end
     end
-  end
-
-  def render_csv(filename)
-    headers['Content-Type'] ||= 'text/csv'
-    headers['Content-Disposition'] = "attachment; filename=\"#{filename}\""
-    render csv: 'index', filename: filename
   end
 end
