@@ -15,15 +15,6 @@ describe Reports::MonthlyGivingGraphSerializer do
 
   subject { Reports::MonthlyGivingGraphSerializer.new(report).as_json }
 
-  it { should include :totals }
-  it { should include :pledges }
-  it { should include :monthly_average }
-  it { should include :monthly_goal }
-  it { should include :months_to_dates }
-  it { should include :multi_currency }
-  it { should include :salary_currency_symbol }
-  it { should include :salary_currency }
-
   it { expect(subject[:account_list][:name]).to be account_list.name }
   it { expect(subject[:monthly_goal]).to eq 1234 }
 end

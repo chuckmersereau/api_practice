@@ -7,10 +7,8 @@ describe PersonSerializer do
     p.phone_numbers << build(:phone_number)
     p
   end
-  subject { PersonSerializer.new(person).as_json }
 
-  it { should include :email_addresses }
-  it { should include :phone_numbers }
+  subject { PersonSerializer.new(person).as_json }
 
   describe '#parent_contacts' do
     before do

@@ -6,13 +6,6 @@ describe DonationReports::DonationInfoSerializer do
 
   subject { DonationReports::DonationInfoSerializer.new(donation_info).as_json }
 
-  it { should include :contact_id }
-  it { should include :converted_amount }
-  it { should include :converted_currency }
-  it { should include :currency }
-  it { should include :donation_date }
-  it { should include :likelihood_type }
-
   it 'serializes amount' do
     expect(subject[:amount]).to eq(9.99)
   end

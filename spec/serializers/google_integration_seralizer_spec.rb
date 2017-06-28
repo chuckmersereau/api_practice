@@ -10,20 +10,6 @@ describe GoogleIntegrationSerializer do
 
   subject { GoogleIntegrationSerializer.new(google_integration).as_json }
 
-  it { is_expected.to include :id }
-  it { is_expected.to include :account_list }
-  it { is_expected.to include :calendar_id }
-  it { is_expected.to include :calendar_integration }
-  it { is_expected.to include :calendar_integrations }
-  it { is_expected.to include :calendar_name }
-  it { is_expected.to include :calendars }
-  it { is_expected.to include :contacts_integration }
-  it { is_expected.to include :email_integration }
-  it { is_expected.to include :google_account }
-  it { is_expected.to include :created_at }
-  it { is_expected.to include :updated_at }
-  it { is_expected.to include :updated_in_db_at }
-
   describe '#calendars' do
     before do
       allow(google_integration).to(
@@ -81,6 +67,7 @@ describe GoogleIntegrationSerializer do
                                          }
                                        ]))
     end
+
     it 'returns a list of calendars with id and name' do
       expect(subject[:calendars]).to eq [{
         id: 'cru.org_iq9ig73eksd81o37afmosu4nts@group.calendar.google.com',
