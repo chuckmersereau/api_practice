@@ -6,22 +6,6 @@ describe DesignationAccountSerializer do
   let(:designation_account) { create(:designation_account, account_lists: [account_list]) }
 
   let(:serializer) { DesignationAccountSerializer.new(designation_account, scope: user) }
-  subject { serializer.as_json }
-
-  it { is_expected.to include :id }
-  it { is_expected.to include :active }
-  it { is_expected.to include :balance }
-  it { is_expected.to include :balance_updated_at }
-  it { is_expected.to include :converted_balance }
-  it { is_expected.to include :currency }
-  it { is_expected.to include :currency_symbol }
-  it { is_expected.to include :designation_number }
-  it { is_expected.to include :exchange_rate }
-  it { is_expected.to include :name }
-  it { is_expected.to include :organization_name }
-  it { is_expected.to include :created_at }
-  it { is_expected.to include :updated_at }
-  it { is_expected.to include :updated_in_db_at }
 
   describe '#currency_symbol' do
     it 'returns symbol for designation account currency' do

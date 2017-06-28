@@ -98,28 +98,4 @@ describe ConstantListSerializer do
       end
     end
   end
-
-  context '#as_json' do
-    subject { serializer.as_json }
-
-    it { should include :activities }
-    it { should include :assignable_likely_to_give }
-    it { should include :assignable_locations }
-    it { should include :assignable_send_newsletter }
-    it { should include :assignable_statuses }
-    it { should include :bulk_update_options }
-    it { should include :csv_import }
-    it { should include :dates }
-    it { should include :languages }
-    it { should include :locales }
-    it { should include :next_actions }
-    it { should include :notifications }
-    it { should include :organizations }
-    it { should include :pledge_currencies }
-    it { should include :pledge_frequencies }
-    it { should include :results }
-    it { should include :sources }
-    it { should include :statuses }
-    it { should include :tnt_import }
-  end
 end

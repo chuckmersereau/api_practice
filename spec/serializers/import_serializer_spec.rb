@@ -5,24 +5,6 @@ describe ImportSerializer do
 
   subject { ImportSerializer.new(import).as_json }
 
-  it { should include :account_list_id }
-  it { should include :created_at }
-  it { should include :file_constants }
-  it { should include :file_constants_mappings }
-  it { should include :file_headers }
-  it { should include :file_headers_mappings }
-  it { should include :file_url }
-  it { should include :group_tags }
-  it { should include :groups }
-  it { should include :import_by_group }
-  it { should include :in_preview }
-  it { should include :override }
-  it { should include :sample_contacts }
-  it { should include :source }
-  it { should include :tag_list }
-  it { should include :updated_at }
-  it { should include :updated_in_db_at }
-
   describe '#file_url' do
     it 'returns the file url' do
       expect(subject[:file_url]).to end_with('/sample_csv_with_custom_headers.csv')
