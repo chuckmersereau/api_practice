@@ -93,37 +93,77 @@ describe DonorAccount do
   end
 
   describe '.filter' do
+    let!(:account_list) { create(:account_list) }
+
     context 'wildcard_search' do
+      let!(:random_account) { create(:donor_account) }
+
       context 'account_number starts with' do
         let!(:donor_account) { create(:donor_account, account_number: '1234') }
+
         it 'returns donor_account' do
-          expect(described_class.filter(wildcard_search: '12')).to eq([donor_account])
+          expect(described_class.filter(account_list, wildcard_search: '12')).to eq([donor_account])
         end
       end
+
       context 'account_number does not start with' do
         let!(:donor_account) { create(:donor_account, account_number: '1234') }
+
         it 'returns no donor_accounts' do
-          expect(described_class.filter(wildcard_search: '34')).to be_empty
+          expect(described_class.filter(account_list, wildcard_search: '34')).to be_empty
         end
       end
-      context 'name contains' do
+
+      context 'donor account name contains' do
         let!(:donor_account) { create(:donor_account, name: 'abcd') }
-        it 'returns dnor_account' do
-          expect(described_class.filter(wildcard_search: 'bc')).to eq([donor_account])
+
+        it 'returns donor_account' do
+          expect(described_class.filter(account_list, wildcard_search: 'bc')).to eq([donor_account])
         end
       end
-      context 'name does not contain' do
+
+      context 'donor account name does not contain' do
         let!(:donor_account) { create(:donor_account, name: 'abcd') }
+
         it 'returns no donor_accounts' do
-          expect(described_class.filter(wildcard_search: 'def')).to be_empty
+          expect(described_class.filter(account_list, wildcard_search: 'def')).to be_empty
+        end
+      end
+
+      context 'contact name contains case insensitively' do
+        let!(:contact) { create(:contact, name: 'random name', account_list: account_list) }
+        let!(:donor_account) { create(:donor_account, account_number: '1234', contacts: [contact]) }
+
+        it 'returns donor_account' do
+          expect(described_class.filter(account_list, wildcard_search: 'Dom Nam')).to eq([donor_account])
+        end
+      end
+
+      context "name on contact belonging to another user's account list" do
+        let!(:contact) { create(:contact, name: 'random name', account_list: create(:account_list)) }
+        let!(:donor_account) { create(:donor_account, account_number: '1234', contacts: [contact]) }
+
+        it 'returns no donor_accounts' do
+          expect(described_class.filter(account_list, wildcard_search: 'Dom Nam')).to eq([])
         end
       end
     end
+
     context 'not wildcard_search' do
       let!(:donor_account) { create(:donor_account, account_number: '1234') }
+
       it 'returns donor_account' do
-        expect(described_class.filter(account_number: donor_account.account_number)).to eq([donor_account])
+        expect(described_class.filter(account_list, account_number: donor_account.account_number)).to eq([donor_account])
       end
+    end
+  end
+
+  context 'by_wildcard_search' do
+    let(:account_list) { create(:account_list) }
+    let!(:donor_account) { create(:donor_account, account_number: '1234') }
+
+    it 'can be called directly' do
+      expect(described_class.by_wildcard_search(account_list, '12')).to eq([donor_account])
     end
   end
 end

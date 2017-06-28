@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 26 June 2017
+- Added contact name search to donor accounts endpoint.
+
 ## 20 June 2017
 - CSV Import should support importing Referred By
 

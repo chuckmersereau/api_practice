@@ -20,7 +20,7 @@ class Api::V2::AccountLists::DonorAccountsController < Api::V2Controller
 
   def load_donor_accounts
     @donor_accounts ||= filter_params[:contacts] ? filtered_donor_accounts : all_donor_accounts
-    @donor_accounts = @donor_accounts.filter(filter_params_without_contacts)
+    @donor_accounts = @donor_accounts.filter(load_account_list, filter_params_without_contacts)
                                      .reorder(sorting_param)
                                      .page(page_number_param)
                                      .per(per_page_param)

@@ -14,6 +14,22 @@ class DonorAccount < ApplicationRecord
   validates :account_number, uniqueness: { scope: :organization_id }
   validates :account_number, presence: true
 
+  scope :filter, lambda { |account_list, filter_params|
+    filtered_scope = where(filter_params.except(:wildcard_search))
+    return filtered_scope unless filter_params.key?(:wildcard_search)
+    filtered_scope.by_wildcard_search(account_list, filter_params[:wildcard_search])
+  }
+
+  scope :by_wildcard_search, lambda { |account_list, wildcard_search_params|
+    includes(:contacts)
+      .references(:contacts).where('"contacts"."name" ilike :name AND "contacts"."account_list_id" = :account_list_id OR '\
+                                   '"donor_accounts"."name" ilike :name OR '\
+                                   '"donor_accounts"."account_number" LIKE :account_number',
+                                   name: "%#{wildcard_search_params}%",
+                                   account_number: "#{wildcard_search_params}%",
+                                   account_list_id: account_list.id)
+  }
+
   def primary_master_person
     master_people.find_by('master_person_donor_accounts.primary' => true)
   end
@@ -67,14 +83,5 @@ class DonorAccount < ApplicationRecord
   def addresses_attributes
     attrs = %w(street city state country postal_code start_date primary_mailing_address source source_donor_account_id remote_id)
     Hash[addresses.collect.with_index { |address, i| [i, address.attributes.slice(*attrs)] }]
-  end
-
-  def self.filter(filter_params)
-    chain = where(filter_params.except(:wildcard_search))
-    return chain unless filter_params.key?(:wildcard_search)
-    chain.where('LOWER("donor_accounts"."name") LIKE :name OR '\
-                '"donor_accounts"."account_number" LIKE :account_number',
-                name: "%#{filter_params[:wildcard_search].downcase}%",
-                account_number: "#{filter_params[:wildcard_search]}%")
   end
 end
