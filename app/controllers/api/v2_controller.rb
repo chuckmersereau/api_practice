@@ -51,8 +51,12 @@ class Api::V2Controller < ApiController
     {
       pagination: pagination_meta_params(resources),
       sort: sorting_param_applied_to_query,
-      filter: filter_params
+      filter: permitted_filter_params_with_uuids
     }
+  end
+
+  def permitted_filter_params_with_uuids
+    @original_params[:filter]&.slice(*filter_params.keys) || {}
   end
 
   def persistence_context

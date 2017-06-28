@@ -291,13 +291,7 @@ class AccountList < ApplicationRecord
   end
 
   def async_merge_contacts(since_time)
-    batch = Sidekiq::Batch.new
-    batch.description = "AccountList #{id} #async_merge_contacts"
-    batch.jobs do
-      contacts.where('updated_at >= ?', since_time).pluck(:id).each do |contact_id|
-        ContactDupMergeWorker.perform_async(id, contact_id)
-      end
-    end
+    QueueContactDupMergeBatchWorker.perform_async(id, since_time.to_i)
   end
 
   # Download all donations / info for all accounts associated with this list

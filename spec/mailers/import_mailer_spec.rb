@@ -29,10 +29,10 @@ describe ImportMailer do
         mail = ImportMailer.failed(import)
         expect(mail.attachments.size).to eq(1)
         expect(mail.attachments.first.content_type).to eq('text/csv; filename="MPDX Import Failures.csv"')
-        expect(mail.attachments.first.body.to_s).to eq('Error Message,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
+        expect(mail.attachments.first.body.to_s).to eq('Error Message,fullname,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
                                                                    'street,city,province,zip-code,country,status,amount,frequency,currency,newsletter,tags,' \
                                                                    'email-address,Spouse-email-address,phone,Spouse-phone-number,extra-notes,skip,likely-giver' \
-                                                                   ",metro,region,appeals,website\n\"Validation failed: Email is invalid, Email is invalid\",Bob" \
+                                                                   ",metro,region,appeals,website,referred_by\n\"Validation failed: Email is invalid, Email is invalid\",Bob" \
                                                                    ',Park,Sara,Kim,Hello!,,,123 Street West,A Small Town,Quebec,L8D 3B9,Canada,Praying and giving' \
                                                                    ',10,Monthly,,Both,bob,this is not a valid email,this is also not a valid email,+12345678901' \
                                                                    ",+10987654321,,Yes,No,metro,region,No,website\n\"Validation failed: First name can't be blank, " \

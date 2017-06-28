@@ -372,7 +372,17 @@ describe TntImport do
       @tnt_import = TntImport.new(@import)
       @import_with_personal_gift = create(:tnt_import_with_personal_gift, account_list: @account_list)
       @tnt_import_with_personal_gift = TntImport.new(@import_with_personal_gift)
+      @appeal = create(:appeal, account_list: @account_list, tnt_id: '1')
+      @second_appeal = create(:appeal, account_list: @account_list, tnt_id: '2')
     end
+
+    let(:setup_online_org) do
+      @user.organization_accounts.destroy_all
+      online_org = create(:organization)
+      @user.organization_accounts << create(:organization_account, organization: online_org)
+    end
+
+    let(:donation_generated_with_gift_splits) { Appeal.find_by(tnt_id: 2).donations.first }
 
     it 'handles an xml that has no gifts' do
       @import = create(:tnt_import_no_gifts, account_list: @account_list)
@@ -381,10 +391,17 @@ describe TntImport do
     end
 
     it 'does import gifts for an online org when gift is marked as personal' do
-      @user.organization_accounts.destroy_all
-      online_org = create(:organization)
-      @user.organization_accounts << create(:organization_account, organization: online_org)
-      expect { @tnt_import_with_personal_gift.import }.to change(Donation, :count).from(0).to(1)
+      setup_online_org
+      expect { @tnt_import_with_personal_gift.import }.to change(Donation, :count).from(0).to(2)
+    end
+
+    it 'links gifts to first appeal and adds other gift splits to memo' do
+      setup_online_org
+      @tnt_import_with_personal_gift.import
+      expect(donation_generated_with_gift_splits.appeal).to eq(@second_appeal)
+      expect(donation_generated_with_gift_splits.memo).to eq(
+        "\n This donation was imported from Tnt. $841 is designated to the \"#{@appeal.name}\" appeal. "
+      )
     end
 
     it 'does not import gifts for an online org or multiple orgs when gift not marked as personal' do
@@ -454,6 +471,15 @@ describe TntImport do
       donor_account = contact.donor_accounts.first
       expect(donor_account.account_number).to eq('1')
       expect(donor_account.total_donations).to eq(175.0)
+    end
+
+    it 'assigns the gift currency code' do
+      @user.organization_accounts.destroy_all
+      online_org = create(:organization)
+      @user.organization_accounts << create(:organization_account, organization: online_org)
+      @tnt_import_with_personal_gift.import
+      expect(Donation.exists?(tendered_amount: 50, tendered_currency: 'CAD')).to eq(true)
+      expect(Donation.exists?(tendered_amount: 25, tendered_currency: 'USD')).to eq(true)
     end
   end
 

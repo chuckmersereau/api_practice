@@ -24,6 +24,7 @@ describe CsvImportContactWorker do
   context 'ActiveRecord::RecordInvalid exception raised when saving contact' do
     let(:csv_row) do
       csv_row = csv_rows.first.to_h
+      csv_row['fullname'] = nil
       csv_row['fname'] = nil
       csv_row['lname'] = nil
       CSV::Row.new(csv_row.keys, csv_row.values)
@@ -32,10 +33,10 @@ describe CsvImportContactWorker do
     it 'adds failed line to file_row_failures' do
       expect(import.reload.file_row_failures).to eq([])
       expect { CsvImportContactWorker.new.perform(import.id, csv_row.headers, csv_row.fields) }.to_not change { Contact.count }.from(0)
-      expect(import.reload.file_row_failures).to eq([["Validation failed: First name can't be blank", nil, nil, 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
+      expect(import.reload.file_row_failures).to eq([["Validation failed: First name can't be blank", nil, nil, nil, 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church',
                                                       '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both', 'christmas-card,      family',
                                                       ' john@example.com ', ' jane@example.com ', '(213) 222-3333', '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes',
-                                                      'http://www.john.doe']])
+                                                      'http://www.john.doe', 'Mary Kim']])
     end
 
     it 'does not report to Rollbar' do
@@ -55,9 +56,10 @@ describe CsvImportContactWorker do
       expect(import.reload.file_row_failures).to eq([])
       expect { CsvImportContactWorker.new.perform(import.id, csv_row.headers, csv_row.fields) }.to_not change { Contact.count }.from(0)
       expect(import.reload.file_row_failures).to eq([['Record not unique error: Please ensure you are not importing duplicate data (such as duplicate email addresses, which must be unique)',
-                                                      ' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church', '1 Example Ave, Apt 6', 'Sample City', 'IL',
-                                                      '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both', 'christmas-card,      family', ' john@example.com ', ' jane@example.com ',
-                                                      '(213) 222-3333', '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe']])
+                                                      'Johnny and Janey Doey', ' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family', 'Westside Baptist Church', '1 Example Ave, Apt 6',
+                                                      'Sample City', 'IL', '60201', 'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both', 'christmas-card,      family', ' john@example.com ',
+                                                      ' jane@example.com ', '(213) 222-3333', '(407) 555-6666', 'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe',
+                                                      'Mary Kim']])
     end
 
     it 'does not report to Rollbar' do
@@ -77,11 +79,11 @@ describe CsvImportContactWorker do
     it 'adds failed line to file_row_failures' do
       expect(import.reload.file_row_failures).to eq([])
       expect { CsvImportContactWorker.new.perform(import.id, csv_row.headers, csv_row.fields) }.to_not change { Contact.count }.from(0)
-      expect(import.reload.file_row_failures).to eq([['StandardError', ' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family',
+      expect(import.reload.file_row_failures).to eq([['StandardError', 'Johnny and Janey Doey', ' John', 'Doe', 'Jane ', 'Doe', 'Hi John and Jane', 'Doe family',
                                                       'Westside Baptist Church', '1 Example Ave, Apt 6', 'Sample City', 'IL', '60201',
                                                       'USA', 'Praying', '50', 'Monthly', 'CAD', 'Both', 'christmas-card,      family',
                                                       ' john@example.com ', ' jane@example.com ', '(213) 222-3333', '(407) 555-6666',
-                                                      'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe']])
+                                                      'test notes', 'No', 'Yes', 'metro', 'region', 'Yes', 'http://www.john.doe', 'Mary Kim']])
     end
   end
 end

@@ -56,8 +56,17 @@ describe Api::V2::AccountLists::InvitesController, type: :controller do
       expect(response.status).to eq 400
     end
 
-    it 'returns a 404 when the code is wrong' do
+    it 'returns a 400 when the code is wrong' do
       full_correct_attributes[:data][:attributes][:code] = 'wrong code'
+      expect do
+        put :update, full_correct_attributes
+      end.to_not change { invite.reload.accepted_at }
+      expect(response.status).to eq 400
+    end
+
+    it 'returns a 404 when the id is not related to the account_list specified' do
+      full_correct_attributes[:id] = create(:account_list_invite).uuid
+
       expect do
         put :update, full_correct_attributes
       end.to_not change { invite.reload.accepted_at }

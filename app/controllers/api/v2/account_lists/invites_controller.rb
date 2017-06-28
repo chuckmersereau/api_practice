@@ -1,5 +1,6 @@
 class Api::V2::AccountLists::InvitesController < Api::V2Controller
   resource_type :account_list_invites
+  skip_after_action :verify_authorized, only: :update
 
   def index
     authorize load_account_list, :show?
@@ -27,9 +28,8 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def update
-    authorize load_account_list
-    validate_account_list_invite_code
     load_account_list_invite
+    validate_account_list_invite_code
 
     if @invite.accept(current_user)
       render_invite
@@ -49,6 +49,11 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
 
   def validate_account_list_invite_code
     raise Exceptions::BadRequestError, "'data/attributes/code' cannot be blank" if params.dig(:account_list_invite, :code).blank?
+    raise Exceptions::BadRequestError, "'data/attributes/code' is invalid" unless valid_invite_code?
+  end
+
+  def valid_invite_code?
+    params.dig(:account_list_invite, :code) == load_account_list_invite.code
   end
 
   def destroy_invite
@@ -101,9 +106,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def load_account_list_invite
-    @invite ||= AccountListInvite.find_by!(uuid: params[:id],
-                                           code: params.dig(:account_list_invite, :code),
-                                           account_list: load_account_list)
+    @invite ||= AccountListInvite.find_by!(uuid: params[:id], account_list: load_account_list)
   end
 
   def pundit_user

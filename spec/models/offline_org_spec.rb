@@ -16,7 +16,11 @@ describe OfflineOrg do
     it 'creates designation account' do
       expect do
         offline_org.import_profiles
-      end.to change(DesignationAccount, :count).by(1)
+      end.to change(DesignationAccount, :count).from(0).to(1)
+      designation_account = DesignationAccount.first
+      expect(designation_account.designation_number).to eq(@org_account.id.to_s)
+      expect(designation_account.active).to eq(true)
+      expect(designation_account.name).to eq(@org.name)
     end
   end
 end

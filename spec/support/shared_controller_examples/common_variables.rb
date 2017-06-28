@@ -9,7 +9,7 @@ RSpec.shared_examples 'common_variables' do
     {
       data: {
         type: resource_type,
-        attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+        attributes: correct_attributes.merge(overwrite: true)
       }.merge(relationships_params)
     }.merge(full_params)
   end
@@ -18,7 +18,7 @@ RSpec.shared_examples 'common_variables' do
     {
       data: {
         type: resource_type,
-        attributes: correct_attributes.merge(updated_in_db_at: resource.updated_at)
+        attributes: correct_attributes.merge(overwrite: true)
       }.merge(unpermitted_relationships_params)
     }.merge(full_params)
   end
@@ -27,7 +27,7 @@ RSpec.shared_examples 'common_variables' do
     {
       data: {
         type: resource_type,
-        attributes: incorrect_attributes.merge(updated_in_db_at: resource.updated_at)
+        attributes: incorrect_attributes.merge(overwrite: true)
       }.merge(incorrect_relationships_params)
     }.merge(full_params)
   end

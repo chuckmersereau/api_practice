@@ -13,7 +13,7 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     create(:donation, donor_account: donor_account,
                       designation_account: designation_account,
                       donation_date: Date.parse('2099-03-04'),
-                      amount: '1100')
+                      amount: '1200')
   end
   let(:time_now) { Time.zone.parse('2099-06-22 12:34:56') }
 
@@ -79,11 +79,11 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     it { expect(subject.multi_currency).to be false }
   end
 
-  describe '#months_back' do
-    it { expect(subject.months_back).to be_a Numeric }
+  describe '#number_of_months_in_range' do
+    it { expect(subject.send(:number_of_months_in_range)).to be_a Numeric }
     it do
       mock_time
-      expect(subject.months_back).to eq 11
+      expect(subject.send(:number_of_months_in_range)).to eq 12
     end
   end
 end

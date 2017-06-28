@@ -44,7 +44,7 @@ class OfflineOrg < DataServer
       designation_number: @org_account.id.to_s,
       active: true
     ).first_or_create
-    da.update(name: @org_account.user.to_s)
+    da.update(name: @org.name.to_s)
     profile.designation_accounts << da unless profile.designation_accounts.include?(da)
   end
 end

@@ -15,8 +15,10 @@ describe Api::V2Controller do
 
       def index
         raise 'Test Error' if params[:raise_error] == true
+
         render json: {
           filter_params: filter_params,
+          filter_params_with_uuid: permitted_filter_params_with_uuids,
           include_params: include_params,
           current_time_zone: current_time_zone.name,
           current_locale: I18n.locale
@@ -59,6 +61,7 @@ describe Api::V2Controller do
         get :index, filter: { contact_id: contact.uuid }
         expect(response.status).to eq(200), invalid_status_detail
         expect(response_json[:filter_params][:contact_id]).to eq(contact.id)
+        expect(response_json[:filter_params_with_uuid][:contact_id]).to eq(contact.uuid)
       end
 
       it 'returns a 404 when a user tries to filter with the id of a resource' do

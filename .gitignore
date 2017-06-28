@@ -12,6 +12,8 @@
 /tmp
 vendor/ruby
 vendor/jruby
+vendor/cache
+vendor/bundle
 coverage
 .DS_Store
 rails/ruby

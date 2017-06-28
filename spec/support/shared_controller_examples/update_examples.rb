@@ -55,6 +55,7 @@ RSpec.shared_examples 'update_examples' do |options = {}|
     it 'does not update resources with outdated updated_at field' do
       api_login(user)
       full_update_attributes[:data][:attributes][:updated_in_db_at] = 1.year.ago
+      full_update_attributes[:data][:attributes][:overwrite] = nil
       put :update, full_update_attributes
 
       expect(response.status).to eq(409), invalid_status_detail

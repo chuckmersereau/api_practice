@@ -34,10 +34,6 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
     account_list.salary_currency_or_default
   end
 
-  def months_back
-    @months_back ||= number_of_months_in_range
-  end
-
   def multi_currency
     account_list.multi_currency?
   end
@@ -53,7 +49,7 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
   protected
 
   def number_of_months_in_range
-    (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month)
+    (end_date.year * 12 + end_date.month) - (start_date.year * 12 + start_date.month) + 1
   end
 
   def start_date

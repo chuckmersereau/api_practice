@@ -83,14 +83,8 @@ RSpec.describe Api::V2::Contacts::ReferralsController, type: :controller do
     }
   end
 
-  # This is only required if you need your update attributes to be different
-  # than the value of correct_attributes.
-  #
-  # If you don't need it - remove it entirely.
   let(:update_attributes) do
-    {
-      updated_in_db_at: contact_referred.updated_at
-    }
+    { overwrite: true }
   end
 
   let(:update_relationships) do
