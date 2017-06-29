@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-04-18 13:06+0000\n"
-"PO-Revision-Date: 2017-04-18 13:06+0000\n"
+"POT-Creation-Date: 2017-06-01 11:42+0000\n"
+"PO-Revision-Date: 2017-06-01 11:42+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: ar\n"
@@ -152,6 +152,7 @@ msgstr "متوسط"
 msgid "Arabic"
 msgstr "العربية"
 
+#. "Avg." is an abbreviation for "Average"
 msgid "Avg."
 msgstr "معدل"
 
@@ -327,6 +328,7 @@ msgstr "خطأ في الاتصال بالخادم %{org_name}"
 msgid "Error connecting: you are already connected as %{org_account}"
 msgstr "خطأ الإتصال: أنت متصل من قبل كـ %{org_account}"
 
+#. This is how a person's name is formatted on the first line of an envelope.
 msgid "Envelope Greeting"
 msgstr "تحية الظرف"
 
@@ -453,6 +455,7 @@ msgstr "هاتف المنزل"
 msgid "Home"
 msgstr "الرئيسية"
 
+#. "Hon." is a person's title. It is shortened from "Honourable" or "Honorable'.
 msgid "Hon."
 msgstr "محترم"
 
