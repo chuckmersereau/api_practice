@@ -1,13 +1,4 @@
-require 'async'
 class GoogleIntegration < ApplicationRecord
-  include Async
-  include Sidekiq::Worker
-  sidekiq_options queue: :api_google_integration, unique: :until_executed
-
-  sidekiq_retry_in do |count|
-    count**6 + 30 # 30, 31, 94, 759, 4126 ... second delays
-  end
-
   belongs_to :google_account, class_name: 'Person::GoogleAccount', inverse_of: :google_integrations
   belongs_to :account_list, inverse_of: :google_integrations
 
@@ -17,7 +8,7 @@ class GoogleIntegration < ApplicationRecord
 
   before_save :create_new_calendar, if: -> { new_calendar.present? }
   before_save :toggle_calendar_integration_for_appointments, :set_default_calendar, if: :calendar_integration_changed?
-  before_save :toggle_email_integration, if: :email_integration_changed?
+  after_save :toggle_email_integration, if: :email_integration_changed?
 
   delegate :sync_task, to: :calendar_integrator
 
@@ -34,29 +25,17 @@ class GoogleIntegration < ApplicationRecord
     :uuid
   ].freeze
 
-  def queue_sync_data(integration = nil)
-    return unless integration
+  PERMITTED_INTEGRATIONS = %w(calendar email contacts).freeze
 
-    if integration == 'contacts'
-      account_list.queue_sync_with_google_contacts
-    else
-      lower_retry_async(:sync_data, integration)
-    end
+  def queue_sync_data(integration)
+    validate_integration!(integration)
+    raise 'Cannot queue sync on an unpersisted record!' unless persisted?
+    GoogleSyncDataWorker.perform_async(id, integration)
   end
 
   def sync_data(integration)
-    case integration
-    when 'calendar'
-      calendar_integrator.sync_tasks
-    when 'email'
-      sync_email
-    when 'contacts'
-      contacts_integrator.sync_contacts
-    end
-  end
-
-  def sync_email
-    email_integrator.sync_mail
+    validate_integration!(integration)
+    send("#{integration}_integrator").sync_data
   end
 
   def calendar_integrator
@@ -93,6 +72,12 @@ class GoogleIntegration < ApplicationRecord
     @calendars || []
   end
 
+  private
+
+  def validate_integration!(integration)
+    raise "Invalid integration '#{integration}'!" unless PERMITTED_INTEGRATIONS.include?(integration)
+  end
+
   def toggle_calendar_integration_for_appointments
     if calendar_integration?
       self.calendar_integrations = ['Appointment'] if calendar_integrations.blank?
@@ -120,10 +105,5 @@ class GoogleIntegration < ApplicationRecord
 
   def toggle_email_integration
     queue_sync_data('email') if email_integration?
-  end
-
-  def self.sync_all_email_accounts
-    email_integrations = GoogleIntegration.where(email_integration: true)
-    AsyncScheduler.schedule_over_24h(email_integrations, :sync_email, :api_google_integration_sync_email)
   end
 end

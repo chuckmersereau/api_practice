@@ -28,7 +28,9 @@ class GoogleContactsIntegrator
     raise e
   end
 
-  def sync_contacts
+  def sync_data
+    return unless @integration.contacts_integration?
+
     # Don't run the Google sync during imports, it can sync them all once the
     # import is done, which is much more efficient.
     return if @integration.account_list.organization_accounts.any?(&:downloading)
@@ -43,6 +45,7 @@ class GoogleContactsIntegrator
   rescue => e
     Rollbar.raise_or_notify(e)
   end
+  alias sync_contacts sync_data
 
   def sync_and_return_num_synced
     @cache = GoogleContactsCache.new(@account)

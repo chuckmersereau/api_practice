@@ -6,32 +6,28 @@ describe GoogleIntegration do
 
   context '#queue_sync_data' do
     it 'queues a data sync when an integration type is passed in' do
-      expect(google_integration).to receive(:lower_retry_async)
-        .with(:sync_data, 'calendar')
+      google_integration.save
+      expect(GoogleSyncDataWorker).to receive(:perform_async).with(google_integration.id, 'calendar')
       google_integration.queue_sync_data('calendar')
     end
 
-    it 'does not queue a data sync when an integration type is passed in' do
+    it 'does not queue a data sync when the record is not saved' do
       expect do
-        google_integration.queue_sync_data
-      end.to_not change(LowerRetryWorker.jobs, :size)
+        google_integration.queue_sync_data('calendar')
+      end.to raise_error(RuntimeError, 'Cannot queue sync on an unpersisted record!')
     end
 
-    it 'queues the google contacts sync integration for the whole account list' do
-      google_integration.update(calendar_integration: false, contacts_integration: true)
+    it 'does not queue a data sync when a bad integration type is passed in' do
+      google_integration.save
       expect do
-        google_integration.queue_sync_data('contacts')
-      end.to change(LowerRetryWorker.jobs, :size).from(0).to(1)
-
-      expect(LowerRetryWorker.jobs.first['args'])
-        .to eq(['AccountList', google_integration.account_list.id, 'sync_with_google_contacts'])
+        google_integration.queue_sync_data('bad')
+      end.to raise_error(RuntimeError, "Invalid integration 'bad'!")
     end
   end
 
   context '#sync_data' do
     it 'triggers a calendar_integration sync' do
-      expect(google_integration.calendar_integrator).to receive(:sync_tasks)
-
+      expect(google_integration.calendar_integrator).to receive(:sync_data)
       google_integration.sync_data('calendar')
     end
   end
@@ -88,7 +84,7 @@ describe GoogleIntegration do
       allow(google_integration).to receive(:calendars).and_return([calendar_data.items.first])
       first_calendar = calendar_data.items.first
 
-      google_integration.set_default_calendar
+      google_integration.send(:set_default_calendar)
 
       expect(google_integration.calendar_id).to eq(first_calendar['id'])
       expect(google_integration.calendar_name).to eq(first_calendar['summary'])
@@ -97,13 +93,13 @@ describe GoogleIntegration do
     it 'returns nil if the api fails' do
       allow(google_integration).to receive(:calendar_api).and_return(false)
 
-      expect(google_integration.set_default_calendar).to eq(nil)
+      expect(google_integration.send(:set_default_calendar)).to eq(nil)
     end
 
     it 'returns nil if this google account has more than one calendar' do
       allow(google_integration).to receive(:calendars).and_return(calendar_data.items)
 
-      expect(google_integration.set_default_calendar).to eq(nil)
+      expect(google_integration.send(:set_default_calendar)).to eq(nil)
     end
   end
 
@@ -124,21 +120,10 @@ describe GoogleIntegration do
 
       first_calendar = calendar_data.items.first
 
-      google_integration.create_new_calendar
+      google_integration.send(:create_new_calendar)
 
       expect(google_integration.calendar_id).to eq(first_calendar['id'])
       expect(google_integration.calendar_name).to eq(google_integration.new_calendar)
-    end
-  end
-
-  context '#sync_all_email_accounts' do
-    it 'schedules the sync email jobs', sidekiq: :testing_disabled do
-      clear_uniqueness_locks
-      create(:google_integration, email_integration: true, calendar_integration: false)
-      create(:google_integration, email_integration: true, calendar_integration: false)
-      expect do
-        GoogleIntegration.sync_all_email_accounts
-      end.to change(Sidekiq::ScheduledSet.new, :size).by(2)
     end
   end
 end
