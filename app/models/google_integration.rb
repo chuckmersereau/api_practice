@@ -71,10 +71,6 @@ class GoogleIntegration < ApplicationRecord
     @contacts_integrator ||= GoogleContactsIntegrator.new(self)
   end
 
-  def plus_api
-    @plus_api ||= google_account.client.discovered_api('plus')
-  end
-
   def calendar_api
     client = google_account.client
     @calendar_api ||= client.discovered_api('calendar', 'v3') if client
