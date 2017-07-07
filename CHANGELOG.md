@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 06 July 2017
+- Added the admin/impersonation endpoint.
+
 ## 27 June 2017
 - Tasks endpoint can now sort by multiple parameters.
 - Sorting now allows specifying the NULLS sort order (FIRST or LAST).
