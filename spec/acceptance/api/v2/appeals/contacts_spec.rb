@@ -34,6 +34,7 @@ resource 'Appeals > Contacts' do
       last_phone_call
       last_pre_call
       last_thank
+      late_at
       likely_to_give
       locale
       magazine
