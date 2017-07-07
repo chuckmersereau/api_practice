@@ -79,6 +79,10 @@ attributes: &attrs
     description:
       The date of the last thank you for the Contact
     type: string
+  late_at:
+    description:
+      The date at which the contact started being late on payments
+    type: string
   lifetime_donations:
     description:
       Total donation amount
