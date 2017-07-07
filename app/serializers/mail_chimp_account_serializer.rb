@@ -14,8 +14,7 @@ class MailChimpAccountSerializer < ApplicationSerializer
              :validation_error
 
   def valid
-    return unless scope
-    scope[:current_account_list].valid_mail_chimp_account
+    object.account_list.valid_mail_chimp_account
   end
 
   def lists_present

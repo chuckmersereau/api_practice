@@ -69,13 +69,13 @@ describe MailChimpAccount do
   end
 
   it 'finds a list by list_id' do
-    allow(account).to receive(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
-    expect(account.list(1).name).to eq('foo')
+    allow(account).to receive(:lists).and_return([OpenStruct.new(id: 'id', name: 'foo')])
+    expect(account.list('id').name).to eq('foo')
   end
 
   it 'finds the primary list' do
-    allow(account).to receive(:lists).and_return([OpenStruct.new(id: 1, name: 'foo')])
-    account.primary_list_id = 1
+    allow(account).to receive(:lists).and_return([OpenStruct.new(id: 'id', name: 'foo')])
+    account.primary_list_id = 'id'
     expect(account.primary_list.name).to eq('foo')
   end
 
