@@ -42,6 +42,7 @@ GIT
 GIT
   remote: https://github.com/gmailgem/gmail.git
   revision: 4f78039e9821340a24ad3d840180d2ec6c6e0115
+  ref: 4f78039e9821340a24ad3d840180d2ec6c6e0115
   specs:
     gmail (0.6.0)
       gmail_xoauth (>= 0.3.0)
@@ -448,7 +449,7 @@ GEM
     loofah (2.0.3)
       nokogiri (>= 1.5.9)
     lumberjack (1.0.11)
-    mail (2.6.5)
+    mail (2.6.6)
       mime-types (>= 1.16, < 4)
     marco-polo (1.2.1)
     method_source (0.8.2)
@@ -829,6 +830,7 @@ DEPENDENCIES
   koala (~> 1.9.0)
   letter_opener (~> 1.4.1)
   linkedin (~> 0.3.7)
+  mail (~> 2.6.6)
   marco-polo (~> 1.2.1)
   mock_redis (~> 0.17.0)
   nameable (~> 1.1.3)
