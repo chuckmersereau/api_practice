@@ -47,7 +47,7 @@ class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
   end
 
   def list(list_id)
-    lists.find { |l| l.id == list_id.to_i }
+    lists.find { |l| l.id == list_id }
   end
 
   def primary_list
