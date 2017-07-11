@@ -1,10 +1,12 @@
 class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
+  include Concerns::Reports::DonationSumHelper
+
   MONTHS_BACK = 12
 
   attr_accessor :account_list
 
   def donor_infos
-    received_donations.donors
+    received_donations_object.donors
   end
 
   def months
@@ -14,12 +16,12 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
 
   def currency_groups
     Hash.new { |h, k| h[k] = {} }.tap do |grouped|
-      donations_by_currency.each do |currency, donations|
+      donations_by_currency(all_received_donations).each do |currency, donations|
         grouped[currency] = {
           totals: {
             year: sum_donations(donations),
             year_converted: sum_converted_donations(donations),
-            months: sum_donations_by_month(donations)
+            months: sum_donations_by_month(donations, months)
           },
           donation_infos: contacts_donation_info(donations)
         }
@@ -41,7 +43,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
 
   def contacts_donation_info(all_donations)
     donor_infos
-      .map { |d| create_donation_info(d, all_donations) }
+      .map { |donation| create_donation_info(donation, all_donations) }
       .reject { |info| info[:months].empty? }
   end
 
@@ -61,7 +63,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
   end
 
   def summarize_months(all_donations)
-    group_donations_by_month(all_donations).map do |donations|
+    group_donations_by_month(all_donations, months).map do |donations|
       {
         total: sum_donations(donations),
         donations: donations
@@ -69,11 +71,11 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
     end
   end
 
-  def received_donations
-    @received_donations ||=
+  def received_donations_object
+    @received_donations_object ||=
       DonationReports::ReceivedDonations.new(
         account_list: account_list,
-        donations_scoper: ->(d) { d.where('donation_date >= ?', start_date) }
+        donations_scoper: ->(donation) { donation.where('donation_date >= ?', start_date) }
       )
   end
 
@@ -81,33 +83,7 @@ class Reports::DonorCurrencyDonations < ActiveModelSerializers::Model
     @start_date ||= MONTHS_BACK.months.ago.beginning_of_month
   end
 
-  def donations_by_currency
-    Hash.new { |h, k| h[k] = [] }.tap do |grouped|
-      donations.each do |donation|
-        grouped[donation_currency(donation)].push(donation)
-      end
-    end
-  end
-
-  def donations
-    @donations ||= received_donations.donations
-  end
-
-  def sum_donations(donations)
-    donations.map(&:amount).inject(:+) || 0
-  end
-
-  def sum_converted_donations(donations)
-    donations.map(&:converted_amount).inject(:+) || 0
-  end
-
-  def sum_donations_by_month(donations)
-    group_donations_by_month(donations).map { |d| sum_donations(d) }
-  end
-
-  def group_donations_by_month(donations)
-    months.map do |month|
-      donations.select { |d| d.donation_date.beginning_of_month == month }
-    end
+  def all_received_donations
+    @all_received_donations ||= received_donations_object.donations
   end
 end

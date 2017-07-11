@@ -164,6 +164,7 @@ Rails.application.routes.draw do
 
         namespace :reports do
           resource :balances, only: :show
+          resource :donation_monthly_totals, only: :show
           resource :donor_currency_donations, only: :show
           resource :expected_monthly_totals, only: :show
           resource :goal_progress, only: :show

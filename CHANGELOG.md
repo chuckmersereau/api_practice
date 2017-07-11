@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 11 July 2017
+- Added a '/reports/donation_monthly_totals' endpoint.
+
 ## 06 July 2017
 - Added the admin/impersonation endpoint.
 

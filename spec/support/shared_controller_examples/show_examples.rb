@@ -16,7 +16,6 @@ RSpec.shared_examples 'show_examples' do |options = {}|
       api_login(user)
       get :show, full_params
       expect(response.status).to eq(200), invalid_status_detail
-
       expect(response.body)
         .to include(resource.send(reference_key).to_json) if reference_key
     end
