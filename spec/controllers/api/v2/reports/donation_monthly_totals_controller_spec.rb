@@ -6,15 +6,15 @@ RSpec.describe Api::V2::Reports::DonationMonthlyTotalsController, type: :control
 
   let(:resource) do
     Reports::DonationMonthlyTotals.new(account_list: account_list,
-                                       start_date: 4.months.ago,
-                                       end_date: 2.months.ago)
+                                       start_date: DateTime.new(2017, 1, 3),
+                                       end_date: DateTime.new(2017, 3, 3))
   end
 
   let(:parent_param) do
     {
       filter: {
         account_list_id: account_list.uuid,
-        month_range: "#{4.months.ago.utc.iso8601}...#{2.months.ago.utc.iso8601}"
+        month_range: "#{DateTime.new(2017, 1, 3).utc.iso8601}...#{DateTime.new(2017, 3, 3).utc.iso8601}"
       }
     }
   end
