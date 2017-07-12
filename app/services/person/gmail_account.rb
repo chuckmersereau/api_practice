@@ -31,7 +31,8 @@ class Person::GmailAccount
     return false unless client
 
     since = (google_account.last_email_sync || 1.day.ago).to_date
-    email_collection = AccountListEmailCollection.new(account_list)
+
+    self.email_collection = AccountList::EmailCollection.new(account_list)
 
     gmail do |g|
       begin
@@ -46,7 +47,7 @@ class Person::GmailAccount
               next unless imap_data
 
               gmail_message = Gmail::Message.new(sent_mailbox, nil, imap_data)
-              log_sent_email(message: gmail_message, email_collection: email_collection)
+              log_sent_email(message: gmail_message)
             end
           end
 
@@ -57,7 +58,7 @@ class Person::GmailAccount
               next unless imap_data
 
               gmail_message = Gmail::Message.new(received_mailbox, nil, imap_data)
-              log_received_email(message: gmail_message, email_collection: email_collection)
+              log_received_email(message: gmail_message)
             end
           end
 
@@ -99,7 +100,9 @@ class Person::GmailAccount
 
   private
 
-  def fetch_account_email_data(email_collection, email_address)
+  attr_accessor :email_collection
+
+  def fetch_account_email_data(email_address)
     return unless email_address
 
     # While `email_collection.index_data[email_address]` could return an array of multiple items,
@@ -108,7 +111,7 @@ class Person::GmailAccount
     # and logging emails for an email address once.
     #
     # For context: https://github.com/CruGlobal/mpdx_api/blob/6412f535455c4959e3801c43143758f1438272ce/app/services/person/gmail_account.rb#L35-L46
-    email_collection.indexed_data[email_address]&.first
+    email_collection.grouped_by_email[email_address]&.first
   end
 
   def force_encode_body(body_needing_encoding)
@@ -141,22 +144,22 @@ class Person::GmailAccount
     end
   end
 
-  def log_received_email(message:, email_collection:)
+  def log_received_email(message:)
     account_list_id      = email_collection.account_list.id
     sender_email_address = sender_email_address_from_envelope(message.envelope)
-    account_email_data   = fetch_account_email_data(email_collection, sender_email_address)
+    account_email_data   = fetch_account_email_data(sender_email_address)
 
     return unless account_email_data.present?
 
     log_email(message, account_list_id, account_email_data[:contact_id], account_email_data[:person_id], 'Received')
   end
 
-  def log_sent_email(message:, email_collection:)
+  def log_sent_email(message:)
     account_list_id           = email_collection.account_list.id
     recipient_email_addresses = recipient_email_addresses_from_envelope(message.envelope)
 
     recipient_email_addresses.each do |recipient_email_address|
-      account_email_data = fetch_account_email_data(email_collection, recipient_email_address)
+      account_email_data = fetch_account_email_data(recipient_email_address)
       next unless account_email_data.present?
 
       log_email(message, account_list_id, account_email_data[:contact_id], account_email_data[:person_id], 'Done')

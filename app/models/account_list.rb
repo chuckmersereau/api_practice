@@ -354,7 +354,10 @@ class AccountList < ApplicationRecord
     return if google_integrations.where(contacts_integration: true).empty?
     return if organization_accounts.any?(&:downloading)
     return if imports.any?(&:importing) || mail_chimp_account.try(&:importing)
-    lower_retry_async(:sync_with_google_contacts)
+
+    google_integrations.where(contacts_integration: true).find_each do |google_integration|
+      google_integration.queue_sync_data('contacts')
+    end
   end
 
   def organization_accounts
@@ -389,13 +392,6 @@ class AccountList < ApplicationRecord
   end
 
   private
-
-  def sync_with_google_contacts
-    # Find the Google integrations 1 by 1 so accounts with multiple integrations
-    # can release memory associated with the sync.
-    google_integrations.where(contacts_integration: true)
-                       .find_each(batch_size: 1) { |g_i| g_i.sync_data('contacts') }
-  end
 
   def import_donations
     organization_accounts.reject(&:disable_downloads).each(&:import_all_data)

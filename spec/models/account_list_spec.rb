@@ -275,37 +275,37 @@ describe AccountList do
 
     it 'queues a job if there is a google integration that syncs contacts' do
       account_list.queue_sync_with_google_contacts
-      expect(LowerRetryWorker.jobs.size).to eq(1)
+      expect(GoogleSyncDataWorker.jobs.size).to eq(1)
     end
 
     it 'does not queue if there are no google integrations with contact sync set' do
       integration.update(contacts_integration: false)
       account_list.queue_sync_with_google_contacts
-      expect(LowerRetryWorker.jobs).to be_empty
+      expect(GoogleSyncDataWorker.jobs).to be_empty
 
       account_list.google_integrations.destroy_all
       account_list.queue_sync_with_google_contacts
-      expect(LowerRetryWorker.jobs).to be_empty
+      expect(GoogleSyncDataWorker.jobs).to be_empty
     end
 
     it 'does not queue if is an import is running' do
       create(:import, account_list: account_list, importing: true, source: 'google')
       account_list.queue_sync_with_google_contacts
-      expect(LowerRetryWorker.jobs).to be_empty
+      expect(GoogleSyncDataWorker.jobs).to be_empty
     end
 
     it 'does not queue if is an account is downloading' do
       account_list.users << create(:user)
       create(:organization_account, downloading: true, person: account_list.users.first)
       account_list.queue_sync_with_google_contacts
-      expect(LowerRetryWorker.jobs).to be_empty
+      expect(GoogleSyncDataWorker.jobs).to be_empty
     end
 
     it 'does not queue if the mail chimp account is importing' do
       create(:mail_chimp_account, account_list: account_list, importing: true)
       expect do
         account_list.queue_sync_with_google_contacts
-      end.to_not change(LowerRetryWorker.jobs, :size)
+      end.to_not change(GoogleSyncDataWorker.jobs, :size)
     end
   end
 

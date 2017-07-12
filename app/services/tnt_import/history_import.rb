@@ -13,7 +13,7 @@ class TntImport::HistoryImport
   def import_history
     contact_ids_by_tnt_appeal_id = Hash.new { |hash, key| hash[key] = [] }
 
-    return contact_ids_by_tnt_appeal_id unless @xml_tables['History'].present?
+    return contact_ids_by_tnt_appeal_id unless @xml_tables['History'].present? && @xml_tables['HistoryContact'].present?
 
     task_id_by_tnt_history_id       = {}
     tnt_appeal_id_by_tnt_history_id = {}
