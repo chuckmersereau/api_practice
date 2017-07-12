@@ -8,6 +8,9 @@ Rails.application.routes.draw do
 
     api_version(module: 'V2', path: { value: 'v2' }) do
       constraints(id: UUID_REGEX) do
+        namespace :admin do
+          resources :impersonation, only: :create
+        end
         resources :account_lists, only: [:index, :show, :update] do
           scope module: :account_lists do
             resource :analytics, only: [:show]
@@ -161,6 +164,7 @@ Rails.application.routes.draw do
 
         namespace :reports do
           resource :balances, only: :show
+          resource :donation_monthly_totals, only: :show
           resource :donor_currency_donations, only: :show
           resource :expected_monthly_totals, only: :show
           resource :goal_progress, only: :show

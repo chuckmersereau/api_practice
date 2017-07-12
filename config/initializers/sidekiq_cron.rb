@@ -6,10 +6,10 @@ SIDEKIQ_CRON_HASH = {
     'args'  => []
   },
 
-  'Google email sync' => {
-    'class' => 'SidekiqCronWorker',
+  'GoogleEmailSyncSchedulerWorker' => {
+    'class' => 'GoogleEmailSyncSchedulerWorker',
     'cron'  => '0 3 * * *',
-    'args'  => ['GoogleIntegration.sync_all_email_accounts']
+    'args'  => []
   },
 
   'Donations download' => {
