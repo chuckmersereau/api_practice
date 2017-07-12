@@ -3,6 +3,7 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 11 July 2017
+- Gift Aid can now be opted out for specific contacts.
 - Added a '/reports/donation_monthly_totals' endpoint.
 
 ## 06 July 2017

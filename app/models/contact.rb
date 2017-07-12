@@ -69,6 +69,7 @@ class Contact < ApplicationRecord
     :name,
     :next_ask,
     :no_appeals,
+    :no_gift_aid,
     :not_duplicated_with,
     :notes,
     :overwrite,
@@ -696,6 +697,8 @@ class Contact < ApplicationRecord
   end
 
   def gift_aid_percentage
+    return 0 if no_gift_aid?
+
     donor_accounts.first.try(:organization).try(:gift_aid_percentage) || 0
   end
 
