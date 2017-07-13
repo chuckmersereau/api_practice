@@ -5,6 +5,15 @@ describe ConstantListExhibit do
   let(:context) { double }
   let(:constant_list) { ConstantList.new }
 
+  shared_examples 'expect method to translate values' do |options|
+    before { I18n.locale = :en }
+    after { I18n.locale = :en }
+
+    it do
+      expect { I18n.locale = :de }.to change { subject.send(options[:method]).first[:value] }
+    end
+  end
+
   context '.applicable_to?' do
     it 'applies only to ConstantList and not other stuff' do
       expect(ConstantListExhibit.applicable_to?(ConstantList.new)).to be true
@@ -103,10 +112,20 @@ describe ConstantListExhibit do
     end
   end
 
+  context '#pledge_frequency_translated_hashes' do
+    it do
+      subject.pledge_frequency_translated_hashes.each do |pledge_frequency|
+        expect(pledge_frequency).to be_a Hash
+      end
+    end
+
+    include_examples 'expect method to translate values', method: :pledge_frequency_translated_hashes
+  end
+
   context '#notification_translated_hashes' do
     it do
-      subject.notification_translated_hashes.each do |_, status|
-        expect(status).to be_a Hash
+      subject.notification_translated_hashes.each do |_, notification|
+        expect(notification).to be_a Hash
       end
     end
   end

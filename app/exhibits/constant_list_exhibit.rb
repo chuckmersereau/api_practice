@@ -59,6 +59,16 @@ class ConstantListExhibit < DisplayCase::Exhibit
     translate_array(statuses)
   end
 
+  def pledge_frequency_translated_hashes
+    pledge_frequencies.map do |key, value|
+      {
+        id: value,
+        key: key,
+        value: _(value)
+      }
+    end
+  end
+
   def notification_translated_hashes
     notifications.dup.map do |key, value|
       {

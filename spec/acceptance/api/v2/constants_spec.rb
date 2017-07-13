@@ -46,6 +46,7 @@ resource 'Constants' do
           organizations_attributes
           pledge_currencies
           pledge_frequencies
+          pledge_frequency_hashes
           results
           sources
           status_hashes
@@ -82,6 +83,10 @@ resource 'Constants' do
 
         resource_object['status_hashes'].each do |activity|
           expect(activity).to be_a(Hash)
+        end
+
+        resource_object['pledge_frequency_hashes'].each do |pledge_frequency|
+          expect(pledge_frequency).to be_a(Hash)
         end
 
         expect(resource_object['alert_frequencies']).to be_a_hash_with_types String, String
