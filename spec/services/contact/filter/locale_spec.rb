@@ -18,9 +18,9 @@ RSpec.describe Contact::Filter::Locale do
         options: [
           { name: '-- Any --', id: '', placeholder: 'None' },
           { name: '-- Unspecified --', id: 'null' },
-          { name: '', id: 'en-US' },
-          { name: '', id: 'fr-CA' },
-          { name: '', id: 'fr-FR' }],
+          { name: 'en-US', id: 'en-US' },
+          { name: 'fr-CA', id: 'fr-CA' },
+          { name: 'fr-FR', id: 'fr-FR' }],
         parent: 'Contact Details',
         priority: 26,
         title: 'Language',

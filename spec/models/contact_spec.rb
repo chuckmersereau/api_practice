@@ -646,27 +646,32 @@ describe Contact do
 
   context '#sync_with_mail_chimp' do
     context 'with mail_chimp account' do
-      let(:mc_account) { build(:mail_chimp_account, account_list: account_list) }
+      let!(:mail_chimp_account) { build(:mail_chimp_account, account_list: account_list, primary_list_id: 'primary_list_id') }
+
       before do
         person_and_email_address
       end
 
       it 'notifies the mail chimp account of changes on certain fields' do
-        expect(mc_account).to receive(:queue_sync_contacts).with([contact.id])
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account, 'primary_list_id', [contact.id]
+        )
         contact.locale = 'en-US'
         contact.send(:check_state_for_mail_chimp_sync)
         contact.send(:sync_with_mail_chimp)
       end
 
       it 'notifies the mail chimp account of changes on certain nested fields' do
-        expect(mc_account).to receive(:queue_sync_contacts).with([contact.id])
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account, 'primary_list_id', [contact.id]
+        )
         contact.people.first.primary_email_address.email = 'new@email.com'
         contact.send(:check_state_for_mail_chimp_sync)
         contact.send(:sync_with_mail_chimp)
       end
 
       it 'does not notify the mail chimp account of changes on certain fields' do
-        expect(mc_account).to_not receive(:queue_sync_contacts).with([contact.id])
+        expect(MailChimp::ExportContactsWorker).not_to receive(:perform_async)
         contact.timezone = 'PST'
         contact.send(:check_state_for_mail_chimp_sync)
         contact.send(:sync_with_mail_chimp)

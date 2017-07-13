@@ -13,7 +13,7 @@ describe Api::V2::Contacts::ExportToMailChimpController, type: :controller do
   let!(:second_contact) { create(:contact, account_list: account_list, appeals: [appeal]) }
 
   before do
-    allow_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list)
+    allow_any_instance_of(MailChimp::Exporter).to receive(:export_contacts)
     allow_any_instance_of(MailChimpAccount).to receive(:lists).and_return([])
     allow_any_instance_of(MailChimpAccount).to receive(:validate_key)
     mail_chimp_account.account_list = account_list
@@ -35,8 +35,8 @@ describe Api::V2::Contacts::ExportToMailChimpController, type: :controller do
 
     it 'queues export when user is logged in and provides mailchimp_list_id' do
       api_login(user)
-      expect_any_instance_of(MailChimpAccount).to receive(:queue_export_appeal_contacts).with(
-        [first_contact.id, second_contact.id], primary_list_id, appeal.id
+      expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+        mail_chimp_account, primary_list_id, [first_contact.id, second_contact.id]
       )
       post :create, mail_chimp_list_id: primary_list_id
       expect(response).to be_success
@@ -44,8 +44,8 @@ describe Api::V2::Contacts::ExportToMailChimpController, type: :controller do
 
     it 'queues export only the contacts in contact_id filter that belong to the user' do
       api_login(user)
-      expect_any_instance_of(MailChimpAccount).to receive(:queue_export_appeal_contacts).with(
-        [first_contact.id], primary_list_id, appeal.id
+      expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+        mail_chimp_account, primary_list_id, [first_contact.id]
       )
       post :create, filter: { contact_ids: [first_contact.uuid, create(:contact).uuid] }, mail_chimp_list_id: primary_list_id
       expect(response).to be_success

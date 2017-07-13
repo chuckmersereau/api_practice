@@ -1,7 +1,7 @@
 def schedule_sync(mc_account, index)
   id = mc_account.id
   num_secs = index * 60
-  MailChimpAccount.perform_in(num_secs.seconds, id, :call_mailchimp, :export_to_primary_list)
+  MailChimpAccount.perform_in(num_secs.seconds, id, :call_mail_chimp, :export_to_primary_list)
 end
 
 def backup_mc_account(mc_account)

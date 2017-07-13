@@ -40,7 +40,6 @@ class ConstantListExhibit < DisplayCase::Exhibit
       options['send_newsletter'] = assignable_send_newsletter.dup
       options['pledge_received'] = %w(Yes No)
       options['pledge_currency'] = pledge_currencies_code_symbol_map
-      options['locale'] = mail_chimp_locale_options.dup
     end
   end
 

@@ -68,8 +68,6 @@ class AccountList < ApplicationRecord
   accepts_nested_attributes_for :contacts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notification_preferences, reject_if: :all_blank, allow_destroy: true
 
-  after_update :queue_update_users_mailchimp
-
   scope :with_linked_org_accounts, lambda {
     joins(:organization_accounts).where('locked_at is null').order('last_download asc')
   }
@@ -401,18 +399,9 @@ class AccountList < ApplicationRecord
     DesignationAccount::DupByBalanceFix.deactivate_dups(designation_accounts)
   end
 
-  def queue_update_users_mailchimp
-    return unless tester_or_owner_setting_changed?
-    async(:update_mailchimp_subscription)
-  end
-
   def tester_or_owner_setting_changed?
     changes.keys.include?('settings') &&
       (changes['settings'][0]['tester'] != changes['settings'][1]['tester'] ||
        changes['settings'][0]['owner'] != changes['settings'][1]['owner'])
-  end
-
-  def update_mailchimp_subscription
-    users.each { |u| User::MailChimpManager.new(u).subscribe }
   end
 end

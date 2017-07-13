@@ -36,12 +36,6 @@ SIDEKIQ_CRON_HASH = {
     'args'  => ['Person::OrganizationAccount.clear_stalled_downloads']
   },
 
-  'Mailchimp sync' => {
-    'class' => 'MailChimpSyncWorker',
-    'cron'  => '0 10 * * *',
-    'args'  => []
-  },
-
   'Fetch currency rates' => {
     'class' => 'CurrencyRatesFetcherWorker',
     'cron' => '0 11 * * *',

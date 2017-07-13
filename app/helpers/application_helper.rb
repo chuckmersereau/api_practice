@@ -136,12 +136,6 @@ module ApplicationHelper
     code + ' (' + currency_symbol(code) + ')'
   end
 
-  def mail_chimp_locale_options
-    MailChimpAccount::Locales::LOCALE_CODES
-      .map { |language, code| [_(language), code] }
-      .sort_by(&:first)
-  end
-
   def show_insights?
     $rollout.active?(:insights, current_account_list) &&
       current_user.organization_accounts.where(organization: Organization.cru_usa).any?
