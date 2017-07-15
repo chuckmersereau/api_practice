@@ -21,6 +21,9 @@ class Reports::GoalProgressSerializer < ServiceSerializer
              :total_pledges
 
   def salary_organization_id
-    Organization.where(id: account_list.salary_organization_id).pluck(:uuid).first
+    Organization.where(id: account_list.salary_organization_id)
+                .limit(1)
+                .pluck(:uuid)
+                .first
   end
 end
