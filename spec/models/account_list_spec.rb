@@ -7,6 +7,17 @@ describe AccountList do
     NotificationTypesSeeder.new.seed # Specs depend on NotificationType records.
   end
 
+  subject { described_class.new }
+
+  describe '#salary_organization=()' do
+    let(:organization) { create(:organization) }
+
+    it 'finds the id when given a uuid' do
+      subject.salary_organization = organization.uuid
+      expect(subject.salary_organization_id).to eq(organization.id)
+    end
+  end
+
   describe '#destroy' do
     it 'raises an error' do
       expect { AccountList.new.destroy }.to raise_error RuntimeError

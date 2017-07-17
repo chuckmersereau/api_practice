@@ -79,7 +79,7 @@ class AccountList < ApplicationRecord
     :monthly_goal,
     :name,
     :overwrite,
-    :settings,
+    :salary_organization,
     :tester,
     :updated_at,
     :updated_in_db_at,
@@ -94,9 +94,14 @@ class AccountList < ApplicationRecord
   end
   alias destroy! destroy
 
-  def salary_organization_id=(val)
-    settings[:salary_organization_id] = val if val.is_a?(Integer)
-    settings[:salary_organization_id] ||= val.id
+  def salary_organization=(value)
+    value = Organization.where(uuid: value).limit(1).ids.first unless value.is_a?(Integer)
+    self.salary_organization_id = value
+  end
+
+  def salary_organization_id=(value)
+    settings[:salary_organization_id] = value if value.is_a?(Integer)
+    settings[:salary_organization_id] ||= value.id
     settings[:salary_currency] = Organization.find(settings[:salary_organization_id]).default_currency_code
   end
 
