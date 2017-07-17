@@ -69,7 +69,7 @@ describe GoogleCalendarIntegrator do
       expect(integrator).to receive(:event_attributes).and_return({})
 
       expect do
-        integrator.add_task(task)
+        integrator.send(:add_task, task)
       end.to change(GoogleEvent, :count)
       expect(GoogleEvent.last.calendar_id).to eq('cal1')
     end
@@ -80,7 +80,7 @@ describe GoogleCalendarIntegrator do
       expect(integrator.client).to receive(:execute).and_return(missing_event_response)
       expect(integrator).to receive(:event_attributes).and_return({})
 
-      integrator.add_task(task)
+      integrator.send(:add_task, task)
 
       expect(google_integration.calendar_integration?).to be false
       expect(google_integration.calendar_id).to be_nil
@@ -100,7 +100,7 @@ describe GoogleCalendarIntegrator do
 
       google_event.save
       expect do
-        integrator.update_task(task, google_event)
+        integrator.send(:update_task, task, google_event)
       end.to_not change(GoogleEvent, :count)
     end
 
@@ -112,7 +112,7 @@ describe GoogleCalendarIntegrator do
       expect(integrator).to receive(:event_attributes).and_return({})
       expect(integrator).to receive(:add_task)
 
-      integrator.update_task(task, google_event)
+      integrator.send(:update_task, task, google_event)
 
       expect(google_event).to_not eq(GoogleEvent.find_by(google_integration_id: google_integration.id, activity_id: task.id))
     end
@@ -127,28 +127,28 @@ describe GoogleCalendarIntegrator do
 
       google_event.save
       expect do
-        integrator.remove_google_event(google_event)
+        integrator.send(:remove_google_event, google_event)
       end.to change(GoogleEvent, :count).by(-1)
     end
   end
 
   context '#event_attributes' do
     it 'sets start and end times for tasks with default lengths' do
-      expect(integrator.event_attributes(task)[:start][:dateTime]).to_not be_nil
-      expect(integrator.event_attributes(task)[:end][:dateTime]).to_not be_nil
+      expect(integrator.send(:event_attributes, task)[:start][:dateTime]).to_not be_nil
+      expect(integrator.send(:event_attributes, task)[:end][:dateTime]).to_not be_nil
 
-      expect(integrator.event_attributes(task)[:start][:date]).to be_nil
-      expect(integrator.event_attributes(task)[:end][:date]).to be_nil
+      expect(integrator.send(:event_attributes, task)[:start][:date]).to be_nil
+      expect(integrator.send(:event_attributes, task)[:end][:date]).to be_nil
     end
 
     it 'sets an all day event for tasks without default lengths' do
       task.activity_type = 'Thank'
 
-      expect(integrator.event_attributes(task)[:start][:dateTime]).to be_nil
-      expect(integrator.event_attributes(task)[:end][:dateTime]).to be_nil
+      expect(integrator.send(:event_attributes, task)[:start][:dateTime]).to be_nil
+      expect(integrator.send(:event_attributes, task)[:end][:dateTime]).to be_nil
 
-      expect(integrator.event_attributes(task)[:start][:date]).to_not be_nil
-      expect(integrator.event_attributes(task)[:end][:date]).to_not be_nil
+      expect(integrator.send(:event_attributes, task)[:start][:date]).to_not be_nil
+      expect(integrator.send(:event_attributes, task)[:end][:date]).to_not be_nil
     end
 
     it 'respects the user time zone on an all day event' do
@@ -158,7 +158,7 @@ describe GoogleCalendarIntegrator do
       user.time_zone = 'Central Time (US & Canada)'
       user.save
 
-      expect(integrator.event_attributes(task)[:start][:date]).to eql('2015-10-14')
+      expect(integrator.send(:event_attributes, task)[:start][:date]).to eql('2015-10-14')
     end
   end
 end
