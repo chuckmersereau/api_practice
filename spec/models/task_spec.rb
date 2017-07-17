@@ -25,7 +25,7 @@ describe Task do
   end
 
   context 'google calendar integration' do
-    let(:google_integration) { double('GoogleIntegration', async: true) }
+    let(:google_integration) { double('GoogleIntegration', async: true, id: 1234) }
 
     before do
       allow_any_instance_of(AccountList).to receive(:google_integrations) { [google_integration] }
@@ -51,13 +51,15 @@ describe Task do
     end
 
     it 'syncs a task to google after a save call' do
-      expect(google_integration).to receive(:lower_retry_async)
+      task = build(:task, start_at: 1.day.from_now, account_list: account_list, activity_type: 'Appointment')
 
-      create(:task, start_at: 1.day.from_now, account_list: account_list, activity_type: 'Appointment')
+      expect { task.save }.to change { GoogleCalendarSyncTaskWorker.jobs.size }.by(1)
+
+      expect(GoogleCalendarSyncTaskWorker.jobs.last['args']).to eq([1234, task.id])
     end
 
     it 'syncs a task to google after a destroy call' do
-      expect(google_integration).to receive(:lower_retry_async).twice
+      expect(GoogleCalendarSyncTaskWorker).to receive(:perform_async).twice
 
       create(:task, start_at: 1.day.from_now, account_list: account_list, activity_type: 'Appointment').destroy
     end
