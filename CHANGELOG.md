@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 13 July 2017
+- Removed the '/api/v2/user/authentication' endpoint.
+
 ## 12 July 2017
 - Added a pledge_frequency_hashes field to '/api/v2/constants' endpoint.
 

@@ -41,7 +41,10 @@ class Api::V2::Admin::ImpersonationController < Api::V2Controller
   end
 
   def load_token
-    @token ||= JsonWebToken.encode(user_uuid: load_impersonated.uuid)
+    @token ||= JsonWebToken.encode(
+      user_uuid: load_impersonated.uuid,
+      exp: 20.minutes.from_now.utc.to_i
+    )
   end
 
   def render_token
