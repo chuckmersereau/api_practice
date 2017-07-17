@@ -6,8 +6,8 @@ class Task < Activity
   sidekiq_options queue: :api_task, backtrace: true, unique: :until_executed
 
   before_validation :update_completed_at
-  after_save :update_contact_uncompleted_tasks_count, :sync_to_google_calendar
-  after_destroy :update_contact_uncompleted_tasks_count, :sync_to_google_calendar
+  after_save :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
+  after_destroy :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
 
   enum notification_type: %w(email)
   enum notification_time_unit: %w(minutes hours)
@@ -366,11 +366,11 @@ class Task < Activity
     contacts.map(&:update_uncompleted_tasks_count)
   end
 
-  def sync_to_google_calendar
+  def queue_sync_to_google_calendar
     return if google_sync_should_not_take_place?
 
     account_list.google_integrations.each do |google_integration|
-      google_integration.lower_retry_async(:sync_task, id)
+      GoogleCalendarSyncTaskWorker.perform_async(google_integration.id, id)
     end
   end
 
