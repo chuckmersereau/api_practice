@@ -13,6 +13,7 @@ class MailChimpAccount < ApplicationRecord # rubocop:disable RedundantReturn
            :lists,
            :lists_available_for_newsletters_formatted,
            :lists_link,
+           :primary_list,
            :primary_list_name,
            :validate_key,
            :validation_error,

@@ -18,6 +18,22 @@ describe AccountList do
     end
   end
 
+  describe '#valid_mail_chimp_account' do
+    let(:account_list) { create(:account_list) }
+    let!(:mail_chimp_account) { create(:mail_chimp_account, account_list: account_list, active: true) }
+    let(:mock_list) { double(:mock_list) }
+
+    it 'returns true when the mail_chimp_account is valid' do
+      expect_any_instance_of(MailChimp::GibbonWrapper).to receive(:primary_list).and_return(mock_list)
+      expect(account_list.valid_mail_chimp_account).to be_truthy
+    end
+
+    it 'returns false when the mail_chimp_account is invalid' do
+      mail_chimp_account.active = false
+      expect(account_list.valid_mail_chimp_account).to be_falsey
+    end
+  end
+
   describe '#destroy' do
     it 'raises an error' do
       expect { AccountList.new.destroy }.to raise_error RuntimeError
