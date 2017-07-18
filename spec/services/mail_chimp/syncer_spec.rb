@@ -80,7 +80,7 @@ RSpec.describe MailChimp::Syncer do
         expect(mock_webhooks).to receive(:retrieve).and_return(
           'webhooks' => [
             {
-              'url' => "https://mpdx.org/mail_chimp_webhook/#{webhook_token}"
+              'url' => "https://api.mpdx.test/mail_chimp_webhook/#{webhook_token}"
             }
           ]
         )

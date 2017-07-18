@@ -40,9 +40,13 @@ Rails.application.configure do
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
 
-  config.action_mailer.default_url_options = { host: 'localhost:3000' }
+  config.action_mailer.default_url_options = {
+    host: 'api.mpdx.test',
+    protocol: 'http'
+  }
 
-  Rails.application.routes.default_url_options[:host] = 'mpdx.org'
+  Rails.application.routes.default_url_options[:host] = config.action_mailer.default_url_options[:host]
+  Rails.application.routes.default_url_options[:protocol] = config.action_mailer.default_url_options[:protocol]
 end
 
 I18n.enforce_available_locales = false

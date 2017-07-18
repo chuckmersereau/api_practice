@@ -20,7 +20,7 @@
 <p>
   <%= _('We have temporarily disassociated your MailChimp list from MPDX to prevent further errors. Once you have
   chosen one of the options above, please go back to %{link}
-  and update your MailChimp settings.').localize % { link: link_to('integration_preferences_url', 'integration_preferences_url') } %>
+  and update your MailChimp settings.').localize % { link: link_to(_('MailChimp Integration Settings'), WebRouter.integration_preferences_url('mailchimp')) } %>
 </p>
 
 

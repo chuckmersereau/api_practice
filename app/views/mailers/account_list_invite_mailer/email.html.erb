@@ -1,5 +1,5 @@
 <p>
-  <%= 
+  <%=
     _('You have been invited by %{inviter} to access the MPDX account "%{account}".')
       .localize % { inviter: @invite.invited_by_user.first_name.to_s + ' ' +
                              @invite.invited_by_user.last_name.to_s,
@@ -11,7 +11,7 @@
 </p>
 
 <p>
-<%= link_to(_('Accept MPDX Account Invite'), account_list_invite_url(@invite)) %>
+<%= link_to(_('Accept MPDX Account Invite'), WebRouter.account_list_invite_url(@invite)) %>
 </p>
 
 <p>
