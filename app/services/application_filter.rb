@@ -27,8 +27,8 @@ class ApplicationFilter
     filters[name] ||= default_selection if default_selection.present?
 
     return unless valid_filters?(filters)
-    return scope.where.not(id: execute_query(scope, filters).ids) if filters["reverse_#{name}".to_sym].to_s == 'true'
-    execute_query(scope, filters)
+    return scope.where.not(id: execute_query(scope, filters).ids.uniq) if filters["reverse_#{name}".to_sym].to_s == 'true'
+    execute_query(scope, filters).distinct
   end
 
   def select_options

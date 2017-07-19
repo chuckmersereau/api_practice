@@ -37,31 +37,31 @@ RSpec.describe Contact::Filter::WildcardSearch do
 
     context 'filter with wildcard search' do
       it 'returns only contacts that match the search query' do
-        expect(described_class.query(contacts, { wildcard_search: 'Freddie' }, nil).to_a).to match_array [contact_one]
-        expect(described_class.query(contacts, { wildcard_search: '1234567890' }, nil).to_a).to match_array [contact_one]
-        expect(described_class.query(contacts, { wildcard_search: person.last_name }, nil).to_a).to match_array [contact_three]
-        expect(described_class.query(contacts, { wildcard_search: '122' }, nil).to_a).to match_array [contact_three]
-        expect(described_class.query(contacts, { wildcard_search: 'random notes' }, nil).to_a).to match_array [contact_one]
-        expect(described_class.query(contacts, { wildcard_search: 'email' }, nil).to_a).to match_array [contact_three]
+        expect(described_class.query(contacts, { wildcard_search: 'Freddie' }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { wildcard_search: '1234567890' }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { wildcard_search: person.last_name }, nil).to_a).to eq [contact_three]
+        expect(described_class.query(contacts, { wildcard_search: '122' }, nil).to_a).to eq [contact_three]
+        expect(described_class.query(contacts, { wildcard_search: 'random notes' }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { wildcard_search: 'email' }, nil).to_a).to eq [contact_three]
       end
 
       it 'searches contact name regardless of order, case, or commas' do
-        expect(described_class.query(contacts, { wildcard_search: 'freddie JONES,' }, nil).to_a).to match_array [contact_one]
-        expect(described_class.query(contacts, { wildcard_search: 'jones, freddie' }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { wildcard_search: 'freddie JONES,' }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { wildcard_search: 'jones, freddie' }, nil).to_a).to eq [contact_one]
       end
 
       it 'searches person first and last name regardless of order, case, or commas' do
-        expect(described_class.query(contacts, { wildcard_search: 'Personfirstname, personlastName' }, nil).to_a).to match_array [contact_three]
-        expect(described_class.query(contacts, { wildcard_search: ',PERSONLASTNAME personfirstname' }, nil).to_a).to match_array [contact_three]
+        expect(described_class.query(contacts, { wildcard_search: 'Personfirstname, personlastName' }, nil).to_a).to eq [contact_three]
+        expect(described_class.query(contacts, { wildcard_search: ',PERSONLASTNAME personfirstname' }, nil).to_a).to eq [contact_three]
       end
 
       it 'searches names with more than two words' do
         contact_one.update(name: 'Min jun, Park')
         contact_two.update(name: 'Seo-yun, Kim')
-        expect(described_class.query(contacts, { wildcard_search: 'park min jun' }, nil).to_a).to match_array [contact_one]
-        expect(described_class.query(contacts, { wildcard_search: 'park min-jun' }, nil).to_a).to match_array [contact_one]
-        expect(described_class.query(contacts, { wildcard_search: 'seo yun kim' }, nil).to_a).to match_array [contact_two]
-        expect(described_class.query(contacts, { wildcard_search: 'kim seo-yun' }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { wildcard_search: 'park min jun' }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { wildcard_search: 'park min-jun' }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { wildcard_search: 'seo yun kim' }, nil).to_a).to eq [contact_two]
+        expect(described_class.query(contacts, { wildcard_search: 'kim seo-yun' }, nil).to_a).to eq [contact_two]
       end
     end
   end

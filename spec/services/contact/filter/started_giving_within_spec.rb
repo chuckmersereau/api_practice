@@ -13,7 +13,7 @@ RSpec.describe Contact::Filter::StartedGivingWithin do
 
     context 'contacts that have started giving within date range' do
       it 'returns the correct contacts' do
-        expect(described_class.query(contacts, { started_giving_within: Range.new(5.months.ago, 2.months.ago) }, [account_list])).to match_array([second_contact])
+        expect(described_class.query(contacts, { started_giving_within: Range.new(5.months.ago, 2.months.ago) }, [account_list])).to eq([second_contact])
       end
     end
   end

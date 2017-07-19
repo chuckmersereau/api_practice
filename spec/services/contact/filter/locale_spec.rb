@@ -46,7 +46,7 @@ RSpec.describe Contact::Filter::Locale do
     context 'filter by address historic' do
       it 'returns only contacts that have the locale' do
         expect(described_class.query(contacts, { locale: 'en-US' }, nil).to_a).to match_array [contact_three, contact_four]
-        expect(described_class.query(contacts, { locale: 'fr-CA' }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { locale: 'fr-CA' }, nil).to_a).to eq [contact_one]
       end
     end
   end

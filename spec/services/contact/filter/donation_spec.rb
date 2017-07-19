@@ -86,11 +86,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: 'none',
           donation_date: Range.new(2.years.ago, 6.months.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq []
         expect(Contact::Filterer.new(
           donation: 'none',
           donation_date: Range.new(2.weeks.ago, 1.day.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq []
       end
     end
 
@@ -99,11 +99,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: 'one',
           donation_date: Range.new(2.years.ago, 6.months.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_one]
         expect(Contact::Filterer.new(
           donation: ['one'],
           donation_date: Range.new(2.weeks.ago, 1.day.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_two]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_two]
       end
     end
 
@@ -112,11 +112,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: 'first',
           donation_date: Range.new(2.years.ago, 6.months.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_one]
         expect(Contact::Filterer.new(
           donation: 'first',
           donation_date: Range.new(2.weeks.ago, 1.day.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array []
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq []
       end
     end
 
@@ -125,11 +125,11 @@ RSpec.describe Contact::Filter::Donation do
         expect(Contact::Filterer.new(
           donation: 'last',
           donation_date: Range.new(2.years.ago, 6.months.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_one]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_one]
         expect(Contact::Filterer.new(
           donation: 'last',
           donation_date: Range.new(2.weeks.ago, 1.day.ago)
-        ).filter(scope: contacts, account_lists: [account_list]).to_a).to match_array [contact_two]
+        ).filter(scope: contacts, account_lists: [account_list]).to_a).to eq [contact_two]
       end
     end
   end

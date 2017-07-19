@@ -4,8 +4,7 @@ class Contact::Filter::Region < Contact::Filter::Base
     region_filters << nil if region_filters.delete('none')
     contacts.where('addresses.region' => region_filters,
                    'addresses.historic' => filters[:address_historic] == 'true')
-            .includes(:addresses)
-            .references('addresses')
+            .joins(:addresses)
   end
 
   def title

@@ -23,7 +23,7 @@ RSpec.describe Task::Filter::ContactPledgeFrequency do
 
     context 'filter by contact with a pledge frequecy' do
       it 'returns the tasks with contacts that have a pledge frequency set' do
-        expect(described_class.query(tasks, { contact_pledge_frequency: '1' }, account_list).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { contact_pledge_frequency: '1' }, account_list).to_a).to eq [task_one]
         expect(described_class.query(tasks, { contact_pledge_frequency: '1' }, account_list).to_a).not_to match_array [task_one, task_two]
       end
     end

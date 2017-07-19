@@ -32,12 +32,12 @@ RSpec.describe Task::Filter::ContactType do
 
     context 'filter tasks by contact type person' do
       it 'returns tasks with contacts that are the correct type' do
-        expect(described_class.query(tasks, { contact_type: 'person' }, account_list).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { contact_type: 'person' }, account_list).to_a).to eq [task_one]
       end
     end
     context 'filter tasks by contact type company' do
       it 'returns tasks with contacts that are the correct type' do
-        expect(described_class.query(tasks, { contact_type: 'company' }, account_list).to_a).to match_array [task_two]
+        expect(described_class.query(tasks, { contact_type: 'company' }, account_list).to_a).to eq [task_two]
       end
     end
   end

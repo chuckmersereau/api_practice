@@ -27,7 +27,7 @@ RSpec.describe Contact::Filter::UpdatedAt do
 
     context 'filter with updated_at value' do
       it 'returns only tasks that have the updated_at value' do
-        expect(described_class.query(contacts, { updated_at: contact_one.updated_at }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { updated_at: contact_one.updated_at }, nil).to_a).to eq [contact_one]
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Contact::Filter::UpdatedAt do
       let(:last_two_days) { 2.days.ago.beginning_of_day..1.day.ago.end_of_day }
 
       it 'returns only tasks that are within the updated_at range' do
-        expect(described_class.query(contacts, { updated_at: one_day_ago }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { updated_at: one_day_ago }, nil).to_a).to eq [contact_one]
         expect(described_class.query(contacts, { updated_at: last_two_days }, nil).to_a).to match_array [contact_one, contact_two]
       end
     end
