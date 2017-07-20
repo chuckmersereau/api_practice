@@ -207,7 +207,7 @@ CREATE TABLE activities (
     result character varying,
     completed_at timestamp without time zone,
     notification_id integer,
-    remote_id character varying,
+    remote_id text,
     source character varying,
     next_action character varying,
     no_date boolean DEFAULT false,
@@ -6458,3 +6458,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170529002918');
 INSERT INTO schema_migrations (version) VALUES ('20170707013656');
 
 INSERT INTO schema_migrations (version) VALUES ('20170711194415');
+
+INSERT INTO schema_migrations (version) VALUES ('20170720172049');
+
