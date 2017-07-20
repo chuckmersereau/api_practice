@@ -18,9 +18,9 @@ RSpec.describe Contact::Filter::Locale do
         options: [
           { name: '-- Any --', id: '', placeholder: 'None' },
           { name: '-- Unspecified --', id: 'null' },
-          { name: '', id: 'en-US' },
-          { name: '', id: 'fr-CA' },
-          { name: '', id: 'fr-FR' }],
+          { name: 'en-US', id: 'en-US' },
+          { name: 'fr-CA', id: 'fr-CA' },
+          { name: 'fr-FR', id: 'fr-FR' }],
         parent: 'Contact Details',
         priority: 26,
         title: 'Language',
@@ -46,7 +46,7 @@ RSpec.describe Contact::Filter::Locale do
     context 'filter by address historic' do
       it 'returns only contacts that have the locale' do
         expect(described_class.query(contacts, { locale: 'en-US' }, nil).to_a).to match_array [contact_three, contact_four]
-        expect(described_class.query(contacts, { locale: 'fr-CA' }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { locale: 'fr-CA' }, nil).to_a).to eq [contact_one]
       end
     end
   end

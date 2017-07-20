@@ -28,7 +28,7 @@ RSpec.describe Contact::Filter::StoppedGivingWithin do
 
     context 'contacts that have stopped giving within date range' do
       it 'returns the correct contacts' do
-        expect(described_class.query(contacts, { stopped_giving_within: Range.new(6.months.ago, 1.month.ago) }, [account_list])).to match_array([second_contact])
+        expect(described_class.query(contacts, { stopped_giving_within: Range.new(6.months.ago, 1.month.ago) }, [account_list])).to eq([second_contact])
       end
     end
   end

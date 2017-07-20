@@ -13,7 +13,7 @@ RSpec.describe Task::Filter::WildcardSearch do
 
     context 'with wildcard subject' do
       it 'returns all tasks that match the subject' do
-        expect(described_class.query(tasks, { wildcard_search: 'subject1' }, nil).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { wildcard_search: 'subject1' }, nil).to_a).to eq [task_one]
         expect(described_class.query(tasks, { wildcard_search: 'subject1' }, nil).to_a).not_to match_array [task_one, task_two, task_three]
       end
     end

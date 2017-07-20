@@ -11,7 +11,10 @@ class ImportCallbackHandler
 
   def handle_success(successes: nil)
     @account_list.queue_sync_with_google_contacts
-    @account_list.mail_chimp_account.queue_export_to_primary_list if @account_list.valid_mail_chimp_account
+
+    if @account_list.valid_mail_chimp_account
+      MailChimp::PrimaryListSyncWorker.perform_async(@account_list.mail_chimp_account)
+    end
 
     begin
       ImportMailer.delay.success(@import, successes)

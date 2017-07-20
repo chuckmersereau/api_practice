@@ -30,10 +30,10 @@ RSpec.describe Task::Filter::ExcludeTags do
         expect(described_class.query(tasks, { exclude_tags: 'tag1' }, nil).to_a).to match_array [task_three, task_four]
       end
       it 'returns only tasks that do not have multiple tags' do
-        expect(described_class.query(tasks, { exclude_tags: 'tag1,tag2,tag3' }, nil).to_a).to match_array [task_four]
+        expect(described_class.query(tasks, { exclude_tags: 'tag1,tag2,tag3' }, nil).to_a).to eq [task_four]
       end
       it 'accepts tags as comma separated string' do
-        expect(described_class.query(tasks, { exclude_tags: 'tag1,tag2,tag3' }, nil).to_a).to match_array [task_four]
+        expect(described_class.query(tasks, { exclude_tags: 'tag1,tag2,tag3' }, nil).to_a).to eq [task_four]
       end
     end
   end

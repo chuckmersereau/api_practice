@@ -2,8 +2,8 @@ class Contact::Filter::ContactInfoAddr < Contact::Filter::Base
   def execute_query(contacts, filters)
     contacts_with_addr = contacts.where.not(addresses: { street: '' })
                                  .where(addresses: { historic: false })
-                                 .includes(:addresses)
-    contacts_with_addr_ids = contacts_with_addr.pluck(:id)
+                                 .joins(:addresses)
+    contacts_with_addr_ids = contacts_with_addr.ids
     return contacts.where(id: contacts_with_addr_ids) if filters[:contact_info_addr] == 'Yes'
     return contacts if contacts_with_addr_ids.empty?
     contacts.where.not(id: contacts_with_addr_ids)

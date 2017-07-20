@@ -1,11 +1,11 @@
+# The HelpRequest feature is actively used on Classic MPDX, but not on API. We can consider removing it after Classic is retired.
+
 require 'user_agent_decoder'
 
 class HelpRequest < ApplicationRecord
   mount_uploader :file, HelpRequestUploader
 
   attr_accessor :user_agent
-
-  after_commit :send_email
 
   belongs_to :account_list
   belongs_to :user
@@ -16,10 +16,6 @@ class HelpRequest < ApplicationRecord
 
   validates :name, :email, :problem, :request_type, presence: true
   validates :email, email: true
-
-  def send_email
-    HelpRequestMailer.delay.email(self)
-  end
 
   def user_agent=(val)
     @user_agent = val

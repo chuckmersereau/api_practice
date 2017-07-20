@@ -17,8 +17,10 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
   let(:appeal) { create(:appeal, account_list: account_list) }
 
   before do
-    allow_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list)
     allow_any_instance_of(MailChimpAccount).to receive(:lists).and_return([])
+    allow_any_instance_of(MailChimpAccount).to receive(:lists_available_for_newsletters_formatted).and_return([])
+    allow_any_instance_of(MailChimpAccount).to receive(:lists_link).and_return([])
+    allow_any_instance_of(MailChimpAccount).to receive(:primary_list_name)
     allow_any_instance_of(MailChimpAccount).to receive(:validate_key)
 
     mail_chimp_account.account_list = account_list
@@ -60,6 +62,8 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
     end
 
     it 'syncs a mailchimp account' do
+      expect(MailChimp::PrimaryListSyncWorker).to receive(:perform_async).with(mail_chimp_account)
+
       get :sync, account_list_id: account_list_id
       expect(response.status).to eq 200
     end

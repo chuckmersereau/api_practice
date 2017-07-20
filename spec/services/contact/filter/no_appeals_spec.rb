@@ -9,7 +9,7 @@ RSpec.describe Contact::Filter::NoAppeals do
 
     context 'contacts that are marked as no_appeal' do
       it 'returns the correct contacts' do
-        expect(described_class.query(contacts, { no_appeals: 'true' }, [account_list])).to match_array([first_contact])
+        expect(described_class.query(contacts, { no_appeals: 'true' }, [account_list])).to eq([first_contact])
       end
     end
   end

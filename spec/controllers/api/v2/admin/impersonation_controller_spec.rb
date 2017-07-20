@@ -30,14 +30,19 @@ RSpec.describe Api::V2::Admin::ImpersonationController do
     end
 
     it 'returns a 200 when someone an admin is logged in' do
+      travel_to(Time.now)
       api_login(user)
       expect do
         post :create, full_correct_attributes
       end.to change { Admin::ImpersonationLog.count }.by(1)
       expect(response.status).to eq(200)
       expect(response_data['attributes']['json_web_token']).to eq(
-        JsonWebToken.encode(user_uuid: user_to_impersonate.uuid)
+        JsonWebToken.encode(
+          user_uuid: user_to_impersonate.uuid,
+          exp: 20.minutes.from_now.utc.to_i
+        )
       )
+      travel_back
     end
   end
 end

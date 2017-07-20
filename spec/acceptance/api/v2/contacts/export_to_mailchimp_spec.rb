@@ -18,7 +18,7 @@ resource 'Contacts > Export to MailChimp' do
   let(:mail_chimp_account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
 
   before do
-    allow_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list)
+    allow(MailChimp::ExportContactsWorker).to receive(:perform_async)
     allow_any_instance_of(MailChimpAccount).to receive(:lists).and_return([])
     allow_any_instance_of(MailChimpAccount).to receive(:validate_key)
     mail_chimp_account.account_list = account_list

@@ -1,8 +1,7 @@
 class Contact::Filter::AddressHistoric < Contact::Filter::Base
   def execute_query(contacts, filters)
     contacts.where('addresses.historic' => filters[:address_historic] == 'true')
-            .includes(:addresses)
-            .references('addresses')
+            .joins(:addresses)
   end
 
   def title

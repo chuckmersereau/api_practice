@@ -1,7 +1,7 @@
 class Contact::Filter::DonationDate < Contact::Filter::Base
   def execute_query(contacts, filters)
     params = daterange_params(filters[:donation_date])
-    contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations]) if params.present?
+    contacts = contacts.joins(donor_accounts: [:donations]) if params.present?
     contacts = contacts.where('donations.donation_date >= ?', params[:start]) if params[:start]
     contacts = contacts.where('donations.donation_date <= ?', params[:end]) if params[:end]
     contacts

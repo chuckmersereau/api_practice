@@ -69,6 +69,7 @@ class Contact < ApplicationRecord
     :name,
     :next_ask,
     :no_appeals,
+    :no_gift_aid,
     :not_duplicated_with,
     :notes,
     :overwrite,
@@ -625,10 +626,6 @@ class Contact < ApplicationRecord
     (last_donation_month_end << prev_months_to_include).beginning_of_month
   end
 
-  def human_contact_locale
-    _(MailChimpAccount::Locales::LOCALE_NAMES[locale])
-  end
-
   def self.bulk_update_options(current_account_list)
     options = {}
     options['likely_to_give'] = ASSIGNABLE_LIKELY_TO_GIVE
@@ -636,7 +633,6 @@ class Contact < ApplicationRecord
     options['send_newsletter'] = ASSIGNABLE_SEND_NEWSLETTER
     options['pledge_received'] = %w(Yes No)
     options['pledge_currency'] = currency_select(current_account_list)
-    options['locale'] = mail_chimp_locale_options
     options
   end
 
@@ -676,11 +672,14 @@ class Contact < ApplicationRecord
   private
 
   def mail_chimp_member_request
-    mail_chimp_account.gb.lists(mail_chimp_account.primary_list_id)
-                      .members(email_hash(email)).retrieve['stats']['avg_open_rate']
-  rescue Gibbon::MailChimpError => e
-    return nil if e.title =~ /Resource Not Found/
-    raise e
+    return unless mail_chimp_account&.primary_list_id
+
+    gibbon_wrapper = MailChimp::GibbonWrapper.new(mail_chimp_account)
+    gibbon_wrapper.gibbon_list_object(mail_chimp_account.primary_list_id)
+                  .members(email_hash(email)).retrieve['stats']['avg_open_rate']
+  rescue Gibbon::MailChimpError => error
+    return nil if error.title =~ /Resource Not Found/
+    raise error
   end
 
   def mail_chimp_account
@@ -696,6 +695,8 @@ class Contact < ApplicationRecord
   end
 
   def gift_aid_percentage
+    return 0 if no_gift_aid?
+
     donor_accounts.first.try(:organization).try(:gift_aid_percentage) || 0
   end
 
@@ -776,9 +777,11 @@ class Contact < ApplicationRecord
   end
 
   def sync_with_mail_chimp
-    return unless @sync_mail_chimp
+    return unless @sync_mail_chimp && account_list.mail_chimp_account
 
-    account_list.mail_chimp_account.try(:queue_sync_contacts, [id])
+    MailChimp::ExportContactsWorker.perform_async(
+      account_list.mail_chimp_account, account_list.mail_chimp_account.primary_list_id, [id]
+    )
   end
 
   def sync_with_google_contacts

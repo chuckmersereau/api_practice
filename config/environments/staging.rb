@@ -76,13 +76,17 @@ Rails.application.configure do
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
 
-  config.action_mailer.default_url_options = { host: 'api.stage.mpdx.org' }
+  config.action_mailer.default_url_options = {
+    host: 'api.stage.mpdx.org',
+    protocol: 'https'
+  }
 
   #config.font_assets.origin = 'https://mpdx.org'
   config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new("mpdx_api-#{ENV['ENVIRONMENT']}", Syslog::LOG_LOCAL7))
   config.log_tags = [->(request) { "ReqID:#{request.uuid}" }]
 
-  Rails.application.routes.default_url_options[:host] = 'api.stage.mpdx.org'
+  Rails.application.routes.default_url_options[:host] = config.action_mailer.default_url_options[:host]
+  Rails.application.routes.default_url_options[:protocol] = config.action_mailer.default_url_options[:protocol]
 
   config.action_dispatch.tld_length = 2
 end

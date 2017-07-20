@@ -5,7 +5,7 @@ class Contact::Filter::Base < ApplicationFilter
     contacts
       .where.not(phone_numbers: { number: nil })
       .where(phone_numbers: { historic: false, location: location })
-      .includes(people: :phone_numbers)
+      .joins(people: :phone_numbers)
       .pluck(:id)
   end
 

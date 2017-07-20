@@ -33,6 +33,12 @@ resource 'Designation Accounts' do
     )
   end
 
+  let(:resource_associations) do
+    %w(
+      organization
+    )
+  end
+
   context 'authorized user' do
     before do
       account_list.designation_accounts << designation_account
@@ -48,7 +54,7 @@ resource 'Designation Accounts' do
       example 'Designation Account [LIST]', document: documentation_scope do
         explanation 'List of Designation Accounts associated to the Account List'
         do_request
-        check_collection_resource(1)
+        check_collection_resource(1, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(response_status).to eq 200
       end
@@ -75,7 +81,7 @@ resource 'Designation Accounts' do
       example 'Designation Account [GET]', document: documentation_scope do
         explanation 'The Designation Account with the given ID'
         do_request
-        check_resource
+        check_resource(['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
         expect(resource_object['designation_number']).to eq designation_account.designation_number
         expect(response_status).to eq 200

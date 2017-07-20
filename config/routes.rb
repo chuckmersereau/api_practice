@@ -148,7 +148,6 @@ Rails.application.routes.draw do
 
         resource :user, only: [:show, :update] do
           scope module: :user do
-            resource :authentication, only: :create # WARNING: This route is DEPRECATED, but kept for now to allow clients to migrate to the new authenticate route (which uses a different auth scheme)
             resource :authenticate, only: :create
             resources :google_accounts do
               scope module: :google_accounts do

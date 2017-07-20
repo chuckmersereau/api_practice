@@ -31,6 +31,8 @@ class GoogleCalendarIntegrator
     end
   end
 
+  private
+
   def remove_google_event(google_event)
     result = @client.execute(
       api_method: @google_integration.calendar_api.events.delete,

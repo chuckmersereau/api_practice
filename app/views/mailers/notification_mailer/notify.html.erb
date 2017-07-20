@@ -10,5 +10,5 @@
 <%=
     (_('You are getting this notification from MPDX because you checked the email setting in ' +
       'your preferences for this type of notification. You can change it <a href="%{preferences_url}">here</a>.')
-    .localize % { preferences_url: 'https://mpdx.org/preferences/notifications' }).html_safe
+    .localize % { preferences_url: WebRouter.notifications_preferences_url }).html_safe
 %>

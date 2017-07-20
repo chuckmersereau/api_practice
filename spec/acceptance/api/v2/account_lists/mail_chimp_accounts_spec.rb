@@ -14,10 +14,9 @@ resource 'Account Lists > Mailchimp Accounts' do
   let(:primary_list_id)   { '1e72b58b72' }
   let(:primary_list_id_2) { '29a77ba541' }
 
-  let(:account_list_with_mailchimp) { create(:account_list, mail_chimp_account: mail_chimp_account) }
-  let(:appeal)                      { create(:appeal, account_list: account_list) }
-  let(:mail_chimp_account)          { create(:mail_chimp_account, account_list: account_list, api_key: 'fake-us4', primary_list_id: primary_list_id) }
-  let(:form_data)                   { build_data(api_key: 'fake-us4', primary_list_id: primary_list_id) }
+  let!(:mail_chimp_account)  { create(:mail_chimp_account, account_list: account_list, api_key: 'fake-us4', primary_list_id: primary_list_id) }
+  let(:appeal)               { create(:appeal, account_list: account_list) }
+  let(:form_data)            { build_data(api_key: 'fake-us4', primary_list_id: primary_list_id) }
 
   let(:resource_attributes) do
     %w(
@@ -40,11 +39,9 @@ resource 'Account Lists > Mailchimp Accounts' do
   end
 
   before do
-    allow_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list)
-    allow_any_instance_of(MailChimpAccount).to receive(:lists).and_return([])
-    allow_any_instance_of(MailChimpAccount).to receive(:validate_key)
-    mail_chimp_account.account_list = account_list
-    mail_chimp_account.save
+    allow_any_instance_of(MailChimp::PrimaryListSyncWorker).to receive(:perform)
+    allow_any_instance_of(MailChimp::GibbonWrapper).to receive(:lists).and_return([])
+    allow_any_instance_of(MailChimp::GibbonWrapper).to receive(:validate_key)
     api_login(user)
   end
 

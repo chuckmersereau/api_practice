@@ -43,7 +43,7 @@ RSpec.describe Contact::Filter::Church do
 
     context 'filter by church' do
       it 'filters multiple churches' do
-        expect(described_class.query(contacts, { church: 'My Church, First Pedestrian Church' }, nil).to_a).to eq [contact_one, contact_two]
+        expect(described_class.query(contacts, { church: 'My Church, First Pedestrian Church' }, nil).to_a).to match_array [contact_one, contact_two]
       end
       it 'filters a single churche' do
         expect(described_class.query(contacts, { church: 'My Church' }, nil).to_a).to eq [contact_one]

@@ -32,6 +32,7 @@ resource 'Account Lists' do
       home_country
       monthly_goal
       name
+      salary_organization
       tester
       total_pledges
       updated_at

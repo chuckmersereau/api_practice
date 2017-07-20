@@ -79,6 +79,15 @@ describe ConstantListSerializer do
     it { expect(subject.status_hashes.first).to be_a_hash_with_types Symbol, String }
   end
 
+  context '#pledge_frequency_hashes' do
+    let(:first_pledge_frequency_hash) { subject.pledge_frequency_hashes.first }
+
+    it do
+      expect(first_pledge_frequency_hash[:id]).to be_a String
+      expect(first_pledge_frequency_hash[:key]).to be_a BigDecimal
+    end
+  end
+
   context '#notification_translated_hashes' do
     let!(:notification_type) { create(:notification_type) }
 

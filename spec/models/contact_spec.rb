@@ -646,27 +646,32 @@ describe Contact do
 
   context '#sync_with_mail_chimp' do
     context 'with mail_chimp account' do
-      let(:mc_account) { build(:mail_chimp_account, account_list: account_list) }
+      let!(:mail_chimp_account) { build(:mail_chimp_account, account_list: account_list, primary_list_id: 'primary_list_id') }
+
       before do
         person_and_email_address
       end
 
       it 'notifies the mail chimp account of changes on certain fields' do
-        expect(mc_account).to receive(:queue_sync_contacts).with([contact.id])
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account, 'primary_list_id', [contact.id]
+        )
         contact.locale = 'en-US'
         contact.send(:check_state_for_mail_chimp_sync)
         contact.send(:sync_with_mail_chimp)
       end
 
       it 'notifies the mail chimp account of changes on certain nested fields' do
-        expect(mc_account).to receive(:queue_sync_contacts).with([contact.id])
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account, 'primary_list_id', [contact.id]
+        )
         contact.people.first.primary_email_address.email = 'new@email.com'
         contact.send(:check_state_for_mail_chimp_sync)
         contact.send(:sync_with_mail_chimp)
       end
 
       it 'does not notify the mail chimp account of changes on certain fields' do
-        expect(mc_account).to_not receive(:queue_sync_contacts).with([contact.id])
+        expect(MailChimp::ExportContactsWorker).not_to receive(:perform_async)
         contact.timezone = 'PST'
         contact.send(:check_state_for_mail_chimp_sync)
         contact.send(:sync_with_mail_chimp)
@@ -817,7 +822,7 @@ describe Contact do
         expect(contact.monthly_avg_from(Date.today << 3)).to eq(9.99 * 2 / 6)
       end
 
-      it 'sums donations correctly when given a except_payment_method argumant' do
+      it 'sums donations correctly when given a except_payment_method argument' do
         gift_aid_donation
         expect(contact.monthly_avg_from(Date.today)).to eq(12.49)
         expect(contact.monthly_avg_from(Date.today, except_payment_method: 'Gift Aid')).to eq(9.99)
@@ -1125,6 +1130,26 @@ describe Contact do
         contact.pledge_currency = 'usd'
         expect(contact.pledge_currency_symbol).to eq '$'
       end
+    end
+  end
+
+  context '#amount_with_gift_aid' do
+    let!(:contact_with_gift_aid_organization) { create(:contact) }
+    let!(:organization) { create(:organization, gift_aid_percentage: 25) }
+    let!(:donor_account) do
+      create(:donor_account, account_number: 'unique_number',
+                             organization: organization,
+                             contacts: [contact_with_gift_aid_organization])
+    end
+
+    it 'returns the amount with gift aid added when applicable' do
+      contact_with_gift_aid_organization.no_gift_aid = true
+
+      expect(contact_with_gift_aid_organization.amount_with_gift_aid(100.00)).to eq(100.00)
+    end
+
+    it 'does not returns the amount with gift aid added when no_gift_aid is set to true' do
+      expect(contact_with_gift_aid_organization.amount_with_gift_aid(100.00)).to eq(125.00)
     end
   end
 end

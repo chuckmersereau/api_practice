@@ -1,7 +1,7 @@
 require 'gettext_i18n_rails/string_interpolate_fix'
 text_domain = FastGettext.add_text_domain 'mpdx', path: 'locale', type: :po, report_warning: false
 FastGettext.default_text_domain = 'mpdx'
-I18n.config.available_locales = ['en', 'en-US','de','fr-FR', 'fr-CA', 'en', 'es-419', 'it', 'ko', 'ru', 'id', 'ar', 'zh-HANS-CH', 'tr', 'th']
+I18n.config.available_locales = ['en', 'en-US','de','fr-FR', 'fr-CA', 'en', 'es-419', 'it', 'ko', 'ru', 'id', 'ar', 'zh-HANS-CH', 'tr', 'th', 'hy']
 FastGettext.default_available_locales = I18n.config.available_locales.map{ |locale| locale.to_s.tr('-', '_') }
 GettextI18nRails.translations_are_html_safe = true
 

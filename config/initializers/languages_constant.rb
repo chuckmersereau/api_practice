@@ -17,5 +17,6 @@ LANGUAGES_CONSTANT = {
   'th'         => 'Thai',
   'tr'         => 'Turkish',
   'uk'         => 'Ukranian',
-  'vi'         => 'Vietnamese'
+  'vi'         => 'Vietnamese',
+  'hy'         => 'Armenian'
 }.freeze

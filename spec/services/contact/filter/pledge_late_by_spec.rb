@@ -40,16 +40,16 @@ RSpec.describe Contact::Filter::PledgeLateBy do
 
     context 'filter by days late' do
       it 'returns only contacts that are less than 30 days late' do
-        expect(described_class.query(contacts, { pledge_late_by: '0_30' }, nil).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { pledge_late_by: '0_30' }, nil).to_a).to eq [contact_one]
       end
       it 'returns only contacts that are between 30 to 60 days late' do
-        expect(described_class.query(contacts, { pledge_late_by: '30_60' }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { pledge_late_by: '30_60' }, nil).to_a).to eq [contact_two]
       end
       it 'returns only contacts that are between 60 to 90 days late' do
-        expect(described_class.query(contacts, { pledge_late_by: '60_90' }, nil).to_a).to match_array [contact_three]
+        expect(described_class.query(contacts, { pledge_late_by: '60_90' }, nil).to_a).to eq [contact_three]
       end
       it 'returns only contacts that are more than 90 days late' do
-        expect(described_class.query(contacts, { pledge_late_by: '90' }, nil).to_a).to match_array [contact_four]
+        expect(described_class.query(contacts, { pledge_late_by: '90' }, nil).to_a).to eq [contact_four]
       end
     end
   end

@@ -12,10 +12,10 @@ RSpec.describe Contact::Filter::Status do
 
     context 'for single status' do
       it 'returns the correct contacts' do
-        expect(described_class.query(contacts, { status: 'active' }, nil)).to match_array([active_contact])
-        expect(described_class.query(contacts, { status: 'hidden' }, nil)).to match_array([inactive_contact])
-        expect(described_class.query(contacts, { status: 'null' }, nil)).to match_array([contact_with_no_status])
-        expect(described_class.query(contacts, { status: 'Not Interested' }, nil)).to match_array([inactive_contact])
+        expect(described_class.query(contacts, { status: 'active' }, nil)).to eq([active_contact])
+        expect(described_class.query(contacts, { status: 'hidden' }, nil)).to eq([inactive_contact])
+        expect(described_class.query(contacts, { status: 'null' }, nil)).to eq([contact_with_no_status])
+        expect(described_class.query(contacts, { status: 'Not Interested' }, nil)).to eq([inactive_contact])
       end
     end
 

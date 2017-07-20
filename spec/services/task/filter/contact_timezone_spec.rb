@@ -27,8 +27,8 @@ RSpec.describe Task::Filter::ContactTimezone do
 
     context 'filter task based on contact timezone' do
       it 'returns the tasks with contacts whose timezone matches the provided filter' do
-        expect(described_class.query(tasks, { contact_timezone: 'Mountain Time (US & Canada)' }, account_list).to_a).to match_array [task_one]
-        expect(described_class.query(tasks, { contact_timezone: 'Eastern Time (US & Canada)' }, account_list).to_a).to match_array [task_two]
+        expect(described_class.query(tasks, { contact_timezone: 'Mountain Time (US & Canada)' }, account_list).to_a).to eq [task_one]
+        expect(described_class.query(tasks, { contact_timezone: 'Eastern Time (US & Canada)' }, account_list).to_a).to eq [task_two]
       end
     end
   end

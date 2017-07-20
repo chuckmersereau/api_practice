@@ -37,17 +37,17 @@ RSpec.describe Task::Filter::ContactReferrer do
 
     context 'task filter by any contact referrer' do
       it 'only returns tasks with contacts that have any referrer' do
-        expect(described_class.query(tasks, { contact_referrer: 'any' }, account_list).to_a).to match_array [task_two]
+        expect(described_class.query(tasks, { contact_referrer: 'any' }, account_list).to_a).to eq [task_two]
       end
     end
 
     context 'task filter by  referrer' do
       it 'filters tasks with contacts that have a single referrer' do
-        expect(described_class.query(tasks, { contact_referrer: contact_one.uuid.to_s }, account_list).to_a).to match_array [task_two]
+        expect(described_class.query(tasks, { contact_referrer: contact_one.uuid.to_s }, account_list).to_a).to eq [task_two]
       end
 
       it 'filters tasks with contacts that have multiple referrers' do
-        expect(described_class.query(tasks, { contact_referrer: "#{contact_one.uuid}, #{contact_one.uuid}" }, account_list).to_a).to match_array [task_two]
+        expect(described_class.query(tasks, { contact_referrer: "#{contact_one.uuid}, #{contact_one.uuid}" }, account_list).to_a).to eq [task_two]
       end
     end
 

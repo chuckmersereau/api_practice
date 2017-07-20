@@ -111,6 +111,10 @@ attributes: &attrs
     description:
       Whether or not the Contact has no appeals
     type: boolean
+  no_gift_aid:
+    description:
+      Whether or not the Contact is eligible for Gift Aid (UK government subsidies)
+    type: boolean
   notes:
     description:
       Notes for this contact

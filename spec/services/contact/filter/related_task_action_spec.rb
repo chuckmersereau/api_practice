@@ -43,11 +43,11 @@ RSpec.describe Contact::Filter::RelatedTaskAction do
 
     context 'filter by Related Task Action Type' do
       it 'returns only contacts that have no related tasks when null is passed' do
-        expect(described_class.query(contacts, { related_task_action: 'null' }, nil).to_a).to match_array [contact_four]
+        expect(described_class.query(contacts, { related_task_action: 'null' }, nil).to_a).to eq [contact_four]
       end
       it 'returns only contacts with tasks of the specified activity type when specified' do
         expect(described_class.query(contacts, { related_task_action: 'Email' }, nil).to_a).to match_array [contact_one, contact_two]
-        expect(described_class.query(contacts, { related_task_action: 'Call' }, nil).to_a).to match_array [contact_three]
+        expect(described_class.query(contacts, { related_task_action: 'Call' }, nil).to_a).to eq [contact_three]
       end
     end
   end

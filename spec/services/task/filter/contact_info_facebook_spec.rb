@@ -34,13 +34,13 @@ RSpec.describe Task::Filter::ContactInfoFacebook do
 
     context 'filter by no address' do
       it 'returns only contacts that have no address' do
-        expect(described_class.query(tasks, { contact_info_facebook: 'No' }, account_list).to_a).to match_array [task_two]
+        expect(described_class.query(tasks, { contact_info_facebook: 'No' }, account_list).to_a).to eq [task_two]
       end
     end
 
     context 'filter by address' do
       it 'returns only contacts that have a address' do
-        expect(described_class.query(tasks, { contact_info_facebook: 'Yes' }, account_list).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { contact_info_facebook: 'Yes' }, account_list).to_a).to eq [task_one]
       end
     end
   end

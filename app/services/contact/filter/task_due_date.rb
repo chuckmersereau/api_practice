@@ -1,7 +1,7 @@
 class Contact::Filter::TaskDueDate < Contact::Filter::Base
   def execute_query(contacts, filters)
     params = daterange_params(filters[:task_due_date])
-    contacts = contacts.includes(:activities).references(:activities)
+    contacts = contacts.joins(:activities)
     contacts = contacts.where('activities.start_at >= ?', params[:start]) if params[:start]
     contacts = contacts.where('activities.start_at <= ?', params[:end]) if params[:end]
     contacts
