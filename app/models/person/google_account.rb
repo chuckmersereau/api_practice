@@ -67,6 +67,8 @@ class Person::GoogleAccount < ApplicationRecord
 
   def contact_groups
     @contact_groups ||= Person::GoogleAccount::ContactGroup.from_groups(contacts_api_user.groups)
+  rescue Person::GoogleAccount::MissingRefreshToken
+    []
   end
 
   def contacts_for_group(group_id)
@@ -116,12 +118,12 @@ class Person::GoogleAccount < ApplicationRecord
         save
       else
         case json['error']
-        when 'invalid_grant'
+        when 'invalid_grant', 'invalid_client'
           needs_refresh
-          return false
         else
-          raise response.inspect
+          Rollbar.error(response.inspect)
         end
+        return false
       end
     end
   end
