@@ -8,7 +8,7 @@ class User::Authenticate < ActiveModelSerializers::Model
   def json_web_token
     @json_web_token ||= ::JsonWebToken.encode(
       user_uuid: user.uuid,
-      exp: 24.hours.from_now.utc.to_i
+      exp: 30.days.from_now.utc.to_i
     )
   end
 end
