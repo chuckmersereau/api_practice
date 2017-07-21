@@ -136,4 +136,13 @@ describe User do
       end
     end
   end
+
+  describe '#find_by_email' do
+    let!(:user) { create(:user) }
+    let!(:relay_account) { create(:relay_account, email: 'test@email.com', person: user) }
+
+    it 'returns the user with a relay account associated to a provided email' do
+      expect(User.find_by_email('test@email.com')).to eq(user)
+    end
+  end
 end

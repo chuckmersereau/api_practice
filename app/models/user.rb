@@ -128,6 +128,13 @@ class User < Person
     account&.person&.to_user
   end
 
+  def self.find_by_email(email)
+    Person::KeyAccount.where('lower(email) = ?', email.downcase)
+                      .limit(1)
+                      .try(:first)
+                      .try(:user)
+  end
+
   def to_person
     Person.find(id)
   end
