@@ -3,6 +3,8 @@ module Person::Account
 
   included do
     belongs_to :person
+    belongs_to :user, foreign_key: :person_id
+
     scope :authenticated, -> { where(authenticated: true) }
   end
 

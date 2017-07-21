@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 20 July 2017
+- The '/admin/impersonation' endpoint now permits the search of impersonated users by email addresses.
+
 ## 13 July 2017
 - Removed the '/api/v2/user/authentication' endpoint.
 

@@ -37,7 +37,19 @@ class Api::V2::Admin::ImpersonationController < Api::V2Controller
   end
 
   def load_impersonated
-    @impersonated ||= User.find_by_uuid_or_raise!(impersonation_params[:user])
+    @impersonated ||= if UUID_REGEX.match(impersonation_params[:user])
+                        User.find_by_uuid_or_raise!(impersonation_params[:user])
+                      else
+                        find_user_by_email
+                      end
+  end
+
+  def find_user_by_email
+    user = User.find_by_email(impersonation_params[:user])
+
+    return user if user
+
+    raise ActiveRecord::RecordNotFound, "Couldn't find User with email #{impersonation_params[:user]}"
   end
 
   def load_token
