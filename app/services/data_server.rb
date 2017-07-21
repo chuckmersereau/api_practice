@@ -412,9 +412,9 @@ class DataServer
     end
     contact = donor_account.link_to_contact_for(account_list)
     raise 'Failed to link to contact' unless contact
-    if $rollout.active?(:data_server_address_updates, account_list)
-      DataServer::ContactAddressUpdate.new(contact, donor_account).update_from_donor_account
-    end
+
+    DataServer::ContactAddressUpdate.new(contact, donor_account).update_from_donor_account
+
     donor_account
   end
 
