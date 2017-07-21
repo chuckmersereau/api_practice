@@ -1,7 +1,8 @@
 class Contact::Filter::DonationAmount < Contact::Filter::Base
   def execute_query(contacts, filters)
     contacts = contacts.joins(donor_accounts: [:donations])
-    contacts = contacts.where(donations: { amount: parse_list(filters[:donation_amount]) })
+    contacts = contacts.where('donations.amount IN (:amounts) AND donations.designation_account_id IN (:designation_account_ids)',
+                              amounts: parse_list(filters[:donation_amount]), designation_account_ids: designation_account_ids)
     contacts
   end
 

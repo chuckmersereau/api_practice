@@ -2,8 +2,10 @@ class Contact::Filter::DonationDate < Contact::Filter::Base
   def execute_query(contacts, filters)
     params = daterange_params(filters[:donation_date])
     contacts = contacts.joins(donor_accounts: [:donations]) if params.present?
-    contacts = contacts.where('donations.donation_date >= ?', params[:start]) if params[:start]
-    contacts = contacts.where('donations.donation_date <= ?', params[:end]) if params[:end]
+    contacts = contacts.where('donations.donation_date >= :date_range_start AND donations.designation_account_id IN (:designation_account_ids)',
+                              date_range_start: params[:start], designation_account_ids: designation_account_ids) if params[:start]
+    contacts = contacts.where('donations.donation_date <= :date_range_end AND donations.designation_account_id IN (:designation_account_ids)',
+                              date_range_end: params[:end], designation_account_ids: designation_account_ids) if params[:end]
     contacts
   end
 

@@ -14,6 +14,10 @@ RSpec.describe Contact::Filter::DonationDate do
   let!(:designation_account_two) { create(:designation_account) }
   let!(:donation_two) { create(:donation, donor_account: donor_account_two, designation_account: designation_account_two) }
 
+  let!(:contact_three) { create(:contact, account_list_id: account_list.id) }
+  let!(:donor_account_three) { create(:donor_account) }
+  let!(:donation_three) { create(:donation, donor_account: donor_account_three, designation_account_id: nil) }
+
   before do
     account_list.designation_accounts << designation_account_one
     account_list.designation_accounts << designation_account_two
@@ -21,6 +25,7 @@ RSpec.describe Contact::Filter::DonationDate do
     contact_two.donor_accounts << donor_account_two
     donation_one.update(donation_date: 1.month.ago)
     donation_two.update(donation_date: 1.month.from_now)
+    donation_three.update(donation_date: 1.month.from_now)
   end
 
   describe '#config' do
@@ -50,8 +55,8 @@ RSpec.describe Contact::Filter::DonationDate do
 
     context 'filter by end and start date' do
       it 'returns only contacts with a donation after the start date and before the end date' do
-        expect(described_class.query(contacts, { donation_date: Range.new(1.year.ago, 1.year.from_now) }, nil).to_a).to match_array [contact_one, contact_two]
-        expect(described_class.query(contacts, { donation_date: Range.new(1.day.ago, 2.months.from_now) }, nil).to_a).to eq [contact_two]
+        expect(described_class.query(contacts, { donation_date: Range.new(1.year.ago, 1.year.from_now) }, [account_list]).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation_date: Range.new(1.day.ago, 2.months.from_now) }, [account_list]).to_a).to eq [contact_two]
       end
     end
   end
