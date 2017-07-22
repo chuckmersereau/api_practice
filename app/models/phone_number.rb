@@ -1,5 +1,6 @@
 class PhoneNumber < ApplicationRecord
   include Concerns::BeforeCreateSetValidValuesBasedOnSource
+  include Concerns::AfterValidationSetSourceToMPDX
   include HasPrimary
   @@primary_scope = :person
 

@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 21 July 2017
+- Addresses, email addresses and phone numbers now can be edited when the source is 'TntImport'.
+
 ## 20 July 2017
 - The '/admin/impersonation' endpoint now permits the search of impersonated users by email addresses.
 

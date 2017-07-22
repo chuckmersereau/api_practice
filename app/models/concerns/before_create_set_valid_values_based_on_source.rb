@@ -3,7 +3,7 @@ module Concerns::BeforeCreateSetValidValuesBasedOnSource
 
   included do
     before_create do
-      self.valid_values = (source == 'MPDX')
+      self.valid_values = (source == Address::MANUAL_SOURCE)
       true
     end
   end

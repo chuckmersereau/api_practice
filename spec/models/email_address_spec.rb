@@ -9,6 +9,8 @@ describe EmailAddress do
 
     include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :email_address
 
+    include_examples 'after_validate_set_source_to_mpdx_examples', factory_type: :email_address
+
     it "should create an email address if it's new" do
       expect do
         EmailAddress.add_for_person(person, email: address)
