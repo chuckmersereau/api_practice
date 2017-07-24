@@ -7,28 +7,9 @@ describe Person::GmailAccount do
   let(:contact) { create(:contact, account_list: account_list) }
   let(:person) { create(:person) }
   let(:user) { create(:user) }
-  let(:client) { double }
-
-  context '#client' do
-    it 'initializes a gmail client' do
-      client = gmail_account.client
-      expect(client.authorization.access_token).to eq(google_account.token)
-    end
-  end
-
-  context '#folders' do
-    it 'returns a list of gmail folders/labels' do
-      allow(gmail_account).to receive(:client).and_return(client)
-
-      expect(client).to receive(:labels).and_return(double(all: []))
-
-      gmail_account.folders
-    end
-  end
 
   context '#gmail' do
     it 'refreshes the google account token if expired' do
-      allow(Gmail).to receive(:connect).and_return(double(logout: true))
       google_account.expires_at = 1.hour.ago
 
       expect(google_account).to receive(:refresh_token!).once
@@ -45,7 +26,6 @@ describe Person::GmailAccount do
 
     let(:sent_mailbox) { double }
     let(:all_mailbox)  { double }
-    let(:client)       { double(logout: true) }
     let(:client_conn)  { double('client_connection') }
 
     let!(:recipient_email) { create(:email_address, email: 'recipient@example.com', person: person) }
@@ -59,10 +39,9 @@ describe Person::GmailAccount do
 
       account_list.users << user
 
-      allow(Gmail).to  receive(:connect).and_return(client)
-      allow(client).to receive(:mailbox).with('[Gmail]/Sent Mail').and_return(sent_mailbox)
-      allow(client).to receive(:mailbox).with('[Gmail]/All Mail').and_return(all_mailbox)
-      allow(client).to receive(:conn).and_return(client_conn)
+      allow_any_instance_of(Gmail::Client::XOAuth2).to receive(:mailbox).with('[Gmail]/Sent Mail').and_return(sent_mailbox)
+      allow_any_instance_of(Gmail::Client::XOAuth2).to receive(:mailbox).with('[Gmail]/All Mail').and_return(all_mailbox)
+      allow_any_instance_of(Gmail::Client::XOAuth2).to receive(:conn).and_return(client_conn)
       allow(client_conn).to receive(:uid_fetch).with([gmail_uid], kind_of(Array)).and_return([gmail_imap_struct])
       allow(client_conn).to receive(:uid_fetch).with([], kind_of(Array)).and_return([])
     end

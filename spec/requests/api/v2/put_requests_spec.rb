@@ -1,5 +1,4 @@
 # coding: utf-8
-require 'uuidtools'
 require 'rails_helper'
 
 RSpec.describe 'Patch Requests', type: :request do
@@ -62,7 +61,7 @@ RSpec.describe 'Patch Requests', type: :request do
     end
 
     context 'against a resource that does not exist (404)' do
-      let(:mock_uuid) { UUIDTools::UUID.random_create.to_s }
+      let(:mock_uuid) { SecureRandom.uuid }
       let(:missing_resource_attributes) do
         {
           data: {
@@ -125,7 +124,7 @@ RSpec.describe 'Patch Requests', type: :request do
     end
 
     context 'in which the resource object’s id does not match the server’s endpoint (409)' do
-      let(:mock_uuid) { UUIDTools::UUID.random_create }
+      let(:mock_uuid) { SecureRandom.uuid }
       let(:account_list) { user.account_lists.first }
       let(:task) { create(:task, account_list: account_list) }
       let(:constrained_attributes) do

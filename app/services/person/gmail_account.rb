@@ -5,30 +5,16 @@ class Person::GmailAccount
     @google_account = google_account
   end
 
-  def client
-    @client ||= google_account.client
-  end
-
   def gmail
-    return false if google_account.token_expired? && !google_account.refresh_token!
+    return false unless token?
 
-    begin
-      client = Gmail.connect(:xoauth2, google_account.email, google_account.token)
-      yield client
-    ensure
-      begin
-        client.logout
-      rescue
-      end
+    Gmail.connect(:xoauth2, google_account.email, google_account.token) do |gmail_client|
+      yield gmail_client
     end
   end
 
-  def folders
-    @folders ||= client.labels.all
-  end
-
   def import_emails(account_list)
-    return false unless client
+    return false unless token?
 
     since = (google_account.last_email_sync || 1.day.ago).to_date
 
@@ -101,6 +87,10 @@ class Person::GmailAccount
   private
 
   attr_accessor :email_collection
+
+  def token?
+    !google_account.token_expired? || google_account.refresh_token!
+  end
 
   def fetch_account_email_data(email_address)
     return unless email_address

@@ -35,10 +35,6 @@ class Activity < ApplicationRecord
     subject
   end
 
-  def subject_with_contacts
-    "#{contacts.map(&:to_s).join(', ')} - #{_(activity_type)}: #{subject}"
-  end
-
   def contacts_attributes=(contacts_array)
     contacts_array = contacts_array.values if contacts_array.is_a?(Hash)
     contacts_array.each do |contact_attributes|

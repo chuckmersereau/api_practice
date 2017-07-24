@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 describe Contact do
+  before { stub_smarty_streets }
+
   describe 'Validations' do
     subject { build(:contact) }
 

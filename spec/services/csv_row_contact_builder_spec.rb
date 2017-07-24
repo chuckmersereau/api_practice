@@ -150,9 +150,7 @@ describe CsvRowContactBuilder do
 
     import.file_headers_mappings = file_headers_mappings
 
-    stub_request(:get, %r{api.smartystreets.com/.*})
-      .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
-      .to_return(status: 200, body: '{}', headers: {})
+    stub_smarty_streets
   end
 
   describe '#build' do
