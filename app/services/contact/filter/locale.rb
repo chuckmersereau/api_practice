@@ -19,7 +19,7 @@ class Contact::Filter::Locale < Contact::Filter::Base
   def custom_options
     options = locales.map do |locale|
       {
-        name: _(MailChimpAccount::Locales::LOCALE_NAMES[locale]),
+        name: _(locale),
         id: locale
       }
     end

@@ -38,7 +38,7 @@ RSpec.describe Task::Filter::ContactInfoAddr do
 
     context 'filter by address' do
       it 'returns only contacts that have a address' do
-        expect(described_class.query(tasks, { contact_info_addr: 'Yes' }, account_list).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { contact_info_addr: 'Yes' }, account_list).to_a).to eq [task_one]
       end
     end
   end

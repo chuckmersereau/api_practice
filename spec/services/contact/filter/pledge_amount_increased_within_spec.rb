@@ -20,7 +20,7 @@ RSpec.describe Contact::Filter::PledgeAmountIncreasedWithin do
 
     context 'contacts that have increased their pledge amount and or frequency' do
       it 'returns the correct contacts' do
-        expect(described_class.query(contacts, { pledge_amount_increased_within: Range.new(3.months.ago, Time.now) }, nil)).to match_array([first_contact])
+        expect(described_class.query(contacts, { pledge_amount_increased_within: Range.new(3.months.ago, Time.now) }, nil)).to eq([first_contact])
       end
     end
   end

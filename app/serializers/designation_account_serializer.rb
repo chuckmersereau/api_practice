@@ -8,6 +8,8 @@ class DesignationAccountSerializer < ApplicationSerializer
              :currency, :currency_symbol, :converted_balance, :exchange_rate,
              :balance_updated_at, :active, :display_name
 
+  belongs_to :organization
+
   def display_name
     return object.designation_number if object.name.blank?
     "#{object.name} (#{object.designation_number})"

@@ -68,8 +68,6 @@ class AccountList < ApplicationRecord
   accepts_nested_attributes_for :contacts, reject_if: :all_blank, allow_destroy: true
   accepts_nested_attributes_for :notification_preferences, reject_if: :all_blank, allow_destroy: true
 
-  after_update :queue_update_users_mailchimp
-
   scope :with_linked_org_accounts, lambda {
     joins(:organization_accounts).where('locked_at is null').order('last_download asc')
   }
@@ -81,7 +79,7 @@ class AccountList < ApplicationRecord
     :monthly_goal,
     :name,
     :overwrite,
-    :settings,
+    :salary_organization,
     :tester,
     :updated_at,
     :updated_in_db_at,
@@ -96,9 +94,14 @@ class AccountList < ApplicationRecord
   end
   alias destroy! destroy
 
-  def salary_organization_id=(val)
-    settings[:salary_organization_id] = val if val.is_a?(Integer)
-    settings[:salary_organization_id] ||= val.id
+  def salary_organization=(value)
+    value = Organization.where(uuid: value).limit(1).ids.first unless value.is_a?(Integer)
+    self.salary_organization_id = value
+  end
+
+  def salary_organization_id=(value)
+    settings[:salary_organization_id] = value if value.is_a?(Integer)
+    settings[:salary_organization_id] ||= value.id
     settings[:salary_currency] = Organization.find(settings[:salary_organization_id]).default_currency_code
   end
 
@@ -401,18 +404,9 @@ class AccountList < ApplicationRecord
     DesignationAccount::DupByBalanceFix.deactivate_dups(designation_accounts)
   end
 
-  def queue_update_users_mailchimp
-    return unless tester_or_owner_setting_changed?
-    async(:update_mailchimp_subscription)
-  end
-
   def tester_or_owner_setting_changed?
     changes.keys.include?('settings') &&
       (changes['settings'][0]['tester'] != changes['settings'][1]['tester'] ||
        changes['settings'][0]['owner'] != changes['settings'][1]['owner'])
-  end
-
-  def update_mailchimp_subscription
-    users.each { |u| User::MailChimpManager.new(u).subscribe }
   end
 end

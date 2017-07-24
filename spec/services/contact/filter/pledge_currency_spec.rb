@@ -37,7 +37,7 @@ RSpec.describe Contact::Filter::PledgeCurrency do
     context 'filter by address historic' do
       it 'returns only contacts that have the locale' do
         expect(described_class.query(contacts, { pledge_currency: 'USD' }, [account_list]).to_a).to match_array [contact_three, contact_four]
-        expect(described_class.query(contacts, { pledge_currency: 'CAD' }, [account_list]).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { pledge_currency: 'CAD' }, [account_list]).to_a).to eq [contact_one]
       end
     end
   end

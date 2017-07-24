@@ -43,7 +43,7 @@ RSpec.describe Contact::Filter::AddressValid do
         expect(described_class.query(contacts, { address_valid: {} },    nil).to_a).to eq([])
         expect(described_class.query(contacts, { address_valid: [] },    nil).to_a).to eq([])
         expect(described_class.query(contacts, { address_valid: '' },    nil).to_a).to eq([])
-        expect(described_class.query(contacts, { address_valid: 'wut' }, nil).to_a).to eq(contacts)
+        expect(described_class.query(contacts, { address_valid: 'wut' }, nil).to_a).to match_array(contacts)
       end
     end
 

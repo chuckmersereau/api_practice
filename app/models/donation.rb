@@ -13,8 +13,9 @@ class Donation < ApplicationRecord
   scope :since, -> (date) { where('donation_date > ?', date) }
   scope :between, -> (from, to) { where(donation_date: from.to_date..to.to_date) }
   scope :currencies, -> { reorder(nil).pluck('DISTINCT currency') }
-  GIFT_AID = 'Gift Aid'.freeze
   scope :without_gift_aid, -> { where.not(payment_method: GIFT_AID) }
+
+  GIFT_AID = 'Gift Aid'.freeze
 
   PERMITTED_ATTRIBUTES = [:amount,
                           :appeal_amount,

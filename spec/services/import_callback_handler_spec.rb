@@ -28,7 +28,7 @@ describe ImportCallbackHandler do
       expect_any_instance_of(AccountList).to receive(:queue_sync_with_google_contacts).once
       expect_any_instance_of(AccountList).to receive(:valid_mail_chimp_account).and_return(true)
       expect_any_instance_of(AccountList).to receive(:mail_chimp_account).and_return(MailChimpAccount.new)
-      expect_any_instance_of(MailChimpAccount).to receive(:queue_export_to_primary_list).once
+      expect(MailChimp::PrimaryListSyncWorker).to receive(:perform_async).once
       expect_delayed_email(ImportMailer, :success)
       ImportCallbackHandler.new(import).handle_success
     end

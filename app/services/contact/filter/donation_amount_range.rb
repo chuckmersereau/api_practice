@@ -1,7 +1,7 @@
 class Contact::Filter::DonationAmountRange < Contact::Filter::Base
   def execute_query(contacts, filters)
     sanitize_filters(filters)
-    contacts = contacts.includes(donor_accounts: [:donations]).references(donor_accounts: [:donations])
+    contacts = contacts.joins(donor_accounts: [:donations])
     contacts = contacts.where('donations.amount >= ?', filters[:donation_amount_range][:min]) if filters[:donation_amount_range][:min].present?
     contacts = contacts.where('donations.amount <= ?', filters[:donation_amount_range][:max]) if filters[:donation_amount_range][:max].present?
     contacts

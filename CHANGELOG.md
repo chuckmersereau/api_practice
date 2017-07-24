@@ -2,11 +2,22 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 20 July 2017
+- The '/admin/impersonation' endpoint now permits the search of impersonated users by email addresses.
+
+## 13 July 2017
+- Removed the '/api/v2/user/authentication' endpoint.
+
+## 12 July 2017
+- Added a pledge_frequency_hashes field to '/api/v2/constants' endpoint.
+
 ## 11 July 2017
+- Added organization to relationships on designation account objects returned by the API.
+- Gift Aid can now be opted out for specific contacts.
 - Added a '/reports/donation_monthly_totals' endpoint.
 
 ## 06 July 2017
-- Added the admin/impersonation endpoint.
+- Added the '/admin/impersonation' endpoint.
 
 ## 27 June 2017
 - Tasks endpoint can now sort by multiple parameters.
@@ -16,7 +27,7 @@ This changelog covers what's changed in the MPDX APIs.
 - Added contact name search to donor accounts endpoint.
 
 ## 20 June 2017
-- CSV Import should support importing Referred By
+- CSV Import should support importing Referred By.
 
 ## 19 June 2017
 - TNT import now allows to import Campaign information related to all manually added gifts.

@@ -28,8 +28,8 @@ RSpec.describe Contact::Filter::NameLike do
 
     context 'filter by contact name' do
       it 'returns only contacts that start with the search query' do
-        expect(described_class.query(contacts, { name_like: 'First' }, nil).to_a).to match_array [contact_one]
-        expect(described_class.query(contacts, { name_like: 'Name' }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { name_like: 'First' }, nil).to_a).to eq [contact_one]
+        expect(described_class.query(contacts, { name_like: 'Name' }, nil).to_a).to eq [contact_two]
       end
     end
   end

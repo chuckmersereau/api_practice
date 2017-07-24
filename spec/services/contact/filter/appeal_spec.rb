@@ -43,7 +43,7 @@ RSpec.describe Contact::Filter::Appeal do
 
     context 'filter with no appeals' do
       it 'returns only contacts with no_appeals set to true' do
-        expect(described_class.query(contacts, { appeal: 'no_appeals' }, nil).to_a).to eq [contact_one, contact_two]
+        expect(described_class.query(contacts, { appeal: 'no_appeals' }, nil).to_a).to match_array [contact_one, contact_two]
       end
       it 'returns only contacts with no_appeals set to true and who are part of the appeal' do
         expect(described_class.query(contacts, { appeal: "#{appeal_1.uuid}, no_appeals" }, nil).to_a).to eq [contact_one]

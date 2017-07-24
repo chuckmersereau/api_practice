@@ -50,6 +50,7 @@ class ConstantListSerializer < ActiveModel::Serializer
              :organizations_attributes,
              :pledge_currencies,
              :pledge_frequencies,
+             :pledge_frequency_hashes,
              :results,
              :sources,
              :statuses,
@@ -78,6 +79,10 @@ class ConstantListSerializer < ActiveModel::Serializer
 
   def status_hashes
     constants_exhibit.status_translated_hashes
+  end
+
+  def pledge_frequency_hashes
+    constants_exhibit.pledge_frequency_translated_hashes
   end
 
   def dates

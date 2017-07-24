@@ -4,8 +4,7 @@ class Contact::Filter::Country < Contact::Filter::Base
     country_filters << nil if country_filters.delete('none')
     contacts.where('addresses.country' => country_filters,
                    'addresses.historic' => filters[:address_historic] == 'true')
-            .includes(:addresses)
-            .references('addresses')
+            .joins(:addresses)
   end
 
   def title

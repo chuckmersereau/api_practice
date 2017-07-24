@@ -35,9 +35,9 @@ RSpec.describe Contact::Filter::PledgeAmount do
 
     context 'filter by amounts' do
       it 'returns only contacts with a pledge amount in the filters' do
-        expect(described_class.query(contacts, { pledge_amount: '100.0' }, nil).to_a).to eq [contact_one, contact_two]
+        expect(described_class.query(contacts, { pledge_amount: '100.0' }, nil).to_a).to match_array [contact_one, contact_two]
         expect(described_class.query(contacts, { pledge_amount: '1' }, nil).to_a).to eq [contact_three]
-        expect(described_class.query(contacts, { pledge_amount: '100.0, 1.0, 200.0' }, nil).to_a).to eq [contact_one, contact_two, contact_three]
+        expect(described_class.query(contacts, { pledge_amount: '100.0, 1.0, 200.0' }, nil).to_a).to match_array [contact_one, contact_two, contact_three]
       end
     end
   end

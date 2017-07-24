@@ -1,5 +1,6 @@
 class MailChimpAccountSerializer < ApplicationSerializer
   type :mail_chimp_accounts
+
   attributes :active,
              :api_key,
              :auto_log_campaigns,

@@ -28,7 +28,7 @@ RSpec.describe Task::Filter::ContactNewsletter do
 
     context 'filter by contact newsletter none' do
       it 'returns only tasks with contacts that have no newsletter option selected' do
-        expect(described_class.query(tasks, { contact_newsletter: 'none' }, account_list).to_a).to match_array [task_four]
+        expect(described_class.query(tasks, { contact_newsletter: 'none' }, account_list).to_a).to eq [task_four]
       end
     end
     context 'filter by contact newsletter all' do
@@ -48,7 +48,7 @@ RSpec.describe Task::Filter::ContactNewsletter do
     end
     context 'filter by contact newsletter both' do
       it 'returns all tasks with contacts that have both newsletter options selected' do
-        expect(described_class.query(tasks, { contact_newsletter: 'both' }, account_list).to_a).to match_array [task_three]
+        expect(described_class.query(tasks, { contact_newsletter: 'both' }, account_list).to_a).to eq [task_three]
       end
     end
   end

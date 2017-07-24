@@ -33,8 +33,12 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
           .with(validator.attributes)
           .and_return(user)
 
+        travel_to(Time.now)
+
         post :create, data: request_data
       end
+
+      after { travel_back }
 
       it 'returns success' do
         expect(response.status).to eq(200)
@@ -42,9 +46,11 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
 
       it 'responds with a valid json web token' do
         json_web_token = response_body['data']['attributes']['json_web_token']
+        decoded_web_token = JsonWebToken.decode(json_web_token)
 
         expect(json_web_token).to be_present
-        expect(User.find_by(uuid: JsonWebToken.decode(json_web_token)['user_uuid']).id).to eq user.id
+        expect(User.find_by(uuid: decoded_web_token['user_uuid']).id).to eq user.id
+        expect(decoded_web_token['exp']).to eq 30.days.from_now.utc.to_i
       end
     end
 

@@ -46,19 +46,19 @@ RSpec.describe Contact::Filter::Newsletter do
 
     context 'filter by newsletter all' do
       it 'returns all contacts that have any newsletter option selected, but not blank' do
-        expect(described_class.query(contacts, { newsletter: 'all' }, nil).to_a).to eq [contact_one, contact_two, contact_three]
+        expect(described_class.query(contacts, { newsletter: 'all' }, nil).to_a).to match_array [contact_one, contact_two, contact_three]
       end
     end
 
     context 'filter by newsletter physical' do
       it 'returns all contacts that have physical or both newsletter options selected' do
-        expect(described_class.query(contacts, { newsletter: 'address' }, nil).to_a).to eq [contact_two, contact_three]
+        expect(described_class.query(contacts, { newsletter: 'address' }, nil).to_a).to match_array [contact_two, contact_three]
       end
     end
 
     context 'filter by newsletter email' do
       it 'returns all contacts that have email or both newsletter options selected' do
-        expect(described_class.query(contacts, { newsletter: 'email' }, nil).to_a).to eq [contact_one, contact_three]
+        expect(described_class.query(contacts, { newsletter: 'email' }, nil).to_a).to match_array [contact_one, contact_three]
       end
     end
 

@@ -51,7 +51,7 @@ RSpec.describe Task::Filter::ContactInfoPhone do
 
     context 'filter by mobile phone' do
       it 'returns only tasks with contacts that have a home phone' do
-        expect(described_class.query(tasks, { contact_info_phone: 'Yes' }, account_list).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { contact_info_phone: 'Yes' }, account_list).to_a).to eq [task_one]
       end
     end
   end

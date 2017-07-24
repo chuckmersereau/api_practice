@@ -47,16 +47,16 @@ RSpec.describe Contact::Filter::Referrer do
 
     context 'filter by any referrer' do
       it 'returns only contacts that have a referrer' do
-        expect(described_class.query(contacts, { referrer: 'any' }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { referrer: 'any' }, nil).to_a).to eq [contact_two]
       end
     end
 
     context 'filter by referrer' do
       it 'filters multiple referrers' do
-        expect(described_class.query(contacts, { referrer: "#{contact_one.uuid}, #{contact_one.uuid}" }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { referrer: "#{contact_one.uuid}, #{contact_one.uuid}" }, nil).to_a).to eq [contact_two]
       end
       it 'filters a single referrer' do
-        expect(described_class.query(contacts, { referrer: contact_one.uuid.to_s }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { referrer: contact_one.uuid.to_s }, nil).to_a).to eq [contact_two]
       end
     end
 

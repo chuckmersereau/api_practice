@@ -41,6 +41,7 @@ RSpec.describe Task::Filter::ContactIds do
       it 'filters single contact' do
         expect(described_class.query(tasks, { contact_ids: contact_one.uuid }, nil).to_a).to include(task_one)
       end
+
       it 'filters multiple contacts' do
         expect(described_class.query(tasks, { contact_ids: "#{contact_one.uuid}, #{contact_two.uuid}" }, nil).to_a).to include(task_two)
       end

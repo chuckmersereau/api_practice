@@ -27,7 +27,7 @@ RSpec.describe Task::Filter::ContactLikely do
 
     context 'filter by no likely to give' do
       it 'returns only tasks with contacts that have no likely to give' do
-        expect(described_class.query(tasks, { contact_likely: 'none' }, account_list).to_a).to match_array [task_four]
+        expect(described_class.query(tasks, { contact_likely: 'none' }, account_list).to_a).to eq [task_four]
       end
     end
 
@@ -36,7 +36,7 @@ RSpec.describe Task::Filter::ContactLikely do
         expect(described_class.query(tasks, { contact_likely: 'Least Likely, Likely' }, account_list).to_a).to match_array [task_one, task_two]
       end
       it 'filters a single likely to give' do
-        expect(described_class.query(tasks, { contact_likely: 'Most Likely' }, account_list).to_a).to match_array [task_three]
+        expect(described_class.query(tasks, { contact_likely: 'Most Likely' }, account_list).to_a).to eq [task_three]
       end
     end
 

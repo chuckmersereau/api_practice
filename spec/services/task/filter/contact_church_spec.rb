@@ -36,7 +36,7 @@ RSpec.describe Task::Filter::ContactChurch do
         expect(described_class.query(tasks, { contact_church: 'My Church, First Pedestrian Church' }, account_list).to_a).to match_array [task_one, task_two]
       end
       it 'filters a single church' do
-        expect(described_class.query(tasks, { contact_church: 'My Church' }, account_list).to_a).to match_array [task_one]
+        expect(described_class.query(tasks, { contact_church: 'My Church' }, account_list).to_a).to eq [task_one]
       end
     end
 

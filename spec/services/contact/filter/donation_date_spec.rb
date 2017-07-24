@@ -51,7 +51,7 @@ RSpec.describe Contact::Filter::DonationDate do
     context 'filter by end and start date' do
       it 'returns only contacts with a donation after the start date and before the end date' do
         expect(described_class.query(contacts, { donation_date: Range.new(1.year.ago, 1.year.from_now) }, nil).to_a).to match_array [contact_one, contact_two]
-        expect(described_class.query(contacts, { donation_date: Range.new(1.day.ago, 2.months.from_now) }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { donation_date: Range.new(1.day.ago, 2.months.from_now) }, nil).to_a).to eq [contact_two]
       end
     end
   end

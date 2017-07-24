@@ -35,7 +35,7 @@ RSpec.describe Contact::Filter::StatusValid do
 
     context 'filter by not status_valid' do
       it 'returns only contacts that have a status_valid set to false' do
-        expect(described_class.query(contacts, { status_valid: 'false' }, nil).to_a).to match_array [contact_two]
+        expect(described_class.query(contacts, { status_valid: 'false' }, nil).to_a).to eq [contact_two]
       end
     end
   end

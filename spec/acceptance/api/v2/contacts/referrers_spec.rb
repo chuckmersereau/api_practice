@@ -40,6 +40,7 @@ resource 'Contacts > Referrers' do
       name
       next_ask
       no_appeals
+      no_gift_aid
       notes
       notes_saved_at
       pledge_amount

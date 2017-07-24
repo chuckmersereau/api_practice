@@ -25,9 +25,7 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
   end
 
   def export_to_mail_chimp
-    @mail_chimp_account.queue_export_appeal_contacts(contact_ids, params[:mail_chimp_list_id], load_appeal.id)
-    # This will have to be changed in the future once we refactor the mail chimp classes as there will no longer
-    # be a need to pass the appeal to the mail_chimp_account method
+    MailChimp::ExportContactsWorker.perform_async(@mail_chimp_account, params[:mail_chimp_list_id], contact_ids)
   end
 
   def contact_ids
