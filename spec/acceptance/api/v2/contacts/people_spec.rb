@@ -17,7 +17,7 @@ resource 'People' do
   let(:new_resource) do
     attributes_for(:person, first_name: 'Mpdx')
       .reject { |key| key.to_s.end_with?('_id') }
-      .merge(updated_in_db_at: contact.updated_at)
+      .merge(overwrite: true)
   end
 
   let(:relationship_person) { create(:person) }
@@ -120,7 +120,7 @@ resource 'People' do
           anniversary_day: nil,
           anniversary_month: nil,
           birthday_day: nil,
-          updated_in_db_at: resource.updated_at,
+          overwrite: true,
           anniversary_year: nil,
           birthday_month: nil,
           deceased: false

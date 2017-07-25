@@ -9,11 +9,6 @@ RSpec.describe ApplicationPreloader::IncludeAssociationsFetcher do
 
     subject { described_class.new(association_preloader_mapping, resource_path) }
 
-    before do
-      Api::V2::ContactsPreloader = Class.new(ApplicationPreloader)
-      Api::V2::Contacts::PeoplePreloader = Class.new(ApplicationPreloader)
-    end
-
     it 'includes all included resources and the appropriate associations for each of those' do
       expect(Api::V2::ContactsPreloader).to receive(:new).with([], field_params, 'contacts_that_referred_me').and_call_original
       expect_any_instance_of(Api::V2::ContactsPreloader).to receive(:associations_to_preload).and_return([])

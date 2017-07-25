@@ -1,4 +1,3 @@
-
 class Api::V2::TasksPreloader < ApplicationPreloader
   ASSOCIATION_PRELOADER_MAPPING = {
     account_list: Api::V2::AccountListsPreloader,
