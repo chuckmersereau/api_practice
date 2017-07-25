@@ -177,6 +177,25 @@ RSpec.describe 'Server Responsibilites', type: :request do
           expect(response.status).to eq 401
         end
       end
+
+      context "with an old jwt (doesn't have an exp attribute)" do
+        # This spec should be removed once the mobile app
+        # can handle expiring tokens.
+
+        it 'should return a succes status (200)' do
+          json_web_token = JsonWebToken.encode(
+            user_uuid: user.uuid
+          )
+
+          headers = {
+            'CONTENT_TYPE' => 'application/vnd.api+json',
+            'ACCEPT' => '*/*',
+            'Authorization' => "Bearer #{json_web_token}"
+          }
+          get api_v2_exports_path, nil, headers
+          expect(response.status).to eq 200
+        end
+      end
     end
   end
 end
