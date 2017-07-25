@@ -67,7 +67,7 @@ module Mpdx
     config.middleware.insert_before 'BatchRequestHandler::Middleware', 'JsonWebToken::Middleware' do |env|
       jwt_payload = env['auth.jwt_payload']
 
-      if jwt_payload.try(:[], 'user_uuid') && jwt_payload.try(:[], 'exp')
+      if jwt_payload.try(:[], 'user_uuid')
         env['auth.user'] = User.find_by(uuid: jwt_payload['user_uuid'])
       end
     end
