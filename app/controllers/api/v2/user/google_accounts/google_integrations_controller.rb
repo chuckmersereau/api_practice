@@ -94,7 +94,7 @@ class Api::V2::User::GoogleAccounts::GoogleIntegrationsController < Api::V2Contr
   end
 
   def google_integration_scope
-    current_user.google_integrations.where(google_account: load_google_account)
+    current_user.google_integrations.where(account_list: account_lists, google_account: load_google_account)
   end
 
   def load_google_account
