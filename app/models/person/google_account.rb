@@ -58,7 +58,11 @@ class Person::GoogleAccount < ApplicationRecord
   end
 
   def token_expired?
-    (expires_at || Time.now) <= Time.now
+    (expires_at || Time.current) <= Time.current
+  end
+
+  def token_failure?
+    notified_failure == true
   end
 
   def contacts

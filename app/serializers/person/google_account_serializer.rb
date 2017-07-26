@@ -14,4 +14,8 @@ class Person::GoogleAccountSerializer < ApplicationSerializer
   def token_expired
     object.token_expired?
   end
+
+  def token_failure
+    object.token_failure?
+  end
 end
