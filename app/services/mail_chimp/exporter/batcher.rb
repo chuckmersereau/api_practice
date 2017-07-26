@@ -20,11 +20,15 @@ class MailChimp::Exporter
     end
 
     def unsubscribe_members(emails_of_members_to_remove)
-      batch_delete_params(emails_of_members_to_remove)
+      operations = emails_of_members_to_remove.map do |email|
+        {
+          method: 'PATCH',
+          path: "/lists/#{list_id}/members/#{email_hash(email)}",
+          body: { status: 'unsubscribed' }
+        }
+      end
 
-      mail_chimp_account.mail_chimp_members
-                        .where(list_id: list_id, email: emails_of_members_to_remove)
-                        .destroy_all
+      gibbon_wrapper.batches.create(body: { operations: operations })
     end
 
     private
@@ -122,14 +126,6 @@ class MailChimp::Exporter
 
     def not_the_intermittent_bad_request_error?(error)
       error.message.exclude?('<H1>Bad Request</H1>')
-    end
-
-    def batch_delete_params(members_to_unsubscribe)
-      operations = members_to_unsubscribe.map do |email|
-        { method: 'DELETE', path: "/lists/#{list_id}/members/#{email_hash(email)}" }
-      end
-
-      gibbon_wrapper.batches.create(body: { operations: operations })
     end
 
     def create_member_records(members_params)
