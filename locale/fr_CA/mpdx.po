@@ -1,8 +1,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: VERSION\n"
-"POT-Creation-Date: 2017-06-27 03:33+0000\n"
-"PO-Revision-Date: 2017-06-27 03:33+0000\n"
+"POT-Creation-Date: 2017-07-20 22:54+0000\n"
+"PO-Revision-Date: 2017-07-20 22:54+0000\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE TEAM <EMAIL@ADDRESS>\n"
 "Language: fr_CA\n"
@@ -184,7 +184,7 @@ msgid "Catalan"
 msgstr "Catalan"
 
 msgid "Call"
-msgstr "Appel"
+msgstr "Appels"
 
 msgid "Chinese (Simplified)"
 msgstr "Chinois (simplifié)"
@@ -226,13 +226,13 @@ msgid "Company"
 msgstr "Entreprise"
 
 msgid "Completed"
-msgstr "Effectuée"
+msgstr "Effectuées"
 
 msgid "Contact Information"
-msgstr "Informations du contact"
+msgstr "Coordonnées du contact"
 
 msgid "Contact Details"
-msgstr "Détails sur le contact"
+msgstr "Détails du contact"
 
 msgid "Contact Location"
 msgstr "Lieu du contact"
@@ -544,7 +544,7 @@ msgid "Last month"
 msgstr "Mois précédent"
 
 msgid "Late By"
-msgstr "En retard de"
+msgstr "En retard"
 
 msgid "Least Likely"
 msgstr "Le moins susceptible"
