@@ -97,5 +97,16 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
         expect(JSON.parse(response.body)['included'].first['attributes'].keys).to contain_exactly('name')
       end
     end
+    context 'duplicates doubles' do
+      let(:person5) { create(:person, first_name: 'john', last_name: 'doe') }
+      let!(:contact5) { create(:contact, name: 'Doe, John 1', account_list: account_list, people: [person5]) }
+
+      it 'does not return duplicates that include people that were already included' do
+        api_login(user)
+        get :index
+        expect(JSON.parse(response.body)['data'].count).to eq(2)
+        expect(JSON.parse(response.body)['data'].map { |duplicate| duplicate['id'] }).to_not include(contact5.uuid)
+      end
+    end
   end
 end
