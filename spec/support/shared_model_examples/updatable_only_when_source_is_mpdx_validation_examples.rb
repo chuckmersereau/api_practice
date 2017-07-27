@@ -12,21 +12,25 @@ RSpec.shared_examples 'updatable_only_when_source_is_mpdx_validation_examples' d
 
   options[:attributes].each do |attribute|
     describe "#{attribute} validation" do
-      context 'when source is MPDX' do
+      context 'when source is MPDX or Manual' do
         it 'does not validate unsaved records' do
           record = build(options[:factory_type])
-          record.source = 'MPDX'
-          change_attribute(record, attribute)
-          expect(record.valid?).to be true
-          expect(record.errors[attribute]).to be_blank
+          %w(manual MPDX).each do |source|
+            record.source = source
+            change_attribute(record, attribute)
+            expect(record.valid?).to be true
+            expect(record.errors[attribute]).to be_blank
+          end
         end
 
         it 'permits updates to existing records' do
           record = create(options[:factory_type])
-          record.source = 'MPDX'
-          change_attribute(record, attribute)
-          expect(record.valid?).to be true
-          expect(record.errors[attribute]).to be_blank
+          %w(manual MPDX).each do |source|
+            record.source = source
+            change_attribute(record, attribute)
+            expect(record.valid?).to be true
+            expect(record.errors[attribute]).to be_blank
+          end
         end
       end
 

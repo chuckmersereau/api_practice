@@ -21,7 +21,8 @@ class Admin::AccountListResetWorker
     authorize_reset_log
     destroy_account_list
     import_profiles
-    async_import_donor_data
+    set_default_account_list
+    queue_import_organization_data
     @reset_log.update_column(:completed_at, Time.current)
   end
 
@@ -38,7 +39,13 @@ class Admin::AccountListResetWorker
     @user.organization_accounts.each(&:import_profiles)
   end
 
-  def async_import_donor_data
+  def set_default_account_list
+    @user.reload
+    return if @user.default_account_list.present? && (@user.valid? || @user.errors[:default_account_list].blank?)
+    @user.update(default_account_list: @user.account_lists&.first&.id)
+  end
+
+  def queue_import_organization_data
     @user.organization_accounts.each(&:queue_import_data)
   end
 end

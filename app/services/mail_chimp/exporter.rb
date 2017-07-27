@@ -26,19 +26,6 @@ class MailChimp::Exporter
     export_deletes(emails_of_members_to_remove) if emails_of_members_to_remove.present?
   end
 
-  def export_appeal_contacts!(contact_ids, appeal_id)
-    raise_error_if_primary_list_is_used_for_error
-
-    @contact_ids = contact_ids
-    @appeal_id = appeal_id
-
-    contacts = mail_chimp_account.active_contacts_with_emails(contact_ids)
-    compare_and_unsubscribe(contacts)
-
-    export_adds_and_updates(contacts)
-    save_appeal_list_info(appeal_id)
-  end
-
   private
 
   def appeal_export?
@@ -96,18 +83,6 @@ class MailChimp::Exporter
     ['GREETING'].concat(appeal_export? ? ['DONATED_TO_APPEAL'] : [])
   end
 
-  def raise_error_if_primary_list_is_used_for_error
-    return unless mail_chimp_account.primary_list_id == list_id
-
-    raise 'Appeal contacts cannot be exported to the Mail Chimp primary list id. Choose a different list'
-  end
-
-  def compare_and_unsubscribe(contacts)
-    members_to_unsubscribe = fetch_members_to_unsubscribe(contacts)
-
-    batcher.unsubscribe_members(members_to_unsubscribe) unless members_to_unsubscribe.empty?
-  end
-
   def fetch_members_to_unsubscribe(contacts)
     gibbon_wrapper.list_emails(list_id) - primary_email_addresses_scope(contacts).pluck(:email)
   end
@@ -115,12 +90,6 @@ class MailChimp::Exporter
   def primary_email_addresses_scope(contacts)
     EmailAddress.joins(person: :contact_people)
                 .where(contact_people: { contact_id: contacts.ids }, primary: true)
-  end
-
-  def save_appeal_list_info(appeal_id)
-    mail_chimp_account.build_mail_chimp_appeal_list unless mail_chimp_account.mail_chimp_appeal_list
-
-    mail_chimp_account.mail_chimp_appeal_list.update(appeal_list_id: list_id, appeal_id: appeal_id)
   end
 
   def contact_changed_or_new?(contact)

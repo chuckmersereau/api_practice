@@ -74,35 +74,4 @@ describe MailChimp::Exporter do
       subject.export_contacts!(contacts.map(&:id))
     end
   end
-
-  context '#export_appeal_contacts!' do
-    let(:mail_chimp_appeal_list) { mail_chimp_account.mail_chimp_appeal_list }
-
-    before do
-      allow_any_instance_of(MailChimp::GibbonWrapper).to receive(:list_emails).and_return(['email@gmail.com'])
-      allow_any_instance_of(MailChimpAccount).to receive(:relevant_contacts).and_return(Contact.limit(2))
-      allow_any_instance_of(MailChimpAccount).to receive(:active_contacts_with_emails).and_return(Contact.limit(1))
-
-      allow(described_class::GroupAdder).to receive(:new).and_return(mock_group_adder)
-      allow(described_class::Batcher).to receive(:new).and_return(mock_batcher)
-      allow(described_class::MergeFieldAdder).to receive(:new).and_return(mock_merge_field_adder)
-    end
-
-    it 'calls GroupAdder, MergeFieldAdder and Batcher instances with correct arguments and updates mail_chimp_appeal_list' do
-      expect(mock_batcher).to receive(:unsubscribe_members).with(['email@gmail.com'])
-
-      expect(mock_group_adder).to receive(:add_status_groups).with(['Partner - Financial', 'Partner - Pray'])
-      expect(mock_group_adder).to receive(:add_tags_groups).with(['tag'])
-
-      expect(mock_merge_field_adder).to receive(:add_merge_field).with('GREETING')
-      expect(mock_merge_field_adder).to receive(:add_merge_field).with('DONATED_TO_APPEAL')
-
-      expect(mock_batcher).to receive(:subscribe_contacts).with([contacts.first])
-
-      subject.export_appeal_contacts!(contacts.map(&:id), appeal.id)
-
-      expect(mail_chimp_appeal_list.reload.appeal_list_id).to eq(list_id)
-      expect(mail_chimp_appeal_list.reload.appeal_id).to eq(appeal.id)
-    end
-  end
 end

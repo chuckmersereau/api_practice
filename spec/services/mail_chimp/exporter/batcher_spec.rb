@@ -94,8 +94,9 @@ RSpec.describe MailChimp::Exporter::Batcher do
     let(:operations_body) do
       [
         {
-          method: 'DELETE',
-          path: '/lists/list_one/members/1919bfc4fa95c7f6b231e583da677a17'
+          method: 'PATCH',
+          path: '/lists/list_one/members/1919bfc4fa95c7f6b231e583da677a17',
+          body: { status: 'unsubscribed' }
         }
       ]
     end
@@ -103,9 +104,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
     it 'unsubscribes the members based on the emails provided' do
       expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body)
 
-      expect do
-        subject.unsubscribe_members([mail_chimp_member.email])
-      end.to change { mail_chimp_account.mail_chimp_members.reload.count }.by(-1)
+      subject.unsubscribe_members([mail_chimp_member.email])
     end
   end
 end

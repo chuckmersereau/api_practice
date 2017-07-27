@@ -41,7 +41,7 @@ class ApplicationPreloader
 
     def preloader_class_from_association(association)
       association_preloader_mapping[association.to_sym] ||
-        "#{resource_path}::#{association.camelize}Preloader".constantize
+        "::#{resource_path}::#{association.camelize}Preloader".constantize
     end
 
     def direct_include_associations

@@ -10,6 +10,7 @@ describe Address do
   end
 
   include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :address
+  include_examples 'after_validate_set_source_to_mpdx_examples', factory_type: :address
 
   context '#find_master_address' do
     it 'normalized an address using smarty streets' do

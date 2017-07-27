@@ -68,4 +68,25 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
   include_examples 'create_examples'
   include_examples 'update_examples'
   include_examples 'destroy_examples'
+
+  describe 'account_list_id filter' do
+    let!(:account_list_two) { create(:account_list).tap { |account_list| user.account_lists << account_list } }
+    let!(:google_integration_two) { create(:google_integration, account_list: account_list_two, google_account: google_account, created_at: 1.hour.ago) }
+
+    before do
+      expect(user.google_integrations.pluck(:account_list_id).uniq.size).to eq(2)
+    end
+
+    it 'filters by account_list_id' do
+      api_login(user)
+      get :index, parent_param_if_needed.merge(filter: { account_list_id: account_list_two.uuid })
+      expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq([google_integration_two.uuid])
+    end
+
+    it 'does not filter by account_list_id' do
+      api_login(user)
+      get :index, parent_param_if_needed.except(:filter)
+      expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq(user.google_integrations.pluck(:uuid))
+    end
+  end
 end

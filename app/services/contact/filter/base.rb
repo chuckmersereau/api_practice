@@ -12,4 +12,10 @@ class Contact::Filter::Base < ApplicationFilter
   def contact_instance
     @@contact_instance ||= Contact.new
   end
+
+  private
+
+  def designation_account_ids
+    account_lists.map(&:designation_account_ids).flatten
+  end
 end

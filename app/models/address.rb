@@ -2,6 +2,7 @@ require 'smarty_streets'
 
 class Address < ApplicationRecord
   include Concerns::BeforeCreateSetValidValuesBasedOnSource
+  include Concerns::AfterValidationSetSourceToMPDX
 
   belongs_to :addressable, polymorphic: true, touch: true
   belongs_to :master_address

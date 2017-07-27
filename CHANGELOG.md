@@ -2,6 +2,12 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 24 July 2017
+- Expanded the search scope of wildcard_search under '/api/v2/tasks' endpoint to include associated comments and contacts.
+
+## 21 July 2017
+- Addresses, email addresses and phone numbers now can be edited when the source is 'TntImport'.
+
 ## 20 July 2017
 - The '/admin/impersonation' endpoint now permits the search of impersonated users by email addresses.
 

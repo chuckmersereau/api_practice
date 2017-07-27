@@ -40,6 +40,12 @@ describe Person::GoogleAccount do
       expect(Person::GoogleAccount::ContactGroup).to receive(:from_groups)
       subject.contact_groups
     end
+
+    it 'returns an empty array if the refresh token is invalid' do
+      expect(subject).to receive(:contacts_api_user).and_raise(Person::GoogleAccount::MissingRefreshToken)
+      expect(Person::GoogleAccount::ContactGroup).to_not receive(:from_groups)
+      expect(subject.contact_groups).to eq([])
+    end
   end
 
   context '#refresh_token!' do
@@ -65,15 +71,25 @@ describe Person::GoogleAccount do
       expect(subject.expires_at).to be > 58.minutes.from_now
     end
 
-    it 'returns false and alerts refresh needed on invalid grant' do
+    it 'returns false and alerts refresh needed on invalid_grant error' do
       stub_refresh_request('{"error":"invalid_grant"}', 403)
       expect(subject).to receive(:needs_refresh)
+      expect(Rollbar).to_not receive(:error)
       expect(subject.refresh_token!).to be_falsey
     end
 
-    it 'fails if it receives another error type' do
+    it 'returns false and alerts refresh needed on invalid_client error' do
+      stub_refresh_request('{"error":"invalid_client"}', 403)
+      expect(subject).to receive(:needs_refresh)
+      expect(Rollbar).to_not receive(:error)
+      expect(subject.refresh_token!).to be_falsey
+    end
+
+    it 'returns false and does not alert refresh needed on an unknown error' do
       stub_refresh_request('{"error":"internal err"}', 500)
-      expect { subject.refresh_token! }.to raise_error(/internal err/)
+      expect(subject).to_not receive(:needs_refresh)
+      expect(Rollbar).to receive(:error)
+      expect(subject.refresh_token!).to be_falsey
     end
 
     def stub_refresh_request(body, status = 200)

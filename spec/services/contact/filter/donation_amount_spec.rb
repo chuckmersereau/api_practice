@@ -13,10 +13,13 @@ RSpec.describe Contact::Filter::DonationAmount do
   let!(:donor_account_two) { create(:donor_account) }
   let!(:designation_account_two) { create(:designation_account) }
   let!(:donation_two) { create(:donation, donor_account: donor_account_two, designation_account: designation_account_two, amount: 12.34) }
-  let!(:donation_three) { create(:donation, donor_account: donor_account_two, designation_account: designation_account_two, amount: 4444.33) }
 
+  let!(:donation_three) { create(:donation, donor_account: donor_account_two, designation_account: designation_account_two, amount: 4444.33) }
   let!(:contact_three) { create(:contact, account_list_id: account_list.id) }
+
   let!(:contact_four) { create(:contact, account_list_id: account_list.id) }
+  let!(:donor_account_four) { create(:donor_account) }
+  let!(:donation_four) { create(:donation, donor_account: donor_account_four, designation_account_id: nil, amount: 12.34) }
 
   before do
     account_list.designation_accounts << designation_account_one
@@ -58,10 +61,10 @@ RSpec.describe Contact::Filter::DonationAmount do
 
     context 'filter by amounts' do
       it 'returns only contacts that have given the exact amount' do
-        expect(described_class.query(contacts, { donation_amount: '9.99' }, account_list).to_a).to match_array [contact_one]
+        expect(described_class.query(contacts, { donation_amount: '9.99' }, [account_list]).to_a).to match_array [contact_one]
       end
       it 'returns only contacts that have given multiple exact amounts' do
-        expect(described_class.query(contacts, { donation_amount: '9.99, 12.34' }, account_list).to_a).to match_array [contact_one, contact_two]
+        expect(described_class.query(contacts, { donation_amount: '9.99, 12.34' }, [account_list]).to_a).to match_array [contact_one, contact_two]
       end
     end
   end

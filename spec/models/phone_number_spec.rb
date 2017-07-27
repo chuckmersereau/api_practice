@@ -13,6 +13,8 @@ describe PhoneNumber do
 
   include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :phone_number
 
+  include_examples 'after_validate_set_source_to_mpdx_examples', factory_type: :phone_number
+
   describe 'adding a phone number to a person' do
     it "creates a phone number normalized to home country if it's new" do
       expect do

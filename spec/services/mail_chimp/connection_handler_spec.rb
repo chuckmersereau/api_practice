@@ -83,7 +83,7 @@ RSpec.describe MailChimp::ConnectionHandler do
 
         expect do
           subject.call_mail_chimp(mail_chimp_syncer, :two_way_sync_with_primary_list)
-        end.to_not raise_error(error)
+        end.to_not raise_error
       end
     end
 
@@ -95,7 +95,7 @@ RSpec.describe MailChimp::ConnectionHandler do
 
         expect do
           subject.call_mail_chimp(mail_chimp_syncer, :two_way_sync_with_primary_list)
-        end.to_not raise_error(error)
+        end.to_not raise_error
       end
     end
 
