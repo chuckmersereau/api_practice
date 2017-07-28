@@ -18,7 +18,7 @@ class Api::V2::AccountLists::MailChimpAccountsController < Api::V2Controller
   def sync
     load_mail_chimp_account
     authorize_mail_chimp_account
-    MailChimp::PrimaryListSyncWorker.perform_async(@mail_chimp_account)
+    MailChimp::PrimaryListSyncWorker.perform_async(@mail_chimp_account.id)
     render_200
   end
 
