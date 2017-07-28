@@ -9,6 +9,7 @@ class Reports::MonthlyGivingGraphSerializer < ServiceSerializer
            :months_to_dates,
            :multi_currency,
            :salary_currency,
+           :display_currency,
            to: :object
 
   delegate :salary_currency_symbol,
@@ -23,7 +24,8 @@ class Reports::MonthlyGivingGraphSerializer < ServiceSerializer
              :months_to_dates,
              :multi_currency,
              :salary_currency_symbol,
-             :salary_currency
+             :salary_currency,
+             :display_currency
 
   def report_exhibit
     exhibit(object)

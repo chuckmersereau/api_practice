@@ -23,14 +23,16 @@ class Api::V2::Reports::MonthlyGivingGraphsController < Api::V2Controller
     [
       :account_list_id,
       :donation_date,
-      :donor_account_id
+      :donor_account_id,
+      :display_currency
     ]
   end
 
   def report_attributes
     {
       account_list: load_account_list,
-      filter_params: filter_params,
+      filter_params: filter_params.except(:display_currency),
+      display_currency: filter_params[:display_currency],
       locale: locale
     }
   end

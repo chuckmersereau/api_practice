@@ -17,4 +17,5 @@ describe Reports::MonthlyGivingGraphSerializer do
 
   it { expect(subject[:account_list][:name]).to be account_list.name }
   it { expect(subject[:monthly_goal]).to eq 1234 }
+  it { expect(subject[:display_currency]).to eq organization.default_currency_code }
 end

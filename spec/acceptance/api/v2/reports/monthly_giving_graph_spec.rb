@@ -13,6 +13,7 @@ resource 'Reports > Monthly Giving Graph Report' do
   let(:resource_attributes) do
     %w(
       created_at
+      display_currency
       monthly_average
       monthly_goal
       months_to_dates
@@ -36,6 +37,7 @@ resource 'Reports > Monthly Giving Graph Report' do
 
       with_options scope: [:data, :attributes] do
         response_field 'created_at',             'Time when report was observed',           type: 'String'
+        response_field 'display_currency',       'The currency converted values are in',    type: 'String'
         response_field 'monthly_average',        'Average monthly total conversion',        type: 'Number'
         response_field 'monthly_goal',           'The Account List\'s monthly goal',        type: 'Number'
         response_field 'pledges',                'The sum of all pledges',                  type: 'Array'
