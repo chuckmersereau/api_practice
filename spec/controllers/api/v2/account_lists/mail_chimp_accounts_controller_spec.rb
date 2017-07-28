@@ -62,7 +62,7 @@ describe Api::V2::AccountLists::MailChimpAccountsController, type: :controller d
     end
 
     it 'syncs a mailchimp account' do
-      expect(MailChimp::PrimaryListSyncWorker).to receive(:perform_async).with(mail_chimp_account)
+      expect(MailChimp::PrimaryListSyncWorker).to receive(:perform_async).with(mail_chimp_account.id)
 
       get :sync, account_list_id: account_list_id
       expect(response.status).to eq 200
