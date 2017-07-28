@@ -1,5 +1,6 @@
 class TntImport::HistoryImport
   include Concerns::TntImport::DateHelpers
+  include Concerns::TntImport::TaskHelpers
 
   def initialize(import, contact_ids_by_tnt_contact_id, xml)
     @import                        = import
@@ -38,8 +39,9 @@ class TntImport::HistoryImport
       tnt_appeal_id_by_tnt_history_id[tnt_history_id] = row_appeal_id(row) if row_appeal_id(row).present?
 
       next unless task.save
-      # Add any notes as a comment
-      task.comments.create(body: row['Notes'].strip) if row['Notes'].present?
+
+      import_comments_for_task(task: task, notes: row['Notes'], tnt_task_type_id: row['TaskTypeID'])
+
       task_id_by_tnt_history_id[tnt_history_id] = task.id
     end
 

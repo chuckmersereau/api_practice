@@ -1,5 +1,6 @@
 class TntImport::TasksImport
   include Concerns::TntImport::DateHelpers
+  include Concerns::TntImport::TaskHelpers
 
   def initialize(import, contact_ids_by_tnt_contact_id, xml)
     @import = import
@@ -19,8 +20,7 @@ class TntImport::TasksImport
 
       next unless task.save
 
-      # Add any notes as a comment
-      task.comments.where(body: row['Notes'].strip).first_or_initialize.save if row['Notes'].present?
+      import_comments_for_task(task: task, notes: row['Notes'], tnt_task_type_id: row['TaskTypeID'])
 
       task_ids_by_tnt_task_id[row['id']] = task.id
     end
