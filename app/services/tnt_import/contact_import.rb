@@ -99,6 +99,7 @@ class TntImport::ContactImport
     contact.likely_to_give = contact.assignable_likely_to_gives[row['LikelyToGiveID'].to_i - 1] if (@override || contact.likely_to_give.blank?) && row['LikelyToGiveID'].to_i != 0
     contact.no_appeals = true?(row['NeverAsk']) if @override || contact.no_appeals.nil?
     contact.estimated_annual_pledge_amount = row['EstimatedAnnualCapacity'] if @override || contact.estimated_annual_pledge_amount.nil?
+    contact.next_ask_amount = row['NextAskAmount'] if @override || contact.next_ask_amount.nil?
   end
 
   def update_contact_date_fields(contact, row)

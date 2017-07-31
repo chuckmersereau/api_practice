@@ -203,5 +203,6 @@ describe TntImport::ContactImport do
     include_examples 'import attribute', attribute_name: :likely_to_give,                 first_value: 1,              second_value: 2,                tnt_row_key: 'LikelyToGiveID'
     include_examples 'import attribute', attribute_name: :no_appeals,                     first_value: 'true',         second_value: 'false',          tnt_row_key: 'NeverAsk'
     include_examples 'import attribute', attribute_name: :estimated_annual_pledge_amount, first_value: 1234.56,        second_value: 7890,             tnt_row_key: 'EstimatedAnnualCapacity'
+    include_examples 'import attribute', attribute_name: :next_ask_amount,                first_value: 1234.56,        second_value: 7890,             tnt_row_key: 'NextAskAmount'
   end
 end
