@@ -166,6 +166,7 @@ describe GoogleImport do
   end
 
   describe 'overall import results' do
+    # rubocop:disable Metrics/AbcSize
     def check_imported_data
       contacts = @account_list.contacts.where(name: 'Google, John')
       expect(contacts.to_a.size).to eq(1)
@@ -235,6 +236,7 @@ describe GoogleImport do
       expect(google_contact.google_account).to eq(@account)
       expect(google_contact.picture_etag).to eq('dxt2DAEZfCp7ImA-AV4zRxBoPG4UK3owXBM.')
       expect(google_contact.picture).to eq(picture)
+      expect(google_contact.contact).to eq(contact)
     end
 
     it 'imports correct person data if no people exist and be the same for repeat imports' do
