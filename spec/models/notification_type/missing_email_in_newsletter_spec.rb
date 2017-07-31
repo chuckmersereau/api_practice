@@ -12,7 +12,10 @@ describe NotificationType::MissingEmailInNewsletter do
 
   context '#missing_info_filter' do
     it 'excludes contacts not on the email newsletter' do
-      account_list.contacts << create(:contact, send_newsletter: nil)
+      contact = create(:contact)
+      contact.update(send_newsletter: nil)
+
+      account_list.contacts << contact
       account_list.contacts << create(:contact, send_newsletter: 'Physical')
       expect_filtered_contacts([])
     end

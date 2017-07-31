@@ -1152,4 +1152,21 @@ describe Contact do
       expect(contact_with_gift_aid_organization.amount_with_gift_aid(100.00)).to eq(125.00)
     end
   end
+
+  context 'set_sendnewsletter' do
+    let(:built_contact) { build(:contact, name: 'Test', account_list: account_list) }
+    let(:persisted_contact) { create(:contact, name: 'Test', account_list: account_list) }
+
+    it 'defaults send_newsletter to Email when creating a new record' do
+      built_contact.send_newsletter = nil
+      built_contact.save
+      expect(built_contact.send_newsletter).to eq('Email')
+    end
+
+    it 'does not default send_newsletter to Email when updating a record' do
+      persisted_contact.send_newsletter = nil
+      persisted_contact.save
+      expect(persisted_contact.send_newsletter).to be_nil
+    end
+  end
 end

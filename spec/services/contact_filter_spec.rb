@@ -343,7 +343,7 @@ describe ContactFilter do
 
     it "doesn't display entries when filtering by Newsletter Recipients With Email Address" do
       contact = create(:contact, send_newsletter: 'Email')
-      create(:contact)
+      create(:contact, send_newsletter: 'Physical')
       p = create(:person)
       contact.people << p
       2.times do

@@ -7,7 +7,11 @@ RSpec.describe Task::Filter::ContactNewsletter do
   let!(:email_contact) { create(:contact, account_list: account_list, send_newsletter: 'Email') }
   let!(:physical_contact) { create(:contact, account_list: account_list, send_newsletter: 'Physical') }
   let!(:both_contact) { create(:contact, account_list: account_list, send_newsletter: 'Both') }
-  let!(:nil_contact) { create(:contact, account_list: account_list, send_newsletter: nil) }
+  let!(:nil_contact) { create(:contact, account_list: account_list) }
+
+  before do
+    nil_contact.update(send_newsletter: nil)
+  end
 
   let!(:task_one) { create(:task, account_list: account_list, contacts: [email_contact]) }
   let!(:task_two) { create(:task, account_list: account_list, contacts: [physical_contact]) }
