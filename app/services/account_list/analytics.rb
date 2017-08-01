@@ -63,7 +63,7 @@ class AccountList::Analytics < ActiveModelSerializers::Model
 
   def electronic
     @electronic ||= {
-      appointments: task_count(activity_type: ['Email', 'Facebook Message', 'Text Message'], next_action: 'Appointment Scheduled'),
+      appointments: task_count(activity_type: ['Email', 'Facebook Message', 'Text Message'], next_action: 'Appointment'),
       received:     email[:received] + facebook[:received] + text_message[:received],
       sent:         email[:sent] + facebook[:sent] + text_message[:sent]
     }
@@ -85,7 +85,7 @@ class AccountList::Analytics < ActiveModelSerializers::Model
 
   def phone
     @phone ||= {
-      appointments:   task_count(activity_type: ['Call', 'Talk to In Person'], next_action: 'Appointment Scheduled'),
+      appointments:   task_count(activity_type: ['Call', 'Talk to In Person'], next_action: 'Appointment'),
       attempted:      task_count(activity_type: 'Call',  with_result: ['Attempted - Left Message', 'Attempted']),
       completed:      task_count(activity_type: 'Call',  with_result: %w(Completed Done)),
       received:       task_count(activity_type: 'Call',  with_result: 'Received'),
