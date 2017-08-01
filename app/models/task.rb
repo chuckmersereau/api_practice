@@ -8,6 +8,7 @@ class Task < Activity
   before_validation :update_completed_at
   after_save :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
   after_destroy :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
+  after_create :log_newsletter, if: -> { (activity_type == 'Newsletter - Physical' || activity_type == 'Newsletter - Email') && contacts.empty? }
 
   enum notification_type: %w(email)
   enum notification_time_unit: %w(minutes hours)
@@ -376,5 +377,26 @@ class Task < Activity
 
   def google_sync_should_not_take_place?
     result.present? || start_at.nil? || Time.now > start_at || no_date?
+  end
+
+  def log_newsletter
+    contacts = account_list.contacts.where(
+      send_newsletter: [activity_type.sub('Newsletter - ', ''), 'Both']
+    )
+    contacts.each do |contact|
+      task = account_list.tasks.create(
+        subject: subject,
+        activity_type: activity_type,
+        contacts: [contact],
+        completed_at: completed_at,
+        completed: completed
+      )
+      comments.each do |comment|
+        task.comments.create(
+          person_id: comment.person_id,
+          body: comment.body
+        )
+      end
+    end
   end
 end
