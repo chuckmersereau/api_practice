@@ -36,8 +36,8 @@ class WebRouter
     "#{base_url}/preferences/notifications"
   end
 
-  def self.contact_url(contact)
-    "#{base_url}/contacts/#{contact.uuid}"
+  def self.contact_url(contact, tab = nil)
+    "#{base_url}/contacts/#{contact.uuid}#{"/#{tab}" if tab}"
   end
 
   def self.person_url(person)

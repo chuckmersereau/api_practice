@@ -87,6 +87,12 @@ describe WebRouter do
     it 'returns the expected url' do
       expect(described_class.contact_url(contact)).to eq('https://mpdx.org/contacts/contact_uuid')
     end
+
+    describe 'tab' do
+      it 'returns the expected url' do
+        expect(described_class.contact_url(contact, 'donations')).to eq('https://mpdx.org/contacts/contact_uuid/donations')
+      end
+    end
   end
 
   describe '.person_url' do
