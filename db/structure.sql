@@ -29,6 +29,48 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: btree_gin; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS btree_gin WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION btree_gin; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION btree_gin IS 'support for indexing common datatypes in GIN';
+
+
+--
+-- Name: btree_gist; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS btree_gist WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION btree_gist; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiST';
+
+
+--
+-- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS pg_trgm WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION pg_trgm; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION pg_trgm IS 'text similarity measurement and index searching based on trigrams';
+
+
+--
 -- Name: uuid-ossp; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -1182,6 +1224,40 @@ CREATE SEQUENCE email_addresses_id_seq
 --
 
 ALTER SEQUENCE email_addresses_id_seq OWNED BY email_addresses.id;
+
+
+--
+-- Name: export_logs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE export_logs (
+    id integer NOT NULL,
+    type character varying,
+    params text,
+    user_id integer,
+    export_at timestamp without time zone,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: export_logs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE export_logs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: export_logs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE export_logs_id_seq OWNED BY export_logs.id;
 
 
 --
@@ -3097,6 +3173,13 @@ ALTER TABLE ONLY email_addresses ALTER COLUMN id SET DEFAULT nextval('email_addr
 
 
 --
+-- Name: export_logs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY export_logs ALTER COLUMN id SET DEFAULT nextval('export_logs_id_seq'::regclass);
+
+
+--
 -- Name: family_relationships id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3642,6 +3725,14 @@ ALTER TABLE ONLY donor_accounts
 
 ALTER TABLE ONLY email_addresses
     ADD CONSTRAINT email_addresses_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: export_logs export_logs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY export_logs
+    ADD CONSTRAINT export_logs_pkey PRIMARY KEY (id);
 
 
 --
@@ -4603,6 +4694,13 @@ CREATE UNIQUE INDEX index_donor_account_people_on_uuid ON donor_account_people U
 --
 
 CREATE INDEX index_donor_accounts_on_account_number ON donor_accounts USING btree (account_number);
+
+
+--
+-- Name: index_donor_accounts_on_acct_num_trig; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_donor_accounts_on_acct_num_trig ON donor_accounts USING gin (account_number gin_trgm_ops);
 
 
 --
@@ -6465,5 +6563,9 @@ INSERT INTO schema_migrations (version) VALUES ('20170720172049');
 
 INSERT INTO schema_migrations (version) VALUES ('20170728214336');
 
+INSERT INTO schema_migrations (version) VALUES ('20170728221932');
+
 INSERT INTO schema_migrations (version) VALUES ('20170731185156');
+
+INSERT INTO schema_migrations (version) VALUES ('20170801182230');
 
