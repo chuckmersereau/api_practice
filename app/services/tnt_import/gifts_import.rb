@@ -1,7 +1,7 @@
 class TntImport::GiftsImport
   include Concerns::TntImport::DateHelpers
   include LocalizationHelper
-  attr_reader :contact_ids_by_tnt_contact_id, :xml_tables, :account_list
+  attr_reader :contact_ids_by_tnt_contact_id, :xml_tables, :account_list, :organization, :user
 
   def initialize(account_list, contact_ids_by_tnt_contact_id, xml, import)
     @account_list                  = account_list
@@ -9,35 +9,40 @@ class TntImport::GiftsImport
     @xml                           = xml
     @xml_tables                    = xml.tables
     @import                        = import
+    @user                          = import&.user
+    @organization                  = account_list&.organization_accounts&.first&.organization
   end
 
   def import
     return {} unless @account_list.organization_accounts.count == 1 && xml_tables['Gift'].present?
-
-    org = @account_list.organization_accounts.first.organization
 
     xml_tables['Gift'].each do |row|
       tnt_contact_id = row['ContactID']
       contact        = account_list.contacts.find_by(id: contact_ids_by_tnt_contact_id[tnt_contact_id])
 
       next unless contact
-      next if org.api_class != 'OfflineOrg' && row['PersonallyReceived'] == 'false'
+      next if organization.api_class != 'OfflineOrg' && row['PersonallyReceived'] == 'false'
 
-      account = donor_account_for_contact(org, contact)
+      donor_account = donor_account_for_contact(contact)
 
-      add_or_update_donation_and_link_to_appeal(row, account, contact)
+      add_or_update_donation_and_link_to_appeal(row, donor_account, contact)
     end
   end
 
   private
 
-  def add_or_update_donation_and_link_to_appeal(row, account, contact)
+  def designation_account
+    return @designation_account if @designation_account
+    name = user.to_s.strip
+    @designation_account = account_list.designation_accounts.where(organization: organization, name: "#{name} (Imported from TntConnect)").first_or_create!
+  end
+
+  def add_or_update_donation_and_link_to_appeal(row, donor_account, contact)
     # If someone re-imports donations, assume that there is just one donation per date per amount;
     # that's not a perfect assumption but it seems reasonable solution for offline orgs for now.
     donation_key_attrs = { amount: row['Amount'], donation_date: parse_date(row['GiftDate'], @import.user).to_date }
-    account.donations.find_or_create_by(donation_key_attrs) do |donation|
-      # Assume the currency is USD. Tnt doesn't have great currency support and USD is a decent default.
-      donation.update(tendered_currency: currency_code_for_id(row['CurrencyID']), tendered_amount: row['Amount'])
+    donor_account.donations.find_or_create_by(donation_key_attrs) do |donation|
+      donation.update(tendered_currency: currency_code_for_id(row['CurrencyID']), tendered_amount: row['Amount'], designation_account: designation_account)
 
       add_donation_to_first_appeal_and_add_other_appeals_to_memo(donation, row)
 
@@ -89,17 +94,17 @@ class TntImport::GiftsImport
     account_list_appeals.find { |appeal| appeal.tnt_id == tnt_id.to_i }
   end
 
-  def donor_account_for_contact(org, contact)
-    account = contact.donor_accounts.first
-    return account if account
+  def donor_account_for_contact(contact)
+    donor_account = contact.donor_accounts.first
+    return donor_account if donor_account
 
     donor_account = Retryable.retryable(sleep: 60, tries: 3) do
       # Find a unique donor account_number for this contact. Try the current max numeric account number
       # plus one. If that is a collision due to a race condition, an exception will be raised as there is a
       # unique constraint on (organization_id, account_number) for donor_accounts. Just wait and try
       # again in that case.
-      max = org.donor_accounts.where("account_number ~ '^[0-9]+$'").maximum('CAST(account_number AS bigint)')
-      org.donor_accounts.create!(account_number: (max.to_i + 1).to_s, name: contact.name)
+      max = organization.donor_accounts.where("account_number ~ '^[0-9]+$'").maximum('CAST(account_number AS bigint)')
+      organization.donor_accounts.create!(account_number: (max.to_i + 1).to_s, name: contact.name)
     end
     contact.donor_accounts << donor_account
     donor_account
