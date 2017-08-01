@@ -780,7 +780,7 @@ class Contact < ApplicationRecord
     return unless @sync_mail_chimp && account_list.mail_chimp_account
 
     MailChimp::ExportContactsWorker.perform_async(
-      account_list.mail_chimp_account, account_list.mail_chimp_account.primary_list_id, [id]
+      account_list.mail_chimp_account.id, account_list.mail_chimp_account.primary_list_id, [id]
     )
   end
 

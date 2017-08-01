@@ -646,7 +646,7 @@ describe Contact do
 
   context '#sync_with_mail_chimp' do
     context 'with mail_chimp account' do
-      let!(:mail_chimp_account) { build(:mail_chimp_account, account_list: account_list, primary_list_id: 'primary_list_id') }
+      let!(:mail_chimp_account) { create(:mail_chimp_account, account_list: account_list, primary_list_id: 'primary_list_id') }
 
       before do
         person_and_email_address
@@ -654,7 +654,7 @@ describe Contact do
 
       it 'notifies the mail chimp account of changes on certain fields' do
         expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
-          mail_chimp_account, 'primary_list_id', [contact.id]
+          mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.locale = 'en-US'
         contact.send(:check_state_for_mail_chimp_sync)
@@ -663,7 +663,7 @@ describe Contact do
 
       it 'notifies the mail chimp account of changes on certain nested fields' do
         expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
-          mail_chimp_account, 'primary_list_id', [contact.id]
+          mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.people.first.primary_email_address.email = 'new@email.com'
         contact.send(:check_state_for_mail_chimp_sync)
