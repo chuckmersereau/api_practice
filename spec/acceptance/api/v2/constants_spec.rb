@@ -48,6 +48,7 @@ resource 'Constants' do
           pledge_frequencies
           pledge_frequency_hashes
           results
+          send_appeals_hashes
           sources
           status_hashes
           tnt_import
@@ -91,7 +92,7 @@ resource 'Constants' do
 
         expect(resource_object['alert_frequencies']).to be_a_hash_with_types String, String
 
-        expect(resource_object['csv_import'].keys.size).to eq 4
+        expect(resource_object['csv_import'].keys.size).to eq 5
 
         expect(resource_object['tnt_import'].keys.size).to eq 1
 

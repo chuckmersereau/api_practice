@@ -53,6 +53,19 @@ describe ConstantListSerializer do
 
   context '#pledge_frequencies' do
     it { expect(subject.pledge_frequencies).to be_a_hash_with_types Numeric, String }
+
+    it 'ideally would underscore keys but it should not underscore the frequencies to support clients that are still depending on it' do
+      subject.pledge_frequencies.keys.each do |key|
+        expect(key).to be_a(BigDecimal)
+        expect(key.to_s).to include('.')
+        expect(key.to_s).to_not include('_')
+      end
+    end
+  end
+
+  context '#send_appeals_hashes' do
+    it { expect(subject.send_appeals_hashes).to be_a(Array) }
+    it { subject.send_appeals_hashes.each { |hash| expect(hash).to be_a(Hash) } }
   end
 
   context '#dates' do

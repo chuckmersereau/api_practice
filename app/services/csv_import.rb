@@ -64,8 +64,16 @@ class CsvImport
     transform_array_to_hash_with_underscored_keys(SUPPORTED_HEADERS.dup)
   end
 
+  def self.supported_headers_hashes
+    SUPPORTED_HEADERS.collect { |header| { id: header&.parameterize&.underscore, value: _(header) }.with_indifferent_access }
+  end
+
   def self.required_headers
     transform_array_to_hash_with_underscored_keys(REQUIRED_HEADERS.dup)
+  end
+
+  def self.required_headers_hashes
+    REQUIRED_HEADERS.collect { |header| { id: header&.parameterize&.underscore, value: _(header) }.with_indifferent_access }
   end
 
   def self.constants
@@ -73,6 +81,10 @@ class CsvImport
       hash[header.parameterize.underscore] = transform_array_to_hash_with_underscored_keys(CONSTANT_HEADERS[header].dup)
       hash
     end
+  end
+
+  def self.constants_hashes
+    CONSTANT_HEADERS.keys.collect { |header| { id: header&.parameterize&.underscore, values: CONSTANT_HEADERS[header] }.with_indifferent_access }
   end
 
   # This helper method transforms an Array like ['A Test', 'B Test'] to a Hash like { a_test: 'A Test', b_test: 'B Test' }

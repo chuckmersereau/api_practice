@@ -4,6 +4,7 @@ class ConstantList < ActiveModelSerializers::Model
   CURRENCY_CODES_NOT_NEEDED = %w(ADP AFA).freeze
 
   delegate :alert_frequencies, :mobile_alert_frequencies, to: :Task
+  delegate :pledge_frequencies, to: :Contact
   delegate :assignable_locations, to: :address
   delegate :assignable_statuses, to: :contact
 
@@ -17,10 +18,6 @@ class ConstantList < ActiveModelSerializers::Model
 
   def assignable_send_newsletter
     contact.assignable_send_newsletters
-  end
-
-  def pledge_frequencies
-    Contact.pledge_frequencies
   end
 
   def statuses
@@ -60,7 +57,15 @@ class ConstantList < ActiveModelSerializers::Model
       supported_headers: CsvImport.supported_headers,
       required_headers: CsvImport.required_headers,
       constants: CsvImport.constants,
-      max_file_size_in_bytes: Import::MAX_FILE_SIZE_IN_BYTES
+      max_file_size_in_bytes: Import::MAX_FILE_SIZE_IN_BYTES,
+      constants_from_top_level: {
+        commitment_currency: :pledge_currencies,
+        commitment_frequency: :pledge_frequency_hashes,
+        likely_to_give: :assignable_likely_to_give_hashes,
+        newsletter: :assignable_send_newsletter_hashes,
+        send_appeals: :send_appeals_hashes,
+        status: :status_hashes
+      }
     }
   end
 
@@ -75,6 +80,13 @@ class ConstantList < ActiveModelSerializers::Model
       addresses: %w(DataServer GoogleContactSync GoogleImport MPDX Siebel TntImport),
       email_addresses: ['MPDX'],
       phone_numbers: ['MPDX']
+    }
+  end
+
+  def send_appeals
+    {
+      true => 'Yes',
+      false => 'No'
     }
   end
 

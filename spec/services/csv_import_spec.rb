@@ -19,6 +19,53 @@ describe CsvImport do
     expect(CsvImport::SUPPORTED_HEADERS & CsvImport::REQUIRED_HEADERS).to eq CsvImport::REQUIRED_HEADERS
   end
 
+  describe '.supported_headers' do
+    it 'returns a Hash of Strings' do
+      expect(CsvImport.supported_headers).to be_a_hash_with_types(String, String)
+    end
+  end
+
+  describe '.supported_headers_hashes' do
+    it 'returns an Array of Hashes' do
+      expect(CsvImport.supported_headers_hashes).to be_a(Array)
+      CsvImport.supported_headers_hashes.each do |hash|
+        expect(hash).to be_a_hash_with_types(String, String)
+      end
+    end
+  end
+
+  describe '.required_headers' do
+    it 'returns a Hash of Strings' do
+      expect(CsvImport.required_headers).to be_a_hash_with_types(String, String)
+    end
+  end
+
+  describe '.required_headers_hashes' do
+    it 'returns an Array of Hashes' do
+      expect(CsvImport.required_headers_hashes).to be_a(Array)
+      CsvImport.required_headers_hashes.each do |hash|
+        expect(hash).to be_a_hash_with_types(String, String)
+      end
+    end
+  end
+
+  describe '.constants' do
+    it 'returns a Hash of Hashes' do
+      expect(CsvImport.constants).to be_a_hash_with_types(String, Hash)
+    end
+  end
+
+  describe '.constants_hashes' do
+    it 'returns an Array of Hashes' do
+      expect(CsvImport.constants_hashes).to be_a(Array)
+      CsvImport.constants_hashes.each do |hash|
+        expect(hash).to be_a(Hash)
+        expect(hash['id']).to be_a(String)
+        expect(hash['values']).to be_a(Array)
+      end
+    end
+  end
+
   describe '#each_row' do
     let!(:csv_import) { build(:csv_import_custom_headers) }
     let!(:import) { CsvImport.new(csv_import) }
@@ -63,18 +110,18 @@ describe CsvImport do
         'zip'                  => 'mailing_postal_code'
       }
       csv_import.file_constants_mappings = {
-        'commitment_currency' => {
-          'cad' => 'CAD'
-        },
-        'commitment_frequency' => {
-          '1_0' => 'Monthly'
-        },
-        'newsletter' => {
-          'both' => 'Both'
-        },
-        'status' => {
-          'partner_pray' => 'Partner - Pray'
-        }
+        'commitment_currency' => [
+          { 'id' => 'CAD', values: ['CAD'] }
+        ],
+        'commitment_frequency' => [
+          { 'id' => '1.0', values: ['Monthly'] }
+        ],
+        'newsletter' => [
+          { 'id' => 'Both', values: ['Both'] }
+        ],
+        'status' => [
+          { 'id' => 'Partner - Pray', values: ['Partner - Pray'] }
+        ]
       }
     end
 

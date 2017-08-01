@@ -48,119 +48,263 @@ describe CsvImportMappingsValidator do
     end).to eq false
   end
 
-  it 'validates that file_constants_mappings_contains_the_constants_needed_for_import' do
-    import.file_headers_mappings = {
-      'first_name' => 'fname',
-      'status' => 'status'
-    }
-    import.file_constants_mappings = {}
-    expect(import.valid?).to eq false
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?('is missing mappings. One or more of the header constants specified in file_headers_mappings does not have a mapping specified in file_constants_mappings')
-    end).to eq true
+  context 'mappings have the format of key and value pairs' do
+    it 'validates that file_constants_mappings_contains_the_constants_needed_for_import' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname',
+        'status' => 'status'
+      }
+      import.file_constants_mappings = {}
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('is missing mappings. One or more of the header constants specified in file_headers_mappings does not have a mapping specified in file_constants_mappings')
+      end).to eq true
 
-    import.file_constants_mappings = { 'status' => {} }
-    import.valid?
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?('is missing mappings. One or more of the header constants specified in file_headers_mappings does not have a mapping specified in file_constants_mappings')
-    end).to eq false
+      import.file_constants_mappings = { 'status' => [] }
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('is missing mappings. One or more of the header constants specified in file_headers_mappings does not have a mapping specified in file_constants_mappings')
+      end).to eq false
+    end
+
+    it 'validates that file_constants_mappings_only_maps_constants_that_are_supported' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname',
+        'status' => 'status'
+      }
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Something Invalid',
+          values: ['Praying and giving']
+        }]
+      }
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('has an invalid mapping. For the header "status", you cannot map to the constants')
+      end).to eq true
+
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Partner - Financial',
+          values: ['Praying and giving']
+        }]
+      }
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('has an invalid mapping. For the header "status", you cannot map to the constants')
+      end).to eq false
+    end
+
+    it 'validates that file_constants_mappings_only_maps_constants_that_are_also_in_file_headers_mappings' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname'
+      }
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Partner - Financial',
+          values: ['Praying and giving']
+        }]
+      }
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('has an invalid mapping. You cannot map to the constants ["status"] because they are not found in file_headers_mappings')
+      end).to eq true
+
+      import.file_headers_mappings['Status'] = 'status'
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('has an invalid mapping. You cannot map to the constants ["status"] because they are not found in file_headers_mappings')
+      end).to eq false
+    end
+
+    it 'validates that file_constants_mappings_only_maps_constants_to_values_found_in_the_csv' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname',
+        'status' => 'status'
+      }
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Partner - Financial',
+          values: ['something invalid']
+        }]
+      }
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?(%(has an invalid mapping. For the header "status", we couldn't find the following values in the CSV))
+      end).to eq true
+
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Partner - Financial',
+          values: ['Praying and giving']
+        }]
+      }
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?(%(has an invalid mapping. For the header "status", we couldn't find the following values in the CSV))
+      end).to eq false
+    end
+
+    it 'validates that file_constants_mappings_maps_all_constants_values_found_in_the_csv' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname',
+        'status' => 'status'
+      }
+      import.file_constants_mappings = {
+        'status' => []
+      }
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?(%(is missing mappings. For the header "status", we couldn't find the following mappings to the CSV values: ["Praying", "Praying and giving"]))
+      end).to eq true
+
+      import.file_constants_mappings = {
+        'status' => [
+          {
+            id: 'Partner - Financial',
+            values: ['Praying and giving']
+          },
+          {
+            id: 'Partner - Prayer',
+            values: ['Praying']
+          }
+        ]
+      }
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?(%(is missing mappings. For the header "status", we couldn't find the following mappings to the CSV values: ["Praying", "Praying and giving"]))
+      end).to eq false
+    end
   end
 
-  it 'validates that file_constants_mappings_only_maps_constants_that_are_supported' do
-    import.file_headers_mappings = {
-      'first_name' => 'fname',
-      'status' => 'status'
-    }
-    import.file_constants_mappings = {
-      'status' => {
-        'something_invalid' => 'Praying and giving'
+  context 'mappings have the format of id and values hashes' do
+    it 'validates that file_constants_mappings_contains_the_constants_needed_for_import' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname',
+        'status' => 'status'
       }
-    }
-    expect(import.valid?).to eq false
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?('has an invalid mapping. For the header "status", you cannot map to the constants')
-    end).to eq true
+      import.file_constants_mappings = {}
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('is missing mappings. One or more of the header constants specified in file_headers_mappings does not have a mapping specified in file_constants_mappings')
+      end).to eq true
 
-    import.file_constants_mappings = {
-      'status' => {
-        'partner_financial' => 'Praying and giving'
+      import.file_constants_mappings = {
+        'status' => []
       }
-    }
-    import.valid?
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?('has an invalid mapping. For the header "status", you cannot map to the constants')
-    end).to eq false
-  end
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('is missing mappings. One or more of the header constants specified in file_headers_mappings does not have a mapping specified in file_constants_mappings')
+      end).to eq false
+    end
 
-  it 'validates that file_constants_mappings_only_maps_constants_that_are_also_in_file_headers_mappings' do
-    import.file_headers_mappings = {
-      'first_name' => 'fname'
-    }
-    import.file_constants_mappings = {
-      'status' => {
-        'partner_financial' => 'Praying and giving'
+    it 'validates that file_constants_mappings_only_maps_constants_that_are_supported' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname',
+        'status' => 'status'
       }
-    }
-    expect(import.valid?).to eq false
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?('has an invalid mapping. You cannot map to the constants ["status"] because they are not found in file_headers_mappings')
-    end).to eq true
-
-    import.file_headers_mappings['Status'] = 'status'
-    import.valid?
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?('has an invalid mapping. You cannot map to the constants ["status"] because they are not found in file_headers_mappings')
-    end).to eq false
-  end
-
-  it 'validates that file_constants_mappings_only_maps_constants_to_values_found_in_the_csv' do
-    import.file_headers_mappings = {
-      'first_name' => 'fname',
-      'status' => 'status'
-    }
-    import.file_constants_mappings = {
-      'status' => {
-        'partner_financial' => 'something invalid'
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Something Invalid',
+          values: ['Praying and giving']
+        }]
       }
-    }
-    expect(import.valid?).to eq false
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?(%(has an invalid mapping. For the header "status", we couldn't find the following values in the CSV))
-    end).to eq true
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('has an invalid mapping. For the header "status", you cannot map to the constants')
+      end).to eq true
 
-    import.file_constants_mappings = {
-      'status' => {
-        'partner_financial' => 'Praying and giving'
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Partner - Financial',
+          values: ['Praying and giving']
+        }]
       }
-    }
-    import.valid?
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?(%(has an invalid mapping. For the header "status", we couldn't find the following values in the CSV))
-    end).to eq false
-  end
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('has an invalid mapping. For the header "status", you cannot map to the constants')
+      end).to eq false
+    end
 
-  it 'validates that file_constants_mappings_maps_all_constants_values_found_in_the_csv' do
-    import.file_headers_mappings = {
-      'first_name' => 'fname',
-      'status' => 'status'
-    }
-    import.file_constants_mappings = {
-      'status' => {}
-    }
-    expect(import.valid?).to eq false
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?(%(is missing mappings. For the header "status", we couldn't find the following mappings to the CSV values: ["Praying", "Praying and giving"]))
-    end).to eq true
-
-    import.file_constants_mappings = {
-      'status' => {
-        'partner_financial' => 'Praying and giving',
-        'partner_prayer' => 'Praying'
+    it 'validates that file_constants_mappings_only_maps_constants_that_are_also_in_file_headers_mappings' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname'
       }
-    }
-    import.valid?
-    expect(import.errors[:file_constants_mappings].any? do |error|
-      error.starts_with?(%(is missing mappings. For the header "status", we couldn't find the following mappings to the CSV values: ["Praying", "Praying and giving"]))
-    end).to eq false
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Partner - Financial',
+          values: ['Praying and giving']
+        }]
+      }
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('has an invalid mapping. You cannot map to the constants ["status"] because they are not found in file_headers_mappings')
+      end).to eq true
+
+      import.file_headers_mappings['Status'] = 'status'
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?('has an invalid mapping. You cannot map to the constants ["status"] because they are not found in file_headers_mappings')
+      end).to eq false
+    end
+
+    it 'validates that file_constants_mappings_only_maps_constants_to_values_found_in_the_csv' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname',
+        'status' => 'status'
+      }
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Partner - Financial',
+          values: ['something invalid']
+        }]
+      }
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?(%(has an invalid mapping. For the header "status", we couldn't find the following values in the CSV))
+      end).to eq true
+
+      import.file_constants_mappings = {
+        'status' => [{
+          id: 'Partner - Financial',
+          values: ['Praying and giving']
+        }]
+      }
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?(%(has an invalid mapping. For the header "status", we couldn't find the following values in the CSV))
+      end).to eq false
+    end
+
+    it 'validates that file_constants_mappings_maps_all_constants_values_found_in_the_csv' do
+      import.file_headers_mappings = {
+        'first_name' => 'fname',
+        'status' => 'status'
+      }
+      import.file_constants_mappings = {
+        'status' => []
+      }
+      expect(import.valid?).to eq false
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?(%(is missing mappings. For the header "status", we couldn't find the following mappings to the CSV values: ["Praying", "Praying and giving"]))
+      end).to eq true
+
+      import.file_constants_mappings = {
+        'status' => [
+          {
+            id: 'Partner - Financial',
+            values: ['Praying and giving']
+          },
+          {
+            id: 'Partner - Prayer',
+            values: ['Praying']
+          }
+        ]
+      }
+      import.valid?
+      expect(import.errors[:file_constants_mappings].any? do |error|
+        error.starts_with?(%(is missing mappings. For the header "status", we couldn't find the following mappings to the CSV values: ["Praying", "Praying and giving"]))
+      end).to eq false
+    end
   end
 end

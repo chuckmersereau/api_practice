@@ -53,15 +53,15 @@ resource 'Account Lists > Imports > from CSV' do
 
   let(:file_constants_mappings) do
     {
-      'status' => {
-        'partner_financial' => 'Praying and giving'
-      },
-      'commitment_frequency' => {
-        '1_0' => 'Monthly'
-      },
-      'newsletter' => {
-        'both' => 'Both'
-      }
+      'status' => [
+        { 'id' => 'Partner - Financial', 'values' => ['Praying and giving'] }
+      ],
+      'commitment_frequency' => [
+        { 'id' => '1.0', 'values' => ['Monthly'] }
+      ],
+      'newsletter' => [
+        { 'id' => 'Both', 'values' => ['Both'] }
+      ]
     }
   end
 
@@ -161,8 +161,8 @@ resource 'Account Lists > Imports > from CSV' do
                                                   '(like "name"), so not every column is returned. At most ' \
                                                   "#{CsvFileConstantsReader::MAX_MAPPINGS_PER_HEADER} results will be returned " \
                                                   'for each column.', type: 'Object'
-        response_field 'file_constants_mappings', "An Object that maps constants in MPDX (keys) to constants in the users's " \
-                                                  'CSV file (values); The client must supply this before import can begin; ' \
+        response_field 'file_constants_mappings', "An Object that maps constants in MPDX to constants in the users's " \
+                                                  'CSV file; The client must supply this before import can begin; ' \
                                                   'Please see the Constants endpoint for a list of supported constants',        type: 'Object'
         response_field 'group_tags',              'Group Tags',                                                                 type: 'String'
         response_field 'groups',                  'Groups',                                                                     type: 'Array[String]'
@@ -219,8 +219,8 @@ resource 'Account Lists > Imports > from CSV' do
                                                   '(like "name"), so not every column is returned. At most ' \
                                                   "#{CsvFileConstantsReader::MAX_MAPPINGS_PER_HEADER} results will be returned " \
                                                   'for each column.', type: 'Object'
-        response_field 'file_constants_mappings', "An Object that maps constants in MPDX (keys) to constants in the users's " \
-                                                  'CSV file (values); The client must supply this before import can begin; ' \
+        response_field 'file_constants_mappings', "An Object that maps constants in MPDX to constants in the users's " \
+                                                  'CSV file; The client must supply this before import can begin; ' \
                                                   'Please see the Constants endpoint for a list of supported constants',        type: 'Object'
         response_field 'group_tags',              'Group Tags',                                                                 type: 'String'
         response_field 'groups',                  'Groups',                                                                     type: 'Array[String]'

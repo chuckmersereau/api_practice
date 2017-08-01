@@ -1,4 +1,5 @@
 require 'rails_helper'
+require_relative '../../db/seeders/notification_types_seeder'
 
 describe ConstantListExhibit do
   subject { ConstantListExhibit.new(constant_list, context) }
@@ -86,6 +87,8 @@ describe ConstantListExhibit do
         expect(activity).to be_a Hash
       end
     end
+
+    include_examples 'expect method to translate values', method: :activity_translated_hashes
   end
 
   context '#assignable_likely_to_give_translated_hashes' do
@@ -94,6 +97,8 @@ describe ConstantListExhibit do
         expect(likelihood).to be_a Hash
       end
     end
+
+    include_examples 'expect method to translate values', method: :assignable_likely_to_give_translated_hashes
   end
 
   context '#assignable_send_newsletter_translated_hashes' do
@@ -102,6 +107,8 @@ describe ConstantListExhibit do
         expect(newsletter).to be_a Hash
       end
     end
+
+    include_examples 'expect method to translate values', method: :assignable_send_newsletter_translated_hashes
   end
 
   context '#status_translated_hashes' do
@@ -110,6 +117,8 @@ describe ConstantListExhibit do
         expect(status).to be_a Hash
       end
     end
+
+    include_examples 'expect method to translate values', method: :status_translated_hashes
   end
 
   context '#pledge_frequency_translated_hashes' do
@@ -123,10 +132,41 @@ describe ConstantListExhibit do
   end
 
   context '#notification_translated_hashes' do
+    before do
+      NotificationTypesSeeder.new(true).seed
+    end
+
     it do
-      subject.notification_translated_hashes.each do |_, notification|
+      subject.notification_translated_hashes.each do |notification|
         expect(notification).to be_a Hash
       end
     end
+
+    it 'translates' do
+      expect(FastGettext).to receive('cached_find').at_least(:once)
+      subject.notification_translated_hashes
+    end
+  end
+
+  context '#pledge_frequencies_translated_hashes' do
+    it do
+      subject.pledge_frequencies_translated_hashes.each do |frequency|
+        expect(frequency).to be_a Hash
+        expect(frequency.keys).to eq([:id, :value])
+      end
+    end
+
+    include_examples 'expect method to translate values', method: :pledge_frequencies_translated_hashes
+  end
+
+  context '#send_appeals_translated_hashes' do
+    it do
+      subject.send_appeals_translated_hashes.each do |send_appeal|
+        expect(send_appeal).to be_a Hash
+        expect(send_appeal.keys).to eq([:id, :value])
+      end
+    end
+
+    include_examples 'expect method to translate values', method: :send_appeals_translated_hashes
   end
 end
