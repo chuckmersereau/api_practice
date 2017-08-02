@@ -133,7 +133,7 @@ class TntImport::ContactImport
                                        .where(donor_accounts: { id: donor_accounts.map(&:id) }).readonly(false)
 
     dups_by_donor_accts.each do |dup_contact_matching_donor_account|
-      tnt_contact.reload.merge(dup_contact_matching_donor_account)
+      tnt_contact.merge(dup_contact_matching_donor_account)
     end
   end
 
