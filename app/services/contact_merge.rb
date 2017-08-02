@@ -76,9 +76,15 @@ class ContactMerge
     begin
       @other.reload
       @other.destroy
-    rescue ActiveRecord::RecordNotFound; end
+    rescue ActiveRecord::RecordNotFound
+    end
 
-    @winner.reload
+    begin
+      @winner.reload
+    rescue ActiveRecord::RecordNotFound
+      return
+    end
+
     @winner.merge_people
     @winner.merge_donor_accounts
 
