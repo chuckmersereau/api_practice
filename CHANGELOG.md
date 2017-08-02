@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 28 July 2017
+- Added filter[display_currency] to '/api/v2/reports/monthly_giving_graph' that changes the converted currency for the graph.
+
 ## 24 July 2017
 - Expanded the search scope of wildcard_search under '/api/v2/tasks' endpoint to include associated comments and contacts.
 

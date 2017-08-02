@@ -29,9 +29,17 @@ class Api::V2::Contacts::DuplicatesController < Api::V2Controller
       Contact::DuplicatesFinder.new(account_list).find
     end
 
-    @dup_contacts = Kaminari.paginate_array(@dup_contacts)
+    @dup_contacts = Kaminari.paginate_array(duplicates_without_doubles)
                             .page(page_number_param)
                             .per(per_page_param)
+  end
+
+  def duplicates_without_doubles
+    @dup_contacts.each_with_object([]) do |duplicate, dups_to_keep|
+      if dups_to_keep.none? { |dup_to_keep| dup_to_keep.shares_an_id_with?(duplicate) }
+        dups_to_keep << duplicate
+      end
+    end
   end
 
   def load_duplicate

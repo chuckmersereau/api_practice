@@ -25,6 +25,10 @@ class TntImport::TntCodes
     { field: 'SpouseCompanyMainPhone', location: 'work', person: :spouse } # index 18
   ].freeze
 
+  UNSUPPORTED_TNT_TASK_CODES = {
+    160 => 'Present'
+  }.freeze
+
   TNT_TASK_CODES_MAPPED_TO_MPDX_TASK_TYPES = {
     1   => 'Appointment',
     2   => 'Thank',
@@ -38,7 +42,10 @@ class TntImport::TntCodes
     70  => 'Pre Call Letter',
     100 => 'Email',
     140 => 'Facebook Message',
-    150 => 'Text Message'
+    150 => 'Text Message',
+    160 => nil,           # Present, not supported by MPDX
+    170 => 'Email',       # MailChimp
+    180 => 'Text Message' # WhatsApp
   }.freeze
 
   TNT_TASK_RESULT_CODES_MAPPED_TO_MPDX_TASK_RESULTS = {

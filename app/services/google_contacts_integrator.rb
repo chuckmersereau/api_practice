@@ -97,18 +97,9 @@ class GoogleContactsIntegrator
   end
 
   def delete_g_contact_merge_loser(g_contact_link)
-    if g_contact_link.remote_id
-      self.class.retry_on_api_errs { api_user.delete_contact(g_contact_link.remote_id) }
-    end
+    # In the past this method also deleted the contact inside the Google account.
+    # We decided to never automatically delete contacts in Google, so that behaviour was removed.
     g_contact_link.destroy
-  rescue => e
-    if defined?(e.response) && GoogleContactsApi::Api.parse_response_code(e.response) == 404
-      # If a 404 error occurred it means the remote Google contact was already deleted, so just delete the link
-      g_contact_link.destroy
-    else
-      # Otherwise we couldn't successfully delete the remote Google Contact, so keep the link to try deleting again later
-      Rollbar.raise_or_notify(e)
-    end
   end
 
   def cleanup_inactive_g_contacts

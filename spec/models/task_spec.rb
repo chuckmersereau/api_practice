@@ -95,4 +95,74 @@ describe Task do
       is_expected.to be_a_hash_with_types(String, String)
     end
   end
+
+  context 'logging newsletter' do
+    subject { build(:task, account_list: account_list) }
+    let!(:contact_1) { create(:contact, account_list: account_list, send_newsletter: 'Email') }
+    let!(:contact_2) { create(:contact, account_list: account_list, send_newsletter: 'Physical') }
+    let!(:contact_3) { create(:contact, account_list: account_list, send_newsletter: 'Both') }
+
+    before do
+      subject.comments.build(body: 'test')
+    end
+
+    context 'physical' do
+      before do
+        subject.activity_type = 'Newsletter - Physical'
+      end
+
+      it 'creates two seperate log newsletter tasks' do
+        expect { subject.save }.to change { Task.count }.from(0).to(3)
+      end
+
+      it 'creates two seperate comments' do
+        expect { subject.save }.to change { ActivityComment.count }.from(0).to(3)
+      end
+
+      it 'creates tasks associated to correct contacts' do
+        subject.save
+        expect(contact_1.tasks.empty?).to be_truthy
+        expect(contact_2.tasks.empty?).to be_falsy
+        expect(contact_3.tasks.empty?).to be_falsy
+      end
+
+      it 'copies attributes to created tasks' do
+        subject.save
+        created_task = contact_3.tasks.first
+        expect(created_task.subject).to eq(subject.subject)
+        expect(created_task.activity_type).to eq(subject.activity_type)
+        expect(created_task.completed_at).to eq(subject.completed_at)
+        expect(created_task.completed).to eq(subject.completed)
+      end
+    end
+    context 'email' do
+      before do
+        subject.activity_type = 'Newsletter - Email'
+      end
+
+      it 'creates two seperate log newsletter tasks' do
+        expect { subject.save }.to change { Task.count }.from(0).to(3)
+      end
+
+      it 'creates two seperate comments' do
+        expect { subject.save }.to change { ActivityComment.count }.from(0).to(3)
+      end
+
+      it 'creates tasks associated to correct contacts' do
+        subject.save
+        expect(contact_1.tasks.empty?).to be_falsy
+        expect(contact_2.tasks.empty?).to be_truthy
+        expect(contact_3.tasks.empty?).to be_falsy
+      end
+
+      it 'copies attributes to created tasks' do
+        subject.save
+        created_task = contact_3.tasks.first
+        expect(created_task.subject).to eq(subject.subject)
+        expect(created_task.activity_type).to eq(subject.activity_type)
+        expect(created_task.completed_at).to eq(subject.completed_at)
+        expect(created_task.completed).to eq(subject.completed)
+      end
+    end
+  end
 end

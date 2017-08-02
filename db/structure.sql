@@ -823,7 +823,9 @@ CREATE TABLE contacts (
     status_validated_at timestamp without time zone,
     suggested_changes text,
     is_organization boolean DEFAULT false,
-    no_gift_aid boolean
+    no_gift_aid boolean,
+    estimated_annual_pledge_amount numeric(19,2),
+    next_ask_amount numeric(19,2)
 );
 
 
@@ -6460,4 +6462,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170707013656');
 INSERT INTO schema_migrations (version) VALUES ('20170711194415');
 
 INSERT INTO schema_migrations (version) VALUES ('20170720172049');
+
+INSERT INTO schema_migrations (version) VALUES ('20170728214336');
+
+INSERT INTO schema_migrations (version) VALUES ('20170731185156');
 

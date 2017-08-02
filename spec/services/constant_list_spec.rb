@@ -64,7 +64,11 @@ RSpec.describe ConstantList, type: :model do
     it { expect(subject.csv_import[:required_headers]).to be_an Hash }
     it { expect(subject.csv_import[:constants]).to be_an Hash }
     it { expect(subject.csv_import[:constants].keys & subject.csv_import[:supported_headers].keys).to eq subject.csv_import[:constants].keys }
+    it { expect(subject.csv_import[:constants].keys).to eq CsvImport.constants.keys }
     it { expect(subject.csv_import[:max_file_size_in_bytes]).to eq Import::MAX_FILE_SIZE_IN_BYTES }
+    it { expect(subject.csv_import[:constants_from_top_level]).to be_an Hash }
+    it { expect(subject.csv_import[:constants_from_top_level].keys.collect(&:to_s)).to eq subject.csv_import[:constants].keys }
+    it { expect(subject.csv_import[:constants_from_top_level].keys.collect(&:to_s)).to eq CsvImport.constants.keys }
   end
 
   describe '#tnt_import' do
@@ -73,5 +77,9 @@ RSpec.describe ConstantList, type: :model do
 
   context '#sources' do
     it { expect(subject.sources).to be_a_hash_with_types Symbol, Array }
+  end
+
+  context '#send_appeals' do
+    it { expect(subject.send_appeals).to be_a Hash }
   end
 end

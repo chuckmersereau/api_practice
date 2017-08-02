@@ -66,16 +66,16 @@ resource 'User > Google Accounts' do
 
     get '/api/v2/user/google_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       type: 'String'
-        response_field 'expires_at',       'Expires At',       type: 'String'
-        response_field 'last_download',    'Last Download',    type: 'String'
-        response_field 'last_email_sync',  'Last Email Sync',  type: 'String'
-        response_field 'primary',          'Primary',          type: 'Boolean'
-        response_field 'refresh_token',    'Refresh Token',    type: 'String'
-        response_field 'remote_id',        'Remote Id',        type: 'Number'
-        response_field 'token',            'Token',            type: 'String'
-        response_field 'updated_at',       'Updated At',       type: 'String'
-        response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
+        response_field 'created_at',       'Created At',                         type: 'String'
+        response_field 'expires_at',       'OAuth Access Token Expiration Time', type: 'String'
+        response_field 'last_download',    'Last Download',                      type: 'String'
+        response_field 'last_email_sync',  'Last Email Sync',                    type: 'String'
+        response_field 'primary',          'Primary',                            type: 'Boolean'
+        response_field 'remote_id',        'Remote Id',                          type: 'Number'
+        response_field 'token_expired',    'OAuth Access Token Expired',         type: 'Boolean'
+        response_field 'token_failure',    'OAuth Access Token Failure',         type: 'Boolean'
+        response_field 'updated_at',       'Updated At',                         type: 'String'
+        response_field 'updated_in_db_at', 'Updated In Db At',                   type: 'String'
       end
 
       example 'Google Account [GET]', document: documentation_scope do
@@ -88,7 +88,6 @@ resource 'User > Google Accounts' do
 
     post '/api/v2/user/google_accounts' do
       with_options scope: [:data, :attributes] do
-        parameter 'expires_at',     'Expires At'
         parameter 'person_id',      'Person Id', required: true
         parameter 'remote_id',      'Remote Id', required: true
       end
@@ -102,7 +101,6 @@ resource 'User > Google Accounts' do
 
     put '/api/v2/user/google_accounts/:id' do
       with_options scope: [:data, :attributes] do
-        parameter 'expires_at',     'Expires At'
         parameter 'person_id',      'Person Id', required: true
         parameter 'remote_id',      'Remote Id', required: true
       end

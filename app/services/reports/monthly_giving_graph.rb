@@ -3,6 +3,8 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
                 :filter_params,
                 :locale
 
+  attr_writer :display_currency
+
   delegate :monthly_goal, to: :account_list
 
   def initialize(attributes)
@@ -32,6 +34,10 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
 
   def salary_currency
     account_list.salary_currency_or_default
+  end
+
+  def display_currency
+    @display_currency || salary_currency
   end
 
   def multi_currency
@@ -89,7 +95,7 @@ class Reports::MonthlyGivingGraph < ActiveModelSerializers::Model
 
       mid_month = Date.new(start_date.year, start_date.month, 15)
       converted = CurrencyRate.convert_on_date(amount: amount, from: currency,
-                                               to: salary_currency, date: mid_month)
+                                               to: display_currency, date: mid_month)
 
       { amount: amount, converted: converted }
     end

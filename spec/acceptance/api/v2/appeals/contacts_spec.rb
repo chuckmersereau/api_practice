@@ -24,7 +24,6 @@ resource 'Appeals > Contacts' do
       created_at
       deceased
       direct_deposit
-      donor_accounts
       envelope_greeting
       greeting
       last_activity
@@ -118,7 +117,6 @@ resource 'Appeals > Contacts' do
         response_field 'contacts_that_referred_me_ids', 'Referrals to me IDs',     type: 'Array[Number]'
         response_field 'created_at',                    'Created At',              type: 'String'
         response_field 'deceased',                      'Deceased',                type: 'Boolean'
-        response_field 'donor_accounts',                'Donor Accounts',          type: 'Array[Object]'
         response_field 'last_activity',                 'Last Activity',           type: 'String'
         response_field 'last_appointment',              'Last Appointment',        type: 'String'
         response_field 'last_letter',                   'Last letter',             type: 'String'

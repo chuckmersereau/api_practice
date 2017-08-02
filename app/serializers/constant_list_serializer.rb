@@ -52,6 +52,7 @@ class ConstantListSerializer < ActiveModel::Serializer
              :pledge_frequencies,
              :pledge_frequency_hashes,
              :results,
+             :send_appeals_hashes,
              :sources,
              :statuses,
              :status_hashes,
@@ -91,6 +92,10 @@ class ConstantListSerializer < ActiveModel::Serializer
 
   def languages
     constants_exhibit.languages_map
+  end
+
+  def send_appeals_hashes
+    constants_exhibit.send_appeals_translated_hashes
   end
 
   private

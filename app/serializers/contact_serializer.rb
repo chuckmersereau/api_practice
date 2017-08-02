@@ -6,7 +6,6 @@ class ContactSerializer < ApplicationSerializer
              :church_name,
              :deceased,
              :direct_deposit,
-             :donor_accounts,
              :envelope_greeting,
              :greeting,
              :last_activity,

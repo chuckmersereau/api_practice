@@ -38,7 +38,6 @@ resource 'Contacts > Merges' do
       created_at
       deceased
       direct_deposit
-      donor_accounts
       envelope_greeting
       greeting
       last_activity

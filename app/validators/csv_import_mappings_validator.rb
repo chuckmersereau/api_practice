@@ -7,6 +7,8 @@ class CsvImportMappingsValidator < ActiveModel::Validator
     self.csv_import = CsvImport.new(import)
     return if (import.errors.keys & [:file_constants_mappings, :file_headers_mappings]).present?
 
+    self.file_constants_mappings_facade = CsvFileConstantsMappingsFacade.new(import.file_constants_mappings)
+
     file_headers_mappings_contains_required_headers
     file_headers_mappings_contains_only_supported_headers
     file_headers_mappings_only_maps_to_headers_in_the_file
@@ -23,7 +25,7 @@ class CsvImportMappingsValidator < ActiveModel::Validator
 
   private
 
-  attr_accessor :import, :csv_import
+  attr_accessor :import, :csv_import, :file_constants_mappings_facade
 
   def file_headers_mappings_contains_required_headers
     return if CsvImport.required_headers.keys.blank?
@@ -53,44 +55,43 @@ class CsvImportMappingsValidator < ActiveModel::Validator
 
   def file_constants_mappings_contains_the_constants_needed_for_import
     constants_needing_to_be_imported = (CsvImport.constants.keys & import.file_headers_mappings.keys)
-    return if (constants_needing_to_be_imported & import.file_constants_mappings.keys) == constants_needing_to_be_imported
+    return if (constants_needing_to_be_imported & file_constants_mappings_facade.header_ids) == constants_needing_to_be_imported
 
-    missing_constant_mappings = constants_needing_to_be_imported - import.file_constants_mappings.keys
+    missing_constant_mappings = constants_needing_to_be_imported - file_constants_mappings_facade.header_ids
     import.errors[:file_constants_mappings] << 'is missing mappings. One or more of the header constants specified in file_headers_mappings ' \
                                                'does not have a mapping specified in file_constants_mappings. ' \
                                                "The missing constant mappings are: #{missing_constant_mappings}"
   end
 
   def file_constants_mappings_only_maps_constants_that_are_supported
-    import.file_constants_mappings.each do |header, mappings|
-      mapping_keys = mappings.keys
-      next if CsvImport.supported_headers.keys.include?(header) &&
-              (mapping_keys & CsvImport.constants[header].keys) == mapping_keys
-
-      if CsvImport.supported_headers.keys.include?(header)
-        invalid_mapping_keys = mapping_keys - CsvImport.constants[header].keys
-        import.errors[:file_constants_mappings] << %(has an invalid mapping. For the header "#{header}", you cannot map to the constants: #{invalid_mapping_keys})
-      else
-        import.errors[:file_constants_mappings] << %(has an invalid mapping. You cannot map to the constant "#{header}" because it's not a supported MPDX constant.)
+    file_constants_mappings_facade.header_ids.each do |header_id|
+      unless CsvImport.supported_headers.keys.include?(header_id)
+        import.errors[:file_constants_mappings] << %(has an invalid mapping. You cannot map to the constant "#{header_id}" because it's not a supported MPDX constant.)
+        next
       end
+
+      unsupported_constants = file_constants_mappings_facade.find_unsupported_constants_for_header_id(header_id)
+      next if unsupported_constants.blank?
+
+      import.errors[:file_constants_mappings] << %(has an invalid mapping. For the header "#{header_id}", you cannot map to the constants: #{unsupported_constants})
     end
   end
 
   def file_constants_mappings_only_maps_constants_that_are_also_in_file_headers_mappings
-    return if (import.file_constants_mappings.keys & import.file_headers_mappings.keys) == import.file_constants_mappings.keys
+    return if (file_constants_mappings_facade.header_ids & import.file_headers_mappings.keys) == file_constants_mappings_facade.header_ids
 
-    invalid_mapping_keys = import.file_constants_mappings.keys - import.file_headers_mappings.keys
+    invalid_mapping_keys = file_constants_mappings_facade.header_ids - import.file_headers_mappings.keys
     import.errors[:file_constants_mappings] << "has an invalid mapping. You cannot map to the constants #{invalid_mapping_keys} because they are not found in file_headers_mappings"
   end
 
   def file_constants_mappings_only_maps_constants_to_values_found_in_the_csv
-    import.file_constants_mappings.each do |header, mappings|
-      mapping_values = mappings.values.flatten
-      file_constants = csv_import.file_constants_for_mpdx_header(header)
+    file_constants_mappings_facade.header_ids.each do |header_id|
+      mapping_values = file_constants_mappings_facade.find_mapped_values_for_header_id(header_id)
+      file_constants = csv_import.file_constants_for_mpdx_header(header_id)
       next if (mapping_values & file_constants) == mapping_values.uniq
 
       invalid_mapping_values = mapping_values - file_constants
-      import.errors[:file_constants_mappings] << %(has an invalid mapping. For the header "#{header}", we couldn't find the following values in the CSV: #{invalid_mapping_values})
+      import.errors[:file_constants_mappings] << %(has an invalid mapping. For the header "#{header_id}", we couldn't find the following values in the CSV: #{invalid_mapping_values})
     end
   end
 
@@ -98,7 +99,7 @@ class CsvImportMappingsValidator < ActiveModel::Validator
     constants_needing_to_be_imported = (CsvImport.constants.keys & import.file_headers_mappings.keys)
 
     constants_needing_to_be_imported.each do |constant_header|
-      mapped_constants = import.file_constants_mappings[constant_header].values.flatten
+      mapped_constants = file_constants_mappings_facade.find_mapped_values_for_header_id(constant_header)
       file_constants = csv_import.file_constants_for_mpdx_header(constant_header)
       next if (file_constants & mapped_constants) == file_constants
 

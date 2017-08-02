@@ -75,6 +75,16 @@ RSpec.describe Reports::MonthlyGivingGraph, type: :model do
     it { expect(subject.salary_currency).to eq organization.default_currency_code }
   end
 
+  describe '#display_currency' do
+    it { expect(subject.display_currency).to be_a String }
+    it { expect(subject.display_currency).to eq organization.default_currency_code }
+
+    context 'display_currency set' do
+      subject { Reports::MonthlyGivingGraph.new(account_list: account_list, display_currency: 'NZD') }
+      it { expect(subject.display_currency).to eq 'NZD' }
+    end
+  end
+
   describe '#multi_currency' do
     it { expect(subject.multi_currency).to be false }
   end

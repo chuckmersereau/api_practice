@@ -20,8 +20,8 @@ describe TntImport::TntCodes do
       types = described_class::TNT_TASK_CODES_MAPPED_TO_MPDX_TASK_TYPES.keys.collect do |tnt_type_code|
         described_class.task_type(tnt_type_code)
       end
-      expect(types - Task::TASK_ACTIVITIES).to eq([])
-      expect(described_class::TNT_TASK_CODES_MAPPED_TO_MPDX_TASK_TYPES.values - Task::TASK_ACTIVITIES).to eq([])
+      expect(types - Task::TASK_ACTIVITIES).to eq([nil])
+      expect(described_class::TNT_TASK_CODES_MAPPED_TO_MPDX_TASK_TYPES.values - Task::TASK_ACTIVITIES).to eq([nil])
     end
   end
 

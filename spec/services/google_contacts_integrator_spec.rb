@@ -585,8 +585,7 @@ describe GoogleContactsIntegrator do
 
       # Then we merge @contact with @contact2 (@contact wins), so we should delete the @contact2 g_contacts
       @contact.merge(@contact2)
-      expect(@account.contacts_api_user).to receive(:delete_contact).with(g_contact_ids['contact2:John'])
-      expect(@account.contacts_api_user).to receive(:delete_contact).with(g_contact_ids['contact2:Jane'])
+      expect(@account.contacts_api_user).to_not receive(:delete_contact)
       @integrator.sync_contacts
       expect(GoogleContact.all.count).to eq(2)
       expect(GoogleContact.find_by(contact: @contact, person: @person).remote_id).to eq(g_contact_ids['contact:John'])
@@ -594,7 +593,7 @@ describe GoogleContactsIntegrator do
 
       # Then we merge @person with @person2 (@person wins), so we should delete @person2 g_contact
       @person.merge(@person2)
-      expect(@account.contacts_api_user).to receive(:delete_contact).with(g_contact_ids['contact:Jane'])
+      expect(@account.contacts_api_user).to_not receive(:delete_contact)
       @integrator.sync_contacts
       expect(GoogleContact.all.count).to eq(1)
       expect(GoogleContact.find_by(contact: @contact, person: @person).remote_id).to eq(g_contact_ids['contact:John'])

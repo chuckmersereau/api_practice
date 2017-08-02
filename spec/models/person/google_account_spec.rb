@@ -13,6 +13,7 @@ describe Person::GoogleAccount do
       expect(person.google_accounts).to include(@account)
     end
   end
+
   describe 'update from auth' do
     it 'should update an account that already exists' do
       auth_hash = Hashie::Mash.new(uid: '1',
@@ -32,7 +33,7 @@ describe Person::GoogleAccount do
     expect(account.to_s).to eq('john.doe@example.com')
   end
 
-  context '#contact_groups' do
+  describe '#contact_groups' do
     subject { create(:google_account) }
 
     it 'calls Person::GoogleAccount::ContactGroup' do
@@ -48,7 +49,32 @@ describe Person::GoogleAccount do
     end
   end
 
-  context '#refresh_token!' do
+  describe '#token_expired?' do
+    it 'is expired if expires_at is in the past' do
+      expect(build(:google_account, expires_at: 1.minute.ago).token_expired?).to eq(true)
+    end
+
+    it 'is not expired if expires_at is in the future' do
+      expect(build(:google_account, expires_at: 1.minute.from_now).token_expired?).to eq(false)
+    end
+
+    it 'is expired if expires_at is nil' do
+      expect(build(:google_account, expires_at: nil).token_expired?).to eq(true)
+    end
+  end
+
+  describe '#token_failure?' do
+    it 'returns true if notified_failure' do
+      expect(build(:google_account, notified_failure: true).token_failure?).to eq(true)
+    end
+
+    it 'returns false if not notified_failure' do
+      expect(build(:google_account, notified_failure: false).token_failure?).to eq(false)
+      expect(build(:google_account, notified_failure: nil).token_failure?).to eq(false)
+    end
+  end
+
+  describe '#refresh_token!' do
     subject { build(:google_account) }
 
     before do

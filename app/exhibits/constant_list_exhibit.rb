@@ -79,6 +79,14 @@ class ConstantListExhibit < DisplayCase::Exhibit
     end
   end
 
+  def pledge_frequencies_translated_hashes
+    translate_hash(pledge_frequencies)
+  end
+
+  def send_appeals_translated_hashes
+    translate_hash(send_appeals)
+  end
+
   private
 
   def currency_information(code)
@@ -96,6 +104,15 @@ class ConstantListExhibit < DisplayCase::Exhibit
       {
         id: string,
         value: _(string)
+      }
+    end
+  end
+
+  def translate_hash(hash)
+    hash.collect do |key, value|
+      {
+        id: key,
+        value: _(value)
       }
     end
   end

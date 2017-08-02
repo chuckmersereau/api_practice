@@ -7,7 +7,11 @@ RSpec.describe Contact::Filter::Newsletter do
   let!(:contact_one)   { create(:contact, account_list_id: account_list.id, send_newsletter: 'Email') }
   let!(:contact_two)   { create(:contact, account_list_id: account_list.id, send_newsletter: 'Physical') }
   let!(:contact_three) { create(:contact, account_list_id: account_list.id, send_newsletter: 'Both') }
-  let!(:contact_four)  { create(:contact, account_list_id: account_list.id, send_newsletter: nil) }
+  let!(:contact_four)  { create(:contact, account_list_id: account_list.id) }
+
+  before do
+    contact_four.update(send_newsletter: nil)
+  end
 
   describe '#config' do
     it 'returns expected config' do

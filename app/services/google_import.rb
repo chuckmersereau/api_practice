@@ -52,8 +52,12 @@ class GoogleImport
     contact = create_or_update_contact(person, g_contact, tags)
     spouse = create_spouse_if_specified(contact, person, g_contact)
 
+    # Associate the local google contact to the mpdx contact
+    person.google_contacts.find_by_remote_id(g_contact.id)&.update(contact: contact)
+
     contact.people.reload
 
+    # Associate the person to the contact
     begin
       contact.people << person unless contact.people.include?(person)
       contact.people << spouse unless spouse.nil? || contact.people.include?(spouse)

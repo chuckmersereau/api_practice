@@ -31,10 +31,7 @@ class Api::V2Controller < ApiController
   end
 
   def current_user
-    # See JsonWebToken::Middleware and application.rb where the middleware is
-    # initialized
-
-    @current_user ||= request.env['auth.user']
+    @current_user ||= fetch_current_user
   end
 
   def account_lists
@@ -42,6 +39,16 @@ class Api::V2Controller < ApiController
   end
 
   private
+
+  def fetch_current_user
+    # See JsonWebToken::Middleware and application.rb where the middleware is initialized
+
+    jwt_payload = request.env['auth.jwt_payload']
+
+    return unless jwt_payload.try(:[], 'user_uuid')
+
+    User.find_by(uuid: jwt_payload['user_uuid'])
+  end
 
   def authenticate!
     raise Exceptions::AuthenticationError unless current_user

@@ -3,6 +3,10 @@ require 'rails_helper'
 describe TntImport::ContactImport do
   include TntImportHelpers
 
+  def load_yaml_row(filename)
+    YAML.load(File.new(Rails.root.join("spec/fixtures/tnt/#{filename}.yaml")).read)
+  end
+
   let(:file) { File.new(Rails.root.join('spec/fixtures/tnt/tnt_export.xml')) }
   let(:tnt_import) { create(:tnt_import, override: true, file: file) }
   let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
@@ -121,7 +125,84 @@ describe TntImport::ContactImport do
     expect(Contact.last.pledge_frequency).to eq nil
   end
 
-  def load_yaml_row(filename)
-    YAML.load(File.new(Rails.root.join("spec/fixtures/tnt/#{filename}.yaml")).read)
+  # These shared examples help test that attributes are imported properly, but they don't currently support all attribute types (such as date/time types).
+  shared_examples 'import attribute' do |options|
+    let(:tnt_row_key) { options[:tnt_row_key] }
+    let(:attribute_name) { options[:attribute_name] }
+    let(:first_value) { options[:first_value] }
+    let(:second_value) { options[:second_value] }
+    let(:uses_override?) { !(options[:uses_override] == false) }
+    let(:required?) { options[:required] == true }
+
+    before do
+      raise 'Values should be different!' if first_value == second_value
+    end
+
+    it 'imports attribute' do
+      row = contact_rows.first
+      row[tnt_row_key] = first_value
+      tnt_import.override = true
+      import.import_contact(row)
+      expect(Contact.last.send(attribute_name)).to eq(first_value)
+    end
+
+    it 'imports attribute when nil' do
+      row = contact_rows.first
+      row.delete(tnt_row_key)
+      tnt_import.override = true
+      if required?
+        expect { import.import_contact(row) }.to_not change { Contact.count }
+      else
+        expect { import.import_contact(row) }.to change { Contact.count }
+        expect(Contact.last.send(attribute_name)).to eq(nil)
+      end
+    end
+
+    it 'overrides if override is true' do
+      next unless uses_override?
+      tnt_import.override = true
+      row = contact_rows.first
+      row[tnt_row_key] = first_value
+      import.import_contact(row)
+      contact = Contact.last
+      expect(contact.send(attribute_name)).to eq(first_value)
+      row[tnt_row_key] = second_value
+      expect { import.import_contact(row) }.to_not change { Contact.count }
+      expect(contact.reload.send(attribute_name)).to eq(second_value)
+    end
+
+    it 'does not override if override is false' do
+      next unless uses_override?
+      tnt_import.override = false
+      row = contact_rows.first
+      row[tnt_row_key] = first_value
+      import.import_contact(row)
+      contact = Contact.last
+      expect(contact.send(attribute_name)).to eq(first_value)
+      row[tnt_row_key] = second_value
+      expect { import.import_contact(row) }.to_not change { Contact.count }
+      expect(contact.reload.send(attribute_name)).to eq(first_value)
+    end
+  end
+
+  describe 'importing Contact attributes' do
+    include_examples 'import attribute', attribute_name: :name,                           first_value: 'Bob',          second_value: 'Joe',            tnt_row_key: 'FileAs', required: true
+    include_examples 'import attribute', attribute_name: :full_name,                      first_value: 'Bob',          second_value: 'Joe',            tnt_row_key: 'FullName'
+    include_examples 'import attribute', attribute_name: :greeting,                       first_value: 'Bob',          second_value: 'Joe',            tnt_row_key: 'Greeting'
+    include_examples 'import attribute', attribute_name: :envelope_greeting,              first_value: 'Address One',  second_value: 'Address Two',    tnt_row_key: 'MailingAddressBlock'
+    include_examples 'import attribute', attribute_name: :website,                        first_value: 'www.mpdx.org', second_value: 'www.cru.org',    tnt_row_key: 'WebPage'
+    include_examples 'import attribute', attribute_name: :church_name,                    first_value: 'Cool Church',  second_value: 'Brisk Basilica', tnt_row_key: 'ChurchName'
+    include_examples 'import attribute', attribute_name: :direct_deposit,                 first_value: 'true',         second_value: 'false',          tnt_row_key: 'DirectDeposit'
+    include_examples 'import attribute', attribute_name: :magazine,                       first_value: 'true',         second_value: 'false',          tnt_row_key: 'Magazine'
+    include_examples 'import attribute', attribute_name: :tnt_id,                         first_value: 1,              second_value: 2,                tnt_row_key: 'id', uses_override: false
+    include_examples 'import attribute', attribute_name: :is_organization,                first_value: 'true',         second_value: 'false',          tnt_row_key: 'IsOrganization'
+    include_examples 'import attribute', attribute_name: :pledge_amount,                  first_value: 1234.56,        second_value: 7890,             tnt_row_key: 'PledgeAmount'
+    include_examples 'import attribute', attribute_name: :pledge_frequency,               first_value: 1,              second_value: 2,                tnt_row_key: 'PledgeFrequencyID'
+    include_examples 'import attribute', attribute_name: :pledge_received,                first_value: 'true',         second_value: 'false',          tnt_row_key: 'PledgeReceived'
+    include_examples 'import attribute', attribute_name: :status,                         first_value: 10,             second_value: 20,               tnt_row_key: 'MPDPhaseID'
+    include_examples 'import attribute', attribute_name: :likely_to_give,                 first_value: 1,              second_value: 2,                tnt_row_key: 'LikelyToGiveID'
+    include_examples 'import attribute', attribute_name: :no_appeals,                     first_value: 'true',         second_value: 'false',          tnt_row_key: 'NeverAsk'
+    include_examples 'import attribute', attribute_name: :estimated_annual_pledge_amount, first_value: 1234.56,        second_value: 7890,             tnt_row_key: 'EstimatedAnnualCapacity'
+    include_examples 'import attribute', attribute_name: :next_ask_amount,                first_value: 1234.56,        second_value: 7890,             tnt_row_key: 'NextAskAmount'
   end
 end
