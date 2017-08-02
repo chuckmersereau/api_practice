@@ -6,8 +6,8 @@ class ContactMerge
 
   def merge
     begin
-      @winner.reload
-      @other.reload
+      Contact.find(@winner.id)
+      Contact.find(@other.id)
     rescue ActiveRecord::RecordNotFound
       return
     end
