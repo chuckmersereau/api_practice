@@ -39,8 +39,11 @@ RSpec.describe MailChimp::Exporter::GroupAdder do
     let(:group_type) { 'Tags' }
     let(:interests_create_body) { { body: { name: 'Tag_two' } } }
 
-    it 'creates and updates the appropriate tag group names and adds the appropriate groups to those' do
-      expect(mock_interest_categories).to receive(:retrieve).and_return('categories' => [grouping_one])
+    it 'creates and updates the appropriate interest_categories and adds the appropriate interests to those' do
+      expect(mock_interest_categories).to receive(:retrieve).and_return(
+        { 'categories' => [grouping_one] },
+        'categories' => [grouping_one, grouping_two]
+      )
       expect(mock_interest_categories).to receive(:create).with(interest_categories_create_body)
       expect(mock_interests).to receive(:retrieve).and_return('interests' => [{ 'name' => 'Tag_one' }])
       expect(mock_interests).to receive(:create).with(interests_create_body)
@@ -52,7 +55,7 @@ RSpec.describe MailChimp::Exporter::GroupAdder do
     let(:group_type) { 'Partner Status' }
     let(:interests_create_body) { { body: { name: 'Never Contacted' } } }
 
-    it 'creates and updates the appropriate tag group names and adds the appropriate groups to those' do
+    it 'creates and updates the appropriate interest_categories and adds the appropriate interests to those' do
       expect(mock_interest_categories).to receive(:retrieve).and_return('categories' => [grouping_one])
       expect(mock_interests).to receive(:retrieve).and_return('interests' => [{ 'name' => 'Partner - Pray' }])
       expect(mock_interests).to receive(:create).with(interests_create_body)

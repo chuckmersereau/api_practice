@@ -38,15 +38,6 @@ describe MailChimp::Exporter do
     end
   end
 
-  context '#export_appeal_contacts' do
-    it 'uses the connection handler and export_appeal_contacts! is called' do
-      expect(MailChimp::ConnectionHandler).to receive(:new).and_return(mock_connection_handler)
-      expect(mock_connection_handler).to receive(:call_mail_chimp).with(subject, :export_appeal_contacts!, contacts.map(&:id), appeal.id)
-
-      subject.export_appeal_contacts(contacts.map(&:id), appeal.id)
-    end
-  end
-
   context '#export_contacts!' do
     let!(:mail_chimp_member) { create(:mail_chimp_member, mail_chimp_account: mail_chimp_account, list_id: list_id) }
 

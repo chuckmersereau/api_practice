@@ -23,7 +23,7 @@ class MailChimp::Exporter
 
     def add_groups(group_type, attribute, groups_to_add)
       grouping = find_grouping(mail_chimp_account.send(attribute), group_type)
-      grouping = create_grouping(group_type, grouping) unless grouping
+      grouping = create_grouping(group_type, attribute) unless grouping
 
       mail_chimp_account.update_attribute(attribute, grouping['id'])
       mail_chimp_account.reload
@@ -39,12 +39,12 @@ class MailChimp::Exporter
         .map { |interest| interest['name'] }
     end
 
-    def create_grouping(group_type, _grouping)
+    def create_grouping(group_type, _attribute)
       grouping_body = { title: _(group_type), type: 'hidden' }
 
       gibbon_list.interest_categories.create(body: grouping_body)
 
-      grouping_body
+      find_grouping(nil, group_type)
     end
 
     def find_grouping(id, group_type)
