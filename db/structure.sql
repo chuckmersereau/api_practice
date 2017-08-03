@@ -2255,7 +2255,7 @@ ALTER SEQUENCE person_facebook_accounts_id_seq OWNED BY person_facebook_accounts
 
 CREATE TABLE person_google_accounts (
     id integer NOT NULL,
-    remote_id character varying,
+    remote_id text,
     person_id integer,
     token character varying,
     refresh_token character varying,
@@ -6540,4 +6540,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170728221932');
 INSERT INTO schema_migrations (version) VALUES ('20170731185156');
 
 INSERT INTO schema_migrations (version) VALUES ('20170801182230');
+
+INSERT INTO schema_migrations (version) VALUES ('20170803172858');
 
