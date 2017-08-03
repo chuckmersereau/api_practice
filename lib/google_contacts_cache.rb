@@ -27,9 +27,10 @@ class GoogleContactsCache
   end
 
   def find_by_id(remote_id)
+    return unless remote_id.present?
     cached_g_contact = @g_contact_by_id[remote_id]
     return cached_g_contact if cached_g_contact
-    return nil if @all_g_contacts_cached
+    return if @all_g_contacts_cached
     g_contact = GoogleContactsIntegrator.retry_on_api_errs do
       @account.contacts_api_user.get_contact(remote_id)
     end

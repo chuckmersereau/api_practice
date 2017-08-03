@@ -1,3 +1,4 @@
+require 'rails_helper'
 require 'google_contacts_cache'
 
 describe GoogleContactsCache do
@@ -7,6 +8,14 @@ describe GoogleContactsCache do
   let(:jane2) { double(id: 'jane2', given_name: 'Jane Doe', family_name: '') }
   let(:account) { build(:google_account) }
   let(:cache) { GoogleContactsCache.new(account) }
+
+  describe 'find_by_id' do
+    it 'handles a missing id' do
+      expect(cache.find_by_id(nil)).to eq(nil)
+      expect(cache.find_by_id('')).to eq(nil)
+      expect(cache.find_by_id(' ')).to eq(nil)
+    end
+  end
 
   describe 'cache_all_g_contacts' do
     it 'calls the api and caches all retrieved contacts' do
