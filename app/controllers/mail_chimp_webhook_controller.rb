@@ -38,10 +38,10 @@ class MailChimpWebhookController < ActionController::API
   def hook_handler_class
     list_id = data_param(:list_id)
     if list_id == @account.primary_list_id
-      MailChimpAccount::PrimaryListHookHandler
+      MailChimp::Webhook::PrimaryList
     elsif @account.mail_chimp_appeal_list &&
           list_id == @account.mail_chimp_appeal_list.appeal_list_id
-      MailChimpAccount::AppealListHookHandler
+      MailChimp::Webhook::AppealList
     end
   end
 

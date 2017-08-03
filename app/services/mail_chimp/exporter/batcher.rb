@@ -27,8 +27,9 @@ class MailChimp::Exporter
           body: { status: 'unsubscribed' }
         }
       end
-
-      gibbon_wrapper.batches.create(body: { operations: operations })
+      operations.in_groups_of(50, false) do |group_of_operations|
+        gibbon_wrapper.batches.create(body: { operations: group_of_operations })
+      end
     end
 
     private
@@ -39,6 +40,7 @@ class MailChimp::Exporter
                               .preload(:contact_people, :primary_email_address)
 
       contacts.each_with_object([]) do |contact, members_params|
+        next unless contact.class.to_s == 'Contact'
         contact.status ||= 'Partner - Pray'
 
         people_that_belong_to_contact(relevant_people, contact).each do |person|
@@ -100,7 +102,9 @@ class MailChimp::Exporter
         }
       end
 
-      batch_create_call(operations)
+      operations.in_groups_of(50, false) do |group_of_operations|
+        batch_create_call(group_of_operations)
+      end
     end
 
     def batch_create_call(operations)
@@ -115,17 +119,26 @@ class MailChimp::Exporter
     end
 
     def escape_intermittent_bad_request_error
-      retry_count = 0
+      retry_count ||= 0
 
       yield
     rescue Gibbon::MailChimpError => error
-      raise if not_the_intermittent_bad_request_error?(error) || (retry_count += 1) >= 5
+      raise if intermittent_error?(error) || (retry_count += 1) >= 5
 
       retry
     end
 
+    def intermittent_error?(error)
+      intermittent_bad_request_error?(error) ||
+        intermittent_nesting_too_deep_error?(error)
+    end
+
+    def not_the_intermittent_nesting_too_deep_error?(error)
+      error.message.include?('nested too deeply')
+    end
+
     def not_the_intermittent_bad_request_error?(error)
-      error.message.exclude?('<H1>Bad Request</H1>')
+      error.message.include?('<H1>Bad Request</H1>')
     end
 
     def create_member_records(members_params)
@@ -171,7 +184,7 @@ class MailChimp::Exporter
     end
 
     def cached_interest_ids(attribute)
-      InterestIdsCacher.new(mail_chimp_account, gibbon_list).cached_interest_ids(attribute)
+      InterestIdsCacher.new(mail_chimp_account, gibbon_wrapper, list_id).cached_interest_ids(attribute)
     end
 
     def appeal_export?

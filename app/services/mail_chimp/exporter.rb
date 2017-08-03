@@ -13,11 +13,6 @@ class MailChimp::Exporter
                                 .call_mail_chimp(self, :export_contacts!, contact_ids)
   end
 
-  def export_appeal_contacts(contact_ids, appeal_id)
-    MailChimp::ConnectionHandler.new(mail_chimp_account)
-                                .call_mail_chimp(self, :export_appeal_contacts!, contact_ids, appeal_id)
-  end
-
   def export_contacts!(contact_ids)
     contacts_to_export = fetch_contacts_to_export(contact_ids)
     emails_of_members_to_remove = fetch_emails_of_members_to_remove

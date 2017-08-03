@@ -13,7 +13,7 @@ class ImportCallbackHandler
     @account_list.queue_sync_with_google_contacts
 
     if @account_list.valid_mail_chimp_account
-      MailChimp::PrimaryListSyncWorker.perform_async(@account_list.mail_chimp_account)
+      MailChimp::PrimaryListSyncWorker.perform_async(@account_list.mail_chimp_account.id)
     end
 
     begin
