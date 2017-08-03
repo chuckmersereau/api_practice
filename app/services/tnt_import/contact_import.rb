@@ -67,7 +67,9 @@ class TntImport::ContactImport
 
     @tags.each { |tag| contact.tag_list.add(tag) }
 
-    contact.save
+    Retryable.retryable do
+      contact.save
+    end
   end
 
   def update_contact_basic_fields(contact, row)
