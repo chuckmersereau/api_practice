@@ -12,6 +12,8 @@ describe MailChimp::Importer do
   let(:mock_matcher) { double(:mock_matcher) }
   let(:mock_gibbon_list) { double(:mock_gibbon_list) }
 
+  let(:email) { 'random@email.com' }
+
   let(:contacts) do
     create_list(
       :contact,
@@ -31,7 +33,16 @@ describe MailChimp::Importer do
     end
   end
 
-  context '#import_all_members!' do
+  context '#import_members_by_email' do
+    it 'uses the connection handler and import_members_by_email! is called' do
+      expect(MailChimp::ConnectionHandler).to receive(:new).and_return(mock_connection_handler)
+      expect(mock_connection_handler).to receive(:call_mail_chimp).with(subject, :import_members_by_email!, [email])
+
+      subject.import_members_by_email([email])
+    end
+  end
+
+  context '#import_all_members & import_members_by_email' do
     let(:mail_chimp_member) { create(:mail_chimp_member, mail_chimp_account: mail_chimp_account) }
 
     let(:member_infos) do
@@ -111,16 +122,32 @@ describe MailChimp::Importer do
       allow(described_class::Matcher).to receive(:new).and_return(mock_matcher)
     end
 
-    it 'calls Matcher instance with correct arguments and updates/creates the contact/people records' do
-      expect(mock_matcher).to receive(:find_matching_people).with(formatted_member_infos).and_return(matching_people_hash)
+    context '#import_all_members!' do
+      it 'calls Matcher instance with correct arguments and updates/creates the contact/people records' do
+        expect(mock_matcher).to receive(:find_matching_people).with(formatted_member_infos).and_return(matching_people_hash)
 
-      expect do
-        subject.import_all_members!
-      end.to change { Person.count }.by(1)
+        expect do
+          subject.import_all_members!
+        end.to change { Person.count }.by(1)
 
-      expect(new_contact.send_newsletter).to eq('Email')
-      expect(new_contact.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
-      expect(contact.reload.send_newsletter).to eq('Both')
+        expect(new_contact.send_newsletter).to eq('Email')
+        expect(new_contact.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
+        expect(contact.reload.send_newsletter).to eq('Both')
+      end
+    end
+
+    context '#import_members_by_email!' do
+      it 'calls Matcher instance with correct arguments and updates/creates the contact/people records' do
+        expect(mock_matcher).to receive(:find_matching_people).with(formatted_member_infos).and_return(matching_people_hash)
+
+        expect do
+          subject.import_members_by_email!(formatted_member_infos.map { |member| member[:email] })
+        end.to change { Person.count }.by(1)
+
+        expect(new_contact.send_newsletter).to eq('Email')
+        expect(new_contact.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
+        expect(contact.reload.send_newsletter).to eq('Both')
+      end
     end
   end
 end

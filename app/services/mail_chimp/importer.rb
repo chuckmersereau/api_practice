@@ -12,10 +12,25 @@ class MailChimp::Importer
                                 .call_mail_chimp(self, :import_all_members!)
   end
 
+  def import_members_by_email(member_emails)
+    MailChimp::ConnectionHandler.new(mail_chimp_account)
+                                .call_mail_chimp(self, :import_members_by_email!, member_emails)
+  end
+
   def import_all_members!
     all_emails_to_import = fetch_all_emails_to_import
 
-    import_members_by_emails(all_emails_to_import)
+    import_members_by_email(all_emails_to_import)
+  end
+
+  def import_members_by_email!(member_emails)
+    subscribed_members = list_of_members_info(member_emails).select do |member_info|
+      member_info[:status] == 'subscribed'
+    end
+
+    formatted_subscribed_members = subscribed_members.map(&method(:format_member_info))
+
+    import_members(formatted_subscribed_members)
   end
 
   private
@@ -25,16 +40,6 @@ class MailChimp::Importer
   end
 
   private_class_method :email_to_name
-
-  def import_members_by_emails(member_emails)
-    subscribed_members = list_of_members_info(member_emails).select do |member_info|
-      member_info[:status] == 'subscribed'
-    end
-
-    formatted_subscribed_members = subscribed_members.map(&method(:format_member_info))
-
-    import_members(formatted_subscribed_members)
-  end
 
   def list_of_members_info(member_emails)
     gibbon_wrapper.list_member_info(mail_chimp_account.primary_list_id, member_emails)
