@@ -17,7 +17,7 @@ describe DonationReports::ReceivedDonations do
     it 'includes received donations info' do
       create(:donation, donor_account: donor_account,
                         designation_account: designation_account,
-                        tendered_amount: 2, tendered_currency: 'EUR',
+                        amount: 2, currency: 'EUR',
                         donation_date: Date.current)
       donations_info = received_donations.donations
       expect(donations_info.size).to eq 1

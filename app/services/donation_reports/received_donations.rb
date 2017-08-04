@@ -27,7 +27,7 @@ module DonationReports
       donations, contacts = donations_and_contacts
       donations_info = donations.map do |donation|
         DonationReports::DonationInfo.from_donation(donation,
-                                                    @account_list.default_currency)
+                                                    @account_list.salary_currency)
       end
       contacts_info = contacts.map do |contact|
         DonationReports::DonorInfo.from_contact(contact)

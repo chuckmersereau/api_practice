@@ -13,8 +13,15 @@ module Concerns::Reports::DonationSumHelper
     donations.map(&:amount).inject(:+) || 0
   end
 
-  def sum_converted_donations(donations)
-    donations.map(&:converted_amount).inject(:+) || 0
+  def sum_converted_donations(donations, converted_currency = 'USD')
+    donations.map do |donation|
+      CurrencyRate.convert_on_date(
+        amount: donation.amount,
+        date: donation.donation_date,
+        from: donation.currency,
+        to: converted_currency
+      )
+    end.inject(:+) || 0
   end
 
   def sum_donations_by_month(donations, months)
