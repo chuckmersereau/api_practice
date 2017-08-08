@@ -11,9 +11,7 @@ describe CsvImportContactWorker do
 
   before do
     Sidekiq::Testing.inline!
-    stub_request(:get, %r{api.smartystreets.com/.*})
-      .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
-      .to_return(status: 200, body: '{}', headers: {})
+    stub_smarty_streets
   end
 
   it 'creates a contact' do

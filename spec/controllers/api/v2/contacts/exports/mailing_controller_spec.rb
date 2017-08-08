@@ -27,6 +27,16 @@ describe Api::V2::Contacts::Exports::MailingController, type: :controller do
       expect(response.status).to eq(401)
     end
 
+    it 'logs the export if successful' do
+      api_login(user)
+
+      expect do
+        get :index, format: :csv
+      end.to change { ExportLog.count }.by(1)
+
+      expect(response.status).to eq(200)
+    end
+
     it 'renders the export alphabetically for users that are signed in' do
       api_login(user)
       get :index, format: :csv

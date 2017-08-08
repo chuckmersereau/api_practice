@@ -2,7 +2,7 @@
 module MailChimp::Webhook
   class PrimaryList < Base
     def subscribe_hook(email)
-      MailChimp::Importer.new(mail_chimp_account).import_members_by_emails([email])
+      MailChimp::MembersImportWorker.perform_async(mail_chimp_account.id, [email])
 
       @account_list.people.joins(:email_addresses).where(email_addresses: { email: email, primary: true })
                    .update_all(optout_enewsletter: false)

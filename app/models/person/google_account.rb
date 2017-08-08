@@ -1,4 +1,4 @@
-require 'google/api_client'
+require 'signet/oauth_2/client'
 
 class Person::GoogleAccount < ApplicationRecord
   include Person::Account
@@ -90,14 +90,14 @@ class Person::GoogleAccount < ApplicationRecord
     @contact_api_user
   end
 
-  def client
+  def authorization
     return false if token_expired? && !refresh_token!
-
-    unless @client
-      @client = Google::APIClient.new(application_name: 'MPDX', application_version: '1.0')
-      @client.authorization.access_token = token
-    end
-    @client
+    @authorization ||= Signet::OAuth2::Client.new(authorization_uri: 'https://accounts.google.com/o/oauth2/auth',
+                                                  token_credential_uri: 'https://www.googleapis.com/oauth2/v3/token',
+                                                  client_id: ENV.fetch('GOOGLE_KEY'),
+                                                  client_secret: ENV.fetch('GOOGLE_SECRET'),
+                                                  access_token: token,
+                                                  refresh_token: refresh_token)
   end
 
   def refresh_token!

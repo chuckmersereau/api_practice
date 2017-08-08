@@ -142,5 +142,7 @@ class ApplicationSeeder
 
     create :tag
     create :tagging, tag: ActsAsTaggableOn::Tag.last, taggable: person
+
+    create :export_log
   end
 end

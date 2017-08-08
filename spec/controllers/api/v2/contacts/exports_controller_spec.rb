@@ -25,6 +25,18 @@ describe Api::V2::Contacts::ExportsController, type: :controller do
         expect(response.status).to eq(401)
       end
     end
+
+    it 'logs the export if successful' do
+      api_login(user)
+
+      [:csv, :xlsx].each do |format|
+        expect do
+          get :index, format: format
+        end.to change { ExportLog.count }.by(1)
+
+        expect(response.status).to eq(200)
+      end
+    end
   end
 
   context 'CSV export' do

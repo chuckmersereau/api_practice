@@ -18,6 +18,10 @@ class Admin::Reset
     true
   end
 
+  def account_list
+    @account_list ||= account_list_scope&.first
+  end
+
   private
 
   attr_accessor :reset_log
@@ -44,10 +48,6 @@ class Admin::Reset
 
   def account_list_scope
     resetted_user&.account_lists&.where(name: account_list_name)
-  end
-
-  def account_list
-    @account_list ||= account_list_scope&.first
   end
 
   def account_list_is_unique

@@ -293,9 +293,9 @@ class DataServer
   end
 
   def get_response(url, params)
-    Rails.logger.debug(url: url, payload: params, timeout: -1, user: u(@org_account.username),
+    Rails.logger.debug(url: url, payload: params, timeout: nil, user: u(@org_account.username),
                        password: u(@org_account.password))
-    RestClient::Request.execute(method: :post, url: url, payload: params, timeout: -1, user: u(@org_account.username),
+    RestClient::Request.execute(method: :post, url: url, payload: params, timeout: nil, user: u(@org_account.username),
                                 password: u(@org_account.password)) do |response, _request, _result, &_block|
       raise(DataServerError, response) if response.code == 500
 

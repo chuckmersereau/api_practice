@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe GoogleIntegration do
   let(:google_integration) { build(:google_integration) }
-  let(:calendar_data) { Hashie::Mash.new(JSON.parse(File.new(Rails.root.join('spec/fixtures/google_calendar_data.json')).read)) }
+  let(:calendar_list_entry) { double(id: '1234', summary: 'My Calendar', access_role: 'owner') }
 
   context '#queue_sync_data' do
     it 'queues a data sync when an integration type is passed in' do
@@ -39,24 +39,20 @@ describe GoogleIntegration do
   end
 
   context '#calendars' do
-    let(:calendar_list_api) { double }
-    let(:client) { double(execute: double(data: calendar_data)) }
+    let(:calendar_list_entry_owner) { double(id: '1234', summary: 'My Calendar', access_role: 'owner') }
+    let(:calendar_list_entry_nonowner) { double(id: '1234', summary: 'My Calendar', access_role: 'nonowner') }
+    let(:calendar_list) { [calendar_list_entry_nonowner, calendar_list_entry_owner] }
 
-    it 'returns a list of calendars from google' do
-      allow(google_integration.google_account).to receive(:client).and_return(client)
-      allow(google_integration).to receive_message_chain(:calendar_api, :calendar_list, :list)
-        .and_return(calendar_list_api)
-
-      expect(client).to receive(:execute).with(api_method: calendar_list_api,
-                                               parameters: { 'userId' => 'me' })
-
-      expect(google_integration.calendars).to eq(calendar_data.items)
+    it 'returns a list of calendars from google with access_role owner' do
+      allow(google_integration).to receive_message_chain(:calendar_service, :list_calendar_lists, :items)
+        .and_return(calendar_list)
+      expect(google_integration.calendars).to eq([calendar_list_entry_owner])
     end
   end
 
   context '#toggle_calendar_integration_for_appointments' do
     before do
-      allow(google_integration).to receive(:calendars).and_return([{}])
+      allow(google_integration).to receive(:calendars).and_return([])
       google_integration.calendar_id = ''
       google_integration.calendar_integrations = []
       google_integration.calendar_integration = true
@@ -81,49 +77,25 @@ describe GoogleIntegration do
     end
 
     it 'defaults to the first calendar if this google account only has 1' do
-      allow(google_integration).to receive(:calendars).and_return([calendar_data.items.first])
-      first_calendar = calendar_data.items.first
+      allow(google_integration).to receive(:calendars).and_return([calendar_list_entry])
+      first_calendar = calendar_list_entry
 
       google_integration.send(:set_default_calendar)
 
-      expect(google_integration.calendar_id).to eq(first_calendar['id'])
-      expect(google_integration.calendar_name).to eq(first_calendar['summary'])
+      expect(google_integration.calendar_id).to eq(first_calendar.id)
+      expect(google_integration.calendar_name).to eq(first_calendar.summary)
     end
 
     it 'returns nil if the api fails' do
-      allow(google_integration).to receive(:calendar_api).and_return(false)
+      allow(google_integration).to receive(:calendar_service).and_return(nil)
 
       expect(google_integration.send(:set_default_calendar)).to eq(nil)
     end
 
     it 'returns nil if this google account has more than one calendar' do
-      allow(google_integration).to receive(:calendars).and_return(calendar_data.items)
+      allow(google_integration).to receive(:calendars).and_return([calendar_list_entry, calendar_list_entry])
 
       expect(google_integration.send(:set_default_calendar)).to eq(nil)
-    end
-  end
-
-  context '#create_new_calendar' do
-    let(:calendar_insert_api) { double }
-    let(:client) { double(execute: double(data: calendar_data.items.first)) }
-
-    it 'creates a new calendar' do
-      google_integration.calendar_id = nil
-      google_integration.new_calendar = 'new calendar'
-
-      allow(google_integration.google_account).to receive(:client).and_return(client)
-      allow(google_integration).to receive_message_chain(:calendar_api, :calendars, :insert)
-        .and_return(calendar_insert_api)
-
-      expect(client).to receive(:execute).with(api_method: calendar_insert_api,
-                                               body_object: { 'summary' => google_integration.new_calendar })
-
-      first_calendar = calendar_data.items.first
-
-      google_integration.send(:create_new_calendar)
-
-      expect(google_integration.calendar_id).to eq(first_calendar['id'])
-      expect(google_integration.calendar_name).to eq(google_integration.new_calendar)
     end
   end
 end

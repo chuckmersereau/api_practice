@@ -16,7 +16,7 @@ module MailChimp::Webhook
       return unless status == 'sent'
 
       mail_chimp_account.update(prayer_letter_last_sent: Time.current)
-      MailChimp::CampaignLoggerWorker.perform_async(mail_chimp_account, campaign_id, subject)
+      MailChimp::CampaignLoggerWorker.perform_async(mail_chimp_account.id, campaign_id, subject)
     end
   end
 end

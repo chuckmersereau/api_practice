@@ -16,7 +16,7 @@ describe MailChimp::Webhook::PrimaryList do
 
   context '#subscribe_hook' do
     it 'queues an import for the new subscriber' do
-      expect_any_instance_of(MailChimp::Importer).to receive(:import_members_by_emails).with(['j@t.co'])
+      expect(MailChimp::MembersImportWorker).to receive(:perform_async).with(mail_chimp_account.id, ['j@t.co'])
       subject.subscribe_hook('j@t.co')
     end
   end
@@ -86,7 +86,7 @@ describe MailChimp::Webhook::PrimaryList do
     end
 
     it 'asyncronously calls the mail chimp account to log the sent campaign' do
-      expect(MailChimp::CampaignLoggerWorker).to receive(:perform_async).with(mail_chimp_account, 'c1', 'subject')
+      expect(MailChimp::CampaignLoggerWorker).to receive(:perform_async).with(mail_chimp_account.id, 'c1', 'subject')
       expect do
         subject.campaign_status_hook('c1', 'sent', 'subject')
       end.to change { mail_chimp_account.reload.prayer_letter_last_sent }

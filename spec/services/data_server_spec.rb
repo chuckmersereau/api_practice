@@ -467,7 +467,7 @@ describe DataServer do
       @org_account.password = 'abcd543!'
 
       execute_params = {
-        method: :post, url: 'http://example.com', payload: [], timeout: -1,
+        method: :post, url: 'http://example.com', payload: [], timeout: nil,
         user: 'tester%40tester.com', password: 'abcd543%21'
       }
       # We can't use webmock to spec this since webmock smart matches on encoding

@@ -42,7 +42,7 @@ class Reports::DonationMonthlyTotals < ActiveModelSerializers::Model
       {
         donor_currency: currency,
         total_in_donor_currency: sum_donations(donations),
-        converted_total_in_salary_currency: sum_converted_donations(donations)
+        converted_total_in_salary_currency: sum_converted_donations(donations, account_list.salary_currency)
       }
     end
   end

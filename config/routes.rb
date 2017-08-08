@@ -10,6 +10,8 @@ Rails.application.routes.draw do
       constraints(id: UUID_REGEX) do
         namespace :admin do
           resources :impersonation, only: :create
+          resources :organizations, only: :create
+          resources :resets, only: :create
         end
         resources :account_lists, only: [:index, :show, :update] do
           scope module: :account_lists do

@@ -3,9 +3,6 @@ require 'omniauth-google-oauth2'
 require 'omniauth-mailchimp'
 require 'omniauth-prayer-letters'
 
-silence_warnings do
-  OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
-end
 Auth::Engine.config.middleware.use OmniAuth::Builder do
   provider :google_oauth2,
            ENV.fetch('GOOGLE_KEY'),

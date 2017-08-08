@@ -3,8 +3,7 @@ require 'rspec_api_documentation/dsl'
 
 resource 'Google Integrations' do
   before do
-    stub_request(:get, 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest')
-      .to_return(status: 200, body: '', headers: {})
+    allow_any_instance_of(GoogleIntegration).to receive(:calendars).and_return([])
   end
 
   include_context :json_headers

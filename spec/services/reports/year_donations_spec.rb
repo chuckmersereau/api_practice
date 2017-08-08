@@ -12,14 +12,14 @@ RSpec.describe Reports::YearDonations, type: :model do
   let!(:donation) do
     create(:donation, donor_account: donor_account,
                       designation_account: designation_account,
-                      tendered_amount: 2, tendered_currency: 'EUR',
+                      amount: 2, currency: 'EUR',
                       donation_date: Date.current)
   end
 
   let!(:donation_last_year) do
     create(:donation, donor_account: donor_account,
                       designation_account: designation_account,
-                      tendered_amount: 2, tendered_currency: 'EUR',
+                      amount: 2, currency: 'EUR',
                       donation_date: 13.months.ago.end_of_month - 1.day)
   end
 

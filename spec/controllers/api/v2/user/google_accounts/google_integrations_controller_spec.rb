@@ -2,8 +2,7 @@ require 'rails_helper'
 
 RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type: :controller do
   before do
-    stub_request(:get, 'https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest')
-      .to_return(status: 200, body: '', headers: {})
+    allow_any_instance_of(GoogleIntegration).to receive(:calendars).and_return([])
   end
 
   let(:user) { create(:user_with_account) }
@@ -88,5 +87,12 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
       get :index, parent_param_if_needed.except(:filter)
       expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq(user.google_integrations.pluck(:uuid))
     end
+  end
+
+  it 'updates the calendar_integrations array' do
+    api_login(user)
+    attributes = full_update_attributes
+    attributes[:data][:attributes][:calendar_integrations] = ['Appointment', 'To Do', 'Support Letter']
+    expect { put :update, attributes }.to change { resource.reload.calendar_integrations }.from(['Appointment']).to(['Appointment', 'To Do', 'Support Letter'])
   end
 end

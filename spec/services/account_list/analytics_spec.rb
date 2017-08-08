@@ -26,7 +26,7 @@ RSpec.describe AccountList::Analytics, type: :model do
     create_task(activity_type: 'Thank', result: 'Done')
 
     # Electronic
-    create_task(activity_type: 'Email', next_action: 'Appointment Scheduled')
+    create_task(activity_type: 'Email', next_action: 'Appointment')
     create_task(activity_type: 'Email', result: 'Received')
     create_task(activity_type: 'Facebook Message', result: 'Received')
     create_task(activity_type: 'Text Message', result: 'Received')
@@ -35,7 +35,7 @@ RSpec.describe AccountList::Analytics, type: :model do
     create_task(activity_type: 'Text Message', result: 'Done')
 
     # Phone
-    create_task(activity_type: 'Call', next_action: 'Appointment Scheduled')
+    create_task(activity_type: 'Call', next_action: 'Appointment')
     create_task(activity_type: 'Call', result: 'Attempted')
     create_task(activity_type: 'Call', result: 'Completed')
     create_task(activity_type: 'Call', result: 'Received')

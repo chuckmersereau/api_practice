@@ -3,9 +3,7 @@ require 'rails_helper'
 describe ImportMailer do
   before do
     Sidekiq::Testing.inline!
-    stub_request(:get, %r{api.smartystreets.com/.*})
-      .with(headers: { 'Accept' => 'application/json', 'Accept-Encoding' => 'gzip, deflate', 'Content-Type' => 'application/json', 'User-Agent' => 'Ruby' })
-      .to_return(status: 200, body: '{}', headers: {})
+    stub_smarty_streets
   end
 
   describe '#failed' do
@@ -28,7 +26,7 @@ describe ImportMailer do
       it 'attaches a csv file containing the failed rows' do
         mail = ImportMailer.failed(import)
         expect(mail.attachments.size).to eq(1)
-        expect(mail.attachments.first.content_type).to eq('text/csv; filename="MPDX Import Failures.csv"')
+        expect(mail.attachments.first.content_type).to eq('text/comma-separated-values; filename="MPDX Import Failures.csv"')
         expect(mail.attachments.first.body.to_s).to eq('Error Message,fullname,fname,lname,Spouse-fname,Spouse-lname,greeting,mailing-greeting,church,' \
                                                                    'street,city,province,zip-code,country,status,amount,frequency,currency,newsletter,tags,' \
                                                                    'email-address,Spouse-email-address,phone,Spouse-phone-number,extra-notes,skip,likely-giver' \

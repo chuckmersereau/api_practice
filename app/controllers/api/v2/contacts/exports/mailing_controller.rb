@@ -8,10 +8,20 @@ class Api::V2::Contacts::Exports::MailingController < Api::V2Controller
 
   def index
     load_contacts
+    log_export
     render_export
   end
 
   private
+
+  def log_export
+    ExportLog.create(
+      type: 'Contacts Mailing',
+      params: params,
+      user: current_user,
+      export_at: DateTime.now
+    )
+  end
 
   def load_contacts
     @contacts ||= filter_contacts.order(name: :asc).preload(:primary_person, :spouse, :primary_address,

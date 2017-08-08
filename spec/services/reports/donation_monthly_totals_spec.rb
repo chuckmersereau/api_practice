@@ -10,16 +10,25 @@ RSpec.describe Reports::DonationMonthlyTotals do
   let!(:cad_donation) do
     create(:donation, donor_account: donor_account,
                       designation_account: designation_account,
-                      tendered_amount: 3, tendered_currency: 'CAD',
+                      amount: 3, currency: 'CAD',
                       donation_date: 6.months.ago + 1.day)
   end
 
   let!(:eur_donation) do
     create(:donation, donor_account: donor_account,
                       designation_account: designation_account,
-                      tendered_amount: 2, tendered_currency: 'EUR',
-                      donation_date: 6.months.ago + 2.days)
+                      amount: 2, currency: 'EUR',
+                      donation_date: 6.months.ago + 20.days)
   end
+
+  before do
+    account_list.update(salary_currency: 'NZD')
+    create(:currency_rate, exchanged_on: 6.months.ago + 1.day, code: 'CAD', rate: 1.1)
+    create(:currency_rate, exchanged_on: 6.months.ago + 1.day, code: 'NZD', rate: 0.7)
+    create(:currency_rate, exchanged_on: 6.months.ago + 20.days, code: 'EUR', rate: 2.2)
+    create(:currency_rate, exchanged_on: 6.months.ago + 20.days, code: 'NZD', rate: 0.8)
+  end
+
   subject do
     described_class.new(account_list: account_list,
                         start_date: 6.months.ago,
@@ -35,12 +44,24 @@ RSpec.describe Reports::DonationMonthlyTotals do
             {
               donor_currency: 'EUR',
               total_in_donor_currency: 2.0,
-              converted_total_in_salary_currency: 9.99
+              converted_total_in_salary_currency:
+                CurrencyRate.convert_on_date(
+                  amount: 2.0,
+                  date: 6.months.ago + 20.days,
+                  from: 'EUR',
+                  to: account_list.salary_currency
+                )
             },
             {
               donor_currency: 'CAD',
               total_in_donor_currency: 3.0,
-              converted_total_in_salary_currency: 9.99
+              converted_total_in_salary_currency:
+                CurrencyRate.convert_on_date(
+                  amount: 3.0,
+                  date: 6.months.ago + 1.day,
+                  from: 'CAD',
+                  to: account_list.salary_currency
+                )
             }
           ]
         },

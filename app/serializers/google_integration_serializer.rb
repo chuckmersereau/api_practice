@@ -10,6 +10,8 @@ class GoogleIntegrationSerializer < ApplicationSerializer
              :calendars
 
   def calendars
-    object.calendars.map { |c| { id: c['id'], name: c['summary'] } }
+    object.calendars.collect do |calendar_list_entry|
+      { id: calendar_list_entry.id, name: calendar_list_entry.summary }
+    end
   end
 end

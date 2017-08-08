@@ -1,21 +1,22 @@
+require 'google/apis/calendar_v3'
+
 class GoogleIntegration < ApplicationRecord
   belongs_to :google_account, class_name: 'Person::GoogleAccount', inverse_of: :google_integrations
   belongs_to :account_list, inverse_of: :google_integrations
 
-  attr_accessor :new_calendar
-
   serialize :calendar_integrations, Array
 
-  before_save :create_new_calendar, if: -> { new_calendar.present? }
   before_save :toggle_calendar_integration_for_appointments, :set_default_calendar, if: :calendar_integration_changed?
   after_save :toggle_email_integration, if: :email_integration_changed?
 
   delegate :sync_task, to: :calendar_integrator
 
+  validates :calendar_integrations, class: { is_a: Array }
+
   PERMITTED_ATTRIBUTES = [
     :account_list_id,
     :calendar_integration,
-    :calendar_integrations,
+    { calendar_integrations: [] },
     :calendar_id,
     :calendar_name,
     :email_integration,
@@ -39,7 +40,7 @@ class GoogleIntegration < ApplicationRecord
   end
 
   def calendar_integrator
-    @calendar_integrator ||= GoogleCalendarIntegrator.new(self)
+    @calendar_integrator ||= GoogleCalendarIntegrator.new(self, calendar_service)
   end
 
   def email_integrator
@@ -50,29 +51,24 @@ class GoogleIntegration < ApplicationRecord
     @contacts_integrator ||= GoogleContactsIntegrator.new(self)
   end
 
-  def calendar_api
-    client = google_account.client
-    @calendar_api ||= client.discovered_api('calendar', 'v3') if client
-  end
-
   def calendars
     return @calendars if @calendars
 
-    @calendars = nil
-    api = calendar_api
-    if api
-      result = google_account.client.execute(
-        api_method: api.calendar_list.list,
-        parameters: { 'userId' => 'me' }
-      )
-      calendar_list = result.data
-      @calendars = calendar_list.items.select { |c| c.accessRole == 'owner' }
+    calendar_list_entries = calendar_service&.list_calendar_lists&.items || []
+    @calendars = calendar_list_entries.select do |calendar_list_entry|
+      calendar_list_entry.access_role == 'owner'
     end
-
-    @calendars || []
   end
 
   private
+
+  def calendar_service
+    return unless google_account.authorization
+
+    @calendar_service ||= Google::Apis::CalendarV3::CalendarService.new.tap do |calendar_service|
+      calendar_service.authorization = google_account.authorization
+    end
+  end
 
   def validate_integration!(integration)
     raise "Invalid integration '#{integration}'!" unless PERMITTED_INTEGRATIONS.include?(integration)
@@ -90,17 +86,8 @@ class GoogleIntegration < ApplicationRecord
     return unless calendar_integration? && calendar_id.blank? && calendars.length == 1
 
     calendar = calendars.first
-    self.calendar_id = calendar['id']
-    self.calendar_name = calendar['summary']
-  end
-
-  def create_new_calendar
-    result = google_account.client.execute(
-      api_method: calendar_api.calendars.insert,
-      body_object: { 'summary' => new_calendar }
-    )
-    self.calendar_id = result.data['id']
-    self.calendar_name = new_calendar
+    self.calendar_id = calendar.id
+    self.calendar_name = calendar.summary
   end
 
   def toggle_email_integration
