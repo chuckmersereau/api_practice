@@ -66,6 +66,8 @@ Rails.application.configure do
 
   config.action_mailer.delivery_method = :letter_opener
 
+  config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')
+
   Rails.application.routes.default_url_options[:host] = config.action_mailer.default_url_options[:host]
   Rails.application.routes.default_url_options[:protocol] = config.action_mailer.default_url_options[:protocol]
 end
