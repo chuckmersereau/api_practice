@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 08 August 2017
+- Added pt-BR (brazilian portuguese) to the list of supported locales on the API.
+
 ## 28 July 2017
 - Added filter[display_currency] to '/api/v2/reports/monthly_giving_graph' that changes the converted currency for the graph.
 

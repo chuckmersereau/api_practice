@@ -12,6 +12,7 @@ LANGUAGES_CONSTANT = {
   'ja'         => 'Japanese',
   'ko'         => 'Korean',
   'pl'         => 'Polish',
+  'pt-BR'      => 'Portuguese (Brasil)',
   'ru'         => 'Russian',
   'es-419'     => 'Spanish (Latin America)',
   'th'         => 'Thai',
