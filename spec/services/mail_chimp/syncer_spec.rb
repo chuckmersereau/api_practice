@@ -73,9 +73,9 @@ RSpec.describe MailChimp::Syncer do
       end
 
       def expect_webhooks_instantiation_and_retrieve_call
-        expect(Gibbon::Request).to receive(:new).and_return(mock_request)
-        expect(mock_request).to receive(:lists).with(list_id).and_return(mock_list)
-        expect(mock_list).to receive(:webhooks).and_return(mock_webhooks)
+        allow(Gibbon::Request).to receive(:new).and_return(mock_request)
+        allow(mock_request).to receive(:lists).with(list_id).and_return(mock_list)
+        allow(mock_list).to receive(:webhooks).and_return(mock_webhooks)
         expect(mock_webhooks).to receive(:retrieve).and_return(
           'webhooks' => [
             {

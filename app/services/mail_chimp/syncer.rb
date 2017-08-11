@@ -92,11 +92,11 @@ class MailChimp::Syncer
   end
 
   def mail_chimp_webhooks
-    @mail_chimp_webhooks ||= mail_chimp_list.webhooks
+    mail_chimp_list.webhooks
   end
 
   def mail_chimp_list
-    @mail_chimp_list ||= gibbon.lists(list_id)
+    gibbon.lists(list_id)
   end
 
   def use_primary_list?

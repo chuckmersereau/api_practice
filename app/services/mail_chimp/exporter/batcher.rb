@@ -40,7 +40,6 @@ class MailChimp::Exporter
                               .preload(:contact_people, :primary_email_address)
 
       contacts.each_with_object([]) do |contact, members_params|
-        next unless contact.class.to_s == 'Contact'
         contact.status ||= 'Partner - Pray'
 
         people_that_belong_to_contact(relevant_people, contact).each do |person|
