@@ -8,10 +8,4 @@ RSpec.describe MailChimp::ExportContactsWorker do
 
     MailChimp::ExportContactsWorker.new.perform(mail_chimp_account.id, 'list_two', [1])
   end
-
-  it 'does not start the export if the list used is the primary list' do
-    expect_any_instance_of(MailChimp::Exporter).not_to receive(:export_contacts).with([1])
-
-    MailChimp::ExportContactsWorker.new.perform(mail_chimp_account.id, 'list_one', [1])
-  end
 end

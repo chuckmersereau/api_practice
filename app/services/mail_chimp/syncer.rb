@@ -32,7 +32,7 @@ class MailChimp::Syncer
   end
 
   def export_mpdx_contacts_to_mail_chimp
-    MailChimp::Exporter.new(mail_chimp_account).export_contacts
+    MailChimp::ExportContactsWorker.perform_async(mail_chimp_account.id, mail_chimp_account.primary_list_id, nil)
   end
 
   def delete_mail_chimp_members

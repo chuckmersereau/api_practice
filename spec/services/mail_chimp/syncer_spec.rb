@@ -40,8 +40,7 @@ RSpec.describe MailChimp::Syncer do
         expect(MailChimp::Importer).to receive(:new).and_return(mock_importer)
         expect(mock_importer).to receive(:import_all_members)
 
-        expect(MailChimp::Exporter).to receive(:new).and_return(mock_exporter)
-        expect(mock_exporter).to receive(:export_contacts)
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(mail_chimp_account.id, list_id, nil)
 
         expect do
           subject.two_way_sync_with_primary_list!

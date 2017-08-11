@@ -14,7 +14,8 @@ resource 'Contacts > Export to MailChimp' do
   let!(:appeal)   { create(:appeal, account_list: account_list) }
   let(:appeal_id) { appeal.uuid }
 
-  let(:primary_list_id)    { '1e72b58b72' }
+  let(:primary_list_id) { '1e72b58b72' }
+  let(:second_list_id) { '1e72b58b44' }
   let(:mail_chimp_account) { MailChimpAccount.new(api_key: 'fake-us4', primary_list_id: primary_list_id) }
 
   before do
@@ -34,7 +35,7 @@ resource 'Contacts > Export to MailChimp' do
 
       example 'Export to Mail Chimp [POST]', document: documentation_scope do
         explanation 'Export Contacts with the given ID to the Mail Chimp server'
-        do_request mail_chimp_list_id: primary_list_id
+        do_request mail_chimp_list_id: second_list_id
 
         expect(response_status).to eq 200
       end
