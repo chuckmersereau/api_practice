@@ -40,8 +40,7 @@ RSpec.describe MailChimp::Syncer do
         expect(MailChimp::Importer).to receive(:new).and_return(mock_importer)
         expect(mock_importer).to receive(:import_all_members)
 
-        expect(MailChimp::Exporter).to receive(:new).and_return(mock_exporter)
-        expect(mock_exporter).to receive(:export_contacts)
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(mail_chimp_account.id, list_id, nil)
 
         expect do
           subject.two_way_sync_with_primary_list!
@@ -74,9 +73,9 @@ RSpec.describe MailChimp::Syncer do
       end
 
       def expect_webhooks_instantiation_and_retrieve_call
-        expect(Gibbon::Request).to receive(:new).and_return(mock_request)
-        expect(mock_request).to receive(:lists).with(list_id).and_return(mock_list)
-        expect(mock_list).to receive(:webhooks).and_return(mock_webhooks)
+        allow(Gibbon::Request).to receive(:new).and_return(mock_request)
+        allow(mock_request).to receive(:lists).with(list_id).and_return(mock_list)
+        allow(mock_list).to receive(:webhooks).and_return(mock_webhooks)
         expect(mock_webhooks).to receive(:retrieve).and_return(
           'webhooks' => [
             {

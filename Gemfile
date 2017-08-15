@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 source 'https://gems.contribsys.com/' do
-  gem 'sidekiq-pro', '~> 3.4.0'
+  gem 'sidekiq-pro', '~> 3.5.0'
 end
 
 gem 'auth', path: 'engines/auth'
@@ -39,6 +39,7 @@ gem 'google_contacts_api', git: 'https://github.com/CruGlobal/google_contacts_ap
 gem 'google_timezone', '~> 0.0.5'
 gem 'graphql', '~> 1.4.2'
 gem 'iniparse', '~> 1.1.6'
+gem 'inky-rb', '~> 1.3.7', require: 'inky'
 gem 'jwt', '~> 1.5.6'
 gem 'kaminari', '~> 0.16.3'
 gem 'koala', '~> 1.9.0'
@@ -49,6 +50,7 @@ gem 'oauth', git: 'https://github.com/CruGlobal/oauth-ruby'
 gem 'oj', '~> 2.18.5'
 gem 'pg', '~> 0.18.2'
 gem 'phonelib', '~> 0.5.4'
+gem 'premailer-rails', '~> 1.9.7'
 gem 'puma', '~> 3.6.0'
 gem 'pundit', '~> 1.1.0'
 gem 'rack-cors', '~> 0.4.0', require: 'rack/cors'

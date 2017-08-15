@@ -95,6 +95,12 @@ describe WebRouter do
     end
   end
 
+  describe '.tasks_url' do
+    it 'returns the expected url' do
+      expect(described_class.tasks_url).to eq('https://mpdx.org/tasks')
+    end
+  end
+
   describe '.person_url' do
     let(:person) { double(uuid: 'person_uuid', contact: double(uuid: 'contact_uuid')) }
 

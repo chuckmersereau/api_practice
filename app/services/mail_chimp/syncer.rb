@@ -32,7 +32,7 @@ class MailChimp::Syncer
   end
 
   def export_mpdx_contacts_to_mail_chimp
-    MailChimp::Exporter.new(mail_chimp_account).export_contacts
+    MailChimp::ExportContactsWorker.perform_async(mail_chimp_account.id, mail_chimp_account.primary_list_id, nil)
   end
 
   def delete_mail_chimp_members
@@ -92,11 +92,11 @@ class MailChimp::Syncer
   end
 
   def mail_chimp_webhooks
-    @mail_chimp_webhooks ||= mail_chimp_list.webhooks
+    mail_chimp_list.webhooks
   end
 
   def mail_chimp_list
-    @mail_chimp_list ||= gibbon.lists(list_id)
+    gibbon.lists(list_id)
   end
 
   def use_primary_list?

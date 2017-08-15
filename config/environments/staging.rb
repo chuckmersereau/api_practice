@@ -81,6 +81,8 @@ Rails.application.configure do
     protocol: 'https'
   }
 
+  config.action_mailer.asset_host = 'https://api.stage.mpdx.org'
+
   #config.font_assets.origin = 'https://mpdx.org'
   config.logger = ActiveSupport::TaggedLogging.new(Logger::Syslog.new("mpdx_api-#{ENV['ENVIRONMENT']}", Syslog::LOG_LOCAL7))
   config.log_tags = [->(request) { "ReqID:#{request.uuid}" }]

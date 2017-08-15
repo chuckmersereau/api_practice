@@ -54,7 +54,7 @@ class Task < Activity
       ],
       activity_contacts_attributes: [
         :_destroy,
-        :contact_id,
+        :id,
         :overwrite
       ],
       contacts_attributes: [

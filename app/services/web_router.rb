@@ -40,6 +40,10 @@ class WebRouter
     "#{base_url}/contacts/#{contact.uuid}#{"/#{tab}" if tab}"
   end
 
+  def self.tasks_url
+    "#{base_url}/tasks"
+  end
+
   def self.person_url(person)
     "#{base_url}/contacts/#{person.contact.uuid}?personId=#{person.uuid}"
   end

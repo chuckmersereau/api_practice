@@ -5,11 +5,19 @@ class Api::V2::Contacts::ExportToMailChimpController < Api::V2Controller
     require_mail_chimp_list_id
     load_mail_chimp_account
     authorize_mail_chimp_account
+    raise_if_selected_list_is_primary_list
     export_to_mail_chimp
     render_200
   end
 
   private
+
+  def raise_if_selected_list_is_primary_list
+    return unless @mail_chimp_account.primary_list_id == params[:mail_chimp_list_id]
+
+    raise Exceptions::BadRequestError,
+          'mail_chimp_list_id cannot be primary_list_id, select different list'
+  end
 
   def require_mail_chimp_list_id
     raise Exceptions::BadRequestError,

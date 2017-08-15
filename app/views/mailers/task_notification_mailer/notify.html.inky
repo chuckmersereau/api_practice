@@ -1,0 +1,44 @@
+<% content_for :reason do %>
+  <%= _('You are getting this notification because you selected the notification option on your task details.') %>
+<% end %>
+<h3>
+  <%= _('Hey%{name},') % { name: " #{@user.first_name}" } %>
+</h3>
+<h4>
+<% if @task.start_at.today? %>
+<%= _("You have a task due today.") %>
+<% elsif @task.start_at.to_date == Time.now.to_date.tomorrow %>
+<%= _("You have a task due tomorrow.") %>
+<% else %>
+<%= _("You have a task due soon.") %>
+<% end %>
+</h4>
+<p>
+  <%= _('You can view, edit and complete this task from the') %>
+  <a href="<%= WebRouter.tasks_url %>"><%= _('tasks page.') %></a>
+</p>
+<row>
+  <columns small="12" large="2" style="padding-left: 0;">
+    <%= l @task.start_at, format: :time %>
+    <br>
+    <small><%= l@task.start_at.to_date, format: :short %></small>
+  </columns>
+  <columns small="12" large="10">
+    <strong><%= @task.activity_type %></strong>
+    <%= @task.subject %>
+    <% if @task.contacts.length > 0 %>
+      <% @task.contacts.each do |contact| %>
+        <br>
+        <a href="<%= WebRouter.contact_url(contact, 'tasks') %>"><%= contact.name %></a>
+      <% end %>
+    <% end %>
+    <% if @task.tags.length > 0 %>
+      <br>
+      <%= @task.tags.map(&:name).join(' | ') %>
+    <% end %>
+    <% unless @task.location.blank? %>
+      <br>
+      <%= @task.location %>
+    <% end %>
+  </columns>
+</row>

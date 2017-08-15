@@ -6,7 +6,6 @@ class MailChimp::ExportContactsWorker
     mail_chimp_account = MailChimpAccount.find_by(id: mail_chimp_account_id)
 
     return unless mail_chimp_account
-    return if mail_chimp_account.primary_list_id == list_id
 
     MailChimp::Exporter.new(mail_chimp_account, list_id)
                        .export_contacts(contact_ids)

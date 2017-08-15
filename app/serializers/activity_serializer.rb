@@ -20,6 +20,7 @@ class ActivitySerializer < ApplicationSerializer
   has_many :people
   has_many :email_addresses
   has_many :phone_numbers
+  has_many :activity_contacts
 
   belongs_to :account_list
 

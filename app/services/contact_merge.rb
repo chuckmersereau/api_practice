@@ -5,6 +5,45 @@ class ContactMerge
   end
 
   def merge
+    begin
+      Contact.find(@winner.id)
+      Contact.find(@other.id)
+    rescue ActiveRecord::RecordNotFound
+      return
+    end
+
+    merge_contacts
+
+    delete_losing_contact
+
+    begin
+      @winner.reload
+    rescue ActiveRecord::RecordNotFound
+      return
+    end
+
+    fixup_winning_contact
+  end
+
+  def self.merged_send_newsletter(winner, other)
+    return 'Both' if winner == 'Both' || other == 'Both'
+    send_newsletter_word(winner == 'Email' || other == 'Email',
+                         winner == 'Physical' || other == 'Physical')
+  end
+
+  def self.send_newsletter_word(email, physical)
+    if email && physical
+      'Both'
+    elsif email
+      'Email'
+    elsif physical
+      'Physical'
+    end
+  end
+
+  private
+
+  def merge_contacts
     Contact.transaction(requires_new: true) do
       # Update related records
       @other.messages.update_all(contact_id: @winner.id)
@@ -71,34 +110,19 @@ class ContactMerge
 
       @winner.save(validate: false)
     end
+  end
 
-    # Delete the losing record
-    begin
-      @other.reload
-      @other.destroy
-    rescue ActiveRecord::RecordNotFound; end
+  def delete_losing_contact
+    @other.reload
+    @other.destroy
+  rescue ActiveRecord::RecordNotFound
+  end
 
-    @winner.reload
+  def fixup_winning_contact
     @winner.merge_people
     @winner.merge_donor_accounts
 
     # Update donation total after donor account ids are all assigned correctly
     @winner.update_all_donation_totals
-  end
-
-  def self.merged_send_newsletter(winner, other)
-    return 'Both' if winner == 'Both' || other == 'Both'
-    send_newsletter_word(winner == 'Email' || other == 'Email',
-                         winner == 'Physical' || other == 'Physical')
-  end
-
-  def self.send_newsletter_word(email, physical)
-    if email && physical
-      'Both'
-    elsif email
-      'Email'
-    elsif physical
-      'Physical'
-    end
   end
 end

@@ -391,12 +391,12 @@ class Contact < ApplicationRecord
   def generated_envelope_greeting
     return name if siebel_organization?
     working_name = name.to_s.strip
-    working_name.chomp!(',') if working_name.ends_with? ','
-    return working_name unless working_name.include? ','
+    working_name.chomp!(',') if working_name.ends_with?(',')
+    return working_name unless working_name.include?(',')
     last_name = working_name.split(',')[0].strip
     first_names = working_name.split(',')[1].strip
     return first_names + ' ' + last_name unless first_names =~ /\((\w|\W)*\)/
-    first_names = first_names.split(/ & | #{_('and')} /)
+    first_names = first_names.split(/ & | #{_('and')} | and /)
     if first_names[0] =~ /\((\w|\W)*\)/
       first_names.each { |first_name| first_name.sub!(/\((\w|\W)*\)/, '') }
       first_names.each(&:strip!)
@@ -407,7 +407,7 @@ class Contact < ApplicationRecord
                      end
       return env_greeting
     end
-    if donor_accounts.where(name: name).any?
+    if donor_accounts.where(name: name).any? && first_names[1] =~ /\((\w|\W)*\)/
       # Contacts from the donor system usually have nicknames, not a different
       # last name in paren, i.e. "Doe, John and Janet (Jane)" not "Doe, John and Janet (Smith)"
       nickname_stripped = first_names[1].gsub!(/\(.*?\)/, '').gsub(/\s\s+/, ' ').strip

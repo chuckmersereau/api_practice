@@ -49,6 +49,7 @@ resource 'Tasks' do
   let(:resource_associations) do
     %w(
       account_list
+      activity_contacts
       comments
       contacts
       email_addresses

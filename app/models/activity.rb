@@ -47,20 +47,6 @@ class Activity < ApplicationRecord
     end
   end
 
-  def activity_contacts_attributes=(hash_or_array)
-    contacts_array = hash_or_array.is_a?(Hash) ? hash_or_array.values : hash_or_array
-    contacts_array.each do |contact_attributes|
-      next unless contact_attributes['contact_id'].present?
-
-      contact = Contact.find(contact_attributes['contact_id'])
-      if contact_attributes['_destroy'].to_s == 'true'
-        contacts.delete(contact) if contacts.include?(contact)
-      else
-        contacts << contact unless contacts.include?(contact)
-      end
-    end
-  end
-
   def activity_comment=(hash)
     comments.new(hash) if hash.values.any?(&:present?)
   end

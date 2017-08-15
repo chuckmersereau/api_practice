@@ -1,7 +1,12 @@
 class TaskNotificationMailer < ApplicationMailer
-  def notify(task)
-    @task = task
-    mail to: task.account_list.users.map(&:email).compact.map(&:email),
-         subject: _('Task on MPDX')
+  layout 'inky'
+
+  def notify(task_id, user_id)
+    @task = Task.find_by(id: task_id)
+    @user = User.find_by(id: user_id)
+    Time.use_zone(@user.time_zone) do
+      mail to: @user.email.try(:email),
+           subject: _('Task on MPDX') if @task && @user
+    end
   end
 end

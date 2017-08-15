@@ -36,44 +36,42 @@ RSpec.describe Reports::DonationMonthlyTotals do
   end
 
   context 'donation_totals_by_month' do
-    let(:expected_donation_amounts_by_month) do
+    let(:totals) do
       [
         {
-          month: 6.months.ago.beginning_of_month.to_date,
-          totals_by_currency: [
-            {
-              donor_currency: 'EUR',
-              total_in_donor_currency: 2.0,
-              converted_total_in_salary_currency:
-                CurrencyRate.convert_on_date(
-                  amount: 2.0,
-                  date: 6.months.ago + 20.days,
-                  from: 'EUR',
-                  to: account_list.salary_currency
-                )
-            },
-            {
-              donor_currency: 'CAD',
-              total_in_donor_currency: 3.0,
-              converted_total_in_salary_currency:
-                CurrencyRate.convert_on_date(
-                  amount: 3.0,
-                  date: 6.months.ago + 1.day,
-                  from: 'CAD',
-                  to: account_list.salary_currency
-                )
-            }
-          ]
+          donor_currency: 'EUR',
+          total_in_donor_currency: 2.0,
+          converted_total_in_salary_currency:
+            CurrencyRate.convert_on_date(
+              amount: 2.0,
+              date: 6.months.ago + 20.days,
+              from: 'EUR',
+              to: account_list.salary_currency
+            )
         },
         {
-          month: 5.months.ago.beginning_of_month.to_date,
-          totals_by_currency: []
+          donor_currency: 'CAD',
+          total_in_donor_currency: 3.0,
+          converted_total_in_salary_currency:
+            CurrencyRate.convert_on_date(
+              amount: 3.0,
+              date: 6.months.ago + 1.day,
+              from: 'CAD',
+              to: account_list.salary_currency
+            )
         }
       ]
     end
 
+    let(:months) do
+      [6.months.ago.beginning_of_month.to_date, 5.months.ago.beginning_of_month.to_date]
+    end
+
     it 'returns a hash with monthly totals by currency' do
-      expect(subject.donation_totals_by_month).to eq(expected_donation_amounts_by_month)
+      subject_totals = subject.donation_totals_by_month.map { |m| m[:totals_by_currency] }.flatten
+      subject_months = subject.donation_totals_by_month.map { |m| m[:month] }
+      expect(subject_months).to contain_exactly(*months)
+      expect(subject_totals).to contain_exactly(*totals)
     end
   end
 end
