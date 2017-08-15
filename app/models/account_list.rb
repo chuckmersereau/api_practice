@@ -297,11 +297,6 @@ class AccountList < ApplicationRecord
     QueueContactDupMergeBatchWorker.perform_async(id, since_time.to_i)
   end
 
-  # Download all donations / info for all accounts associated with this list
-  def self.update_linked_org_accounts
-    AsyncScheduler.schedule_over_24h(with_linked_org_accounts, :import_data, :api_account_list_import_data)
-  end
-
   def merge(other)
     AccountList::Merge.new(self, other).merge
   end
@@ -322,12 +317,6 @@ class AccountList < ApplicationRecord
   end
 
   def async_send_chalkline_list
-    # Since AccountList normally uses the lower priority :import queue use the :default queue for the
-    # email to Chalkline which the user would expect to see soon after their clicking the button to send it.
-    Sidekiq::Client.enqueue_to(:api_default, self.class, id, :send_chalkline_mailing_list)
-  end
-
-  def send_chalkline_mailing_list
     ChalklineMailer.delay.mailing_list(self)
   end
 

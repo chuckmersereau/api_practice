@@ -21,10 +21,9 @@ RSpec.describe AccountList::ChalklineMails, type: :model do
 
     subject { service.send_later }
 
-    it 'enqueus a new background job' do
-      expect { subject }.to change { AccountList.jobs.size }.by(1)
-      expect(AccountList.jobs.first['class']).to eq 'AccountList'
-      expect(AccountList.jobs.first['args']).to eq [account_list.id, 'send_chalkline_mailing_list']
+    it 'enqueues a new background job' do
+      expect(ChalklineMailer).to receive_message_chain(:delay, :mailing_list).with(account_list)
+      subject
     end
   end
 end

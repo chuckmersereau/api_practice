@@ -401,19 +401,6 @@ describe AccountList do
     end
   end
 
-  context '.update_linked_org_accounts' do
-    it 'schedules the linked accounts to spread over 24 hours' do
-      account_list = instance_double(AccountList)
-      expect(AccountList).to receive(:with_linked_org_accounts) do
-        [account_list]
-      end
-      expect(AsyncScheduler).to receive(:schedule_over_24h)
-        .with([account_list], :import_data, :api_account_list_import_data)
-
-      AccountList.update_linked_org_accounts
-    end
-  end
-
   context '#async_merge_contacts' do
     it 'merges duplicate contacts by common name and donor number / address' do
       Sidekiq::Testing.inline!

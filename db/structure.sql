@@ -1677,7 +1677,8 @@ CREATE TABLE master_addresses (
     updated_at timestamp without time zone NOT NULL,
     latitude character varying,
     longitude character varying,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    last_geocoded_at timestamp without time zone
 );
 
 
@@ -6545,4 +6546,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170801182230');
 INSERT INTO schema_migrations (version) VALUES ('20170803172858');
 
 INSERT INTO schema_migrations (version) VALUES ('20170817184253');
+
+INSERT INTO schema_migrations (version) VALUES ('20170816144835');
 

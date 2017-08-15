@@ -103,11 +103,6 @@ class Person::FacebookAccount < ApplicationRecord
     save
   end
 
-  # Refresh any tokens that will be expiring soon
-  def self.refresh_tokens
-    Person::FacebookAccount.where('token_expires_at < ? AND token_expires_at > ?', 2.days.from_now, Time.now).find_each(&:refresh_token)
-  end
-
   def self.search(user, params)
     if account = user.facebook_accounts.first
       FbGraph::User.search(params.slice(:first_name, :last_name).values.join(' '), access_token: account.token)
