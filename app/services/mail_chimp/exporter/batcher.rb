@@ -24,12 +24,11 @@ class MailChimp::Exporter
         {
           method: 'PATCH',
           path: "/lists/#{list_id}/members/#{email_hash(email)}",
-          body: { status: 'unsubscribed' }
+          body: { status: 'unsubscribed' }.to_json
         }
       end
-      operations.in_groups_of(50, false) do |group_of_operations|
-        gibbon_wrapper.batches.create(body: { operations: group_of_operations })
-      end
+
+      send_batch_operations(operations)
     end
 
     private
@@ -101,19 +100,19 @@ class MailChimp::Exporter
         }
       end
 
-      operations.in_groups_of(50, false) do |group_of_operations|
-        batch_create_call(group_of_operations)
-      end
+      send_batch_operations(operations)
     end
 
-    def batch_create_call(operations)
+    def send_batch_operations(operations)
       # MailChimp is giving a weird error every once in a while.
       # At first glance it seems to be a Bad Request Error, however the
       # legitimate Bad Request error message is different. Because I've never
       # seen this happen more than twice in a row, I think that this solution
       # will do.
-      escape_intermittent_bad_request_error do
-        gibbon_wrapper.batches.create(body: { operations: operations })
+      operations.in_groups_of(50, false) do |group_of_operations|
+        escape_intermittent_bad_request_error do
+          gibbon_wrapper.batches.create(body: { operations: group_of_operations })
+        end
       end
     end
 
@@ -122,7 +121,8 @@ class MailChimp::Exporter
 
       yield
     rescue Gibbon::MailChimpError => error
-      raise if intermittent_error?(error) || (retry_count += 1) >= 5
+      raise unless intermittent_error?(error)
+      raise if (retry_count += 1) >= 5
 
       retry
     end
@@ -132,11 +132,11 @@ class MailChimp::Exporter
         intermittent_nesting_too_deep_error?(error)
     end
 
-    def not_the_intermittent_nesting_too_deep_error?(error)
+    def intermittent_nesting_too_deep_error?(error)
       error.message.include?('nested too deeply')
     end
 
-    def not_the_intermittent_bad_request_error?(error)
+    def intermittent_bad_request_error?(error)
       error.message.include?('<H1>Bad Request</H1>')
     end
 

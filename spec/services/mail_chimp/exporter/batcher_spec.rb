@@ -96,7 +96,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
         {
           method: 'PATCH',
           path: '/lists/list_one/members/1919bfc4fa95c7f6b231e583da677a17',
-          body: { status: 'unsubscribed' }
+          body: { status: 'unsubscribed' }.to_json
         }
       ]
     end
