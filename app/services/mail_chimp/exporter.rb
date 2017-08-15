@@ -60,7 +60,7 @@ class MailChimp::Exporter
 
   def fetch_contacts_to_export(contact_ids)
     relevant_contact_scope = mail_chimp_account.relevant_contacts(contact_ids)
-                                               .includes(:primary_person, people: :primary_email_address)
+                                               .includes(primary_contact_person: :person, people: :primary_email_address)
     relevant_contact_scope.find_each.map do |contact|
       contact if contact_changed_or_new?(contact)
     end.compact
