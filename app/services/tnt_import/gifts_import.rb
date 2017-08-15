@@ -98,7 +98,7 @@ class TntImport::GiftsImport
     donor_account = contact.donor_accounts.first
     return donor_account if donor_account
 
-    donor_account = Retryable.retryable(sleep: 60, tries: 3) do
+    donor_account = Retryable.retryable(tries: 3) do
       # Find a unique donor account_number for this contact. Try the current max numeric account number
       # plus one. If that is a collision due to a race condition, an exception will be raised as there is a
       # unique constraint on (organization_id, account_number) for donor_accounts. Just wait and try
