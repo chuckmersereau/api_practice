@@ -7,6 +7,8 @@ RSpec.describe Task::Filter::ActivityType do
   let!(:task_one)   { create(:task, account_list: account_list, activity_type: 'Call') }
   let!(:task_two)   { create(:task, account_list: account_list, activity_type: 'Appointment') }
   let!(:task_three) { create(:task, account_list: account_list, activity_type: 'Email') }
+  let!(:task_four)  { create(:task, account_list: account_list, activity_type: nil) }
+  let!(:task_five)  { create(:task, account_list: account_list, activity_type: '') }
 
   describe '#config' do
     it 'returns expected config' do
@@ -14,6 +16,7 @@ RSpec.describe Task::Filter::ActivityType do
                                                                 name: :activity_type,
                                                                 options: [
                                                                   { name: '-- Any --', id: '', placeholder: 'None' },
+                                                                  { name: '-- None --', id: 'none' },
                                                                   { name: 'Call', id: 'Call' },
                                                                   { name: 'Appointment', id: 'Appointment' },
                                                                   { name: 'Email', id: 'Email' },
@@ -52,13 +55,17 @@ RSpec.describe Task::Filter::ActivityType do
 
     context 'filter by activity_type' do
       it 'filters multiple activity_types' do
-        expect(described_class.query(tasks, { activity_type: 'Call, Appointment' }, nil).to_a).to include(task_one, task_two)
+        expect(described_class.query(tasks, { activity_type: 'Call, Appointment,none' }, nil).to_a).to eq([task_one, task_two, task_four, task_five])
+        expect(described_class.query(tasks, { activity_type: 'call,none, Email,' }, nil).to_a).to eq([task_three, task_four, task_five])
       end
       it 'filters a single activity_type' do
-        expect(described_class.query(tasks, { activity_type: 'Email' }, nil).to_a).to include(task_three)
+        expect(described_class.query(tasks, { activity_type: 'Email' }, nil).to_a).to eq([task_three])
       end
       it 'filters by non existing activity_type' do
-        expect(described_class.query(tasks, { activity_type: 'Newsletter' }, nil).to_a).to be_empty
+        expect(described_class.query(tasks, { activity_type: 'Newsletter' }, nil).to_a).to eq([])
+      end
+      it 'filters by none' do
+        expect(described_class.query(tasks, { activity_type: 'none' }, nil).to_a).to eq([task_four, task_five])
       end
     end
   end
