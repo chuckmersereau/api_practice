@@ -1,7 +1,6 @@
 class Task::Filter::ContactType < Task::Filter::Base
   def execute_query(tasks, filters)
-    tasks.joins(:contacts)
-         .where(contacts: { id: Contact::Filter::ContactType.query(contact_scope(tasks), filters, account_lists).ids })
+    tasks.joins(:contacts).merge(Contact::Filter::ContactType.query(Contact, filters, account_lists))
   end
 
   def title

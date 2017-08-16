@@ -1,7 +1,6 @@
 class Task::Filter::ContactInfoFacebook < Task::Filter::Base
   def execute_query(tasks, filters)
-    tasks.joins(:contacts)
-         .where(contacts: { id: Contact::Filter::ContactInfoFacebook.query(contact_scope(tasks), filters, account_lists).ids })
+    tasks.joins(:contacts).merge(Contact::Filter::ContactInfoFacebook.query(Contact, filters, account_lists))
   end
 
   delegate :custom_options,
