@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 17 August 2017
+- Moved appeals donations attribute into relationships.
+
 ## 08 August 2017
 - Added pt-BR (brazilian portuguese) to the list of supported locales on the API.
 

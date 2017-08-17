@@ -11,10 +11,6 @@ attributes: &attrs
     description:
       The description for this Appeal
     type: string
-  donations:
-    description:
-      The donations given to this Appeal
-    type: '[Donation]'
   end_date:
     description:
       The date in which this Appeal ends
@@ -44,6 +40,12 @@ relationships: &rels
         An array of Contact references for the Appeal
       type: '[Contact]'
 
+  donations:
+    data:
+      description:
+        An array of Donation references for the Appeal
+      type: '[Donation]'
+
 mutation_attributes: &mutation_attrs
   <<: *attrs
   currencies:
@@ -64,7 +66,7 @@ parameters:
     filters:
       account_list_id:
         description:
-          Filter by Account List; accepts an Account List `id`
+          Filter by Account List; accepts an Account List `id`; this is required if you want the Contact included on Donations.
         type: UUID string
       excluded:
         description:
