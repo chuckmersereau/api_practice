@@ -61,6 +61,22 @@ describe Person::GmailAccount do
 
       gmail_account.import_emails(account_list)
     end
+
+    it 'does not log a blacklisted received email' do
+      expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
+      expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
+      expect(gmail_account).to_not receive(:log_email)
+
+      gmail_account.import_emails(account_list, [sender_email.email])
+    end
+
+    it 'does not log a blacklisted sent email' do
+      expect(sent_mailbox).to  receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([gmail_uid])
+      expect(all_mailbox).to   receive(:fetch_uids).with(on: google_account.last_email_sync.to_date).and_return([])
+      expect(gmail_account).to_not receive(:log_email)
+
+      gmail_account.import_emails(account_list, [recipient_email.email])
+    end
   end
 
   context '#log_email' do

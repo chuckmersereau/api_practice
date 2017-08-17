@@ -7,7 +7,7 @@ describe GoogleEmailIntegrator, '#sync_mail' do
     gmail_account = double
     expect(Person::GmailAccount).to receive(:new) { gmail_account }
     expect(gmail_account).to receive(:import_emails)
-      .with(integration.account_list)
+      .with(integration.account_list, ['black@listed.com'])
     integrator.sync_mail
   end
 
@@ -20,6 +20,6 @@ describe GoogleEmailIntegrator, '#sync_mail' do
   def build_google_integration(email_integration)
     account_list = build(:account_list)
     build(:google_integration, email_integration: email_integration,
-                               account_list: account_list)
+                               account_list: account_list, email_blacklist: ['black@listed.com'])
   end
 end

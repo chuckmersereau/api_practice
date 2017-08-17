@@ -5,25 +5,29 @@ class GoogleIntegration < ApplicationRecord
   belongs_to :account_list, inverse_of: :google_integrations
 
   serialize :calendar_integrations, Array
+  serialize :email_blacklist, Array
 
   before_save :toggle_calendar_integration_for_appointments, :set_default_calendar, if: :calendar_integration_changed?
   after_save :toggle_email_integration, if: :email_integration_changed?
 
   delegate :sync_task, to: :calendar_integrator
 
-  validates :calendar_integrations, class: { is_a: Array }
+  validates :calendar_integrations, :email_blacklist, class: { is_a: Array }
 
   PERMITTED_ATTRIBUTES = [
     :account_list_id,
-    :calendar_integration,
-    { calendar_integrations: [] },
     :calendar_id,
+    :calendar_integration,
     :calendar_name,
-    :email_integration,
     :contacts_integration,
+    :email_integration,
     :overwrite,
     :updated_in_db_at,
-    :uuid
+    :uuid,
+    {
+      calendar_integrations: [],
+      email_blacklist: []
+    }
   ].freeze
 
   PERMITTED_INTEGRATIONS = %w(calendar email contacts).freeze

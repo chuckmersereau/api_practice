@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 18 August 2017
+- Added email_blacklist attribute to google_integrations.
+
 ## 17 August 2017
 - Moved appeals donations attribute into relationships.
 

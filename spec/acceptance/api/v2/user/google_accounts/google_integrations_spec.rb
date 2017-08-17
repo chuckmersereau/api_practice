@@ -28,6 +28,7 @@ resource 'Google Integrations' do
       calendar_id
       calendar_name
       email_integration
+      email_blacklist
       contacts_integration
       calendars
     )
@@ -118,40 +119,78 @@ resource 'Google Integrations' do
       end
     end
 
-    # update
-    put '/api/v2/user/google_accounts/:google_account_id/google_integrations/:id' do
-      with_options scope: [:data, :attributes] do
-        # list out the PUT params here
-        parameter 'attribute_name', 'Description of the Attribute'
+    describe 'update' do
+      put '/api/v2/user/google_accounts/:google_account_id/google_integrations/:id' do
+        with_options scope: [:data, :attributes] do
+          # list out the PUT params here
+          parameter 'attribute_name', 'Description of the Attribute'
+        end
+
+        example 'Google Integration [UPDATE]', document: documentation_scope do
+          explanation 'Update Google Integration'
+
+          # Merge with the updated_in_db_at value provided by the server.
+          # Ex: updated_in_db_at: email_address.updated_at
+          do_request data: form_data
+          check_resource(additional_attribute_keys)
+          expect(response_status).to eq 200
+        end
+
+        [:calendar_integrations, :email_blacklist].each do |attribute_name|
+          example "It updates the #{attribute_name} array", document: false do
+            google_integration.update!(calendar_integration: true, attribute_name => ['Test'])
+            data = form_data
+            data[:attributes][:calendar_integration] = true
+            data[:attributes][attribute_name] = %w(Test 1234)
+
+            do_request data: data
+            check_resource(additional_attribute_keys)
+            expect(response_status).to eq 200
+            expect(json_response['data']['attributes'][attribute_name.to_s]).to eq(%w(Test 1234))
+          end
+
+          example "It updates the #{attribute_name} array to be empty", document: false do
+            google_integration.update!(calendar_integration: true, attribute_name => ['Test'])
+            data = form_data
+            data[:attributes][:calendar_integration] = true
+            data[:attributes][attribute_name] = []
+
+            do_request data: data
+            check_resource(additional_attribute_keys)
+            expect(response_status).to eq 200
+            expect(json_response['data']['attributes'][attribute_name.to_s]).to eq([])
+          end
+
+          example "It does not set the #{attribute_name} array if the param is not sent", document: false do
+            google_integration.update!(calendar_integration: true, attribute_name => ['Test'])
+            data = form_data
+            data[:attributes][:calendar_integration] = true
+            data[:attributes].delete(attribute_name)
+
+            do_request data: data
+            check_resource(additional_attribute_keys)
+            expect(response_status).to eq 200
+            expect(json_response['data']['attributes'][attribute_name.to_s]).to eq(['Test'])
+          end
+        end
       end
 
-      example 'Google Integration [UPDATE]', document: documentation_scope do
-        explanation 'Update Google Integration'
+      patch '/api/v2/user/google_accounts/:google_account_id/google_integrations/:id' do
+        with_options scope: [:data, :attributes] do
+          # list out the PATCH params here
+          parameter 'attribute_name', 'Description of the Attribute'
+        end
 
-        # Merge with the updated_in_db_at value provided by the server.
-        # Ex: updated_in_db_at: email_address.updated_at
-        do_request data: form_data
-        check_resource(additional_attribute_keys)
-        expect(response_status).to eq 200
-      end
-    end
+        example 'Google Integration [UPDATE]', document: documentation_scope do
+          explanation 'Update Google Integration'
 
-    # update
-    patch '/api/v2/user/google_accounts/:google_account_id/google_integrations/:id' do
-      with_options scope: [:data, :attributes] do
-        # list out the PATCH params here
-        parameter 'attribute_name', 'Description of the Attribute'
-      end
+          # Merge with the updated_in_db_at value provided by the server.
+          # Ex: updated_in_db_at: email_address.updated_at
+          do_request data: form_data
 
-      example 'Google Integration [UPDATE]', document: documentation_scope do
-        explanation 'Update Google Integration'
-
-        # Merge with the updated_in_db_at value provided by the server.
-        # Ex: updated_in_db_at: email_address.updated_at
-        do_request data: form_data
-
-        check_resource(additional_attribute_keys)
-        expect(response_status).to eq 200
+          check_resource(additional_attribute_keys)
+          expect(response_status).to eq 200
+        end
       end
     end
 

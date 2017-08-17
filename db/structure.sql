@@ -1424,7 +1424,8 @@ CREATE TABLE google_integrations (
     contacts_last_synced timestamp without time zone,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
     updated_at timestamp without time zone DEFAULT now() NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    email_blacklist text
 );
 
 
@@ -6542,4 +6543,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170731185156');
 INSERT INTO schema_migrations (version) VALUES ('20170801182230');
 
 INSERT INTO schema_migrations (version) VALUES ('20170803172858');
+
+INSERT INTO schema_migrations (version) VALUES ('20170817184253');
 
