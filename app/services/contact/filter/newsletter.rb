@@ -3,14 +3,16 @@ class Contact::Filter::Newsletter < Contact::Filter::Base
     contacts = case filters[:newsletter]
                when 'all'
                  contacts.where.not(send_newsletter: [nil, ''])
-               when 'none'
+               when 'no_value'
                  contacts.where(send_newsletter: [nil, ''])
+               when 'none'
+                 contacts.where(send_newsletter: 'None')
                when 'address'
                  contacts.where(send_newsletter: %w(Physical Both))
                when 'email'
                  contacts.where(send_newsletter: %w(Email Both))
                when 'both'
-                 contacts.where(send_newsletter: %w(Both))
+                 contacts.where(send_newsletter: 'Both')
                else
                  contacts
                end
@@ -25,8 +27,13 @@ class Contact::Filter::Newsletter < Contact::Filter::Base
     'radio'
   end
 
+  def default_options
+    []
+  end
+
   def custom_options
-    [{ name: _('None Selected'), id: 'none' },
+    [{ name: _('Nothing Selected'), id: 'no_value' },
+     { name: _('None'), id: 'none' },
      { name: _('All'), id: 'all' },
      { name: _('Physical'), id: 'address' },
      { name: _('Email'), id: 'email' },

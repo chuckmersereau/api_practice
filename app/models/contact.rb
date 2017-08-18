@@ -174,7 +174,6 @@ class Contact < ApplicationRecord
 
   before_save :set_notes_saved_at, :update_late_at, :check_state_for_mail_chimp_sync
   after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
-  before_create :set_send_newsletter
   after_create :create_people_from_contact, if: :prefill_attributes_on_create
   before_destroy :delete_from_letter_services, :delete_people
   LETTER_SERVICES = [:pls, :prayer_letters].freeze
@@ -221,7 +220,7 @@ class Contact < ApplicationRecord
     ASSIGNABLE_LIKELY_TO_GIVE
   end
 
-  ASSIGNABLE_SEND_NEWSLETTER = %w(Physical Email Both).freeze
+  ASSIGNABLE_SEND_NEWSLETTER = %w(Physical Email Both None).freeze
   assignable_values_for :send_newsletter, allow_blank: true do
     ASSIGNABLE_SEND_NEWSLETTER
   end
@@ -848,9 +847,5 @@ class Contact < ApplicationRecord
     else
       1 # default
     end
-  end
-
-  def set_send_newsletter
-    self.send_newsletter ||= 'Email'
   end
 end
