@@ -38,6 +38,11 @@ relationships: &rels
       description:
         An array of Notification Preference references for the Account List
       type: '[Notification Preference]'
+  organization_accounts:
+    data:
+      description:
+        An array of Organization Accounts connected to the Account List
+      type: '[Organization Account]'
 
 object: &obj
   attributes:

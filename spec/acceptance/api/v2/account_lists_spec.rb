@@ -43,6 +43,7 @@ resource 'Account Lists' do
   let(:resource_associations) do
     %w(
       notification_preferences
+      organization_accounts
     )
   end
 
