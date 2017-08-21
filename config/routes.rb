@@ -78,7 +78,7 @@ Rails.application.routes.draw do
                 resource :bulk, only: [:create, :destroy], controller: :bulk
               end
               constraints(id: /.+/) do
-                resources :duplicates, only: [:index, :destroy]
+                resources :duplicates, only: [:index, :show, :update]
                 namespace :people do
                   resources :duplicates, only: [:index, :destroy]
                 end

@@ -36,7 +36,7 @@ class Contact::FindFromName
   end
 
   def parse_and_rebuild_name
-    @parse_and_rebuild_name ||= Contact::NameBuilder.new(parsed_name_parts).name
+    @parse_and_rebuild_name ||= Contact::NameBuilder.new(name).name
   end
 
   def parse_and_rebuild_first_name

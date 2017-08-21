@@ -28,8 +28,8 @@ RSpec.describe Tools::Analytics do
     let(:people_duplicates) { double }
 
     before do
-      allow_any_instance_of(Contact::DuplicatesFinder).to receive(:find).and_return(contact_duplicates)
-      allow(contact_duplicates).to receive(:count).and_return(3)
+      allow_any_instance_of(Contact::DuplicatePairsFinder).to receive(:find_and_save)
+      allow(DuplicateRecordPair).to receive_message_chain(:type, :where, :count).and_return(3)
 
       allow_any_instance_of(Person::DuplicatesFinder).to receive(:find).and_return(people_duplicates)
       allow(people_duplicates).to receive(:count).and_return(2)

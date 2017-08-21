@@ -16,23 +16,23 @@ resource 'Contacts > Duplicates' do
 
   # This is required!
   # This is the resource's JSONAPI.org `type` attribute to be validated against.
-  let(:resource_type) { 'contact_duplicates' }
+  let(:resource_type) { 'duplicate_record_pairs' }
 
   # Remove this and the authorized context below if not authorizing your requests.
-  let(:user) { create(:user_with_account) }
-  let(:account_list) { user.account_lists.first }
-
-  let(:person1) { create(:person, first_name: 'john', last_name: 'doe') }
-  let(:person2) { create(:person, first_name: 'John', last_name: 'Doe') }
-  let(:contact1) { create(:contact, name: 'Doe, John 1', account_list: account_list) }
-  let(:contact2) { create(:contact, name: 'Doe, John 2', account_list: account_list) }
-
-  let(:resource) { Contact::Duplicate.new(contact1, contact2) }
-  let(:id) { resource.id }
+  let(:duplicate_record_pair) { create(:duplicate_record_pair) }
+  let(:resource) { duplicate_record_pair }
+  let(:account_list) { resource.account_list }
+  let(:user) { create(:user).tap { |user| account_list.users << user } }
+  let(:id) { resource.uuid }
 
   # List your expected resource keys vertically here (alphabetical please!)
   let(:expected_attribute_keys) do
-    []
+    %w(
+      created_at
+      ignore
+      reason
+      updated_at
+      updated_in_db_at)
   end
 
   # List out any additional attribute keys that will be alongside
@@ -45,15 +45,27 @@ resource 'Contacts > Duplicates' do
     )
   end
 
-  before do
-    contact1.people << person1
-    contact2.people << person2
+  let(:form_data) do
+    build_data({
+                 ignore: true,
+                 updated_in_db_at: resource.updated_at
+               }, relationships: relationships)
+  end
+
+  let(:relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: account_list.uuid
+        }
+      }
+    }
   end
 
   context 'authorized user' do
     before { api_login(user) }
 
-    # index
     get '/api/v2/contacts/duplicates' do
       doc_helper.insert_documentation_for(action: :index, context: self)
 
@@ -67,15 +79,28 @@ resource 'Contacts > Duplicates' do
       end
     end
 
-    # destroy
-    delete '/api/v2/contacts/duplicates/:id' do
-      doc_helper.insert_documentation_for(action: :delete, context: self)
+    get '/api/v2/contacts/duplicates/:id' do
+      doc_helper.insert_documentation_for(action: :show, context: self)
 
-      example doc_helper.title_for(:delete), document: doc_helper.document_scope do
-        explanation doc_helper.description_for(:delete)
+      example doc_helper.title_for(:show), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:show)
         do_request
 
-        expect(response_status).to eq 204
+        check_resource(['relationships'], additional_attribute_keys)
+        expect(resource_object['reason']).to eq resource.reason
+        expect(response_status).to eq 200
+      end
+    end
+
+    put '/api/v2/contacts/duplicates/:id' do
+      doc_helper.insert_documentation_for(action: :update, context: self)
+
+      example doc_helper.title_for(:update), document: doc_helper.document_scope do
+        explanation doc_helper.description_for(:update)
+        do_request data: form_data
+
+        expect(response_status).to eq(200), invalid_status_detail
+        expect(resource_object['ignore']).to eq(true)
       end
     end
   end

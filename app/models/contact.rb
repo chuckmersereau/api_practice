@@ -70,7 +70,6 @@ class Contact < ApplicationRecord
     :next_ask,
     :no_appeals,
     :no_gift_aid,
-    :not_duplicated_with,
     :notes,
     :overwrite,
     :pledge_amount,
@@ -457,17 +456,6 @@ class Contact < ApplicationRecord
   def pledge_currency_symbol
     cldr_currency = TwitterCldr::Shared::Currencies.for_code(pledge_currency.upcase)
     cldr_currency.present? ? cldr_currency[:symbol] : pledge_currency
-  end
-
-  def confirmed_non_duplicate_of?(other)
-    not_duplicated_with.to_s.split(',').include?(other.id.to_s) ||
-      other.not_duplicated_with.to_s.split(',').include?(id.to_s)
-  end
-
-  def mark_not_duplicate_of!(other)
-    not_duplicated_with_set = not_duplicated_with.to_s.split(',').to_set
-    not_duplicated_with_set << other.id.to_s
-    update_column(:not_duplicated_with, not_duplicated_with_set.to_a.join(','))
   end
 
   def donor_accounts_attributes=(attribute_collection)

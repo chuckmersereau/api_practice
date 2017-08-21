@@ -821,7 +821,7 @@ CREATE TABLE contacts (
     last_thank date,
     pledge_received boolean DEFAULT false NOT NULL,
     tnt_id integer,
-    not_duplicated_with character varying(2000),
+    deprecated_not_duplicated_with character varying(2000),
     uncompleted_tasks_count integer DEFAULT 0 NOT NULL,
     prayer_letters_id character varying,
     timezone character varying,
@@ -1156,6 +1156,44 @@ CREATE SEQUENCE donor_accounts_id_seq
 --
 
 ALTER SEQUENCE donor_accounts_id_seq OWNED BY donor_accounts.id;
+
+
+--
+-- Name: duplicate_record_pairs; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE duplicate_record_pairs (
+    id integer NOT NULL,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    account_list_id integer NOT NULL,
+    record_one_id integer NOT NULL,
+    record_one_type character varying NOT NULL,
+    record_two_id integer NOT NULL,
+    record_two_type character varying NOT NULL,
+    reason character varying NOT NULL,
+    ignore boolean DEFAULT false NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: duplicate_record_pairs_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE duplicate_record_pairs_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: duplicate_record_pairs_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE duplicate_record_pairs_id_seq OWNED BY duplicate_record_pairs.id;
 
 
 --
@@ -3140,6 +3178,13 @@ ALTER TABLE ONLY donor_accounts ALTER COLUMN id SET DEFAULT nextval('donor_accou
 
 
 --
+-- Name: duplicate_record_pairs id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY duplicate_record_pairs ALTER COLUMN id SET DEFAULT nextval('duplicate_record_pairs_id_seq'::regclass);
+
+
+--
 -- Name: email_addresses id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3691,6 +3736,14 @@ ALTER TABLE ONLY donor_account_people
 
 ALTER TABLE ONLY donor_accounts
     ADD CONSTRAINT donor_accounts_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: duplicate_record_pairs duplicate_record_pairs_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY duplicate_record_pairs
+    ADD CONSTRAINT duplicate_record_pairs_pkey PRIMARY KEY (id);
 
 
 --
@@ -4710,6 +4763,41 @@ CREATE INDEX index_donor_accounts_on_total_donations ON donor_accounts USING btr
 --
 
 CREATE UNIQUE INDEX index_donor_accounts_on_uuid ON donor_accounts USING btree (uuid);
+
+
+--
+-- Name: index_dup_record_pairs_on_record_one_type_and_record_one_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dup_record_pairs_on_record_one_type_and_record_one_id ON duplicate_record_pairs USING btree (record_one_type, record_one_id);
+
+
+--
+-- Name: index_dup_record_pairs_on_record_two_type_and_record_two_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_dup_record_pairs_on_record_two_type_and_record_two_id ON duplicate_record_pairs USING btree (record_two_type, record_two_id);
+
+
+--
+-- Name: index_dup_record_pairs_on_record_types_and_ids; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_dup_record_pairs_on_record_types_and_ids ON duplicate_record_pairs USING btree (record_one_type, record_two_type, record_one_id, record_two_id);
+
+
+--
+-- Name: index_duplicate_record_pairs_on_account_list_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_duplicate_record_pairs_on_account_list_id ON duplicate_record_pairs USING btree (account_list_id);
+
+
+--
+-- Name: index_duplicate_record_pairs_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_duplicate_record_pairs_on_uuid ON duplicate_record_pairs USING btree (uuid);
 
 
 --
@@ -6547,5 +6635,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170803172858');
 
 INSERT INTO schema_migrations (version) VALUES ('20170817184253');
 
+INSERT INTO schema_migrations (version) VALUES ('20170810174948');
+
+INSERT INTO schema_migrations (version) VALUES ('20170814230054');
+
 INSERT INTO schema_migrations (version) VALUES ('20170816144835');
+
 
