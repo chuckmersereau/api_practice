@@ -27,8 +27,8 @@ RSpec.describe Contact::FindFromName, type: :model do
 
     it 'finds a match on the greeting by parsing full name' do
       Person.delete_all
-      contact_one.update(greeting: 'McBilly, Bobby and Janey')
-      expect(Contact::FindFromName.new(Contact.all, 'Bobby and Janey McBilly').first).to eq(contact_one)
+      contact_one.update(greeting: 'Mcbilly, Bobby and Janey')
+      expect(Contact::FindFromName.new(Contact.all, 'Bobby and Janey Mcbilly').first).to eq(contact_one)
     end
 
     it 'finds a match on the greeting by parsing just first name' do

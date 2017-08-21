@@ -88,11 +88,4 @@ RSpec.describe Api::V2::User::GoogleAccounts::GoogleIntegrationsController, type
       expect(JSON.parse(response.body)['data'].map { |hash| hash['id'] }).to eq(user.google_integrations.pluck(:uuid))
     end
   end
-
-  it 'updates the calendar_integrations array' do
-    api_login(user)
-    attributes = full_update_attributes
-    attributes[:data][:attributes][:calendar_integrations] = ['Appointment', 'To Do', 'Support Letter']
-    expect { put :update, attributes }.to change { resource.reload.calendar_integrations }.from(['Appointment']).to(['Appointment', 'To Do', 'Support Letter'])
-  end
 end

@@ -9,6 +9,7 @@ class AccountListSerializer < ApplicationSerializer
              :total_pledges
 
   has_many :notification_preferences
+  has_many :organization_accounts
 
   def salary_organization
     return nil unless object.salary_organization_id

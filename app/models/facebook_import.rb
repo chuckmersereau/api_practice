@@ -22,7 +22,7 @@ class FacebookImport
         begin
           friend = Retryable.retryable on: FbGraph::Unauthorized, times: 5, sleep: 60 do
             Retryable.retryable on: [FbGraph::InvalidRequest, OpenSSL::SSL::SSLError, HTTPClient::ConnectTimeoutError, HTTPClient::ReceiveTimeoutError], times: 5, sleep: 5 do
-              sleep 3 unless Rails.env.test? # facebook apparently limits api calls to 600 calls every 600s
+              sleep 3 # facebook apparently limits api calls to 600 calls every 600s
               f.fetch
             end
           end
@@ -40,7 +40,7 @@ class FacebookImport
             next if friend.significant_other.identifier == facebook_account.remote_id.to_s
 
             spouse = friend.significant_other.fetch(access_token: facebook_account.token)
-            sleep 1 unless Rails.env.test?
+            sleep 1
 
             fb_spouse = create_or_update_person(spouse, @account_list)
 

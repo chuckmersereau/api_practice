@@ -1,8 +1,7 @@
 class Task::Filter::ContactLikely < Task::Filter::Base
   def execute_query(tasks, filters)
     filters = clean_contact_filter(filters)
-    tasks.joins(:contacts)
-         .where(contacts: { id: Contact::Filter::Likely.query(contact_scope(tasks), filters, account_lists).ids })
+    tasks.joins(:contacts).merge(Contact::Filter::Likely.query(Contact, filters, account_lists))
   end
 
   def title

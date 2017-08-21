@@ -1,8 +1,7 @@
 class Task::Filter::ContactStatus < Task::Filter::Base
   def execute_query(tasks, filters)
     filters = clean_contact_filter(filters)
-    tasks.joins(:contacts)
-         .where(contacts: { id: Contact::Filter::Status.query(contact_scope(tasks), filters, account_lists).ids })
+    tasks.joins(:contacts).merge(Contact::Filter::Status.query(Contact, filters, account_lists))
   end
 
   def title

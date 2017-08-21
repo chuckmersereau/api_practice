@@ -2,6 +2,7 @@ class Api::V2::AppealsController < Api::V2Controller
   def index
     load_appeals
     render json: @appeals.preload_valid_associations(include_associations),
+           scope: { account_list: load_account_list_scope },
            meta: meta_hash(@appeals),
            include: include_params,
            fields: field_params
@@ -49,6 +50,7 @@ class Api::V2::AppealsController < Api::V2Controller
 
   def render_appeal
     render json: @appeal,
+           scope: { account_list: load_account_list_scope },
            status: success_status,
            include: include_params,
            fields: field_params
@@ -85,7 +87,14 @@ class Api::V2::AppealsController < Api::V2Controller
   end
 
   def authorize_appeal
-    authorize @appeal
+    authorize(@appeal)
+  end
+
+  def load_account_list_scope
+    return unless filter_params[:account_list_id]
+    @account_list ||= AccountList.find(filter_params[:account_list_id]).tap do |account_list|
+      authorize(account_list, :show?)
+    end
   end
 
   def permitted_filters

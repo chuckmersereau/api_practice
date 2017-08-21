@@ -159,7 +159,7 @@ class Siebel < DataServer
         @org_account.destroy
         return []
       end
-      Retryable.retryable on: RestClient::InternalServerError, sleep: 10 do
+      Retryable.retryable(on: RestClient::InternalServerError, times: 3) do
         @profiles = SiebelDonations::Profile.find(ssoGuid: @org_account.remote_id)
       end
     end

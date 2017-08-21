@@ -54,19 +54,68 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
 
   describe '#index' do
     before { api_login(user) }
-    let(:account_list_id) { account_list.id }
+
+    describe 'filter[account_list_id]' do
+      let!(:first_account_list) { account_list }
+      let!(:second_account_list) { create(:account_list) }
+      let!(:appeal_for_second_account_list) { create(:appeal, account_list: second_account_list) }
+
+      before do
+        user.account_lists << second_account_list
+      end
+
+      it 'returns appeals from multiple accounts lists when not filtering' do
+        get :index
+        data = JSON.parse(response.body)['data']
+        expect(data.size).to eq(3)
+        expect(data[0]['id']).to eq(resource.uuid)
+        expect(data[1]['id']).to eq(second_resource.uuid)
+        expect(data[2]['id']).to eq(appeal_for_second_account_list.uuid)
+      end
+
+      it 'returns appeals from one account list when filtering' do
+        get :index, filter: { account_list_id: first_account_list.uuid }
+        data = JSON.parse(response.body)['data']
+        expect(data.size).to eq(2)
+        expect(data[0]['id']).to eq(second_resource.uuid)
+        expect(data[1]['id']).to eq(resource.uuid)
+      end
+
+      it "includes the donation's contact when filtering" do
+        donor_account = create(:donor_account)
+        contact = create(:contact, account_list: account_list)
+        donor_account.contacts << contact
+        donation = create(:donation, donor_account: donor_account)
+        resource.donations << donation
+
+        get :index, include: 'donations.contacts', filter: { account_list_id: first_account_list.uuid }
+        body = JSON.parse(response.body)
+        expect(body['included'].first['id']).to eq(donation.uuid)
+        expect(body['included'].first['relationships']['contact']['data']['id']).to eq(contact.uuid)
+      end
+
+      it "does not permit filtering by an account list that's not owned by current user" do
+        not_my_account_list = create(:account_list)
+        get :index, filter: { account_list_id: not_my_account_list.uuid }
+        expect(response.code).to eq('403')
+      end
+    end
+
     describe 'filter[wildcard_search]' do
       context 'name contains' do
         let!(:appeal) { create(factory_type, name: 'abcd', account_list: account_list) }
+
         it 'returns appeal' do
-          get :index, account_list_id: account_list_id, filter: { wildcard_search: 'bc' }
+          get :index, filter: { wildcard_search: 'bc' }
           expect(JSON.parse(response.body)['data'][0]['id']).to eq(appeal.uuid)
         end
       end
+
       context 'name does not contain' do
         let!(:appeal) { create(factory_type, name: 'abcd', account_list: account_list) }
+
         it 'returns no appeals' do
-          get :index, account_list_id: account_list_id, filter: { wildcard_search: 'def' }
+          get :index, filter: { wildcard_search: 'def' }
           expect(JSON.parse(response.body)['data'].count).to eq(0)
         end
       end

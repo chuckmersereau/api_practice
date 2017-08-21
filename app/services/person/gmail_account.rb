@@ -13,8 +13,9 @@ class Person::GmailAccount
     end
   end
 
-  def import_emails(account_list)
+  def import_emails(account_list, blacklisted_emails = [])
     return false unless token?
+    self.blacklisted_emails = blacklisted_emails.collect(&:strip)
 
     since = (google_account.last_email_sync || 1.day.ago).to_date
 
@@ -88,7 +89,7 @@ class Person::GmailAccount
 
   private
 
-  attr_accessor :email_collection
+  attr_accessor :email_collection, :blacklisted_emails
 
   def token?
     !google_account.token_expired? || google_account.refresh_token!
@@ -141,7 +142,7 @@ class Person::GmailAccount
     sender_email_address = sender_email_address_from_envelope(message.envelope)
     account_email_data   = fetch_account_email_data(sender_email_address)
 
-    return unless account_email_data.present?
+    return unless account_email_data.present? && log_emails_for_email_address?(account_email_data[:email])
 
     log_email(message, account_list_id, account_email_data[:contact_id], account_email_data[:person_id], 'Received')
   end
@@ -152,7 +153,7 @@ class Person::GmailAccount
 
     recipient_email_addresses.each do |recipient_email_address|
       account_email_data = fetch_account_email_data(recipient_email_address)
-      next unless account_email_data.present?
+      next unless account_email_data.present? && log_emails_for_email_address?(account_email_data[:email])
 
       log_email(message, account_list_id, account_email_data[:contact_id], account_email_data[:person_id], 'Done')
     end
@@ -170,5 +171,10 @@ class Person::GmailAccount
     return unless address
 
     "#{address.mailbox}@#{address.host}"
+  end
+
+  def log_emails_for_email_address?(email)
+    return false unless email
+    !blacklisted_emails.include?(email)
   end
 end

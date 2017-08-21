@@ -46,7 +46,6 @@ resource 'Appeals' do
       created_at
       currencies
       description
-      donations
       end_date
       name
       total_currency
@@ -59,6 +58,7 @@ resource 'Appeals' do
     %w(
       account_list
       contacts
+      donations
     )
   end
 

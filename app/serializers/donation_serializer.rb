@@ -24,6 +24,6 @@ class DonationSerializer < ApplicationSerializer
   def contact
     return unless scope&.[](:account_list)
 
-    object.donor_account.contacts.where(account_list_id: scope[:account_list].id).first
+    object.donor_account.contacts.where(account_list: scope[:account_list]).first
   end
 end

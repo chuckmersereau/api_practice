@@ -50,7 +50,8 @@ class Tools::Analytics < ActiveModelSerializers::Model
   end
 
   def duplicate_contacts_count(account_list)
-    Contact::DuplicatesFinder.new(account_list).find.count
+    Contact::DuplicatePairsFinder.new(account_list).find_and_save
+    DuplicateRecordPair.type('Contact').where(account_list: account_list, ignore: false).count
   end
 
   def duplicate_people_count(account_list)

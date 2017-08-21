@@ -19,7 +19,8 @@ class NotificationType::TaskIfPeriodPast < NotificationType
   end
 
   def notify_for_contact?(contact)
-    contact.tasks.where('start_at > ?', past_period_to_check).where(activity_type: task_type_to_check).empty?
+    contact.tasks.where('start_at > ? OR completed_at > ?', past_period_to_check, past_period_to_check)
+           .where(activity_type: task_type_to_check).empty?
   end
 
   def past_period_to_check

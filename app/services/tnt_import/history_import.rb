@@ -56,7 +56,7 @@ class TntImport::HistoryImport
 
       next unless contact_id && task_id
 
-      Retryable.retryable times: 3, sleep: 1 do
+      Retryable.retryable(times: 3) do
         ActivityContact.where(activity_id: task_id, contact_id: contact_id).first_or_create! do |activity_contact|
           activity_contact.skip_task_counter_update = true
 

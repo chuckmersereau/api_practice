@@ -31,6 +31,6 @@ class Contact::Filter::RelatedTaskAction < Contact::Filter::Base
   private
 
   def related_tasks
-    Task.new.assignable_activity_types & account_lists.collect(&:tasks).flatten.uniq.collect(&:activity_type)
+    Task.new.assignable_activity_types & Task.where(account_list: account_lists).distinct.pluck(:activity_type)
   end
 end

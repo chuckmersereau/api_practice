@@ -16,7 +16,7 @@ gem 'attributes_history', '~> 0.0.3'
 gem 'axlsx', '= 2.0.1'
 gem 'axlsx_rails', '~> 0.5.0'
 gem 'carrierwave', '~> 0.11.2'
-gem 'charlock_holmes', '~> 0.7.3'
+gem 'charlock_holmes', '~> 0.7.4'
 gem 'cloudinary', '~> 1.8.1'
 gem 'country_select', git: 'https://github.com/CruGlobal/country_select.git' # My fork has the meta data for the fancy select
 gem 'ddtrace', '~> 0.7.2'

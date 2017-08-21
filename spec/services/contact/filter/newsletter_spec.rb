@@ -8,6 +8,7 @@ RSpec.describe Contact::Filter::Newsletter do
   let!(:contact_two)   { create(:contact, account_list_id: account_list.id, send_newsletter: 'Physical') }
   let!(:contact_three) { create(:contact, account_list_id: account_list.id, send_newsletter: 'Both') }
   let!(:contact_four)  { create(:contact, account_list_id: account_list.id) }
+  let!(:contact_five)  { create(:contact, account_list_id: account_list.id, send_newsletter: 'None') }
 
   before do
     contact_four.update(send_newsletter: nil)
@@ -17,12 +18,12 @@ RSpec.describe Contact::Filter::Newsletter do
     it 'returns expected config' do
       expect(described_class.config([account_list])).to include(multiple: false,
                                                                 name: :newsletter,
-                                                                options: [{ name: '-- Any --', id: '', placeholder: 'None' },
-                                                                          { name: 'None Selected', id: 'none' },
-                                                                          { name: 'All', id: 'all' },
-                                                                          { name: 'Physical', id: 'address' },
-                                                                          { name: 'Email', id: 'email' },
-                                                                          { name: 'Both', id: 'both' }],
+                                                                options: [{ name: _('Nothing Selected'), id: 'no_value' },
+                                                                          { name: _('None'), id: 'none' },
+                                                                          { name: _('All'), id: 'all' },
+                                                                          { name: _('Physical'), id: 'address' },
+                                                                          { name: _('Email'), id: 'email' },
+                                                                          { name: _('Both'), id: 'both' }],
                                                                 parent: nil,
                                                                 title: 'Newsletter Recipients',
                                                                 type: 'radio',
@@ -42,15 +43,21 @@ RSpec.describe Contact::Filter::Newsletter do
       end
     end
 
+    context 'filter by newsletter no_value' do
+      it 'returns only contacts that have no newsletter option selected' do
+        expect(described_class.query(contacts, { newsletter: 'no_value' }, nil).to_a).to eq [contact_four]
+      end
+    end
+
     context 'filter by newsletter none' do
       it 'returns only contacts that have no newsletter option selected' do
-        expect(described_class.query(contacts, { newsletter: 'none' }, nil).to_a).to eq [contact_four]
+        expect(described_class.query(contacts, { newsletter: 'none' }, nil).to_a).to eq [contact_five]
       end
     end
 
     context 'filter by newsletter all' do
       it 'returns all contacts that have any newsletter option selected, but not blank' do
-        expect(described_class.query(contacts, { newsletter: 'all' }, nil).to_a).to match_array [contact_one, contact_two, contact_three]
+        expect(described_class.query(contacts, { newsletter: 'all' }, nil).to_a).to match_array [contact_one, contact_two, contact_three, contact_five]
       end
     end
 

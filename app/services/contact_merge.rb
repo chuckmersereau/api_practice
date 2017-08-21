@@ -113,6 +113,7 @@ class ContactMerge
   end
 
   def delete_losing_contact
+    DuplicateRecordPair.type('Contact').where(record_one_id: ids, record_two_id: ids).first&.destroy
     @other.reload
     @other.destroy
   rescue ActiveRecord::RecordNotFound
@@ -124,5 +125,9 @@ class ContactMerge
 
     # Update donation total after donor account ids are all assigned correctly
     @winner.update_all_donation_totals
+  end
+
+  def ids
+    [@winner.id, @other.id]
   end
 end

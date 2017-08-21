@@ -1,22 +1,79 @@
-actions:
-  delete:
+attributes: &attrs
+  amount:
+    reason:
+      The reason this duplicate pair was found
+    type: string
+  ignore:
     description:
-      Mark the two associated contacts as not duplicates based on the passed `id`
+      Whether or not this duplicate pair should be ignored
+    type: boolean
 
-filter_params: &filters
-  account_list_id:
-    description:
-      Filter by Account List; Accepts Account List ID
-    required: false
+relationships: &rels
+  account_list:
+    data:
+      id:
+        description:
+          The `id` of the Account List
+        type: UUID string
+        required: true
+  record_one:
+    data:
+      id:
+        description:
+          The `id` of the first Contact
+        type: UUID string
+        required: true
+  record_two:
+    data:
+      id:
+        description:
+          The `id` of the second Contact
+        type: UUID string
+        required: true
+  records:
+    data:
+      description:
+        An array of two Contact references
+      type: '[Contact]'
+
+mutation_attributes: &mutation_attrs
+  <<: *attrs
+  reason:
+    ignore: true
+  ignore:
+    ignore: true
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
 
 parameters:
   index:
     filters:
-      <<: *filters
+      account_list_id:
+        description:
+          Filter by Account List; accepts an Account List `id`
+        type: UUID string
+      ignore:
+        description:
+          Filter by ignored duplicate pairs
+        type: Boolean
+
+  update:
+    attributes:
+      <<: *mutation_attrs
 
 response_fields:
   index:
     data:
       description:
-        An array of Duplicate contacts
-      type: '[Contact Duplicate]'
+        An array of Duplicate Record Pair Objects
+      type: '[Duplicate Record Pair]'
+
+  show:
+    <<: *obj
+
+  update:
+    <<: *obj

@@ -70,7 +70,6 @@ class Contact < ApplicationRecord
     :next_ask,
     :no_appeals,
     :no_gift_aid,
-    :not_duplicated_with,
     :notes,
     :overwrite,
     :pledge_amount,
@@ -174,7 +173,6 @@ class Contact < ApplicationRecord
 
   before_save :set_notes_saved_at, :update_late_at, :check_state_for_mail_chimp_sync
   after_commit :sync_with_mail_chimp, :sync_with_letter_services, :sync_with_google_contacts
-  before_create :set_send_newsletter
   after_create :create_people_from_contact, if: :prefill_attributes_on_create
   before_destroy :delete_from_letter_services, :delete_people
   LETTER_SERVICES = [:pls, :prayer_letters].freeze
@@ -221,7 +219,7 @@ class Contact < ApplicationRecord
     ASSIGNABLE_LIKELY_TO_GIVE
   end
 
-  ASSIGNABLE_SEND_NEWSLETTER = %w(Physical Email Both).freeze
+  ASSIGNABLE_SEND_NEWSLETTER = %w(Physical Email Both None).freeze
   assignable_values_for :send_newsletter, allow_blank: true do
     ASSIGNABLE_SEND_NEWSLETTER
   end
@@ -458,17 +456,6 @@ class Contact < ApplicationRecord
   def pledge_currency_symbol
     cldr_currency = TwitterCldr::Shared::Currencies.for_code(pledge_currency.upcase)
     cldr_currency.present? ? cldr_currency[:symbol] : pledge_currency
-  end
-
-  def confirmed_non_duplicate_of?(other)
-    not_duplicated_with.to_s.split(',').include?(other.id.to_s) ||
-      other.not_duplicated_with.to_s.split(',').include?(id.to_s)
-  end
-
-  def mark_not_duplicate_of!(other)
-    not_duplicated_with_set = not_duplicated_with.to_s.split(',').to_set
-    not_duplicated_with_set << other.id.to_s
-    update_column(:not_duplicated_with, not_duplicated_with_set.to_a.join(','))
   end
 
   def donor_accounts_attributes=(attribute_collection)
@@ -848,9 +835,5 @@ class Contact < ApplicationRecord
     else
       1 # default
     end
-  end
-
-  def set_send_newsletter
-    self.send_newsletter ||= 'Email'
   end
 end
