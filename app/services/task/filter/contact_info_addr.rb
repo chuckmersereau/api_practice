@@ -1,6 +1,11 @@
 class Task::Filter::ContactInfoAddr < Task::Filter::Base
   def execute_query(tasks, filters)
-    tasks.joins(:contacts).merge(Contact::Filter::ContactInfoAddr.query(Contact, filters, account_lists))
+    # We are plucking ids here because the contact filter already generates an sql statement with several nested subqueries
+    # and sending too many of those to postgres can cause unexpected errors and is often slower than breaking things up.
+    # Do not change this unless you test the results before pushing to production.
+
+    tasks.joins(:contacts)
+         .where(contacts: { id: Contact::Filter::ContactInfoAddr.query(contact_scope(tasks), filters, account_lists).ids })
   end
 
   delegate :custom_options,
