@@ -12,7 +12,7 @@ describe CurrencyRate do
     end
 
     it 'logs a missing rate exception to Rollbar and returns 1.0 if rate missing' do
-      expect(Rollbar).to receive(:error) do |error|
+      expect(Rollbar).to receive(:info) do |error|
         expect(error).to be_a(CurrencyRate::RateNotFoundError)
       end
 
