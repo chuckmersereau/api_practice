@@ -151,6 +151,7 @@ class Task < Activity
     'Thank'
   ].freeze
 
+  PRE_CALL_LETTER_RESULTS = %w(Completed Received).freeze
   PRE_CALL_LETTER_NEXT_ACTIONS = [
     'Call',
     'Email',
@@ -168,7 +169,7 @@ class Task < Activity
   MESSAGE_RESULTS = [_('Done'), _('Received')].freeze
   STANDARD_RESULTS = [_('Done')].freeze
 
-  ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS + TALK_TO_IN_PERSON_RESULTS + PRAYER_REQUEST_RESULTS
+  ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS + TALK_TO_IN_PERSON_RESULTS + PRAYER_REQUEST_RESULTS + PRE_CALL_LETTER_RESULTS
 
   TASK_ACTIVITIES = [
     'Call',
@@ -260,6 +261,8 @@ class Task < Activity
       TALK_TO_IN_PERSON_RESULTS
     when 'Prayer Request'
       PRAYER_REQUEST_RESULTS
+    when 'Pre Call Letter'
+      PRE_CALL_LETTER_RESULTS
     else
       STANDARD_RESULTS
     end
@@ -317,6 +320,7 @@ class Task < Activity
     options['Text Message'] = TEXT_RESULTS
     options['Talk to In Person'] = TALK_TO_IN_PERSON_RESULTS
     options['Prayer Request'] = PRAYER_REQUEST_RESULTS
+    options['Pre Call Letter'] = PRE_CALL_LETTER_RESULTS
     options['default'] = STANDARD_RESULTS
     options
   end
