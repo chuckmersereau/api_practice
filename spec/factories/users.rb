@@ -6,7 +6,6 @@ FactoryGirl.define do
     first_name { Faker::Name.first_name }
     preferences do
       {
-        setup: false,
         time_zone: Time.zone.name
       }
     end

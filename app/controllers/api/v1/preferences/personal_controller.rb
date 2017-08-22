@@ -11,7 +11,7 @@ class Api::V1::Preferences::PersonalController < Api::V1::Preferences::BaseContr
   private
 
   def load_default_preferences
-    @preferences.merge!(current_user.preferences.except(:setup, :contacts_filter))
+    @preferences.merge!(current_user.preferences.except(:contacts_filter))
   end
 
   def load_current_user_preferences

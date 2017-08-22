@@ -145,4 +145,67 @@ describe User do
       expect(User.find_by_email('test@email.com')).to eq(user)
     end
   end
+
+  describe '#setup' do
+    describe 'no account lists' do
+      let(:user) { create(:user) }
+      it 'return no account_lists' do
+        expect(user.setup).to eq('no account_lists')
+      end
+    end
+
+    describe 'no default_account_list' do
+      let(:account_list) { create(:account_list) }
+      let(:user) { create(:user, account_lists: [account_list]) }
+      it 'return no default_account_list' do
+        expect(user.setup).to eq('no default_account_list')
+      end
+    end
+
+    describe 'no organization_account on default_account_list' do
+      let(:account_list) { create(:account_list) }
+      let(:user) do
+        create(:user,
+               account_lists: [account_list],
+               preferences: { default_account_list: account_list.id })
+      end
+      it 'return true' do
+        expect(user.setup).to eq('no organization_account on default_account_list')
+      end
+    end
+
+    describe 'organization_account on default_account_list' do
+      let!(:organization_account) { create(:organization_account, user: user) }
+      let(:account_list) { create(:account_list) }
+      let(:user) do
+        create(:user,
+               account_lists: [account_list],
+               preferences: { default_account_list: account_list.id })
+      end
+      it 'return nil' do
+        expect(user.setup).to be_nil
+      end
+    end
+  end
+
+  describe '#default_account_list_record' do
+    describe 'default_account_list set' do
+      let(:account_list) { create(:account_list) }
+      let(:user) do
+        create(:user,
+               account_lists: [account_list],
+               preferences: { default_account_list: account_list.id })
+      end
+      it 'returns account_list' do
+        expect(user.default_account_list_record).to eq account_list
+      end
+    end
+    describe 'default_account_list not set' do
+      let(:account_list) { create(:account_list) }
+      let(:user) { create(:user, account_lists: [account_list]) }
+      it 'returns nil' do
+        expect(user.default_account_list_record).to be_nil
+      end
+    end
+  end
 end
