@@ -9,4 +9,9 @@ describe GoogleSyncDataWorker do
     expect(google_integration_double).to receive(:sync_data).with('email')
     GoogleSyncDataWorker.new.perform(google_integration.id, 'email')
   end
+
+  it 'returns without error if the GoogleIntegration is not found' do
+    expect(GoogleIntegration).to receive(:find).with(google_integration.id).and_raise(ActiveRecord::RecordNotFound)
+    expect(GoogleSyncDataWorker.new.perform(google_integration.id, 'email')).to eq(nil)
+  end
 end
