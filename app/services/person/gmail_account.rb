@@ -15,7 +15,7 @@ class Person::GmailAccount
 
   def import_emails(account_list, blacklisted_emails = [])
     return false unless token?
-    self.blacklisted_emails = blacklisted_emails.collect(&:strip)
+    self.blacklisted_emails = (blacklisted_emails.presence || []).collect(&:strip)
 
     since = (google_account.last_email_sync || 1.day.ago).to_date
 
