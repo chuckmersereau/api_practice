@@ -2532,7 +2532,8 @@ CREATE TABLE person_organization_accounts (
     token character varying(255),
     locked_at timestamp without time zone,
     disable_downloads boolean DEFAULT false NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    last_download_attempt_at timestamp without time zone
 );
 
 
@@ -5578,6 +5579,13 @@ CREATE UNIQUE INDEX index_person_options_on_uuid ON person_options USING btree (
 
 
 --
+-- Name: index_person_organization_accounts_on_last_download_attempt_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_organization_accounts_on_last_download_attempt_at ON person_organization_accounts USING btree (last_download_attempt_at);
+
+
+--
 -- Name: index_person_organization_accounts_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6718,3 +6726,4 @@ INSERT INTO schema_migrations (version) VALUES ('20170817184253');
 
 INSERT INTO schema_migrations (version) VALUES ('20170829192854');
 
+INSERT INTO schema_migrations (version) VALUES ('20170824151005');

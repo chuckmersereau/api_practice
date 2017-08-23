@@ -15,6 +15,12 @@ describe Person::OrganizationAccount do
   end
 
   context '#import_all_data' do
+    it 'updates last_download_attempt_at' do
+      travel_to Time.current do
+        expect { org_account.import_all_data }.to change { org_account.reload.last_download_attempt_at }.from(nil).to(Time.current)
+      end
+    end
+
     it 'does not update the last_download column if no donations downloaded' do
       org_account.downloading = false
       org_account.last_download = nil

@@ -9,6 +9,34 @@ describe AccountList do
 
   subject { described_class.new }
 
+  describe '.with_linked_org_accounts scope' do
+    let!(:org_account) { create(:organization_account) }
+
+    it 'returns non-locked account lists with organization accounts' do
+      expect(AccountList.with_linked_org_accounts).to include org_account.account_list
+    end
+
+    it 'does not return locked accounts' do
+      org_account.update_column(:locked_at, 1.minute.ago)
+      expect(AccountList.with_linked_org_accounts).to_not include org_account.account_list
+    end
+  end
+
+  describe '.has_users scope' do
+    let!(:user_one) { create(:user_with_account) }
+    let!(:user_two) { create(:user_with_account) }
+    let!(:user_three) { create(:user_with_account) }
+    let!(:account_without_user) { create(:account_list) }
+
+    it 'scopes account_lists when receiving a User relation' do
+      expect(AccountList.has_users(User.where(id: [user_one.id, user_two.id])).to_a).to eq([user_one.account_lists.first, user_two.account_lists.first])
+    end
+
+    it 'scopes account_lists when receiving a User instance' do
+      expect(AccountList.has_users(user_one).to_a).to eq([user_one.account_lists.first])
+    end
+  end
+
   describe '#salary_organization=()' do
     let(:organization) { create(:organization) }
 
@@ -385,19 +413,6 @@ describe AccountList do
 
     it 'calculates the bottom 50 percent' do
       expect(subject.bottom_50_percent.to_a).to eq [low_pledger]
-    end
-  end
-
-  context 'with_linked_org_accounts scope' do
-    let!(:org_account) { create(:organization_account) }
-
-    it 'returns non-locked account lists with organization accounts' do
-      expect(AccountList.with_linked_org_accounts).to include org_account.account_list
-    end
-
-    it 'does not return locked accounts' do
-      org_account.update_column(:locked_at, 1.minute.ago)
-      expect(AccountList.with_linked_org_accounts).to_not include org_account.account_list
     end
   end
 

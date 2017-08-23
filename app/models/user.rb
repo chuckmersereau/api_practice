@@ -142,11 +142,6 @@ class User < Person
     self.time_zone = timezone_object.name
   end
 
-  def stale?
-    return false unless last_sign_in_at
-    last_sign_in_at < 6.months.ago
-  end
-
   def can_manage_sharing?(account_list)
     # We only allow users to manage sharing if the donor system linked them to
     # the account list via a designation profile. Otherwise, they only have

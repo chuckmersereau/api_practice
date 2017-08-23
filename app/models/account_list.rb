@@ -69,8 +69,10 @@ class AccountList < ApplicationRecord
   accepts_nested_attributes_for :notification_preferences, reject_if: :all_blank, allow_destroy: true
 
   scope :with_linked_org_accounts, lambda {
-    joins(:organization_accounts).where('locked_at is null').order('last_download asc')
+    joins(:organization_accounts).where('locked_at IS NULL').order('last_download ASC')
   }
+
+  scope :has_users, -> (users) { joins(:account_list_users).where(account_list_users: { user: users }) }
 
   PERMITTED_ATTRIBUTES = [
     :created_at,
