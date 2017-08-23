@@ -64,7 +64,7 @@ class CurrencyRate < ApplicationRecord
     rescue RateNotFoundError => e
       # If a rate cannot be found, log that error to rollbar so we can debug it
       # easily, but gracefully fall back to a rate of 1.0
-      Rollbar.error(e)
+      Rollbar.info(e)
       1.0
     end
 
