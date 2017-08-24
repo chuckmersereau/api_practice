@@ -2,6 +2,11 @@
 require 'rails_helper'
 
 describe Address do
+  # Old way that DataServer used to do encoding that mangled special characters.
+  def old_encoding(str)
+    str.unpack('C*').pack('U*')
+  end
+
   context 'validates updatable_only_when_source_is_mpdx' do
     before { stub_smarty_streets }
     include_examples 'updatable_only_when_source_is_mpdx_validation_examples',
@@ -306,8 +311,10 @@ describe Address do
     end
   end
 
-  # Old way that DataServer used to do encoding that mangled special characters.
-  def old_encoding(str)
-    str.unpack('C*').pack('U*')
+  it 'should allow editing location if source is not mpdx' do
+    address = create(:address, location: 'Home', source: Address::MANUAL_SOURCE)
+    expect do
+      expect { address.update!(location: 'Business') }.to_not raise_error
+    end.to change { address.reload.location }.from('Home').to('Business')
   end
 end
