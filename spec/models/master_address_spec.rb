@@ -90,5 +90,17 @@ describe MasterAddress do
       expect(GoogleTimezone).to receive(:fetch).with('40.7', '-74.0') { timezone }
       expect(address.find_timezone).to eq('Eastern Time (US & Canada)')
     end
+
+    it 'returns the string of the timezone if not in ActiveSupport::TimeZone::MAPPING and valid' do
+      timezone = double(time_zone_id: 'America/Vancouver')
+      expect(GoogleTimezone).to receive(:fetch).with('40.7', '-74.0') { timezone }
+      expect(address.find_timezone).to eq('America/Vancouver')
+    end
+
+    it 'returns the nil if not in ActiveSupport::TimeZone::MAPPING and invalid' do
+      timezone = double(time_zone_id: 'NonExistantTimezone')
+      expect(GoogleTimezone).to receive(:fetch).with('40.7', '-74.0') { timezone }
+      expect(address.find_timezone).to be_nil
+    end
   end
 end
