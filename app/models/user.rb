@@ -164,6 +164,10 @@ class User < Person
     super(old_value.merge(hash))
   end
 
+  def preferences=(preferences_attributes)
+    super(preferences.merge(preferences_attributes)) if preferences_attributes
+  end
+
   private
 
   def default_account_list_is_valid

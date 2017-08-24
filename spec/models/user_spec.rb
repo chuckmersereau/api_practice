@@ -112,6 +112,36 @@ describe User do
     end
   end
 
+  describe '#preferences=' do
+    let(:user) { create(:user) }
+    before do
+      user.preferences = {
+        time_zone: 'Auckland',
+        developer: true
+      }
+    end
+    context 'user is overriding preference' do
+      it 'should keep other preferences intact' do
+        user.preferences = {
+          developer: false
+        }
+        expect(user.preferences).to eq('time_zone' => 'Auckland',
+                                       'developer' => false)
+      end
+    end
+
+    context 'user is appending a preference' do
+      it 'should keep other preferences intact' do
+        user.preferences = {
+          admin: true
+        }
+        expect(user.preferences).to eq('time_zone' => 'Auckland',
+                                       'developer' => true,
+                                       'admin' => true)
+      end
+    end
+  end
+
   describe '#assign_time_zone' do
     let(:user) { build(:user) }
 
