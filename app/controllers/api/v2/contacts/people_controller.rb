@@ -1,4 +1,6 @@
 class Api::V2::Contacts::PeopleController < Api::V2Controller
+  supports_content_types 'multipart/form-data', 'application/vnd.api+json'
+
   def index
     authorize_index
     load_people
