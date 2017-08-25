@@ -16,6 +16,7 @@ class AccountList::EmailCollection
       .contacts
       .active
       .joins(people: [:email_addresses])
+      .where(email_addresses: { deleted: false })
       .pluck(:contact_id, 'people.id', 'email_addresses.email')
   end
 
