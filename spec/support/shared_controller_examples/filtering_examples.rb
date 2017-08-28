@@ -24,6 +24,7 @@ RSpec.shared_examples 'filtering examples' do |options|
     if defined?(filterer_class)
       api_login(user)
 
+      # Use permitted_filters here instead of filterer_class.filter_params
       filterer_class.filter_params.collect(&:to_s).each do |filter|
         filter_value = ''
 
