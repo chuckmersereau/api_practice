@@ -71,7 +71,7 @@ resource 'Users' do
           parameter 'contacts_view_options', 'Contacts View Options',  type: 'String'
           parameter 'default_account_list',  'Default Account List',   type: 'String'
           parameter 'locale',                'User Locale',            type: 'String'
-          parameter 'setup',                 'User Preferences Setup', type: 'Boolean'
+          parameter 'setup',                 'User Preferences Setup', type: 'String'
           parameter 'tab_orders',            'Tab Orders',             type: 'String'
           parameter 'tasks_filter',          'Tasks Filter',           type: 'String'
           parameter 'time_zone',             'User Time Zone',         type: 'String'

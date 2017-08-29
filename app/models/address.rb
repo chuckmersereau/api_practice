@@ -15,7 +15,7 @@ class Address < ApplicationRecord
   after_destroy :clean_up_master_address
   after_save :update_contact_timezone
 
-  validates :street, :city, :state, :country, :postal_code, :location, :start_date, :end_date, :remote_id, :region, :metro_area, updatable_only_when_source_is_mpdx: true
+  validates :street, :city, :state, :country, :postal_code, :start_date, :end_date, :remote_id, :region, :metro_area, updatable_only_when_source_is_mpdx: true
 
   alias destroy! destroy
 

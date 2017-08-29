@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Tools::Analytics do
-  let(:account_list) { create(:account_list) }
+  let!(:account_list) { create(:account_list) }
 
   let!(:contact_one) { create(:contact, account_list: account_list, status_valid: false) }
   let!(:contact_two) { create(:contact, account_list: account_list) }
@@ -10,13 +10,17 @@ RSpec.describe Tools::Analytics do
   let!(:address) { create(:address, addressable: contact_one, source: 'Random Source') }
   let!(:second_address) { create(:address, addressable: contact_one) }
 
-  let(:person) { create(:person, contacts: [contact_two]) }
+  let!(:person) { create(:person, contacts: [contact_two]) }
 
   let!(:email_address)        { create(:email_address, person: person, source: 'Random Source') }
   let!(:second_email_address) { create(:email_address, person: person) }
 
   let!(:phone_number)         { create(:phone_number, person: person, source: 'Random Source') }
   let!(:second_phone_number)  { create(:phone_number, person: person) }
+
+  # Inactive contacts should be excluded.
+  let!(:contact_inactive) { create(:contact, account_list: account_list, status_valid: false, status: Contact::INACTIVE_STATUSES.first) }
+  let!(:address_inactive) { create(:address, addressable: contact_inactive, source: 'Random Source', valid_values: false) }
 
   subject { described_class.new(account_lists: [account_list]) }
 

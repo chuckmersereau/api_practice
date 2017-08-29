@@ -17,11 +17,13 @@ describe AccountList::EmailCollection do
     let!(:person_3) { contact_2.spouse = create(:person) }
     let!(:email_address_2) { create(:email_address, person: person_2) }
     let!(:email_address_3) { create(:email_address, email: " #{email_address_2.email.upcase} ", person: person_3) }
+    let!(:email_address_4) { create(:email_address, person: person_2, deleted: true) }
 
-    it 'normalizes and groups the data by emails' do
-      expect(AccountList::EmailCollection.new(account_list).grouped_by_email).to eq(email_address_1.email => [{ contact_id: contact_1.id, person_id: person_1.id, email: email_address_1.email }],
-                                                                                    email_address_2.email => [{ contact_id: contact_2.id, person_id: person_2.id, email: email_address_2.email },
-                                                                                                              { contact_id: contact_2.id, person_id: person_3.id, email: email_address_3.email }])
+    it 'normalizes and groups the data by emails without the deleted emails' do
+      emails = AccountList::EmailCollection.new(account_list).grouped_by_email
+      expect(emails[email_address_1.email]).to match_array([{ contact_id: contact_1.id, person_id: person_1.id, email: email_address_1.email }])
+      expect(emails[email_address_2.email]).to match_array([{ contact_id: contact_2.id, person_id: person_2.id, email: email_address_2.email },
+                                                            { contact_id: contact_2.id, person_id: person_3.id, email: email_address_3.email }])
     end
   end
 end

@@ -2,7 +2,7 @@ class Contact::Filter::Appeal < Contact::Filter::Base
   def execute_query(contacts, filters)
     appeal_filters = parse_list(filters[:appeal])
     contacts = contacts.where(no_appeals: true) if appeal_filters.delete('no_appeals')
-    contacts = contacts.where(appeals: { uuid: appeal_filters }).includes(:appeals).uniq if appeal_filters.present?
+    contacts = contacts.joins(:appeals).where(appeals: { uuid: appeal_filters }).uniq if appeal_filters.present?
     contacts
   end
 

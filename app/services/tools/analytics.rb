@@ -33,20 +33,29 @@ class Tools::Analytics < ActiveModelSerializers::Model
     ]
   end
 
+  def filter_contacts(account_list, filter_params)
+    Contact::Filterer.new(filter_params).filter(scope: account_list.contacts, account_lists: [account_list])
+  end
+
+  def filter_people(account_list, filter_params)
+    person_scope = Person.joins(:contact_people).where(contact_people: { contact: account_list.contacts })
+    Person::Filterer.new(filter_params).filter(scope: person_scope, account_lists: [account_list])
+  end
+
   def fix_commitment_info_count(account_list)
-    account_list.contacts.where(status_valid: false).count
+    filter_contacts(account_list, status_valid: 'false').count
   end
 
   def fix_phone_number_count(account_list)
-    Person::Filter::PhoneNumberValid.query(account_list.people, { phone_number_valid: 'false' }, account_list).count
+    filter_people(account_list, phone_number_valid: 'false').count
   end
 
   def fix_email_addresses_count(account_list)
-    Person::Filter::EmailAddressValid.query(account_list.people, { email_address_valid: 'false' }, account_list).count
+    filter_people(account_list, email_address_valid: 'false').count
   end
 
   def fix_addresses_count(account_list)
-    Contact::Filter::AddressValid.query(account_list.contacts, { address_valid: 'false' }, account_list).count
+    filter_contacts(account_list, address_valid: 'false').count
   end
 
   def duplicate_contacts_count(account_list)

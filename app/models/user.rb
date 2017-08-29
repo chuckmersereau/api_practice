@@ -13,12 +13,10 @@ class User < Person
   has_many :tasks, through: :account_lists
 
   devise :trackable
-  store :preferences, accessors: [:time_zone, :locale, :locale_display, :setup, :contacts_filter,
+  store :preferences, accessors: [:time_zone, :locale, :locale_display, :contacts_filter,
                                   :tasks_filter, :default_account_list, :contacts_view_options,
                                   :tab_orders, :developer, :admin]
   validate :default_account_list_is_valid, if: 'default_account_list.present?'
-
-  after_create :set_setup_mode
 
   PERMITTED_ATTRIBUTES = Person::PERMITTED_ATTRIBUTES.deep_dup.concat(
     [preferences: [
@@ -27,7 +25,6 @@ class User < Person
       :default_account_list,
       :locale,
       :locale_display,
-      :setup,
       :tasks_filter,
       :tab_orders,
       :time_zone
@@ -63,14 +60,14 @@ class User < Person
     super
   end
 
-  def setup_mode?
-    setup == true || organization_accounts.blank?
+  def setup
+    return 'no account_lists' if account_lists.empty?
+    return 'no default_account_list' if default_account_list_record.nil?
+    return 'no organization_account on default_account_list' if default_account_list_record.organization_accounts.empty?
   end
 
-  def setup_finished!
-    return unless setup_mode?
-    self.setup = [:import, :goal, :contacts]
-    save(validate: false)
+  def default_account_list_record
+    AccountList.find_by(id: default_account_list)
   end
 
   def designation_numbers(organization_id)
@@ -139,10 +136,6 @@ class User < Person
     Person.find(id)
   end
 
-  def setup
-    super || []
-  end
-
   def assign_time_zone(timezone_object)
     raise ArgumentError unless timezone_object.is_a?(ActiveSupport::TimeZone)
 
@@ -171,18 +164,15 @@ class User < Person
     super(old_value.merge(hash))
   end
 
+  def preferences=(preferences_attributes)
+    super(preferences.merge(preferences_attributes)) if preferences_attributes
+  end
+
   private
 
   def default_account_list_is_valid
     return if account_lists.map(&:id).include?(default_account_list)
 
     errors.add(:default_account_list, 'is not included in list of account_lists')
-  end
-
-  def set_setup_mode
-    if preferences[:setup].nil?
-      preferences[:setup] = true
-      save(validate: false)
-    end
   end
 end

@@ -20,7 +20,10 @@ class MasterAddress < ApplicationRecord
     geocode
     return unless latitude.present? && longitude.present?
     timezone = GoogleTimezone.fetch(latitude, longitude).time_zone_id
-    ActiveSupport::TimeZone::MAPPING.invert[timezone]
+    return ActiveSupport::TimeZone::MAPPING.invert[timezone] if ActiveSupport::TimeZone::MAPPING.invert[timezone]
+    timezone if Time.now.in_time_zone(timezone)
+  rescue ArgumentError
+    nil
   end
 
   def geocode

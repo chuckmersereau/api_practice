@@ -9,15 +9,14 @@ class UserSerializer < ApplicationSerializer
   belongs_to :master_person
 
   def preferences
-    object.preferences.merge(default_account_list: default_account_list_uuid)
+    object.preferences.merge(
+      default_account_list: default_account_list_uuid,
+      setup: object.setup)
   end
 
   private
 
   def default_account_list_uuid
-    AccountList.where(id: object.default_account_list)
-               .limit(1)
-               .pluck(:uuid)
-               .first
+    object.default_account_list_record.try(:uuid)
   end
 end
