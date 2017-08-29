@@ -8,6 +8,7 @@ RSpec.describe Contact::Filter::Locale do
   let!(:contact_two)   { create(:contact, account_list_id: account_list.id, locale: 'fr-FR') }
   let!(:contact_three) { create(:contact, account_list_id: account_list.id, locale: 'en-US') }
   let!(:contact_four)  { create(:contact, account_list_id: account_list.id, locale: 'en-US') }
+  let!(:contact_five)  { create(:contact, account_list_id: account_list.id, locale: 'Something else') }
 
   describe '#config' do
     it 'returns expected config' do
@@ -17,10 +18,12 @@ RSpec.describe Contact::Filter::Locale do
         default_selection: '',
         options: [
           { name: '-- Any --', id: '', placeholder: 'None' },
-          { name: '-- Unspecified --', id: 'null' },
-          { name: 'en-US', id: 'en-US' },
-          { name: 'fr-CA', id: 'fr-CA' },
-          { name: 'fr-FR', id: 'fr-FR' }],
+          { id: 'null', name: '-- Unspecified --' },
+          { name: 'Something else', id: 'Something else' },
+          { name: 'U.S. English', id: 'en-US' },
+          { name: 'Canadian French', id: 'fr-CA' },
+          { name: 'fr-FR', id: 'fr-FR' }
+        ],
         parent: 'Contact Details',
         priority: 26,
         title: 'Language',

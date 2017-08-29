@@ -17,10 +17,12 @@ class Contact::Filter::Locale < Contact::Filter::Base
   end
 
   def custom_options
-    options = locales.map do |locale|
+    options = locale_codes.map do |locale_code|
+      name_in_english = TwitterCldr::Shared::Languages.from_code_for_locale(locale_code, :en)
+      translated_name = name_in_english.present? ? _(name_in_english) : locale_code
       {
-        name: _(locale),
-        id: locale
+        name: translated_name,
+        id: locale_code
       }
     end
 
@@ -38,7 +40,7 @@ class Contact::Filter::Locale < Contact::Filter::Base
     ]
   end
 
-  def locales
-    account_lists.map(&:contact_locales).flatten.uniq.select(&:present?).sort
+  def locale_codes
+    (account_lists.flat_map(&:contact_locales) - ['', nil]).uniq.sort
   end
 end
