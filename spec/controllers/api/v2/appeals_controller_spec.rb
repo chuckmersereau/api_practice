@@ -68,17 +68,19 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
         get :index
         data = JSON.parse(response.body)['data']
         expect(data.size).to eq(3)
-        expect(data[0]['id']).to eq(resource.uuid)
-        expect(data[1]['id']).to eq(second_resource.uuid)
-        expect(data[2]['id']).to eq(appeal_for_second_account_list.uuid)
+        ids = data.map { |d| d['id'] }
+        expect(ids).to contain_exactly(resource.uuid,
+                                       second_resource.uuid,
+                                       appeal_for_second_account_list.uuid)
       end
 
       it 'returns appeals from one account list when filtering' do
         get :index, filter: { account_list_id: first_account_list.uuid }
         data = JSON.parse(response.body)['data']
         expect(data.size).to eq(2)
-        expect(data[0]['id']).to eq(second_resource.uuid)
-        expect(data[1]['id']).to eq(resource.uuid)
+        ids = data.map { |d| d['id'] }
+        expect(ids).to contain_exactly(resource.uuid,
+                                       second_resource.uuid)
       end
 
       it "includes the donation's contact when filtering" do

@@ -10,6 +10,8 @@ class DesignationAccountSerializer < ApplicationSerializer
 
   belongs_to :organization
 
+  has_many :balances
+
   def display_name
     return object.designation_number if object.name.blank?
     "#{object.name} (#{object.designation_number})"

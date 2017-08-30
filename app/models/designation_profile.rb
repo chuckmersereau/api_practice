@@ -3,8 +3,9 @@ class DesignationProfile < ApplicationRecord
   belongs_to :organization
   has_many :designation_profile_accounts, dependent: :delete_all
   has_many :designation_accounts, through: :designation_profile_accounts
+  has_many :balances, dependent: :delete_all, as: :resource
   belongs_to :account_list
-
+  after_save :create_balance, if: :balance_changed?
   scope :for_org, -> (org_id) { where(organization_id: org_id) }
 
   def to_s
@@ -26,5 +27,11 @@ class DesignationProfile < ApplicationRecord
 
       save(validate: false)
     end
+  end
+
+  protected
+
+  def create_balance
+    balances.create(balance: balance) if balance
   end
 end

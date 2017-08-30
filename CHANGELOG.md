@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 29 August 2017
+- Add a new include to designation_accounts called balances showing historic balances
+
 ## 21 August 2017
 - Breaking changes to the /api/v2/user endpoint. preferences[setup] now returns a string if the user is not setup correctly.
 
