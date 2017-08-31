@@ -2796,9 +2796,10 @@ CREATE TABLE pledges (
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    received_not_processed boolean,
     amount_currency character varying(255),
-    appeal_id integer
+    appeal_id integer,
+    received_not_processed boolean,
+    processed boolean DEFAULT false
 );
 
 
@@ -6723,6 +6724,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170814230054');
 INSERT INTO schema_migrations (version) VALUES ('20170816144835');
 
 INSERT INTO schema_migrations (version) VALUES ('20170817184253');
+
+INSERT INTO schema_migrations (version) VALUES ('20170829220006');
 
 INSERT INTO schema_migrations (version) VALUES ('20170829192854');
 
