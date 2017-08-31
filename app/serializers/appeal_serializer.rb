@@ -4,6 +4,10 @@ class AppealSerializer < ApplicationSerializer
              :description,
              :end_date,
              :name,
+             :pledges_amount_not_received_not_processed,
+             :pledges_amount_processed,
+             :pledges_amount_received_not_processed,
+             :pledges_amount_total,
              :total_currency
 
   belongs_to :account_list

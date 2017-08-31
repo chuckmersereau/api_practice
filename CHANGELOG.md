@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 30 August 2017
+- Added pledges_amount fields to appeal object.
+
 ## 29 August 2017
 - Added a 'processed' field on the pledge object.
 - Added an 'appeal_id' filter on the pledges endpoint.

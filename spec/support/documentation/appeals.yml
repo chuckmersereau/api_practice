@@ -94,6 +94,22 @@ response_fields:
 
   show:
     <<: *obj
+    pledges_amount_not_received_not_processed:   
+      description:
+        Sum of amounts for pledges that have not been received or processed.
+      type: number
+    pledges_amount_processed:
+      description:
+        Sum of amounts for pledges that have been processed.
+      type: number
+    pledges_amount_received_not_processed:
+      description:
+        Sum of amounts for pledges that have been received, but not processed.
+      type: number
+    pledges_amount_total:
+      description:
+        Sum of amounts for all pledges.
+      type: number
 
   create:
     <<: *obj

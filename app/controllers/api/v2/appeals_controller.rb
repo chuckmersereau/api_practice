@@ -98,7 +98,7 @@ class Api::V2::AppealsController < Api::V2Controller
   end
 
   def permitted_filters
-    [:account_list_id, :wildcard_search]
+    [:account_list_id, :wildcard_search, :appeal_id]
   end
 
   def pundit_user

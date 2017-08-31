@@ -48,6 +48,10 @@ resource 'Appeals' do
       description
       end_date
       name
+      pledges_amount_not_received_not_processed
+      pledges_amount_processed
+      pledges_amount_received_not_processed
+      pledges_amount_total
       total_currency
       updated_at
       updated_in_db_at
