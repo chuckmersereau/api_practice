@@ -6,10 +6,14 @@ class AccountListSerializer < ApplicationSerializer
              :name,
              :salary_organization,
              :tester,
-             :total_pledges
+             :total_pledges,
+             :active_mpd_start_at,
+             :active_mpd_finish_at,
+             :active_mpd_monthly_goal
 
   has_many :notification_preferences
   has_many :organization_accounts
+  belongs_to :primary_appeal
 
   def salary_organization
     return nil unless object.salary_organization_id

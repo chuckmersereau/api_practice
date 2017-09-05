@@ -9,6 +9,8 @@ describe AccountList do
 
   subject { described_class.new }
 
+  it { is_expected.to belong_to(:primary_appeal) }
+
   describe '.with_linked_org_accounts scope' do
     let!(:org_account) { create(:organization_account) }
 
@@ -497,6 +499,54 @@ describe AccountList do
                                    designation_account: designation_account)
       contact.donor_accounts << donor_account
       expect(account_list.donations.to_a).to eq([donation])
+    end
+  end
+
+  context '#active_mpd_start_at_is_before_active_mpd_finish_at' do
+    subject { create(:account_list) }
+
+    before do
+      subject.active_mpd_start_at = Date.today
+    end
+
+    describe 'start_at date is set but finish_at date is not set' do
+      it 'validates' do
+        expect(subject.valid?).to eq(true)
+      end
+    end
+
+    describe 'start_at date is set but finish_at date is set' do
+      describe 'start_at date is before finish_at date' do
+        before do
+          subject.active_mpd_finish_at = Date.tomorrow
+        end
+
+        it 'validates' do
+          expect(subject.valid?).to eq(true)
+        end
+      end
+
+      describe 'start_at date is finish_at date' do
+        before do
+          subject.active_mpd_finish_at = Date.today
+        end
+
+        it 'validates' do
+          expect(subject.valid?).to eq(false)
+          expect(subject.errors[:active_mpd_start_at]).to eq ['is after or equal to active mpd finish at date']
+        end
+      end
+
+      describe 'start_at date is after finish_at date' do
+        before do
+          subject.active_mpd_finish_at = Date.yesterday
+        end
+
+        it 'does not validates' do
+          expect(subject.valid?).to eq(false)
+          expect(subject.errors[:active_mpd_start_at]).to eq ['is after or equal to active mpd finish at date']
+        end
+      end
     end
   end
 end

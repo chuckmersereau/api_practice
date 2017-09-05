@@ -21,6 +21,7 @@ class AccountList < ApplicationRecord
   sidekiq_options queue: :api_account_list, retry: false, unique: :until_executed, unique_job_expiration: 24.hours
 
   validates :name, presence: true
+  validate :active_mpd_start_at_is_before_active_mpd_finish_at
 
   store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :ministry_country,
                                :currency, :salary_currency, :log_debug_info,
@@ -37,6 +38,7 @@ class AccountList < ApplicationRecord
   has_many :activity_tags, through: :activities, source: :base_tags
   has_many :addresses, through: :contacts
   has_many :appeals
+  belongs_to :primary_appeal, class_name: 'Appeal'
   has_many :companies, through: :company_partnerships
   has_many :company_partnerships, dependent: :destroy
   has_many :contact_tags, through: :contacts, source: :base_tags
@@ -83,6 +85,10 @@ class AccountList < ApplicationRecord
     :overwrite,
     :salary_organization,
     :tester,
+    :primary_appeal_id,
+    :active_mpd_start_at,
+    :active_mpd_finish_at,
+    :active_mpd_monthly_goal,
     :updated_at,
     :updated_in_db_at,
     :uuid,
@@ -399,5 +405,11 @@ class AccountList < ApplicationRecord
     changes.keys.include?('settings') &&
       (changes['settings'][0]['tester'] != changes['settings'][1]['tester'] ||
        changes['settings'][0]['owner'] != changes['settings'][1]['owner'])
+  end
+
+  def active_mpd_start_at_is_before_active_mpd_finish_at
+    return unless active_mpd_start_at && active_mpd_finish_at
+    return unless active_mpd_start_at >= active_mpd_finish_at
+    errors[:active_mpd_start_at] << 'is after or equal to active mpd finish at date'
   end
 end
