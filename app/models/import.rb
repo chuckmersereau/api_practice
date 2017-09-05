@@ -15,7 +15,7 @@ class Import < ApplicationRecord
     csv: 'You must specify a .csv spreadsheet file from to upload to MPDX.'.freeze,
     tnt_data_sync: 'You must specify a TntDataSync (.tntdatasync or .tntmpd) donor export file from your organization to upload to MPDX.'.freeze
   }.freeze
-  MAX_FILE_SIZE_IN_BYTES = 150_000_000
+  MAX_FILE_SIZE_IN_BYTES = 500_000_000
   PERMITTED_ATTRIBUTES = [:created_at,
                           :file,
                           :file_constants_mappings,
