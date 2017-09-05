@@ -158,18 +158,21 @@ class TntImport::ContactImport
 
   def add_notes(contact, row)
     contact.add_to_notes(row['Notes'])
-    contact.add_to_notes("Children: #{row['Children']}") if must_add_children?(row, contact)
 
-    # These social fields don't have equivalents in MPDX, so we'll add them to notes:
+    # These fields don't have equivalents in MPDX, so we'll add them to notes:
 
-    contact.add_to_notes("Other Social: #{row['SocialWeb4']}") if row['SocialWeb4']
-    contact.add_to_notes("Spouse Other Social: #{row['SpouseSocialWeb4']}") if row['SpouseSocialWeb4']
+    contact.add_to_notes("Children: #{row['Children']}") if row['Children'].present?
+    contact.add_to_notes("User Status: #{row['UserStatus']}") if row['UserStatus'].present?
+    contact.add_to_notes("Categories: #{row['Categories']}") if row['Categories'].present?
 
-    contact.add_to_notes("Voice/Skype: #{row['VoiceSkype']}") if row['VoiceSkype']
-    contact.add_to_notes("Spouse Voice/Skype: #{row['SpouseVoiceSkype']}") if row['SpouseVoiceSkype']
+    contact.add_to_notes("Other Social: #{row['SocialWeb4']}") if row['SocialWeb4'].present?
+    contact.add_to_notes("Spouse Other Social: #{row['SpouseSocialWeb4']}") if row['SpouseSocialWeb4'].present?
 
-    contact.add_to_notes("IM Address: #{row['IMAddress']}") if row['IMAddress']
-    contact.add_to_notes("Spouse IM Address: #{row['SpouseIMAddress']}") if row['SpouseIMAddress']
+    contact.add_to_notes("Voice/Skype: #{row['VoiceSkype']}") if row['VoiceSkype'].present?
+    contact.add_to_notes("Spouse Voice/Skype: #{row['SpouseVoiceSkype']}") if row['SpouseVoiceSkype'].present?
+
+    contact.add_to_notes("IM Address: #{row['IMAddress']}") if row['IMAddress'].present?
+    contact.add_to_notes("Spouse IM Address: #{row['SpouseIMAddress']}") if row['SpouseIMAddress'].present?
   end
 
   def extract_envelope_greeting_from_row(row)
@@ -181,9 +184,5 @@ class TntImport::ContactImport
 
   def true?(val)
     val.to_s.casecmp('TRUE').zero?
-  end
-
-  def must_add_children?(row, contact)
-    row['Children'].present? && (!contact.notes || !contact.notes.include?(row['Children']))
   end
 end

@@ -91,6 +91,8 @@ Has run into issues with Campus Crusade in the past...  Was told couldn&apos;t b
 Has run into issues with Campus Crusade.</Notes>
         <FamilyLevelID>0</FamilyLevelID>
         <FamilySideID>0</FamilySideID>
+        <Categories>Custom category one, Category two</Categories>
+        <UserStatus>Custom user status</UserStatus>
         <MapAddressType>0</MapAddressType>
         <MapLat>0</MapLat>
         <MapLng>0</MapLng>
@@ -134,6 +136,7 @@ Has run into issues with Campus Crusade.</Notes>
         <AppealsSinceLastGift>0</AppealsSinceLastGift>
         <ChallengesSinceLastGift>0</ChallengesSinceLastGift>
         <OrgDonorCodes>413518908</OrgDonorCodes>
+        <SocialWeb4></SocialWeb4>
       </row>
       <row id="-861693757">
         <LastEdit>2012-11-16 11:10:09</LastEdit>
