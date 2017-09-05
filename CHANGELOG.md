@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 5 September 2017
+- Added fix-send-newsletter count to /api/v2/tools/analytics endpoint.
+
 ## 30 August 2017
 - Added pledges_amount fields to appeal object.
 

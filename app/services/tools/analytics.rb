@@ -28,6 +28,7 @@ class Tools::Analytics < ActiveModelSerializers::Model
       { type: 'fix-phone-numbers', count: fix_phone_number_count(account_list) },
       { type: 'fix-email-addresses', count: fix_email_addresses_count(account_list) },
       { type: 'fix-addresses', count: fix_addresses_count(account_list) },
+      { type: 'fix-send-newsletter', count: fix_send_newsletter_count(account_list) },
       { type: 'duplicate-contacts', count: duplicate_contacts_count(account_list) },
       { type: 'duplicate-people', count: duplicate_people_count(account_list) }
     ]
@@ -56,6 +57,12 @@ class Tools::Analytics < ActiveModelSerializers::Model
 
   def fix_addresses_count(account_list)
     filter_contacts(account_list, address_valid: 'false').count
+  end
+
+  def fix_send_newsletter_count(account_list)
+    filter_contacts(account_list,
+                    newsletter: 'no_value',
+                    status: 'Partner - Financial,Partner - Special,Partner - Pray').count
   end
 
   def duplicate_contacts_count(account_list)
