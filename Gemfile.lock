@@ -533,7 +533,7 @@ GEM
       parallel
     parser (2.4.0.0)
       ast (~> 2.2)
-    pg (0.18.4)
+    pg (0.21.0)
     phonelib (0.5.6)
     powerpack (0.1.1)
     premailer (1.10.4)
@@ -880,7 +880,7 @@ DEPENDENCIES
   oauth!
   oj (~> 2.18.5)
   parallel_tests (~> 2.10.0)
-  pg (~> 0.18.2)
+  pg (~> 0.21.0)
   phonelib (~> 0.5.4)
   premailer-rails (~> 1.9.7)
   pry-byebug (~> 3.4.0)
@@ -937,4 +937,4 @@ DEPENDENCIES
   zonebie (~> 0.6.1)
 
 BUNDLED WITH
-   1.15.1
+   1.15.3

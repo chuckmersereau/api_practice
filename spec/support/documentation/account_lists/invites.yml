@@ -1,0 +1,7 @@
+parameters:
+  index:
+    filters:
+      invite_user_as:
+        description:
+          Filter by type of invite. Either 'user' or 'coach'
+        type: string

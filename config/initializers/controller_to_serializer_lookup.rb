@@ -1,5 +1,7 @@
 CONTROLLER_TO_SERIALIZER_LOOKUP = {
   'Api::V2::AccountLists::AnalyticsController' => 'AccountList::AnalyticsSerializer',
+  'Api::V2::AccountLists::UsersController' => 'AccountList::UserSerializer',
+  'Api::V2::AccountLists::CoachesController' => 'AccountList::UserSerializer',
   'Api::V2::Contacts::AnalyticsController' => 'Contact::AnalyticsSerializer',
   'Api::V2::Contacts::DuplicatesController' => 'DuplicateRecordPairSerializer',
   'Api::V2::Contacts::MergesController' => 'ContactSerializer',

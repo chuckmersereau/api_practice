@@ -5,7 +5,8 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
     render json: @users.preload_valid_associations(include_associations),
            meta: meta_hash(@users),
            include: include_params,
-           fields: field_params
+           fields: field_params,
+           each_serializer: AccountListUserSerializer
   end
 
   def show
@@ -23,7 +24,7 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
   private
 
   def destroy_user
-    @user.remove_access(load_account_list)
+    @user.remove_user_access(load_account_list)
     head :no_content
   end
 
@@ -42,7 +43,8 @@ class Api::V2::AccountLists::UsersController < Api::V2Controller
     render json: @user,
            status: success_status,
            include: include_params,
-           fields: field_params
+           fields: field_params,
+           serializer: AccountListUserSerializer
   end
 
   def authorize_user

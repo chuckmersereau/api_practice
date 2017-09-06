@@ -9,6 +9,8 @@ describe AccountList do
 
   subject { described_class.new }
 
+  it { is_expected.to have_many(:account_list_coaches).dependent(:destroy) }
+  it { is_expected.to have_many(:coaches).through(:account_list_coaches) }
   it { is_expected.to belong_to(:primary_appeal) }
 
   describe '.with_linked_org_accounts scope' do

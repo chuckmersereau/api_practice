@@ -1,20 +1,22 @@
 require 'rails_helper'
 
-describe Api::V2::AccountLists::UsersController, type: :controller do
+describe Api::V2::AccountLists::CoachesController, type: :controller do
+  let(:resource_type) { 'users' }
   let(:factory_type) { :user }
   let!(:user) { create(:user_with_account) }
-  let!(:users) { create_list(:user, 2) }
+  let!(:coaches) { create_list(:user_coach, 2) }
   let!(:account_list) { user.account_lists.first }
   let(:account_list_id) { account_list.uuid }
-  let(:user2) { users.last }
-  let(:id) { user2.uuid }
+  let(:coach2) { coaches.last }
+  let(:id) { coach2.uuid }
   let(:original_user_id) { user.uuid }
 
   before do
-    account_list.users += users
+    account_list.coaches += coaches
+    account_list.coaches << user.becomes(User::Coach)
   end
 
-  let(:resource) { user2 }
+  let(:resource) { coach2 }
   let(:parent_param) { { account_list_id: account_list_id } }
   let(:correct_attributes) { attributes_for(:user) }
 
@@ -33,9 +35,9 @@ describe Api::V2::AccountLists::UsersController, type: :controller do
         expect(response.status).to eq 204
       end
 
-      it 'does not delete self' do
+      it 'does delete self' do
         delete :destroy, account_list_id: account_list_id, id: original_user_id
-        expect(response.status).to eq 403
+        expect(response.status).to eq 204
       end
     end
   end

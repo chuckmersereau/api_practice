@@ -1,6 +1,7 @@
 class User < Person
   has_many :account_list_users, dependent: :destroy
   has_many :account_lists, -> { uniq }, through: :account_list_users
+  has_many :account_list_coaches, dependent: :destroy, foreign_key: :coach_id
   has_many :account_list_invites
   has_many :contacts, through: :account_lists
   has_many :account_list_entries, through: :account_lists
@@ -150,7 +151,7 @@ class User < Person
     designation_profiles.where(account_list: account_list).any?
   end
 
-  def remove_access(account_list)
+  def remove_user_access(account_list)
     account_list_users.where(account_list: account_list).find_each(&:destroy)
   end
 

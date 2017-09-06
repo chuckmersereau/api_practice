@@ -11,7 +11,8 @@ resource 'Account Lists > Invites' do
   let!(:account_list)   { user.account_lists.first }
   let(:account_list_id) { account_list.uuid }
 
-  let!(:invite)         { create(:account_list_invite, account_list: account_list, accepted_by_user: nil) }
+  let!(:invite)         { create(:account_list_invite, account_list: account_list, accepted_by_user: nil, cancelled_by_user: nil) }
+  let!(:invite_coach)   { create(:account_list_invite, account_list: account_list, accepted_by_user: nil, cancelled_by_user: nil, invite_user_as: 'coach') }
   let(:id)              { invite.uuid }
 
   let(:expected_attribute_keys) do
@@ -19,6 +20,7 @@ resource 'Account Lists > Invites' do
       accepted_at
       code
       created_at
+      invite_user_as
       recipient_email
       updated_at
       updated_in_db_at
@@ -44,8 +46,24 @@ resource 'Account Lists > Invites' do
         explanation 'List of Invites associated with the Account List'
         do_request
 
-        check_collection_resource(1, ['relationships'])
+        check_collection_resource(2, ['relationships'])
         expect(resource_object.keys).to match_array expected_attribute_keys
+        expect(response_status).to eq 200
+      end
+
+      example 'Invite [LIST] Filter User Invites', document: false do
+        explanation 'List of User Invites associated with the Account List'
+        do_request(filter: { invite_user_as: 'user' })
+        check_collection_resource(1, ['relationships'])
+        expect(resource_object['invite_user_as']).to eq 'user'
+        expect(response_status).to eq 200
+      end
+
+      example 'Invite [LIST] Filter Coach Invites', document: false do
+        explanation 'List of Coach Invites associated with the Account List'
+        do_request(filter: { invite_user_as: 'coach' })
+        check_collection_resource(1, ['relationships'])
+        expect(resource_object['invite_user_as']).to eq 'coach'
         expect(response_status).to eq 200
       end
     end
@@ -75,19 +93,21 @@ resource 'Account Lists > Invites' do
     end
 
     post '/api/v2/account_lists/:account_list_id/invites' do
-      let(:new_account_list_invite) { attributes_for :account_list_invite }
-      let(:email)                   { new_account_list_invite[:recipient_email] }
-      let(:recipient_email)         { email }
-      let(:form_data)               { build_data(recipient_email: recipient_email) }
+      let!(:new_account_list_invite) { attributes_for :account_list_invite }
+      let!(:recipient_email)         { new_account_list_invite[:recipient_email] }
+      let!(:invite_user_as)          { 'user' }
+      let!(:form_data)               { build_data(recipient_email: recipient_email, invite_user_as: invite_user_as) }
 
       parameter 'recipient_email', 'Recipient Email', scope: [:data, :attributes], required: true
+      parameter 'invite_user_as', 'Kind of invite ("user" or "coach")', scope: [:data, :attributes], required: true
 
       example 'Invite [CREATE]', document: documentation_scope do
         explanation 'Creates the invite associated to the given account_list'
         do_request data: form_data
 
         expect(response_status).to eq 201
-        expect(resource_object['recipient_email']).to eq email
+        expect(resource_object['recipient_email']).to eq recipient_email
+        expect(resource_object['invite_user_as']).to eq 'user'
       end
     end
 

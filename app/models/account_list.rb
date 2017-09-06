@@ -32,6 +32,7 @@ class AccountList < ApplicationRecord
   has_many :account_list_entries, dependent: :destroy
   has_many :account_list_invites, dependent: :destroy
   has_many :account_list_users, dependent: :destroy
+  has_many :account_list_coaches, dependent: :destroy
   has_many :active_contacts, -> { where(Contact.active_conditions) }, class_name: 'Contact'
   has_many :active_people, through: :active_contacts, source: :people, class_name: 'Person'
   has_many :activities, dependent: :destroy
@@ -61,6 +62,7 @@ class AccountList < ApplicationRecord
   has_many :pledges
   has_many :recurring_recommendation_results
   has_many :tasks
+  has_many :coaches, through: :account_list_coaches
   has_many :users, through: :account_list_users
 
   has_one :mail_chimp_account, dependent: :destroy

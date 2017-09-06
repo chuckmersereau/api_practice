@@ -4,6 +4,7 @@ describe User do
   subject { build(:user) }
   let(:account_list) { create(:account_list) }
   it { is_expected.to have_many(:options).dependent(:destroy) }
+  it { is_expected.to have_many(:account_list_coaches).dependent(:destroy) }
 
   context '#validations' do
     context '#default_account_list_is_valid' do
@@ -45,11 +46,11 @@ describe User do
     end
   end
 
-  context '#remove_access' do
+  context '#remove_user_access' do
     it 'removes user from account list users' do
       subject.save
       account_list.users << subject
-      subject.remove_access(account_list)
+      subject.remove_user_access(account_list)
       expect(account_list.reload.users).to_not include subject
     end
   end

@@ -20,8 +20,6 @@
               </container>
               <container class="reason">
                 <%= yield(:reason) %>
-                <%= _('If you no longer wish to receive notification emails you can unsubscribe from your ') %>
-                <a href="<%= WebRouter.notifications_preferences_url %>"><%= _('notification preferences page.') %></a>
               </container>
               <container class="footer">
                 <a href="https://mpdx.org">MPDX.org</a>
