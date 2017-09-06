@@ -49,7 +49,7 @@ describe TntImport::GiftsImport do
       @tnt_import_with_personal_gift.import
       expect(donation_generated_with_gift_splits.appeal).to eq(@second_appeal)
       expect(donation_generated_with_gift_splits.memo).to eq(
-        "\n This donation was imported from Tnt. $841 is designated to the \"#{@appeal.name}\" appeal. "
+        %(This donation was imported from Tnt.\n\n$841 is designated to the "#{@appeal.name}" appeal.)
       )
     end
 

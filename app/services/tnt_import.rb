@@ -22,10 +22,11 @@ class TntImport
 
     contact_ids_by_tnt_appeal_id = import_history(contact_ids_by_tnt_contact_id)
 
-    import_offline_org_gifts(contact_ids_by_tnt_contact_id)
     import_settings
+
     import_appeals(contact_ids_by_tnt_appeal_id)
     import_pledges
+    import_offline_org_gifts(contact_ids_by_tnt_contact_id)
 
     false
   ensure

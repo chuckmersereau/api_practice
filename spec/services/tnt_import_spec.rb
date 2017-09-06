@@ -426,6 +426,12 @@ describe TntImport do
       expect(Appeal.count).to eq(1)
       expect(AppealContact.count).to eq(0)
     end
+
+    it 'imports appeals before it imports gifts' do
+      expect(import).to receive(:import_appeals).ordered
+      expect(import).to receive(:import_offline_org_gifts).ordered
+      import.import
+    end
   end
 
   context '#import_history' do

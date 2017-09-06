@@ -55,24 +55,28 @@ class TntImport::GiftsImport
       gift_splits_by_gift_and_campaign(tnt_gift['id'], appeal.tnt_id.to_s)
     end.flatten.compact
 
-    tnt_campaign_ids = gift_splits.map { |gift_split| gift_split['CampaignID'] }
-    first_appeal = account_list_appeal_by_tnt_id(tnt_campaign_ids.first)
+    gift_split_with_appeal = gift_splits.find { |gift_split| account_list_appeal_by_tnt_id(gift_split['CampaignID']).present? }
 
-    mpdx_donation.update(appeal: first_appeal,
-                         memo: "#{mpdx_donation.memo}\n #{generate_gift_splits_memo(gift_splits.drop(1))}".gsub('&quot;', '"'))
+    appeal = gift_split_with_appeal ? account_list_appeal_by_tnt_id(gift_split_with_appeal['CampaignID']) : nil
+
+    new_memo = generate_donation_memo(mpdx_donation, (gift_splits - [gift_split_with_appeal]))
+
+    mpdx_donation.update(appeal: appeal, memo: new_memo)
+  end
+
+  def generate_donation_memo(donation, gift_splits)
+    [donation.memo, _('This donation was imported from Tnt.'), generate_gift_splits_memo(gift_splits)].select(&:present?)
+                                                                                                      .join("\n\n")
+                                                                                                      .gsub('&quot;', '"')
   end
 
   def generate_gift_splits_memo(gift_splits)
-    _('This donation was imported from Tnt.') + generate_gift_splits_data(gift_splits)
-  end
-
-  def generate_gift_splits_data(gift_splits)
     gift_splits.map do |gift_split|
       current_appeal = account_list_appeal_by_tnt_id(gift_split['CampaignID'])
       current_currency_symbol = currency_symbol(currency_code_for_id(gift_split['CurrencyID']))
 
-      " #{current_currency_symbol}#{gift_split['Amount']}" +
-        _(' is designated to the "%{appeal_name}" appeal. ').localize % { appeal_name: current_appeal.name }
+      "#{current_currency_symbol}#{gift_split['Amount']}" +
+        _(' is designated to the "%{appeal_name}" appeal.').localize % { appeal_name: current_appeal.name }
     end.join
   end
 
