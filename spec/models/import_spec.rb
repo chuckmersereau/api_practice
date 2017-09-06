@@ -134,6 +134,16 @@ describe Import do
     end.to_not raise_error
   end
 
+  it 'passes an exception on to the callback handler on failure' do
+    Sidekiq::Testing.inline!
+    import = create(:tnt_import)
+    error = StandardError.new
+    expect(@tnt_import).to receive(:import).and_raise(error)
+    expect_any_instance_of(ImportCallbackHandler).to receive(:handle_failure).with(exception: error)
+
+    import.send(:import)
+  end
+
   describe '#queue_import' do
     it 'queues an import when saved' do
       expect { create(:import) }.to change(Import.jobs, :size).from(0).to(1)

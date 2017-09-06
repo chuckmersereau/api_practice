@@ -135,7 +135,7 @@ class Import < ApplicationRecord
       async = "#{source.camelize}Import".safe_constantize.new(self).import
     rescue => exception
       exception.is_a?(Import::UnsurprisingImportError) ? Rollbar.info(exception) : Rollbar.error(exception)
-      ImportCallbackHandler.new(self).handle_failure
+      ImportCallbackHandler.new(self).handle_failure(exception: exception)
       false
     else
       ImportCallbackHandler.new(self).handle_success unless async
@@ -144,7 +144,7 @@ class Import < ApplicationRecord
 
   rescue => exception
     Rollbar.error(exception)
-    ImportCallbackHandler.new(self).handle_failure unless async
+    ImportCallbackHandler.new(self).handle_failure(exception: exception) unless async
     false
   ensure
     ImportCallbackHandler.new(self).handle_complete unless async
