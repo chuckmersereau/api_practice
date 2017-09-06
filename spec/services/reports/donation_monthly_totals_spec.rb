@@ -31,7 +31,7 @@ RSpec.describe Reports::DonationMonthlyTotals do
 
   subject do
     described_class.new(account_list: account_list,
-                        start_date: 6.months.ago,
+                        start_date: 6.months.ago - 1.day,
                         end_date: 5.months.ago)
   end
 

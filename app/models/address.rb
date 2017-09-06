@@ -60,6 +60,7 @@ class Address < ApplicationRecord
 
   def equal_to?(other)
     return false unless other
+
     other.master_address_id && master_address_id == other.master_address_id ||
       (address_fields_equal?(other) && country_equal?(other) &&
        postal_code_equals?(other))

@@ -19,7 +19,8 @@ RSpec.describe Tools::Analytics do
   let!(:second_phone_number)  { create(:phone_number, person: person) }
 
   # Inactive contacts should be excluded.
-  let!(:contact_inactive) { create(:contact, account_list: account_list, status_valid: false, status: Contact::INACTIVE_STATUSES.first, send_newsletter: nil) }
+  let!(:contact_inactive) { create(:contact, account_list: account_list, status_valid: false, status: Contact::INACTIVE_STATUSES.first) }
+
   let!(:address_inactive) { create(:address, addressable: contact_inactive, source: 'Random Source', valid_values: false) }
 
   subject { described_class.new(account_lists: [account_list]) }

@@ -10,7 +10,7 @@ class Reports::DonationMonthlyTotals < ActiveModelSerializers::Model
 
   def initialize(account_list:, start_date:, end_date:)
     super
-    date_range = start_date.beginning_of_month.to_datetime..end_date.beginning_of_month.to_datetime
+    date_range = start_date.beginning_of_month.to_date..end_date.beginning_of_month.to_date
     @months = date_range.map { |date| Date.new(date.year, date.month, 1) }.uniq
   end
 

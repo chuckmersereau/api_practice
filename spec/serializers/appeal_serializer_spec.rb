@@ -10,7 +10,7 @@ RSpec.describe AppealSerializer do
 
   describe '#currencies' do
     it 'returns all currencies from the donations' do
-      expect(parsed_json_response['currencies']).to eq(%w(CAD ZAR))
+      expect(parsed_json_response['currencies']).to match_array(%w(CAD ZAR))
     end
   end
 

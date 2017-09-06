@@ -55,17 +55,17 @@ RSpec.describe Task::Filter::ActivityType do
 
     context 'filter by activity_type' do
       it 'filters multiple activity_types' do
-        expect(described_class.query(tasks, { activity_type: 'Call, Appointment,none' }, nil).to_a).to eq([task_one, task_two, task_four, task_five])
-        expect(described_class.query(tasks, { activity_type: 'call,none, Email,' }, nil).to_a).to eq([task_three, task_four, task_five])
+        expect(described_class.query(tasks, { activity_type: 'Call, Appointment,none' }, nil).to_a).to match_array([task_one, task_two, task_four, task_five])
+        expect(described_class.query(tasks, { activity_type: 'call,none, Email,' }, nil).to_a).to match_array([task_three, task_four, task_five])
       end
       it 'filters a single activity_type' do
-        expect(described_class.query(tasks, { activity_type: 'Email' }, nil).to_a).to eq([task_three])
+        expect(described_class.query(tasks, { activity_type: 'Email' }, nil).to_a).to match_array([task_three])
       end
       it 'filters by non existing activity_type' do
         expect(described_class.query(tasks, { activity_type: 'Newsletter' }, nil).to_a).to eq([])
       end
       it 'filters by none' do
-        expect(described_class.query(tasks, { activity_type: 'none' }, nil).to_a).to eq([task_four, task_five])
+        expect(described_class.query(tasks, { activity_type: 'none' }, nil).to_a).to match_array([task_four, task_five])
       end
     end
   end
