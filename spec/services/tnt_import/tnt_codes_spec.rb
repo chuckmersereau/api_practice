@@ -25,6 +25,21 @@ describe TntImport::TntCodes do
     end
   end
 
+  describe '.import_task_type?' do
+    it 'returns false' do
+      expect(described_class.import_task_type?('190')).to eq(false)
+      expect(described_class.import_task_type?(190)).to eq(false)
+    end
+
+    it 'returns true' do
+      expect(described_class.import_task_type?('')).to eq(true)
+      expect(described_class.import_task_type?(nil)).to eq(true)
+      described_class::TNT_TASK_CODES_MAPPED_TO_MPDX_TASK_TYPES.keys.each do |id|
+        expect(described_class.import_task_type?(id)).to eq(true)
+      end
+    end
+  end
+
   describe '.task_status_completed?' do
     it 'is true for 2' do
       expect(described_class.task_status_completed?(2)).to eq(true)

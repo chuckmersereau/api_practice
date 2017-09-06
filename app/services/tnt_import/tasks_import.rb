@@ -16,6 +16,8 @@ class TntImport::TasksImport
     task_ids_by_tnt_task_id = {}
 
     xml_tables['Task'].each do |row|
+      next unless TntImport::TntCodes.import_task_type?(row['TaskTypeID'])
+
       task = build_task_from_row(row)
 
       next unless task.save

@@ -20,6 +20,8 @@ class TntImport::HistoryImport
     tnt_appeal_id_by_tnt_history_id = {}
 
     @xml_tables['History'].each do |row|
+      next unless TntImport::TntCodes.import_task_type?(row['TaskTypeID'])
+
       tnt_history_id = row['id']
 
       task = Retryable.retryable do
