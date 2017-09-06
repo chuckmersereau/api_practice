@@ -1656,7 +1656,8 @@ CREATE TABLE imports (
     file_row_failures text,
     queued_for_import_at timestamp without time zone,
     import_completed_at timestamp without time zone,
-    import_started_at timestamp without time zone
+    import_started_at timestamp without time zone,
+    error text
 );
 
 
@@ -6820,3 +6821,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170830234109');
 INSERT INTO schema_migrations (version) VALUES ('20170905043431');
 
 INSERT INTO schema_migrations (version) VALUES ('20170905044350');
+
+INSERT INTO schema_migrations (version) VALUES ('20170830234109');
+
+INSERT INTO schema_migrations (version) VALUES ('20170906162655');
+

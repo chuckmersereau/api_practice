@@ -18,13 +18,15 @@ class ImportCallbackHandler
 
     begin
       ImportMailer.delay.success(@import, successes)
+      @import.update_column(:error, nil)
     rescue => exception
       Rollbar.error(exception)
     end
   end
 
-  def handle_failure(failures: nil, successes: nil)
+  def handle_failure(exception: nil, failures: nil, successes: nil)
     ImportMailer.delay.failed(@import, successes, failures)
+    @import.update_column(:error, exception_to_text(exception))
   rescue => exception
     Rollbar.error(exception)
   end
@@ -34,5 +36,13 @@ class ImportCallbackHandler
     ContactSuggestedChangesUpdaterWorker.perform_async(@import.user_id, @import.import_started_at)
   ensure
     @import.update_columns(importing: false, import_completed_at: Time.current)
+  end
+
+  private
+
+  def exception_to_text(exception)
+    return unless exception
+    text = [exception.class, exception.message].compact.join(': ')
+    [text, exception.backtrace&.join("\n")].compact.join("\n")
   end
 end

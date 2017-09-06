@@ -41,12 +41,23 @@ describe ImportCallbackHandler do
       rescue
       end
     end
+
+    it 'sets the Import error to nil' do
+      import.update_column(:error, 'ERROR')
+      expect { ImportCallbackHandler.new(import).handle_success }.to change { import.reload.error }.from('ERROR').to(nil)
+    end
   end
 
   describe '#handle_failure' do
     it 'sends import failure mail' do
       expect_delayed_email(ImportMailer, :failed)
       ImportCallbackHandler.new(import).handle_failure
+    end
+
+    it 'sets the Import error' do
+      import.update_column(:error, nil)
+      exception = StandardError.new('Just testing!')
+      expect { ImportCallbackHandler.new(import).handle_failure(exception: exception) }.to change { import.reload.error }.from(nil).to('StandardError: Just testing!')
     end
   end
 
