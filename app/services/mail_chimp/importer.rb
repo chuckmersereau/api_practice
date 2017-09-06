@@ -24,9 +24,7 @@ class MailChimp::Importer
   end
 
   def import_members_by_email!(member_emails)
-    subscribed_members = list_of_members_info(member_emails).select do |member_info|
-      member_info[:status] == 'subscribed'
-    end
+    subscribed_members = list_of_members_info(member_emails)
 
     formatted_subscribed_members = subscribed_members.map(&method(:format_member_info))
 
@@ -85,7 +83,7 @@ class MailChimp::Importer
 
   def import_matched(matching_people_hash)
     matching_people_hash.each do |person_id, member_info|
-      add_person_to_newsletter(Person.find(person_id), member_info[:email])
+      add_or_remove_person_from_newsletter(Person.find(person_id), member_info)
     end
   end
 
@@ -93,19 +91,38 @@ class MailChimp::Importer
     member_infos_to_add = member_infos - matching_people_hash.values.map(&:symbolize_keys)
 
     member_infos_to_add.each do |member_info|
-      add_person_to_newsletter(create_person(member_info), member_info[:email])
+      add_or_remove_person_from_newsletter(create_person(member_info), member_info)
     end
   end
 
-  def add_person_to_newsletter(person, email)
-    add_contact_to_newsletter(person.contact)
-    person.update(email: email)
-  end
-
-  def add_contact_to_newsletter(contact)
+  def add_or_remove_person_from_newsletter(person, member_info)
     return if mail_chimp_account.sync_all_active_contacts?
 
-    contact.update(send_newsletter: (contact.send_newsletter == 'Physical' ? 'Both' : 'Email'))
+    person.optout_enewsletter = true if person_should_be_opted_out?(person, member_info)
+    person.email = member_info[:email]
+    person.save(validate: false)
+
+    person.primary_email_address.update(historic: true) if primary_email_address_should_be_made_historic?(member_info)
+
+    add_or_remove_contact_from_newsletter(person.contact, member_info)
+  end
+
+  def primary_email_address_should_be_made_historic?(member_info)
+    member_info[:status].casecmp('cleaned').zero?
+  end
+
+  def person_should_be_opted_out?(person, member_info)
+    %w(cleaned unsubscribed).include?(member_info[:status].downcase) || person.contact.send_newsletter == 'None'
+  end
+
+  def add_or_remove_contact_from_newsletter(contact, member_info)
+    return if contact.send_newsletter == 'None'
+
+    if member_info[:status].casecmp('unsubscribed').zero?
+      contact.update(send_newsletter: nil)
+    else
+      contact.update(send_newsletter: (contact.send_newsletter == 'Physical' ? 'Both' : 'Email'))
+    end
   end
 
   def create_person(member)

@@ -2,10 +2,16 @@
 module MailChimp::Webhook
   class PrimaryList < Base
     def subscribe_hook(email)
-      MailChimp::MembersImportWorker.perform_async(mail_chimp_account.id, [email])
+      people_to_subscribe = account_list.people.joins(:email_addresses).where(email_addresses: { email: email, primary: true })
 
-      @account_list.people.joins(:email_addresses).where(email_addresses: { email: email, primary: true })
-                   .update_all(optout_enewsletter: false)
+      return MailChimp::MembersImportWorker.perform_async(mail_chimp_account.id, [email]) if people_to_subscribe.empty?
+
+      contacts_of_people_to_subscribe = Contact.joins(:contact_people).where(contact_people: { person: people_to_subscribe })
+
+      contacts_of_people_to_subscribe.where(send_newsletter: 'Physical').update_all(send_newsletter: 'Both')
+      contacts_of_people_to_subscribe.where(send_newsletter: ['None', nil]).update_all(send_newsletter: 'Email')
+
+      people_to_subscribe.update_all(optout_enewsletter: false)
     end
 
     def unsubscribe_hook(email)
