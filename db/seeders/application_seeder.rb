@@ -57,6 +57,7 @@ class ApplicationSeeder
     create :contact_notes_log, contact: contact
 
     create :account_list_invite, account_list: account_list
+    create :account_list_coach, account_list: account_list, coach: user.becomes(User::Coach)
 
     create :activity, account_list: account_list
     create :activity_comment, activity: Activity.last, person: person

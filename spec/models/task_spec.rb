@@ -165,4 +165,48 @@ describe Task do
       end
     end
   end
+
+  describe '#update_completed_at' do
+    context 'complete' do
+      it 'sets completed_at, start_at, and result on create' do
+        task = build(:task, completed: true, start_at: nil, result: nil)
+        travel_to Time.current do
+          expect { task.save }.to change { task.completed_at }.from(nil).to(Time.current)
+            .and change { task.start_at }.from(nil).to(Time.current)
+            .and change { task.result }.from(nil).to('Done')
+        end
+      end
+
+      it 'sets completed_at, start_at, and result on update' do
+        task = create(:task, completed: false, start_at: nil, result: nil)
+        task.completed = true
+        travel_to Time.current do
+          expect { task.save }.to change { task.completed_at }.from(nil).to(Time.current)
+            .and change { task.start_at }.from(nil).to(Time.current)
+            .and change { task.result }.from(nil).to('Done')
+        end
+      end
+    end
+
+    context 'not complete' do
+      it 'sets completed_at, start_at, and result on create' do
+        task = build(:task, completed: false, start_at: nil, result: nil)
+        travel_to Time.current do
+          expect { task.save }.to_not change { task.completed_at }.from(nil)
+        end
+        expect(task.start_at).to eq(nil)
+        expect(task.result).to eq(nil)
+      end
+
+      it 'sets completed_at, start_at, and result on update' do
+        original_completed_at = 1.month.ago
+        task = create(:task, completed: true, completed_at: original_completed_at, start_at: nil, result: nil)
+        travel_to Time.current do
+          expect { task.update(completed: false) }.to change { task.completed_at }.from(original_completed_at).to(nil)
+          expect(task.start_at).to eq(original_completed_at)
+          expect(task.result).to eq('')
+        end
+      end
+    end
+  end
 end

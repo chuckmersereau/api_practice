@@ -52,6 +52,10 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
     raise Exceptions::BadRequestError, "'data/attributes/code' is invalid" unless valid_invite_code?
   end
 
+  def permitted_filters
+    [:invite_user_as]
+  end
+
   def valid_invite_code?
     params.dig(:account_list_invite, :code) == load_account_list_invite.code
   end
@@ -82,9 +86,10 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   def authorize_and_save_invite
     authorize AccountListInvite.new(invited_by_user: current_user,
                                     recipient_email: invite_params['recipient_email'],
+                                    invite_user_as: invite_params['invite_user_as'] || 'user',
                                     account_list: load_account_list), :update?
     return false unless EmailValidator.valid?(invite_params['recipient_email'])
-    @invite = AccountListInvite.send_invite(current_user, load_account_list, invite_params['recipient_email'])
+    @invite = AccountListInvite.send_invite(current_user, load_account_list, invite_params['recipient_email'], invite_params['invite_user_as'] || 'user')
   end
 
   def authorize_invite
@@ -98,7 +103,7 @@ class Api::V2::AccountLists::InvitesController < Api::V2Controller
   end
 
   def invite_scope
-    load_account_list.account_list_invites
+    load_account_list.account_list_invites.active
   end
 
   def load_account_list

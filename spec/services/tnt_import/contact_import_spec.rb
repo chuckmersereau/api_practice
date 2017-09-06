@@ -11,9 +11,9 @@ describe TntImport::ContactImport do
   let(:tnt_import) { create(:tnt_import, override: true, file: file) }
   let(:xml) { TntImport::XmlReader.new(tnt_import).parsed_xml }
   let(:contact_rows) { xml.tables['Contact'] }
+  let(:tags) { %w(tag1 tag2) }
   let(:import) do
     donor_accounts = []
-    tags = []
     TntImport::ContactImport.new(tnt_import, tags, donor_accounts)
   end
 
@@ -125,6 +125,11 @@ describe TntImport::ContactImport do
     tnt_import.override = true
     import.import_contact(row)
     expect(Contact.last.pledge_frequency).to eq nil
+  end
+
+  it 'imports given tags' do
+    row = contact_rows.first
+    expect(import.import_contact(row).tag_list).to eq(tags)
   end
 
   # These shared examples help test that attributes are imported properly, but they don't currently support all attribute types (such as date/time types).

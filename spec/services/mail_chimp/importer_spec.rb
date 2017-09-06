@@ -68,9 +68,24 @@ describe MailChimp::Importer do
           'status' => 'subscribed'
         },
         {
-          'merge_fields' => {},
+          'merge_fields' => {
+            'FNAME' => 'Third First Name',
+            'LNAME' => 'Third Last Name',
+            'GREETING' => 'Third Greeting',
+            'GROUPINGS' => 'Third Random Grouping'
+          },
           'email_address' => 'third_email@gmail.com',
-          'status' => 'none'
+          'status' => 'cleaned'
+        },
+        {
+          'merge_fields' => {
+            'FNAME' => 'Fourth First Name',
+            'LNAME' => 'Fourth Last Name',
+            'GREETING' => 'Fourth Greeting',
+            'GROUPINGS' => 'Fourth Random Grouping'
+          },
+          'email_address' => 'fourth_email@gmail.com',
+          'status' => 'unsubscribed'
         }
       ]
     end
@@ -92,6 +107,22 @@ describe MailChimp::Importer do
           greeting: 'Second Greeting',
           groupings: 'Second Random Grouping',
           status: 'subscribed'
+        },
+        {
+          email: 'third_email@gmail.com',
+          first_name: 'Third First Name',
+          last_name: 'Third Last Name',
+          greeting: 'Third Greeting',
+          groupings: 'Third Random Grouping',
+          status: 'cleaned'
+        },
+        {
+          email: 'fourth_email@gmail.com',
+          first_name: 'Fourth First Name',
+          last_name: 'Fourth Last Name',
+          greeting: 'Fourth Greeting',
+          groupings: 'Fourth Random Grouping',
+          status: 'unsubscribed'
         }
       ]
     end
@@ -110,9 +141,8 @@ describe MailChimp::Importer do
     end
 
     let!(:person) { create(:person, primary_email_address: build(:email_address, email: 'email@gmail.com')) }
-    let!(:contact) { create(:contact, primary_person: person, send_newsletter: 'Physical') }
-    let(:new_contact) { Contact.last }
-
+    let!(:contact) { create(:contact, primary_person: person, send_newsletter: 'None') }
+    let(:new_contacts) { Contact.last(3) }
     before do
       allow(MailChimp::GibbonWrapper).to receive(:new).and_return(mock_gibbon_wrapper)
       allow(mock_gibbon_wrapper).to receive(:list_emails).and_return(['email@gmail.com', 'second_email@gmail.com'])
@@ -128,11 +158,17 @@ describe MailChimp::Importer do
 
         expect do
           subject.import_all_members!
-        end.to change { Person.count }.by(1)
+        end.to change { Person.count }.by(3)
 
-        expect(new_contact.send_newsletter).to eq('Email')
-        expect(new_contact.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
-        expect(contact.reload.send_newsletter).to eq('Both')
+        expect(new_contacts.first.send_newsletter).to eq('Email')
+        expect(new_contacts.first.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
+
+        expect(new_contacts.second.primary_person.email_addresses.first.historic).to be_truthy
+
+        expect(new_contacts.third.send_newsletter).to be_nil
+        expect(new_contacts.third.primary_person.optout_enewsletter).to be_truthy
+
+        expect(contact.reload.send_newsletter).to eq('None')
       end
     end
 
@@ -142,11 +178,17 @@ describe MailChimp::Importer do
 
         expect do
           subject.import_members_by_email!(formatted_member_infos.map { |member| member[:email] })
-        end.to change { Person.count }.by(1)
+        end.to change { Person.count }.by(3)
 
-        expect(new_contact.send_newsletter).to eq('Email')
-        expect(new_contact.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
-        expect(contact.reload.send_newsletter).to eq('Both')
+        expect(new_contacts.first.send_newsletter).to eq('Email')
+        expect(new_contacts.first.primary_person.primary_email_address.email).to eq('second_email@gmail.com')
+
+        expect(new_contacts.second.primary_person.email_addresses.first.historic).to be_truthy
+
+        expect(new_contacts.third.send_newsletter).to be_nil
+        expect(new_contacts.third.primary_person.optout_enewsletter).to be_truthy
+
+        expect(contact.reload.send_newsletter).to eq('None')
       end
     end
   end

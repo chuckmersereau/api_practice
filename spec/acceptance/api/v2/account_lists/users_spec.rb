@@ -21,17 +21,8 @@ resource 'Account Lists > Users' do
       created_at
       first_name
       last_name
-      preferences
       updated_at
       updated_in_db_at
-    )
-  end
-
-  let(:resource_associations) do
-    %w(
-      account_lists
-      email_addresses
-      master_person
     )
   end
 
@@ -46,19 +37,16 @@ resource 'Account Lists > Users' do
       example 'User [LIST]', document: documentation_scope do
         explanation 'List of Users associated to the Account List'
         do_request
-
-        check_collection_resource(3, ['relationships'])
+        check_collection_resource(3, [])
         expect(response_status).to eq 200
       end
     end
 
     get '/api/v2/account_lists/:account_list_id/users/:id' do
       with_options scope: [:data, :attributes] do
-        response_field 'created_at',       'Created At',       type: 'String'
         response_field 'first_name',       'First name',       type: 'String'
         response_field 'last_name',        'Last name',        type: 'String'
-        response_field 'master_person_id', 'Master Person ID', type: 'Number'
-        response_field 'preferences',      'Preferences',      type: 'Object'
+        response_field 'created_at',       'Created At',       type: 'String'
         response_field 'updated_at',       'Updated At',       type: 'String'
         response_field 'updated_in_db_at', 'Updated In Db At', type: 'String'
       end
@@ -66,7 +54,7 @@ resource 'Account Lists > Users' do
       example 'User [GET]', document: documentation_scope do
         explanation 'The Account List User with the given ID'
         do_request
-        check_resource(['relationships'])
+        check_resource([])
         expect(resource_object['first_name']).to eq user2.first_name
         expect(resource_object['last_name']).to eq user2.last_name
         expect(response_status).to eq 200

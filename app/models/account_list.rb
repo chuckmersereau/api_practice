@@ -21,6 +21,7 @@ class AccountList < ApplicationRecord
   sidekiq_options queue: :api_account_list, retry: false, unique: :until_executed, unique_job_expiration: 24.hours
 
   validates :name, presence: true
+  validate :active_mpd_start_at_is_before_active_mpd_finish_at
 
   store :settings, accessors: [:monthly_goal, :tester, :owner, :home_country, :ministry_country,
                                :currency, :salary_currency, :log_debug_info,
@@ -31,12 +32,14 @@ class AccountList < ApplicationRecord
   has_many :account_list_entries, dependent: :destroy
   has_many :account_list_invites, dependent: :destroy
   has_many :account_list_users, dependent: :destroy
+  has_many :account_list_coaches, dependent: :destroy
   has_many :active_contacts, -> { where(Contact.active_conditions) }, class_name: 'Contact'
   has_many :active_people, through: :active_contacts, source: :people, class_name: 'Person'
   has_many :activities, dependent: :destroy
   has_many :activity_tags, through: :activities, source: :base_tags
   has_many :addresses, through: :contacts
   has_many :appeals
+  belongs_to :primary_appeal, class_name: 'Appeal'
   has_many :companies, through: :company_partnerships
   has_many :company_partnerships, dependent: :destroy
   has_many :contact_tags, through: :contacts, source: :base_tags
@@ -59,6 +62,7 @@ class AccountList < ApplicationRecord
   has_many :pledges
   has_many :recurring_recommendation_results
   has_many :tasks
+  has_many :coaches, through: :account_list_coaches
   has_many :users, through: :account_list_users
 
   has_one :mail_chimp_account, dependent: :destroy
@@ -69,8 +73,10 @@ class AccountList < ApplicationRecord
   accepts_nested_attributes_for :notification_preferences, reject_if: :all_blank, allow_destroy: true
 
   scope :with_linked_org_accounts, lambda {
-    joins(:organization_accounts).where('locked_at is null').order('last_download asc')
+    joins(:organization_accounts).where('locked_at IS NULL').order('last_download ASC')
   }
+
+  scope :has_users, -> (users) { joins(:account_list_users).where(account_list_users: { user: users }) }
 
   PERMITTED_ATTRIBUTES = [
     :created_at,
@@ -81,6 +87,10 @@ class AccountList < ApplicationRecord
     :overwrite,
     :salary_organization,
     :tester,
+    :primary_appeal_id,
+    :active_mpd_start_at,
+    :active_mpd_finish_at,
+    :active_mpd_monthly_goal,
     :updated_at,
     :updated_in_db_at,
     :uuid,
@@ -397,5 +407,11 @@ class AccountList < ApplicationRecord
     changes.keys.include?('settings') &&
       (changes['settings'][0]['tester'] != changes['settings'][1]['tester'] ||
        changes['settings'][0]['owner'] != changes['settings'][1]['owner'])
+  end
+
+  def active_mpd_start_at_is_before_active_mpd_finish_at
+    return unless active_mpd_start_at && active_mpd_finish_at
+    return unless active_mpd_start_at >= active_mpd_finish_at
+    errors[:active_mpd_start_at] << 'is after or equal to active mpd finish at date'
   end
 end

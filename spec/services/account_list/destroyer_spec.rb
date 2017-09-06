@@ -34,6 +34,7 @@ RSpec.describe AccountList::Destroyer do
     let(:records_to_delete) do
       [
         account_list,
+        account_list.account_list_coaches,
         account_list.account_list_entries,
         account_list.account_list_invites,
         account_list.account_list_users,
@@ -81,7 +82,7 @@ RSpec.describe AccountList::Destroyer do
     end
 
     let(:records_to_leave_alone) do
-      (ApplicationRecord.descendants - [User]).collect do |klass|
+      (ApplicationRecord.descendants - [User, User::Coach]).collect do |klass|
         klass.all.to_a.presence
       end.flatten - records_to_delete
     end

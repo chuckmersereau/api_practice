@@ -1,6 +1,7 @@
 class User < Person
   has_many :account_list_users, dependent: :destroy
   has_many :account_lists, -> { uniq }, through: :account_list_users
+  has_many :account_list_coaches, dependent: :destroy, foreign_key: :coach_id
   has_many :account_list_invites
   has_many :contacts, through: :account_lists
   has_many :account_list_entries, through: :account_lists
@@ -142,11 +143,6 @@ class User < Person
     self.time_zone = timezone_object.name
   end
 
-  def stale?
-    return false unless last_sign_in_at
-    last_sign_in_at < 6.months.ago
-  end
-
   def can_manage_sharing?(account_list)
     # We only allow users to manage sharing if the donor system linked them to
     # the account list via a designation profile. Otherwise, they only have
@@ -155,7 +151,7 @@ class User < Person
     designation_profiles.where(account_list: account_list).any?
   end
 
-  def remove_access(account_list)
+  def remove_user_access(account_list)
     account_list_users.where(account_list: account_list).find_each(&:destroy)
   end
 

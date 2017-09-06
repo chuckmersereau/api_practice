@@ -35,6 +35,9 @@ resource 'Account Lists' do
       salary_organization
       tester
       total_pledges
+      active_mpd_start_at
+      active_mpd_finish_at
+      active_mpd_monthly_goal
       updated_at
       updated_in_db_at
     )
@@ -44,6 +47,7 @@ resource 'Account Lists' do
     %w(
       notification_preferences
       organization_accounts
+      primary_appeal
     )
   end
 

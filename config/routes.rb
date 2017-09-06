@@ -48,6 +48,7 @@ Rails.application.routes.draw do
             end
 
             resources :users, only: [:index, :show, :destroy]
+            resources :coaches, only: [:index, :show, :destroy]
 
             resource :chalkline_mail, only: :create
           end

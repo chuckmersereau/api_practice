@@ -41,6 +41,7 @@ resource 'Pledges' do
       amount
       created_at
       expected_date
+      processed
       received_not_processed
       updated_at
       updated_in_db_at
@@ -116,9 +117,10 @@ resource 'Pledges' do
       with_options scope: :data do
         with_options scope: :attributes do
           # list out the attributes here
-          response_field 'amount',                 'Amount of Pledge',                                                     type: 'Number'
-          response_field 'expected_date',          'Expected Date of Donation',                                            type: 'String'
-          response_field 'received_not_processed', 'Value is set to true if the donation was received, but not processed', type: 'Boolean'
+          response_field 'amount',                 'Amount of Pledge',                                                        type: 'Number'
+          response_field 'expected_date',          'Expected Date of Donation',                                               type: 'String'
+          response_field 'processed',              'Value is set to true if the donation(s) was processed',                   type: 'Boolean'
+          response_field 'received_not_processed', 'Value is set to true if the donation(s) was received, but not processed', type: 'Boolean'
         end
 
         with_options scope: :relationships do

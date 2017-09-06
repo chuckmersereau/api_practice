@@ -9,20 +9,18 @@ describe Api::V2::AccountLists::UsersController, type: :controller do
   let(:user2) { users.last }
   let(:id) { user2.uuid }
   let(:original_user_id) { user.uuid }
-  let!(:google_accounts) {}
 
   before do
     account_list.users += users
-    create(:google_account, person: user2) # Test inclusion of related resources.
   end
 
   let(:resource) { user2 }
   let(:parent_param) { { account_list_id: account_list_id } }
   let(:correct_attributes) { attributes_for(:user) }
 
-  include_examples 'index_examples'
+  include_examples 'index_examples', except: [:includes, :sparse_fieldsets]
 
-  include_examples 'show_examples'
+  include_examples 'show_examples', except: [:includes, :sparse_fieldsets]
 
   context 'authorized user' do
     before do
@@ -35,7 +33,7 @@ describe Api::V2::AccountLists::UsersController, type: :controller do
         expect(response.status).to eq 204
       end
 
-      it 'does not deletes himself' do
+      it 'does not delete self' do
         delete :destroy, account_list_id: account_list_id, id: original_user_id
         expect(response.status).to eq 403
       end

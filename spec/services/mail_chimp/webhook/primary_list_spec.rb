@@ -15,9 +15,19 @@ describe MailChimp::Webhook::PrimaryList do
   let(:delayed) { double(:delayed) }
 
   context '#subscribe_hook' do
-    it 'queues an import for the new subscriber' do
+    it "queues an import for the new subscriber if it doesn't exist" do
       expect(MailChimp::MembersImportWorker).to receive(:perform_async).with(mail_chimp_account.id, ['j@t.co'])
       subject.subscribe_hook('j@t.co')
+    end
+
+    it 'updates existing contacts to the list of MPDX subscribers' do
+      person.update(optout_enewsletter: true)
+      contact.update(send_newsletter: 'None')
+
+      subject.subscribe_hook('a@example.com')
+
+      expect(person.reload.optout_enewsletter).to eq(false)
+      expect(contact.reload.send_newsletter).to eq('Email')
     end
   end
 
@@ -25,6 +35,7 @@ describe MailChimp::Webhook::PrimaryList do
     it 'marks an unsubscribed person with opt out of enewsletter' do
       subject.unsubscribe_hook('a@example.com')
       expect(person.reload.optout_enewsletter).to be_truthy
+      expect(person.contact.send_newsletter).to eq(nil)
     end
 
     it 'does not mark as unsubscribed someone with that email but not as set primary' do
@@ -32,6 +43,7 @@ describe MailChimp::Webhook::PrimaryList do
       create(:email_address, email: 'b@example.com', primary: true, person: person)
       subject.unsubscribe_hook('a@example.com')
       expect(person.reload.optout_enewsletter).to be_falsey
+      expect(person.contact.send_newsletter).to eq(nil)
     end
   end
 

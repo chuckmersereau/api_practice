@@ -6,6 +6,7 @@ class AccountList::Destroyer
   def destroy!
     destroy_sync_associations # Destroy the sync associations first to prevent syncing to external services.
 
+    @account_list.account_list_coaches.destroy_all
     @account_list.account_list_users.destroy_all
     @account_list.designation_accounts.each(&:destroy)
     @account_list.designation_profiles.destroy_all

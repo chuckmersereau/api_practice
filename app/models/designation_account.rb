@@ -7,6 +7,8 @@ class DesignationAccount < ApplicationRecord
   has_many :account_lists, through: :account_list_entries
   has_many :contacts, through: :account_lists
   has_many :donations, dependent: :delete_all
+  has_many :balances, dependent: :delete_all, as: :resource
+  after_save :create_balance, if: :balance_changed?
 
   validates :organization_id, presence: true
 
@@ -46,5 +48,11 @@ class DesignationAccount < ApplicationRecord
                 '"designation_accounts"."designation_number" LIKE :account_number',
                 name: "%#{filter_params[:wildcard_search].downcase}%",
                 account_number: "#{filter_params[:wildcard_search]}%")
+  end
+
+  protected
+
+  def create_balance
+    balances.create(balance: balance) if balance
   end
 end

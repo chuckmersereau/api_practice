@@ -3,7 +3,7 @@ class Donation < ApplicationRecord
   belongs_to :designation_account
   belongs_to :appeal
 
-  has_many :pledge_donations
+  has_many :pledge_donations, dependent: :destroy
   has_many :pledges, through: :pledge_donations
 
   validates :amount, :donation_date, presence: { message: _('can not be blank') }

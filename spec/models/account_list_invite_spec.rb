@@ -48,14 +48,29 @@ describe AccountListInvite do
   end
 
   context '.send_invite' do
-    it 'creates an invite with a random code and sends the invite email' do
-      expect(SecureRandom).to receive(:hex).with(32) { 'code' }
-      expect_delayed_email(AccountListInviteMailer, :email)
-      invite = AccountListInvite.send_invite(user, account_list, 'test@example.com')
-      expect(invite.invited_by_user).to eq(user)
-      expect(invite.code).to eq('code')
-      expect(invite.recipient_email).to eq('test@example.com')
-      expect(invite.account_list).to eq(account_list)
+    context 'user' do
+      it 'creates an invite with a random code and sends the invite email' do
+        expect(SecureRandom).to receive(:hex).with(32) { 'code' }
+        expect_delayed_email(AccountListInviteMailer, :email)
+        invite = AccountListInvite.send_invite(user, account_list, 'test@example.com', 'user')
+        expect(invite.invited_by_user).to eq(user)
+        expect(invite.invite_user_as).to eq('user')
+        expect(invite.code).to eq('code')
+        expect(invite.recipient_email).to eq('test@example.com')
+        expect(invite.account_list).to eq(account_list)
+      end
+    end
+    context 'coach' do
+      it 'creates an invite with a random code and sends the invite email' do
+        expect(SecureRandom).to receive(:hex).with(32) { 'code' }
+        expect_delayed_email(AccountListInviteMailer, :email)
+        invite = AccountListInvite.send_invite(user, account_list, 'test@example.com', 'coach')
+        expect(invite.invited_by_user).to eq(user)
+        expect(invite.invite_user_as).to eq('coach')
+        expect(invite.code).to eq('code')
+        expect(invite.recipient_email).to eq('test@example.com')
+        expect(invite.account_list).to eq(account_list)
+      end
     end
   end
 

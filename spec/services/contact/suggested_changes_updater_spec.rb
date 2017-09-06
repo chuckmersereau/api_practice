@@ -129,4 +129,22 @@ RSpec.describe Contact::SuggestedChangesUpdater, type: :model do
       expect(contact.suggested_changes.keys.include?(:pledge_frequency)).to eq false
     end
   end
+
+  context 'suggesting changes again after the contact has been updated' do
+    before do
+      create_donations_to_match_frequency(1.0)
+      contact.update_columns(status: nil,
+                             pledge_frequency: nil,
+                             pledge_amount: nil,
+                             pledge_currency: nil)
+    end
+
+    it 'does not suggest the same change after it has been applied to the contact' do
+      service.update_status_suggestions
+      expect(contact.reload.suggested_changes).to be_present
+      contact.update!(contact.reload.suggested_changes)
+      service.update_status_suggestions
+      expect(contact.reload.suggested_changes).to be_blank
+    end
+  end
 end

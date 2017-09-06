@@ -64,6 +64,8 @@ Rails.application.configure do
 
   config.debug_exception_response_format = :default
 
+  config.action_mailer.asset_host = 'http://localhost:3000'
+
   config.action_mailer.delivery_method = :letter_opener
 
   config.action_mailer.preview_path = Rails.root.join('spec', 'mailers', 'previews')

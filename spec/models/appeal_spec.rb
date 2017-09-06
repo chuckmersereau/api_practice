@@ -227,7 +227,7 @@ describe Appeal do
     context 'wildcard_search' do
       context 'name contains' do
         let!(:appeal) { create(:appeal, name: 'abcd', account_list: account_list) }
-        it 'returns dnor_account' do
+        it 'returns donor_account' do
           expect(described_class.filter(wildcard_search: 'bc')).to eq([appeal])
         end
       end
@@ -242,6 +242,38 @@ describe Appeal do
       let!(:appeal) { create(:appeal, amount: 10, account_list: account_list) }
       it 'returns designation_account' do
         expect(described_class.filter(amount: 10)).to eq([appeal])
+      end
+    end
+  end
+
+  describe 'pledges related fields' do
+    let(:appeal) { create(:appeal) }
+
+    let!(:processed_pledge)                  { create(:pledge, processed: true, amount: 200.00, appeal: appeal) }
+    let!(:received_not_processed_pledge)     { create(:pledge, received_not_processed: true, amount: 300.00, appeal: appeal) }
+    let!(:not_received_not_processed_pledge) { create(:pledge, amount: 400.00, appeal: appeal) }
+
+    context '#pledges_amount_total' do
+      it 'returns the total amount of all pledges' do
+        expect(appeal.pledges_amount_total).to eq(900.00)
+      end
+    end
+
+    context '#pledges_amount_not_received_not_processed' do
+      it 'returns the total amount of pledges that were not processed and received' do
+        expect(appeal.pledges_amount_not_received_not_processed).to eq(400.00)
+      end
+    end
+
+    context '#pledges_amount_received_not_processed' do
+      it 'returns the total amount of all pledges that were received and not processed' do
+        expect(appeal.pledges_amount_received_not_processed).to eq(300.00)
+      end
+    end
+
+    context '#pledges_amount_processed' do
+      it 'returns the total amount of all pledges that were received that were' do
+        expect(appeal.pledges_amount_processed).to eq(200.00)
       end
     end
   end

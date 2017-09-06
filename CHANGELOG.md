@@ -2,6 +2,19 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 5 September 2017
+- Added active_mpd_start_at, active_mpd_finish_at, active_mpd_monthly_goal fields to account_list object.
+- Added primary_appeal relationship to account_list object.
+- Added fix-send-newsletter count to /api/v2/tools/analytics endpoint.
+
+## 30 August 2017
+- Added pledges_amount fields to appeal object.
+
+## 29 August 2017
+- Added a 'processed' field on the pledge object.
+- Added an 'appeal_id' filter on the pledges endpoint.
+- Add a new include to designation_accounts called balances showing historic balances
+
 ## 21 August 2017
 - Breaking changes to the /api/v2/user endpoint. preferences[setup] now returns a string if the user is not setup correctly.
 

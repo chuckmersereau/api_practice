@@ -66,7 +66,7 @@ class Person::OrganizationAccount < ApplicationRecord
 
   def import_all_data
     return if locked_at || new_record? || !valid_rechecked_credentials
-    update_column(:downloading, true)
+    update_columns(downloading: true, last_download_attempt_at: Time.current)
     import_donations
   rescue OrgAccountInvalidCredentialsError, OrgAccountMissingCredentialsError
     update_column(:valid_credentials, false)
@@ -94,7 +94,8 @@ class Person::OrganizationAccount < ApplicationRecord
     starting_donation_count = user.donations.count
     import_donations_from_api
 
-    # we only want to set the last_download date if at least one donation was downloaded
+    # The last_download date is the date of the last donation that was imported.
+    # We only want to set the last_download date if at least one donation was downloaded.
     return unless user.donations.count > starting_donation_count
     process_new_donations_downloaded(import_started_at: starting_time)
   end

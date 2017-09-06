@@ -29,6 +29,34 @@ COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
 
 
 --
+-- Name: btree_gin; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS btree_gin WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION btree_gin; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION btree_gin IS 'support for indexing common datatypes in GIN';
+
+
+--
+-- Name: btree_gist; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS btree_gist WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION btree_gist; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION btree_gist IS 'support for indexing common datatypes in GiST';
+
+
+--
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -61,6 +89,38 @@ SET search_path = public, pg_catalog;
 SET default_tablespace = '';
 
 SET default_with_oids = false;
+
+--
+-- Name: account_list_coaches; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE account_list_coaches (
+    id integer NOT NULL,
+    coach_id integer,
+    account_list_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: account_list_coaches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE account_list_coaches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: account_list_coaches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE account_list_coaches_id_seq OWNED BY account_list_coaches.id;
+
 
 --
 -- Name: account_list_entries; Type: TABLE; Schema: public; Owner: -
@@ -103,14 +163,15 @@ CREATE TABLE account_list_invites (
     id integer NOT NULL,
     account_list_id integer,
     invited_by_user_id integer NOT NULL,
-    code character varying NOT NULL,
-    recipient_email character varying NOT NULL,
+    code character varying(255) NOT NULL,
+    recipient_email character varying(255) NOT NULL,
     accepted_by_user_id integer,
     accepted_at timestamp without time zone,
     cancelled_by_user_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    invite_user_as character varying DEFAULT 'user'::character varying
 );
 
 
@@ -172,12 +233,16 @@ ALTER SEQUENCE account_list_users_id_seq OWNED BY account_list_users.id;
 
 CREATE TABLE account_lists (
     id integer NOT NULL,
-    name character varying,
+    name character varying(255),
     creator_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     settings text,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    active_mpd_start_at date,
+    active_mpd_finish_at date,
+    active_mpd_monthly_goal numeric,
+    primary_appeal_id integer
 );
 
 
@@ -208,22 +273,22 @@ CREATE TABLE activities (
     id integer NOT NULL,
     account_list_id integer,
     starred boolean DEFAULT false NOT NULL,
-    location character varying,
+    location character varying(255),
     subject character varying(2000),
     start_at timestamp without time zone,
     end_at timestamp without time zone,
-    type character varying,
+    type character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     completed boolean DEFAULT false NOT NULL,
     activity_comments_count integer DEFAULT 0,
-    activity_type character varying,
-    result character varying,
+    activity_type character varying(255),
+    result character varying(255),
     completed_at timestamp without time zone,
     notification_id integer,
-    remote_id text,
-    source character varying,
-    next_action character varying,
+    remote_id character varying(255),
+    source character varying(255),
+    next_action character varying(255),
     no_date boolean DEFAULT false,
     notification_type integer,
     notification_time_before integer,
@@ -327,26 +392,26 @@ CREATE TABLE addresses (
     id integer NOT NULL,
     addressable_id integer,
     street text,
-    city character varying,
-    state character varying,
-    country character varying,
-    postal_code character varying,
-    location character varying,
+    city character varying(255),
+    state character varying(255),
+    country character varying(255),
+    postal_code character varying(255),
+    location character varying(255),
     start_date date,
     end_date date,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     primary_mailing_address boolean DEFAULT false,
-    addressable_type character varying,
-    remote_id character varying,
+    addressable_type character varying(255),
+    remote_id character varying(255),
     seasonal boolean DEFAULT false,
     master_address_id integer NOT NULL,
     verified boolean DEFAULT false NOT NULL,
     deleted boolean DEFAULT false NOT NULL,
-    region character varying,
-    metro_area character varying,
+    region character varying(255),
+    metro_area character varying(255),
     historic boolean DEFAULT false,
-    source character varying DEFAULT 'MPDX'::character varying,
+    source character varying(255) DEFAULT 'MPDX'::character varying,
     source_donor_account_id integer,
     uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT false
@@ -414,7 +479,7 @@ CREATE TABLE admin_reset_logs (
     id integer NOT NULL,
     admin_resetting_id integer,
     resetted_user_id integer,
-    reason character varying,
+    reason character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4(),
@@ -512,7 +577,7 @@ ALTER SEQUENCE appeal_excluded_appeal_contacts_id_seq OWNED BY appeal_excluded_a
 
 CREATE TABLE appeals (
     id integer NOT NULL,
-    name character varying,
+    name character varying(255),
     account_list_id integer,
     amount numeric(19,2),
     description text,
@@ -544,20 +609,54 @@ ALTER SEQUENCE appeals_id_seq OWNED BY appeals.id;
 
 
 --
+-- Name: balances; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE balances (
+    id integer NOT NULL,
+    balance numeric,
+    resource_id integer,
+    resource_type character varying,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: balances_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE balances_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: balances_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE balances_id_seq OWNED BY balances.id;
+
+
+--
 -- Name: companies; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE companies (
     id integer NOT NULL,
-    name character varying,
+    name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     street text,
-    city character varying,
-    state character varying,
-    postal_code character varying,
-    country character varying,
-    phone_number character varying,
+    city character varying(255),
+    state character varying(255),
+    postal_code character varying(255),
+    country character varying(255),
+    phone_number character varying(255),
     master_company_id integer,
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -625,7 +724,7 @@ CREATE TABLE company_positions (
     company_id integer NOT NULL,
     start_date date,
     end_date date,
-    "position" character varying,
+    "position" character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -791,26 +890,26 @@ ALTER SEQUENCE contact_referrals_id_seq OWNED BY contact_referrals.id;
 
 CREATE TABLE contacts (
     id integer NOT NULL,
-    name character varying,
+    name character varying(255),
     account_list_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     pledge_amount numeric(19,2),
-    status character varying,
+    status character varying(255),
     total_donations numeric(19,2),
     last_donation_date date,
     first_donation_date date,
     notes text,
     notes_saved_at timestamp without time zone,
-    full_name character varying,
-    greeting character varying,
+    full_name character varying(255),
+    greeting character varying(255),
     website character varying(1000),
     pledge_frequency numeric,
     pledge_start_date date,
     next_ask date,
-    likely_to_give character varying,
+    likely_to_give character varying(255),
     church_name text,
-    send_newsletter character varying,
+    send_newsletter character varying(255),
     direct_deposit boolean DEFAULT false NOT NULL,
     magazine boolean DEFAULT false NOT NULL,
     last_activity date,
@@ -823,14 +922,14 @@ CREATE TABLE contacts (
     tnt_id integer,
     deprecated_not_duplicated_with character varying(2000),
     uncompleted_tasks_count integer DEFAULT 0 NOT NULL,
-    prayer_letters_id character varying,
-    timezone character varying,
-    envelope_greeting character varying,
+    prayer_letters_id character varying(255),
+    timezone character varying(255),
+    envelope_greeting character varying(255),
     no_appeals boolean,
-    pls_id character varying,
+    pls_id character varying(255),
     prayer_letters_params text,
     pledge_currency character varying(4),
-    locale character varying,
+    locale character varying(255),
     late_at date,
     uuid uuid DEFAULT uuid_generate_v4(),
     status_valid boolean,
@@ -868,8 +967,8 @@ ALTER SEQUENCE contacts_id_seq OWNED BY contacts.id;
 
 CREATE TABLE currency_aliases (
     id integer NOT NULL,
-    alias_code character varying NOT NULL,
-    rate_api_code character varying NOT NULL,
+    alias_code character varying(255) NOT NULL,
+    rate_api_code character varying(255) NOT NULL,
     ratio numeric NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -903,9 +1002,9 @@ ALTER SEQUENCE currency_aliases_id_seq OWNED BY currency_aliases.id;
 CREATE TABLE currency_rates (
     id integer NOT NULL,
     exchanged_on date NOT NULL,
-    code character varying NOT NULL,
+    code character varying(255) NOT NULL,
     rate numeric(20,10) NOT NULL,
-    source character varying NOT NULL,
+    source character varying(255) NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -935,15 +1034,15 @@ ALTER SEQUENCE currency_rates_id_seq OWNED BY currency_rates.id;
 
 CREATE TABLE designation_accounts (
     id integer NOT NULL,
-    designation_number character varying,
+    designation_number character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     organization_id integer,
     balance numeric(19,2),
     balance_updated_at timestamp without time zone,
-    name character varying,
-    staff_account_id character varying,
-    chartfield character varying,
+    name character varying(255),
+    staff_account_id character varying(255),
+    chartfield character varying(255),
     active boolean DEFAULT true NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -1007,13 +1106,13 @@ ALTER SEQUENCE designation_profile_accounts_id_seq OWNED BY designation_profile_
 
 CREATE TABLE designation_profiles (
     id integer NOT NULL,
-    remote_id character varying,
+    remote_id character varying(255),
     user_id integer NOT NULL,
     organization_id integer NOT NULL,
-    name character varying,
+    name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    code character varying,
+    code character varying(255),
     balance numeric(19,2),
     balance_updated_at timestamp without time zone,
     account_list_id integer,
@@ -1046,21 +1145,21 @@ ALTER SEQUENCE designation_profiles_id_seq OWNED BY designation_profiles.id;
 
 CREATE TABLE donations (
     id integer NOT NULL,
-    remote_id character varying,
+    remote_id character varying(255),
     donor_account_id integer,
     designation_account_id integer,
-    motivation character varying,
-    payment_method character varying,
-    tendered_currency character varying,
+    motivation character varying(255),
+    payment_method character varying(255),
+    tendered_currency character varying(255),
     tendered_amount numeric(19,2),
-    currency character varying,
+    currency character varying(255),
     amount numeric(19,2),
     memo text,
     donation_date date,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    payment_type character varying,
-    channel character varying,
+    payment_type character varying(255),
+    channel character varying(255),
     appeal_id integer,
     appeal_amount numeric(19,2),
     uuid uuid DEFAULT uuid_generate_v4()
@@ -1126,8 +1225,8 @@ ALTER SEQUENCE donor_account_people_id_seq OWNED BY donor_account_people.id;
 CREATE TABLE donor_accounts (
     id integer NOT NULL,
     organization_id integer,
-    account_number character varying,
-    name character varying,
+    account_number character varying(255),
+    name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     master_company_id integer,
@@ -1203,17 +1302,17 @@ ALTER SEQUENCE duplicate_record_pairs_id_seq OWNED BY duplicate_record_pairs.id;
 CREATE TABLE email_addresses (
     id integer NOT NULL,
     person_id integer,
-    email character varying NOT NULL,
+    email character varying(255) NOT NULL,
     "primary" boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    remote_id character varying,
+    remote_id character varying(255),
     location character varying(50),
     historic boolean DEFAULT false,
     deleted boolean DEFAULT false,
     uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT true,
-    source character varying DEFAULT 'MPDX'::character varying
+    source character varying(255) DEFAULT 'MPDX'::character varying
 );
 
 
@@ -1278,7 +1377,7 @@ CREATE TABLE family_relationships (
     id integer NOT NULL,
     person_id integer,
     related_person_id integer,
-    relationship character varying NOT NULL,
+    relationship character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -1310,15 +1409,15 @@ ALTER SEQUENCE family_relationships_id_seq OWNED BY family_relationships.id;
 
 CREATE TABLE google_contacts (
     id integer NOT NULL,
-    remote_id character varying,
+    remote_id character varying(255),
     person_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    picture_etag character varying,
+    picture_etag character varying(255),
     picture_id integer,
     google_account_id integer,
     last_synced timestamp without time zone,
-    last_etag character varying,
+    last_etag character varying(255),
     last_data text,
     contact_id integer,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -1418,10 +1517,10 @@ CREATE TABLE google_events (
     id integer NOT NULL,
     activity_id integer,
     google_integration_id integer,
-    google_event_id character varying,
+    google_event_id character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    calendar_id character varying,
+    calendar_id character varying(255),
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1455,8 +1554,8 @@ CREATE TABLE google_integrations (
     google_account_id integer,
     calendar_integration boolean DEFAULT false NOT NULL,
     calendar_integrations text,
-    calendar_id character varying,
-    calendar_name character varying,
+    calendar_id character varying(255),
+    calendar_name character varying(255),
     email_integration boolean DEFAULT false NOT NULL,
     contacts_integration boolean DEFAULT false NOT NULL,
     contacts_last_synced timestamp without time zone,
@@ -1492,17 +1591,17 @@ ALTER SEQUENCE google_integrations_id_seq OWNED BY google_integrations.id;
 
 CREATE TABLE help_requests (
     id integer NOT NULL,
-    name character varying,
+    name character varying(255),
     browser text,
     problem text,
-    email character varying,
-    file character varying,
+    email character varying(255),
+    file character varying(255),
     user_id integer,
     account_list_id integer,
     session text,
     user_preferences text,
     account_list_settings text,
-    request_type character varying,
+    request_type character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -1535,8 +1634,8 @@ ALTER SEQUENCE help_requests_id_seq OWNED BY help_requests.id;
 CREATE TABLE imports (
     id integer NOT NULL,
     account_list_id integer,
-    source character varying,
-    file character varying,
+    source character varying(255),
+    file character varying(255),
     importing boolean,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -1586,18 +1685,18 @@ ALTER SEQUENCE imports_id_seq OWNED BY imports.id;
 
 CREATE TABLE mail_chimp_accounts (
     id integer NOT NULL,
-    api_key character varying,
+    api_key character varying(255),
     active boolean DEFAULT false,
-    status_grouping_id character varying,
-    primary_list_id character varying,
+    status_grouping_id character varying(255),
+    primary_list_id character varying(255),
     account_list_id integer,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    webhook_token character varying,
+    webhook_token character varying(255),
     auto_log_campaigns boolean DEFAULT false NOT NULL,
     importing boolean DEFAULT false NOT NULL,
     status_interest_ids text,
-    tags_grouping_id character varying,
+    tags_grouping_id character varying(255),
     tags_interest_ids text,
     sync_all_active_contacts boolean,
     prayer_letter_last_sent timestamp without time zone,
@@ -1631,7 +1730,7 @@ ALTER SEQUENCE mail_chimp_accounts_id_seq OWNED BY mail_chimp_accounts.id;
 CREATE TABLE mail_chimp_appeal_lists (
     id integer NOT NULL,
     mail_chimp_account_id integer NOT NULL,
-    appeal_list_id character varying NOT NULL,
+    appeal_list_id character varying(255) NOT NULL,
     appeal_id integer NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -1665,16 +1764,16 @@ ALTER SEQUENCE mail_chimp_appeal_lists_id_seq OWNED BY mail_chimp_appeal_lists.i
 CREATE TABLE mail_chimp_members (
     id integer NOT NULL,
     mail_chimp_account_id integer NOT NULL,
-    list_id character varying NOT NULL,
-    email character varying NOT NULL,
-    status character varying,
-    greeting character varying,
-    first_name character varying,
-    last_name character varying,
+    list_id character varying(255) NOT NULL,
+    email character varying(255) NOT NULL,
+    status character varying(255),
+    greeting character varying(255),
+    first_name character varying(255),
+    last_name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    contact_locale character varying,
-    tags character varying[],
+    contact_locale character varying(255),
+    tags character varying(255)[],
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -1705,16 +1804,16 @@ ALTER SEQUENCE mail_chimp_members_id_seq OWNED BY mail_chimp_members.id;
 CREATE TABLE master_addresses (
     id integer NOT NULL,
     street text,
-    city character varying,
-    state character varying,
-    country character varying,
-    postal_code character varying,
+    city character varying(255),
+    state character varying(255),
+    country character varying(255),
+    postal_code character varying(255),
     verified boolean DEFAULT false NOT NULL,
     smarty_response text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    latitude character varying,
-    longitude character varying,
+    latitude character varying(255),
+    longitude character varying(255),
     uuid uuid DEFAULT uuid_generate_v4(),
     last_geocoded_at timestamp without time zone
 );
@@ -1745,7 +1844,7 @@ ALTER SEQUENCE master_addresses_id_seq OWNED BY master_addresses.id;
 
 CREATE TABLE master_companies (
     id integer NOT NULL,
-    name character varying,
+    name character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -1844,7 +1943,7 @@ CREATE TABLE master_person_sources (
     id integer NOT NULL,
     master_person_id integer,
     organization_id integer,
-    remote_id character varying,
+    remote_id character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -1878,11 +1977,11 @@ CREATE TABLE messages (
     id integer NOT NULL,
     from_id integer,
     to_id integer,
-    subject character varying,
+    subject character varying(255),
     body text,
     sent_at timestamp without time zone,
-    source character varying,
-    remote_id character varying,
+    source character varying(255),
+    remote_id character varying(255),
     contact_id integer,
     account_list_id integer,
     created_at timestamp without time zone NOT NULL,
@@ -1916,7 +2015,7 @@ ALTER SEQUENCE messages_id_seq OWNED BY messages.id;
 
 CREATE TABLE name_male_ratios (
     id integer NOT NULL,
-    name character varying NOT NULL,
+    name character varying(255) NOT NULL,
     male_ratio double precision NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -1949,9 +2048,9 @@ ALTER SEQUENCE name_male_ratios_id_seq OWNED BY name_male_ratios.id;
 
 CREATE TABLE nicknames (
     id integer NOT NULL,
-    name character varying NOT NULL,
-    nickname character varying NOT NULL,
-    source character varying,
+    name character varying(255) NOT NULL,
+    nickname character varying(255) NOT NULL,
+    source character varying(255),
     num_merges integer DEFAULT 0 NOT NULL,
     num_not_duplicates integer DEFAULT 0 NOT NULL,
     num_times_offered integer DEFAULT 0 NOT NULL,
@@ -2021,7 +2120,7 @@ ALTER SEQUENCE notification_preferences_id_seq OWNED BY notification_preferences
 
 CREATE TABLE notification_types (
     id integer NOT NULL,
-    type character varying,
+    type character varying(255),
     description text,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -2091,40 +2190,40 @@ ALTER SEQUENCE notifications_id_seq OWNED BY notifications.id;
 
 CREATE TABLE organizations (
     id integer NOT NULL,
-    name character varying,
-    query_ini_url character varying,
-    iso3166 character varying,
-    minimum_gift_date character varying,
-    logo character varying,
-    code character varying,
+    name character varying(255),
+    query_ini_url character varying(255),
+    iso3166 character varying(255),
+    minimum_gift_date character varying(255),
+    logo character varying(255),
+    code character varying(255),
     query_authentication boolean,
-    account_help_url character varying,
-    abbreviation character varying,
-    org_help_email character varying,
-    org_help_url character varying,
-    org_help_url_description character varying,
+    account_help_url character varying(255),
+    abbreviation character varying(255),
+    org_help_email character varying(255),
+    org_help_url character varying(255),
+    org_help_url_description character varying(255),
     org_help_other text,
-    request_profile_url character varying,
-    staff_portal_url character varying,
-    default_currency_code character varying,
+    request_profile_url character varying(255),
+    staff_portal_url character varying(255),
+    default_currency_code character varying(255),
     allow_passive_auth boolean,
-    account_balance_url character varying,
-    account_balance_params character varying,
-    donations_url character varying,
-    donations_params character varying,
-    addresses_url character varying,
-    addresses_params character varying,
-    addresses_by_personids_url character varying,
-    addresses_by_personids_params character varying,
-    profiles_url character varying,
-    profiles_params character varying,
-    redirect_query_ini character varying,
+    account_balance_url character varying(255),
+    account_balance_params character varying(255),
+    donations_url character varying(255),
+    donations_params character varying(255),
+    addresses_url character varying(255),
+    addresses_params character varying(255),
+    addresses_by_personids_url character varying(255),
+    addresses_by_personids_params character varying(255),
+    profiles_url character varying(255),
+    profiles_params character varying(255),
+    redirect_query_ini character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    api_class character varying,
-    country character varying,
+    api_class character varying(255),
+    country character varying(255),
     uses_key_auth boolean DEFAULT false,
-    locale character varying DEFAULT 'en'::character varying NOT NULL,
+    locale character varying(255) DEFAULT 'en'::character varying NOT NULL,
     gift_aid_percentage numeric,
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -2157,7 +2256,7 @@ CREATE TABLE partner_status_logs (
     id integer NOT NULL,
     contact_id integer NOT NULL,
     recorded_on date NOT NULL,
-    status character varying,
+    status character varying(255),
     pledge_amount numeric,
     pledge_frequency numeric,
     pledge_received boolean,
@@ -2193,36 +2292,36 @@ ALTER SEQUENCE partner_status_logs_id_seq OWNED BY partner_status_logs.id;
 
 CREATE TABLE people (
     id integer NOT NULL,
-    first_name character varying NOT NULL,
-    legal_first_name character varying,
-    last_name character varying,
+    first_name character varying(255) NOT NULL,
+    legal_first_name character varying(255),
+    last_name character varying(255),
     birthday_month integer,
     birthday_year integer,
     birthday_day integer,
     anniversary_month integer,
     anniversary_year integer,
     anniversary_day integer,
-    title character varying,
-    suffix character varying,
-    gender character varying,
-    marital_status character varying,
+    title character varying(255),
+    suffix character varying(255),
+    gender character varying(255),
+    marital_status character varying(255),
     preferences text,
     sign_in_count integer DEFAULT 0,
     current_sign_in_at timestamp without time zone,
     last_sign_in_at timestamp without time zone,
-    current_sign_in_ip character varying,
-    last_sign_in_ip character varying,
+    current_sign_in_ip character varying(255),
+    last_sign_in_ip character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     master_person_id integer NOT NULL,
-    middle_name character varying,
+    middle_name character varying(255),
     access_token character varying(32),
     profession text,
     deceased boolean DEFAULT false NOT NULL,
     subscribed_to_updates boolean,
     optout_enewsletter boolean DEFAULT false,
-    occupation character varying,
-    employer character varying,
+    occupation character varying(255),
+    employer character varying(255),
     not_duplicated_with character varying(2000),
     uuid uuid DEFAULT uuid_generate_v4()
 );
@@ -2255,17 +2354,17 @@ CREATE TABLE person_facebook_accounts (
     id integer NOT NULL,
     person_id integer NOT NULL,
     remote_id bigint,
-    token character varying,
+    token character varying(255),
     token_expires_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_token boolean DEFAULT false,
-    first_name character varying,
-    last_name character varying,
+    first_name character varying(255),
+    last_name character varying(255),
     authenticated boolean DEFAULT false NOT NULL,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    username character varying,
+    username character varying(255),
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2297,13 +2396,13 @@ CREATE TABLE person_google_accounts (
     id integer NOT NULL,
     remote_id text,
     person_id integer,
-    token character varying,
-    refresh_token character varying,
+    token character varying(255),
+    refresh_token character varying(255),
     expires_at timestamp without time zone,
     valid_token boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    email character varying NOT NULL,
+    email character varying(255) NOT NULL,
     authenticated boolean DEFAULT false NOT NULL,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
@@ -2340,10 +2439,10 @@ ALTER SEQUENCE person_google_accounts_id_seq OWNED BY person_google_accounts.id;
 CREATE TABLE person_key_accounts (
     id integer NOT NULL,
     person_id integer,
-    remote_id character varying,
-    first_name character varying,
-    last_name character varying,
-    email character varying,
+    remote_id character varying(255),
+    first_name character varying(255),
+    last_name character varying(255),
+    email character varying(255),
     authenticated boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -2380,15 +2479,15 @@ ALTER SEQUENCE person_key_accounts_id_seq OWNED BY person_key_accounts.id;
 CREATE TABLE person_linkedin_accounts (
     id integer NOT NULL,
     person_id integer NOT NULL,
-    remote_id character varying,
-    token character varying,
-    secret character varying,
+    remote_id character varying(255),
+    token character varying(255),
+    secret character varying(255),
     token_expires_at timestamp without time zone,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_token boolean DEFAULT false,
-    first_name character varying,
-    last_name character varying,
+    first_name character varying(255),
+    last_name character varying(255),
     authenticated boolean DEFAULT false NOT NULL,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
@@ -2422,8 +2521,8 @@ ALTER SEQUENCE person_linkedin_accounts_id_seq OWNED BY person_linkedin_accounts
 
 CREATE TABLE person_options (
     id integer NOT NULL,
-    key character varying NOT NULL,
-    value character varying,
+    key character varying(255) NOT NULL,
+    value character varying(255),
     user_id integer,
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
@@ -2458,19 +2557,20 @@ CREATE TABLE person_organization_accounts (
     id integer NOT NULL,
     person_id integer,
     organization_id integer,
-    username character varying,
-    password character varying,
+    username character varying(255),
+    password character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    remote_id character varying,
+    remote_id character varying(255),
     authenticated boolean DEFAULT false NOT NULL,
     valid_credentials boolean DEFAULT false NOT NULL,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    token character varying,
+    token character varying(255),
     locked_at timestamp without time zone,
     disable_downloads boolean DEFAULT false NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    last_download_attempt_at timestamp without time zone
 );
 
 
@@ -2500,20 +2600,20 @@ ALTER SEQUENCE person_organization_accounts_id_seq OWNED BY person_organization_
 CREATE TABLE person_relay_accounts (
     id integer NOT NULL,
     person_id integer,
-    relay_remote_id character varying,
-    first_name character varying,
-    last_name character varying,
-    email character varying,
-    designation character varying,
-    employee_id character varying,
-    username character varying,
+    relay_remote_id character varying(255),
+    first_name character varying(255),
+    last_name character varying(255),
+    email character varying(255),
+    designation character varying(255),
+    employee_id character varying(255),
+    username character varying(255),
     authenticated boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     "primary" boolean DEFAULT false,
     downloading boolean DEFAULT false NOT NULL,
     last_download timestamp without time zone,
-    remote_id character varying NOT NULL,
+    remote_id character varying(255) NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2545,9 +2645,9 @@ CREATE TABLE person_twitter_accounts (
     id integer NOT NULL,
     person_id integer NOT NULL,
     remote_id bigint,
-    screen_name character varying,
-    token character varying,
-    secret character varying,
+    screen_name character varying(255),
+    token character varying(255),
+    secret character varying(255),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     valid_token boolean DEFAULT false,
@@ -2619,17 +2719,17 @@ ALTER SEQUENCE person_websites_id_seq OWNED BY person_websites.id;
 CREATE TABLE phone_numbers (
     id integer NOT NULL,
     person_id integer,
-    number character varying,
-    country_code character varying,
-    location character varying,
+    number character varying(255),
+    country_code character varying(255),
+    location character varying(255),
     "primary" boolean DEFAULT false,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    remote_id character varying,
+    remote_id character varying(255),
     historic boolean DEFAULT false,
     uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT true,
-    source character varying DEFAULT 'MPDX'::character varying
+    source character varying(255) DEFAULT 'MPDX'::character varying
 );
 
 
@@ -2659,8 +2759,8 @@ ALTER SEQUENCE phone_numbers_id_seq OWNED BY phone_numbers.id;
 CREATE TABLE pictures (
     id integer NOT NULL,
     picture_of_id integer,
-    picture_of_type character varying,
-    image character varying,
+    picture_of_type character varying(255),
+    image character varying(255),
     "primary" boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -2733,9 +2833,10 @@ CREATE TABLE pledges (
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    amount_currency character varying,
+    received_not_processed boolean,
+    amount_currency character varying(255),
     appeal_id integer,
-    received_not_processed boolean
+    processed boolean DEFAULT false
 );
 
 
@@ -2765,7 +2866,7 @@ ALTER SEQUENCE pledges_id_seq OWNED BY pledges.id;
 CREATE TABLE pls_accounts (
     id integer NOT NULL,
     account_list_id integer,
-    oauth2_token character varying,
+    oauth2_token character varying(255),
     valid_token boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -2798,13 +2899,13 @@ ALTER SEQUENCE pls_accounts_id_seq OWNED BY pls_accounts.id;
 
 CREATE TABLE prayer_letters_accounts (
     id integer NOT NULL,
-    token character varying,
-    secret character varying,
+    token character varying(255),
+    secret character varying(255),
     valid_token boolean DEFAULT true,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     account_list_id integer,
-    oauth2_token character varying,
+    oauth2_token character varying(255),
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -2836,7 +2937,7 @@ CREATE TABLE recurring_recommendation_results (
     id integer NOT NULL,
     account_list_id integer,
     contact_id integer,
-    result character varying NOT NULL,
+    result character varying(255) NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -2867,7 +2968,7 @@ ALTER SEQUENCE recurring_recommendation_results_id_seq OWNED BY recurring_recomm
 --
 
 CREATE TABLE schema_migrations (
-    version character varying NOT NULL
+    version character varying(255) NOT NULL
 );
 
 
@@ -2879,9 +2980,9 @@ CREATE TABLE taggings (
     id integer NOT NULL,
     tag_id integer,
     taggable_id integer,
-    taggable_type character varying,
+    taggable_type character varying(255),
     tagger_id integer,
-    tagger_type character varying,
+    tagger_type character varying(255),
     context character varying(128),
     created_at timestamp without time zone NOT NULL,
     uuid uuid DEFAULT uuid_generate_v4()
@@ -2913,7 +3014,7 @@ ALTER SEQUENCE taggings_id_seq OWNED BY taggings.id;
 
 CREATE TABLE tags (
     id integer NOT NULL,
-    name character varying,
+    name character varying(255),
     uuid uuid DEFAULT uuid_generate_v4(),
     taggings_count integer DEFAULT 0
 );
@@ -2944,14 +3045,14 @@ ALTER SEQUENCE tags_id_seq OWNED BY tags.id;
 
 CREATE TABLE versions (
     id integer NOT NULL,
-    item_type character varying NOT NULL,
+    item_type character varying(255) NOT NULL,
     item_id integer NOT NULL,
-    event character varying NOT NULL,
-    whodunnit character varying,
+    event character varying(255) NOT NULL,
+    whodunnit character varying(255),
     object text,
-    related_object_type character varying,
+    related_object_type character varying(255),
     related_object_id integer,
-    created_at timestamp without time zone
+    created_at timestamp without time zone NOT NULL
 );
 
 
@@ -2972,6 +3073,13 @@ CREATE SEQUENCE versions_id_seq
 --
 
 ALTER SEQUENCE versions_id_seq OWNED BY versions.id;
+
+
+--
+-- Name: account_list_coaches id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY account_list_coaches ALTER COLUMN id SET DEFAULT nextval('account_list_coaches_id_seq'::regclass);
 
 
 --
@@ -3063,6 +3171,13 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts ALTER COLUMN id SET DEFAULT nex
 --
 
 ALTER TABLE ONLY appeals ALTER COLUMN id SET DEFAULT nextval('appeals_id_seq'::regclass);
+
+
+--
+-- Name: balances id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY balances ALTER COLUMN id SET DEFAULT nextval('balances_id_seq'::regclass);
 
 
 --
@@ -3507,6 +3622,14 @@ ALTER TABLE ONLY versions ALTER COLUMN id SET DEFAULT nextval('versions_id_seq':
 
 
 --
+-- Name: account_list_coaches account_list_coaches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY account_list_coaches
+    ADD CONSTRAINT account_list_coaches_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: account_list_entries account_list_entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3608,6 +3731,14 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts
 
 ALTER TABLE ONLY appeals
     ADD CONSTRAINT appeals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: balances balances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY balances
+    ADD CONSTRAINT balances_pkey PRIMARY KEY (id);
 
 
 --
@@ -4143,6 +4274,27 @@ CREATE UNIQUE INDEX designation_p_to_a ON designation_profile_accounts USING btr
 
 
 --
+-- Name: index_account_list_coaches_on_account_list_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_list_coaches_on_account_list_id ON account_list_coaches USING btree (account_list_id);
+
+
+--
+-- Name: index_account_list_coaches_on_coach_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_account_list_coaches_on_coach_id ON account_list_coaches USING btree (coach_id);
+
+
+--
+-- Name: index_account_list_coaches_on_coach_id_and_account_list_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_account_list_coaches_on_coach_id_and_account_list_id ON account_list_coaches USING btree (coach_id, account_list_id);
+
+
+--
 -- Name: index_account_list_entries_on_designation_account_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4409,6 +4561,13 @@ CREATE UNIQUE INDEX index_appeals_on_uuid ON appeals USING btree (uuid);
 
 
 --
+-- Name: index_balances_on_resource_id_and_resource_type; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_balances_on_resource_id_and_resource_type ON balances USING btree (resource_id, resource_type);
+
+
+--
 -- Name: index_companies_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4549,6 +4708,13 @@ CREATE INDEX index_contacts_on_last_donation_date ON contacts USING btree (last_
 
 
 --
+-- Name: index_contacts_on_status; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_contacts_on_status ON contacts USING btree (status);
+
+
+--
 -- Name: index_contacts_on_status_valid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4671,7 +4837,7 @@ CREATE INDEX index_donations_on_created_at ON donations USING btree (created_at)
 -- Name: index_donations_on_des_acc_id_and_don_date_and_rem_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_donations_on_des_acc_id_and_don_date_and_rem_id ON donations USING btree (designation_account_id, donation_date DESC, remote_id);
+CREATE INDEX index_donations_on_des_acc_id_and_don_date_and_rem_id ON donations USING btree (designation_account_id, donation_date, remote_id);
 
 
 --
@@ -4777,13 +4943,6 @@ CREATE INDEX index_dup_record_pairs_on_record_one_type_and_record_one_id ON dupl
 --
 
 CREATE INDEX index_dup_record_pairs_on_record_two_type_and_record_two_id ON duplicate_record_pairs USING btree (record_two_type, record_two_id);
-
-
---
--- Name: index_dup_record_pairs_on_record_types_and_ids; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_dup_record_pairs_on_record_types_and_ids ON duplicate_record_pairs USING btree (record_one_type, record_two_type, record_one_id, record_two_id);
 
 
 --
@@ -5498,6 +5657,13 @@ CREATE UNIQUE INDEX index_person_options_on_key_and_user_id ON person_options US
 --
 
 CREATE UNIQUE INDEX index_person_options_on_uuid ON person_options USING btree (uuid);
+
+
+--
+-- Name: index_person_organization_accounts_on_last_download_attempt_at; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_person_organization_accounts_on_last_download_attempt_at ON person_organization_accounts USING btree (last_download_attempt_at);
 
 
 --
@@ -6621,8 +6787,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170707013656');
 
 INSERT INTO schema_migrations (version) VALUES ('20170711194415');
 
-INSERT INTO schema_migrations (version) VALUES ('20170720172049');
-
 INSERT INTO schema_migrations (version) VALUES ('20170728214336');
 
 INSERT INTO schema_migrations (version) VALUES ('20170728221932');
@@ -6633,12 +6797,26 @@ INSERT INTO schema_migrations (version) VALUES ('20170801182230');
 
 INSERT INTO schema_migrations (version) VALUES ('20170803172858');
 
-INSERT INTO schema_migrations (version) VALUES ('20170817184253');
-
 INSERT INTO schema_migrations (version) VALUES ('20170810174948');
 
 INSERT INTO schema_migrations (version) VALUES ('20170814230054');
 
 INSERT INTO schema_migrations (version) VALUES ('20170816144835');
 
+INSERT INTO schema_migrations (version) VALUES ('20170817184253');
 
+INSERT INTO schema_migrations (version) VALUES ('20170824151005');
+
+INSERT INTO schema_migrations (version) VALUES ('20170829192854');
+
+INSERT INTO schema_migrations (version) VALUES ('20170829211453');
+
+INSERT INTO schema_migrations (version) VALUES ('20170829212715');
+
+INSERT INTO schema_migrations (version) VALUES ('20170829220006');
+
+INSERT INTO schema_migrations (version) VALUES ('20170830234109');
+
+INSERT INTO schema_migrations (version) VALUES ('20170905043431');
+
+INSERT INTO schema_migrations (version) VALUES ('20170905044350');

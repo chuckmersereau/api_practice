@@ -9,6 +9,38 @@ describe AccountList do
 
   subject { described_class.new }
 
+  it { is_expected.to have_many(:account_list_coaches).dependent(:destroy) }
+  it { is_expected.to have_many(:coaches).through(:account_list_coaches) }
+  it { is_expected.to belong_to(:primary_appeal) }
+
+  describe '.with_linked_org_accounts scope' do
+    let!(:org_account) { create(:organization_account) }
+
+    it 'returns non-locked account lists with organization accounts' do
+      expect(AccountList.with_linked_org_accounts).to include org_account.account_list
+    end
+
+    it 'does not return locked accounts' do
+      org_account.update_column(:locked_at, 1.minute.ago)
+      expect(AccountList.with_linked_org_accounts).to_not include org_account.account_list
+    end
+  end
+
+  describe '.has_users scope' do
+    let!(:user_one) { create(:user_with_account) }
+    let!(:user_two) { create(:user_with_account) }
+    let!(:user_three) { create(:user_with_account) }
+    let!(:account_without_user) { create(:account_list) }
+
+    it 'scopes account_lists when receiving a User relation' do
+      expect(AccountList.has_users(User.where(id: [user_one.id, user_two.id])).to_a).to eq([user_one.account_lists.first, user_two.account_lists.first])
+    end
+
+    it 'scopes account_lists when receiving a User instance' do
+      expect(AccountList.has_users(user_one).to_a).to eq([user_one.account_lists.first])
+    end
+  end
+
   describe '#salary_organization=()' do
     let(:organization) { create(:organization) }
 
@@ -388,19 +420,6 @@ describe AccountList do
     end
   end
 
-  context 'with_linked_org_accounts scope' do
-    let!(:org_account) { create(:organization_account) }
-
-    it 'returns non-locked account lists with organization accounts' do
-      expect(AccountList.with_linked_org_accounts).to include org_account.account_list
-    end
-
-    it 'does not return locked accounts' do
-      org_account.update_column(:locked_at, 1.minute.ago)
-      expect(AccountList.with_linked_org_accounts).to_not include org_account.account_list
-    end
-  end
-
   context '#async_merge_contacts' do
     it 'merges duplicate contacts by common name and donor number / address' do
       Sidekiq::Testing.inline!
@@ -482,6 +501,54 @@ describe AccountList do
                                    designation_account: designation_account)
       contact.donor_accounts << donor_account
       expect(account_list.donations.to_a).to eq([donation])
+    end
+  end
+
+  context '#active_mpd_start_at_is_before_active_mpd_finish_at' do
+    subject { create(:account_list) }
+
+    before do
+      subject.active_mpd_start_at = Date.today
+    end
+
+    describe 'start_at date is set but finish_at date is not set' do
+      it 'validates' do
+        expect(subject.valid?).to eq(true)
+      end
+    end
+
+    describe 'start_at date is set but finish_at date is set' do
+      describe 'start_at date is before finish_at date' do
+        before do
+          subject.active_mpd_finish_at = Date.tomorrow
+        end
+
+        it 'validates' do
+          expect(subject.valid?).to eq(true)
+        end
+      end
+
+      describe 'start_at date is finish_at date' do
+        before do
+          subject.active_mpd_finish_at = Date.today
+        end
+
+        it 'validates' do
+          expect(subject.valid?).to eq(false)
+          expect(subject.errors[:active_mpd_start_at]).to eq ['is after or equal to active mpd finish at date']
+        end
+      end
+
+      describe 'start_at date is after finish_at date' do
+        before do
+          subject.active_mpd_finish_at = Date.yesterday
+        end
+
+        it 'does not validates' do
+          expect(subject.valid?).to eq(false)
+          expect(subject.errors[:active_mpd_start_at]).to eq ['is after or equal to active mpd finish at date']
+        end
+      end
     end
   end
 end

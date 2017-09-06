@@ -7,6 +7,11 @@ describe DesignationAccountSerializer do
 
   let(:serializer) { DesignationAccountSerializer.new(designation_account, scope: user) }
 
+  it 'balances list' do
+    expect(serializer.as_json).to include :balances
+    expect(serializer.as_json[:balances][0][:id]).to eq(designation_account.balances[0].uuid)
+  end
+
   describe '#currency_symbol' do
     it 'returns symbol for designation account currency' do
       expect(designation_account).to receive(:currency).and_return('USD')

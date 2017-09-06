@@ -35,6 +35,7 @@ resource 'Designation Accounts' do
 
   let(:resource_associations) do
     %w(
+      balances
       organization
     )
   end

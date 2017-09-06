@@ -62,6 +62,8 @@ class Contact::SuggestedChangesUpdater
   def load_suggested_attribute(suggested_change_attribute, suggested_change_value)
     if contact.send(suggested_change_attribute) != suggested_change_value
       suggested_changes[suggested_change_attribute] = suggested_change_value
+    else
+      suggested_changes.delete(suggested_change_attribute)
     end
   end
 end

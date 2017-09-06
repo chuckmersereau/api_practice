@@ -5,6 +5,7 @@ class Appeal < ApplicationRecord
   has_many :contacts, through: :appeal_contacts
   has_many :excluded_appeal_contacts, dependent: :delete_all
   has_many :donations
+  has_many :pledges
 
   validates :name, :account_list_id, presence: true
 
@@ -89,5 +90,21 @@ class Appeal < ApplicationRecord
     return chain unless filter_params.key?(:wildcard_search)
     chain.where('LOWER("appeals"."name") LIKE :name',
                 name: "%#{filter_params[:wildcard_search].downcase}%")
+  end
+
+  def pledges_amount_total
+    pledges.sum(:amount)
+  end
+
+  def pledges_amount_not_received_not_processed
+    pledges.where(received_not_processed: [nil, false], processed: [nil, false]).sum(:amount)
+  end
+
+  def pledges_amount_received_not_processed
+    pledges.where(received_not_processed: true).sum(:amount)
+  end
+
+  def pledges_amount_processed
+    pledges.where(processed: true).sum(:amount)
   end
 end
