@@ -3,7 +3,7 @@ module Concerns::AfterValidationSetSourceToMPDX
 
   included do
     after_validation do
-      self.source = Address::MANUAL_SOURCE if source_should_be_changed_to_mpdx?
+      self.source = self.class::MANUAL_SOURCE if source_should_be_changed_to_mpdx?
       true
     end
   end

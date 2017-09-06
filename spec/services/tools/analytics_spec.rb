@@ -7,16 +7,16 @@ RSpec.describe Tools::Analytics do
   let!(:contact_two) { create(:contact, account_list: account_list, send_newsletter: nil, status: 'Partner - Pray') }
   let!(:contact_three) { create(:contact, account_list: account_list, send_newsletter: 'Physical') }
 
-  let!(:address) { create(:address, addressable: contact_one, source: 'Random Source') }
-  let!(:second_address) { create(:address, addressable: contact_one) }
+  let!(:address) { create(:address, addressable: contact_one) }
+  let!(:second_address) { create(:address, addressable: contact_one, source: 'Random Source') }
 
   let!(:person) { create(:person, contacts: [contact_two]) }
 
-  let!(:email_address)        { create(:email_address, person: person, source: 'Random Source') }
-  let!(:second_email_address) { create(:email_address, person: person) }
+  let!(:email_address)        { create(:email_address, person: person) }
+  let!(:second_email_address) { create(:email_address, person: person, source: 'Random Source') }
 
-  let!(:phone_number)         { create(:phone_number, person: person, source: 'Random Source') }
-  let!(:second_phone_number)  { create(:phone_number, person: person) }
+  let!(:phone_number)         { create(:phone_number, person: person) }
+  let!(:second_phone_number)  { create(:phone_number, person: person, source: 'Random Source') }
 
   # Inactive contacts should be excluded.
   let!(:contact_inactive) { create(:contact, account_list: account_list, status_valid: false, status: Contact::INACTIVE_STATUSES.first) }

@@ -1,7 +1,6 @@
 require 'smarty_streets'
 
 class Address < ApplicationRecord
-  include Concerns::BeforeCreateSetValidValuesBasedOnSource
   include Concerns::AfterValidationSetSourceToMPDX
 
   belongs_to :addressable, polymorphic: true, touch: true
@@ -14,15 +13,13 @@ class Address < ApplicationRecord
   before_validation :set_manual_source_if_user_changed
   after_destroy :clean_up_master_address
   after_save :update_contact_timezone
+  before_create :set_valid_values
 
   validates :street, :city, :state, :country, :postal_code, :start_date, :end_date, :remote_id, :region, :metro_area, updatable_only_when_source_is_mpdx: true
 
   alias destroy! destroy
 
   attr_accessor :user_changed
-
-  # Indicates an address was manually created/updated. Otherwise source is usually the import class name.
-  MANUAL_SOURCE = 'MPDX'.freeze
 
   PERMITTED_ATTRIBUTES = [:city,
                           :country,
@@ -330,6 +327,11 @@ class Address < ApplicationRecord
                                                       .slice(:street, :city, :state, :country, :postal_code)
                                                       .select { |_k, v| v.present? }
                                                       .map { |k, v| [k, v.downcase] }]
+  end
+
+  def set_valid_values
+    self.valid_values = (source == MANUAL_SOURCE) || !self.class.where(addressable: addressable).exists?
+    true
   end
 
   US_STATES =  [

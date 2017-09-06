@@ -4,6 +4,9 @@ class ApplicationRecord < ActiveRecord::Base
   self.abstract_class = true
   CONFLICT_ERROR_MESSAGE = 'is not equal to the current value in the database'.freeze
 
+  # Indicates a record was manually created/updated. Otherwise source usually indicates where it was imported from.
+  MANUAL_SOURCE = 'MPDX'.freeze
+
   attr_reader :updated_in_db_at
   attr_accessor :overwrite
 
