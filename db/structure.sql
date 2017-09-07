@@ -4380,6 +4380,13 @@ CREATE INDEX index_activities_on_notification_id ON activities USING btree (noti
 
 
 --
+-- Name: index_activities_on_remote_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX CONCURRENTLY index_activities_on_remote_id ON activities USING btree (remote_id);
+
+
+--
 -- Name: index_activities_on_start_at; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6835,4 +6842,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170905044350');
 INSERT INTO schema_migrations (version) VALUES ('20170830234109');
 
 INSERT INTO schema_migrations (version) VALUES ('20170906162655');
+
+INSERT INTO schema_migrations (version) VALUES ('20170907182701');
 
