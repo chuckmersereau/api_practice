@@ -43,9 +43,9 @@ class TntImport::TntCodes
     100 => 'Email',
     140 => 'Facebook Message',
     150 => 'Text Message',
-    160 => nil,           # Present, not supported by MPDX
-    170 => 'Email',       # MailChimp
-    180 => 'Text Message' # WhatsApp
+    160 => nil,           # "Present", i.e. a gift, not supported by MPDX
+    170 => 'Email',       # "MailChimp"
+    180 => 'Text Message' # "WhatsApp"
   }.freeze
 
   TNT_TASK_RESULT_CODES_MAPPED_TO_MPDX_TASK_RESULTS = {
@@ -74,6 +74,10 @@ class TntImport::TntCodes
   class << self
     def task_type(task_type_id)
       TNT_TASK_CODES_MAPPED_TO_MPDX_TASK_TYPES[task_type_id.to_i]
+    end
+
+    def import_task_type?(task_type_id)
+      task_type_id.to_i != 190 # The TaskTypeID 190 indicates a "Data Change", we don't import data change types because it creates too many unhelpful tasks in Mpdx.
     end
 
     def task_status_completed?(task_status_id)
