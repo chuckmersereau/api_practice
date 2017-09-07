@@ -9,6 +9,7 @@ class Pledge < ApplicationRecord
 
   PERMITTED_ATTRIBUTES = [:amount,
                           :amount_currency,
+                          :appeal_id,
                           :created_at,
                           :contact_id,
                           :donation_id,
