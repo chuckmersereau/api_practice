@@ -240,7 +240,7 @@ class Task < Activity
       end
       numbers.compact.join("\n")
     else
-      return AddressExhibit.new(contacts.first.address, nil).to_google if contacts.first && contacts.first.address
+      return AddressExhibit.new(contacts.first.address, nil).to_google if contacts.first&.address
     end
   end
 

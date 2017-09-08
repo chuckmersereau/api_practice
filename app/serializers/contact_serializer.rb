@@ -77,4 +77,8 @@ class ContactSerializer < ApplicationSerializer
   def account_list_id
     object.account_list.uuid
   end
+
+  def tag_list
+    object.tags.collect(&:name)
+  end
 end

@@ -1,7 +1,6 @@
 class Contact < ApplicationRecord
   include AddressMethods
   acts_as_taggable
-  include TagsEagerLoading
   extend ApplicationHelper
 
   # Track status and pledge details at most once per day in separate table
