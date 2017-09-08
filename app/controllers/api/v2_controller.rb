@@ -45,7 +45,7 @@ class Api::V2Controller < ApiController
 
     jwt_payload = request.env['auth.jwt_payload']
 
-    return unless jwt_payload.try(:[], 'user_uuid')
+    return unless jwt_payload.try(:[], 'user_uuid') && jwt_payload.try(:[], 'exp')
 
     User.find_by(uuid: jwt_payload['user_uuid'])
   end

@@ -162,7 +162,7 @@ RSpec.describe 'Server Responsibilites', type: :request do
       end
 
       context 'with a json web token that is expired' do
-        it 'should return a succes status (200)' do
+        it 'should return an unauthorized status (401)' do
           json_web_token = JsonWebToken.encode(
             user_uuid: user.uuid,
             exp: 10.minutes.ago.utc
@@ -182,7 +182,7 @@ RSpec.describe 'Server Responsibilites', type: :request do
         # This spec should be removed once the mobile app
         # can handle expiring tokens.
 
-        it 'should return a succes status (200)' do
+        it 'should return an unauthorized status (401)' do
           json_web_token = JsonWebToken.encode(
             user_uuid: user.uuid
           )
@@ -193,7 +193,7 @@ RSpec.describe 'Server Responsibilites', type: :request do
             'Authorization' => "Bearer #{json_web_token}"
           }
           get api_v2_exports_path, nil, headers
-          expect(response.status).to eq 200
+          expect(response.status).to eq 401
         end
       end
     end
