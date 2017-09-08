@@ -67,7 +67,7 @@ class MailChimp::CampaignLogger
   def create_campaign_activity(contact, subject)
     contact.tasks.create(
       account_list: account_list,
-      activity_type: 'Email',
+      activity_type: 'Newsletter - Email',
       completed: true,
       completed_at: Time.now,
       result: 'Completed',

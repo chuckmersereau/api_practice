@@ -123,7 +123,13 @@ class MailChimp::Exporter
 
       yield
     rescue Gibbon::MailChimpError => error
+
       raise unless intermittent_error?(error)
+
+      sleep 10 if too_many_batches_error?(error)
+      # If the MC API responds with the 'too many batches opened' error,
+      # we wait for 10 seconds hoping that other batches will complete in that time.
+
       raise if (retry_count += 1) >= 5
 
       retry
@@ -131,7 +137,12 @@ class MailChimp::Exporter
 
     def intermittent_error?(error)
       intermittent_bad_request_error?(error) ||
-        intermittent_nesting_too_deep_error?(error)
+        intermittent_nesting_too_deep_error?(error) ||
+        too_many_batches_error?(error)
+    end
+
+    def too_many_batches_error?(error)
+      error.message.include?('You have more than 500 pending batches.')
     end
 
     def intermittent_nesting_too_deep_error?(error)
