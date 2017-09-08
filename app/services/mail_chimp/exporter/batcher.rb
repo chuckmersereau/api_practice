@@ -42,6 +42,8 @@ class MailChimp::Exporter
         contact.status ||= 'Partner - Pray'
 
         people_that_belong_to_contact(relevant_people, contact).each do |person|
+          next if person.optout_enewsletter?
+
           members_params << person_to_member_param(person, contact)
         end
       end

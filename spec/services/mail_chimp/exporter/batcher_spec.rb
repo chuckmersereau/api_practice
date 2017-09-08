@@ -37,10 +37,14 @@ RSpec.describe MailChimp::Exporter::Batcher do
 
   context '#subscribe_contacts' do
     let(:first_email) { 'email@gmail.com' }
-    let!(:contact) { create(:contact, account_list: account_list, people: [person]) }
+    let!(:contact) { create(:contact, account_list: account_list, people: [person, person_opted_out]) }
 
     let(:person) do
       create(:person, primary_email_address: build(:email_address, email: first_email))
+    end
+
+    let(:person_opted_out) do
+      create(:person, optout_enewsletter: true, primary_email_address: build(:email_address))
     end
 
     let(:operations_body) do
@@ -55,7 +59,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
               EMAIL: 'email@gmail.com',
               FNAME: person.first_name,
               LNAME: person.last_name,
-              GREETING: person.first_name
+              GREETING: contact.greeting
             },
             language: 'en',
             interests: {
