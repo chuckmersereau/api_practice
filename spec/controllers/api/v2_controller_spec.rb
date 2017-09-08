@@ -154,13 +154,22 @@ describe Api::V2Controller do
         expect(response_json[:current_locale]).to eq 'it'
       end
 
+      it 'sets the correct locale when specified in the accept-language header' do
+        api_login(user)
+
+        request.env['HTTP_ACCEPT_LANGUAGE'] = 'fr-FR,fr-CA;q=0.8'
+
+        get :index
+        expect(response_json[:current_locale]).to eq 'fr-FR'
+      end
+
       it 'defaults to english when no preference is defined' do
         api_login(user)
         get :index
         expect(response_json[:current_locale]).to eq 'en-US'
       end
 
-      it 'resets the locale constant to nil in case of error' do
+      it 'resets the locale constant to en-US in case of error' do
         api_login(italian_user)
         expect do
           get :index, raise_error: true

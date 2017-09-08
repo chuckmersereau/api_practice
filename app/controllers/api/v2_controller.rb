@@ -107,10 +107,14 @@ class Api::V2Controller < ApiController
   end
 
   def scope_request_to_locale
-    I18n.locale = current_user&.locale.try(:tr, '-', '_') || 'en_US'
+    I18n.locale = locale_from_header_or_current_user.try(:tr, '-', '_') || 'en_US'
     yield
   ensure
     I18n.locale = 'en_US'
+  end
+
+  def locale_from_header_or_current_user
+    request.env['HTTP_ACCEPT_LANGUAGE'].try(:split, /[,,;]/).try(:first) || current_user&.locale
   end
 
   def validate_and_transform_json_api_params
