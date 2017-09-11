@@ -41,13 +41,16 @@ class TntImport::GiftsImport
     # If someone re-imports donations, assume that there is just one donation per date per amount;
     # that's not a perfect assumption but it seems reasonable solution for offline orgs for now.
     donation_key_attrs = { amount: row['Amount'], donation_date: parse_date(row['GiftDate'], @import.user).to_date }
-    donor_account.donations.find_or_create_by(donation_key_attrs) do |donation|
-      donation.update(tendered_currency: currency_code_for_id(row['CurrencyID']), tendered_amount: row['Amount'], designation_account: designation_account)
 
-      add_donation_to_first_appeal_and_add_other_appeals_to_memo(donation, row)
-
-      contact.update_donation_totals(donation)
+    donation = donor_account.donations.find_or_create_by(donation_key_attrs) do |new_donation|
+      contact.update_donation_totals(new_donation) # Only update the total on creation.
     end
+
+    donation.update(tendered_currency: currency_code_for_id(row['CurrencyID']), tendered_amount: row['Amount'], designation_account: designation_account)
+
+    add_donation_to_first_appeal_and_add_other_appeals_to_memo(donation, row)
+
+    donation
   end
 
   def add_donation_to_first_appeal_and_add_other_appeals_to_memo(mpdx_donation, tnt_gift)
@@ -59,25 +62,30 @@ class TntImport::GiftsImport
 
     appeal = gift_split_with_appeal ? account_list_appeal_by_tnt_id(gift_split_with_appeal['CampaignID']) : nil
 
-    new_memo = generate_donation_memo(mpdx_donation, (gift_splits - [gift_split_with_appeal]))
+    new_memo = generate_new_donation_memo(mpdx_donation, (gift_splits - [gift_split_with_appeal]))
 
     mpdx_donation.update(appeal: appeal, memo: new_memo)
   end
 
-  def generate_donation_memo(donation, gift_splits)
-    [donation.memo, _('This donation was imported from Tnt.'), generate_gift_splits_memo(gift_splits)].select(&:present?)
-                                                                                                      .join("\n\n")
-                                                                                                      .gsub('&quot;', '"')
+  def generate_new_donation_memo(donation, gift_splits)
+    new_memo_items = [_('This donation was imported from Tnt.')]
+    new_memo_items += generate_gift_splits_memos(gift_splits)
+    new_memo_items.each { |memo_item| memo_item.gsub!('&quot;', '"') }
+    new_memo_items.reject! do |memo_item|
+      memo_item.blank? || (donation.memo || '').include?(memo_item)
+    end
+    new_memo_items.prepend(donation.memo) if donation.memo.present?
+    new_memo_items.join("\n\n")
   end
 
-  def generate_gift_splits_memo(gift_splits)
+  def generate_gift_splits_memos(gift_splits)
     gift_splits.map do |gift_split|
       current_appeal = account_list_appeal_by_tnt_id(gift_split['CampaignID'])
       current_currency_symbol = currency_symbol(currency_code_for_id(gift_split['CurrencyID']))
 
       "#{current_currency_symbol}#{gift_split['Amount']}" +
         _(' is designated to the "%{appeal_name}" appeal.').localize % { appeal_name: current_appeal.name }
-    end.join
+    end
   end
 
   def gift_splits_by_gift_and_campaign(gift_id, campaign_id)
