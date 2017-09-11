@@ -53,17 +53,7 @@ class TntImport::ContactImport
     update_contact_basic_fields(contact, row)
     update_contact_pledge_fields(contact, row)
     update_contact_date_fields(contact, row)
-
-    if (@override || contact.send_newsletter.blank?) && true?(row['SendNewsletter'])
-      case row['NewsletterMediaPref']
-      when '+E', '+E-P'
-        contact.send_newsletter = 'Email'
-      when '+P', '+P-E'
-        contact.send_newsletter = 'Physical'
-      else
-        contact.send_newsletter = 'Both'
-      end
-    end
+    update_contact_send_newsletter_field(contact, row)
 
     @tags.each { |tag| contact.tag_list.add(tag) }
 
@@ -115,6 +105,23 @@ class TntImport::ContactImport
     contact.last_phone_call = parse_date(row['LastCall'], @import.user) if (@override || contact.last_phone_call.blank?) && row['LastCall'].present? && row['LastCall'] != '1899-12-30'
     contact.last_pre_call = parse_date(row['LastPreCall'], @import.user) if (@override || contact.last_pre_call.blank?) && row['LastPreCall'].present? && row['LastPreCall'] != '1899-12-30'
     contact.last_thank = parse_date(row['LastThank'], @import.user) if (@override || contact.last_thank.blank?) && row['LastThank'].present? && row['LastThank'] != '1899-12-30'
+  end
+
+  def update_contact_send_newsletter_field(contact, row)
+    return unless contact.send_newsletter.nil? || @override
+
+    if true?(row['SendNewsletter'])
+      case row['NewsletterMediaPref']
+      when '+E', '+E-P'
+        contact.send_newsletter = 'Email'
+      when '+P', '+P-E'
+        contact.send_newsletter = 'Physical'
+      else
+        contact.send_newsletter = 'Both'
+      end
+    else
+      contact.send_newsletter = 'None'
+    end
   end
 
   def add_or_update_primary_person(row, contact)
