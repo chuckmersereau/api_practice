@@ -1,5 +1,4 @@
 class PhoneNumber < ApplicationRecord
-  include Concerns::BeforeCreateSetValidValuesBasedOnSource
   include Concerns::AfterValidationSetSourceToMPDX
   include HasPrimary
   @@primary_scope = :person
@@ -22,6 +21,7 @@ class PhoneNumber < ApplicationRecord
   belongs_to :person, touch: true
 
   before_save :clean_up_number
+  before_create :set_valid_values
 
   validates :number, presence: true
   validates :number, :country_code, :location, :remote_id, updatable_only_when_source_is_mpdx: true
@@ -75,5 +75,10 @@ class PhoneNumber < ApplicationRecord
     code = Address.find_country_iso(person.contacts.first.account_list.home_country)
     return nil unless code
     @user_country = code.downcase.to_sym
+  end
+
+  def set_valid_values
+    self.valid_values = (source == MANUAL_SOURCE) || !self.class.where(person: person).exists?
+    true
   end
 end

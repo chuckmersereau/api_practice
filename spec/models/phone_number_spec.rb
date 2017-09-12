@@ -11,8 +11,6 @@ describe PhoneNumber do
 
   include_examples 'updatable_only_when_source_is_mpdx_validation_examples', attributes: [:number, :country_code, :location, :remote_id], factory_type: :phone_number
 
-  include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :phone_number
-
   include_examples 'after_validate_set_source_to_mpdx_examples', factory_type: :phone_number
 
   describe 'adding a phone number to a person' do
@@ -167,6 +165,19 @@ describe PhoneNumber do
   describe 'permitted attributes' do
     it 'defines permitted attributes' do
       expect(PhoneNumber::PERMITTED_ATTRIBUTES).to be_present
+    end
+  end
+
+  describe '#set_valid_values' do
+    it "sets valid_values to true if this is the person's only phone number, or the source is manual" do
+      phone_number_one = create(:phone_number, source: 'not mpdx')
+      expect(phone_number_one.valid_values).to eq(true)
+      expect(phone_number_one.source).to_not eq(PhoneNumber::MANUAL_SOURCE)
+      phone_number_two = create(:phone_number, source: 'not mpdx', person: phone_number_one.person)
+      expect(phone_number_two.valid_values).to eq(false)
+      expect(phone_number_two.source).to_not eq(PhoneNumber::MANUAL_SOURCE)
+      phone_number_three = create(:phone_number, source: PhoneNumber::MANUAL_SOURCE, person: phone_number_one.person)
+      expect(phone_number_three.valid_values).to eq(true)
     end
   end
 end

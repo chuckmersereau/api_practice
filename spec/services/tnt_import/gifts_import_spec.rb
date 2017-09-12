@@ -49,7 +49,7 @@ describe TntImport::GiftsImport do
       @tnt_import_with_personal_gift.import
       expect(donation_generated_with_gift_splits.appeal).to eq(@second_appeal)
       expect(donation_generated_with_gift_splits.memo).to eq(
-        "\n This donation was imported from Tnt. $841 is designated to the \"#{@appeal.name}\" appeal. "
+        %(This donation was imported from Tnt.\n\n$841 is designated to the "#{@appeal.name}" appeal.)
       )
     end
 
@@ -106,10 +106,10 @@ describe TntImport::GiftsImport do
 
       expect { tnt_import2.import  }.to change(Donation, :count).from(2).to(3)
 
-      donations = Donation.all.map { |d| d.attributes.symbolize_keys.slice(:donation_date, :amount) }
-      expect(donations).to include(donation_date: Date.new(2013, 11, 20), amount: 50)
-      expect(donations).to include(donation_date: Date.new(2013, 11, 21), amount: 25)
-      expect(donations).to include(donation_date: Date.new(2013, 11, 22), amount: 100)
+      donations = Donation.all.map { |d| d.attributes.symbolize_keys.slice(:donation_date, :amount, :memo) }
+      expect(donations).to include(donation_date: Date.new(2013, 11, 20), amount: 50, memo: 'This donation was imported from Tnt.')
+      expect(donations).to include(donation_date: Date.new(2013, 11, 21), amount: 25, memo: 'This donation was imported from Tnt.')
+      expect(donations).to include(donation_date: Date.new(2013, 11, 22), amount: 100, memo: 'This donation was imported from Tnt.')
 
       contact = Contact.first
       expect(contact.last_donation_date).to eq(Date.new(2013, 11, 22))
@@ -149,6 +149,14 @@ describe TntImport::GiftsImport do
       designation_account = @account_list.designation_accounts.last
       expect(designation_account.name).to eq("#{@import.user.to_s.strip} (Imported from TntConnect)")
       expect(designation_account.organization).to eq(@offline_org)
+    end
+
+    it 'reimports the designation account' do
+      expect { @tnt_import.import }.to change { @account_list.designation_accounts.reload.count }.from(0).to(1)
+      first_designation_account_id = @account_list.designation_accounts.first.id
+      donation = @account_list.donations.first
+      DesignationAccount.delete_all
+      expect { @tnt_import.import }.to change { donation.reload.designation_account_id }.from(first_designation_account_id)
     end
   end
 end

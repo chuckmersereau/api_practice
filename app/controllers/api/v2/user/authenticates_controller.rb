@@ -5,6 +5,7 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
   def create
     require_cas_ticket
     validate_cas_ticket
+    update_tracked_fields
     queue_imports
     render_authenticate
   end
@@ -59,5 +60,9 @@ class Api::V2::User::AuthenticatesController < Api::V2Controller
   def render_authenticate
     render json: build_authenticate,
            status: :ok
+  end
+
+  def update_tracked_fields
+    load_user.update_tracked_fields!(request)
   end
 end

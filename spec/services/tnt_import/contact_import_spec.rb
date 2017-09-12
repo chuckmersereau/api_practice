@@ -19,7 +19,7 @@ describe TntImport::ContactImport do
 
   before { stub_smarty_streets }
 
-  context '#update_contact' do
+  describe '#update_contact' do
     before do
       @contact = Contact.new(notes: 'Another note')
     end
@@ -82,6 +82,24 @@ describe TntImport::ContactImport do
         expect(notes).to include('Spouse Voice/Skype: HelenParrSkype')
         expect(notes).to include('IM Address: bobsIMaddress')
         expect(notes).to include('Spouse IM Address: helenIMaddress')
+      end
+    end
+
+    context 'importing send_newsletter' do
+      it 'supports overriding' do
+        row = tnt_import_parsed_xml_sample_contact_row
+
+        tnt_import.override = false
+        import = TntImport::ContactImport.new(tnt_import, tags, [])
+
+        expect(import.import_contact(row).send_newsletter).to eq('Both')
+
+        row['SendNewsletter'] = 'false'
+        expect(import.import_contact(row).send_newsletter).to eq('Both')
+
+        tnt_import.override = true
+        import = TntImport::ContactImport.new(tnt_import, tags, [])
+        expect(import.import_contact(row).send_newsletter).to eq('None')
       end
     end
   end

@@ -7,8 +7,6 @@ describe EmailAddress do
 
     include_examples 'updatable_only_when_source_is_mpdx_validation_examples', attributes: [:email, :remote_id, :location], factory_type: :email_address
 
-    include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :email_address
-
     include_examples 'after_validate_set_source_to_mpdx_examples', factory_type: :email_address
 
     it "should create an email address if it's new" do
@@ -110,5 +108,18 @@ describe EmailAddress do
     email = build(:email_address, email: "\t zero-width-spaces\u200B\u200E@t.co \n")
     email.save
     expect(email.email).to eq 'zero-width-spaces@t.co'
+  end
+
+  describe '#set_valid_values' do
+    it "sets valid_values to true if this is the person's only email address, or the source is manual" do
+      email_address_one = create(:email_address, source: 'not mpdx')
+      expect(email_address_one.valid_values).to eq(true)
+      expect(email_address_one.source).to_not eq(EmailAddress::MANUAL_SOURCE)
+      email_address_two = create(:email_address, source: 'not mpdx', person: email_address_one.person)
+      expect(email_address_two.valid_values).to eq(false)
+      expect(email_address_two.source).to_not eq(EmailAddress::MANUAL_SOURCE)
+      email_address_three = create(:email_address, source: EmailAddress::MANUAL_SOURCE, person: email_address_one.person)
+      expect(email_address_three.valid_values).to eq(true)
+    end
   end
 end

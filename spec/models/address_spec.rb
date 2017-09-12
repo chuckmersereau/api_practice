@@ -14,7 +14,6 @@ describe Address do
                      factory_type: :address
   end
 
-  include_examples 'before_create_set_valid_values_based_on_source_examples', factory_type: :address
   include_examples 'after_validate_set_source_to_mpdx_examples', factory_type: :address
 
   context '#find_master_address' do
@@ -316,5 +315,18 @@ describe Address do
     expect do
       expect { address.update!(location: 'Business') }.to_not raise_error
     end.to change { address.reload.location }.from('Home').to('Business')
+  end
+
+  describe '#set_valid_values' do
+    it "sets valid_values to true if this is the person's only address, or the source is manual" do
+      address_one = create(:address, source: 'not mpdx')
+      expect(address_one.valid_values).to eq(true)
+      expect(address_one.source).to_not eq(Address::MANUAL_SOURCE)
+      address_two = create(:address, source: 'not mpdx', addressable: address_one.addressable)
+      expect(address_two.valid_values).to eq(false)
+      expect(address_two.source).to_not eq(Address::MANUAL_SOURCE)
+      address_three = create(:address, source: Address::MANUAL_SOURCE, addressable: address_one.addressable)
+      expect(address_three.valid_values).to eq(true)
+    end
   end
 end

@@ -2,7 +2,6 @@ class Api::V2::ContactsPreloader < ApplicationPreloader
   ASSOCIATION_PRELOADER_MAPPING = {
     account_list: Api::V2::AccountListsPreloader,
     appeals: Api::V2::AppealsPreloader,
-    contacts: Api::V2::AppealsPreloader,
     contact_referrals_by_me: self,
     contact_referrals_to_me: self,
     contacts_referred_by_me: self,

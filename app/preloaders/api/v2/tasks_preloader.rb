@@ -7,5 +7,13 @@ class Api::V2::TasksPreloader < ApplicationPreloader
     phone_numbers: Api::V2::Contacts::People::PhoneNumbersPreloader
   }.freeze
 
-  FIELD_ASSOCIATION_MAPPING = { tag_list: :tags }.freeze
+  FIELD_ASSOCIATION_MAPPING = {
+    tag_list: :tags,
+    location: {
+      contacts: [
+        :primary_address,
+        :addresses
+      ]
+    }
+  }.freeze
 end

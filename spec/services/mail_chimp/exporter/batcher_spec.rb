@@ -37,10 +37,14 @@ RSpec.describe MailChimp::Exporter::Batcher do
 
   context '#subscribe_contacts' do
     let(:first_email) { 'email@gmail.com' }
-    let!(:contact) { create(:contact, account_list: account_list, people: [person]) }
+    let!(:contact) { create(:contact, account_list: account_list, people: [person, person_opted_out]) }
 
     let(:person) do
       create(:person, primary_email_address: build(:email_address, email: first_email))
+    end
+
+    let(:person_opted_out) do
+      create(:person, optout_enewsletter: true, primary_email_address: build(:email_address))
     end
 
     let(:operations_body) do
@@ -55,7 +59,7 @@ RSpec.describe MailChimp::Exporter::Batcher do
               EMAIL: 'email@gmail.com',
               FNAME: person.first_name,
               LNAME: person.last_name,
-              GREETING: person.first_name
+              GREETING: contact.greeting
             },
             language: 'en',
             interests: {
@@ -66,8 +70,28 @@ RSpec.describe MailChimp::Exporter::Batcher do
       ]
     end
 
-    it 'subscribes the contacts and creates the mail_chimp_members' do
-      expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body)
+    before do
+      # This block of code ensures that MC batches method will trigger each
+      # of the 3 types of errors that are handled by the import.
+
+      times_called = 0
+
+      allow(mock_gibbon_batches).to receive(:create) do
+        times_called += 1
+
+        case times_called
+        when 1
+          raise Gibbon::MailChimpError, 'You have more than 500 pending batches.'
+        when 2
+          raise Gibbon::MailChimpError, 'nested too deeply'
+        when 3
+          raise Gibbon::MailChimpError, '<H1>Bad Request</H1>'
+        end
+      end
+    end
+
+    it 'subscribes the contacts and creates the mail_chimp_members handling all 3 MC API intermittent errors' do
+      expect(mock_gibbon_batches).to receive(:create).with(complete_batch_body).at_least(:once)
 
       expect do
         subject.subscribe_contacts([contact])

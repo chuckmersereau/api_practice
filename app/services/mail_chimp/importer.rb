@@ -33,11 +33,9 @@ class MailChimp::Importer
 
   private
 
-  def self.email_to_name(email)
+  def email_to_name(email)
     email[/[^@]+/].split(/[.\-_]/).map(&:capitalize).join(' ')
   end
-
-  private_class_method :email_to_name
 
   def list_of_members_info(member_emails)
     gibbon_wrapper.list_member_info(mail_chimp_account.primary_list_id, member_emails)
@@ -126,7 +124,7 @@ class MailChimp::Importer
   end
 
   def create_person(member)
-    first_name = member[:first_name] || self.class.email_to_name(member[:email])
+    first_name = member[:first_name] || email_to_name(member[:email])
 
     person = Person.create(first_name: first_name, last_name: member[:last_name])
 

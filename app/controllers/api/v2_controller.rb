@@ -45,7 +45,7 @@ class Api::V2Controller < ApiController
 
     jwt_payload = request.env['auth.jwt_payload']
 
-    return unless jwt_payload.try(:[], 'user_uuid')
+    return unless jwt_payload.try(:[], 'user_uuid') && jwt_payload.try(:[], 'exp')
 
     User.find_by(uuid: jwt_payload['user_uuid'])
   end
@@ -107,10 +107,14 @@ class Api::V2Controller < ApiController
   end
 
   def scope_request_to_locale
-    I18n.locale = current_user&.locale.try(:tr, '-', '_') || 'en_US'
+    I18n.locale = locale_from_header_or_current_user.try(:tr, '-', '_') || 'en_US'
     yield
   ensure
     I18n.locale = 'en_US'
+  end
+
+  def locale_from_header_or_current_user
+    request.env['HTTP_ACCEPT_LANGUAGE'].try(:split, /[,,;]/).try(:first) || current_user&.locale
   end
 
   def validate_and_transform_json_api_params

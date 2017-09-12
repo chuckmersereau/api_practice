@@ -672,6 +672,15 @@ describe Contact do
         contact.send(:sync_with_mail_chimp)
       end
 
+      it 'notifies the mail chimp account when a person is opted out' do
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account.id, 'primary_list_id', [contact.id]
+        )
+        contact.people.first.optout_enewsletter = true
+        contact.send(:check_state_for_mail_chimp_sync)
+        contact.send(:sync_with_mail_chimp)
+      end
+
       it 'does not notify the mail chimp account of changes on certain fields' do
         expect(MailChimp::ExportContactsWorker).not_to receive(:perform_async)
         contact.timezone = 'PST'

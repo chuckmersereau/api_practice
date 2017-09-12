@@ -34,23 +34,33 @@ RSpec.describe Api::V2::User::AuthenticatesController, type: :controller do
           .and_return(user)
 
         travel_to(Time.now)
-
-        post :create, data: request_data
       end
 
       after { travel_back }
 
+      subject { post :create, data: request_data }
+
       it 'returns success' do
+        subject
         expect(response.status).to eq(200)
       end
 
       it 'responds with a valid json web token' do
+        subject
+
         json_web_token = response_body['data']['attributes']['json_web_token']
         decoded_web_token = JsonWebToken.decode(json_web_token)
 
         expect(json_web_token).to be_present
         expect(User.find_by(uuid: decoded_web_token['user_uuid']).id).to eq user.id
         expect(decoded_web_token['exp']).to eq 30.days.from_now.utc.to_i
+      end
+
+      it 'updates the user tracked fields' do
+        user.update_columns(current_sign_in_at: 1.year.ago, last_sign_in_at: 2.years.ago, sign_in_count: 2)
+        expect { subject }.to change { user.current_sign_in_at }.to(Time.now)
+        expect(user.last_sign_in_at).to eq(1.year.ago)
+        expect(user.sign_in_count).to eq(3)
       end
     end
 

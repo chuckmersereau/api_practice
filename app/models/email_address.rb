@@ -1,5 +1,4 @@
 class EmailAddress < ApplicationRecord
-  include Concerns::BeforeCreateSetValidValuesBasedOnSource
   include Concerns::AfterValidationSetSourceToMPDX
   include HasPrimary
   @@primary_scope = :person
@@ -19,6 +18,7 @@ class EmailAddress < ApplicationRecord
   belongs_to :person, touch: true
 
   before_save :strip_email_attribute
+  before_create :set_valid_values
 
   validates :email, presence: true, email: true, uniqueness: { scope: :person_id }
   validates :email, :remote_id, :location, updatable_only_when_source_is_mpdx: true
@@ -93,5 +93,10 @@ class EmailAddress < ApplicationRecord
 
   def contact
     @contact ||= person.try(:contacts).try(:first)
+  end
+
+  def set_valid_values
+    self.valid_values = (source == MANUAL_SOURCE) || !self.class.where(person: person).exists?
+    true
   end
 end

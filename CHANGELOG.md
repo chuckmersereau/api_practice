@@ -2,6 +2,15 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 11 September 2017
+- Upon a successful Account Reset (an admin function), the user is sent an
+  email asking them to logout and log back into MPDX. A link to the logout
+  route is provided in the email body.
+
+## 8 September 2017
+- The ACCEPT-LANGUAGE header can now be used to set the locale on each request.
+  - Eg. 'ACCEPT-LANGUAGE: "fr-FR"'
+
 ## 5 September 2017
 - Added active_mpd_start_at, active_mpd_finish_at, active_mpd_monthly_goal fields to account_list object.
 - Added primary_appeal relationship to account_list object.

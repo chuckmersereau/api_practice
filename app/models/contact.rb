@@ -1,7 +1,6 @@
 class Contact < ApplicationRecord
   include AddressMethods
   acts_as_taggable
-  include TagsEagerLoading
   extend ApplicationHelper
 
   # Track status and pledge details at most once per day in separate table
@@ -760,7 +759,8 @@ class Contact < ApplicationRecord
     people.any? do |person|
       person.primary_email_address&.email_changed? ||
         person.first_name_changed? ||
-        person.last_name_changed?
+        person.last_name_changed? ||
+        person.optout_enewsletter_changed?
     end
   end
 
