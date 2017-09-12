@@ -47,4 +47,8 @@ class WebRouter
   def self.person_url(person)
     "#{base_url}/contacts/#{person.contact.uuid}?personId=#{person.uuid}"
   end
+
+  def self.logout_url
+    "#{base_url}/logout"
+  end
 end

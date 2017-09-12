@@ -1,0 +1,21 @@
+<% content_for :reason do %>
+  <p>
+    <%= _('You are getting this email because an MPDX administrator has ' \
+          'reset your Account.') %>
+  </p>
+<% end %>
+<h3>
+  <%= _('Hey %{account_name},').localize % { account_name: @user.first_name } %>
+</h3>
+<h5>
+  <%=
+    _('Your MPDX Account has been reset. As a consequence, you must logout ' \
+      'and again login to MPDX on each device with which you use MPDX. ' \
+      'Please use the button below to logout and back in.')
+  %>
+</h5>
+<p>
+  <button href="<%= WebRouter.logout_url %>" class="warning">
+    <%= _('Logout and Login Again') %>
+  </button>
+</p>

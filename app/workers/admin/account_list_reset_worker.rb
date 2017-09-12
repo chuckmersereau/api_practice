@@ -8,6 +8,7 @@ class Admin::AccountListResetWorker
     @user = User.find(user_id)
     @reset_log = Admin::ResetLog.where(id: reset_log_id, resetted_user: @user).last!
     reset
+    email_user
   rescue ActiveRecord::RecordNotFound, Pundit::NotAuthorizedError => exception
     Rollbar.error(exception)
     false
@@ -47,5 +48,9 @@ class Admin::AccountListResetWorker
 
   def queue_import_organization_data
     @user.organization_accounts.each(&:queue_import_data)
+  end
+
+  def email_user
+    AccountListResetMailer.delay.logout(@user, @reset_log)
   end
 end

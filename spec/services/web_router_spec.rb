@@ -108,4 +108,10 @@ describe WebRouter do
       expect(described_class.person_url(person)).to eq('https://mpdx.org/contacts/contact_uuid?personId=person_uuid')
     end
   end
+
+  describe '.logout_url' do
+    it 'returns the expected url' do
+      expect(described_class.logout_url).to eq('https://mpdx.org/logout')
+    end
+  end
 end

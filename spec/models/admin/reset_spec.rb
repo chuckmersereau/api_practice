@@ -117,6 +117,16 @@ describe Admin::Reset, '#reset!' do
       end.to_not change(AccountList, :count)
       expect(Admin::ResetLog.count).to eq(0)
     end
+
+    it 'sends an email notifying the reset user to logout and login again' do
+      subject = Admin::Reset.new(
+        reason: 'because', admin_resetting: admin_user, resetted_user_email: resetted_user_email,
+        user_finder: user_finder, reset_logger: reset_logger, account_list_name: account_list.name
+      )
+
+      expect_delayed_email(AccountListResetMailer, :logout)
+      subject.reset!
+    end
   end
 
   describe '#account_list' do
