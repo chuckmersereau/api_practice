@@ -33,7 +33,6 @@
   - ["api_import_google",                                10]
   - ["api_import_tnt_data_sync",                         10]
   - ["api_lower_retry_worker",                           2]
-  - ["api_mail_chimp_sync_worker",                       1]
   - ["api_org_donor_accounts_address_cleaner",           2]
   - ["api_organization",                                 2]
   - ["api_organization_fetcher_worker",                  2]
