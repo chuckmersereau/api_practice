@@ -8,6 +8,7 @@ class MailChimp::CampaignLogger
   end
 
   def log_sent_campaign(campaign_id, subject)
+    return unless mail_chimp_account.auto_log_campaigns?
     log_sent_campaign!(campaign_id, subject)
   rescue Gibbon::MailChimpError => error
     raise unless campaign_not_completely_sent?(error)
@@ -65,16 +66,23 @@ class MailChimp::CampaignLogger
   end
 
   def create_campaign_activity(contact, subject)
-    contact.tasks.create(
+    activity_attributes = {
       account_list: account_list,
       activity_type: 'Newsletter - Email',
       completed: true,
-      completed_at: Time.now,
       result: 'Completed',
       source: 'mailchimp',
-      start_at: Time.now,
       subject: "MailChimp: #{subject}",
       type: 'Task'
+    }
+
+    return if contact.tasks.exists?(activity_attributes)
+
+    contact.tasks.create(
+      activity_attributes.merge(
+        completed_at: Time.now,
+        start_at: Time.now
+      )
     )
   end
 end
