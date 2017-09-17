@@ -1,5 +1,6 @@
 RESOURCE_TYPE_TO_DB_TYPE = {
     comments: 'activity_comments',
+    excluded_appeal_contacts: 'appeal_excluded_appeal_contacts',
     facebook_accounts: 'person_facebook_accounts',
     google_accounts: 'person_google_accounts',
     key_accounts: 'person_relay_accounts', # This was added because Key accounts are stored as Relay accounts in the db

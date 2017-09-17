@@ -3,6 +3,9 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 11 September 2017
+- Removed /api/v2/appeals/contacts endpoint.
+- Added /api/v2/appeals/appeal_contacts endpoint.
+- Added /api/v2/appeals/excluded_appeal_contacts endpoint.
 - Upon a successful Account Reset (an admin function), the user is sent an
   email asking them to logout and log back into MPDX. A link to the logout
   route is provided in the email body.

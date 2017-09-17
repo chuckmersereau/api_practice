@@ -43,6 +43,7 @@ RSpec.describe AccountList::Destroyer do
         account_list.activities.collect(&:comments).flatten,
         account_list.activities.collect(&:google_email_activities).flatten,
         account_list.appeals,
+        account_list.appeals.collect(&:appeal_contacts).flatten,
         account_list.appeals.collect(&:excluded_appeal_contacts).flatten,
         account_list.company_partnerships,
         account_list.contacts,
