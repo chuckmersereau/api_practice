@@ -40,7 +40,7 @@ describe Api::V2Controller do
       end
     end
 
-    context '#jwt_authorize' do
+    describe 'JWT Authorize' do
       it 'doesnt allow not signed in users to access the api' do
         get :index
         expect(response.status).to eq(401), invalid_status_detail
@@ -53,7 +53,43 @@ describe Api::V2Controller do
       end
     end
 
-    context '#filters' do
+    describe 'Update user tracked info' do
+      context "the user's current_sign_in_at is recent" do
+        before do
+          api_login(user)
+          user.update_columns(sign_in_count: 0, current_sign_in_at: 6.hours.ago)
+        end
+
+        it 'does not update the user tracked info for an authenticated user' do
+          expect { get :index }.to_not change { user.reload.current_sign_in_at }
+          expect(user.sign_in_count).to eq(0)
+        end
+      end
+
+      context "the user's current_sign_in_at is a long time ago" do
+        before do
+          api_login(user)
+          user.update_columns(sign_in_count: 0, current_sign_in_at: 1.week.ago)
+        end
+
+        it 'updates the user tracked info for an authenticated user' do
+          travel_to(Time.current) do
+            expect { get :index }.to change { user.reload.sign_in_count }.from(0).to(1)
+            expect(user.current_sign_in_at).to eq(Time.current)
+          end
+        end
+      end
+
+      it 'does not update tracked fields if user is not authenticated' do
+        user
+        expect(User.count).to be > 0
+        expect_any_instance_of(User).to_not receive(:update_tracked_fields!)
+        expect_any_instance_of(User).to_not receive(:update_tracked_fields)
+        get :index
+      end
+    end
+
+    describe 'Filters' do
       let(:contact) { create(:contact) }
 
       it 'allows a user to filter by id using a uuid' do
@@ -88,7 +124,7 @@ describe Api::V2Controller do
       end
     end
 
-    context '#includes' do
+    describe 'Includes' do
       let(:contact) { create(:contact) }
 
       it "includes all associated resources when the '*' flag is passed" do

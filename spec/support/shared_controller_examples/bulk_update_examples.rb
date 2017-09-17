@@ -68,9 +68,7 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
 
     context 'resources not found' do
       it 'responds correctly if all resources are not found' do
-        expect do
-          put :update, data: [{ data: { type: resource_type, id: SecureRandom.uuid } }]
-        end.not_to change { resource.class.order(:updated_at).last.updated_at }
+        put :update, data: [{ data: { type: resource_type, id: SecureRandom.uuid } }]
         expect(response.status).to eq(404), invalid_status_detail
         expect(response_body['errors']).to be_present
         expect(response_body['data']).to be_blank
@@ -78,9 +76,7 @@ RSpec.shared_examples 'bulk_update_examples' do |options = {}|
 
       it 'responds correctly if only some resources are not found' do
         bulk_update_attributes[:data] << { data: { type: resource_type, id: SecureRandom.uuid } }
-        expect do
-          put :update, data: bulk_update_attributes[:data]
-        end.to change { resource.class.order(:updated_at).last.updated_at }
+        put :update, data: bulk_update_attributes[:data]
         expect(response.status).to eq(200), invalid_status_detail
         expect(response_body.size).to eq(3)
       end
