@@ -414,6 +414,9 @@ class Person < ApplicationRecord
       other_master_person_id = other.master_person.id
       other_master_person_sources = other.master_person.master_person_sources.pluck(:organization_id, :remote_id)
 
+      ids = [id, other.id]
+      DuplicateRecordPair.type(self.class).find_by(record_one_id: ids, record_two_id: ids)&.destroy
+
       other.reload
       other.destroy
 
@@ -449,17 +452,6 @@ class Person < ApplicationRecord
 
   def to_person
     self
-  end
-
-  def confirmed_non_duplicate_of?(other)
-    not_duplicated_with.to_s.split(',').include?(other.id.to_s) ||
-      other.not_duplicated_with.to_s.split(',').include?(id.to_s)
-  end
-
-  def mark_not_duplicate_of!(other)
-    not_duplicated_with_set = not_duplicated_with.to_s.split(',').to_set
-    not_duplicated_with_set << other.id.to_s
-    update_column(:not_duplicated_with, not_duplicated_with_set.to_a.join(','))
   end
 
   def birthday_year

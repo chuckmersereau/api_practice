@@ -76,7 +76,8 @@ RSpec.describe AccountList::Destroyer do
         account_list.people.collect(&:websites).flatten,
         account_list.people.collect(&:email_addresses).flatten,
         account_list.pls_account,
-        account_list.prayer_letters_account
+        account_list.prayer_letters_account,
+        account_list.duplicate_record_pairs
       ].collect(&:presence).flatten.collect do |record|
         record.is_a?(ActiveRecord::Associations::CollectionProxy) ? record.to_a.presence : record.presence
       end.flatten

@@ -2297,7 +2297,7 @@ CREATE TABLE people (
     optout_enewsletter boolean DEFAULT false,
     occupation character varying,
     employer character varying,
-    not_duplicated_with character varying(2000),
+    deprecated_not_duplicated_with character varying(2000),
     uuid uuid DEFAULT uuid_generate_v4()
 );
 
@@ -6805,6 +6805,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170829212715');
 INSERT INTO schema_migrations (version) VALUES ('20170829220006');
 
 INSERT INTO schema_migrations (version) VALUES ('20170830234109');
+
+INSERT INTO schema_migrations (version) VALUES ('20170831194616');
 
 INSERT INTO schema_migrations (version) VALUES ('20170905043431');
 

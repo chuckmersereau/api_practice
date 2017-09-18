@@ -34,10 +34,14 @@ RSpec.describe Tools::Analytics do
 
     before do
       allow_any_instance_of(Contact::DuplicatePairsFinder).to receive(:find_and_save)
-      allow(DuplicateRecordPair).to receive_message_chain(:type, :where, :count).and_return(3)
+      dup_contact_pairs_double = double
+      allow(dup_contact_pairs_double).to receive_message_chain(:where, :count).and_return(3)
+      allow(DuplicateRecordPair).to receive(:type).with('Contact').and_return(dup_contact_pairs_double)
 
-      allow_any_instance_of(Person::DuplicatesFinder).to receive(:find).and_return(people_duplicates)
-      allow(people_duplicates).to receive(:count).and_return(2)
+      allow_any_instance_of(Person::DuplicatePairsFinder).to receive(:find_and_save)
+      dup_person_pairs_double = double
+      allow(dup_person_pairs_double).to receive_message_chain(:where, :count).and_return(2)
+      allow(DuplicateRecordPair).to receive(:type).with('Person').and_return(dup_person_pairs_double)
     end
 
     it 'returns the account_list uuid for each account_list' do

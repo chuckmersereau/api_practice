@@ -19,6 +19,9 @@ This changelog covers what's changed in the MPDX APIs.
 - Added primary_appeal relationship to account_list object.
 - Added fix-send-newsletter count to /api/v2/tools/analytics endpoint.
 
+## 31 August 2017
+- Breaking changes to the /api/v2/contacts/people/duplicates endpoints. Duplicates are now resources with uuids.
+
 ## 30 August 2017
 - Added pledges_amount fields to appeal object.
 

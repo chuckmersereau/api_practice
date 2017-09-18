@@ -1,97 +1,74 @@
 require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::People::DuplicatesController, type: :controller do
-  # This is required!
-  let(:user) { create(:user_with_account) }
+  let(:factory_type) { :duplicate_people_pair }
 
-  # This MAY be required!
-  let(:account_list) { user.account_lists.first }
+  let!(:duplicate_record_pair) { create(:duplicate_people_pair) }
+  let!(:second_duplicate_record_pair) { create(:duplicate_people_pair, account_list: duplicate_record_pair.account_list) }
 
-  # This is required!
-  let(:factory_type) do
-    # This is the type used to auto-generate a resource using FactoryGirl,
-    # ex: The type `:email_address` would be used as create(:email_address)
-    :person
-  end
+  let(:account_list) { duplicate_record_pair.account_list }
+  let(:user) { create(:user).tap { |user| account_list.users << user } }
 
-  # The minimum number of records for having two separate contact duplicates
-  let(:person1) { create(:person, first_name: 'John', last_name: 'Doe') }
-  let(:person2) { create(:person, first_name: 'john', last_name: 'doe') }
-  let(:person3) { create(:person, first_name: 'Jane', last_name: 'Doe') }
-  let(:person4) { create(:person, first_name: 'jane', last_name: 'doe') }
-  let(:contact1) { create(:contact, name: 'Doe, John', account_list: account_list) }
-  let(:contact2) { create(:contact, name: 'Doe, Jane', account_list: account_list) }
+  let(:resource) { duplicate_record_pair }
+  let(:second_resource) { second_duplicate_record_pair }
 
-  # This is required!
-  let!(:resource) do
-    Person::Duplicate.new(
-      person: person3,
-      dup_person: person4,
-      shared_contact: contact1
-    )
-  end
+  let(:id) { duplicate_record_pair.uuid }
 
-  # This is required for the index action!
-  let!(:second_resource) do
-    Person::Duplicate.new(
-      person: person1,
-      dup_person: person2,
-      shared_contact: contact2
-    )
-  end
-
-  # If needed, keep this ;)
-  let(:id) { resource.id }
-
-  let(:count) { -> { Person::DuplicatesFinder.new(account_list).find.count } }
-
-  # This is required!
   let(:correct_attributes) do
-    {}
+    {
+      reason: 'Testing',
+      updated_in_db_at: resource.updated_at
+    }
   end
 
-  # This is required!
-  let(:unpermitted_attributes) do
-    nil
+  let(:correct_relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: account_list.uuid
+        }
+      },
+      records: {
+        data: [
+          {
+            type: 'person',
+            id: account_list.people.first.uuid
+          },
+          {
+            type: 'person',
+            id: account_list.people.second.uuid
+          }
+        ]
+      }
+    }
   end
 
-  # This is required!
+  let(:unpermitted_relationships) do
+    {
+      account_list: {
+        data: {
+          type: 'account_lists',
+          id: create(:account_list).uuid
+        }
+      }
+    }
+  end
+
+  let(:reference_key) { :reason }
+  let(:reference_value) { correct_attributes[:reason] }
+  let(:incorrect_reference_value) { resource.send(reference_key) }
+
   let(:incorrect_attributes) do
-    nil
+    {
+      reason: nil,
+      updated_in_db_at: resource.updated_at
+    }
   end
 
-  before(:each) do
-    contact1.people << person1
-    contact1.people << person2
-    contact2.people << person3
-    contact2.people << person4
-  end
+  include_examples 'index_examples'
 
-  # These includes can be found in:
-  # spec/support/shared_controller_examples
-  include_examples 'destroy_examples'
+  include_examples 'show_examples'
 
-  include_examples 'index_examples', except: [:sparse_fieldsets, :sorting]
-
-  context '#index' do
-    let!(:person5) do
-      create(:person, first_name: 'John', last_name: 'Doe', contacts: [contact1])
-    end
-
-    it 'does not return duplicates that include people that were already included' do
-      api_login(user)
-      get :index, contact_id: contact1.uuid
-      expect(JSON.parse(response.body)['data'].count).to eq(2)
-      expect(JSON.parse(response.body)['data'].map { |duplicate| duplicate['id'] }).to_not include(person5.uuid)
-    end
-
-    describe 'sparse fieldsets' do
-      it 'only returns fields requested' do
-        api_login(user)
-        get :index, parent_param_if_needed.merge(fields: { people: 'first_name' }, include: 'people')
-
-        expect(JSON.parse(response.body)['included'].first['attributes'].keys).to contain_exactly('first_name')
-      end
-    end
-  end
+  include_examples 'update_examples'
 end

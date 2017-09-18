@@ -80,7 +80,7 @@ Rails.application.routes.draw do
               constraints(id: /.+/) do
                 resources :duplicates, only: [:index, :show, :update]
                 namespace :people do
-                  resources :duplicates, only: [:index, :destroy]
+                  resources :duplicates, only: [:index, :show, :update]
                 end
               end
               namespace :people do
