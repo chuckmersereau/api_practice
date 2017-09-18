@@ -153,7 +153,7 @@ describe Appeal do
 
       subject.save
       expect(subject.contacts).to eq([contact2])
-      expect(subject.excluded_contacts).to eq([contact1, contact3, contact4])
+      expect(subject.excluded_contacts).to match_array([contact1, contact3, contact4])
     end
 
     it 'adds filter name as reason for exclusion' do

@@ -8,7 +8,7 @@ class Task < Activity
   before_validation :update_completed_at
   after_save :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
   after_destroy :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
-  after_create :log_newsletter, if: -> { (activity_type == 'Newsletter - Physical' || activity_type == 'Newsletter - Email') && contacts.empty? }
+  after_create :log_newsletter, if: -> { should_log_to_all_contacts? }
 
   enum notification_type: %w(email)
   enum notification_time_unit: %w(minutes hours)
@@ -402,5 +402,10 @@ class Task < Activity
         )
       end
     end
+  end
+
+  def should_log_to_all_contacts?
+    (activity_type == 'Newsletter - Physical' || (activity_type == 'Newsletter - Email' && source.nil?)) &&
+      contacts.empty?
   end
 end

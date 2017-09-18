@@ -136,32 +136,49 @@ describe Task do
       end
     end
     context 'email' do
-      before do
-        subject.activity_type = 'Newsletter - Email'
-      end
+      context 'with source Nil' do
+        before do
+          subject.activity_type = 'Newsletter - Email'
+          subject.source = nil
+        end
 
-      it 'creates two seperate log newsletter tasks' do
-        expect { subject.save }.to change { Task.count }.from(0).to(3)
-      end
+        it 'does not create a seperate log newsletter tasks' do
+          expect { subject.save }.to change { Task.count }.from(0).to(3)
+        end
 
-      it 'creates two seperate comments' do
-        expect { subject.save }.to change { ActivityComment.count }.from(0).to(3)
-      end
+        it 'creates two seperate comments' do
+          expect { subject.save }.to change { ActivityComment.count }.from(0).to(3)
+        end
 
-      it 'creates tasks associated to correct contacts' do
-        subject.save
-        expect(contact_1.tasks.empty?).to be_falsy
-        expect(contact_2.tasks.empty?).to be_truthy
-        expect(contact_3.tasks.empty?).to be_falsy
-      end
+        it 'creates tasks associated to correct contacts' do
+          subject.save
+          expect(contact_1.tasks.empty?).to be_falsy
+          expect(contact_2.tasks.empty?).to be_truthy
+          expect(contact_3.tasks.empty?).to be_falsy
+        end
 
-      it 'copies attributes to created tasks' do
-        subject.save
-        created_task = contact_3.tasks.first
-        expect(created_task.subject).to eq(subject.subject)
-        expect(created_task.activity_type).to eq(subject.activity_type)
-        expect(created_task.completed_at).to eq(subject.completed_at)
-        expect(created_task.completed).to eq(subject.completed)
+        it 'copies attributes to created tasks' do
+          subject.save
+          created_task = contact_3.tasks.first
+          expect(created_task.subject).to eq(subject.subject)
+          expect(created_task.activity_type).to eq(subject.activity_type)
+          expect(created_task.completed_at).to eq(subject.completed_at)
+          expect(created_task.completed).to eq(subject.completed)
+        end
+      end
+      context 'with source MailChimp' do
+        before do
+          subject.activity_type = 'Newsletter - Email'
+          subject.source = 'MailChimp'
+        end
+
+        it 'does not create seperate log newsletter tasks' do
+          expect { subject.save }.to change { Task.count }.from(0).to(1)
+        end
+
+        it 'creates two seperate comments' do
+          expect { subject.save }.to change { ActivityComment.count }.from(0).to(1)
+        end
       end
     end
   end
