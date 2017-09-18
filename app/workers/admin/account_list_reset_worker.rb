@@ -6,6 +6,7 @@ class Admin::AccountListResetWorker
   def perform(account_list_id, user_id, reset_log_id)
     @account_list = AccountList.find_by_id(account_list_id)
     @user = User.find(user_id)
+    @organization_accounts = @account_list&.organization_accounts.presence || @user.organization_accounts
     @reset_log = Admin::ResetLog.where(id: reset_log_id, resetted_user: @user).last!
     reset
     email_user
@@ -37,7 +38,7 @@ class Admin::AccountListResetWorker
   end
 
   def import_profiles
-    @user.organization_accounts.each(&:import_profiles)
+    @organization_accounts.each(&:import_profiles)
   end
 
   def set_default_account_list
@@ -47,7 +48,8 @@ class Admin::AccountListResetWorker
   end
 
   def queue_import_organization_data
-    @user.organization_accounts.each(&:queue_import_data)
+    Person::OrganizationAccount.where(id: @organization_accounts).update_all(last_download: nil)
+    @organization_accounts.each(&:queue_import_data)
   end
 
   def email_user

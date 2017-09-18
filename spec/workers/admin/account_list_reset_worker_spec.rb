@@ -70,16 +70,18 @@ describe Admin::AccountListResetWorker do
 
       it 'imports the profiles' do
         organization_account_double = instance_double('Person::OrganizationAccount', queue_import_data: nil, import_profiles: nil)
-        expect_any_instance_of(User).to receive(:organization_accounts).twice.and_return([organization_account_double])
+        expect_any_instance_of(User).to receive(:organization_accounts).once.and_return([organization_account_double])
+        expect_any_instance_of(Admin::AccountListResetWorker).to receive(:queue_import_organization_data).once
         expect(organization_account_double).to receive(:import_profiles)
         subject
       end
 
       it 'queues a data sync' do
-        organization_account_double = instance_double('Person::OrganizationAccount', queue_import_data: nil, import_profiles: nil)
-        expect_any_instance_of(User).to receive(:organization_accounts).twice.and_return([organization_account_double])
-        expect(organization_account_double).to receive(:queue_import_data)
+        number_of_times_called = 0
+        Person::OrganizationAccount.any_instance.stub(:queue_import_data) { number_of_times_called += 1 }
         subject
+        expect(number_of_times_called).to eq(user.organization_accounts.size)
+        expect(user.organization_accounts.size).to eq(2)
       end
 
       it 'logs the complete time' do
@@ -92,6 +94,12 @@ describe Admin::AccountListResetWorker do
       it 'updates the default_account_list' do
         expect { subject }.to change { user.reload.default_account_list }.from(account_list.id)
         expect(user.account_lists.ids).to include(user.default_account_list)
+      end
+
+      it 'resets the organization account last_download so that all donations are reimported' do
+        user.organization_accounts.first.update(last_download: 1.day.ago)
+        original_time = user.organization_accounts.first.reload.last_download
+        expect { subject }.to change { user.organization_accounts.reload.first.last_download }.from(original_time).to(nil)
       end
     end
   end
@@ -137,7 +145,8 @@ describe Admin::AccountListResetWorker do
 
       before do
         expect(user.organization_accounts.size).to eq(1)
-        expect_any_instance_of(User).to receive(:organization_accounts).twice.and_return([org_account_double])
+        expect_any_instance_of(Admin::AccountListResetWorker).to receive(:queue_import_organization_data)
+        expect_any_instance_of(User).to receive(:organization_accounts).once.and_return([org_account_double])
       end
 
       it 'updates the default_account_list' do
