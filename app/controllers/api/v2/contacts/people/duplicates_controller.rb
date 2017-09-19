@@ -1,17 +1,23 @@
 class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
-  resource_type :people
+  resource_type :duplicate_record_pairs
 
   def index
     authorize_index
+    find_more_duplicates
     load_duplicates
     render_duplicates
   end
 
-  def destroy
+  def show
     load_duplicate
     authorize_duplicate
-    invalidate_duplicate
-    head :no_content
+    render_duplicate
+  end
+
+  def update
+    load_duplicate
+    authorize_duplicate
+    persist_duplicate
   end
 
   private
@@ -21,33 +27,61 @@ class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
   end
 
   def authorize_duplicate
-    authorize(@duplicate.shared_contact, :update?)
-    @duplicate.people.each { |person| authorize(person, :update?) }
+    @duplicate.records.each { |person| authorize(person, :update?) }
+    authorize(@duplicate.account_list, :update?)
   end
 
-  def invalidate_duplicate
-    @duplicate.invalidate!
+  def duplicates_scope
+    DuplicateRecordPair.type('Person').where(account_list: account_lists)
   end
 
-  def load_duplicate
-    @duplicate = Person::Duplicate.find(params[:id])
+  def find_more_duplicates
+    account_lists.each do |account_list|
+      Person::DuplicatePairsFinder.new(account_list).find_and_save
+    end
   end
 
   def load_duplicates
-    @duplicates = account_lists.flat_map do |account_list|
-      Person::DuplicatesFinder.new(account_list).find
-    end
-    @duplicates = Kaminari.paginate_array(duplicates_without_doubles)
-                          .page(page_number_param)
-                          .per(per_page_param)
+    @duplicates = duplicates_scope.where(filter_params)
+                                  .reorder(sorting_param)
+                                  .page(page_number_param)
+                                  .per(per_page_param)
   end
 
-  def duplicates_without_doubles
-    @duplicates.each_with_object([]) do |duplicate, dups_to_keep|
-      if dups_to_keep.none? { |dup_to_keep| dup_to_keep.shares_an_id_with?(duplicate) }
-        dups_to_keep << duplicate
-      end
+  def load_duplicate
+    @duplicate = DuplicateRecordPair.type('Person').find_by_uuid_or_raise!(params[:id])
+  end
+
+  def build_duplicate
+    @duplicate ||= DuplicateRecordPair.new(type: 'Person')
+    @duplicate.assign_attributes(duplicate_params)
+  end
+
+  def save_duplicate
+    @duplicate.save(context: persistence_context)
+  end
+
+  def persist_duplicate
+    build_duplicate
+    authorize_duplicate
+
+    if save_duplicate
+      render_duplicate
+    else
+      render_with_resource_errors(@duplicate)
     end
+  end
+
+  def duplicate_params
+    params.require(:duplicate_record_pair)
+          .permit(DuplicateRecordPair::PERMITTED_ATTRIBUTES)
+  end
+
+  def render_duplicate
+    render json: @duplicate,
+           status: success_status,
+           include: include_params,
+           fields: field_params
   end
 
   def render_duplicates
@@ -57,15 +91,11 @@ class Api::V2::Contacts::People::DuplicatesController < Api::V2Controller
            fields: field_params
   end
 
-  def current_contact
-    @duplicate&.shared_contact
-  end
-
   def permitted_filters
-    [:account_list_id]
+    [:account_list_id, :ignore]
   end
 
   def pundit_user
-    PunditContext.new(current_user, contact: current_contact)
+    PunditContext.new(current_user)
   end
 end

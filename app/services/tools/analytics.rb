@@ -71,7 +71,8 @@ class Tools::Analytics < ActiveModelSerializers::Model
   end
 
   def duplicate_people_count(account_list)
-    Person::DuplicatesFinder.new(account_list).find.count
+    Person::DuplicatePairsFinder.new(account_list).find_and_save
+    DuplicateRecordPair.type('Person').where(account_list: account_list, ignore: false).count
   end
 
   def after_initialize

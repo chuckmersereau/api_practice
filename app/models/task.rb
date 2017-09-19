@@ -8,7 +8,7 @@ class Task < Activity
   before_validation :update_completed_at
   after_save :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
   after_destroy :update_contact_uncompleted_tasks_count, :queue_sync_to_google_calendar
-  # after_create :log_newsletter, if: -> { (activity_type == 'Newsletter - Physical' || activity_type == 'Newsletter - Email') && contacts.empty? }
+  after_create :log_newsletter, if: -> { should_log_to_all_contacts? }
 
   enum notification_type: %w(email)
   enum notification_time_unit: %w(minutes hours)
@@ -151,6 +151,7 @@ class Task < Activity
     'Thank'
   ].freeze
 
+  PRE_CALL_LETTER_RESULTS = %w(Completed Received).freeze
   PRE_CALL_LETTER_NEXT_ACTIONS = [
     'Call',
     'Email',
@@ -168,7 +169,7 @@ class Task < Activity
   MESSAGE_RESULTS = [_('Done'), _('Received')].freeze
   STANDARD_RESULTS = [_('Done')].freeze
 
-  ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS + TALK_TO_IN_PERSON_RESULTS + PRAYER_REQUEST_RESULTS
+  ALL_RESULTS = STANDARD_RESULTS + APPOINTMENT_RESULTS + CALL_RESULTS + MESSAGE_RESULTS + TALK_TO_IN_PERSON_RESULTS + PRAYER_REQUEST_RESULTS + PRE_CALL_LETTER_RESULTS
 
   TASK_ACTIVITIES = [
     'Call',
@@ -260,6 +261,8 @@ class Task < Activity
       TALK_TO_IN_PERSON_RESULTS
     when 'Prayer Request'
       PRAYER_REQUEST_RESULTS
+    when 'Pre Call Letter'
+      PRE_CALL_LETTER_RESULTS
     else
       STANDARD_RESULTS
     end
@@ -317,6 +320,7 @@ class Task < Activity
     options['Text Message'] = TEXT_RESULTS
     options['Talk to In Person'] = TALK_TO_IN_PERSON_RESULTS
     options['Prayer Request'] = PRAYER_REQUEST_RESULTS
+    options['Pre Call Letter'] = PRE_CALL_LETTER_RESULTS
     options['default'] = STANDARD_RESULTS
     options
   end
@@ -379,24 +383,29 @@ class Task < Activity
     result.present? || start_at.nil? || Time.now > start_at || no_date?
   end
 
-  # def log_newsletter
-  #   contacts = account_list.contacts.where(
-  #     send_newsletter: [activity_type.sub('Newsletter - ', ''), 'Both']
-  #   )
-  #   contacts.each do |contact|
-  #     task = account_list.tasks.create(
-  #       subject: subject,
-  #       activity_type: activity_type,
-  #       contacts: [contact],
-  #       completed_at: completed_at,
-  #       completed: completed
-  #     )
-  #     comments.each do |comment|
-  #       task.comments.create(
-  #         person_id: comment.person_id,
-  #         body: comment.body
-  #       )
-  #     end
-  #   end
-  # end
+  def log_newsletter
+    contacts = account_list.contacts.where(
+      send_newsletter: [activity_type.sub('Newsletter - ', ''), 'Both']
+    )
+    contacts.each do |contact|
+      task = account_list.tasks.create(
+        subject: subject,
+        activity_type: activity_type,
+        contacts: [contact],
+        completed_at: completed_at,
+        completed: completed
+      )
+      comments.each do |comment|
+        task.comments.create(
+          person_id: comment.person_id,
+          body: comment.body
+        )
+      end
+    end
+  end
+
+  def should_log_to_all_contacts?
+    (activity_type == 'Newsletter - Physical' || (activity_type == 'Newsletter - Email' && source.nil?)) &&
+      contacts.empty?
+  end
 end

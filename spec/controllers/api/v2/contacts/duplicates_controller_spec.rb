@@ -1,10 +1,10 @@
 require 'rails_helper'
 
 RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
-  let(:factory_type) { :duplicate_record_pair }
+  let(:factory_type) { :duplicate_contacts_pair }
 
-  let!(:duplicate_record_pair) { create(:duplicate_record_pair) }
-  let!(:second_duplicate_record_pair) { create(:duplicate_record_pair, account_list: duplicate_record_pair.account_list) }
+  let!(:duplicate_record_pair) { create(:duplicate_contacts_pair) }
+  let!(:second_duplicate_record_pair) { create(:duplicate_contacts_pair, account_list: duplicate_record_pair.account_list) }
 
   let(:account_list) { duplicate_record_pair.account_list }
   let(:user) { create(:user).tap { |user| account_list.users << user } }
@@ -29,17 +29,17 @@ RSpec.describe Api::V2::Contacts::DuplicatesController, type: :controller do
           id: account_list.uuid
         }
       },
-      record_one: {
-        data: {
-          type: 'contacts',
-          id: account_list.contacts.first.uuid
-        }
-      },
-      record_two: {
-        data: {
-          type: 'contacts',
-          id: account_list.contacts.second.uuid
-        }
+      records: {
+        data: [
+          {
+            type: 'contact',
+            id: account_list.contacts.first.uuid
+          },
+          {
+            type: 'contact',
+            id: account_list.contacts.second.uuid
+          }
+        ]
       }
     }
   end

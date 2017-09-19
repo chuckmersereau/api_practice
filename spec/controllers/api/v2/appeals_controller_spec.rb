@@ -39,7 +39,7 @@ RSpec.describe Api::V2::AppealsController, type: :controller do
   end
 
   before do
-    resource.contacts << create(:contact) # Test inclusion of related resources.
+    resource.contacts << create(:contact, account_list: account_list) # Test inclusion of related resources.
   end
 
   include_examples 'create_examples'

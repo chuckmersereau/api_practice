@@ -3,6 +3,9 @@
 This changelog covers what's changed in the MPDX APIs.
 
 ## 11 September 2017
+- Removed /api/v2/appeals/contacts endpoint.
+- Added /api/v2/appeals/appeal_contacts endpoint.
+- Added /api/v2/appeals/excluded_appeal_contacts endpoint.
 - Upon a successful Account Reset (an admin function), the user is sent an
   email asking them to logout and log back into MPDX. A link to the logout
   route is provided in the email body.
@@ -15,6 +18,9 @@ This changelog covers what's changed in the MPDX APIs.
 - Added active_mpd_start_at, active_mpd_finish_at, active_mpd_monthly_goal fields to account_list object.
 - Added primary_appeal relationship to account_list object.
 - Added fix-send-newsletter count to /api/v2/tools/analytics endpoint.
+
+## 31 August 2017
+- Breaking changes to the /api/v2/contacts/people/duplicates endpoints. Duplicates are now resources with uuids.
 
 ## 30 August 2017
 - Added pledges_amount fields to appeal object.

@@ -19,6 +19,39 @@ describe Contact::DuplicatePairsFinder do
     Contact::DuplicatePairsFinder.new(account_list)
   end
 
+  it 'deletes pairs with missing records' do
+    valid_pair = DuplicateRecordPair.create!(
+      account_list: account_list,
+      reason: 'Test',
+      record_one: create(:contact, name: 'Doe, John', account_list: account_list),
+      record_two: create(:contact, name: 'Doe, John', account_list: account_list))
+    contact = create(:contact, name: 'Doe, John', account_list: account_list)
+
+    pair_missing_record_one = DuplicateRecordPair.new(
+      account_list: account_list,
+      reason: 'Test',
+      record_one_id: contact.id + 1,
+      record_one_type: 'Contact',
+      record_two_id: contact.id,
+      record_two_type: 'Contact')
+    pair_missing_record_one.save(validate: false)
+
+    pair_missing_record_two = DuplicateRecordPair.new(
+      account_list: account_list,
+      reason: 'Test',
+      record_one_id: contact.id,
+      record_one_type: 'Contact',
+      record_two_id: contact.id + 2,
+      record_two_type: 'Contact')
+    pair_missing_record_two.save(validate: false)
+
+    expect { build_finder.find_and_save }.to change { DuplicateRecordPair.count }.by(-2)
+
+    expect(DuplicateRecordPair.exists?(pair_missing_record_one.id)).to eq(false)
+    expect(DuplicateRecordPair.exists?(pair_missing_record_two.id)).to eq(false)
+    expect(DuplicateRecordPair.exists?(valid_pair.id)).to eq(true)
+  end
+
   it 'does not find duplicates from a different account list' do
     create(:contact, name: 'Doe, John')
     create(:contact, name: 'Doe, John', account_list: account_list)

@@ -2,226 +2,8 @@ require 'rails_helper'
 
 describe Appeal do
   let(:account_list) { create(:account_list) }
-  let(:appeal) { create(:appeal, account_list: account_list) }
+  subject { create(:appeal, account_list: account_list) }
   let(:contact) { create(:contact, account_list: account_list) }
-  let(:da) { create(:designation_account) }
-
-  before do
-    account_list.designation_accounts << da
-  end
-
-  context '#add_contacts_by_opts' do
-    it 'adds contacts found by contacts_by_opts' do
-      opts = [['Partner - Pray'], ['tag'], {}]
-      expect(appeal).to receive(:contacts_by_opts).with(*opts).and_return([contact])
-      expect do
-        appeal.add_contacts_by_opts(*opts)
-      end.to change(appeal.contacts, :count).from(0).to(1)
-      expect(appeal.contacts.first).to eq(contact)
-    end
-  end
-
-  context '#bulk_add_contacts' do
-    it 'bulk adds the contacts but removes duplicates first and does not create dups when run again' do
-      contact2 = create(:contact)
-      expect do
-        appeal.bulk_add_contacts(contacts: [contact, contact, contact2])
-      end.to change(appeal.contacts, :count).from(0).to(2)
-
-      expect do
-        appeal.bulk_add_contacts(contacts: [contact, contact, contact2])
-      end.to_not change(appeal.contacts, :count).from(2)
-    end
-  end
-
-  context '#contacts_by_opts' do
-    let(:donor_account) { create(:donor_account) }
-    let(:donation) { create(:donation, donor_account: donor_account, designation_account: da) }
-
-    before do
-      contact.donor_accounts << donor_account
-    end
-
-    it 'finds contacts with specified statuses or tags' do
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], {}).count).to eq(1)
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], {})).to include(contact)
-
-      expect(appeal.contacts_by_opts(['Partner - Financial'], ['tag'], {}).count).to eq(1)
-      contact.update_column(:status, 'Not Interested')
-      expect(appeal.contacts_by_opts(['Partner - Financial'], ['tag'], {}).count).to eq(0)
-      contact.tag_list = ['tag']
-      contact.save
-      expect(appeal.contacts_by_opts(['Partner - Financial'], ['tag'], {}).count).to eq(1)
-    end
-
-    it 'does not have an error with nil parameters' do
-      expect(appeal.contacts_by_opts(nil, nil, nil).count).to eq(0)
-    end
-
-    it 'does not find duplicate contacts if contact has multiple tags' do
-      contact.tag_list = %w(tagt tag2)
-      contact.save
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], {}).count).to eq(1)
-    end
-
-    it 'excludes no appeals field if specified' do
-      contact.update_column(:no_appeals, true)
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], {}).count).to eq(1)
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], doNotAskAppeals: true).count).to eq(0)
-    end
-
-    it 'excludes joined team last 3 months if specified' do
-      contact.update_column(:first_donation_date, 4.months.ago)
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], joinedTeam3months: true).count).to eq(1)
-
-      contact.update_column(:pledge_amount, 50)
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], joinedTeam3months: true).count).to eq(1)
-
-      contact.update_column(:first_donation_date, 2.months.ago)
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], joinedTeam3months: true).count).to eq(0)
-      expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
-
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], {}).count).to eq(1)
-    end
-
-    it 'does not exclude contacts with a nil pledge amount' do
-      contact.update_columns(pledge_amount: nil, first_donation_date: nil)
-
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [],
-                                     joinedTeam3months: true).count).to eq(1)
-    end
-
-    it 'excludes special givers in the past 3 months if specified' do
-      contact.tag_list = ['tag']
-      contact.save
-      contact.update(pledge_amount: 50, pledge_frequency: 1, status: 'Partner - Pray')
-      donation.update(amount: 500, donation_date: 2.months.ago)
-
-      expect(appeal.contacts_by_opts([], ['tag'], {}).count).to eq(1)
-      expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(0)
-      expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
-
-      donation.update(amount: 150)
-      expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
-
-      donation.update(donation_date: Date.current << 3)
-      donation2 = create(:donation, amount: 50, donation_date: Date.current, designation_account: da)
-      donor_account.donations << donation2
-      contact.update_donation_totals(donation2)
-      expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
-
-      donation2.update(amount: 51)
-      expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(0)
-      expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
-
-      donation2.update(designation_account: nil)
-      expect(appeal.contacts_by_opts([], ['tag'], specialGift3months: true).count).to eq(1)
-    end
-
-    it 'does not exclude contacts with duplicate donor account links' do
-      # create duplicate donor account
-      contact.contact_donor_accounts.create(donor_account: donor_account)
-      contact.update(pledge_amount: 50, pledge_frequency: 1, status: 'Partner - Financial')
-      donation.update(amount: 100, donation_date: 2.months.ago)
-
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], specialGift3months: true).count).to eq(1)
-    end
-
-    it 'excludes contacts who stopped giving in the past 2 months if specified' do
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
-
-      donation2 = create(:donation, amount: 25, donation_date: 3.months.ago, designation_account: da)
-      donor_account.donations << donation2
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
-
-      contact.update(pledge_amount: 0, last_donation_date: 3.months.ago)
-
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
-
-      donation3 = create(:donation, amount: 25, donation_date: 4.months.ago, designation_account: da)
-      donation4 = create(:donation, amount: 25, donation_date: 5.months.ago, designation_account: da)
-      donor_account.donations << donation3
-      donor_account.donations << donation4
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(0)
-      expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
-
-      donation2.update(designation_account: nil)
-      donation3.update(designation_account: nil)
-      expect(appeal.contacts_by_opts(['Partner - Financial'], [], stoppedGiving2months: true).count).to eq(1)
-    end
-
-    it 'excludes contacts who increased giving in the past 3 months if specified' do
-      {
-        { amounts: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2], pledge_frequency: 1 } => true,
-        { amounts: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2], pledge_frequency: 1 } => true,
-        { amounts: [1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2], pledge_frequency: 1 } => false,
-        { amounts: [1, 1, 1], pledge_frequency: 1 } => false,
-        { amounts: [1, 1, 2], pledge_frequency: 1 } => true,
-        { amounts: [1, 1, 2, 2, 0], pledge_frequency: 1 } => true,
-        { amounts: [1, 2, 2, 2, 0], pledge_frequency: 1 } => true,
-        { amounts: [1, 0, 0, 0, 0, 0, 0, 0, 1], pledge_frequency: 1 } => false,
-        { amounts: [1, 1, 1, 2, 1], pledge_frequency: 1 } => false,
-        { amounts: [100, 1, 1, 1, 1, 1, 1, 1], pledge_frequency: 1 } => false,
-        { amounts: [100, 1, 1, 1, 1, 1, 2, 2], pledge_frequency: 1 } => true,
-        { amounts: [1, 2, 1, 2, 1, 4], pledge_frequency: 1 } => true,
-        { amounts: [1, 1, 0, 0, 0, 1], pledge_frequency: 1 } => false,
-        { amounts: [1, 1, 1, 1, 2, 0], pledge_frequency: 1 } => true,
-        { amounts: [1, 1, 1, 1, 2, 2, 0], pledge_frequency: 1 } => true,
-        { amounts: [1, 2, 1, 2, 1, 4], pledge_frequency: 2 } => true,
-        { amounts: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 2], pledge_frequency: 1 } => true,
-        { amounts: [0, 0, 1, 0, 0, 1, 0, 0, 1, 0, 0, 2], pledge_frequency: 3 } => true,
-        { amounts: [1, 2, 1, 2, 1], pledge_frequency: 1 } => false,
-        { amounts: [1, 1, 1, 0, 2], pledge_frequency: 1 } => false,
-        { amounts: [0, 0, 1, 0, 0, 1, 0, 0, 2, 0, 0, 2], pledge_frequency: 3 } => false,
-        { amounts: [1, 2, 1, 2, 1, 2], pledge_frequency: 1 } => true,
-        { amounts: [1, 1, 1, 2, 0, 0], pledge_frequency: 1 } => false
-      }.each do |giving_info, increased|
-        import_giving_info(giving_info)
-
-        expect(appeal.contacts_by_opts(['Partner - Financial'], [], increasedGiving3months: true).count)
-          .to eq(increased ? 0 : 1)
-
-        if increased
-          expect(appeal.excluded_appeal_contacts.first.contact).to eq contact
-        end
-
-        donor_account.donations.update_all(designation_account_id: nil)
-        expect(appeal.contacts_by_opts(['Partner - Financial'], [], increasedGiving3months: true).count).to eq(1)
-      end
-    end
-
-    context '#donated?' do
-      let(:donor_account) { create(:donor_account, contacts: [contact]) }
-      let(:donation) { create(:donation, donor_account: donor_account, appeal: appeal) }
-
-      it 'responds with false when a contact has not given' do
-        expect(appeal.donated?(contact)).to be_falsy
-      end
-
-      it 'responds with true when a contact has given' do
-        donation
-        expect(appeal.donated?(contact)).to be_truthy
-      end
-    end
-
-    def import_giving_info(giving_info)
-      Donation.destroy_all
-      contact.update(pledge_frequency: giving_info[:pledge_frequency], last_donation_date: nil)
-
-      donations = []
-      giving_info[:amounts].reverse.each_with_index do |amount, i|
-        next if amount == 0
-        donations << build(:donation,
-                           donor_account: donor_account,
-                           amount: amount, donation_date: Date.current << i,
-                           designation_account: da)
-      end
-      Donation.import(donations)
-      contact.update(first_donation_date: donations.map(&:donation_date).min,
-                     last_donation_date: donations.map(&:donation_date).max)
-    end
-  end
 
   describe '.filter' do
     context 'wildcard_search' do
@@ -246,35 +28,159 @@ describe Appeal do
     end
   end
 
-  describe 'pledges related fields' do
-    let(:appeal) { create(:appeal) }
+  describe '#bulk_add_contacts' do
+    let(:contact2) { create(:contact, account_list: account_list) }
 
-    let!(:processed_pledge)                  { create(:pledge, processed: true, amount: 200.00, appeal: appeal) }
-    let!(:received_not_processed_pledge)     { create(:pledge, received_not_processed: true, amount: 300.00, appeal: appeal) }
-    let!(:not_received_not_processed_pledge) { create(:pledge, amount: 400.00, appeal: appeal) }
+    it 'bulk adds the contacts but removes duplicates first and does not create dups when run again' do
+      expect do
+        subject.bulk_add_contacts(contacts: [contact, contact, contact2])
+      end.to change(subject.contacts, :count).from(0).to(2)
 
-    context '#pledges_amount_total' do
+      expect do
+        subject.bulk_add_contacts(contacts: [contact, contact, contact2])
+      end.to_not change(subject.contacts, :count).from(2)
+    end
+
+    it 'bulk adds the contact_ids but removes duplicates first and does not create dups when run again' do
+      expect do
+        subject.bulk_add_contacts(contact_ids: [contact.id, contact.id, contact2.id])
+      end.to change(subject.contacts, :count).from(0).to(2)
+
+      expect do
+        subject.bulk_add_contacts(contact_ids: [contact.id, contact.id, contact2.id])
+      end.to_not change(subject.contacts, :count).from(2)
+    end
+  end
+
+  describe '#donated?' do
+    let(:donor_account) { create(:donor_account, contacts: [contact]) }
+    let(:donation) { create(:donation, donor_account: donor_account, appeal: subject) }
+
+    before do
+      contact.donor_accounts << donor_account
+    end
+
+    it 'responds with false when a contact has not given' do
+      expect(subject.donated?(contact)).to be_falsy
+    end
+
+    it 'responds with true when a contact has given' do
+      donation
+      expect(subject.donated?(contact)).to be_truthy
+    end
+  end
+
+  context 'pledges related fields' do
+    subject { create(:appeal) }
+
+    let!(:processed_pledge)                  { create(:pledge, processed: true, amount: 200.00, appeal: subject) }
+    let!(:received_not_processed_pledge)     { create(:pledge, received_not_processed: true, amount: 300.00, appeal: subject) }
+    let!(:not_received_not_processed_pledge) { create(:pledge, amount: 400.00, appeal: subject) }
+
+    describe '#pledges_amount_total' do
       it 'returns the total amount of all pledges' do
-        expect(appeal.pledges_amount_total).to eq(900.00)
+        expect(subject.pledges_amount_total).to eq(900.00)
       end
     end
 
-    context '#pledges_amount_not_received_not_processed' do
+    describe '#pledges_amount_not_received_not_processed' do
       it 'returns the total amount of pledges that were not processed and received' do
-        expect(appeal.pledges_amount_not_received_not_processed).to eq(400.00)
+        expect(subject.pledges_amount_not_received_not_processed).to eq(400.00)
       end
     end
 
-    context '#pledges_amount_received_not_processed' do
+    describe '#pledges_amount_received_not_processed' do
       it 'returns the total amount of all pledges that were received and not processed' do
-        expect(appeal.pledges_amount_received_not_processed).to eq(300.00)
+        expect(subject.pledges_amount_received_not_processed).to eq(300.00)
       end
     end
 
-    context '#pledges_amount_processed' do
+    describe '#pledges_amount_processed' do
       it 'returns the total amount of all pledges that were received that were' do
-        expect(appeal.pledges_amount_processed).to eq(200.00)
+        expect(subject.pledges_amount_processed).to eq(200.00)
       end
+    end
+  end
+
+  describe '#create_contact_associations' do
+    subject { build(:appeal, account_list: account_list) }
+    let!(:contact1) do
+      create(:contact,
+             account_list: account_list,
+             status: 'Partner - Financial',
+             send_newsletter: 'Both')
+    end
+    let!(:contact2) do
+      create(:contact,
+             account_list: account_list,
+             status: 'Never Contacted',
+             send_newsletter: 'Both')
+    end
+    let!(:contact3) do
+      create(:contact,
+             account_list: account_list,
+             status: 'Partner - Pray',
+             pledge_currency: 'NZD',
+             send_newsletter: 'Both')
+    end
+    let!(:contact4) do
+      create(:contact,
+             account_list: account_list,
+             status: 'Partner - Financial',
+             pledge_currency: 'NZD',
+             send_newsletter: 'Both')
+    end
+
+    it 'adds to appeal contacts who are within inclusion filter' do
+      subject.inclusion_filter = {
+        status: 'Partner - Financial',
+        send_newsletter: 'Both'
+      }
+
+      subject.save
+      expect(subject.contacts).to eq([contact1, contact4])
+    end
+
+    it 'excludes contacts in any of the exclusion_filters' do
+      subject.inclusion_filter = {
+        send_newsletter: 'Both'
+      }
+
+      subject.exclusion_filter = {
+        status: 'Partner - Financial',
+        pledge_currency: 'NZD'
+      }
+
+      subject.save
+      expect(subject.contacts).to eq([contact2])
+      expect(subject.excluded_contacts).to match_array([contact1, contact3, contact4])
+    end
+
+    it 'adds filter name as reason for exclusion' do
+      subject.inclusion_filter = {
+        send_newsletter: 'Both'
+      }
+
+      subject.exclusion_filter = {
+        status: 'Partner - Financial',
+        pledge_currency: 'NZD'
+      }
+
+      subject.save
+
+      excluded_appeal_contact1 = subject.excluded_appeal_contacts.find_by(contact: contact1)
+      excluded_appeal_contact3 = subject.excluded_appeal_contacts.find_by(contact: contact3)
+      excluded_appeal_contact4 = subject.excluded_appeal_contacts.find_by(contact: contact4)
+
+      expect(excluded_appeal_contact1.reasons).to eq(['status'])
+      expect(excluded_appeal_contact3.reasons).to eq(['pledge_currency'])
+      expect(excluded_appeal_contact4.reasons).to match_array(%w(status pledge_currency))
+    end
+
+    it 'does not add any contacts when filters are not included' do
+      subject.save
+      expect(subject.appeal_contacts.count).to eq(0)
+      expect(subject.excluded_appeal_contacts.count).to eq(0)
     end
   end
 end

@@ -337,19 +337,13 @@ describe Person do
       expect(winner.master_person_id).to eq(orig_winner_master_person_id)
       expect(winner.master_person).to_not be_nil
     end
-  end
 
-  context '#confirmed_non_duplicate_of?' do
-    it 'considers two people different unless not_duplicated_with is set' do
-      p1 = create(:person)
-      p2 = create(:person)
-      expect(p1.confirmed_non_duplicate_of?(p2)).to be false
-      expect(p2.confirmed_non_duplicate_of?(p1)).to be false
-
-      p1.not_duplicated_with = p2.id.to_s
-
-      expect(p1.confirmed_non_duplicate_of?(p2)).to be true
-      expect(p2.confirmed_non_duplicate_of?(p1)).to be true
+    it 'deletes a DuplicateRecordPair if it exists' do
+      winner.contacts << create(:contact)
+      loser.contacts << winner.contacts.first
+      expect(winner.account_lists).to eq(loser.account_lists)
+      dup_pair_id = DuplicateRecordPair.create!(account_list: winner.account_lists.first, record_one: winner, record_two: loser, reason: 'Testing').id
+      expect { winner.merge(loser) }.to change { DuplicateRecordPair.exists?(dup_pair_id) }.from(true).to(false)
     end
   end
 

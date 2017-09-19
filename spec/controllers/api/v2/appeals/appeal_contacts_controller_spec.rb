@@ -1,23 +1,31 @@
 require 'rails_helper'
 
-describe Api::V2::Appeals::ContactsController, type: :controller do
-  let(:factory_type) { :contact }
+describe Api::V2::Appeals::AppealContactsController, type: :controller do
+  let(:factory_type) { :appeal_contact }
   let!(:user) { create(:user_with_full_account) }
   let!(:account_list) { user.account_lists.first }
   let(:account_list_id) { account_list.uuid }
   let!(:appeal) { create(:appeal, account_list: account_list) }
   let(:appeal_id) { appeal.uuid }
-  let!(:contact) { create(:contact, account_list: account_list, appeals: [appeal]) }
-  let!(:second_contact) { create(:contact, account_list: account_list, appeals: [appeal]) }
+  let!(:contact) { create(:contact, account_list: account_list) }
+  let!(:appeal_contact) { create(:appeal_contact, appeal: appeal, contact: contact) }
+  let!(:second_contact) { create(:contact, account_list: account_list) }
+  let!(:second_appeal_contact) { create(:appeal_contact, appeal: appeal, contact: second_contact) }
   let(:unassociated_contact) { create(:contact, account_list: account_list) }
-  let(:id) { contact.uuid }
+  let(:id) { appeal_contact.uuid }
 
-  let(:resource) { contact }
-  let(:parent_param) { { appeal_id: appeal_id, filters: { account_list_id: account_list_id, excluded: 0 } } }
+  let(:resource) { appeal_contact }
+  let(:parent_param) { { appeal_id: appeal_id } }
   let(:correct_attributes) { {} }
-
-  before do
-    resource.addresses << create(:address) # Test inclusion of related resources.
+  let(:correct_relationships) do
+    {
+      contact: {
+        data: {
+          type: 'contacts',
+          id: unassociated_contact.uuid
+        }
+      }
+    }
   end
 
   include_examples 'index_examples'
@@ -32,16 +40,33 @@ describe Api::V2::Appeals::ContactsController, type: :controller do
       api_login(user)
       expect do
         post :create, full_correct_attributes
-        appeal.contacts.reload
-      end.to change { appeal.contacts.count }.by(1)
+        appeal.appeal_contacts.reload
+      end.to change { appeal.appeal_contacts.count }.by(1)
       expect(response.status).to eq(200)
+    end
+
+    context 'excluded_appeal_contact exists' do
+      let!(:appeal_excluded_appeal_contact) do
+        create(:appeal_excluded_appeal_contact,
+               contact: unassociated_contact,
+               appeal: appeal)
+      end
+
+      it 'destroys appeal_excluded_appeal_contact' do
+        api_login(user)
+        expect do
+          post :create, full_correct_attributes
+          appeal.appeal_contacts.reload
+        end.to change { appeal.excluded_appeal_contacts.count }.by(-1)
+        expect(response.status).to eq(200)
+      end
     end
 
     it 'does not create resource for users that are not signed in' do
       expect do
         post :create, full_correct_attributes
-        appeal.contacts.reload
-      end.not_to change { appeal.contacts.count }
+        appeal.appeal_contacts.reload
+      end.not_to change { appeal.appeal_contacts.count }
       expect(response.status).to eq(401)
     end
   end
@@ -55,8 +80,8 @@ describe Api::V2::Appeals::ContactsController, type: :controller do
       api_login(user)
       expect do
         delete :destroy, full_params
-        appeal.contacts.reload
-      end.to change { appeal.contacts.count }.by(-1)
+        appeal.appeal_contacts.reload
+      end.to change { appeal.appeal_contacts.count }.by(-1)
       expect(response.status).to eq(204)
     end
 
@@ -65,8 +90,8 @@ describe Api::V2::Appeals::ContactsController, type: :controller do
         api_login(create(:user))
         expect do
           delete :destroy, full_params
-          appeal.contacts.reload
-        end.not_to change { appeal.contacts.count }
+          appeal.appeal_contacts.reload
+        end.not_to change { appeal.appeal_contacts.count }
         expect(response.status).to eq(403)
       end
     end
@@ -74,8 +99,8 @@ describe Api::V2::Appeals::ContactsController, type: :controller do
     it 'does not destroy resource object to users that are signed in' do
       expect do
         delete :destroy, full_params
-        appeal.contacts.reload
-      end.not_to change { appeal.contacts.count }
+        appeal.appeal_contacts.reload
+      end.not_to change { appeal.appeal_contacts.count }
       expect(response.status).to eq(401)
     end
   end

@@ -19,7 +19,7 @@ resource 'Contacts > Duplicates' do
   let(:resource_type) { 'duplicate_record_pairs' }
 
   # Remove this and the authorized context below if not authorizing your requests.
-  let(:duplicate_record_pair) { create(:duplicate_record_pair) }
+  let(:duplicate_record_pair) { create(:duplicate_contacts_pair) }
   let(:resource) { duplicate_record_pair }
   let(:account_list) { resource.account_list }
   let(:user) { create(:user).tap { |user| account_list.users << user } }

@@ -19,8 +19,8 @@ relationships: &rels
   records:
     data:
       description:
-        An array of two Contact references
-      type: '[Contact]'
+        An array of two Person references
+      type: '[Person]'
 
 mutation_attributes: &mutation_attrs
   <<: *attrs

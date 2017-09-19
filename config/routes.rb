@@ -56,9 +56,8 @@ Rails.application.routes.draw do
 
         resources :appeals, only: [:index, :show, :create, :update, :destroy] do
           scope module: :appeals do
-            resources :contacts, only: [:index, :show, :destroy] do
-              post :create, on: :member, path: ''
-            end
+            resources :appeal_contacts, only: [:index, :show, :create, :destroy]
+            resources :excluded_appeal_contacts, only: [:index, :show]
           end
         end
 
@@ -81,7 +80,7 @@ Rails.application.routes.draw do
               constraints(id: /.+/) do
                 resources :duplicates, only: [:index, :show, :update]
                 namespace :people do
-                  resources :duplicates, only: [:index, :destroy]
+                  resources :duplicates, only: [:index, :show, :update]
                 end
               end
               namespace :people do

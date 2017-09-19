@@ -64,6 +64,7 @@ class AccountList < ApplicationRecord
   has_many :tasks
   has_many :coaches, through: :account_list_coaches
   has_many :users, through: :account_list_users
+  has_many :duplicate_record_pairs, dependent: :delete_all
 
   has_one :mail_chimp_account, dependent: :destroy
   has_one :prayer_letters_account, dependent: :destroy, autosave: true

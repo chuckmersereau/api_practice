@@ -12,6 +12,8 @@ class DuplicateRecordPair < ApplicationRecord
     :uuid
   ].freeze
 
+  TYPES = %w(Contact Person).freeze
+
   belongs_to :record_one, polymorphic: true
   belongs_to :record_two, polymorphic: true
   belongs_to :account_list
@@ -19,7 +21,7 @@ class DuplicateRecordPair < ApplicationRecord
   before_save :sort_record_ids
 
   validates :account_list_id, :record_one_id, :record_one_type, :record_two_id, :record_two_type, :reason, presence: true
-  validates :record_one_type, :record_two_type, inclusion: { in: %w(Contact) }
+  validates :record_one_type, :record_two_type, inclusion: { in: TYPES }
   validate :records_have_the_same_type_validation
   validate :records_belong_to_the_same_account_list_validation
   validate :pair_is_unique_validation
@@ -52,8 +54,20 @@ class DuplicateRecordPair < ApplicationRecord
     errors.add(:base, 'Records must have the same type!')
   end
 
+  def find_account_list_ids_for_record(record)
+    if record.respond_to?(:account_list_id)
+      [record.account_list_id]
+    elsif record.respond_to?(:account_lists)
+      record.account_lists.ids
+    else
+      []
+    end
+  end
+
   def records_belong_to_the_same_account_list_validation
-    return if record_one&.account_list_id == account_list&.id && record_two&.account_list_id == account_list&.id
+    return if records.all? do |record|
+      find_account_list_ids_for_record(record).include?(account_list&.id)
+    end
     errors.add(:base, 'Records must belong to the same AccountList!')
   end
 

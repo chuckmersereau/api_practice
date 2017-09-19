@@ -16,6 +16,7 @@ class Api::V2Controller < ApiController
 
   before_action :authenticate!
   before_action :validate_and_transform_json_api_params
+  before_action :update_current_user_tracked_fields
 
   after_action  :verify_authorized, except: :index
   around_action :scope_request_to_time_zone, :scope_request_to_locale
@@ -120,5 +121,11 @@ class Api::V2Controller < ApiController
   def validate_and_transform_json_api_params
     @original_params = params
     @_params = JsonApiService.consume(params: params, context: self)
+  end
+
+  def update_current_user_tracked_fields
+    return unless current_user
+    return if current_user.current_sign_in_at.present? && current_user.current_sign_in_at > 12.hours.ago
+    current_user.update_tracked_fields!(request)
   end
 end
