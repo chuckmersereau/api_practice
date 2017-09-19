@@ -9,8 +9,8 @@ describe Siebel do
   let(:account_list) { create(:account_list) }
   let(:designation_profile) { create(:designation_profile, user: person.to_user, organization: org, account_list: account_list) }
   let!(:siebel) { Siebel.new(org_account) }
-  let(:da1) { build(:designation_account, staff_account_id: 1, organization: org) }
-  let(:da2) { build(:designation_account, staff_account_id: 2, organization: org) }
+  let(:designation_account_one) { build(:designation_account, staff_account_id: 1, organization: org) }
+  let(:designation_account_two) { build(:designation_account, staff_account_id: 2, organization: org) }
   let(:donor_account) { create(:donor_account, organization: org) }
   let(:contact) { create(:contact) }
   let(:siebel_donor) do
@@ -45,8 +45,8 @@ describe Siebel do
       stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=2&response_timeout=60000")
         .to_return(body: '{ "2": { "primary": 2 }}')
 
-      designation_profile.designation_accounts << da1
-      designation_profile.designation_accounts << da2
+      designation_profile.designation_accounts << designation_account_one
+      designation_profile.designation_accounts << designation_account_two
 
       siebel.import_profile_balance(designation_profile)
 
@@ -57,11 +57,11 @@ describe Siebel do
       stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=1&response_timeout=60000")
         .to_return(body: '{ "1": { "primary": 1 }}')
 
-      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << designation_account_one
 
       siebel.import_profile_balance(designation_profile)
 
-      expect(da1.balance).to eq(1)
+      expect(designation_account_one.balance).to eq(1)
     end
 
     it 'sets inactive designation accounts to a zero balance thus excluding their amount from the profile total' do
@@ -70,13 +70,13 @@ describe Siebel do
       stub_request(:get, "#{wsapi}/staffAccount/balances?employee_ids=2&response_timeout=60000")
         .to_return(body: '{ "2": { "primary": 2 }}')
 
-      designation_profile.designation_accounts << da1
-      designation_profile.designation_accounts << da2
-      da1.update(active: false)
+      designation_profile.designation_accounts << designation_account_one
+      designation_profile.designation_accounts << designation_account_two
+      designation_account_one.update(active: false)
 
       siebel.import_profile_balance(designation_profile)
       expect(designation_profile.balance).to eq(2)
-      expect(da1.balance).to eq(0)
+      expect(designation_account_one.balance).to eq(0)
     end
   end
 
@@ -84,50 +84,50 @@ describe Siebel do
     it 'imports a new donation from the donor system' do
       stub_one_donation
 
-      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << designation_account_one
 
       expect(siebel).to receive(:add_or_update_donation)
       siebel.import_donations(designation_profile)
     end
 
     it 'removes a donation not in the downloaded list if list is non-empty' do
-      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << designation_account_one
       create(:donation, remote_id: '1-IGQAP', donor_account: donor_account,
-                        designation_account: da1, donation_date: Date.new(2012, 12, 17))
+                        designation_account: designation_account_one, donation_date: Date.new(2012, 12, 17))
       create(:donation, remote_id: '1-IGQAM', donor_account: donor_account,
-                        designation_account: da1, donation_date: Date.new(2012, 12, 18))
+                        designation_account: designation_account_one, donation_date: Date.new(2012, 12, 18))
       stub_one_donation
       stub_no_donations_on_date(Date.new(2012, 12, 17))
 
       expect do
         siebel.send(:import_donations, designation_profile)
-      end.to change { da1.donations.count }.by(-1)
+      end.to change { designation_account_one.donations.count }.by(-1)
     end
 
     it 'removes at most 3 donations per import' do
-      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << designation_account_one
       4.times do |i|
         create(:donation, remote_id: "#{i}-IGQAP", donor_account: donor_account,
-                          designation_account: da1, donation_date: Date.new(2012, 12, 17))
+                          designation_account: designation_account_one, donation_date: Date.new(2012, 12, 17))
       end
       create(:donation, remote_id: '1-IGQAM', donor_account: donor_account,
-                        designation_account: da1, donation_date: Date.new(2012, 12, 18))
+                        designation_account: designation_account_one, donation_date: Date.new(2012, 12, 18))
       stub_one_donation
       stub_no_donations_on_date(Date.new(2012, 12, 17))
 
       expect do
         siebel.send(:import_donations, designation_profile)
-      end.to change { da1.donations.count }.by(-3)
+      end.to change { designation_account_one.donations.count }.by(-3)
     end
 
     it 'does not remove donations if the result from Siebel is empty' do
       create(:donation, remote_id: '1-IGQAP', donor_account: donor_account,
-                        designation_account: da1, donation_date: Date.new(2012, 12, 18))
+                        designation_account: designation_account_one, donation_date: Date.new(2012, 12, 18))
 
       stub_donations('[]')
       stub_no_donations_on_date(Date.new(2012, 12, 18))
 
-      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << designation_account_one
 
       expect do
         siebel.send(:import_donations, designation_profile)
@@ -135,13 +135,13 @@ describe Siebel do
     end
 
     it 'does not remove a donation if it has appeal info' do
-      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << designation_account_one
       appeal = create(:appeal)
       create(:donation, remote_id: '1-IGQAP', donor_account: donor_account,
-                        designation_account: da1, donation_date: Date.new(2012, 12, 17),
+                        designation_account: designation_account_one, donation_date: Date.new(2012, 12, 17),
                         appeal: appeal)
       create(:donation, remote_id: '1-IGQAM', donor_account: donor_account,
-                        designation_account: da1, donation_date: Date.new(2012, 12, 18),
+                        designation_account: designation_account_one, donation_date: Date.new(2012, 12, 18),
                         appeal: appeal)
       stub_one_donation
       stub_no_donations_on_date(Date.new(2012, 12, 17))
@@ -152,13 +152,13 @@ describe Siebel do
     end
 
     it 'does not remove a manually entered donation if it is not in the download list' do
-      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << designation_account_one
       appeal = create(:appeal)
       create(:donation, remote_id: nil, donor_account: donor_account,
-                        designation_account: da1, donation_date: Date.new(2012, 12, 17),
+                        designation_account: designation_account_one, donation_date: Date.new(2012, 12, 17),
                         appeal: appeal)
       create(:donation, remote_id: '1-IGQAM', donor_account: donor_account,
-                        designation_account: da1, donation_date: Date.new(2012, 12, 18),
+                        designation_account: designation_account_one, donation_date: Date.new(2012, 12, 18),
                         appeal: appeal)
       stub_one_donation
       stub_no_donations_on_date(Date.new(2012, 12, 17))
@@ -170,7 +170,7 @@ describe Siebel do
 
     def stub_one_donation
       donations_json = [
-        { id: '1-IGQAM', amount: '100.00', designation: da1.designation_number,
+        { id: '1-IGQAM', amount: '100.00', designation: designation_account_one.designation_number,
           donorId: donor_account.account_number, donationDate: '2012-12-18',
           postedDate: '2012-12-21', paymentMethod: 'Check', channel: 'Mail',
           campaignCode: '000000' }
@@ -180,17 +180,17 @@ describe Siebel do
 
     def stub_donations(donations_json)
       today = Date.today.strftime('%Y-%m-%d')
-      stub_request(:get, "#{wsapi}/donations?designations=#{da1.designation_number}&"\
+      stub_request(:get, "#{wsapi}/donations?designations=#{designation_account_one.designation_number}&"\
                    "posted_date_end=#{today}&response_timeout=60000&posted_date_start=2004-01-01")
         .to_return(body: donations_json)
-      stub_request(:get, "#{wsapi}/donations?designations=#{da1.designation_number}&"\
+      stub_request(:get, "#{wsapi}/donations?designations=#{designation_account_one.designation_number}&"\
                    "donation_date_end=#{today}&response_timeout=60000&donation_date_start=2004-01-01")
         .to_return(body: donations_json)
     end
 
     def stub_no_donations_on_date(date)
       date_str = date.strftime('%Y-%m-%d')
-      stub_request(:get, "#{wsapi}/donations?designations=#{da1.designation_number}&"\
+      stub_request(:get, "#{wsapi}/donations?designations=#{designation_account_one.designation_number}&"\
                    "donors=#{donor_account.account_number}&end_date=#{date_str}&"\
                    "response_timeout=60000&start_date=#{date_str}")
         .to_return(body: '[]')
@@ -206,36 +206,66 @@ describe Siebel do
     end
 
     it 'updates an existing designation account' do
-      da1.save
+      designation_account_one.save
 
       expect do
-        siebel.send(:find_or_create_designation_account, da1.designation_number, designation_profile,
+        siebel.send(:find_or_create_designation_account, designation_account_one.designation_number, designation_profile,
                     name: 'foo')
       end.not_to change { DesignationAccount.count }
 
-      expect(da1.reload.name).to eq('foo')
+      expect(designation_account_one.reload.name).to eq('foo')
     end
   end
 
   context '#add_or_update_donation' do
-    let(:siebel_donation) { SiebelDonations::Donation.new(Oj.load('{ "id": "1-IGQAM", "amount": "100.00", "designation": "' + da1.designation_number + '", "donorId": "' + donor_account.account_number + '", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" }')) }
+    let(:siebel_donation) { SiebelDonations::Donation.new(Oj.load('{ "id": "1-IGQAM", "amount": "100.00", "designation": "' + designation_account_one.designation_number + '", "donorId": "' + donor_account.account_number + '", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" }')) }
 
     before do
-      da1.save
+      designation_account_one.save
     end
 
     it 'creates a new donation' do
       expect do
-        siebel.send(:add_or_update_donation, siebel_donation, da1, designation_profile)
+        siebel.send(:add_or_update_donation, siebel_donation, designation_account_one, designation_profile)
       end.to change { Donation.count }.by(1)
     end
 
-    it 'updates an existing donation' do
-      create(:donation, remote_id: '1-IGQAM', amount: 5, designation_account: da1)
+    it 'updates an existing donation with a remote_id' do
+      donation = create(:donation, remote_id: '1-IGQAM', tnt_id: nil, donor_account: donor_account, amount: 5, designation_account: designation_account_one)
 
       expect do
-        siebel.send(:add_or_update_donation, siebel_donation, da1, designation_profile)
+        siebel.send(:add_or_update_donation, siebel_donation, designation_account_one, designation_profile)
       end.not_to change { Donation.count }
+
+      expect(donation.reload.amount).to eq(100.00)
+    end
+
+    it 'updates an existing donation with a tnt_id' do
+      donation = create(:donation, remote_id: nil, tnt_id: '1-IGQAM', donor_account: donor_account, amount: 5, designation_account: designation_account_one)
+
+      expect do
+        siebel.send(:add_or_update_donation, siebel_donation, designation_account_one, designation_profile)
+      end.not_to change { Donation.count }
+
+      expect(donation.reload.amount).to eq(100.00)
+    end
+
+    it 'updates an existing donation that does not have a remote_id or tnt_id' do
+      donation = create(:donation, remote_id: nil, tnt_id: nil, donor_account: donor_account, amount: 100.00, donation_date: Date.parse('2012-12-18'), designation_account: designation_account_one)
+
+      expect do
+        siebel.send(:add_or_update_donation, siebel_donation, designation_account_one, designation_profile)
+      end.not_to change { Donation.count }
+
+      expect(donation.reload.remote_id).to eq('1-IGQAM')
+    end
+
+    it 'imports multiple donations that were made on the same day, by the same donor, and of the same amount' do
+      siebel_donation_one = SiebelDonations::Donation.new(Oj.load(%({ "id": "1-IGQAM", "amount": "100.00", "designation": "#{designation_account_one.designation_number}", "donorId": "#{donor_account.account_number}", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" })))
+      siebel_donation_two = SiebelDonations::Donation.new(Oj.load(%({ "id": "1-MHEBN", "amount": "100.00", "designation": "#{designation_account_one.designation_number}", "donorId": "#{donor_account.account_number}", "donationDate": "2012-12-18", "postedDate": "2012-12-21", "paymentMethod": "Check", "channel": "Mail", "campaignCode": "000000" })))
+
+      expect { siebel.send(:add_or_update_donation, siebel_donation_one, designation_account_one, designation_profile) }.to change { Donation.count }.from(0).to(1)
+      expect { siebel.send(:add_or_update_donation, siebel_donation_two, designation_account_one, designation_profile) }.to change { Donation.count }.from(1).to(2)
     end
 
     it "fetches the donor from siebel if the donor isn't already on this account list" do
@@ -244,16 +274,16 @@ describe Siebel do
         .to_return(body: '[{ "id": "602506447", "accountName": "Hillside Evangelical Free Church"}]', headers: {})
 
       expect do
-        siebel.send(:add_or_update_donation, siebel_donation, da1, designation_profile)
+        siebel.send(:add_or_update_donation, siebel_donation, designation_account_one, designation_profile)
       end.to change { DonorAccount.count }.by(1)
     end
   end
 
   context '#import_donors' do
     before do
-      designation_profile.designation_accounts << da1
+      designation_profile.designation_accounts << designation_account_one
 
-      stub_request(:get, "#{wsapi}/donors?account_address_filter=primary&contact_email_filter=all&contact_filter=all&contact_phone_filter=all&having_given_to_designations=#{da1.designation_number}&response_timeout=60000")
+      stub_request(:get, "#{wsapi}/donors?account_address_filter=primary&contact_email_filter=all&contact_filter=all&contact_phone_filter=all&having_given_to_designations=#{designation_account_one.designation_number}&response_timeout=60000")
         .to_return(body: '[{"id":"602506447","accountName":"HillsideEvangelicalFreeChurch","type":"Business","updatedAt":"' + Date.today.to_s(:db) + '"}]')
     end
 

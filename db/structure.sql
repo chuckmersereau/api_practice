@@ -1258,7 +1258,8 @@ CREATE TABLE donations (
     channel character varying,
     appeal_id integer,
     appeal_amount numeric(19,2),
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    tnt_id character varying
 );
 
 
@@ -4997,6 +4998,13 @@ CREATE INDEX index_donations_on_donor_account_id ON donations USING btree (donor
 
 
 --
+-- Name: index_donations_on_tnt_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_donations_on_tnt_id ON donations USING btree (tnt_id);
+
+
+--
 -- Name: index_donations_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6994,4 +7002,6 @@ INSERT INTO schema_migrations (version) VALUES ('20170913013837');
 INSERT INTO schema_migrations (version) VALUES ('20170918022812');
 
 INSERT INTO schema_migrations (version) VALUES ('20170918022824');
+
+INSERT INTO schema_migrations (version) VALUES ('20170922152101');
 
