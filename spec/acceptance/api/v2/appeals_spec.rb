@@ -5,10 +5,12 @@ resource 'Appeals' do
   include_context :json_headers
   doc_helper = DocumentationHelper.new(resource: :appeals)
 
-  let(:resource_type) { 'appeals' }
-  let!(:user)         { create(:user_with_full_account) }
+  let(:resource_type)   { 'appeals' }
+  let!(:user)           { create(:user_with_full_account) }
   let!(:account_list)   { user.account_lists.first }
   let(:account_list_id) { account_list.uuid }
+  let!(:contact1)       { create(:contact, account_list: account_list, status: 'Partner - Pray') }
+  let!(:contact2)       { create(:contact, account_list: account_list, status: 'Partner - Financial') }
 
   let(:excluded) { 0 }
 
@@ -23,7 +25,9 @@ resource 'Appeals' do
   let(:form_data) do
     attributes = attributes_for(:appeal).except(:account_list_id)
                                         .merge(
-                                          updated_in_db_at: appeal.updated_at
+                                          updated_in_db_at: appeal.updated_at,
+                                          inclusion_filter: { status: 'Partner - Financial,Partner - Pray' },
+                                          exclusion_filter: { status: 'Partner - Financial' }
                                         )
 
     build_data(attributes, relationships: relationships)
@@ -101,6 +105,10 @@ resource 'Appeals' do
         do_request data: form_data
 
         expect(response_status).to eq(201), invalid_status_detail
+
+        appeal = Appeal.find_by(uuid: json_response['data']['id'])
+        expect(appeal.appeal_contacts.first.contact_id).to eq(contact1.id)
+        expect(appeal.excluded_appeal_contacts.first.contact_id).to eq(contact2.id)
       end
     end
 

@@ -74,7 +74,7 @@ class Appeal < ApplicationRecord
     return unless exclusion_filter
     exclusions = {}
     exclusion_filter.each do |key, value|
-      excluded_contacts_from_filter(key => value).pluck(:id).each do |id|
+      excluded_contacts_from_filter(ActionController::Parameters.new(key => value)).pluck(:id).each do |id|
         exclusions[id] ||= []
         exclusions[id].append(key)
       end
@@ -84,7 +84,7 @@ class Appeal < ApplicationRecord
 
   def bulk_add_excluded_appeal_contacts(exclusions)
     excluded_appeal_contacts_to_import = []
-    exclusions.map do |id, reasons|
+    exclusions.each do |id, reasons|
       excluded_appeal_contacts_to_import << excluded_appeal_contacts.build(contact_id: id, reasons: reasons)
     end
     Appeal::ExcludedAppealContact.import(excluded_appeal_contacts_to_import)
