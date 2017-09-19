@@ -97,9 +97,12 @@ describe Admin::AccountListResetWorker do
       end
 
       it 'resets the organization account last_download so that all donations are reimported' do
-        user.organization_accounts.first.update(last_download: 1.day.ago)
-        original_time = user.organization_accounts.first.reload.last_download
-        expect { subject }.to change { user.organization_accounts.reload.first.last_download }.from(original_time).to(nil)
+        organization_accounts = account_list.organization_accounts
+        organization_accounts.first.update(last_download: 1.day.ago)
+        original_time = organization_accounts.first.reload.last_download
+        organization_accounts.second.update(last_download: original_time)
+        expect { subject }.to change { organization_accounts.first.reload.last_download }.from(original_time).to(nil)
+          .and change { organization_accounts.second.reload.last_download }.from(original_time).to(nil)
       end
     end
   end
