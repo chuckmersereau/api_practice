@@ -4,11 +4,12 @@ RSpec.describe MailChimp::CampaignLogger do
   let(:mail_chimp_account) { create(:mail_chimp_account, auto_log_campaigns: true) }
   let(:account_list) { mail_chimp_account.account_list }
 
+  let(:mock_gibbon) { double(:mock_gibbon) }
+  let(:mock_gibbon_campaigns) { double(:mock_gibbon_campaigns) }
+
   subject { described_class.new(mail_chimp_account) }
 
   context '#log_sent_campaign' do
-    let(:mock_gibbon) { double(:mock_gibbon) }
-
     before do
       allow(Gibbon::Request).to receive(:new).and_return(mock_gibbon)
       allow(mock_gibbon).to receive(:timeout)
@@ -27,11 +28,10 @@ RSpec.describe MailChimp::CampaignLogger do
     end
 
     context 'error handling' do
-      let(:mock_gibbon_campaigns) { double(:mock_gibbon_campaigns) }
-
       it 'handles case where campaign not completely sent' do
         expect(subject).to receive(:log_sent_campaign!).and_raise(Gibbon::MailChimpError, 'code 301')
-        expect(mock_gibbon).to receive(:campaigns).and_return('data' => [{ 'send_time' => 30.minutes.ago.to_s }])
+        expect(mock_gibbon).to receive(:campaigns).with('Random_id').and_return(mock_gibbon_campaigns)
+        expect(mock_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 30.minutes.ago.to_s)
 
         expect do
           subject.log_sent_campaign('Random_id', 'Random Subject')
@@ -40,7 +40,8 @@ RSpec.describe MailChimp::CampaignLogger do
 
       it 'handles case where campaign has been running for more than one hour' do
         expect(subject).to receive(:log_sent_campaign!).and_raise(Gibbon::MailChimpError, 'code 301')
-        expect(mock_gibbon).to receive(:campaigns).and_return('data' => [{ 'send_time' => 2.hours.ago.to_s }])
+        expect(mock_gibbon).to receive(:campaigns).with('Random_id').and_return(mock_gibbon_campaigns)
+        expect(mock_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 2.hours.ago.to_s)
 
         expect do
           subject.log_sent_campaign('Random_id', 'Random Subject')
@@ -48,6 +49,9 @@ RSpec.describe MailChimp::CampaignLogger do
       end
 
       it 'handles all other errors by raising the Mail Chimp error' do
+        allow(mock_gibbon).to receive(:campaigns).and_return(mock_gibbon_campaigns)
+        allow(mock_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 2.hours.ago.to_s)
+
         expect(subject).to receive(:log_sent_campaign!).and_raise(Gibbon::MailChimpError)
 
         expect do
@@ -75,6 +79,17 @@ RSpec.describe MailChimp::CampaignLogger do
       end
 
       let(:logged_task) { Task.last }
+      let(:send_time) { 30.minutes.ago.to_s }
+
+      let(:mock_second_gibbon_campaigns) { double(:mock_second_gibbon_campaigns) }
+
+      before do
+        allow(mock_gibbon).to receive(:campaigns).with('random_campaign_id').and_return(mock_gibbon_campaigns)
+        allow(mock_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => send_time)
+
+        allow(mock_gibbon).to receive(:campaigns).with('second_random_campaign_id').and_return(mock_second_gibbon_campaigns)
+        allow(mock_second_gibbon_campaigns).to receive(:retrieve).and_return('send_time' => 2.days.ago.to_s)
+      end
 
       before { travel_to(Time.local(2017, 1, 1, 12, 0, 0)) }
       after { travel_back }
@@ -88,12 +103,12 @@ RSpec.describe MailChimp::CampaignLogger do
           subject.log_sent_campaign('random_campaign_id', 'Random Subject')
         end.to change { Task.count }.by(1)
         expect(logged_task.completed).to be_truthy
-        expect(logged_task.start_at).to eq(Time.zone.now)
-        expect(logged_task.completed_at).to eq(Time.zone.now)
+        expect(logged_task.start_at).to eq(send_time)
+        expect(logged_task.completed_at).to eq(send_time)
         expect(logged_task.subject).to eq('MailChimp: Random Subject')
       end
 
-      it 'does not log the same activity more than once' do
+      it 'does not log the same campaign more than once' do
         expect(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
         expect(mock_gibbon_reports).to receive(:sent_to).and_return(mock_gibbon_sent_to)
         expect(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
@@ -105,6 +120,20 @@ RSpec.describe MailChimp::CampaignLogger do
         expect(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
 
         expect { subject.log_sent_campaign('random_campaign_id', 'Random Subject') }.to_not change { Task.count }
+      end
+
+      it 'does log two campaigns with the same subject but sent at different times' do
+        expect(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
+        expect(mock_gibbon_reports).to receive(:sent_to).and_return(mock_gibbon_sent_to)
+        expect(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
+
+        expect { subject.log_sent_campaign('random_campaign_id', 'Random Subject') }.to change { Task.count }.by(1)
+
+        expect(mock_gibbon).to receive(:reports).and_return(mock_gibbon_reports)
+        expect(mock_gibbon_reports).to receive(:sent_to).and_return(mock_gibbon_sent_to)
+        expect(mock_gibbon_sent_to).to receive(:retrieve).and_return(sent_to_reports)
+
+        expect { subject.log_sent_campaign('second_random_campaign_id', 'Random Subject') }.to change { Task.count }.by(1)
       end
     end
   end
