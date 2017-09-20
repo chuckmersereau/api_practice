@@ -30,12 +30,16 @@ class TntImport::ReferralsImport
   def import_referred_by_id(row, referred_by_id)
     contact_id, *_the_rest = @contact_attributes_by_tnt_contact_id[row['id']]
 
-    if referred_by_id
+    return if contact_id.blank?
+
+    if referred_by_id.present?
       ContactReferral.where(referred_to_id: contact_id, referred_by_id: referred_by_id).first_or_create!
     else
       contact = Contact.find(contact_id)
       contact.tag_list.add('Missing Tnt Referred By')
       contact.add_to_notes("Referred by: #{row['ReferredBy']}")
     end
+  rescue ActiveRecord::RecordNotFound => error
+    Rollbar.info(error)
   end
 end
