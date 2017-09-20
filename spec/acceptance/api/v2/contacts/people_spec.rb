@@ -158,6 +158,51 @@ resource 'People' do
       end
     end
 
+    get '/api/v2/contacts/people/:id' do
+      with_options scope: :data do
+        with_options scope: :attributes do
+          response_field 'anniversary_day',    'Anniversary Day',              type: 'Number'
+          response_field 'anniversary_month',  'Anniversary Month',            type: 'Number'
+          response_field 'anniversary_year',   'Anniversary Year',             type: 'Number'
+          response_field 'avatar',             'Avatar',                       type: 'String'
+          response_field 'birthday_day',       'Birthday Day',                 type: 'Number'
+          response_field 'birthday_month',     'Birthday Month',               type: 'Number'
+          response_field 'birthday_year',      'Birthday Year',                type: 'Number'
+          response_field 'created_at',         'Created At',                   type: 'String'
+          response_field 'deceased',           'Deceased',                     type: 'Boolean'
+          response_field 'employer',           'Employer',                     type: 'String'
+          response_field 'first_name',         'First Name',                   type: 'String'
+          response_field 'gender',             'Gender',                       type: 'String'
+          response_field 'last_name',          'Last Name',                    type: 'String'
+          response_field 'legal_first_name',   'Legal First Name',             type: 'String'
+          response_field 'marital_status',     'Marital Status',               type: 'String'
+          response_field 'master_person_id',   'Master Person ID',             type: 'Number'
+          response_field 'middle_name',        'Middle Name',                  type: 'String'
+          response_field 'occupation',         'Occupation',                   type: 'String'
+          response_field 'optout_enewsletter', 'Optout of Enewsletter or not', type: 'Boolean'
+          response_field 'parent_contacts',    'Array of Parent Contact Ids',  type: 'Array'
+          response_field 'suffix',             'Suffix',                       type: 'String'
+          response_field 'title',              'Title',                        type: 'String'
+          response_field 'updated_at',         'Updated At',                   type: 'String'
+          response_field 'updated_in_db_at',   'Updated In Db At',             type: 'String'
+        end
+
+        with_options scope: :relationships do
+          response_field 'email_addresses',   'Email Addresses',  type: 'Object'
+          response_field 'facebook_accounts', 'Facebook Account', type: 'Object'
+          response_field 'phone_numbers',     'Phone Number',     type: 'Object'
+        end
+      end
+
+      example 'Retrieve a person', document: documentation_scope do
+        explanation 'The Contact\'s Person with the given ID'
+        do_request
+
+        expect(response_status).to eq(200), invalid_status_detail
+        check_resource(['relationships'])
+      end
+    end
+
     put '/api/v2/contacts/people/:id' do
       example 'Update a person', document: documentation_scope do
         explanation 'Update the Person with the given ID'
@@ -165,6 +210,15 @@ resource 'People' do
 
         expect(response_status).to eq(200), invalid_status_detail
         expect(resource_object['first_name']).to(be_present) && eq(new_resource['first_name'])
+      end
+    end
+
+    delete '/api/v2/contacts/people/:id' do
+      example 'Delete a person', document: documentation_scope do
+        explanation 'Delete the Contact\'s Person with the given ID'
+        do_request
+
+        expect(response_status).to eq(204), invalid_status_detail
       end
     end
 
@@ -215,7 +269,7 @@ resource 'People' do
       end
 
       example 'Retrieve a person', document: documentation_scope do
-        explanation 'The Contact\'s Person with the given ID'
+        explanation 'The Contact\'s Person with the given ID and Contact ID'
         do_request
 
         expect(response_status).to eq(200), invalid_status_detail
@@ -351,7 +405,7 @@ resource 'People' do
       end
 
       example 'Update a person', document: documentation_scope do
-        explanation 'Update the Contact\'s Person with the given ID'
+        explanation 'Update the Contact\'s Person with the given ID and Contact ID'
         do_request data: form_data
 
         expect(response_status).to eq(200), invalid_status_detail
@@ -373,7 +427,7 @@ resource 'People' do
 
     delete '/api/v2/contacts/:contact_id/people/:id' do
       example 'Delete a person', document: documentation_scope do
-        explanation 'Delete the Contact\'s Person with the given ID'
+        explanation 'Delete the Contact\'s Person with the given ID and Contact ID'
         do_request
 
         expect(response_status).to eq(204), invalid_status_detail

@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 19 September 2017
+- Added the /contacts/people endpoint to get and delete a person without the contact id.
+
 ## 11 September 2017
 - Removed /api/v2/appeals/contacts endpoint.
 - Added /api/v2/appeals/appeal_contacts endpoint.
