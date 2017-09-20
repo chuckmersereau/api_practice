@@ -64,19 +64,35 @@ describe DataServer do
       end.to change(DesignationProfile, :count).by(3)
     end
 
-    it 'links from profile correctly if no profile url present' do
-      @org.designation_profiles << profile
-      @org.update(profiles_url: nil)
-      profile_linker = double(link_account_list!: nil)
-      allow(data_server).to receive(:import_profile_balance)
-      allow(AccountList::FromProfileLinker).to receive(:new) { profile_linker }
+    context 'links from profile correctly if no profile url present' do
+      let(:profile_linker) { double(link_account_list!: nil) }
 
-      data_server.import_profiles
+      before do
+        @org.designation_profiles << profile
+        @org.update(profiles_url: nil)
 
-      expect(data_server).to have_received(:import_profile_balance)
-      expect(AccountList::FromProfileLinker).to have_received(:new)
-        .with(profile, @org_account)
-      expect(profile_linker).to have_received(:link_account_list!)
+        allow(data_server).to receive(:import_profile_balance)
+        allow(AccountList::FromProfileLinker).to receive(:new) { profile_linker }
+      end
+
+      it 'and only associates to account_list if missing' do
+        profile.update(account_list_id: nil)
+        profile.reload
+        data_server.import_profiles
+
+        expect(data_server).to have_received(:import_profile_balance)
+        expect(AccountList::FromProfileLinker).to have_received(:new)
+          .with(profile, @org_account)
+        expect(profile_linker).to have_received(:link_account_list!)
+      end
+
+      it "doesn't associate to account_list if already present" do
+        data_server.import_profiles
+
+        expect(data_server).to have_received(:import_profile_balance)
+        expect(AccountList::FromProfileLinker).not_to have_received(:new)
+          .with(profile, @org_account)
+      end
     end
   end
 

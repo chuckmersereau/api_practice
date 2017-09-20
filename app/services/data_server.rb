@@ -43,7 +43,7 @@ class DataServer
           designation_profile = @org.designation_profiles.where(user_id: @org_account.person_id, name: profile[:name], code: profile[:code]).first_or_create
           import_profile_balance(designation_profile)
           AccountList::FromProfileLinker.new(designation_profile, @org_account)
-                                        .link_account_list!
+                                        .link_account_list! unless designation_profile.account_list
         end
       end
     else
@@ -52,7 +52,7 @@ class DataServer
         Retryable.retryable do
           import_profile_balance(designation_profile)
           AccountList::FromProfileLinker.new(designation_profile, @org_account)
-                                        .link_account_list!
+                                        .link_account_list! unless designation_profile.account_list
         end
       end
     end
