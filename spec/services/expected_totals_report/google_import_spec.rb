@@ -228,7 +228,7 @@ describe GoogleImport do
 
       expect(person.pictures.count).to eq(1)
       picture = person.pictures.first
-      expect(picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      expect(picture.image.url).to eq("https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
       expect(picture.primary).to be true
 
       expect(person.google_contacts.count).to eq(1)
@@ -340,7 +340,7 @@ describe GoogleImport do
       @original_picture.reload
       expect(@original_picture.primary).to be false
       expect(@existing_person.pictures.count).to eq(2)
-      expect(@existing_person.primary_picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      expect(@existing_person.primary_picture.image.url).to eq("https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
     end
 
     it 'does not append the contact notes twice' do
@@ -383,7 +383,7 @@ describe GoogleImport do
       expect(@existing_contact.notes).to eq('Notes here')
 
       expect(@existing_person.pictures.count).to eq(1)
-      expect(@existing_person.primary_picture.image.url).to eq("http://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
+      expect(@existing_person.primary_picture.image.url).to eq("https://res.cloudinary.com/#{ENV.fetch('CLOUDINARY_CLOUD_NAME')}/image/upload/v1/img.jpg")
     end
   end
 
