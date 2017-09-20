@@ -19,7 +19,7 @@ class TntImport::ContactsImport
       tags = all_tags_for_tnt_contact_id(tnt_id)
       donor_accounts = donors_by_tnt_id[tnt_id]
       contact = import_contact(row, tags.compact, donor_accounts)
-      contact_id_by_tnt_contact_id[tnt_id] = contact.id
+      contact_id_by_tnt_contact_id[tnt_id] = contact.id if contact.id
     end
 
     contact_id_by_tnt_contact_id
