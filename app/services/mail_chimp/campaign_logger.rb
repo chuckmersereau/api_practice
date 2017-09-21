@@ -9,24 +9,27 @@ class MailChimp::CampaignLogger
 
   def log_sent_campaign(campaign_id, subject)
     return unless mail_chimp_account.auto_log_campaigns?
-    log_sent_campaign!(campaign_id, subject)
+
+    campaign_send_time = fetch_campaign_send_time(campaign_id)
+
+    log_sent_campaign!(campaign_id, subject, campaign_send_time)
   rescue Gibbon::MailChimpError => error
     raise unless campaign_not_completely_sent?(error)
 
-    if campaign_has_been_running_for_less_than_one_hour?(campaign_id)
+    if campaign_has_been_running_for_less_than_one_hour?(campaign_send_time)
       raise LowerRetryWorker::RetryJobButNoRollbarError
     end
   end
 
   private
 
-  def log_sent_campaign!(campaign_id, subject)
+  def log_sent_campaign!(campaign_id, subject, campaign_send_time)
     sent_emails = mail_chimp_reports(campaign_id).map do |mail_chimp_report|
       mail_chimp_report[:email_address]
     end
 
     contacts_with_sent_emails(sent_emails).find_each do |contact|
-      create_campaign_activity(contact, subject)
+      create_campaign_activity(contact, subject, campaign_send_time)
     end
   end
 
@@ -52,23 +55,21 @@ class MailChimp::CampaignLogger
     error.message.include?('code 301')
   end
 
-  def campaign_has_been_running_for_less_than_one_hour?(campaign_id)
+  def campaign_has_been_running_for_less_than_one_hour?(campaign_send_time)
     # keep retrying the job for one hour then give up.
-    (Time.now.utc - campaign_send_time(campaign_id)) < 1.hour
+    (Time.now.utc - campaign_send_time) < 1.hour
   end
 
-  def campaign_send_time(campaign_id)
-    Time.parse(campaign_info(campaign_id)['send_time'] + ' UTC')
+  def fetch_campaign_send_time(campaign_id)
+    Time.parse(gibbon.campaigns(campaign_id).retrieve['send_time'] + ' UTC')
   end
 
-  def campaign_info(campaign_id)
-    gibbon.campaigns(filters: { campaign_id: campaign_id })['data'][0]
-  end
-
-  def create_campaign_activity(contact, subject)
+  def create_campaign_activity(contact, subject, campaign_send_time)
     activity_attributes = {
       account_list: account_list,
       activity_type: 'Newsletter - Email',
+      start_at: campaign_send_time,
+      completed_at: campaign_send_time,
       completed: true,
       result: 'Completed',
       source: 'mailchimp',
@@ -76,13 +77,6 @@ class MailChimp::CampaignLogger
       type: 'Task'
     }
 
-    return if contact.tasks.exists?(activity_attributes)
-
-    contact.tasks.create(
-      activity_attributes.merge(
-        completed_at: Time.now,
-        start_at: Time.now
-      )
-    )
+    contact.tasks.find_or_create_by(activity_attributes)
   end
 end
