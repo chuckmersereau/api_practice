@@ -59,6 +59,23 @@ class TntImport::GiftsImport
   end
 
   def add_donation_to_first_appeal_and_add_other_appeals_to_memo(mpdx_donation, tnt_gift)
+    # Version 3.2 of Tnt changed the relationship beteween Gifts and Appeals:
+    # In 3.1 a Gift can only belong to one Appeal, through a foreign key on the Gift table.
+    # In 3.2 a Gift can be split and belong to many Appeals, through a new GiftSplit table.
+    if @xml.version < 3.2
+      add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_1(mpdx_donation, tnt_gift)
+    else
+      add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_2(mpdx_donation, tnt_gift)
+    end
+  end
+
+  def add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_1(mpdx_donation, tnt_gift)
+    appeal = account_list_appeal_by_tnt_id(tnt_gift['AppealID'])
+    new_memo = generate_new_donation_memo(mpdx_donation)
+    mpdx_donation.update(appeal: appeal, memo: new_memo)
+  end
+
+  def add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_2(mpdx_donation, tnt_gift)
     gift_splits = account_list_appeals.map do |appeal|
       gift_splits_by_gift_and_campaign(tnt_gift['id'], appeal.tnt_id.to_s)
     end.flatten.compact
@@ -72,7 +89,7 @@ class TntImport::GiftsImport
     mpdx_donation.update(appeal: appeal, memo: new_memo)
   end
 
-  def generate_new_donation_memo(donation, gift_splits)
+  def generate_new_donation_memo(donation, gift_splits = [])
     new_memo_items = [_('This donation was imported from Tnt.')]
     new_memo_items += generate_gift_splits_memos(gift_splits)
     new_memo_items.each { |memo_item| memo_item.gsub!('&quot;', '"') }

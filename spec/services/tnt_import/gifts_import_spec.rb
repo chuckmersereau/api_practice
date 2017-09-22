@@ -31,8 +31,6 @@ describe TntImport::GiftsImport do
       @user.organization_accounts << create(:organization_account, organization: online_org)
     end
 
-    let(:donation_generated_with_gift_splits) { Appeal.find_by(tnt_id: 2).donations.first }
-
     it 'handles an xml that has no gifts' do
       @import = create(:tnt_import_no_gifts, account_list: @account_list)
       @tnt_import = TntImport.new(@import)
@@ -44,13 +42,28 @@ describe TntImport::GiftsImport do
       expect { @tnt_import_with_personal_gift.import }.to change(Donation, :count).from(0).to(2)
     end
 
-    it 'links gifts to first appeal and adds other gift splits to memo' do
-      setup_online_org
-      @tnt_import_with_personal_gift.import
-      expect(donation_generated_with_gift_splits.appeal).to eq(@second_appeal)
-      expect(donation_generated_with_gift_splits.memo).to eq(
-        %(This donation was imported from Tnt.\n\n$841 is designated to the "#{@appeal.name}" appeal.)
-      )
+    describe 'associating gifts to appeals' do
+      context 'version 3.1 and lower' do
+        it 'links gifts to first appeal and adds other gift splits to memo' do
+          setup_online_org
+          @tnt_import.import
+          donation = Appeal.find_by(tnt_id: 2).donations.first
+          expect(donation.appeal).to eq(@second_appeal)
+          expect(donation.memo).to eq('This donation was imported from Tnt.')
+        end
+      end
+
+      context 'version 3.2 and higher' do
+        it 'links gifts to first appeal and adds other gift splits to memo' do
+          setup_online_org
+          @tnt_import_with_personal_gift.import
+          donation = Appeal.find_by(tnt_id: 2).donations.first
+          expect(donation.appeal).to eq(@second_appeal)
+          expect(donation.memo).to eq(
+            %(This donation was imported from Tnt.\n\n$841 is designated to the "#{@appeal.name}" appeal.)
+          )
+        end
+      end
     end
 
     it 'does not import gifts when the user has multiple orgs' do
