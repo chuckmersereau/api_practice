@@ -2,6 +2,8 @@ require_dependency 'address_methods'
 class DonorAccount < ApplicationRecord
   include AddressMethods
 
+  belongs_to :organization
+  belongs_to :master_company
   has_many :master_person_donor_accounts, dependent: :destroy
   has_many :master_people, through: :master_person_donor_accounts
   has_many :donor_account_people, dependent: :destroy
@@ -9,8 +11,7 @@ class DonorAccount < ApplicationRecord
   has_many :donations, dependent: :destroy
   has_many :contact_donor_accounts, dependent: :destroy
   has_many :contacts, through: :contact_donor_accounts, inverse_of: :donor_accounts
-  belongs_to :organization
-  belongs_to :master_company
+
   validates :account_number, uniqueness: { scope: :organization_id }
   validates :account_number, presence: true
 

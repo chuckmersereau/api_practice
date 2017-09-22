@@ -1114,6 +1114,53 @@ ALTER SEQUENCE designation_profiles_id_seq OWNED BY designation_profiles.id;
 
 
 --
+-- Name: donation_amount_recommendations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE donation_amount_recommendations (
+    id integer NOT NULL,
+    organization_id integer,
+    donor_number character varying,
+    designation_number character varying,
+    previous_amount numeric,
+    amount numeric,
+    started_at timestamp without time zone,
+    gift_min numeric,
+    gift_max numeric,
+    income_min numeric,
+    income_max numeric,
+    suggested_pledge_amount_min numeric,
+    suggested_pledge_amount_max numeric,
+    suggested_special_amount_min numeric,
+    suggested_special_amount_max numeric,
+    ask_at timestamp without time zone,
+    zip_code character varying,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: donation_amount_recommendations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE donation_amount_recommendations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: donation_amount_recommendations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE donation_amount_recommendations_id_seq OWNED BY donation_amount_recommendations.id;
+
+
+--
 -- Name: donations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -2905,40 +2952,6 @@ ALTER SEQUENCE prayer_letters_accounts_id_seq OWNED BY prayer_letters_accounts.i
 
 
 --
--- Name: recurring_recommendation_results; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE recurring_recommendation_results (
-    id integer NOT NULL,
-    account_list_id integer,
-    contact_id integer,
-    result character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
-);
-
-
---
--- Name: recurring_recommendation_results_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE recurring_recommendation_results_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: recurring_recommendation_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE recurring_recommendation_results_id_seq OWNED BY recurring_recommendation_results.id;
-
-
---
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3244,6 +3257,13 @@ ALTER TABLE ONLY designation_profile_accounts ALTER COLUMN id SET DEFAULT nextva
 --
 
 ALTER TABLE ONLY designation_profiles ALTER COLUMN id SET DEFAULT nextval('designation_profiles_id_seq'::regclass);
+
+
+--
+-- Name: donation_amount_recommendations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY donation_amount_recommendations ALTER COLUMN id SET DEFAULT nextval('donation_amount_recommendations_id_seq'::regclass);
 
 
 --
@@ -3569,13 +3589,6 @@ ALTER TABLE ONLY prayer_letters_accounts ALTER COLUMN id SET DEFAULT nextval('pr
 
 
 --
--- Name: recurring_recommendation_results id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY recurring_recommendation_results ALTER COLUMN id SET DEFAULT nextval('recurring_recommendation_results_id_seq'::regclass);
-
-
---
 -- Name: taggings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3818,6 +3831,14 @@ ALTER TABLE ONLY designation_profile_accounts
 
 ALTER TABLE ONLY designation_profiles
     ADD CONSTRAINT designation_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: donation_amount_recommendations donation_amount_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY donation_amount_recommendations
+    ADD CONSTRAINT donation_amount_recommendations_pkey PRIMARY KEY (id);
 
 
 --
@@ -4186,14 +4207,6 @@ ALTER TABLE ONLY pls_accounts
 
 ALTER TABLE ONLY prayer_letters_accounts
     ADD CONSTRAINT prayer_letters_accounts_pkey PRIMARY KEY (id);
-
-
---
--- Name: recurring_recommendation_results recurring_recommendation_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY recurring_recommendation_results
-    ADD CONSTRAINT recurring_recommendation_results_pkey PRIMARY KEY (id);
 
 
 --
@@ -4799,6 +4812,20 @@ CREATE INDEX index_designation_profiles_on_organization_id ON designation_profil
 --
 
 CREATE UNIQUE INDEX index_designation_profiles_on_uuid ON designation_profiles USING btree (uuid);
+
+
+--
+-- Name: index_donation_amount_recommendations; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_donation_amount_recommendations ON donation_amount_recommendations USING btree (organization_id, designation_number, donor_number);
+
+
+--
+-- Name: index_donation_amount_recommendations_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_donation_amount_recommendations_on_uuid ON donation_amount_recommendations USING btree (uuid);
 
 
 --
@@ -5831,13 +5858,6 @@ CREATE UNIQUE INDEX index_prayer_letters_accounts_on_uuid ON prayer_letters_acco
 
 
 --
--- Name: index_recurring_recommendation_results_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_recurring_recommendation_results_on_uuid ON recurring_recommendation_results USING btree (uuid);
-
-
---
 -- Name: index_remote_id_on_person_relay_account; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6817,4 +6837,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170906162655');
 INSERT INTO schema_migrations (version) VALUES ('20170907182701');
 
 INSERT INTO schema_migrations (version) VALUES ('20170911035021');
+
+INSERT INTO schema_migrations (version) VALUES ('20170912232954');
+
+INSERT INTO schema_migrations (version) VALUES ('20170913013837');
 

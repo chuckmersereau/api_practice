@@ -141,7 +141,7 @@ class ApplicationSeeder
     create :picture, picture_of: person
     create :pls_account, account_list: account_list
     create :prayer_letters_account, account_list: account_list
-    create :recurring_recommendation_result
+    create :donation_amount_recommendation
     create :task, account_list: account_list
 
     create :tag
