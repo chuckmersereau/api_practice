@@ -37,7 +37,7 @@ class Appeal < ApplicationRecord
     contact_ids_to_add = contact_ids.uniq - self.contact_ids
 
     appeal_contacts_to_import = contact_ids_to_add.map do |contact_id|
-      AppealContact.new(contact_id: contact_id, appeal: self)
+      AppealContact.new(contact_id: contact_id, appeal: self, uuid: SecureRandom.uuid)
     end
 
     AppealContact.import(appeal_contacts_to_import)
@@ -85,7 +85,7 @@ class Appeal < ApplicationRecord
   def bulk_add_excluded_appeal_contacts(exclusions)
     excluded_appeal_contacts_to_import = []
     exclusions.each do |id, reasons|
-      excluded_appeal_contacts_to_import << excluded_appeal_contacts.build(contact_id: id, reasons: reasons)
+      excluded_appeal_contacts_to_import << excluded_appeal_contacts.build(contact_id: id, reasons: reasons, uuid: SecureRandom.uuid)
     end
     Appeal::ExcludedAppealContact.import(excluded_appeal_contacts_to_import)
   end
