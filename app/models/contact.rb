@@ -294,7 +294,8 @@ class Contact < ApplicationRecord
 
   def update_late_at
     initial_date = last_donation_date || pledge_start_date
-    return unless status == 'Partner - Financial' && pledge_frequency.present? && initial_date.present?
+
+    return self.late_at = nil unless late_at_should_be_set?(initial_date)
 
     self.late_at = case
                    when pledge_frequency >= 1.0
@@ -304,6 +305,10 @@ class Contact < ApplicationRecord
                    else
                      initial_date + 1.week
                    end
+  end
+
+  def late_at_should_be_set?(initial_date)
+    status == 'Partner - Financial' && pledge_frequency.present? && initial_date.present?
   end
 
   def self.active_conditions
