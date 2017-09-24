@@ -1,0 +1,87 @@
+actions:
+  create:
+    description: |
+      > an individual element of the `requests` array
+
+      ```json
+      {
+        "data": {
+          "type": "background_batch_requests",
+          "id": "1d6393dd-f3f4-49d3-9fd8-7e758b056b1f",
+          "attributes": {
+            "path": "api/v2/account_lists/%{default_account_list_id}/donations"
+            "request_params": {
+              "filter": {
+                "account_list_id": "users default account list id"
+              } // Added only if default_account_list is true
+            } // GET params are automatically added in as query params
+            "request_body": ""
+            "request_headers": {
+              "accept": "application/vnd.api+json",
+              "authorization": "Bearer JWT", // User JWT is inserted here
+              "content-type": "application/vnd.api+json"
+            } // These headers are included by default
+            "request_method": "GET" // GET, POST, PUT, or DELETE (GET by default)
+            "default_account_list": false // should only be true on index requests
+          }
+        }
+      }
+      ```
+
+      You are *required* to include at least one request relationship.
+      - Each request must have a path
+      - If you include `%{default_account_list_id}` template in your path string it will substitute the user's default_account_list_id
+
+attributes: &attrs
+  total:
+    description:
+      The total number of requests
+    type: integer
+  pending:
+    description:
+      The total number of requests still to be processed
+    type: integer
+
+relationships: &rels
+  user:
+    data:
+      id:
+        description:
+          The `id` of the User that the Bulk Background belongs to
+        type: UUID string
+  requests:
+    data:
+      description:
+        An array of Bulk Background Requests references for the Bulk Background
+      type: '[Bulk Background Request]'
+
+mutation_attributes: &mutation_attrs
+  <<: *attrs
+  total:
+    ignore: true
+  pending:
+    ignore: true
+
+object: &obj
+  attributes:
+    <<: *attrs
+  relationships:
+    <<: *rels
+
+parameters:
+  create:
+    attributes:
+      <<: *mutation_attrs
+    relationships:
+      <<: *rels
+
+response_fields:
+  index:
+    data:
+      description:
+        An array of Bulk Background Objects
+      type: '[Bulk Background]'
+  show:
+    <<: *obj
+  create:
+    <<: *obj

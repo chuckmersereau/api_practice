@@ -3,6 +3,7 @@ require 'json_api_service'
 JsonApiService.configure do |config|
   config.custom_references = {
     comments: 'ActivityComment',
+    background_batch_requests: 'BackgroundBatch::Request',
     facebook_accounts: 'Person::FacebookAccount',
     google_accounts: 'Person::GoogleAccount',
     key_accounts: 'Person::KeyAccount',
@@ -17,6 +18,9 @@ JsonApiService.configure do |config|
   config.ignored_foreign_keys = {
     account_lists: [
       :default_organization_id
+    ],
+    background_batches: [
+      :batch_id
     ],
     donations: [
       :remote_id

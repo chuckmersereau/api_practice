@@ -61,6 +61,8 @@ Rails.application.routes.draw do
           end
         end
 
+        resources :background_batches, except: [:update]
+
         resources :constants, only: [:index]
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do

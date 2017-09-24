@@ -583,6 +583,81 @@ ALTER SEQUENCE appeals_id_seq OWNED BY appeals.id;
 
 
 --
+-- Name: background_batch_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE background_batch_requests (
+    id integer NOT NULL,
+    background_batch_id integer,
+    path character varying,
+    request_params character varying,
+    request_body character varying,
+    request_headers character varying,
+    request_method character varying DEFAULT 'GET'::character varying,
+    response_headers character varying,
+    response_body character varying,
+    response_status character varying,
+    status integer DEFAULT 0,
+    default_account_list boolean DEFAULT false,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: background_batch_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE background_batch_requests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: background_batch_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE background_batch_requests_id_seq OWNED BY background_batch_requests.id;
+
+
+--
+-- Name: background_batches; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE background_batches (
+    id integer NOT NULL,
+    batch_id character varying,
+    user_id integer,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: background_batches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE background_batches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: background_batches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE background_batches_id_seq OWNED BY background_batches.id;
+
+
+--
 -- Name: balances; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3162,6 +3237,20 @@ ALTER TABLE ONLY appeals ALTER COLUMN id SET DEFAULT nextval('appeals_id_seq'::r
 
 
 --
+-- Name: background_batch_requests id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batch_requests ALTER COLUMN id SET DEFAULT nextval('background_batch_requests_id_seq'::regclass);
+
+
+--
+-- Name: background_batches id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batches ALTER COLUMN id SET DEFAULT nextval('background_batches_id_seq'::regclass);
+
+
+--
 -- Name: balances id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3719,6 +3808,22 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts
 
 ALTER TABLE ONLY appeals
     ADD CONSTRAINT appeals_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: background_batch_requests background_batch_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batch_requests
+    ADD CONSTRAINT background_batch_requests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: background_batches background_batches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batches
+    ADD CONSTRAINT background_batches_pkey PRIMARY KEY (id);
 
 
 --
@@ -4553,6 +4658,34 @@ CREATE INDEX index_appeals_on_account_list_id ON appeals USING btree (account_li
 --
 
 CREATE UNIQUE INDEX index_appeals_on_uuid ON appeals USING btree (uuid);
+
+
+--
+-- Name: index_background_batch_requests_on_background_batch_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batch_requests_on_background_batch_id ON background_batch_requests USING btree (background_batch_id);
+
+
+--
+-- Name: index_background_batch_requests_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batch_requests_on_uuid ON background_batch_requests USING btree (uuid);
+
+
+--
+-- Name: index_background_batches_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batches_on_user_id ON background_batches USING btree (user_id);
+
+
+--
+-- Name: index_background_batches_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batches_on_uuid ON background_batches USING btree (uuid);
 
 
 --
@@ -6091,6 +6224,22 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts
 
 
 --
+-- Name: background_batch_requests background_batch_requests_background_batch_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batch_requests
+    ADD CONSTRAINT background_batch_requests_background_batch_id_fk FOREIGN KEY (background_batch_id) REFERENCES background_batches(id);
+
+
+--
+-- Name: background_batches background_batches_user_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batches
+    ADD CONSTRAINT background_batches_user_id_fk FOREIGN KEY (user_id) REFERENCES people(id);
+
+
+--
 -- Name: master_person_sources master_person_sources_master_person_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6841,4 +6990,8 @@ INSERT INTO schema_migrations (version) VALUES ('20170911035021');
 INSERT INTO schema_migrations (version) VALUES ('20170912232954');
 
 INSERT INTO schema_migrations (version) VALUES ('20170913013837');
+
+INSERT INTO schema_migrations (version) VALUES ('20170918022812');
+
+INSERT INTO schema_migrations (version) VALUES ('20170918022824');
 

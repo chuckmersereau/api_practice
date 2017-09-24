@@ -11,6 +11,7 @@ class User < Person
   has_many :partner_companies, through: :account_lists, source: :companies
   has_many :imports, dependent: :destroy
   has_many :options, dependent: :destroy
+  has_many :background_batches, dependent: :destroy
   has_many :tasks, through: :account_lists
 
   devise :trackable
