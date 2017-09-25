@@ -2,7 +2,7 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.5.7
+-- Dumped from database version 9.6.2
 -- Dumped by pg_dump version 9.6.2
 
 SET statement_timeout = 0;
@@ -996,12 +996,12 @@ CREATE TABLE contacts (
     late_at date,
     uuid uuid DEFAULT uuid_generate_v4(),
     status_valid boolean,
-    status_validated_at timestamp without time zone,
     suggested_changes text,
     is_organization boolean DEFAULT false,
     no_gift_aid boolean,
     estimated_annual_pledge_amount numeric(19,2),
-    next_ask_amount numeric(19,2)
+    next_ask_amount numeric(19,2),
+    status_confirmed_at timestamp without time zone
 );
 
 
@@ -4915,13 +4915,6 @@ CREATE INDEX index_contacts_on_status_valid ON contacts USING btree (status_vali
 
 
 --
--- Name: index_contacts_on_status_validated_at; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_contacts_on_status_validated_at ON contacts USING btree (status_validated_at);
-
-
---
 -- Name: index_contacts_on_tnt_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -7086,3 +7079,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170918022812');
 INSERT INTO schema_migrations (version) VALUES ('20170918022824');
 
 INSERT INTO schema_migrations (version) VALUES ('20170922152101');
+
+INSERT INTO schema_migrations (version) VALUES ('20170925223827');
+
+INSERT INTO schema_migrations (version) VALUES ('20170926155821');
+
+INSERT INTO schema_migrations (version) VALUES ('20170926162140');
+

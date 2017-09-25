@@ -43,10 +43,6 @@ RSpec.describe Contact::SuggestedChangesUpdater, type: :model do
           expect { subject }.to_not change { contact.reload.updated_at }
         end
 
-        it 'updates status_validated_at' do
-          expect { subject }.to change { contact.reload.status_validated_at }.to(Time.current)
-        end
-
         it 'updates suggested_changes' do
           subject
           expect(contact.suggested_changes[:pledge_frequency]).to eq pledge_frequency
@@ -68,10 +64,6 @@ RSpec.describe Contact::SuggestedChangesUpdater, type: :model do
 
         it 'does not change updated_at' do
           expect { subject }.to_not change { contact.reload.updated_at }
-        end
-
-        it 'updates status_validated_at' do
-          expect { subject }.to change { contact.reload.status_validated_at }.to(Time.current)
         end
 
         it 'updates suggested_changes' do
@@ -145,6 +137,23 @@ RSpec.describe Contact::SuggestedChangesUpdater, type: :model do
       contact.update!(contact.reload.suggested_changes)
       service.update_status_suggestions
       expect(contact.reload.suggested_changes).to be_blank
+    end
+  end
+
+  describe '#status_confirmed_recently?' do
+    it 'updates suggested_changes if status_confirmed_at is nil' do
+      contact.update!(status_confirmed_at: nil)
+      expect { service.update_status_suggestions }.to change { contact.reload.suggested_changes }.from({})
+    end
+
+    it 'does not update suggested_changes if status_confirmed_at is less than a year ago' do
+      contact.update!(status_confirmed_at: 11.months.ago)
+      expect { service.update_status_suggestions }.to_not change { contact.reload.suggested_changes }.from({})
+    end
+
+    it 'updates suggested_changes if status_confirmed_at is more than a year ago' do
+      contact.update!(status_confirmed_at: 13.months.ago)
+      expect { service.update_status_suggestions }.to change { contact.reload.suggested_changes }.from({})
     end
   end
 end
