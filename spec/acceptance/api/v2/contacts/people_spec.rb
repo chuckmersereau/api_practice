@@ -137,6 +137,7 @@ resource 'People' do
     before { api_login(user) }
 
     get '/api/v2/contacts/people' do
+      parameter 'filter[deceased]',            'Filter by deceased; Accepts values "true" and "false"', required: false
       parameter 'filter[email_address_valid]', %(Filter by Email Address Invalid; A Person's Email Address is invalid if \
                                                   the Email Address's valid_values attribute is set to false, or if the Person has \
                                                   multiple Email Addresses marked as primary; Accepts value "false"), required: false
