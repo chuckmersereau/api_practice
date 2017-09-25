@@ -358,6 +358,11 @@ describe Person do
       person.anniversary_year = 1988
       expect(person.anniversary_year).to eq(1988)
     end
+
+    it 'handles a missing year' do
+      person.anniversary_year = nil
+      expect(person.anniversary_year).to eq(1900)
+    end
   end
 
   context '#birthday_year' do
@@ -370,6 +375,11 @@ describe Person do
       expect(person.birthday_year).to eq(2015)
       person.birthday_year = 1988
       expect(person.birthday_year).to eq(1988)
+    end
+
+    it 'handles a missing year' do
+      person.birthday_year = nil
+      expect(person.birthday_year).to eq(1900)
     end
   end
 end

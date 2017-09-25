@@ -10,6 +10,7 @@ class Person < ApplicationRecord
   TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')].freeze
   SUFFIXES = [_('Jr.'), _('Sr.')].freeze
   MARITAL_STATUSES = [_('Single'), _('Engaged'), _('Married'), _('Separated'), _('Divorced'), _('Widowed')].freeze
+  PLACEHOLDER_FOR_MISSING_YEAR = 1900
 
   belongs_to :master_person
   has_many :email_addresses, -> { order('email_addresses.primary::int desc') }, dependent: :delete_all, autosave: true
@@ -455,11 +456,11 @@ class Person < ApplicationRecord
   end
 
   def birthday_year
-    get_four_digit_year_from_value(attributes['birthday_year'])
+    get_four_digit_year_from_value(attributes['birthday_year']) || PLACEHOLDER_FOR_MISSING_YEAR
   end
 
   def anniversary_year
-    get_four_digit_year_from_value(attributes['anniversary_year'])
+    get_four_digit_year_from_value(attributes['anniversary_year']) || PLACEHOLDER_FOR_MISSING_YEAR
   end
 
   private
