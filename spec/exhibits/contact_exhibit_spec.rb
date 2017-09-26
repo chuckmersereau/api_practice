@@ -64,7 +64,7 @@ describe ContactExhibit do
     end
 
     it 'uses google plus avatar if relevant google_account profile_picture_url' do
-      google_plus_account = double(profile_picture_url: 'https://google.com/image')
+      google_plus_account = double(profile_picture_link: 'https://google.com/image')
       email_address = double(google_plus_account: google_plus_account)
       person = double(facebook_account: double(remote_id: nil),
                       primary_email_address: email_address,

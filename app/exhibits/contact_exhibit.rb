@@ -146,7 +146,7 @@ class ContactExhibit < DisplayCase::Exhibit
   end
 
   def relevant_google_plus_profile_picture_url
-    primary_or_first_person&.primary_email_address&.google_plus_account&.profile_picture_url
+    primary_or_first_person&.primary_email_address&.google_plus_account&.profile_picture_link
   end
 
   def default_image_url_by_gender
