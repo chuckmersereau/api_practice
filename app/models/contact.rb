@@ -761,12 +761,17 @@ class Contact < ApplicationRecord
   end
 
   def relevant_nested_attribute_changed?
-    people.any? do |person|
-      person.primary_email_address&.email_changed? ||
-        person.first_name_changed? ||
-        person.last_name_changed? ||
-        person.optout_enewsletter_changed?
-    end
+    any_tags_change? ||
+      people.any? do |person|
+        person.primary_email_address&.email_changed? ||
+          person.first_name_changed? ||
+          person.last_name_changed? ||
+          person.optout_enewsletter_changed?
+      end
+  end
+
+  def any_tags_change?
+    taggings.count != tag_list.count
   end
 
   def sync_with_mail_chimp

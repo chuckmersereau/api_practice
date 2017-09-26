@@ -53,6 +53,12 @@ class Api::V2::Contacts::Tags::BulkController < Api::V2::BulkController
   alias tags_scope contacts_scope
 
   def destroy_tags
+    # We are removing tags from each contact individually here to trigger the MC export
+    # on contact update. Do not change this unless you have another solution in mind to trigger that callback.
+    contacts_scope.joins(:taggings).where(taggings: { id: @tags }).each do |contact|
+      contact.tag_list.remove(*tag_names)
+      contact.save!
+    end
     @tags.destroy_all
     head :no_content
   end

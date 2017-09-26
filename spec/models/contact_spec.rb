@@ -699,6 +699,8 @@ describe Contact do
 
       before do
         person_and_email_address
+        contact.tag_list.add('example_tag')
+        contact.save
       end
 
       it 'notifies the mail chimp account of changes on certain fields' do
@@ -715,6 +717,24 @@ describe Contact do
           mail_chimp_account.id, 'primary_list_id', [contact.id]
         )
         contact.people.first.primary_email_address.email = 'new@email.com'
+        contact.send(:check_state_for_mail_chimp_sync)
+        contact.send(:sync_with_mail_chimp)
+      end
+
+      it 'notifies the mail chimp account of changes when tags are added' do
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account.id, 'primary_list_id', [contact.id]
+        )
+        contact.tag_list.add('second_example_tag')
+        contact.send(:check_state_for_mail_chimp_sync)
+        contact.send(:sync_with_mail_chimp)
+      end
+
+      it 'notifies the mail chimp account of changes when tags are removed' do
+        expect(MailChimp::ExportContactsWorker).to receive(:perform_async).with(
+          mail_chimp_account.id, 'primary_list_id', [contact.id]
+        )
+        contact.tag_list.remove('example_tag')
         contact.send(:check_state_for_mail_chimp_sync)
         contact.send(:sync_with_mail_chimp)
       end
