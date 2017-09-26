@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 9.6.5
--- Dumped by pg_dump version 9.6.5
+-- Dumped from database version 9.5.7
+-- Dumped by pg_dump version 9.6.2
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -26,6 +26,20 @@ CREATE EXTENSION IF NOT EXISTS plpgsql WITH SCHEMA pg_catalog;
 --
 
 COMMENT ON EXTENSION plpgsql IS 'PL/pgSQL procedural language';
+
+
+--
+-- Name: btree_gin; Type: EXTENSION; Schema: -; Owner: -
+--
+
+CREATE EXTENSION IF NOT EXISTS btree_gin WITH SCHEMA public;
+
+
+--
+-- Name: EXTENSION btree_gin; Type: COMMENT; Schema: -; Owner: -
+--
+
+COMMENT ON EXTENSION btree_gin IS 'support for indexing common datatypes in GIN';
 
 
 --
@@ -1409,7 +1423,8 @@ CREATE TABLE email_addresses (
     deleted boolean DEFAULT false,
     uuid uuid DEFAULT uuid_generate_v4(),
     valid_values boolean DEFAULT true,
-    source character varying DEFAULT 'MPDX'::character varying
+    source character varying DEFAULT 'MPDX'::character varying,
+    checked_for_google_plus_account boolean
 );
 
 
@@ -1680,6 +1695,40 @@ CREATE SEQUENCE google_integrations_id_seq
 --
 
 ALTER SEQUENCE google_integrations_id_seq OWNED BY google_integrations.id;
+
+
+--
+-- Name: google_plus_accounts; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE google_plus_accounts (
+    id integer NOT NULL,
+    account_id character varying,
+    profile_picture_link character varying,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    email_address_id integer,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: google_plus_accounts_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE google_plus_accounts_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: google_plus_accounts_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE google_plus_accounts_id_seq OWNED BY google_plus_accounts.id;
 
 
 --
@@ -2931,9 +2980,9 @@ CREATE TABLE pledges (
     uuid uuid DEFAULT uuid_generate_v4(),
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
+    received_not_processed boolean,
     amount_currency character varying,
     appeal_id integer,
-    received_not_processed boolean,
     processed boolean DEFAULT false
 );
 
@@ -3438,6 +3487,13 @@ ALTER TABLE ONLY google_events ALTER COLUMN id SET DEFAULT nextval('google_event
 --
 
 ALTER TABLE ONLY google_integrations ALTER COLUMN id SET DEFAULT nextval('google_integrations_id_seq'::regclass);
+
+
+--
+-- Name: google_plus_accounts id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY google_plus_accounts ALTER COLUMN id SET DEFAULT nextval('google_plus_accounts_id_seq'::regclass);
 
 
 --
@@ -4041,6 +4097,14 @@ ALTER TABLE ONLY google_events
 
 ALTER TABLE ONLY google_integrations
     ADD CONSTRAINT google_integrations_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: google_plus_accounts google_plus_accounts_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY google_plus_accounts
+    ADD CONSTRAINT google_plus_accounts_pkey PRIMARY KEY (id);
 
 
 --
@@ -5306,6 +5370,13 @@ CREATE UNIQUE INDEX index_google_integrations_on_uuid ON google_integrations USI
 
 
 --
+-- Name: index_google_plus_accounts_on_email_address_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_google_plus_accounts_on_email_address_id ON google_plus_accounts USING btree (email_address_id);
+
+
+--
 -- Name: index_help_requests_on_uuid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6017,6 +6088,13 @@ CREATE INDEX index_taggings_on_context ON taggings USING btree (context);
 --
 
 CREATE INDEX index_taggings_on_tag_id ON taggings USING btree (tag_id);
+
+
+--
+-- Name: index_taggings_on_taggable_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_taggings_on_taggable_id ON taggings USING btree (taggable_id);
 
 
 --
@@ -6995,6 +7073,10 @@ INSERT INTO schema_migrations (version) VALUES ('20170907182701');
 
 INSERT INTO schema_migrations (version) VALUES ('20170911035021');
 
+INSERT INTO schema_migrations (version) VALUES ('20170921212918');
+
+INSERT INTO schema_migrations (version) VALUES ('20170921213101');
+
 INSERT INTO schema_migrations (version) VALUES ('20170912232954');
 
 INSERT INTO schema_migrations (version) VALUES ('20170913013837');
@@ -7004,4 +7086,3 @@ INSERT INTO schema_migrations (version) VALUES ('20170918022812');
 INSERT INTO schema_migrations (version) VALUES ('20170918022824');
 
 INSERT INTO schema_migrations (version) VALUES ('20170922152101');
-

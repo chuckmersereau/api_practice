@@ -98,7 +98,10 @@ class ApplicationSeeder
     create :pledge_donation, pledge: Pledge.last, donation: Donation.last
 
     create :phone_number, person: person
-    create :email_address, person: person
+
+    email_address = create :email_address, person: person
+    create :google_plus_account, email_address: email_address
+
     create :event, account_list: account_list
 
     create :family_relationship, person: person, related_person: create(:person)

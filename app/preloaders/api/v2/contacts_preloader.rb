@@ -10,7 +10,7 @@ class Api::V2::ContactsPreloader < ApplicationPreloader
   }.freeze
 
   FIELD_ASSOCIATION_MAPPING = {
-    avatar: { primary_person: [:primary_picture, :facebook_account] },
+    avatar: { primary_person: [:primary_picture, :facebook_account, primary_email_address: :google_plus_account] },
     tag_list: :tags
   }.freeze
 end

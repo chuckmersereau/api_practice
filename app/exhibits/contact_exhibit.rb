@@ -46,27 +46,13 @@ class ContactExhibit < DisplayCase::Exhibit
   end
 
   def avatar(size = :square)
-    if (picture = primary_or_first_person.primary_picture) && picture.image.url(size)
-      picture.image.url(size)
-    else
-      fb = primary_or_first_person.facebook_account
-      if fb && fb.remote_id.present?
-        return "https://graph.facebook.com/#{fb.remote_id}/picture?height=120&width=120" if size == :large_square
-        return "https://graph.facebook.com/#{fb.remote_id}/picture?type=#{size}"
-      end
+    url = get_mpdx_picture_url_if_available(size)
 
-      url = if primary_or_first_person.gender == 'female'
-              ActionController::Base.helpers.image_url('avatar_f.png')
-            else
-              ActionController::Base.helpers.image_url('avatar.png')
-            end
+    url ||= get_facebook_picture_url_if_available(size)
 
-      if url.start_with?('/')
-        root_url = 'https://mpdx.org'
-        url = URI.join(root_url, url).to_s
-      end
-      url
-    end
+    url ||= get_google_plus_url_if_available(size)
+
+    url || default_image_url_by_gender
   end
 
   def pledge_amount_formatter
@@ -124,6 +110,59 @@ class ContactExhibit < DisplayCase::Exhibit
   end
 
   private
+
+  def get_mpdx_picture_url_if_available(size)
+    picture = primary_or_first_person.primary_picture
+
+    picture&.image&.url(size)
+  end
+
+  def get_facebook_picture_url_if_available(size)
+    fb_account = primary_or_first_person.facebook_account
+
+    if fb_account && fb_account.remote_id.present?
+      return "https://graph.facebook.com/#{fb_account.remote_id}/picture?height=120&width=120" if size == :large_square
+      "https://graph.facebook.com/#{fb_account.remote_id}/picture?type=#{size}"
+    end
+  end
+
+  def get_google_plus_url_if_available(size)
+    return unless relevant_google_plus_profile_picture_url
+
+    "#{relevant_google_plus_profile_picture_url}?size=#{size_in_pixels(size)}"
+  end
+
+  def size_in_pixels(size)
+    case size
+    when :small_square
+      100
+    when :square
+      200
+    when :large_square
+      300
+    else
+      200
+    end
+  end
+
+  def relevant_google_plus_profile_picture_url
+    primary_or_first_person&.primary_email_address&.google_plus_account&.profile_picture_url
+  end
+
+  def default_image_url_by_gender
+    url = if primary_or_first_person.gender == 'female'
+            ActionController::Base.helpers.image_url('avatar_f.png')
+          else
+            ActionController::Base.helpers.image_url('avatar.png')
+          end
+
+    if url.start_with?('/')
+      root_url = 'https://mpdx.org'
+      url = URI.join(root_url, url).to_s
+    end
+
+    url
+  end
 
   def whole_number?(number)
     (number.to_f % 1).zero?

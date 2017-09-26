@@ -122,4 +122,14 @@ describe EmailAddress do
       expect(email_address_three.valid_values).to eq(true)
     end
   end
+
+  describe '#start_google_plus_account_fetcher_job' do
+    it 'starts the GooglePlusAccountFetcherWorker job' do
+      allow_any_instance_of(EmailAddress).to receive(:start_google_plus_account_fetcher_job).and_call_original
+
+      expect(GooglePlusAccountFetcherWorker).to receive(:perform_async)
+
+      create(:email_address)
+    end
+  end
 end
