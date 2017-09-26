@@ -574,12 +574,39 @@ describe DataServer do
           @data_server.send(:add_or_update_donation, line, designation_account, profile)
         end.to change(Donation, :count)
       end
-      it 'updates an existing donation' do
-        @data_server.send(:add_or_update_donation, line, designation_account, profile)
+
+      it 'updates an existing donation with a remote_id' do
+        donation = create(:donation, remote_id: '1062', tnt_id: nil, amount: 1, designation_account: designation_account)
         expect do
           donation = @data_server.send(:add_or_update_donation, line.merge!('AMOUNT' => '5'), designation_account, profile)
           expect(donation.amount).to eq(5)
         end.to_not change(Donation, :count)
+      end
+
+      it 'updates an existing donation with a tnt_id' do
+        donation = create(:donation, remote_id: nil, tnt_id: '1062', amount: 1, designation_account: designation_account)
+        expect do
+          donation = @data_server.send(:add_or_update_donation, line.merge!('AMOUNT' => '5'), designation_account, profile)
+          expect(donation.amount).to eq(5)
+        end.to_not change(Donation, :count)
+      end
+
+      it 'updates an existing donation that does not have a remote_id or tnt_id' do
+        donation = create(:donation, remote_id: nil, tnt_id: nil, amount: 100.00, donation_date: Date.parse('2003-04-23'), designation_account: designation_account)
+        donation.donor_account.update(organization: @org, account_number: line['PEOPLE_ID'])
+
+        expect do
+          donation = @data_server.send(:add_or_update_donation, line.merge!('AMOUNT' => '100'), designation_account, profile)
+          expect(donation.remote_id).to eq('1062')
+        end.to_not change(Donation, :count)
+      end
+
+      it 'imports multiple donations that were made on the same day, by the same donor, and of the same amount' do
+        line_one = line
+        line_two = line.merge('DONATION_ID' => '1063')
+
+        expect { @data_server.send(:add_or_update_donation, line_one, designation_account, profile) }.to change { Donation.count }.from(0).to(1)
+        expect { @data_server.send(:add_or_update_donation, line_two, designation_account, profile) }.to change { Donation.count }.from(1).to(2)
       end
     end
 

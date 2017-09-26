@@ -6,29 +6,6 @@ describe AccountListInvite do
   let(:account_list) { create(:account_list) }
 
   context '#accept' do
-    it 'creates an account list entry for recipient and updates the accepting info' do
-      expect(invite.accept(user)).to be_truthy
-      expect(user.account_lists.to_a).to eq([invite.account_list])
-      invite.reload
-      expect(invite.accepted_by_user).to eq(user)
-      expect(invite.accepted_at).to be_present
-    end
-
-    it 'does not create a second account list entry if the user already has access' do
-      user.account_lists << invite.account_list
-      expect do
-        invite.accept(user)
-      end.to_not change(AccountListUser, :count)
-    end
-
-    it 'returns true if same user accepts again, but does not create new entry' do
-      invite.accept(user)
-
-      expect do
-        expect(invite.accept(user)).to be_truthy
-      end.to_not change(AccountListUser, :count)
-    end
-
     it 'returns false and does nothing if a second user tries to accept' do
       invite.accept(user)
 
@@ -44,6 +21,60 @@ describe AccountListInvite do
       expect do
         expect(invite.accept(user2)).to be_falsey
       end.to_not change(AccountListUser, :count)
+    end
+
+    context 'user' do
+      it 'creates an account list entry for recipient and updates the accepting info' do
+        expect(invite.accept(user)).to be_truthy
+        expect(user.account_lists.to_a).to eq([invite.account_list])
+        invite.reload
+        expect(invite.accepted_by_user).to eq(user)
+        expect(invite.accepted_at).to be_present
+      end
+
+      it 'does not create a second account list entry if the user already has access' do
+        user.account_lists << invite.account_list
+        expect do
+          invite.accept(user)
+        end.to_not change(AccountListUser, :count)
+      end
+
+      it 'returns true if same user accepts again, but does not create new entry' do
+        invite.accept(user)
+        expect do
+          expect(invite.accept(user)).to be_truthy
+        end.to_not change(AccountListUser, :count)
+      end
+    end
+
+    context 'coach' do
+      let(:coach) { user.becomes(User::Coach) }
+
+      before do
+        invite.update(invite_user_as: 'coach')
+      end
+
+      it 'creates an account list entry for recipient and updates the accepting info' do
+        expect(invite.accept(user)).to be_truthy
+        expect(coach.coaching_account_lists.to_a).to eq([invite.account_list])
+        invite.reload
+        expect(invite.accepted_by_user).to eq(user)
+        expect(invite.accepted_at).to be_present
+      end
+
+      it 'does not create a second account list entry if the user already has access' do
+        coach.coaching_account_lists << invite.account_list
+        expect do
+          invite.accept(user)
+        end.to_not change(AccountListCoach, :count)
+      end
+
+      it 'returns true if same user accepts again, but does not create new entry' do
+        invite.accept(user)
+        expect do
+          expect(invite.accept(user)).to be_truthy
+        end.to_not change(AccountListCoach, :count)
+      end
     end
   end
 

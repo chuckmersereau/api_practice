@@ -33,6 +33,8 @@ RSpec.describe Api::V2::Contacts::PeopleController, type: :controller do
     let(:parent_param) { {} }
     include_examples 'index_examples'
     include_examples 'update_examples'
+    include_examples 'show_examples'
+    include_examples 'destroy_examples'
   end
 
   context 'a specific contact' do

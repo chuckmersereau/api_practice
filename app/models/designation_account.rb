@@ -8,6 +8,7 @@ class DesignationAccount < ApplicationRecord
   has_many :contacts, through: :account_lists
   has_many :donations, dependent: :delete_all
   has_many :balances, dependent: :delete_all, as: :resource
+
   after_save :create_balance, if: :balance_changed?
 
   validates :organization_id, presence: true

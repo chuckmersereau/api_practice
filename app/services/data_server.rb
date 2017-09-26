@@ -436,20 +436,24 @@ class DataServer
     donor_account = add_or_update_donor_account(line, profile)
 
     Retryable.retryable do
-      donation = designation_account.donations.where(remote_id: line['DONATION_ID']).first_or_initialize
       date = line['DISPLAY_DATE'] ? Date.strptime(line['DISPLAY_DATE'], '%m/%d/%Y') : nil
-      donation.assign_attributes(
+
+      donation = designation_account.donations.find_by(remote_id: line['DONATION_ID'])
+      donation ||= designation_account.donations.find_by(tnt_id: line['DONATION_ID'])
+      donation ||= designation_account.donations.find_or_initialize_by(remote_id: nil, donor_account_id: donor_account.id, amount: line['AMOUNT'], donation_date: date)
+
+      donation.update!(
+        amount: line['AMOUNT'],
+        currency: default_currency,
+        donation_date: date,
         donor_account_id: donor_account.id,
+        memo: line['MEMO'],
         motivation: line['MOTIVATION'],
         payment_method: line['PAYMENT_METHOD'],
-        tendered_currency: line['TENDERED_CURRENCY'] || default_currency,
-        memo: line['MEMO'],
-        donation_date: date,
-        amount: line['AMOUNT'],
+        remote_id: line['DONATION_ID'],
         tendered_amount: line['TENDERED_AMOUNT'] || line['AMOUNT'],
-        currency: default_currency
+        tendered_currency: line['TENDERED_CURRENCY'] || default_currency
       )
-      donation.save!
       donation
     end
   end

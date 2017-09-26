@@ -29,6 +29,7 @@
   - ["api_google_sync_data_worker",                      1]
   - ["api_import",                                       10]
   - ["api_import_csv",                                   10]
+  - ["api_import_gifts_and_appeals_from_tnt_worker",     2]
   - ["api_import_google",                                10]
   - ["api_import_tnt",                                   10]
   - ["api_import_tnt_data_sync",                         10]

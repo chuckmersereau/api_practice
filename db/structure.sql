@@ -583,6 +583,81 @@ ALTER SEQUENCE appeals_id_seq OWNED BY appeals.id;
 
 
 --
+-- Name: background_batch_requests; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE background_batch_requests (
+    id integer NOT NULL,
+    background_batch_id integer,
+    path character varying,
+    request_params character varying,
+    request_body character varying,
+    request_headers character varying,
+    request_method character varying DEFAULT 'GET'::character varying,
+    response_headers character varying,
+    response_body character varying,
+    response_status character varying,
+    status integer DEFAULT 0,
+    default_account_list boolean DEFAULT false,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: background_batch_requests_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE background_batch_requests_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: background_batch_requests_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE background_batch_requests_id_seq OWNED BY background_batch_requests.id;
+
+
+--
+-- Name: background_batches; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE background_batches (
+    id integer NOT NULL,
+    batch_id character varying,
+    user_id integer,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: background_batches_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE background_batches_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: background_batches_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE background_batches_id_seq OWNED BY background_batches.id;
+
+
+--
 -- Name: balances; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1114,6 +1189,53 @@ ALTER SEQUENCE designation_profiles_id_seq OWNED BY designation_profiles.id;
 
 
 --
+-- Name: donation_amount_recommendations; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE donation_amount_recommendations (
+    id integer NOT NULL,
+    organization_id integer,
+    donor_number character varying,
+    designation_number character varying,
+    previous_amount numeric,
+    amount numeric,
+    started_at timestamp without time zone,
+    gift_min numeric,
+    gift_max numeric,
+    income_min numeric,
+    income_max numeric,
+    suggested_pledge_amount_min numeric,
+    suggested_pledge_amount_max numeric,
+    suggested_special_amount_min numeric,
+    suggested_special_amount_max numeric,
+    ask_at timestamp without time zone,
+    zip_code character varying,
+    uuid uuid DEFAULT uuid_generate_v4(),
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: donation_amount_recommendations_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE donation_amount_recommendations_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: donation_amount_recommendations_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE donation_amount_recommendations_id_seq OWNED BY donation_amount_recommendations.id;
+
+
+--
 -- Name: donations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -1136,7 +1258,8 @@ CREATE TABLE donations (
     channel character varying,
     appeal_id integer,
     appeal_amount numeric(19,2),
-    uuid uuid DEFAULT uuid_generate_v4()
+    uuid uuid DEFAULT uuid_generate_v4(),
+    tnt_id character varying
 );
 
 
@@ -2905,40 +3028,6 @@ ALTER SEQUENCE prayer_letters_accounts_id_seq OWNED BY prayer_letters_accounts.i
 
 
 --
--- Name: recurring_recommendation_results; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE recurring_recommendation_results (
-    id integer NOT NULL,
-    account_list_id integer,
-    contact_id integer,
-    result character varying NOT NULL,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    uuid uuid DEFAULT uuid_generate_v4()
-);
-
-
---
--- Name: recurring_recommendation_results_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE recurring_recommendation_results_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: recurring_recommendation_results_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE recurring_recommendation_results_id_seq OWNED BY recurring_recommendation_results.id;
-
-
---
 -- Name: schema_migrations; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -3149,6 +3238,20 @@ ALTER TABLE ONLY appeals ALTER COLUMN id SET DEFAULT nextval('appeals_id_seq'::r
 
 
 --
+-- Name: background_batch_requests id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batch_requests ALTER COLUMN id SET DEFAULT nextval('background_batch_requests_id_seq'::regclass);
+
+
+--
+-- Name: background_batches id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batches ALTER COLUMN id SET DEFAULT nextval('background_batches_id_seq'::regclass);
+
+
+--
 -- Name: balances id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3244,6 +3347,13 @@ ALTER TABLE ONLY designation_profile_accounts ALTER COLUMN id SET DEFAULT nextva
 --
 
 ALTER TABLE ONLY designation_profiles ALTER COLUMN id SET DEFAULT nextval('designation_profiles_id_seq'::regclass);
+
+
+--
+-- Name: donation_amount_recommendations id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY donation_amount_recommendations ALTER COLUMN id SET DEFAULT nextval('donation_amount_recommendations_id_seq'::regclass);
 
 
 --
@@ -3569,13 +3679,6 @@ ALTER TABLE ONLY prayer_letters_accounts ALTER COLUMN id SET DEFAULT nextval('pr
 
 
 --
--- Name: recurring_recommendation_results id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY recurring_recommendation_results ALTER COLUMN id SET DEFAULT nextval('recurring_recommendation_results_id_seq'::regclass);
-
-
---
 -- Name: taggings id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3709,6 +3812,22 @@ ALTER TABLE ONLY appeals
 
 
 --
+-- Name: background_batch_requests background_batch_requests_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batch_requests
+    ADD CONSTRAINT background_batch_requests_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: background_batches background_batches_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batches
+    ADD CONSTRAINT background_batches_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: balances balances_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -3818,6 +3937,14 @@ ALTER TABLE ONLY designation_profile_accounts
 
 ALTER TABLE ONLY designation_profiles
     ADD CONSTRAINT designation_profiles_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: donation_amount_recommendations donation_amount_recommendations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY donation_amount_recommendations
+    ADD CONSTRAINT donation_amount_recommendations_pkey PRIMARY KEY (id);
 
 
 --
@@ -4189,14 +4316,6 @@ ALTER TABLE ONLY prayer_letters_accounts
 
 
 --
--- Name: recurring_recommendation_results recurring_recommendation_results_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY recurring_recommendation_results
-    ADD CONSTRAINT recurring_recommendation_results_pkey PRIMARY KEY (id);
-
-
---
 -- Name: taggings taggings_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4543,6 +4662,34 @@ CREATE UNIQUE INDEX index_appeals_on_uuid ON appeals USING btree (uuid);
 
 
 --
+-- Name: index_background_batch_requests_on_background_batch_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batch_requests_on_background_batch_id ON background_batch_requests USING btree (background_batch_id);
+
+
+--
+-- Name: index_background_batch_requests_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batch_requests_on_uuid ON background_batch_requests USING btree (uuid);
+
+
+--
+-- Name: index_background_batches_on_user_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batches_on_user_id ON background_batches USING btree (user_id);
+
+
+--
+-- Name: index_background_batches_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_background_batches_on_uuid ON background_batches USING btree (uuid);
+
+
+--
 -- Name: index_balances_on_resource_id_and_resource_type; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4802,6 +4949,20 @@ CREATE UNIQUE INDEX index_designation_profiles_on_uuid ON designation_profiles U
 
 
 --
+-- Name: index_donation_amount_recommendations; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_donation_amount_recommendations ON donation_amount_recommendations USING btree (organization_id, designation_number, donor_number);
+
+
+--
+-- Name: index_donation_amount_recommendations_on_uuid; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_donation_amount_recommendations_on_uuid ON donation_amount_recommendations USING btree (uuid);
+
+
+--
 -- Name: index_donations_on_appeal_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4834,6 +4995,13 @@ CREATE INDEX index_donations_on_donation_date ON donations USING btree (donation
 --
 
 CREATE INDEX index_donations_on_donor_account_id ON donations USING btree (donor_account_id);
+
+
+--
+-- Name: index_donations_on_tnt_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_donations_on_tnt_id ON donations USING btree (tnt_id);
 
 
 --
@@ -5831,13 +5999,6 @@ CREATE UNIQUE INDEX index_prayer_letters_accounts_on_uuid ON prayer_letters_acco
 
 
 --
--- Name: index_recurring_recommendation_results_on_uuid; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_recurring_recommendation_results_on_uuid ON recurring_recommendation_results USING btree (uuid);
-
-
---
 -- Name: index_remote_id_on_person_relay_account; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6068,6 +6229,22 @@ ALTER TABLE ONLY appeal_excluded_appeal_contacts
 
 ALTER TABLE ONLY appeal_excluded_appeal_contacts
     ADD CONSTRAINT appeal_excluded_appeal_contacts_contact_id_fk FOREIGN KEY (contact_id) REFERENCES contacts(id) ON DELETE CASCADE;
+
+
+--
+-- Name: background_batch_requests background_batch_requests_background_batch_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batch_requests
+    ADD CONSTRAINT background_batch_requests_background_batch_id_fk FOREIGN KEY (background_batch_id) REFERENCES background_batches(id);
+
+
+--
+-- Name: background_batches background_batches_user_id_fk; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY background_batches
+    ADD CONSTRAINT background_batches_user_id_fk FOREIGN KEY (user_id) REFERENCES people(id);
 
 
 --
@@ -6817,4 +6994,14 @@ INSERT INTO schema_migrations (version) VALUES ('20170906162655');
 INSERT INTO schema_migrations (version) VALUES ('20170907182701');
 
 INSERT INTO schema_migrations (version) VALUES ('20170911035021');
+
+INSERT INTO schema_migrations (version) VALUES ('20170912232954');
+
+INSERT INTO schema_migrations (version) VALUES ('20170913013837');
+
+INSERT INTO schema_migrations (version) VALUES ('20170918022812');
+
+INSERT INTO schema_migrations (version) VALUES ('20170918022824');
+
+INSERT INTO schema_migrations (version) VALUES ('20170922152101');
 

@@ -13,3 +13,4 @@ Pry.config.prompt = [
   proc { '> ' }
 ]
 Pry.start
+exit

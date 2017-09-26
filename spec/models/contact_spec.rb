@@ -217,6 +217,53 @@ describe Contact do
     end
   end
 
+  describe '#update_late_at' do
+    before do
+      contact.late_at = 2.weeks.ago
+      contact.pledge_start_date = Time.now
+    end
+
+    context 'set to nil when' do
+      it 'is not financial' do
+        contact.update(status: 'Partner - Special')
+
+        expect(contact.late_at).to be_nil
+      end
+
+      it 'does not have a pledge_frequency' do
+        contact.update(pledge_frequency: nil)
+
+        expect(contact.late_at).to be_nil
+      end
+
+      it 'does not have an initial date' do
+        contact.update(last_donation_date: nil, pledge_start_date: nil)
+
+        expect(contact.late_at).to be_nil
+      end
+    end
+
+    context 'sets to appropriate late_at date when' do
+      it 'has a pledge freqency smaller than 0.4' do
+        contact.update(pledge_frequency: 0.2)
+
+        expect(contact.late_at).to eq 1.week.from_now.utc.to_date
+      end
+
+      it 'has a pledge freqency greater than 0.4 but smaller than' do
+        contact.update(pledge_frequency: 0.5)
+
+        expect(contact.late_at).to eq 2.weeks.from_now.utc.to_date
+      end
+
+      it 'has a pledge freqency greater than 0.4 but smaller than' do
+        contact.update(pledge_frequency: 2.0)
+
+        expect(contact.late_at).to eq 2.months.from_now.utc.to_date
+      end
+    end
+  end
+
   describe '#late_by?' do
     it 'should tell if a monthly donor is late on their donation' do
       expect(contact.late_by?(2.days, 30.days)).to be true

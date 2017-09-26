@@ -46,7 +46,11 @@ class ApplicationSeeder
     require_relative 'notification_types_seeder'
     NotificationTypesSeeder.new(quiet).seed
 
+    Rails.application.eager_load!
+    ApplicationRecord.descendants.each(&:reset_column_information)
+
     # Create some fundamental records first so that we can reference them below to establish associations:
+
     organization = create :organization
     user = create :user_with_full_account
     account_list = user.account_lists.reload.last
@@ -141,11 +145,13 @@ class ApplicationSeeder
     create :picture, picture_of: person
     create :pls_account, account_list: account_list
     create :prayer_letters_account, account_list: account_list
-    create :recurring_recommendation_result
+    create :donation_amount_recommendation
     create :task, account_list: account_list
 
     create :tag
     create :tagging, tag: ActsAsTaggableOn::Tag.last, taggable: person
+
+    create :background_batch
 
     create :export_log
   end

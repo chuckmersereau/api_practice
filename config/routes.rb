@@ -61,6 +61,8 @@ Rails.application.routes.draw do
           end
         end
 
+        resources :background_batches, except: [:update]
+
         resources :constants, only: [:index]
 
         resources :contacts, only: [:index, :show, :create, :update, :destroy] do
@@ -124,7 +126,7 @@ Rails.application.routes.draw do
               end
               resource :bulk, only: [:create, :update, :destroy], controller: :bulk
               resources :filters, only: :index
-              resources :people, only: [:index, :update]
+              resources :people, only: [:index, :show, :update, :destroy]
             end
           end
         end

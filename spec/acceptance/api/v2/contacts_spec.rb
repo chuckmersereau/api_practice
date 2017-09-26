@@ -187,6 +187,7 @@ resource 'Contacts' do
       parameter 'filter[stopped_giving_within]',          'Will return contacts that have stopped giving during the date range;
                                                             Note that for this filter to work the end date must be more than 1 month ago.
                                                             Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',                                  required: false
+      parameter 'filter[tasks_all_completed]',            'Return contacts that have no incomplete tasks if given the value "true"',                             required: false
       parameter 'filter[task_due_date]',                  'Filter by Due Date; Accepts date range with text value like "MM/DD/YYYY - MM/DD/YYYY"',               required: false
       parameter 'filter[timezone]',                       'Filter by Timezone; Accepts multiple parameters,',                                                    required: false
       parameter 'filter[wildcard_search]',                'Filter by keyword, searches through name, notes, donor account numbers, email_addresses,

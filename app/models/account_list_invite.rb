@@ -25,7 +25,7 @@ class AccountListInvite < ApplicationRecord
     return accepted_by_user == accepting_user if accepted_by_user.present?
 
     if invite_user_as == 'coach'
-      account_list.account_list_coaches.find_or_create_by(user: accepting_user)
+      account_list.account_list_coaches.find_or_create_by(coach: accepting_user.becomes(User::Coach))
     else
       account_list.account_list_users.find_or_create_by(user: accepting_user)
     end

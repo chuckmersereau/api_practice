@@ -31,8 +31,6 @@ describe TntImport::GiftsImport do
       @user.organization_accounts << create(:organization_account, organization: online_org)
     end
 
-    let(:donation_generated_with_gift_splits) { Appeal.find_by(tnt_id: 2).donations.first }
-
     it 'handles an xml that has no gifts' do
       @import = create(:tnt_import_no_gifts, account_list: @account_list)
       @tnt_import = TntImport.new(@import)
@@ -44,37 +42,46 @@ describe TntImport::GiftsImport do
       expect { @tnt_import_with_personal_gift.import }.to change(Donation, :count).from(0).to(2)
     end
 
-    it 'links gifts to first appeal and adds other gift splits to memo' do
-      setup_online_org
-      @tnt_import_with_personal_gift.import
-      expect(donation_generated_with_gift_splits.appeal).to eq(@second_appeal)
-      expect(donation_generated_with_gift_splits.memo).to eq(
-        %(This donation was imported from Tnt.\n\n$841 is designated to the "#{@appeal.name}" appeal.)
-      )
+    describe 'associating gifts to appeals' do
+      context 'version 3.1 and lower' do
+        it 'links gifts to first appeal and adds other gift splits to memo' do
+          setup_online_org
+          @tnt_import.import
+          donation = Appeal.find_by(tnt_id: 2).donations.first
+          expect(donation.appeal).to eq(@second_appeal)
+          expect(donation.memo).to eq('This donation was imported from Tnt.')
+        end
+      end
+
+      context 'version 3.2 and higher' do
+        it 'links gifts to first appeal and adds other gift splits to memo' do
+          setup_online_org
+          @tnt_import_with_personal_gift.import
+          donation = Appeal.find_by(tnt_id: 2).donations.first
+          expect(donation.appeal).to eq(@second_appeal)
+          expect(donation.memo).to eq(
+            %(This donation was imported from Tnt.\n\n$841 is designated to the "#{@appeal.name}" appeal.)
+          )
+        end
+      end
     end
 
-    it 'does not import gifts for an online org or multiple orgs when gift not marked as personal' do
-      @user.organization_accounts.destroy_all
-      online_org = create(:organization)
-      @user.organization_accounts << create(:organization_account, organization: online_org)
-
-      expect { @tnt_import.import }.to_not change(Donation, :count).from(0)
-
+    it 'does not import gifts when the user has multiple orgs' do
       @user.organization_accounts.destroy_all
       @user.organization_accounts << create(:organization_account, organization: @offline_org)
       @user.organization_accounts << create(:organization_account, organization: create(:offline_org))
       expect { @tnt_import.import  }.to_not change(Donation, :count).from(0)
     end
 
-    it 'imports gifts for a single offline org' do
+    it 'imports gifts for a single org' do
       expect { @tnt_import.import  }.to change(Donation, :count).from(0).to(2)
       contact = Contact.first
-      fields = [:donation_date, :amount, :tendered_amount, :tendered_currency]
+      fields = [:donation_date, :amount, :tendered_amount, :tendered_currency, :tnt_id]
       donations = Donation.all.map { |d| d.attributes.symbolize_keys.slice(*fields) }
       expect(donations).to include(donation_date: Date.new(2013, 11, 20), amount: 50,
-                                   tendered_amount: 50, tendered_currency: 'USD')
+                                   tendered_amount: 50, tendered_currency: 'USD', tnt_id: '1-M84S3J')
       expect(donations).to include(donation_date: Date.new(2013, 11, 21), amount: 25,
-                                   tendered_amount: 25, tendered_currency: 'USD')
+                                   tendered_amount: 25, tendered_currency: 'USD', tnt_id: '1-O73R2P')
 
       expect(contact.last_donation_date).to eq(Date.new(2013, 11, 21))
       expect(contact.first_donation_date).to eq(Date.new(2013, 11, 20))
@@ -106,10 +113,10 @@ describe TntImport::GiftsImport do
 
       expect { tnt_import2.import  }.to change(Donation, :count).from(2).to(3)
 
-      donations = Donation.all.map { |d| d.attributes.symbolize_keys.slice(:donation_date, :amount, :memo) }
-      expect(donations).to include(donation_date: Date.new(2013, 11, 20), amount: 50, memo: 'This donation was imported from Tnt.')
-      expect(donations).to include(donation_date: Date.new(2013, 11, 21), amount: 25, memo: 'This donation was imported from Tnt.')
-      expect(donations).to include(donation_date: Date.new(2013, 11, 22), amount: 100, memo: 'This donation was imported from Tnt.')
+      donations = Donation.all.map { |d| d.attributes.symbolize_keys.slice(:donation_date, :amount, :memo, :tnt_id) }
+      expect(donations).to include(donation_date: Date.new(2013, 11, 20), amount: 50, memo: 'This donation was imported from Tnt.', tnt_id: '1-M84S3J')
+      expect(donations).to include(donation_date: Date.new(2013, 11, 21), amount: 25, memo: 'This donation was imported from Tnt.', tnt_id: '1-O73R2P')
+      expect(donations).to include(donation_date: Date.new(2013, 11, 22), amount: 100, memo: 'This donation was imported from Tnt.', tnt_id: nil)
 
       contact = Contact.first
       expect(contact.last_donation_date).to eq(Date.new(2013, 11, 22))
@@ -157,6 +164,53 @@ describe TntImport::GiftsImport do
       donation = @account_list.donations.first
       DesignationAccount.delete_all
       expect { @tnt_import.import }.to change { donation.reload.designation_account_id }.from(first_designation_account_id)
+    end
+
+    it 'does not assign a remote_id when creating a donation' do
+      expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
+      expect(Donation.where(remote_id: nil).count).to eq(2)
+    end
+
+    it 'updates an existing donation by remote_id' do
+      expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
+      Donation.where(tnt_id: '1-M84S3J').first.update!(tnt_id: nil, remote_id: '1-M84S3J', amount: 1)
+      expect { @tnt_import.import }.to_not change(Donation, :count).from(2)
+      expect(Donation.where(tnt_id: '1-M84S3J', remote_id: '1-M84S3J').first.amount).to eq(50.0)
+      expect(Donation.where(tnt_id: '1-M84S3J').count).to eq(1)
+    end
+
+    it 'updates an existing donation by tnt_id' do
+      expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
+      Donation.where(tnt_id: '1-M84S3J').first.update!(remote_id: nil, amount: 1)
+      expect { @tnt_import.import }.to_not change(Donation, :count).from(2)
+      expect(Donation.where(tnt_id: '1-M84S3J').first.amount).to eq(50.0)
+      expect(Donation.where(tnt_id: '1-M84S3J').count).to eq(1)
+    end
+
+    it 'updates an existing donation by donor, amount, and date, if there is no tnt_id or remote_id' do
+      expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
+      # Set the tnt_id and remote_id to nil, to force the import to find by donor, amount, and date.
+      Donation.update_all(tnt_id: nil, remote_id: nil)
+      expect { @tnt_import.import }.to_not change(Donation, :count).from(2)
+    end
+
+    it 'creates new donations by donor, amount, and date, if there is no tnt_id or remote_id' do
+      expect { @tnt_import.import }.to change(Donation, :count).from(0).to(2)
+      # Set the tnt_id and remote_id to nil, to force the import to find by donor, amount, and date.
+      # Set the amount to 1, to test that the import doesn't find the donation and creates a new one.
+      Donation.where(tnt_id: '1-M84S3J').first.update!(tnt_id: nil, remote_id: nil, amount: 1)
+      expect { @tnt_import.import }.to change(Donation, :count).from(2).to(3)
+      Donation.where(tnt_id: '1-M84S3J').first.update!(tnt_id: nil, remote_id: nil, donor_account_id: create(:donor_account).id)
+      expect { @tnt_import.import }.to change(Donation, :count).from(3).to(4)
+      Donation.where(tnt_id: '1-M84S3J').first.update!(tnt_id: nil, remote_id: nil, donation_date: Time.current)
+      expect { @tnt_import.import }.to change(Donation, :count).from(4).to(5)
+    end
+
+    it 'imports multiple donations that were made on the same day, by the same donor, and of the same amount' do
+      import = create(:tnt_import_gifts_multiple_same_day, account_list: @account_list, user: @import.user)
+      tnt_import = TntImport.new(import)
+      expect { tnt_import.import }.to change { Donation.count }.from(0).to(3)
+      expect { tnt_import.import }.to_not change { Donation.count }.from(3)
     end
   end
 end

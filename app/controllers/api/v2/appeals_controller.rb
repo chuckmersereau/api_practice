@@ -70,6 +70,8 @@ class Api::V2::AppealsController < Api::V2Controller
   def build_appeal
     @appeal ||= appeal_scope.build
     @appeal.assign_attributes(appeal_params)
+    @appeal.exclusion_filter = params[:appeal][:exclusion_filter]
+    @appeal.inclusion_filter = params[:appeal][:inclusion_filter]
   end
 
   def save_appeal

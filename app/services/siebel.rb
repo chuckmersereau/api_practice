@@ -203,21 +203,25 @@ class Siebel < DataServer
     end
 
     Retryable.retryable do
-      donation = designation_account.donations.where(remote_id: siebel_donation.id).first_or_initialize
       date = Date.strptime(siebel_donation.donation_date, '%Y-%m-%d')
-      donation.attributes = {
+
+      donation = designation_account.donations.find_by(remote_id: siebel_donation.id)
+      donation ||= designation_account.donations.find_by(tnt_id: siebel_donation.id)
+      donation ||= designation_account.donations.find_or_initialize_by(remote_id: nil, donor_account_id: donor_account.id, amount: siebel_donation.amount, donation_date: date)
+
+      donation.update!(
+        amount: siebel_donation.amount,
+        channel: siebel_donation.channel,
+        currency: default_currency,
+        donation_date: date,
         donor_account_id: donor_account.id,
         motivation: siebel_donation.campaign_code,
         payment_method: siebel_donation.payment_method,
-        tendered_currency: default_currency,
-        donation_date: date,
-        amount: siebel_donation.amount,
+        payment_type: siebel_donation.payment_type,
+        remote_id: siebel_donation.id,
         tendered_amount: siebel_donation.amount,
-        currency: default_currency,
-        channel: siebel_donation.channel,
-        payment_type: siebel_donation.payment_type
-      }
-      donation.save!
+        tendered_currency: default_currency
+      )
       donation
     end
   end

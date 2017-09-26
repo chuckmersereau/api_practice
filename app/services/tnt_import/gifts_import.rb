@@ -21,11 +21,10 @@ class TntImport::GiftsImport
       contact        = account_list.contacts.find_by(id: contact_ids_by_tnt_contact_id[tnt_contact_id])
 
       next unless contact
-      next if organization.api_class != 'OfflineOrg' && row['PersonallyReceived'] == 'false'
 
       donor_account = donor_account_for_contact(contact)
 
-      add_or_update_donation_and_link_to_appeal(row, donor_account, contact)
+      add_or_update_donation_and_link_to_appeal(row, donor_account)
     end
   end
 
@@ -37,16 +36,22 @@ class TntImport::GiftsImport
     @designation_account = account_list.designation_accounts.where(organization: organization, name: "#{name} (Imported from TntConnect)").first_or_create!
   end
 
-  def add_or_update_donation_and_link_to_appeal(row, donor_account, contact)
-    # If someone re-imports donations, assume that there is just one donation per date per amount;
-    # that's not a perfect assumption but it seems reasonable solution for offline orgs for now.
-    donation_key_attrs = { amount: row['Amount'], donation_date: parse_date(row['GiftDate'], @import.user).to_date }
+  def add_or_update_donation_and_link_to_appeal(row, donor_account)
+    donation_date = parse_date(row['GiftDate'], @import.user).to_date
 
-    donation = donor_account.donations.find_or_create_by(donation_key_attrs) do |new_donation|
-      contact.update_donation_totals(new_donation) # Only update the total on creation.
-    end
+    donation = donor_account.donations.find_by(tnt_id: row['OrgGiftCode']) if row['OrgGiftCode']
+    donation ||= donor_account.donations.find_by(remote_id: row['OrgGiftCode']) if row['OrgGiftCode']
+    donation ||= donor_account.donations.find_or_initialize_by(tnt_id: nil, donor_account_id: donor_account.id, amount: row['Amount'], donation_date: donation_date)
 
-    donation.update(tendered_currency: currency_code_for_id(row['CurrencyID']), tendered_amount: row['Amount'], designation_account: designation_account)
+    donation.update(
+      amount: row['Amount'],
+      designation_account: designation_account,
+      donation_date: donation_date,
+      donor_account_id: donor_account.id,
+      tendered_amount: row['Amount'],
+      tendered_currency: currency_code_for_id(row['CurrencyID']),
+      tnt_id: row['OrgGiftCode']
+    )
 
     add_donation_to_first_appeal_and_add_other_appeals_to_memo(donation, row)
 
@@ -54,6 +59,23 @@ class TntImport::GiftsImport
   end
 
   def add_donation_to_first_appeal_and_add_other_appeals_to_memo(mpdx_donation, tnt_gift)
+    # Version 3.2 of Tnt changed the relationship beteween Gifts and Appeals:
+    # In 3.1 a Gift can only belong to one Appeal, through a foreign key on the Gift table.
+    # In 3.2 a Gift can be split and belong to many Appeals, through a new GiftSplit table.
+    if @xml.version < 3.2
+      add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_1(mpdx_donation, tnt_gift)
+    else
+      add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_2(mpdx_donation, tnt_gift)
+    end
+  end
+
+  def add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_1(mpdx_donation, tnt_gift)
+    appeal = account_list_appeal_by_tnt_id(tnt_gift['AppealID'])
+    new_memo = generate_new_donation_memo(mpdx_donation)
+    mpdx_donation.update(appeal: appeal, memo: new_memo)
+  end
+
+  def add_donation_to_first_appeal_and_add_other_appeals_to_memo_version_3_2(mpdx_donation, tnt_gift)
     gift_splits = account_list_appeals.map do |appeal|
       gift_splits_by_gift_and_campaign(tnt_gift['id'], appeal.tnt_id.to_s)
     end.flatten.compact
@@ -67,7 +89,7 @@ class TntImport::GiftsImport
     mpdx_donation.update(appeal: appeal, memo: new_memo)
   end
 
-  def generate_new_donation_memo(donation, gift_splits)
+  def generate_new_donation_memo(donation, gift_splits = [])
     new_memo_items = [_('This donation was imported from Tnt.')]
     new_memo_items += generate_gift_splits_memos(gift_splits)
     new_memo_items.each { |memo_item| memo_item.gsub!('&quot;', '"') }
