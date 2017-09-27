@@ -1,15 +1,12 @@
 LANGUAGES_CONSTANT = {
   'en-us'      => 'US English',
   'ar'         => 'Arabic',
-  'my'         => 'Burmese',
   'zh-hans-cn' => 'Chinese (Simplified)',
-  'fa'         => 'Farsi (Persian)',
   'fr-fr'      => 'French (France)',
   'fr-ca'      => 'French (Canadian)',
   'de'         => 'German',
   'id'         => 'Indonesian',
   'it'         => 'Italian',
-  'ja'         => 'Japanese',
   'ko'         => 'Korean',
   'pl'         => 'Polish',
   'pt-BR'      => 'Portuguese (Brasil)',
@@ -18,6 +15,5 @@ LANGUAGES_CONSTANT = {
   'th'         => 'Thai',
   'tr'         => 'Turkish',
   'uk'         => 'Ukranian',
-  'vi'         => 'Vietnamese',
   'hy'         => 'Armenian'
 }.freeze

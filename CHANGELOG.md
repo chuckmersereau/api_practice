@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 27 September 2017
+- Removed Burmese, Vietnamese, Japanese and Persian to list available languages.
+
 ## 19 September 2017
 - Added the /contacts/people endpoint to get and delete a person without the contact id.
 
