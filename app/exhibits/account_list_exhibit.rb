@@ -53,13 +53,29 @@ class AccountListExhibit < DisplayCase::Exhibit
     balances_html(format(balance_text, balance: formatted_balance), tooltip, link_to_report)
   end
 
-  private
+  def weeks_on_mpd
+    if active_mpd_start_at.present? && active_mpd_finish_at.present?
+      seconds = (active_mpd_finish_at - active_mpd_start_at).days
+      seconds / 1.week
+    end
+  end
 
-  def formatted_balance
+  def last_prayer_letter_at
+    mail_chimp_account&.prayer_letter_last_sent
+  end
+
+  def formatted_balance(locale: nil)
     balance = designation_accounts.where(organization_id: salary_organization_id)
                                   .where(active: true).sum(:balance)
-    @context.number_to_current_currency(balance, currency: salary_currency)
+    @context.number_to_current_currency(balance, currency: salary_currency,
+                                                 locale: locale)
   end
+
+  def staff_account_ids
+    designation_accounts.map(&:staff_account_id).compact
+  end
+
+  private
 
   def balances_html(balance_text, tooltip, link_to_report)
     html = "<div class='account_balances tip' title='#{tooltip}'>#{balance_text}</div>"
