@@ -10,7 +10,6 @@ class Person < ApplicationRecord
   TITLES = [_('Mr.'), _('Mrs.'), _('Miss'), _('Ms.'), _('Rev.'), _('Hon.'), _('Dr.')].freeze
   SUFFIXES = [_('Jr.'), _('Sr.')].freeze
   MARITAL_STATUSES = [_('Single'), _('Engaged'), _('Married'), _('Separated'), _('Divorced'), _('Widowed')].freeze
-  PLACEHOLDER_FOR_MISSING_YEAR = 1900
 
   belongs_to :master_person
   has_many :email_addresses, -> { order('email_addresses.primary::int desc') }, dependent: :delete_all, autosave: true
@@ -456,11 +455,11 @@ class Person < ApplicationRecord
   end
 
   def birthday_year
-    get_four_digit_year_from_value(attributes['birthday_year']) || PLACEHOLDER_FOR_MISSING_YEAR
+    get_four_digit_year_from_value(attributes['birthday_year']) || placeholder_for_missing_year(:birthday)
   end
 
   def anniversary_year
-    get_four_digit_year_from_value(attributes['anniversary_year']) || PLACEHOLDER_FOR_MISSING_YEAR
+    get_four_digit_year_from_value(attributes['anniversary_year']) || placeholder_for_missing_year(:anniversary)
   end
 
   private
@@ -493,5 +492,14 @@ class Person < ApplicationRecord
         records_to_keep << new_record
       end
     end
+  end
+
+  # If the date has a day and a month but no year then we want to default the year to a particular value.
+  # If day, month, and year are all nil then year should remain nil.
+  def placeholder_for_missing_year(date_name)
+    day_attribute_name = "#{date_name}_day"
+    month_attribute_name = "#{date_name}_month"
+    return unless send(day_attribute_name) && send(month_attribute_name)
+    1900
   end
 end
