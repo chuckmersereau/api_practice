@@ -104,7 +104,7 @@ class Person::GmailAccount
     # and logging emails for an email address once.
     #
     # For context: https://github.com/CruGlobal/mpdx_api/blob/6412f535455c4959e3801c43143758f1438272ce/app/services/person/gmail_account.rb#L35-L46
-    email_collection.grouped_by_email[email_address]&.first
+    email_collection.select_by_email(email_address)&.first
   end
 
   def force_encode_body(body_needing_encoding)
