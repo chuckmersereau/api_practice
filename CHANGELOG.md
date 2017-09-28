@@ -2,6 +2,9 @@
 
 This changelog covers what's changed in the MPDX APIs.
 
+## 28 September 2017
+- Add all person fields to the /user endpoint.
+
 ## 27 September 2017
 - Removed Burmese, Vietnamese, Japanese and Persian to list available languages.
 
